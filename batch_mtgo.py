@@ -81,6 +81,17 @@ def extract_data(html):
                     return json.loads(html[brace_start:i + 1])
     return None
 
+def is_data_complete(data):
+    """检查解析出的赛事数据是否包含我们需要的关键字段，残缺则视为失败"""
+    if data is None:
+        return False
+    required = ["event_id", "description", "player_count", "decklists"]
+    for field in required:
+        if field not in data:
+            return False
+    if not data["decklists"]:   # decklists 不能是空的
+        return False
+    return True
 
 # ============ 牌表简化 ============
 def cards_to_simple(card_list):
@@ -119,12 +130,13 @@ def build_clean_data(data):
     return {
         "event_id": data["event_id"],
         "description": data["description"],
-        "format": data["format"],
-        "starttime": data["starttime"],
+        "format": data.get("format"),
+        "starttime": data.get("starttime"),
         "player_count": player_count,
         "inplayoffs": data.get("inplayoffs"),
         "players": players,
     }
+
 
 
 # ============ 从链接里取赛制和日期 ============
@@ -198,7 +210,7 @@ def main():
                     print(f"    下载彻底失败，第 {try_round+1} 轮，等待后重试...")
                 else:
                     candidate = extract_data(html)
-                    if candidate is not None and candidate.get("decklists"):
+                    if is_data_complete(candidate):
                         raw = candidate
                         break
                     else:
