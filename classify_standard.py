@@ -8,6 +8,16 @@ RULES_FILE = "my_archetypes/standard.yaml"   # j6e 格式的规则库
 DATA_DIR = "data/standard"                     # 你抓取的 standard 赛事数据
 UNKNOWN_OUTPUT = "unknown_decks.txt"           # 归不了类的牌表导出到这里
 
+# MTGO 版权改名卡 -> j6e 规则使用的标准卡名
+# 仅覆盖 2025年末蜘蛛侠系列 ~ 2026年6月漫威系列 窗口期内高频改名卡
+# 漫威系列发售后线上获得版权，新数据已用正名，此表把两个时期的数据归一
+CARD_ALIASES = {
+    "Kavaero, Mind-Bitten": "Superior Spider-Man",
+}
+
+def normalize_name(name):
+    name = name.strip()
+    return CARD_ALIASES.get(name, name)
 
 # ---------- 1. 加载 YAML 规则 ----------
 def load_rules():
@@ -20,14 +30,12 @@ def load_rules():
 
 # ---------- 2. 把一副牌整理成「卡名 -> 张数」的字典 ----------
 def deck_to_counts(player):
-    """返回 (主牌计数字典, 备牌计数字典)，键是卡名，值是张数"""
-    main_counts = {}
-    side_counts = {}
+    main_counts, side_counts = {}, {}
     for c in player.get("main_deck", []):
-        name = c["name"].strip()
+        name = normalize_name(c["name"])
         main_counts[name] = main_counts.get(name, 0) + int(c["qty"])
     for c in player.get("sideboard", []):
-        name = c["name"].strip()
+        name = normalize_name(c["name"])
         side_counts[name] = side_counts.get(name, 0) + int(c["qty"])
     return main_counts, side_counts
 
