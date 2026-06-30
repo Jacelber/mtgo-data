@@ -1,14 +1,36 @@
 format: Standard
 date: "2026-03-08"
 archetypes:
+  - name: Monument Lessons
+    signatureCards:
+      - name: "Gran-Gran"
+        minCopies: 3
+      - name: "Accumulate Wisdom"
+        minCopies: 3
+      - name: "Monument to Endurance"
+        minCopies: 3
+
+  - name: Jeskai Lessons
+    signatureCards:
+      - name: "Gran-Gran"
+        minCopies: 3
+      - name: "Accumulate Wisdom"
+        minCopies: 3
+      - name: "Jeskai Revelation"
+        minCopies: 2
+
   - name: Izzet Lessons
     signatureCards:
-      - name: Gran-Gran
+      - name: "Gran-Gran"
         minCopies: 4
-      - name: Firebending Lesson
+      - name: "Firebending Lesson"
         minCopies: 4
-      - name: Accumulate Wisdom
+      - name: "Accumulate Wisdom"
         minCopies: 4
+      - name: "Monument to Endurance"
+        maxCopies: 1
+      - name: "Jeskai Revelation"
+        exactCopies: 0
 
   - name: Mono-Green Landfall
     signatureCards:
@@ -117,9 +139,9 @@ archetypes:
       - name: Eddymurk Crab
         minCopies: 4
       - name: Sunderflock
-        minCopies: 4
+        minCopies: 2
       - name: Hearth Elemental
-        minCopies: 4
+        minCopies: 1
 
   - name: Temur Elementals
     signatureCards:
@@ -161,6 +183,10 @@ archetypes:
       - name: "Jeskai Revelation"
         minCopies: 2
       - name: "Inevitable Defeat"
+        exactCopies: 0
+      - name: "Gran-Gran"
+        exactCopies: 0
+      - name: "Accumulate Wisdom"
         exactCopies: 0
 
   - name: Jeskai Control
@@ -247,6 +273,15 @@ archetypes:
         minCopies: 3
       - name: Mountain
         minCopies: 12
+
+  - name: Mardu Discard
+    signatureCards:
+      - name: "Hardened Academic"
+        minCopies: 3
+      - name: "Marauding Mako"
+        minCopies: 3
+      - name: "Moonshadow"
+        minCopies: 3
 
   - name: Rakdos Discard
     signatureCards:
@@ -450,4 +485,27 @@ archetypes:
       - name: "Surrak, Elusive Hunter"
         minCopies: 1
       - name: "Pawpatch Recruit"
+        minCopies: 3
+
+  - name: Izzet Aggro
+    signatureCards:
+      - name: "Scalding Viper"
+        minCopies: 3
+      - name: "Razorkin Needlehead"
+        minCopies: 3
+      - name: Spirebluff Canal
+        minCopies: 1
+
+  - name: Gruul Delirium
+    signatureCards:
+      - name: "Patchwork Beastie"
+        minCopies: 3
+      - name: "Wildfire Wickerfolk"
+        minCopies: 3
+
+  - name: Bant Bounce
+    signatureCards:
+      - name: "Brightglass Gearhulk"
+        minCopies: 3
+      - name: "Stormchaser's Talent"
         minCopies: 3

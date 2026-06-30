@@ -54,17 +54,16 @@ def count_card(card_name, zone, main_counts, side_counts):
 # ---------- 4. 判断一张签名卡的条件是否满足 ----------
 def signature_card_met(sig, main_counts, side_counts):
     name = sig["name"]
-    zone = sig.get("zone", "any")   # 默认 any（主备合计）
+    zone = sig.get("zone", "any")
     actual = count_card(name, zone, main_counts, side_counts)
-
-    # exactCopies：必须恰好等于（常用 0 表示「不能有这张卡」）
     if "exactCopies" in sig:
         return actual == sig["exactCopies"]
-    # minCopies：必须 >= 指定张数
     if "minCopies" in sig:
         return actual >= sig["minCopies"]
-    # 既没写 exactCopies 也没写 minCopies：只要有这张卡就算（>=1）
+    if "maxCopies" in sig:
+        return actual <= sig["maxCopies"]
     return actual >= 1
+
 
 
 # ---------- 5. 尝试匹配一个套牌 ----------
