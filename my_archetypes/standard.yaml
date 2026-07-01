@@ -88,22 +88,9 @@ archetypes:
       - name: Deceit
         minCopies: 3
 
-  - name: Simic Rhythm
-    signatureCards:
-      - name: Badgermole Cub
-        minCopies: 4
-      - name: "Nature's Rhythm"
-        minCopies: 4
-      - name: Gene Pollinator
-        minCopies: 3
-      - name: Llanowar Elves
-        minCopies: 4
-      - name: Blooming Marsh
-        exactCopies: 0
-
   - name: Bant Rhythm
     signatureCards:
-      - name: Brightglass Gearhulk
+      - name: Quantum Riddler
         minCopies: 1
       - name: Badgermole Cub
         minCopies: 4
@@ -115,6 +102,40 @@ archetypes:
         minCopies: 4
       - name: Seam Rip
         minCopies: 1
+
+  - name: Simic Rhythm
+    signatureCards:
+      - name: Badgermole Cub
+        minCopies: 4
+      - name: "Nature's Rhythm"
+        minCopies: 3
+      - name: Gene Pollinator
+        minCopies: 3
+      - name: Llanowar Elves
+        minCopies: 4
+      - name: Blooming Marsh
+        exactCopies: 0
+      - name: Plains
+        exactCopies: 0
+      - name: Temple Garden
+        exactCopies: 0
+
+  - name: Selesnya Rhythm
+    signatureCards:
+      - name: Badgermole Cub
+        minCopies: 4
+      - name: "Nature's Rhythm"
+        minCopies: 3
+      - name: Gene Pollinator
+        minCopies: 3
+      - name: Llanowar Elves
+        minCopies: 4
+      - name: Temple Garden
+        minCopies: 1
+      - name: Blooming Marsh
+        exactCopies: 0
+      - name: Breeding Pool
+        exactCopies: 0
 
   - name: Dimir Midrange
     signatureCards:
@@ -363,14 +384,27 @@ archetypes:
       - name: "Jeskai Revelation"
         exactCopies: 0
 
-  - name: Momo-White
+  - name: Mono-White Momo
     signatureCards:
       - name: Momo, Friendly Flier
         minCopies: 3
       - name: Sage of the Skies
-        minCopies: 3
+        minCopies: 2
       - name: Springleaf Drum
         minCopies: 3
+      - name: Hallowed Fountain
+        exactCopies: 0
+
+  - name: Azorius Momo
+    signatureCards:
+      - name: Momo, Friendly Flier
+        minCopies: 3
+      - name: Sage of the Skies
+        minCopies: 2
+      - name: Springleaf Drum
+        minCopies: 3
+      - name: Hallowed Fountain
+        minCopies: 1
 
   - name: Azorius Otters
     signatureCards:
@@ -482,10 +516,10 @@ archetypes:
     signatureCards:
       - name: "Practiced Offense"
         minCopies: 3
-      - name: "Surrak, Elusive Hunter"
+      - name: "Temple Garden"
         minCopies: 1
-      - name: "Pawpatch Recruit"
-        minCopies: 3
+      - name: "Nature's Rhythm"
+        maxCopies: 1
 
   - name: Izzet Aggro
     signatureCards:
@@ -509,3 +543,54 @@ archetypes:
         minCopies: 3
       - name: "Stormchaser's Talent"
         minCopies: 3
+
+  - name: Dimir Deceit
+    signatureCards:
+      - name: Deceit
+        minCopies: 3
+      - name: Requiting Hex
+        minCopies: 3
+      - name: Superior Spider-Man
+        minCopies: 3
+      - name: Doomsday Excruciator
+        exactCopies: 0
+
+  - name: Izzet Opus
+    signatureCards:
+      - name: Colorstorm Stallion
+        minCopies: 3
+      - name: "Ashling's Command"
+        minCopies: 3
+      - name: Spirebluff Canal
+        minCopies: 1
+
+  - name: Izzet Aggro
+    signatureCards:
+      - name: "Scalding Viper"
+        minCopies: 3
+      - name: "Hired Claw"
+        minCopies: 3
+      - name: Spirebluff Canal
+        minCopies: 1
+
+  - name: Jeskai Manufacturing
+    signatureCards:
+      - name: Weapons Manufacturing
+        minCopies: 3
+      - name: Legion Extruder
+        minCopies: 3
+      - name: Cryogen Relic
+        minCopies: 2
+      - name: Sacred Foundry
+        minCopies: 1
+
+  - name: Boros Manufacturing
+    signatureCards:
+      - name: Weapons Manufacturing
+        minCopies: 3
+      - name: Legion Extruder
+        minCopies: 3
+      - name: Sacred Foundry
+        minCopies: 1
+      - name: Hallowed Fountain
+        exactCopies: 0
