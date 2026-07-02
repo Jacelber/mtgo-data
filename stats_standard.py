@@ -50,36 +50,39 @@ def high_score_threshold(rounds):
 # ---------- 单赛事处理 ----------
 
 def process_event(event, archetypes):
-    """处理单个赛事，返回该赛事每位牌手的记录。"""
     player_count = to_int(event.get("player_count"))
     rounds = rounds_from_player_count(player_count)
     threshold = high_score_threshold(rounds)
-
+    starttime = event.get("starttime", "")
+    description = event.get("description", "?")
     records = []
     for player in event.get("players", []):
         main_counts, side_counts = deck_to_counts(player)
-        arch = match_archetype(main_counts, side_counts, archetypes)
-        if arch is None:
-            arch = "Unknown"
-
+        arch = match_archetype(main_counts, side_counts, archetypes) or "Unknown"
         swiss_score = to_int(player.get("swiss_score"))
         final_rank = to_int(player.get("final_rank"), default=9999)
-
         records.append({
             "archetype": arch,
             "is_high_score": swiss_score >= threshold,
             "is_top8": final_rank <= 8,
             "swiss_score": swiss_score,
             "final_rank": final_rank,
+            # 以下为示例牌表功能新增字段
+            "player": player.get("player", player.get("name", "?")),
+            "player_count": player_count,   # 事件规模，用于最佳牌表第二级排序
+            "starttime": starttime,         # 事件时间，用于最佳牌表第三级排序
+            "main_deck": player.get("main_deck", []),
+            "side_deck": player.get("sideboard", []),
         })
-
     return {
-        "description": event.get("description", "?"),
+        "description": description,
         "player_count": player_count,
         "rounds": rounds,
         "threshold": threshold,
+        "starttime": starttime,
         "records": records,
     }
+
 
 from datetime import datetime, timedelta
 
@@ -176,9 +179,28 @@ def latest_complete_week(events, today=None):
     return complete[-1] if complete else (weeks[-1] if weeks else None)
 
 
+def build_decks(records):
+    """按套牌分组，为每套牌选出最佳牌表（average_deck 暂留 None 占位）。
+    返回 dict: { archetype_name: {best_deck, average_deck} }
+    """
+    from collections import defaultdict
+    by_arch = defaultdict(list)
+    for r in records:
+        by_arch[r["archetype"]].append(r)
+
+    result = {}
+    for arch, arch_records in by_arch.items():
+        result[arch] = {
+            "best_deck": pick_best_deck(arch_records),
+            "average_deck": None,   # 平均牌表定义待补，先占位
+        }
+    return result
+
+
 def build_range(events, archetypes, end_monday, n_weeks):
     """聚合从 end_monday 那周往前数 n_weeks 个自然周内的所有赛事。
     区间 = [start_monday, end_sunday]，含首尾。
+    返回 (stats_data, decks_data)：统计 JSON 与牌表详情 JSON 两份内容。
     """
     start_monday = end_monday - timedelta(weeks=n_weeks - 1)
     end_sunday = end_monday + timedelta(days=6)
@@ -189,17 +211,25 @@ def build_range(events, archetypes, end_monday, n_weeks):
             records.extend(process_event(ev, archetypes)["records"])
 
     agg = aggregate(records)
-    return {
+    period = {
+        "type": f"{n_weeks}w",
+        "start": start_monday.isoformat(),
+        "end": end_sunday.isoformat(),
+        "weeks": n_weeks,
+    }
+    stats_data = {
         "format": "standard",
         "source": "mtgo",
-        "period": {
-            "type": f"{n_weeks}w",
-            "start": start_monday.isoformat(),
-            "end": end_sunday.isoformat(),
-            "weeks": n_weeks,
-        },
+        "period": period,
         **agg,
     }
+    decks_data = {
+        "format": "standard",
+        "source": "mtgo",
+        "period": period,
+        "decks": build_decks(records),
+    }
+    return stats_data, decks_data
 
 
 def build_all_stats(today=None):
@@ -217,19 +247,25 @@ def build_all_stats(today=None):
     ranges = [1, 4, 12, 36]
     index_entries = []
     for n in ranges:
-        data = build_range(events, archetypes, end_monday, n)
+        data, decks = build_range(events, archetypes, end_monday, n)
         fname = f"range_{n}w.json"
         with open(os.path.join(out_dir, fname), "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
+
+        decks_fname = f"decks_{n}w.json"
+        with open(os.path.join(out_dir, decks_fname), "w", encoding="utf-8") as f:
+            json.dump(decks, f, ensure_ascii=False, indent=2)
+
         index_entries.append({
             "file": fname,
+            "decks_file": decks_fname,
             "type": data["period"]["type"],
             "start": data["period"]["start"],
             "end": data["period"]["end"],
             "weeks": n,
             "total_decks": data["total_decks"],
         })
-        print(f"  写出 {fname}: {data['period']['start']} ~ {data['period']['end']}, "
+        print(f"  写出 {fname} + {decks_fname}: {data['period']['start']} ~ {data['period']['end']}, "
               f"{data['total_decks']} 副牌, 高分 {data['total_high_score']}, 八强 {data['total_top8']}")
 
     index = {
@@ -244,6 +280,52 @@ def build_all_stats(today=None):
     print(f"  写出 index.json")
     print(f"  全部输出到 {out_dir}/")
 
+def merge_cards(card_list):
+    """合并同名卡，qty 累加。按卡名排序返回。"""
+    merged = {}
+    for c in card_list:
+        name = c.get("name", "?")
+        merged[name] = merged.get(name, 0) + to_int(c.get("qty", 0))
+    return [{"name": n, "qty": q} for n, q in sorted(merged.items())]
+
+
+def pick_best_deck(archetype_records):
+    """按三级排序选出最佳牌表：
+       1) final_rank 最小（瑞士轮排名最高）
+       2) player_count 最大（场次人数最多）
+       3) starttime 最新（日期更近）
+       archetype_records: 属于同一套牌的 record 列表
+       返回一个 dict（含选手、战绩、主牌、备牌），无记录则返回 None
+    """
+    if not archetype_records:
+        return None
+    best = min(
+        archetype_records,
+        key=lambda r: (
+            r["final_rank"],           # 越小越好
+            -r["player_count"],        # 取负号使越大越靠前
+            _neg_time_key(r["starttime"]),  # 越新越靠前
+        ),
+    )
+    return {
+        "player": best["player"],
+        "final_rank": best["final_rank"] if best["final_rank"] != 9999 else None,
+        "swiss_score": best["swiss_score"],
+        "player_count": best["player_count"],
+        "starttime": best["starttime"],
+        "main_deck": merge_cards(best["main_deck"]),
+        "side_deck": merge_cards(best["side_deck"]),
+    }
+
+
+def _neg_time_key(starttime):
+    """把 starttime 转成可比较的负向排序键：时间越新，返回值越小（排越前）。
+       解析失败的记为最旧（排最后）。"""
+    d = parse_event_date(starttime)
+    if d is None:
+        return 0  # 最旧
+    # date.toordinal() 越大越新，取负后越新越小
+    return -d.toordinal()
 
 # ---------- 自测块（始终放在文件最末尾） ----------
 
@@ -335,3 +417,28 @@ if __name__ == "__main__":
 
     print("\n=== 生成区间统计 JSON ===")
     build_all_stats()
+    
+    print("\n=== 最佳牌表选择测试（单赛事内按套牌）===")
+    # 复用前面已 process_event 的 result（第一个赛事文件）
+    from collections import defaultdict
+    by_arch = defaultdict(list)
+    for r in result["records"]:
+        by_arch[r["archetype"]].append(r)
+    for arch in list(by_arch.keys())[:5]:
+        best = pick_best_deck(by_arch[arch])
+        main_len = sum(to_int(c.get("qty", 0)) for c in best["main_deck"]) if best["main_deck"] else 0
+        side_len = sum(to_int(c.get("qty", 0)) for c in best["side_deck"]) if best["side_deck"] else 0
+        print(f"  {arch:<22} 最佳: {best['player']:<14} "
+              f"rank={best['final_rank']} score={best['swiss_score']} "
+              f"主牌={main_len}张 备牌={side_len}张({len(best['side_deck'])}条)")
+
+    print("\n=== 牌手对象结构探查 ===")
+    first_player = event["players"][0]
+    print("  牌手对象的顶层字段:", list(first_player.keys()))
+    for k, v in first_player.items():
+        if isinstance(v, list):
+            print(f"  字段 {k!r} 是列表，长度 {len(v)}，第一个元素: {v[0] if v else '空'}")
+        else:
+            print(f"  字段 {k!r} = {v!r}")
+
+
