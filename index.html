@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTGO Meta 数据分析</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    background: #f5f6f8; color: #222; line-height: 1.5;
+    max-width: 1100px; margin: 0 auto; padding: 16px;
+  }
+  h1 { font-size: 20px; margin-bottom: 12px; }
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
+  }
+  .lang-switch button {
+    border: 1px solid #ccc; background: #fff; padding: 4px 10px;
+    cursor: pointer; border-radius: 4px; font-size: 13px;
+  }
+  .lang-switch button.active { background: #3b6ea5; color: #fff; border-color: #3b6ea5; }
+  .format-tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+  .format-tabs button {
+    border: none; background: #e3e6ea; padding: 6px 16px; cursor: pointer;
+    border-radius: 6px 6px 0 0; font-size: 14px; color: #555;
+  }
+  .format-tabs button.active { background: #3b6ea5; color: #fff; font-weight: bold; }
+  .format-tabs button:disabled { color: #aaa; cursor: not-allowed; opacity: 0.6; }
+  .range-buttons { display: flex; gap: 6px; margin-bottom: 14px; }
+  .range-buttons button {
+    border: 1px solid #ccc; background: #fff; padding: 6px 14px;
+    cursor: pointer; border-radius: 4px; font-size: 13px;
+  }
+  .range-buttons button.active { background: #3b6ea5; color: #fff; border-color: #3b6ea5; }
+  .period-info { font-size: 13px; color: #777; margin-bottom: 14px; }
+  .panel { background: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px;
+           box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .placeholder { color: #999; text-align: center; padding: 40px 0; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th, .data-table td { padding: 6px 10px; border-bottom: 1px solid #eee; }
+  .data-table th.sortable { cursor: pointer; user-select: none; background: #f0f2f5; }
+  .data-table th.sortable:hover { background: #e3e6ea; }
+  .data-table tbody tr:hover { background: #f9fafb; }
+  .arch-link { color: #3b6ea5; text-decoration: none; }
+  .arch-link:hover { text-decoration: underline; }
+
+  /* 行内展开的牌表 */
+  .deck-row td { background: #fbfcfd; padding: 0; }
+  .deck-row:hover td { background: #fbfcfd; }
+  .deck-box { position: relative; padding: 14px 16px; }
+  .deck-close {
+    position: absolute; top: 10px; right: 12px;
+    border: none; background: #eee; cursor: pointer; border-radius: 4px;
+    padding: 2px 9px; font-size: 14px; line-height: 1.4; color: #666;
+  }
+  .deck-close:hover { background: #ddd; }
+  .deck-title { font-size: 16px; font-weight: bold; margin-bottom: 8px; padding-right: 30px; }
+  .deck-columns { display: flex; gap: 24px; flex-wrap: wrap; }
+  .deck-col { flex: 1; min-width: 240px; }
+  .deck-col h3 { font-size: 14px; margin: 4px 0; color: #3b6ea5; }
+  .deck-col h4 { font-size: 13px; margin: 10px 0 4px; color: #666; }
+  .deck-meta { font-size: 12px; color: #888; margin-bottom: 6px; }
+  .card-list { list-style: none; font-size: 13px; padding-left: 0; margin: 0; }
+  .card-list li { padding: 1px 0; }
+  .card-list .qty { display: inline-block; width: 20px; color: #999; text-align: right; margin-right: 6px; }
+  .card-link { color: #333; text-decoration: none; }
+  .card-link:hover { color: #3b6ea5; text-decoration: underline; }
+  .deck-total { font-size: 12px; color: #aaa; margin-bottom: 2px; }
+
+  /* 卡图悬停预览 */
+  #cardPreview {
+    position: fixed; z-index: 9999; pointer-events: none;
+    width: 240px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    display: none; background: #fff;
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <h1 id="siteTitle">MTGO Meta 数据分析</h1>
+    <div class="lang-switch">
+      <button id="langZh" class="active" onclick="setLang('zh')">中文</button>
+      <button id="langEn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+
+  <div class="format-tabs" id="formatTabs"></div>
+  <div class="range-buttons" id="rangeButtons"></div>
+  <div class="period-info" id="periodInfo"></div>
+
+  <div class="panel" id="chartPanel">
+    <canvas id="metaChart"></canvas>
+  </div>
+
+  <div class="panel" id="tablePanel">
+    <div class="placeholder" id="tablePlaceholder">（数据表格待接入）</div>
+  </div>
+
+  <img id="cardPreview" alt="">
+
+<script>
+// ===================== 配置 =====================
+const CHART_MIN_SHARE = 0.02;
+const RANGES = [1, 4, 12, 36];
+const FORMATS = [
+  { key: "standard", enabled: true },
+  { key: "pioneer",  enabled: false },
+  { key: "modern",   enabled: false },
+];
+
+// ===================== i18n 字典 =====================
+const I18N = {
+  zh: {
+    siteTitle: "MTGO Meta 数据分析",
+    range_1w: "1 周", range_4w: "4 周", range_12w: "12 周", range_36w: "36 周",
+    format_standard: "标准", format_pioneer: "先驱", format_modern: "近代",
+    col_archetype: "套牌", col_hs_count: "高分数量", col_hs_share: "高分占比",
+    col_t8_count: "八强数量", col_t8_share: "八强占比", col_conv: "转化率",
+    chart_hs: "高分占比", chart_t8: "八强占比",
+    period: "统计区间", loading: "加载中…",
+    best_deck: "最佳牌表", avg_deck: "平均牌表", avg_wip: "（开发中）",
+    main_deck: "主牌", side_deck: "备牌", na: "N/A", others:"其他",
+  },
+  en: {
+    siteTitle: "MTGO Meta Analytics",
+    range_1w: "1 Week", range_4w: "4 Weeks", range_12w: "12 Weeks", range_36w: "36 Weeks",
+    format_standard: "Standard", format_pioneer: "Pioneer", format_modern: "Modern",
+    col_archetype: "Archetype", col_hs_count: "High-Score", col_hs_share: "HS Share",
+    col_t8_count: "Top 8", col_t8_share: "T8 Share", col_conv: "Conversion",
+    chart_hs: "HS Share", chart_t8: "T8 Share",
+    period: "Period", loading: "Loading…",
+    best_deck: "Best Deck", avg_deck: "Average Deck", avg_wip: "(WIP)",
+    main_deck: "Main", side_deck: "Sideboard", na: "N/A", others:"Others",
+  },
+};
+
+// ===================== 全局状态 =====================
+let lang = "zh";
+let currentFormat = "standard";
+let currentRange = 1;
+let currentData = null;
+let sortKey = "hs_share";
+let sortDir = "desc";
+let chartInstance = null;
+let currentDecks = null;   // 当前区间的 decks_Xw.json 内容
+let openedArch = null;     // 当前展开的套牌名（排序/切换后保持展开）
+
+const COLSPAN = 6;         // 表格列数，展开行需跨这么多列
+
+// ===================== i18n 取值函数 =====================
+function t(key) {
+  return (I18N[lang] && I18N[lang][key]) || (I18N.en[key]) || key;
+}
+function archetypeName(en) {
+  return en;   // TODO: 接入 archetype_names_zh 对照表
+}
+function cardName(en) {
+  return en;   // TODO: 接入 card_names_zh 对照表
+}
+// 单卡跳转链接（默认 Scryfall 精确名查询；将来可改 MTGCH）
+function cardUrl(en) {
+  return "https://scryfall.com/search?q=" + encodeURIComponent(`!"${en}"`);
+}
+
+// ===================== 卡图悬停预览 =====================
+// Scryfall 按精确名取图；normal 尺寸约 488×680
+function cardImageUrl(en) {
+  return "https://api.scryfall.com/cards/named?exact="
+    + encodeURIComponent(en) + "&format=image&version=normal";
+}
+
+const _cardImgCache = {};   // 预加载缓存，避免重复请求
+let _previewToken = 0;      // 防止快速移动时旧图覆盖新图
+
+function showCardPreview(en, ev) {
+  const box = document.getElementById("cardPreview");
+  const token = ++_previewToken;
+
+  const place = () => {
+    box.style.display = "block";
+    moveCardPreview(ev);
+  };
+
+  if (_cardImgCache[en]) {
+    box.src = _cardImgCache[en];
+    place();
+  } else {
+    const pre = new Image();
+    pre.onload = () => {
+      if (token !== _previewToken) return;   // 已移到别的卡，放弃
+      _cardImgCache[en] = pre.src;
+      box.src = pre.src;
+      place();
+    };
+    pre.src = cardImageUrl(en);
+  }
+}
+
+function moveCardPreview(ev) {
+  const box = document.getElementById("cardPreview");
+  if (box.style.display !== "block") return;
+  const w = 240, h = 336, pad = 16;
+  let x = ev.clientX + pad;
+  let y = ev.clientY + pad;
+  if (x + w > window.innerWidth)  x = ev.clientX - w - pad;
+  if (y + h > window.innerHeight) y = window.innerHeight - h - pad;
+  if (y < pad) y = pad;
+  box.style.left = x + "px";
+  box.style.top = y + "px";
+}
+
+function hideCardPreview() {
+  _previewToken++;   // 使任何进行中的加载作废
+  const box = document.getElementById("cardPreview");
+  box.style.display = "none";
+}
+
+// ===================== 渲染骨架 =====================
+function renderFormatTabs() {
+  const box = document.getElementById("formatTabs");
+  box.innerHTML = "";
+  FORMATS.forEach(f => {
+    const b = document.createElement("button");
+    b.textContent = t("format_" + f.key);
+    b.disabled = !f.enabled;
+    if (f.key === currentFormat) b.classList.add("active");
+    b.onclick = () => { if (f.enabled) { currentFormat = f.key; refreshAll(); } };
+    box.appendChild(b);
+  });
+}
+
+function renderRangeButtons() {
+  const box = document.getElementById("rangeButtons");
+  box.innerHTML = "";
+  RANGES.forEach(n => {
+    const b = document.createElement("button");
+    b.textContent = t("range_" + n + "w");
+    if (n === currentRange) b.classList.add("active");
+    b.onclick = () => { currentRange = n; refreshAll(); };
+    box.appendChild(b);
+  });
+}
+
+function renderStaticTexts() {
+  document.getElementById("siteTitle").textContent = t("siteTitle");
+  document.title = t("siteTitle");
+  document.documentElement.lang = (lang === "zh") ? "zh" : "en";
+  document.getElementById("langZh").classList.toggle("active", lang === "zh");
+  document.getElementById("langEn").classList.toggle("active", lang === "en");
+}
+
+// ===================== 数据加载 =====================
+async function loadData() {
+const url = `stats/${currentFormat}/mtgo/range_${currentRange}w.json?v=${Date.now()}`;
+  const tp = document.getElementById("tablePlaceholder");
+  if (tp) tp.textContent = t("loading");
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    currentData = await resp.json();
+
+    // 同时加载牌表详情文件（失败不阻塞主表格）
+    const deckUrl = `stats/${currentFormat}/mtgo/decks_${currentRange}w.json?v=${Date.now()}`;
+    try {
+      const dResp = await fetch(deckUrl);
+      currentDecks = dResp.ok ? await dResp.json() : null;
+    } catch (e) {
+      currentDecks = null;
+    }
+  } catch (e) {
+    currentData = null;
+    document.getElementById("tablePanel").innerHTML =
+      `<div class="placeholder">加载失败: ${url}<br>${e.message}</div>`;
+    return;
+  }
+
+  updatePeriodInfo();
+  renderTable();
+  renderChart();
+}
+
+function updatePeriodInfo() {
+  if (!currentData) return;
+  const p = currentData.period;
+  document.getElementById("periodInfo").textContent =
+    `${t("period")}: ${p.start} ~ ${p.end}　|　` +
+    `${currentData.total_decks} decks　|　HS ${currentData.total_high_score}　|　T8 ${currentData.total_top8}`;
+}
+
+// ===================== 表格渲染 =====================
+function fmtPct(x) {
+  if (x === null || x === undefined) return t("na");
+  return (x * 100).toFixed(1) + "%";
+}
+
+function sortedArchetypes() {
+  const arr = [...currentData.archetypes];
+  const keymap = {
+    archetype: a => archetypeName(a.name).toLowerCase(),
+    hs_count: a => a.high_score_count,
+    hs_share: a => a.high_score_share ?? 0,
+    t8_count: a => a.top8_count,
+    t8_share: a => a.top8_share ?? 0,
+    conv: a => (a.conversion ?? -1),
+  };
+  const f = keymap[sortKey] || keymap.hs_share;
+  arr.sort((x, y) => {
+    const vx = f(x), vy = f(y);
+    if (vx < vy) return sortDir === "asc" ? -1 : 1;
+    if (vx > vy) return sortDir === "asc" ? 1 : -1;
+    return 0;
+  });
+  return arr;
+}
+
+function renderTable() {
+  if (!currentData) return;
+  const cols = [
+    { key: "archetype", label: "col_archetype", align: "left" },
+    { key: "hs_count",  label: "col_hs_count",  align: "right" },
+    { key: "hs_share",  label: "col_hs_share",  align: "right" },
+    { key: "t8_count",  label: "col_t8_count",  align: "right" },
+    { key: "t8_share",  label: "col_t8_share",  align: "right" },
+    { key: "conv",      label: "col_conv",      align: "right" },
+  ];
+  let html = '<table class="data-table"><thead><tr>';
+  cols.forEach(c => {
+    let arrow = "";
+    if (c.key === sortKey) arrow = sortDir === "desc" ? " ▼" : " ▲";
+    html += `<th style="text-align:${c.align}" data-key="${c.key}" class="sortable">${t(c.label)}${arrow}</th>`;
+  });
+  html += "</tr></thead><tbody>";
+  sortedArchetypes().filter(a => a.high_score_count > 0).forEach(a => {
+    html += "<tr>"
+      + `<td><a href="#" class="arch-link" data-name="${encodeURIComponent(a.name)}">${archetypeName(a.name)}</a></td>`
+      + `<td style="text-align:right">${a.high_score_count}</td>`
+      + `<td style="text-align:right">${fmtPct(a.high_score_share)}</td>`
+      + `<td style="text-align:right">${a.top8_count}</td>`
+      + `<td style="text-align:right">${fmtPct(a.top8_share)}</td>`
+      + `<td style="text-align:right">${fmtPct(a.conversion)}</td>`
+      + "</tr>";
+  });
+  html += "</tbody></table>";
+
+  const panel = document.getElementById("tablePanel");
+  panel.innerHTML = html;
+
+  // 表头点击排序
+  panel.querySelectorAll("th.sortable").forEach(th => {
+    th.onclick = () => {
+      const k = th.dataset.key;
+      if (sortKey === k) { sortDir = (sortDir === "desc") ? "asc" : "desc"; }
+      else { sortKey = k; sortDir = "desc"; }
+      renderTable();
+    };
+  });
+
+  // 套牌名点击：行内展开/收起牌表
+  panel.querySelectorAll("a.arch-link").forEach(link => {
+    link.onclick = (ev) => {
+      ev.preventDefault();
+      const name = decodeURIComponent(link.dataset.name);
+      toggleDeckRow(name, link.closest("tr"));
+    };
+  });
+
+  // 卡图悬停预览（事件委托到表格容器）
+  panel.onmouseover = (ev) => {
+    const link = ev.target.closest("a.card-link");
+    if (link) showCardPreview(decodeURIComponent(link.dataset.card), ev);
+  };
+  panel.onmousemove = (ev) => {
+    if (document.getElementById("cardPreview").style.display === "block") {
+      moveCardPreview(ev);
+    }
+  };
+  panel.onmouseout = (ev) => {
+    const link = ev.target.closest("a.card-link");
+    if (link) hideCardPreview();
+  };
+
+  // 排序/重画后，如果之前有展开的套牌，重新展开到它的新行下
+  if (openedArch) {
+    const arch = openedArch;
+    openedArch = null;   // toggleDeckRow 会重新设回
+    const link = panel.querySelector(`a.arch-link[data-name="${encodeURIComponent(arch)}"]`);
+    if (link) toggleDeckRow(arch, link.closest("tr"));
+  }
+}
+
+// ===================== 柱状图渲染 =====================
+function renderChart(){
+  if(!currentData) return;
+  let arr=[...currentData.archetypes].sort((a,b)=>(b.high_score_share??0)-(a.high_score_share??0));
+  let shown=arr.filter(a=>(a.high_score_share??0)>=CHART_MIN_SHARE);
+  let rest =arr.filter(a=>(a.high_score_share??0)< CHART_MIN_SHARE);
+
+  const labels=shown.map(a=>archetypeName(a.name));
+  const hsData=shown.map(a=>+((a.high_score_share??0)*100).toFixed(1));
+  const t8Data=shown.map(a=>+((a.top8_share??0)*100).toFixed(1));
+
+  // 把不足 2% 的合并成 Others，放最下方
+  if(rest.length>0){
+    const othHs=rest.reduce((s,a)=>s+(a.high_score_share??0),0);
+    const othT8=rest.reduce((s,a)=>s+(a.top8_share??0),0);
+    labels.push(t("others"));
+    hsData.push(+(othHs*100).toFixed(1));
+    t8Data.push(+(othT8*100).toFixed(1));
+  }
+
+  const canvas=document.getElementById("metaChart");
+  canvas.parentElement.style.height=Math.max(200, labels.length*34+60)+"px";
+  if(chartInstance) chartInstance.destroy();
+  chartInstance=new Chart(canvas,{type:"bar",data:{labels,datasets:[
+    {label:t("chart_hs"),data:hsData,backgroundColor:"#3b6ea5"},
+    {label:t("chart_t8"),data:t8Data,backgroundColor:"#e0973b"}
+  ]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+    scales:{x:{beginAtZero:true,ticks:{callback:v=>v+"%"}}},
+    plugins:{legend:{position:"top"},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+": "+ctx.parsed.x+"%"}}}}});
+}
+
+
+// ===================== 牌表详情（行内展开）=====================
+function deckCardList(cards) {
+  if (!cards || cards.length === 0) return "<div class='placeholder'>—</div>";
+  const total = cards.reduce((s, c) => s + (c.qty || 0), 0);
+  let html = `<div class="deck-total">${total}</div><ul class="card-list">`;
+  cards.forEach(c => {
+    const dataCard = encodeURIComponent(c.name).replace(/"/g, "&quot;");
+    html += `<li><span class="qty">${c.qty}</span>`
+      + `<a class="card-link" href="${cardUrl(c.name)}" target="_blank" rel="noopener" data-card="${dataCard}">${cardName(c.name)}</a></li>`;
+  });
+  html += `</ul>`;
+  return html;
+}
+
+function deckBoxHtml(archName) {
+  const entry = currentDecks && currentDecks.decks ? currentDecks.decks[archName] : null;
+  const best = entry ? entry.best_deck : null;
+  let inner = `<button class="deck-close" onclick="closeDeckRow()">✕</button>`
+    + `<div class="deck-title">${archetypeName(archName)}</div>`;
+  if (!best) {
+    inner += `<div class="placeholder">—</div>`;
+    return `<div class="deck-box">${inner}</div>`;
+  }
+  const fr = (best.final_rank === null || best.final_rank === undefined) ? "-" : best.final_rank;
+  inner += `<div class="deck-columns">
+      <div class="deck-col">
+        <h3>${t("best_deck")}</h3>
+        <div class="deck-meta">${best.player} · rank ${fr} · score ${best.swiss_score} · ${best.starttime.slice(0,10)}</div>
+        <h4>${t("main_deck")}</h4>${deckCardList(best.main_deck)}
+        <h4>${t("side_deck")}</h4>${deckCardList(best.side_deck)}
+      </div>
+      <div class="deck-col">
+        <h3>${t("avg_deck")}</h3>
+        <div class="placeholder">${t("avg_wip")}</div>
+      </div>
+    </div>`;
+  return `<div class="deck-box">${inner}</div>`;
+}
+
+// 在指定套牌那一行下方插入展开行；已展开同一套牌则收起（切换）
+function toggleDeckRow(archName, rowEl) {
+  const next = rowEl.nextElementSibling;
+  const alreadyOpen = next && next.classList.contains("deck-row")
+                      && next.dataset.arch === archName;
+  closeDeckRow();                       // 同一时间只展开一个
+  if (alreadyOpen) { openedArch = null; return; }   // 点自己 => 收起
+  openedArch = archName;
+  const tr = document.createElement("tr");
+  tr.className = "deck-row";
+  tr.dataset.arch = archName;
+  tr.innerHTML = `<td colspan="${COLSPAN}">${deckBoxHtml(archName)}</td>`;
+  rowEl.parentNode.insertBefore(tr, rowEl.nextSibling);
+}
+
+function closeDeckRow() {
+  hideCardPreview();   // 收起牌表时顺便关掉可能残留的卡图
+  document.querySelectorAll("tr.deck-row").forEach(r => r.remove());
+  openedArch = null;
+}
+
+// ===================== 语言与刷新 =====================
+function setLang(l) {
+  lang = l;
+  refreshAll();
+}
+
+function refreshAll() {
+  renderStaticTexts();
+  renderFormatTabs();
+  renderRangeButtons();
+  loadData();   // 加载数据 -> 渲染表格/图表；展开状态在 renderTable 内部恢复
+}
+
+// ===================== 启动 =====================
+refreshAll();
+</script>
+</body>
+</html>

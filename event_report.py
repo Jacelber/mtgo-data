@@ -4,7 +4,7 @@ from classify_standard import load_rules, deck_to_counts, normalize_name, signat
 DATA_DIR = "data/standard"
 
 # 在这里填你要分析的那场赛事的文件名
-TARGET_FILE = "Standard_RC_Super_Qualifier_12845613.json"   # ← 改成你的目标文件
+TARGET_FILE = "Standard_Challenge_32_12845647.json"   # ← 改成你的目标文件
 
 def match_archetype(main_counts, side_counts, archetypes):
     for arch in archetypes:

@@ -4,6 +4,7 @@ import glob
 
 # 直接复用分类脚本的核心逻辑，保证 Unknown 判定完全一致（含别名表）
 from classify_standard import load_rules, deck_to_counts, signature_card_met
+from stats_standard import rounds_from_player_count, high_score_threshold, to_int
 
 # === 配置 ===
 DATA_DIR = "data/standard"
@@ -38,22 +39,45 @@ def similarity(set_a, set_b):
 def main():
     archetypes = load_rules()
 
-    # 1. 收集所有 Unknown 牌表
+    # 1. 收集所有 Unknown 牌表（仅保留高分或八强的）
     unknowns = []   # 每个元素: (赛事名, 牌手名, 卡名集合, 带张数的卡列表)
+    kept, skipped_lowperf = 0, 0
     for event_path in glob.glob(os.path.join(DATA_DIR, "*.json")):
         with open(event_path, "r", encoding="utf-8") as f:
             event = json.load(f)
+
+        # 算出这个赛事的高分门槛
+        player_count = to_int(event.get("player_count"))
+        rounds = rounds_from_player_count(player_count)
+        threshold = high_score_threshold(rounds)
+
         for player in event.get("players", []):
             main_counts, side_counts = deck_to_counts(player)
-            if is_unknown(main_counts, side_counts, archetypes):
-                cardset = deck_to_cardset(main_counts, side_counts)
-                # 带张数的卡列表（主牌），方便看代表牌表
-                card_list = sorted(f"{q} {n}" for n, q in main_counts.items())
-                unknowns.append((event.get("description", "?"),
-                                 player.get("player", "?"),
-                                 cardset, card_list))
+            if not is_unknown(main_counts, side_counts, archetypes):
+                continue
 
-    print(f"共有 {len(unknowns)} 副 Unknown 牌表，开始聚类...\n")
+            # 高分 / 八强判定
+            swiss_score = to_int(player.get("swiss_score"))
+            final_rank = to_int(player.get("final_rank"), default=9999)
+            is_high = swiss_score >= threshold
+            is_top8 = final_rank <= 8
+            if not (is_high or is_top8):
+                skipped_lowperf += 1
+                continue   # 低战绩的 Unknown 直接跳过，不参与聚类
+
+            kept += 1
+            cardset = deck_to_cardset(main_counts, side_counts)
+            card_list = sorted(f"{q} {n}" for n, q in main_counts.items())
+            tag = []
+            if is_high: tag.append("高分")
+            if is_top8: tag.append("八强")
+            label = "/".join(tag)
+            unknowns.append((event.get("description", "?") + f" [{label}]",
+                             player.get("player", "?"),
+                             cardset, card_list))
+
+    print(f"高分/八强 Unknown: {kept} 副（已跳过低战绩 Unknown {skipped_lowperf} 副），开始聚类...\n")
+
 
     # 2. 简单贪心聚类：每副牌和已有的组比较，重合度够高就并入，否则自立一组
     groups = []   # 每个组是一个 list，里面是 unknowns 的索引

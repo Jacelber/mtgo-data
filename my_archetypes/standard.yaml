@@ -12,8 +12,6 @@ archetypes:
 
   - name: Jeskai Lessons
     signatureCards:
-      - name: "Gran-Gran"
-        minCopies: 3
       - name: "Accumulate Wisdom"
         minCopies: 3
       - name: "Jeskai Revelation"
@@ -21,8 +19,6 @@ archetypes:
 
   - name: Izzet Lessons
     signatureCards:
-      - name: "Gran-Gran"
-        minCopies: 4
       - name: "Firebending Lesson"
         minCopies: 4
       - name: "Accumulate Wisdom"
@@ -64,7 +60,7 @@ archetypes:
       - name: Earthbender Ascension
         minCopies: 3
       - name: Stomping Ground
-        minCopies: 4
+        minCopies: 3
 
   - name: Selesnya Landfall
     signatureCards:
@@ -76,7 +72,7 @@ archetypes:
         minCopies: 4
       - name: Earthbender Ascension
         minCopies: 3
-      - name: Temple Garden
+      - name: Plains
         minCopies: 1
 
   - name: Dimir Excruciator
@@ -95,8 +91,6 @@ archetypes:
       - name: Badgermole Cub
         minCopies: 4
       - name: "Nature's Rhythm"
-        minCopies: 3
-      - name: Gene Pollinator
         minCopies: 3
       - name: Llanowar Elves
         minCopies: 4
@@ -164,6 +158,17 @@ archetypes:
       - name: Hearth Elemental
         minCopies: 1
 
+  - name: Mono-Blue Spellementals
+    signatureCards:
+      - name: Eddymurk Crab
+        minCopies: 4
+      - name: Sunderflock
+        minCopies: 2
+      - name: Island
+        minCopies: 14
+      - name: "Eluge, the Shoreless Sea"
+        minCopies: 3
+
   - name: Temur Elementals
     signatureCards:
       - name: "Ashling, Rekindled"
@@ -188,10 +193,19 @@ archetypes:
       - name: Vibrance
         minCopies: 2
 
+  - name: Temur Tablet
+    signatureCards:
+      - name: "Tablet of Discovery"
+        minCopies: 2
+      - name: "Breeding Pool"
+        minCopies: 2
+      - name: "Doppelgang"
+        minCopies: 1
+
   - name: 4-Color Tablet
     signatureCards:
       - name: "Tablet of Discovery"
-        minCopies: 3
+        minCopies: 2
       - name: "Jeskai Revelation"
         minCopies: 2
       - name: "Inevitable Defeat"
@@ -225,8 +239,6 @@ archetypes:
         minCopies: 2
       - name: Jeskai Revelation
         minCopies: 1
-      - name: No More Lies
-        minCopies: 2
       - name: Stock Up
         minCopies: 1
 
@@ -248,7 +260,7 @@ archetypes:
       - name: "Voice of Victory"
         minCopies: 2
 
-  - name: Izzet Sling
+  - name: Izzet Fling
     signatureCards:
       - name: "Callous Sell-Sword"
         minCopies: 3
@@ -256,6 +268,15 @@ archetypes:
         minCopies: 4
       - name: Spirebluff Canal
         minCopies: 1
+
+  - name: Gruul Fling
+    signatureCards:
+      - name: "Callous Sell-Sword"
+        minCopies: 3
+      - name: "Stomping Ground"
+        minCopies: 3
+      - name: Thornspire Verge
+        minCopies: 3
 
   - name: Izzet Prowess
     signatureCards:
@@ -433,6 +454,17 @@ archetypes:
       - name: "Nature's Rhythm"
         exactCopies: 0
 
+  - name: Sultai Demon
+    signatureCards:
+      - name: "Unholy Annex // Ritual Chamber"
+        minCopies: 3
+      - name: "Watery Grave"
+        minCopies: 1
+      - name: "Nature's Rhythm"
+        exactCopies: 0
+      - name: "Overgrown Tomb"
+        minCopies: 1
+
   - name: Boros Burn
     signatureCards:
       - name: "Boros Charm"
@@ -475,6 +507,8 @@ archetypes:
         minCopies: 3
       - name: "United Battlefront"
         minCopies: 3
+      - name: "Weapons Manufacturing"
+        exactCopies: 0    
 
   - name: Leyline Aggro
     signatureCards:
@@ -577,7 +611,7 @@ archetypes:
     signatureCards:
       - name: Weapons Manufacturing
         minCopies: 3
-      - name: Legion Extruder
+      - name: United Battlefront
         minCopies: 3
       - name: Cryogen Relic
         minCopies: 2
@@ -588,9 +622,137 @@ archetypes:
     signatureCards:
       - name: Weapons Manufacturing
         minCopies: 3
-      - name: Legion Extruder
+      - name: United Battlefront
         minCopies: 3
       - name: Sacred Foundry
         minCopies: 1
       - name: Hallowed Fountain
         exactCopies: 0
+
+  - name: Golgari Reanimator
+    signatureCards:
+      - name: "Zombify"
+        minCopies: 3
+      - name: "Broodheart Engine"
+        minCopies: 3
+      - name: "Broodspinner"
+        minCopies: 3
+
+  - name: Sultai Control
+    signatureCards:
+      - name: "Undercity Sewers"
+        minCopies: 1
+      - name: "Rakshasa's Bargain"
+        minCopies: 3
+      - name: "Willowrush Verge"
+        minCopies: 1
+
+  - name: 4-Color Control
+    signatureCards:
+      - name: "Rakshasa's Bargain"
+        minCopies: 2
+      - name: "Aang, Swift Savior"
+        minCopies: 2
+      - name: "Three Steps Ahead"
+        minCopies: 2
+      - name: "Emeritus of Abundance"
+        minCopies: 2
+      - name: "Flow State"
+        exactCopies: 0
+
+  - name: Orzhov Repartee 
+    signatureCards:
+      - name: "Informed Inkwright"
+        minCopies: 3
+      - name: "Lecturing Scornmage"
+        minCopies: 3
+      - name: "Concealed Courtyard"
+        minCopies: 2
+
+  - name: Mono-Black Aggro
+    signatureCards:
+      - name: "Swamp"
+        minCopies: 14
+      - name: "Timeline Culler"
+        minCopies: 3
+      - name: "Forsaken Miner"
+        minCopies: 2
+
+  - name: Golgari Crime
+    signatureCards:
+      - name: "Freestrider Lookout"
+        minCopies: 4
+      - name: "Ghost Vacuum"
+        minCopies: 3
+
+  - name: Golgari Roots
+    signatureCards:
+      - name: "Insidious Roots"
+        minCopies: 4
+      - name: "Blooming Marsh"
+        minCopies: 4
+
+  - name: Orzhov Control
+    signatureCards:
+      - name: "Godless Shrine"
+        minCopies: 3
+      - name: "Ketramose, the New Dawn"
+        minCopies: 3       
+      - name: "Ghost Vacuum"
+        minCopies: 3
+      - name: "Deadly Cover-Up"
+        minCopies: 2 
+
+  - name: Boros Leyline
+    signatureCards:
+      - name: "Leyline of Resonance"
+        minCopies: 3
+      - name: "Inspiring Vantage"
+        minCopies: 3
+
+  - name: Mono-Red Leyline
+    signatureCards:
+      - name: "Leyline of Resonance"
+        minCopies: 3
+      - name: "Mountain"
+        minCopies: 12
+
+  - name: Simic Ramp
+    signatureCards:
+      - name: "Shared Roots"
+        minCopies: 4
+      - name: "Breeding Pool"
+        minCopies: 4
+
+  - name: Mono-Green Aggro
+    signatureCards:
+      - name: "Forest"
+        minCopies: 14
+      - name: "Frenzied Baloth"
+        minCopies: 4
+
+   # ========== 色组兜底规则（无具体签名卡的中速/杂类，须始终置于最后）==========
+
+  - name: Golgari Midrange
+    signatureCards:
+      - name: "Overgrown Tomb"
+        minCopies: 2
+      - name: "Restless Cottage"
+        minCopies: 1
+      - name: "Blooming Marsh"
+        minCopies: 2
+      - name: "Nature's Rhythm"
+        exactCopies: 0
+      - name: "Flow State"
+        exactCopies: 0
+      - name: "Unholy Annex // Ritual Chamber"
+        maxCopies: 1
+
+  - name: Selesnya Midrange
+    signatureCards:
+      - name: "Temple Garden"
+        minCopies: 2
+      - name: "Hushwood Verge"
+        minCopies: 2
+      - name: "Plains"
+        minCopies: 1

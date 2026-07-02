@@ -5,7 +5,7 @@ import math
 import os
 import json
 import glob
-from classify_standard import load_rules, deck_to_counts, match_archetype
+from classify_standard import load_rules, deck_to_counts, match_archetype, normalize_name
 
 DATA_DIR = "data/standard"
 
@@ -281,10 +281,10 @@ def build_all_stats(today=None):
     print(f"  全部输出到 {out_dir}/")
 
 def merge_cards(card_list):
-    """合并同名卡，qty 累加。按卡名排序返回。"""
+    """合并同名卡，qty 累加。卡名先经 normalize_name 规范化（应用别名）。按卡名排序返回。"""
     merged = {}
     for c in card_list:
-        name = c.get("name", "?")
+        name = normalize_name(c.get("name", "?"))   # 应用 CARD_ALIASES
         merged[name] = merged.get(name, 0) + to_int(c.get("qty", 0))
     return [{"name": n, "qty": q} for n, q in sorted(merged.items())]
 
