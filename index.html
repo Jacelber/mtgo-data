@@ -65,10 +65,45 @@
   .deck-meta { font-size: 12px; color: #888; margin-bottom: 6px; }
   .card-list { list-style: none; font-size: 13px; padding-left: 0; margin: 0; }
   .card-list li { padding: 1px 0; }
-  .card-list .qty { display: inline-block; width: 20px; color: #999; text-align: right; margin-right: 6px; }
+  .card-list .qty { display: inline-block; width: 32px; color: #999; text-align: right; margin-right: 6px; }
   .card-link { color: #333; text-decoration: none; }
   .card-link:hover { color: #3b6ea5; text-decoration: underline; }
   .deck-total { font-size: 12px; color: #aaa; margin-bottom: 2px; }
+
+  /* 偏离度展示 */
+  .dev-box { margin: 4px 0 10px; padding: 8px 10px; background: #f0f4f8;
+             border-radius: 6px; font-size: 12px; }
+  .dev-score { font-size: 15px; font-weight: bold; color: #3b6ea5; }
+  .dev-note { color: #888; margin-top: 2px; }
+  /* 逐卡差异拆解 */
+  .diff-cols { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 6px; }
+  .diff-col { flex: 1; min-width: 180px; }
+  .diff-col h5 { font-size: 12px; margin: 0 0 3px; }
+  .diff-col.fewer h5 { color: #c0392b; }
+  .diff-col.more  h5 { color: #27884a; }
+  .diff-list { list-style: none; padding: 0; margin: 0; font-size: 12px; }
+  .diff-list li { padding: 1px 0; }
+  .diff-qty { color: #999; font-size: 11px; }
+  /* 平均牌表 tab 切换 */
+  .avg-toggle { display: flex; gap: 6px; margin: 4px 0 8px; }
+  .avg-toggle button {
+    border: 1px solid #ccc; background: #fff; padding: 3px 10px;
+    cursor: pointer; border-radius: 4px; font-size: 12px;
+  }
+  .avg-toggle button.active { background: #3b6ea5; color: #fff; border-color: #3b6ea5; }
+  .avg-toggle button:disabled { color: #bbb; cursor: not-allowed; opacity: 0.6; }
+  /* Core / Flex 分组 */
+  .cf-group h4 { font-size: 13px; margin: 8px 0 3px; }
+  .cf-core h4 { color: #2c6e49; }
+  .cf-flex h4 { color: #9a6a00; }
+  .cf-list { list-style: none; padding: 0; margin: 0; font-size: 13px; }
+  .cf-list li { padding: 1px 0; }
+  .cf-list .qty { display: inline-block; width: 34px; color: #999; text-align: right; margin-right: 6px; }
+  /* 近期变化度 */
+  .change-box { margin: 8px 0 4px; padding: 6px 10px; background: #f7f4ef;
+                border-radius: 6px; font-size: 12px; }
+  .change-score { font-size: 14px; font-weight: bold; color: #9a6a00; }
+  .change-note { color: #999; }
 
   /* 卡图悬停预览 */
   #cardPreview {
@@ -111,6 +146,7 @@ const FORMATS = [
   { key: "pioneer",  enabled: false },
   { key: "modern",   enabled: false },
 ];
+const DIFF_MIN = 1;   // 差异拆解：仅显示 |deck_qty - typical_qty| >= 1 的卡
 
 // ===================== i18n 字典 =====================
 const I18N = {
@@ -122,8 +158,21 @@ const I18N = {
     col_t8_count: "八强数量", col_t8_share: "八强占比", col_conv: "转化率",
     chart_hs: "高分占比", chart_t8: "八强占比",
     period: "统计区间", loading: "加载中…",
-    best_deck: "最佳牌表", avg_deck: "平均牌表", avg_wip: "（开发中）",
+    best_deck: "最佳牌表",
     main_deck: "主牌", side_deck: "备牌", na: "N/A", others:"其他",
+    tab_synthetic: "架空平均牌表", tab_real: "实际典型牌表",
+    core_group: "常备卡 (Core)", flex_group: "自选卡 (Flex)",
+    avg_sample: "样本",
+    avg_none: "4 周样本不足，无平均牌表",
+    dev_title: "偏离度", dev_suffix: " 分",
+    dev_desc: "偏离度衡量该牌表与最近 4 周主流构筑的差异程度，数值越高越独创；不代表强弱。",
+    diff_fewer: "比典型少带", diff_more: "比典型多带",
+    typical_qty: "典型",
+    change_title: "近期构筑变化度", change_suffix: " 分",
+    change_desc: "衡量本周构筑相对之前 4 周主流的变化程度，数值越高说明近期构筑变动越大。",
+    change_note_recent: "本周样本不足，暂无变化度",
+    change_note_prior: "缺少历史构筑数据，无法计算变化度",
+    change_note_nobase: "4 周样本不足，暂无变化度",
   },
   en: {
     siteTitle: "MTGO Meta Analytics",
@@ -133,8 +182,21 @@ const I18N = {
     col_t8_count: "Top 8", col_t8_share: "T8 Share", col_conv: "Conversion",
     chart_hs: "HS Share", chart_t8: "T8 Share",
     period: "Period", loading: "Loading…",
-    best_deck: "Best Deck", avg_deck: "Average Deck", avg_wip: "(WIP)",
+    best_deck: "Best Deck",
     main_deck: "Main", side_deck: "Sideboard", na: "N/A", others:"Others",
+    tab_synthetic: "Synthetic Average", tab_real: "Representative Deck",
+    core_group: "Core", flex_group: "Flex",
+    avg_sample: "sample",
+    avg_none: "Insufficient 4-week sample, no average deck",
+    dev_title: "Deviation", dev_suffix: "",
+    dev_desc: "Deviation measures how much this deck differs from the last-4-week mainstream build; higher means more original. It does not indicate strength.",
+    diff_fewer: "Fewer than typical", diff_more: "More than typical",
+    typical_qty: "typical",
+    change_title: "Recent Change", change_suffix: "",
+    change_desc: "Measures how much this week's build differs from the prior 4 weeks' mainstream; higher means bigger recent shift.",
+    change_note_recent: "Insufficient sample this week; no change score",
+    change_note_prior: "No historical build data; cannot compute change",    
+    change_note_nobase: "Insufficient 4-week sample; no change score",
   },
 };
 
@@ -148,75 +210,56 @@ let sortDir = "desc";
 let chartInstance = null;
 let currentDecks = null;   // 当前区间的 decks_Xw.json 内容
 let openedArch = null;     // 当前展开的套牌名（排序/切换后保持展开）
+let avgMode = "synthetic"; // 平均牌表 tab：synthetic（默认，架空）/ real（实际典型）
 
 const COLSPAN = 6;         // 表格列数，展开行需跨这么多列
 
 // ===================== i18n 取值函数 =====================
 function t(key) {
-  return (I18N[lang] && I18N[lang][key]) || (I18N.en[key]) || key;
+  if (I18N[lang] && I18N[lang][key] !== undefined) return I18N[lang][key];
+  if (I18N.en[key] !== undefined) return I18N.en[key];
+  return key;
 }
-function archetypeName(en) {
-  return en;   // TODO: 接入 archetype_names_zh 对照表
-}
-function cardName(en) {
-  return en;   // TODO: 接入 card_names_zh 对照表
-}
-// 单卡跳转链接（默认 Scryfall 精确名查询；将来可改 MTGCH）
+function archetypeName(en) { return en; }   // TODO: 接入对照表
+function cardName(en) { return en; }         // TODO: 接入对照表
 function cardUrl(en) {
   return "https://scryfall.com/search?q=" + encodeURIComponent(`!"${en}"`);
 }
 
 // ===================== 卡图悬停预览 =====================
-// Scryfall 按精确名取图；normal 尺寸约 488×680
 function cardImageUrl(en) {
   return "https://api.scryfall.com/cards/named?exact="
     + encodeURIComponent(en) + "&format=image&version=normal";
 }
-
-const _cardImgCache = {};   // 预加载缓存，避免重复请求
-let _previewToken = 0;      // 防止快速移动时旧图覆盖新图
-
+const _cardImgCache = {};
+let _previewToken = 0;
 function showCardPreview(en, ev) {
   const box = document.getElementById("cardPreview");
   const token = ++_previewToken;
-
-  const place = () => {
-    box.style.display = "block";
-    moveCardPreview(ev);
-  };
-
-  if (_cardImgCache[en]) {
-    box.src = _cardImgCache[en];
-    place();
-  } else {
+  const place = () => { box.style.display = "block"; moveCardPreview(ev); };
+  if (_cardImgCache[en]) { box.src = _cardImgCache[en]; place(); }
+  else {
     const pre = new Image();
     pre.onload = () => {
-      if (token !== _previewToken) return;   // 已移到别的卡，放弃
-      _cardImgCache[en] = pre.src;
-      box.src = pre.src;
-      place();
+      if (token !== _previewToken) return;
+      _cardImgCache[en] = pre.src; box.src = pre.src; place();
     };
     pre.src = cardImageUrl(en);
   }
 }
-
 function moveCardPreview(ev) {
   const box = document.getElementById("cardPreview");
   if (box.style.display !== "block") return;
   const w = 240, h = 336, pad = 16;
-  let x = ev.clientX + pad;
-  let y = ev.clientY + pad;
+  let x = ev.clientX + pad, y = ev.clientY + pad;
   if (x + w > window.innerWidth)  x = ev.clientX - w - pad;
   if (y + h > window.innerHeight) y = window.innerHeight - h - pad;
   if (y < pad) y = pad;
-  box.style.left = x + "px";
-  box.style.top = y + "px";
+  box.style.left = x + "px"; box.style.top = y + "px";
 }
-
 function hideCardPreview() {
-  _previewToken++;   // 使任何进行中的加载作废
-  const box = document.getElementById("cardPreview");
-  box.style.display = "none";
+  _previewToken++;
+  document.getElementById("cardPreview").style.display = "none";
 }
 
 // ===================== 渲染骨架 =====================
@@ -232,7 +275,6 @@ function renderFormatTabs() {
     box.appendChild(b);
   });
 }
-
 function renderRangeButtons() {
   const box = document.getElementById("rangeButtons");
   box.innerHTML = "";
@@ -244,7 +286,6 @@ function renderRangeButtons() {
     box.appendChild(b);
   });
 }
-
 function renderStaticTexts() {
   document.getElementById("siteTitle").textContent = t("siteTitle");
   document.title = t("siteTitle");
@@ -255,34 +296,28 @@ function renderStaticTexts() {
 
 // ===================== 数据加载 =====================
 async function loadData() {
-const url = `stats/${currentFormat}/mtgo/range_${currentRange}w.json?v=${Date.now()}`;
+  const url = `stats/${currentFormat}/mtgo/range_${currentRange}w.json?v=${Date.now()}`;
   const tp = document.getElementById("tablePlaceholder");
   if (tp) tp.textContent = t("loading");
   try {
     const resp = await fetch(url);
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     currentData = await resp.json();
-
-    // 同时加载牌表详情文件（失败不阻塞主表格）
     const deckUrl = `stats/${currentFormat}/mtgo/decks_${currentRange}w.json?v=${Date.now()}`;
     try {
       const dResp = await fetch(deckUrl);
       currentDecks = dResp.ok ? await dResp.json() : null;
-    } catch (e) {
-      currentDecks = null;
-    }
+    } catch (e) { currentDecks = null; }
   } catch (e) {
     currentData = null;
     document.getElementById("tablePanel").innerHTML =
       `<div class="placeholder">加载失败: ${url}<br>${e.message}</div>`;
     return;
   }
-
   updatePeriodInfo();
   renderTable();
   renderChart();
 }
-
 function updatePeriodInfo() {
   if (!currentData) return;
   const p = currentData.period;
@@ -296,7 +331,6 @@ function fmtPct(x) {
   if (x === null || x === undefined) return t("na");
   return (x * 100).toFixed(1) + "%";
 }
-
 function sortedArchetypes() {
   const arr = [...currentData.archetypes];
   const keymap = {
@@ -316,7 +350,6 @@ function sortedArchetypes() {
   });
   return arr;
 }
-
 function renderTable() {
   if (!currentData) return;
   const cols = [
@@ -349,7 +382,6 @@ function renderTable() {
   const panel = document.getElementById("tablePanel");
   panel.innerHTML = html;
 
-  // 表头点击排序
   panel.querySelectorAll("th.sortable").forEach(th => {
     th.onclick = () => {
       const k = th.dataset.key;
@@ -358,8 +390,6 @@ function renderTable() {
       renderTable();
     };
   });
-
-  // 套牌名点击：行内展开/收起牌表
   panel.querySelectorAll("a.arch-link").forEach(link => {
     link.onclick = (ev) => {
       ev.preventDefault();
@@ -367,26 +397,21 @@ function renderTable() {
       toggleDeckRow(name, link.closest("tr"));
     };
   });
-
-  // 卡图悬停预览（事件委托到表格容器）
   panel.onmouseover = (ev) => {
     const link = ev.target.closest("a.card-link");
     if (link) showCardPreview(decodeURIComponent(link.dataset.card), ev);
   };
   panel.onmousemove = (ev) => {
-    if (document.getElementById("cardPreview").style.display === "block") {
-      moveCardPreview(ev);
-    }
+    if (document.getElementById("cardPreview").style.display === "block") moveCardPreview(ev);
   };
   panel.onmouseout = (ev) => {
     const link = ev.target.closest("a.card-link");
     if (link) hideCardPreview();
   };
 
-  // 排序/重画后，如果之前有展开的套牌，重新展开到它的新行下
   if (openedArch) {
     const arch = openedArch;
-    openedArch = null;   // toggleDeckRow 会重新设回
+    openedArch = null;
     const link = panel.querySelector(`a.arch-link[data-name="${encodeURIComponent(arch)}"]`);
     if (link) toggleDeckRow(arch, link.closest("tr"));
   }
@@ -398,12 +423,9 @@ function renderChart(){
   let arr=[...currentData.archetypes].sort((a,b)=>(b.high_score_share??0)-(a.high_score_share??0));
   let shown=arr.filter(a=>(a.high_score_share??0)>=CHART_MIN_SHARE);
   let rest =arr.filter(a=>(a.high_score_share??0)< CHART_MIN_SHARE);
-
   const labels=shown.map(a=>archetypeName(a.name));
   const hsData=shown.map(a=>+((a.high_score_share??0)*100).toFixed(1));
   const t8Data=shown.map(a=>+((a.top8_share??0)*100).toFixed(1));
-
-  // 把不足 2% 的合并成 Others，放最下方
   if(rest.length>0){
     const othHs=rest.reduce((s,a)=>s+(a.high_score_share??0),0);
     const othT8=rest.reduce((s,a)=>s+(a.top8_share??0),0);
@@ -411,7 +433,6 @@ function renderChart(){
     hsData.push(+(othHs*100).toFixed(1));
     t8Data.push(+(othT8*100).toFixed(1));
   }
-
   const canvas=document.getElementById("metaChart");
   canvas.parentElement.style.height=Math.max(200, labels.length*34+60)+"px";
   if(chartInstance) chartInstance.destroy();
@@ -423,8 +444,10 @@ function renderChart(){
     plugins:{legend:{position:"top"},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+": "+ctx.parsed.x+"%"}}}}});
 }
 
-
 // ===================== 牌表详情（行内展开）=====================
+function getMain(rec) { return (rec && (rec.main_deck || rec.mainboard)) || []; }
+function getSide(rec) { return (rec && (rec.side_deck || rec.sideboard)) || []; }
+
 function deckCardList(cards) {
   if (!cards || cards.length === 0) return "<div class='placeholder'>—</div>";
   const total = cards.reduce((s, c) => s + (c.qty || 0), 0);
@@ -437,67 +460,196 @@ function deckCardList(cards) {
   html += `</ul>`;
   return html;
 }
+function deckMetaLine(rec) {
+  if (!rec) return "";
+  const player = rec.player || "-";
+  const fr = (rec.final_rank === null || rec.final_rank === undefined || rec.final_rank === "") ? "-" : rec.final_rank;
+  const sc = (rec.swiss_score === null || rec.swiss_score === undefined || rec.swiss_score === "") ? "-" : rec.swiss_score;
+  const dt = rec.starttime ? rec.starttime.slice(0, 10) : "-";
+  return `<div class="deck-meta">${player} · rank ${fr} · score ${sc} · ${dt}</div>`;
+}
+function deckMainSideHtml(rec) {
+  return `<h4>${t("main_deck")}</h4>${deckCardList(getMain(rec))}`
+       + `<h4>${t("side_deck")}</h4>${deckCardList(getSide(rec))}`;
+}
+
+// —— 偏离度 (单副) + 差异拆解 ——
+function deviationHtml(best) {
+  if (!best || best.deviation === null || best.deviation === undefined) return "";
+  const p = best.deviation;
+  let html = `<div class="dev-box">`
+    + `<span style="color:#666">${t("dev_title")}: </span>`
+    + `<span class="dev-score">${p}${t("dev_suffix")}</span>`
+    + `<div class="dev-note">${t("dev_desc")}</div>`;
+  const diff = best.deviation_diff;
+  if (diff) {
+    const fewer = filterDiff(diff.fewer);
+    const more  = filterDiff(diff.more);
+    if (fewer.length || more.length) {
+      html += `<div class="diff-cols">`;
+      html += `<div class="diff-col fewer"><h5>${t("diff_fewer")}</h5>${diffListHtml(fewer)}</div>`;
+      html += `<div class="diff-col more"><h5>${t("diff_more")}</h5>${diffListHtml(more)}</div>`;
+      html += `</div>`;
+    }
+  }
+  html += `</div>`;
+  return html;
+}
+function filterDiff(items) {
+  if (!items) return [];
+  return items.filter(it => {
+    const dq = Number(it.deck_qty) || 0;
+    const tq = Number(it.typical_qty) || 0;
+    return Math.abs(dq - tq) >= DIFF_MIN;
+  });
+}
+function diffListHtml(items) {
+  if (!items || items.length === 0) return "<div class='placeholder' style='padding:4px 0'>—</div>";
+  let html = `<ul class="diff-list">`;
+  items.forEach(it => {
+    const dataCard = encodeURIComponent(it.name).replace(/"/g, "&quot;");
+    const dq = it.deck_qty;
+    const tq = (it.typical_qty === null || it.typical_qty === undefined) ? "-" : it.typical_qty;
+    html += `<li>`
+      + `<a class="card-link" href="${cardUrl(it.name)}" target="_blank" rel="noopener" data-card="${dataCard}">${cardName(it.name)}</a> `
+      + `<span class="diff-qty">${dq} (${t("typical_qty")} ${tq})</span></li>`;
+  });
+  html += `</ul>`;
+  return html;
+}
+
+// —— 近期变化度 ——
+function recentChangeHtml(avg) {
+  const val = avg ? avg.recent_change : null;
+  const reason = avg ? avg.recent_change_reason : null;
+  if (val === null || val === undefined) {
+    let msg = "";
+    if (reason === "prior") msg = t("change_note_prior");
+    else if (reason === "recent") msg = t("change_note_recent");
+    else if (reason === "nobase") msg = t("change_note_nobase");
+    if (!msg) return "";
+    return `<div class="change-box"><span style="color:#666">${t("change_title")}: </span>`
+      + `<span class="change-note">${msg}</span></div>`;
+  }
+  return `<div class="change-box">`
+    + `<span style="color:#666">${t("change_title")}: </span>`
+    + `<span class="change-score">${val}${t("change_suffix")}</span>`
+    + `<div class="change-note">${t("change_desc")}</div></div>`;
+}
+
+// —— Core / Flex 分组（架空平均牌表）——
+function coreFlexHtml(avg) {
+  const core = (avg && avg.core) || [];
+  const flex = (avg && avg.flex) || [];
+  if (core.length === 0 && flex.length === 0) {
+    return `<div class="placeholder">${t("avg_none")}</div>`;
+  }
+  const groupHtml = (items, cls, label) => {
+    if (!items.length) return "";
+    let h = `<div class="cf-group ${cls}"><h4>${label}</h4><ul class="cf-list">`;
+    items.forEach(c => {
+      const dataCard = encodeURIComponent(c.name).replace(/"/g, "&quot;");
+      h += `<li><span class="qty">${c.mean_qty}</span>`
+        + `<a class="card-link" href="${cardUrl(c.name)}" target="_blank" rel="noopener" data-card="${dataCard}">${cardName(c.name)}</a></li>`;
+    });
+    h += `</ul></div>`;
+    return h;
+  };
+  return groupHtml(core, "cf-core", t("core_group"))
+       + groupHtml(flex, "cf-flex", t("flex_group"));
+}
+
+// —— 平均牌表区（两 tab + 近期变化度）——
+function averageDeckHtml(entry) {
+  const avg = entry ? entry.average_deck : null;
+  if (!avg || (avg.sample_size === 0 && !(avg.core && avg.core.length))) {
+    return recentChangeHtml(avg) + `<div class="placeholder">${t("avg_none")}</div>`;
+  }
+  const ss = (avg.sample_size ?? "-");
+  // tab 切换按钮
+  let html = `<div class="avg-toggle">`
+    + `<button data-mode="synthetic" class="${avgMode==='synthetic'?'active':''}">${t("tab_synthetic")}</button>`
+    + `<button data-mode="real" class="${avgMode==='real'?'active':''}">${t("tab_real")}</button>`
+    + `<span style="align-self:center;color:#aaa;font-size:11px">(${t("avg_sample")} ${ss})</span>`
+    + `</div>`;
+  // 近期变化度：固定显示在 tab 与牌表内容之间
+  html += recentChangeHtml(avg);
+  // 牌表内容（随 tab 切换）
+  if (avgMode === "real") {
+    html += avg.medoid ? (deckMetaLine(avg.medoid) + deckMainSideHtml(avg.medoid))
+                       : `<div class="placeholder">—</div>`;
+  } else {
+    html += coreFlexHtml(avg);
+  }
+  return html;
+}
+
+
+// 平均牌表 tab 按钮绑定（每次重绘右栏后调用）
+function bindAvgToggle(tr, archName) {
+  tr.querySelectorAll(".avg-toggle button").forEach(b => {
+    b.onclick = () => {
+      avgMode = b.dataset.mode;
+      const col = tr.querySelector(".deck-columns .deck-col:last-child");
+      const entry = currentDecks && currentDecks.decks ? currentDecks.decks[archName] : null;
+      if (col) col.innerHTML = averageDeckHtml(entry);
+      bindAvgToggle(tr, archName);
+    };
+  });
+}
 
 function deckBoxHtml(archName) {
   const entry = currentDecks && currentDecks.decks ? currentDecks.decks[archName] : null;
   const best = entry ? entry.best_deck : null;
   let inner = `<button class="deck-close" onclick="closeDeckRow()">✕</button>`
     + `<div class="deck-title">${archetypeName(archName)}</div>`;
-  if (!best) {
+  if (!entry) {
     inner += `<div class="placeholder">—</div>`;
     return `<div class="deck-box">${inner}</div>`;
   }
-  const fr = (best.final_rank === null || best.final_rank === undefined) ? "-" : best.final_rank;
-  inner += `<div class="deck-columns">
-      <div class="deck-col">
-        <h3>${t("best_deck")}</h3>
-        <div class="deck-meta">${best.player} · rank ${fr} · score ${best.swiss_score} · ${best.starttime.slice(0,10)}</div>
-        <h4>${t("main_deck")}</h4>${deckCardList(best.main_deck)}
-        <h4>${t("side_deck")}</h4>${deckCardList(best.side_deck)}
-      </div>
-      <div class="deck-col">
-        <h3>${t("avg_deck")}</h3>
-        <div class="placeholder">${t("avg_wip")}</div>
-      </div>
-    </div>`;
+  let leftCol = `<div class="deck-col"><h3>${t("best_deck")}</h3>`;
+  if (best) {
+    leftCol += deckMetaLine(best);
+    leftCol += deviationHtml(best);
+    leftCol += deckMainSideHtml(best);
+  } else {
+    leftCol += `<div class="placeholder">—</div>`;
+  }
+  leftCol += `</div>`;
+  const rightCol = `<div class="deck-col">${averageDeckHtml(entry)}</div>`;
+  inner += `<div class="deck-columns">${leftCol}${rightCol}</div>`;
   return `<div class="deck-box">${inner}</div>`;
 }
 
-// 在指定套牌那一行下方插入展开行；已展开同一套牌则收起（切换）
 function toggleDeckRow(archName, rowEl) {
   const next = rowEl.nextElementSibling;
   const alreadyOpen = next && next.classList.contains("deck-row")
                       && next.dataset.arch === archName;
-  closeDeckRow();                       // 同一时间只展开一个
-  if (alreadyOpen) { openedArch = null; return; }   // 点自己 => 收起
+  closeDeckRow();
+  if (alreadyOpen) { openedArch = null; return; }
   openedArch = archName;
   const tr = document.createElement("tr");
   tr.className = "deck-row";
   tr.dataset.arch = archName;
   tr.innerHTML = `<td colspan="${COLSPAN}">${deckBoxHtml(archName)}</td>`;
   rowEl.parentNode.insertBefore(tr, rowEl.nextSibling);
+  bindAvgToggle(tr, archName);
 }
 
 function closeDeckRow() {
-  hideCardPreview();   // 收起牌表时顺便关掉可能残留的卡图
+  hideCardPreview();
   document.querySelectorAll("tr.deck-row").forEach(r => r.remove());
   openedArch = null;
 }
 
 // ===================== 语言与刷新 =====================
-function setLang(l) {
-  lang = l;
-  refreshAll();
-}
-
+function setLang(l) { lang = l; refreshAll(); }
 function refreshAll() {
   renderStaticTexts();
   renderFormatTabs();
   renderRangeButtons();
-  loadData();   // 加载数据 -> 渲染表格/图表；展开状态在 renderTable 内部恢复
+  loadData();
 }
-
-// ===================== 启动 =====================
 refreshAll();
 </script>
 </body>

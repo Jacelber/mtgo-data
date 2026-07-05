@@ -1,5 +1,6 @@
 # stats_standard.py —— MTGO standard 赛制统计模块
 # 阶段一：底层工具 + 单赛事处理
+# 阶段二：平均牌表 & 偏离度（固定 4 周 base + 全局 D99）
 
 import math
 import os
@@ -9,6 +10,14 @@ from classify_standard import load_rules, deck_to_counts, match_archetype, norma
 
 DATA_DIR = "data/standard"
 
+# ---------- 偏离度 / 平均牌表 常量 ----------
+AVG_FLOOR = 0.15      # 均值低于此的卡不计入向量
+MIN_SAMPLE = 8        # 4 周样本不足此数则不建 base
+BASE_WEEKS = 4        # 偏离度基准：固定最近 4 个自然周
+CORE_RATE = 0.8       # 出现率 >= 此值归为 Core（常备卡），否则 Flex（自选卡）
+DEV_PERCENTILE = 99   # 全局归一化锚点分位（P99）
+RECENT_MIN = 3        # 近端(本周)/远端(之前4周) 最小样本，不足则变化度为 null
+PRIOR_WEEKS = 4       # 近期变化度的远端窗口：本周之前的 4 周
 
 # ---------- 工具函数 ----------
 
@@ -25,9 +34,7 @@ def to_int(value, default=0):
 
 
 def rounds_from_player_count(n):
-    """按 MTGO 官方人数-轮数对照表，用全场报名人数推断瑞士轮数。
-    表来源：https://www.mtgo.com/en/mtgo/events
-    """
+    """按 MTGO 官方人数-轮数对照表，用全场报名人数推断瑞士轮数。"""
     table = [(8, 3), (16, 4), (32, 5), (64, 6),
              (128, 7), (212, 8), (384, 9), (672, 10)]
     for cap, rounds in table:
@@ -41,9 +48,7 @@ def rounds_from_player_count(n):
 
 
 def high_score_threshold(rounds):
-    """高分门槛：积分严格超过总可能积分的一半，向上取整到最近的 3 的倍数。
-    swiss_score >= threshold 即算高分。
-    """
+    """高分门槛：积分严格超过总可能积分的一半，向上取整到最近的 3 的倍数。"""
     return (math.floor(rounds * 1.5 / 3) + 1) * 3
 
 
@@ -67,10 +72,9 @@ def process_event(event, archetypes):
             "is_top8": final_rank <= 8,
             "swiss_score": swiss_score,
             "final_rank": final_rank,
-            # 以下为示例牌表功能新增字段
             "player": player.get("player", player.get("name", "?")),
-            "player_count": player_count,   # 事件规模，用于最佳牌表第二级排序
-            "starttime": starttime,         # 事件时间，用于最佳牌表第三级排序
+            "player_count": player_count,
+            "starttime": starttime,
             "main_deck": player.get("main_deck", []),
             "side_deck": player.get("sideboard", []),
         })
@@ -88,9 +92,7 @@ from datetime import datetime, timedelta
 
 
 def parse_event_date(starttime):
-    """从 starttime 取日期部分。只用前 10 个字符 YYYY-MM-DD，
-    忽略时间与小数秒，稳健。返回 date 对象；解析失败返回 None。
-    """
+    """从 starttime 取日期部分（前 10 字符 YYYY-MM-DD）。失败返回 None。"""
     if not starttime:
         return None
     try:
@@ -100,20 +102,13 @@ def parse_event_date(starttime):
 
 
 def week_monday(d):
-    """给一个 date，返回它所属自然周（周一到周日）的周一日期。
-    周一 weekday()==0，减掉即可回到本周一。
-    """
+    """返回 date 所属自然周（周一到周日）的周一日期。"""
     return d - timedelta(days=d.weekday())
 
+
 def aggregate(records):
-    """把一批牌手记录聚合成各套牌的统计。
-    records: process_event 返回的 records 列表可跨赛事拼接后传入。
-    返回: {total_decks, total_high_score, total_top8, unknown_count, archetypes[...]}
-    占比口径：高分占比=该套牌高分数/全部高分数；八强占比=该套牌八强数/全部八强数。
-    转化率=八强数/高分数；高分数为0时输出 None（前端显示 N/A）。
-    """
-    # 按套牌累计三个计数
-    stats = {}   # name -> {"count","high","top8"}
+    """把一批牌手记录聚合成各套牌的统计。"""
+    stats = {}
     total_decks = 0
     total_high = 0
     total_top8 = 0
@@ -147,7 +142,6 @@ def aggregate(records):
             "conversion": round(conversion, 4) if conversion is not None else None,
         })
 
-    # 按出现次数降序，方便查看
     archetypes.sort(key=lambda a: a["count"], reverse=True)
 
     return {
@@ -158,8 +152,9 @@ def aggregate(records):
         "archetypes": archetypes,
     }
 
+
 def load_all_events():
-    """读取 DATA_DIR 下所有赛事，返回 [(event_date, event_dict), ...]，跳过无日期的。"""
+    """读取 DATA_DIR 下所有赛事，返回 [(event_date, event_dict), ...]。"""
     events = []
     for path in sorted(glob.glob(os.path.join(DATA_DIR, "*.json"))):
         with open(path, "r", encoding="utf-8") as f:
@@ -171,7 +166,7 @@ def load_all_events():
 
 
 def latest_complete_week(events, today=None):
-    """返回最近一个『已结束』完整周的周一。判定：该周周日 < 今天。"""
+    """返回最近一个『已结束』完整周的周一。"""
     if today is None:
         today = datetime.now().date()
     weeks = sorted({week_monday(d) for d, _ in events})
@@ -179,9 +174,238 @@ def latest_complete_week(events, today=None):
     return complete[-1] if complete else (weeks[-1] if weeks else None)
 
 
-def build_decks(records):
-    """按套牌分组，为每套牌选出最佳牌表（average_deck 暂留 None 占位）。
-    返回 dict: { archetype_name: {best_deck, average_deck} }
+# ================================================================
+#            平均牌表 & 偏离度：向量 / 距离 / base 构建
+# ================================================================
+
+def deck_vector(record):
+    """把 record 的 main_deck 转成 {规范卡名: 张数} 向量（仅主牌）。"""
+    vec = {}
+    for c in record.get("main_deck", []):
+        name = normalize_name(c.get("name", "?"))
+        vec[name] = vec.get(name, 0) + to_int(c.get("qty", 0))
+    return vec
+
+
+def mean_vector(vectors):
+    """对一批牌表向量求均值向量，过滤均值 < AVG_FLOOR 的卡。"""
+    if not vectors:
+        return {}
+    total = {}
+    for v in vectors:
+        for name, qty in v.items():
+            total[name] = total.get(name, 0) + qty
+    n = len(vectors)
+    mean = {name: s / n for name, s in total.items()}
+    return {name: m for name, m in mean.items() if m >= AVG_FLOOR}
+
+
+def appearance_rates(vectors):
+    """每张卡在多少比例的牌表中出现（qty>0）。返回 {卡名: 0-1}。"""
+    if not vectors:
+        return {}
+    n = len(vectors)
+    cnt = {}
+    for v in vectors:
+        for name, qty in v.items():
+            if qty > 0:
+                cnt[name] = cnt.get(name, 0) + 1
+    return {name: c / n for name, c in cnt.items()}
+
+
+def split_core_flex(mean_vec, rates, core_rate=CORE_RATE):
+    """按出现率把均值向量里的卡分成 Core（常备）/ Flex（自选）两组。
+    每项 {name, mean_qty, rate}，组内按均值张数降序。
+    """
+    core, flex = [], []
+    for name, m in mean_vec.items():
+        r = rates.get(name, 0.0)
+        item = {"name": name, "mean_qty": round(m, 1), "rate": round(r, 3)}
+        (core if r >= core_rate else flex).append(item)
+    core.sort(key=lambda x: (-x["mean_qty"], x["name"]))
+    flex.sort(key=lambda x: (-x["mean_qty"], x["name"]))
+    return core, flex
+
+
+def weighted_l1(vec, mean_vec, weights):
+    """加权 L1 距离：Σ w_card × |vec张数 − 均值张数|。覆盖两侧全部卡名。"""
+    names = set(vec) | set(mean_vec)
+    d = 0.0
+    for name in names:
+        w = weights.get(name, 0.0)
+        d += w * abs(vec.get(name, 0) - mean_vec.get(name, 0.0))
+    return d
+
+
+def normalize_dev(d, d99):
+    """把原始加权 L1 距离归一化到 0-100（全局 P99 为 100 锚点）。"""
+    if not d99 or d99 <= 0:
+        return 0
+    return min(100, round(d / d99 * 100))
+
+
+def deck_diff(vec, mean_vec, top=8):
+    """生成逐卡差异（相对均值）。返回 {fewer, more}，各含 {name, deck_qty, typical_qty}。
+    前端再按最小差距过滤；这里输出较多项供其筛选。
+    """
+    names = set(vec) | set(mean_vec)
+    rows = []
+    for name in names:
+        dq = vec.get(name, 0)
+        tq = mean_vec.get(name, 0.0)
+        rows.append({"name": name, "deck_qty": dq, "typical_qty": round(tq, 1),
+                     "delta": dq - tq})
+    fewer = sorted([r for r in rows if r["delta"] < 0], key=lambda r: r["delta"])[:top]
+    more = sorted([r for r in rows if r["delta"] > 0], key=lambda r: -r["delta"])[:top]
+    strip = lambda rs: [{"name": r["name"], "deck_qty": r["deck_qty"],
+                         "typical_qty": r["typical_qty"]} for r in rs]
+    return {"fewer": strip(fewer), "more": strip(more)}
+
+
+def pick_medoid(records, mean_vec, weights):
+    """从 records 中选离均值向量最近（加权 L1 最小）的真实牌表，返回该 record。"""
+    if not records:
+        return None
+    best = None
+    best_d = None
+    for r in records:
+        d = weighted_l1(deck_vector(r), mean_vec, weights)
+        if best_d is None or d < best_d:
+            best_d, best = d, r
+    return best
+
+
+def record_to_deck_display(record):
+    """把 record 转成前端展示用的牌表结构（含选手/战绩/主备牌）。"""
+    if not record:
+        return None
+    return {
+        "player": record.get("player", "?"),
+        "final_rank": record["final_rank"] if record.get("final_rank", 9999) != 9999 else None,
+        "swiss_score": record.get("swiss_score"),
+        "player_count": record.get("player_count"),
+        "starttime": record.get("starttime", ""),
+        "main_deck": merge_cards(record.get("main_deck", [])),
+        "side_deck": merge_cards(record.get("side_deck", [])),
+    }
+
+
+def recent_change_for_arch(events, archetypes, end_monday, arch, d99):
+    """计算某套牌的近期变化度：
+       近端 = 最近 1 完整周(end_monday 那周) 该套牌主牌平均向量
+       远端 = 之前 PRIOR_WEEKS 周(不含本周) 该套牌主牌平均向量
+       权重 = 远端出现率；距离 = 加权 L1；归一化 = 全局 D99。
+       返回 (value, reason)：
+         value 为 0-100 或 None
+         reason 为 None（正常）/ "recent"（本周样本不足）/ "prior"（缺少历史构筑数据）
+    """
+    recent_start = end_monday
+    recent_end_sunday = end_monday + timedelta(days=6)
+    prior_start = end_monday - timedelta(weeks=PRIOR_WEEKS)
+    prior_end_sunday = end_monday - timedelta(days=1)   # 本周之前一天
+
+    recent_recs, prior_recs = [], []
+    for d, ev in events:
+        if recent_start <= d <= recent_end_sunday:
+            for r in process_event(ev, archetypes)["records"]:
+                if r["archetype"] == arch:
+                    recent_recs.append(r)
+        elif prior_start <= d <= prior_end_sunday:
+            for r in process_event(ev, archetypes)["records"]:
+                if r["archetype"] == arch:
+                    prior_recs.append(r)
+
+    if len(recent_recs) < RECENT_MIN:
+        return None, "recent"
+    if len(prior_recs) < RECENT_MIN:
+        return None, "prior"
+
+    recent_vecs = [deck_vector(r) for r in recent_recs]
+    prior_vecs = [deck_vector(r) for r in prior_recs]
+    recent_mean = mean_vector(recent_vecs)
+    prior_mean = mean_vector(prior_vecs)
+    weights = appearance_rates(prior_vecs)   # 以之前主流为参照系
+
+    raw = weighted_l1(recent_mean, prior_mean, weights)
+    return normalize_dev(raw, d99), None
+
+
+def build_base_pack(events, archetypes, end_monday, today=None):
+    """构建固定 4 周 base 包 + 全局 D99 + 每套牌近期变化度。
+    base_pack = { arch: {mean, weights, core, flex, medoid_display,
+                         sample_size, recent_change, recent_change_reason} }
+    """
+    from collections import defaultdict
+    start_monday = end_monday - timedelta(weeks=BASE_WEEKS - 1)
+    end_sunday = end_monday + timedelta(days=6)
+
+    by_arch = defaultdict(list)
+    for d, ev in events:
+        if start_monday <= d <= end_sunday:
+            for r in process_event(ev, archetypes)["records"]:
+                if r["archetype"] != "Unknown":
+                    by_arch[r["archetype"]].append(r)
+
+    base_pack = {}
+    all_distances = []
+    for arch, recs in by_arch.items():
+        if len(recs) < MIN_SAMPLE:
+            continue
+        vectors = [deck_vector(r) for r in recs]
+        mean = mean_vector(vectors)
+        if not mean:
+            continue
+        rates = appearance_rates(vectors)
+        weights = rates
+        core, flex = split_core_flex(mean, rates)
+        medoid = pick_medoid(recs, mean, weights)
+        base_pack[arch] = {
+            "mean": mean,
+            "weights": weights,
+            "core": core,
+            "flex": flex,
+            "medoid_display": record_to_deck_display(medoid),
+            "sample_size": len(recs),
+            "recent_change": None,          # 下面补算
+            "recent_change_reason": None,
+        }
+        for v in vectors:
+            all_distances.append(weighted_l1(v, mean, weights))
+
+    d99 = percentile(all_distances, DEV_PERCENTILE) if all_distances else 0.0
+
+    # d99 就绪后，回头为每个达标套牌算近期变化度
+    for arch in base_pack:
+        val, reason = recent_change_for_arch(events, archetypes, end_monday, arch, d99)
+        base_pack[arch]["recent_change"] = val
+        base_pack[arch]["recent_change_reason"] = reason
+
+    return base_pack, d99
+
+
+def percentile(values, p):
+    """线性插值百分位。values 非空。p 为 0-100。"""
+    if not values:
+        return 0.0
+    xs = sorted(values)
+    if len(xs) == 1:
+        return xs[0]
+    k = (len(xs) - 1) * (p / 100.0)
+    lo = math.floor(k)
+    hi = math.ceil(k)
+    if lo == hi:
+        return xs[int(k)]
+    return xs[lo] + (xs[hi] - xs[lo]) * (k - lo)
+
+
+# ================================================================
+#                      区间牌表详情构建
+# ================================================================
+
+def build_decks(records, base_pack, d99):
+    """按套牌分组，为每套牌生成 best_deck（含偏离度/差异）与 average_deck（4 周 base）。
+    返回 { arch: {best_deck, average_deck} }。
+    偏离度均相对固定 4 周 base 计算。
     """
     from collections import defaultdict
     by_arch = defaultdict(list)
@@ -190,18 +414,43 @@ def build_decks(records):
 
     result = {}
     for arch, arch_records in by_arch.items():
-        result[arch] = {
-            "best_deck": pick_best_deck(arch_records),
-            "average_deck": None,   # 平均牌表定义待补，先占位
-        }
+        best = pick_best_deck(arch_records)
+        base = base_pack.get(arch)
+
+        if best and base:
+            best_vec = {}
+            for c in best["main_deck"]:
+                best_vec[c["name"]] = best_vec.get(c["name"], 0) + to_int(c["qty"])
+            raw = weighted_l1(best_vec, base["mean"], base["weights"])
+            best["deviation"] = normalize_dev(raw, d99)
+            best["deviation_diff"] = deck_diff(best_vec, base["mean"])
+
+        if base:
+            average_deck = {
+                "sample_size": base["sample_size"],
+                "medoid": base["medoid_display"],
+                "core": base["core"],
+                "flex": base["flex"],
+                "recent_change": base["recent_change"],
+                "recent_change_reason": base["recent_change_reason"],
+            }
+        else:
+            average_deck = {
+                "sample_size": 0,
+                "medoid": None,
+                "core": [],
+                "flex": [],
+                "recent_change": None,
+                "recent_change_reason": "nobase",
+            }
+
+        result[arch] = {"best_deck": best, "average_deck": average_deck}
     return result
 
 
-def build_range(events, archetypes, end_monday, n_weeks):
-    """聚合从 end_monday 那周往前数 n_weeks 个自然周内的所有赛事。
-    区间 = [start_monday, end_sunday]，含首尾。
-    返回 (stats_data, decks_data)：统计 JSON 与牌表详情 JSON 两份内容。
-    """
+def build_range(events, archetypes, end_monday, n_weeks, base_pack, d99):
+    """聚合区间统计，并用固定 4 周 base 计算每套牌的区间平均偏离度。"""
+    from collections import defaultdict
     start_monday = end_monday - timedelta(weeks=n_weeks - 1)
     end_sunday = end_monday + timedelta(days=6)
 
@@ -211,6 +460,26 @@ def build_range(events, archetypes, end_monday, n_weeks):
             records.extend(process_event(ev, archetypes)["records"])
 
     agg = aggregate(records)
+
+    # 区间平均偏离度：该区间内该套牌所有牌表逐副对 4 周 base 算偏离，取平均
+    by_arch = defaultdict(list)
+    for r in records:
+        if r["archetype"] != "Unknown":
+            by_arch[r["archetype"]].append(r)
+
+    avg_dev = {}
+    for arch, recs in by_arch.items():
+        base = base_pack.get(arch)
+        if not base:
+            avg_dev[arch] = None
+            continue
+        devs = [normalize_dev(weighted_l1(deck_vector(r), base["mean"], base["weights"]), d99)
+                for r in recs]
+        avg_dev[arch] = round(sum(devs) / len(devs)) if devs else None
+
+    for a in agg["archetypes"]:
+        a["avg_deviation"] = avg_dev.get(a["name"])
+
     period = {
         "type": f"{n_weeks}w",
         "start": start_monday.isoformat(),
@@ -227,13 +496,15 @@ def build_range(events, archetypes, end_monday, n_weeks):
         "format": "standard",
         "source": "mtgo",
         "period": period,
-        "decks": build_decks(records),
+        "decks": build_decks(records, base_pack, d99),
     }
     return stats_data, decks_data
 
 
 def build_all_stats(today=None):
-    """生成 1/4/12/36 周四档区间 JSON + index.json，写入 stats/standard/mtgo/。"""
+    """生成 1/4/12/36 周四档区间 JSON + index.json。
+    先算一次固定 4 周 base 包与全局 D99，供所有区间复用。
+    """
     archetypes = load_rules()
     events = load_all_events()
     end_monday = latest_complete_week(events, today=today)
@@ -241,13 +512,16 @@ def build_all_stats(today=None):
         print("  没有可用的完整周，终止")
         return
 
+    base_pack, d99 = build_base_pack(events, archetypes, end_monday, today=today)
+    print(f"  4 周 base: {len(base_pack)} 套牌达标 (>= {MIN_SAMPLE} 副), 全局 D99 = {d99:.3f}")
+
     out_dir = os.path.join("stats", "standard", "mtgo")
     os.makedirs(out_dir, exist_ok=True)
 
     ranges = [1, 4, 12, 36]
     index_entries = []
     for n in ranges:
-        data, decks = build_range(events, archetypes, end_monday, n)
+        data, decks = build_range(events, archetypes, end_monday, n, base_pack, d99)
         fname = f"range_{n}w.json"
         with open(os.path.join(out_dir, fname), "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
@@ -273,6 +547,8 @@ def build_all_stats(today=None):
         "source": "mtgo",
         "generated": datetime.now().isoformat(timespec="seconds"),
         "latest_complete_week": end_monday.isoformat(),
+        "base_weeks": BASE_WEEKS,
+        "global_d99": round(d99, 4),
         "ranges": index_entries,
     }
     with open(os.path.join(out_dir, "index.json"), "w", encoding="utf-8") as f:
@@ -280,31 +556,26 @@ def build_all_stats(today=None):
     print(f"  写出 index.json")
     print(f"  全部输出到 {out_dir}/")
 
+
 def merge_cards(card_list):
-    """合并同名卡，qty 累加。卡名先经 normalize_name 规范化（应用别名）。按卡名排序返回。"""
+    """合并同名卡，qty 累加。卡名经 normalize_name 规范化。按卡名排序返回。"""
     merged = {}
     for c in card_list:
-        name = normalize_name(c.get("name", "?"))   # 应用 CARD_ALIASES
+        name = normalize_name(c.get("name", "?"))
         merged[name] = merged.get(name, 0) + to_int(c.get("qty", 0))
     return [{"name": n, "qty": q} for n, q in sorted(merged.items())]
 
 
 def pick_best_deck(archetype_records):
-    """按三级排序选出最佳牌表：
-       1) final_rank 最小（瑞士轮排名最高）
-       2) player_count 最大（场次人数最多）
-       3) starttime 最新（日期更近）
-       archetype_records: 属于同一套牌的 record 列表
-       返回一个 dict（含选手、战绩、主牌、备牌），无记录则返回 None
-    """
+    """三级排序选最佳牌表：final_rank 最小 > player_count 最大 > starttime 最新。"""
     if not archetype_records:
         return None
     best = min(
         archetype_records,
         key=lambda r: (
-            r["final_rank"],           # 越小越好
-            -r["player_count"],        # 取负号使越大越靠前
-            _neg_time_key(r["starttime"]),  # 越新越靠前
+            r["final_rank"],
+            -r["player_count"],
+            _neg_time_key(r["starttime"]),
         ),
     )
     return {
@@ -319,13 +590,12 @@ def pick_best_deck(archetype_records):
 
 
 def _neg_time_key(starttime):
-    """把 starttime 转成可比较的负向排序键：时间越新，返回值越小（排越前）。
-       解析失败的记为最旧（排最后）。"""
+    """时间越新返回值越小；解析失败记为最旧。"""
     d = parse_event_date(starttime)
     if d is None:
-        return 0  # 最旧
-    # date.toordinal() 越大越新，取负后越新越小
+        return 0
     return -d.toordinal()
+
 
 # ---------- 自测块（始终放在文件最末尾） ----------
 
@@ -357,88 +627,47 @@ if __name__ == "__main__":
         hs = sum(1 for r in result['records'] if r['is_high_score'])
         t8 = sum(1 for r in result['records'] if r['is_top8'])
         print(f"  高分牌手数: {hs}   八强牌手数: {t8}")
-        print(f"  前 10 位牌手（按 final_rank 排序）:")
-        for r in sorted(result['records'], key=lambda x: x['final_rank'])[:10]:
-            fr = r['final_rank'] if r['final_rank'] != 9999 else "-"
-            hs_mark = "★高分" if r['is_high_score'] else ""
-            t8_mark = "【八强】" if r['is_top8'] else ""
-            print(f"    rank={fr:<5} score={r['swiss_score']:<3} {r['archetype']:<22} {t8_mark}{hs_mark}")
 
-    print("\n=== 自然周归类测试 ===")
-    test_dates = [
-        "2026-06-26 18:00:00.0",   # 周五
-        "2026-06-22 10:00:00.0",   # 周一（应归到自己）
-        "2026-06-28 23:59:00.0",   # 周日（应和上面同一周）
-        "2026-06-29 00:01:00.0",   # 下周一（应跳到新一周）
-        "2026-06-25",              # 只有日期没时间，验证兼容
-        "",                        # 空值，应返回 None
-    ]
-    for s in test_dates:
-        d = parse_event_date(s)
-        if d is None:
-            print(f"  {s!r:30} -> 解析失败(None)")
-        else:
-            print(f"  {s!r:30} -> 日期 {d} ({['周一','周二','周三','周四','周五','周六','周日'][d.weekday()]}) -> 所属周一 {week_monday(d)}")
-
-    print("\n=== 扫描所有赛事的周分布 ===")
-    all_files = sorted(glob.glob(os.path.join(DATA_DIR, "*.json")))
-    week_event_count = {}
-    no_date = 0
-    for path in all_files:
-        with open(path, "r", encoding="utf-8") as f:
-            ev = json.load(f)
-        d = parse_event_date(ev.get("starttime"))
-        if d is None:
-            no_date += 1
-            continue
-        wk = week_monday(d)
-        week_event_count[wk] = week_event_count.get(wk, 0) + 1
-    print(f"  共 {len(all_files)} 个赛事，解析失败 {no_date} 个")
-    print(f"  按自然周分布（周一日期 -> 赛事数）:")
-    for wk in sorted(week_event_count):
-        print(f"    {wk} 那一周: {week_event_count[wk]} 场")
-
-    print("\n=== 单场赛事聚合测试 ===")
-    with open(files[0], "r", encoding="utf-8") as f:
-        ev = json.load(f)
-    res = process_event(ev, archetypes)
-    agg = aggregate(res["records"])
-    print(f"  总牌表 {agg['total_decks']}  高分 {agg['total_high_score']}  八强 {agg['total_top8']}  Unknown {agg['unknown_count']}")
-    print(f"  {'套牌':<22} {'数量':>4} {'高分':>4} {'高分占比':>8} {'八强':>4} {'八强占比':>8} {'转化率':>8}")
-    for a in agg["archetypes"]:
-        hs = f"{a['high_score_share']:.1%}" if a['high_score_share'] is not None else "N/A"
-        t8 = f"{a['top8_share']:.1%}" if a['top8_share'] is not None else "N/A"
-        cv = f"{a['conversion']:.1%}" if a['conversion'] is not None else "N/A"
-        print(f"  {a['name']:<22} {a['count']:>4} {a['high_score_count']:>4} {hs:>8} {a['top8_count']:>4} {t8:>8} {cv:>8}")
-    # 核对：占比应各自加起来约等于 100%
-    sum_hs = sum(a['high_score_share'] for a in agg["archetypes"] if a['high_score_share'] is not None)
-    sum_t8 = sum(a['top8_share'] for a in agg["archetypes"] if a['top8_share'] is not None)
-    print(f"  [核对] 高分占比合计={sum_hs:.4f}  八强占比合计={sum_t8:.4f}  (应都≈1.0)")
-
-    print("\n=== 生成区间统计 JSON ===")
+    print("\n=== 生成区间统计 JSON（含 4 周 base 偏离度）===")
     build_all_stats()
-    
-    print("\n=== 最佳牌表选择测试（单赛事内按套牌）===")
-    # 复用前面已 process_event 的 result（第一个赛事文件）
-    from collections import defaultdict
-    by_arch = defaultdict(list)
-    for r in result["records"]:
-        by_arch[r["archetype"]].append(r)
-    for arch in list(by_arch.keys())[:5]:
-        best = pick_best_deck(by_arch[arch])
-        main_len = sum(to_int(c.get("qty", 0)) for c in best["main_deck"]) if best["main_deck"] else 0
-        side_len = sum(to_int(c.get("qty", 0)) for c in best["side_deck"]) if best["side_deck"] else 0
-        print(f"  {arch:<22} 最佳: {best['player']:<14} "
-              f"rank={best['final_rank']} score={best['swiss_score']} "
-              f"主牌={main_len}张 备牌={side_len}张({len(best['side_deck'])}条)")
 
-    print("\n=== 牌手对象结构探查 ===")
-    first_player = event["players"][0]
-    print("  牌手对象的顶层字段:", list(first_player.keys()))
-    for k, v in first_player.items():
-        if isinstance(v, list):
-            print(f"  字段 {k!r} 是列表，长度 {len(v)}，第一个元素: {v[0] if v else '空'}")
-        else:
-            print(f"  字段 {k!r} = {v!r}")
+    print("\n=== 平均牌表 & 偏离度验证（12 周区间，达标套牌）===")
+    events = load_all_events()
+    end_monday = latest_complete_week(events)
+    base_pack, d99 = build_base_pack(events, archetypes, end_monday)
+    print(f"  全局 D99 = {d99:.3f}，达标套牌 {len(base_pack)} 个")
+    data12, decks12 = build_range(events, archetypes, end_monday, 12, base_pack, d99)
 
+    # 取达标套牌里样本较大的前几个展示
+    qualified = sorted(base_pack.items(), key=lambda kv: -kv[1]["sample_size"])[:5]
+    for arch, base in qualified:
+        entry = decks12["decks"].get(arch, {})
+        best = entry.get("best_deck")
+        arch_agg = next((a for a in data12["archetypes"] if a["name"] == arch), {})
+        core_names = ", ".join(f"{c['name']}×{c['mean_qty']}" for c in base["core"][:5])
+        flex_names = ", ".join(f"{c['name']}({c['rate']})" for c in base["flex"][:5])
+        print(f"\n  【{arch}】 4周样本 {base['sample_size']}")
+        print(f"    Core(常备): {core_names}")
+        print(f"    Flex(自选): {flex_names}")
+        if base["medoid_display"]:
+            m = base["medoid_display"]
+            print(f"    实际典型牌表: {m['player']} rank={m['final_rank']} score={m['swiss_score']}")
+        if best and "deviation" in best:
+            print(f"    最佳牌表单副偏离度: {best['deviation']}")
+            fewer = best["deviation_diff"]["fewer"][:3]
+            more = best["deviation_diff"]["more"][:3]
+            print(f"      少带: {[(r['name'], r['deck_qty'], r['typical_qty']) for r in fewer]}")
+            print(f"      多带: {[(r['name'], r['deck_qty'], r['typical_qty']) for r in more]}")
+        print(f"    12周区间平均偏离度: {arch_agg.get('avg_deviation')}")
+        rc = base["recent_change"]
+        rc_reason = base["recent_change_reason"]
+        print(f"    近期变化度(本周 vs 之前4周): {rc if rc is not None else '—(' + str(rc_reason) + ')'}")
 
+    print("\n=== 各区间平均偏离度对比（验证跨区间不同）===")
+    for arch, base in qualified[:3]:
+        line = [f"{arch} (4周样本{base['sample_size']}):"]
+        for n in [1, 4, 12, 36]:
+            d, _ = build_range(events, archetypes, end_monday, n, base_pack, d99)
+            a = next((x for x in d["archetypes"] if x["name"] == arch), {})
+            line.append(f"{n}w={a.get('avg_deviation')}")
+        print("  " + "  ".join(line))
