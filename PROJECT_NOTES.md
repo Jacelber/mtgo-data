@@ -213,118 +213,122 @@
 
 ---
 
-## 六、平均牌表 & 偏离度（特殊度）统计设计定稿并落地（2026-07-03 定稿 → 2026-07-05 全面实现）
+## 六、平均牌表 & 偏离度（特殊度）统计设计定稿并落地（2026-07-03 定稿 → 2026-07-05 落地 → 2026-07-06 归一化改为绝对刻度）
 
 本章确定并**已实现**「平均牌表」「偏离度」「近期变化度」三大统计功能。核心原则：**机器比较**与**用户参考**彻底解耦；所有距离度量**共用同一个加权 L1 函数**（一处定义、多处复用）。
 
-⚠️ **本章相对旧版（2026-07-03 双 medoid 方案）有重大重构，以下为最终落地口径。** 旧版的「Overall / High-score 双 medoid + deviation_percentile」方案已废弃，替换为「单一架空平均牌表（Core/Flex）+ 单一实际典型牌表（medoid）+ deviation + 区间平均偏离度 + 近期变化度」。
+⚠️ **重大迭代记录**：
+- 旧版（2026-07-03）：Overall / High-score 双 medoid + deviation_percentile。**已废弃。**
+- 中版（2026-07-05）：单一架空平均牌表（Core/Flex）+ 单一实际典型牌表（medoid）+ 单副 deviation + 区间平均偏离度 + 近期变化度；归一化用**全局 P99（D99）**。
+- **今版（2026-07-06）：归一化从「全局 D99」改为「绝对刻度」（见 6.5）。** 起因见下。
+
+### 6.0 为什么从 D99 改为绝对刻度（本次迭代动因，务必理解）
+- D99 归一化（距离 / 全体牌表距离的 P99 × 100）测的是「这副牌在全体里有多极端（相对语义）」。
+- 实测暴露问题：一副构筑已高度成型、核心完全没动、只调整了地基和几张 Flex 卡的 4-Color Tablet，D99 口径下算出 **94 分**（接近满分），与玩家体感严重不符——它本质就是标准 Tablet，不该接近「最独创的 1%」。
+- 根因：D99 锚点偏小（约 19.8），而地和低权重 Flex 卡的琐碎差异就能贡献十几点距离，除以小锚点后分数虚高，分辨率被压在高区间。
+- 用户目标是「绝对语义」刻度：**0 分 = 与主流构筑几乎完全一致；接近 100 分 = 几乎换掉整副（现实中极少出现，因为完全不同的牌不会被归为同一套牌类型）**。
+- 解决：改用「加权 L1 距离 / base 自身加权总量 × 100」。这把尺子天然满足上述直觉，且核心卡（高权重）没动时分数自然低、真正魔改核心才拿高分——正好贴合「独创性」语义。改后同一副 Tablet 落到 **40 分（那副具体牌）/ best_deck 25 分**，符合体感。
 
 ### 6.1 固定 4 周 base（所有偏离度计算的统一基准）
 - **BASE_WEEKS = 4**：所有偏离度相关计算（单副偏离度、区间平均偏离度、Core/Flex 分组、实际典型 medoid、近期变化度）**统一基于最近 4 个完整自然周的数据**，与用户查询的时间区间（1/4/12/36 周）无关。
 - base 采用"最近 4 个完整自然周"滑动窗口，与区间口径一致（终点为最近一个已结束的完整周）。偏离度随时间自然更新。
-- **样本门槛 MIN_SAMPLE = 8**：该套牌 4 周内牌表数 ≥8 才计算 base（均值向量 / Core/Flex / medoid / 偏离度基准）。不足则该套牌无偏离度基准。
+- **样本门槛 MIN_SAMPLE = 8**：该套牌 4 周内牌表数 ≥8 才计算 base。不足则该套牌无偏离度基准。
 
 ### 6.2 三个核心定义（术语已与用户敲定）
 - **架空平均牌表（Typical deck, abstract）**：过去一个月（4 周 base）该套牌的平均构筑。逐卡计算平均张数，**保留小数、不取整、不凑 60**。这是唯一参与偏离度打分的机器基准。
 - **实际典型牌表（Typical deck, actual / medoid）**：4 周 base 内，离架空平均牌表最近的一副**真实、合法、高胜率**牌表。用作用户可读的代表牌。
 - **偏离度（deviation）**：单副牌相对架空平均牌表的偏离程度（独创性度量）。
 
-### 6.3 Core/Flex 分组（替代旧版 Overall/High-score 双 medoid）
+### 6.3 Core/Flex 分组
 架空平均牌表按**出现率**（而非均值张数）拆成两组呈现给用户：
-- **核心卡 / Core**：出现率 ≥ **CORE_RATE = 0.8** 的卡（即"绝大多数牌表都使用的组件"）。
-- **弹性卡 / Flex**：出现率 < 0.8 的卡（即"相对只有少数牌表才使用的组件"）。
-- 展示时每张卡保留均值张数（保留一位小数），仅用于排序。
-- ⚠️ **术语定义**：Core = "大多数牌表中都使用的组件"，Flex = "相对只有少数牌表才使用的组件"。用出现率划分而非均值张数，避免"半数牌表带 4 张、半数不带"这类卡被误判。
-- CORE_RATE=0.8 为初版验证值，若 Core 组过空或过满可再调。
+- **核心卡 / Core**：出现率 ≥ **CORE_RATE = 0.8** 的卡（"大多数牌表中都使用的组件"）。
+- **弹性卡 / Flex**：出现率 < 0.8 的卡（"相对只有少数牌表才使用的组件"）。
+- 展示时每张卡保留均值张数（保留一位小数）用于排序，另存出现率 rate。
 - 边缘卡地板 **AVG_FLOOR = 0.15**：均值 < 0.15 的卡从向量中滤除（一次性错卡噪声），不进 Core/Flex 也不进偏离度计算。
+- CORE_RATE=0.8 为初版验证值，若 Core 组过空或过满可再调。
 
 ### 6.4 距离函数：加权 L1（曼哈顿）——全局共用
-- **度量：加权 L1** —— `Σ w_card × |牌表张数 - 均值张数|`。兼具可解释性（能拆成"少带 X、多带 Y"）与合理性（核心卡偏离权重更高）。
+- **度量：加权 L1** —— `Σ w_card × |牌表张数 − 均值张数|`。兼具可解释性（能拆成"少带 X、多带 Y"）与合理性（核心卡偏离权重更高）。
 - **权重 w_card = 该卡的出现率**（0~1，干净的"核心程度"刻度）；不用均值张数当权重。
 - **共用性**：选 medoid、单副偏离度、区间平均偏离度、近期变化度**全部共用此函数**（weighted_l1），只实现一次。选 medoid 用原始距离比大小即可。
-- 初版口径 **use_side=False（仅主牌）**：主牌最能代表套牌构筑身份、信号最干净；备牌方差大易淹没主牌信号。（旧版 6.6 计划的"主牌 vs 主牌+备牌"口径校准，最终定为初版只用主牌。）
+- ⚠️ **口径：纯主牌（use_side = False），备牌完全不算**（2026-07-06 复核确认）。
+  - `deck_vector` 只读 `main_deck`，整条偏离度链路（base 均值 / Core/Flex / medoid / 单副偏离度 / 区间平均 / 近期变化度）自始至终只有主牌。
+  - 理由：主牌定义套牌核心策略、信号干净；备牌随环境波动大、方差高，会引入噪声、淹没主牌信号。玩家的真正创新几乎都在主牌。
+  - ⚠️ **一致性铁律**：base 与被比较对象必须在同一「卡空间」——要么都含备牌、要么都不含，**绝不能一边含一边不含**，否则距离度量失真（base 里的备牌卡会被当成被比牌「少带的卡」，凭空拉高偏离度）。现状全链路纯主牌，自洽无问题。将来若要纳入备牌，必须**所有调用点同步切换**（给 `deck_vector` 加 include_side 参数并全改），或改为「主牌偏离度 / 备牌偏离度」两个独立指标，且都要重新校准数值。当前明确不纳入。
 
-### 6.5 归一化：全局单一 D99
-- 所有偏离度类指标做**全局固定缩放**归一化到 0~100，单副与平均可相互比较、跨套牌也可横向排序。
-- **DEV_PERCENTILE = 99**：收集全体套牌所有牌表到各自 4 周 base 的加权 L1 距离，取全局 **P99** 作为"100 分"锚点 **D99**（跨所有 archetype 的单一锚点，不是每套牌各自 P99）。
-- 归一化公式：`normalize_dev(d, D99) = min(100, round(d / D99 × 100))`。
-- 归一化**不影响 medoid 选取**（选 medoid 只需原始距离比大小），仅用于展示。
-- 实测：**全局 D99 = 19.55**（本轮 12 周区间数据）。
+### 6.5 归一化：绝对刻度（本次核心改动，替代旧 D99）
+- 所有偏离度类指标（单副偏离度、区间平均偏离度、近期变化度）**统一改用绝对刻度**归一化到 0~100，仍保持同量纲可比。
+- **公式**：`deviation = min(100, round( weighted_l1(vec, base_mean, weights) / denom × 100 ))`
+  - 其中 **分母 denom = base 自身的加权总量 = Σ(权重 × base均值张数)**，对 base 里所有卡求和。
+  - 语义：把 base 里每张卡「完全拿掉」所对应的加权距离作为满分 100 的锚点。
+  - **0 分 = 与 base 完全一致；接近 100 = 几乎换掉整副 base。**
+- **分母是每套牌各自的常数**（各套牌 base 加权量不同），存入 base_pack 的 `denom` 字段，随各指标复用。
+  - 区间平均偏离度：分母用该套牌 **4 周 base** 的 denom。
+  - 近期变化度：两端为「本周平均 vs 前 4 周平均」，参照系是前 4 周，分母用**前 4 周（远端）平均向量的加权总量**。
+- ⚠️ **语义变化（与旧 D99 的区别）**：
+  - 旧 D99 是**全局单一锚点**，任意两套牌偏离度可直接横向比「谁更极端」。
+  - 新绝对刻度**分母因套牌而异**，偏离度含义变为「相对各自 base 改了多少比例」。**同一套牌内部比较（哪副更独创）完全有效，也是主要用途**；跨套牌横向比时应理解为「改动比例」而非「绝对差异量」。对本项目场景（用户关心「这副 Tablet 相对标准 Tablet 改了多少」）反而更合理。
+- ⚠️ **数值特征**：绝对刻度下数值普遍温和（日常构筑差异多落在 5~40，最独创也就 25~40），接近 100 基本不可能出现（那意味着换掉整副）。这正是「绝对刻度」的预期效果，代价是区分度集中在中低区间。若将来需拉开独创牌差距，可考虑温和的非线性拉伸，但初版不做（先让用户用直觉刻度，看反馈再说）。
+- **旧 D99 相关代码保留但不再用于归一化**：`percentile()` 计算、`build_base_pack` 里的 `d99`、`index.json` 的 `global_d99` 字段均保留（历史遗留、无害），归一化已切到 `normalize_dev_abs(d, denom)`。旧 `normalize_dev(d, d99)` 函数保留未删。
 
-### 6.6 三个独立指标（含义各异，不可直接比大小）
+### 6.6 三个独立指标（含义各异，均用绝对刻度）
 
 **① 单副偏离度（deviation）** —— 套牌固有属性
-- 某副牌相对 4 周 base 架空平均牌表的加权 L1 距离，归一化到 0~100。越高越非主流（独创性越强）。
+- 某副牌（纯主牌）相对 4 周 base 架空平均的加权 L1 距离，绝对刻度归一化到 0~100。越高越非主流（独创性越强）。
 - 用于 best_deck，并附**逐卡差异拆解 deviation_diff**（比典型"少带/多带"的卡）。
-- ⚠️ **差异过滤**：前端只显示绝对张数差 ≥ 1 的卡（`DIFF_MIN = 1`）——差零点几张属于均值小数导致的正常波动，忽略。
+- ⚠️ **差异过滤**：前端只显示绝对张数差 ≥ 1 的卡（`DIFF_MIN = 1`）——差零点几张属均值小数波动，忽略。
 
 **② 区间平均偏离度（avg_deviation）** —— 衡量某类套牌一段时间内的构筑漂移
-- 口径（用户敲定的"先平均、再算距离"）：**先把该区间内该套牌所有牌表聚合成一个平均向量，再算这个平均向量到 4 周 base 的加权 L1 距离**，归一化。
-  * 区别于"每副牌各自算距离再平均"（那测的是离散度）；本口径测的是**中心漂移**。
-- 各区间语义：
-  * **1 周 tab**：本周平均构筑 vs 4 周 base ⇒ 本周相对整月主流变了多少。
-  * **4 周 tab**：base 自己 vs base，数值≈0（同一批牌）。
-  * **12 / 36 周 tab**：更长窗口平均 vs 4 周 base ⇒ 3 个月 / 9 个月的构筑演变。
-- 因基准固定为 4 周，4 周档数值最小、12/36 档更大（拖入更早的老构筑）。小样本也照常显示（不设额外门槛）。
-- ⚠️ **不进主表格**（见下"UI 决策"）。
+- 口径（用户敲定）：该区间内该套牌**每副牌各自对 4 周 base 算偏离度，再取平均**。
+  - （注：此为「先算距离、再平均」，测的是该区间牌表相对固定 base 的平均偏离水平。）
+- 各区间语义：1 周=本周相对整月主流的平均偏离；4 周≈base 内在离散度；12/36 周=更长窗口的偏离水平（拖入更早老构筑，数值更大）。
+- 因基准固定为 4 周，趋势为 1w ≤ 4w ≤ 12w ≈ 36w。小样本也照常显示（不设额外门槛）。
+- ⚠️ **不进主表格**（见 6.7）。
 
 **③ 近期变化度（recent_change）** —— 套牌固有属性，衡量"本周相对之前主流的变化"
 - 近端 = 最近完整 1 周该套牌主牌平均向量；远端 = 前 4 周（不含本周）该套牌主牌平均向量。
-- 权重 = **前 4 周出现率**（以之前主流为参照系）；距离 = 加权 L1；归一化 = 全局 D99（两端都是平均向量、距离偏小属正常，不单独放大）。
-- **样本门槛 RECENT_MIN = 3、PRIOR_WEEKS = 4**：本周 <3 副 → 值为 null，原因枚举 `"recent"`；前 4 周 <3 副 → null，原因 `"prior"`；无 4 周 base → `"nobase"`。
+- 权重 = **前 4 周出现率**；距离 = 加权 L1；归一化 = 绝对刻度（分母用前 4 周加权总量）。
+- **样本门槛 RECENT_MIN = 3、PRIOR_WEEKS = 4**：本周 <3 副 → null，原因枚举 `"recent"`；前 4 周 <3 副 → null，原因 `"prior"`；无 4 周 base → `"nobase"`。
 - 结果与 average_deck / best_deck 同级存进 decks 文件，**在展开区显示，不进表格**。
 
-### 6.7 UI 决策（用户敲定）
-- **主表格列结构完全不动**：区间平均偏离度、近期变化度都是"随区间/固有"的展示层数据，**不进表格**（避免"表格里出现不随区间变的列"这种反直觉设计）。
-- 展开区（deck-row）改为：
+### 6.7 UI 决策（用户敲定，不变）
+- **主表格列结构完全不动**：区间平均偏离度、近期变化度都不进表格（避免"表格里出现不随区间变的列"这种反直觉设计）。
+- 展开区（deck-row）：
   * **best_deck**：显示单副偏离度 + 逐卡差异拆解。
-  * **average_deck 区**，两个 tab：
-    - **架空平均牌表（synthetic，默认显示）**：Core / Flex 两栏 + 均值张数。
-    - **实际典型牌表（real）**：medoid 牌组主牌 + 备牌。
-  * **近期变化度**行：固定显示在 **tab 切换按钮与"常备卡（Core）"之间**（不在最下方），有值显示分数，无值按原因枚举显示文案。
-- ⚠️ 展示层命名沿用"架空平均 / 实际典型"，避免"Average Deck"被误解为逐卡平均或困惑于署玩家名。
+  * **average_deck 区**，两个 tab：架空平均牌表（synthetic，默认）显示 Core/Flex 两栏 + 均值张数；实际典型牌表（real）显示 medoid 主牌 + 备牌。
+  * **近期变化度**行：固定显示在 tab 切换按钮与"常备卡（Core）"之间。
 
 ### 6.8 后端实现（stats_standard.py，已落地）
-- **常量**：AVG_FLOOR=0.15、MIN_SAMPLE=8、BASE_WEEKS=4、CORE_RATE=0.8、DEV_PERCENTILE=99、RECENT_MIN=3、PRIOR_WEEKS=4。
-- **新增函数**（在 _neg_time_key 之后）：
-  * `deck_vector(record)`：record → 卡名张数向量（走 normalize_name）。
-  * `mean_vector(vectors)`：均值向量，滤 <AVG_FLOOR。
-  * `appearance_rates(vectors)`：逐卡出现率（权重）。
-  * `split_core_flex(mean, rates, core_rate=0.8)`：按出现率分 Core/Flex，返回 [{name, mean_qty}]。
-  * `weighted_l1(vec_a, vec_b, weights)`：加权 L1 距离。
-  * `normalize_dev(d, d99)`：`min(100, round(d/d99*100))`。
-  * `deck_diff(deck_vec, mean, weights)`：差异拆解 {fewer, more}（各项 name/deck_qty/typical_qty）。
-  * `pick_medoid(records, mean, rates)`：选离均值最近的真实牌表。
-  * `record_to_deck_display(record)`：牌表展示结构（同 best_deck 格式）。
-  * `build_base_pack(events, archetypes, end_monday)`：生成 4 周 base 包，返回 `(base_pack, d99)`。每个达标套牌含 mean / weights / core / flex / medoid_display / sample_size / recent_change / recent_change_reason；同时汇总全体距离算全局 d99；再回填每套牌 recent_change。
-  * `recent_change_for_arch(events, archetypes, end_monday, arch, d99)`：算近期变化度，返回 `(value, reason)`，失败返回 `(None, "recent")` / `(None, "prior")`，成功返回 `(normalize_dev(...), None)`。
-- **修改函数**：
-  * `build_range`：接受 base 包参数；对该区间每个套牌聚合平均向量算 avg_deviation（先平均再距离）；archetype 层输出 `avg_deviation`。
-  * `build_decks`：接受 base 包；best_deck 附 `deviation`（改名，原 deviation_percentile）与 `deviation_diff`；average_deck 改为 {sample_size, medoid, core, flex, recent_change, recent_change_reason}，无 base 时各字段空且 recent_change_reason="nobase"。
-  * `build_all_stats`：先建 base 包与 D99，再逐区间生成 JSON；index.json 写入全局 D99。
-- ⚠️ 临时/大体积中间量（均值向量、权重）只在内存流转，不写进用户 JSON。
+- **常量**：AVG_FLOOR=0.15、MIN_SAMPLE=8、BASE_WEEKS=4、CORE_RATE=0.8、DEV_PERCENTILE=99（旧 D99 遗留、不再用于归一化）、RECENT_MIN=3、PRIOR_WEEKS=4。
+- **距离/归一化函数**：`weighted_l1(vec, mean, weights)`、`dev_denominator(mean_vec, weights)`（= Σ 权重×均值，绝对刻度分母）、`normalize_dev_abs(d, denom)`（= min(100, round(d/denom×100))）。旧 `normalize_dev(d, d99)` 保留未用。
+- **向量/分组函数**：`deck_vector`（仅主牌）、`mean_vector`（滤 <AVG_FLOOR）、`appearance_rates`、`split_core_flex`、`deck_diff`、`pick_medoid`、`record_to_deck_display`。
+- **base 构建 `build_base_pack`**：返回 `(base_pack, d99)`；每个达标套牌含 mean / weights / **denom** / core / flex / medoid_display / sample_size / recent_change / recent_change_reason；d99 仍计算但仅用于遗留字段。
+- **近期变化度 `recent_change_for_arch`**：返回 `(value, reason)`，分母用远端加权总量（`dev_denominator(prior_mean, weights)`），`normalize_dev_abs`。
+- **区间构建**：`build_range` 用 `normalize_dev_abs(..., base["denom"])` 算 avg_deviation；`build_decks` 用 `normalize_dev_abs(raw, base["denom"])` 算 best_deck.deviation + deviation_diff。
+- **全量统计 `build_all_stats`**：先建 base 包，逐区间生成 JSON；index.json 仍写 `global_d99`（遗留）。
+- ⚠️ 中间量（均值向量、权重、denom）只在内存/base_pack 流转，denom 不必写进用户 decks JSON（偏离度已是算好的 0~100 值）。
 
-### 6.9 验证结果（2026-07-05）
-- 全局 **D99 = 19.55**；4 周内达标套牌 **15 副（≥8）**。
-- 三指标呈现良性区分（以 12 周区间为例）：
-  * Selesnya Offense（样本 184）：单副最佳偏离度 26，12 周平均偏离度 42，近期变化度 31。
-  * Izzet Prowess（182）：30 / 44 / 18。
-  * Jeskai Lessons（128）：21 / 31 / 11。
-  * Izzet Spellementals（102）：30 / 64 / 27。
-  * 4-Color Tablet（84）：68 / 76 / 30。
-- **跨区间平均偏离度**符合预期（4w 最小、12/36 更大）：
-  * Selesnya Offense：1w=38, 4w=38, 12w=42, 36w=42
-  * Izzet Prowess：1w=29, 4w=33, 12w=44, 36w=45
-  * Jeskai Lessons：1w=25, 4w=29, 12w=31, 36w=31
-- 近期变化度区分度良好（11~31，无 null，说明 15 副达标套牌 4 周样本充足）。
-- 别名归一化在此链路正常（未误伤相似名卡）。
-- ⚠️ medoid 会随 base 窗口滑动略变（如 Izzet Prowess medoid 从 rank=11 变 rank=17），属数据更新的正常现象，非 bug。
+### 6.9 验证结果（2026-07-06，绝对刻度）
+- 4 周内达标套牌 **14 个（≥8 副）**（数据窗口滑到 2026-06-08~07-05）。
+- 单副偏离度 / 12 周平均偏离度 / 近期变化度（best_deck，纯主牌，绝对刻度）：
+  * Selesnya Offense（4 周样本 165）：14 / 15 / 13
+  * Izzet Prowess（160）：9 / 15 / 6
+  * Jeskai Lessons（128）：7 / 10 / 4
+  * 4-Color Tablet（102）：25 / 31 / 15
+  * Izzet Spellementals（87）：12 / 22 / 7
+- 数值符合直觉：Jeskai Lessons 核心 5 张全 rate=1.0 满编、构筑极固定 → 偏离度 7、变化度 4（最稳定）；4-Color Tablet Flex 槽多、弹性大 → 偏离度 25、变化度 15（相对高）；均落在温和区间，不再出现旧 D99 的虚高 90+。
+- **跨区间平均偏离度**趋势正确（1w ≤ 4w ≤ 12w ≈ 36w）：
+  * Selesnya Offense：1w=11, 4w=13, 12w=15, 36w=15
+  * Izzet Prowess：1w=11, 4w=10, 12w=15, 36w=16
+  * Jeskai Lessons：1w=9, 4w=9, 12w=10, 36w=10
+- 关键校验案例：曾报 94 分的 4-Color Tablet（_Batutinha_ 那副），绝对刻度下降到 **40 分**，符合"成型牌只改了地基和几张 Flex"的体感。
 
 ### 6.10 前端实现（index.html，已落地）
-- 移除旧版 Overall/High-score 切换；展开区改为架空平均（默认）/ 实际典型两 tab，`bindAvgToggle` 每次右栏重渲染后重新绑定按钮、从 `dataset.mode` 读取模式（修复了旧版"切到高分后无法切回"的按钮失效 bug）。
-- `filterDiff` 过滤张数差 <1 的卡（DIFF_MIN=1）；`deviationHtml` 只渲染非空的 fewer/more。
-- `recentChangeHtml` 固定显示在 tab 与 Core 之间，依据 `recent_change_reason`（recent / prior / nobase）选 i18n 文案（`change_note_recent` / `change_note_prior` / `change_note_nobase`）。
-- i18n：`t()` 用 `!== undefined` 区分"缺 key"与"空串"（使英文 dev_suffix="" 正确返回空串）；新增 Core/Flex、tab 名、近期变化度、三种样本不足文案等键。
+- 移除旧版 Overall/High-score 切换；展开区改架空平均（默认）/ 实际典型两 tab，`bindAvgToggle` 每次右栏重渲染后重新绑定按钮、从 `dataset.mode` 读模式（修复"切到高分后无法切回"bug）。
+- `filterDiff` 过滤张数差 <1 的卡（DIFF_MIN=1）；`deviationHtml` 只渲染非空 fewer/more。
+- `recentChangeHtml` 固定于 tab 与 Core 之间，依 `recent_change_reason`（recent/prior/nobase）选 i18n 文案（change_note_recent / change_note_prior / change_note_nobase）。
+- i18n：`t()` 用 `!== undefined` 区分缺 key 与空串；已加 Core/Flex、tab 名、近期变化度、样本不足文案等键。
+- ⚠️ 前端展示的偏离度已是后端算好的 0~100 绝对刻度值，前端不做归一化，切换 D99→绝对刻度对前端透明、无需改动。
 
 ---
 

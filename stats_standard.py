@@ -244,6 +244,22 @@ def normalize_dev(d, d99):
     return min(100, round(d / d99 * 100))
 
 
+def dev_denominator(mean_vec, weights):
+    """偏离度绝对刻度的分母 = base 自身的加权总量 = Σ 权重 × 均值张数。
+    含义：把 base 里每张卡完全拿掉所对应的加权距离，作为满分 100 的锚点。
+    """
+    return sum(weights.get(name, 0.0) * m for name, m in mean_vec.items())
+
+
+def normalize_dev_abs(d, denom):
+    """绝对刻度归一化：加权 L1 距离 / base 加权总量 × 100，截顶 100。
+    0 = 与 base 完全一致；接近 100 = 几乎换掉整副 base。denom<=0 返回 0。
+    """
+    if not denom or denom <= 0:
+        return 0
+    return min(100, round(d / denom * 100))
+
+
 def deck_diff(vec, mean_vec, top=8):
     """生成逐卡差异（相对均值）。返回 {fewer, more}，各含 {name, deck_qty, typical_qty}。
     前端再按最小差距过滤；这里输出较多项供其筛选。
@@ -327,7 +343,8 @@ def recent_change_for_arch(events, archetypes, end_monday, arch, d99):
     weights = appearance_rates(prior_vecs)   # 以之前主流为参照系
 
     raw = weighted_l1(recent_mean, prior_mean, weights)
-    return normalize_dev(raw, d99), None
+    denom = dev_denominator(prior_mean, weights)   # 分母=远端(前4周)加权总量
+    return normalize_dev_abs(raw, denom), None
 
 
 def build_base_pack(events, archetypes, end_monday, today=None):
@@ -362,6 +379,7 @@ def build_base_pack(events, archetypes, end_monday, today=None):
         base_pack[arch] = {
             "mean": mean,
             "weights": weights,
+            "denom": dev_denominator(mean, weights),   # 绝对刻度分母
             "core": core,
             "flex": flex,
             "medoid_display": record_to_deck_display(medoid),
@@ -422,7 +440,7 @@ def build_decks(records, base_pack, d99):
             for c in best["main_deck"]:
                 best_vec[c["name"]] = best_vec.get(c["name"], 0) + to_int(c["qty"])
             raw = weighted_l1(best_vec, base["mean"], base["weights"])
-            best["deviation"] = normalize_dev(raw, d99)
+            best["deviation"] = normalize_dev_abs(raw, base["denom"])
             best["deviation_diff"] = deck_diff(best_vec, base["mean"])
 
         if base:
@@ -473,7 +491,8 @@ def build_range(events, archetypes, end_monday, n_weeks, base_pack, d99):
         if not base:
             avg_dev[arch] = None
             continue
-        devs = [normalize_dev(weighted_l1(deck_vector(r), base["mean"], base["weights"]), d99)
+        devs = [normalize_dev_abs(weighted_l1(deck_vector(r), base["mean"], base["weights"]),
+                                  base["denom"])
                 for r in recs]
         avg_dev[arch] = round(sum(devs) / len(devs)) if devs else None
 
