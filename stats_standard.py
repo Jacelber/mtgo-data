@@ -77,6 +77,7 @@ def process_event(event, archetypes):
             "starttime": starttime,
             "main_deck": player.get("main_deck", []),
             "side_deck": player.get("sideboard", []),
+            "rounds": rounds,
         })
     return {
         "description": description,
@@ -107,7 +108,9 @@ def week_monday(d):
 
 
 def aggregate(records):
-    """把一批牌手记录聚合成各套牌的统计。"""
+    """把一批牌手记录聚合成各套牌的统计。
+    场均分（avg_points_per_round）= Σ该套牌积分 / Σ对应赛事理论轮数（微观平均，0~3）。
+    """
     stats = {}
     total_decks = 0
     total_high = 0
@@ -115,9 +118,12 @@ def aggregate(records):
 
     for r in records:
         name = r["archetype"]
-        s = stats.setdefault(name, {"count": 0, "high": 0, "top8": 0})
+        s = stats.setdefault(name, {"count": 0, "high": 0, "top8": 0,
+                                    "score_sum": 0, "rounds_sum": 0})
         s["count"] += 1
         total_decks += 1
+        s["score_sum"] += r.get("swiss_score", 0)
+        s["rounds_sum"] += r.get("rounds", 0)
         if r["is_high_score"]:
             s["high"] += 1
             total_high += 1
@@ -132,6 +138,7 @@ def aggregate(records):
         high_share = s["high"] / total_high if total_high else None
         top8_share = s["top8"] / total_top8 if total_top8 else None
         conversion = s["top8"] / s["high"] if s["high"] else None
+        appr = s["score_sum"] / s["rounds_sum"] if s["rounds_sum"] else None
         archetypes.append({
             "name": name,
             "count": s["count"],
@@ -140,6 +147,7 @@ def aggregate(records):
             "top8_count": s["top8"],
             "top8_share": round(top8_share, 4) if top8_share is not None else None,
             "conversion": round(conversion, 4) if conversion is not None else None,
+            "avg_points_per_round": round(appr, 2) if appr is not None else None,
         })
 
     archetypes.sort(key=lambda a: a["count"], reverse=True)

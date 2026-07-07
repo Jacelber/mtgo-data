@@ -104,6 +104,46 @@
                 border-radius: 6px; font-size: 12px; }
   .change-score { font-size: 14px; font-weight: bold; color: #9a6a00; }
   .change-note { color: #999; }
+  
+  /* ===== 每周精选 pickup ===== */
+  .view-switch { display: flex; gap: 6px; margin-bottom: 12px; }
+  .view-switch button {
+    border: 1px solid #ccc; background: #fff; padding: 6px 16px;
+    cursor: pointer; border-radius: 6px; font-size: 14px; color: #555;
+  }
+  .view-switch button.active { background: #3b6ea5; color: #fff; border-color: #3b6ea5; font-weight: bold; }
+  .pickup-layout { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+  .pickup-weeks {
+    flex: 0 0 160px; background: #fff; border-radius: 8px; padding: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .pickup-weeks h3 { font-size: 13px; color: #777; margin: 4px 6px 8px; }
+  .pickup-weeks button {
+    display: block; width: 100%; text-align: left; border: none; background: none;
+    padding: 7px 10px; cursor: pointer; border-radius: 5px; font-size: 13px; color: #333;
+  }
+  .pickup-weeks button:hover { background: #f0f2f5; }
+  .pickup-weeks button.active { background: #3b6ea5; color: #fff; }
+  .pickup-weeks button .wk-sub { display: block; font-size: 11px; color: inherit; opacity: 0.7; }
+  .pickup-content { flex: 1; min-width: 280px; }
+  .pickup-group { margin-bottom: 18px; }
+  .pickup-group > h2 { font-size: 15px; color: #3b6ea5; margin: 0 0 8px;
+    border-bottom: 2px solid #e3e6ea; padding-bottom: 4px; }
+  .pickup-empty { color: #999; padding: 10px 0; font-size: 13px; }
+  .pk-card { background: #fff; border-radius: 8px; margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden; }
+  .pk-head { padding: 10px 14px; cursor: pointer; display: flex;
+    justify-content: space-between; align-items: center; gap: 10px; }
+  .pk-head:hover { background: #f9fafb; }
+  .pk-name { font-weight: bold; font-size: 14px; color: #222; }
+  .pk-brief { font-size: 12px; color: #888; }
+  .pk-dev { font-size: 12px; color: #3b6ea5; font-weight: bold; white-space: nowrap; }
+  .pk-body { padding: 0 14px 14px; border-top: 1px solid #eee; display: none; }
+  .pk-card.open .pk-body { display: block; }
+  .pk-comment { white-space: pre-wrap; font-size: 13px; line-height: 1.6;
+    color: #333; margin: 12px 0; padding: 10px 12px; background: #f7f9fb; border-radius: 6px; }
+  .pk-decks { display: flex; gap: 24px; flex-wrap: wrap; }
+  .pk-decks .deck-col { flex: 1; min-width: 220px; }
 
   /* 卡图悬停预览 */
   #cardPreview {
@@ -123,13 +163,29 @@
     </div>
   </div>
 
-  <div class="format-tabs" id="formatTabs"></div>
-  <div class="range-buttons" id="rangeButtons"></div>
-  <div class="period-info" id="periodInfo"></div>
+  <div class="view-switch" id="viewSwitch"></div>
 
-  <div class="panel" id="chartPanel">
-    <canvas id="metaChart"></canvas>
+  <div id="statsView">
+    <div class="format-tabs" id="formatTabs"></div>
+    <div class="range-buttons" id="rangeButtons"></div>
+    <div class="period-info" id="periodInfo"></div>
+
+    <div class="panel" id="chartPanel">
+      <canvas id="metaChart"></canvas>
+    </div>
+
+    <div class="panel" id="tablePanel">
+      <div class="placeholder" id="tablePlaceholder">（数据表格待接入）</div>
+    </div>
   </div>
+
+  <div id="pickupView" style="display:none">
+    <div class="pickup-layout">
+      <div class="pickup-weeks" id="pickupWeeks"></div>
+      <div class="pickup-content" id="pickupContent"></div>
+    </div>
+  </div>
+
 
   <div class="panel" id="tablePanel">
     <div class="placeholder" id="tablePlaceholder">（数据表格待接入）</div>
@@ -154,7 +210,7 @@ const I18N = {
     siteTitle: "MTGO Meta 数据分析",
     range_1w: "1 周", range_4w: "4 周", range_12w: "12 周", range_36w: "36 周",
     format_standard: "标准", format_pioneer: "先驱", format_modern: "近代",
-    col_archetype: "套牌", col_hs_count: "高分数量", col_hs_share: "高分占比",
+    col_archetype: "套牌", col_appr: "场均分", col_hs_count: "高分数量", col_hs_share: "高分占比",
     col_t8_count: "八强数量", col_t8_share: "八强占比", col_conv: "转化率",
     chart_hs: "高分占比", chart_t8: "八强占比",
     period: "统计区间", loading: "加载中…",
@@ -173,12 +229,17 @@ const I18N = {
     change_note_recent: "本周样本不足，暂无变化度",
     change_note_prior: "缺少历史构筑数据，无法计算变化度",
     change_note_nobase: "4 周样本不足，暂无变化度",
+    view_stats: "数据统计", view_pickup: "每周精选",
+    pickup_weeks: "往期", pickup_existing: "现有套牌构筑变化",
+    pickup_new: "本周新增套牌", pickup_empty: "本周空缺",
+    pickup_no_data: "暂无每周精选内容",
+    pk_rank: "名次", pk_score: "积分",
   },
   en: {
     siteTitle: "MTGO Meta Analytics",
     range_1w: "1 Week", range_4w: "4 Weeks", range_12w: "12 Weeks", range_36w: "36 Weeks",
     format_standard: "Standard", format_pioneer: "Pioneer", format_modern: "Modern",
-    col_archetype: "Archetype", col_hs_count: "High-Score", col_hs_share: "HS Share",
+    col_archetype: "Archetype", col_appr: "Pts/Round", col_hs_count: "High-Score", col_hs_share: "HS Share",
     col_t8_count: "Top 8", col_t8_share: "T8 Share", col_conv: "Conversion",
     chart_hs: "HS Share", chart_t8: "T8 Share",
     period: "Period", loading: "Loading…",
@@ -197,6 +258,11 @@ const I18N = {
     change_note_recent: "Insufficient sample this week; no change score",
     change_note_prior: "No historical build data; cannot compute change",    
     change_note_nobase: "Insufficient 4-week sample; no change score",
+    view_stats: "Statistics", view_pickup: "Weekly Pickup",
+    pickup_weeks: "Archive", pickup_existing: "Existing Archetype Changes",
+    pickup_new: "New Archetypes This Week", pickup_empty: "None this week",
+    pickup_no_data: "No weekly pickup content yet",
+    pk_rank: "Rank", pk_score: "Score",
   },
 };
 
@@ -211,8 +277,12 @@ let chartInstance = null;
 let currentDecks = null;   // 当前区间的 decks_Xw.json 内容
 let openedArch = null;     // 当前展开的套牌名（排序/切换后保持展开）
 let avgMode = "synthetic"; // 平均牌表 tab：synthetic（默认，架空）/ real（实际典型）
+let currentView = "stats";       // stats / pickup
+let pickupIndex = null;          // pickup/index.json
+let currentPickupWeek = null;    // 当前选中周
+let currentPickupData = null;    // 当前周的 {week}.json
 
-const COLSPAN = 6;         // 表格列数，展开行需跨这么多列
+const COLSPAN = 7;         // 表格列数，展开行需跨这么多列
 
 // ===================== i18n 取值函数 =====================
 function t(key) {
@@ -331,10 +401,15 @@ function fmtPct(x) {
   if (x === null || x === undefined) return t("na");
   return (x * 100).toFixed(1) + "%";
 }
+function fmtAppr(x) {
+  if (x === null || x === undefined) return t("na");
+  return Number(x).toFixed(2);
+}
 function sortedArchetypes() {
   const arr = [...currentData.archetypes];
   const keymap = {
     archetype: a => archetypeName(a.name).toLowerCase(),
+    appr: a => (a.avg_points_per_round ?? -1),
     hs_count: a => a.high_score_count,
     hs_share: a => a.high_score_share ?? 0,
     t8_count: a => a.top8_count,
@@ -354,6 +429,7 @@ function renderTable() {
   if (!currentData) return;
   const cols = [
     { key: "archetype", label: "col_archetype", align: "left" },
+    { key: "appr",      label: "col_appr",      align: "right" },
     { key: "hs_count",  label: "col_hs_count",  align: "right" },
     { key: "hs_share",  label: "col_hs_share",  align: "right" },
     { key: "t8_count",  label: "col_t8_count",  align: "right" },
@@ -370,6 +446,7 @@ function renderTable() {
   sortedArchetypes().filter(a => a.high_score_count > 0).forEach(a => {
     html += "<tr>"
       + `<td><a href="#" class="arch-link" data-name="${encodeURIComponent(a.name)}">${archetypeName(a.name)}</a></td>`
+      + `<td style="text-align:right">${fmtAppr(a.avg_points_per_round)}</td>`
       + `<td style="text-align:right">${a.high_score_count}</td>`
       + `<td style="text-align:right">${fmtPct(a.high_score_share)}</td>`
       + `<td style="text-align:right">${a.top8_count}</td>`
@@ -641,16 +718,155 @@ function closeDeckRow() {
   document.querySelectorAll("tr.deck-row").forEach(r => r.remove());
   openedArch = null;
 }
+// ===================== 视图切换 =====================
+function renderViewSwitch() {
+  const box = document.getElementById("viewSwitch");
+  box.innerHTML = "";
+  [["stats", "view_stats"], ["pickup", "view_pickup"]].forEach(([key, label]) => {
+    const b = document.createElement("button");
+    b.textContent = t(label);
+    if (key === currentView) b.classList.add("active");
+    b.onclick = () => { currentView = key; refreshAll(); };
+    box.appendChild(b);
+  });
+}
+function applyView() {
+  document.getElementById("statsView").style.display = (currentView === "stats") ? "" : "none";
+  document.getElementById("pickupView").style.display = (currentView === "pickup") ? "" : "none";
+}
+
+// ===================== pickup 数据 & 渲染 =====================
+async function loadPickup() {
+  const idxUrl = `stats/${currentFormat}/mtgo/pickup/index.json?v=${Date.now()}`;
+  try {
+    const resp = await fetch(idxUrl);
+    pickupIndex = resp.ok ? await resp.json() : null;
+  } catch (e) { pickupIndex = null; }
+
+  const weeks = (pickupIndex && pickupIndex.weeks) || [];
+  if (!weeks.length) {
+    document.getElementById("pickupWeeks").innerHTML =
+      `<h3>${t("pickup_weeks")}</h3>`;
+    document.getElementById("pickupContent").innerHTML =
+      `<div class="pickup-empty">${t("pickup_no_data")}</div>`;
+    return;
+  }
+  // 默认选最新一周（weeks 已按周降序）
+  if (!currentPickupWeek || !weeks.some(w => w.week === currentPickupWeek)) {
+    currentPickupWeek = weeks[0].week;
+  }
+  renderPickupWeeks(weeks);
+  await loadPickupWeek(currentPickupWeek);
+}
+function renderPickupWeeks(weeks) {
+  let html = `<h3>${t("pickup_weeks")}</h3>`;
+  weeks.forEach(w => {
+    const active = (w.week === currentPickupWeek) ? " active" : "";
+    html += `<button class="wk-btn${active}" data-week="${w.week}">${w.week}`
+      + `<span class="wk-sub">${w.start} ~ ${w.end}</span></button>`;
+  });
+  const box = document.getElementById("pickupWeeks");
+  box.innerHTML = html;
+  box.querySelectorAll(".wk-btn").forEach(btn => {
+    btn.onclick = async () => {
+      currentPickupWeek = btn.dataset.week;
+      renderPickupWeeks(weeks);
+      await loadPickupWeek(currentPickupWeek);
+    };
+  });
+}
+async function loadPickupWeek(week) {
+  const url = `stats/${currentFormat}/mtgo/pickup/${week}.json?v=${Date.now()}`;
+  const content = document.getElementById("pickupContent");
+  content.innerHTML = `<div class="pickup-empty">${t("loading")}</div>`;
+  try {
+    const resp = await fetch(url);
+    currentPickupData = resp.ok ? await resp.json() : null;
+  } catch (e) { currentPickupData = null; }
+  renderPickupContent();
+}
+function renderPickupContent() {
+  const content = document.getElementById("pickupContent");
+  if (!currentPickupData) {
+    content.innerHTML = `<div class="pickup-empty">${t("pickup_empty")}</div>`;
+    return;
+  }
+  const existing = currentPickupData.existing_changes || [];
+  const newArch = currentPickupData.new_archetypes || [];
+  let html = "";
+  html += pickupGroupHtml(t("pickup_existing"), existing);
+  html += pickupGroupHtml(t("pickup_new"), newArch);
+  content.innerHTML = html;
+
+  // 折叠/展开 + 卡图悬停
+  content.querySelectorAll(".pk-head").forEach(head => {
+    head.onclick = () => head.closest(".pk-card").classList.toggle("open");
+  });
+  content.onmouseover = (ev) => {
+    const link = ev.target.closest("a.card-link");
+    if (link) showCardPreview(decodeURIComponent(link.dataset.card), ev);
+  };
+  content.onmousemove = (ev) => {
+    if (document.getElementById("cardPreview").style.display === "block") moveCardPreview(ev);
+  };
+  content.onmouseout = (ev) => {
+    if (ev.target.closest("a.card-link")) hideCardPreview();
+  };
+}
+function pickupGroupHtml(title, items) {
+  let html = `<div class="pickup-group"><h2>${title}</h2>`;
+  if (!items.length) {
+    html += `<div class="pickup-empty">${t("pickup_empty")}</div></div>`;
+    return html;
+  }
+  items.forEach((it, i) => { html += pickupCardHtml(it, i); });
+  html += `</div>`;
+  return html;
+}
+function pickupCardHtml(it, idx) {
+  const dev = (it.deviation === null || it.deviation === undefined)
+    ? "" : `<span class="pk-dev">${t("dev_title")} ${it.deviation}${t("dev_suffix")}</span>`;
+  const fr = (it.final_rank === null || it.final_rank === undefined) ? "-" : it.final_rank;
+  const sc = (it.swiss_score === null || it.swiss_score === undefined) ? "-" : it.swiss_score;
+  const dt = it.starttime ? it.starttime.slice(0, 10) : "";
+  const brief = `${it.player || "-"} · ${t("pk_rank")} ${fr} · ${t("pk_score")} ${sc}${dt ? " · " + dt : ""}`;
+  const comment = (lang === "en" && it.comment_en) ? it.comment_en : (it.comment_zh || "");
+
+  let body = "";
+  if (comment) body += `<div class="pk-comment">${escapeHtml(comment)}</div>`;
+  body += `<div class="pk-decks">`
+    + `<div class="deck-col"><h4>${t("main_deck")}</h4>${deckCardList(it.main_deck || [])}</div>`
+    + `<div class="deck-col"><h4>${t("side_deck")}</h4>${deckCardList(it.side_deck || [])}</div>`
+    + `</div>`;
+
+  return `<div class="pk-card">`
+    + `<div class="pk-head"><div>`
+    + `<div class="pk-name">${archetypeName(it.archetype)}</div>`
+    + `<div class="pk-brief">${brief}</div></div>`
+    + dev + `</div>`
+    + `<div class="pk-body">${body}</div>`
+    + `</div>`;
+}
+function escapeHtml(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 
 // ===================== 语言与刷新 =====================
 function setLang(l) { lang = l; refreshAll(); }
 function refreshAll() {
   renderStaticTexts();
-  renderFormatTabs();
-  renderRangeButtons();
-  loadData();
+  renderViewSwitch();
+  applyView();
+  if (currentView === "stats") {
+    renderFormatTabs();
+    renderRangeButtons();
+    loadData();
+  } else {
+    loadPickup();
+  }
 }
 refreshAll();
+
 </script>
 </body>
 </html>
