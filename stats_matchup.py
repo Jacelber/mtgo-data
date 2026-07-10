@@ -52,25 +52,29 @@ def _win_rate(cell):
 
 # ---------- 1. 为单个赛事建立 {玩家名 -> archetype} ----------
 def build_player_archetypes(official_path, archetypes):
-    """读官方赛事 JSON，返回 (event_id, {player_name: archetype_name})。
-    无法分类(None)的玩家不放入映射，等价于后续对局丢弃。"""
+    """读官方赛事 JSON，返回 (event_id, {player: archetype}, {全部官方玩家名})。
+    无法分类(None)的玩家不放入 mapping，但名字仍收进 all_names，
+    用于区分「官方没这人」与「官方有牌表但分不了类」。"""
     with open(official_path, "r", encoding="utf-8") as f:
         event = json.load(f)
     event_id = str(event.get("event_id", "")).strip()
     mapping = {}
+    all_names = set()
     for player in event.get("players", []):
         name = player.get("player")
         if not name:
             continue
+        all_names.add(name)
         main_counts, side_counts = deck_to_counts(player)
         arch = match_archetype(main_counts, side_counts, archetypes)
         if arch is not None:
             mapping[name] = arch
-    return event_id, mapping
+    return event_id, mapping, all_names
 
 
 # ---------- 2. 累计单个赛事的对局 ----------
-def accumulate_event(event_id, player_arch, matrix, mirror, overall, seen_keys, stats):
+def accumulate_event(event_id, player_arch, event_official_names,
+                     matrix, mirror, overall, seen_keys, stats):
     """把一个赛事的 Videre 对局并入全局统计结构。
     matrix[a][b]  : a 对 b 的三元组（跨 archetype）
     mirror[a]     : a 的镜像内战三元组
@@ -83,7 +87,13 @@ def accumulate_event(event_id, player_arch, matrix, mirror, overall, seen_keys, 
         stats["no_match_file"] += 1
         return
     with open(matches_path, "r", encoding="utf-8") as f:
-        rows = json.load(f)
+        raw = json.load(f)
+    rows = raw.get("matches", []) if isinstance(raw, dict) else raw
+
+    if not rows:
+        stats["no_match_file"] += 1
+        return
+
 
     for row in rows:
         if row.get("isbye"):
@@ -108,6 +118,13 @@ def accumulate_event(event_id, player_arch, matrix, mirror, overall, seen_keys, 
         b = player_arch.get(opponent)
         if a is None or b is None:
             stats["dropped_unmapped"] += 1
+            # 细分：是官方完全没这人，还是有牌表但分不了类？
+            for name, arch in ((player, a), (opponent, b)):
+                if arch is None:
+                    if name in event_official_names:   # 官方名单里有此人
+                        stats["drop_reason_unknown_deck"] += 1
+                    else:                               # 官方名单里根本没此人
+                        stats["drop_reason_not_in_official"] += 1
             continue
 
         stats["counted"] += 1
@@ -207,16 +224,19 @@ def main():
         "dropped_unmapped": 0,
         "cross_matches": 0,
         "mirror_matches": 0,
+        "drop_reason_unknown_deck": 0,
+        "drop_reason_not_in_official": 0,
     }
 
     for official_path in official_files:
-        event_id, player_arch = build_player_archetypes(official_path, archetypes)
+        event_id, player_arch, event_official_names = build_player_archetypes(official_path, archetypes)
         if not event_id:
             continue
         matches_path = os.path.join(MATCHES_DIR, f"{event_id}.json")
         if os.path.exists(matches_path):
             stats["events_with_matches"] += 1
-        accumulate_event(event_id, player_arch, matrix, mirror, overall, seen_keys, stats)
+        accumulate_event(event_id, player_arch, event_official_names,
+                         matrix, mirror, overall, seen_keys, stats)
 
     matrix_out = build_matrix_output(matrix, mirror)
     overall_out = build_overall_output(overall)
@@ -241,6 +261,9 @@ def main():
     print("=" * 55)
     print(f"矩阵已写入   : {MATRIX_OUT}")
     print(f"整体胜率写入 : {OVERALL_OUT}")
+    print(f"  因无法映射丢弃 : {stats['dropped_unmapped']}")
+    print(f"    其中 有牌表但分不了类 : {stats['drop_reason_unknown_deck']}")
+    print(f"    其中 官方无此玩家     : {stats['drop_reason_not_in_official']}")
 
 
 if __name__ == "__main__":
