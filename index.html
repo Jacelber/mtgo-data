@@ -145,6 +145,70 @@
   .pk-decks { display: flex; gap: 24px; flex-wrap: wrap; }
   .pk-decks .deck-col { flex: 1; min-width: 220px; }
 
+    /* ===== 对阵矩阵 matchup ===== */
+  .mx-note { font-size: 12px; color: #999; margin-bottom: 10px; line-height: 1.5; }
+  .mx-legend { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 12px; color: #666; flex-wrap: wrap; }
+  .mx-legend .bar {
+    width: 180px; height: 12px; border-radius: 3px;
+    background: linear-gradient(to right, #c0392b 0%, #e8c84a 50%, #27884a 100%);
+  }
+  .mx-legend .ends { display: flex; justify-content: space-between; width: 180px; font-size: 11px; color: #888; }
+  .mx-legend .na-chip { display: inline-block; width: 14px; height: 14px; border-radius: 3px;
+    background: #e6e8ea; border: 1px solid #d0d3d6; vertical-align: middle; margin-right: 4px; }
+  .mx-scroll { overflow-x: auto; }
+  .mx-table { border-collapse: collapse; font-size: 12px; }
+  .mx-table th, .mx-table td { border: 1px solid #e3e6ea; text-align: center; }
+  .mx-table th.corner { background: #f0f2f5; }
+  .mx-table th.col-head {
+    background: #f0f2f5; padding: 6px 4px; font-weight: normal; color: #444;
+    height: 120px; white-space: nowrap; vertical-align: bottom;
+  }
+  .mx-table th.col-head > div { writing-mode: vertical-rl; transform: rotate(180deg); margin: 0 auto; }
+  .mx-table th.row-head {
+    background: #f0f2f5; text-align: left; padding: 4px 8px; font-weight: normal;
+    color: #333; white-space: nowrap; position: sticky; left: 0; z-index: 1;
+  }
+  .mx-table td.cell { min-width: 62px; width: 62px; height: 44px; padding: 2px; cursor: default; position: relative; }
+  .mx-table td.cell.overall {
+    min-width: 72px; width: 72px;
+    border-left: 2px solid #b9c2cc; border-right: 2px solid #b9c2cc; font-weight: bold;
+  }
+  .mx-table th.col-head.overall-head {
+    min-width: 72px; width: 72px; vertical-align: bottom;
+    border-left: 2px solid #b9c2cc; border-right: 2px solid #b9c2cc;
+  }
+  .mx-table th.col-head.overall-head > div {
+    writing-mode: horizontal-tb; transform: none; margin: 0 auto;
+    font-weight: bold; color: #333;
+  }
+  .mx-table td.na { background: #e6e8ea; color: #b0b4b8; }
+  .mx-wr { font-size: 13px; font-weight: bold; line-height: 1.15; }
+  .mx-ci { font-size: 10px; opacity: 0.72; line-height: 1.1; }
+  .mx-cell-low::after {
+    content: ""; position: absolute; top: 2px; right: 2px;
+    width: 0; height: 0; border-top: 6px solid rgba(0,0,0,0.28); border-left: 6px solid transparent;
+  }
+  /* tooltip 浮层（可 hover 可点击） */
+  .tip-wrap { position: relative; display: inline-block; }
+  .tip-icon {
+    display: inline-block; width: 14px; height: 14px; line-height: 14px; text-align: center;
+    border-radius: 50%; background: #b9c2cc; color: #fff; font-size: 10px; font-style: normal;
+    cursor: pointer; margin-left: 4px; vertical-align: middle; user-select: none;
+  }
+  .tip-icon:hover { background: #3b6ea5; }
+  .tip-pop {
+    position: absolute; z-index: 9998; top: 20px; left: 0; width: 240px;
+    background: #fff; border: 1px solid #d0d3d6; border-radius: 6px; padding: 8px 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18); font-size: 12px; color: #444; line-height: 1.5;
+    font-weight: normal; text-align: left; display: none; white-space: normal;
+  }
+  .tip-wrap.tip-open .tip-pop { display: block; }
+  .mx-hover-pop {
+    position: fixed; z-index: 9999; pointer-events: none; display: none;
+    background: #2b2f33; color: #fff; font-size: 12px; padding: 6px 9px; border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.35); white-space: nowrap; line-height: 1.5;
+  }
+
   /* 卡图悬停预览 */
   #cardPreview {
     position: fixed; z-index: 9999; pointer-events: none;
@@ -185,6 +249,15 @@
       <div class="pickup-content" id="pickupContent"></div>
     </div>
   </div>
+
+    <div id="matchupView" style="display:none">
+    <div class="range-buttons" id="mxRangeButtons"></div>
+    <div class="mx-note" id="mxNote"></div>
+    <div class="mx-legend" id="mxLegend"></div>
+    <div class="mx-scroll"><div id="mxTable"></div></div>
+  </div>
+
+  <div class="mx-hover-pop" id="mxHoverPop"></div>
 
   <img id="cardPreview" alt="">
 
@@ -229,6 +302,21 @@ const I18N = {
     pickup_new: "本周新增套牌", pickup_empty: "本周空缺",
     pickup_no_data: "暂无每周精选内容",
     pk_rank: "名次", pk_score: "积分",
+    view_matchup: "对阵胜率",
+    mx_overall: "整体",
+    mx_wld: "胜-平-负",
+    mx_na: "无数据/样本不足",
+    mx_low_sample: "低样本（谨慎参考）",
+    mx_legend_label: "胜率配色：",
+    mx_source_note: "数据来自 Videre 众包对局，双方均以官方公开牌表分类；因官方仅公开中高分段牌表，本矩阵偏向公开牌表选手圈内，非全体参赛者。",
+    // —— tooltip 文案（草稿，待最终确定）——
+    mx_matchup_tip: "行套牌对列套牌的对局胜率（match win rate）。大字为胜率，小字为 95% 置信区间半宽（±范围），样本越多区间越窄。悬停或点击查看具体胜-平-负场次。",
+    appr_tip: "场均分：该套牌每个瑞士轮的平均积分（0–3），3 分约等于全胜。",
+    hs_share_tip: "高分占比：达到高分门槛的牌手中，该套牌所占比例。",
+    t8_share_tip: "八强占比：进入八强的牌手中，该套牌所占比例。",
+    conv_tip: "转化率：该套牌高分牌手中最终进入八强的比例。",
+    deviation_tip: "偏离度：该牌表与最近 4 周基准典型构筑的差异程度，越高越独创，不代表强弱。",
+    change_tip: "近期变化度：本周主流构筑相对之前 4 周的变化幅度。",
   },
   en: {
     siteTitle: "MTGO Meta Analytics",
@@ -258,6 +346,20 @@ const I18N = {
     pickup_new: "New Archetypes This Week", pickup_empty: "None this week",
     pickup_no_data: "No weekly pickup content yet",
     pk_rank: "Rank", pk_score: "Score",
+    view_matchup: "Matchups",
+    mx_overall: "Overall",
+    mx_wld: "W-D-L",
+    mx_na: "No data / low sample",
+    mx_low_sample: "Low sample (interpret with care)",
+    mx_legend_label: "Win-rate color:",
+    mx_source_note: "Data from Videre crowd-sourced matches; both sides classified by official published decklists. Since MTGO only publishes higher-scoring decklists, this matrix skews toward the published-decklist pool, not all entrants.",
+    mx_matchup_tip: "Row deck's match win rate vs. column deck. Large number is win rate; small number is the 95% confidence interval half-width (±). More samples means a narrower interval. Hover or click for exact W-D-L.",
+    appr_tip: "Points per round: average Swiss-round points (0–3); 3 ≈ perfect record.",
+    hs_share_tip: "High-score share: share of high-scoring players on this deck.",
+    t8_share_tip: "Top 8 share: share of Top 8 players on this deck.",
+    conv_tip: "Conversion: share of this deck's high-scoring players who reached Top 8.",
+    deviation_tip: "Deviation: how much this build differs from the last-4-week baseline; higher = more original, not stronger.",
+    change_tip: "Recent change: how much this week's mainstream build shifted vs. the prior 4 weeks.",
   },
 };
 
@@ -717,7 +819,7 @@ function closeDeckRow() {
 function renderViewSwitch() {
   const box = document.getElementById("viewSwitch");
   box.innerHTML = "";
-  [["stats", "view_stats"], ["pickup", "view_pickup"]].forEach(([key, label]) => {
+  [["stats", "view_stats"], ["pickup", "view_pickup"], ["matchup", "view_matchup"]].forEach(([key, label]) => {
     const b = document.createElement("button");
     b.textContent = t(label);
     if (key === currentView) b.classList.add("active");
@@ -728,6 +830,7 @@ function renderViewSwitch() {
 function applyView() {
   document.getElementById("statsView").style.display = (currentView === "stats") ? "" : "none";
   document.getElementById("pickupView").style.display = (currentView === "pickup") ? "" : "none";
+  document.getElementById("matchupView").style.display = (currentView === "matchup") ? "" : "none";
 }
 
 // ===================== pickup 数据 & 渲染 =====================
@@ -847,7 +950,11 @@ function escapeHtml(s) {
 }
 
 // ===================== 语言与刷新 =====================
-function setLang(l) { lang = l; refreshAll(); }
+function setLang(l) {
+  lang = l;
+  refreshAll();
+}
+
 function refreshAll() {
   renderStaticTexts();
   renderViewSwitch();
@@ -856,10 +963,197 @@ function refreshAll() {
     renderFormatTabs();
     renderRangeButtons();
     loadData();
-  } else {
+  } else if (currentView === "pickup") {
     loadPickup();
+  } else if (currentView === "matchup") {
+    loadMatchup();
   }
 }
+
+// ===================== 对阵矩阵 matchup =====================
+const MX_RANGES = [1, 4, 12];   // 上线显示 1/4/12；36w 数据足够后加回
+let mxRange = 4;                // 默认 4 周
+let mxData = null;
+
+// —— 胜率 -> 颜色（0%红 / 50%黄 / 100%绿 线性渐变）——
+function mxColor(wr) {
+  if (wr === null || wr === undefined) return null;
+  const p = Math.max(0, Math.min(1, wr));
+  // 0->红(192,57,43) 0.5->黄(232,200,74) 1->绿(39,136,74)
+  let r, g, b;
+  if (p < 0.5) {
+    const k = p / 0.5;
+    r = 192 + (232 - 192) * k; g = 57 + (200 - 57) * k; b = 43 + (74 - 43) * k;
+  } else {
+    const k = (p - 0.5) / 0.5;
+    r = 232 + (39 - 232) * k; g = 200 + (136 - 200) * k; b = 74 + (74 - 74) * k;
+  }
+  return `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
+}
+function mxTextColor(wr) {
+  // 黄区用深字，红/绿深色区用白字
+  if (wr === null || wr === undefined) return "#b0b4b8";
+  return (wr >= 0.40 && wr <= 0.60) ? "#333" : "#fff";
+}
+
+function renderMxRangeButtons() {
+  const box = document.getElementById("mxRangeButtons");
+  box.innerHTML = "";
+  MX_RANGES.forEach(n => {
+    const b = document.createElement("button");
+    b.textContent = t("range_" + n + "w");
+    if (n === mxRange) b.classList.add("active");
+    b.onclick = () => { mxRange = n; loadMatchup(); };
+    box.appendChild(b);
+  });
+}
+
+function renderMxLegend() {
+  document.getElementById("mxNote").innerHTML =
+    t("mx_source_note") + tipIconHtml("mx_matchup");
+  document.getElementById("mxLegend").innerHTML =
+    `<span>${t("mx_legend_label")}</span>`
+    + `<div><div class="bar"></div><div class="ends"><span>0%</span><span>50%</span><span>100%</span></div></div>`
+    + `<span><span class="na-chip"></span>${t("mx_na")}</span>`
+    + `<span style="color:#999"><span style="display:inline-block;width:0;height:0;border-top:7px solid rgba(0,0,0,0.4);border-left:7px solid transparent;vertical-align:middle;margin-right:4px"></span>${t("mx_low_sample")}</span>`;
+}
+
+async function loadMatchup() {
+  renderMxRangeButtons();
+  renderMxLegend();
+  const url = `stats/${currentFormat}/mtgo/matchup_${mxRange}w.json?v=${Date.now()}`;
+  const holder = document.getElementById("mxTable");
+  holder.innerHTML = `<div class="placeholder">${t("loading")}</div>`;
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    mxData = await resp.json();
+  } catch (e) {
+    mxData = null;
+    holder.innerHTML = `<div class="placeholder">${t("loading")} ✕<br>${e.message}</div>`;
+    return;
+  }
+  renderMatrix();
+}
+
+function mxCellHtml(cell, isOverall) {
+  const cls = "cell" + (isOverall ? " overall" : "")
+    + (cell && cell.low_sample ? " mx-cell-low" : "");
+  if (!cell || cell.win_rate === null || cell.win_rate === undefined || cell.matches === 0) {
+    return `<td class="${cls} na" data-empty="1">–</td>`;
+  }
+  const wr = cell.win_rate;
+  const bg = mxColor(wr);
+  const fg = mxTextColor(wr);
+  const wrTxt = (wr * 100).toFixed(1);
+  const ciTxt = (cell.ci_half !== null && cell.ci_half !== undefined)
+    ? "±" + (cell.ci_half * 100).toFixed(1) : "";
+  const payload = encodeURIComponent(JSON.stringify(
+    { w: cell.wins, l: cell.losses, d: cell.draws, m: cell.matches }));
+  return `<td class="${cls}" style="background:${bg};color:${fg}" data-mx="${payload}">`
+    + `<div class="mx-wr">${wrTxt}</div>`
+    + (ciTxt ? `<div class="mx-ci">${ciTxt}</div>` : "")
+    + `</td>`;
+}
+
+function renderMatrix() {
+  if (!mxData) return;
+  const order = mxData.archetype_order || [];
+  const overall = mxData.overall || {};
+  const matrix = mxData.matrix || {};
+
+  let html = `<table class="mx-table"><thead><tr><th class="corner"></th>`;
+  // 第一列表头：整体
+  html += `<th class="col-head overall-head"><div>${t("mx_overall")}</div></th>`;
+  order.forEach(name => {
+    html += `<th class="col-head"><div>${archetypeName(name)}</div></th>`;
+  });
+  html += `</tr></thead><tbody>`;
+
+  order.forEach(rowName => {
+    html += `<tr><th class="row-head">${archetypeName(rowName)}</th>`;
+    // Overall 列
+    html += mxCellHtml(overall[rowName], true);
+    // 各对手列
+    order.forEach(colName => {
+      const cell = (matrix[rowName] || {})[colName];
+      html += mxCellHtml(cell, false);
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table>`;
+
+  const holder = document.getElementById("mxTable");
+  holder.innerHTML = html;
+
+  // hover / 点击 浮层：显示 胜-平-负
+  const pop = document.getElementById("mxHoverPop");
+  holder.onmousemove = (ev) => {
+    const td = ev.target.closest("td.cell");
+    if (!td || td.dataset.empty) { pop.style.display = "none"; return; }
+    try {
+      const o = JSON.parse(decodeURIComponent(td.dataset.mx));
+      pop.textContent = `${t("mx_wld")}: ${o.w}-${o.d}-${o.l} (${o.m})`;
+      pop.style.display = "block";
+      pop.style.left = (ev.clientX + 14) + "px";
+      pop.style.top = (ev.clientY + 14) + "px";
+    } catch (e) { pop.style.display = "none"; }
+  };
+  holder.onmouseleave = () => { pop.style.display = "none"; };
+  // 触屏/点击：切换显示（简单复用同一浮层，点空白隐藏）
+  holder.onclick = (ev) => {
+    const td = ev.target.closest("td.cell");
+    if (!td || td.dataset.empty) return;
+    try {
+      const o = JSON.parse(decodeURIComponent(td.dataset.mx));
+      pop.textContent = `${t("mx_wld")}: ${o.w}-${o.d}-${o.l} (${o.m})`;
+      pop.style.display = "block";
+      const r = td.getBoundingClientRect();
+      pop.style.left = (r.left + 6) + "px";
+      pop.style.top = (r.bottom + 4) + "px";
+    } catch (e) {}
+  };
+}
+
+// ===================== 通用 tooltip 组件（可 hover 可点击）=====================
+// 用法：在需要说明的地方插入 tipIconHtml("i18n键")，键对应 <键>_tip 的文案
+function tipIconHtml(termKey) {
+  const tipKey = termKey + "_tip";
+  const text = t(tipKey);
+  const payload = encodeURIComponent(text);
+  return `<span class="tip-wrap"><i class="tip-icon" data-tip="${payload}">i</i>`
+    + `<span class="tip-pop">${text}</span></span>`;
+}
+// 全局委托：hover 显示、点击切换、点其它地方关闭
+document.addEventListener("mouseover", (ev) => {
+  const wrap = ev.target.closest(".tip-wrap");
+  document.querySelectorAll(".tip-wrap.tip-hover").forEach(w => {
+    if (w !== wrap) w.classList.remove("tip-hover");
+  });
+  if (wrap) wrap.classList.add("tip-open", "tip-hover");
+});
+document.addEventListener("mouseout", (ev) => {
+  const wrap = ev.target.closest(".tip-wrap");
+  if (wrap && wrap.classList.contains("tip-hover")) {
+    wrap.classList.remove("tip-open", "tip-hover");
+  }
+});
+document.addEventListener("click", (ev) => {
+  const icon = ev.target.closest(".tip-icon");
+  if (icon) {
+    const wrap = icon.closest(".tip-wrap");
+    wrap.classList.toggle("tip-open");
+    ev.stopPropagation();
+    return;
+  }
+  // 点击别处关闭所有点击打开的浮层
+  document.querySelectorAll(".tip-wrap.tip-open").forEach(w => {
+    if (!w.classList.contains("tip-hover")) w.classList.remove("tip-open");
+  });
+});
+
+// 页面初始化（放在所有函数定义之后）
+
 refreshAll();
 
 </script>
