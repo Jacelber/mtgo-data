@@ -215,6 +215,12 @@
     width: 240px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
     display: none; background: #fff;
   }
+  .site-footer {
+    text-align: center; color: #999; font-size: 12px;
+    padding: 24px 0 12px; margin-top: 20px; border-top: 1px solid #e3e6ea;
+  }
+  .site-footer a { color: #3b6ea5; text-decoration: none; }
+  .site-footer a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -230,6 +236,7 @@
   <div class="view-switch" id="viewSwitch"></div>
 
   <div id="statsView">
+    <div class="mx-note" id="statsNote"></div>
     <div class="format-tabs" id="formatTabs"></div>
     <div class="range-buttons" id="rangeButtons"></div>
     <div class="period-info" id="periodInfo"></div>
@@ -261,6 +268,12 @@
 
   <img id="cardPreview" alt="">
 
+  <footer class="site-footer">
+    Made by DJac ·
+    <a href="https://x.com/JacERROR" target="_blank" rel="noopener">X @JacERROR</a> ·
+    <a href="https://space.bilibili.com/383589" target="_blank" rel="noopener">Bilibili</a>
+  </footer>
+
 <script>
 // ===================== 配置 =====================
 const CHART_MIN_SHARE = 0.02;
@@ -275,51 +288,56 @@ const DIFF_MIN = 1;   // 差异拆解：仅显示 |deck_qty - typical_qty| >= 1 
 // ===================== i18n 字典 =====================
 const I18N = {
   zh: {
-    siteTitle: "MTGO Meta 数据分析",
+    siteTitle: "MTG Meta数据分析",
     range_1w: "1 周", range_4w: "4 周", range_12w: "12 周", range_36w: "36 周",
-    format_standard: "标准", format_pioneer: "先驱", format_modern: "近代",
+    format_standard: "标准", format_pioneer: "先驱", format_modern: "摩登",
     col_archetype: "套牌", col_appr: "场均分", col_hs_count: "高分数量", col_hs_share: "高分占比",
     col_t8_count: "八强数量", col_t8_share: "八强占比", col_conv: "转化率",
     chart_hs: "高分占比", chart_t8: "八强占比",
     period: "统计区间", loading: "加载中…",
     best_deck: "最佳牌表",
     main_deck: "主牌", side_deck: "备牌", na: "N/A", others:"其他",
-    tab_synthetic: "架空平均牌表", tab_real: "实际典型牌表",
-    core_group: "常备卡 (Core)", flex_group: "自选卡 (Flex)",
+    tab_synthetic: "近4周平均构筑", tab_real: "实际典型牌表",
+    core_group: "核心组件", flex_group: "弹性组件",
     avg_sample: "样本",
     avg_none: "4 周样本不足，无平均牌表",
     dev_title: "偏离度", dev_suffix: " 分",
-    dev_desc: "偏离度衡量该牌表与最近 4 周主流构筑的差异程度，数值越高越独创；不代表强弱。",
-    diff_fewer: "比典型少带", diff_more: "比典型多带",
-    typical_qty: "典型",
+    dev_desc: "偏离度衡量该牌表与最近 4 周平均构筑的差异程度，数值越高越独创；不代表强弱。",
+    diff_fewer: "比平均少带", diff_more: "比平均多带",
+    typical_qty: "平均",
     change_title: "近期构筑变化度", change_suffix: " 分",
-    change_desc: "衡量本周构筑相对之前 4 周主流的变化程度，数值越高说明近期构筑变动越大。",
+    change_desc: "衡量本周构筑相对之前 4 周平均构筑的变化程度，数值越高说明本周构筑变动越大。",
     change_note_recent: "本周样本不足，暂无变化度",
     change_note_prior: "缺少历史构筑数据，无法计算变化度",
     change_note_nobase: "4 周样本不足，暂无变化度",
-    view_stats: "数据统计", view_pickup: "每周精选",
-    pickup_weeks: "往期", pickup_existing: "现有套牌构筑变化",
-    pickup_new: "本周新增套牌", pickup_empty: "本周空缺",
+    view_stats: "MTGO官方数据统计", view_pickup: "每周精选套牌",
+    pickup_weeks: "往期", pickup_existing: "新科技",
+    pickup_new: "新套牌", pickup_empty: "本周空缺",
     pickup_no_data: "暂无每周精选内容",
     pk_rank: "名次", pk_score: "积分",
     view_matchup: "对阵胜率",
     mx_overall: "整体",
-    mx_wld: "胜-平-负",
+    mx_wld: "胜-负-平",
     mx_na: "无数据/样本不足",
     mx_low_sample: "低样本（谨慎参考）",
     mx_legend_label: "胜率配色：",
-    mx_source_note: "数据来自 Videre 众包对局，双方均以官方公开牌表分类；因官方仅公开中高分段牌表，本矩阵偏向公开牌表选手圈内，非全体参赛者。",
-    // —— tooltip 文案（草稿，待最终确定）——
-    mx_matchup_tip: "行套牌对列套牌的对局胜率（match win rate）。大字为胜率，小字为 95% 置信区间半宽（±范围），样本越多区间越窄。悬停或点击查看具体胜-平-负场次。",
-    appr_tip: "场均分：该套牌每个瑞士轮的平均积分（0–3），3 分约等于全胜。",
-    hs_share_tip: "高分占比：达到高分门槛的牌手中，该套牌所占比例。",
-    t8_share_tip: "八强占比：进入八强的牌手中，该套牌所占比例。",
-    conv_tip: "转化率：该套牌高分牌手中最终进入八强的比例。",
-    deviation_tip: "偏离度：该牌表与最近 4 周基准典型构筑的差异程度，越高越独创，不代表强弱。",
-    change_tip: "近期变化度：本周主流构筑相对之前 4 周的变化幅度。",
+    mx_source_note: "数据来自 Videre 众包对局记录，以官方公开牌表分类；因官方仅公开前32牌表，对局数据并不包含全体参赛者。",
+    // —— tooltip 文案 ——
+    mx_matchup_tip: "矩阵内数值为行套牌对列套牌的对局胜率。大字为胜率，小字为 95% 置信区间半宽（±范围），样本越多区间越窄。悬停或点击查看具体战绩。",
+    appr_tip: "该套牌对应瑞士轮理论轮数的平均得分，按总积分除以理论总轮数计算。范围 0–3 分，分数越高代表该套牌整体战绩越好。",
+    hs_share_tip: "所选区间内该套牌高分数量占总高分套牌数量的比例。",
+    t8_share_tip: "所选区间内该套牌八强数量占总八强数量的比例。",
+    conv_tip: "所选区间内该套牌高分牌手中最终进入八强的比例。",
+    hs_count_tip: "所选区间内该套牌打出高分成绩的数量。高分定义为瑞士轮积分达到等效于胜率超过 50% 的门槛，门槛随赛事轮数变化（如 6 轮赛事需 12 分以上）。",
+    t8_count_tip: "所选区间内该套牌进入赛事前八名的数量。",
+    hs_count_tip: "所选区间内该套牌打出高分成绩的数量。高分定义为瑞士轮积分达到等效于胜率超过 50% 的门槛，门槛随赛事轮数变化（如 6 轮赛事需 12 分以上）。",
+    t8_count_tip: "所选区间内该套牌进入赛事前八名的数量。",
+    // 数据统计 tab 数据来源说明
+    stats_source_note: "本页面数据源为 MTGO 官网，官网仅放出各赛事前 32 的牌表，所以数据会有一定误差。",
+    stats_source_tip: "整体 meta 占比误差较大，所以本页面不予展示，转而统计高分套牌数量。因为一方面高分套牌更有参考价值（会有更少情况被 0 胜随机套牌污染占比），另一方面高分套牌在前 32 中被囊括的比例也更大（不过超过 80 人左右的赛事中依旧会有高分套牌被 cut 掉）。",
   },
   en: {
-    siteTitle: "MTGO Meta Analytics",
+    siteTitle: "MTG Meta Analytics",
     range_1w: "1 Week", range_4w: "4 Weeks", range_12w: "12 Weeks", range_36w: "36 Weeks",
     format_standard: "Standard", format_pioneer: "Pioneer", format_modern: "Modern",
     col_archetype: "Archetype", col_appr: "Pts/Round", col_hs_count: "High-Score", col_hs_share: "HS Share",
@@ -328,38 +346,38 @@ const I18N = {
     period: "Period", loading: "Loading…",
     best_deck: "Best Deck",
     main_deck: "Main", side_deck: "Sideboard", na: "N/A", others:"Others",
-    tab_synthetic: "Synthetic Average", tab_real: "Representative Deck",
+    tab_synthetic: "4-Week Average Build", tab_real: "Representative Deck",
     core_group: "Core", flex_group: "Flex",
     avg_sample: "sample",
     avg_none: "Insufficient 4-week sample, no average deck",
     dev_title: "Deviation", dev_suffix: "",
-    dev_desc: "Deviation measures how much this deck differs from the last-4-week mainstream build; higher means more original. It does not indicate strength.",
-    diff_fewer: "Fewer than typical", diff_more: "More than typical",
-    typical_qty: "typical",
-    change_title: "Recent Change", change_suffix: "",
-    change_desc: "Measures how much this week's build differs from the prior 4 weeks' mainstream; higher means bigger recent shift.",
+    dev_desc: "Deviation measures how much this deck differs from the last-4-week average build; higher means more original. It does not indicate strength.",
+    diff_fewer: "Fewer than average", diff_more: "More than average",
+    typical_qty: "avg",
+    change_title: "Recent Build Change", change_suffix: "",
+    change_desc: "Measures how much this week's build differs from the prior 4 weeks' average build; higher means a bigger shift this week.",
     change_note_recent: "Insufficient sample this week; no change score",
-    change_note_prior: "No historical build data; cannot compute change",    
+    change_note_prior: "No historical build data; cannot compute change",
     change_note_nobase: "Insufficient 4-week sample; no change score",
-    view_stats: "Statistics", view_pickup: "Weekly Pickup",
-    pickup_weeks: "Archive", pickup_existing: "Existing Archetype Changes",
-    pickup_new: "New Archetypes This Week", pickup_empty: "None this week",
+    view_stats: "MTGO Official Stats", view_pickup: "Weekly Pickup",
+    pickup_weeks: "Archive", pickup_existing: "New Tech",
+    pickup_new: "New Archetypes", pickup_empty: "None this week",
     pickup_no_data: "No weekly pickup content yet",
     pk_rank: "Rank", pk_score: "Score",
     view_matchup: "Matchups",
     mx_overall: "Overall",
-    mx_wld: "W-D-L",
+    mx_wld: "W-L-D",
     mx_na: "No data / low sample",
     mx_low_sample: "Low sample (interpret with care)",
     mx_legend_label: "Win-rate color:",
-    mx_source_note: "Data from Videre crowd-sourced matches; both sides classified by official published decklists. Since MTGO only publishes higher-scoring decklists, this matrix skews toward the published-decklist pool, not all entrants.",
-    mx_matchup_tip: "Row deck's match win rate vs. column deck. Large number is win rate; small number is the 95% confidence interval half-width (±). More samples means a narrower interval. Hover or click for exact W-D-L.",
-    appr_tip: "Points per round: average Swiss-round points (0–3); 3 ≈ perfect record.",
-    hs_share_tip: "High-score share: share of high-scoring players on this deck.",
-    t8_share_tip: "Top 8 share: share of Top 8 players on this deck.",
-    conv_tip: "Conversion: share of this deck's high-scoring players who reached Top 8.",
-    deviation_tip: "Deviation: how much this build differs from the last-4-week baseline; higher = more original, not stronger.",
-    change_tip: "Recent change: how much this week's mainstream build shifted vs. the prior 4 weeks.",
+    mx_source_note: "Data from Videre crowd-sourced matches, classified by official published decklists. Since MTGO only publishes the Top 32 decklists, the match data does not cover all entrants.",
+    mx_matchup_tip: "Row deck's match win rate vs. column deck. Large number is win rate; small number is the 95% confidence interval half-width (±). More samples means a narrower interval. Hover or click for exact record.",
+    appr_tip: "Average points over the theoretical number of Swiss rounds, computed as total points divided by total theoretical rounds. Range 0–3; higher means better overall performance.",
+    hs_share_tip: "Share of this deck's high-score count out of the total high-score count in the selected range.",
+    t8_share_tip: "Share of this deck's Top 8 count out of the total Top 8 count in the selected range.",
+    conv_tip: "Share of this deck's high-scoring players who reached Top 8 in the selected range.",
+    stats_source_note: "Data on this page comes from the official MTGO site, which only publishes each event's Top 32 decklists, so figures carry some margin of error.",
+    stats_source_tip: "Overall metagame-share estimates carry large error, so this page does not display them; instead it counts high-scoring decks. High-scoring decks are more meaningful (their share is less polluted by random 0-win decks), and a larger fraction of them is captured within the Top 32 (though in events with ~80+ players some high-scoring decks are still cut).",
   },
 };
 
@@ -442,10 +460,12 @@ function renderFormatTabs() {
     box.appendChild(b);
   });
 }
+// 数据统计当前显示的区间档位（36w 数据不足，暂不显示，日后恢复改回 RANGES）
+const RANGES_SHOWN = [1, 4, 12];
 function renderRangeButtons() {
   const box = document.getElementById("rangeButtons");
   box.innerHTML = "";
-  RANGES.forEach(n => {
+  RANGES_SHOWN.forEach(n => {
     const b = document.createElement("button");
     b.textContent = t("range_" + n + "w");
     if (n === currentRange) b.classList.add("active");
@@ -459,6 +479,8 @@ function renderStaticTexts() {
   document.documentElement.lang = (lang === "zh") ? "zh" : "en";
   document.getElementById("langZh").classList.toggle("active", lang === "zh");
   document.getElementById("langEn").classList.toggle("active", lang === "en");
+  document.getElementById("statsNote").innerHTML =
+    t("stats_source_note") + " " + t("stats_source_tip");
 }
 
 // ===================== 数据加载 =====================
@@ -533,11 +555,18 @@ function renderTable() {
     { key: "t8_share",  label: "col_t8_share",  align: "right" },
     { key: "conv",      label: "col_conv",      align: "right" },
   ];
+  // 列 key -> tooltip 键（有说明的列才挂小 i）
+  const colTips = {
+    hs_count: "hs_count", hs_share: "hs_share",
+    t8_count: "t8_count", t8_share: "t8_share",
+    appr: "appr", conv: "conv",
+  };
   let html = '<table class="data-table"><thead><tr>';
   cols.forEach(c => {
     let arrow = "";
     if (c.key === sortKey) arrow = sortDir === "desc" ? " ▼" : " ▲";
-    html += `<th style="text-align:${c.align}" data-key="${c.key}" class="sortable">${t(c.label)}${arrow}</th>`;
+    const tip = colTips[c.key] ? tipIconHtml(colTips[c.key]) : "";
+    html += `<th style="text-align:${c.align}" data-key="${c.key}" class="sortable">${t(c.label)}${arrow}${tip}</th>`;
   });
   html += "</tr></thead><tbody>";
   sortedArchetypes().filter(a => a.high_score_count > 0).forEach(a => {
@@ -557,7 +586,9 @@ function renderTable() {
   panel.innerHTML = html;
 
   panel.querySelectorAll("th.sortable").forEach(th => {
-    th.onclick = () => {
+    th.onclick = (ev) => {
+      // 点在 tooltip 小 i（或其浮层）上时，不触发排序
+      if (ev.target.closest(".tip-wrap")) return;
       const k = th.dataset.key;
       if (sortKey === k) { sortDir = (sortDir === "desc") ? "asc" : "desc"; }
       else { sortKey = k; sortDir = "desc"; }
@@ -611,8 +642,8 @@ function renderChart(){
   canvas.parentElement.style.height=Math.max(200, labels.length*34+60)+"px";
   if(chartInstance) chartInstance.destroy();
   chartInstance=new Chart(canvas,{type:"bar",data:{labels,datasets:[
-    {label:t("chart_hs"),data:hsData,backgroundColor:"#3b6ea5"},
-    {label:t("chart_t8"),data:t8Data,backgroundColor:"#e0973b"}
+    {label:t("chart_hs"),data:hsData,backgroundColor:"#9cc0e0"},
+    {label:t("chart_t8"),data:t8Data,backgroundColor:"#3b6ea5"}
   ]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
     scales:{x:{beginAtZero:true,ticks:{callback:v=>v+"%"}}},
     plugins:{legend:{position:"top"},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+": "+ctx.parsed.x+"%"}}}}});
@@ -819,7 +850,7 @@ function closeDeckRow() {
 function renderViewSwitch() {
   const box = document.getElementById("viewSwitch");
   box.innerHTML = "";
-  [["stats", "view_stats"], ["pickup", "view_pickup"], ["matchup", "view_matchup"]].forEach(([key, label]) => {
+  [["stats", "view_stats"], ["matchup", "view_matchup"], ["pickup", "view_pickup"]].forEach(([key, label]) => {
     const b = document.createElement("button");
     b.textContent = t(label);
     if (key === currentView) b.classList.add("active");
@@ -1010,7 +1041,7 @@ function renderMxRangeButtons() {
 
 function renderMxLegend() {
   document.getElementById("mxNote").innerHTML =
-    t("mx_source_note") + tipIconHtml("mx_matchup");
+    t("mx_source_note") + " " + t("mx_matchup_tip");
   document.getElementById("mxLegend").innerHTML =
     `<span>${t("mx_legend_label")}</span>`
     + `<div><div class="bar"></div><div class="ends"><span>0%</span><span>50%</span><span>100%</span></div></div>`
@@ -1093,7 +1124,7 @@ function renderMatrix() {
     if (!td || td.dataset.empty) { pop.style.display = "none"; return; }
     try {
       const o = JSON.parse(decodeURIComponent(td.dataset.mx));
-      pop.textContent = `${t("mx_wld")}: ${o.w}-${o.d}-${o.l} (${o.m})`;
+      pop.textContent = `${t("mx_wld")}: ${o.w}-${o.l}-${o.d} (${o.m})`;
       pop.style.display = "block";
       pop.style.left = (ev.clientX + 14) + "px";
       pop.style.top = (ev.clientY + 14) + "px";
