@@ -1,17 +1,13 @@
 name: Weekly data update
 
 on:
-  # 手动触发：在 Actions 页面点 "Run workflow" 即可立即跑
   workflow_dispatch:
-  # 定时触发：cron 用 UTC。下面是每天 UTC 20:00 = 东九区(UTC+9) 次日 05:00
   schedule:
-    - cron: "0 20 * * *"
+    - cron: "0 20 * * *"   # 每天 UTC 20:00 = 东九区(UTC+9) 次日 05:00
 
-# 允许用内置 GITHUB_TOKEN 推送回本仓库
 permissions:
   contents: write
 
-# 避免两次运行同时 push 冲突：同一时刻只允许一个在跑
 concurrency:
   group: data-update
   cancel-in-progress: false
@@ -23,7 +19,7 @@ jobs:
       - name: Checkout (full history for rules commit date)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # gen_meta.py 需要完整历史来读 yaml 最后提交时间
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -47,6 +43,32 @@ jobs:
       - name: Build matchup matrix
         run: python stats_matchup.py
 
+      # ---- 审查报告：每次都重生成（只读参考，覆盖无害）；失败不影响主流程 ----
+      - name: Dump unknown high-performing decks
+        run: python dump_unknown_highperf.py
+        continue-on-error: true
+
+      - name: Cluster unknown decks
+        run: python cluster_unknown.py
+        continue-on-error: true
+
+      # ---- 精选候选：仅当当周 candidates 文件不存在时才生成，避免覆盖人工编辑 ----
+      - name: Generate weekly pickup candidates (only if missing)
+        continue-on-error: true
+        run: |
+          WEEK=$(python -c "from stats_standard import load_all_events, latest_complete_week; \
+          from weekly_pickup import iso_week_label; \
+          e=load_all_events(); m=latest_complete_week(e); print(iso_week_label(m) if m else '')")
+          echo "当前完整周: $WEEK"
+          if [ -z "$WEEK" ]; then
+            echo "无法确定完整周，跳过 candidates 生成。"
+          elif [ -f "stats/standard/mtgo/pickup/candidates_${WEEK}.yaml" ]; then
+            echo "candidates_${WEEK}.yaml 已存在，跳过（保护人工编辑）。"
+          else
+            echo "生成 candidates_${WEEK}.yaml ..."
+            python weekly_pickup.py candidates
+          fi
+
       - name: Generate meta.json
         run: python gen_meta.py
 
@@ -54,7 +76,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ stats/ fetched.txt
+          git add data/ stats/ fetched.txt unknown_highperf.txt unknown_clusters.txt
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
