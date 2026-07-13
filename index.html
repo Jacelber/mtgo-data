@@ -237,6 +237,7 @@
 
   <div id="statsView">
     <div class="mx-note" id="statsNote"></div>
+    <div class="mx-note" id="statsMeta" style="margin-top:-4px"></div>
     <div class="format-tabs" id="formatTabs"></div>
     <div class="range-buttons" id="rangeButtons"></div>
     <div class="period-info" id="periodInfo"></div>
@@ -335,6 +336,8 @@ const I18N = {
     // 数据统计 tab 数据来源说明
     stats_source_note: "本页面数据源为 MTGO 官网，官网仅放出各赛事前 32 的牌表，所以数据会有一定误差。",
     stats_source_tip: "整体 meta 占比误差较大，所以本页面不予展示，转而统计高分套牌数量。因为一方面高分套牌更有参考价值（会有更少情况被 0 胜随机套牌污染占比），另一方面高分套牌在前 32 中被囊括的比例也更大（不过超过 80 人左右的赛事中依旧会有高分套牌被 cut 掉）。",
+    meta_rules_updated: "套牌类型特征最后更新",
+    meta_data_updated: "数据最后更新",
   },
   en: {
     siteTitle: "MTG Meta Analytics",
@@ -378,6 +381,8 @@ const I18N = {
     conv_tip: "Share of this deck's high-scoring players who reached Top 8 in the selected range.",
     stats_source_note: "Data on this page comes from the official MTGO site, which only publishes each event's Top 32 decklists, so figures carry some margin of error.",
     stats_source_tip: "Overall metagame-share estimates carry large error, so this page does not display them; instead it counts high-scoring decks. High-scoring decks are more meaningful (their share is less polluted by random 0-win decks), and a larger fraction of them is captured within the Top 32 (though in events with ~80+ players some high-scoring decks are still cut).",
+    meta_rules_updated: "Archetype rules last updated",
+    meta_data_updated: "Data last updated",
   },
 };
 
@@ -482,8 +487,34 @@ function renderStaticTexts() {
   document.getElementById("statsNote").innerHTML =
     t("stats_source_note") + " " + t("stats_source_tip");
 }
+function renderMetaLine() {
+  const el = document.getElementById("statsMeta");
+  if (!el) return;
+  if (!metaInfo) { el.textContent = ""; return; }
+  const fmtDate = (iso) => {
+    if (!iso) return t("na");
+    // 只取日期部分 YYYY-MM-DD
+    return String(iso).slice(0, 10);
+  };
+  const parts = [];
+  if (metaInfo.rules_updated)
+    parts.push(`${t("meta_rules_updated")}: ${fmtDate(metaInfo.rules_updated)}`);
+  if (metaInfo.data_updated)
+    parts.push(`${t("meta_data_updated")}: ${fmtDate(metaInfo.data_updated)}`);
+  el.textContent = parts.join("　|　");
+}
 
 // ===================== 数据加载 =====================
+let metaInfo = null;
+async function loadMeta() {
+  const url = `stats/${currentFormat}/mtgo/meta.json?v=${Date.now()}`;
+  try {
+    const resp = await fetch(url);
+    metaInfo = resp.ok ? await resp.json() : null;
+  } catch (e) { metaInfo = null; }
+  renderMetaLine();
+}
+
 async function loadData() {
   const url = `stats/${currentFormat}/mtgo/range_${currentRange}w.json?v=${Date.now()}`;
   const tp = document.getElementById("tablePlaceholder");
@@ -994,6 +1025,7 @@ function refreshAll() {
     renderFormatTabs();
     renderRangeButtons();
     loadData();
+    loadMeta();
   } else if (currentView === "pickup") {
     loadPickup();
   } else if (currentView === "matchup") {
