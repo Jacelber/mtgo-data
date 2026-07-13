@@ -1,0 +1,64 @@
+name: Weekly data update
+
+on:
+  # 手动触发：在 Actions 页面点 "Run workflow" 即可立即跑
+  workflow_dispatch:
+  # 定时触发：cron 用 UTC。下面是每天 UTC 20:00 = 东九区(UTC+9) 次日 05:00
+  schedule:
+    - cron: "0 20 * * *"
+
+# 允许用内置 GITHUB_TOKEN 推送回本仓库
+permissions:
+  contents: write
+
+# 避免两次运行同时 push 冲突：同一时刻只允许一个在跑
+concurrency:
+  group: data-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history for rules commit date)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # gen_meta.py 需要完整历史来读 yaml 最后提交时间
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pyyaml
+
+      - name: Fetch official MTGO events
+        run: python batch_mtgo.py
+
+      - name: Fetch Videre matches
+        run: python fetch_videre_matches.py
+
+      - name: Build standard stats
+        run: python stats_standard.py
+
+      - name: Build matchup matrix
+        run: python stats_matchup.py
+
+      - name: Generate meta.json
+        run: python gen_meta.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ stats/ fetched.txt
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: 自动数据更新 $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git pull --rebase
+            git push
+          fi
