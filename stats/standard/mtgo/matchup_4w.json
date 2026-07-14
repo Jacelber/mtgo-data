@@ -34,14 +34,14 @@
     "Azorius Tempo",
     "Gruul Delirium",
     "Jeskai Tablet",
-    "Sultai Demon",
     "Dimir Midrange",
+    "Sultai Demon",
     "Selesnya Rhythm",
     "Mono-Blue Spellementals",
     "Golgari Demon",
+    "Esper Pixie",
     "Selesnya Midrange",
     "Sultai Reanimator",
-    "Esper Pixie",
     "Golgari Roots",
     "Golgari Rhythm",
     "Sultai Control",
@@ -299,22 +299,22 @@
       "low_sample": true,
       "mirror": false
     },
-    "Sultai Demon": {
-      "wins": 6,
-      "losses": 5,
-      "draws": 0,
-      "matches": 11,
-      "win_rate": 0.5455,
-      "ci_half": 0.2536,
-      "low_sample": true,
-      "mirror": false
-    },
     "Dimir Midrange": {
       "wins": 5,
       "losses": 6,
       "draws": 0,
       "matches": 11,
       "win_rate": 0.4545,
+      "ci_half": 0.2536,
+      "low_sample": true,
+      "mirror": false
+    },
+    "Sultai Demon": {
+      "wins": 6,
+      "losses": 5,
+      "draws": 0,
+      "matches": 11,
+      "win_rate": 0.5455,
       "ci_half": 0.2536,
       "low_sample": true,
       "mirror": false
@@ -349,6 +349,16 @@
       "low_sample": true,
       "mirror": false
     },
+    "Esper Pixie": {
+      "wins": 2,
+      "losses": 3,
+      "draws": 0,
+      "matches": 5,
+      "win_rate": 0.4,
+      "ci_half": 0.3258,
+      "low_sample": true,
+      "mirror": false
+    },
     "Selesnya Midrange": {
       "wins": 3,
       "losses": 2,
@@ -366,16 +376,6 @@
       "matches": 5,
       "win_rate": 0.2,
       "ci_half": 0.2941,
-      "low_sample": true,
-      "mirror": false
-    },
-    "Esper Pixie": {
-      "wins": 2,
-      "losses": 3,
-      "draws": 0,
-      "matches": 5,
-      "win_rate": 0.4,
-      "ci_half": 0.3258,
       "low_sample": true,
       "mirror": false
     },
@@ -4691,6 +4691,58 @@
         "mirror": false
       }
     },
+    "Dimir Midrange": {
+      "Selesnya Offense": {
+        "wins": 2,
+        "losses": 3,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.4,
+        "ci_half": 0.3258,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Dimir Excruciator": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Fling": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Prowess": {
+        "wins": 1,
+        "losses": 2,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.3333,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Spellementals": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      }
+    },
     "Sultai Demon": {
       "Izzet Prowess": {
         "wins": 2,
@@ -4748,58 +4800,6 @@
         "draws": 0,
         "matches": 1,
         "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      }
-    },
-    "Dimir Midrange": {
-      "Selesnya Offense": {
-        "wins": 2,
-        "losses": 3,
-        "draws": 0,
-        "matches": 5,
-        "win_rate": 0.4,
-        "ci_half": 0.3258,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Dimir Excruciator": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Fling": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Prowess": {
-        "wins": 1,
-        "losses": 2,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.3333,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Spellementals": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
         "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false
@@ -4931,6 +4931,58 @@
         "mirror": false
       }
     },
+    "Esper Pixie": {
+      "Izzet Spellementals": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Selesnya Offense": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Prowess": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Mono-Green Landfall": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "4-Color Tablet": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      }
+    },
     "Selesnya Midrange": {
       "Selesnya Landfall": {
         "wins": 0,
@@ -4995,58 +5047,6 @@
         "mirror": false
       },
       "Dimir Excruciator": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      }
-    },
-    "Esper Pixie": {
-      "Izzet Spellementals": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Selesnya Offense": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Prowess": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Mono-Green Landfall": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "4-Color Tablet": {
         "wins": 0,
         "losses": 1,
         "draws": 0,

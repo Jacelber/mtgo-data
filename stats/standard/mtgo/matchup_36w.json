@@ -35,8 +35,8 @@
     "Boros Token",
     "Izzet Opus",
     "Bant Rhythm",
-    "Bant Bounce",
     "Golgari Midrange",
+    "Bant Bounce",
     "Dimir Deceit",
     "Boros Manufacturing",
     "Simic Rhythm",
@@ -48,29 +48,29 @@
     "Jeskai Manufacturing",
     "Golgari Rhythm",
     "Golgari Crime",
-    "Mono-Black Aggro",
     "Rakdos Discard",
+    "Mono-Black Aggro",
     "Mono-Blue Spellementals",
     "4-Color Control",
     "Gruul Delirium",
     "Selesnya Midrange",
     "Orzhov Repartee",
-    "Golgari Roots",
     "Golgari Reanimator",
+    "Golgari Roots",
     "Bant Airbending",
-    "Mono-Green Aggro",
     "4-Color Allies",
+    "Mono-Green Aggro",
+    "Gruul Fling",
     "Temur Harmonizer",
     "Sultai Demon",
-    "Gruul Fling",
     "Boros Leyline",
     "Esper Pixie",
-    "Temur Tablet",
     "Simic Ramp",
+    "Temur Tablet",
     "Orzhov Control",
     "Mono-Red Leyline",
-    "Temur Otters",
     "Leyline Aggro",
+    "Temur Otters",
     "Boros Burn"
   ],
   "overall": {
@@ -334,16 +334,6 @@
       "low_sample": false,
       "mirror": false
     },
-    "Bant Bounce": {
-      "wins": 50,
-      "losses": 33,
-      "draws": 0,
-      "matches": 83,
-      "win_rate": 0.6024,
-      "ci_half": 0.103,
-      "low_sample": false,
-      "mirror": false
-    },
     "Golgari Midrange": {
       "wins": 41,
       "losses": 42,
@@ -351,6 +341,16 @@
       "matches": 83,
       "win_rate": 0.494,
       "ci_half": 0.1052,
+      "low_sample": false,
+      "mirror": false
+    },
+    "Bant Bounce": {
+      "wins": 50,
+      "losses": 33,
+      "draws": 0,
+      "matches": 83,
+      "win_rate": 0.6024,
+      "ci_half": 0.103,
       "low_sample": false,
       "mirror": false
     },
@@ -464,7 +464,7 @@
       "low_sample": false,
       "mirror": false
     },
-    "Mono-Black Aggro": {
+    "Rakdos Discard": {
       "wins": 13,
       "losses": 10,
       "draws": 0,
@@ -474,7 +474,7 @@
       "low_sample": false,
       "mirror": false
     },
-    "Rakdos Discard": {
+    "Mono-Black Aggro": {
       "wins": 13,
       "losses": 10,
       "draws": 0,
@@ -534,16 +534,6 @@
       "low_sample": true,
       "mirror": false
     },
-    "Golgari Roots": {
-      "wins": 7,
-      "losses": 7,
-      "draws": 0,
-      "matches": 14,
-      "win_rate": 0.5,
-      "ci_half": 0.232,
-      "low_sample": true,
-      "mirror": false
-    },
     "Golgari Reanimator": {
       "wins": 5,
       "losses": 9,
@@ -551,6 +541,16 @@
       "matches": 14,
       "win_rate": 0.3571,
       "ci_half": 0.2245,
+      "low_sample": true,
+      "mirror": false
+    },
+    "Golgari Roots": {
+      "wins": 7,
+      "losses": 7,
+      "draws": 0,
+      "matches": 14,
+      "win_rate": 0.5,
+      "ci_half": 0.232,
       "low_sample": true,
       "mirror": false
     },
@@ -564,6 +564,16 @@
       "low_sample": true,
       "mirror": false
     },
+    "4-Color Allies": {
+      "wins": 6,
+      "losses": 6,
+      "draws": 0,
+      "matches": 12,
+      "win_rate": 0.5,
+      "ci_half": 0.2462,
+      "low_sample": true,
+      "mirror": false
+    },
     "Mono-Green Aggro": {
       "wins": 6,
       "losses": 6,
@@ -574,13 +584,13 @@
       "low_sample": true,
       "mirror": false
     },
-    "4-Color Allies": {
-      "wins": 6,
-      "losses": 6,
+    "Gruul Fling": {
+      "wins": 1,
+      "losses": 10,
       "draws": 0,
-      "matches": 12,
-      "win_rate": 0.5,
-      "ci_half": 0.2462,
+      "matches": 11,
+      "win_rate": 0.0909,
+      "ci_half": 0.1806,
       "low_sample": true,
       "mirror": false
     },
@@ -604,16 +614,6 @@
       "low_sample": true,
       "mirror": false
     },
-    "Gruul Fling": {
-      "wins": 1,
-      "losses": 10,
-      "draws": 0,
-      "matches": 11,
-      "win_rate": 0.0909,
-      "ci_half": 0.1806,
-      "low_sample": true,
-      "mirror": false
-    },
     "Boros Leyline": {
       "wins": 4,
       "losses": 6,
@@ -634,22 +634,22 @@
       "low_sample": true,
       "mirror": false
     },
-    "Temur Tablet": {
-      "wins": 5,
-      "losses": 2,
-      "draws": 0,
-      "matches": 7,
-      "win_rate": 0.7143,
-      "ci_half": 0.2794,
-      "low_sample": true,
-      "mirror": false
-    },
     "Simic Ramp": {
       "wins": 2,
       "losses": 5,
       "draws": 0,
       "matches": 7,
       "win_rate": 0.2857,
+      "ci_half": 0.2794,
+      "low_sample": true,
+      "mirror": false
+    },
+    "Temur Tablet": {
+      "wins": 5,
+      "losses": 2,
+      "draws": 0,
+      "matches": 7,
+      "win_rate": 0.7143,
       "ci_half": 0.2794,
       "low_sample": true,
       "mirror": false
@@ -674,7 +674,7 @@
       "low_sample": true,
       "mirror": false
     },
-    "Temur Otters": {
+    "Leyline Aggro": {
       "wins": 1,
       "losses": 3,
       "draws": 0,
@@ -684,7 +684,7 @@
       "low_sample": true,
       "mirror": false
     },
-    "Leyline Aggro": {
+    "Temur Otters": {
       "wins": 1,
       "losses": 3,
       "draws": 0,
@@ -10328,188 +10328,6 @@
         "mirror": false
       }
     },
-    "Bant Bounce": {
-      "Dimir Excruciator": {
-        "wins": 4,
-        "losses": 3,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.5714,
-        "ci_half": 0.2957,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Spellementals": {
-        "wins": 2,
-        "losses": 3,
-        "draws": 0,
-        "matches": 5,
-        "win_rate": 0.4,
-        "ci_half": 0.3258,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Selesnya Offense": {
-        "wins": 14,
-        "losses": 6,
-        "draws": 0,
-        "matches": 20,
-        "win_rate": 0.7,
-        "ci_half": 0.1868,
-        "low_sample": false,
-        "mirror": false
-      },
-      "Mono-Green Landfall": {
-        "wins": 5,
-        "losses": 0,
-        "draws": 0,
-        "matches": 5,
-        "win_rate": 1.0,
-        "ci_half": 0.2172,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Simic Rhythm": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false
-      },
-      "4-Color Tablet": {
-        "wins": 6,
-        "losses": 2,
-        "draws": 0,
-        "matches": 8,
-        "win_rate": 0.75,
-        "ci_half": 0.2596,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Monument Lessons": {
-        "wins": 1,
-        "losses": 2,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.3333,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Jeskai Lessons": {
-        "wins": 2,
-        "losses": 5,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.2857,
-        "ci_half": 0.2794,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Prowess": {
-        "wins": 5,
-        "losses": 9,
-        "draws": 0,
-        "matches": 14,
-        "win_rate": 0.3571,
-        "ci_half": 0.2245,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Azorius Tempo": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Dimir Deceit": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Mardu Discard": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Lessons": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Jeskai Tablet": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Simic Kona": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Temur Otters": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Selesnya Landfall": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Fling": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false
-      }
-    },
     "Golgari Midrange": {
       "Jeskai Artifacts": {
         "wins": 1,
@@ -10748,6 +10566,188 @@
         "matches": 1,
         "win_rate": 1.0,
         "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      }
+    },
+    "Bant Bounce": {
+      "Dimir Excruciator": {
+        "wins": 4,
+        "losses": 3,
+        "draws": 0,
+        "matches": 7,
+        "win_rate": 0.5714,
+        "ci_half": 0.2957,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Spellementals": {
+        "wins": 2,
+        "losses": 3,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.4,
+        "ci_half": 0.3258,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Selesnya Offense": {
+        "wins": 14,
+        "losses": 6,
+        "draws": 0,
+        "matches": 20,
+        "win_rate": 0.7,
+        "ci_half": 0.1868,
+        "low_sample": false,
+        "mirror": false
+      },
+      "Mono-Green Landfall": {
+        "wins": 5,
+        "losses": 0,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 1.0,
+        "ci_half": 0.2172,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Simic Rhythm": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false
+      },
+      "4-Color Tablet": {
+        "wins": 6,
+        "losses": 2,
+        "draws": 0,
+        "matches": 8,
+        "win_rate": 0.75,
+        "ci_half": 0.2596,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Monument Lessons": {
+        "wins": 1,
+        "losses": 2,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.3333,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Jeskai Lessons": {
+        "wins": 2,
+        "losses": 5,
+        "draws": 0,
+        "matches": 7,
+        "win_rate": 0.2857,
+        "ci_half": 0.2794,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Prowess": {
+        "wins": 5,
+        "losses": 9,
+        "draws": 0,
+        "matches": 14,
+        "win_rate": 0.3571,
+        "ci_half": 0.2245,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Azorius Tempo": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Dimir Deceit": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Mardu Discard": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Lessons": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Jeskai Tablet": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Simic Kona": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Temur Otters": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Selesnya Landfall": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Fling": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false
       }
@@ -12544,138 +12544,6 @@
         "mirror": false
       }
     },
-    "Mono-Black Aggro": {
-      "Izzet Prowess": {
-        "wins": 2,
-        "losses": 3,
-        "draws": 0,
-        "matches": 5,
-        "win_rate": 0.4,
-        "ci_half": 0.3258,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Dimir Excruciator": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Lessons": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Golgari Demon": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Selesnya Landfall": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "4-Color Tablet": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Azorius Momo": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Jeskai Tablet": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Selesnya Offense": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Spellementals": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Mardu Discard": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Mono-Green Landfall": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Jeskai Lessons": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      }
-    },
     "Rakdos Discard": {
       "Boros Leyline": {
         "wins": 1,
@@ -12804,6 +12672,138 @@
         "matches": 2,
         "win_rate": 0.5,
         "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false
+      }
+    },
+    "Mono-Black Aggro": {
+      "Izzet Prowess": {
+        "wins": 2,
+        "losses": 3,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.4,
+        "ci_half": 0.3258,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Dimir Excruciator": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Lessons": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Golgari Demon": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Selesnya Landfall": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "4-Color Tablet": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Azorius Momo": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Jeskai Tablet": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Selesnya Offense": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Spellementals": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Mardu Discard": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Mono-Green Landfall": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Jeskai Lessons": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false
       }
@@ -13338,88 +13338,6 @@
         "mirror": false
       }
     },
-    "Golgari Roots": {
-      "Izzet Lessons": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Prowess": {
-        "wins": 3,
-        "losses": 3,
-        "draws": 0,
-        "matches": 6,
-        "win_rate": 0.5,
-        "ci_half": 0.3124,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Sultai Reanimator": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Dimir Excruciator": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Selesnya Landfall": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Jeskai Lessons": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Selesnya Rhythm": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Mono-Green Landfall": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      }
-    },
     "Golgari Reanimator": {
       "Izzet Spellementals": {
         "wins": 0,
@@ -13512,6 +13430,88 @@
         "mirror": false
       }
     },
+    "Golgari Roots": {
+      "Izzet Lessons": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Prowess": {
+        "wins": 3,
+        "losses": 3,
+        "draws": 0,
+        "matches": 6,
+        "win_rate": 0.5,
+        "ci_half": 0.3124,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Sultai Reanimator": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Dimir Excruciator": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Selesnya Landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Jeskai Lessons": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Selesnya Rhythm": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Mono-Green Landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      }
+    },
     "Bant Airbending": {
       "Bant Rhythm": {
         "wins": 1,
@@ -13579,6 +13579,78 @@
         "draws": 0,
         "matches": 1,
         "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      }
+    },
+    "4-Color Allies": {
+      "Izzet Fling": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Prowess": {
+        "wins": 2,
+        "losses": 4,
+        "draws": 0,
+        "matches": 6,
+        "win_rate": 0.3333,
+        "ci_half": 0.3016,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Spellementals": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Dimir Excruciator": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Selesnya Landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Monument Lessons": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "4-Color Tablet": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
         "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false
@@ -13676,58 +13748,8 @@
         "mirror": false
       }
     },
-    "4-Color Allies": {
-      "Izzet Fling": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Prowess": {
-        "wins": 2,
-        "losses": 4,
-        "draws": 0,
-        "matches": 6,
-        "win_rate": 0.3333,
-        "ci_half": 0.3016,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Spellementals": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Dimir Excruciator": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
+    "Gruul Fling": {
       "Selesnya Landfall": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Monument Lessons": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -13737,7 +13759,67 @@
         "low_sample": true,
         "mirror": false
       },
-      "4-Color Tablet": {
+      "Mardu Discard": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Dimir Excruciator": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Spellementals": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Selesnya Rhythm": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Mono-Green Landfall": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Prowess": {
+        "wins": 1,
+        "losses": 2,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.3333,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Aggro": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -13857,88 +13939,6 @@
         "draws": 0,
         "matches": 1,
         "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      }
-    },
-    "Gruul Fling": {
-      "Selesnya Landfall": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Mardu Discard": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Dimir Excruciator": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Spellementals": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Selesnya Rhythm": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Mono-Green Landfall": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Prowess": {
-        "wins": 1,
-        "losses": 2,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.3333,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Aggro": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
         "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false
@@ -14108,6 +14108,38 @@
         "mirror": false
       }
     },
+    "Simic Ramp": {
+      "Selesnya Rhythm": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Spellementals": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "ci_half": 0.3269,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Simic Kona": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      }
+    },
     "Temur Tablet": {
       "Izzet Spellementals": {
         "wins": 1,
@@ -14140,38 +14172,6 @@
         "mirror": false
       },
       "Bant Rhythm": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      }
-    },
-    "Simic Ramp": {
-      "Selesnya Rhythm": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Spellementals": {
-        "wins": 1,
-        "losses": 3,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.25,
-        "ci_half": 0.3269,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Simic Kona": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -14276,38 +14276,6 @@
         "mirror": false
       }
     },
-    "Temur Otters": {
-      "4-Color Tablet": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Bant Bounce": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      },
-      "Izzet Prowess": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false
-      }
-    },
     "Leyline Aggro": {
       "Boros Dragons": {
         "wins": 0,
@@ -14336,6 +14304,38 @@
         "matches": 2,
         "win_rate": 0.0,
         "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false
+      }
+    },
+    "Temur Otters": {
+      "4-Color Tablet": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Bant Bounce": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false
+      },
+      "Izzet Prowess": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false
       }
