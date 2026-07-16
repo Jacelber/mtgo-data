@@ -60,6 +60,16 @@ current_phase:
   production_changes_allowed: false
   feature_development_allowed: false
 
+phase_0_pull_request:
+  number: 1
+  url: "https://github.com/Jacelber/mtgo-data/pull/1"
+  status: "open"
+  base_branch: "master"
+  head_branch: "docs/final-development-plan"
+  initial_head_commit: "cf0569d597e2ba37e152a3143cd5261290bd80ff"
+  review_status: "pending"
+  merge_status: "pending"
+
 phase_0_tasks:
   - id: "P0-01"
     name: "Create documentation branch"
@@ -150,7 +160,7 @@ phase_0_tasks:
 
   - id: "P0-15"
     name: "Push branch and open Pull Request"
-    status: "not_started"
+    status: "completed"
 
 current_repository_state:
   verified_during_phase_0: false
@@ -275,9 +285,9 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P0-15"
-  name: "Push branch and open Pull Request"
-  target_path: "docs/final-development-plan"
+  id: "PHASE-0-REVIEW"
+  name: "Review and merge Pull Request 1"
+  target_path: "https://github.com/Jacelber/mtgo-data/pull/1"
   production_change: false
   requires_user_confirmation: true
 
