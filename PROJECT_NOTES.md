@@ -1,3 +1,22 @@
+> [!WARNING]
+> **Historical document - not the current project specification**
+>
+> This file preserves earlier development notes, experiments, AI conversations, and implementation history. It may contain outdated plans, superseded assumptions, incomplete proposals, or descriptions of legacy behavior.
+>
+> Before making changes, read the current authoritative documents in this order:
+>
+> 1. `AGENTS.md`
+> 2. `docs/PROJECT_SCOPE.md`
+> 3. `docs/STATISTICS_SPEC.md`
+> 4. `docs/DATA_ARCHITECTURE.md`
+> 5. `docs/ROADMAP.md`
+> 6. `docs/DECISIONS.md`
+> 7. `docs/STATUS.yaml`
+>
+> If this file conflicts with the authoritative documents, follow the authoritative documents. Do not restore an older plan from this file without explicit project-owner approval.
+
+---
+
 # MTG 数据分析系统 — 项目笔记
 
 最后更新：2026-07-05（平均牌表 & 偏离度设计定稿并**全面落地**：架空平均牌表 Core/Flex + 实际典型牌表 medoid + 单副偏离度 deviation + 区间平均偏离度 + 近期变化度；后端 stats_standard.py 与前端 index.html 均已实现并验证）
