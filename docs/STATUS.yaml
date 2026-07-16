@@ -1,0 +1,314 @@
+schema_version: "1.0"
+
+project:
+  name: "mtgo-data"
+  repository: "https://github.com/Jacelber/mtgo-data"
+  default_branch: "master"
+  current_working_branch: "docs/final-development-plan"
+  status: "active_development"
+  primary_language: "Python"
+  deployment: "GitHub Pages"
+
+status_document:
+  purpose: "Machine-readable record of current project progress and next actions."
+  last_updated: "2026-07-16"
+  updated_by: "project-owner-with-ai-assistance"
+  update_required_after_each_phase: true
+  authoritative_for:
+    - "current phase"
+    - "task completion state"
+    - "known blockers"
+    - "next approved action"
+  not_authoritative_for:
+    - "statistical formulas"
+    - "product scope"
+    - "data architecture"
+    - "historical decisions"
+
+authoritative_documents:
+  reading_order:
+    - path: "AGENTS.md"
+      status: "created"
+    - path: "docs/PROJECT_SCOPE.md"
+      status: "created"
+    - path: "docs/STATISTICS_SPEC.md"
+      status: "created"
+    - path: "docs/DATA_ARCHITECTURE.md"
+      status: "created"
+    - path: "docs/ROADMAP.md"
+      status: "created"
+    - path: "docs/DECISIONS.md"
+      status: "created"
+    - path: "docs/STATUS.yaml"
+      status: "created"
+  agent_adapter_documents:
+    - path: "CLAUDE.md"
+      status: "created"
+    - path: ".github/copilot-instructions.md"
+      status: "created"
+  historical_documents:
+    - path: "PROJECT_NOTES.md"
+      status: "historical_warning_added"
+      authoritative: false
+
+current_phase:
+  id: 0
+  name: "Authoritative documentation"
+  status: "in_progress"
+  started_on: "2026-07-16"
+  objective: "Create and review the authoritative documentation set before changing production behavior."
+  production_changes_allowed: false
+  feature_development_allowed: false
+
+phase_0_pull_request:
+  number: 1
+  url: "https://github.com/Jacelber/mtgo-data/pull/1"
+  status: "open"
+  base_branch: "master"
+  head_branch: "docs/final-development-plan"
+  initial_head_commit: "cf0569d597e2ba37e152a3143cd5261290bd80ff"
+  review_status: "pending"
+  merge_status: "pending"
+
+phase_0_tasks:
+  - id: "P0-01"
+    name: "Create documentation branch"
+    status: "completed"
+    output:
+      - "docs/final-development-plan"
+
+  - id: "P0-02"
+    name: "Create AGENTS.md"
+    status: "completed"
+    output:
+      - "AGENTS.md"
+
+  - id: "P0-03"
+    name: "Document project scope"
+    status: "completed"
+    output:
+      - "docs/PROJECT_SCOPE.md"
+
+  - id: "P0-04"
+    name: "Document statistical definitions"
+    status: "completed"
+    output:
+      - "docs/STATISTICS_SPEC.md"
+
+  - id: "P0-05"
+    name: "Document data architecture"
+    status: "completed"
+    output:
+      - "docs/DATA_ARCHITECTURE.md"
+
+  - id: "P0-06"
+    name: "Document development roadmap"
+    status: "completed"
+    output:
+      - "docs/ROADMAP.md"
+
+  - id: "P0-07"
+    name: "Record confirmed decisions"
+    status: "completed"
+    output:
+      - "docs/DECISIONS.md"
+
+  - id: "P0-08"
+    name: "Create machine-readable project status"
+    status: "completed"
+    output:
+      - "docs/STATUS.yaml"
+
+  - id: "P0-09"
+    name: "Create Claude adapter instructions"
+    status: "completed"
+    output:
+      - "CLAUDE.md"
+
+  - id: "P0-10"
+    name: "Create GitHub Copilot instructions"
+    status: "completed"
+    output:
+      - ".github/copilot-instructions.md"
+
+  - id: "P0-11"
+    name: "Mark PROJECT_NOTES.md as historical"
+    status: "completed"
+    output:
+      - "PROJECT_NOTES.md"
+
+  - id: "P0-12"
+    name: "Cross-check documentation consistency"
+    status: "completed"
+    checks:
+      - "document precedence"
+      - "product names"
+      - "format order"
+      - "event whitelist policy"
+      - "event structure names"
+      - "result handling"
+      - "file paths"
+      - "roadmap phase order"
+
+  - id: "P0-13"
+    name: "Review Git diff"
+    status: "completed"
+
+  - id: "P0-14"
+    name: "Commit Phase 0 documentation"
+    status: "completed"
+
+  - id: "P0-15"
+    name: "Push branch and open Pull Request"
+    status: "completed"
+
+current_repository_state:
+  verified_during_phase_0: false
+  verification_note: "Production code and workflows have not yet been re-audited during the documentation phase."
+  known_existing_capabilities:
+    - "Standard MTGO event processing"
+    - "Standard archetype classification"
+    - "Standard generated statistics"
+    - "MTGO matchup statistics"
+    - "Weekly Pickup output"
+    - "GitHub Pages front end"
+    - "existing GitHub Actions workflows"
+  known_legacy_characteristics:
+    - "current pipeline is primarily Standard-specific"
+    - "root directory contains multiple Python entry-point scripts"
+    - "index.html is monolithic"
+    - "workflow responsibilities may overlap"
+    - "classification rules need stable IDs and explicit priorities"
+    - "automated regression protection is incomplete"
+    - "JSON Schema validation has not yet been established"
+
+product_tracks:
+  mtgo:
+    product_name: "MTGO Environment Trends"
+    status: "existing_standard_only"
+    data_merging_with_melee: false
+    formats:
+      standard:
+        implementation_status: "existing_baseline"
+        verification_status: "pending_phase_1"
+      pauper:
+        implementation_status: "not_started"
+      modern:
+        implementation_status: "not_started"
+      pioneer:
+        implementation_status: "not_started"
+      legacy:
+        implementation_status: "not_started"
+      vintage:
+        implementation_status: "deferred_pending_decision"
+
+  tabletop:
+    product_name: "Tabletop Major Events"
+    internal_source_name: "melee"
+    status: "not_started"
+    data_merging_with_mtgo: false
+    event_discovery: "manual_whitelist_only"
+    formats:
+      pauper:
+        implementation_status: "not_started"
+        first_approved_event:
+          name: "Paupergeddon Summer 2026 Main Event"
+          melee_event_id: "438329"
+          event_structure: "constructed_day2"
+      modern:
+        implementation_status: "not_started"
+      pioneer:
+        implementation_status: "not_started"
+      legacy:
+        implementation_status: "not_started"
+      standard:
+        implementation_status: "not_started"
+      vintage:
+        implementation_status: "deferred_pending_decision"
+
+approved_event_structures:
+  - id: "constructed_day2"
+    implementation_status: "not_started"
+  - id: "constructed_single_stage"
+    implementation_status: "not_started"
+  - id: "mixed"
+    implementation_status: "not_started"
+
+engineering_quality:
+  readme:
+    status: "planned_phase_1"
+  license:
+    status: "planned_phase_1"
+  notice:
+    status: "planned_phase_1"
+  dependency_lists:
+    status: "planned_phase_1"
+  pytest:
+    status: "planned_phase_1"
+  rule_validation:
+    status: "planned_phase_1"
+  classification_conflict_reports:
+    status: "planned_phase_2"
+  json_schemas:
+    status: "planned_phase_1"
+  ci:
+    status: "planned_phase_1"
+  actions_permissions_review:
+    status: "planned_phase_1"
+  actions_concurrency:
+    status: "planned_phase_1"
+  index_html_split:
+    status: "planned_phase_4"
+
+known_blockers: []
+
+open_decisions:
+  - id: "OPEN-001"
+    topic: "Final license combination"
+    status: "open"
+    target_phase: 1
+
+  - id: "OPEN-002"
+    topic: "Exact statistical warning thresholds"
+    status: "open"
+    target_document: "docs/STATISTICS_SPEC.md"
+    target_phase: 1
+
+  - id: "OPEN-003"
+    topic: "Vintage implementation"
+    status: "deferred"
+    target_phase: 17
+
+  - id: "OPEN-004"
+    topic: "Automatic Melee event discovery"
+    status: "deferred"
+    note: "Not part of the current approved scope."
+
+next_approved_task:
+  id: "PHASE-0-REVIEW"
+  name: "Review and merge Pull Request 1"
+  target_path: "https://github.com/Jacelber/mtgo-data/pull/1"
+  production_change: false
+  requires_user_confirmation: true
+
+prohibited_next_actions:
+  - "Do not refactor the production Standard pipeline."
+  - "Do not implement the shared classifier yet."
+  - "Do not implement MTGO Pauper yet."
+  - "Do not fetch Melee events yet."
+  - "Do not generate Paupergeddon statistics yet."
+  - "Do not split production index.html yet."
+  - "Do not change production GitHub Actions yet."
+  - "Do not commit directly to master."
+
+phase_0_completion_requirements:
+  - "All authoritative documents exist."
+  - "CLAUDE.md exists."
+  - ".github/copilot-instructions.md exists."
+  - "PROJECT_NOTES.md is marked as historical."
+  - "Documentation consistency checks pass."
+  - "Git diff is reviewed."
+  - "Documentation is committed on the documentation branch."
+  - "The documentation branch is pushed."
+  - "A Pull Request is opened."
+  - "The project owner approves completion of Phase 0."

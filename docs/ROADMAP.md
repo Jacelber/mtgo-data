@@ -1,0 +1,1489 @@
+# Development Roadmap
+
+## Document purpose
+
+This document defines the approved development order for the `mtgo-data` repository.
+
+It is an authoritative planning document for AI assistants, coding agents, and human developers.
+
+Development must proceed phase by phase. A later phase must not begin until the current phase meets its acceptance criteria, unless the project owner explicitly approves a change of order.
+
+This document defines development order and phase-level acceptance criteria.
+
+Detailed product boundaries belong in `docs/PROJECT_SCOPE.md`.
+
+Detailed statistical definitions belong in `docs/STATISTICS_SPEC.md`.
+
+Detailed code, data, schema, and front-end paths belong in `docs/DATA_ARCHITECTURE.md`.
+
+Confirmed scope and statistical decisions belong in `docs/DECISIONS.md`.
+
+Current implementation progress belongs in `docs/STATUS.yaml`.
+
+---
+
+## Roadmap status
+
+Current phase:
+
+**Phase 0 — Authoritative documentation**
+
+Current objective:
+
+Create a complete and internally consistent documentation set before changing the production pipeline, statistics, automation, or front end.
+
+Do not begin the main refactor, Melee ingestion, Pauper implementation, or production front-end split until Phase 0 is reviewed and approved.
+
+---
+
+## Development principles
+
+All phases must follow these principles:
+
+1. Preserve the currently working Standard MTGO implementation until regression protection exists.
+2. Keep MTGO and Melee source data separate.
+3. Keep MTGO and Melee normalized data separate.
+4. Keep MTGO and Melee generated statistics separate.
+5. Do not merge MTGO and Melee results into one statistic.
+6. Share classification logic and reusable statistical utilities where appropriate.
+7. Do not silently ignore malformed, incomplete, or ambiguous data.
+8. Generate explicit reports for Unknown decks, classification conflicts, missing data, and data-quality problems.
+9. Add tests before replacing working legacy behavior.
+10. Do not develop directly on `master`.
+11. Use small, reviewable branches and commits.
+12. Do not manually edit generated JSON as a substitute for fixing the generating code.
+13. Update specifications, schemas, and tests whenever statistical behavior changes.
+14. Keep GitHub Pages compatible without requiring a front-end build framework unless separately approved.
+15. Keep existing public data paths compatible until a migration plan exists.
+16. Stop after each guided task and wait for user confirmation.
+17. Do not delete legacy scripts until their replacements have been verified.
+18. Record important scope or statistical changes in `docs/DECISIONS.md`.
+19. Update `docs/STATUS.yaml` at the end of every completed phase.
+20. Treat `PROJECT_NOTES.md` as historical context rather than the current specification.
+
+---
+
+## Approved product direction
+
+The repository will support two separate product areas:
+
+1. **MTGO Environment Trends**
+2. **Tabletop Major Events**
+
+The Tabletop Major Events product may use Melee as a data source, but the user-facing product should not be named only “Melee.”
+
+The intended constructed formats are:
+
+- Standard
+- Pauper
+- Modern
+- Pioneer
+- Legacy
+- Vintage, only if approved at a later decision gate
+
+The approved format-development order is:
+
+1. Preserve Standard as the regression baseline.
+2. Generalize the Standard-only MTGO pipeline.
+3. Implement Pauper for MTGO.
+4. Implement the approved Paupergeddon event.
+5. Implement Modern.
+6. Implement Pioneer.
+7. Implement Legacy.
+8. Add qualifying Standard tabletop events when the Melee pipeline is stable.
+9. Decide whether Vintage should be implemented.
+
+---
+
+## Approved event policy
+
+Melee must not be crawled without an event whitelist.
+
+Approved events must be registered manually in:
+
+`configs/melee_events.yaml`
+
+Target event categories are:
+
+- World Championships;
+- Pro Tours;
+- Regional Championships;
+- Magic Spotlight Series;
+- Paupergeddon main events;
+- Eternal Weekend Legacy main events;
+- Eternal Weekend Vintage main events, if Vintage is approved later.
+
+The following are excluded unless the project owner explicitly changes the policy:
+
+- team events;
+- pure Limited events;
+- side events;
+- unrelated local events;
+- qualifiers that are not specifically approved;
+- events that are not present in the whitelist.
+
+Mixed Draft and Constructed events are allowed only when the Constructed rounds can be identified reliably.
+
+---
+
+# Phase 0 — Authoritative documentation
+
+## Objective
+
+Create a stable documentation system that allows any AI assistant, coding agent, or human developer to understand the project without reconstructing requirements from conversation history.
+
+## Required files
+
+Create and review:
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `.github/copilot-instructions.md`
+- `docs/PROJECT_SCOPE.md`
+- `docs/STATISTICS_SPEC.md`
+- `docs/DATA_ARCHITECTURE.md`
+- `docs/ROADMAP.md`
+- `docs/DECISIONS.md`
+- `docs/STATUS.yaml`
+
+Add a historical-document warning to:
+
+- `PROJECT_NOTES.md`
+
+## Required decisions to document
+
+The documentation set must establish:
+
+- MTGO and Melee separation;
+- shared classification boundaries;
+- supported formats;
+- format-development order;
+- event whitelist policy;
+- pure Constructed event modes;
+- mixed-format event handling;
+- Day 1 and Day 2 handling;
+- average-point formulas;
+- high-score-region formulas;
+- matchup scopes;
+- intentional-draw handling;
+- bye handling;
+- drop handling;
+- no-show handling;
+- official awarded-win handling;
+- playoff handling;
+- raw, normalized, and generated data paths;
+- front-end structure;
+- engineering-quality requirements;
+- phase acceptance criteria.
+
+## Acceptance criteria
+
+Phase 0 is complete when:
+
+- all authoritative documents exist;
+- document precedence is explicit;
+- the documents do not contradict one another;
+- MTGO and Melee product boundaries are clear;
+- event inclusion and exclusion policy is clear;
+- statistical result handling is documented;
+- mixed-format behavior is documented;
+- the development order is documented;
+- `PROJECT_NOTES.md` is clearly marked as historical;
+- the documentation changes are committed on a documentation branch;
+- a Pull Request is opened and reviewed;
+- no production behavior has changed.
+
+---
+
+# Phase 1 — Engineering foundation and Standard baseline
+
+## Objective
+
+Protect the current working Standard implementation before refactoring it.
+
+## Required repository files
+
+Add or improve:
+
+- `README.md`
+- `LICENSE`
+- `NOTICE.md`
+- `requirements.txt`
+- `requirements-dev.txt`
+- pytest configuration
+- `tests/`
+- `schemas/`
+- rule-validation command
+- JSON validation command
+- CI workflow
+- `.gitignore`
+
+## Standard baseline work
+
+Record a recoverable Standard baseline that includes:
+
+- a baseline Git tag;
+- representative Standard input fixtures;
+- representative classification fixtures;
+- representative generated output fixtures;
+- current Unknown output;
+- current conflict behavior;
+- current public JSON paths;
+- a front-end smoke-test checklist;
+- a list of current production commands.
+
+The baseline must make unintended behavior changes visible.
+
+## Existing workflow review
+
+Review:
+
+- `.github/workflows/scrape.yml`
+- `.github/workflows/update.yml`
+
+Determine:
+
+- which workflow currently updates production data;
+- whether both workflows run the same scraper;
+- whether duplicate runs can create conflicts;
+- which files each workflow commits;
+- what schedule is currently active;
+- what permissions each workflow uses.
+
+Do not delete or disable a workflow until its production role is confirmed.
+
+## GitHub Actions requirements
+
+CI must use least-privilege permissions.
+
+CI permission target:
+
+    permissions:
+      contents: read
+
+Data-update workflows may use:
+
+    permissions:
+      contents: write
+
+Workflows must include:
+
+- explicit concurrency groups;
+- dependency installation from requirement files;
+- pytest execution;
+- rule validation;
+- JSON or schema validation where applicable;
+- useful `$GITHUB_STEP_SUMMARY` output;
+- clear failure behavior.
+
+Initial failure handling should use:
+
+- GitHub workflow status;
+- GitHub notifications;
+- workflow step summaries.
+
+Do not automatically create GitHub Issues for every failed run during the initial implementation.
+
+## Acceptance criteria
+
+Phase 1 is complete when:
+
+- current Standard data can be regenerated;
+- baseline tests detect unintended Standard changes;
+- production commands are documented;
+- duplicate automation is resolved safely;
+- dependencies are reproducible;
+- CI runs on Pull Requests;
+- CI uses read-only permissions unless write access is required;
+- data-update concurrency is explicit;
+- existing `index.html` still works;
+- no multi-format behavior has been introduced accidentally.
+
+---
+
+# Phase 2 — Shared rule system and classifier
+
+## Objective
+
+Extract format-independent classification behavior while preserving approved Standard classification results.
+
+## Required shared capabilities
+
+Implement reusable support for:
+
+- YAML rule loading;
+- archetype IDs;
+- rule IDs;
+- explicit priority values;
+- card-name normalization;
+- deck normalization;
+- full-match evaluation;
+- deterministic result selection;
+- Unknown reporting;
+- multiple-match reporting;
+- conflict detection;
+- rule validation.
+
+## Rule requirements
+
+Every archetype must have:
+
+- a stable machine-readable `id`;
+- a display name;
+- an explicit `priority`;
+- one or more identifiable classification rules.
+
+Every classification rule must have:
+
+- a stable rule ID;
+- explicit match conditions;
+- validation coverage.
+
+YAML file order must not silently determine the classification result.
+
+Equal-priority conflicts must be reported rather than silently resolved.
+
+Lower-priority matches that are overridden should remain available in diagnostic output.
+
+## Proposed shared code area
+
+The intended shared package is:
+
+    src/
+    └── mtgmeta/
+        ├── __init__.py
+        ├── card_names.py
+        ├── classifier.py
+        ├── config.py
+        ├── deck.py
+        ├── metrics.py
+        └── rules.py
+
+The exact modules may be adjusted during implementation, but their responsibilities must remain clear.
+
+## Required reports
+
+Generate machine-readable reports for:
+
+- Unknown decks;
+- multiple matched archetypes;
+- equal-priority conflicts;
+- overridden lower-priority matches;
+- malformed rules;
+- missing IDs;
+- duplicate IDs;
+- invalid priorities.
+
+## Legacy compatibility
+
+Keep existing Standard entry points available temporarily, including where still used:
+
+- `classify_standard.py`
+- `stats_standard.py`
+- `stats_matchup.py`
+
+Compatibility wrappers may call the new shared implementation.
+
+## Acceptance criteria
+
+Phase 2 is complete when:
+
+- Standard classification matches the approved baseline;
+- archetype IDs are stable and unique;
+- rule IDs are stable and unique;
+- priorities are explicit;
+- YAML order does not determine classification accidentally;
+- conflicts are visible and reviewable;
+- Unknown decks are visible and reviewable;
+- tests cover positive, negative, Unknown, and conflict cases;
+- malformed rule files fail validation clearly.
+
+---
+
+# Phase 3 — Generalize the MTGO pipeline
+
+## Objective
+
+Replace Standard-only assumptions with explicit format configuration.
+
+## Required work
+
+Make these functions format-aware:
+
+- event fetching;
+- raw event storage;
+- normalization;
+- classification;
+- event statistics;
+- range statistics;
+- matchup statistics;
+- Weekly Pickup where applicable;
+- metadata generation;
+- catalog generation.
+
+The generalized pipeline should accept an explicit format argument, such as:
+
+- `standard`
+- `pauper`
+- `modern`
+- `pioneer`
+- `legacy`
+
+Vintage must not be enabled before the Vintage decision gate.
+
+## Design rules
+
+Do not add formats by copying the complete Standard pipeline into new format-specific scripts.
+
+Format selection should control:
+
+- input paths;
+- output paths;
+- rule paths;
+- format-specific configuration;
+- front-end catalog entries.
+
+Selecting one format must not read from or overwrite another format’s data.
+
+## Legacy compatibility
+
+Temporary compatibility wrappers may remain for current commands.
+
+The wrappers must be removed only after:
+
+- the generalized command is verified;
+- workflows use the generalized command;
+- documentation is updated;
+- regression tests pass.
+
+## Acceptance criteria
+
+Phase 3 is complete when:
+
+- Standard runs through generalized internal code;
+- existing Standard public output remains compatible;
+- format names are configuration-driven;
+- data paths are format-aware;
+- unsupported formats fail clearly;
+- selecting one format cannot overwrite another format;
+- Standard regression tests pass.
+
+---
+
+# Phase 4 — Split the existing MTGO front end
+
+## Objective
+
+Make the current monolithic `index.html` maintainable before adding major multi-format and Melee front-end behavior.
+
+## Initial target structure
+
+    index.html
+    assets/
+    ├── css/
+    │   └── site.css
+    └── js/
+        ├── common.js
+        └── mtgo.js
+
+Additional JavaScript modules may later be introduced for:
+
+- MTGO statistics;
+- decklist display;
+- matchup matrices;
+- Weekly Pickup;
+- localization;
+- format navigation.
+
+## Preservation requirements
+
+The first split must preserve:
+
+- current appearance;
+- current labels;
+- current language behavior;
+- existing JSON paths;
+- existing buttons and filters;
+- charts;
+- decklist display;
+- Weekly Pickup;
+- matchup matrix behavior;
+- GitHub Pages deployment.
+
+## Restrictions
+
+Do not introduce during the initial split:
+
+- a mandatory Node.js build step;
+- a bundler;
+- a front-end framework;
+- changed statistical behavior;
+- Melee-specific statistics inside the MTGO page.
+
+These changes require separate approval if later desired.
+
+## Acceptance criteria
+
+Phase 4 is complete when:
+
+- `index.html` is materially smaller;
+- CSS is loaded from `assets/css/`;
+- JavaScript is loaded from `assets/js/`;
+- existing Standard behavior passes the smoke-test checklist;
+- existing public JSON paths still work;
+- GitHub Pages works without a build step;
+- the split does not alter statistics;
+- MTGO and Melee front-end responsibilities remain separate.
+
+---
+
+# Phase 5 — Melee ingestion and normalized event model
+
+## Objective
+
+Implement safe, reproducible fetching and normalization for explicitly whitelisted Melee events.
+
+## Required configuration
+
+Create:
+
+- `configs/melee_events.yaml`
+
+Only enabled whitelist entries may be fetched.
+
+## Proposed Melee package
+
+    src/
+    └── mtgmeta/
+        └── melee/
+            ├── __init__.py
+            ├── assembler.py
+            ├── client.py
+            ├── parser.py
+            └── quality.py
+
+## Raw data location
+
+Store raw event material under:
+
+    data_raw/melee/<event_id>/
+
+Possible raw files include:
+
+- tournament page;
+- standings pages;
+- round information;
+- match information;
+- decklist information;
+- request metadata;
+- fetch timestamp;
+- source URLs.
+
+## Normalized data location
+
+Store normalized events under:
+
+    data/<format>/melee/events/<event_id>.json
+
+## Client requirements
+
+The Melee client must support:
+
+- request delays;
+- pagination;
+- limited retries;
+- descriptive errors;
+- fetch timestamps;
+- source URLs;
+- raw response preservation where appropriate;
+- dry-run or validation-only behavior;
+- safe re-fetching.
+
+## Required normalized result types
+
+The normalized model must distinguish:
+
+- played win;
+- played loss;
+- played draw;
+- intentional draw;
+- bye;
+- no-show;
+- unplayed round after drop;
+- official awarded win;
+- Draft round;
+- Constructed round;
+- playoff round;
+- unknown result;
+- unknown round type.
+
+## Data-quality rules
+
+Unknown rounds or results must not be silently included in Constructed statistics.
+
+Fetching must not automatically publish unvalidated statistics.
+
+Raw data and normalized data must remain separate.
+
+## Acceptance criteria
+
+Phase 5 is complete when:
+
+- only whitelisted events can be fetched;
+- disabled whitelist entries are rejected;
+- raw and normalized data are separate;
+- re-fetching does not silently corrupt prior data;
+- normalized events include source and timestamp metadata;
+- unknown phases are reported;
+- malformed results are reported;
+- normalized event JSON passes its schema;
+- unvalidated data cannot be published as final statistics.
+
+---
+
+# Phase 6 — Pauper classification and MTGO Pauper
+
+## Objective
+
+Add Pauper as the first new format using the generalized MTGO pipeline and shared classifier.
+
+## Required rule file
+
+Create and validate:
+
+- `my_archetypes/pauper.yaml`
+
+## Required work
+
+Implement:
+
+- stable Pauper archetype IDs;
+- Pauper rule IDs;
+- explicit Pauper rule priorities;
+- known-deck test fixtures;
+- Unknown reporting;
+- conflict reporting;
+- MTGO Pauper classification;
+- MTGO Pauper event statistics;
+- MTGO Pauper range statistics;
+- MTGO Pauper matchup output where source data permits;
+- Pauper entry in the MTGO format catalog.
+
+## Separation requirements
+
+MTGO Pauper data must remain separate from:
+
+- Standard MTGO data;
+- Melee Pauper raw data;
+- Melee Pauper normalized data;
+- Melee Pauper statistics.
+
+The shared classifier may use the same Pauper archetype IDs for both MTGO and Melee.
+
+## Acceptance criteria
+
+Phase 6 is complete when:
+
+- Pauper rules pass validation;
+- known Pauper fixtures classify correctly;
+- rule conflicts are reviewable;
+- Unknown decks are reviewable;
+- Pauper output is separate from Standard output;
+- MTGO Pauper can be regenerated;
+- Standard output remains compatible;
+- the MTGO front end can select Pauper without hardcoded Standard-only behavior.
+
+---
+
+# Phase 7 — Paupergeddon event pipeline
+
+## Objective
+
+Implement the first approved Melee event from fetching through per-event statistics.
+
+## Initial event
+
+The initial approved event is:
+
+- Name: Paupergeddon Summer 2026 Main Event
+- Melee tournament ID: `438329`
+- Format: Pauper
+- Event type: pure Constructed with Day 2
+
+The event must be explicitly registered in:
+
+- `configs/melee_events.yaml`
+
+## Required input work
+
+Fetch and normalize:
+
+- event metadata;
+- standings;
+- decklists;
+- rounds;
+- matches;
+- Day 1 participation;
+- Day 2 participation;
+- drop information where available;
+- bye information;
+- intentional draws;
+- playoff information;
+- source metadata;
+- quality metadata.
+
+## Required output location
+
+Generate:
+
+    stats/pauper/melee/events/438329/
+    ├── meta.json
+    ├── overview.json
+    ├── decks.json
+    ├── matchup.json
+    └── quality.json
+
+## Required quality report
+
+Report at least:
+
+- listed player count;
+- standings count;
+- valid decklist count;
+- missing decklist count;
+- Unknown archetype count;
+- classification conflict count;
+- valid played-match count;
+- excluded bye count;
+- excluded intentional-draw count;
+- no-show count;
+- drop count;
+- Day 2 player count;
+- playoff participant count;
+- unidentified round count;
+- unidentified result count.
+
+## Acceptance criteria
+
+Phase 7 is complete when:
+
+- the event can be fetched only through its whitelist entry;
+- raw data is preserved;
+- normalized data passes schema validation;
+- all exclusions appear in the quality report;
+- Pauper classification uses the shared rules;
+- per-event statistics can be regenerated from normalized data;
+- MTGO Pauper and Melee Pauper remain separate;
+- unexplained quality failures prevent publication.
+
+---
+
+# Phase 8 — Tabletop Major Events front end
+
+## Objective
+
+Create the separate event-based front end for approved tabletop events.
+
+## Target page
+
+Create:
+
+- `melee/index.html`
+
+The directory name may remain `melee` as an internal implementation path, but the visible product name should be:
+
+- Tabletop Major Events
+
+## Top-level navigation
+
+Use:
+
+- MTGO Environment Trends
+- Tabletop Major Events
+
+Do not present the entire second product only as “Melee.”
+
+## Event behavior
+
+The front end must support:
+
+- format selection;
+- event selection;
+- latest enabled event as the default for each format;
+- event-specific overview;
+- event-specific matchup matrix;
+- visible data-quality warnings;
+- links or references to the source event;
+- separate MTGO and tabletop navigation.
+
+## Page A: event overview
+
+Page A is calculated per event only.
+
+It may show, depending on event type:
+
+- archetype;
+- deck count;
+- initial metagame share;
+- average points per theoretical round;
+- high-score count;
+- high-score-region share;
+- high-score conversion;
+- Day 2 count;
+- Day 2 share;
+- Day 2 conversion;
+- Day 1 win rate;
+- Day 2 win rate;
+- all-Constructed Swiss win rate;
+- sample size;
+- quality warnings.
+
+## Page B: matchup matrix
+
+Page B must support:
+
+- a single-event matrix;
+- optional aggregation of approved same-format events;
+- visible matchup scope;
+- W-L-D counts;
+- valid match count;
+- win rate;
+- confidence interval where specified;
+- low-sample warnings.
+
+## Acceptance criteria
+
+Phase 8 is complete when:
+
+- Paupergeddon is viewable independently from MTGO Pauper;
+- the event overview loads per-event JSON;
+- the matchup matrix loads event-specific JSON;
+- data-quality warnings are visible;
+- the latest event behavior is configuration-driven;
+- the MTGO page remains operational;
+- no MTGO and Melee statistics are merged.
+
+---
+
+# Phase 9 — Pure Constructed event strategies
+
+## Objective
+
+Complete statistical support for both pure Constructed event structures.
+
+## Mode A: constructed with Day 2
+
+Configuration value:
+
+- `constructed_day2`
+
+Primary metrics include:
+
+- initial field count;
+- initial metagame share;
+- average points per theoretical Constructed round;
+- Day 2 player count;
+- Day 2 metagame share;
+- Day 2 conversion;
+- Day 2 average performance;
+- Day 1 played-match win rate;
+- Day 2 played-match win rate;
+- all-Constructed Swiss win rate;
+- completion and quality indicators.
+
+## Mode B: constructed without Day 2
+
+Configuration value:
+
+- `constructed_single_stage`
+
+Primary metrics include:
+
+- field count;
+- initial metagame share;
+- average points per theoretical round;
+- high-score count;
+- high-score-region share;
+- conversion from initial field to the high-score region;
+- played-match win rate;
+- completion and quality indicators.
+
+## Statistical restrictions
+
+Do not invent Day 2 metrics for single-stage events.
+
+Use high-score substitution only where the event has no Day 2 and the statistics specification requires it.
+
+Do not use playoff single-match samples as the primary archetype performance measure.
+
+## Acceptance criteria
+
+Phase 9 is complete when:
+
+- event structure is selected explicitly from configuration;
+- the two structures use separate strategies;
+- theoretical-round denominators follow the statistics specification;
+- drop handling follows the statistics specification;
+- high-score thresholds are deterministic;
+- tests cover both structures;
+- front-end labels clearly indicate which structure is being displayed.
+
+---
+
+# Phase 10 — Mixed Draft and Constructed events
+
+## Objective
+
+Support Pro Tours and World Championships without allowing Draft performance to contaminate Constructed deck statistics.
+
+## Required phase configuration
+
+Mixed events must identify:
+
+- Day 1 Draft rounds;
+- Day 1 Constructed rounds;
+- Day 2 Draft rounds;
+- Day 2 Constructed rounds;
+- playoff rounds;
+- advancement rules;
+- official Top 8 lock behavior where applicable.
+
+Every event round must be labeled as:
+
+- `draft`;
+- `constructed`;
+- `playoff`;
+- `unknown`.
+
+Unknown rounds must be reported and excluded until reviewed.
+
+## Required Constructed scopes
+
+Generate separate scopes for:
+
+- Day 1 Constructed;
+- Day 2 Constructed;
+- all Constructed Swiss;
+- playoffs as contextual data only.
+
+## Day 1 purpose
+
+Day 1 Constructed statistics describe the broad initial tournament field.
+
+Day 1 metrics should include:
+
+- initial archetype count;
+- initial metagame share;
+- Day 1 Constructed average points;
+- Day 1 Constructed high-score metrics;
+- Day 1 Constructed played-match win rate;
+- completion and drop indicators.
+
+## Day 2 purpose
+
+Day 2 Constructed statistics describe the qualified field.
+
+They are affected by qualification selection, including Draft performance, and must show a selection-bias warning.
+
+Day 2 performance must not be represented by average score alone.
+
+Where data permits, show by archetype:
+
+- Day 2 player count;
+- Day 2 field share;
+- Day 2 Constructed average points;
+- Day 2 played-match win rate;
+- Day 2 high-score count or score distribution where meaningful;
+- effective theoretical rounds;
+- valid real-match count;
+- intentional-draw count;
+- bye count;
+- official awarded-win count;
+- Top 8 lock count;
+- sample-size warning;
+- selection-bias warning.
+
+## Combined purpose
+
+All-Constructed Swiss metrics may combine Day 1 and Day 2 played Constructed Swiss matches.
+
+The combined scope must be labeled clearly.
+
+It must not be described as an unbiased estimate of the initial field because Day 2 participants are selected.
+
+## Official awarded wins
+
+Official awarded wins after a player has locked Top 8:
+
+- do not count as real match wins;
+- do not count in played-match win rate;
+- do not count in matchup matrices;
+- do not count as earned Constructed points;
+- must be recorded separately;
+- may exempt the affected round from the player’s effective theoretical-round denominator when the official event structure confirms that no match was required.
+
+## Acceptance criteria
+
+Phase 10 is complete when:
+
+- Draft rounds contribute nothing to Constructed deck statistics;
+- Day 1, Day 2, and combined Constructed scopes reconcile;
+- official awarded wins are distinguishable from played wins;
+- intentional draws are distinguishable from played draws;
+- unknown rounds are excluded and reported;
+- mixed-event output includes selection-bias warnings;
+- representative mixed-event tests pass;
+- Page A and Page B expose the correct scopes.
+
+---
+
+# Phase 11 — Multi-event matchup aggregation
+
+## Objective
+
+Allow matchup matrices to combine selected events without merging unrelated overview statistics.
+
+## Aggregation eligibility
+
+Only combine events that:
+
+- use the same Constructed format;
+- use compatible archetype IDs;
+- pass schema validation;
+- pass required quality checks;
+- are explicitly selected;
+- expose the requested matchup scope.
+
+## Aggregation method
+
+Aggregate raw counts:
+
+- wins;
+- losses;
+- played draws;
+- valid matches.
+
+Do not average already calculated percentages.
+
+## Default exclusions
+
+Exclude from primary matchup aggregation:
+
+- mirror matches from overall non-mirror win rate;
+- byes;
+- no-shows;
+- intentional draws;
+- official awarded wins;
+- Draft rounds;
+- unknown rounds;
+- unknown results;
+- playoffs, unless a separate playoff view is explicitly selected.
+
+## Scope behavior
+
+The matrix must identify whether it uses:
+
+- all Constructed Swiss;
+- Day 1 Constructed only;
+- Day 2 Constructed only.
+
+For mixed events, the default may be all Constructed Swiss, but Day 1 and Day 2 scopes must remain available where data permits.
+
+## Acceptance criteria
+
+Phase 11 is complete when:
+
+- single-event and multi-event matrices reconcile from raw counts;
+- cross-format selection is impossible;
+- incompatible schema versions are rejected or migrated;
+- sample size is displayed;
+- low-sample warnings are displayed;
+- confidence intervals are generated where specified;
+- scope selection is visible;
+- overview metrics remain per-event rather than merged.
+
+---
+
+# Phase 12 — Whitelist operations and Melee automation
+
+## Objective
+
+Create a controlled workflow for adding and refreshing approved events.
+
+## Required operational commands
+
+Document and implement commands for:
+
+- whitelist validation;
+- event fetch;
+- event normalization;
+- data-quality reporting;
+- deck classification;
+- statistics generation;
+- schema validation;
+- event catalog generation.
+
+## Proposed workflow
+
+Create:
+
+- `.github/workflows/fetch_melee.yml`
+
+During initial operation, use manual dispatch rather than unrestricted automatic discovery.
+
+## Required workflow sequence
+
+The workflow should:
+
+1. validate the event ID against the whitelist;
+2. confirm that the event is enabled;
+3. fetch raw data;
+4. normalize event data;
+5. generate quality reports;
+6. classify decklists;
+7. generate per-event statistics;
+8. validate generated JSON;
+9. run tests;
+10. write a workflow summary;
+11. publish only through a reviewable change.
+
+## Workflow safety
+
+The workflow must have:
+
+- explicit permissions;
+- explicit concurrency;
+- event-specific logs;
+- failure before publication when quality checks fail;
+- protection against overwriting valid data with incomplete fetches.
+
+## Acceptance criteria
+
+Phase 12 is complete when:
+
+- unlisted events are rejected;
+- disabled events are rejected;
+- excluded event types cannot be enabled accidentally;
+- fetch failures do not overwrite valid existing data;
+- quality failures prevent publication;
+- permissions are least-privilege;
+- concurrency is explicit;
+- event addition is documented for non-programmers.
+
+---
+
+# Phase 13 — Modern
+
+## Objective
+
+Add Modern to both product tracks where approved data is available.
+
+## Required sequence
+
+1. Add Modern archetype rules.
+2. Add Modern rule fixtures.
+3. Validate Modern rule IDs and priorities.
+4. Run Modern MTGO classification.
+5. Generate Modern MTGO statistics.
+6. Validate Modern MTGO output.
+7. Register an approved Modern Melee event.
+8. Normalize and validate that event.
+9. Generate event-specific Modern statistics.
+10. Enable Modern in both front ends.
+
+## Acceptance criteria
+
+Phase 13 is complete when:
+
+- shared Modern archetype IDs are used by both sources;
+- MTGO and Melee data remain separate;
+- MTGO and Melee statistics remain separate;
+- Modern rules pass validation;
+- Standard and Pauper regression tests pass;
+- front-end format selection is catalog-driven;
+- quality reports are available.
+
+---
+
+# Phase 14 — Pioneer
+
+## Objective
+
+Add Pioneer using the established shared-classifier and dual-product process.
+
+## Required sequence
+
+1. Add Pioneer archetype rules.
+2. Add Pioneer fixtures.
+3. Validate rule IDs and priorities.
+4. Add Pioneer MTGO processing.
+5. Validate Pioneer MTGO statistics.
+6. Register an approved Pioneer Melee event.
+7. Normalize and validate the event.
+8. Generate event-specific Pioneer statistics.
+9. Enable Pioneer in both front ends.
+
+## Acceptance criteria
+
+Phase 14 is complete when:
+
+- Pioneer uses the generalized MTGO pipeline;
+- Pioneer uses the shared classifier;
+- MTGO and Melee remain separate;
+- no copied Standard-only pipeline is introduced;
+- rules, tests, schemas, and catalogs are updated;
+- prior-format regression tests pass.
+
+---
+
+# Phase 15 — Legacy
+
+## Objective
+
+Add Legacy using the established process, including approved Eternal Weekend Legacy main events.
+
+## Required sequence
+
+1. Add Legacy archetype rules.
+2. Add Legacy fixtures.
+3. Validate rule IDs and priorities.
+4. Add Legacy MTGO processing.
+5. Validate Legacy MTGO statistics.
+6. Register an Eternal Weekend Legacy main event.
+7. Normalize and validate the event.
+8. Generate event-specific Legacy statistics.
+9. Enable Legacy in both front ends.
+
+## Event restrictions
+
+Only approved Eternal Weekend main events may be included under this policy.
+
+Do not include:
+
+- side events;
+- trials;
+- qualifiers;
+- team events;
+- unrelated Legacy events not present in the whitelist.
+
+## Acceptance criteria
+
+Phase 15 is complete when:
+
+- only the approved main event is included;
+- side events remain excluded;
+- shared Legacy archetype IDs are stable;
+- MTGO and Melee remain separate;
+- prior-format regressions pass;
+- front-end catalogs are updated.
+
+---
+
+# Phase 16 — Standard tabletop events
+
+## Objective
+
+Enable qualifying Standard tabletop events after the Melee pipeline is stable.
+
+## Requirements
+
+Only Standard events matching the approved event policy may be added.
+
+Standard MTGO and Standard Melee must remain separate in:
+
+- raw data;
+- normalized data;
+- generated statistics;
+- catalogs;
+- front-end presentation.
+
+Qualifying mixed-format Standard events must use the mixed-event strategy.
+
+## Acceptance criteria
+
+Phase 16 is complete when:
+
+- Standard tabletop events use the shared Standard classifier;
+- no MTGO and Melee statistics are merged;
+- mixed-format rules are applied where required;
+- current Standard MTGO behavior remains compatible;
+- data quality and source metadata are visible.
+
+---
+
+# Phase 17 — Vintage decision gate
+
+## Objective
+
+Decide whether Vintage support should be implemented.
+
+## Required decision inputs
+
+Review:
+
+- available MTGO Vintage data;
+- Eternal Weekend Vintage data quality;
+- decklist completeness;
+- matchup completeness;
+- classification maintenance cost;
+- expected user value;
+- front-end impact;
+- automation impact;
+- long-term operational cost.
+
+## Possible outcomes
+
+The project owner may:
+
+1. approve Vintage and implement it using the established process;
+2. defer Vintage with a documented reason;
+3. reject Vintage from the current scope.
+
+## Acceptance criteria
+
+Phase 17 is complete when:
+
+- the decision is recorded in `docs/DECISIONS.md`;
+- `docs/PROJECT_SCOPE.md` is updated;
+- `docs/STATUS.yaml` is updated;
+- the roadmap is updated if implementation phases change;
+- Vintage is not enabled before the decision is recorded.
+
+---
+
+# Phase 18 — Cleanup, operations, and release
+
+## Objective
+
+Remove obsolete compatibility code only after replacements are verified, then document long-term maintenance and release procedures.
+
+## Required cleanup
+
+Review:
+
+- obsolete root-level scripts;
+- temporary compatibility wrappers;
+- duplicate workflows;
+- unused generated files;
+- Python cache files;
+- `.gitignore`;
+- old documentation;
+- obsolete public paths;
+- repository data volume.
+
+Do not delete a legacy entry point until:
+
+- its replacement is verified;
+- workflows use the replacement;
+- tests cover the replacement;
+- documentation uses the replacement;
+- rollback is possible.
+
+## Required operations documentation
+
+Document:
+
+- MTGO data refresh;
+- Melee event addition;
+- Melee event refresh;
+- whitelist maintenance;
+- classification-rule maintenance;
+- Unknown-deck review;
+- conflict resolution;
+- quality-report review;
+- schema migration;
+- GitHub Actions operation;
+- GitHub Pages deployment;
+- rollback;
+- release verification.
+
+## Acceptance criteria
+
+Phase 18 is complete when:
+
+- obsolete code is removed safely;
+- compatibility decisions are documented;
+- README reflects actual commands and paths;
+- operations can be performed from written instructions;
+- all tests pass;
+- all required schemas validate;
+- production pages work;
+- workflows use explicit permissions and concurrency;
+- a release tag is created;
+- `docs/STATUS.yaml` records the released state.
+
+---
+
+# Phase completion procedure
+
+At the end of every phase:
+
+1. Run all tests required by the phase.
+2. Run rule validation where applicable.
+3. Run schema validation where applicable.
+4. Verify that current production behavior is not unintentionally broken.
+5. Review Unknown and conflict reports.
+6. Review data-quality reports.
+7. Update `docs/STATUS.yaml`.
+8. Update `docs/ROADMAP.md` if phase status or order changed.
+9. Add a record to `docs/DECISIONS.md` when a scope or statistical decision changed.
+10. Update schemas when data structures changed.
+11. Update tests when statistical behavior changed.
+12. Update README when commands or operations changed.
+13. Review the Git diff.
+14. Commit with a focused commit message.
+15. Push the branch.
+16. Open or update a Pull Request.
+17. Wait for review and user confirmation before beginning the next phase.
+
+---
+
+# Change-control rules
+
+Changes to the following require explicit project-owner confirmation:
+
+- merging MTGO and Melee statistics;
+- adding an event category outside the whitelist policy;
+- enabling automatic Melee-wide event discovery;
+- including team events;
+- including pure Limited events;
+- changing intentional-draw handling;
+- changing bye handling;
+- treating awarded wins as played wins;
+- including Draft results in Constructed statistics;
+- using playoffs as the primary performance sample;
+- changing the approved format-development order;
+- introducing a mandatory front-end framework or build system;
+- breaking existing public JSON paths;
+- removing legacy entry points before replacement verification;
+- enabling Vintage before the Vintage decision gate.
+
+When such a decision is approved:
+
+- update `docs/DECISIONS.md`;
+- update the relevant specification;
+- update tests;
+- update schemas if needed;
+- update `docs/STATUS.yaml`.
+
+---
+
+# Current approved next action
+
+The project remains in:
+
+**Phase 0 — Authoritative documentation**
+
+The next work is to complete and review the remaining authoritative documents.
+
+Do not begin:
+
+- engineering refactoring;
+- shared-classifier implementation;
+- MTGO Pauper implementation;
+- Melee fetching;
+- Paupergeddon statistics;
+- production `index.html` splitting;
+- new GitHub Actions behavior.
+
+Those tasks begin only after Phase 0 is complete and approved.
