@@ -11,8 +11,11 @@ Before suggesting repository-wide changes, read:
 5. `docs/ROADMAP.md`
 6. `docs/DECISIONS.md`
 7. `docs/STATUS.yaml`
+8. `docs/DEVELOPMENT_WORKFLOW.md`
 
 Use `docs/STATUS.yaml` to determine the current phase and next approved task.
+
+Use `docs/DEVELOPMENT_WORKFLOW.md` for workspace isolation and approval boundaries. A planned task that requires confirmation is not authorized merely because it appears in `docs/STATUS.yaml`.
 
 Do not treat `PROJECT_NOTES.md` as the current specification. It is historical context.
 

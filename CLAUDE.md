@@ -11,10 +11,13 @@ Before analyzing, planning, editing, or generating code for this repository, rea
 5. `docs/ROADMAP.md`
 6. `docs/DECISIONS.md`
 7. `docs/STATUS.yaml`
+8. `docs/DEVELOPMENT_WORKFLOW.md`
 
 These documents define the authoritative project scope, statistics, architecture, development order, confirmed decisions, and current progress.
 
 Do not use this file as a replacement for those documents.
+
+`docs/DEVELOPMENT_WORKFLOW.md` defines isolation, approval, publication, and stop rules. `docs/STATUS.yaml` controls project pause and task authorization.
 
 ---
 

@@ -978,3 +978,25 @@ When adding a decision:
 Do not delete old decisions merely because they are no longer active.
 
 Mark them `Superseded` and link them to the replacement decision.
+
+---
+
+# DEC-028 — Use disposable isolated workspaces for agent development
+
+Status: `Accepted`
+
+## Context
+
+Broad permissions, credential exposure, protected-repository writes, and per-command human technical approval each create avoidable security, integrity, and operational risks.
+
+## Decision
+
+Use independent, disposable clones for agent development. Permit sandboxed ordinary-file writes and use Auto-review only for narrow local Git metadata operations in the isolated task workspace. Deny network access by default.
+
+Require owner confirmation for external or irreversible operations. Full access, automatic push, automatic PR creation, automatic merge, direct development on `master`, and credential access are prohibited. Task authorization ends at the task stop point and does not authorize later tasks.
+
+The operational requirements are defined in `docs/DEVELOPMENT_WORKFLOW.md`.
+
+## Consequences
+
+This decision does not alter product scope, statistics, architecture, public paths, schemas, or production behavior.
