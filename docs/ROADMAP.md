@@ -24,15 +24,19 @@ Current implementation progress belongs in `docs/STATUS.yaml`.
 
 ## Roadmap status
 
-Current phase:
+The current implementation phase and the next approved action are tracked in `docs/STATUS.yaml`.
 
-**Phase 0 — Authoritative documentation**
+Before starting work, read `docs/STATUS.yaml` and confirm:
 
-Current objective:
+- the current phase;
+- the current working branch;
+- the next approved task;
+- known blockers;
+- prohibited next actions.
 
-Create a complete and internally consistent documentation set before changing the production pipeline, statistics, automation, or front end.
+This roadmap defines the approved phase order, objectives, dependencies, and acceptance criteria. It does not hard-code the live project phase.
 
-Do not begin the main refactor, Melee ingestion, Pauper implementation, or production front-end split until Phase 0 is reviewed and approved.
+If a historical phase-status statement elsewhere in the repository conflicts with `docs/STATUS.yaml`, use `docs/STATUS.yaml` for current progress while continuing to use this roadmap for development order and phase acceptance criteria.
 
 ---
 
@@ -1470,20 +1474,14 @@ When such a decision is approved:
 
 # Current approved next action
 
-The project remains in:
+The current approved task is defined in `docs/STATUS.yaml`.
 
-**Phase 0 — Authoritative documentation**
+Before beginning work:
 
-The next work is to complete and review the remaining authoritative documents.
+1. confirm `current_phase`;
+2. confirm `next_approved_task`;
+3. confirm the current working branch;
+4. review `prohibited_next_actions`;
+5. stop and request project-owner confirmation if the requested work does not match the recorded next task.
 
-Do not begin:
-
-- engineering refactoring;
-- shared-classifier implementation;
-- MTGO Pauper implementation;
-- Melee fetching;
-- Paupergeddon statistics;
-- production `index.html` splitting;
-- new GitHub Actions behavior.
-
-Those tasks begin only after Phase 0 is complete and approved.
+Do not infer the current task from examples, historical notes, completed pull requests, or the static phase descriptions in this roadmap.
