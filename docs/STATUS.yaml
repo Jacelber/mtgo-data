@@ -261,7 +261,7 @@ engineering_quality:
   notice:
     status: "planned_phase_1"
   dependency_lists:
-    status: "planned_phase_1"
+    status: "completed_phase_1"
   pytest:
     status: "planned_phase_1"
   rule_validation:
@@ -301,6 +301,44 @@ phase_1_tasks:
       production_pipeline_executed: false
       final_fixtures_selected: false
 
+  - id: "P1-02"
+    name: "Establish reproducible Python dependency manifests"
+    status: "completed"
+    completed_on: "2026-07-17"
+    validated_branch: "phase1/engineering-foundation"
+    validated_base_commit: "57e43a89533c107f275a1e78e6552bd0ab09763d"
+    production_change: false
+    output:
+      - "requirements.txt"
+      - "requirements-dev.txt"
+    validation:
+      python_version_exercised: "3.12.7"
+      python_3_11_install_exercised: false
+      isolated_runtime_install_passed: true
+      isolated_development_install_passed: true
+      runtime_pip_check_passed: true
+      development_pip_check_passed: true
+      runtime_import_check_passed: true
+      pytest_import_check_passed: true
+      temporary_environment_removed: true
+    hashes:
+      requirements_txt:
+        git_blob: "4152231a721199b7969b2c88614b95093ed15614"
+        sha256: "AB65DE8D1D2002EAE19B2D5573CC5513D543EEA470232450340C1ED9DF6D6D1E"
+      requirements_dev_txt:
+        git_blob: "99ef46dfc9fe38de4037886e3c3d833da833334b"
+        sha256: "F9D77A0F7F91728103AE9F25243655D5A6C87E81EA0467A9BC7018AADBCC5242"
+    acceptance:
+      runtime_manifest_created: true
+      development_manifest_created: true
+      direct_dependencies_pinned: true
+      transitive_dependencies_pinned: true
+      isolated_install_validation_passed: true
+      production_behavior_changed: false
+    limitations:
+      - "Python 3.11 compatibility was not exercised by a local installation."
+      - "Package versions are pinned, but distribution artifact hashes are not included."
+
 known_blockers: []
 
 open_decisions:
@@ -326,11 +364,10 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P1-02"
-  name: "Establish reproducible Python dependency manifests"
+  id: "P1-03"
+  name: "Add a read-only repository validation command"
   target_paths:
-    - "requirements.txt"
-    - "requirements-dev.txt"
+    - "validate_repository.py"
   production_change: false
   requires_user_confirmation: true
 
