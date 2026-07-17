@@ -262,6 +262,8 @@ engineering_quality:
     status: "planned_phase_1"
   dependency_lists:
     status: "completed_phase_1"
+  repository_validation:
+    status: "completed_phase_1"
   pytest:
     status: "planned_phase_1"
   rule_validation:
@@ -339,6 +341,46 @@ phase_1_tasks:
       - "Python 3.11 compatibility was not exercised by a local installation."
       - "Package versions are pinned, but distribution artifact hashes are not included."
 
+  - id: "P1-03"
+    name: "Add a read-only repository validation command"
+    status: "completed"
+    completed_on: "2026-07-17"
+    validated_branch: "phase1/engineering-foundation"
+    validated_base_commit: "09fb04a6493181f2ad106b2eb00f10dcc847a7b8"
+    production_change: false
+    output:
+      - "validate_repository.py"
+    validation:
+      python_version_exercised: "3.12.7"
+      root_execution_passed: true
+      non_root_execution_passed: true
+      help_exit_code: 0
+      unsupported_argument_exit_code: 2
+      python_checked: 15
+      json_checked: 738
+      yaml_checked: 6
+      references_checked: 29
+      normal_result: "PASS"
+      normal_exit_code: 0
+      unsafe_reference_regressions_passed: true
+      infrastructure_error_separation_passed: true
+      no_network_access: true
+      no_repository_writes: true
+      bytecode_creation_disabled: true
+    hashes:
+      validate_repository_py:
+        git_blob: "dcfca6b69e07588267628abdc27d4b7f3769eb75"
+        sha256: "78B38C57EF5980C2D527FC5929EEBBB1A1364C73C7652D9E3E17EA3F3CD0CDFB"
+    acceptance:
+      read_only_inventory_passed: true
+      python_syntax_validation_passed: true
+      json_syntax_validation_passed: true
+      yaml_syntax_validation_passed: true
+      repository_reference_validation_passed: true
+      deterministic_reporting_passed: true
+      content_and_infrastructure_failures_separated: true
+      production_behavior_changed: false
+
 known_blockers: []
 
 open_decisions:
@@ -364,10 +406,11 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P1-03"
-  name: "Add a read-only repository validation command"
+  id: "P1-04"
+  name: "Add pytest configuration and tests for the repository validation command"
   target_paths:
-    - "validate_repository.py"
+    - "pytest.ini"
+    - "tests/"
   production_change: false
   requires_user_confirmation: true
 
