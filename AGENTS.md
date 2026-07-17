@@ -311,19 +311,18 @@ A code change that alters statistics without updating the relevant specification
 
 ---
 
-## Current phase
+## Current phase source of truth
 
-The current phase is:
+The current implementation phase is not hard-coded in this file.
 
-**Phase 0 — Specification and authoritative documentation**
+Before starting or proposing any task, read `docs/STATUS.yaml` and confirm:
 
-During this phase:
+- `current_phase`;
+- `next_approved_task`;
+- active blockers, if any;
+- `prohibited_next_actions`;
+- the current working branch.
 
-- create the authoritative documentation set;
-- resolve contradictions in historical notes;
-- record confirmed product and statistical decisions;
-- do not begin the main MTGO refactor;
-- do not begin Melee scraping implementation;
-- do not split the production front end yet.
+`AGENTS.md` defines stable repository-wide operating rules. `docs/STATUS.yaml` is authoritative for current phase, task completion state, known blockers, and the next approved action.
 
-The next phase may begin only after the documentation set is reviewed and committed.
+Do not begin a later phase or an unapproved task unless the project owner explicitly approves the change and the project status is updated.
