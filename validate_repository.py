@@ -130,7 +130,7 @@ def tracked_regular(root: Path, names: set[str], name: str, suffix: str | None =
 def safe_declared_reference(value: Any) -> bool:
     if not isinstance(value, str) or not value or "\\" in value:
         return False
-    if Path(value).is_absolute() or ntpath.splitdrive(value)[0] or value.startswith("//"):
+    if Path(value).is_absolute() or ntpath.splitdrive(value)[0] or value.startswith("/"):
         return False
     return ".." not in Path(value).parts
 

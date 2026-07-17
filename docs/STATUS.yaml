@@ -265,7 +265,19 @@ engineering_quality:
   repository_validation:
     status: "completed_phase_1"
   pytest:
-    status: "planned_phase_1"
+    status: "completed_phase_1"
+    configuration: "pytest.ini"
+    tests_directory: "tests/"
+    test_module: "tests/test_validate_repository.py"
+    pytest_version_exercised: "9.1.1"
+    tests_collected: 38
+    tests_passed: 38
+    tests_failed: 0
+    tests_skipped: 0
+    warnings: 0
+    root_execution_passed: true
+    non_root_execution_passed: true
+    cache_provider_disabled: true
   rule_validation:
     status: "planned_phase_1"
   classification_conflict_reports:
@@ -337,6 +349,77 @@ phase_1_tasks:
       transitive_dependencies_pinned: true
       isolated_install_validation_passed: true
       production_behavior_changed: false
+
+  - id: "P1-04"
+    name: "Add pytest configuration and tests for the repository validation command"
+    status: "completed"
+    completed_on: "2026-07-17"
+    validated_branch: "phase1/engineering-foundation"
+    validated_base_commit: "7afd47a89f7d25ef14ca697f98a92e88f0b40251"
+    production_change: true
+    scope_note: "Cross-platform rejection of POSIX absolute authoritative-document paths in the read-only repository validator."
+    behavior_unchanged:
+      statistical_formulas: true
+      generated_data: true
+      public_json_paths: true
+      front_end_behavior: true
+      production_data_generation: true
+    output:
+      - "validate_repository.py"
+      - "pytest.ini"
+      - "tests/test_validate_repository.py"
+    validation:
+      python_version_exercised: "3.12.7"
+      pytest_version_exercised: "9.1.1"
+      tests_collected: 38
+      tests_passed: 38
+      tests_failed: 0
+      tests_skipped: 0
+      warnings: 0
+      collection_exit_code: 0
+      focused_exit_code: 0
+      full_suite_exit_code: 0
+      non_root_exit_code: 0
+      root_execution_passed: true
+      non_root_execution_passed: true
+      validator_python_checked_before_staging: 15
+      validator_json_checked: 738
+      validator_yaml_checked: 6
+      validator_references_checked: 29
+      validator_result: "PASS"
+      validator_exit_code: 0
+      help_exit_code: 0
+      unsupported_argument_exit_code: 2
+    hashes:
+      validate_repository_py:
+        git_blob: "fbdf352f9b9a97575d60ee57bd06824a57806baf"
+        sha256: "72A5D00FB65B5046CEA03C5C02923DE8DC53B9029B1EC57311EF904E251FD620"
+      pytest_ini:
+        git_blob: "751b1abada1ee9b41b5ea3a2b132c5aa7c0797b5"
+        sha256: "B9FEF7A6663381BAD0AB6022D6BEAC0746C948B76A9A606531E0C5F327400731"
+      tests_test_validate_repository_py:
+        git_blob: "b9533ddc57b233a2fc608af7eecd92e9e73f3de5"
+        sha256: "680620A1F6B48C777963D1CAC2F7A652D6ABF6ED7FCA60724C0E79545A0662BC"
+    acceptance:
+      pytest_configuration_added: true
+      repository_validation_tests_added: true
+      content_failure_handling_tested: true
+      infrastructure_failure_handling_tested: true
+      cli_exit_codes_tested: true
+      path_safety_tested: true
+      posix_absolute_path_rejected_cross_platform: true
+      front_end_template_references_tested: true
+      standard_reference_set_tested: true
+      non_regular_file_handling_tested: true
+      deterministic_reporting_tested: true
+      root_and_non_root_execution_passed: true
+      no_test_cache_created: true
+      no_new_bytecode_created: true
+      statistical_behavior_changed: false
+      generated_data_changed: false
+      public_json_paths_changed: false
+      front_end_behavior_changed: false
+      production_data_generation_changed: false
     limitations:
       - "Python 3.11 compatibility was not exercised by a local installation."
       - "Package versions are pinned, but distribution artifact hashes are not included."
@@ -406,11 +489,9 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P1-04"
-  name: "Add pytest configuration and tests for the repository validation command"
-  target_paths:
-    - "pytest.ini"
-    - "tests/"
+  id: "P1-05"
+  name: "Add a repository rule-validation command and tests"
+  target_paths: []
   production_change: false
   requires_user_confirmation: true
 
