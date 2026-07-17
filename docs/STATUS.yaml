@@ -11,7 +11,7 @@ project:
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-16"
+  last_updated: "2026-07-17"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -279,6 +279,28 @@ engineering_quality:
   index_html_split:
     status: "planned_phase_4"
 
+phase_1_tasks:
+  - id: "P1-01"
+    name: "Audit repository and capture Standard baseline inventory"
+    status: "completed"
+    completed_on: "2026-07-17"
+    audited_branch: "phase1/engineering-foundation"
+    audited_commit: "f87c4de45e3841bf74322428750af99458cf2605"
+    production_change: false
+    execution_mode: "read_only"
+    output:
+      - "docs/audits/P1-01.md"
+    acceptance:
+      repository_inventory_recorded: true
+      production_entry_points_recorded: true
+      workflow_responsibilities_recorded: true
+      public_standard_paths_recorded: true
+      static_json_validation_passed: true
+      static_yaml_validation_passed: true
+      static_python_ast_validation_passed: true
+      production_pipeline_executed: false
+      final_fixtures_selected: false
+
 known_blockers: []
 
 open_decisions:
@@ -304,9 +326,11 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P1-01"
-  name: "Audit repository and capture Standard baseline inventory"
-  target_path: "existing repository and Standard pipeline"
+  id: "P1-02"
+  name: "Establish reproducible Python dependency manifests"
+  target_paths:
+    - "requirements.txt"
+    - "requirements-dev.txt"
   production_change: false
   requires_user_confirmation: true
 
