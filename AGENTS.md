@@ -21,6 +21,7 @@ Read the following files in this order:
 5. `docs/ROADMAP.md`
 6. `docs/DECISIONS.md`
 7. `docs/STATUS.yaml`
+8. `docs/DEVELOPMENT_WORKFLOW.md`
 
 Additional instructions:
 
@@ -29,6 +30,11 @@ Additional instructions:
 - If documents conflict, use the document appearing earlier in the list above.
 - If a current user instruction conflicts with the established project scope, stop and request explicit confirmation before changing the scope.
 - Do not silently redefine statistical metrics.
+- `docs/DEVELOPMENT_WORKFLOW.md` is the authoritative operational workflow for workspace isolation, approvals, publication, and stop conditions.
+- Use a disposable isolated development workspace unless another environment is explicitly approved.
+- Narrow local Git metadata operations may use Auto-review in the isolated workspace.
+- Network, credentials, push, PR creation, merge, and protected-branch changes require separate owner authorization.
+- Full access is prohibited. Authorization ends at the task stop point and does not carry over to another task.
 
 Some documents in the list may be added progressively during Phase 0. Until Phase 0 is complete, do not begin feature refactoring unless explicitly instructed.
 
