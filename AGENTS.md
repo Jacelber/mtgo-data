@@ -33,8 +33,8 @@ Additional instructions:
 - `docs/DEVELOPMENT_WORKFLOW.md` is the authoritative operational workflow for workspace isolation, approvals, publication, and stop conditions.
 - Use a disposable isolated development workspace unless another environment is explicitly approved.
 - Narrow local Git metadata operations may use Auto-review in the isolated workspace.
-- Network, credentials, push, PR creation, merge, and protected-branch changes require separate owner authorization.
-- Full access is prohibited. Authorization ends at the task stop point and does not carry over to another task.
+- Anonymous read-only access to the approved repository or necessary public documentation may be used for an approved focused task. Credentialed access, uploads, remote writes, unrelated network access, push, PR creation, merge, and protected-branch changes require separate owner authorization.
+- Full access is prohibited. A stop point pauses execution pending a continuation instruction; a compliant pause does not by itself terminate delegated local authority for the same approved focused task. Authorization does not carry over to another task or phase, and remote publication remains separately controlled.
 
 Some documents in the list may be added progressively during Phase 0. Until Phase 0 is complete, do not begin feature refactoring unless explicitly instructed.
 

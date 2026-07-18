@@ -19,6 +19,8 @@ Do not use this file as a replacement for those documents.
 
 `docs/DEVELOPMENT_WORKFLOW.md` defines isolation, approval, publication, and stop rules. `docs/STATUS.yaml` controls project pause and task authorization.
 
+After a focused task is approved, use its delegated local execution authority for harmless local-only work reasonably needed to finish it; listed paths are expected deliverables unless explicitly protected. Do not request repeated approval for that work. Stop for credentials, protected resources, remote writes, new tasks or phases, and unresolved product or statistical decisions.
+
 ---
 
 ## Historical information
