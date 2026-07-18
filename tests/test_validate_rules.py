@@ -97,11 +97,25 @@ def test_three_copy_count_conditions_fail():
 
 def test_production_bytes_and_repository_status_are_unchanged():
     production = Path("my_archetypes/standard.yaml")
-    before = production.read_bytes()
+    production_before = production.read_bytes()
+    status_before_result = subprocess.run(
+        ["git", "status", "--porcelain=v1", "--untracked-files=all"],
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    status_before = status_before_result.stdout
+
     assert rules.main([]) == 0
-    assert production.read_bytes() == before
-    status = subprocess.run(["git", "status", "--porcelain"], text=True, capture_output=True).stdout.splitlines()
-    assert all(line.endswith("tests/test_validate_rules.py") for line in status)
+    assert production.read_bytes() == production_before
+
+    status_after_result = subprocess.run(
+        ["git", "status", "--porcelain=v1", "--untracked-files=all"],
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    assert status_after_result.stdout == status_before
 
 
 def test_explicit_valid_path_and_legacy_order_are_preserved(tmp_path):
