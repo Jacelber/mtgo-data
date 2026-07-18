@@ -985,6 +985,8 @@ Mark them `Superseded` and link them to the replacement decision.
 
 Status: `Accepted`
 
+Operational restrictions in this decision are partially superseded by DEC-029. Its isolation, credential, protected-source, direct-`master`, and no-automatic-publication requirements remain accepted.
+
 ## Context
 
 Broad permissions, credential exposure, protected-repository writes, and per-command human technical approval each create avoidable security, integrity, and operational risks.
@@ -1000,3 +1002,25 @@ The operational requirements are defined in `docs/DEVELOPMENT_WORKFLOW.md`.
 ## Consequences
 
 This decision does not alter product scope, statistics, architecture, public paths, schemas, or production behavior.
+
+---
+
+# DEC-029 — Delegate local execution within approved focused tasks
+
+Status: `Accepted`
+
+## Context
+
+Requiring repeated Owner approval for harmless local-only operations can prevent an already approved focused task from being completed efficiently, while remote publication and product decisions still require direct Owner control.
+
+## Decision
+
+Adopt a two-gate authorization model. An approved focused task grants delegated local execution authority inside its disposable isolated workspace for reasonably necessary implementation, investigation, testing, test repair, fixture generation, temporary experimentation, and local Git operations. This authority does not carry over to another task or phase.
+
+Remote publication and every remote mutation require separate Owner authorization. Product and statistical decisions remain Owner-controlled. Disposable-workspace isolation, credential restrictions, no direct development on `master`, and no automatic publication remain mandatory. `docs/DEVELOPMENT_WORKFLOW.md` is the detailed operational authority.
+
+This decision partially supersedes only the restrictive operational portions of DEC-028.
+
+## Consequences
+
+Task contracts must distinguish delegated local execution from remote-publication authority and preserve explicit protected-path and stop conditions. Harmless local task operations do not require repeated Owner authorization. This decision does not alter product scope, statistics, architecture, public paths, schemas, or production behavior.

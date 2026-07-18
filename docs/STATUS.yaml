@@ -543,6 +543,28 @@ governance_baseline:
   merged_on: "2026-07-18"
   note: "The governance baseline is active on master. No standing authorization exists for further remote operations or product development."
 
+delegated_local_execution_governance:
+  owner_decision: "approved"
+  task_id: "GOV-02-DELEGATED-LOCAL-EXECUTION-AUTHORITY-20260718"
+  activation_rule: "The policy is authoritative when the GOV-02 commits are present on master."
+  delegated_local_execution: "Approved for focused tasks within their isolated disposable workspaces."
+  remote_publication:
+    standing_authorization: false
+    requires_separate_owner_authorization: true
+  credentials:
+    standing_authorization: false
+    requires_separate_owner_authorization: true
+  p1_06:
+    status: "paused"
+    resume_requires:
+      - "GOV-02 governance commits are present on master."
+      - "The project owner explicitly authorizes P1-06 continuation."
+  p1_07:
+    status: "unauthorized"
+  phase_2:
+    status: "unauthorized"
+  completes_p1_06: false
+
 prohibited_next_actions:
   - "Do not begin the shared-classifier refactor."
   - "Do not generalize the MTGO pipeline yet."

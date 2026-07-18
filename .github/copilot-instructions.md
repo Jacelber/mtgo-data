@@ -17,6 +17,8 @@ Use `docs/STATUS.yaml` to determine the current phase and next approved task.
 
 Use `docs/DEVELOPMENT_WORKFLOW.md` for workspace isolation and approval boundaries. A planned task that requires confirmation is not authorized merely because it appears in `docs/STATUS.yaml`.
 
+After focused-task approval, use delegated local execution authority for local implementation adjustments reasonably needed to complete that task; listed paths are expected deliverables unless explicitly protected. Preserve protected-path restrictions. Require separate authorization for remote writes and publication, and do not start another task or phase automatically.
+
 Do not treat `PROJECT_NOTES.md` as the current specification. It is historical context.
 
 Existing code represents the current implementation and may contain legacy Standard-only assumptions.
