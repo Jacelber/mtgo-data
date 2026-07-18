@@ -500,12 +500,16 @@ next_approved_task:
   planning_status: "next_candidate_after_owner_confirmation"
 
 governance_baseline:
-  status: "established_locally_pending_owner_acceptance"
+  status: "active_on_master"
   project_pause: "owner_controlled"
   product_development_authorized: false
   task_authorization_carries_over: false
   remote_publication_authorized: false
-  note: "This governance baseline does not claim push, PR, merge, or remote acceptance."
+  owner_acceptance: "accepted"
+  pull_request: 8
+  merge_commit: "46b3c7883ca124f55bed4f43c9a51c2bae70675e"
+  merged_on: "2026-07-18"
+  note: "The governance baseline is active on master. No standing authorization exists for further remote operations or product development."
 
 prohibited_next_actions:
   - "Do not begin the shared-classifier refactor."
