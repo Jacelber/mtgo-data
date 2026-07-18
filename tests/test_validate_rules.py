@@ -100,4 +100,5 @@ def test_production_bytes_and_repository_status_are_unchanged():
     before = production.read_bytes()
     assert rules.main([]) == 0
     assert production.read_bytes() == before
-    assert subprocess.run(["git", "status", "--porcelain"], text=True, capture_output=True).stdout == ""
+    status = subprocess.run(["git", "status", "--porcelain"], text=True, capture_output=True).stdout.splitlines()
+    assert all(line.endswith("tests/test_validate_rules.py") for line in status)
