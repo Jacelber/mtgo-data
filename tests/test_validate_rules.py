@@ -102,3 +102,13 @@ def test_production_bytes_and_repository_status_are_unchanged():
     assert production.read_bytes() == before
     status = subprocess.run(["git", "status", "--porcelain"], text=True, capture_output=True).stdout.splitlines()
     assert all(line.endswith("tests/test_validate_rules.py") for line in status)
+
+
+def test_explicit_valid_path_and_legacy_order_are_preserved(tmp_path):
+    path = tmp_path / "valid.yaml"
+    ordered = VALID + "  - name: Second\n    signatureCards:\n      - name: Other\n"
+    path.write_text(ordered, encoding="utf-8")
+    result = subprocess.run([sys.executable, "-B", "validate_rules.py", str(path)], text=True, capture_output=True)
+    assert result.returncode == 0 and "PASS" in result.stdout
+    data = __import__("yaml").safe_load(ordered)
+    assert [entry["name"] for entry in data["archetypes"]] == ["A", "Second"]
