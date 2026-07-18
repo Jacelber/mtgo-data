@@ -1,15 +1,23 @@
 """Focused regression tests for the unchanged legacy Standard classifier."""
 
 import json
+import sys
 from pathlib import Path
 
 import yaml
 
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+repository_root_text = str(REPOSITORY_ROOT)
+if repository_root_text not in sys.path:
+    sys.path.insert(0, repository_root_text)
+
 from classify_standard import CARD_ALIASES, count_card, deck_to_counts, match_archetype, signature_card_met
 
+ROOT = REPOSITORY_ROOT
+FIXTURE = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
 
 def rules():
-    return yaml.safe_load(Path("my_archetypes/standard.yaml").read_text(encoding="utf-8"))["archetypes"]
+    return yaml.safe_load((ROOT / "my_archetypes" / "standard.yaml").read_text(encoding="utf-8"))["archetypes"]
 
 
 def all_legacy_matches(main, side):
@@ -17,7 +25,9 @@ def all_legacy_matches(main, side):
 
 
 def player(source, index):
-    return json.loads(Path("data/standard", source).read_text(encoding="utf-8"))["players"][index]
+    records = json.loads(FIXTURE.read_text(encoding="utf-8"))["records"]
+    record = next(item for item in records if item["source"] == source and item["index"] == index)
+    return {"main_deck": [{"name": name, "qty": qty} for name, qty in record["main"]], "sideboard": [{"name": name, "qty": qty} for name, qty in record["side"]]}
 
 
 def test_representative_legacy_results_cover_rule_order_and_unknown():

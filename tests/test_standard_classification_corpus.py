@@ -2,14 +2,21 @@
 
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 import yaml
 
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+repository_root_text = str(REPOSITORY_ROOT)
+if repository_root_text not in sys.path:
+    sys.path.insert(0, repository_root_text)
+
 from classify_standard import match_archetype
 
 
-FIXTURE = Path(__file__).resolve().parent / "fixtures" / "standard" / "frozen_legacy_corpus.json"
+ROOT = REPOSITORY_ROOT
+FIXTURE = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
 EXPECTED_DIGEST = "af1b6af542c7185ba507994e8f666c89272dc67e00318fc9399b0a1c3623fe0b"
 
 
@@ -18,7 +25,7 @@ def load_records():
 
 
 def legacy_rules():
-    return yaml.safe_load(Path("my_archetypes/standard.yaml").read_text(encoding="utf-8"))["archetypes"]
+    return yaml.safe_load((ROOT / "my_archetypes" / "standard.yaml").read_text(encoding="utf-8"))["archetypes"]
 
 
 def digest(records):
