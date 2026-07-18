@@ -281,7 +281,13 @@ engineering_quality:
     non_root_execution_passed: true
     cache_provider_disabled: true
   rule_validation:
-    status: "planned_phase_1"
+    status: "completed_phase_1"
+    command: "validate_rules.py"
+    tests: "tests/test_validate_rules.py"
+    pull_request: 10
+    merge_commit: "9711ff5500f034309ee3bafab2e62751478e6248"
+    source_branch: "codex/p1-05-rule-validation"
+    source_branch_retained: true
   classification_conflict_reports:
     status: "planned_phase_2"
   json_schemas:
@@ -466,6 +472,32 @@ phase_1_tasks:
       content_and_infrastructure_failures_separated: true
       production_behavior_changed: false
 
+  - id: "P1-05"
+    name: "Add a repository rule-validation command and tests"
+    status: "completed"
+    completed_on: "2026-07-18"
+    source_branch: "codex/p1-05-rule-validation"
+    source_branch_head: "e323a51627f20f40698e1cb8a59c40f3534be04b"
+    pull_request: 10
+    merge_commit: "9711ff5500f034309ee3bafab2e62751478e6248"
+    master_commit: "9711ff5500f034309ee3bafab2e62751478e6248"
+    source_branch_retained: true
+    production_change: false
+    output:
+      - "validate_rules.py"
+      - "tests/test_validate_rules.py"
+    validation:
+      focused_tests_passed: 23
+      full_suite_tests_passed: 61
+      validator_result: "PASS"
+      validator_exit_code: 0
+    acceptance:
+      rule_validation_command_added: true
+      duplicate_yaml_keys_rejected: true
+      legacy_classification_behavior_unchanged: true
+      production_rule_file_unchanged: true
+      merged_to_master: true
+
 known_blockers: []
 
 open_decisions:
@@ -491,13 +523,13 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P1-05"
-  name: "Add a repository rule-validation command and tests"
+  id: null
+  name: "No next task authorized"
   target_paths: []
   production_change: false
   requires_user_confirmation: true
   authorization_status: "not_authorized"
-  planning_status: "next_candidate_after_owner_confirmation"
+  planning_status: "owner_decision_required_after_p1_05"
 
 governance_baseline:
   status: "active_on_master"
@@ -522,7 +554,7 @@ prohibited_next_actions:
   - "Do not delete or disable existing workflows before their responsibilities are audited."
   - "Do not change public Standard output without regression protection."
   - "Do not commit directly to master."
-  - "Do not begin P1-05 without explicit owner authorization."
+  - "Do not begin a follow-up task without explicit owner authorization."
 
 phase_0_completion_requirements:
   - "All authoritative documents exist."
