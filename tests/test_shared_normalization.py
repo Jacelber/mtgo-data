@@ -6,9 +6,6 @@ import json
 import sys
 from pathlib import Path
 
-import yaml
-
-
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
 if str(SRC) not in sys.path:
@@ -16,7 +13,7 @@ if str(SRC) not in sys.path:
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from classify_standard import match_archetype
+from classify_standard import load_rules, match_archetype
 from mtgmeta.card_names import CARD_ALIASES, normalize_card_name
 from mtgmeta.deck import count_card, deck_to_counts
 
@@ -82,7 +79,7 @@ def test_deck_normalization_merges_aliases_duplicates_and_zones_without_mutation
 
 def test_full_om1_mapping_improves_normalization_without_changing_3936_parent_results():
     records = json.loads(CORPUS_PATH.read_text(encoding="utf-8"))["records"]
-    rules = yaml.safe_load(RULE_PATH.read_text(encoding="utf-8"))["archetypes"]
+    rules = load_rules()
     changed_decks = 0
     changed_alias_names = set()
     parent_differences = []

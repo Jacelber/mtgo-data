@@ -7,17 +7,17 @@ import json
 import re
 import sys
 from collections import Counter, defaultdict
+from dataclasses import replace
 from pathlib import Path
-
-import yaml
-
 
 ROOT = Path(__file__).resolve().parents[1]
 root_text = str(ROOT)
 if root_text not in sys.path:
     sys.path.insert(0, root_text)
 
-from classify_standard import deck_to_counts, signature_card_met
+from classify_standard import deck_to_counts, load_rules as load_production_rules, signature_card_met
+from mtgmeta.config import load_rule_set
+from mtgmeta.legacy_rules import to_legacy_archetypes
 
 
 CONTRACT_PATH = ROOT / "tests" / "fixtures" / "standard" / "rule_migration_contract.json"
@@ -32,7 +32,7 @@ def load_contract():
 
 
 def load_rules():
-    return yaml.safe_load(RULE_PATH.read_text(encoding="utf-8"))["archetypes"]
+    return load_production_rules()
 
 
 def canonical_digest(value):
@@ -58,14 +58,17 @@ def matched_rule_indexes(record, legacy_rules):
     ]
 
 
-def test_contract_identity_and_phase_1_inputs_are_frozen():
+def test_contract_identity_and_phase_1_baseline_remains_frozen_after_migration():
     contract = load_contract()
     baseline = contract["legacy_baseline"]
     assert contract["schema_version"] == "1.0.0"
     assert contract["format"] == "standard"
     assert baseline["tag"] == "phase-1-standard-baseline"
     assert baseline["commit"] == "baf71f4522447b85e30c8c9cb37455e034d27259"
-    assert normalized_text_sha256(RULE_PATH) == baseline["production_rule_content_sha256"]
+    production = load_rule_set(RULE_PATH)
+    assert production.schema_version == "1.0.0"
+    assert production.format == "standard"
+    assert normalized_text_sha256(RULE_PATH) != baseline["production_rule_content_sha256"]
     assert baseline["legacy_classifier_content_sha256"] == "a69753e60a493ec7775112fa9c378d48dec06fef9cb2b99d737b6353398e437d"
     assert normalized_text_sha256(CORPUS_PATH) == baseline["frozen_corpus_content_sha256"]
 
@@ -84,6 +87,52 @@ def test_all_legacy_rules_have_one_stable_complete_mapping():
         assert mapping["legacy_display_name"] == legacy["name"]
         assert mapping["priority"] == (76 - index) * 10
         assert mapping["legacy_signature_sha256"] == canonical_digest(legacy["signatureCards"])
+
+
+def test_versioned_production_rules_implement_every_frozen_identity_and_priority():
+    contract = load_contract()
+    rule_set = load_rule_set(RULE_PATH)
+    actual_archetypes = {archetype.id: archetype for archetype in rule_set.archetypes}
+    actual_rules = {
+        rule.id: (archetype.id, rule)
+        for archetype in rule_set.archetypes
+        for rule in archetype.rules
+    }
+
+    assert len(actual_archetypes) == 74
+    assert len(actual_rules) == 76
+    assert set(actual_archetypes) == {item["id"] for item in contract["archetypes"]}
+    assert set(actual_rules) == {item["rule_id"] for item in contract["rules"]}
+
+    for expected in contract["archetypes"]:
+        actual = actual_archetypes[expected["id"]]
+        assert (actual.name, actual.priority) == (
+            expected["legacy_display_name"], expected["priority"]
+        )
+        assert [(item.id, item.name) for item in actual.subtypes] == [
+            (item["id"], item["name"]) for item in expected["subtypes"]
+        ]
+
+    for expected in contract["rules"]:
+        archetype_id, actual = actual_rules[expected["rule_id"]]
+        assert archetype_id == expected["archetype_id"]
+        assert actual.priority == expected["priority"]
+        expected_subtype = expected["subtype"]
+        assert actual.subtype_id == (
+            None if expected_subtype is None else expected_subtype["id"]
+        )
+
+
+def test_legacy_adapter_uses_explicit_priority_not_yaml_collection_order():
+    rule_set = load_rule_set(RULE_PATH)
+    reordered = replace(
+        rule_set,
+        archetypes=tuple(
+            replace(archetype, rules=tuple(reversed(archetype.rules)))
+            for archetype in reversed(rule_set.archetypes)
+        ),
+    )
+    assert to_legacy_archetypes(reordered) == to_legacy_archetypes(rule_set)
 
 
 def test_archetype_and_subtype_scope_is_exactly_the_owner_approved_migration():

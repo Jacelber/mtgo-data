@@ -43,7 +43,7 @@ def test_copy_count_rejections():
     assert rules.validate_text(text)
 
 
-def test_real_production_file_passes_unchanged():
+def test_real_versioned_production_file_passes():
     assert rules.validate_path(Path("my_archetypes/standard.yaml")) == []
 
 
