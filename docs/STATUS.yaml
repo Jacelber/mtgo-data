@@ -12,7 +12,7 @@ project:
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-18"
+  last_updated: "2026-07-19"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -299,7 +299,7 @@ engineering_quality:
     status: "completed_phase_1"
     compatibility_profile: "legacy-standard-mtgo-public-json"
     schema_version: "1.0.0"
-    output_schema_version_embedded: false
+    output_schema_version_embedded: true
     command: "validate_schemas.py"
     manifest: "schemas/manifest.json"
   ci:
@@ -785,6 +785,42 @@ phase_1_tasks:
       owner_accepted: true
       merged_to_master: true
 
+  - id: "P1-14"
+    name: "Audit Phase 1 completion and prepare the Standard recovery baseline"
+    status: "completed_local_pending_owner_acceptance"
+    completed_on: "2026-07-19"
+    source_branch: "codex/p1-14-phase1-closeout"
+    production_change: false
+    output:
+      - "docs/audits/P1-14.md"
+      - "docs/STATUS.yaml"
+    baseline:
+      audited_base_commit: "531a94a0f2f779dd2859a40d5444730054c1b352"
+      proposed_tag: "phase-1-standard-baseline"
+      tag_status: "pending_owner_acceptance_merge_and_remote_authorization"
+      manifest_files_regenerated: 17
+      regenerated_files_changed: 0
+    validation:
+      repository_validation_passed: true
+      rule_validation_passed: true
+      standard_quality_baseline_passed: true
+      schema_validation_passed: true
+      pytest_collected: 108
+      pytest_passed: 108
+      browser_smoke_test_passed: true
+      browser_console_errors: 0
+    acceptance:
+      phase_1_roadmap_criteria_audited: true
+      all_phase_1_roadmap_criteria_passed: true
+      standard_regeneration_byte_identical: true
+      statistical_results_changed: false
+      classification_behavior_changed: false
+      public_paths_changed: false
+      front_end_code_changed: false
+      front_end_behavior_changed: false
+      workflow_changed: false
+      phase_2_started: false
+
 known_blockers: []
 
 open_decisions:
@@ -798,7 +834,8 @@ open_decisions:
     topic: "Exact statistical warning thresholds"
     status: "open"
     target_document: "docs/STATISTICS_SPEC.md"
-    target_phase: 1
+    target_phase: 8
+    note: "Resolve before the Tabletop front end consumes confidence-interval and low-sample presentation thresholds; P1-14 does not choose statistical values."
 
   - id: "OPEN-003"
     topic: "Vintage implementation"
@@ -817,7 +854,7 @@ next_approved_task:
   production_change: false
   requires_user_confirmation: true
   authorization_status: "not_authorized"
-  planning_status: "owner_decision_required_after_p1_10"
+  planning_status: "owner_decision_required_after_p1_14"
 
 governance_baseline:
   status: "active_on_master"
