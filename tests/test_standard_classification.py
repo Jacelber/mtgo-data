@@ -1,4 +1,4 @@
-"""Focused regression tests for the unchanged legacy Standard classifier."""
+"""Focused regression tests for the Standard compatibility classifier API."""
 
 import json
 import sys
@@ -9,7 +9,7 @@ repository_root_text = str(REPOSITORY_ROOT)
 if repository_root_text not in sys.path:
     sys.path.insert(0, repository_root_text)
 
-from classify_standard import CARD_ALIASES, count_card, deck_to_counts, load_rules, match_archetype, signature_card_met
+from classify_standard import CARD_ALIASES, all_matching_archetype_names, count_card, deck_to_counts, load_rules, match_archetype, signature_card_met
 
 ROOT = REPOSITORY_ROOT
 FIXTURE = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
@@ -19,7 +19,7 @@ def rules():
 
 
 def all_legacy_matches(main, side):
-    return [rule["name"] for rule in rules() if rule.get("signatureCards") and all(signature_card_met(sig, main, side) for sig in rule["signatureCards"])]
+    return all_matching_archetype_names(main, side, rules())
 
 
 def player(source, index):

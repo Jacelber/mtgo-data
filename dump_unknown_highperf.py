@@ -2,7 +2,7 @@ import os
 import json
 import glob
 
-from classify_standard import load_rules, deck_to_counts, signature_card_met
+from classify_standard import load_rules, deck_to_counts, match_archetype
 from stats_standard import rounds_from_player_count, high_score_threshold, to_int
 
 DATA_DIR = "data/standard"
@@ -10,11 +10,7 @@ OUTPUT_FILE = "unknown_highperf.txt"
 
 
 def is_unknown(main_counts, side_counts, archetypes):
-    for arch in archetypes:
-        sigs = arch.get("signatureCards", [])
-        if sigs and all(signature_card_met(s, main_counts, side_counts) for s in sigs):
-            return False
-    return True
+    return match_archetype(main_counts, side_counts, archetypes) is None
 
 
 def main():

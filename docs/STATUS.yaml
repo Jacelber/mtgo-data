@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "clean_after_p2_05_publication"
+  current_working_branch: "codex/p2-06-standard-integration"
+  working_branch_status: "active_isolated_task"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -1126,6 +1126,68 @@ phase_2_tasks:
       workflow_changed: false
       front_end_changed: false
 
+  - id: "P2-06"
+    name: "Route legacy Standard entry points through the shared classifier"
+    status: "implemented_pending_owner_acceptance"
+    completed_on: "2026-07-20"
+    source_branch: "codex/p2-06-standard-integration"
+    production_change: true
+    output:
+      - "classify_standard.py"
+      - "src/mtgmeta/legacy_rules.py"
+      - "event_report.py"
+      - "cluster_unknown.py"
+      - "dump_unknown_highperf.py"
+      - "validate_standard_quality.py"
+      - "tests/test_standard_classifier_integration.py"
+      - "tests/test_standard_classification.py"
+      - "tests/test_standard_classification_corpus.py"
+      - "docs/audits/P2-06.md"
+      - "docs/STATUS.yaml"
+    integration_contract:
+      production_classification_uses_shared_classifier: true
+      legacy_parent_string_api_preserved: true
+      full_result_api_available: true
+      subtype_not_published: true
+      conflict_fails_explicitly: true
+      invalid_deck_fails_explicitly: true
+      plain_legacy_list_fallback_preserved: true
+      standard_statistics_routed: true
+      videre_matchup_routed: true
+      weekly_pickup_routed: true
+      auxiliary_unknown_tools_routed: true
+    standard_regression:
+      frozen_corpus_records: 3936
+      parent_archetype_differences: 0
+      unknown_results: 71
+      multiple_match_results: 947
+      maximum_matches_per_deck: 3
+      selected_subtype_decks: 45
+      same_parent_multiple_subtype_matches: 21
+      runtime_conflicts: 0
+    output_regression:
+      generated_json_files_compared: 20
+      json_semantic_differences: 0
+      weekly_pickup_yaml_files_compared: 4
+      weekly_pickup_semantic_differences: 0
+      unknown_text_files_compared: 3
+      unknown_text_differences: 0
+    acceptance:
+      owner_accepted: false
+      full_corpus_parent_compatibility_passed: true
+      rule_validation_passed: true
+      schema_validation_passed: true
+      standard_quality_baseline_passed: true
+      repository_validation_passed: true
+      pytest_passed: 147
+      statistics_changed: false
+      matchup_output_changed: false
+      weekly_pickup_output_changed: false
+      public_json_semantics_changed: false
+      production_rules_changed: false
+      workflow_changed: false
+      front_end_changed: false
+
 known_blockers: []
 
 open_decisions:
@@ -1165,8 +1227,8 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  planning_status: "awaiting_owner_review"
+  authorization_status: "authorized"
+  planning_status: "implemented_pending_owner_acceptance"
 
 governance_baseline:
   status: "active_on_master"
@@ -1205,11 +1267,11 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "p2_05_completed"
+    status: "p2_06_implemented_pending_owner_acceptance"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P2-06 implementation without explicit owner authorization."
+  - "Do not begin P2-07 until P2-06 is accepted and published."
   - "Do not generalize the MTGO pipeline yet."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."

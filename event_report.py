@@ -1,17 +1,10 @@
 import os, json
-from classify_standard import load_rules, deck_to_counts, normalize_name, signature_card_met
+from classify_standard import load_rules, deck_to_counts, match_archetype, normalize_name
 
 DATA_DIR = "data/standard"
 
 # 在这里填你要分析的那场赛事的文件名
 TARGET_FILE = "Standard_Challenge_32_12845647.json"   # ← 改成你的目标文件
-
-def match_archetype(main_counts, side_counts, archetypes):
-    for arch in archetypes:
-        sigs = arch.get("signatureCards", [])
-        if sigs and all(signature_card_met(s, main_counts, side_counts) for s in sigs):
-            return arch.get("name", "Unnamed")
-    return "Unknown"
 
 def to_int(v):
     # 把可能是字符串/None 的排名值安全转成整数；无效值返回一个很大的数排到最后
@@ -55,7 +48,7 @@ def main():
 
     for i, p in enumerate(players_sorted, 1):
         main_counts, side_counts = deck_to_counts(p)
-        arch = match_archetype(main_counts, side_counts, archetypes)
+        arch = match_archetype(main_counts, side_counts, archetypes) or "Unknown"
         fr = p.get("final_rank")
         sr = p.get("swiss_rank")
         rank_str = f"final={fr}" if fr is not None else f"swiss={sr}"

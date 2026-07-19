@@ -9,7 +9,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from classify_standard import signature_card_met
+from classify_standard import all_matching_archetype_names
 from mtgmeta.config import load_rule_set
 from mtgmeta.legacy_rules import to_legacy_archetypes
 
@@ -27,12 +27,7 @@ def load_json(path: Path) -> Any:
 def matching_names(record: dict[str, Any], rules: list[dict[str, Any]]) -> list[str]:
     main = dict(record["main"])
     side = dict(record["side"])
-    return [
-        rule["name"]
-        for rule in rules
-        if rule.get("signatureCards")
-        and all(signature_card_met(signature, main, side) for signature in rule["signatureCards"])
-    ]
+    return all_matching_archetype_names(main, side, rules)
 
 
 def analyze(records: list[dict[str, Any]], rules: list[dict[str, Any]]) -> dict[str, Any]:
