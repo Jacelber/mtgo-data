@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "clean_after_p2_04_publication"
+  current_working_branch: "codex/p2-05-shared-classifier"
+  working_branch_status: "active_isolated_task"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -1068,6 +1068,62 @@ phase_2_tasks:
       workflow_changed: false
       front_end_changed: false
 
+  - id: "P2-05"
+    name: "Implement full-match compatibility classification and diagnostics"
+    status: "accepted_pending_publication"
+    completed_on: "2026-07-20"
+    source_branch: "codex/p2-05-shared-classifier"
+    production_change: true
+    output:
+      - "src/mtgmeta/classifier.py"
+      - "src/mtgmeta/__init__.py"
+      - "tests/test_shared_classifier.py"
+      - "docs/audits/P2-05.md"
+      - "docs/STATUS.yaml"
+    classifier_contract:
+      evaluates_all_rules_before_selection: true
+      selection_uses_explicit_priority: true
+      collection_order_independent: true
+      optional_subtype_result: true
+      condition_evidence_retained: true
+      all_matches_retained: true
+      overridden_matches_retained: true
+      parent_archetype_conflicts_reported: true
+      subtype_conflicts_reported: true
+      equivalent_identity_ties_deterministic: true
+      statuses:
+        - "classified"
+        - "unknown"
+        - "conflict"
+        - "invalid_deck"
+    standard_regression:
+      frozen_corpus_records: 3936
+      parent_archetype_differences: 0
+      unknown_results: 71
+      multiple_match_results: 947
+      maximum_matches_per_deck: 3
+      selected_subtype_decks: 45
+      same_parent_multiple_subtype_matches: 21
+      runtime_conflicts: 0
+    acceptance:
+      owner_accepted: true
+      shared_classifier_added: true
+      legacy_standard_integration_deferred_to_p2_06: true
+      machine_readable_reports_deferred_to_p2_07: true
+      production_rules_changed: false
+      full_corpus_parent_compatibility_passed: true
+      rule_validation_passed: true
+      schema_validation_passed: true
+      standard_quality_baseline_passed: true
+      repository_validation_passed: true
+      pytest_passed: 140
+      generated_json_files_compared: 20
+      regeneration_semantic_field_differences: 0
+      statistics_changed: false
+      public_json_semantics_changed: false
+      workflow_changed: false
+      front_end_changed: false
+
 known_blockers: []
 
 open_decisions:
@@ -1104,8 +1160,8 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  planning_status: "awaiting_owner_review"
+  authorization_status: "authorized"
+  planning_status: "accepted_pending_publication"
 
 governance_baseline:
   status: "active_on_master"
@@ -1144,11 +1200,11 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "p2_04_completed"
+    status: "p2_05_accepted_pending_publication"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P2-05 implementation without explicit owner authorization."
+  - "Do not begin P2-06 until P2-05 is accepted and published."
   - "Do not generalize the MTGO pipeline yet."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
