@@ -4,6 +4,8 @@
 
 The project is in Phase 1: engineering foundation and Standard baseline protection. Current task authorization and project status are recorded in [`docs/STATUS.yaml`](docs/STATUS.yaml).
 
+The current Standard page compatibility baseline is documented in [`docs/audits/P1-11.md`](docs/audits/P1-11.md). Run `python -m pytest tests/test_standard_public_contract.py` for its automated checks and use [`docs/checklists/STANDARD_FRONTEND_SMOKE.md`](docs/checklists/STANDARD_FRONTEND_SMOKE.md) for browser verification.
+
 ## Product boundaries
 
 - MTGO and tabletop source data, normalized data, statistics, workflows, and front ends remain separate.

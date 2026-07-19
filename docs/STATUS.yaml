@@ -674,6 +674,32 @@ phase_1_tasks:
       statistical_behavior_changed: false
       public_paths_changed: false
 
+  - id: "P1-11"
+    name: "Establish the Standard public output and front-end compatibility baseline"
+    status: "completed_local_pending_owner_acceptance"
+    completed_on: "2026-07-19"
+    source_branch: "codex/p1-11-standard-public-contract"
+    production_change: false
+    output:
+      - "tests/fixtures/standard/public_contract/contract.json"
+      - "tests/test_standard_public_contract.py"
+      - "docs/audits/P1-11.md"
+      - "docs/checklists/STANDARD_FRONTEND_SMOKE.md"
+      - "README.md"
+      - "docs/STATUS.yaml"
+    acceptance:
+      frontend_path_templates_frozen: true
+      catalog_targets_checked: true
+      cross_file_periods_checked: true
+      aggregate_counts_checked: true
+      matchup_reciprocity_checked: true
+      pickup_references_checked: true
+      browser_smoke_check_documented: true
+      generated_data_changed: false
+      generator_changed: false
+      statistical_behavior_changed: false
+      front_end_behavior_changed: false
+
 known_blockers: []
 
 open_decisions:
