@@ -57,11 +57,16 @@ authoritative_documents:
 current_phase:
   id: 1
   name: "Engineering foundation and Standard baseline"
-  status: "in_progress"
+  status: "completed"
   started_on: "2026-07-16"
+  completed_on: "2026-07-19"
   objective: "Audit and protect the current Standard implementation before multi-format refactoring."
-  production_changes_allowed: true
+  production_changes_allowed: false
   feature_development_allowed: false
+  closeout_pull_request: 25
+  closeout_merge_commit: "baf71f4522447b85e30c8c9cb37455e034d27259"
+  recovery_tag: "phase-1-standard-baseline"
+  recovery_tag_commit: "baf71f4522447b85e30c8c9cb37455e034d27259"
 
 phase_0_pull_request:
   number: 1
@@ -787,9 +792,11 @@ phase_1_tasks:
 
   - id: "P1-14"
     name: "Audit Phase 1 completion and prepare the Standard recovery baseline"
-    status: "completed_local_pending_owner_acceptance"
+    status: "completed"
     completed_on: "2026-07-19"
     source_branch: "codex/p1-14-phase1-closeout"
+    pull_request: 25
+    merge_commit: "baf71f4522447b85e30c8c9cb37455e034d27259"
     production_change: false
     output:
       - "docs/audits/P1-14.md"
@@ -797,7 +804,8 @@ phase_1_tasks:
     baseline:
       audited_base_commit: "531a94a0f2f779dd2859a40d5444730054c1b352"
       proposed_tag: "phase-1-standard-baseline"
-      tag_status: "pending_owner_acceptance_merge_and_remote_authorization"
+      tag_status: "published"
+      tag_target_commit: "baf71f4522447b85e30c8c9cb37455e034d27259"
       manifest_files_regenerated: 17
       regenerated_files_changed: 0
     validation:
@@ -820,6 +828,25 @@ phase_1_tasks:
       front_end_behavior_changed: false
       workflow_changed: false
       phase_2_started: false
+      owner_accepted: true
+      merged_to_master: true
+      recovery_tag_published: true
+
+phase_1_result:
+  status: "completed"
+  completed_on: "2026-07-19"
+  closeout_task: "P1-14"
+  closeout_pull_request: 25
+  closeout_merge_commit: "baf71f4522447b85e30c8c9cb37455e034d27259"
+  recovery_tag: "phase-1-standard-baseline"
+  recovery_tag_commit: "baf71f4522447b85e30c8c9cb37455e034d27259"
+  phase_2_authorized: false
+  acceptance:
+    roadmap_criteria_passed: true
+    standard_regeneration_byte_identical: true
+    full_regression_suite_passed: true
+    front_end_smoke_test_passed: true
+    production_behavior_changed_by_closeout: false
 
 known_blockers: []
 
@@ -854,7 +881,7 @@ next_approved_task:
   production_change: false
   requires_user_confirmation: true
   authorization_status: "not_authorized"
-  planning_status: "owner_decision_required_after_p1_14"
+  planning_status: "owner_decision_required_before_phase_2"
 
 governance_baseline:
   status: "active_on_master"
