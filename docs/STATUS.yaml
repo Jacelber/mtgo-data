@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p2-08-phase2-closeout"
-  working_branch_status: "p2_08_accepted_awaiting_publication"
+  current_working_branch: "master"
+  working_branch_status: "clean_after_phase_2_publication"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,11 +57,11 @@ authoritative_documents:
 current_phase:
   id: 2
   name: "Shared rule system and classifier"
-  status: "accepted_awaiting_publication"
+  status: "completed"
   started_on: "2026-07-19"
   objective: "Extract format-independent classification behavior while preserving every approved Standard parent-archetype result and adding only the approved compatibility subtypes."
-  production_changes_allowed: true
-  feature_development_allowed: true
+  production_changes_allowed: false
+  feature_development_allowed: false
 
 phase_0_pull_request:
   number: 1
@@ -844,7 +844,7 @@ phase_1_result:
     production_behavior_changed_by_closeout: false
 
 phase_2_planning:
-  status: "accepted_awaiting_publication"
+  status: "completed"
   decision: "DEC-032"
   objective: "Build a shared compatibility classifier with optional rule-level subtypes while preserving every legacy Standard parent archetype result."
   parent_archetype_compatibility_required: true
@@ -1254,10 +1254,13 @@ phase_2_tasks:
 
   - id: "P2-08"
     name: "Complete Phase 2 regression and behavior closeout"
-    status: "accepted_awaiting_publication"
+    status: "completed"
+    completed_on: "2026-07-20"
     implemented_on: "2026-07-20"
     source_branch: "codex/p2-08-phase2-closeout"
     baseline_commit: "d03e12125e98ead2ce89ee75ac09507034a80205"
+    pull_request: 39
+    merge_commit: "a5361fc4ec5a05b07811f47b40daa94ecbc9d0e5"
     production_change: true
     output:
       - "stats_standard.py"
@@ -1330,17 +1333,17 @@ phase_2_tasks:
       pytest_passed: 156
       browser_smoke_test_passed: true
       phase_2_acceptance_criteria_passed: true
-      merged_to_master: false
+      merged_to_master: true
 
 phase_2_result:
-  status: "accepted_awaiting_publication"
+  status: "completed"
   closeout_task: "P2-08"
   closeout_branch: "codex/p2-08-phase2-closeout"
   baseline_commit: "d03e12125e98ead2ce89ee75ac09507034a80205"
-  completed_on: null
-  pull_request: null
-  merge_commit: null
-  tag: null
+  completed_on: "2026-07-20"
+  pull_request: 39
+  merge_commit: "a5361fc4ec5a05b07811f47b40daa94ecbc9d0e5"
+  tag: "phase-2-shared-classifier-baseline"
   acceptance:
     documented_criteria_passed: true
     project_owner_approved: true
@@ -1374,22 +1377,15 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P2-08"
-  name: "Complete Phase 2 regression and behavior closeout"
+  id: "PHASE-3-PLANNING"
+  name: "Review and authorize the first Phase 3 task"
   target_paths:
-    - "stats_standard.py"
-    - "stats_matchup.py"
-    - "tests/"
-    - "reports/standard/mtgo/"
-    - "stats/standard/mtgo/"
-    - "index.html"
-    - "docs/audits/P2-08.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  production_change: true
+  production_change: false
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_and_publication_authorized"
-  planning_status: "accepted_awaiting_publication"
+  authorization_status: "not_authorized"
+  planning_status: "awaiting_owner_review"
 
 governance_baseline:
   status: "active_on_master"
@@ -1428,11 +1424,11 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "p2_08_accepted_awaiting_publication"
+    status: "completed"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin Phase 3 until Phase 2 is accepted and Phase 3 is explicitly authorized."
+  - "Do not begin Phase 3 implementation until its first task is reviewed and explicitly authorized."
   - "Do not generalize the MTGO pipeline yet."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
