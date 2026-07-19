@@ -4,7 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "phase1/engineering-foundation"
+  current_working_branch: null
+  working_branch_status: "none_project_paused"
   status: "paused"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -186,6 +187,9 @@ phase_0_tasks:
 current_repository_state:
   verified_during_phase_0: false
   verification_note: "Production code and workflows have not yet been re-audited during the documentation phase."
+  verified_during_phase_1: true
+  phase_1_audit: "docs/audits/P1-01.md"
+  standard_classification_baseline: "docs/audits/P1-06.md"
   known_existing_capabilities:
     - "Standard MTGO event processing"
     - "Standard archetype classification"
@@ -211,7 +215,7 @@ product_tracks:
     formats:
       standard:
         implementation_status: "existing_baseline"
-        verification_status: "pending_phase_1"
+        verification_status: "classification_baseline_completed_phase_1"
       pauper:
         implementation_status: "not_started"
       modern:
@@ -496,6 +500,32 @@ phase_1_tasks:
       duplicate_yaml_keys_rejected: true
       legacy_classification_behavior_unchanged: true
       production_rule_file_unchanged: true
+      merged_to_master: true
+
+  - id: "P1-06"
+    name: "Establish a self-contained Standard classification baseline"
+    status: "completed"
+    completed_on: "2026-07-18"
+    source_branch: "codex/p1-06-standard-classification-baseline"
+    pull_request: 13
+    merge_commit: "1ca911eaf3652cf5db339054a8305afa509f4c72"
+    production_change: false
+    output:
+      - "docs/audits/P1-06.md"
+      - "tests/fixtures/standard/frozen_legacy_corpus.json"
+      - "tests/test_standard_classification.py"
+      - "tests/test_standard_classification_corpus.py"
+    baseline:
+      records: 3936
+      unknown_results: 71
+      canonical_sha256: "af1b6af542c7185ba507994e8f666c89272dc67e00318fc9399b0a1c3623fe0b"
+    acceptance:
+      fixture_is_self_contained: true
+      production_data_runtime_dependency_removed: true
+      legacy_classifier_behavior_frozen: true
+      player_names_excluded: true
+      network_dependency: false
+      production_behavior_changed: false
       merged_to_master: true
 
 known_blockers: []
