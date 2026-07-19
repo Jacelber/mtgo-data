@@ -915,21 +915,43 @@ Severe unresolved quality failures may block publication.
 
 ---
 
+# DEC-030 — License code, documentation, rules, and source data separately
+
+Status: `Accepted`
+
+## Context
+
+The repository contains project-authored software, documentation, and archetype classification rules alongside third-party tournament records and intellectual property. One license cannot accurately grant rights over all of these materials.
+
+## Decision
+
+License repository software code under the MIT License.
+
+License project-authored documentation and archetype classification rules under the Creative Commons Attribution 4.0 International license.
+
+Do not claim ownership of or relicense underlying tournament records, decklists, card names, artwork, trademarks, or other third-party materials. Record source, attribution, trademark, and data-use boundaries in `NOTICE.md`.
+
+## Consequences
+
+The repository must include `LICENSE` and `NOTICE.md`, and `README.md` must summarize the licensing boundary. Reusers must evaluate their own right to use third-party data. Source provenance should be preserved where supported.
+
+---
+
 # Open decisions
 
-The following items are not yet fully approved and must not be guessed during implementation.
+The following items track decisions that remain open, have been resolved, or are deferred. Unresolved items must not be guessed during implementation.
 
 ## License details
 
-Status: `Proposed`
+Status: `Resolved by DEC-030`
 
-The repository needs:
+The approved licensing structure includes:
 
 - a code license;
 - a notice covering third-party and source data;
 - clear treatment of project documentation and classification rules.
 
-The exact final license combination must be confirmed before the License task is completed.
+The approved license combination is recorded in DEC-030.
 
 ## Statistical warning thresholds
 
