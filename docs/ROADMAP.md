@@ -303,6 +303,8 @@ Phase 1 is complete when:
 - existing `index.html` still works;
 - no multi-format behavior has been introduced accidentally.
 
+Phase 1 completion is recorded in `docs/STATUS.yaml`. The recoverable Standard baseline is tagged as `phase-1-standard-baseline`. Phase 2 remains subject to separate project-owner authorization.
+
 ---
 
 # Phase 2 — Shared rule system and classifier
