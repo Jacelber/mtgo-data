@@ -305,7 +305,14 @@ engineering_quality:
     command: "validate_schemas.py"
     manifest: "schemas/manifest.json"
   ci:
-    status: "planned_phase_1"
+    status: "completed_phase_1"
+    workflow: ".github/workflows/ci.yml"
+    repository_permission: "contents_read"
+    checkout_credentials_persisted: false
+    production_fetch_allowed: false
+    production_generation_allowed: false
+    pull_request_validation: true
+    master_push_validation: true
   actions_permissions_review:
     status: "planned_phase_1"
   actions_concurrency:
@@ -587,6 +594,34 @@ phase_1_tasks:
       statistical_behavior_changed: false
       front_end_behavior_changed: false
 
+  - id: "P1-09"
+    name: "Add read-only pull request validation CI"
+    status: "completed"
+    completed_on: "2026-07-19"
+    source_branch: "codex/p1-read-only-pr-ci"
+    production_change: false
+    output:
+      - ".github/workflows/ci.yml"
+      - "tests/test_ci_workflow.py"
+      - "README.md"
+      - "docs/STATUS.yaml"
+    acceptance:
+      pull_request_trigger_added: true
+      master_push_trigger_added: true
+      explicit_contents_read_permission: true
+      checkout_credentials_disabled: true
+      concurrency_configured: true
+      timeout_configured: true
+      repository_validation_runs: true
+      rule_validation_runs: true
+      schema_validation_runs: true
+      pytest_runs: true
+      workflow_summary_added: true
+      production_fetch_excluded: true
+      production_generation_excluded: true
+      remote_write_excluded: true
+      existing_production_workflows_changed: false
+
 known_blockers: []
 
 open_decisions:
@@ -619,7 +654,7 @@ next_approved_task:
   production_change: false
   requires_user_confirmation: true
   authorization_status: "not_authorized"
-  planning_status: "owner_decision_required_after_p1_08"
+  planning_status: "owner_decision_required_after_p1_09"
 
 governance_baseline:
   status: "active_on_master"
@@ -652,6 +687,8 @@ delegated_local_execution_governance:
   p1_07:
     status: "completed"
   p1_08:
+    status: "completed"
+  p1_09:
     status: "completed"
   phase_2:
     status: "unauthorized"
