@@ -585,6 +585,15 @@ Every archetype must have:
 - one or more rules;
 - stable rule IDs.
 
+An archetype may additionally define optional subtypes. Every published subtype must have:
+
+- a stable ID unique within its parent archetype;
+- a display name;
+- one or more associated rule IDs;
+- an explicit parent archetype ID.
+
+A rule may select a parent archetype and an optional subtype. Subtype selection must never change which parent archetype wins compatibility classification.
+
 Example shape:
 
 ```yaml
@@ -598,6 +607,7 @@ archetypes:
     rules:
       - id: example-archetype-core
         priority: 100
+        subtype_id: null
         conditions:
           all:
             - card: Example Card
@@ -605,6 +615,8 @@ archetypes:
 ```
 
 This example defines structure only. It is not an approved real archetype rule.
+
+During the Standard compatibility migration, only distinct legacy rule entries that already return the same legacy archetype may receive different subtype IDs. The initial known duplicate display-name groups are `4-Color Control` and `Izzet Aggro`. All other existing Standard archetypes must initially return no subtype. Choosing names and rules for additional archetypes or subtypes is a later, separately approved rule-development task.
 
 ### 7.2 Identifier rules
 
@@ -632,6 +644,8 @@ A classification result should retain at least:
 
 - archetype ID;
 - archetype display name;
+- optional subtype ID;
+- optional subtype display name;
 - selected rule ID;
 - selected priority;
 - all matched archetype IDs;
@@ -639,6 +653,8 @@ A classification result should retain at least:
 - conflict status;
 - classification status;
 - relevant evidence where practical.
+
+The parent archetype fields are the compatibility contract. Subtype fields are supplementary and may be `null`. Reports and downstream consumers must not treat a subtype as an unrelated archetype.
 
 Recommended classification statuses are:
 

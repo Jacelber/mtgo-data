@@ -848,6 +848,38 @@ phase_1_result:
     front_end_smoke_test_passed: true
     production_behavior_changed_by_closeout: false
 
+phase_2_planning:
+  status: "owner_direction_recorded_implementation_not_authorized"
+  decision: "DEC-032"
+  objective: "Build a shared compatibility classifier with optional rule-level subtypes while preserving every legacy Standard parent archetype result."
+  parent_archetype_compatibility_required: true
+  subtype_scope:
+    initial_policy: "existing_duplicate_legacy_rule_paths_only"
+    legacy_rule_entries: 76
+    legacy_archetype_display_names: 74
+    initial_duplicate_groups:
+      - "4-Color Control"
+      - "Izzet Aggro"
+    subtype_for_other_existing_archetypes: null
+    new_archetypes_allowed_during_compatibility_build: false
+    additional_subtypes_allowed_during_compatibility_build: false
+  front_end:
+    subtype_representation_required_in_later_planning: true
+    phase_2_front_end_change_authorized: false
+    parent_archetype_totals_must_remain_primary: true
+  proposed_sequence:
+    - "P2-01 Standard archetype, rule, priority, and subtype migration contract"
+    - "P2-02 Shared card-name and deck normalization"
+    - "P2-03 Shared rule model, loader, validation, and schema"
+    - "P2-04 Standard rule migration"
+    - "P2-05 Full-match compatibility classifier and diagnostics"
+    - "P2-06 Legacy Standard entry-point integration"
+    - "P2-07 Machine-readable classification reports"
+    - "P2-08 Phase 2 regression and behavior closeout"
+  proposed_first_task: "P2-01"
+  implementation_authorized: false
+  remote_publication_authorized: false
+
 known_blockers: []
 
 open_decisions:

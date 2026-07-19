@@ -1068,3 +1068,34 @@ This decision partially supersedes only the restrictive operational portions of 
 ## Consequences
 
 Task contracts must distinguish delegated local execution from remote-publication authority and preserve explicit protected-path and stop conditions. Harmless local task operations do not require repeated Owner authorization. This decision does not alter product scope, statistics, architecture, public paths, schemas, or production behavior.
+
+---
+
+# DEC-032 — Add optional subtypes beneath compatibility archetypes
+
+Status: `Accepted`
+
+## Context
+
+The legacy Standard classifier contains 76 ordered rule entries but only 74 distinct archetype display names. `4-Color Control` and `Izzet Aggro` each have two distinct legacy rule paths that currently return the same archetype name.
+
+The shared classifier needs stable rule identities and full-match diagnostics, but treating every legacy rule path as a separate archetype would break the approved Standard compatibility baseline. Conversely, discarding the rule-level distinction would prevent the product from exposing meaningful variants later.
+
+## Decision
+
+Use a two-level classification identity:
+
+- `archetype` is the required parent identity and compatibility result;
+- `subtype` is an optional rule-level variant beneath one archetype.
+
+During the initial Phase 2 compatibility migration, different existing rule entries that already return the same legacy archetype may produce different subtypes. The parent archetype must remain identical to the legacy classifier for every frozen Standard record.
+
+Initial subtype creation is limited to the existing duplicate Standard rule groups. Archetypes without an existing duplicate rule path return no subtype. No new archetype or additional subtype taxonomy is added until the compatibility classifier is complete and a later rule-development task is separately approved.
+
+Primary statistics continue to aggregate by parent archetype. Subtype-level statistics or presentation are not introduced implicitly. Later front-end work must explicitly consider how to display subtype information without splitting or double-counting the parent archetype.
+
+## Consequences
+
+Archetype IDs, subtype IDs, and rule IDs require stable validation. Classification results and diagnostics may carry nullable subtype fields. Compatibility tests must compare parent archetype results against the Phase 1 baseline and separately verify subtype assignment.
+
+Rule migration, classifier implementation, schemas, reports, and later front-end planning must follow this hierarchy. Adding future archetypes or subtypes remains a separately reviewed rule and product change.
