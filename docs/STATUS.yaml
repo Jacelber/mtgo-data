@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p2-07-classification-reports"
-  working_branch_status: "implemented_awaiting_owner_acceptance"
+  current_working_branch: "master"
+  working_branch_status: "clean_after_p2_07_publication"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -1192,8 +1192,11 @@ phase_2_tasks:
 
   - id: "P2-07"
     name: "Generate machine-readable classification diagnostic reports"
-    status: "implemented_awaiting_owner_acceptance"
+    status: "completed"
+    completed_on: "2026-07-20"
     source_branch: "codex/p2-07-classification-reports"
+    pull_request: 37
+    merge_commit: "0c0d7a7629e4a9d37370e81db8669fb6bfc6c105"
     production_change: true
     output:
       - "generate_classification_reports.py"
@@ -1232,7 +1235,7 @@ phase_2_tasks:
       runtime_conflicts: 0
       invalid_decks: 0
     acceptance:
-      owner_accepted: false
+      owner_accepted: true
       deterministic_reports_generated: true
       identity_fields_excluded: true
       unknown_deck_evidence_retained: true
@@ -1247,7 +1250,7 @@ phase_2_tasks:
       front_end_code_changed: false
       front_end_behavior_changed: false
       workflow_changed: true
-      merged_to_master: false
+      merged_to_master: true
 
 known_blockers: []
 
@@ -1276,20 +1279,20 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P2-07"
-  name: "Generate machine-readable classification diagnostic reports"
+  id: "P2-08"
+  name: "Complete Phase 2 regression and behavior closeout"
   target_paths:
-    - "src/mtgmeta/"
-    - "schemas/"
-    - "reports/standard/mtgo/"
-    - ".github/workflows/update.yml"
     - "tests/"
-    - "docs/audits/P2-07.md"
+    - "reports/standard/mtgo/"
+    - "stats/standard/mtgo/"
+    - "index.html"
+    - "docs/audits/P2-08.md"
+    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  production_change: true
+  production_change: false
   requires_user_confirmation: true
-  authorization_status: "authorized_for_local_implementation"
-  planning_status: "implemented_awaiting_owner_acceptance"
+  authorization_status: "not_authorized"
+  planning_status: "awaiting_owner_review"
 
 governance_baseline:
   status: "active_on_master"
@@ -1328,7 +1331,7 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "p2_07_implemented_awaiting_owner_acceptance"
+    status: "p2_07_completed"
   completes_p1_06: true
 
 prohibited_next_actions:
