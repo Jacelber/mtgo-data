@@ -1,4 +1,4 @@
-"""Read-only JSON Schema validation for declared public compatibility outputs."""
+"""Read-only JSON Schema validation for declared generated JSON outputs."""
 from __future__ import annotations
 
 import argparse

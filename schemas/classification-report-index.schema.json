@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/classification-report-index.schema.json",
+  "x-schema-version": "1.0.0",
+  "allOf": [
+    {"$ref": "classification-report-common.schema.json#/$defs/header"}
+  ],
+  "properties": {
+    "report_type": {"const": "classification_report_index"},
+    "summary": {
+      "type": "object",
+      "required": ["total_decks", "classified", "unknown", "conflicts", "invalid_decks", "multiple_matches", "overridden_matches", "selected_subtypes", "same_parent_multiple_subtype_matches", "strict_validation"],
+      "properties": {
+        "total_decks": {"type": "integer", "minimum": 0},
+        "classified": {"type": "integer", "minimum": 0},
+        "unknown": {"type": "integer", "minimum": 0},
+        "conflicts": {"type": "integer", "minimum": 0},
+        "invalid_decks": {"type": "integer", "minimum": 0},
+        "multiple_matches": {"type": "integer", "minimum": 0},
+        "overridden_matches": {"type": "integer", "minimum": 0},
+        "selected_subtypes": {"type": "integer", "minimum": 0},
+        "same_parent_multiple_subtype_matches": {"type": "integer", "minimum": 0},
+        "strict_validation": {"enum": ["pass", "fail"]}
+      },
+      "additionalProperties": false
+    },
+    "files": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z_]+\\.json$"}
+    },
+    "invalid_records": {
+      "type": "array",
+      "items": {
+        "allOf": [{"$ref": "classification-report-common.schema.json#/$defs/identity"}],
+        "required": ["errors"],
+        "properties": {
+          "errors": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        },
+        "unevaluatedProperties": false
+      }
+    }
+  },
+  "required": ["summary", "files", "invalid_records"],
+  "unevaluatedProperties": false
+}

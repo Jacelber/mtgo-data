@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "profile": "legacy-standard-mtgo-public-json",
   "output_schema_version_embedded": true,
-  "note": "Compatibility contract for public output with embedded schema_version.",
+  "note": "Compatibility contract for page-consumed and diagnostic generated output with embedded schema_version.",
   "mappings": [
     {"pattern": "stats/standard/mtgo/range_*w.json", "schema": "mtgo-range.schema.json"},
     {"pattern": "stats/standard/mtgo/decks_*w.json", "schema": "mtgo-decks.schema.json"},
@@ -11,6 +11,12 @@
     {"pattern": "stats/standard/mtgo/matchup_index.json", "schema": "mtgo-matchup-catalog.schema.json"},
     {"pattern": "stats/standard/mtgo/meta.json", "schema": "mtgo-meta.schema.json"},
     {"pattern": "stats/standard/mtgo/pickup/index.json", "schema": "mtgo-pickup-index.schema.json"},
-    {"pattern": "stats/standard/mtgo/pickup/[0-9][0-9][0-9][0-9]-W[0-9][0-9].json", "schema": "mtgo-pickup-week.schema.json"}
+    {"pattern": "stats/standard/mtgo/pickup/[0-9][0-9][0-9][0-9]-W[0-9][0-9].json", "schema": "mtgo-pickup-week.schema.json"},
+    {"pattern": "reports/standard/mtgo/index.json", "schema": "classification-report-index.schema.json"},
+    {"pattern": "reports/standard/mtgo/unknown_decks.json", "schema": "classification-report.schema.json"},
+    {"pattern": "reports/standard/mtgo/multiple_matches.json", "schema": "classification-report.schema.json"},
+    {"pattern": "reports/standard/mtgo/classification_conflicts.json", "schema": "classification-report.schema.json"},
+    {"pattern": "reports/standard/mtgo/overridden_matches.json", "schema": "classification-report.schema.json"},
+    {"pattern": "reports/standard/mtgo/subtype_diagnostics.json", "schema": "classification-report.schema.json"}
   ]
 }

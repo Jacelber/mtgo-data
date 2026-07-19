@@ -57,6 +57,7 @@ def test_complete_pipeline_order_preserves_mtgo_and_videre():
         "stats_standard.py",
         "stats_matchup.py",
         "gen_meta.py",
+        "generate_classification_reports.py --strict",
         "validate_repository.py",
         "validate_rules.py",
         "validate_schemas.py",
@@ -81,7 +82,7 @@ def test_only_diagnostics_and_candidate_generation_may_continue_on_error():
 def test_publication_scope_covers_replaced_scraper_and_generated_outputs():
     publish = next(step for step in load_update()["jobs"]["update"]["steps"] if step.get("id") == "publish")
     command = publish["run"]
-    assert "git add -- data/ stats/ fetched.txt unknown_highperf.txt unknown_clusters.txt" in command
+    assert "git add -- data/ stats/ reports/ fetched.txt unknown_highperf.txt unknown_clusters.txt" in command
     assert "git push origin HEAD:master" in command
     assert "git pull" not in command
     assert "rebase" not in command

@@ -2,7 +2,7 @@
 
 `mtgo-data` analyzes Constructed Magic: The Gathering tournament data. The current production baseline is the Standard-focused **MTGO Environment Trends** site. A separate **Tabletop Major Events** product and additional Constructed formats are planned, but they are not yet production features.
 
-The project is in Phase 1: engineering foundation and Standard baseline protection. Current task authorization and project status are recorded in [`docs/STATUS.yaml`](docs/STATUS.yaml).
+The project is in Phase 2: shared rule system and compatibility classifier. Current task authorization and project status are recorded in [`docs/STATUS.yaml`](docs/STATUS.yaml).
 
 The current Standard page compatibility baseline is documented in [`docs/audits/P1-11.md`](docs/audits/P1-11.md). Run `python -m pytest tests/test_standard_public_contract.py` for its automated checks and use [`docs/checklists/STANDARD_FRONTEND_SMOKE.md`](docs/checklists/STANDARD_FRONTEND_SMOKE.md) for browser verification.
 
@@ -38,13 +38,16 @@ Run the read-only repository validator, rule validator, and tests from the repos
 .\.venv\Scripts\python.exe validate_repository.py
 .\.venv\Scripts\python.exe validate_rules.py
 .\.venv\Scripts\python.exe validate_rules.py path\to\versioned-rules.yaml
+.\.venv\Scripts\python.exe generate_classification_reports.py --strict
 .\.venv\Scripts\python.exe validate_schemas.py
 .\.venv\Scripts\python.exe -m pytest
 ```
 
-These commands validate repository syntax and references, the current legacy Standard archetype rules, versioned shared rule files when an explicit path is supplied, the Standard public JSON compatibility schemas, and the frozen Standard classification baseline. They do not fetch tournament data or regenerate production statistics.
+These commands validate repository syntax and references, Standard archetype rules, versioned shared rule files, generated classification diagnostics, Standard JSON Schemas, and the frozen Standard classification baseline. They do not fetch tournament data or regenerate production statistics.
 
-The Schema mapping in `schemas/manifest.json` is versioned as `1.0.0`. It protects the structure of the existing unversioned Standard MTGO public JSON. Adding an embedded `schema_version` field to generated output requires a separate producer migration and is intentionally outside this compatibility-baseline task.
+`generate_classification_reports.py` reads committed Standard MTGO events and writes deterministic reports under `reports/standard/mtgo/`. The reports omit player names, login IDs, and raw player records while retaining event context, stable pseudonymous deck IDs, matched rule evidence, and Unknown decklists. `--strict` returns a failure when an unresolved classification conflict or invalid deck input is present. These reports are operational diagnostics and are not consumed by the current front end.
+
+The Schema mapping in `schemas/manifest.json` is versioned as `1.0.0`. It protects the existing Standard MTGO page-consumed JSON and the classification diagnostic reports; every declared output embeds `schema_version: "1.0.0"`.
 
 Pull requests and pushes to `master` run the same validation sequence through `.github/workflows/ci.yml`. The CI workflow has read-only repository permissions, does not persist checkout credentials, and does not fetch or regenerate production tournament data.
 
@@ -54,11 +57,12 @@ Pull requests and pushes to `master` run the same validation sequence through `.
 - `my_archetypes/standard.yaml`: current legacy Standard classification rules.
 - `src/mtgmeta/`: shared normalization, versioned rule-model, and rule-loading utilities.
 - `schemas/classification-rules.schema.json`: machine-readable contract for versioned shared rule files.
+- `reports/standard/mtgo/`: generated, de-identified Standard classification diagnostics.
 - `stats/standard/mtgo/`: generated Standard MTGO statistics consumed by the public page.
 - `tests/fixtures/standard/`: self-contained Standard classification baseline.
 - `docs/`: authoritative specifications, decisions, audits, status, and development workflow.
 - `index.html`: current GitHub Pages entry point for MTGO Environment Trends.
-- `.github/workflows/update.yml`: the single scheduled MTGO production pipeline, covering official event fetches, Videre matches, statistics, validation, and publication.
+- `.github/workflows/update.yml`: the single scheduled MTGO production pipeline, covering official event fetches, Videre matches, statistics, classification diagnostics, validation, and publication.
 
 Generated statistics and source configurations serve different roles. Do not manually edit generated statistics as a substitute for fixing their generator.
 
