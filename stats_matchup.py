@@ -169,10 +169,15 @@ def _emit_cell(cell, is_mirror):
 def build_window_output(matrix, mirror, overall):
     archetypes = set(matrix) | set(mirror) | set(overall)
     # archetype 排序：按整体样本量降序（主流在前，前端 Overall 列同序）
-    order = sorted(archetypes,
-                   key=lambda a: -(overall.get(a, _blank_cell())["wins"]
-                                   + overall.get(a, _blank_cell())["losses"]
-                                   + overall.get(a, _blank_cell())["draws"]))
+    order = sorted(
+        archetypes,
+        key=lambda a: (
+            -(overall.get(a, _blank_cell())["wins"]
+              + overall.get(a, _blank_cell())["losses"]
+              + overall.get(a, _blank_cell())["draws"]),
+            a,
+        ),
+    )
     matrix_out, overall_out = {}, {}
     for a in order:
         overall_out[a] = _emit_cell(overall.get(a, _blank_cell()), False)
