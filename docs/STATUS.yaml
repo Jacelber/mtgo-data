@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p2-05-shared-classifier"
-  working_branch_status: "active_isolated_task"
+  current_working_branch: "master"
+  working_branch_status: "clean_after_p2_05_publication"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -1070,9 +1070,11 @@ phase_2_tasks:
 
   - id: "P2-05"
     name: "Implement full-match compatibility classification and diagnostics"
-    status: "accepted_pending_publication"
+    status: "completed"
     completed_on: "2026-07-20"
     source_branch: "codex/p2-05-shared-classifier"
+    pull_request: 33
+    merge_commit: "5eeb4e4bf13d8d706f85f076132a31d35040cb69"
     production_change: true
     output:
       - "src/mtgmeta/classifier.py"
@@ -1151,17 +1153,20 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P2-05"
-  name: "Implement full-match compatibility classification and diagnostics"
+  id: "P2-06"
+  name: "Route legacy Standard entry points through the shared classifier"
   target_paths:
     - "src/mtgmeta/"
+    - "classify_standard.py"
+    - "stats_standard.py"
+    - "stats_matchup.py"
     - "tests/"
-    - "docs/audits/P2-05.md"
+    - "docs/audits/P2-06.md"
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "authorized"
-  planning_status: "accepted_pending_publication"
+  authorization_status: "not_authorized"
+  planning_status: "awaiting_owner_review"
 
 governance_baseline:
   status: "active_on_master"
@@ -1200,11 +1205,11 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "p2_05_accepted_pending_publication"
+    status: "p2_05_completed"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P2-06 until P2-05 is accepted and published."
+  - "Do not begin P2-06 implementation without explicit owner authorization."
   - "Do not generalize the MTGO pipeline yet."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
