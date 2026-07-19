@@ -1,0 +1,18 @@
+{
+  "format": "standard",
+  "source": "mtgo",
+  "ranges": [1, 4, 12, 36],
+  "frontend_templates": [
+    "stats/${currentFormat}/mtgo/meta.json",
+    "stats/${currentFormat}/mtgo/range_${currentRange}w.json",
+    "stats/${currentFormat}/mtgo/decks_${currentRange}w.json",
+    "stats/${currentFormat}/mtgo/pickup/index.json",
+    "stats/${currentFormat}/mtgo/pickup/${week}.json",
+    "stats/${currentFormat}/mtgo/matchup_${mxRange}w.json"
+  ],
+  "catalogs": {
+    "statistics": "stats/standard/mtgo/index.json",
+    "matchups": "stats/standard/mtgo/matchup_index.json",
+    "pickup": "stats/standard/mtgo/pickup/index.json"
+  }
+}
