@@ -202,10 +202,8 @@ current_repository_state:
     - "current pipeline is primarily Standard-specific"
     - "root directory contains multiple Python entry-point scripts"
     - "index.html is monolithic"
-    - "workflow responsibilities may overlap"
     - "classification rules need stable IDs and explicit priorities"
     - "automated regression protection is incomplete"
-    - "JSON Schema validation has not yet been established"
 
 product_tracks:
   mtgo:
@@ -314,9 +312,29 @@ engineering_quality:
     pull_request_validation: true
     master_push_validation: true
   actions_permissions_review:
-    status: "planned_phase_1"
+    status: "completed_phase_1"
+    pull_request_ci: "contents_read"
+    production_update: "contents_write"
+    additional_permissions: false
   actions_concurrency:
-    status: "planned_phase_1"
+    status: "completed_phase_1"
+    pull_request_group: "per_workflow_and_pull_request_or_ref"
+    production_group: "production-data-update"
+    production_cancel_in_progress: false
+  workflow_summaries:
+    status: "completed_phase_1"
+    pull_request_ci: true
+    production_update: true
+  production_workflow:
+    status: "consolidated_phase_1"
+    workflow: ".github/workflows/update.yml"
+    scheduled_workflow_count: 1
+    legacy_scrape_workflow_removed: true
+    mtgo_event_fetch: "batch_mtgo.py"
+    videre_match_fetch: "fetch_videre_matches.py"
+    standard_statistics: "stats_standard.py"
+    matchup_statistics: "stats_matchup.py"
+    decision: "DEC-031"
   index_html_split:
     status: "planned_phase_4"
 
@@ -622,6 +640,40 @@ phase_1_tasks:
       remote_write_excluded: true
       existing_production_workflows_changed: false
 
+  - id: "P1-10"
+    name: "Consolidate MTGO production automation"
+    status: "completed"
+    completed_on: "2026-07-19"
+    source_branch: "codex/p1-consolidate-production-workflow"
+    production_change: true
+    production_change_scope: "Replace two overlapping scheduled workflows with one complete serialized update pipeline."
+    output:
+      - ".github/workflows/update.yml"
+      - ".github/workflows/scrape.yml (removed)"
+      - "tests/test_production_workflow.py"
+      - "README.md"
+      - "docs/DECISIONS.md"
+      - "docs/STATUS.yaml"
+    decision: "DEC-031"
+    acceptance:
+      single_scheduled_production_workflow: true
+      batch_mtgo_fetch_preserved: true
+      videre_fetch_preserved: true
+      standard_statistics_preserved: true
+      matchup_statistics_preserved: true
+      generated_commit_scope_preserved: true
+      pinned_dependencies_used: true
+      explicit_contents_write_permission: true
+      shared_production_concurrency: true
+      production_runs_not_cancelled: true
+      master_only_guard: true
+      validation_before_publication: true
+      workflow_summary_added: true
+      legacy_scrape_workflow_removed: true
+      python_production_logic_changed: false
+      statistical_behavior_changed: false
+      public_paths_changed: false
+
 known_blockers: []
 
 open_decisions:
@@ -654,7 +706,7 @@ next_approved_task:
   production_change: false
   requires_user_confirmation: true
   authorization_status: "not_authorized"
-  planning_status: "owner_decision_required_after_p1_09"
+  planning_status: "owner_decision_required_after_p1_10"
 
 governance_baseline:
   status: "active_on_master"
@@ -689,6 +741,8 @@ delegated_local_execution_governance:
   p1_08:
     status: "completed"
   p1_09:
+    status: "completed"
+  p1_10:
     status: "completed"
   phase_2:
     status: "unauthorized"
