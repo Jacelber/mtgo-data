@@ -70,6 +70,9 @@ jobs:
       - name: Generate Standard metadata
         run: python -B gen_meta.py
 
+      - name: Generate and strictly validate classification diagnostics
+        run: python -B generate_classification_reports.py --strict
+
       - name: Validate repository files and references
         run: python -B validate_repository.py
 
@@ -88,7 +91,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -- data/ stats/ fetched.txt unknown_highperf.txt unknown_clusters.txt
+          git add -- data/ stats/ reports/ fetched.txt unknown_highperf.txt unknown_clusters.txt
           if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No generated changes to publish."
@@ -109,5 +112,5 @@ jobs:
             echo "- Trigger: ${{ github.event_name }}"
             echo "- Source branch: ${{ github.ref_name }}"
             echo "- Generated changes published: ${{ steps.publish.outputs.changed || 'not-reached' }}"
-            echo "- Pipeline: MTGO events, Videre matches, Standard statistics, matchup statistics, metadata, validation, and publication."
+            echo "- Pipeline: MTGO events, Videre matches, Standard statistics, matchup statistics, metadata, classification diagnostics, validation, and publication."
           } >> "$GITHUB_STEP_SUMMARY"

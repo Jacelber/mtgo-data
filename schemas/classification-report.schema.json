@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/classification-report.schema.json",
+  "x-schema-version": "1.0.0",
+  "allOf": [
+    {"$ref": "classification-report-common.schema.json#/$defs/header"}
+  ],
+  "oneOf": [
+    {
+      "properties": {
+        "report_type": {"const": "unknown_decks"},
+        "summary": {"$ref": "classification-report-common.schema.json#/$defs/basic_summary"},
+        "records": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "classification-report-common.schema.json#/$defs/identity"}],
+            "required": ["main_deck", "sideboard"],
+            "properties": {
+              "main_deck": {"type": "array", "items": {"$ref": "classification-report-common.schema.json#/$defs/card"}},
+              "sideboard": {"type": "array", "items": {"$ref": "classification-report-common.schema.json#/$defs/card"}}
+            },
+            "unevaluatedProperties": false
+          }
+        }
+      },
+      "required": ["summary", "records"]
+    },
+    {
+      "properties": {
+        "report_type": {"const": "multiple_matches"},
+        "summary": {"$ref": "classification-report-common.schema.json#/$defs/basic_summary"},
+        "records": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "classification-report-common.schema.json#/$defs/identity"}],
+            "required": ["classification_status", "selected", "matches"],
+            "properties": {
+              "classification_status": {"enum": ["classified", "conflict"]},
+              "selected": {"$ref": "classification-report-common.schema.json#/$defs/selected"},
+              "matches": {"type": "array", "minItems": 2, "items": {"$ref": "classification-report-common.schema.json#/$defs/rule_match"}}
+            },
+            "unevaluatedProperties": false
+          }
+        }
+      },
+      "required": ["summary", "records"]
+    },
+    {
+      "properties": {
+        "report_type": {"const": "classification_conflicts"},
+        "summary": {"$ref": "classification-report-common.schema.json#/$defs/basic_summary"},
+        "records": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "classification-report-common.schema.json#/$defs/identity"}],
+            "required": ["conflict_kind", "selected", "selected_priority", "blocking", "matches"],
+            "properties": {
+              "conflict_kind": {"enum": ["parent_archetype", "subtype"]},
+              "selected": {"type": "null"},
+              "selected_priority": {"type": "integer", "minimum": 0},
+              "blocking": {"const": true},
+              "matches": {"type": "array", "minItems": 2, "items": {"$ref": "classification-report-common.schema.json#/$defs/rule_match"}}
+            },
+            "unevaluatedProperties": false
+          }
+        }
+      },
+      "required": ["summary", "records"]
+    },
+    {
+      "properties": {
+        "report_type": {"const": "overridden_matches"},
+        "summary": {"$ref": "classification-report-common.schema.json#/$defs/basic_summary"},
+        "records": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "classification-report-common.schema.json#/$defs/identity"}],
+            "required": ["classification_status", "selected", "overridden_matches"],
+            "properties": {
+              "classification_status": {"enum": ["classified", "conflict"]},
+              "selected": {"$ref": "classification-report-common.schema.json#/$defs/selected"},
+              "overridden_matches": {"type": "array", "minItems": 1, "items": {"$ref": "classification-report-common.schema.json#/$defs/rule_match"}}
+            },
+            "unevaluatedProperties": false
+          }
+        }
+      },
+      "required": ["summary", "records"]
+    },
+    {
+      "properties": {
+        "report_type": {"const": "subtype_diagnostics"},
+        "summary": {
+          "type": "object",
+          "required": ["record_count", "blocking", "selected_record_count", "selected_by_subtype", "same_parent_multiple_subtype_matches"],
+          "properties": {
+            "record_count": {"type": "integer", "minimum": 0},
+            "blocking": {"const": false},
+            "selected_record_count": {"type": "integer", "minimum": 0},
+            "selected_by_subtype": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+            "same_parent_multiple_subtype_matches": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "allOf": [{"$ref": "classification-report-common.schema.json#/$defs/identity"}],
+            "required": ["selected", "matched_subtypes", "same_parent_multiple_subtype_matches"],
+            "properties": {
+              "selected": {"$ref": "classification-report-common.schema.json#/$defs/selected"},
+              "matched_subtypes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["archetype_id", "subtype_id"],
+                  "properties": {
+                    "archetype_id": {"type": "string", "minLength": 1},
+                    "subtype_id": {"type": "string", "minLength": 1}
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "same_parent_multiple_subtype_matches": {"type": "boolean"}
+            },
+            "unevaluatedProperties": false
+          }
+        }
+      },
+      "required": ["summary", "records"]
+    }
+  ],
+  "unevaluatedProperties": false
+}

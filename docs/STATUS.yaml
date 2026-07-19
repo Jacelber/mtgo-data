@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "clean_after_p2_06_publication"
+  current_working_branch: "codex/p2-07-classification-reports"
+  working_branch_status: "implemented_awaiting_owner_acceptance"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -1190,6 +1190,65 @@ phase_2_tasks:
       workflow_changed: false
       front_end_changed: false
 
+  - id: "P2-07"
+    name: "Generate machine-readable classification diagnostic reports"
+    status: "implemented_awaiting_owner_acceptance"
+    source_branch: "codex/p2-07-classification-reports"
+    production_change: true
+    output:
+      - "generate_classification_reports.py"
+      - "src/mtgmeta/reports.py"
+      - "reports/standard/mtgo/"
+      - "schemas/classification-report-common.schema.json"
+      - "schemas/classification-report.schema.json"
+      - "schemas/classification-report-index.schema.json"
+      - "schemas/manifest.json"
+      - ".github/workflows/update.yml"
+      - "tests/test_classification_reports.py"
+      - "tests/test_production_workflow.py"
+      - "tests/test_validate_schemas.py"
+      - "README.md"
+      - "docs/audits/P2-07.md"
+      - "docs/STATUS.yaml"
+    report_contract:
+      schema_version: "1.0.0"
+      location: "reports/standard/mtgo"
+      reports_generated: 6
+      player_names_included: false
+      login_ids_included: false
+      pseudonymous_deck_ids: true
+      current_front_end_consumes_reports: false
+      strict_conflict_validation: true
+      invalid_deck_strict_validation: true
+    production_baseline:
+      event_files: 123
+      records: 3936
+      classified: 3865
+      unknown_results: 71
+      multiple_match_results: 947
+      overridden_match_results: 947
+      selected_subtype_decks: 45
+      same_parent_multiple_subtype_matches: 21
+      runtime_conflicts: 0
+      invalid_decks: 0
+    acceptance:
+      owner_accepted: false
+      deterministic_reports_generated: true
+      identity_fields_excluded: true
+      unknown_deck_evidence_retained: true
+      synthetic_conflict_reported: true
+      synthetic_conflict_strict_failure_passed: true
+      schema_validation_passed: true
+      standard_quality_baseline_passed: true
+      repository_validation_passed: true
+      pytest_passed: 153
+      statistics_changed: false
+      public_json_semantics_changed: false
+      front_end_code_changed: false
+      front_end_behavior_changed: false
+      workflow_changed: true
+      merged_to_master: false
+
 known_blockers: []
 
 open_decisions:
@@ -1222,14 +1281,15 @@ next_approved_task:
   target_paths:
     - "src/mtgmeta/"
     - "schemas/"
-    - "stats/standard/"
+    - "reports/standard/mtgo/"
+    - ".github/workflows/update.yml"
     - "tests/"
     - "docs/audits/P2-07.md"
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  planning_status: "awaiting_owner_review"
+  authorization_status: "authorized_for_local_implementation"
+  planning_status: "implemented_awaiting_owner_acceptance"
 
 governance_baseline:
   status: "active_on_master"
@@ -1268,11 +1328,11 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "p2_06_completed"
+    status: "p2_07_implemented_awaiting_owner_acceptance"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P2-07 implementation without explicit owner authorization."
+  - "Do not begin P2-08 implementation without explicit owner authorization."
   - "Do not generalize the MTGO pipeline yet."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
