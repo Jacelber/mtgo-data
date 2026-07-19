@@ -18,6 +18,8 @@ The project does not claim ownership of underlying third-party tournament record
 
 Source provenance and data-quality metadata should be preserved where the relevant generated format supports them. Removal of provenance does not expand the rights granted for source data.
 
+The OM1-to-SPM card-name alias artifact in `src/mtgmeta/data/om1_spm_aliases.json` is derived from the [MTGJSON OM1 dataset](https://mtgjson.com/api/v5/OM1.json). MTGJSON is distributed under the [MIT License](https://github.com/mtgjson/mtgjson/blob/main/LICENSE). The artifact records its source version and retrieval date. This attribution does not relicense Magic card names or other Wizards of the Coast materials.
+
 ## Magic: The Gathering materials
 
 Magic: The Gathering, Magic Online, MTGO, card names, card text, artwork, set symbols, and related marks and materials are property of their respective rights holders. Wizards of the Coast is not affiliated with or endorsing this project.

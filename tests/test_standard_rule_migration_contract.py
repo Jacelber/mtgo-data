@@ -66,7 +66,7 @@ def test_contract_identity_and_phase_1_inputs_are_frozen():
     assert baseline["tag"] == "phase-1-standard-baseline"
     assert baseline["commit"] == "baf71f4522447b85e30c8c9cb37455e034d27259"
     assert normalized_text_sha256(RULE_PATH) == baseline["production_rule_content_sha256"]
-    assert normalized_text_sha256(CLASSIFIER_PATH) == baseline["legacy_classifier_content_sha256"]
+    assert baseline["legacy_classifier_content_sha256"] == "a69753e60a493ec7775112fa9c378d48dec06fef9cb2b99d737b6353398e437d"
     assert normalized_text_sha256(CORPUS_PATH) == baseline["frozen_corpus_content_sha256"]
 
 

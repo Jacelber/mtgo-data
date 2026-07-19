@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p2-01-rule-migration-contract"
+  current_working_branch: "codex/p2-02-shared-normalization"
   working_branch_status: "active_isolated_task"
   status: "active"
   primary_language: "Python"
@@ -878,9 +878,11 @@ phase_2_planning:
 phase_2_tasks:
   - id: "P2-01"
     name: "Define the Standard archetype, subtype, rule, and priority migration contract"
-    status: "accepted_pending_publication"
+    status: "completed"
     completed_on: "2026-07-19"
     source_branch: "codex/p2-01-rule-migration-contract"
+    pull_request: 28
+    merge_commit: "d51637ca0adc5beac5c21d3d7fef7303877a22d9"
     production_change: false
     output:
       - "tests/fixtures/standard/rule_migration_contract.json"
@@ -918,6 +920,46 @@ phase_2_tasks:
       public_json_changed: false
       front_end_changed: false
 
+  - id: "P2-02"
+    name: "Extract shared card-name and deck normalization with legacy parity"
+    status: "accepted_pending_publication"
+    completed_on: "2026-07-19"
+    source_branch: "codex/p2-02-shared-normalization"
+    production_change: true
+    output:
+      - "src/mtgmeta/__init__.py"
+      - "src/mtgmeta/card_names.py"
+      - "src/mtgmeta/deck.py"
+      - "src/mtgmeta/data/om1_spm_aliases.json"
+      - "tests/test_shared_normalization.py"
+      - "tests/test_standard_rule_migration_contract.py"
+      - "classify_standard.py"
+      - "NOTICE.md"
+      - "docs/audits/P2-02.md"
+      - "docs/STATUS.yaml"
+    normalization:
+      om1_spm_source: "MTGJSON 5.3.0+20260718"
+      alias_mappings: 158
+      canonical_names: 153
+      frozen_corpus_records: 3936
+      normalization_changed_decks: 567
+      observed_alias_names: 25
+      parent_archetype_differences: 0
+    acceptance:
+      owner_accepted: true
+      shared_card_name_utility_added: true
+      shared_deck_utility_added: true
+      legacy_standard_helpers_preserved: true
+      complete_om1_spm_mapping_added: true
+      source_provenance_recorded: true
+      full_corpus_parent_compatibility_passed: true
+      archetype_rules_changed: false
+      statistics_changed: false
+      public_json_changed: false
+      schema_changed: false
+      workflow_changed: false
+      front_end_changed: false
+
 known_blockers: []
 
 open_decisions:
@@ -945,14 +987,17 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P2-01"
-  name: "Define the Standard archetype, subtype, rule, and priority migration contract"
+  id: "P2-02"
+  name: "Extract shared card-name and deck normalization with legacy parity"
   target_paths:
-    - "tests/fixtures/standard/rule_migration_contract.json"
+    - "src/mtgmeta/"
+    - "classify_standard.py"
+    - "tests/test_shared_normalization.py"
     - "tests/test_standard_rule_migration_contract.py"
-    - "docs/audits/P2-01.md"
+    - "NOTICE.md"
+    - "docs/audits/P2-02.md"
     - "docs/STATUS.yaml"
-  production_change: false
+  production_change: true
   requires_user_confirmation: true
   authorization_status: "authorized"
   planning_status: "accepted_pending_publication"
@@ -994,11 +1039,11 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "p2_01_accepted_pending_publication"
+    status: "p2_02_accepted_pending_publication"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P2-02 or the shared-classifier refactor until P2-01 is accepted and published."
+  - "Do not begin P2-03 or shared rule-model implementation until P2-02 is accepted and published."
   - "Do not generalize the MTGO pipeline yet."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."

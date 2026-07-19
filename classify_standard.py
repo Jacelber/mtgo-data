@@ -1,7 +1,16 @@
 import os
 import json
 import glob
+import sys
+from pathlib import Path
 import yaml
+
+SHARED_SRC = Path(__file__).resolve().parent / "src"
+if str(SHARED_SRC) not in sys.path:
+    sys.path.insert(0, str(SHARED_SRC))
+
+from mtgmeta.deck import count_card as shared_count_card
+from mtgmeta.deck import deck_to_counts as shared_deck_to_counts
 
 # === 配置 ===
 RULES_FILE = "my_archetypes/standard.yaml"   # j6e 格式的规则库
@@ -13,10 +22,12 @@ UNKNOWN_OUTPUT = "unknown_decks.txt"           # 归不了类的牌表导出到�
 # 漫威系列发售后线上获得版权，新数据已用正名，此表把两个时期的数据归一
 CARD_ALIASES = {
     "Kavaero, Mind-Bitten": "Superior Spider-Man",
-    "Leyline Weaver": "Spider Manifestation"
+    "Leyline Weaver": "Spider Manifestation",
 }
 
+
 def normalize_name(name):
+    """Preserve the legacy public-output alias behavior during migration."""
     name = name.strip()
     return CARD_ALIASES.get(name, name)
 
@@ -31,25 +42,13 @@ def load_rules():
 
 # ---------- 2. 把一副牌整理成「卡名 -> 张数」的字典 ----------
 def deck_to_counts(player):
-    main_counts, side_counts = {}, {}
-    for c in player.get("main_deck", []):
-        name = normalize_name(c["name"])
-        main_counts[name] = main_counts.get(name, 0) + int(c["qty"])
-    for c in player.get("sideboard", []):
-        name = normalize_name(c["name"])
-        side_counts[name] = side_counts.get(name, 0) + int(c["qty"])
-    return main_counts, side_counts
+    return shared_deck_to_counts(player)
 
 
 # ---------- 3. 数某张卡在指定区域有几张 ----------
 def count_card(card_name, zone, main_counts, side_counts):
     """根据 zone 决定在哪里数这张卡的张数"""
-    if zone == "main":
-        return main_counts.get(card_name, 0)
-    elif zone == "side":
-        return side_counts.get(card_name, 0)
-    else:  # "any" 或没写 zone：主备合计
-        return main_counts.get(card_name, 0) + side_counts.get(card_name, 0)
+    return shared_count_card(card_name, zone, main_counts, side_counts)
 
 
 # ---------- 4. 判断一张签名卡的条件是否满足 ----------
