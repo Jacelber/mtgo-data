@@ -555,7 +555,7 @@ delegated_local_execution_governance:
     standing_authorization: false
     requires_separate_owner_authorization: true
   p1_06:
-    status: "paused"
+    status: "completed"
     resume_requires:
       - "GOV-02 governance commits are present on master."
       - "The project owner explicitly authorizes P1-06 continuation."
@@ -563,7 +563,7 @@ delegated_local_execution_governance:
     status: "unauthorized"
   phase_2:
     status: "unauthorized"
-  completes_p1_06: false
+  completes_p1_06: true
 
 prohibited_next_actions:
   - "Do not begin the shared-classifier refactor."
