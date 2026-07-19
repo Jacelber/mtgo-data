@@ -2,11 +2,19 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+ROOT = Path(__file__).resolve().parent
+SHARED_SRC = ROOT / "src"
+if str(SHARED_SRC) not in sys.path:
+    sys.path.insert(0, str(SHARED_SRC))
+
+from mtgmeta.rules import validate_rule_data
 
 
 @dataclass(frozen=True)
@@ -85,6 +93,8 @@ def validate_text(text: str) -> list[ValidationFailure]:
         data = yaml.load(text, Loader=DuplicateKeyLoader)
     except yaml.YAMLError as exc:
         return [ValidationFailure("YAML", str(exc).splitlines()[0])]
+    if isinstance(data, dict) and "schema_version" in data:
+        return [ValidationFailure(item.path, item.message) for item in validate_rule_data(data)]
     return validate_data(data)
 
 
@@ -97,7 +107,7 @@ def validate_path(path: str | Path) -> list[ValidationFailure]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Validate legacy archetype rule YAML.")
+    parser = argparse.ArgumentParser(description="Validate legacy or versioned archetype rule YAML.")
     parser.add_argument("path", nargs="?", default="my_archetypes/standard.yaml")
     args = parser.parse_args(argv)
     failures = validate_path(args.path)

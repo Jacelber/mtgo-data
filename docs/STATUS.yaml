@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p2-02-shared-normalization"
+  current_working_branch: "codex/p2-03-shared-rule-model"
   working_branch_status: "active_isolated_task"
   status: "active"
   primary_language: "Python"
@@ -922,9 +922,11 @@ phase_2_tasks:
 
   - id: "P2-02"
     name: "Extract shared card-name and deck normalization with legacy parity"
-    status: "accepted_pending_publication"
+    status: "completed"
     completed_on: "2026-07-19"
     source_branch: "codex/p2-02-shared-normalization"
+    pull_request: 29
+    merge_commit: "f2859c87197624eadd5e08926f3b36de33bf3ab9"
     production_change: true
     output:
       - "src/mtgmeta/__init__.py"
@@ -960,6 +962,53 @@ phase_2_tasks:
       workflow_changed: false
       front_end_changed: false
 
+  - id: "P2-03"
+    name: "Implement the shared rule model, loader, validation, and rule schema"
+    status: "accepted_pending_publication"
+    completed_on: "2026-07-19"
+    source_branch: "codex/p2-03-shared-rule-model"
+    production_change: false
+    output:
+      - "src/mtgmeta/rules.py"
+      - "src/mtgmeta/config.py"
+      - "src/mtgmeta/__init__.py"
+      - "schemas/classification-rules.schema.json"
+      - "validate_rules.py"
+      - "tests/fixtures/rules/"
+      - "tests/test_shared_rules.py"
+      - "tests/test_validate_rules.py"
+      - "tests/test_validate_schemas.py"
+      - "README.md"
+      - "docs/audits/P2-03.md"
+      - "docs/STATUS.yaml"
+    rule_contract:
+      schema_version: "1.0.0"
+      immutable_models: true
+      duplicate_yaml_keys_rejected: true
+      archetype_ids_validated: true
+      rule_ids_globally_unique: true
+      subtype_ids_unique_within_parent: true
+      subtype_references_validated: true
+      explicit_priorities_required: true
+      equal_priorities_allowed_for_later_runtime_conflict_detection: true
+    acceptance:
+      owner_accepted: true
+      legacy_default_validator_preserved: true
+      versioned_rule_cli_supported: true
+      production_standard_rules_changed: false
+      classification_behavior_changed: false
+      statistics_changed: false
+      public_json_changed: false
+      workflow_changed: false
+      front_end_changed: false
+      repository_validation_passed: true
+      legacy_rule_validation_passed: true
+      shared_rule_validation_passed: true
+      standard_quality_baseline_passed: true
+      schema_validation_passed: true
+      pytest_passed: 130
+      regeneration_semantic_field_differences: 0
+
 known_blockers: []
 
 open_decisions:
@@ -987,17 +1036,20 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P2-02"
-  name: "Extract shared card-name and deck normalization with legacy parity"
+  id: "P2-03"
+  name: "Implement the shared rule model, loader, validation, and rule schema"
   target_paths:
     - "src/mtgmeta/"
-    - "classify_standard.py"
-    - "tests/test_shared_normalization.py"
-    - "tests/test_standard_rule_migration_contract.py"
-    - "NOTICE.md"
-    - "docs/audits/P2-02.md"
+    - "schemas/classification-rules.schema.json"
+    - "validate_rules.py"
+    - "tests/fixtures/rules/"
+    - "tests/test_shared_rules.py"
+    - "tests/test_validate_rules.py"
+    - "tests/test_validate_schemas.py"
+    - "README.md"
+    - "docs/audits/P2-03.md"
     - "docs/STATUS.yaml"
-  production_change: true
+  production_change: false
   requires_user_confirmation: true
   authorization_status: "authorized"
   planning_status: "accepted_pending_publication"
@@ -1039,11 +1091,11 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "p2_02_accepted_pending_publication"
+    status: "p2_03_accepted_pending_publication"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P2-03 or shared rule-model implementation until P2-02 is accepted and published."
+  - "Do not begin P2-04 or migrate production Standard rules until P2-03 is accepted and published."
   - "Do not generalize the MTGO pipeline yet."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."

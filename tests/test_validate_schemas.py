@@ -31,7 +31,8 @@ def test_every_public_output_embeds_the_manifest_version():
 
 def test_all_declared_schemas_are_valid_and_versioned():
     loaded, _ = schemas.load_schemas(ROOT / "schemas")
-    assert len(loaded) == 9
+    assert len(loaded) == 10
+    assert "classification-rules.schema.json" in loaded
     assert all(schema["$schema"] == "https://json-schema.org/draft/2020-12/schema" for schema in loaded.values())
     assert all(schema["x-schema-version"] == "1.0.0" for schema in loaded.values())
 
