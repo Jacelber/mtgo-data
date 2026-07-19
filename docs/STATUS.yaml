@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "clean_after_p2_07_publication"
+  current_working_branch: "codex/p2-08-phase2-closeout"
+  working_branch_status: "p2_08_accepted_awaiting_publication"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 2
   name: "Shared rule system and classifier"
-  status: "in_progress"
+  status: "accepted_awaiting_publication"
   started_on: "2026-07-19"
   objective: "Extract format-independent classification behavior while preserving every approved Standard parent-archetype result and adding only the approved compatibility subtypes."
   production_changes_allowed: true
@@ -844,7 +844,7 @@ phase_1_result:
     production_behavior_changed_by_closeout: false
 
 phase_2_planning:
-  status: "active"
+  status: "accepted_awaiting_publication"
   decision: "DEC-032"
   objective: "Build a shared compatibility classifier with optional rule-level subtypes while preserving every legacy Standard parent archetype result."
   parent_archetype_compatibility_required: true
@@ -1252,6 +1252,101 @@ phase_2_tasks:
       workflow_changed: true
       merged_to_master: true
 
+  - id: "P2-08"
+    name: "Complete Phase 2 regression and behavior closeout"
+    status: "accepted_awaiting_publication"
+    implemented_on: "2026-07-20"
+    source_branch: "codex/p2-08-phase2-closeout"
+    baseline_commit: "d03e12125e98ead2ce89ee75ac09507034a80205"
+    production_change: true
+    output:
+      - "stats_standard.py"
+      - "stats_matchup.py"
+      - "tests/test_generated_output_determinism.py"
+      - "stats/standard/mtgo/decks_1w.json"
+      - "stats/standard/mtgo/decks_4w.json"
+      - "stats/standard/mtgo/decks_12w.json"
+      - "stats/standard/mtgo/decks_36w.json"
+      - "stats/standard/mtgo/matchup_1w.json"
+      - "stats/standard/mtgo/matchup_4w.json"
+      - "stats/standard/mtgo/matchup_12w.json"
+      - "stats/standard/mtgo/matchup_36w.json"
+      - "docs/audits/P2-08.md"
+      - "docs/ROADMAP.md"
+      - "docs/STATUS.yaml"
+    closeout_contract:
+      new_archetypes: 0
+      new_subtypes: 0
+      statistical_formulas_changed: false
+      deterministic_presentation_tie_breaks_repaired: true
+      front_end_code_changed: false
+      diagnostic_reports_published_to_front_end: false
+    standard_regression:
+      event_files: 123
+      records: 3936
+      parent_archetype_differences: 0
+      classified: 3865
+      unknown_results: 71
+      multiple_match_results: 947
+      overridden_match_results: 947
+      selected_subtype_decks: 45
+      same_parent_multiple_subtype_matches: 21
+      runtime_conflicts: 0
+      invalid_decks: 0
+    generated_output_regression:
+      generated_json_files_cross_seed_compared: 26
+      hash_seeds_checked: [1, 2, 17, 101]
+      cross_seed_byte_differences: 0
+      committed_files_changed: 8
+      unexpected_statistical_differences: 0
+      changes_limited_to:
+        - "best_deck.deviation_diff deterministic ordering"
+        - "average_deck.medoid deterministic representative selection"
+        - "archetype_order deterministic equal-sample ordering"
+    browser_regression:
+      page_loaded: true
+      console_errors: 0
+      data_through: "2026-07-19"
+      statistics_ranges_checked: [1, 4, 12]
+      weekly_pickup_checked: true
+      videre_matchup_ranges_checked: [1, 4, 12]
+      matchup_overall_and_matrix_checked: true
+      front_end_reports_dependency: false
+      generated_36_week_artifacts_front_end_exposed: false
+    acceptance:
+      owner_accepted: true
+      full_corpus_parent_compatibility_passed: true
+      subtype_scope_passed: true
+      id_and_priority_validation_passed: true
+      yaml_order_independence_passed: true
+      diagnostic_visibility_passed: true
+      malformed_rule_failure_passed: true
+      deterministic_generation_passed: true
+      strict_report_validation_passed: true
+      rule_validation_passed: true
+      schema_validation_passed: true
+      standard_quality_baseline_passed: true
+      repository_validation_passed: true
+      pytest_passed: 156
+      browser_smoke_test_passed: true
+      phase_2_acceptance_criteria_passed: true
+      merged_to_master: false
+
+phase_2_result:
+  status: "accepted_awaiting_publication"
+  closeout_task: "P2-08"
+  closeout_branch: "codex/p2-08-phase2-closeout"
+  baseline_commit: "d03e12125e98ead2ce89ee75ac09507034a80205"
+  completed_on: null
+  pull_request: null
+  merge_commit: null
+  tag: null
+  acceptance:
+    documented_criteria_passed: true
+    project_owner_approved: true
+    remote_publication_authorized: true
+    phase_3_authorized: false
+
 known_blockers: []
 
 open_decisions:
@@ -1282,6 +1377,8 @@ next_approved_task:
   id: "P2-08"
   name: "Complete Phase 2 regression and behavior closeout"
   target_paths:
+    - "stats_standard.py"
+    - "stats_matchup.py"
     - "tests/"
     - "reports/standard/mtgo/"
     - "stats/standard/mtgo/"
@@ -1289,10 +1386,10 @@ next_approved_task:
     - "docs/audits/P2-08.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  production_change: false
+  production_change: true
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  planning_status: "awaiting_owner_review"
+  authorization_status: "owner_accepted_and_publication_authorized"
+  planning_status: "accepted_awaiting_publication"
 
 governance_baseline:
   status: "active_on_master"
@@ -1331,11 +1428,11 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "p2_07_completed"
+    status: "p2_08_accepted_awaiting_publication"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P2-08 implementation without explicit owner authorization."
+  - "Do not begin Phase 3 until Phase 2 is accepted and Phase 3 is explicitly authorized."
   - "Do not generalize the MTGO pipeline yet."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."

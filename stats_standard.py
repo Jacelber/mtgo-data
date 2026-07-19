@@ -238,12 +238,11 @@ def split_core_flex(mean_vec, rates, core_rate=CORE_RATE):
 
 def weighted_l1(vec, mean_vec, weights):
     """加权 L1 距离：Σ w_card × |vec张数 − 均值张数|。覆盖两侧全部卡名。"""
-    names = set(vec) | set(mean_vec)
-    d = 0.0
-    for name in names:
-        w = weights.get(name, 0.0)
-        d += w * abs(vec.get(name, 0) - mean_vec.get(name, 0.0))
-    return d
+    names = sorted(set(vec) | set(mean_vec))
+    return math.fsum(
+        weights.get(name, 0.0) * abs(vec.get(name, 0) - mean_vec.get(name, 0.0))
+        for name in names
+    )
 
 
 def normalize_dev(d, d99):
@@ -273,15 +272,21 @@ def deck_diff(vec, mean_vec, top=8):
     """生成逐卡差异（相对均值）。返回 {fewer, more}，各含 {name, deck_qty, typical_qty}。
     前端再按最小差距过滤；这里输出较多项供其筛选。
     """
-    names = set(vec) | set(mean_vec)
+    names = sorted(set(vec) | set(mean_vec))
     rows = []
     for name in names:
         dq = vec.get(name, 0)
         tq = mean_vec.get(name, 0.0)
         rows.append({"name": name, "deck_qty": dq, "typical_qty": round(tq, 1),
                      "delta": dq - tq})
-    fewer = sorted([r for r in rows if r["delta"] < 0], key=lambda r: r["delta"])[:top]
-    more = sorted([r for r in rows if r["delta"] > 0], key=lambda r: -r["delta"])[:top]
+    fewer = sorted(
+        [r for r in rows if r["delta"] < 0],
+        key=lambda r: (r["delta"], r["name"]),
+    )[:top]
+    more = sorted(
+        [r for r in rows if r["delta"] > 0],
+        key=lambda r: (-r["delta"], r["name"]),
+    )[:top]
     strip = lambda rs: [{"name": r["name"], "deck_qty": r["deck_qty"],
                          "typical_qty": r["typical_qty"]} for r in rs]
     return {"fewer": strip(fewer), "more": strip(more)}
