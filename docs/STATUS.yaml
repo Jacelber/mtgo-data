@@ -1128,7 +1128,7 @@ phase_2_tasks:
 
   - id: "P2-06"
     name: "Route legacy Standard entry points through the shared classifier"
-    status: "implemented_pending_owner_acceptance"
+    status: "accepted_pending_publication"
     completed_on: "2026-07-20"
     source_branch: "codex/p2-06-standard-integration"
     production_change: true
@@ -1173,7 +1173,7 @@ phase_2_tasks:
       unknown_text_files_compared: 3
       unknown_text_differences: 0
     acceptance:
-      owner_accepted: false
+      owner_accepted: true
       full_corpus_parent_compatibility_passed: true
       rule_validation_passed: true
       schema_validation_passed: true
@@ -1228,7 +1228,7 @@ next_approved_task:
   production_change: true
   requires_user_confirmation: true
   authorization_status: "authorized"
-  planning_status: "implemented_pending_owner_acceptance"
+  planning_status: "accepted_pending_publication"
 
 governance_baseline:
   status: "active_on_master"
@@ -1267,7 +1267,7 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "p2_06_implemented_pending_owner_acceptance"
+    status: "p2_06_accepted_pending_publication"
   completes_p1_06: true
 
 prohibited_next_actions:
