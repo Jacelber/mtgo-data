@@ -126,3 +126,14 @@ def test_explicit_valid_path_and_legacy_order_are_preserved(tmp_path):
     assert result.returncode == 0 and "PASS" in result.stdout
     data = __import__("yaml").safe_load(ordered)
     assert [entry["name"] for entry in data["archetypes"]] == ["A", "Second"]
+
+
+def test_versioned_shared_rule_file_passes_cli_and_semantic_failures_are_reported():
+    valid = Path("tests/fixtures/rules/valid_shared_rules.yaml")
+    result = subprocess.run([sys.executable, "-B", "validate_rules.py", str(valid)], text=True, capture_output=True)
+    assert result.returncode == 0 and "PASS" in result.stdout
+    invalid = Path("tests/fixtures/rules/invalid_unknown_subtype.yaml")
+    result = subprocess.run([sys.executable, "-B", "validate_rules.py", str(invalid)], text=True, capture_output=True)
+    assert result.returncode == 1
+    assert "archetypes[0].rules[0].subtype_id" in result.stdout
+    assert "Traceback" not in result.stderr

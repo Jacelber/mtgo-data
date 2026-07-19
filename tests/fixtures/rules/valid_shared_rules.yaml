@@ -1,0 +1,35 @@
+schema_version: "1.0.0"
+format: standard
+archetypes:
+  - id: example-control
+    name: Example Control
+    priority: 100
+    subtypes:
+      - id: artifact-build
+        name: Artifact Build
+    rules:
+      - id: example-control-artifacts
+        priority: 100
+        subtype_id: artifact-build
+        conditions:
+          all:
+            - card: Example Engine
+              zone: main
+              min_count: 2
+              max_count: 4
+      - id: example-control-core
+        priority: 100
+        subtype_id: null
+        conditions:
+          all:
+            - card: Example Answer
+              exact_count: 4
+  - id: example-aggro
+    name: Example Aggro
+    priority: 50
+    rules:
+      - id: example-aggro-core
+        priority: 50
+        conditions:
+          all:
+            - card: Example Threat

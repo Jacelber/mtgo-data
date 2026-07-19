@@ -1,0 +1,13 @@
+schema_version: "1.0.0"
+format: standard
+archetypes:
+  - id: invalid-example
+    name: Invalid Example
+    priority: 10
+    rules:
+      - id: invalid-example-core
+        priority: 10
+        subtype_id: missing-subtype
+        conditions:
+          all:
+            - card: Example Card
