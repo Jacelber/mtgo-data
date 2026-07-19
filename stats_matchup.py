@@ -26,6 +26,7 @@ from datetime import datetime, timedelta
 
 from classify_standard import load_rules, deck_to_counts, match_archetype
 from stats_standard import parse_event_date, week_monday, latest_complete_week
+from public_contract import versioned
 
 # === 配置 ===
 OFFICIAL_DIR = "data/standard"
@@ -202,7 +203,7 @@ def build_window(events, end_monday, n_weeks):
                              matrix, mirror, overall, seen_keys, stats)
 
     order, matrix_out, overall_out = build_window_output(matrix, mirror, overall)
-    data = {
+    data = versioned({
         "format": "standard",
         "source": "mtgo",
         "period": {
@@ -215,7 +216,7 @@ def build_window(events, end_monday, n_weeks):
         "archetype_order": order,
         "overall": overall_out,
         "matrix": matrix_out,
-    }
+    })
     return data, stats
 
 def main():
@@ -250,14 +251,14 @@ def main():
               f"(跨{stats['cross_matches']}/镜像{stats['mirror_matches']}) "
               f"丢弃{stats['dropped_unmapped']} 套牌{len(data['archetype_order'])} -> {fname}")
 
-    index = {
+    index = versioned({
         "format": "standard",
         "source": "mtgo",
         "generated": datetime.now().isoformat(timespec="seconds"),
         "latest_complete_week": end_monday.isoformat(),
         "min_sample_hint": MIN_MATCHUP_SAMPLE,
         "ranges": index_entries,
-    }
+    })
     with open(os.path.join(OUT_DIR, "matchup_index.json"), "w", encoding="utf-8") as f:
         json.dump(index, f, ensure_ascii=False, indent=2)
     print(f"  写出 matchup_index.json，全部输出到 {OUT_DIR}/")

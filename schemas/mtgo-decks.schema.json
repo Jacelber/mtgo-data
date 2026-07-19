@@ -4,8 +4,9 @@
   "title": "Legacy Standard MTGO representative decks",
   "x-schema-version": "1.0.0",
   "type": "object",
-  "required": ["format", "source", "period", "decks"],
+  "required": ["schema_version", "format", "source", "period", "decks"],
   "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
     "format": {"const": "standard"}, "source": {"const": "mtgo"}, "period": {"$ref": "common.schema.json#/$defs/period"},
     "decks": {"type": "object", "additionalProperties": {"type": "object", "required": ["best_deck", "average_deck"], "properties": {
       "best_deck": {"type": "object", "required": ["player", "final_rank", "swiss_score", "player_count", "starttime", "main_deck", "side_deck"], "properties": {

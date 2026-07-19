@@ -4,8 +4,9 @@
   "title": "Legacy Standard MTGO range statistics",
   "x-schema-version": "1.0.0",
   "type": "object",
-  "required": ["format", "source", "period", "total_decks", "total_high_score", "total_top8", "unknown_count", "archetypes"],
+  "required": ["schema_version", "format", "source", "period", "total_decks", "total_high_score", "total_top8", "unknown_count", "archetypes"],
   "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
     "format": {"const": "standard"},
     "source": {"const": "mtgo"},
     "period": {"$ref": "common.schema.json#/$defs/period"},

@@ -19,6 +19,16 @@ def test_production_public_outputs_pass():
     assert failures == []
 
 
+def test_every_public_output_embeds_the_manifest_version():
+    manifest = json.loads((ROOT / "schemas" / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["output_schema_version_embedded"] is True
+    matched = []
+    for mapping in manifest["mappings"]:
+        matched.extend(ROOT.glob(mapping["pattern"]))
+    assert len(matched) == 17
+    assert all(json.loads(path.read_text(encoding="utf-8"))["schema_version"] == manifest["schema_version"] for path in matched)
+
+
 def test_all_declared_schemas_are_valid_and_versioned():
     loaded, _ = schemas.load_schemas(ROOT / "schemas")
     assert len(loaded) == 9
@@ -44,6 +54,17 @@ def test_wrong_source_and_unknown_top_level_field_fail():
     loaded, registry = schemas.load_schemas(ROOT / "schemas")
     instance["source"] = "melee"
     assert schemas.validate_instance(instance, loaded["mtgo-meta.schema.json"], registry)
+
+
+def test_missing_and_wrong_embedded_version_fail():
+    instance = json.loads((ROOT / "stats/standard/mtgo/meta.json").read_text(encoding="utf-8"))
+    loaded, registry = schemas.load_schemas(ROOT / "schemas")
+    instance.pop("schema_version")
+    failures = schemas.validate_instance(instance, loaded["mtgo-meta.schema.json"], registry)
+    assert failures and "required property" in failures[0].message
+    instance["schema_version"] = "1.0.1"
+    failures = schemas.validate_instance(instance, loaded["mtgo-meta.schema.json"], registry)
+    assert failures and "1.0.0" in failures[0].message
     instance["source"] = "mtgo"
     instance["unexpected"] = True
     assert schemas.validate_instance(instance, loaded["mtgo-meta.schema.json"], registry)
@@ -81,7 +102,7 @@ def test_cli_content_failure_and_infrastructure_error(tmp_path):
     target_dir.mkdir()
     schema = {"$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://example.test/value.schema.json", "type": "object", "required": ["value"]}
     (schema_dir / "value.schema.json").write_text(json.dumps(schema), encoding="utf-8")
-    (schema_dir / "manifest.json").write_text(json.dumps({"schema_version": "1.0.0", "mappings": [{"pattern": "stats/value.json", "schema": "value.schema.json"}]}), encoding="utf-8")
+    (schema_dir / "manifest.json").write_text(json.dumps({"schema_version": "1.0.0", "output_schema_version_embedded": True, "mappings": [{"pattern": "stats/value.json", "schema": "value.schema.json"}]}), encoding="utf-8")
     (target_dir / "value.json").write_text("{}", encoding="utf-8")
     script = ROOT / "validate_schemas.py"
     failed = subprocess.run([sys.executable, "-B", str(script), "--root", str(root), "--manifest", "schemas/manifest.json"], text=True, capture_output=True)

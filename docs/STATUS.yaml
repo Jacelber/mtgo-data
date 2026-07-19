@@ -739,6 +739,48 @@ phase_1_tasks:
       public_json_changed: false
       front_end_behavior_changed: false
 
+  - id: "P1-13"
+    name: "Embed schema versions in Standard public JSON"
+    status: "completed_local_pending_owner_acceptance"
+    completed_on: "2026-07-19"
+    source_branch: "codex/p1-13-embedded-schema-version"
+    production_change: true
+    production_change_scope: "Embed the existing compatibility version in manifest-declared public JSON and all corresponding producers."
+    output:
+      - "public_contract.py"
+      - "stats_standard.py"
+      - "stats_matchup.py"
+      - "gen_meta.py"
+      - "weekly_pickup.py"
+      - "schemas/"
+      - "stats/standard/mtgo/ manifest-declared JSON"
+      - "validate_schemas.py"
+      - "tests/test_validate_schemas.py"
+      - "tests/test_embedded_schema_version.py"
+      - "tests/fixtures/standard/public_contract/contract.json"
+      - "tests/test_standard_public_contract.py"
+      - "docs/audits/P1-13.md"
+      - "README.md"
+      - "docs/STATUS.yaml"
+    compatibility:
+      profile: "legacy-standard-mtgo-public-json"
+      schema_version: "1.0.0"
+      output_schema_version_embedded: true
+      manifest_files_migrated: 17
+    acceptance:
+      single_version_source_added: true
+      all_manifest_producers_versioned: true
+      all_manifest_outputs_versioned: true
+      missing_version_rejected: true
+      wrong_version_rejected: true
+      migration_semantic_equivalence_passed: true
+      public_paths_changed: false
+      statistical_results_changed: false
+      front_end_code_changed: false
+      front_end_behavior_changed: false
+      workflow_changed: false
+      production_workflow_dispatched: false
+
 known_blockers: []
 
 open_decisions:

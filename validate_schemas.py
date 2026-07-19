@@ -65,6 +65,8 @@ def validate_manifest(repository_root: Path, manifest_path: Path) -> tuple[int, 
     manifest = _read_json(manifest_path)
     if manifest.get("schema_version") != "1.0.0":
         raise SchemaError("manifest schema_version must be 1.0.0")
+    if manifest.get("output_schema_version_embedded") is not True:
+        raise SchemaError("manifest must require embedded output schema versions")
     mappings = manifest.get("mappings")
     if not isinstance(mappings, list) or not mappings:
         raise SchemaError("manifest mappings must be a non-empty list")
@@ -116,7 +118,7 @@ def main(argv: list[str] | None = None) -> int:
         for failure in failures:
             print(f"{failure.path} {failure.location}: {failure.message}")
         return 1
-    print(f"Schema validation PASS: checked={checked} profile=legacy-standard-mtgo-public-json version=1.0.0")
+    print(f"Schema validation PASS: checked={checked} profile=legacy-standard-mtgo-public-json version=1.0.0 embedded_versions={checked}")
     return 0
 
 
