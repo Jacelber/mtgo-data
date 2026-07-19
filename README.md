@@ -49,13 +49,13 @@ Pull requests and pushes to `master` run the same validation sequence through `.
 - `tests/fixtures/standard/`: self-contained Standard classification baseline.
 - `docs/`: authoritative specifications, decisions, audits, status, and development workflow.
 - `index.html`: current GitHub Pages entry point for MTGO Environment Trends.
-- `.github/workflows/`: existing production data-fetch and update workflows.
+- `.github/workflows/update.yml`: the single scheduled MTGO production pipeline, covering official event fetches, Videre matches, statistics, validation, and publication.
 
 Generated statistics and source configurations serve different roles. Do not manually edit generated statistics as a substitute for fixing their generator.
 
 ## Production operations
 
-The existing production scripts and GitHub Actions workflows fetch data and write committed outputs. They are not part of the read-only validation sequence. Before running or changing them, review:
+The production scripts and `.github/workflows/update.yml` fetch data and write committed outputs. The production workflow runs daily at `20:00 UTC` and may also be dispatched manually on `master`. It is not part of the read-only PR validation sequence. Before running or changing it, review:
 
 - [`docs/audits/P1-01.md`](docs/audits/P1-01.md) for the current entry-point and workflow inventory;
 - [`docs/STATISTICS_SPEC.md`](docs/STATISTICS_SPEC.md) for metric definitions;

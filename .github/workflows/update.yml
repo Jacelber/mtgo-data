@@ -1,86 +1,113 @@
-name: Weekly data update
+name: MTGO production data update
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   schedule:
-    - cron: "0 20 * * *"   # 每天 UTC 20:00 = 东九区(UTC+9) 次日 05:00
+    - cron: "0 20 * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: data-update
+  group: production-data-update
   cancel-in-progress: false
 
 jobs:
   update:
+    name: Fetch, generate, validate, and publish MTGO data
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
-      - name: Checkout (full history for rules commit date)
-        uses: actions/checkout@v4
+      - name: Check out full history for metadata and publication
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
+          persist-credentials: true
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6.3.0
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests pyyaml
+      - name: Install pinned runtime and validation dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
 
       - name: Fetch official MTGO events
-        run: python batch_mtgo.py
+        run: python -B batch_mtgo.py
 
       - name: Fetch Videre matches
-        run: python fetch_videre_matches.py
+        run: python -B fetch_videre_matches.py
 
-      - name: Build standard stats
-        run: python stats_standard.py
+      - name: Build Standard statistics
+        run: python -B stats_standard.py
 
-      - name: Build matchup matrix
-        run: python stats_matchup.py
+      - name: Build Standard matchup statistics
+        run: python -B stats_matchup.py
 
-      # ---- 审查报告：每次都重生成（只读参考，覆盖无害）；失败不影响主流程 ----
       - name: Dump unknown high-performing decks
-        run: python dump_unknown_highperf.py
+        run: python -B dump_unknown_highperf.py
         continue-on-error: true
 
       - name: Cluster unknown decks
-        run: python cluster_unknown.py
+        run: python -B cluster_unknown.py
         continue-on-error: true
 
-      # ---- 精选候选：仅当当周 candidates 文件不存在时才生成，避免覆盖人工编辑 ----
-      - name: Generate weekly pickup candidates (only if missing)
+      - name: Generate Weekly Pickup candidates when absent
         continue-on-error: true
+        shell: bash
         run: |
-          WEEK=$(python -c "from stats_standard import load_all_events, latest_complete_week; \
-          from weekly_pickup import iso_week_label; \
-          e=load_all_events(); m=latest_complete_week(e); print(iso_week_label(m) if m else '')")
-          echo "当前完整周: $WEEK"
+          WEEK=$(python -B -c "from stats_standard import load_all_events, latest_complete_week; from weekly_pickup import iso_week_label; events=load_all_events(); latest=latest_complete_week(events); print(iso_week_label(latest) if latest else '')")
+          echo "Latest complete week: ${WEEK:-none}"
           if [ -z "$WEEK" ]; then
-            echo "无法确定完整周，跳过 candidates 生成。"
+            echo "Skipping candidate generation because no complete week is available."
           elif [ -f "stats/standard/mtgo/pickup/candidates_${WEEK}.yaml" ]; then
-            echo "candidates_${WEEK}.yaml 已存在，跳过（保护人工编辑）。"
+            echo "Preserving existing manually reviewed candidates_${WEEK}.yaml."
           else
-            echo "生成 candidates_${WEEK}.yaml ..."
-            python weekly_pickup.py candidates
+            python -B weekly_pickup.py candidates
           fi
 
-      - name: Generate meta.json
-        run: python gen_meta.py
+      - name: Generate Standard metadata
+        run: python -B gen_meta.py
 
-      - name: Commit and push if changed
+      - name: Validate repository files and references
+        run: python -B validate_repository.py
+
+      - name: Validate Standard archetype rules
+        run: python -B validate_rules.py
+
+      - name: Validate Standard public JSON schemas
+        run: python -B validate_schemas.py
+
+      - name: Run regression tests
+        run: python -B -m pytest
+
+      - name: Commit and push generated changes
+        id: publish
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ stats/ fetched.txt unknown_highperf.txt unknown_clusters.txt
+          git add -- data/ stats/ fetched.txt unknown_highperf.txt unknown_clusters.txt
           if git diff --cached --quiet; then
-            echo "No changes to commit."
-          else
-            git commit -m "chore: 自动数据更新 $(date -u +'%Y-%m-%d %H:%M UTC')"
-            git pull --rebase
-            git push
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No generated changes to publish."
+            exit 0
           fi
+          git commit -m "chore: update MTGO production data $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push origin HEAD:master
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Write production update summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## MTGO production data update"
+            echo
+            echo "- Job result: ${{ job.status }}"
+            echo "- Trigger: ${{ github.event_name }}"
+            echo "- Source branch: ${{ github.ref_name }}"
+            echo "- Generated changes published: ${{ steps.publish.outputs.changed || 'not-reached' }}"
+            echo "- Pipeline: MTGO events, Videre matches, Standard statistics, matchup statistics, metadata, validation, and publication."
+          } >> "$GITHUB_STEP_SUMMARY"
