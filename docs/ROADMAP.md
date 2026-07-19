@@ -436,7 +436,7 @@ Phase 2 is complete when:
 - tests cover positive, negative, Unknown, and conflict cases;
 - malformed rule files fail validation clearly.
 
-P2-08 local closeout verification completed these criteria on 2026-07-20. The full 3,936-deck Standard parent-archetype baseline remains unchanged, only the four approved duplicate-rule subtype paths are selected, diagnostic reports remain reviewable, and generated output is now byte-stable across Python hash seeds. Existing MTGO statistics, Weekly Pickup, and Videre matchup page behavior passed browser regression. The project owner accepted P2-08 and authorized Phase 2 publication on 2026-07-20. Phase 3 remains subject to separate task authorization.
+P2-08 completed these criteria on 2026-07-20. The full 3,936-deck Standard parent-archetype baseline remains unchanged, only the four approved duplicate-rule subtype paths are selected, diagnostic reports remain reviewable, and generated output is now byte-stable across Python hash seeds. Existing MTGO statistics, Weekly Pickup, and Videre matchup page behavior passed browser regression. The project owner accepted the closeout, and P2-08 was published through pull request #39 and merge commit `a5361fc4ec5a05b07811f47b40daa94ecbc9d0e5`. The recoverable Phase 2 baseline is tagged as `phase-2-shared-classifier-baseline`. Phase 3 remains subject to separate task authorization.
 
 ---
 
