@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-meta.schema.json",
+  "title": "Legacy Standard MTGO metadata",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "required": ["format", "source", "rules_updated", "data_updated"],
+  "properties": {
+    "format": {"const": "standard"}, "source": {"const": "mtgo"},
+    "rules_updated": {"type": "string", "minLength": 1}, "data_updated": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

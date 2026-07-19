@@ -31,10 +31,13 @@ Run the read-only repository validator, rule validator, and tests from the repos
 ```powershell
 .\.venv\Scripts\python.exe validate_repository.py
 .\.venv\Scripts\python.exe validate_rules.py
+.\.venv\Scripts\python.exe validate_schemas.py
 .\.venv\Scripts\python.exe -m pytest
 ```
 
-These commands validate repository syntax and references, the current Standard archetype rules, and the frozen Standard classification baseline. They do not fetch tournament data or regenerate production statistics.
+These commands validate repository syntax and references, the current Standard archetype rules, the legacy Standard public JSON compatibility schemas, and the frozen Standard classification baseline. They do not fetch tournament data or regenerate production statistics.
+
+The Schema mapping in `schemas/manifest.json` is versioned as `1.0.0`. It protects the structure of the existing unversioned Standard MTGO public JSON. Adding an embedded `schema_version` field to generated output requires a separate producer migration and is intentionally outside this compatibility-baseline task.
 
 ## Current repository layout
 

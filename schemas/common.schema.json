@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/common.schema.json",
+  "title": "MTGO legacy compatibility common definitions",
+  "x-schema-version": "1.0.0",
+  "$defs": {
+    "period": {
+      "type": "object",
+      "required": ["type", "start", "end", "weeks"],
+      "properties": {
+        "type": {"type": "string", "pattern": "^[0-9]+w$"},
+        "start": {"type": "string", "format": "date"},
+        "end": {"type": "string", "format": "date"},
+        "weeks": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "cardQuantity": {
+      "type": "object",
+      "required": ["name", "qty"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "qty": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "tournamentDeck": {
+      "type": "object",
+      "required": ["player", "final_rank", "swiss_score", "player_count", "starttime", "main_deck", "side_deck"],
+      "properties": {
+        "player": {"type": "string"},
+        "final_rank": {"type": "integer", "minimum": 1},
+        "swiss_score": {"type": "integer", "minimum": 0},
+        "player_count": {"type": "integer", "minimum": 1},
+        "starttime": {"type": "string", "minLength": 1},
+        "main_deck": {"type": "array", "items": {"$ref": "#/$defs/cardQuantity"}},
+        "side_deck": {"type": "array", "items": {"$ref": "#/$defs/cardQuantity"}}
+      },
+      "additionalProperties": false
+    },
+    "matchRecord": {
+      "type": "object",
+      "required": ["wins", "losses", "draws", "matches", "win_rate", "ci_half", "low_sample", "mirror"],
+      "properties": {
+        "wins": {"type": "integer", "minimum": 0},
+        "losses": {"type": "integer", "minimum": 0},
+        "draws": {"type": "integer", "minimum": 0},
+        "matches": {"type": "integer", "minimum": 0},
+        "win_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "ci_half": {"type": "number", "minimum": 0, "maximum": 1},
+        "low_sample": {"type": "boolean"},
+        "mirror": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-matchup.schema.json",
+  "title": "Legacy Standard MTGO matchup statistics",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "required": ["format", "source", "period", "min_sample_hint", "archetype_order", "overall", "matrix"],
+  "properties": {
+    "format": {"const": "standard"}, "source": {"const": "mtgo"}, "period": {"$ref": "common.schema.json#/$defs/period"},
+    "min_sample_hint": {"type": "integer", "minimum": 1},
+    "archetype_order": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "overall": {"type": "object", "additionalProperties": {"$ref": "common.schema.json#/$defs/matchRecord"}},
+    "matrix": {"type": "object", "additionalProperties": {"type": "object", "additionalProperties": {"$ref": "common.schema.json#/$defs/matchRecord"}}}
+  },
+  "additionalProperties": false
+}

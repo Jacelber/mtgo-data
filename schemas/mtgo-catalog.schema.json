@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-catalog.schema.json",
+  "title": "Legacy Standard MTGO range catalog",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "required": ["format", "source", "generated", "latest_complete_week", "base_weeks", "global_d99", "ranges"],
+  "properties": {
+    "format": {"const": "standard"}, "source": {"const": "mtgo"},
+    "generated": {"type": "string", "minLength": 1}, "latest_complete_week": {"type": "string", "format": "date"},
+    "base_weeks": {"type": "integer", "minimum": 1}, "global_d99": {"type": "number", "minimum": 0},
+    "ranges": {"type": "array", "items": {"type": "object", "required": ["file", "decks_file", "type", "start", "end", "weeks", "total_decks"], "properties": {
+      "file": {"type": "string", "pattern": "^range_[0-9]+w\\.json$"}, "decks_file": {"type": "string", "pattern": "^decks_[0-9]+w\\.json$"},
+      "type": {"type": "string", "pattern": "^[0-9]+w$"}, "start": {"type": "string", "format": "date"}, "end": {"type": "string", "format": "date"},
+      "weeks": {"type": "integer", "minimum": 1}, "total_decks": {"type": "integer", "minimum": 0}
+    }, "additionalProperties": false}}
+  },
+  "additionalProperties": false
+}

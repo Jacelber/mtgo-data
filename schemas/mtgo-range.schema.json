@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-range.schema.json",
+  "title": "Legacy Standard MTGO range statistics",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "required": ["format", "source", "period", "total_decks", "total_high_score", "total_top8", "unknown_count", "archetypes"],
+  "properties": {
+    "format": {"const": "standard"},
+    "source": {"const": "mtgo"},
+    "period": {"$ref": "common.schema.json#/$defs/period"},
+    "total_decks": {"type": "integer", "minimum": 0},
+    "total_high_score": {"type": "integer", "minimum": 0},
+    "total_top8": {"type": "integer", "minimum": 0},
+    "unknown_count": {"type": "integer", "minimum": 0},
+    "archetypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "count", "high_score_count", "high_score_share", "top8_count", "top8_share", "conversion", "avg_points_per_round", "avg_deviation"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "count": {"type": "integer", "minimum": 0},
+          "high_score_count": {"type": "integer", "minimum": 0},
+          "high_score_share": {"type": "number", "minimum": 0, "maximum": 1},
+          "top8_count": {"type": "integer", "minimum": 0},
+          "top8_share": {"type": "number", "minimum": 0, "maximum": 1},
+          "conversion": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "avg_points_per_round": {"type": "number", "minimum": 0, "maximum": 3},
+          "avg_deviation": {"type": ["number", "null"], "minimum": 0}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
