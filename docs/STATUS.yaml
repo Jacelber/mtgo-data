@@ -703,6 +703,42 @@ phase_1_tasks:
       statistical_behavior_changed: false
       front_end_behavior_changed: false
 
+  - id: "P1-12"
+    name: "Establish Standard classification quality and repository hygiene baselines"
+    status: "completed"
+    completed_on: "2026-07-19"
+    source_branch: "codex/p1-12-quality-hygiene"
+    production_change: false
+    output:
+      - "validate_standard_quality.py"
+      - "tests/fixtures/standard/quality_baseline.json"
+      - "tests/test_standard_quality_baseline.py"
+      - "validate_repository.py"
+      - "tests/test_validate_repository.py"
+      - ".gitignore"
+      - "docs/audits/P1-12.md"
+      - "README.md"
+      - "docs/STATUS.yaml"
+    baseline:
+      records: 3936
+      rules: 76
+      unknown_results: 71
+      multiple_match_results: 947
+      maximum_matches_per_deck: 3
+      multiple_match_digest: "f8110df54d93ae77192e42f6bd86d334a94235cdad0da840b11ee75323de8aca"
+    acceptance:
+      frozen_quality_baseline_added: true
+      baseline_contains_player_identifiers: false
+      legacy_first_match_behavior_changed: false
+      repository_hygiene_validation_added: true
+      diagnostic_report_risks_documented: true
+      diagnostic_generators_changed: false
+      generated_reports_changed: false
+      classification_rules_changed: false
+      statistical_behavior_changed: false
+      public_json_changed: false
+      front_end_behavior_changed: false
+
 known_blockers: []
 
 open_decisions:
