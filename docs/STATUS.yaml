@@ -741,9 +741,11 @@ phase_1_tasks:
 
   - id: "P1-13"
     name: "Embed schema versions in Standard public JSON"
-    status: "completed_local_pending_owner_acceptance"
+    status: "completed"
     completed_on: "2026-07-19"
     source_branch: "codex/p1-13-embedded-schema-version"
+    pull_request: 23
+    merge_commit: "8a334fc4173b45486b42854d90960bd0337fd8d3"
     production_change: true
     production_change_scope: "Embed the existing compatibility version in manifest-declared public JSON and all corresponding producers."
     output:
@@ -780,6 +782,8 @@ phase_1_tasks:
       front_end_behavior_changed: false
       workflow_changed: false
       production_workflow_dispatched: false
+      owner_accepted: true
+      merged_to_master: true
 
 known_blockers: []
 
