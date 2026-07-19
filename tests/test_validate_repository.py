@@ -114,6 +114,25 @@ def test_tracked_files_bad_utf8(monkeypatch, tmp_path):
         validator.tracked_files(tmp_path)
 
 
+def test_repository_hygiene_accepts_source_and_generated_reports():
+    checked, failures = validator.validate_hygiene([
+        "src/module.py", "unknown_highperf.txt", "stats/standard/mtgo/meta.json"
+    ])
+    assert checked == 3
+    assert failures == []
+
+
+def test_repository_hygiene_rejects_tracked_runtime_artifacts():
+    names = [
+        "src/__pycache__/module.pyc", ".pytest_cache/state", ".venv/pyvenv.cfg",
+        "debug.log", "scratch.tmp", "backup.bak", ".DS_Store", "assets/THUMBS.DB",
+    ]
+    checked, failures = validator.validate_hygiene(names)
+    assert checked == len(names)
+    assert [failure.path for failure in failures] == names
+    assert all(failure.category == "Hygiene" for failure in failures)
+
+
 @pytest.mark.parametrize("value,expected", [("a/b.txt", True), ("../a", False), ("a\\b", False), ("C:\\a", False), ("//server/a", False)])
 def test_safe_declared_reference(value, expected):
     assert validator.safe_declared_reference(value) is expected

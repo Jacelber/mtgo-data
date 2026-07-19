@@ -29,7 +29,11 @@ class Failure:
     column: int | None = None
 
 
-CATEGORY_ORDER = {"Python": 0, "JSON": 1, "YAML": 2, "References": 3}
+CATEGORY_ORDER = {"Python": 0, "JSON": 1, "YAML": 2, "References": 3, "Hygiene": 4}
+
+FORBIDDEN_TRACKED_PARTS = {"__pycache__", ".pytest_cache", ".venv", "node_modules"}
+FORBIDDEN_TRACKED_NAMES = {".ds_store", "thumbs.db"}
+FORBIDDEN_TRACKED_SUFFIXES = (".pyc", ".pyo", ".log", ".tmp", ".bak", ".swp")
 
 
 def repository_root() -> Path:
@@ -235,6 +239,24 @@ def validate_references(root: Path, names: list[str], status: dict[str, Any]) ->
     return checked, failures, breakdown
 
 
+def validate_hygiene(names: list[str]) -> tuple[int, list[Failure]]:
+    failures = []
+    for name in names:
+        path = Path(name)
+        lowered_parts = {part.lower() for part in path.parts}
+        lowered_name = path.name.lower()
+        reason = None
+        if FORBIDDEN_TRACKED_PARTS.intersection(lowered_parts):
+            reason = "tracked runtime or dependency directory"
+        elif lowered_name in FORBIDDEN_TRACKED_NAMES:
+            reason = "tracked operating-system artifact"
+        elif lowered_name.endswith(FORBIDDEN_TRACKED_SUFFIXES):
+            reason = "tracked cache, log, backup, or temporary file"
+        if reason:
+            failures.append(Failure("Hygiene", name, reason))
+    return len(names), failures
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate tracked repository content read-only.")
     parser.parse_args()
@@ -245,6 +267,8 @@ def main() -> int:
         counts, failures, parsed = validate_files(root, candidates)
         reference_count, reference_failures, breakdown = validate_references(root, tracked, parsed.get("docs/STATUS.yaml"))
         failures.extend(reference_failures)
+        hygiene_count, hygiene_failures = validate_hygiene(tracked)
+        failures.extend(hygiene_failures)
         failures.sort(key=lambda f: (CATEGORY_ORDER[f.category], f.path, f.line or 0, f.column or 0, f.message))
         failed_paths = {category: {f.path for f in failures if f.category == category} for category in CATEGORY_ORDER}
         print("Repository validation")
@@ -254,6 +278,7 @@ def main() -> int:
             failed = len(failed_paths[category])
             print(f"{category}: checked={checked} passed={checked - failed} failed={failed}")
         print(f"References: checked={reference_count} passed={reference_count - len({f.path for f in reference_failures})} failed={len({f.path for f in reference_failures})}")
+        print(f"Hygiene: checked={hygiene_count} passed={hygiene_count - len(hygiene_failures)} failed={len(hygiene_failures)}")
         for item in failures:
             location = f" line {item.line}, column {item.column}" if item.line is not None else ""
             print(f"{item.category}: {item.path}{location}: {item.message}")
