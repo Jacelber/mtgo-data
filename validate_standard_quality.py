@@ -9,9 +9,9 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-import yaml
-
 from classify_standard import signature_card_met
+from mtgmeta.config import load_rule_set
+from mtgmeta.legacy_rules import to_legacy_archetypes
 
 
 ROOT = Path(__file__).resolve().parent
@@ -66,7 +66,7 @@ def analyze(records: list[dict[str, Any]], rules: list[dict[str, Any]]) -> dict[
 def validate() -> list[str]:
     baseline = load_json(BASELINE)
     records = load_json(CORPUS)["records"]
-    rules = yaml.safe_load(RULES.read_text(encoding="utf-8"))["archetypes"]
+    rules = to_legacy_archetypes(load_rule_set(RULES))
     actual = analyze(records, rules)
     failures = []
     for key in actual:

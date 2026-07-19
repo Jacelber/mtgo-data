@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p2-03-shared-rule-model"
+  current_working_branch: "codex/p2-04-standard-rule-migration"
   working_branch_status: "active_isolated_task"
   status: "active"
   primary_language: "Python"
@@ -12,7 +12,7 @@ project:
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-19"
+  last_updated: "2026-07-20"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -964,9 +964,11 @@ phase_2_tasks:
 
   - id: "P2-03"
     name: "Implement the shared rule model, loader, validation, and rule schema"
-    status: "accepted_pending_publication"
+    status: "completed"
     completed_on: "2026-07-19"
     source_branch: "codex/p2-03-shared-rule-model"
+    pull_request: 30
+    merge_commit: "4d679c496b3584bb5cb91caa3c354c0bf785d69b"
     production_change: false
     output:
       - "src/mtgmeta/rules.py"
@@ -1009,6 +1011,61 @@ phase_2_tasks:
       pytest_passed: 130
       regeneration_semantic_field_differences: 0
 
+  - id: "P2-04"
+    name: "Migrate Standard rules to stable identities and explicit priorities"
+    status: "accepted_pending_publication"
+    completed_on: "2026-07-20"
+    source_branch: "codex/p2-04-standard-rule-migration"
+    production_change: true
+    output:
+      - "my_archetypes/standard.yaml"
+      - "src/mtgmeta/legacy_rules.py"
+      - "classify_standard.py"
+      - "validate_standard_quality.py"
+      - "tests/test_shared_normalization.py"
+      - "tests/test_standard_classification.py"
+      - "tests/test_standard_classification_corpus.py"
+      - "tests/test_standard_rule_migration_contract.py"
+      - "docs/audits/P2-04.md"
+      - "docs/STATUS.yaml"
+    migrated_rule_contract:
+      schema_version: "1.0.0"
+      format: "standard"
+      parent_archetypes: 74
+      rules: 76
+      stable_archetype_ids: 74
+      stable_rule_ids: 76
+      explicit_rule_priorities: true
+      approved_subtype_parent_groups: 2
+      approved_subtype_identities: 4
+      additional_archetypes_added: false
+      additional_subtypes_added: false
+    compatibility:
+      legacy_adapter_added: true
+      explicit_priority_independent_of_yaml_order: true
+      frozen_corpus_records: 3936
+      parent_archetype_differences: 0
+      unknown_results: 71
+      multiple_match_results: 947
+      maximum_matches_per_deck: 3
+      subtype_selection_deferred_to_p2_05: true
+    acceptance:
+      owner_accepted: true
+      production_rule_file_versioned: true
+      migration_contract_passed: true
+      full_corpus_parent_compatibility_passed: true
+      rule_validation_passed: true
+      schema_validation_passed: true
+      standard_quality_baseline_passed: true
+      repository_validation_passed: true
+      pytest_passed: 132
+      generated_json_files_compared: 20
+      regeneration_semantic_field_differences: 0
+      statistics_changed: false
+      public_json_semantics_changed: false
+      workflow_changed: false
+      front_end_changed: false
+
 known_blockers: []
 
 open_decisions:
@@ -1036,20 +1093,17 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P2-03"
-  name: "Implement the shared rule model, loader, validation, and rule schema"
+  id: "P2-04"
+  name: "Migrate Standard rules to stable identities and explicit priorities"
   target_paths:
-    - "src/mtgmeta/"
-    - "schemas/classification-rules.schema.json"
-    - "validate_rules.py"
-    - "tests/fixtures/rules/"
-    - "tests/test_shared_rules.py"
-    - "tests/test_validate_rules.py"
-    - "tests/test_validate_schemas.py"
-    - "README.md"
-    - "docs/audits/P2-03.md"
+    - "my_archetypes/standard.yaml"
+    - "src/mtgmeta/legacy_rules.py"
+    - "classify_standard.py"
+    - "validate_standard_quality.py"
+    - "tests/"
+    - "docs/audits/P2-04.md"
     - "docs/STATUS.yaml"
-  production_change: false
+  production_change: true
   requires_user_confirmation: true
   authorization_status: "authorized"
   planning_status: "accepted_pending_publication"
@@ -1091,11 +1145,11 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "p2_03_accepted_pending_publication"
+    status: "p2_04_accepted_pending_publication"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P2-04 or migrate production Standard rules until P2-03 is accepted and published."
+  - "Do not begin P2-05 until P2-04 is accepted and published."
   - "Do not generalize the MTGO pipeline yet."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."

@@ -3,7 +3,6 @@ import json
 import glob
 import sys
 from pathlib import Path
-import yaml
 
 SHARED_SRC = Path(__file__).resolve().parent / "src"
 if str(SHARED_SRC) not in sys.path:
@@ -11,9 +10,11 @@ if str(SHARED_SRC) not in sys.path:
 
 from mtgmeta.deck import count_card as shared_count_card
 from mtgmeta.deck import deck_to_counts as shared_deck_to_counts
+from mtgmeta.config import load_rule_set
+from mtgmeta.legacy_rules import to_legacy_archetypes
 
 # === 配置 ===
-RULES_FILE = "my_archetypes/standard.yaml"   # j6e 格式的规则库
+RULES_FILE = "my_archetypes/standard.yaml"   # 版本化 Standard 规则库
 DATA_DIR = "data/standard"                     # 你抓取的 standard 赛事数据
 UNKNOWN_OUTPUT = "unknown_decks.txt"           # 归不了类的牌表导出到这里
 
@@ -31,11 +32,10 @@ def normalize_name(name):
     name = name.strip()
     return CARD_ALIASES.get(name, name)
 
-# ---------- 1. 加载 YAML 规则 ----------
+# ---------- 1. 加载版本化 YAML，并适配现有调用方 ----------
 def load_rules():
-    with open(RULES_FILE, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f)
-    archetypes = data.get("archetypes", [])
+    rule_set = load_rule_set(RULES_FILE)
+    archetypes = to_legacy_archetypes(rule_set)
     print(f"  已加载 {len(archetypes)} 条规则（来自 {RULES_FILE}）")
     return archetypes
 

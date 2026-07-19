@@ -4,20 +4,18 @@ import json
 import sys
 from pathlib import Path
 
-import yaml
-
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 repository_root_text = str(REPOSITORY_ROOT)
 if repository_root_text not in sys.path:
     sys.path.insert(0, repository_root_text)
 
-from classify_standard import CARD_ALIASES, count_card, deck_to_counts, match_archetype, signature_card_met
+from classify_standard import CARD_ALIASES, count_card, deck_to_counts, load_rules, match_archetype, signature_card_met
 
 ROOT = REPOSITORY_ROOT
 FIXTURE = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
 
 def rules():
-    return yaml.safe_load((ROOT / "my_archetypes" / "standard.yaml").read_text(encoding="utf-8"))["archetypes"]
+    return load_rules()
 
 
 def all_legacy_matches(main, side):

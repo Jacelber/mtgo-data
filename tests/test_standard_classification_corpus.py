@@ -5,14 +5,12 @@ import json
 import sys
 from pathlib import Path
 
-import yaml
-
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 repository_root_text = str(REPOSITORY_ROOT)
 if repository_root_text not in sys.path:
     sys.path.insert(0, repository_root_text)
 
-from classify_standard import match_archetype
+from classify_standard import load_rules, match_archetype
 
 
 ROOT = REPOSITORY_ROOT
@@ -25,7 +23,7 @@ def load_records():
 
 
 def legacy_rules():
-    return yaml.safe_load((ROOT / "my_archetypes" / "standard.yaml").read_text(encoding="utf-8"))["archetypes"]
+    return load_rules()
 
 
 def digest(records):
