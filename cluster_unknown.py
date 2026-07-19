@@ -3,7 +3,7 @@ import json
 import glob
 
 # 直接复用分类脚本的核心逻辑，保证 Unknown 判定完全一致（含别名表）
-from classify_standard import load_rules, deck_to_counts, signature_card_met
+from classify_standard import load_rules, deck_to_counts, match_archetype
 from stats_standard import rounds_from_player_count, high_score_threshold, to_int
 
 # === 配置 ===
@@ -14,11 +14,7 @@ MIN_GROUP_SIZE = 3
 
 
 def is_unknown(main_counts, side_counts, archetypes):
-    for arch in archetypes:
-        sigs = arch.get("signatureCards", [])
-        if sigs and all(signature_card_met(s, main_counts, side_counts) for s in sigs):
-            return False   # 匹配到某个套牌，不是 Unknown
-    return True
+    return match_archetype(main_counts, side_counts, archetypes) is None
 
 
 # ---------- 把一副牌变成「全部卡名的集合」（主备合计），用于比较重合度 ----------

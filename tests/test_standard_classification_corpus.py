@@ -1,4 +1,4 @@
-"""Self-contained deterministic baseline for the legacy Standard classifier."""
+"""Self-contained deterministic baseline for the Standard compatibility API."""
 
 import hashlib
 import json

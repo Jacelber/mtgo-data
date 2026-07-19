@@ -10,8 +10,10 @@ if str(SHARED_SRC) not in sys.path:
 
 from mtgmeta.deck import count_card as shared_count_card
 from mtgmeta.deck import deck_to_counts as shared_deck_to_counts
+from mtgmeta.classifier import ClassificationResult, classify_counts
 from mtgmeta.config import load_rule_set
-from mtgmeta.legacy_rules import to_legacy_archetypes
+from mtgmeta.legacy_rules import LegacyArchetypeRules, to_legacy_archetypes
+from mtgmeta.rules import RuleSet
 
 # === 配置 ===
 RULES_FILE = "my_archetypes/standard.yaml"   # 版本化 Standard 规则库
@@ -65,9 +67,61 @@ def signature_card_met(sig, main_counts, side_counts):
     return actual >= 1
 
 
+class StandardClassificationConflict(RuntimeError):
+    def __init__(self, result: ClassificationResult):
+        self.result = result
+        rule_ids = ", ".join(match.rule_id for match in result.conflict_matches)
+        super().__init__(f"Standard classification conflict ({result.conflict_kind}): {rule_ids}")
+
+
+class StandardInvalidDeck(ValueError):
+    def __init__(self, result: ClassificationResult):
+        self.result = result
+        super().__init__("Standard deck classification input is invalid: " + "; ".join(result.errors))
+
+
+def classify_standard_result(main_counts, side_counts, archetypes):
+    """Return the shared result behind the temporary Standard compatibility API."""
+
+    if isinstance(archetypes, LegacyArchetypeRules):
+        rule_set = archetypes.rule_set
+    elif isinstance(archetypes, RuleSet):
+        rule_set = archetypes
+    else:
+        raise TypeError("shared Standard classification requires a RuleSet-backed rule collection")
+    return classify_counts(rule_set, main_counts, side_counts)
+
+
+def all_matching_archetype_names(main_counts, side_counts, archetypes):
+    """Return every matched parent name while preserving legacy duplicate names."""
+
+    if isinstance(archetypes, (LegacyArchetypeRules, RuleSet)):
+        return [
+            match.archetype_name
+            for match in classify_standard_result(main_counts, side_counts, archetypes).matched_rules
+        ]
+    return [
+        arch.get("name", "Unnamed")
+        for arch in archetypes
+        if arch.get("signatureCards")
+        and all(signature_card_met(sig, main_counts, side_counts) for sig in arch["signatureCards"])
+    ]
+
+
 
 # ---------- 5. 尝试匹配一个套牌 ----------
 def match_archetype(main_counts, side_counts, archetypes):
+    if isinstance(archetypes, (LegacyArchetypeRules, RuleSet)):
+        result = classify_standard_result(main_counts, side_counts, archetypes)
+        if result.status == "classified":
+            return result.archetype_name
+        if result.status == "unknown":
+            return None
+        if result.status == "conflict":
+            raise StandardClassificationConflict(result)
+        if result.status == "invalid_deck":
+            raise StandardInvalidDeck(result)
+        raise RuntimeError(f"Unsupported Standard classification status: {result.status}")
     for arch in archetypes:
         sigs = arch.get("signatureCards", [])
         if sigs and all(signature_card_met(s, main_counts, side_counts) for s in sigs):
