@@ -39,6 +39,8 @@ These commands validate repository syntax and references, the current Standard a
 
 The Schema mapping in `schemas/manifest.json` is versioned as `1.0.0`. It protects the structure of the existing unversioned Standard MTGO public JSON. Adding an embedded `schema_version` field to generated output requires a separate producer migration and is intentionally outside this compatibility-baseline task.
 
+Pull requests and pushes to `master` run the same validation sequence through `.github/workflows/ci.yml`. The CI workflow has read-only repository permissions, does not persist checkout credentials, and does not fetch or regenerate production tournament data.
+
 ## Current repository layout
 
 - `data/<format>/`: committed source event data; source-specific normalized paths will be added in later phases.
