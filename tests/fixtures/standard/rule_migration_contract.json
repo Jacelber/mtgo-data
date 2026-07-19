@@ -1,0 +1,1202 @@
+{
+  "schema_version": "1.0.0",
+  "format": "standard",
+  "purpose": "Frozen migration contract from legacy ordered rules to explicit archetype, subtype, rule, and priority identities.",
+  "legacy_baseline": {
+    "tag": "phase-1-standard-baseline",
+    "commit": "baf71f4522447b85e30c8c9cb37455e034d27259",
+    "production_rule_git_blob": "f740b082895b6ef45e31bdfe2c0cbf759da1279e",
+    "legacy_classifier_git_blob": "cf106c15c4fbdb48305a04a28e64b9b0e234de3e",
+    "frozen_corpus_git_blob": "ac0b182e699a1c981466fe054bd547c8c8fb86fc",
+    "production_rule_content_sha256": "604e9af057540f8d314d957dd1be8eabbef3a731e70e81c93fdaff80fbe33254",
+    "legacy_classifier_content_sha256": "a69753e60a493ec7775112fa9c378d48dec06fef9cb2b99d737b6353398e437d",
+    "frozen_corpus_content_sha256": "1c0d945c9d13fa273680d613d8b264bb8cbaf24750f9113469bc2433c2159066",
+    "records": 3936,
+    "rules": 76,
+    "archetypes": 74,
+    "unknown": 71,
+    "multiple_matches": 947,
+    "maximum_matches_per_deck": 3,
+    "parent_archetype_differences": 0
+  },
+  "compatibility_policy": {
+    "parent_archetype_resolution": "highest_explicit_rule_priority",
+    "priority_migration": "descending multiples of 10 reproduce legacy first-match order",
+    "subtype_resolution": "subtype of the selected highest-priority rule, otherwise null",
+    "new_archetypes_added": false,
+    "additional_subtype_taxonomy_added": false
+  },
+  "approved_initial_subtype_groups": [
+    "4-color-control",
+    "izzet-aggro"
+  ],
+  "archetypes": [
+    {
+      "id": "monument-lessons",
+      "legacy_display_name": "Monument Lessons",
+      "priority": 760,
+      "subtypes": []
+    },
+    {
+      "id": "jeskai-lessons",
+      "legacy_display_name": "Jeskai Lessons",
+      "priority": 750,
+      "subtypes": []
+    },
+    {
+      "id": "izzet-lessons",
+      "legacy_display_name": "Izzet Lessons",
+      "priority": 740,
+      "subtypes": []
+    },
+    {
+      "id": "mono-green-landfall",
+      "legacy_display_name": "Mono-Green Landfall",
+      "priority": 730,
+      "subtypes": []
+    },
+    {
+      "id": "gruul-landfall",
+      "legacy_display_name": "Gruul Landfall",
+      "priority": 720,
+      "subtypes": []
+    },
+    {
+      "id": "selesnya-landfall",
+      "legacy_display_name": "Selesnya Landfall",
+      "priority": 710,
+      "subtypes": []
+    },
+    {
+      "id": "dimir-excruciator",
+      "legacy_display_name": "Dimir Excruciator",
+      "priority": 700,
+      "subtypes": []
+    },
+    {
+      "id": "bant-rhythm",
+      "legacy_display_name": "Bant Rhythm",
+      "priority": 690,
+      "subtypes": []
+    },
+    {
+      "id": "simic-rhythm",
+      "legacy_display_name": "Simic Rhythm",
+      "priority": 680,
+      "subtypes": []
+    },
+    {
+      "id": "selesnya-rhythm",
+      "legacy_display_name": "Selesnya Rhythm",
+      "priority": 670,
+      "subtypes": []
+    },
+    {
+      "id": "dimir-midrange",
+      "legacy_display_name": "Dimir Midrange",
+      "priority": 660,
+      "subtypes": []
+    },
+    {
+      "id": "azorius-tempo",
+      "legacy_display_name": "Azorius Tempo",
+      "priority": 650,
+      "subtypes": []
+    },
+    {
+      "id": "izzet-spellementals",
+      "legacy_display_name": "Izzet Spellementals",
+      "priority": 640,
+      "subtypes": []
+    },
+    {
+      "id": "mono-blue-spellementals",
+      "legacy_display_name": "Mono-Blue Spellementals",
+      "priority": 630,
+      "subtypes": []
+    },
+    {
+      "id": "temur-elementals",
+      "legacy_display_name": "Temur Elementals",
+      "priority": 620,
+      "subtypes": []
+    },
+    {
+      "id": "grixis-elementals",
+      "legacy_display_name": "Grixis Elementals",
+      "priority": 610,
+      "subtypes": []
+    },
+    {
+      "id": "temur-tablet",
+      "legacy_display_name": "Temur Tablet",
+      "priority": 600,
+      "subtypes": []
+    },
+    {
+      "id": "4-color-tablet",
+      "legacy_display_name": "4-Color Tablet",
+      "priority": 590,
+      "subtypes": []
+    },
+    {
+      "id": "jeskai-tablet",
+      "legacy_display_name": "Jeskai Tablet",
+      "priority": 580,
+      "subtypes": []
+    },
+    {
+      "id": "jeskai-control",
+      "legacy_display_name": "Jeskai Control",
+      "priority": 570,
+      "subtypes": []
+    },
+    {
+      "id": "4-color-control",
+      "legacy_display_name": "4-Color Control",
+      "priority": 560,
+      "subtypes": [
+        {
+          "id": "inevitable-defeat",
+          "name": "Inevitable Defeat"
+        },
+        {
+          "id": "rakshasas-bargain",
+          "name": "Rakshasa's Bargain"
+        }
+      ]
+    },
+    {
+      "id": "boros-dragons",
+      "legacy_display_name": "Boros Dragons",
+      "priority": 550,
+      "subtypes": []
+    },
+    {
+      "id": "boros-token",
+      "legacy_display_name": "Boros Token",
+      "priority": 540,
+      "subtypes": []
+    },
+    {
+      "id": "izzet-fling",
+      "legacy_display_name": "Izzet Fling",
+      "priority": 530,
+      "subtypes": []
+    },
+    {
+      "id": "gruul-fling",
+      "legacy_display_name": "Gruul Fling",
+      "priority": 520,
+      "subtypes": []
+    },
+    {
+      "id": "izzet-prowess",
+      "legacy_display_name": "Izzet Prowess",
+      "priority": 510,
+      "subtypes": []
+    },
+    {
+      "id": "bant-airbending",
+      "legacy_display_name": "Bant Airbending",
+      "priority": 500,
+      "subtypes": []
+    },
+    {
+      "id": "temur-harmonizer",
+      "legacy_display_name": "Temur Harmonizer",
+      "priority": 490,
+      "subtypes": []
+    },
+    {
+      "id": "mono-red-aggro",
+      "legacy_display_name": "Mono-Red Aggro",
+      "priority": 480,
+      "subtypes": []
+    },
+    {
+      "id": "mardu-discard",
+      "legacy_display_name": "Mardu Discard",
+      "priority": 470,
+      "subtypes": []
+    },
+    {
+      "id": "rakdos-discard",
+      "legacy_display_name": "Rakdos Discard",
+      "priority": 460,
+      "subtypes": []
+    },
+    {
+      "id": "grixis-discard",
+      "legacy_display_name": "Grixis Discard",
+      "priority": 450,
+      "subtypes": []
+    },
+    {
+      "id": "izzet-blink",
+      "legacy_display_name": "Izzet Blink",
+      "priority": 440,
+      "subtypes": []
+    },
+    {
+      "id": "sultai-reanimator",
+      "legacy_display_name": "Sultai Reanimator",
+      "priority": 430,
+      "subtypes": []
+    },
+    {
+      "id": "esper-pixie",
+      "legacy_display_name": "Esper Pixie",
+      "priority": 420,
+      "subtypes": []
+    },
+    {
+      "id": "simic-kona",
+      "legacy_display_name": "Simic Kona",
+      "priority": 410,
+      "subtypes": []
+    },
+    {
+      "id": "dimir-control",
+      "legacy_display_name": "Dimir Control",
+      "priority": 400,
+      "subtypes": []
+    },
+    {
+      "id": "azorius-control",
+      "legacy_display_name": "Azorius Control",
+      "priority": 390,
+      "subtypes": []
+    },
+    {
+      "id": "mono-white-momo",
+      "legacy_display_name": "Mono-White Momo",
+      "priority": 380,
+      "subtypes": []
+    },
+    {
+      "id": "azorius-momo",
+      "legacy_display_name": "Azorius Momo",
+      "priority": 370,
+      "subtypes": []
+    },
+    {
+      "id": "azorius-otters",
+      "legacy_display_name": "Azorius Otters",
+      "priority": 360,
+      "subtypes": []
+    },
+    {
+      "id": "golgari-rhythm",
+      "legacy_display_name": "Golgari Rhythm",
+      "priority": 350,
+      "subtypes": []
+    },
+    {
+      "id": "golgari-demon",
+      "legacy_display_name": "Golgari Demon",
+      "priority": 340,
+      "subtypes": []
+    },
+    {
+      "id": "sultai-demon",
+      "legacy_display_name": "Sultai Demon",
+      "priority": 330,
+      "subtypes": []
+    },
+    {
+      "id": "boros-burn",
+      "legacy_display_name": "Boros Burn",
+      "priority": 320,
+      "subtypes": []
+    },
+    {
+      "id": "simic-jackal",
+      "legacy_display_name": "Simic Jackal",
+      "priority": 310,
+      "subtypes": []
+    },
+    {
+      "id": "temur-battlecrier",
+      "legacy_display_name": "Temur Battlecrier",
+      "priority": 300,
+      "subtypes": []
+    },
+    {
+      "id": "izzet-looting",
+      "legacy_display_name": "Izzet Looting",
+      "priority": 290,
+      "subtypes": []
+    },
+    {
+      "id": "jeskai-artifacts",
+      "legacy_display_name": "Jeskai Artifacts",
+      "priority": 280,
+      "subtypes": []
+    },
+    {
+      "id": "leyline-aggro",
+      "legacy_display_name": "Leyline Aggro",
+      "priority": 270,
+      "subtypes": []
+    },
+    {
+      "id": "4-color-allies",
+      "legacy_display_name": "4-Color Allies",
+      "priority": 260,
+      "subtypes": []
+    },
+    {
+      "id": "temur-otters",
+      "legacy_display_name": "Temur Otters",
+      "priority": 250,
+      "subtypes": []
+    },
+    {
+      "id": "mono-black-demons",
+      "legacy_display_name": "Mono-Black Demons",
+      "priority": 240,
+      "subtypes": []
+    },
+    {
+      "id": "selesnya-offense",
+      "legacy_display_name": "Selesnya Offense",
+      "priority": 230,
+      "subtypes": []
+    },
+    {
+      "id": "izzet-aggro",
+      "legacy_display_name": "Izzet Aggro",
+      "priority": 220,
+      "subtypes": [
+        {
+          "id": "razorkin-needlehead",
+          "name": "Razorkin Needlehead"
+        },
+        {
+          "id": "hired-claw",
+          "name": "Hired Claw"
+        }
+      ]
+    },
+    {
+      "id": "gruul-delirium",
+      "legacy_display_name": "Gruul Delirium",
+      "priority": 210,
+      "subtypes": []
+    },
+    {
+      "id": "bant-bounce",
+      "legacy_display_name": "Bant Bounce",
+      "priority": 200,
+      "subtypes": []
+    },
+    {
+      "id": "dimir-deceit",
+      "legacy_display_name": "Dimir Deceit",
+      "priority": 190,
+      "subtypes": []
+    },
+    {
+      "id": "izzet-opus",
+      "legacy_display_name": "Izzet Opus",
+      "priority": 180,
+      "subtypes": []
+    },
+    {
+      "id": "jeskai-manufacturing",
+      "legacy_display_name": "Jeskai Manufacturing",
+      "priority": 160,
+      "subtypes": []
+    },
+    {
+      "id": "boros-manufacturing",
+      "legacy_display_name": "Boros Manufacturing",
+      "priority": 150,
+      "subtypes": []
+    },
+    {
+      "id": "golgari-reanimator",
+      "legacy_display_name": "Golgari Reanimator",
+      "priority": 140,
+      "subtypes": []
+    },
+    {
+      "id": "sultai-control",
+      "legacy_display_name": "Sultai Control",
+      "priority": 130,
+      "subtypes": []
+    },
+    {
+      "id": "orzhov-repartee",
+      "legacy_display_name": "Orzhov Repartee",
+      "priority": 110,
+      "subtypes": []
+    },
+    {
+      "id": "mono-black-aggro",
+      "legacy_display_name": "Mono-Black Aggro",
+      "priority": 100,
+      "subtypes": []
+    },
+    {
+      "id": "golgari-crime",
+      "legacy_display_name": "Golgari Crime",
+      "priority": 90,
+      "subtypes": []
+    },
+    {
+      "id": "golgari-roots",
+      "legacy_display_name": "Golgari Roots",
+      "priority": 80,
+      "subtypes": []
+    },
+    {
+      "id": "orzhov-control",
+      "legacy_display_name": "Orzhov Control",
+      "priority": 70,
+      "subtypes": []
+    },
+    {
+      "id": "boros-leyline",
+      "legacy_display_name": "Boros Leyline",
+      "priority": 60,
+      "subtypes": []
+    },
+    {
+      "id": "mono-red-leyline",
+      "legacy_display_name": "Mono-Red Leyline",
+      "priority": 50,
+      "subtypes": []
+    },
+    {
+      "id": "simic-ramp",
+      "legacy_display_name": "Simic Ramp",
+      "priority": 40,
+      "subtypes": []
+    },
+    {
+      "id": "mono-green-aggro",
+      "legacy_display_name": "Mono-Green Aggro",
+      "priority": 30,
+      "subtypes": []
+    },
+    {
+      "id": "golgari-midrange",
+      "legacy_display_name": "Golgari Midrange",
+      "priority": 20,
+      "subtypes": []
+    },
+    {
+      "id": "selesnya-midrange",
+      "legacy_display_name": "Selesnya Midrange",
+      "priority": 10,
+      "subtypes": []
+    }
+  ],
+  "rules": [
+    {
+      "legacy_index": 0,
+      "legacy_display_name": "Monument Lessons",
+      "archetype_id": "monument-lessons",
+      "rule_id": "monument-lessons-primary",
+      "priority": 760,
+      "subtype": null,
+      "legacy_signature_sha256": "6dc2b370ce45df0631a0ff0a588043296528b8b6cc841a9d233b122cb35af3d8"
+    },
+    {
+      "legacy_index": 1,
+      "legacy_display_name": "Jeskai Lessons",
+      "archetype_id": "jeskai-lessons",
+      "rule_id": "jeskai-lessons-primary",
+      "priority": 750,
+      "subtype": null,
+      "legacy_signature_sha256": "0ffda75811e6bd165b41c2e299f846aabeafc52f9d6e9fdb48fb35b4df58fb1e"
+    },
+    {
+      "legacy_index": 2,
+      "legacy_display_name": "Izzet Lessons",
+      "archetype_id": "izzet-lessons",
+      "rule_id": "izzet-lessons-primary",
+      "priority": 740,
+      "subtype": null,
+      "legacy_signature_sha256": "11f1db86af2d6c855b9b30913d7d142d3240699416cca5080110356fe8e624ba"
+    },
+    {
+      "legacy_index": 3,
+      "legacy_display_name": "Mono-Green Landfall",
+      "archetype_id": "mono-green-landfall",
+      "rule_id": "mono-green-landfall-primary",
+      "priority": 730,
+      "subtype": null,
+      "legacy_signature_sha256": "1f3200a5bcdad4d6abbd34897e565553da154e0080b9828d57f756aac124ddae"
+    },
+    {
+      "legacy_index": 4,
+      "legacy_display_name": "Gruul Landfall",
+      "archetype_id": "gruul-landfall",
+      "rule_id": "gruul-landfall-primary",
+      "priority": 720,
+      "subtype": null,
+      "legacy_signature_sha256": "71ef1275b98b1d8edc0657a3eb6488aa399c3ebc4f5afeaab94bd5b5da7419ce"
+    },
+    {
+      "legacy_index": 5,
+      "legacy_display_name": "Selesnya Landfall",
+      "archetype_id": "selesnya-landfall",
+      "rule_id": "selesnya-landfall-primary",
+      "priority": 710,
+      "subtype": null,
+      "legacy_signature_sha256": "fe7e104d74fb31a5dc8126c79fc282a1fa5539b40a16348c07db754449343892"
+    },
+    {
+      "legacy_index": 6,
+      "legacy_display_name": "Dimir Excruciator",
+      "archetype_id": "dimir-excruciator",
+      "rule_id": "dimir-excruciator-primary",
+      "priority": 700,
+      "subtype": null,
+      "legacy_signature_sha256": "28442f673098198c5f87be221232f8fcad7e9919db67cd41c49e64279bd41ce8"
+    },
+    {
+      "legacy_index": 7,
+      "legacy_display_name": "Bant Rhythm",
+      "archetype_id": "bant-rhythm",
+      "rule_id": "bant-rhythm-primary",
+      "priority": 690,
+      "subtype": null,
+      "legacy_signature_sha256": "01d90108fd8dc8342704af8d5e0216956de15492a4e6ba5379b62b8cf8e74ab9"
+    },
+    {
+      "legacy_index": 8,
+      "legacy_display_name": "Simic Rhythm",
+      "archetype_id": "simic-rhythm",
+      "rule_id": "simic-rhythm-primary",
+      "priority": 680,
+      "subtype": null,
+      "legacy_signature_sha256": "afebd6a139a86d07917e809449a3b7d90e57f6c9adaf46764d7c36c191f187c4"
+    },
+    {
+      "legacy_index": 9,
+      "legacy_display_name": "Selesnya Rhythm",
+      "archetype_id": "selesnya-rhythm",
+      "rule_id": "selesnya-rhythm-primary",
+      "priority": 670,
+      "subtype": null,
+      "legacy_signature_sha256": "a208a338d794674cc9f289e7621fa3e5174a0c8e7a6e5edc43e1c7874160d105"
+    },
+    {
+      "legacy_index": 10,
+      "legacy_display_name": "Dimir Midrange",
+      "archetype_id": "dimir-midrange",
+      "rule_id": "dimir-midrange-primary",
+      "priority": 660,
+      "subtype": null,
+      "legacy_signature_sha256": "dc4979a66e033d9f787545c8802c7173eb06876f2b6d43d8cca8e34d8366690c"
+    },
+    {
+      "legacy_index": 11,
+      "legacy_display_name": "Azorius Tempo",
+      "archetype_id": "azorius-tempo",
+      "rule_id": "azorius-tempo-primary",
+      "priority": 650,
+      "subtype": null,
+      "legacy_signature_sha256": "263109d54bb93a3cec8505ca1dde3fb0fa3128454fae11adfd9cae6d3328bfa5"
+    },
+    {
+      "legacy_index": 12,
+      "legacy_display_name": "Izzet Spellementals",
+      "archetype_id": "izzet-spellementals",
+      "rule_id": "izzet-spellementals-primary",
+      "priority": 640,
+      "subtype": null,
+      "legacy_signature_sha256": "10b9fb38559dd2fbb9add43553ccebd2c8b5ccdd781d1a060457f0de4e10e1ab"
+    },
+    {
+      "legacy_index": 13,
+      "legacy_display_name": "Mono-Blue Spellementals",
+      "archetype_id": "mono-blue-spellementals",
+      "rule_id": "mono-blue-spellementals-primary",
+      "priority": 630,
+      "subtype": null,
+      "legacy_signature_sha256": "79c3b65cc264d11164967186a6c02d6de58fc2f244fcc55f25177646bd04db5f"
+    },
+    {
+      "legacy_index": 14,
+      "legacy_display_name": "Temur Elementals",
+      "archetype_id": "temur-elementals",
+      "rule_id": "temur-elementals-primary",
+      "priority": 620,
+      "subtype": null,
+      "legacy_signature_sha256": "84eef5a8ea2cce5fd50b1e1295ebe282233b5cba61891b2c43eee17f9229a41b"
+    },
+    {
+      "legacy_index": 15,
+      "legacy_display_name": "Grixis Elementals",
+      "archetype_id": "grixis-elementals",
+      "rule_id": "grixis-elementals-primary",
+      "priority": 610,
+      "subtype": null,
+      "legacy_signature_sha256": "ab76226855fdd7de141646a29100edcf409dd50481240ff896a6c1b03a0ff866"
+    },
+    {
+      "legacy_index": 16,
+      "legacy_display_name": "Temur Tablet",
+      "archetype_id": "temur-tablet",
+      "rule_id": "temur-tablet-primary",
+      "priority": 600,
+      "subtype": null,
+      "legacy_signature_sha256": "e0c6bdaa0743c49199a64fb89013ac54d1101b6068f18f4eebe687ed1268ec4e"
+    },
+    {
+      "legacy_index": 17,
+      "legacy_display_name": "4-Color Tablet",
+      "archetype_id": "4-color-tablet",
+      "rule_id": "4-color-tablet-primary",
+      "priority": 590,
+      "subtype": null,
+      "legacy_signature_sha256": "dfb839624a8bd69834551861c270de00a0392af6aceefac34100650c63a729c9"
+    },
+    {
+      "legacy_index": 18,
+      "legacy_display_name": "Jeskai Tablet",
+      "archetype_id": "jeskai-tablet",
+      "rule_id": "jeskai-tablet-primary",
+      "priority": 580,
+      "subtype": null,
+      "legacy_signature_sha256": "a47494408d9822b1f0deee5338090449b74bc2dbe48fdcd1caf0fcfffc2eda51"
+    },
+    {
+      "legacy_index": 19,
+      "legacy_display_name": "Jeskai Control",
+      "archetype_id": "jeskai-control",
+      "rule_id": "jeskai-control-primary",
+      "priority": 570,
+      "subtype": null,
+      "legacy_signature_sha256": "13e0f183dda45303abc0d674e325ffa74897b52bc4a38c30f65b1c0b251726dd"
+    },
+    {
+      "legacy_index": 20,
+      "legacy_display_name": "4-Color Control",
+      "archetype_id": "4-color-control",
+      "rule_id": "4-color-control-inevitable-defeat",
+      "priority": 560,
+      "subtype": {
+        "id": "inevitable-defeat",
+        "name": "Inevitable Defeat"
+      },
+      "legacy_signature_sha256": "33773f00095c2375e6f0bf64e711daefc56522959141e2fa76a51376adf2387d"
+    },
+    {
+      "legacy_index": 21,
+      "legacy_display_name": "Boros Dragons",
+      "archetype_id": "boros-dragons",
+      "rule_id": "boros-dragons-primary",
+      "priority": 550,
+      "subtype": null,
+      "legacy_signature_sha256": "c5bcc6e5d058a4de2a57b75fad6577b517fc0abc18656ab6d81e3270485f6a52"
+    },
+    {
+      "legacy_index": 22,
+      "legacy_display_name": "Boros Token",
+      "archetype_id": "boros-token",
+      "rule_id": "boros-token-primary",
+      "priority": 540,
+      "subtype": null,
+      "legacy_signature_sha256": "002ac0d6b4f7f4f516fa18f80090ece06972ab1f98998b75630be912b9d951a0"
+    },
+    {
+      "legacy_index": 23,
+      "legacy_display_name": "Izzet Fling",
+      "archetype_id": "izzet-fling",
+      "rule_id": "izzet-fling-primary",
+      "priority": 530,
+      "subtype": null,
+      "legacy_signature_sha256": "a63b3f564720d68dab7b57a3c5c906a3662ad7902ddfd52fef5aa3b23756753f"
+    },
+    {
+      "legacy_index": 24,
+      "legacy_display_name": "Gruul Fling",
+      "archetype_id": "gruul-fling",
+      "rule_id": "gruul-fling-primary",
+      "priority": 520,
+      "subtype": null,
+      "legacy_signature_sha256": "96fb70cf1f1343a5fa897adce75df1941f48ec1242f23e2d7b264728fa13f357"
+    },
+    {
+      "legacy_index": 25,
+      "legacy_display_name": "Izzet Prowess",
+      "archetype_id": "izzet-prowess",
+      "rule_id": "izzet-prowess-primary",
+      "priority": 510,
+      "subtype": null,
+      "legacy_signature_sha256": "26a8a2d8317dfc07dee5f9ebcbc658e09f2d0b0640fe021ec3a3cbed9035b4cb"
+    },
+    {
+      "legacy_index": 26,
+      "legacy_display_name": "Bant Airbending",
+      "archetype_id": "bant-airbending",
+      "rule_id": "bant-airbending-primary",
+      "priority": 500,
+      "subtype": null,
+      "legacy_signature_sha256": "e9b11a80063217d603dae5168d7b11b611a9d898f47737edd07fc47aecf4dcdb"
+    },
+    {
+      "legacy_index": 27,
+      "legacy_display_name": "Temur Harmonizer",
+      "archetype_id": "temur-harmonizer",
+      "rule_id": "temur-harmonizer-primary",
+      "priority": 490,
+      "subtype": null,
+      "legacy_signature_sha256": "534c20f2cd9a8e8d79ee99577da470798a4e9c8dac04668ea423f04d7b213b13"
+    },
+    {
+      "legacy_index": 28,
+      "legacy_display_name": "Mono-Red Aggro",
+      "archetype_id": "mono-red-aggro",
+      "rule_id": "mono-red-aggro-primary",
+      "priority": 480,
+      "subtype": null,
+      "legacy_signature_sha256": "94ca4ccd74312c0c977ffbba05de2042351050021f4d1911b0216da0d2c327ab"
+    },
+    {
+      "legacy_index": 29,
+      "legacy_display_name": "Mardu Discard",
+      "archetype_id": "mardu-discard",
+      "rule_id": "mardu-discard-primary",
+      "priority": 470,
+      "subtype": null,
+      "legacy_signature_sha256": "a184357ac8fc3144ae5f623fb73cd80bf1636b95bfde313008a8519c6bde4da9"
+    },
+    {
+      "legacy_index": 30,
+      "legacy_display_name": "Rakdos Discard",
+      "archetype_id": "rakdos-discard",
+      "rule_id": "rakdos-discard-primary",
+      "priority": 460,
+      "subtype": null,
+      "legacy_signature_sha256": "95c7309b8f8b6de1706b2aa41ba6d2f4e7f34f25336c18168c82578123eb9ece"
+    },
+    {
+      "legacy_index": 31,
+      "legacy_display_name": "Grixis Discard",
+      "archetype_id": "grixis-discard",
+      "rule_id": "grixis-discard-primary",
+      "priority": 450,
+      "subtype": null,
+      "legacy_signature_sha256": "a5c30d4c11b20d77935c67e5fa78d36a7a06b4f4715b934bc9d8136e337988f8"
+    },
+    {
+      "legacy_index": 32,
+      "legacy_display_name": "Izzet Blink",
+      "archetype_id": "izzet-blink",
+      "rule_id": "izzet-blink-primary",
+      "priority": 440,
+      "subtype": null,
+      "legacy_signature_sha256": "418b369356930918ab9d820cd9228cd107c2a7e03a524a3604b7524dd0891f78"
+    },
+    {
+      "legacy_index": 33,
+      "legacy_display_name": "Sultai Reanimator",
+      "archetype_id": "sultai-reanimator",
+      "rule_id": "sultai-reanimator-primary",
+      "priority": 430,
+      "subtype": null,
+      "legacy_signature_sha256": "5c73d6cd61afd21c13d28e443fdb19e4534b87702e4d6460fb45070bcaae2e45"
+    },
+    {
+      "legacy_index": 34,
+      "legacy_display_name": "Esper Pixie",
+      "archetype_id": "esper-pixie",
+      "rule_id": "esper-pixie-primary",
+      "priority": 420,
+      "subtype": null,
+      "legacy_signature_sha256": "da1831ca73b8de88184724a87994c26a9fead8fac228ac1f0f7197f5256dc018"
+    },
+    {
+      "legacy_index": 35,
+      "legacy_display_name": "Simic Kona",
+      "archetype_id": "simic-kona",
+      "rule_id": "simic-kona-primary",
+      "priority": 410,
+      "subtype": null,
+      "legacy_signature_sha256": "64e2af5955b62c36f48de2c96d212ed1f4446dab020cc695e6a8770b66a3b6cb"
+    },
+    {
+      "legacy_index": 36,
+      "legacy_display_name": "Dimir Control",
+      "archetype_id": "dimir-control",
+      "rule_id": "dimir-control-primary",
+      "priority": 400,
+      "subtype": null,
+      "legacy_signature_sha256": "8531dfa654dc654011104b03c2dfb126e6f1201fa7b8c2c27dcee3d79b53cacd"
+    },
+    {
+      "legacy_index": 37,
+      "legacy_display_name": "Azorius Control",
+      "archetype_id": "azorius-control",
+      "rule_id": "azorius-control-primary",
+      "priority": 390,
+      "subtype": null,
+      "legacy_signature_sha256": "5b56fe4888f6d8be8054be64e1e2bbff1caba470c0c0f78398a1b839b9518792"
+    },
+    {
+      "legacy_index": 38,
+      "legacy_display_name": "Mono-White Momo",
+      "archetype_id": "mono-white-momo",
+      "rule_id": "mono-white-momo-primary",
+      "priority": 380,
+      "subtype": null,
+      "legacy_signature_sha256": "6f9c51849a8b920271b1c45ae2120f2c35ac3f44bdc98d3e44fa5ac5f893c75e"
+    },
+    {
+      "legacy_index": 39,
+      "legacy_display_name": "Azorius Momo",
+      "archetype_id": "azorius-momo",
+      "rule_id": "azorius-momo-primary",
+      "priority": 370,
+      "subtype": null,
+      "legacy_signature_sha256": "73fa48ad2886222ee0a3f98eeeee8f82e67a0b193c97952d10ba5a68bc52a568"
+    },
+    {
+      "legacy_index": 40,
+      "legacy_display_name": "Azorius Otters",
+      "archetype_id": "azorius-otters",
+      "rule_id": "azorius-otters-primary",
+      "priority": 360,
+      "subtype": null,
+      "legacy_signature_sha256": "b241e6bd6227bb7949a79522c450cfcf7d622c9cf0b80eeeb4a61432995a2aab"
+    },
+    {
+      "legacy_index": 41,
+      "legacy_display_name": "Golgari Rhythm",
+      "archetype_id": "golgari-rhythm",
+      "rule_id": "golgari-rhythm-primary",
+      "priority": 350,
+      "subtype": null,
+      "legacy_signature_sha256": "f1abb93c0c35f6fb62727fc4a9a673abc72928475d4e01876db99689c2c2bc94"
+    },
+    {
+      "legacy_index": 42,
+      "legacy_display_name": "Golgari Demon",
+      "archetype_id": "golgari-demon",
+      "rule_id": "golgari-demon-primary",
+      "priority": 340,
+      "subtype": null,
+      "legacy_signature_sha256": "7abb96e54130fa86f374a158690a5f77dedd9461843cdaad5dea17418534efb5"
+    },
+    {
+      "legacy_index": 43,
+      "legacy_display_name": "Sultai Demon",
+      "archetype_id": "sultai-demon",
+      "rule_id": "sultai-demon-primary",
+      "priority": 330,
+      "subtype": null,
+      "legacy_signature_sha256": "16d0fcfa1a0b8cfe707b1fe23a80f7b19a5a82c05bb043470188c30afe69ca60"
+    },
+    {
+      "legacy_index": 44,
+      "legacy_display_name": "Boros Burn",
+      "archetype_id": "boros-burn",
+      "rule_id": "boros-burn-primary",
+      "priority": 320,
+      "subtype": null,
+      "legacy_signature_sha256": "2b429795f08fbe42b0e8d43af2f70d62836db534f7f50e8b0cd3dc45a4e06f80"
+    },
+    {
+      "legacy_index": 45,
+      "legacy_display_name": "Simic Jackal",
+      "archetype_id": "simic-jackal",
+      "rule_id": "simic-jackal-primary",
+      "priority": 310,
+      "subtype": null,
+      "legacy_signature_sha256": "0b0f53260173445951e7c5e332d1b72f040c8f902caf935f4ca6ef48339309f2"
+    },
+    {
+      "legacy_index": 46,
+      "legacy_display_name": "Temur Battlecrier",
+      "archetype_id": "temur-battlecrier",
+      "rule_id": "temur-battlecrier-primary",
+      "priority": 300,
+      "subtype": null,
+      "legacy_signature_sha256": "64439d44ce4de1639e5f21b12f692286e0a724b8daba03781340e3ad0e7e182c"
+    },
+    {
+      "legacy_index": 47,
+      "legacy_display_name": "Izzet Looting",
+      "archetype_id": "izzet-looting",
+      "rule_id": "izzet-looting-primary",
+      "priority": 290,
+      "subtype": null,
+      "legacy_signature_sha256": "ba049db039f6dd6ee72d9e9a183f9cda47e902d3c9ec6443dc5117d347629cec"
+    },
+    {
+      "legacy_index": 48,
+      "legacy_display_name": "Jeskai Artifacts",
+      "archetype_id": "jeskai-artifacts",
+      "rule_id": "jeskai-artifacts-primary",
+      "priority": 280,
+      "subtype": null,
+      "legacy_signature_sha256": "1c024e541fb86a61c12a5de5f5396065b35af1ca56daf510e7b6a362d566a637"
+    },
+    {
+      "legacy_index": 49,
+      "legacy_display_name": "Leyline Aggro",
+      "archetype_id": "leyline-aggro",
+      "rule_id": "leyline-aggro-primary",
+      "priority": 270,
+      "subtype": null,
+      "legacy_signature_sha256": "5b6472fb3098cf9f1d0e369dcc573f2cbaa830974c2545460606af73f9e5229c"
+    },
+    {
+      "legacy_index": 50,
+      "legacy_display_name": "4-Color Allies",
+      "archetype_id": "4-color-allies",
+      "rule_id": "4-color-allies-primary",
+      "priority": 260,
+      "subtype": null,
+      "legacy_signature_sha256": "98aa5316c67aecfac4096daa9f2ba72aea50aa646e05a1d8b09d4610f4243652"
+    },
+    {
+      "legacy_index": 51,
+      "legacy_display_name": "Temur Otters",
+      "archetype_id": "temur-otters",
+      "rule_id": "temur-otters-primary",
+      "priority": 250,
+      "subtype": null,
+      "legacy_signature_sha256": "3543f5a35db6a8801f117d67f1df497dc07d8412587366677a8bf03132d3412d"
+    },
+    {
+      "legacy_index": 52,
+      "legacy_display_name": "Mono-Black Demons",
+      "archetype_id": "mono-black-demons",
+      "rule_id": "mono-black-demons-primary",
+      "priority": 240,
+      "subtype": null,
+      "legacy_signature_sha256": "8e87c59d077b28f29eadb3402468098cb7bd9161b8dc9aff72ddb34a6f9d7064"
+    },
+    {
+      "legacy_index": 53,
+      "legacy_display_name": "Selesnya Offense",
+      "archetype_id": "selesnya-offense",
+      "rule_id": "selesnya-offense-primary",
+      "priority": 230,
+      "subtype": null,
+      "legacy_signature_sha256": "65098e90e3df70fced6ebef05ef28686d8b120b8e20364b2cc05b945a8a146fc"
+    },
+    {
+      "legacy_index": 54,
+      "legacy_display_name": "Izzet Aggro",
+      "archetype_id": "izzet-aggro",
+      "rule_id": "izzet-aggro-razorkin-needlehead",
+      "priority": 220,
+      "subtype": {
+        "id": "razorkin-needlehead",
+        "name": "Razorkin Needlehead"
+      },
+      "legacy_signature_sha256": "d3ccd310117b9e38ce2af6c9b2ae74917256166f50e69a390d97015326b977ce"
+    },
+    {
+      "legacy_index": 55,
+      "legacy_display_name": "Gruul Delirium",
+      "archetype_id": "gruul-delirium",
+      "rule_id": "gruul-delirium-primary",
+      "priority": 210,
+      "subtype": null,
+      "legacy_signature_sha256": "41e61cdc36f900cda9de9cf0f742f63be077dcdcaa759ea9be09b506587b90b1"
+    },
+    {
+      "legacy_index": 56,
+      "legacy_display_name": "Bant Bounce",
+      "archetype_id": "bant-bounce",
+      "rule_id": "bant-bounce-primary",
+      "priority": 200,
+      "subtype": null,
+      "legacy_signature_sha256": "b457641c1ac7ecddea7a59099c7e7626d934216449c2664e5145a94602b5c541"
+    },
+    {
+      "legacy_index": 57,
+      "legacy_display_name": "Dimir Deceit",
+      "archetype_id": "dimir-deceit",
+      "rule_id": "dimir-deceit-primary",
+      "priority": 190,
+      "subtype": null,
+      "legacy_signature_sha256": "5bd5c448a4696d1c2aff953720c7de08e56a0f7730eb25e4c7d213f7ee4894cd"
+    },
+    {
+      "legacy_index": 58,
+      "legacy_display_name": "Izzet Opus",
+      "archetype_id": "izzet-opus",
+      "rule_id": "izzet-opus-primary",
+      "priority": 180,
+      "subtype": null,
+      "legacy_signature_sha256": "c343e74f99172b86e5db04a0ffacb1b1686ca39e7eaea289caae011a40a699dd"
+    },
+    {
+      "legacy_index": 59,
+      "legacy_display_name": "Izzet Aggro",
+      "archetype_id": "izzet-aggro",
+      "rule_id": "izzet-aggro-hired-claw",
+      "priority": 170,
+      "subtype": {
+        "id": "hired-claw",
+        "name": "Hired Claw"
+      },
+      "legacy_signature_sha256": "c24a70bb58ee5ec848d7ee987897fcb26a2d9528ac19aa796d1fd272ea04b96c"
+    },
+    {
+      "legacy_index": 60,
+      "legacy_display_name": "Jeskai Manufacturing",
+      "archetype_id": "jeskai-manufacturing",
+      "rule_id": "jeskai-manufacturing-primary",
+      "priority": 160,
+      "subtype": null,
+      "legacy_signature_sha256": "5274e5beed14de70f5ea81c4d998d3b3f9b0eb90f1801dc81a0f7959a79ab3c2"
+    },
+    {
+      "legacy_index": 61,
+      "legacy_display_name": "Boros Manufacturing",
+      "archetype_id": "boros-manufacturing",
+      "rule_id": "boros-manufacturing-primary",
+      "priority": 150,
+      "subtype": null,
+      "legacy_signature_sha256": "cc911f4c244a35359ffe600e02cac93a35f34c4fec44a8864afd3dbf325cd9f3"
+    },
+    {
+      "legacy_index": 62,
+      "legacy_display_name": "Golgari Reanimator",
+      "archetype_id": "golgari-reanimator",
+      "rule_id": "golgari-reanimator-primary",
+      "priority": 140,
+      "subtype": null,
+      "legacy_signature_sha256": "1dd07929bbea1ecbbfc0a3ce992210de5d464a95890e9d5ec6af4197d160cc9f"
+    },
+    {
+      "legacy_index": 63,
+      "legacy_display_name": "Sultai Control",
+      "archetype_id": "sultai-control",
+      "rule_id": "sultai-control-primary",
+      "priority": 130,
+      "subtype": null,
+      "legacy_signature_sha256": "725fc18ac50ea62acb5163451c6a56a6409364aa2284d288918182beb5f59693"
+    },
+    {
+      "legacy_index": 64,
+      "legacy_display_name": "4-Color Control",
+      "archetype_id": "4-color-control",
+      "rule_id": "4-color-control-rakshasas-bargain",
+      "priority": 120,
+      "subtype": {
+        "id": "rakshasas-bargain",
+        "name": "Rakshasa's Bargain"
+      },
+      "legacy_signature_sha256": "93fd878389d7b28b9761a01c9fff407ebd05e0e9d4efd448c576600a525ab9ca"
+    },
+    {
+      "legacy_index": 65,
+      "legacy_display_name": "Orzhov Repartee",
+      "archetype_id": "orzhov-repartee",
+      "rule_id": "orzhov-repartee-primary",
+      "priority": 110,
+      "subtype": null,
+      "legacy_signature_sha256": "91b9be48587968646f85381e8b441846c44d6c20caa984e93fbc72036614f913"
+    },
+    {
+      "legacy_index": 66,
+      "legacy_display_name": "Mono-Black Aggro",
+      "archetype_id": "mono-black-aggro",
+      "rule_id": "mono-black-aggro-primary",
+      "priority": 100,
+      "subtype": null,
+      "legacy_signature_sha256": "36dcc7222d6fd39907506f4e15a162635e9dc358d3245c8cf74691e3905772d1"
+    },
+    {
+      "legacy_index": 67,
+      "legacy_display_name": "Golgari Crime",
+      "archetype_id": "golgari-crime",
+      "rule_id": "golgari-crime-primary",
+      "priority": 90,
+      "subtype": null,
+      "legacy_signature_sha256": "23ebd8e2534ae41bd0e2934b877da77e7d3a50d8fff96cfa3283aa847822768d"
+    },
+    {
+      "legacy_index": 68,
+      "legacy_display_name": "Golgari Roots",
+      "archetype_id": "golgari-roots",
+      "rule_id": "golgari-roots-primary",
+      "priority": 80,
+      "subtype": null,
+      "legacy_signature_sha256": "9cedfb396dde25975626e38ae36ac78bff6d812ea79ce8db5e644db34765164f"
+    },
+    {
+      "legacy_index": 69,
+      "legacy_display_name": "Orzhov Control",
+      "archetype_id": "orzhov-control",
+      "rule_id": "orzhov-control-primary",
+      "priority": 70,
+      "subtype": null,
+      "legacy_signature_sha256": "d652a2fcbe17e64c186143ba9f37d4d5b9aacd1010d3f78e26e0102c8062207d"
+    },
+    {
+      "legacy_index": 70,
+      "legacy_display_name": "Boros Leyline",
+      "archetype_id": "boros-leyline",
+      "rule_id": "boros-leyline-primary",
+      "priority": 60,
+      "subtype": null,
+      "legacy_signature_sha256": "16d715a231f1bf986755c49e3cfdde35bec66740bc6511db34f8a46bb725fe0f"
+    },
+    {
+      "legacy_index": 71,
+      "legacy_display_name": "Mono-Red Leyline",
+      "archetype_id": "mono-red-leyline",
+      "rule_id": "mono-red-leyline-primary",
+      "priority": 50,
+      "subtype": null,
+      "legacy_signature_sha256": "69291f8371e1a1bfda0549e5820247f470f535892f002eab88e296081adcb4a2"
+    },
+    {
+      "legacy_index": 72,
+      "legacy_display_name": "Simic Ramp",
+      "archetype_id": "simic-ramp",
+      "rule_id": "simic-ramp-primary",
+      "priority": 40,
+      "subtype": null,
+      "legacy_signature_sha256": "d5b4997b663f7f909622f881ce118fce6df99b1ef96f1ab084b2d570c4e5960a"
+    },
+    {
+      "legacy_index": 73,
+      "legacy_display_name": "Mono-Green Aggro",
+      "archetype_id": "mono-green-aggro",
+      "rule_id": "mono-green-aggro-primary",
+      "priority": 30,
+      "subtype": null,
+      "legacy_signature_sha256": "218676f7c4d489e7a1b55ccd692cb9efa7c60ad828f323bdb30fe9ad75308531"
+    },
+    {
+      "legacy_index": 74,
+      "legacy_display_name": "Golgari Midrange",
+      "archetype_id": "golgari-midrange",
+      "rule_id": "golgari-midrange-primary",
+      "priority": 20,
+      "subtype": null,
+      "legacy_signature_sha256": "d4ddddd52fe30bc54eb6abdbaba5fd21877dd27ac21f9f9c1bdb2053278c212f"
+    },
+    {
+      "legacy_index": 75,
+      "legacy_display_name": "Selesnya Midrange",
+      "archetype_id": "selesnya-midrange",
+      "rule_id": "selesnya-midrange-primary",
+      "priority": 10,
+      "subtype": null,
+      "legacy_signature_sha256": "b1ccd320feb57211793f44dc94fe447c5daa0f2f77d617941b895e66521affd4"
+    }
+  ],
+  "observed_subtype_selection_counts": {
+    "4-color-control/inevitable-defeat": 1,
+    "4-color-control/rakshasas-bargain": 4,
+    "izzet-aggro/hired-claw": 32,
+    "izzet-aggro/razorkin-needlehead": 8
+  },
+  "same_archetype_multiple_subtype_match_records": 21
+}

@@ -4,9 +4,9 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: null
-  working_branch_status: "none_project_paused"
-  status: "paused"
+  current_working_branch: "codex/p2-01-rule-migration-contract"
+  working_branch_status: "active_isolated_task"
+  status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
@@ -55,18 +55,13 @@ authoritative_documents:
       authoritative: false
 
 current_phase:
-  id: 1
-  name: "Engineering foundation and Standard baseline"
-  status: "completed"
-  started_on: "2026-07-16"
-  completed_on: "2026-07-19"
-  objective: "Audit and protect the current Standard implementation before multi-format refactoring."
-  production_changes_allowed: false
-  feature_development_allowed: false
-  closeout_pull_request: 25
-  closeout_merge_commit: "baf71f4522447b85e30c8c9cb37455e034d27259"
-  recovery_tag: "phase-1-standard-baseline"
-  recovery_tag_commit: "baf71f4522447b85e30c8c9cb37455e034d27259"
+  id: 2
+  name: "Shared rule system and classifier"
+  status: "in_progress"
+  started_on: "2026-07-19"
+  objective: "Extract format-independent classification behavior while preserving every approved Standard parent-archetype result and adding only the approved compatibility subtypes."
+  production_changes_allowed: true
+  feature_development_allowed: true
 
 phase_0_pull_request:
   number: 1
@@ -840,7 +835,7 @@ phase_1_result:
   closeout_merge_commit: "baf71f4522447b85e30c8c9cb37455e034d27259"
   recovery_tag: "phase-1-standard-baseline"
   recovery_tag_commit: "baf71f4522447b85e30c8c9cb37455e034d27259"
-  phase_2_authorized: false
+  phase_2_authorized: true
   acceptance:
     roadmap_criteria_passed: true
     standard_regeneration_byte_identical: true
@@ -849,7 +844,7 @@ phase_1_result:
     production_behavior_changed_by_closeout: false
 
 phase_2_planning:
-  status: "owner_direction_recorded_implementation_not_authorized"
+  status: "active"
   decision: "DEC-032"
   objective: "Build a shared compatibility classifier with optional rule-level subtypes while preserving every legacy Standard parent archetype result."
   parent_archetype_compatibility_required: true
@@ -877,8 +872,51 @@ phase_2_planning:
     - "P2-07 Machine-readable classification reports"
     - "P2-08 Phase 2 regression and behavior closeout"
   proposed_first_task: "P2-01"
-  implementation_authorized: false
-  remote_publication_authorized: false
+  implementation_authorized: true
+  remote_publication_authorized: true
+
+phase_2_tasks:
+  - id: "P2-01"
+    name: "Define the Standard archetype, subtype, rule, and priority migration contract"
+    status: "accepted_pending_publication"
+    completed_on: "2026-07-19"
+    source_branch: "codex/p2-01-rule-migration-contract"
+    production_change: false
+    output:
+      - "tests/fixtures/standard/rule_migration_contract.json"
+      - "tests/test_standard_rule_migration_contract.py"
+      - "docs/audits/P2-01.md"
+      - "docs/STATUS.yaml"
+    baseline:
+      phase_1_tag: "phase-1-standard-baseline"
+      phase_1_commit: "baf71f4522447b85e30c8c9cb37455e034d27259"
+      records: 3936
+      legacy_rules: 76
+      parent_archetypes: 74
+      unknown_results: 71
+      multiple_match_results: 947
+      maximum_matches_per_deck: 3
+      parent_archetype_differences: 0
+    subtype_contract:
+      approved_parent_groups: 2
+      subtype_identities: 4
+      selected_subtype_decks: 45
+      same_parent_multiple_subtype_matches: 21
+      additional_subtypes_added: false
+    acceptance:
+      owner_accepted: true
+      all_legacy_rules_mapped: true
+      archetype_ids_unique: true
+      rule_ids_unique: true
+      subtype_ids_unique_within_parent: true
+      explicit_priorities_frozen: true
+      evaluation_order_independent: true
+      full_corpus_parent_compatibility_passed: true
+      production_rule_file_changed: false
+      legacy_classifier_changed: false
+      statistics_changed: false
+      public_json_changed: false
+      front_end_changed: false
 
 known_blockers: []
 
@@ -907,13 +945,17 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: null
-  name: "No next task authorized"
-  target_paths: []
+  id: "P2-01"
+  name: "Define the Standard archetype, subtype, rule, and priority migration contract"
+  target_paths:
+    - "tests/fixtures/standard/rule_migration_contract.json"
+    - "tests/test_standard_rule_migration_contract.py"
+    - "docs/audits/P2-01.md"
+    - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  planning_status: "owner_decision_required_before_phase_2"
+  authorization_status: "authorized"
+  planning_status: "accepted_pending_publication"
 
 governance_baseline:
   status: "active_on_master"
@@ -952,11 +994,11 @@ delegated_local_execution_governance:
   p1_10:
     status: "completed"
   phase_2:
-    status: "unauthorized"
+    status: "p2_01_accepted_pending_publication"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin the shared-classifier refactor."
+  - "Do not begin P2-02 or the shared-classifier refactor until P2-01 is accepted and published."
   - "Do not generalize the MTGO pipeline yet."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
