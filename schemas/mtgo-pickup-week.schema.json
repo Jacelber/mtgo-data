@@ -4,8 +4,9 @@
   "title": "Legacy Standard MTGO Weekly Pickup",
   "x-schema-version": "1.0.0",
   "type": "object",
-  "required": ["format", "source", "week", "start", "end", "existing_changes", "new_archetypes"],
+  "required": ["schema_version", "format", "source", "week", "start", "end", "existing_changes", "new_archetypes"],
   "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
     "format": {"const": "standard"}, "source": {"const": "mtgo"}, "week": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
     "start": {"type": "string", "format": "date"}, "end": {"type": "string", "format": "date"},
     "existing_changes": {"type": "array", "items": {"$ref": "#/$defs/pickupDeck"}},

@@ -4,8 +4,9 @@
   "title": "Legacy Standard MTGO Weekly Pickup catalog",
   "x-schema-version": "1.0.0",
   "type": "object",
-  "required": ["format", "source", "weeks"],
+  "required": ["schema_version", "format", "source", "weeks"],
   "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
     "format": {"const": "standard"}, "source": {"const": "mtgo"},
     "weeks": {"type": "array", "items": {"type": "object", "required": ["week", "file", "start", "end", "existing_count", "new_count"], "properties": {
       "week": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"}, "file": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}\\.json$"},

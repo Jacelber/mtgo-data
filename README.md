@@ -8,6 +8,8 @@ The current Standard page compatibility baseline is documented in [`docs/audits/
 
 The legacy Standard classification-quality baseline is documented in [`docs/audits/P1-12.md`](docs/audits/P1-12.md). Run `python validate_standard_quality.py` to verify frozen Unknown and multiple-match aggregates without reading mutable production data.
 
+Standard public JSON embeds `schema_version: "1.0.0"`. The producer migration and compatibility proof are documented in [`docs/audits/P1-13.md`](docs/audits/P1-13.md); run `python validate_schemas.py` to verify all declared outputs.
+
 ## Product boundaries
 
 - MTGO and tabletop source data, normalized data, statistics, workflows, and front ends remain separate.

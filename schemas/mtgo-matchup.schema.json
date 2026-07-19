@@ -4,8 +4,9 @@
   "title": "Legacy Standard MTGO matchup statistics",
   "x-schema-version": "1.0.0",
   "type": "object",
-  "required": ["format", "source", "period", "min_sample_hint", "archetype_order", "overall", "matrix"],
+  "required": ["schema_version", "format", "source", "period", "min_sample_hint", "archetype_order", "overall", "matrix"],
   "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
     "format": {"const": "standard"}, "source": {"const": "mtgo"}, "period": {"$ref": "common.schema.json#/$defs/period"},
     "min_sample_hint": {"type": "integer", "minimum": 1},
     "archetype_order": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},

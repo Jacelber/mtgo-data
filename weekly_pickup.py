@@ -20,6 +20,7 @@ from stats_standard import (
     process_event, deck_vector, weighted_l1, normalize_dev,
     merge_cards, to_int,
 )
+from public_contract import versioned
 
 # ---------- 常量 ----------
 OUT_DIR = os.path.join("stats", "standard", "mtgo", "pickup")
@@ -279,7 +280,7 @@ def publish():
         print("⚠️ 没有任何条目被标记 approved: true，未发布。请编辑 YAML 后重试。")
         return
 
-    published = {
+    published = versioned({
         "format": "standard",
         "source": "mtgo",
         "week": week_label,
@@ -287,7 +288,7 @@ def publish():
         "end": doc.get("end"),
         "existing_changes": existing,
         "new_archetypes": new_arch,
-    }
+    })
 
     os.makedirs(OUT_DIR, exist_ok=True)
     pub_file = os.path.join(OUT_DIR, f"{week_label}.json")
@@ -311,7 +312,7 @@ def publish():
     })
     entries.sort(key=lambda e: e["week"], reverse=True)
     with open(INDEX_FILE, "w", encoding="utf-8") as f:
-        json.dump({"format": "standard", "source": "mtgo", "weeks": entries},
+        json.dump(versioned({"format": "standard", "source": "mtgo", "weeks": entries}),
                   f, ensure_ascii=False, indent=2)
     print(f"更新索引: {INDEX_FILE}  (共 {len(entries)} 周)")
 

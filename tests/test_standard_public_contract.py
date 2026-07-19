@@ -17,6 +17,7 @@ def contract():
 
 
 def assert_identity(document, expected):
+    assert document["schema_version"] == expected["schema_version"]
     assert document["format"] == expected["format"]
     assert document["source"] == expected["source"]
 

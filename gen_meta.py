@@ -4,6 +4,8 @@ import json
 import subprocess
 from datetime import datetime, timezone
 
+from public_contract import versioned
+
 RULES_FILE = "my_archetypes/standard.yaml"
 OUT_DIR = os.path.join("stats", "standard", "mtgo")
 OUT_FILE = os.path.join(OUT_DIR, "meta.json")
@@ -25,14 +27,14 @@ def rules_last_commit_iso():
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
-    meta = {
+    meta = versioned({
         "format": "standard",
         "source": "mtgo",
         # 套牌类型特征（分类规则）最后更新时间：取 standard.yaml 的 git 提交时间
         "rules_updated": rules_last_commit_iso(),
         # 本次自动数据更新时间（UTC）
         "data_updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-    }
+    })
     with open(OUT_FILE, "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
     print(f"写出 {OUT_FILE}: rules_updated={meta['rules_updated']}, "

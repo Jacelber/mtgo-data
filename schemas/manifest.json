@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "profile": "legacy-standard-mtgo-public-json",
-  "output_schema_version_embedded": false,
-  "note": "Compatibility contract for existing unversioned public output. Producer migration to embedded schema_version is a separate task.",
+  "output_schema_version_embedded": true,
+  "note": "Compatibility contract for public output with embedded schema_version.",
   "mappings": [
     {"pattern": "stats/standard/mtgo/range_*w.json", "schema": "mtgo-range.schema.json"},
     {"pattern": "stats/standard/mtgo/decks_*w.json", "schema": "mtgo-decks.schema.json"},

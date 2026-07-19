@@ -4,8 +4,9 @@
   "title": "Legacy Standard MTGO metadata",
   "x-schema-version": "1.0.0",
   "type": "object",
-  "required": ["format", "source", "rules_updated", "data_updated"],
+  "required": ["schema_version", "format", "source", "rules_updated", "data_updated"],
   "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
     "format": {"const": "standard"}, "source": {"const": "mtgo"},
     "rules_updated": {"type": "string", "minLength": 1}, "data_updated": {"type": "string", "minLength": 1}
   },

@@ -7,6 +7,7 @@ import os
 import json
 import glob
 from classify_standard import load_rules, deck_to_counts, match_archetype, normalize_name
+from public_contract import versioned
 
 DATA_DIR = "data/standard"
 
@@ -513,18 +514,18 @@ def build_range(events, archetypes, end_monday, n_weeks, base_pack, d99):
         "end": end_sunday.isoformat(),
         "weeks": n_weeks,
     }
-    stats_data = {
+    stats_data = versioned({
         "format": "standard",
         "source": "mtgo",
         "period": period,
         **agg,
-    }
-    decks_data = {
+    })
+    decks_data = versioned({
         "format": "standard",
         "source": "mtgo",
         "period": period,
         "decks": build_decks(records, base_pack, d99),
-    }
+    })
     return stats_data, decks_data
 
 
@@ -569,7 +570,7 @@ def build_all_stats(today=None):
         print(f"  写出 {fname} + {decks_fname}: {data['period']['start']} ~ {data['period']['end']}, "
               f"{data['total_decks']} 副牌, 高分 {data['total_high_score']}, 八强 {data['total_top8']}")
 
-    index = {
+    index = versioned({
         "format": "standard",
         "source": "mtgo",
         "generated": datetime.now().isoformat(timespec="seconds"),
@@ -577,7 +578,7 @@ def build_all_stats(today=None):
         "base_weeks": BASE_WEEKS,
         "global_d99": round(d99, 4),
         "ranges": index_entries,
-    }
+    })
     with open(os.path.join(out_dir, "index.json"), "w", encoding="utf-8") as f:
         json.dump(index, f, ensure_ascii=False, indent=2)
     print(f"  写出 index.json")
