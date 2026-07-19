@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-decks.schema.json",
+  "title": "Legacy Standard MTGO representative decks",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "required": ["format", "source", "period", "decks"],
+  "properties": {
+    "format": {"const": "standard"}, "source": {"const": "mtgo"}, "period": {"$ref": "common.schema.json#/$defs/period"},
+    "decks": {"type": "object", "additionalProperties": {"type": "object", "required": ["best_deck", "average_deck"], "properties": {
+      "best_deck": {"type": "object", "required": ["player", "final_rank", "swiss_score", "player_count", "starttime", "main_deck", "side_deck"], "properties": {
+        "player": {"type": "string"}, "final_rank": {"type": "integer", "minimum": 1}, "swiss_score": {"type": "integer", "minimum": 0},
+        "player_count": {"type": "integer", "minimum": 1}, "starttime": {"type": "string", "minLength": 1},
+        "main_deck": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/cardQuantity"}},
+        "side_deck": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/cardQuantity"}},
+        "deviation": {"type": "number", "minimum": 0},
+        "deviation_diff": {"type": "object", "required": ["fewer", "more"], "properties": {
+          "fewer": {"type": "array", "items": {"$ref": "#/$defs/deviationCard"}},
+          "more": {"type": "array", "items": {"$ref": "#/$defs/deviationCard"}}
+        }, "additionalProperties": false}
+      }, "additionalProperties": false},
+      "average_deck": {"type": "object", "required": ["sample_size", "medoid", "core", "flex", "recent_change", "recent_change_reason"], "properties": {
+        "sample_size": {"type": "integer", "minimum": 0}, "medoid": {"oneOf": [{"$ref": "common.schema.json#/$defs/tournamentDeck"}, {"type": "null"}]},
+        "core": {"type": "array", "items": {"$ref": "#/$defs/averageCard"}}, "flex": {"type": "array", "items": {"$ref": "#/$defs/averageCard"}},
+        "recent_change": {"type": ["number", "null"]}, "recent_change_reason": {"type": ["string", "null"]}
+      }, "additionalProperties": false}
+    }, "additionalProperties": false}}
+  },
+  "$defs": {
+    "deviationCard": {"type": "object", "required": ["name", "deck_qty", "typical_qty"], "properties": {
+      "name": {"type": "string", "minLength": 1}, "deck_qty": {"type": "integer", "minimum": 0}, "typical_qty": {"type": "number", "minimum": 0}
+    }, "additionalProperties": false},
+    "averageCard": {"type": "object", "required": ["name", "mean_qty", "rate"], "properties": {
+      "name": {"type": "string", "minLength": 1}, "mean_qty": {"type": "number", "minimum": 0}, "rate": {"type": "number", "minimum": 0, "maximum": 1}
+    }, "additionalProperties": false}
+  },
+  "additionalProperties": false
+}

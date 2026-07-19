@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-pickup-week.schema.json",
+  "title": "Legacy Standard MTGO Weekly Pickup",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "required": ["format", "source", "week", "start", "end", "existing_changes", "new_archetypes"],
+  "properties": {
+    "format": {"const": "standard"}, "source": {"const": "mtgo"}, "week": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
+    "start": {"type": "string", "format": "date"}, "end": {"type": "string", "format": "date"},
+    "existing_changes": {"type": "array", "items": {"$ref": "#/$defs/pickupDeck"}},
+    "new_archetypes": {"type": "array", "items": {"$ref": "#/$defs/pickupDeck"}}
+  },
+  "$defs": {"pickupDeck": {"type": "object", "required": ["archetype", "player", "final_rank", "swiss_score", "player_count", "starttime", "deviation", "source", "comment_zh", "comment_en", "main_deck", "side_deck"], "properties": {
+    "archetype": {"type": "string", "minLength": 1}, "player": {"type": "string"}, "final_rank": {"type": "integer", "minimum": 1},
+    "swiss_score": {"type": "integer", "minimum": 0}, "player_count": {"type": "integer", "minimum": 1}, "starttime": {"type": "string", "minLength": 1},
+    "deviation": {"type": "number", "minimum": 0}, "source": {"enum": ["existing", "new"]}, "comment_zh": {"type": "string"}, "comment_en": {"type": "string"},
+    "main_deck": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/cardQuantity"}},
+    "side_deck": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/cardQuantity"}}
+  }, "additionalProperties": false}},
+  "additionalProperties": false
+}

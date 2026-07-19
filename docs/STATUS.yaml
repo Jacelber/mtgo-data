@@ -298,7 +298,12 @@ engineering_quality:
   classification_conflict_reports:
     status: "planned_phase_2"
   json_schemas:
-    status: "planned_phase_1"
+    status: "completed_phase_1"
+    compatibility_profile: "legacy-standard-mtgo-public-json"
+    schema_version: "1.0.0"
+    output_schema_version_embedded: false
+    command: "validate_schemas.py"
+    manifest: "schemas/manifest.json"
   ci:
     status: "planned_phase_1"
   actions_permissions_review:
@@ -553,6 +558,35 @@ phase_1_tasks:
       statistical_behavior_changed: false
       generated_data_changed: false
 
+  - id: "P1-08"
+    name: "Add versioned compatibility schemas for Standard public JSON"
+    status: "completed"
+    completed_on: "2026-07-19"
+    source_branch: "codex/p1-standard-json-schemas"
+    production_change: false
+    output:
+      - "schemas/"
+      - "validate_schemas.py"
+      - "tests/test_validate_schemas.py"
+      - "requirements-dev.txt"
+      - "README.md"
+      - "docs/STATUS.yaml"
+    compatibility:
+      profile: "legacy-standard-mtgo-public-json"
+      schema_version: "1.0.0"
+      output_schema_version_embedded: false
+      producer_migration_deferred: true
+    acceptance:
+      draft_2020_12_schemas_added: true
+      path_to_schema_manifest_added: true
+      existing_public_outputs_validate: true
+      read_only_validator_added: true
+      validator_tests_added: true
+      production_json_changed: false
+      generator_changed: false
+      statistical_behavior_changed: false
+      front_end_behavior_changed: false
+
 known_blockers: []
 
 open_decisions:
@@ -585,7 +619,7 @@ next_approved_task:
   production_change: false
   requires_user_confirmation: true
   authorization_status: "not_authorized"
-  planning_status: "owner_decision_required_after_p1_07"
+  planning_status: "owner_decision_required_after_p1_08"
 
 governance_baseline:
   status: "active_on_master"
@@ -616,6 +650,8 @@ delegated_local_execution_governance:
       - "GOV-02 governance commits are present on master."
       - "The project owner explicitly authorizes P1-06 continuation."
   p1_07:
+    status: "completed"
+  p1_08:
     status: "completed"
   phase_2:
     status: "unauthorized"
