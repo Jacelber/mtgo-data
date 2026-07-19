@@ -330,6 +330,22 @@ Implement reusable support for:
 - conflict detection;
 - rule validation.
 
+The shared result model must also support an optional subtype identity beneath the selected archetype.
+
+## Archetype and subtype compatibility
+
+The Phase 2 compatibility classifier must preserve the parent archetype selected by the approved Standard baseline. Different existing rule entries that already resolve to the same legacy archetype may be represented as different subtypes beneath that archetype.
+
+Initial subtype scope is deliberately narrow:
+
+- create subtypes only for existing duplicate Standard archetype rule paths;
+- leave subtype unset for every other existing Standard archetype;
+- do not add new archetypes;
+- do not invent additional subtype taxonomy;
+- complete and validate the compatibility classifier before any later rule expansion.
+
+Subtype identity is supplementary. Archetype-level statistics and public compatibility output remain grouped by the parent archetype unless a later approved task changes the relevant schemas, generators, statistics specification, and front end.
+
 ## Rule requirements
 
 Every archetype must have:
@@ -390,12 +406,28 @@ Keep existing Standard entry points available temporarily, including where still
 
 Compatibility wrappers may call the new shared implementation.
 
+## Required implementation sequence
+
+1. P2-01: define the Standard archetype, rule, priority, and subtype migration contract without changing production rules.
+2. P2-02: extract shared card-name and deck normalization utilities with legacy parity tests.
+3. P2-03: implement the shared rule model, loader, validation, and rule schema.
+4. P2-04: migrate Standard rules to stable archetype IDs, rule IDs, explicit priorities, and only the approved compatibility subtypes.
+5. P2-05: implement full-match evaluation, deterministic parent-archetype selection, optional subtype selection, and conflict diagnostics.
+6. P2-06: route legacy Standard entry points through the shared classifier while preserving every baseline archetype result.
+7. P2-07: generate sanitized Unknown, multiple-match, conflict, overridden-match, and subtype diagnostic reports.
+8. P2-08: complete Phase 2 regression, generated-output, and front-end behavior verification before considering new archetypes or subtypes.
+
+P2-01 must map all 76 legacy Standard rule entries, all 74 legacy archetype display identities, and the two existing duplicate-name groups (`4-Color Control` and `Izzet Aggro`). It must prove that proposed explicit priorities reproduce the legacy parent archetype for all 3,936 frozen records, including 71 Unknown results and 947 multiple-match records. Production rules and classifiers remain unchanged during P2-01.
+
 ## Acceptance criteria
 
 Phase 2 is complete when:
 
 - Standard classification matches the approved baseline;
+- every Standard deck's parent archetype matches the approved baseline even when an optional subtype is present;
 - archetype IDs are stable and unique;
+- subtype IDs are stable and unique within their parent archetype;
+- only approved legacy duplicate rule paths produce an initial subtype;
 - rule IDs are stable and unique;
 - priorities are explicit;
 - YAML order does not determine classification accidentally;
@@ -500,6 +532,8 @@ Additional JavaScript modules may later be introduced for:
 - Weekly Pickup;
 - localization;
 - format navigation.
+
+Later front-end planning must consider how optional subtype information can be displayed or filtered without replacing the parent archetype, changing archetype-level totals, or double-counting decks. The initial Phase 4 split does not have to expose subtypes and must not introduce subtype-level statistical behavior implicitly.
 
 ## Preservation requirements
 

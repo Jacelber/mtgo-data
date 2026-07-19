@@ -131,6 +131,10 @@ Display names may change without changing the archetype ID.
 
 Statistics must aggregate by archetype ID rather than only by display name.
 
+A classification result may also contain an optional subtype ID and subtype display name. A subtype is a rule-level variant within one parent archetype. Unless a later statistical specification explicitly defines subtype-level metrics, primary metagame, performance, conversion, and matchup statistics continue to aggregate by the parent archetype ID. Subtypes must not split or double-count the parent archetype population.
+
+The Phase 2 compatibility migration may expose subtypes only for distinct legacy rule entries that already resolve to the same legacy archetype. It must not change any deck's parent archetype result. New subtype taxonomy and subtype-level statistical presentation require separate approval after the compatibility classifier is complete.
+
 ### 3.3 Theoretical round
 
 A theoretical round is a scheduled Constructed Swiss round that a player was expected or eligible to play for the metric’s population.

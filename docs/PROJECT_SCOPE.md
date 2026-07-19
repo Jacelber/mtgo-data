@@ -425,6 +425,15 @@ The split must preserve existing behavior, visual presentation, language behavio
 
 Each archetype definition must have a stable machine-readable archetype ID.
 
+An archetype may optionally contain stable machine-readable subtype identities. A subtype describes an existing rule-level variant within one archetype; it is not a separate archetype and must not change archetype-level compatibility or aggregation.
+
+During the initial shared-classifier migration:
+
+- the selected archetype must remain identical to the approved legacy Standard result;
+- only legacy rules that already produce the same archetype through distinct rule entries may become distinct subtypes;
+- archetypes without an existing duplicate rule path must return no subtype;
+- no new archetype or additional subtype taxonomy may be introduced until the compatibility classifier is complete and separately approved.
+
 Classification rules must support:
 
 - rule IDs;
@@ -448,6 +457,8 @@ The intended rule files are:
 Adding a new source for an existing format should reuse the same archetype identities where possible.
 
 Source-specific parsing differences must not require duplicate archetype identities.
+
+Future front-end work should consider how to expose subtype information without replacing, splitting, or double-counting the parent archetype. Phase 2 does not require a subtype visual redesign.
 
 ---
 
