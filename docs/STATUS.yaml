@@ -676,9 +676,12 @@ phase_1_tasks:
 
   - id: "P1-11"
     name: "Establish the Standard public output and front-end compatibility baseline"
-    status: "completed_local_pending_owner_acceptance"
+    status: "completed"
     completed_on: "2026-07-19"
     source_branch: "codex/p1-11-standard-public-contract"
+    pull_request: 20
+    merge_commit: "eee1a33674c74ef173aff479a2ffa2a194eac84f"
+    source_branch_retained: true
     production_change: false
     output:
       - "tests/fixtures/standard/public_contract/contract.json"
