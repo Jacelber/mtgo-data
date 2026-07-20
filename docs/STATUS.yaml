@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p5-02-melee-whitelist-loader"
-  working_branch_status: "p5_02_completed_awaiting_owner_acceptance_and_publication_authorization"
+  current_working_branch: "codex/p5-02-publication-status"
+  working_branch_status: "p5_02_publication_status_update_pending"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2109,8 +2109,12 @@ phase_5_tasks:
     tests_passed: 236
   - id: "P5-02"
     name: "Implement whitelist loading and fetch-boundary enforcement"
-    status: "completed_locally_awaiting_owner_acceptance_and_publication_authorization"
+    status: "completed_and_published"
     branch: "codex/p5-02-melee-whitelist-loader"
+    commit: "c0dcce1e93ba8ccdaf55cb7745c8a7699dd0343f"
+    pull_request: 61
+    merge_commit: "a9a6485cfa773d0a68fd095af3bd1f63da7f23f5"
+    merged_on: "2026-07-21"
     reference_event_id: "434455"
     live_fetch_performed: false
     statistics_generated: false
