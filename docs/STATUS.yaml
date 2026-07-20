@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p3-06-pickup-metadata-catalogs"
-  working_branch_status: "p3_06_owner_accepted_publication_authorized"
+  current_working_branch: "master"
+  working_branch_status: "clean_after_p3_06_publication"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -1351,7 +1351,7 @@ phase_2_result:
     phase_3_authorized: false
 
 phase_3_planning:
-  status: "p3_06_owner_accepted_publication_authorized"
+  status: "p3_06_completed_awaiting_p3_07_review_and_authorization"
   objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
   standard_remains_regression_baseline: true
   executable_formats:
@@ -1379,7 +1379,7 @@ phase_3_planning:
   p3_04_local_implementation_authorized: true
   p3_05_local_implementation_authorized: true
   p3_06_local_implementation_authorized: true
-  remote_publication_authorized: true
+  remote_publication_authorized: false
 
 phase_3_tasks:
   - id: "P3-01"
@@ -1673,7 +1673,7 @@ phase_3_tasks:
 
   - id: "P3-06"
     name: "Generalize Weekly Pickup, metadata, and catalogs"
-    status: "completed_awaiting_publication"
+    status: "completed"
     started_on: "2026-07-20"
     implemented_on: "2026-07-20"
     completed_on: "2026-07-20"
@@ -1738,12 +1738,16 @@ phase_3_tasks:
       browser_pickup_archetype: "4-Color Tablet"
       browser_console_errors: 0
       ci_shallow_checkout_safe: true
+      github_actions_validation_passed: true
+      github_actions_run: 29729932608
+    pull_request: 51
+    merge_commit: "82824622a1fc6080b037d368437b91b0dd1c5c5e"
     authorization:
       owner_local_implementation_authorized: true
-      remote_publication_authorized: true
+      remote_publication_authorized: false
     acceptance:
       owner_accepted: true
-      merged_to_master: false
+      merged_to_master: true
 
 known_blockers: []
 
@@ -1772,22 +1776,19 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P3-06"
-  name: "Generalize Weekly Pickup, metadata, and catalogs"
+  id: "P3-07"
+  name: "Add generalized MTGO commands and migrate the production workflow"
   target_paths:
-    - "src/mtgmeta/mtgo/pickup.py"
-    - "weekly_pickup.py"
-    - "gen_meta.py"
-    - "stats_standard.py"
-    - "stats_matchup.py"
+    - "src/mtgmeta/mtgo/__main__.py"
+    - ".github/workflows/update.yml"
     - "tests/"
     - "README.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_publication_authorized"
-  planning_status: "completed_awaiting_publication"
+  authorization_status: "awaiting_detailed_task_review_and_owner_authorization"
+  planning_status: "not_started"
 
 governance_baseline:
   status: "active_on_master"
@@ -1828,12 +1829,12 @@ delegated_local_execution_governance:
   phase_2:
     status: "completed"
   phase_3:
-    status: "p3_06_owner_accepted_publication_authorized"
+    status: "p3_06_completed_awaiting_p3_07_review_and_authorization"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P3-07 until P3-06 is accepted, published, and P3-07 is separately reviewed and explicitly authorized."
-  - "Do not modify production workflows, schemas, rules, or front-end code during P3-06."
+  - "Do not begin P3-07 until it is reviewed in detail and explicitly authorized."
+  - "Do not modify production workflows outside the approved P3-07 migration contract."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."

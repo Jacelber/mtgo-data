@@ -531,6 +531,8 @@ P3-05 was published through pull request #49 and merge commit `3596fcd5b5ba275e8
 
 P3-06 local implementation was authorized and completed in an isolated workspace on 2026-07-20. Weekly Pickup candidate generation, manual publication, MTGO metadata, and public-catalog authorization now use explicit format configuration through `src/mtgmeta/mtgo/pickup.py`; the legacy Standard commands remain available. Fixed-reference regeneration produced byte-identical W28 candidate YAML, W28 base-reference YAML, and `meta.json`. Catalog generation is now capability-gated before Standard statistics, matchup, or Pickup catalog writes. The full 210-test suite and repository, rule, classification-report, and Schema validation pass. Browser regression confirmed the Standard statistics, matchup, and W27 Pickup views with zero console errors. No format was enabled, no production data or public JSON changed, and no workflow, schema, rule, statistical formula, or front-end source was modified. The project owner accepted P3-06 and authorized its commit, push, pull request, and merge on 2026-07-20.
 
+P3-06 was published through pull request #51 and merge commit `82824622a1fc6080b037d368437b91b0dd1c5c5e`. Its first CI run exposed and then corrected a shallow-checkout-only metadata test assumption; the replacement deterministic test and the full remote validation passed. P3-07 is the next planned task, but requires a detailed pre-development review and separate project-owner authorization before any command or production-workflow migration begins.
+
 ## Acceptance criteria
 
 Phase 3 is complete when:
