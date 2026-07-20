@@ -118,7 +118,9 @@ def test_publish_preserves_manual_approval_and_catalog_state(tmp_path):
     )
 
 
-def test_fixed_reference_metadata_and_legacy_wrapper_are_byte_identical(tmp_path):
+def test_fixed_reference_metadata_and_legacy_wrapper_are_byte_identical(
+    tmp_path, monkeypatch
+):
     expected = json.loads((PUBLIC / "meta.json").read_text(encoding="utf-8"))
     destination = pickup.generate_metadata(
         ROOT,
@@ -134,7 +136,39 @@ def test_fixed_reference_metadata_and_legacy_wrapper_are_byte_identical(tmp_path
     )
     assert destination.read_bytes() == (PUBLIC / "meta.json").read_bytes()
     assert wrapped.read_bytes() == destination.read_bytes()
-    assert gen_meta.rules_last_commit_iso() == expected["rules_updated"]
+    captured = {}
+
+    def fake_runner(command, **kwargs):
+        captured["command"] = command
+        captured["kwargs"] = kwargs
+        return type("Result", (), {"stdout": "2026-07-20T05:34:31+09:00\n"})()
+
+    assert pickup.rules_last_commit_iso(
+        ROOT,
+        ROOT / "my_archetypes" / "standard.yaml",
+        runner=fake_runner,
+    ) == "2026-07-20T05:34:31+09:00"
+    assert captured["command"] == [
+        "git",
+        "log",
+        "-1",
+        "--format=%cI",
+        "--",
+        "my_archetypes/standard.yaml",
+    ]
+    assert captured["kwargs"] == {
+        "cwd": ROOT.resolve(),
+        "capture_output": True,
+        "text": True,
+        "check": True,
+    }
+
+    monkeypatch.setattr(
+        gen_meta._shared,
+        "rules_last_commit_iso",
+        lambda root, rules_file: "2026-07-20T05:34:31+09:00",
+    )
+    assert gen_meta.rules_last_commit_iso() == "2026-07-20T05:34:31+09:00"
 
 
 @pytest.mark.parametrize(
