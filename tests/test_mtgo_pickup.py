@@ -49,6 +49,28 @@ def test_fixed_reference_candidates_and_base_are_byte_identical(tmp_path):
     ).read_bytes()
 
 
+def test_candidate_preservation_does_not_overwrite_manual_review(tmp_path):
+    first = pickup.generate_candidates(
+        ROOT,
+        "standard",
+        today=REFERENCE_TODAY,
+        output_directory=tmp_path,
+    )
+    candidate = first["candidate_path"]
+    reviewed = candidate.read_text(encoding="utf-8") + "# manual review marker\n"
+    candidate.write_text(reviewed, encoding="utf-8")
+
+    second = pickup.generate_candidates(
+        ROOT,
+        "standard",
+        today=REFERENCE_TODAY,
+        output_directory=tmp_path,
+        preserve_existing=True,
+    )
+    assert second["skipped_existing"] is True
+    assert candidate.read_text(encoding="utf-8") == reviewed
+
+
 def test_unapproved_candidates_do_not_publish_or_update_state(tmp_path):
     candidates = tmp_path / "candidates"
     output = tmp_path / "published"
@@ -248,5 +270,7 @@ def test_shared_publication_module_has_no_implicit_standard_paths():
     assert '"standard"' not in source
     assert "stats/standard/mtgo" not in source
     workflow = (ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8")
-    assert "python -B weekly_pickup.py" in workflow
-    assert "python -B gen_meta.py" in workflow
+    assert "python -B weekly_pickup.py" not in workflow
+    assert "python -B gen_meta.py" not in workflow
+    assert "pickup candidates --if-absent" in workflow
+    assert "generate-metadata" in workflow

@@ -1099,3 +1099,23 @@ Primary statistics continue to aggregate by parent archetype. Subtype-level stat
 Archetype IDs, subtype IDs, and rule IDs require stable validation. Classification results and diagnostics may carry nullable subtype fields. Compatibility tests must compare parent archetype results against the Phase 1 baseline and separately verify subtype assignment.
 
 Rule migration, classifier implementation, schemas, reports, and later front-end planning must follow this hierarchy. Adding future archetypes or subtypes remains a separately reviewed rule and product change.
+
+---
+
+# DEC-033 — Separate MTGO event archival from product-format execution
+
+Status: `Accepted`
+
+## Context
+
+Before Phase 3, the scheduled `batch_mtgo.py` command archived official MTGO event data for Standard, Pauper, Modern, Pioneer, Legacy, and Vintage. Only Standard had Videre match collection, classification rules, generated statistics, Pickup, and front-end output. Treating every non-executable format as ineligible for all network collection would silently stop the existing non-Standard event archive during the generalized-command migration.
+
+## Decision
+
+Represent official MTGO event archival separately from complete product-format execution. `event_collection_enabled` authorizes event-page discovery, download, normalized raw storage under `data/<format>/`, and fetched-ledger maintenance. It does not enable Videre collection, classification, statistics, Pickup, metadata, catalogs, public JSON, or front-end presentation.
+
+Preserve official event archival for Standard, Pauper, Modern, Pioneer, Legacy, and Vintage. Keep Standard as the only executable MTGO product format during Phase 3. Keep Videre collection Standard-only until another format's implementation is separately approved.
+
+## Consequences
+
+The format registry and its Schema must distinguish collection permission from execution permission. The production workflow must keep its event-collection allowlist aligned with the registry. Tests must prove that a collection-enabled planned format writes only to its own event path and remains unable to run product commands. Collecting raw events is not approval to publish or statistically process a format.

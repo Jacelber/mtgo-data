@@ -37,7 +37,12 @@ def test_all_declared_schemas_are_valid_and_versioned():
     assert "classification-report-index.schema.json" in loaded
     assert "formats.schema.json" in loaded
     assert all(schema["$schema"] == "https://json-schema.org/draft/2020-12/schema" for schema in loaded.values())
-    assert all(schema["x-schema-version"] == "1.0.0" for schema in loaded.values())
+    assert loaded["formats.schema.json"]["x-schema-version"] == "1.1.0"
+    assert all(
+        schema["x-schema-version"] == "1.0.0"
+        for name, schema in loaded.items()
+        if name != "formats.schema.json"
+    )
 
 
 @pytest.mark.parametrize("filename", ["range_1w.json", "decks_1w.json", "index.json", "matchup_1w.json", "matchup_index.json", "meta.json"])

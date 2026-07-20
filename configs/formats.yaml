@@ -1,4 +1,4 @@
-schema_version: "1.0.0"
+schema_version: "1.1.0"
 
 formats:
   - id: "standard"
@@ -7,6 +7,7 @@ formats:
     public: true
     mtgo:
       enabled: true
+      event_collection_enabled: true
       capabilities:
         - "event_fetching"
         - "raw_event_storage"
@@ -31,6 +32,7 @@ formats:
     public: false
     mtgo:
       enabled: false
+      event_collection_enabled: true
       capabilities: []
       paths:
         events: "data/pauper"
@@ -45,6 +47,7 @@ formats:
     public: false
     mtgo:
       enabled: false
+      event_collection_enabled: true
       capabilities: []
       paths:
         events: "data/modern"
@@ -59,6 +62,7 @@ formats:
     public: false
     mtgo:
       enabled: false
+      event_collection_enabled: true
       capabilities: []
       paths:
         events: "data/pioneer"
@@ -73,6 +77,7 @@ formats:
     public: false
     mtgo:
       enabled: false
+      event_collection_enabled: true
       capabilities: []
       paths:
         events: "data/legacy"
@@ -87,6 +92,7 @@ formats:
     public: false
     mtgo:
       enabled: false
+      event_collection_enabled: true
       capabilities: []
       paths:
         events: "data/vintage"

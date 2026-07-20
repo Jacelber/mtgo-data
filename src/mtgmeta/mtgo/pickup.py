@@ -199,6 +199,7 @@ def generate_candidates(
     registry_path: str | Path | None = None,
     output_directory: str | Path | None = None,
     known_file: str | Path | None = None,
+    preserve_existing: bool = False,
 ) -> dict[str, Any] | None:
     """Generate human-reviewed Pickup candidates for one explicit MTGO format."""
 
@@ -228,6 +229,18 @@ def generate_candidates(
     week = candidates["week"]
     candidate_path = output / f"candidates_{week}.yaml"
     base_path = output / f"base_reference_{week}.yaml"
+    if preserve_existing and candidate_path.exists():
+        return {
+            "week": week,
+            "candidate_path": candidate_path,
+            "base_reference_path": base_path,
+            "existing_count": len(candidates["existing_changes"]),
+            "new_count": len(candidates["new_archetypes"]),
+            "top8_count": top8_count,
+            "deduplicated_count": deduplicated_count,
+            "first_run": first_run,
+            "skipped_existing": True,
+        }
     candidate_path.write_text(
         yaml.dump(
             candidates,
@@ -257,6 +270,7 @@ def generate_candidates(
         "top8_count": top8_count,
         "deduplicated_count": deduplicated_count,
         "first_run": first_run,
+        "skipped_existing": False,
     }
 
 

@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 import pytest
+import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,6 +29,7 @@ from mtgmeta.mtgo.fetch import (
     event_filename,
     extract_event_data,
     fetch_and_store_event,
+    fetch_event_months,
     is_event_data_complete,
     load_fetched,
     mark_fetched,
@@ -265,6 +267,82 @@ def test_standard_fetch_uses_registry_path_and_normalizes_before_storage(tmp_pat
     assert len(calls) == 1
 
 
+def test_format_aware_month_fetch_preserves_playoff_filter_and_ledger(tmp_path):
+    event_link = "/decklist/standard-challenge-32-2026-07-201234"
+    listing = f'<a href="{event_link}">event</a>'
+    calls = []
+
+    def request(url, **kwargs):
+        calls.append(url)
+        return Response(listing if "/decklists/" in url else embedded_html())
+
+    summary = fetch_event_months(
+        tmp_path,
+        "standard",
+        months=[(2026, 7)],
+        registry_path=REGISTRY,
+        request_get=request,
+        sleep=lambda _seconds: None,
+        inter_event_delay=0,
+    )
+    assert summary["fetched"] == 1
+    assert summary["failed"] == 0
+    assert calls == [
+        "https://www.mtgo.com/decklists/2026/07",
+        f"https://www.mtgo.com{event_link}",
+    ]
+    assert (tmp_path / "fetched.txt").read_text(encoding="utf-8") == event_link + "\n"
+    destination = tmp_path / "data" / "standard" / "Standard_Challenge_32_12345.json"
+    assert json.loads(destination.read_text(encoding="utf-8")) == expected_batch_event()
+
+
+def test_non_executable_format_event_collection_uses_its_own_path(tmp_path):
+    calls = []
+    modern = raw_event()
+    modern["description"] = "Modern Challenge 32"
+    modern["format"] = "CMODERN"
+    event_link = "/decklist/modern-challenge-32-2026-07-201234"
+
+    def request(url, **kwargs):
+        calls.append(url)
+        return Response(event_link if "/decklists/" in url else embedded_html(modern))
+
+    summary = fetch_event_months(
+        tmp_path,
+        "modern",
+        months=[(2026, 7)],
+        registry_path=REGISTRY,
+        request_get=request,
+        sleep=lambda _seconds: None,
+        inter_event_delay=0,
+    )
+    assert summary["fetched"] == 1
+    assert summary["failed"] == 0
+    assert (tmp_path / "data" / "modern" / "Modern_Challenge_32_12345.json").exists()
+    with pytest.raises(DisabledFormatError, match="not enabled"):
+        load_rules_for_format(tmp_path, "modern", registry_path=REGISTRY)
+
+
+def test_collection_disabled_format_fails_before_ledger_network_or_storage(tmp_path):
+    registry = yaml.safe_load(REGISTRY.read_text(encoding="utf-8"))
+    modern = next(item for item in registry["formats"] if item["id"] == "modern")
+    modern["mtgo"]["event_collection_enabled"] = False
+    registry_path = tmp_path / "formats.yaml"
+    registry_path.write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")
+    calls = []
+    with pytest.raises(DisabledFormatError, match="event collection"):
+        fetch_event_months(
+            tmp_path,
+            "modern",
+            months=[(2026, 7)],
+            registry_path=registry_path,
+            request_get=lambda *_args, **_kwargs: calls.append(True),
+        )
+    assert calls == []
+    assert not (tmp_path / "fetched.txt").exists()
+    assert not (tmp_path / "data").exists()
+
+
 def test_url_format_mismatch_fails_before_network_or_storage(tmp_path):
     calls = []
     with pytest.raises(MTGOFetchError, match="does not identify"):
@@ -303,5 +381,5 @@ def test_p3_03_target_modules_exist_and_production_workflow_is_unchanged():
     unit = next(item for item in contract["migration_units"] if item["task"] == "P3-03")
     assert all((ROOT / path).is_file() for path in unit["target_modules"])
     workflow = (ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8")
-    assert "python -B batch_mtgo.py" in workflow
-    assert "src/mtgmeta/mtgo" not in workflow
+    assert "python -B batch_mtgo.py" not in workflow
+    assert "python -B -m mtgmeta.mtgo" in workflow

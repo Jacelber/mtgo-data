@@ -45,9 +45,28 @@ Run the read-only repository validator, rule validator, and tests from the repos
 
 These commands validate repository syntax and references, Standard archetype rules, versioned shared rule files, generated classification diagnostics, Standard JSON Schemas, and the frozen Standard classification baseline. They do not fetch tournament data or regenerate production statistics.
 
-`generate_classification_reports.py` remains the legacy Standard command and now resolves its event, rule, and report paths through `configs/formats.yaml`; `--format standard` may be supplied explicitly. The reports omit player names, login IDs, and raw player records while retaining event context, stable pseudonymous deck IDs, matched rule evidence, and Unknown decklists. `--strict` returns a failure when an unresolved classification conflict or invalid deck input is present. These reports are operational diagnostics and are not consumed by the current front end.
+## Format-aware MTGO commands
 
-`weekly_pickup.py` and `gen_meta.py` remain the Standard maintenance commands, but their implementation now resolves rules, event input, statistics output, and supported capabilities through `configs/formats.yaml`. Weekly Pickup still requires the existing two-step human review: run `python weekly_pickup.py candidates`, edit the generated YAML and mark selected rows `approved: true`, then run `python weekly_pickup.py publish`. Candidate generation never publishes or changes the known-archetype state by itself.
+The production MTGO pipeline uses one explicit command entry point. Set `PYTHONPATH` to `src` when running it from a source checkout:
+
+```powershell
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard fetch-events
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard fetch-matches
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard build-statistics
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard build-matchups
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard pickup candidates --if-absent
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard generate-metadata
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard classification-reports --strict
+```
+
+The format argument is mandatory. Standard is currently the only format that may run Videre fetching, classification, statistics, Pickup, metadata, catalogs, and public-output generation. Official MTGO event raw-data collection is controlled separately by `event_collection_enabled`; Standard, Pauper, Modern, Pioneer, Legacy, and Vintage retain the legacy daily event archive. `fetch-events` checks the current and previous calendar month by default and accepts repeatable `--month YYYY-MM` overrides. `fetch-matches` remains Standard-only and accepts optional numeric event IDs and `--force`.
+
+Weekly Pickup publication remains a separate manual approval step. After reviewing and approving a candidate YAML, run `python -B -m mtgmeta.mtgo --format standard pickup publish`. The scheduled workflow generates candidates only and preserves an existing candidate file for the latest complete week.
+
+`generate_classification_reports.py` remains a legacy Standard compatibility command. The production workflow now uses the format-aware command above. The reports omit player names, login IDs, and raw player records while retaining event context, stable pseudonymous deck IDs, matched rule evidence, and Unknown decklists. `--strict` returns a failure when an unresolved classification conflict or invalid deck input is present. These reports are operational diagnostics and are not consumed by the current front end.
+
+The root-level `batch_mtgo.py`, `fetch_videre_matches.py`, `stats_standard.py`, `stats_matchup.py`, `weekly_pickup.py`, and `gen_meta.py` commands remain compatibility entry points. They are no longer production-workflow dependencies and are not removed during Phase 3 migration. Candidate generation never publishes or changes the known-archetype state by itself.
 
 The Schema mapping in `schemas/manifest.json` is versioned as `1.0.0`. It protects the existing Standard MTGO page-consumed JSON and the classification diagnostic reports; every declared output embeds `schema_version: "1.0.0"`.
 
@@ -56,7 +75,7 @@ Pull requests and pushes to `master` run the same validation sequence through `.
 ## Current repository layout
 
 - `data/<format>/`: committed source event data; source-specific normalized paths will be added in later phases.
-- `configs/formats.yaml`: validated registry of known formats, execution state, capabilities, and format-specific paths.
+- `configs/formats.yaml`: validated registry of known formats, raw-event collection state, product execution state, capabilities, and format-specific paths.
 - `my_archetypes/standard.yaml`: current legacy Standard classification rules.
 - `src/mtgmeta/`: shared normalization, classification, configuration, and format-aware MTGO event-I/O, rolling-statistics, Videre, matchup, Weekly Pickup, metadata, catalog, and report-routing utilities.
 - `schemas/classification-rules.schema.json`: machine-readable contract for versioned shared rule files.
@@ -65,7 +84,7 @@ Pull requests and pushes to `master` run the same validation sequence through `.
 - `tests/fixtures/standard/`: self-contained Standard classification baseline.
 - `docs/`: authoritative specifications, decisions, audits, status, and development workflow.
 - `index.html`: current GitHub Pages entry point for MTGO Environment Trends.
-- `.github/workflows/update.yml`: the single scheduled MTGO production pipeline, covering official event fetches, Videre matches, statistics, classification diagnostics, validation, and publication.
+- `.github/workflows/update.yml`: the single scheduled MTGO production pipeline, using the explicit Standard MTGO command for official event fetches, Videre matches, statistics, Pickup candidates, metadata, de-identified classification diagnostics, validation, and publication.
 
 Generated statistics and source configurations serve different roles. Do not manually edit generated statistics as a substitute for fixing their generator.
 

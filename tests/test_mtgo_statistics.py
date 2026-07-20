@@ -121,12 +121,10 @@ def test_shared_statistics_module_has_no_implicit_standard_paths():
     source = (SRC / "mtgmeta" / "mtgo" / "stats.py").read_text(encoding="utf-8")
     assert '"data/standard"' not in source
     assert '"stats/standard/mtgo"' not in source
-    assert "src/mtgmeta/mtgo/stats.py" not in (
-        ROOT / ".github" / "workflows" / "update.yml"
-    ).read_text(encoding="utf-8")
-    assert "python -B stats_standard.py" in (
-        ROOT / ".github" / "workflows" / "update.yml"
-    ).read_text(encoding="utf-8")
+    workflow = (ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8")
+    assert "src/mtgmeta/mtgo/stats.py" not in workflow
+    assert "python -B stats_standard.py" not in workflow
+    assert "build-statistics" in workflow
 
 
 def test_legacy_public_card_alias_scope_is_preserved():

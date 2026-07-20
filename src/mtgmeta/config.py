@@ -12,7 +12,7 @@ import yaml
 from .rules import RuleSet, RuleValidationFailure, build_rule_set, validate_rule_data
 
 
-FORMAT_REGISTRY_SCHEMA_VERSION = "1.0.0"
+FORMAT_REGISTRY_SCHEMA_VERSION = "1.1.0"
 FORMAT_STATES = frozenset({"executable", "planned", "decision_gated"})
 MTGO_CAPABILITIES = frozenset(
     {
@@ -90,6 +90,7 @@ class FormatPaths:
 @dataclass(frozen=True)
 class MTGOFormat:
     enabled: bool
+    event_collection_enabled: bool
     capabilities: frozenset[str]
     paths: FormatPaths
 
@@ -119,6 +120,16 @@ class FormatRegistry:
         if not definition.mtgo.enabled:
             state_note = "is decision-gated" if definition.state == "decision_gated" else "is not enabled"
             raise DisabledFormatError(f"MTGO format {format_id!r} {state_note}")
+        return definition
+
+    def require_mtgo_event_collection(self, format_id: str) -> FormatDefinition:
+        """Authorize raw MTGO event collection independently of product execution."""
+
+        definition = self.get(format_id)
+        if not definition.mtgo.event_collection_enabled:
+            raise DisabledFormatError(
+                f"MTGO event collection for format {format_id!r} is not enabled"
+            )
         return definition
 
 
@@ -186,7 +197,7 @@ def parse_format_text(text: str) -> FormatRegistry:
     definitions: list[FormatDefinition] = []
     seen_ids: set[str] = set()
     expected_entry_keys = {"id", "display_name", "state", "public", "mtgo"}
-    expected_mtgo_keys = {"enabled", "capabilities", "paths"}
+    expected_mtgo_keys = {"enabled", "event_collection_enabled", "capabilities", "paths"}
     for index, entry in enumerate(entries):
         path = f"formats[{index}]"
         if not isinstance(entry, dict) or set(entry) != expected_entry_keys:
@@ -212,6 +223,12 @@ def parse_format_text(text: str) -> FormatRegistry:
             raise _format_error(f"{path}.mtgo.enabled", "must be a boolean")
         if enabled != (state == "executable"):
             raise _format_error(f"{path}.mtgo.enabled", "must match executable state")
+        event_collection_enabled = mtgo_data["event_collection_enabled"]
+        if not isinstance(event_collection_enabled, bool):
+            raise _format_error(
+                f"{path}.mtgo.event_collection_enabled",
+                "must be a boolean",
+            )
         capabilities = mtgo_data["capabilities"]
         if not isinstance(capabilities, list) or any(not isinstance(item, str) for item in capabilities):
             raise _format_error(f"{path}.mtgo.capabilities", "must be a list of strings")
@@ -236,6 +253,7 @@ def parse_format_text(text: str) -> FormatRegistry:
                 public=public,
                 mtgo=MTGOFormat(
                     enabled=enabled,
+                    event_collection_enabled=event_collection_enabled,
                     capabilities=frozenset(capabilities),
                     paths=FormatPaths(**normalized_paths),
                 ),

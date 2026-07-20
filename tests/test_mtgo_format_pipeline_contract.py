@@ -125,6 +125,12 @@ def test_hardcoded_inventory_tracks_migrated_and_remaining_boundaries():
             'RULES_FILE = "my_archetypes/standard.yaml"',
             'OUT_DIR = os.path.join("stats", "standard", "mtgo")',
         },
+        ".github/workflows/update.yml": {
+            "run: python -B batch_mtgo.py",
+            "run: python -B stats_standard.py",
+            "run: python -B stats_matchup.py",
+            "stats/standard/mtgo/pickup",
+        },
     }
 
     assert len(inventory) == 12
