@@ -1351,7 +1351,7 @@ phase_2_result:
     phase_3_authorized: false
 
 phase_3_planning:
-  status: "p3_01_completed_awaiting_p3_02_authorization"
+  status: "p3_02_accepted_awaiting_publication"
   objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
   standard_remains_regression_baseline: true
   executable_formats:
@@ -1374,7 +1374,8 @@ phase_3_planning:
     - "P3-08 Standard and front-end closeout"
   phase_implementation_authorized: false
   p3_01_local_implementation_authorized: true
-  remote_publication_authorized: false
+  p3_02_local_implementation_authorized: true
+  remote_publication_authorized: true
 
 phase_3_tasks:
   - id: "P3-01"
@@ -1421,6 +1422,47 @@ phase_3_tasks:
       production_outputs_changed: false
       merged_to_master: true
 
+  - id: "P3-02"
+    name: "Add the format registry and safe path resolution"
+    status: "accepted_awaiting_publication"
+    implemented_on: "2026-07-20"
+    started_on: "2026-07-20"
+    source_branch: "codex/p3-02-format-registry"
+    baseline_commit: "2bab92f54cff915f4730d64e4227bb43cc475029"
+    baseline_tag: "phase-2-shared-classifier-baseline"
+    production_change: false
+    output:
+      - "configs/formats.yaml"
+      - "schemas/formats.schema.json"
+      - "src/mtgmeta/config.py"
+      - "tests/test_format_registry.py"
+      - "docs/audits/P3-02.md"
+      - "docs/ROADMAP.md"
+      - "docs/STATUS.yaml"
+    scope:
+      only_standard_executable: true
+      new_formats_enabled: false
+      production_generators_changed: false
+      workflows_changed: false
+      public_json_changed: false
+      rules_changed: false
+      front_end_changed: false
+    authorization:
+      owner_local_implementation_authorized: true
+      remote_publication_authorized: true
+    validation:
+      format_registry_tests_passed: 10
+      pytest_passed: 172
+      repository_validation_passed: true
+      rule_validation_passed: true
+      schema_validation_passed: true
+      standard_quality_baseline_passed: true
+      production_outputs_changed: false
+      manifest_semantics_changed: false
+    acceptance:
+      owner_accepted: true
+      merged_to_master: false
+
 known_blockers: []
 
 open_decisions:
@@ -1461,8 +1503,8 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  planning_status: "awaiting_owner_review"
+  authorization_status: "owner_accepted_and_publication_authorized"
+  planning_status: "accepted_awaiting_publication"
 
 governance_baseline:
   status: "active_on_master"
@@ -1503,11 +1545,11 @@ delegated_local_execution_governance:
   phase_2:
     status: "completed"
   phase_3:
-    status: "p3_01_completed"
+    status: "p3_02_accepted_awaiting_publication"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P3-02 until its detailed scope is reviewed and explicitly authorized."
+  - "Do not begin P3-03 until P3-02 publication is complete and its detailed scope is reviewed and explicitly authorized."
   - "Do not modify production generators, workflows, public JSON, rules, or front-end code during P3-02."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
