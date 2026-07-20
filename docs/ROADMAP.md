@@ -539,6 +539,8 @@ P3-07 local implementation was authorized and completed in an isolated workspace
 
 P3-07 was published through pull request #53 and merge commit `3cdf07701a89f88568cf38f9af05265b70a59f66`; the remote repository validation passed before merge. P3-08 is the next planned task, but remains unstarted until its detailed closeout scope is reviewed and the project owner separately authorizes implementation.
 
+P3-08 local implementation was authorized and completed in an isolated workspace on 2026-07-20. A new end-to-end closeout test regenerated 23 fixed-reference Standard statistics, matchup, Pickup, metadata, and classification-report documents into temporary directories; every document was byte-identical to the committed product. All 35 non-Standard product command combinations fail before dispatch or output, while the six-format official-event archive remains available under DEC-033. The 225-test suite and repository, rule, Standard-quality, strict classification-report, and Schema validation passed. Browser regression confirmed the visible 1/4/12-week statistics, deck details, matchup matrices, W27 Pickup, optional-data fallback, and language switching with zero console errors or warnings. The front-end smoke checklist now reflects the long-standing intentional omission of 36-week buttons while automated contracts continue to validate the generated 36-week documents. No production output, generator, workflow, rule, Schema, statistical formula, public contract, or front-end source changed. P3-08 awaits project-owner acceptance and separate remote-publication authorization; Phase 4 is not authorized.
+
 ## Acceptance criteria
 
 Phase 3 is complete when:
