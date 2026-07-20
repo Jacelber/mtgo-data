@@ -1351,7 +1351,7 @@ phase_2_result:
     phase_3_authorized: false
 
 phase_3_planning:
-  status: "p3_07_completed_awaiting_p3_08_review_and_authorization"
+  status: "p3_08_locally_completed_awaiting_owner_acceptance"
   objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
   standard_remains_regression_baseline: true
   executable_formats:
@@ -1387,6 +1387,7 @@ phase_3_planning:
   p3_05_local_implementation_authorized: true
   p3_06_local_implementation_authorized: true
   p3_07_local_implementation_authorized: true
+  p3_08_local_implementation_authorized: true
   remote_publication_authorized: false
 
 phase_3_tasks:
@@ -1860,6 +1861,85 @@ phase_3_tasks:
       owner_accepted: true
       merged_to_master: true
 
+  - id: "P3-08"
+    name: "Complete Standard and front-end closeout"
+    status: "locally_completed_awaiting_owner_acceptance"
+    started_on: "2026-07-20"
+    implemented_on: "2026-07-20"
+    source_branch: "codex/p3-08-standard-frontend-closeout"
+    baseline_commit: "b5927972e81cc7554db31bd87fa05b1d694cd881"
+    production_change: false
+    output:
+      - "tests/test_phase3_closeout.py"
+      - "docs/checklists/STANDARD_FRONTEND_SMOKE.md"
+      - "docs/audits/P3-08.md"
+      - "docs/ROADMAP.md"
+      - "docs/STATUS.yaml"
+    contract:
+      fixed_reference_standard_product_verified: true
+      fixed_reference_documents_compared: 23
+      fixed_reference_byte_differences: 0
+      statistics_documents_compared: 9
+      matchup_documents_compared: 5
+      pickup_documents_compared: 2
+      metadata_documents_compared: 1
+      classification_report_documents_compared: 6
+      public_contract_changed: false
+      statistical_formulas_changed: false
+      classification_rules_changed: false
+      public_json_changed: false
+      production_workflow_changed: false
+      front_end_source_changed: false
+      visible_front_end_ranges:
+        - 1
+        - 4
+        - 12
+      generated_catalog_ranges:
+        - 1
+        - 4
+        - 12
+        - 36
+      thirty_six_week_visibility_changed: false
+      subtype_presentation_added: false
+      parent_archetype_aggregation_preserved: true
+      nonstandard_product_command_combinations_rejected: 35
+      event_collection_formats_preserved:
+        - "standard"
+        - "pauper"
+        - "modern"
+        - "pioneer"
+        - "legacy"
+        - "vintage"
+      nonstandard_videre_collection_added: false
+      live_network_requests: 0
+      production_workflow_dispatched: false
+    validation:
+      p3_08_focused_tests_passed: 2
+      pytest_passed: 225
+      repository_validation_passed: true
+      rule_validation_passed: true
+      standard_quality_baseline_passed: true
+      frozen_corpus_records: 3936
+      unknown_results: 71
+      multiple_match_results: 947
+      classification_report_validation_passed: true
+      classification_conflicts: 0
+      invalid_decks: 0
+      selected_subtypes: 45
+      schema_validation_passed: true
+      schema_documents_validated: 23
+      browser_smoke_test_passed: true
+      browser_console_errors_or_warnings: 0
+      optional_data_fallback_passed: true
+      language_switching_passed: true
+      generated_production_outputs_changed: false
+    authorization:
+      owner_local_implementation_authorized: true
+      remote_publication_authorized: false
+    acceptance:
+      owner_accepted: false
+      merged_to_master: false
+
 known_blockers: []
 
 open_decisions:
@@ -1897,8 +1977,8 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "awaiting_detailed_review_and_owner_authorization"
-  planning_status: "not_started"
+  authorization_status: "local_implementation_authorized"
+  planning_status: "locally_completed_awaiting_owner_acceptance"
 
 governance_baseline:
   status: "active_on_master"
@@ -1939,11 +2019,12 @@ delegated_local_execution_governance:
   phase_2:
     status: "completed"
   phase_3:
-    status: "p3_07_completed_awaiting_p3_08_review_and_authorization"
+    status: "p3_08_locally_completed_awaiting_owner_acceptance"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P3-08 until its detailed scope is reviewed and the project owner explicitly authorizes implementation."
+  - "Do not publish P3-08 or mark Phase 3 complete without separate owner acceptance and remote-publication authorization."
+  - "Do not begin Phase 4 until P3-08 is accepted and separately published."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."
