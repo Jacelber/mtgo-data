@@ -103,6 +103,21 @@ def test_hardcoded_inventory_tracks_migrated_and_remaining_boundaries():
             'DATA_DIR = "data/standard"',
             'os.path.join("stats", "standard", "mtgo")',
         },
+        "fetch_videre_matches.py": {
+            'FORMAT = "standard"',
+            'OUT_DIR = os.path.join("data", "standard", "mtgo", "matches")',
+        },
+        "stats_matchup.py": {
+            'OFFICIAL_DIR = "data/standard"',
+            'MATCHES_DIR = "data/standard/mtgo/matches"',
+            'OUT_DIR = "stats/standard/mtgo"',
+        },
+        "generate_classification_reports.py": {
+            'default=Path("data/standard")',
+            'default=Path("my_archetypes/standard.yaml")',
+            'default=Path("reports/standard/mtgo")',
+        },
+        "src/mtgmeta/reports.py": {'"format": "standard"'},
     }
 
     assert len(inventory) == 12

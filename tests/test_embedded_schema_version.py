@@ -23,7 +23,7 @@ def test_versioned_returns_a_new_document_and_rejects_double_versioning():
     "path,expected_calls",
     [
         ("src/mtgmeta/mtgo/stats.py", 3),
-        ("stats_matchup.py", 2),
+        ("src/mtgmeta/mtgo/matchup.py", 2),
         ("gen_meta.py", 1),
         ("weekly_pickup.py", 2),
     ],

@@ -59,6 +59,18 @@ def test_production_report_baseline_and_subtype_contract():
     assert not has_blocking_diagnostics(reports)
 
 
+def test_report_metadata_accepts_an_explicit_format_without_changing_classification():
+    reports = build_classification_reports(
+        load_events((ROOT / "data" / "standard").glob("*.json"), ROOT),
+        load_rule_set(STANDARD_RULES),
+        format_id="format-fixture",
+        source="mtgo",
+    )
+    assert {report["format"] for report in reports.values()} == {"format-fixture"}
+    assert {report["source"] for report in reports.values()} == {"mtgo"}
+    assert reports["index"]["summary"] == production_reports()["index"]["summary"]
+
+
 def test_reports_are_deidentified_and_unknowns_retain_deck_evidence():
     reports = production_reports()
     assert find_identity_fields(reports) == []
@@ -157,6 +169,7 @@ def test_cli_writes_conflict_report_before_strict_failure(tmp_path):
     result = subprocess.run(
         [
             sys.executable, "-B", str(script), "--root", str(tmp_path),
+            "--registry", str(ROOT / "configs" / "formats.yaml"),
             "--rules", str(rules), "--strict",
         ],
         cwd=tmp_path,
@@ -168,3 +181,25 @@ def test_cli_writes_conflict_report_before_strict_failure(tmp_path):
     report = json.loads((tmp_path / "reports/standard/mtgo/classification_conflicts.json").read_text(encoding="utf-8"))
     assert report["summary"] == {"record_count": 1, "blocking": True}
     assert "must-not-leak" not in json.dumps(report)
+
+
+def test_cli_rejects_a_disabled_format_before_creating_report_output(tmp_path):
+    script = ROOT / "generate_classification_reports.py"
+    output = tmp_path / "reports"
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-B",
+            str(script),
+            "--format",
+            "pauper",
+            "--output-dir",
+            str(output),
+        ],
+        cwd=tmp_path,
+        text=True,
+        capture_output=True,
+    )
+    assert result.returncode == 2
+    assert "not enabled" in result.stdout
+    assert not output.exists()
