@@ -521,6 +521,8 @@ P3-03 was published through pull request #45 and merge commit `3bf23ffaf54b8f831
 
 P3-04 local implementation completed in an isolated workspace on 2026-07-20 after detailed review and explicit project-owner authorization. It routes Standard event and 1/4/12/36-week rolling statistics through `src/mtgmeta/mtgo/stats.py`, retains `stats_standard.py` as the production and import-compatibility wrapper, and rejects disabled formats before output side effects. Fixed-reference regeneration produced nine byte-identical Standard statistics documents. Statistical formulas, public JSON, schemas, workflows, rules, Videre processing, Weekly Pickup, metadata, catalogs, and front-end source remain unchanged. The project owner accepted the result and authorized its remote publication on 2026-07-20.
 
+P3-04 was published through pull request #47 and merge commit `e401f64d78081b5ac8ed6cc7ff499e5545485d1d`. P3-05 is the next planned task, but requires a detailed pre-development review and separate project-owner authorization before implementation begins.
+
 ## Acceptance criteria
 
 Phase 3 is complete when:
