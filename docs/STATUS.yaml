@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p4-01-split-mtgo-frontend"
-  working_branch_status: "p4_01_accepted_awaiting_publication"
+  current_working_branch: "codex/p4-01-phase4-status"
+  working_branch_status: "phase_4_closeout_awaiting_publication"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -55,11 +55,11 @@ authoritative_documents:
       authoritative: false
 
 current_phase:
-  id: 4
-  name: "Split the existing MTGO front end"
-  status: "p4_01_accepted_awaiting_publication"
-  started_on: "2026-07-20"
-  objective: "Split the monolithic MTGO page into maintainable static assets while preserving behavior, appearance, public paths, and GitHub Pages compatibility."
+  id: 5
+  name: "Melee ingestion and normalized event model"
+  status: "awaiting_detailed_review_and_owner_authorization"
+  started_on: null
+  objective: "Implement safe, reproducible fetching and normalization for explicitly whitelisted Melee events while keeping raw and normalized data separate."
   production_changes_allowed: false
   feature_development_allowed: false
 
@@ -336,7 +336,7 @@ engineering_quality:
     matchup_statistics: "stats_matchup.py"
     decision: "DEC-031"
   index_html_split:
-    status: "p4_01_accepted_awaiting_publication"
+    status: "completed"
 
 phase_1_tasks:
   - id: "P1-01"
@@ -1972,7 +1972,7 @@ phase_3_result:
     phase_tag_published: true
 
 phase_4_planning:
-  status: "p4_01_accepted_awaiting_publication"
+  status: "completed"
   detailed_review_completed_on: "2026-07-20"
   owner_authorized_local_implementation: true
   remote_publication_authorized: true
@@ -1981,11 +1981,16 @@ phase_4_planning:
 phase_4_tasks:
   - id: "P4-01"
     name: "Split the existing MTGO front end while preserving behavior"
-    status: "accepted_awaiting_publication"
+    status: "completed"
     completed_on: "2026-07-20"
     source_branch: "codex/p4-01-split-mtgo-frontend"
     baseline_commit: "6c76fbdf61d65a6e0c3d832e2b0658e618b0aa2b"
     production_change: true
+    pull_request: 57
+    merge_commit: "ab4a7fe731eee7696215fcfb53588ba85129904c"
+    phase_tag: "phase-4-split-mtgo-frontend"
+    phase_tag_object: "3d4c2e9c375dd9e939021ec5d1c03cdd3f3cc899"
+    phase_tag_target_commit: "ab4a7fe731eee7696215fcfb53588ba85129904c"
     output:
       - "index.html"
       - "assets/css/site.css"
@@ -2035,8 +2040,30 @@ phase_4_tasks:
       remote_publication_authorized: true
     acceptance:
       owner_accepted: true
-      merged_to_master: false
-      phase_tag_published: false
+      merged_to_master: true
+      phase_tag_published: true
+
+phase_4_result:
+  status: "completed"
+  completed_on: "2026-07-20"
+  closeout_task: "P4-01"
+  pull_request: 57
+  merge_commit: "ab4a7fe731eee7696215fcfb53588ba85129904c"
+  tag: "phase-4-split-mtgo-frontend"
+  tag_object: "3d4c2e9c375dd9e939021ec5d1c03cdd3f3cc899"
+  tag_target_commit: "ab4a7fe731eee7696215fcfb53588ba85129904c"
+  acceptance:
+    index_html_materially_smaller: true
+    css_loaded_from_assets: true
+    javascript_loaded_from_assets: true
+    standard_front_end_behavior_preserved: true
+    public_json_paths_preserved: true
+    github_pages_requires_no_build_step: true
+    statistics_unchanged: true
+    mtgo_and_melee_front_end_responsibilities_separate: true
+    project_owner_approved: true
+    remote_publication_completed: true
+    phase_tag_published: true
 
 known_blockers: []
 
@@ -2065,19 +2092,20 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P4-01"
-  name: "Split the existing MTGO front end while preserving behavior"
+  id: "P5-01"
+  name: "Define the Melee whitelist and normalized event contract"
   target_paths:
-    - "index.html"
-    - "assets/"
+    - "configs/melee_events.yaml"
+    - "schemas/"
+    - "src/mtgmeta/melee/"
     - "tests/"
     - "docs/audits/"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "accepted_awaiting_publication"
-  planning_status: "completed"
+  authorization_status: "awaiting_detailed_review_and_owner_authorization"
+  planning_status: "not_started"
 
 governance_baseline:
   status: "active_on_master"
@@ -2120,12 +2148,11 @@ delegated_local_execution_governance:
   phase_3:
     status: "completed"
   phase_4:
-    status: "p4_01_accepted_awaiting_publication"
+    status: "completed"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not mark Phase 4 complete until P4-01 is merged, the authorized Phase 4 tag is published, and the closeout status is recorded."
-  - "Do not begin Phase 5 without a detailed review and explicit project-owner authorization."
+  - "Do not begin P5-01 until its Melee whitelist, source-boundary, normalized-model, and data-quality scope is reviewed and the project owner explicitly authorizes implementation."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."
