@@ -339,10 +339,12 @@ For mixed events:
 
 The first tabletop implementation target is:
 
-- Event: Paupergeddon Summer 2026 Main Event
-- Melee tournament ID: `438329`
-- Format: Pauper
-- Source URL: `https://melee.gg/Tournament/View/438329`
+- Event: Pro Tour Magic: The Gathering® | Marvel Super Heroes
+- Melee tournament ID: `434455`
+- Constructed format: Modern
+- Event structure: `mixed`
+- Date range: 2026-07-17 through 2026-07-19
+- Source URL: `https://melee.gg/Tournament/View/434455`
 
 This event is used to implement and validate:
 
@@ -351,14 +353,17 @@ This event is used to implement and validate:
 - standings collection;
 - decklist collection;
 - round and match collection;
-- Pauper classification;
-- pure Constructed event statistics;
-- Day 1 and Day 2 handling where supported by source data;
+- Modern classification;
+- mixed Draft and Constructed event statistics;
+- Day 1 and Day 2 Constructed separation;
+- Draft and Draft-playoff exclusion from Constructed statistics;
 - per-event overview;
 - per-event matchup matrix;
 - data-quality reporting.
 
-The implementation must verify the event structure from collected data and configuration rather than assuming that all events follow the same structure.
+The reference event has three Draft Swiss rounds followed by five Modern Swiss rounds on each of Day 1 and Day 2, then a Draft Top 8 playoff. The normalized model must therefore represent event stage, round phase, and game format independently. The implementation must still verify source records during collection rather than assuming that all Pro Tours follow this structure.
+
+Pauper and the approved Paupergeddon event remain in scope after the Modern reference path is proven. They are no longer the first post-Standard implementation target.
 
 ---
 
@@ -481,19 +486,17 @@ Development must proceed in the following broad order:
 5. Generalize the Standard-only MTGO pipeline.
 6. Split the existing MTGO front end without changing behavior.
 7. Implement the whitelist-based Melee collection and normalization pipeline.
-8. Implement Pauper classification.
-9. Implement MTGO Pauper statistics.
-10. Implement the Paupergeddon reference event.
-11. Implement the tabletop event overview and matchup matrix.
-12. Implement pure Constructed single-stage event handling.
-13. Implement mixed Draft and Constructed event handling.
-14. Implement compatible multi-event tabletop matchup aggregation.
-15. Add Modern to both applicable product areas.
-16. Add Pioneer to both applicable product areas.
-17. Add Legacy to both applicable product areas.
-18. Add Standard tabletop events when an approved event is available.
-19. Decide whether to implement Vintage.
-20. Complete cleanup, operational documentation, and release procedures.
+8. Implement Modern classification and MTGO Modern statistics.
+9. Implement the approved mixed-format Modern Pro Tour reference event.
+10. Implement the tabletop event overview and matchup matrix.
+11. Complete reusable pure Constructed and mixed-event strategies.
+12. Implement compatible multi-event tabletop matchup aggregation and whitelist operations.
+13. Implement Pauper for MTGO and the approved Paupergeddon event.
+14. Add Pioneer to both applicable product areas.
+15. Add Legacy to both applicable product areas.
+16. Add Standard tabletop events when an approved event is available.
+17. Decide whether to implement Vintage.
+18. Complete cleanup, operational documentation, and release procedures.
 
 Detailed phases and acceptance criteria belong in `ROADMAP.md`.
 

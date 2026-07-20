@@ -64,8 +64,8 @@ The intended format-development order is:
 
 1. Preserve Standard as the regression baseline.
 2. Generalize the existing Standard-only MTGO pipeline.
-3. Implement Pauper for MTGO and the selected Paupergeddon Melee event.
-4. Implement Modern.
+3. Implement Modern for MTGO and the selected mixed-format Modern Pro Tour event.
+4. Implement Pauper for MTGO and the selected Paupergeddon Melee event.
 5. Implement Pioneer.
 6. Implement Legacy.
 7. Decide whether to implement Vintage.

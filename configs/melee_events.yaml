@@ -1,0 +1,68 @@
+schema_version: "1.0.0"
+
+events:
+  - id: "434455"
+    url: "https://melee.gg/Tournament/View/434455"
+    name: "Pro Tour Magic: The Gathering | Marvel Super Heroes"
+    date:
+      start: "2026-07-17"
+      end: "2026-07-19"
+    format: "modern"
+    series: "pro_tour"
+    structure: "mixed"
+    enabled: false
+    review_status: "verified"
+    tabletop: true
+    team_event: false
+    mixed_format: true
+    include:
+      swiss: true
+      playoffs: true
+    phases:
+      - id: "day1_draft"
+        stage: "day1"
+        round_phase: "draft"
+        game_format: "limited"
+        swiss: true
+        rounds: [1, 2, 3]
+      - id: "day1_modern"
+        stage: "day1"
+        round_phase: "constructed"
+        game_format: "modern"
+        swiss: true
+        rounds: [4, 5, 6, 7, 8]
+      - id: "day2_draft"
+        stage: "day2"
+        round_phase: "draft"
+        game_format: "limited"
+        swiss: true
+        rounds: [9, 10, 11]
+      - id: "day2_modern"
+        stage: "day2"
+        round_phase: "constructed"
+        game_format: "modern"
+        swiss: true
+        rounds: [12, 13, 14, 15, 16]
+      - id: "top8_draft"
+        stage: "playoff"
+        round_phase: "playoff"
+        game_format: "limited"
+        swiss: false
+        source_labels: ["Quarterfinals", "Semifinals", "Finals"]
+    advancement:
+      day2_after_round: 8
+      day2_minimum_match_points: 12
+      top8_lock_supported: true
+    statistics:
+      default_match_scope: "all_constructed_swiss"
+      constructed_game_format: "modern"
+      include_playoffs: false
+    source_evidence:
+      - "https://magic.gg/news/pro-tour-marvel-super-heroes-viewers-guide"
+      - "https://magic.gg/news/pro-tour-magic-the-gathering-marvel-super-heroes-fact-sheet-for-competitors"
+    special_handling:
+      - "Draft Swiss rounds must not enter Modern statistics."
+      - "The Top 8 is Draft and must remain contextual only."
+      - "Overall standings points combine Draft and Modern performance."
+      - "Players may leave later Swiss pairings after officially locking Top 8."
+    notes: "Approved reference contract; live Melee fetching requires separate authorization."

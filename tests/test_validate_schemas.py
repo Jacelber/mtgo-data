@@ -31,11 +31,13 @@ def test_every_public_output_embeds_the_manifest_version():
 
 def test_all_declared_schemas_are_valid_and_versioned():
     loaded, _ = schemas.load_schemas(ROOT / "schemas")
-    assert len(loaded) == 14
+    assert len(loaded) == 16
     assert "classification-rules.schema.json" in loaded
     assert "classification-report.schema.json" in loaded
     assert "classification-report-index.schema.json" in loaded
     assert "formats.schema.json" in loaded
+    assert "melee-events.schema.json" in loaded
+    assert "melee-event.schema.json" in loaded
     assert all(schema["$schema"] == "https://json-schema.org/draft/2020-12/schema" for schema in loaded.values())
     assert loaded["formats.schema.json"]["x-schema-version"] == "1.1.0"
     assert all(

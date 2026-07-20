@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p4-01-phase4-status"
-  working_branch_status: "phase_4_closeout_awaiting_publication"
+  current_working_branch: "codex/p5-01-melee-contract"
+  working_branch_status: "p5_01_completed_awaiting_owner_acceptance_and_publication_authorization"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,8 +57,8 @@ authoritative_documents:
 current_phase:
   id: 5
   name: "Melee ingestion and normalized event model"
-  status: "awaiting_detailed_review_and_owner_authorization"
-  started_on: null
+  status: "in_progress"
+  started_on: "2026-07-20"
   objective: "Implement safe, reproducible fetching and normalization for explicitly whitelisted Melee events while keeping raw and normalized data separate."
   production_changes_allowed: false
   feature_development_allowed: false
@@ -234,12 +234,15 @@ product_tracks:
     formats:
       pauper:
         implementation_status: "not_started"
-        first_approved_event:
-          name: "Paupergeddon Summer 2026 Main Event"
-          melee_event_id: "438329"
-          event_structure: "constructed_day2"
+        planned_reference_event_category: "paupergeddon_main_event"
+        priority: "after_modern_reference_path"
       modern:
         implementation_status: "not_started"
+        first_approved_event:
+          name: "Pro Tour Magic: The Gathering | Marvel Super Heroes"
+          melee_event_id: "434455"
+          event_structure: "mixed"
+          whitelist_enabled: false
       pioneer:
         implementation_status: "not_started"
       legacy:
@@ -2091,12 +2094,42 @@ open_decisions:
     status: "deferred"
     note: "Not part of the current approved scope."
 
+phase_5_tasks:
+  - id: "P5-01"
+    name: "Define the Melee whitelist and normalized event contract"
+    status: "completed_locally_awaiting_owner_acceptance_and_publication_authorization"
+    branch: "codex/p5-01-melee-contract"
+    reference_event_id: "434455"
+    live_fetch_performed: false
+    statistics_generated: false
+    tests_passed: 236
+  - id: "P5-02"
+    name: "Implement whitelist loading and fetch-boundary enforcement"
+    status: "not_started"
+  - id: "P5-03"
+    name: "Implement the safe Melee client and raw archive"
+    status: "not_started"
+  - id: "P5-04"
+    name: "Parse stored Melee source fixtures"
+    status: "not_started"
+  - id: "P5-05"
+    name: "Assemble normalized Melee events"
+    status: "not_started"
+  - id: "P5-06"
+    name: "Normalize phases, results, and reviewed overrides"
+    status: "not_started"
+  - id: "P5-07"
+    name: "Add quality gates and publication blocking"
+    status: "not_started"
+  - id: "P5-08"
+    name: "Run end-to-end Phase 5 validation and closeout"
+    status: "not_started"
+
 next_approved_task:
-  id: "P5-01"
-  name: "Define the Melee whitelist and normalized event contract"
+  id: "P5-02"
+  name: "Implement whitelist loading and fetch-boundary enforcement"
   target_paths:
     - "configs/melee_events.yaml"
-    - "schemas/"
     - "src/mtgmeta/melee/"
     - "tests/"
     - "docs/audits/"
@@ -2152,10 +2185,10 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P5-01 until its Melee whitelist, source-boundary, normalized-model, and data-quality scope is reviewed and the project owner explicitly authorizes implementation."
-  - "Do not implement MTGO Pauper yet."
+  - "Do not begin P5-02 until its whitelist-loading, duplicate-ID, disabled-entry, and fetch-boundary behavior is reviewed and the project owner explicitly authorizes implementation."
+  - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not fetch Melee events yet."
-  - "Do not generate Paupergeddon statistics yet."
+  - "Do not generate reference-event or Paupergeddon statistics yet."
   - "Do not add new Constructed formats yet."
   - "Do not delete or disable existing workflows before their responsibilities are audited."
   - "Do not change public Standard output without regression protection."

@@ -230,7 +230,7 @@ For this mode:
 
 ## 5. Round classification
 
-Each tabletop round must be assigned a normalized phase.
+Each tabletop round must be assigned a normalized phase. Event stage, round phase, and actual game format are separate dimensions and must not be collapsed into one field.
 
 Allowed primary values are:
 
@@ -239,11 +239,14 @@ Allowed primary values are:
 - `playoff`;
 - `unknown`.
 
-Constructed rounds should also retain a day or stage designation when known:
+Every round should retain a stage designation when known:
 
 - `day1`;
 - `day2`;
+- `playoff`;
 - `other`.
+
+Every round should also retain its actual game format, such as `limited`, `modern`, or `unknown`. This is necessary when a playoff uses a different format from the event's Constructed Swiss rounds. For example, a Draft Top 8 has stage `playoff`, phase `playoff`, and game format `limited`.
 
 A normalized round should contain or allow derivation of:
 
@@ -251,9 +254,9 @@ A normalized round should contain or allow derivation of:
 - source round name;
 - source round number;
 - normalized round number;
-- day;
+- stage;
 - phase;
-- Constructed format when applicable;
+- actual game format;
 - whether it is Swiss;
 - whether it is playoff;
 - whether it counts toward each statistical scope.
