@@ -5,7 +5,7 @@ project:
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
   current_working_branch: "master"
-  working_branch_status: "clean_after_p3_02_publication"
+  working_branch_status: "clean_after_p3_04_publication"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -1351,7 +1351,7 @@ phase_2_result:
     phase_3_authorized: false
 
 phase_3_planning:
-  status: "p3_04_owner_accepted_publication_authorized"
+  status: "p3_04_completed_awaiting_p3_05_review_and_authorization"
   objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
   standard_remains_regression_baseline: true
   executable_formats:
@@ -1377,7 +1377,7 @@ phase_3_planning:
   p3_02_local_implementation_authorized: true
   p3_03_local_implementation_authorized: true
   p3_04_local_implementation_authorized: true
-  remote_publication_authorized: true
+  remote_publication_authorized: false
 
 phase_3_tasks:
   - id: "P3-01"
@@ -1528,9 +1528,10 @@ phase_3_tasks:
 
   - id: "P3-04"
     name: "Generalize Standard event and rolling-range statistics"
-    status: "owner_accepted_publication_authorized"
+    status: "completed"
     started_on: "2026-07-20"
     implemented_on: "2026-07-20"
+    completed_on: "2026-07-20"
     source_branch: "codex/p3-04-mtgo-statistics"
     baseline_commit: "faaf149433f7c2e72990dc0bda2b6c724958e58b"
     baseline_tag: "phase-2-shared-classifier-baseline"
@@ -1579,9 +1580,11 @@ phase_3_tasks:
       production_outputs_changed: false
       browser_smoke_test_passed: true
       browser_console_errors: 0
+    pull_request: 47
+    merge_commit: "e401f64d78081b5ac8ed6cc7ff499e5545485d1d"
     acceptance:
       owner_accepted: true
-      merged_to_master: false
+      merged_to_master: true
 
 known_blockers: []
 
@@ -1610,20 +1613,20 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P3-04"
-  name: "Generalize Standard event and rolling-range statistics"
+  id: "P3-05"
+  name: "Generalize Videre matchup and classification-report routing"
   target_paths:
-    - "src/mtgmeta/mtgo/stats.py"
-    - "stats_standard.py"
+    - "src/mtgmeta/mtgo/matchup.py"
+    - "fetch_videre_matches.py"
+    - "stats_matchup.py"
+    - "generate_classification_reports.py"
     - "tests/"
-    - "README.md"
-    - "docs/audits/P3-04.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_remote_publication_authorized"
-  planning_status: "accepted_awaiting_publication"
+  authorization_status: "awaiting_detailed_task_review_and_owner_authorization"
+  planning_status: "not_started"
 
 governance_baseline:
   status: "active_on_master"
@@ -1664,12 +1667,12 @@ delegated_local_execution_governance:
   phase_2:
     status: "completed"
   phase_3:
-    status: "p3_04_owner_accepted_publication_authorized"
+    status: "p3_04_completed_awaiting_p3_05_review_and_authorization"
   completes_p1_06: true
 
 prohibited_next_actions:
   - "Do not begin P3-05 until P3-04 is accepted and P3-05 is reviewed and explicitly authorized."
-  - "Do not modify Videre matchup processing, classification-report routing, Weekly Pickup, metadata, catalogs, production workflows, public JSON, schemas, rules, or front-end code during P3-04."
+  - "Do not modify Weekly Pickup, metadata, catalogs, production workflows, public JSON, schemas, rules, or front-end code during P3-05 unless its approved task contract explicitly requires it."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."
