@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p5-01-phase5-status"
-  working_branch_status: "p5_01_published_p5_02_awaiting_detailed_review_and_owner_authorization"
+  current_working_branch: "codex/p5-02-melee-whitelist-loader"
+  working_branch_status: "p5_02_completed_awaiting_owner_acceptance_and_publication_authorization"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2109,7 +2109,12 @@ phase_5_tasks:
     tests_passed: 236
   - id: "P5-02"
     name: "Implement whitelist loading and fetch-boundary enforcement"
-    status: "not_started"
+    status: "completed_locally_awaiting_owner_acceptance_and_publication_authorization"
+    branch: "codex/p5-02-melee-whitelist-loader"
+    reference_event_id: "434455"
+    live_fetch_performed: false
+    statistics_generated: false
+    tests_passed: 247
   - id: "P5-03"
     name: "Implement the safe Melee client and raw archive"
     status: "not_started"
@@ -2130,8 +2135,8 @@ phase_5_tasks:
     status: "not_started"
 
 next_approved_task:
-  id: "P5-02"
-  name: "Implement whitelist loading and fetch-boundary enforcement"
+  id: "P5-03"
+  name: "Implement the safe Melee client and raw archive"
   target_paths:
     - "configs/melee_events.yaml"
     - "src/mtgmeta/melee/"
@@ -2189,7 +2194,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P5-02 until its whitelist-loading, duplicate-ID, disabled-entry, and fetch-boundary behavior is reviewed and the project owner explicitly authorizes implementation."
+  - "Do not begin P5-03 until its request-boundary, raw-archive, retry, pagination, and re-fetch-safety behavior is reviewed and the project owner explicitly authorizes implementation."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not fetch Melee events yet."
   - "Do not generate reference-event or Paupergeddon statistics yet."

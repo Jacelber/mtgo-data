@@ -7,4 +7,22 @@ no network access and does not authorize fetching or publication.
 WHITELIST_SCHEMA_VERSION = "1.0.0"
 NORMALIZED_EVENT_SCHEMA_VERSION = "1.0.0"
 
-__all__ = ["WHITELIST_SCHEMA_VERSION", "NORMALIZED_EVENT_SCHEMA_VERSION"]
+from .config import (
+    DisabledMeleeEventError,
+    MeleeConfigError,
+    MeleeEventDefinition,
+    MeleeEventRegistry,
+    UnknownMeleeEventError,
+    load_melee_event_registry,
+)
+
+__all__ = [
+    "WHITELIST_SCHEMA_VERSION",
+    "NORMALIZED_EVENT_SCHEMA_VERSION",
+    "DisabledMeleeEventError",
+    "MeleeConfigError",
+    "MeleeEventDefinition",
+    "MeleeEventRegistry",
+    "UnknownMeleeEventError",
+    "load_melee_event_registry",
+]
