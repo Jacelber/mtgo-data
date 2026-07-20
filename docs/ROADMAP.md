@@ -509,6 +509,8 @@ The wrappers must be removed only after:
 
 P3-01 must distinguish known, executable, planned, and decision-gated formats. Only Standard is executable during the migration. The generalized interface must fail clearly for unknown or disabled formats, and it must never silently use Standard paths for another format. P3-01 changes no generator, workflow, public JSON, rule file, or front-end code.
 
+P3-01 completed on 2026-07-20 through pull request #41 and merge commit `c95f156737d10014f6f593ee27378e73b8e06fb3`. Its executable contract is pinned to the Phase 2 recovery baseline. P3-02 remains subject to separate project-owner authorization.
+
 ## Acceptance criteria
 
 Phase 3 is complete when:
