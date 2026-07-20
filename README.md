@@ -2,7 +2,7 @@
 
 `mtgo-data` analyzes Constructed Magic: The Gathering tournament data. The current production baseline is the Standard-focused **MTGO Environment Trends** site. A separate **Tabletop Major Events** product and additional Constructed formats are planned, but they are not yet production features.
 
-The project is in Phase 2: shared rule system and compatibility classifier. Current task authorization and project status are recorded in [`docs/STATUS.yaml`](docs/STATUS.yaml).
+The project is in Phase 3: generalizing the MTGO pipeline while Standard remains the only executable format. Current task authorization and project status are recorded in [`docs/STATUS.yaml`](docs/STATUS.yaml).
 
 The current Standard page compatibility baseline is documented in [`docs/audits/P1-11.md`](docs/audits/P1-11.md). Run `python -m pytest tests/test_standard_public_contract.py` for its automated checks and use [`docs/checklists/STANDARD_FRONTEND_SMOKE.md`](docs/checklists/STANDARD_FRONTEND_SMOKE.md) for browser verification.
 
@@ -45,7 +45,7 @@ Run the read-only repository validator, rule validator, and tests from the repos
 
 These commands validate repository syntax and references, Standard archetype rules, versioned shared rule files, generated classification diagnostics, Standard JSON Schemas, and the frozen Standard classification baseline. They do not fetch tournament data or regenerate production statistics.
 
-`generate_classification_reports.py` reads committed Standard MTGO events and writes deterministic reports under `reports/standard/mtgo/`. The reports omit player names, login IDs, and raw player records while retaining event context, stable pseudonymous deck IDs, matched rule evidence, and Unknown decklists. `--strict` returns a failure when an unresolved classification conflict or invalid deck input is present. These reports are operational diagnostics and are not consumed by the current front end.
+`generate_classification_reports.py` remains the legacy Standard command and now resolves its event, rule, and report paths through `configs/formats.yaml`; `--format standard` may be supplied explicitly. The reports omit player names, login IDs, and raw player records while retaining event context, stable pseudonymous deck IDs, matched rule evidence, and Unknown decklists. `--strict` returns a failure when an unresolved classification conflict or invalid deck input is present. These reports are operational diagnostics and are not consumed by the current front end.
 
 The Schema mapping in `schemas/manifest.json` is versioned as `1.0.0`. It protects the existing Standard MTGO page-consumed JSON and the classification diagnostic reports; every declared output embeds `schema_version: "1.0.0"`.
 
@@ -56,7 +56,7 @@ Pull requests and pushes to `master` run the same validation sequence through `.
 - `data/<format>/`: committed source event data; source-specific normalized paths will be added in later phases.
 - `configs/formats.yaml`: validated registry of known formats, execution state, capabilities, and format-specific paths.
 - `my_archetypes/standard.yaml`: current legacy Standard classification rules.
-- `src/mtgmeta/`: shared normalization, classification, configuration, and format-aware MTGO event-I/O and rolling-statistics utilities.
+- `src/mtgmeta/`: shared normalization, classification, configuration, and format-aware MTGO event-I/O, rolling-statistics, Videre, matchup, and report-routing utilities.
 - `schemas/classification-rules.schema.json`: machine-readable contract for versioned shared rule files.
 - `reports/standard/mtgo/`: generated, de-identified Standard classification diagnostics.
 - `stats/standard/mtgo/`: generated Standard MTGO statistics consumed by the public page.

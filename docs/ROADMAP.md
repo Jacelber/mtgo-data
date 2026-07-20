@@ -523,6 +523,10 @@ P3-04 local implementation completed in an isolated workspace on 2026-07-20 afte
 
 P3-04 was published through pull request #47 and merge commit `e401f64d78081b5ac8ed6cc7ff499e5545485d1d`. P3-05 is the next planned task, but requires a detailed pre-development review and separate project-owner authorization before implementation begins.
 
+P3-05 local implementation was authorized and started in an isolated workspace on 2026-07-20. Its approved scope is format-aware Videre match fetching, matchup generation, and classification-report routing while retaining the existing Standard commands and outputs. It does not authorize another executable format, live Videre fetching, statistical changes, workflow changes, public-contract changes, or remote publication.
+
+P3-05 local implementation completed on 2026-07-20. Standard fixed-reference regeneration produced five byte-identical matchup documents and six byte-identical de-identified classification reports; 1/4/12/36-week counted-match totals remain 619/2,564/6,732/8,247. The legacy production commands and browser behavior remain compatible, disabled formats fail before network or output side effects, and no live Videre fetch, production data change, workflow change, schema change, rule change, or front-end source change occurred. The project owner accepted the result and authorized its remote publication on 2026-07-20.
+
 ## Acceptance criteria
 
 Phase 3 is complete when:

@@ -1351,7 +1351,7 @@ phase_2_result:
     phase_3_authorized: false
 
 phase_3_planning:
-  status: "p3_04_completed_awaiting_p3_05_review_and_authorization"
+  status: "p3_05_owner_accepted_publication_authorized"
   objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
   standard_remains_regression_baseline: true
   executable_formats:
@@ -1377,7 +1377,8 @@ phase_3_planning:
   p3_02_local_implementation_authorized: true
   p3_03_local_implementation_authorized: true
   p3_04_local_implementation_authorized: true
-  remote_publication_authorized: false
+  p3_05_local_implementation_authorized: true
+  remote_publication_authorized: true
 
 phase_3_tasks:
   - id: "P3-01"
@@ -1586,6 +1587,86 @@ phase_3_tasks:
       owner_accepted: true
       merged_to_master: true
 
+  - id: "P3-05"
+    name: "Generalize Videre matchup and classification-report routing"
+    status: "owner_accepted_publication_authorized"
+    started_on: "2026-07-20"
+    implemented_on: "2026-07-20"
+    source_branch: "codex/p3-05-mtgo-matchup-reports"
+    baseline_commit: "520ba6ba43f49cfcb4710081240afcc7f816b1e9"
+    baseline_tag: "phase-2-shared-classifier-baseline"
+    production_change: true
+    output:
+      - "src/mtgmeta/mtgo/matchup.py"
+      - "fetch_videre_matches.py"
+      - "stats_matchup.py"
+      - "generate_classification_reports.py"
+      - "src/mtgmeta/reports.py"
+      - "tests/test_mtgo_matchup.py"
+      - "tests/test_classification_reports.py"
+      - "tests/test_generated_output_determinism.py"
+      - "tests/test_mtgo_format_pipeline_contract.py"
+      - "tests/test_embedded_schema_version.py"
+      - "README.md"
+      - "docs/audits/P3-05.md"
+      - "docs/ROADMAP.md"
+      - "docs/STATUS.yaml"
+    contract:
+      capabilities_migrated:
+        - "matchup_statistics"
+        - "classification_report_routing"
+      only_standard_executable: true
+      explicit_format_required_in_shared_interfaces: true
+      registry_paths_used_for_events_matches_rules_statistics_and_reports: true
+      disabled_format_fails_before_network_or_output_side_effects: true
+      unsafe_videre_event_id_fails_before_network_or_output_side_effects: true
+      legacy_standard_commands_preserved: true
+      parent_archetype_matchup_aggregation_preserved: true
+      classification_report_deidentification_preserved: true
+      statistical_formulas_changed: false
+      public_json_contract_changed: false
+      schemas_changed: false
+      production_workflow_changed: false
+      weekly_pickup_changed: false
+      metadata_or_catalogs_changed: false
+      rules_changed: false
+      front_end_changed: false
+      live_videre_fetch_performed: false
+    validation:
+      p3_05_focused_tests_passed: 32
+      pytest_passed: 202
+      repository_validation_passed: true
+      rule_validation_passed: true
+      schema_validation_passed: true
+      schema_documents_validated: 23
+      standard_quality_baseline_passed: true
+      frozen_corpus_records: 3936
+      fixed_reference_matchup_documents_compared: 5
+      fixed_reference_report_documents_compared: 6
+      fixed_reference_byte_differences: 0
+      matchup_counted_matches:
+        one_week: 619
+        four_weeks: 2564
+        twelve_weeks: 6732
+        thirty_six_weeks: 8247
+      classification_report_unknown: 71
+      classification_report_multiple_matches: 947
+      classification_report_conflicts: 0
+      classification_report_selected_subtypes: 45
+      production_outputs_changed: false
+      browser_smoke_test_passed: true
+      browser_matchup_rows:
+        one_week: 24
+        four_weeks: 38
+        twelve_weeks: 60
+      browser_console_errors: 0
+    authorization:
+      owner_local_implementation_authorized: true
+      remote_publication_authorized: false
+    acceptance:
+      owner_accepted: true
+      merged_to_master: false
+
 known_blockers: []
 
 open_decisions:
@@ -1620,13 +1701,16 @@ next_approved_task:
     - "fetch_videre_matches.py"
     - "stats_matchup.py"
     - "generate_classification_reports.py"
+    - "src/mtgmeta/reports.py"
     - "tests/"
+    - "README.md"
+    - "docs/audits/P3-05.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "awaiting_detailed_task_review_and_owner_authorization"
-  planning_status: "not_started"
+  authorization_status: "owner_accepted_remote_publication_authorized"
+  planning_status: "accepted_awaiting_publication"
 
 governance_baseline:
   status: "active_on_master"
@@ -1667,7 +1751,7 @@ delegated_local_execution_governance:
   phase_2:
     status: "completed"
   phase_3:
-    status: "p3_04_completed_awaiting_p3_05_review_and_authorization"
+    status: "p3_05_owner_accepted_publication_authorized"
   completes_p1_06: true
 
 prohibited_next_actions:

@@ -96,12 +96,18 @@ def _record_identity(event: Mapping[str, Any], source_file: str, player_index: i
     }
 
 
-def _base(report_type: str, event_count: int, data_through: str) -> dict[str, Any]:
+def _base(
+    report_type: str,
+    event_count: int,
+    data_through: str,
+    format_id: str,
+    source: str,
+) -> dict[str, Any]:
     return {
         "schema_version": REPORT_SCHEMA_VERSION,
         "report_type": report_type,
-        "format": "standard",
-        "source": "mtgo",
+        "format": format_id,
+        "source": source,
         "scope": "all_available_events",
         "event_count": event_count,
         "data_through": data_through,
@@ -111,6 +117,9 @@ def _base(report_type: str, event_count: int, data_through: str) -> dict[str, An
 def build_classification_reports(
     events: Sequence[tuple[str, Mapping[str, Any]]],
     rule_set: RuleSet,
+    *,
+    format_id: str = "standard",
+    source: str = "mtgo",
 ) -> dict[str, dict[str, Any]]:
     """Classify every event deck and return deterministic diagnostic documents."""
 
@@ -200,7 +209,12 @@ def build_classification_reports(
         records.sort(key=record_sort)
 
     total = sum(statuses.values())
-    common = {"event_count": len(events), "data_through": data_through}
+    common = {
+        "event_count": len(events),
+        "data_through": data_through,
+        "format_id": format_id,
+        "source": source,
+    }
     reports = {
         "unknown_decks": {
             **_base("unknown_decks", **common),
