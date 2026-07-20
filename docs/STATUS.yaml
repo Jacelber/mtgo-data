@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p5-01-melee-contract"
-  working_branch_status: "p5_01_completed_awaiting_owner_acceptance_and_publication_authorization"
+  current_working_branch: "codex/p5-01-phase5-status"
+  working_branch_status: "p5_01_published_p5_02_awaiting_detailed_review_and_owner_authorization"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2097,8 +2097,12 @@ open_decisions:
 phase_5_tasks:
   - id: "P5-01"
     name: "Define the Melee whitelist and normalized event contract"
-    status: "completed_locally_awaiting_owner_acceptance_and_publication_authorization"
+    status: "completed_and_published"
     branch: "codex/p5-01-melee-contract"
+    commit: "cdffd628330b858a325889996a0054cf395cd91b"
+    pull_request: 59
+    merge_commit: "c742c9d7a78ff7fc6648b2476340ad3e811d64a4"
+    merged_on: "2026-07-20"
     reference_event_id: "434455"
     live_fetch_performed: false
     statistics_generated: false
