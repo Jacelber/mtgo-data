@@ -54,8 +54,9 @@ Pull requests and pushes to `master` run the same validation sequence through `.
 ## Current repository layout
 
 - `data/<format>/`: committed source event data; source-specific normalized paths will be added in later phases.
+- `configs/formats.yaml`: validated registry of known formats, execution state, capabilities, and format-specific paths.
 - `my_archetypes/standard.yaml`: current legacy Standard classification rules.
-- `src/mtgmeta/`: shared normalization, versioned rule-model, and rule-loading utilities.
+- `src/mtgmeta/`: shared normalization, classification, configuration, and format-aware MTGO event-I/O utilities.
 - `schemas/classification-rules.schema.json`: machine-readable contract for versioned shared rule files.
 - `reports/standard/mtgo/`: generated, de-identified Standard classification diagnostics.
 - `stats/standard/mtgo/`: generated Standard MTGO statistics consumed by the public page.

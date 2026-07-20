@@ -91,8 +91,15 @@ def test_migration_sequence_covers_every_phase_3_pipeline_capability_once():
             assert (ROOT / entry_point).is_file(), entry_point
 
 
-def test_hardcoded_standard_inventory_matches_the_current_repository():
+def test_hardcoded_inventory_tracks_migrated_and_remaining_boundaries():
     inventory = load_json(CONTRACT_PATH)["hardcoded_inventory"]
+    migrated_snippets = {
+        "batch_mtgo.py": {"folder = os.path.join(DATA_DIR, fmt)"},
+        "classify_standard.py": {
+            'RULES_FILE = "my_archetypes/standard.yaml"',
+            'DATA_DIR = "data/standard"',
+        },
+    }
 
     assert len(inventory) == 12
     for item in inventory:
@@ -100,4 +107,7 @@ def test_hardcoded_standard_inventory_matches_the_current_repository():
         assert path.is_file(), item["file"]
         source = path.read_text(encoding="utf-8")
         for snippet in item["snippets"]:
-            assert snippet in source, f"missing inventory snippet in {item['file']}: {snippet}"
+            if snippet in migrated_snippets.get(item["file"], set()):
+                assert snippet not in source, f"migrated P3-03 snippet remains in {item['file']}: {snippet}"
+            else:
+                assert snippet in source, f"missing unresolved inventory snippet in {item['file']}: {snippet}"

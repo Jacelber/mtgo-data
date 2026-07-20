@@ -1,4 +1,3 @@
-import os
 import json
 import glob
 import sys
@@ -11,13 +10,14 @@ if str(SHARED_SRC) not in sys.path:
 from mtgmeta.deck import count_card as shared_count_card
 from mtgmeta.deck import deck_to_counts as shared_deck_to_counts
 from mtgmeta.classifier import ClassificationResult, classify_counts
-from mtgmeta.config import load_rule_set
 from mtgmeta.legacy_rules import LegacyArchetypeRules, to_legacy_archetypes
+from mtgmeta.mtgo import load_mtgo_context
+from mtgmeta.mtgo.normalize import load_rules_for_format
 from mtgmeta.rules import RuleSet
 
 # === 配置 ===
-RULES_FILE = "my_archetypes/standard.yaml"   # 版本化 Standard 规则库
-DATA_DIR = "data/standard"                     # 你抓取的 standard 赛事数据
+REPOSITORY_ROOT = Path(__file__).resolve().parent
+FORMAT_ID = "standard"
 UNKNOWN_OUTPUT = "unknown_decks.txt"           # 归不了类的牌表导出到这里
 
 # MTGO 版权改名卡 -> j6e 规则使用的标准卡名
@@ -36,9 +36,11 @@ def normalize_name(name):
 
 # ---------- 1. 加载版本化 YAML，并适配现有调用方 ----------
 def load_rules():
-    rule_set = load_rule_set(RULES_FILE)
+    context = load_mtgo_context(REPOSITORY_ROOT, FORMAT_ID, "classification")
+    rule_set = load_rules_for_format(REPOSITORY_ROOT, FORMAT_ID)
     archetypes = to_legacy_archetypes(rule_set)
-    print(f"  已加载 {len(archetypes)} 条规则（来自 {RULES_FILE}）")
+    rules_path = context.paths["rules"].relative_to(REPOSITORY_ROOT).as_posix()
+    print(f"  已加载 {len(archetypes)} 条规则（来自 {rules_path}）")
     return archetypes
 
 
@@ -132,13 +134,14 @@ def match_archetype(main_counts, side_counts, archetypes):
 # ---------- 6. 主流程 ----------
 def main():
     archetypes = load_rules()
+    context = load_mtgo_context(REPOSITORY_ROOT, FORMAT_ID, "classification")
 
     counts = {}            # 每个分类结果的牌表数量
     total = 0
     unknown_decks = []     # 收集归不了类的牌表
 
-    event_files = glob.glob(os.path.join(DATA_DIR, "*.json"))
-    print(f"  找到 {len(event_files)} 个 standard 赛事文件\n")
+    event_files = glob.glob(str(context.paths["events"] / "*.json"))
+    print(f"  找到 {len(event_files)} 个 {FORMAT_ID} 赛事文件\n")
 
     for event_path in event_files:
         with open(event_path, "r", encoding="utf-8") as f:

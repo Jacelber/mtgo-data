@@ -515,6 +515,8 @@ P3-02 local implementation completed in an isolated workspace on 2026-07-20 afte
 
 P3-02 was published through pull request #43 and merge commit `485887b89d57407916d7d668c507de739e7b726c`. P3-03 remains subject to separate project-owner authorization.
 
+P3-03 local implementation completed in an isolated workspace on 2026-07-20 after explicit project-owner authorization. It extracts format-aware MTGO event download, parsing, normalization, safe storage, and classification dispatch while retaining the legacy Standard entry points and leaving production data, statistics, workflows, public JSON, and front-end behavior unchanged. The project owner accepted the result and authorized its separate remote publication on 2026-07-20.
+
 ## Acceptance criteria
 
 Phase 3 is complete when:
