@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p3-01-mtgo-pipeline-contract"
-  working_branch_status: "p3_01_accepted_awaiting_publication"
+  current_working_branch: "master"
+  working_branch_status: "clean_after_p3_01_publication"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -1351,7 +1351,7 @@ phase_2_result:
     phase_3_authorized: false
 
 phase_3_planning:
-  status: "p3_01_accepted_awaiting_publication"
+  status: "p3_01_completed_awaiting_p3_02_authorization"
   objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
   standard_remains_regression_baseline: true
   executable_formats:
@@ -1374,17 +1374,20 @@ phase_3_planning:
     - "P3-08 Standard and front-end closeout"
   phase_implementation_authorized: false
   p3_01_local_implementation_authorized: true
-  remote_publication_authorized: true
+  remote_publication_authorized: false
 
 phase_3_tasks:
   - id: "P3-01"
     name: "Define the format-aware MTGO pipeline migration contract"
-    status: "accepted_awaiting_publication"
+    status: "completed"
+    completed_on: "2026-07-20"
     implemented_on: "2026-07-20"
     started_on: "2026-07-20"
     source_branch: "codex/p3-01-mtgo-pipeline-contract"
     baseline_commit: "a9e35a2c957d32f2bc0fb43c8a0777a25f71c31c"
     baseline_tag: "phase-2-shared-classifier-baseline"
+    pull_request: 41
+    merge_commit: "c95f156737d10014f6f593ee27378e73b8e06fb3"
     production_change: false
     output:
       - "tests/fixtures/mtgo/format_pipeline_contract.json"
@@ -1416,7 +1419,7 @@ phase_3_tasks:
       schema_validation_passed: true
       standard_quality_baseline_passed: true
       production_outputs_changed: false
-      merged_to_master: false
+      merged_to_master: true
 
 known_blockers: []
 
@@ -1445,18 +1448,21 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P3-01"
-  name: "Define the format-aware MTGO pipeline migration contract"
+  id: "P3-02"
+  name: "Add the format registry and safe path resolution"
   target_paths:
-    - "tests/fixtures/mtgo/format_pipeline_contract.json"
-    - "tests/test_mtgo_format_pipeline_contract.py"
-    - "docs/audits/P3-01.md"
+    - "configs/formats.yaml"
+    - "schemas/formats.schema.json"
+    - "schemas/manifest.json"
+    - "src/mtgmeta/config.py"
+    - "tests/"
+    - "docs/audits/P3-02.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_and_publication_authorized"
-  planning_status: "accepted_awaiting_publication"
+  authorization_status: "not_authorized"
+  planning_status: "awaiting_owner_review"
 
 governance_baseline:
   status: "active_on_master"
@@ -1497,12 +1503,12 @@ delegated_local_execution_governance:
   phase_2:
     status: "completed"
   phase_3:
-    status: "p3_01_accepted_awaiting_publication"
+    status: "p3_01_completed"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P3-02 or change production MTGO code until P3-01 is accepted and P3-02 is explicitly authorized."
-  - "Do not modify production generators, workflows, public JSON, rules, or front-end code during P3-01."
+  - "Do not begin P3-02 until its detailed scope is reviewed and explicitly authorized."
+  - "Do not modify production generators, workflows, public JSON, rules, or front-end code during P3-02."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."
