@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "task": "P3-01",
+  "baseline": {
+    "tag": "phase-2-shared-classifier-baseline",
+    "commit": "a9e35a2c957d32f2bc0fb43c8a0777a25f71c31c"
+  },
+  "scope": {
+    "production_changes_allowed": false,
+    "statistical_changes_allowed": false,
+    "public_json_changes_allowed": false,
+    "front_end_changes_allowed": false,
+    "workflow_changes_allowed": false,
+    "new_formats_enabled": []
+  },
+  "format_state_model": {
+    "known_format_ids": ["standard", "pauper", "modern", "pioneer", "legacy", "vintage"],
+    "executable_format_ids": ["standard"],
+    "planned_non_executable_format_ids": ["pauper", "modern", "pioneer", "legacy"],
+    "decision_gated_format_ids": ["vintage"]
+  },
+  "format_path_templates": {
+    "events": "data/{format}",
+    "matches": "data/{format}/mtgo/matches",
+    "rules": "my_archetypes/{format}.yaml",
+    "statistics": "stats/{format}/mtgo",
+    "reports": "reports/{format}/mtgo"
+  },
+  "standard_contract": {
+    "format": "standard",
+    "source": "mtgo",
+    "ranges": [1, 4, 12, 36],
+    "paths": {
+      "events": "data/standard",
+      "event_glob": "*.json",
+      "matches": "data/standard/mtgo/matches",
+      "rules": "my_archetypes/standard.yaml",
+      "statistics": "stats/standard/mtgo",
+      "reports": "reports/standard/mtgo"
+    },
+    "public_contract_fixture": "tests/fixtures/standard/public_contract/contract.json",
+    "legacy_entry_points": [
+      "batch_mtgo.py",
+      "classify_standard.py",
+      "fetch_videre_matches.py",
+      "stats_standard.py",
+      "stats_matchup.py",
+      "weekly_pickup.py",
+      "gen_meta.py",
+      "generate_classification_reports.py"
+    ],
+    "public_catalogs": {
+      "statistics": "stats/standard/mtgo/index.json",
+      "matchups": "stats/standard/mtgo/matchup_index.json",
+      "pickup": "stats/standard/mtgo/pickup/index.json"
+    }
+  },
+  "generalized_interface": {
+    "explicit_format_required": true,
+    "legacy_wrappers_default_to": "standard",
+    "configuration_controls": [
+      "format identity",
+      "implementation and enabled state",
+      "event input path",
+      "match input path",
+      "classification rule path",
+      "statistics output path",
+      "diagnostic report path",
+      "supported MTGO capabilities"
+    ],
+    "unsupported_format_fails_clearly": true,
+    "disabled_format_fails_clearly": true,
+    "cross_format_reads_prohibited": true,
+    "cross_format_writes_prohibited": true,
+    "implicit_standard_fallback_prohibited": true
+  },
+  "required_capabilities": [
+    "event_fetching",
+    "raw_event_storage",
+    "normalization",
+    "classification",
+    "event_statistics",
+    "range_statistics",
+    "matchup_statistics",
+    "weekly_pickup",
+    "metadata_generation",
+    "catalog_generation"
+  ],
+  "migration_units": [
+    {
+      "task": "P3-02",
+      "id": "format_registry",
+      "capabilities": [],
+      "current_entry_points": ["src/mtgmeta/config.py"],
+      "target_modules": ["src/mtgmeta/config.py"],
+      "production_behavior_change": false
+    },
+    {
+      "task": "P3-03",
+      "id": "event_io",
+      "capabilities": ["event_fetching", "raw_event_storage", "normalization", "classification"],
+      "current_entry_points": ["batch_mtgo.py", "fetch_mtgo.py", "classify_standard.py"],
+      "target_modules": ["src/mtgmeta/mtgo/fetch.py", "src/mtgmeta/mtgo/normalize.py"],
+      "production_behavior_change": false
+    },
+    {
+      "task": "P3-04",
+      "id": "statistics",
+      "capabilities": ["event_statistics", "range_statistics"],
+      "current_entry_points": ["stats_standard.py"],
+      "target_modules": ["src/mtgmeta/mtgo/stats.py"],
+      "production_behavior_change": true
+    },
+    {
+      "task": "P3-05",
+      "id": "matchups_and_reports",
+      "capabilities": ["matchup_statistics"],
+      "current_entry_points": ["fetch_videre_matches.py", "stats_matchup.py", "generate_classification_reports.py"],
+      "target_modules": ["src/mtgmeta/mtgo/matchup.py"],
+      "production_behavior_change": true
+    },
+    {
+      "task": "P3-06",
+      "id": "pickup_metadata_catalogs",
+      "capabilities": ["weekly_pickup", "metadata_generation", "catalog_generation"],
+      "current_entry_points": ["weekly_pickup.py", "gen_meta.py", "stats_standard.py", "stats_matchup.py"],
+      "target_modules": ["src/mtgmeta/mtgo/pickup.py"],
+      "production_behavior_change": true
+    },
+    {
+      "task": "P3-07",
+      "id": "commands_and_workflow",
+      "capabilities": [],
+      "current_entry_points": [".github/workflows/update.yml"],
+      "target_modules": ["src/mtgmeta/mtgo/__main__.py"],
+      "production_behavior_change": true
+    },
+    {
+      "task": "P3-08",
+      "id": "phase_closeout",
+      "capabilities": [],
+      "current_entry_points": ["index.html"],
+      "target_modules": [],
+      "production_behavior_change": false
+    }
+  ],
+  "hardcoded_inventory": [
+    {"file": "batch_mtgo.py", "responsibility": "event discovery and storage", "snippets": ["FORMATS = (\"standard\", \"legacy\", \"pioneer\", \"pauper\", \"vintage\", \"modern\")", "folder = os.path.join(DATA_DIR, fmt)"]},
+    {"file": "classify_standard.py", "responsibility": "legacy classification wrapper", "snippets": ["RULES_FILE = \"my_archetypes/standard.yaml\"", "DATA_DIR = \"data/standard\""]},
+    {"file": "fetch_videre_matches.py", "responsibility": "Videre match fetching", "snippets": ["FORMAT = \"standard\"", "OUT_DIR = os.path.join(\"data\", \"standard\", \"mtgo\", \"matches\")"]},
+    {"file": "stats_standard.py", "responsibility": "event and range statistics", "snippets": ["DATA_DIR = \"data/standard\"", "os.path.join(\"stats\", \"standard\", \"mtgo\")"]},
+    {"file": "stats_matchup.py", "responsibility": "matchup statistics", "snippets": ["OFFICIAL_DIR = \"data/standard\"", "MATCHES_DIR = \"data/standard/mtgo/matches\"", "OUT_DIR = \"stats/standard/mtgo\""]},
+    {"file": "weekly_pickup.py", "responsibility": "Weekly Pickup", "snippets": ["OUT_DIR = os.path.join(\"stats\", \"standard\", \"mtgo\", \"pickup\")"]},
+    {"file": "gen_meta.py", "responsibility": "metadata", "snippets": ["RULES_FILE = \"my_archetypes/standard.yaml\"", "OUT_DIR = os.path.join(\"stats\", \"standard\", \"mtgo\")"]},
+    {"file": "generate_classification_reports.py", "responsibility": "classification reports", "snippets": ["default=Path(\"data/standard\")", "default=Path(\"my_archetypes/standard.yaml\")", "default=Path(\"reports/standard/mtgo\")"]},
+    {"file": "src/mtgmeta/reports.py", "responsibility": "report metadata", "snippets": ["\"format\": \"standard\""]},
+    {"file": "validate_repository.py", "responsibility": "public path validation", "snippets": ["\"stats/standard/mtgo/meta.json\""]},
+    {"file": ".github/workflows/update.yml", "responsibility": "production orchestration", "snippets": ["run: python -B batch_mtgo.py", "run: python -B stats_standard.py", "run: python -B stats_matchup.py", "stats/standard/mtgo/pickup"]},
+    {"file": "index.html", "responsibility": "front-end compatibility boundary", "snippets": ["const FORMATS = [", "let currentFormat = \"standard\";"]}
+  ]
+}
