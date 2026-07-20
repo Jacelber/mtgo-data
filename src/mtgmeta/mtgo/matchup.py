@@ -470,6 +470,12 @@ def build_all_matchups(
         "matchup_statistics",
         registry_path=registry_path,
     )
+    load_mtgo_context(
+        repository_root,
+        format_id,
+        "catalog_generation",
+        registry_path=registry_path,
+    )
     rule_set = load_rule_set(context.paths["rules"])
     events = load_official_events_from_directory(context.paths["events"], rule_set)
     end_monday = latest_complete_week([(event[0], None) for event in events], today=today)

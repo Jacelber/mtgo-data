@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "clean_after_p3_05_publication"
+  current_working_branch: "codex/p3-06-pickup-metadata-catalogs"
+  working_branch_status: "p3_06_owner_accepted_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -1351,7 +1351,7 @@ phase_2_result:
     phase_3_authorized: false
 
 phase_3_planning:
-  status: "p3_05_completed_awaiting_p3_06_review_and_authorization"
+  status: "p3_06_owner_accepted_publication_authorized"
   objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
   standard_remains_regression_baseline: true
   executable_formats:
@@ -1378,7 +1378,8 @@ phase_3_planning:
   p3_03_local_implementation_authorized: true
   p3_04_local_implementation_authorized: true
   p3_05_local_implementation_authorized: true
-  remote_publication_authorized: false
+  p3_06_local_implementation_authorized: true
+  remote_publication_authorized: true
 
 phase_3_tasks:
   - id: "P3-01"
@@ -1670,6 +1671,80 @@ phase_3_tasks:
       owner_accepted: true
       merged_to_master: true
 
+  - id: "P3-06"
+    name: "Generalize Weekly Pickup, metadata, and catalogs"
+    status: "completed_awaiting_publication"
+    started_on: "2026-07-20"
+    implemented_on: "2026-07-20"
+    completed_on: "2026-07-20"
+    source_branch: "codex/p3-06-pickup-metadata-catalogs"
+    baseline_commit: "64c913148bd20c81039309f1dcc5935d173278c3"
+    baseline_tag: "phase-2-shared-classifier-baseline"
+    production_change: true
+    output:
+      - "src/mtgmeta/mtgo/pickup.py"
+      - "weekly_pickup.py"
+      - "gen_meta.py"
+      - "src/mtgmeta/mtgo/stats.py"
+      - "src/mtgmeta/mtgo/matchup.py"
+      - "tests/test_mtgo_pickup.py"
+      - "tests/test_embedded_schema_version.py"
+      - "tests/test_mtgo_format_pipeline_contract.py"
+      - "README.md"
+      - "docs/audits/P3-06.md"
+      - "docs/ROADMAP.md"
+      - "docs/STATUS.yaml"
+    contract:
+      capabilities_migrated:
+        - "weekly_pickup"
+        - "metadata_generation"
+        - "catalog_generation"
+      only_standard_executable: true
+      explicit_format_required_in_shared_interfaces: true
+      registry_paths_used_for_events_rules_statistics_and_pickup: true
+      disabled_format_fails_before_output_side_effects: true
+      catalog_capability_required_before_catalog_output: true
+      cross_format_reads_and_writes_prohibited: true
+      legacy_standard_commands_preserved: true
+      legacy_weekly_pickup_helper_imports_preserved: true
+      manual_pickup_approval_required: true
+      candidate_generation_changes_publication_state: false
+      statistical_formulas_changed: false
+      public_json_contract_changed: false
+      schemas_changed: false
+      production_workflow_changed: false
+      rules_changed: false
+      front_end_changed: false
+      new_format_enabled: false
+      live_fetch_performed: false
+    validation:
+      p3_06_focused_tests_passed: 41
+      pytest_passed: 210
+      repository_validation_passed: true
+      rule_validation_passed: true
+      classification_report_validation_passed: true
+      schema_validation_passed: true
+      schema_documents_validated: 23
+      standard_quality_baseline_passed: true
+      frozen_corpus_records: 3936
+      fixed_reference_pickup_documents_compared: 2
+      fixed_reference_metadata_documents_compared: 1
+      fixed_reference_byte_differences: 0
+      committed_production_outputs_changed: false
+      browser_smoke_test_passed: true
+      browser_statistics_view_loaded: true
+      browser_matchup_view_loaded: true
+      browser_pickup_week: "2026-W27"
+      browser_pickup_archetype: "4-Color Tablet"
+      browser_console_errors: 0
+      ci_shallow_checkout_safe: true
+    authorization:
+      owner_local_implementation_authorized: true
+      remote_publication_authorized: true
+    acceptance:
+      owner_accepted: true
+      merged_to_master: false
+
 known_blockers: []
 
 open_decisions:
@@ -1711,8 +1786,8 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "awaiting_detailed_task_review_and_owner_authorization"
-  planning_status: "not_started"
+  authorization_status: "owner_accepted_publication_authorized"
+  planning_status: "completed_awaiting_publication"
 
 governance_baseline:
   status: "active_on_master"
@@ -1753,12 +1828,12 @@ delegated_local_execution_governance:
   phase_2:
     status: "completed"
   phase_3:
-    status: "p3_05_completed_awaiting_p3_06_review_and_authorization"
+    status: "p3_06_owner_accepted_publication_authorized"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P3-06 until P3-05 is accepted and P3-06 is reviewed and explicitly authorized."
-  - "Do not modify production workflows, schemas, rules, or front-end code during P3-06 unless its approved task contract explicitly requires it."
+  - "Do not begin P3-07 until P3-06 is accepted, published, and P3-07 is separately reviewed and explicitly authorized."
+  - "Do not modify production workflows, schemas, rules, or front-end code during P3-06."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."

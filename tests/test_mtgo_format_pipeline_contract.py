@@ -118,6 +118,13 @@ def test_hardcoded_inventory_tracks_migrated_and_remaining_boundaries():
             'default=Path("reports/standard/mtgo")',
         },
         "src/mtgmeta/reports.py": {'"format": "standard"'},
+        "weekly_pickup.py": {
+            'OUT_DIR = os.path.join("stats", "standard", "mtgo", "pickup")'
+        },
+        "gen_meta.py": {
+            'RULES_FILE = "my_archetypes/standard.yaml"',
+            'OUT_DIR = os.path.join("stats", "standard", "mtgo")',
+        },
     }
 
     assert len(inventory) == 12

@@ -633,6 +633,12 @@ def build_all_stats(
         "range_statistics",
         registry_path=registry_path,
     )
+    load_mtgo_context(
+        root,
+        format_id,
+        "catalog_generation",
+        registry_path=registry_path,
+    )
     normalized_ranges = tuple(ranges)
     if not normalized_ranges or any(
         not isinstance(weeks, int) or isinstance(weeks, bool) or weeks <= 0

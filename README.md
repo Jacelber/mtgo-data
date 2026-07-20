@@ -47,6 +47,8 @@ These commands validate repository syntax and references, Standard archetype rul
 
 `generate_classification_reports.py` remains the legacy Standard command and now resolves its event, rule, and report paths through `configs/formats.yaml`; `--format standard` may be supplied explicitly. The reports omit player names, login IDs, and raw player records while retaining event context, stable pseudonymous deck IDs, matched rule evidence, and Unknown decklists. `--strict` returns a failure when an unresolved classification conflict or invalid deck input is present. These reports are operational diagnostics and are not consumed by the current front end.
 
+`weekly_pickup.py` and `gen_meta.py` remain the Standard maintenance commands, but their implementation now resolves rules, event input, statistics output, and supported capabilities through `configs/formats.yaml`. Weekly Pickup still requires the existing two-step human review: run `python weekly_pickup.py candidates`, edit the generated YAML and mark selected rows `approved: true`, then run `python weekly_pickup.py publish`. Candidate generation never publishes or changes the known-archetype state by itself.
+
 The Schema mapping in `schemas/manifest.json` is versioned as `1.0.0`. It protects the existing Standard MTGO page-consumed JSON and the classification diagnostic reports; every declared output embeds `schema_version: "1.0.0"`.
 
 Pull requests and pushes to `master` run the same validation sequence through `.github/workflows/ci.yml`. The CI workflow has read-only repository permissions, does not persist checkout credentials, and does not fetch or regenerate production tournament data.
@@ -56,7 +58,7 @@ Pull requests and pushes to `master` run the same validation sequence through `.
 - `data/<format>/`: committed source event data; source-specific normalized paths will be added in later phases.
 - `configs/formats.yaml`: validated registry of known formats, execution state, capabilities, and format-specific paths.
 - `my_archetypes/standard.yaml`: current legacy Standard classification rules.
-- `src/mtgmeta/`: shared normalization, classification, configuration, and format-aware MTGO event-I/O, rolling-statistics, Videre, matchup, and report-routing utilities.
+- `src/mtgmeta/`: shared normalization, classification, configuration, and format-aware MTGO event-I/O, rolling-statistics, Videre, matchup, Weekly Pickup, metadata, catalog, and report-routing utilities.
 - `schemas/classification-rules.schema.json`: machine-readable contract for versioned shared rule files.
 - `reports/standard/mtgo/`: generated, de-identified Standard classification diagnostics.
 - `stats/standard/mtgo/`: generated Standard MTGO statistics consumed by the public page.
