@@ -612,6 +612,8 @@ Do not introduce during the initial split:
 
 These changes require separate approval if later desired.
 
+P4-01 local implementation was authorized and completed in an isolated workspace on 2026-07-20. The monolithic `index.html` now loads the preserved stylesheet from `assets/css/site.css`, shared browser helpers from `assets/js/common.js`, and MTGO-specific state, data loading, and rendering from `assets/js/mtgo.js`. The scripts remain classic ordered scripts so the existing inline language controls and initialization contract remain compatible. The Standard public-path contract now searches the external JavaScript assets, and a focused structural test protects asset presence, load order, the absence of inline style/script blocks, classic global hooks, and the materially smaller HTML shell. Browser regression preserved statistics, deck details, matchup matrices, Weekly Pickup, localization, and narrow-screen behavior with zero console errors or warnings. No public JSON, statistical formula, generated output, workflow, classifier, rule, Schema, format authorization, subtype presentation, or Melee behavior changed. The project owner accepted P4-01 and authorized its commit, push, pull request, merge, Phase 4 closeout, and Phase 4 tag on 2026-07-20. Publication is pending; Phase 5 is not authorized.
+
 ## Acceptance criteria
 
 Phase 4 is complete when:
