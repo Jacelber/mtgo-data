@@ -751,6 +751,8 @@ Phase 5 is complete when:
 
 P5-01 local implementation was authorized and completed in an isolated workspace on 2026-07-20. It records DEC-034, registers Melee event `434455` as a verified but disabled mixed-format Modern reference, defines versioned whitelist and normalized-event Schemas, and adds synthetic contract fixtures. Stage, round phase, and actual game format are independent so the reference event's Draft Top 8 cannot be mistaken for a Modern playoff. Repository validation, existing public-output Schema validation, and all 236 pytest tests passed. No network fetch, raw event archive, generated statistic, workflow, public JSON, or front-end behavior changed. P5-01 was published through pull request #59 and merge commit `c742c9d7a78ff7fc6648b2476340ad3e811d64a4`. P5-02 remains separately controlled and is not authorized.
 
+P5-02 local implementation was authorized and completed in an isolated workspace on 2026-07-21. It adds an immutable Melee whitelist registry that rejects malformed, duplicate, unlisted, and disabled entries before any future collection client can obtain a source URL. The reference event `434455` remains disabled and therefore is inspectable but not fetchable. Repository validation, public-output Schema validation, 19 focused Melee tests, and all 247 pytest tests passed. P5-02 makes no network request and does not authorize P5-03 or a live Melee fetch. Publication remains separately controlled.
+
 ---
 
 # Phase 6 — Modern classification and MTGO Modern
