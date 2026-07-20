@@ -720,22 +720,67 @@ Example shape:
 schema_version: "1.0.0"
 
 events:
-  - id: "438329"
-    url: "https://melee.gg/Tournament/View/438329"
-    name: "Paupergeddon Summer 2026 Main Event"
-    format: "pauper"
-    series: "paupergeddon"
-    structure: "constructed_day2"
-    enabled: true
+  - id: "434455"
+    url: "https://melee.gg/Tournament/View/434455"
+    name: "Pro Tour Magic: The Gathering | Marvel Super Heroes"
+    date:
+      start: "2026-07-17"
+      end: "2026-07-19"
+    format: "modern"
+    series: "pro_tour"
+    structure: "mixed"
+    enabled: false
+    review_status: "verified"
     tabletop: true
     team_event: false
-    mixed_format: false
+    mixed_format: true
     include:
       swiss: true
       playoffs: true
+    phases:
+      - id: "day1_draft"
+        stage: "day1"
+        round_phase: "draft"
+        game_format: "limited"
+        swiss: true
+        rounds: [1, 2, 3]
+      - id: "day1_modern"
+        stage: "day1"
+        round_phase: "constructed"
+        game_format: "modern"
+        swiss: true
+        rounds: [4, 5, 6, 7, 8]
+      - id: "day2_draft"
+        stage: "day2"
+        round_phase: "draft"
+        game_format: "limited"
+        swiss: true
+        rounds: [9, 10, 11]
+      - id: "day2_modern"
+        stage: "day2"
+        round_phase: "constructed"
+        game_format: "modern"
+        swiss: true
+        rounds: [12, 13, 14, 15, 16]
+      - id: "top8_draft"
+        stage: "playoff"
+        round_phase: "playoff"
+        game_format: "limited"
+        swiss: false
+        source_labels: ["Quarterfinals", "Semifinals", "Finals"]
+    advancement:
+      day2_after_round: 8
+      day2_minimum_match_points: 12
+      top8_lock_supported: true
     statistics:
       default_match_scope: "all_constructed_swiss"
-    notes: "Main Event only"
+      constructed_game_format: "modern"
+      include_playoffs: false
+    source_evidence:
+      - "https://magic.gg/news/pro-tour-marvel-super-heroes-viewers-guide"
+    special_handling:
+      - "Draft Swiss and the Draft Top 8 are excluded from Modern statistics."
+    notes: "Reference contract only; live fetching requires separate authorization"
 ```
 
 This configuration does not by itself prove the exact round assignments. They must be verified during collection and normalization.
@@ -839,7 +884,7 @@ data_raw/melee/<event_id>/
 For example:
 
 ```text
-data_raw/melee/438329/
+data_raw/melee/434455/
 ```
 
 Recommended files include:
@@ -904,7 +949,7 @@ data/<format>/melee/events/<event_id>.json
 Example:
 
 ```text
-data/pauper/melee/events/438329.json
+data/modern/melee/events/434455.json
 ```
 
 A normalized event should contain logical sections for:
@@ -922,6 +967,14 @@ A normalized event should contain logical sections for:
 - exclusions;
 - normalization warnings;
 - schema version.
+
+Round identity must keep three independent dimensions:
+
+- `stage`: `day1`, `day2`, `playoff`, or `other`;
+- `round_phase`: `draft`, `constructed`, `playoff`, or `unknown`;
+- `game_format`: the actual game format, such as `limited` or `modern`.
+
+This separation is required because the initial reference event has a Draft playoff. A single `playoff` value cannot by itself prove whether the games were Limited or Constructed.
 
 ### 11.1 Player identity
 
@@ -1059,11 +1112,11 @@ quality.json
 Example:
 
 ```text
-stats/pauper/melee/events/438329/meta.json
-stats/pauper/melee/events/438329/overview.json
-stats/pauper/melee/events/438329/decks.json
-stats/pauper/melee/events/438329/matchup.json
-stats/pauper/melee/events/438329/quality.json
+stats/modern/melee/events/434455/meta.json
+stats/modern/melee/events/434455/overview.json
+stats/modern/melee/events/434455/decks.json
+stats/modern/melee/events/434455/matchup.json
+stats/modern/melee/events/434455/quality.json
 ```
 
 ### 12.3 Multi-event matchup output
@@ -1416,8 +1469,8 @@ Illustrative command shapes are:
 ```text
 python -m mtgmeta.mtgo.fetch --format pauper
 python -m mtgmeta.mtgo.stats --format pauper
-python -m mtgmeta.melee.client --event-id 438329
-python -m mtgmeta.melee.stats --event-id 438329
+python -m mtgmeta.melee.client --event-id 434455
+python -m mtgmeta.melee.stats --event-id 434455
 ```
 
 These command shapes are architectural examples, not confirmation that the modules already provide executable command-line interfaces.
@@ -1623,7 +1676,7 @@ Recommended example:
 ```json
 {
   "source": "melee",
-  "event_id": "438329"
+  "event_id": "434455"
 }
 ```
 

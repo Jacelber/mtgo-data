@@ -89,13 +89,14 @@ The approved format-development order is:
 
 1. Preserve Standard as the regression baseline.
 2. Generalize the Standard-only MTGO pipeline.
-3. Implement Pauper for MTGO.
-4. Implement the approved Paupergeddon event.
-5. Implement Modern.
-6. Implement Pioneer.
-7. Implement Legacy.
-8. Add qualifying Standard tabletop events when the Melee pipeline is stable.
-9. Decide whether Vintage should be implemented.
+3. Implement Modern for MTGO as the first post-Standard format.
+4. Implement the approved mixed-format Modern Pro Tour reference event.
+5. Complete reusable mixed-event and pure Constructed strategies.
+6. Implement Pauper for MTGO and the approved Paupergeddon event.
+7. Implement Pioneer.
+8. Implement Legacy.
+9. Add qualifying Standard tabletop events when the Melee pipeline is stable.
+10. Decide whether Vintage should be implemented.
 
 ---
 
@@ -637,6 +638,21 @@ Phase 4 is complete when:
 
 Implement safe, reproducible fetching and normalization for explicitly whitelisted Melee events.
 
+The first reference contract is Melee event `434455`, Pro Tour Magic: The Gathering® | Marvel Super Heroes. It is a `mixed` event whose Constructed format is Modern. The event has Draft and Modern Swiss rounds on both days and a Draft Top 8, so stage, round phase, and game format must remain independently represented.
+
+## Planned task sequence
+
+1. `P5-01` — align the approved reference-event and format order, then define the whitelist and normalized-event contracts without network access.
+2. `P5-02` — implement whitelist loading, validation, and rejection of unlisted or disabled events.
+3. `P5-03` — implement the rate-limited Melee client and raw-response archive with safe re-fetch behavior.
+4. `P5-04` — parse stored tournament, standings, decklist, round, and match fixtures.
+5. `P5-05` — assemble source records into one normalized event with stable participant and record identities.
+6. `P5-06` — normalize stages, formats, result types, and reviewed event-specific overrides.
+7. `P5-07` — add quality gates, idempotency checks, Schema validation, and publication blocking.
+8. `P5-08` — run reduced-fixture end-to-end validation and, only with separate authorization, validate a live fetch of the reference event.
+
+No Phase 5 task generates Modern classification, statistics, or front-end output.
+
 ## Required configuration
 
 Create:
@@ -733,63 +749,65 @@ Phase 5 is complete when:
 - normalized event JSON passes its schema;
 - unvalidated data cannot be published as final statistics.
 
+P5-01 local implementation was authorized and completed in an isolated workspace on 2026-07-20. It records DEC-034, registers Melee event `434455` as a verified but disabled mixed-format Modern reference, defines versioned whitelist and normalized-event Schemas, and adds synthetic contract fixtures. Stage, round phase, and actual game format are independent so the reference event's Draft Top 8 cannot be mistaken for a Modern playoff. Repository validation, existing public-output Schema validation, and all 236 pytest tests passed. No network fetch, raw event archive, generated statistic, workflow, public JSON, or front-end behavior changed. Publication and P5-02 remain separately controlled.
+
 ---
 
-# Phase 6 — Pauper classification and MTGO Pauper
+# Phase 6 — Modern classification and MTGO Modern
 
 ## Objective
 
-Add Pauper as the first new format using the generalized MTGO pipeline and shared classifier.
+Add Modern as the first new format using the generalized MTGO pipeline and shared classifier.
 
 ## Required rule file
 
 Create and validate:
 
-- `my_archetypes/pauper.yaml`
+- `my_archetypes/modern.yaml`
 
 ## Required work
 
 Implement:
 
-- stable Pauper archetype IDs;
-- Pauper rule IDs;
-- explicit Pauper rule priorities;
+- stable Modern archetype IDs;
+- Modern rule IDs;
+- explicit Modern rule priorities;
 - known-deck test fixtures;
 - Unknown reporting;
 - conflict reporting;
-- MTGO Pauper classification;
-- MTGO Pauper event statistics;
-- MTGO Pauper range statistics;
-- MTGO Pauper matchup output where source data permits;
-- Pauper entry in the MTGO format catalog.
+- MTGO Modern classification;
+- MTGO Modern event statistics;
+- MTGO Modern range statistics;
+- MTGO Modern matchup output where source data permits;
+- Modern entry in the MTGO format catalog.
 
 ## Separation requirements
 
-MTGO Pauper data must remain separate from:
+MTGO Modern data must remain separate from:
 
 - Standard MTGO data;
-- Melee Pauper raw data;
-- Melee Pauper normalized data;
-- Melee Pauper statistics.
+- Melee Modern raw data;
+- Melee Modern normalized data;
+- Melee Modern statistics.
 
-The shared classifier may use the same Pauper archetype IDs for both MTGO and Melee.
+The shared classifier should use the same Modern archetype IDs for both MTGO and Melee.
 
 ## Acceptance criteria
 
 Phase 6 is complete when:
 
-- Pauper rules pass validation;
-- known Pauper fixtures classify correctly;
+- Modern rules pass validation;
+- known Modern fixtures classify correctly;
 - rule conflicts are reviewable;
 - Unknown decks are reviewable;
-- Pauper output is separate from Standard output;
-- MTGO Pauper can be regenerated;
+- Modern output is separate from Standard output;
+- MTGO Modern can be regenerated;
 - Standard output remains compatible;
-- the MTGO front end can select Pauper without hardcoded Standard-only behavior.
+- the MTGO front end can select Modern without hardcoded Standard-only behavior.
 
 ---
 
-# Phase 7 — Paupergeddon event pipeline
+# Phase 7 — Mixed-format Modern Pro Tour reference pipeline
 
 ## Objective
 
@@ -799,10 +817,10 @@ Implement the first approved Melee event from fetching through per-event statist
 
 The initial approved event is:
 
-- Name: Paupergeddon Summer 2026 Main Event
-- Melee tournament ID: `438329`
-- Format: Pauper
-- Event type: pure Constructed with Day 2
+- Name: Pro Tour Magic: The Gathering® | Marvel Super Heroes
+- Melee tournament ID: `434455`
+- Constructed format: Modern
+- Event type: mixed Draft and Constructed with Day 2 and a Draft Top 8
 
 The event must be explicitly registered in:
 
@@ -823,6 +841,8 @@ Fetch and normalize:
 - bye information;
 - intentional draws;
 - playoff information;
+- independent stage, round-phase, and game-format labels;
+- official Top 8 lock evidence where available;
 - source metadata;
 - quality metadata.
 
@@ -830,7 +850,7 @@ Fetch and normalize:
 
 Generate:
 
-    stats/pauper/melee/events/438329/
+    stats/modern/melee/events/434455/
     ├── meta.json
     ├── overview.json
     ├── decks.json
@@ -865,9 +885,10 @@ Phase 7 is complete when:
 - raw data is preserved;
 - normalized data passes schema validation;
 - all exclusions appear in the quality report;
-- Pauper classification uses the shared rules;
+- Modern classification uses the shared rules;
 - per-event statistics can be regenerated from normalized data;
-- MTGO Pauper and Melee Pauper remain separate;
+- MTGO Modern and Melee Modern remain separate;
+- Draft Swiss and Draft playoff records do not enter Modern statistics;
 - unexplained quality failures prevent publication.
 
 ---
@@ -949,7 +970,7 @@ Page B must support:
 
 Phase 8 is complete when:
 
-- Paupergeddon is viewable independently from MTGO Pauper;
+- the approved Modern Pro Tour is viewable independently from MTGO Modern;
 - the event overview loads per-event JSON;
 - the matchup matrix loads event-specific JSON;
 - data-quality warnings are visible;
@@ -1266,34 +1287,34 @@ Phase 12 is complete when:
 
 ---
 
-# Phase 13 — Modern
+# Phase 13 — Pauper and Paupergeddon
 
 ## Objective
 
-Add Modern to both product tracks where approved data is available.
+Add Pauper to both product tracks after the Modern reference path and reusable event strategies are stable.
 
 ## Required sequence
 
-1. Add Modern archetype rules.
-2. Add Modern rule fixtures.
-3. Validate Modern rule IDs and priorities.
-4. Run Modern MTGO classification.
-5. Generate Modern MTGO statistics.
-6. Validate Modern MTGO output.
-7. Register an approved Modern Melee event.
-8. Normalize and validate that event.
-9. Generate event-specific Modern statistics.
-10. Enable Modern in both front ends.
+1. Add Pauper archetype rules.
+2. Add Pauper rule fixtures.
+3. Validate Pauper rule IDs and priorities.
+4. Run Pauper MTGO classification.
+5. Generate Pauper MTGO statistics.
+6. Validate Pauper MTGO output.
+7. Register the approved Paupergeddon main event.
+8. Normalize and validate that event as `constructed_day2`.
+9. Generate event-specific Pauper statistics.
+10. Enable Pauper in both front ends.
 
 ## Acceptance criteria
 
 Phase 13 is complete when:
 
-- shared Modern archetype IDs are used by both sources;
+- shared Pauper archetype IDs are used by both sources;
 - MTGO and Melee data remain separate;
 - MTGO and Melee statistics remain separate;
-- Modern rules pass validation;
-- Standard and Pauper regression tests pass;
+- Pauper rules pass validation;
+- Standard and Modern regression tests pass;
 - front-end format selection is catalog-driven;
 - quality reports are available.
 

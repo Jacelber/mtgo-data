@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-events.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Manually approved Melee event whitelist",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "events"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/event"}
+    }
+  },
+  "$defs": {
+    "format": {
+      "enum": ["standard", "pauper", "modern", "pioneer", "legacy", "vintage"]
+    },
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "stage", "round_phase", "game_format", "swiss"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+        "stage": {"enum": ["day1", "day2", "playoff", "other"]},
+        "round_phase": {"enum": ["draft", "constructed", "playoff", "unknown"]},
+        "game_format": {
+          "enum": ["limited", "standard", "pauper", "modern", "pioneer", "legacy", "vintage", "unknown"]
+        },
+        "swiss": {"type": "boolean"},
+        "rounds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "integer", "minimum": 1}
+        },
+        "source_labels": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "anyOf": [
+        {"required": ["rounds"]},
+        {"required": ["source_labels"]}
+      ]
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "url", "name", "date", "format", "series", "structure",
+        "enabled", "review_status", "tabletop", "team_event", "mixed_format",
+        "include", "phases", "statistics", "source_evidence", "special_handling", "notes"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "url": {"type": "string", "pattern": "^https://melee\\.gg/Tournament/View/[1-9][0-9]*$"},
+        "name": {"type": "string", "minLength": 1},
+        "date": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": {"type": "string", "format": "date"},
+            "end": {"type": "string", "format": "date"}
+          }
+        },
+        "format": {"$ref": "#/$defs/format"},
+        "series": {
+          "enum": [
+            "world_championship", "pro_tour", "regional_championship",
+            "spotlight_series", "paupergeddon", "eternal_weekend"
+          ]
+        },
+        "structure": {"enum": ["constructed_day2", "constructed_single_stage", "mixed"]},
+        "enabled": {"type": "boolean"},
+        "review_status": {"enum": ["pending", "verified", "rejected"]},
+        "tabletop": {"const": true},
+        "team_event": {"const": false},
+        "mixed_format": {"type": "boolean"},
+        "include": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["swiss", "playoffs"],
+          "properties": {
+            "swiss": {"const": true},
+            "playoffs": {"type": "boolean"}
+          }
+        },
+        "phases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/phase"}
+        },
+        "advancement": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "day2_after_round": {"type": "integer", "minimum": 1},
+            "day2_minimum_match_points": {"type": "integer", "minimum": 0},
+            "top8_lock_supported": {"type": "boolean"}
+          }
+        },
+        "statistics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["default_match_scope", "constructed_game_format", "include_playoffs"],
+          "properties": {
+            "default_match_scope": {"const": "all_constructed_swiss"},
+            "constructed_game_format": {"$ref": "#/$defs/format"},
+            "include_playoffs": {"const": false}
+          }
+        },
+        "source_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "format": "uri"}
+        },
+        "special_handling": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "notes": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"structure": {"const": "mixed"}}, "required": ["structure"]},
+          "then": {"properties": {"mixed_format": {"const": true}}},
+          "else": {"properties": {"mixed_format": {"const": false}}}
+        },
+        {
+          "if": {"properties": {"enabled": {"const": true}}, "required": ["enabled"]},
+          "then": {"properties": {"review_status": {"const": "verified"}}}
+        }
+      ]
+    }
+  }
+}

@@ -728,7 +728,7 @@ Navigation should connect the two products while preserving separate data loadin
 
 # DEC-022 — Use shared format development order
 
-Status: `Accepted`
+Status: `Superseded by DEC-034`
 
 ## Context
 
@@ -1119,3 +1119,35 @@ Preserve official event archival for Standard, Pauper, Modern, Pioneer, Legacy, 
 ## Consequences
 
 The format registry and its Schema must distinguish collection permission from execution permission. The production workflow must keep its event-collection allowlist aligned with the registry. Tests must prove that a collection-enabled planned format writes only to its own event path and remains unable to run product commands. Collecting raw events is not approval to publish or statistically process a format.
+
+---
+
+# DEC-034 — Use the 2026 Marvel Super Heroes Pro Tour and Modern as the first post-Standard reference path
+
+Status: `Accepted`
+
+Supersedes the ordering portion of DEC-022 and the Paupergeddon-first reference-event decision. Pauper and Paupergeddon remain approved later targets.
+
+## Context
+
+The original roadmap selected Pauper and Paupergeddon Summer 2026 (`438329`) as the first post-Standard format and tabletop reference event. After Pro Tour Magic: The Gathering® | Marvel Super Heroes concluded, the project owner selected its Melee event (`434455`) as the more useful current reference and explicitly changed the first post-Standard trial format to Modern.
+
+The event ran three Draft Swiss rounds followed by five Modern Swiss rounds on each of Day 1 and Day 2, with a Draft Top 8 playoff. It therefore exercises mixed-event boundaries, Day 1 and Day 2 separation, Draft exclusion, overall-standing ambiguity, and official Top 8 lock handling earlier than the pure Constructed reference would.
+
+## Decision
+
+Use Melee event `434455`, `https://melee.gg/Tournament/View/434455`, as the initial Tabletop Major Events reference contract. Treat it as a `mixed` event with Modern as its Constructed format. Keep the whitelist entry disabled until live Melee fetching receives separate authorization.
+
+Represent these dimensions independently in normalized data:
+
+- event stage, such as Day 1, Day 2, or playoff;
+- round phase, such as Draft, Constructed, playoff, or unknown;
+- actual game format, such as Limited or Modern.
+
+Implement Modern before Pauper after the protected Standard baseline. Retain Pauper, Paupergeddon, Pioneer, Legacy, qualifying Standard tabletop events, and the Vintage decision gate in later roadmap positions.
+
+## Consequences
+
+Phase 5 uses `434455` only to define and validate ingestion contracts; it does not authorize live fetching, Modern classification, statistics, or publication. Later Modern statistics may include only verified Modern Swiss records. Draft Swiss and the Draft Top 8 remain available as source context but are excluded from Modern performance and matchup calculations.
+
+Overall standings cannot be presented as Modern-only performance because they combine Draft and Modern results. Day 2 metrics require the existing selection-bias warning. The roadmap, scope, architecture examples, status, whitelist, schemas, and tests must reflect the new reference path.

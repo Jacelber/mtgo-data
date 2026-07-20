@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0.0",
+  "metadata": {
+    "source": "melee",
+    "event_id": "434455",
+    "name": "Pro Tour Magic: The Gathering | Marvel Super Heroes",
+    "date": {"start": "2026-07-17", "end": "2026-07-19"},
+    "constructed_format": "modern",
+    "series": "pro_tour"
+  },
+  "provenance": {
+    "source_urls": [
+      "https://melee.gg/Tournament/View/434455",
+      "https://magic.gg/news/pro-tour-magic-the-gathering-marvel-super-heroes-fact-sheet-for-competitors"
+    ],
+    "fetched_at": "2026-07-20T12:00:00+09:00",
+    "normalized_at": "2026-07-20T12:05:00+09:00",
+    "raw_artifacts": [
+      {
+        "path": "data_raw/melee/434455/tournament.html",
+        "source_url": "https://melee.gg/Tournament/View/434455",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ]
+  },
+  "event_structure": "mixed",
+  "phases": [
+    {"id": "day1_draft", "stage": "day1", "round_phase": "draft", "game_format": "limited", "swiss": true},
+    {"id": "day1_modern", "stage": "day1", "round_phase": "constructed", "game_format": "modern", "swiss": true},
+    {"id": "day2_draft", "stage": "day2", "round_phase": "draft", "game_format": "limited", "swiss": true},
+    {"id": "day2_modern", "stage": "day2", "round_phase": "constructed", "game_format": "modern", "swiss": true},
+    {"id": "top8_draft", "stage": "playoff", "round_phase": "playoff", "game_format": "limited", "swiss": false}
+  ],
+  "rounds": [
+    {"id": "round-1", "source_label": "Round 1", "number": 1, "phase_id": "day1_draft", "stage": "day1", "round_phase": "draft", "game_format": "limited", "swiss": true},
+    {"id": "round-4", "source_label": "Round 4", "number": 4, "phase_id": "day1_modern", "stage": "day1", "round_phase": "constructed", "game_format": "modern", "swiss": true},
+    {"id": "round-12", "source_label": "Round 12", "number": 12, "phase_id": "day2_modern", "stage": "day2", "round_phase": "constructed", "game_format": "modern", "swiss": true},
+    {"id": "round-16", "source_label": "Round 16", "number": 16, "phase_id": "day2_modern", "stage": "day2", "round_phase": "constructed", "game_format": "modern", "swiss": true},
+    {"id": "quarterfinals", "source_label": "Quarterfinals", "number": null, "phase_id": "top8_draft", "stage": "playoff", "round_phase": "playoff", "game_format": "limited", "swiss": false}
+  ],
+  "participants": [
+    {"id": "participant-a", "source_id": "source-a", "display_name": "Fixture Player A", "status": "active"},
+    {"id": "participant-b", "source_id": "source-b", "display_name": "Fixture Player B", "status": "active"}
+  ],
+  "standings": [
+    {"participant_id": "participant-a", "rank": 1, "match_points": 39, "source_record": {"fixture": true}},
+    {"participant_id": "participant-b", "rank": 2, "match_points": 36, "source_record": {"fixture": true}}
+  ],
+  "decklists": [
+    {
+      "participant_id": "participant-a",
+      "game_format": "modern",
+      "status": "submitted",
+      "cards": [{"name": "Fixture Card", "quantity": 4, "section": "main"}],
+      "source_url": "https://melee.gg/Decklist/View/1"
+    },
+    {
+      "participant_id": "participant-b",
+      "game_format": "modern",
+      "status": "missing",
+      "cards": [],
+      "source_url": null
+    }
+  ],
+  "matches": [
+    {
+      "id": "match-round-1",
+      "round_id": "round-1",
+      "source_record_id": "fixture-match-1",
+      "original_result": "2-1-0",
+      "competitors": [
+        {"participant_id": "participant-a", "result_type": "played_win", "match_points": 3},
+        {"participant_id": "participant-b", "result_type": "played_loss", "match_points": 0}
+      ],
+      "played": true,
+      "constructed_statistics_eligible": false,
+      "matchup_eligible": false,
+      "evidence": ["Fixture Draft result"]
+    },
+    {
+      "id": "match-round-4",
+      "round_id": "round-4",
+      "source_record_id": "fixture-match-4",
+      "original_result": "2-0-0",
+      "competitors": [
+        {"participant_id": "participant-a", "result_type": "played_win", "match_points": 3},
+        {"participant_id": "participant-b", "result_type": "played_loss", "match_points": 0}
+      ],
+      "played": true,
+      "constructed_statistics_eligible": true,
+      "matchup_eligible": true,
+      "evidence": ["Fixture Modern result"]
+    },
+    {
+      "id": "match-round-12-id",
+      "round_id": "round-12",
+      "source_record_id": "fixture-match-12",
+      "original_result": "0-0-3",
+      "competitors": [
+        {"participant_id": "participant-a", "result_type": "intentional_draw", "match_points": 1},
+        {"participant_id": "participant-b", "result_type": "intentional_draw", "match_points": 1}
+      ],
+      "played": false,
+      "constructed_statistics_eligible": false,
+      "matchup_eligible": false,
+      "evidence": ["Fixture intentional draw"]
+    },
+    {
+      "id": "match-round-16-lock",
+      "round_id": "round-16",
+      "source_record_id": "fixture-match-16",
+      "original_result": "Awarded win",
+      "competitors": [
+        {"participant_id": "participant-a", "result_type": "awarded_win_top8_lock", "match_points": 3}
+      ],
+      "played": false,
+      "constructed_statistics_eligible": false,
+      "matchup_eligible": false,
+      "evidence": ["Fixture official Top 8 lock evidence"]
+    },
+    {
+      "id": "match-quarterfinal",
+      "round_id": "quarterfinals",
+      "source_record_id": "fixture-qf",
+      "original_result": "2-1-0",
+      "competitors": [
+        {"participant_id": "participant-a", "result_type": "played_win", "match_points": 0},
+        {"participant_id": "participant-b", "result_type": "played_loss", "match_points": 0}
+      ],
+      "played": true,
+      "constructed_statistics_eligible": false,
+      "matchup_eligible": false,
+      "evidence": ["Fixture Draft playoff result"]
+    }
+  ],
+  "quality": {"status": "valid", "publishable": false, "issues": []}
+}

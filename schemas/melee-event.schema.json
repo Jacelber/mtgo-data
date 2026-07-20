@@ -1,0 +1,290 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Normalized Melee tournament event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "metadata", "provenance", "event_structure", "phases",
+    "rounds", "participants", "standings", "decklists", "matches", "quality"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "metadata": {"$ref": "#/$defs/metadata"},
+    "provenance": {"$ref": "#/$defs/provenance"},
+    "event_structure": {"enum": ["constructed_day2", "constructed_single_stage", "mixed"]},
+    "phases": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/phase"}},
+    "rounds": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/round"}},
+    "participants": {"type": "array", "items": {"$ref": "#/$defs/participant"}},
+    "standings": {"type": "array", "items": {"$ref": "#/$defs/standing"}},
+    "decklists": {"type": "array", "items": {"$ref": "#/$defs/decklist"}},
+    "matches": {"type": "array", "items": {"$ref": "#/$defs/match"}},
+    "quality": {"$ref": "#/$defs/quality"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "rounds": {
+            "contains": {
+              "type": "object",
+              "properties": {"round_phase": {"const": "unknown"}},
+              "required": ["round_phase"]
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "quality": {
+            "properties": {
+              "issues": {
+                "contains": {
+                  "type": "object",
+                  "properties": {"code": {"const": "unknown_round_phase"}},
+                  "required": ["code"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "matches": {
+            "contains": {
+              "type": "object",
+              "properties": {
+                "competitors": {
+                  "contains": {
+                    "type": "object",
+                    "properties": {"result_type": {"const": "unknown"}},
+                    "required": ["result_type"]
+                  }
+                }
+              },
+              "required": ["competitors"]
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "quality": {
+            "properties": {
+              "issues": {
+                "contains": {
+                  "type": "object",
+                  "properties": {"code": {"const": "unknown_result"}},
+                  "required": ["code"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "format": {
+      "enum": ["limited", "standard", "pauper", "modern", "pioneer", "legacy", "vintage", "unknown"]
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "event_id", "name", "date", "constructed_format", "series"],
+      "properties": {
+        "source": {"const": "melee"},
+        "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "name": {"type": "string", "minLength": 1},
+        "date": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": {"type": "string", "format": "date"},
+            "end": {"type": "string", "format": "date"}
+          }
+        },
+        "constructed_format": {
+          "enum": ["standard", "pauper", "modern", "pioneer", "legacy", "vintage"]
+        },
+        "series": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_urls", "fetched_at", "normalized_at", "raw_artifacts"],
+      "properties": {
+        "source_urls": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "format": "uri"}
+        },
+        "fetched_at": {"type": "string", "format": "date-time"},
+        "normalized_at": {"type": "string", "format": "date-time"},
+        "raw_artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "source_url"],
+            "properties": {
+              "path": {"type": "string", "pattern": "^data_raw/melee/[1-9][0-9]*/[^/]+$"},
+              "source_url": {"type": "string", "format": "uri"},
+              "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+            }
+          }
+        }
+      }
+    },
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "stage", "round_phase", "game_format", "swiss"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+        "stage": {"enum": ["day1", "day2", "playoff", "other"]},
+        "round_phase": {"enum": ["draft", "constructed", "playoff", "unknown"]},
+        "game_format": {"$ref": "#/$defs/format"},
+        "swiss": {"type": "boolean"}
+      }
+    },
+    "round": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source_label", "number", "phase_id", "stage", "round_phase", "game_format", "swiss"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "source_label": {"type": "string", "minLength": 1},
+        "number": {"type": ["integer", "null"], "minimum": 1},
+        "phase_id": {"type": "string", "minLength": 1},
+        "stage": {"enum": ["day1", "day2", "playoff", "other"]},
+        "round_phase": {"enum": ["draft", "constructed", "playoff", "unknown"]},
+        "game_format": {"$ref": "#/$defs/format"},
+        "swiss": {"type": "boolean"}
+      }
+    },
+    "participant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source_id", "display_name", "status"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "source_id": {"type": ["string", "null"]},
+        "display_name": {"type": ["string", "null"]},
+        "status": {"enum": ["active", "dropped", "no_show", "unknown"]}
+      }
+    },
+    "standing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["participant_id", "rank", "match_points", "source_record"],
+      "properties": {
+        "participant_id": {"type": "string", "minLength": 1},
+        "rank": {"type": ["integer", "null"], "minimum": 1},
+        "match_points": {"type": ["integer", "null"], "minimum": 0},
+        "source_record": {"type": "object"}
+      }
+    },
+    "card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "quantity", "section"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "quantity": {"type": "integer", "minimum": 1},
+        "section": {"enum": ["main", "sideboard", "commander", "other"]}
+      }
+    },
+    "decklist": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["participant_id", "game_format", "status", "cards", "source_url"],
+      "properties": {
+        "participant_id": {"type": "string", "minLength": 1},
+        "game_format": {"$ref": "#/$defs/format"},
+        "status": {"enum": ["submitted", "missing", "unavailable", "unknown"]},
+        "cards": {"type": "array", "items": {"$ref": "#/$defs/card"}},
+        "source_url": {"type": ["string", "null"], "format": "uri"}
+      }
+    },
+    "competitor_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["participant_id", "result_type", "match_points"],
+      "properties": {
+        "participant_id": {"type": "string", "minLength": 1},
+        "result_type": {
+          "enum": [
+            "played_win", "played_loss", "played_draw", "intentional_draw", "bye",
+            "no_show", "unplayed_drop", "awarded_win_top8_lock", "administrative", "unknown"
+          ]
+        },
+        "match_points": {"type": "integer", "minimum": 0}
+      }
+    },
+    "match": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "round_id", "source_record_id", "original_result", "competitors",
+        "played", "constructed_statistics_eligible", "matchup_eligible", "evidence"
+      ],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "round_id": {"type": "string", "minLength": 1},
+        "source_record_id": {"type": ["string", "null"]},
+        "original_result": {"type": "string"},
+        "competitors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {"$ref": "#/$defs/competitor_result"}
+        },
+        "played": {"type": "boolean"},
+        "constructed_statistics_eligible": {"type": "boolean"},
+        "matchup_eligible": {"type": "boolean"},
+        "evidence": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "quality_issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "severity", "entity_type", "entity_id", "message", "blocking", "source_evidence"],
+      "properties": {
+        "code": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+        "severity": {"enum": ["info", "warning", "error"]},
+        "entity_type": {"enum": ["event", "phase", "round", "participant", "standing", "decklist", "match"]},
+        "entity_id": {"type": ["string", "null"]},
+        "message": {"type": "string", "minLength": 1},
+        "blocking": {"type": "boolean"},
+        "source_evidence": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "publishable", "issues"],
+      "properties": {
+        "status": {"enum": ["valid", "warning", "blocked"]},
+        "publishable": {"type": "boolean"},
+        "issues": {"type": "array", "items": {"$ref": "#/$defs/quality_issue"}}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "blocked"}}, "required": ["status"]},
+          "then": {"properties": {"publishable": {"const": false}}}
+        }
+      ]
+    }
+  }
+}
