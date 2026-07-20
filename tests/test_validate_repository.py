@@ -175,7 +175,11 @@ def test_frontend_and_standard_missing_references(tmp_path):
     status = {"authoritative_documents": {s: [] for s in ("reading_order", "agent_adapter_documents", "historical_documents")}}
     (tmp_path / "index.html").write_text("", encoding="utf-8")
     checked, failures, _ = validator.validate_references(tmp_path, ["index.html"], status)
-    assert checked == 17 and len(failures) == 17
+    assert checked == 17 and len(failures) == 19
+    assert {failure.path for failure in failures if failure.message == "missing front-end asset"} == {
+        "assets/js/common.js",
+        "assets/js/mtgo.js",
+    }
 
 
 def test_all_frontend_templates_are_recognized(tmp_path):
@@ -187,7 +191,10 @@ def test_all_frontend_templates_are_recognized(tmp_path):
         "stats/${currentFormat}/mtgo/pickup/${week}.json",
         "stats/${currentFormat}/mtgo/matchup_${mxRange}w.json",
     ]
-    (tmp_path / "index.html").write_text("\n".join(templates), encoding="utf-8")
+    (tmp_path / "index.html").write_text("", encoding="utf-8")
+    (tmp_path / "assets" / "js").mkdir(parents=True)
+    (tmp_path / "assets" / "js" / "common.js").write_text("", encoding="utf-8")
+    (tmp_path / "assets" / "js" / "mtgo.js").write_text("\n".join(templates), encoding="utf-8")
     status = {"authoritative_documents": {s: [] for s in ("reading_order", "agent_adapter_documents", "historical_documents")}}
     _, failures, breakdown = validator.validate_references(tmp_path, ["index.html"], status)
     assert breakdown["front-end templates"] == 6

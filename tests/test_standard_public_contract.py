@@ -24,10 +24,17 @@ def assert_identity(document, expected):
 
 def test_frontend_public_paths_are_frozen_and_exist():
     expected = contract()
-    html = (REPO_ROOT / "index.html").read_text(encoding="utf-8")
+    frontend_source = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in (
+            REPO_ROOT / "index.html",
+            REPO_ROOT / "assets" / "js" / "common.js",
+            REPO_ROOT / "assets" / "js" / "mtgo.js",
+        )
+    )
 
     for template in expected["frontend_templates"]:
-        assert template in html
+        assert template in frontend_source
 
     base = REPO_ROOT / "stats" / expected["format"] / expected["source"]
     assert (base / "meta.json").is_file()

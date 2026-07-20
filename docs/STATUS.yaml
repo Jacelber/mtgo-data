@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "clean_after_p3_06_publication"
+  current_working_branch: "codex/p4-01-split-mtgo-frontend"
+  working_branch_status: "p4_01_accepted_awaiting_publication"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,8 +57,8 @@ authoritative_documents:
 current_phase:
   id: 4
   name: "Split the existing MTGO front end"
-  status: "awaiting_detailed_review_and_owner_authorization"
-  started_on: null
+  status: "p4_01_accepted_awaiting_publication"
+  started_on: "2026-07-20"
   objective: "Split the monolithic MTGO page into maintainable static assets while preserving behavior, appearance, public paths, and GitHub Pages compatibility."
   production_changes_allowed: false
   feature_development_allowed: false
@@ -336,7 +336,7 @@ engineering_quality:
     matchup_statistics: "stats_matchup.py"
     decision: "DEC-031"
   index_html_split:
-    status: "planned_phase_4"
+    status: "p4_01_accepted_awaiting_publication"
 
 phase_1_tasks:
   - id: "P1-01"
@@ -1971,6 +1971,73 @@ phase_3_result:
     remote_publication_completed: true
     phase_tag_published: true
 
+phase_4_planning:
+  status: "p4_01_accepted_awaiting_publication"
+  detailed_review_completed_on: "2026-07-20"
+  owner_authorized_local_implementation: true
+  remote_publication_authorized: true
+  next_phase_authorized: false
+
+phase_4_tasks:
+  - id: "P4-01"
+    name: "Split the existing MTGO front end while preserving behavior"
+    status: "accepted_awaiting_publication"
+    completed_on: "2026-07-20"
+    source_branch: "codex/p4-01-split-mtgo-frontend"
+    baseline_commit: "6c76fbdf61d65a6e0c3d832e2b0658e618b0aa2b"
+    production_change: true
+    output:
+      - "index.html"
+      - "assets/css/site.css"
+      - "assets/js/common.js"
+      - "assets/js/mtgo.js"
+      - "tests/test_frontend_asset_split.py"
+      - "tests/test_standard_public_contract.py"
+      - "tests/fixtures/mtgo/format_pipeline_contract.json"
+      - "validate_repository.py"
+      - "docs/audits/P4-01.md"
+      - "docs/ROADMAP.md"
+      - "docs/STATUS.yaml"
+    contract:
+      index_html_lines_before: 1225
+      index_html_lines_after: 65
+      inline_style_blocks_after: 0
+      inline_script_blocks_after: 0
+      css_loaded_from_assets: true
+      javascript_loaded_from_assets: true
+      classic_script_order_preserved: true
+      mandatory_build_step_added: false
+      frontend_framework_added: false
+      visible_front_end_ranges:
+        - 1
+        - 4
+        - 12
+      thirty_six_week_visibility_changed: false
+      public_json_paths_changed: false
+      generated_outputs_changed: false
+      statistical_formulas_changed: false
+      subtype_presentation_added: false
+      melee_behavior_added: false
+    validation:
+      focused_frontend_tests_passed: 7
+      pytest_passed: 228
+      repository_validation_passed: true
+      browser_smoke_test_passed: true
+      browser_console_errors_or_warnings: 0
+      language_switching_passed: true
+      statistics_ranges_passed: true
+      deck_details_passed: true
+      matchup_matrix_passed: true
+      weekly_pickup_passed: true
+      narrow_viewport_checked: true
+    authorization:
+      owner_local_implementation_authorized: true
+      remote_publication_authorized: true
+    acceptance:
+      owner_accepted: true
+      merged_to_master: false
+      phase_tag_published: false
+
 known_blockers: []
 
 open_decisions:
@@ -2009,8 +2076,8 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "awaiting_detailed_review_and_owner_authorization"
-  planning_status: "not_started"
+  authorization_status: "accepted_awaiting_publication"
+  planning_status: "completed"
 
 governance_baseline:
   status: "active_on_master"
@@ -2052,14 +2119,16 @@ delegated_local_execution_governance:
     status: "completed"
   phase_3:
     status: "completed"
+  phase_4:
+    status: "p4_01_accepted_awaiting_publication"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P4-01 until its detailed behavior-preservation scope is reviewed and the project owner explicitly authorizes implementation."
+  - "Do not mark Phase 4 complete until P4-01 is merged, the authorized Phase 4 tag is published, and the closeout status is recorded."
+  - "Do not begin Phase 5 without a detailed review and explicit project-owner authorization."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."
-  - "Do not split production index.html yet."
   - "Do not add new Constructed formats yet."
   - "Do not delete or disable existing workflows before their responsibilities are audited."
   - "Do not change public Standard output without regression protection."

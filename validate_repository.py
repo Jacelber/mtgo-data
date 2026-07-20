@@ -201,13 +201,27 @@ def validate_references(root: Path, names: list[str], status: dict[str, Any]) ->
         "stats/${currentFormat}/mtgo/pickup/${week}.json",
         "stats/${currentFormat}/mtgo/matchup_${mxRange}w.json",
     ]
+    frontend_paths = ["index.html", "assets/js/common.js", "assets/js/mtgo.js"]
     if "index.html" not in tracked:
         reference_check(failures, "index.html", "missing tracked index.html")
     else:
-        html = read_bytes(root, "index.html").decode("utf-8")
+        missing_assets = [
+            path for path in frontend_paths[1:] if not safe_path(root, path).is_file()
+        ]
+        for path in missing_assets:
+            reference_check(failures, path, "missing front-end asset")
+        frontend_source = "\n".join(
+            read_bytes(root, path).decode("utf-8")
+            for path in frontend_paths
+            if safe_path(root, path).is_file()
+        )
         for template in templates:
             breakdown["front-end templates"] += 1
-            reference_check(failures, "index.html", f"missing template {template}" if template not in html else None)
+            reference_check(
+                failures,
+                "front-end assets",
+                f"missing template {template}" if template not in frontend_source else None,
+            )
     required = [
         "stats/standard/mtgo/meta.json", "stats/standard/mtgo/range_1w.json",
         "stats/standard/mtgo/range_4w.json", "stats/standard/mtgo/range_12w.json",
