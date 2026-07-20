@@ -1351,7 +1351,7 @@ phase_2_result:
     phase_3_authorized: false
 
 phase_3_planning:
-  status: "p3_07_locally_completed_awaiting_owner_acceptance"
+  status: "p3_07_completed_awaiting_p3_08_review_and_authorization"
   objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
   standard_remains_regression_baseline: true
   executable_formats:
@@ -1759,10 +1759,14 @@ phase_3_tasks:
 
   - id: "P3-07"
     name: "Add generalized MTGO commands and migrate the production workflow"
-    status: "locally_completed_awaiting_owner_acceptance"
+    status: "completed"
     started_on: "2026-07-20"
     implemented_on: "2026-07-20"
+    completed_on: "2026-07-20"
     source_branch: "codex/p3-07-generalized-command-workflow"
+    source_commit: "a48af954be9ba3a9d1640d7ab0df9e071a27d58c"
+    pull_request: 53
+    merge_commit: "3cdf07701a89f88568cf38f9af05265b70a59f66"
     baseline_commit: "661b498f02fb26216b4a02290a974854e5c83e67"
     baseline_tag: "phase-2-shared-classifier-baseline"
     decision: "DEC-033"
@@ -1851,10 +1855,10 @@ phase_3_tasks:
       videre_remains_standard_only: true
     authorization:
       owner_local_implementation_authorized: true
-      remote_publication_authorized: false
+      remote_publication_authorized: true
     acceptance:
-      owner_accepted: false
-      merged_to_master: false
+      owner_accepted: true
+      merged_to_master: true
 
 known_blockers: []
 
@@ -1883,19 +1887,18 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P3-07"
-  name: "Add generalized MTGO commands and migrate the production workflow"
+  id: "P3-08"
+  name: "Complete Standard and front-end closeout"
   target_paths:
-    - "src/mtgmeta/mtgo/__main__.py"
-    - ".github/workflows/update.yml"
+    - "index.html"
     - "tests/"
-    - "README.md"
+    - "docs/audits/"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  production_change: true
+  production_change: false
   requires_user_confirmation: true
-  authorization_status: "local_implementation_authorized"
-  planning_status: "locally_completed_awaiting_owner_acceptance"
+  authorization_status: "awaiting_detailed_review_and_owner_authorization"
+  planning_status: "not_started"
 
 governance_baseline:
   status: "active_on_master"
@@ -1936,12 +1939,11 @@ delegated_local_execution_governance:
   phase_2:
     status: "completed"
   phase_3:
-    status: "p3_07_locally_completed_awaiting_owner_acceptance"
+    status: "p3_07_completed_awaiting_p3_08_review_and_authorization"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not publish or dispatch the P3-07 workflow without separate owner authorization."
-  - "Do not begin P3-08 until P3-07 is accepted and separately published."
+  - "Do not begin P3-08 until its detailed scope is reviewed and the project owner explicitly authorizes implementation."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."
