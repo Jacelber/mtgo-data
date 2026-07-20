@@ -99,6 +99,10 @@ def test_hardcoded_inventory_tracks_migrated_and_remaining_boundaries():
             'RULES_FILE = "my_archetypes/standard.yaml"',
             'DATA_DIR = "data/standard"',
         },
+        "stats_standard.py": {
+            'DATA_DIR = "data/standard"',
+            'os.path.join("stats", "standard", "mtgo")',
+        },
     }
 
     assert len(inventory) == 12
@@ -108,6 +112,6 @@ def test_hardcoded_inventory_tracks_migrated_and_remaining_boundaries():
         source = path.read_text(encoding="utf-8")
         for snippet in item["snippets"]:
             if snippet in migrated_snippets.get(item["file"], set()):
-                assert snippet not in source, f"migrated P3-03 snippet remains in {item['file']}: {snippet}"
+                assert snippet not in source, f"migrated Phase 3 snippet remains in {item['file']}: {snippet}"
             else:
                 assert snippet in source, f"missing unresolved inventory snippet in {item['file']}: {snippet}"
