@@ -1351,7 +1351,7 @@ phase_2_result:
     phase_3_authorized: false
 
 phase_3_planning:
-  status: "p3_03_completed_awaiting_p3_04_review_and_authorization"
+  status: "p3_04_owner_accepted_publication_authorized"
   objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
   standard_remains_regression_baseline: true
   executable_formats:
@@ -1376,7 +1376,8 @@ phase_3_planning:
   p3_01_local_implementation_authorized: true
   p3_02_local_implementation_authorized: true
   p3_03_local_implementation_authorized: true
-  remote_publication_authorized: false
+  p3_04_local_implementation_authorized: true
+  remote_publication_authorized: true
 
 phase_3_tasks:
   - id: "P3-01"
@@ -1525,6 +1526,63 @@ phase_3_tasks:
       owner_accepted: true
       merged_to_master: true
 
+  - id: "P3-04"
+    name: "Generalize Standard event and rolling-range statistics"
+    status: "owner_accepted_publication_authorized"
+    started_on: "2026-07-20"
+    implemented_on: "2026-07-20"
+    source_branch: "codex/p3-04-mtgo-statistics"
+    baseline_commit: "faaf149433f7c2e72990dc0bda2b6c724958e58b"
+    baseline_tag: "phase-2-shared-classifier-baseline"
+    production_change: true
+    output:
+      - "src/mtgmeta/mtgo/stats.py"
+      - "stats_standard.py"
+      - "tests/test_mtgo_statistics.py"
+      - "tests/test_mtgo_format_pipeline_contract.py"
+      - "tests/test_embedded_schema_version.py"
+      - "README.md"
+      - "docs/audits/P3-04.md"
+      - "docs/ROADMAP.md"
+      - "docs/STATUS.yaml"
+    contract:
+      capabilities_migrated:
+        - "event_statistics"
+        - "range_statistics"
+      only_standard_executable: true
+      explicit_format_required_in_shared_module: true
+      registry_paths_used_for_events_and_statistics: true
+      disabled_format_fails_before_output_side_effects: true
+      legacy_standard_command_preserved: true
+      legacy_helper_imports_preserved: true
+      parent_archetype_aggregation_preserved: true
+      legacy_two_alias_construction_normalization_preserved: true
+      statistical_formulas_changed: false
+      public_json_changed: false
+      schemas_changed: false
+      production_workflow_changed: false
+      matchup_processing_changed: false
+      weekly_pickup_changed: false
+      metadata_or_catalogs_changed: false
+      front_end_changed: false
+    validation:
+      p3_04_focused_tests_passed: 28
+      pytest_passed: 190
+      repository_validation_passed: true
+      rule_validation_passed: true
+      schema_validation_passed: true
+      schema_documents_validated: 23
+      standard_quality_baseline_passed: true
+      frozen_corpus_records: 3936
+      fixed_reference_documents_compared: 9
+      fixed_reference_byte_differences: 0
+      production_outputs_changed: false
+      browser_smoke_test_passed: true
+      browser_console_errors: 0
+    acceptance:
+      owner_accepted: true
+      merged_to_master: false
+
 known_blockers: []
 
 open_decisions:
@@ -1558,12 +1616,14 @@ next_approved_task:
     - "src/mtgmeta/mtgo/stats.py"
     - "stats_standard.py"
     - "tests/"
+    - "README.md"
+    - "docs/audits/P3-04.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "awaiting_detailed_task_review_and_owner_authorization"
-  planning_status: "not_started"
+  authorization_status: "owner_accepted_remote_publication_authorized"
+  planning_status: "accepted_awaiting_publication"
 
 governance_baseline:
   status: "active_on_master"
@@ -1604,12 +1664,12 @@ delegated_local_execution_governance:
   phase_2:
     status: "completed"
   phase_3:
-    status: "p3_03_completed_awaiting_p3_04_review_and_authorization"
+    status: "p3_04_owner_accepted_publication_authorized"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P3-04 until P3-03 is accepted and P3-04 is reviewed and explicitly authorized."
-  - "Do not modify MTGO statistics, Videre matchup processing, Weekly Pickup, metadata, catalogs, production workflows, public JSON, or front-end code during P3-03."
+  - "Do not begin P3-05 until P3-04 is accepted and P3-05 is reviewed and explicitly authorized."
+  - "Do not modify Videre matchup processing, classification-report routing, Weekly Pickup, metadata, catalogs, production workflows, public JSON, schemas, rules, or front-end code during P3-04."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."

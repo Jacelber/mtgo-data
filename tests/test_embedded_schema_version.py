@@ -22,7 +22,7 @@ def test_versioned_returns_a_new_document_and_rejects_double_versioning():
 @pytest.mark.parametrize(
     "path,expected_calls",
     [
-        ("stats_standard.py", 3),
+        ("src/mtgmeta/mtgo/stats.py", 3),
         ("stats_matchup.py", 2),
         ("gen_meta.py", 1),
         ("weekly_pickup.py", 2),
