@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/formats.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "MTGO format registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "formats"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "formats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/format"}
+    }
+  },
+  "$defs": {
+    "format_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "repository_path": {
+      "type": "string",
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$))[a-zA-Z0-9._/-]+$"
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["events", "matches", "rules", "statistics", "reports"],
+      "properties": {
+        "events": {"$ref": "#/$defs/repository_path"},
+        "matches": {"$ref": "#/$defs/repository_path"},
+        "rules": {"$ref": "#/$defs/repository_path"},
+        "statistics": {"$ref": "#/$defs/repository_path"},
+        "reports": {"$ref": "#/$defs/repository_path"}
+      }
+    },
+    "mtgo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "capabilities", "paths"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "event_fetching",
+              "raw_event_storage",
+              "normalization",
+              "classification",
+              "event_statistics",
+              "range_statistics",
+              "matchup_statistics",
+              "weekly_pickup",
+              "metadata_generation",
+              "catalog_generation"
+            ]
+          }
+        },
+        "paths": {"$ref": "#/$defs/paths"}
+      }
+    },
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "display_name", "state", "public", "mtgo"],
+      "properties": {
+        "id": {"$ref": "#/$defs/format_id"},
+        "display_name": {"type": "string", "minLength": 1},
+        "state": {"enum": ["executable", "planned", "decision_gated"]},
+        "public": {"type": "boolean"},
+        "mtgo": {"$ref": "#/$defs/mtgo"}
+      }
+    }
+  }
+}

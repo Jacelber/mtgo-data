@@ -1,0 +1,96 @@
+schema_version: "1.0.0"
+
+formats:
+  - id: "standard"
+    display_name: "Standard"
+    state: "executable"
+    public: true
+    mtgo:
+      enabled: true
+      capabilities:
+        - "event_fetching"
+        - "raw_event_storage"
+        - "normalization"
+        - "classification"
+        - "event_statistics"
+        - "range_statistics"
+        - "matchup_statistics"
+        - "weekly_pickup"
+        - "metadata_generation"
+        - "catalog_generation"
+      paths:
+        events: "data/standard"
+        matches: "data/standard/mtgo/matches"
+        rules: "my_archetypes/standard.yaml"
+        statistics: "stats/standard/mtgo"
+        reports: "reports/standard/mtgo"
+
+  - id: "pauper"
+    display_name: "Pauper"
+    state: "planned"
+    public: false
+    mtgo:
+      enabled: false
+      capabilities: []
+      paths:
+        events: "data/pauper"
+        matches: "data/pauper/mtgo/matches"
+        rules: "my_archetypes/pauper.yaml"
+        statistics: "stats/pauper/mtgo"
+        reports: "reports/pauper/mtgo"
+
+  - id: "modern"
+    display_name: "Modern"
+    state: "planned"
+    public: false
+    mtgo:
+      enabled: false
+      capabilities: []
+      paths:
+        events: "data/modern"
+        matches: "data/modern/mtgo/matches"
+        rules: "my_archetypes/modern.yaml"
+        statistics: "stats/modern/mtgo"
+        reports: "reports/modern/mtgo"
+
+  - id: "pioneer"
+    display_name: "Pioneer"
+    state: "planned"
+    public: false
+    mtgo:
+      enabled: false
+      capabilities: []
+      paths:
+        events: "data/pioneer"
+        matches: "data/pioneer/mtgo/matches"
+        rules: "my_archetypes/pioneer.yaml"
+        statistics: "stats/pioneer/mtgo"
+        reports: "reports/pioneer/mtgo"
+
+  - id: "legacy"
+    display_name: "Legacy"
+    state: "planned"
+    public: false
+    mtgo:
+      enabled: false
+      capabilities: []
+      paths:
+        events: "data/legacy"
+        matches: "data/legacy/mtgo/matches"
+        rules: "my_archetypes/legacy.yaml"
+        statistics: "stats/legacy/mtgo"
+        reports: "reports/legacy/mtgo"
+
+  - id: "vintage"
+    display_name: "Vintage"
+    state: "decision_gated"
+    public: false
+    mtgo:
+      enabled: false
+      capabilities: []
+      paths:
+        events: "data/vintage"
+        matches: "data/vintage/mtgo/matches"
+        rules: "my_archetypes/vintage.yaml"
+        statistics: "stats/vintage/mtgo"
+        reports: "reports/vintage/mtgo"

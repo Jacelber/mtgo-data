@@ -511,6 +511,8 @@ P3-01 must distinguish known, executable, planned, and decision-gated formats. O
 
 P3-01 completed on 2026-07-20 through pull request #41 and merge commit `c95f156737d10014f6f593ee27378e73b8e06fb3`. Its executable contract is pinned to the Phase 2 recovery baseline. P3-02 remains subject to separate project-owner authorization.
 
+P3-02 local implementation completed in an isolated workspace on 2026-07-20 after explicit project-owner authorization. It adds only the validated format registry and safe repository-relative path-resolution boundary; it does not enable another MTGO format or change production behavior. The local acceptance suite passed. The project owner accepted the result and authorized its separate remote publication on 2026-07-20.
+
 ## Acceptance criteria
 
 Phase 3 is complete when:
