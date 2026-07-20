@@ -679,6 +679,7 @@ The format registry should identify:
 
 - format ID;
 - display name;
+- MTGO raw-event collection status;
 - enabled sources;
 - classification-rule path;
 - public availability;
@@ -686,6 +687,10 @@ The format registry should identify:
 - relevant output paths.
 
 The registry should eventually allow the front end and command-line tools to discover supported formats without hard-coding only Standard.
+
+MTGO raw-event collection and product execution are separate states. `event_collection_enabled` authorizes only official event download, normalized archival storage, and fetched-ledger maintenance for that format. It does not authorize Videre fetching, classification, statistics, Pickup, catalogs, public output, or front-end exposure. Those operations continue to require the executable MTGO state and their declared capabilities.
+
+During Phase 3, Standard, Pauper, Modern, Pioneer, Legacy, and Vintage retain their pre-migration official-event archive, while Standard remains the only executable MTGO product format. Non-Standard Videre collection is not implied by event archival.
 
 ### 8.2 `melee_events.yaml`
 

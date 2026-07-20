@@ -446,6 +446,8 @@ P2-08 completed these criteria on 2026-07-20. The full 3,936-deck Standard paren
 
 Replace Standard-only assumptions with explicit format configuration.
 
+Official MTGO event archival is independently configurable and does not make a format executable. During Phase 3, the six-format legacy raw-event archive remains active while Standard remains the only format authorized for Videre, classification, statistics, Pickup, catalogs, public output, and front-end behavior.
+
 ## Required work
 
 Make these functions format-aware:
@@ -507,7 +509,7 @@ The wrappers must be removed only after:
 7. P3-07: add the generalized MTGO command entry point and migrate the production workflow after every legacy command has a verified replacement.
 8. P3-08: complete fixed-reference Standard regeneration, public-contract, cross-format isolation, and front-end behavior verification.
 
-P3-01 must distinguish known, executable, planned, and decision-gated formats. Only Standard is executable during the migration. The generalized interface must fail clearly for unknown or disabled formats, and it must never silently use Standard paths for another format. P3-01 changes no generator, workflow, public JSON, rule file, or front-end code.
+P3-01 must distinguish known, executable, planned, and decision-gated formats. Only Standard is executable during the migration. Under DEC-033, event archival permission is separate from product execution: a collection-enabled planned format may archive only its own official event data, while every unauthorized product operation must fail clearly and must never silently use Standard paths. P3-01 changes no generator, workflow, public JSON, rule file, or front-end code.
 
 P3-01 completed on 2026-07-20 through pull request #41 and merge commit `c95f156737d10014f6f593ee27378e73b8e06fb3`. Its executable contract is pinned to the Phase 2 recovery baseline. P3-02 remains subject to separate project-owner authorization.
 
@@ -533,6 +535,8 @@ P3-06 local implementation was authorized and completed in an isolated workspace
 
 P3-06 was published through pull request #51 and merge commit `82824622a1fc6080b037d368437b91b0dd1c5c5e`. Its first CI run exposed and then corrected a shallow-checkout-only metadata test assumption; the replacement deterministic test and the full remote validation passed. P3-07 is the next planned task, but requires a detailed pre-development review and separate project-owner authorization before any command or production-workflow migration begins.
 
+P3-07 local implementation was authorized and completed in an isolated workspace on 2026-07-20. The new `python -m mtgmeta.mtgo --format ...` entry point covers official event fetching, Videre match fetching, rolling statistics, matchup statistics, Weekly Pickup candidate generation and manual publication, metadata, and de-identified classification reports. DEC-033 separates official-event archival from product execution: Standard, Pauper, Modern, Pioneer, Legacy, and Vintage retain their legacy daily raw-event collection, while only Standard may run Videre, classification, statistics, Pickup, metadata, catalogs, or public generation. The production workflow preserves its single schedule, permissions, concurrency, validation, and publication controls and no longer regenerates the superseded identity-bearing text diagnostics. Legacy root commands remain available as compatibility entry points. No additional product format was enabled, and no live fetch or workflow dispatch occurred. P3-07 awaits project-owner acceptance and separate remote-publication authorization; P3-08 is not authorized.
+
 ## Acceptance criteria
 
 Phase 3 is complete when:
@@ -541,7 +545,8 @@ Phase 3 is complete when:
 - existing Standard public output remains compatible;
 - format names are configuration-driven;
 - data paths are format-aware;
-- unsupported formats fail clearly;
+- unsupported command-and-format combinations fail clearly;
+- event collection is limited to the explicit archive allowlist and does not enable product execution;
 - selecting one format cannot overwrite another format;
 - Standard regression tests pass.
 

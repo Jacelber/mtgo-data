@@ -44,7 +44,7 @@ def test_registry_matches_the_p3_contract_and_preserves_standard_paths():
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     loaded = registry()
 
-    assert loaded.schema_version == "1.0.0"
+    assert loaded.schema_version == "1.1.0"
     assert [item.id for item in loaded.formats] == contract["format_state_model"]["known_format_ids"]
     assert [item.id for item in loaded.formats if item.state == "executable"] == ["standard"]
 
@@ -56,6 +56,13 @@ def test_registry_matches_the_p3_contract_and_preserves_standard_paths():
         for key, value in contract["standard_contract"]["paths"].items()
         if key in {"events", "matches", "rules", "statistics", "reports"}
     }
+    assert [
+        item.id for item in loaded.formats if item.mtgo.event_collection_enabled
+    ] == ["standard", "pauper", "modern", "pioneer", "legacy", "vintage"]
+    assert all(
+        loaded.require_mtgo_event_collection(format_id).id == format_id
+        for format_id in ("standard", "pauper", "modern", "pioneer", "legacy", "vintage")
+    )
 
 
 def test_known_disabled_and_unknown_formats_fail_without_a_standard_fallback():
@@ -91,6 +98,7 @@ def test_schema_accepts_the_registry_and_rejects_extra_or_unsafe_shape_fields():
         (lambda data: data["formats"][1].update(id="standard"), "duplicates"),
         (lambda data: data["formats"][0]["mtgo"].update(enabled=False), "must match executable state"),
         (lambda data: data["formats"][1]["mtgo"].update(capabilities=["classification"]), "must be empty"),
+        (lambda data: data["formats"][1]["mtgo"].update(event_collection_enabled="yes"), "must be a boolean"),
         (lambda data: data["formats"][0]["mtgo"]["paths"].update(events="data\\standard"), "forward slashes"),
         (lambda data: data["formats"][0]["mtgo"]["paths"].update(events="data/../standard"), "safe repository-relative"),
         (lambda data: data["formats"][0]["mtgo"]["paths"].update(events="data/pauper"), "format-specific"),
@@ -105,7 +113,7 @@ def test_loader_rejects_semantically_unsafe_registry_entries(mutation, expected)
 
 def test_duplicate_yaml_keys_and_repository_escapes_fail_clearly(tmp_path):
     duplicate = REGISTRY_PATH.read_text(encoding="utf-8").replace(
-        'schema_version: "1.0.0"', 'schema_version: "1.0.0"\nschema_version: "1.0.0"', 1
+        'schema_version: "1.1.0"', 'schema_version: "1.1.0"\nschema_version: "1.1.0"', 1
     )
     with pytest.raises(FormatConfigError, match="duplicate key"):
         parse_format_text(duplicate)

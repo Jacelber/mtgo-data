@@ -1351,11 +1351,18 @@ phase_2_result:
     phase_3_authorized: false
 
 phase_3_planning:
-  status: "p3_06_completed_awaiting_p3_07_review_and_authorization"
+  status: "p3_07_locally_completed_awaiting_owner_acceptance"
   objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
   standard_remains_regression_baseline: true
   executable_formats:
     - "standard"
+  event_collection_formats:
+    - "standard"
+    - "legacy"
+    - "pioneer"
+    - "pauper"
+    - "vintage"
+    - "modern"
   planned_non_executable_formats:
     - "pauper"
     - "modern"
@@ -1379,6 +1386,7 @@ phase_3_planning:
   p3_04_local_implementation_authorized: true
   p3_05_local_implementation_authorized: true
   p3_06_local_implementation_authorized: true
+  p3_07_local_implementation_authorized: true
   remote_publication_authorized: false
 
 phase_3_tasks:
@@ -1749,6 +1757,105 @@ phase_3_tasks:
       owner_accepted: true
       merged_to_master: true
 
+  - id: "P3-07"
+    name: "Add generalized MTGO commands and migrate the production workflow"
+    status: "locally_completed_awaiting_owner_acceptance"
+    started_on: "2026-07-20"
+    implemented_on: "2026-07-20"
+    source_branch: "codex/p3-07-generalized-command-workflow"
+    baseline_commit: "661b498f02fb26216b4a02290a974854e5c83e67"
+    baseline_tag: "phase-2-shared-classifier-baseline"
+    decision: "DEC-033"
+    production_change: true
+    output:
+      - "configs/formats.yaml"
+      - "schemas/formats.schema.json"
+      - "src/mtgmeta/config.py"
+      - "src/mtgmeta/mtgo/__init__.py"
+      - "src/mtgmeta/mtgo/__main__.py"
+      - "src/mtgmeta/mtgo/fetch.py"
+      - "src/mtgmeta/mtgo/pickup.py"
+      - ".github/workflows/update.yml"
+      - "tests/test_mtgo_cli.py"
+      - "tests/test_format_registry.py"
+      - "tests/test_mtgo_event_io.py"
+      - "tests/test_mtgo_format_pipeline_contract.py"
+      - "tests/test_mtgo_pickup.py"
+      - "tests/test_mtgo_statistics.py"
+      - "tests/test_production_workflow.py"
+      - "tests/test_validate_schemas.py"
+      - "README.md"
+      - "docs/DATA_ARCHITECTURE.md"
+      - "docs/DECISIONS.md"
+      - "docs/audits/P3-01.md"
+      - "docs/audits/P3-07.md"
+      - "docs/ROADMAP.md"
+      - "docs/STATUS.yaml"
+    contract:
+      generalized_module_command_added: true
+      explicit_format_required: true
+      only_standard_executable: true
+      event_collection_separate_from_product_execution: true
+      event_collection_formats:
+        - "standard"
+        - "legacy"
+        - "pioneer"
+        - "pauper"
+        - "vintage"
+        - "modern"
+      nonstandard_videre_collection_added: false
+      product_disabled_format_fails_before_network_or_output_side_effects: true
+      collection_disabled_format_fails_before_network_or_output_side_effects: true
+      format_registry_controls_paths_and_capabilities: true
+      current_and_previous_month_event_fetch_preserved: true
+      playoff_only_event_filter_preserved: true
+      videre_fetch_preserved: true
+      statistics_and_matchup_generation_preserved: true
+      weekly_pickup_manual_publication_preserved: true
+      existing_pickup_candidates_preserved_by_scheduled_workflow: true
+      deidentified_classification_reports_preserved: true
+      identity_bearing_legacy_diagnostics_removed_from_schedule: true
+      legacy_root_commands_retained: true
+      single_scheduled_production_workflow_preserved: true
+      production_permissions_schedule_and_concurrency_preserved: true
+      statistical_formulas_changed: false
+      public_json_contract_changed: false
+      format_registry_schema_changed: true
+      format_registry_schema_version: "1.1.0"
+      public_json_schemas_changed: false
+      rules_changed: false
+      front_end_changed: false
+      new_format_enabled: false
+      live_fetch_performed: false
+      production_workflow_dispatched: false
+    validation:
+      p3_07_focused_tests_passed: 88
+      pytest_passed: 223
+      repository_validation_passed: true
+      repository_python_files_checked: 57
+      repository_json_files_checked: 788
+      repository_yaml_files_checked: 9
+      rule_validation_passed: true
+      standard_quality_baseline_passed: true
+      frozen_corpus_records: 3936
+      unknown_results: 71
+      multiple_match_results: 947
+      classification_report_validation_passed: true
+      classification_conflicts: 0
+      invalid_decks: 0
+      schema_validation_passed: true
+      schema_documents_validated: 23
+      generated_production_outputs_changed: false
+      live_network_requests: 0
+      nonstandard_event_collection_routing_passed: true
+      videre_remains_standard_only: true
+    authorization:
+      owner_local_implementation_authorized: true
+      remote_publication_authorized: false
+    acceptance:
+      owner_accepted: false
+      merged_to_master: false
+
 known_blockers: []
 
 open_decisions:
@@ -1787,8 +1894,8 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "awaiting_detailed_task_review_and_owner_authorization"
-  planning_status: "not_started"
+  authorization_status: "local_implementation_authorized"
+  planning_status: "locally_completed_awaiting_owner_acceptance"
 
 governance_baseline:
   status: "active_on_master"
@@ -1829,12 +1936,12 @@ delegated_local_execution_governance:
   phase_2:
     status: "completed"
   phase_3:
-    status: "p3_06_completed_awaiting_p3_07_review_and_authorization"
+    status: "p3_07_locally_completed_awaiting_owner_acceptance"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P3-07 until it is reviewed in detail and explicitly authorized."
-  - "Do not modify production workflows outside the approved P3-07 migration contract."
+  - "Do not publish or dispatch the P3-07 workflow without separate owner authorization."
+  - "Do not begin P3-08 until P3-07 is accepted and separately published."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."

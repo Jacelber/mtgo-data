@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from pathlib import Path
 import re
 import time
@@ -11,7 +12,7 @@ from urllib.parse import urlparse
 
 import requests
 
-from . import load_mtgo_context
+from . import load_mtgo_context, load_mtgo_event_collection_context
 from .normalize import normalize_event
 
 
@@ -163,6 +164,103 @@ def mark_fetched(path: str | Path, link: str) -> None:
         handle.write(link + "\n")
 
 
+def recent_months(now: datetime | None = None) -> list[tuple[int, int]]:
+    """Return the current and previous calendar month in stable order."""
+
+    current = now or datetime.now()
+    previous = (current.year - 1, 12) if current.month == 1 else (current.year, current.month - 1)
+    return [(current.year, current.month), previous]
+
+
+def fetch_event_months(
+    repository_root: str | Path,
+    format_id: str,
+    *,
+    months: Iterable[tuple[int, int]] | None = None,
+    registry_path: str | Path | None = None,
+    fetched_path: str | Path | None = None,
+    request_get: Callable[..., Any] | None = None,
+    sleep: Callable[[float], None] | None = None,
+    inter_event_delay: float = 4,
+) -> dict[str, Any]:
+    """Fetch one format's recent event pages after capability authorization."""
+
+    context = load_mtgo_event_collection_context(
+        repository_root,
+        format_id,
+        registry_path=registry_path,
+    )
+    selected_months = list(months) if months is not None else recent_months()
+    if not selected_months or any(
+        not isinstance(year, int)
+        or not isinstance(month, int)
+        or year < 2000
+        or month not in range(1, 13)
+        for year, month in selected_months
+    ):
+        raise ValueError("months must contain valid (year, month) pairs")
+
+    ledger = Path(fetched_path) if fetched_path is not None else context.repository_root / "fetched.txt"
+    fetched = load_fetched(ledger)
+    wait = sleep or time.sleep
+    summary: dict[str, Any] = {
+        "format": format_id,
+        "months": selected_months,
+        "candidates": 0,
+        "fetched": 0,
+        "skipped": 0,
+        "excluded_no_playoff": 0,
+        "failed": 0,
+        "written": [],
+        "errors": [],
+    }
+    for year, month in selected_months:
+        list_url = f"{MTGO_BASE_URL}/decklists/{year}/{month:02d}"
+        try:
+            listing = download_page(
+                list_url,
+                request_get=request_get,
+                sleep=wait,
+            )
+        except MTGOFetchError as exc:
+            summary["failed"] += 1
+            summary["errors"].append((list_url, str(exc)))
+            continue
+        candidates = discover_event_links(listing, (format_id,))
+        summary["candidates"] += len(candidates)
+        for link in candidates:
+            if link in fetched:
+                summary["skipped"] += 1
+                continue
+            event_url = f"{MTGO_BASE_URL}{link}"
+            try:
+                html = download_page(
+                    event_url,
+                    request_get=request_get,
+                    sleep=wait,
+                )
+                raw = extract_event_data(html)
+                if not is_event_data_complete(raw):
+                    raise MTGOParseError("MTGO event data is incomplete")
+                clean = normalize_event(raw, include_inplayoffs=True)
+                if str(clean.get("inplayoffs")) != "1":
+                    mark_fetched(ledger, link)
+                    fetched.add(link)
+                    summary["excluded_no_playoff"] += 1
+                else:
+                    destination = save_event(clean, context.paths["events"])
+                    mark_fetched(ledger, link)
+                    fetched.add(link)
+                    summary["fetched"] += 1
+                    summary["written"].append(destination)
+            except (MTGOFetchError, MTGOParseError, MTGOStorageError, OSError) as exc:
+                summary["failed"] += 1
+                summary["errors"].append((event_url, str(exc)))
+            if inter_event_delay:
+                wait(inter_event_delay)
+    return summary
+
+
 def fetch_and_store_event(
     repository_root: str | Path,
     format_id: str,
@@ -206,10 +304,12 @@ __all__ = [
     "download_page",
     "event_filename",
     "extract_event_data",
+    "fetch_event_months",
     "fetch_and_store_event",
     "is_event_data_complete",
     "load_fetched",
     "mark_fetched",
     "parse_event_link",
+    "recent_months",
     "save_event",
 ]
