@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "clean_after_phase_2_publication"
+  current_working_branch: "codex/p3-01-mtgo-pipeline-contract"
+  working_branch_status: "p3_01_accepted_awaiting_publication"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -55,11 +55,11 @@ authoritative_documents:
       authoritative: false
 
 current_phase:
-  id: 2
-  name: "Shared rule system and classifier"
-  status: "completed"
-  started_on: "2026-07-19"
-  objective: "Extract format-independent classification behavior while preserving every approved Standard parent-archetype result and adding only the approved compatibility subtypes."
+  id: 3
+  name: "Generalize the MTGO pipeline"
+  status: "in_progress"
+  started_on: "2026-07-20"
+  objective: "Replace Standard-only MTGO pipeline assumptions with explicit validated format configuration while preserving the published Standard contract."
   production_changes_allowed: false
   feature_development_allowed: false
 
@@ -1350,6 +1350,74 @@ phase_2_result:
     remote_publication_authorized: true
     phase_3_authorized: false
 
+phase_3_planning:
+  status: "p3_01_accepted_awaiting_publication"
+  objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
+  standard_remains_regression_baseline: true
+  executable_formats:
+    - "standard"
+  planned_non_executable_formats:
+    - "pauper"
+    - "modern"
+    - "pioneer"
+    - "legacy"
+  decision_gated_formats:
+    - "vintage"
+  proposed_sequence:
+    - "P3-01 MTGO format pipeline migration contract"
+    - "P3-02 Format registry and safe path resolution"
+    - "P3-03 Event fetch, storage, normalization, and classification dispatch"
+    - "P3-04 Event and rolling-range statistics"
+    - "P3-05 Videre matchup and classification-report routing"
+    - "P3-06 Weekly Pickup, metadata, and catalogs"
+    - "P3-07 Generalized command and production workflow migration"
+    - "P3-08 Standard and front-end closeout"
+  phase_implementation_authorized: false
+  p3_01_local_implementation_authorized: true
+  remote_publication_authorized: true
+
+phase_3_tasks:
+  - id: "P3-01"
+    name: "Define the format-aware MTGO pipeline migration contract"
+    status: "accepted_awaiting_publication"
+    implemented_on: "2026-07-20"
+    started_on: "2026-07-20"
+    source_branch: "codex/p3-01-mtgo-pipeline-contract"
+    baseline_commit: "a9e35a2c957d32f2bc0fb43c8a0777a25f71c31c"
+    baseline_tag: "phase-2-shared-classifier-baseline"
+    production_change: false
+    output:
+      - "tests/fixtures/mtgo/format_pipeline_contract.json"
+      - "tests/test_mtgo_format_pipeline_contract.py"
+      - "docs/audits/P3-01.md"
+      - "docs/ROADMAP.md"
+      - "docs/STATUS.yaml"
+    contract:
+      hardcoded_boundaries_inventoried: 12
+      known_formats: 6
+      executable_formats: 1
+      executable_format_ids:
+        - "standard"
+      public_standard_paths_preserved: true
+      cross_format_reads_prohibited: true
+      cross_format_writes_prohibited: true
+      implicit_standard_fallback_prohibited: true
+      vintage_decision_gate_preserved: true
+      production_generators_changed: false
+      workflows_changed: false
+      public_json_changed: false
+      front_end_changed: false
+    acceptance:
+      owner_accepted: true
+      contract_tests_passed: 6
+      full_regression_suite_passed: 162
+      repository_validation_passed: true
+      rule_validation_passed: true
+      schema_validation_passed: true
+      standard_quality_baseline_passed: true
+      production_outputs_changed: false
+      merged_to_master: false
+
 known_blockers: []
 
 open_decisions:
@@ -1377,15 +1445,18 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "PHASE-3-PLANNING"
-  name: "Review and authorize the first Phase 3 task"
+  id: "P3-01"
+  name: "Define the format-aware MTGO pipeline migration contract"
   target_paths:
+    - "tests/fixtures/mtgo/format_pipeline_contract.json"
+    - "tests/test_mtgo_format_pipeline_contract.py"
+    - "docs/audits/P3-01.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  planning_status: "awaiting_owner_review"
+  authorization_status: "owner_accepted_and_publication_authorized"
+  planning_status: "accepted_awaiting_publication"
 
 governance_baseline:
   status: "active_on_master"
@@ -1425,11 +1496,13 @@ delegated_local_execution_governance:
     status: "completed"
   phase_2:
     status: "completed"
+  phase_3:
+    status: "p3_01_accepted_awaiting_publication"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin Phase 3 implementation until its first task is reviewed and explicitly authorized."
-  - "Do not generalize the MTGO pipeline yet."
+  - "Do not begin P3-02 or change production MTGO code until P3-01 is accepted and P3-02 is explicitly authorized."
+  - "Do not modify production generators, workflows, public JSON, rules, or front-end code during P3-01."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."

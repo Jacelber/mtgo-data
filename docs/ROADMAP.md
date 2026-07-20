@@ -496,6 +496,19 @@ The wrappers must be removed only after:
 - documentation is updated;
 - regression tests pass.
 
+## Required implementation sequence
+
+1. P3-01: define the executable format-aware MTGO pipeline migration contract and inventory every current Standard-only coupling boundary without changing production behavior.
+2. P3-02: add the validated format registry and safe repository-relative path resolution, with only Standard executable.
+3. P3-03: generalize MTGO event fetching, raw storage, normalization, and classification dispatch while preserving legacy Standard entry points.
+4. P3-04: route Standard event and rolling-range statistics through format-aware MTGO internals.
+5. P3-05: generalize Videre matchup processing and classification-report routing.
+6. P3-06: generalize Weekly Pickup, metadata, and catalog generation where supported by format configuration.
+7. P3-07: add the generalized MTGO command entry point and migrate the production workflow after every legacy command has a verified replacement.
+8. P3-08: complete fixed-reference Standard regeneration, public-contract, cross-format isolation, and front-end behavior verification.
+
+P3-01 must distinguish known, executable, planned, and decision-gated formats. Only Standard is executable during the migration. The generalized interface must fail clearly for unknown or disabled formats, and it must never silently use Standard paths for another format. P3-01 changes no generator, workflow, public JSON, rule file, or front-end code.
+
 ## Acceptance criteria
 
 Phase 3 is complete when:
