@@ -55,11 +55,11 @@ authoritative_documents:
       authoritative: false
 
 current_phase:
-  id: 3
-  name: "Generalize the MTGO pipeline"
-  status: "in_progress"
-  started_on: "2026-07-20"
-  objective: "Replace Standard-only MTGO pipeline assumptions with explicit validated format configuration while preserving the published Standard contract."
+  id: 4
+  name: "Split the existing MTGO front end"
+  status: "awaiting_detailed_review_and_owner_authorization"
+  started_on: null
+  objective: "Split the monolithic MTGO page into maintainable static assets while preserving behavior, appearance, public paths, and GitHub Pages compatibility."
   production_changes_allowed: false
   feature_development_allowed: false
 
@@ -1351,7 +1351,7 @@ phase_2_result:
     phase_3_authorized: false
 
 phase_3_planning:
-  status: "p3_08_locally_completed_awaiting_owner_acceptance"
+  status: "completed"
   objective: "Generalize MTGO ingestion, classification dispatch, statistics, matchup, Pickup, metadata, catalogs, commands, and workflow without enabling another format or changing Standard semantics."
   standard_remains_regression_baseline: true
   executable_formats:
@@ -1388,7 +1388,7 @@ phase_3_planning:
   p3_06_local_implementation_authorized: true
   p3_07_local_implementation_authorized: true
   p3_08_local_implementation_authorized: true
-  remote_publication_authorized: false
+  remote_publication_authorized: true
 
 phase_3_tasks:
   - id: "P3-01"
@@ -1863,10 +1863,17 @@ phase_3_tasks:
 
   - id: "P3-08"
     name: "Complete Standard and front-end closeout"
-    status: "locally_completed_awaiting_owner_acceptance"
+    status: "completed"
     started_on: "2026-07-20"
     implemented_on: "2026-07-20"
+    completed_on: "2026-07-20"
     source_branch: "codex/p3-08-standard-frontend-closeout"
+    source_commit: "4c69f8ed4d5ce95c10e2480dbb9166163bc158f7"
+    pull_request: 55
+    merge_commit: "dd8741fc8b63ded9206cdbf88ac8b87682e3bf14"
+    phase_tag: "phase-3-generalized-mtgo-pipeline"
+    phase_tag_object: "85b85ab075bc872286bda561338bac4286747894"
+    phase_tag_target: "dd8741fc8b63ded9206cdbf88ac8b87682e3bf14"
     baseline_commit: "b5927972e81cc7554db31bd87fa05b1d694cd881"
     production_change: false
     output:
@@ -1935,10 +1942,34 @@ phase_3_tasks:
       generated_production_outputs_changed: false
     authorization:
       owner_local_implementation_authorized: true
-      remote_publication_authorized: false
+      remote_publication_authorized: true
     acceptance:
-      owner_accepted: false
-      merged_to_master: false
+      owner_accepted: true
+      merged_to_master: true
+      phase_tag_published: true
+
+phase_3_result:
+  status: "completed"
+  completed_on: "2026-07-20"
+  closeout_task: "P3-08"
+  pull_request: 55
+  merge_commit: "dd8741fc8b63ded9206cdbf88ac8b87682e3bf14"
+  tag: "phase-3-generalized-mtgo-pipeline"
+  tag_object: "85b85ab075bc872286bda561338bac4286747894"
+  tag_target_commit: "dd8741fc8b63ded9206cdbf88ac8b87682e3bf14"
+  acceptance:
+    standard_uses_generalized_internals: true
+    standard_public_output_compatible: true
+    format_names_configuration_driven: true
+    data_paths_format_aware: true
+    unsupported_combinations_fail_clearly: true
+    event_collection_does_not_enable_product_execution: true
+    cross_format_overwrite_prevented: true
+    standard_regression_passed: true
+    browser_regression_passed: true
+    project_owner_approved: true
+    remote_publication_completed: true
+    phase_tag_published: true
 
 known_blockers: []
 
@@ -1967,18 +1998,19 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 next_approved_task:
-  id: "P3-08"
-  name: "Complete Standard and front-end closeout"
+  id: "P4-01"
+  name: "Split the existing MTGO front end while preserving behavior"
   target_paths:
     - "index.html"
+    - "assets/"
     - "tests/"
     - "docs/audits/"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  production_change: false
+  production_change: true
   requires_user_confirmation: true
-  authorization_status: "local_implementation_authorized"
-  planning_status: "locally_completed_awaiting_owner_acceptance"
+  authorization_status: "awaiting_detailed_review_and_owner_authorization"
+  planning_status: "not_started"
 
 governance_baseline:
   status: "active_on_master"
@@ -2019,12 +2051,11 @@ delegated_local_execution_governance:
   phase_2:
     status: "completed"
   phase_3:
-    status: "p3_08_locally_completed_awaiting_owner_acceptance"
+    status: "completed"
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not publish P3-08 or mark Phase 3 complete without separate owner acceptance and remote-publication authorization."
-  - "Do not begin Phase 4 until P3-08 is accepted and separately published."
+  - "Do not begin P4-01 until its detailed behavior-preservation scope is reviewed and the project owner explicitly authorizes implementation."
   - "Do not implement MTGO Pauper yet."
   - "Do not fetch Melee events yet."
   - "Do not generate Paupergeddon statistics yet."
