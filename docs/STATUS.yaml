@@ -2102,6 +2102,32 @@ open_decisions:
     note: "Not part of the current approved scope."
 
 maintenance_tasks:
+  - id: "MAINT-2026-07-21-COMMITTED-BASELINE-STABILITY"
+    name: "Make committed-baseline tests follow the current committed snapshot"
+    status: "owner_accepted_and_publication_authorized"
+    source_production_commit: "c50d599730d1c0bbce26bb609e9cddae1e6fcc66"
+    source_branch: "codex/committed-baseline-stability"
+    owner_local_implementation_authorized: true
+    remote_publication_authorized: true
+    output:
+      - "tests/test_classification_reports.py"
+      - "tests/test_mtgo_matchup.py"
+      - "tests/test_mtgo_statistics.py"
+      - "tests/test_phase3_closeout.py"
+      - "README.md"
+      - "docs/DEVELOPMENT_WORKFLOW.md"
+      - "docs/DECISIONS.md"
+      - "docs/STATUS.yaml"
+    contract:
+      committed_snapshot_metadata_drives_volatile_references: true
+      byte_identical_output_comparison_retained: true
+      stable_semantic_invariants_retained: true
+      frozen_classification_corpus_retained: true
+      statistical_formulas_changed: false
+      classification_rules_changed: false
+      generated_data_changed: false
+      public_output_changed: false
+
   - id: "MAINT-2026-07-21-PRODUCTION-VALIDATION-LAYERS"
     name: "Separate committed baselines from dynamic production candidate acceptance"
     status: "owner_accepted_and_publication_authorized"

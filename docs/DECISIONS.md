@@ -1179,3 +1179,25 @@ Fixed-reference tests do not run against a checkout after production mutation. D
 Standard remains the committed regression baseline without blocking legitimate daily growth. Production publication receives a separate fail-closed boundary that can detect unexpected code, configuration, Melee, or unsupported-format product writes. A newly generated file is parsed even when it is still untracked and therefore invisible to tracked-file-only repository checks. Extending the production publication scope or permitting automatic deletion requires an explicit validator and workflow review.
 
 This decision changes validation orchestration only. It does not change statistical formulas, classification rules, public JSON contracts, source inclusion policy, or format authorization.
+
+---
+
+# DEC-036 — Reproduce the currently committed production snapshot from its metadata
+
+Status: `Accepted`
+
+## Context
+
+The first successful production run after DEC-035 published commit `c50d599730d1c0bbce26bb609e9cddae1e6fcc66`. The candidate validator correctly accepted the new data, but the next clean checkout failed five `committed_baseline` tests. Those tests still supplied the previous run's hard-coded generation date, timestamps, event count, matchup counts, report counts, and Pickup week while comparing against the newly committed production files. The failure was caused by stale test inputs rather than a generator, statistical, or data-quality regression.
+
+## Decision
+
+Committed-snapshot tests must derive volatile reproduction inputs and expected aggregate counts from the versioned metadata already stored with the committed snapshot. They continue to regenerate outputs and require byte-identical equality with the committed files.
+
+Stable behavioral expectations remain explicit and independent of daily volume: Standard legacy and shared entry points must agree; classification reports must have no conflicts or invalid decks; report totals must be internally consistent; only the approved compatibility subtype identities may appear; generated outputs must match committed reports; and the frozen classification corpus, formulas, schemas, rules, path boundaries, and production candidate validation remain unchanged.
+
+## Consequences
+
+A legitimate automated production update does not require an accompanying manual test edit merely because dates, event totals, matchup totals, subtype observations, or Pickup weeks advanced. A clean checkout still detects non-deterministic generators, stale or internally inconsistent committed outputs, wrapper divergence, unexpected subtype identities, conflicts, invalid decks, and byte-level output differences.
+
+This decision changes test reference selection only. It does not change production code, statistical formulas, classification rules, generated data, public JSON, or source inclusion policy.

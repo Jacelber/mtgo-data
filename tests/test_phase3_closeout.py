@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date
+import json
 from pathlib import Path
 
 import pytest
@@ -13,11 +14,6 @@ from mtgmeta.mtgo import matchup, pickup, stats
 
 
 ROOT = Path(__file__).resolve().parents[1]
-REFERENCE_DATE = date(2026, 7, 19)
-STATISTICS_GENERATED = "2026-07-19T21:00:04"
-MATCHUPS_GENERATED = "2026-07-19T21:00:07"
-METADATA_DATA_UPDATED = "2026-07-19T21:00:08+00:00"
-METADATA_RULES_UPDATED = "2026-07-20T05:34:31+09:00"
 NONSTANDARD_FORMATS = ("pauper", "modern", "pioneer", "legacy", "vintage")
 
 
@@ -33,33 +29,41 @@ def test_fixed_reference_standard_product_is_byte_identical(tmp_path):
     committed_stats = ROOT / "stats" / "standard" / "mtgo"
     committed_pickup = committed_stats / "pickup"
     committed_reports = ROOT / "reports" / "standard" / "mtgo"
+    statistics_index = json.loads((committed_stats / "index.json").read_text(encoding="utf-8"))
+    matchup_index = json.loads(
+        (committed_stats / "matchup_index.json").read_text(encoding="utf-8")
+    )
+    committed_metadata = json.loads(
+        (committed_stats / "meta.json").read_text(encoding="utf-8")
+    )
+    reference_date = date.fromisoformat(statistics_index["generated"][:10])
 
     statistics = stats.build_all_stats(
         ROOT,
         "standard",
-        today=REFERENCE_DATE,
-        generated_at=STATISTICS_GENERATED,
+        today=reference_date,
+        generated_at=statistics_index["generated"],
         output_directory=generated_stats,
     )
     matchups, matchup_counts = matchup.build_all_matchups(
         ROOT,
         "standard",
-        today=REFERENCE_DATE,
-        generated_at=MATCHUPS_GENERATED,
+        today=reference_date,
+        generated_at=matchup_index["generated"],
         output_directory=generated_stats,
     )
     candidates = pickup.generate_candidates(
         ROOT,
         "standard",
-        today=REFERENCE_DATE,
+        today=reference_date,
         output_directory=generated_pickup,
         known_file=committed_pickup / "known_archetypes.json",
     )
     metadata = pickup.generate_metadata(
         ROOT,
         "standard",
-        data_updated=METADATA_DATA_UPDATED,
-        rules_updated=METADATA_RULES_UPDATED,
+        data_updated=committed_metadata["data_updated"],
+        rules_updated=committed_metadata["rules_updated"],
         output_directory=generated_stats,
     )
     reports = generate_reports(ROOT, "standard", output_directory=generated_reports)
@@ -83,25 +87,15 @@ def test_fixed_reference_standard_product_is_byte_identical(tmp_path):
         "matchup_36w.json",
     }
     assert {weeks: values["counted"] for weeks, values in matchup_counts.items()} == {
-        1: 619,
-        4: 2564,
-        12: 6732,
-        36: 8247,
+        item["weeks"]: item["counted_matches"] for item in matchup_index["ranges"]
     }
     assert candidates is not None
-    assert candidates["week"] == "2026-W28"
-    assert reports["index"]["summary"] == {
-        "total_decks": 3936,
-        "classified": 3865,
-        "unknown": 71,
-        "multiple_matches": 947,
-        "overridden_matches": 947,
-        "conflicts": 0,
-        "invalid_decks": 0,
-        "selected_subtypes": 45,
-        "same_parent_multiple_subtype_matches": 21,
-        "strict_validation": "pass",
-    }
+    latest_week = date.fromisoformat(statistics_index["latest_complete_week"])
+    assert candidates["week"] == f"{latest_week.isocalendar().year}-W{latest_week.isocalendar().week:02d}"
+    committed_report_index = json.loads(
+        (committed_reports / "index.json").read_text(encoding="utf-8")
+    )
+    assert reports["index"]["summary"] == committed_report_index["summary"]
 
     for name in statistics | matchups:
         assert_byte_identical(generated_stats / name, committed_stats / name)

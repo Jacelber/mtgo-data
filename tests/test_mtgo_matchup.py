@@ -131,16 +131,19 @@ def test_unsafe_event_id_is_rejected_before_network_and_storage(tmp_path):
 def test_fixed_reference_standard_matchups_are_byte_identical(tmp_path):
     import stats_matchup
 
+    committed_index = json.loads(
+        (ROOT / "stats" / "standard" / "mtgo" / "matchup_index.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    reference_date = date.fromisoformat(committed_index["generated"][:10])
     written, statistics = stats_matchup.build_all_matchups(
-        today=date(2026, 7, 19),
-        generated_at="2026-07-19T21:00:07",
+        today=reference_date,
+        generated_at=committed_index["generated"],
         output_directory=tmp_path,
     )
     assert {weeks: values["counted"] for weeks, values in statistics.items()} == {
-        1: 619,
-        4: 2564,
-        12: 6732,
-        36: 8247,
+        item["weeks"]: item["counted_matches"] for item in committed_index["ranges"]
     }
     for filename, path in written.items():
         assert path.read_bytes() == (ROOT / "stats" / "standard" / "mtgo" / filename).read_bytes()
