@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "p5_06_completed_and_published"
+  current_working_branch: "codex/p5-07-melee-quality-gates"
+  working_branch_status: "p5_07_accepted_and_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2302,14 +2302,42 @@ phase_5_tasks:
     merged_to_master: true
   - id: "P5-07"
     name: "Add quality gates and publication blocking"
-    status: "not_started"
+    status: "accepted_pending_remote_publication"
+    branch: "codex/p5-07-melee-quality-gates"
+    base_commit: "2f9ff84a488a923b6f24e889bae68588048ebb89"
+    reference_event_id: "434455"
+    whitelist_schema_version: "3.0.0"
+    normalized_event_schema_version: "2.0.0"
+    schema_validation_boundary: "before_and_after_quality_assessment"
+    publication_boundary: "canonical_bytes_only_no_writer"
+    disabled_event_publishable: false
+    missing_or_unavailable_decklist_blocking: false
+    decklist_coverage_threshold_added: false
+    input_mutated: false
+    deterministic_object_bytes_and_hash: true
+    deterministic_text_newline: "LF"
+    focused_melee_and_schema_tests_passed: 105
+    tests_passed: 334
+    repository_validation_passed: true
+    rule_validation_passed: true
+    schema_validation_passed: true
+    standard_quality_baseline_passed: true
+    live_fetch_performed: false
+    real_normalized_event_created: false
+    statistics_generated: false
+    public_json_changed: false
+    workflow_changed: false
+    frontend_changed: false
+    owner_accepted: true
+    remote_publication_authorized: true
+    merged_to_master: false
   - id: "P5-08"
     name: "Run end-to-end Phase 5 validation and closeout"
     status: "not_started"
 
 next_approved_task:
-  id: "P5-07"
-  name: "Add quality gates and publication blocking"
+  id: "P5-08"
+  name: "Run end-to-end Phase 5 validation and closeout"
   target_paths:
     - "src/mtgmeta/melee/"
     - "tests/"
@@ -2317,9 +2345,9 @@ next_approved_task:
     - "docs/audits/"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  production_change: true
+  production_change: false
   requires_user_confirmation: true
-  authorization_status: "awaiting_detailed_review_and_owner_authorization"
+  authorization_status: "blocked_pending_p5_07_publication_and_separate_p5_08_authorization"
   planning_status: "not_started"
 
 governance_baseline:
@@ -2367,7 +2395,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P5-07 until its quality-gate, idempotency, Schema-validation, and publication-blocking behavior is reviewed and the project owner explicitly authorizes implementation."
+  - "Do not begin P5-08 until P5-07 is accepted and the project owner separately authorizes P5-08."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not fetch Melee events yet."
   - "Do not generate reference-event or Paupergeddon statistics yet."

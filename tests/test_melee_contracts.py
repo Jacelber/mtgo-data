@@ -104,7 +104,11 @@ def test_unknown_round_requires_explicit_quality_issue():
 def test_unknown_result_requires_explicit_quality_issue():
     loaded, registry = _contracts()
     fixture = _event_fixture()
-    fixture["matches"][0]["competitors"][0]["result_type"] = "unknown"
+    for competitor in fixture["matches"][0]["competitors"]:
+        competitor["result_type"] = "unknown"
+    fixture["matches"][0]["played"] = False
+    fixture["matches"][0]["constructed_statistics_eligible"] = False
+    fixture["matches"][0]["matchup_eligible"] = False
     assert schemas.validate_instance(fixture, loaded["melee-event.schema.json"], registry)
     fixture["quality"]["status"] = "blocked"
     fixture["quality"]["issues"].append(
@@ -119,6 +123,28 @@ def test_unknown_result_requires_explicit_quality_issue():
         }
     )
     assert schemas.validate_instance(fixture, loaded["melee-event.schema.json"], registry) == []
+
+
+def test_schema_v2_rejects_internally_inconsistent_publication_flags():
+    loaded, registry = _contracts()
+    fixture = _event_fixture()
+    fixture["matches"][1]["played"] = False
+    assert schemas.validate_instance(fixture, loaded["melee-event.schema.json"], registry)
+
+    fixture = _event_fixture()
+    fixture["quality"]["publishable"] = True
+    fixture["quality"]["issues"].append(
+        {
+            "code": "blocking_fixture_issue",
+            "severity": "error",
+            "entity_type": "event",
+            "entity_id": "434455",
+            "message": "Fixture blocks publication.",
+            "blocking": True,
+            "source_evidence": ["fixture"],
+        }
+    )
+    assert schemas.validate_instance(fixture, loaded["melee-event.schema.json"], registry)
 
 
 def test_normalized_event_requires_provenance_and_blocks_blocked_publication():

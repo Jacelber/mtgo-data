@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event.schema.json",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "2.0.0",
   "title": "Normalized Melee tournament event",
   "type": "object",
   "additionalProperties": false,
@@ -10,7 +10,7 @@
     "rounds", "participants", "standings", "decklists", "matches", "quality"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"const": "2.0.0"},
     "metadata": {"$ref": "#/$defs/metadata"},
     "provenance": {"$ref": "#/$defs/provenance"},
     "event_structure": {"enum": ["constructed_day2", "constructed_single_stage", "mixed"]},
@@ -254,7 +254,52 @@
           "type": "array",
           "items": {"type": "string", "minLength": 1}
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"played": {"const": true}}, "required": ["played"]},
+          "then": {
+            "properties": {
+              "competitors": {
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "result_type": {"enum": ["played_win", "played_loss", "played_draw"]}
+                  },
+                  "required": ["result_type"]
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {"properties": {"played": {"const": false}}, "required": ["played"]},
+          "then": {
+            "properties": {
+              "constructed_statistics_eligible": {"const": false},
+              "matchup_eligible": {"const": false}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"constructed_statistics_eligible": {"const": true}},
+            "required": ["constructed_statistics_eligible"]
+          },
+          "then": {"properties": {"played": {"const": true}}}
+        },
+        {
+          "if": {"properties": {"matchup_eligible": {"const": true}}, "required": ["matchup_eligible"]},
+          "then": {
+            "properties": {
+              "played": {"const": true},
+              "constructed_statistics_eligible": {"const": true}
+            }
+          }
+        }
+      ]
     },
     "quality_issue": {
       "type": "object",
@@ -277,12 +322,64 @@
       "properties": {
         "status": {"enum": ["valid", "warning", "blocked"]},
         "publishable": {"type": "boolean"},
-        "issues": {"type": "array", "items": {"$ref": "#/$defs/quality_issue"}}
+        "issues": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/quality_issue"}
+        }
       },
       "allOf": [
         {
           "if": {"properties": {"status": {"const": "blocked"}}, "required": ["status"]},
-          "then": {"properties": {"publishable": {"const": false}}}
+          "then": {
+            "properties": {
+              "publishable": {"const": false},
+              "issues": {
+                "contains": {
+                  "type": "object",
+                  "properties": {"blocking": {"const": true}},
+                  "required": ["blocking"]
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {"properties": {"publishable": {"const": true}}, "required": ["publishable"]},
+          "then": {
+            "properties": {
+              "status": {"enum": ["valid", "warning"]},
+              "issues": {
+                "not": {
+                  "contains": {
+                    "type": "object",
+                    "properties": {"blocking": {"const": true}},
+                    "required": ["blocking"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "issues": {
+                "contains": {
+                  "type": "object",
+                  "properties": {"blocking": {"const": true}},
+                  "required": ["blocking"]
+                }
+              }
+            },
+            "required": ["issues"]
+          },
+          "then": {
+            "properties": {
+              "status": {"const": "blocked"},
+              "publishable": {"const": false}
+            }
+          }
         }
       ]
     }

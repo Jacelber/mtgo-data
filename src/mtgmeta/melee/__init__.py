@@ -5,7 +5,7 @@ no network access and does not authorize fetching or publication.
 """
 
 WHITELIST_SCHEMA_VERSION = "3.0.0"
-NORMALIZED_EVENT_SCHEMA_VERSION = "1.0.0"
+NORMALIZED_EVENT_SCHEMA_VERSION = "2.0.0"
 
 from .config import (
     DisabledMeleeEventError,
@@ -35,6 +35,12 @@ from .normalize import (
     normalize_parsed_snapshot,
     normalize_raw_snapshot,
 )
+from .quality import (
+    MeleePublicationBlocked,
+    MeleeQualityError,
+    build_publication_payload,
+    finalize_event_quality,
+)
 
 __all__ = [
     "WHITELIST_SCHEMA_VERSION",
@@ -59,4 +65,8 @@ __all__ = [
     "MeleeNormalizationError",
     "normalize_parsed_snapshot",
     "normalize_raw_snapshot",
+    "MeleePublicationBlocked",
+    "MeleeQualityError",
+    "build_publication_payload",
+    "finalize_event_quality",
 ]

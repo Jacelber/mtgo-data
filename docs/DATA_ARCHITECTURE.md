@@ -1040,8 +1040,32 @@ in a reviewed Constructed Swiss phase of the event's configured format are
 eligible for primary Constructed and matchup statistics. Draft, playoff, bye,
 intentional-draw, no-show, drop, administrative, awarded, and unknown records
 remain in normalized context but are ineligible. P5-06 output remains explicitly
-non-publishable even when no unknown values remain; P5-07 owns the final quality
-and publication gate.
+non-publishable until it passes the separate quality and publication boundary.
+
+### 11.5 Quality and publication boundary
+
+Normalized Melee event Schema 2.0.0 tightens the relationship among played
+results, statistical eligibility, blocking issues, quality status, and the
+`publishable` flag. The P5-07 quality gate deep-copies its input, validates the
+complete document against that Schema both before and after assessment, and
+checks reviewed event metadata, provenance digests, identity uniqueness,
+cross-record references, round-to-phase agreement, result semantics, and
+Constructed Swiss eligibility.
+
+The gate is fail-closed. A publication payload can be built only when the event
+is explicitly enabled and verified, no blocking issue remains, and at least one
+verified played match belongs to the configured Constructed Swiss scope. Unknown
+semantics, mismatched or dangling identities, malformed eligibility, missing
+primary standings, missing raw-artifact integrity evidence, and Schema failures
+block publication.
+
+Missing or unavailable decklists are retained as deterministic non-blocking
+warnings because matches can remain trustworthy without complete decklists. No
+numeric decklist-coverage or sample-size threshold is introduced; those values
+remain governed by OPEN-002. The publication boundary returns canonical UTF-8
+JSON bytes and performs no file write, network request, classification, or
+statistical generation. Repeating it with the same logical input therefore
+produces identical bytes and SHA-256 values.
 
 ---
 

@@ -1568,6 +1568,26 @@ Non-blocking warnings may include:
 
 Blocking thresholds must be configurable and documented.
 
+For the Phase 5 normalized-event boundary, the following deterministic checks
+apply before any classification or statistical output exists:
+
+- the event must be explicitly enabled and verified in the whitelist;
+- the normalized event must pass its versioned JSON Schema before and after
+  quality assessment;
+- reviewed metadata, raw-artifact integrity digests, stable identities, and all
+  cross-record references must reconcile;
+- match result semantics and Constructed/matchup eligibility must agree with the
+  reviewed round phase, actual format, Swiss flag, and per-competitor result;
+- at least one verified played match must belong to the configured Constructed
+  Swiss scope;
+- any unresolved or blocking issue makes the event non-publishable.
+
+A missing or unavailable decklist is a non-blocking warning at this ingestion
+boundary. It does not make a match result untrustworthy by itself. This rule does
+not establish a decklist-coverage threshold for later classification or public
+statistics; exact coverage and sample warning thresholds remain open under
+OPEN-002.
+
 ---
 
 ## 20. Required statistical tests

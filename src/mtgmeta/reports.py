@@ -285,7 +285,7 @@ def write_classification_reports(reports: Mapping[str, Mapping[str, Any]], outpu
     filenames = {**REPORT_FILENAMES, "index": "index.json"}
     for name, filename in filenames.items():
         content = json.dumps(reports[name], ensure_ascii=False, indent=2, sort_keys=False) + "\n"
-        (output_dir / filename).write_text(content, encoding="utf-8")
+        (output_dir / filename).write_text(content, encoding="utf-8", newline="\n")
 
 
 def has_blocking_diagnostics(reports: Mapping[str, Mapping[str, Any]]) -> bool:
