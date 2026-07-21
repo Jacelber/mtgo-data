@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p5-07-melee-quality-gates"
-  working_branch_status: "p5_07_accepted_and_remote_publication_authorized"
+  current_working_branch: "master"
+  working_branch_status: "p5_07_completed_and_published"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2302,9 +2302,13 @@ phase_5_tasks:
     merged_to_master: true
   - id: "P5-07"
     name: "Add quality gates and publication blocking"
-    status: "accepted_pending_remote_publication"
+    status: "completed_and_published"
     branch: "codex/p5-07-melee-quality-gates"
     base_commit: "2f9ff84a488a923b6f24e889bae68588048ebb89"
+    commit: "0e4636ffcc4afcb95c977fe1b714753ce7b97c6a"
+    pull_request: 75
+    merge_commit: "1c15c719367edbec1cf8ad0a0348e4d35999d923"
+    merged_on: "2026-07-21"
     reference_event_id: "434455"
     whitelist_schema_version: "3.0.0"
     normalized_event_schema_version: "2.0.0"
@@ -2330,7 +2334,7 @@ phase_5_tasks:
     frontend_changed: false
     owner_accepted: true
     remote_publication_authorized: true
-    merged_to_master: false
+    merged_to_master: true
   - id: "P5-08"
     name: "Run end-to-end Phase 5 validation and closeout"
     status: "not_started"
@@ -2347,7 +2351,7 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "blocked_pending_p5_07_publication_and_separate_p5_08_authorization"
+  authorization_status: "awaiting_detailed_review_and_owner_authorization"
   planning_status: "not_started"
 
 governance_baseline:
