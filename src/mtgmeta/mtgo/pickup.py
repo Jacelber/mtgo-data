@@ -250,6 +250,7 @@ def generate_candidates(
             default_flow_style=False,
         ),
         encoding="utf-8",
+        newline="\n",
     )
     base_path.write_text(
         yaml.dump(
@@ -260,6 +261,7 @@ def generate_candidates(
             default_flow_style=False,
         ),
         encoding="utf-8",
+        newline="\n",
     )
     return {
         "week": week,
@@ -360,7 +362,11 @@ def publish(
         }
     )
     published_path = output / f"{week}.json"
-    published_path.write_text(json.dumps(published, ensure_ascii=False, indent=2), encoding="utf-8")
+    published_path.write_text(
+        json.dumps(published, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+        newline="\n",
+    )
 
     state = Path(state_directory) if state_directory is not None else configured
     index_source = state / "index.json"
@@ -391,6 +397,7 @@ def publish(
             indent=2,
         ),
         encoding="utf-8",
+        newline="\n",
     )
 
     known_source = state / "known_archetypes.json"
@@ -402,6 +409,7 @@ def publish(
     known_path.write_text(
         json.dumps({"known": sorted(known)}, ensure_ascii=False, indent=2),
         encoding="utf-8",
+        newline="\n",
     )
     return {
         "week": week,
@@ -482,6 +490,7 @@ def generate_metadata(
     destination.write_text(
         json.dumps(document, ensure_ascii=False, indent=2),
         encoding="utf-8",
+        newline="\n",
     )
     return destination
 

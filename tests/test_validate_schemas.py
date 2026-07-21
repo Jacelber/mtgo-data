@@ -42,10 +42,13 @@ def test_all_declared_schemas_are_valid_and_versioned():
     assert all(schema["$schema"] == "https://json-schema.org/draft/2020-12/schema" for schema in loaded.values())
     assert loaded["formats.schema.json"]["x-schema-version"] == "1.1.0"
     assert loaded["melee-events.schema.json"]["x-schema-version"] == "3.0.0"
+    assert loaded["melee-event.schema.json"]["x-schema-version"] == "2.0.0"
     assert all(
         schema["x-schema-version"] == "1.0.0"
         for name, schema in loaded.items()
-        if name not in {"formats.schema.json", "melee-events.schema.json"}
+        if name not in {
+            "formats.schema.json", "melee-events.schema.json", "melee-event.schema.json"
+        }
     )
 
 

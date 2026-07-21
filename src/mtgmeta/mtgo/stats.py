@@ -707,6 +707,7 @@ def build_all_stats(
         destination.write_text(
             json.dumps(document, ensure_ascii=False, indent=2),
             encoding="utf-8",
+            newline="\n",
         )
         written[filename] = destination
     return written

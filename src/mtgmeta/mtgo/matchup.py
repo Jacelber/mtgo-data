@@ -166,6 +166,7 @@ def fetch_and_store_matches(
             destination.write_text(
                 json.dumps({"event_id": int(event_id), "matches": rows}, ensure_ascii=False, indent=2),
                 encoding="utf-8",
+                newline="\n",
             )
             summary["fetched"] += 1
             summary["written"].append(destination)
@@ -522,7 +523,11 @@ def build_all_matchups(
     written: dict[str, Path] = {}
     for filename, document in documents.items():
         destination = output / filename
-        destination.write_text(json.dumps(document, ensure_ascii=False, indent=2), encoding="utf-8")
+        destination.write_text(
+            json.dumps(document, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+            newline="\n",
+        )
         written[filename] = destination
     return written, statistics
 
