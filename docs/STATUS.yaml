@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "p5_05_completed_and_published"
+  current_working_branch: "codex/p5-06-melee-semantic-normalization"
+  working_branch_status: "p5_06_local_implementation_completed_awaiting_owner_acceptance"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2270,7 +2270,31 @@ phase_5_tasks:
     merged_to_master: true
   - id: "P5-06"
     name: "Normalize phases, results, and reviewed overrides"
-    status: "not_started"
+    status: "local_implementation_completed_awaiting_owner_acceptance"
+    branch: "codex/p5-06-melee-semantic-normalization"
+    base_commit: "cdc536719fe3789c11d9d55534db3e80d4365bd9"
+    reference_event_id: "434455"
+    whitelist_schema_version: "3.0.0"
+    normalized_event_schema_version: "1.0.0"
+    source_outcome_contract: "explicit_per_competitor"
+    competitor_order_used_as_result_evidence: false
+    reviewed_overrides_evidence_required: true
+    top8_lock_support_required: true
+    eligible_scope: "played_configured_constructed_swiss_only"
+    valid_output_publishable: false
+    live_fetch_performed: false
+    real_raw_archive_created: false
+    statistics_generated: false
+    public_json_changed: false
+    frontend_changed: false
+    focused_melee_tests_passed: 95
+    tests_passed: 324
+    repository_validation_passed: true
+    rule_validation_passed: true
+    schema_validation_passed: true
+    standard_quality_baseline_passed: true
+    owner_accepted: false
+    remote_publication_authorized: false
   - id: "P5-07"
     name: "Add quality gates and publication blocking"
     status: "not_started"
@@ -2280,7 +2304,7 @@ phase_5_tasks:
 
 next_approved_task:
   id: "P5-06"
-  name: "Normalize phases, results, and reviewed overrides"
+  name: "Review and accept P5-06 local implementation"
   target_paths:
     - "src/mtgmeta/melee/"
     - "tests/"
@@ -2289,8 +2313,8 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "awaiting_detailed_review_and_owner_authorization"
-  planning_status: "not_started"
+  authorization_status: "local_implementation_authorized_remote_publication_not_authorized"
+  planning_status: "local_implementation_completed"
 
 governance_baseline:
   status: "active_on_master"
@@ -2337,7 +2361,8 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P5-06 until its phase mapping, result normalization, reviewed-override, and statistical-eligibility behavior is reviewed and the project owner explicitly authorizes implementation."
+  - "Do not commit, push, open a pull request, or merge P5-06 until the project owner accepts the local implementation and separately authorizes remote publication."
+  - "Do not begin P5-07 until P5-06 is accepted and P5-07 receives a detailed review and separate owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not fetch Melee events yet."
   - "Do not generate reference-event or Paupergeddon statistics yet."

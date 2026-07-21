@@ -772,6 +772,7 @@ events:
       day2_after_round: 8
       day2_minimum_match_points: 12
       top8_lock_supported: true
+    reviewed_overrides: []
     statistics:
       default_match_scope: "all_constructed_swiss"
       constructed_game_format: "modern"
@@ -1018,6 +1019,29 @@ Each normalized match should retain:
 - exclusion reason where applicable.
 
 The source result text must not be discarded.
+
+### 11.4 Evidence-based result normalization
+
+Stored source match records may retain explicit per-competitor outcome text and
+match points in addition to competitor IDs. The parser may accept the earlier
+identity-only fixture shape for compatibility, but identity-only records cannot
+be promoted to played wins or losses by competitor order.
+
+Whitelist Schema 3.0.0 adds optional `reviewed_overrides`. Each override is
+event-scoped and must have review status `verified`, name one source match, declare whether it was played,
+provide complete participant result records, explain the correction, and cite
+at least one HTTPS source. Duplicate override IDs, duplicate match targets,
+identity mismatches, malformed played-result pairs, and unsupported Top 8 lock
+awards fail closed.
+
+The normalizer resolves phase, stage, actual game format, participant status,
+result type, points, and eligibility. Only internally consistent played results
+in a reviewed Constructed Swiss phase of the event's configured format are
+eligible for primary Constructed and matchup statistics. Draft, playoff, bye,
+intentional-draw, no-show, drop, administrative, awarded, and unknown records
+remain in normalized context but are ineligible. P5-06 output remains explicitly
+non-publishable even when no unknown values remain; P5-07 owns the final quality
+and publication gate.
 
 ---
 

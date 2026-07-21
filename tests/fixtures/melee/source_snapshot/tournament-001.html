@@ -47,7 +47,10 @@
     {
       "source_match_id": "match-source-1",
       "source_round_id": "round-source-1",
-      "competitor_source_ids": ["participant-101", "participant-202"],
+      "competitors": [
+        {"source_participant_id": "participant-101", "outcome_text": "Win", "match_points": 3},
+        {"source_participant_id": "participant-202", "outcome_text": "Loss", "match_points": 0}
+      ],
       "result_text": "2-1-0",
       "status_text": "Completed",
       "table_number": 7
@@ -55,10 +58,23 @@
     {
       "source_match_id": "match-source-4",
       "source_round_id": "round-source-4",
-      "competitor_source_ids": ["participant-101"],
+      "competitors": [
+        {"source_participant_id": "participant-101", "outcome_text": "Bye", "match_points": 3}
+      ],
       "result_text": null,
       "status_text": "Bye",
       "table_number": null
+    },
+    {
+      "source_match_id": "match-source-4-played",
+      "source_round_id": "round-source-4",
+      "competitors": [
+        {"source_participant_id": "participant-202", "outcome_text": "Win", "match_points": 3},
+        {"source_participant_id": "participant-101", "outcome_text": "Loss", "match_points": 0}
+      ],
+      "result_text": "2-0-0",
+      "status_text": "Completed",
+      "table_number": 3
     }
   ]
 }

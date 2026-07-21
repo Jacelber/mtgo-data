@@ -71,10 +71,18 @@ class SourceRound:
 
 
 @dataclass(frozen=True)
+class SourceCompetitor:
+    source_participant_id: str
+    outcome_text: str | None
+    match_points: int | None
+
+
+@dataclass(frozen=True)
 class SourceMatch:
     source_match_id: str
     source_round_id: str
     competitor_source_ids: tuple[str, ...]
+    competitor_results: tuple[SourceCompetitor, ...]
     result_text: str | None
     status_text: str | None
     table_number: int | None
@@ -320,23 +328,68 @@ def _parse_matches(value: Any, path: str) -> tuple[SourceMatch, ...]:
         data = _fields(
             item,
             item_path,
-            {"source_match_id", "source_round_id", "competitor_source_ids"},
-            {"result_text", "status_text", "table_number"},
+            {"source_match_id", "source_round_id"},
+            {"competitors", "competitor_source_ids", "result_text", "status_text", "table_number"},
         )
-        competitor_values = _list(data.get("competitor_source_ids"), f"{item_path}.competitor_source_ids")
-        competitors = tuple(
-            _string(value, f"{item_path}.competitor_source_ids[{position}]")
-            for position, value in enumerate(competitor_values)
-        )
-        if not 1 <= len(competitors) <= 2 or len(competitors) != len(set(competitors)):
+        if ("competitors" in data) == ("competitor_source_ids" in data):
             raise MeleeSourceParseError(
-                f"{item_path}.competitor_source_ids: expected one or two distinct source IDs"
+                f"{item_path}: expected exactly one of competitors or competitor_source_ids"
+            )
+        competitors: tuple[SourceCompetitor, ...]
+        if "competitors" in data:
+            parsed_competitors = []
+            for position, value in enumerate(_list(data["competitors"], f"{item_path}.competitors")):
+                competitor_path = f"{item_path}.competitors[{position}]"
+                competitor = _fields(
+                    value,
+                    competitor_path,
+                    {"source_participant_id"},
+                    {"outcome_text", "match_points"},
+                )
+                parsed_competitors.append(
+                    SourceCompetitor(
+                        source_participant_id=_string(
+                            competitor.get("source_participant_id"),
+                            f"{competitor_path}.source_participant_id",
+                        ),
+                        outcome_text=_string(
+                            competitor.get("outcome_text"),
+                            f"{competitor_path}.outcome_text",
+                            optional=True,
+                        ),
+                        match_points=_integer(
+                            competitor.get("match_points"),
+                            f"{competitor_path}.match_points",
+                            optional=True,
+                        ),
+                    )
+                )
+            competitors = tuple(parsed_competitors)
+        else:
+            competitors = tuple(
+                SourceCompetitor(
+                    source_participant_id=_string(
+                        source_id,
+                        f"{item_path}.competitor_source_ids[{position}]",
+                    ),
+                    outcome_text=None,
+                    match_points=None,
+                )
+                for position, source_id in enumerate(
+                    _list(data["competitor_source_ids"], f"{item_path}.competitor_source_ids")
+                )
+            )
+        competitor_ids = tuple(item.source_participant_id for item in competitors)
+        if not 1 <= len(competitors) <= 2 or len(competitor_ids) != len(set(competitor_ids)):
+            raise MeleeSourceParseError(
+                f"{item_path}.competitors: expected one or two distinct source IDs"
             )
         records.append(
             SourceMatch(
                 source_match_id=_string(data.get("source_match_id"), f"{item_path}.source_match_id"),
                 source_round_id=_string(data.get("source_round_id"), f"{item_path}.source_round_id"),
-                competitor_source_ids=competitors,
+                competitor_source_ids=competitor_ids,
+                competitor_results=competitors,
                 result_text=_string(data.get("result_text"), f"{item_path}.result_text", optional=True),
                 status_text=_string(data.get("status_text"), f"{item_path}.status_text", optional=True),
                 table_number=_integer(data.get("table_number"), f"{item_path}.table_number", optional=True, minimum=1),

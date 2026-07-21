@@ -35,7 +35,7 @@ class MeleeAssemblyError(ValueError):
 T = TypeVar("T")
 
 
-def _stable_id(kind: str, event_id: str, source_id: str) -> str:
+def stable_record_id(kind: str, event_id: str, source_id: str) -> str:
     payload = f"melee\0{event_id}\0{kind}\0{source_id}".encode("utf-8")
     return f"{kind}-{sha256(payload).hexdigest()}"
 
@@ -183,7 +183,7 @@ def assemble_parsed_snapshot(
         raise MeleeAssemblyError("snapshot does not contain standings participants")
 
     participant_ids = {
-        source_id: _stable_id("participant", event.id, source_id)
+        source_id: stable_record_id("participant", event.id, source_id)
         for source_id in standings_by_participant
     }
     if len(set(participant_ids.values())) != len(participant_ids):
@@ -236,10 +236,10 @@ def assemble_parsed_snapshot(
         decklists_by_participant[decklist.source_participant_id] = decklist
 
     normalized_round_ids = {
-        source_id: _stable_id("round", event.id, source_id) for source_id in rounds
+        source_id: stable_record_id("round", event.id, source_id) for source_id in rounds
     }
     normalized_match_ids = {
-        source_id: _stable_id("match", event.id, source_id) for source_id in matches
+        source_id: stable_record_id("match", event.id, source_id) for source_id in matches
     }
     if len(set(normalized_round_ids.values())) != len(normalized_round_ids):
         raise MeleeAssemblyError("stable round ID collision")
@@ -424,4 +424,5 @@ __all__ = [
     "MeleeAssemblyError",
     "assemble_parsed_snapshot",
     "assemble_raw_snapshot",
+    "stable_record_id",
 ]

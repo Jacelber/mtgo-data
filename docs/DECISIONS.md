@@ -1201,3 +1201,45 @@ Stable behavioral expectations remain explicit and independent of daily volume: 
 A legitimate automated production update does not require an accompanying manual test edit merely because dates, event totals, matchup totals, subtype observations, or Pickup weeks advanced. A clean checkout still detects non-deterministic generators, stale or internally inconsistent committed outputs, wrapper divergence, unexpected subtype identities, conflicts, invalid decks, and byte-level output differences.
 
 This decision changes test reference selection only. It does not change production code, statistical formulas, classification rules, generated data, public JSON, or source inclusion policy.
+
+---
+
+# DEC-037 — Require explicit evidence for Melee result normalization
+
+Status: `Accepted`
+
+## Context
+
+P5-05 deliberately assembled source matches with unknown result semantics. A
+source result string such as `2-1-0` does not identify the winner by itself, and
+competitor array order is not a reliable outcome contract. Exceptional records
+such as awarded wins after a Top 8 lock also require event-specific evidence.
+
+## Decision
+
+Retain explicit per-competitor source outcome text and match points when the
+stored response supplies them. Never infer a winner from competitor order.
+Accept the earlier identity-only stored fixture shape for parser compatibility,
+but leave its result unknown unless a complete evidence-backed interpretation is
+available.
+
+Whitelist Schema 3.0.0 adds event-scoped `reviewed_overrides`. An override must
+be explicitly `verified`, identify one source match, list complete source participant results and points,
+declare whether play occurred, provide a reason, and cite HTTPS evidence. A Top
+8 lock awarded win additionally requires the event's advancement configuration
+to support that procedure. Overrides cannot invent participant or match
+identities.
+
+Only consistent played win/loss or draw/draw results in the configured
+Constructed Swiss format are eligible for primary Constructed and matchup
+statistics. All other normalized types remain contextual and ineligible.
+Unknown phases, statuses, or results block quality. P5-06 always leaves
+`publishable` false; P5-07 separately decides publication readiness.
+
+## Consequences
+
+The normalized output becomes deterministic and auditable without using source
+ordering as hidden semantics. Existing Standard behavior, MTGO collection,
+classification rules, statistics, public JSON, workflows, and front-end output
+do not change. The reference Melee event remains disabled and no live fetch is
+authorized.

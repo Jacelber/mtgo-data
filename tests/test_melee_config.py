@@ -33,7 +33,8 @@ def _parse_data(data):
 def test_loads_reference_event_for_inspection_without_authorizing_fetch():
     registry = load_melee_event_registry(WHITELIST)
     event = registry.get("434455")
-    assert registry.schema_version == "2.0.0"
+    assert registry.schema_version == "3.0.0"
+    assert event.reviewed_overrides == ()
     assert event.format == "modern"
     assert event.structure == "mixed"
     assert event.enabled is False
@@ -147,3 +148,78 @@ def test_returned_models_are_immutable_and_missing_files_are_descriptive(tmp_pat
         registry.events[0].enabled = True  # type: ignore[misc]
     with pytest.raises(MeleeConfigError, match="cannot read whitelist"):
         load_melee_event_registry(tmp_path / "missing.yaml")
+
+
+def test_reviewed_overrides_require_evidence_and_consistent_results():
+    data = _source_data()
+    data["events"][0]["reviewed_overrides"] = [
+        {
+            "id": "official_correction",
+            "source_match_id": "match-1",
+            "review_status": "verified",
+            "played": False,
+            "competitors": [
+                {
+                    "source_participant_id": "player-1",
+                    "result_type": "awarded_win_top8_lock",
+                    "match_points": 3,
+                }
+            ],
+            "reason": "Official Top 8 lock award.",
+            "source_evidence": ["https://magic.gg/example"],
+        }
+    ]
+    event = _parse_data(data).events[0]
+    assert event.reviewed_overrides[0].id == "official_correction"
+
+    data["events"][0]["reviewed_overrides"][0]["played"] = True
+    with pytest.raises(MeleeConfigError, match="played must agree"):
+        _parse_data(data)
+
+
+def test_top8_lock_override_requires_explicit_event_support():
+    data = _source_data()
+    data["events"][0]["reviewed_overrides"] = [
+        {
+            "id": "official_correction",
+            "source_match_id": "match-1",
+            "review_status": "verified",
+            "played": False,
+            "competitors": [
+                {
+                    "source_participant_id": "player-1",
+                    "result_type": "awarded_win_top8_lock",
+                    "match_points": 3,
+                }
+            ],
+            "reason": "Official Top 8 lock award.",
+            "source_evidence": ["https://magic.gg/example"],
+        }
+    ]
+    data["events"][0]["advancement"]["top8_lock_supported"] = False
+    with pytest.raises(MeleeConfigError, match="require explicit advancement support"):
+        _parse_data(data)
+
+
+def test_reviewed_override_requires_verified_status_and_consistent_played_points():
+    data = _source_data()
+    override = {
+        "id": "official_correction",
+        "source_match_id": "match-1",
+        "review_status": "pending",
+        "played": True,
+        "competitors": [
+            {"source_participant_id": "player-1", "result_type": "played_win", "match_points": 3},
+            {"source_participant_id": "player-2", "result_type": "played_loss", "match_points": 0},
+        ],
+        "reason": "Official correction.",
+        "source_evidence": ["https://magic.gg/example"],
+    }
+    data["events"][0]["reviewed_overrides"] = [override]
+    with pytest.raises(MeleeConfigError, match="must be verified"):
+        _parse_data(data)
+
+    override["review_status"] = "verified"
+    override["competitors"][0]["match_points"] = 0
+    with pytest.raises(MeleeConfigError, match="points must match"):
+        _parse_data(data)

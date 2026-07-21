@@ -284,9 +284,9 @@ def test_raw_request_contract_rejects_cross_event_and_duplicate_request_ids():
         parse_melee_event_text(yaml.safe_dump(data, sort_keys=False))
 
 
-def test_whitelist_v2_accepts_explicit_decklist_but_rejects_wrong_resource_path():
+def test_whitelist_v3_accepts_explicit_decklist_but_rejects_wrong_resource_path():
     data = yaml.safe_load(WHITELIST.read_text(encoding="utf-8"))
-    assert data["schema_version"] == "2.0.0"
+    assert data["schema_version"] == "3.0.0"
     event = data["events"][0]
     event["raw_requests"].append(
         {
