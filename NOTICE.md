@@ -10,6 +10,12 @@ Project-authored documentation and archetype classification rules are available 
 
 The CC BY 4.0 grant applies only to original documentation and classification-rule authorship contributed to this project. It does not apply to third-party data or intellectual property described below.
 
+## Third-party classification definitions
+
+The Modern classification definitions in `my_archetypes/modern.yaml` are adapted from Joan G.E., [`j6e/mtg-meta-analyzer`](https://github.com/j6e/mtg-meta-analyzer), file `data/archetypes/modern.yaml` at commit `0ecd26bd734cedc6c40e7c753115f796613a32ba`. The source classification content is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
+This project changed the source material by converting it to the shared versioned rule schema, adding stable archetype and rule IDs, encoding the source selection behavior as explicit priorities, declaring mainboard-only card zones, retaining unmatched decks as explicit Unknown results, and omitting the source corpus-dependent centroid fallback. Detailed provenance and compatibility evidence are recorded in `docs/audits/P6-01.md` and DEC-039.
+
 ## Tournament and source data
 
 This repository contains or derives information from third-party tournament sources, including Magic Online tournament results and, in planned product areas, selected Melee event records. It may include tournament metadata, standings, match results, decklists, player or account identifiers published by a source, and derived aggregate statistics.

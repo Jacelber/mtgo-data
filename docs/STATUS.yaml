@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p5-phase5-publication-record"
-  working_branch_status: "phase_5_completed_and_tagged"
+  current_working_branch: "codex/p6-01-modern-rule-baseline"
+  working_branch_status: "p6_01_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -55,13 +55,13 @@ authoritative_documents:
       authoritative: false
 
 current_phase:
-  id: 5
-  name: "Melee ingestion and normalized event model"
-  status: "completed"
-  started_on: "2026-07-20"
-  completed_on: "2026-07-21"
-  recovery_tag: "phase-5-melee-ingestion-baseline"
-  objective: "Implement safe, reproducible fetching and normalization for explicitly whitelisted Melee events while keeping raw and normalized data separate."
+  id: 6
+  name: "Modern classification and MTGO Modern"
+  status: "in_progress"
+  started_on: "2026-07-21"
+  completed_on: null
+  recovery_tag: null
+  objective: "Add Modern as the first new format using the generalized MTGO pipeline and shared classifier."
   production_changes_allowed: false
   feature_development_allowed: false
 
@@ -2422,18 +2422,104 @@ phase_5_tasks:
     phase_tag_target: "f30eb79e651d4ee2d6351872c0a70912c146ec4d"
     phase_closeout_blocked: false
 
+phase_6_tasks:
+  - id: "P6-01"
+    name: "Prepare the Modern archetype rule baseline"
+    status: "owner_accepted_remote_publication_authorized"
+    branch: "codex/p6-01-modern-rule-baseline"
+    base_commit: "cb1a510dc8e03472ea16b18c95630eac0ee3d6fe"
+    decision: "DEC-039"
+    audit: "docs/audits/P6-01.md"
+    upstream_repository: "https://github.com/j6e/mtg-meta-analyzer"
+    upstream_commit: "0ecd26bd734cedc6c40e7c753115f796613a32ba"
+    upstream_rule_path: "data/archetypes/modern.yaml"
+    upstream_rule_date: "2026-07-08"
+    upstream_content_license: "CC BY 4.0"
+    upstream_parent_archetypes: 38
+    shared_rules: 38
+    explicit_unique_priorities: true
+    priority_semantics: "greatest_signature_condition_count_then_earliest_upstream_order"
+    mainboard_only: true
+    centroid_fallback_migrated: false
+    unmatched_result: "Unknown"
+    new_archetypes_added: false
+    subtypes_defined: 0
+    subtype_extension_deferred_to: "P6-03"
+    source_snapshot_commit: "cb1a510dc8e03472ea16b18c95630eac0ee3d6fe"
+    eligible_source_format: "CMODERN"
+    eligible_event_files: 181
+    excluded_premodern_event_files: 2
+    excluded_premodern_records: 64
+    frozen_records: 5792
+    frozen_date_min: "2026-04-01"
+    frozen_date_max: "2026-07-20"
+    frozen_fixture_deidentified: true
+    classified_records: 5157
+    unknown_records: 635
+    multiple_rule_match_records: 324
+    maximum_matches_per_deck: 3
+    parent_archetype_differences: 0
+    focused_tests_passed: 7
+    tests_passed: 354
+    modern_rule_validation_passed: true
+    repository_validation_passed: true
+    standard_rule_validation_passed: true
+    schema_validation_passed: true
+    standard_quality_baseline_passed: true
+    format_registry_changed: false
+    modern_product_enabled: false
+    production_classification_run: false
+    statistics_generated: false
+    public_json_changed: false
+    workflow_changed: false
+    frontend_changed: false
+    owner_local_implementation_authorized: true
+    owner_acceptance: "accepted"
+    remote_publication_authorized: true
+  - id: "P6-02"
+    name: "Complete Modern shared-classifier integration"
+    status: "authorized_pending_p6_01_publication"
+    depends_on: "P6-01 accepted and published"
+    fixed_parent_baseline: 38
+    taxonomy_changes_allowed: false
+    subtype_changes_allowed: false
+    scope:
+      - "Connect the P6-01 Modern rule set to generalized shared classification and diagnostic paths."
+      - "Remove remaining Standard-only assumptions encountered on the Modern classification path."
+      - "Add integration and classification-report contract tests."
+      - "Preserve every P6-01 frozen parent-archetype result."
+    product_enablement_allowed: false
+    statistics_allowed: false
+    workflow_changes_allowed: false
+    frontend_changes_allowed: false
+    owner_local_implementation_authorized: true
+  - id: "P6-03"
+    name: "Review and extend the Modern taxonomy"
+    status: "planned_not_authorized"
+    depends_on: "P6-02 accepted and published"
+    baseline_comparison: "P6-01"
+    scope:
+      - "Review Unknown decks, overlapping matches, conflicts, and representative current lists."
+      - "Propose and test new or revised rules and parent archetypes where evidence supports them."
+      - "Add optional subtypes where distinct rule paths share one approved parent archetype."
+      - "Report every parent and subtype difference from the P6-01 compatibility baseline."
+    product_enablement_allowed: false
+    statistics_allowed: false
+    workflow_changes_allowed: false
+    frontend_changes_allowed: false
+
 next_approved_task:
-  id: "P6-01"
-  name: "Prepare the Modern archetype rule baseline"
+  id: "P6-02"
+  name: "Complete Modern shared-classifier integration"
   target_paths:
-    - "my_archetypes/modern.yaml"
+    - "src/mtgmeta/"
     - "tests/"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   production_change: false
-  requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  planning_status: "requires_detailed_predevelopment_review"
+  requires_user_confirmation: false
+  authorization_status: "local_implementation_authorized"
+  planning_status: "ready_after_p6_01_publication"
 
 governance_baseline:
   status: "active_on_master"
@@ -2484,7 +2570,7 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not retain or commit real P5-08 participant, match, or decklist data."
   - "Do not reuse cookies or browser sessions or bypass access controls."
-  - "Do not begin P6-01 or any Phase 6 implementation without explicit owner authorization."
+  - "Do not begin P6-03 without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not generate reference-event or Paupergeddon statistics yet."
   - "Do not add new Constructed formats yet."

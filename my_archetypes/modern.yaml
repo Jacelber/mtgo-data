@@ -1,0 +1,667 @@
+# Adapted from Joan G.E., j6e/mtg-meta-analyzer, data/archetypes/modern.yaml
+# at commit 0ecd26bd734cedc6c40e7c753115f796613a32ba (CC BY 4.0).
+# Changes: shared schema, stable IDs, explicit priorities and main zones, explicit Unknown,
+# and omission of the upstream corpus-dependent centroid fallback.
+schema_version: 1.0.0
+format: modern
+archetypes:
+- id: mardu-energy
+  name: Mardu Energy
+  priority: 4380
+  rules:
+  - id: mardu-energy-primary
+    priority: 4380
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ajani, Nacatl Pariah
+        zone: main
+        min_count: 3
+      - card: Guide of Souls
+        zone: main
+        min_count: 3
+      - card: Ocelot Pride
+        zone: main
+        min_count: 3
+      - card: Orcish Bowmasters
+        zone: main
+        min_count: 2
+- id: boros-energy
+  name: Boros Energy
+  priority: 5370
+  rules:
+  - id: boros-energy-primary
+    priority: 5370
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ajani, Nacatl Pariah
+        zone: main
+        min_count: 3
+      - card: Guide of Souls
+        zone: main
+        min_count: 3
+      - card: Ocelot Pride
+        zone: main
+        min_count: 3
+      - card: Quantum Riddler
+        zone: main
+        exact_count: 0
+      - card: Orcish Bowmasters
+        zone: main
+        exact_count: 0
+- id: jeskai-energy
+  name: Jeskai Energy
+  priority: 3360
+  rules:
+  - id: jeskai-energy-primary
+    priority: 3360
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ajani, Nacatl Pariah
+        zone: main
+        min_count: 3
+      - card: Guide of Souls
+        zone: main
+        min_count: 3
+      - card: Quantum Riddler
+        zone: main
+        min_count: 3
+- id: izzet-affinity
+  name: Izzet Affinity
+  priority: 4350
+  rules:
+  - id: izzet-affinity-primary
+    priority: 4350
+    subtype_id: null
+    conditions:
+      all:
+      - card: Mox Opal
+        zone: main
+        min_count: 3
+      - card: Spirebluff Canal
+        zone: main
+        min_count: 3
+      - card: Urza's Saga
+        zone: main
+        min_count: 3
+      - card: Mishra's Bauble
+        zone: main
+        min_count: 3
+- id: izzet-steel-cutter
+  name: Izzet Steel-Cutter
+  priority: 3340
+  rules:
+  - id: izzet-steel-cutter-primary
+    priority: 3340
+    subtype_id: null
+    conditions:
+      all:
+      - card: Emry, Lurker of the Loch
+        zone: main
+        min_count: 3
+      - card: Cori-Steel Cutter
+        zone: main
+        min_count: 3
+      - card: Mishra's Bauble
+        zone: main
+        min_count: 3
+- id: izzet-prowess
+  name: Izzet Prowess
+  priority: 4330
+  rules:
+  - id: izzet-prowess-primary
+    priority: 4330
+    subtype_id: null
+    conditions:
+      all:
+      - card: Slickshot Show-Off
+        zone: main
+        min_count: 3
+      - card: Cori-Steel Cutter
+        zone: main
+        min_count: 3
+      - card: Preordain
+        zone: main
+        min_count: 3
+      - card: Expressive Iteration
+        zone: main
+        min_count: 3
+- id: amulet-titan
+  name: Amulet Titan
+  priority: 2320
+  rules:
+  - id: amulet-titan-primary
+    priority: 2320
+    subtype_id: null
+    conditions:
+      all:
+      - card: Primeval Titan
+        zone: main
+        min_count: 3
+      - card: Amulet of Vigor
+        zone: main
+        min_count: 4
+- id: esper-blink
+  name: Esper Blink
+  priority: 3310
+  rules:
+  - id: esper-blink-primary
+    priority: 3310
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+      - card: Quantum Riddler
+        zone: main
+        min_count: 3
+- id: azorius-blink
+  name: Azorius Blink
+  priority: 6300
+  rules:
+  - id: azorius-blink-primary
+    priority: 6300
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ephemerate
+        zone: main
+        min_count: 3
+      - card: Quantum Riddler
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        exact_count: 0
+      - card: Ajani, Nacatl Pariah
+        zone: main
+        exact_count: 0
+      - card: Galvanic Discharge
+        zone: main
+        exact_count: 0
+      - card: Goryo's Vengeance
+        zone: main
+        exact_count: 0
+- id: jeskai-blink
+  name: Jeskai Blink
+  priority: 2290
+  rules:
+  - id: jeskai-blink-primary
+    priority: 2290
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Consign to Memory
+        zone: main
+        min_count: 3
+- id: boros-ponza
+  name: Boros Ponza
+  priority: 3280
+  rules:
+  - id: boros-ponza-primary
+    priority: 3280
+    subtype_id: null
+    conditions:
+      all:
+      - card: Erode
+        zone: main
+        min_count: 3
+      - card: Wrath of the Skies
+        zone: main
+        min_count: 3
+      - card: Price of Freedom
+        zone: main
+        min_count: 3
+- id: domain-zoo
+  name: Domain Zoo
+  priority: 3270
+  rules:
+  - id: domain-zoo-primary
+    priority: 3270
+    subtype_id: null
+    conditions:
+      all:
+      - card: Leyline of the Guildpact
+        zone: main
+        min_count: 3
+      - card: Leyline Binding
+        zone: main
+        min_count: 3
+      - card: Scion of Draco
+        zone: main
+        min_count: 3
+- id: mono-blue-belcher
+  name: Mono-Blue Belcher
+  priority: 2260
+  rules:
+  - id: mono-blue-belcher-primary
+    priority: 2260
+    subtype_id: null
+    conditions:
+      all:
+      - card: Goblin Charbelcher
+        zone: main
+        min_count: 3
+      - card: Tameshi, Reality Architect
+        zone: main
+        min_count: 3
+- id: boros-belcher
+  name: Boros Belcher
+  priority: 2250
+  rules:
+  - id: boros-belcher-primary
+    priority: 2250
+    subtype_id: null
+    conditions:
+      all:
+      - card: Goblin Charbelcher
+        zone: main
+        min_count: 3
+      - card: Legion Leadership
+        zone: main
+        min_count: 3
+- id: simic-ritual
+  name: Simic Ritual
+  priority: 3240
+  rules:
+  - id: simic-ritual-primary
+    priority: 3240
+    subtype_id: null
+    conditions:
+      all:
+      - card: Birthing Ritual
+        zone: main
+        min_count: 3
+      - card: Coiling Oracle
+        zone: main
+        min_count: 3
+      - card: Shardless Agent
+        zone: main
+        min_count: 3
+- id: sam-combo
+  name: Sam Combo
+  priority: 2230
+  rules:
+  - id: sam-combo-primary
+    priority: 2230
+    subtype_id: null
+    conditions:
+      all:
+      - card: Samwise Gamgee
+        zone: main
+        min_count: 3
+      - card: Cauldron Familiar
+        zone: main
+        min_count: 3
+- id: esper-reanimator
+  name: Esper Reanimator
+  priority: 3220
+  rules:
+  - id: esper-reanimator-primary
+    priority: 3220
+    subtype_id: null
+    conditions:
+      all:
+      - card: Atraxa, Grand Unifier
+        zone: main
+        min_count: 3
+      - card: Psychic Frog
+        zone: main
+        min_count: 3
+      - card: Goryo's Vengeance
+        zone: main
+        min_count: 3
+- id: golgari-yawgmoth
+  name: Golgari Yawgmoth
+  priority: 2210
+  rules:
+  - id: golgari-yawgmoth-primary
+    priority: 2210
+    subtype_id: null
+    conditions:
+      all:
+      - card: Yawgmoth, Thran Physician
+        zone: main
+        min_count: 3
+      - card: Grist, the Hunger Tide
+        zone: main
+        min_count: 1
+- id: mono-green-broodscale-combo
+  name: Mono-Green Broodscale Combo
+  priority: 3200
+  rules:
+  - id: mono-green-broodscale-combo-primary
+    priority: 3200
+    subtype_id: null
+    conditions:
+      all:
+      - card: Basking Broodscale
+        zone: main
+        min_count: 3
+      - card: Devourer of Destiny
+        zone: main
+        min_count: 3
+      - card: Blade of the Bloodchief
+        zone: main
+        min_count: 2
+- id: gruul-broodscale-combo
+  name: Gruul Broodscale Combo
+  priority: 3190
+  rules:
+  - id: gruul-broodscale-combo-primary
+    priority: 3190
+    subtype_id: null
+    conditions:
+      all:
+      - card: Basking Broodscale
+        zone: main
+        min_count: 3
+      - card: Blade of the Bloodchief
+        zone: main
+        min_count: 3
+      - card: Devourer of Destiny
+        zone: main
+        exact_count: 0
+- id: eldrazi-tron
+  name: Eldrazi Tron
+  priority: 5180
+  rules:
+  - id: eldrazi-tron-primary
+    priority: 5180
+    subtype_id: null
+    conditions:
+      all:
+      - card: Thought-Knot Seer
+        zone: main
+        min_count: 3
+      - card: Urza's Mine
+        zone: main
+        min_count: 4
+      - card: Urza's Tower
+        zone: main
+        min_count: 4
+      - card: Ugin, Eye of the Storms
+        zone: main
+        min_count: 1
+      - card: Karn, the Great Creator
+        zone: main
+        min_count: 1
+- id: mono-black-eldrazi
+  name: Mono-Black Eldrazi
+  priority: 3170
+  rules:
+  - id: mono-black-eldrazi-primary
+    priority: 3170
+    subtype_id: null
+    conditions:
+      all:
+      - card: Thought-Knot Seer
+        zone: main
+        min_count: 3
+      - card: Urza's Saga
+        zone: main
+        min_count: 3
+      - card: Kozilek's Command
+        zone: main
+        min_count: 3
+- id: eldrazi-ramp
+  name: Eldrazi Ramp
+  priority: 3160
+  rules:
+  - id: eldrazi-ramp-primary
+    priority: 3160
+    subtype_id: null
+    conditions:
+      all:
+      - card: Sowing Mycospawn
+        zone: main
+        min_count: 3
+      - card: Ugin's Labyrinth
+        zone: main
+        min_count: 3
+      - card: Eldrazi Temple
+        zone: main
+        min_count: 3
+- id: gruul-eldrazi-aggro
+  name: Gruul Eldrazi Aggro
+  priority: 3150
+  rules:
+  - id: gruul-eldrazi-aggro-primary
+    priority: 3150
+    subtype_id: null
+    conditions:
+      all:
+      - card: Eldrazi Linebreaker
+        zone: main
+        min_count: 3
+      - card: Forest
+        zone: main
+        min_count: 1
+      - card: Mountain
+        zone: main
+        min_count: 1
+- id: ruby-storm
+  name: Ruby Storm
+  priority: 2140
+  rules:
+  - id: ruby-storm-primary
+    priority: 2140
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ral, Monsoon Mage
+        zone: main
+        min_count: 3
+      - card: Ruby Medallion
+        zone: main
+        min_count: 3
+- id: living-end
+  name: Living End
+  priority: 1130
+  rules:
+  - id: living-end-primary
+    priority: 1130
+    subtype_id: null
+    conditions:
+      all:
+      - card: Living End
+        zone: main
+        min_count: 3
+- id: dimir-midrange
+  name: Dimir Midrange
+  priority: 2120
+  rules:
+  - id: dimir-midrange-primary
+    priority: 2120
+    subtype_id: null
+    conditions:
+      all:
+      - card: Psychic Frog
+        zone: main
+        min_count: 3
+      - card: Fatal Push
+        zone: main
+        min_count: 3
+- id: dimir-mill
+  name: Dimir Mill
+  priority: 2110
+  rules:
+  - id: dimir-mill-primary
+    priority: 2110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Hedron Crab
+        zone: main
+        min_count: 3
+      - card: Archive Trap
+        zone: main
+        min_count: 3
+- id: simic-neoform
+  name: Simic Neoform
+  priority: 1100
+  rules:
+  - id: simic-neoform-primary
+    priority: 1100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Neoform
+        zone: main
+        min_count: 3
+- id: golgari-persist
+  name: Golgari Persist
+  priority: 2090
+  rules:
+  - id: golgari-persist-primary
+    priority: 2090
+    subtype_id: null
+    conditions:
+      all:
+      - card: Eyetwitch
+        zone: main
+        min_count: 3
+      - card: Persist
+        zone: main
+        min_count: 3
+- id: grixis-reanimator
+  name: Grixis Reanimator
+  priority: 3080
+  rules:
+  - id: grixis-reanimator-primary
+    priority: 3080
+    subtype_id: null
+    conditions:
+      all:
+      - card: Abhorrent Oculus
+        zone: main
+        min_count: 2
+      - card: Archon of Cruelty
+        zone: main
+        min_count: 1
+      - card: Faithless Looting
+        zone: main
+        min_count: 3
+- id: arclight-phoenix
+  name: Arclight Phoenix
+  priority: 2070
+  rules:
+  - id: arclight-phoenix-primary
+    priority: 2070
+    subtype_id: null
+    conditions:
+      all:
+      - card: Arclight Phoenix
+        zone: main
+        min_count: 3
+      - card: Creeping Chill
+        zone: main
+        min_count: 3
+- id: burn
+  name: Burn
+  priority: 2060
+  rules:
+  - id: burn-primary
+    priority: 2060
+    subtype_id: null
+    conditions:
+      all:
+      - card: Boltwave
+        zone: main
+        min_count: 3
+      - card: Lightning Bolt
+        zone: main
+        min_count: 4
+- id: jeskai-control
+  name: Jeskai Control
+  priority: 3050
+  rules:
+  - id: jeskai-control-primary
+    priority: 3050
+    subtype_id: null
+    conditions:
+      all:
+      - card: Orim's Chant
+        zone: main
+        min_count: 2
+      - card: Wrath of the Skies
+        zone: main
+        min_count: 2
+      - card: Galvanic Discharge
+        zone: main
+        min_count: 2
+- id: azorius-control
+  name: Azorius Control
+  priority: 4040
+  rules:
+  - id: azorius-control-primary
+    priority: 4040
+    subtype_id: null
+    conditions:
+      all:
+      - card: Teferi, Time Raveler
+        zone: main
+        min_count: 2
+      - card: Isochron Scepter
+        zone: main
+        min_count: 1
+      - card: Orim's Chant
+        zone: main
+        min_count: 1
+      - card: Galvanic Discharge
+        zone: main
+        exact_count: 0
+- id: mono-black-midrange
+  name: Mono-Black Midrange
+  priority: 2030
+  rules:
+  - id: mono-black-midrange-primary
+    priority: 2030
+    subtype_id: null
+    conditions:
+      all:
+      - card: Necrodominance
+        zone: main
+        min_count: 3
+      - card: Boggart Trawler
+        zone: main
+        min_count: 3
+- id: mono-blue-merfolk
+  name: Mono-Blue Merfolk
+  priority: 1020
+  rules:
+  - id: mono-blue-merfolk-primary
+    priority: 1020
+    subtype_id: null
+    conditions:
+      all:
+      - card: Lord of Atlantis
+        zone: main
+        min_count: 3
+- id: jund-sagavan
+  name: Jund Sagavan
+  priority: 3010
+  rules:
+  - id: jund-sagavan-primary
+    priority: 3010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Wrenn and Six
+        zone: main
+        min_count: 1
+      - card: Ragavan, Nimble Pilferer
+        zone: main
+        min_count: 3
+      - card: Urza's Saga
+        zone: main
+        min_count: 3
