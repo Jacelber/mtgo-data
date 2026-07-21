@@ -54,6 +54,18 @@ The complete pytest suite is a clean-checkout gate. Tests marked `committed_base
 
 The baseline file is a temporary workflow artifact and must not be committed. Candidate validation permits only the declared MTGO generated-data scope, rejects deletions and cross-product writes, validates changed documents and dynamic count deltas, and runs before staging or publication.
 
+## Melee raw-response client
+
+Phase 5 provides a separately controlled raw-response client for explicitly enabled events in `configs/melee_events.yaml`. The command defaults to a zero-side-effect dry run; live requests additionally require the explicit `--execute` flag:
+
+```powershell
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455 --execute
+```
+
+The reference event `434455` is currently disabled, so both forms reject it before network or filesystem activity. Enabling an event and executing a live fetch require separate project-owner authorization. Completed raw snapshots use `data_raw/melee/<event_id>/<UTC-snapshot>/`; re-fetching creates a new snapshot instead of overwriting prior source evidence.
+
 ## Format-aware MTGO commands
 
 The production MTGO pipeline uses one explicit command entry point. Set `PYTHONPATH` to `src` when running it from a source checkout:

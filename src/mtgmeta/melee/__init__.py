@@ -4,7 +4,7 @@ Phase 5 starts with schemas and stored fixtures. Importing this package performs
 no network access and does not authorize fetching or publication.
 """
 
-WHITELIST_SCHEMA_VERSION = "1.0.0"
+WHITELIST_SCHEMA_VERSION = "2.0.0"
 NORMALIZED_EVENT_SCHEMA_VERSION = "1.0.0"
 
 from .config import (
@@ -12,6 +12,7 @@ from .config import (
     MeleeConfigError,
     MeleeEventDefinition,
     MeleeEventRegistry,
+    MeleeRawRequestDefinition,
     UnknownMeleeEventError,
     load_melee_event_registry,
 )
@@ -23,6 +24,7 @@ __all__ = [
     "MeleeConfigError",
     "MeleeEventDefinition",
     "MeleeEventRegistry",
+    "MeleeRawRequestDefinition",
     "UnknownMeleeEventError",
     "load_melee_event_registry",
 ]

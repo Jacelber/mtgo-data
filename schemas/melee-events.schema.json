@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-events.schema.json",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "2.0.0",
   "title": "Manually approved Melee event whitelist",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "events"],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"const": "2.0.0"},
     "events": {
       "type": "array",
       "minItems": 1,
@@ -53,7 +53,7 @@
       "additionalProperties": false,
       "required": [
         "id", "url", "name", "date", "format", "series", "structure",
-        "enabled", "review_status", "tabletop", "team_event", "mixed_format",
+        "enabled", "review_status", "tabletop", "team_event", "mixed_format", "raw_requests",
         "include", "phases", "statistics", "source_evidence", "special_handling", "notes"
       ],
       "properties": {
@@ -82,6 +82,35 @@
         "tabletop": {"const": true},
         "team_event": {"const": false},
         "mixed_format": {"type": "boolean"},
+        "raw_requests": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "resource_type", "url", "content_type"],
+            "properties": {
+              "id": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+              "resource_type": {"enum": ["tournament", "decklist"]},
+              "url": {
+                "type": "string",
+                "pattern": "^https://melee\\.gg/(Tournament/View/[1-9][0-9]*|Decklist/View/[1-9][0-9]*)(\\?[^#]*)?$"
+              },
+              "content_type": {"enum": ["html", "json"]},
+              "pagination": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["parameter", "start_page", "max_pages"],
+                "properties": {
+                  "parameter": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_]*$"},
+                  "start_page": {"type": "integer", "minimum": 1},
+                  "max_pages": {"type": "integer", "minimum": 1, "maximum": 100}
+                }
+              }
+            }
+          }
+        },
         "include": {
           "type": "object",
           "additionalProperties": false,
