@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p5-08-phase5-closeout"
-  working_branch_status: "p5_08_accepted_publication_authorized"
+  current_working_branch: "codex/p5-phase5-publication-record"
+  working_branch_status: "phase_5_completed_and_tagged"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,8 +57,10 @@ authoritative_documents:
 current_phase:
   id: 5
   name: "Melee ingestion and normalized event model"
-  status: "in_progress"
+  status: "completed"
   started_on: "2026-07-20"
+  completed_on: "2026-07-21"
+  recovery_tag: "phase-5-melee-ingestion-baseline"
   objective: "Implement safe, reproducible fetching and normalization for explicitly whitelisted Melee events while keeping raw and normalized data separate."
   production_changes_allowed: false
   feature_development_allowed: false
@@ -2348,7 +2350,7 @@ phase_5_tasks:
     merged_to_master: true
   - id: "P5-08"
     name: "Run end-to-end Phase 5 validation and closeout"
-    status: "accepted_publication_authorized"
+    status: "completed_and_published"
     branch: "codex/p5-08-phase5-closeout"
     base_commit: "adc69a2aec783b7591980fabfe3f0faa0a0e5d87"
     reference_event_id: "434455"
@@ -2410,22 +2412,28 @@ phase_5_tasks:
     remote_publication_authorized: true
     phase_tag_authorized: true
     phase_tag: "phase-5-melee-ingestion-baseline"
+    implementation_commit: "1cdb06834d2c40b91b660b87a026a8f0fb08ecb4"
+    pull_request: 77
+    merge_commit: "f30eb79e651d4ee2d6351872c0a70912c146ec4d"
+    merged_on: "2026-07-21"
+    remote_repository_validation_passed: true
+    phase_tag_published: true
+    phase_tag_object: "e28576da99880a9a862c3c7a7d467bae01328516"
+    phase_tag_target: "f30eb79e651d4ee2d6351872c0a70912c146ec4d"
     phase_closeout_blocked: false
 
 next_approved_task:
-  id: "P5-08"
-  name: "Publish the accepted P5-08 closeout and Phase 5 tag"
+  id: "P6-01"
+  name: "Prepare the Modern archetype rule baseline"
   target_paths:
-    - "src/mtgmeta/melee/"
+    - "my_archetypes/modern.yaml"
     - "tests/"
-    - "schemas/"
-    - "docs/audits/"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "remote_publication_and_phase_tag_authorized"
-  planning_status: "accepted_publication_in_progress"
+  authorization_status: "not_authorized"
+  planning_status: "requires_detailed_predevelopment_review"
 
 governance_baseline:
   status: "active_on_master"
@@ -2469,12 +2477,14 @@ delegated_local_execution_governance:
     status: "completed"
   phase_4:
     status: "completed"
+  phase_5:
+    status: "completed"
   completes_p1_06: true
 
 prohibited_next_actions:
   - "Do not retain or commit real P5-08 participant, match, or decklist data."
   - "Do not reuse cookies or browser sessions or bypass access controls."
-  - "Do not begin Phase 6 until P5-08 publication and the authorized Phase 5 tag are confirmed."
+  - "Do not begin P6-01 or any Phase 6 implementation without explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not generate reference-event or Paupergeddon statistics yet."
   - "Do not add new Constructed formats yet."
