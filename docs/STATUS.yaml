@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "p5_04_completed_and_published"
+  current_working_branch: "codex/p5-05-melee-event-assembler"
+  working_branch_status: "p5_05_owner_accepted_and_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2243,7 +2243,27 @@ phase_5_tasks:
     merged_to_master: true
   - id: "P5-05"
     name: "Assemble normalized Melee events"
-    status: "not_started"
+    status: "owner_accepted_and_publication_authorized"
+    branch: "codex/p5-05-melee-event-assembler"
+    base_commit: "c3728c1fd71478ba434dc2960fc8e98c65037ff2"
+    reference_event_id: "434455"
+    normalized_event_schema_version: "1.0.0"
+    stable_identity_scope: "single_event"
+    participant_identity_source: "source_participant_id"
+    display_name_used_as_identity: false
+    source_page_order_independent: true
+    cross_resource_references_fail_closed: true
+    unresolved_semantics_deferred_to_p5_06: true
+    assembled_quality_status: "blocked"
+    assembled_publishable: false
+    live_fetch_performed: false
+    real_raw_archive_created: false
+    statistics_generated: false
+    focused_melee_tests_passed: 68
+    tests_passed: 312
+    owner_accepted: true
+    remote_publication_authorized: true
+    merged_to_master: false
   - id: "P5-06"
     name: "Normalize phases, results, and reviewed overrides"
     status: "not_started"
@@ -2255,8 +2275,8 @@ phase_5_tasks:
     status: "not_started"
 
 next_approved_task:
-  id: "P5-05"
-  name: "Assemble normalized Melee events"
+  id: "P5-06"
+  name: "Normalize phases, results, and reviewed overrides"
   target_paths:
     - "src/mtgmeta/melee/"
     - "tests/"
@@ -2313,7 +2333,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P5-05 until its participant-linking, cross-resource assembly, stable-identity, and normalized-event output behavior is reviewed and the project owner explicitly authorizes implementation."
+  - "Do not begin P5-06 until its phase mapping, result normalization, reviewed-override, and statistical-eligibility behavior is reviewed and the project owner explicitly authorizes implementation."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not fetch Melee events yet."
   - "Do not generate reference-event or Paupergeddon statistics yet."
