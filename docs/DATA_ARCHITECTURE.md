@@ -888,21 +888,28 @@ For example:
 data_raw/melee/434455/
 ```
 
-Recommended files include:
+One immutable collection snapshot uses numbered source files plus a manifest:
 
 ```text
-tournament.html
-standings.json
-rounds.json
-matches.json
-decklists.json
-fetch_meta.json
+<utc-timestamp>-<sequence>/
+  manifest.json
+  tournament-001.html
+  standings-<round_id>-<page>.json
+  matches-<round_id>-<page>.json
+  decklist-<decklist_guid>.json
 ```
 
-If source endpoints require multiple pages, the implementation may store either:
+Raw manifest `2.0.0` records each response's method, URL, page, content metadata,
+byte count, SHA-256, request-body SHA-256 for DataTables POSTs, and applicable
+source round, participant, and decklist identity. Parsers retain read
+compatibility with stored manifest `1.0.0` fixtures.
 
-- one combined raw response preserving source rows; or
-- numbered source pages with a manifest.
+Complete event collection begins from the exact whitelisted tournament page,
+discovers completed round IDs there, paginates the public standings and match
+DataTables endpoints, and follows only decklist GUIDs exposed by the primary
+standings. It must remain sequential and rate-limited and must reject redirects,
+cross-host or unexpected paths, changing page totals, unsafe identities, and
+configured response, record, or byte limits.
 
 ### 10.1 Raw-data requirements
 
@@ -1042,9 +1049,15 @@ intentional-draw, no-show, drop, administrative, awarded, and unknown records
 remain in normalized context but are ineligible. P5-06 output remains explicitly
 non-publishable until it passes the separate quality and publication boundary.
 
+Participant status `disqualified` remains distinct from an ordinary drop. All
+source records for that participant remain normalized, but every match involving
+them is excluded as a complete match unit from Constructed win-rate and matchup
+eligibility. The match evidence records the exclusion reason, and the quality
+gate emits one non-blocking participant-level warning.
+
 ### 11.5 Quality and publication boundary
 
-Normalized Melee event Schema 2.0.0 tightens the relationship among played
+Normalized Melee event Schema 2.1.0 tightens the relationship among played
 results, statistical eligibility, blocking issues, quality status, and the
 `publishable` flag. The P5-07 quality gate deep-copies its input, validates the
 complete document against that Schema both before and after assessment, and
