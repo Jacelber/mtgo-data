@@ -1299,3 +1299,36 @@ This decision does not enable the committed reference event, authorize Modern
 classification or statistics, change the front end or workflows, or authorize
 publication. Production retention, resumability, and operational progress
 reporting remain later tasks.
+
+---
+
+# DEC-039 — Adopt a pinned j6e Modern signature-rule compatibility baseline
+
+Status: `Accepted`
+
+## Context
+
+The project owner identified the public `j6e/mtg-meta-analyzer` Modern classifier as the appropriate starting point, consistent with the historical origin of the Standard classification logic. The current project has since replaced the legacy framework with stable archetype and rule IDs, explicit priorities, optional subtypes, conflict evidence, and explicit Unknown reporting.
+
+The upstream Modern definitions at commit `0ecd26bd734cedc6c40e7c753115f796613a32ba`, file `data/archetypes/modern.yaml`, contain 38 unique parent archetypes. The deterministic upstream signature classifier checks mainboard cards only and chooses the matching definition with the greatest number of signature conditions; the earlier source-list position wins a tie. Its later centroid fallback depends on the surrounding deck corpus rather than only on a reviewable rule.
+
+## Decision
+
+Use that pinned file as the P6-01 parent-archetype compatibility source and provide CC BY 4.0 attribution to Joan G.E. and `j6e/mtg-meta-analyzer`. Convert each source definition into one shared-schema rule with:
+
+- a stable archetype ID and rule ID;
+- `subtype_id: null`;
+- an explicit `main` zone on every condition;
+- a unique priority equal to `condition_count * 1000 + (rule_count - source_index) * 10`.
+
+This priority encodes the complete deterministic upstream winner order: condition count first and source order second. It must produce the same parent archetype on the frozen committed Modern corpus even if YAML collections are reordered.
+
+Do not migrate the corpus-dependent centroid fallback. A deck without a deterministic signature match remains `Unknown` so it can be measured and reviewed. Do not add new archetypes or subtypes during P6-01 or P6-02. P6-02 completes framework migration and shared-path integration while preserving the fixed 38-parent rule contract. Modern rule extensions, new parent archetypes, and optional subtype distinctions belong to P6-03 and must retain an explicit compatibility comparison with this baseline.
+
+Only committed `CMODERN` event records may enter the baseline. Files whose embedded format is `CPREMODERN` or another format remain excluded even if stored under `data/modern/`. The frozen fixture must be de-identified and contain no participant, account, standing, event, or source identifiers.
+
+## Consequences
+
+MTGO and Melee can later share the same 38 Modern parent IDs without coupling their source data or statistics. The migration is deterministic, attribution-compliant, reorder-independent, and reviewable. Unknown and overlapping-rule counts become explicit baseline quality measurements rather than being silently filled by a model.
+
+P6-01 does not enable Modern in the format registry, change Standard behavior, run production classification, generate statistics or reports, modify workflows, change public JSON, or change front-end behavior. P6-02 may complete shared classification and diagnostic integration only; P6-03 owns the first taxonomy additions. Product enablement and publication behavior remain later separately authorized Phase 6 tasks.

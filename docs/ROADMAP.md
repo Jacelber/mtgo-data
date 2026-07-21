@@ -808,6 +808,29 @@ MTGO Modern data must remain separate from:
 
 The shared classifier should use the same Modern archetype IDs for both MTGO and Melee.
 
+## P6-01 Modern compatibility baseline
+
+P6-01 uses the public `j6e/mtg-meta-analyzer` Modern classification definitions as the compatibility source rather than inventing a new taxonomy. The reference is pinned to commit `0ecd26bd734cedc6c40e7c753115f796613a32ba`, file `data/archetypes/modern.yaml`, dated 2026-07-08 and licensed as CC BY 4.0 content.
+
+The migrated rule baseline preserves the deterministic signature-card behavior exactly:
+
+- only mainboard cards satisfy signature conditions;
+- every signature condition must match;
+- the matching rule with the greatest number of signature conditions wins;
+- source-list order breaks equal-condition-count ties;
+- stable archetype IDs, rule IDs, and unique explicit priorities encode that result independently of YAML collection order;
+- unmatched decks remain explicit `Unknown` results.
+
+The upstream corpus-dependent centroid fallback is not part of the compatibility rule baseline because it would turn the result into a function of the surrounding dataset and hide reviewable Unknown decks. The initial migration adds no new archetype or subtype taxonomy.
+
+The frozen P6-01 corpus contains all 5,792 committed `CMODERN` deck records from 181 event files dated 2026-04-01 through 2026-07-20. It uses synthetic record IDs and card counts only. Two misplaced `CPREMODERN` event files and their 64 records are excluded by source format. The shared classifier reproduces all 5,792 reference parent results with zero differences: 5,157 classified records, 635 Unknown records, 324 multi-rule matches, and at most three matches for one deck.
+
+P6-01 creates and validates `my_archetypes/modern.yaml`, the frozen compatibility contract, de-identified corpus, regression tests, decision record, and audit only. It does not enable Modern in the format registry, run production classification, generate Modern statistics or reports, change the workflow, modify public JSON, or change either front end.
+
+P6-02 completes the remaining framework migration and integration work around this rule file. It connects the fixed 38-parent Modern baseline to the generalized shared classification and diagnostic paths, removes any remaining Standard-only assumptions encountered on that path, and adds the necessary integration and report-contract tests. P6-02 must not add or rename a parent archetype, change a signature condition for taxonomy reasons, or define a subtype. Its output must remain compatible with the P6-01 frozen parent results.
+
+P6-03 performs the first taxonomy review. It analyzes the P6-01 Unknown population, multi-rule matches, conflicts, and current representative decklists; then it may propose and test new or revised rules, new parent archetypes, and optional subtypes. Every P6-03 change must report its difference from the P6-01 compatibility baseline. Modern product enablement, statistics, workflow, and front-end work remain later separately controlled tasks.
+
 ## Acceptance criteria
 
 Phase 6 is complete when:
