@@ -32,6 +32,10 @@ class MTGOParseError(RuntimeError):
     """Raised when an MTGO page does not contain one complete event payload."""
 
 
+class MTGOIncompleteEventError(MTGOParseError):
+    """Raised when MTGO lists an event before publishing any decklists."""
+
+
 class MTGOStorageError(RuntimeError):
     """Raised when an event filename or output operation is unsafe."""
 
@@ -112,6 +116,64 @@ def is_event_data_complete(data: Any) -> bool:
         and isinstance(data.get("decklists"), list)
         and bool(data["decklists"])
     )
+
+
+def is_event_data_pending(data: Any) -> bool:
+    """Return whether an otherwise shaped event is waiting for decklist publication."""
+
+    return (
+        isinstance(data, dict)
+        and REQUIRED_EVENT_FIELDS <= set(data)
+        and isinstance(data.get("decklists"), list)
+        and not data["decklists"]
+    )
+
+
+def download_event_data(
+    url: str,
+    *,
+    attempts: int = 5,
+    timeout: int = 90,
+    retry_delay: float = 5,
+    request_get: Callable[..., Any] | None = None,
+    sleep: Callable[[float], None] | None = None,
+) -> dict[str, Any]:
+    """Download, parse, and validate one event within a shared retry policy."""
+
+    if attempts < 1:
+        raise ValueError("attempts must be at least one")
+    wait = sleep or time.sleep
+    last_error: MTGOFetchError | MTGOParseError | None = None
+    pending_error: MTGOIncompleteEventError | None = None
+    for attempt in range(1, attempts + 1):
+        try:
+            html = download_page(
+                url,
+                attempts=1,
+                timeout=timeout,
+                retry_delay=0,
+                request_get=request_get,
+                sleep=wait,
+            )
+            data = extract_event_data(html)
+            if is_event_data_complete(data):
+                return data
+            if is_event_data_pending(data):
+                pending_error = MTGOIncompleteEventError(
+                    "MTGO event decklists have not been published yet"
+                )
+                last_error = pending_error
+            else:
+                last_error = MTGOParseError("MTGO event data is incomplete")
+        except (MTGOFetchError, MTGOParseError) as exc:
+            last_error = exc
+        if retry_delay and attempt < attempts:
+            wait(retry_delay)
+    if pending_error is not None:
+        raise pending_error
+    if last_error is None:  # Defensive guard; attempts >= 1 always assigns or returns.
+        raise MTGOFetchError(f"failed to download event data from {url!r}")
+    raise last_error
 
 
 def parse_event_link(link: str, recognized_format_ids: Iterable[str]) -> tuple[str, str | None]:
@@ -210,8 +272,10 @@ def fetch_event_months(
         "fetched": 0,
         "skipped": 0,
         "excluded_no_playoff": 0,
+        "deferred_incomplete": 0,
         "failed": 0,
         "written": [],
+        "warnings": [],
         "errors": [],
     }
     for year, month in selected_months:
@@ -234,14 +298,11 @@ def fetch_event_months(
                 continue
             event_url = f"{MTGO_BASE_URL}{link}"
             try:
-                html = download_page(
+                raw = download_event_data(
                     event_url,
                     request_get=request_get,
                     sleep=wait,
                 )
-                raw = extract_event_data(html)
-                if not is_event_data_complete(raw):
-                    raise MTGOParseError("MTGO event data is incomplete")
                 clean = normalize_event(raw, include_inplayoffs=True)
                 if str(clean.get("inplayoffs")) != "1":
                     mark_fetched(ledger, link)
@@ -253,6 +314,9 @@ def fetch_event_months(
                     fetched.add(link)
                     summary["fetched"] += 1
                     summary["written"].append(destination)
+            except MTGOIncompleteEventError as exc:
+                summary["deferred_incomplete"] += 1
+                summary["warnings"].append((event_url, str(exc)))
             except (MTGOFetchError, MTGOParseError, MTGOStorageError, OSError) as exc:
                 summary["failed"] += 1
                 summary["errors"].append((event_url, str(exc)))
@@ -286,10 +350,7 @@ def fetch_and_store_event(
     link_format, _ = parse_event_link(url, (format_id,))
     if link_format != format_id:
         raise MTGOFetchError(f"event URL does not identify requested format {format_id!r}")
-    html = download_page(url, request_get=request_get, sleep=sleep)
-    raw = extract_event_data(html)
-    if not is_event_data_complete(raw):
-        raise MTGOParseError("MTGO event data is incomplete")
+    raw = download_event_data(url, request_get=request_get, sleep=sleep)
     clean = normalize_event(raw, include_inplayoffs=True)
     return save_event(clean, context.paths["events"])
 
@@ -298,15 +359,18 @@ __all__ = [
     "DEFAULT_HEADERS",
     "DECKLIST_MARKER",
     "MTGOFetchError",
+    "MTGOIncompleteEventError",
     "MTGOParseError",
     "MTGOStorageError",
     "discover_event_links",
+    "download_event_data",
     "download_page",
     "event_filename",
     "extract_event_data",
     "fetch_event_months",
     "fetch_and_store_event",
     "is_event_data_complete",
+    "is_event_data_pending",
     "load_fetched",
     "mark_fetched",
     "parse_event_link",
