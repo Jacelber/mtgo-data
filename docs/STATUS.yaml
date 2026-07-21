@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p5-03-melee-client-raw-archive"
-  working_branch_status: "p5_03_owner_accepted_and_publication_authorized"
+  current_working_branch: "master"
+  working_branch_status: "p5_03_completed_and_published"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2104,9 +2104,13 @@ open_decisions:
 maintenance_tasks:
   - id: "MAINT-2026-07-21-COMMITTED-BASELINE-STABILITY"
     name: "Make committed-baseline tests follow the current committed snapshot"
-    status: "owner_accepted_and_publication_authorized"
+    status: "completed_and_published"
     source_production_commit: "c50d599730d1c0bbce26bb609e9cddae1e6fcc66"
     source_branch: "codex/committed-baseline-stability"
+    commit: "60f2add598d5ec7697bf887ae59aec878d90124e"
+    pull_request: 66
+    merge_commit: "4e5a2450997ab8d37bd27036095950c2a13a7573"
+    merged_on: "2026-07-21"
     owner_local_implementation_authorized: true
     remote_publication_authorized: true
     output:
@@ -2193,17 +2197,22 @@ phase_5_tasks:
     tests_passed: 247
   - id: "P5-03"
     name: "Implement the safe Melee client and raw archive"
-    status: "owner_accepted_and_publication_authorized"
+    status: "completed_and_published"
     branch: "codex/p5-03-melee-client-raw-archive"
+    commit: "a85e20ef107edcb6555369d12e4da811a8bccd91"
+    pull_request: 67
+    merge_commit: "0caa03b6b1bcf4ad4bfef6adcf467da0a45796e8"
+    merged_on: "2026-07-21"
     reference_event_id: "434455"
     whitelist_schema_version: "2.0.0"
     raw_archive_schema_version: "1.0.0"
     live_fetch_performed: false
     real_raw_archive_created: false
     statistics_generated: false
-    tests_passed: 259
+    tests_passed: 275
     owner_accepted: true
     remote_publication_authorized: true
+    merged_to_master: true
   - id: "P5-04"
     name: "Parse stored Melee source fixtures"
     status: "not_started"
