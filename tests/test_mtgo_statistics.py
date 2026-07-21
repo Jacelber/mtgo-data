@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime
+import json
 from pathlib import Path
 import sys
 
@@ -31,8 +32,16 @@ EXPECTED_FILES = {
     "decks_12w.json",
     "decks_36w.json",
 }
-REFERENCE_TODAY = date(2026, 7, 19)
-REFERENCE_GENERATED = datetime(2026, 7, 19, 21, 0, 4)
+
+
+def committed_statistics_reference() -> tuple[date, datetime]:
+    index = json.loads(
+        (ROOT / "stats" / "standard" / "mtgo" / "index.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    generated = datetime.fromisoformat(index["generated"])
+    return generated.date(), generated
 
 
 def test_round_and_high_score_boundaries_remain_frozen():
@@ -68,11 +77,12 @@ def test_latest_complete_week_is_deterministic_at_the_reference_boundary():
 
 @pytest.mark.committed_baseline
 def test_fixed_reference_regeneration_is_byte_identical(tmp_path):
+    reference_today, reference_generated = committed_statistics_reference()
     written = mtgo_stats.build_all_stats(
         ROOT,
         "standard",
-        today=REFERENCE_TODAY,
-        generated_at=REFERENCE_GENERATED,
+        today=reference_today,
+        generated_at=reference_generated,
         output_directory=tmp_path,
     )
     assert set(written) == EXPECTED_FILES
@@ -83,25 +93,27 @@ def test_fixed_reference_regeneration_is_byte_identical(tmp_path):
 
 @pytest.mark.committed_baseline
 def test_legacy_standard_wrapper_uses_the_same_fixed_output(tmp_path):
+    reference_today, reference_generated = committed_statistics_reference()
     written = stats_standard.build_all_stats(
-        today=REFERENCE_TODAY,
-        generated_at=REFERENCE_GENERATED,
+        today=reference_today,
+        generated_at=reference_generated,
         output_directory=tmp_path,
     )
     assert set(written) == EXPECTED_FILES
     assert stats_standard.deck_diff is mtgo_stats.deck_diff
     assert stats_standard.weighted_l1 is mtgo_stats.weighted_l1
-    assert len(stats_standard.load_all_events()) == 123
+    assert stats_standard.load_all_events() == mtgo_stats.load_all_events(ROOT, "standard")
 
 
 def test_disabled_format_fails_before_output_side_effects(tmp_path):
+    reference_today, reference_generated = committed_statistics_reference()
     destination = tmp_path / "pauper-output"
     with pytest.raises(DisabledFormatError, match="not enabled"):
         mtgo_stats.build_all_stats(
             ROOT,
             "pauper",
-            today=REFERENCE_TODAY,
-            generated_at=REFERENCE_GENERATED,
+            today=reference_today,
+            generated_at=reference_generated,
             output_directory=destination,
         )
     assert not destination.exists()

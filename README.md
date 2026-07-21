@@ -45,7 +45,7 @@ Run the read-only repository validator, rule validator, and tests from the repos
 
 These commands validate repository syntax and references, Standard archetype rules, versioned shared rule files, generated classification diagnostics, Standard JSON Schemas, and the frozen Standard classification baseline. They do not fetch tournament data or regenerate production statistics.
 
-The complete pytest suite is a clean-checkout gate. Tests marked `committed_baseline` intentionally compare the current generators with the committed Standard snapshot and must not be interpreted as validation of a checkout after live production data has been added. The production workflow separately captures a dynamic baseline and runs `validate_production_candidate.py` after fetching and generation:
+The complete pytest suite is a clean-checkout gate. Tests marked `committed_baseline` reproduce the current committed Standard snapshot using its own versioned dates, timestamps, and aggregate metadata, then require byte-identical generator output. They must not be interpreted as validation of a checkout after live production data has been added. The production workflow separately captures a dynamic baseline and runs `validate_production_candidate.py` after fetching and generation:
 
 ```powershell
 .\.venv\Scripts\python.exe validate_production_candidate.py snapshot --output production-baseline.json
