@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-raw-archive.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Melee raw-response archive manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source", "event_id", "event_url", "fetched_at", "responses"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "source": {"const": "melee"},
+    "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "event_url": {
+      "type": "string",
+      "pattern": "^https://melee\\.gg/Tournament/View/[1-9][0-9]*$"
+    },
+    "fetched_at": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "responses": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 500,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "request_id", "resource_type", "page", "url", "path",
+          "expected_content_type", "response_content_type", "etag", "last_modified",
+          "status_code", "attempts", "sha256", "bytes"
+        ],
+        "properties": {
+          "request_id": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+          "resource_type": {"enum": ["tournament", "decklist"]},
+          "page": {"type": "integer", "minimum": 1},
+          "url": {
+            "type": "string",
+            "pattern": "^https://melee\\.gg/(Tournament/View/[1-9][0-9]*|Decklist/View/[1-9][0-9]*)(\\?[^#]*)?$"
+          },
+          "path": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*-[0-9]{3}\\.(html|json)$"},
+          "expected_content_type": {"enum": ["html", "json"]},
+          "response_content_type": {"type": ["string", "null"]},
+          "etag": {"type": ["string", "null"]},
+          "last_modified": {"type": ["string", "null"]},
+          "status_code": {"type": "integer", "minimum": 200, "maximum": 299},
+          "attempts": {"type": "integer", "minimum": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "bytes": {"type": "integer", "minimum": 0, "maximum": 33554432}
+        }
+      }
+    }
+  }
+}

@@ -14,7 +14,7 @@ import yaml
 from ..config import DuplicateKeyLoader
 
 
-MELEE_EVENT_SCHEMA_VERSION = "1.0.0"
+MELEE_EVENT_SCHEMA_VERSION = "2.0.0"
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
 PHASE_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*$")
 MELEE_EVENT_URL_PATTERN = re.compile(r"^https://melee\.gg/Tournament/View/([1-9][0-9]*)$")
@@ -60,6 +60,19 @@ class MeleePhaseDefinition:
 
 
 @dataclass(frozen=True)
+class MeleeRawRequestDefinition:
+    """One manually approved raw response request for a whitelisted event."""
+
+    id: str
+    resource_type: str
+    url: str
+    content_type: str
+    page_parameter: str | None
+    start_page: int | None
+    max_pages: int | None
+
+
+@dataclass(frozen=True)
 class MeleeAdvancement:
     day2_after_round: int | None
     day2_minimum_match_points: int | None
@@ -79,6 +92,7 @@ class MeleeEventDefinition:
     enabled: bool
     review_status: str
     mixed_format: bool
+    raw_requests: tuple[MeleeRawRequestDefinition, ...]
     include_playoffs: bool
     phases: tuple[MeleePhaseDefinition, ...]
     advancement: MeleeAdvancement | None
@@ -228,6 +242,57 @@ def _parse_phase(value: Any, path: str, constructed_format: str, enabled: bool) 
     return MeleePhaseDefinition(phase_id, stage, round_phase, game_format, swiss, rounds, source_labels)
 
 
+def _parse_raw_requests(value: Any, path: str, event_id: str) -> tuple[MeleeRawRequestDefinition, ...]:
+    if not isinstance(value, list) or not value or len(value) > 32:
+        raise _error(path, "must be a non-empty list with at most 32 requests")
+    requests: list[MeleeRawRequestDefinition] = []
+    for index, item in enumerate(value):
+        item_path = f"{path}[{index}]"
+        data = _require_mapping(item, item_path, {"id", "resource_type", "url", "content_type"}, {"pagination"})
+        request_id = _require_string(data["id"], f"{item_path}.id")
+        if not PHASE_ID_PATTERN.fullmatch(request_id):
+            raise _error(f"{item_path}.id", "must be a lowercase underscore-separated identifier")
+        resource_type = _require_string(data["resource_type"], f"{item_path}.resource_type")
+        if resource_type not in {"tournament", "decklist"}:
+            raise _error(f"{item_path}.resource_type", "must be tournament or decklist")
+        url = _require_string(data["url"], f"{item_path}.url")
+        parsed_url = urlparse(url)
+        unsafe_url = (
+            parsed_url.scheme != "https"
+            or parsed_url.hostname != "melee.gg"
+            or parsed_url.port is not None
+            or parsed_url.username is not None
+            or parsed_url.password is not None
+            or bool(parsed_url.fragment)
+        )
+        tournament_path = parsed_url.path == f"/Tournament/View/{event_id}"
+        decklist_path = bool(re.fullmatch(r"/Decklist/View/[1-9][0-9]*", parsed_url.path))
+        if unsafe_url or (resource_type == "tournament" and not tournament_path) or (resource_type == "decklist" and not decklist_path):
+            raise _error(f"{item_path}.url", "must be an HTTPS Melee tournament URL for this event")
+        content_type = _require_string(data["content_type"], f"{item_path}.content_type")
+        if content_type not in {"html", "json"}:
+            raise _error(f"{item_path}.content_type", "must be html or json")
+        page_parameter: str | None = None
+        start_page: int | None = None
+        max_pages: int | None = None
+        if "pagination" in data:
+            if resource_type != "tournament":
+                raise _error(f"{item_path}.pagination", "is supported only for tournament resources")
+            pagination = _require_mapping(data["pagination"], f"{item_path}.pagination", {"parameter", "start_page", "max_pages"})
+            page_parameter = _require_string(pagination["parameter"], f"{item_path}.pagination.parameter")
+            if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", page_parameter):
+                raise _error(f"{item_path}.pagination.parameter", "must be a safe query parameter name")
+            start_page = _require_non_negative_int(pagination["start_page"], f"{item_path}.pagination.start_page")
+            max_pages = _require_non_negative_int(pagination["max_pages"], f"{item_path}.pagination.max_pages")
+            if start_page == 0 or max_pages == 0 or max_pages > 100:
+                raise _error(f"{item_path}.pagination", "must use positive pages and at most 100 pages")
+        requests.append(MeleeRawRequestDefinition(request_id, resource_type, url, content_type, page_parameter, start_page, max_pages))
+    ids = [request.id for request in requests]
+    if len(ids) != len(set(ids)):
+        raise _error(path, "must not contain duplicate request IDs")
+    return tuple(requests)
+
+
 def _parse_advancement(value: Any, path: str) -> MeleeAdvancement:
     data = _require_mapping(value, path, set(), {"day2_after_round", "day2_minimum_match_points", "top8_lock_supported"})
     after_round = data.get("day2_after_round")
@@ -247,7 +312,7 @@ def _parse_advancement(value: Any, path: str) -> MeleeAdvancement:
 def _parse_event(value: Any, path: str) -> MeleeEventDefinition:
     required = {
         "id", "url", "name", "date", "format", "series", "structure", "enabled", "review_status",
-        "tabletop", "team_event", "mixed_format", "include", "phases", "statistics", "source_evidence",
+        "tabletop", "team_event", "mixed_format", "raw_requests", "include", "phases", "statistics", "source_evidence",
         "special_handling", "notes",
     }
     data = _require_mapping(value, path, required, {"advancement"})
@@ -284,6 +349,7 @@ def _parse_event(value: Any, path: str) -> MeleeEventDefinition:
     mixed_format = _require_bool(data["mixed_format"], f"{path}.mixed_format")
     if mixed_format != (structure == "mixed"):
         raise _error(f"{path}.mixed_format", "must match the event structure")
+    raw_requests = _parse_raw_requests(data["raw_requests"], f"{path}.raw_requests", event_id)
 
     include = _require_mapping(data["include"], f"{path}.include", {"swiss", "playoffs"})
     if include["swiss"] is not True:
@@ -330,7 +396,7 @@ def _parse_event(value: Any, path: str) -> MeleeEventDefinition:
     advancement = _parse_advancement(data["advancement"], f"{path}.advancement") if "advancement" in data else None
     return MeleeEventDefinition(
         event_id, url, name, start_date, end_date, constructed_format, series, structure, enabled,
-        review_status, mixed_format, include_playoffs, phases, advancement, statistics_format,
+        review_status, mixed_format, raw_requests, include_playoffs, phases, advancement, statistics_format,
         evidence, special_handling, notes,
     )
 

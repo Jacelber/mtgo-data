@@ -33,7 +33,7 @@ def _parse_data(data):
 def test_loads_reference_event_for_inspection_without_authorizing_fetch():
     registry = load_melee_event_registry(WHITELIST)
     event = registry.get("434455")
-    assert registry.schema_version == "1.0.0"
+    assert registry.schema_version == "2.0.0"
     assert event.format == "modern"
     assert event.structure == "mixed"
     assert event.enabled is False

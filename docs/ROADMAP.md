@@ -753,6 +753,8 @@ P5-01 local implementation was authorized and completed in an isolated workspace
 
 P5-02 was implemented and published from an isolated workspace on 2026-07-21 through pull request #61 and merge commit `a9a6485cfa773d0a68fd095af3bd1f63da7f23f5`. It adds an immutable Melee whitelist registry that rejects malformed, duplicate, unlisted, and disabled entries before any future collection client can obtain a source URL. The reference event `434455` remains disabled and therefore is inspectable but not fetchable. Repository validation, public-output Schema validation, 19 focused Melee tests, and all 247 pytest tests passed. P5-02 made no network request and does not authorize P5-03 or a live Melee fetch.
 
+P5-03 local implementation adds a bounded Melee raw-response client and immutable snapshot archive. Whitelist Schema 2.0.0 requires explicit typed `raw_requests`; the client rejects redirects and out-of-bound URLs, defaults its CLI to dry run, uses bounded retry and pagination, streams responses within per-response and per-snapshot limits, preserves safe response metadata, validates archive manifests against a dedicated Schema, and publishes only complete snapshots. The reference event `434455` remains disabled, so this implementation made no live Melee request and produced no real raw archive. Parsing, normalization, classification, statistics, and front-end work remain outside this task. Publication and P5-04 remain separately controlled.
+
 ---
 
 # Phase 6 — Modern classification and MTGO Modern
