@@ -63,3 +63,22 @@ __all__ = [
     "load_mtgo_context",
     "load_mtgo_event_collection_context",
 ]
+
+
+from .classification import (  # noqa: E402  (context functions must exist first)
+    ExcludedMTGOEvent,
+    MTGOClassificationAudit,
+    MTGOClassificationAuditError,
+    audit_mtgo_classification,
+    load_mtgo_events_for_format,
+    mtgo_event_format,
+)
+
+__all__ += [
+    "ExcludedMTGOEvent",
+    "MTGOClassificationAudit",
+    "MTGOClassificationAuditError",
+    "audit_mtgo_classification",
+    "load_mtgo_events_for_format",
+    "mtgo_event_format",
+]

@@ -14,11 +14,11 @@ if str(SRC) not in sys.path:
 
 from mtgmeta.config import load_rule_set
 from mtgmeta.mtgo import load_mtgo_context
+from mtgmeta.mtgo.classification import load_mtgo_events_for_format
 from mtgmeta.reports import (
     build_classification_reports,
     find_identity_fields,
     has_blocking_diagnostics,
-    load_events,
     write_classification_reports,
 )
 
@@ -57,8 +57,17 @@ def generate_reports(
     paths = sorted(data_dir.glob("*.json"))
     if not paths:
         raise ValueError(f"no event files found in {data_dir}")
+    events, excluded = load_mtgo_events_for_format(paths, root, format_id)
+    if excluded:
+        details = ", ".join(
+            f"{item.source_file}={item.actual_format}" for item in excluded
+        )
+        raise ValueError(
+            f"cross-format event input rejected; expected "
+            f"{excluded[0].expected_format}: {details}"
+        )
     reports = build_classification_reports(
-        load_events(paths, root),
+        events,
         load_rule_set(rules),
         format_id=format_id,
         source="mtgo",

@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-01-modern-rule-baseline"
-  working_branch_status: "p6_01_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p6-02-modern-classifier-integration"
+  working_branch_status: "p6_02_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2425,7 +2425,7 @@ phase_5_tasks:
 phase_6_tasks:
   - id: "P6-01"
     name: "Prepare the Modern archetype rule baseline"
-    status: "owner_accepted_remote_publication_authorized"
+    status: "completed_and_published"
     branch: "codex/p6-01-modern-rule-baseline"
     base_commit: "cb1a510dc8e03472ea16b18c95630eac0ee3d6fe"
     decision: "DEC-039"
@@ -2476,10 +2476,18 @@ phase_6_tasks:
     owner_local_implementation_authorized: true
     owner_acceptance: "accepted"
     remote_publication_authorized: true
+    implementation_commit: "a3ee05a748b0855c91c4b772178d0189c4f29d82"
+    pull_request: 79
+    merge_commit: "a09740028b39607021a3a02f1ee1679986f39b85"
+    merged_on: "2026-07-21"
+    remote_repository_validation_passed: true
   - id: "P6-02"
     name: "Complete Modern shared-classifier integration"
-    status: "authorized_pending_p6_01_publication"
+    status: "owner_accepted_remote_publication_authorized"
     depends_on: "P6-01 accepted and published"
+    branch: "codex/p6-02-modern-classifier-integration"
+    base_commit: "a09740028b39607021a3a02f1ee1679986f39b85"
+    audit: "docs/audits/P6-02.md"
     fixed_parent_baseline: 38
     taxonomy_changes_allowed: false
     subtype_changes_allowed: false
@@ -2493,6 +2501,40 @@ phase_6_tasks:
     workflow_changes_allowed: false
     frontend_changes_allowed: false
     owner_local_implementation_authorized: true
+    read_only_classification_audit_added: true
+    audit_writes_files: false
+    audit_uses_event_collection_context: true
+    expected_embedded_event_format: "CMODERN"
+    included_event_files: 181
+    excluded_cross_format_event_files: 2
+    excluded_cross_format_value: "CPREMODERN"
+    audited_decks: 5792
+    classified_decks: 5157
+    unknown_decks: 635
+    multiple_rule_matches: 324
+    conflicts: 0
+    invalid_decks: 0
+    selected_subtypes: 0
+    blocking_diagnostics: false
+    p6_01_rule_bytes_changed: false
+    parent_archetype_differences: 0
+    report_format_rule_format_match_required: true
+    production_cross_format_input_rejected_before_write: true
+    production_modern_cli_remains_disabled: true
+    format_registry_changed: false
+    report_schema_changed: false
+    production_reports_written: false
+    statistics_generated: false
+    public_json_changed: false
+    focused_tests_passed: 46
+    tests_passed: 360
+    repository_validation_passed: true
+    modern_rule_validation_passed: true
+    standard_rule_validation_passed: true
+    schema_validation_passed: true
+    standard_quality_baseline_passed: true
+    owner_acceptance: "accepted"
+    remote_publication_authorized: true
   - id: "P6-03"
     name: "Review and extend the Modern taxonomy"
     status: "planned_not_authorized"
@@ -2509,17 +2551,17 @@ phase_6_tasks:
     frontend_changes_allowed: false
 
 next_approved_task:
-  id: "P6-02"
-  name: "Complete Modern shared-classifier integration"
+  id: "P6-03"
+  name: "Review and extend the Modern taxonomy"
   target_paths:
-    - "src/mtgmeta/"
+    - "my_archetypes/modern.yaml"
     - "tests/"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   production_change: false
-  requires_user_confirmation: false
-  authorization_status: "local_implementation_authorized"
-  planning_status: "ready_after_p6_01_publication"
+  requires_user_confirmation: true
+  authorization_status: "not_authorized"
+  planning_status: "requires_detailed_predevelopment_review"
 
 governance_baseline:
   status: "active_on_master"
