@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p5-05-melee-event-assembler"
-  working_branch_status: "p5_05_owner_accepted_and_publication_authorized"
+  current_working_branch: "master"
+  working_branch_status: "p5_05_completed_and_published"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2243,9 +2243,13 @@ phase_5_tasks:
     merged_to_master: true
   - id: "P5-05"
     name: "Assemble normalized Melee events"
-    status: "owner_accepted_and_publication_authorized"
+    status: "completed_and_published"
     branch: "codex/p5-05-melee-event-assembler"
     base_commit: "c3728c1fd71478ba434dc2960fc8e98c65037ff2"
+    commit: "96e083e55c61b3c570aca82905740f96993599b5"
+    pull_request: 71
+    merge_commit: "6da679d042662d7aa7ccd9f849ad8799473d0fac"
+    merged_on: "2026-07-21"
     reference_event_id: "434455"
     normalized_event_schema_version: "1.0.0"
     stable_identity_scope: "single_event"
@@ -2263,7 +2267,7 @@ phase_5_tasks:
     tests_passed: 312
     owner_accepted: true
     remote_publication_authorized: true
-    merged_to_master: false
+    merged_to_master: true
   - id: "P5-06"
     name: "Normalize phases, results, and reviewed overrides"
     status: "not_started"
