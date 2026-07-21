@@ -57,6 +57,8 @@ def test_job_is_master_only_bounded_and_uses_official_actions():
 def test_complete_pipeline_order_preserves_mtgo_and_videre():
     ordered = [
         "-r requirements-dev.txt",
+        "-m pytest",
+        "validate_production_candidate.py snapshot",
         "fetch-events",
         "fetch-matches",
         "build-statistics",
@@ -64,14 +66,28 @@ def test_complete_pipeline_order_preserves_mtgo_and_videre():
         "pickup candidates --if-absent",
         "generate-metadata",
         "classification-reports --strict",
+        "validate_production_candidate.py validate",
         "validate_repository.py",
         "validate_rules.py",
         "validate_schemas.py",
-        "-m pytest",
         "git add --",
+        "git ls-remote origin refs/heads/master",
     ]
     indexes = [command_index(fragment) for fragment in ordered]
     assert indexes == sorted(indexes)
+
+
+def test_clean_baseline_and_dynamic_candidate_checks_are_not_conflated():
+    steps = load_update()["jobs"]["update"]["steps"]
+    commands = [step.get("run", "") for step in steps]
+    pytest_indexes = [index for index, command in enumerate(commands) if "-m pytest" in command]
+    assert len(pytest_indexes) == 1
+    assert pytest_indexes[0] < command_index("fetch-events")
+    snapshot_index = command_index("validate_production_candidate.py snapshot")
+    candidate_index = command_index("validate_production_candidate.py validate")
+    assert pytest_indexes[0] < snapshot_index < command_index("fetch-events")
+    assert command_index("classification-reports --strict") < candidate_index
+    assert candidate_index < command_index("git add --")
 
 
 def test_only_candidate_generation_may_continue_on_error():
@@ -91,6 +107,16 @@ def test_publication_scope_covers_replaced_scraper_and_generated_outputs():
     assert "git pull" not in command
     assert "rebase" not in command
     assert command.count("git add") == 1
+    assert 'echo "commit=$(git rev-parse HEAD)"' in command
+
+
+def test_publication_is_confirmed_against_remote_master():
+    steps = load_update()["jobs"]["update"]["steps"]
+    verify = next(step for step in steps if step.get("id") == "verify")
+    assert "git status --porcelain" in verify["run"]
+    assert "git ls-remote origin refs/heads/master" in verify["run"]
+    assert 'if [ "$LOCAL_SHA" != "$REMOTE_SHA" ]' in verify["run"]
+    assert command_index("git add --") < command_index("git ls-remote origin refs/heads/master")
 
 
 def test_summary_is_always_written_without_secrets():
@@ -101,6 +127,7 @@ def test_summary_is_always_written_without_secrets():
     text = UPDATE.read_text(encoding="utf-8").lower()
     assert "secrets." not in text
     assert "github.token" not in text
+    assert "Validation layers: clean-checkout regression" in summary["run"]
 
 
 def test_format_aware_command_replaces_every_standard_production_wrapper():

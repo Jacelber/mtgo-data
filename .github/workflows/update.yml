@@ -37,6 +37,12 @@ jobs:
       - name: Install pinned runtime and validation dependencies
         run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
 
+      - name: Verify clean-checkout code and committed baseline
+        run: python -B -m pytest
+
+      - name: Snapshot production data baseline
+        run: python -B validate_production_candidate.py snapshot --output "$RUNNER_TEMP/production-baseline.json"
+
       - name: Fetch configured MTGO event archives
         shell: bash
         run: |
@@ -64,6 +70,9 @@ jobs:
       - name: Generate and strictly validate classification diagnostics
         run: python -B -m mtgmeta.mtgo --format "$MTGO_FORMAT" classification-reports --strict
 
+      - name: Validate production candidate scope and data increments
+        run: python -B validate_production_candidate.py validate --baseline "$RUNNER_TEMP/production-baseline.json"
+
       - name: Validate repository files and references
         run: python -B validate_repository.py
 
@@ -72,9 +81,6 @@ jobs:
 
       - name: Validate Standard public JSON schemas
         run: python -B validate_schemas.py
-
-      - name: Run regression tests
-        run: python -B -m pytest
 
       - name: Commit and push generated changes
         id: publish
@@ -85,12 +91,32 @@ jobs:
           git add -- data/ stats/ reports/ fetched.txt
           if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
             echo "No generated changes to publish."
             exit 0
           fi
           git commit -m "chore: update MTGO production data $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push origin HEAD:master
           echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Verify published master commit and clean workspace
+        id: verify
+        shell: bash
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Production workspace is not clean after publication." >&2
+            git status --short >&2
+            exit 1
+          fi
+          LOCAL_SHA="$(git rev-parse HEAD)"
+          REMOTE_SHA="$(git ls-remote origin refs/heads/master | awk '{print $1}')"
+          if [ "$LOCAL_SHA" != "$REMOTE_SHA" ]; then
+            echo "Published master mismatch: local=$LOCAL_SHA remote=$REMOTE_SHA" >&2
+            exit 1
+          fi
+          echo "commit=$LOCAL_SHA" >> "$GITHUB_OUTPUT"
+          echo "Published master verified at $LOCAL_SHA."
 
       - name: Write production update summary
         if: always()
@@ -103,6 +129,8 @@ jobs:
             echo "- Trigger: ${{ github.event_name }}"
             echo "- Source branch: ${{ github.ref_name }}"
             echo "- Generated changes published: ${{ steps.publish.outputs.changed || 'not-reached' }}"
+            echo "- Published commit verified: ${{ steps.verify.outputs.commit || 'not-reached' }}"
             echo "- Format: ${MTGO_FORMAT}"
+            echo "- Validation layers: clean-checkout regression, production candidate acceptance, and published-commit confirmation."
             echo "- Pipeline: MTGO events, Videre matches, statistics, matchup statistics, Pickup candidates, metadata, de-identified classification diagnostics, validation, and publication."
           } >> "$GITHUB_STEP_SUMMARY"

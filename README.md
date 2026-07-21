@@ -45,6 +45,15 @@ Run the read-only repository validator, rule validator, and tests from the repos
 
 These commands validate repository syntax and references, Standard archetype rules, versioned shared rule files, generated classification diagnostics, Standard JSON Schemas, and the frozen Standard classification baseline. They do not fetch tournament data or regenerate production statistics.
 
+The complete pytest suite is a clean-checkout gate. Tests marked `committed_baseline` intentionally compare the current generators with the committed Standard snapshot and must not be interpreted as validation of a checkout after live production data has been added. The production workflow separately captures a dynamic baseline and runs `validate_production_candidate.py` after fetching and generation:
+
+```powershell
+.\.venv\Scripts\python.exe validate_production_candidate.py snapshot --output production-baseline.json
+.\.venv\Scripts\python.exe validate_production_candidate.py validate --baseline production-baseline.json
+```
+
+The baseline file is a temporary workflow artifact and must not be committed. Candidate validation permits only the declared MTGO generated-data scope, rejects deletions and cross-product writes, validates changed documents and dynamic count deltas, and runs before staging or publication.
+
 ## Format-aware MTGO commands
 
 The production MTGO pipeline uses one explicit command entry point. Set `PYTHONPATH` to `src` when running it from a source checkout:
@@ -70,7 +79,7 @@ The root-level `batch_mtgo.py`, `fetch_videre_matches.py`, `stats_standard.py`, 
 
 The Schema mapping in `schemas/manifest.json` is versioned as `1.0.0`. It protects the existing Standard MTGO page-consumed JSON and the classification diagnostic reports; every declared output embeds `schema_version: "1.0.0"`.
 
-Pull requests and pushes to `master` run the same validation sequence through `.github/workflows/ci.yml`. The CI workflow has read-only repository permissions, does not persist checkout credentials, and does not fetch or regenerate production tournament data.
+Pull requests and pushes to `master` run the clean-checkout validation sequence through `.github/workflows/ci.yml`. The CI workflow has read-only repository permissions, does not persist checkout credentials, and does not fetch or regenerate production tournament data. The production workflow adds candidate-data acceptance and published-commit confirmation as separate validation layers.
 
 ## Current repository layout
 

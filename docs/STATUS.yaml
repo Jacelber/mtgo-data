@@ -12,7 +12,7 @@ project:
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-20"
+  last_updated: "2026-07-21"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -329,15 +329,22 @@ engineering_quality:
     pull_request_ci: true
     production_update: true
   production_workflow:
-    status: "consolidated_phase_1"
+    status: "layered_validation_local_implementation_completed"
     workflow: ".github/workflows/update.yml"
     scheduled_workflow_count: 1
     legacy_scrape_workflow_removed: true
-    mtgo_event_fetch: "batch_mtgo.py"
-    videre_match_fetch: "fetch_videre_matches.py"
-    standard_statistics: "stats_standard.py"
-    matchup_statistics: "stats_matchup.py"
-    decision: "DEC-031"
+    mtgo_event_fetch: "python -m mtgmeta.mtgo --format <format> fetch-events"
+    videre_match_fetch: "python -m mtgmeta.mtgo --format standard fetch-matches"
+    standard_statistics: "python -m mtgmeta.mtgo --format standard build-statistics"
+    matchup_statistics: "python -m mtgmeta.mtgo --format standard build-matchups"
+    clean_checkout_regression_before_fetch: true
+    dynamic_candidate_validator: "validate_production_candidate.py"
+    deletion_allowed: false
+    cross_product_write_allowed: false
+    remote_master_commit_confirmation: true
+    decisions:
+      - "DEC-031"
+      - "DEC-035"
   index_html_split:
     status: "completed"
 
@@ -2093,6 +2100,45 @@ open_decisions:
     topic: "Automatic Melee event discovery"
     status: "deferred"
     note: "Not part of the current approved scope."
+
+maintenance_tasks:
+  - id: "MAINT-2026-07-21-PRODUCTION-VALIDATION-LAYERS"
+    name: "Separate committed baselines from dynamic production candidate acceptance"
+    status: "owner_accepted_and_publication_authorized"
+    source_failure_run: 29795445118
+    source_branch: "codex/production-validation-layers"
+    owner_local_implementation_authorized: true
+    remote_publication_authorized: true
+    production_dispatch_authorized: false
+    output:
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/update.yml"
+      - "validate_production_candidate.py"
+      - "pytest.ini"
+      - "tests/test_ci_workflow.py"
+      - "tests/test_production_workflow.py"
+      - "tests/test_production_candidate_validation.py"
+      - "tests/test_classification_reports.py"
+      - "tests/test_mtgo_matchup.py"
+      - "tests/test_mtgo_statistics.py"
+      - "tests/test_phase3_closeout.py"
+      - "README.md"
+      - "docs/DEVELOPMENT_WORKFLOW.md"
+      - "docs/DECISIONS.md"
+      - "docs/STATUS.yaml"
+    contract:
+      clean_checkout_full_pytest_before_fetch: true
+      committed_baseline_marker: true
+      dynamic_candidate_baseline_snapshot: true
+      generated_path_allowlist: true
+      automatic_deletion_rejected: true
+      cross_product_writes_rejected: true
+      untracked_generated_documents_validated: true
+      count_regression_rejected: true
+      remote_master_commit_confirmation: true
+      statistical_formulas_changed: false
+      classification_rules_changed: false
+      generated_data_changed: false
 
 phase_5_tasks:
   - id: "P5-01"

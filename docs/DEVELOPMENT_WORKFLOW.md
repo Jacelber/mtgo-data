@@ -66,6 +66,14 @@ Use focused English branch names and commit messages. Make small reviewable loca
 
 Review the complete diff; run applicable tests and validators; verify changed paths; check for secrets and credentials; check English-language compliance; confirm generated output remains unchanged unless authorized; confirm a clean final worktree; and report unknowns rather than guessing.
 
+Repository validation uses three distinct layers. Do not treat them as interchangeable:
+
+1. **Clean-checkout code and committed-baseline validation** runs in read-only CI for pull requests and pushes to `master`. It includes the complete pytest suite. Tests marked `committed_baseline` intentionally compare generators, diagnostics, and public outputs with the committed production snapshot and must run before any production fetch mutates the checkout.
+2. **Production candidate validation** runs after authorized fetching and generation but before staging or publication. It compares the candidate with a baseline snapshot captured at the start of the run, permits only declared generated-data paths, rejects deletions and cross-product writes, parses changed JSON and YAML, verifies event and match document shape, prevents event, match, or fetched-ledger count regression, and retains strict classification, repository, rule, and Schema validation. Candidate acceptance must use dynamic deltas rather than historical hard-coded deck or event counts.
+3. **Publication confirmation** runs after the generated commit is pushed. It requires a clean production workspace and confirms that the remote `master` commit equals the locally published commit.
+
+A clean-checkout baseline test protects reproducibility across code and rule changes; it is not evidence that newly fetched data is acceptable. A production candidate check protects the current data increment; it does not replace fixture-based unit and regression tests. Adding a new generated path or allowing an automatic deletion requires explicit review of the candidate publication boundary.
+
 ## Language
 
 Repository and Git/GitHub content must be English. Codex contracts, criteria, stop conditions, and reports must be English. User-facing orchestration outside the repository may be Chinese. Preserve commands, paths, identifiers, hashes, package names, and raw output. Do not alter existing files solely for language or style consistency. Stop if non-English repository content could be introduced.

@@ -42,7 +42,7 @@ jobs:
       - name: Validate Standard public JSON schemas
         run: python -B validate_schemas.py
 
-      - name: Run test suite
+      - name: Run clean-checkout code and committed-baseline tests
         run: python -B -m pytest
 
       - name: Write validation summary
@@ -52,7 +52,7 @@ jobs:
           {
             echo "## Pull request validation"
             echo
-            echo "- Repository validation, rule validation, schema validation, and pytest were requested."
+            echo "- Repository validation, rule validation, schema validation, and clean-checkout pytest were requested."
             echo "- Job result: ${{ job.status }}"
             echo "- Python: 3.12"
             echo "- This workflow does not fetch tournament data or publish repository changes."

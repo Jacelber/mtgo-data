@@ -8,6 +8,8 @@ from pathlib import Path
 import subprocess
 import sys
 
+import pytest
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
@@ -34,6 +36,7 @@ def production_reports():
     return build_classification_reports(events, load_rule_set(STANDARD_RULES))
 
 
+@pytest.mark.committed_baseline
 def test_production_report_baseline_and_subtype_contract():
     reports = production_reports()
     assert reports["index"]["summary"] == {
