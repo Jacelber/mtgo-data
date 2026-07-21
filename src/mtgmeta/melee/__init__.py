@@ -23,6 +23,11 @@ from .parser import (
     parse_raw_snapshot,
     parse_source_response,
 )
+from .assembler import (
+    MeleeAssemblyError,
+    assemble_parsed_snapshot,
+    assemble_raw_snapshot,
+)
 
 __all__ = [
     "WHITELIST_SCHEMA_VERSION",
@@ -39,4 +44,7 @@ __all__ = [
     "ParsedSourcePage",
     "parse_raw_snapshot",
     "parse_source_response",
+    "MeleeAssemblyError",
+    "assemble_parsed_snapshot",
+    "assemble_raw_snapshot",
 ]
