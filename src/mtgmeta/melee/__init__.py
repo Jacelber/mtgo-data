@@ -5,7 +5,7 @@ no network access and does not authorize fetching or publication.
 """
 
 WHITELIST_SCHEMA_VERSION = "3.0.0"
-NORMALIZED_EVENT_SCHEMA_VERSION = "2.0.0"
+NORMALIZED_EVENT_SCHEMA_VERSION = "2.1.0"
 
 from .config import (
     DisabledMeleeEventError,

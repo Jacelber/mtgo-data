@@ -302,6 +302,17 @@ def _semantic_issues(document: dict[str, Any], event: MeleeEventDefinition) -> l
                     [f"source_id={participant['source_id']}"],
                 )
             )
+        elif participant["status"] == "disqualified":
+            issues.append(
+                _issue(
+                    "disqualified_participant_matches_excluded",
+                    "participant",
+                    participant["id"],
+                    "Participant data is retained, but all of their matches are excluded from win-rate and matchup statistics.",
+                    [f"source_id={participant['source_id']}", "status=disqualified"],
+                    blocking=False,
+                )
+            )
 
     for collection, entity_type in ((document["standings"], "standing"), (document["decklists"], "decklist")):
         for record in collection:
@@ -412,6 +423,11 @@ def _semantic_issues(document: dict[str, Any], event: MeleeEventDefinition) -> l
         )
 
     eligible_count = 0
+    disqualified_participant_ids = {
+        participant["id"]
+        for participant in document["participants"]
+        if participant["status"] == "disqualified"
+    }
     for match in document["matches"]:
         round_ = rounds.get(match["round_id"])
         competitors = match["competitors"]
@@ -504,6 +520,10 @@ def _semantic_issues(document: dict[str, Any], event: MeleeEventDefinition) -> l
             and round_["round_phase"] == "constructed"
             and round_["game_format"] == event.constructed_game_format
             and round_["swiss"]
+            and not any(
+                participant_id in disqualified_participant_ids
+                for participant_id in competitor_ids
+            )
         )
         if (
             match["constructed_statistics_eligible"] != expected_eligible

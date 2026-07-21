@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "p5_07_completed_and_published"
+  current_working_branch: "codex/p5-08-phase5-closeout"
+  working_branch_status: "p5_08_accepted_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2075,7 +2075,18 @@ phase_4_result:
     remote_publication_completed: true
     phase_tag_published: true
 
-known_blockers: []
+known_blockers:
+  - id: "BLOCK-P5-08-MELEE-LIVE-HTTP-403"
+    status: "resolved"
+    task: "P5-08"
+    observed_on: "2026-07-21"
+    source_url: "https://melee.gg/Tournament/View/434455"
+    symptom: "The transparent anonymous Melee client receives non-retryable HTTP 403 from awselb/2.0 before any raw archive is created."
+    browser_reachability_confirmed: true
+    partial_archive_created: false
+    resolution: "DEC-038 permits bounded anonymous browser-compatible headers and complete public DataTables collection without cookies, credentials, browser-session reuse, or access-control bypass."
+    resolved_on: "2026-07-21"
+    complete_live_validation_passed: true
 
 open_decisions:
   - id: "OPEN-001"
@@ -2337,11 +2348,73 @@ phase_5_tasks:
     merged_to_master: true
   - id: "P5-08"
     name: "Run end-to-end Phase 5 validation and closeout"
-    status: "not_started"
+    status: "accepted_publication_authorized"
+    branch: "codex/p5-08-phase5-closeout"
+    base_commit: "adc69a2aec783b7591980fabfe3f0faa0a0e5d87"
+    reference_event_id: "434455"
+    fixture_kind: "synthetic_deidentified_stored_raw_snapshot"
+    complete_offline_boundary_tested: true
+    deterministic_object_bytes_and_hash: true
+    disabled_event_rejected_before_network: true
+    disabled_event_rejected_before_archive_side_effect: true
+    fixture_bytes_changed: false
+    production_or_public_paths_created: false
+    live_fetch_authorized: true
+    live_fetch_attempted: true
+    initial_live_fetch_http_status: 403
+    complete_live_fetch_succeeded: true
+    complete_live_fetch_runs: 5
+    complete_live_response_count: 483
+    live_tournament_responses: 1
+    live_standings_responses: 15
+    live_match_responses: 105
+    live_decklist_responses: 362
+    live_participant_count: 362
+    live_round_count: 19
+    live_match_count: 2296
+    live_constructed_eligible_match_count: 1394
+    live_decklist_count: 362
+    live_unknown_result_count: 0
+    live_bye_count: 7
+    live_awarded_win_top8_lock_count: 7
+    live_intentional_draw_match_count: 4
+    live_disqualified_participant_count: 1
+    live_disqualified_matches_retained: 12
+    live_disqualified_matches_eligible: 0
+    live_disqualified_otherwise_eligible_matches_excluded: 6
+    live_final_quality_status: "warning"
+    live_final_quality_issue_count: 1
+    live_final_quality_issue_codes:
+      - "disqualified_participant_matches_excluded"
+    browser_reachability_confirmed: true
+    real_raw_archive_created_temporarily: true
+    real_raw_archive_retained: false
+    real_normalized_event_retained: false
+    access_control_bypass_attempted: false
+    raw_archive_schema_version: "2.0.0"
+    legacy_raw_archive_schema_read_compatible: "1.0.0"
+    normalized_event_schema_version: "2.1.0"
+    focused_melee_and_schema_tests_passed: 118
+    tests_passed: 347
+    repository_validation_passed: true
+    rule_validation_passed: true
+    schema_validation_passed: true
+    standard_quality_baseline_passed: true
+    dependency_check_passed: true
+    statistics_generated: false
+    public_json_changed: false
+    workflow_changed: false
+    frontend_changed: false
+    owner_local_implementation_authorized: true
+    owner_acceptance: "accepted"
+    remote_publication_authorized: true
+    phase_tag_authorized: true
+    phase_tag: "phase-5-melee-ingestion-baseline"
+    phase_closeout_blocked: false
 
 next_approved_task:
   id: "P5-08"
-  name: "Run end-to-end Phase 5 validation and closeout"
+  name: "Publish the accepted P5-08 closeout and Phase 5 tag"
   target_paths:
     - "src/mtgmeta/melee/"
     - "tests/"
@@ -2351,8 +2424,8 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "awaiting_detailed_review_and_owner_authorization"
-  planning_status: "not_started"
+  authorization_status: "remote_publication_and_phase_tag_authorized"
+  planning_status: "accepted_publication_in_progress"
 
 governance_baseline:
   status: "active_on_master"
@@ -2399,9 +2472,10 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P5-08 until P5-07 is accepted and the project owner separately authorizes P5-08."
+  - "Do not retain or commit real P5-08 participant, match, or decklist data."
+  - "Do not reuse cookies or browser sessions or bypass access controls."
+  - "Do not begin Phase 6 until P5-08 publication and the authorized Phase 5 tag are confirmed."
   - "Do not implement Modern classification or statistics during Phase 5."
-  - "Do not fetch Melee events yet."
   - "Do not generate reference-event or Paupergeddon statistics yet."
   - "Do not add new Constructed formats yet."
   - "Do not delete or disable existing workflows before their responsibilities are audited."

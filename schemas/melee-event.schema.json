@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event.schema.json",
-  "x-schema-version": "2.0.0",
+  "x-schema-version": "2.1.0",
   "title": "Normalized Melee tournament event",
   "type": "object",
   "additionalProperties": false,
@@ -10,7 +10,7 @@
     "rounds", "participants", "standings", "decklists", "matches", "quality"
   ],
   "properties": {
-    "schema_version": {"const": "2.0.0"},
+    "schema_version": {"const": "2.1.0"},
     "metadata": {"$ref": "#/$defs/metadata"},
     "provenance": {"$ref": "#/$defs/provenance"},
     "event_structure": {"enum": ["constructed_day2", "constructed_single_stage", "mixed"]},
@@ -178,7 +178,7 @@
         "id": {"type": "string", "minLength": 1},
         "source_id": {"type": ["string", "null"]},
         "display_name": {"type": ["string", "null"]},
-        "status": {"enum": ["active", "dropped", "no_show", "unknown"]}
+        "status": {"enum": ["active", "dropped", "disqualified", "no_show", "unknown"]}
       }
     },
     "standing": {

@@ -16,7 +16,7 @@ from pathlib import Path, PurePosixPath
 from typing import Any, Iterable, Mapping
 
 
-SUPPORTED_RESOURCE_TYPES = frozenset({"tournament", "decklist"})
+SUPPORTED_RESOURCE_TYPES = frozenset({"tournament", "standings", "matches", "decklist"})
 SUPPORTED_CONTENT_TYPES = frozenset({"html", "json"})
 MAX_SOURCE_BYTES = 32 * 1024 * 1024
 
@@ -35,6 +35,11 @@ class SourceArtifact:
     expected_content_type: str
     sha256: str
     bytes: int
+    method: str | None = None
+    request_body_sha256: str | None = None
+    source_round_id: str | None = None
+    source_participant_id: str | None = None
+    source_decklist_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -146,6 +151,44 @@ class _JsonScriptCollector(HTMLParser):
             self.candidates.append("".join(self._buffer))
             self._capturing = False
             self._buffer = []
+
+
+class _RealTournamentParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self._in_title = False
+        self._title: list[str] = []
+        self.start_text: str | None = None
+        self.rounds: dict[str, tuple[str, bool]] = {}
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        values = {key.casefold(): value for key, value in attrs}
+        if tag.casefold() == "title":
+            self._in_title = True
+        if self.start_text is None and values.get("data-toggle") == "datetime" and values.get("data-value"):
+            self.start_text = values["data-value"].strip()
+        if tag.casefold() != "button" or "round-selector" not in set((values.get("class") or "").split()):
+            return
+        round_id = values.get("data-id") or ""
+        label = (values.get("data-name") or "").strip()
+        if not round_id.isdigit() or not label:
+            return
+        completed = (values.get("data-is-completed") or "").casefold() == "true"
+        previous = self.rounds.get(round_id)
+        self.rounds[round_id] = (label, completed or bool(previous and previous[1]))
+
+    def handle_data(self, data: str) -> None:
+        if self._in_title:
+            self._title.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag.casefold() == "title":
+            self._in_title = False
+
+    @property
+    def name(self) -> str:
+        title = "".join(self._title).strip()
+        return title.removesuffix(" | Melee").strip()
 
 
 def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -428,6 +471,197 @@ def _parse_decklist(value: Any, path: str) -> SourceDecklist:
     )
 
 
+def _real_tournament(body: bytes, artifact: SourceArtifact) -> ParsedSourcePage:
+    try:
+        text = body.decode("utf-8-sig")
+    except UnicodeDecodeError as exc:
+        raise MeleeSourceParseError(f"{artifact.path}: source response is not valid UTF-8") from exc
+    parser = _RealTournamentParser()
+    parser.feed(text)
+    parser.close()
+    event_id = artifact.url.rstrip("/").rsplit("/", 1)[-1]
+    if not event_id.isdigit() or not parser.name:
+        raise MeleeSourceParseError(f"{artifact.path}: real tournament metadata is incomplete")
+    rounds = []
+    for round_id, (label, completed) in parser.rounds.items():
+        if not completed:
+            continue
+        parts = label.casefold().split()
+        number = int(parts[1]) if len(parts) == 2 and parts[0] == "round" and parts[1].isdigit() else None
+        rounds.append(SourceRound(round_id, label, number))
+    if not rounds:
+        raise MeleeSourceParseError(f"{artifact.path}: no completed rounds were found")
+    return ParsedSourcePage(
+        artifact=artifact,
+        tournament=SourceTournament(event_id, parser.name, parser.start_text, None),
+        rounds=tuple(rounds),
+    )
+
+
+def _real_player(team: Any, path: str) -> tuple[str, str, str | None]:
+    team_data = _mapping(team, path)
+    players = _list(team_data.get("Players"), f"{path}.Players")
+    if len(players) != 1:
+        raise MeleeSourceParseError(f"{path}.Players: expected one individual competitor")
+    player = _mapping(players[0], f"{path}.Players[0]")
+    participant_id = str(player.get("ID") or "")
+    display_name = str(player.get("DisplayName") or "").strip()
+    if not participant_id.isdigit() or not display_name:
+        raise MeleeSourceParseError(f"{path}.Players[0]: participant identity is incomplete")
+    status_value = team_data.get("StatusDescription")
+    status = str(status_value).strip() if status_value is not None and str(status_value).strip() else None
+    return participant_id, display_name, status
+
+
+def _real_standings(payload: Mapping[str, Any], artifact: SourceArtifact) -> ParsedSourcePage:
+    rows = _list(payload.get("data"), f"{artifact.path}.data")
+    standings: list[SourceStanding] = []
+    references: list[SourceDecklistReference] = []
+    for index, value in enumerate(rows):
+        path = f"{artifact.path}.data[{index}]"
+        row = _mapping(value, path)
+        participant_id, display_name, status = _real_player(row.get("Team"), f"{path}.Team")
+        standing_id = str(row.get("ID") or "")
+        if not standing_id:
+            raise MeleeSourceParseError(f"{path}.ID: standing identity is missing")
+        rank = row.get("Rank")
+        points = row.get("Points")
+        standings.append(SourceStanding(
+            source_standing_id=standing_id,
+            source_participant_id=participant_id,
+            display_name=display_name,
+            rank=rank if isinstance(rank, int) and rank >= 1 else None,
+            match_points=points if isinstance(points, int) and points >= 0 else None,
+            record_text=str(row.get("MatchRecord")).strip() if row.get("MatchRecord") else None,
+            status_text=status,
+        ))
+        decklist_values = row.get("Decklists") or []
+        for position, item in enumerate(_list(decklist_values, f"{path}.Decklists")):
+            reference = _mapping(item, f"{path}.Decklists[{position}]")
+            decklist_id = str(reference.get("DecklistId") or "")
+            owner_id = str(reference.get("PlayerId") or "")
+            if not decklist_id or owner_id != participant_id:
+                raise MeleeSourceParseError(f"{path}.Decklists[{position}]: decklist identity is inconsistent")
+            references.append(SourceDecklistReference(
+                decklist_id, participant_id,
+                f"https://melee.gg/Decklist/GetDecklistDetails?id={decklist_id}",
+            ))
+    return ParsedSourcePage(
+        artifact=artifact,
+        standings=_unique(standings, "source_standing_id", artifact.path),
+        decklist_references=_unique(references, "source_decklist_id", artifact.path),
+    )
+
+
+def _optional_text(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    return text or None
+
+
+def _real_matches(payload: Mapping[str, Any], artifact: SourceArtifact) -> ParsedSourcePage:
+    if artifact.source_round_id is None:
+        raise MeleeSourceParseError(f"{artifact.path}: match response lacks source_round_id context")
+    matches: list[SourceMatch] = []
+    for index, value in enumerate(_list(payload.get("data"), f"{artifact.path}.data")):
+        path = f"{artifact.path}.data[{index}]"
+        row = _mapping(value, path)
+        match_id = str(row.get("Guid") or "")
+        row_round_id = str(row.get("RoundId") or "")
+        if not match_id or row_round_id != artifact.source_round_id:
+            raise MeleeSourceParseError(f"{path}: match or round identity is inconsistent")
+        competitors_raw = _list(row.get("Competitors") or [], f"{path}.Competitors")
+        competitors: list[tuple[str, int, int]] = []
+        for position, raw in enumerate(competitors_raw):
+            competitor = _mapping(raw, f"{path}.Competitors[{position}]")
+            participant_id, _display_name, _status = _real_player(
+                competitor.get("Team"), f"{path}.Competitors[{position}].Team"
+            )
+            wins = competitor.get("GameWins")
+            byes = competitor.get("GameByes")
+            competitors.append((
+                participant_id,
+                wins if isinstance(wins, int) and wins >= 0 else 0,
+                byes if isinstance(byes, int) and byes >= 0 else 0,
+            ))
+        if not 1 <= len(competitors) <= 2 or len({item[0] for item in competitors}) != len(competitors):
+            raise MeleeSourceParseError(f"{path}.Competitors: expected one or two distinct participants")
+        has_result = row.get("HasResult") is True
+        bye_reason = _optional_text(row.get("ByeReasonDescription"))
+        loss_reason = _optional_text(row.get("LossReasonDescription"))
+        status = bye_reason or loss_reason
+        results: list[SourceCompetitor] = []
+        if len(competitors) == 1 and (has_result or bye_reason or competitors[0][2] > 0):
+            qualified = (bye_reason or "").casefold() == "qualified"
+            outcome = "Qualified" if qualified else "Bye"
+            results.append(SourceCompetitor(competitors[0][0], outcome, 3))
+            status = outcome
+        elif len(competitors) == 2 and has_result:
+            first_wins, second_wins = competitors[0][1], competitors[1][1]
+            game_draws = row.get("GameDraws")
+            intentional_draw = first_wins == second_wins == 0 and game_draws == 3
+            if first_wins == second_wins:
+                outcomes = ("Draw", "Draw")
+                points = (1, 1)
+            elif first_wins > second_wins:
+                outcomes = ("Win", "Loss")
+                points = (3, 0)
+            else:
+                outcomes = ("Loss", "Win")
+                points = (0, 3)
+            results.extend(
+                SourceCompetitor(competitor[0], outcome, point)
+                for competitor, outcome, point in zip(competitors, outcomes, points, strict=True)
+            )
+            if intentional_draw:
+                status = "Intentional Draw"
+        else:
+            results.extend(SourceCompetitor(item[0], None, None) for item in competitors)
+        table = row.get("TableNumber")
+        matches.append(SourceMatch(
+            source_match_id=match_id,
+            source_round_id=row_round_id,
+            competitor_source_ids=tuple(item.source_participant_id for item in results),
+            competitor_results=tuple(results),
+            result_text=_optional_text(row.get("ResultString")),
+            status_text=status,
+            table_number=table if isinstance(table, int) and table >= 1 else None,
+        ))
+    return ParsedSourcePage(artifact=artifact, matches=_unique(matches, "source_match_id", artifact.path))
+
+
+def _real_decklist(payload: Mapping[str, Any], artifact: SourceArtifact) -> ParsedSourcePage:
+    if artifact.source_participant_id is None or artifact.source_decklist_id is None:
+        raise MeleeSourceParseError(f"{artifact.path}: decklist response lacks manifest owner context")
+    payload_id = str(payload.get("Guid") or "")
+    if payload_id.casefold() != artifact.source_decklist_id.casefold():
+        raise MeleeSourceParseError(f"{artifact.path}: decklist identity does not match manifest")
+    cards = []
+    section_names = {0: "Main Deck", 2: "Commander", 3: "Commander", 99: "Sideboard"}
+    for index, value in enumerate(_list(payload.get("Records"), f"{artifact.path}.Records")):
+        path = f"{artifact.path}.Records[{index}]"
+        record = _mapping(value, path)
+        section = record.get("c")
+        if section not in section_names:
+            continue
+        name = record.get("n")
+        quantity = record.get("q")
+        cards.append(SourceCard(
+            name=_string(name, f"{path}.n"),
+            quantity=_integer(quantity, f"{path}.q", minimum=1),
+            section_text=section_names[section],
+        ))
+    if not cards:
+        raise MeleeSourceParseError(f"{artifact.path}: decklist contains no recognized cards")
+    return ParsedSourcePage(artifact=artifact, decklists=(SourceDecklist(
+        source_decklist_id=artifact.source_decklist_id,
+        source_participant_id=artifact.source_participant_id,
+        format_text=_optional_text(payload.get("FormatName")),
+        cards=tuple(cards),
+    ),))
+
+
 def parse_source_response(body: bytes, artifact: SourceArtifact) -> ParsedSourcePage:
     """Parse one verified source response without applying normalized semantics."""
 
@@ -437,7 +671,35 @@ def parse_source_response(body: bytes, artifact: SourceArtifact) -> ParsedSource
         raise MeleeSourceParseError(
             f"{artifact.path}: unsupported content type {artifact.expected_content_type!r}"
         )
-    payload = _decode_payload(body, artifact.expected_content_type, artifact.path)
+    if artifact.resource_type == "tournament" and artifact.expected_content_type == "html":
+        try:
+            payload = _decode_payload(body, artifact.expected_content_type, artifact.path)
+        except MeleeSourceParseError as exc:
+            if "expected exactly one supported" not in str(exc):
+                raise
+            collector = _JsonScriptCollector()
+            collector.feed(body.decode("utf-8-sig"))
+            collector.close()
+            supported = 0
+            for candidate in collector.candidates:
+                try:
+                    decoded = _decode_json(candidate, artifact.path)
+                except MeleeSourceParseError:
+                    continue
+                supported += decoded.get("resource_type") in SUPPORTED_RESOURCE_TYPES
+            if supported:
+                raise
+            return _real_tournament(body, artifact)
+    else:
+        payload = _decode_payload(body, artifact.expected_content_type, artifact.path)
+    if "resource_type" not in payload:
+        if artifact.resource_type == "standings":
+            return _real_standings(payload, artifact)
+        if artifact.resource_type == "matches":
+            return _real_matches(payload, artifact)
+        if artifact.resource_type == "decklist":
+            return _real_decklist(payload, artifact)
+        raise MeleeSourceParseError(f"{artifact.path}: real source payload is not supported")
     if payload.get("resource_type") != artifact.resource_type:
         raise MeleeSourceParseError(f"{artifact.path}: payload resource type does not match manifest")
     if artifact.resource_type == "tournament":
@@ -458,6 +720,8 @@ def parse_source_response(body: bytes, artifact: SourceArtifact) -> ParsedSource
             rounds=_parse_rounds(payload.get("rounds", []), "rounds"),
             matches=_parse_matches(payload.get("matches", []), "matches"),
         )
+    if artifact.resource_type != "decklist":
+        raise MeleeSourceParseError(f"{artifact.path}: fixture payload is unsupported for this resource")
     payload = _fields(payload, artifact.path, {"resource_type", "decklist"})
     return ParsedSourcePage(
         artifact=artifact,
@@ -485,6 +749,10 @@ def _artifact(value: Any, index: int) -> SourceArtifact:
             "sha256",
             "bytes",
         },
+        {
+            "method", "request_body_sha256", "source_round_id",
+            "source_participant_id", "source_decklist_id",
+        },
     )
     return SourceArtifact(
         request_id=_string(data.get("request_id"), f"{path}.request_id"),
@@ -497,6 +765,17 @@ def _artifact(value: Any, index: int) -> SourceArtifact:
         ),
         sha256=_string(data.get("sha256"), f"{path}.sha256"),
         bytes=_integer(data.get("bytes"), f"{path}.bytes"),
+        method=_string(data.get("method"), f"{path}.method", optional=True),
+        request_body_sha256=_string(
+            data.get("request_body_sha256"), f"{path}.request_body_sha256", optional=True
+        ),
+        source_round_id=_string(data.get("source_round_id"), f"{path}.source_round_id", optional=True),
+        source_participant_id=_string(
+            data.get("source_participant_id"), f"{path}.source_participant_id", optional=True
+        ),
+        source_decklist_id=_string(
+            data.get("source_decklist_id"), f"{path}.source_decklist_id", optional=True
+        ),
     )
 
 
@@ -521,7 +800,7 @@ def parse_raw_snapshot(snapshot_path: str | Path) -> ParsedMeleeSnapshot:
         manifest = _decode_json(manifest_path.read_text(encoding="utf-8"), "manifest.json")
     except (OSError, UnicodeError) as exc:
         raise MeleeSourceParseError(f"manifest.json: cannot read manifest: {exc}") from exc
-    if manifest.get("schema_version") != "1.0.0" or manifest.get("source") != "melee":
+    if manifest.get("schema_version") not in {"1.0.0", "2.0.0"} or manifest.get("source") != "melee":
         raise MeleeSourceParseError("manifest.json: unsupported raw archive contract")
     manifest = _fields(
         manifest,
@@ -537,7 +816,34 @@ def parse_raw_snapshot(snapshot_path: str | Path) -> ParsedMeleeSnapshot:
     pages = []
     seen_paths: set[str] = set()
     for index, response_value in enumerate(response_values):
+        if manifest["schema_version"] == "2.0.0":
+            response_mapping = _mapping(response_value, f"manifest.responses[{index}]")
+            v2_fields = {
+                "method", "request_body_sha256", "source_round_id",
+                "source_participant_id", "source_decklist_id",
+            }
+            missing_v2 = v2_fields - set(response_mapping)
+            if missing_v2:
+                raise MeleeSourceParseError(
+                    f"manifest.responses[{index}]: missing v2 fields {sorted(missing_v2)}"
+                )
         artifact = _artifact(response_value, index)
+        if manifest["schema_version"] == "2.0.0":
+            post_resource = artifact.resource_type in {"standings", "matches"}
+            if artifact.method != ("POST" if post_resource else "GET"):
+                raise MeleeSourceParseError(
+                    f"{artifact.path}: HTTP method does not match its resource type"
+                )
+            if post_resource != (artifact.request_body_sha256 is not None):
+                raise MeleeSourceParseError(
+                    f"{artifact.path}: request-body digest does not match its HTTP method"
+                )
+            if artifact.resource_type in {"standings", "matches"} and artifact.source_round_id is None:
+                raise MeleeSourceParseError(f"{artifact.path}: round response lacks source context")
+            if artifact.resource_type == "decklist" and (
+                artifact.source_participant_id is None or artifact.source_decklist_id is None
+            ):
+                raise MeleeSourceParseError(f"{artifact.path}: decklist response lacks source context")
         if artifact.path in seen_paths:
             raise MeleeSourceParseError("manifest.responses: duplicate response paths are not allowed")
         seen_paths.add(artifact.path)

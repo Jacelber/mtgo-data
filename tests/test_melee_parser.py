@@ -192,9 +192,70 @@ def test_resource_and_content_type_mismatches_fail_explicitly():
             encoded({"resource_type": "decklist", "decklist": {}}), artifact()
         )
     with pytest.raises(MeleeSourceParseError, match="unsupported resource type"):
-        parse_source_response(encoded(tournament_payload()), replace(artifact(), resource_type="matches"))
+        parse_source_response(encoded(tournament_payload()), replace(artifact(), resource_type="unknown"))
     with pytest.raises(MeleeSourceParseError, match="unsupported content type"):
         parse_source_response(encoded(tournament_payload()), replace(artifact(), expected_content_type="xml"))
+
+
+def test_real_qualified_single_competitor_preserves_top8_lock_evidence():
+    body = encoded({
+        "recordsTotal": 1,
+        "data": [{
+            "Guid": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+            "RoundId": 116,
+            "HasResult": True,
+            "ResultString": "Participant was assigned a bye",
+            "ByeReasonDescription": "Qualified",
+            "LossReasonDescription": None,
+            "TableNumber": None,
+            "Competitors": [{
+                "Team": {"StatusDescription": "Active", "Players": [{"ID": 11, "DisplayName": "Fixture"}]},
+                "GameWins": 0,
+                "GameByes": 2,
+            }],
+        }],
+    })
+    match_artifact = replace(
+        artifact(resource_type="matches"),
+        source_round_id="116",
+        url="https://melee.gg/Match/GetRoundMatches/116",
+    )
+    parsed = parse_source_response(body, match_artifact).matches[0]
+    assert parsed.status_text == "Qualified"
+    assert parsed.competitor_results[0].outcome_text == "Qualified"
+    assert parsed.competitor_results[0].match_points == 3
+
+
+def test_real_zero_zero_three_result_preserves_intentional_draw_evidence():
+    team = lambda participant_id, name: {
+        "StatusDescription": "Active",
+        "Players": [{"ID": participant_id, "DisplayName": name}],
+    }
+    body = encoded({
+        "recordsTotal": 1,
+        "data": [{
+            "Guid": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+            "RoundId": 116,
+            "HasResult": True,
+            "ResultString": "Fixture result (0-0-3)",
+            "GameDraws": 3,
+            "ByeReasonDescription": None,
+            "LossReasonDescription": None,
+            "TableNumber": 1,
+            "Competitors": [
+                {"Team": team(11, "Alpha"), "GameWins": 0, "GameByes": 0},
+                {"Team": team(22, "Beta"), "GameWins": 0, "GameByes": 0},
+            ],
+        }],
+    })
+    match_artifact = replace(
+        artifact(resource_type="matches"),
+        source_round_id="116",
+        url="https://melee.gg/Match/GetRoundMatches/116",
+    )
+    parsed = parse_source_response(body, match_artifact).matches[0]
+    assert parsed.status_text == "Intentional Draw"
+    assert [item.outcome_text for item in parsed.competitor_results] == ["Draw", "Draw"]
 
 
 @pytest.mark.parametrize(

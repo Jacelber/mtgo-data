@@ -171,6 +171,7 @@ It does not include:
 - unknown result;
 - playoff result when calculating primary Swiss statistics;
 - intentional draw reported as `0-0-3`.
+- a match involving a participant whose event status is `disqualified`.
 
 ### 3.6 Match draw
 
@@ -453,6 +454,27 @@ Reasons include:
 Playoff results may be shown separately as event context, final placement, or deck detail.
 
 They must not be merged silently into the primary Swiss win rate or matchup matrix.
+
+### 6.10 Disqualified participants
+
+A disqualified participant and their source records must remain in the
+normalized archive for provenance, standings reconciliation, and review. Their
+status must remain explicitly `disqualified`; do not collapse it into an
+ordinary drop.
+
+Every match involving a disqualified participant is excluded as a complete
+match unit from:
+
+- played-match win-rate samples;
+- archetype matchup matrices;
+- primary Constructed match-performance counts.
+
+The opponent side of the same match is also excluded. Removing only one side
+would break W-L-D conservation and could retain a result affected by the conduct
+that caused the disqualification. Original results, points, rounds, opponents,
+decklist, and standings remain available as contextual data. The quality output
+must report the disqualified participant and the exclusion without treating a
+reviewed disqualification as an unknown or blocking source error.
 
 ---
 
@@ -1604,6 +1626,7 @@ Automated tests must cover at least:
 - bye exclusion from win rate;
 - no-show exclusion;
 - awarded-win exclusion;
+- disqualified-participant match exclusion with both match sides retained;
 - Top 8 lock theoretical-round exemption;
 - Draft exclusion;
 - playoff exclusion;

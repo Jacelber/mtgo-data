@@ -62,9 +62,10 @@ Phase 5 provides a separately controlled raw-response client for explicitly enab
 $env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455 --execute
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455 --complete --execute
 ```
 
-The reference event `434455` is currently disabled, so both forms reject it before network or filesystem activity. Enabling an event and executing a live fetch require separate project-owner authorization. Completed raw snapshots use `data_raw/melee/<event_id>/<UTC-snapshot>/`; re-fetching creates a new snapshot instead of overwriting prior source evidence.
+`--complete` discovers the enabled event's completed rounds, paginates its public standings and match endpoints, and retrieves only decklists referenced by the primary standings. It has no dry-run form because the request plan is discovered from the live tournament page. The reference event `434455` is currently disabled, so all forms reject it before network or filesystem activity. Enabling an event and executing a live fetch require separate project-owner authorization. Completed raw snapshots use `data_raw/melee/<event_id>/<UTC-snapshot>/`; re-fetching creates a new snapshot instead of overwriting prior source evidence.
 
 ## Format-aware MTGO commands
 

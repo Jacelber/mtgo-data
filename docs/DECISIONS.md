@@ -1243,3 +1243,59 @@ ordering as hidden semantics. Existing Standard behavior, MTGO collection,
 classification rules, statistics, public JSON, workflows, and front-end output
 do not change. The reference Melee event remains disabled and no live fetch is
 authorized.
+
+---
+
+# DEC-038 — Require complete bounded public-source validation for Melee ingestion
+
+Status: `Accepted`
+
+## Context
+
+The initial P5-08 live check requested only the whitelisted tournament page with
+a project-branded User-Agent and received HTTP 403. Browser reachability alone
+could not prove that Phase 5 could collect standings, matches, and decklists or
+normalize the real reference event. The project owner raised P5-08 acceptance
+from a page-reachability probe to complete real-source collection, parsing,
+normalization, and quality assessment, and approved comparison with the public
+`j6e/mtg-meta-analyzer` implementation.
+
+## Decision
+
+Use ordinary anonymous browser-compatible request headers for public Melee HTML
+and JSON endpoints without credentials, cookies, browser-session reuse, or
+access-control bypass. Begin only from an enabled whitelisted tournament page;
+discover completed rounds from that page; fetch the final completed Swiss
+standings, every completed round's DataTables match pages, and only the decklist
+GUIDs referenced by those standings.
+
+Keep collection sequential and rate-limited. Reject redirects, unexpected
+hosts or paths, unsafe IDs, changing pagination totals, and configured round,
+decklist, response, or byte limits. Raw manifest `2.0.0` records method,
+request-body digest, and applicable source round, participant, and decklist
+context. Stored `1.0.0` fixture manifests remain readable.
+
+Map Melee participant states `Cut` and `Eliminated` to completed active
+participation and `Dropped (Self)` or `Dropped (Staff)` to dropped
+participation. Preserve `Disqualified` as the distinct normalized participant
+status `disqualified`. Retain that participant, standings, decklist, points, and
+all source matches, but exclude every match involving them as a complete unit
+from Constructed win-rate and matchup eligibility. Do not delete only one side
+of a match. Emit a non-blocking quality warning so the exclusion is visible.
+
+This mapping does not alter source match outcomes or points. Normalized event
+Schema `2.1.0` adds the explicit participant status and the quality gate verifies
+the resulting match eligibility.
+
+## Consequences
+
+P5-08 must pass an ephemeral complete run through parsing, normalization,
+Schema, and semantic quality assessment before Phase 5 can close. Real raw,
+participant, match, and decklist data remain temporary during this closeout and
+must not enter Git or production paths. Anonymous aggregate counts and issue
+codes may be retained as audit evidence.
+
+This decision does not enable the committed reference event, authorize Modern
+classification or statistics, change the front end or workflows, or authorize
+publication. Production retention, resumability, and operational progress
+reporting remain later tasks.

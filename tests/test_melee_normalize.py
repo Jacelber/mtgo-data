@@ -11,6 +11,7 @@ from mtgmeta.melee.normalize import (
     normalize_raw_snapshot,
 )
 from mtgmeta.melee.parser import SourceCompetitor, parse_raw_snapshot
+from mtgmeta.melee.quality import finalize_event_quality
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -73,6 +74,67 @@ def test_normalized_fixture_matches_schema_but_remains_non_publishable():
         document, loaded["melee-event.schema.json"], registry
     ) == []
     assert document["quality"]["publishable"] is False
+
+
+@pytest.mark.parametrize(
+    ("source_status", "expected"),
+    [
+        ("Cut", "active"),
+        ("Eliminated", "active"),
+        ("Dropped (Self)", "dropped"),
+        ("Dropped (Staff)", "dropped"),
+    ],
+)
+def test_real_melee_participant_statuses_are_mapped_without_affecting_matches(source_status, expected):
+    snapshot = parsed_snapshot()
+    page = snapshot.pages[0]
+    standing = replace(page.standings[0], status_text=source_status)
+    changed = replace(snapshot, pages=(replace(page, standings=(standing, *page.standings[1:])), *snapshot.pages[1:]))
+    document = normalize_parsed_snapshot(changed, event_definition(), normalized_at=NORMALIZED_AT)
+    participant = next(item for item in document["participants"] if item["source_id"] == standing.source_participant_id)
+    assert participant["status"] == expected
+    assert document["quality"]["issues"] == []
+
+
+def test_disqualified_participant_is_retained_but_all_their_matches_are_statistically_excluded():
+    snapshot = parsed_snapshot()
+    page = snapshot.pages[0]
+    standing = replace(page.standings[0], status_text="Disqualified")
+    changed = replace(
+        snapshot,
+        pages=(replace(page, standings=(standing, *page.standings[1:])), *snapshot.pages[1:]),
+    )
+    event = event_definition()
+    document = normalize_parsed_snapshot(changed, event, normalized_at=NORMALIZED_AT)
+    participant = next(
+        item for item in document["participants"]
+        if item["source_id"] == standing.source_participant_id
+    )
+    assert participant["status"] == "disqualified"
+    affected = [
+        match for match in document["matches"]
+        if standing.source_participant_id in {
+            competitor.source_participant_id
+            for page in changed.pages
+            for source_match in page.matches
+            if source_match.source_match_id == match["source_record_id"]
+            for competitor in source_match.competitor_results
+        }
+    ]
+    assert affected
+    assert all(match["constructed_statistics_eligible"] is False for match in affected)
+    assert all(match["matchup_eligible"] is False for match in affected)
+    assert all(
+        "statistical_exclusion=disqualified_participant" in match["evidence"]
+        for match in affected
+    )
+
+    finalized = finalize_event_quality(document, replace(event, enabled=True))
+    warning = next(
+        issue for issue in finalized["quality"]["issues"]
+        if issue["code"] == "disqualified_participant_matches_excluded"
+    )
+    assert warning["blocking"] is False
 
 
 def test_competitor_order_never_determines_the_winner():
@@ -206,6 +268,27 @@ def test_intentional_draw_and_explicit_no_show_are_nonplayed_and_ineligible():
     normalized_no_show = source_match(document, "match-source-4")
     assert normalized_no_show["competitors"][0]["result_type"] == "no_show"
     assert normalized_no_show["matchup_eligible"] is False
+
+
+def test_qualified_single_competitor_is_a_reviewed_top8_lock_award_not_a_bye():
+    snapshot = parsed_snapshot()
+    page = snapshot.pages[0]
+    source = replace(
+        page.matches[1],
+        status_text="Qualified",
+        competitor_results=(SourceCompetitor("participant-101", "Qualified", 3),),
+    )
+    changed = replace(snapshot, pages=(replace(page, matches=(page.matches[0], source, page.matches[2])), snapshot.pages[1]))
+    event = event_definition()
+    document = normalize_parsed_snapshot(changed, event, normalized_at=NORMALIZED_AT)
+    normalized = source_match(document, source.source_match_id)
+    assert normalized["played"] is False
+    assert normalized["competitors"][0]["result_type"] == "awarded_win_top8_lock"
+    assert normalized["constructed_statistics_eligible"] is False
+
+    unsupported = replace(event, advancement=replace(event.advancement, top8_lock_supported=False))
+    blocked = normalize_parsed_snapshot(changed, unsupported, normalized_at=NORMALIZED_AT)
+    assert {item["code"] for item in blocked["quality"]["issues"]} == {"unknown_result"}
 
 
 def test_inconsistent_source_points_block_the_match():

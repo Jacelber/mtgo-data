@@ -20,8 +20,10 @@ for candidate in (ROOT, SRC):
 import validate_schemas as schemas
 import mtgmeta.melee.client as melee_client
 from mtgmeta.melee.__main__ import main as melee_main
-from mtgmeta.melee.client import MeleeFetchError, MeleeRawFetchResult, MeleeRequestBoundaryError, fetch_raw_event, planned_request_urls
+from mtgmeta.melee.client import MeleeFetchError, MeleeRawFetchResult, MeleeRequestBoundaryError, fetch_complete_event, fetch_raw_event, planned_request_urls
 from mtgmeta.melee.config import DisabledMeleeEventError, MeleeConfigError, parse_melee_event_text
+from mtgmeta.melee.parser import MeleeSourceParseError, parse_raw_snapshot
+from mtgmeta.melee.normalize import normalize_parsed_snapshot
 
 
 WHITELIST = ROOT / "configs" / "melee_events.yaml"
@@ -69,6 +71,13 @@ def test_disabled_event_fails_before_transport_or_archive_side_effects(tmp_path)
     calls = []
     with pytest.raises(DisabledMeleeEventError, match="disabled"):
         fetch_raw_event("434455", registry(enabled=False), tmp_path, request_get=lambda *_args, **_kwargs: calls.append(True))
+    assert calls == []
+    assert list(tmp_path.iterdir()) == []
+    with pytest.raises(DisabledMeleeEventError, match="disabled"):
+        fetch_complete_event(
+            "434455", registry(enabled=False), tmp_path,
+            request_send=lambda *_args, **_kwargs: calls.append(True),
+        )
     assert calls == []
     assert list(tmp_path.iterdir()) == []
 
@@ -272,6 +281,24 @@ def test_cli_defaults_to_dry_run_and_requires_explicit_execute(tmp_path, capsys)
     assert calls[-1][2] is False
 
 
+def test_cli_complete_mode_requires_execute_and_uses_complete_collector(tmp_path, capsys):
+    data = yaml.safe_load(WHITELIST.read_text(encoding="utf-8"))
+    data["events"][0]["enabled"] = True
+    registry_path = tmp_path / "events.yaml"
+    registry_path.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
+    args = ["--event-id", "434455", "--registry", str(registry_path), "--raw-root", str(tmp_path / "raw"), "--complete"]
+    assert melee_main(args) == 2
+    assert "requires --execute" in capsys.readouterr().err
+    calls = []
+
+    def fake_complete(event_id, _registry, raw_root):
+        calls.append((event_id, raw_root))
+        return MeleeRawFetchResult(event_id, False, tmp_path / "snapshot", ("https://melee.gg/Tournament/View/434455",), ())
+
+    assert melee_main([*args, "--execute"], complete_fetch=fake_complete) == 0
+    assert calls == [("434455", tmp_path / "raw")]
+
+
 def test_raw_request_contract_rejects_cross_event_and_duplicate_request_ids():
     data = yaml.safe_load(WHITELIST.read_text(encoding="utf-8"))
     event = data["events"][0]
@@ -301,3 +328,88 @@ def test_whitelist_v3_accepts_explicit_decklist_but_rejects_wrong_resource_path(
     event["raw_requests"][-1]["url"] = "https://melee.gg/Tournament/View/434455"
     with pytest.raises(MeleeConfigError, match="for this event"):
         parse_melee_event_text(yaml.safe_dump(data, sort_keys=False))
+
+
+def test_complete_event_collects_and_parses_real_wire_shapes_without_credentials(tmp_path):
+    guid_one = "11111111-1111-1111-1111-111111111111"
+    guid_two = "22222222-2222-2222-2222-222222222222"
+    html = b"""<html><head><title>Fixture Pro Tour | Melee</title></head><body>
+    <button class='round-selector' data-id='101' data-name='Round 1' data-is-completed='True'></button>
+    <button class='round-selector' data-id='101' data-name='Round 1'></button>
+    </body></html>"""
+
+    def player(participant_id, name):
+        return {"StatusDescription": "Active", "Players": [{"ID": participant_id, "DisplayName": name}]}
+
+    standings = {
+        "recordsTotal": 2,
+        "data": [
+            {"ID": 1, "Rank": 1, "Points": 3, "MatchRecord": "1-0-0", "Team": player(11, "Alpha"),
+             "Decklists": [{"DecklistId": guid_one, "PlayerId": 11}]},
+            {"ID": 2, "Rank": 2, "Points": 0, "MatchRecord": "0-1-0", "Team": player(22, "Beta"),
+             "Decklists": [{"DecklistId": guid_two, "PlayerId": 22}]},
+        ],
+    }
+    matches = {
+        "recordsTotal": 1,
+        "data": [{
+            "Guid": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", "RoundId": 101,
+            "HasResult": True, "ResultString": "2-1-0", "TableNumber": 1,
+            "ByeReasonDescription": None, "LossReasonDescription": None,
+            "Competitors": [
+                {"Team": player(11, "Alpha"), "GameWins": 2, "GameByes": 0},
+                {"Team": player(22, "Beta"), "GameWins": 1, "GameByes": 0},
+            ],
+        }],
+    }
+    calls = []
+
+    def send(method, url, **kwargs):
+        calls.append((method, url, kwargs))
+        if url.endswith("/Tournament/View/434455"):
+            return Response(content=html, url=url, headers={"Content-Type": "text/html"})
+        if url.endswith("/Standing/GetRoundStandings"):
+            payload = standings
+        elif "/Match/GetRoundMatches/101" in url:
+            payload = matches
+        else:
+            decklist_id = url.rsplit("=", 1)[-1]
+            payload = {"Guid": decklist_id, "FormatName": "Modern", "Records": [{"c": 0, "n": "Fixture Card", "q": 4}]}
+        return Response(content=json.dumps(payload).encode(), url=url, headers={"Content-Type": "application/json"})
+
+    result = fetch_complete_event(
+        "434455", registry(), tmp_path, request_send=send,
+        sleep=lambda _seconds: None, now=fixed_now, request_delay=0,
+    )
+    manifest = json.loads((result.archive_path / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["schema_version"] == "2.0.0"
+    assert [item["resource_type"] for item in manifest["responses"]] == [
+        "tournament", "standings", "matches", "decklist", "decklist"
+    ]
+    assert all("Cookie" not in call[2]["headers"] and "Authorization" not in call[2]["headers"] for call in calls)
+    assert calls[0][0] == "GET"
+    assert calls[1][0] == calls[2][0] == "POST"
+    assert manifest["responses"][1]["source_round_id"] == "101"
+    assert manifest["responses"][1]["request_body_sha256"]
+    loaded, schema_registry = schemas.load_schemas(ROOT / "schemas")
+    assert schemas.validate_instance(manifest, loaded["melee-raw-archive.schema.json"], schema_registry) == []
+
+    parsed = parse_raw_snapshot(result.archive_path)
+    assert sum(len(page.standings) for page in parsed.pages) == 2
+    assert sum(len(page.matches) for page in parsed.pages) == 1
+    assert sum(len(page.decklists) for page in parsed.pages) == 2
+    normalized = normalize_parsed_snapshot(
+        parsed, registry().events[0], normalized_at="2026-07-21T12:01:00Z"
+    )
+    assert normalized["quality"]["status"] == "valid"
+    assert normalized["matches"][0]["constructed_statistics_eligible"] is False
+
+    manifest["responses"][0].pop("method")
+    assert schemas.validate_instance(
+        manifest, loaded["melee-raw-archive.schema.json"], schema_registry
+    )
+    (result.archive_path / "manifest.json").write_text(
+        json.dumps(manifest), encoding="utf-8"
+    )
+    with pytest.raises(MeleeSourceParseError, match="missing v2 fields"):
+        parse_raw_snapshot(result.archive_path)

@@ -71,21 +71,43 @@ def _phase_for_round(source: SourceRound, event: MeleeEventDefinition):
 
 def _participant_status(source: SourceStanding) -> str:
     status = _normalized_text(source.status_text)
-    if status in {"active", "completed", "qualified", "finished"}:
+    if status in {"active", "completed", "qualified", "finished", "cut", "eliminated"}:
         return "active"
-    if status in {"drop", "dropped", "withdrawn"}:
+    if status in {
+        "drop", "dropped", "withdrawn", "dropped (self)", "dropped (staff)",
+    }:
         return "dropped"
+    if status == "disqualified":
+        return "disqualified"
     if status in {"no show", "noshow"}:
         return "no_show"
     return "unknown"
 
 
-def _source_result(source: SourceMatch) -> tuple[bool, list[dict[str, Any]]] | None:
+def _source_result(
+    source: SourceMatch, event: MeleeEventDefinition
+) -> tuple[bool, list[dict[str, Any]]] | None:
     status = _normalized_text(source.status_text)
     result = _normalized_text(source.result_text)
     competitors = source.competitor_results
     if tuple(item.source_participant_id for item in competitors) != source.competitor_source_ids:
         return None
+
+    if status == "qualified" or any(
+        _normalized_text(item.outcome_text) == "qualified" for item in competitors
+    ):
+        if (
+            len(competitors) != 1
+            or competitors[0].match_points not in {None, 3}
+            or event.advancement is None
+            or event.advancement.top8_lock_supported is not True
+        ):
+            return None
+        return False, [{
+            "source_participant_id": competitors[0].source_participant_id,
+            "result_type": "awarded_win_top8_lock",
+            "match_points": competitors[0].match_points if competitors[0].match_points is not None else 3,
+        }]
 
     if status == "bye" or any(_normalized_text(item.outcome_text) == "bye" for item in competitors):
         if len(competitors) != 1:
@@ -305,6 +327,12 @@ def normalize_parsed_snapshot(
                 )
             )
 
+    disqualified_source_ids = {
+        source_id
+        for source_id, participant in participant_documents.items()
+        if participant["status"] == "disqualified"
+    }
+
     for decklist in document["decklists"]:
         decklist["game_format"] = event.constructed_game_format
 
@@ -315,7 +343,7 @@ def normalize_parsed_snapshot(
     for source_id, source in sorted(source_matches.items()):
         target = match_documents[source_id]
         override = overrides.get(source_id)
-        resolved = _override_result(source, override) if override else _source_result(source)
+        resolved = _override_result(source, override) if override else _source_result(source, event)
         if resolved is None:
             issues.append(
                 _issue(
@@ -354,9 +382,18 @@ def normalize_parsed_snapshot(
             and phase.game_format == event.constructed_game_format
             and phase.swiss
             and all(item["result_type"] in PLAYED_RESULTS for item in results)
+            and not any(
+                item["source_participant_id"] in disqualified_source_ids
+                for item in results
+            )
         )
         target["constructed_statistics_eligible"] = eligible
         target["matchup_eligible"] = eligible
+        if any(
+            item["source_participant_id"] in disqualified_source_ids
+            for item in results
+        ):
+            target["evidence"].append("statistical_exclusion=disqualified_participant")
 
     if not any(round_["phase_id"] == "unresolved" for round_ in document["rounds"]):
         document["phases"] = [phase for phase in document["phases"] if phase["id"] != "unresolved"]

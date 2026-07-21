@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 from typing import Callable, Sequence
 
-from .client import MeleeFetchError, MeleeRawFetchResult, fetch_raw_event
+from .client import MeleeFetchError, MeleeRawFetchResult, fetch_complete_event, fetch_raw_event
 from .config import MeleeConfigError, load_melee_event_registry
 
 
@@ -26,6 +26,7 @@ def main(
     argv: Sequence[str] | None = None,
     *,
     fetch: Callable[..., MeleeRawFetchResult] = fetch_raw_event,
+    complete_fetch: Callable[..., MeleeRawFetchResult] = fetch_complete_event,
 ) -> int:
     parser = argparse.ArgumentParser(description="Validate or execute one whitelisted Melee raw-response plan.")
     parser.add_argument("--event-id", required=True, help="Whitelisted Melee tournament ID")
@@ -36,10 +37,21 @@ def main(
         action="store_true",
         help="Perform approved requests; without this flag the command is a zero-side-effect dry run",
     )
+    parser.add_argument(
+        "--complete",
+        action="store_true",
+        help="Discover and collect the complete public event; requires --execute",
+    )
     args = parser.parse_args(argv)
     try:
         registry = load_melee_event_registry(args.registry)
-        result = fetch(args.event_id, registry, args.raw_root, dry_run=not args.execute)
+        if args.complete and not args.execute:
+            raise ValueError("--complete requires --execute because its request plan is discovered live")
+        result = (
+            complete_fetch(args.event_id, registry, args.raw_root)
+            if args.complete
+            else fetch(args.event_id, registry, args.raw_root, dry_run=not args.execute)
+        )
     except (MeleeConfigError, MeleeFetchError, OSError, ValueError) as exc:
         print(f"Melee raw collection ERROR: {exc}", file=sys.stderr)
         return 2
