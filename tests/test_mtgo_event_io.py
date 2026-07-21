@@ -22,9 +22,11 @@ import fetch_mtgo
 from mtgmeta.config import DisabledFormatError
 from mtgmeta.mtgo.fetch import (
     MTGOFetchError,
+    MTGOIncompleteEventError,
     MTGOParseError,
     MTGOStorageError,
     discover_event_links,
+    download_event_data,
     download_page,
     event_filename,
     extract_event_data,
@@ -196,6 +198,43 @@ def test_download_retry_policy_is_injectable_and_bounded():
         )
 
 
+def test_event_download_retries_parse_failures_until_complete():
+    calls = []
+    waits = []
+
+    def request(_url, **_kwargs):
+        calls.append(True)
+        return Response("missing" if len(calls) == 1 else embedded_html())
+
+    assert download_event_data(
+        "https://example.test/event",
+        attempts=2,
+        retry_delay=1,
+        request_get=request,
+        sleep=waits.append,
+    ) == raw_event()
+    assert len(calls) == 2
+    assert waits == [1]
+
+
+def test_event_download_distinguishes_pending_decklists_from_parse_failure():
+    pending = {**raw_event(), "decklists": []}
+    with pytest.raises(MTGOIncompleteEventError, match="not been published"):
+        download_event_data(
+            "https://example.test/pending",
+            attempts=2,
+            retry_delay=0,
+            request_get=lambda *_args, **_kwargs: Response(embedded_html(pending)),
+        )
+    with pytest.raises(MTGOParseError, match="marker"):
+        download_event_data(
+            "https://example.test/malformed",
+            attempts=2,
+            retry_delay=0,
+            request_get=lambda *_args, **_kwargs: Response("missing"),
+        )
+
+
 def test_link_discovery_is_exact_and_does_not_confuse_premodern_or_leagues():
     html = " ".join(
         [
@@ -294,6 +333,55 @@ def test_format_aware_month_fetch_preserves_playoff_filter_and_ledger(tmp_path):
     assert (tmp_path / "fetched.txt").read_text(encoding="utf-8") == event_link + "\n"
     destination = tmp_path / "data" / "standard" / "Standard_Challenge_32_12345.json"
     assert json.loads(destination.read_text(encoding="utf-8")) == expected_batch_event()
+
+
+def test_month_fetch_defers_listed_event_until_decklists_are_published(tmp_path):
+    event_link = "/decklist/legacy-challenge-32-2026-07-1912847711"
+    pending = {**raw_event(), "description": "Legacy Challenge 32", "decklists": []}
+
+    def request(url, **_kwargs):
+        return Response(event_link if "/decklists/" in url else embedded_html(pending))
+
+    summary = fetch_event_months(
+        tmp_path,
+        "legacy",
+        months=[(2026, 7)],
+        registry_path=REGISTRY,
+        request_get=request,
+        sleep=lambda _seconds: None,
+        inter_event_delay=0,
+    )
+    assert summary["deferred_incomplete"] == 1
+    assert summary["failed"] == 0
+    assert summary["warnings"] == [
+        (
+            f"https://www.mtgo.com{event_link}",
+            "MTGO event decklists have not been published yet",
+        )
+    ]
+    assert not (tmp_path / "fetched.txt").exists()
+    assert not (tmp_path / "data").exists()
+
+
+def test_month_fetch_keeps_persistent_parse_failure_fatal(tmp_path):
+    event_link = "/decklist/legacy-challenge-32-2026-07-1912847711"
+
+    def request(url, **_kwargs):
+        return Response(event_link if "/decklists/" in url else "missing")
+
+    summary = fetch_event_months(
+        tmp_path,
+        "legacy",
+        months=[(2026, 7)],
+        registry_path=REGISTRY,
+        request_get=request,
+        sleep=lambda _seconds: None,
+        inter_event_delay=0,
+    )
+    assert summary["deferred_incomplete"] == 0
+    assert summary["failed"] == 1
+    assert summary["errors"][0][1] == "MTGO decklist marker was not found"
+    assert not (tmp_path / "fetched.txt").exists()
 
 
 def test_non_executable_format_event_collection_uses_its_own_path(tmp_path):

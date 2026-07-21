@@ -85,8 +85,11 @@ def _run_fetch_events(args: argparse.Namespace, root: Path, registry: Path) -> i
         "MTGO events: "
         f"format={args.format_id} candidates={summary['candidates']} fetched={summary['fetched']} "
         f"skipped={summary['skipped']} excluded={summary['excluded_no_playoff']} "
+        f"deferred={summary['deferred_incomplete']} "
         f"failed={summary['failed']}"
     )
+    for source, message in summary["warnings"]:
+        print(f"DEFERRED {source}: {message}", file=sys.stderr)
     for source, message in summary["errors"]:
         print(f"ERROR {source}: {message}", file=sys.stderr)
     return 1 if summary["failed"] else 0

@@ -37,7 +37,9 @@ def test_event_and_match_fetch_arguments_are_forwarded(monkeypatch):
             "fetched": 1,
             "skipped": 1,
             "excluded_no_playoff": 0,
+            "deferred_incomplete": 0,
             "failed": 0,
+            "warnings": [],
             "errors": [],
         }
 
@@ -65,6 +67,48 @@ def test_event_and_match_fetch_arguments_are_forwarded(monkeypatch):
     assert captured["matches"][0:2] == (ROOT, "standard")
     assert captured["matches"][2]["event_ids"] == ["123"]
     assert captured["matches"][2]["force"] is True
+
+
+def test_event_fetch_reports_deferred_events_without_failing(monkeypatch, capsys):
+    source = "https://www.mtgo.com/decklist/legacy-pending"
+    monkeypatch.setattr(
+        cli.fetch,
+        "fetch_event_months",
+        lambda *_args, **_kwargs: {
+            "candidates": 1,
+            "fetched": 0,
+            "skipped": 0,
+            "excluded_no_playoff": 0,
+            "deferred_incomplete": 1,
+            "failed": 0,
+            "warnings": [(source, "MTGO event decklists have not been published yet")],
+            "errors": [],
+        },
+    )
+    assert cli.main(["--root", str(ROOT), "--format", "legacy", "fetch-events"]) == 0
+    captured = capsys.readouterr()
+    assert "deferred=1 failed=0" in captured.out
+    assert f"DEFERRED {source}" in captured.err
+
+
+def test_event_fetch_keeps_persistent_parse_errors_fatal(monkeypatch, capsys):
+    source = "https://www.mtgo.com/decklist/legacy-malformed"
+    monkeypatch.setattr(
+        cli.fetch,
+        "fetch_event_months",
+        lambda *_args, **_kwargs: {
+            "candidates": 1,
+            "fetched": 0,
+            "skipped": 0,
+            "excluded_no_playoff": 0,
+            "deferred_incomplete": 0,
+            "failed": 1,
+            "warnings": [],
+            "errors": [(source, "MTGO decklist marker was not found")],
+        },
+    )
+    assert cli.main(["--root", str(ROOT), "--format", "legacy", "fetch-events"]) == 1
+    assert f"ERROR {source}" in capsys.readouterr().err
 
 
 def test_statistics_matchups_pickup_and_metadata_dispatch(monkeypatch):
