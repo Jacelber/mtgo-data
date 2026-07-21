@@ -62,16 +62,21 @@ def test_production_report_baseline_and_subtype_contract():
     assert not has_blocking_diagnostics(reports)
 
 
-def test_report_metadata_accepts_an_explicit_format_without_changing_classification():
+def test_report_metadata_defaults_to_rule_format_and_rejects_mismatch():
     reports = build_classification_reports(
         load_events((ROOT / "data" / "standard").glob("*.json"), ROOT),
         load_rule_set(STANDARD_RULES),
-        format_id="format-fixture",
         source="mtgo",
     )
-    assert {report["format"] for report in reports.values()} == {"format-fixture"}
+    assert {report["format"] for report in reports.values()} == {"standard"}
     assert {report["source"] for report in reports.values()} == {"mtgo"}
     assert reports["index"]["summary"] == production_reports()["index"]["summary"]
+    with pytest.raises(ValueError, match="does not match rule format"):
+        build_classification_reports(
+            [],
+            load_rule_set(STANDARD_RULES),
+            format_id="modern",
+        )
 
 
 def test_reports_are_deidentified_and_unknowns_retain_deck_evidence():
@@ -153,6 +158,7 @@ def test_cli_writes_conflict_report_before_strict_failure(tmp_path):
     event = {
         "event_id": "strict-fixture",
         "description": "Strict Fixture",
+        "format": "CSTANDARD",
         "starttime": "2026-01-01 00:00:00.0",
         "players": [{
             "player": "must-not-leak",
@@ -184,6 +190,46 @@ def test_cli_writes_conflict_report_before_strict_failure(tmp_path):
     report = json.loads((tmp_path / "reports/standard/mtgo/classification_conflicts.json").read_text(encoding="utf-8"))
     assert report["summary"] == {"record_count": 1, "blocking": True}
     assert "must-not-leak" not in json.dumps(report)
+
+
+def test_cli_rejects_cross_format_event_before_writing_reports(tmp_path):
+    data_dir = tmp_path / "data" / "standard"
+    data_dir.mkdir(parents=True)
+    (data_dir / "wrong-format.json").write_text(
+        json.dumps({
+            "event_id": "wrong-format",
+            "description": "Wrong Format",
+            "format": "CMODERN",
+            "starttime": "2026-01-01 00:00:00.0",
+            "players": [],
+        }),
+        encoding="utf-8",
+    )
+    output = tmp_path / "reports"
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-B",
+            str(ROOT / "generate_classification_reports.py"),
+            "--root",
+            str(tmp_path),
+            "--registry",
+            str(ROOT / "configs" / "formats.yaml"),
+            "--data-dir",
+            str(data_dir),
+            "--rules",
+            str(STANDARD_RULES),
+            "--output-dir",
+            str(output),
+        ],
+        cwd=tmp_path,
+        text=True,
+        capture_output=True,
+    )
+    assert result.returncode == 2
+    assert "cross-format event input rejected" in result.stdout
+    assert "CMODERN" in result.stdout
+    assert not output.exists()
 
 
 def test_cli_rejects_a_disabled_format_before_creating_report_output(tmp_path):

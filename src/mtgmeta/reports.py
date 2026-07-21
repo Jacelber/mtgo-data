@@ -118,10 +118,17 @@ def build_classification_reports(
     events: Sequence[tuple[str, Mapping[str, Any]]],
     rule_set: RuleSet,
     *,
-    format_id: str = "standard",
+    format_id: str | None = None,
     source: str = "mtgo",
 ) -> dict[str, dict[str, Any]]:
     """Classify every event deck and return deterministic diagnostic documents."""
+
+    resolved_format = rule_set.format if format_id is None else format_id
+    if resolved_format != rule_set.format:
+        raise ValueError(
+            f"classification report format {resolved_format!r} does not match "
+            f"rule format {rule_set.format!r}"
+        )
 
     unknown: list[dict[str, Any]] = []
     multiple: list[dict[str, Any]] = []
@@ -212,7 +219,7 @@ def build_classification_reports(
     common = {
         "event_count": len(events),
         "data_through": data_through,
-        "format_id": format_id,
+        "format_id": resolved_format,
         "source": source,
     }
     reports = {

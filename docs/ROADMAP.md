@@ -831,6 +831,10 @@ P6-02 completes the remaining framework migration and integration work around th
 
 P6-03 performs the first taxonomy review. It analyzes the P6-01 Unknown population, multi-rule matches, conflicts, and current representative decklists; then it may propose and test new or revised rules, new parent archetypes, and optional subtypes. Every P6-03 change must report its difference from the P6-01 compatibility baseline. Modern product enablement, statistics, workflow, and front-end work remain later separately controlled tasks.
 
+P6-01 was published through pull request #79, implementation commit `a3ee05a748b0855c91c4b772178d0189c4f29d82`, and merge commit `a09740028b39607021a3a02f1ee1679986f39b85` on 2026-07-21; the remote repository-validation check passed before merge.
+
+P6-02 local implementation was authorized and completed in an isolated workspace on 2026-07-21. It adds a read-only, in-memory classification audit for collection-enabled planned MTGO formats without granting executable product capabilities. The Modern audit loads the fixed P6-01 rules, requires matching rule metadata, admits 181 embedded `CMODERN` event documents, and reports the two misplaced `CPREMODERN` documents as explicit exclusions. It produces the P6-01 totals of 5,792 decks, 5,157 classified, 635 Unknown, 324 multiple matches, zero conflicts, zero invalid decks, and zero selected subtypes without creating a report directory. Shared report construction now requires report format and rule format to agree, and the authorized production report writer rejects cross-format event input before creating output. The production Modern CLI remains disabled. The P6-01 rule bytes, 38 parent archetypes, registry, report Schema, production reports, statistics, workflow, public JSON, and front ends are unchanged. The project owner accepted P6-02 and authorized its commit, push, pull request, and merge on 2026-07-21; P6-03 remains separately controlled and is not yet authorized.
+
 ## Acceptance criteria
 
 Phase 6 is complete when:
