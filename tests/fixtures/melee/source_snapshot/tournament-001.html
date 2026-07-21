@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Fixture tournament source</title></head>
+<body>
+<script type="application/json">
+{
+  "resource_type": "tournament",
+  "tournament": {
+    "source_event_id": "434455",
+    "name": "Fixture Mixed Pro Tour",
+    "start_text": "July 17, 2026",
+    "end_text": "July 19, 2026"
+  },
+  "standings": [
+    {
+      "source_standing_id": "standing-101",
+      "source_participant_id": "participant-101",
+      "display_name": "Fixture Player Alpha",
+      "rank": 1,
+      "match_points": 39,
+      "record_text": "13-3-0",
+      "status_text": "Qualified"
+    },
+    {
+      "source_standing_id": "standing-202",
+      "source_participant_id": "participant-202",
+      "display_name": "Fixture Player Beta",
+      "rank": 2,
+      "match_points": 36,
+      "record_text": "12-4-0",
+      "status_text": "Dropped"
+    }
+  ],
+  "decklist_references": [
+    {
+      "source_decklist_id": "9001",
+      "source_participant_id": "participant-101",
+      "url": "https://melee.gg/Decklist/View/9001"
+    }
+  ],
+  "rounds": [
+    {"source_round_id": "round-source-1", "label": "Round 1", "number": 1},
+    {"source_round_id": "round-source-4", "label": "Round 4", "number": 4},
+    {"source_round_id": "round-source-qf", "label": "Quarterfinals", "number": null}
+  ],
+  "matches": [
+    {
+      "source_match_id": "match-source-1",
+      "source_round_id": "round-source-1",
+      "competitor_source_ids": ["participant-101", "participant-202"],
+      "result_text": "2-1-0",
+      "status_text": "Completed",
+      "table_number": 7
+    },
+    {
+      "source_match_id": "match-source-4",
+      "source_round_id": "round-source-4",
+      "competitor_source_ids": ["participant-101"],
+      "result_text": null,
+      "status_text": "Bye",
+      "table_number": null
+    }
+  ]
+}
+</script>
+</body>
+</html>
