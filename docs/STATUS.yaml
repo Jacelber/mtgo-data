@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p5-04-melee-source-parser"
-  working_branch_status: "p5_04_owner_accepted_and_publication_authorized"
+  current_working_branch: "master"
+  working_branch_status: "p5_04_completed_and_published"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2215,8 +2215,12 @@ phase_5_tasks:
     merged_to_master: true
   - id: "P5-04"
     name: "Parse stored Melee source fixtures"
-    status: "owner_accepted_and_publication_authorized"
+    status: "completed_and_published"
     branch: "codex/p5-04-melee-source-parser"
+    commit: "36de9c4c7ccbede92542caca0f4edd25f703acbb"
+    pull_request: 69
+    merge_commit: "ac08bef5159e4dc43650d80ccfecac9f81ed299e"
+    merged_on: "2026-07-21"
     reference_event_id: "434455"
     fixture_kind: "synthetic_deidentified_stored_raw_snapshot"
     raw_archive_schema_version: "1.0.0"
@@ -2236,6 +2240,7 @@ phase_5_tasks:
     tests_passed: 295
     owner_accepted: true
     remote_publication_authorized: true
+    merged_to_master: true
   - id: "P5-05"
     name: "Assemble normalized Melee events"
     status: "not_started"
