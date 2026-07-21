@@ -286,6 +286,17 @@ Recommended normalized values include:
 - `draft_result`;
 - `playoff_result`.
 
+Result normalization must use explicit source evidence for each competitor. The
+order of competitors in a source array is not evidence of winner or loser. A
+played result is valid only when two identified competitors have a consistent
+win/loss or draw/draw pair and compatible match points. Ambiguous records remain
+`unknown` and are excluded.
+
+Event-specific corrections must be stored as reviewed configuration with the
+source match ID, complete competitor identities and results, a reason, and
+reviewable source URLs. In particular, `awarded_win_top8_lock` must not be
+inferred from rank, late-round timing, or an apparent win alone.
+
 ### 6.1 Handling matrix
 
 | Result type | Constructed points | Win-rate denominator | Matchup matrix | Theoretical round | Notes |

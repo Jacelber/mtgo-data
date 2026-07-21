@@ -102,6 +102,10 @@ def test_stored_snapshot_parses_all_source_record_families_without_normalizing()
         ("Quarterfinals", None),
     ]
     assert tournament_page.matches[0].result_text == "2-1-0"
+    assert [item.outcome_text for item in tournament_page.matches[0].competitor_results] == [
+        "Win",
+        "Loss",
+    ]
     assert tournament_page.matches[1].competitor_source_ids == ("participant-101",)
     assert tournament_page.matches[1].status_text == "Bye"
 

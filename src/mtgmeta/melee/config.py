@@ -14,7 +14,7 @@ import yaml
 from ..config import DuplicateKeyLoader
 
 
-MELEE_EVENT_SCHEMA_VERSION = "2.0.0"
+MELEE_EVENT_SCHEMA_VERSION = "3.0.0"
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
 PHASE_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*$")
 MELEE_EVENT_URL_PATTERN = re.compile(r"^https://melee\.gg/Tournament/View/([1-9][0-9]*)$")
@@ -34,6 +34,13 @@ STRUCTURES = frozenset({"constructed_day2", "constructed_single_stage", "mixed"}
 STAGES = frozenset({"day1", "day2", "playoff", "other"})
 ROUND_PHASES = frozenset({"draft", "constructed", "playoff", "unknown"})
 REVIEW_STATUSES = frozenset({"pending", "verified", "rejected"})
+RESULT_TYPES = frozenset(
+    {
+        "played_win", "played_loss", "played_draw", "intentional_draw", "bye",
+        "no_show", "unplayed_drop", "awarded_win_top8_lock", "administrative",
+    }
+)
+PLAYED_RESULT_TYPES = frozenset({"played_win", "played_loss", "played_draw"})
 
 
 class MeleeConfigError(ValueError):
@@ -80,6 +87,24 @@ class MeleeAdvancement:
 
 
 @dataclass(frozen=True)
+class MeleeOverrideCompetitor:
+    source_participant_id: str
+    result_type: str
+    match_points: int
+
+
+@dataclass(frozen=True)
+class MeleeMatchOverride:
+    id: str
+    source_match_id: str
+    review_status: str
+    played: bool
+    competitors: tuple[MeleeOverrideCompetitor, ...]
+    reason: str
+    source_evidence: tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class MeleeEventDefinition:
     id: str
     url: str
@@ -96,6 +121,7 @@ class MeleeEventDefinition:
     include_playoffs: bool
     phases: tuple[MeleePhaseDefinition, ...]
     advancement: MeleeAdvancement | None
+    reviewed_overrides: tuple[MeleeMatchOverride, ...]
     constructed_game_format: str
     source_evidence: tuple[str, ...]
     special_handling: tuple[str, ...]
@@ -309,13 +335,92 @@ def _parse_advancement(value: Any, path: str) -> MeleeAdvancement:
     return MeleeAdvancement(after_round, match_points, top8_lock_supported)
 
 
+def _parse_reviewed_overrides(value: Any, path: str) -> tuple[MeleeMatchOverride, ...]:
+    if not isinstance(value, list):
+        raise _error(path, "must be a list")
+    overrides: list[MeleeMatchOverride] = []
+    for index, item in enumerate(value):
+        item_path = f"{path}[{index}]"
+        data = _require_mapping(
+            item,
+            item_path,
+            {"id", "source_match_id", "review_status", "played", "competitors", "reason", "source_evidence"},
+        )
+        override_id = _require_string(data["id"], f"{item_path}.id")
+        if not PHASE_ID_PATTERN.fullmatch(override_id):
+            raise _error(f"{item_path}.id", "must be a lowercase underscore-separated identifier")
+        source_match_id = _require_string(data["source_match_id"], f"{item_path}.source_match_id")
+        review_status = _require_string(data["review_status"], f"{item_path}.review_status")
+        if review_status != "verified":
+            raise _error(f"{item_path}.review_status", "must be verified")
+        played = _require_bool(data["played"], f"{item_path}.played")
+        competitors_data = data["competitors"]
+        if not isinstance(competitors_data, list) or not 1 <= len(competitors_data) <= 2:
+            raise _error(f"{item_path}.competitors", "must contain one or two competitors")
+        competitors: list[MeleeOverrideCompetitor] = []
+        for position, competitor_value in enumerate(competitors_data):
+            competitor_path = f"{item_path}.competitors[{position}]"
+            competitor = _require_mapping(
+                competitor_value,
+                competitor_path,
+                {"source_participant_id", "result_type", "match_points"},
+            )
+            result_type = _require_string(competitor["result_type"], f"{competitor_path}.result_type")
+            if result_type not in RESULT_TYPES:
+                raise _error(f"{competitor_path}.result_type", "is not a supported reviewed result")
+            competitors.append(
+                MeleeOverrideCompetitor(
+                    _require_string(competitor["source_participant_id"], f"{competitor_path}.source_participant_id"),
+                    result_type,
+                    _require_non_negative_int(competitor["match_points"], f"{competitor_path}.match_points"),
+                )
+            )
+        participant_ids = [item.source_participant_id for item in competitors]
+        if len(participant_ids) != len(set(participant_ids)):
+            raise _error(f"{item_path}.competitors", "must not contain duplicate participants")
+        result_types = tuple(item.result_type for item in competitors)
+        if played != all(result_type in PLAYED_RESULT_TYPES for result_type in result_types):
+            raise _error(item_path, "played must agree with all competitor result types")
+        if played and (
+            len(competitors) != 2
+            or sorted(result_types) not in [["played_loss", "played_win"], ["played_draw", "played_draw"]]
+        ):
+            raise _error(item_path, "played overrides must be win/loss or draw/draw pairs")
+        expected_points = {"played_win": 3, "played_loss": 0, "played_draw": 1}
+        if played and any(
+            item.match_points != expected_points[item.result_type] for item in competitors
+        ):
+            raise _error(item_path, "played override points must match win/loss/draw semantics")
+        evidence = _parse_string_list(data["source_evidence"], f"{item_path}.source_evidence")
+        for position, url in enumerate(evidence):
+            _require_https_url(url, f"{item_path}.source_evidence[{position}]")
+        overrides.append(
+            MeleeMatchOverride(
+                override_id,
+                source_match_id,
+                review_status,
+                played,
+                tuple(competitors),
+                _require_string(data["reason"], f"{item_path}.reason"),
+                evidence,
+            )
+        )
+    ids = [item.id for item in overrides]
+    source_match_ids = [item.source_match_id for item in overrides]
+    if len(ids) != len(set(ids)):
+        raise _error(path, "must not contain duplicate override IDs")
+    if len(source_match_ids) != len(set(source_match_ids)):
+        raise _error(path, "must not contain multiple overrides for one match")
+    return tuple(overrides)
+
+
 def _parse_event(value: Any, path: str) -> MeleeEventDefinition:
     required = {
         "id", "url", "name", "date", "format", "series", "structure", "enabled", "review_status",
         "tabletop", "team_event", "mixed_format", "raw_requests", "include", "phases", "statistics", "source_evidence",
         "special_handling", "notes",
     }
-    data = _require_mapping(value, path, required, {"advancement"})
+    data = _require_mapping(value, path, required, {"advancement", "reviewed_overrides"})
     event_id = _require_string(data["id"], f"{path}.id")
     if not EVENT_ID_PATTERN.fullmatch(event_id):
         raise _error(f"{path}.id", "must be a non-empty decimal string")
@@ -394,9 +499,18 @@ def _parse_event(value: Any, path: str) -> MeleeEventDefinition:
     special_handling = _parse_string_list(data["special_handling"], f"{path}.special_handling", required=False)
     notes = _require_string(data["notes"], f"{path}.notes")
     advancement = _parse_advancement(data["advancement"], f"{path}.advancement") if "advancement" in data else None
+    reviewed_overrides = _parse_reviewed_overrides(
+        data.get("reviewed_overrides", []), f"{path}.reviewed_overrides"
+    )
+    if any(
+        competitor.result_type == "awarded_win_top8_lock"
+        for override in reviewed_overrides
+        for competitor in override.competitors
+    ) and (advancement is None or advancement.top8_lock_supported is not True):
+        raise _error(f"{path}.reviewed_overrides", "Top 8 lock awards require explicit advancement support")
     return MeleeEventDefinition(
         event_id, url, name, start_date, end_date, constructed_format, series, structure, enabled,
-        review_status, mixed_format, raw_requests, include_playoffs, phases, advancement, statistics_format,
+        review_status, mixed_format, raw_requests, include_playoffs, phases, advancement, reviewed_overrides, statistics_format,
         evidence, special_handling, notes,
     )
 
