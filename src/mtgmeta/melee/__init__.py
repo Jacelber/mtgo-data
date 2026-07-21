@@ -16,6 +16,13 @@ from .config import (
     UnknownMeleeEventError,
     load_melee_event_registry,
 )
+from .parser import (
+    MeleeSourceParseError,
+    ParsedMeleeSnapshot,
+    ParsedSourcePage,
+    parse_raw_snapshot,
+    parse_source_response,
+)
 
 __all__ = [
     "WHITELIST_SCHEMA_VERSION",
@@ -27,4 +34,9 @@ __all__ = [
     "MeleeRawRequestDefinition",
     "UnknownMeleeEventError",
     "load_melee_event_registry",
+    "MeleeSourceParseError",
+    "ParsedMeleeSnapshot",
+    "ParsedSourcePage",
+    "parse_raw_snapshot",
+    "parse_source_response",
 ]
