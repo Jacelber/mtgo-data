@@ -66,6 +66,7 @@ def test_latest_complete_week_is_deterministic_at_the_reference_boundary():
     )
 
 
+@pytest.mark.committed_baseline
 def test_fixed_reference_regeneration_is_byte_identical(tmp_path):
     written = mtgo_stats.build_all_stats(
         ROOT,
@@ -80,6 +81,7 @@ def test_fixed_reference_regeneration_is_byte_identical(tmp_path):
         assert written[filename].read_bytes() == (committed / filename).read_bytes(), filename
 
 
+@pytest.mark.committed_baseline
 def test_legacy_standard_wrapper_uses_the_same_fixed_output(tmp_path):
     written = stats_standard.build_all_stats(
         today=REFERENCE_TODAY,

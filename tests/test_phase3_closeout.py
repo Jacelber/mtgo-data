@@ -5,6 +5,8 @@ from __future__ import annotations
 from datetime import date
 from pathlib import Path
 
+import pytest
+
 from generate_classification_reports import generate_reports
 from mtgmeta.mtgo import __main__ as cli
 from mtgmeta.mtgo import matchup, pickup, stats
@@ -23,6 +25,7 @@ def assert_byte_identical(generated: Path, committed: Path) -> None:
     assert generated.read_bytes() == committed.read_bytes(), committed.relative_to(ROOT)
 
 
+@pytest.mark.committed_baseline
 def test_fixed_reference_standard_product_is_byte_identical(tmp_path):
     generated_stats = tmp_path / "stats"
     generated_pickup = tmp_path / "pickup"

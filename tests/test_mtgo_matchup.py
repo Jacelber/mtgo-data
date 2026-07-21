@@ -127,6 +127,7 @@ def test_unsafe_event_id_is_rejected_before_network_and_storage(tmp_path):
     assert not (root / "data").exists()
 
 
+@pytest.mark.committed_baseline
 def test_fixed_reference_standard_matchups_are_byte_identical(tmp_path):
     import stats_matchup
 

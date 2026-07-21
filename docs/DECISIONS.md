@@ -1151,3 +1151,31 @@ Implement Modern before Pauper after the protected Standard baseline. Retain Pau
 Phase 5 uses `434455` only to define and validate ingestion contracts; it does not authorize live fetching, Modern classification, statistics, or publication. Later Modern statistics may include only verified Modern Swiss records. Draft Swiss and the Draft Top 8 remain available as source context but are excluded from Modern performance and matchup calculations.
 
 Overall standings cannot be presented as Modern-only performance because they combine Draft and Modern results. Day 2 metrics require the existing selection-bias warning. The roadmap, scope, architecture examples, status, whitelist, schemas, and tests must reflect the new reference path.
+
+---
+
+# DEC-035 — Separate clean baselines from production candidate acceptance
+
+Status: `Accepted`
+
+## Context
+
+The production update run `29795445118` successfully fetched and generated new MTGO data, then failed five fixed-reference tests because those tests read the now-mutated production directories and compared them with the previously committed Standard snapshot. The failures correctly detected that the checkout no longer matched the historical baseline, but that baseline responsibility was being applied at the wrong lifecycle stage. Treating historical deck counts as daily data-acceptance thresholds would make every legitimate data increment look like a regression.
+
+## Decision
+
+Use three explicit validation layers:
+
+- read-only pull-request and `master` CI runs the complete test suite against a clean checkout, including tests marked `committed_baseline`;
+- the production workflow runs the same clean-checkout suite before any fetch as defense in depth, then captures a dynamic production baseline;
+- after fetching and generation, a dedicated candidate validator checks permitted publication paths, rejects deletions and source-boundary violations, parses changed documents, verifies event and match shape, checks ledger uniqueness, and prevents event, match, or ledger count regression;
+- strict classification diagnostics and repository, rule, and Schema validators continue to run on the generated candidate;
+- after publication, the workflow confirms a clean workspace and equality between the local published commit and remote `master`.
+
+Fixed-reference tests do not run against a checkout after production mutation. Dynamic candidate acceptance does not use historical hard-coded event, deck, or matchup counts.
+
+## Consequences
+
+Standard remains the committed regression baseline without blocking legitimate daily growth. Production publication receives a separate fail-closed boundary that can detect unexpected code, configuration, Melee, or unsupported-format product writes. A newly generated file is parsed even when it is still untracked and therefore invisible to tracked-file-only repository checks. Extending the production publication scope or permitting automatic deletion requires an explicit validator and workflow review.
+
+This decision changes validation orchestration only. It does not change statistical formulas, classification rules, public JSON contracts, source inclusion policy, or format authorization.
