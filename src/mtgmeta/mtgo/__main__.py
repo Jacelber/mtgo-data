@@ -6,7 +6,7 @@ import argparse
 from pathlib import Path
 import sys
 
-from mtgmeta.config import FormatConfigError, load_format_registry
+from mtgmeta.config import DisabledFormatError, FormatConfigError, load_format_registry
 
 from . import DEFAULT_REGISTRY_PATH
 from . import fetch, matchup, pickup, stats
@@ -190,6 +190,15 @@ RUNNERS = {
     "classification-reports": _run_reports,
 }
 
+COMMAND_CAPABILITIES = {
+    "fetch-matches": "matchup_statistics",
+    "build-statistics": "event_statistics",
+    "build-matchups": "matchup_statistics",
+    "pickup": "weekly_pickup",
+    "generate-metadata": "metadata_generation",
+    "classification-reports": "classification",
+}
+
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
@@ -202,7 +211,12 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "fetch-events":
             format_registry.require_mtgo_event_collection(args.format_id)
         else:
-            format_registry.require_mtgo(args.format_id)
+            definition = format_registry.require_mtgo(args.format_id)
+            capability = COMMAND_CAPABILITIES[args.command]
+            if capability not in definition.mtgo.capabilities:
+                raise DisabledFormatError(
+                    f"MTGO format {args.format_id!r} does not support {capability!r}"
+                )
         return RUNNERS[args.command](args, root, registry)
     except (
         FormatConfigError,

@@ -46,13 +46,22 @@ def repository_root() -> Path:
 def tracked_files(root: Path) -> list[str]:
     try:
         result = subprocess.run(
-            ["git", "ls-files", "-z"], cwd=root, check=True,
+            ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
+            cwd=root, check=True,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        deleted_result = subprocess.run(
+            ["git", "ls-files", "-z", "--deleted"], cwd=root, check=True,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         )
     except (OSError, subprocess.CalledProcessError) as exc:
         raise InfrastructureError(f"cannot obtain tracked-file inventory: {exc}") from exc
     try:
-        return sorted(name for name in result.stdout.decode("utf-8").split("\0") if name)
+        names = {name for name in result.stdout.decode("utf-8").split("\0") if name}
+        deleted = {
+            name for name in deleted_result.stdout.decode("utf-8").split("\0") if name
+        }
+        return sorted(names - deleted)
     except UnicodeDecodeError as exc:
         raise InfrastructureError(f"tracked-file inventory is not UTF-8: {exc}") from exc
 

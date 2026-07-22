@@ -27,11 +27,19 @@ from mtgmeta.reports import find_identity_fields, has_blocking_diagnostics
 
 
 MODERN_RULES = ROOT / "my_archetypes" / "modern.yaml"
+MODERN_REPORTS = ROOT / "reports" / "modern" / "mtgo"
+STANDARD_REPORTS = ROOT / "reports" / "standard" / "mtgo"
 
 
-def test_complete_modern_audit_uses_shared_paths_without_product_output():
-    output = ROOT / "reports" / "modern" / "mtgo"
-    assert not output.exists()
+def report_bytes():
+    return {
+        path.name: path.read_bytes()
+        for path in sorted(MODERN_REPORTS.glob("*.json"))
+    }
+
+
+def test_complete_modern_audit_uses_shared_paths_without_mutating_product_output():
+    before = report_bytes()
 
     audit = audit_mtgo_classification(ROOT, "modern")
     reports = audit.reports
@@ -42,9 +50,7 @@ def test_complete_modern_audit_uses_shared_paths_without_product_output():
     assert audit.event_directory == ROOT / "data" / "modern"
     assert audit.rule_path == MODERN_RULES
     assert audit.included_event_count == reports["index"]["event_count"] == 181
-    assert len(audit.excluded_events) == 2
-    assert {item.actual_format for item in audit.excluded_events} == {"CPREMODERN"}
-    assert all(item.expected_format == "CMODERN" for item in audit.excluded_events)
+    assert audit.excluded_events == ()
     assert summary == {
         "total_decks": 5792,
         "classified": 5664,
@@ -61,7 +67,7 @@ def test_complete_modern_audit_uses_shared_paths_without_product_output():
     assert {report["source"] for report in reports.values()} == {"mtgo"}
     assert find_identity_fields(reports) == []
     assert not has_blocking_diagnostics(reports)
-    assert not output.exists()
+    assert report_bytes() == before
 
 
 def test_audit_preserves_the_active_rule_artifact_exactly():
@@ -100,9 +106,11 @@ def test_planned_format_audit_never_falls_back_to_standard_rules():
         audit_mtgo_classification(ROOT, "pauper")
 
 
-def test_production_cli_still_rejects_modern_before_writing_reports(tmp_path):
-    output = ROOT / "reports" / "modern" / "mtgo"
-    assert not output.exists()
+def test_production_cli_generates_strict_deidentified_modern_reports():
+    standard_before = {
+        path.name: path.read_bytes()
+        for path in sorted(STANDARD_REPORTS.glob("*.json"))
+    }
     result = subprocess.run(
         [
             sys.executable,
@@ -114,6 +122,66 @@ def test_production_cli_still_rejects_modern_before_writing_reports(tmp_path):
             "--format",
             "modern",
             "classification-reports",
+            "--strict",
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        env={**__import__("os").environ, "PYTHONPATH": str(SRC)},
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "decks=5792" in result.stdout
+    assert "unknown=128" in result.stdout
+    assert "validation PASS" in result.stdout
+    assert sorted(path.name for path in MODERN_REPORTS.glob("*.json")) == [
+        "classification_conflicts.json",
+        "index.json",
+        "multiple_matches.json",
+        "overridden_matches.json",
+        "subtype_diagnostics.json",
+        "unknown_decks.json",
+    ]
+    generated = {
+        path.stem: json.loads(path.read_text(encoding="utf-8"))
+        for path in sorted(MODERN_REPORTS.glob("*.json"))
+    }
+    assert find_identity_fields(generated) == []
+    assert all(report["format"] == "modern" for report in generated.values())
+    for report in generated.values():
+        for record in report.get("records", []):
+            assert record["source_file"].startswith("data/modern/")
+    assert {
+        path.name: path.read_bytes()
+        for path in sorted(STANDARD_REPORTS.glob("*.json"))
+    } == standard_before
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        ["fetch-matches"],
+        ["build-statistics"],
+        ["build-matchups"],
+        ["pickup", "candidates"],
+        ["generate-metadata"],
+    ],
+)
+def test_every_nonclassification_modern_product_command_remains_disabled(command):
+    statistics = ROOT / "stats" / "modern" / "mtgo"
+    matches = ROOT / "data" / "modern" / "mtgo" / "matches"
+    assert not statistics.exists()
+    assert not matches.exists()
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-B",
+            "-m",
+            "mtgmeta.mtgo",
+            "--root",
+            str(ROOT),
+            "--format",
+            "modern",
+            *command,
         ],
         cwd=ROOT,
         text=True,
@@ -121,5 +189,6 @@ def test_production_cli_still_rejects_modern_before_writing_reports(tmp_path):
         env={**__import__("os").environ, "PYTHONPATH": str(SRC)},
     )
     assert result.returncode == 2
-    assert "not enabled" in result.stderr
-    assert not output.exists()
+    assert "does not support" in result.stderr
+    assert not statistics.exists()
+    assert not matches.exists()

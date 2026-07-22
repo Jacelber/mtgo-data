@@ -118,7 +118,8 @@ def main(argv: list[str] | None = None) -> int:
         for failure in failures:
             print(f"{failure.path} {failure.location}: {failure.message}")
         return 1
-    print(f"Schema validation PASS: checked={checked} profile=legacy-standard-mtgo-public-json version=1.0.0 embedded_versions={checked}")
+    profile = _read_json(manifest).get("profile", "unspecified")
+    print(f"Schema validation PASS: checked={checked} profile={profile} version=1.0.0 embedded_versions={checked}")
     return 0
 
 

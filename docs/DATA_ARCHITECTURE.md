@@ -692,6 +692,10 @@ MTGO raw-event collection and product execution are separate states. `event_coll
 
 During Phase 3, Standard, Pauper, Modern, Pioneer, Legacy, and Vintage retain their pre-migration official-event archive, while Standard remains the only executable MTGO product format. Non-Standard Videre collection is not implied by event archival.
 
+Beginning with P6-04, executable state is capability-scoped rather than equivalent to a complete public product. Modern is executable and non-public with only the `classification` capability. This permits deterministic de-identified reports under `reports/modern/mtgo/`, but it does not permit Modern match fetching, statistics, Pickup, metadata, catalogs, workflows, or front-end exposure. Every command must check its own declared capability before performing network or output side effects.
+
+Format event directories may contain only documents whose embedded MTGO format matches the configured project format. Classification generation fails closed when it encounters any cross-format document. Unsupported formats must not be retained inside a supported format's data directory or represented as classification exceptions; erroneous unsupported-format archives should be removed after review.
+
 ### 8.2 `melee_events.yaml`
 
 This file is the authoritative Melee whitelist.
