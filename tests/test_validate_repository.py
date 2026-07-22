@@ -89,13 +89,22 @@ def test_invalid_yaml_utf8(tmp_path):
 def test_tracked_files_invocation(monkeypatch, tmp_path):
     calls = []
     class Result:
-        stdout = b"b.py\0a.py\0\0"
+        def __init__(self, stdout):
+            self.stdout = stdout
     def run(args, **kwargs):
         calls.append((args, kwargs))
-        return Result()
+        return Result(
+            b"b.py\0a.py\0removed.py\0\0"
+            if "--deleted" not in args
+            else b"removed.py\0"
+        )
     monkeypatch.setattr(validator.subprocess, "run", run)
     assert validator.tracked_files(tmp_path) == ["a.py", "b.py"]
-    assert calls[0][0] == ["git", "ls-files", "-z"] and "shell" not in calls[0][1]
+    assert calls[0][0] == [
+        "git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"
+    ]
+    assert calls[1][0] == ["git", "ls-files", "-z", "--deleted"]
+    assert all("shell" not in kwargs for _, kwargs in calls)
 
 
 def test_tracked_files_failure(monkeypatch, tmp_path):

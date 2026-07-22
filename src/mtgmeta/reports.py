@@ -257,20 +257,21 @@ def build_classification_reports(
             "records": subtype,
         },
     }
+    index_summary = {
+        "total_decks": total,
+        "classified": statuses["classified"],
+        "unknown": statuses["unknown"],
+        "conflicts": statuses["conflict"],
+        "invalid_decks": statuses["invalid_deck"],
+        "multiple_matches": len(multiple),
+        "overridden_matches": len(overridden),
+        "selected_subtypes": sum(subtype_counts.values()),
+        "same_parent_multiple_subtype_matches": reports["subtype_diagnostics"]["summary"]["same_parent_multiple_subtype_matches"],
+        "strict_validation": "fail" if conflicts or invalid else "pass",
+    }
     reports["index"] = {
         **_base("classification_report_index", **common),
-        "summary": {
-            "total_decks": total,
-            "classified": statuses["classified"],
-            "unknown": statuses["unknown"],
-            "conflicts": statuses["conflict"],
-            "invalid_decks": statuses["invalid_deck"],
-            "multiple_matches": len(multiple),
-            "overridden_matches": len(overridden),
-            "selected_subtypes": sum(subtype_counts.values()),
-            "same_parent_multiple_subtype_matches": reports["subtype_diagnostics"]["summary"]["same_parent_multiple_subtype_matches"],
-            "strict_validation": "fail" if conflicts or invalid else "pass",
-        },
+        "summary": index_summary,
         "files": [REPORT_FILENAMES[name] for name in REPORT_FILENAMES],
         "invalid_records": invalid,
     }

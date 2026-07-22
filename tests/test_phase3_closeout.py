@@ -110,7 +110,7 @@ def test_fixed_reference_standard_product_is_byte_identical(tmp_path):
     assert len(list(generated_reports.glob("*.json"))) == 6
 
 
-def test_all_nonstandard_product_commands_fail_before_dispatch_or_output(
+def test_nonstandard_product_commands_obey_current_capabilities_before_dispatch(
     tmp_path, monkeypatch, capsys
 ):
     registry = tmp_path / "configs" / "formats.yaml"
@@ -136,16 +136,19 @@ def test_all_nonstandard_product_commands_fail_before_dispatch_or_output(
     )
     for format_id in NONSTANDARD_FORMATS:
         for command in product_commands:
+            expected = 0 if format_id == "modern" and command == ["classification-reports"] else 2
             assert cli.main(
                 ["--root", str(tmp_path), "--format", format_id, *command]
-            ) == 2
-    assert dispatched == []
+            ) == expected
+    assert [(format_id, command) for format_id, command, _, _ in dispatched] == [
+        ("modern", "classification-reports")
+    ]
     assert sorted(path.relative_to(tmp_path).as_posix() for path in tmp_path.rglob("*")) == [
         "configs",
         "configs/formats.yaml",
     ]
     assert capsys.readouterr().err.count("MTGO command ERROR") == (
-        len(NONSTANDARD_FORMATS) * len(product_commands)
+        len(NONSTANDARD_FORMATS) * len(product_commands) - 1
     )
 
     for format_id in ("standard", *NONSTANDARD_FORMATS):
@@ -153,5 +156,7 @@ def test_all_nonstandard_product_commands_fail_before_dispatch_or_output(
             ["--root", str(tmp_path), "--format", format_id, "fetch-events"]
         ) == 0
     assert [(format_id, command) for format_id, command, _, _ in dispatched] == [
+        ("modern", "classification-reports")
+    ] + [
         (format_id, "fetch-events") for format_id in ("standard", *NONSTANDARD_FORMATS)
     ]

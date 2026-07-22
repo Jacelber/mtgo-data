@@ -9,7 +9,7 @@
       "properties": {
         "schema_version": {"const": "1.0.0"},
         "report_type": {"type": "string", "minLength": 1},
-        "format": {"const": "standard"},
+        "format": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
         "source": {"const": "mtgo"},
         "scope": {"const": "all_available_events"},
         "event_count": {"type": "integer", "minimum": 0},
@@ -24,7 +24,7 @@
         "event_id": {"type": "string", "minLength": 1},
         "event_name": {"type": "string", "minLength": 1},
         "event_start": {"type": "string"},
-        "source_file": {"type": "string", "pattern": "^data/standard/.+\\.json$"}
+        "source_file": {"type": "string", "pattern": "^data/[a-z0-9]+(?:-[a-z0-9]+)*/.+\\.json$"}
       }
     },
     "selected": {

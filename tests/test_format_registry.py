@@ -40,13 +40,16 @@ def registry():
     return load_format_registry(REGISTRY_PATH)
 
 
-def test_registry_matches_the_p3_contract_and_preserves_standard_paths():
+def test_registry_preserves_the_p3_standard_contract_and_enables_modern_classification_only():
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     loaded = registry()
 
     assert loaded.schema_version == "1.1.0"
     assert [item.id for item in loaded.formats] == contract["format_state_model"]["known_format_ids"]
-    assert [item.id for item in loaded.formats if item.state == "executable"] == ["standard"]
+    assert [item.id for item in loaded.formats if item.state == "executable"] == [
+        "standard",
+        "modern",
+    ]
 
     standard = loaded.require_mtgo("standard")
     assert standard.public is True
@@ -63,11 +66,14 @@ def test_registry_matches_the_p3_contract_and_preserves_standard_paths():
         loaded.require_mtgo_event_collection(format_id).id == format_id
         for format_id in ("standard", "pauper", "modern", "pioneer", "legacy", "vintage")
     )
+    modern = loaded.require_mtgo("modern")
+    assert modern.public is False
+    assert modern.mtgo.capabilities == {"classification"}
 
 
 def test_known_disabled_and_unknown_formats_fail_without_a_standard_fallback():
     loaded = registry()
-    for format_id in ("pauper", "modern", "pioneer", "legacy"):
+    for format_id in ("pauper", "pioneer", "legacy"):
         with pytest.raises(DisabledFormatError, match="not enabled"):
             loaded.require_mtgo(format_id)
     with pytest.raises(DisabledFormatError, match="decision-gated"):
@@ -76,6 +82,7 @@ def test_known_disabled_and_unknown_formats_fail_without_a_standard_fallback():
         loaded.require_mtgo("alchemy")
     with pytest.raises(TypeError):
         loaded.require_mtgo()  # type: ignore[call-arg]
+    assert loaded.require_mtgo("modern").id == "modern"
 
 
 def test_schema_accepts_the_registry_and_rejects_extra_or_unsafe_shape_fields():

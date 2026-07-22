@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-02-modern-classifier-integration"
-  working_branch_status: "p6_02_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p6-04-modern-classification-product-boundary"
+  working_branch_status: "p6_04_local_complete_owner_acceptance_pending"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-21"
+  last_updated: "2026-07-22"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -62,8 +62,8 @@ current_phase:
   completed_on: null
   recovery_tag: null
   objective: "Add Modern as the first new format using the generalized MTGO pipeline and shared classifier."
-  production_changes_allowed: false
-  feature_development_allowed: false
+  production_changes_allowed: true
+  feature_development_allowed: true
 
 phase_0_pull_request:
   number: 1
@@ -2537,7 +2537,7 @@ phase_6_tasks:
     remote_publication_authorized: true
   - id: "P6-03"
     name: "Review and extend the Modern taxonomy"
-    status: "owner_accepted_remote_publication_authorized"
+    status: "completed_and_published"
     branch: "codex/p6-03-modern-taxonomy"
     base_commit: "47743bc2ab6ed08d166af4f958e1bc4944b01c3a"
     decision: "DEC-040"
@@ -2580,25 +2580,97 @@ phase_6_tasks:
     modern_rule_validation_passed: true
     owner_acceptance: "accepted"
     remote_publication_authorized: true
+    implementation_commit: "b313ea5ccbb0b3dee59fdaaaf00193889de228bb"
+    pull_request: 81
+    merge_commit: "ccdd2495ed1bbf8029c0d588337220574a3a9b63"
+    merged_on: "2026-07-22"
+    remote_repository_validation_passed: true
     product_enablement_allowed: false
     statistics_allowed: false
     workflow_changes_allowed: false
     frontend_changes_allowed: false
+  - id: "P6-04"
+    name: "Enable the Modern classification-report product boundary"
+    status: "completed_locally_pending_owner_acceptance"
+    branch: "codex/p6-04-modern-classification-product-boundary"
+    base_commit: "ccdd2495ed1bbf8029c0d588337220574a3a9b63"
+    depends_on: "P6-03 accepted and published"
+    scope:
+      - "Close the P6-03 publication record."
+      - "Enable Modern as an executable but non-public MTGO format with classification capability only."
+      - "Generate de-identified Modern classification reports from embedded CMODERN events."
+      - "Remove misplaced unsupported Premodern documents from the Modern raw-data path."
+      - "Reject any future cross-format document before report generation."
+      - "Keep every non-classification Modern product capability disabled."
+      - "Preserve committed Standard report bytes and public behavior."
+    owner_local_implementation_authorized: true
+    product_enablement_allowed: "classification_only"
+    statistics_allowed: false
+    matchup_allowed: false
+    weekly_pickup_allowed: false
+    metadata_allowed: false
+    catalog_allowed: false
+    workflow_changes_allowed: false
+    frontend_changes_allowed: false
+    public_format_allowed: false
+    decision: "DEC-041"
+    audit: "docs/audits/P6-04.md"
+    format_registry_schema_version: "1.1.0"
+    classification_report_schema_version: "1.0.0"
+    modern_event_files_included: 181
+    modern_event_files_excluded: 0
+    misplaced_premodern_files_removed: 2
+    premodern_supported: false
+    modern_decks: 5792
+    classified_decks: 5664
+    unknown_decks: 128
+    multiple_matches: 1519
+    overridden_matches: 1519
+    selected_subtypes: 2329
+    same_parent_multiple_subtype_matches: 132
+    conflicts: 0
+    invalid_decks: 0
+    modern_reports_written: 6
+    schema_validated_outputs: 29
+    identity_fields_found: 0
+    standard_report_bytes_unchanged: true
+    nonclassification_capabilities_disabled: true
+    statistics_generated: false
+    matchup_data_generated: false
+    workflow_changed: false
+    frontend_changed: false
+    focused_tests_passed: 64
+    repository_validator_tests_passed: 40
+    tests_passed: 368
+    repository_validation_passed: true
+    modern_rule_validation_passed: true
+    standard_rule_validation_passed: true
+    schema_validation_passed: true
+    standard_quality_baseline_passed: true
+    remote_publication_authorized: false
+    owner_acceptance: "pending"
 
 next_approved_task:
-  id: "P6-03"
-  name: "Review and extend the Modern taxonomy"
+  id: "P6-04"
+  name: "Enable the Modern classification-report product boundary"
   target_paths:
-    - "my_archetypes/modern.yaml"
+    - "configs/formats.yaml"
+    - "generate_classification_reports.py"
+    - "src/mtgmeta/reports.py"
+    - "src/mtgmeta/mtgo/classification.py"
+    - "schemas/classification-report-common.schema.json"
+    - "schemas/classification-report-index.schema.json"
+    - "schemas/classification-report.schema.json"
+    - "schemas/manifest.json"
+    - "reports/modern/mtgo/"
     - "tests/"
-    - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P6-03.md"
-  production_change: false
+    - "docs/audits/P6-04.md"
+  production_change: true
   requires_user_confirmation: true
-  authorization_status: "remote_publication_authorized"
-  planning_status: "publication_in_progress"
+  authorization_status: "owner_acceptance_required"
+  planning_status: "completed_locally"
 
 governance_baseline:
   status: "active_on_master"
@@ -2649,6 +2721,8 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not retain or commit real P5-08 participant, match, or decklist data."
   - "Do not reuse cookies or browser sessions or bypass access controls."
+  - "Do not enable any P6-04 Modern capability other than classification."
+  - "Do not expose Modern in the front end or public format catalog during P6-04."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not generate reference-event or Paupergeddon statistics yet."

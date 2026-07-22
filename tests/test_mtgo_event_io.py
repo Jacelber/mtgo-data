@@ -384,7 +384,7 @@ def test_month_fetch_keeps_persistent_parse_failure_fatal(tmp_path):
     assert not (tmp_path / "fetched.txt").exists()
 
 
-def test_non_executable_format_event_collection_uses_its_own_path(tmp_path):
+def test_modern_event_collection_and_classification_use_their_own_paths(tmp_path):
     calls = []
     modern = raw_event()
     modern["description"] = "Modern Challenge 32"
@@ -407,8 +407,10 @@ def test_non_executable_format_event_collection_uses_its_own_path(tmp_path):
     assert summary["fetched"] == 1
     assert summary["failed"] == 0
     assert (tmp_path / "data" / "modern" / "Modern_Challenge_32_12345.json").exists()
-    with pytest.raises(DisabledFormatError, match="not enabled"):
-        load_rules_for_format(tmp_path, "modern", registry_path=REGISTRY)
+    rule_path = tmp_path / "my_archetypes" / "modern.yaml"
+    rule_path.parent.mkdir(parents=True)
+    rule_path.write_bytes((ROOT / "my_archetypes" / "modern.yaml").read_bytes())
+    assert load_rules_for_format(tmp_path, "modern", registry_path=REGISTRY).format == "modern"
 
 
 def test_collection_disabled_format_fails_before_ledger_network_or_storage(tmp_path):
@@ -456,8 +458,9 @@ def test_standard_classification_dispatch_matches_the_legacy_parent_api():
         main, side = classify_standard.deck_to_counts(player)
         assert result.archetype_name == classify_standard.match_archetype(main, side, legacy_rules)
 
-    with pytest.raises(DisabledFormatError, match="not enabled"):
-        load_rules_for_format(ROOT, "modern")
+    modern_rules = load_rules_for_format(ROOT, "modern")
+    assert modern_rules.format == "modern"
+    assert modern_rules.format != rule_set.format
 
 
 def test_p3_03_target_modules_exist_and_production_workflow_is_unchanged():

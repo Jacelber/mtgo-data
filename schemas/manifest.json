@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "profile": "legacy-standard-mtgo-public-json",
+  "profile": "mtgo-generated-json",
   "output_schema_version_embedded": true,
-  "note": "Compatibility contract for page-consumed and diagnostic generated output with embedded schema_version.",
+  "note": "Compatibility contract for page-consumed Standard output and generated Standard/Modern diagnostics with embedded schema_version.",
   "mappings": [
     {"pattern": "stats/standard/mtgo/range_*w.json", "schema": "mtgo-range.schema.json"},
     {"pattern": "stats/standard/mtgo/decks_*w.json", "schema": "mtgo-decks.schema.json"},
@@ -17,6 +17,12 @@
     {"pattern": "reports/standard/mtgo/multiple_matches.json", "schema": "classification-report.schema.json"},
     {"pattern": "reports/standard/mtgo/classification_conflicts.json", "schema": "classification-report.schema.json"},
     {"pattern": "reports/standard/mtgo/overridden_matches.json", "schema": "classification-report.schema.json"},
-    {"pattern": "reports/standard/mtgo/subtype_diagnostics.json", "schema": "classification-report.schema.json"}
+    {"pattern": "reports/standard/mtgo/subtype_diagnostics.json", "schema": "classification-report.schema.json"},
+    {"pattern": "reports/modern/mtgo/index.json", "schema": "classification-report-index.schema.json"},
+    {"pattern": "reports/modern/mtgo/unknown_decks.json", "schema": "classification-report.schema.json"},
+    {"pattern": "reports/modern/mtgo/multiple_matches.json", "schema": "classification-report.schema.json"},
+    {"pattern": "reports/modern/mtgo/classification_conflicts.json", "schema": "classification-report.schema.json"},
+    {"pattern": "reports/modern/mtgo/overridden_matches.json", "schema": "classification-report.schema.json"},
+    {"pattern": "reports/modern/mtgo/subtype_diagnostics.json", "schema": "classification-report.schema.json"}
   ]
 }

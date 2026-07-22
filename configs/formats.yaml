@@ -43,12 +43,13 @@ formats:
 
   - id: "modern"
     display_name: "Modern"
-    state: "planned"
+    state: "executable"
     public: false
     mtgo:
-      enabled: false
+      enabled: true
       event_collection_enabled: true
-      capabilities: []
+      capabilities:
+        - "classification"
       paths:
         events: "data/modern"
         matches: "data/modern/mtgo/matches"
