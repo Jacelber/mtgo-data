@@ -40,7 +40,7 @@ def registry():
     return load_format_registry(REGISTRY_PATH)
 
 
-def test_registry_preserves_the_p3_standard_contract_and_enables_modern_classification_only():
+def test_registry_preserves_the_p3_standard_contract_and_enables_modern_range_statistics():
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     loaded = registry()
 
@@ -68,7 +68,11 @@ def test_registry_preserves_the_p3_standard_contract_and_enables_modern_classifi
     )
     modern = loaded.require_mtgo("modern")
     assert modern.public is False
-    assert modern.mtgo.capabilities == {"classification"}
+    assert modern.mtgo.capabilities == {
+        "classification",
+        "event_statistics",
+        "range_statistics",
+    }
 
 
 def test_known_disabled_and_unknown_formats_fail_without_a_standard_fallback():

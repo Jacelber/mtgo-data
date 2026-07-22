@@ -160,16 +160,18 @@ def test_production_cli_generates_strict_deidentified_modern_reports():
     "command",
     [
         ["fetch-matches"],
-        ["build-statistics"],
         ["build-matchups"],
         ["pickup", "candidates"],
         ["generate-metadata"],
     ],
 )
-def test_every_nonclassification_modern_product_command_remains_disabled(command):
+def test_every_post_p6_05_modern_product_command_remains_disabled(command):
     statistics = ROOT / "stats" / "modern" / "mtgo"
     matches = ROOT / "data" / "modern" / "mtgo" / "matches"
-    assert not statistics.exists()
+    statistics_before = {
+        path.name: path.read_bytes() for path in sorted(statistics.glob("*.json"))
+    }
+    assert len(statistics_before) == 9
     assert not matches.exists()
     result = subprocess.run(
         [
@@ -190,5 +192,7 @@ def test_every_nonclassification_modern_product_command_remains_disabled(command
     )
     assert result.returncode == 2
     assert "does not support" in result.stderr
-    assert not statistics.exists()
+    assert {
+        path.name: path.read_bytes() for path in sorted(statistics.glob("*.json"))
+    } == statistics_before
     assert not matches.exists()

@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-range.schema.json",
-  "title": "Legacy Standard MTGO range statistics",
+  "title": "MTGO range statistics",
   "x-schema-version": "1.0.0",
   "type": "object",
   "required": ["schema_version", "format", "source", "period", "total_decks", "total_high_score", "total_top8", "unknown_count", "archetypes"],
   "properties": {
     "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
-    "format": {"const": "standard"},
+    "format": {"enum": ["standard", "modern"]},
     "source": {"const": "mtgo"},
     "period": {"$ref": "common.schema.json#/$defs/period"},
     "total_decks": {"type": "integer", "minimum": 0},
@@ -20,6 +20,7 @@
         "type": "object",
         "required": ["name", "count", "high_score_count", "high_score_share", "top8_count", "top8_share", "conversion", "avg_points_per_round", "avg_deviation"],
         "properties": {
+          "id": {"type": "string", "minLength": 1},
           "name": {"type": "string", "minLength": 1},
           "count": {"type": "integer", "minimum": 0},
           "high_score_count": {"type": "integer", "minimum": 0},
@@ -34,5 +35,11 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": {"properties": {"format": {"const": "modern"}}, "required": ["format"]},
+      "then": {"properties": {"archetypes": {"items": {"required": ["id"]}}}}
+    }
+  ],
   "additionalProperties": false
 }

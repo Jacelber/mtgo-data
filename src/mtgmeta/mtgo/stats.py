@@ -17,6 +17,7 @@ from mtgmeta.rules import RuleSet
 from public_contract import versioned
 
 from . import load_mtgo_context
+from .classification import load_mtgo_events_for_format
 from .normalize import load_rules_for_format
 
 
@@ -91,14 +92,24 @@ def _as_rule_set(rules: RuleSet | LegacyArchetypeRules) -> RuleSet:
     raise TypeError("MTGO statistics require a RuleSet or LegacyArchetypeRules")
 
 
-def _classify_parent(player: dict[str, Any], rules: RuleSet | LegacyArchetypeRules) -> str | None:
+def _classify_parent_identity(
+    player: dict[str, Any],
+    rules: RuleSet | LegacyArchetypeRules,
+) -> tuple[str | None, str | None]:
     result = classify_deck(_as_rule_set(rules), player)
     if result.status == "classified":
-        return result.archetype_name
+        return result.archetype_id, result.archetype_name
     if result.status == "unknown":
-        return None
+        return None, None
     detail = result.conflict_kind or ", ".join(result.errors) or result.status
     raise MTGOStatisticsError(f"cannot aggregate {result.status} deck: {detail}")
+
+
+def _classify_parent(player: dict[str, Any], rules: RuleSet | LegacyArchetypeRules) -> str | None:
+    """Compatibility helper returning the selected parent display name."""
+
+    _archetype_id, archetype_name = _classify_parent_identity(player, rules)
+    return archetype_name
 
 
 def process_event(
@@ -114,13 +125,19 @@ def process_event(
     starttime = event.get("starttime", "")
     description = event.get("description", "?")
     records = []
-    classify = classifier or _classify_parent
     for player in event.get("players", []):
-        arch = classify(player, rules) or "Unknown"
+        if classifier is None:
+            archetype_id, archetype_name = _classify_parent_identity(player, rules)
+        else:
+            archetype_name = classifier(player, rules)
+            archetype_id = archetype_name
+        arch = archetype_name or "Unknown"
+        arch_id = archetype_id or "unknown"
         swiss_score = to_int(player.get("swiss_score"))
         final_rank = to_int(player.get("final_rank"), default=9999)
         records.append({
             "archetype": arch,
+            "archetype_id": arch_id,
             "is_high_score": swiss_score >= threshold,
             "is_top8": final_rank <= 8,
             "swiss_score": swiss_score,
@@ -156,7 +173,7 @@ def week_monday(d):
     return d - timedelta(days=d.weekday())
 
 
-def aggregate(records):
+def aggregate(records, *, include_archetype_ids: bool = False):
     """把一批牌手记录聚合成各套牌的统计。
     场均分（avg_points_per_round）= Σ该套牌积分 / Σ对应赛事理论轮数（微观平均，0~3）。
     """
@@ -166,9 +183,14 @@ def aggregate(records):
     total_top8 = 0
 
     for r in records:
+        archetype_id = r["archetype_id"]
         name = r["archetype"]
-        s = stats.setdefault(name, {"count": 0, "high": 0, "top8": 0,
-                                    "score_sum": 0, "rounds_sum": 0})
+        s = stats.setdefault(archetype_id, {"name": name, "count": 0, "high": 0,
+                                            "top8": 0, "score_sum": 0, "rounds_sum": 0})
+        if s["name"] != name:
+            raise MTGOStatisticsError(
+                f"archetype ID {archetype_id!r} resolved to multiple display names"
+            )
         s["count"] += 1
         total_decks += 1
         s["score_sum"] += r.get("swiss_score", 0)
@@ -180,16 +202,16 @@ def aggregate(records):
             s["top8"] += 1
             total_top8 += 1
 
-    unknown_count = stats.get("Unknown", {}).get("count", 0)
+    unknown_count = stats.get("unknown", {}).get("count", 0)
 
     archetypes = []
-    for name, s in stats.items():
+    for archetype_id, s in stats.items():
         high_share = s["high"] / total_high if total_high else None
         top8_share = s["top8"] / total_top8 if total_top8 else None
         conversion = s["top8"] / s["high"] if s["high"] else None
         appr = s["score_sum"] / s["rounds_sum"] if s["rounds_sum"] else None
-        archetypes.append({
-            "name": name,
+        item = {
+            "name": s["name"],
             "count": s["count"],
             "high_score_count": s["high"],
             "high_score_share": round(high_share, 4) if high_share is not None else None,
@@ -197,7 +219,10 @@ def aggregate(records):
             "top8_share": round(top8_share, 4) if top8_share is not None else None,
             "conversion": round(conversion, 4) if conversion is not None else None,
             "avg_points_per_round": round(appr, 2) if appr is not None else None,
-        })
+        }
+        if include_archetype_ids:
+            item = {"id": archetype_id, **item}
+        archetypes.append(item)
 
     archetypes.sort(key=lambda a: a["count"], reverse=True)
 
@@ -210,12 +235,40 @@ def aggregate(records):
     }
 
 
-def load_events_from_directory(events_directory: str | Path):
-    """Load dated event documents from one already-authorized format directory."""
+def load_events_from_directory(
+    events_directory: str | Path,
+    *,
+    repository_root: str | Path | None = None,
+    format_id: str | None = None,
+):
+    """Load dated event documents from one authorized, format-isolated directory."""
+
+    paths = sorted(Path(events_directory).glob("*.json"))
+    if format_id is not None:
+        if repository_root is None:
+            raise MTGOStatisticsError(
+                "repository_root is required when enforcing an event format"
+            )
+        loaded, excluded = load_mtgo_events_for_format(
+            paths,
+            repository_root,
+            format_id,
+        )
+        if excluded:
+            details = ", ".join(
+                f"{item.source_file} ({item.actual_format})" for item in excluded
+            )
+            raise MTGOStatisticsError(
+                f"cross-format event input rejected for {format_id}: {details}"
+            )
+        documents = [event for _source_file, event in loaded]
+    else:
+        documents = [
+            json.loads(path.read_text(encoding="utf-8")) for path in paths
+        ]
 
     events = []
-    for path in sorted(Path(events_directory).glob("*.json")):
-        ev = json.loads(path.read_text(encoding="utf-8"))
+    for ev in documents:
         d = parse_event_date(ev.get("starttime"))
         if d is not None:
             events.append((d, ev))
@@ -236,7 +289,11 @@ def load_all_events(
         "event_statistics",
         registry_path=registry_path,
     )
-    return load_events_from_directory(context.paths["events"])
+    return load_events_from_directory(
+        context.paths["events"],
+        repository_root=context.repository_root,
+        format_id=format_id,
+    )
 
 
 def latest_complete_week(events, today=None):
@@ -385,7 +442,7 @@ def record_to_deck_display(record):
     }
 
 
-def recent_change_for_arch(events, archetypes, end_monday, arch, d99):
+def recent_change_for_arch(events, archetypes, end_monday, archetype_id, d99):
     """计算某套牌的近期变化度：
        近端 = 最近 1 完整周(end_monday 那周) 该套牌主牌平均向量
        远端 = 之前 PRIOR_WEEKS 周(不含本周) 该套牌主牌平均向量
@@ -403,11 +460,11 @@ def recent_change_for_arch(events, archetypes, end_monday, arch, d99):
     for d, ev in events:
         if recent_start <= d <= recent_end_sunday:
             for r in process_event(ev, archetypes)["records"]:
-                if r["archetype"] == arch:
+                if r["archetype_id"] == archetype_id:
                     recent_recs.append(r)
         elif prior_start <= d <= prior_end_sunday:
             for r in process_event(ev, archetypes)["records"]:
-                if r["archetype"] == arch:
+                if r["archetype_id"] == archetype_id:
                     prior_recs.append(r)
 
     if len(recent_recs) < RECENT_MIN:
@@ -439,12 +496,12 @@ def build_base_pack(events, archetypes, end_monday, today=None):
     for d, ev in events:
         if start_monday <= d <= end_sunday:
             for r in process_event(ev, archetypes)["records"]:
-                if r["archetype"] != "Unknown":
-                    by_arch[r["archetype"]].append(r)
+                if r["archetype_id"] != "unknown":
+                    by_arch[r["archetype_id"]].append(r)
 
     base_pack = {}
     all_distances = []
-    for arch, recs in by_arch.items():
+    for archetype_id, recs in by_arch.items():
         if len(recs) < MIN_SAMPLE:
             continue
         vectors = [deck_vector(r) for r in recs]
@@ -455,7 +512,8 @@ def build_base_pack(events, archetypes, end_monday, today=None):
         weights = rates
         core, flex = split_core_flex(mean, rates)
         medoid = pick_medoid(recs, mean, weights)
-        base_pack[arch] = {
+        base_pack[archetype_id] = {
+            "name": recs[0]["archetype"],
             "mean": mean,
             "weights": weights,
             "denom": dev_denominator(mean, weights),   # 绝对刻度分母
@@ -472,10 +530,12 @@ def build_base_pack(events, archetypes, end_monday, today=None):
     d99 = percentile(all_distances, DEV_PERCENTILE) if all_distances else 0.0
 
     # d99 就绪后，回头为每个达标套牌算近期变化度
-    for arch in base_pack:
-        val, reason = recent_change_for_arch(events, archetypes, end_monday, arch, d99)
-        base_pack[arch]["recent_change"] = val
-        base_pack[arch]["recent_change_reason"] = reason
+    for archetype_id in base_pack:
+        val, reason = recent_change_for_arch(
+            events, archetypes, end_monday, archetype_id, d99
+        )
+        base_pack[archetype_id]["recent_change"] = val
+        base_pack[archetype_id]["recent_change_reason"] = reason
 
     return base_pack, d99
 
@@ -499,7 +559,7 @@ def percentile(values, p):
 #                      区间牌表详情构建
 # ================================================================
 
-def build_decks(records, base_pack, d99):
+def build_decks(records, base_pack, d99, *, include_archetype_ids: bool = False):
     """按套牌分组，为每套牌生成 best_deck（含偏离度/差异）与 average_deck（4 周 base）。
     返回 { arch: {best_deck, average_deck} }。
     偏离度均相对固定 4 周 base 计算。
@@ -507,12 +567,13 @@ def build_decks(records, base_pack, d99):
     from collections import defaultdict
     by_arch = defaultdict(list)
     for r in records:
-        by_arch[r["archetype"]].append(r)
+        by_arch[r["archetype_id"]].append(r)
 
     result = {}
-    for arch, arch_records in by_arch.items():
+    for archetype_id, arch_records in by_arch.items():
+        name = arch_records[0]["archetype"]
         best = pick_best_deck(arch_records)
-        base = base_pack.get(arch)
+        base = base_pack.get(archetype_id)
 
         if best and base:
             best_vec = {}
@@ -541,7 +602,14 @@ def build_decks(records, base_pack, d99):
                 "recent_change_reason": "nobase",
             }
 
-        result[arch] = {"best_deck": best, "average_deck": average_deck}
+        if name in result:
+            raise MTGOStatisticsError(
+                f"multiple archetype IDs share statistics display name {name!r}"
+            )
+        entry = {"best_deck": best, "average_deck": average_deck}
+        if include_archetype_ids:
+            entry = {"archetype_id": archetype_id, **entry}
+        result[name] = entry
     return result
 
 
@@ -565,27 +633,30 @@ def build_range(
         if start_monday <= d <= end_sunday:
             records.extend(process_event(ev, rules)["records"])
 
-    agg = aggregate(records)
+    include_archetype_ids = format_id != "standard"
+    agg = aggregate(records, include_archetype_ids=include_archetype_ids)
 
     # 区间平均偏离度：该区间内该套牌所有牌表逐副对 4 周 base 算偏离，取平均
     by_arch = defaultdict(list)
     for r in records:
-        if r["archetype"] != "Unknown":
-            by_arch[r["archetype"]].append(r)
+        if r["archetype_id"] != "unknown":
+            by_arch[r["archetype_id"]].append(r)
 
     avg_dev = {}
-    for arch, recs in by_arch.items():
-        base = base_pack.get(arch)
+    for archetype_id, recs in by_arch.items():
+        base = base_pack.get(archetype_id)
         if not base:
-            avg_dev[arch] = None
+            avg_dev[archetype_id] = None
             continue
         devs = [normalize_dev_abs(weighted_l1(deck_vector(r), base["mean"], base["weights"]),
                                   base["denom"])
                 for r in recs]
-        avg_dev[arch] = round(sum(devs) / len(devs)) if devs else None
+        avg_dev[archetype_id] = round(sum(devs) / len(devs)) if devs else None
 
+    ids_by_name = {record["archetype"]: record["archetype_id"] for record in records}
     for a in agg["archetypes"]:
-        a["avg_deviation"] = avg_dev.get(a["name"])
+        aggregation_id = a.get("id") or ids_by_name[a["name"]]
+        a["avg_deviation"] = avg_dev.get(aggregation_id)
 
     period = {
         "type": f"{n_weeks}w",
@@ -603,7 +674,12 @@ def build_range(
         "format": format_id,
         "source": SOURCE_ID,
         "period": period,
-        "decks": build_decks(records, base_pack, d99),
+        "decks": build_decks(
+            records,
+            base_pack,
+            d99,
+            include_archetype_ids=include_archetype_ids,
+        ),
     })
     return stats_data, decks_data
 
@@ -633,12 +709,6 @@ def build_all_stats(
         "range_statistics",
         registry_path=registry_path,
     )
-    load_mtgo_context(
-        root,
-        format_id,
-        "catalog_generation",
-        registry_path=registry_path,
-    )
     normalized_ranges = tuple(ranges)
     if not normalized_ranges or any(
         not isinstance(weeks, int) or isinstance(weeks, bool) or weeks <= 0
@@ -649,7 +719,11 @@ def build_all_stats(
         raise MTGOStatisticsError("rolling ranges must be unique")
 
     rules = load_rules_for_format(root, format_id, registry_path=registry_path)
-    events = load_events_from_directory(context.paths["events"])
+    events = load_events_from_directory(
+        context.paths["events"],
+        repository_root=context.repository_root,
+        format_id=format_id,
+    )
     end_monday = latest_complete_week(events, today=today)
     if end_monday is None:
         return {}
