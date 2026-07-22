@@ -2537,7 +2537,11 @@ phase_6_tasks:
     remote_publication_authorized: true
   - id: "P6-03"
     name: "Review and extend the Modern taxonomy"
-    status: "planned_not_authorized"
+    status: "owner_accepted_remote_publication_authorized"
+    branch: "codex/p6-03-modern-taxonomy"
+    base_commit: "47743bc2ab6ed08d166af4f958e1bc4944b01c3a"
+    decision: "DEC-040"
+    audit: "docs/audits/P6-03.md"
     depends_on: "P6-02 accepted and published"
     baseline_comparison: "P6-01"
     scope:
@@ -2545,6 +2549,37 @@ phase_6_tasks:
       - "Propose and test new or revised rules and parent archetypes where evidence supports them."
       - "Add optional subtypes where distinct rule paths share one approved parent archetype."
       - "Report every parent and subtype difference from the P6-01 compatibility baseline."
+    owner_reference_workbook_used_read_only: true
+    owner_reference_sheet: "Modern (2)"
+    owner_reference_uniquely_matched_events: 179
+    owner_reference_high_score_decks: 4771
+    owner_reference_labels: 166
+    owner_reference_blank_labels: 1
+    owner_reference_data_committed: false
+    rule_schema_version: "1.0.0"
+    parent_archetypes_defined: 55
+    rules_defined: 100
+    subtype_definitions: 54
+    rule_priorities_globally_unique: true
+    mainboard_only: true
+    frozen_records: 5792
+    classified_records: 5664
+    unknown_records: 128
+    multiple_matches: 1519
+    overridden_matches: 1519
+    selected_subtypes: 2329
+    same_parent_multiple_subtype_matches: 132
+    conflicts: 0
+    invalid_decks: 0
+    p6_01_rule_fixture_frozen: true
+    p6_01_rules_sha256: "cdc556114129a3675916b0b5bd88c8ccb3fbf4eedbe523b4e4a29b2a1f315c2e"
+    p6_03_rules_sha256: "dcf7be96e5609502033071099c14d6abbab3d90ab95af0c5a56642bb39731a2e"
+    taxonomy_transition_contract_created: true
+    focused_modern_tests_passed: 15
+    tests_passed: 363
+    modern_rule_validation_passed: true
+    owner_acceptance: "accepted"
+    remote_publication_authorized: true
     product_enablement_allowed: false
     statistics_allowed: false
     workflow_changes_allowed: false
@@ -2556,12 +2591,14 @@ next_approved_task:
   target_paths:
     - "my_archetypes/modern.yaml"
     - "tests/"
+    - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
+    - "docs/audits/P6-03.md"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  planning_status: "requires_detailed_predevelopment_review"
+  authorization_status: "remote_publication_authorized"
+  planning_status: "publication_in_progress"
 
 governance_baseline:
   status: "active_on_master"
@@ -2612,7 +2649,7 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not retain or commit real P5-08 participant, match, or decklist data."
   - "Do not reuse cookies or browser sessions or bypass access controls."
-  - "Do not begin P6-03 without separate explicit owner authorization."
+  - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not generate reference-event or Paupergeddon statistics yet."
   - "Do not add new Constructed formats yet."

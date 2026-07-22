@@ -1332,3 +1332,29 @@ Only committed `CMODERN` event records may enter the baseline. Files whose embed
 MTGO and Melee can later share the same 38 Modern parent IDs without coupling their source data or statistics. The migration is deterministic, attribution-compliant, reorder-independent, and reviewable. Unknown and overlapping-rule counts become explicit baseline quality measurements rather than being silently filled by a model.
 
 P6-01 does not enable Modern in the format registry, change Standard behavior, run production classification, generate statistics or reports, modify workflows, change public JSON, or change front-end behavior. P6-02 may complete shared classification and diagnostic integration only; P6-03 owns the first taxonomy additions. Product enablement and publication behavior remain later separately authorized Phase 6 tasks.
+
+---
+
+# DEC-040 — Use strategic-family parents and evidence-backed Modern subtypes
+
+Status: `Accepted`
+
+## Context
+
+P6-01 intentionally froze the 38-parent j6e compatibility result before any taxonomy changes. For P6-03, the project owner supplied an independent Chinese classification workbook covering recent Modern challenge high-score decks and clarified the intended parent/subtype boundary. A read-only comparison uniquely aligned 179 committed `CMODERN` events and 4,771 high-score deck records; it found 166 non-empty owner labels and one blank label. The workbook, event identities, player identities, and source rows are not repository artifacts.
+
+The owner-defined labels frequently describe color or construction variants within one strategic family. In particular, Broodscale Combo variants and Prowess variants should share a parent, and Colorless and Mono-Green Eldrazi Tron should share a parent. Energy variants should remain separate parents because Boros, Mardu, Jeskai, and non-red builds differ enough that one Energy parent would hide material strategic differences.
+
+## Decision
+
+Use a shared parent archetype when variants retain the same defining engine and game plan, and use a subtype for a reviewable color or construction branch within that family. Apply this boundary to Broodscale Combo, Prowess, Eldrazi Tron, and other strongly evidenced families. Keep Boros Energy, Mardu Energy, Jeskai Energy, Azorius Energy, Selesnya Energy, and Esper Energy as separate parent archetypes with no Energy umbrella subtype.
+
+Every production rule remains a deterministic mainboard signature rule with a stable archetype ID, stable rule ID, explicit subtype or `null`, and globally unique priority. Unsupported centroid or corpus-nearest-neighbor fallback remains prohibited. Sparse workbook labels do not justify a new production identity by themselves; proposed Hardened Scales, Kethis, and Valakut labels therefore remain absent until representative evidence supports reliable rules.
+
+Preserve the P6-01 artifact as a separate frozen rule fixture and continue running its original full-corpus compatibility tests unchanged. Add a P6-03 taxonomy contract over the same de-identified 5,792 records. The contract must freeze the active rule-text hash, exact parent counts, exact selected subtype counts, every P6-01-to-P6-03 parent transition, representative selected identities, rule-order independence, and the approved parent/subtype boundaries.
+
+## Consequences
+
+The active Modern taxonomy contains 55 parents, 100 rules, and 54 subtype definitions. On the frozen corpus it classifies 5,664 records and leaves 128 explicit Unknown; 2,329 records receive a subtype. The diagnostic path reports 1,519 multiple matches and 132 same-parent multiple-subtype matches, with zero conflicts and zero invalid decks. These overlaps remain visible and deterministic rather than being hidden.
+
+This decision changes Modern taxonomy and its regression contracts only. It does not enable Modern in `configs/formats.yaml`, generate Modern reports or statistics, change Standard or Melee behavior, modify workflows or schemas, publish public JSON, or alter either front end. Product enablement and any later taxonomy extension remain separately controlled tasks.

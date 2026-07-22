@@ -1,0 +1,964 @@
+{
+  "schema_version": "1.0.0",
+  "format": "modern",
+  "baseline": {
+    "task": "P6-01",
+    "rules_sha256": "cdc556114129a3675916b0b5bd88c8ccb3fbf4eedbe523b4e4a29b2a1f315c2e",
+    "records": 5792,
+    "classified": 5157,
+    "unknown": 635
+  },
+  "taxonomy": {
+    "task": "P6-03",
+    "rules_sha256": "dcf7be96e5609502033071099c14d6abbab3d90ab95af0c5a56642bb39731a2e",
+    "parents_defined": 55,
+    "rules_defined": 100,
+    "subtypes_defined": 54,
+    "records": 5792,
+    "classified": 5664,
+    "unknown": 128,
+    "multiple_matches": 1519,
+    "same_parent_multiple_subtype_matches": 132,
+    "selected_subtypes": 2329,
+    "conflicts": 0,
+    "invalid_decks": 0
+  },
+  "selected_parent_counts": {
+    "Affinity": 500,
+    "Amulet Titan": 215,
+    "Azorius Control": 138,
+    "Azorius Energy": 72,
+    "Blink": 300,
+    "Blue Eldrazi": 7,
+    "Blue-Black Tempo": 182,
+    "Boros Belcher": 36,
+    "Boros Energy": 849,
+    "Boros Land Destruction": 198,
+    "Broodscale Combo": 247,
+    "Burn": 46,
+    "Chant Control": 93,
+    "Death's Shadow": 10,
+    "Devoted Druid Combo": 17,
+    "Dimir Mill": 30,
+    "Domain Zoo": 157,
+    "Dredge": 22,
+    "Eldrazi Aggro": 18,
+    "Eldrazi Ramp": 112,
+    "Eldrazi Tron": 263,
+    "Esper Control": 2,
+    "Esper Energy": 10,
+    "Fight Rigging": 48,
+    "Five-Color Creativity": 21,
+    "Five-Color Ritual": 7,
+    "Fling Goyf": 28,
+    "Golgari Yawgmoth": 75,
+    "Goryo's Reanimator": 287,
+    "Hammer Time": 20,
+    "Hollow One": 44,
+    "Izzet Phoenix": 4,
+    "Izzet Wizards": 12,
+    "Jeskai Control": 13,
+    "Jeskai Energy": 24,
+    "Jund Sagavan": 2,
+    "Lantern Control": 17,
+    "Living End": 167,
+    "Mardu Energy": 39,
+    "Mono-Black Eldrazi": 25,
+    "Mono-Blue Belcher": 133,
+    "Mono-Blue Merfolk": 6,
+    "Necrodominance": 55,
+    "Oculus Ritual": 53,
+    "Pensive Combo": 5,
+    "Persist Reanimator": 250,
+    "Prowess": 292,
+    "Rhinos": 20,
+    "Ruby Storm": 267,
+    "Sam Combo": 38,
+    "Selesnya Energy": 14,
+    "Simic Neoform": 102,
+    "Song of Creation": 7,
+    "Soultrader": 15,
+    "Steel-Cutter": 50,
+    "Unknown": 128
+  },
+  "selected_subtype_counts": {
+    "blink/azorius": 23,
+    "blink/esper": 113,
+    "blink/jeskai": 138,
+    "blink/mardu": 19,
+    "blink/orzhov": 7,
+    "blue-black-tempo/dimir": 112,
+    "blue-black-tempo/esper": 26,
+    "blue-black-tempo/grixis": 44,
+    "broodscale-combo/golgari": 3,
+    "broodscale-combo/gruul": 117,
+    "broodscale-combo/mono-green": 127,
+    "burn/boros": 34,
+    "burn/mono-red": 3,
+    "burn/rakdos": 9,
+    "chant-control/four-color": 11,
+    "chant-control/jeskai": 82,
+    "eldrazi-ramp/golgari": 3,
+    "eldrazi-ramp/gruul": 97,
+    "eldrazi-ramp/simic": 4,
+    "eldrazi-ramp/sultai": 3,
+    "eldrazi-ramp/temur": 5,
+    "eldrazi-tron/colorless": 234,
+    "eldrazi-tron/mono-black": 6,
+    "eldrazi-tron/mono-green": 23,
+    "goryos-reanimator/esper": 273,
+    "goryos-reanimator/grixis": 14,
+    "hammer-time/azorius": 17,
+    "hammer-time/mono-white": 3,
+    "hollow-one/rakdos": 29,
+    "hollow-one/vengevine": 15,
+    "necrodominance/dimir": 7,
+    "necrodominance/golgari": 17,
+    "necrodominance/mono-black": 30,
+    "necrodominance/rakdos": 1,
+    "oculus-ritual/simic": 9,
+    "oculus-ritual/sultai": 40,
+    "oculus-ritual/temur": 4,
+    "persist-reanimator/esper": 8,
+    "persist-reanimator/golgari": 18,
+    "persist-reanimator/grixis": 224,
+    "prowess/grixis": 13,
+    "prowess/izzet": 221,
+    "prowess/lessons": 16,
+    "prowess/temur": 42,
+    "rhinos/domain": 9,
+    "rhinos/temur": 11,
+    "soultrader/dimir": 3,
+    "soultrader/golgari": 7,
+    "soultrader/sultai": 5,
+    "steel-cutter/izzet": 38,
+    "steel-cutter/mono-red": 8,
+    "steel-cutter/rakdos": 4
+  },
+  "baseline_to_taxonomy_transitions": {
+    "Amulet Titan -> Amulet Titan": 210,
+    "Arclight Phoenix -> Dredge": 22,
+    "Arclight Phoenix -> Unknown": 3,
+    "Azorius Blink -> Azorius Energy": 63,
+    "Azorius Blink -> Blink": 23,
+    "Azorius Blink -> Esper Energy": 1,
+    "Azorius Blink -> Persist Reanimator": 7,
+    "Azorius Control -> Azorius Control": 111,
+    "Boros Belcher -> Boros Belcher": 31,
+    "Boros Energy -> Boros Energy": 849,
+    "Boros Energy -> Mardu Energy": 6,
+    "Boros Ponza -> Boros Land Destruction": 181,
+    "Burn -> Burn": 46,
+    "Burn -> Steel-Cutter": 6,
+    "Dimir Midrange -> Blue-Black Tempo": 123,
+    "Dimir Midrange -> Death's Shadow": 8,
+    "Dimir Midrange -> Necrodominance": 7,
+    "Dimir Midrange -> Oculus Ritual": 2,
+    "Dimir Midrange -> Pensive Combo": 5,
+    "Dimir Mill -> Dimir Mill": 30,
+    "Domain Zoo -> Domain Zoo": 157,
+    "Domain Zoo -> Rhinos": 3,
+    "Eldrazi Ramp -> Eldrazi Aggro": 8,
+    "Eldrazi Ramp -> Eldrazi Ramp": 112,
+    "Eldrazi Ramp -> Eldrazi Tron": 6,
+    "Eldrazi Ramp -> Fight Rigging": 46,
+    "Eldrazi Ramp -> Unknown": 3,
+    "Eldrazi Tron -> Eldrazi Tron": 245,
+    "Esper Blink -> Blink": 113,
+    "Esper Blink -> Esper Energy": 1,
+    "Esper Reanimator -> Goryo's Reanimator": 286,
+    "Golgari Persist -> Persist Reanimator": 18,
+    "Golgari Yawgmoth -> Golgari Yawgmoth": 75,
+    "Grixis Reanimator -> Persist Reanimator": 205,
+    "Gruul Broodscale Combo -> Broodscale Combo": 151,
+    "Gruul Eldrazi Aggro -> Eldrazi Aggro": 9,
+    "Izzet Affinity -> Affinity": 473,
+    "Izzet Affinity -> Steel-Cutter": 2,
+    "Izzet Prowess -> Prowess": 240,
+    "Izzet Steel-Cutter -> Steel-Cutter": 36,
+    "Jeskai Blink -> Blink": 138,
+    "Jeskai Control -> Boros Land Destruction": 11,
+    "Jeskai Control -> Chant Control": 93,
+    "Jeskai Energy -> Jeskai Energy": 24,
+    "Jund Sagavan -> Jund Sagavan": 2,
+    "Living End -> Living End": 167,
+    "Living End -> Persist Reanimator": 2,
+    "Mardu Energy -> Mardu Energy": 32,
+    "Mono-Black Eldrazi -> Mono-Black Eldrazi": 25,
+    "Mono-Black Midrange -> Necrodominance": 48,
+    "Mono-Blue Belcher -> Mono-Blue Belcher": 133,
+    "Mono-Blue Merfolk -> Mono-Blue Merfolk": 6,
+    "Mono-Green Broodscale Combo -> Broodscale Combo": 96,
+    "Ruby Storm -> Ruby Storm": 267,
+    "Sam Combo -> Sam Combo": 38,
+    "Simic Neoform -> Oculus Ritual": 1,
+    "Simic Neoform -> Simic Neoform": 102,
+    "Simic Ritual -> Oculus Ritual": 49,
+    "Unknown -> Affinity": 27,
+    "Unknown -> Amulet Titan": 5,
+    "Unknown -> Azorius Control": 27,
+    "Unknown -> Azorius Energy": 9,
+    "Unknown -> Blink": 26,
+    "Unknown -> Blue Eldrazi": 7,
+    "Unknown -> Blue-Black Tempo": 59,
+    "Unknown -> Boros Belcher": 5,
+    "Unknown -> Boros Land Destruction": 6,
+    "Unknown -> Death's Shadow": 2,
+    "Unknown -> Devoted Druid Combo": 17,
+    "Unknown -> Eldrazi Aggro": 1,
+    "Unknown -> Eldrazi Tron": 12,
+    "Unknown -> Esper Control": 2,
+    "Unknown -> Esper Energy": 8,
+    "Unknown -> Fight Rigging": 2,
+    "Unknown -> Five-Color Creativity": 21,
+    "Unknown -> Five-Color Ritual": 7,
+    "Unknown -> Fling Goyf": 28,
+    "Unknown -> Goryo's Reanimator": 1,
+    "Unknown -> Hammer Time": 20,
+    "Unknown -> Hollow One": 44,
+    "Unknown -> Izzet Phoenix": 4,
+    "Unknown -> Izzet Wizards": 12,
+    "Unknown -> Jeskai Control": 13,
+    "Unknown -> Lantern Control": 17,
+    "Unknown -> Mardu Energy": 1,
+    "Unknown -> Oculus Ritual": 1,
+    "Unknown -> Persist Reanimator": 18,
+    "Unknown -> Prowess": 52,
+    "Unknown -> Rhinos": 17,
+    "Unknown -> Selesnya Energy": 14,
+    "Unknown -> Song of Creation": 7,
+    "Unknown -> Soultrader": 15,
+    "Unknown -> Steel-Cutter": 6,
+    "Unknown -> Unknown": 122
+  },
+  "representative_cases": {
+    "affinity": {
+      "record_id": "modern-baseline-0006",
+      "archetype_id": "affinity",
+      "archetype_name": "Affinity",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "affinity-primary"
+    },
+    "amulet-titan": {
+      "record_id": "modern-baseline-0007",
+      "archetype_id": "amulet-titan",
+      "archetype_name": "Amulet Titan",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "amulet-titan-spelunking"
+    },
+    "azorius-control": {
+      "record_id": "modern-baseline-0020",
+      "archetype_id": "azorius-control",
+      "archetype_name": "Azorius Control",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "azorius-control-primary"
+    },
+    "azorius-energy": {
+      "record_id": "modern-baseline-0934",
+      "archetype_id": "azorius-energy",
+      "archetype_name": "Azorius Energy",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "azorius-energy-primary"
+    },
+    "blink/azorius": {
+      "record_id": "modern-baseline-0268",
+      "archetype_id": "blink",
+      "archetype_name": "Blink",
+      "subtype_id": "azorius",
+      "subtype_name": "Azorius",
+      "selected_rule_id": "blink-azorius"
+    },
+    "blink/esper": {
+      "record_id": "modern-baseline-0084",
+      "archetype_id": "blink",
+      "archetype_name": "Blink",
+      "subtype_id": "esper",
+      "subtype_name": "Esper",
+      "selected_rule_id": "blink-esper"
+    },
+    "blink/jeskai": {
+      "record_id": "modern-baseline-0003",
+      "archetype_id": "blink",
+      "archetype_name": "Blink",
+      "subtype_id": "jeskai",
+      "subtype_name": "Jeskai",
+      "selected_rule_id": "blink-jeskai"
+    },
+    "blink/mardu": {
+      "record_id": "modern-baseline-0553",
+      "archetype_id": "blink",
+      "archetype_name": "Blink",
+      "subtype_id": "mardu",
+      "subtype_name": "Mardu",
+      "selected_rule_id": "blink-mardu"
+    },
+    "blink/orzhov": {
+      "record_id": "modern-baseline-0334",
+      "archetype_id": "blink",
+      "archetype_name": "Blink",
+      "subtype_id": "orzhov",
+      "subtype_name": "Orzhov",
+      "selected_rule_id": "blink-orzhov"
+    },
+    "blue-black-tempo/dimir": {
+      "record_id": "modern-baseline-0008",
+      "archetype_id": "blue-black-tempo",
+      "archetype_name": "Blue-Black Tempo",
+      "subtype_id": "dimir",
+      "subtype_name": "Dimir",
+      "selected_rule_id": "blue-black-tempo-dimir"
+    },
+    "blue-black-tempo/esper": {
+      "record_id": "modern-baseline-0089",
+      "archetype_id": "blue-black-tempo",
+      "archetype_name": "Blue-Black Tempo",
+      "subtype_id": "esper",
+      "subtype_name": "Esper",
+      "selected_rule_id": "blue-black-tempo-esper"
+    },
+    "blue-black-tempo/grixis": {
+      "record_id": "modern-baseline-0011",
+      "archetype_id": "blue-black-tempo",
+      "archetype_name": "Blue-Black Tempo",
+      "subtype_id": "grixis",
+      "subtype_name": "Grixis",
+      "selected_rule_id": "blue-black-tempo-grixis"
+    },
+    "blue-eldrazi": {
+      "record_id": "modern-baseline-1409",
+      "archetype_id": "blue-eldrazi",
+      "archetype_name": "Blue Eldrazi",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "blue-eldrazi-primary"
+    },
+    "boros-belcher": {
+      "record_id": "modern-baseline-0149",
+      "archetype_id": "boros-belcher",
+      "archetype_name": "Boros Belcher",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "boros-belcher-ritual"
+    },
+    "boros-energy": {
+      "record_id": "modern-baseline-0001",
+      "archetype_id": "boros-energy",
+      "archetype_name": "Boros Energy",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "boros-energy-primary"
+    },
+    "boros-land-destruction": {
+      "record_id": "modern-baseline-0057",
+      "archetype_id": "boros-land-destruction",
+      "archetype_name": "Boros Land Destruction",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "boros-land-destruction-primary"
+    },
+    "broodscale-combo/golgari": {
+      "record_id": "modern-baseline-2026",
+      "archetype_id": "broodscale-combo",
+      "archetype_name": "Broodscale Combo",
+      "subtype_id": "golgari",
+      "subtype_name": "Golgari",
+      "selected_rule_id": "broodscale-combo-golgari"
+    },
+    "broodscale-combo/gruul": {
+      "record_id": "modern-baseline-0046",
+      "archetype_id": "broodscale-combo",
+      "archetype_name": "Broodscale Combo",
+      "subtype_id": "gruul",
+      "subtype_name": "Gruul",
+      "selected_rule_id": "broodscale-combo-gruul"
+    },
+    "broodscale-combo/mono-green": {
+      "record_id": "modern-baseline-0073",
+      "archetype_id": "broodscale-combo",
+      "archetype_name": "Broodscale Combo",
+      "subtype_id": "mono-green",
+      "subtype_name": "Mono-Green",
+      "selected_rule_id": "broodscale-combo-mono-green"
+    },
+    "burn/boros": {
+      "record_id": "modern-baseline-1285",
+      "archetype_id": "burn",
+      "archetype_name": "Burn",
+      "subtype_id": "boros",
+      "subtype_name": "Boros",
+      "selected_rule_id": "burn-boros"
+    },
+    "burn/mono-red": {
+      "record_id": "modern-baseline-1460",
+      "archetype_id": "burn",
+      "archetype_name": "Burn",
+      "subtype_id": "mono-red",
+      "subtype_name": "Mono-Red",
+      "selected_rule_id": "burn-mono-red"
+    },
+    "burn/rakdos": {
+      "record_id": "modern-baseline-2132",
+      "archetype_id": "burn",
+      "archetype_name": "Burn",
+      "subtype_id": "rakdos",
+      "subtype_name": "Rakdos",
+      "selected_rule_id": "burn-rakdos"
+    },
+    "chant-control/four-color": {
+      "record_id": "modern-baseline-1300",
+      "archetype_id": "chant-control",
+      "archetype_name": "Chant Control",
+      "subtype_id": "four-color",
+      "subtype_name": "Four-Color",
+      "selected_rule_id": "chant-control-four-color"
+    },
+    "chant-control/jeskai": {
+      "record_id": "modern-baseline-0024",
+      "archetype_id": "chant-control",
+      "archetype_name": "Chant Control",
+      "subtype_id": "jeskai",
+      "subtype_name": "Jeskai",
+      "selected_rule_id": "chant-control-jeskai"
+    },
+    "deaths-shadow": {
+      "record_id": "modern-baseline-0122",
+      "archetype_id": "deaths-shadow",
+      "archetype_name": "Death's Shadow",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "deaths-shadow-primary"
+    },
+    "devoted-druid-combo": {
+      "record_id": "modern-baseline-1797",
+      "archetype_id": "devoted-druid-combo",
+      "archetype_name": "Devoted Druid Combo",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "devoted-druid-combo-primary"
+    },
+    "dimir-mill": {
+      "record_id": "modern-baseline-0135",
+      "archetype_id": "dimir-mill",
+      "archetype_name": "Dimir Mill",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "dimir-mill-primary"
+    },
+    "domain-zoo": {
+      "record_id": "modern-baseline-0016",
+      "archetype_id": "domain-zoo",
+      "archetype_name": "Domain Zoo",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "domain-zoo-primary"
+    },
+    "dredge": {
+      "record_id": "modern-baseline-0585",
+      "archetype_id": "dredge",
+      "archetype_name": "Dredge",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "dredge-primary"
+    },
+    "eldrazi-aggro": {
+      "record_id": "modern-baseline-1437",
+      "archetype_id": "eldrazi-aggro",
+      "archetype_name": "Eldrazi Aggro",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "eldrazi-aggro-primary"
+    },
+    "eldrazi-ramp/golgari": {
+      "record_id": "modern-baseline-4707",
+      "archetype_id": "eldrazi-ramp",
+      "archetype_name": "Eldrazi Ramp",
+      "subtype_id": "golgari",
+      "subtype_name": "Golgari",
+      "selected_rule_id": "eldrazi-ramp-golgari"
+    },
+    "eldrazi-ramp/gruul": {
+      "record_id": "modern-baseline-0181",
+      "archetype_id": "eldrazi-ramp",
+      "archetype_name": "Eldrazi Ramp",
+      "subtype_id": "gruul",
+      "subtype_name": "Gruul",
+      "selected_rule_id": "eldrazi-ramp-gruul"
+    },
+    "eldrazi-ramp/simic": {
+      "record_id": "modern-baseline-1453",
+      "archetype_id": "eldrazi-ramp",
+      "archetype_name": "Eldrazi Ramp",
+      "subtype_id": "simic",
+      "subtype_name": "Simic",
+      "selected_rule_id": "eldrazi-ramp-simic"
+    },
+    "eldrazi-ramp/sultai": {
+      "record_id": "modern-baseline-3489",
+      "archetype_id": "eldrazi-ramp",
+      "archetype_name": "Eldrazi Ramp",
+      "subtype_id": "sultai",
+      "subtype_name": "Sultai",
+      "selected_rule_id": "eldrazi-ramp-sultai"
+    },
+    "eldrazi-ramp/temur": {
+      "record_id": "modern-baseline-2728",
+      "archetype_id": "eldrazi-ramp",
+      "archetype_name": "Eldrazi Ramp",
+      "subtype_id": "temur",
+      "subtype_name": "Temur",
+      "selected_rule_id": "eldrazi-ramp-temur"
+    },
+    "eldrazi-tron/colorless": {
+      "record_id": "modern-baseline-0009",
+      "archetype_id": "eldrazi-tron",
+      "archetype_name": "Eldrazi Tron",
+      "subtype_id": "colorless",
+      "subtype_name": "Colorless",
+      "selected_rule_id": "eldrazi-tron-colorless"
+    },
+    "eldrazi-tron/mono-black": {
+      "record_id": "modern-baseline-1413",
+      "archetype_id": "eldrazi-tron",
+      "archetype_name": "Eldrazi Tron",
+      "subtype_id": "mono-black",
+      "subtype_name": "Mono-Black",
+      "selected_rule_id": "eldrazi-tron-mono-black"
+    },
+    "eldrazi-tron/mono-green": {
+      "record_id": "modern-baseline-0176",
+      "archetype_id": "eldrazi-tron",
+      "archetype_name": "Eldrazi Tron",
+      "subtype_id": "mono-green",
+      "subtype_name": "Mono-Green",
+      "selected_rule_id": "eldrazi-tron-mono-green"
+    },
+    "esper-control": {
+      "record_id": "modern-baseline-0114",
+      "archetype_id": "esper-control",
+      "archetype_name": "Esper Control",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "esper-control-primary"
+    },
+    "esper-energy": {
+      "record_id": "modern-baseline-1747",
+      "archetype_id": "esper-energy",
+      "archetype_name": "Esper Energy",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "esper-energy-primary"
+    },
+    "fight-rigging": {
+      "record_id": "modern-baseline-1142",
+      "archetype_id": "fight-rigging",
+      "archetype_name": "Fight Rigging",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "fight-rigging-primary"
+    },
+    "five-color-creativity": {
+      "record_id": "modern-baseline-0117",
+      "archetype_id": "five-color-creativity",
+      "archetype_name": "Five-Color Creativity",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "five-color-creativity-primary"
+    },
+    "five-color-ritual": {
+      "record_id": "modern-baseline-0403",
+      "archetype_id": "five-color-ritual",
+      "archetype_name": "Five-Color Ritual",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "five-color-ritual-primary"
+    },
+    "fling-goyf": {
+      "record_id": "modern-baseline-0545",
+      "archetype_id": "fling-goyf",
+      "archetype_name": "Fling Goyf",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "fling-goyf-primary"
+    },
+    "golgari-yawgmoth": {
+      "record_id": "modern-baseline-0248",
+      "archetype_id": "golgari-yawgmoth",
+      "archetype_name": "Golgari Yawgmoth",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "golgari-yawgmoth-primary"
+    },
+    "goryos-reanimator/esper": {
+      "record_id": "modern-baseline-0002",
+      "archetype_id": "goryos-reanimator",
+      "archetype_name": "Goryo's Reanimator",
+      "subtype_id": "esper",
+      "subtype_name": "Esper",
+      "selected_rule_id": "goryos-reanimator-esper"
+    },
+    "goryos-reanimator/grixis": {
+      "record_id": "modern-baseline-1589",
+      "archetype_id": "goryos-reanimator",
+      "archetype_name": "Goryo's Reanimator",
+      "subtype_id": "grixis",
+      "subtype_name": "Grixis",
+      "selected_rule_id": "goryos-reanimator-grixis"
+    },
+    "hammer-time/azorius": {
+      "record_id": "modern-baseline-0150",
+      "archetype_id": "hammer-time",
+      "archetype_name": "Hammer Time",
+      "subtype_id": "azorius",
+      "subtype_name": "Azorius",
+      "selected_rule_id": "hammer-time-azorius"
+    },
+    "hammer-time/mono-white": {
+      "record_id": "modern-baseline-0697",
+      "archetype_id": "hammer-time",
+      "archetype_name": "Hammer Time",
+      "subtype_id": "mono-white",
+      "subtype_name": "Mono-White",
+      "selected_rule_id": "hammer-time-mono-white"
+    },
+    "hollow-one/rakdos": {
+      "record_id": "modern-baseline-0074",
+      "archetype_id": "hollow-one",
+      "archetype_name": "Hollow One",
+      "subtype_id": "rakdos",
+      "subtype_name": "Rakdos",
+      "selected_rule_id": "hollow-one-rakdos"
+    },
+    "hollow-one/vengevine": {
+      "record_id": "modern-baseline-0279",
+      "archetype_id": "hollow-one",
+      "archetype_name": "Hollow One",
+      "subtype_id": "vengevine",
+      "subtype_name": "Vengevine",
+      "selected_rule_id": "hollow-one-vengevine"
+    },
+    "izzet-phoenix": {
+      "record_id": "modern-baseline-0660",
+      "archetype_id": "izzet-phoenix",
+      "archetype_name": "Izzet Phoenix",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "izzet-phoenix-primary"
+    },
+    "izzet-wizards": {
+      "record_id": "modern-baseline-1079",
+      "archetype_id": "izzet-wizards",
+      "archetype_name": "Izzet Wizards",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "izzet-wizards-primary"
+    },
+    "jeskai-control": {
+      "record_id": "modern-baseline-0341",
+      "archetype_id": "jeskai-control",
+      "archetype_name": "Jeskai Control",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "jeskai-control-primary"
+    },
+    "jeskai-energy": {
+      "record_id": "modern-baseline-1940",
+      "archetype_id": "jeskai-energy",
+      "archetype_name": "Jeskai Energy",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "jeskai-energy-primary"
+    },
+    "jund-sagavan": {
+      "record_id": "modern-baseline-0335",
+      "archetype_id": "jund-sagavan",
+      "archetype_name": "Jund Sagavan",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "jund-sagavan-primary"
+    },
+    "lantern-control": {
+      "record_id": "modern-baseline-0094",
+      "archetype_id": "lantern-control",
+      "archetype_name": "Lantern Control",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "lantern-control-primary"
+    },
+    "living-end": {
+      "record_id": "modern-baseline-0029",
+      "archetype_id": "living-end",
+      "archetype_name": "Living End",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "living-end-primary"
+    },
+    "mardu-energy": {
+      "record_id": "modern-baseline-1465",
+      "archetype_id": "mardu-energy",
+      "archetype_name": "Mardu Energy",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "mardu-energy-primary"
+    },
+    "mono-black-eldrazi": {
+      "record_id": "modern-baseline-0941",
+      "archetype_id": "mono-black-eldrazi",
+      "archetype_name": "Mono-Black Eldrazi",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "mono-black-eldrazi-primary"
+    },
+    "mono-blue-belcher": {
+      "record_id": "modern-baseline-0017",
+      "archetype_id": "mono-blue-belcher",
+      "archetype_name": "Mono-Blue Belcher",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "mono-blue-belcher-primary"
+    },
+    "mono-blue-merfolk": {
+      "record_id": "modern-baseline-1728",
+      "archetype_id": "mono-blue-merfolk",
+      "archetype_name": "Mono-Blue Merfolk",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "mono-blue-merfolk-primary"
+    },
+    "necrodominance/dimir": {
+      "record_id": "modern-baseline-0250",
+      "archetype_id": "necrodominance",
+      "archetype_name": "Necrodominance",
+      "subtype_id": "dimir",
+      "subtype_name": "Dimir",
+      "selected_rule_id": "necrodominance-dimir"
+    },
+    "necrodominance/golgari": {
+      "record_id": "modern-baseline-1276",
+      "archetype_id": "necrodominance",
+      "archetype_name": "Necrodominance",
+      "subtype_id": "golgari",
+      "subtype_name": "Golgari",
+      "selected_rule_id": "necrodominance-golgari"
+    },
+    "necrodominance/mono-black": {
+      "record_id": "modern-baseline-0032",
+      "archetype_id": "necrodominance",
+      "archetype_name": "Necrodominance",
+      "subtype_id": "mono-black",
+      "subtype_name": "Mono-Black",
+      "selected_rule_id": "necrodominance-mono-black"
+    },
+    "necrodominance/rakdos": {
+      "record_id": "modern-baseline-4148",
+      "archetype_id": "necrodominance",
+      "archetype_name": "Necrodominance",
+      "subtype_id": "rakdos",
+      "subtype_name": "Rakdos",
+      "selected_rule_id": "necrodominance-rakdos"
+    },
+    "oculus-ritual/simic": {
+      "record_id": "modern-baseline-0147",
+      "archetype_id": "oculus-ritual",
+      "archetype_name": "Oculus Ritual",
+      "subtype_id": "simic",
+      "subtype_name": "Simic",
+      "selected_rule_id": "oculus-ritual-simic"
+    },
+    "oculus-ritual/sultai": {
+      "record_id": "modern-baseline-0079",
+      "archetype_id": "oculus-ritual",
+      "archetype_name": "Oculus Ritual",
+      "subtype_id": "sultai",
+      "subtype_name": "Sultai",
+      "selected_rule_id": "oculus-ritual-sultai"
+    },
+    "oculus-ritual/temur": {
+      "record_id": "modern-baseline-1667",
+      "archetype_id": "oculus-ritual",
+      "archetype_name": "Oculus Ritual",
+      "subtype_id": "temur",
+      "subtype_name": "Temur",
+      "selected_rule_id": "oculus-ritual-temur"
+    },
+    "pensive-combo": {
+      "record_id": "modern-baseline-1044",
+      "archetype_id": "pensive-combo",
+      "archetype_name": "Pensive Combo",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "pensive-combo-primary"
+    },
+    "persist-reanimator/esper": {
+      "record_id": "modern-baseline-0869",
+      "archetype_id": "persist-reanimator",
+      "archetype_name": "Persist Reanimator",
+      "subtype_id": "esper",
+      "subtype_name": "Esper",
+      "selected_rule_id": "persist-reanimator-esper"
+    },
+    "persist-reanimator/golgari": {
+      "record_id": "modern-baseline-1168",
+      "archetype_id": "persist-reanimator",
+      "archetype_name": "Persist Reanimator",
+      "subtype_id": "golgari",
+      "subtype_name": "Golgari",
+      "selected_rule_id": "persist-reanimator-golgari"
+    },
+    "persist-reanimator/grixis": {
+      "record_id": "modern-baseline-0012",
+      "archetype_id": "persist-reanimator",
+      "archetype_name": "Persist Reanimator",
+      "subtype_id": "grixis",
+      "subtype_name": "Grixis",
+      "selected_rule_id": "persist-reanimator-grixis"
+    },
+    "prowess/grixis": {
+      "record_id": "modern-baseline-0901",
+      "archetype_id": "prowess",
+      "archetype_name": "Prowess",
+      "subtype_id": "grixis",
+      "subtype_name": "Grixis",
+      "selected_rule_id": "prowess-grixis"
+    },
+    "prowess/izzet": {
+      "record_id": "modern-baseline-0156",
+      "archetype_id": "prowess",
+      "archetype_name": "Prowess",
+      "subtype_id": "izzet",
+      "subtype_name": "Izzet",
+      "selected_rule_id": "prowess-izzet"
+    },
+    "prowess/lessons": {
+      "record_id": "modern-baseline-1408",
+      "archetype_id": "prowess",
+      "archetype_name": "Prowess",
+      "subtype_id": "lessons",
+      "subtype_name": "Lessons",
+      "selected_rule_id": "prowess-lessons"
+    },
+    "prowess/temur": {
+      "record_id": "modern-baseline-0035",
+      "archetype_id": "prowess",
+      "archetype_name": "Prowess",
+      "subtype_id": "temur",
+      "subtype_name": "Temur",
+      "selected_rule_id": "prowess-temur"
+    },
+    "rhinos/domain": {
+      "record_id": "modern-baseline-1357",
+      "archetype_id": "rhinos",
+      "archetype_name": "Rhinos",
+      "subtype_id": "domain",
+      "subtype_name": "Domain",
+      "selected_rule_id": "rhinos-domain"
+    },
+    "rhinos/temur": {
+      "record_id": "modern-baseline-1291",
+      "archetype_id": "rhinos",
+      "archetype_name": "Rhinos",
+      "subtype_id": "temur",
+      "subtype_name": "Temur",
+      "selected_rule_id": "rhinos-temur"
+    },
+    "ruby-storm": {
+      "record_id": "modern-baseline-0019",
+      "archetype_id": "ruby-storm",
+      "archetype_name": "Ruby Storm",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "ruby-storm-primary"
+    },
+    "sam-combo": {
+      "record_id": "modern-baseline-0306",
+      "archetype_id": "sam-combo",
+      "archetype_name": "Sam Combo",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "sam-combo-primary"
+    },
+    "selesnya-energy": {
+      "record_id": "modern-baseline-1293",
+      "archetype_id": "selesnya-energy",
+      "archetype_name": "Selesnya Energy",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "selesnya-energy-primary"
+    },
+    "simic-neoform": {
+      "record_id": "modern-baseline-0078",
+      "archetype_id": "simic-neoform",
+      "archetype_name": "Simic Neoform",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "simic-neoform-primary"
+    },
+    "song-of-creation": {
+      "record_id": "modern-baseline-0880",
+      "archetype_id": "song-of-creation",
+      "archetype_name": "Song of Creation",
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": "song-of-creation-primary"
+    },
+    "soultrader/dimir": {
+      "record_id": "modern-baseline-1435",
+      "archetype_id": "soultrader",
+      "archetype_name": "Soultrader",
+      "subtype_id": "dimir",
+      "subtype_name": "Dimir",
+      "selected_rule_id": "soultrader-dimir"
+    },
+    "soultrader/golgari": {
+      "record_id": "modern-baseline-1220",
+      "archetype_id": "soultrader",
+      "archetype_name": "Soultrader",
+      "subtype_id": "golgari",
+      "subtype_name": "Golgari",
+      "selected_rule_id": "soultrader-golgari"
+    },
+    "soultrader/sultai": {
+      "record_id": "modern-baseline-0713",
+      "archetype_id": "soultrader",
+      "archetype_name": "Soultrader",
+      "subtype_id": "sultai",
+      "subtype_name": "Sultai",
+      "selected_rule_id": "soultrader-sultai"
+    },
+    "steel-cutter/izzet": {
+      "record_id": "modern-baseline-0136",
+      "archetype_id": "steel-cutter",
+      "archetype_name": "Steel-Cutter",
+      "subtype_id": "izzet",
+      "subtype_name": "Izzet",
+      "selected_rule_id": "steel-cutter-izzet"
+    },
+    "steel-cutter/mono-red": {
+      "record_id": "modern-baseline-1299",
+      "archetype_id": "steel-cutter",
+      "archetype_name": "Steel-Cutter",
+      "subtype_id": "mono-red",
+      "subtype_name": "Mono-Red",
+      "selected_rule_id": "steel-cutter-mono-red"
+    },
+    "steel-cutter/rakdos": {
+      "record_id": "modern-baseline-2765",
+      "archetype_id": "steel-cutter",
+      "archetype_name": "Steel-Cutter",
+      "subtype_id": "rakdos",
+      "subtype_name": "Rakdos",
+      "selected_rule_id": "steel-cutter-rakdos"
+    },
+    "unknown": {
+      "record_id": "modern-baseline-0021",
+      "archetype_id": null,
+      "archetype_name": null,
+      "subtype_id": null,
+      "subtype_name": null,
+      "selected_rule_id": null
+    }
+  }
+}
