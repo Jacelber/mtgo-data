@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-05-modern-statistics"
-  working_branch_status: "p6_05_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p6-05-publication-status"
+  working_branch_status: "p6_05_completed_and_published_no_follow_up_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2691,7 +2691,7 @@ phase_6_tasks:
 
   - id: "P6-05"
     name: "Enable MTGO Modern event and rolling-range statistics"
-    status: "owner_accepted_remote_publication_authorized"
+    status: "completed_and_published"
     branch: "codex/p6-05-modern-statistics"
     base_commit: "46146c5503fa4cb51aead309f868f2fbb4cd648b"
     depends_on: "P6-04A accepted and published"
@@ -2759,26 +2759,22 @@ phase_6_tasks:
     production_workflow_changed: false
     frontend_changed: false
     owner_acceptance: "accepted"
+    implementation_commit: "57b642b0e2e31e539d88812dd69f42d1a8dd1d1c"
+    pull_request: 84
+    merge_commit: "f0be04a557c4b2cb02a52372618fd066d14761a2"
+    merged_on: "2026-07-22"
+    merged_to_master: true
+    remote_repository_validation_passed: true
+    github_actions_run: 29930407944
 
 next_approved_task:
-  id: "P6-05"
-  name: "Enable MTGO Modern event and rolling-range statistics"
-  target_paths:
-    - "configs/formats.yaml"
-    - "src/mtgmeta/mtgo/stats.py"
-    - "schemas/manifest.json"
-    - "schemas/mtgo-range.schema.json"
-    - "schemas/mtgo-decks.schema.json"
-    - "schemas/mtgo-catalog.schema.json"
-    - "stats/modern/mtgo/"
-    - "tests/test_modern_statistics.py"
-    - "docs/ROADMAP.md"
-    - "docs/STATUS.yaml"
-    - "docs/audits/P6-05.md"
-  production_change: true
+  id: null
+  name: "No next task authorized"
+  target_paths: []
+  production_change: false
   requires_user_confirmation: true
-  authorization_status: "remote_publication_authorized"
-  planning_status: "publication_in_progress"
+  authorization_status: "not_authorized"
+  planning_status: "paused_by_owner_after_p6_05_publication"
 
 governance_baseline:
   status: "active_on_master"
