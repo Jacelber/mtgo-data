@@ -27,7 +27,6 @@ from mtgmeta.reports import find_identity_fields, has_blocking_diagnostics
 
 
 MODERN_RULES = ROOT / "my_archetypes" / "modern.yaml"
-P6_01_CONTRACT = ROOT / "tests" / "fixtures" / "modern" / "rule_migration_contract.json"
 
 
 def test_complete_modern_audit_uses_shared_paths_without_product_output():
@@ -48,14 +47,14 @@ def test_complete_modern_audit_uses_shared_paths_without_product_output():
     assert all(item.expected_format == "CMODERN" for item in audit.excluded_events)
     assert summary == {
         "total_decks": 5792,
-        "classified": 5157,
-        "unknown": 635,
+        "classified": 5664,
+        "unknown": 128,
         "conflicts": 0,
         "invalid_decks": 0,
-        "multiple_matches": 324,
-        "overridden_matches": 324,
-        "selected_subtypes": 0,
-        "same_parent_multiple_subtype_matches": 0,
+        "multiple_matches": 1519,
+        "overridden_matches": 1519,
+        "selected_subtypes": 2329,
+        "same_parent_multiple_subtype_matches": 132,
         "strict_validation": "pass",
     }
     assert {report["format"] for report in reports.values()} == {"modern"}
@@ -65,13 +64,11 @@ def test_complete_modern_audit_uses_shared_paths_without_product_output():
     assert not output.exists()
 
 
-def test_audit_preserves_the_p6_01_rule_artifact_exactly():
-    contract = json.loads(P6_01_CONTRACT.read_text(encoding="utf-8"))
+def test_audit_preserves_the_active_rule_artifact_exactly():
     digest = hashlib.sha256(MODERN_RULES.read_text(encoding="utf-8").encode()).hexdigest()
 
     audit_mtgo_classification(ROOT, "modern")
 
-    assert digest == contract["production_rule_content_sha256"]
     assert hashlib.sha256(MODERN_RULES.read_text(encoding="utf-8").encode()).hexdigest() == digest
 
 

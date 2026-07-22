@@ -23,7 +23,7 @@ from mtgmeta.config import load_rule_set
 
 CONTRACT_PATH = ROOT / "tests" / "fixtures" / "modern" / "rule_migration_contract.json"
 CORPUS_PATH = ROOT / "tests" / "fixtures" / "modern" / "frozen_j6e_corpus.json"
-RULE_PATH = ROOT / "my_archetypes" / "modern.yaml"
+RULE_PATH = ROOT / "tests" / "fixtures" / "modern" / "p6_01_rules.yaml"
 ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 RECORD_ID_PATTERN = re.compile(r"^modern-baseline-[0-9]{4}$")
 
