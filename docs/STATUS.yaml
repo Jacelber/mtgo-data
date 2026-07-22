@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-04-modern-classification-product-boundary"
-  working_branch_status: "p6_04_local_complete_owner_acceptance_pending"
+  current_working_branch: "codex/p6-04a-modern-fetch-boundary-audit"
+  working_branch_status: "p6_04a_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2591,7 +2591,7 @@ phase_6_tasks:
     frontend_changes_allowed: false
   - id: "P6-04"
     name: "Enable the Modern classification-report product boundary"
-    status: "completed_locally_pending_owner_acceptance"
+    status: "completed_and_published"
     branch: "codex/p6-04-modern-classification-product-boundary"
     base_commit: "ccdd2495ed1bbf8029c0d588337220574a3a9b63"
     depends_on: "P6-03 accepted and published"
@@ -2647,30 +2647,57 @@ phase_6_tasks:
     standard_rule_validation_passed: true
     schema_validation_passed: true
     standard_quality_baseline_passed: true
-    remote_publication_authorized: false
-    owner_acceptance: "pending"
+    owner_acceptance: "accepted"
+    remote_publication_authorized: true
+    implementation_commit: "1b5eb7fe79153405445107a363821f3157211ad3"
+    pull_request: 82
+    merge_commit: "9589f6a1f00da5c4880d6a7c832e76bb2717aa63"
+    merged_on: "2026-07-22"
+    remote_repository_validation_passed: true
+  - id: "P6-04A"
+    name: "Audit the Modern and Premodern MTGO fetch boundary"
+    status: "owner_accepted_remote_publication_authorized"
+    branch: "codex/p6-04a-modern-fetch-boundary-audit"
+    base_commit: "9589f6a1f00da5c4880d6a7c832e76bb2717aa63"
+    depends_on: "P6-04 accepted and published"
+    scope:
+      - "Confirm whether the current Modern event collector can select Premodern links."
+      - "Inspect link discovery, explicit-format dispatch, storage routing, tests, and repository history."
+      - "Run the current discovery function against public June and July 2026 MTGO archive pages."
+      - "Change collection behavior only if Premodern can enter the Modern candidate set."
+    owner_local_audit_authorized: true
+    audit: "docs/audits/P6-04A.md"
+    result: "no_fix_required"
+    current_parser_boundary: "exact_first_url_segment"
+    july_modern_candidates: 42
+    july_premodern_links: 34
+    july_premodern_selected: 0
+    june_modern_candidates: 50
+    june_premodern_links: 48
+    june_premodern_selected: 0
+    existing_premodern_regression_test: true
+    focused_tests_passed: 17
+    repository_validation_passed: true
+    code_changed: false
+    workflow_changed: false
+    configuration_changed: false
+    remote_publication_authorized: true
+    owner_acceptance: "accepted"
 
 next_approved_task:
-  id: "P6-04"
-  name: "Enable the Modern classification-report product boundary"
+  id: "P6-04A"
+  name: "Audit the Modern and Premodern MTGO fetch boundary"
   target_paths:
-    - "configs/formats.yaml"
-    - "generate_classification_reports.py"
-    - "src/mtgmeta/reports.py"
-    - "src/mtgmeta/mtgo/classification.py"
-    - "schemas/classification-report-common.schema.json"
-    - "schemas/classification-report-index.schema.json"
-    - "schemas/classification-report.schema.json"
-    - "schemas/manifest.json"
-    - "reports/modern/mtgo/"
-    - "tests/"
+    - "src/mtgmeta/mtgo/fetch.py"
+    - "batch_mtgo.py"
+    - "tests/test_mtgo_event_io.py"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P6-04.md"
-  production_change: true
+    - "docs/audits/P6-04A.md"
+  production_change: false
   requires_user_confirmation: true
-  authorization_status: "owner_acceptance_required"
-  planning_status: "completed_locally"
+  authorization_status: "remote_publication_authorized"
+  planning_status: "publication_in_progress"
 
 governance_baseline:
   status: "active_on_master"
