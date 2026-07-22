@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-04a-modern-fetch-boundary-audit"
-  working_branch_status: "p6_04a_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p6-05-modern-statistics"
+  working_branch_status: "p6_05_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2656,7 +2656,7 @@ phase_6_tasks:
     remote_repository_validation_passed: true
   - id: "P6-04A"
     name: "Audit the Modern and Premodern MTGO fetch boundary"
-    status: "owner_accepted_remote_publication_authorized"
+    status: "completed_and_published"
     branch: "codex/p6-04a-modern-fetch-boundary-audit"
     base_commit: "9589f6a1f00da5c4880d6a7c832e76bb2717aa63"
     depends_on: "P6-04 accepted and published"
@@ -2683,18 +2683,99 @@ phase_6_tasks:
     configuration_changed: false
     remote_publication_authorized: true
     owner_acceptance: "accepted"
+    implementation_commit: "4a2516ed72f93931aee4eac7d6a743bb64fa7758"
+    pull_request: 83
+    merge_commit: "46146c5503fa4cb51aead309f868f2fbb4cd648b"
+    merged_on: "2026-07-22"
+    remote_repository_validation_passed: true
+
+  - id: "P6-05"
+    name: "Enable MTGO Modern event and rolling-range statistics"
+    status: "owner_accepted_remote_publication_authorized"
+    branch: "codex/p6-05-modern-statistics"
+    base_commit: "46146c5503fa4cb51aead309f868f2fbb4cd648b"
+    depends_on: "P6-04A accepted and published"
+    scope:
+      - "Enable event_statistics and range_statistics for executable non-public Modern."
+      - "Generate independent 1, 4, 12, and 36 complete-week Modern statistics and representative-deck documents."
+      - "Aggregate primary statistics by selected parent archetype while retaining subtype use as diagnostics only."
+      - "Reject cross-format event input before any statistics output is written."
+      - "Extend existing MTGO statistics schemas and the manifest to Modern without changing Standard output bytes."
+      - "Keep matchup, Weekly Pickup, metadata, broader catalogs, production workflow, public format, and front-end behavior disabled."
+    owner_local_implementation_authorized: true
+    remote_publication_authorized: true
+    product_enablement_allowed: "event_and_range_statistics_only"
+    matchup_allowed: false
+    weekly_pickup_allowed: false
+    metadata_allowed: false
+    catalog_generation_capability_allowed: false
+    workflow_changes_allowed: false
+    frontend_changes_allowed: false
+    public_format_allowed: false
+    audit: "docs/audits/P6-05.md"
+    event_files_expected: 181
+    embedded_event_format_expected: "CMODERN"
+    premodern_supported: false
+    rolling_ranges_weeks:
+      - 1
+      - 4
+      - 12
+      - 36
+    generated_documents: 9
+    completed_week_event_files: 179
+    incomplete_current_week_event_files_excluded: 2
+    latest_complete_week: "2026-07-13"
+    complete_week_data_through: "2026-07-19"
+    parent_archetype_id_aggregation: true
+    subtype_rows_generated: false
+    range_statistics:
+      one_week:
+        decks: 416
+        unknown: 14
+      four_weeks:
+        decks: 1568
+        unknown: 32
+      twelve_weeks:
+        decks: 4480
+        unknown: 103
+      thirty_six_weeks:
+        decks: 5728
+        unknown: 127
+    schema_validated_outputs: 38
+    focused_tests_passed: 60
+    tests_passed: 374
+    repository_validation_passed: true
+    repository_python_files_validated: 84
+    repository_json_files_validated: 824
+    repository_yaml_files_validated: 14
+    modern_rule_validation_passed: true
+    standard_rule_validation_passed: true
+    schema_validation_passed: true
+    standard_quality_baseline_passed: true
+    standard_statistics_bytes_unchanged: true
+    matchup_data_generated: false
+    weekly_pickup_generated: false
+    metadata_generated: false
+    production_workflow_changed: false
+    frontend_changed: false
+    owner_acceptance: "accepted"
 
 next_approved_task:
-  id: "P6-04A"
-  name: "Audit the Modern and Premodern MTGO fetch boundary"
+  id: "P6-05"
+  name: "Enable MTGO Modern event and rolling-range statistics"
   target_paths:
-    - "src/mtgmeta/mtgo/fetch.py"
-    - "batch_mtgo.py"
-    - "tests/test_mtgo_event_io.py"
+    - "configs/formats.yaml"
+    - "src/mtgmeta/mtgo/stats.py"
+    - "schemas/manifest.json"
+    - "schemas/mtgo-range.schema.json"
+    - "schemas/mtgo-decks.schema.json"
+    - "schemas/mtgo-catalog.schema.json"
+    - "stats/modern/mtgo/"
+    - "tests/test_modern_statistics.py"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P6-04A.md"
-  production_change: false
+    - "docs/audits/P6-05.md"
+  production_change: true
   requires_user_confirmation: true
   authorization_status: "remote_publication_authorized"
   planning_status: "publication_in_progress"
@@ -2748,8 +2829,8 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not retain or commit real P5-08 participant, match, or decklist data."
   - "Do not reuse cookies or browser sessions or bypass access controls."
-  - "Do not enable any P6-04 Modern capability other than classification."
-  - "Do not expose Modern in the front end or public format catalog during P6-04."
+  - "Do not enable any P6-05 Modern capability other than classification, event_statistics, and range_statistics."
+  - "Do not expose Modern in the front end or public format catalog during P6-05."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not generate reference-event or Paupergeddon statistics yet."

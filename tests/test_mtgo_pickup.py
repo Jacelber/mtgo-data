@@ -210,7 +210,7 @@ def test_unavailable_formats_fail_before_pickup_or_metadata_output(
     assert not metadata_output.exists()
 
 
-def test_catalog_capability_gates_every_catalog_before_output(tmp_path):
+def test_catalog_capability_does_not_gate_range_statistics(tmp_path):
     registry = yaml.safe_load((ROOT / "configs" / "formats.yaml").read_text(encoding="utf-8"))
     standard = next(item for item in registry["formats"] if item["id"] == "standard")
     standard["mtgo"]["capabilities"].remove("catalog_generation")
@@ -221,13 +221,14 @@ def test_catalog_capability_gates_every_catalog_before_output(tmp_path):
     )
 
     destinations = [tmp_path / "stats", tmp_path / "matchups", tmp_path / "pickup"]
-    with pytest.raises(DisabledFormatError, match="catalog_generation"):
-        mtgo_stats.build_all_stats(
-            ROOT,
-            "standard",
-            registry_path=registry_path,
-            output_directory=destinations[0],
-        )
+    written = mtgo_stats.build_all_stats(
+        ROOT,
+        "standard",
+        registry_path=registry_path,
+        output_directory=destinations[0],
+        ranges=(1,),
+    )
+    assert set(written) == {"range_1w.json", "decks_1w.json", "index.json"}
     with pytest.raises(DisabledFormatError, match="catalog_generation"):
         mtgo_matchup.build_all_matchups(
             ROOT,
@@ -242,7 +243,9 @@ def test_catalog_capability_gates_every_catalog_before_output(tmp_path):
             registry_path=registry_path,
             output_directory=destinations[2],
         )
-    assert not any(destination.exists() for destination in destinations)
+    assert destinations[0].exists()
+    assert not destinations[1].exists()
+    assert not destinations[2].exists()
 
 
 def test_legacy_commands_route_to_shared_format_aware_implementation(monkeypatch):

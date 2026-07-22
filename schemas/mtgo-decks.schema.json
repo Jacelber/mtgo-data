@@ -1,14 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-decks.schema.json",
-  "title": "Legacy Standard MTGO representative decks",
+  "title": "MTGO representative decks",
   "x-schema-version": "1.0.0",
   "type": "object",
   "required": ["schema_version", "format", "source", "period", "decks"],
   "properties": {
     "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
-    "format": {"const": "standard"}, "source": {"const": "mtgo"}, "period": {"$ref": "common.schema.json#/$defs/period"},
+    "format": {"enum": ["standard", "modern"]}, "source": {"const": "mtgo"}, "period": {"$ref": "common.schema.json#/$defs/period"},
     "decks": {"type": "object", "additionalProperties": {"type": "object", "required": ["best_deck", "average_deck"], "properties": {
+      "archetype_id": {"type": "string", "minLength": 1},
       "best_deck": {"type": "object", "required": ["player", "final_rank", "swiss_score", "player_count", "starttime", "main_deck", "side_deck"], "properties": {
         "player": {"type": "string"}, "final_rank": {"type": "integer", "minimum": 1}, "swiss_score": {"type": "integer", "minimum": 0},
         "player_count": {"type": "integer", "minimum": 1}, "starttime": {"type": "string", "minLength": 1},
@@ -35,5 +36,11 @@
       "name": {"type": "string", "minLength": 1}, "mean_qty": {"type": "number", "minimum": 0}, "rate": {"type": "number", "minimum": 0, "maximum": 1}
     }, "additionalProperties": false}
   },
+  "allOf": [
+    {
+      "if": {"properties": {"format": {"const": "modern"}}, "required": ["format"]},
+      "then": {"properties": {"decks": {"additionalProperties": {"required": ["archetype_id"]}}}}
+    }
+  ],
   "additionalProperties": false
 }

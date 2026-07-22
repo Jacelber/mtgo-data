@@ -126,7 +126,7 @@ def _candidate_documents(events, rules, end_monday: date, known: set[str]):
     for record in top8_records:
         if record["archetype"] == "Unknown":
             continue
-        key = (record["archetype"], deck_fingerprint(record))
+        key = (record["archetype_id"], deck_fingerprint(record))
         if key not in deduplicated:
             deduplicated[key] = record
         else:
@@ -144,7 +144,11 @@ def _candidate_documents(events, rules, end_monday: date, known: set[str]):
             "swiss_score": record["swiss_score"],
             "player_count": record["player_count"],
             "starttime": record["starttime"],
-            "deviation": deck_deviation(record, base_pack.get(archetype), d99),
+            "deviation": deck_deviation(
+                record,
+                base_pack.get(record["archetype_id"]),
+                d99,
+            ),
             "source": "new" if archetype not in known else "existing",
             "approved": False,
             "comment_zh": "",
@@ -178,8 +182,8 @@ def _candidate_documents(events, rules, end_monday: date, known: set[str]):
         "mean_qty 为均值张数，rate 为出现率（权重）。用于人工核对某副牌偏离度是否合理。",
         "archetypes": {},
     }
-    for archetype in sorted(base_pack):
-        base = base_pack[archetype]
+    for base in sorted(base_pack.values(), key=lambda item: item["name"]):
+        archetype = base["name"]
         base_reference["archetypes"][archetype] = {
             "sample_size": base["sample_size"],
             "core": base["core"],
