@@ -20,8 +20,9 @@ jobs:
     timeout-minutes: 45
     env:
       PYTHONPATH: src
-      MTGO_FORMAT: standard
       MTGO_EVENT_FORMATS: "standard legacy pioneer pauper vintage modern"
+      MTGO_PRODUCT_FORMATS: "standard modern"
+      MTGO_HIERARCHY_FORMATS: "modern"
     steps:
       - name: Check out full history for metadata and publication
         uses: actions/checkout@v7.0.0
@@ -51,24 +52,64 @@ jobs:
             python -B -m mtgmeta.mtgo --format "$FORMAT" fetch-events
           done
 
-      - name: Fetch Videre matches
-        run: python -B -m mtgmeta.mtgo --format "$MTGO_FORMAT" fetch-matches
+      - name: Fetch Videre matches for product formats
+        shell: bash
+        run: |
+          for FORMAT in $MTGO_PRODUCT_FORMATS; do
+            echo "Collecting Videre match data for ${FORMAT}."
+            python -B -m mtgmeta.mtgo --format "$FORMAT" fetch-matches
+          done
 
-      - name: Build Standard statistics
-        run: python -B -m mtgmeta.mtgo --format "$MTGO_FORMAT" build-statistics
+      - name: Build product statistics
+        shell: bash
+        run: |
+          for FORMAT in $MTGO_PRODUCT_FORMATS; do
+            echo "Building MTGO statistics for ${FORMAT}."
+            python -B -m mtgmeta.mtgo --format "$FORMAT" build-statistics
+          done
 
-      - name: Build Standard matchup statistics
-        run: python -B -m mtgmeta.mtgo --format "$MTGO_FORMAT" build-matchups
+      - name: Build product matchup statistics
+        shell: bash
+        run: |
+          for FORMAT in $MTGO_PRODUCT_FORMATS; do
+            echo "Building matchup statistics for ${FORMAT}."
+            python -B -m mtgmeta.mtgo --format "$FORMAT" build-matchups
+          done
 
       - name: Generate Weekly Pickup candidates when absent
         continue-on-error: true
-        run: python -B -m mtgmeta.mtgo --format "$MTGO_FORMAT" pickup candidates --if-absent
+        shell: bash
+        run: |
+          STATUS=0
+          for FORMAT in $MTGO_PRODUCT_FORMATS; do
+            echo "Preparing Weekly Pickup candidates for ${FORMAT}."
+            python -B -m mtgmeta.mtgo --format "$FORMAT" pickup candidates --if-absent || STATUS=$?
+          done
+          exit "$STATUS"
 
-      - name: Generate Standard metadata
-        run: python -B -m mtgmeta.mtgo --format "$MTGO_FORMAT" generate-metadata
+      - name: Generate maintained hierarchy catalogs
+        shell: bash
+        run: |
+          for FORMAT in $MTGO_HIERARCHY_FORMATS; do
+            echo "Generating archetype hierarchy for ${FORMAT}."
+            python -B -m mtgmeta.mtgo --format "$FORMAT" generate-hierarchy
+          done
 
-      - name: Generate and strictly validate classification diagnostics
-        run: python -B -m mtgmeta.mtgo --format "$MTGO_FORMAT" classification-reports --strict
+      - name: Generate product metadata
+        shell: bash
+        run: |
+          for FORMAT in $MTGO_PRODUCT_FORMATS; do
+            echo "Generating MTGO metadata for ${FORMAT}."
+            python -B -m mtgmeta.mtgo --format "$FORMAT" generate-metadata
+          done
+
+      - name: Generate and strictly validate product classification diagnostics
+        shell: bash
+        run: |
+          for FORMAT in $MTGO_PRODUCT_FORMATS; do
+            echo "Generating classification diagnostics for ${FORMAT}."
+            python -B -m mtgmeta.mtgo --format "$FORMAT" classification-reports --strict
+          done
 
       - name: Validate production candidate scope and data increments
         run: python -B validate_production_candidate.py validate --baseline "$RUNNER_TEMP/production-baseline.json"
@@ -76,10 +117,14 @@ jobs:
       - name: Validate repository files and references
         run: python -B validate_repository.py
 
-      - name: Validate Standard archetype rules
-        run: python -B validate_rules.py
+      - name: Validate product archetype rules
+        shell: bash
+        run: |
+          for FORMAT in $MTGO_PRODUCT_FORMATS; do
+            python -B validate_rules.py "my_archetypes/${FORMAT}.yaml"
+          done
 
-      - name: Validate Standard public JSON schemas
+      - name: Validate generated JSON schemas
         run: python -B validate_schemas.py
 
       - name: Commit and push generated changes
@@ -130,7 +175,8 @@ jobs:
             echo "- Source branch: ${{ github.ref_name }}"
             echo "- Generated changes published: ${{ steps.publish.outputs.changed || 'not-reached' }}"
             echo "- Published commit verified: ${{ steps.verify.outputs.commit || 'not-reached' }}"
-            echo "- Format: ${MTGO_FORMAT}"
+            echo "- Product formats: ${MTGO_PRODUCT_FORMATS}"
+            echo "- Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}"
             echo "- Validation layers: clean-checkout regression, production candidate acceptance, and published-commit confirmation."
-            echo "- Pipeline: MTGO events, Videre matches, statistics, matchup statistics, Pickup candidates, metadata, de-identified classification diagnostics, validation, and publication."
+            echo "- Pipeline: all configured MTGO event archives; Standard and Modern Videre matches, statistics, matchup statistics, Pickup candidates, metadata, de-identified classification diagnostics; Modern hierarchy; validation and publication."
           } >> "$GITHUB_STEP_SUMMARY"
