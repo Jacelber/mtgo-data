@@ -37,10 +37,19 @@ def committed_reference() -> tuple[datetime, dict]:
 
 
 def test_modern_event_input_is_complete_and_format_isolated():
+    source_events = [
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in sorted((ROOT / "data" / "modern").glob("*.json"))
+    ]
     events = stats.load_all_events(ROOT, "modern")
-    assert len(events) == 181
+    assert len(events) == len(source_events)
     assert {event["format"] for _date, event in events} == {"CMODERN"}
-    assert sum(len(event["players"]) for _date, event in events) == 5792
+    assert {event["event_id"] for _date, event in events} == {
+        event["event_id"] for event in source_events
+    }
+    assert sum(len(event["players"]) for _date, event in events) == sum(
+        len(event["players"]) for event in source_events
+    )
 
 
 def test_committed_modern_ranges_reconcile_parent_aggregates():

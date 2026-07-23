@@ -136,13 +136,20 @@ def test_nonstandard_product_commands_obey_current_capabilities_before_dispatch(
     )
     for format_id in NONSTANDARD_FORMATS:
         for command in product_commands:
-            enabled_modern_commands = (["classification-reports"], ["build-statistics"])
+            enabled_modern_commands = (
+                ["fetch-matches"],
+                ["build-statistics"],
+                ["build-matchups"],
+                ["classification-reports"],
+            )
             expected = 0 if format_id == "modern" and command in enabled_modern_commands else 2
             assert cli.main(
                 ["--root", str(tmp_path), "--format", format_id, *command]
             ) == expected
     assert [(format_id, command) for format_id, command, _, _ in dispatched] == [
+        ("modern", "fetch-matches"),
         ("modern", "build-statistics"),
+        ("modern", "build-matchups"),
         ("modern", "classification-reports")
     ]
     assert sorted(path.relative_to(tmp_path).as_posix() for path in tmp_path.rglob("*")) == [
@@ -150,7 +157,7 @@ def test_nonstandard_product_commands_obey_current_capabilities_before_dispatch(
         "configs/formats.yaml",
     ]
     assert capsys.readouterr().err.count("MTGO command ERROR") == (
-        len(NONSTANDARD_FORMATS) * len(product_commands) - 2
+        len(NONSTANDARD_FORMATS) * len(product_commands) - 4
     )
 
     for format_id in ("standard", *NONSTANDARD_FORMATS):
@@ -158,7 +165,9 @@ def test_nonstandard_product_commands_obey_current_capabilities_before_dispatch(
             ["--root", str(tmp_path), "--format", format_id, "fetch-events"]
         ) == 0
     assert [(format_id, command) for format_id, command, _, _ in dispatched] == [
+        ("modern", "fetch-matches"),
         ("modern", "build-statistics"),
+        ("modern", "build-matchups"),
         ("modern", "classification-reports")
     ] + [
         (format_id, "fetch-events") for format_id in ("standard", *NONSTANDARD_FORMATS)

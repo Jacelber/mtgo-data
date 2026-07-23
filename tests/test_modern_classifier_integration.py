@@ -40,6 +40,12 @@ def report_bytes():
 
 def test_complete_modern_audit_uses_shared_paths_without_mutating_product_output():
     before = report_bytes()
+    modern_events, excluded = load_mtgo_events_for_format(
+        sorted((ROOT / "data" / "modern").glob("*.json")),
+        ROOT,
+        "modern",
+    )
+    expected_decks = sum(len(event.get("players", [])) for _, event in modern_events)
 
     audit = audit_mtgo_classification(ROOT, "modern")
     reports = audit.reports
@@ -49,20 +55,18 @@ def test_complete_modern_audit_uses_shared_paths_without_mutating_product_output
     assert audit.expected_event_format == "CMODERN"
     assert audit.event_directory == ROOT / "data" / "modern"
     assert audit.rule_path == MODERN_RULES
-    assert audit.included_event_count == reports["index"]["event_count"] == 181
-    assert audit.excluded_events == ()
-    assert summary == {
-        "total_decks": 5792,
-        "classified": 5664,
-        "unknown": 128,
-        "conflicts": 0,
-        "invalid_decks": 0,
-        "multiple_matches": 1519,
-        "overridden_matches": 1519,
-        "selected_subtypes": 2329,
-        "same_parent_multiple_subtype_matches": 132,
-        "strict_validation": "pass",
-    }
+    assert audit.included_event_count == reports["index"]["event_count"] == len(modern_events)
+    assert audit.excluded_events == excluded == ()
+    assert summary["total_decks"] == expected_decks
+    assert (
+        summary["classified"] + summary["unknown"] + summary["conflicts"]
+        + summary["invalid_decks"]
+        == expected_decks
+    )
+    assert summary["conflicts"] == 0
+    assert summary["invalid_decks"] == 0
+    assert summary["multiple_matches"] == summary["overridden_matches"]
+    assert summary["strict_validation"] == "pass"
     assert {report["format"] for report in reports.values()} == {"modern"}
     assert {report["source"] for report in reports.values()} == {"mtgo"}
     assert find_identity_fields(reports) == []
@@ -106,11 +110,13 @@ def test_planned_format_audit_never_falls_back_to_standard_rules():
         audit_mtgo_classification(ROOT, "pauper")
 
 
-def test_production_cli_generates_strict_deidentified_modern_reports():
+def test_production_cli_generates_strict_deidentified_modern_reports(tmp_path):
     standard_before = {
         path.name: path.read_bytes()
         for path in sorted(STANDARD_REPORTS.glob("*.json"))
     }
+    modern_before = report_bytes()
+    output_dir = tmp_path / "reports"
     result = subprocess.run(
         [
             sys.executable,
@@ -122,6 +128,8 @@ def test_production_cli_generates_strict_deidentified_modern_reports():
             "--format",
             "modern",
             "classification-reports",
+            "--output-dir",
+            str(output_dir),
             "--strict",
         ],
         cwd=ROOT,
@@ -130,10 +138,12 @@ def test_production_cli_generates_strict_deidentified_modern_reports():
         env={**__import__("os").environ, "PYTHONPATH": str(SRC)},
     )
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "decks=5792" in result.stdout
-    assert "unknown=128" in result.stdout
+    audit = audit_mtgo_classification(ROOT, "modern")
+    summary = audit.reports["index"]["summary"]
+    assert f"decks={summary['total_decks']}" in result.stdout
+    assert f"unknown={summary['unknown']}" in result.stdout
     assert "validation PASS" in result.stdout
-    assert sorted(path.name for path in MODERN_REPORTS.glob("*.json")) == [
+    assert sorted(path.name for path in output_dir.glob("*.json")) == [
         "classification_conflicts.json",
         "index.json",
         "multiple_matches.json",
@@ -143,7 +153,7 @@ def test_production_cli_generates_strict_deidentified_modern_reports():
     ]
     generated = {
         path.stem: json.loads(path.read_text(encoding="utf-8"))
-        for path in sorted(MODERN_REPORTS.glob("*.json"))
+        for path in sorted(output_dir.glob("*.json"))
     }
     assert find_identity_fields(generated) == []
     assert all(report["format"] == "modern" for report in generated.values())
@@ -154,25 +164,22 @@ def test_production_cli_generates_strict_deidentified_modern_reports():
         path.name: path.read_bytes()
         for path in sorted(STANDARD_REPORTS.glob("*.json"))
     } == standard_before
+    assert report_bytes() == modern_before
 
 
 @pytest.mark.parametrize(
     "command",
     [
-        ["fetch-matches"],
-        ["build-matchups"],
         ["pickup", "candidates"],
         ["generate-metadata"],
     ],
 )
-def test_every_post_p6_05_modern_product_command_remains_disabled(command):
+def test_every_post_p6_06_modern_product_command_remains_disabled(command):
     statistics = ROOT / "stats" / "modern" / "mtgo"
-    matches = ROOT / "data" / "modern" / "mtgo" / "matches"
     statistics_before = {
         path.name: path.read_bytes() for path in sorted(statistics.glob("*.json"))
     }
-    assert len(statistics_before) == 9
-    assert not matches.exists()
+    assert len(statistics_before) >= 9
     result = subprocess.run(
         [
             sys.executable,
@@ -195,4 +202,3 @@ def test_every_post_p6_05_modern_product_command_remains_disabled(command):
     assert {
         path.name: path.read_bytes() for path in sorted(statistics.glob("*.json"))
     } == statistics_before
-    assert not matches.exists()

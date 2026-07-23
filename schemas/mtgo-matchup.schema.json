@@ -1,17 +1,265 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-matchup.schema.json",
-  "title": "Legacy Standard MTGO matchup statistics",
+  "title": "MTGO parent and hierarchical matchup statistics",
   "x-schema-version": "1.0.0",
   "type": "object",
-  "required": ["schema_version", "format", "source", "period", "min_sample_hint", "archetype_order", "overall", "matrix"],
+  "required": [
+    "schema_version",
+    "format",
+    "source",
+    "period",
+    "min_sample_hint"
+  ],
   "properties": {
-    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
-    "format": {"const": "standard"}, "source": {"const": "mtgo"}, "period": {"$ref": "common.schema.json#/$defs/period"},
-    "min_sample_hint": {"type": "integer", "minimum": 1},
-    "archetype_order": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
-    "overall": {"type": "object", "additionalProperties": {"$ref": "common.schema.json#/$defs/matchRecord"}},
-    "matrix": {"type": "object", "additionalProperties": {"type": "object", "additionalProperties": {"$ref": "common.schema.json#/$defs/matchRecord"}}}
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/schemaVersion"
+    },
+    "format": {
+      "enum": ["standard", "modern"]
+    },
+    "source": {
+      "const": "mtgo"
+    },
+    "period": {
+      "$ref": "common.schema.json#/$defs/period"
+    },
+    "min_sample_hint": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "archetype_order": {
+      "$ref": "#/$defs/legacyOrder"
+    },
+    "overall": {
+      "$ref": "#/$defs/legacyRecordMap"
+    },
+    "matrix": {
+      "$ref": "#/$defs/legacyRecordMatrix"
+    },
+    "hierarchical": {
+      "const": true
+    },
+    "canonical_level": {
+      "const": "leaf"
+    },
+    "hierarchy": {
+      "$ref": "#/$defs/hierarchy"
+    },
+    "parent_order": {
+      "$ref": "#/$defs/identityOrder"
+    },
+    "parent_overall": {
+      "$ref": "#/$defs/recordMap"
+    },
+    "parent_matrix": {
+      "$ref": "#/$defs/recordMatrix"
+    },
+    "leaf_order": {
+      "$ref": "#/$defs/identityOrder"
+    },
+    "leaf_overall": {
+      "$ref": "#/$defs/recordMap"
+    },
+    "leaf_matrix": {
+      "$ref": "#/$defs/recordMatrix"
+    }
   },
-  "additionalProperties": false
+  "oneOf": [
+    {
+      "properties": {
+        "format": {
+          "const": "standard"
+        }
+      },
+      "required": ["archetype_order", "overall", "matrix"],
+      "not": {
+        "anyOf": [
+          {"required": ["hierarchical"]},
+          {"required": ["canonical_level"]},
+          {"required": ["hierarchy"]},
+          {"required": ["parent_order"]},
+          {"required": ["parent_overall"]},
+          {"required": ["parent_matrix"]},
+          {"required": ["leaf_order"]},
+          {"required": ["leaf_overall"]},
+          {"required": ["leaf_matrix"]}
+        ]
+      }
+    },
+    {
+      "properties": {
+        "format": {
+          "const": "modern"
+        }
+      },
+      "required": [
+        "hierarchical",
+        "canonical_level",
+        "hierarchy",
+        "parent_order",
+        "parent_overall",
+        "parent_matrix",
+        "leaf_order",
+        "leaf_overall",
+        "leaf_matrix"
+      ],
+      "not": {
+        "anyOf": [
+          {"required": ["archetype_order"]},
+          {"required": ["overall"]},
+          {"required": ["matrix"]}
+        ]
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)?$"
+    },
+    "identityOrder": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/identity"
+      },
+      "uniqueItems": true
+    },
+    "legacyName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "legacyOrder": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/legacyName"
+      },
+      "uniqueItems": true
+    },
+    "legacyRecordMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/legacyName"
+      },
+      "additionalProperties": {
+        "$ref": "common.schema.json#/$defs/matchRecord"
+      }
+    },
+    "legacyRecordMatrix": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/legacyName"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "propertyNames": {
+          "$ref": "#/$defs/legacyName"
+        },
+        "additionalProperties": {
+          "$ref": "common.schema.json#/$defs/matchRecord"
+        }
+      }
+    },
+    "recordMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/identity"
+      },
+      "additionalProperties": {
+        "$ref": "common.schema.json#/$defs/matchRecord"
+      }
+    },
+    "recordMatrix": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/identity"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "propertyNames": {
+          "$ref": "#/$defs/identity"
+        },
+        "additionalProperties": {
+          "$ref": "common.schema.json#/$defs/matchRecord"
+        }
+      }
+    },
+    "hierarchy": {
+      "type": "object",
+      "required": ["parents", "leaves"],
+      "properties": {
+        "parents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/parentNode"
+          }
+        },
+        "leaves": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/leafNode"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "parentNode": {
+      "type": "object",
+      "required": ["id", "name", "expandable", "subtype_ids"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identity"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expandable": {
+          "type": "boolean"
+        },
+        "subtype_ids": {
+          "$ref": "#/$defs/identityOrder"
+        }
+      },
+      "additionalProperties": false
+    },
+    "leafNode": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "name",
+        "parent_id",
+        "subtype_id"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identity"
+        },
+        "kind": {
+          "enum": ["archetype", "subtype"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "parent_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "subtype_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
 }

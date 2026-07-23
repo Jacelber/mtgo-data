@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 import json
 from pathlib import Path
@@ -19,6 +20,7 @@ from mtgmeta.rules import RuleSet
 from public_contract import versioned
 
 from . import load_mtgo_context
+from .classification import load_mtgo_events_for_format
 from .stats import latest_complete_week, parse_event_date
 
 
@@ -35,6 +37,26 @@ class NoResults(Exception):
 
 class MTGOMatchupError(RuntimeError):
     """Raised when matchup input cannot be classified or generated safely."""
+
+
+@dataclass(frozen=True)
+class MatchupIdentity:
+    """Stable parent and most-specific matchup identities for one deck."""
+
+    parent_id: str
+    parent_name: str
+    subtype_id: str | None
+    subtype_name: str | None
+
+    @property
+    def leaf_id(self) -> str:
+        if self.subtype_id is None:
+            return self.parent_id
+        return f"{self.parent_id}/{self.subtype_id}"
+
+    @property
+    def leaf_name(self) -> str:
+        return self.subtype_name or self.parent_name
 
 
 def api_get(
@@ -180,7 +202,7 @@ def fetch_and_store_matches(
     return summary
 
 
-def wilson_half_width(wins: int, total: int, z: float = WILSON_Z) -> float | None:
+def wilson_half_width(wins: float, total: int, z: float = WILSON_Z) -> float | None:
     if total <= 0:
         return None
     p = wins / total
@@ -198,7 +220,7 @@ def _blank_cell() -> dict[str, int]:
 
 def _win_rate(cell: dict[str, int]) -> float | None:
     total = cell["wins"] + cell["losses"] + cell["draws"]
-    return cell["wins"] / total if total else None
+    return (cell["wins"] + 0.5 * cell["draws"]) / total if total else None
 
 
 def _classify_parent(player: dict[str, Any], rule_set: RuleSet) -> str | None:
@@ -209,6 +231,42 @@ def _classify_parent(player: dict[str, Any], rule_set: RuleSet) -> str | None:
         return None
     detail = result.conflict_kind or ", ".join(result.errors) or result.status
     raise MTGOMatchupError(f"cannot aggregate {result.status} deck: {detail}")
+
+
+def _classify_identity(
+    player: dict[str, Any],
+    rule_set: RuleSet,
+) -> MatchupIdentity | None:
+    """Classify one deck and enforce the approved no-residual subtype policy."""
+
+    result = classify_deck(rule_set, player)
+    if result.status == "unknown":
+        return None
+    if result.status != "classified":
+        detail = result.conflict_kind or ", ".join(result.errors) or result.status
+        raise MTGOMatchupError(f"cannot aggregate {result.status} deck: {detail}")
+    definitions = {
+        archetype.id: archetype for archetype in rule_set.archetypes
+    }
+    definition = definitions.get(result.archetype_id or "")
+    if definition is None:
+        raise MTGOMatchupError(
+            f"classified archetype {result.archetype_id!r} is absent from the rule set"
+        )
+    if definition.subtypes and result.subtype_id is None:
+        raise MTGOMatchupError(
+            f"classified archetype {definition.id!r} defines subtypes but selected none"
+        )
+    if not definition.subtypes and result.subtype_id is not None:
+        raise MTGOMatchupError(
+            f"classified archetype {definition.id!r} selected an undefined subtype"
+        )
+    return MatchupIdentity(
+        parent_id=definition.id,
+        parent_name=definition.name,
+        subtype_id=result.subtype_id,
+        subtype_name=result.subtype_name,
+    )
 
 
 def load_official_events_from_directory(
@@ -257,6 +315,99 @@ def load_official_events(
         context.paths["events"],
         load_rule_set(context.paths["rules"]),
     )
+
+
+def build_matchup_hierarchy(rule_set: RuleSet) -> dict[str, Any]:
+    """Build the complete stable parent/leaf hierarchy from maintained rules."""
+
+    parents: list[dict[str, Any]] = []
+    leaves: list[dict[str, Any]] = []
+    for archetype in sorted(rule_set.archetypes, key=lambda item: item.id):
+        subtype_ids = [
+            f"{archetype.id}/{subtype.id}"
+            for subtype in sorted(archetype.subtypes, key=lambda item: item.id)
+        ]
+        parents.append(
+            {
+                "id": archetype.id,
+                "name": archetype.name,
+                "expandable": len(archetype.subtypes) >= 2,
+                "subtype_ids": subtype_ids,
+            }
+        )
+        if archetype.subtypes:
+            for subtype in sorted(archetype.subtypes, key=lambda item: item.id):
+                leaves.append(
+                    {
+                        "id": f"{archetype.id}/{subtype.id}",
+                        "kind": "subtype",
+                        "name": subtype.name,
+                        "parent_id": archetype.id,
+                        "subtype_id": subtype.id,
+                    }
+                )
+        else:
+            leaves.append(
+                {
+                    "id": archetype.id,
+                    "kind": "archetype",
+                    "name": archetype.name,
+                    "parent_id": archetype.id,
+                    "subtype_id": None,
+                }
+            )
+    return {"parents": parents, "leaves": leaves}
+
+
+def load_hierarchical_events_from_directory(
+    events_directory: str | Path,
+    rule_set: RuleSet,
+    *,
+    repository_root: str | Path,
+    format_id: str,
+) -> list[tuple[date, str, dict[str, MatchupIdentity], set[str]]]:
+    """Load exact-format events and stable parent/subtype mappings."""
+
+    paths = sorted(Path(events_directory).glob("*.json"))
+    loaded, excluded = load_mtgo_events_for_format(
+        paths,
+        repository_root,
+        format_id,
+    )
+    if excluded:
+        details = ", ".join(
+            f"{item.source_file} ({item.actual_format})" for item in excluded
+        )
+        raise MTGOMatchupError(
+            f"cross-format event input rejected for {format_id}: {details}"
+        )
+    events: list[tuple[date, str, dict[str, MatchupIdentity], set[str]]] = []
+    for source_file, event in loaded:
+        event_date = parse_event_date(event.get("starttime"))
+        event_id = str(event.get("event_id", "")).strip()
+        if event_date is None or not event_id:
+            raise MTGOMatchupError(
+                f"{source_file}: event date and event ID are required"
+            )
+        mapping: dict[str, MatchupIdentity] = {}
+        all_names: set[str] = set()
+        players = event.get("players", [])
+        if not isinstance(players, list):
+            raise MTGOMatchupError(f"{source_file}: players must be an array")
+        for player in players:
+            if not isinstance(player, dict):
+                raise MTGOMatchupError(
+                    f"{source_file}: every player must be an object"
+                )
+            name = player.get("player")
+            if not isinstance(name, str) or not name:
+                continue
+            all_names.add(name)
+            identity = _classify_identity(player, rule_set)
+            if identity is not None:
+                mapping[name] = identity
+        events.append((event_date, event_id, mapping, all_names))
+    return events
 
 
 def accumulate_event(
@@ -342,10 +493,202 @@ def accumulate_event(
         stats["cross_matches"] += 1
 
 
+def _inverse_result(result: str) -> str:
+    if result == "win":
+        return "loss"
+    if result == "loss":
+        return "win"
+    return "draw"
+
+
+def _add_directed_result(
+    matrix: dict[str, dict[str, dict[str, int]]],
+    row_id: str,
+    column_id: str,
+    result: str,
+) -> None:
+    cell = matrix.setdefault(row_id, {}).setdefault(column_id, _blank_cell())
+    if result == "win":
+        cell["wins"] += 1
+    elif result == "loss":
+        cell["losses"] += 1
+    else:
+        cell["draws"] += 1
+
+
+def accumulate_hierarchical_event(
+    matches_directory: str | Path,
+    event_id: str,
+    player_identity: dict[str, MatchupIdentity],
+    official_names: set[str],
+    leaf_matrix: dict[str, dict[str, dict[str, int]]],
+    seen_keys: set[tuple[Any, ...]],
+    stats: dict[str, int],
+) -> None:
+    """Accumulate canonical directed leaf counts for one physical event."""
+
+    matches_path = Path(matches_directory) / f"{event_id}.json"
+    if not matches_path.exists():
+        stats["no_match_file"] += 1
+        return
+    raw = json.loads(matches_path.read_text(encoding="utf-8"))
+    rows = raw.get("matches", []) if isinstance(raw, dict) else raw
+    if not isinstance(rows, list) or not rows:
+        stats["no_match_file"] += 1
+        return
+
+    for row in rows:
+        if not isinstance(row, dict) or row.get("isbye"):
+            continue
+        player = row.get("player")
+        opponent = row.get("opponent")
+        result = row.get("result")
+        round_id = row.get("round")
+        if (
+            not isinstance(player, str)
+            or not player
+            or not isinstance(opponent, str)
+            or not opponent
+            or result not in ("win", "loss", "draw")
+        ):
+            continue
+        key = (str(event_id), round_id, frozenset((player, opponent)))
+        if key in seen_keys:
+            stats["dedup_skipped"] += 1
+            continue
+        seen_keys.add(key)
+        stats["physical_matches"] += 1
+
+        first = player_identity.get(player)
+        second = player_identity.get(opponent)
+        if first is None or second is None:
+            stats["dropped_unmapped"] += 1
+            for name, identity in ((player, first), (opponent, second)):
+                if identity is None:
+                    reason = (
+                        "drop_reason_unknown_deck"
+                        if name in official_names
+                        else "drop_reason_not_in_official"
+                    )
+                    stats[reason] += 1
+            continue
+
+        stats["counted"] += 1
+        _add_directed_result(
+            leaf_matrix,
+            first.leaf_id,
+            second.leaf_id,
+            result,
+        )
+        _add_directed_result(
+            leaf_matrix,
+            second.leaf_id,
+            first.leaf_id,
+            _inverse_result(result),
+        )
+        if first.parent_id == second.parent_id:
+            stats["mirror_matches"] += 1
+        else:
+            stats["cross_matches"] += 1
+
+
+def aggregate_matchup_counts(
+    leaf_matrix: dict[str, dict[str, dict[str, int]]],
+    row_identity: dict[str, str],
+    column_identity: dict[str, str],
+) -> dict[str, dict[str, dict[str, int]]]:
+    """Aggregate canonical counts independently on each matrix axis."""
+
+    aggregated: dict[str, dict[str, dict[str, int]]] = {}
+    for row_id, columns in leaf_matrix.items():
+        target_row = row_identity.get(row_id)
+        if target_row is None:
+            raise MTGOMatchupError(f"unknown matchup leaf ID {row_id!r}")
+        for column_id, cell in columns.items():
+            target_column = column_identity.get(column_id)
+            if target_column is None:
+                raise MTGOMatchupError(f"unknown matchup leaf ID {column_id!r}")
+            target = aggregated.setdefault(target_row, {}).setdefault(
+                target_column,
+                _blank_cell(),
+            )
+            for field in ("wins", "losses", "draws"):
+                target[field] += cell[field]
+    return aggregated
+
+
+def rollup_matchup_counts(
+    leaf_matrix: dict[str, dict[str, dict[str, int]]],
+    leaf_to_parent: dict[str, str],
+) -> dict[str, dict[str, dict[str, int]]]:
+    """Roll canonical leaf counts up to stable parent IDs on both axes."""
+
+    return aggregate_matchup_counts(
+        leaf_matrix,
+        leaf_to_parent,
+        leaf_to_parent,
+    )
+
+
+def _overall_from_directed_matrix(
+    matrix: dict[str, dict[str, dict[str, int]]],
+) -> dict[str, dict[str, int]]:
+    """Return non-mirror overall counts from one directed matrix."""
+
+    overall: dict[str, dict[str, int]] = {}
+    for row_id, columns in matrix.items():
+        target = overall.setdefault(row_id, _blank_cell())
+        for column_id, cell in columns.items():
+            if row_id == column_id:
+                continue
+            for field in ("wins", "losses", "draws"):
+                target[field] += cell[field]
+    return overall
+
+
+def _directed_order(
+    matrix: dict[str, dict[str, dict[str, int]]],
+    overall: dict[str, dict[str, int]],
+) -> list[str]:
+    identities = set(matrix) | {
+        column_id for columns in matrix.values() for column_id in columns
+    }
+    return sorted(
+        identities,
+        key=lambda identity: (
+            -sum(overall.get(identity, _blank_cell()).values()),
+            identity,
+        ),
+    )
+
+
+def _emit_directed_matrix(
+    matrix: dict[str, dict[str, dict[str, int]]],
+    order: list[str],
+) -> dict[str, dict[str, Any]]:
+    return {
+        row_id: {
+            column_id: _emit_cell(cell, row_id == column_id)
+            for column_id, cell in sorted(matrix.get(row_id, {}).items())
+        }
+        for row_id in order
+    }
+
+
+def _emit_overall(
+    overall: dict[str, dict[str, int]],
+    order: list[str],
+) -> dict[str, dict[str, Any]]:
+    return {
+        identity: _emit_cell(overall.get(identity, _blank_cell()), False)
+        for identity in order
+    }
+
+
 def _emit_cell(cell: dict[str, int], is_mirror: bool) -> dict[str, Any]:
     total = cell["wins"] + cell["losses"] + cell["draws"]
     win_rate = _win_rate(cell)
-    interval = wilson_half_width(cell["wins"], total)
+    interval = wilson_half_width(cell["wins"] + 0.5 * cell["draws"], total)
     return {
         "wins": cell["wins"],
         "losses": cell["losses"],
@@ -446,6 +789,114 @@ def build_window(
     ), stats
 
 
+def _validate_directed_counts(
+    matrix: dict[str, dict[str, dict[str, int]]],
+    physical_matches: int,
+) -> None:
+    observations = 0
+    for row_id, columns in matrix.items():
+        for column_id, cell in columns.items():
+            observations += sum(cell.values())
+            inverse = matrix.get(column_id, {}).get(row_id)
+            if inverse is None:
+                raise MTGOMatchupError(
+                    f"missing inverse matchup cell for {row_id!r} and {column_id!r}"
+                )
+            if (
+                cell["wins"] != inverse["losses"]
+                or cell["losses"] != inverse["wins"]
+                or cell["draws"] != inverse["draws"]
+            ):
+                raise MTGOMatchupError(
+                    f"non-conserving matchup cells for {row_id!r} and {column_id!r}"
+                )
+    if observations != physical_matches * 2:
+        raise MTGOMatchupError(
+            "directed matchup observations do not equal twice the counted matches"
+        )
+
+
+def build_hierarchical_window(
+    events: list[
+        tuple[date, str, dict[str, MatchupIdentity], set[str]]
+    ],
+    end_monday: date,
+    n_weeks: int,
+    *,
+    matches_directory: str | Path,
+    format_id: str,
+    rule_set: RuleSet,
+) -> tuple[dict[str, Any], dict[str, int]]:
+    """Build one stable-ID hierarchical matchup window."""
+
+    start_monday = end_monday - timedelta(weeks=n_weeks - 1)
+    end_sunday = end_monday + timedelta(days=6)
+    leaf_matrix: dict[str, dict[str, dict[str, int]]] = {}
+    seen_keys: set[tuple[Any, ...]] = set()
+    stats = {
+        key: 0
+        for key in (
+            "events_in_window",
+            "no_match_file",
+            "physical_matches",
+            "dedup_skipped",
+            "counted",
+            "dropped_unmapped",
+            "cross_matches",
+            "mirror_matches",
+            "drop_reason_unknown_deck",
+            "drop_reason_not_in_official",
+        )
+    }
+    for event_date, event_id, mapping, all_names in events:
+        if start_monday <= event_date <= end_sunday:
+            stats["events_in_window"] += 1
+            accumulate_hierarchical_event(
+                matches_directory,
+                event_id,
+                mapping,
+                all_names,
+                leaf_matrix,
+                seen_keys,
+                stats,
+            )
+
+    hierarchy = build_matchup_hierarchy(rule_set)
+    leaf_to_parent = {
+        leaf["id"]: leaf["parent_id"] for leaf in hierarchy["leaves"]
+    }
+    _validate_directed_counts(leaf_matrix, stats["counted"])
+    parent_matrix = rollup_matchup_counts(leaf_matrix, leaf_to_parent)
+    _validate_directed_counts(parent_matrix, stats["counted"])
+
+    leaf_overall = _overall_from_directed_matrix(leaf_matrix)
+    parent_overall = _overall_from_directed_matrix(parent_matrix)
+    leaf_order = _directed_order(leaf_matrix, leaf_overall)
+    parent_order = _directed_order(parent_matrix, parent_overall)
+    return versioned(
+        {
+            "format": format_id,
+            "source": SOURCE_ID,
+            "period": {
+                "type": f"{n_weeks}w",
+                "start": start_monday.isoformat(),
+                "end": end_sunday.isoformat(),
+                "weeks": n_weeks,
+            },
+            "min_sample_hint": MIN_MATCHUP_SAMPLE,
+            "hierarchical": True,
+            "canonical_level": "leaf",
+            "hierarchy": hierarchy,
+            "parent_order": parent_order,
+            "parent_overall": _emit_overall(parent_overall, parent_order),
+            "parent_matrix": _emit_directed_matrix(parent_matrix, parent_order),
+            "leaf_order": leaf_order,
+            "leaf_overall": _emit_overall(leaf_overall, leaf_order),
+            "leaf_matrix": _emit_directed_matrix(leaf_matrix, leaf_order),
+        }
+    ), stats
+
+
 def _generated_value(value: datetime | str | None) -> str:
     if value is None:
         return datetime.now().isoformat(timespec="seconds")
@@ -471,14 +922,17 @@ def build_all_matchups(
         "matchup_statistics",
         registry_path=registry_path,
     )
-    load_mtgo_context(
-        repository_root,
-        format_id,
-        "catalog_generation",
-        registry_path=registry_path,
-    )
     rule_set = load_rule_set(context.paths["rules"])
-    events = load_official_events_from_directory(context.paths["events"], rule_set)
+    hierarchical = format_id != "standard"
+    if hierarchical:
+        events = load_hierarchical_events_from_directory(
+            context.paths["events"],
+            rule_set,
+            repository_root=context.repository_root,
+            format_id=format_id,
+        )
+    else:
+        events = load_official_events_from_directory(context.paths["events"], rule_set)
     end_monday = latest_complete_week([(event[0], None) for event in events], today=today)
     if end_monday is None:
         return {}, {}
@@ -488,37 +942,53 @@ def build_all_matchups(
     statistics: dict[int, dict[str, int]] = {}
     index_entries = []
     for weeks in DEFAULT_RANGES:
-        document, window_stats = build_window(
-            events,
-            end_monday,
-            weeks,
-            matches_directory=context.paths["matches"],
-            format_id=format_id,
-        )
+        if hierarchical:
+            document, window_stats = build_hierarchical_window(
+                events,
+                end_monday,
+                weeks,
+                matches_directory=context.paths["matches"],
+                format_id=format_id,
+                rule_set=rule_set,
+            )
+        else:
+            document, window_stats = build_window(
+                events,
+                end_monday,
+                weeks,
+                matches_directory=context.paths["matches"],
+                format_id=format_id,
+            )
         filename = f"matchup_{weeks}w.json"
         documents[filename] = document
         statistics[weeks] = window_stats
-        index_entries.append(
-            {
-                "file": filename,
-                "type": document["period"]["type"],
-                "start": document["period"]["start"],
-                "end": document["period"]["end"],
-                "weeks": weeks,
-                "archetypes": len(document["archetype_order"]),
-                "counted_matches": window_stats["counted"],
-            }
-        )
-    documents["matchup_index.json"] = versioned(
-        {
-            "format": format_id,
-            "source": SOURCE_ID,
-            "generated": _generated_value(generated_at),
-            "latest_complete_week": end_monday.isoformat(),
-            "min_sample_hint": MIN_MATCHUP_SAMPLE,
-            "ranges": index_entries,
+        entry = {
+            "file": filename,
+            "type": document["period"]["type"],
+            "start": document["period"]["start"],
+            "end": document["period"]["end"],
+            "weeks": weeks,
+            "archetypes": len(
+                document["parent_order"]
+                if hierarchical
+                else document["archetype_order"]
+            ),
+            "counted_matches": window_stats["counted"],
         }
-    )
+        if hierarchical:
+            entry["leaves"] = len(document["leaf_order"])
+        index_entries.append(entry)
+    index_document = {
+        "format": format_id,
+        "source": SOURCE_ID,
+        "generated": _generated_value(generated_at),
+        "latest_complete_week": end_monday.isoformat(),
+        "min_sample_hint": MIN_MATCHUP_SAMPLE,
+        "ranges": index_entries,
+    }
+    if hierarchical:
+        index_document["hierarchical"] = True
+    documents["matchup_index.json"] = versioned(index_document)
     output.mkdir(parents=True, exist_ok=True)
     written: dict[str, Path] = {}
     for filename, document in documents.items():
@@ -539,9 +1009,14 @@ __all__ = [
     "NoResults",
     "VIDERE_BASE_URL",
     "WILSON_Z",
+    "MatchupIdentity",
     "accumulate_event",
+    "accumulate_hierarchical_event",
+    "aggregate_matchup_counts",
     "api_get",
     "build_all_matchups",
+    "build_hierarchical_window",
+    "build_matchup_hierarchy",
     "build_window",
     "build_window_output",
     "event_ids_from_fetched",
@@ -549,5 +1024,7 @@ __all__ = [
     "fetch_and_store_matches",
     "load_official_events",
     "load_official_events_from_directory",
+    "load_hierarchical_events_from_directory",
+    "rollup_matchup_counts",
     "wilson_half_width",
 ]

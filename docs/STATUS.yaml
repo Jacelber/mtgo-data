@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-05-publication-status"
-  working_branch_status: "p6_05_completed_and_published_no_follow_up_authorized"
+  current_working_branch: "codex/p6-06-hierarchical-matchup"
+  working_branch_status: "p6_06_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-22"
+  last_updated: "2026-07-23"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -2114,6 +2114,23 @@ open_decisions:
     status: "deferred"
     note: "Not part of the current approved scope."
 
+  - id: "OPEN-005"
+    topic: "Residual representation for a null subtype under a subtype-defining parent"
+    status: "resolved"
+    resolved_by: "DEC-042"
+    resolved_on: "2026-07-23"
+    target_documents:
+      - "docs/STATISTICS_SPEC.md"
+      - "docs/DATA_ARCHITECTURE.md"
+    current_evidence:
+      audited_production_commit: "168e929"
+      standard_classified_under_subtype_parent_without_selected_subtype: 0
+      modern_classified_under_subtype_parent_without_selected_subtype: 0
+      standard_parents_with_exactly_one_subtype: 0
+      modern_parents_with_exactly_one_subtype: 0
+    resolution: "Do not create a residual subtype. Block generation and report the condition; do not synthesize, omit, or reassign a subtype."
+    note: "A null subtype remains valid for a parent that defines no subtypes. The owner confirmed the no-residual P6-06 scope on 2026-07-23."
+
 maintenance_tasks:
   - id: "MAINT-2026-07-21-COMMITTED-BASELINE-STABILITY"
     name: "Make committed-baseline tests follow the current committed snapshot"
@@ -2767,14 +2784,139 @@ phase_6_tasks:
     remote_repository_validation_passed: true
     github_actions_run: 29930407944
 
+  - id: "P6-06"
+    name: "Implement hierarchical Modern matchup calculation"
+    status: "owner_accepted_remote_publication_authorized"
+    depends_on: "P6-05 accepted and published"
+    decision: "DEC-042"
+    planning_audit: "docs/audits/P6-HIERARCHICAL-MATCHUP-PLANNING.md"
+    scope:
+      - "Enable Modern Videre match collection and matchup statistics without making Modern public."
+      - "Retain stable parent-archetype and selected-subtype identities on both sides of every eligible match."
+      - "Generate canonical directed W-L-D counts for parent-parent, subtype-parent, parent-subtype, and subtype-subtype rollups."
+      - "Keep the fully collapsed parent matrix as the default and prove exact rollup conservation."
+      - "Generate independent 1, 4, 12, and 36 complete-week Modern matchup outputs."
+      - "Reject Premodern and every other cross-format input before network or output side effects."
+      - "Preserve current Standard public matchup bytes during P6-06."
+      - "Treat a null subtype under a subtype-defining parent as blocking under OPEN-005's approved no-residual resolution."
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-23"
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-23"
+    product_enablement_allowed: false
+    workflow_changes_allowed: false
+    frontend_changes_allowed: false
+    public_format_allowed: false
+    residual_subtype_allowed: false
+    standard_hierarchical_migration_task: "P6-09"
+    local_implementation_completed_on: "2026-07-23"
+    production_base_commit: "168e929"
+    planning_commit: "632fd39"
+    real_videre_collection:
+      requested_event_ids: 187
+      response_files_written: 165
+      no_results: 22
+      failed: 0
+      official_modern_events: 183
+      raw_official_overlap: 161
+      official_events_without_raw: 22
+      raw_events_without_official_statistics_event: 4
+    generated_matchup_documents: 5
+    latest_complete_week: "2026-07-13"
+    taxonomy:
+      parent_archetypes: 55
+      most_specific_leaves: 92
+      expandable_parents: 17
+      exactly_one_subtype_parents: 0
+    counted_matches:
+      one_week: 793
+      four_weeks: 3266
+      twelve_weeks: 8475
+      thirty_six_weeks: 10817
+    observed_parent_archetypes:
+      one_week: 41
+      four_weeks: 50
+      twelve_weeks: 54
+      thirty_six_weeks: 55
+    observed_leaves:
+      one_week: 54
+      four_weeks: 73
+      twelve_weeks: 88
+      thirty_six_weeks: 89
+    rollup_conservation_passed: true
+    no_residual_blocking_test_passed: true
+    premodern_exclusion_passed: true
+    standard_matchup_bytes_unchanged: true
+    modern_matchup_regeneration_byte_identical: true
+    schema_validated_outputs: 43
+    tests_passed: 381
+    repository_validation_passed: true
+    repository_python_files_validated: 84
+    repository_json_files_validated: 1000
+    repository_yaml_files_validated: 14
+    repository_references_validated: 30
+    repository_hygiene_files_validated: 1163
+    modern_rule_validation_passed: true
+    standard_rule_validation_passed: true
+    schema_validation_passed: true
+    workflow_changed: false
+    frontend_changed: false
+    public_format_changed: false
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-23"
+    implementation_commit: null
+    pull_request: null
+    merge_commit: null
+
+  - id: "P6-07"
+    name: "Generate Modern Pickup, metadata, and hierarchy catalog"
+    status: "planned"
+    depends_on: "P6-06 accepted and published"
+
+  - id: "P6-08"
+    name: "Add Modern to the production workflow"
+    status: "planned"
+    depends_on: "P6-07 accepted and published"
+
+  - id: "P6-09"
+    name: "Migrate Standard and Modern to the shared hierarchical matchup front end"
+    status: "planned"
+    depends_on: "P6-08 accepted and published"
+    required_standard_migration:
+      - "Run Standard through the same shared hierarchical matchup calculation."
+      - "Prove the fully collapsed parent matrix matches the existing Standard result."
+      - "Do not leave Standard on a separate legacy calculation."
+    frontend_behavior:
+      default_view: "collapsed_parent_archetypes"
+      independent_row_expansion: true
+      independent_column_expansion: true
+      global_expand_collapse_control: true
+      hide_zero_or_one_subtype_parent_controls: true
+
+  - id: "P6-10"
+    name: "Complete Phase 6 regression, release, and recovery tag"
+    status: "planned"
+    depends_on: "P6-09 accepted and published"
+
 next_approved_task:
-  id: null
-  name: "No next task authorized"
-  target_paths: []
-  production_change: false
+  id: "P6-06"
+  name: "Implement hierarchical Modern matchup calculation"
+  target_paths:
+    - "configs/formats.yaml"
+    - "src/mtgmeta/mtgo/matchup.py"
+    - "data/modern/mtgo/matches/"
+    - "stats/modern/mtgo/"
+    - "schemas/"
+    - "tests/"
+    - "docs/audits/P6-06.md"
+    - "docs/STATUS.yaml"
+    - "docs/ROADMAP.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+  production_change: true
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  planning_status: "paused_by_owner_after_p6_05_publication"
+  authorization_status: "owner_accepted_remote_publication_authorized"
+  planning_status: "complete"
 
 governance_baseline:
   status: "active_on_master"
@@ -2825,8 +2967,8 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not retain or commit real P5-08 participant, match, or decklist data."
   - "Do not reuse cookies or browser sessions or bypass access controls."
-  - "Do not enable any P6-05 Modern capability other than classification, event_statistics, and range_statistics."
-  - "Do not expose Modern in the front end or public format catalog during P6-05."
+  - "Do not synthesize a residual subtype during P6-06."
+  - "Do not expose Modern in the front end or public format catalog before P6-09."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not generate reference-event or Paupergeddon statistics yet."
