@@ -1,0 +1,1060 @@
+{
+  "schema_version": "1.0.0",
+  "format": "modern",
+  "source": "mtgo",
+  "rules_updated": "2026-07-22T21:40:30+09:00",
+  "summary": {
+    "parents": 55,
+    "leaves": 92,
+    "expandable_parents": 17
+  },
+  "parents": [
+    {
+      "id": "affinity",
+      "name": "Affinity",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "amulet-titan",
+      "name": "Amulet Titan",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "azorius-control",
+      "name": "Azorius Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "azorius-energy",
+      "name": "Azorius Energy",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "blink",
+      "name": "Blink",
+      "expandable": true,
+      "subtype_ids": [
+        "blink/azorius",
+        "blink/esper",
+        "blink/jeskai",
+        "blink/mardu",
+        "blink/orzhov"
+      ]
+    },
+    {
+      "id": "blue-black-tempo",
+      "name": "Blue-Black Tempo",
+      "expandable": true,
+      "subtype_ids": [
+        "blue-black-tempo/dimir",
+        "blue-black-tempo/esper",
+        "blue-black-tempo/grixis"
+      ]
+    },
+    {
+      "id": "blue-eldrazi",
+      "name": "Blue Eldrazi",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "boros-belcher",
+      "name": "Boros Belcher",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "boros-energy",
+      "name": "Boros Energy",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "boros-land-destruction",
+      "name": "Boros Land Destruction",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "broodscale-combo",
+      "name": "Broodscale Combo",
+      "expandable": true,
+      "subtype_ids": [
+        "broodscale-combo/golgari",
+        "broodscale-combo/gruul",
+        "broodscale-combo/mono-green"
+      ]
+    },
+    {
+      "id": "burn",
+      "name": "Burn",
+      "expandable": true,
+      "subtype_ids": [
+        "burn/boros",
+        "burn/mono-red",
+        "burn/rakdos"
+      ]
+    },
+    {
+      "id": "chant-control",
+      "name": "Chant Control",
+      "expandable": true,
+      "subtype_ids": [
+        "chant-control/four-color",
+        "chant-control/jeskai"
+      ]
+    },
+    {
+      "id": "deaths-shadow",
+      "name": "Death's Shadow",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "devoted-druid-combo",
+      "name": "Devoted Druid Combo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "dimir-mill",
+      "name": "Dimir Mill",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "domain-zoo",
+      "name": "Domain Zoo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "dredge",
+      "name": "Dredge",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "eldrazi-aggro",
+      "name": "Eldrazi Aggro",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "eldrazi-ramp",
+      "name": "Eldrazi Ramp",
+      "expandable": true,
+      "subtype_ids": [
+        "eldrazi-ramp/golgari",
+        "eldrazi-ramp/gruul",
+        "eldrazi-ramp/simic",
+        "eldrazi-ramp/sultai",
+        "eldrazi-ramp/temur"
+      ]
+    },
+    {
+      "id": "eldrazi-tron",
+      "name": "Eldrazi Tron",
+      "expandable": true,
+      "subtype_ids": [
+        "eldrazi-tron/colorless",
+        "eldrazi-tron/mono-black",
+        "eldrazi-tron/mono-green"
+      ]
+    },
+    {
+      "id": "esper-control",
+      "name": "Esper Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "esper-energy",
+      "name": "Esper Energy",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "fight-rigging",
+      "name": "Fight Rigging",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "five-color-creativity",
+      "name": "Five-Color Creativity",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "five-color-ritual",
+      "name": "Five-Color Ritual",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "fling-goyf",
+      "name": "Fling Goyf",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "golgari-yawgmoth",
+      "name": "Golgari Yawgmoth",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "goryos-reanimator",
+      "name": "Goryo's Reanimator",
+      "expandable": true,
+      "subtype_ids": [
+        "goryos-reanimator/esper",
+        "goryos-reanimator/grixis"
+      ]
+    },
+    {
+      "id": "hammer-time",
+      "name": "Hammer Time",
+      "expandable": true,
+      "subtype_ids": [
+        "hammer-time/azorius",
+        "hammer-time/mono-white"
+      ]
+    },
+    {
+      "id": "hollow-one",
+      "name": "Hollow One",
+      "expandable": true,
+      "subtype_ids": [
+        "hollow-one/rakdos",
+        "hollow-one/vengevine"
+      ]
+    },
+    {
+      "id": "izzet-phoenix",
+      "name": "Izzet Phoenix",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "izzet-wizards",
+      "name": "Izzet Wizards",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "jeskai-control",
+      "name": "Jeskai Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "jeskai-energy",
+      "name": "Jeskai Energy",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "jund-sagavan",
+      "name": "Jund Sagavan",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "lantern-control",
+      "name": "Lantern Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "living-end",
+      "name": "Living End",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mardu-energy",
+      "name": "Mardu Energy",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-black-eldrazi",
+      "name": "Mono-Black Eldrazi",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-blue-belcher",
+      "name": "Mono-Blue Belcher",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-blue-merfolk",
+      "name": "Mono-Blue Merfolk",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "necrodominance",
+      "name": "Necrodominance",
+      "expandable": true,
+      "subtype_ids": [
+        "necrodominance/dimir",
+        "necrodominance/golgari",
+        "necrodominance/mono-black",
+        "necrodominance/rakdos"
+      ]
+    },
+    {
+      "id": "oculus-ritual",
+      "name": "Oculus Ritual",
+      "expandable": true,
+      "subtype_ids": [
+        "oculus-ritual/simic",
+        "oculus-ritual/sultai",
+        "oculus-ritual/temur"
+      ]
+    },
+    {
+      "id": "pensive-combo",
+      "name": "Pensive Combo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "persist-reanimator",
+      "name": "Persist Reanimator",
+      "expandable": true,
+      "subtype_ids": [
+        "persist-reanimator/esper",
+        "persist-reanimator/golgari",
+        "persist-reanimator/grixis"
+      ]
+    },
+    {
+      "id": "prowess",
+      "name": "Prowess",
+      "expandable": true,
+      "subtype_ids": [
+        "prowess/grixis",
+        "prowess/izzet",
+        "prowess/jeskai",
+        "prowess/lessons",
+        "prowess/temur"
+      ]
+    },
+    {
+      "id": "rhinos",
+      "name": "Rhinos",
+      "expandable": true,
+      "subtype_ids": [
+        "rhinos/domain",
+        "rhinos/four-color",
+        "rhinos/temur"
+      ]
+    },
+    {
+      "id": "ruby-storm",
+      "name": "Ruby Storm",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "sam-combo",
+      "name": "Sam Combo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "selesnya-energy",
+      "name": "Selesnya Energy",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "simic-neoform",
+      "name": "Simic Neoform",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "song-of-creation",
+      "name": "Song of Creation",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "soultrader",
+      "name": "Soultrader",
+      "expandable": true,
+      "subtype_ids": [
+        "soultrader/dimir",
+        "soultrader/golgari",
+        "soultrader/sultai"
+      ]
+    },
+    {
+      "id": "steel-cutter",
+      "name": "Steel-Cutter",
+      "expandable": true,
+      "subtype_ids": [
+        "steel-cutter/izzet",
+        "steel-cutter/mono-red",
+        "steel-cutter/rakdos"
+      ]
+    }
+  ],
+  "leaves": [
+    {
+      "id": "affinity",
+      "kind": "archetype",
+      "name": "Affinity",
+      "parent_id": "affinity",
+      "subtype_id": null
+    },
+    {
+      "id": "amulet-titan",
+      "kind": "archetype",
+      "name": "Amulet Titan",
+      "parent_id": "amulet-titan",
+      "subtype_id": null
+    },
+    {
+      "id": "azorius-control",
+      "kind": "archetype",
+      "name": "Azorius Control",
+      "parent_id": "azorius-control",
+      "subtype_id": null
+    },
+    {
+      "id": "azorius-energy",
+      "kind": "archetype",
+      "name": "Azorius Energy",
+      "parent_id": "azorius-energy",
+      "subtype_id": null
+    },
+    {
+      "id": "blink/azorius",
+      "kind": "subtype",
+      "name": "Azorius",
+      "parent_id": "blink",
+      "subtype_id": "azorius"
+    },
+    {
+      "id": "blink/esper",
+      "kind": "subtype",
+      "name": "Esper",
+      "parent_id": "blink",
+      "subtype_id": "esper"
+    },
+    {
+      "id": "blink/jeskai",
+      "kind": "subtype",
+      "name": "Jeskai",
+      "parent_id": "blink",
+      "subtype_id": "jeskai"
+    },
+    {
+      "id": "blink/mardu",
+      "kind": "subtype",
+      "name": "Mardu",
+      "parent_id": "blink",
+      "subtype_id": "mardu"
+    },
+    {
+      "id": "blink/orzhov",
+      "kind": "subtype",
+      "name": "Orzhov",
+      "parent_id": "blink",
+      "subtype_id": "orzhov"
+    },
+    {
+      "id": "blue-black-tempo/dimir",
+      "kind": "subtype",
+      "name": "Dimir",
+      "parent_id": "blue-black-tempo",
+      "subtype_id": "dimir"
+    },
+    {
+      "id": "blue-black-tempo/esper",
+      "kind": "subtype",
+      "name": "Esper",
+      "parent_id": "blue-black-tempo",
+      "subtype_id": "esper"
+    },
+    {
+      "id": "blue-black-tempo/grixis",
+      "kind": "subtype",
+      "name": "Grixis",
+      "parent_id": "blue-black-tempo",
+      "subtype_id": "grixis"
+    },
+    {
+      "id": "blue-eldrazi",
+      "kind": "archetype",
+      "name": "Blue Eldrazi",
+      "parent_id": "blue-eldrazi",
+      "subtype_id": null
+    },
+    {
+      "id": "boros-belcher",
+      "kind": "archetype",
+      "name": "Boros Belcher",
+      "parent_id": "boros-belcher",
+      "subtype_id": null
+    },
+    {
+      "id": "boros-energy",
+      "kind": "archetype",
+      "name": "Boros Energy",
+      "parent_id": "boros-energy",
+      "subtype_id": null
+    },
+    {
+      "id": "boros-land-destruction",
+      "kind": "archetype",
+      "name": "Boros Land Destruction",
+      "parent_id": "boros-land-destruction",
+      "subtype_id": null
+    },
+    {
+      "id": "broodscale-combo/golgari",
+      "kind": "subtype",
+      "name": "Golgari",
+      "parent_id": "broodscale-combo",
+      "subtype_id": "golgari"
+    },
+    {
+      "id": "broodscale-combo/gruul",
+      "kind": "subtype",
+      "name": "Gruul",
+      "parent_id": "broodscale-combo",
+      "subtype_id": "gruul"
+    },
+    {
+      "id": "broodscale-combo/mono-green",
+      "kind": "subtype",
+      "name": "Mono-Green",
+      "parent_id": "broodscale-combo",
+      "subtype_id": "mono-green"
+    },
+    {
+      "id": "burn/boros",
+      "kind": "subtype",
+      "name": "Boros",
+      "parent_id": "burn",
+      "subtype_id": "boros"
+    },
+    {
+      "id": "burn/mono-red",
+      "kind": "subtype",
+      "name": "Mono-Red",
+      "parent_id": "burn",
+      "subtype_id": "mono-red"
+    },
+    {
+      "id": "burn/rakdos",
+      "kind": "subtype",
+      "name": "Rakdos",
+      "parent_id": "burn",
+      "subtype_id": "rakdos"
+    },
+    {
+      "id": "chant-control/four-color",
+      "kind": "subtype",
+      "name": "Four-Color",
+      "parent_id": "chant-control",
+      "subtype_id": "four-color"
+    },
+    {
+      "id": "chant-control/jeskai",
+      "kind": "subtype",
+      "name": "Jeskai",
+      "parent_id": "chant-control",
+      "subtype_id": "jeskai"
+    },
+    {
+      "id": "deaths-shadow",
+      "kind": "archetype",
+      "name": "Death's Shadow",
+      "parent_id": "deaths-shadow",
+      "subtype_id": null
+    },
+    {
+      "id": "devoted-druid-combo",
+      "kind": "archetype",
+      "name": "Devoted Druid Combo",
+      "parent_id": "devoted-druid-combo",
+      "subtype_id": null
+    },
+    {
+      "id": "dimir-mill",
+      "kind": "archetype",
+      "name": "Dimir Mill",
+      "parent_id": "dimir-mill",
+      "subtype_id": null
+    },
+    {
+      "id": "domain-zoo",
+      "kind": "archetype",
+      "name": "Domain Zoo",
+      "parent_id": "domain-zoo",
+      "subtype_id": null
+    },
+    {
+      "id": "dredge",
+      "kind": "archetype",
+      "name": "Dredge",
+      "parent_id": "dredge",
+      "subtype_id": null
+    },
+    {
+      "id": "eldrazi-aggro",
+      "kind": "archetype",
+      "name": "Eldrazi Aggro",
+      "parent_id": "eldrazi-aggro",
+      "subtype_id": null
+    },
+    {
+      "id": "eldrazi-ramp/golgari",
+      "kind": "subtype",
+      "name": "Golgari",
+      "parent_id": "eldrazi-ramp",
+      "subtype_id": "golgari"
+    },
+    {
+      "id": "eldrazi-ramp/gruul",
+      "kind": "subtype",
+      "name": "Gruul",
+      "parent_id": "eldrazi-ramp",
+      "subtype_id": "gruul"
+    },
+    {
+      "id": "eldrazi-ramp/simic",
+      "kind": "subtype",
+      "name": "Simic",
+      "parent_id": "eldrazi-ramp",
+      "subtype_id": "simic"
+    },
+    {
+      "id": "eldrazi-ramp/sultai",
+      "kind": "subtype",
+      "name": "Sultai",
+      "parent_id": "eldrazi-ramp",
+      "subtype_id": "sultai"
+    },
+    {
+      "id": "eldrazi-ramp/temur",
+      "kind": "subtype",
+      "name": "Temur",
+      "parent_id": "eldrazi-ramp",
+      "subtype_id": "temur"
+    },
+    {
+      "id": "eldrazi-tron/colorless",
+      "kind": "subtype",
+      "name": "Colorless",
+      "parent_id": "eldrazi-tron",
+      "subtype_id": "colorless"
+    },
+    {
+      "id": "eldrazi-tron/mono-black",
+      "kind": "subtype",
+      "name": "Mono-Black",
+      "parent_id": "eldrazi-tron",
+      "subtype_id": "mono-black"
+    },
+    {
+      "id": "eldrazi-tron/mono-green",
+      "kind": "subtype",
+      "name": "Mono-Green",
+      "parent_id": "eldrazi-tron",
+      "subtype_id": "mono-green"
+    },
+    {
+      "id": "esper-control",
+      "kind": "archetype",
+      "name": "Esper Control",
+      "parent_id": "esper-control",
+      "subtype_id": null
+    },
+    {
+      "id": "esper-energy",
+      "kind": "archetype",
+      "name": "Esper Energy",
+      "parent_id": "esper-energy",
+      "subtype_id": null
+    },
+    {
+      "id": "fight-rigging",
+      "kind": "archetype",
+      "name": "Fight Rigging",
+      "parent_id": "fight-rigging",
+      "subtype_id": null
+    },
+    {
+      "id": "five-color-creativity",
+      "kind": "archetype",
+      "name": "Five-Color Creativity",
+      "parent_id": "five-color-creativity",
+      "subtype_id": null
+    },
+    {
+      "id": "five-color-ritual",
+      "kind": "archetype",
+      "name": "Five-Color Ritual",
+      "parent_id": "five-color-ritual",
+      "subtype_id": null
+    },
+    {
+      "id": "fling-goyf",
+      "kind": "archetype",
+      "name": "Fling Goyf",
+      "parent_id": "fling-goyf",
+      "subtype_id": null
+    },
+    {
+      "id": "golgari-yawgmoth",
+      "kind": "archetype",
+      "name": "Golgari Yawgmoth",
+      "parent_id": "golgari-yawgmoth",
+      "subtype_id": null
+    },
+    {
+      "id": "goryos-reanimator/esper",
+      "kind": "subtype",
+      "name": "Esper",
+      "parent_id": "goryos-reanimator",
+      "subtype_id": "esper"
+    },
+    {
+      "id": "goryos-reanimator/grixis",
+      "kind": "subtype",
+      "name": "Grixis",
+      "parent_id": "goryos-reanimator",
+      "subtype_id": "grixis"
+    },
+    {
+      "id": "hammer-time/azorius",
+      "kind": "subtype",
+      "name": "Azorius",
+      "parent_id": "hammer-time",
+      "subtype_id": "azorius"
+    },
+    {
+      "id": "hammer-time/mono-white",
+      "kind": "subtype",
+      "name": "Mono-White",
+      "parent_id": "hammer-time",
+      "subtype_id": "mono-white"
+    },
+    {
+      "id": "hollow-one/rakdos",
+      "kind": "subtype",
+      "name": "Rakdos",
+      "parent_id": "hollow-one",
+      "subtype_id": "rakdos"
+    },
+    {
+      "id": "hollow-one/vengevine",
+      "kind": "subtype",
+      "name": "Vengevine",
+      "parent_id": "hollow-one",
+      "subtype_id": "vengevine"
+    },
+    {
+      "id": "izzet-phoenix",
+      "kind": "archetype",
+      "name": "Izzet Phoenix",
+      "parent_id": "izzet-phoenix",
+      "subtype_id": null
+    },
+    {
+      "id": "izzet-wizards",
+      "kind": "archetype",
+      "name": "Izzet Wizards",
+      "parent_id": "izzet-wizards",
+      "subtype_id": null
+    },
+    {
+      "id": "jeskai-control",
+      "kind": "archetype",
+      "name": "Jeskai Control",
+      "parent_id": "jeskai-control",
+      "subtype_id": null
+    },
+    {
+      "id": "jeskai-energy",
+      "kind": "archetype",
+      "name": "Jeskai Energy",
+      "parent_id": "jeskai-energy",
+      "subtype_id": null
+    },
+    {
+      "id": "jund-sagavan",
+      "kind": "archetype",
+      "name": "Jund Sagavan",
+      "parent_id": "jund-sagavan",
+      "subtype_id": null
+    },
+    {
+      "id": "lantern-control",
+      "kind": "archetype",
+      "name": "Lantern Control",
+      "parent_id": "lantern-control",
+      "subtype_id": null
+    },
+    {
+      "id": "living-end",
+      "kind": "archetype",
+      "name": "Living End",
+      "parent_id": "living-end",
+      "subtype_id": null
+    },
+    {
+      "id": "mardu-energy",
+      "kind": "archetype",
+      "name": "Mardu Energy",
+      "parent_id": "mardu-energy",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-black-eldrazi",
+      "kind": "archetype",
+      "name": "Mono-Black Eldrazi",
+      "parent_id": "mono-black-eldrazi",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-blue-belcher",
+      "kind": "archetype",
+      "name": "Mono-Blue Belcher",
+      "parent_id": "mono-blue-belcher",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-blue-merfolk",
+      "kind": "archetype",
+      "name": "Mono-Blue Merfolk",
+      "parent_id": "mono-blue-merfolk",
+      "subtype_id": null
+    },
+    {
+      "id": "necrodominance/dimir",
+      "kind": "subtype",
+      "name": "Dimir",
+      "parent_id": "necrodominance",
+      "subtype_id": "dimir"
+    },
+    {
+      "id": "necrodominance/golgari",
+      "kind": "subtype",
+      "name": "Golgari",
+      "parent_id": "necrodominance",
+      "subtype_id": "golgari"
+    },
+    {
+      "id": "necrodominance/mono-black",
+      "kind": "subtype",
+      "name": "Mono-Black",
+      "parent_id": "necrodominance",
+      "subtype_id": "mono-black"
+    },
+    {
+      "id": "necrodominance/rakdos",
+      "kind": "subtype",
+      "name": "Rakdos",
+      "parent_id": "necrodominance",
+      "subtype_id": "rakdos"
+    },
+    {
+      "id": "oculus-ritual/simic",
+      "kind": "subtype",
+      "name": "Simic",
+      "parent_id": "oculus-ritual",
+      "subtype_id": "simic"
+    },
+    {
+      "id": "oculus-ritual/sultai",
+      "kind": "subtype",
+      "name": "Sultai",
+      "parent_id": "oculus-ritual",
+      "subtype_id": "sultai"
+    },
+    {
+      "id": "oculus-ritual/temur",
+      "kind": "subtype",
+      "name": "Temur",
+      "parent_id": "oculus-ritual",
+      "subtype_id": "temur"
+    },
+    {
+      "id": "pensive-combo",
+      "kind": "archetype",
+      "name": "Pensive Combo",
+      "parent_id": "pensive-combo",
+      "subtype_id": null
+    },
+    {
+      "id": "persist-reanimator/esper",
+      "kind": "subtype",
+      "name": "Esper",
+      "parent_id": "persist-reanimator",
+      "subtype_id": "esper"
+    },
+    {
+      "id": "persist-reanimator/golgari",
+      "kind": "subtype",
+      "name": "Golgari",
+      "parent_id": "persist-reanimator",
+      "subtype_id": "golgari"
+    },
+    {
+      "id": "persist-reanimator/grixis",
+      "kind": "subtype",
+      "name": "Grixis",
+      "parent_id": "persist-reanimator",
+      "subtype_id": "grixis"
+    },
+    {
+      "id": "prowess/grixis",
+      "kind": "subtype",
+      "name": "Grixis",
+      "parent_id": "prowess",
+      "subtype_id": "grixis"
+    },
+    {
+      "id": "prowess/izzet",
+      "kind": "subtype",
+      "name": "Izzet",
+      "parent_id": "prowess",
+      "subtype_id": "izzet"
+    },
+    {
+      "id": "prowess/jeskai",
+      "kind": "subtype",
+      "name": "Jeskai",
+      "parent_id": "prowess",
+      "subtype_id": "jeskai"
+    },
+    {
+      "id": "prowess/lessons",
+      "kind": "subtype",
+      "name": "Lessons",
+      "parent_id": "prowess",
+      "subtype_id": "lessons"
+    },
+    {
+      "id": "prowess/temur",
+      "kind": "subtype",
+      "name": "Temur",
+      "parent_id": "prowess",
+      "subtype_id": "temur"
+    },
+    {
+      "id": "rhinos/domain",
+      "kind": "subtype",
+      "name": "Domain",
+      "parent_id": "rhinos",
+      "subtype_id": "domain"
+    },
+    {
+      "id": "rhinos/four-color",
+      "kind": "subtype",
+      "name": "Four-Color",
+      "parent_id": "rhinos",
+      "subtype_id": "four-color"
+    },
+    {
+      "id": "rhinos/temur",
+      "kind": "subtype",
+      "name": "Temur",
+      "parent_id": "rhinos",
+      "subtype_id": "temur"
+    },
+    {
+      "id": "ruby-storm",
+      "kind": "archetype",
+      "name": "Ruby Storm",
+      "parent_id": "ruby-storm",
+      "subtype_id": null
+    },
+    {
+      "id": "sam-combo",
+      "kind": "archetype",
+      "name": "Sam Combo",
+      "parent_id": "sam-combo",
+      "subtype_id": null
+    },
+    {
+      "id": "selesnya-energy",
+      "kind": "archetype",
+      "name": "Selesnya Energy",
+      "parent_id": "selesnya-energy",
+      "subtype_id": null
+    },
+    {
+      "id": "simic-neoform",
+      "kind": "archetype",
+      "name": "Simic Neoform",
+      "parent_id": "simic-neoform",
+      "subtype_id": null
+    },
+    {
+      "id": "song-of-creation",
+      "kind": "archetype",
+      "name": "Song of Creation",
+      "parent_id": "song-of-creation",
+      "subtype_id": null
+    },
+    {
+      "id": "soultrader/dimir",
+      "kind": "subtype",
+      "name": "Dimir",
+      "parent_id": "soultrader",
+      "subtype_id": "dimir"
+    },
+    {
+      "id": "soultrader/golgari",
+      "kind": "subtype",
+      "name": "Golgari",
+      "parent_id": "soultrader",
+      "subtype_id": "golgari"
+    },
+    {
+      "id": "soultrader/sultai",
+      "kind": "subtype",
+      "name": "Sultai",
+      "parent_id": "soultrader",
+      "subtype_id": "sultai"
+    },
+    {
+      "id": "steel-cutter/izzet",
+      "kind": "subtype",
+      "name": "Izzet",
+      "parent_id": "steel-cutter",
+      "subtype_id": "izzet"
+    },
+    {
+      "id": "steel-cutter/mono-red",
+      "kind": "subtype",
+      "name": "Mono-Red",
+      "parent_id": "steel-cutter",
+      "subtype_id": "mono-red"
+    },
+    {
+      "id": "steel-cutter/rakdos",
+      "kind": "subtype",
+      "name": "Rakdos",
+      "parent_id": "steel-cutter",
+      "subtype_id": "rakdos"
+    }
+  ]
+}

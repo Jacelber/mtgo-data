@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-06-hierarchical-matchup"
-  working_branch_status: "p6_06_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p6-07-modern-metadata"
+  working_branch_status: "p6_07_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2786,7 +2786,8 @@ phase_6_tasks:
 
   - id: "P6-06"
     name: "Implement hierarchical Modern matchup calculation"
-    status: "owner_accepted_remote_publication_authorized"
+    status: "completed_and_published"
+    branch: "codex/p6-06-hierarchical-matchup"
     depends_on: "P6-05 accepted and published"
     decision: "DEC-042"
     planning_audit: "docs/audits/P6-HIERARCHICAL-MATCHUP-PLANNING.md"
@@ -2864,14 +2865,87 @@ phase_6_tasks:
     public_format_changed: false
     owner_acceptance: "accepted"
     owner_accepted_on: "2026-07-23"
-    implementation_commit: null
-    pull_request: null
-    merge_commit: null
+    implementation_commit: "f0e76aeb32a37093e6cbf439107fec18ea874555"
+    documentation_commit: "80b82ad"
+    pull_request: 86
+    merge_commit: "8b600a70d6e01c6e630fff5e27b28f083cc54730"
+    merged_on: "2026-07-23"
+    merged_to_master: true
+    remote_checks_passed: true
 
   - id: "P6-07"
     name: "Generate Modern Pickup, metadata, and hierarchy catalog"
-    status: "planned"
+    status: "owner_accepted_remote_publication_authorized"
     depends_on: "P6-06 accepted and published"
+    branch: "codex/p6-07-modern-metadata"
+    base_commit: "8b600a70d6e01c6e630fff5e27b28f083cc54730"
+    audit: "docs/audits/P6-07.md"
+    scope:
+      - "Enable Modern Weekly Pickup, metadata generation, and hierarchy catalog generation while keeping Modern non-public."
+      - "Generate a time-window-independent hierarchy catalog from the same shared hierarchy function used by Modern matchups."
+      - "Track Modern Pickup known state and existing/new decisions by stable parent archetype ID."
+      - "Retain selected subtype ID and name as informational Pickup review fields without splitting parent populations."
+      - "Report measured Videre event/archive coverage and avoid implying complete coverage."
+      - "Preserve manual Pickup approval and publication boundaries."
+      - "Keep Standard bytes, workflows, the public format catalog, and front-end behavior unchanged."
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-23"
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-23"
+    public_format_allowed: false
+    workflow_changes_allowed: false
+    frontend_changes_allowed: false
+    capabilities_enabled:
+      - "weekly_pickup"
+      - "metadata_generation"
+      - "catalog_generation"
+    hierarchy_catalog:
+      parent_archetypes: 55
+      most_specific_leaves: 92
+      expandable_parents: 17
+      exactly_one_subtype_parents: 0
+      shared_with_matchup_generator: true
+    matchup_coverage:
+      source: "Videre"
+      official_events: 183
+      events_with_archives: 161
+      events_without_archives: 22
+      stored_archives: 165
+      archives_outside_official_events: 4
+    pickup:
+      latest_complete_week: "2026-W29"
+      start: "2026-07-13"
+      end: "2026-07-19"
+      known_parent_ids: 54
+      existing_candidates: 92
+      new_parent_candidates: 0
+      candidates_with_selected_subtype: 35
+      approved_candidates: 0
+      weekly_document_published: false
+      pickup_index_published: false
+      candidate_generation_updates_known_state: false
+    schema_managed_outputs: 45
+    standard_generated_bytes_unchanged: true
+    workflow_changed: false
+    frontend_changed: false
+    public_format_changed: false
+    focused_modern_tests_passed: 4
+    tests_passed: 384
+    repository_validation_passed: true
+    repository_python_files_validated: 85
+    repository_json_files_validated: 1004
+    repository_yaml_files_validated: 16
+    repository_references_validated: 30
+    repository_hygiene_files_validated: 1173
+    modern_rule_validation_passed: true
+    standard_rule_validation_passed: true
+    schema_validation_passed: true
+    local_validation_status: "passed"
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-23"
+    implementation_commit: null
+    pull_request: null
+    merge_commit: null
 
   - id: "P6-08"
     name: "Add Modern to the production workflow"
@@ -2899,22 +2973,22 @@ phase_6_tasks:
     depends_on: "P6-09 accepted and published"
 
 next_approved_task:
-  id: "P6-06"
-  name: "Implement hierarchical Modern matchup calculation"
+  id: "P6-07"
+  name: "Generate Modern Pickup, metadata, and hierarchy catalog"
   target_paths:
     - "configs/formats.yaml"
-    - "src/mtgmeta/mtgo/matchup.py"
-    - "data/modern/mtgo/matches/"
+    - "src/mtgmeta/mtgo/pickup.py"
+    - "src/mtgmeta/mtgo/__main__.py"
     - "stats/modern/mtgo/"
     - "schemas/"
     - "tests/"
-    - "docs/audits/P6-06.md"
+    - "docs/audits/P6-07.md"
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
     - "docs/STATISTICS_SPEC.md"
     - "docs/DATA_ARCHITECTURE.md"
   production_change: true
-  requires_user_confirmation: true
+  requires_user_confirmation: false
   authorization_status: "owner_accepted_remote_publication_authorized"
   planning_status: "complete"
 

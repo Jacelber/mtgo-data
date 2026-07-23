@@ -132,6 +132,7 @@ def test_nonstandard_product_commands_obey_current_capabilities_before_dispatch(
         ["pickup", "candidates"],
         ["pickup", "publish"],
         ["generate-metadata"],
+        ["generate-hierarchy"],
         ["classification-reports"],
     )
     for format_id in NONSTANDARD_FORMATS:
@@ -140,6 +141,10 @@ def test_nonstandard_product_commands_obey_current_capabilities_before_dispatch(
                 ["fetch-matches"],
                 ["build-statistics"],
                 ["build-matchups"],
+                ["pickup", "candidates"],
+                ["pickup", "publish"],
+                ["generate-metadata"],
+                ["generate-hierarchy"],
                 ["classification-reports"],
             )
             expected = 0 if format_id == "modern" and command in enabled_modern_commands else 2
@@ -150,6 +155,10 @@ def test_nonstandard_product_commands_obey_current_capabilities_before_dispatch(
         ("modern", "fetch-matches"),
         ("modern", "build-statistics"),
         ("modern", "build-matchups"),
+        ("modern", "pickup"),
+        ("modern", "pickup"),
+        ("modern", "generate-metadata"),
+        ("modern", "generate-hierarchy"),
         ("modern", "classification-reports")
     ]
     assert sorted(path.relative_to(tmp_path).as_posix() for path in tmp_path.rglob("*")) == [
@@ -157,7 +166,7 @@ def test_nonstandard_product_commands_obey_current_capabilities_before_dispatch(
         "configs/formats.yaml",
     ]
     assert capsys.readouterr().err.count("MTGO command ERROR") == (
-        len(NONSTANDARD_FORMATS) * len(product_commands) - 4
+        len(NONSTANDARD_FORMATS) * len(product_commands) - 8
     )
 
     for format_id in ("standard", *NONSTANDARD_FORMATS):
@@ -168,6 +177,10 @@ def test_nonstandard_product_commands_obey_current_capabilities_before_dispatch(
         ("modern", "fetch-matches"),
         ("modern", "build-statistics"),
         ("modern", "build-matchups"),
+        ("modern", "pickup"),
+        ("modern", "pickup"),
+        ("modern", "generate-metadata"),
+        ("modern", "generate-hierarchy"),
         ("modern", "classification-reports")
     ] + [
         (format_id, "fetch-events") for format_id in ("standard", *NONSTANDARD_FORMATS)

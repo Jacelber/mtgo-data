@@ -1,14 +1,68 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-meta.schema.json",
-  "title": "Legacy Standard MTGO metadata",
+  "title": "MTGO format metadata",
   "x-schema-version": "1.0.0",
   "type": "object",
   "required": ["schema_version", "format", "source", "rules_updated", "data_updated"],
   "properties": {
     "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
-    "format": {"const": "standard"}, "source": {"const": "mtgo"},
-    "rules_updated": {"type": "string", "minLength": 1}, "data_updated": {"type": "string", "minLength": 1}
+    "format": {"enum": ["standard", "modern"]}, "source": {"const": "mtgo"},
+    "rules_updated": {"type": "string", "minLength": 1}, "data_updated": {"type": "string", "minLength": 1},
+    "statistics_catalog": {"const": "index.json"},
+    "matchup_catalog": {"const": "matchup_index.json"},
+    "hierarchy_catalog": {"const": "archetype_hierarchy.json"},
+    "pickup_catalog": {
+      "oneOf": [
+        {"const": "pickup/index.json"},
+        {"type": "null"}
+      ]
+    },
+    "matchup_source": {"const": "Videre"},
+    "matchup_coverage": {
+      "type": "object",
+      "required": [
+        "official_events",
+        "events_with_archives",
+        "events_without_archives",
+        "stored_archives",
+        "archives_outside_official_events"
+      ],
+      "properties": {
+        "official_events": {"type": "integer", "minimum": 0},
+        "events_with_archives": {"type": "integer", "minimum": 0},
+        "events_without_archives": {"type": "integer", "minimum": 0},
+        "stored_archives": {"type": "integer", "minimum": 0},
+        "archives_outside_official_events": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    }
   },
+  "oneOf": [
+    {
+      "properties": {"format": {"const": "standard"}},
+      "not": {
+        "anyOf": [
+          {"required": ["statistics_catalog"]},
+          {"required": ["matchup_catalog"]},
+          {"required": ["hierarchy_catalog"]},
+          {"required": ["pickup_catalog"]},
+          {"required": ["matchup_source"]},
+          {"required": ["matchup_coverage"]}
+        ]
+      }
+    },
+    {
+      "properties": {"format": {"const": "modern"}},
+      "required": [
+        "statistics_catalog",
+        "matchup_catalog",
+        "hierarchy_catalog",
+        "pickup_catalog",
+        "matchup_source",
+        "matchup_coverage"
+      ]
+    }
+  ],
   "additionalProperties": false
 }

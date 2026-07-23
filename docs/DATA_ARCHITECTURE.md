@@ -451,9 +451,23 @@ Responsibilities:
 
 - Weekly Pickup;
 - MTGO-specific weekly comparison;
+- stable parent-ID tracking for formats migrated beyond the legacy
+  name-keyed Standard contract;
+- explicit one-time known-state initialization, separate from candidate
+  generation and publication;
+- format metadata that identifies matchup source and measured archive
+  coverage;
+- a taxonomy-derived parent/subtype hierarchy catalog whose expandability is
+  based on maintained subtype count;
 - output generation for the MTGO front end.
 
 Weekly Pickup does not belong in the Melee package.
+
+Candidate generation is a review artifact, not a publication action. It must
+not change known-archetype state or create a published weekly index. A first
+format migration may initialize known state explicitly from the approved
+historical window; subsequent state changes occur only when an approved Pickup
+week is published.
 
 ---
 
@@ -1169,6 +1183,20 @@ Do not create an implicit residual subtype. If a classified deck has a null
 subtype under a parent that defines subtypes, generation stops with a visible
 quality failure. OPEN-005 resolved this representation question by requiring
 generation to stop rather than synthesizing, omitting, or reassigning a subtype.
+
+The format-level hierarchy catalog is independent of the currently observed
+time window. It contains the complete maintained taxonomy, stable parent and
+composite subtype IDs, display names, subtype membership, and a taxonomy-based
+`expandable` flag. A parent is expandable only when it defines at least two
+subtypes. Matchup documents and the hierarchy catalog must be generated from
+the same shared hierarchy function and reconcile exactly.
+
+MTGO format metadata references the statistics, matchup, and hierarchy
+catalogs. It records the approved matchup source and exact event/archive
+coverage counts, including official events without stored archives and stored
+archives outside the admitted official-event set. A missing Pickup publication
+is represented as a null catalog reference rather than by creating an empty
+public catalog.
 
 ### 12.2 Melee output
 

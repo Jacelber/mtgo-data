@@ -24,7 +24,7 @@ def test_versioned_returns_a_new_document_and_rejects_double_versioning():
     [
         ("src/mtgmeta/mtgo/stats.py", 3),
         ("src/mtgmeta/mtgo/matchup.py", 3),
-        ("src/mtgmeta/mtgo/pickup.py", 3),
+        ("src/mtgmeta/mtgo/pickup.py", 4),
     ],
 )
 def test_every_public_json_generator_uses_the_shared_version_helper(path, expected_calls):

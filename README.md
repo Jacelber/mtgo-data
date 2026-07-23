@@ -90,6 +90,23 @@ The format argument is mandatory. Standard supports the complete current product
 
 Weekly Pickup publication remains a separate manual approval step. After reviewing and approving a candidate YAML, run `python -B -m mtgmeta.mtgo --format standard pickup publish`. The scheduled workflow generates candidates only and preserves an existing candidate file for the latest complete week.
 
+Modern has the same local, non-public preparation path. Bootstrap its stable-ID
+known state once, generate the maintained hierarchy and metadata, and then
+create the weekly review file:
+
+```powershell
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern generate-hierarchy
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern generate-metadata
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern pickup initialize-known
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern pickup candidates --if-absent
+```
+
+`initialize-known` refuses to overwrite existing state. Modern candidate rows
+carry stable parent IDs and optional subtype information, but selection and
+publication remain manual. Generating candidates does not approve a row,
+publish a week, or update known state. Modern remains absent from the public
+format catalog and front end until the separately approved P6-09 migration.
+
 `generate_classification_reports.py` remains a legacy Standard compatibility command. The production workflow now uses the format-aware command above. The reports omit player names, login IDs, and raw player records while retaining event context, stable pseudonymous deck IDs, matched rule evidence, and Unknown decklists. `--strict` returns a failure when an unresolved classification conflict or invalid deck input is present. These reports are operational diagnostics and are not consumed by the current front end.
 
 The root-level `batch_mtgo.py`, `fetch_videre_matches.py`, `stats_standard.py`, `stats_matchup.py`, `weekly_pickup.py`, and `gen_meta.py` commands remain compatibility entry points. They are no longer production-workflow dependencies and are not removed during Phase 3 migration. Candidate generation never publishes or changes the known-archetype state by itself.

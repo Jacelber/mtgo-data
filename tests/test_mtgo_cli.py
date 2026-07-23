@@ -141,12 +141,25 @@ def test_statistics_matchups_pickup_and_metadata_dispatch(monkeypatch):
         lambda root, format_id, **kwargs: captured.append(("metadata", root, format_id, kwargs))
         or output / "meta.json",
     )
+    monkeypatch.setattr(
+        cli.pickup,
+        "generate_hierarchy_catalog",
+        lambda root, format_id, **kwargs: captured.append(("hierarchy", root, format_id, kwargs))
+        or output / "archetype_hierarchy.json",
+    )
     base = ["--root", str(ROOT), "--format", "standard"]
     assert cli.main(base + ["build-statistics"]) == 0
     assert cli.main(base + ["build-matchups"]) == 0
     assert cli.main(base + ["pickup", "candidates", "--if-absent"]) == 0
     assert cli.main(base + ["generate-metadata"]) == 0
-    assert [entry[0] for entry in captured] == ["stats", "matchups", "candidates", "metadata"]
+    assert cli.main(base + ["generate-hierarchy"]) == 0
+    assert [entry[0] for entry in captured] == [
+        "stats",
+        "matchups",
+        "candidates",
+        "metadata",
+        "hierarchy",
+    ]
     assert captured[2][3]["preserve_existing"] is True
 
 

@@ -40,7 +40,7 @@ def registry():
     return load_format_registry(REGISTRY_PATH)
 
 
-def test_registry_preserves_the_p3_standard_contract_and_enables_modern_range_statistics():
+def test_registry_preserves_standard_and_enables_the_p6_07_modern_product_layers():
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     loaded = registry()
 
@@ -73,6 +73,9 @@ def test_registry_preserves_the_p3_standard_contract_and_enables_modern_range_st
         "event_statistics",
         "range_statistics",
         "matchup_statistics",
+        "weekly_pickup",
+        "metadata_generation",
+        "catalog_generation",
     }
 
 

@@ -57,9 +57,17 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="preserve an existing candidate file for the latest complete week",
     )
+    pickup_commands.add_parser(
+        "initialize-known",
+        help="bootstrap known-archetype state before the first candidate review",
+    )
     pickup_commands.add_parser("publish", help="publish manually approved candidates")
 
     commands.add_parser("generate-metadata", help="generate MTGO metadata")
+    commands.add_parser(
+        "generate-hierarchy",
+        help="generate the maintained archetype hierarchy catalog",
+    )
     report_parser = commands.add_parser(
         "classification-reports",
         help="generate de-identified classification diagnostics",
@@ -153,6 +161,17 @@ def _run_pickup(args: argparse.Namespace, root: Path, registry: Path) -> int:
         else:
             print(f"Weekly Pickup candidates written: {result['candidate_path']}")
         return 0
+    if args.pickup_command == "initialize-known":
+        destination = pickup.initialize_known_state(
+            root,
+            args.format_id,
+            registry_path=registry,
+        )
+        if destination is None:
+            print(f"No complete MTGO event week is available for {args.format_id}.")
+        else:
+            print(f"Weekly Pickup known state initialized: {destination}")
+        return 0
     result = pickup.publish(root, args.format_id, registry_path=registry)
     if result is None:
         print("No manually approved Weekly Pickup candidates are available.")
@@ -164,6 +183,16 @@ def _run_pickup(args: argparse.Namespace, root: Path, registry: Path) -> int:
 def _run_metadata(args: argparse.Namespace, root: Path, registry: Path) -> int:
     destination = pickup.generate_metadata(root, args.format_id, registry_path=registry)
     print(f"MTGO metadata: format={args.format_id} output={destination}")
+    return 0
+
+
+def _run_hierarchy(args: argparse.Namespace, root: Path, registry: Path) -> int:
+    destination = pickup.generate_hierarchy_catalog(
+        root,
+        args.format_id,
+        registry_path=registry,
+    )
+    print(f"MTGO hierarchy: format={args.format_id} output={destination}")
     return 0
 
 
@@ -197,6 +226,7 @@ RUNNERS = {
     "build-matchups": _run_matchups,
     "pickup": _run_pickup,
     "generate-metadata": _run_metadata,
+    "generate-hierarchy": _run_hierarchy,
     "classification-reports": _run_reports,
 }
 
@@ -206,6 +236,7 @@ COMMAND_CAPABILITIES = {
     "build-matchups": "matchup_statistics",
     "pickup": "weekly_pickup",
     "generate-metadata": "metadata_generation",
+    "generate-hierarchy": "catalog_generation",
     "classification-reports": "classification",
 }
 

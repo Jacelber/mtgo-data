@@ -10,9 +10,11 @@ from typing import Any, Callable, Mapping
 
 import yaml
 
+from mtgmeta.classifier import classify_deck
 from public_contract import versioned
 
 from . import load_mtgo_context
+from . import matchup
 from . import stats
 from .normalize import load_rules_for_format
 
@@ -39,7 +41,14 @@ def week_records(events, rules, end_monday: date) -> list[dict[str, Any]]:
     return records
 
 
-def archetypes_in_window(events, rules, end_monday: date, n_weeks: int) -> set[str]:
+def archetypes_in_window(
+    events,
+    rules,
+    end_monday: date,
+    n_weeks: int,
+    *,
+    stable_ids: bool = False,
+) -> set[str]:
     if not isinstance(n_weeks, int) or isinstance(n_weeks, bool) or n_weeks <= 0:
         raise MTGOPickupError("n_weeks must be a positive integer")
     start = end_monday - timedelta(weeks=n_weeks - 1)
@@ -49,18 +58,21 @@ def archetypes_in_window(events, rules, end_monday: date, n_weeks: int) -> set[s
         if start <= event_date <= end_sunday:
             for record in stats.process_event(event, rules)["records"]:
                 if record["archetype"] != "Unknown":
-                    names.add(record["archetype"])
+                    names.add(
+                        record["archetype_id"] if stable_ids else record["archetype"]
+                    )
     return names
 
 
-def load_known(path: str | Path) -> set[str] | None:
+def load_known(path: str | Path, *, stable_ids: bool = False) -> set[str] | None:
     source = Path(path)
     if not source.exists():
         return None
     document = json.loads(source.read_text(encoding="utf-8"))
-    known = document.get("known", [])
+    field = "known_ids" if stable_ids else "known"
+    known = document.get(field, [])
     if not isinstance(known, list) or any(not isinstance(item, str) for item in known):
-        raise MTGOPickupError(f"{source}: known must be a list of strings")
+        raise MTGOPickupError(f"{source}: {field} must be a list of strings")
     return set(known)
 
 
@@ -116,7 +128,33 @@ def _pickup_directories(
     return configured, output
 
 
-def _candidate_documents(events, rules, end_monday: date, known: set[str]):
+def _record_identity(record: Mapping[str, Any], rules) -> dict[str, Any]:
+    result = classify_deck(
+        rules,
+        {
+            "main_deck": record.get("main_deck", []),
+            "sideboard": record.get("side_deck", []),
+        },
+    )
+    if result.status != "classified":
+        raise MTGOPickupError(
+            f"Pickup record could not reproduce its classified identity: {result.status}"
+        )
+    return {
+        "archetype_id": result.archetype_id,
+        "subtype_id": result.subtype_id,
+        "subtype": result.subtype_name,
+    }
+
+
+def _candidate_documents(
+    events,
+    rules,
+    end_monday: date,
+    known: set[str],
+    *,
+    stable_ids: bool = False,
+):
     week_label = iso_week_label(end_monday)
     end_sunday = end_monday + timedelta(days=6)
     base_pack, d99 = stats.build_base_pack(events, rules, end_monday)
@@ -136,6 +174,7 @@ def _candidate_documents(events, rules, end_monday: date, known: set[str]):
     new_picks: list[dict[str, Any]] = []
     for record in deduplicated.values():
         archetype = record["archetype"]
+        identity_key = record["archetype_id"] if stable_ids else archetype
         cards = record_deck_cards(record)
         entry = {
             "archetype": archetype,
@@ -149,14 +188,16 @@ def _candidate_documents(events, rules, end_monday: date, known: set[str]):
                 base_pack.get(record["archetype_id"]),
                 d99,
             ),
-            "source": "new" if archetype not in known else "existing",
+            "source": "new" if identity_key not in known else "existing",
             "approved": False,
             "comment_zh": "",
             "comment_en": "",
             "main_deck": cards["main_deck"],
             "side_deck": cards["side_deck"],
         }
-        (new_picks if archetype not in known else existing_picks).append(entry)
+        if stable_ids:
+            entry = {**_record_identity(record, rules), **entry}
+        (new_picks if identity_key not in known else existing_picks).append(entry)
 
     existing_picks.sort(
         key=lambda entry: (entry["deviation"] is None, -(entry["deviation"] or 0))
@@ -221,12 +262,23 @@ def generate_candidates(
         return None
 
     known_path = Path(known_file) if known_file is not None else configured / "known_archetypes.json"
-    known = load_known(known_path)
+    stable_ids = format_id == "modern"
+    known = load_known(known_path, stable_ids=stable_ids)
     first_run = known is None
     if known is None:
-        known = archetypes_in_window(events, rules, end_monday, INITIAL_KNOWN_WEEKS)
+        known = archetypes_in_window(
+            events,
+            rules,
+            end_monday,
+            INITIAL_KNOWN_WEEKS,
+            stable_ids=stable_ids,
+        )
     candidates, base_reference, top8_count, deduplicated_count = _candidate_documents(
-        events, rules, end_monday, known
+        events,
+        rules,
+        end_monday,
+        known,
+        stable_ids=stable_ids,
     )
 
     output.mkdir(parents=True, exist_ok=True)
@@ -290,8 +342,7 @@ def _approved_entries(document: Mapping[str, Any], key: str) -> list[dict[str, A
             raise MTGOPickupError(f"{key} entries must be mappings")
         if not entry.get("approved"):
             continue
-        approved.append(
-            {
+        published_entry = {
                 "archetype": entry["archetype"],
                 "player": entry.get("player"),
                 "final_rank": entry.get("final_rank"),
@@ -305,7 +356,14 @@ def _approved_entries(document: Mapping[str, Any], key: str) -> list[dict[str, A
                 "main_deck": entry.get("main_deck", []),
                 "side_deck": entry.get("side_deck", []),
             }
-        )
+        if "archetype_id" in entry:
+            published_entry = {
+                "archetype_id": entry["archetype_id"],
+                "subtype_id": entry.get("subtype_id"),
+                "subtype": entry.get("subtype"),
+                **published_entry,
+            }
+        approved.append(published_entry)
     return approved
 
 
@@ -405,13 +463,27 @@ def publish(
     )
 
     known_source = state / "known_archetypes.json"
-    known = load_known(known_source) or set()
+    stable_ids = format_id == "modern"
+    known = load_known(known_source, stable_ids=stable_ids) or set()
     if not known_source.is_file():
-        known |= archetypes_in_window(events, rules, end_monday, INITIAL_KNOWN_WEEKS)
-    known |= archetypes_in_window(events, rules, end_monday, 1)
+        known |= archetypes_in_window(
+            events,
+            rules,
+            end_monday,
+            INITIAL_KNOWN_WEEKS,
+            stable_ids=stable_ids,
+        )
+    known |= archetypes_in_window(
+        events,
+        rules,
+        end_monday,
+        1,
+        stable_ids=stable_ids,
+    )
     known_path = output / "known_archetypes.json"
+    known_document = {"known_ids": sorted(known)} if stable_ids else {"known": sorted(known)}
     known_path.write_text(
-        json.dumps({"known": sorted(known)}, ensure_ascii=False, indent=2),
+        json.dumps(known_document, ensure_ascii=False, indent=2),
         encoding="utf-8",
         newline="\n",
     )
@@ -422,6 +494,139 @@ def publish(
         "known_path": known_path,
         "existing_count": len(existing),
         "new_count": len(new_archetypes),
+    }
+
+
+def initialize_known_state(
+    repository_root: str | Path,
+    format_id: str,
+    *,
+    today: date | None = None,
+    registry_path: str | Path | None = None,
+    output_directory: str | Path | None = None,
+) -> Path | None:
+    """Explicitly bootstrap stable Pickup state without publishing a weekly selection."""
+
+    configured, output = _pickup_directories(
+        repository_root,
+        format_id,
+        "weekly_pickup",
+        registry_path=registry_path,
+        output_directory=output_directory,
+    )
+    load_mtgo_context(
+        repository_root,
+        format_id,
+        "catalog_generation",
+        registry_path=registry_path,
+    )
+    destination = output / "known_archetypes.json"
+    if destination.exists():
+        raise MTGOPickupError(f"{destination}: known state already exists")
+    rules = load_rules_for_format(repository_root, format_id, registry_path=registry_path)
+    events = stats.load_all_events(repository_root, format_id, registry_path=registry_path)
+    end_monday = stats.latest_complete_week(events, today=today)
+    if end_monday is None:
+        return None
+    stable_ids = format_id == "modern"
+    known = archetypes_in_window(
+        events,
+        rules,
+        end_monday,
+        INITIAL_KNOWN_WEEKS,
+        stable_ids=stable_ids,
+    )
+    document = {"known_ids": sorted(known)} if stable_ids else {"known": sorted(known)}
+    output.mkdir(parents=True, exist_ok=True)
+    destination.write_text(
+        json.dumps(document, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+        newline="\n",
+    )
+    return destination
+
+
+def generate_hierarchy_catalog(
+    repository_root: str | Path,
+    format_id: str,
+    *,
+    rules_updated: str | None = None,
+    registry_path: str | Path | None = None,
+    output_directory: str | Path | None = None,
+) -> Path:
+    """Generate the complete maintained parent/subtype catalog for one format."""
+
+    context = load_mtgo_context(
+        repository_root,
+        format_id,
+        "catalog_generation",
+        registry_path=registry_path,
+    )
+    rules = load_rules_for_format(repository_root, format_id, registry_path=registry_path)
+    if rules_updated is None:
+        rules_updated = rules_last_commit_iso(
+            context.repository_root,
+            context.paths["rules"],
+        )
+    hierarchy = matchup.build_matchup_hierarchy(rules)
+    parents = hierarchy["parents"]
+    leaves = hierarchy["leaves"]
+    document = versioned(
+        {
+            "format": format_id,
+            "source": SOURCE_ID,
+            "rules_updated": rules_updated,
+            "summary": {
+                "parents": len(parents),
+                "leaves": len(leaves),
+                "expandable_parents": sum(item["expandable"] for item in parents),
+            },
+            **hierarchy,
+        }
+    )
+    output = (
+        Path(output_directory).resolve()
+        if output_directory is not None
+        else context.paths["statistics"]
+    )
+    output.mkdir(parents=True, exist_ok=True)
+    destination = output / "archetype_hierarchy.json"
+    destination.write_text(
+        json.dumps(document, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+        newline="\n",
+    )
+    return destination
+
+
+def _matchup_coverage(
+    context,
+    *,
+    registry_path: str | Path | None = None,
+) -> dict[str, int]:
+    events = stats.load_all_events(
+        context.repository_root,
+        context.definition.id,
+        registry_path=registry_path,
+    )
+    official_ids = {
+        str(event.get("event_id"))
+        for _event_date, event in events
+        if event.get("event_id") is not None
+    }
+    archive_ids: set[str] = set()
+    for path in sorted(context.paths["matches"].glob("*.json")):
+        document = json.loads(path.read_text(encoding="utf-8"))
+        event_id = document.get("event_id")
+        if event_id is not None:
+            archive_ids.add(str(event_id))
+    overlap = official_ids & archive_ids
+    return {
+        "official_events": len(official_ids),
+        "events_with_archives": len(overlap),
+        "events_without_archives": len(official_ids - archive_ids),
+        "stored_archives": len(archive_ids),
+        "archives_outside_official_events": len(archive_ids - official_ids),
     }
 
 
@@ -484,6 +689,24 @@ def generate_metadata(
             "data_updated": data_updated_value,
         }
     )
+    if format_id == "modern":
+        document.update(
+            {
+                "statistics_catalog": "index.json",
+                "matchup_catalog": "matchup_index.json",
+                "hierarchy_catalog": "archetype_hierarchy.json",
+                "pickup_catalog": (
+                    "pickup/index.json"
+                    if (context.paths["statistics"] / "pickup" / "index.json").is_file()
+                    else None
+                ),
+                "matchup_source": "Videre",
+                "matchup_coverage": _matchup_coverage(
+                    context,
+                    registry_path=registry_path,
+                ),
+            }
+        )
     output = (
         Path(output_directory).resolve()
         if output_directory is not None
@@ -507,7 +730,9 @@ __all__ = [
     "deck_deviation",
     "deck_fingerprint",
     "generate_candidates",
+    "generate_hierarchy_catalog",
     "generate_metadata",
+    "initialize_known_state",
     "iso_week_label",
     "load_known",
     "publish",
