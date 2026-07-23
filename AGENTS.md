@@ -268,6 +268,13 @@ Do not manually edit generated statistics as a substitute for fixing the generat
 
 - Do not make development changes directly on `master`.
 - Use a dedicated branch for each phase or focused task.
+- Follow the mandatory bootstrap, impact-discovery, validation-economy, and
+  publication-preflight procedures in `docs/DEVELOPMENT_WORKFLOW.md`. These
+  controls were added after repeated avoidable rework and are not optional.
+- On Windows, set `core.autocrlf=false` as part of the clone command, before
+  the first checkout is created. Setting it only after a normal clone is too
+  late. Abandon a new disposable workspace if its initial status is not clean;
+  do not normalize or repair the checkout in place.
 - Preserve the current Standard implementation until regression checks exist.
 - Prefer small, reviewable commits.
 - Do not combine documentation, large refactoring, new data ingestion, and front-end redesign in one commit.
@@ -277,6 +284,9 @@ Do not manually edit generated statistics as a substitute for fixing the generat
 - Do not commit secrets, credentials, access tokens, or private user data.
 - Do not overwrite unexplained local changes.
 - If repository state is not clean, inspect it before proceeding.
+- Do not test remote-write authorization by attempting a push. After the owner
+  authorizes publication, complete the publication preflight and use one
+  documented push/PR path.
 
 ---
 
