@@ -436,6 +436,12 @@ Responsibilities:
 - process the approved MTGO matchup source;
 - retain source coverage metadata;
 - calculate format-specific matchup outputs;
+- retain stable parent-archetype and selected-subtype identities for both sides
+  of each eligible match;
+- aggregate canonical directed W-L-D counts at the most specific selected
+  identity;
+- derive and validate parent-parent, subtype-parent, parent-subtype, and
+  subtype-subtype rollups without averaging percentages;
 - use shared W-L-D utilities;
 - avoid implying full event coverage when coverage is partial.
 
@@ -654,7 +660,7 @@ A classification result should retain at least:
 - classification status;
 - relevant evidence where practical.
 
-The parent archetype fields are the compatibility contract. Subtype fields are supplementary and may be `null`. Reports and downstream consumers must not treat a subtype as an unrelated archetype.
+The parent archetype fields are the compatibility contract. Subtype fields are supplementary and may be `null`. A null subtype is normal when the selected parent defines no subtypes. Under the current Standard and Modern taxonomies, a parent that defines subtypes must select one of them for every classified deck; a later null result under such a parent is blocking pending OPEN-005. Reports and downstream consumers must not treat a subtype as an unrelated archetype.
 
 Recommended classification statuses are:
 
@@ -1144,6 +1150,25 @@ During migration, existing Standard output paths may remain as compatibility fil
 
 Do not remove a public path without a compatibility or migration plan.
 
+Hierarchical matchup output must describe:
+
+- stable parent-archetype nodes and display names;
+- stable subtype nodes and their parent IDs;
+- whether a parent is expandable under the maintained taxonomy;
+- canonical directed W-L-D counts at the most specific selected identity;
+- enough source, period, coverage, and exclusion metadata to reproduce the
+  fully collapsed parent matrix.
+
+The stored hierarchy must support independent row-axis and column-axis rollups.
+It must not materialize a different authoritative statistic for every possible
+front-end expansion state. Parent and subtype rates are calculated from the
+applicable supplied W-L-D counts. A parent with no subtype definitions and a
+parent with exactly one subtype are non-expandable presentation nodes.
+
+Do not create an implicit residual subtype. If a classified deck has a null
+subtype under a parent that defines subtypes, generation stops with a visible
+quality failure until OPEN-005 defines the approved representation.
+
 ### 12.2 Melee output
 
 Target Melee output belongs under:
@@ -1440,7 +1465,14 @@ Responsibilities may include:
 - scope switching;
 - confidence intervals;
 - low-sample styling;
-- compatible multi-event selection.
+- compatible multi-event selection;
+- default collapsed parent-archetype rows and columns;
+- independent expansion and collapse of one parent on either axis;
+- a global control that expands or collapses all eligible parents;
+- suppression of subtype controls for parents with zero or one defined
+  subtype;
+- calculation of interactive rollups only from explicitly supplied canonical
+  W-L-D counts.
 
 Shared rendering code may be reused, but MTGO and tabletop data must not be combined.
 
@@ -1449,6 +1481,11 @@ Shared rendering code may be reused, but MTGO and tabletop data must not be comb
 Primary statistical values must be generated or calculated through tested statistical code.
 
 The front end may format values and combine explicitly supplied counts for approved interactive views, but a statistical rule must not exist only as undocumented JavaScript.
+
+The shared statistical tests must prove every hierarchical matchup rollup before
+the front end relies on it. JavaScript may select and sum the approved canonical
+count cells for an interaction, but it must not infer classification, invent a
+subtype, average percentages, or define a different eligibility rule.
 
 ---
 

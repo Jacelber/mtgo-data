@@ -131,7 +131,7 @@ Display names may change without changing the archetype ID.
 
 Statistics must aggregate by archetype ID rather than only by display name.
 
-A classification result may also contain an optional subtype ID and subtype display name. A subtype is a rule-level variant within one parent archetype. Unless a later statistical specification explicitly defines subtype-level metrics, primary metagame, performance, conversion, and matchup statistics continue to aggregate by the parent archetype ID. Subtypes must not split or double-count the parent archetype population.
+A classification result may also contain an optional subtype ID and subtype display name. A subtype is a rule-level variant within one parent archetype. Primary metagame, performance, and conversion statistics continue to aggregate by the parent archetype ID. Hierarchical matchup statistics are separately defined in section 11.8. Subtypes must not split or double-count the parent archetype population.
 
 The Phase 2 compatibility migration may expose subtypes only for distinct legacy rule entries that already resolve to the same legacy archetype. It must not change any deck's parent archetype result. New subtype taxonomy and subtype-level statistical presentation require separate approval after the compatibility classifier is complete.
 
@@ -1174,6 +1174,54 @@ If event rules allow a player to use different Constructed decks in different ph
 Do not assign every match automatically to the player’s first or final deck without verification.
 
 If the correct phase-specific deck cannot be determined, affected matches must be excluded and reported.
+
+### 11.8 Hierarchical parent and subtype matchups
+
+The default matchup matrix remains the parent-archetype matrix. A hierarchical
+matchup output may additionally allow the row axis and column axis to expand
+independently from a parent archetype into its defined subtypes.
+
+The statistical generator must retain each eligible competitor's stable parent
+archetype ID and selected subtype ID, when one is selected. It must aggregate
+canonical directed W-L-D counts at the most specific selected identity and make
+the following views derivable from those counts:
+
+- parent archetype against parent archetype;
+- subtype against parent archetype;
+- parent archetype against subtype;
+- subtype against subtype.
+
+Every displayed rate must be calculated from the summed W-L-D counts using the
+formula in section 11.1. Do not average already-calculated parent, subtype, row,
+column, event, or time-window percentages.
+
+Collapsing all subtype nodes beneath a parent must reproduce that parent's
+parent-level W-L-D counts exactly. Expanding or collapsing either axis must not
+change the number of underlying eligible matches, double-count a match, or
+change the fully collapsed parent matrix.
+
+A parent archetype with no subtype definitions is a complete non-expandable
+node. A classified deck under such a parent correctly has `subtype_id: null`;
+this is not a residual or Unknown classification. A parent with exactly one
+defined subtype is also non-expandable in the front end, although the generated
+data may retain that subtype for audit and future compatibility. Expandability
+is determined by the maintained taxonomy, not by how many subtype samples
+happen to appear in one time window.
+
+The current Standard and Modern rules contain no classified deck under a parent
+that defines subtypes without also selecting one of those subtypes. If that
+state appears later, it is a blocking classification or data-quality condition
+until OPEN-005 is resolved. The generator must not silently omit the deck,
+attribute it to another subtype, or invent an `Other` or `Unspecified` subtype.
+
+Unknown archetypes remain governed by section 11.3. A subtype is never treated
+as an unrelated parent archetype.
+
+Before the hierarchical matchup front end is accepted, Standard must be run
+through the same shared hierarchical calculation used for Modern. Its fully
+collapsed parent matrix must reproduce the existing Standard parent-level
+matchup output. This migration is required even if the legacy Standard public
+files remain available temporarily as compatibility outputs.
 
 ---
 

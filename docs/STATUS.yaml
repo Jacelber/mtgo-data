@@ -2114,6 +2114,23 @@ open_decisions:
     status: "deferred"
     note: "Not part of the current approved scope."
 
+  - id: "OPEN-005"
+    topic: "Residual representation for a null subtype under a subtype-defining parent"
+    status: "resolved"
+    resolved_by: "DEC-042"
+    resolved_on: "2026-07-23"
+    target_documents:
+      - "docs/STATISTICS_SPEC.md"
+      - "docs/DATA_ARCHITECTURE.md"
+    current_evidence:
+      audited_production_commit: "168e929"
+      standard_classified_under_subtype_parent_without_selected_subtype: 0
+      modern_classified_under_subtype_parent_without_selected_subtype: 0
+      standard_parents_with_exactly_one_subtype: 0
+      modern_parents_with_exactly_one_subtype: 0
+    resolution: "Do not create a residual subtype. Block generation and report the condition; do not synthesize, omit, or reassign a subtype."
+    note: "A null subtype remains valid for a parent that defines no subtypes. The owner confirmed the no-residual P6-06 scope on 2026-07-23."
+
 maintenance_tasks:
   - id: "MAINT-2026-07-21-COMMITTED-BASELINE-STABILITY"
     name: "Make committed-baseline tests follow the current committed snapshot"
@@ -2767,14 +2784,80 @@ phase_6_tasks:
     remote_repository_validation_passed: true
     github_actions_run: 29930407944
 
+  - id: "P6-06"
+    name: "Implement hierarchical Modern matchup calculation"
+    status: "authorized_in_progress"
+    depends_on: "P6-05 accepted and published"
+    decision: "DEC-042"
+    planning_audit: "docs/audits/P6-HIERARCHICAL-MATCHUP-PLANNING.md"
+    scope:
+      - "Enable Modern Videre match collection and matchup statistics without making Modern public."
+      - "Retain stable parent-archetype and selected-subtype identities on both sides of every eligible match."
+      - "Generate canonical directed W-L-D counts for parent-parent, subtype-parent, parent-subtype, and subtype-subtype rollups."
+      - "Keep the fully collapsed parent matrix as the default and prove exact rollup conservation."
+      - "Generate independent 1, 4, 12, and 36 complete-week Modern matchup outputs."
+      - "Reject Premodern and every other cross-format input before network or output side effects."
+      - "Preserve current Standard public matchup bytes during P6-06."
+      - "Treat a null subtype under a subtype-defining parent as blocking pending OPEN-005."
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-23"
+    remote_publication_authorized: false
+    product_enablement_allowed: false
+    workflow_changes_allowed: false
+    frontend_changes_allowed: false
+    public_format_allowed: false
+    residual_subtype_allowed: false
+    standard_hierarchical_migration_task: "P6-09"
+
+  - id: "P6-07"
+    name: "Generate Modern Pickup, metadata, and hierarchy catalog"
+    status: "planned"
+    depends_on: "P6-06 accepted and published"
+
+  - id: "P6-08"
+    name: "Add Modern to the production workflow"
+    status: "planned"
+    depends_on: "P6-07 accepted and published"
+
+  - id: "P6-09"
+    name: "Migrate Standard and Modern to the shared hierarchical matchup front end"
+    status: "planned"
+    depends_on: "P6-08 accepted and published"
+    required_standard_migration:
+      - "Run Standard through the same shared hierarchical matchup calculation."
+      - "Prove the fully collapsed parent matrix matches the existing Standard result."
+      - "Do not leave Standard on a separate legacy calculation."
+    frontend_behavior:
+      default_view: "collapsed_parent_archetypes"
+      independent_row_expansion: true
+      independent_column_expansion: true
+      global_expand_collapse_control: true
+      hide_zero_or_one_subtype_parent_controls: true
+
+  - id: "P6-10"
+    name: "Complete Phase 6 regression, release, and recovery tag"
+    status: "planned"
+    depends_on: "P6-09 accepted and published"
+
 next_approved_task:
-  id: null
-  name: "No next task authorized"
-  target_paths: []
-  production_change: false
+  id: "P6-06"
+  name: "Implement hierarchical Modern matchup calculation"
+  target_paths:
+    - "configs/formats.yaml"
+    - "src/mtgmeta/mtgo/matchup.py"
+    - "data/modern/mtgo/matches/"
+    - "stats/modern/mtgo/"
+    - "schemas/"
+    - "tests/"
+    - "docs/audits/P6-06.md"
+    - "docs/STATUS.yaml"
+    - "docs/ROADMAP.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+  production_change: true
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  planning_status: "paused_by_owner_after_p6_05_publication"
+  authorization_status: "authorized"
+  planning_status: "local_implementation_in_progress"
 
 governance_baseline:
   status: "active_on_master"
@@ -2825,8 +2908,8 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not retain or commit real P5-08 participant, match, or decklist data."
   - "Do not reuse cookies or browser sessions or bypass access controls."
-  - "Do not enable any P6-05 Modern capability other than classification, event_statistics, and range_statistics."
-  - "Do not expose Modern in the front end or public format catalog during P6-05."
+  - "Do not synthesize a residual subtype during P6-06."
+  - "Do not expose Modern in the front end or public format catalog before P6-09."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not generate reference-event or Paupergeddon statistics yet."

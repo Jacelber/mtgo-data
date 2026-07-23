@@ -843,6 +843,57 @@ P6-04A is an owner-requested read-only follow-up audit of the Modern/Premodern c
 
 P6-05 enables only the next Modern product layer: MTGO event statistics and 1-, 4-, 12-, and 36-complete-week rolling statistics under `stats/modern/mtgo/`. The primary aggregation uses the stable selected parent archetype ID, which is emitted beside its display name in new Modern range and representative-deck documents; a selected subtype therefore neither creates a separate metagame row nor double-counts a deck. Statistics input must contain the exact embedded `CMODERN` marker; any cross-format document blocks generation before output. The range index belongs to this statistics product and therefore no longer requires the broader `catalog_generation` capability. Modern remains non-public, and matchup data, Weekly Pickup, metadata, the public format catalog, production workflow, and front-end selection remain outside P6-05. Existing MTGO statistics Schemas are extended to accept Modern while the committed Standard documents remain byte-compatible. The local implementation generated nine deterministic documents from all 181 Modern inputs while correctly limiting complete-week statistics to 179 events and 5,728 decks through 2026-07-19; all 374 repository tests pass. P6-05 was published through pull request #84, implementation commit `57b642b0e2e31e539d88812dd69f42d1a8dd1d1c`, and merge commit `f0be04a557c4b2cb02a52372618fd066d14761a2`; remote repository validation passed before merge. No follow-up task is currently authorized.
 
+## Remaining Phase 6 sequence
+
+### P6-06 — Hierarchical Modern matchup calculation
+
+Define and implement the shared hierarchical matchup contract before designing
+the final interface. Fetch and preserve approved Modern Videre match records,
+generate 1-, 4-, 12-, and 36-complete-week Modern matchup outputs, and retain
+canonical directed W-L-D counts that support parent-parent, subtype-parent,
+parent-subtype, and subtype-subtype views. The default statistical view remains
+the fully collapsed parent matrix. Parent and subtype rollups must use stable
+IDs and must never average percentages.
+
+P6-06 must keep Modern non-public, keep Standard public bytes compatible, and
+exclude Premodern exactly. It must not add a synthetic residual subtype. A null
+subtype under a parent that defines subtypes is blocking pending OPEN-005.
+
+### P6-07 — Modern Pickup, metadata, and hierarchy catalog
+
+Generate Modern Weekly Pickup and format metadata after P6-06 is accepted.
+Expose stable parent/subtype hierarchy metadata, including the taxonomy-based
+expandability rule, without yet changing the public format catalog or front
+end.
+
+### P6-08 — Modern production workflow
+
+Add authorized recurring Modern Videre collection and deterministic Modern
+statistics, matchup, Pickup, metadata, Schema, and production-candidate
+validation to the production workflow. Keep MTGO formats and tabletop products
+separate.
+
+### P6-09 — Shared hierarchical matchup front end
+
+Apply the shared hierarchical calculation to Standard before changing the
+front end. Prove that the fully collapsed Standard result reproduces the
+existing parent-level matrix, then migrate Standard and Modern to one shared
+renderer. The matrix defaults to parent archetypes; row and column parents can
+expand independently; a global control expands or collapses all eligible
+parents; and parents with zero or one defined subtype never expose an expansion
+control.
+
+This task owns the Standard migration to the new hierarchical calculation. It
+must not leave Standard on the legacy calculation while Modern alone uses the
+new interactive matrix.
+
+### P6-10 — Phase 6 closeout
+
+Run the complete Standard and Modern regression, Schema, production, front-end,
+and rollup-conservation checks. Confirm that Modern is public only after every
+required data layer is available, update phase status, and publish the Phase 6
+recovery tag after separate owner authorization.
+
 ## Acceptance criteria
 
 Phase 6 is complete when:
@@ -854,7 +905,13 @@ Phase 6 is complete when:
 - Modern output is separate from Standard output;
 - MTGO Modern can be regenerated;
 - Standard output remains compatible;
-- the MTGO front end can select Modern without hardcoded Standard-only behavior.
+- every collapsed parent matchup is reproducible from canonical subtype-aware
+  W-L-D counts;
+- Standard is reapplied to the shared hierarchical matchup calculation before
+  the expandable front end is accepted;
+- the MTGO front end can select Modern without hardcoded Standard-only behavior;
+- matchup rows and columns can expand independently by subtype while parents
+  with zero or one defined subtype remain non-expandable.
 
 ---
 
