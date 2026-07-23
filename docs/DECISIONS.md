@@ -1431,8 +1431,8 @@ for parents with zero or one defined subtype.
 A null subtype is valid when a parent defines no subtypes. No residual subtype
 is currently necessary for either Standard or Modern. If a future classified
 deck has a null subtype under a parent that defines subtypes, generation must
-fail visibly pending OPEN-005; it must not silently omit the deck or invent an
-unapproved residual subtype.
+fail visibly under OPEN-005's approved no-residual resolution; it must not
+silently omit the deck or invent an unapproved residual subtype.
 
 ## Consequences
 

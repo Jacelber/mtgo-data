@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-05-publication-status"
-  working_branch_status: "p6_05_completed_and_published_no_follow_up_authorized"
+  current_working_branch: "codex/p6-06-hierarchical-matchup"
+  working_branch_status: "p6_06_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-22"
+  last_updated: "2026-07-23"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -2786,7 +2786,7 @@ phase_6_tasks:
 
   - id: "P6-06"
     name: "Implement hierarchical Modern matchup calculation"
-    status: "authorized_in_progress"
+    status: "owner_accepted_remote_publication_authorized"
     depends_on: "P6-05 accepted and published"
     decision: "DEC-042"
     planning_audit: "docs/audits/P6-HIERARCHICAL-MATCHUP-PLANNING.md"
@@ -2798,16 +2798,75 @@ phase_6_tasks:
       - "Generate independent 1, 4, 12, and 36 complete-week Modern matchup outputs."
       - "Reject Premodern and every other cross-format input before network or output side effects."
       - "Preserve current Standard public matchup bytes during P6-06."
-      - "Treat a null subtype under a subtype-defining parent as blocking pending OPEN-005."
+      - "Treat a null subtype under a subtype-defining parent as blocking under OPEN-005's approved no-residual resolution."
     owner_local_implementation_authorized: true
     owner_local_implementation_authorized_on: "2026-07-23"
-    remote_publication_authorized: false
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-23"
     product_enablement_allowed: false
     workflow_changes_allowed: false
     frontend_changes_allowed: false
     public_format_allowed: false
     residual_subtype_allowed: false
     standard_hierarchical_migration_task: "P6-09"
+    local_implementation_completed_on: "2026-07-23"
+    production_base_commit: "168e929"
+    planning_commit: "632fd39"
+    real_videre_collection:
+      requested_event_ids: 187
+      response_files_written: 165
+      no_results: 22
+      failed: 0
+      official_modern_events: 183
+      raw_official_overlap: 161
+      official_events_without_raw: 22
+      raw_events_without_official_statistics_event: 4
+    generated_matchup_documents: 5
+    latest_complete_week: "2026-07-13"
+    taxonomy:
+      parent_archetypes: 55
+      most_specific_leaves: 92
+      expandable_parents: 17
+      exactly_one_subtype_parents: 0
+    counted_matches:
+      one_week: 793
+      four_weeks: 3266
+      twelve_weeks: 8475
+      thirty_six_weeks: 10817
+    observed_parent_archetypes:
+      one_week: 41
+      four_weeks: 50
+      twelve_weeks: 54
+      thirty_six_weeks: 55
+    observed_leaves:
+      one_week: 54
+      four_weeks: 73
+      twelve_weeks: 88
+      thirty_six_weeks: 89
+    rollup_conservation_passed: true
+    no_residual_blocking_test_passed: true
+    premodern_exclusion_passed: true
+    standard_matchup_bytes_unchanged: true
+    modern_matchup_regeneration_byte_identical: true
+    schema_validated_outputs: 43
+    tests_passed: 381
+    repository_validation_passed: true
+    repository_python_files_validated: 84
+    repository_json_files_validated: 1000
+    repository_yaml_files_validated: 14
+    repository_references_validated: 30
+    repository_hygiene_files_validated: 1163
+    modern_rule_validation_passed: true
+    standard_rule_validation_passed: true
+    schema_validation_passed: true
+    workflow_changed: false
+    frontend_changed: false
+    public_format_changed: false
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-23"
+    implementation_commit: null
+    pull_request: null
+    merge_commit: null
 
   - id: "P6-07"
     name: "Generate Modern Pickup, metadata, and hierarchy catalog"
@@ -2856,8 +2915,8 @@ next_approved_task:
     - "docs/DATA_ARCHITECTURE.md"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "authorized"
-  planning_status: "local_implementation_in_progress"
+  authorization_status: "owner_accepted_remote_publication_authorized"
+  planning_status: "complete"
 
 governance_baseline:
   status: "active_on_master"

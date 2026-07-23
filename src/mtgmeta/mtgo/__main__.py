@@ -64,6 +64,11 @@ def build_parser() -> argparse.ArgumentParser:
         "classification-reports",
         help="generate de-identified classification diagnostics",
     )
+    report_parser.add_argument(
+        "--output-dir",
+        type=Path,
+        help="write reports to a disposable or alternate directory",
+    )
     report_parser.add_argument("--strict", action="store_true", help="fail on blocking diagnostics")
     return parser
 
@@ -166,7 +171,12 @@ def _run_reports(args: argparse.Namespace, root: Path, registry: Path) -> int:
     from generate_classification_reports import generate_reports
     from mtgmeta.reports import has_blocking_diagnostics
 
-    reports = generate_reports(root, args.format_id, registry_path=registry)
+    reports = generate_reports(
+        root,
+        args.format_id,
+        output_directory=args.output_dir,
+        registry_path=registry,
+    )
     summary = reports["index"]["summary"]
     print(
         "Classification reports: "

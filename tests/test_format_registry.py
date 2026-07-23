@@ -72,6 +72,7 @@ def test_registry_preserves_the_p3_standard_contract_and_enables_modern_range_st
         "classification",
         "event_statistics",
         "range_statistics",
+        "matchup_statistics",
     }
 
 

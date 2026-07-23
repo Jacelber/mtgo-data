@@ -660,7 +660,7 @@ A classification result should retain at least:
 - classification status;
 - relevant evidence where practical.
 
-The parent archetype fields are the compatibility contract. Subtype fields are supplementary and may be `null`. A null subtype is normal when the selected parent defines no subtypes. Under the current Standard and Modern taxonomies, a parent that defines subtypes must select one of them for every classified deck; a later null result under such a parent is blocking pending OPEN-005. Reports and downstream consumers must not treat a subtype as an unrelated archetype.
+The parent archetype fields are the compatibility contract. Subtype fields are supplementary and may be `null`. A null subtype is normal when the selected parent defines no subtypes. Under the current Standard and Modern taxonomies, a parent that defines subtypes must select one of them for every classified deck; a later null result under such a parent is blocking under the approved no-residual policy. Reports and downstream consumers must not treat a subtype as an unrelated archetype.
 
 Recommended classification statuses are:
 
@@ -1167,7 +1167,8 @@ parent with exactly one subtype are non-expandable presentation nodes.
 
 Do not create an implicit residual subtype. If a classified deck has a null
 subtype under a parent that defines subtypes, generation stops with a visible
-quality failure until OPEN-005 defines the approved representation.
+quality failure. OPEN-005 resolved this representation question by requiring
+generation to stop rather than synthesizing, omitting, or reassigning a subtype.
 
 ### 12.2 Melee output
 

@@ -857,7 +857,27 @@ IDs and must never average percentages.
 
 P6-06 must keep Modern non-public, keep Standard public bytes compatible, and
 exclude Premodern exactly. It must not add a synthetic residual subtype. A null
-subtype under a parent that defines subtypes is blocking pending OPEN-005.
+subtype under a parent that defines subtypes is blocking under the approved
+no-residual policy recorded by OPEN-005.
+
+P6-06 local implementation was authorized and completed in an isolated
+workspace on 2026-07-23. An exact Modern-only Videre fetch requested 187 event
+IDs, wrote 165 public raw-response files, received 22 explicit no-result
+responses, and had zero failures. Four Modern Last Chance raw files are
+preserved but excluded from statistics because no corresponding official
+decklist event was admitted. The generated 1-, 4-, 12-, and 36-week outputs
+contain 793, 3,266, 8,475, and 10,817 counted physical matches respectively.
+They publish canonical directed counts for 92 taxonomy leaves beneath 55
+parents, mark the 17 multi-subtype parents as expandable, and reproduce every
+parent cell exactly by count rollup. Independent row and column aggregation
+supports all four parent/subtype view combinations without averaging
+percentages. The no-residual condition blocks visibly, Premodern remains
+excluded, Standard matchup bytes remain unchanged, all 43 Schema-managed
+outputs pass, and all 381 repository tests pass. Modern remains non-public; the
+workflow, Pickup, metadata, catalog, and front end are unchanged. Detailed
+evidence is recorded in `docs/audits/P6-06.md`. Owner acceptance and separate
+remote-publication authorization were granted on 2026-07-23. Publication is in
+progress; P6-07 remains separately controlled.
 
 ### P6-07 — Modern Pickup, metadata, and hierarchy catalog
 

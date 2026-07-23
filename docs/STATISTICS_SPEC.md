@@ -1211,8 +1211,9 @@ happen to appear in one time window.
 The current Standard and Modern rules contain no classified deck under a parent
 that defines subtypes without also selecting one of those subtypes. If that
 state appears later, it is a blocking classification or data-quality condition
-until OPEN-005 is resolved. The generator must not silently omit the deck,
-attribute it to another subtype, or invent an `Other` or `Unspecified` subtype.
+under the approved no-residual policy. The generator must not silently omit the
+deck, attribute it to another subtype, or invent an `Other` or `Unspecified`
+subtype.
 
 Unknown archetypes remain governed by section 11.3. A subtype is never treated
 as an unrelated parent archetype.

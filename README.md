@@ -80,9 +80,13 @@ $env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard pickup candidates --if-absent
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard generate-metadata
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard classification-reports --strict
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern fetch-matches
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern build-statistics
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern build-matchups
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern classification-reports --strict
 ```
 
-The format argument is mandatory. Standard is currently the only format that may run Videre fetching, classification, statistics, Pickup, metadata, catalogs, and public-output generation. Official MTGO event raw-data collection is controlled separately by `event_collection_enabled`; Standard, Pauper, Modern, Pioneer, Legacy, and Vintage retain the legacy daily event archive. `fetch-events` checks the current and previous calendar month by default and accepts repeatable `--month YYYY-MM` overrides. `fetch-matches` remains Standard-only and accepts optional numeric event IDs and `--force`.
+The format argument is mandatory. Standard supports the complete current product command set. Modern is executable for classification, event statistics, Videre fetching, and hierarchical matchup generation, but remains non-public; Modern Pickup, metadata, workflow publication, and front-end selection are enabled only in later Phase 6 tasks. Official MTGO event raw-data collection is controlled separately by `event_collection_enabled`; Standard, Pauper, Modern, Pioneer, Legacy, and Vintage retain the legacy daily event archive. `fetch-events` checks the current and previous calendar month by default and accepts repeatable `--month YYYY-MM` overrides. `fetch-matches` accepts optional numeric event IDs and `--force`. Classification reports may be directed to a disposable location with `--output-dir`.
 
 Weekly Pickup publication remains a separate manual approval step. After reviewing and approving a candidate YAML, run `python -B -m mtgmeta.mtgo --format standard pickup publish`. The scheduled workflow generates candidates only and preserves an existing candidate file for the latest complete week.
 
