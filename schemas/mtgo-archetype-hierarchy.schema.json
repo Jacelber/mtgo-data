@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-archetype-hierarchy.schema.json",
+  "title": "MTGO archetype hierarchy catalog",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "format",
+    "source",
+    "rules_updated",
+    "summary",
+    "parents",
+    "leaves"
+  ],
+  "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
+    "format": {"const": "modern"},
+    "source": {"const": "mtgo"},
+    "rules_updated": {"type": "string", "minLength": 1},
+    "summary": {
+      "type": "object",
+      "required": ["parents", "leaves", "expandable_parents"],
+      "properties": {
+        "parents": {"type": "integer", "minimum": 1},
+        "leaves": {"type": "integer", "minimum": 1},
+        "expandable_parents": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "parents": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/parent"}
+    },
+    "leaves": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/leaf"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)?$"
+    },
+    "parent": {
+      "type": "object",
+      "required": ["id", "name", "expandable", "subtype_ids"],
+      "properties": {
+        "id": {"$ref": "#/$defs/stableId"},
+        "name": {"type": "string", "minLength": 1},
+        "expandable": {"type": "boolean"},
+        "subtype_ids": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/stableId"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "leaf": {
+      "type": "object",
+      "required": ["id", "kind", "name", "parent_id", "subtype_id"],
+      "properties": {
+        "id": {"$ref": "#/$defs/stableId"},
+        "kind": {"enum": ["archetype", "subtype"]},
+        "name": {"type": "string", "minLength": 1},
+        "parent_id": {"$ref": "#/$defs/stableId"},
+        "subtype_id": {
+          "oneOf": [
+            {"$ref": "#/$defs/stableId"},
+            {"type": "null"}
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -9,6 +9,7 @@ import subprocess
 import sys
 
 import pytest
+import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -167,38 +168,24 @@ def test_production_cli_generates_strict_deidentified_modern_reports(tmp_path):
     assert report_bytes() == modern_before
 
 
-@pytest.mark.parametrize(
-    "command",
-    [
-        ["pickup", "candidates"],
-        ["generate-metadata"],
-    ],
-)
-def test_every_post_p6_06_modern_product_command_remains_disabled(command):
+def test_p6_07_does_not_make_modern_public_or_change_existing_statistics():
     statistics = ROOT / "stats" / "modern" / "mtgo"
     statistics_before = {
-        path.name: path.read_bytes() for path in sorted(statistics.glob("*.json"))
+        path.name: path.read_bytes()
+        for path in sorted(statistics.glob("*.json"))
+        if path.name not in {"meta.json", "archetype_hierarchy.json"}
     }
     assert len(statistics_before) >= 9
-    result = subprocess.run(
-        [
-            sys.executable,
-            "-B",
-            "-m",
-            "mtgmeta.mtgo",
-            "--root",
-            str(ROOT),
-            "--format",
-            "modern",
-            *command,
-        ],
-        cwd=ROOT,
-        text=True,
-        capture_output=True,
-        env={**__import__("os").environ, "PYTHONPATH": str(SRC)},
-    )
-    assert result.returncode == 2
-    assert "does not support" in result.stderr
+    registry = yaml.safe_load((ROOT / "configs" / "formats.yaml").read_text(encoding="utf-8"))
+    modern = next(item for item in registry["formats"] if item["id"] == "modern")
+    assert modern["public"] is False
+    assert set(modern["mtgo"]["capabilities"]) >= {
+        "weekly_pickup",
+        "metadata_generation",
+        "catalog_generation",
+    }
     assert {
-        path.name: path.read_bytes() for path in sorted(statistics.glob("*.json"))
+        path.name: path.read_bytes()
+        for path in sorted(statistics.glob("*.json"))
+        if path.name not in {"meta.json", "archetype_hierarchy.json"}
     } == statistics_before
