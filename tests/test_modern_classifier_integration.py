@@ -168,7 +168,7 @@ def test_production_cli_generates_strict_deidentified_modern_reports(tmp_path):
     assert report_bytes() == modern_before
 
 
-def test_p6_07_does_not_make_modern_public_or_change_existing_statistics():
+def test_p6_09_makes_modern_public_without_rewriting_existing_statistics():
     statistics = ROOT / "stats" / "modern" / "mtgo"
     statistics_before = {
         path.name: path.read_bytes()
@@ -178,7 +178,7 @@ def test_p6_07_does_not_make_modern_public_or_change_existing_statistics():
     assert len(statistics_before) >= 9
     registry = yaml.safe_load((ROOT / "configs" / "formats.yaml").read_text(encoding="utf-8"))
     modern = next(item for item in registry["formats"] if item["id"] == "modern")
-    assert modern["public"] is False
+    assert modern["public"] is True
     assert set(modern["mtgo"]["capabilities"]) >= {
         "weekly_pickup",
         "metadata_generation",

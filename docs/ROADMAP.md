@@ -963,6 +963,16 @@ statistical formula, generated document contract, workflow, public catalog, or
 front-end behavior. P6-09 must not begin until the hotfix is published and one
 complete real Standard/Modern production run succeeds.
 
+P6-08A was published through pull request #89 and merge commit
+`1259b672b0eb62e078becb836b911b6ca44fa5d2`. Production run
+`30059165608` then completed successfully. Event `12838888` returned HTTP 408
+on its first request, the bounded retry path ran, and the source subsequently
+resolved to an explicit non-failing no-results response. Standard and Modern
+generation, strict classification, candidate validation, publication
+confirmation, and the following Pages deployment passed. The resulting
+production commit is
+`ee83e92d19f2b5ba779f250ef5e225bc80334747`.
+
 ### P6-09 — Shared hierarchical matchup front end
 
 Apply the shared hierarchical calculation to Standard before changing the
@@ -976,6 +986,34 @@ control.
 This task owns the Standard migration to the new hierarchical calculation. It
 must not leave Standard on the legacy calculation while Modern alone uses the
 new interactive matrix.
+
+P6-09 local implementation was authorized on 2026-07-24. Standard now uses the
+same stable-ID canonical leaf calculation as Modern. Its original name-keyed
+fields remain compatibility aliases derived from the new parent rollup. A
+frozen migration contract proves exact equality for every 1-, 4-, 12-, and
+36-week parent cell, overall record, visible ordering, and counted-match total
+against production commit `ee83e92`; the four windows retain 469, 2,475, 6,597,
+and 8,716 counted matches.
+
+The shared static renderer defaults to parent archetypes, expands row and
+column axes independently, provides one global expand/collapse control, and
+uses maintained taxonomy rather than observed window volume to decide
+expandability. Parents with zero or one subtype expose no control. Interactive
+records, rates, confidence intervals, and low-sample flags are recalculated
+from canonical leaf W-L-D counts, never from averaged percentages. Standard and
+Modern are both public format selections, both generate hierarchy catalogs and
+complete metadata, and Standard retains its existing public paths.
+
+Local browser acceptance confirmed Standard 4-week transitions of 36x36,
+37x36, and 37x37 for independent Izzet Aggro expansion, followed by exact
+global collapse. Modern defaults to 50x50 and expands the 16 currently observed
+eligible parents to 85x85 with 51 subtype rows and columns; Broodscale exposes
+Golgari, Gruul, and Mono-Green. Narrow-screen horizontal scrolling and a
+zero-error browser console were also confirmed. Remote publication and real
+post-merge production verification remain separately controlled. The owner
+accepted the implementation and authorized commit, push, pull request, and
+merge on 2026-07-24; real post-merge production verification remains outside
+that authorization.
 
 ### P6-10 — Phase 6 closeout
 

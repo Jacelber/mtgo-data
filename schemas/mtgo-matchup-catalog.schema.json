@@ -11,6 +11,7 @@
     "generated",
     "latest_complete_week",
     "min_sample_hint",
+    "hierarchical",
     "ranges"
   ],
   "properties": {
@@ -45,38 +46,6 @@
       }
     }
   },
-  "oneOf": [
-    {
-      "properties": {
-        "format": {
-          "const": "standard"
-        },
-        "ranges": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/standardRange"
-          }
-        }
-      },
-      "not": {
-        "required": ["hierarchical"]
-      }
-    },
-    {
-      "properties": {
-        "format": {
-          "const": "modern"
-        },
-        "ranges": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/modernRange"
-          }
-        }
-      },
-      "required": ["hierarchical"]
-    }
-  ],
   "additionalProperties": false,
   "$defs": {
     "range": {
@@ -88,6 +57,7 @@
         "end",
         "weeks",
         "archetypes",
+        "leaves",
         "counted_matches"
       ],
       "properties": {
@@ -125,28 +95,6 @@
         }
       },
       "additionalProperties": false
-    },
-    "standardRange": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/range"
-        },
-        {
-          "not": {
-            "required": ["leaves"]
-          }
-        }
-      ]
-    },
-    "modernRange": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/range"
-        },
-        {
-          "required": ["leaves"]
-        }
-      ]
     }
   }
 }

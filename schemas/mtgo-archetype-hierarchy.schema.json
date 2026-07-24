@@ -15,7 +15,7 @@
   ],
   "properties": {
     "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
-    "format": {"const": "modern"},
+    "format": {"enum": ["standard", "modern"]},
     "source": {"const": "mtgo"},
     "rules_updated": {"type": "string", "minLength": 1},
     "summary": {

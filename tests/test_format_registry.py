@@ -40,7 +40,7 @@ def registry():
     return load_format_registry(REGISTRY_PATH)
 
 
-def test_registry_preserves_standard_and_enables_the_p6_07_modern_product_layers():
+def test_registry_exposes_complete_standard_and_modern_products():
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     loaded = registry()
 
@@ -67,7 +67,7 @@ def test_registry_preserves_standard_and_enables_the_p6_07_modern_product_layers
         for format_id in ("standard", "pauper", "modern", "pioneer", "legacy", "vintage")
     )
     modern = loaded.require_mtgo("modern")
-    assert modern.public is False
+    assert modern.public is True
     assert modern.mtgo.capabilities == {
         "classification",
         "event_statistics",

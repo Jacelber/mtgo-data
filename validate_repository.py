@@ -210,7 +210,12 @@ def validate_references(root: Path, names: list[str], status: dict[str, Any]) ->
         "stats/${currentFormat}/mtgo/pickup/${week}.json",
         "stats/${currentFormat}/mtgo/matchup_${mxRange}w.json",
     ]
-    frontend_paths = ["index.html", "assets/js/common.js", "assets/js/mtgo.js"]
+    frontend_paths = [
+        "index.html",
+        "assets/js/common.js",
+        "assets/js/matchup.js",
+        "assets/js/mtgo.js",
+    ]
     if "index.html" not in tracked:
         reference_check(failures, "index.html", "missing tracked index.html")
     else:

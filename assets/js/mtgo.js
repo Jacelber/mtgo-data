@@ -4,7 +4,7 @@ const RANGES = [1, 4, 12, 36];
 const FORMATS = [
   { key: "standard", enabled: true },
   { key: "pioneer",  enabled: false },
-  { key: "modern",   enabled: false },
+  { key: "modern",   enabled: true },
 ];
 const DIFF_MIN = 1;   // Show only cards where |deck_qty - typical_qty| >= 1.
 
@@ -43,6 +43,12 @@ const I18N = {
     mx_wld: "胜-负-平",
     mx_na: "无数据/样本不足",
     mx_low_sample: "低样本（谨慎参考）",
+    mx_expand_all: "展开全部 subtype",
+    mx_collapse_all: "收起全部 subtype",
+    mx_expand_row: "展开行 subtype",
+    mx_collapse_row: "收起行 subtype",
+    mx_expand_column: "展开列 subtype",
+    mx_collapse_column: "收起列 subtype",
     mx_legend_label: "胜率配色：",
     mx_source_note: "数据来自 Videre 众包对局记录，以官方公开牌表分类；因官方仅公开前32牌表，对局数据并不包含全体参赛者。",
     // Tooltip copy.
@@ -94,6 +100,12 @@ const I18N = {
     mx_wld: "W-L-D",
     mx_na: "No data / low sample",
     mx_low_sample: "Low sample (interpret with care)",
+    mx_expand_all: "Expand all subtypes",
+    mx_collapse_all: "Collapse all subtypes",
+    mx_expand_row: "Expand row subtypes",
+    mx_collapse_row: "Collapse row subtypes",
+    mx_expand_column: "Expand column subtypes",
+    mx_collapse_column: "Collapse column subtypes",
     mx_legend_label: "Win-rate color:",
     mx_source_note: "Data from Videre crowd-sourced matches, classified by official published decklists. Since MTGO only publishes the Top 32 decklists, the match data does not cover all entrants.",
     mx_matchup_tip: "Row deck's match win rate vs. column deck. Large number is win rate; small number is the 95% confidence interval half-width (±). More samples means a narrower interval. Hover or click for exact record.",
@@ -123,6 +135,8 @@ let currentView = "stats";       // stats / pickup
 let pickupIndex = null;          // pickup/index.json
 let currentPickupWeek = null;    // Active Pickup week.
 let currentPickupData = null;    // {week}.json for the active Pickup week.
+let mxExpandedRows = new Set();   // Independently expanded parent row IDs.
+let mxExpandedColumns = new Set();// Independently expanded parent column IDs.
 
 const COLSPAN = 7;         // Number of table columns spanned by an expanded row.
 
@@ -175,7 +189,15 @@ function renderFormatTabs() {
     b.textContent = t("format_" + f.key);
     b.disabled = !f.enabled;
     if (f.key === currentFormat) b.classList.add("active");
-    b.onclick = () => { if (f.enabled) { currentFormat = f.key; refreshAll(); } };
+    b.onclick = () => {
+      if (f.enabled && currentFormat !== f.key) {
+        currentFormat = f.key;
+        currentPickupWeek = null;
+        mxExpandedRows = new Set();
+        mxExpandedColumns = new Set();
+        refreshAll();
+      }
+    };
     box.appendChild(b);
   });
 }
@@ -723,9 +745,9 @@ function setLang(l) {
 function refreshAll() {
   renderStaticTexts();
   renderViewSwitch();
+  renderFormatTabs();
   applyView();
   if (currentView === "stats") {
-    renderFormatTabs();
     renderRangeButtons();
     loadData();
     loadMeta();
@@ -784,6 +806,46 @@ function renderMxLegend() {
     + `<span style="color:#999"><span style="display:inline-block;width:0;height:0;border-top:7px solid rgba(0,0,0,0.4);border-left:7px solid transparent;vertical-align:middle;margin-right:4px"></span>${t("mx_low_sample")}</span>`;
 }
 
+function renderMxExpandControls(view) {
+  const box = document.getElementById("mxExpandControls");
+  const eligible = view ? view.expandableParentIds : [];
+  if (!eligible.length) {
+    box.innerHTML = "";
+    return;
+  }
+  const allExpanded = eligible.every(parentId =>
+    mxExpandedRows.has(parentId) && mxExpandedColumns.has(parentId)
+  );
+  const button = document.createElement("button");
+  button.className = "mx-expand-all";
+  button.textContent = t(allExpanded ? "mx_collapse_all" : "mx_expand_all");
+  button.setAttribute("aria-pressed", allExpanded ? "true" : "false");
+  button.onclick = () => {
+    if (allExpanded) {
+      mxExpandedRows = new Set();
+      mxExpandedColumns = new Set();
+    } else {
+      mxExpandedRows = new Set(eligible);
+      mxExpandedColumns = new Set(eligible);
+    }
+    renderMatrix();
+  };
+  box.replaceChildren(button);
+}
+
+function mxAxisButton(node, axis, expanded) {
+  if (!node.expandable) return "";
+  const action = expanded
+    ? (axis === "row" ? "mx_collapse_row" : "mx_collapse_column")
+    : (axis === "row" ? "mx_expand_row" : "mx_expand_column");
+  const symbol = expanded ? "−" : "+";
+  return `<button class="mx-axis-toggle mx-${axis}-toggle"`
+    + ` data-axis="${axis}" data-parent="${node.parentId}"`
+    + ` aria-expanded="${expanded ? "true" : "false"}"`
+    + ` aria-label="${escapeHtml(t(action))}: ${escapeHtml(node.name)}"`
+    + ` title="${escapeHtml(t(action))}">${symbol}</button>`;
+}
+
 async function loadMatchup() {
   renderMxRangeButtons();
   renderMxLegend();
@@ -824,26 +886,44 @@ function mxCellHtml(cell, isOverall) {
 
 function renderMatrix() {
   if (!mxData) return;
-  const order = mxData.archetype_order || [];
-  const overall = mxData.overall || {};
-  const matrix = mxData.matrix || {};
+  let view;
+  try {
+    view = MtgMatchup.buildView(
+      mxData,
+      Array.from(mxExpandedRows),
+      Array.from(mxExpandedColumns)
+    );
+  } catch (e) {
+    document.getElementById("mxTable").innerHTML =
+      `<div class="placeholder">${escapeHtml(e.message)}</div>`;
+    document.getElementById("mxExpandControls").innerHTML = "";
+    return;
+  }
+  renderMxExpandControls(view);
 
   let html = `<table class="mx-table"><thead><tr><th class="corner"></th>`;
   // The first data column is Overall.
   html += `<th class="col-head overall-head"><div>${t("mx_overall")}</div></th>`;
-  order.forEach(name => {
-    html += `<th class="col-head"><div>${archetypeName(name)}</div></th>`;
+  view.columns.forEach(node => {
+    const subtypeClass = node.kind === "subtype" ? " subtype-head" : "";
+    const expanded = mxExpandedColumns.has(node.parentId);
+    html += `<th class="col-head${subtypeClass}"><div title="${escapeHtml(node.parentName)}">`
+      + mxAxisButton(node, "column", expanded)
+      + `<span>${escapeHtml(archetypeName(node.name))}</span></div></th>`;
   });
   html += `</tr></thead><tbody>`;
 
-  order.forEach(rowName => {
-    html += `<tr><th class="row-head">${archetypeName(rowName)}</th>`;
+  view.rows.forEach(node => {
+    const subtypeClass = node.kind === "subtype" ? " subtype-row" : "";
+    const expanded = mxExpandedRows.has(node.parentId);
+    html += `<tr><th class="row-head${subtypeClass}" title="${escapeHtml(node.parentName)}">`
+      + mxAxisButton(node, "row", expanded)
+      + `<span>${escapeHtml(archetypeName(node.name))}</span></th>`;
     // Overall column.
-    html += mxCellHtml(overall[rowName], true);
+    html += mxCellHtml(view.overall[node.id], true);
     // Opponent columns.
-    order.forEach(colName => {
-      const cell = (matrix[rowName] || {})[colName];
-      html += mxCellHtml(cell, false);
+    view.columns.forEach(column => {
+      html += mxCellHtml(view.matrix[node.id][column.id], false);
     });
     html += `</tr>`;
   });
@@ -868,11 +948,20 @@ function renderMatrix() {
   holder.onmouseleave = () => { pop.style.display = "none"; };
   // Touch/click toggles the same overlay; clicking elsewhere hides it.
   holder.onclick = (ev) => {
+    const toggle = ev.target.closest(".mx-axis-toggle");
+    if (toggle) {
+      const target = toggle.dataset.axis === "row"
+        ? mxExpandedRows : mxExpandedColumns;
+      if (target.has(toggle.dataset.parent)) target.delete(toggle.dataset.parent);
+      else target.add(toggle.dataset.parent);
+      renderMatrix();
+      return;
+    }
     const td = ev.target.closest("td.cell");
     if (!td || td.dataset.empty) return;
     try {
       const o = JSON.parse(decodeURIComponent(td.dataset.mx));
-      pop.textContent = `${t("mx_wld")}: ${o.w}-${o.d}-${o.l} (${o.m})`;
+      pop.textContent = `${t("mx_wld")}: ${o.w}-${o.l}-${o.d} (${o.m})`;
       pop.style.display = "block";
       const r = td.getBoundingClientRect();
       pop.style.left = (r.left + 6) + "px";

@@ -78,6 +78,7 @@ $env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard build-statistics
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard build-matchups
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard pickup candidates --if-absent
+.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard generate-hierarchy
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard generate-metadata
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard classification-reports --strict
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern fetch-matches
@@ -86,13 +87,13 @@ $env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern classification-reports --strict
 ```
 
-The format argument is mandatory. Standard and Modern support the complete current product command set, but Modern remains non-public. The scheduled workflow runs Videre collection, statistics, matchups, Pickup candidate preparation, metadata, and strict classification diagnostics for both formats; it additionally regenerates the maintained Modern hierarchy catalog. Official MTGO event raw-data collection is controlled separately by `event_collection_enabled`; Standard, Pauper, Modern, Pioneer, Legacy, and Vintage continue to receive the daily official-event archive, while the four incomplete products receive no Videre, statistics, report, or metadata generation. `fetch-events` checks the current and previous calendar month by default and accepts repeatable `--month YYYY-MM` overrides. `fetch-matches` accepts optional numeric event IDs and `--force`. Each Videre page request makes at most three attempts for HTTP 408, 425, 429, 5xx, connection errors, and timeouts, with a bounded delay between attempts. Explicit `400 No results found` responses remain non-failing missing archives; non-transient HTTP errors and exhausted retries remain publication-blocking failures. Classification reports may be directed to a disposable location with `--output-dir`.
+The format argument is mandatory. Standard and Modern are complete public MTGO products and support the same command set. The scheduled workflow runs Videre collection, statistics, hierarchical matchups, Pickup candidate preparation, metadata, hierarchy catalogs, and strict classification diagnostics for both formats. Official MTGO event raw-data collection is controlled separately by `event_collection_enabled`; Standard, Pauper, Modern, Pioneer, Legacy, and Vintage continue to receive the daily official-event archive, while the four incomplete products receive no Videre, statistics, report, or metadata generation. `fetch-events` checks the current and previous calendar month by default and accepts repeatable `--month YYYY-MM` overrides. `fetch-matches` accepts optional numeric event IDs and `--force`. Each Videre page request makes at most three attempts for HTTP 408, 425, 429, 5xx, connection errors, and timeouts, with a bounded delay between attempts. Explicit `400 No results found` responses remain non-failing missing archives; non-transient HTTP errors and exhausted retries remain publication-blocking failures. Classification reports may be directed to a disposable location with `--output-dir`.
 
 Weekly Pickup publication remains a separate manual approval step. After reviewing and approving a candidate YAML, run `python -B -m mtgmeta.mtgo --format <standard-or-modern> pickup publish`. The scheduled workflow generates candidates only and preserves an existing candidate file for the latest complete week. A failure in one format's candidate preparation does not prevent the other format from being attempted and does not by itself block the remaining production pipeline.
 
-Modern has the same non-public preparation path. Bootstrap its stable-ID
-known state once, generate the maintained hierarchy and metadata, and then
-create the weekly review file:
+Modern uses the same public product path. Bootstrap its stable-ID known state
+once, generate the maintained hierarchy and metadata, and then create the
+weekly review file:
 
 ```powershell
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern generate-hierarchy
@@ -104,8 +105,15 @@ create the weekly review file:
 `initialize-known` refuses to overwrite existing state. Modern candidate rows
 carry stable parent IDs and optional subtype information, but selection and
 publication remain manual. Generating candidates does not approve a row,
-publish a week, or update known state. Modern remains absent from the public
-format catalog and front end until the separately approved P6-09 migration.
+publish a week, or update known state.
+
+The MTGO front end exposes Standard and Modern through one format selector.
+The matchup matrix defaults to collapsed parent archetypes. Parents with at
+least two maintained subtypes expose independent row and column expansion
+buttons, and the global control expands or collapses every eligible parent.
+Parents with zero or one subtype remain non-expandable. Interactive cells are
+recalculated from canonical W-L-D counts; displayed percentages are never
+averaged together.
 
 `generate_classification_reports.py` remains a legacy Standard compatibility command. The production workflow now uses the format-aware command above. The reports omit player names, login IDs, and raw player records while retaining event context, stable pseudonymous deck IDs, matched rule evidence, and Unknown decklists. `--strict` returns a failure when an unresolved classification conflict or invalid deck input is present. These reports are operational diagnostics and are not consumed by the current front end.
 
