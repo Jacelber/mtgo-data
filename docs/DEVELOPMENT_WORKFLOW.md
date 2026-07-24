@@ -160,6 +160,17 @@ Record the validated commit or tree identity in the task evidence. Do not rerun
 the same expensive command when no relevant input changed, and do not run every
 validator after every small edit.
 
+### CI timing observation
+
+The read-only validation workflow records timing from the one complete pytest
+execution already required for each run. Its GitHub summary reports selected
+and completed test counts, call-time totals for ordinary and
+`committed_baseline` tests, and the 25 slowest completed test calls. The report
+is an observation aid only: it must not change pytest selection, rerun either
+group, suppress failures, or replace the complete-suite requirement. Use a
+representative sequence of successful PR, `master`, and production runs before
+proposing CI sharding, trigger changes, or test removal.
+
 ### External-source and live validation
 
 Fixture tests prove deterministic parsing, not current source compatibility.

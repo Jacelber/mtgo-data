@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p7-03-classify-reference-event"
-  working_branch_status: "p7_03_local_implementation_completed_pending_owner_acceptance"
+  current_working_branch: "codex/p7-ci-efficiency-02"
+  working_branch_status: "p7_ci_efficiency_02_local_implementation_completed_pending_owner_acceptance"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-24"
+  last_updated: "2026-07-25"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -3522,13 +3522,14 @@ phase_7_tasks:
 
   - id: "P7-03"
     name: "Classify reference-event Modern decklists with shared parent and subtype rules"
-    status: "local_implementation_completed_pending_owner_acceptance"
+    status: "completed_and_published"
     branch: "codex/p7-03-classify-reference-event"
     base_commit: "ff9ccc1c0ad952f5069f22900826fd08732811ee"
     audit: "docs/audits/P7-03.md"
     owner_local_implementation_authorized: true
     owner_local_implementation_authorized_on: "2026-07-24"
-    owner_remote_publication_and_merge_authorized: false
+    owner_remote_publication_and_merge_authorized: true
+    owner_remote_publication_and_merge_authorized_on: "2026-07-24"
     scope:
       - "Classify every submitted Modern decklist in retained event 434455 with the unchanged shared Modern taxonomy."
       - "Store parent, subtype, selected rule, all match evidence, overridden matches, Unknowns, conflicts, and invalid-input evidence in a separate participant-keyed overlay."
@@ -3588,7 +3589,46 @@ phase_7_tasks:
     schema_validation_passed: true
     schema_validated_public_outputs: 46
     tests_passed: 443
+    owner_acceptance: "accepted"
+    implementation_commit: "49d39a3db430e7dcbf97cca3995a83777b59704f"
+    pull_request: 96
+    merge_commit: "ddfc34ed356c590786b585b50c03e1d1ea90ff78"
+    merged_on: "2026-07-24"
+    ci_run: 30101935483
+    ci_status: "success"
+
+  - id: "P7-CI-EFFICIENCY-02"
+    name: "Add read-only CI timing observation"
+    status: "local_implementation_completed_pending_owner_acceptance"
+    branch: "codex/p7-ci-efficiency-02"
+    base_commit: "ddfc34ed356c590786b585b50c03e1d1ea90ff78"
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-25"
+    scope:
+      - "Record timing evidence from the existing single complete pytest run."
+      - "Summarize selected and completed counts, marker-group call times, and slowest test calls."
+      - "Keep full validation, triggers, permissions, concurrency, production workflow, public outputs, and statistical behavior unchanged."
+    target_paths:
+      - ".github/workflows/ci.yml"
+      - "ci_timing.py"
+      - "tests/test_ci_timing.py"
+      - "tests/test_ci_workflow.py"
+      - "docs/DEVELOPMENT_WORKFLOW.md"
+      - "docs/audits/P7-CI-EFFICIENCY-02.md"
+      - "docs/STATUS.yaml"
+    workflow_changed: true
+    production_workflow_changed: false
+    statistical_behavior_changed: false
+    public_paths_changed: false
+    focused_tests_passed: 8
+    tests_passed: 445
+    repository_validation_passed: true
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    schema_validation_passed: true
+    schema_validated_outputs: 46
     owner_acceptance: "pending"
+    remote_publication_authorized: false
 
   - id: "P7-04"
     name: "Build the mixed-event Constructed opportunity ledger"
@@ -3611,16 +3651,14 @@ phase_7_tasks:
     status: "planned_not_authorized"
 
 next_approved_task:
-  id: "P7-03"
-  name: "Owner acceptance and separately authorized publication of the reference-event classification overlay"
+  id: "P7-CI-EFFICIENCY-02"
+  name: "Owner acceptance and separately authorized publication of CI timing observation"
   target_paths:
-    - "data/modern/melee/classifications/434455.json"
-    - "src/mtgmeta/melee/classification.py"
-    - "schemas/melee-classification.schema.json"
+    - ".github/workflows/ci.yml"
+    - "ci_timing.py"
     - "tests/"
-    - "README.md"
     - "docs/"
-  production_change: true
+  production_change: false
   requires_user_confirmation: true
   authorization_status: "owner_authorized_local_implementation_remote_publication_not_authorized"
   remote_publication_authorized: false

@@ -62,12 +62,15 @@ def test_all_required_checks_and_summary_are_present():
         "validate_rules.py",
         "validate_schemas.py",
         "-m pytest",
+        "-p ci_timing",
+        "ci_timing.py --summary",
         "GITHUB_STEP_SUMMARY",
     ):
         assert expected in combined
     assert steps[-1]["if"] == "always()"
     pytest_step = next(step for step in steps if "-m pytest" in step.get("run", ""))
     assert pytest_step["name"] == "Run clean-checkout code and committed-baseline tests"
+    assert pytest_step["env"]["PYTEST_TIMING_REPORT"] == "${{ runner.temp }}/pytest-timing.json"
 
 
 def test_ci_cannot_fetch_production_data_or_write_repository():
