@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-09-shared-hierarchical-frontend"
-  working_branch_status: "p6_09_owner_accepted_remote_publication_authorized"
+  current_working_branch: "master"
+  working_branch_status: "p6_09_completed_and_published_p6_10_not_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -3105,7 +3105,7 @@ phase_6_tasks:
 
   - id: "P6-09"
     name: "Migrate Standard and Modern to the shared hierarchical matchup front end"
-    status: "local_implementation_complete_owner_acceptance_pending"
+    status: "completed_and_published"
     depends_on: "P6-08A accepted, published, and production-verified"
     branch: "codex/p6-09-shared-hierarchical-frontend"
     base_commit: "ee83e92d19f2b5ba779f250ef5e225bc80334747"
@@ -3197,10 +3197,17 @@ phase_6_tasks:
     local_validation_status: "passed"
     owner_acceptance: "accepted"
     owner_accepted_on: "2026-07-24"
-    implementation_commit: null
-    pull_request: null
-    merge_commit: null
-    merged_to_master: false
+    implementation_commit: "033fb0c6656115031e88fa37042ed394276418dc"
+    pull_request: 90
+    merge_commit: "4b9ac8fbbc5ba7452bf732b910e935ac0bc90f06"
+    merged_on: "2026-07-24"
+    merged_to_master: true
+    remote_checks_passed: true
+    pull_request_validation_run: 30062295781
+    post_merge_validation_passed: true
+    post_merge_validation_run: 30062710514
+    pages_deployment_passed: true
+    pages_deployment_run: 30062710064
 
   - id: "P6-10"
     name: "Complete Phase 6 regression, release, and recovery tag"
@@ -3208,27 +3215,20 @@ phase_6_tasks:
     depends_on: "P6-09 accepted and published"
 
 next_approved_task:
-  id: "P6-09"
-  name: "Migrate Standard and Modern to the shared hierarchical matchup front end"
+  id: "P6-10"
+  name: "Complete Phase 6 regression, release, and recovery tag"
   target_paths:
-    - "src/mtgmeta/mtgo/"
-    - "configs/formats.yaml"
-    - "schemas/"
-    - "stats/standard/mtgo/"
-    - "assets/"
-    - "index.html"
     - "tests/"
-    - ".github/workflows/update.yml"
     - "README.md"
-    - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P6-09.md"
+    - "docs/DECISIONS.md"
+    - "docs/audits/P6-10.md"
   production_change: true
-  requires_user_confirmation: false
-  authorization_status: "owner_accepted_remote_publication_authorized"
-  remote_publication_authorized: true
-  planning_status: "implemented_locally"
+  requires_user_confirmation: true
+  authorization_status: "not_authorized"
+  remote_publication_authorized: false
+  planning_status: "ready_for_owner_review"
 
 governance_baseline:
   status: "active_on_master"
@@ -3280,7 +3280,6 @@ prohibited_next_actions:
   - "Do not retain or commit real P5-08 participant, match, or decklist data."
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
-  - "Do not publish P6-09 or expose Modern on master before owner acceptance and separately authorized remote publication."
   - "Do not begin P6-10 without separate explicit owner authorization."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
