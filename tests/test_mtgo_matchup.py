@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 from datetime import date
+import io
 import json
 from pathlib import Path
 import shutil
 import sys
+import urllib.error
 
 import pytest
 
@@ -34,11 +36,37 @@ from mtgmeta.mtgo.matchup import (
     build_hierarchical_window,
     build_matchup_hierarchy,
     event_ids_from_fetched,
+    api_get,
     fetch_all_matches,
     fetch_and_store_matches,
     load_hierarchical_events_from_directory,
     rollup_matchup_counts,
 )
+
+
+class VidereResponse:
+    def __init__(self, value):
+        self.body = json.dumps(value).encode("utf-8")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_args):
+        return None
+
+    def read(self):
+        return self.body
+
+
+def videre_http_error(code, body=None):
+    payload = b"" if body is None else json.dumps(body).encode("utf-8")
+    return urllib.error.HTTPError(
+        "https://example.test/videre",
+        code,
+        "test error",
+        {},
+        io.BytesIO(payload),
+    )
 
 
 def make_repository(tmp_path: Path) -> Path:
@@ -65,6 +93,149 @@ def test_event_discovery_selects_only_the_explicit_format(tmp_path):
     assert event_ids_from_fetched(source, "standard") == ["12345001", "12345003"]
     assert event_ids_from_fetched(source, "pauper") == ["12345002"]
     assert event_ids_from_fetched(source, "modern") == ["12345005"]
+
+
+@pytest.mark.parametrize("status", (408, 429, 503, 599))
+def test_videre_request_retries_transient_http_error_then_returns_success(
+    status,
+    caplog,
+):
+    outcomes = [
+        videre_http_error(status),
+        VidereResponse({"data": [], "meta": {"has_more": False}}),
+    ]
+    waits = []
+
+    def opener(_request, *, timeout):
+        assert timeout == 30
+        outcome = outcomes.pop(0)
+        if isinstance(outcome, Exception):
+            raise outcome
+        return outcome
+
+    result = api_get(
+        "modern",
+        {"event_id": "12838888"},
+        opener=opener,
+        retry_delay=2,
+        sleep=waits.append,
+    )
+    assert result == {"data": [], "meta": {"has_more": False}}
+    assert waits == [2]
+    assert f"attempt 1/3 failed with HTTP Error {status}" in caplog.text
+
+
+@pytest.mark.parametrize(
+    "failure",
+    (
+        TimeoutError("timed out"),
+        ConnectionError("connection reset"),
+        urllib.error.URLError("temporary transport failure"),
+    ),
+    ids=("timeout", "connection-error", "url-error"),
+)
+def test_videre_request_retries_transport_failure_then_returns_success(failure):
+    outcomes = [
+        failure,
+        VidereResponse({"data": [], "meta": {"has_more": False}}),
+    ]
+    waits = []
+
+    def opener(_request, **_kwargs):
+        outcome = outcomes.pop(0)
+        if isinstance(outcome, Exception):
+            raise outcome
+        return outcome
+
+    result = api_get(
+        "modern",
+        {"event_id": "12838888"},
+        opener=opener,
+        retry_delay=1,
+        sleep=waits.append,
+    )
+    assert result == {"data": [], "meta": {"has_more": False}}
+    assert waits == [1]
+
+
+def test_videre_request_retries_408_then_preserves_no_results_contract():
+    outcomes = [
+        videre_http_error(408),
+        videre_http_error(400, {"message": "No results found."}),
+    ]
+    waits = []
+
+    def opener(_request, **_kwargs):
+        raise outcomes.pop(0)
+
+    with pytest.raises(matchup.NoResults):
+        api_get(
+            "modern",
+            {"event_id": "12838888"},
+            opener=opener,
+            retry_delay=1,
+            sleep=waits.append,
+        )
+    assert waits == [1]
+
+
+def test_videre_request_exhausts_bounded_retries_and_keeps_original_error():
+    calls = []
+    waits = []
+
+    def opener(_request, **_kwargs):
+        calls.append(True)
+        raise videre_http_error(408)
+
+    with pytest.raises(urllib.error.HTTPError) as captured:
+        api_get(
+            "modern",
+            {"event_id": "12838888"},
+            opener=opener,
+            attempts=3,
+            retry_delay=1,
+            sleep=waits.append,
+        )
+    assert captured.value.code == 408
+    assert len(calls) == 3
+    assert waits == [1, 1]
+
+
+def test_videre_request_does_not_retry_non_transient_http_error():
+    calls = []
+    waits = []
+
+    def opener(_request, **_kwargs):
+        calls.append(True)
+        raise videre_http_error(404)
+
+    with pytest.raises(urllib.error.HTTPError) as captured:
+        api_get(
+            "modern",
+            {"event_id": "123"},
+            opener=opener,
+            retry_delay=1,
+            sleep=waits.append,
+        )
+    assert captured.value.code == 404
+    assert len(calls) == 1
+    assert waits == []
+
+
+@pytest.mark.parametrize(
+    "options",
+    (
+        {"attempts": 0},
+        {"attempts": True},
+        {"timeout": 0},
+        {"timeout": True},
+        {"retry_delay": -1},
+        {"retry_delay": True},
+    ),
+)
+def test_videre_request_rejects_invalid_retry_limits(options):
+    with pytest.raises(ValueError):
+        api_get("modern", {"event_id": "123"}, **options)
 
 
 def test_videre_pagination_preserves_all_rows_and_offsets():

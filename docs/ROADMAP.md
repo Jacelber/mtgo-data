@@ -944,6 +944,25 @@ The owner accepted the local implementation and separately authorized commit,
 push, pull request, and merge on 2026-07-24. A manual production workflow
 dispatch remains separately controlled.
 
+P6-08 was published through pull request #88, implementation commit
+`1d9ab80257d2ecf77c4fc17457959676a6cf14e1`, and merge commit
+`3fab907bb778d86c3bb3b441718fff929baab870`; pull-request validation,
+post-merge validation, and Pages deployment passed. The owner then authorized
+real Standard and Modern production verification. Runs `30056505630` and
+`30056952539` both passed the clean-checkout baseline and six-format official
+event collection, then failed closed during Modern Videre collection when event
+`12838888` returned HTTP 408. Standard had zero Videre failures, and neither run
+created a production commit or changed master.
+
+P6-08A is the focused reliability follow-up. It adds request-level bounded
+retries for HTTP 408, 425, 429, 5xx, connection failures, and timeouts without
+weakening the data-quality gate. Explicit `400 No results found` remains a
+non-failing missing archive; other non-transient HTTP failures are immediate;
+and exhausted retries remain publication-blocking. P6-08A changes no
+statistical formula, generated document contract, workflow, public catalog, or
+front-end behavior. P6-09 must not begin until the hotfix is published and one
+complete real Standard/Modern production run succeeds.
+
 ### P6-09 — Shared hierarchical matchup front end
 
 Apply the shared hierarchical calculation to Standard before changing the
