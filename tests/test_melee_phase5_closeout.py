@@ -12,6 +12,7 @@ import pytest
 import validate_schemas as schemas
 from mtgmeta.melee import (
     DisabledMeleeEventError,
+    MeleeEventRegistry,
     MeleePublicationBlocked,
     build_publication_payload,
     finalize_event_quality,
@@ -39,9 +40,10 @@ def _fixture_hashes() -> dict[str, str]:
     }
 
 
-def test_real_reference_event_remains_disabled_before_network_or_archive_side_effects(tmp_path):
-    registry = _registry()
-    event = registry.get("434455")
+def test_phase5_disabled_boundary_remains_reproducible_without_network_or_archive_side_effects(tmp_path):
+    current = _registry()
+    event = replace(current.get("434455"), enabled=False)
+    registry = MeleeEventRegistry(current.schema_version, (event,))
     raw_root = tmp_path / "raw"
     network_calls: list[str] = []
 
@@ -63,6 +65,7 @@ def test_real_reference_event_remains_disabled_before_network_or_archive_side_ef
 def test_reduced_fixture_crosses_every_offline_phase5_boundary_deterministically():
     registry = _registry()
     event = registry.get("434455")
+    phase5_disabled_event = replace(event, enabled=False)
     fixture_before = _fixture_hashes()
     loaded, schema_registry = schemas.load_schemas(ROOT / "schemas")
     manifest = json.loads((FIXTURE / "manifest.json").read_text(encoding="utf-8"))
@@ -90,23 +93,22 @@ def test_reduced_fixture_crosses_every_offline_phase5_boundary_deterministically
         schema_registry,
     ) == []
 
-    blocked = finalize_event_quality(first_normalized, event)
+    blocked = finalize_event_quality(first_normalized, phase5_disabled_event)
     assert blocked["quality"]["status"] == "blocked"
     assert blocked["quality"]["publishable"] is False
     assert "event_not_enabled" in {
         issue["code"] for issue in blocked["quality"]["issues"]
     }
     with pytest.raises(MeleePublicationBlocked, match="event_not_enabled"):
-        build_publication_payload(first_normalized, event)
+        build_publication_payload(first_normalized, phase5_disabled_event)
 
-    enabled_for_acceptance_test = replace(event, enabled=True)
     first_payload = build_publication_payload(
         first_normalized,
-        enabled_for_acceptance_test,
+        event,
     )
     second_payload = build_publication_payload(
         second_normalized,
-        enabled_for_acceptance_test,
+        event,
     )
     assert first_payload == second_payload
     assert hashlib.sha256(first_payload).hexdigest() == hashlib.sha256(second_payload).hexdigest()
@@ -143,7 +145,6 @@ def test_closeout_fixture_does_not_create_production_or_public_output_paths():
         )
     }
     normalized = normalize_raw_snapshot(FIXTURE, event, normalized_at=NORMALIZED_AT)
-    with pytest.raises(MeleePublicationBlocked):
-        build_publication_payload(normalized, event)
+    build_publication_payload(normalized, event)
     assert {path: path.exists() for path in before} == before
     assert all(existed is False for existed in before.values())

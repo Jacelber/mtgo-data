@@ -770,7 +770,7 @@ events:
     format: "modern"
     series: "pro_tour"
     structure: "mixed"
-    enabled: false
+    enabled: true
     review_status: "verified"
     tabletop: true
     team_event: false
@@ -822,10 +822,21 @@ events:
       - "https://magic.gg/news/pro-tour-marvel-super-heroes-viewers-guide"
     special_handling:
       - "Draft Swiss and the Draft Top 8 are excluded from Modern statistics."
-    notes: "Reference contract only; live fetching requires separate authorization"
+    notes: "Phase 7 reference event; manual collection is enabled"
 ```
 
 This configuration does not by itself prove the exact round assignments. They must be verified during collection and normalization.
+
+For the Phase 7 reference event, `enabled: true` authorizes the bounded client
+to resolve this one verified whitelist entry for an explicitly invoked manual
+collection. It does not authorize broad event discovery, recurring workflow
+execution, or any write to MTGO paths. The complete live request plan still
+requires the caller to supply both `--execute` and `--complete`.
+
+P7-01 activation alone writes no source or generated data. P7-02 owns the first
+retained immutable snapshot and canonical normalized event. Later Phase 7
+tasks own classification, mixed-event opportunity accounting, overview and
+matchup generation, public packaging, and workflow integration in that order.
 
 ### 8.3 Event-specific overrides
 

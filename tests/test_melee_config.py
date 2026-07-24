@@ -30,18 +30,17 @@ def _parse_data(data):
     return parse_melee_event_text(_text(data))
 
 
-def test_loads_reference_event_for_inspection_without_authorizing_fetch():
+def test_loads_enabled_verified_phase7_reference_event():
     registry = load_melee_event_registry(WHITELIST)
     event = registry.get("434455")
     assert registry.schema_version == "3.0.0"
     assert event.reviewed_overrides == ()
     assert event.format == "modern"
     assert event.structure == "mixed"
-    assert event.enabled is False
+    assert event.enabled is True
     assert event.phases[-1].id == "top8_draft"
     assert event.phases[-1].game_format == "limited"
-    with pytest.raises(DisabledMeleeEventError, match="disabled for fetching"):
-        registry.require_fetchable("434455")
+    assert registry.require_fetchable("434455") is event
 
 
 def test_rejects_unknown_or_non_string_event_ids():
@@ -54,9 +53,17 @@ def test_rejects_unknown_or_non_string_event_ids():
 
 def test_verified_enabled_event_becomes_fetchable():
     data = _source_data()
-    data["events"][0]["enabled"] = True
     registry = _parse_data(data)
     assert registry.require_fetchable("434455").id == "434455"
+
+
+def test_disabled_event_remains_inspectable_but_not_fetchable():
+    data = _source_data()
+    data["events"][0]["enabled"] = False
+    registry = _parse_data(data)
+    assert registry.get("434455").id == "434455"
+    with pytest.raises(DisabledMeleeEventError, match="disabled for fetching"):
+        registry.require_fetchable("434455")
 
 
 def test_enabled_event_requires_verified_review_status():

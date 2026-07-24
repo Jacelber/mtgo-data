@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/bridge-mtgo-subtype-stats"
-  working_branch_status: "owner_accepted_remote_publication_and_production_validation_authorized"
+  current_working_branch: "codex/p7-01-reference-event-contract"
+  working_branch_status: "p7_01_local_implementation_completed_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -55,13 +55,13 @@ authoritative_documents:
       authoritative: false
 
 current_phase:
-  id: 6
-  name: "Modern classification and MTGO Modern"
-  status: "completed"
-  started_on: "2026-07-21"
-  completed_on: "2026-07-24"
-  recovery_tag: "phase-6-modern-mtgo-product"
-  objective: "Add Modern as the first new format using the generalized MTGO pipeline and shared classifier."
+  id: 7
+  name: "Mixed-format Modern Pro Tour reference pipeline"
+  status: "in_progress"
+  started_on: "2026-07-24"
+  completed_on: null
+  recovery_tag: null
+  objective: "Implement the first approved Melee event from verified collection through source-separated per-event statistics."
   production_changes_allowed: true
   feature_development_allowed: true
 
@@ -230,7 +230,7 @@ product_tracks:
   tabletop:
     product_name: "Tabletop Major Events"
     internal_source_name: "melee"
-    status: "not_started"
+    status: "phase_7_reference_pipeline_in_progress"
     data_merging_with_mtgo: false
     event_discovery: "manual_whitelist_only"
     formats:
@@ -239,12 +239,12 @@ product_tracks:
         planned_reference_event_category: "paupergeddon_main_event"
         priority: "after_modern_reference_path"
       modern:
-        implementation_status: "not_started"
+        implementation_status: "reference_event_activation_in_progress"
         first_approved_event:
           name: "Pro Tour Magic: The Gathering | Marvel Super Heroes"
           melee_event_id: "434455"
           event_structure: "mixed"
-          whitelist_enabled: false
+          whitelist_enabled: true
       pioneer:
         implementation_status: "not_started"
       legacy:
@@ -260,7 +260,7 @@ approved_event_structures:
   - id: "constructed_single_stage"
     implementation_status: "not_started"
   - id: "mixed"
-    implementation_status: "not_started"
+    implementation_status: "ingestion_baseline_completed_phase_5_statistics_in_progress_phase_7"
 
 engineering_quality:
   readme:
@@ -3307,7 +3307,7 @@ phase_6_tasks:
 bridge_tasks:
   - id: "BRIDGE-MTGO-SUBTYPE-STATS-01"
     name: "Generate hierarchical MTGO range and construction statistics"
-    status: "owner_accepted_publication_in_progress"
+    status: "completed_and_production_validated"
     timing: "between_phase_6_and_phase_7"
     branch: "codex/bridge-mtgo-subtype-stats"
     base_commit: "e68e4e7ac989239213b82bd8e4b3cae4497cbe18"
@@ -3382,25 +3382,108 @@ bridge_tasks:
     remote_publication_authorized_on: "2026-07-24"
     production_workflow_dispatch_authorized: true
     production_workflow_dispatch_authorized_on: "2026-07-24"
-    phase_7_started: false
+    implementation_commit: "32d4c0eeb9ebf7790007936d9483c1a47de220a9"
+    pull_request: 93
+    merge_commit: "e74b014a78990a36930039e13cf7441d0398b8ad"
+    merged_on: "2026-07-24"
+    production_workflow_run: 30073684059
+    production_workflow_attempts: 2
+    production_workflow_final_status: "success"
+    production_commit: "ca641b3e96707fc8f1cb9945b188dd4019b605fd"
+    pages_workflow_run: 30074665782
+    pages_workflow_status: "success"
+    phase_7_started: true
+
+phase_7_tasks:
+  - id: "P7-01"
+    name: "Activate the verified reference event and freeze the Phase 7 production boundary"
+    status: "local_implementation_completed_publication_authorized"
+    branch: "codex/p7-01-reference-event-contract"
+    base_commit: "ca641b3e96707fc8f1cb9945b188dd4019b605fd"
+    audit: "docs/audits/P7-01.md"
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-24"
+    owner_remote_publication_and_merge_authorized: true
+    owner_remote_publication_and_merge_authorized_on: "2026-07-24"
+    scope:
+      - "Record the complete P7-01 through P7-08 dependency order."
+      - "Enable only the verified Melee reference event 434455."
+      - "Retain explicit manual execute and complete-collection gates."
+      - "Prove activation creates no raw, normalized, statistical, catalog, workflow, or front-end output."
+      - "Keep historical disabled-event fail-closed behavior independently tested."
+      - "Keep MTGO Modern and Melee Modern source-separated."
+    reference_event:
+      id: "434455"
+      format: "modern"
+      structure: "mixed"
+      review_status: "verified"
+      enabled: true
+    production_change: true
+    network_request_performed: false
+    real_event_data_retained: false
+    classification_changed: false
+    statistical_behavior_changed: false
+    generated_data_changed: false
+    public_paths_changed: false
+    workflow_changed: false
+    frontend_changed: false
+    decision: "DEC-044"
+    focused_tests_passed: 30
+    impacted_melee_tests_passed: 107
+    tests_passed: 421
+    repository_validation_passed: true
+    repository_python_files_checked: 89
+    repository_json_files_checked: 1016
+    repository_yaml_files_checked: 16
+    repository_references_checked: 30
+    repository_hygiene_entries_checked: 1196
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    schema_validation_passed: true
+    schema_validated_outputs: 46
+    owner_acceptance: "publication_authorized_with_initial_task_request"
+
+  - id: "P7-02"
+    name: "Retain and normalize the complete reference-event source snapshot"
+    status: "planned_not_authorized"
+
+  - id: "P7-03"
+    name: "Classify reference-event Modern decklists with shared parent and subtype rules"
+    status: "planned_not_authorized"
+
+  - id: "P7-04"
+    name: "Build the mixed-event Constructed opportunity ledger"
+    status: "planned_not_authorized"
+
+  - id: "P7-05"
+    name: "Generate per-event overview and deck statistics"
+    status: "planned_not_authorized"
+
+  - id: "P7-06"
+    name: "Generate scoped hierarchical matchup statistics"
+    status: "planned_not_authorized"
+
+  - id: "P7-07"
+    name: "Finalize public Schemas, event catalog, packaging, and production workflow"
+    status: "planned_not_authorized"
+
+  - id: "P7-08"
+    name: "Run real production validation and close Phase 7"
+    status: "planned_not_authorized"
 
 next_approved_task:
-  id: "BRIDGE-MTGO-SUBTYPE-STATS-01-PUBLICATION"
-  name: "Publish, merge, and production-validate the accepted hierarchical MTGO subtype statistics implementation"
+  id: "P7-01"
+  name: "Activate the verified reference event and record the complete Phase 7 task sequence"
   target_paths:
-    - "src/mtgmeta/mtgo/stats.py"
-    - "schemas/mtgo-range.schema.json"
-    - "schemas/mtgo-decks.schema.json"
-    - "stats/standard/mtgo/"
-    - "stats/modern/mtgo/"
+    - "configs/melee_events.yaml"
     - "tests/"
     - "docs/"
   production_change: true
-  requires_user_confirmation: true
-  authorization_status: "owner_accepted_remote_publication_and_production_validation_authorized"
+  requires_user_confirmation: false
+  authorization_status: "owner_authorized_local_implementation_remote_publication_and_merge"
   remote_publication_authorized: true
-  production_workflow_dispatch_authorized: true
-  planning_status: "publication_in_progress"
+  production_workflow_dispatch_authorized: false
+  planning_status: "local_implementation_completed_publication_authorized"
 
 governance_baseline:
   status: "active_on_master"
@@ -3449,10 +3532,10 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not retain or commit real P5-08 participant, match, or decklist data."
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
-  - "Do not begin Phase 7 without separate explicit owner authorization."
+  - "Do not perform a live P7-02 fetch or retain real participant, match, or decklist data during P7-01."
+  - "Do not begin P7-02 without separate explicit owner authorization."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not generate reference-event or Paupergeddon statistics yet."

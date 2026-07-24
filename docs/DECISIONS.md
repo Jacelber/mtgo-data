@@ -1505,3 +1505,54 @@ change because it already runs the shared generator for both enabled formats.
 This decision does not alter Weekly Pickup grouping, matchup formulas,
 classification taxonomy, Melee outputs, public paths, or the Phase 7 reference
 event. It does not authorize remote publication or a production workflow run.
+
+---
+
+# DEC-044 — Activate the verified Pro Tour reference event in a staged Phase 7 pipeline
+
+Status: `Accepted`
+
+## Context
+
+Phase 5 proved that the complete public source for Melee event `434455` can be
+collected, parsed, normalized, and assessed without unresolved issues. Its real
+records remained temporary and the committed whitelist entry stayed disabled.
+Phase 6 then completed the shared Modern taxonomy and MTGO Modern product.
+Phase 7 must now turn the verified ingestion capability into a retained,
+source-separated Tabletop Major Events backend without combining activation,
+live data retention, classification, statistics, workflow automation, and
+front-end work in one change.
+
+## Decision
+
+P7-01 makes event `434455` the only enabled Melee whitelist entry. The event
+remains `verified`, `mixed`, and Modern, with Draft and Constructed phases kept
+independent. Activation permits only the existing bounded client to resolve
+this exact event when a caller explicitly invokes collection. Complete live
+collection continues to require both `--execute` and `--complete`.
+
+P7-01 performs no live request and creates no real raw archive, normalized
+event, statistic, catalog, workflow, or front-end output. P7-02 owns retained
+raw and normalized production input. P7-03 through P7-08 then own shared Modern
+classification, mixed-event opportunity accounting, overview statistics,
+hierarchical matchup statistics, public packaging and workflow integration,
+and real production closeout respectively. Phase 8 owns the tabletop front
+end.
+
+Historical Phase 5 disabled-event protections remain testable with an explicit
+disabled copy of the same immutable event definition. Current-configuration
+tests instead require the verified event to be fetchable and continue to prove
+that disabled events fail before network or filesystem side effects.
+
+## Consequences
+
+The repository gains a deliberate Phase 7 lifecycle transition without a
+network or generated-data change. Running the manual collection command can now
+create a raw snapshot for event `434455`, but only with explicit execution
+flags; no scheduled workflow invokes it. Unlisted, disabled, unverified, unsafe,
+redirected, or over-bound source access remains rejected.
+
+MTGO Modern behavior, MTGO generated data, Modern taxonomy, statistical
+formulas, public JSON, GitHub workflows, and both front ends remain unchanged
+in P7-01. Starting P7-02 or dispatching a live or production workflow requires
+separate owner authorization.
