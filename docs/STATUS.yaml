@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "p6_09_completed_and_published_p6_10_not_authorized"
+  current_working_branch: "codex/p6-10-phase6-closeout"
+  working_branch_status: "p6_10_closeout_pull_request_92"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,10 +57,10 @@ authoritative_documents:
 current_phase:
   id: 6
   name: "Modern classification and MTGO Modern"
-  status: "in_progress"
+  status: "completed"
   started_on: "2026-07-21"
-  completed_on: null
-  recovery_tag: null
+  completed_on: "2026-07-24"
+  recovery_tag: "phase-6-modern-mtgo-product"
   objective: "Add Modern as the first new format using the generalized MTGO pipeline and shared classifier."
   production_changes_allowed: true
   feature_development_allowed: true
@@ -3186,7 +3186,7 @@ phase_6_tasks:
     tests_passed: 408
     repository_validation_passed: true
     repository_python_files_validated: 86
-    repository_json_files_validated: 1013
+    repository_json_files_validated: 1015
     repository_yaml_files_validated: 16
     repository_references_validated: 30
     repository_hygiene_files_validated: 1187
@@ -3211,24 +3211,110 @@ phase_6_tasks:
 
   - id: "P6-10"
     name: "Complete Phase 6 regression, release, and recovery tag"
-    status: "planned"
+    status: "completed_when_closeout_record_is_on_master"
     depends_on: "P6-09 accepted and published"
+    branch: "codex/p6-10-phase6-closeout"
+    base_commit: "f70b6a7bd9405c488d8b71845b931a5d319c2849"
+    audit: "docs/audits/P6-10.md"
+    scope:
+      - "Add one cross-layer Phase 6 acceptance contract without changing product behavior."
+      - "Validate complete public-product alignment across registry, workflow, generated layers, and front end."
+      - "Validate four-window Standard and Modern hierarchical rollup conservation."
+      - "Validate Standard compatibility aliases and Modern stable-ID-only output."
+      - "Complete full local regression, Schema, rule, repository, and browser verification."
+      - "Run one real dual-product production workflow only after separate authorization."
+      - "Close Phase 6 and create the recovery tag only after separate publication and tag authorization."
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-24"
+    production_workflow_dispatch_authorized: true
+    production_workflow_dispatch_authorized_on: "2026-07-24"
+    production_workflow_run: 30065570450
+    production_workflow_result: "success"
+    production_workflow_head_commit: "f70b6a7bd9405c488d8b71845b931a5d319c2849"
+    production_commit_created: true
+    production_commit: "25df27cb7a52f0fe23a23fa8db72d17190464750"
+    production_files_changed: 9
+    production_insertions: 19233
+    production_deletions: 9
+    production_candidate_validation_passed: true
+    production_publication_confirmation_passed: true
+    production_pages_deployment_passed: true
+    production_pages_deployment_run: 30066074838
+    production_classification:
+      standard_decks: 4064
+      standard_unknown: 78
+      standard_conflicts: 0
+      standard_invalid: 0
+      modern_decks: 5920
+      modern_unknown: 130
+      modern_conflicts: 0
+      modern_invalid: 0
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-24"
+    phase_tag:
+      proposed: "phase-6-modern-mtgo-product"
+      authorized: true
+      authorized_on: "2026-07-24"
+      publication_status: "publish_after_closeout_merge"
+      source_of_truth_for_object_and_target: "git_and_github_history"
+    product_scope_changed: false
+    statistical_behavior_changed: false
+    frontend_axis_collapse_repaired: true
+    closeout_contract_tests_passed: 3
+    impacted_subsystem_tests_passed: 103
+    post_repair_frontend_tests_passed: 9
+    tests_passed: 411
+    repository_validation_passed: true
+    repository_python_files_validated: 87
+    repository_json_files_validated: 1013
+    repository_yaml_files_validated: 16
+    repository_references_validated: 30
+    repository_hygiene_files_validated: 1191
+    schema_validation_passed: true
+    schema_validated_outputs: 46
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    browser_validation:
+      standard_4w_collapsed: "36x36"
+      standard_row_expanded: "37x36"
+      standard_row_individually_collapsed: "36x36"
+      modern_4w_collapsed: "50x50"
+      modern_broodscale_row_expanded: "52x50"
+      modern_broodscale_row_individually_collapsed: "50x50"
+      modern_global_expanded: "85x85"
+      modern_global_collapsed: "50x50"
+      modern_global_subtype_rows_and_columns: 51
+      standard_pickup_loaded: true
+      modern_pickup_empty_state_loaded: true
+      language_switching_passed: true
+      narrow_viewport_width: 390
+      narrow_matrix_horizontal_scroll_passed: true
+      console_errors_or_warnings: 0
+    generated_data_changed_by_local_closeout: false
+    generated_data_changed_by_authorized_production_run: true
+    rules_or_taxonomy_changed: false
+    workflow_changed: false
+    public_paths_changed: false
+    local_validation_status: "passed"
+    post_production_integration_tests_passed: 411
+    post_production_repository_validation_passed: true
+    post_production_schema_validation_passed: true
+    post_production_rule_validation_passed: true
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-24"
+    pull_request: 92
 
 next_approved_task:
-  id: "P6-10"
-  name: "Complete Phase 6 regression, release, and recovery tag"
+  id: "OWNER-DIRECTION-REQUIRED"
+  name: "Select and authorize the next development phase"
   target_paths:
-    - "tests/"
-    - "README.md"
-    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/DECISIONS.md"
-    - "docs/audits/P6-10.md"
-  production_change: true
+    - "docs/ROADMAP.md"
+  production_change: false
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
+  authorization_status: "phase_6_closeout_authorized_no_follow_up_authorized"
   remote_publication_authorized: false
-  planning_status: "ready_for_owner_review"
+  planning_status: "blocked_pending_owner_direction"
 
 governance_baseline:
   status: "active_on_master"
@@ -3280,7 +3366,7 @@ prohibited_next_actions:
   - "Do not retain or commit real P5-08 participant, match, or decklist data."
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
-  - "Do not begin P6-10 without separate explicit owner authorization."
+  - "Do not begin Phase 7 without separate explicit owner authorization."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not generate reference-event or Paupergeddon statistics yet."
