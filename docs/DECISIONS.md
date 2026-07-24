@@ -1609,3 +1609,52 @@ snapshot-qualified production provenance while retaining read compatibility
 with the committed `2.1.0` synthetic fixture. It does not change match
 eligibility, classification rules, statistical formulas, workflows, public
 catalogs, MTGO data, or either front end.
+
+# DEC-046 — Store Melee deck classification as a deterministic overlay
+
+Status: `Accepted`
+
+## Context
+
+P7-02 made event `434455` reproducible normalized input. Appending
+classification to that event would break its byte-identical rebuild contract
+and couple source normalization to a taxonomy that may evolve independently.
+Later event statistics still need a stable participant-keyed parent and
+subtype result with enough evidence to review Unknowns and overlapping rules.
+
+## Decision
+
+P7-03 stores derived classification at
+`data/<format>/melee/classifications/<event_id>.json` instead of rewriting the
+canonical normalized event. The output joins by normalized `participant_id`
+and records exact event and rule bytes through SHA-256 provenance. It applies
+the unchanged shared format taxonomy and retains selected parent, subtype,
+rule, priority, all matched rule evidence, overridden evidence, conflicts,
+invalid-input errors, and normalized deck evidence for Unknowns.
+
+Strict validation treats conflicts, invalid decks, and a null subtype under a
+parent with maintained subtypes as blocking. Unknowns are reviewable but
+non-blocking. A null subtype remains valid only for a parent with no maintained
+subtypes. Classification is independent of statistical eligibility, so a
+disqualified participant's retained decklist is classified while their
+matches remain excluded from later statistics.
+
+The overlay is deterministic: it contains no wall-clock, checkout-depth, Git
+history, or current-branch value. Identical normalized-event and rule bytes
+must rebuild the exact committed JSON bytes. The adapter maps Melee card
+sections to the shared classifier input only and must not contain a second
+source-specific taxonomy.
+
+## Consequences
+
+The retained reference event yields 362 overlay records: 290 classified and 72
+Unknown, with zero conflicts, invalid decks, or residual-subtype violations.
+There are 153 selected subtype records and 137 parent-only records. The source
+event and shared Modern taxonomy stay byte-identical, and all MTGO Modern
+products remain unchanged.
+
+P7-04 and later tasks can join classifications without mutating production
+input. P7-03 does not calculate participation, opportunities, points, win
+rates, conversion, or matchups. Improving the 72 Unknown classifications would
+change the shared Modern taxonomy and requires a separate reviewed task with
+MTGO regression evidence.

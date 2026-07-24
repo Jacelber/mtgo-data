@@ -92,6 +92,26 @@ snapshot must produce byte-identical output; a different result cannot silently
 replace the retained input. Interrupted fetches are discarded as a unit rather
 than resumed by mixing responses collected at different source moments.
 
+P7-03 classifies every submitted Modern decklist from the retained event with
+the same shared taxonomy used by MTGO Modern. The read-only command builds and
+strictly validates the overlay in memory; `--execute` atomically writes the
+participant-keyed result:
+
+```powershell
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.classification `
+  --root . --format modern --event-id 434455 --strict
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.classification `
+  --root . --format modern --event-id 434455 --execute --strict
+```
+
+The output is `data/modern/melee/classifications/434455.json`. It records the
+exact normalized-event and rule-file SHA-256 values, preserves every matched
+rule and condition evidence, retains reviewable deck evidence for Unknowns,
+and blocks strict generation on conflicts, invalid inputs, or an unassigned
+subtype under a parent that defines subtypes. It does not rewrite the
+normalized event or change MTGO statistics.
+
 ## Format-aware MTGO commands
 
 The production MTGO pipeline uses one explicit command entry point. Set `PYTHONPATH` to `src` when running it from a source checkout:

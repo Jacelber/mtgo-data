@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p7-01-reference-event-contract"
-  working_branch_status: "p7_01_local_implementation_completed_publication_authorized"
+  current_working_branch: "codex/p7-03-classify-reference-event"
+  working_branch_status: "p7_03_local_implementation_completed_pending_owner_acceptance"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -3420,7 +3420,8 @@ phase_7_tasks:
       enabled: true
     production_change: true
     network_request_performed: false
-    real_event_data_retained: false
+    new_source_data_retained: false
+    real_event_derived_data_added: true
     classification_changed: false
     statistical_behavior_changed: false
     generated_data_changed: false
@@ -3451,7 +3452,7 @@ phase_7_tasks:
 
   - id: "P7-02"
     name: "Retain and normalize the complete reference-event source snapshot"
-    status: "local_implementation_completed_publication_authorized"
+    status: "completed_and_published"
     branch: "codex/p7-02-retain-normalized-event"
     base_commit: "e6468802c23bbf5881a407c81e5e7b2c37e755aa"
     owner_local_implementation_authorized: true
@@ -3511,11 +3512,83 @@ phase_7_tasks:
     schema_validation_passed: true
     schema_validated_outputs: 46
     tests_passed: 429
-    owner_acceptance: "publication_authorized"
+    owner_acceptance: "accepted"
+    implementation_commit: "d8880c2126814407a873d9ba3285300cc1c87c4f"
+    pull_request: 95
+    merge_commit: "ff9ccc1c0ad952f5069f22900826fd08732811ee"
+    merged_on: "2026-07-24"
+    ci_run: 30085905795
+    ci_status: "success"
 
   - id: "P7-03"
     name: "Classify reference-event Modern decklists with shared parent and subtype rules"
-    status: "planned_not_authorized"
+    status: "local_implementation_completed_pending_owner_acceptance"
+    branch: "codex/p7-03-classify-reference-event"
+    base_commit: "ff9ccc1c0ad952f5069f22900826fd08732811ee"
+    audit: "docs/audits/P7-03.md"
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-24"
+    owner_remote_publication_and_merge_authorized: false
+    scope:
+      - "Classify every submitted Modern decklist in retained event 434455 with the unchanged shared Modern taxonomy."
+      - "Store parent, subtype, selected rule, all match evidence, overridden matches, Unknowns, conflicts, and invalid-input evidence in a separate participant-keyed overlay."
+      - "Record exact normalized-event and taxonomy hashes and prove byte-identical regeneration."
+      - "Block strict generation on conflicts, invalid decks, or residual subtype violations while retaining Unknowns as non-blocking review records."
+      - "Keep the P7-02 raw snapshot and normalized event, Modern taxonomy, MTGO products, workflows, statistics, and front ends unchanged."
+    reference_event:
+      id: "434455"
+      format: "modern"
+      normalized_path: "data/modern/melee/events/434455.json"
+      normalized_sha256: "0b4296a9573a4facf4cfde1ce98569156f78fde6f5d2a1d3d662b54e2889e710"
+      taxonomy_path: "my_archetypes/modern.yaml"
+      taxonomy_sha256: "dcf7be96e5609502033071099c14d6abbab3d90ab95af0c5a56642bb39731a2e"
+      classification_path: "data/modern/melee/classifications/434455.json"
+      classification_bytes: 1277225
+      classification_sha256: "e31835fa0ba7bc60607c48d8e7fc725ee1b13c352ba5bbc2f511b11f81b6d55b"
+      decklists: 362
+      classification_records: 362
+      classified: 290
+      unknown: 72
+      conflicts: 0
+      invalid_decks: 0
+      selected_subtypes: 153
+      parent_only: 137
+      multiple_matches: 75
+      overridden_matches: 75
+      same_parent_multiple_subtype_matches: 2
+      residual_subtype_violations: 0
+      selected_parent_identities: 28
+      selected_subtype_identities: 17
+      strict_validation: "pass"
+      disqualified_deck_retained_and_classified: true
+      disqualified_selected_archetype: "eldrazi-tron"
+      disqualified_selected_subtype: "colorless"
+    production_change: true
+    network_request_performed: false
+    real_event_data_retained: false
+    generated_data_changed: true
+    classification_output_added: true
+    classification_taxonomy_changed: false
+    statistical_behavior_changed: false
+    mtgo_output_changed: false
+    public_paths_changed: false
+    workflow_changed: false
+    frontend_changed: false
+    classification_overlay_schema_version: "1.0.0"
+    decision: "DEC-046"
+    focused_tests_passed: 95
+    repository_validation_passed: true
+    repository_python_files_checked: 94
+    repository_json_files_checked: 1502
+    repository_yaml_files_checked: 16
+    repository_references_checked: 30
+    repository_hygiene_entries_checked: 1690
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    schema_validation_passed: true
+    schema_validated_public_outputs: 46
+    tests_passed: 443
+    owner_acceptance: "pending"
 
   - id: "P7-04"
     name: "Build the mixed-event Constructed opportunity ledger"
@@ -3538,21 +3611,21 @@ phase_7_tasks:
     status: "planned_not_authorized"
 
 next_approved_task:
-  id: "P7-02"
-  name: "Retain and normalize the complete reference-event source snapshot"
+  id: "P7-03"
+  name: "Owner acceptance and separately authorized publication of the reference-event classification overlay"
   target_paths:
-    - "data_raw/melee/434455/"
-    - "data/modern/melee/events/434455.json"
-    - "src/mtgmeta/melee/"
-    - "schemas/melee-event.schema.json"
+    - "data/modern/melee/classifications/434455.json"
+    - "src/mtgmeta/melee/classification.py"
+    - "schemas/melee-classification.schema.json"
     - "tests/"
+    - "README.md"
     - "docs/"
   production_change: true
-  requires_user_confirmation: false
-  authorization_status: "owner_authorized_local_implementation_remote_publication_and_merge"
-  remote_publication_authorized: true
+  requires_user_confirmation: true
+  authorization_status: "owner_authorized_local_implementation_remote_publication_not_authorized"
+  remote_publication_authorized: false
   production_workflow_dispatch_authorized: false
-  planning_status: "local_implementation_completed_publication_authorized"
+  planning_status: "local_implementation_completed_pending_owner_acceptance"
 
 governance_baseline:
   status: "active_on_master"
@@ -3603,7 +3676,7 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
-  - "Do not classify P7-02 decklists or generate event statistics before P7-03 and later tasks are separately authorized."
+  - "Do not build the P7-04 opportunity ledger or later event statistics before those tasks are separately authorized."
   - "Do not replace the retained P7-02 snapshot or normalized event with a different source snapshot without explicit review."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
