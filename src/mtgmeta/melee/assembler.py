@@ -12,6 +12,7 @@ from dataclasses import asdict
 from datetime import datetime
 from hashlib import sha256
 from pathlib import Path
+from pathlib import PurePosixPath
 from typing import Any, Callable, Iterable, TypeVar
 
 from . import NORMALIZED_EVENT_SCHEMA_VERSION
@@ -127,6 +128,7 @@ def assemble_parsed_snapshot(
     event: MeleeEventDefinition,
     *,
     normalized_at: str,
+    raw_artifact_prefix: str | None = None,
 ) -> dict[str, Any]:
     """Join a parsed snapshot into a deterministic, non-publishable event.
 
@@ -135,6 +137,17 @@ def assemble_parsed_snapshot(
     """
 
     normalized_at = _require_normalized_at(normalized_at)
+    if raw_artifact_prefix is None:
+        raw_artifact_prefix = f"data_raw/melee/{event.id}"
+    prefix = PurePosixPath(raw_artifact_prefix)
+    if (
+        prefix.is_absolute()
+        or any(part in {"", ".", ".."} for part in prefix.parts)
+        or prefix.parts[:3] != ("data_raw", "melee", event.id)
+        or len(prefix.parts) not in {3, 4}
+    ):
+        raise MeleeAssemblyError("raw_artifact_prefix must identify this event's repository raw path")
+    raw_artifact_prefix = prefix.as_posix()
     if snapshot.event_id != event.id:
         raise MeleeAssemblyError("snapshot event ID does not match the whitelist event")
     if snapshot.event_url != event.url:
@@ -371,7 +384,7 @@ def assemble_parsed_snapshot(
     source_urls = [event.url, *sorted(secondary_urls)]
     raw_artifacts = [
         {
-            "path": f"data_raw/melee/{event.id}/{page.artifact.path}",
+            "path": f"{raw_artifact_prefix}/{page.artifact.path}",
             "source_url": page.artifact.url,
             "sha256": page.artifact.sha256,
         }
@@ -410,6 +423,7 @@ def assemble_raw_snapshot(
     event: MeleeEventDefinition,
     *,
     normalized_at: str,
+    raw_artifact_prefix: str | None = None,
 ) -> dict[str, Any]:
     """Parse and assemble one stored raw snapshot without network access."""
 
@@ -417,6 +431,7 @@ def assemble_raw_snapshot(
         parse_raw_snapshot(snapshot_path),
         event,
         normalized_at=normalized_at,
+        raw_artifact_prefix=raw_artifact_prefix,
     )
 
 

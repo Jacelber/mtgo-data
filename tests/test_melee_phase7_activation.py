@@ -27,14 +27,23 @@ def test_only_reviewed_reference_event_is_activated_for_manual_collection():
     )
 
 
-def test_activation_does_not_create_data_or_statistics_outputs():
-    protected_paths = (
-        ROOT / "data_raw" / "melee" / "434455",
-        ROOT / "data" / "modern" / "melee" / "events" / "434455.json",
-        ROOT / "stats" / "modern" / "melee" / "events" / "434455",
+def test_activation_dry_run_does_not_create_data_or_statistics_outputs(tmp_path, capsys):
+    raw_root = tmp_path / "data_raw"
+
+    exit_code = main(
+        (
+            "--event-id",
+            "434455",
+            "--registry",
+            str(WHITELIST),
+            "--raw-root",
+            str(raw_root),
+        )
     )
 
-    assert all(not path.exists() for path in protected_paths)
+    assert exit_code == 0
+    assert '"mode": "dry-run"' in capsys.readouterr().out
+    assert not raw_root.exists()
 
 
 def test_complete_collection_still_requires_explicit_execute_flag(capsys):

@@ -1556,3 +1556,56 @@ MTGO Modern behavior, MTGO generated data, Modern taxonomy, statistical
 formulas, public JSON, GitHub workflows, and both front ends remain unchanged
 in P7-01. Starting P7-02 or dispatching a live or production workflow requires
 separate owner authorization.
+
+# DEC-045 — Retain one complete reference snapshot as deterministic normalized input
+
+Status: `Accepted`
+
+## Context
+
+Phase 5 validated the complete event `434455` source path with temporary real
+data, and P7-01 activated that exact verified whitelist entry. Later Phase 7
+classification and statistics need reproducible production input, but
+request-level resume could combine pages observed at different source moments.
+The normalized event also previously named artifacts only at the event
+directory level rather than identifying the immutable snapshot that supplied
+them.
+
+## Decision
+
+P7-02 retains one complete raw manifest `2.0.0` snapshot and one canonical
+normalized event in Git. Retention requires the snapshot to be a direct
+timestamped child of the approved event archive, requires exact manifest/file
+coverage, verifies every response's size and SHA-256, parses the complete
+source, applies reviewed normalization, and passes the existing fail-closed
+Schema and semantic quality gate before writing.
+
+Safe restart reuses only a completed and digest-verified snapshot. Partial
+temporary collections are discarded as a unit and are never combined with a
+later request. The immutable snapshot timestamp supplies `normalized_at`, so
+the same source rebuilds byte-identically. An existing normalized event with
+different bytes is a review failure, not an overwrite opportunity. Production
+raw-artifact provenance includes the snapshot directory. Git treats
+`data_raw/**` as byte-preserved source evidence with both text and end-of-line
+conversion disabled, so a clean checkout retains the manifest's exact response
+bytes.
+
+The retained source contains only the public tournament records needed for the
+approved product, including source-published participant names and IDs,
+standings, matches, and decklists. It contains no cookies, credentials, private
+request headers, or browser-session state. Third-party records remain covered
+by `NOTICE.md` and are not relicensed as project code.
+
+## Consequences
+
+Event `434455` becomes reproducible production input without yet becoming
+classified or statistical output. P7-03 can classify its submitted Modern
+decklists without another network request. Any later source refresh creates a
+new immutable candidate and needs explicit review before repository retention
+or canonical-input replacement.
+
+P7-02 changes normalized event Schema from `2.1.0` to `2.2.0` for
+snapshot-qualified production provenance while retaining read compatibility
+with the committed `2.1.0` synthetic fixture. It does not change match
+eligibility, classification rules, statistical formulas, workflows, public
+catalogs, MTGO data, or either front end.
