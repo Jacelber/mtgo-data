@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -612,10 +613,18 @@ def test_hierarchical_loader_rejects_cross_format_input(tmp_path):
         )
 
 
-@pytest.mark.committed_baseline
-def test_fixed_reference_standard_matchups_are_byte_identical(tmp_path):
+def test_standard_hierarchical_migration_preserves_every_legacy_parent_cell(tmp_path):
     import stats_matchup
 
+    contract = json.loads(
+        (
+            ROOT
+            / "tests"
+            / "fixtures"
+            / "standard"
+            / "hierarchical_matchup_migration_contract.json"
+        ).read_text(encoding="utf-8")
+    )
     committed_index = json.loads(
         (ROOT / "stats" / "standard" / "mtgo" / "matchup_index.json").read_text(
             encoding="utf-8"
@@ -628,10 +637,49 @@ def test_fixed_reference_standard_matchups_are_byte_identical(tmp_path):
         output_directory=tmp_path,
     )
     assert {weeks: values["counted"] for weeks, values in statistics.items()} == {
-        item["weeks"]: item["counted_matches"] for item in committed_index["ranges"]
+        int(weeks): item["counted_matches"]
+        for weeks, item in contract["ranges"].items()
     }
     for filename, path in written.items():
-        assert path.read_bytes() == (ROOT / "stats" / "standard" / "mtgo" / filename).read_bytes()
+        if filename == "matchup_index.json":
+            continue
+        document = json.loads(path.read_text(encoding="utf-8"))
+        expected = contract["ranges"][str(document["period"]["weeks"])]
+        projection = {
+            field: document[field] for field in contract["projection"]
+        }
+        payload = json.dumps(
+            projection,
+            ensure_ascii=contract["canonical_json"]["ensure_ascii"],
+            sort_keys=contract["canonical_json"]["sort_keys"],
+            separators=tuple(contract["canonical_json"]["separators"]),
+        ).encode("utf-8")
+        assert document["period"]["start"] == expected["start"]
+        assert document["period"]["end"] == expected["end"]
+        assert len(document["archetype_order"]) == expected["archetypes"]
+        assert hashlib.sha256(payload).hexdigest() == expected["sha256"]
+        assert document["hierarchical"] is True
+        assert document["canonical_level"] == "leaf"
+
+
+@pytest.mark.committed_baseline
+def test_fixed_reference_standard_hierarchical_matchups_are_byte_identical(tmp_path):
+    import stats_matchup
+
+    committed_directory = ROOT / "stats" / "standard" / "mtgo"
+    committed_index = json.loads(
+        (committed_directory / "matchup_index.json").read_text(encoding="utf-8")
+    )
+    if committed_index.get("hierarchical") is not True:
+        pytest.skip("committed baseline predates the P6-09 hierarchical migration")
+    reference_date = date.fromisoformat(committed_index["generated"][:10])
+    written, _statistics = stats_matchup.build_all_matchups(
+        today=reference_date,
+        generated_at=committed_index["generated"],
+        output_directory=tmp_path,
+    )
+    for filename, path in written.items():
+        assert path.read_bytes() == (committed_directory / filename).read_bytes()
 
 
 @pytest.mark.committed_baseline

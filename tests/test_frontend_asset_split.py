@@ -6,6 +6,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 INDEX = REPO_ROOT / "index.html"
 SITE_CSS = REPO_ROOT / "assets" / "css" / "site.css"
 COMMON_JS = REPO_ROOT / "assets" / "js" / "common.js"
+MATCHUP_JS = REPO_ROOT / "assets" / "js" / "matchup.js"
 MTGO_JS = REPO_ROOT / "assets" / "js" / "mtgo.js"
 
 
@@ -20,6 +21,7 @@ def test_frontend_uses_ordered_static_assets_without_inline_blocks():
     assert script_sources == [
         "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js",
         "assets/js/common.js",
+        "assets/js/matchup.js",
         "assets/js/mtgo.js",
     ]
     assert 'type="module"' not in html
@@ -28,6 +30,7 @@ def test_frontend_uses_ordered_static_assets_without_inline_blocks():
 def test_frontend_assets_are_present_and_index_is_materially_smaller():
     assert SITE_CSS.is_file()
     assert COMMON_JS.is_file()
+    assert MATCHUP_JS.is_file()
     assert MTGO_JS.is_file()
     assert len(INDEX.read_text(encoding="utf-8").splitlines()) < 150
 

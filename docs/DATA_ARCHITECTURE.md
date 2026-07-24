@@ -723,7 +723,13 @@ Standard and Modern are the complete products during P6-08. Standard, Legacy, Pi
 
 Weekly Pickup remains candidate-only in scheduled automation. Candidate generation may continue on error so that review preparation cannot suppress unrelated generated data, but every product format must still be attempted. Approval, publication, and known-state changes remain manual.
 
-The maintained hierarchy catalog is regenerated for Modern in P6-08. Standard hierarchy generation and the shared hierarchical front-end migration remain owned by P6-09 so that workflow enablement does not silently move the Standard compatibility boundary.
+P6-08 initially regenerated the maintained hierarchy catalog only for Modern.
+P6-09 moves Standard to the same shared hierarchical calculation, adds its
+maintained hierarchy catalog, and makes both Standard and Modern public MTGO
+formats. The production workflow now regenerates hierarchy catalogs for both
+products. Standard retains its original name-keyed matchup fields as
+compatibility aliases derived from the stable-ID parent rollup; those aliases
+are not a separate statistical calculation.
 
 Format event directories may contain only documents whose embedded MTGO format matches the configured project format. Classification generation fails closed when it encounters any cross-format document. Unsupported formats must not be retained inside a supported format's data directory or represented as classification exceptions; erroneous unsupported-format archives should be removed after review.
 
@@ -1208,6 +1214,12 @@ coverage counts, including official events without stored archives and stored
 archives outside the admitted official-event set. A missing Pickup publication
 is represented as a null catalog reference rather than by creating an empty
 public catalog.
+
+Beginning with P6-09, Standard and Modern matchup documents use this same
+hierarchical contract. The front end reads canonical leaf W-L-D counts and
+derives the selected parent/subtype axis view. Standard's legacy
+`archetype_order`, `overall`, and `matrix` fields remain temporary compatible
+aliases generated from `parent_order`, `parent_overall`, and `parent_matrix`.
 
 ### 12.2 Melee output
 

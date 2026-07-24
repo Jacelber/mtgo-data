@@ -22,7 +22,7 @@ jobs:
       PYTHONPATH: src
       MTGO_EVENT_FORMATS: "standard legacy pioneer pauper vintage modern"
       MTGO_PRODUCT_FORMATS: "standard modern"
-      MTGO_HIERARCHY_FORMATS: "modern"
+      MTGO_HIERARCHY_FORMATS: "standard modern"
     steps:
       - name: Check out full history for metadata and publication
         uses: actions/checkout@v7.0.0
@@ -178,5 +178,5 @@ jobs:
             echo "- Product formats: ${MTGO_PRODUCT_FORMATS}"
             echo "- Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}"
             echo "- Validation layers: clean-checkout regression, production candidate acceptance, and published-commit confirmation."
-            echo "- Pipeline: all configured MTGO event archives; Standard and Modern Videre matches, statistics, matchup statistics, Pickup candidates, metadata, de-identified classification diagnostics; Modern hierarchy; validation and publication."
+            echo "- Pipeline: all configured MTGO event archives; Standard and Modern Videre matches, statistics, hierarchical matchup statistics, Pickup candidates, metadata, hierarchy catalogs, de-identified classification diagnostics; validation and publication."
           } >> "$GITHUB_STEP_SUMMARY"

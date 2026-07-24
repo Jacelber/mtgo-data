@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/videre-bounded-retry"
-  working_branch_status: "p6_08a_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p6-09-shared-hierarchical-frontend"
+  working_branch_status: "p6_09_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2967,7 +2967,7 @@ phase_6_tasks:
 
   - id: "P6-08"
     name: "Add Modern to the production workflow"
-    status: "completed_and_published_live_validation_followup_in_progress"
+    status: "completed_and_published"
     depends_on: "P6-07 accepted and published"
     branch: "codex/p6-08-modern-workflow"
     base_commit: "2b60def9367fa6aacb58c842c2d5cfc63cb153a3"
@@ -3031,18 +3031,33 @@ phase_6_tasks:
     live_validation:
       first_run: 30056505630
       retry_run: 30056952539
+      successful_run: 30059165608
       clean_checkout_baseline_passed: true
       six_format_event_collection_passed: true
       standard_videre_failed: 0
-      modern_videre_failed: 1
+      modern_videre_failed_before_hotfix: 1
       blocking_event_id: "12838888"
       blocking_error: "HTTP 408 Request Timeout"
-      production_commit_created: false
-      master_changed: false
+      bounded_retry_observed: true
+      retry_resolved_as_explicit_no_results: true
+      standard_counted_matches:
+        1w: 469
+        4w: 2475
+        12w: 6597
+        36w: 8716
+      modern_counted_matches:
+        1w: 793
+        4w: 3266
+        12w: 8475
+        36w: 10817
+      candidate_validation_passed: true
+      pages_deployment_passed: true
+      production_commit_created: true
+      production_commit: "ee83e92d19f2b5ba779f250ef5e225bc80334747"
 
   - id: "P6-08A"
     name: "Add bounded retries for transient Videre request failures"
-    status: "owner_accepted_remote_publication_authorized"
+    status: "completed_and_published"
     depends_on: "P6-08 published and live validation diagnosed"
     branch: "codex/videre-bounded-retry"
     base_commit: "3fab907bb778d86c3bb3b441718fff929baab870"
@@ -3078,11 +3093,70 @@ phase_6_tasks:
     schema_validation_passed: true
     schema_validated_outputs: 45
     local_validation_status: "passed"
+    implementation_commit: "11d4fc17fef3db1e4fbdf14ae30709c6b426c2c2"
+    pull_request: 89
+    merge_commit: "1259b672b0eb62e078becb836b911b6ca44fa5d2"
+    merged_on: "2026-07-24"
+    merged_to_master: true
+    remote_checks_passed: true
+    pages_deployment_passed: true
+    real_production_run: 30059165608
+    latest_verified_production_master_commit: "ee83e92d19f2b5ba779f250ef5e225bc80334747"
 
   - id: "P6-09"
     name: "Migrate Standard and Modern to the shared hierarchical matchup front end"
-    status: "planned"
-    depends_on: "P6-08 accepted and published"
+    status: "local_implementation_complete_owner_acceptance_pending"
+    depends_on: "P6-08A accepted, published, and production-verified"
+    branch: "codex/p6-09-shared-hierarchical-frontend"
+    base_commit: "ee83e92d19f2b5ba779f250ef5e225bc80334747"
+    audit: "docs/audits/P6-09.md"
+    scope:
+      - "Move Standard onto the same canonical leaf matchup calculation as Modern."
+      - "Derive temporary Standard legacy fields from the stable-ID parent rollup."
+      - "Prove exact collapsed Standard compatibility for every maintained window."
+      - "Publish Standard and Modern through one shared hierarchical static renderer."
+      - "Support independent row and column expansion plus a global control."
+      - "Hide expansion controls for parents with zero or one maintained subtype."
+      - "Recalculate selected views from canonical W-L-D counts rather than averaging rates."
+      - "Generate complete hierarchy catalogs and metadata for both public formats."
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-24"
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-24"
+    statistical_formulas_changed: false
+    standard_public_paths_changed: false
+    standard_legacy_aliases_derived_from_parent_rollup: true
+    standard_migration_contract:
+      baseline_commit: "ee83e92d19f2b5ba779f250ef5e225bc80334747"
+      exact_parent_projection_match: true
+      windows:
+        1w:
+          counted_matches: 469
+          visible_parents: 21
+          sha256: "fa2a0387300c6704f0bd903d1c0234323084de9da2677f11c65009a3cac790f1"
+        4w:
+          counted_matches: 2475
+          visible_parents: 36
+          sha256: "e674ef5c5eae0e35d1cf61fe67f2c7445423b0e5cfb0fc995c49db3df8ee8b55"
+        12w:
+          counted_matches: 6597
+          visible_parents: 58
+          sha256: "2ce9bfbb341bd5e42291a44c0bf54f07db08e5d6aa0796540090722397c523eb"
+        36w:
+          counted_matches: 8716
+          visible_parents: 63
+          sha256: "8cc0c9392c37e24b79fdc2f1c5b9072ee60eb3d45ad60ec4e7bb7660069523eb"
+    standard_hierarchy_catalog:
+      parent_archetypes: 74
+      most_specific_leaves: 76
+      expandable_parents: 2
+      exactly_one_subtype_parents: 0
+    public_formats:
+      - "standard"
+      - "modern"
+    hierarchy_generation_formats:
+      - "standard"
+      - "modern"
     required_standard_migration:
       - "Run Standard through the same shared hierarchical matchup calculation."
       - "Prove the fully collapsed parent matrix matches the existing Standard result."
@@ -3093,6 +3167,40 @@ phase_6_tasks:
       independent_column_expansion: true
       global_expand_collapse_control: true
       hide_zero_or_one_subtype_parent_controls: true
+      canonical_leaf_wld_aggregation: true
+    browser_validation:
+      standard_4w_collapsed: "36x36"
+      standard_4w_row_expanded: "37x36"
+      standard_4w_both_axes_expanded: "37x37"
+      standard_global_collapse_returned_to: "36x36"
+      modern_4w_collapsed: "50x50"
+      modern_4w_global_expanded: "85x85"
+      modern_observed_expandable_parents: 16
+      modern_observed_subtype_rows_and_columns: 51
+      broodscale_subtypes:
+        - "Golgari Broodscale"
+        - "Gruul Broodscale"
+        - "Mono-Green Broodscale"
+      narrow_view_horizontal_scroll_passed: true
+      console_errors: 0
+    tests_passed: 408
+    repository_validation_passed: true
+    repository_python_files_validated: 86
+    repository_json_files_validated: 1013
+    repository_yaml_files_validated: 16
+    repository_references_validated: 30
+    repository_hygiene_files_validated: 1187
+    schema_validation_passed: true
+    schema_validated_outputs: 46
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    local_validation_status: "passed"
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-24"
+    implementation_commit: null
+    pull_request: null
+    merge_commit: null
+    merged_to_master: false
 
   - id: "P6-10"
     name: "Complete Phase 6 regression, release, and recovery tag"
@@ -3100,19 +3208,27 @@ phase_6_tasks:
     depends_on: "P6-09 accepted and published"
 
 next_approved_task:
-  id: "P6-08A"
-  name: "Add bounded retries for transient Videre request failures"
+  id: "P6-09"
+  name: "Migrate Standard and Modern to the shared hierarchical matchup front end"
   target_paths:
-    - "src/mtgmeta/mtgo/matchup.py"
-    - "tests/test_mtgo_matchup.py"
-    - "docs/audits/P6-08A.md"
-    - "docs/STATUS.yaml"
-    - "docs/ROADMAP.md"
+    - "src/mtgmeta/mtgo/"
+    - "configs/formats.yaml"
+    - "schemas/"
+    - "stats/standard/mtgo/"
+    - "assets/"
+    - "index.html"
+    - "tests/"
+    - ".github/workflows/update.yml"
     - "README.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/ROADMAP.md"
+    - "docs/STATUS.yaml"
+    - "docs/audits/P6-09.md"
   production_change: true
   requires_user_confirmation: false
-  authorization_status: "owner_authorized_local_fix_and_conditional_remote_publication"
-  planning_status: "complete"
+  authorization_status: "owner_accepted_remote_publication_authorized"
+  remote_publication_authorized: true
+  planning_status: "implemented_locally"
 
 governance_baseline:
   status: "active_on_master"
@@ -3164,7 +3280,8 @@ prohibited_next_actions:
   - "Do not retain or commit real P5-08 participant, match, or decklist data."
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
-  - "Do not expose Modern in the front end or public format catalog before P6-09."
+  - "Do not publish P6-09 or expose Modern on master before owner acceptance and separately authorized remote publication."
+  - "Do not begin P6-10 without separate explicit owner authorization."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not generate reference-event or Paupergeddon statistics yet."

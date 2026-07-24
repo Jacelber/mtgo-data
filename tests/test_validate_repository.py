@@ -184,9 +184,10 @@ def test_frontend_and_standard_missing_references(tmp_path):
     status = {"authoritative_documents": {s: [] for s in ("reading_order", "agent_adapter_documents", "historical_documents")}}
     (tmp_path / "index.html").write_text("", encoding="utf-8")
     checked, failures, _ = validator.validate_references(tmp_path, ["index.html"], status)
-    assert checked == 17 and len(failures) == 19
+    assert checked == 17 and len(failures) == 20
     assert {failure.path for failure in failures if failure.message == "missing front-end asset"} == {
         "assets/js/common.js",
+        "assets/js/matchup.js",
         "assets/js/mtgo.js",
     }
 

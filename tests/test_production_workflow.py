@@ -46,7 +46,7 @@ def test_job_is_master_only_bounded_and_uses_official_actions():
         "PYTHONPATH": "src",
         "MTGO_EVENT_FORMATS": "standard legacy pioneer pauper vintage modern",
         "MTGO_PRODUCT_FORMATS": "standard modern",
-        "MTGO_HIERARCHY_FORMATS": "modern",
+        "MTGO_HIERARCHY_FORMATS": "standard modern",
     }
     steps = job["steps"]
     assert steps[0]["uses"] == "actions/checkout@v7.0.0"
@@ -197,7 +197,7 @@ def test_product_formats_match_complete_executable_registry_products():
     ]
     env = load_update()["jobs"]["update"]["env"]
     assert env["MTGO_PRODUCT_FORMATS"].split() == configured == ["standard", "modern"]
-    assert env["MTGO_HIERARCHY_FORMATS"].split() == ["modern"]
+    assert env["MTGO_HIERARCHY_FORMATS"].split() == ["standard", "modern"]
 
 
 def test_every_product_rule_file_is_validated_before_schema_validation():

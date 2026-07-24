@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_production_public_outputs_pass():
     checked, failures = schemas.validate_manifest(ROOT, ROOT / "schemas" / "manifest.json")
-    assert checked == 45
+    assert checked == 46
     assert failures == []
 
 
@@ -25,7 +25,7 @@ def test_every_public_output_embeds_the_manifest_version():
     matched = []
     for mapping in manifest["mappings"]:
         matched.extend(ROOT.glob(mapping["pattern"]))
-    assert len(matched) == 45
+    assert len(matched) == 46
     assert all(json.loads(path.read_text(encoding="utf-8"))["schema_version"] == manifest["schema_version"] for path in matched)
 
 
@@ -75,10 +75,11 @@ def test_wrong_source_and_unknown_top_level_field_fail():
     assert schemas.validate_instance(instance, loaded["mtgo-meta.schema.json"], registry)
 
 
-def test_modern_matchup_schemas_require_the_hierarchical_contract():
+@pytest.mark.parametrize("format_id", ["standard", "modern"])
+def test_matchup_schemas_require_the_hierarchical_contract(format_id):
     loaded, registry = schemas.load_schemas(ROOT / "schemas")
     matchup = json.loads(
-        (ROOT / "stats/modern/mtgo/matchup_1w.json").read_text(encoding="utf-8")
+        (ROOT / f"stats/{format_id}/mtgo/matchup_1w.json").read_text(encoding="utf-8")
     )
     matchup.pop("leaf_matrix")
     failures = schemas.validate_instance(
@@ -89,7 +90,7 @@ def test_modern_matchup_schemas_require_the_hierarchical_contract():
     assert failures
 
     catalog = json.loads(
-        (ROOT / "stats/modern/mtgo/matchup_index.json").read_text(encoding="utf-8")
+        (ROOT / f"stats/{format_id}/mtgo/matchup_index.json").read_text(encoding="utf-8")
     )
     catalog["ranges"][0].pop("leaves")
     failures = schemas.validate_instance(
@@ -131,7 +132,7 @@ def test_manifest_rejects_missing_matches_and_schema(tmp_path):
 def test_cli_pass_help_usage_and_non_root_execution(tmp_path):
     script = ROOT / "validate_schemas.py"
     result = subprocess.run([sys.executable, "-B", str(script)], cwd=tmp_path, text=True, capture_output=True)
-    assert result.returncode == 0 and "PASS" in result.stdout and "checked=45" in result.stdout
+    assert result.returncode == 0 and "PASS" in result.stdout and "checked=46" in result.stdout
     help_result = subprocess.run([sys.executable, "-B", str(script), "--help"], text=True, capture_output=True)
     assert help_result.returncode == 0 and "usage:" in help_result.stdout
     usage = subprocess.run([sys.executable, "-B", str(script), "--unknown"], text=True, capture_output=True)

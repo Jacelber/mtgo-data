@@ -921,28 +921,52 @@ def build_hierarchical_window(
     parent_overall = _overall_from_directed_matrix(parent_matrix)
     leaf_order = _directed_order(leaf_matrix, leaf_overall)
     parent_order = _directed_order(parent_matrix, parent_overall)
-    return versioned(
-        {
-            "format": format_id,
-            "source": SOURCE_ID,
-            "period": {
-                "type": f"{n_weeks}w",
-                "start": start_monday.isoformat(),
-                "end": end_sunday.isoformat(),
-                "weeks": n_weeks,
-            },
-            "min_sample_hint": MIN_MATCHUP_SAMPLE,
-            "hierarchical": True,
-            "canonical_level": "leaf",
-            "hierarchy": hierarchy,
-            "parent_order": parent_order,
-            "parent_overall": _emit_overall(parent_overall, parent_order),
-            "parent_matrix": _emit_directed_matrix(parent_matrix, parent_order),
-            "leaf_order": leaf_order,
-            "leaf_overall": _emit_overall(leaf_overall, leaf_order),
-            "leaf_matrix": _emit_directed_matrix(leaf_matrix, leaf_order),
+    document = {
+        "format": format_id,
+        "source": SOURCE_ID,
+        "period": {
+            "type": f"{n_weeks}w",
+            "start": start_monday.isoformat(),
+            "end": end_sunday.isoformat(),
+            "weeks": n_weeks,
+        },
+        "min_sample_hint": MIN_MATCHUP_SAMPLE,
+        "hierarchical": True,
+        "canonical_level": "leaf",
+        "hierarchy": hierarchy,
+        "parent_order": parent_order,
+        "parent_overall": _emit_overall(parent_overall, parent_order),
+        "parent_matrix": _emit_directed_matrix(parent_matrix, parent_order),
+        "leaf_order": leaf_order,
+        "leaf_overall": _emit_overall(leaf_overall, leaf_order),
+        "leaf_matrix": _emit_directed_matrix(leaf_matrix, leaf_order),
+    }
+    if format_id == "standard":
+        # Preserve the original name-keyed Standard fields as compatibility
+        # aliases. They are derived from the shared stable-ID parent rollup,
+        # not from a second legacy calculation.
+        parent_names = {
+            parent["id"]: parent["name"] for parent in hierarchy["parents"]
         }
-    ), stats
+        document.update(
+            {
+                "archetype_order": [
+                    parent_names[parent_id] for parent_id in parent_order
+                ],
+                "overall": {
+                    parent_names[parent_id]: cell
+                    for parent_id, cell in document["parent_overall"].items()
+                },
+                "matrix": {
+                    parent_names[row_id]: {
+                        parent_names[column_id]: cell
+                        for column_id, cell in columns.items()
+                    }
+                    for row_id, columns in document["parent_matrix"].items()
+                },
+            }
+        )
+    return versioned(document), stats
 
 
 def _generated_value(value: datetime | str | None) -> str:
@@ -971,16 +995,12 @@ def build_all_matchups(
         registry_path=registry_path,
     )
     rule_set = load_rule_set(context.paths["rules"])
-    hierarchical = format_id != "standard"
-    if hierarchical:
-        events = load_hierarchical_events_from_directory(
-            context.paths["events"],
-            rule_set,
-            repository_root=context.repository_root,
-            format_id=format_id,
-        )
-    else:
-        events = load_official_events_from_directory(context.paths["events"], rule_set)
+    events = load_hierarchical_events_from_directory(
+        context.paths["events"],
+        rule_set,
+        repository_root=context.repository_root,
+        format_id=format_id,
+    )
     end_monday = latest_complete_week([(event[0], None) for event in events], today=today)
     if end_monday is None:
         return {}, {}
@@ -990,23 +1010,14 @@ def build_all_matchups(
     statistics: dict[int, dict[str, int]] = {}
     index_entries = []
     for weeks in DEFAULT_RANGES:
-        if hierarchical:
-            document, window_stats = build_hierarchical_window(
-                events,
-                end_monday,
-                weeks,
-                matches_directory=context.paths["matches"],
-                format_id=format_id,
-                rule_set=rule_set,
-            )
-        else:
-            document, window_stats = build_window(
-                events,
-                end_monday,
-                weeks,
-                matches_directory=context.paths["matches"],
-                format_id=format_id,
-            )
+        document, window_stats = build_hierarchical_window(
+            events,
+            end_monday,
+            weeks,
+            matches_directory=context.paths["matches"],
+            format_id=format_id,
+            rule_set=rule_set,
+        )
         filename = f"matchup_{weeks}w.json"
         documents[filename] = document
         statistics[weeks] = window_stats
@@ -1016,15 +1027,10 @@ def build_all_matchups(
             "start": document["period"]["start"],
             "end": document["period"]["end"],
             "weeks": weeks,
-            "archetypes": len(
-                document["parent_order"]
-                if hierarchical
-                else document["archetype_order"]
-            ),
+            "archetypes": len(document["parent_order"]),
             "counted_matches": window_stats["counted"],
+            "leaves": len(document["leaf_order"]),
         }
-        if hierarchical:
-            entry["leaves"] = len(document["leaf_order"])
         index_entries.append(entry)
     index_document = {
         "format": format_id,
@@ -1034,8 +1040,7 @@ def build_all_matchups(
         "min_sample_hint": MIN_MATCHUP_SAMPLE,
         "ranges": index_entries,
     }
-    if hierarchical:
-        index_document["hierarchical"] = True
+    index_document["hierarchical"] = True
     documents["matchup_index.json"] = versioned(index_document)
     output.mkdir(parents=True, exist_ok=True)
     written: dict[str, Path] = {}

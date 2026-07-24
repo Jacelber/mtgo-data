@@ -38,22 +38,8 @@
       "additionalProperties": false
     }
   },
-  "oneOf": [
+  "allOf": [
     {
-      "properties": {"format": {"const": "standard"}},
-      "not": {
-        "anyOf": [
-          {"required": ["statistics_catalog"]},
-          {"required": ["matchup_catalog"]},
-          {"required": ["hierarchy_catalog"]},
-          {"required": ["pickup_catalog"]},
-          {"required": ["matchup_source"]},
-          {"required": ["matchup_coverage"]}
-        ]
-      }
-    },
-    {
-      "properties": {"format": {"const": "modern"}},
       "required": [
         "statistics_catalog",
         "matchup_catalog",

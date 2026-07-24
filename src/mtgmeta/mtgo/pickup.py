@@ -689,24 +689,23 @@ def generate_metadata(
             "data_updated": data_updated_value,
         }
     )
-    if format_id == "modern":
-        document.update(
-            {
-                "statistics_catalog": "index.json",
-                "matchup_catalog": "matchup_index.json",
-                "hierarchy_catalog": "archetype_hierarchy.json",
-                "pickup_catalog": (
-                    "pickup/index.json"
-                    if (context.paths["statistics"] / "pickup" / "index.json").is_file()
-                    else None
-                ),
-                "matchup_source": "Videre",
-                "matchup_coverage": _matchup_coverage(
-                    context,
-                    registry_path=registry_path,
-                ),
-            }
-        )
+    document.update(
+        {
+            "statistics_catalog": "index.json",
+            "matchup_catalog": "matchup_index.json",
+            "hierarchy_catalog": "archetype_hierarchy.json",
+            "pickup_catalog": (
+                "pickup/index.json"
+                if (context.paths["statistics"] / "pickup" / "index.json").is_file()
+                else None
+            ),
+            "matchup_source": "Videre",
+            "matchup_coverage": _matchup_coverage(
+                context,
+                registry_path=registry_path,
+            ),
+        }
+    )
     output = (
         Path(output_directory).resolve()
         if output_directory is not None

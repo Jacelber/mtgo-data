@@ -72,20 +72,20 @@
           "const": "standard"
         }
       },
-      "required": ["archetype_order", "overall", "matrix"],
-      "not": {
-        "anyOf": [
-          {"required": ["hierarchical"]},
-          {"required": ["canonical_level"]},
-          {"required": ["hierarchy"]},
-          {"required": ["parent_order"]},
-          {"required": ["parent_overall"]},
-          {"required": ["parent_matrix"]},
-          {"required": ["leaf_order"]},
-          {"required": ["leaf_overall"]},
-          {"required": ["leaf_matrix"]}
-        ]
-      }
+      "required": [
+        "archetype_order",
+        "overall",
+        "matrix",
+        "hierarchical",
+        "canonical_level",
+        "hierarchy",
+        "parent_order",
+        "parent_overall",
+        "parent_matrix",
+        "leaf_order",
+        "leaf_overall",
+        "leaf_matrix"
+      ]
     },
     {
       "properties": {
