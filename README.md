@@ -1,8 +1,8 @@
 # mtgo-data
 
-`mtgo-data` analyzes Constructed Magic: The Gathering tournament data. The current production baseline is the Standard-focused **MTGO Environment Trends** site. A separate **Tabletop Major Events** product and additional Constructed formats are planned, but they are not yet production features.
+`mtgo-data` analyzes Constructed Magic: The Gathering tournament data. The current public **MTGO Environment Trends** site remains Standard-only, while the production data pipeline prepares both Standard and non-public Modern data. A separate **Tabletop Major Events** product and additional Constructed formats are planned, but they are not yet public production features.
 
-The project is in Phase 3: generalizing the MTGO pipeline while Standard remains the only executable format. Current task authorization and project status are recorded in [`docs/STATUS.yaml`](docs/STATUS.yaml).
+The project is in Phase 6: adding Modern as the first new format through the generalized MTGO pipeline while preserving Standard as the public compatibility baseline. Current task authorization and project status are recorded in [`docs/STATUS.yaml`](docs/STATUS.yaml).
 
 The current Standard page compatibility baseline is documented in [`docs/audits/P1-11.md`](docs/audits/P1-11.md). Run `python -m pytest tests/test_standard_public_contract.py` for its automated checks and use [`docs/checklists/STANDARD_FRONTEND_SMOKE.md`](docs/checklists/STANDARD_FRONTEND_SMOKE.md) for browser verification.
 
@@ -52,7 +52,7 @@ The complete pytest suite is a clean-checkout gate. Tests marked `committed_base
 .\.venv\Scripts\python.exe validate_production_candidate.py validate --baseline production-baseline.json
 ```
 
-The baseline file is a temporary workflow artifact and must not be committed. Candidate validation permits only the declared MTGO generated-data scope, rejects deletions and cross-product writes, validates changed documents and dynamic count deltas, and runs before staging or publication.
+The baseline file is a temporary workflow artifact and must not be committed. Candidate validation discovers the six raw-event collection formats and the complete Standard and Modern products from `configs/formats.yaml`. It permits only their declared generated-data scopes, rejects deletions and cross-product writes, validates changed documents and per-format count deltas, and runs before staging or publication.
 
 ## Melee raw-response client
 
@@ -86,11 +86,11 @@ $env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern classification-reports --strict
 ```
 
-The format argument is mandatory. Standard supports the complete current product command set. Modern is executable for classification, event statistics, Videre fetching, and hierarchical matchup generation, but remains non-public; Modern Pickup, metadata, workflow publication, and front-end selection are enabled only in later Phase 6 tasks. Official MTGO event raw-data collection is controlled separately by `event_collection_enabled`; Standard, Pauper, Modern, Pioneer, Legacy, and Vintage retain the legacy daily event archive. `fetch-events` checks the current and previous calendar month by default and accepts repeatable `--month YYYY-MM` overrides. `fetch-matches` accepts optional numeric event IDs and `--force`. Classification reports may be directed to a disposable location with `--output-dir`.
+The format argument is mandatory. Standard and Modern support the complete current product command set, but Modern remains non-public. The scheduled workflow runs Videre collection, statistics, matchups, Pickup candidate preparation, metadata, and strict classification diagnostics for both formats; it additionally regenerates the maintained Modern hierarchy catalog. Official MTGO event raw-data collection is controlled separately by `event_collection_enabled`; Standard, Pauper, Modern, Pioneer, Legacy, and Vintage continue to receive the daily official-event archive, while the four incomplete products receive no Videre, statistics, report, or metadata generation. `fetch-events` checks the current and previous calendar month by default and accepts repeatable `--month YYYY-MM` overrides. `fetch-matches` accepts optional numeric event IDs and `--force`. Classification reports may be directed to a disposable location with `--output-dir`.
 
-Weekly Pickup publication remains a separate manual approval step. After reviewing and approving a candidate YAML, run `python -B -m mtgmeta.mtgo --format standard pickup publish`. The scheduled workflow generates candidates only and preserves an existing candidate file for the latest complete week.
+Weekly Pickup publication remains a separate manual approval step. After reviewing and approving a candidate YAML, run `python -B -m mtgmeta.mtgo --format <standard-or-modern> pickup publish`. The scheduled workflow generates candidates only and preserves an existing candidate file for the latest complete week. A failure in one format's candidate preparation does not prevent the other format from being attempted and does not by itself block the remaining production pipeline.
 
-Modern has the same local, non-public preparation path. Bootstrap its stable-ID
+Modern has the same non-public preparation path. Bootstrap its stable-ID
 known state once, generate the maintained hierarchy and metadata, and then
 create the weekly review file:
 
@@ -127,7 +127,7 @@ Pull requests and pushes to `master` run the clean-checkout validation sequence 
 - `tests/fixtures/standard/`: self-contained Standard classification baseline.
 - `docs/`: authoritative specifications, decisions, audits, status, and development workflow.
 - `index.html`: current GitHub Pages entry point for MTGO Environment Trends.
-- `.github/workflows/update.yml`: the single scheduled MTGO production pipeline, using the explicit Standard MTGO command for official event fetches, Videre matches, statistics, Pickup candidates, metadata, de-identified classification diagnostics, validation, and publication.
+- `.github/workflows/update.yml`: the single scheduled MTGO production pipeline, retaining all six official event archives and generating the complete Standard and non-public Modern product data with per-format candidate validation before publication.
 
 Generated statistics and source configurations serve different roles. Do not manually edit generated statistics as a substitute for fixing their generator.
 

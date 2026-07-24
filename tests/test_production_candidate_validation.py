@@ -25,9 +25,10 @@ def make_candidate_root(tmp_path: Path) -> Path:
     shutil.copyfile(ROOT / "configs" / "formats.yaml", tmp_path / "configs" / "formats.yaml")
     for format_id in FORMATS:
         (tmp_path / "data" / format_id).mkdir(parents=True)
-    (tmp_path / "data" / "standard" / "mtgo" / "matches").mkdir(parents=True)
-    (tmp_path / "stats" / "standard" / "mtgo").mkdir(parents=True)
-    (tmp_path / "reports" / "standard" / "mtgo").mkdir(parents=True)
+    for format_id in ("standard", "modern"):
+        (tmp_path / "data" / format_id / "mtgo" / "matches").mkdir(parents=True)
+        (tmp_path / "stats" / format_id / "mtgo").mkdir(parents=True)
+        (tmp_path / "reports" / format_id / "mtgo").mkdir(parents=True)
     (tmp_path / "fetched.txt").write_text("/decklist/standard-existing\n", encoding="utf-8")
     return tmp_path
 
@@ -50,7 +51,7 @@ def test_snapshot_records_collection_counts_without_historical_constants(tmp_pat
         json.dumps(event_document()), encoding="utf-8"
     )
     state = snapshot_state(root)
-    assert state["schema_version"] == "1.0.0"
+    assert state["schema_version"] == "2.0.0"
     assert state["event_files"] == {
         "standard": 1,
         "pauper": 0,
@@ -59,8 +60,18 @@ def test_snapshot_records_collection_counts_without_historical_constants(tmp_pat
         "legacy": 0,
         "vintage": 0,
     }
-    assert state["standard_match_files"] == 0
+    assert state["match_files"] == {"standard": 0, "modern": 0}
     assert state["fetched_entries"] == 1
+
+
+def test_pre_p6_08_baseline_shape_fails_closed(tmp_path):
+    root = make_candidate_root(tmp_path)
+    baseline = snapshot_state(root)
+    baseline["schema_version"] = "1.0.0"
+    baseline["standard_match_files"] = baseline.pop("match_files")["standard"]
+    _report, failures = validate_candidate(root, baseline, [])
+    assert "baseline snapshot has an unsupported schema_version" in failures
+    assert "baseline snapshot does not match the configured product formats" in failures
 
 
 def test_valid_candidate_reports_dynamic_deltas_and_source_separation(tmp_path):
@@ -70,6 +81,13 @@ def test_valid_candidate_reports_dynamic_deltas_and_source_separation(tmp_path):
     event.write_text(json.dumps(event_document("modern")), encoding="utf-8")
     statistic = root / "stats" / "standard" / "mtgo" / "index.json"
     statistic.write_text(json.dumps({"schema_version": "1.0.0"}), encoding="utf-8")
+    modern_match = root / "data" / "modern" / "mtgo" / "matches" / "123.json"
+    modern_match.write_text(
+        json.dumps({"event_id": "123", "matches": []}),
+        encoding="utf-8",
+    )
+    modern_report = root / "reports" / "modern" / "mtgo" / "index.json"
+    modern_report.write_text(json.dumps({"schema_version": "1.0.0"}), encoding="utf-8")
     (root / "fetched.txt").write_text(
         "/decklist/standard-existing\n/decklist/modern-new\n", encoding="utf-8"
     )
@@ -78,17 +96,22 @@ def test_valid_candidate_reports_dynamic_deltas_and_source_separation(tmp_path):
         baseline,
         [
             Change("??", "data/modern/Modern_Challenge_32_123.json"),
+            Change("??", "data/modern/mtgo/matches/123.json"),
             Change(" M", "stats/standard/mtgo/index.json"),
+            Change(" M", "reports/modern/mtgo/index.json"),
             Change(" M", "fetched.txt"),
         ],
     )
     assert failures == []
     assert report["event_file_deltas"]["modern"] == 1
+    assert report["match_file_deltas"] == {"standard": 0, "modern": 1}
     assert report["fetched_entry_delta"] == 1
     assert report["changes_by_area"] == {
         "events_modern": 1,
         "ledger": 1,
-        "standard_statistics": 1,
+        "matches_modern": 1,
+        "reports_modern": 1,
+        "statistics_standard": 1,
     }
 
 
@@ -100,6 +123,13 @@ def test_candidate_blocks_deletion_cross_source_write_and_malformed_json(tmp_pat
     melee.write_text("{}", encoding="utf-8")
     broken = root / "data" / "standard" / "broken.json"
     broken.write_text("{", encoding="utf-8")
+    cross_format = root / "data" / "modern" / "cross-format.json"
+    cross_format.write_text(json.dumps(event_document("standard")), encoding="utf-8")
+    broken_match = root / "data" / "modern" / "mtgo" / "matches" / "broken.json"
+    broken_match.write_text(json.dumps({"matches": {}}), encoding="utf-8")
+    planned = root / "stats" / "pioneer" / "mtgo" / "index.json"
+    planned.parent.mkdir(parents=True)
+    planned.write_text("{}", encoding="utf-8")
     _report, failures = validate_candidate(
         root,
         baseline,
@@ -107,17 +137,24 @@ def test_candidate_blocks_deletion_cross_source_write_and_malformed_json(tmp_pat
             Change(" D", "data/legacy/old.json"),
             Change("??", "data/melee/event.json"),
             Change("??", "data/standard/broken.json"),
+            Change("??", "data/modern/cross-format.json"),
+            Change("??", "data/modern/mtgo/matches/broken.json"),
+            Change("??", "stats/pioneer/mtgo/index.json"),
         ],
     )
     assert any("deletion is not allowed" in failure for failure in failures)
     assert any("outside the production publication scope" in failure for failure in failures)
     assert any("cannot parse candidate file" in failure for failure in failures)
+    assert any("embedded format" in failure for failure in failures)
+    assert any("match JSON is missing event_id" in failure for failure in failures)
+    assert any("matches must be a list" in failure for failure in failures)
 
 
 def test_candidate_blocks_count_regression_duplicate_ledger_and_code_changes(tmp_path):
     root = make_candidate_root(tmp_path)
     baseline = snapshot_state(root)
     baseline["event_files"]["standard"] = 1
+    baseline["match_files"]["modern"] = 1
     (root / "fetched.txt").write_text(
         "/decklist/standard-existing\n/decklist/standard-existing\n", encoding="utf-8"
     )
@@ -130,6 +167,7 @@ def test_candidate_blocks_count_regression_duplicate_ledger_and_code_changes(tmp
         [Change("??", "src/unexpected.py"), Change(" M", "fetched.txt")],
     )
     assert any("event file count decreased for standard" in failure for failure in failures)
+    assert any("match file count decreased for modern" in failure for failure in failures)
     assert any("duplicate entries" in failure for failure in failures)
     assert any("outside the production publication scope" in failure for failure in failures)
 
@@ -139,6 +177,8 @@ def test_candidate_blocks_unapproved_new_generated_paths(tmp_path):
     baseline = snapshot_state(root)
     unexpected = root / "stats" / "standard" / "mtgo" / "unexpected.json"
     unexpected.write_text("{}", encoding="utf-8")
+    unexpected_modern = root / "stats" / "modern" / "mtgo" / "unexpected.json"
+    unexpected_modern.write_text("{}", encoding="utf-8")
     approved = (
         root
         / "stats"
@@ -154,32 +194,38 @@ def test_candidate_blocks_unapproved_new_generated_paths(tmp_path):
         baseline,
         [
             Change("??", "stats/standard/mtgo/unexpected.json"),
+            Change("??", "stats/modern/mtgo/unexpected.json"),
             Change("??", "stats/standard/mtgo/pickup/candidates_2026-W29.yaml"),
         ],
     )
     assert failures == [
-        "stats/standard/mtgo/unexpected.json: new generated path is not in the approved creation scope"
+        "stats/modern/mtgo/unexpected.json: new generated path is not in the approved creation scope",
+        "stats/standard/mtgo/unexpected.json: new generated path is not in the approved creation scope",
     ]
 
 
 def test_candidate_accepts_valid_changed_yaml_and_rejects_renames(tmp_path):
     root = make_candidate_root(tmp_path)
     baseline = snapshot_state(root)
-    candidate = (
-        root
-        / "stats"
-        / "standard"
-        / "mtgo"
-        / "pickup"
-        / "candidates_2026-W29.yaml"
-    )
-    candidate.parent.mkdir(parents=True)
-    candidate.write_text(yaml.safe_dump({"approved": False}), encoding="utf-8")
+    candidates = []
+    for format_id in ("standard", "modern"):
+        candidate = (
+            root
+            / "stats"
+            / format_id
+            / "mtgo"
+            / "pickup"
+            / "candidates_2026-W29.yaml"
+        )
+        candidate.parent.mkdir(parents=True)
+        candidate.write_text(yaml.safe_dump({"approved": False}), encoding="utf-8")
+        candidates.append(candidate)
     _report, failures = validate_candidate(
         root,
         baseline,
         [
             Change("??", "stats/standard/mtgo/pickup/candidates_2026-W29.yaml"),
+            Change("??", "stats/modern/mtgo/pickup/candidates_2026-W29.yaml"),
             Change("R ", "data/standard/new.json", "data/standard/old.json"),
         ],
     )

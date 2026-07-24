@@ -44,8 +44,9 @@ def test_job_is_master_only_bounded_and_uses_official_actions():
     assert job["timeout-minutes"] == "45"
     assert job["env"] == {
         "PYTHONPATH": "src",
-        "MTGO_FORMAT": "standard",
         "MTGO_EVENT_FORMATS": "standard legacy pioneer pauper vintage modern",
+        "MTGO_PRODUCT_FORMATS": "standard modern",
+        "MTGO_HIERARCHY_FORMATS": "modern",
     }
     steps = job["steps"]
     assert steps[0]["uses"] == "actions/checkout@v7.0.0"
@@ -64,6 +65,7 @@ def test_complete_pipeline_order_preserves_mtgo_and_videre():
         "build-statistics",
         "build-matchups",
         "pickup candidates --if-absent",
+        "generate-hierarchy",
         "generate-metadata",
         "classification-reports --strict",
         "validate_production_candidate.py validate",
@@ -95,6 +97,10 @@ def test_only_candidate_generation_may_continue_on_error():
     allowed = {"Generate Weekly Pickup candidates when absent"}
     actual = {step["name"] for step in steps if step.get("continue-on-error") == "true"}
     assert actual == allowed
+    candidate = next(step for step in steps if step["name"] in allowed)
+    assert "STATUS=0" in candidate["run"]
+    assert '|| STATUS=$?' in candidate["run"]
+    assert 'exit "$STATUS"' in candidate["run"]
 
 
 def test_publication_scope_covers_replaced_scraper_and_generated_outputs():
@@ -128,12 +134,24 @@ def test_summary_is_always_written_without_secrets():
     assert "secrets." not in text
     assert "github.token" not in text
     assert "Validation layers: clean-checkout regression" in summary["run"]
+    assert "Product formats: ${MTGO_PRODUCT_FORMATS}" in summary["run"]
+    assert "Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}" in summary["run"]
 
 
-def test_format_aware_command_replaces_every_standard_production_wrapper():
+def test_format_aware_loops_replace_every_standard_production_wrapper():
     workflow = UPDATE.read_text(encoding="utf-8")
-    assert workflow.count("python -B -m mtgmeta.mtgo --format \"$MTGO_FORMAT\"") == 6
+    assert "$MTGO_FORMAT" not in workflow
     assert "python -B -m mtgmeta.mtgo --format \"$FORMAT\" fetch-events" in workflow
+    for command in (
+        "fetch-matches",
+        "build-statistics",
+        "build-matchups",
+        "pickup candidates --if-absent",
+        "generate-hierarchy",
+        "generate-metadata",
+        "classification-reports --strict",
+    ):
+        assert f'python -B -m mtgmeta.mtgo --format "$FORMAT" {command}' in workflow
     for legacy in (
         "batch_mtgo.py",
         "fetch_videre_matches.py",
@@ -157,3 +175,34 @@ def test_event_archive_formats_match_the_registry_collection_allowlist():
     workflow_formats = load_update()["jobs"]["update"]["env"]["MTGO_EVENT_FORMATS"].split()
     assert set(workflow_formats) == set(configured)
     assert workflow_formats == ["standard", "legacy", "pioneer", "pauper", "vintage", "modern"]
+
+
+def test_product_formats_match_complete_executable_registry_products():
+    required = {
+        "classification",
+        "event_statistics",
+        "range_statistics",
+        "matchup_statistics",
+        "weekly_pickup",
+        "metadata_generation",
+        "catalog_generation",
+    }
+    configured = [
+        item["id"]
+        for item in yaml.safe_load(
+            (ROOT / "configs" / "formats.yaml").read_text(encoding="utf-8")
+        )["formats"]
+        if item["mtgo"]["enabled"]
+        and required <= set(item["mtgo"]["capabilities"])
+    ]
+    env = load_update()["jobs"]["update"]["env"]
+    assert env["MTGO_PRODUCT_FORMATS"].split() == configured == ["standard", "modern"]
+    assert env["MTGO_HIERARCHY_FORMATS"].split() == ["modern"]
+
+
+def test_every_product_rule_file_is_validated_before_schema_validation():
+    rules = command_index('validate_rules.py "my_archetypes/${FORMAT}.yaml"')
+    schemas = command_index("validate_schemas.py")
+    assert rules < schemas
+    command = run_commands()[rules]
+    assert "for FORMAT in $MTGO_PRODUCT_FORMATS" in command

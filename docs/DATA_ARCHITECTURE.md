@@ -712,7 +712,18 @@ MTGO raw-event collection and product execution are separate states. `event_coll
 
 During Phase 3, Standard, Pauper, Modern, Pioneer, Legacy, and Vintage retain their pre-migration official-event archive, while Standard remains the only executable MTGO product format. Non-Standard Videre collection is not implied by event archival.
 
-Beginning with P6-04, executable state is capability-scoped rather than equivalent to a complete public product. Modern is executable and non-public with only the `classification` capability. This permits deterministic de-identified reports under `reports/modern/mtgo/`, but it does not permit Modern match fetching, statistics, Pickup, metadata, catalogs, workflows, or front-end exposure. Every command must check its own declared capability before performing network or output side effects.
+Beginning with P6-04, executable state is capability-scoped rather than equivalent to a complete public product. Every command must check its own declared capability before performing network or output side effects. By P6-07, Modern has the full MTGO producer capability set while remaining non-public; executable completeness therefore does not imply public catalog or front-end exposure.
+
+Beginning with P6-08, the single production workflow distinguishes two registry-derived sets:
+
+- **event-collection formats** have `event_collection_enabled: true` and receive only official MTGO event archives plus fetched-ledger maintenance unless they also qualify as a complete product;
+- **complete product formats** have MTGO execution enabled and declare every production capability: classification, event and range statistics, matchup statistics, Weekly Pickup, metadata generation, and catalog generation.
+
+Standard and Modern are the complete products during P6-08. Standard, Legacy, Pioneer, Pauper, Vintage, and Modern remain event-collection formats. The production workflow may express these sets as explicit environment lists for readable command dispatch, but workflow tests must prove that those lists match the registry. The dynamic production-candidate validator independently derives the same sets from the registry, records per-format event and match counts, and restricts statistics and reports to complete products. A planned or raw-archive-only format cannot gain generated product output merely by being added to the event loop.
+
+Weekly Pickup remains candidate-only in scheduled automation. Candidate generation may continue on error so that review preparation cannot suppress unrelated generated data, but every product format must still be attempted. Approval, publication, and known-state changes remain manual.
+
+The maintained hierarchy catalog is regenerated for Modern in P6-08. Standard hierarchy generation and the shared hierarchical front-end migration remain owned by P6-09 so that workflow enablement does not silently move the Standard compatibility boundary.
 
 Format event directories may contain only documents whose embedded MTGO format matches the configured project format. Classification generation fails closed when it encounters any cross-format document. Unsupported formats must not be retained inside a supported format's data directory or represented as classification exceptions; erroneous unsupported-format archives should be removed after review.
 
@@ -1695,7 +1706,7 @@ permissions:
 
 CI should not receive write permission without a specific reason.
 
-### 19.2 `update_mtgo.yml`
+### 19.2 `update.yml`
 
 Purpose:
 
@@ -1713,6 +1724,14 @@ It should use:
 - `cancel-in-progress: false` unless a later decision changes it;
 - a workflow summary;
 - no-op handling when no files change.
+
+The Phase 6 production workflow uses three validation layers:
+
+1. a clean-checkout regression suite before any live fetch;
+2. a dynamic, registry-aware candidate snapshot comparison after fetch and generation but before staging;
+3. confirmation that the published remote `master` commit equals the locally created generated-data commit.
+
+The candidate baseline is an ephemeral workflow artifact. Its schema version is breaking when the tracked format dimensions change; P6-08 uses version `2.0.0` to replace the former Standard-only match count with per-product match counts. New arbitrary generated JSON paths remain blocked even for complete products; only expected event archives, match archives, and dated Pickup review YAML may be newly created automatically.
 
 ### 19.3 `fetch_melee.yml`
 

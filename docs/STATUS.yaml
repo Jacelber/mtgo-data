@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-07-modern-metadata"
-  working_branch_status: "p6_07_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p6-08-modern-workflow"
+  working_branch_status: "p6_08_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-23"
+  last_updated: "2026-07-24"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -331,16 +331,30 @@ engineering_quality:
     pull_request_ci: true
     production_update: true
   production_workflow:
-    status: "layered_validation_local_implementation_completed"
+    status: "standard_modern_dual_product_local_implementation_completed"
     workflow: ".github/workflows/update.yml"
     scheduled_workflow_count: 1
     legacy_scrape_workflow_removed: true
     mtgo_event_fetch: "python -m mtgmeta.mtgo --format <format> fetch-events"
-    videre_match_fetch: "python -m mtgmeta.mtgo --format standard fetch-matches"
-    standard_statistics: "python -m mtgmeta.mtgo --format standard build-statistics"
-    matchup_statistics: "python -m mtgmeta.mtgo --format standard build-matchups"
+    event_collection_formats:
+      - "standard"
+      - "legacy"
+      - "pioneer"
+      - "pauper"
+      - "vintage"
+      - "modern"
+    complete_product_formats:
+      - "standard"
+      - "modern"
+    hierarchy_generation_formats:
+      - "modern"
+    videre_match_fetch: "python -m mtgmeta.mtgo --format <complete-product-format> fetch-matches"
+    product_statistics: "python -m mtgmeta.mtgo --format <complete-product-format> build-statistics"
+    matchup_statistics: "python -m mtgmeta.mtgo --format <complete-product-format> build-matchups"
+    weekly_pickup_mode: "candidate_only_continue_on_error"
     clean_checkout_regression_before_fetch: true
     dynamic_candidate_validator: "validate_production_candidate.py"
+    candidate_baseline_schema_version: "2.0.0"
     deletion_allowed: false
     cross_product_write_allowed: false
     remote_master_commit_confirmation: true
@@ -2875,7 +2889,7 @@ phase_6_tasks:
 
   - id: "P6-07"
     name: "Generate Modern Pickup, metadata, and hierarchy catalog"
-    status: "owner_accepted_remote_publication_authorized"
+    status: "completed_and_published"
     depends_on: "P6-06 accepted and published"
     branch: "codex/p6-07-modern-metadata"
     base_commit: "8b600a70d6e01c6e630fff5e27b28f083cc54730"
@@ -2943,14 +2957,70 @@ phase_6_tasks:
     local_validation_status: "passed"
     owner_acceptance: "accepted"
     owner_accepted_on: "2026-07-23"
-    implementation_commit: null
-    pull_request: null
-    merge_commit: null
+    implementation_commit: "939914efc8079d302dd4defbfbf1bb5355e4dfad"
+    pull_request: 87
+    merge_commit: "2a94d7eb4d235612e6d4217da37922f73d53d1d6"
+    merged_on: "2026-07-23"
+    merged_to_master: true
+    remote_checks_passed: true
+    latest_verified_production_master_commit: "2b60def9367fa6aacb58c842c2d5cfc63cb153a3"
 
   - id: "P6-08"
     name: "Add Modern to the production workflow"
-    status: "planned"
+    status: "owner_accepted_remote_publication_authorized"
     depends_on: "P6-07 accepted and published"
+    branch: "codex/p6-08-modern-workflow"
+    base_commit: "2b60def9367fa6aacb58c842c2d5cfc63cb153a3"
+    audit: "docs/audits/P6-08.md"
+    scope:
+      - "Keep official MTGO event-archive collection enabled for Standard, Legacy, Pioneer, Pauper, Vintage, and Modern."
+      - "Run Videre collection, statistics, matchups, Pickup candidates, metadata, strict classification reports, and rule validation for Standard and Modern."
+      - "Regenerate the maintained Modern hierarchy catalog without moving the deferred Standard hierarchy migration out of P6-09."
+      - "Discover production candidate collection and complete-product formats from the registry and validate each format independently."
+      - "Keep Weekly Pickup candidate-only and preserve manual approval and publication."
+      - "Keep Modern absent from the public format catalog and front end."
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-24"
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-24"
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-24"
+    workflow_dispatch_authorized: false
+    event_collection_formats:
+      - "standard"
+      - "legacy"
+      - "pioneer"
+      - "pauper"
+      - "vintage"
+      - "modern"
+    complete_product_formats:
+      - "standard"
+      - "modern"
+    hierarchy_generation_formats:
+      - "modern"
+    production_candidate_schema_version: "2.0.0"
+    real_network_fetch_executed: false
+    offline_production_simulation_passed: true
+    offline_simulation_candidate_changes: 12
+    frontend_changed: false
+    public_format_changed: false
+    statistical_formulas_changed: false
+    generated_data_committed_by_task: false
+    coverage_regression_repaired: true
+    coverage_regression_note: "Modern metadata integration test now derives coverage from committed inputs instead of freezing mutable production totals."
+    focused_tests_passed: 41
+    tests_passed: 387
+    repository_validation_passed: true
+    repository_python_files_validated: 85
+    repository_json_files_validated: 1009
+    repository_yaml_files_validated: 16
+    repository_references_validated: 30
+    repository_hygiene_files_validated: 1179
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    schema_validation_passed: true
+    schema_validated_outputs: 45
+    local_validation_status: "passed"
 
   - id: "P6-09"
     name: "Migrate Standard and Modern to the shared hierarchical matchup front end"
@@ -2973,20 +3043,19 @@ phase_6_tasks:
     depends_on: "P6-09 accepted and published"
 
 next_approved_task:
-  id: "P6-07"
-  name: "Generate Modern Pickup, metadata, and hierarchy catalog"
+  id: "P6-08"
+  name: "Add Modern to the production workflow"
   target_paths:
-    - "configs/formats.yaml"
-    - "src/mtgmeta/mtgo/pickup.py"
-    - "src/mtgmeta/mtgo/__main__.py"
-    - "stats/modern/mtgo/"
-    - "schemas/"
-    - "tests/"
-    - "docs/audits/P6-07.md"
+    - ".github/workflows/update.yml"
+    - "validate_production_candidate.py"
+    - "tests/test_production_candidate_validation.py"
+    - "tests/test_production_workflow.py"
+    - "tests/test_modern_pickup_metadata.py"
+    - "docs/audits/P6-08.md"
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
-    - "docs/STATISTICS_SPEC.md"
     - "docs/DATA_ARCHITECTURE.md"
+    - "README.md"
   production_change: true
   requires_user_confirmation: false
   authorization_status: "owner_accepted_remote_publication_authorized"

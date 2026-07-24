@@ -61,13 +61,29 @@ def test_modern_metadata_reports_partial_videre_coverage_without_public_pickup(t
     assert document["hierarchy_catalog"] == "archetype_hierarchy.json"
     assert document["pickup_catalog"] is None
     assert document["matchup_source"] == "Videre"
-    assert document["matchup_coverage"] == {
-        "official_events": 183,
-        "events_with_archives": 161,
-        "events_without_archives": 22,
-        "stored_archives": 165,
-        "archives_outside_official_events": 4,
+    official_ids = {
+        str(event["event_id"])
+        for path in (ROOT / "data" / "modern").glob("*.json")
+        if (event := json.loads(path.read_text(encoding="utf-8"))).get("format")
+        == "CMODERN"
+        and event.get("event_id") is not None
     }
+    archive_ids = {
+        str(archive["event_id"])
+        for path in (ROOT / "data" / "modern" / "mtgo" / "matches").glob("*.json")
+        if (archive := json.loads(path.read_text(encoding="utf-8"))).get("event_id")
+        is not None
+    }
+    overlap = official_ids & archive_ids
+    coverage = document["matchup_coverage"]
+    assert coverage == {
+        "official_events": len(official_ids),
+        "events_with_archives": len(overlap),
+        "events_without_archives": len(official_ids - archive_ids),
+        "stored_archives": len(archive_ids),
+        "archives_outside_official_events": len(archive_ids - official_ids),
+    }
+    assert coverage["events_without_archives"] > 0
 
 
 def test_modern_pickup_uses_stable_parent_ids_and_preserves_manual_boundary(tmp_path):
