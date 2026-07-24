@@ -43,7 +43,9 @@ jobs:
         run: python -B validate_schemas.py
 
       - name: Run clean-checkout code and committed-baseline tests
-        run: python -B -m pytest
+        env:
+          PYTEST_TIMING_REPORT: ${{ runner.temp }}/pytest-timing.json
+        run: python -B -m pytest -p ci_timing --durations=25
 
       - name: Write validation summary
         if: always()
@@ -57,3 +59,8 @@ jobs:
             echo "- Python: 3.12"
             echo "- This workflow does not fetch tournament data or publish repository changes."
           } >> "$GITHUB_STEP_SUMMARY"
+          if [ -f "$RUNNER_TEMP/pytest-timing.json" ]; then
+            python -B ci_timing.py --summary "$RUNNER_TEMP/pytest-timing.json" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- Pytest timing report was unavailable because pytest did not reach its session-finish hook." >> "$GITHUB_STEP_SUMMARY"
+          fi
