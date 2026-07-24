@@ -23,7 +23,7 @@ def _event_fixture():
     return json.loads((ROOT / "tests/fixtures/melee/reference_event_contract.json").read_text(encoding="utf-8"))
 
 
-def test_reference_whitelist_contract_is_valid_and_fetch_disabled():
+def test_reference_whitelist_contract_is_valid_and_phase7_enabled():
     loaded, registry = _contracts()
     whitelist = _whitelist()
     assert schemas.validate_instance(whitelist, loaded["melee-events.schema.json"], registry) == []
@@ -31,7 +31,7 @@ def test_reference_whitelist_contract_is_valid_and_fetch_disabled():
     assert event["id"] == "434455"
     assert event["format"] == "modern"
     assert event["structure"] == "mixed"
-    assert event["enabled"] is False
+    assert event["enabled"] is True
 
 
 def test_enabled_event_requires_verified_review_status():

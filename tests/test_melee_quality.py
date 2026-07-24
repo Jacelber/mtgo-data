@@ -39,7 +39,8 @@ def issue_codes(document):
 def test_disabled_event_is_assessed_but_fails_closed_at_publication_boundary():
     source = normalized()
     original = copy.deepcopy(source)
-    assessed = finalize_event_quality(source, event_definition())
+    disabled_event = replace(event_definition(), enabled=False)
+    assessed = finalize_event_quality(source, disabled_event)
 
     assert source == original
     assert assessed["quality"]["status"] == "blocked"
@@ -50,7 +51,7 @@ def test_disabled_event_is_assessed_but_fails_closed_at_publication_boundary():
     )
     assert warning["blocking"] is False
     with pytest.raises(MeleePublicationBlocked, match="event_not_enabled"):
-        build_publication_payload(source, event_definition())
+        build_publication_payload(source, disabled_event)
 
 
 def test_verified_enabled_event_with_only_missing_decklist_warning_is_publishable():

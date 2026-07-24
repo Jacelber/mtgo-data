@@ -1148,6 +1148,67 @@ The event must be explicitly registered in:
 
 - `configs/melee_events.yaml`
 
+## Approved task sequence
+
+Phase 7 proceeds through the following focused tasks. Each task requires its
+own local authorization and acceptance; production workflow dispatch, remote
+publication, and the next task remain separately controlled unless the owner
+explicitly authorizes them.
+
+1. `P7-01` — activate the verified reference-event contract and freeze the
+   source-retention, output, authorization, and no-side-effect boundaries.
+2. `P7-02` — collect one complete immutable raw snapshot, support safe
+   restart/reuse of complete archived responses, normalize the event, and pass
+   the existing Schema and semantic quality gate before retaining the
+   production input.
+3. `P7-03` — classify submitted Modern decklists with the shared Modern
+   taxonomy, retaining parent archetype, subtype, rule evidence, Unknowns, and
+   conflicts without changing the MTGO Modern product.
+4. `P7-04` — build the mixed-event participation and Constructed-opportunity
+   ledger for Day 1, Day 2, all Constructed Swiss, drops, byes, intentional
+   draws, disqualification exclusions, and verified Top 8 lock exemptions.
+5. `P7-05` — generate per-event overview and deck statistics directly from the
+   classified normalized event and the opportunity ledger.
+6. `P7-06` — generate parent/subtype-aware matchup statistics for Day 1,
+   Day 2, and all Constructed Swiss, with inverse-cell, scope, exclusion, and
+   count-conservation checks.
+7. `P7-07` — finalize versioned public Schemas, the Modern tabletop event
+   catalog, deterministic output packaging, and a separately authorized
+   source-specific production workflow.
+8. `P7-08` — run the complete real-source production path, validate the
+   retained inputs and generated candidates, confirm MTGO/Melee separation,
+   close the phase documentation, and create the Phase 7 recovery tag after
+   owner acceptance.
+
+The sequence intentionally completes normalized source retention before
+classification, classification before statistics, and statistics before
+workflow publication. Phase 8 owns the Tabletop Major Events front end; Phase
+7 produces the complete backend contract that the page will consume.
+
+## P7-01 — Reference-event activation and production boundary
+
+P7-01 changes the verified event `434455` from a disabled Phase 5 reference
+contract to the only enabled Melee whitelist entry. It freezes these
+boundaries:
+
+- activation authorizes only an explicit manual collection command for this
+  exact event and does not enable event discovery;
+- complete collection still requires the explicit `--execute --complete`
+  command flags;
+- P7-01 itself performs no network request and creates no raw, normalized,
+  statistical, catalog, workflow, or front-end output;
+- immutable raw retention and canonical normalized-event production begin in
+  P7-02, not P7-01;
+- Modern classification, overview statistics, matchup statistics, workflow
+  integration, and the front end remain assigned to their later tasks;
+- MTGO Modern data and Melee Modern data remain source-separated.
+
+P7-01 is complete when the registry and Schema accept the enabled verified
+event, disabled-event fail-closed behavior remains covered independently,
+implicit complete collection remains impossible, no production data path is
+created, and the detailed Phase 7 sequence is recorded in the authoritative
+documents.
+
 ## Required input work
 
 Fetch and normalize:
