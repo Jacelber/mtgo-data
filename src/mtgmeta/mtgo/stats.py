@@ -92,17 +92,44 @@ def _as_rule_set(rules: RuleSet | LegacyArchetypeRules) -> RuleSet:
     raise TypeError("MTGO statistics require a RuleSet or LegacyArchetypeRules")
 
 
+def _classify_identity(
+    player: dict[str, Any],
+    rules: RuleSet | LegacyArchetypeRules,
+) -> tuple[str | None, str | None, str | None, str | None]:
+    rule_set = _as_rule_set(rules)
+    result = classify_deck(rule_set, player)
+    if result.status == "classified":
+        parent = next(
+            archetype
+            for archetype in rule_set.archetypes
+            if archetype.id == result.archetype_id
+        )
+        if parent.subtypes and result.subtype_id is None:
+            raise MTGOStatisticsError(
+                f"classified deck under subtype-defining parent "
+                f"{parent.id!r} has no selected subtype"
+            )
+        return (
+            result.archetype_id,
+            result.archetype_name,
+            result.subtype_id,
+            result.subtype_name,
+        )
+    if result.status == "unknown":
+        return None, None, None, None
+    detail = result.conflict_kind or ", ".join(result.errors) or result.status
+    raise MTGOStatisticsError(f"cannot aggregate {result.status} deck: {detail}")
+
+
 def _classify_parent_identity(
     player: dict[str, Any],
     rules: RuleSet | LegacyArchetypeRules,
 ) -> tuple[str | None, str | None]:
-    result = classify_deck(_as_rule_set(rules), player)
-    if result.status == "classified":
-        return result.archetype_id, result.archetype_name
-    if result.status == "unknown":
-        return None, None
-    detail = result.conflict_kind or ", ".join(result.errors) or result.status
-    raise MTGOStatisticsError(f"cannot aggregate {result.status} deck: {detail}")
+    archetype_id, archetype_name, _subtype_id, _subtype_name = _classify_identity(
+        player,
+        rules,
+    )
+    return archetype_id, archetype_name
 
 
 def _classify_parent(player: dict[str, Any], rules: RuleSet | LegacyArchetypeRules) -> str | None:
@@ -127,10 +154,15 @@ def process_event(
     records = []
     for player in event.get("players", []):
         if classifier is None:
-            archetype_id, archetype_name = _classify_parent_identity(player, rules)
+            archetype_id, archetype_name, subtype_id, subtype_name = _classify_identity(
+                player,
+                rules,
+            )
         else:
             archetype_name = classifier(player, rules)
             archetype_id = archetype_name
+            subtype_id = None
+            subtype_name = None
         arch = archetype_name or "Unknown"
         arch_id = archetype_id or "unknown"
         swiss_score = to_int(player.get("swiss_score"))
@@ -138,6 +170,8 @@ def process_event(
         records.append({
             "archetype": arch,
             "archetype_id": arch_id,
+            "subtype": subtype_name,
+            "subtype_id": subtype_id,
             "is_high_score": swiss_score >= threshold,
             "is_top8": final_rank <= 8,
             "swiss_score": swiss_score,
@@ -173,7 +207,53 @@ def week_monday(d):
     return d - timedelta(days=d.weekday())
 
 
-def aggregate(records, *, include_archetype_ids: bool = False):
+def _subtype_taxonomy(
+    rules: RuleSet | LegacyArchetypeRules,
+) -> dict[str, tuple[dict[str, str], ...]]:
+    rule_set = _as_rule_set(rules)
+    return {
+        archetype.id: tuple(
+            {
+                "id": subtype.id,
+                "name": subtype.name,
+                "parent_id": archetype.id,
+            }
+            for subtype in archetype.subtypes
+        )
+        for archetype in rule_set.archetypes
+        if archetype.subtypes
+    }
+
+
+def _aggregate_item(
+    identity: dict[str, Any],
+    values: dict[str, Any],
+    *,
+    total_high: int,
+    total_top8: int,
+) -> dict[str, Any]:
+    high_share = values["high"] / total_high if total_high else None
+    top8_share = values["top8"] / total_top8 if total_top8 else None
+    conversion = values["top8"] / values["high"] if values["high"] else None
+    appr = values["score_sum"] / values["rounds_sum"] if values["rounds_sum"] else None
+    return {
+        **identity,
+        "count": values["count"],
+        "high_score_count": values["high"],
+        "high_score_share": round(high_share, 4) if high_share is not None else None,
+        "top8_count": values["top8"],
+        "top8_share": round(top8_share, 4) if top8_share is not None else None,
+        "conversion": round(conversion, 4) if conversion is not None else None,
+        "avg_points_per_round": round(appr, 2) if appr is not None else None,
+    }
+
+
+def aggregate(
+    records,
+    *,
+    include_archetype_ids: bool = False,
+    rules: RuleSet | LegacyArchetypeRules | None = None,
+):
     """把一批牌手记录聚合成各套牌的统计。
     场均分（avg_points_per_round）= Σ该套牌积分 / Σ对应赛事理论轮数（微观平均，0~3）。
     """
@@ -182,6 +262,7 @@ def aggregate(records, *, include_archetype_ids: bool = False):
     total_high = 0
     total_top8 = 0
 
+    subtype_stats: dict[tuple[str, str], dict[str, Any]] = {}
     for r in records:
         archetype_id = r["archetype_id"]
         name = r["archetype"]
@@ -201,27 +282,70 @@ def aggregate(records, *, include_archetype_ids: bool = False):
         if r["is_top8"]:
             s["top8"] += 1
             total_top8 += 1
+        subtype_id = r.get("subtype_id")
+        if subtype_id is not None:
+            key = (archetype_id, subtype_id)
+            subtype = subtype_stats.setdefault(
+                key,
+                {
+                    "name": r.get("subtype"),
+                    "count": 0,
+                    "high": 0,
+                    "top8": 0,
+                    "score_sum": 0,
+                    "rounds_sum": 0,
+                },
+            )
+            if subtype["name"] != r.get("subtype"):
+                raise MTGOStatisticsError(
+                    f"subtype identity {key!r} resolved to multiple display names"
+                )
+            subtype["count"] += 1
+            subtype["score_sum"] += r.get("swiss_score", 0)
+            subtype["rounds_sum"] += r.get("rounds", 0)
+            subtype["high"] += int(bool(r["is_high_score"]))
+            subtype["top8"] += int(bool(r["is_top8"]))
 
     unknown_count = stats.get("unknown", {}).get("count", 0)
 
     archetypes = []
+    taxonomy = _subtype_taxonomy(rules) if rules is not None else {}
     for archetype_id, s in stats.items():
-        high_share = s["high"] / total_high if total_high else None
-        top8_share = s["top8"] / total_top8 if total_top8 else None
-        conversion = s["top8"] / s["high"] if s["high"] else None
-        appr = s["score_sum"] / s["rounds_sum"] if s["rounds_sum"] else None
-        item = {
-            "name": s["name"],
-            "count": s["count"],
-            "high_score_count": s["high"],
-            "high_score_share": round(high_share, 4) if high_share is not None else None,
-            "top8_count": s["top8"],
-            "top8_share": round(top8_share, 4) if top8_share is not None else None,
-            "conversion": round(conversion, 4) if conversion is not None else None,
-            "avg_points_per_round": round(appr, 2) if appr is not None else None,
-        }
+        item = _aggregate_item(
+            {"name": s["name"]},
+            s,
+            total_high=total_high,
+            total_top8=total_top8,
+        )
         if include_archetype_ids:
             item = {"id": archetype_id, **item}
+        definitions = taxonomy.get(archetype_id, ())
+        if definitions:
+            children = []
+            for definition in definitions:
+                values = subtype_stats.get(
+                    (archetype_id, definition["id"]),
+                    {
+                        "name": definition["name"],
+                        "count": 0,
+                        "high": 0,
+                        "top8": 0,
+                        "score_sum": 0,
+                        "rounds_sum": 0,
+                    },
+                )
+                child = _aggregate_item(
+                    definition,
+                    values,
+                    total_high=total_high,
+                    total_top8=total_top8,
+                )
+                child["parent_share"] = round(
+                    values["count"] / s["count"],
+                    4,
+                )
+                children.append(child)
+            item["subtypes"] = children
         archetypes.append(item)
 
     archetypes.sort(key=lambda a: a["count"], reverse=True)
@@ -442,7 +566,26 @@ def record_to_deck_display(record):
     }
 
 
-def recent_change_for_arch(events, archetypes, end_monday, archetype_id, d99):
+def _record_identity_key(record: dict[str, Any], identity_level: str):
+    if identity_level == "parent":
+        return record["archetype_id"] if record["archetype_id"] != "unknown" else None
+    if identity_level == "subtype":
+        subtype_id = record.get("subtype_id")
+        if subtype_id is None:
+            return None
+        return record["archetype_id"], subtype_id
+    raise ValueError(f"unsupported identity level {identity_level!r}")
+
+
+def _recent_change_for_identity(
+    events,
+    archetypes,
+    end_monday,
+    identity_key,
+    d99,
+    *,
+    identity_level: str,
+):
     """计算某套牌的近期变化度：
        近端 = 最近 1 完整周(end_monday 那周) 该套牌主牌平均向量
        远端 = 之前 PRIOR_WEEKS 周(不含本周) 该套牌主牌平均向量
@@ -460,11 +603,11 @@ def recent_change_for_arch(events, archetypes, end_monday, archetype_id, d99):
     for d, ev in events:
         if recent_start <= d <= recent_end_sunday:
             for r in process_event(ev, archetypes)["records"]:
-                if r["archetype_id"] == archetype_id:
+                if _record_identity_key(r, identity_level) == identity_key:
                     recent_recs.append(r)
         elif prior_start <= d <= prior_end_sunday:
             for r in process_event(ev, archetypes)["records"]:
-                if r["archetype_id"] == archetype_id:
+                if _record_identity_key(r, identity_level) == identity_key:
                     prior_recs.append(r)
 
     if len(recent_recs) < RECENT_MIN:
@@ -483,7 +626,24 @@ def recent_change_for_arch(events, archetypes, end_monday, archetype_id, d99):
     return normalize_dev_abs(raw, denom), None
 
 
-def build_base_pack(events, archetypes, end_monday, today=None):
+def recent_change_for_arch(events, archetypes, end_monday, archetype_id, d99):
+    return _recent_change_for_identity(
+        events,
+        archetypes,
+        end_monday,
+        archetype_id,
+        d99,
+        identity_level="parent",
+    )
+
+
+def _build_base_pack(
+    events,
+    archetypes,
+    end_monday,
+    *,
+    identity_level: str,
+):
     """构建固定 4 周 base 包 + 全局 D99 + 每套牌近期变化度。
     base_pack = { arch: {mean, weights, core, flex, medoid_display,
                          sample_size, recent_change, recent_change_reason} }
@@ -496,12 +656,13 @@ def build_base_pack(events, archetypes, end_monday, today=None):
     for d, ev in events:
         if start_monday <= d <= end_sunday:
             for r in process_event(ev, archetypes)["records"]:
-                if r["archetype_id"] != "unknown":
-                    by_arch[r["archetype_id"]].append(r)
+                identity_key = _record_identity_key(r, identity_level)
+                if identity_key is not None:
+                    by_arch[identity_key].append(r)
 
     base_pack = {}
     all_distances = []
-    for archetype_id, recs in by_arch.items():
+    for identity_key, recs in by_arch.items():
         if len(recs) < MIN_SAMPLE:
             continue
         vectors = [deck_vector(r) for r in recs]
@@ -512,8 +673,12 @@ def build_base_pack(events, archetypes, end_monday, today=None):
         weights = rates
         core, flex = split_core_flex(mean, rates)
         medoid = pick_medoid(recs, mean, weights)
-        base_pack[archetype_id] = {
-            "name": recs[0]["archetype"],
+        base_pack[identity_key] = {
+            "name": (
+                recs[0]["archetype"]
+                if identity_level == "parent"
+                else recs[0]["subtype"]
+            ),
             "mean": mean,
             "weights": weights,
             "denom": dev_denominator(mean, weights),   # 绝对刻度分母
@@ -530,14 +695,37 @@ def build_base_pack(events, archetypes, end_monday, today=None):
     d99 = percentile(all_distances, DEV_PERCENTILE) if all_distances else 0.0
 
     # d99 就绪后，回头为每个达标套牌算近期变化度
-    for archetype_id in base_pack:
-        val, reason = recent_change_for_arch(
-            events, archetypes, end_monday, archetype_id, d99
+    for identity_key in base_pack:
+        val, reason = _recent_change_for_identity(
+            events,
+            archetypes,
+            end_monday,
+            identity_key,
+            d99,
+            identity_level=identity_level,
         )
-        base_pack[archetype_id]["recent_change"] = val
-        base_pack[archetype_id]["recent_change_reason"] = reason
+        base_pack[identity_key]["recent_change"] = val
+        base_pack[identity_key]["recent_change_reason"] = reason
 
     return base_pack, d99
+
+
+def build_base_pack(events, archetypes, end_monday, today=None):
+    return _build_base_pack(
+        events,
+        archetypes,
+        end_monday,
+        identity_level="parent",
+    )
+
+
+def build_subtype_base_pack(events, archetypes, end_monday, today=None):
+    return _build_base_pack(
+        events,
+        archetypes,
+        end_monday,
+        identity_level="subtype",
+    )
 
 
 def percentile(values, p):
@@ -559,6 +747,37 @@ def percentile(values, p):
 #                      区间牌表详情构建
 # ================================================================
 
+def _deck_entry(records, base):
+    best = pick_best_deck(records)
+    if best and base:
+        best_vec = {}
+        for card in best["main_deck"]:
+            best_vec[card["name"]] = best_vec.get(card["name"], 0) + to_int(card["qty"])
+        raw = weighted_l1(best_vec, base["mean"], base["weights"])
+        best["deviation"] = normalize_dev_abs(raw, base["denom"])
+        best["deviation_diff"] = deck_diff(best_vec, base["mean"])
+
+    if base:
+        average_deck = {
+            "sample_size": base["sample_size"],
+            "medoid": base["medoid_display"],
+            "core": base["core"],
+            "flex": base["flex"],
+            "recent_change": base["recent_change"],
+            "recent_change_reason": base["recent_change_reason"],
+        }
+    else:
+        average_deck = {
+            "sample_size": 0,
+            "medoid": None,
+            "core": [],
+            "flex": [],
+            "recent_change": None,
+            "recent_change_reason": "nobase",
+        }
+    return {"best_deck": best, "average_deck": average_deck}
+
+
 def build_decks(records, base_pack, d99, *, include_archetype_ids: bool = False):
     """按套牌分组，为每套牌生成 best_deck（含偏离度/差异）与 average_deck（4 周 base）。
     返回 { arch: {best_deck, average_deck} }。
@@ -572,45 +791,52 @@ def build_decks(records, base_pack, d99, *, include_archetype_ids: bool = False)
     result = {}
     for archetype_id, arch_records in by_arch.items():
         name = arch_records[0]["archetype"]
-        best = pick_best_deck(arch_records)
         base = base_pack.get(archetype_id)
-
-        if best and base:
-            best_vec = {}
-            for c in best["main_deck"]:
-                best_vec[c["name"]] = best_vec.get(c["name"], 0) + to_int(c["qty"])
-            raw = weighted_l1(best_vec, base["mean"], base["weights"])
-            best["deviation"] = normalize_dev_abs(raw, base["denom"])
-            best["deviation_diff"] = deck_diff(best_vec, base["mean"])
-
-        if base:
-            average_deck = {
-                "sample_size": base["sample_size"],
-                "medoid": base["medoid_display"],
-                "core": base["core"],
-                "flex": base["flex"],
-                "recent_change": base["recent_change"],
-                "recent_change_reason": base["recent_change_reason"],
-            }
-        else:
-            average_deck = {
-                "sample_size": 0,
-                "medoid": None,
-                "core": [],
-                "flex": [],
-                "recent_change": None,
-                "recent_change_reason": "nobase",
-            }
 
         if name in result:
             raise MTGOStatisticsError(
                 f"multiple archetype IDs share statistics display name {name!r}"
             )
-        entry = {"best_deck": best, "average_deck": average_deck}
+        entry = _deck_entry(arch_records, base)
         if include_archetype_ids:
             entry = {"archetype_id": archetype_id, **entry}
         result[name] = entry
     return result
+
+
+def attach_subtype_decks(
+    parent_decks,
+    records,
+    subtype_base_pack,
+    rules: RuleSet | LegacyArchetypeRules,
+):
+    from collections import defaultdict
+
+    records_by_identity = defaultdict(list)
+    for record in records:
+        identity_key = _record_identity_key(record, "subtype")
+        if identity_key is not None:
+            records_by_identity[identity_key].append(record)
+
+    rule_set = _as_rule_set(rules)
+    for parent in rule_set.archetypes:
+        if not parent.subtypes or parent.name not in parent_decks:
+            continue
+        children = []
+        for subtype in parent.subtypes:
+            identity_key = (parent.id, subtype.id)
+            child = {
+                "id": subtype.id,
+                "parent_id": parent.id,
+                "name": subtype.name,
+                **_deck_entry(
+                    records_by_identity.get(identity_key, []),
+                    subtype_base_pack.get(identity_key),
+                ),
+            }
+            children.append(child)
+        parent_decks[parent.name]["subtypes"] = children
+    return parent_decks
 
 
 def build_range(
@@ -622,6 +848,7 @@ def build_range(
     d99,
     *,
     format_id: str,
+    subtype_base_pack=None,
 ):
     """聚合区间统计，并用固定 4 周 base 计算每套牌的区间平均偏离度。"""
     from collections import defaultdict
@@ -633,8 +860,18 @@ def build_range(
         if start_monday <= d <= end_sunday:
             records.extend(process_event(ev, rules)["records"])
 
-    include_archetype_ids = format_id != "standard"
-    agg = aggregate(records, include_archetype_ids=include_archetype_ids)
+    include_archetype_ids = True
+    agg = aggregate(
+        records,
+        include_archetype_ids=include_archetype_ids,
+        rules=rules,
+    )
+    if subtype_base_pack is None:
+        subtype_base_pack, _subtype_d99 = build_subtype_base_pack(
+            events,
+            rules,
+            end_monday,
+        )
 
     # 区间平均偏离度：该区间内该套牌所有牌表逐副对 4 周 base 算偏离，取平均
     by_arch = defaultdict(list)
@@ -657,6 +894,33 @@ def build_range(
     for a in agg["archetypes"]:
         aggregation_id = a.get("id") or ids_by_name[a["name"]]
         a["avg_deviation"] = avg_dev.get(aggregation_id)
+        for child in a.get("subtypes", []):
+            identity_key = (aggregation_id, child["id"])
+            base = subtype_base_pack.get(identity_key)
+            child_records = [
+                record
+                for record in by_arch.get(aggregation_id, [])
+                if record.get("subtype_id") == child["id"]
+            ]
+            if not base:
+                child["avg_deviation"] = None
+            else:
+                deviations = [
+                    normalize_dev_abs(
+                        weighted_l1(
+                            deck_vector(record),
+                            base["mean"],
+                            base["weights"],
+                        ),
+                        base["denom"],
+                    )
+                    for record in child_records
+                ]
+                child["avg_deviation"] = (
+                    round(sum(deviations) / len(deviations))
+                    if deviations
+                    else None
+                )
 
     period = {
         "type": f"{n_weeks}w",
@@ -670,15 +934,21 @@ def build_range(
         "period": period,
         **agg,
     })
+    parent_decks = build_decks(
+        records,
+        base_pack,
+        d99,
+        include_archetype_ids=include_archetype_ids,
+    )
     decks_data = versioned({
         "format": format_id,
         "source": SOURCE_ID,
         "period": period,
-        "decks": build_decks(
+        "decks": attach_subtype_decks(
+            parent_decks,
             records,
-            base_pack,
-            d99,
-            include_archetype_ids=include_archetype_ids,
+            subtype_base_pack,
+            rules,
         ),
     })
     return stats_data, decks_data
@@ -729,6 +999,12 @@ def build_all_stats(
         return {}
 
     base_pack, d99 = build_base_pack(events, rules, end_monday, today=today)
+    subtype_base_pack, _subtype_d99 = build_subtype_base_pack(
+        events,
+        rules,
+        end_monday,
+        today=today,
+    )
     out_dir = Path(output_directory) if output_directory is not None else context.paths["statistics"]
 
     index_entries = []
@@ -742,6 +1018,7 @@ def build_all_stats(
             base_pack,
             d99,
             format_id=format_id,
+            subtype_base_pack=subtype_base_pack,
         )
         fname = f"range_{n}w.json"
         decks_fname = f"decks_{n}w.json"

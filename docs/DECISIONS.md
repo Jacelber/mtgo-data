@@ -1446,3 +1446,62 @@ migration; P6-10 owns final regression and the phase tag.
 The owner authorized local P6-06 implementation and confirmed the no-residual
 scope on 2026-07-23. Remote publication, workflow changes, and front-end changes
 remain separately controlled.
+
+---
+
+# DEC-043 — Generate hierarchical MTGO range statistics before Phase 7
+
+Status: `Accepted`
+
+## Context
+
+The Phase 6 front end can expand matchup rows and columns by subtype, but the
+official MTGO environment statistics remain parent-only. The intended MTGO
+statistics interaction is the same hierarchy principle: parent archetypes are
+shown by default, eligible parents can expose their subtypes, and one global
+control can expand or collapse all eligible parents. Implementing only the
+front-end control later would leave subtype metagame, performance, conversion,
+and deck-construction values unavailable or tempt the browser to reconstruct
+statistical logic from parent aggregates.
+
+Phase 7 begins a separate Melee source pipeline. Mixing this MTGO backend change
+into the Pro Tour work would blur the required MTGO/Melee boundary and make
+regression attribution harder.
+
+## Decision
+
+Implement `BRIDGE-MTGO-SUBTYPE-STATS-01` as an independent task between Phase 6
+and Phase 7. Extend existing MTGO `range_<n>w.json` and `decks_<n>w.json`
+documents additively with nested subtype entries. Do not create a separate
+subtype endpoint or workflow.
+
+Parent archetypes remain the primary and default aggregation. A subtype row is
+computed directly from records assigned to that subtype and uses the same
+thresholds and formulas as its parent-level counterpart. For a
+subtype-defining parent, subtype counts must conserve the parent deck,
+high-score, and Top 8 counts exactly. The complete maintained subtype list is
+emitted for every observed subtype-defining parent, including explicit
+zero-observation entries.
+
+Deck-construction outputs are also recalculated independently per subtype.
+Their four-week base, sample threshold, representative deck, average deck,
+Core/Flex lists, deviation, and recent-change result use only that subtype's
+records. They must not reuse or proportionally split the parent base.
+
+Preserve the no-residual rule: a classified deck under a subtype-defining
+parent without a selected subtype blocks generation. Preserve Phase 6
+parent-only values and ordering through a frozen projection contract. Leave the
+current front-end rendering unchanged; the later UI task will consume the
+already-defined hierarchy rather than redefine its statistics.
+
+## Consequences
+
+Standard and Modern gain schema-validated subtype-ready MTGO range and
+deck-construction data while existing parent presentation remains stable.
+Generated documents grow because they retain maintained subtype empty states
+and construction payloads. The scheduled MTGO workflow needs no structural
+change because it already runs the shared generator for both enabled formats.
+
+This decision does not alter Weekly Pickup grouping, matchup formulas,
+classification taxonomy, Melee outputs, public paths, or the Phase 7 reference
+event. It does not authorize remote publication or a production workflow run.

@@ -29,10 +29,39 @@
           "top8_share": {"type": "number", "minimum": 0, "maximum": 1},
           "conversion": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
           "avg_points_per_round": {"type": "number", "minimum": 0, "maximum": 3},
-          "avg_deviation": {"type": ["number", "null"], "minimum": 0}
+          "avg_deviation": {"type": ["number", "null"], "minimum": 0},
+          "subtypes": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/subtypeStatistics"}
+          }
         },
         "additionalProperties": false
       }
+    }
+  },
+  "$defs": {
+    "subtypeStatistics": {
+      "type": "object",
+      "required": [
+        "id", "parent_id", "name", "count", "parent_share",
+        "high_score_count", "high_score_share", "top8_count", "top8_share",
+        "conversion", "avg_points_per_round", "avg_deviation"
+      ],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "parent_id": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "count": {"type": "integer", "minimum": 0},
+        "parent_share": {"type": "number", "minimum": 0, "maximum": 1},
+        "high_score_count": {"type": "integer", "minimum": 0},
+        "high_score_share": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "top8_count": {"type": "integer", "minimum": 0},
+        "top8_share": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "conversion": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "avg_points_per_round": {"type": ["number", "null"], "minimum": 0, "maximum": 3},
+        "avg_deviation": {"type": ["number", "null"], "minimum": 0}
+      },
+      "additionalProperties": false
     }
   },
   "allOf": [

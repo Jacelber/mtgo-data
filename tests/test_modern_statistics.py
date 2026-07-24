@@ -114,6 +114,8 @@ def test_statistics_aggregate_the_selected_parent_not_the_subtype():
     assert classification.subtype_name is not None
     assert processed["records"][0]["archetype"] == classification.archetype_name
     assert processed["records"][0]["archetype"] != classification.subtype_name
+    assert processed["records"][0]["subtype_id"] == classification.subtype_id
+    assert processed["records"][0]["subtype"] == classification.subtype_name
 
 
 def test_cross_format_input_is_rejected_before_output(tmp_path):

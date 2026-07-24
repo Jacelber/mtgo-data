@@ -1095,6 +1095,40 @@ Phase 6 is complete when:
 
 ---
 
+# Bridge — MTGO hierarchical subtype range statistics
+
+Before Phase 7 changes the Melee product, complete the independently approved
+`BRIDGE-MTGO-SUBTYPE-STATS-01` task for the existing MTGO Standard and Modern
+products.
+
+This bridge extends the existing MTGO rolling-range and deck-construction JSON
+additively:
+
+- keep the parent archetype as the default and compatibility aggregation;
+- nest the complete maintained subtype taxonomy beneath every observed
+  subtype-defining parent;
+- calculate subtype counts, high-score metrics, Top 8 metrics, conversion,
+  points per round, construction deviation, best deck, average deck, Core/Flex,
+  and recent construction change from the subtype's own records;
+- retain zero-observation maintained subtypes with explicit empty states;
+- prove parent totals, rates, construction payloads, and ordering remain
+  compatible with the Phase 6 committed baseline;
+- update Schemas, specifications, generated Standard and Modern snapshots,
+  and regression contracts;
+- leave the current front end visually unchanged until its separately planned
+  hierarchical statistics controls are implemented.
+
+The existing MTGO production workflow already invokes the shared statistics
+generator for enabled formats, so this task must not add another workflow.
+Phase 7 remains source-separated and must not merge Pro Tour/Melee data into
+these MTGO outputs.
+
+The bridge is complete when local validation passes, the owner accepts the
+result, and the focused change is published under separate remote
+authorization. Phase 7 does not begin implicitly when the bridge closes.
+
+---
+
 # Phase 7 — Mixed-format Modern Pro Tour reference pipeline
 
 ## Objective
