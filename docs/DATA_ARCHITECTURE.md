@@ -1172,6 +1172,42 @@ command fails for review instead of overwriting it. This retention step does
 not classify decks, generate statistics, publish a public catalog, dispatch a
 workflow, or modify either front end.
 
+### 11.7 Deterministic classification overlay
+
+P7-03 keeps canonical normalized input immutable and stores derived
+classification separately at:
+
+```text
+data/<format>/melee/classifications/<event_id>.json
+```
+
+The overlay joins to the normalized event by `participant_id`. It contains one
+record for every submitted decklist in the event's Constructed format and
+retains the selected parent archetype, optional subtype, selected rule and
+priority, every matched rule with condition evidence, top-priority matches,
+overridden matches, conflict evidence, and sanitized errors. An Unknown record
+also carries normalized main-deck and sideboard evidence so taxonomy gaps can
+be reviewed without scanning unrelated event records.
+
+The file header records the normalized-event path, byte-level SHA-256, Schema
+version and decklist counts, plus the shared taxonomy path, byte-level SHA-256,
+rule Schema version, and maintained parent, rule, and subtype counts. It uses
+no wall clock or Git-history value. Repeating classification with identical
+input and rules must therefore produce byte-identical UTF-8 JSON.
+
+Strict classification blocks downstream use when any unresolved conflict,
+invalid deck, or null subtype under a parent with maintained subtypes exists.
+Unknown classifications remain visible and non-blocking. A null subtype under
+a parent with no maintained subtypes remains a normal non-expandable parent
+classification. Classification describes the submitted deck and therefore
+includes a disqualified participant's retained decklist; P7-04 and later
+statistics remain responsible for excluding disqualified match records.
+
+The Melee adapter only converts source card sections into the shared
+`main_deck` and `sideboard` shape. It does not contain source-specific
+archetype rules. The normalized event, raw snapshot, shared Modern taxonomy,
+MTGO products, workflows, and front ends remain unchanged by this overlay.
+
 ---
 
 ## 12. Statistics-output layout

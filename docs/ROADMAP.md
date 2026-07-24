@@ -1238,9 +1238,42 @@ and 2,296 matches. The existing semantic gate accepts 1,394 eligible Modern
 Swiss matches and emits only the reviewed non-blocking
 `disqualified_participant_matches_excluded` warning. Rebuilding from the
 retained snapshot is byte-identical. All 429 tests and repository, Standard,
-Modern, and Schema validators pass. Remote publication remains separately
+Modern, and Schema validators pass. Remote publication was separately
 controlled. The project owner accepted the result and authorized commit, push,
 pull request, and merge on 2026-07-24.
+
+P7-02 was published through pull request 95 and merged as
+`ff9ccc1c0ad952f5069f22900826fd08732811ee` on 2026-07-24. Repository
+validation run 30085905795 completed successfully.
+
+## P7-03 — Classify the retained Modern decklists
+
+P7-03 applies the unchanged shared Modern taxonomy to all 362 submitted
+decklists in normalized event `434455`. The canonical normalized event remains
+immutable. Classification is stored as a separate deterministic overlay at
+`data/modern/melee/classifications/434455.json`, keyed by `participant_id` for
+later joins.
+
+The overlay records exact event and rule hashes; parent archetype, subtype,
+selected rule and priority; all matched and overridden rule evidence;
+Unknown-deck card evidence; conflict and invalid-input evidence; and summary
+conservation totals. Strict validation permits Unknowns but blocks conflicts,
+invalid decks, and any missing subtype under a parent that maintains subtypes.
+The disqualified participant's deck remains classified because deck identity
+is archival; P7-04 retains responsibility for match-statistics exclusion.
+
+The retained taxonomy classifies 290 decklists and leaves 72 explicit Unknown.
+Of the classified decks, 153 select maintained subtypes and 137 select parents
+that define no subtype. There are 75 multiple-match and 75 overridden-match
+records, two same-parent multiple-subtype diagnostic records, zero conflicts,
+zero invalid decks, and zero residual-subtype violations. The result uses 28
+selected parents and 17 selected subtype identities.
+
+P7-03 does not change `my_archetypes/modern.yaml`, raw or normalized event
+data, MTGO Modern output, statistical formulas, workflows, public catalogs, or
+either front end. Taxonomy improvement for the 72 Unknowns requires a separate
+reviewed task; P7-04 may build the participation and Constructed-opportunity
+ledger without reclassifying them.
 
 ## Required input work
 
