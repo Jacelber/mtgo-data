@@ -992,7 +992,29 @@ Only collect data required for approved public tournament analysis.
 
 Raw data should be retained long enough to reproduce normalization and diagnose source changes.
 
-The exact Git tracking or archival policy may depend on repository-size constraints and must be documented before large raw datasets are committed.
+For the first approved reference event, retain exactly one complete raw
+snapshot in Git together with its manifest and canonical normalized event. The
+snapshot must be a direct immutable child of
+`data_raw/melee/<event_id>/`, must use manifest Schema `2.0.0`, and must contain
+exactly the regular files named by that manifest. Each response's byte count
+and SHA-256 must be verified before normalization. Repository attributes treat
+`data_raw/**` as byte-preserved source evidence and explicitly unsets both text
+and end-of-line conversion for those files.
+
+Incomplete temporary snapshots, duplicate fetch logs, credentials, cookies,
+private headers, and unrelated source responses are not retained. A failed
+collection is discarded as a unit. Safe restart means either fetching a new
+complete immutable snapshot or reusing a previously completed and
+digest-verified snapshot; it never means combining partial responses from
+different source moments.
+
+The retained event `434455` snapshot contains source-published tournament
+metadata, participant names and IDs, standings, matches, and submitted
+decklists required for the approved product. These third-party records remain
+subject to `NOTICE.md` and are not relicensed as project code. Any later refresh
+must create a separate snapshot, pass the same boundary, and receive an
+explicit repository-size and production-input review before it can replace or
+supplement the reference input.
 
 Do not silently discard raw data after generating statistics.
 
@@ -1109,7 +1131,9 @@ gate emits one non-blocking participant-level warning.
 
 ### 11.5 Quality and publication boundary
 
-Normalized Melee event Schema 2.1.0 tightens the relationship among played
+Normalized Melee event Schema 2.2.0 retains read compatibility with the
+committed 2.1.0 synthetic contract and adds snapshot-qualified raw provenance
+for production input. It also tightens the relationship among played
 results, statistical eligibility, blocking issues, quality status, and the
 `publishable` flag. The P5-07 quality gate deep-copies its input, validates the
 complete document against that Schema both before and after assessment, and
@@ -1131,6 +1155,22 @@ remain governed by OPEN-002. The publication boundary returns canonical UTF-8
 JSON bytes and performs no file write, network request, classification, or
 statistical generation. Repeating it with the same logical input therefore
 produces identical bytes and SHA-256 values.
+
+### 11.6 Canonical normalized-event retention
+
+P7-02 converts one complete, verified snapshot into
+`data/<format>/melee/events/<event_id>.json`. The command validates the raw
+manifest and exact file set, parses and normalizes every response, applies the
+existing Schema and semantic quality gate, then performs one atomic write.
+Production provenance includes the immutable snapshot directory in every raw
+artifact path.
+
+The source snapshot's `fetched_at` is also the deterministic normalization
+epoch. Rebuilding from the same snapshot must therefore produce identical
+bytes and SHA-256. If the canonical path already contains different bytes, the
+command fails for review instead of overwriting it. This retention step does
+not classify decks, generate statistics, publish a public catalog, dispatch a
+workflow, or modify either front end.
 
 ---
 

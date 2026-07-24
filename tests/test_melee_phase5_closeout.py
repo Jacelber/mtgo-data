@@ -147,4 +147,3 @@ def test_closeout_fixture_does_not_create_production_or_public_output_paths():
     normalized = normalize_raw_snapshot(FIXTURE, event, normalized_at=NORMALIZED_AT)
     build_publication_payload(normalized, event)
     assert {path: path.exists() for path in before} == before
-    assert all(existed is False for existed in before.values())

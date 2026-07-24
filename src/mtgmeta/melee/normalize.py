@@ -264,10 +264,16 @@ def normalize_parsed_snapshot(
     event: MeleeEventDefinition,
     *,
     normalized_at: str,
+    raw_artifact_prefix: str | None = None,
 ) -> dict[str, Any]:
     """Resolve P5-06 semantics while keeping publication explicitly disabled."""
 
-    document = assemble_parsed_snapshot(snapshot, event, normalized_at=normalized_at)
+    document = assemble_parsed_snapshot(
+        snapshot,
+        event,
+        normalized_at=normalized_at,
+        raw_artifact_prefix=raw_artifact_prefix,
+    )
     source_rounds = {item.source_round_id: item for item in _records(snapshot, "rounds")}
     source_matches = {item.source_match_id: item for item in _records(snapshot, "matches")}
     source_standings = {
@@ -410,11 +416,15 @@ def normalize_raw_snapshot(
     event: MeleeEventDefinition,
     *,
     normalized_at: str,
+    raw_artifact_prefix: str | None = None,
 ) -> dict[str, Any]:
     """Parse and normalize a stored snapshot without network access."""
 
     return normalize_parsed_snapshot(
-        parse_raw_snapshot(snapshot_path), event, normalized_at=normalized_at
+        parse_raw_snapshot(snapshot_path),
+        event,
+        normalized_at=normalized_at,
+        raw_artifact_prefix=raw_artifact_prefix,
     )
 
 

@@ -3397,7 +3397,7 @@ bridge_tasks:
 phase_7_tasks:
   - id: "P7-01"
     name: "Activate the verified reference event and freeze the Phase 7 production boundary"
-    status: "local_implementation_completed_publication_authorized"
+    status: "completed_and_published"
     branch: "codex/p7-01-reference-event-contract"
     base_commit: "ca641b3e96707fc8f1cb9945b188dd4019b605fd"
     audit: "docs/audits/P7-01.md"
@@ -3442,10 +3442,76 @@ phase_7_tasks:
     schema_validation_passed: true
     schema_validated_outputs: 46
     owner_acceptance: "publication_authorized_with_initial_task_request"
+    implementation_commit: "0d000b2c85748e6e160f188efaa8d878a049f8dd"
+    pull_request: 94
+    merge_commit: "e6468802c23bbf5881a407c81e5e7b2c37e755aa"
+    merged_on: "2026-07-24"
+    ci_run: 30077632416
+    ci_status: "success"
 
   - id: "P7-02"
     name: "Retain and normalize the complete reference-event source snapshot"
-    status: "planned_not_authorized"
+    status: "local_implementation_completed_publication_authorized"
+    branch: "codex/p7-02-retain-normalized-event"
+    base_commit: "e6468802c23bbf5881a407c81e5e7b2c37e755aa"
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-24"
+    owner_remote_publication_and_merge_authorized: true
+    owner_remote_publication_and_merge_authorized_on: "2026-07-24"
+    scope:
+      - "Collect and retain one complete immutable raw snapshot for event 434455."
+      - "Validate exact manifest coverage, file identities, byte counts, and SHA-256 values."
+      - "Safely reuse only complete digest-verified snapshots without mixing partial collections."
+      - "Write one canonical normalized event atomically after Schema and semantic quality gates pass."
+      - "Prove the retained source reproduces byte-identical normalized input."
+      - "Keep classification, statistics, workflows, front ends, and all MTGO data unchanged."
+    reference_event:
+      id: "434455"
+      format: "modern"
+      structure: "mixed"
+      snapshot: "20260724T092458Z-01"
+      snapshot_path: "data_raw/melee/434455/20260724T092458Z-01"
+      normalized_path: "data/modern/melee/events/434455.json"
+      fetched_at: "2026-07-24T09:24:58.745748Z"
+      responses: 483
+      raw_files_including_manifest: 484
+      raw_bytes: 7729288
+      snapshot_manifest_sha256: "d037d03c6b104abfed0ff33138f1738bd0aa02cd27c3e5789e135a9b539f359e"
+      normalized_bytes: 2944810
+      normalized_sha256: "0b4296a9573a4facf4cfde1ce98569156f78fde6f5d2a1d3d662b54e2889e710"
+      participants: 362
+      standings: 362
+      decklists: 362
+      rounds: 19
+      matches: 2296
+      eligible_constructed_matches: 1394
+      quality_status: "warning"
+      quality_issue_codes:
+        - "disqualified_participant_matches_excluded"
+    production_change: true
+    network_request_performed: true
+    real_event_data_retained: true
+    classification_changed: false
+    statistical_behavior_changed: false
+    generated_data_changed: false
+    public_paths_changed: false
+    workflow_changed: false
+    frontend_changed: false
+    normalized_event_schema_version: "2.2.0"
+    decision: "DEC-045"
+    focused_tests_passed: 66
+    repository_validation_passed: true
+    repository_python_files_checked: 92
+    repository_json_files_checked: 1500
+    repository_yaml_files_checked: 16
+    repository_references_checked: 30
+    repository_hygiene_entries_checked: 1685
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    schema_validation_passed: true
+    schema_validated_outputs: 46
+    tests_passed: 429
+    owner_acceptance: "publication_authorized"
 
   - id: "P7-03"
     name: "Classify reference-event Modern decklists with shared parent and subtype rules"
@@ -3472,10 +3538,13 @@ phase_7_tasks:
     status: "planned_not_authorized"
 
 next_approved_task:
-  id: "P7-01"
-  name: "Activate the verified reference event and record the complete Phase 7 task sequence"
+  id: "P7-02"
+  name: "Retain and normalize the complete reference-event source snapshot"
   target_paths:
-    - "configs/melee_events.yaml"
+    - "data_raw/melee/434455/"
+    - "data/modern/melee/events/434455.json"
+    - "src/mtgmeta/melee/"
+    - "schemas/melee-event.schema.json"
     - "tests/"
     - "docs/"
   production_change: true
@@ -3534,8 +3603,8 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
-  - "Do not perform a live P7-02 fetch or retain real participant, match, or decklist data during P7-01."
-  - "Do not begin P7-02 without separate explicit owner authorization."
+  - "Do not classify P7-02 decklists or generate event statistics before P7-03 and later tasks are separately authorized."
+  - "Do not replace the retained P7-02 snapshot or normalized event with a different source snapshot without explicit review."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
   - "Do not generate reference-event or Paupergeddon statistics yet."

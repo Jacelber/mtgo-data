@@ -1209,6 +1209,39 @@ implicit complete collection remains impossible, no production data path is
 created, and the detailed Phase 7 sequence is recorded in the authoritative
 documents.
 
+## P7-02 — Complete source retention and normalized production input
+
+P7-02 collects one complete immutable snapshot for event `434455` and promotes
+it to canonical normalized input only after the existing raw, Schema, semantic,
+and publication-quality boundaries pass. It adds a separate no-network
+retention command so a completed snapshot can be verified and reused without
+contacting the source.
+
+Safe reuse applies only to a completed, digest-verified snapshot. Interrupted
+collections remain all-or-nothing temporary directories and are deleted on
+failure; responses from different source moments are never combined. Repeating
+normalization for the retained snapshot must be byte-identical, while a
+different candidate cannot silently overwrite the canonical event.
+
+The retained P7-02 input includes the source-published participant identifiers,
+names, standings, matches, and submitted decklists required to reproduce later
+classification and statistics. It remains third-party tournament data under
+`NOTICE.md`, separate from project code and from all MTGO data. P7-02 does not
+classify decks, calculate event statistics, add a catalog or workflow, or
+change either front end; those responsibilities remain P7-03 through P7-08.
+
+P7-02 local implementation completed in an isolated workspace on 2026-07-24.
+The bounded client retained snapshot `20260724T092458Z-01` with 483 public
+responses (7,729,288 bytes including its manifest). Canonical normalized event
+Schema 2.2.0 records 362 participants, 362 standings and decklists, 19 rounds,
+and 2,296 matches. The existing semantic gate accepts 1,394 eligible Modern
+Swiss matches and emits only the reviewed non-blocking
+`disqualified_participant_matches_excluded` warning. Rebuilding from the
+retained snapshot is byte-identical. All 429 tests and repository, Standard,
+Modern, and Schema validators pass. Remote publication remains separately
+controlled. The project owner accepted the result and authorized commit, push,
+pull request, and merge on 2026-07-24.
+
 ## Required input work
 
 Fetch and normalize:

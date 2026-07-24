@@ -2,7 +2,10 @@
 
 `mtgo-data` analyzes Constructed Magic: The Gathering tournament data. The current public **MTGO Environment Trends** site remains Standard-only, while the production data pipeline prepares both Standard and non-public Modern data. A separate **Tabletop Major Events** product and additional Constructed formats are planned, but they are not yet public production features.
 
-The project is in Phase 6: adding Modern as the first new format through the generalized MTGO pipeline while preserving Standard as the public compatibility baseline. Current task authorization and project status are recorded in [`docs/STATUS.yaml`](docs/STATUS.yaml).
+The project is in Phase 7: implementing the first approved mixed-format Modern
+Pro Tour reference pipeline while keeping MTGO and tabletop products
+source-separated. Current task authorization and project status are recorded
+in [`docs/STATUS.yaml`](docs/STATUS.yaml).
 
 The current Standard page compatibility baseline is documented in [`docs/audits/P1-11.md`](docs/audits/P1-11.md). Run `python -m pytest tests/test_standard_public_contract.py` for its automated checks and use [`docs/checklists/STANDARD_FRONTEND_SMOKE.md`](docs/checklists/STANDARD_FRONTEND_SMOKE.md) for browser verification.
 
@@ -65,7 +68,29 @@ $env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455 --complete --execute
 ```
 
-`--complete` discovers the enabled event's completed rounds, paginates its public standings and match endpoints, and retrieves only decklists referenced by the primary standings. It has no dry-run form because the request plan is discovered from the live tournament page. The reference event `434455` is currently disabled, so all forms reject it before network or filesystem activity. Enabling an event and executing a live fetch require separate project-owner authorization. Completed raw snapshots use `data_raw/melee/<event_id>/<UTC-snapshot>/`; re-fetching creates a new snapshot instead of overwriting prior source evidence.
+`--complete` discovers the enabled event's completed rounds, paginates its public standings and match endpoints, and retrieves only decklists referenced by the primary standings. It has no dry-run form because the request plan is discovered from the live tournament page. The verified reference event `434455` is the only enabled Melee event; every live fetch still requires separate project-owner authorization. Completed raw snapshots use `data_raw/melee/<event_id>/<UTC-snapshot>/`; re-fetching creates a new snapshot instead of overwriting prior source evidence.
+
+P7-02 retains a complete snapshot as the canonical normalized production input
+only after validating its manifest, response coverage, file set, byte counts,
+SHA-256 values, parsed identities, normalized semantics, and publication
+quality:
+
+```powershell
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.retention `
+  --event-id 434455 `
+  --snapshot data_raw/melee/434455/20260724T092458Z-01
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.retention `
+  --event-id 434455 `
+  --snapshot data_raw/melee/434455/20260724T092458Z-01 `
+  --execute
+```
+
+The first command is a zero-side-effect path plan. `--execute` writes
+`data/modern/melee/events/434455.json` atomically. Reusing the same verified
+snapshot must produce byte-identical output; a different result cannot silently
+replace the retained input. Interrupted fetches are discarded as a unit rather
+than resumed by mixing responses collected at different source moments.
 
 ## Format-aware MTGO commands
 
