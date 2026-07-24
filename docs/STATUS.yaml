@@ -5,7 +5,7 @@ project:
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
   current_working_branch: "codex/p6-10-phase6-closeout"
-  working_branch_status: "p6_10_production_verified_publication_authorized"
+  working_branch_status: "p6_10_closeout_pull_request_92"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 6
   name: "Modern classification and MTGO Modern"
-  status: "completed_pending_publication"
+  status: "completed"
   started_on: "2026-07-21"
   completed_on: "2026-07-24"
   recovery_tag: "phase-6-modern-mtgo-product"
@@ -3211,7 +3211,7 @@ phase_6_tasks:
 
   - id: "P6-10"
     name: "Complete Phase 6 regression, release, and recovery tag"
-    status: "production_verified_publication_authorized"
+    status: "completed_when_closeout_record_is_on_master"
     depends_on: "P6-09 accepted and published"
     branch: "codex/p6-10-phase6-closeout"
     base_commit: "f70b6a7bd9405c488d8b71845b931a5d319c2849"
@@ -3255,7 +3255,8 @@ phase_6_tasks:
       proposed: "phase-6-modern-mtgo-product"
       authorized: true
       authorized_on: "2026-07-24"
-      published: false
+      publication_status: "publish_after_closeout_merge"
+      source_of_truth_for_object_and_target: "git_and_github_history"
     product_scope_changed: false
     statistical_behavior_changed: false
     frontend_axis_collapse_repaired: true
@@ -3301,22 +3302,19 @@ phase_6_tasks:
     post_production_rule_validation_passed: true
     owner_acceptance: "accepted"
     owner_accepted_on: "2026-07-24"
+    pull_request: 92
 
 next_approved_task:
-  id: "P6-10"
-  name: "Complete Phase 6 regression, release, and recovery tag"
+  id: "OWNER-DIRECTION-REQUIRED"
+  name: "Select and authorize the next development phase"
   target_paths:
-    - "tests/"
-    - "README.md"
-    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/DECISIONS.md"
-    - "docs/audits/P6-10.md"
-  production_change: true
-  requires_user_confirmation: false
-  authorization_status: "production_verified_publication_and_phase_tag_authorized"
-  remote_publication_authorized: true
-  planning_status: "publication_in_progress"
+    - "docs/ROADMAP.md"
+  production_change: false
+  requires_user_confirmation: true
+  authorization_status: "phase_6_closeout_authorized_no_follow_up_authorized"
+  remote_publication_authorized: false
+  planning_status: "blocked_pending_owner_direction"
 
 governance_baseline:
   status: "active_on_master"

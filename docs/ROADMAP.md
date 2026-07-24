@@ -1068,7 +1068,11 @@ run `30066074838` also passed. P6-10 publication and the
 the final P6-10 merge commit. After rebasing the closeout onto production
 commit `25df27c`, all 411 tests, 46 governed-output Schema checks, both rule
 validations, and repository validation passed again; the updated repository
-inventory contains 1,015 JSON and 1,191 hygiene-checked files.
+inventory contains 1,015 JSON and 1,191 hygiene-checked files. The owner
+accepted the result and authorized pull request #92, merge, and recovery-tag
+publication. Once this closeout record is present on `master`, Phase 6 is
+complete; exact merge and tag identities remain authoritative in Git and
+GitHub history, and no subsequent phase or task is authorized automatically.
 
 ## Acceptance criteria
 
