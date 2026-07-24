@@ -115,6 +115,11 @@ def test_collapsed_view_recalculates_parent_cells_from_canonical_counts():
 
     assert [item["id"] for item in view["rows"]] == ["alpha", "beta", "gamma"]
     assert [item["id"] for item in view["columns"]] == ["alpha", "beta", "gamma"]
+    assert [item["showAxisToggle"] for item in view["rows"]] == [
+        True,
+        False,
+        False,
+    ]
     assert view["expandableParentIds"] == ["alpha"]
     assert view["matrix"]["alpha"]["beta"] == {
         "wins": 1,
@@ -138,6 +143,12 @@ def test_row_and_column_expansion_are_independent_and_exclude_parent_mirrors_fro
         "alpha/two",
         "beta",
         "gamma",
+    ]
+    assert [item["showAxisToggle"] for item in row_view["rows"]] == [
+        True,
+        False,
+        False,
+        False,
     ]
     assert [item["id"] for item in row_view["columns"]] == [
         "alpha",

@@ -80,7 +80,7 @@
       const parent = indexes.parentById.get(parentId);
       if (!parent) throw new Error(`Unknown parent order identity: ${parentId}`);
       if (parent.expandable && expanded.has(parentId)) {
-        parent.subtype_ids.forEach(leafId => {
+        parent.subtype_ids.forEach((leafId, subtypeIndex) => {
           const leaf = indexes.leafById.get(leafId);
           if (!leaf) throw new Error(`Unknown subtype identity: ${leafId}`);
           nodes.push({
@@ -90,6 +90,7 @@
             parentId,
             parentName: parent.name,
             expandable: false,
+            showAxisToggle: subtypeIndex === 0,
           });
         });
       } else {
@@ -100,6 +101,7 @@
           parentId,
           parentName: parent.name,
           expandable: Boolean(parent.expandable),
+          showAxisToggle: Boolean(parent.expandable),
         });
       }
     });

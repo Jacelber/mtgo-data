@@ -834,15 +834,16 @@ function renderMxExpandControls(view) {
 }
 
 function mxAxisButton(node, axis, expanded) {
-  if (!node.expandable) return "";
+  if (!node.showAxisToggle) return "";
   const action = expanded
     ? (axis === "row" ? "mx_collapse_row" : "mx_collapse_column")
     : (axis === "row" ? "mx_expand_row" : "mx_expand_column");
   const symbol = expanded ? "−" : "+";
+  const label = expanded ? node.parentName : node.name;
   return `<button class="mx-axis-toggle mx-${axis}-toggle"`
     + ` data-axis="${axis}" data-parent="${node.parentId}"`
     + ` aria-expanded="${expanded ? "true" : "false"}"`
-    + ` aria-label="${escapeHtml(t(action))}: ${escapeHtml(node.name)}"`
+    + ` aria-label="${escapeHtml(t(action))}: ${escapeHtml(label)}"`
     + ` title="${escapeHtml(t(action))}">${symbol}</button>`;
 }
 

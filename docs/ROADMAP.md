@@ -1029,6 +1029,47 @@ and rollup-conservation checks. Confirm that Modern is public only after every
 required data layer is available, update phase status, and publish the Phase 6
 recovery tag after separate owner authorization.
 
+P6-10 local development and validation were authorized on 2026-07-24 from
+production master `f70b6a7`. The closeout adds one cross-layer acceptance
+contract without changing product behavior or freezing mutable live counts.
+It verifies registry/workflow/public-layer alignment, all four Standard and
+Modern hierarchical matchup rollups, Standard compatibility aliases, and the
+shared public renderer. A real production workflow dispatch, remote
+publication, and the proposed `phase-6-modern-mtgo-product` recovery tag remain
+separately controlled.
+
+Local closeout validation found and repaired one front-end-only P6-09 gap:
+after independently expanding a parent row or column, replacement subtype
+nodes had removed that axis's individual collapse button. The first rendered
+subtype now retains one parent-labeled collapse control; other subtype nodes do
+not duplicate it, and zero- or one-subtype parents remain non-expandable.
+Standard browser behavior now proves `36x36 -> 37x36 -> 36x36`; Modern
+Broodscale proves `50x50 -> 52x50 -> 50x50`, and the global control proves
+`50x50 -> 85x85 -> 50x50`. Statistics, Pickup states, language switching,
+narrow-screen scrolling, and a zero-error console also passed.
+
+All three new cross-layer closeout tests, 103 impacted subsystem tests, and the
+final 411-test repository suite pass. All 46 governed JSON outputs, both rule
+files, and repository validation also pass. No generated data, rule, taxonomy,
+formula, public path, workflow, or source archive changed through the local
+closeout implementation.
+
+The project owner separately authorized the real production dispatch and
+remote Phase 6 publication on 2026-07-24. Production run `30065570450`
+completed successfully from `f70b6a7`, passed the clean-checkout, candidate,
+repository, rule, Schema, classification, and publication-confirmation layers,
+and published generated-data commit `25df27c`. The commit added one Modern
+match archive and one Pioneer official-event archive and regenerated the
+affected Standard and Modern public indexes and metadata. Standard classified
+4,064 decks with 78 Unknown and Modern classified 5,920 decks with 130
+Unknown; both reported zero conflicts and zero invalid decks. Pages deployment
+run `30066074838` also passed. P6-10 publication and the
+`phase-6-modern-mtgo-product` recovery tag are authorized; the tag must target
+the final P6-10 merge commit. After rebasing the closeout onto production
+commit `25df27c`, all 411 tests, 46 governed-output Schema checks, both rule
+validations, and repository validation passed again; the updated repository
+inventory contains 1,015 JSON and 1,191 hygiene-checked files.
+
 ## Acceptance criteria
 
 Phase 6 is complete when:
