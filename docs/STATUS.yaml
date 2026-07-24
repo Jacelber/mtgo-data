@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-08-modern-workflow"
-  working_branch_status: "p6_08_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/videre-bounded-retry"
+  working_branch_status: "p6_08a_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -2967,7 +2967,7 @@ phase_6_tasks:
 
   - id: "P6-08"
     name: "Add Modern to the production workflow"
-    status: "owner_accepted_remote_publication_authorized"
+    status: "completed_and_published_live_validation_followup_in_progress"
     depends_on: "P6-07 accepted and published"
     branch: "codex/p6-08-modern-workflow"
     base_commit: "2b60def9367fa6aacb58c842c2d5cfc63cb153a3"
@@ -2985,7 +2985,7 @@ phase_6_tasks:
     owner_accepted_on: "2026-07-24"
     remote_publication_authorized: true
     remote_publication_authorized_on: "2026-07-24"
-    workflow_dispatch_authorized: false
+    workflow_dispatch_authorized: true
     event_collection_formats:
       - "standard"
       - "legacy"
@@ -2999,7 +2999,7 @@ phase_6_tasks:
     hierarchy_generation_formats:
       - "modern"
     production_candidate_schema_version: "2.0.0"
-    real_network_fetch_executed: false
+    real_network_fetch_executed: true
     offline_production_simulation_passed: true
     offline_simulation_candidate_changes: 12
     frontend_changed: false
@@ -3016,6 +3016,63 @@ phase_6_tasks:
     repository_yaml_files_validated: 16
     repository_references_validated: 30
     repository_hygiene_files_validated: 1179
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    schema_validation_passed: true
+    schema_validated_outputs: 45
+    local_validation_status: "passed"
+    implementation_commit: "1d9ab80257d2ecf77c4fc17457959676a6cf14e1"
+    pull_request: 88
+    merge_commit: "3fab907bb778d86c3bb3b441718fff929baab870"
+    merged_on: "2026-07-24"
+    merged_to_master: true
+    remote_checks_passed: true
+    pages_deployment_passed: true
+    live_validation:
+      first_run: 30056505630
+      retry_run: 30056952539
+      clean_checkout_baseline_passed: true
+      six_format_event_collection_passed: true
+      standard_videre_failed: 0
+      modern_videre_failed: 1
+      blocking_event_id: "12838888"
+      blocking_error: "HTTP 408 Request Timeout"
+      production_commit_created: false
+      master_changed: false
+
+  - id: "P6-08A"
+    name: "Add bounded retries for transient Videre request failures"
+    status: "owner_accepted_remote_publication_authorized"
+    depends_on: "P6-08 published and live validation diagnosed"
+    branch: "codex/videre-bounded-retry"
+    base_commit: "3fab907bb778d86c3bb3b441718fff929baab870"
+    audit: "docs/audits/P6-08A.md"
+    scope:
+      - "Retry only HTTP 408, 425, 429, 5xx, connection errors, and timeouts."
+      - "Limit each Videre page request to three attempts with a bounded delay."
+      - "Preserve immediate non-failing handling of explicit 400 No results responses."
+      - "Preserve immediate failure for non-transient HTTP errors."
+      - "Preserve publication blocking when retries are exhausted."
+      - "Re-run the complete Standard and Modern production workflow after publication."
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-24"
+    remote_publication_authorized_after_local_validation: true
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-24"
+    post_merge_production_validation_authorized: true
+    statistical_formulas_changed: false
+    generated_data_changed_by_fix: false
+    workflow_changed: false
+    frontend_changed: false
+    public_format_changed: false
+    focused_tests_passed: 55
+    tests_passed: 403
+    repository_validation_passed: true
+    repository_python_files_validated: 85
+    repository_json_files_validated: 1009
+    repository_yaml_files_validated: 16
+    repository_references_validated: 30
+    repository_hygiene_files_validated: 1180
     standard_rule_validation_passed: true
     modern_rule_validation_passed: true
     schema_validation_passed: true
@@ -3043,22 +3100,18 @@ phase_6_tasks:
     depends_on: "P6-09 accepted and published"
 
 next_approved_task:
-  id: "P6-08"
-  name: "Add Modern to the production workflow"
+  id: "P6-08A"
+  name: "Add bounded retries for transient Videre request failures"
   target_paths:
-    - ".github/workflows/update.yml"
-    - "validate_production_candidate.py"
-    - "tests/test_production_candidate_validation.py"
-    - "tests/test_production_workflow.py"
-    - "tests/test_modern_pickup_metadata.py"
-    - "docs/audits/P6-08.md"
+    - "src/mtgmeta/mtgo/matchup.py"
+    - "tests/test_mtgo_matchup.py"
+    - "docs/audits/P6-08A.md"
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
-    - "docs/DATA_ARCHITECTURE.md"
     - "README.md"
   production_change: true
   requires_user_confirmation: false
-  authorization_status: "owner_accepted_remote_publication_authorized"
+  authorization_status: "owner_authorized_local_fix_and_conditional_remote_publication"
   planning_status: "complete"
 
 governance_baseline:

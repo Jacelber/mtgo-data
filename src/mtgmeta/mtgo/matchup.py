@@ -6,6 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 import json
+import logging
 from pathlib import Path
 import re
 import time
@@ -29,6 +30,13 @@ DEFAULT_RANGES = (1, 4, 12, 36)
 MIN_MATCHUP_SAMPLE = 20
 WILSON_Z = 1.96
 SOURCE_ID = "mtgo"
+VIDERE_REQUEST_ATTEMPTS = 3
+VIDERE_REQUEST_TIMEOUT_SECONDS = 30
+VIDERE_RETRY_DELAY_SECONDS = 2.0
+VIDERE_RETRYABLE_HTTP_CODES = frozenset({408, 425, 429})
+
+
+LOGGER = logging.getLogger(__name__)
 
 
 class NoResults(Exception):
@@ -64,27 +72,67 @@ def api_get(
     params: dict[str, Any],
     *,
     opener: Callable[..., Any] | None = None,
+    attempts: int = VIDERE_REQUEST_ATTEMPTS,
+    timeout: float = VIDERE_REQUEST_TIMEOUT_SECONDS,
+    retry_delay: float = VIDERE_RETRY_DELAY_SECONDS,
+    sleep: Callable[[float], None] | None = None,
 ) -> dict[str, Any]:
-    """Read one Videre response for an explicitly selected format."""
+    """Read one Videre response with bounded transient-failure retries."""
+
+    if not isinstance(attempts, int) or isinstance(attempts, bool) or attempts < 1:
+        raise ValueError("attempts must be a positive integer")
+    if (
+        not isinstance(timeout, (int, float))
+        or isinstance(timeout, bool)
+        or timeout <= 0
+    ):
+        raise ValueError("timeout must be positive")
+    if (
+        not isinstance(retry_delay, (int, float))
+        or isinstance(retry_delay, bool)
+        or retry_delay < 0
+    ):
+        raise ValueError("retry_delay must be non-negative")
 
     url = f"{VIDERE_BASE_URL}/matches/{format_id}?" + urllib.parse.urlencode(params)
     request = urllib.request.Request(url, headers={"User-Agent": "videre-fetch/0.2"})
     open_request = opener or urllib.request.urlopen
-    try:
-        with open_request(request, timeout=30) as response:
-            value = json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        if exc.code == 400:
-            try:
-                body = json.loads(exc.read().decode("utf-8"))
-            except Exception:
-                body = {}
-            if str(body.get("message", "")).lower().startswith("no results"):
-                raise NoResults() from exc
-        raise
-    if not isinstance(value, dict):
-        raise MTGOMatchupError("Videre response root must be an object")
-    return value
+    wait = sleep or time.sleep
+    for attempt in range(1, attempts + 1):
+        try:
+            with open_request(request, timeout=timeout) as response:
+                value = json.loads(response.read().decode("utf-8"))
+            if not isinstance(value, dict):
+                raise MTGOMatchupError("Videre response root must be an object")
+            return value
+        except urllib.error.HTTPError as exc:
+            if exc.code == 400:
+                try:
+                    body = json.loads(exc.read().decode("utf-8"))
+                except Exception:
+                    body = {}
+                if str(body.get("message", "")).lower().startswith("no results"):
+                    raise NoResults() from exc
+            if (
+                exc.code not in VIDERE_RETRYABLE_HTTP_CODES
+                and not 500 <= exc.code < 600
+            ):
+                raise
+            error: Exception = exc
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as exc:
+            error = exc
+        if attempt >= attempts:
+            raise error
+        LOGGER.warning(
+            "Videre request attempt %d/%d failed with %s; retrying in %.1f seconds",
+            attempt,
+            attempts,
+            error,
+            retry_delay,
+        )
+        if retry_delay:
+            wait(retry_delay)
+    raise AssertionError("unreachable Videre retry state")
 
 
 def fetch_all_matches(
