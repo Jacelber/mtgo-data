@@ -1015,6 +1015,13 @@ accepted the implementation and authorized commit, push, pull request, and
 merge on 2026-07-24; real post-merge production verification remains outside
 that authorization.
 
+P6-09 was published through pull request #90, implementation commit
+`033fb0c6656115031e88fa37042ed394276418dc`, and merge commit
+`4b9ac8fbbc5ba7452bf732b910e935ac0bc90f06`. Pull-request validation,
+post-merge validation, and Pages deployment all passed. No production workflow
+was manually dispatched, and P6-10 remains subject to separate owner
+authorization.
+
 ### P6-10 — Phase 6 closeout
 
 Run the complete Standard and Modern regression, Schema, production, front-end,
