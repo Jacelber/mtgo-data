@@ -131,7 +131,7 @@ Display names may change without changing the archetype ID.
 
 Statistics must aggregate by archetype ID rather than only by display name.
 
-A classification result may also contain an optional subtype ID and subtype display name. A subtype is a rule-level variant within one parent archetype. Primary metagame, performance, and conversion statistics continue to aggregate by the parent archetype ID. Hierarchical matchup statistics are separately defined in section 11.8. Subtypes must not split or double-count the parent archetype population.
+A classification result may also contain an optional subtype ID and subtype display name. A subtype is a rule-level variant within one parent archetype. Primary metagame, performance, and conversion statistics continue to aggregate by the parent archetype ID. Hierarchical matchup statistics are separately defined in section 11.8, and supplementary hierarchical MTGO range statistics are defined in section 16.3. Subtypes must not split or double-count the parent archetype population.
 
 The Phase 2 compatibility migration may expose subtypes only for distinct legacy rule entries that already resolve to the same legacy archetype. It must not change any deck's parent archetype result. New subtype taxonomy and subtype-level statistical presentation require separate approval after the compatibility classifier is complete.
 
@@ -1469,7 +1469,38 @@ The existing Standard implementation identifies a latest complete calendar week.
 
 This behavior must be preserved by regression tests before the pipeline becomes format-parameterized.
 
-### 16.3 Average deck and deviation
+### 16.3 Hierarchical range statistics
+
+Every MTGO rolling-range document continues to use parent archetypes as its
+primary, default aggregation. When an observed parent defines maintained
+subtypes, its statistics row additionally contains the complete maintained
+subtype list in taxonomy order. A parent with no maintained subtype definitions
+has no subtype collection.
+
+Each subtype row is calculated directly from the deck records assigned to that
+subtype. It must contain:
+
+- stable subtype ID, parent ID, and display name;
+- deck count and its share of the parent count;
+- high-score count and share of the range-wide high-score population;
+- Top 8 count and share of the range-wide Top 8 population;
+- conversion, using that subtype's Top 8 count divided by its high-score count;
+- average points per theoretical round from that subtype's own records;
+- average construction deviation from that subtype's own four-week base.
+
+Do not derive subtype rates by apportioning a parent rate or by averaging
+already-calculated percentages. For each parent, subtype deck, high-score, and
+Top 8 counts must sum exactly to the parent counts. A maintained subtype with no
+records in the selected range remains present with zero counts and null
+sample-dependent rates. This makes taxonomy membership and expandability
+independent of short-lived event volume.
+
+The parent row remains authoritative and must reproduce the Phase 6 parent-only
+result byte-for-byte when supplementary subtype fields and newly exposed stable
+parent IDs are projected away. Adding the subtype layer must not change totals,
+Unknown handling, thresholds, range dates, or parent ranking.
+
+### 16.4 Average deck and deviation
 
 Average decklists, representative decklists, Core/Flex classification, construction deviation, and recent construction change are MTGO product features.
 
@@ -1477,13 +1508,22 @@ These calculations are not automatically required for tabletop event pages.
 
 Their detailed existing behavior should be documented and regression-tested during the Standard baseline phase before intentional formula changes.
 
-### 16.4 Weekly Pickup
+For a parent with maintained subtypes, each subtype's representative deck,
+average deck, Core/Flex list, deviation, and recent construction change are
+recalculated from that subtype's own records. The same four-week base,
+minimum-sample threshold, and formulas used by the parent calculation apply
+independently to each subtype. A subtype below the base threshold may still
+publish its best observed deck, but its average-deck sample is zero and its
+base-dependent values remain unavailable. A zero-observation subtype publishes
+no best deck and an empty average-deck state.
+
+### 16.5 Weekly Pickup
 
 Weekly Pickup remains an MTGO-specific product feature.
 
 It must not be applied automatically to isolated tabletop events.
 
-### 16.5 MTGO matchup source
+### 16.6 MTGO matchup source
 
 MTGO matchup data may come from a different collection mechanism than MTGO decklist and standings data.
 

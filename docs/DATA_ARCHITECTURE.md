@@ -1221,6 +1221,30 @@ derives the selected parent/subtype axis view. Standard's legacy
 `archetype_order`, `overall`, and `matrix` fields remain temporary compatible
 aliases generated from `parent_order`, `parent_overall`, and `parent_matrix`.
 
+MTGO rolling-range and deck-construction documents use a parallel additive
+hierarchy:
+
+- every range document keeps its existing parent rows and nests `subtypes`
+  only beneath an observed parent that defines maintained subtypes;
+- every nested range row carries the stable subtype ID, parent ID, display
+  name, direct counts, direct rates, parent share, and subtype-specific
+  construction deviation;
+- every decks document keeps its existing parent entry and nests the complete
+  maintained subtype list with subtype-specific best-deck and average-deck
+  payloads;
+- subtype construction bases are calculated independently from each subtype's
+  own four-week records and never reuse or proportionally split the parent
+  base;
+- maintained zero-observation subtypes remain explicit so a future front end
+  can distinguish taxonomy from current volume;
+- parent-only projections remain compatible with the Phase 6 outputs.
+
+The range and decks files remain source-separated MTGO products. They do not
+consume Melee records, and Phase 7's Modern Pro Tour pipeline must not write to
+or aggregate into them. The existing production statistics command regenerates
+the additive hierarchy for every MTGO format that has range-statistics
+capability; no second subtype-only workflow or public path is introduced.
+
 ### 12.2 Melee output
 
 Target Melee output belongs under:

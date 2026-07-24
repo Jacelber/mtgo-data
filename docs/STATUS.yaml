@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p6-10-phase6-closeout"
-  working_branch_status: "p6_10_closeout_pull_request_92"
+  current_working_branch: "codex/bridge-mtgo-subtype-stats"
+  working_branch_status: "owner_accepted_remote_publication_and_production_validation_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -3304,17 +3304,103 @@ phase_6_tasks:
     owner_accepted_on: "2026-07-24"
     pull_request: 92
 
+bridge_tasks:
+  - id: "BRIDGE-MTGO-SUBTYPE-STATS-01"
+    name: "Generate hierarchical MTGO range and construction statistics"
+    status: "owner_accepted_publication_in_progress"
+    timing: "between_phase_6_and_phase_7"
+    branch: "codex/bridge-mtgo-subtype-stats"
+    base_commit: "e68e4e7ac989239213b82bd8e4b3cae4497cbe18"
+    audit: "docs/audits/BRIDGE-MTGO-SUBTYPE-STATS-01.md"
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-24"
+    scope:
+      - "Retain subtype identity in the shared MTGO event-statistics path."
+      - "Nest direct subtype metrics beneath existing parent rows for Standard and Modern."
+      - "Build subtype-specific best decks and four-week average construction bases."
+      - "Retain complete maintained subtype definitions, including zero-observation empty states."
+      - "Preserve Phase 6 parent totals, metrics, ordering, best decks, and average decks."
+      - "Extend existing range and decks Schemas additively without changing public paths."
+      - "Leave the current front end and production workflow structure unchanged."
+    output_formats:
+      - "standard"
+      - "modern"
+    output_windows:
+      - 1
+      - 4
+      - 12
+      - 36
+    generated_range_files_changed: 8
+    generated_decks_files_changed: 8
+    generated_index_files_changed: 0
+    local_dual_format_generation_smoke:
+      files_generated: 18
+      elapsed_seconds: 49.26
+      committed_range_and_decks_byte_identical: 16
+    parent_projection_contracts_passed: 16
+    subtype_rows_by_format_and_window:
+      standard:
+        1w: 2
+        4w: 2
+        12w: 4
+        36w: 4
+      modern:
+        1w: 48
+        4w: 51
+        12w: 54
+        36w: 54
+    subtype_count_conservation_passed: true
+    subtype_construction_uses_independent_base: true
+    zero_observation_subtypes_retained: true
+    residual_subtype_synthesized: false
+    parent_default_aggregation_preserved: true
+    schema_version_changed: false
+    public_paths_changed: false
+    frontend_changed: false
+    workflow_changed: false
+    melee_outputs_changed: false
+    focused_contract_tests_passed: 6
+    impacted_subsystem_tests_passed: 34
+    tests_passed: 417
+    schema_validation_passed: true
+    schema_validated_outputs: 46
+    repository_validation_passed: true
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    browser_validation:
+      standard_parent_statistics_loaded: true
+      modern_parent_statistics_loaded: true
+      modern_1w_parent_rows: 43
+      modern_parent_detail_loaded: true
+      existing_parent_average_sample_preserved: 96
+      subtype_statistics_controls_present: false
+      subtype_rows_rendered_early: false
+      console_errors_or_warnings: 0
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-24"
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-24"
+    production_workflow_dispatch_authorized: true
+    production_workflow_dispatch_authorized_on: "2026-07-24"
+    phase_7_started: false
+
 next_approved_task:
-  id: "OWNER-DIRECTION-REQUIRED"
-  name: "Select and authorize the next development phase"
+  id: "BRIDGE-MTGO-SUBTYPE-STATS-01-PUBLICATION"
+  name: "Publish, merge, and production-validate the accepted hierarchical MTGO subtype statistics implementation"
   target_paths:
-    - "docs/STATUS.yaml"
-    - "docs/ROADMAP.md"
-  production_change: false
+    - "src/mtgmeta/mtgo/stats.py"
+    - "schemas/mtgo-range.schema.json"
+    - "schemas/mtgo-decks.schema.json"
+    - "stats/standard/mtgo/"
+    - "stats/modern/mtgo/"
+    - "tests/"
+    - "docs/"
+  production_change: true
   requires_user_confirmation: true
-  authorization_status: "phase_6_closeout_authorized_no_follow_up_authorized"
-  remote_publication_authorized: false
-  planning_status: "blocked_pending_owner_direction"
+  authorization_status: "owner_accepted_remote_publication_and_production_validation_authorized"
+  remote_publication_authorized: true
+  production_workflow_dispatch_authorized: true
+  planning_status: "publication_in_progress"
 
 governance_baseline:
   status: "active_on_master"
