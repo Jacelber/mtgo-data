@@ -21,11 +21,15 @@ def command_index(fragment):
     return next(index for index, command in enumerate(commands) if fragment in command)
 
 
-def test_only_one_production_workflow_remains():
+def test_mtgo_remains_the_only_scheduled_production_workflow():
     assert not (WORKFLOWS / "scrape.yml").exists()
     assert UPDATE.exists()
     assert (ROOT / "batch_mtgo.py").exists()
-    assert sorted(path.name for path in WORKFLOWS.glob("*.yml")) == ["ci.yml", "update.yml"]
+    assert sorted(path.name for path in WORKFLOWS.glob("*.yml")) == [
+        "ci.yml",
+        "fetch_melee.yml",
+        "update.yml",
+    ]
 
 
 def test_update_is_the_only_scheduled_production_pipeline():

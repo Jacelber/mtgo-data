@@ -1376,8 +1376,39 @@ changes, or MTGO changes. Those boundaries remain P7-07 and Phase 8 work.
 
 The project owner explicitly authorized local P7-06 development on
 2026-07-25. Local implementation and validation are complete in the isolated
-`codex/p7-06-event-matchups` workspace and await owner acceptance. No remote
-publication is authorized yet.
+`codex/p7-06-event-matchups` workspace. The owner accepted and published P7-06
+through implementation commit
+`864284328437f400a0e0a906d9d3d5ab9a8a75d6`, pull request #101, and merge
+commit `d429b978cb7f2386d9f80c8095b59247d6add97f`. Pull-request CI run
+`30146146051`, post-merge CI run `30146467926`, and Pages run `30146467706`
+completed successfully.
+
+## P7-07 — Public packaging and manual production candidate workflow
+
+P7-07 generates deterministic event metadata and a Modern Tabletop Major
+Events catalog. The metadata binds the exact overview, decks, matchup, and
+quality bytes by relative path, Schema version, size, and SHA-256. The catalog
+exposes only enabled, verified event `434455`. All six public event and catalog
+documents enter the versioned public-output manifest.
+
+A source-specific candidate validator permits only the selected event's new
+raw snapshot, normalized Melee inputs, event statistics, and format catalog.
+It rejects deletion, mutation of retained raw evidence, another event or
+format, and every MTGO path.
+
+The new workflow is manual-only, event-scoped, explicitly concurrent, and
+separate from MTGO `update.yml`. It runs the approved full event sequence but
+may publish only to `data/melee-<event_id>` for review. It cannot push
+`master`, create a pull request, merge, or run on a schedule.
+
+The owner authorized local P7-07 development on 2026-07-25. The task performs
+no live source request and no workflow dispatch. P7-08 remains separately
+controlled. Local implementation completed in the isolated
+`codex/p7-07-publication` workspace with 44 focused, 252 affected, and 488
+complete tests passing. Standard and Modern rule validation, 52-document
+public Schema validation, and repository validation also pass. The owner
+accepted the result and authorized commit, push, pull request, and merge on
+2026-07-25. Workflow dispatch and P7-08 remain separately controlled.
 
 ## Required input work
 

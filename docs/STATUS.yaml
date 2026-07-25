@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p7-06-event-matchups"
-  working_branch_status: "p7_06_local_implementation_completed_pending_owner_acceptance"
+  current_working_branch: "codex/p7-07-publication"
+  working_branch_status: "p7_07_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -3836,7 +3836,7 @@ phase_7_tasks:
 
   - id: "P7-06"
     name: "Generate scoped hierarchical matchup statistics"
-    status: "local_implementation_completed_pending_owner_acceptance"
+    status: "completed_and_published"
     branch: "codex/p7-06-event-matchups"
     base_commit: "6f2e483c5baf3245545ce8a68f2a5fa3e76b34da"
     audit: "docs/audits/P7-06.md"
@@ -3901,35 +3901,104 @@ phase_7_tasks:
     modern_rule_validation_passed: true
     schema_validation_passed: true
     schema_validated_public_outputs: 46
-    owner_acceptance: "pending"
-    remote_publication_authorized: false
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-25"
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-25"
     production_workflow_dispatch_authorized: false
+    implementation_commit: "864284328437f400a0e0a906d9d3d5ab9a8a75d6"
+    pull_request: 101
+    merge_commit: "d429b978cb7f2386d9f80c8095b59247d6add97f"
+    merged_on: "2026-07-25"
+    pull_request_ci_run: 30146146051
+    post_merge_ci_run: 30146467926
+    pages_run: 30146467706
+    ci_status: "success"
+    pages_status: "success"
 
   - id: "P7-07"
     name: "Finalize public Schemas, event catalog, packaging, and production workflow"
-    status: "planned_not_authorized"
+    status: "owner_accepted_remote_publication_authorized_pending_publication"
+    branch: "codex/p7-07-publication"
+    base_commit: "d429b978cb7f2386d9f80c8095b59247d6add97f"
+    audit: "docs/audits/P7-07.md"
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-25"
+    scope:
+      - "Generate deterministic event meta and Modern Melee catalog documents."
+      - "Govern all six public event and catalog documents through the public Schema manifest."
+      - "Validate that one production candidate cannot delete data or write another event, format, source, or MTGO path."
+      - "Add a manual-only source-specific workflow that pushes only an event review branch."
+      - "Keep statistics, taxonomy, front ends, MTGO workflow, and Phase 7 closeout unchanged."
+    reference_event:
+      id: "434455"
+      format: "modern"
+      meta_path: "stats/modern/melee/events/434455/meta.json"
+      meta_bytes: 2365
+      meta_sha256: "e6f953cf9f60feef4c6066ef0ac9296ba04fff41c268abb17b917f08e626bbbd"
+      catalog_path: "stats/modern/melee/index.json"
+      catalog_bytes: 911
+      catalog_sha256: "c8e44d94fff8dc902e848a4fa1dc0b72c57e14e9aec6eb81ef537fe27b565808"
+      public_manifest_documents: 52
+    production_change: true
+    network_request_performed: false
+    workflow_dispatch_performed: false
+    generated_data_changed: true
+    statistical_output_added: false
+    statistical_formula_changed: false
+    classification_taxonomy_changed: false
+    mtgo_output_changed: false
+    public_catalog_changed: true
+    public_output_manifest_changed: true
+    workflow_changed: true
+    frontend_changed: false
+    decision: "DEC-050"
+    publication_schema_version: "1.0.0"
+    deterministic_regeneration_passed: true
+    exact_output_digest_validation_passed: true
+    candidate_scope_validation_passed: true
+    workflow_safety_validation_passed: true
+    focused_tests_passed: 44
+    impacted_tests_passed: 252
+    tests_passed: 488
+    repository_validation_passed: true
+    repository_python_files_checked: 107
+    repository_json_files_checked: 1521
+    repository_yaml_files_checked: 17
+    repository_references_checked: 30
+    repository_hygiene_entries_checked: 1729
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    schema_validation_passed: true
+    schema_validated_public_outputs: 52
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-25"
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-25"
+    production_workflow_dispatch_authorized: false
 
   - id: "P7-08"
     name: "Run real production validation and close Phase 7"
     status: "planned_not_authorized"
 
 next_approved_task:
-  id: "P7-06"
-  name: "Owner acceptance and separately authorized publication of scoped hierarchical matchup statistics"
+  id: "P7-07"
+  name: "Publish the accepted P7-07 implementation"
   target_paths:
-    - "src/mtgmeta/melee/matchup.py"
-    - "schemas/melee-event-matchup.schema.json"
-    - "stats/modern/melee/events/434455/matchup.json"
-    - "tests/test_melee_matchup.py"
-    - "tests/test_validate_schemas.py"
+    - "src/mtgmeta/melee/publish.py"
+    - "validate_melee_candidate.py"
+    - "schemas/"
+    - "stats/modern/melee/"
+    - ".github/workflows/fetch_melee.yml"
+    - "tests/"
     - "docs/"
     - "README.md"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "local_implementation_authorized_owner_acceptance_pending"
-  remote_publication_authorized: false
+  authorization_status: "owner_accepted_remote_publication_authorized"
+  remote_publication_authorized: true
   production_workflow_dispatch_authorized: false
-  planning_status: "local_implementation_completed_pending_owner_acceptance"
+  planning_status: "publication_in_progress"
 
 governance_baseline:
   status: "active_on_master"
@@ -3980,7 +4049,7 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
-  - "Do not build P7-07 or later publication integration before those tasks are separately authorized."
+  - "Do not dispatch the P7-07 workflow or begin P7-08 before separate authorization."
   - "Do not replace the retained P7-02 snapshot or normalized event with a different source snapshot without explicit review."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."

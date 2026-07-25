@@ -1,0 +1,157 @@
+name: Melee production candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      event_id:
+        description: "Enabled and verified Melee event ID"
+        required: true
+        default: "434455"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: melee-production-${{ inputs.event_id }}
+  cancel-in-progress: false
+
+jobs:
+  candidate:
+    name: Build one reviewable Tabletop Major Events candidate
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PYTHONPATH: src
+      EVENT_ID: ${{ inputs.event_id }}
+      FORMAT: modern
+    steps:
+      - name: Check out full history for candidate publication
+        uses: actions/checkout@v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6.3.0
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned development dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Verify clean-checkout code and committed baseline
+        run: python -B -m pytest
+
+      - name: Snapshot Melee candidate baseline
+        run: >-
+          python -B validate_melee_candidate.py snapshot
+          --event-id "$EVENT_ID" --format "$FORMAT"
+          --output "$RUNNER_TEMP/melee-baseline.json"
+
+      - name: Resolve retained snapshot or fetch a new whitelisted event
+        id: snapshot
+        shell: bash
+        run: |
+          EVENT_PATH="data/${FORMAT}/melee/events/${EVENT_ID}.json"
+          if [ -f "$EVENT_PATH" ]; then
+            SNAPSHOT="$(python -c 'import json,pathlib,sys; p=json.load(open(sys.argv[1], encoding="utf-8"))["provenance"]["raw_artifacts"][0]["path"]; print(pathlib.Path(p).parent.as_posix())' "$EVENT_PATH")"
+            SOURCE_MODE="retained"
+          else
+            RESULT="$(python -B -m mtgmeta.melee --event-id "$EVENT_ID" --complete --execute)"
+            printf '%s\n' "$RESULT"
+            SNAPSHOT="$(printf '%s' "$RESULT" | python -c 'import json,sys; print(json.load(sys.stdin)["archive_path"])')"
+            SOURCE_MODE="fetched"
+          fi
+          test -n "$SNAPSHOT"
+          echo "snapshot=$SNAPSHOT" >> "$GITHUB_OUTPUT"
+          echo "source_mode=$SOURCE_MODE" >> "$GITHUB_OUTPUT"
+
+      - name: Retain normalized event
+        run: >-
+          python -B -m mtgmeta.melee.retention
+          --event-id "$EVENT_ID" --snapshot "${{ steps.snapshot.outputs.snapshot }}"
+          --execute
+
+      - name: Classify submitted decks strictly
+        run: >-
+          python -B -m mtgmeta.melee.classification
+          --root . --format "$FORMAT" --event-id "$EVENT_ID"
+          --execute --strict
+
+      - name: Build Constructed opportunity ledger
+        run: >-
+          python -B -m mtgmeta.melee.opportunities
+          --root . --format "$FORMAT" --event-id "$EVENT_ID" --execute
+
+      - name: Build event overview, decks, and quality
+        run: >-
+          python -B -m mtgmeta.melee.stats
+          --root . --format "$FORMAT" --event-id "$EVENT_ID" --execute
+
+      - name: Build hierarchical matchup statistics
+        run: >-
+          python -B -m mtgmeta.melee.matchup
+          --root . --format "$FORMAT" --event-id "$EVENT_ID" --execute
+
+      - name: Package event metadata and catalog
+        run: >-
+          python -B -m mtgmeta.melee.publish
+          --root . --format "$FORMAT" --event-id "$EVENT_ID" --execute
+
+      - name: Validate Melee candidate scope
+        run: >-
+          python -B validate_melee_candidate.py validate
+          --baseline "$RUNNER_TEMP/melee-baseline.json"
+
+      - name: Validate repository, rules, and public Schemas
+        shell: bash
+        run: |
+          python -B validate_repository.py
+          python -B validate_rules.py "my_archetypes/${FORMAT}.yaml"
+          python -B validate_schemas.py
+
+      - name: Commit and push review branch
+        id: publish
+        shell: bash
+        run: |
+          BRANCH="data/melee-${EVENT_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -- "data_raw/melee/${EVENT_ID}/" "data/${FORMAT}/melee/" "stats/${FORMAT}/melee/"
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+            echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "chore: build Melee event ${EVENT_ID} candidate"
+          git push origin "HEAD:refs/heads/${BRANCH}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Verify review branch
+        if: steps.publish.outputs.changed == 'true'
+        shell: bash
+        run: |
+          REMOTE_SHA="$(git ls-remote origin "refs/heads/${{ steps.publish.outputs.branch }}" | awk '{print $1}')"
+          test "$REMOTE_SHA" = "${{ steps.publish.outputs.commit }}"
+
+      - name: Write candidate summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Melee production candidate"
+            echo
+            echo "- Event ID: ${EVENT_ID}"
+            echo "- Format: ${FORMAT}"
+            echo "- Source mode: ${{ steps.snapshot.outputs.source_mode || 'not-reached' }}"
+            echo "- Result: ${{ job.status }}"
+            echo "- Candidate changed: ${{ steps.publish.outputs.changed || 'not-reached' }}"
+            echo "- Review branch: ${{ steps.publish.outputs.branch || 'not-reached' }}"
+            echo "- Candidate commit: ${{ steps.publish.outputs.commit || 'not-reached' }}"
+            echo "- This workflow never pushes directly to master and never creates or merges a pull request."
+          } >> "$GITHUB_STEP_SUMMARY"

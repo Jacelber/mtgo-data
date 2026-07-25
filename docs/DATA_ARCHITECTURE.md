@@ -1322,6 +1322,38 @@ catalog. The new document and its Schema are validated directly in P7-06 but
 remain outside `schemas/manifest.json`; P7-07 owns public discovery, manifest
 governance, `meta.json`, and workflow integration.
 
+### 11.11 Deterministic event publication packaging
+
+P7-07 rebuilds and byte-compares the four event statistics before publishing
+their metadata. It writes only:
+
+```text
+stats/<format>/melee/events/<event_id>/meta.json
+stats/<format>/melee/index.json
+```
+
+`meta.json` binds overview, decks, matchup, and quality by relative path,
+Schema version, byte size, and SHA-256. It also carries the shared immutable
+input provenance, scopes, default scope, and reviewed quality issue codes.
+`index.json` is the format-level discovery boundary and points to the five
+event documents. Neither document contains wall-clock or Git-derived state.
+
+The overview, decks, matchup, quality, meta, and catalog documents are all
+declared in `schemas/manifest.json`. The source-specific candidate validator
+allows only the selected event's immutable new raw snapshot, normalized
+Melee-derived inputs, event statistics, and format catalog. It rejects
+deletions, retained-raw mutation, another event, another format, and every
+MTGO path.
+
+The manual Melee workflow is separate from `update.yml`. It starts only through
+`workflow_dispatch`. An event with canonical normalized input reuses the exact
+immutable snapshot recorded by that input; only a new event without canonical
+input performs a complete live fetch. The workflow runs the remaining approved
+event sequence and pushes changed data only to `data/melee-<event_id>` for
+later review. It cannot push
+`master`, create a pull request, merge, or run on a schedule. P7-08 owns the
+first authorized real workflow execution.
+
 ---
 
 ## 12. Statistics-output layout

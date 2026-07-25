@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-catalog.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Tabletop Major Events format catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "source",
+    "product",
+    "format",
+    "default_event_id",
+    "events"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "event_catalog"},
+    "source": {"const": "melee"},
+    "product": {"const": "tabletop-major-events"},
+    "format": {"$ref": "melee-event-statistics-common.schema.json#/$defs/id"},
+    "default_event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/event"}
+    }
+  },
+  "$defs": {
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "name",
+        "series",
+        "date",
+        "event_structure",
+        "source_url",
+        "meta",
+        "overview",
+        "decks",
+        "matchup",
+        "quality",
+        "scope_order",
+        "default_scope",
+        "quality_status"
+      ],
+      "properties": {
+        "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "name": {"type": "string", "minLength": 1},
+        "series": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+        "date": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": {"type": "string", "format": "date"},
+            "end": {"type": "string", "format": "date"}
+          }
+        },
+        "event_structure": {"const": "mixed"},
+        "source_url": {"type": "string", "format": "uri"},
+        "meta": {"type": "string", "pattern": "^events/[1-9][0-9]*/meta\\.json$"},
+        "overview": {"type": "string", "pattern": "^events/[1-9][0-9]*/overview\\.json$"},
+        "decks": {"type": "string", "pattern": "^events/[1-9][0-9]*/decks\\.json$"},
+        "matchup": {"type": "string", "pattern": "^events/[1-9][0-9]*/matchup\\.json$"},
+        "quality": {"type": "string", "pattern": "^events/[1-9][0-9]*/quality\\.json$"},
+        "scope_order": {"const": ["day1", "day2", "all_constructed"]},
+        "default_scope": {"const": "all_constructed"},
+        "quality_status": {"enum": ["pass", "warning"]}
+      }
+    }
+  }
+}
