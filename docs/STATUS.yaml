@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p7-ci-efficiency-02"
-  working_branch_status: "p7_ci_efficiency_02_local_implementation_completed_pending_owner_acceptance"
+  current_working_branch: "codex/p7-ci-efficiency-plan-01"
+  working_branch_status: "p7_ci_efficiency_plan_01_local_implementation_completed_pending_owner_acceptance"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -3599,7 +3599,7 @@ phase_7_tasks:
 
   - id: "P7-CI-EFFICIENCY-02"
     name: "Add read-only CI timing observation"
-    status: "local_implementation_completed_pending_owner_acceptance"
+    status: "completed_and_published"
     branch: "codex/p7-ci-efficiency-02"
     base_commit: "ddfc34ed356c590786b585b50c03e1d1ea90ff78"
     owner_local_implementation_authorized: true
@@ -3627,6 +3627,37 @@ phase_7_tasks:
     modern_rule_validation_passed: true
     schema_validation_passed: true
     schema_validated_outputs: 46
+    owner_acceptance: "accepted"
+    remote_publication_authorized: true
+    implementation_commit: "1949f3c9b762930f720b839aca6d713c8f6accca"
+    pull_request: 97
+    merge_commit: "53e2f685d9c4e3b3cea987b2ddf979713781afde"
+    merged_on: "2026-07-24"
+    pull_request_ci_run: 30105972366
+    post_merge_ci_run: 30106707496
+    pages_run: 30106706682
+    ci_status: "success"
+    pages_status: "success"
+
+  - id: "P7-CI-EFFICIENCY-PLAN-01"
+    name: "Record CI efficiency evidence and decision plan"
+    status: "local_implementation_completed_pending_owner_acceptance"
+    branch: "codex/p7-ci-efficiency-plan-01"
+    base_commit: "ca71fe2dbb3b22dff75f4552d44386b838deaceb"
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-25"
+    scope:
+      - "Record the CI-efficiency sample ledger, counts, decision gates, stop conditions, and model guidance."
+      - "Keep all workflows, branch protections, test selection, production behavior, public outputs, and statistics unchanged."
+    target_paths:
+      - "docs/audits/CI_EFFICIENCY_PLAN.md"
+      - "docs/DEVELOPMENT_WORKFLOW.md"
+      - "docs/STATUS.yaml"
+    workflow_changed: false
+    production_workflow_changed: false
+    statistical_behavior_changed: false
+    public_paths_changed: false
+    repository_validation_passed: true
     owner_acceptance: "pending"
     remote_publication_authorized: false
 
@@ -3651,12 +3682,9 @@ phase_7_tasks:
     status: "planned_not_authorized"
 
 next_approved_task:
-  id: "P7-CI-EFFICIENCY-02"
-  name: "Owner acceptance and separately authorized publication of CI timing observation"
+  id: "P7-CI-EFFICIENCY-PLAN-01"
+  name: "Owner acceptance and separately authorized publication of the CI efficiency evidence plan"
   target_paths:
-    - ".github/workflows/ci.yml"
-    - "ci_timing.py"
-    - "tests/"
     - "docs/"
   production_change: false
   requires_user_confirmation: true
