@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p7-07-publication"
-  working_branch_status: "p7_07_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p7-08-closeout"
+  working_branch_status: "phase_7_completed"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,13 +57,13 @@ authoritative_documents:
 current_phase:
   id: 7
   name: "Mixed-format Modern Pro Tour reference pipeline"
-  status: "in_progress"
+  status: "completed"
   started_on: "2026-07-24"
-  completed_on: null
-  recovery_tag: null
+  completed_on: "2026-07-25"
+  recovery_tag: "phase-7-tabletop-major-events-backend"
   objective: "Implement the first approved Melee event from verified collection through source-separated per-event statistics."
-  production_changes_allowed: true
-  feature_development_allowed: true
+  production_changes_allowed: false
+  feature_development_allowed: false
 
 phase_0_pull_request:
   number: 1
@@ -3918,7 +3918,7 @@ phase_7_tasks:
 
   - id: "P7-07"
     name: "Finalize public Schemas, event catalog, packaging, and production workflow"
-    status: "owner_accepted_remote_publication_authorized_pending_publication"
+    status: "completed_and_published"
     branch: "codex/p7-07-publication"
     base_commit: "d429b978cb7f2386d9f80c8095b59247d6add97f"
     audit: "docs/audits/P7-07.md"
@@ -3976,29 +3976,99 @@ phase_7_tasks:
     remote_publication_authorized: true
     remote_publication_authorized_on: "2026-07-25"
     production_workflow_dispatch_authorized: false
+    implementation_commit: "9791e7398f9eca1187f146e38aa0dfddb7ee5534"
+    pull_request: 102
+    merge_commit: "30fb4fbdd7a72f093847fc74f33f7a6a654df1c4"
+    merged_on: "2026-07-25"
+    pull_request_ci_run: 30148125167
+    post_merge_ci_run: 30148439065
+    pages_run: 30148438934
+    ci_status: "success"
+    pages_status: "success"
 
   - id: "P7-08"
     name: "Run real production validation and close Phase 7"
-    status: "planned_not_authorized"
+    status: "completed"
+    branch: "codex/p7-08-closeout"
+    base_commit: "30fb4fbdd7a72f093847fc74f33f7a6a654df1c4"
+    audit: "docs/audits/P7-08.md"
+    owner_local_preparation_authorized: true
+    owner_local_preparation_authorized_on: "2026-07-25"
+    scope:
+      - "Freeze one minimal cross-layer Phase 7 backend closeout contract."
+      - "Backfill the exact P7-07 publication evidence."
+      - "Validate retained input, classification, opportunity, statistics, public packaging, and source separation without regenerating committed output."
+      - "Stop before the first real Melee production workflow dispatch."
+      - "Keep Phase 8 front-end work, statistical policy, taxonomy, schemas, workflows, retained data, and generated data unchanged."
+    proposed_recovery_tag: "phase-7-tabletop-major-events-backend"
+    focused_closeout_tests_passed: 3
+    impacted_tests_passed: 255
+    tests_passed: 491
+    repository_validation_passed: true
+    repository_python_files_checked: 108
+    repository_json_files_checked: 1521
+    repository_yaml_files_checked: 17
+    repository_references_checked: 30
+    repository_hygiene_entries_checked: 1731
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    schema_validation_passed: true
+    schema_validated_public_outputs: 52
+    local_validation_status: "pass"
+    anonymous_repository_clone_performed: true
+    declared_dependency_install_performed: true
+    melee_source_request_performed: false
+    workflow_dispatch_performed: true
+    production_workflow_dispatch_authorized: true
+    production_workflow_dispatch_authorized_on: "2026-07-25"
+    production_workflow_run: 30149718594
+    production_workflow_job: 89657881345
+    production_workflow_source_commit: "30fb4fbdd7a72f093847fc74f33f7a6a654df1c4"
+    production_workflow_status: "success"
+    production_workflow_source_mode: "retained"
+    production_workflow_snapshot: "data_raw/melee/434455/20260724T092458Z-01"
+    production_workflow_snapshot_reused: true
+    production_workflow_clean_checkout_tests_passed: 488
+    production_workflow_candidate_changed_paths: 0
+    production_workflow_candidate_changed: false
+    production_workflow_review_branch_created: false
+    production_workflow_master_unchanged: true
+    production_workflow_outputs_reused: true
+    production_validation_status: "pass"
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-25"
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-25"
+    recovery_tag_authorized: true
+    recovery_tag_authorized_on: "2026-07-25"
+    completed_on: "2026-07-25"
+
+phase_7_result:
+  status: "completed"
+  completed_on: "2026-07-25"
+  closeout_task: "P7-08"
+  closeout_branch: "codex/p7-08-closeout"
+  baseline_commit: "30fb4fbdd7a72f093847fc74f33f7a6a654df1c4"
+  recovery_tag: "phase-7-tabletop-major-events-backend"
+  acceptance:
+    documented_criteria_passed: true
+    production_validation_passed: true
+    project_owner_approved: true
+    remote_publication_authorized: true
+    recovery_tag_authorized: true
+    phase_8_authorized: false
 
 next_approved_task:
-  id: "P7-07"
-  name: "Publish the accepted P7-07 implementation"
+  id: "P8-PLANNING"
+  name: "Review and authorize the Phase 8 front-end plan"
   target_paths:
-    - "src/mtgmeta/melee/publish.py"
-    - "validate_melee_candidate.py"
-    - "schemas/"
-    - "stats/modern/melee/"
-    - ".github/workflows/fetch_melee.yml"
-    - "tests/"
-    - "docs/"
-    - "README.md"
-  production_change: true
+    - "docs/ROADMAP.md"
+    - "docs/STATUS.yaml"
+  production_change: false
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_remote_publication_authorized"
-  remote_publication_authorized: true
-  production_workflow_dispatch_authorized: false
-  planning_status: "publication_in_progress"
+  authorization_status: "not_authorized"
+  remote_publication_authorized: false
+  planning_status: "awaiting_owner_review"
 
 governance_baseline:
   status: "active_on_master"
@@ -4049,7 +4119,8 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
-  - "Do not dispatch the P7-07 workflow or begin P7-08 before separate authorization."
+  - "Do not re-dispatch the Melee production workflow without separate authorization."
+  - "Do not begin Phase 8 before separate owner authorization."
   - "Do not replace the retained P7-02 snapshot or normalized event with a different source snapshot without explicit review."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
