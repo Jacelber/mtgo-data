@@ -4112,7 +4112,10 @@ phase_8_plan:
   tasks:
     - id: "P8-01"
       name: "Current UI and public-data consumer audit"
-      status: "awaiting_authorization"
+      status: "completed_local_awaiting_owner_acceptance"
+      authorized_on: "2026-07-25"
+      audited_base: "3bb89c9e9ada4020e9ddfe353b68a9f5227cc211"
+      deliverable: "docs/audits/P8-01.md"
     - id: "P8-02"
       name: "Local information architecture and interaction prototypes"
       status: "not_started"
@@ -4146,14 +4149,14 @@ phase_8_plan:
 
 next_approved_task:
   id: "P8-01"
-  name: "Review and authorize the current UI and public-data consumer audit"
+  name: "Review and accept the completed current UI and public-data consumer audit"
   target_paths:
     - "docs/audits/P8-01.md"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
+  authorization_status: "authorized_local_completed_awaiting_owner_acceptance"
   remote_publication_authorized: false
-  planning_status: "phase_8_plan_approved_awaiting_task_review"
+  planning_status: "phase_8_plan_approved_p8_01_awaiting_owner_acceptance"
 
 governance_baseline:
   status: "active_on_master"
@@ -4205,7 +4208,6 @@ prohibited_next_actions:
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
   - "Do not re-dispatch the Melee production workflow without separate authorization."
-  - "Do not begin P8-01 implementation without separate owner authorization."
   - "Do not use Superdesign or transmit project context to an external design service without the P8 external-design approval gate."
   - "Do not begin Phase 8 backend production changes before P8-03 owner UI acceptance."
   - "Do not begin the final Phase 8 production front end before P8-07 backend consumer-readiness acceptance."
