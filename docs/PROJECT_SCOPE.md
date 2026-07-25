@@ -83,6 +83,7 @@ The MTGO product should retain or develop the following capabilities:
 - high-score counts and proportions;
 - high-score conversion;
 - Top 8 information where present in source events;
+- a complete-week view of admitted MTGO event Top 8 decklists;
 - average points per theoretical round;
 - representative or average decklists;
 - deck-construction deviation;
@@ -91,6 +92,17 @@ The MTGO product should retain or develop the following capabilities:
 - Unknown deck reporting;
 - classification conflict reporting;
 - data update date and data-quality information.
+
+Parent archetypes are the default aggregation. Where maintained subtypes exist,
+the product must support taxonomy-driven expansion without changing or
+double-counting the parent result. Deck-construction comparison is based on the
+most specific maintained identity: subtype-specific for a subtype-defining
+parent and parent-specific only when the parent defines no subtypes.
+
+MTGO source completeness must be visible rather than implied. The product must
+show range-specific matchup-source coverage and a reviewed theoretical-versus-
+observed high-score decklist completeness measure with their raw numerators,
+denominators, exclusions, and unavailable states.
 
 The existing Standard page must remain functional during refactoring.
 
@@ -369,14 +381,28 @@ Pauper and the approved Paupergeddon event remain in scope after the Modern refe
 
 ## 9. Front-end scope
 
-### 9.1 Top-level navigation
+### 9.1 Navigation hierarchy
 
-The product should expose two clear top-level sections:
+The primary analysis selector is the Constructed format.
 
-- MTGO Environment Trends
-- Tabletop Major Events
+After selecting a format, the user should be able to choose the products
+available for that format:
 
-The source name “Melee” may appear in event metadata but should not be the only user-facing description of the tabletop product.
+- MTGO official event statistics;
+- MTGO matchup win rates;
+- MTGO weekly Top 8 decklists;
+- Tabletop Major Events;
+- Weekly Pickup.
+
+Availability must come from generated catalogs rather than a hard-coded
+assumption that every format supports every product.
+
+MTGO Environment Trends and Tabletop Major Events remain clear, separately
+identified source products. The format-first navigation may connect their
+separate entry points and retain the selected format, but it must not merge
+their data loading or statistics. The source name “Melee” may appear in event
+metadata but should not be the only user-facing description of the tabletop
+product.
 
 ### 9.2 MTGO page
 
@@ -385,6 +411,17 @@ The existing root page remains the MTGO entry point:
 `/index.html`
 
 The current Standard behavior must be protected while the page is split and generalized.
+
+The MTGO page must default hierarchical statistics and matchup axes to parent
+archetypes. Eligible parents may expand into maintained subtypes individually
+or through one global control. Parents with zero or one maintained subtype must
+not expose a redundant expansion control. Visible subtype labels must remain
+self-contained when the parent row is replaced.
+
+The MTGO page should also provide a complete-week Top 8 decklist view. Selecting
+a listed deck should use the same detail structure as MTGO statistics while
+showing the exact event deck, its subtype-based deviation, and its subtype
+average deck.
 
 ### 9.3 Tabletop page
 
@@ -423,6 +460,12 @@ The initial target structure is:
 - additional focused JavaScript modules when justified.
 
 The split must preserve existing behavior, visual presentation, language behavior, data paths, and GitHub Pages deployment.
+
+The Phase 8 redesign must be approved through local information-architecture
+and interaction prototypes before backend production additions or final
+front-end implementation. External generative design services are optional and
+require separate owner authorization after a documented cost, privacy, scope,
+and local-alternative review.
 
 ---
 

@@ -1660,6 +1660,49 @@ whether an archetype is already known, while subtype ID and display name may be
 retained as informational review fields. Subtypes do not split the base pack,
 the existing/new decision, or the Pickup population.
 
+### 16.7 Phase 8 MTGO source-completeness contracts
+
+Phase 8 must expose two separate completeness products. They must not be merged
+or presented as general confidence in all MTGO statistics.
+
+MTGO matchup-source completeness is interval-specific and must retain:
+
+- expected or admitted official events in the selected interval;
+- events with a usable approved matchup archive;
+- missing, deferred, and excluded events;
+- the raw numerator and denominator;
+- the resulting rate or an explicit unavailable state;
+- source and formula version.
+
+MTGO high-score decklist completeness is also interval-specific and must retain:
+
+- the reviewed theoretical high-score decklist count derived from eligible
+  event round and participant structures;
+- the observed usable high-score decklist count;
+- unsupported or indeterminate events;
+- the raw numerator and denominator;
+- the resulting rate or an explicit unavailable state;
+- source and formula version.
+
+The exact admitted-event rules, theoretical high-score calculation, exclusions,
+rounding, and unsupported-event behavior remain a P8-04 statistical-contract
+decision. They require owner review, fixtures, and tests before generator or
+front-end implementation. The browser must never estimate either denominator.
+
+### 16.8 Weekly MTGO Top 8 decklist presentation data
+
+The weekly Top 8 product groups admitted MTGO events by complete week and
+retains each event's first eight finishing decklists when available. It must
+preserve event identity, date, finish, stable parent and subtype identity,
+source provenance, and explicit missing-deck states.
+
+Selecting one entry displays the exact event deck, not a representative deck.
+If the selected identity belongs to a subtype-defining parent, its deviation
+and comparison average use that subtype's independently calculated construction
+base under section 16.4. A parent with no maintained subtype uses its parent
+base. The weekly product must not create a cross-subtype average or reclassify a
+deck in browser code.
+
 ---
 
 ## 17. Tabletop per-event outputs
