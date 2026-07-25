@@ -1405,6 +1405,7 @@ index.json
 12w.json
 36w.json
 matchup.json
+top8_decks.json
 weekly_pickup.json
 ```
 
@@ -1477,6 +1478,24 @@ consume Melee records, and Phase 7's Modern Pro Tour pipeline must not write to
 or aggregate into them. The existing production statistics command regenerates
 the additive hierarchy for every MTGO format that has range-statistics
 capability; no second subtype-only workflow or public path is introduced.
+
+Phase 8 may add a dedicated weekly Top 8 document after its exact contract is
+approved. That output must be generated from admitted MTGO events and include:
+
+- complete-week and event identity;
+- event date and finishing position;
+- stable parent and subtype identity;
+- a stable self-contained subtype display label;
+- an exact decklist reference or explicit missing-deck state;
+- provenance for the subtype construction base used by deviation and
+  average-deck comparison.
+
+Phase 8 may also extend MTGO metadata or range documents with approved
+completeness payloads. Matchup completeness must retain the expected/admitted,
+available, missing, and excluded event counts for the selected interval.
+High-score decklist completeness must retain the reviewed theoretical and
+observed counts, unsupported-event states, and formula version. The browser
+must not infer either denominator from presentation rows.
 
 ### 12.2 Melee output
 
@@ -1715,6 +1734,19 @@ The tabletop entry point is:
 /melee/index.html
 ```
 
+The visible analysis hierarchy is format-first. A shared shell retains the
+selected format while routing to the products available for that format:
+
+- MTGO official event statistics;
+- MTGO matchup win rates;
+- MTGO weekly Top 8 decklists;
+- Tabletop Major Events;
+- Weekly Pickup.
+
+The shell must obtain product availability and public paths from generated
+catalogs. Routing between entry points must not combine MTGO and tabletop
+payloads, caches, or statistical state.
+
 ### 15.2 Shared assets
 
 Shared front-end assets belong under:
@@ -1745,7 +1777,7 @@ Responsibilities may include:
 - date formatting;
 - percentage formatting;
 - error messages;
-- top-level navigation;
+- format-first and product navigation;
 - shared language utilities where appropriate.
 
 It must not contain all MTGO and Melee product logic.
@@ -1801,6 +1833,50 @@ The shared statistical tests must prove every hierarchical matchup rollup before
 the front end relies on it. JavaScript may select and sum the approved canonical
 count cells for an interaction, but it must not infer classification, invent a
 subtype, average percentages, or define a different eligibility rule.
+
+### 15.8 Hierarchical statistics and deck-detail presentation
+
+All hierarchical statistics default to parent archetypes. A maintained parent
+with at least two subtypes may expand; a parent with zero or one subtype is a
+non-expandable presentation node. Matchup axes expand independently, and one
+global control may expand or collapse all eligible parents.
+
+A subtype must have a stable self-contained public display label, such as
+`Grixis Prowess`, in addition to its stable subtype ID and parent membership.
+Presentation code must not rename classifier identities or guess a label from
+color words. The exact catalog field and compatibility behavior are frozen
+before generator implementation.
+
+Deck-construction details use the most specific maintained identity:
+
+- selecting an expandable parent expands its subtypes and does not display an
+  averaged cross-subtype deck;
+- selecting a subtype displays the subtype's independently generated
+  representative, average, deviation, and recent-change data;
+- selecting a parent with no maintained subtypes may display its existing
+  parent-level detail;
+- a weekly Top 8 selection displays the exact event deck while reusing the same
+  detail component and subtype comparison base.
+
+### 15.9 Design-to-data sequence
+
+Phase 8 follows this order:
+
+1. current UI and public-data audit;
+2. local information-architecture and interaction prototypes;
+3. owner-approved UI specification;
+4. statistical and public payload contract;
+5. backend generation and Schema validation;
+6. shared static page split;
+7. final MTGO and tabletop UI implementation;
+8. cross-product browser and regression acceptance.
+
+Local HTML/CSS/JavaScript prototypes are the default design method. An external
+generative design service is not part of the required architecture and may be
+used only after separate owner authorization that identifies the design gap,
+expected deliverables, current cost or quota limits, transmitted context, data
+minimization, and the local alternative. Its output is advisory and does not
+replace repository specifications, tests, or owner acceptance.
 
 ---
 

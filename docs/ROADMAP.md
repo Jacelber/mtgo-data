@@ -1182,8 +1182,9 @@ explicitly authorizes them.
 
 The sequence intentionally completes normalized source retention before
 classification, classification before statistics, and statistics before
-workflow publication. Phase 8 owns the Tabletop Major Events front end; Phase
-7 produces the complete backend contract that the page will consume.
+workflow publication. Phase 8 owns the format-first public redesign and
+Tabletop Major Events front end; Phase 7 produces the complete event backend
+contract that those views will consume.
 
 ## P7-01 — Reference-event activation and production boundary
 
@@ -1523,90 +1524,141 @@ Phase 7 is complete when:
 
 ---
 
-# Phase 8 — Tabletop Major Events front end
+# Phase 8 — Format-first front end and supporting data contracts
 
 ## Objective
 
-Create the separate event-based front end for approved tabletop events.
+Redesign the public information architecture around format-first navigation,
+add the separate Tabletop Major Events front end, expose parent/subtype data
+consistently, and implement only the backend additions required by the approved
+interface.
 
-## Target page
+The authoritative execution plan is:
 
-Create:
+- `docs/audits/P8-FRONTEND-PLANNING.md`
 
-- `melee/index.html`
+The phase order is fixed:
 
-The directory name may remain `melee` as an internal implementation path, but the visible product name should be:
+1. audit the current UI and public data;
+2. design and approve the final UI locally;
+3. freeze the UI behavior and backend consumer contract;
+4. implement and validate required backend additions;
+5. implement the final MTGO and tabletop front ends;
+6. run cross-product regression and browser acceptance.
 
-- Tabletop Major Events
+Do not implement backend payloads before the P8-03 UI freeze. Do not implement
+the final production front end before P8-07 backend consumer-readiness
+acceptance.
 
-## Top-level navigation
+## Navigation and source boundary
 
-Use:
+Format is the primary analysis selector. After a format is selected, expose the
+available products:
 
-- MTGO Environment Trends
-- Tabletop Major Events
+- MTGO official event statistics;
+- MTGO matchup win rates;
+- MTGO weekly Top 8 decklists;
+- Tabletop Major Events;
+- Weekly Pickup.
 
-Do not present the entire second product only as “Melee.”
+The available products and paths are catalog-driven. MTGO remains at
+`/index.html`, Tabletop Major Events remains at `/melee/index.html`, and the
+shared shell may retain the selected format while routing between them. It must
+not merge their records, caches, generated statistics, or quality claims.
 
-## Event behavior
+## Hierarchical interaction
 
-The front end must support:
+Parent archetypes are shown by default. Eligible parents expand into maintained
+subtypes individually, matchup axes expand independently, and one global
+control expands or collapses all eligible parents. Parents with zero or one
+maintained subtype expose no redundant control.
 
-- format selection;
-- event selection;
-- latest enabled event as the default for each format;
-- event-specific overview;
-- event-specific matchup matrix;
-- visible data-quality warnings;
-- links or references to the source event;
-- separate MTGO and tabletop navigation.
+Subtype labels must be self-contained when displayed, such as
+`Grixis Prowess`. Selecting an expandable parent only reveals its subtypes.
+Representative deck, average deck, deviation, and recent construction change
+use the most specific maintained identity and are never averaged across
+different subtypes for display.
 
-## Page A: event overview
+## New data products
 
-Page A is calculated per event only.
+Phase 8 adds, after contract approval:
 
-It may show, depending on event type:
+- a complete-week MTGO Top 8 view covering every admitted event and its first
+  eight finishing decklists when available;
+- exact-deck detail that compares the selected event deck with its subtype
+  average and deviation base;
+- range-specific Videre expected/available/missing event completeness;
+- reviewed theoretical-versus-observed MTGO high-score decklist completeness;
+- stable self-contained subtype display labels.
 
-- archetype;
-- deck count;
-- initial metagame share;
-- average points per theoretical round;
-- high-score count;
-- high-score-region share;
-- high-score conversion;
-- Day 2 count;
-- Day 2 share;
-- Day 2 conversion;
-- Day 1 win rate;
-- Day 2 win rate;
-- all-Constructed Swiss win rate;
-- sample size;
-- quality warnings.
+The completeness formulas, denominators, event eligibility, exclusions,
+rounding, and unavailable states are specified and tested before generators or
+front-end presentation change. The browser does not infer them.
 
-## Page B: matchup matrix
+## Design method
 
-Page B must support:
+Use local UI analysis, disposable HTML/CSS/JavaScript prototypes, and browser
+review by default. Superdesign is not part of the default phase toolchain.
+Before any Superdesign generation or upload, explain the unresolved design
+problem, expected value, current price or quota limits, transmitted context,
+privacy controls, and local alternative, then obtain separate owner
+authorization. Installation or authentication alone is not authorization.
 
-- a single-event matrix;
-- optional aggregation of approved same-format events;
-- visible matchup scope;
-- W-L-D counts;
-- valid match count;
-- win rate;
-- confidence interval where specified;
-- low-sample warnings.
+## Tasks
+
+1. `P8-01` — audit current UI, public data consumers, and backend gaps.
+2. `P8-02` — build local information-architecture and interaction prototypes.
+3. `P8-03` — obtain owner approval and freeze the UI and consumer contract.
+4. `P8-04` — specify completeness, Top 8, subtype-label, detail, Schema, and
+   compatibility contracts.
+5. `P8-05` — implement the weekly MTGO Top 8 backend product.
+6. `P8-06` — implement MTGO matchup and high-score completeness products.
+7. `P8-07` — validate Standard/Modern backend consumer readiness against real
+   retained production data.
+8. `P8-08` — split the shared static shell while preserving current behavior.
+9. `P8-09` — implement the approved format-first MTGO production UI.
+10. `P8-10` — implement the Tabletop Major Events production UI.
+11. `P8-11` — complete cross-product regression, deployed-browser acceptance,
+    documentation, and Phase 8 closeout.
+
+Every task requires separate focused authorization. P8-03 and P8-07 are
+mandatory owner stop points.
+
+## Tabletop behavior
+
+The Tabletop Major Events front end supports:
+
+- format and event selection;
+- latest enabled event as the catalog-driven default;
+- event-specific overview and hierarchical matchup matrix;
+- Day 1, Day 2, and all-Constructed scope where applicable;
+- W-L-D counts, sample sizes, confidence intervals, and low-sample states;
+- visible selection-bias, exclusion, completeness, and quality warnings;
+- source-event references;
+- optional aggregation only for approved compatible same-format events.
+
+The visible product name is Tabletop Major Events. `Melee` remains an internal
+path and source name.
 
 ## Acceptance criteria
 
 Phase 8 is complete when:
 
+- format is the primary analysis selector;
+- the five product views are catalog-driven by selected format;
+- MTGO and tabletop entry points and statistics remain separate;
+- parent/subtype controls work on statistics and both matchup axes;
+- zero- or one-subtype parents expose no redundant control;
+- every visible subtype label is self-contained;
+- deck-construction details use the most specific maintained identity;
+- weekly MTGO Top 8 exact-deck and subtype-comparison details work;
+- Videre and high-score decklist completeness display approved generated
+  numerators, denominators, exclusions, and unavailable states;
 - the approved Modern Pro Tour is viewable independently from MTGO Modern;
-- the event overview loads per-event JSON;
-- the matchup matrix loads event-specific JSON;
-- data-quality warnings are visible;
-- the latest event behavior is configuration-driven;
-- the MTGO page remains operational;
-- no MTGO and Melee statistics are merged.
+- event overview and matchup data load from event-specific public JSON;
+- Standard and Modern baselines, public paths, GitHub Pages behavior, and
+  source separation pass regression;
+- owner browser acceptance is complete.
 
 ---
 

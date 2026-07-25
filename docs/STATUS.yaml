@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p7-08-closeout"
-  working_branch_status: "phase_7_completed"
+  current_working_branch: "codex/p8-ui-redesign-planning"
+  working_branch_status: "phase_8_plan_local"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -55,13 +55,13 @@ authoritative_documents:
       authoritative: false
 
 current_phase:
-  id: 7
-  name: "Mixed-format Modern Pro Tour reference pipeline"
-  status: "completed"
-  started_on: "2026-07-24"
-  completed_on: "2026-07-25"
-  recovery_tag: "phase-7-tabletop-major-events-backend"
-  objective: "Implement the first approved Melee event from verified collection through source-separated per-event statistics."
+  id: 8
+  name: "Format-first front end and supporting data contracts"
+  status: "planning_approved_implementation_not_started"
+  started_on: null
+  completed_on: null
+  recovery_tag: null
+  objective: "Approve the final format-first UI locally, implement only its missing backend contracts, then deliver separate MTGO and Tabletop Major Events front ends."
   production_changes_allowed: false
   feature_development_allowed: false
 
@@ -4058,17 +4058,102 @@ phase_7_result:
     recovery_tag_authorized: true
     phase_8_authorized: false
 
-next_approved_task:
+phase_8_plan:
   id: "P8-PLANNING"
-  name: "Review and authorize the Phase 8 front-end plan"
+  name: "Format-first front-end and supporting data plan"
+  status: "owner_approved_local_documentation"
+  owner_approved: true
+  owner_approved_on: "2026-07-25"
+  implementation_authorized: false
+  production_change_authorized: false
+  remote_publication_authorized: false
+  plan: "docs/audits/P8-FRONTEND-PLANNING.md"
+  decision: "DEC-051"
+  required_order:
+    - "Audit the current UI and public-data consumers."
+    - "Create and review local information-architecture and interaction prototypes."
+    - "Freeze the owner-approved UI and backend consumer contract."
+    - "Specify and implement the missing backend data products."
+    - "Split the shared static shell and implement the final MTGO and tabletop front ends."
+    - "Run cross-product regression and real-browser acceptance."
+  approved_navigation:
+    primary_selector: "format"
+    format_products:
+      - "MTGO official event statistics"
+      - "MTGO matchup win rates"
+      - "MTGO weekly Top 8 decklists"
+      - "Tabletop Major Events"
+      - "Weekly Pickup"
+    catalog_driven_availability: true
+    mtgo_tabletop_statistics_merged: false
+  approved_hierarchy:
+    default_level: "parent_archetype"
+    independent_matchup_axis_expansion: true
+    global_subtype_control: true
+    hide_zero_or_one_subtype_expansion: true
+    self_contained_subtype_labels: true
+    construction_detail_identity: "most_specific_maintained_identity"
+  planned_backend_gaps:
+    - "Complete-week MTGO Top 8 event and exact-deck payloads."
+    - "Range-specific Videre expected, available, missing, and excluded coverage."
+    - "Reviewed theoretical-versus-observed MTGO high-score decklist completeness."
+    - "Stable self-contained subtype display labels and shared detail references."
+  design_method:
+    default: "local_html_css_javascript_prototypes"
+    superdesign_default_enabled: false
+    superdesign_current_authorization: false
+    superdesign_requires:
+      - "A specific unresolved visual-design problem."
+      - "Expected value and deliverables."
+      - "Verified current pricing, free-tier, quota, and model limits."
+      - "An explicit list of transmitted prompts, files, images, and data."
+      - "Privacy minimization and a local alternative comparison."
+      - "Separate owner authorization before generation or upload."
+  tasks:
+    - id: "P8-01"
+      name: "Current UI and public-data consumer audit"
+      status: "awaiting_authorization"
+    - id: "P8-02"
+      name: "Local information architecture and interaction prototypes"
+      status: "not_started"
+    - id: "P8-03"
+      name: "Owner review and UI freeze"
+      status: "not_started"
+    - id: "P8-04"
+      name: "Statistical and public data contract"
+      status: "not_started"
+    - id: "P8-05"
+      name: "Weekly MTGO Top 8 backend product"
+      status: "not_started"
+    - id: "P8-06"
+      name: "MTGO completeness backend product"
+      status: "not_started"
+    - id: "P8-07"
+      name: "Backend consumer-readiness closeout"
+      status: "not_started"
+    - id: "P8-08"
+      name: "Shared static shell and page split"
+      status: "not_started"
+    - id: "P8-09"
+      name: "MTGO format-first production UI"
+      status: "not_started"
+    - id: "P8-10"
+      name: "Tabletop Major Events production UI"
+      status: "not_started"
+    - id: "P8-11"
+      name: "Cross-product regression and Phase 8 closeout"
+      status: "not_started"
+
+next_approved_task:
+  id: "P8-01"
+  name: "Review and authorize the current UI and public-data consumer audit"
   target_paths:
-    - "docs/ROADMAP.md"
-    - "docs/STATUS.yaml"
+    - "docs/audits/P8-01.md"
   production_change: false
   requires_user_confirmation: true
   authorization_status: "not_authorized"
   remote_publication_authorized: false
-  planning_status: "awaiting_owner_review"
+  planning_status: "phase_8_plan_approved_awaiting_task_review"
 
 governance_baseline:
   status: "active_on_master"
@@ -4120,7 +4205,10 @@ prohibited_next_actions:
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
   - "Do not re-dispatch the Melee production workflow without separate authorization."
-  - "Do not begin Phase 8 before separate owner authorization."
+  - "Do not begin P8-01 implementation without separate owner authorization."
+  - "Do not use Superdesign or transmit project context to an external design service without the P8 external-design approval gate."
+  - "Do not begin Phase 8 backend production changes before P8-03 owner UI acceptance."
+  - "Do not begin the final Phase 8 production front end before P8-07 backend consumer-readiness acceptance."
   - "Do not replace the retained P7-02 snapshot or normalized event with a different source snapshot without explicit review."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."

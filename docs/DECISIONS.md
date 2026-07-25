@@ -1860,3 +1860,84 @@ expands from 46 to 52 documents without changing any statistic.
 P7-07 performs no live source request and does not dispatch the workflow.
 P7-08 separately owns the first real run, candidate review, Phase 7 closeout,
 and recovery tag. Phase 8 owns all front-end behavior.
+
+---
+
+# DEC-051 — Freeze a local format-first UI before Phase 8 backend additions
+
+Status: `Accepted`
+
+## Context
+
+Phase 8 was originally described only as the separate Tabletop Major Events
+front end. The project now has two public MTGO formats, hierarchical parent and
+subtype matchup data, subtype-specific MTGO range and construction data, and a
+complete Modern Pro Tour backend. Designing each statistic first and adding a
+format selector inside it would obscure the selected format and duplicate
+navigation.
+
+The owner also requires a weekly MTGO Top 8 decklist view, subtype-specific
+construction details, and visible completeness for Videre match archives and
+MTGO high-score decklists. These requirements create new backend consumers, but
+their payloads should not be implemented before the interaction and
+unavailable-state behavior are approved.
+
+Superdesign is installed as an optional external design service. It is useful
+for parallel high-fidelity visual exploration, but it is not required to define
+information architecture or to validate the repository's data-heavy
+interactions. Defaulting to it would introduce an external-service dependency,
+possible plan or quota limits, and unnecessary context transmission before a
+specific visual problem exists.
+
+## Decision
+
+Phase 8 uses format as the primary analysis selector. After selecting a format,
+the interface exposes the available MTGO official statistics, MTGO matchup,
+MTGO weekly Top 8, Tabletop Major Events, and Weekly Pickup products. Generated
+catalogs determine availability.
+
+Keep `/index.html` and `/melee/index.html` as separate source-product entry
+points. A shared shell may preserve the selected format while navigating
+between them, but MTGO and tabletop data loading, caches, statistics, quality
+claims, and generated outputs remain separate.
+
+Parent archetypes are the default display. Eligible parents may expand into
+maintained subtypes, matchup axes expand independently, and one global control
+expands or collapses all eligible parents. A parent with zero or one maintained
+subtype is non-expandable. Public subtype labels are self-contained without
+changing stable subtype identities.
+
+Deck-construction detail uses the most specific maintained identity. Selecting
+an expandable parent only reveals subtypes and does not display a cross-subtype
+average. Selecting a subtype displays its independently generated construction
+data. A weekly Top 8 selection reuses the detail component while showing the
+exact event deck against the subtype average and deviation base.
+
+Before backend changes, P8-01 audits current consumers, P8-02 creates local
+prototypes, and P8-03 freezes the owner-approved UI and backend consumer
+contract. P8-04 then specifies formulas and public payloads; P8-05 through
+P8-07 implement and validate only the confirmed backend gaps; P8-08 through
+P8-10 implement the shared shell and final front ends; P8-11 closes the phase.
+
+Local HTML/CSS/JavaScript prototyping is the default design method. Superdesign
+may be used only after a separate owner authorization based on a documented
+unresolved design problem, expected deliverables, verified current pricing or
+quota limits, transmitted context, privacy minimization, and local alternative.
+Installation or authentication does not authorize generation or upload.
+
+## Consequences
+
+Phase 8 expands from a Tabletop-only page task into a controlled redesign and
+supporting-data phase, but it does not merge the two source products or approve
+another front-end framework. Existing hierarchical calculations are reused and
+must not be rebuilt in browser code.
+
+The exact Videre and high-score completeness formulas remain a P8-04
+statistical-contract decision. No generator or front-end implementation may
+estimate those denominators before the specification, fixtures, Schemas, and
+owner-required unavailable states are approved.
+
+The owner approved this planning direction on 2026-07-25. The approval
+authorizes the documentation baseline only. P8-01 implementation, external
+design-service use, production changes, publication, workflow dispatch, and
+deployment remain separately controlled.

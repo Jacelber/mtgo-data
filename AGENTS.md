@@ -220,10 +220,14 @@ These cases must be represented explicitly in normalized data. Do not rely only 
 
 The current `index.html` is the MTGO product and must continue working during refactoring.
 
-The intended top-level navigation is:
+The primary analysis selector is the Constructed format. After selecting a
+format, users choose among the available MTGO official statistics, MTGO
+matchup, MTGO weekly Top 8, Tabletop Major Events, and Weekly Pickup products.
+Availability must be catalog-driven.
 
-- MTGO Environment Trends
-- Tabletop Major Events
+MTGO Environment Trends and Tabletop Major Events remain separate source
+products. Format-first navigation may connect their entry points while
+retaining the selected format, but it must not merge their data or statistics.
 
 The intended front-end structure is:
 
@@ -234,6 +238,12 @@ The intended front-end structure is:
 The existing monolithic `index.html` must be split before major multi-format front-end expansion.
 
 The split must preserve current behavior, appearance, data paths, and GitHub Pages compatibility. Do not introduce a mandatory JavaScript build framework unless separately approved.
+
+Phase 8 uses local prototypes by default and freezes the owner-approved UI
+before backend additions or final front-end implementation. Superdesign or
+another external generative design service requires separate owner
+authorization after cost, quota, transmitted-context, privacy, and local
+alternative review.
 
 ---
 
