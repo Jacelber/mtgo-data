@@ -1410,6 +1410,52 @@ public Schema validation, and repository validation also pass. The owner
 accepted the result and authorized commit, push, pull request, and merge on
 2026-07-25. Workflow dispatch and P7-08 remain separately controlled.
 
+P7-07 was published through implementation commit
+`9791e7398f9eca1187f146e38aa0dfddb7ee5534`, pull request #102, and merge
+commit `30fb4fbdd7a72f093847fc74f33f7a6a654df1c4`. Pull-request CI run
+`30148125167`, post-merge CI run `30148439065`, and Pages run `30148438934`
+completed successfully.
+
+## P7-08 — Production validation and Phase 7 closeout
+
+The owner authorized P7-08 local preparation on 2026-07-25. The local task
+adds one minimal cross-layer acceptance contract, backfills P7-07 publication
+evidence, and prepares the Phase 7 closeout audit. It does not change retained
+data, generated output, classification, statistics, schemas, workflows, or
+either front end.
+
+The first real execution of `.github/workflows/fetch_melee.yml` remains a
+separate authorization gate. For retained event `434455`, the expected run
+reuses the exact P7-02 immutable snapshot, rebuilds every downstream layer, and
+reports no candidate change. Any generated difference or review-branch push
+blocks closeout pending investigation. Remote publication, merge, and the
+proposed `phase-7-tabletop-major-events-backend` recovery tag also remain
+separately controlled.
+
+Local preparation completed in the isolated `codex/p7-08-closeout` workspace.
+The three-test cross-layer contract, 255 impacted tests, and the complete
+491-test suite pass. Standard and Modern rule validation, all 52 governed
+public Schema documents, and repository validation also pass. No retained or
+generated data, rule, schema, workflow, front-end source, or statistical
+behavior changed. Local preparation stopped before workflow dispatch until
+the owner separately authorized the production run recorded below.
+
+The owner separately authorized the first real Melee production candidate
+run. Workflow run `30149718594` executed from `master` commit
+`30fb4fbdd7a72f093847fc74f33f7a6a654df1c4` and completed successfully on
+2026-07-25. It reused retained snapshot `20260724T092458Z-01`; reproduced the
+362-participant event, 290 classified and 72 Unknown decks, 2,910
+opportunities, 1,394 eligible matches, the 55-leaf/29-parent matchup, and all
+six public documents; and passed its 488-test clean-checkout baseline,
+candidate boundary, repository, Modern-rule, and 52-document Schema checks.
+Every generated layer reported reuse, candidate validation reported zero
+changed paths, no review branch was created, and `master` remained unchanged.
+
+The owner accepted P7-08 and authorized its commit, push, pull request, merge,
+and the `phase-7-tabletop-major-events-backend` recovery tag on 2026-07-25.
+The validated closeout contract satisfies the Phase 7 acceptance criteria.
+Phase 8 remains separately controlled and is not authorized.
+
 ## Required input work
 
 Fetch and normalize:
