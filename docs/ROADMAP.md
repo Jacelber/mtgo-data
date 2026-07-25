@@ -1338,6 +1338,11 @@ This task does not create `matchup.json`, `meta.json`, a public event catalog,
 workflow integration, or front-end behavior. P7-06 through P7-08 remain
 separately controlled.
 
+The project owner accepted P7-05 and authorized commit, push, pull request, and
+merge on 2026-07-25. Implementation commit
+`777bd5fca5badcee56bf5a82d691219d1f1a3d76` is published through pull request
+#100. P7-06 remains separately controlled.
+
 ## Required input work
 
 Fetch and normalize:
