@@ -1658,3 +1658,60 @@ input. P7-03 does not calculate participation, opportunities, points, win
 rates, conversion, or matchups. Improving the 72 Unknown classifications would
 change the shared Modern taxonomy and requires a separate reviewed task with
 MTGO regression evidence.
+
+# DEC-047 — Store mixed-event Constructed opportunities as a deterministic ledger
+
+Status: `Accepted`
+
+## Context
+
+The retained Pro Tour event mixes Draft and Modern on both days. Later
+archetype statistics need scheduled Constructed opportunities even when a
+player drops, while win-rate and matchup calculations need only eligible real
+matches. Deriving those populations and exclusions separately in P7-05 and
+P7-06 would risk inconsistent Day 2 membership, double counting, and different
+treatment of byes, intentional draws, disqualification, or Top 8 locks.
+
+## Decision
+
+P7-04 stores a deterministic participant-round ledger at
+`data/<format>/melee/opportunities/<event_id>.json`. It hashes the immutable
+normalized event and the P7-03 classification overlay, joins them by stable
+participant ID, and records the selected classification summary without
+rewriting either input.
+
+The Day 1 population is the complete starting field. The Day 2 population is
+established by actual Day 2 Swiss participation, including Draft evidence;
+Draft results themselves remain excluded. Every member receives each scheduled
+Constructed Swiss opportunity in that stage. Missing rounds are synthesized
+only for a normalized `dropped` or `disqualified` status; any unexplained
+absence fails closed.
+
+Point inclusion, theoretical and effective rounds, win-rate inclusion, matchup
+inclusion, and exclusion reasons are independent fields. Ordinary drops retain
+zero-point theoretical rounds. Verified Top 8 lock awards retain their source
+value but contribute zero Constructed points and no effective theoretical
+round. A disqualified participant remains distinct from a drop; both sides of
+each affected match remain retained and symmetrically excluded from win-rate
+and matchup use under DEC-038.
+
+The ledger contains no wall-clock, checkout, branch, or Git-history value.
+Identical input bytes must rebuild identical UTF-8 JSON. It is an internal
+derived input, not a public statistic. P7-05 owns archetype overview and deck
+aggregation; P7-06 owns matchup aggregation.
+
+## Consequences
+
+Event `434455` yields 362 Day 1 participants, 220 evidenced Day 2
+participants, 2,910 theoretical Constructed opportunities, and 2,903 effective
+opportunities after seven verified Top 8 lock exemptions. It retains 88
+ordinary unplayed drop opportunities, four later administrative
+disqualification opportunities, seven byes, and two Constructed intentional
+draw matches. The 1,394 win-rate and matchup-eligible source matches reconcile
+exactly with the normalized event; six disqualification-affected Constructed
+matches remain excluded as complete units.
+
+Draft and playoff records, MTGO products, taxonomy rules, public statistics,
+workflows, and both front ends remain unchanged. Any future event with an
+unexplained missing participant-round record must be reviewed rather than
+silently assigned a result.

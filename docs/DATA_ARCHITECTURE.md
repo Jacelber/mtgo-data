@@ -1208,6 +1208,49 @@ The Melee adapter only converts source card sections into the shared
 archetype rules. The normalized event, raw snapshot, shared Modern taxonomy,
 MTGO products, workflows, and front ends remain unchanged by this overlay.
 
+### 11.8 Deterministic Constructed-opportunity ledger
+
+P7-04 stores derived mixed-event participation and scheduled Constructed
+opportunities separately at:
+
+```text
+data/<format>/melee/opportunities/<event_id>.json
+```
+
+The ledger hashes both the canonical normalized event and its classification
+overlay. It joins classification by stable `participant_id`, records the Day 1
+starting field and the independently evidenced Day 2 population, and emits one
+row for every scheduled Constructed Swiss opportunity in those populations.
+Draft rounds and playoffs do not enter the ledger.
+
+Each opportunity preserves the source match and official match points when
+present, while independently recording:
+
+- whether the point result contributes to Constructed point totals;
+- theoretical and effective theoretical-round inclusion;
+- win-rate inclusion;
+- matchup inclusion;
+- explicit exclusion reasons.
+
+Ordinary missing rounds for a participant whose source status is `dropped`
+become zero-point `drop_unplayed` opportunities. A missing round for any
+non-terminal status fails closed instead of being guessed. Day 2 membership is
+established from actual Day 2 Swiss participation, including Draft evidence,
+so a player who drops before the Day 2 Constructed phase still receives the
+scheduled qualified-field opportunities. Non-qualifiers receive none.
+
+A verified `awarded_win_top8_lock` retains its source result but contributes
+zero Constructed points and no effective theoretical round. Matches involving
+a disqualified participant retain both sides and official point context but
+remain symmetrically excluded from win-rate and matchup use. The participant's
+later missing rounds remain explicit administrative opportunities rather than
+being mislabeled as an ordinary drop.
+
+The file contains no wall-clock or Git-derived value. Identical event and
+classification bytes must rebuild byte-identically. P7-04 does not create
+public statistics; P7-05 and P7-06 consume this ledger together with the
+retained event contract.
+
 ---
 
 ## 12. Statistics-output layout
