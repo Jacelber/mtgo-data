@@ -131,6 +131,28 @@ disqualification exclusions, and verified Top 8 lock exemptions. It excludes
 Draft and playoffs and does not calculate archetype aggregates, win rates, or
 matchup matrices; those remain P7-05 and P7-06 work.
 
+P7-05 turns the retained event, classification overlay, opportunity ledger,
+and unchanged Modern taxonomy into deterministic per-event overview, deck,
+and quality statistics. The first command is read-only; `--execute` atomically
+writes the three candidates:
+
+```powershell
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.stats `
+  --root . --format modern --event-id 434455
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.stats `
+  --root . --format modern --event-id 434455 --execute
+```
+
+The outputs are `overview.json`, `decks.json`, and `quality.json` under
+`stats/modern/melee/events/434455/`. They retain separate Day 1, Day 2, and
+all-Constructed-Swiss scopes, direct parent and maintained-subtype metrics,
+explicit Unknown rows, raw W-L-D samples, Wilson intervals, and reviewed
+quality exclusions. A combined high-score metric is intentionally absent
+because the two stages have different participant populations. P7-05 does not
+generate `matchup.json`, `meta.json`, a public event catalog, a workflow, or
+front-end behavior; those remain later tasks.
+
 ## Format-aware MTGO commands
 
 The production MTGO pipeline uses one explicit command entry point. Set `PYTHONPATH` to `src` when running it from a source checkout:

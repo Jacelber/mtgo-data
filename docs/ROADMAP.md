@@ -1307,6 +1307,42 @@ P7-05 through P7-08.
 The project owner accepted the local P7-04 result and authorized commit, push,
 pull request, and merge on 2026-07-25.
 
+P7-04 was published through pull request #99, implementation commit
+`f1cef2a72559efdc2a77196a2e400ac04a7e254e`, and merge commit
+`687d539b3e7fefa8e4a74b8327f62d4bfe3ebe19`. Pull-request CI, post-merge CI,
+and Pages deployment all completed successfully.
+
+## P7-05 — Per-event overview and deck statistics
+
+P7-05 consumes the exact retained event, classification overlay, opportunity
+ledger, and Modern taxonomy bytes without changing them. It generates
+`overview.json`, `decks.json`, and `quality.json` under
+`stats/modern/melee/events/434455/`.
+
+The overview exposes separate Day 1, Day 2, and all-Constructed-Swiss scopes.
+It keeps the parent archetype as the default unit, includes Unknown in every
+applicable denominator, and nests complete maintained subtype lists beneath
+observed subtype-defining parents. Direct subtype totals must conserve their
+parent. Stage-specific high-score results are available for Day 1 and Day 2;
+the combined scope intentionally has no high-score result. Played-match
+records retain raw W-L-D counts and 95% Wilson intervals. No low-sample display
+threshold is invented before OPEN-002 is resolved.
+
+The participant deck output preserves submitted decklists, classification,
+official standing context, and scope-level opportunity accounting. The
+disqualified participant remains archived with the point treatment frozen by
+P7-04, while the six affected matches remain excluded from played win rate.
+The quality output reports all reviewed exclusions and reconciliation totals.
+
+This task does not create `matchup.json`, `meta.json`, a public event catalog,
+workflow integration, or front-end behavior. P7-06 through P7-08 remain
+separately controlled.
+
+The project owner accepted P7-05 and authorized commit, push, pull request, and
+merge on 2026-07-25. Implementation commit
+`777bd5fca5badcee56bf5a82d691219d1f1a3d76` is published through pull request
+#100. P7-06 remains separately controlled.
+
 ## Required input work
 
 Fetch and normalize:

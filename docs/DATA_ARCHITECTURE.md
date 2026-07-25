@@ -1251,6 +1251,42 @@ classification bytes must rebuild byte-identically. P7-04 does not create
 public statistics; P7-05 and P7-06 consume this ledger together with the
 retained event contract.
 
+### 11.9 Deterministic per-event overview and deck statistics
+
+P7-05 consumes four immutable inputs: the normalized event, classification
+overlay, opportunity ledger, and maintained format taxonomy. The generated
+documents record the repository-relative path, Schema version, and exact
+SHA-256 value of every input. A digest or identity mismatch fails before any
+output write.
+
+The deterministic candidates are:
+
+```text
+stats/<format>/melee/events/<event_id>/overview.json
+stats/<format>/melee/events/<event_id>/decks.json
+stats/<format>/melee/events/<event_id>/quality.json
+```
+
+`overview.json` aggregates parent archetypes and their maintained subtype
+children for Day 1, Day 2, and all Constructed Swiss. `decks.json` preserves
+one participant-keyed audit record with classification, decklist, official
+standing context, eligibility, and the same three statistical scopes.
+`quality.json` reconciles source, classification, ledger, exclusions, and
+stage populations without copying the full source archive.
+
+Parent rows remain the default aggregation. Only parents observed in the event
+are emitted, plus the explicit Unknown bucket. For each observed
+subtype-defining parent, all maintained subtypes are emitted, including empty
+states, and their additive fields must conserve the parent exactly. A
+subtype-defining parent with an unassigned classified deck blocks generation
+under the no-residual rule.
+
+The generator has a read-only default and an explicit `--execute` write path.
+It does not contact Melee or MTGO, modify any retained input, or write a
+catalog. P7-06 adds `matchup.json`; P7-07 owns `meta.json`, the format event
+catalog, manifest/public packaging, and workflow integration. Phase 8 owns
+front-end presentation.
+
 ---
 
 ## 12. Statistics-output layout
@@ -1414,6 +1450,12 @@ stats/modern/melee/events/434455/decks.json
 stats/modern/melee/events/434455/matchup.json
 stats/modern/melee/events/434455/quality.json
 ```
+
+P7-05 initially generates and directly Schema-validates `overview.json`,
+`decks.json`, and `quality.json` for event `434455`. These are deterministic
+event-output candidates but are not yet discoverable through a public catalog
+or governed by the public-output manifest. P7-07 owns that publication
+boundary after `matchup.json` is available.
 
 ### 12.3 Multi-event matchup output
 

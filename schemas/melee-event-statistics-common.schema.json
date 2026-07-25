@@ -1,0 +1,289 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-statistics-common.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Shared definitions for Melee per-event statistics",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "participant_id": {
+      "type": "string",
+      "pattern": "^participant-[a-f0-9]{64}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "rate": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "average_points": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 3
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_path",
+        "event_sha256",
+        "event_schema_version",
+        "classification_path",
+        "classification_sha256",
+        "classification_schema_version",
+        "opportunity_path",
+        "opportunity_sha256",
+        "opportunity_schema_version",
+        "taxonomy_path",
+        "taxonomy_sha256",
+        "taxonomy_schema_version"
+      ],
+      "properties": {
+        "event_path": {
+          "type": "string",
+          "pattern": "^data/[a-z0-9]+(?:-[a-z0-9]+)*/melee/events/[1-9][0-9]*\\.json$"
+        },
+        "event_sha256": {"$ref": "#/$defs/sha256"},
+        "event_schema_version": {"type": "string", "minLength": 1},
+        "classification_path": {
+          "type": "string",
+          "pattern": "^data/[a-z0-9]+(?:-[a-z0-9]+)*/melee/classifications/[1-9][0-9]*\\.json$"
+        },
+        "classification_sha256": {"$ref": "#/$defs/sha256"},
+        "classification_schema_version": {"type": "string", "minLength": 1},
+        "opportunity_path": {
+          "type": "string",
+          "pattern": "^data/[a-z0-9]+(?:-[a-z0-9]+)*/melee/opportunities/[1-9][0-9]*\\.json$"
+        },
+        "opportunity_sha256": {"$ref": "#/$defs/sha256"},
+        "opportunity_schema_version": {"type": "string", "minLength": 1},
+        "taxonomy_path": {
+          "type": "string",
+          "pattern": "^my_archetypes/[a-z0-9]+(?:-[a-z0-9]+)*\\.yaml$"
+        },
+        "taxonomy_sha256": {"$ref": "#/$defs/sha256"},
+        "taxonomy_schema_version": {"type": "string", "minLength": 1}
+      }
+    },
+    "confidence_interval": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lower", "upper"],
+          "properties": {
+            "lower": {"type": "number", "minimum": 0, "maximum": 1},
+            "upper": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        }
+      ]
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wins",
+        "losses",
+        "draws",
+        "matches",
+        "win_rate",
+        "confidence_interval_95"
+      ],
+      "properties": {
+        "wins": {"type": "integer", "minimum": 0},
+        "losses": {"type": "integer", "minimum": 0},
+        "draws": {"type": "integer", "minimum": 0},
+        "matches": {"type": "integer", "minimum": 0},
+        "win_rate": {"$ref": "#/$defs/rate"},
+        "confidence_interval_95": {"$ref": "#/$defs/confidence_interval"}
+      }
+    },
+    "match_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["all_matches", "non_mirror", "mirror_match_count"],
+      "properties": {
+        "all_matches": {"$ref": "#/$defs/record"},
+        "non_mirror": {"$ref": "#/$defs/record"},
+        "mirror_match_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "result_counts": {
+      "type": "object",
+      "propertyNames": {
+        "enum": [
+          "played_win",
+          "played_loss",
+          "played_draw",
+          "intentional_draw",
+          "bye",
+          "no_show",
+          "drop_unplayed",
+          "awarded_win_top8_lock",
+          "administrative_result",
+          "unknown"
+        ]
+      },
+      "additionalProperties": {"type": "integer", "minimum": 1}
+    },
+    "high_score": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "count",
+            "field_share",
+            "high_score_conversion",
+            "day2_high_score_rate",
+            "effective_round_distribution"
+          ],
+          "properties": {
+            "count": {"type": "integer", "minimum": 0},
+            "field_share": {"$ref": "#/$defs/rate"},
+            "high_score_conversion": {"$ref": "#/$defs/rate"},
+            "day2_high_score_rate": {"$ref": "#/$defs/rate"},
+            "effective_round_distribution": {
+              "type": "object",
+              "patternProperties": {
+                "^[0-9]+$": {"type": "integer", "minimum": 1}
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    "group_metrics": {
+      "type": "object",
+      "required": [
+        "deck_count",
+        "metagame_share",
+        "constructed_points",
+        "theoretical_rounds",
+        "effective_theoretical_rounds",
+        "average_points_per_effective_round",
+        "completed_or_officially_exempt_rounds",
+        "completion_rate",
+        "played_match_participations",
+        "source_match_count",
+        "result_counts",
+        "drop_player_count",
+        "drop_unplayed_rounds",
+        "intentional_draw_opportunities",
+        "bye_count",
+        "top8_lock_player_count",
+        "top8_lock_exemptions",
+        "disqualified_player_count",
+        "high_score",
+        "match_record"
+      ],
+      "properties": {
+        "deck_count": {"type": "integer", "minimum": 0},
+        "metagame_share": {"$ref": "#/$defs/rate"},
+        "constructed_points": {"type": "integer", "minimum": 0},
+        "theoretical_rounds": {"type": "integer", "minimum": 0},
+        "effective_theoretical_rounds": {"type": "integer", "minimum": 0},
+        "average_points_per_effective_round": {"$ref": "#/$defs/average_points"},
+        "completed_or_officially_exempt_rounds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "completion_rate": {"$ref": "#/$defs/rate"},
+        "played_match_participations": {"type": "integer", "minimum": 0},
+        "source_match_count": {"type": "integer", "minimum": 0},
+        "result_counts": {"$ref": "#/$defs/result_counts"},
+        "drop_player_count": {"type": "integer", "minimum": 0},
+        "drop_unplayed_rounds": {"type": "integer", "minimum": 0},
+        "intentional_draw_opportunities": {"type": "integer", "minimum": 0},
+        "bye_count": {"type": "integer", "minimum": 0},
+        "top8_lock_player_count": {"type": "integer", "minimum": 0},
+        "top8_lock_exemptions": {"type": "integer", "minimum": 0},
+        "disqualified_player_count": {"type": "integer", "minimum": 0},
+        "high_score": {"$ref": "#/$defs/high_score"},
+        "match_record": {"$ref": "#/$defs/match_record"}
+      }
+    },
+    "subtype": {
+      "allOf": [
+        {"$ref": "#/$defs/group_metrics"},
+        {
+          "type": "object",
+          "required": ["group_id", "subtype_id", "subtype_name"],
+          "properties": {
+            "group_id": {
+              "type": "string",
+              "pattern": "^subtype:[a-z0-9]+(?:-[a-z0-9]+)*/[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "subtype_id": {"$ref": "#/$defs/id"},
+            "subtype_name": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "archetype": {
+      "allOf": [
+        {"$ref": "#/$defs/group_metrics"},
+        {
+          "type": "object",
+          "required": [
+            "group_id",
+            "classification_status",
+            "archetype_id",
+            "archetype_name",
+            "expandable",
+            "subtypes"
+          ],
+          "properties": {
+            "group_id": {
+              "oneOf": [
+                {"const": "unknown"},
+                {
+                  "type": "string",
+                  "pattern": "^archetype:[a-z0-9]+(?:-[a-z0-9]+)*$"
+                }
+              ]
+            },
+            "classification_status": {"enum": ["classified", "unknown"]},
+            "archetype_id": {
+              "oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]
+            },
+            "archetype_name": {"type": "string", "minLength": 1},
+            "expandable": {"type": "boolean"},
+            "subtypes": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/subtype"}
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "warning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "scopes", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["day1", "day2", "all_constructed"]}
+        },
+        "message": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-decks.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Melee per-event deck statistics",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "source",
+    "event_id",
+    "format",
+    "event_structure",
+    "input",
+    "scope_order",
+    "decks",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "decks"},
+    "source": {"const": "melee"},
+    "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "format": {
+      "$ref": "melee-event-statistics-common.schema.json#/$defs/id"
+    },
+    "event_structure": {"const": "mixed"},
+    "input": {
+      "$ref": "melee-event-statistics-common.schema.json#/$defs/input"
+    },
+    "scope_order": {"const": ["day1", "day2", "all_constructed"]},
+    "decks": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/deck"}
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "melee-event-statistics-common.schema.json#/$defs/warning"
+      }
+    }
+  },
+  "$defs": {
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "archetype_id",
+        "archetype_name",
+        "subtype_id",
+        "subtype_name"
+      ],
+      "properties": {
+        "status": {"enum": ["classified", "unknown"]},
+        "archetype_id": {
+          "oneOf": [
+            {
+              "$ref": "melee-event-statistics-common.schema.json#/$defs/id"
+            },
+            {"type": "null"}
+          ]
+        },
+        "archetype_name": {"type": ["string", "null"], "minLength": 1},
+        "subtype_id": {
+          "oneOf": [
+            {
+              "$ref": "melee-event-statistics-common.schema.json#/$defs/id"
+            },
+            {"type": "null"}
+          ]
+        },
+        "subtype_name": {"type": ["string", "null"], "minLength": 1}
+      }
+    },
+    "card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "quantity", "section"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "quantity": {"type": "integer", "minimum": 1},
+        "section": {"enum": ["main", "sideboard"]}
+      }
+    },
+    "deck_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "participated",
+        "constructed_points",
+        "theoretical_rounds",
+        "effective_theoretical_rounds",
+        "average_points_per_effective_round",
+        "completed_or_officially_exempt_rounds",
+        "completion_rate",
+        "played_record",
+        "high_score",
+        "result_counts"
+      ],
+      "properties": {
+        "participated": {"type": "boolean"},
+        "constructed_points": {"type": "integer", "minimum": 0},
+        "theoretical_rounds": {"type": "integer", "minimum": 0},
+        "effective_theoretical_rounds": {"type": "integer", "minimum": 0},
+        "average_points_per_effective_round": {
+          "$ref": "melee-event-statistics-common.schema.json#/$defs/average_points"
+        },
+        "completed_or_officially_exempt_rounds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "completion_rate": {
+          "$ref": "melee-event-statistics-common.schema.json#/$defs/rate"
+        },
+        "played_record": {
+          "$ref": "melee-event-statistics-common.schema.json#/$defs/record"
+        },
+        "high_score": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["threshold", "qualified"],
+              "properties": {
+                "threshold": {"type": ["integer", "null"], "minimum": 0},
+                "qualified": {"type": ["boolean", "null"]}
+              }
+            }
+          ]
+        },
+        "result_counts": {
+          "$ref": "melee-event-statistics-common.schema.json#/$defs/result_counts"
+        }
+      }
+    },
+    "deck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "participant_id",
+        "player_name",
+        "participant_status",
+        "final_rank",
+        "overall_event_match_points",
+        "overall_points_include_non_constructed_context",
+        "day2_participant",
+        "classification",
+        "decklist",
+        "statistics_eligibility",
+        "scopes"
+      ],
+      "properties": {
+        "participant_id": {
+          "$ref": "melee-event-statistics-common.schema.json#/$defs/participant_id"
+        },
+        "player_name": {"type": "string", "minLength": 1},
+        "participant_status": {
+          "enum": ["active", "dropped", "disqualified", "no_show"]
+        },
+        "final_rank": {"type": "integer", "minimum": 1},
+        "overall_event_match_points": {"type": "integer", "minimum": 0},
+        "overall_points_include_non_constructed_context": {"const": true},
+        "day2_participant": {"type": "boolean"},
+        "classification": {"$ref": "#/$defs/classification"},
+        "decklist": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["game_format", "status", "source_url", "cards"],
+          "properties": {
+            "game_format": {
+              "$ref": "melee-event-statistics-common.schema.json#/$defs/id"
+            },
+            "status": {"enum": ["submitted", "missing", "unavailable"]},
+            "source_url": {"type": ["string", "null"], "format": "uri"},
+            "cards": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/card"}
+            }
+          }
+        },
+        "statistics_eligibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "point_metrics_follow_opportunity_ledger",
+            "played_match_metrics_excluded",
+            "exclusion_reason"
+          ],
+          "properties": {
+            "point_metrics_follow_opportunity_ledger": {"const": true},
+            "played_match_metrics_excluded": {"type": "boolean"},
+            "exclusion_reason": {
+              "type": ["string", "null"],
+              "enum": ["disqualified_participant", null]
+            }
+          }
+        },
+        "scopes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["day1", "day2", "all_constructed"],
+          "properties": {
+            "day1": {"$ref": "#/$defs/deck_scope"},
+            "day2": {"$ref": "#/$defs/deck_scope"},
+            "all_constructed": {"$ref": "#/$defs/deck_scope"}
+          }
+        }
+      }
+    }
+  }
+}

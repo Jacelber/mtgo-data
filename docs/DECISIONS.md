@@ -1715,3 +1715,55 @@ Draft and playoff records, MTGO products, taxonomy rules, public statistics,
 workflows, and both front ends remain unchanged. Any future event with an
 unexplained missing participant-round record must be reviewed rather than
 silently assigned a result.
+
+# DEC-048 — Generate direct hierarchical per-event deck statistics
+
+Status: `Accepted`
+
+## Context
+
+P7-04 established one authoritative Constructed-opportunity ledger for the
+mixed Modern reference event. P7-05 needs to turn that ledger into event and
+deck statistics without changing the shared Modern taxonomy, pre-aggregating
+future matchup cells, hiding Unknown decks, or applying a front-end sample
+policy that has not yet been approved.
+
+## Decision
+
+Generate three deterministic event candidates at
+`stats/<format>/melee/events/<event_id>/`: `overview.json`, `decks.json`, and
+`quality.json`. Bind each document to the exact normalized-event,
+classification-overlay, opportunity-ledger, and taxonomy bytes and fail closed
+on any provenance or identity mismatch.
+
+Use separate `day1`, `day2`, and `all_constructed` scopes. Calculate parent
+rows directly and retain Unknown as an explicit parent bucket in applicable
+denominators. For each observed parent with maintained subtypes, emit the
+complete subtype list in taxonomy order, calculate every subtype directly,
+and require additive counts and all-match W-L-D records to reproduce the
+parent. The parent remains the default view and is expandable only when at
+least two maintained subtypes exist.
+
+Report stage-specific high-score metrics for Day 1 and Day 2. Do not invent a
+combined high-score result across unequal populations. Retain raw W-L-D sample
+counts, all-match and non-mirror records, and 95% Wilson intervals. Do not
+hard-code the unresolved OPEN-002 low-sample display thresholds.
+
+Keep the disqualified participant's deck and official Constructed points as
+frozen by the P7-04 ledger, but exclude all affected matches from played win
+rate. P7-06 remains responsible for matchup aggregation. P7-07 remains
+responsible for `meta.json`, catalog discovery, public-manifest integration,
+and workflow packaging; Phase 8 owns front-end behavior.
+
+## Consequences
+
+Event `434455` produces 362 Day 1 and 220 Day 2 participant records. The
+all-Constructed-Swiss scope contains 2,910 theoretical and 2,903 effective
+opportunities, 4,196 Constructed points, and 1,394 eligible matches. The
+classification population remains 290 known and 72 Unknown. Observed parent
+and maintained subtype statistics are reproducible without changing MTGO
+Modern or the taxonomy.
+
+The generated candidates are directly Schema-validated but are not yet
+catalog-discoverable or part of the public-output manifest. No source fetch,
+matchup matrix, workflow, catalog, or front-end change is implied.

@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p7-04-opportunity-ledger"
-  working_branch_status: "p7_04_owner_accepted_and_remote_publication_authorized"
+  current_working_branch: "codex/p7-05-event-statistics"
+  working_branch_status: "p7_05_owner_accepted_and_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -3672,7 +3672,7 @@ phase_7_tasks:
 
   - id: "P7-04"
     name: "Build the mixed-event Constructed opportunity ledger"
-    status: "local_implementation_completed_pending_owner_acceptance"
+    status: "completed_and_published"
     branch: "codex/p7-04-opportunity-ledger"
     base_commit: "7e2cbebaf731d6c323ad230cbe647fe9e1e58313"
     audit: "docs/audits/P7-04.md"
@@ -3740,10 +3740,92 @@ phase_7_tasks:
     owner_accepted_on: "2026-07-25"
     remote_publication_authorized: true
     remote_publication_authorized_on: "2026-07-25"
+    implementation_commit: "f1cef2a72559efdc2a77196a2e400ac04a7e254e"
+    pull_request: 99
+    merge_commit: "687d539b3e7fefa8e4a74b8327f62d4bfe3ebe19"
+    merged_on: "2026-07-25"
+    pull_request_ci_run: 30141853404
+    post_merge_ci_run: 30142174310
+    pages_run: 30142174080
+    ci_status: "success"
+    pages_status: "success"
 
   - id: "P7-05"
     name: "Generate per-event overview and deck statistics"
-    status: "planned_not_authorized"
+    status: "local_implementation_completed_pending_owner_acceptance"
+    branch: "codex/p7-05-event-statistics"
+    base_commit: "687d539b3e7fefa8e4a74b8327f62d4bfe3ebe19"
+    audit: "docs/audits/P7-05.md"
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-25"
+    scope:
+      - "Generate deterministic overview, participant deck, and quality statistics for retained event 434455."
+      - "Expose separate Day 1, Day 2, and all-Constructed-Swiss scopes without inventing a combined high-score population."
+      - "Keep parent archetypes as the default, retain Unknown in denominators, and calculate maintained subtype children directly."
+      - "Retain raw W-L-D samples and 95% Wilson intervals without hard-coding the unresolved low-sample display policy."
+      - "Preserve the P7-04 disqualification point treatment while excluding affected played matches."
+      - "Keep matchup output, meta/catalog packaging, workflow integration, front ends, MTGO products, and taxonomy unchanged."
+    reference_event:
+      id: "434455"
+      format: "modern"
+      event_structure: "mixed"
+      overview_path: "stats/modern/melee/events/434455/overview.json"
+      overview_bytes: 381889
+      overview_sha256: "eabb6117cd7090061b4b5b92f8c256dd4ab85580838b18e4a8798be3065445f7"
+      decks_path: "stats/modern/melee/events/434455/decks.json"
+      decks_bytes: 2640597
+      decks_sha256: "270f641005d81b55fd65fdcf5942a65f2ad78f1df2690dbaeabe787c686b3ebc"
+      quality_path: "stats/modern/melee/events/434455/quality.json"
+      quality_bytes: 3127
+      quality_sha256: "758713d8d2978c462e7722cd0ce2db7b2dfb6b3d9a94e6dddb3dfebd9c524892"
+      participants: 362
+      day2_participants: 220
+      classified_decks: 290
+      unknown_decks: 72
+      combined_constructed_points: 4196
+      combined_theoretical_opportunities: 2910
+      combined_effective_opportunities: 2903
+      eligible_constructed_matches: 1394
+      disqualified_matches_excluded: 6
+      quality_status: "warning"
+    production_change: true
+    network_request_performed: false
+    real_event_data_retained: false
+    generated_data_changed: true
+    statistical_output_added: true
+    statistical_formula_changed: false
+    classification_taxonomy_changed: false
+    mtgo_output_changed: false
+    public_catalog_changed: false
+    public_output_manifest_changed: false
+    workflow_changed: false
+    frontend_changed: false
+    event_statistics_schema_version: "1.0.0"
+    decision: "DEC-048"
+    direct_output_schema_validation_passed: true
+    byte_identical_regeneration_passed: true
+    parent_unknown_conservation_passed: true
+    subtype_parent_conservation_passed: true
+    disqualification_contract_passed: true
+    focused_tests_passed: 9
+    tests_passed: 462
+    repository_validation_passed: true
+    repository_python_files_checked: 100
+    repository_json_files_checked: 1515
+    repository_yaml_files_checked: 16
+    repository_references_checked: 30
+    repository_hygiene_entries_checked: 1713
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    schema_validation_passed: true
+    schema_validated_public_outputs: 46
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-25"
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-25"
+    production_workflow_dispatch_authorized: false
+    implementation_commit: "777bd5fca5badcee56bf5a82d691219d1f1a3d76"
+    pull_request: 100
 
   - id: "P7-06"
     name: "Generate scoped hierarchical matchup statistics"
@@ -3758,13 +3840,16 @@ phase_7_tasks:
     status: "planned_not_authorized"
 
 next_approved_task:
-  id: "P7-04"
-  name: "Owner acceptance and separately authorized publication of the mixed-event Constructed opportunity ledger"
+  id: "P7-05"
+  name: "Owner acceptance and separately authorized publication of per-event overview and deck statistics"
   target_paths:
-    - "src/mtgmeta/melee/opportunities.py"
-    - "schemas/melee-opportunity-ledger.schema.json"
-    - "data/modern/melee/opportunities/434455.json"
-    - "tests/test_melee_opportunities.py"
+    - "src/mtgmeta/melee/stats.py"
+    - "schemas/melee-event-statistics-common.schema.json"
+    - "schemas/melee-event-overview.schema.json"
+    - "schemas/melee-event-decks.schema.json"
+    - "schemas/melee-event-quality.schema.json"
+    - "stats/modern/melee/events/434455/"
+    - "tests/test_melee_statistics.py"
     - "docs/"
     - "README.md"
   production_change: true
@@ -3772,7 +3857,7 @@ next_approved_task:
   authorization_status: "owner_accepted_and_remote_publication_authorized"
   remote_publication_authorized: true
   production_workflow_dispatch_authorized: false
-  planning_status: "local_implementation_completed_pending_owner_acceptance"
+  planning_status: "owner_accepted_and_remote_publication_in_progress"
 
 governance_baseline:
   status: "active_on_master"
@@ -3823,7 +3908,7 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
-  - "Do not build P7-05 or later event statistics before those tasks are separately authorized."
+  - "Do not build P7-06 or later event statistics before those tasks are separately authorized."
   - "Do not replace the retained P7-02 snapshot or normalized event with a different source snapshot without explicit review."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."

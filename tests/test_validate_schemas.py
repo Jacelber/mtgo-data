@@ -31,7 +31,7 @@ def test_every_public_output_embeds_the_manifest_version():
 
 def test_all_declared_schemas_are_valid_and_versioned():
     loaded, _ = schemas.load_schemas(ROOT / "schemas")
-    assert len(loaded) == 20
+    assert len(loaded) == 24
     assert "mtgo-archetype-hierarchy.schema.json" in loaded
     assert "classification-rules.schema.json" in loaded
     assert "classification-report.schema.json" in loaded
@@ -41,6 +41,10 @@ def test_all_declared_schemas_are_valid_and_versioned():
     assert "melee-event.schema.json" in loaded
     assert "melee-classification.schema.json" in loaded
     assert "melee-opportunity-ledger.schema.json" in loaded
+    assert "melee-event-statistics-common.schema.json" in loaded
+    assert "melee-event-overview.schema.json" in loaded
+    assert "melee-event-decks.schema.json" in loaded
+    assert "melee-event-quality.schema.json" in loaded
     assert "melee-raw-archive.schema.json" in loaded
     assert all(schema["$schema"] == "https://json-schema.org/draft/2020-12/schema" for schema in loaded.values())
     assert loaded["formats.schema.json"]["x-schema-version"] == "1.1.0"
