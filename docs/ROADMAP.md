@@ -1275,6 +1275,38 @@ either front end. Taxonomy improvement for the 72 Unknowns requires a separate
 reviewed task; P7-04 may build the participation and Constructed-opportunity
 ledger without reclassifying them.
 
+## P7-04 — Mixed-event Constructed-opportunity ledger
+
+P7-04 creates the deterministic internal ledger at
+`data/modern/melee/opportunities/434455.json`. It binds the byte-identical
+P7-02 normalized event and P7-03 classification overlay by their exact
+SHA-256 values and does not mutate either input.
+
+The ledger establishes the 362-player Day 1 field and 220-player Day 2 field,
+then emits one record for every scheduled Constructed Swiss opportunity:
+1,810 for Day 1 and 1,100 for Day 2. The combined 2,910 theoretical
+opportunities reconcile to 2,903 effective opportunities after seven verified
+Top 8 lock exemptions. It retains 88 ordinary drop/unplayed opportunities,
+four administrative unplayed opportunities after the one disqualification,
+seven byes, and the two Constructed intentional-draw matches.
+
+Every row keeps point, theoretical-round, effective-round, win-rate, and
+matchup inclusion independent. The 1,394 eligible real matches reconcile
+exactly with the normalized event. All six Constructed matches involving the
+disqualified participant remain present on both sides but excluded from match
+statistics. Draft, playoffs, non-qualifier Day 2 opportunities, unexplained
+absences, and inferred Top 8 locks cannot enter silently.
+
+P7-04 adds a versioned Schema, deterministic dry-run/atomic-write command,
+synthetic special-result tests, real-event byte-rebuild coverage, and scope
+conservation tests. It does not aggregate archetypes, calculate win rates or
+matchup cells, create public output, change MTGO, modify taxonomy, add a
+workflow, or alter either front end. Those boundaries remain assigned to
+P7-05 through P7-08.
+
+The project owner accepted the local P7-04 result and authorized commit, push,
+pull request, and merge on 2026-07-25.
+
 ## Required input work
 
 Fetch and normalize:

@@ -476,6 +476,39 @@ decklist, and standings remain available as contextual data. The quality output
 must report the disqualified participant and the exclusion without treating a
 reviewed disqualification as an unknown or blocking source error.
 
+### 6.11 Mixed-event opportunity-ledger contract
+
+Before calculating mixed-event deck or matchup aggregates, construct an
+explicit participant-round ledger for the Day 1, Day 2, and combined
+Constructed Swiss scopes.
+
+The Day 1 population is the starting field. The Day 2 population contains only
+players with actual or official Day 2 Swiss participation evidence. Day 2
+Draft records may establish participation but never contribute Constructed
+points, opportunities, win rate, or matchup results. A non-qualifier receives
+no Day 2 Constructed theoretical rounds.
+
+For every member of a scope, create one opportunity for every scheduled
+Constructed Swiss round in that scope. A source match supplies its explicit
+per-competitor result and points. A missing round may be synthesized only when
+the participant has a reviewed terminal status:
+
+- `dropped` becomes a zero-point `drop_unplayed` opportunity;
+- `disqualified` remains an administrative unplayed opportunity and must not
+  be relabeled as an ordinary drop;
+- any other missing state fails review rather than being silently counted.
+
+Each row must carry independent point, theoretical-round, effective-round,
+win-rate, and matchup inclusion fields. The handling rules in sections
+6.1–6.10 determine those fields. In particular, intentional draws and byes may
+contribute points without entering match samples, Top 8 lock awards remove one
+effective theoretical round, and disqualification exclusion is symmetric for
+both sides of every affected match.
+
+The combined scope is a raw-count union of Day 1 and Day 2. Its Constructed
+points, theoretical rounds, effective theoretical rounds, match counts, and
+special-result counts must reconcile exactly to the two component scopes.
+
 ---
 
 ## 7. Average points per theoretical round

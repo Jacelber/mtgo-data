@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p7-ci-efficiency-plan-01"
-  working_branch_status: "p7_ci_efficiency_plan_01_local_implementation_completed_pending_owner_acceptance"
+  current_working_branch: "codex/p7-04-opportunity-ledger"
+  working_branch_status: "p7_04_owner_accepted_and_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -3641,7 +3641,7 @@ phase_7_tasks:
 
   - id: "P7-CI-EFFICIENCY-PLAN-01"
     name: "Record CI efficiency evidence and decision plan"
-    status: "local_implementation_completed_pending_owner_acceptance"
+    status: "completed_and_published"
     branch: "codex/p7-ci-efficiency-plan-01"
     base_commit: "ca71fe2dbb3b22dff75f4552d44386b838deaceb"
     owner_local_implementation_authorized: true
@@ -3658,12 +3658,88 @@ phase_7_tasks:
     statistical_behavior_changed: false
     public_paths_changed: false
     repository_validation_passed: true
-    owner_acceptance: "pending"
-    remote_publication_authorized: false
+    owner_acceptance: "accepted"
+    remote_publication_authorized: true
+    implementation_commit: "ce93f9fcd3f654c43f976f9e853467f34bdb7ce3"
+    pull_request: 98
+    merge_commit: "7e2cbebaf731d6c323ad230cbe647fe9e1e58313"
+    merged_on: "2026-07-25"
+    pull_request_ci_run: 30139811294
+    post_merge_ci_run: 30140148503
+    pages_run: 30140148232
+    ci_status: "success"
+    pages_status: "success"
 
   - id: "P7-04"
     name: "Build the mixed-event Constructed opportunity ledger"
-    status: "planned_not_authorized"
+    status: "local_implementation_completed_pending_owner_acceptance"
+    branch: "codex/p7-04-opportunity-ledger"
+    base_commit: "7e2cbebaf731d6c323ad230cbe647fe9e1e58313"
+    audit: "docs/audits/P7-04.md"
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-25"
+    scope:
+      - "Build an explicit participant-round ledger for Day 1, Day 2, and all Constructed Swiss opportunities."
+      - "Retain drops, byes, intentional draws, disqualification exclusions, and verified Top 8 lock exemptions with independent eligibility fields."
+      - "Bind the ledger to the exact normalized-event and classification-overlay bytes and prove deterministic regeneration."
+      - "Keep Draft, playoffs, public statistics, workflows, front ends, MTGO products, and Modern taxonomy unchanged."
+    reference_event:
+      id: "434455"
+      format: "modern"
+      event_structure: "mixed"
+      normalized_path: "data/modern/melee/events/434455.json"
+      normalized_sha256: "0b4296a9573a4facf4cfde1ce98569156f78fde6f5d2a1d3d662b54e2889e710"
+      classification_path: "data/modern/melee/classifications/434455.json"
+      classification_sha256: "e31835fa0ba7bc60607c48d8e7fc725ee1b13c352ba5bbc2f511b11f81b6d55b"
+      opportunity_path: "data/modern/melee/opportunities/434455.json"
+      opportunity_bytes: 2564475
+      opportunity_sha256: "5eb5a1ebeefe33919d0c27ef1db5dde64c71479dc0f72c8bf54b1b4fe9bea961"
+      day1_participants: 362
+      day2_participants: 220
+      day1_theoretical_opportunities: 1810
+      day2_theoretical_opportunities: 1100
+      combined_theoretical_opportunities: 2910
+      combined_effective_opportunities: 2903
+      top8_lock_exemptions: 7
+      drop_unplayed_opportunities: 88
+      disqualification_administrative_opportunities: 4
+      byes: 7
+      constructed_intentional_draw_matches: 2
+      source_constructed_matches: 1416
+      eligible_win_rate_and_matchup_matches: 1394
+      disqualified_constructed_matches_excluded: 6
+    production_change: true
+    network_request_performed: false
+    real_event_data_retained: false
+    generated_data_changed: true
+    opportunity_ledger_added: true
+    statistical_formula_changed: false
+    classification_taxonomy_changed: false
+    mtgo_output_changed: false
+    public_paths_changed: false
+    workflow_changed: false
+    frontend_changed: false
+    opportunity_ledger_schema_version: "1.0.0"
+    decision: "DEC-047"
+    focused_tests_passed: 50
+    tests_passed: 453
+    repository_validation_passed: true
+    repository_python_files_checked: 98
+    repository_json_files_checked: 1508
+    repository_yaml_files_checked: 16
+    repository_references_checked: 30
+    repository_hygiene_entries_checked: 1703
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    schema_validation_passed: true
+    schema_validated_public_outputs: 46
+    ledger_schema_validation_passed: true
+    byte_identical_regeneration_passed: true
+    scope_conservation_passed: true
+    owner_acceptance: "accepted"
+    owner_accepted_on: "2026-07-25"
+    remote_publication_authorized: true
+    remote_publication_authorized_on: "2026-07-25"
 
   - id: "P7-05"
     name: "Generate per-event overview and deck statistics"
@@ -3682,14 +3758,19 @@ phase_7_tasks:
     status: "planned_not_authorized"
 
 next_approved_task:
-  id: "P7-CI-EFFICIENCY-PLAN-01"
-  name: "Owner acceptance and separately authorized publication of the CI efficiency evidence plan"
+  id: "P7-04"
+  name: "Owner acceptance and separately authorized publication of the mixed-event Constructed opportunity ledger"
   target_paths:
+    - "src/mtgmeta/melee/opportunities.py"
+    - "schemas/melee-opportunity-ledger.schema.json"
+    - "data/modern/melee/opportunities/434455.json"
+    - "tests/test_melee_opportunities.py"
     - "docs/"
-  production_change: false
+    - "README.md"
+  production_change: true
   requires_user_confirmation: true
-  authorization_status: "owner_authorized_local_implementation_remote_publication_not_authorized"
-  remote_publication_authorized: false
+  authorization_status: "owner_accepted_and_remote_publication_authorized"
+  remote_publication_authorized: true
   production_workflow_dispatch_authorized: false
   planning_status: "local_implementation_completed_pending_owner_acceptance"
 
@@ -3742,7 +3823,7 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
-  - "Do not build the P7-04 opportunity ledger or later event statistics before those tasks are separately authorized."
+  - "Do not build P7-05 or later event statistics before those tasks are separately authorized."
   - "Do not replace the retained P7-02 snapshot or normalized event with a different source snapshot without explicit review."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."

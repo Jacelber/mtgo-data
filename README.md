@@ -112,6 +112,25 @@ and blocks strict generation on conflicts, invalid inputs, or an unassigned
 subtype under a parent that defines subtypes. It does not rewrite the
 normalized event or change MTGO statistics.
 
+P7-04 converts the retained event and classification overlay into an explicit
+mixed-event Constructed-opportunity ledger. The first command is read-only;
+`--execute` atomically writes the deterministic candidate:
+
+```powershell
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.opportunities `
+  --root . --format modern --event-id 434455
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.opportunities `
+  --root . --format modern --event-id 434455 --execute
+```
+
+The output is `data/modern/melee/opportunities/434455.json`. It records one
+row for every scheduled Day 1 or qualified-field Day 2 Constructed Swiss
+opportunity, including unplayed drop rounds, byes, intentional draws,
+disqualification exclusions, and verified Top 8 lock exemptions. It excludes
+Draft and playoffs and does not calculate archetype aggregates, win rates, or
+matchup matrices; those remain P7-05 and P7-06 work.
+
 ## Format-aware MTGO commands
 
 The production MTGO pipeline uses one explicit command entry point. Set `PYTHONPATH` to `src` when running it from a source checkout:
@@ -170,7 +189,8 @@ Pull requests and pushes to `master` run the clean-checkout validation sequence 
 
 ## Current repository layout
 
-- `data/<format>/`: committed source event data; source-specific normalized paths will be added in later phases.
+- `data/<format>/melee/`: retained normalized events and deterministic
+  classification and opportunity-ledger overlays for approved tabletop events.
 - `configs/formats.yaml`: validated registry of known formats, raw-event collection state, product execution state, capabilities, and format-specific paths.
 - `my_archetypes/standard.yaml`: current legacy Standard classification rules.
 - `src/mtgmeta/`: shared normalization, classification, configuration, and format-aware MTGO event-I/O, rolling-statistics, Videre, matchup, Weekly Pickup, metadata, catalog, and report-routing utilities.

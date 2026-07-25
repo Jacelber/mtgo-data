@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-opportunity-ledger.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Melee mixed-event Constructed opportunity ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "source", "event_id", "format", "event_structure",
+    "input", "rounds", "scope_summaries", "participants", "opportunities"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "source": {"const": "melee"},
+    "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "format": {"$ref": "#/$defs/id"},
+    "event_structure": {"const": "mixed"},
+    "input": {"$ref": "#/$defs/input"},
+    "rounds": {
+      "type": "array",
+      "minItems": 2,
+      "items": {"$ref": "#/$defs/round"}
+    },
+    "scope_summaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["day1", "day2", "all_constructed"],
+      "properties": {
+        "day1": {"$ref": "#/$defs/scope_summary"},
+        "day2": {"$ref": "#/$defs/scope_summary"},
+        "all_constructed": {"$ref": "#/$defs/scope_summary"}
+      }
+    },
+    "participants": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/participant"}
+    },
+    "opportunities": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/opportunity"}
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "participant_id": {
+      "type": "string",
+      "pattern": "^participant-[a-f0-9]{64}$"
+    },
+    "round_id": {
+      "type": "string",
+      "pattern": "^round-[a-f0-9]{64}$"
+    },
+    "match_id": {
+      "type": "string",
+      "pattern": "^match-[a-f0-9]{64}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_path", "event_sha256", "event_schema_version",
+        "classification_path", "classification_sha256",
+        "classification_schema_version"
+      ],
+      "properties": {
+        "event_path": {
+          "type": "string",
+          "pattern": "^data/[a-z0-9]+(?:-[a-z0-9]+)*/melee/events/[1-9][0-9]*\\.json$"
+        },
+        "event_sha256": {"$ref": "#/$defs/sha256"},
+        "event_schema_version": {"type": "string", "minLength": 1},
+        "classification_path": {
+          "type": "string",
+          "pattern": "^data/[a-z0-9]+(?:-[a-z0-9]+)*/melee/classifications/[1-9][0-9]*\\.json$"
+        },
+        "classification_sha256": {"$ref": "#/$defs/sha256"},
+        "classification_schema_version": {"type": "string", "minLength": 1}
+      }
+    },
+    "round": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["round_id", "round_number", "stage", "phase_id"],
+      "properties": {
+        "round_id": {"$ref": "#/$defs/round_id"},
+        "round_number": {"type": "integer", "minimum": 1},
+        "stage": {"enum": ["day1", "day2"]},
+        "phase_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:[_-][a-z0-9]+)*$"
+        }
+      }
+    },
+    "scope_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "participant_count", "scheduled_round_count", "theoretical_rounds",
+        "effective_theoretical_rounds", "constructed_points",
+        "source_match_count", "win_rate_match_count", "matchup_match_count",
+        "disqualified_matches_excluded", "result_counts"
+      ],
+      "properties": {
+        "participant_count": {"type": "integer", "minimum": 0},
+        "scheduled_round_count": {"type": "integer", "minimum": 0},
+        "theoretical_rounds": {"type": "integer", "minimum": 0},
+        "effective_theoretical_rounds": {"type": "integer", "minimum": 0},
+        "constructed_points": {"type": "integer", "minimum": 0},
+        "source_match_count": {"type": "integer", "minimum": 0},
+        "win_rate_match_count": {"type": "integer", "minimum": 0},
+        "matchup_match_count": {"type": "integer", "minimum": 0},
+        "disqualified_matches_excluded": {"type": "integer", "minimum": 0},
+        "result_counts": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "played_win", "played_loss", "played_draw", "intentional_draw",
+              "bye", "no_show", "drop_unplayed", "awarded_win_top8_lock",
+              "administrative_result", "unknown"
+            ]
+          },
+          "additionalProperties": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status", "archetype_id", "archetype_name", "subtype_id", "subtype_name"
+      ],
+      "properties": {
+        "status": {"enum": ["classified", "unknown"]},
+        "archetype_id": {
+          "oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]
+        },
+        "archetype_name": {"type": ["string", "null"], "minLength": 1},
+        "subtype_id": {
+          "oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]
+        },
+        "subtype_name": {"type": ["string", "null"], "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "unknown"}}},
+          "then": {
+            "properties": {
+              "archetype_id": {"type": "null"},
+              "archetype_name": {"type": "null"},
+              "subtype_id": {"type": "null"},
+              "subtype_name": {"type": "null"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"status": {"const": "classified"}}},
+          "then": {
+            "properties": {
+              "archetype_id": {"$ref": "#/$defs/id"},
+              "archetype_name": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      ]
+    },
+    "participant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "participant_id", "participant_status", "day1_participant",
+        "day2_participant", "classification"
+      ],
+      "properties": {
+        "participant_id": {"$ref": "#/$defs/participant_id"},
+        "participant_status": {
+          "enum": ["active", "dropped", "disqualified", "no_show"]
+        },
+        "day1_participant": {"const": true},
+        "day2_participant": {"type": "boolean"},
+        "classification": {"$ref": "#/$defs/classification"}
+      }
+    },
+    "opportunity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "participant_id", "participant_status", "round_id", "round_number",
+        "scope", "match_id", "opponent_participant_id", "result_type",
+        "source_played", "source_match_points", "points_included",
+        "constructed_points", "theoretical_round",
+        "effective_theoretical_round", "win_rate_included",
+        "matchup_included", "exclusion_reasons"
+      ],
+      "properties": {
+        "participant_id": {"$ref": "#/$defs/participant_id"},
+        "participant_status": {
+          "enum": ["active", "dropped", "disqualified", "no_show"]
+        },
+        "round_id": {"$ref": "#/$defs/round_id"},
+        "round_number": {"type": "integer", "minimum": 1},
+        "scope": {"enum": ["day1", "day2"]},
+        "match_id": {
+          "oneOf": [{"$ref": "#/$defs/match_id"}, {"type": "null"}]
+        },
+        "opponent_participant_id": {
+          "oneOf": [{"$ref": "#/$defs/participant_id"}, {"type": "null"}]
+        },
+        "result_type": {
+          "enum": [
+            "played_win", "played_loss", "played_draw", "intentional_draw",
+            "bye", "no_show", "drop_unplayed", "awarded_win_top8_lock",
+            "administrative_result", "unknown"
+          ]
+        },
+        "source_played": {"type": "boolean"},
+        "source_match_points": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "points_included": {"type": "boolean"},
+        "constructed_points": {"type": "integer", "minimum": 0, "maximum": 3},
+        "theoretical_round": {"const": true},
+        "effective_theoretical_round": {"type": "boolean"},
+        "win_rate_included": {"type": "boolean"},
+        "matchup_included": {"type": "boolean"},
+        "exclusion_reasons": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "disqualified_participant", "intentional_draw", "bye",
+              "top8_lock_exemption", "no_show", "administrative_result",
+              "unknown", "source_match_ineligible", "unplayed_after_drop",
+              "unplayed_after_disqualification"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
