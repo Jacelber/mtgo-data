@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_production_public_outputs_pass():
     checked, failures = schemas.validate_manifest(ROOT, ROOT / "schemas" / "manifest.json")
-    assert checked == 46
+    assert checked == 52
     assert failures == []
 
 
@@ -25,13 +25,13 @@ def test_every_public_output_embeds_the_manifest_version():
     matched = []
     for mapping in manifest["mappings"]:
         matched.extend(ROOT.glob(mapping["pattern"]))
-    assert len(matched) == 46
+    assert len(matched) == 52
     assert all(json.loads(path.read_text(encoding="utf-8"))["schema_version"] == manifest["schema_version"] for path in matched)
 
 
 def test_all_declared_schemas_are_valid_and_versioned():
     loaded, _ = schemas.load_schemas(ROOT / "schemas")
-    assert len(loaded) == 25
+    assert len(loaded) == 27
     assert "mtgo-archetype-hierarchy.schema.json" in loaded
     assert "classification-rules.schema.json" in loaded
     assert "classification-report.schema.json" in loaded
@@ -46,6 +46,8 @@ def test_all_declared_schemas_are_valid_and_versioned():
     assert "melee-event-decks.schema.json" in loaded
     assert "melee-event-quality.schema.json" in loaded
     assert "melee-event-matchup.schema.json" in loaded
+    assert "melee-event-meta.schema.json" in loaded
+    assert "melee-event-catalog.schema.json" in loaded
     assert "melee-raw-archive.schema.json" in loaded
     assert all(schema["$schema"] == "https://json-schema.org/draft/2020-12/schema" for schema in loaded.values())
     assert loaded["formats.schema.json"]["x-schema-version"] == "1.1.0"
@@ -139,7 +141,7 @@ def test_manifest_rejects_missing_matches_and_schema(tmp_path):
 def test_cli_pass_help_usage_and_non_root_execution(tmp_path):
     script = ROOT / "validate_schemas.py"
     result = subprocess.run([sys.executable, "-B", str(script)], cwd=tmp_path, text=True, capture_output=True)
-    assert result.returncode == 0 and "PASS" in result.stdout and "checked=46" in result.stdout
+    assert result.returncode == 0 and "PASS" in result.stdout and "checked=52" in result.stdout
     help_result = subprocess.run([sys.executable, "-B", str(script), "--help"], text=True, capture_output=True)
     assert help_result.returncode == 0 and "usage:" in help_result.stdout
     usage = subprocess.run([sys.executable, "-B", str(script), "--unknown"], text=True, capture_output=True)

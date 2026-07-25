@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-meta.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Tabletop Major Events per-event publication metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "source",
+    "product",
+    "event_id",
+    "format",
+    "event_structure",
+    "event",
+    "input",
+    "scope_order",
+    "default_scope",
+    "quality",
+    "outputs"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "meta"},
+    "source": {"const": "melee"},
+    "product": {"const": "tabletop-major-events"},
+    "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "format": {"$ref": "melee-event-statistics-common.schema.json#/$defs/id"},
+    "event_structure": {"const": "mixed"},
+    "event": {"$ref": "#/$defs/event"},
+    "input": {"$ref": "melee-event-statistics-common.schema.json#/$defs/input"},
+    "scope_order": {"const": ["day1", "day2", "all_constructed"]},
+    "default_scope": {"const": "all_constructed"},
+    "quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "blocking", "issue_codes"],
+      "properties": {
+        "status": {"enum": ["pass", "warning"]},
+        "blocking": {"const": false},
+        "issue_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["overview", "decks", "matchup", "quality"],
+      "properties": {
+        "overview": {"$ref": "#/$defs/output"},
+        "decks": {"$ref": "#/$defs/output"},
+        "matchup": {"$ref": "#/$defs/output"},
+        "quality": {"$ref": "#/$defs/output"}
+      }
+    }
+  },
+  "$defs": {
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "series", "date", "source_url"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "series": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+        "date": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": {"type": "string", "format": "date"},
+            "end": {"type": "string", "format": "date"}
+          }
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://melee\\.gg/Tournament/View/[1-9][0-9]*$"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "schema_version", "bytes", "sha256"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?:overview|decks|matchup|quality)\\.json$"
+        },
+        "schema_version": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {
+          "$ref": "melee-event-statistics-common.schema.json#/$defs/sha256"
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "profile": "mtgo-generated-json",
+  "profile": "public-generated-json",
   "output_schema_version_embedded": true,
-  "note": "Compatibility contract for page-consumed Standard output and generated Standard/Modern statistics and diagnostics with embedded schema_version.",
+  "note": "Compatibility contract for public MTGO and Tabletop Major Events generated output with embedded schema_version.",
   "mappings": [
     {"pattern": "stats/standard/mtgo/range_*w.json", "schema": "mtgo-range.schema.json"},
     {"pattern": "stats/standard/mtgo/decks_*w.json", "schema": "mtgo-decks.schema.json"},
@@ -31,6 +31,12 @@
     {"pattern": "reports/modern/mtgo/multiple_matches.json", "schema": "classification-report.schema.json"},
     {"pattern": "reports/modern/mtgo/classification_conflicts.json", "schema": "classification-report.schema.json"},
     {"pattern": "reports/modern/mtgo/overridden_matches.json", "schema": "classification-report.schema.json"},
-    {"pattern": "reports/modern/mtgo/subtype_diagnostics.json", "schema": "classification-report.schema.json"}
+    {"pattern": "reports/modern/mtgo/subtype_diagnostics.json", "schema": "classification-report.schema.json"},
+    {"pattern": "stats/modern/melee/events/434455/overview.json", "schema": "melee-event-overview.schema.json"},
+    {"pattern": "stats/modern/melee/events/434455/decks.json", "schema": "melee-event-decks.schema.json"},
+    {"pattern": "stats/modern/melee/events/434455/matchup.json", "schema": "melee-event-matchup.schema.json"},
+    {"pattern": "stats/modern/melee/events/434455/quality.json", "schema": "melee-event-quality.schema.json"},
+    {"pattern": "stats/modern/melee/events/434455/meta.json", "schema": "melee-event-meta.schema.json"},
+    {"pattern": "stats/modern/melee/index.json", "schema": "melee-event-catalog.schema.json"}
   ]
 }

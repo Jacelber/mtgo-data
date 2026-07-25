@@ -175,6 +175,28 @@ is invented while OPEN-002 remains unresolved. P7-06 does not create catalog,
 manifest, workflow, or front-end behavior; those remain P7-07 and Phase 8
 work.
 
+P7-07 packages the verified event for public discovery. The first command is
+read-only; `--execute` atomically writes the event `meta.json` and Modern
+Melee `index.json`:
+
+```powershell
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.publish `
+  --root . --format modern --event-id 434455
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.publish `
+  --root . --format modern --event-id 434455 --execute
+```
+
+The metadata binds the exact overview, decks, matchup, and quality bytes by
+Schema version, size, and SHA-256. The catalog exposes only the enabled,
+verified reference event. All six Melee public documents are governed by
+`schemas/manifest.json`. `.github/workflows/fetch_melee.yml` is manual-only
+and source-separated: after a separately authorized dispatch it builds one
+event candidate and may push only `data/melee-<event_id>` for review. It never
+pushes `master`, creates a pull request, or merges. An already retained
+canonical event reuses its exact immutable snapshot; only a newly approved
+event without canonical input performs a live fetch.
+
 ## Format-aware MTGO commands
 
 The production MTGO pipeline uses one explicit command entry point. Set `PYTHONPATH` to `src` when running it from a source checkout:

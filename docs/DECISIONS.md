@@ -1814,3 +1814,49 @@ future independent row and column expansion without reprocessing source
 matches. P7-07 still owns catalog discovery, manifest governance, `meta.json`,
 and workflow integration. Phase 8 owns the front-end interaction. No MTGO
 output, taxonomy rule, source data, or existing P7-05 statistic changes.
+
+# DEC-050 — Publish Melee events through deterministic metadata and a review branch
+
+Status: `Accepted`
+
+## Context
+
+P7-05 and P7-06 produced complete event statistics, but those files had no
+format catalog, no per-event integrity metadata, and no public-manifest
+governance. A future front end needs one stable discovery entry point.
+Production refreshes also need a source-specific boundary that cannot modify
+MTGO data or push unreviewed source changes directly to `master`.
+
+## Decision
+
+Generate deterministic `meta.json` and `index.json` documents. The event
+metadata records exact path, Schema version, byte size, and SHA-256 for the
+overview, decks, matchup, and quality documents after each one reproduces its
+deterministic generator bytes. The format catalog exposes only the enabled,
+verified reference event and its five public paths. Add all six event/catalog
+documents to `schemas/manifest.json`.
+
+Add a separate Melee candidate validator. Permit only the selected event's new
+raw snapshot, normalized event, classification overlay, opportunity ledger,
+five event statistics, and format catalog. Reject deletions, mutation of
+retained raw evidence, cross-event writes, cross-format writes, MTGO writes,
+and inconsistent embedded identities.
+
+Provide a manual-only, event-scoped workflow with `contents: write`, explicit
+concurrency, and no schedule. Reuse the exact immutable snapshot recorded by
+an existing canonical event; fetch only when the selected approved event has
+no canonical input. It may push a successful candidate only to
+`data/melee-<event_id>`. It must not push `master`, create or merge a pull
+request, or share the MTGO workflow. Owner-controlled PR publication remains
+outside the workflow.
+
+## Consequences
+
+Modern event `434455` becomes discoverable through
+`stats/modern/melee/index.json`, while its `meta.json` provides a stable
+integrity boundary for all four statistical payloads. Public Schema validation
+expands from 46 to 52 documents without changing any statistic.
+
+P7-07 performs no live source request and does not dispatch the workflow.
+P7-08 separately owns the first real run, candidate review, Phase 7 closeout,
+and recovery tag. Phase 8 owns all front-end behavior.
