@@ -878,6 +878,16 @@ Use `rate` rather than `conversion` because the population already consists of D
 
 When effective round counts vary substantially, the output must expose the round-count distribution and display a comparability warning.
 
+### 8.9 Mixed-event combined scope
+
+Do not create a combined high-score count for a mixed event by adding Day 1
+and Day 2 high-score decks. Day 2 is a selected population, players have
+different opportunities across the two stages, and the same deck may qualify
+in both stage-specific regions. P7-05 therefore reports high-score metrics for
+Day 1 and Day 2 only. The all-Constructed-Swiss scope retains combined points,
+opportunities, completion, and played-match records, but its high-score fields
+are unavailable.
+
 ---
 
 ## 9. Day 2 participation metrics
@@ -1071,6 +1081,41 @@ For mixed-format event pages:
 - the event configuration may override the default if quality checks justify it.
 
 A default-scope override must be recorded in event configuration and explained in generated metadata.
+
+### 10.8 Per-event overview and deck-statistics contract
+
+For the P7-05 mixed-event output, `overview.json` and `decks.json` expose
+`day1`, `day2`, and `all_constructed` scopes. Day 1 and Day 2 use their own
+participant populations; the combined scope is a micro-aggregation of the
+underlying opportunity rows and does not pretend that all starting players had
+equal Day 2 access.
+
+Every overview parent row is calculated directly from the participants and
+opportunities assigned to that parent. The output also includes an explicit
+`Unknown` parent bucket in deck-count, opportunity, point, completion, and
+played-record denominators. Unknowns must not be dropped or redistributed.
+
+When an observed parent defines maintained subtypes, its row contains the
+complete maintained subtype list in taxonomy order, including zero-observation
+subtypes. Each subtype row is calculated directly from participants assigned
+to that subtype. Subtype deck counts, points, theoretical rounds, effective
+rounds, result counts, and all-match W-L-D records must sum to the parent row.
+The parent remains the default view. A parent is marked expandable only when
+the maintained taxonomy defines at least two subtypes.
+
+The played records expose raw W-L-D counts, match count, win rate, and a 95%
+Wilson interval. Both all-match and non-mirror records are retained; the
+non-mirror record excludes opponents assigned to the same displayed identity.
+No low-sample display threshold is hard-coded while OPEN-002 remains
+unresolved. Consumers must use the retained sample size and interval rather
+than treating an unavailable rate as zero.
+
+The participant-level `decks.json` preserves source-published player identity,
+standing context, submitted decklist, classification, and the same three
+statistical scopes. A disqualified participant's archival deck and official
+Constructed point fields remain present as frozen by the opportunity ledger,
+while all affected played matches remain excluded from win-rate and later
+matchup calculations.
 
 ---
 

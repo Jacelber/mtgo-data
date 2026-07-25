@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-overview.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Melee per-event overview statistics",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "source",
+    "event_id",
+    "format",
+    "event_structure",
+    "input",
+    "event",
+    "scope_order",
+    "default_scope",
+    "scopes",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "overview"},
+    "source": {"const": "melee"},
+    "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "format": {
+      "$ref": "melee-event-statistics-common.schema.json#/$defs/id"
+    },
+    "event_structure": {"const": "mixed"},
+    "input": {
+      "$ref": "melee-event-statistics-common.schema.json#/$defs/input"
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "series", "date", "source_url"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "series": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+        },
+        "date": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": {"type": "string", "format": "date"},
+            "end": {"type": "string", "format": "date"}
+          }
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://melee\\.gg/Tournament/View/[1-9][0-9]*$"
+        }
+      }
+    },
+    "scope_order": {
+      "const": ["day1", "day2", "all_constructed"]
+    },
+    "default_scope": {"const": "all_constructed"},
+    "scopes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["day1", "day2", "all_constructed"],
+      "properties": {
+        "day1": {"$ref": "#/$defs/scope"},
+        "day2": {"$ref": "#/$defs/scope"},
+        "all_constructed": {"$ref": "#/$defs/scope"}
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "melee-event-statistics-common.schema.json#/$defs/warning"
+      }
+    }
+  },
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "population",
+        "selection_bias_warning",
+        "participant_count",
+        "known_deck_count",
+        "unknown_deck_count",
+        "scheduled_round_count",
+        "theoretical_rounds",
+        "effective_theoretical_rounds",
+        "constructed_points",
+        "average_points_per_effective_round",
+        "source_match_count",
+        "eligible_match_count",
+        "disqualified_matches_excluded",
+        "high_score_deck_count",
+        "result_counts",
+        "archetypes"
+      ],
+      "properties": {
+        "population": {
+          "enum": [
+            "starting_field",
+            "qualified_field",
+            "starting_field_with_qualified_day2_opportunities"
+          ]
+        },
+        "selection_bias_warning": {"type": "boolean"},
+        "participant_count": {"type": "integer", "minimum": 0},
+        "known_deck_count": {"type": "integer", "minimum": 0},
+        "unknown_deck_count": {"type": "integer", "minimum": 0},
+        "scheduled_round_count": {"type": "integer", "minimum": 0},
+        "theoretical_rounds": {"type": "integer", "minimum": 0},
+        "effective_theoretical_rounds": {"type": "integer", "minimum": 0},
+        "constructed_points": {"type": "integer", "minimum": 0},
+        "average_points_per_effective_round": {
+          "$ref": "melee-event-statistics-common.schema.json#/$defs/average_points"
+        },
+        "source_match_count": {"type": "integer", "minimum": 0},
+        "eligible_match_count": {"type": "integer", "minimum": 0},
+        "disqualified_matches_excluded": {"type": "integer", "minimum": 0},
+        "high_score_deck_count": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "result_counts": {
+          "$ref": "melee-event-statistics-common.schema.json#/$defs/result_counts"
+        },
+        "archetypes": {
+          "type": "array",
+          "items": {
+            "$ref": "melee-event-statistics-common.schema.json#/$defs/archetype"
+          }
+        }
+      }
+    }
+  }
+}

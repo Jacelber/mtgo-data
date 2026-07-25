@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-quality.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Melee per-event statistics quality report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "source",
+    "event_id",
+    "format",
+    "event_structure",
+    "input",
+    "status",
+    "blocking",
+    "counts",
+    "checks",
+    "issues"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "quality"},
+    "source": {"const": "melee"},
+    "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "format": {
+      "$ref": "melee-event-statistics-common.schema.json#/$defs/id"
+    },
+    "event_structure": {"const": "mixed"},
+    "input": {
+      "$ref": "melee-event-statistics-common.schema.json#/$defs/input"
+    },
+    "status": {"enum": ["ready", "warning"]},
+    "blocking": {"const": false},
+    "counts": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+      },
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "passed"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+          },
+          "passed": {"const": true}
+        }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "severity", "count", "message"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+          },
+          "severity": {"enum": ["warning", "info"]},
+          "count": {"type": "integer", "minimum": 0},
+          "message": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
