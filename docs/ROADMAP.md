@@ -1341,7 +1341,43 @@ separately controlled.
 The project owner accepted P7-05 and authorized commit, push, pull request, and
 merge on 2026-07-25. Implementation commit
 `777bd5fca5badcee56bf5a82d691219d1f1a3d76` is published through pull request
-#100. P7-06 remains separately controlled.
+#100 and merge commit `6f2e483c5baf3245545ce8a68f2a5fa3e76b34da`.
+Pull-request CI run `30144216455`, post-merge CI run `30144509446`, and Pages
+run `30144509231` completed successfully. P7-06 remains separately
+controlled.
+
+## P7-06 — Scoped hierarchical matchup statistics
+
+P7-06 consumes the unchanged retained event, classification overlay,
+opportunity ledger, and Modern taxonomy. It rebuilds the P7-05 overview as an
+input-validation boundary, then generates only
+`stats/modern/melee/events/434455/matchup.json`.
+
+The output keeps `day1`, `day2`, and `all_constructed` scopes and defaults to
+the combined Constructed-Swiss view. It emits a complete canonical 55-leaf
+matrix and derives the complete 29-parent matrix by independently rolling up
+both axes. All maintained subtype nodes, non-subtype parents, Unknown, and
+zero cells remain present. Sibling subtype matches remain visible as
+non-mirrors when expanded but become parent mirrors when collapsed.
+
+Only complete reciprocal matches whose two opportunity rows have
+`matchup_included: true` enter the matrix. Each physical match contributes
+exactly two directed observations. The output reconciles Day 1's 861 and Day
+2's 533 eligible matches, and retains the 22 combined physical-match
+exclusions by reviewed reason. Raw W-L-D counts and 95% Wilson intervals are
+available for every cell and overall record; no low-sample threshold is
+invented before OPEN-002 is resolved.
+
+The generator is deterministic, read-only by default, and writes atomically
+only with `--execute`. Its Schema and output are validated directly but remain
+outside the public-output manifest. This task does not add `meta.json`, public
+catalog discovery, workflow integration, front-end behavior, taxonomy
+changes, or MTGO changes. Those boundaries remain P7-07 and Phase 8 work.
+
+The project owner explicitly authorized local P7-06 development on
+2026-07-25. Local implementation and validation are complete in the isolated
+`codex/p7-06-event-matchups` workspace and await owner acceptance. No remote
+publication is authorized yet.
 
 ## Required input work
 

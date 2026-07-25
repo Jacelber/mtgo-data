@@ -1287,6 +1287,41 @@ catalog. P7-06 adds `matchup.json`; P7-07 owns `meta.json`, the format event
 catalog, manifest/public packaging, and workflow integration. Phase 8 owns
 front-end presentation.
 
+### 11.10 Deterministic per-event hierarchical matchup statistics
+
+P7-06 reuses the P7-05 input validation boundary and reads the same normalized
+event, classification overlay, opportunity ledger, and maintained taxonomy.
+It verifies the opportunity-ledger digest again immediately before
+aggregation, then writes only:
+
+```text
+stats/<format>/melee/events/<event_id>/matchup.json
+```
+
+The document carries the same four-path provenance object as the P7-05
+outputs. It contains no wall-clock, checkout, branch, or Git-history value and
+must rebuild byte-identically from unchanged inputs.
+
+The hierarchy is taken from the rebuilt P7-05 all-Constructed overview: its
+ordered parent nodes, all maintained subtype leaves, non-subtype parent
+leaves, and Unknown become a complete stable event matrix domain. The
+leaf-level matrix is canonical. The parent matrix is a deterministic
+row-and-column rollup of the leaf counts. Each of `day1`, `day2`, and
+`all_constructed` contains:
+
+- included round numbers and physical-match reconciliation;
+- reviewed exclusion counts;
+- ordered parent and leaf identities;
+- complete parent and leaf matrices, including zero cells;
+- non-mirror overall parent and leaf records;
+- raw W-L-D counts, derived rates, and 95% Wilson intervals.
+
+The command is read-only unless `--execute` is supplied. It does not fetch a
+source, modify retained data, change taxonomy, write MTGO output, or publish a
+catalog. The new document and its Schema are validated directly in P7-06 but
+remain outside `schemas/manifest.json`; P7-07 owns public discovery, manifest
+governance, `meta.json`, and workflow integration.
+
 ---
 
 ## 12. Statistics-output layout
@@ -1451,11 +1486,11 @@ stats/modern/melee/events/434455/matchup.json
 stats/modern/melee/events/434455/quality.json
 ```
 
-P7-05 initially generates and directly Schema-validates `overview.json`,
-`decks.json`, and `quality.json` for event `434455`. These are deterministic
+P7-05 and P7-06 directly Schema-validate `overview.json`, `decks.json`,
+`quality.json`, and `matchup.json` for event `434455`. These are deterministic
 event-output candidates but are not yet discoverable through a public catalog
 or governed by the public-output manifest. P7-07 owns that publication
-boundary after `matchup.json` is available.
+boundary.
 
 ### 12.3 Multi-event matchup output
 

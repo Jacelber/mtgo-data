@@ -1302,6 +1302,39 @@ collapsed parent matrix must reproduce the existing Standard parent-level
 matchup output. This migration is required even if the legacy Standard public
 files remain available temporarily as compatibility outputs.
 
+### 11.9 P7-06 mixed-event matchup contract
+
+The event-level Melee matchup document uses the scope IDs `day1`, `day2`, and
+`all_constructed`, with `all_constructed` as the default. Only complete
+physical matches for which both opportunity-ledger rows have
+`matchup_included: true` enter a matrix. Each included physical match produces
+exactly two directed observations. A one-sided inclusion, non-reciprocal
+opponent reference, or non-inverse result is a blocking error.
+
+The canonical matrix level is the complete leaf set derived from the P7-05
+event hierarchy. A leaf is a maintained subtype for a subtype-defining parent,
+the parent itself when it defines no subtype, or the explicit Unknown node.
+All maintained leaves and every row-column cell are emitted even when their
+sample is zero. The complete parent matrix is obtained by independently
+rolling both leaf axes up to their parents; it is not recalculated from
+percentages.
+
+Sibling-subtype matches are non-mirror observations at leaf level but are
+parent mirrors after collapse. Consequently, subtype overall records exclude
+only the same leaf, while parent overall records exclude the complete parent
+diagonal. Parent non-mirror records must reproduce the corresponding P7-05
+overview records exactly.
+
+Each cell and overall record contains raw wins, losses, draws, valid-match
+count, win rate, and a 95% Wilson interval. A zero-sample rate and interval are
+`null`. The output records `low_sample_threshold: null` while OPEN-002 remains
+unresolved; it must not assign a display warning by inventing a threshold.
+
+Excluded physical matches remain counted by reviewed reason for each scope:
+bye, intentional draw, no-show, verified Top 8 lock award, administrative
+result, disqualified participant, or unknown. Draft, playoffs, and ordinary
+unplayed scheduled opportunities never become source matchup matches.
+
 ---
 
 ## 12. Confidence intervals and sample size

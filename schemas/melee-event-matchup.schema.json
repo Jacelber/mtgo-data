@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-matchup.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Hierarchical matchup statistics for one Melee event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "source",
+    "event_id",
+    "format",
+    "event_structure",
+    "input",
+    "event",
+    "scope_order",
+    "default_scope",
+    "hierarchical",
+    "canonical_level",
+    "rate_method",
+    "hierarchy",
+    "scopes",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "matchup"},
+    "source": {"const": "melee"},
+    "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "format": {"$ref": "melee-event-statistics-common.schema.json#/$defs/id"},
+    "event_structure": {"const": "mixed"},
+    "input": {
+      "$ref": "melee-event-statistics-common.schema.json#/$defs/input"
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "series", "date", "source_url"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "series": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+        },
+        "date": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": {"type": "string", "format": "date"},
+            "end": {"type": "string", "format": "date"}
+          }
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://melee\\.gg/Tournament/View/[1-9][0-9]*$"
+        }
+      }
+    },
+    "scope_order": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "day1"},
+        {"const": "day2"},
+        {"const": "all_constructed"}
+      ],
+      "items": false
+    },
+    "default_scope": {"const": "all_constructed"},
+    "hierarchical": {"const": true},
+    "canonical_level": {"const": "leaf"},
+    "rate_method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "draw_weight",
+        "confidence_interval",
+        "low_sample_threshold"
+      ],
+      "properties": {
+        "draw_weight": {"const": 0.5},
+        "confidence_interval": {"const": "wilson_95"},
+        "low_sample_threshold": {"type": "null"}
+      }
+    },
+    "hierarchy": {"$ref": "#/$defs/hierarchy"},
+    "scopes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["day1", "day2", "all_constructed"],
+      "properties": {
+        "day1": {"$ref": "#/$defs/scope"},
+        "day2": {"$ref": "#/$defs/scope"},
+        "all_constructed": {"$ref": "#/$defs/scope"}
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "melee-event-statistics-common.schema.json#/$defs/warning"
+      }
+    }
+  },
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "pattern": "^(?:unknown|[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)?)$"
+    },
+    "identity_order": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/identity"}
+    },
+    "parent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "expandable", "subtype_ids"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identity"},
+        "name": {"type": "string", "minLength": 1},
+        "expandable": {"type": "boolean"},
+        "subtype_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/identity"}
+        }
+      }
+    },
+    "leaf": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "name", "parent_id", "subtype_id"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identity"},
+        "kind": {"enum": ["archetype", "subtype", "unknown"]},
+        "name": {"type": "string", "minLength": 1},
+        "parent_id": {"$ref": "#/$defs/identity"},
+        "subtype_id": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          ]
+        }
+      }
+    },
+    "hierarchy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parents", "leaves"],
+      "properties": {
+        "parents": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/parent"}
+        },
+        "leaves": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/leaf"}
+        }
+      }
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wins",
+        "losses",
+        "draws",
+        "matches",
+        "win_rate",
+        "confidence_interval_95",
+        "mirror"
+      ],
+      "properties": {
+        "wins": {"type": "integer", "minimum": 0},
+        "losses": {"type": "integer", "minimum": 0},
+        "draws": {"type": "integer", "minimum": 0},
+        "matches": {"type": "integer", "minimum": 0},
+        "win_rate": {
+          "$ref": "melee-event-statistics-common.schema.json#/$defs/rate"
+        },
+        "confidence_interval_95": {
+          "$ref": "melee-event-statistics-common.schema.json#/$defs/confidence_interval"
+        },
+        "mirror": {"type": "boolean"}
+      }
+    },
+    "record_map": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/identity"},
+      "additionalProperties": {"$ref": "#/$defs/record"}
+    },
+    "record_matrix": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/identity"},
+      "additionalProperties": {
+        "type": "object",
+        "propertyNames": {"$ref": "#/$defs/identity"},
+        "additionalProperties": {"$ref": "#/$defs/record"}
+      }
+    },
+    "excluded_match_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bye",
+        "intentional_draw",
+        "no_show",
+        "awarded_win_top8_lock",
+        "administrative_result",
+        "disqualified_participant",
+        "unknown"
+      ],
+      "properties": {
+        "bye": {"type": "integer", "minimum": 0},
+        "intentional_draw": {"type": "integer", "minimum": 0},
+        "no_show": {"type": "integer", "minimum": 0},
+        "awarded_win_top8_lock": {"type": "integer", "minimum": 0},
+        "administrative_result": {"type": "integer", "minimum": 0},
+        "disqualified_participant": {"type": "integer", "minimum": 0},
+        "unknown": {"type": "integer", "minimum": 0}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "round_numbers",
+        "source_match_count",
+        "included_match_count",
+        "excluded_match_count",
+        "directed_observation_count",
+        "excluded_match_counts",
+        "parent_order",
+        "parent_overall",
+        "parent_matrix",
+        "leaf_order",
+        "leaf_overall",
+        "leaf_matrix"
+      ],
+      "properties": {
+        "round_numbers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "integer", "minimum": 1}
+        },
+        "source_match_count": {"type": "integer", "minimum": 0},
+        "included_match_count": {"type": "integer", "minimum": 0},
+        "excluded_match_count": {"type": "integer", "minimum": 0},
+        "directed_observation_count": {"type": "integer", "minimum": 0},
+        "excluded_match_counts": {"$ref": "#/$defs/excluded_match_counts"},
+        "parent_order": {"$ref": "#/$defs/identity_order"},
+        "parent_overall": {"$ref": "#/$defs/record_map"},
+        "parent_matrix": {"$ref": "#/$defs/record_matrix"},
+        "leaf_order": {"$ref": "#/$defs/identity_order"},
+        "leaf_overall": {"$ref": "#/$defs/record_map"},
+        "leaf_matrix": {"$ref": "#/$defs/record_matrix"}
+      }
+    }
+  }
+}

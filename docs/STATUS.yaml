@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p7-05-event-statistics"
-  working_branch_status: "p7_05_owner_accepted_and_remote_publication_authorized"
+  current_working_branch: "codex/p7-06-event-matchups"
+  working_branch_status: "p7_06_local_implementation_completed_pending_owner_acceptance"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -3752,7 +3752,7 @@ phase_7_tasks:
 
   - id: "P7-05"
     name: "Generate per-event overview and deck statistics"
-    status: "local_implementation_completed_pending_owner_acceptance"
+    status: "completed_and_published"
     branch: "codex/p7-05-event-statistics"
     base_commit: "687d539b3e7fefa8e4a74b8327f62d4bfe3ebe19"
     audit: "docs/audits/P7-05.md"
@@ -3826,10 +3826,84 @@ phase_7_tasks:
     production_workflow_dispatch_authorized: false
     implementation_commit: "777bd5fca5badcee56bf5a82d691219d1f1a3d76"
     pull_request: 100
+    merge_commit: "6f2e483c5baf3245545ce8a68f2a5fa3e76b34da"
+    merged_on: "2026-07-25"
+    pull_request_ci_run: 30144216455
+    post_merge_ci_run: 30144509446
+    pages_run: 30144509231
+    ci_status: "success"
+    pages_status: "success"
 
   - id: "P7-06"
     name: "Generate scoped hierarchical matchup statistics"
-    status: "planned_not_authorized"
+    status: "local_implementation_completed_pending_owner_acceptance"
+    branch: "codex/p7-06-event-matchups"
+    base_commit: "6f2e483c5baf3245545ce8a68f2a5fa3e76b34da"
+    audit: "docs/audits/P7-06.md"
+    owner_local_implementation_authorized: true
+    owner_local_implementation_authorized_on: "2026-07-25"
+    scope:
+      - "Generate deterministic Day 1, Day 2, and all-Constructed-Swiss matchup statistics for retained event 434455."
+      - "Use a complete canonical leaf matrix and derive both parent axes without averaging rates."
+      - "Keep all maintained subtypes, non-subtype parents, Unknown, and explicit zero cells."
+      - "Count only symmetric matchup-included ledger pairs and retain reviewed exclusion counts."
+      - "Retain raw W-L-D samples and 95% Wilson intervals without hard-coding the unresolved low-sample display policy."
+      - "Keep meta/catalog packaging, manifest governance, workflow integration, front ends, MTGO products, and taxonomy unchanged."
+    reference_event:
+      id: "434455"
+      format: "modern"
+      event_structure: "mixed"
+      matchup_path: "stats/modern/melee/events/434455/matchup.json"
+      matchup_bytes: 3119844
+      matchup_sha256: "452f0d81c143348d75d0e02b5004a603e077216e806fdca9bc30f92927575870"
+      parent_nodes: 29
+      canonical_leaf_nodes: 55
+      day1_source_matches: 870
+      day1_included_matches: 861
+      day1_excluded_matches: 9
+      day2_source_matches: 546
+      day2_included_matches: 533
+      day2_excluded_matches: 13
+      combined_source_matches: 1416
+      combined_included_matches: 1394
+      combined_excluded_matches: 22
+      combined_directed_observations: 2788
+    production_change: true
+    network_request_performed: false
+    real_event_data_retained: false
+    generated_data_changed: true
+    statistical_output_added: true
+    statistical_formula_changed: false
+    classification_taxonomy_changed: false
+    mtgo_output_changed: false
+    public_catalog_changed: false
+    public_output_manifest_changed: false
+    workflow_changed: false
+    frontend_changed: false
+    event_matchup_schema_version: "1.0.0"
+    decision: "DEC-049"
+    direct_output_schema_validation_passed: true
+    byte_identical_regeneration_passed: true
+    scope_match_conservation_passed: true
+    inverse_cell_conservation_passed: true
+    leaf_parent_rollup_passed: true
+    p7_05_parent_record_reconciliation_passed: true
+    focused_tests_passed: 29
+    impacted_tests_passed: 159
+    tests_passed: 474
+    repository_validation_passed: true
+    repository_python_files_checked: 102
+    repository_json_files_checked: 1517
+    repository_yaml_files_checked: 16
+    repository_references_checked: 30
+    repository_hygiene_entries_checked: 1718
+    standard_rule_validation_passed: true
+    modern_rule_validation_passed: true
+    schema_validation_passed: true
+    schema_validated_public_outputs: 46
+    owner_acceptance: "pending"
+    remote_publication_authorized: false
+    production_workflow_dispatch_authorized: false
 
   - id: "P7-07"
     name: "Finalize public Schemas, event catalog, packaging, and production workflow"
@@ -3840,24 +3914,22 @@ phase_7_tasks:
     status: "planned_not_authorized"
 
 next_approved_task:
-  id: "P7-05"
-  name: "Owner acceptance and separately authorized publication of per-event overview and deck statistics"
+  id: "P7-06"
+  name: "Owner acceptance and separately authorized publication of scoped hierarchical matchup statistics"
   target_paths:
-    - "src/mtgmeta/melee/stats.py"
-    - "schemas/melee-event-statistics-common.schema.json"
-    - "schemas/melee-event-overview.schema.json"
-    - "schemas/melee-event-decks.schema.json"
-    - "schemas/melee-event-quality.schema.json"
-    - "stats/modern/melee/events/434455/"
-    - "tests/test_melee_statistics.py"
+    - "src/mtgmeta/melee/matchup.py"
+    - "schemas/melee-event-matchup.schema.json"
+    - "stats/modern/melee/events/434455/matchup.json"
+    - "tests/test_melee_matchup.py"
+    - "tests/test_validate_schemas.py"
     - "docs/"
     - "README.md"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_and_remote_publication_authorized"
-  remote_publication_authorized: true
+  authorization_status: "local_implementation_authorized_owner_acceptance_pending"
+  remote_publication_authorized: false
   production_workflow_dispatch_authorized: false
-  planning_status: "owner_accepted_and_remote_publication_in_progress"
+  planning_status: "local_implementation_completed_pending_owner_acceptance"
 
 governance_baseline:
   status: "active_on_master"
@@ -3908,11 +3980,10 @@ delegated_local_execution_governance:
 prohibited_next_actions:
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
-  - "Do not build P7-06 or later event statistics before those tasks are separately authorized."
+  - "Do not build P7-07 or later publication integration before those tasks are separately authorized."
   - "Do not replace the retained P7-02 snapshot or normalized event with a different source snapshot without explicit review."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."
-  - "Do not generate reference-event or Paupergeddon statistics yet."
   - "Do not add new Constructed formats yet."
   - "Do not delete or disable existing workflows before their responsibilities are audited."
   - "Do not change public Standard output without regression protection."

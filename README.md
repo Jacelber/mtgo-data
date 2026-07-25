@@ -153,6 +153,28 @@ because the two stages have different participant populations. P7-05 does not
 generate `matchup.json`, `meta.json`, a public event catalog, a workflow, or
 front-end behavior; those remain later tasks.
 
+P7-06 generates the source-separated hierarchical matchup candidate from the
+same four validated inputs. The first command is read-only; `--execute`
+atomically writes `stats/modern/melee/events/434455/matchup.json`:
+
+```powershell
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.matchup `
+  --root . --format modern --event-id 434455
+.\.venv\Scripts\python.exe -B -m mtgmeta.melee.matchup `
+  --root . --format modern --event-id 434455 --execute
+```
+
+The document defaults to all Constructed Swiss and also retains separate Day
+1 and Day 2 scopes. Its complete 29-parent and 55-leaf matrices include
+explicit zero cells, Unknown, raw W-L-D counts, and 95% Wilson intervals.
+Leaf cells are canonical; parent cells are independent row-and-column rollups
+of those leaves. Only opportunity-ledger rows with symmetric
+`matchup_included: true` enter the matrices. No low-sample display threshold
+is invented while OPEN-002 remains unresolved. P7-06 does not create catalog,
+manifest, workflow, or front-end behavior; those remain P7-07 and Phase 8
+work.
+
 ## Format-aware MTGO commands
 
 The production MTGO pipeline uses one explicit command entry point. Set `PYTHONPATH` to `src` when running it from a source checkout:
