@@ -1767,3 +1767,50 @@ Modern or the taxonomy.
 The generated candidates are directly Schema-validated but are not yet
 catalog-discoverable or part of the public-output manifest. No source fetch,
 matchup matrix, workflow, catalog, or front-end change is implied.
+
+# DEC-049 — Store canonical leaf matchups and derive both parent axes
+
+Status: `Accepted`
+
+## Context
+
+P7-05 exposes direct parent and maintained-subtype deck statistics, while the
+approved future front end must independently expand either matchup axis.
+Generating only a parent matrix cannot recover subtype matchups. Generating
+separate display matrices risks double counting, incompatible samples, and
+parent totals that no longer reproduce the established overview. The
+low-sample display policy also remains unresolved under OPEN-002.
+
+## Decision
+
+For each mixed-event scope, store one complete canonical matrix at the most
+specific maintained leaf identity. A leaf is a subtype, a parent with no
+defined subtype, or Unknown. Retain all event hierarchy nodes and explicit
+zero cells. Derive the complete parent matrix by summing the leaf matrix over
+both axes; never roll up rates.
+
+Use `day1`, `day2`, and `all_constructed` scopes, defaulting to
+`all_constructed`. Admit only physical matches represented by exactly two
+reciprocal opportunity rows whose `matchup_included` values are both true and
+whose played results are inverse. Preserve reviewed physical-match exclusion
+counts by reason.
+
+Sibling subtype matches are leaf non-mirrors and parent mirrors. Leaf overall
+records therefore exclude only their own leaf diagonal; parent overall records
+exclude the complete parent diagonal and must reproduce P7-05 parent
+non-mirror records. Retain raw W-L-D counts and Wilson 95% intervals. Record a
+null low-sample threshold until OPEN-002 is resolved.
+
+## Consequences
+
+Event `434455` yields 29 parent nodes and 55 canonical leaves across every
+scope. It includes 861 Day 1 and 533 Day 2 physical matches, for 1,394 combined
+matches and 2,788 directed combined observations. The combined 22 exclusions
+are seven byes, two intentional-draw matches, seven verified Top 8 lock
+awards, and six disqualification-affected matches.
+
+The deterministic `matchup.json` is directly Schema-validated and can support
+future independent row and column expansion without reprocessing source
+matches. P7-07 still owns catalog discovery, manifest governance, `meta.json`,
+and workflow integration. Phase 8 owns the front-end interaction. No MTGO
+output, taxonomy rule, source data, or existing P7-05 statistic changes.
