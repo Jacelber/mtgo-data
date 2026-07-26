@@ -921,6 +921,26 @@ archetypes:
       - card: Talisman of Curiosity
         zone: main
         exact_count: 0
+  - id: eldrazi-ramp-golgari-underground-mortuary
+    priority: 6445
+    subtype_id: golgari
+    conditions:
+      all:
+      - card: Sowing Mycospawn
+        zone: main
+        min_count: 3
+      - card: Eldrazi Temple
+        zone: main
+        min_count: 3
+      - card: Talisman of Resilience
+        zone: main
+        min_count: 1
+      - card: Underground Mortuary
+        zone: main
+        min_count: 1
+      - card: Talisman of Curiosity
+        zone: main
+        exact_count: 0
   - id: eldrazi-ramp-temur
     priority: 6440
     subtype_id: temur
