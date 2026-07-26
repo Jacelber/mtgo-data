@@ -2214,6 +2214,42 @@ maintenance_tasks:
       classification_rules_changed: false
       generated_data_changed: false
 
+  - id: "MAINT-2026-07-26-MODERN-ELDRAZI-RAMP-SUBTYPE"
+    name: "Recognize Underground Mortuary Golgari Eldrazi Ramp builds"
+    status: "owner_accepted_and_publication_authorized"
+    source_failure_run: 30184557061
+    source_branch: "codex/modern-eldrazi-ramp-subtype-hotfix"
+    base_commit: "1f205472938d8f9942102fdd95f48491456d1ac0"
+    owner_local_implementation_authorized: true
+    remote_publication_authorized: true
+    production_dispatch_authorized: true
+    output:
+      - "my_archetypes/modern.yaml"
+      - "tests/fixtures/modern/taxonomy_contract.json"
+      - "tests/test_modern_taxonomy.py"
+      - "tests/test_melee_classification.py"
+      - "data/modern/melee/classifications/434455.json"
+      - "data/modern/melee/opportunities/434455.json"
+      - "stats/modern/melee/events/434455/overview.json"
+      - "stats/modern/melee/events/434455/decks.json"
+      - "stats/modern/melee/events/434455/matchup.json"
+      - "stats/modern/melee/events/434455/quality.json"
+      - "stats/modern/melee/events/434455/meta.json"
+      - "docs/audits/MTGO-MODERN-ELDRAZI-RAMP-SUBTYPE-HOTFIX.md"
+      - "docs/STATUS.yaml"
+    contract:
+      parent_archetypes_changed: false
+      subtype_definitions_changed: false
+      golgari_eldrazi_ramp_rule_added: true
+      residual_subtype_added: false
+      frozen_modern_parent_results_changed: false
+      frozen_modern_subtype_results_changed: false
+      retained_melee_classification_results_changed: false
+      statistical_formulas_changed: false
+      workflow_changed: false
+      front_end_changed: false
+      complete_tests_passed: 497
+
 phase_5_tasks:
   - id: "P5-01"
     name: "Define the Melee whitelist and normalized event contract"
