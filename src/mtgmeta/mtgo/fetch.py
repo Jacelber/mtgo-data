@@ -22,6 +22,7 @@ DEFAULT_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
 }
 REQUIRED_EVENT_FIELDS = frozenset({"event_id", "description", "player_count", "decklists"})
+INCOMPLETE_EVENT_GRACE_DAYS = 2
 
 
 class MTGOFetchError(RuntimeError):
@@ -119,14 +120,32 @@ def is_event_data_complete(data: Any) -> bool:
 
 
 def is_event_data_pending(data: Any) -> bool:
-    """Return whether an otherwise shaped event is waiting for decklist publication."""
+    """Return whether a valid event object is still being published."""
 
-    return (
-        isinstance(data, dict)
-        and REQUIRED_EVENT_FIELDS <= set(data)
-        and isinstance(data.get("decklists"), list)
-        and not data["decklists"]
-    )
+    return _incomplete_event_message(data) is not None
+
+
+def _incomplete_event_message(data: Any) -> str | None:
+    if not isinstance(data, dict):
+        return None
+    missing = sorted(REQUIRED_EVENT_FIELDS - set(data))
+    if missing:
+        return f"MTGO event publication is incomplete (missing fields: {', '.join(missing)})"
+    if isinstance(data.get("decklists"), list) and not data["decklists"]:
+        return "MTGO event decklists have not been published yet"
+    return None
+
+
+def _is_within_incomplete_event_grace(link: str, now: datetime) -> bool:
+    _, event_date_value = parse_event_link(link, ())
+    if event_date_value is None:
+        return False
+    try:
+        event_date = datetime.strptime(event_date_value, "%Y-%m-%d").date()
+    except ValueError:
+        return False
+    age_days = (now.date() - event_date).days
+    return 0 <= age_days <= INCOMPLETE_EVENT_GRACE_DAYS
 
 
 def download_event_data(
@@ -144,7 +163,6 @@ def download_event_data(
         raise ValueError("attempts must be at least one")
     wait = sleep or time.sleep
     last_error: MTGOFetchError | MTGOParseError | None = None
-    pending_error: MTGOIncompleteEventError | None = None
     for attempt in range(1, attempts + 1):
         try:
             html = download_page(
@@ -158,19 +176,19 @@ def download_event_data(
             data = extract_event_data(html)
             if is_event_data_complete(data):
                 return data
-            if is_event_data_pending(data):
-                pending_error = MTGOIncompleteEventError(
-                    "MTGO event decklists have not been published yet"
-                )
-                last_error = pending_error
+            incomplete_message = _incomplete_event_message(data)
+            if incomplete_message is not None:
+                last_error = MTGOIncompleteEventError(incomplete_message)
+            elif isinstance(data, dict) and not isinstance(data.get("decklists"), list):
+                last_error = MTGOParseError("MTGO event decklists must be a list")
             else:
                 last_error = MTGOParseError("MTGO event data is incomplete")
         except (MTGOFetchError, MTGOParseError) as exc:
             last_error = exc
         if retry_delay and attempt < attempts:
             wait(retry_delay)
-    if pending_error is not None:
-        raise pending_error
+    if isinstance(last_error, MTGOIncompleteEventError):
+        raise MTGOIncompleteEventError(f"{last_error} after {attempts} attempts")
     if last_error is None:  # Defensive guard; attempts >= 1 always assigns or returns.
         raise MTGOFetchError(f"failed to download event data from {url!r}")
     raise last_error
@@ -244,6 +262,7 @@ def fetch_event_months(
     request_get: Callable[..., Any] | None = None,
     sleep: Callable[[float], None] | None = None,
     inter_event_delay: float = 4,
+    now: datetime | None = None,
 ) -> dict[str, Any]:
     """Fetch one format's recent event pages after capability authorization."""
 
@@ -252,7 +271,8 @@ def fetch_event_months(
         format_id,
         registry_path=registry_path,
     )
-    selected_months = list(months) if months is not None else recent_months()
+    reference_now = now or datetime.now()
+    selected_months = list(months) if months is not None else recent_months(reference_now)
     if not selected_months or any(
         not isinstance(year, int)
         or not isinstance(month, int)
@@ -315,8 +335,20 @@ def fetch_event_months(
                     summary["fetched"] += 1
                     summary["written"].append(destination)
             except MTGOIncompleteEventError as exc:
-                summary["deferred_incomplete"] += 1
-                summary["warnings"].append((event_url, str(exc)))
+                if _is_within_incomplete_event_grace(link, reference_now):
+                    summary["deferred_incomplete"] += 1
+                    summary["warnings"].append(
+                        (event_url, f"{exc}; will retry on a later scheduled run")
+                    )
+                else:
+                    summary["failed"] += 1
+                    summary["errors"].append(
+                        (
+                            event_url,
+                            f"{exc}; event is outside the "
+                            f"{INCOMPLETE_EVENT_GRACE_DAYS}-day publication grace period",
+                        )
+                    )
             except (MTGOFetchError, MTGOParseError, MTGOStorageError, OSError) as exc:
                 summary["failed"] += 1
                 summary["errors"].append((event_url, str(exc)))

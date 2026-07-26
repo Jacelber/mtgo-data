@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import pytest
@@ -217,6 +218,24 @@ def test_event_download_retries_parse_failures_until_complete():
     assert waits == [1]
 
 
+def test_event_download_retries_partial_publication_until_complete():
+    calls = []
+    partial = raw_event()
+    del partial["player_count"]
+
+    def request(_url, **_kwargs):
+        calls.append(True)
+        return Response(embedded_html(partial if len(calls) == 1 else raw_event()))
+
+    assert download_event_data(
+        "https://example.test/event",
+        attempts=2,
+        retry_delay=0,
+        request_get=request,
+    ) == raw_event()
+    assert len(calls) == 2
+
+
 def test_event_download_distinguishes_pending_decklists_from_parse_failure():
     pending = {**raw_event(), "decklists": []}
     with pytest.raises(MTGOIncompleteEventError, match="not been published"):
@@ -232,6 +251,45 @@ def test_event_download_distinguishes_pending_decklists_from_parse_failure():
             attempts=2,
             retry_delay=0,
             request_get=lambda *_args, **_kwargs: Response("missing"),
+        )
+
+
+def test_event_download_distinguishes_partial_publication_from_invalid_field_type():
+    partial = raw_event()
+    del partial["player_count"]
+    with pytest.raises(MTGOIncompleteEventError, match="missing fields: player_count"):
+        download_event_data(
+            "https://example.test/partial",
+            attempts=2,
+            retry_delay=0,
+            request_get=lambda *_args, **_kwargs: Response(embedded_html(partial)),
+        )
+
+    invalid = {**raw_event(), "decklists": {}}
+    with pytest.raises(MTGOParseError, match="decklists must be a list"):
+        download_event_data(
+            "https://example.test/invalid",
+            attempts=2,
+            retry_delay=0,
+            request_get=lambda *_args, **_kwargs: Response(embedded_html(invalid)),
+        )
+
+
+def test_event_download_does_not_hide_final_invalid_data_behind_earlier_pending_data():
+    responses = [
+        {**raw_event(), "decklists": []},
+        {**raw_event(), "decklists": {}},
+    ]
+
+    def request(_url, **_kwargs):
+        return Response(embedded_html(responses.pop(0)))
+
+    with pytest.raises(MTGOParseError, match="decklists must be a list"):
+        download_event_data(
+            "https://example.test/invalid-after-pending",
+            attempts=2,
+            retry_delay=0,
+            request_get=request,
         )
 
 
@@ -346,6 +404,7 @@ def test_month_fetch_defers_listed_event_until_decklists_are_published(tmp_path)
         tmp_path,
         "legacy",
         months=[(2026, 7)],
+        now=datetime(2026, 7, 20),
         registry_path=REGISTRY,
         request_get=request,
         sleep=lambda _seconds: None,
@@ -356,7 +415,70 @@ def test_month_fetch_defers_listed_event_until_decklists_are_published(tmp_path)
     assert summary["warnings"] == [
         (
             f"https://www.mtgo.com{event_link}",
-            "MTGO event decklists have not been published yet",
+            "MTGO event decklists have not been published yet after 5 attempts; "
+            "will retry on a later scheduled run",
+        )
+    ]
+    assert not (tmp_path / "fetched.txt").exists()
+    assert not (tmp_path / "data").exists()
+
+
+def test_month_fetch_defers_recent_partial_event_without_writing(tmp_path):
+    event_link = "/decklist/modern-challenge-32-2026-07-2512848201"
+    partial = {**raw_event(), "description": "Modern Challenge 32"}
+    del partial["player_count"]
+
+    def request(url, **_kwargs):
+        return Response(event_link if "/decklists/" in url else embedded_html(partial))
+
+    summary = fetch_event_months(
+        tmp_path,
+        "modern",
+        months=[(2026, 7)],
+        now=datetime(2026, 7, 26),
+        registry_path=REGISTRY,
+        request_get=request,
+        sleep=lambda _seconds: None,
+        inter_event_delay=0,
+    )
+    assert summary["deferred_incomplete"] == 1
+    assert summary["failed"] == 0
+    assert summary["warnings"] == [
+        (
+            f"https://www.mtgo.com{event_link}",
+            "MTGO event publication is incomplete (missing fields: player_count) "
+            "after 5 attempts; will retry on a later scheduled run",
+        )
+    ]
+    assert not (tmp_path / "fetched.txt").exists()
+    assert not (tmp_path / "data").exists()
+
+
+def test_month_fetch_escalates_partial_event_after_grace_period(tmp_path):
+    event_link = "/decklist/modern-challenge-32-2026-07-2512848201"
+    partial = {**raw_event(), "description": "Modern Challenge 32"}
+    del partial["player_count"]
+
+    def request(url, **_kwargs):
+        return Response(event_link if "/decklists/" in url else embedded_html(partial))
+
+    summary = fetch_event_months(
+        tmp_path,
+        "modern",
+        months=[(2026, 7)],
+        now=datetime(2026, 7, 28),
+        registry_path=REGISTRY,
+        request_get=request,
+        sleep=lambda _seconds: None,
+        inter_event_delay=0,
+    )
+    assert summary["deferred_incomplete"] == 0
+    assert summary["failed"] == 1
+    assert summary["errors"] == [
+        (
+            f"https://www.mtgo.com{event_link}",
+            "MTGO event publication is incomplete (missing fields: player_count) "
+            "after 5 attempts; event is outside the 2-day publication grace period",
         )
     ]
     assert not (tmp_path / "fetched.txt").exists()
