@@ -400,8 +400,19 @@ Responsibilities:
 - preserve source identifiers;
 - avoid refetching known events when appropriate;
 - apply retries and timeouts;
+- require an explicit playoff marker before deciding archive eligibility;
+- require every published playoff deck to have matching Swiss standings and a
+  final placement before storage;
+- distinguish temporarily incomplete publication from structurally invalid
+  identities or numeric fields;
 - report partial failures;
 - write source data through controlled paths.
+
+Temporary semantic incompleteness enters the existing bounded retry and
+two-day defer path. It produces no event file and no fetched-ledger entry.
+Duplicate source player IDs, invalid collection types, or invalid rank/score
+values are parser failures. Non-playoff events remain eligible for explicit
+exclusion without requiring playoff-only standings and placement collections.
 
 ### 5.2 `normalize.py`
 
@@ -907,6 +918,13 @@ Every normalized or source-preserved event record must contain or allow derivati
 - deck and result records;
 - fetch or generation metadata;
 - schema version when normalized.
+
+Every retained MTGO playoff event must also contain a non-empty player list
+whose `loginid` values are unique and whose `swiss_rank`, `swiss_score`, and
+`final_rank` values are valid integers (`swiss_score` may be zero; ranks are
+positive). Production-candidate validation applies this contract to every new
+or modified retained event. Existing known exceptions must be repaired from
+validated source data, not hand-edited.
 
 ### 9.2 Fetch state
 

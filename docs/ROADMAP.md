@@ -1670,11 +1670,29 @@ Modern event `12847150` and Pioneer event `12844304`.
 Before P8-05, obtain separate authorization for two ordered focused tasks:
 
 1. `P8-HOTFIX-MTGO-EVENT-COMPLETENESS` — strengthen fetch-time semantics,
-   retry/defer diagnostics, normalized candidate validation, fail-closed
-   statistics behavior, and regression coverage.
+   retry/defer diagnostics, normalized candidate validation, and regression
+   coverage so no new incomplete event can be retained.
 2. `P8-REPAIR-MTGO-EVENTS-12847150-12844304` — perform validated atomic
-   source refreshes and regenerate affected Modern outputs without hand-editing
-   generated data or manipulating the fetched ledger as a substitute.
+   source refreshes, prove the retained exception count is zero, activate
+   fail-closed statistical consumption, and regenerate affected Modern outputs
+   without hand-editing generated data or manipulating the fetched ledger as a
+   substitute.
+
+This boundary avoids an invalid intermediate master: enabling strict
+statistical consumption before repairing `12847150` intentionally breaks the
+committed Modern and Pickup rebuilds. The admission barrier must merge first;
+the source repair and consumer strictness must then land together.
+
+The first hotfix has completed local implementation. New playoff payloads now
+require complete unique deck, standing, and final-rank identity coverage before
+storage or ledger admission, and production-candidate validation rejects
+missing normalized Swiss or placement evidence. Existing non-playoff exclusion
+behavior and all generated statistics remain unchanged. All 511 tests and
+repository, rule, and Schema validation pass; no retained event or workflow was
+changed. The owner accepted the hotfix and authorized publication on
+2026-07-28. After its merge, local execution of the separately isolated event
+repair task is also authorized; publication of that repair remains separately
+controlled.
 
 The full evidence, uncertainty boundary, expected repair invariants, and
 acceptance tests are recorded in

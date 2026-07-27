@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_followup_12847150_owner_accepted_publication_authorized"
+  status: "p8_hotfix_mtgo_event_completeness_owner_accepted_publication_authorized"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4291,32 +4291,99 @@ phase_8_plan:
       workflow_changed: false
       remote_publication_authorized: true
       remote_publication_authorized_on: "2026-07-27"
+      publication:
+        local_commit: "731fb72c80a4ceac2d86c904216f2411f668d3df"
+        pull_request: 111
+        merge_commit: "4dcb8d19f2b8e3a2f2182a9dbd4d0e970918bbf5"
       recommended_followups:
         - id: "P8-HOTFIX-MTGO-EVENT-COMPLETENESS"
-          authorization_status: "local_execution_authorized"
+          authorization_status: "owner_accepted_publication_authorized"
         - id: "P8-REPAIR-MTGO-EVENTS-12847150-12844304"
-          authorization_status: "not_authorized"
+          authorization_status: "local_execution_authorized"
+    - id: "P8-HOTFIX-MTGO-EVENT-COMPLETENESS"
+      name: "Harden MTGO event semantic completeness"
+      status: "completed_owner_accepted_publication_authorized"
+      branch: "codex/p8-hotfix-mtgo-event-completeness"
+      base_commit: "4dcb8d19f2b8e3a2f2182a9dbd4d0e970918bbf5"
+      authorized_on: "2026-07-27"
+      deliverable: "docs/audits/P8-HOTFIX-MTGO-EVENT-COMPLETENESS.md"
+      scope:
+        - "Reject or defer playoff payloads without complete deck, standing, and final-rank identity coverage."
+        - "Keep structural source errors fatal and field-specific."
+        - "Reject new or modified normalized event archives with missing Swiss or final-rank evidence."
+        - "Preserve non-playoff exclusion, current generated statistics, and the two known retained files."
+      sequencing:
+        current_statistics_fail_closed: false
+        reason: "Known event 12847150 must be repaired before strict consumers can pass the committed Modern and Pickup baselines."
+        deferred_to: "P8-REPAIR-MTGO-EVENTS-12847150-12844304"
+      production_data_changed: false
+      generated_statistics_changed: false
+      workflow_changed: false
+      live_source_validation:
+        retained_data_written: false
+        events:
+          "12847150":
+            decklists: 32
+            standings: 32
+            final_ranks: 32
+            result: "complete"
+          "12844304":
+            decklists: 32
+            standings: 32
+            final_ranks: 32
+            result: "complete"
+      validation:
+        focused_tests_passed: 56
+        full_pytest_passed: 511
+        repository_validation_passed: true
+        rule_validation_passed: true
+        schema_documents_validated: 52
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-28"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-28"
+    - id: "P8-REPAIR-MTGO-EVENTS-12847150-12844304"
+      name: "Repair retained MTGO events and activate strict statistical consumption"
+      status: "authorized_not_started"
+      authorized_on: "2026-07-28"
+      required_base: "merged P8-HOTFIX-MTGO-EVENT-COMPLETENESS"
+      scope:
+        - "Add an explicit controlled single-event refresh path."
+        - "Refresh events 12847150 and 12844304 from validated official source payloads."
+        - "Verify stable event identity, format, player identities, and final ranks before atomic replacement."
+        - "Require zero retained-event semantic exceptions."
+        - "Activate fail-closed statistical consumption after the retained archive is valid."
+        - "Regenerate and validate affected Modern outputs without hand-editing generated data."
+      local_execution_authorized: true
+      remote_publication_authorized: false
+      production_workflow_dispatch_authorized: false
 
 next_approved_task:
-  id: "P8-HOTFIX-MTGO-EVENT-COMPLETENESS"
-  name: "Harden MTGO event semantic completeness"
+  id: "P8-REPAIR-MTGO-EVENTS-12847150-12844304"
+  name: "Repair retained MTGO events and activate strict statistical consumption"
   target_paths:
     - "src/mtgmeta/mtgo/fetch.py"
+    - "src/mtgmeta/mtgo/__main__.py"
     - "src/mtgmeta/mtgo/stats.py"
     - "validate_production_candidate.py"
     - "tests/test_mtgo_event_io.py"
     - "tests/test_mtgo_statistics.py"
     - "tests/test_production_candidate_validation.py"
+    - "data/modern/Modern_Challenge_64_12847150.json"
+    - "data/pioneer/Pioneer_Challenge_32_12844304.json"
+    - "stats/modern/mtgo/"
+    - "reports/modern/mtgo/"
     - "docs/STATISTICS_SPEC.md"
     - "docs/DATA_ARCHITECTURE.md"
+    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
   authorization_status: "local_execution_authorized"
   local_execution_authorized: true
-  local_execution_authorized_on: "2026-07-27"
+  local_execution_authorized_on: "2026-07-28"
   remote_publication_authorized: false
-  planning_status: "p8_hotfix_mtgo_event_completeness_local_execution_authorized"
+  planning_status: "p8_repair_mtgo_events_authorized_not_started"
 
 governance_baseline:
   status: "active_on_master"
