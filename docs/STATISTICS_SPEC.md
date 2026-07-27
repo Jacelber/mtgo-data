@@ -955,15 +955,15 @@ If a raw Day 2 qualification rate is displayed for context, it must be labeled c
 ### 10.0 Implementation status and compatibility boundary
 
 The formulas in this section are the approved target statistical meaning for
-the public label `win rate` / `胜率`, frozen by DEC-053. Existing generated
-outputs, their current Schemas, and the deployed front end may still expose the
-pre-P8 draw-adjusted compatibility result until P8-04 defines and implements a
-versioned migration, compatibility fields, fixtures, and regression tests.
+the public label `win rate` / `胜率`, frozen by DEC-053. P8-04 defines the
+versioned target contract, fixture, and migration boundary. Existing generated
+outputs, their current Schemas, and the deployed front end still expose the
+pre-P8 draw-adjusted compatibility result until the applicable P8-05 or P8-06
+producer migration is implemented and accepted.
 
-Documentation approval does not authorize a browser to reinterpret legacy
-percentages or a generator to overwrite published output. Until P8-04 is
-accepted and implemented, consumers must identify legacy output as such rather
-than silently claiming it uses this target formula.
+A browser must not reinterpret a legacy percentage. A target record declares
+`win_rate_method: "wins_over_valid_matches"`; an output without that declaration
+remains governed by its existing Schema and producer behavior.
 
 ### 10.1 General formula
 
@@ -1014,6 +1014,12 @@ The output must retain:
 - calculated win rate.
 
 Do not store only the final percentage.
+
+Target public rates are decimal fractions rounded to six decimal places. For a
+non-empty record, the 95% Wilson interval uses `Wins` as successes and
+`Wins + Losses + Draws` as trials, with `z = 1.96`, and rounds each bound to six
+decimal places. Empty records use null for both the rate and interval rather
+than zero.
 
 ### 10.3 All-match and mirror treatment
 
@@ -1687,7 +1693,27 @@ the existing/new decision, or the Pickup population.
 Phase 8 must expose two separate completeness products. They must not be merged
 or presented as general confidence in all MTGO statistics.
 
-MTGO matchup-source completeness is interval-specific and must retain:
+MTGO matchup-source completeness uses formula version
+`videre-range-coverage-v1`. For the selected closed interval:
+
+\[
+ExpectedEvents =
+AvailableEvents + DeferredEvents + MissingEvents
+\]
+
+\[
+MatchupCompleteness =
+\frac{AvailableEvents}{ExpectedEvents}
+\]
+
+An available event has a usable approved matchup archive. A deferred event is
+an admitted event whose source is known to be temporarily incomplete and is
+eligible for retry. A missing event is admitted but has no usable archive and
+is not currently deferred. Excluded events are retained as diagnostics but do
+not enter either numerator or denominator. If the admitted expected population
+cannot be established or is empty, the rate is unavailable, not zero.
+
+The output must retain:
 
 - expected or admitted official events in the selected interval;
 - events with a usable approved matchup archive;
@@ -1696,7 +1722,52 @@ MTGO matchup-source completeness is interval-specific and must retain:
 - the resulting rate or an explicit unavailable state;
 - source and formula version.
 
-MTGO high-score decklist completeness is also interval-specific and must retain:
+MTGO high-score decklist completeness uses formula version
+`mtgo-high-score-binomial-v1`. It is an explicit model estimate, not a claim
+that tournament pairings are independent.
+
+For each eligible event, infer its Swiss round count \(R\) from the existing
+reviewed MTGO player-count-to-round table. Let \(T\) be the existing event
+high-score threshold in match points and let \(k\) be the minimum decisive-win
+count that reaches that threshold. Under the documented fair, decisive,
+independent-match model:
+
+\[
+ExpectedHighScoreDecklists_e =
+N_e \sum_{w=k_e}^{R_e}
+\binom{R_e}{w} \left(\frac{1}{2}\right)^{R_e}
+\]
+
+where \(N_e\) is the event player count. Keep each event expectation unrounded,
+then sum:
+
+\[
+ExpectedHighScoreDecklists =
+\sum_e ExpectedHighScoreDecklists_e
+\]
+
+\[
+HighScoreDecklistCompleteness =
+\min\left(
+\frac{ObservedUsableHighScoreDecklists}
+{ExpectedHighScoreDecklists},
+1
+\right)
+\]
+
+The displayed expected count is the summed raw expectation rounded to the
+nearest integer with halves rounded up. The displayed rate is rounded to six
+decimal places. `exceeds_model` is true when the observed count is greater than
+the raw expectation even though the displayed completeness rate is capped at
+one.
+
+An event is unsupported, excluded from both observed and expected totals, and
+reported explicitly if it lacks a valid player count, a reviewed round model,
+the applicable Swiss high-score threshold, or the Swiss-score evidence needed
+to identify observed high-score decklists. Unsupported events never contribute
+an assumed zero. If no eligible event remains, the result is unavailable.
+
+The output must retain:
 
 - the reviewed theoretical high-score decklist count derived from eligible
   event round and participant structures;
@@ -1706,17 +1777,18 @@ MTGO high-score decklist completeness is also interval-specific and must retain:
 - the resulting rate or an explicit unavailable state;
 - source and formula version.
 
-The exact admitted-event rules, theoretical high-score calculation, exclusions,
-rounding, and unsupported-event behavior remain a P8-04 statistical-contract
-decision. They require owner review, fixtures, and tests before generator or
-front-end implementation. The browser must never estimate either denominator.
+Both completeness outputs retain their formula version, interval, raw counts,
+event identities, exclusions or unsupported reasons, rate, and unavailable
+reason. The browser must never estimate either denominator.
 
 ### 16.8 Weekly MTGO Top 8 decklist presentation data
 
-The weekly Top 8 product groups admitted MTGO events by complete week and
-retains each event's first eight finishing decklists when available. It must
-preserve event identity, date, finish, stable parent and subtype identity,
-source provenance, and explicit missing-deck states.
+The weekly Top 8 product groups admitted MTGO events by complete Monday-through-
+Sunday weeks. Every admitted event in that week contributes ranks 1 through 8
+exactly once. It must preserve event identity, date, finish, player count,
+stable parent and subtype identity, source provenance, and explicit missing-
+deck states. A missing deck remains a ranked placeholder with null identity,
+exact deck, and comparison values; it must not be omitted or silently replaced.
 
 Selecting one entry displays the exact event deck, not a representative deck.
 If the selected identity belongs to a subtype-defining parent, its deviation

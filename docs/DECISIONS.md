@@ -2073,3 +2073,55 @@ boundary, obtain a separately authorized P8-04 decision.
 
 The owner accepted this freeze and its recorded English dictionary on
 2026-07-27. This acceptance does not authorize P8-04 implementation.
+
+---
+
+# DEC-055 — Version the Phase 8 public statistical target
+
+Status: `Accepted`
+
+## Context
+
+The accepted UI requires literal all-match win rate, range-specific Videre
+coverage, modeled MTGO high-score decklist completeness, complete-week Top 8
+decks, self-contained subtype identities, and direct Tabletop scope summaries.
+Existing public outputs use legacy draw-adjusted rates and do not expose all of
+those inputs. Changing their meaning in place would make old and new consumers
+indistinguishable.
+
+## Decision
+
+Define `schemas/phase8-public-contract.schema.json` version `1.0.0` as a
+parallel migration target with an executable fixture and semantic tests. Do not
+map it to current public files during P8-04.
+
+Target match records declare `win_rate_method:
+"wins_over_valid_matches"`, calculate `W / (W + L + D)`, retain all-match and
+non-mirror records, and calculate Wilson intervals with literal wins as
+successes and all valid played matches as trials.
+
+Videre interval coverage uses
+`available / (available + deferred + missing)` and keeps excluded events outside
+the denominator. High-score decklist completeness uses the reviewed
+`mtgo-high-score-binomial-v1` model: infer rounds from the existing player-count
+table, calculate each event's fair decisive-match binomial tail without
+rounding, sum raw expectations, round the displayed expected count half-up, cap
+the displayed rate at one, and retain `exceeds_model`. Events without the
+required player, round, threshold, or Swiss-score evidence are unsupported and
+never treated as zero.
+
+Top 8 weeks retain exactly ranks 1 through 8 per admitted event and fail closed
+with explicit missing-deck entries. Public subtype labels are self-contained.
+Tabletop documents expose event structure, supported scopes, direct per-scope
+overall records, and compatible matchup scopes.
+
+## Consequences
+
+P8-04 changes no producer, current public JSON, manifest mapping, workflow, or
+front end. P8-05 and P8-06 own product-specific producer Schemas and migration;
+P8-07 owns validation against real retained Standard and Modern data.
+
+The high-score expectation is a completeness model under explicit simplifying
+assumptions, not an exact reconstruction of Swiss pairings. Unsupported events
+remain visible and can trigger focused source-quality work instead of lowering
+the denominator silently.

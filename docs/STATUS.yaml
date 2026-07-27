@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-02-ui-prototypes"
-  working_branch_status: "p8_02_owner_accepted_publication_authorized"
+  current_working_branch: "codex/p8-04-data-contract"
+  working_branch_status: "p8_04_owner_accepted_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_02_owner_accepted"
+  status: "p8_04_owner_accepted_publication_authorized"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4097,7 +4097,7 @@ phase_7_result:
 phase_8_plan:
   id: "P8-PLANNING"
   name: "Format-first front-end and supporting data plan"
-  status: "p8_03_owner_accepted"
+  status: "p8_04_owner_accepted_publication_authorized"
   owner_approved: true
   owner_approved_on: "2026-07-25"
   implementation_authorized: false
@@ -4192,7 +4192,7 @@ phase_8_plan:
         matrix_diagonal_shows_real_mirror_win_rate: true
     - id: "P8-03"
       name: "Owner review and UI freeze"
-      status: "completed_owner_accepted_awaiting_publication"
+      status: "completed_accepted_and_published"
       branch: "codex/p8-03-ui-contract-freeze"
       base_commit: "f34a042fd356b57455e571628b8abe100abaa291"
       deliverable: "docs/audits/P8-03.md"
@@ -4205,9 +4205,34 @@ phase_8_plan:
       owner_accepted_on: "2026-07-27"
       remote_publication_authorized: true
       remote_publication_authorized_on: "2026-07-27"
+      publication:
+        pull_request: 109
+        merge_commit: "76646bc8c6318a859942f543d73f10b3cff58101"
     - id: "P8-04"
       name: "Statistical and public data contract"
-      status: "not_started"
+      status: "completed_owner_accepted_publication_authorized"
+      branch: "codex/p8-04-data-contract"
+      base_commit: "76646bc8c6318a859942f543d73f10b3cff58101"
+      authorized_on: "2026-07-27"
+      deliverable: "docs/audits/P8-04.md"
+      target_schema: "schemas/phase8-public-contract.schema.json"
+      target_fixture: "tests/fixtures/phase8_public_contract.json"
+      semantic_tests: "tests/test_phase8_public_contract.py"
+      production_change: false
+      production_manifest_changed: false
+      generated_data_changed: false
+      workflow_changed: false
+      front_end_changed: false
+      validation:
+        focused_contract_and_schema_tests_passed: 25
+        full_pytest_passed: 505
+        schema_validation_passed: true
+        production_manifest_documents_validated: 52
+        production_manifest_mapping_changed: false
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-27"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-27"
     - id: "P8-05"
       name: "Weekly MTGO Top 8 backend product"
       status: "not_started"
@@ -4229,26 +4254,43 @@ phase_8_plan:
     - id: "P8-11"
       name: "Cross-product regression and Phase 8 closeout"
       status: "not_started"
+  deferred_followups:
+    - id: "P8-FOLLOWUP-12847150"
+      name: "Investigate incomplete retained MTGO event 12847150"
+      status: "awaiting_separate_owner_authorization"
+      evidence:
+        official_page_currently_complete: true
+        retained_deck_entries: 32
+        retained_swiss_scores_present: false
+      required_scope:
+        - "Trace the original fetch response and completeness decision."
+        - "Classify temporary source incompleteness versus parser or gate failure."
+        - "Recommend fetch-time validation, retry/defer behavior, diagnostics, and regression coverage."
+      production_fix_authorized: false
+      automatic_start_authorized: false
 
 next_approved_task:
-  id: "P8-03"
-  name: "Review and freeze the accepted UI and backend consumer contract"
+  id: "P8-04"
+  name: "Specify the statistical and public data contract"
   target_paths:
-    - "docs/audits/P8-03.md"
-    - "docs/PROJECT_SCOPE.md"
+    - "docs/audits/P8-04.md"
     - "docs/STATISTICS_SPEC.md"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
+    - "schemas/phase8-public-contract.schema.json"
+    - "tests/fixtures/phase8_public_contract.json"
+    - "tests/test_phase8_public_contract.py"
+    - "tests/test_validate_schemas.py"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "completed_owner_accepted_awaiting_publication"
+  authorization_status: "owner_accepted_publication_authorized"
   local_execution_authorized: true
   local_execution_authorized_on: "2026-07-27"
   remote_publication_authorized: true
   remote_publication_authorized_on: "2026-07-27"
-  planning_status: "p8_03_owner_accepted_awaiting_publication"
+  planning_status: "p8_04_owner_accepted_publication_authorized"
 
 governance_baseline:
   status: "active_on_master"

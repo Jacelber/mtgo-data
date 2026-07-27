@@ -1644,8 +1644,21 @@ instead of reconstructing the value in browser code.
 P8-03 was owner-accepted on 2026-07-27. Its contract is recorded in
 `docs/audits/P8-03.md`, including the accepted English dictionary and the
 target-versus-legacy statistical boundary. It changes no production page,
-generator, Schema, fixture, output, workflow, or public path. P8-04 remains
-unstarted and separately controlled.
+generator, Schema, fixture, output, workflow, or public path.
+
+P8-04 local implementation defines the parallel versioned target Schema,
+representative fixture, formula and compatibility specification, and executable
+contract tests. It does not map a new production document, migrate a generator,
+rewrite existing statistics, change a workflow, or alter the deployed page.
+Owner acceptance remains the stop point before publication or P8-05.
+
+After P8-04 owner acceptance, perform a separately authorized focused
+investigation of retained MTGO event `12847150`. The owner verified that the
+current official event page contains complete data, while the retained archive
+lacks Swiss-score fields. The investigation must trace the original collection
+and completeness decision, reproduce the failure where possible, and propose
+fetch-time validation, retry/defer behavior, and regression coverage. It must
+not be folded into the P8-04 contract change or started automatically.
 
 ## Tabletop behavior
 

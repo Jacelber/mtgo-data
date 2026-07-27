@@ -1,0 +1,356 @@
+{
+  "contract_version": "1.0.0",
+  "literal_match_record": {
+    "wins": 11,
+    "losses": 11,
+    "draws": 4,
+    "matches": 26,
+    "win_rate": 0.423077,
+    "win_rate_method": "wins_over_valid_matches",
+    "confidence_interval_95": {
+      "lower": 0.255442,
+      "upper": 0.610517
+    }
+  },
+  "matchup_coverage": {
+    "formula_version": "videre-range-coverage-v1",
+    "status": "available",
+    "period": {
+      "start": "2026-07-13",
+      "end": "2026-07-19"
+    },
+    "expected_event_count": 7,
+    "available_event_count": 5,
+    "deferred_event_count": 1,
+    "missing_event_count": 1,
+    "excluded_event_count": 1,
+    "available_event_ids": [
+      "12847158",
+      "12847168",
+      "12847673",
+      "12847680",
+      "12847684"
+    ],
+    "deferred_event_ids": ["12847697"],
+    "missing_event_ids": ["12847716"],
+    "excluded_events": [
+      {
+        "event_id": "99999998",
+        "reason": "outside_admitted_event_set"
+      }
+    ],
+    "completeness_rate": 0.714286,
+    "unavailable_reason": null
+  },
+  "high_score_decklist_completeness": {
+    "formula_version": "mtgo-high-score-binomial-v1",
+    "status": "available",
+    "period": {
+      "start": "2026-07-13",
+      "end": "2026-07-19"
+    },
+    "eligible_event_count": 7,
+    "unsupported_event_count": 1,
+    "events": [
+      {
+        "event_id": "12847158",
+        "player_count": 50,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 15,
+        "expected_decklist_count": 17.1875
+      },
+      {
+        "event_id": "12847168",
+        "player_count": 40,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 13,
+        "expected_decklist_count": 13.75
+      },
+      {
+        "event_id": "12847673",
+        "player_count": 38,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 12,
+        "expected_decklist_count": 13.0625
+      },
+      {
+        "event_id": "12847680",
+        "player_count": 33,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 12,
+        "expected_decklist_count": 11.34375
+      },
+      {
+        "event_id": "12847684",
+        "player_count": 39,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 14,
+        "expected_decklist_count": 13.40625
+      },
+      {
+        "event_id": "12847697",
+        "player_count": 42,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 15,
+        "expected_decklist_count": 14.4375
+      },
+      {
+        "event_id": "12847716",
+        "player_count": 32,
+        "round_count": 5,
+        "high_score_threshold": 9,
+        "minimum_decisive_wins": 3,
+        "observed_decklist_count": 16,
+        "expected_decklist_count": 16.0
+      }
+    ],
+    "unsupported_events": [
+      {
+        "event_id": "12847150",
+        "reason": "missing_swiss_scores",
+        "note": "The retained archive is incomplete; the owner verified that the current official event page contains the missing data."
+      }
+    ],
+    "observed_decklist_count": 97,
+    "expected_decklist_count": 99.1875,
+    "expected_decklist_count_display": 99,
+    "completeness_rate": 0.977946,
+    "exceeds_model": false,
+    "unavailable_reason": null
+  },
+  "top8_week": {
+    "schema_version": "1.0.0",
+    "document_type": "top8_week",
+    "source": "mtgo",
+    "format": "modern",
+    "week": {
+      "start": "2026-07-13",
+      "end": "2026-07-19"
+    },
+    "events": [
+      {
+        "event_id": "99999999",
+        "name": "Modern Challenge 32",
+        "display_name": "C32",
+        "date": "2026-07-13",
+        "player_count": 68,
+        "placements": [
+          {
+            "rank": 1,
+            "deck_status": "available",
+            "identity": {
+              "identity_id": "prowess/grixis",
+              "parent_id": "prowess",
+              "subtype_id": "grixis",
+              "display_name": "Grixis Prowess",
+              "detail_id": "prowess/grixis"
+            },
+            "exact_deck": {
+              "player": "fixture-player",
+              "main_deck": [{"name": "Mountain", "qty": 4}],
+              "sideboard": [{"name": "Negate", "qty": 2}]
+            },
+            "comparison": {
+              "identity_id": "prowess/grixis",
+              "base_period": "4w",
+              "base_period_end": "2026-07-19",
+              "average_deck_ref": "decks_4w.json#identity/prowess/grixis"
+            }
+          },
+          {
+            "rank": 2,
+            "deck_status": "missing",
+            "identity": null,
+            "exact_deck": null,
+            "comparison": null
+          },
+          {
+            "rank": 3,
+            "deck_status": "missing",
+            "identity": null,
+            "exact_deck": null,
+            "comparison": null
+          },
+          {
+            "rank": 4,
+            "deck_status": "missing",
+            "identity": null,
+            "exact_deck": null,
+            "comparison": null
+          },
+          {
+            "rank": 5,
+            "deck_status": "missing",
+            "identity": null,
+            "exact_deck": null,
+            "comparison": null
+          },
+          {
+            "rank": 6,
+            "deck_status": "missing",
+            "identity": null,
+            "exact_deck": null,
+            "comparison": null
+          },
+          {
+            "rank": 7,
+            "deck_status": "missing",
+            "identity": null,
+            "exact_deck": null,
+            "comparison": null
+          },
+          {
+            "rank": 8,
+            "deck_status": "missing",
+            "identity": null,
+            "exact_deck": null,
+            "comparison": null
+          }
+        ]
+      }
+    ]
+  },
+  "subtype_identity": {
+    "identity_id": "prowess/grixis",
+    "parent_id": "prowess",
+    "subtype_id": "grixis",
+    "display_name": "Grixis Prowess",
+    "detail_id": "prowess/grixis"
+  },
+  "tabletop_event": {
+    "event_id": "434455",
+    "format": "modern",
+    "event_structure": "mixed",
+    "supported_scopes": ["day1", "day2", "all_constructed"],
+    "default_scope": "all_constructed",
+    "scope_summaries": [
+      {
+        "scope": "day1",
+        "population": "starting_field",
+        "selection_bias_warning": false,
+        "participant_count": 365,
+        "completion_rate": 0.98,
+        "high_score_status": "available",
+        "high_score_deck_count": 92,
+        "match_record": {
+          "all_matches": {
+            "wins": 600,
+            "losses": 570,
+            "draws": 30,
+            "matches": 1200,
+            "win_rate": 0.5,
+            "win_rate_method": "wins_over_valid_matches",
+            "confidence_interval_95": {
+              "lower": 0.471755,
+              "upper": 0.528245
+            }
+          },
+          "non_mirror": {
+            "wins": 540,
+            "losses": 520,
+            "draws": 20,
+            "matches": 1080,
+            "win_rate": 0.5,
+            "win_rate_method": "wins_over_valid_matches",
+            "confidence_interval_95": {
+              "lower": 0.470232,
+              "upper": 0.529768
+            }
+          },
+          "mirror_match_count": 60
+        }
+      },
+      {
+        "scope": "day2",
+        "population": "qualified_field",
+        "selection_bias_warning": true,
+        "participant_count": 186,
+        "completion_rate": 0.97,
+        "high_score_status": "available",
+        "high_score_deck_count": 48,
+        "match_record": {
+          "all_matches": {
+            "wins": 300,
+            "losses": 290,
+            "draws": 10,
+            "matches": 600,
+            "win_rate": 0.5,
+            "win_rate_method": "wins_over_valid_matches",
+            "confidence_interval_95": {
+              "lower": 0.460119,
+              "upper": 0.539881
+            }
+          },
+          "non_mirror": {
+            "wins": 270,
+            "losses": 265,
+            "draws": 5,
+            "matches": 540,
+            "win_rate": 0.5,
+            "win_rate_method": "wins_over_valid_matches",
+            "confidence_interval_95": {
+              "lower": 0.457977,
+              "upper": 0.542023
+            }
+          },
+          "mirror_match_count": 30
+        }
+      },
+      {
+        "scope": "all_constructed",
+        "population": "starting_field_with_qualified_day2_opportunities",
+        "selection_bias_warning": true,
+        "participant_count": 365,
+        "completion_rate": 0.976,
+        "high_score_status": "unavailable",
+        "high_score_deck_count": null,
+        "match_record": {
+          "all_matches": {
+            "wins": 900,
+            "losses": 860,
+            "draws": 40,
+            "matches": 1800,
+            "win_rate": 0.5,
+            "win_rate_method": "wins_over_valid_matches",
+            "confidence_interval_95": {
+              "lower": 0.476926,
+              "upper": 0.523074
+            }
+          },
+          "non_mirror": {
+            "wins": 810,
+            "losses": 785,
+            "draws": 25,
+            "matches": 1620,
+            "win_rate": 0.5,
+            "win_rate_method": "wins_over_valid_matches",
+            "confidence_interval_95": {
+              "lower": 0.475681,
+              "upper": 0.524319
+            }
+          },
+          "mirror_match_count": 90
+        }
+      }
+    ],
+    "matchup_compatibility": {
+      "format": "modern",
+      "taxonomy_schema_version": "2.0.0",
+      "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "matchup_schema_version": "2.0.0",
+      "supported_scopes": ["day1", "day2", "all_constructed"]
+    }
+  }
+}
