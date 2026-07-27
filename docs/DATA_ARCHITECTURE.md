@@ -1497,6 +1497,37 @@ High-score decklist completeness must retain the reviewed theoretical and
 observed counts, unsupported-event states, and formula version. The browser
 must not infer either denominator from presentation rows.
 
+### 12.1.1 Phase 8 consumer-contract freeze
+
+P8-03 freezes the semantic consumer requirements before P8-04 chooses a
+versioned Schema or public-field spelling. The published legacy outputs remain
+compatible until that migration is implemented; no front end may reinterpret a
+legacy percentage as a new statistic.
+
+The target public contract requires:
+
+- all-match W-L-D counts, valid-match count, literal all-match win rate, and
+  confidence interval for every overview identity and matchup cell;
+- an explicit non-mirror W-L-D record and non-mirror rate as supporting output;
+- real diagonal mirror records under the same matrix contract as other cells;
+- generated self-contained subtype display labels and stable detail identities;
+- generated catalog availability and public paths for the format/product shell;
+- range-specific Videre coverage with named observed and expected/admitted
+  event counts, deferred/missing/excluded counts, rate or unavailable state,
+  and formula version;
+- high-score decklist completeness with named observed and theoretical counts,
+  reviewed eligibility/exclusions, rate or unavailable state, and formula
+  version;
+- complete-week MTGO Top 8 event/rank/exact-deck records plus subtype-base
+  provenance or an explicit missing-deck state; and
+- direct Tabletop event/per-scope overall summaries, event structure, supported
+  scopes, quality context, and compatible multi-event matchup counts.
+
+P8-04 owns exact field names, Schema versions, compatibility aliases, producer
+paths, rounding, fixtures, and migration tests. P8-05 and P8-06 implement
+only the approved producers. P8-07 proves generated consumer readiness with
+real retained data before P8-08 through P8-10 implement production pages.
+
 ### 12.2 Melee output
 
 Target Melee output belongs under:
@@ -1833,6 +1864,11 @@ The shared statistical tests must prove every hierarchical matchup rollup before
 the front end relies on it. JavaScript may select and sum the approved canonical
 count cells for an interaction, but it must not infer classification, invent a
 subtype, average percentages, or define a different eligibility rule.
+
+For the Phase 8 target, a visible `Win Rate` / `胜率` is calculated from the
+supplied all-match W-L-D record as `W / (W + L + D)`. The browser may format it
+or roll up supplied canonical counts, but the versioned producer and its
+compatibility behavior remain P8-04 responsibilities.
 
 ### 15.8 Hierarchical statistics and deck-detail presentation
 

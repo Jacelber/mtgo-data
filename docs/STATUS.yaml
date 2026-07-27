@@ -4097,7 +4097,7 @@ phase_7_result:
 phase_8_plan:
   id: "P8-PLANNING"
   name: "Format-first front-end and supporting data plan"
-  status: "p8_02_owner_accepted"
+  status: "p8_03_owner_accepted"
   owner_approved: true
   owner_approved_on: "2026-07-25"
   implementation_authorized: false
@@ -4192,7 +4192,19 @@ phase_8_plan:
         matrix_diagonal_shows_real_mirror_win_rate: true
     - id: "P8-03"
       name: "Owner review and UI freeze"
-      status: "not_started"
+      status: "completed_owner_accepted_awaiting_publication"
+      branch: "codex/p8-03-ui-contract-freeze"
+      base_commit: "f34a042fd356b57455e571628b8abe100abaa291"
+      deliverable: "docs/audits/P8-03.md"
+      chinese_ui_contract: "accepted_in_P8-02"
+      english_dictionary: "accepted"
+      production_change: false
+      generated_data_changed: false
+      statistical_formula_changed_in_production: false
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-27"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-27"
     - id: "P8-04"
       name: "Statistical and public data contract"
       status: "not_started"
@@ -4231,9 +4243,12 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  remote_publication_authorized: false
-  planning_status: "p8_02_accepted_and_published_p8_03_awaiting_authorization"
+  authorization_status: "completed_owner_accepted_awaiting_publication"
+  local_execution_authorized: true
+  local_execution_authorized_on: "2026-07-27"
+  remote_publication_authorized: true
+  remote_publication_authorized_on: "2026-07-27"
+  planning_status: "p8_03_owner_accepted_awaiting_publication"
 
 governance_baseline:
   status: "active_on_master"

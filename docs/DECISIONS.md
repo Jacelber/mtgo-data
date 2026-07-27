@@ -2030,3 +2030,46 @@ hiding it.
 The production front end must not derive the new rate from incomplete browser
 data. P8-04 must define explicit all-match and non-mirror fields and a
 compatibility plan before any generator or production consumer changes.
+
+---
+
+# DEC-054 — Freeze the initial Phase 8 UI and backend consumer contract
+
+Status: `Accepted`
+
+## Context
+
+P8-02 received owner acceptance as a Chinese-first local prototype, but its
+decisions were distributed across the prototype audit, planning document, and
+DEC-051 through DEC-053. The current public output also still reflects the
+pre-P8 draw-adjusted compatibility behavior. Starting backend work from either
+the prototype alone or the legacy output would risk speculative fields,
+browser-side statistics, feature deletion, or a false claim that the new
+win-rate formula is already deployed.
+
+## Proposal
+
+Use `docs/audits/P8-03.md` as the initial Phase 8 UI and backend consumer
+contract. It freezes the accepted Chinese interaction baseline, preserves the
+current production feature surface unless a deletion is separately accepted,
+assigns missing data products to P8-04 through P8-06, and separates target
+literal all-match win rate from legacy published compatibility output.
+
+The audit records the accepted English dictionary alongside the accepted
+Chinese prototype language. Any later wording change remains subject to owner
+review.
+
+P8-04 must make the versioned Schema, field-name, compatibility, rounding,
+fixture, and migration decisions. No P8-03 documentation change authorizes a
+generator, public page, workflow, data rewrite, or browser calculation.
+
+## Consequences
+
+P8-03 becomes the mandatory acceptance gate before Phase 8 backend changes.
+P8-07 remains the separate real-data visual review before production UI work.
+If owner review changes an interaction without changing data meaning, amend the
+P8-03 contract before P8-04 begins. If it changes a statistic or source
+boundary, obtain a separately authorized P8-04 decision.
+
+The owner accepted this freeze and its recorded English dictionary on
+2026-07-27. This acceptance does not authorize P8-04 implementation.

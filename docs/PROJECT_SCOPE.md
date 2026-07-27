@@ -423,6 +423,14 @@ a listed deck should use the same detail structure as MTGO statistics while
 showing the exact event deck, its subtype-based deviation, and its subtype
 average deck.
 
+For both MTGO and Tabletop Major Events, the primary visible `胜率` is literal
+valid-match win percentage: wins divided by valid wins, losses, and normal
+played draws. Primary overview and overall values include mirror matches, and
+the matchup diagonal displays real mirror W-L-D information. Non-mirror win
+rate is supporting information. Existing published output retains its
+compatibility behavior until the versioned P8-04 migration is implemented; a
+browser must not reinterpret a legacy rate locally.
+
 ### 9.3 Tabletop page
 
 The tabletop entry point should be:

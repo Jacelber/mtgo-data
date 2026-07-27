@@ -331,8 +331,12 @@ A normal played draw counts as:
 
 - one Constructed point;
 - one played match;
-- half a win in match-win-rate calculations;
 - a draw in matchup W-L-D records.
+
+For the approved Phase 8 target visible win rate, it contributes zero wins and
+remains in the valid-match denominator. The compatibility note in section 10
+explains why already-published draw-adjusted outputs are not reinterpreted
+until P8-04 completes the versioned migration.
 
 ### 6.4 Intentional draws reported as `0-0-3`
 
@@ -948,6 +952,19 @@ If a raw Day 2 qualification rate is displayed for context, it must be labeled c
 
 ## 10. Match win rate
 
+### 10.0 Implementation status and compatibility boundary
+
+The formulas in this section are the approved target statistical meaning for
+the public label `win rate` / `胜率`, frozen by DEC-053. Existing generated
+outputs, their current Schemas, and the deployed front end may still expose the
+pre-P8 draw-adjusted compatibility result until P8-04 defines and implements a
+versioned migration, compatibility fields, fixtures, and regression tests.
+
+Documentation approval does not authorize a browser to reinterpret legacy
+percentages or a generator to overwrite published output. Until P8-04 is
+accepted and implemented, consumers must identify legacy output as such rather
+than silently claiming it uses this target formula.
+
 ### 10.1 General formula
 
 For valid played matches:
@@ -956,7 +973,7 @@ For valid played matches:
 \[
 MatchWinRate =
 \frac{
-Wins + 0.5 \times Draws
+Wins
 }{
 Wins + Losses + Draws
 }
@@ -982,7 +999,7 @@ For archetype \(a\):
 \[
 WinRate_a =
 \frac{
-Wins_a + 0.5 \times Draws_a
+Wins_a
 }{
 Wins_a + Losses_a + Draws_a
 }
@@ -998,13 +1015,18 @@ The output must retain:
 
 Do not store only the final percentage.
 
-### 10.3 Mirror matches
+### 10.3 All-match and mirror treatment
 
-Mirror matches naturally produce an aggregate archetype result near 50% and do not measure performance against the surrounding metagame.
+The primary archetype win rate and primary `overall` value include mirror
+matches. A mirror is a valid played match, and normal draws in a mirror remain
+visible information under the literal win-rate definition.
 
-The primary comparative archetype win rate should exclude mirror matches.
+The matchup-matrix diagonal displays the real mirror W-L-D record, literal win
+rate, confidence interval, and normal sample state. It must not be replaced by
+an unavailable dash solely because it is a mirror.
 
-Outputs may additionally provide an all-match rate including mirrors for accounting and diagnostics.
+Outputs must additionally retain a non-mirror record and rate as explicit
+supporting analysis. Non-mirror is not the only primary visible rate.
 
 Fields should be explicit, for example:
 
@@ -1062,7 +1084,7 @@ It must be calculated from aggregated W-L-D counts:
 \[
 AllConstructedWinRate =
 \frac{
-W_{D1} + W_{D2} + 0.5(D_{D1} + D_{D2})
+W_{D1} + W_{D2}
 }{
 W_{D1} + W_{D2} + L_{D1} + L_{D2} + D_{D1} + D_{D2}
 }
