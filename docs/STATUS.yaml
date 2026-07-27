@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_04_owner_accepted_publication_authorized"
+  status: "p8_followup_12847150_owner_accepted_publication_authorized"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4210,7 +4210,7 @@ phase_8_plan:
         merge_commit: "76646bc8c6318a859942f543d73f10b3cff58101"
     - id: "P8-04"
       name: "Statistical and public data contract"
-      status: "completed_owner_accepted_publication_authorized"
+      status: "completed_accepted_and_published"
       branch: "codex/p8-04-data-contract"
       base_commit: "76646bc8c6318a859942f543d73f10b3cff58101"
       authorized_on: "2026-07-27"
@@ -4233,6 +4233,10 @@ phase_8_plan:
       owner_accepted_on: "2026-07-27"
       remote_publication_authorized: true
       remote_publication_authorized_on: "2026-07-27"
+      publication:
+        local_commit: "16002a5b288538172568db86200b49184a7ad25d"
+        pull_request: 110
+        merge_commit: "4291b8dc4505ad3f08b2a95957eee7ef558cc6a4"
     - id: "P8-05"
       name: "Weekly MTGO Top 8 backend product"
       status: "not_started"
@@ -4257,40 +4261,62 @@ phase_8_plan:
   deferred_followups:
     - id: "P8-FOLLOWUP-12847150"
       name: "Investigate incomplete retained MTGO event 12847150"
-      status: "awaiting_separate_owner_authorization"
+      status: "completed_owner_accepted_publication_authorized"
+      branch: "codex/p8-followup-12847150"
+      base_commit: "4291b8dc4505ad3f08b2a95957eee7ef558cc6a4"
+      authorized_on: "2026-07-27"
+      deliverable: "docs/audits/P8-FOLLOWUP-12847150.md"
       evidence:
         official_page_currently_complete: true
         retained_deck_entries: 32
         retained_swiss_scores_present: false
+        original_incomplete_file_commit: "6250e346015e3beef03c22dd13e475872efc00a2"
+        current_gate_accepts_missing_standings: true
+        same_shape_events:
+          - 12847150
+          - 12844304
+        retained_event_files_scanned: 671
+        affected_modern_high_score_decks: 27
       required_scope:
         - "Trace the original fetch response and completeness decision."
         - "Classify temporary source incompleteness versus parser or gate failure."
         - "Recommend fetch-time validation, retry/defer behavior, diagnostics, and regression coverage."
-      production_fix_authorized: false
-      automatic_start_authorized: false
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-27"
+      production_fix_authorized: true
+      authorized_production_fix: "P8-HOTFIX-MTGO-EVENT-COMPLETENESS"
+      automatic_start_authorized: true
+      production_change: false
+      generated_data_changed: false
+      workflow_changed: false
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-27"
+      recommended_followups:
+        - id: "P8-HOTFIX-MTGO-EVENT-COMPLETENESS"
+          authorization_status: "local_execution_authorized"
+        - id: "P8-REPAIR-MTGO-EVENTS-12847150-12844304"
+          authorization_status: "not_authorized"
 
 next_approved_task:
-  id: "P8-04"
-  name: "Specify the statistical and public data contract"
+  id: "P8-HOTFIX-MTGO-EVENT-COMPLETENESS"
+  name: "Harden MTGO event semantic completeness"
   target_paths:
-    - "docs/audits/P8-04.md"
+    - "src/mtgmeta/mtgo/fetch.py"
+    - "src/mtgmeta/mtgo/stats.py"
+    - "validate_production_candidate.py"
+    - "tests/test_mtgo_event_io.py"
+    - "tests/test_mtgo_statistics.py"
+    - "tests/test_production_candidate_validation.py"
     - "docs/STATISTICS_SPEC.md"
     - "docs/DATA_ARCHITECTURE.md"
-    - "docs/ROADMAP.md"
-    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-    - "schemas/phase8-public-contract.schema.json"
-    - "tests/fixtures/phase8_public_contract.json"
-    - "tests/test_phase8_public_contract.py"
-    - "tests/test_validate_schemas.py"
-  production_change: false
+  production_change: true
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_publication_authorized"
+  authorization_status: "local_execution_authorized"
   local_execution_authorized: true
   local_execution_authorized_on: "2026-07-27"
-  remote_publication_authorized: true
-  remote_publication_authorized_on: "2026-07-27"
-  planning_status: "p8_04_owner_accepted_publication_authorized"
+  remote_publication_authorized: false
+  planning_status: "p8_hotfix_mtgo_event_completeness_local_execution_authorized"
 
 governance_baseline:
   status: "active_on_master"

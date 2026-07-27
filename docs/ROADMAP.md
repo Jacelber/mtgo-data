@@ -1660,6 +1660,26 @@ and completeness decision, reproduce the failure where possible, and propose
 fetch-time validation, retry/defer behavior, and regression coverage. It must
 not be folded into the P8-04 contract change or started automatically.
 
+The separately authorized investigation found that the original and current
+fetch completeness gates accept non-empty decklists without standings, after
+which `fetched.txt` prevents self-healing. Production-candidate validation also
+does not require player-level Swiss evidence, and statistics currently coerce
+missing scores to zero. A full retained-archive scan found the same defect in
+Modern event `12847150` and Pioneer event `12844304`.
+
+Before P8-05, obtain separate authorization for two ordered focused tasks:
+
+1. `P8-HOTFIX-MTGO-EVENT-COMPLETENESS` — strengthen fetch-time semantics,
+   retry/defer diagnostics, normalized candidate validation, fail-closed
+   statistics behavior, and regression coverage.
+2. `P8-REPAIR-MTGO-EVENTS-12847150-12844304` — perform validated atomic
+   source refreshes and regenerate affected Modern outputs without hand-editing
+   generated data or manipulating the fetched ledger as a substitute.
+
+The full evidence, uncertainty boundary, expected repair invariants, and
+acceptance tests are recorded in
+`docs/audits/P8-FOLLOWUP-12847150.md`.
+
 ## Tabletop behavior
 
 The Tabletop Major Events front end supports:
