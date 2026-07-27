@@ -1616,7 +1616,9 @@ authorization. Installation or authentication alone is not authorization.
 
 1. `P8-01` — audit current UI, public data consumers, and backend gaps.
 2. `P8-02` — build local information-architecture and interaction prototypes.
-3. `P8-03` — obtain owner approval and freeze the UI and consumer contract.
+3. `P8-03` — record the accepted Chinese-first UI behavior, proposed English
+   dictionary, target-versus-legacy statistical boundary, and consumer matrix;
+   then obtain owner approval to freeze the UI and consumer contract.
 4. `P8-04` — specify win-rate migration, completeness, Top 8, subtype-label,
    detail, Schema, and compatibility contracts.
 5. `P8-05` — implement the weekly MTGO Top 8 backend product.
@@ -1638,6 +1640,12 @@ changes after seeing representative real payloads. P8-08 must not begin until
 that review is accepted. If the P8-07 review discovers a missing or incorrect
 statistical payload, return to a separately authorized contract/backend task
 instead of reconstructing the value in browser code.
+
+P8-03 was owner-accepted on 2026-07-27. Its contract is recorded in
+`docs/audits/P8-03.md`, including the accepted English dictionary and the
+target-versus-legacy statistical boundary. It changes no production page,
+generator, Schema, fixture, output, workflow, or public path. P8-04 remains
+unstarted and separately controlled.
 
 ## Tabletop behavior
 
