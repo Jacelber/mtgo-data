@@ -41,6 +41,11 @@ def build_parser() -> argparse.ArgumentParser:
         dest="months",
         help="calendar month in YYYY-MM; repeat for multiple months",
     )
+    refresh_parser = commands.add_parser(
+        "refresh-event",
+        help="replace one retained official event after identity verification",
+    )
+    refresh_parser.add_argument("url", help="official MTGO decklist URL")
 
     match_parser = commands.add_parser("fetch-matches", help="fetch Videre match records")
     match_parser.add_argument("event_ids", nargs="*", help="optional numeric event IDs")
@@ -106,6 +111,17 @@ def _run_fetch_events(args: argparse.Namespace, root: Path, registry: Path) -> i
     for source, message in summary["errors"]:
         print(f"ERROR {source}: {message}", file=sys.stderr)
     return 1 if summary["failed"] else 0
+
+
+def _run_refresh_event(args: argparse.Namespace, root: Path, registry: Path) -> int:
+    destination = fetch.refresh_existing_event(
+        root,
+        args.format_id,
+        args.url,
+        registry_path=registry,
+    )
+    print(f"MTGO event refreshed: format={args.format_id} output={destination}")
+    return 0
 
 
 def _run_fetch_matches(args: argparse.Namespace, root: Path, registry: Path) -> int:
@@ -221,6 +237,7 @@ def _run_reports(args: argparse.Namespace, root: Path, registry: Path) -> int:
 
 RUNNERS = {
     "fetch-events": _run_fetch_events,
+    "refresh-event": _run_refresh_event,
     "fetch-matches": _run_fetch_matches,
     "build-statistics": _run_statistics,
     "build-matchups": _run_matchups,
@@ -249,7 +266,7 @@ def main(argv: list[str] | None = None) -> int:
         # Every command validates the explicit format before its runner can access
         # a network client or create an output directory.
         format_registry = load_format_registry(registry)
-        if args.command == "fetch-events":
+        if args.command in {"fetch-events", "refresh-event"}:
             format_registry.require_mtgo_event_collection(args.format_id)
         else:
             definition = format_registry.require_mtgo(args.format_id)

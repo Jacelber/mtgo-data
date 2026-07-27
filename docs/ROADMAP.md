@@ -1690,8 +1690,23 @@ missing normalized Swiss or placement evidence. Existing non-playoff exclusion
 behavior and all generated statistics remain unchanged. All 511 tests and
 repository, rule, and Schema validation pass; no retained event or workflow was
 changed. The owner accepted the hotfix and authorized publication on
-2026-07-28. After its merge, local execution of the separately isolated event
-repair task is also authorized; publication of that repair remains separately
+2026-07-28. It was published through pull request #112, implementation commit
+`35407874a6f23524806f10d967ad437e80322e66`, and merge commit
+`444a9da3a66e1f7ba6c256b47d3a4948e120a0c3`; the remote checks passed before
+merge.
+
+The separately isolated event repair is locally complete. An explicit
+`refresh-event` command validated and atomically replaced Modern event
+`12847150` and Pioneer event `12844304` without changing either fetched ledger.
+Both archives retain the same event identity, format, player identities, final
+ranks, and deck contents; only the five previously absent Swiss-derived fields
+were restored. All 671 retained event archives now pass the semantic audit.
+Fail-closed statistics reject missing Swiss scores and invalid final ranks, and
+the affected Modern statistics and the existing 2026-W29 Pickup candidate were
+regenerated from source rather than edited by hand. The fixed 2026-07-13 through
+2026-07-19 Modern window keeps 416 decks and 104 Top 8 decks while restoring 27
+high-score decks, from 330 to 357. All 517 tests and repository, rule, and
+Schema validation pass. Publication of this repair remains separately
 controlled.
 
 The full evidence, uncertainty boundary, expected repair invariants, and

@@ -69,6 +69,22 @@ def test_event_and_match_fetch_arguments_are_forwarded(monkeypatch):
     assert captured["matches"][2]["force"] is True
 
 
+def test_controlled_event_refresh_is_explicit_and_format_authorized(monkeypatch):
+    captured = {}
+    destination = ROOT / "data" / "modern" / "Modern_Challenge_64_12847150.json"
+
+    def fake_refresh(root, format_id, url, **kwargs):
+        captured["refresh"] = (root, format_id, url, kwargs)
+        return destination
+
+    monkeypatch.setattr(cli.fetch, "refresh_existing_event", fake_refresh)
+    url = "https://www.mtgo.com/decklist/modern-challenge-64-2026-07-1312847150"
+    assert cli.main(
+        ["--root", str(ROOT), "--format", "modern", "refresh-event", url]
+    ) == 0
+    assert captured["refresh"][0:3] == (ROOT, "modern", url)
+
+
 def test_event_fetch_reports_deferred_events_without_failing(monkeypatch, capsys):
     source = "https://www.mtgo.com/decklist/legacy-pending"
     monkeypatch.setattr(

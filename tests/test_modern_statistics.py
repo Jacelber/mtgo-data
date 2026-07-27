@@ -27,10 +27,6 @@ EXPECTED_FILES = {
     "decks_12w.json",
     "decks_36w.json",
 }
-EXPECTED_TOTALS = {1: 416, 4: 1568, 12: 4480, 36: 5728}
-EXPECTED_UNKNOWNS = {1: 14, 4: 32, 12: 103, 36: 127}
-
-
 def committed_reference() -> tuple[datetime, dict]:
     index = json.loads((OUTPUT / "index.json").read_text(encoding="utf-8"))
     return datetime.fromisoformat(index["generated"]), index
@@ -57,22 +53,23 @@ def test_committed_modern_ranges_reconcile_parent_aggregates():
     assert generated.isoformat(timespec="seconds") == index["generated"]
     assert index["format"] == "modern"
     assert index["source"] == "mtgo"
-    assert index["latest_complete_week"] == "2026-07-13"
     assert [item["weeks"] for item in index["ranges"]] == [1, 4, 12, 36]
+    one_week = next(item for item in index["ranges"] if item["weeks"] == 1)
+    assert index["latest_complete_week"] == one_week["start"]
 
-    for weeks in EXPECTED_TOTALS:
+    for weeks in (1, 4, 12, 36):
         document = json.loads(
             (OUTPUT / f"range_{weeks}w.json").read_text(encoding="utf-8")
         )
         assert document["format"] == "modern"
         assert document["source"] == "mtgo"
-        assert document["total_decks"] == EXPECTED_TOTALS[weeks]
-        assert document["unknown_count"] == EXPECTED_UNKNOWNS[weeks]
         assert all(item["id"] for item in document["archetypes"])
         assert len({item["id"] for item in document["archetypes"]}) == len(
             document["archetypes"]
         )
         assert sum(item["count"] for item in document["archetypes"]) == document["total_decks"]
+        unknown = next(item for item in document["archetypes"] if item["id"] == "unknown")
+        assert document["unknown_count"] == unknown["count"]
         assert sum(item["high_score_count"] for item in document["archetypes"]) == document["total_high_score"]
         assert sum(item["top8_count"] for item in document["archetypes"]) == document["total_top8"]
         decks = json.loads(

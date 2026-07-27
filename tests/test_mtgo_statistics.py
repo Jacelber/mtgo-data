@@ -62,6 +62,26 @@ def test_round_and_high_score_boundaries_remain_frozen():
     ]
 
 
+def test_process_event_rejects_missing_swiss_score_instead_of_counting_zero():
+    event = {
+        "event_id": "incomplete",
+        "description": "Incomplete fixture",
+        "player_count": 8,
+        "players": [
+            {
+                "player": "Fixture",
+                "swiss_score": None,
+                "final_rank": 1,
+                "main_deck": [],
+                "sideboard": [],
+            }
+        ],
+    }
+
+    with pytest.raises(mtgo_stats.MTGOStatisticsError, match="swiss_score"):
+        mtgo_stats.process_event(event, {})
+
+
 def test_latest_complete_week_is_deterministic_at_the_reference_boundary():
     events = [
         (date(2026, 7, 12), {}),
