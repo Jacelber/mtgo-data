@@ -1767,6 +1767,23 @@ the applicable Swiss high-score threshold, or the Swiss-score evidence needed
 to identify observed high-score decklists. Unsupported events never contribute
 an assumed zero. If no eligible event remains, the result is unavailable.
 
+Official MTGO playoff archives have a stricter source-admission boundary.
+Before a newly fetched event may be normalized, stored, or added to the fetched
+ledger, every published deck must have one matching standing with a positive
+Swiss rank and non-negative Swiss score and one matching positive final rank.
+All three source collections must use non-empty, unique player identifiers.
+Temporarily absent records or values use the bounded retry and publication
+grace policy; invalid types, values, or duplicate identities are structural
+failures.
+
+This admission rule prevents new unsupported archives. It does not reinterpret
+the two known retained legacy defects (`12847150` and `12844304`). Until their
+separately controlled source refresh is complete, existing production
+statistics retain their compatibility behavior. The repair task must remove
+both retained defects before activating fail-closed statistical consumption;
+missing Swiss evidence must not continue to be coerced to zero after that
+migration.
+
 The output must retain:
 
 - the reviewed theoretical high-score decklist count derived from eligible

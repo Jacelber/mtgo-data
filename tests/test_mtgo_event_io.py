@@ -60,9 +60,19 @@ def raw_event():
                 "score": "18",
                 "opponentmatchwinpercentage": "0.625",
                 "gamewinpercentage": "0.700",
-            }
+            },
+            {
+                "loginid": "two",
+                "rank": 2,
+                "score": "15",
+                "opponentmatchwinpercentage": "0.500",
+                "gamewinpercentage": "0.600",
+            },
         ],
-        "final_rank": [{"loginid": "one", "rank": 2}],
+        "final_rank": [
+            {"loginid": "one", "rank": 2},
+            {"loginid": "two", "rank": 1},
+        ],
         "decklists": [
             {
                 "loginid": "one",
@@ -110,12 +120,12 @@ def expected_batch_event():
             {
                 "player": "Player Two",
                 "loginid": "two",
-                "swiss_rank": None,
-                "swiss_score": None,
-                "swiss_wins": None,
-                "opp_match_win_pct": None,
-                "game_win_pct": None,
-                "final_rank": None,
+                "swiss_rank": 2,
+                "swiss_score": "15",
+                "swiss_wins": 5,
+                "opp_match_win_pct": "0.500",
+                "game_win_pct": "0.600",
+                "final_rank": 1,
                 "main_deck": [{"name": "Main Card", "qty": 3}],
                 "sideboard": [],
             },
@@ -160,6 +170,20 @@ def test_completeness_and_normalization_freeze_both_legacy_output_shapes():
     expected = expected_batch_event()
     assert is_event_data_complete(raw) is True
     assert is_event_data_complete({**raw, "decklists": []}) is False
+    assert is_event_data_complete({**raw, "standings": []}) is False
+    assert is_event_data_complete({**raw, "final_rank": []}) is False
+    without_playoff_marker = {
+        key: value for key, value in raw.items() if key != "inplayoffs"
+    }
+    assert is_event_data_complete(without_playoff_marker) is False
+    assert is_event_data_complete(
+        {
+            **raw,
+            "inplayoffs": "0",
+            "standings": [],
+            "final_rank": [],
+        }
+    ) is True
     assert normalize_event(raw) == expected
     assert batch_mtgo.build_clean_data(raw) == expected
     expected_fetch = dict(expected)
@@ -234,6 +258,66 @@ def test_event_download_retries_partial_publication_until_complete():
         request_get=request,
     ) == raw_event()
     assert len(calls) == 2
+
+
+def test_event_download_retries_until_standings_cover_every_deck():
+    calls = []
+    partial = {**raw_event(), "standings": raw_event()["standings"][:1]}
+
+    def request(_url, **_kwargs):
+        calls.append(True)
+        return Response(embedded_html(partial if len(calls) == 1 else raw_event()))
+
+    assert download_event_data(
+        "https://example.test/event",
+        attempts=2,
+        retry_delay=0,
+        request_get=request,
+    ) == raw_event()
+    assert len(calls) == 2
+
+
+def test_event_download_rejects_duplicate_source_player_ids():
+    duplicate = raw_event()
+    duplicate["standings"] = [
+        duplicate["standings"][0],
+        {**duplicate["standings"][1], "loginid": "one"},
+    ]
+    with pytest.raises(MTGOParseError, match="duplicate standings loginid"):
+        download_event_data(
+            "https://example.test/duplicate",
+            attempts=1,
+            retry_delay=0,
+            request_get=lambda *_args, **_kwargs: Response(embedded_html(duplicate)),
+        )
+
+
+def test_event_download_distinguishes_missing_from_invalid_swiss_values():
+    missing = raw_event()
+    missing["standings"] = [
+        missing["standings"][0],
+        {**missing["standings"][1], "score": None},
+    ]
+    with pytest.raises(MTGOIncompleteEventError, match="missing rank or score"):
+        download_event_data(
+            "https://example.test/missing-score",
+            attempts=1,
+            retry_delay=0,
+            request_get=lambda *_args, **_kwargs: Response(embedded_html(missing)),
+        )
+
+    invalid = raw_event()
+    invalid["standings"] = [
+        invalid["standings"][0],
+        {**invalid["standings"][1], "score": "not-a-score"},
+    ]
+    with pytest.raises(MTGOParseError, match=r"standings\[1\]\.score is invalid"):
+        download_event_data(
+            "https://example.test/invalid-score",
+            attempts=1,
+            retry_delay=0,
+            request_get=lambda *_args, **_kwargs: Response(embedded_html(invalid)),
+        )
 
 
 def test_event_download_distinguishes_pending_decklists_from_parse_failure():
@@ -450,6 +534,30 @@ def test_month_fetch_defers_recent_partial_event_without_writing(tmp_path):
             "after 5 attempts; will retry on a later scheduled run",
         )
     ]
+    assert not (tmp_path / "fetched.txt").exists()
+    assert not (tmp_path / "data").exists()
+
+
+def test_month_fetch_defers_recent_event_with_missing_standings_without_writing(tmp_path):
+    event_link = "/decklist/modern-challenge-64-2026-07-2712849000"
+    partial = {**raw_event(), "description": "Modern Challenge 64", "standings": []}
+
+    def request(url, **_kwargs):
+        return Response(event_link if "/decklists/" in url else embedded_html(partial))
+
+    summary = fetch_event_months(
+        tmp_path,
+        "modern",
+        months=[(2026, 7)],
+        now=datetime(2026, 7, 27),
+        registry_path=REGISTRY,
+        request_get=request,
+        sleep=lambda _seconds: None,
+        inter_event_delay=0,
+    )
+    assert summary["deferred_incomplete"] == 1
+    assert summary["failed"] == 0
+    assert "standings have not been published" in summary["warnings"][0][1]
     assert not (tmp_path / "fetched.txt").exists()
     assert not (tmp_path / "data").exists()
 

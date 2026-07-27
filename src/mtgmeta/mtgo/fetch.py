@@ -21,7 +21,10 @@ DECKLIST_MARKER = "window.MTGO.decklists.data ="
 DEFAULT_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
 }
-REQUIRED_EVENT_FIELDS = frozenset({"event_id", "description", "player_count", "decklists"})
+REQUIRED_EVENT_FIELDS = frozenset(
+    {"event_id", "description", "player_count", "inplayoffs", "decklists"}
+)
+PLAYOFF_REQUIRED_EVENT_FIELDS = frozenset({"standings", "final_rank"})
 INCOMPLETE_EVENT_GRACE_DAYS = 2
 
 
@@ -34,7 +37,7 @@ class MTGOParseError(RuntimeError):
 
 
 class MTGOIncompleteEventError(MTGOParseError):
-    """Raised when MTGO lists an event before publishing any decklists."""
+    """Raised when MTGO lists an event before publishing all required records."""
 
 
 class MTGOStorageError(RuntimeError):
@@ -110,29 +113,126 @@ def extract_event_data(html: str) -> dict[str, Any]:
     raise MTGOParseError("MTGO event JSON did not end")
 
 
+def _is_int_at_least(value: Any, minimum: int) -> bool:
+    if isinstance(value, bool) or value is None:
+        return False
+    try:
+        parsed = int(str(value).strip())
+    except (TypeError, ValueError):
+        return False
+    return parsed >= minimum
+
+
+def _invalid_event_message(data: Any) -> str | None:
+    if not isinstance(data, dict):
+        return "MTGO event JSON must be an object"
+    collection_names = ["decklists"]
+    if str(data.get("inplayoffs")) == "1":
+        collection_names.extend(["standings", "final_rank"])
+    for name in collection_names:
+        if name not in data:
+            continue
+        records = data[name]
+        if not isinstance(records, list):
+            return f"MTGO event {name} must be a list"
+        seen = set()
+        for index, record in enumerate(records):
+            if not isinstance(record, dict):
+                return f"MTGO event {name}[{index}] must be an object"
+            login_id = record.get("loginid")
+            if (
+                isinstance(login_id, bool)
+                or not isinstance(login_id, (str, int))
+                or not str(login_id).strip()
+            ):
+                return f"MTGO event {name}[{index}] has an invalid loginid"
+            if login_id in seen:
+                return f"MTGO event has duplicate {name} loginid {login_id!r}"
+            seen.add(login_id)
+            if name == "standings":
+                for field, minimum in (("rank", 1), ("score", 0)):
+                    value = record.get(field)
+                    if value is not None and value != "" and not _is_int_at_least(value, minimum):
+                        return f"MTGO event standings[{index}].{field} is invalid"
+            elif name == "final_rank":
+                value = record.get("rank")
+                if value is not None and value != "" and not _is_int_at_least(value, 1):
+                    return f"MTGO event final_rank[{index}].rank is invalid"
+    return None
+
+
 def is_event_data_complete(data: Any) -> bool:
     return (
-        isinstance(data, dict)
-        and REQUIRED_EVENT_FIELDS <= set(data)
-        and isinstance(data.get("decklists"), list)
-        and bool(data["decklists"])
+        _invalid_event_message(data) is None
+        and _incomplete_event_message(data) is None
     )
 
 
 def is_event_data_pending(data: Any) -> bool:
     """Return whether a valid event object is still being published."""
 
-    return _incomplete_event_message(data) is not None
+    return (
+        _invalid_event_message(data) is None
+        and _incomplete_event_message(data) is not None
+    )
 
 
 def _incomplete_event_message(data: Any) -> str | None:
     if not isinstance(data, dict):
         return None
-    missing = sorted(REQUIRED_EVENT_FIELDS - set(data))
+    required = REQUIRED_EVENT_FIELDS
+    if str(data.get("inplayoffs")) == "1":
+        required |= PLAYOFF_REQUIRED_EVENT_FIELDS
+    missing = sorted(required - set(data))
     if missing:
         return f"MTGO event publication is incomplete (missing fields: {', '.join(missing)})"
     if isinstance(data.get("decklists"), list) and not data["decklists"]:
         return "MTGO event decklists have not been published yet"
+    if str(data.get("inplayoffs")) != "1":
+        return None
+    if isinstance(data.get("standings"), list) and not data["standings"]:
+        return "MTGO event standings have not been published yet"
+    if isinstance(data.get("final_rank"), list) and not data["final_rank"]:
+        return "MTGO event final ranks have not been published yet"
+    if not all(
+        isinstance(data.get(name), list)
+        for name in ("decklists", "standings", "final_rank")
+    ):
+        return None
+    deck_ids = {record["loginid"] for record in data["decklists"]}
+    standing_ids = {record["loginid"] for record in data["standings"]}
+    final_rank_ids = {record["loginid"] for record in data["final_rank"]}
+    if not deck_ids <= standing_ids:
+        return (
+            "MTGO event standings do not cover published decklists "
+            f"(missing={len(deck_ids - standing_ids)})"
+        )
+    if not deck_ids <= final_rank_ids:
+        return (
+            "MTGO event final ranks do not cover published decklists "
+            f"(missing={len(deck_ids - final_rank_ids)})"
+        )
+    standings_by_id = {record["loginid"]: record for record in data["standings"]}
+    final_ranks_by_id = {record["loginid"]: record for record in data["final_rank"]}
+    missing_standing_values = sum(
+        standings_by_id[login_id].get("rank") in (None, "")
+        or standings_by_id[login_id].get("score") in (None, "")
+        for login_id in deck_ids
+    )
+    if missing_standing_values:
+        return (
+            "MTGO event standings are missing rank or score values "
+            f"for {missing_standing_values} published decklists"
+        )
+    missing_final_ranks = sum(
+        final_ranks_by_id[login_id].get("rank") in (None, "")
+        for login_id in deck_ids
+    )
+    if missing_final_ranks:
+        return (
+            "MTGO event final ranks are missing values "
+            f"for {missing_final_ranks} published decklists"
+        )
     return None
 
 
@@ -174,15 +274,14 @@ def download_event_data(
                 sleep=wait,
             )
             data = extract_event_data(html)
-            if is_event_data_complete(data):
-                return data
-            incomplete_message = _incomplete_event_message(data)
-            if incomplete_message is not None:
-                last_error = MTGOIncompleteEventError(incomplete_message)
-            elif isinstance(data, dict) and not isinstance(data.get("decklists"), list):
-                last_error = MTGOParseError("MTGO event decklists must be a list")
+            invalid_message = _invalid_event_message(data)
+            if invalid_message is not None:
+                last_error = MTGOParseError(invalid_message)
             else:
-                last_error = MTGOParseError("MTGO event data is incomplete")
+                incomplete_message = _incomplete_event_message(data)
+                if incomplete_message is None:
+                    return data
+                last_error = MTGOIncompleteEventError(incomplete_message)
         except (MTGOFetchError, MTGOParseError) as exc:
             last_error = exc
         if retry_delay and attempt < attempts:

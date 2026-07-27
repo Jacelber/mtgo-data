@@ -214,8 +214,46 @@ def _validate_event_document(path: str, value: Any) -> list[str]:
     required = {"event_id", "description", "format", "starttime", "player_count", "inplayoffs", "players"}
     missing = sorted(required - set(value))
     failures = [f"{path}: missing event fields: {', '.join(missing)}"] if missing else []
-    if "players" in value and (not isinstance(value["players"], list) or not value["players"]):
+    if "inplayoffs" in value and str(value["inplayoffs"]) != "1":
+        failures.append(f"{path}: retained event must have inplayoffs=1")
+    players = value.get("players")
+    if "players" in value and (not isinstance(players, list) or not players):
         failures.append(f"{path}: players must be a non-empty list")
+    elif isinstance(players, list):
+        seen_login_ids = set()
+        for index, player in enumerate(players):
+            prefix = f"{path}: players[{index}]"
+            if not isinstance(player, dict):
+                failures.append(f"{prefix} must be an object")
+                continue
+            login_id = player.get("loginid")
+            if (
+                isinstance(login_id, bool)
+                or not isinstance(login_id, (str, int))
+                or not str(login_id).strip()
+            ):
+                failures.append(f"{prefix}.loginid must be a non-empty string or integer")
+            elif login_id in seen_login_ids:
+                failures.append(f"{prefix}.loginid duplicates {login_id!r}")
+            else:
+                seen_login_ids.add(login_id)
+            for field, minimum in (
+                ("swiss_rank", 1),
+                ("swiss_score", 0),
+                ("final_rank", 1),
+            ):
+                field_value = player.get(field)
+                try:
+                    parsed = (
+                        int(str(field_value).strip())
+                        if not isinstance(field_value, bool) and field_value is not None
+                        else None
+                    )
+                except (TypeError, ValueError):
+                    parsed = None
+                if parsed is None or parsed < minimum:
+                    qualifier = "positive" if minimum == 1 else "non-negative"
+                    failures.append(f"{prefix}.{field} must be a {qualifier} integer")
     parts = PurePosixPath(path).parts
     expected_format = parts[1].upper() if len(parts) >= 2 else ""
     actual_format = str(value.get("format", "")).strip().upper()

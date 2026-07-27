@@ -41,7 +41,15 @@ def event_document(format_id: str = "standard"):
         "starttime": "2026-07-20 00:00:00.0",
         "player_count": 1,
         "inplayoffs": "1",
-        "players": [{"player": "Fixture"}],
+        "players": [
+            {
+                "player": "Fixture",
+                "loginid": "fixture",
+                "swiss_rank": 1,
+                "swiss_score": 15,
+                "final_rank": 1,
+            }
+        ],
     }
 
 
@@ -113,6 +121,44 @@ def test_valid_candidate_reports_dynamic_deltas_and_source_separation(tmp_path):
         "reports_modern": 1,
         "statistics_standard": 1,
     }
+
+
+def test_candidate_rejects_event_without_complete_swiss_evidence(tmp_path):
+    root = make_candidate_root(tmp_path)
+    baseline = snapshot_state(root)
+    event = event_document()
+    event["players"][0]["swiss_score"] = None
+    path = root / "data" / "standard" / "Standard_Challenge_32_123.json"
+    path.write_text(json.dumps(event), encoding="utf-8")
+
+    _report, failures = validate_candidate(
+        root,
+        baseline,
+        [Change("??", "data/standard/Standard_Challenge_32_123.json")],
+    )
+
+    assert any("swiss_score must be a non-negative integer" in item for item in failures)
+
+
+def test_candidate_rejects_duplicate_login_and_missing_placement(tmp_path):
+    root = make_candidate_root(tmp_path)
+    baseline = snapshot_state(root)
+    event = event_document()
+    duplicate = dict(event["players"][0], player="Duplicate", final_rank=None)
+    event["players"].append(duplicate)
+    event["inplayoffs"] = "0"
+    path = root / "data" / "standard" / "Standard_Challenge_32_123.json"
+    path.write_text(json.dumps(event), encoding="utf-8")
+
+    _report, failures = validate_candidate(
+        root,
+        baseline,
+        [Change("??", "data/standard/Standard_Challenge_32_123.json")],
+    )
+
+    assert any(".loginid duplicates" in item for item in failures)
+    assert any(".final_rank must be a positive integer" in item for item in failures)
+    assert any("retained event must have inplayoffs=1" in item for item in failures)
 
 
 def test_candidate_blocks_deletion_cross_source_write_and_malformed_json(tmp_path):
