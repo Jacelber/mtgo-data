@@ -1,0 +1,527 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/phase8-public-contract.schema.json",
+  "title": "Phase 8 target public consumer contract",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "literal_match_record",
+    "matchup_coverage",
+    "high_score_decklist_completeness",
+    "top8_week",
+    "subtype_identity",
+    "tabletop_event"
+  ],
+  "properties": {
+    "contract_version": {"const": "1.0.0"},
+    "literal_match_record": {"$ref": "#/$defs/literalRecord"},
+    "matchup_coverage": {"$ref": "#/$defs/matchupCoverage"},
+    "high_score_decklist_completeness": {
+      "$ref": "#/$defs/highScoreCompleteness"
+    },
+    "top8_week": {"$ref": "#/$defs/top8Week"},
+    "subtype_identity": {"$ref": "#/$defs/identity"},
+    "tabletop_event": {"$ref": "#/$defs/tabletopEvent"}
+  },
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)?$"
+    },
+    "eventId": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$"
+    },
+    "rate": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": {"type": "string", "format": "date"},
+        "end": {"type": "string", "format": "date"}
+      }
+    },
+    "confidenceInterval": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lower", "upper"],
+          "properties": {
+            "lower": {"type": "number", "minimum": 0, "maximum": 1},
+            "upper": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        }
+      ]
+    },
+    "literalRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wins",
+        "losses",
+        "draws",
+        "matches",
+        "win_rate",
+        "win_rate_method",
+        "confidence_interval_95"
+      ],
+      "properties": {
+        "wins": {"type": "integer", "minimum": 0},
+        "losses": {"type": "integer", "minimum": 0},
+        "draws": {"type": "integer", "minimum": 0},
+        "matches": {"type": "integer", "minimum": 0},
+        "win_rate": {"$ref": "#/$defs/rate"},
+        "win_rate_method": {"const": "wins_over_valid_matches"},
+        "confidence_interval_95": {"$ref": "#/$defs/confidenceInterval"}
+      }
+    },
+    "matchRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["all_matches", "non_mirror", "mirror_match_count"],
+      "properties": {
+        "all_matches": {"$ref": "#/$defs/literalRecord"},
+        "non_mirror": {"$ref": "#/$defs/literalRecord"},
+        "mirror_match_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "eventIdList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/eventId"}
+    },
+    "excludedEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "reason"],
+      "properties": {
+        "event_id": {"$ref": "#/$defs/eventId"},
+        "reason": {
+          "enum": [
+            "outside_admitted_event_set",
+            "wrong_format",
+            "unsupported_event_structure",
+            "invalid_official_event"
+          ]
+        }
+      }
+    },
+    "matchupCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "formula_version",
+        "status",
+        "period",
+        "expected_event_count",
+        "available_event_count",
+        "deferred_event_count",
+        "missing_event_count",
+        "excluded_event_count",
+        "available_event_ids",
+        "deferred_event_ids",
+        "missing_event_ids",
+        "excluded_events",
+        "completeness_rate",
+        "unavailable_reason"
+      ],
+      "properties": {
+        "formula_version": {"const": "videre-range-coverage-v1"},
+        "status": {"enum": ["available", "unavailable"]},
+        "period": {"$ref": "#/$defs/period"},
+        "expected_event_count": {"type": "integer", "minimum": 0},
+        "available_event_count": {"type": "integer", "minimum": 0},
+        "deferred_event_count": {"type": "integer", "minimum": 0},
+        "missing_event_count": {"type": "integer", "minimum": 0},
+        "excluded_event_count": {"type": "integer", "minimum": 0},
+        "available_event_ids": {"$ref": "#/$defs/eventIdList"},
+        "deferred_event_ids": {"$ref": "#/$defs/eventIdList"},
+        "missing_event_ids": {"$ref": "#/$defs/eventIdList"},
+        "excluded_events": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/excludedEvent"}
+        },
+        "completeness_rate": {"$ref": "#/$defs/rate"},
+        "unavailable_reason": {
+          "type": ["string", "null"],
+          "enum": [
+            null,
+            "no_expected_events",
+            "incomplete_source_evidence"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "available"}}},
+          "then": {
+            "properties": {
+              "completeness_rate": {"type": "number"},
+              "unavailable_reason": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "completeness_rate": {"type": "null"},
+              "unavailable_reason": {"type": "string"}
+            }
+          }
+        }
+      ]
+    },
+    "highScoreEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "player_count",
+        "round_count",
+        "high_score_threshold",
+        "minimum_decisive_wins",
+        "observed_decklist_count",
+        "expected_decklist_count"
+      ],
+      "properties": {
+        "event_id": {"$ref": "#/$defs/eventId"},
+        "player_count": {"type": "integer", "minimum": 1},
+        "round_count": {"type": "integer", "minimum": 1},
+        "high_score_threshold": {"type": "integer", "minimum": 3},
+        "minimum_decisive_wins": {"type": "integer", "minimum": 1},
+        "observed_decklist_count": {"type": "integer", "minimum": 0},
+        "expected_decklist_count": {"type": "number", "minimum": 0}
+      }
+    },
+    "unsupportedHighScoreEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "reason"],
+      "properties": {
+        "event_id": {"$ref": "#/$defs/eventId"},
+        "reason": {
+          "enum": [
+            "missing_player_count",
+            "unsupported_round_model",
+            "missing_high_score_threshold",
+            "missing_swiss_scores"
+          ]
+        },
+        "note": {"type": "string", "minLength": 1}
+      }
+    },
+    "highScoreCompleteness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "formula_version",
+        "status",
+        "period",
+        "eligible_event_count",
+        "unsupported_event_count",
+        "events",
+        "unsupported_events",
+        "observed_decklist_count",
+        "expected_decklist_count",
+        "expected_decklist_count_display",
+        "completeness_rate",
+        "exceeds_model",
+        "unavailable_reason"
+      ],
+      "properties": {
+        "formula_version": {"const": "mtgo-high-score-binomial-v1"},
+        "status": {"enum": ["available", "unavailable"]},
+        "period": {"$ref": "#/$defs/period"},
+        "eligible_event_count": {"type": "integer", "minimum": 0},
+        "unsupported_event_count": {"type": "integer", "minimum": 0},
+        "events": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/highScoreEvent"}
+        },
+        "unsupported_events": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/unsupportedHighScoreEvent"}
+        },
+        "observed_decklist_count": {"type": "integer", "minimum": 0},
+        "expected_decklist_count": {"type": "number", "minimum": 0},
+        "expected_decklist_count_display": {"type": "integer", "minimum": 0},
+        "completeness_rate": {"$ref": "#/$defs/rate"},
+        "exceeds_model": {"type": "boolean"},
+        "unavailable_reason": {
+          "type": ["string", "null"],
+          "enum": [null, "no_eligible_events", "incomplete_source_evidence"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "available"}}},
+          "then": {
+            "properties": {
+              "completeness_rate": {"type": "number"},
+              "unavailable_reason": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "completeness_rate": {"type": "null"},
+              "unavailable_reason": {"type": "string"}
+            }
+          }
+        }
+      ]
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_id",
+        "parent_id",
+        "subtype_id",
+        "display_name",
+        "detail_id"
+      ],
+      "properties": {
+        "identity_id": {"$ref": "#/$defs/stableId"},
+        "parent_id": {"$ref": "#/$defs/stableId"},
+        "subtype_id": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "display_name": {"type": "string", "minLength": 1},
+        "detail_id": {"$ref": "#/$defs/stableId"}
+      }
+    },
+    "card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "qty"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "qty": {"type": "integer", "minimum": 1}
+      }
+    },
+    "exactDeck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["player", "main_deck", "sideboard"],
+      "properties": {
+        "player": {"type": "string", "minLength": 1},
+        "main_deck": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/card"}
+        },
+        "sideboard": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/card"}
+        }
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_id",
+        "base_period",
+        "base_period_end",
+        "average_deck_ref"
+      ],
+      "properties": {
+        "identity_id": {"$ref": "#/$defs/stableId"},
+        "base_period": {"const": "4w"},
+        "base_period_end": {"type": "string", "format": "date"},
+        "average_deck_ref": {"type": "string", "minLength": 1}
+      }
+    },
+    "placement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rank",
+        "deck_status",
+        "identity",
+        "exact_deck",
+        "comparison"
+      ],
+      "properties": {
+        "rank": {"type": "integer", "minimum": 1, "maximum": 8},
+        "deck_status": {"enum": ["available", "missing"]},
+        "identity": {
+          "oneOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "exact_deck": {
+          "oneOf": [{"$ref": "#/$defs/exactDeck"}, {"type": "null"}]
+        },
+        "comparison": {
+          "oneOf": [{"$ref": "#/$defs/comparison"}, {"type": "null"}]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"deck_status": {"const": "available"}}},
+          "then": {
+            "properties": {
+              "identity": {"$ref": "#/$defs/identity"},
+              "exact_deck": {"$ref": "#/$defs/exactDeck"},
+              "comparison": {"$ref": "#/$defs/comparison"}
+            }
+          },
+          "else": {
+            "properties": {
+              "identity": {"type": "null"},
+              "exact_deck": {"type": "null"},
+              "comparison": {"type": "null"}
+            }
+          }
+        }
+      ]
+    },
+    "top8Event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "name",
+        "display_name",
+        "date",
+        "player_count",
+        "placements"
+      ],
+      "properties": {
+        "event_id": {"$ref": "#/$defs/eventId"},
+        "name": {"type": "string", "minLength": 1},
+        "display_name": {"type": "string", "minLength": 1},
+        "date": {"type": "string", "format": "date"},
+        "player_count": {"type": "integer", "minimum": 1},
+        "placements": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {"$ref": "#/$defs/placement"}
+        }
+      }
+    },
+    "top8Week": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "document_type",
+        "source",
+        "format",
+        "week",
+        "events"
+      ],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "document_type": {"const": "top8_week"},
+        "source": {"const": "mtgo"},
+        "format": {"enum": ["standard", "modern"]},
+        "week": {"$ref": "#/$defs/period"},
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/top8Event"}
+        }
+      }
+    },
+    "scopeId": {
+      "enum": ["day1", "day2", "all_constructed"]
+    },
+    "tabletopScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "population",
+        "selection_bias_warning",
+        "participant_count",
+        "completion_rate",
+        "high_score_status",
+        "high_score_deck_count",
+        "match_record"
+      ],
+      "properties": {
+        "scope": {"$ref": "#/$defs/scopeId"},
+        "population": {
+          "enum": [
+            "starting_field",
+            "qualified_field",
+            "starting_field_with_qualified_day2_opportunities"
+          ]
+        },
+        "selection_bias_warning": {"type": "boolean"},
+        "participant_count": {"type": "integer", "minimum": 0},
+        "completion_rate": {"$ref": "#/$defs/rate"},
+        "high_score_status": {"enum": ["available", "unavailable"]},
+        "high_score_deck_count": {"type": ["integer", "null"], "minimum": 0},
+        "match_record": {"$ref": "#/$defs/matchRecord"}
+      }
+    },
+    "matchupCompatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "taxonomy_schema_version",
+        "taxonomy_sha256",
+        "matchup_schema_version",
+        "supported_scopes"
+      ],
+      "properties": {
+        "format": {"$ref": "#/$defs/stableId"},
+        "taxonomy_schema_version": {"type": "string", "minLength": 1},
+        "taxonomy_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "matchup_schema_version": {"type": "string", "minLength": 1},
+        "supported_scopes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/scopeId"}
+        }
+      }
+    },
+    "tabletopEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "format",
+        "event_structure",
+        "supported_scopes",
+        "default_scope",
+        "scope_summaries",
+        "matchup_compatibility"
+      ],
+      "properties": {
+        "event_id": {"$ref": "#/$defs/eventId"},
+        "format": {"$ref": "#/$defs/stableId"},
+        "event_structure": {
+          "enum": ["mixed", "constructed_day2", "constructed_single_stage"]
+        },
+        "supported_scopes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/scopeId"}
+        },
+        "default_scope": {"$ref": "#/$defs/scopeId"},
+        "scope_summaries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/tabletopScope"}
+        },
+        "matchup_compatibility": {"$ref": "#/$defs/matchupCompatibility"}
+      }
+    }
+  }
+}

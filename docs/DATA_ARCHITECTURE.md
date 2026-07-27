@@ -1528,6 +1528,33 @@ paths, rounding, fixtures, and migration tests. P8-05 and P8-06 implement
 only the approved producers. P8-07 proves generated consumer readiness with
 real retained data before P8-08 through P8-10 implement production pages.
 
+### 12.1.2 P8-04 versioned target contract
+
+`schemas/phase8-public-contract.schema.json` is the executable `1.0.0` target
+contract for the P8-03 consumers. Its representative document is
+`tests/fixtures/phase8_public_contract.json`, and
+`tests/test_phase8_public_contract.py` enforces the cross-field semantics that
+JSON Schema cannot express.
+
+The contract covers:
+
+- literal all-match and non-mirror W-L-D records with an explicit
+  `wins_over_valid_matches` method;
+- range-specific Videre available, deferred, missing, and excluded events;
+- event-level and range-level modeled high-score decklist completeness;
+- self-contained parent/subtype identities and stable detail references;
+- complete-week MTGO Top 8 events with exactly eight explicit placements;
+- direct Tabletop event structure, supported scopes, per-scope summaries, and
+  matchup compatibility.
+
+This Schema is intentionally not mapped in `schemas/manifest.json`: it validates
+the migration target, not any current public file. The 52 existing manifest
+mappings, production JSON, generators, workflows, and deployed consumers remain
+unchanged in P8-04. P8-05 and P8-06 must either reference these definitions from
+their product Schemas or introduce a reviewed compatible version, map only
+actual generated public documents, and migrate consumers without reinterpreting
+legacy `win_rate` values.
+
 ### 12.2 Melee output
 
 Target Melee output belongs under:
