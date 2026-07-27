@@ -73,6 +73,12 @@ self-contained, for example `Grixis Prowess` rather than only `Grixis`.
 The public contract must provide a stable full display label without changing
 the subtype ID or classifier taxonomy.
 
+Across MTGO and Tabletop matchup products, the visible primary win rate is the
+literal valid-match win share, `W / (W + L + D)`. Normal played draws remain in
+the denominator and do not count as wins. Primary overview and `Overall`
+values include mirrors, matrix diagonal cells display their real mirror W-L-D
+rates, and an explicit non-mirror rate remains available as supporting output.
+
 ### 2.3 Deck-construction details
 
 Representative deck, average construction, deviation, recent construction
@@ -218,22 +224,32 @@ Purpose:
 
 - compare and revise the local prototypes;
 - select the final information hierarchy and visual direction;
-- freeze component states, labels, navigation, responsive behavior, and shared
-  detail behavior;
+- freeze the initial component states, labels, navigation, responsive behavior,
+  shared detail behavior, and backend consumer requirements;
 - publish the accepted UI specification and backend consumer contract.
 
 P8-03 is a mandatory owner-acceptance gate. Backend production changes must not
-begin before the owner accepts the UI specification.
+begin before the owner accepts the initial UI specification. This freeze is
+strong enough to prevent speculative backend work, but it is not the last
+visual acceptance: representative real payloads receive a second owner review
+at P8-07 before production front-end implementation.
 
 ### P8-04 — Statistical and public data contract
 
 Purpose:
 
+- define the versioned migration from the existing draw-adjusted, primary
+  non-mirror rate to literal all-match win rate while retaining explicit
+  supporting non-mirror fields and visible mirror cells;
 - define the two completeness metrics precisely;
 - define weekly Top 8 event, rank, deck, and week eligibility;
 - define the stable full subtype display-label contract;
 - define exact-deck, subtype-average, deviation, provenance, empty-state, and
   error payloads;
+- define a direct per-event, per-scope Tabletop overall row with aggregate
+  completion and match records so the browser does not reconstruct it;
+- expose event structure, supported scopes, and matchup-scope compatibility,
+  while keeping mixed all-Constructed high-score values explicitly unavailable;
 - update statistical specifications, architecture, JSON Schemas, fixtures, and
   compatibility requirements before generator changes.
 
@@ -261,7 +277,7 @@ Purpose:
   provenance;
 - prevent the browser from reconstructing statistical denominators.
 
-### P8-07 — Backend consumer-readiness closeout
+### P8-07 — Backend consumer-readiness and real-data UI revalidation
 
 Purpose:
 
@@ -270,9 +286,18 @@ Purpose:
 - confirm subtype-specific construction metrics are consumed rather than
   recomputed;
 - validate Top 8 and completeness outputs against real retained production data;
-- freeze the public paths and payload versions needed by the front end.
+- freeze the public paths and payload versions needed by the front end;
+- load representative real Standard and Modern payloads into the accepted
+  review UI;
+- review real row counts, label lengths, table density, unavailable values,
+  warnings, completeness states, deck details, and responsive behavior;
+- obtain explicit owner acceptance of any final display or interaction changes
+  before P8-08 begins.
 
-No final UI implementation begins until P8-07 passes.
+No final UI implementation begins until P8-07 passes. Display-only findings may
+amend the UI specification here. A finding that requires a new field, formula,
+denominator, or Schema returns to a separately authorized contract/backend task;
+the browser must not reconstruct the missing statistic.
 
 ### P8-08 — Shared static shell and page split
 
@@ -329,7 +354,8 @@ Phase 8 has three mandatory stop points:
 
 1. after P8-01, before selecting prototype directions;
 2. after P8-03, before any backend production change;
-3. after P8-07, before implementing the final production UI.
+3. during P8-07, after representative real data has been reviewed and before
+   implementing the final production UI.
 
 Every task still requires its own focused authorization. Acceptance,
 publication, workflow dispatch, deployment verification, and the Phase 8 tag

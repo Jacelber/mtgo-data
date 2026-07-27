@@ -1541,10 +1541,12 @@ The phase order is fixed:
 
 1. audit the current UI and public data;
 2. design and approve the final UI locally;
-3. freeze the UI behavior and backend consumer contract;
+3. freeze the initial UI behavior and backend consumer contract;
 4. implement and validate required backend additions;
-5. implement the final MTGO and tabletop front ends;
-6. run cross-product regression and browser acceptance.
+5. load representative real generated data into the accepted UI and obtain a
+   final owner review;
+6. implement the final MTGO and tabletop front ends;
+7. run cross-product regression and browser acceptance.
 
 Do not implement backend payloads before the P8-03 UI freeze. Do not implement
 the final production front end before P8-07 backend consumer-readiness
@@ -1589,7 +1591,13 @@ Phase 8 adds, after contract approval:
   average and deviation base;
 - range-specific Videre expected/available/missing event completeness;
 - reviewed theoretical-versus-observed MTGO high-score decklist completeness;
-- stable self-contained subtype display labels.
+- stable self-contained subtype display labels;
+- literal all-match win rates with normal draws retained only in the denominator,
+  explicit supporting non-mirror rates, and visible mirror matrix cells;
+- a direct Tabletop per-event and per-scope overall summary with aggregate
+  completion and match records;
+- catalog-declared Tabletop event structure and supported scopes, with mixed
+  all-Constructed high-score values explicitly unavailable.
 
 The completeness formulas, denominators, event eligibility, exclusions,
 rounding, and unavailable states are specified and tested before generators or
@@ -1609,12 +1617,13 @@ authorization. Installation or authentication alone is not authorization.
 1. `P8-01` — audit current UI, public data consumers, and backend gaps.
 2. `P8-02` — build local information-architecture and interaction prototypes.
 3. `P8-03` — obtain owner approval and freeze the UI and consumer contract.
-4. `P8-04` — specify completeness, Top 8, subtype-label, detail, Schema, and
-   compatibility contracts.
+4. `P8-04` — specify win-rate migration, completeness, Top 8, subtype-label,
+   detail, Schema, and compatibility contracts.
 5. `P8-05` — implement the weekly MTGO Top 8 backend product.
 6. `P8-06` — implement MTGO matchup and high-score completeness products.
 7. `P8-07` — validate Standard/Modern backend consumer readiness against real
-   retained production data.
+   retained production data, exercise the accepted UI with those payloads, and
+   obtain the final pre-implementation owner review.
 8. `P8-08` — split the shared static shell while preserving current behavior.
 9. `P8-09` — implement the approved format-first MTGO production UI.
 10. `P8-10` — implement the Tabletop Major Events production UI.
@@ -1622,7 +1631,13 @@ authorization. Installation or authentication alone is not authorization.
     documentation, and Phase 8 closeout.
 
 Every task requires separate focused authorization. P8-03 and P8-07 are
-mandatory owner stop points.
+mandatory owner stop points. P8-03 freezes the initial consumer contract needed
+to implement the backend safely. P8-07 is a second, data-backed UI review: the
+owner may request final display, density, wording, empty-state, and interaction
+changes after seeing representative real payloads. P8-08 must not begin until
+that review is accepted. If the P8-07 review discovers a missing or incorrect
+statistical payload, return to a separately authorized contract/backend task
+instead of reconstructing the value in browser code.
 
 ## Tabletop behavior
 
