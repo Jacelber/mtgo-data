@@ -1,6 +1,6 @@
 # P8 Rolling Contract Test Hotfix
 
-Status: `completed_owner_accepted_publication_authorized`
+Status: `published`
 Task: `P8-HOTFIX-ROLLING-CONTRACT-TESTS`
 Base: `400a2c76006a3abea31631a86b1320ce317b5bc5` (`master`)
 Branch: `codex/p8-hotfix-rolling-contract-tests`
@@ -52,4 +52,6 @@ classification rule, or statistical formula changes.
 - Git whitespace validation: passed.
 
 The owner authorized this independent hotfix and authorized resuming P8-05
-publication after the hotfix merges.
+publication. The hotfix was published through implementation commit `53ec3db1`,
+PR #115, and merge commit `bc08063a4fd1e1cbc4bfb2160e895a880a8fcfb1`;
+the remote check passed before merge.

@@ -44,7 +44,7 @@ def test_registry_exposes_complete_standard_and_modern_products():
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     loaded = registry()
 
-    assert loaded.schema_version == "1.1.0"
+    assert loaded.schema_version == "1.2.0"
     assert [item.id for item in loaded.formats] == contract["format_state_model"]["known_format_ids"]
     assert [item.id for item in loaded.formats if item.state == "executable"] == [
         "standard",
@@ -53,7 +53,9 @@ def test_registry_exposes_complete_standard_and_modern_products():
 
     standard = loaded.require_mtgo("standard")
     assert standard.public is True
-    assert standard.mtgo.capabilities == set(contract["required_capabilities"])
+    assert standard.mtgo.capabilities == set(contract["required_capabilities"]) | {
+        "weekly_top8"
+    }
     assert standard.mtgo.paths.resolve(ROOT) == {
         key: ROOT / value
         for key, value in contract["standard_contract"]["paths"].items()
@@ -73,6 +75,7 @@ def test_registry_exposes_complete_standard_and_modern_products():
         "event_statistics",
         "range_statistics",
         "matchup_statistics",
+        "weekly_top8",
         "weekly_pickup",
         "metadata_generation",
         "catalog_generation",
@@ -128,7 +131,7 @@ def test_loader_rejects_semantically_unsafe_registry_entries(mutation, expected)
 
 def test_duplicate_yaml_keys_and_repository_escapes_fail_clearly(tmp_path):
     duplicate = REGISTRY_PATH.read_text(encoding="utf-8").replace(
-        'schema_version: "1.1.0"', 'schema_version: "1.1.0"\nschema_version: "1.1.0"', 1
+        'schema_version: "1.2.0"', 'schema_version: "1.2.0"\nschema_version: "1.2.0"', 1
     )
     with pytest.raises(FormatConfigError, match="duplicate key"):
         parse_format_text(duplicate)

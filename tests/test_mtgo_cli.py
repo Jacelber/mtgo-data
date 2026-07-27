@@ -127,7 +127,7 @@ def test_event_fetch_keeps_persistent_parse_errors_fatal(monkeypatch, capsys):
     assert f"ERROR {source}" in capsys.readouterr().err
 
 
-def test_statistics_matchups_pickup_and_metadata_dispatch(monkeypatch):
+def test_statistics_top8_matchups_pickup_and_metadata_dispatch(monkeypatch):
     captured = []
     output = ROOT / "stats" / "standard" / "mtgo"
     monkeypatch.setattr(
@@ -135,6 +135,12 @@ def test_statistics_matchups_pickup_and_metadata_dispatch(monkeypatch):
         "build_all_stats",
         lambda root, format_id, **kwargs: captured.append(("stats", root, format_id, kwargs))
         or {"index.json": output / "index.json"},
+    )
+    monkeypatch.setattr(
+        cli.top8,
+        "build_all_top8",
+        lambda root, format_id, **kwargs: captured.append(("top8", root, format_id, kwargs))
+        or {"index.json": output / "top8" / "index.json"},
     )
     monkeypatch.setattr(
         cli.matchup,
@@ -165,18 +171,20 @@ def test_statistics_matchups_pickup_and_metadata_dispatch(monkeypatch):
     )
     base = ["--root", str(ROOT), "--format", "standard"]
     assert cli.main(base + ["build-statistics"]) == 0
+    assert cli.main(base + ["build-top8"]) == 0
     assert cli.main(base + ["build-matchups"]) == 0
     assert cli.main(base + ["pickup", "candidates", "--if-absent"]) == 0
     assert cli.main(base + ["generate-metadata"]) == 0
     assert cli.main(base + ["generate-hierarchy"]) == 0
     assert [entry[0] for entry in captured] == [
         "stats",
+        "top8",
         "matchups",
         "candidates",
         "metadata",
         "hierarchy",
     ]
-    assert captured[2][3]["preserve_existing"] is True
+    assert captured[3][3]["preserve_existing"] is True
 
 
 def test_invalid_month_is_rejected_by_argparse():

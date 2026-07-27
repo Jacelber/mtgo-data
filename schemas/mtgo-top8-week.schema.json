@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-top8-week.schema.json",
+  "title": "MTGO complete-week Top 8 decklists",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "source",
+    "format",
+    "week",
+    "events"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "top8_week"},
+    "source": {"const": "mtgo"},
+    "format": {"enum": ["standard", "modern"]},
+    "week": {"$ref": "#/$defs/week"},
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/event"}
+    }
+  },
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[-/][a-z0-9]+)*$"
+    },
+    "week": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": {"type": "string", "format": "date"},
+        "end": {"type": "string", "format": "date"}
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_id",
+        "parent_id",
+        "subtype_id",
+        "display_name",
+        "detail_id"
+      ],
+      "properties": {
+        "identity_id": {"$ref": "#/$defs/stableId"},
+        "parent_id": {"$ref": "#/$defs/stableId"},
+        "subtype_id": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "display_name": {"type": "string", "minLength": 1},
+        "detail_id": {"$ref": "#/$defs/stableId"}
+      }
+    },
+    "card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "qty"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "qty": {"type": "integer", "minimum": 1}
+      }
+    },
+    "exactDeck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["player", "main_deck", "sideboard"],
+      "properties": {
+        "player": {"type": "string", "minLength": 1},
+        "main_deck": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/card"}
+        },
+        "sideboard": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/card"}
+        }
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_id",
+        "base_period",
+        "base_period_end",
+        "average_deck_ref"
+      ],
+      "properties": {
+        "identity_id": {"$ref": "#/$defs/stableId"},
+        "base_period": {"const": "4w"},
+        "base_period_end": {"type": "string", "format": "date"},
+        "average_deck_ref": {"type": "string", "minLength": 1}
+      }
+    },
+    "placement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rank",
+        "deck_status",
+        "identity",
+        "exact_deck",
+        "comparison"
+      ],
+      "properties": {
+        "rank": {"type": "integer", "minimum": 1, "maximum": 8},
+        "deck_status": {"enum": ["available", "missing"]},
+        "identity": {
+          "oneOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "exact_deck": {
+          "oneOf": [{"$ref": "#/$defs/exactDeck"}, {"type": "null"}]
+        },
+        "comparison": {
+          "oneOf": [{"$ref": "#/$defs/comparison"}, {"type": "null"}]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"deck_status": {"const": "available"}},
+            "required": ["deck_status"]
+          },
+          "then": {
+            "properties": {
+              "identity": {"$ref": "#/$defs/identity"},
+              "exact_deck": {"$ref": "#/$defs/exactDeck"},
+              "comparison": {"$ref": "#/$defs/comparison"}
+            }
+          },
+          "else": {
+            "properties": {
+              "identity": {"type": "null"},
+              "exact_deck": {"type": "null"},
+              "comparison": {"type": "null"}
+            }
+          }
+        }
+      ]
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "name",
+        "display_name",
+        "date",
+        "player_count",
+        "placements"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "name": {"type": "string", "minLength": 1},
+        "display_name": {"type": "string", "minLength": 1},
+        "date": {"type": "string", "format": "date"},
+        "player_count": {"type": "integer", "minimum": 1},
+        "placements": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {"$ref": "#/$defs/placement"}
+        }
+      }
+    }
+  }
+}

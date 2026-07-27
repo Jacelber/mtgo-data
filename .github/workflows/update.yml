@@ -76,6 +76,14 @@ jobs:
             python -B -m mtgmeta.mtgo --format "$FORMAT" build-matchups
           done
 
+      - name: Build weekly Top 8 decklists
+        shell: bash
+        run: |
+          for FORMAT in $MTGO_PRODUCT_FORMATS; do
+            echo "Building weekly MTGO Top 8 data for ${FORMAT}."
+            python -B -m mtgmeta.mtgo --format "$FORMAT" build-top8
+          done
+
       - name: Generate Weekly Pickup candidates when absent
         continue-on-error: true
         shell: bash
@@ -178,5 +186,5 @@ jobs:
             echo "- Product formats: ${MTGO_PRODUCT_FORMATS}"
             echo "- Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}"
             echo "- Validation layers: clean-checkout regression, production candidate acceptance, and published-commit confirmation."
-            echo "- Pipeline: all configured MTGO event archives; Standard and Modern Videre matches, statistics, hierarchical matchup statistics, Pickup candidates, metadata, hierarchy catalogs, de-identified classification diagnostics; validation and publication."
+            echo "- Pipeline: all configured MTGO event archives; Standard and Modern Videre matches, statistics, hierarchical matchup statistics, weekly Top 8 decklists, Pickup candidates, metadata, hierarchy catalogs, de-identified classification diagnostics; validation and publication."
           } >> "$GITHUB_STEP_SUMMARY"

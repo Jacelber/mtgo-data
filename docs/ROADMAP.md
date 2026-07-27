@@ -1652,6 +1652,18 @@ contract tests. It does not map a new production document, migrate a generator,
 rewrite existing statistics, change a workflow, or alter the deployed page.
 Owner acceptance remains the stop point before publication or P8-05.
 
+P8-05 local implementation adds a capability-gated Standard/Modern weekly Top
+8 producer, product Schemas, manifest mappings, metadata discovery, and
+fail-closed scheduled workflow integration. The first release publishes the
+latest complete week only: Standard contains 8 events and 64 available
+placements for 2026-07-20 through 2026-07-26; Modern contains 13 events and 104
+available placements, including 42 subtype identities. Every event has exactly
+ranks 1 through 8, and every comparison identity resolves in the same-period
+four-week deck output. Historical week retention is deferred until immutable
+historical construction-base provenance is specified; P8-07 must review that
+boundary with real data. No source fetcher, classification rule, statistical
+formula, current production page, or Tabletop output changes in P8-05.
+
 After P8-04 owner acceptance, perform a separately authorized focused
 investigation of retained MTGO event `12847150`. The owner verified that the
 current official event page contains complete data, while the retained archive
@@ -1706,8 +1718,9 @@ the affected Modern statistics and the existing 2026-W29 Pickup candidate were
 regenerated from source rather than edited by hand. The fixed 2026-07-13 through
 2026-07-19 Modern window keeps 416 decks and 104 Top 8 decks while restoring 27
 high-score decks, from 330 to 357. All 517 tests and repository, rule, and
-Schema validation pass. Publication of this repair remains separately
-controlled.
+Schema validation pass. The repair was published through pull request #113,
+implementation commit `0a952d794db21ed5be53780cb6cea338bdd9b53a`,
+and merge commit `c2a5cf24303172a83cc561fd8bfe9ca446c9aad4`.
 
 The full evidence, uncertainty boundary, expected repair invariants, and
 acceptance tests are recorded in

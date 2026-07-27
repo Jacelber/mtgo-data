@@ -1819,6 +1819,21 @@ base under section 16.4. A parent with no maintained subtype uses its parent
 base. The weekly product must not create a cross-subtype average or reclassify a
 deck in browser code.
 
+P8-05 formalizes this product as
+`stats/<format>/mtgo/top8/YYYY-Www.json`, with discovery through
+`stats/<format>/mtgo/top8/index.json`. The first producer release generates the
+latest complete week for Standard and Modern. Every available placement embeds
+the exact main deck and sideboard and carries a stable identity plus a
+`decks_4w.json` comparison reference whose `base_period_end` equals the selected
+week's Sunday. The producer does not invent a separate deviation value that was
+not defined by the P8-04 contract.
+
+The initial index exposes one latest-complete-week entry. Retaining historical
+weeks is not permitted until their subtype/parent construction bases are made
+immutable or version-addressable. An older exact deck must never be compared
+silently with a newer rolling four-week average. P8-07 reviews whether the
+production UI requires that additional historical-base contract.
+
 ---
 
 ## 17. Tabletop per-event outputs

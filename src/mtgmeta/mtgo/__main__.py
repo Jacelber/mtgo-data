@@ -9,7 +9,7 @@ import sys
 from mtgmeta.config import DisabledFormatError, FormatConfigError, load_format_registry
 
 from . import DEFAULT_REGISTRY_PATH
-from . import fetch, matchup, pickup, stats
+from . import fetch, matchup, pickup, stats, top8
 
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3]
@@ -52,6 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
     match_parser.add_argument("--force", action="store_true", help="replace existing event files")
 
     commands.add_parser("build-statistics", help="build rolling MTGO statistics")
+    commands.add_parser("build-top8", help="build latest complete-week MTGO Top 8 data")
     commands.add_parser("build-matchups", help="build Videre matchup statistics")
 
     pickup_parser = commands.add_parser("pickup", help="manage Weekly Pickup")
@@ -162,6 +163,15 @@ def _run_matchups(args: argparse.Namespace, root: Path, registry: Path) -> int:
     return 0
 
 
+def _run_top8(args: argparse.Namespace, root: Path, registry: Path) -> int:
+    written = top8.build_all_top8(root, args.format_id, registry_path=registry)
+    print(
+        f"MTGO Top 8: format={args.format_id} "
+        f"output={written['index.json'].parent}"
+    )
+    return 0
+
+
 def _run_pickup(args: argparse.Namespace, root: Path, registry: Path) -> int:
     if args.pickup_command == "candidates":
         result = pickup.generate_candidates(
@@ -240,6 +250,7 @@ RUNNERS = {
     "refresh-event": _run_refresh_event,
     "fetch-matches": _run_fetch_matches,
     "build-statistics": _run_statistics,
+    "build-top8": _run_top8,
     "build-matchups": _run_matchups,
     "pickup": _run_pickup,
     "generate-metadata": _run_metadata,
@@ -250,6 +261,7 @@ RUNNERS = {
 COMMAND_CAPABILITIES = {
     "fetch-matches": "matchup_statistics",
     "build-statistics": "event_statistics",
+    "build-top8": "weekly_top8",
     "build-matchups": "matchup_statistics",
     "pickup": "weekly_pickup",
     "generate-metadata": "metadata_generation",
@@ -284,6 +296,7 @@ def main(argv: list[str] | None = None) -> int:
         matchup.MTGOMatchupError,
         pickup.MTGOPickupError,
         stats.MTGOStatisticsError,
+        top8.MTGOTop8Error,
         OSError,
         ValueError,
     ) as exc:

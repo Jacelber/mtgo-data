@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-hotfix-rolling-contract-tests"
-  working_branch_status: "p8_hotfix_rolling_contract_tests_owner_accepted_publication_authorized"
+  current_working_branch: "codex/p8-05-weekly-top8"
+  working_branch_status: "p8_05_publication_resumed_after_hotfix"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-27"
+  last_updated: "2026-07-28"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_hotfix_rolling_contract_tests_owner_accepted_publication_authorized"
+  status: "p8_05_publication_resumed_after_hotfix"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4097,7 +4097,7 @@ phase_7_result:
 phase_8_plan:
   id: "P8-PLANNING"
   name: "Format-first front-end and supporting data plan"
-  status: "p8_04_owner_accepted_publication_authorized"
+  status: "p8_05_publication_blocked_by_master_baseline"
   owner_approved: true
   owner_approved_on: "2026-07-25"
   implementation_authorized: false
@@ -4239,7 +4239,79 @@ phase_8_plan:
         merge_commit: "4291b8dc4505ad3f08b2a95957eee7ef558cc6a4"
     - id: "P8-05"
       name: "Weekly MTGO Top 8 backend product"
-      status: "not_started"
+      status: "completed_owner_accepted_publication_authorized"
+      branch: "codex/p8-05-weekly-top8"
+      base_commit: "c2a5cf24303172a83cc561fd8bfe9ca446c9aad4"
+      authorized_on: "2026-07-28"
+      deliverable: "docs/audits/P8-05.md"
+      production_change: true
+      workflow_changed: true
+      generated_data_changed: true
+      front_end_changed: false
+      classification_rules_changed: false
+      statistical_formula_changed: false
+      implementation:
+        command: "python -B -m mtgmeta.mtgo --format <standard-or-modern> build-top8"
+        capability: "weekly_top8"
+        registry_schema_version: "1.2.0"
+        index_schema: "schemas/mtgo-top8-index.schema.json"
+        week_schema: "schemas/mtgo-top8-week.schema.json"
+        metadata_field: "top8_catalog"
+        manifest_documents_before: 52
+        manifest_documents_after: 56
+        latest_complete_week_only: true
+        historical_base_contract_deferred_to: "P8-07 review or separately authorized contract task"
+      real_data:
+        week_start: "2026-07-20"
+        week_end: "2026-07-26"
+        standard:
+          events: 8
+          placements_available: 64
+          placements_missing: 0
+        modern:
+          events: 13
+          placements_available: 104
+          placements_missing: 0
+          subtype_placements: 42
+        exact_rank_slots_per_event: 8
+        comparison_identities_resolve: true
+      validation:
+        focused_tests_passed: 72
+        pre_rebase_full_pytest_passed: 537
+        post_rebase_full_pytest_passed: 535
+        post_rebase_full_pytest_failed: 2
+        inherited_master_failures_reproduced_on_origin_master: true
+        post_hotfix_full_pytest_passed: 536
+        post_hotfix_full_pytest_failed: 0
+        repository_validation_passed: true
+        standard_rule_validation_passed: true
+        modern_rule_validation_passed: true
+        schema_documents_validated: 56
+        diff_check_passed: true
+      publication_blocker:
+        status: "resolved"
+        introduced_by_master_commit: "400a2c76006a3abea31631a86b1320ce317b5bc5"
+        reason: "The daily production data commit changed rolling Standard outputs without updating or isolating two frozen compatibility fixtures."
+        failing_tests:
+          - "tests/test_mtgo_matchup.py::test_standard_hierarchical_migration_preserves_every_legacy_parent_cell"
+          - "tests/test_mtgo_subtype_statistics.py::test_committed_parent_outputs_remain_phase6_compatible"
+        p8_05_specific_tests_passed: true
+        separate_hotfix_authorized: true
+        resolution:
+          task: "P8-HOTFIX-ROLLING-CONTRACT-TESTS"
+          pull_request: 115
+          implementation_commit: "53ec3db1"
+          merge_commit: "bc08063a4fd1e1cbc4bfb2160e895a880a8fcfb1"
+          status: "merged"
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-28"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-28"
+      workflow_dispatch_authorized: false
+      local_commit: null
+      pull_request: 114
+      pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/114"
+      merge_commit: null
     - id: "P8-06"
       name: "MTGO completeness backend product"
       status: "not_started"
@@ -4351,7 +4423,7 @@ phase_8_plan:
         merged_on: "2026-07-28"
     - id: "P8-REPAIR-MTGO-EVENTS-12847150-12844304"
       name: "Repair retained MTGO events and activate strict statistical consumption"
-      status: "completed_owner_accepted_publication_authorized"
+      status: "published"
       authorized_on: "2026-07-28"
       required_base: "merged P8-HOTFIX-MTGO-EVENT-COMPLETENESS"
       branch: "codex/p8-repair-mtgo-events-12847150-12844304"
@@ -4427,18 +4499,20 @@ phase_8_plan:
         schema_documents_validated: 52
         production_candidate_changes: 13
         production_candidate_failures: 0
-      local_commit: null
-      pull_request: null
-      merge_commit: null
+      publication:
+        local_commit: "0a952d794db21ed5be53780cb6cea338bdd9b53a"
+        pull_request: 113
+        pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/113"
+        merge_commit: "c2a5cf24303172a83cc561fd8bfe9ca446c9aad4"
+        merged_on: "2026-07-28"
     - id: "P8-HOTFIX-ROLLING-CONTRACT-TESTS"
       name: "Isolate historical migration contracts from rolling production data"
-      status: "completed_owner_accepted_publication_authorized"
+      status: "published"
       branch: "codex/p8-hotfix-rolling-contract-tests"
       base_commit: "400a2c76006a3abea31631a86b1320ce317b5bc5"
       authorized_on: "2026-07-28"
       deliverable: "docs/audits/P8-HOTFIX-ROLLING-CONTRACT-TESTS.md"
       cause:
-        production_commit: "400a2c76006a3abea31631a86b1320ce317b5bc5"
         rolling_output_changed_normally: true
         historical_contracts_depended_on_rolling_output: true
         p8_05_caused_failure: false
@@ -4448,38 +4522,54 @@ phase_8_plan:
         statistical_formula_changed: false
         rolling_hashes_refreshed: false
         immutable_synthetic_contracts_added: true
-        standard_legacy_aliases_match_parent_rollup: true
-        parent_statistics_unchanged_by_subtypes: true
-        parent_construction_unchanged_by_subtypes: true
       validation:
         focused_tests_passed: 40
         full_pytest_passed: 516
-        diff_check_passed: true
-      owner_acceptance: "accepted"
-      owner_accepted_on: "2026-07-28"
-      remote_publication_authorized: true
-      remote_publication_authorized_on: "2026-07-28"
-      local_commit: null
-      pull_request: null
-      merge_commit: null
+        remote_checks_passed: true
+      publication:
+        local_commit: "53ec3db1"
+        pull_request: 115
+        pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/115"
+        merge_commit: "bc08063a4fd1e1cbc4bfb2160e895a880a8fcfb1"
+        merged_on: "2026-07-28"
 
 next_approved_task:
-  id: "P8-HOTFIX-ROLLING-CONTRACT-TESTS"
-  name: "Isolate historical migration contracts from rolling production data"
+  id: "P8-05"
+  name: "Weekly MTGO Top 8 backend product"
   target_paths:
-    - "tests/test_mtgo_matchup.py"
-    - "tests/test_mtgo_subtype_statistics.py"
+    - "src/mtgmeta/mtgo/top8.py"
+    - "src/mtgmeta/mtgo/__main__.py"
+    - "src/mtgmeta/mtgo/pickup.py"
+    - "configs/formats.yaml"
+    - "schemas/formats.schema.json"
+    - "schemas/mtgo-top8-index.schema.json"
+    - "schemas/mtgo-top8-week.schema.json"
+    - "schemas/mtgo-meta.schema.json"
+    - "schemas/manifest.json"
+    - ".github/workflows/update.yml"
+    - "validate_production_candidate.py"
+    - "tests/test_mtgo_top8.py"
+    - "tests/test_mtgo_cli.py"
+    - "tests/test_production_candidate_validation.py"
+    - "tests/test_production_workflow.py"
+    - "stats/standard/mtgo/top8/"
+    - "stats/modern/mtgo/top8/"
+    - "stats/standard/mtgo/meta.json"
+    - "stats/modern/mtgo/meta.json"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
+    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P8-HOTFIX-ROLLING-CONTRACT-TESTS.md"
-  production_change: false
+    - "docs/audits/P8-05.md"
+  production_change: true
   requires_user_confirmation: true
   authorization_status: "owner_accepted_publication_authorized"
   local_execution_authorized: true
   local_execution_authorized_on: "2026-07-28"
   remote_publication_authorized: true
   remote_publication_authorized_on: "2026-07-28"
-  planning_status: "p8_hotfix_rolling_contract_tests_owner_accepted_publication_authorized"
+  planning_status: "p8_05_publication_resumed_after_hotfix"
 
 governance_baseline:
   status: "active_on_master"
