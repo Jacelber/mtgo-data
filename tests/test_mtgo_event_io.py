@@ -37,6 +37,7 @@ from mtgmeta.mtgo.fetch import (
     load_fetched,
     mark_fetched,
     parse_event_link,
+    refresh_existing_event,
 )
 from mtgmeta.mtgo.normalize import classify_event, load_rules_for_format, normalize_event
 
@@ -446,6 +447,58 @@ def test_standard_fetch_uses_registry_path_and_normalizes_before_storage(tmp_pat
     assert destination == tmp_path / "data" / "standard" / "Standard_Challenge_32_12345.json"
     assert json.loads(destination.read_text(encoding="utf-8")) == expected_batch_event()
     assert len(calls) == 1
+
+
+def test_controlled_refresh_replaces_only_matching_existing_event(tmp_path):
+    existing = expected_batch_event()
+    existing["players"][1]["swiss_score"] = "12"
+    existing["players"][1]["swiss_wins"] = 4
+    destination = tmp_path / "data" / "standard" / "Standard_Challenge_32_12345.json"
+    destination.parent.mkdir(parents=True)
+    destination.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    refreshed = refresh_existing_event(
+        tmp_path,
+        "standard",
+        "https://www.mtgo.com/decklist/standard-challenge-32-2026-07-2012345",
+        registry_path=REGISTRY,
+        request_get=lambda *_args, **_kwargs: Response(embedded_html()),
+        sleep=lambda _seconds: None,
+    )
+
+    assert refreshed == destination
+    assert json.loads(destination.read_text(encoding="utf-8")) == expected_batch_event()
+    assert b"\r\n" not in destination.read_bytes()
+    assert not (tmp_path / "fetched.txt").exists()
+    assert not list(destination.parent.glob("*.tmp"))
+
+
+def test_controlled_refresh_preserves_original_when_identity_or_placement_changes(tmp_path):
+    destination = tmp_path / "data" / "standard" / "Standard_Challenge_32_12345.json"
+    destination.parent.mkdir(parents=True)
+    destination.write_text(
+        json.dumps(expected_batch_event(), ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    original = destination.read_bytes()
+    changed = raw_event()
+    changed["final_rank"] = [
+        changed["final_rank"][0],
+        {**changed["final_rank"][1], "rank": 3},
+    ]
+
+    with pytest.raises(MTGOStorageError, match="final ranks changed"):
+        refresh_existing_event(
+            tmp_path,
+            "standard",
+            "https://www.mtgo.com/decklist/standard-challenge-32-2026-07-2012345",
+            registry_path=REGISTRY,
+            request_get=lambda *_args, **_kwargs: Response(embedded_html(changed)),
+            sleep=lambda _seconds: None,
+        )
+
+    assert destination.read_bytes() == original
+    assert not list(destination.parent.glob("*.tmp"))
 
 
 def test_format_aware_month_fetch_preserves_playoff_filter_and_ledger(tmp_path):

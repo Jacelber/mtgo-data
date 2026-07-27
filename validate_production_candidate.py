@@ -10,7 +10,7 @@ import os
 from pathlib import Path, PurePosixPath
 import re
 import subprocess
-from typing import Any
+from typing import Any, Iterable
 
 import yaml
 
@@ -277,6 +277,26 @@ def _validate_match_document(path: str, value: Any) -> list[str]:
     return failures
 
 
+def validate_retained_event_archives(
+    root: Path,
+    collection_formats: Iterable[str],
+) -> list[str]:
+    failures = []
+    for format_id in collection_formats:
+        directory = root / "data" / format_id
+        if not directory.is_dir():
+            continue
+        for path in sorted(directory.glob("*.json")):
+            relative = path.relative_to(root).as_posix()
+            try:
+                value = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+                failures.append(f"{relative}: cannot parse retained event: {exc}")
+                continue
+            failures.extend(_validate_event_document(relative, value))
+    return sorted(set(failures))
+
+
 def _validate_changed_document(root: Path, change: Change) -> list[str]:
     path = root / PurePosixPath(change.path)
     if path.is_symlink():
@@ -316,7 +336,7 @@ def validate_candidate(
 ) -> tuple[dict[str, Any], list[str]]:
     collection_formats, product_formats = _configured_formats(root)
     current = snapshot_state(root)
-    failures: list[str] = []
+    failures = validate_retained_event_archives(root, collection_formats)
     if baseline.get("schema_version") != BASELINE_SCHEMA_VERSION:
         failures.append("baseline snapshot has an unsupported schema_version")
     baseline_events = baseline.get("event_files")

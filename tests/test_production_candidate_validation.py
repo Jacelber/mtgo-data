@@ -12,6 +12,7 @@ from validate_production_candidate import (
     Change,
     collect_changes,
     snapshot_state,
+    validate_retained_event_archives,
     validate_candidate,
 )
 
@@ -159,6 +160,29 @@ def test_candidate_rejects_duplicate_login_and_missing_placement(tmp_path):
     assert any(".loginid duplicates" in item for item in failures)
     assert any(".final_rank must be a positive integer" in item for item in failures)
     assert any("retained event must have inplayoffs=1" in item for item in failures)
+
+
+def test_retained_archive_audit_checks_unchanged_event_files(tmp_path):
+    root = make_candidate_root(tmp_path)
+    valid_path = root / "data" / "standard" / "valid.json"
+    valid_path.write_text(json.dumps(event_document()), encoding="utf-8")
+    invalid = event_document("modern")
+    invalid["players"][0]["swiss_rank"] = None
+    invalid_path = root / "data" / "modern" / "invalid.json"
+    invalid_path.write_text(json.dumps(invalid), encoding="utf-8")
+
+    failures = validate_retained_event_archives(root, FORMATS)
+
+    assert not any("data/standard/valid.json" in item for item in failures)
+    assert any(
+        "data/modern/invalid.json" in item
+        and "swiss_rank must be a positive integer" in item
+        for item in failures
+    )
+
+
+def test_committed_retained_event_archives_have_no_semantic_exceptions():
+    assert validate_retained_event_archives(ROOT, FORMATS) == []
 
 
 def test_candidate_blocks_deletion_cross_source_write_and_malformed_json(tmp_path):

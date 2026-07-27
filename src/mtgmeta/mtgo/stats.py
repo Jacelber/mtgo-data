@@ -63,6 +63,16 @@ def to_int(value, default=0):
         return default
 
 
+def _is_valid_stat_integer(value: Any, *, minimum: int) -> bool:
+    if isinstance(value, bool) or value is None:
+        return False
+    try:
+        parsed = int(str(value).strip())
+    except (TypeError, ValueError):
+        return False
+    return parsed >= minimum
+
+
 def rounds_from_player_count(n):
     """按 MTGO 官方人数-轮数对照表，用全场报名人数推断瑞士轮数。"""
     table = [(8, 3), (16, 4), (32, 5), (64, 6),
@@ -153,6 +163,19 @@ def process_event(
     description = event.get("description", "?")
     records = []
     for player in event.get("players", []):
+        player_label = player.get("loginid") or player.get("player") or player.get("name") or "?"
+        raw_swiss_score = player.get("swiss_score")
+        if not _is_valid_stat_integer(raw_swiss_score, minimum=0):
+            raise MTGOStatisticsError(
+                f"event {event.get('event_id', '?')} player {player_label!r} "
+                "has missing or invalid swiss_score"
+            )
+        raw_final_rank = player.get("final_rank")
+        if not _is_valid_stat_integer(raw_final_rank, minimum=1):
+            raise MTGOStatisticsError(
+                f"event {event.get('event_id', '?')} player {player_label!r} "
+                "has missing or invalid final_rank"
+            )
         if classifier is None:
             archetype_id, archetype_name, subtype_id, subtype_name = _classify_identity(
                 player,
@@ -165,8 +188,8 @@ def process_event(
             subtype_name = None
         arch = archetype_name or "Unknown"
         arch_id = archetype_id or "unknown"
-        swiss_score = to_int(player.get("swiss_score"))
-        final_rank = to_int(player.get("final_rank"), default=9999)
+        swiss_score = to_int(raw_swiss_score)
+        final_rank = to_int(raw_final_rank)
         records.append({
             "archetype": arch,
             "archetype_id": arch_id,

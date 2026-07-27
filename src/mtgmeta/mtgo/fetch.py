@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 import re
+import tempfile
 import time
 from typing import Any, Callable, Iterable
 from urllib.parse import urlparse
@@ -486,6 +487,102 @@ def fetch_and_store_event(
     return save_event(clean, context.paths["events"])
 
 
+def _player_final_ranks(event: dict[str, Any]) -> dict[str | int, int]:
+    players = event.get("players")
+    if not isinstance(players, list) or not players:
+        raise MTGOStorageError("retained event players must be a non-empty list")
+    ranks = {}
+    for index, player in enumerate(players):
+        if not isinstance(player, dict):
+            raise MTGOStorageError(f"retained event players[{index}] must be an object")
+        login_id = player.get("loginid")
+        if (
+            isinstance(login_id, bool)
+            or not isinstance(login_id, (str, int))
+            or not str(login_id).strip()
+        ):
+            raise MTGOStorageError(f"retained event players[{index}] has an invalid loginid")
+        if login_id in ranks:
+            raise MTGOStorageError(f"retained event has duplicate loginid {login_id!r}")
+        final_rank = player.get("final_rank")
+        if not _is_int_at_least(final_rank, 1):
+            raise MTGOStorageError(
+                f"retained event player {login_id!r} has an invalid final_rank"
+            )
+        ranks[login_id] = int(str(final_rank).strip())
+    return ranks
+
+
+def refresh_existing_event(
+    repository_root: str | Path,
+    format_id: str,
+    url: str,
+    *,
+    registry_path: str | Path | None = None,
+    request_get: Callable[..., Any] | None = None,
+    sleep: Callable[[float], None] | None = None,
+) -> Path:
+    """Atomically refresh one retained event after stable-identity verification."""
+
+    context = load_mtgo_event_collection_context(
+        repository_root,
+        format_id,
+        registry_path=registry_path,
+    )
+    link_format, _ = parse_event_link(url, (format_id,))
+    if link_format != format_id:
+        raise MTGOFetchError(f"event URL does not identify requested format {format_id!r}")
+    clean = normalize_event(
+        download_event_data(url, request_get=request_get, sleep=sleep),
+        include_inplayoffs=True,
+    )
+    if str(clean.get("inplayoffs")) != "1":
+        raise MTGOStorageError("controlled refresh requires a playoff event")
+    event_id = str(clean.get("event_id", "")).strip()
+    if not event_id or not event_id.isdigit():
+        raise MTGOStorageError("controlled refresh requires a numeric event_id")
+    matches = sorted(context.paths["events"].glob(f"*_{event_id}.json"))
+    if len(matches) != 1:
+        raise MTGOStorageError(
+            f"controlled refresh requires exactly one retained event {event_id}; "
+            f"found {len(matches)}"
+        )
+    destination = matches[0]
+    try:
+        retained = json.loads(destination.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise MTGOStorageError(f"cannot read retained event {destination.name}: {exc}") from exc
+    if str(retained.get("event_id")) != event_id:
+        raise MTGOStorageError("retained event_id does not match refreshed event")
+    retained_format = str(retained.get("format", "")).lower().removeprefix("c")
+    refreshed_format = str(clean.get("format", "")).lower().removeprefix("c")
+    if retained_format != format_id or refreshed_format != format_id:
+        raise MTGOStorageError("retained or refreshed event format does not match request")
+    retained_ranks = _player_final_ranks(retained)
+    refreshed_ranks = _player_final_ranks(clean)
+    if set(retained_ranks) != set(refreshed_ranks):
+        raise MTGOStorageError("retained event player identities changed")
+    if retained_ranks != refreshed_ranks:
+        raise MTGOStorageError("retained event final ranks changed")
+
+    payload = json.dumps(clean, ensure_ascii=False, indent=2).encode("utf-8")
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            dir=destination.parent,
+            prefix=f".{destination.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as handle:
+            handle.write(payload)
+            temporary_path = Path(handle.name)
+        temporary_path.replace(destination)
+    finally:
+        if temporary_path is not None and temporary_path.exists():
+            temporary_path.unlink()
+    return destination
+
+
 __all__ = [
     "DEFAULT_HEADERS",
     "DECKLIST_MARKER",
@@ -506,5 +603,6 @@ __all__ = [
     "mark_fetched",
     "parse_event_link",
     "recent_months",
+    "refresh_existing_event",
     "save_event",
 ]

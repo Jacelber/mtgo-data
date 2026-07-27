@@ -414,6 +414,15 @@ Duplicate source player IDs, invalid collection types, or invalid rank/score
 values are parser failures. Non-playoff events remain eligible for explicit
 exclusion without requiring playoff-only standings and placement collections.
 
+The explicit `refresh-event` command is the controlled repair path for an
+already retained playoff event. It is not part of scheduled production
+collection. The command downloads and validates the current official payload,
+then requires exactly one existing archive with the same numeric event ID,
+requested format, player identity set, and player-to-final-rank mapping. Only
+after all invariants pass may it atomically replace that archive through a
+same-directory temporary file. It does not add, remove, or rewrite a fetched
+ledger entry. Any mismatch leaves the original archive byte-for-byte intact.
+
 ### 5.2 `normalize.py`
 
 Responsibilities:
@@ -429,6 +438,8 @@ Responsibilities:
 Responsibilities:
 
 - format-parameterized MTGO statistics;
+- reject retained players without a non-negative integer Swiss score or
+  positive integer final rank;
 - time-range aggregation;
 - latest-complete-week logic;
 - high-score statistics;

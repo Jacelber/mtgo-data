@@ -1776,13 +1776,18 @@ Temporarily absent records or values use the bounded retry and publication
 grace policy; invalid types, values, or duplicate identities are structural
 failures.
 
-This admission rule prevents new unsupported archives. It does not reinterpret
-the two known retained legacy defects (`12847150` and `12844304`). Until their
-separately controlled source refresh is complete, existing production
-statistics retain their compatibility behavior. The repair task must remove
-both retained defects before activating fail-closed statistical consumption;
-missing Swiss evidence must not continue to be coerced to zero after that
-migration.
+This admission rule prevents new unsupported archives. The two known retained
+legacy defects (`12847150` and `12844304`) were repaired from validated official
+source payloads in `P8-REPAIR-MTGO-EVENTS-12847150-12844304`. The repair
+preserved event identity, format, player identities, final ranks, and deck
+contents while restoring the missing Swiss evidence.
+
+Statistical consumption is now fail closed. Every retained player consumed by
+the MTGO statistics generator must have a non-negative integer Swiss score and
+a positive integer final rank. Missing or invalid evidence is an error and must
+not be coerced to zero or a fallback placement. A full retained-archive audit
+must report zero semantic exceptions before affected statistics are generated
+or published.
 
 The output must retain:
 

@@ -1,11 +1,14 @@
 # P8 MTGO Event Semantic Completeness Hotfix
 
-Status: `completed_owner_accepted_publication_authorized`
+Status: `published`
 Task type: focused production-ingestion guard
 Base: `4dcb8d19f2b8e3a2f2182a9dbd4d0e970918bbf5` (`master`)
 Branch: `codex/p8-hotfix-mtgo-event-completeness`
 Date: 2026-07-27
 Owner accepted: 2026-07-28
+Implementation commit: `35407874a6f23524806f10d967ad437e80322e66`
+Pull request: [#112](https://github.com/Jacelber/mtgo-data/pull/112)
+Merge commit: `444a9da3a66e1f7ba6c256b47d3a4948e120a0c3`
 
 ## Purpose
 
@@ -110,9 +113,10 @@ that both audited events satisfy the new source contract:
 No response body, normalized event, identity data, or generated output from
 the live check was retained.
 
-## Stop point
+## Publication
 
 The owner accepted this hotfix and authorized its commit, push, PR, and merge
-on 2026-07-28. The same instruction separately authorizes local execution of
-the second repair task after this hotfix is merged. Production workflow
-execution and remote publication of the repair task remain unauthorized.
+on 2026-07-28. Pull request #112 passed its remote checks and was merged the
+same day. The same instruction separately authorized local execution of the
+second repair task after this hotfix merged. Production workflow execution and
+remote publication of the repair task remain unauthorized.
