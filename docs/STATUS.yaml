@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-ui-redesign-planning"
-  working_branch_status: "phase_8_plan_local"
+  current_working_branch: "codex/p8-02-ui-prototypes"
+  working_branch_status: "p8_02_owner_accepted_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-25"
+  last_updated: "2026-07-27"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -57,8 +57,8 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "planning_approved_implementation_not_started"
-  started_on: null
+  status: "p8_02_owner_accepted"
+  started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
   objective: "Approve the final format-first UI locally, implement only its missing backend contracts, then deliver separate MTGO and Tabletop Major Events front ends."
@@ -4097,7 +4097,7 @@ phase_7_result:
 phase_8_plan:
   id: "P8-PLANNING"
   name: "Format-first front-end and supporting data plan"
-  status: "owner_approved_local_documentation"
+  status: "p8_02_owner_accepted"
   owner_approved: true
   owner_approved_on: "2026-07-25"
   implementation_authorized: false
@@ -4105,11 +4105,13 @@ phase_8_plan:
   remote_publication_authorized: false
   plan: "docs/audits/P8-FRONTEND-PLANNING.md"
   decision: "DEC-051"
+  win_rate_decision: "DEC-053"
   required_order:
     - "Audit the current UI and public-data consumers."
     - "Create and review local information-architecture and interaction prototypes."
     - "Freeze the owner-approved UI and backend consumer contract."
     - "Specify and implement the missing backend data products."
+    - "Load representative real generated data into the review UI and obtain final owner acceptance."
     - "Split the shared static shell and implement the final MTGO and tabletop front ends."
     - "Run cross-product regression and real-browser acceptance."
   approved_navigation:
@@ -4134,6 +4136,7 @@ phase_8_plan:
     - "Range-specific Videre expected, available, missing, and excluded coverage."
     - "Reviewed theoretical-versus-observed MTGO high-score decklist completeness."
     - "Stable self-contained subtype display labels and shared detail references."
+    - "Direct Tabletop per-scope overall summary, event-structure, and supported-scope fields."
   design_method:
     default: "local_html_css_javascript_prototypes"
     superdesign_default_enabled: false
@@ -4148,13 +4151,45 @@ phase_8_plan:
   tasks:
     - id: "P8-01"
       name: "Current UI and public-data consumer audit"
-      status: "completed_local_awaiting_owner_acceptance"
+      status: "completed_accepted_and_published"
       authorized_on: "2026-07-25"
       audited_base: "3bb89c9e9ada4020e9ddfe353b68a9f5227cc211"
       deliverable: "docs/audits/P8-01.md"
+      owner_accepted_on: "2026-07-25"
+      publication:
+        pull_request: 105
+        merge_commit: "4e1a914da3274cf5f474cdbe12aa675e6017ad00"
     - id: "P8-02"
       name: "Local information architecture and interaction prototypes"
-      status: "not_started"
+      status: "completed_accepted_and_published"
+      branch: "codex/p8-02-ui-prototypes"
+      authorized_on: "2026-07-25"
+      audited_base: "4e1a914da3274cf5f474cdbe12aa675e6017ad00"
+      deliverable: "docs/audits/P8-02.md"
+      prototype_root: "docs/prototypes/P8-02/"
+      revised_on: "2026-07-27"
+      review_language: "zh"
+      english_copy_status: "deferred_until_owner_accepts_chinese_copy"
+      production_feature_deletion_authorized: false
+      owner_visual_acceptance: "accepted"
+      owner_accepted_on: "2026-07-27"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-27"
+      publication:
+        target: "master"
+        method: "pull_request"
+      owner_confirmed_interactions:
+        preserve_multi_event_selection: true
+        mixed_all_constructed_high_score_hidden: true
+        day2_supporting_counts_in_metric_help: true
+        real_data_final_review_required: true
+        matchup_parent_retained_when_subtypes_expand: true
+        archetype_labels_align_with_hanging_toggle: true
+        win_rate_formula: "wins_divided_by_wins_losses_and_normal_draws"
+        normal_draws_count_as_wins: false
+        primary_win_rate_scope: "all_valid_matches_including_mirrors"
+        non_mirror_win_rate_retained_as_supporting_output: true
+        matrix_diagonal_shows_real_mirror_win_rate: true
     - id: "P8-03"
       name: "Owner review and UI freeze"
       status: "not_started"
@@ -4168,7 +4203,7 @@ phase_8_plan:
       name: "MTGO completeness backend product"
       status: "not_started"
     - id: "P8-07"
-      name: "Backend consumer-readiness closeout"
+      name: "Backend consumer-readiness and real-data UI revalidation"
       status: "not_started"
     - id: "P8-08"
       name: "Shared static shell and page split"
@@ -4184,15 +4219,21 @@ phase_8_plan:
       status: "not_started"
 
 next_approved_task:
-  id: "P8-01"
-  name: "Review and accept the completed current UI and public-data consumer audit"
+  id: "P8-03"
+  name: "Review and freeze the accepted UI and backend consumer contract"
   target_paths:
-    - "docs/audits/P8-01.md"
+    - "docs/audits/P8-03.md"
+    - "docs/PROJECT_SCOPE.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/ROADMAP.md"
+    - "docs/DECISIONS.md"
+    - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "authorized_local_completed_awaiting_owner_acceptance"
+  authorization_status: "not_authorized"
   remote_publication_authorized: false
-  planning_status: "phase_8_plan_approved_p8_01_awaiting_owner_acceptance"
+  planning_status: "p8_02_accepted_and_published_p8_03_awaiting_authorization"
 
 governance_baseline:
   status: "active_on_master"
@@ -4246,7 +4287,7 @@ prohibited_next_actions:
   - "Do not re-dispatch the Melee production workflow without separate authorization."
   - "Do not use Superdesign or transmit project context to an external design service without the P8 external-design approval gate."
   - "Do not begin Phase 8 backend production changes before P8-03 owner UI acceptance."
-  - "Do not begin the final Phase 8 production front end before P8-07 backend consumer-readiness acceptance."
+  - "Do not begin the final Phase 8 production front end before P8-07 backend consumer-readiness and real-data UI acceptance."
   - "Do not replace the retained P7-02 snapshot or normalized event with a different source snapshot without explicit review."
   - "Do not begin a follow-up task without separate explicit owner authorization."
   - "Do not implement Modern classification or statistics during Phase 5."

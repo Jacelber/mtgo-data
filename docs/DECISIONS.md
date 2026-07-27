@@ -1941,3 +1941,92 @@ The owner approved this planning direction on 2026-07-25. The approval
 authorizes the documentation baseline only. P8-01 implementation, external
 design-service use, production changes, publication, workflow dispatch, and
 deployment remain separately controlled.
+
+---
+
+# DEC-052 — Revalidate the Phase 8 UI with real generated data before implementation
+
+Status: `Accepted`
+
+## Context
+
+P8-03 can approve information hierarchy, statistical meaning, navigation, and
+representative component states before the missing backend products exist.
+However, some final UI decisions depend on real payload characteristics such as
+row counts, label lengths, missing values, warning frequency, table density,
+deck-detail size, and narrow-screen behavior. Treating the first prototype
+approval as the last visual review would force those issues to be discovered
+after production implementation.
+
+## Decision
+
+Keep P8-03 as the initial UI and backend-consumer-contract freeze required
+before backend development. Extend P8-07 into a second mandatory owner gate.
+After the required backend products have been generated and validated against
+retained real Standard and Modern data, load representative real payloads into
+the accepted review UI and obtain final owner acceptance before P8-08 begins.
+
+The P8-07 review may revise presentation, wording, density, responsive layout,
+empty and unavailable states, and interactions. If it reveals a missing field,
+formula, denominator, provenance value, or Schema rule, stop and return to a
+separately authorized contract/backend task. Do not reconstruct the missing
+statistic in browser code.
+
+## Consequences
+
+P8-03 remains meaningful: it prevents speculative backend products and freezes
+the intended consumer contract. P8-07 prevents the final front end from being
+built against representative placeholders only. P8-08 through P8-10 cannot
+begin until the data-backed review is accepted.
+
+The owner approved this route clarification and the recommended interaction
+decisions on 2026-07-27. This decision does not authorize backend production
+changes, production front-end implementation, publication, or deployment.
+
+---
+
+# DEC-053 — Use literal all-match win rate and preserve visible mirror cells
+
+Status: `Accepted`
+
+## Context
+
+The existing statistical specification uses
+`(wins + 0.5 × normal draws) / valid matches` and prefers non-mirror archetype
+rates for comparison. During P8-02 review, the owner clarified that the visible
+label `胜率` should instead mean the literal percentage of valid matches won.
+The owner also confirmed that mirror results are meaningful: their draw
+frequency is information, and the deployed MTGO matrix already displays its
+diagonal rather than replacing it with an unavailable state.
+
+The first P8-02 prototype incorrectly returned an unavailable dash for every
+diagonal matrix cell. This was an unauthorized loss of existing behavior.
+
+## Decision
+
+The Phase 8 target consumer contract is:
+
+- `win_rate = wins / (wins + losses + normal_draws)`;
+- a normal played draw remains in the denominator and contributes zero wins;
+- the established exclusions for intentional draws, byes, no-shows, awarded
+  wins, administrative results, Draft, and primary-Swiss playoffs remain;
+- primary overview and `整体` values include mirror matches;
+- non-mirror rates remain explicit supporting output;
+- both MTGO and Tabletop matchup matrices display real diagonal mirror W-L-D,
+  win rate, confidence interval, and sample state.
+
+P8-02 may demonstrate this contract with clearly identified prototype data.
+P8-04 owns the versioned migration of statistical specifications, generators,
+Schemas, compatibility fields, fixtures, and regression tests. Production
+statistics are not reinterpreted or rewritten during P8-02.
+
+## Consequences
+
+MTGO mirror cells with no draws remain 50%. Tabletop mirror cells may be below
+50% because normal draws count as valid non-wins under the literal definition.
+That value is intentional and exposes the mirror draw frequency rather than
+hiding it.
+
+The production front end must not derive the new rate from incomplete browser
+data. P8-04 must define explicit all-match and non-mirror fields and a
+compatibility plan before any generator or production consumer changes.
