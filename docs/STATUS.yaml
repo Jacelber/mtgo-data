@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-04-data-contract"
-  working_branch_status: "p8_04_owner_accepted_publication_authorized"
+  current_working_branch: "codex/p8-hotfix-rolling-contract-tests"
+  working_branch_status: "p8_hotfix_rolling_contract_tests_owner_accepted_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_repair_mtgo_events_owner_accepted_publication_authorized"
+  status: "p8_hotfix_rolling_contract_tests_owner_accepted_publication_authorized"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4430,39 +4430,56 @@ phase_8_plan:
       local_commit: null
       pull_request: null
       merge_commit: null
+    - id: "P8-HOTFIX-ROLLING-CONTRACT-TESTS"
+      name: "Isolate historical migration contracts from rolling production data"
+      status: "completed_owner_accepted_publication_authorized"
+      branch: "codex/p8-hotfix-rolling-contract-tests"
+      base_commit: "400a2c76006a3abea31631a86b1320ce317b5bc5"
+      authorized_on: "2026-07-28"
+      deliverable: "docs/audits/P8-HOTFIX-ROLLING-CONTRACT-TESTS.md"
+      cause:
+        production_commit: "400a2c76006a3abea31631a86b1320ce317b5bc5"
+        rolling_output_changed_normally: true
+        historical_contracts_depended_on_rolling_output: true
+        p8_05_caused_failure: false
+      implementation:
+        production_code_changed: false
+        generated_data_changed: false
+        statistical_formula_changed: false
+        rolling_hashes_refreshed: false
+        immutable_synthetic_contracts_added: true
+        standard_legacy_aliases_match_parent_rollup: true
+        parent_statistics_unchanged_by_subtypes: true
+        parent_construction_unchanged_by_subtypes: true
+      validation:
+        focused_tests_passed: 40
+        full_pytest_passed: 516
+        diff_check_passed: true
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-28"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-28"
+      local_commit: null
+      pull_request: null
+      merge_commit: null
 
 next_approved_task:
-  id: "P8-REPAIR-MTGO-EVENTS-12847150-12844304"
-  name: "Repair retained MTGO events and activate strict statistical consumption"
+  id: "P8-HOTFIX-ROLLING-CONTRACT-TESTS"
+  name: "Isolate historical migration contracts from rolling production data"
   target_paths:
-    - "src/mtgmeta/mtgo/fetch.py"
-    - "src/mtgmeta/mtgo/__main__.py"
-    - "src/mtgmeta/mtgo/stats.py"
-    - "validate_production_candidate.py"
-    - "tests/test_mtgo_event_io.py"
-    - "tests/test_mtgo_statistics.py"
-    - "tests/test_production_candidate_validation.py"
-    - "data/modern/Modern_Challenge_64_12847150.json"
-    - "data/pioneer/Pioneer_Challenge_32_12844304.json"
-    - "stats/modern/mtgo/"
-    - "reports/modern/mtgo/"
-    - "tests/test_modern_statistics.py"
-    - "tests/test_mtgo_cli.py"
+    - "tests/test_mtgo_matchup.py"
     - "tests/test_mtgo_subtype_statistics.py"
-    - "tests/fixtures/mtgo/subtype_stats_parent_contract.json"
-    - "docs/STATISTICS_SPEC.md"
-    - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P8-HOTFIX-MTGO-EVENT-COMPLETENESS.md"
-    - "docs/audits/P8-REPAIR-MTGO-EVENTS-12847150-12844304.md"
-  production_change: true
+    - "docs/audits/P8-HOTFIX-ROLLING-CONTRACT-TESTS.md"
+  production_change: false
   requires_user_confirmation: true
-  authorization_status: "local_execution_authorized"
+  authorization_status: "owner_accepted_publication_authorized"
   local_execution_authorized: true
   local_execution_authorized_on: "2026-07-28"
-  remote_publication_authorized: false
-  planning_status: "p8_repair_mtgo_events_owner_accepted_publication_authorized"
+  remote_publication_authorized: true
+  remote_publication_authorized_on: "2026-07-28"
+  planning_status: "p8_hotfix_rolling_contract_tests_owner_accepted_publication_authorized"
 
 governance_baseline:
   status: "active_on_master"

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from datetime import date
-import hashlib
 import io
 import json
 from pathlib import Path
@@ -541,13 +540,19 @@ def test_hierarchical_window_exposes_parent_and_leaf_views(tmp_path):
         "A1": _identity("alpha", "Alpha", "one", "One"),
         "B": _identity("beta", "Beta"),
     }
+    modern_rules = _hierarchical_rule_set()
+    standard_rules = RuleSet(
+        modern_rules.schema_version,
+        "standard",
+        modern_rules.archetypes,
+    )
     document, stats = build_hierarchical_window(
         [(date(2026, 7, 13), "123", identities, set(identities))],
         date(2026, 7, 13),
         1,
         matches_directory=matches,
-        format_id="modern",
-        rule_set=_hierarchical_rule_set(),
+        format_id="standard",
+        rule_set=standard_rules,
     )
     assert stats["counted"] == 1
     assert document["hierarchical"] is True
@@ -556,6 +561,19 @@ def test_hierarchical_window_exposes_parent_and_leaf_views(tmp_path):
     assert document["leaf_order"] == ["alpha/one", "beta"]
     assert document["parent_matrix"]["alpha"]["beta"]["wins"] == 1
     assert document["leaf_matrix"]["alpha/one"]["beta"]["wins"] == 1
+    assert document["archetype_order"] == ["Alpha", "Beta"]
+    assert document["overall"] == {
+        "Alpha": document["parent_overall"]["alpha"],
+        "Beta": document["parent_overall"]["beta"],
+    }
+    parent_names = {"alpha": "Alpha", "beta": "Beta"}
+    assert document["matrix"] == {
+        parent_names[row_id]: {
+            parent_names[column_id]: cell
+            for column_id, cell in columns.items()
+        }
+        for row_id, columns in document["parent_matrix"].items()
+    }
     assert next(
         item for item in document["hierarchy"]["parents"] if item["id"] == "alpha"
     )["expandable"] is True
@@ -611,55 +629,6 @@ def test_hierarchical_loader_rejects_cross_format_input(tmp_path):
             repository_root=tmp_path,
             format_id="modern",
         )
-
-
-def test_standard_hierarchical_migration_preserves_every_legacy_parent_cell(tmp_path):
-    import stats_matchup
-
-    contract = json.loads(
-        (
-            ROOT
-            / "tests"
-            / "fixtures"
-            / "standard"
-            / "hierarchical_matchup_migration_contract.json"
-        ).read_text(encoding="utf-8")
-    )
-    committed_index = json.loads(
-        (ROOT / "stats" / "standard" / "mtgo" / "matchup_index.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    reference_date = date.fromisoformat(committed_index["generated"][:10])
-    written, statistics = stats_matchup.build_all_matchups(
-        today=reference_date,
-        generated_at=committed_index["generated"],
-        output_directory=tmp_path,
-    )
-    assert {weeks: values["counted"] for weeks, values in statistics.items()} == {
-        int(weeks): item["counted_matches"]
-        for weeks, item in contract["ranges"].items()
-    }
-    for filename, path in written.items():
-        if filename == "matchup_index.json":
-            continue
-        document = json.loads(path.read_text(encoding="utf-8"))
-        expected = contract["ranges"][str(document["period"]["weeks"])]
-        projection = {
-            field: document[field] for field in contract["projection"]
-        }
-        payload = json.dumps(
-            projection,
-            ensure_ascii=contract["canonical_json"]["ensure_ascii"],
-            sort_keys=contract["canonical_json"]["sort_keys"],
-            separators=tuple(contract["canonical_json"]["separators"]),
-        ).encode("utf-8")
-        assert document["period"]["start"] == expected["start"]
-        assert document["period"]["end"] == expected["end"]
-        assert len(document["archetype_order"]) == expected["archetypes"]
-        assert hashlib.sha256(payload).hexdigest() == expected["sha256"]
-        assert document["hierarchical"] is True
-        assert document["canonical_level"] == "leaf"
 
 
 @pytest.mark.committed_baseline
