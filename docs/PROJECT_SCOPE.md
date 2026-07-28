@@ -456,9 +456,13 @@ Do not introduce a mandatory front-end build system or framework unless a later 
 
 ### 9.5 Existing page split
 
-The current monolithic `index.html` must be split before major multi-format front-end expansion.
+Phase 4 already split the deployed legacy MTGO page into static HTML, CSS, and
+focused JavaScript assets. Phase 8 must not repeat that decomposition as
+throwaway work. After the owner accepted the real-data P8-07 prototype, that
+prototype became the implementation reference for the format-first front end;
+the deployed legacy page remains the regression oracle and rollback baseline.
 
-The initial target structure is:
+The production target structure remains:
 
 - `/index.html`;
 - `/melee/index.html`;
@@ -467,7 +471,17 @@ The initial target structure is:
 - `/assets/js/mtgo.js`;
 - additional focused JavaScript modules when justified.
 
-The split must preserve existing behavior, visual presentation, language behavior, data paths, and GitHub Pages deployment.
+P8-08 productionizes the accepted P8-07 behavior into a modular, parallel
+candidate with a shared shell and separate MTGO and Tabletop controllers. It
+must not replace `/index.html` or create the final `/melee/index.html`. P8-09
+connects the accepted MTGO candidate to `/index.html` after one-to-one
+regression, and P8-10 separately connects the Tabletop product to
+`/melee/index.html`.
+
+The transition must preserve approved behavior, language behavior, public data
+paths, source separation, and GitHub Pages deployment. Legacy compatibility
+assets may be retired only after the corresponding production entry point is
+accepted and verified.
 
 The Phase 8 redesign must be approved through local information-architecture
 and interaction prototypes before backend production additions or final

@@ -1626,9 +1626,15 @@ authorization. Installation or authentication alone is not authorization.
 7. `P8-07` — validate Standard/Modern backend consumer readiness against real
    retained production data, exercise the accepted UI with those payloads, and
    obtain the final pre-implementation owner review.
-8. `P8-08` — split the shared static shell while preserving current behavior.
-9. `P8-09` — implement the approved format-first MTGO production UI.
-10. `P8-10` — implement the Tabletop Major Events production UI.
+8. `P8-08` — productionize the owner-accepted P8-07 real-data prototype as a
+   modular parallel candidate with a shared shell and separate MTGO/Tabletop
+   controllers, without replacing a production entry point.
+9. `P8-09` — connect the accepted MTGO candidate to `/index.html`, verify it
+   one-to-one against the legacy regression and rollback baseline, and retire
+   compatibility assets only after acceptance.
+10. `P8-10` — connect the accepted Tabletop controller to
+    `/melee/index.html`, preserving independent catalogs, loaders, caches, and
+    product behavior.
 11. `P8-11` — complete cross-product regression, deployed-browser acceptance,
     documentation, and Phase 8 closeout.
 
@@ -1640,6 +1646,13 @@ changes after seeing representative real payloads. P8-08 must not begin until
 that review is accepted. If the P8-07 review discovers a missing or incorrect
 statistical payload, return to a separately authorized contract/backend task
 instead of reconstructing the value in browser code.
+
+The original P8-08 decomposition route was superseded on 2026-07-29 after
+P8-07 became a high-fidelity, owner-accepted real-data prototype and review
+showed that Phase 4 had already split the legacy production page. The revised
+route uses P8-07 as the implementation source and the deployed page only as a
+regression oracle and rollback baseline. P8-08 creates a parallel candidate;
+P8-09 and P8-10 retain separate production-entry authorization.
 
 P8-03 was owner-accepted on 2026-07-27. Its contract is recorded in
 `docs/audits/P8-03.md`, including the accepted English dictionary and the

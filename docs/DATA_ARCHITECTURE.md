@@ -2015,9 +2015,17 @@ Phase 8 follows this order:
 3. owner-approved UI specification;
 4. statistical and public payload contract;
 5. backend generation and Schema validation;
-6. shared static page split;
-7. final MTGO and tabletop UI implementation;
+6. productionize the owner-accepted P8-07 real-data prototype as a parallel,
+   modular static candidate;
+7. connect the MTGO and Tabletop production entry points in separate tasks;
 8. cross-product browser and regression acceptance.
+
+Phase 4 already split the legacy MTGO page. P8-08 therefore does not decompose
+that page a second time. The legacy entry remains unchanged as a regression
+oracle and rollback path while the candidate establishes the shared shell,
+catalog-driven availability, and structurally separate MTGO and Tabletop
+controllers. P8-09 alone may switch `/index.html`; P8-10 separately owns
+`/melee/index.html`.
 
 Local HTML/CSS/JavaScript prototypes are the default design method. An external
 generative design service is not part of the required architecture and may be

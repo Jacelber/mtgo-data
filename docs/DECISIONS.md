@@ -2249,3 +2249,39 @@ historical averages, and deviation without deriving them in JavaScript. The
 current deployed page remains unchanged. No older week is guessed or
 backfilled, no legacy rate field is removed, and MTGO and Tabletop data remain
 separate.
+
+---
+
+# DEC-059 — Productionize the P8-07 prototype instead of re-splitting the legacy page
+
+Status: `Accepted`
+
+## Context
+
+The original P8-08 plan was written before P8-07 grew into a high-fidelity,
+owner-accepted prototype backed by real Standard, Modern, and Tabletop data.
+Phase 4 had already split the deployed legacy page into static assets.
+Decomposing that page again would create an intermediate implementation that
+the accepted P8-07 design would immediately replace.
+
+## Decision
+
+Use P8-07 as the target implementation and behavior reference. Keep the
+deployed legacy MTGO page only as the regression oracle and rollback baseline.
+
+P8-08 creates a parallel modular production candidate with a shared shell,
+catalog-driven availability, and separate MTGO and Tabletop controllers,
+loaders, state, and caches. It does not replace `/index.html`, create the final
+`/melee/index.html`, change formulas, or change public data contracts.
+
+P8-09 separately connects the accepted MTGO candidate to `/index.html` after
+one-to-one regression. P8-10 separately connects the accepted Tabletop
+controller to `/melee/index.html`. No mandatory framework or build step is
+introduced.
+
+## Consequences
+
+P8-08 avoids a second legacy decomposition and concentrates verification on the
+accepted real-data behavior. Production entry-point changes remain isolated,
+reviewable, and independently reversible. The owner approved this revised
+P8-08 through P8-10 route on 2026-07-29.

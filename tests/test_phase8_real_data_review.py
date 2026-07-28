@@ -11,6 +11,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 PROTOTYPE = ROOT / "docs" / "prototypes" / "P8-07"
+PHASE8_ASSETS = ROOT / "assets" / "js" / "phase8"
 
 
 def _json(path: str) -> dict:
@@ -28,12 +29,15 @@ def _node(script: str, *args: str) -> dict:
     return json.loads(result.stdout)
 
 
-def test_review_entry_point_is_chinese_first_and_keeps_p8_02_immutable() -> None:
+def test_review_entry_point_is_chinese_first_and_uses_candidate_assets() -> None:
     html = (PROTOTYPE / "index.html").read_text(encoding="utf-8")
-    app = (PROTOTYPE / "app.js").read_text(encoding="utf-8")
+    app = (PHASE8_ASSETS / "app.js").read_text(encoding="utf-8")
 
     assert "P8-07 真实生产数据评审" in html
-    assert "../P8-02/styles.css" in html
+    assert "../../../assets/css/phase8-base.css" in html
+    assert "../../../assets/css/phase8-candidate.css" in html
+    assert "../../../assets/js/phase8/mtgo-controller.js" in html
+    assert "../../../assets/js/phase8/tabletop-controller.js" in html
     assert "MTGO占比统计" in app
     assert "MTGO官方数据统计" not in app
     assert '"weekly-pickup": "每周精选套牌"' in app
@@ -56,7 +60,7 @@ def test_review_entry_point_is_chinese_first_and_keeps_p8_02_immutable() -> None
     assert "activeTabletopSubtypes" in app
     assert "合并赛事：" not in app
     assert "summary-grid" not in app
-    assert 'fetchJson("stats/catalog.json")' in app
+    assert 'Runtime.catalog.fetchJson("stats/catalog.json")' in app
     assert "modernTop8Events" not in app
     assert "prototype-cut" not in app
 
@@ -108,7 +112,7 @@ def test_top8_review_uses_immutable_bases_and_explicit_unavailable_states() -> N
 def test_review_matrix_retains_parents_and_uses_literal_wins_over_matches() -> None:
     script = r"""
 const fs = require("fs");
-const review = require("./docs/prototypes/P8-07/review-data.js");
+const review = require("./assets/js/phase8/matchup-model.js");
 const source = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
 const document = review.activeMatchupDocument(source, 20);
 const collapsed = review.buildView(document, [], []);

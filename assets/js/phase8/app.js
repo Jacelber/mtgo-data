@@ -1,6 +1,9 @@
 "use strict";
 
 const ReviewData = globalThis.P8ReviewData;
+const Runtime = globalThis.P8Runtime;
+const MtgoController = globalThis.P8MtgoController;
+const TabletopController = globalThis.P8TabletopController;
 const PRODUCT_ORDER = [
   "mtgo-statistics",
   "mtgo-matchups",
@@ -32,7 +35,6 @@ const PIE_COLORS = [
   "#d5ad5b", "#e0bf78", "#625783", "#766a98", "#8b80aa",
   "#a198bc", "#3f705f", "#588876", "#73a08d", "#93b6a6",
 ];
-const cache = new Map();
 const state = {
   catalog: null,
   format: "modern",
@@ -86,29 +88,6 @@ function number(value, digits = 2) {
 function dateText(value) {
   if (!value) return "—";
   return String(value).replace("T", " ").replace(/(\.\d+)?([+-]\d\d:\d\d|Z)$/, "");
-}
-
-function basename(path) {
-  return path.split("/").pop();
-}
-
-function dirname(path) {
-  return path.split("/").slice(0, -1).join("/");
-}
-
-function joinPath(base, child) {
-  if (child.startsWith("stats/")) return child;
-  return `${base.replace(/\/$/, "")}/${child.replace(/^\//, "")}`;
-}
-
-async function fetchJson(path) {
-  if (!cache.has(path)) {
-    cache.set(path, fetch(ReviewData.publicPath(path)).then(async response => {
-      if (!response.ok) throw new Error(`${path}：HTTP ${response.status}`);
-      return response.json();
-    }));
-  }
-  return cache.get(path);
 }
 
 function formatEntry() {
@@ -415,13 +394,8 @@ function sortedArchetypes(archetypes) {
 }
 
 async function statsView() {
-  const base = `stats/${state.format}/mtgo`;
-  const [meta, range, decks, completeness] = await Promise.all([
-    fetchJson(`${base}/meta.json`),
-    fetchJson(`${base}/range_${state.statsRange}w.json`),
-    fetchJson(`${base}/decks_${state.statsRange}w.json`),
-    fetchJson(`${base}/completeness/${state.statsRange}w.json`),
-  ]);
+  const { meta, range, decks, completeness } = await MtgoController
+    .loadStatistics(state.format, state.statsRange);
   const archetypes = sortedArchetypes(range.archetypes);
   const identityNames = new Map();
   range.archetypes.forEach(parent => {
@@ -531,11 +505,8 @@ function matrixHtml(document) {
 }
 
 async function matchupView() {
-  const base = `stats/${state.format}/mtgo`;
-  const [document, completeness] = await Promise.all([
-    fetchJson(`${base}/matchup_${state.matchupRange}w.json`),
-    fetchJson(`${base}/completeness/${state.matchupRange}w.json`),
-  ]);
+  const { document, completeness } = await MtgoController
+    .loadMatchup(state.format, state.matchupRange);
   const displayDocument = ReviewData.activeMatchupDocument(document, LOW_SAMPLE_THRESHOLD);
   currentContext = { matchupDocument: displayDocument, completeness };
   const coverage = completeness.matchup_coverage;
@@ -569,14 +540,9 @@ function top8PlacementDetail() {
 
 async function top8View() {
   const indexPath = productEntry().path;
-  const index = await fetchJson(indexPath);
-  const weekEntry = index.weeks.find(item => item.file === state.top8WeekFile) || index.weeks[0];
+  const { index, weekEntry, top8, bases } = await MtgoController
+    .loadTop8(indexPath, state.top8WeekFile);
   state.top8WeekFile = weekEntry.file;
-  const base = dirname(indexPath);
-  const [top8, bases] = await Promise.all([
-    fetchJson(joinPath(base, weekEntry.file)),
-    fetchJson(joinPath(base, weekEntry.comparison_bases_file)),
-  ]);
   currentContext = { top8Index: index, top8, bases };
   return `<section class="source-note"><p>数据来源：MTGO 官网公开赛事牌表。按完整自然周列出该周收录赛事的前八名；点击子类型可查看精确牌表和同周不可变构筑基准。</p></section>
     <div class="select-row"><label for="top8-week">显示周：</label>
@@ -843,18 +809,23 @@ function tabletopMatchup(matchupDocument, scopeId) {
 
 async function tabletopView() {
   const indexPath = productEntry().path;
-  const index = await fetchJson(indexPath);
-  const eventEntry = index.events.find(item => item.event_id === state.tabletopEventId) || index.events[0];
+  const {
+    eventEntry,
+    index,
+    matchup,
+    meta,
+    mtgoDecks,
+    overview,
+    quality,
+    tabletopDecks,
+  } = await TabletopController.loadEvent(
+    indexPath,
+    state.tabletopEventId,
+    state.format,
+    MtgoController
+  );
   state.tabletopEventId = eventEntry.event_id;
   state.tabletopSelectedEvents.add(eventEntry.event_id);
-  const indexBase = dirname(indexPath);
-  const paths = ["meta", "overview", "matchup", "quality", "decks"].map(key => (
-    joinPath(indexBase, eventEntry[key])
-  ));
-  const [meta, overview, matchup, quality, tabletopDecks, mtgoDecks] = await Promise.all([
-    ...paths.map(fetchJson),
-    fetchJson(`stats/${state.format}/mtgo/decks_4w.json`),
-  ]);
   if (!overview.scope_order.includes(state.tabletopScope)) state.tabletopScope = overview.default_scope;
   const scope = overview.scopes[state.tabletopScope];
   currentContext = { tabletopIndex: index, eventEntry, meta, overview, matchup, quality, tabletopDecks, mtgoDecks };
@@ -910,10 +881,9 @@ function pickupDeck(item, key) {
 
 async function pickupView() {
   const indexPath = productEntry().path;
-  const index = await fetchJson(indexPath);
-  const week = index.weeks.find(item => item.file === state.pickupWeekFile) || index.weeks[0];
+  const { index, week, document } = await MtgoController
+    .loadPickup(indexPath, state.pickupWeekFile);
   state.pickupWeekFile = week.file;
-  const document = await fetchJson(joinPath(dirname(indexPath), week.file));
   currentContext = { pickupIndex: index, pickupDocument: document };
   const groups = [
     ["新科技", "existing_changes"],
@@ -1246,7 +1216,7 @@ function toggleSet(set, value) {
 
 async function initialize() {
   try {
-    state.catalog = await fetchJson("stats/catalog.json");
+    state.catalog = await Runtime.catalog.fetchJson("stats/catalog.json");
     const initialFormat = state.catalog.formats.find(item => item.id === state.format);
     if (!initialFormat?.products.some(item => item.id === state.product && item.available)) {
       state.product = initialFormat.default_product_id;
