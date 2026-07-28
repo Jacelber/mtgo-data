@@ -58,6 +58,8 @@ def snapshot_state(root: Path, event_id: str, format_id: str) -> dict[str, str]:
 
 
 def _allowed_path(path: str, event_id: str, format_id: str) -> bool:
+    if path == "stats/catalog.json":
+        return True
     event_file = f"{event_id}.json"
     if path.startswith(f"data_raw/melee/{event_id}/"):
         return True
@@ -86,6 +88,8 @@ def _validate_json_identity(
     if not isinstance(value, dict):
         return [f"{change.path}: must contain a JSON object"]
     failures: list[str] = []
+    if change.path == "stats/catalog.json":
+        return []
     if change.path != f"stats/{format_id}/melee/index.json":
         if value.get("event_id") != event_id:
             failures.append(f"{change.path}: event_id does not match {event_id}")

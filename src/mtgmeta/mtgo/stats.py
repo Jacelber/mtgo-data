@@ -15,6 +15,7 @@ from mtgmeta.classifier import classify_deck
 from mtgmeta.legacy_rules import LegacyArchetypeRules
 from mtgmeta.rules import RuleSet
 from public_contract import versioned
+from mtgmeta.consumer import identity_display_name
 
 from . import load_mtgo_context
 from .classification import load_mtgo_events_for_format
@@ -358,7 +359,13 @@ def aggregate(
                     },
                 )
                 child = _aggregate_item(
-                    definition,
+                    {
+                        **definition,
+                        "display_name": identity_display_name(
+                            s["name"],
+                            definition["name"],
+                        ),
+                    },
                     values,
                     total_high=total_high,
                     total_top8=total_top8,
@@ -852,6 +859,7 @@ def attach_subtype_decks(
                 "id": subtype.id,
                 "parent_id": parent.id,
                 "name": subtype.name,
+                "display_name": identity_display_name(parent.name, subtype.name),
                 **_deck_entry(
                     records_by_identity.get(identity_key, []),
                     subtype_base_pack.get(identity_key),

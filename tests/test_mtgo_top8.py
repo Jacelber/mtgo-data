@@ -150,12 +150,15 @@ def test_week_document_keeps_exact_ranks_missing_states_and_full_identity_labels
         "player": "Winner",
         "main_deck": [{"name": "Grixis Card", "qty": 4}],
         "sideboard": [{"name": "Sideboard Card", "qty": 2}],
+        "deviation": None,
+        "deviation_diff": None,
     }
     assert winner["comparison"] == {
         "identity_id": "prowess/grixis",
         "base_period": "4w",
         "base_period_end": "2026-07-26",
-        "average_deck_ref": "decks_4w.json#identity/prowess/grixis",
+        "base_status": "unavailable",
+        "average_deck_ref": "2026-W30-bases.json#identity/prowess/grixis",
     }
 
     parent = output_event["placements"][1]
@@ -255,7 +258,11 @@ def test_build_latest_week_is_deterministic_and_writes_week_catalog(tmp_path):
         generated_at="2026-07-28T12:00:00",
     )
 
-    assert set(first_written) == {"2026-W30.json", "index.json"}
+    assert set(first_written) == {
+        "2026-W30.json",
+        "2026-W30-bases.json",
+        "index.json",
+    }
     assert {
         name: path.read_bytes() for name, path in first_written.items()
     } == {
@@ -263,9 +270,11 @@ def test_build_latest_week_is_deterministic_and_writes_week_catalog(tmp_path):
     }
     catalog = json.loads((first / "index.json").read_text(encoding="utf-8"))
     assert catalog["latest_complete_week"] == "2026-07-20"
+    assert catalog["history_policy"] == "immutable_weekly_comparison_bases"
     assert catalog["weeks"] == [
         {
             "file": "2026-W30.json",
+            "comparison_bases_file": "2026-W30-bases.json",
             "start": "2026-07-20",
             "end": "2026-07-26",
             "event_count": 1,
@@ -310,7 +319,11 @@ def test_committed_latest_week_rebuild_is_byte_identical(format_id, tmp_path):
         generated_at=generated,
         output_directory=tmp_path / format_id,
     )
-    assert set(written) == {index["weeks"][0]["file"], "index.json"}
+    assert set(written) == {
+        index["weeks"][0]["file"],
+        index["weeks"][0]["comparison_bases_file"],
+        "index.json",
+    }
     for name, path in written.items():
         assert path.read_bytes() == (committed / name).read_bytes()
 
@@ -331,6 +344,16 @@ def test_committed_top8_documents_match_formal_schemas(format_id):
     assert validate_schemas.validate_instance(
         week,
         loaded["mtgo-top8-week.schema.json"],
+        registry,
+    ) == []
+    bases = json.loads(
+        (output / catalog["weeks"][0]["comparison_bases_file"]).read_text(
+            encoding="utf-8"
+        )
+    )
+    assert validate_schemas.validate_instance(
+        bases,
+        loaded["mtgo-top8-comparison-bases.schema.json"],
         registry,
     ) == []
 

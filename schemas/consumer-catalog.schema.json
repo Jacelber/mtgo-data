@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/consumer-catalog.schema.json",
+  "title": "Format-first public product availability catalog",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "generated",
+    "formats"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "consumer_catalog"},
+    "generated": {"type": "string", "minLength": 1},
+    "formats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/format"}
+    }
+  },
+  "$defs": {
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "display_name",
+        "state",
+        "default_product_id",
+        "products"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "display_name": {"type": "string", "minLength": 1},
+        "state": {"enum": ["executable", "planned", "decision_gated"]},
+        "default_product_id": {
+          "type": ["string", "null"],
+          "enum": [
+            null,
+            "mtgo-statistics",
+            "mtgo-matchups",
+            "mtgo-top8",
+            "tabletop-major-events",
+            "weekly-pickup"
+          ]
+        },
+        "products": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {"$ref": "#/$defs/product"}
+        }
+      }
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "available", "path"],
+      "properties": {
+        "id": {
+          "enum": [
+            "mtgo-statistics",
+            "mtgo-matchups",
+            "mtgo-top8",
+            "tabletop-major-events",
+            "weekly-pickup"
+          ]
+        },
+        "available": {"type": "boolean"},
+        "path": {
+          "type": ["string", "null"],
+          "pattern": "^stats/[a-z0-9]+(?:-[a-z0-9]+)*/(?:mtgo|melee)/.+\\.json$"
+        }
+      }
+    }
+  }
+}

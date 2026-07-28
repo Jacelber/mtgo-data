@@ -100,6 +100,9 @@ jobs:
           python -B -m mtgmeta.melee.publish
           --root . --format "$FORMAT" --event-id "$EVENT_ID" --execute
 
+      - name: Generate format-first consumer catalog
+        run: python -B -m mtgmeta.catalog --root .
+
       - name: Validate Melee candidate scope
         run: >-
           python -B validate_melee_candidate.py validate
@@ -119,7 +122,7 @@ jobs:
           BRANCH="data/melee-${EVENT_ID}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -- "data_raw/melee/${EVENT_ID}/" "data/${FORMAT}/melee/" "stats/${FORMAT}/melee/"
+          git add -- "data_raw/melee/${EVENT_ID}/" "data/${FORMAT}/melee/" "stats/${FORMAT}/melee/" "stats/catalog.json"
           if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"

@@ -76,11 +76,13 @@
       "additionalProperties": false,
       "required": [
         "draw_weight",
+        "literal_win_rate_method",
         "confidence_interval",
         "low_sample_threshold"
       ],
       "properties": {
         "draw_weight": {"const": 0.5},
+        "literal_win_rate_method": {"const": "wins_over_valid_matches"},
         "confidence_interval": {"const": "wilson_95"},
         "low_sample_threshold": {"type": "null"}
       }
@@ -132,11 +134,12 @@
     "leaf": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "kind", "name", "parent_id", "subtype_id"],
+      "required": ["id", "kind", "name", "display_name", "parent_id", "subtype_id"],
       "properties": {
         "id": {"$ref": "#/$defs/identity"},
         "kind": {"enum": ["archetype", "subtype", "unknown"]},
         "name": {"type": "string", "minLength": 1},
+        "display_name": {"type": "string", "minLength": 1},
         "parent_id": {"$ref": "#/$defs/identity"},
         "subtype_id": {
           "oneOf": [
@@ -176,7 +179,8 @@
         "matches",
         "win_rate",
         "confidence_interval_95",
-        "mirror"
+        "mirror",
+        "literal_record"
       ],
       "properties": {
         "wins": {"type": "integer", "minimum": 0},
@@ -189,7 +193,10 @@
         "confidence_interval_95": {
           "$ref": "melee-event-statistics-common.schema.json#/$defs/confidence_interval"
         },
-        "mirror": {"type": "boolean"}
+        "mirror": {"type": "boolean"},
+        "literal_record": {
+          "$ref": "https://jacelber.github.io/mtgo-data/schemas/phase8-public-contract.schema.json#/$defs/literalRecord"
+        }
       }
     },
     "record_map": {

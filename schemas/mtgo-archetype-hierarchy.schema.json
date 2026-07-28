@@ -59,11 +59,12 @@
     },
     "leaf": {
       "type": "object",
-      "required": ["id", "kind", "name", "parent_id", "subtype_id"],
+      "required": ["id", "kind", "name", "display_name", "parent_id", "subtype_id"],
       "properties": {
         "id": {"$ref": "#/$defs/stableId"},
         "kind": {"enum": ["archetype", "subtype"]},
         "name": {"type": "string", "minLength": 1},
+        "display_name": {"type": "string", "minLength": 1},
         "parent_id": {"$ref": "#/$defs/stableId"},
         "subtype_id": {
           "oneOf": [

@@ -1853,18 +1853,21 @@ deck in browser code.
 
 P8-05 formalizes this product as
 `stats/<format>/mtgo/top8/YYYY-Www.json`, with discovery through
-`stats/<format>/mtgo/top8/index.json`. The first producer release generates the
-latest complete week for Standard and Modern. Every available placement embeds
-the exact main deck and sideboard and carries a stable identity plus a
-`decks_4w.json` comparison reference whose `base_period_end` equals the selected
-week's Sunday. The producer does not invent a separate deviation value that was
-not defined by the P8-04 contract.
+`stats/<format>/mtgo/top8/index.json`. P8-07 extends the producer with one
+immutable `YYYY-Www-bases.json` companion for each retained weekly document.
+Every available placement embeds the exact main deck and sideboard, carries a
+stable identity, and references the companion base whose `base_period_end`
+equals the selected week's Sunday. Where the four-week minimum sample exists,
+the producer also emits deviation and card differences using the section 16.4
+formula. Where it does not, `base_status` is `unavailable` and deviation fields
+are null rather than inferred.
 
-The initial index exposes one latest-complete-week entry. Retaining historical
-weeks is not permitted until their subtype/parent construction bases are made
-immutable or version-addressable. An older exact deck must never be compared
-silently with a newer rolling four-week average. P8-07 reviews whether the
-production UI requires that additional historical-base contract.
+The catalog accumulates complete weeks from the first safely established
+historical baseline, 2026-W30. Once an index entry declares
+`immutable_weekly_comparison_bases`, regeneration must produce byte-identical
+week and base documents or fail before overwriting either file. Earlier weeks
+are not backfilled unless a separate task can reproduce and validate their
+original same-period construction inputs.
 
 ---
 
@@ -1902,6 +1905,10 @@ Includes:
 - sample sizes;
 - exclusion counts;
 - warnings.
+
+P8-07 preserves the existing draw-adjusted overview records as compatibility
+data and adds `literal_record` to each all-match and non-mirror record. The
+literal method is wins divided by wins, losses, and normal played draws.
 
 ### 17.3 Deck data
 

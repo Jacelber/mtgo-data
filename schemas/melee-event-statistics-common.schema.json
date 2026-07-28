@@ -104,13 +104,37 @@
         "confidence_interval_95": {"$ref": "#/$defs/confidence_interval"}
       }
     },
+    "target_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wins",
+        "losses",
+        "draws",
+        "matches",
+        "win_rate",
+        "confidence_interval_95",
+        "literal_record"
+      ],
+      "properties": {
+        "wins": {"type": "integer", "minimum": 0},
+        "losses": {"type": "integer", "minimum": 0},
+        "draws": {"type": "integer", "minimum": 0},
+        "matches": {"type": "integer", "minimum": 0},
+        "win_rate": {"$ref": "#/$defs/rate"},
+        "confidence_interval_95": {"$ref": "#/$defs/confidence_interval"},
+        "literal_record": {
+          "$ref": "https://jacelber.github.io/mtgo-data/schemas/phase8-public-contract.schema.json#/$defs/literalRecord"
+        }
+      }
+    },
     "match_record": {
       "type": "object",
       "additionalProperties": false,
       "required": ["all_matches", "non_mirror", "mirror_match_count"],
       "properties": {
-        "all_matches": {"$ref": "#/$defs/record"},
-        "non_mirror": {"$ref": "#/$defs/record"},
+        "all_matches": {"$ref": "#/$defs/target_record"},
+        "non_mirror": {"$ref": "#/$defs/target_record"},
         "mirror_match_count": {"type": "integer", "minimum": 0}
       }
     },
@@ -216,14 +240,15 @@
         {"$ref": "#/$defs/group_metrics"},
         {
           "type": "object",
-          "required": ["group_id", "subtype_id", "subtype_name"],
+          "required": ["group_id", "subtype_id", "subtype_name", "display_name"],
           "properties": {
             "group_id": {
               "type": "string",
               "pattern": "^subtype:[a-z0-9]+(?:-[a-z0-9]+)*/[a-z0-9]+(?:-[a-z0-9]+)*$"
             },
             "subtype_id": {"$ref": "#/$defs/id"},
-            "subtype_name": {"type": "string", "minLength": 1}
+            "subtype_name": {"type": "string", "minLength": 1},
+            "display_name": {"type": "string", "minLength": 1}
           },
           "additionalProperties": true
         }

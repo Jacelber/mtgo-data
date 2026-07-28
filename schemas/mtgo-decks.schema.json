@@ -59,11 +59,12 @@
     },
     "subtypeDeck": {
       "type": "object",
-      "required": ["id", "parent_id", "name", "best_deck", "average_deck"],
+      "required": ["id", "parent_id", "name", "display_name", "best_deck", "average_deck"],
       "properties": {
         "id": {"type": "string", "minLength": 1},
         "parent_id": {"type": "string", "minLength": 1},
         "name": {"type": "string", "minLength": 1},
+        "display_name": {"type": "string", "minLength": 1},
         "best_deck": {"oneOf": [{"$ref": "#/$defs/bestDeck"}, {"type": "null"}]},
         "average_deck": {"$ref": "#/$defs/averageDeck"}
       },

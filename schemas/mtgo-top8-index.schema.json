@@ -12,6 +12,7 @@
     "format",
     "generated",
     "latest_complete_week",
+    "history_policy",
     "weeks"
   ],
   "properties": {
@@ -21,17 +22,28 @@
     "format": {"enum": ["standard", "modern"]},
     "generated": {"type": "string", "minLength": 1},
     "latest_complete_week": {"type": "string", "format": "date"},
+    "history_policy": {"const": "immutable_weekly_comparison_bases"},
     "weeks": {
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["file", "start", "end", "event_count"],
+        "required": [
+          "file",
+          "comparison_bases_file",
+          "start",
+          "end",
+          "event_count"
+        ],
         "properties": {
           "file": {
             "type": "string",
             "pattern": "^[0-9]{4}-W[0-9]{2}\\.json$"
+          },
+          "comparison_bases_file": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-W[0-9]{2}-bases\\.json$"
           },
           "start": {"type": "string", "format": "date"},
           "end": {"type": "string", "format": "date"},

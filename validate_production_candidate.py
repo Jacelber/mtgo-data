@@ -147,6 +147,8 @@ def _allowed_path(
     parts = PurePosixPath(path).parts
     if path == "fetched.txt":
         return True
+    if path == "stats/catalog.json":
+        return True
     if len(parts) == 3 and parts[0] == "data" and parts[1] in collection_formats:
         return parts[2].endswith(".json")
     if (
@@ -167,6 +169,8 @@ def _allowed_path(
 def _area(path: str) -> str:
     if path == "fetched.txt":
         return "ledger"
+    if path == "stats/catalog.json":
+        return "statistics_catalog"
     parts = PurePosixPath(path).parts
     if (
         len(parts) >= 4
@@ -189,6 +193,8 @@ def _allowed_new_path(
     product_formats: tuple[str, ...],
 ) -> bool:
     parts = PurePosixPath(path).parts
+    if path == "stats/catalog.json":
+        return True
     if len(parts) == 3 and parts[0] == "data" and parts[1] in collection_formats:
         return parts[2].endswith(".json")
     if (
@@ -214,7 +220,7 @@ def _allowed_new_path(
         and parts[2:4] == ("mtgo", "top8")
     ):
         return parts[4] == "index.json" or bool(
-            re.fullmatch(r"\d{4}-W\d{2}\.json", parts[4])
+            re.fullmatch(r"\d{4}-W\d{2}(?:-bases)?\.json", parts[4])
         )
     if (
         len(parts) == 5

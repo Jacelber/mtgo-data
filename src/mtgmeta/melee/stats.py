@@ -15,6 +15,7 @@ import tempfile
 from typing import Any, Mapping, Sequence
 
 from ..config import RuleConfigError, load_rule_set
+from ..consumer import identity_display_name, literal_match_record
 from ..rules import RuleSet
 
 
@@ -183,11 +184,19 @@ def _match_record(
         if identity_by_participant.get(str(item["opponent_participant_id"]))
         == group_key
     }
+    all_record = _record_from_result_types(all_results)
+    non_mirror_record = _record_from_result_types(
+        [str(item["result_type"]) for item in non_mirror]
+    )
+    for record in (all_record, non_mirror_record):
+        record["literal_record"] = literal_match_record(
+            record["wins"],
+            record["losses"],
+            record["draws"],
+        )
     return {
-        "all_matches": _record_from_result_types(all_results),
-        "non_mirror": _record_from_result_types(
-            [str(item["result_type"]) for item in non_mirror]
-        ),
+        "all_matches": all_record,
+        "non_mirror": non_mirror_record,
         "mirror_match_count": len(mirror_ids),
     }
 
@@ -590,6 +599,10 @@ def _scope_documents(
                         "group_id": f"subtype:{parent_id}/{subtype.id}",
                         "subtype_id": subtype.id,
                         "subtype_name": subtype.name,
+                        "display_name": identity_display_name(
+                            parent.name,
+                            subtype.name,
+                        ),
                         **_group_metrics(
                             participant_ids=participant_ids_by_leaf.get(
                                 leaf_key, set()

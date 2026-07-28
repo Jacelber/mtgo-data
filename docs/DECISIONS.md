@@ -2211,3 +2211,41 @@ Standard/Modern completeness, labels, density, and empty states without
 inventing statistics in JavaScript. A future deferred-event ledger requires a
 separate reviewed source-status contract rather than a silent denominator
 change.
+
+---
+
+# DEC-058 — Bridge frozen Phase 8 consumers with immutable weekly Top 8 bases
+
+Status: `Accepted`
+
+## Context
+
+P8-07 exercised the frozen consumer contract against real Standard, Modern,
+and Tabletop output. Most statistical products were present, but consumers
+would still have had to reconstruct subtype labels, reinterpret Tabletop legacy
+win rates, hard-code product paths, and compare an older Top 8 deck against a
+mutable rolling construction base.
+
+## Decision
+
+Publish a generated `stats/catalog.json` containing all known formats, all five
+approved product slots, actual availability, and public entry paths. Add a
+self-contained `display_name` to subtype consumers across MTGO and Tabletop.
+Preserve every existing Tabletop draw-adjusted record and add a nested literal
+record using wins over all valid played matches, including normal draws only in
+the denominator.
+
+Retain weekly Top 8 history only with a same-week immutable
+`YYYY-Www-bases.json` companion. The catalog starts at the first safely
+reproducible week, 2026-W30, and accumulates forward. Existing immutable week
+and base bytes must reproduce exactly. Exact-deck deviation uses the existing
+four-week subtype or parent formula; insufficient samples produce an explicit
+unavailable base and null deviation.
+
+## Consequences
+
+The production front end can consume labels, rates, product availability,
+historical averages, and deviation without deriving them in JavaScript. The
+current deployed page remains unchanged. No older week is guessed or
+backfilled, no legacy rate field is removed, and MTGO and Tabletop data remain
+separate.

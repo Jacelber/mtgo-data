@@ -17,6 +17,11 @@ import urllib.request
 
 from mtgmeta.classifier import classify_deck
 from mtgmeta.config import load_rule_set
+from mtgmeta.consumer import (
+    identity_display_name,
+    literal_match_record,
+    wilson_interval as literal_wilson_interval,
+)
 from mtgmeta.rules import RuleSet
 from public_contract import versioned
 
@@ -269,24 +274,7 @@ def wilson_interval(
 ) -> dict[str, float] | None:
     """Return the literal-win Wilson interval required by the P8 contract."""
 
-    if total <= 0:
-        return None
-    proportion = wins / total
-    denominator = 1 + z * z / total
-    center = (proportion + z * z / (2 * total)) / denominator
-    margin = (
-        z
-        * (
-            proportion * (1 - proportion) / total
-            + z * z / (4 * total * total)
-        )
-        ** 0.5
-        / denominator
-    )
-    return {
-        "lower": round(max(0.0, center - margin), 6),
-        "upper": round(min(1.0, center + margin), 6),
-    }
+    return literal_wilson_interval(wins, total, z)
 
 
 def _blank_cell() -> dict[str, int]:
@@ -417,6 +405,10 @@ def build_matchup_hierarchy(rule_set: RuleSet) -> dict[str, Any]:
                         "id": f"{archetype.id}/{subtype.id}",
                         "kind": "subtype",
                         "name": subtype.name,
+                        "display_name": identity_display_name(
+                            archetype.name,
+                            subtype.name,
+                        ),
                         "parent_id": archetype.id,
                         "subtype_id": subtype.id,
                     }
@@ -427,6 +419,7 @@ def build_matchup_hierarchy(rule_set: RuleSet) -> dict[str, Any]:
                     "id": archetype.id,
                     "kind": "archetype",
                     "name": archetype.name,
+                    "display_name": archetype.name,
                     "parent_id": archetype.id,
                     "subtype_id": None,
                 }
@@ -778,16 +771,11 @@ def _emit_cell(cell: dict[str, int], is_mirror: bool) -> dict[str, Any]:
 
 
 def _literal_record(cell: dict[str, int]) -> dict[str, Any]:
-    total = cell["wins"] + cell["losses"] + cell["draws"]
-    return {
-        "wins": cell["wins"],
-        "losses": cell["losses"],
-        "draws": cell["draws"],
-        "matches": total,
-        "win_rate": round(cell["wins"] / total, 6) if total else None,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": wilson_interval(cell["wins"], total),
-    }
+    return literal_match_record(
+        cell["wins"],
+        cell["losses"],
+        cell["draws"],
+    )
 
 
 def _emit_match_records(

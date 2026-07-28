@@ -43,7 +43,7 @@
     "subtypeStatistics": {
       "type": "object",
       "required": [
-        "id", "parent_id", "name", "count", "parent_share",
+        "id", "parent_id", "name", "display_name", "count", "parent_share",
         "high_score_count", "high_score_share", "top8_count", "top8_share",
         "conversion", "avg_points_per_round", "avg_deviation"
       ],
@@ -51,6 +51,7 @@
         "id": {"type": "string", "minLength": 1},
         "parent_id": {"type": "string", "minLength": 1},
         "name": {"type": "string", "minLength": 1},
+        "display_name": {"type": "string", "minLength": 1},
         "count": {"type": "integer", "minimum": 0},
         "parent_share": {"type": "number", "minimum": 0, "maximum": 1},
         "high_score_count": {"type": "integer", "minimum": 0},

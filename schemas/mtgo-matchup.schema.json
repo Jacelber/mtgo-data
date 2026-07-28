@@ -277,6 +277,7 @@
         "id",
         "kind",
         "name",
+        "display_name",
         "parent_id",
         "subtype_id"
       ],
@@ -288,6 +289,10 @@
           "enum": ["archetype", "subtype"]
         },
         "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "display_name": {
           "type": "string",
           "minLength": 1
         },
