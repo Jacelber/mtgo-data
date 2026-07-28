@@ -149,6 +149,14 @@ def test_statistics_top8_matchups_pickup_and_metadata_dispatch(monkeypatch):
         or ({"matchup_index.json": output / "matchup_index.json"}, {1: {"counted": 7}}),
     )
     monkeypatch.setattr(
+        cli.completeness,
+        "build_all_completeness",
+        lambda root, format_id, **kwargs: captured.append(
+            ("completeness", root, format_id, kwargs)
+        )
+        or {"index.json": output / "completeness" / "index.json"},
+    )
+    monkeypatch.setattr(
         cli.pickup,
         "generate_candidates",
         lambda root, format_id, **kwargs: captured.append(("candidates", root, format_id, kwargs))
@@ -173,6 +181,7 @@ def test_statistics_top8_matchups_pickup_and_metadata_dispatch(monkeypatch):
     assert cli.main(base + ["build-statistics"]) == 0
     assert cli.main(base + ["build-top8"]) == 0
     assert cli.main(base + ["build-matchups"]) == 0
+    assert cli.main(base + ["build-completeness"]) == 0
     assert cli.main(base + ["pickup", "candidates", "--if-absent"]) == 0
     assert cli.main(base + ["generate-metadata"]) == 0
     assert cli.main(base + ["generate-hierarchy"]) == 0
@@ -180,11 +189,12 @@ def test_statistics_top8_matchups_pickup_and_metadata_dispatch(monkeypatch):
         "stats",
         "top8",
         "matchups",
+        "completeness",
         "candidates",
         "metadata",
         "hierarchy",
     ]
-    assert captured[3][3]["preserve_existing"] is True
+    assert captured[4][3]["preserve_existing"] is True
 
 
 def test_invalid_month_is_rejected_by_argparse():

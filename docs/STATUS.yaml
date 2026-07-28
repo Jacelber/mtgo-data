@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-05-weekly-top8"
-  working_branch_status: "p8_05_publication_resumed_after_hotfix"
+  current_working_branch: "codex/p8-06-mtgo-completeness"
+  working_branch_status: "p8_06_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_05_publication_resumed_after_hotfix"
+  status: "p8_06_publication_authorized"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4239,7 +4239,7 @@ phase_8_plan:
         merge_commit: "4291b8dc4505ad3f08b2a95957eee7ef558cc6a4"
     - id: "P8-05"
       name: "Weekly MTGO Top 8 backend product"
-      status: "completed_owner_accepted_publication_authorized"
+      status: "completed_published"
       branch: "codex/p8-05-weekly-top8"
       base_commit: "c2a5cf24303172a83cc561fd8bfe9ca446c9aad4"
       authorized_on: "2026-07-28"
@@ -4308,13 +4308,91 @@ phase_8_plan:
       remote_publication_authorized: true
       remote_publication_authorized_on: "2026-07-28"
       workflow_dispatch_authorized: false
-      local_commit: null
+      local_commit: "dfdee810ba6d21dfb3ea22cb150d382dbb80ffb0"
       pull_request: 114
       pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/114"
-      merge_commit: null
+      merge_commit: "8397d4ffc676042356ef7fe7703a946b0d55923f"
+      merged_on: "2026-07-28"
     - id: "P8-06"
       name: "MTGO completeness backend product"
-      status: "not_started"
+      status: "completed_owner_accepted_publication_authorized"
+      branch: "codex/p8-06-mtgo-completeness"
+      base_commit: "8397d4ffc676042356ef7fe7703a946b0d55923f"
+      authorized_on: "2026-07-28"
+      deliverable: "docs/audits/P8-06.md"
+      production_change: true
+      workflow_changed: true
+      generated_data_changed: true
+      front_end_changed: false
+      classification_rules_changed: false
+      statistical_formula_changed: true
+      authorized_scope:
+        - "Generate range-specific Videre matchup completeness."
+        - "Generate theoretical-versus-observed MTGO high-score decklist completeness."
+        - "Add literal all-match and supporting non-mirror MTGO match records while preserving legacy fields."
+        - "Publish capability, Schema, manifest, metadata, workflow, and candidate-validation contracts."
+      implementation:
+        command: "python -B -m mtgmeta.mtgo --format <standard-or-modern> build-completeness"
+        capability: "completeness_reporting"
+        registry_schema_version: "1.3.0"
+        index_schema: "schemas/mtgo-completeness-index.schema.json"
+        range_schema: "schemas/mtgo-completeness-range.schema.json"
+        metadata_field: "completeness_catalog"
+        manifest_documents_before: 56
+        manifest_documents_after: 66
+        ranges:
+          - 1
+          - 4
+          - 12
+          - 36
+        literal_cell_field: "literal_record"
+        identity_record_fields:
+          - "parent_match_records"
+          - "leaf_match_records"
+        legacy_matchup_fields_preserved: true
+        durable_videre_deferred_ledger_available: false
+        absent_archive_defaults_to_missing: true
+      real_data:
+        period_end: "2026-07-26"
+        unsupported_high_score_events: 0
+        standard:
+          1w:
+            videre_available: 7
+            videre_expected: 8
+            high_score_observed: 114
+            high_score_expected_display: 118
+          36w:
+            videre_available: 119
+            videre_expected: 132
+            high_score_observed: 2280
+            high_score_expected_display: 2725
+        modern:
+          1w:
+            videre_available: 13
+            videre_expected: 13
+            high_score_observed: 370
+            high_score_expected_display: 516
+          36w:
+            videre_available: 170
+            videre_expected: 192
+            high_score_observed: 5142
+            high_score_expected_display: 7610
+      validation:
+        initial_focused_tests_passed: 52
+        affected_tests_passed: 128
+        full_pytest_passed: 548
+        repository_validation_passed: true
+        standard_rule_validation_passed: true
+        modern_rule_validation_passed: true
+        schema_documents_validated: 66
+        deterministic_matchup_rebuild_passed: true
+        deterministic_completeness_rebuild_passed: true
+        diff_check_passed: true
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-28"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-28"
+      workflow_dispatch_authorized: false
     - id: "P8-07"
       name: "Backend consumer-readiness and real-data UI revalidation"
       status: "not_started"
@@ -4534,26 +4612,32 @@ phase_8_plan:
         merged_on: "2026-07-28"
 
 next_approved_task:
-  id: "P8-05"
-  name: "Weekly MTGO Top 8 backend product"
+  id: "P8-06"
+  name: "MTGO completeness backend product"
   target_paths:
-    - "src/mtgmeta/mtgo/top8.py"
+    - "src/mtgmeta/mtgo/completeness.py"
     - "src/mtgmeta/mtgo/__main__.py"
+    - "src/mtgmeta/mtgo/matchup.py"
     - "src/mtgmeta/mtgo/pickup.py"
     - "configs/formats.yaml"
     - "schemas/formats.schema.json"
-    - "schemas/mtgo-top8-index.schema.json"
-    - "schemas/mtgo-top8-week.schema.json"
+    - "schemas/mtgo-completeness-index.schema.json"
+    - "schemas/mtgo-completeness-range.schema.json"
+    - "schemas/mtgo-matchup.schema.json"
     - "schemas/mtgo-meta.schema.json"
     - "schemas/manifest.json"
     - ".github/workflows/update.yml"
+    - "README.md"
     - "validate_production_candidate.py"
-    - "tests/test_mtgo_top8.py"
+    - "tests/test_mtgo_completeness.py"
+    - "tests/test_mtgo_matchup.py"
     - "tests/test_mtgo_cli.py"
     - "tests/test_production_candidate_validation.py"
     - "tests/test_production_workflow.py"
-    - "stats/standard/mtgo/top8/"
-    - "stats/modern/mtgo/top8/"
+    - "stats/standard/mtgo/completeness/"
+    - "stats/modern/mtgo/completeness/"
+    - "stats/standard/mtgo/matchup_*.json"
+    - "stats/modern/mtgo/matchup_*.json"
     - "stats/standard/mtgo/meta.json"
     - "stats/modern/mtgo/meta.json"
     - "docs/STATISTICS_SPEC.md"
@@ -4561,7 +4645,7 @@ next_approved_task:
     - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P8-05.md"
+    - "docs/audits/P8-06.md"
   production_change: true
   requires_user_confirmation: true
   authorization_status: "owner_accepted_publication_authorized"
@@ -4569,7 +4653,7 @@ next_approved_task:
   local_execution_authorized_on: "2026-07-28"
   remote_publication_authorized: true
   remote_publication_authorized_on: "2026-07-28"
-  planning_status: "p8_05_publication_resumed_after_hotfix"
+  planning_status: "p8_06_publication_authorized"
 
 governance_baseline:
   status: "active_on_master"

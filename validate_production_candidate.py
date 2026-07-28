@@ -24,6 +24,7 @@ PRODUCTION_CAPABILITIES = frozenset(
         "range_statistics",
         "matchup_statistics",
         "weekly_top8",
+        "completeness_reporting",
         "weekly_pickup",
         "metadata_generation",
         "catalog_generation",
@@ -214,6 +215,15 @@ def _allowed_new_path(
     ):
         return parts[4] == "index.json" or bool(
             re.fullmatch(r"\d{4}-W\d{2}\.json", parts[4])
+        )
+    if (
+        len(parts) == 5
+        and parts[0] == "stats"
+        and parts[1] in product_formats
+        and parts[2:4] == ("mtgo", "completeness")
+    ):
+        return parts[4] == "index.json" or bool(
+            re.fullmatch(r"[1-9]\d*w\.json", parts[4])
         )
     return False
 

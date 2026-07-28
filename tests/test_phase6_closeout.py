@@ -26,6 +26,7 @@ COMPLETE_CAPABILITIES = {
     "range_statistics",
     "matchup_statistics",
     "weekly_top8",
+    "completeness_reporting",
     "weekly_pickup",
     "metadata_generation",
     "catalog_generation",

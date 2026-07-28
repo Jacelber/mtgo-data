@@ -9,7 +9,7 @@ import sys
 from mtgmeta.config import DisabledFormatError, FormatConfigError, load_format_registry
 
 from . import DEFAULT_REGISTRY_PATH
-from . import fetch, matchup, pickup, stats, top8
+from . import completeness, fetch, matchup, pickup, stats, top8
 
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3]
@@ -54,6 +54,10 @@ def build_parser() -> argparse.ArgumentParser:
     commands.add_parser("build-statistics", help="build rolling MTGO statistics")
     commands.add_parser("build-top8", help="build latest complete-week MTGO Top 8 data")
     commands.add_parser("build-matchups", help="build Videre matchup statistics")
+    commands.add_parser(
+        "build-completeness",
+        help="build range-specific MTGO source-completeness data",
+    )
 
     pickup_parser = commands.add_parser("pickup", help="manage Weekly Pickup")
     pickup_commands = pickup_parser.add_subparsers(dest="pickup_command", required=True)
@@ -172,6 +176,26 @@ def _run_top8(args: argparse.Namespace, root: Path, registry: Path) -> int:
     return 0
 
 
+def _run_completeness(
+    args: argparse.Namespace,
+    root: Path,
+    registry: Path,
+) -> int:
+    written = completeness.build_all_completeness(
+        root,
+        args.format_id,
+        registry_path=registry,
+    )
+    if not written:
+        print(f"No complete MTGO event week is available for {args.format_id}.")
+        return 0
+    print(
+        f"MTGO completeness: format={args.format_id} "
+        f"output={written['index.json'].parent}"
+    )
+    return 0
+
+
 def _run_pickup(args: argparse.Namespace, root: Path, registry: Path) -> int:
     if args.pickup_command == "candidates":
         result = pickup.generate_candidates(
@@ -251,6 +275,7 @@ RUNNERS = {
     "fetch-matches": _run_fetch_matches,
     "build-statistics": _run_statistics,
     "build-top8": _run_top8,
+    "build-completeness": _run_completeness,
     "build-matchups": _run_matchups,
     "pickup": _run_pickup,
     "generate-metadata": _run_metadata,
@@ -262,6 +287,7 @@ COMMAND_CAPABILITIES = {
     "fetch-matches": "matchup_statistics",
     "build-statistics": "event_statistics",
     "build-top8": "weekly_top8",
+    "build-completeness": "completeness_reporting",
     "build-matchups": "matchup_statistics",
     "pickup": "weekly_pickup",
     "generate-metadata": "metadata_generation",
@@ -293,6 +319,7 @@ def main(argv: list[str] | None = None) -> int:
         fetch.MTGOFetchError,
         fetch.MTGOParseError,
         fetch.MTGOStorageError,
+        completeness.MTGOCompletenessError,
         matchup.MTGOMatchupError,
         pickup.MTGOPickupError,
         stats.MTGOStatisticsError,
