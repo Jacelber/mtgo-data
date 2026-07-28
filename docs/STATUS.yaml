@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_07_bridge_published_ci_gate_4_owner_accepted_remote_publication_in_progress"
+  status: "p8_07_owner_accepted_remote_publication_authorized"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4400,14 +4400,85 @@ phase_8_plan:
       merged_on: "2026-07-28"
     - id: "P8-07"
       name: "Backend consumer-readiness and real-data UI revalidation"
-      status: "ready_to_resume_after_ci_governance_task"
-      branch: "codex/p8-07-consumer-readiness"
-      base_commit: "024c63afc390201bc4fbadfd09e033c538624270"
+      status: "owner_accepted_remote_publication_authorized"
+      branch: "codex/p8-07-real-data-review"
+      base_commit: "491f5d79c7931e429272225b12485b82eb33d178"
       authorized_on: "2026-07-28"
       deliverable: "docs/audits/P8-07.md"
       blocker:
         task: "P8-07-BACKEND-CONSUMER-BRIDGE"
         reason: "Real payloads lacked complete subtype labels, Tabletop literal rates, immutable Top 8 bases/deviation, and a global product catalog."
+        status: "resolved_published_and_production_verified"
+      review_harness: "docs/prototypes/P8-07/index.html"
+      production_front_end_changed: false
+      generated_data_changed: false
+      statistical_behavior_changed: false
+      real_data_review:
+        catalog_formats: 6
+        available_product_entries: 8
+        standard_top8_events: 8
+        standard_top8_decks: 64
+        modern_top8_events: 13
+        modern_top8_decks: 104
+        tabletop_parent_identities: 29
+        tabletop_canonical_leaves: 55
+        tabletop_retained_parent_expanded_rows: 66
+        literal_rate_method: "wins_over_valid_matches"
+        real_diagonal_cells_verified: true
+        browser_console_errors: 0
+        narrow_viewport_verified: "390x844"
+        owner_revision:
+          product_label: "MTGO占比统计"
+          visible_ranges: [1, 4, 12]
+          distribution_charts: ["high_score_share_pie", "top8_share_pie"]
+          individual_pie_segment_minimum_exclusive: 0.02
+          pie_segment_interaction: "hover_focus_or_click_shows_name_share_and_deck_count"
+          construction_difference_minimum_cards: 1
+          matchup_cell_width_px: 56
+          mtgo_low_sample_threshold: 20
+          tabletop_low_sample_threshold_in_prototype: 20
+          tabletop_backend_low_sample_threshold: null
+          unified_low_sample_threshold_status: "prototype_proposal_pending_owner_confirmation"
+          inactive_subtype_display: "omitted_in_active_range_or_scope"
+          archetype_name_toggles_matchup_expansion: true
+          matchup_row_identity_alignment: "fixed_text_edge_with_suspended_centered_toggle"
+          matchup_column_identity_alignment: "shared_bottom_baseline_with_nonoccupying_top_left_toggle"
+          matchup_column_labels_ellipsized: false
+          melee_raw_json_deck_link_displayed: false
+          recent_change_reason_copy:
+            nobase: "近四周样本不足，暂无平均构筑与变化度数据。"
+            recent: "最近一周样本不足，暂不显示近期构筑变化度。"
+            prior: "此前四周样本不足，暂不显示近期构筑变化度。"
+          tabletop_best_deck_basis:
+            - "scope_average_points_per_effective_round"
+            - "scope_constructed_points"
+            - "scope_played_wins"
+          disqualified_best_deck_candidates_excluded: true
+          production_front_end_changed: false
+      validation:
+        focused_tests_passed: 6
+        node_syntax_checks_passed: true
+        browser_acceptance_passed: true
+        browser_console_errors: 0
+        repository_validation_passed: true
+        standard_rule_validation_passed: true
+        modern_rule_validation_passed: true
+        schema_documents_validated: 69
+        full_pytest_passed: 570
+        full_pytest_seconds: 403.18
+        repository_python_checked: 119
+        repository_json_checked: 1588
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1837
+        repository_validation_status: "passed"
+        rule_validation_status: "passed"
+        git_diff_check: "passed"
+        local_environment_note: "Before the owner revision, two broad attempts used unsuitable pytest temporary roots and stopped with fixture infrastructure errors after 427 passing tests and no assertion failure. A focused tmp_path probe verified a writable independent parent before the 569-test pre-revision suite passed; the revised 570-test suite then passed from the verified independent temporary root."
+      owner_acceptance: "accepted"
+      owner_acceptance_on: "2026-07-28"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-28"
       p8_08_authorized: false
     - id: "P8-07-BACKEND-CONSUMER-BRIDGE"
       name: "Bridge frozen Phase 8 consumers with immutable weekly Top 8 bases"
@@ -4596,7 +4667,7 @@ phase_8_plan:
       gate_4_authorized: true
     - id: "CI-EFFICIENCY-GATE-4"
       name: "Use exact validated-merge admission for master confirmation"
-      status: "owner_accepted_remote_publication_in_progress"
+      status: "completed_published_and_remote_verified"
       branch: "codex/ci-gate4-master-trigger"
       base_commit: "0c09c72abba2da4e51e50be75168d08de261414c"
       owner_local_implementation_authorized: true
@@ -4647,6 +4718,25 @@ phase_8_plan:
       remote_publication_authorized_on: "2026-07-28"
       merge_authorized_after_passing_checks: true
       production_dispatch_authorized: false
+      publication:
+        pull_request: 120
+        implementation_commit: "ffcfae9fd7ad2eeba3e7c34320ce332a4d7f9f71"
+        merge_commit: "491f5d79c7931e429272225b12485b82eb33d178"
+        merged_on: "2026-07-28"
+      remote_validation:
+        pull_request_run_id: 30344264614
+        pull_request_conclusion: "success"
+        ordinary_passed: 555
+        committed_baseline_passed: 9
+        total_selected_exactly_once: 564
+        master_run_id: 30345131617
+        master_conclusion: "success"
+        admission: "exact_validated_merge"
+        static_and_pytest_shards_skipped: true
+        confirmation_and_aggregate_passed: true
+        master_run_wall_seconds_approx: 35
+        pages_run_id: 30345130308
+        pages_conclusion: "success"
     - id: "P8-08"
       name: "Shared static shell and page split"
       status: "not_started"
@@ -4863,15 +4953,13 @@ phase_8_plan:
         merged_on: "2026-07-28"
 
 next_approved_task:
-  id: "CI-EFFICIENCY-GATE-4"
-  name: "Use exact validated-merge admission for master confirmation"
+  id: "P8-07"
+  name: "Backend consumer-readiness and real-data UI revalidation"
   target_paths:
-    - ".github/workflows/ci.yml"
-    - "ci_master_admission.py"
-    - "tests/"
-    - "docs/audits/CI_EFFICIENCY_PLAN.md"
+    - "docs/prototypes/P8-07/"
+    - "tests/test_phase8_real_data_review.py"
+    - "docs/audits/P8-07.md"
     - "docs/audits/CI-MASTER-ADMISSION.md"
-    - "docs/DEVELOPMENT_WORKFLOW.md"
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
@@ -4880,7 +4968,7 @@ next_approved_task:
   local_execution_authorized_on: "2026-07-28"
   remote_publication_authorized: true
   production_dispatch_authorized: false
-  planning_status: "remote_publication_in_progress"
+  planning_status: "remote_publication_authorized"
 
 governance_baseline:
   status: "active_on_master"

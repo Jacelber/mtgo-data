@@ -98,8 +98,24 @@ Remote acceptance requires one real PR and its resulting `master` run:
 6. the lightweight confirmation and established aggregate check must pass; and
 7. Pages behavior and the production workflow must remain unchanged.
 
-Until that remote evidence exists, Gate 4 is locally validated but not remotely
-accepted.
+## Remote acceptance result
+
+Gate 4 was published through pull request 120. Its exact PR validation run
+`30344264614` passed static validation and both complementary pytest shards:
+555 ordinary tests and nine committed-baseline tests, with 564 tests selected
+exactly once and the aggregate check successful.
+
+The resulting exact two-parent merge
+`491f5d79c7931e429272225b12485b82eb33d178` triggered master run
+`30345131617`. Admission reported `exact_validated_merge`, identified pull
+request 120 and prior run `30344264614`, skipped static validation and both
+pytest shards, and passed the lightweight confirmation plus the established
+aggregate check. The run completed in approximately 35 seconds. Pages run
+`30345130308` also passed.
+
+This evidence satisfies the remote acceptance criteria. Direct pushes,
+non-exact merges, manual dispatches, and missing or ambiguous evidence continue
+to fail safe to the complete suite.
 
 ## Rollback
 
