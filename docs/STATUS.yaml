@@ -5,7 +5,7 @@ project:
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
   current_working_branch: "codex/ci-gate3-sharding"
-  working_branch_status: "ci_gate_3_local_prototype_completed_awaiting_owner_acceptance"
+  working_branch_status: "ci_gate_3_remote_validation_accepted"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_07_bridge_published_ci_gate_3_local_prototype_completed"
+  status: "p8_07_bridge_published_ci_gate_3_remote_validation_accepted"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4525,7 +4525,7 @@ phase_8_plan:
       gate_4_authorized: false
     - id: "CI-EFFICIENCY-GATE-3"
       name: "Prototype disjoint complete-suite pytest sharding"
-      status: "local_prototype_completed_awaiting_owner_acceptance"
+      status: "remote_validation_accepted"
       branch: "codex/ci-gate3-sharding"
       base_commit: "24f5575c2176dfee9455a95772a6d14c35a3f320"
       owner_local_implementation_authorized: true
@@ -4574,7 +4574,25 @@ phase_8_plan:
         rule_validation: "passed"
         schema_validation: "passed"
       focused_tests_passed: 9
-      remote_publication_authorized: false
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-28"
+      merge_authorized_after_passing_checks: true
+      remote_validation:
+        pull_request: 119
+        implementation_commit: "146e88cc2da6aace258a3ffe1660cc737ed8e901"
+        run_id: 30337562027
+        conclusion: "success"
+        total_node_ids: 556
+        ordinary_passed: 547
+        ordinary_deselected: 9
+        committed_baseline_passed: 9
+        committed_baseline_deselected: 547
+        aggregate_check: "success"
+        run_wall_seconds: 632
+        serial_pr_118_wall_seconds: 906
+        observed_saving_seconds: 274
+        minimum_required_saving_seconds: 60
+        acceptance_threshold_met: true
       gate_4_authorized: false
     - id: "P8-08"
       name: "Shared static shell and page split"
@@ -4803,12 +4821,12 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "local_prototype_completed_awaiting_owner_acceptance"
+  authorization_status: "remote_publication_and_merge_authorized"
   local_execution_authorized: true
   local_execution_authorized_on: "2026-07-28"
-  remote_publication_authorized: false
+  remote_publication_authorized: true
   production_dispatch_authorized: false
-  planning_status: "local_prototype_completed_remote_publication_not_authorized"
+  planning_status: "remote_validation_accepted_gate_3_merge_authorized"
 
 governance_baseline:
   status: "active_on_master"

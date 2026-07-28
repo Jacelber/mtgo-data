@@ -67,9 +67,9 @@ reduction of 135.67 seconds, or 28.6 percent. This exceeds the one-minute local
 prototype threshold without manual file balancing or an added dependency.
 
 Local absolute timings are not interchangeable with GitHub-hosted runner
-timings. Remote publication requires separate owner authorization, after which
-the PR and matching `master` runs must demonstrate complete shard counts and
-at least one minute of actual wall-clock improvement before Gate 3 is accepted.
+timings. Remote publication therefore requires separate owner authorization,
+complete remote shard counts, and at least one minute of actual wall-clock
+improvement before Gate 3 is accepted.
 
 ## Timing-report correction
 
@@ -105,5 +105,21 @@ of 127.66 seconds, or 30.7 percent. The focused workflow and timing tests pass,
 and repository validation passes.
 
 The local prototype therefore satisfies the partition, coverage, and projected
-improvement gates. Remote publication and GitHub-hosted timing acceptance remain
-pending separate owner authorization.
+improvement gates.
+
+## Remote acceptance
+
+The owner authorized commit, push, PR creation, and merge after successful
+checks. PR #119 run `30337562027` supplied the required GitHub-hosted evidence:
+
+- static validation passed;
+- the ordinary shard selected and passed 547 tests while deselecting 9;
+- the committed-baseline shard selected and passed 9 tests while deselecting
+  547;
+- the aggregate `Repository validation (Python 3.12)` check passed;
+- the complete run took approximately 10m32s, from 07:12:56Z to 07:23:28Z;
+- the accepted serial PR #118 baseline took 15m06s, so the observed PR
+  wall-clock reduction was approximately 4m34s.
+
+The remote reduction exceeds the one-minute acceptance threshold. Gate 3 is
+accepted for merge. Gate 4 remains closed.
