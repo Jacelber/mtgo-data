@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-completeness-index.schema.json",
+  "title": "MTGO completeness range catalog",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "format",
+    "source",
+    "generated",
+    "latest_complete_week",
+    "ranges"
+  ],
+  "properties": {
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/schemaVersion"
+    },
+    "document_type": {
+      "const": "mtgo_completeness_index"
+    },
+    "format": {
+      "enum": ["standard", "modern"]
+    },
+    "source": {
+      "const": "mtgo"
+    },
+    "generated": {
+      "type": "string",
+      "minLength": 1
+    },
+    "latest_complete_week": {
+      "type": "string",
+      "format": "date"
+    },
+    "ranges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/range"
+      }
+    }
+  },
+  "$defs": {
+    "range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "type",
+        "start",
+        "end",
+        "weeks",
+        "matchup_status",
+        "high_score_status"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*w\\.json$"
+        },
+        "type": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*w$"
+        },
+        "start": {
+          "type": "string",
+          "format": "date"
+        },
+        "end": {
+          "type": "string",
+          "format": "date"
+        },
+        "weeks": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "matchup_status": {
+          "enum": ["available", "unavailable"]
+        },
+        "high_score_status": {
+          "enum": ["available", "unavailable"]
+        }
+      }
+    }
+  }
+}

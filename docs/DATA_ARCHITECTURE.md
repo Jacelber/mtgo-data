@@ -1600,9 +1600,37 @@ This Schema is intentionally not mapped in `schemas/manifest.json`: it validates
 the migration target, not any current public file. P8-04 left the 52 existing
 manifest mappings unchanged. P8-05 introduces compatible product-specific Top
 8 Schemas and four mapped Standard/Modern documents, bringing the production
-manifest to 56 documents. P8-06 must follow the same rule: map only actual
-generated public documents and migrate consumers without reinterpreting legacy
-`win_rate` values.
+manifest to 56 documents.
+
+P8-06 adds a capability-gated completeness product:
+
+```text
+stats/<format>/mtgo/completeness/index.json
+stats/<format>/mtgo/completeness/1w.json
+stats/<format>/mtgo/completeness/4w.json
+stats/<format>/mtgo/completeness/12w.json
+stats/<format>/mtgo/completeness/36w.json
+```
+
+`schemas/mtgo-completeness-index.schema.json` validates discovery and
+`schemas/mtgo-completeness-range.schema.json` reuses the frozen P8-04
+completeness definitions. Standard and Modern contribute ten mapped documents,
+bringing the production manifest to 66 documents. MTGO metadata exposes
+`completeness_catalog`, while the previous format-global `matchup_coverage`
+block remains a compatibility diagnostic.
+
+The MTGO matchup documents remain on their existing paths. P8-06 adds a
+`literal_record` beside every legacy matrix cell and adds
+`parent_match_records` and `leaf_match_records` for all-match and non-mirror
+identity totals. The old draw-adjusted fields remain compatibility aliases;
+the browser selects the new records only by their explicit
+`wins_over_valid_matches` method.
+
+The scheduled producer order is event and match collection, range statistics,
+matchup statistics, completeness, Top 8, Pickup preparation, hierarchy,
+metadata, and diagnostics. Candidate validation admits only the reviewed
+completeness index and positive-week JSON names; arbitrary generated paths
+remain blocked.
 
 ### 12.2 Melee output
 

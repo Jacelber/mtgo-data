@@ -2167,3 +2167,47 @@ metadata, and production-candidate validation admits only the defined Top 8
 catalog and week paths for Standard and Modern. The production manifest grows
 from 52 to 56 mapped documents. P8-05 changes no fetch behavior, classifier,
 win-rate formula, Tabletop output, or deployed front end.
+
+---
+
+# DEC-057 — Publish range-specific MTGO completeness and literal match records
+
+Status: `Accepted`
+
+## Context
+
+P8-04 froze Videre range coverage, modeled high-score decklist completeness,
+and literal all-match win rates. The deployed MTGO output exposes only
+format-global archive counts and draw-adjusted percentages. The browser cannot
+derive the approved denominators or safely reinterpret those legacy values.
+The current Videre fetcher also has no durable deferred-event status ledger.
+
+## Decision
+
+Add the Standard/Modern `completeness_reporting` capability and publish
+`completeness/index.json` plus 1-, 4-, 12-, and 36-week range documents. Each
+document carries the two separate P8-04 completeness blocks. A usable non-empty
+Videre archive is available. An admitted event without one is missing unless
+explicit durable source evidence marks it deferred; absence alone is never
+treated as temporary incompleteness.
+
+Keep existing MTGO matchup `win_rate` and Wilson-half-width fields as deployed
+compatibility data. Add `literal_record` to each matrix cell and add
+`parent_match_records` and `leaf_match_records` containing primary all-match,
+supporting non-mirror, and physical mirror counts. Only records declaring
+`wins_over_valid_matches` have the new target meaning.
+
+Expose the completeness catalog through metadata, validate the product with
+dedicated version 1.0.0 Schemas, map all ten Standard/Modern documents, admit
+only their reviewed paths in production-candidate validation, and regenerate
+them before Top 8 and metadata in the scheduled workflow.
+
+## Consequences
+
+The format registry advances to version 1.3.0 and the production manifest grows
+from 56 to 66 documents. The current front end remains unchanged and continues
+reading legacy matchup fields until P8-09. P8-07 can now validate real
+Standard/Modern completeness, labels, density, and empty states without
+inventing statistics in JavaScript. A future deferred-event ledger requires a
+separate reviewed source-status contract rather than a silent denominator
+change.

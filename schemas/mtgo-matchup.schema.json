@@ -52,6 +52,9 @@
     "parent_overall": {
       "$ref": "#/$defs/recordMap"
     },
+    "parent_match_records": {
+      "$ref": "#/$defs/matchRecordMap"
+    },
     "parent_matrix": {
       "$ref": "#/$defs/recordMatrix"
     },
@@ -60,6 +63,9 @@
     },
     "leaf_overall": {
       "$ref": "#/$defs/recordMap"
+    },
+    "leaf_match_records": {
+      "$ref": "#/$defs/matchRecordMap"
     },
     "leaf_matrix": {
       "$ref": "#/$defs/recordMatrix"
@@ -81,9 +87,11 @@
         "hierarchy",
         "parent_order",
         "parent_overall",
+        "parent_match_records",
         "parent_matrix",
         "leaf_order",
         "leaf_overall",
+        "leaf_match_records",
         "leaf_matrix"
       ]
     },
@@ -99,9 +107,11 @@
         "hierarchy",
         "parent_order",
         "parent_overall",
+        "parent_match_records",
         "parent_matrix",
         "leaf_order",
         "leaf_overall",
+        "leaf_match_records",
         "leaf_matrix"
       ],
       "not": {
@@ -143,7 +153,7 @@
         "$ref": "#/$defs/legacyName"
       },
       "additionalProperties": {
-        "$ref": "common.schema.json#/$defs/matchRecord"
+        "$ref": "#/$defs/compatibilityRecord"
       }
     },
     "legacyRecordMatrix": {
@@ -157,7 +167,7 @@
           "$ref": "#/$defs/legacyName"
         },
         "additionalProperties": {
-          "$ref": "common.schema.json#/$defs/matchRecord"
+          "$ref": "#/$defs/compatibilityRecord"
         }
       }
     },
@@ -167,7 +177,7 @@
         "$ref": "#/$defs/identity"
       },
       "additionalProperties": {
-        "$ref": "common.schema.json#/$defs/matchRecord"
+        "$ref": "#/$defs/compatibilityRecord"
       }
     },
     "recordMatrix": {
@@ -181,8 +191,45 @@
           "$ref": "#/$defs/identity"
         },
         "additionalProperties": {
-          "$ref": "common.schema.json#/$defs/matchRecord"
+          "$ref": "#/$defs/compatibilityRecord"
         }
+      }
+    },
+    "compatibilityRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wins",
+        "losses",
+        "draws",
+        "matches",
+        "win_rate",
+        "ci_half",
+        "low_sample",
+        "mirror",
+        "literal_record"
+      ],
+      "properties": {
+        "wins": {"type": "integer", "minimum": 0},
+        "losses": {"type": "integer", "minimum": 0},
+        "draws": {"type": "integer", "minimum": 0},
+        "matches": {"type": "integer", "minimum": 0},
+        "win_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "ci_half": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "low_sample": {"type": "boolean"},
+        "mirror": {"type": "boolean"},
+        "literal_record": {
+          "$ref": "phase8-public-contract.schema.json#/$defs/literalRecord"
+        }
+      }
+    },
+    "matchRecordMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/identity"
+      },
+      "additionalProperties": {
+        "$ref": "phase8-public-contract.schema.json#/$defs/matchRecord"
       }
     },
     "hierarchy": {

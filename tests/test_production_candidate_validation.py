@@ -265,6 +265,16 @@ def test_candidate_blocks_unapproved_new_generated_paths(tmp_path):
     top8_week.parent.mkdir(parents=True)
     top8_index.write_text("{}", encoding="utf-8")
     top8_week.write_text("{}", encoding="utf-8")
+    completeness_index = (
+        root / "stats" / "standard" / "mtgo" / "completeness" / "index.json"
+    )
+    completeness_range = (
+        root / "stats" / "modern" / "mtgo" / "completeness" / "4w.json"
+    )
+    completeness_index.parent.mkdir(parents=True)
+    completeness_range.parent.mkdir(parents=True)
+    completeness_index.write_text("{}", encoding="utf-8")
+    completeness_range.write_text("{}", encoding="utf-8")
     _report, failures = validate_candidate(
         root,
         baseline,
@@ -274,6 +284,8 @@ def test_candidate_blocks_unapproved_new_generated_paths(tmp_path):
             Change("??", "stats/standard/mtgo/pickup/candidates_2026-W29.yaml"),
             Change("??", "stats/standard/mtgo/top8/index.json"),
             Change("??", "stats/modern/mtgo/top8/2026-W30.json"),
+            Change("??", "stats/standard/mtgo/completeness/index.json"),
+            Change("??", "stats/modern/mtgo/completeness/4w.json"),
         ],
     )
     assert failures == [

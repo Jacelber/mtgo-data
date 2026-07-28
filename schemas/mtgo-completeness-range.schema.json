@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-completeness-range.schema.json",
+  "title": "MTGO range-specific completeness product",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "format",
+    "source",
+    "period",
+    "matchup_coverage",
+    "high_score_decklist_completeness"
+  ],
+  "properties": {
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/schemaVersion"
+    },
+    "document_type": {
+      "const": "mtgo_completeness_range"
+    },
+    "format": {
+      "enum": ["standard", "modern"]
+    },
+    "source": {
+      "const": "mtgo"
+    },
+    "period": {
+      "$ref": "common.schema.json#/$defs/period"
+    },
+    "matchup_coverage": {
+      "$ref": "phase8-public-contract.schema.json#/$defs/matchupCoverage"
+    },
+    "high_score_decklist_completeness": {
+      "$ref": "phase8-public-contract.schema.json#/$defs/highScoreCompleteness"
+    }
+  }
+}

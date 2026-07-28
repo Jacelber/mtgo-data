@@ -325,6 +325,46 @@ def test_draws_count_as_half_a_win_for_rate_and_wilson_input():
     assert emitted["ci_half"] == round(matchup.wilson_half_width(1.5, 2), 4)
 
 
+def test_literal_match_record_counts_draws_only_in_the_denominator():
+    emitted = matchup._emit_cell(
+        {"wins": 1, "losses": 0, "draws": 1},
+        False,
+    )
+    assert emitted["win_rate"] == 0.75
+    assert emitted["literal_record"] == {
+        "wins": 1,
+        "losses": 0,
+        "draws": 1,
+        "matches": 2,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471,
+        },
+    }
+
+
+def test_identity_match_records_include_mirrors_without_replacing_non_mirror():
+    matrix = {
+        "alpha": {
+            "alpha": {"wins": 1, "losses": 1, "draws": 0},
+            "beta": {"wins": 2, "losses": 1, "draws": 1},
+        },
+        "beta": {
+            "alpha": {"wins": 1, "losses": 2, "draws": 1},
+        },
+    }
+    records = matchup._emit_match_records(matrix, ["alpha", "beta"])
+    assert records["alpha"]["all_matches"]["matches"] == 6
+    assert records["alpha"]["all_matches"]["win_rate"] == 0.5
+    assert records["alpha"]["non_mirror"]["matches"] == 4
+    assert records["alpha"]["non_mirror"]["win_rate"] == 0.5
+    assert records["alpha"]["mirror_match_count"] == 1
+    assert records["beta"]["all_matches"] == records["beta"]["non_mirror"]
+    assert records["beta"]["mirror_match_count"] == 0
+
+
 def test_modern_hierarchy_uses_stable_parent_and_composite_subtype_ids():
     rules = matchup.load_rule_set(ROOT / "my_archetypes" / "modern.yaml")
     hierarchy = build_matchup_hierarchy(rules)

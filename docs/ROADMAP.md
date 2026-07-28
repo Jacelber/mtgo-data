@@ -1664,6 +1664,23 @@ historical construction-base provenance is specified; P8-07 must review that
 boundary with real data. No source fetcher, classification rule, statistical
 formula, current production page, or Tabletop output changes in P8-05.
 
+P8-06 implements the accepted MTGO completeness and win-rate migration
+contracts without changing the deployed page. Standard and Modern now publish
+1-, 4-, 12-, and 36-week completeness documents plus a catalog. Each interval
+keeps Videre available, deferred, missing, and excluded event identities and
+keeps modeled-versus-observed high-score decklist counts with unsupported
+events explicit. Because no durable Videre defer ledger exists, production
+does not guess that a missing archive is deferred.
+
+MTGO matchup cells retain their deployed draw-adjusted compatibility fields and
+add an explicit literal record. Parent and leaf identities additionally expose
+all-match and non-mirror records with physical mirror counts, so P8-07 and the
+future front end need no statistical derivation in browser code. The
+`completeness_reporting` capability, two product Schemas, metadata discovery,
+manifest mappings, candidate boundary, and scheduled producer step make the
+product fail closed. P8-06 changes no classifier, fetch policy, Melee output,
+or front-end source.
+
 After P8-04 owner acceptance, perform a separately authorized focused
 investigation of retained MTGO event `12847150`. The owner verified that the
 current official event page contains complete data, while the retained archive

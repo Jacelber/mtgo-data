@@ -957,9 +957,10 @@ If a raw Day 2 qualification rate is displayed for context, it must be labeled c
 The formulas in this section are the approved target statistical meaning for
 the public label `win rate` / `胜率`, frozen by DEC-053. P8-04 defines the
 versioned target contract, fixture, and migration boundary. Existing generated
-outputs, their current Schemas, and the deployed front end still expose the
-pre-P8 draw-adjusted compatibility result until the applicable P8-05 or P8-06
-producer migration is implemented and accepted.
+outputs and the deployed front end retain the pre-P8 draw-adjusted
+compatibility fields. P8-06 adds parallel literal records to every MTGO matrix
+cell and adds parent/leaf all-match and non-mirror records. It does not
+reinterpret the legacy `win_rate` field in place.
 
 A browser must not reinterpret a legacy percentage. A target record declares
 `win_rate_method: "wins_over_valid_matches"`; an output without that declaration
@@ -1802,6 +1803,37 @@ The output must retain:
 Both completeness outputs retain their formula version, interval, raw counts,
 event identities, exclusions or unsupported reasons, rate, and unavailable
 reason. The browser must never estimate either denominator.
+
+P8-06 publishes one range document for each configured 1-, 4-, 12-, and
+36-week interval at:
+
+```text
+stats/<format>/mtgo/completeness/<weeks>w.json
+```
+
+The catalog is:
+
+```text
+stats/<format>/mtgo/completeness/index.json
+```
+
+The catalog and range documents are generated for Standard and Modern under
+the `completeness_reporting` capability. MTGO metadata exposes them through
+`completeness_catalog`.
+
+The current Videre fetch layer has no durable deferred-event ledger.
+Accordingly, production completeness does not infer `deferred` from a missing
+archive. An admitted event without a usable non-empty archive is `missing`
+unless a future reviewed source-status record supplies explicit temporary
+incompleteness evidence. This keeps the rate reproducible and prevents an
+unverified absence from being removed from the denominator.
+
+P8-06 also adds `literal_record` to every MTGO parent and leaf matrix cell.
+Each range document exposes `parent_match_records` and `leaf_match_records`;
+each identity record contains `all_matches`, `non_mirror`, and the physical
+`mirror_match_count`. The existing `parent_overall`, `leaf_overall`, Standard
+name aliases, and their draw-adjusted compatibility fields remain available
+until the production front end migrates in P8-09.
 
 ### 16.8 Weekly MTGO Top 8 decklist presentation data
 

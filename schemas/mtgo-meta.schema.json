@@ -18,6 +18,12 @@
         {"type": "null"}
       ]
     },
+    "completeness_catalog": {
+      "oneOf": [
+        {"const": "completeness/index.json"},
+        {"type": "null"}
+      ]
+    },
     "pickup_catalog": {
       "oneOf": [
         {"const": "pickup/index.json"},
@@ -51,6 +57,7 @@
         "matchup_catalog",
         "hierarchy_catalog",
         "top8_catalog",
+        "completeness_catalog",
         "pickup_catalog",
         "matchup_source",
         "matchup_coverage"

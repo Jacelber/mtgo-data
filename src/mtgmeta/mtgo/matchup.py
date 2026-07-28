@@ -262,6 +262,33 @@ def wilson_half_width(wins: float, total: int, z: float = WILSON_Z) -> float | N
     )
 
 
+def wilson_interval(
+    wins: int,
+    total: int,
+    z: float = WILSON_Z,
+) -> dict[str, float] | None:
+    """Return the literal-win Wilson interval required by the P8 contract."""
+
+    if total <= 0:
+        return None
+    proportion = wins / total
+    denominator = 1 + z * z / total
+    center = (proportion + z * z / (2 * total)) / denominator
+    margin = (
+        z
+        * (
+            proportion * (1 - proportion) / total
+            + z * z / (4 * total * total)
+        )
+        ** 0.5
+        / denominator
+    )
+    return {
+        "lower": round(max(0.0, center - margin), 6),
+        "upper": round(min(1.0, center + margin), 6),
+    }
+
+
 def _blank_cell() -> dict[str, int]:
     return {"wins": 0, "losses": 0, "draws": 0}
 
@@ -746,7 +773,56 @@ def _emit_cell(cell: dict[str, int], is_mirror: bool) -> dict[str, Any]:
         "ci_half": round(interval, 4) if interval is not None else None,
         "low_sample": total < MIN_MATCHUP_SAMPLE,
         "mirror": is_mirror,
+        "literal_record": _literal_record(cell),
     }
+
+
+def _literal_record(cell: dict[str, int]) -> dict[str, Any]:
+    total = cell["wins"] + cell["losses"] + cell["draws"]
+    return {
+        "wins": cell["wins"],
+        "losses": cell["losses"],
+        "draws": cell["draws"],
+        "matches": total,
+        "win_rate": round(cell["wins"] / total, 6) if total else None,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": wilson_interval(cell["wins"], total),
+    }
+
+
+def _emit_match_records(
+    matrix: dict[str, dict[str, dict[str, int]]],
+    order: list[str],
+) -> dict[str, dict[str, Any]]:
+    """Emit all-match and supporting non-mirror records for each identity."""
+
+    records: dict[str, dict[str, Any]] = {}
+    for identity in order:
+        all_counts = _blank_cell()
+        non_mirror_counts = _blank_cell()
+        for opponent, cell in matrix.get(identity, {}).items():
+            for field in ("wins", "losses", "draws"):
+                all_counts[field] += cell[field]
+                if opponent != identity:
+                    non_mirror_counts[field] += cell[field]
+        mirror_observations = (
+            all_counts["wins"]
+            + all_counts["losses"]
+            + all_counts["draws"]
+            - non_mirror_counts["wins"]
+            - non_mirror_counts["losses"]
+            - non_mirror_counts["draws"]
+        )
+        if mirror_observations % 2:
+            raise MTGOMatchupError(
+                f"identity {identity!r} has an odd mirror-observation count"
+            )
+        records[identity] = {
+            "all_matches": _literal_record(all_counts),
+            "non_mirror": _literal_record(non_mirror_counts),
+            "mirror_match_count": mirror_observations // 2,
+        }
+    return records
 
 
 def build_window_output(
@@ -936,9 +1012,11 @@ def build_hierarchical_window(
         "hierarchy": hierarchy,
         "parent_order": parent_order,
         "parent_overall": _emit_overall(parent_overall, parent_order),
+        "parent_match_records": _emit_match_records(parent_matrix, parent_order),
         "parent_matrix": _emit_directed_matrix(parent_matrix, parent_order),
         "leaf_order": leaf_order,
         "leaf_overall": _emit_overall(leaf_overall, leaf_order),
+        "leaf_match_records": _emit_match_records(leaf_matrix, leaf_order),
         "leaf_matrix": _emit_directed_matrix(leaf_matrix, leaf_order),
     }
     if format_id == "standard":
@@ -1080,4 +1158,5 @@ __all__ = [
     "load_hierarchical_events_from_directory",
     "rollup_matchup_counts",
     "wilson_half_width",
+    "wilson_interval",
 ]
