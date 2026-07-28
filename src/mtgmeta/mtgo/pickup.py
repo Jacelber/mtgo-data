@@ -694,6 +694,11 @@ def generate_metadata(
             "statistics_catalog": "index.json",
             "matchup_catalog": "matchup_index.json",
             "hierarchy_catalog": "archetype_hierarchy.json",
+            "top8_catalog": (
+                "top8/index.json"
+                if (context.paths["statistics"] / "top8" / "index.json").is_file()
+                else None
+            ),
             "pickup_catalog": (
                 "pickup/index.json"
                 if (context.paths["statistics"] / "pickup" / "index.json").is_file()

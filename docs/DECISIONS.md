@@ -2125,3 +2125,45 @@ The high-score expectation is a completeness model under explicit simplifying
 assumptions, not an exact reconstruction of Swiss pairings. Unsupported events
 remain visible and can trigger focused source-quality work instead of lowering
 the denominator silently.
+
+---
+
+# DEC-056 — Publish the latest complete-week MTGO Top 8 product
+
+Status: `Accepted`
+
+## Context
+
+P8-03 requires a weekly MTGO Top 8 table whose event columns preserve exact
+finishing decks and whose detail view compares the selected deck with the most
+specific maintained parent or subtype construction base. P8-04 freezes the
+event, placement, exact-deck, identity, missing-state, and comparison-reference
+contract. The current four-week deck output is rolling and has no immutable
+historical address.
+
+## Decision
+
+Add the capability-gated `build-top8` producer for Standard and Modern. Publish
+`top8/index.json` and one latest complete-week `top8/YYYY-Www.json`, validate
+them with product-specific version 1.0.0 Schemas, map the four concrete public
+documents in the manifest, and expose the catalog through MTGO metadata.
+
+Every admitted event has exactly eight ordered rank slots. Missing decks remain
+explicit null states. Available decks retain exact main deck and sideboard,
+self-contained stable identity, and a same-period `decks_4w.json` comparison
+reference. Generation fails on duplicate event identities, duplicate Top 8
+ranks, or invalid event metadata.
+
+Do not retain historical weeks while their references would resolve to a newer
+rolling comparison base. Historical browsing requires a separately reviewed
+immutable or version-addressable construction-base contract. P8-07 reviews
+whether that extension is required before production UI implementation.
+
+## Consequences
+
+The format registry advances to version 1.2.0 and complete MTGO products now
+require `weekly_top8`. The scheduled workflow builds the product before
+metadata, and production-candidate validation admits only the defined Top 8
+catalog and week paths for Standard and Modern. The production manifest grows
+from 52 to 56 mapped documents. P8-05 changes no fetch behavior, classifier,
+win-rate formula, Tabletop output, or deployed front end.

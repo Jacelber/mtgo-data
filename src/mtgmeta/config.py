@@ -12,7 +12,7 @@ import yaml
 from .rules import RuleSet, RuleValidationFailure, build_rule_set, validate_rule_data
 
 
-FORMAT_REGISTRY_SCHEMA_VERSION = "1.1.0"
+FORMAT_REGISTRY_SCHEMA_VERSION = "1.2.0"
 FORMAT_STATES = frozenset({"executable", "planned", "decision_gated"})
 MTGO_CAPABILITIES = frozenset(
     {
@@ -23,6 +23,7 @@ MTGO_CAPABILITIES = frozenset(
         "event_statistics",
         "range_statistics",
         "matchup_statistics",
+        "weekly_top8",
         "weekly_pickup",
         "metadata_generation",
         "catalog_generation",

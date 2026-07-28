@@ -12,6 +12,12 @@
     "statistics_catalog": {"const": "index.json"},
     "matchup_catalog": {"const": "matchup_index.json"},
     "hierarchy_catalog": {"const": "archetype_hierarchy.json"},
+    "top8_catalog": {
+      "oneOf": [
+        {"const": "top8/index.json"},
+        {"type": "null"}
+      ]
+    },
     "pickup_catalog": {
       "oneOf": [
         {"const": "pickup/index.json"},
@@ -44,6 +50,7 @@
         "statistics_catalog",
         "matchup_catalog",
         "hierarchy_catalog",
+        "top8_catalog",
         "pickup_catalog",
         "matchup_source",
         "matchup_coverage"

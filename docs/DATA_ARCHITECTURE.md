@@ -739,7 +739,7 @@ Beginning with P6-04, executable state is capability-scoped rather than equivale
 Beginning with P6-08, the single production workflow distinguishes two registry-derived sets:
 
 - **event-collection formats** have `event_collection_enabled: true` and receive only official MTGO event archives plus fetched-ledger maintenance unless they also qualify as a complete product;
-- **complete product formats** have MTGO execution enabled and declare every production capability: classification, event and range statistics, matchup statistics, Weekly Pickup, metadata generation, and catalog generation.
+- **complete product formats** have MTGO execution enabled and declare every production capability: classification, event and range statistics, matchup statistics, weekly Top 8 generation, Weekly Pickup, metadata generation, and catalog generation.
 
 Standard and Modern are the complete products during P6-08. Standard, Legacy, Pioneer, Pauper, Vintage, and Modern remain event-collection formats. The production workflow may express these sets as explicit environment lists for readable command dispatch, but workflow tests must prove that those lists match the registry. The dynamic production-candidate validator independently derives the same sets from the registry, records per-format event and match counts, and restricts statistics and reports to complete products. A planned or raw-archive-only format cannot gain generated product output merely by being added to the event loop.
 
@@ -1508,8 +1508,20 @@ or aggregate into them. The existing production statistics command regenerates
 the additive hierarchy for every MTGO format that has range-statistics
 capability; no second subtype-only workflow or public path is introduced.
 
-Phase 8 may add a dedicated weekly Top 8 document after its exact contract is
-approved. That output must be generated from admitted MTGO events and include:
+P8-05 adds a dedicated weekly Top 8 product generated from admitted MTGO
+events. Its public files are:
+
+- `stats/<format>/mtgo/top8/index.json`, validated by
+  `schemas/mtgo-top8-index.schema.json`;
+- `stats/<format>/mtgo/top8/YYYY-Www.json`, validated by
+  `schemas/mtgo-top8-week.schema.json`.
+
+The `weekly_top8` capability gates generation independently for each format.
+The metadata document exposes `top8_catalog` only when the catalog exists, and
+the production workflow regenerates Top 8 after range and matchup statistics
+and before metadata.
+
+Each weekly document includes:
 
 - complete-week and event identity;
 - event date and finishing position;
@@ -1518,6 +1530,14 @@ approved. That output must be generated from admitted MTGO events and include:
 - an exact decklist reference or explicit missing-deck state;
 - provenance for the subtype construction base used by deviation and
   average-deck comparison.
+
+The initial catalog deliberately exposes only the latest complete
+Monday-through-Sunday week. Its comparison reference resolves against that
+same period's current `decks_4w.json`. Historical exact-deck browsing requires
+a separately versioned immutable historical construction-base contract; P8-05
+does not retain an old week while pointing it at a newer mutable four-week
+average. P8-07 must review this boundary with real payloads before the
+production UI is implemented.
 
 Phase 8 may also extend MTGO metadata or range documents with approved
 completeness payloads. Matchup completeness must retain the expected/admitted,
@@ -1577,12 +1597,12 @@ The contract covers:
   matchup compatibility.
 
 This Schema is intentionally not mapped in `schemas/manifest.json`: it validates
-the migration target, not any current public file. The 52 existing manifest
-mappings, production JSON, generators, workflows, and deployed consumers remain
-unchanged in P8-04. P8-05 and P8-06 must either reference these definitions from
-their product Schemas or introduce a reviewed compatible version, map only
-actual generated public documents, and migrate consumers without reinterpreting
-legacy `win_rate` values.
+the migration target, not any current public file. P8-04 left the 52 existing
+manifest mappings unchanged. P8-05 introduces compatible product-specific Top
+8 Schemas and four mapped Standard/Modern documents, bringing the production
+manifest to 56 documents. P8-06 must follow the same rule: map only actual
+generated public documents and migrate consumers without reinterpreting legacy
+`win_rate` values.
 
 ### 12.2 Melee output
 

@@ -59,6 +59,7 @@ def test_modern_metadata_reports_partial_videre_coverage_without_public_pickup(t
     assert document["statistics_catalog"] == "index.json"
     assert document["matchup_catalog"] == "matchup_index.json"
     assert document["hierarchy_catalog"] == "archetype_hierarchy.json"
+    assert document["top8_catalog"] == "top8/index.json"
     assert document["pickup_catalog"] is None
     assert document["matchup_source"] == "Videre"
     official_ids = {

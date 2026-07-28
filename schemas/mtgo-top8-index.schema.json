@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-top8-index.schema.json",
+  "title": "MTGO weekly Top 8 catalog",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "source",
+    "format",
+    "generated",
+    "latest_complete_week",
+    "weeks"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "top8_index"},
+    "source": {"const": "mtgo"},
+    "format": {"enum": ["standard", "modern"]},
+    "generated": {"type": "string", "minLength": 1},
+    "latest_complete_week": {"type": "string", "format": "date"},
+    "weeks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["file", "start", "end", "event_count"],
+        "properties": {
+          "file": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-W[0-9]{2}\\.json$"
+          },
+          "start": {"type": "string", "format": "date"},
+          "end": {"type": "string", "format": "date"},
+          "event_count": {"type": "integer", "minimum": 1}
+        }
+      }
+    }
+  }
+}
