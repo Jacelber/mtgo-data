@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_07_owner_accepted_remote_publication_authorized"
+  status: "p8_07_completed_p8_08_awaiting_owner_authorization"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4400,7 +4400,7 @@ phase_8_plan:
       merged_on: "2026-07-28"
     - id: "P8-07"
       name: "Backend consumer-readiness and real-data UI revalidation"
-      status: "owner_accepted_remote_publication_authorized"
+      status: "completed_published_and_pages_verified"
       branch: "codex/p8-07-real-data-review"
       base_commit: "491f5d79c7931e429272225b12485b82eb33d178"
       authorized_on: "2026-07-28"
@@ -4479,6 +4479,24 @@ phase_8_plan:
       owner_acceptance_on: "2026-07-28"
       remote_publication_authorized: true
       remote_publication_authorized_on: "2026-07-28"
+      publication:
+        local_commit: "9cdc4e5d704e11f3f39f49d687b0751dc8c456ef"
+        pull_request: 121
+        pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/121"
+        merge_commit: "7d5c9ddf12123c611580df46e12cb2e104d40f43"
+        merged_on: "2026-07-28"
+      remote_validation:
+        pull_request_run_id: 30363941375
+        pull_request_conclusion: "success"
+        master_run_id: 30364857187
+        master_conclusion: "success"
+        admission: "exact_validated_merge"
+        static_and_pytest_shards_skipped: true
+        confirmation_and_aggregate_passed: true
+        pages_run_id: 30364855787
+        pages_conclusion: "success"
+        published_review_url: "https://jacelber.github.io/mtgo-data/docs/prototypes/P8-07/"
+        published_review_http_status: 200
       p8_08_authorized: false
     - id: "P8-07-BACKEND-CONSUMER-BRIDGE"
       name: "Bridge frozen Phase 8 consumers with immutable weekly Top 8 bases"
@@ -4953,22 +4971,22 @@ phase_8_plan:
         merged_on: "2026-07-28"
 
 next_approved_task:
-  id: "P8-07"
-  name: "Backend consumer-readiness and real-data UI revalidation"
+  id: "P8-08"
+  name: "Shared static shell and page split"
   target_paths:
-    - "docs/prototypes/P8-07/"
-    - "tests/test_phase8_real_data_review.py"
-    - "docs/audits/P8-07.md"
-    - "docs/audits/CI-MASTER-ADMISSION.md"
+    - "index.html"
+    - "assets/"
+    - "melee/index.html"
+    - "tests/"
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_remote_publication_and_merge_authorized"
-  local_execution_authorized: true
-  local_execution_authorized_on: "2026-07-28"
-  remote_publication_authorized: true
+  authorization_status: "awaiting_owner_authorization"
+  local_execution_authorized: false
+  local_execution_authorized_on: null
+  remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "remote_publication_authorized"
+  planning_status: "awaiting_predevelopment_explanation_and_owner_authorization"
 
 governance_baseline:
   status: "active_on_master"
