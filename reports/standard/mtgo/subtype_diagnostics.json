@@ -4,19 +4,19 @@
   "format": "standard",
   "source": "mtgo",
   "scope": "all_available_events",
-  "event_count": 132,
-  "data_through": "2026-07-26 21:00:00.0",
+  "event_count": 133,
+  "data_through": "2026-07-27 20:00:00.0",
   "summary": {
-    "record_count": 310,
+    "record_count": 312,
     "blocking": false,
-    "selected_record_count": 48,
+    "selected_record_count": 49,
     "selected_by_subtype": {
       "4-color-control/inevitable-defeat": 1,
       "4-color-control/rakshasas-bargain": 4,
       "izzet-aggro/hired-claw": 33,
-      "izzet-aggro/razorkin-needlehead": 10
+      "izzet-aggro/razorkin-needlehead": 11
     },
-    "same_parent_multiple_subtype_matches": 23
+    "same_parent_multiple_subtype_matches": 24
   },
   "records": [
     {
@@ -6268,6 +6268,54 @@
         }
       ],
       "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "44f2bde91de42131aa38",
+      "event_id": "12848235",
+      "event_name": "Standard Challenge 32",
+      "event_start": "2026-07-27 20:00:00.0",
+      "source_file": "data/standard/Standard_Challenge_32_12848235.json",
+      "selected": {
+        "archetype_id": "4-color-tablet",
+        "archetype_name": "4-Color Tablet",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "4-color-tablet-primary",
+        "priority": 590
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "4-color-control",
+          "subtype_id": "inevitable-defeat"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "cc2a0c487bda3f5a0a82",
+      "event_id": "12848235",
+      "event_name": "Standard Challenge 32",
+      "event_start": "2026-07-27 20:00:00.0",
+      "source_file": "data/standard/Standard_Challenge_32_12848235.json",
+      "selected": {
+        "archetype_id": "izzet-aggro",
+        "archetype_name": "Izzet Aggro",
+        "subtype_id": "razorkin-needlehead",
+        "subtype_name": "Razorkin Needlehead",
+        "rule_id": "izzet-aggro-razorkin-needlehead",
+        "priority": 220
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "izzet-aggro",
+          "subtype_id": "hired-claw"
+        },
+        {
+          "archetype_id": "izzet-aggro",
+          "subtype_id": "razorkin-needlehead"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": true
     },
     {
       "deck_id": "8427ae265a0b3218d6be",
