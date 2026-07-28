@@ -8,15 +8,45 @@ on:
   workflow_dispatch: {}
 
 permissions:
+  actions: read
   contents: read
+  pull-requests: read
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
+  admission:
+    name: Select full validation or exact-merge confirmation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      mode: ${{ steps.classify.outputs.mode }}
+      reason: ${{ steps.classify.outputs.reason }}
+      pull_request: ${{ steps.classify.outputs.pull_request }}
+      workflow_run: ${{ steps.classify.outputs.workflow_run }}
+    steps:
+      - name: Check out admission logic without persisted credentials
+        uses: actions/checkout@v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6.3.0
+        with:
+          python-version: "3.12"
+
+      - name: Classify validation path
+        id: classify
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python -B ci_master_admission.py
+
   static-validation:
     name: Repository files, rules, and schemas
+    needs: admission
+    if: needs.admission.outputs.mode == 'full'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -29,6 +59,19 @@ jobs:
         uses: actions/setup-python@v6.3.0
         with:
           python-version: "3.12"
+
+      - name: Verify checked-out PR merge subject
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          ACTUAL_PARENTS="$(git cat-file -p HEAD | awk '/^parent / { if (count++) printf " "; printf "%s", $2 } END { print "" }')"
+          EXPECTED_PARENTS="${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}"
+          if [ "$ACTUAL_PARENTS" != "$EXPECTED_PARENTS" ]; then
+            echo "Checked-out PR merge subject mismatch." >&2
+            echo "Expected parents: $EXPECTED_PARENTS" >&2
+            echo "Actual parents:   $ACTUAL_PARENTS" >&2
+            exit 1
+          fi
 
       - name: Install pinned development dependencies
         run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
@@ -44,6 +87,8 @@ jobs:
 
   pytest:
     name: Pytest shard (${{ matrix.shard }})
+    needs: admission
+    if: needs.admission.outputs.mode == 'full'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
@@ -64,6 +109,19 @@ jobs:
         uses: actions/setup-python@v6.3.0
         with:
           python-version: "3.12"
+
+      - name: Verify checked-out PR merge subject
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          ACTUAL_PARENTS="$(git cat-file -p HEAD | awk '/^parent / { if (count++) printf " "; printf "%s", $2 } END { print "" }')"
+          EXPECTED_PARENTS="${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}"
+          if [ "$ACTUAL_PARENTS" != "$EXPECTED_PARENTS" ]; then
+            echo "Checked-out PR merge subject mismatch." >&2
+            echo "Expected parents: $EXPECTED_PARENTS" >&2
+            echo "Actual parents:   $ACTUAL_PARENTS" >&2
+            exit 1
+          fi
 
       - name: Install pinned development dependencies
         run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
@@ -92,26 +150,77 @@ jobs:
             echo "- Pytest timing report was unavailable because pytest did not reach its session-finish hook." >> "$GITHUB_STEP_SUMMARY"
           fi
 
+  post-merge-confirmation:
+    name: Confirm previously validated merge
+    needs: admission
+    if: needs.admission.outputs.mode == 'pr-confirmation'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Confirm exact prior validation evidence
+        shell: bash
+        run: |
+          {
+            echo "## Exact merged-PR confirmation"
+            echo
+            echo "- Pull request: #${{ needs.admission.outputs.pull_request }}"
+            echo "- Prior full-validation run: ${{ needs.admission.outputs.workflow_run }}"
+            echo "- Admission reason: ${{ needs.admission.outputs.reason }}"
+            echo "- The full suite is retained for direct pushes and every ambiguous or unavailable evidence path."
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ github.event_name }}" != "push" ] ||
+             [ "${{ github.ref }}" != "refs/heads/master" ] ||
+             [ "${{ needs.admission.outputs.reason }}" != "exact_validated_merge" ] ||
+             [ -z "${{ needs.admission.outputs.pull_request }}" ] ||
+             [ -z "${{ needs.admission.outputs.workflow_run }}" ]; then
+            exit 1
+          fi
+
   validate:
     name: Repository validation (Python 3.12)
     if: always()
     needs:
+      - admission
       - static-validation
       - pytest
+      - post-merge-confirmation
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - name: "Validated merge subject: pr=${{ github.event.pull_request.number }}; base=${{ github.event.pull_request.base.sha }}; head=${{ github.event.pull_request.head.sha }}"
+        if: github.event_name == 'pull_request'
+        run: "true"
+
       - name: Require every validation shard
         shell: bash
         run: |
           {
             echo "## Pull request validation"
             echo
+            echo "- Admission: ${{ needs.admission.result }}"
+            echo "- Validation mode: ${{ needs.admission.outputs.mode }}"
             echo "- Static validation: ${{ needs.static-validation.result }}"
             echo "- Pytest shards: ${{ needs.pytest.result }}"
+            echo "- Exact merged-PR confirmation: ${{ needs.post-merge-confirmation.result }}"
             echo "- This workflow does not fetch tournament data or publish repository changes."
           } >> "$GITHUB_STEP_SUMMARY"
-          if [ "${{ needs.static-validation.result }}" != "success" ] ||
-             [ "${{ needs.pytest.result }}" != "success" ]; then
+          if [ "${{ needs.admission.result }}" != "success" ]; then
             exit 1
           fi
+          if [ "${{ needs.admission.outputs.mode }}" = "full" ] &&
+             [ "${{ needs.static-validation.result }}" = "success" ] &&
+             [ "${{ needs.pytest.result }}" = "success" ] &&
+             [ "${{ needs.post-merge-confirmation.result }}" = "skipped" ]; then
+            exit 0
+          fi
+          if [ "${{ needs.admission.outputs.mode }}" = "pr-confirmation" ] &&
+             [ "${{ needs.static-validation.result }}" = "skipped" ] &&
+             [ "${{ needs.pytest.result }}" = "skipped" ] &&
+             [ "${{ needs.post-merge-confirmation.result }}" = "success" ]; then
+            exit 0
+          fi
+          {
+            echo
+            echo "Unexpected or incomplete validation path."
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 1

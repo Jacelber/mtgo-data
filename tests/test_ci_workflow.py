@@ -34,7 +34,11 @@ def test_triggers_are_review_and_validation_only():
 
 def test_permissions_and_concurrency_are_least_privilege():
     workflow = load_workflow()
-    assert workflow["permissions"] == {"contents": "read"}
+    assert workflow["permissions"] == {
+        "actions": "read",
+        "contents": "read",
+        "pull-requests": "read",
+    }
     assert workflow["concurrency"] == {
         "group": "ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}",
         "cancel-in-progress": "true",
@@ -43,11 +47,13 @@ def test_permissions_and_concurrency_are_least_privilege():
 
 def test_execution_jobs_are_bounded_and_use_current_official_actions():
     jobs = load_workflow()["jobs"]
+    assert jobs["admission"]["timeout-minutes"] == "5"
     assert jobs["static-validation"]["timeout-minutes"] == "10"
     assert jobs["pytest"]["timeout-minutes"] == "30"
+    assert jobs["post-merge-confirmation"]["timeout-minutes"] == "5"
     assert jobs["validate"]["timeout-minutes"] == "5"
 
-    for job_name in ("static-validation", "pytest"):
+    for job_name in ("admission", "static-validation", "pytest"):
         job = jobs[job_name]
         assert job["runs-on"] == "ubuntu-latest"
         steps = job["steps"]
@@ -55,6 +61,15 @@ def test_execution_jobs_are_bounded_and_use_current_official_actions():
         assert steps[0]["with"]["persist-credentials"] == "false"
         assert steps[1]["uses"] == "actions/setup-python@v6.3.0"
         assert steps[1]["with"]["python-version"] == "3.12"
+
+    for job_name in ("static-validation", "pytest"):
+        subject_step = jobs[job_name]["steps"][2]
+        assert subject_step["name"] == "Verify checked-out PR merge subject"
+        assert subject_step["if"] == "github.event_name == 'pull_request'"
+        assert "git cat-file -p HEAD" in subject_step["run"]
+        assert "github.event.pull_request.base.sha" in subject_step["run"]
+        assert "github.event.pull_request.head.sha" in subject_step["run"]
+        assert "exit 1" in subject_step["run"]
 
 
 def test_pytest_shards_are_exact_marker_complements():
@@ -95,11 +110,40 @@ def test_static_validation_and_aggregate_check_are_complete():
     aggregate = jobs["validate"]
     assert aggregate["name"] == "Repository validation (Python 3.12)"
     assert aggregate["if"] == "always()"
-    assert aggregate["needs"] == ["static-validation", "pytest"]
-    command = aggregate["steps"][0]["run"]
+    assert aggregate["needs"] == [
+        "admission",
+        "static-validation",
+        "pytest",
+        "post-merge-confirmation",
+    ]
+    assert aggregate["steps"][0]["if"] == "github.event_name == 'pull_request'"
+    assert "Validated merge subject:" in aggregate["steps"][0]["name"]
+    command = aggregate["steps"][1]["run"]
+    assert "needs.admission.result" in command
+    assert "needs.admission.outputs.mode" in command
     assert "needs.static-validation.result" in command
     assert "needs.pytest.result" in command
+    assert "needs.post-merge-confirmation.result" in command
     assert "exit 1" in command
+
+
+def test_master_admission_is_fail_safe_and_full_suite_is_default():
+    jobs = load_workflow()["jobs"]
+    admission = jobs["admission"]
+    assert admission["outputs"]["mode"] == "${{ steps.classify.outputs.mode }}"
+    classify = admission["steps"][2]
+    assert classify["run"] == "python -B ci_master_admission.py"
+    assert classify["env"] == {"GITHUB_TOKEN": "${{ github.token }}"}
+
+    assert jobs["static-validation"]["needs"] == "admission"
+    assert jobs["pytest"]["needs"] == "admission"
+    assert jobs["static-validation"]["if"] == (
+        "needs.admission.outputs.mode == 'full'"
+    )
+    assert jobs["pytest"]["if"] == "needs.admission.outputs.mode == 'full'"
+    assert jobs["post-merge-confirmation"]["if"] == (
+        "needs.admission.outputs.mode == 'pr-confirmation'"
+    )
 
 
 def test_ci_cannot_fetch_production_data_or_write_repository():
@@ -122,4 +166,4 @@ def test_ci_cannot_fetch_production_data_or_write_repository():
 def test_workflow_contains_no_secret_or_token_expression():
     text = WORKFLOW.read_text(encoding="utf-8").lower()
     assert "secrets." not in text
-    assert "github.token" not in text
+    assert text.count("github.token") == 1
