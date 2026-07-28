@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MTG Meta 数据分析 · P8-07 真实数据评审</title>
+  <link rel="stylesheet" href="../P8-02/styles.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>MTG Meta 数据分析</h1>
+      <p class="prototype-mark">P8-07 真实生产数据评审 · 不修改当前上线页面</p>
+    </div>
+    <div class="lang-switch" aria-label="语言">
+      <button id="lang-zh" class="active" type="button">中文</button>
+      <button id="lang-en" type="button">EN</button>
+    </div>
+  </header>
+
+  <main>
+    <aside class="review-banner">
+      <strong>评审范围</strong>
+      <span>本页面直接读取仓库内已发布 JSON，用于确认信息密度、文案、缺失态和交互；它不是正式前端。</span>
+      <span id="payload-status">正在载入产品目录……</span>
+    </aside>
+    <nav class="format-tabs" id="format-tabs" aria-label="赛制"></nav>
+    <nav class="product-tabs" id="product-tabs" aria-label="产品"></nav>
+    <p id="availability-message" class="availability-message" role="status" hidden></p>
+    <section id="view" aria-live="polite"><p class="loading-state">正在载入真实数据……</p></section>
+  </main>
+
+  <img id="card-preview" alt="">
+
+  <footer class="site-footer">
+    Made by DJac ·
+    <a href="https://x.com/JacERROR" target="_blank" rel="noopener">X @JacERROR</a> ·
+    <a href="https://space.bilibili.com/383589" target="_blank" rel="noopener">Bilibili</a>
+  </footer>
+
+  <script src="review-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

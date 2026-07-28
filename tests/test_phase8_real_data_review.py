@@ -1,0 +1,197 @@
+"""P8-07 real-data review prototype contracts."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+import subprocess
+
+import pytest
+
+
+ROOT = Path(__file__).resolve().parents[1]
+PROTOTYPE = ROOT / "docs" / "prototypes" / "P8-07"
+
+
+def _json(path: str) -> dict:
+    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+
+
+def _node(script: str, *args: str) -> dict:
+    result = subprocess.run(
+        ["node", "-e", script, *args],
+        cwd=ROOT,
+        check=True,
+        text=True,
+        capture_output=True,
+    )
+    return json.loads(result.stdout)
+
+
+def test_review_entry_point_is_chinese_first_and_keeps_p8_02_immutable() -> None:
+    html = (PROTOTYPE / "index.html").read_text(encoding="utf-8")
+    app = (PROTOTYPE / "app.js").read_text(encoding="utf-8")
+
+    assert "P8-07 真实生产数据评审" in html
+    assert "../P8-02/styles.css" in html
+    assert "MTGO占比统计" in app
+    assert "MTGO官方数据统计" not in app
+    assert '"weekly-pickup": "每周精选套牌"' in app
+    assert 'pauper: "纯铁"' in app
+    assert "const RANGE_OPTIONS = [1, 4, 12];" in app
+    assert "const DIFF_MIN = 1;" in app
+    assert "const LOW_SAMPLE_THRESHOLD = 20;" in app
+    assert 'class="pie-slice"' in app
+    assert "data-pie-detail" in app
+    assert "悬停或点击分区查看名称、占比和数量" in app
+    assert "Number(item[key]) > 0.02" in app
+    assert "data-tabletop-sort" in app
+    assert "data-tabletop-detail" in app
+    assert "MTGO 最近4周平均构筑与典型牌表" in app
+    assert "查看 Melee 原始牌表" not in app
+    assert "近四周样本不足，暂无平均构筑与变化度数据。" in app
+    assert "最近一周样本不足，暂不显示近期构筑变化度。" in app
+    assert "activeMatchupDocument" in app
+    assert "activeStatisticsSubtypes" in app
+    assert "activeTabletopSubtypes" in app
+    assert "合并赛事：" not in app
+    assert "summary-grid" not in app
+    assert 'fetchJson("stats/catalog.json")' in app
+    assert "modernTop8Events" not in app
+    assert "prototype-cut" not in app
+
+
+def test_catalog_and_real_review_payloads_have_expected_density() -> None:
+    catalog = _json("stats/catalog.json")
+    available = [
+        (format_entry["id"], product["id"])
+        for format_entry in catalog["formats"]
+        for product in format_entry["products"]
+        if product["available"]
+    ]
+    standard = _json("stats/standard/mtgo/top8/2026-W30.json")
+    modern = _json("stats/modern/mtgo/top8/2026-W30.json")
+
+    assert len(catalog["formats"]) == 6
+    assert len(available) == 8
+    assert len(standard["events"]) == 8
+    assert sum(len(event["placements"]) for event in standard["events"]) == 64
+    assert len(modern["events"]) == 13
+    assert sum(len(event["placements"]) for event in modern["events"]) == 104
+
+
+def test_top8_review_uses_immutable_bases_and_explicit_unavailable_states() -> None:
+    for format_id, expected_available, expected_unavailable in (
+        ("standard", 61, 3),
+        ("modern", 100, 4),
+    ):
+        top8 = _json(f"stats/{format_id}/mtgo/top8/2026-W30.json")
+        bases = _json(f"stats/{format_id}/mtgo/top8/2026-W30-bases.json")
+        statuses = [
+            placement["comparison"]["base_status"]
+            for event in top8["events"]
+            for placement in event["placements"]
+        ]
+
+        assert statuses.count("available") == expected_available
+        assert statuses.count("unavailable") == expected_unavailable
+        assert bases["base_period_end"] == top8["week"]["end"]
+        assert all(
+            placement["comparison"]["average_deck_ref"].startswith(
+                "2026-W30-bases.json#identity/"
+            )
+            for event in top8["events"]
+            for placement in event["placements"]
+        )
+
+
+def test_review_matrix_retains_parents_and_uses_literal_wins_over_matches() -> None:
+    script = r"""
+const fs = require("fs");
+const review = require("./docs/prototypes/P8-07/review-data.js");
+const source = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+const document = review.activeMatchupDocument(source, 20);
+const collapsed = review.buildView(document, [], []);
+const expanded = review.buildView(
+  document,
+  ["broodscale-combo"],
+  ["broodscale-combo"]
+);
+const drawRecord = review.literalRecord({wins: 1, losses: 1, draws: 1});
+process.stdout.write(JSON.stringify({
+  collapsedRows: collapsed.rows.length,
+  parentRetained: expanded.rows.some(row => row.id === "broodscale-combo"),
+  subtypeLabels: expanded.rows
+    .filter(row => row.parentId === "broodscale-combo" && row.kind === "subtype")
+    .map(row => row.name),
+  crossLevel: expanded.matrix["broodscale-combo"]["broodscale-combo/gruul"],
+  necroSubtypeIds: document.hierarchy.parents
+    .find(parent => parent.id === "necrodominance").subtype_ids,
+  minSampleHint: document.min_sample_hint,
+  drawRecord,
+}));
+"""
+    result = _node(
+        script,
+        "stats/modern/mtgo/matchup_4w.json",
+    )
+
+    assert result["collapsedRows"] == 49
+    assert result["parentRetained"] is True
+    assert "Gruul Broodscale Combo" in result["subtypeLabels"]
+    assert result["necroSubtypeIds"] == [
+        "necrodominance/golgari",
+        "necrodominance/mono-black",
+    ]
+    assert result["minSampleHint"] == 20
+    cross_level = result["crossLevel"]
+    assert cross_level["matches"] == (
+        cross_level["wins"] + cross_level["losses"] + cross_level["draws"]
+    )
+    assert result["drawRecord"]["win_rate"] == 1 / 3
+
+
+def test_tabletop_review_reads_literal_records_and_real_diagonal() -> None:
+    overview = _json("stats/modern/melee/events/434455/overview.json")
+    matchup = _json("stats/modern/melee/events/434455/matchup.json")
+    scope = matchup["scopes"]["all_constructed"]
+    first_parent = scope["parent_order"][0]
+    diagonal = scope["parent_matrix"][first_parent][first_parent]["literal_record"]
+    first_overview = overview["scopes"]["all_constructed"]["archetypes"][0]
+    literal = first_overview["match_record"]["all_matches"]["literal_record"]
+
+    assert matchup["rate_method"]["literal_win_rate_method"] == (
+        "wins_over_valid_matches"
+    )
+    assert diagonal["matches"] > 0
+    assert diagonal["win_rate"] == pytest.approx(
+        diagonal["wins"] / diagonal["matches"], abs=1e-6
+    )
+    assert literal["win_rate"] == pytest.approx(
+        literal["wins"] / literal["matches"], abs=1e-6
+    )
+    assert first_overview["match_record"]["all_matches"]["win_rate"] != (
+        literal["win_rate"]
+    )
+
+
+def test_tabletop_deck_payload_supports_scope_specific_best_deck_review() -> None:
+    decks = _json("stats/modern/melee/events/434455/decks.json")["decks"]
+    eligible = [
+        deck
+        for deck in decks
+        if deck["classification"]["archetype_id"] == "broodscale-combo"
+        and deck["classification"]["subtype_id"] == "gruul"
+        and deck["participant_status"] != "disqualified"
+        and not deck["statistics_eligibility"]["played_match_metrics_excluded"]
+        and deck["decklist"]["status"] == "submitted"
+        and deck["scopes"]["all_constructed"]["participated"]
+    ]
+
+    assert eligible
+    assert all(deck["decklist"]["cards"] for deck in eligible)
+    assert all(
+        deck["scopes"]["all_constructed"]["average_points_per_effective_round"]
+        is not None
+        for deck in eligible
+    )
