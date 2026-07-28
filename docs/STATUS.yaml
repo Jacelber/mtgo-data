@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/ci-gate4-master-trigger"
-  working_branch_status: "ci_gate_4_owner_accepted_remote_publication_in_progress"
+  current_working_branch: "codex/publication-workflow-governance"
+  working_branch_status: "publication_workflow_governance_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -4497,6 +4497,62 @@ phase_8_plan:
         pages_conclusion: "success"
         published_review_url: "https://jacelber.github.io/mtgo-data/docs/prototypes/P8-07/"
         published_review_http_status: 200
+      p8_08_authorized: false
+    - id: "P8-PUBLICATION-WORKFLOW-GOVERNANCE"
+      name: "Fix the repository publication path and prohibit automatic status-only closure PRs"
+      status: "owner_accepted_remote_publication_authorized"
+      branch: "codex/publication-workflow-governance"
+      base_commit: "6ecf19341b52482bf86fed6c4a34281eb3efd2cd"
+      authorized_on: "2026-07-28"
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-28"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-28"
+      production_change: false
+      generated_data_changed: false
+      workflow_changed: false
+      statistical_behavior_changed: false
+      status_document_changed: true
+      deliverables:
+        - "AGENTS.md"
+        - "docs/DEVELOPMENT_WORKFLOW.md"
+        - "docs/audits/CI_EFFICIENCY_PLAN.md"
+        - "docs/audits/DEVELOPMENT_PROCESS_RETROSPECTIVE_2026-07.md"
+        - "docs/STATUS.yaml"
+        - "tests/test_publication_governance_docs.py"
+      recurrence:
+        credential_context_misreported_as_token_expiry: true
+        github_app_mutation_attempted_before_established_gh_path: true
+        unnecessary_status_only_pull_request: 122
+        prior_rule_already_existed: true
+      controls:
+        remote_mutation_client: "gh"
+        git_push_auth: "command_scoped_gh_auth_git_credential"
+        persistent_push_url_change: false
+        github_app_mutations_allowed: false
+        credential_expiry_requires:
+          - "gh_auth_status_failure_in_actual_publication_context"
+          - "gh_api_user_authentication_failure_in_actual_publication_context"
+        exact_post_merge_metadata_source_of_truth: "github"
+        exact_post_merge_metadata_repository_update:
+          default: "next_already_authorized_change_or_phase_closeout"
+          immediate_status_only_pull_request: false
+          exceptions:
+            - "explicit_owner_request"
+            - "documented_safety_blocker"
+      validation:
+        focused_tests_passed: 3
+        repository_python_checked: 120
+        repository_json_checked: 1588
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1838
+        repository_validation_status: "passed"
+        git_diff_check: "passed"
+      publication_metadata:
+        status: "deferred_by_policy"
+        destination: "next_already_authorized_change_or_phase_closeout"
+        create_status_only_pull_request_after_merge: false
       p8_08_authorized: false
     - id: "P8-07-BACKEND-CONSUMER-BRIDGE"
       name: "Bridge frozen Phase 8 consumers with immutable weekly Top 8 bases"
