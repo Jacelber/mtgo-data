@@ -299,41 +299,53 @@ amend the UI specification here. A finding that requires a new field, formula,
 denominator, or Schema returns to a separately authorized contract/backend task;
 the browser must not reconstruct the missing statistic.
 
-### P8-08 — Shared static shell and page split
+### P8-08 — P8-07 prototype productionization and shared candidate shell
 
 Purpose:
 
-- split the monolithic MTGO page into focused shared and product-specific static
-  assets;
-- preserve current output paths, GitHub Pages behavior, and a compatibility
-  entry point;
-- establish shared format navigation, product navigation, loading, errors,
-  deck-detail structure, and accessibility utilities;
-- keep MTGO and tabletop data loaders separate.
+- use the owner-accepted P8-07 real-data prototype as the implementation source
+  instead of re-splitting the Phase 4 legacy page;
+- move the accepted shell, navigation, loading, error, deck-detail,
+  accessibility, and hierarchical interaction behavior into focused static
+  modules;
+- keep MTGO and Tabletop controllers, loaders, state, and caches structurally
+  separate while sharing presentation utilities;
+- load the published catalog and real retained JSON through the approved
+  consumer contracts;
+- publish only a parallel production candidate during this task.
 
-This engineering-preservation task should not introduce the complete visual
-redesign by itself.
+The deployed `/index.html` and its Phase 4 assets remain unchanged as a
+regression oracle and rollback baseline. P8-08 does not create the final
+`/melee/index.html`, switch a production entry point, alter a statistical
+formula, or change a public data contract.
 
 ### P8-09 — MTGO format-first production UI
 
 Purpose:
 
+- connect the accepted P8-08 MTGO controller and shared shell to `/index.html`;
 - implement the approved format-first shell for enabled MTGO formats;
 - implement official statistics, hierarchical matchup, weekly Top 8, and Weekly
   Pickup views;
 - implement parent/subtype controls and full subtype labels;
 - implement shared exact/representative/average deck detail;
-- display both completeness products and quality warnings.
+- display both completeness products and quality warnings;
+- verify every retained legacy behavior and public path before retiring any
+  compatibility asset.
 
 ### P8-10 — Tabletop Major Events production UI
 
 Purpose:
 
-- implement `/melee/index.html` using the shared shell;
+- connect the accepted P8-08 Tabletop controller to `/melee/index.html` using
+  the shared shell;
 - select format, event, and statistical scope from the published catalogs;
 - render hierarchical event overview and matchup statistics;
 - expose event quality, selection-bias, exclusion, and source information;
 - keep all tabletop values separate from MTGO products.
+
+P8-09 and P8-10 are separate production-entry changes and each retains its own
+owner authorization and acceptance gate.
 
 ### P8-11 — Cross-product regression and Phase 8 closeout
 

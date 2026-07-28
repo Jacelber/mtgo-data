@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/publication-workflow-governance"
-  working_branch_status: "publication_workflow_governance_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p8-08-prototype-productionization"
+  working_branch_status: "p8_08_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-28"
+  last_updated: "2026-07-29"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_07_completed_p8_08_awaiting_owner_authorization"
+  status: "p8_08_owner_accepted_remote_publication_authorized"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4497,7 +4497,7 @@ phase_8_plan:
         pages_conclusion: "success"
         published_review_url: "https://jacelber.github.io/mtgo-data/docs/prototypes/P8-07/"
         published_review_http_status: 200
-      p8_08_authorized: false
+      p8_08_authorized: true
     - id: "P8-PUBLICATION-WORKFLOW-GOVERNANCE"
       name: "Fix the repository publication path and prohibit automatic status-only closure PRs"
       status: "owner_accepted_remote_publication_authorized"
@@ -4812,13 +4812,60 @@ phase_8_plan:
         pages_run_id: 30345130308
         pages_conclusion: "success"
     - id: "P8-08"
-      name: "Shared static shell and page split"
-      status: "not_started"
+      name: "P8-07 prototype productionization and shared candidate shell"
+      status: "owner_accepted_remote_publication_authorized"
+      branch: "codex/p8-08-prototype-productionization"
+      base_commit: "5e93ddf39bf894a85ab823cb61acb6c252bb9fba"
+      authorized_on: "2026-07-29"
+      owner_local_execution_authorized: true
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-29"
+      merge_authorized_after_passing_checks: true
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-29"
+      production_entry_changed: false
+      implementation_reference: "docs/prototypes/P8-07/"
+      legacy_page_role: "regression_oracle_and_rollback_baseline"
+      candidate_requirements:
+        - "Use the accepted P8-07 real-data behavior as the implementation source."
+        - "Create a parallel modular static candidate."
+        - "Keep MTGO and Tabletop controllers, loaders, state, and caches separate."
+        - "Load the published catalog and approved real-data consumer contracts."
+        - "Do not replace /index.html or create the final /melee/index.html."
+      deliverables:
+        - "docs/prototypes/P8-08/index.html"
+        - "assets/css/phase8-base.css"
+        - "assets/css/phase8-candidate.css"
+        - "assets/js/phase8/runtime.js"
+        - "assets/js/phase8/matchup-model.js"
+        - "assets/js/phase8/mtgo-controller.js"
+        - "assets/js/phase8/tabletop-controller.js"
+        - "assets/js/phase8/app.js"
+        - "tests/test_phase8_production_candidate.py"
+        - "docs/audits/P8-08.md"
+      validation:
+        node_syntax_checks_passed: true
+        focused_tests_passed: 16
+        full_pytest_passed: 577
+        full_pytest_seconds: 386.02
+        repository_python_checked: 121
+        repository_json_checked: 1588
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1844
+        rule_validation_status: "passed"
+        schema_documents_validated: 69
+        git_diff_check: "passed"
+        browser_acceptance_passed: true
+        browser_console_errors: 0
+        narrow_viewport_verified: "390x844"
+        production_entry_diff: false
+      local_environment_note: "The first complete pytest attempt used an inaccessible default Windows temporary root and ended with 435 passes plus 142 fixture setup errors and no assertion failure. A five-test probe and the unchanged 577-test complete suite passed under a fresh independent workspace-sibling basetemp."
     - id: "P8-09"
-      name: "MTGO format-first production UI"
+      name: "MTGO production-entry connection and legacy regression"
       status: "not_started"
     - id: "P8-10"
-      name: "Tabletop Major Events production UI"
+      name: "Tabletop Major Events production-entry connection"
       status: "not_started"
     - id: "P8-11"
       name: "Cross-product regression and Phase 8 closeout"
@@ -5027,17 +5074,17 @@ phase_8_plan:
         merged_on: "2026-07-28"
 
 next_approved_task:
-  id: "P8-08"
-  name: "Shared static shell and page split"
+  id: "P8-09"
+  name: "MTGO production-entry connection and legacy regression"
   target_paths:
     - "index.html"
-    - "assets/"
-    - "melee/index.html"
+    - "assets/css/"
+    - "assets/js/"
     - "tests/"
     - "docs/STATUS.yaml"
-  production_change: false
+  production_change: true
   requires_user_confirmation: true
-  authorization_status: "awaiting_owner_authorization"
+  authorization_status: "awaiting_predevelopment_explanation_and_owner_authorization"
   local_execution_authorized: false
   local_execution_authorized_on: null
   remote_publication_authorized: false
