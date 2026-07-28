@@ -297,6 +297,21 @@ Do not manually edit generated statistics as a substitute for fixing the generat
 - Do not test remote-write authorization by attempting a push. After the owner
   authorizes publication, complete the publication preflight and use one
   documented push/PR path.
+- For this repository, the documented remote-mutation client is `gh`. Use the
+  repository-specific `gh` publication commands in
+  `docs/DEVELOPMENT_WORKFLOW.md`; do not first attempt PR creation, merge, file
+  writes, or Git-data writes through a GitHub app or connector.
+- A credential failure observed only in an isolated, elevated, or
+  non-interactive execution context means that context could not use the
+  credential until the documented preflight proves otherwise. Do not tell the
+  owner that their token expired unless the same publication context fails both
+  `gh auth status` and an authenticated read-only `gh api` identity check.
+- Do not create a second pull request solely to record the preceding pull
+  request number, merge SHA, workflow run IDs, or Pages result. Report those
+  facts in the handoff and reconcile them in the next already-authorized
+  development or governance change, or at phase closeout. Immediate repository
+  reconciliation requires an explicit owner request or a demonstrated safety
+  blocker.
 
 ---
 

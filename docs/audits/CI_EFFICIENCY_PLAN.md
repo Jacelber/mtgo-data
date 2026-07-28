@@ -220,8 +220,13 @@ cross-layer. Do not create benchmark-only PRs just to fill the sample ledger.
 After each qualifying PR, merged `master` run, and production run, append one
 compact row to this document's sample ledger in the next already-authorized
 governance or development change. Do not create a status-only pull request for
-each row. At Phase 7 closeout, consolidate the evidence and state whether Gate
-1 is met, blocked, or no longer warranted.
+each row. This includes exact PR numbers, merge SHAs, workflow run IDs, and
+Pages results that become known only after an implementation PR is merged.
+Report them in the immediate handoff, but keep GitHub as their source of truth
+until the next already-authorized change or phase closeout. PR #122 is a
+recorded recurrence of the prohibited status-only pattern, not a precedent.
+At Phase 7 closeout, consolidate the evidence and state whether Gate 1 is met,
+blocked, or no longer warranted.
 
 ## Model guidance
 

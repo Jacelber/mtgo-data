@@ -223,20 +223,54 @@ authorization and before the first remote write:
 1. confirm the final local commit, clean status, current branch, and intended
    base;
 2. inspect the fetch and disabled push URLs;
-3. run `gh auth status`;
-4. confirm repository write permission through a read-only repository metadata
-   query;
+3. in the same execution context that will publish, run
+   `gh auth status -h github.com` and
+   `gh api user --jq .login`;
+4. confirm repository write permission without mutating it:
+   `gh api repos/Jacelber/mtgo-data --jq .permissions.push` must return `true`;
 5. if `.github/workflows/**` changed, confirm that the active token includes the
    required `workflow` scope;
-6. restore the real push URL only after those checks pass;
-7. use the single standard path: local Git push, pull-request creation, checks,
-   and authorized merge.
+6. keep the workspace's disabled push sentinel and empty local credential
+   helper intact; do not restore or persist a real push URL;
+7. use only the repository-specific `gh` publication path below.
 
 Do not use a push as a credential probe and do not rotate through unrelated
 fallback publication mechanisms after a `403`. First distinguish the expected
 local disabled-push sentinel from a real GitHub authorization or token-scope
 failure. If preflight fails, stop once, report the missing permission or
 configuration, and preserve the local commit.
+
+For this repository, generic GitHub app or connector mutation preferences are
+superseded by this repository-specific path. GitHub app and connector tools may
+be used read-only, but do not attempt branch creation, file writes, Git-data
+writes, PR creation, or merge through them before falling back to `gh`.
+
+Use these commands, substituting the approved workspace, branch, title, body
+file, and PR number:
+
+```powershell
+git -c safe.directory=<workspace> `
+  -c credential.helper= `
+  -c "credential.helper=!gh auth git-credential" `
+  push https://github.com/Jacelber/mtgo-data.git <branch>
+
+gh pr create --repo Jacelber/mtgo-data --base master --head <branch> `
+  --title "<title>" --body-file <body-file>
+
+gh pr checks <pr-number> --repo Jacelber/mtgo-data --watch --interval 20
+gh pr view <pr-number> --repo Jacelber/mtgo-data `
+  --json state,headRefOid,mergeable,statusCheckRollup,url
+gh pr merge <pr-number> --repo Jacelber/mtgo-data --merge --delete-branch
+```
+
+The command-scoped `safe.directory` and credential helper do not modify global
+or repository-local configuration. A disabled push sentinel error means the
+explicit approved URL was not used. `/dev/tty`, username-prompt, or credential
+helper errors mean Git did not obtain the already-checked `gh` credential; they
+do not prove token expiration. Describe a token as invalid or expired only
+when both `gh auth status` and `gh api user` fail with an authentication error
+in the actual publication context. Otherwise report a credential-context or
+helper-path failure and retry only the documented path.
 
 A pull request cannot contain its own not-yet-known merge commit. Therefore,
 implementation pull requests should record stable task results and validation,
@@ -247,6 +281,18 @@ already-authorized governance or development change, or at phase closeout. If
 the owner explicitly requires immediate exact metadata, create at most one
 intentional documentation closure change; never create a second change solely
 to finalize that closure change.
+
+Before merging the implementation PR, update durable project state and the
+next owner-authorization stop in that same PR without inventing not-yet-known
+identifiers. Report the actual PR number, merge SHA, workflow run IDs, and Pages
+result in the final handoff. Leave those exact publication fields absent or
+explicitly deferred in the repository until the next already-authorized
+development or governance PR, then reconcile them as part of that PR's normal
+documentation maintenance. Do not create or switch to a
+`publication-record`, `status`, `reconciliation`, or `finalization` branch
+solely for those identifiers. An immediate documentation PR is allowed only
+when the owner explicitly requests it or when stale durable state would
+otherwise authorize unsafe work; explain the exception before creating it.
 
 ## Evidence and context economy
 

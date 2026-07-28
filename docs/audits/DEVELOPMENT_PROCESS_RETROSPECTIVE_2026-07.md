@@ -69,3 +69,31 @@ At the next phase closeout, review whether:
 
 The desired result is zero recurrence. A recurrence should update the control,
 not merely add another narrative incident.
+
+## P8-07 recurrence and strengthened control
+
+The P8-07 publication on 2026-07-28 exposed two compliance failures rather
+than missing project policy:
+
+1. the agent followed a generic app-first PR workflow even though this
+   repository already required one preflighted publication path; and
+2. after PR #121 merged, the agent created PR #122 solely to record publication
+   metadata even though this document, `docs/DEVELOPMENT_WORKFLOW.md`, and
+   `docs/audits/CI_EFFICIENCY_PLAN.md` already prohibited that pattern.
+
+PR #122 increases the historical status/publication/reconciliation/finalization
+count beyond the previously audited 31 of the first 85 merged pull requests.
+It is recorded as a recurrence, not as a new accepted workflow.
+
+The corrective action is intentionally operational rather than narrative:
+
+- `AGENTS.md` now places both controls in the mandatory entry point;
+- `docs/DEVELOPMENT_WORKFLOW.md` names `gh` as the only remote-mutation client
+  for this repository and provides the exact command-scoped credential-helper
+  path;
+- authentication errors are classified as context/helper failures unless the
+  actual publication context fails both `gh auth status` and `gh api user`;
+- exact post-merge identifiers are reported immediately but reconciled in the
+  next already-authorized change or phase closeout; and
+- a pure publication-record branch requires an explicit owner request or a
+  documented safety blocker.
