@@ -1713,6 +1713,15 @@ The full evidence, uncertainty boundary, expected repair invariants, and
 acceptance tests are recorded in
 `docs/audits/P8-FOLLOWUP-12847150.md`.
 
+The 2026-07-27 daily production commit exposed two migration tests that froze
+rolling Standard counts and hashes instead of the compatibility behavior they
+were intended to protect. The focused
+`P8-HOTFIX-ROLLING-CONTRACT-TESTS` replaces those data-dependent assertions
+with immutable synthetic contracts for Standard legacy matchup aliases, parent
+rollups, additive subtype statistics, and additive subtype construction
+details. It changes no producer, generated data, statistical formula, or public
+contract. All 40 focused tests and all 516 repository tests pass.
+
 ## Tabletop behavior
 
 The Tabletop Major Events front end supports:

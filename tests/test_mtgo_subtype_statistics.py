@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import hashlib
+from copy import deepcopy
 import json
 from pathlib import Path
 
@@ -23,16 +23,6 @@ PARENT_FIELDS = (
     "avg_points_per_round",
     "avg_deviation",
 )
-
-
-def digest(value) -> str:
-    payload = json.dumps(
-        value,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode()
-    return hashlib.sha256(payload).hexdigest()
 
 
 def subtype_rules():
@@ -132,6 +122,7 @@ def test_parent_and_subtype_range_counts_conserve_with_zero_sample_taxonomy():
         rules,
     )["records"]
     result = stats.aggregate(records, include_archetype_ids=True, rules=rules)
+    parent_only = stats.aggregate(records)
     engine = next(item for item in result["archetypes"] if item["id"] == "engine")
     children = {item["id"]: item for item in engine["subtypes"]}
 
@@ -155,6 +146,47 @@ def test_parent_and_subtype_range_counts_conserve_with_zero_sample_taxonomy():
     assert "subtypes" not in next(
         item for item in result["archetypes"] if item["id"] == "other"
     )
+    assert [
+        {key: item[key] for key in PARENT_FIELDS if key in item}
+        for item in result["archetypes"]
+    ] == [
+        {key: item[key] for key in PARENT_FIELDS if key in item}
+        for item in parent_only["archetypes"]
+    ]
+
+
+def test_attaching_subtype_decks_preserves_parent_construction():
+    rules = subtype_rules()
+    records = stats.process_event(
+        {
+            "player_count": 8,
+            "players": [
+                player("Alpha Card", 9, 1),
+                player("Beta Card", 6, 4),
+            ],
+        },
+        rules,
+    )["records"]
+    parent_decks = {
+        "Engine": {
+            "archetype_id": "engine",
+            "best_deck": {"player": "Parent Best"},
+            "average_deck": {"sample_size": 2},
+        }
+    }
+    expected_parent = deepcopy(parent_decks["Engine"])
+
+    stats.attach_subtype_decks(parent_decks, records, {}, rules)
+
+    assert {
+        key: parent_decks["Engine"][key]
+        for key in ("archetype_id", "best_deck", "average_deck")
+    } == expected_parent
+    assert [item["id"] for item in parent_decks["Engine"]["subtypes"]] == [
+        "alpha",
+        "beta",
+        "gamma",
+    ]
 
 
 def test_null_subtype_under_subtype_defining_parent_fails_closed():
@@ -198,55 +230,6 @@ def test_null_subtype_under_subtype_defining_parent_fails_closed():
         assert "has no selected subtype" in str(exc)
     else:
         raise AssertionError("null subtype under subtype-defining parent was accepted")
-
-
-def test_committed_parent_outputs_remain_phase6_compatible():
-    contract = json.loads(
-        (
-            ROOT
-            / "tests"
-            / "fixtures"
-            / "mtgo"
-            / "subtype_stats_parent_contract.json"
-        ).read_text(encoding="utf-8")
-    )
-    for format_id, windows in contract["formats"].items():
-        for weeks, expected in windows.items():
-            output = ROOT / "stats" / format_id / "mtgo"
-            range_document = json.loads(
-                (output / f"range_{weeks}w.json").read_text(encoding="utf-8")
-            )
-            decks_document = json.loads(
-                (output / f"decks_{weeks}w.json").read_text(encoding="utf-8")
-            )
-            range_projection = {
-                "totals": {
-                    key: range_document[key]
-                    for key in (
-                        "total_decks",
-                        "total_high_score",
-                        "total_top8",
-                        "unknown_count",
-                    )
-                },
-                "archetypes": [
-                    {key: item[key] for key in PARENT_FIELDS}
-                    for item in range_document["archetypes"]
-                ],
-            }
-            decks_projection = {
-                name: {
-                    key: entry[key]
-                    for key in ("best_deck", "average_deck")
-                }
-                for name, entry in decks_document["decks"].items()
-            }
-            assert digest(range_projection) == expected[
-                "range_parent_projection_sha256"
-            ]
-            assert digest(decks_projection) == expected[
-                "decks_parent_projection_sha256"
-            ]
 
 
 def test_committed_ranges_cover_taxonomy_and_conserve_parent_counts():
