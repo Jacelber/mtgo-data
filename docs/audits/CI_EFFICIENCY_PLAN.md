@@ -45,8 +45,8 @@ recorded as context but excluded from median calculations.
 
 | Population | Existing usable baseline | Instrumented at plan publication | Minimum before a CI-design decision | Remaining target |
 | --- | ---: | ---: | ---: | ---: |
-| Matched PR and merged-`master` pairs | 4 historical pairs | 1 pair (PR #97) | 6 instrumented pairs | 5 pairs |
-| Production data-update runs | 3 successful step-duration examples | 0 marker-group reports | 3 post-plan successful runs | 3 runs |
+| Matched PR and merged-`master` pairs | 4 historical pairs | 20 pairs (PR #97 through #116) | 6 instrumented pairs | 0 pairs |
+| Production data-update runs | 3 successful step-duration examples | 3 post-plan successful runs | 3 post-plan successful runs | 0 runs |
 | Pages deployments | 4 successful examples | 1 additional #97 deployment | No collection task unless duration becomes material | 0 |
 
 The six instrumented pairs should come from ordinary approved work, not from
@@ -61,6 +61,47 @@ job duration, clean-checkout pytest-step duration, fetch duration, generation
 duration, candidate-validation duration, and publication-confirmation result.
 Do not infer marker-group timings that the current production workflow does
 not report.
+
+## Gate 1 review — 2026-07-28
+
+The evidence threshold is met. Twenty successful PR-to-`master` pairs from
+PR #97 through PR #116 use the same instrumented CI workflow. Across those
+pairs:
+
+- PR jobs have a 595-second median and a 385-to-666-second range;
+- PR pytest steps have a 552-second median and a 348-to-612-second range;
+- merged-`master` jobs have a 628-second median and a 348-to-666-second range;
+- merged-`master` pytest steps have a 578.5-second median and a
+  314-to-610-second range;
+- pytest therefore occupies approximately 92 percent of both populations.
+
+The latest six pairs have PR and `master` pytest medians of 592 and 596.5
+seconds respectively, confirming that repository growth has added roughly
+40-to-64 seconds relative to the first six pairs. The same slow calls recur
+in all twelve latest runs: Modern fixed-reference regeneration averages
+94.71 seconds, Modern Pickup metadata 60.59 seconds, the Standard Phase 3
+fixed-reference product 41.19 seconds, and each of three repeated Schema
+validation calls approximately 33 seconds.
+
+Production runs `30193812741`, `30220282843`, and `30306215892` use the same
+production-workflow version and all completed successfully. Their median job
+duration is 901 seconds; the clean-checkout suite contributes 450 seconds,
+MTGO event fetching 192 seconds, product statistics 82 seconds, and Videre
+fetching 34 seconds. Production remains a separate population and no
+marker-group time is inferred.
+
+Gate 1 therefore identifies complete pytest execution as the dominant,
+recurrent CI cost and shows more than one minute of plausible optimization
+space. This finding authorizes no behavior change by itself. Gate 2 remains
+blocked on a separately approved branch-protection review, and any Gate 3
+sharding prototype still must prove complete, disjoint collection and measured
+wall-clock improvement.
+
+PR #117 run `30327216251` is contextual evidence only and is excluded from
+the medians. The former 15-minute job ceiling cancelled the suite at 96
+percent before pytest could render seven already-recorded byte-identity
+failures. The focused repair restores the exact generated-file byte contract
+and raises the safety ceiling to 30 minutes without changing test selection.
 
 ## Decision sequence
 

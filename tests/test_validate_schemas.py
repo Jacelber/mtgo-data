@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_production_public_outputs_pass():
     checked, failures = schemas.validate_manifest(ROOT, ROOT / "schemas" / "manifest.json")
-    assert checked == 66
+    assert checked == 69
     assert failures == []
 
 
@@ -25,13 +25,13 @@ def test_every_public_output_embeds_the_manifest_version():
     matched = []
     for mapping in manifest["mappings"]:
         matched.extend(ROOT.glob(mapping["pattern"]))
-    assert len(matched) == 66
+    assert len(matched) == 69
     assert all(json.loads(path.read_text(encoding="utf-8"))["schema_version"] == manifest["schema_version"] for path in matched)
 
 
 def test_all_declared_schemas_are_valid_and_versioned():
     loaded, _ = schemas.load_schemas(ROOT / "schemas")
-    assert len(loaded) == 32
+    assert len(loaded) == 34
     assert "phase8-public-contract.schema.json" in loaded
     assert "mtgo-archetype-hierarchy.schema.json" in loaded
     assert "classification-rules.schema.json" in loaded
@@ -142,7 +142,7 @@ def test_manifest_rejects_missing_matches_and_schema(tmp_path):
 def test_cli_pass_help_usage_and_non_root_execution(tmp_path):
     script = ROOT / "validate_schemas.py"
     result = subprocess.run([sys.executable, "-B", str(script)], cwd=tmp_path, text=True, capture_output=True)
-    assert result.returncode == 0 and "PASS" in result.stdout and "checked=66" in result.stdout
+    assert result.returncode == 0 and "PASS" in result.stdout and "checked=69" in result.stdout
     help_result = subprocess.run([sys.executable, "-B", str(script), "--help"], text=True, capture_output=True)
     assert help_result.returncode == 0 and "usage:" in help_result.stdout
     usage = subprocess.run([sys.executable, "-B", str(script), "--unknown"], text=True, capture_output=True)

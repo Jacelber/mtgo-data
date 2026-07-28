@@ -73,6 +73,7 @@ def test_complete_pipeline_order_preserves_mtgo_and_videre():
         "pickup candidates --if-absent",
         "generate-hierarchy",
         "generate-metadata",
+        "-m mtgmeta.catalog",
         "classification-reports --strict",
         "validate_production_candidate.py validate",
         "validate_repository.py",
@@ -146,6 +147,7 @@ def test_summary_is_always_written_without_secrets():
 
 def test_format_aware_loops_replace_every_standard_production_wrapper():
     workflow = UPDATE.read_text(encoding="utf-8")
+    assert "python -B -m mtgmeta.catalog --root ." in workflow
     assert "$MTGO_FORMAT" not in workflow
     assert "python -B -m mtgmeta.mtgo --format \"$FORMAT\" fetch-events" in workflow
     for command in (

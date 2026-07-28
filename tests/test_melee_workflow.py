@@ -56,6 +56,7 @@ def test_pipeline_order_is_complete_and_fail_closed():
         "-m mtgmeta.melee.stats",
         "-m mtgmeta.melee.matchup",
         "-m mtgmeta.melee.publish",
+        "-m mtgmeta.catalog",
         "validate_melee_candidate.py validate",
         "validate_repository.py",
         "validate_rules.py",
@@ -83,6 +84,7 @@ def test_existing_canonical_event_reuses_its_immutable_snapshot():
 def test_publication_uses_only_event_melee_paths_and_never_master_or_pr():
     text = WORKFLOW.read_text(encoding="utf-8")
     assert 'git add -- "data_raw/melee/${EVENT_ID}/" "data/${FORMAT}/melee/" "stats/${FORMAT}/melee/"' in text
+    assert '"stats/catalog.json"' in text
     assert 'BRANCH="data/melee-${EVENT_ID}"' in text
     assert 'git push origin "HEAD:refs/heads/${BRANCH}"' in text
     assert "HEAD:master" not in text

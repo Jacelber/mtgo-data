@@ -72,7 +72,13 @@
     "exactDeck": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["player", "main_deck", "sideboard"],
+      "required": [
+        "player",
+        "main_deck",
+        "sideboard",
+        "deviation",
+        "deviation_diff"
+      ],
       "properties": {
         "player": {"type": "string", "minLength": 1},
         "main_deck": {
@@ -83,6 +89,31 @@
         "sideboard": {
           "type": "array",
           "items": {"$ref": "#/$defs/card"}
+        },
+        "deviation": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "deviation_diff": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["fewer", "more"],
+              "properties": {
+                "fewer": {
+                  "type": "array",
+                  "items": {"$ref": "mtgo-decks.schema.json#/$defs/deviationCard"}
+                },
+                "more": {
+                  "type": "array",
+                  "items": {"$ref": "mtgo-decks.schema.json#/$defs/deviationCard"}
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -93,13 +124,18 @@
         "identity_id",
         "base_period",
         "base_period_end",
+        "base_status",
         "average_deck_ref"
       ],
       "properties": {
         "identity_id": {"$ref": "#/$defs/stableId"},
         "base_period": {"const": "4w"},
         "base_period_end": {"type": "string", "format": "date"},
-        "average_deck_ref": {"type": "string", "minLength": 1}
+        "base_status": {"enum": ["available", "unavailable"]},
+        "average_deck_ref": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-W[0-9]{2}-bases\\.json#identity/[a-z0-9]+(?:[-/][a-z0-9]+)*$"
+        }
       }
     },
     "placement": {

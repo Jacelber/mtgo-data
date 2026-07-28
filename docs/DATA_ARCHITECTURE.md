@@ -1393,22 +1393,22 @@ The public statistics root is:
 stats/
 ```
 
-A global catalog should eventually be generated at:
+A global format-first consumer catalog is generated at:
 
 ```text
 stats/catalog.json
 ```
 
-The catalog should allow the front end to discover:
+The catalog allows the front end to discover:
 
-- product source;
-- formats;
-- available time ranges;
-- available events;
-- latest event;
-- generated dates;
-- schema versions;
-- public JSON paths.
+- whether each approved product is available for each known format;
+- the first available product for format-switch fallback;
+- the public metadata or product-catalog path;
+- planned and decision-gated formats without inventing an empty product.
+
+The catalog is generated from the format registry and actual published product
+catalogs. It does not make a non-public format available merely because raw
+event archives exist.
 
 ### 12.1 MTGO output
 
@@ -1515,6 +1515,8 @@ events. Its public files are:
   `schemas/mtgo-top8-index.schema.json`;
 - `stats/<format>/mtgo/top8/YYYY-Www.json`, validated by
   `schemas/mtgo-top8-week.schema.json`.
+- `stats/<format>/mtgo/top8/YYYY-Www-bases.json`, validated by
+  `schemas/mtgo-top8-comparison-bases.schema.json`.
 
 The `weekly_top8` capability gates generation independently for each format.
 The metadata document exposes `top8_catalog` only when the catalog exists, and
@@ -1528,16 +1530,16 @@ Each weekly document includes:
 - stable parent and subtype identity;
 - a stable self-contained subtype display label;
 - an exact decklist reference or explicit missing-deck state;
-- provenance for the subtype construction base used by deviation and
-  average-deck comparison.
+- an immutable same-week subtype or parent construction-base reference;
+- exact-deck deviation and card differences when that base has sufficient
+  samples, or an explicit unavailable state otherwise.
 
-The initial catalog deliberately exposes only the latest complete
-Monday-through-Sunday week. Its comparison reference resolves against that
-same period's current `decks_4w.json`. Historical exact-deck browsing requires
-a separately versioned immutable historical construction-base contract; P8-05
-does not retain an old week while pointing it at a newer mutable four-week
-average. P8-07 must review this boundary with real payloads before the
-production UI is implemented.
+P8-07 establishes 2026-W30 as the first immutable historical baseline. Future
+production runs append a new complete week and companion base while retaining
+older catalog entries. Rebuilding an already immutable week must be
+byte-identical. The initial migration may replace the pre-contract rolling
+reference for 2026-W30 exactly once; after that, changed historical bytes fail
+closed.
 
 Phase 8 may also extend MTGO metadata or range documents with approved
 completeness payloads. Matchup completeness must retain the expected/admitted,
@@ -1626,11 +1628,17 @@ identity totals. The old draw-adjusted fields remain compatibility aliases;
 the browser selects the new records only by their explicit
 `wins_over_valid_matches` method.
 
+The Tabletop overview and hierarchical matchup documents follow the same
+additive migration: legacy draw-adjusted records remain, while every target
+record includes a nested `literal_record`. MTGO range, deck, hierarchy,
+matchup, and Tabletop overview/matchup subtype nodes expose `display_name`, so
+browser code never reconstructs a full subtype label.
+
 The scheduled producer order is event and match collection, range statistics,
 matchup statistics, completeness, Top 8, Pickup preparation, hierarchy,
-metadata, and diagnostics. Candidate validation admits only the reviewed
-completeness index and positive-week JSON names; arbitrary generated paths
-remain blocked.
+metadata, the global consumer catalog, and diagnostics. Candidate validation
+admits only the reviewed completeness documents, Top 8 week/base names, and
+`stats/catalog.json`; arbitrary generated paths remain blocked.
 
 ### 12.2 Melee output
 

@@ -119,6 +119,9 @@ jobs:
             python -B -m mtgmeta.mtgo --format "$FORMAT" generate-metadata
           done
 
+      - name: Generate format-first consumer catalog
+        run: python -B -m mtgmeta.catalog --root .
+
       - name: Generate and strictly validate product classification diagnostics
         shell: bash
         run: |

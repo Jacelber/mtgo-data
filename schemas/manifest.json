@@ -4,6 +4,7 @@
   "output_schema_version_embedded": true,
   "note": "Compatibility contract for public MTGO and Tabletop Major Events generated output with embedded schema_version.",
   "mappings": [
+    {"pattern": "stats/catalog.json", "schema": "consumer-catalog.schema.json"},
     {"pattern": "stats/standard/mtgo/range_*w.json", "schema": "mtgo-range.schema.json"},
     {"pattern": "stats/standard/mtgo/decks_*w.json", "schema": "mtgo-decks.schema.json"},
     {"pattern": "stats/standard/mtgo/index.json", "schema": "mtgo-catalog.schema.json"},
@@ -12,8 +13,10 @@
     {"pattern": "stats/modern/mtgo/index.json", "schema": "mtgo-catalog.schema.json"},
     {"pattern": "stats/standard/mtgo/top8/index.json", "schema": "mtgo-top8-index.schema.json"},
     {"pattern": "stats/standard/mtgo/top8/[0-9][0-9][0-9][0-9]-W[0-9][0-9].json", "schema": "mtgo-top8-week.schema.json"},
+    {"pattern": "stats/standard/mtgo/top8/[0-9][0-9][0-9][0-9]-W[0-9][0-9]-bases.json", "schema": "mtgo-top8-comparison-bases.schema.json"},
     {"pattern": "stats/modern/mtgo/top8/index.json", "schema": "mtgo-top8-index.schema.json"},
     {"pattern": "stats/modern/mtgo/top8/[0-9][0-9][0-9][0-9]-W[0-9][0-9].json", "schema": "mtgo-top8-week.schema.json"},
+    {"pattern": "stats/modern/mtgo/top8/[0-9][0-9][0-9][0-9]-W[0-9][0-9]-bases.json", "schema": "mtgo-top8-comparison-bases.schema.json"},
     {"pattern": "stats/standard/mtgo/completeness/index.json", "schema": "mtgo-completeness-index.schema.json"},
     {"pattern": "stats/standard/mtgo/completeness/[0-9]*w.json", "schema": "mtgo-completeness-range.schema.json"},
     {"pattern": "stats/modern/mtgo/completeness/index.json", "schema": "mtgo-completeness-index.schema.json"},

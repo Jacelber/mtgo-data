@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-top8-comparison-bases.schema.json",
+  "title": "Immutable MTGO weekly Top 8 construction comparison bases",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "source",
+    "format",
+    "week",
+    "base_period",
+    "base_period_end",
+    "identities"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "top8_comparison_bases"},
+    "source": {"const": "mtgo"},
+    "format": {"enum": ["standard", "modern"]},
+    "week": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": {"type": "string", "format": "date"},
+        "end": {"type": "string", "format": "date"}
+      }
+    },
+    "base_period": {"const": "4w"},
+    "base_period_end": {"type": "string", "format": "date"},
+    "identities": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+(?:[-/][a-z0-9]+)*$"
+      },
+      "additionalProperties": {"$ref": "#/$defs/identity"}
+    }
+  },
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_id",
+        "display_name",
+        "base_status",
+        "average_deck"
+      ],
+      "properties": {
+        "identity_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:[-/][a-z0-9]+)*$"
+        },
+        "display_name": {"type": "string", "minLength": 1},
+        "base_status": {"enum": ["available", "unavailable"]},
+        "average_deck": {
+          "$ref": "mtgo-decks.schema.json#/$defs/averageDeck"
+        }
+      }
+    }
+  }
+}

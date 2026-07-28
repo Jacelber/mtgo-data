@@ -12,6 +12,7 @@ import re
 import sys
 from typing import Any, Mapping, Sequence
 
+from ..consumer import identity_display_name, literal_match_record
 from .stats import (
     MeleeStatisticsError,
     SCOPE_ORDER,
@@ -98,6 +99,7 @@ def _hierarchy_from_overview(
                 "id": parent_id,
                 "kind": "unknown",
                 "name": parent["name"],
+                "display_name": parent["name"],
                 "parent_id": parent_id,
                 "subtype_id": None,
             }
@@ -140,6 +142,10 @@ def _hierarchy_from_overview(
                     "id": leaf_id,
                     "kind": "subtype",
                     "name": subtype_name,
+                    "display_name": identity_display_name(
+                        parent_name,
+                        subtype_name,
+                    ),
                     "parent_id": parent_id,
                     "subtype_id": subtype_id,
                 }
@@ -152,6 +158,7 @@ def _hierarchy_from_overview(
                     "id": parent_id,
                     "kind": "archetype",
                     "name": parent_name,
+                    "display_name": parent_name,
                     "parent_id": parent_id,
                     "subtype_id": None,
                 }
@@ -431,6 +438,7 @@ def _emit_record(counts: Mapping[str, int], *, mirror: bool) -> dict[str, Any]:
         "win_rate": win_rate,
         "confidence_interval_95": interval,
         "mirror": mirror,
+        "literal_record": literal_match_record(wins, losses, draws),
     }
 
 
@@ -629,6 +637,7 @@ def build_event_matchup(
         "canonical_level": "leaf",
         "rate_method": {
             "draw_weight": 0.5,
+            "literal_win_rate_method": "wins_over_valid_matches",
             "confidence_interval": "wilson_95",
             "low_sample_threshold": None,
         },

@@ -1681,6 +1681,23 @@ manifest mappings, candidate boundary, and scheduled producer step make the
 product fail closed. P8-06 changes no classifier, fetch policy, Melee output,
 or front-end source.
 
+The P8-07 real-data readiness audit found four consumer blockers: subtype labels
+were not self-contained outside Top 8, Tabletop still exposed only legacy
+draw-adjusted rates, Top 8 comparison references were rolling rather than
+historical, and no global format/product catalog existed. The owner authorized
+a focused backend bridge before resuming the UI review.
+
+The bridge adds only additive consumer fields and generated discovery. MTGO and
+Tabletop subtype nodes now expose complete labels. Tabletop overview and
+matchup records keep legacy percentages and add literal win records. The global
+catalog declares all six known formats and five approved product slots from
+actual published catalogs. Top 8 now retains 2026-W30 as its first immutable
+week, stores a same-week comparison-base companion, emits exact-deck deviation
+when a valid four-week base exists, and fails if a frozen week or base would be
+rewritten. Earlier weeks remain unbackfilled. The bridge changes no front-end
+source, classifier, source fetcher, event inclusion policy, or legacy rate
+field.
+
 After P8-04 owner acceptance, perform a separately authorized focused
 investigation of retained MTGO event `12847150`. The owner verified that the
 current official event page contains complete data, while the retained archive

@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-06-mtgo-completeness"
-  working_branch_status: "p8_06_publication_authorized"
+  current_working_branch: "codex/p8-07-backend-consumer-bridge"
+  working_branch_status: "p8_07_backend_consumer_bridge_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_06_publication_authorized"
+  status: "p8_07_backend_consumer_bridge_publication_authorized"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4097,7 +4097,7 @@ phase_7_result:
 phase_8_plan:
   id: "P8-PLANNING"
   name: "Format-first front-end and supporting data plan"
-  status: "p8_05_publication_blocked_by_master_baseline"
+  status: "p8_07_backend_consumer_bridge_publication_authorized"
   owner_approved: true
   owner_approved_on: "2026-07-25"
   implementation_authorized: false
@@ -4315,7 +4315,7 @@ phase_8_plan:
       merged_on: "2026-07-28"
     - id: "P8-06"
       name: "MTGO completeness backend product"
-      status: "completed_owner_accepted_publication_authorized"
+      status: "completed_published"
       branch: "codex/p8-06-mtgo-completeness"
       base_commit: "8397d4ffc676042356ef7fe7703a946b0d55923f"
       authorized_on: "2026-07-28"
@@ -4393,9 +4393,80 @@ phase_8_plan:
       remote_publication_authorized: true
       remote_publication_authorized_on: "2026-07-28"
       workflow_dispatch_authorized: false
+      local_commit: "58418585a42ba6f9aba18add816810ee1c54bc98"
+      pull_request: 116
+      pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/116"
+      merge_commit: "024c63afc390201bc4fbadfd09e033c538624270"
+      merged_on: "2026-07-28"
     - id: "P8-07"
       name: "Backend consumer-readiness and real-data UI revalidation"
-      status: "not_started"
+      status: "paused_for_authorized_backend_consumer_bridge"
+      branch: "codex/p8-07-consumer-readiness"
+      base_commit: "024c63afc390201bc4fbadfd09e033c538624270"
+      authorized_on: "2026-07-28"
+      deliverable: "docs/audits/P8-07.md"
+      blocker:
+        task: "P8-07-BACKEND-CONSUMER-BRIDGE"
+        reason: "Real payloads lacked complete subtype labels, Tabletop literal rates, immutable Top 8 bases/deviation, and a global product catalog."
+      p8_08_authorized: false
+    - id: "P8-07-BACKEND-CONSUMER-BRIDGE"
+      name: "Bridge frozen Phase 8 consumers with immutable weekly Top 8 bases"
+      status: "completed_owner_accepted_publication_authorized"
+      branch: "codex/p8-07-backend-consumer-bridge"
+      base_commit: "024c63afc390201bc4fbadfd09e033c538624270"
+      authorized_on: "2026-07-28"
+      deliverable: "docs/audits/P8-07-BACKEND-CONSUMER-BRIDGE.md"
+      production_change: true
+      workflow_changed: true
+      generated_data_changed: true
+      front_end_changed: false
+      classification_rules_changed: false
+      source_fetching_changed: false
+      historical_top8_policy: "immutable_weekly_comparison_bases"
+      first_immutable_week: "2026-W30"
+      older_week_backfill_authorized: false
+      implementation:
+        global_catalog: "stats/catalog.json"
+        known_formats: 6
+        available_product_entries: 8
+        standard_top8_events: 8
+        standard_top8_available_decks: 64
+        standard_deviation_available: 61
+        standard_deviation_unavailable: 3
+        modern_top8_events: 13
+        modern_top8_available_decks: 104
+        modern_deviation_available: 100
+        modern_deviation_unavailable: 4
+        tabletop_overview_subtypes: 37
+        tabletop_matchup_leaves: 55
+        legacy_rate_fields_preserved: true
+        literal_rate_method: "wins_over_valid_matches"
+      validation:
+        focused_bridge_tests_passed: 70
+        affected_tests_passed: 108
+        full_pytest_passed: 555
+        schema_documents_validated: 69
+        repository_validation_passed: true
+        standard_rule_validation_passed: true
+        modern_rule_validation_passed: true
+        immutable_week_rebuild_passed: true
+        immutable_mutation_rejection_passed: true
+        diff_check_passed: true
+        first_remote_ci_run: 30327216251
+        first_remote_ci_result: "cancelled_at_15_minute_ceiling"
+        first_remote_ci_recorded_byte_identity_failures: 7
+        byte_identity_failure_cause: "six generated index files had one non-generator trailing LF"
+        ci_repair_authorized_on: "2026-07-28"
+        ci_timeout_minutes_after_gate_1_review: 30
+        ci_repair_committed_baseline_tests_passed: 9
+        ci_repair_workflow_tests_passed: 8
+        ci_repair_repository_validation_passed: true
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-28"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-28"
+      workflow_dispatch_authorized: true
+      workflow_dispatch_authorized_on: "2026-07-28"
     - id: "P8-08"
       name: "Shared static shell and page split"
       status: "not_started"
@@ -4612,48 +4683,52 @@ phase_8_plan:
         merged_on: "2026-07-28"
 
 next_approved_task:
-  id: "P8-06"
-  name: "MTGO completeness backend product"
+  id: "P8-07-BACKEND-CONSUMER-BRIDGE"
+  name: "Bridge frozen Phase 8 consumers with immutable weekly Top 8 bases"
   target_paths:
-    - "src/mtgmeta/mtgo/completeness.py"
-    - "src/mtgmeta/mtgo/__main__.py"
+    - "src/mtgmeta/consumer.py"
+    - "src/mtgmeta/catalog.py"
+    - "src/mtgmeta/mtgo/stats.py"
     - "src/mtgmeta/mtgo/matchup.py"
-    - "src/mtgmeta/mtgo/pickup.py"
-    - "configs/formats.yaml"
-    - "schemas/formats.schema.json"
-    - "schemas/mtgo-completeness-index.schema.json"
-    - "schemas/mtgo-completeness-range.schema.json"
+    - "src/mtgmeta/mtgo/top8.py"
+    - "src/mtgmeta/melee/stats.py"
+    - "src/mtgmeta/melee/matchup.py"
+    - "schemas/consumer-catalog.schema.json"
+    - "schemas/mtgo-range.schema.json"
+    - "schemas/mtgo-decks.schema.json"
+    - "schemas/mtgo-archetype-hierarchy.schema.json"
     - "schemas/mtgo-matchup.schema.json"
-    - "schemas/mtgo-meta.schema.json"
+    - "schemas/mtgo-top8-index.schema.json"
+    - "schemas/mtgo-top8-week.schema.json"
+    - "schemas/mtgo-top8-comparison-bases.schema.json"
+    - "schemas/melee-event-statistics-common.schema.json"
+    - "schemas/melee-event-matchup.schema.json"
     - "schemas/manifest.json"
     - ".github/workflows/update.yml"
-    - "README.md"
+    - ".github/workflows/fetch_melee.yml"
     - "validate_production_candidate.py"
-    - "tests/test_mtgo_completeness.py"
-    - "tests/test_mtgo_matchup.py"
-    - "tests/test_mtgo_cli.py"
-    - "tests/test_production_candidate_validation.py"
-    - "tests/test_production_workflow.py"
-    - "stats/standard/mtgo/completeness/"
-    - "stats/modern/mtgo/completeness/"
-    - "stats/standard/mtgo/matchup_*.json"
-    - "stats/modern/mtgo/matchup_*.json"
-    - "stats/standard/mtgo/meta.json"
-    - "stats/modern/mtgo/meta.json"
+    - "validate_melee_candidate.py"
+    - "tests/test_phase8_consumer_bridge.py"
+    - "tests/test_mtgo_top8.py"
+    - "stats/catalog.json"
+    - "stats/standard/mtgo/"
+    - "stats/modern/mtgo/"
+    - "stats/modern/melee/"
     - "docs/STATISTICS_SPEC.md"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P8-06.md"
+    - "docs/audits/P8-07.md"
+    - "docs/audits/P8-07-BACKEND-CONSUMER-BRIDGE.md"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_publication_authorized"
-  local_execution_authorized: true
+  authorization_status: "owner_accepted_publication_and_workflow_authorized"
+  local_execution_authorized: false
   local_execution_authorized_on: "2026-07-28"
   remote_publication_authorized: true
   remote_publication_authorized_on: "2026-07-28"
-  planning_status: "p8_06_publication_authorized"
+  planning_status: "p8_07_backend_consumer_bridge_publication_authorized"
 
 governance_baseline:
   status: "active_on_master"
