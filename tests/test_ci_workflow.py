@@ -44,7 +44,7 @@ def test_permissions_and_concurrency_are_least_privilege():
 def test_job_is_bounded_and_uses_current_official_action_versions():
     job = load_workflow()["jobs"]["validate"]
     assert job["runs-on"] == "ubuntu-latest"
-    assert job["timeout-minutes"] == "15"
+    assert job["timeout-minutes"] == "30"
     steps = job["steps"]
     assert steps[0]["uses"] == "actions/checkout@v7.0.0"
     assert steps[0]["with"]["persist-credentials"] == "false"

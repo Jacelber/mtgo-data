@@ -171,6 +171,13 @@ group, suppress failures, or replace the complete-suite requirement. Use a
 representative sequence of successful PR, `master`, and production runs before
 proposing CI sharding, trigger changes, or test removal.
 
+The validation job has a 30-minute safety ceiling. This is a failure-reporting
+boundary, not a duration target: the 2026-07-28 Gate 1 review found that the
+former 15-minute ceiling could cancel an otherwise progressing complete suite
+before pytest printed its failure details. Raising the ceiling does not change
+test selection, triggers, permissions, or the requirement to investigate
+duration growth.
+
 The evidence counts, decision gates, stop conditions, and model guidance for
 any CI-efficiency work are maintained in
 `docs/audits/CI_EFFICIENCY_PLAN.md`. Treat that plan as the required sequence:
