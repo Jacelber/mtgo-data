@@ -180,7 +180,7 @@ static validation, both exact complementary shards, and the aggregate check.
 The remote run selected all 556 tests exactly once: 547 ordinary and 9
 committed-baseline. It completed in approximately 10m32s versus the accepted
 15m06s serial PR #118 baseline, an observed reduction of approximately 4m34s.
-Gate 3 therefore meets its remote acceptance threshold. Gate 4 remains closed.
+Gate 3 therefore meets its remote acceptance threshold.
 
 ### Gate 4 — optional post-merge trigger decision
 
@@ -194,6 +194,18 @@ Success criterion: the design documents exact event predicates, direct-push
 handling, failure visibility, rollback, and the validation that is retained.
 This is a high-risk governance change and always requires separate owner
 authorization and a Sol-high implementation task.
+
+The owner authorized Gate 4 local implementation on 2026-07-28. The isolated
+`codex/ci-gate4-master-trigger` task implements a fail-safe admission job:
+pull requests and manual runs remain full; direct pushes, non-exact merges,
+missing or stale evidence, API failures, and ambiguous metadata remain full;
+only a successful PR run that records the final merge's exact PR number, base
+SHA, and head SHA may use lightweight post-merge confirmation. The established
+aggregate check name is retained, production validation and publication are
+unchanged, and the complete predicates and rollback are documented in
+`docs/audits/CI-MASTER-ADMISSION.md`. Local deterministic validation is
+complete. Gate 4 remains pending owner acceptance, separate remote-publication
+authorization, and real PR/post-merge acceptance evidence.
 
 ## Explicit non-priorities
 
