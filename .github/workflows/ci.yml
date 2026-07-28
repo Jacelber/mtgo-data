@@ -15,10 +15,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate:
-    name: Repository validation (Python 3.12)
+  static-validation:
+    name: Repository files, rules, and schemas
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     steps:
       - name: Check out repository without persisted credentials
         uses: actions/checkout@v7.0.0
@@ -42,25 +42,76 @@ jobs:
       - name: Validate Standard public JSON schemas
         run: python -B validate_schemas.py
 
-      - name: Run clean-checkout code and committed-baseline tests
+  pytest:
+    name: Pytest shard (${{ matrix.shard }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - shard: ordinary
+            marker_expression: not committed_baseline
+          - shard: committed-baseline
+            marker_expression: committed_baseline
+    steps:
+      - name: Check out repository without persisted credentials
+        uses: actions/checkout@v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6.3.0
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned development dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Run clean-checkout pytest shard
         env:
           PYTEST_TIMING_REPORT: ${{ runner.temp }}/pytest-timing.json
-        run: python -B -m pytest -p ci_timing --durations=25
+        run: >-
+          python -B -m pytest -p ci_timing --durations=25
+          -m "${{ matrix.marker_expression }}"
 
-      - name: Write validation summary
+      - name: Write shard timing summary
         if: always()
         shell: bash
         run: |
           {
-            echo "## Pull request validation"
+            echo "## Pytest shard: ${{ matrix.shard }}"
             echo
-            echo "- Repository validation, rule validation, schema validation, and clean-checkout pytest were requested."
+            echo "- Marker expression: \`${{ matrix.marker_expression }}\`"
             echo "- Job result: ${{ job.status }}"
             echo "- Python: 3.12"
-            echo "- This workflow does not fetch tournament data or publish repository changes."
           } >> "$GITHUB_STEP_SUMMARY"
           if [ -f "$RUNNER_TEMP/pytest-timing.json" ]; then
             python -B ci_timing.py --summary "$RUNNER_TEMP/pytest-timing.json" >> "$GITHUB_STEP_SUMMARY"
           else
             echo "- Pytest timing report was unavailable because pytest did not reach its session-finish hook." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  validate:
+    name: Repository validation (Python 3.12)
+    if: always()
+    needs:
+      - static-validation
+      - pytest
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require every validation shard
+        shell: bash
+        run: |
+          {
+            echo "## Pull request validation"
+            echo
+            echo "- Static validation: ${{ needs.static-validation.result }}"
+            echo "- Pytest shards: ${{ needs.pytest.result }}"
+            echo "- This workflow does not fetch tournament data or publish repository changes."
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ needs.static-validation.result }}" != "success" ] ||
+             [ "${{ needs.pytest.result }}" != "success" ]; then
+            exit 1
           fi

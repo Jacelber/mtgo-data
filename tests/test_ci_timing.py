@@ -20,14 +20,19 @@ class FakeReport:
         self.when = when
 
 
+class FakeSession:
+    def __init__(self, items):
+        self.items = items
+
+
 def test_timing_recorder_groups_calls_and_orders_the_slowest(tmp_path):
     report_path = tmp_path / "pytest-timing.json"
     recorder = TimingRecorder(report_path)
-    recorder.pytest_collection_modifyitems(
-        [
+    recorder.pytest_collection_finish(
+        FakeSession([
             FakeItem("tests/test_fast.py::test_fast"),
             FakeItem("tests/test_baseline.py::test_baseline", baseline=True),
-        ]
+        ])
     )
     recorder.pytest_runtest_logreport(FakeReport("tests/test_fast.py::test_fast", 0.25))
     recorder.pytest_runtest_logreport(

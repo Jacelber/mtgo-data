@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/ci-branch-protection"
-  working_branch_status: "ci_gate_2_minimum_ruleset_active_docs_publication_authorized"
+  current_working_branch: "codex/ci-gate3-sharding"
+  working_branch_status: "ci_gate_3_remote_validation_accepted"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_07_bridge_published_ci_gate_2_minimum_protection_active"
+  status: "p8_07_bridge_published_ci_gate_3_remote_validation_accepted"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4523,6 +4523,77 @@ phase_8_plan:
         effective_rules_verified: true
       gate_3_authorized: true
       gate_4_authorized: false
+    - id: "CI-EFFICIENCY-GATE-3"
+      name: "Prototype disjoint complete-suite pytest sharding"
+      status: "remote_validation_accepted"
+      branch: "codex/ci-gate3-sharding"
+      base_commit: "24f5575c2176dfee9455a95772a6d14c35a3f320"
+      owner_local_implementation_authorized: true
+      owner_local_implementation_authorized_on: "2026-07-28"
+      deliverable: "docs/audits/CI-TEST-SHARDING.md"
+      workflow_changed: true
+      test_selection_reduced: false
+      production_workflow_changed: false
+      statistical_behavior_changed: false
+      public_paths_changed: false
+      partition:
+        ordinary_expression: "not committed_baseline"
+        committed_baseline_expression: "committed_baseline"
+        pre_change_total_node_ids: 555
+        pre_change_ordinary_node_ids: 546
+        pre_change_committed_baseline_node_ids: 9
+        intersection_node_ids: 0
+        missing_node_ids: 0
+        extra_node_ids: 0
+      local_measurement:
+        ordinary_passed: 546
+        ordinary_wall_seconds: 337.98
+        committed_baseline_passed: 9
+        committed_baseline_wall_seconds: 135.67
+        projected_parallel_wall_seconds: 337.98
+        projected_saving_seconds: 135.67
+        projected_saving_percent: 28.6
+      post_change_validation:
+        total_node_ids: 556
+        ordinary_passed: 547
+        ordinary_deselected: 9
+        ordinary_wall_seconds: 287.63
+        ordinary_timing_selected: 547
+        ordinary_timing_completed: 547
+        committed_baseline_passed: 9
+        committed_baseline_deselected: 547
+        committed_baseline_wall_seconds: 127.66
+        committed_baseline_timing_selected: 9
+        committed_baseline_timing_completed: 9
+        intersection_node_ids: 0
+        missing_node_ids: 0
+        projected_parallel_wall_seconds: 287.63
+        projected_saving_seconds: 127.66
+        projected_saving_percent: 30.7
+        repository_validation: "passed"
+        rule_validation: "passed"
+        schema_validation: "passed"
+      focused_tests_passed: 9
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-28"
+      merge_authorized_after_passing_checks: true
+      remote_validation:
+        pull_request: 119
+        implementation_commit: "146e88cc2da6aace258a3ffe1660cc737ed8e901"
+        run_id: 30337562027
+        conclusion: "success"
+        total_node_ids: 556
+        ordinary_passed: 547
+        ordinary_deselected: 9
+        committed_baseline_passed: 9
+        committed_baseline_deselected: 547
+        aggregate_check: "success"
+        run_wall_seconds: 632
+        serial_pr_118_wall_seconds: 906
+        observed_saving_seconds: 274
+        minimum_required_saving_seconds: 60
+        acceptance_threshold_met: true
+      gate_4_authorized: false
     - id: "P8-08"
       name: "Shared static shell and page split"
       status: "not_started"
@@ -4750,12 +4821,12 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "local_prototype_authorized"
+  authorization_status: "remote_publication_and_merge_authorized"
   local_execution_authorized: true
   local_execution_authorized_on: "2026-07-28"
-  remote_publication_authorized: false
+  remote_publication_authorized: true
   production_dispatch_authorized: false
-  planning_status: "awaiting_gate_2_documentation_publication_then_local_prototype"
+  planning_status: "remote_validation_accepted_gate_3_merge_authorized"
 
 governance_baseline:
   status: "active_on_master"

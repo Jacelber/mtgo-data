@@ -41,36 +41,65 @@ def test_permissions_and_concurrency_are_least_privilege():
     }
 
 
-def test_job_is_bounded_and_uses_current_official_action_versions():
-    job = load_workflow()["jobs"]["validate"]
-    assert job["runs-on"] == "ubuntu-latest"
-    assert job["timeout-minutes"] == "30"
-    steps = job["steps"]
-    assert steps[0]["uses"] == "actions/checkout@v7.0.0"
-    assert steps[0]["with"]["persist-credentials"] == "false"
-    assert steps[1]["uses"] == "actions/setup-python@v6.3.0"
-    assert steps[1]["with"]["python-version"] == "3.12"
+def test_execution_jobs_are_bounded_and_use_current_official_actions():
+    jobs = load_workflow()["jobs"]
+    assert jobs["static-validation"]["timeout-minutes"] == "10"
+    assert jobs["pytest"]["timeout-minutes"] == "30"
+    assert jobs["validate"]["timeout-minutes"] == "5"
+
+    for job_name in ("static-validation", "pytest"):
+        job = jobs[job_name]
+        assert job["runs-on"] == "ubuntu-latest"
+        steps = job["steps"]
+        assert steps[0]["uses"] == "actions/checkout@v7.0.0"
+        assert steps[0]["with"]["persist-credentials"] == "false"
+        assert steps[1]["uses"] == "actions/setup-python@v6.3.0"
+        assert steps[1]["with"]["python-version"] == "3.12"
 
 
-def test_all_required_checks_and_summary_are_present():
-    steps = load_workflow()["jobs"]["validate"]["steps"]
-    commands = [step.get("run", "") for step in steps]
-    combined = "\n".join(commands)
+def test_pytest_shards_are_exact_marker_complements():
+    pytest_job = load_workflow()["jobs"]["pytest"]
+    assert pytest_job["strategy"]["fail-fast"] == "false"
+    assert pytest_job["strategy"]["matrix"]["include"] == [
+        {
+            "shard": "ordinary",
+            "marker_expression": "not committed_baseline",
+        },
+        {
+            "shard": "committed-baseline",
+            "marker_expression": "committed_baseline",
+        },
+    ]
+    combined = "\n".join(
+        step.get("run", "") for step in pytest_job["steps"]
+    )
+    assert '-m "${{ matrix.marker_expression }}"' in combined
+    assert "-p ci_timing" in combined
+    assert "ci_timing.py --summary" in combined
+    assert "GITHUB_STEP_SUMMARY" in combined
+
+
+def test_static_validation_and_aggregate_check_are_complete():
+    jobs = load_workflow()["jobs"]
+    static_commands = "\n".join(
+        step.get("run", "") for step in jobs["static-validation"]["steps"]
+    )
     for expected in (
         "-r requirements-dev.txt",
         "validate_repository.py",
         "validate_rules.py",
         "validate_schemas.py",
-        "-m pytest",
-        "-p ci_timing",
-        "ci_timing.py --summary",
-        "GITHUB_STEP_SUMMARY",
     ):
-        assert expected in combined
-    assert steps[-1]["if"] == "always()"
-    pytest_step = next(step for step in steps if "-m pytest" in step.get("run", ""))
-    assert pytest_step["name"] == "Run clean-checkout code and committed-baseline tests"
-    assert pytest_step["env"]["PYTEST_TIMING_REPORT"] == "${{ runner.temp }}/pytest-timing.json"
+        assert expected in static_commands
+
+    aggregate = jobs["validate"]
+    assert aggregate["name"] == "Repository validation (Python 3.12)"
+    assert aggregate["if"] == "always()"
+    assert aggregate["needs"] == ["static-validation", "pytest"]
+    command = aggregate["steps"][0]["run"]
+    assert "needs.static-validation.result" in command
+    assert "needs.pytest.result" in command
+    assert "exit 1" in command
 
 
 def test_ci_cannot_fetch_production_data_or_write_repository():

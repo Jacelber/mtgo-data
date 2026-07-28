@@ -134,7 +134,7 @@ Review the complete diff; run applicable tests and validators; verify changed pa
 
 Repository validation uses three distinct layers. Do not treat them as interchangeable:
 
-1. **Clean-checkout code and committed-baseline validation** runs in read-only CI for pull requests and pushes to `master`. It includes the complete pytest suite. Tests marked `committed_baseline` intentionally reproduce generators, diagnostics, and public outputs from the current committed production snapshot and require byte-identical results. Volatile dates, timestamps, and aggregate counts come from the committed snapshot metadata rather than a previous run's hard-coded values. These tests must run before any production fetch mutates the checkout.
+1. **Clean-checkout code and committed-baseline validation** runs in read-only CI for pull requests and pushes to `master`. It includes the complete pytest suite, partitioned into exact complementary `ordinary` and `committed_baseline` shards on independent runners. Their aggregate check may pass only when static validation and both pytest shards pass. Tests marked `committed_baseline` intentionally reproduce generators, diagnostics, and public outputs from the current committed production snapshot and require byte-identical results. Volatile dates, timestamps, and aggregate counts come from the committed snapshot metadata rather than a previous run's hard-coded values. These tests must run before any production fetch mutates the checkout.
 2. **Production candidate validation** runs after authorized fetching and generation but before staging or publication. It compares the candidate with a baseline snapshot captured at the start of the run, permits only declared generated-data paths, rejects deletions and cross-product writes, parses changed JSON and YAML, verifies event and match document shape, prevents event, match, or fetched-ledger count regression, and retains strict classification, repository, rule, and Schema validation. Candidate acceptance must use dynamic deltas rather than historical hard-coded deck or event counts.
 3. **Publication confirmation** runs after the generated commit is pushed. It requires a clean production workspace and confirms that the remote `master` commit equals the locally published commit.
 
@@ -162,14 +162,15 @@ validator after every small edit.
 
 ### CI timing observation
 
-The read-only validation workflow records timing from the one complete pytest
-execution already required for each run. Its GitHub summary reports selected
-and completed test counts, call-time totals for ordinary and
-`committed_baseline` tests, and the 25 slowest completed test calls. The report
-is an observation aid only: it must not change pytest selection, rerun either
-group, suppress failures, or replace the complete-suite requirement. Use a
-representative sequence of successful PR, `master`, and production runs before
-proposing CI sharding, trigger changes, or test removal.
+The read-only validation workflow records timing from each complementary
+pytest shard. Each GitHub summary reports the selected and completed test
+counts, call-time totals, and the 25 slowest completed calls for that shard.
+The aggregate check retains the established `Repository validation (Python
+3.12)` name and passes only after static validation and both shards pass.
+Timing reports are observation aids only: they must not suppress failures or
+replace the complete-suite requirement. Use representative successful PR,
+`master`, and production runs before proposing trigger changes or test
+removal.
 
 The validation job has a 30-minute safety ceiling. This is a failure-reporting
 boundary, not a duration target: the 2026-07-28 Gate 1 review found that the
