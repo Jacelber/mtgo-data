@@ -131,6 +131,22 @@ PR merges, production-generated commits, and recovery are documented and
 owner-approved. Stop if that governance choice is not approved; retain the
 existing full `master` validation.
 
+The 2026-07-28 read-only review is recorded in
+`docs/audits/CI-BRANCH-PROTECTION.md`. It confirms that no protection or
+ruleset is active and identifies a repository ruleset as the minimum viable
+control. The proposed rule requires PR validation from the official
+`github-actions` integration, blocks deletion and force pushes, and grants
+only that integration a bypass for the existing validated production-data
+publisher. The authorized disabled-mode creation attempt was rejected with
+HTTP 422 because the built-in GitHub Actions integration is not eligible as a
+bypass actor for this personal-account ruleset source. No full ruleset was
+created. The owner instead approved repository ruleset `19874624`, which is
+active on `master` and blocks deletion and non-fast-forward pushes without
+changing PR, check, merge, or production-publisher behavior. Gate 3 may
+prototype disjoint complete-suite sharding without reducing validation, but
+Gate 4 remains closed until a separately approved publisher identity or
+admission-check design establishes a mandatory PR-check boundary.
+
 ### Gate 3 — optional test-sharding design
 
 Only if Gate 1 identifies test execution as the dominant recurrent cost, design

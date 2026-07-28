@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-07-backend-consumer-bridge"
-  working_branch_status: "p8_07_backend_consumer_bridge_publication_authorized"
+  current_working_branch: "codex/ci-branch-protection"
+  working_branch_status: "ci_gate_2_minimum_ruleset_active_docs_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_07_backend_consumer_bridge_publication_authorized"
+  status: "p8_07_bridge_published_ci_gate_2_minimum_protection_active"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4400,7 +4400,7 @@ phase_8_plan:
       merged_on: "2026-07-28"
     - id: "P8-07"
       name: "Backend consumer-readiness and real-data UI revalidation"
-      status: "paused_for_authorized_backend_consumer_bridge"
+      status: "ready_to_resume_after_ci_governance_task"
       branch: "codex/p8-07-consumer-readiness"
       base_commit: "024c63afc390201bc4fbadfd09e033c538624270"
       authorized_on: "2026-07-28"
@@ -4411,7 +4411,7 @@ phase_8_plan:
       p8_08_authorized: false
     - id: "P8-07-BACKEND-CONSUMER-BRIDGE"
       name: "Bridge frozen Phase 8 consumers with immutable weekly Top 8 bases"
-      status: "completed_owner_accepted_publication_authorized"
+      status: "completed_published_and_production_verified"
       branch: "codex/p8-07-backend-consumer-bridge"
       base_commit: "024c63afc390201bc4fbadfd09e033c538624270"
       authorized_on: "2026-07-28"
@@ -4467,6 +4467,62 @@ phase_8_plan:
       remote_publication_authorized_on: "2026-07-28"
       workflow_dispatch_authorized: true
       workflow_dispatch_authorized_on: "2026-07-28"
+      publication:
+        implementation_commit: "6573268d4cd2d40adab18b56913701440a216f8d"
+        ci_repair_commit: "745672c88a09498aebc3bae925422ae9a0fd68a2"
+        pull_request: 117
+        merge_commit: "a6d8747c54661ff44fa9000806e4e417e8b47d63"
+        pull_request_ci_run: 30330129437
+        post_merge_ci_run: 30330920560
+        production_run: 30331739942
+        production_commit: "dcabfe1a864d21febc5ec558974e476e2cfd68f8"
+        pages_run: 30332672988
+        status: "success"
+    - id: "CI-EFFICIENCY-GATE-2"
+      name: "Protect master validation and production publication"
+      status: "minimum_history_ruleset_active_documentation_publication_authorized"
+      branch: "codex/ci-branch-protection"
+      base_commit: "dcabfe1a864d21febc5ec558974e476e2cfd68f8"
+      owner_local_implementation_authorized: true
+      owner_local_implementation_authorized_on: "2026-07-28"
+      deliverable: "docs/audits/CI-BRANCH-PROTECTION.md"
+      findings:
+        classic_branch_protection_active: false
+        repository_ruleset_count: 0
+        required_check_context: "Repository validation (Python 3.12)"
+        required_check_integration: "github-actions"
+        required_check_integration_id: 15368
+        production_direct_publisher: "GitHub Actions GITHUB_TOKEN"
+        activation_attempt_http_status: 422
+        activation_error: "GitHub Actions integration must be part of the ruleset source or owner organization"
+        full_ruleset_created: false
+      rejected_full_ruleset:
+        require_pull_request: true
+        required_approving_reviews: 0
+        strict_status_checks: false
+        require_check_from_integration_id: 15368
+        block_deletion: true
+        block_non_fast_forward: true
+        github_actions_bypass_only: true
+      remote_repository_setting_authorized: true
+      remote_repository_setting_authorized_on: "2026-07-28"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-28"
+      production_dispatch_authorized: false
+      activated_ruleset:
+        id: 19874624
+        name: "Protect master history"
+        enforcement: "active"
+        target: "refs/heads/master"
+        bypass_actor_count: 0
+        rules:
+          - "deletion"
+          - "non_fast_forward"
+        pull_request_required: false
+        status_check_required: false
+        effective_rules_verified: true
+      gate_3_authorized: true
+      gate_4_authorized: false
     - id: "P8-08"
       name: "Shared static shell and page split"
       status: "not_started"
@@ -4683,52 +4739,23 @@ phase_8_plan:
         merged_on: "2026-07-28"
 
 next_approved_task:
-  id: "P8-07-BACKEND-CONSUMER-BRIDGE"
-  name: "Bridge frozen Phase 8 consumers with immutable weekly Top 8 bases"
+  id: "CI-EFFICIENCY-GATE-3"
+  name: "Prototype disjoint complete-suite pytest sharding"
   target_paths:
-    - "src/mtgmeta/consumer.py"
-    - "src/mtgmeta/catalog.py"
-    - "src/mtgmeta/mtgo/stats.py"
-    - "src/mtgmeta/mtgo/matchup.py"
-    - "src/mtgmeta/mtgo/top8.py"
-    - "src/mtgmeta/melee/stats.py"
-    - "src/mtgmeta/melee/matchup.py"
-    - "schemas/consumer-catalog.schema.json"
-    - "schemas/mtgo-range.schema.json"
-    - "schemas/mtgo-decks.schema.json"
-    - "schemas/mtgo-archetype-hierarchy.schema.json"
-    - "schemas/mtgo-matchup.schema.json"
-    - "schemas/mtgo-top8-index.schema.json"
-    - "schemas/mtgo-top8-week.schema.json"
-    - "schemas/mtgo-top8-comparison-bases.schema.json"
-    - "schemas/melee-event-statistics-common.schema.json"
-    - "schemas/melee-event-matchup.schema.json"
-    - "schemas/manifest.json"
-    - ".github/workflows/update.yml"
-    - ".github/workflows/fetch_melee.yml"
-    - "validate_production_candidate.py"
-    - "validate_melee_candidate.py"
-    - "tests/test_phase8_consumer_bridge.py"
-    - "tests/test_mtgo_top8.py"
-    - "stats/catalog.json"
-    - "stats/standard/mtgo/"
-    - "stats/modern/mtgo/"
-    - "stats/modern/melee/"
-    - "docs/STATISTICS_SPEC.md"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/ROADMAP.md"
-    - "docs/DECISIONS.md"
+    - ".github/workflows/ci.yml"
+    - "ci_timing.py"
+    - "tests/"
+    - "docs/audits/CI_EFFICIENCY_PLAN.md"
+    - "docs/audits/CI-TEST-SHARDING.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P8-07.md"
-    - "docs/audits/P8-07-BACKEND-CONSUMER-BRIDGE.md"
-  production_change: true
+  production_change: false
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_publication_and_workflow_authorized"
-  local_execution_authorized: false
+  authorization_status: "local_prototype_authorized"
+  local_execution_authorized: true
   local_execution_authorized_on: "2026-07-28"
-  remote_publication_authorized: true
-  remote_publication_authorized_on: "2026-07-28"
-  planning_status: "p8_07_backend_consumer_bridge_publication_authorized"
+  remote_publication_authorized: false
+  production_dispatch_authorized: false
+  planning_status: "awaiting_gate_2_documentation_publication_then_local_prototype"
 
 governance_baseline:
   status: "active_on_master"
