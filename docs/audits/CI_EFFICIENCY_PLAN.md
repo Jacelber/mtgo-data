@@ -167,6 +167,15 @@ The prototype must prove all of the following before any trigger change:
 Stop if the prototype duplicates a dominant baseline, introduces order or
 shared-state failures, or cannot demonstrate the stated saving.
 
+The 2026-07-28 local prototype is recorded in
+`docs/audits/CI-TEST-SHARDING.md`. Its exact complementary marker expressions
+partitioned all 555 pre-change node IDs into 546 ordinary and 9
+committed-baseline tests with no intersection, missing IDs, or duplicates.
+Independent local runs passed in 337.98 and 135.67 seconds, projecting a
+135.67-second critical-path reduction. The workflow prototype retains separate
+static validation and an aggregate established check name. Remote evidence and
+owner acceptance remain required; Gate 4 remains closed.
+
 ### Gate 4 — optional post-merge trigger decision
 
 Consider a lighter `master` confirmation only after Gates 1 through 3 succeed

@@ -22,8 +22,8 @@ class TimingRecorder:
         self.selected_counts = {"ordinary": 0, COMMITTED_BASELINE_MARKER: 0}
         self.results: list[dict[str, object]] = []
 
-    def pytest_collection_modifyitems(self, items):
-        for item in items:
+    def pytest_collection_finish(self, session):
+        for item in session.items:
             group = (
                 COMMITTED_BASELINE_MARKER
                 if item.get_closest_marker(COMMITTED_BASELINE_MARKER) is not None
