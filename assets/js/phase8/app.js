@@ -20,6 +20,13 @@ const PRODUCT_LABEL_KEYS = {
   "tabletop-major-events": "product.tabletop",
   "weekly-pickup": "product.pickup",
 };
+const PRODUCT_SURFACES = {
+  "mtgo-statistics": "mtgo",
+  "mtgo-matchups": "mtgo",
+  "mtgo-top8": "mtgo",
+  "tabletop-major-events": "tabletop",
+  "weekly-pickup": "mtgo",
+};
 const FORMAT_LABEL_KEYS = {
   standard: "format.standard",
   pauper: "format.pauper",
@@ -79,11 +86,21 @@ function formatLabel(formatId, fallback = formatId) {
   return key ? t(key) : fallback;
 }
 
-function surfaceProductAvailable(productId, catalogAvailable) {
-  if (ENTRY_SURFACE === "mtgo" && productId === "tabletop-major-events") {
-    return false;
-  }
-  return Boolean(catalogAvailable);
+function navigateToProductEntry(productId, formatId) {
+  if (ENTRY_SURFACE === "review") return false;
+  const targetSurface = PRODUCT_SURFACES[productId];
+  if (!targetSurface || targetSurface === ENTRY_SURFACE) return false;
+  const attribute = targetSurface === "tabletop"
+    ? "tabletopEntry"
+    : "mtgoEntry";
+  const entry = document.documentElement.dataset[attribute];
+  if (!entry) throw new Error(`Missing ${targetSurface} entry path`);
+  const target = new URL(entry, window.location.href);
+  target.searchParams.set("format", formatId);
+  target.searchParams.set("product", productId);
+  target.searchParams.set("lang", I18n.language());
+  window.location.assign(target.href);
+  return true;
 }
 
 function escapeHtml(value) {
@@ -123,7 +140,7 @@ function productEntry(productId = state.product) {
 function availableProductIds(formatId) {
   return state.catalog.formats
     .find(item => item.id === formatId)
-    ?.products.filter(item => surfaceProductAvailable(item.id, item.available))
+    ?.products.filter(item => item.available)
     .map(item => item.id) || [];
 }
 
@@ -155,19 +172,14 @@ function renderNavigation() {
   const formatRoot = document.querySelector("#format-tabs");
   const productRoot = document.querySelector("#product-tabs");
   formatRoot.innerHTML = state.catalog.formats.map(format => {
-    const available = format.products.some(item => (
-      surfaceProductAvailable(item.id, item.available)
-    ));
+    const available = format.products.some(item => item.available);
     return `<button type="button" data-format="${escapeHtml(format.id)}"
       class="${state.format === format.id ? "active" : ""} ${available ? "" : "unavailable"}"
       aria-pressed="${state.format === format.id}" aria-disabled="${!available}"
       title="${available ? "" : t("availability.developing")}">${formatLabel(format.id, escapeHtml(format.display_name))}</button>`;
   }).join("");
   productRoot.innerHTML = PRODUCT_ORDER.map(productId => {
-    const available = surfaceProductAvailable(
-      productId,
-      productEntry(productId)?.available
-    );
+    const available = Boolean(productEntry(productId)?.available);
     return `<button type="button" data-product="${productId}"
       class="${state.product === productId ? "active" : ""} ${available ? "" : "unavailable"}"
       aria-pressed="${state.product === productId}" aria-disabled="${!available}"
@@ -623,11 +635,12 @@ async function top8View() {
 }
 
 function scopeLabel(scope) {
-  return {
-    day1: "第一日摩登",
-    day2: "第二日摩登",
-    all_constructed: "全部摩登瑞士轮",
-  }[scope] || scope;
+  const key = {
+    day1: "tabletop.scope.day1",
+    day2: "tabletop.scope.day2",
+    all_constructed: "tabletop.scope.all_constructed",
+  }[scope];
+  return key ? t(key) : scope;
 }
 
 function eventDateRange(date) {
@@ -637,28 +650,31 @@ function eventDateRange(date) {
 }
 
 function eventStructureLabel(value) {
-  return {
-    mixed: "混合赛制",
-    constructed_day2: "纯构筑 · 有 Cut",
-    constructed_single_stage: "纯构筑 · 无 Cut",
-  }[value] || value;
+  const key = {
+    mixed: "tabletop.structure.mixed",
+    constructed_day2: "tabletop.structure.constructed_day2",
+    constructed_single_stage: "tabletop.structure.constructed_single_stage",
+  }[value];
+  return key ? t(key) : value;
 }
 
 function qualityStatusLabel(value) {
-  return {
-    ok: "正常",
-    warning: "警告",
-    blocked: "阻断",
-  }[value] || value;
+  const key = {
+    ok: "tabletop.quality.ok",
+    warning: "tabletop.quality.warning",
+    blocked: "tabletop.quality.blocked",
+  }[value];
+  return key ? t(key) : value;
 }
 
 function issueMessage(issue) {
-  return {
-    unknown_classifications: "有效提交的牌表中仍有明确保留为 Unknown 的记录。",
-    disqualified_participant_matches_excluded: "被取消资格的牌手记录继续留档，其涉及的全部对局从实战统计中对称排除。",
-    mixed_event_day2_selection_bias: "第二日参赛者由包含轮抽在内的综合赛事表现筛选；第二日摩登统计描述入围人群。",
-    overall_standings_include_non_constructed_results: "最终名次和赛事总积分仅作背景信息，不作为摩登表现积分。",
-  }[issue.code] || issue.message;
+  const key = {
+    unknown_classifications: "tabletop.issue.unknown",
+    disqualified_participant_matches_excluded: "tabletop.issue.disqualified",
+    mixed_event_day2_selection_bias: "tabletop.day2_bias",
+    overall_standings_include_non_constructed_results: "tabletop.issue.overall_standings",
+  }[issue.code];
+  return key ? t(key) : issue.message;
 }
 
 function overviewRecord(record) {
@@ -713,19 +729,22 @@ function tabletopDetailRow(identityId) {
     ? `${source.classification.subtype_name} ${source.classification.archetype_name}`
     : (source?.classification?.archetype_name || currentContext.tabletopIdentityNames.get(identityId) || identityId);
   const performanceHtml = performance ? `<div class="event-deck-performance">
-    <strong>${scopeLabel(state.tabletopScope)}内表现</strong>
-    <span>场均分 ${number(performance.average_points_per_effective_round)} · 构筑积分 ${performance.constructed_points}
-      · ${record ? `${record.wins}-${record.losses}-${record.draws}` : "无有效对局"}</span>
-    <small>按场均分选择；同分依次比较构筑积分和胜场。取消资格牌手不参与选择。</small>
+    <strong>${t("tabletop.scope_performance", { scope: scopeLabel(state.tabletopScope) })}</strong>
+    <span>${t("tabletop.performance_summary", {
+      average: number(performance.average_points_per_effective_round),
+      points: performance.constructed_points,
+      record: record ? `${record.wins}-${record.losses}-${record.draws}` : t("tabletop.no_valid_matches"),
+    })}</span>
+    <small>${t("tabletop.selection_rule")}</small>
   </div>` : "";
   return `<tr class="deck-detail-row"><td colspan="9">${deckDetailHtml({
     title,
     exactDeck,
-    exactDeckTitle: "最佳表现牌表",
+    exactDeckTitle: t("tabletop.best_deck"),
     averageDeck: mtgoBase?.average_deck,
     comparison: { date: eventDateRange(currentContext.overview.event.date) },
     closeAction: "data-close-tabletop-detail",
-    referenceNote: "右侧来源：MTGO 最近4周平均构筑与典型牌表，仅供构筑参考，不属于该实体赛事统计。",
+    referenceNote: t("tabletop.mtgo_reference"),
     performanceHtml,
     showDeviation: false,
   })}</td></tr>`;
@@ -743,7 +762,7 @@ function tabletopOverall(scope) {
     ? (scope.theoretical_rounds - dropRounds) / scope.theoretical_rounds
     : null;
   return {
-    name: "整体",
+    name: t("tabletop.overall"),
     overall: true,
     deck_count: scope.participant_count,
     metagame_share: 1,
@@ -836,16 +855,16 @@ function tabletopOverview(scope) {
     const arrow = state.tabletopSort === key ? (state.tabletopDirection === "desc" ? " ▼" : " ▲") : "";
     return `<button class="sort-button" type="button" data-tabletop-sort="${key}">${label}${arrow}</button>${tip ? infoTip(tip) : ""}`;
   };
-  return `<div class="panel-toolbar"><h2>套牌表现概览</h2>
-      <button id="tabletop-expand-all" class="secondary-button" type="button">${state.tabletopExpanded.size ? "隐藏全部子类型" : "显示全部子类型"}</button>
+  return `<div class="panel-toolbar"><h2>${t("tabletop.overview_title")}</h2>
+      <button id="tabletop-expand-all" class="secondary-button" type="button">${state.tabletopExpanded.size ? t("stats.hide_subtypes") : t("stats.show_subtypes")}</button>
     </div><div class="table-scroll"><table class="data-table metric-columns" style="width:1250px;min-width:100%">
-      ${fixedColumns(9)}<thead><tr><th>${sortHeader("套牌类型", "name")}</th><th class="number">${sortHeader("牌表数", "deck_count")}</th>
-        <th class="number">${sortHeader("环境占比", "metagame_share")}</th>
-        <th class="number">${sortHeader("场均分", "average_points_per_effective_round", "当前赛事范围内获得的构筑积分 ÷ 有效理论轮数；轮抽积分不计入。")}</th>
-        <th class="number">${sortHeader("胜率", "win_rate", "胜场数 ÷ 有效对局数；平局计入分母但不折算为胜场，并包含内战。")}</th><th class="number">胜-负-平</th>
-        <th class="number">${sortHeader("有效对局", "matches", "实际进行并计入胜率的构筑瑞士轮对局；轮抽、轮空、约和、未进行轮次及裁定胜不计入。")}</th>
-        <th class="number">${sortHeader("完赛率", "completion_rate", "已完成或经赛事结构确认免除的轮数 ÷ 理论应参加轮数；退赛后未进行轮次会降低完赛率。")}</th>
-        <th class="number">${sortHeader("高分牌表", "high_score")}</th></tr></thead>
+      ${fixedColumns(9)}<thead><tr><th>${sortHeader(t("tabletop.deck_type"), "name")}</th><th class="number">${sortHeader(t("tabletop.deck_count"), "deck_count")}</th>
+        <th class="number">${sortHeader(t("tabletop.metagame_share"), "metagame_share")}</th>
+        <th class="number">${sortHeader(t("tabletop.average_points"), "average_points_per_effective_round", t("tabletop.average_points_tip"))}</th>
+        <th class="number">${sortHeader(t("tabletop.win_rate"), "win_rate", t("tabletop.win_rate_tip"))}</th><th class="number">${t("tabletop.record")}</th>
+        <th class="number">${sortHeader(t("tabletop.valid_matches"), "matches", t("tabletop.valid_matches_tip"))}</th>
+        <th class="number">${sortHeader(t("tabletop.completion_rate"), "completion_rate", t("tabletop.completion_rate_tip"))}</th>
+        <th class="number">${sortHeader(t("tabletop.high_score_decks"), "high_score")}</th></tr></thead>
       <tbody>${tabletopRow(tabletopOverall(scope), "overall-row")}${rows}</tbody>
     </table></div>`;
 }
@@ -859,9 +878,9 @@ function tabletopMatchup(matchupDocument, scopeId) {
     leaf_matrix: scope.leaf_matrix,
   }, LOW_SAMPLE_THRESHOLD);
   currentContext.matchupDisplayDocument = viewDocument;
-  return `<div class="panel-toolbar"><div><h2>赛事对阵胜率</h2>
-      <p class="matrix-toolbar-note">${scopeLabel(scopeId)} · ${scope.included_match_count} 场有效对局。类型保留，行列可独立展开。</p></div>
-      <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? "收起全部子类型" : "展开全部子类型"}</button>
+  return `<div class="panel-toolbar"><div><h2>${t("tabletop.matchup_title")}</h2>
+      <p class="matrix-toolbar-note">${t("tabletop.matchup_note", { scope: scopeLabel(scopeId), count: scope.included_match_count })}</p></div>
+      <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
     </div>${matchupLegend(viewDocument.min_sample_hint)}${matrixHtml(viewDocument)}`;
 }
 
@@ -887,19 +906,19 @@ async function tabletopView() {
   if (!overview.scope_order.includes(state.tabletopScope)) state.tabletopScope = overview.default_scope;
   const scope = overview.scopes[state.tabletopScope];
   currentContext = { tabletopIndex: index, eventEntry, meta, overview, matchup, quality, tabletopDecks, mtgoDecks };
-  const viewTabs = `<div class="tabletop-view-tabs subview-tabs" role="group" aria-label="实体大赛视图">
-    <button type="button" data-tabletop-view="overview" class="${state.tabletopView === "overview" ? "active" : ""}">赛事概览</button>
-    <button type="button" data-tabletop-view="matchup" class="${state.tabletopView === "matchup" ? "active" : ""}">对阵胜率</button>
+  const viewTabs = `<div class="tabletop-view-tabs subview-tabs" role="group" aria-label="${t("tabletop.view_label")}">
+    <button type="button" data-tabletop-view="overview" class="${state.tabletopView === "overview" ? "active" : ""}">${t("tabletop.overview")}</button>
+    <button type="button" data-tabletop-view="matchup" class="${state.tabletopView === "matchup" ? "active" : ""}">${t("tabletop.matchups")}</button>
   </div>`;
   const selector = state.tabletopView === "overview"
-    ? `<div class="select-row"><label for="tabletop-event">选择赛事：</label><select id="tabletop-event">${index.events.map(item => (
+    ? `<div class="select-row"><label for="tabletop-event">${t("tabletop.select_event")}</label><select id="tabletop-event">${index.events.map(item => (
         `<option value="${escapeHtml(item.event_id)}" ${item.event_id === state.tabletopEventId ? "selected" : ""}>${escapeHtml(item.name)}</option>`
       )).join("")}</select></div>`
-    : `<div class="select-row"><span>选择赛事：</span><div class="event-selector-pane">${index.events.map(item => (
+    : `<div class="select-row"><span>${t("tabletop.select_event")}</span><div class="event-selector-pane">${index.events.map(item => (
         `<label><input type="checkbox" data-tabletop-event-check="${escapeHtml(item.event_id)}"
           ${state.tabletopSelectedEvents.has(item.event_id) ? "checked" : ""}> ${escapeHtml(item.name)}</label>`
       )).join("")}</div></div>`;
-  const scopes = `<div class="range-buttons" aria-label="赛事范围">${overview.scope_order.map(scopeId => (
+  const scopes = `<div class="range-buttons" aria-label="${t("tabletop.event_scope")}">${overview.scope_order.map(scopeId => (
     `<button type="button" data-tabletop-scope="${scopeId}" class="${state.tabletopScope === scopeId ? "active" : ""}">${scopeLabel(scopeId)}</button>`
   )).join("")}</div>`;
   const retainedQualityCodes = new Set([
@@ -908,15 +927,17 @@ async function tabletopView() {
   ]);
   const issueList = quality.issues.filter(issue => retainedQualityCodes.has(issue.code)).map(issue => (
     issue.code === "disqualified_participant_matches_excluded"
-      ? `<li>${quality.counts.disqualified_participant_count} 名被取消资格牌手继续留档；其涉及的
-        ${quality.counts.disqualified_matches_excluded} 场对局从实战统计中对称排除。</li>`
+      ? `<li>${t("tabletop.disqualified", {
+        participants: quality.counts.disqualified_participant_count,
+        matches: quality.counts.disqualified_matches_excluded,
+      })}</li>`
       : `<li>${escapeHtml(issueMessage(issue))}</li>`
   )).join("");
   return `${viewTabs}${selector}${scopes}
     <section class="panel event-summary"><div class="event-title-row"><strong>${escapeHtml(overview.event.name)}</strong>
-      <a href="${escapeHtml(overview.event.source_url)}" target="_blank" rel="noopener">查看赛事来源</a></div>
-      <p>${eventDateRange(overview.event.date)} · ${escapeHtml(eventStructureLabel(overview.event_structure))} · Melee 赛事 ID ${escapeHtml(overview.event_id)}</p>
-      <div class="quality-notice"><strong>数据质量说明</strong>
+      <a href="${escapeHtml(overview.event.source_url)}" target="_blank" rel="noopener">${t("tabletop.source_event")}</a></div>
+      <p>${eventDateRange(overview.event.date)} · ${escapeHtml(eventStructureLabel(overview.event_structure))} · ${t("tabletop.event_id", { id: escapeHtml(overview.event_id) })}</p>
+      <div class="quality-notice"><strong>${t("tabletop.data_quality")}</strong>
         <ul class="quality-list">${issueList}</ul></div>
     </section>
     <section class="panel">${state.tabletopView === "overview"
@@ -1010,15 +1031,13 @@ document.addEventListener("click", async event => {
     }
     state.format = next;
     if (!available.includes(state.product)) state.product = available[0];
+    if (navigateToProductEntry(state.product, state.format)) return;
     resetInteractions();
     setMessage("");
     renderNavigation();
     await renderView();
   } else if (button.dataset.product) {
-    if (!surfaceProductAvailable(
-      button.dataset.product,
-      productEntry(button.dataset.product)?.available
-    )) {
+    if (!productEntry(button.dataset.product)?.available) {
       setMessage(t("availability.product", {
         format: formatLabel(state.format),
         product: productLabel(button.dataset.product),
@@ -1026,6 +1045,7 @@ document.addEventListener("click", async event => {
       return;
     }
     state.product = button.dataset.product;
+    if (navigateToProductEntry(state.product, state.format)) return;
     resetInteractions();
     setMessage("");
     renderNavigation();
@@ -1270,7 +1290,7 @@ document.addEventListener("click", event => {
   }
 });
 
-async function changeLanguage(language) {
+function updateLanguageChrome(language) {
   I18n.setLanguage(language);
   document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
   document.title = t("site.title");
@@ -1278,6 +1298,10 @@ async function changeLanguage(language) {
   if (siteTitle) siteTitle.textContent = t("site.title");
   document.querySelector("#lang-zh").classList.toggle("active", language === "zh");
   document.querySelector("#lang-en").classList.toggle("active", language === "en");
+}
+
+async function changeLanguage(language) {
+  updateLanguageChrome(language);
   setMessage("");
   renderNavigation();
   await renderView();
@@ -1299,11 +1323,31 @@ function toggleSet(set, value) {
 async function initialize() {
   try {
     state.catalog = await Runtime.catalog.fetchJson("stats/catalog.json");
+    const parameters = new URLSearchParams(window.location.search);
+    const requestedLanguage = parameters.get("lang");
+    if (requestedLanguage === "zh" || requestedLanguage === "en") {
+      updateLanguageChrome(requestedLanguage);
+    }
+    const requestedFormat = parameters.get("format");
+    if (
+      requestedFormat
+      && state.catalog.formats.some(item => (
+        item.id === requestedFormat && availableProductIds(item.id).length
+      ))
+    ) {
+      state.format = requestedFormat;
+    }
     const initialFormat = state.catalog.formats.find(item => item.id === state.format);
-    if (!availableProductIds(state.format).includes(state.product)) {
+    const requestedProduct = parameters.get("product");
+    const preferredProduct = requestedProduct
+      || (ENTRY_SURFACE === "tabletop" ? "tabletop-major-events" : state.product);
+    if (availableProductIds(state.format).includes(preferredProduct)) {
+      state.product = preferredProduct;
+    } else {
       state.product = availableProductIds(state.format)[0]
         || initialFormat.default_product_id;
     }
+    if (navigateToProductEntry(state.product, state.format)) return;
     renderNavigation();
     await renderView();
   } catch (error) {

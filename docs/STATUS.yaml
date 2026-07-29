@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-09-mtgo-production-entry"
-  working_branch_status: "p8_09_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p8-10-tabletop-production-entry"
+  working_branch_status: "p8_10_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_09_owner_accepted_remote_publication_authorized"
+  status: "p8_10_owner_accepted_remote_publication_authorized"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4908,9 +4908,59 @@ phase_8_plan:
         browser_console_errors: 0
         narrow_viewport_verified: "390x844"
         phase4_rollback_assets_unchanged: true
+      publication:
+        local_commit: "e945a941a185755d26b7fd3388211eefc3ccb35f"
+        pull_request: 125
+        merge_commit: "1eac2afc87effdc06b47f40c1e8280a669403e73"
+        pr_validation_run: 30450639604
+        master_admission_run: 30451426149
+        pages_run: 30451421860
     - id: "P8-10"
       name: "Tabletop Major Events production-entry connection"
-      status: "not_started"
+      status: "owner_accepted_remote_publication_authorized"
+      branch: "codex/p8-10-tabletop-production-entry"
+      base_commit: "1eac2afc87effdc06b47f40c1e8280a669403e73"
+      authorized_on: "2026-07-29"
+      owner_local_execution_authorized: true
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-29"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-29"
+      merge_authorized_after_passing_checks: true
+      production_entry_changed: true
+      mtgo_entry_changed: true
+      tabletop_entry_changed: true
+      generated_data_changed: false
+      statistical_formula_changed: false
+      schema_changed: false
+      workflow_changed: false
+      deliverables:
+        - "index.html"
+        - "melee/index.html"
+        - "assets/js/phase8/app.js"
+        - "assets/js/phase8/i18n.js"
+        - "tests/test_phase8_mtgo_production_entry.py"
+        - "tests/test_phase8_production_candidate.py"
+        - "tests/test_phase8_tabletop_production_entry.py"
+        - "docs/audits/P8-10.md"
+      validation:
+        focused_tests_passed: 32
+        equivalent_full_pytest_passed: 589
+        test_files_covered: 65
+        repository_python_checked: 123
+        repository_json_checked: 1588
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1850
+        rule_validation_status: "passed"
+        schema_documents_validated: 69
+        javascript_files_checked: 6
+        git_diff_check: "passed"
+        browser_acceptance_passed: true
+        browser_event_id: "434455"
+        rendered_error_state: false
+        mtgo_tabletop_round_trip_verified: true
+        standard_fallback_verified: true
     - id: "P8-11"
       name: "Cross-product regression and Phase 8 closeout"
       status: "not_started"
@@ -5118,15 +5168,15 @@ phase_8_plan:
         merged_on: "2026-07-28"
 
 next_approved_task:
-  id: "P8-10"
-  name: "Tabletop Major Events production-entry connection"
+  id: "P8-11"
+  name: "Cross-product regression and Phase 8 closeout"
   target_paths:
     - "index.html"
     - "assets/css/"
     - "assets/js/"
     - "tests/"
     - "docs/STATUS.yaml"
-  production_change: true
+  production_change: false
   requires_user_confirmation: true
   authorization_status: "awaiting_predevelopment_explanation_and_owner_authorization"
   local_execution_authorized: false

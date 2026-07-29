@@ -42,7 +42,7 @@ def test_production_entry_uses_phase8_while_legacy_assets_remain_available() -> 
     assert (ROOT / "assets" / "js" / "common.js").is_file()
     assert (ROOT / "assets" / "js" / "matchup.js").is_file()
     assert (ROOT / "assets" / "js" / "mtgo.js").is_file()
-    assert not (ROOT / "melee" / "index.html").exists()
+    assert (ROOT / "melee" / "index.html").is_file()
 
 
 def test_scoped_clients_admit_only_their_source_tree() -> None:

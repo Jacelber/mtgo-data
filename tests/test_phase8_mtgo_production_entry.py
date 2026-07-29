@@ -57,7 +57,9 @@ def test_root_is_the_mtgo_surface_and_has_no_review_copy() -> None:
     assert "review-banner" not in html
     assert "P8-08" not in html
     assert "tabletop-controller.js" not in html
-    assert not (ROOT / "melee" / "index.html").exists()
+    assert 'data-mtgo-entry="./index.html"' in html
+    assert 'data-tabletop-entry="./melee/index.html"' in html
+    assert (ROOT / "melee" / "index.html").is_file()
 
 
 def test_review_entries_keep_review_surface_and_relative_data_base() -> None:
@@ -78,6 +80,10 @@ def test_runtime_resolves_only_stats_paths_from_the_entry_base() -> None:
         "ok": True,
         "path": "../../../stats/modern/mtgo/statistics_4w.json",
     }
+    assert _runtime_path("../", "stats/modern/melee/index.json") == {
+        "ok": True,
+        "path": "../stats/modern/melee/index.json",
+    }
     rejected = _runtime_path("./", "../secrets.json")
     assert rejected["ok"] is False
 
@@ -92,15 +98,13 @@ def test_root_uses_only_the_mtgo_phase8_module_boundary() -> None:
     ]
 
 
-def test_app_has_surface_gating_and_real_language_switching() -> None:
+def test_app_has_cross_entry_routing_and_real_language_switching() -> None:
     app = (PHASE8_JS / "app.js").read_text(encoding="utf-8")
 
     assert "dataset.surface" in app
-    assert "surfaceProductAvailable" in app
-    assert (
-        'ENTRY_SURFACE === "mtgo" && productId === "tabletop-major-events"'
-        in app
-    )
+    assert "navigateToProductEntry" in app
+    assert "window.location.assign" in app
+    assert "URLSearchParams(window.location.search)" in app
     assert "I18n.setLanguage" in app
     assert "本轮先确认中文界面" not in app
 
