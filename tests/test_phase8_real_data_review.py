@@ -32,29 +32,30 @@ def _node(script: str, *args: str) -> dict:
 def test_review_entry_point_is_chinese_first_and_uses_candidate_assets() -> None:
     html = (PROTOTYPE / "index.html").read_text(encoding="utf-8")
     app = (PHASE8_ASSETS / "app.js").read_text(encoding="utf-8")
+    copy = app + (PHASE8_ASSETS / "i18n.js").read_text(encoding="utf-8")
 
     assert "P8-07 真实生产数据评审" in html
     assert "../../../assets/css/phase8-base.css" in html
     assert "../../../assets/css/phase8-candidate.css" in html
     assert "../../../assets/js/phase8/mtgo-controller.js" in html
     assert "../../../assets/js/phase8/tabletop-controller.js" in html
-    assert "MTGO占比统计" in app
-    assert "MTGO官方数据统计" not in app
-    assert '"weekly-pickup": "每周精选套牌"' in app
-    assert 'pauper: "纯铁"' in app
+    assert "MTGO占比统计" in copy
+    assert "MTGO官方数据统计" not in copy
+    assert '"product.pickup": "每周精选套牌"' in copy
+    assert '"format.pauper": "纯铁"' in copy
     assert "const RANGE_OPTIONS = [1, 4, 12];" in app
     assert "const DIFF_MIN = 1;" in app
     assert "const LOW_SAMPLE_THRESHOLD = 20;" in app
     assert 'class="pie-slice"' in app
     assert "data-pie-detail" in app
-    assert "悬停或点击分区查看名称、占比和数量" in app
+    assert "悬停或点击分区查看名称、占比和数量" in copy
     assert "Number(item[key]) > 0.02" in app
     assert "data-tabletop-sort" in app
     assert "data-tabletop-detail" in app
-    assert "MTGO 最近4周平均构筑与典型牌表" in app
+    assert "MTGO 最近4周平均构筑与典型牌表" in copy
     assert "查看 Melee 原始牌表" not in app
-    assert "近四周样本不足，暂无平均构筑与变化度数据。" in app
-    assert "最近一周样本不足，暂不显示近期构筑变化度。" in app
+    assert "近四周样本不足，暂无平均构筑与变化度数据。" in copy
+    assert "最近一周样本不足，暂不显示近期构筑变化度。" in copy
     assert "activeMatchupDocument" in app
     assert "activeStatisticsSubtypes" in app
     assert "activeTabletopSubtypes" in app

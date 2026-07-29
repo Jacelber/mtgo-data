@@ -2,8 +2,10 @@
 
 const ReviewData = globalThis.P8ReviewData;
 const Runtime = globalThis.P8Runtime;
+const I18n = globalThis.P8I18n;
 const MtgoController = globalThis.P8MtgoController;
 const TabletopController = globalThis.P8TabletopController;
+const ENTRY_SURFACE = document.documentElement.dataset.surface || "review";
 const PRODUCT_ORDER = [
   "mtgo-statistics",
   "mtgo-matchups",
@@ -11,20 +13,20 @@ const PRODUCT_ORDER = [
   "tabletop-major-events",
   "weekly-pickup",
 ];
-const PRODUCT_LABELS = {
-  "mtgo-statistics": "MTGO占比统计",
-  "mtgo-matchups": "MTGO对阵胜率",
-  "mtgo-top8": "MTGO八强牌表",
-  "tabletop-major-events": "实体大赛",
-  "weekly-pickup": "每周精选套牌",
+const PRODUCT_LABEL_KEYS = {
+  "mtgo-statistics": "product.stats",
+  "mtgo-matchups": "product.matchups",
+  "mtgo-top8": "product.top8",
+  "tabletop-major-events": "product.tabletop",
+  "weekly-pickup": "product.pickup",
 };
-const FORMAT_LABELS = {
-  standard: "标准",
-  pauper: "纯铁",
-  modern: "摩登",
-  pioneer: "先驱",
-  legacy: "薪传",
-  vintage: "特选",
+const FORMAT_LABEL_KEYS = {
+  standard: "format.standard",
+  pauper: "format.pauper",
+  modern: "format.modern",
+  pioneer: "format.pioneer",
+  legacy: "format.legacy",
+  vintage: "format.vintage",
 };
 const RANGE_OPTIONS = [1, 4, 12];
 const DIFF_MIN = 1;
@@ -64,6 +66,26 @@ const state = {
 };
 let currentContext = {};
 
+function t(key, values) {
+  return I18n.t(key, values);
+}
+
+function productLabel(productId) {
+  return t(PRODUCT_LABEL_KEYS[productId] || productId);
+}
+
+function formatLabel(formatId, fallback = formatId) {
+  const key = FORMAT_LABEL_KEYS[formatId];
+  return key ? t(key) : fallback;
+}
+
+function surfaceProductAvailable(productId, catalogAvailable) {
+  if (ENTRY_SURFACE === "mtgo" && productId === "tabletop-major-events") {
+    return false;
+  }
+  return Boolean(catalogAvailable);
+}
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -101,7 +123,7 @@ function productEntry(productId = state.product) {
 function availableProductIds(formatId) {
   return state.catalog.formats
     .find(item => item.id === formatId)
-    ?.products.filter(item => item.available)
+    ?.products.filter(item => surfaceProductAvailable(item.id, item.available))
     .map(item => item.id) || [];
 }
 
@@ -117,8 +139,8 @@ function infoTip(text) {
 }
 
 function rangeButtons(selected, attribute) {
-  return `<div class="range-buttons" aria-label="统计区间">${RANGE_OPTIONS.map(range => (
-    `<button type="button" class="${selected === range ? "active" : ""}" ${attribute}="${range}">${range} 周</button>`
+  return `<div class="range-buttons" aria-label="${t("range.label")}">${RANGE_OPTIONS.map(range => (
+    `<button type="button" class="${selected === range ? "active" : ""}" ${attribute}="${range}">${t("range.weeks", { count: range })}</button>`
   )).join("")}</div>`;
 }
 
@@ -133,18 +155,23 @@ function renderNavigation() {
   const formatRoot = document.querySelector("#format-tabs");
   const productRoot = document.querySelector("#product-tabs");
   formatRoot.innerHTML = state.catalog.formats.map(format => {
-    const available = format.products.some(item => item.available);
+    const available = format.products.some(item => (
+      surfaceProductAvailable(item.id, item.available)
+    ));
     return `<button type="button" data-format="${escapeHtml(format.id)}"
       class="${state.format === format.id ? "active" : ""} ${available ? "" : "unavailable"}"
       aria-pressed="${state.format === format.id}" aria-disabled="${!available}"
-      title="${available ? "" : "暂未上线，正在开发中"}">${FORMAT_LABELS[format.id] || escapeHtml(format.display_name)}</button>`;
+      title="${available ? "" : t("availability.developing")}">${formatLabel(format.id, escapeHtml(format.display_name))}</button>`;
   }).join("");
   productRoot.innerHTML = PRODUCT_ORDER.map(productId => {
-    const available = Boolean(productEntry(productId)?.available);
+    const available = surfaceProductAvailable(
+      productId,
+      productEntry(productId)?.available
+    );
     return `<button type="button" data-product="${productId}"
       class="${state.product === productId ? "active" : ""} ${available ? "" : "unavailable"}"
       aria-pressed="${state.product === productId}" aria-disabled="${!available}"
-      title="${available ? "" : "暂未上线，正在开发中"}">${PRODUCT_LABELS[productId]}</button>`;
+      title="${available ? "" : t("availability.developing")}">${productLabel(productId)}</button>`;
   }).join("");
 }
 
@@ -160,7 +187,7 @@ function cardLink(card) {
 }
 
 function cardList(cards) {
-  if (!cards?.length) return '<p class="empty-state">没有可显示的单卡。</p>';
+  if (!cards?.length) return `<p class="empty-state">${t("empty.cards")}</p>`;
   return `<ul class="card-list">${cards.map(cardLink).join("")}</ul>`;
 }
 
@@ -168,36 +195,44 @@ function differenceList(items) {
   const visible = (items || []).filter(item => (
     Math.abs(Number(item.deck_qty) - Number(item.typical_qty)) >= DIFF_MIN
   ));
-  if (!visible.length) return `<p>无达到 ${DIFF_MIN} 张显示阈值的差异</p>`;
+  if (!visible.length) {
+    return `<p>${t("deck.difference_none", { count: DIFF_MIN })}</p>`;
+  }
   return visible.slice(0, 8).map(item => (
-    `<p>${escapeHtml(item.name)} ${escapeHtml(item.deck_qty)}（平均 ${escapeHtml(item.typical_qty)}）</p>`
+    `<p>${t("deck.difference_row", {
+      name: escapeHtml(item.name),
+      deck: escapeHtml(item.deck_qty),
+      average: escapeHtml(item.typical_qty),
+    })}</p>`
   )).join("");
 }
 
 function averageDeckHtml(average) {
-  if (!average) return '<p class="empty-state">该身份没有可用的平均构筑基准。</p>';
+  if (!average) return `<p class="empty-state">${t("deck.no_average")}</p>`;
   if (state.detailMode === "typical") {
     const medoid = average.medoid;
-    if (!medoid) return '<p class="empty-state">该基准没有典型牌表。</p>';
-    return `<p class="deck-meta">${escapeHtml(medoid.player)} · 名次 ${escapeHtml(medoid.final_rank)}
-      · ${dateText(medoid.starttime)}</p><h4>主牌</h4>${cardList(medoid.main_deck)}
-      <h4>备牌</h4>${cardList(medoid.side_deck || medoid.sideboard)}`;
+    if (!medoid) return `<p class="empty-state">${t("deck.no_typical")}</p>`;
+    return `<p class="deck-meta">${escapeHtml(medoid.player)} · ${t("deck.rank")} ${escapeHtml(medoid.final_rank)}
+      · ${dateText(medoid.starttime)}</p><h4>${t("deck.main")}</h4>${cardList(medoid.main_deck)}
+      <h4>${t("deck.side")}</h4>${cardList(medoid.side_deck || medoid.sideboard)}`;
   }
   const reasonText = {
-    nobase: "近四周样本不足，暂无平均构筑与变化度数据。",
-    recent: "最近一周样本不足，暂不显示近期构筑变化度。",
-    prior: "此前四周样本不足，暂不显示近期构筑变化度。",
+    nobase: t("deck.no_base"),
+    recent: t("deck.no_recent"),
+    prior: t("deck.no_prior"),
   }[average.recent_change_reason] || "";
   if (!average.sample_size) {
-    return `<p class="empty-state">${reasonText || "近四周样本不足，暂无平均构筑基准。"}</p>`;
+    return `<p class="empty-state">${reasonText || t("deck.no_average_base")}</p>`;
   }
-  return `<div class="change-box"><span>近期构筑变化度：</span>
-      <strong>${average.recent_change === null || average.recent_change === undefined ? "暂不可用" : `${average.recent_change} 分`}</strong>
-      <p>衡量最近一周构筑相对之前四周平均构筑的变化程度；数值越高表示构筑变化越大。</p>
+  return `<div class="change-box"><span>${t("deck.recent_change")}</span>
+      <strong>${average.recent_change === null || average.recent_change === undefined
+        ? t("deck.unavailable")
+        : t("deck.points", { count: average.recent_change })}</strong>
+      <p>${t("deck.change_help")}</p>
       ${reasonText ? `<p>${escapeHtml(reasonText)}</p>` : ""}
     </div>
-    <h4 class="group-title core">核心组件</h4>${cardList(average.core)}
-    <h4 class="group-title flex">弹性组件</h4>${cardList(average.flex)}`;
+    <h4 class="group-title core">${t("deck.core")}</h4>${cardList(average.core)}
+    <h4 class="group-title flex">${t("deck.flex")}</h4>${cardList(average.flex)}`;
 }
 
 function deckDetailHtml({
@@ -207,39 +242,39 @@ function deckDetailHtml({
   averageDeck,
   comparison,
   closeAction,
-  exactDeckTitle = "该赛事实际牌表",
+  exactDeckTitle = t("deck.exact"),
   referenceNote = "",
   performanceHtml = "",
   showDeviation = true,
 }) {
   const deck = exactDeck || bestDeck;
-  const deckTitle = exactDeck ? exactDeckTitle : "最佳牌表";
+  const deckTitle = exactDeck ? exactDeckTitle : t("deck.best");
   const baseStatus = comparison?.base_status;
   const deviation = deck?.deviation;
   const diff = deck?.deviation_diff;
   return `<section class="deck-detail">
-    <button class="deck-close" type="button" ${closeAction} aria-label="关闭牌表">✕</button>
+    <button class="deck-close" type="button" ${closeAction} aria-label="${t("deck.close")}">✕</button>
     <h3>${escapeHtml(title)}</h3>
-    ${baseStatus === "unavailable" ? '<p class="detail-status">构筑比较不可用：该子类型在同周四周基准中未达到最低样本量。实际牌表仍完整保留。</p>' : ""}
+    ${baseStatus === "unavailable" ? `<p class="detail-status">${t("deck.comparison_unavailable")}</p>` : ""}
     <div class="deck-columns">
       <div class="deck-column">
         <h4>${deckTitle}</h4>
-        ${deck ? `<p class="deck-meta">${escapeHtml(deck.player)} · 名次 ${escapeHtml(deck.final_rank ?? comparison?.rank ?? "—")}
+        ${deck ? `<p class="deck-meta">${escapeHtml(deck.player)} · ${t("deck.rank")} ${escapeHtml(deck.final_rank ?? comparison?.rank ?? "—")}
           · ${dateText(deck.starttime || comparison?.date)}</p>
           ${performanceHtml}
-          ${showDeviation ? `<div class="deviation-box"><span>偏离度：</span><strong>${deviation ?? "—"} 分</strong>
-            <p>偏离度衡量该牌表与同一子类型最近四周平均构筑的差异程度；它不代表套牌强弱。单卡数量差达到 ${DIFF_MIN} 张时才显示。</p>
-            ${diff ? `<div class="difference-grid"><div><b>比平均少带</b>${differenceList(diff.fewer)}</div>
-              <div><b>比平均多带</b>${differenceList(diff.more)}</div></div>` : ""}
-          </div>` : ""}<h4>主牌</h4>${cardList(deck.main_deck)}
-          <h4>备牌</h4>${cardList(deck.side_deck || deck.sideboard)}` : '<p class="empty-state">没有可用牌表。</p>'}
+          ${showDeviation ? `<div class="deviation-box"><span>${t("deck.deviation")}</span><strong>${t("deck.points", { count: deviation ?? "—" })}</strong>
+            <p>${t("deck.deviation_help", { count: DIFF_MIN })}</p>
+            ${diff ? `<div class="difference-grid"><div><b>${t("deck.fewer")}</b>${differenceList(diff.fewer)}</div>
+              <div><b>${t("deck.more")}</b>${differenceList(diff.more)}</div></div>` : ""}
+          </div>` : ""}<h4>${t("deck.main")}</h4>${cardList(deck.main_deck)}
+          <h4>${t("deck.side")}</h4>${cardList(deck.side_deck || deck.sideboard)}` : `<p class="empty-state">${t("empty.deck")}</p>`}
       </div>
       <div class="deck-column">
         ${referenceNote ? `<p class="reference-note">${escapeHtml(referenceNote)}</p>` : ""}
-        <div class="deck-mode" role="group" aria-label="平均构筑与典型牌表">
-          <button type="button" data-deck-mode="average" class="${state.detailMode === "average" ? "active" : ""}">近4周平均构筑</button>
-          <button type="button" data-deck-mode="typical" class="${state.detailMode === "typical" ? "active" : ""}">实际典型牌表</button>
-          <span>（样本 ${averageDeck?.sample_size ?? "—"}）</span>
+        <div class="deck-mode" role="group" aria-label="${t("deck.average")} / ${t("deck.representative")}">
+          <button type="button" data-deck-mode="average" class="${state.detailMode === "average" ? "active" : ""}">${t("deck.average")}</button>
+          <button type="button" data-deck-mode="typical" class="${state.detailMode === "typical" ? "active" : ""}">${t("deck.representative")}</button>
+          <span>（${t("deck.sample", { count: averageDeck?.sample_size ?? "—" })}）</span>
         </div>
         ${averageDeckHtml(averageDeck)}
       </div>
@@ -348,39 +383,39 @@ function pieChart(archetypes, key, label) {
   const remainderCount = sorted.filter(item => Number(item[key]) <= 0.02)
     .reduce((sum, item) => sum + (Number(item[countKey]) || 0), 0);
   const slices = remainder > 0
-    ? [...visible, { name: "其他", [key]: remainder, [countKey]: remainderCount, other: true }]
+    ? [...visible, { name: t("chart.other"), [key]: remainder, [countKey]: remainderCount, other: true }]
     : visible;
   let cursor = 0;
   const segments = slices.map((item, index) => {
     const start = cursor;
     cursor += (Number(item[key]) || 0) * 100;
     const color = item.other ? "#c7ccd1" : PIE_COLORS[index % PIE_COLORS.length];
-    const detail = `${item.name} · ${pct(item[key])} · ${Number(item[countKey]) || 0} 份牌表`;
+    const detail = `${item.name} · ${pct(item[key])} · ${t("chart.decks", { count: Number(item[countKey]) || 0 })}`;
     return `<path class="pie-slice" d="${piePath(start, cursor)}" fill="${color}"
       tabindex="0" data-pie-detail="${escapeHtml(detail)}" aria-label="${escapeHtml(detail)}">
       <title>${escapeHtml(detail)}</title></path>`;
   });
   if (cursor < 99.999) {
     segments.push(`<path class="pie-slice pie-slice-unavailable" d="${piePath(cursor, 100)}" fill="#eef0f2"
-      tabindex="0" data-pie-detail="未分配 · ${(100 - cursor).toFixed(1)}% · 0 份牌表"
-      aria-label="未分配 · ${(100 - cursor).toFixed(1)}% · 0 份牌表"></path>`);
+      tabindex="0" data-pie-detail="${t("chart.unassigned")} · ${(100 - cursor).toFixed(1)}% · ${t("chart.decks", { count: 0 })}"
+      aria-label="${t("chart.unassigned")} · ${(100 - cursor).toFixed(1)}% · ${t("chart.decks", { count: 0 })}"></path>`);
   }
   const legend = slices.map((item, index) => (
     `<li><i style="background:${item.other ? "#c7ccd1" : PIE_COLORS[index % PIE_COLORS.length]}"></i>
       <span>${escapeHtml(item.name)}</span><strong>${pct(item[key])}</strong>
-      <small>${Number(item[countKey]) || 0} 份</small></li>`
+      <small>${t("chart.count", { count: Number(item[countKey]) || 0 })}</small></li>`
   )).join("");
   return `<article class="pie-card"><h3>${label}</h3><div class="pie-body">
     <div class="pie-chart-shell"><svg class="pie" viewBox="0 0 200 200" role="img" aria-label="${label}">
       ${segments.join("")}</svg>
-      <div class="pie-readout" role="status">悬停或点击分区查看名称、占比和数量</div></div>
+      <div class="pie-readout" role="status">${t("chart.help")}</div></div>
     <ul class="pie-legend">${legend}</ul></div></article>`;
 }
 
 function chartHtml(archetypes) {
-  return `<section class="panel pie-panel" aria-label="高分占比与八强占比图表">
-    ${pieChart(archetypes, "high_score_share", "高分占比")}
-    ${pieChart(archetypes, "top8_share", "八强占比")}
+  return `<section class="panel pie-panel" aria-label="${t("chart.aria")}">
+    ${pieChart(archetypes, "high_score_share", t("stats.high_share"))}
+    ${pieChart(archetypes, "top8_share", t("stats.top8_share"))}
   </section>`;
 }
 
@@ -410,29 +445,42 @@ async function statsView() {
     return `<button class="sort-button" type="button" data-stats-sort="${key}">${label}${arrow}</button>${tip ? infoTip(tip) : ""}`;
   };
   return `<section class="source-note">
-      <p>本页面数据源为 MTGO 官网，官网仅放出各赛事前 32 的牌表，所以数据会有一定误差。整体 meta 占比误差较大，所以本页面不予展示，转而统计高分套牌数量。因为一方面高分套牌更有参考价值（会有更少情况被 0 胜随机套牌污染占比），另一方面高分套牌在前 32 中被囊括的比例也更大（不过超过 80 人左右的赛事中依旧会有高分套牌被 cut 掉）。</p>
-      <p>套牌类型特征最后更新：${dateText(meta.rules_updated)}　|　数据最后更新：${dateText(meta.data_updated)}</p>
+      <p>${t("source.stats")}</p>
+      <p>${t("stats.updated", {
+        rules: dateText(meta.rules_updated),
+        data: dateText(meta.data_updated),
+      })}</p>
     </section>
     ${rangeButtons(state.statsRange, "data-stats-range")}
     <div class="period-info">
-      <span>统计区间：${range.period.start} ～ ${range.period.end}　|　${range.total_decks} 份牌表　|　高分 ${range.total_high_score}　|　八强 ${range.total_top8}</span>
-      <strong>高分牌表完备度：实际收录 ${hs.observed_decklist_count} 份 / 理论应有 ${hs.expected_decklist_count_display ?? hs.expected_decklist_count} 份（${pct(hs.completeness_rate)}）</strong>
+      <span>${t("stats.period", {
+        start: range.period.start,
+        end: range.period.end,
+        decks: range.total_decks,
+        high: range.total_high_score,
+        top8: range.total_top8,
+      })}</span>
+      <strong>${t("stats.completeness", {
+        observed: hs.observed_decklist_count,
+        expected: hs.expected_decklist_count_display ?? hs.expected_decklist_count,
+        rate: pct(hs.completeness_rate),
+      })}</strong>
     </div>
     ${chartHtml(archetypes)}
     <section class="panel">
-      <div class="panel-toolbar"><h2>套牌统计</h2>
-        ${expandable.length ? `<button id="stats-expand-all" class="secondary-button" type="button">${state.statsExpanded.size ? "隐藏全部子类型" : "显示全部子类型"}</button>` : ""}
+      <div class="panel-toolbar"><h2>${t("stats.title")}</h2>
+        ${expandable.length ? `<button id="stats-expand-all" class="secondary-button" type="button">${state.statsExpanded.size ? t("stats.hide_subtypes") : t("stats.show_subtypes")}</button>` : ""}
       </div>
-      <p class="real-data-note">类型默认显示；只有维护了至少两个子类型的类型可展开。点击子类型后在原行下方显示该子类型的构筑数据。</p>
+      <p class="real-data-note">${t("stats.note")}</p>
       <div class="table-scroll"><table class="data-table metric-columns" style="width:980px;min-width:100%">
         ${fixedColumns(7)}
-        <thead><tr><th>${sortHeader("套牌", "name")}</th>
-          <th class="number">${sortHeader("场均分", "avg_points_per_round", "按该套牌瑞士轮总积分除以理论轮数计算。")}</th>
-          <th class="number">${sortHeader("高分数量", "high_score_count")}</th>
-          <th class="number">${sortHeader("高分占比", "high_score_share")}</th>
-          <th class="number">${sortHeader("八强数量", "top8_count")}</th>
-          <th class="number">${sortHeader("八强占比", "top8_share")}</th>
-          <th class="number">${sortHeader("转化率", "conversion", "高分牌表中最终进入八强的比例。")}</th>
+        <thead><tr><th>${sortHeader(t("stats.deck"), "name")}</th>
+          <th class="number">${sortHeader(t("stats.average_points"), "avg_points_per_round", t("stats.average_points_tip"))}</th>
+          <th class="number">${sortHeader(t("stats.high_count"), "high_score_count")}</th>
+          <th class="number">${sortHeader(t("stats.high_share"), "high_score_share")}</th>
+          <th class="number">${sortHeader(t("stats.top8_count"), "top8_count")}</th>
+          <th class="number">${sortHeader(t("stats.top8_share"), "top8_share")}</th>
+          <th class="number">${sortHeader(t("stats.conversion"), "conversion", t("stats.conversion_tip"))}</th>
         </tr></thead><tbody>${statsRows(archetypes)}</tbody>
       </table></div>
     </section>`;
@@ -440,12 +488,12 @@ async function statsView() {
 
 function matchupLegend(lowSampleThreshold) {
   const lowSampleText = Number.isFinite(lowSampleThreshold)
-    ? `低样本（少于 ${lowSampleThreshold} 场；仅为警示线，不代表达到后即可靠）`
-    : "低样本阈值待确定";
+    ? t("matchup.low_sample", { count: lowSampleThreshold })
+    : t("matchup.threshold_pending");
   return `<div class="matchup-legend">
-    <span>胜率配色：</span><div><div class="legend-bar"></div>
+    <span>${t("matchup.colors")}</span><div><div class="legend-bar"></div>
       <div class="legend-values"><span>0%</span><span>50%</span><span>100%</span></div></div>
-    <span><i class="na-chip"></i>无有效对局</span><span><i class="low-chip"></i>${lowSampleText}</span>
+    <span><i class="na-chip"></i>${t("matchup.none")}</span><span><i class="low-chip"></i>${lowSampleText}</span>
   </div>`;
 }
 
@@ -464,7 +512,7 @@ function winRateColor(rate) {
 }
 
 function matrixCell(record) {
-  if (!record || record.win_rate === null) return '<td class="matrix-cell na" title="无有效对局">—</td>';
+  if (!record || record.win_rate === null) return `<td class="matrix-cell na" title="${t("matchup.none")}">—</td>`;
   const low = record.low_sample ? "low-sample" : "";
   const ci = record.confidence_interval_95;
   const half = ci ? ((ci.upper - ci.lower) / 2) : null;
@@ -472,19 +520,19 @@ function matrixCell(record) {
   const foreground = record.win_rate < 0.2 || record.win_rate > 0.72 ? "#fff" : "#26313a";
   return `<td class="matrix-cell ${low}" tabindex="0"
     style="background:${winRateColor(record.win_rate)};color:${foreground}"
-    data-record="${recordText}" title="胜-负-平：${recordText}${record.mirror ? " · 同一类型" : ""}">
+    data-record="${recordText}" title="${t("matchup.record", { record: recordText })}${record.mirror ? ` · ${t("matchup.mirror")}` : ""}">
     <strong>${(record.win_rate * 100).toFixed(1)}</strong><small>${half === null ? "—" : `±${(half * 100).toFixed(1)}`}</small></td>`;
 }
 
 function matrixHtml(document) {
   const view = ReviewData.buildView(document, state.matchupRows, state.matchupColumns);
   return `<div class="table-scroll matrix-scroll"><table class="matchup-table">
-    <thead><tr><th class="corner"></th><th class="column-head overall">整体</th>
+    <thead><tr><th class="corner"></th><th class="column-head overall">${t("matchup.overall")}</th>
       ${view.columns.map(column => {
         const open = state.matchupColumns.has(column.parentId);
         const content = column.kind === "archetype" && column.expandable
           ? `<button type="button" class="axis-label-button column-axis-label" data-matchup-column="${escapeHtml(column.parentId)}"
-              aria-label="${open ? "收起" : "展开"}${escapeHtml(column.name)}" title="${escapeHtml(column.name)}">
+              aria-label="${open ? t("matchup.collapse") : t("matchup.expand")}${escapeHtml(column.name)}" title="${escapeHtml(column.name)}">
               <span class="axis-toggle">${open ? "−" : "+"}</span><span class="axis-name">${escapeHtml(column.name)}</span></button>`
           : `<span>${escapeHtml(column.name)}</span>`;
         return `<th class="column-head ${column.kind === "subtype" ? "subtype-head" : ""}"><div>${content}</div></th>`;
@@ -494,7 +542,7 @@ function matrixHtml(document) {
         const open = state.matchupRows.has(row.parentId);
         const content = row.kind === "archetype" && row.expandable
           ? `<button type="button" class="axis-label-button row-axis-label" data-matchup-row="${escapeHtml(row.parentId)}"
-              aria-label="${open ? "收起" : "展开"}${escapeHtml(row.name)}">
+              aria-label="${open ? t("matchup.collapse") : t("matchup.expand")}${escapeHtml(row.name)}">
               <span class="axis-toggle">${open ? "−" : "+"}</span><span>${escapeHtml(row.name)}</span></button>`
           : `<span>${escapeHtml(row.name)}</span>`;
         return `<tr><th class="row-head ${row.kind === "subtype" ? "subtype-head" : ""}">${content}</th>
@@ -512,12 +560,19 @@ async function matchupView() {
   const coverage = completeness.matchup_coverage;
   return `${rangeButtons(state.matchupRange, "data-matchup-range")}
     <section class="source-note">
-      <p>数据来自 Videre 众包对局记录，并按 MTGO 官方牌表分类。胜率为胜场数 ÷ 有效对局数；正常平局计入分母但不计为胜场。对角线显示真实内战，内战也计入“整体”。小字为 95% 置信区间半宽。</p>
-      <p><strong>Videre 赛事完备度：该区间理论应有 ${coverage.expected_event_count} 场，实际有可用对局档案 ${coverage.available_event_count} 场（${pct(coverage.completeness_rate)}）；延后 ${coverage.deferred_event_count} 场，缺失 ${coverage.missing_event_count} 场，排除 ${coverage.excluded_event_count} 场。</strong></p>
+      <p>${t("source.matchups")}</p>
+      <p><strong>${t("matchup.completeness", {
+        expected: coverage.expected_event_count,
+        available: coverage.available_event_count,
+        rate: pct(coverage.completeness_rate),
+        deferred: coverage.deferred_event_count,
+        missing: coverage.missing_event_count,
+        excluded: coverage.excluded_event_count,
+      })}</strong></p>
     </section>
-    <section class="panel"><div class="panel-toolbar"><div><h2>对阵胜率</h2>
-      <p class="matrix-toolbar-note">行列可独立展开；类型始终保留。展开只聚合后端提供的最细粒度 W-L-D 计数，不平均胜率。</p></div>
-      <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? "收起全部子类型" : "展开全部子类型"}</button>
+    <section class="panel"><div class="panel-toolbar"><div><h2>${t("matchup.title")}</h2>
+      <p class="matrix-toolbar-note">${t("matchup.note")}</p></div>
+      <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
     </div>${matchupLegend(displayDocument.min_sample_hint)}${matrixHtml(displayDocument)}</section>`;
 }
 
@@ -530,7 +585,7 @@ function top8PlacementDetail() {
   const identityId = placement.identity?.identity_id;
   const base = currentContext.bases.identities?.[identityId];
   return deckDetailHtml({
-    title: placement.identity?.display_name || "未分类牌表",
+    title: placement.identity?.display_name || t("top8.unknown"),
     exactDeck: placement.exact_deck,
     averageDeck: base?.average_deck,
     comparison: { ...placement.comparison, rank: placement.rank, date: event.date },
@@ -544,21 +599,24 @@ async function top8View() {
     .loadTop8(indexPath, state.top8WeekFile);
   state.top8WeekFile = weekEntry.file;
   currentContext = { top8Index: index, top8, bases };
-  return `<section class="source-note"><p>数据来源：MTGO 官网公开赛事牌表。按完整自然周列出该周收录赛事的前八名；点击子类型可查看精确牌表和同周不可变构筑基准。</p></section>
-    <div class="select-row"><label for="top8-week">显示周：</label>
+  return `<section class="source-note"><p>${t("source.top8")}</p></section>
+    <div class="select-row"><label for="top8-week">${t("top8.week")}</label>
       <select id="top8-week">${index.weeks.map(item => (
         `<option value="${escapeHtml(item.file)}" ${item.file === state.top8WeekFile ? "selected" : ""}>${item.start} ～ ${item.end}</option>`
       )).join("")}</select>
     </div>
-    <section class="panel"><p class="real-data-note">${top8.events.length} 场赛事 · ${top8.events.reduce((sum, event) => sum + event.placements.length, 0)} 个名次。赛事全称可悬停查看。</p>
-      <div class="table-scroll"><table class="top8-table top8-week-table"><thead><tr><th>名次</th>
+    <section class="panel"><p class="real-data-note">${t("top8.summary", {
+      events: top8.events.length,
+      placements: top8.events.reduce((sum, event) => sum + event.placements.length, 0),
+    })}</p>
+      <div class="table-scroll"><table class="top8-table top8-week-table"><thead><tr><th>${t("top8.rank")}</th>
         ${top8.events.map(event => `<th title="${escapeHtml(event.name)}"><strong>${escapeHtml(event.display_name)}</strong>
-          <small>${event.date} · ${event.player_count} 人</small></th>`).join("")}
+          <small>${event.date} · ${t("top8.players", { count: event.player_count })}</small></th>`).join("")}
       </tr></thead><tbody>${Array.from({ length: 8 }, (_, offset) => {
         const rank = offset + 1;
         return `<tr><td>${rank}</td>${top8.events.map(event => {
           const placement = event.placements.find(item => item.rank === rank);
-          if (!placement || placement.deck_status !== "available") return '<td class="missing-deck">牌表不可用</td>';
+          if (!placement || placement.deck_status !== "available") return `<td class="missing-deck">${t("top8.unavailable")}</td>`;
           return `<td><button class="name-button" type="button" data-top8-detail="${escapeHtml(event.event_id)}:${rank}">${escapeHtml(placement.identity.display_name)}</button></td>`;
         }).join("")}</tr>`;
       }).join("")}</tbody></table></div>${top8PlacementDetail()}</section>`;
@@ -867,16 +925,21 @@ async function tabletopView() {
 }
 
 function pickupDeck(item, key) {
-  const title = key === "existing_changes" ? "新科技" : "新套牌";
+  const title = key === "existing_changes"
+    ? t("pickup.new_tech")
+    : t("pickup.new_decks");
   const id = `${key}:${item.archetype}:${item.player}`;
   const open = state.pickupOpen.has(id);
+  const comment = I18n.language() === "en"
+    ? (item.comment_en || item.comment_zh || "")
+    : (item.comment_zh || "");
   return `<article class="pickup-card ${open ? "open" : ""}">
     <button type="button" class="pickup-head" data-pickup-toggle="${escapeHtml(id)}" aria-expanded="${open}">
-      <span><strong>${escapeHtml(item.archetype)}</strong><small>${escapeHtml(item.player)} · 名次 ${item.final_rank}
-      · 积分 ${item.swiss_score} · ${dateText(item.starttime)}</small></span><b>${title} · 偏离度 ${item.deviation} 分</b>
-    </button>${open ? `<div class="pickup-body"><p>${escapeHtml(item.comment_zh || "")}</p>
-      <div class="deck-columns"><div class="deck-column"><h4>主牌</h4>${cardList(item.main_deck)}</div>
-      <div class="deck-column"><h4>备牌</h4>${cardList(item.side_deck)}</div></div></div>` : ""}</article>`;
+      <span><strong>${escapeHtml(item.archetype)}</strong><small>${escapeHtml(item.player)} · ${t("deck.rank")} ${item.final_rank}
+      · ${t("deck.points", { count: item.swiss_score })} · ${dateText(item.starttime)}</small></span><b>${title} · ${t("deck.deviation")} ${t("deck.points", { count: item.deviation })}</b>
+    </button>${open ? `<div class="pickup-body"><p>${escapeHtml(comment)}</p>
+      <div class="deck-columns"><div class="deck-column"><h4>${t("deck.main")}</h4>${cardList(item.main_deck)}</div>
+      <div class="deck-column"><h4>${t("deck.side")}</h4>${cardList(item.side_deck)}</div></div></div>` : ""}</article>`;
 }
 
 async function pickupView() {
@@ -886,23 +949,24 @@ async function pickupView() {
   state.pickupWeekFile = week.file;
   currentContext = { pickupIndex: index, pickupDocument: document };
   const groups = [
-    ["新科技", "existing_changes"],
-    ["新套牌", "new_archetypes"],
+    [t("pickup.new_tech"), "existing_changes"],
+    [t("pickup.new_decks"), "new_archetypes"],
   ];
-  return `<div class="pickup-layout"><aside class="pickup-weeks"><h2>往期</h2>${index.weeks.map(item => (
+  return `<section class="source-note"><p>${t("source.pickup")}</p></section>
+    <div class="pickup-layout"><aside class="pickup-weeks"><h2>${t("pickup.archive")}</h2>${index.weeks.map(item => (
       `<button type="button" data-pickup-week="${escapeHtml(item.file)}" class="${item.file === state.pickupWeekFile ? "active" : ""}">
         ${escapeHtml(item.week)}<span>${item.start} ～ ${item.end}</span></button>`
     )).join("")}</aside><div class="pickup-content">${groups.map(([title, key]) => (
       `<section class="pickup-group"><h2>${title}</h2>${document[key]?.length
         ? document[key].map(item => pickupDeck(item, key)).join("")
-        : '<p class="pickup-empty">本周空缺</p>'}</section>`
+        : `<p class="pickup-empty">${t("pickup.empty")}</p>`}</section>`
     )).join("")}</div></div>`;
 }
 
 async function renderView() {
   const root = document.querySelector("#view");
   const token = ++state.renderToken;
-  root.innerHTML = '<p class="loading-state">正在载入真实数据……</p>';
+  root.innerHTML = `<p class="loading-state">${t("loading.data")}</p>`;
   try {
     let html;
     if (state.product === "mtgo-statistics") html = await statsView();
@@ -912,11 +976,14 @@ async function renderView() {
     else html = await pickupView();
     if (token !== state.renderToken) return;
     root.innerHTML = html;
-    document.querySelector("#payload-status").textContent = `已读取：${state.format} / ${state.product}`;
+    document.querySelector("#payload-status").textContent = t("loading.loaded", {
+      format: formatLabel(state.format),
+      product: productLabel(state.product),
+    });
   } catch (error) {
     if (token !== state.renderToken) return;
-    root.innerHTML = `<p class="error-state"><strong>真实数据载入失败</strong><br>${escapeHtml(error.message)}</p>`;
-    document.querySelector("#payload-status").textContent = "载入失败";
+    root.innerHTML = `<p class="error-state"><strong>${t("loading.error")}</strong><br>${escapeHtml(error.message)}</p>`;
+    document.querySelector("#payload-status").textContent = t("loading.failed");
     console.error(error);
   }
 }
@@ -938,7 +1005,7 @@ document.addEventListener("click", async event => {
     const next = button.dataset.format;
     const available = availableProductIds(next);
     if (!available.length) {
-      setMessage(`${FORMAT_LABELS[next]}：暂未上线，正在开发中。`);
+      setMessage(t("availability.format", { format: formatLabel(next) }));
       return;
     }
     state.format = next;
@@ -948,8 +1015,14 @@ document.addEventListener("click", async event => {
     renderNavigation();
     await renderView();
   } else if (button.dataset.product) {
-    if (!productEntry(button.dataset.product)?.available) {
-      setMessage(`${FORMAT_LABELS[state.format]}的${PRODUCT_LABELS[button.dataset.product]}暂未上线，正在开发中。`);
+    if (!surfaceProductAvailable(
+      button.dataset.product,
+      productEntry(button.dataset.product)?.available
+    )) {
+      setMessage(t("availability.product", {
+        format: formatLabel(state.format),
+        product: productLabel(button.dataset.product),
+      }));
       return;
     }
     state.product = button.dataset.product;
@@ -1097,7 +1170,7 @@ function setPieReadout(slice, pin = false) {
     card.querySelectorAll(".pie-slice.pinned").forEach(item => item.classList.remove("pinned"));
     if (alreadyPinned) {
       delete card.dataset.pinnedPieDetail;
-      readout.textContent = "悬停或点击分区查看名称、占比和数量";
+      readout.textContent = t("chart.help");
       return;
     }
     card.dataset.pinnedPieDetail = slice.dataset.pieDetail;
@@ -1111,7 +1184,7 @@ function restorePieReadout(slice) {
   const readout = card?.querySelector(".pie-readout");
   if (!card || !readout) return;
   readout.textContent = card.dataset.pinnedPieDetail
-    || "悬停或点击分区查看名称、占比和数量";
+    || t("chart.help");
 }
 
 document.addEventListener("mouseover", event => {
@@ -1141,7 +1214,7 @@ document.addEventListener("mousemove", event => {
   const cell = event.target.closest("[data-record]");
   const pop = document.querySelector("#matrix-hover-pop");
   if (cell && pop) {
-    pop.textContent = `胜-负-平：${cell.dataset.record}`;
+    pop.textContent = t("matchup.record", { record: cell.dataset.record });
     pop.hidden = false;
     pop.style.left = `${Math.min(window.innerWidth - 190, event.clientX + 12)}px`;
     pop.style.top = `${Math.max(8, event.clientY - 38)}px`;
@@ -1172,7 +1245,7 @@ document.addEventListener("focusin", event => {
   if (!cell) return;
   const node = document.querySelector("#matrix-record");
   if (node) {
-    node.textContent = `胜-负-平：${cell.dataset.record}`;
+    node.textContent = t("matchup.record", { record: cell.dataset.record });
     node.hidden = false;
   }
 });
@@ -1192,21 +1265,30 @@ document.addEventListener("click", event => {
   if (!cell) return;
   const node = document.querySelector("#matrix-record");
   if (node) {
-    node.textContent = `胜-负-平：${cell.dataset.record}`;
+    node.textContent = t("matchup.record", { record: cell.dataset.record });
     node.hidden = false;
   }
 });
 
-document.querySelector("#lang-en").addEventListener("click", () => {
-  document.querySelector("#lang-zh").classList.add("active");
-  document.querySelector("#lang-en").classList.remove("active");
-  setMessage("本轮先确认中文界面；英文文案将在中文定稿后另行提交确认。");
+async function changeLanguage(language) {
+  I18n.setLanguage(language);
+  document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+  document.title = t("site.title");
+  const siteTitle = document.querySelector("#site-title");
+  if (siteTitle) siteTitle.textContent = t("site.title");
+  document.querySelector("#lang-zh").classList.toggle("active", language === "zh");
+  document.querySelector("#lang-en").classList.toggle("active", language === "en");
+  setMessage("");
+  renderNavigation();
+  await renderView();
+}
+
+document.querySelector("#lang-en").addEventListener("click", async () => {
+  await changeLanguage("en");
 });
 
-document.querySelector("#lang-zh").addEventListener("click", () => {
-  document.querySelector("#lang-zh").classList.add("active");
-  document.querySelector("#lang-en").classList.remove("active");
-  setMessage("");
+document.querySelector("#lang-zh").addEventListener("click", async () => {
+  await changeLanguage("zh");
 });
 
 function toggleSet(set, value) {
@@ -1218,14 +1300,15 @@ async function initialize() {
   try {
     state.catalog = await Runtime.catalog.fetchJson("stats/catalog.json");
     const initialFormat = state.catalog.formats.find(item => item.id === state.format);
-    if (!initialFormat?.products.some(item => item.id === state.product && item.available)) {
-      state.product = initialFormat.default_product_id;
+    if (!availableProductIds(state.format).includes(state.product)) {
+      state.product = availableProductIds(state.format)[0]
+        || initialFormat.default_product_id;
     }
     renderNavigation();
     await renderView();
   } catch (error) {
-    document.querySelector("#view").innerHTML = `<p class="error-state"><strong>产品目录载入失败</strong><br>${escapeHtml(error.message)}</p>`;
-    document.querySelector("#payload-status").textContent = "载入失败";
+    document.querySelector("#view").innerHTML = `<p class="error-state"><strong>${t("loading.catalog_error")}</strong><br>${escapeHtml(error.message)}</p>`;
+    document.querySelector("#payload-status").textContent = t("loading.failed");
     console.error(error);
   }
 }

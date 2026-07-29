@@ -1,11 +1,24 @@
 (function (root) {
   "use strict";
 
+  function entryBase() {
+    const configured = globalThis.document?.documentElement?.dataset?.statsBase;
+    const base = configured || "../../../";
+    if (!/^(?:\.\/|\.\.\/)+$/.test(base)) {
+      throw new Error(`不受支持的公开数据根路径：${base}`);
+    }
+    return base.endsWith("/") ? base : `${base}/`;
+  }
+
   function publicPath(path) {
-    if (typeof path !== "string" || !path.startsWith("stats/")) {
+    if (
+      typeof path !== "string"
+      || !path.startsWith("stats/")
+      || path.split("/").includes("..")
+    ) {
       throw new Error(`目录中存在不受支持的公开路径：${path}`);
     }
-    return `../../../${path}`;
+    return `${entryBase()}${path}`;
   }
 
   function dirname(path) {

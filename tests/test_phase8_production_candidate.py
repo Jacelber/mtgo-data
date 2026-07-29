@@ -22,6 +22,7 @@ def _scripts(path: Path) -> list[str]:
 def test_candidate_and_review_entries_use_the_same_ordered_modules() -> None:
     expected = [
         "../../../assets/js/phase8/runtime.js",
+        "../../../assets/js/phase8/i18n.js",
         "../../../assets/js/phase8/matchup-model.js",
         "../../../assets/js/phase8/mtgo-controller.js",
         "../../../assets/js/phase8/tabletop-controller.js",
@@ -33,13 +34,14 @@ def test_candidate_and_review_entries_use_the_same_ordered_modules() -> None:
     assert "P8-08 模块化生产候选" in P8_08.read_text(encoding="utf-8")
 
 
-def test_production_entry_remains_on_the_legacy_phase4_assets() -> None:
+def test_production_entry_uses_phase8_while_legacy_assets_remain_available() -> None:
     html = (ROOT / "index.html").read_text(encoding="utf-8")
 
-    assert "assets/js/common.js" in html
-    assert "assets/js/matchup.js" in html
-    assert "assets/js/mtgo.js" in html
-    assert "assets/js/phase8/" not in html
+    assert "assets/js/phase8/app.js" in html
+    assert "assets/js/phase8/tabletop-controller.js" not in html
+    assert (ROOT / "assets" / "js" / "common.js").is_file()
+    assert (ROOT / "assets" / "js" / "matchup.js").is_file()
+    assert (ROOT / "assets" / "js" / "mtgo.js").is_file()
     assert not (ROOT / "melee" / "index.html").exists()
 
 
