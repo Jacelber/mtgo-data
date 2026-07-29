@@ -185,17 +185,23 @@ def test_every_public_matchup_window_conserves_hierarchical_counts():
 
 def test_public_format_selector_uses_the_shared_hierarchical_renderer():
     html = (ROOT / "index.html").read_text(encoding="utf-8")
-    javascript = (ROOT / "assets" / "js" / "mtgo.js").read_text(encoding="utf-8")
-
-    assert html.index('src="assets/js/matchup.js"') < html.index(
-        'src="assets/js/mtgo.js"'
+    app = (ROOT / "assets" / "js" / "phase8" / "app.js").read_text(
+        encoding="utf-8"
     )
+    legacy = (ROOT / "assets" / "js" / "mtgo.js").read_text(encoding="utf-8")
+
+    assert html.index('src="assets/js/phase8/matchup-model.js"') < html.index(
+        'src="assets/js/phase8/app.js"'
+    )
+    assert "ReviewData.buildView(" in app
+    assert "matchupRows: new Set()" in app
+    assert "matchupColumns: new Set()" in app
+    assert "data-matchup-row" in app
+    assert "data-matchup-column" in app
+
+    # The Phase 4 entry assets remain intact as the rollback baseline.
     assert re.findall(
         r'\{\s*key:\s*"([^"]+)",\s*enabled:\s*true\s*\}',
-        javascript,
+        legacy,
     ) == list(PRODUCT_FORMATS)
-    assert "MtgMatchup.buildView(" in javascript
-    assert "mxExpandedRows" in javascript
-    assert "mxExpandedColumns" in javascript
-    assert "renderMxExpandControls(view)" in javascript
-    assert "if (!node.showAxisToggle) return \"\";" in javascript
+    assert "MtgMatchup.buildView(" in legacy

@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-08-prototype-productionization"
-  working_branch_status: "p8_08_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p8-09-mtgo-production-entry"
+  working_branch_status: "p8_09_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_08_owner_accepted_remote_publication_authorized"
+  status: "p8_09_owner_accepted_remote_publication_authorized"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -4863,7 +4863,51 @@ phase_8_plan:
       local_environment_note: "The first complete pytest attempt used an inaccessible default Windows temporary root and ended with 435 passes plus 142 fixture setup errors and no assertion failure. A five-test probe and the unchanged 577-test complete suite passed under a fresh independent workspace-sibling basetemp."
     - id: "P8-09"
       name: "MTGO production-entry connection and legacy regression"
-      status: "not_started"
+      status: "owner_accepted_remote_publication_authorized"
+      branch: "codex/p8-09-mtgo-production-entry"
+      base_commit: "3daacc0da1e5f7815f055f9ad8483c173c69bd11"
+      authorized_on: "2026-07-29"
+      owner_local_execution_authorized: true
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-29"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-29"
+      merge_authorized_after_passing_checks: true
+      production_entry_changed: true
+      tabletop_entry_changed: false
+      generated_data_changed: false
+      statistical_formula_changed: false
+      schema_changed: false
+      workflow_changed: false
+      accepted_english_stats_product_label: "MTGO High-Score & Top 8 Shares"
+      retained_rollback_assets:
+        - "assets/css/site.css"
+        - "assets/js/common.js"
+        - "assets/js/matchup.js"
+        - "assets/js/mtgo.js"
+      deliverables:
+        - "index.html"
+        - "assets/js/phase8/i18n.js"
+        - "assets/js/phase8/runtime.js"
+        - "assets/js/phase8/app.js"
+        - "tests/test_phase8_mtgo_production_entry.py"
+        - "docs/audits/P8-09.md"
+      validation:
+        focused_tests_passed: 22
+        equivalent_full_pytest_passed: 583
+        test_files_covered: 64
+        repository_python_checked: 122
+        repository_json_checked: 1588
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1847
+        rule_validation_status: "passed"
+        schema_documents_validated: 69
+        git_diff_check: "passed"
+        browser_acceptance_passed: true
+        browser_console_errors: 0
+        narrow_viewport_verified: "390x844"
+        phase4_rollback_assets_unchanged: true
     - id: "P8-10"
       name: "Tabletop Major Events production-entry connection"
       status: "not_started"
@@ -5074,8 +5118,8 @@ phase_8_plan:
         merged_on: "2026-07-28"
 
 next_approved_task:
-  id: "P8-09"
-  name: "MTGO production-entry connection and legacy regression"
+  id: "P8-10"
+  name: "Tabletop Major Events production-entry connection"
   target_paths:
     - "index.html"
     - "assets/css/"

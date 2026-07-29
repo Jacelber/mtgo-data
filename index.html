@@ -1,58 +1,32 @@
-<!DOCTYPE html>
-<html lang="zh">
+<!doctype html>
+<html lang="zh-CN" data-stats-base="./" data-surface="mtgo">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MTGO Meta 数据分析</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<link rel="stylesheet" href="assets/css/site.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MTG Meta 数据分析</title>
+  <link rel="stylesheet" href="assets/css/phase8-base.css">
+  <link rel="stylesheet" href="assets/css/phase8-candidate.css">
 </head>
 <body>
-
-  <div class="topbar">
-    <h1 id="siteTitle">MTGO Meta 数据分析</h1>
-    <div class="lang-switch">
-      <button id="langZh" class="active" onclick="setLang('zh')">中文</button>
-      <button id="langEn" onclick="setLang('en')">EN</button>
+  <header class="topbar">
+    <div>
+      <h1 id="site-title">MTG Meta 数据分析</h1>
     </div>
-  </div>
-
-  <div class="view-switch" id="viewSwitch"></div>
-  <div class="format-tabs" id="formatTabs"></div>
-
-  <div id="statsView">
-    <div class="mx-note" id="statsNote"></div>
-    <div class="mx-note" id="statsMeta" style="margin-top:-4px"></div>
-    <div class="range-buttons" id="rangeButtons"></div>
-    <div class="period-info" id="periodInfo"></div>
-
-    <div class="panel" id="chartPanel">
-      <canvas id="metaChart"></canvas>
+    <div class="lang-switch" aria-label="语言">
+      <button id="lang-zh" class="active" type="button">中文</button>
+      <button id="lang-en" type="button">EN</button>
     </div>
+  </header>
 
-    <div class="panel" id="tablePanel">
-      <div class="placeholder" id="tablePlaceholder">（数据表格待接入）</div>
-    </div>
-  </div>
+  <main>
+    <span id="payload-status" class="sr-only" role="status">正在载入产品目录……</span>
+    <nav class="format-tabs" id="format-tabs" aria-label="赛制"></nav>
+    <nav class="product-tabs" id="product-tabs" aria-label="产品"></nav>
+    <p id="availability-message" class="availability-message" role="status" hidden></p>
+    <section id="view" aria-live="polite"><p class="loading-state">正在载入真实数据……</p></section>
+  </main>
 
-  <div id="pickupView" style="display:none">
-    <div class="pickup-layout">
-      <div class="pickup-weeks" id="pickupWeeks"></div>
-      <div class="pickup-content" id="pickupContent"></div>
-    </div>
-  </div>
-
-    <div id="matchupView" style="display:none">
-    <div class="range-buttons" id="mxRangeButtons"></div>
-    <div class="mx-expand-controls" id="mxExpandControls"></div>
-    <div class="mx-note" id="mxNote"></div>
-    <div class="mx-legend" id="mxLegend"></div>
-    <div class="mx-scroll"><div id="mxTable"></div></div>
-  </div>
-
-  <div class="mx-hover-pop" id="mxHoverPop"></div>
-
-  <img id="cardPreview" alt="">
+  <img id="card-preview" alt="">
 
   <footer class="site-footer">
     Made by DJac ·
@@ -60,8 +34,10 @@
     <a href="https://space.bilibili.com/383589" target="_blank" rel="noopener">Bilibili</a>
   </footer>
 
-<script src="assets/js/common.js"></script>
-<script src="assets/js/matchup.js"></script>
-<script src="assets/js/mtgo.js"></script>
+  <script src="assets/js/phase8/runtime.js"></script>
+  <script src="assets/js/phase8/i18n.js"></script>
+  <script src="assets/js/phase8/matchup-model.js"></script>
+  <script src="assets/js/phase8/mtgo-controller.js"></script>
+  <script src="assets/js/phase8/app.js"></script>
 </body>
 </html>
