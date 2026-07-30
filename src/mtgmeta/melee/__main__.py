@@ -19,6 +19,8 @@ def _result_payload(result: MeleeRawFetchResult) -> dict[str, object]:
         "archive_path": str(result.archive_path) if result.archive_path is not None else None,
         "planned_urls": list(result.planned_urls),
         "responses": len(result.responses),
+        "planned_responses": result.planned_responses,
+        "resumed_responses": result.resumed_responses,
     }
 
 
@@ -47,11 +49,27 @@ def main(
         registry = load_melee_event_registry(args.registry)
         if args.complete and not args.execute:
             raise ValueError("--complete requires --execute because its request plan is discovered live")
-        result = (
-            complete_fetch(args.event_id, registry, args.raw_root)
-            if args.complete
-            else fetch(args.event_id, registry, args.raw_root, dry_run=not args.execute)
-        )
+        if args.complete:
+            def report_progress(payload: dict[str, object]) -> None:
+                print(
+                    "Melee raw collection progress: "
+                    + json.dumps(payload, ensure_ascii=False, sort_keys=True),
+                    file=sys.stderr,
+                )
+
+            result = complete_fetch(
+                args.event_id,
+                registry,
+                args.raw_root,
+                progress=report_progress,
+            )
+        else:
+            result = fetch(
+                args.event_id,
+                registry,
+                args.raw_root,
+                dry_run=not args.execute,
+            )
     except (MeleeConfigError, MeleeFetchError, OSError, ValueError) as exc:
         print(f"Melee raw collection ERROR: {exc}", file=sys.stderr)
         return 2

@@ -24,6 +24,7 @@ from mtgmeta.melee.client import MeleeFetchError, MeleeRawFetchResult, MeleeRequ
 from mtgmeta.melee.config import DisabledMeleeEventError, MeleeConfigError, parse_melee_event_text
 from mtgmeta.melee.parser import MeleeSourceParseError, parse_raw_snapshot
 from mtgmeta.melee.normalize import normalize_parsed_snapshot
+from mtgmeta.melee.retention import MeleeRetentionError, retain_normalized_event
 
 
 WHITELIST = ROOT / "configs" / "melee_events.yaml"
@@ -291,12 +292,14 @@ def test_cli_complete_mode_requires_execute_and_uses_complete_collector(tmp_path
     assert "requires --execute" in capsys.readouterr().err
     calls = []
 
-    def fake_complete(event_id, _registry, raw_root):
+    def fake_complete(event_id, _registry, raw_root, *, progress):
         calls.append((event_id, raw_root))
+        progress({"stage": "complete", "completed_responses": 1, "planned_responses": 1})
         return MeleeRawFetchResult(event_id, False, tmp_path / "snapshot", ("https://melee.gg/Tournament/View/434455",), ())
 
     assert melee_main([*args, "--execute"], complete_fetch=fake_complete) == 0
     assert calls == [("434455", tmp_path / "raw")]
+    assert '"stage": "complete"' in capsys.readouterr().err
 
 
 def test_raw_request_contract_rejects_cross_event_and_duplicate_request_ids():
@@ -413,3 +416,145 @@ def test_complete_event_collects_and_parses_real_wire_shapes_without_credentials
     )
     with pytest.raises(MeleeSourceParseError, match="missing v2 fields"):
         parse_raw_snapshot(result.archive_path)
+
+
+def test_complete_collection_resumes_verified_responses_and_matches_uninterrupted_bytes(tmp_path):
+    guid_one = "11111111-1111-1111-1111-111111111111"
+    guid_two = "22222222-2222-2222-2222-222222222222"
+    html = b"""<html><body>
+    <button class='round-selector' data-id='101' data-name='Round 1' data-is-completed='True'></button>
+    </body></html>"""
+
+    def player(participant_id, name):
+        return {"StatusDescription": "Active", "Players": [{"ID": participant_id, "DisplayName": name}]}
+
+    standings = {
+        "recordsTotal": 2,
+        "data": [
+            {"ID": 1, "Rank": 1, "Points": 3, "Team": player(11, "Alpha"),
+             "Decklists": [{"DecklistId": guid_one, "PlayerId": 11}]},
+            {"ID": 2, "Rank": 2, "Points": 0, "Team": player(22, "Beta"),
+             "Decklists": [{"DecklistId": guid_two, "PlayerId": 22}]},
+        ],
+    }
+    matches = {
+        "recordsTotal": 1,
+        "data": [{
+            "Guid": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", "RoundId": 101,
+            "HasResult": True, "ResultString": "2-0-0", "TableNumber": 1,
+            "ByeReasonDescription": None, "LossReasonDescription": None,
+            "Competitors": [
+                {"Team": player(11, "Alpha"), "GameWins": 2, "GameByes": 0},
+                {"Team": player(22, "Beta"), "GameWins": 0, "GameByes": 0},
+            ],
+        }],
+    }
+    failed_url = f"https://melee.gg/Decklist/GetDecklistDetails?id={guid_two}"
+
+    def payload(method, url):
+        if url.endswith("/Tournament/View/434455"):
+            return html, "text/html"
+        if url.endswith("/Standing/GetRoundStandings"):
+            value = standings
+        elif "/Match/GetRoundMatches/101" in url:
+            value = matches
+        else:
+            decklist_id = url.rsplit("=", 1)[-1]
+            value = {
+                "Guid": decklist_id,
+                "FormatName": "Modern",
+                "Records": [{"c": 0, "n": "Fixture Card", "q": 4}],
+            }
+        return json.dumps(value, sort_keys=True).encode(), "application/json"
+
+    first_calls = []
+
+    def interrupted_send(method, url, **_kwargs):
+        first_calls.append(url)
+        if url == failed_url:
+            return Response(status_code=500, url=url)
+        content, content_type = payload(method, url)
+        return Response(content=content, url=url, headers={"Content-Type": content_type})
+
+    progress = []
+    interrupted_root = tmp_path / "interrupted"
+    with pytest.raises(MeleeFetchError, match="after 1 attempts"):
+        fetch_complete_event(
+            "434455", registry(), interrupted_root,
+            request_send=interrupted_send, sleep=lambda _seconds: None,
+            now=fixed_now, attempts=1, request_delay=0, progress=progress.append,
+        )
+    event_root = interrupted_root / "melee" / "434455"
+    partial = event_root / melee_client.COMPLETE_PARTIAL_DIRECTORY
+    checkpoint = event_root / melee_client.COMPLETE_CHECKPOINT_FILE
+    assert partial.is_dir()
+    assert checkpoint.is_file()
+    assert not (partial / "manifest.json").exists()
+    with pytest.raises(MeleeSourceParseError, match="manifest"):
+        parse_raw_snapshot(partial)
+    with pytest.raises(MeleeRetentionError, match="snapshot"):
+        retain_normalized_event(
+            registry().events[0],
+            partial,
+            raw_root=interrupted_root,
+            data_root=tmp_path / "normalized",
+        )
+
+    resumed_calls = []
+
+    def resumed_send(method, url, **_kwargs):
+        resumed_calls.append(url)
+        content, content_type = payload(method, url)
+        return Response(content=content, url=url, headers={"Content-Type": content_type})
+
+    resumed = fetch_complete_event(
+        "434455", registry(), interrupted_root,
+        request_send=resumed_send, sleep=lambda _seconds: None,
+        now=lambda: datetime(2026, 7, 22, 12, 0, tzinfo=UTC),
+        attempts=1, request_delay=0, progress=progress.append,
+    )
+    assert resumed_calls == [failed_url]
+    assert resumed.resumed_responses == 4
+    assert resumed.planned_responses == 5
+    assert progress[-1]["stage"] == "complete"
+    assert not partial.exists()
+    assert not checkpoint.exists()
+
+    uninterrupted_root = tmp_path / "uninterrupted"
+    uninterrupted = fetch_complete_event(
+        "434455", registry(), uninterrupted_root,
+        request_send=resumed_send, sleep=lambda _seconds: None,
+        now=fixed_now, attempts=1, request_delay=0,
+    )
+    resumed_files = {
+        path.name: path.read_bytes()
+        for path in resumed.archive_path.iterdir()
+    }
+    uninterrupted_files = {
+        path.name: path.read_bytes()
+        for path in uninterrupted.archive_path.iterdir()
+    }
+    assert resumed.archive_path.name == uninterrupted.archive_path.name
+    assert resumed_files == uninterrupted_files
+
+
+def test_complete_request_budget_supports_three_thousand_players_with_hard_ceiling():
+    budget = melee_client.complete_request_budget(
+        standings_total=3_000,
+        round_match_totals=(1_500,) * 16,
+        decklist_count=3_000,
+    )
+    assert budget == 4_081
+    assert budget < melee_client.MAX_COMPLETE_ARCHIVE_RESPONSES
+    assert melee_client.MAX_COMPLETE_EVENT_DECKLISTS >= 3_000
+    loaded, _schema_registry = schemas.load_schemas(ROOT / "schemas")
+    assert (
+        loaded["melee-raw-archive.schema.json"]["properties"]["responses"]["maxItems"]
+        == melee_client.MAX_COMPLETE_ARCHIVE_RESPONSES
+    )
+    with pytest.raises(MeleeRequestBoundaryError, match="decklists"):
+        melee_client.complete_request_budget(
+            standings_total=melee_client.MAX_COMPLETE_EVENT_DECKLISTS + 1,
+            round_match_totals=(1,),
+            decklist_count=melee_client.MAX_COMPLETE_EVENT_DECKLISTS + 1,
+        )

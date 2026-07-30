@@ -2017,6 +2017,15 @@ P9-07S is therefore a Phase 9 prerequisite rather than a Phase 11 aggregation
 task. P9-08 owns the separate format-dynamic Tabletop label correction and the
 final cross-format consumer regression.
 
+P9-07 was published through pull request #135, implementation commit
+`0a787ed916f843f3b89882e70c0048c7eb978d66`, and merge commit
+`85876cbee74bad5ab173ba151ef63e8167f69baa`. P9-07S local implementation
+subsequently completed against that merged baseline. Its resumable collector
+successfully collected and parsed all 1,085 responses for temporary event
+`419742`, then removed the temporary source archive. It does not activate the
+event whitelist, retain generated or source data, change a workflow, or begin
+P9-08. The P9-07S implementation remains at its owner-acceptance stop point.
+
 ## Acceptance criteria
 
 Phase 9 is complete when:
