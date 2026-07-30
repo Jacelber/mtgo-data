@@ -152,6 +152,24 @@ def test_adapter_uses_shared_rules_and_retains_full_evidence():
     ]
 
 
+def test_adapter_normalizes_double_faced_names_before_shared_rules():
+    document = _fixture_overlay(
+        _fixture_event(
+            [
+                {
+                    "name": "Alpha Card // Alpha Back",
+                    "quantity": 4,
+                    "section": "main",
+                }
+            ]
+        )
+    )
+
+    assert document["summary"]["classified"] == 1
+    assert document["summary"]["unknown"] == 0
+    assert document["records"][0]["selected"]["archetype_id"] == "example"
+
+
 def test_unknown_deck_retains_reviewable_normalized_cards_without_blocking():
     document = _fixture_overlay(
         _fixture_event(
@@ -337,18 +355,21 @@ def test_committed_reference_overlay_conserves_all_submitted_decklists():
     assert summary == {
         **summary,
         "total_records": 362,
-        "classified": 290,
-        "unknown": 72,
+        "classified": 352,
+        "unknown": 10,
         "conflicts": 0,
         "invalid_decks": 0,
-        "multiple_matches": 75,
-        "overridden_matches": 75,
+        "multiple_matches": 76,
+        "overridden_matches": 76,
         "selected_subtypes": 153,
-        "parent_only": 137,
+        "parent_only": 199,
         "same_parent_multiple_subtype_matches": 2,
         "residual_subtype_violations": 0,
         "strict_validation": "pass",
     }
+    assert summary["selected_by_parent"]["boros-energy"] == 45
+    assert summary["selected_by_parent"]["mardu-energy"] == 1
+    assert summary["selected_by_parent"]["ruby-storm"] == 16
 
 
 def test_committed_overlay_hashes_exact_input_and_shared_taxonomy():
@@ -385,8 +406,14 @@ def test_unknowns_keep_deck_evidence_and_disqualified_deck_is_classified():
         if item["participant_id"] == disqualified_id
     )
 
-    assert len(unknowns) == 72
+    assert len(unknowns) == 10
     assert all(item["unknown_deck"]["main_deck"] for item in unknowns)
+    assert all(
+        " // " not in card["name"]
+        for item in unknowns
+        for zone in ("main_deck", "sideboard")
+        for card in item["unknown_deck"][zone]
+    )
     assert disqualified["classification_status"] == "classified"
     assert disqualified["selected"]["archetype_id"] == "eldrazi-tron"
     assert disqualified["selected"]["subtype_id"] == "colorless"

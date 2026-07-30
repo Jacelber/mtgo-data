@@ -36,6 +36,12 @@ class MeleeClassificationError(ValueError):
     """Raised when a normalized event cannot be classified safely."""
 
 
+def _classification_card_name(name: str) -> str:
+    """Return the front-face name used by shared classification rules."""
+
+    return name.strip().partition(" // ")[0]
+
+
 def _sha256_bytes(payload: bytes) -> str:
     return sha256(payload).hexdigest()
 
@@ -140,7 +146,7 @@ def _adapt_decklist(decklist: Mapping[str, Any]) -> tuple[dict[str, Any] | None,
         ):
             continue
         target = main if section == "main" else side
-        target.append({"name": name, "qty": quantity})
+        target.append({"name": _classification_card_name(name), "qty": quantity})
 
     if not main:
         errors.append("decklist must contain at least one main-deck card")
