@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p9-05-publication-generalization"
-  working_branch_status: "p9_05_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p9-06-structure-consumer"
+  working_branch_status: "p9_06_local_implementation_completed_awaiting_owner_acceptance"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 9
   name: "Pure Constructed event strategies"
-  status: "p9_05_owner_accepted_remote_publication_authorized"
+  status: "p9_06_local_implementation_completed_awaiting_owner_acceptance"
   started_on: "2026-07-30"
   objective: "Complete statistical support for the explicitly configured constructed_day2 and constructed_single_stage Tabletop Major Events structures while preserving the mixed Modern baseline."
   production_changes_allowed: false
@@ -5622,7 +5622,7 @@ phase_9_plan:
       stop_point: "P9-05 was separately authorized on 2026-07-30."
     - id: "P9-05"
       name: "Matchup, quality, publication, catalog, and Schema generalization"
-      status: "owner_accepted_remote_publication_authorized"
+      status: "completed_accepted_and_published"
       authorized_on: "2026-07-30"
       local_execution_authorized: true
       requires_owner_authorization: false
@@ -5652,6 +5652,14 @@ phase_9_plan:
       remote_publication_authorized: true
       remote_publication_authorized_on: "2026-07-30"
       production_dispatch_authorized: false
+      publication:
+        local_commit: "3ed24a4cc53623c41330cd59ce23ed559c5f9fde"
+        pull_request: 133
+        pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/133"
+        merge_commit: "aa3f3c1c20b8ac20bc41daeb31bcb580dc6fbe3a"
+        pr_validation_run: 30523191570
+        master_admission_run: 30523785800
+        pages_run: 30523785068
       validation:
         focused_pure_full_package_contract_tests_passed: 23
         impacted_subsystem_tests_passed: 61
@@ -5686,12 +5694,50 @@ phase_9_plan:
         standard_rule_validation: "passed"
         python_compile: "passed"
         git_diff_check: "passed"
-      publication_record: "Exact PR, merge, and workflow identifiers are deferred to the next already-authorized business or governance change."
-      stop_point: "Publish the accepted P9-05 change; P9-06 remains unauthorized."
+      publication_record: "Reconciled into the next authorized P9-06 business change."
+      stop_point: "P9-05 is published. P9-06 was separately authorized on 2026-07-30."
     - id: "P9-06"
       name: "Structure-aware Tabletop consumer"
-      status: "not_started"
-      requires_owner_authorization: true
+      status: "local_implementation_completed_awaiting_owner_acceptance"
+      authorized_on: "2026-07-30"
+      local_execution_authorized: true
+      requires_owner_authorization: false
+      branch: "codex/p9-06-structure-consumer"
+      base_commit: "aa3f3c1c20b8ac20bc41daeb31bcb580dc6fbe3a"
+      deliverables:
+        - "assets/css/phase8-candidate.css"
+        - "assets/js/phase8/app.js"
+        - "assets/js/phase8/i18n.js"
+        - "assets/js/phase8/tabletop-controller.js"
+        - "tests/test_phase9_structure_consumer.py"
+        - "docs/audits/P9-05.md"
+        - "docs/audits/P9-06.md"
+        - "docs/STATUS.yaml"
+      production_change: true
+      generated_data_changed: false
+      live_source_used: false
+      whitelist_changed: false
+      public_schema_or_formula_changed: false
+      multi_event_aggregation_implemented: false
+      remote_publication_authorized: false
+      production_dispatch_authorized: false
+      validation:
+        new_structure_consumer_tests_passed: 4
+        focused_consumer_and_contract_tests_passed: 36
+        javascript_syntax_check: "passed"
+        mixed_real_browser_regression: "passed"
+        mixed_day1_overall_high_score_count: 168
+        full_pytest_passed: 619
+        repository_python_checked: 127
+        repository_json_checked: 1592
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1867
+        standard_rule_validation: "passed"
+        modern_rule_validation: "passed"
+        repository_validation_status: "passed"
+        git_diff_check: "passed"
+      stop_point: "Obtain owner acceptance before commit or remote publication. P9-07 remains separately controlled."
     - id: "P9-07"
       name: "Bounded real-source pilots"
       status: "not_started"
@@ -5704,22 +5750,23 @@ phase_9_plan:
 
 next_approved_task:
   id: "P9-06"
-  name: "Owner authorization for the structure-aware Tabletop consumer"
+  name: "Owner acceptance and publication decision for the structure-aware Tabletop consumer"
   target_paths:
+    - "assets/css/phase8-candidate.css"
+    - "assets/js/phase8/app.js"
+    - "assets/js/phase8/i18n.js"
     - "assets/js/phase8/tabletop-controller.js"
-    - "assets/js/phase8/matchup-model.js"
-    - "melee/index.html"
-    - "tests/test_phase9_pure_constructed_contract.py"
-    - "tests/test_phase8_tabletop_production_entry.py"
+    - "tests/test_phase9_structure_consumer.py"
+    - "docs/audits/P9-05.md"
     - "docs/audits/P9-06.md"
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  local_execution_authorized: false
+  authorization_status: "local_implementation_completed_awaiting_owner_acceptance"
+  local_execution_authorized: true
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "P9-05 was accepted and authorized for remote publication on 2026-07-30. P9-06, real-source access, whitelist changes, generated-output writes, and workflow dispatch remain unauthorized."
+  planning_status: "P9-06 local implementation and browser regression are complete. Commit, remote publication, production dispatch, real-source access, whitelist changes, generated-output writes, and P9-07 remain unauthorized."
 
 governance_baseline:
   status: "active_on_master"
@@ -5768,7 +5815,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P9-06 without separate owner authorization."
+  - "Do not begin P9-07 without separate owner authorization."
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
   - "Do not re-dispatch the Melee production workflow without separate authorization."

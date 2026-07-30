@@ -64,6 +64,9 @@ const state = {
   tabletopView: "overview",
   tabletopEventId: null,
   tabletopSelectedEvents: new Set(),
+  tabletopLastSelectedEventId: null,
+  tabletopLastScopeByEvent: new Map(),
+  tabletopWasMultiEvent: false,
   tabletopScope: "all_constructed",
   tabletopExpanded: new Set(),
   tabletopDetailIdentity: null,
@@ -750,7 +753,7 @@ function tabletopDetailRow(identityId) {
   })}</td></tr>`;
 }
 
-function tabletopOverall(scope) {
+function tabletopOverall(scope, advancementMetric) {
   const counts = {
     wins: scope.result_counts.played_win || 0,
     losses: scope.result_counts.played_loss || 0,
@@ -768,15 +771,18 @@ function tabletopOverall(scope) {
     metagame_share: 1,
     average_points_per_effective_round: scope.average_points_per_effective_round,
     completion_rate: completion,
+    day2_conversion: scope.day2_conversion,
     high_score: scope.high_score_deck_count === null ? null : { count: scope.high_score_deck_count },
     literal_record: record,
     subtypes: [],
   };
 }
 
-function tabletopRow(record, className = "") {
+function tabletopRow(record, className = "", advancementMetric = "high_score") {
   const match = record.literal_record || overviewRecord(record.match_record?.all_matches);
-  const high = record.high_score?.count;
+  const advancement = advancementMetric === "day2_conversion"
+    ? pct(record.day2_conversion)
+    : (record.high_score?.count ?? "—");
   return `<tr class="${className}">
     <td class="identity-cell">${record.nameHtml || escapeHtml(record.display_name || record.archetype_name || record.name)}</td>
     <td class="number">${record.deck_count}</td><td class="number">${pct(record.metagame_share)}</td>
@@ -784,7 +790,7 @@ function tabletopRow(record, className = "") {
     <td class="number">${pct(match?.win_rate)}</td>
     <td class="number">${match ? `${match.wins}-${match.losses}-${match.draws}` : "—"}</td>
     <td class="number">${match?.matches ?? "—"}</td><td class="number">${pct(record.completion_rate)}</td>
-    <td class="number">${high ?? "—"}</td>
+    <td class="number">${advancement}</td>
   </tr>`;
 }
 
@@ -792,6 +798,7 @@ function tabletopSortValue(record, key) {
   if (key === "name") return (record.archetype_name || record.display_name || "").toLowerCase();
   if (key === "win_rate") return overviewRecord(record.match_record?.all_matches)?.win_rate ?? -1;
   if (key === "matches") return overviewRecord(record.match_record?.all_matches)?.matches ?? -1;
+  if (key === "day2_conversion") return record.day2_conversion ?? -1;
   if (key === "high_score") return record.high_score?.count ?? -1;
   return record[key] ?? -1;
 }
@@ -809,7 +816,8 @@ function activeTabletopSubtypes(parent) {
   return (parent.subtypes || []).filter(subtype => Number(subtype.deck_count) > 0);
 }
 
-function tabletopOverview(scope) {
+function tabletopOverview(scope, presentation) {
+  const advancementMetric = presentation.advancement_metric;
   const identityNames = new Map();
   scope.archetypes.forEach(parent => {
     if (parent.archetype_id) identityNames.set(parent.archetype_id, parent.archetype_name);
@@ -833,7 +841,7 @@ function tabletopOverview(scope) {
         ? `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(directIdentity)}">
             <span class="identity-label">${escapeHtml(parent.archetype_name)}</span></button>`
         : `<span class="identity-label">${escapeHtml(parent.archetype_name)}</span>`;
-    const output = [tabletopRow({ ...parent, nameHtml })];
+    const output = [tabletopRow({ ...parent, nameHtml }, "", advancementMetric)];
     if (!expandable && directIdentity && state.tabletopDetailIdentity === directIdentity) {
       output.push(tabletopDetailRow(directIdentity));
     }
@@ -845,7 +853,7 @@ function tabletopOverview(scope) {
           literal_record: overviewRecord(subtype.match_record?.all_matches),
           nameHtml: `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(identityId)}">
             <span class="identity-label">${escapeHtml(subtype.display_name)}</span></button>`,
-        }, "subtype-row"));
+        }, "subtype-row", advancementMetric));
         if (state.tabletopDetailIdentity === identityId) output.push(tabletopDetailRow(identityId));
       });
     }
@@ -855,6 +863,13 @@ function tabletopOverview(scope) {
     const arrow = state.tabletopSort === key ? (state.tabletopDirection === "desc" ? " ▼" : " ▲") : "";
     return `<button class="sort-button" type="button" data-tabletop-sort="${key}">${label}${arrow}</button>${tip ? infoTip(tip) : ""}`;
   };
+  const advancementHeader = advancementMetric === "day2_conversion"
+    ? sortHeader(
+        t("tabletop.day2_conversion"),
+        "day2_conversion",
+        t("tabletop.day2_conversion_tip")
+      )
+    : sortHeader(t("tabletop.high_score_decks"), "high_score");
   return `<div class="panel-toolbar"><h2>${t("tabletop.overview_title")}</h2>
       <button id="tabletop-expand-all" class="secondary-button" type="button">${state.tabletopExpanded.size ? t("stats.hide_subtypes") : t("stats.show_subtypes")}</button>
     </div><div class="table-scroll"><table class="data-table metric-columns" style="width:1250px;min-width:100%">
@@ -864,8 +879,8 @@ function tabletopOverview(scope) {
         <th class="number">${sortHeader(t("tabletop.win_rate"), "win_rate", t("tabletop.win_rate_tip"))}</th><th class="number">${t("tabletop.record")}</th>
         <th class="number">${sortHeader(t("tabletop.valid_matches"), "matches", t("tabletop.valid_matches_tip"))}</th>
         <th class="number">${sortHeader(t("tabletop.completion_rate"), "completion_rate", t("tabletop.completion_rate_tip"))}</th>
-        <th class="number">${sortHeader(t("tabletop.high_score_decks"), "high_score")}</th></tr></thead>
-      <tbody>${tabletopRow(tabletopOverall(scope), "overall-row")}${rows}</tbody>
+        <th class="number">${advancementHeader}</th></tr></thead>
+      <tbody>${tabletopRow(tabletopOverall(scope, advancementMetric), "overall-row", advancementMetric)}${rows}</tbody>
     </table></div>`;
 }
 
@@ -902,10 +917,45 @@ async function tabletopView() {
     MtgoController
   );
   state.tabletopEventId = eventEntry.event_id;
-  state.tabletopSelectedEvents.add(eventEntry.event_id);
-  if (!overview.scope_order.includes(state.tabletopScope)) state.tabletopScope = overview.default_scope;
+  const catalogEventIds = new Set(index.events.map(item => item.event_id));
+  state.tabletopSelectedEvents = new Set(
+    [...state.tabletopSelectedEvents].filter(id => catalogEventIds.has(id))
+  );
+  if (!state.tabletopSelectedEvents.size) {
+    state.tabletopSelectedEvents.add(eventEntry.event_id);
+  }
+  if (!state.tabletopLastSelectedEventId) {
+    state.tabletopLastSelectedEventId = eventEntry.event_id;
+  }
+  const selectedEventIds = state.tabletopView === "matchup"
+    ? [...state.tabletopSelectedEvents]
+    : [eventEntry.event_id];
+  const scopeState = TabletopController.resolveScopeState({
+    events: index.events,
+    selectedEventIds,
+    activeEventId: eventEntry.event_id,
+    requestedScope: state.tabletopScope,
+    preferredSingleScope: state.tabletopLastScopeByEvent.get(eventEntry.event_id),
+    restoreSingleScope: state.tabletopWasMultiEvent && selectedEventIds.length === 1,
+  });
+  state.tabletopScope = scopeState.scope;
+  if (!scopeState.multi_event) {
+    state.tabletopLastScopeByEvent.set(eventEntry.event_id, state.tabletopScope);
+  }
+  state.tabletopWasMultiEvent = scopeState.multi_event;
   const scope = overview.scopes[state.tabletopScope];
-  currentContext = { tabletopIndex: index, eventEntry, meta, overview, matchup, quality, tabletopDecks, mtgoDecks };
+  const presentation = TabletopController.structurePresentation(overview);
+  currentContext = {
+    tabletopIndex: index,
+    eventEntry,
+    meta,
+    overview,
+    matchup,
+    quality,
+    tabletopDecks,
+    mtgoDecks,
+    scopeState,
+  };
   const viewTabs = `<div class="tabletop-view-tabs subview-tabs" role="group" aria-label="${t("tabletop.view_label")}">
     <button type="button" data-tabletop-view="overview" class="${state.tabletopView === "overview" ? "active" : ""}">${t("tabletop.overview")}</button>
     <button type="button" data-tabletop-view="matchup" class="${state.tabletopView === "matchup" ? "active" : ""}">${t("tabletop.matchups")}</button>
@@ -918,13 +968,20 @@ async function tabletopView() {
         `<label><input type="checkbox" data-tabletop-event-check="${escapeHtml(item.event_id)}"
           ${state.tabletopSelectedEvents.has(item.event_id) ? "checked" : ""}> ${escapeHtml(item.name)}</label>`
       )).join("")}</div></div>`;
-  const scopes = `<div class="range-buttons" aria-label="${t("tabletop.event_scope")}">${overview.scope_order.map(scopeId => (
-    `<button type="button" data-tabletop-scope="${scopeId}" class="${state.tabletopScope === scopeId ? "active" : ""}">${scopeLabel(scopeId)}</button>`
+  const disabledScopes = new Set(scopeState.disabled_scopes);
+  const scopes = `<div class="range-buttons" aria-label="${t("tabletop.event_scope")}">${scopeState.scope_order.map(scopeId => (
+    `<button type="button" data-tabletop-scope="${scopeId}" class="${state.tabletopScope === scopeId ? "active" : ""}"
+      ${disabledScopes.has(scopeId) ? 'disabled aria-disabled="true"' : ""}>${scopeLabel(scopeId)}</button>`
   )).join("")}</div>`;
+  const scopeLock = scopeState.multi_event
+    ? `<p class="scope-lock-note">${t("tabletop.multi_scope_lock")}</p>`
+    : "";
   const retainedQualityCodes = new Set([
     "disqualified_participant_matches_excluded",
-    "mixed_event_day2_selection_bias",
   ]);
+  if (presentation.show_mixed_selection_bias) {
+    retainedQualityCodes.add("mixed_event_day2_selection_bias");
+  }
   const issueList = quality.issues.filter(issue => retainedQualityCodes.has(issue.code)).map(issue => (
     issue.code === "disqualified_participant_matches_excluded"
       ? `<li>${t("tabletop.disqualified", {
@@ -933,16 +990,22 @@ async function tabletopView() {
       })}</li>`
       : `<li>${escapeHtml(issueMessage(issue))}</li>`
   )).join("");
-  return `${viewTabs}${selector}${scopes}
+  const eventSummary = scopeState.multi_event ? "" : `
     <section class="panel event-summary"><div class="event-title-row"><strong>${escapeHtml(overview.event.name)}</strong>
       <a href="${escapeHtml(overview.event.source_url)}" target="_blank" rel="noopener">${t("tabletop.source_event")}</a></div>
       <p>${eventDateRange(overview.event.date)} · ${escapeHtml(eventStructureLabel(overview.event_structure))} · ${t("tabletop.event_id", { id: escapeHtml(overview.event_id) })}</p>
       <div class="quality-notice"><strong>${t("tabletop.data_quality")}</strong>
         <ul class="quality-list">${issueList}</ul></div>
-    </section>
-    <section class="panel">${state.tabletopView === "overview"
-      ? tabletopOverview(scope)
-      : tabletopMatchup(matchup, state.tabletopScope)}</section>`;
+    </section>`;
+  const content = scopeState.multi_event
+    ? `<div class="empty-state">${t("tabletop.multi_event_pending", {
+        count: selectedEventIds.length,
+      })}</div>`
+    : state.tabletopView === "overview"
+      ? tabletopOverview(scope, presentation)
+      : tabletopMatchup(matchup, state.tabletopScope);
+  return `${viewTabs}${selector}${scopes}${scopeLock}${eventSummary}
+    <section class="panel">${content}</section>`;
 }
 
 function pickupDeck(item, key) {
@@ -1118,11 +1181,18 @@ document.addEventListener("click", async event => {
     await renderView();
   } else if (button.dataset.tabletopView) {
     state.tabletopView = button.dataset.tabletopView;
+    if (state.tabletopView === "overview" && state.tabletopLastSelectedEventId) {
+      state.tabletopEventId = state.tabletopLastSelectedEventId;
+    }
     state.matchupRows.clear();
     state.matchupColumns.clear();
     await renderView();
   } else if (button.dataset.tabletopScope) {
     state.tabletopScope = button.dataset.tabletopScope;
+    state.tabletopLastScopeByEvent.set(
+      state.tabletopEventId,
+      state.tabletopScope
+    );
     state.tabletopDetailIdentity = null;
     await renderView();
   } else if (button.dataset.tabletopToggle) {
@@ -1170,14 +1240,31 @@ document.addEventListener("change", async event => {
     await renderView();
   } else if (event.target.id === "tabletop-event") {
     state.tabletopEventId = event.target.value;
-    state.tabletopSelectedEvents.add(event.target.value);
+    state.tabletopLastSelectedEventId = event.target.value;
+    state.tabletopSelectedEvents = new Set([event.target.value]);
+    state.tabletopWasMultiEvent = false;
     state.tabletopDetailIdentity = null;
     await renderView();
   } else if (event.target.dataset.tabletopEventCheck) {
     const id = event.target.dataset.tabletopEventCheck;
-    if (event.target.checked) state.tabletopSelectedEvents.add(id);
-    else if (state.tabletopSelectedEvents.size > 1) state.tabletopSelectedEvents.delete(id);
-    else event.target.checked = true;
+    if (event.target.checked) {
+      state.tabletopSelectedEvents.add(id);
+      state.tabletopEventId = id;
+      state.tabletopLastSelectedEventId = id;
+    } else if (state.tabletopSelectedEvents.size > 1) {
+      state.tabletopSelectedEvents.delete(id);
+      if (state.tabletopEventId === id) {
+        state.tabletopEventId = [...state.tabletopSelectedEvents].at(-1);
+      }
+      state.tabletopLastSelectedEventId = state.tabletopEventId;
+    } else {
+      event.target.checked = true;
+      return;
+    }
+    state.tabletopDetailIdentity = null;
+    state.matchupRows.clear();
+    state.matchupColumns.clear();
+    await renderView();
   }
 });
 
