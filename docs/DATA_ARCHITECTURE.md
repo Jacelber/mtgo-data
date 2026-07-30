@@ -1308,11 +1308,32 @@ stats/<format>/melee/events/<event_id>/quality.json
 ```
 
 `overview.json` aggregates parent archetypes and their maintained subtype
-children for Day 1, Day 2, and all Constructed Swiss. `decks.json` preserves
-one participant-keyed audit record with classification, decklist, official
-standing context, eligibility, and the same three statistical scopes.
+children. `decks.json` preserves one participant-keyed audit record with
+classification, decklist, official standing context, eligibility, and the
+same structure-declared statistical scopes. P9-04 dispatches those two
+documents as follows:
+
+- `mixed` keeps `day1`, `day2`, and `all_constructed`, including the existing
+  mixed-event selection-bias warning and stage high-score metrics;
+- `constructed_day2` keeps the same three scopes, removes the mixed-event
+  warning, makes high-score metrics unavailable, and reports
+  `day2_conversion` for the Day 2 field and each parent/subtype identity;
+- `constructed_single_stage` emits only `all_constructed` and calculates its
+  high-score population and `high_score_conversion` from each participant's
+  effective theoretical rounds.
+
+Pure-event documents declare their primary `advancement_metric`. Their deck
+records mark overall standings points as Constructed-only context, while the
+mixed document retains the existing non-Constructed-context flag. Existing
+draw-adjusted record fields remain compatibility data and their nested
+`literal_record` remains the target wins-over-valid-matches statistic.
+
 `quality.json` reconciles source, classification, ledger, exclusions, and
-stage populations without copying the full source archive.
+stage populations without copying the full source archive. It remains
+mixed-only through P9-04; P9-05 owns its structure generalization together
+with matchup, publication, meta, and catalog contracts. Accordingly,
+`build_event_overview_and_decks` is the structure-aware P9-04 boundary, while
+the existing three-document path/CLI remains mixed-only until P9-05.
 
 Parent rows remain the default aggregation. Only parents observed in the event
 are emitted, plus the explicit Unknown bucket. For each observed
@@ -1320,6 +1341,13 @@ subtype-defining parent, all maintained subtypes are emitted, including empty
 states, and their additive fields must conserve the parent exactly. A
 subtype-defining parent with an unassigned classified deck blocks generation
 under the no-residual rule.
+
+P9-04 extends the compatible `1.0.0` overview and decks Schemas without
+changing the retained mixed document shape. Structure conditionals require
+the exact scope set, the pure-event advancement metric, the pure Day 2
+conversion field, and the correct overall-points context flag. The committed
+mixed event `434455` remains the byte-stability oracle for overview, decks,
+and quality.
 
 The generator has a read-only default and an explicit `--execute` write path.
 It does not contact Melee or MTGO, modify any retained input, or write a

@@ -25,11 +25,18 @@
     "format": {
       "$ref": "melee-event-statistics-common.schema.json#/$defs/id"
     },
-    "event_structure": {"const": "mixed"},
+    "event_structure": {
+      "enum": ["mixed", "constructed_day2", "constructed_single_stage"]
+    },
     "input": {
       "$ref": "melee-event-statistics-common.schema.json#/$defs/input"
     },
-    "scope_order": {"const": ["day1", "day2", "all_constructed"]},
+    "scope_order": {
+      "oneOf": [
+        {"const": ["day1", "day2", "all_constructed"]},
+        {"const": ["all_constructed"]}
+      ]
+    },
     "decks": {
       "type": "array",
       "items": {"$ref": "#/$defs/deck"}
@@ -41,6 +48,94 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "event_structure": {
+            "enum": ["mixed", "constructed_day2"]
+          }
+        },
+        "required": ["event_structure"]
+      },
+      "then": {
+        "properties": {
+          "scope_order": {"const": ["day1", "day2", "all_constructed"]},
+          "decks": {
+            "items": {
+              "properties": {
+                "scopes": {
+                  "required": ["day1", "day2", "all_constructed"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"event_structure": {"const": "mixed"}},
+        "required": ["event_structure"]
+      },
+      "then": {
+        "properties": {
+          "decks": {
+            "items": {
+              "properties": {
+                "overall_points_include_non_constructed_context": {
+                  "const": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_structure": {
+            "enum": ["constructed_day2", "constructed_single_stage"]
+          }
+        },
+        "required": ["event_structure"]
+      },
+      "then": {
+        "properties": {
+          "decks": {
+            "items": {
+              "properties": {
+                "overall_points_include_non_constructed_context": {
+                  "const": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_structure": {"const": "constructed_single_stage"}
+        },
+        "required": ["event_structure"]
+      },
+      "then": {
+        "properties": {
+          "scope_order": {"const": ["all_constructed"]},
+          "decks": {
+            "items": {
+              "properties": {
+                "scopes": {"maxProperties": 1}
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "classification": {
       "type": "object",
@@ -162,7 +257,7 @@
         },
         "final_rank": {"type": "integer", "minimum": 1},
         "overall_event_match_points": {"type": "integer", "minimum": 0},
-        "overall_points_include_non_constructed_context": {"const": true},
+        "overall_points_include_non_constructed_context": {"type": "boolean"},
         "day2_participant": {"type": "boolean"},
         "classification": {"$ref": "#/$defs/classification"},
         "decklist": {
@@ -201,7 +296,7 @@
         "scopes": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["day1", "day2", "all_constructed"],
+          "required": ["all_constructed"],
           "properties": {
             "day1": {"$ref": "#/$defs/deck_scope"},
             "day2": {"$ref": "#/$defs/deck_scope"},

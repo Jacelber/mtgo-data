@@ -23,6 +23,11 @@ EVENT_STATISTICS_SCHEMA_VERSION = "1.0.0"
 FORMAT_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
 SCOPE_ORDER = ("day1", "day2", "all_constructed")
+STRUCTURE_SCOPE_ORDER = {
+    "mixed": SCOPE_ORDER,
+    "constructed_day2": SCOPE_ORDER,
+    "constructed_single_stage": ("all_constructed",),
+}
 PLAYED_RESULT_TYPES = frozenset({"played_win", "played_loss", "played_draw"})
 COMPLETED_OR_EXEMPT_RESULT_TYPES = frozenset(
     {
@@ -97,6 +102,15 @@ def _high_score_threshold(rounds: int) -> int | None:
     if rounds <= 0:
         return None
     return 3 * (rounds // 2 + 1)
+
+
+def _high_score_available(event_structure: str, scope: str) -> bool:
+    return (
+        event_structure == "mixed" and scope in {"day1", "day2"}
+    ) or (
+        event_structure == "constructed_single_stage"
+        and scope == "all_constructed"
+    )
 
 
 def _record_from_result_types(result_types: Sequence[str]) -> dict[str, Any]:
@@ -239,6 +253,7 @@ def _group_metrics(
     scope_population: set[str],
     scope_opportunities: Sequence[Mapping[str, Any]],
     scope: str,
+    event_structure: str,
     total_high_score: int | None,
     group_key: tuple[str, ...],
     identity_by_participant: Mapping[str, tuple[str, ...]],
@@ -263,7 +278,8 @@ def _group_metrics(
     high_score_conversion: float | None = None
     day2_high_score_rate: float | None = None
     round_distribution: dict[str, int] | None = None
-    if scope in {"day1", "day2"}:
+    high_score_available = _high_score_available(event_structure, scope)
+    if high_score_available:
         high_score_count = 0
         distribution: Counter[int] = Counter()
         by_participant = {
@@ -288,7 +304,7 @@ def _group_metrics(
         high_score_share = _rounded_ratio(
             high_score_count, int(total_high_score or 0)
         )
-        if scope == "day1":
+        if scope == "day1" or event_structure == "constructed_single_stage":
             high_score_conversion = _rounded_ratio(high_score_count, len(members))
         else:
             day2_high_score_rate = _rounded_ratio(high_score_count, len(members))
@@ -298,7 +314,7 @@ def _group_metrics(
         }
 
     result_counts = _result_counts(opportunities)
-    return {
+    result = {
         "deck_count": len(members),
         "metagame_share": _rounded_ratio(len(members), len(scope_population)),
         "constructed_points": constructed_points,
@@ -346,15 +362,15 @@ def _group_metrics(
             }
         ),
         "high_score": (
-            None
-            if scope == "all_constructed"
-            else {
+            {
                 "count": high_score_count,
                 "field_share": high_score_share,
                 "high_score_conversion": high_score_conversion,
                 "day2_high_score_rate": day2_high_score_rate,
                 "effective_round_distribution": round_distribution,
             }
+            if high_score_available
+            else None
         ),
         "match_record": _match_record(
             opportunities,
@@ -362,6 +378,11 @@ def _group_metrics(
             identity_by_participant=identity_by_participant,
         ),
     }
+    if event_structure == "constructed_day2" and scope == "day2":
+        result["day2_conversion"] = _rounded_ratio(
+            len(members), len(participant_ids)
+        )
+    return result
 
 
 def _source_url(event: Mapping[str, Any], event_id: str) -> str:
@@ -399,10 +420,13 @@ def _validate_inputs(
         raise MeleeStatisticsError("event.metadata must be an object")
     event_id = metadata.get("event_id")
     format_id = metadata.get("constructed_format")
+    event_structure = event.get("event_structure")
     if metadata.get("source") != "melee":
         raise MeleeStatisticsError("event.metadata.source must be 'melee'")
-    if event.get("event_structure") != "mixed":
-        raise MeleeStatisticsError("P7-05 requires a mixed event")
+    if event_structure not in STRUCTURE_SCOPE_ORDER:
+        raise MeleeStatisticsError(
+            f"unsupported event structure {event_structure!r}"
+        )
     if not isinstance(event_id, str) or not EVENT_ID_PATTERN.fullmatch(event_id):
         raise MeleeStatisticsError("event.metadata.event_id must be numeric")
     if not isinstance(format_id, str) or not FORMAT_PATTERN.fullmatch(format_id):
@@ -430,9 +454,17 @@ def _validate_inputs(
     if (
         ledger.get("event_id") != event_id
         or ledger.get("format") != format_id
-        or ledger.get("event_structure") != "mixed"
+        or ledger.get("event_structure") != event_structure
     ):
         raise MeleeStatisticsError("opportunity ledger identity does not match event")
+    expected_scopes = STRUCTURE_SCOPE_ORDER[str(event_structure)]
+    scope_summaries = ledger.get("scope_summaries")
+    if not isinstance(scope_summaries, Mapping) or tuple(scope_summaries) != (
+        expected_scopes
+    ):
+        raise MeleeStatisticsError(
+            f"{event_structure} opportunity scopes do not match its structure"
+        )
     ledger_input = ledger.get("input")
     if not isinstance(ledger_input, Mapping):
         raise MeleeStatisticsError("opportunity ledger input must be an object")
@@ -538,6 +570,8 @@ def _scope_documents(
     ledger: Mapping[str, Any],
     taxonomy: RuleSet,
     participant_documents: Mapping[str, Mapping[str, Any]],
+    event_structure: str,
+    scope_order: Sequence[str],
 ) -> dict[str, Any]:
     opportunities = ledger["opportunities"]
     parents, leaves = _identity_keys(participant_documents)
@@ -553,7 +587,7 @@ def _scope_documents(
         )
 
     scopes: dict[str, Any] = {}
-    for scope in SCOPE_ORDER:
+    for scope in scope_order:
         population = _scope_population(participant_documents, scope)
         scope_opportunities = [
             item
@@ -569,7 +603,7 @@ def _scope_documents(
             for participant_id in population
         }
         total_high_score: int | None = None
-        if scope in {"day1", "day2"}:
+        if _high_score_available(event_structure, scope):
             total_high_score = sum(
                 _participant_high_score(items)[2] is True
                 for items in participant_opportunities.values()
@@ -610,6 +644,7 @@ def _scope_documents(
                             scope_population=population,
                             scope_opportunities=scope_opportunities,
                             scope=scope,
+                            event_structure=event_structure,
                             total_high_score=total_high_score,
                             group_key=leaf_key,
                             identity_by_participant=leaves,
@@ -627,6 +662,7 @@ def _scope_documents(
                     scope_population=population,
                     scope_opportunities=scope_opportunities,
                     scope=scope,
+                    event_structure=event_structure,
                     total_high_score=total_high_score,
                     group_key=parent_key,
                     identity_by_participant=parents,
@@ -639,12 +675,29 @@ def _scope_documents(
                     "constructed_points",
                     "theoretical_rounds",
                     "effective_theoretical_rounds",
+                    "completed_or_officially_exempt_rounds",
                     "played_match_participations",
                 ):
                     if row[field] != sum(child[field] for child in children):
                         raise MeleeStatisticsError(
                             f"{scope} {parent_id} subtype {field} does not conserve"
                         )
+                for field in ("wins", "losses", "draws", "matches"):
+                    if row["match_record"]["all_matches"][field] != sum(
+                        child["match_record"]["all_matches"][field]
+                        for child in children
+                    ):
+                        raise MeleeStatisticsError(
+                            f"{scope} {parent_id} subtype all-match {field} "
+                            "does not conserve"
+                        )
+                if row["high_score"] is not None and row["high_score"][
+                    "count"
+                ] != sum(child["high_score"]["count"] for child in children):
+                    raise MeleeStatisticsError(
+                        f"{scope} {parent_id} subtype high-score count "
+                        "does not conserve"
+                    )
             rows.append(row)
 
         unknown_key = ("unknown",)
@@ -661,6 +714,7 @@ def _scope_documents(
                         scope_population=population,
                         scope_opportunities=scope_opportunities,
                         scope=scope,
+                        event_structure=event_structure,
                         total_high_score=total_high_score,
                         group_key=unknown_key,
                         identity_by_participant=parents,
@@ -672,16 +726,18 @@ def _scope_documents(
             raise MeleeStatisticsError(f"{scope} archetype deck counts do not conserve")
 
         scope_summary = ledger["scope_summaries"][scope]
-        scopes[scope] = {
+        scope_document = {
             "population": (
                 "starting_field"
                 if scope == "day1"
+                or event_structure == "constructed_single_stage"
                 else "qualified_field"
                 if scope == "day2"
                 else "starting_field_with_qualified_day2_opportunities"
             ),
             "selection_bias_warning": (
-                scope in {"day2", "all_constructed"}
+                event_structure == "mixed"
+                and scope in {"day2", "all_constructed"}
             ),
             "participant_count": len(population),
             "known_deck_count": sum(
@@ -713,6 +769,11 @@ def _scope_documents(
             "result_counts": scope_summary["result_counts"],
             "archetypes": rows,
         }
+        if event_structure == "constructed_day2" and scope == "day2":
+            scope_document["day2_conversion"] = _rounded_ratio(
+                len(population), len(participant_documents)
+            )
+        scopes[scope] = scope_document
     return scopes
 
 
@@ -721,6 +782,7 @@ def _deck_scope(
     scope: str,
     participant_document: Mapping[str, Any],
     opportunities: Sequence[Mapping[str, Any]],
+    event_structure: str,
 ) -> dict[str, Any]:
     participates = (
         True
@@ -744,7 +806,7 @@ def _deck_scope(
         str(item["result_type"]) in COMPLETED_OR_EXEMPT_RESULT_TYPES for item in items
     )
     high_score = None
-    if scope in {"day1", "day2"} and participates:
+    if _high_score_available(event_structure, scope) and participates:
         threshold, _points, qualifies = _participant_high_score(items)
         high_score = {"threshold": threshold, "qualified": qualifies}
     result_counts = _result_counts(items)
@@ -775,6 +837,8 @@ def _deck_documents(
     decklists: Mapping[str, Mapping[str, Any]],
     participant_documents: Mapping[str, Mapping[str, Any]],
     opportunities: Sequence[Mapping[str, Any]],
+    event_structure: str,
+    scope_order: Sequence[str],
 ) -> list[dict[str, Any]]:
     result = []
     for participant_id in sorted(
@@ -796,7 +860,9 @@ def _deck_documents(
                 "participant_status": participant["status"],
                 "final_rank": standing["rank"],
                 "overall_event_match_points": standing["match_points"],
-                "overall_points_include_non_constructed_context": True,
+                "overall_points_include_non_constructed_context": (
+                    event_structure == "mixed"
+                ),
                 "day2_participant": ledger_participant["day2_participant"],
                 "classification": classification,
                 "decklist": {
@@ -822,8 +888,9 @@ def _deck_documents(
                         scope,
                         ledger_participant,
                         opportunities,
+                        event_structure,
                     )
-                    for scope in SCOPE_ORDER
+                    for scope in scope_order
                 },
             }
         )
@@ -1011,7 +1078,7 @@ def _quality_document(
     }
 
 
-def build_event_statistics(
+def build_event_overview_and_decks(
     event: Mapping[str, Any],
     classification: Mapping[str, Any],
     ledger: Mapping[str, Any],
@@ -1026,7 +1093,7 @@ def build_event_statistics(
     taxonomy_path: str,
     taxonomy_sha256: str,
 ) -> dict[str, dict[str, Any]]:
-    """Build deterministic overview, decks, and quality documents."""
+    """Build deterministic overview and deck documents for one event structure."""
 
     (
         event_id,
@@ -1046,6 +1113,8 @@ def build_event_statistics(
         ledger_sha256=opportunity_sha256,
         taxonomy_sha256=taxonomy_sha256,
     )
+    event_structure = str(event["event_structure"])
+    scope_order = STRUCTURE_SCOPE_ORDER[event_structure]
     input_document = _input_document(
         event_path=event_path,
         event_sha256=event_sha256,
@@ -1064,32 +1133,38 @@ def build_event_statistics(
         ledger=ledger,
         taxonomy=taxonomy,
         participant_documents=participant_documents,
+        event_structure=event_structure,
+        scope_order=scope_order,
     )
-    warnings = [
-        {
-            "code": "mixed_event_day2_selection_bias",
-            "scopes": ["day2", "all_constructed"],
-            "message": (
-                "Day 2 participants were selected using combined event performance, "
-                "including Draft where applicable."
-            ),
-        },
-        {
-            "code": "overall_standings_include_non_constructed_results",
-            "scopes": SCOPE_ORDER,
-            "message": (
-                "Final rank and overall event points are context only and are not "
-                "used as Modern performance points."
-            ),
-        },
-    ]
+    warnings = (
+        [
+            {
+                "code": "mixed_event_day2_selection_bias",
+                "scopes": ["day2", "all_constructed"],
+                "message": (
+                    "Day 2 participants were selected using combined event performance, "
+                    "including Draft where applicable."
+                ),
+            },
+            {
+                "code": "overall_standings_include_non_constructed_results",
+                "scopes": SCOPE_ORDER,
+                "message": (
+                    "Final rank and overall event points are context only and are not "
+                    "used as Modern performance points."
+                ),
+            },
+        ]
+        if event_structure == "mixed"
+        else []
+    )
     overview = {
         "schema_version": EVENT_STATISTICS_SCHEMA_VERSION,
         "document_type": "overview",
         "source": "melee",
         "event_id": event_id,
         "format": format_id,
-        "event_structure": "mixed",
+        "event_structure": event_structure,
         "input": input_document,
         "event": {
             "name": metadata["name"],
@@ -1097,39 +1172,95 @@ def build_event_statistics(
             "date": metadata["date"],
             "source_url": _source_url(event, event_id),
         },
-        "scope_order": list(SCOPE_ORDER),
+        "scope_order": list(scope_order),
         "default_scope": "all_constructed",
-        "scopes": scopes,
-        "warnings": warnings,
     }
+    if event_structure != "mixed":
+        overview["advancement_metric"] = (
+            "day2_conversion"
+            if event_structure == "constructed_day2"
+            else "high_score_conversion"
+        )
+    overview["scopes"] = scopes
+    overview["warnings"] = warnings
     decks = {
         "schema_version": EVENT_STATISTICS_SCHEMA_VERSION,
         "document_type": "decks",
         "source": "melee",
         "event_id": event_id,
         "format": format_id,
-        "event_structure": "mixed",
+        "event_structure": event_structure,
         "input": input_document,
-        "scope_order": list(SCOPE_ORDER),
+        "scope_order": list(scope_order),
         "decks": _deck_documents(
             participants=participants,
             standings=standings,
             decklists=decklists,
             participant_documents=participant_documents,
             opportunities=ledger["opportunities"],
+            event_structure=event_structure,
+            scope_order=scope_order,
         ),
         "warnings": warnings,
     }
+    return {"overview": overview, "decks": decks}
+
+
+def build_event_statistics(
+    event: Mapping[str, Any],
+    classification: Mapping[str, Any],
+    ledger: Mapping[str, Any],
+    taxonomy: RuleSet,
+    *,
+    event_path: str,
+    event_sha256: str,
+    classification_path: str,
+    classification_sha256: str,
+    opportunity_path: str,
+    opportunity_sha256: str,
+    taxonomy_path: str,
+    taxonomy_sha256: str,
+) -> dict[str, dict[str, Any]]:
+    """Build the existing mixed-event overview, decks, and quality bundle."""
+
+    if event.get("event_structure") != "mixed":
+        raise MeleeStatisticsError(
+            "quality generation for pure structures belongs to P9-05"
+        )
+    documents = build_event_overview_and_decks(
+        event,
+        classification,
+        ledger,
+        taxonomy,
+        event_path=event_path,
+        event_sha256=event_sha256,
+        classification_path=classification_path,
+        classification_sha256=classification_sha256,
+        opportunity_path=opportunity_path,
+        opportunity_sha256=opportunity_sha256,
+        taxonomy_path=taxonomy_path,
+        taxonomy_sha256=taxonomy_sha256,
+    )
+    participants = _objects_by_id(
+        event.get("participants"), field="id", label="event.participants"
+    )
+    decklists = _objects_by_id(
+        event.get("decklists"), field="participant_id", label="event.decklists"
+    )
     quality = _quality_document(
         event=event,
         classification=classification,
         ledger=ledger,
-        scopes=scopes,
+        scopes=documents["overview"]["scopes"],
         participants=participants,
         decklists=decklists,
-        input_document=input_document,
+        input_document=documents["overview"]["input"],
     )
-    return {"overview": overview, "decks": decks, "quality": quality}
+    return {
+        "overview": documents["overview"],
+        "decks": documents["decks"],
+        "quality": quality,
+    }
 
 
 def statistics_document_bytes(document: Mapping[str, Any]) -> bytes:
