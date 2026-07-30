@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-closeout-v2"
-  working_branch_status: "phase_8_closeout_owner_accepted_remote_publication_and_tag_authorized"
+  current_working_branch: "codex/p9-02-pure-constructed-contracts"
+  working_branch_status: "p9_02_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -55,13 +55,11 @@ authoritative_documents:
       authoritative: false
 
 current_phase:
-  id: 8
-  name: "Format-first front end and supporting data contracts"
-  status: "completed_when_closeout_record_is_on_master"
-  started_on: "2026-07-25"
-  completed_on: "2026-07-30"
-  recovery_tag: "phase-8-format-first-frontends"
-  objective: "Approve the final format-first UI locally, implement only its missing backend contracts, then deliver separate MTGO and Tabletop Major Events front ends."
+  id: 9
+  name: "Pure Constructed event strategies"
+  status: "p9_02_owner_accepted_remote_publication_authorized"
+  started_on: "2026-07-30"
+  objective: "Complete statistical support for the explicitly configured constructed_day2 and constructed_single_stage Tabletop Major Events structures while preserving the mixed Modern baseline."
   production_changes_allowed: false
   feature_development_allowed: false
 
@@ -5073,7 +5071,7 @@ phase_8_plan:
         pages_run: 30503074350
     - id: "P8-CLOSEOUT"
       name: "Reconcile Phase 8 completion evidence and prepare owner closeout"
-      status: "owner_accepted_remote_publication_and_tag_authorized"
+      status: "completed_published_and_tagged"
       branch: "codex/p8-closeout-v2"
       base_commit: "10e6780c2c48585cb05d02492ce81702cbb869c1"
       authorized_on: "2026-07-30"
@@ -5117,6 +5115,14 @@ phase_8_plan:
         documentation_consistency: "passed"
         git_diff_check: "passed"
       stop_point: "Publish the accepted closeout and recovery tag; do not begin Phase 9 without separate owner authorization."
+      publication:
+        local_commit: "272a831efbe663c00068ef9235bb1571ea5bbde4"
+        pull_request: 129
+        merge_commit: "c32f197b7584237246a62b756a9f401243086426"
+        pr_validation_run: 30506660895
+        master_admission_run: 30507193454
+        pages_run: 30507193092
+        recovery_tag: "phase-8-format-first-frontends"
   deferred_followups:
     - id: "P8-HOTFIX-MELEE-DFC-NORMALIZATION"
       name: "Normalize ordinary Melee double-faced card names before shared classification"
@@ -5402,7 +5408,7 @@ phase_8_plan:
         merged_on: "2026-07-28"
 
 phase_8_result:
-  status: "completed_when_closeout_record_is_on_master"
+  status: "completed_published_and_tagged"
   completed_on: "2026-07-30"
   closeout_task: "P8-CLOSEOUT"
   closeout_branch: "codex/p8-closeout-v2"
@@ -5417,12 +5423,117 @@ phase_8_result:
     remote_publication_authorized: true
     recovery_tag_authorized: true
     production_behavior_changed_by_closeout: false
+  publication:
+    local_commit: "272a831efbe663c00068ef9235bb1571ea5bbde4"
+    pull_request: 129
+    pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/129"
+    merge_commit: "c32f197b7584237246a62b756a9f401243086426"
+    pr_validation_run: 30506660895
+    master_admission_run: 30507193454
+    pages_run: 30507193092
+  recovery_tag_publication:
+    name: "phase-8-format-first-frontends"
+    tag_object: "54edf92effba8d9dd15ed916ab03f962ce27ad2a"
+    target_commit: "c32f197b7584237246a62b756a9f401243086426"
+
+phase_9_plan:
+  id: "P9-PLANNING"
+  name: "Pure Constructed event strategies"
+  status: "p9_02_owner_accepted_remote_publication_authorized"
+  owner_authorized_on: "2026-07-30"
+  production_change_authorized: false
+  remote_publication_authorized: true
+  remote_publication_authorized_on: "2026-07-30"
+  plan: "docs/audits/P9-01.md"
+  mixed_regression_oracle:
+    event_id: "434455"
+    format: "modern"
+    structure: "mixed"
+    master_baseline: "c32f197b7584237246a62b756a9f401243086426"
+    byte_stability_required: true
+  tasks:
+    - id: "P9-01"
+      name: "Pure Constructed readiness audit and contract plan"
+      status: "completed_owner_accepted_publication_authorized"
+      branch: "codex/p9-01-pure-constructed-audit"
+      audited_base: "c32f197b7584237246a62b756a9f401243086426"
+      deliverable: "docs/audits/P9-01.md"
+      local_execution_authorized: true
+      production_change: false
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-30"
+      owner_accepted_on: "2026-07-30"
+      aggregation_scope_decision: "DEC-061"
+      stop_point: "Publish P9-01 and P9-02 together; do not begin P9-03 without separate authorization."
+    - id: "P9-02"
+      name: "Pure Constructed fixture and public-contract freeze"
+      status: "completed_owner_accepted_publication_authorized"
+      authorized_on: "2026-07-30"
+      local_execution_authorized: true
+      requires_owner_authorization: false
+      live_source_authorized: false
+      branch: "codex/p9-02-pure-constructed-contracts"
+      base_commit: "730103b410e4ec9e173205ae3b8a20db5b0f1d2f"
+      deliverables:
+        - "tests/fixtures/melee/pure_constructed_contract.json"
+        - "schemas/melee-pure-constructed-contract.schema.json"
+        - "tests/test_phase9_pure_constructed_contract.py"
+        - "docs/STATISTICS_SPEC.md"
+        - "docs/audits/P9-02.md"
+      production_change: false
+      generated_data_changed: false
+      public_schema_mapping_changed: false
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-30"
+      owner_accepted_on: "2026-07-30"
+      validation:
+        focused_contract_tests_passed: 10
+        impacted_subsystem_tests_passed: 61
+        full_pytest_passed: 604
+        repository_python_checked: 125
+        repository_json_checked: 1592
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1861
+        public_schema_documents_validated: 69
+        yaml_parse: "passed"
+        git_diff_check: "passed"
+      stop_point: "Publish P9-01 and P9-02 together; P9-03 still requires separate authorization."
+    - id: "P9-03"
+      name: "Structure-dispatched opportunity ledger"
+      status: "not_started"
+      requires_owner_authorization: true
+    - id: "P9-04"
+      name: "Structure-specific overview and deck statistics"
+      status: "not_started"
+      requires_owner_authorization: true
+    - id: "P9-05"
+      name: "Matchup, quality, publication, catalog, and Schema generalization"
+      status: "not_started"
+      requires_owner_authorization: true
+    - id: "P9-06"
+      name: "Structure-aware Tabletop consumer"
+      status: "not_started"
+      requires_owner_authorization: true
+    - id: "P9-07"
+      name: "Bounded real-source pilots"
+      status: "not_started"
+      requires_owner_authorization: true
+      whitelist_or_publication_authorized: false
+    - id: "P9-08"
+      name: "Cross-structure regression and closeout"
+      status: "not_started"
+      requires_owner_authorization: true
 
 next_approved_task:
-  id: "P9-PLANNING"
-  name: "Review Phase 9 pure Constructed event strategies"
+  id: "P9-03"
+  name: "Structure-dispatched opportunity ledger"
   target_paths:
-    - "docs/ROADMAP.md"
+    - "src/mtgmeta/melee/opportunities.py"
+    - "schemas/melee-opportunity-ledger.schema.json"
+    - "tests/test_melee_opportunities.py"
+    - "tests/fixtures/melee/pure_constructed_contract.json"
+    - "docs/audits/P9-03.md"
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
@@ -5430,7 +5541,7 @@ next_approved_task:
   local_execution_authorized: false
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "Phase 8 is complete after closeout publication. Phase 9 planning and implementation require separate owner review and authorization."
+  planning_status: "P9-02 is owner-accepted and authorized for publication together with P9-01. P9-03 requires separate authorization and does not authorize a real event, source fetch, or publication."
 
 governance_baseline:
   status: "active_on_master"
@@ -5479,7 +5590,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin Phase 9 planning or implementation without separate owner authorization."
+  - "Do not begin P9-03 or another Phase 9 task without separate owner authorization."
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
   - "Do not re-dispatch the Melee production workflow without separate authorization."

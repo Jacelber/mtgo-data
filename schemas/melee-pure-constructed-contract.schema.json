@@ -1,0 +1,348 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/melee-pure-constructed-contract.schema.json",
+  "title": "Phase 9 pure Constructed target contract",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "rate_method",
+    "shared_result_handling",
+    "structures",
+    "multi_event_selection"
+  ],
+  "properties": {
+    "contract_version": {"const": "1.0.0"},
+    "rate_method": {"const": "wins_over_valid_matches"},
+    "shared_result_handling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "played_win",
+        "played_loss",
+        "played_draw",
+        "intentional_draw",
+        "bye",
+        "drop_unplayed",
+        "awarded_win_top8_lock",
+        "disqualified_match",
+        "playoff_result"
+      ],
+      "properties": {
+        "played_win": {"$ref": "#/$defs/resultPolicy"},
+        "played_loss": {"$ref": "#/$defs/resultPolicy"},
+        "played_draw": {"$ref": "#/$defs/resultPolicy"},
+        "intentional_draw": {"$ref": "#/$defs/resultPolicy"},
+        "bye": {"$ref": "#/$defs/resultPolicy"},
+        "drop_unplayed": {"$ref": "#/$defs/resultPolicy"},
+        "awarded_win_top8_lock": {"$ref": "#/$defs/resultPolicy"},
+        "disqualified_match": {"$ref": "#/$defs/resultPolicy"},
+        "playoff_result": {"$ref": "#/$defs/resultPolicy"}
+      }
+    },
+    "structures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["constructed_day2", "constructed_single_stage"],
+      "properties": {
+        "constructed_day2": {"$ref": "#/$defs/constructedDay2"},
+        "constructed_single_stage": {"$ref": "#/$defs/constructedSingleStage"}
+      }
+    },
+    "multi_event_selection": {"$ref": "#/$defs/multiEventSelection"}
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "resultPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constructed_points",
+        "win_rate_eligible",
+        "matchup_eligible",
+        "effective_theoretical_round",
+        "retained",
+        "symmetric_match_exclusion"
+      ],
+      "properties": {
+        "constructed_points": {
+          "oneOf": [
+            {"type": "integer", "minimum": 0, "maximum": 3},
+            {"const": "context_only"}
+          ]
+        },
+        "win_rate_eligible": {"type": "boolean"},
+        "matchup_eligible": {"type": "boolean"},
+        "effective_theoretical_round": {"type": "boolean"},
+        "retained": {"const": true},
+        "symmetric_match_exclusion": {"type": "boolean"}
+      }
+    },
+    "participant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "parent_id",
+        "subtype_id",
+        "day2_participation_evidence",
+        "day1_scheduled_rounds",
+        "day2_scheduled_rounds",
+        "day2_effective_rounds",
+        "single_stage_scheduled_rounds",
+        "single_stage_points"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "status": {"enum": ["active", "dropped", "disqualified"]},
+        "parent_id": {"$ref": "#/$defs/id"},
+        "subtype_id": {
+          "oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]
+        },
+        "day2_participation_evidence": {"type": "boolean"},
+        "day1_scheduled_rounds": {"type": "integer", "minimum": 0},
+        "day2_scheduled_rounds": {"type": "integer", "minimum": 0},
+        "day2_effective_rounds": {"type": "integer", "minimum": 0},
+        "single_stage_scheduled_rounds": {"type": "integer", "minimum": 0},
+        "single_stage_points": {"type": "integer", "minimum": 0}
+      }
+    },
+    "scopeEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "population",
+        "participant_ids",
+        "theoretical_rounds",
+        "effective_theoretical_rounds",
+        "top8_lock_exemptions",
+        "high_score_status",
+        "high_score_unavailable_reason",
+        "high_score_threshold",
+        "high_score_count",
+        "day2_conversion_status",
+        "day2_conversion_unavailable_reason",
+        "match_record"
+      ],
+      "properties": {
+        "population": {
+          "enum": [
+            "starting_field",
+            "qualified_field",
+            "starting_field_with_qualified_day2_opportunities"
+          ]
+        },
+        "participant_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "theoretical_rounds": {"type": "integer", "minimum": 0},
+        "effective_theoretical_rounds": {"type": "integer", "minimum": 0},
+        "top8_lock_exemptions": {"type": "integer", "minimum": 0},
+        "high_score_status": {"enum": ["available", "unavailable"]},
+        "high_score_unavailable_reason": {
+          "type": ["string", "null"],
+          "enum": [null, "day2_conversion_is_primary"]
+        },
+        "high_score_threshold": {"type": ["integer", "null"], "minimum": 3},
+        "high_score_count": {"type": ["integer", "null"], "minimum": 0},
+        "day2_conversion_status": {"enum": ["available", "unavailable"]},
+        "day2_conversion_unavailable_reason": {
+          "type": ["string", "null"],
+          "enum": [null, "not_day2_scope", "no_day2_cut"]
+        },
+        "match_record": {
+          "$ref": "https://jacelber.github.io/mtgo-data/schemas/phase8-public-contract.schema.json#/$defs/literalRecord"
+        }
+      }
+    },
+    "day2Group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_id",
+        "initial_deck_count",
+        "subtype_initial_deck_counts",
+        "day2_deck_count",
+        "subtype_day2_deck_counts"
+      ],
+      "properties": {
+        "parent_id": {"$ref": "#/$defs/id"},
+        "initial_deck_count": {"type": "integer", "minimum": 0},
+        "subtype_initial_deck_counts": {"$ref": "#/$defs/countMap"},
+        "day2_deck_count": {"type": "integer", "minimum": 0},
+        "subtype_day2_deck_counts": {"$ref": "#/$defs/countMap"}
+      }
+    },
+    "singleStageGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_id",
+        "initial_deck_count",
+        "subtype_initial_deck_counts",
+        "high_score_deck_count",
+        "subtype_high_score_deck_counts"
+      ],
+      "properties": {
+        "parent_id": {"$ref": "#/$defs/id"},
+        "initial_deck_count": {"type": "integer", "minimum": 0},
+        "subtype_initial_deck_counts": {"$ref": "#/$defs/countMap"},
+        "high_score_deck_count": {"type": "integer", "minimum": 0},
+        "subtype_high_score_deck_counts": {"$ref": "#/$defs/countMap"}
+      }
+    },
+    "countMap": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/id"},
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "constructedDay2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_structure",
+        "supported_scopes",
+        "default_scope",
+        "advancement_metric",
+        "mixed_selection_bias_warning",
+        "participants",
+        "expected_scopes",
+        "group_conservation"
+      ],
+      "properties": {
+        "event_structure": {"const": "constructed_day2"},
+        "supported_scopes": {
+          "const": ["day1", "day2", "all_constructed"]
+        },
+        "default_scope": {"const": "all_constructed"},
+        "advancement_metric": {"const": "day2_conversion"},
+        "mixed_selection_bias_warning": {"const": false},
+        "participants": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/participant"}
+        },
+        "expected_scopes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["day1", "day2", "all_constructed"],
+          "properties": {
+            "day1": {"$ref": "#/$defs/scopeEvidence"},
+            "day2": {"$ref": "#/$defs/scopeEvidence"},
+            "all_constructed": {"$ref": "#/$defs/scopeEvidence"}
+          }
+        },
+        "group_conservation": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/day2Group"}
+        }
+      }
+    },
+    "constructedSingleStage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_structure",
+        "supported_scopes",
+        "default_scope",
+        "advancement_metric",
+        "mixed_selection_bias_warning",
+        "participants",
+        "expected_scopes",
+        "group_conservation"
+      ],
+      "properties": {
+        "event_structure": {"const": "constructed_single_stage"},
+        "supported_scopes": {"const": ["all_constructed"]},
+        "default_scope": {"const": "all_constructed"},
+        "advancement_metric": {"const": "high_score_conversion"},
+        "mixed_selection_bias_warning": {"const": false},
+        "participants": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/participant"}
+        },
+        "expected_scopes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["all_constructed"],
+          "properties": {
+            "all_constructed": {"$ref": "#/$defs/scopeEvidence"}
+          }
+        },
+        "group_conservation": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/singleStageGroup"}
+        }
+      }
+    },
+    "multiEventSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_event_count",
+        "same_source_required",
+        "same_format_required",
+        "forced_scope",
+        "on_second_event_selected",
+        "stage_controls_during_multi_selection",
+        "absent_single_event_scopes",
+        "single_event_restore_policy",
+        "aggregation_method",
+        "overview_aggregation",
+        "aggregation_example"
+      ],
+      "properties": {
+        "minimum_event_count": {"const": 2},
+        "same_source_required": {"const": true},
+        "same_format_required": {"const": true},
+        "forced_scope": {"const": "all_constructed"},
+        "on_second_event_selected": {"const": "switch_to_all_constructed"},
+        "stage_controls_during_multi_selection": {
+          "const": "disabled_with_explanation"
+        },
+        "absent_single_event_scopes": {"const": "omitted"},
+        "single_event_restore_policy": {
+          "const": "last_supported_scope_or_default"
+        },
+        "aggregation_method": {"const": "sum_raw_wld_then_recalculate"},
+        "overview_aggregation": {"const": "prohibited"},
+        "aggregation_example": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["event_records", "combined_record"],
+          "properties": {
+            "event_records": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["event_id", "wins", "losses", "draws"],
+                "properties": {
+                  "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+                  "wins": {"type": "integer", "minimum": 0},
+                  "losses": {"type": "integer", "minimum": 0},
+                  "draws": {"type": "integer", "minimum": 0}
+                }
+              }
+            },
+            "combined_record": {
+              "$ref": "https://jacelber.github.io/mtgo-data/schemas/phase8-public-contract.schema.json#/$defs/literalRecord"
+            }
+          }
+        }
+      }
+    }
+  }
+}

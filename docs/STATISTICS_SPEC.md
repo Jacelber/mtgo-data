@@ -304,7 +304,7 @@ inferred from rank, late-round timing, or an apparent win alone.
 |---|---:|---:|---:|---:|---|
 | Played win | 3 | Yes | Yes | Yes | Real Constructed match |
 | Played loss | 0 | Yes | Yes | Yes | Real Constructed match |
-| Played draw | 1 | Yes | Yes | Yes | Counts as 0.5 win |
+| Played draw | 1 | Yes | Yes | Yes | Zero wins; remains in the literal valid-match denominator |
 | Intentional draw `0-0-3` | 1 | No | No | Yes | Retain separately |
 | Bye | 3 | No | No | Yes | No real opponent |
 | No-show | 0 | No | No | Conditional | Must be reviewed |
@@ -1263,17 +1263,40 @@ Then calculate:
 \[
 CombinedWinRate =
 \frac{
-CombinedW + 0.5 \times CombinedD
+CombinedW
 }{
 CombinedW + CombinedL + CombinedD
 }
 \]
+
+Normal played draws remain in the denominator and do not contribute a
+fractional win. This is the same literal `wins_over_valid_matches` method used
+by single-event target records.
 
 Do not calculate the simple average of event win-rate percentages.
 
 The output must list every included event ID.
 
 MTGO data must never be included in a tabletop multi-event matrix.
+
+The initial cross-structure presentation policy exposes only
+`all_constructed` when two or more events are selected. This is the common
+scope across `mixed`, `constructed_day2`, and
+`constructed_single_stage`. The combined matrix aggregates underlying valid
+Constructed Swiss W-L-D counts and does not average event rates.
+
+When exactly one event is selected, the consumer may expose every scope
+declared by that event. A single-stage event exposes only `all_constructed`;
+the absent Day 1 and Day 2 scopes are omitted rather than presented as empty
+data. When multiple events are selected, Day 1 and Day 2 controls may remain
+visible as disabled explanatory controls, but they cannot select or retain a
+stage-specific scope. Adding a second event while a stage-specific scope is
+active switches deterministically to `all_constructed`.
+
+This conservative presentation rule does not assert that compatible Day 1 or
+Day 2 raw-count aggregation is mathematically impossible. Enabling such a
+multi-event scope later requires a separate reviewed compatibility contract
+for event structures, cut rules, missing stages, and selection effects.
 
 ### 11.7 Multiple decks or deck changes
 

@@ -2334,3 +2334,51 @@ data, matrices, and statistics remain separate.
 This decision does not establish a decklist-coverage blocking threshold and
 does not remove the need to interpret confidence intervals and raw sample
 counts.
+
+---
+
+# DEC-061 — Limit initial multi-event matchup selection to all Constructed Swiss
+
+Status: `Accepted`
+
+## Context
+
+Tabletop events may use `mixed`, `constructed_day2`, or
+`constructed_single_stage`. Mixed and pure Day 2 events can expose Day 1, Day
+2, and all Constructed Swiss scopes, while a single-stage event has no Day 1
+or Day 2 cut scope. The existing multi-event decision requires compatible
+scopes but did not define what the consumer should do when selected events
+have different structures.
+
+Stage-specific raw-count aggregation can be meaningful for a carefully
+compatible event set, but enabling it initially would require additional rules
+for cut structures, absent stages, and selection effects.
+
+## Decision
+
+When exactly one event is selected, expose every scope declared by that event.
+A `constructed_single_stage` event therefore exposes only
+`all_constructed`; it does not display fictional or zero-valued Day 1 and Day
+2 scopes.
+
+When two or more compatible same-format Tabletop events are selected, force
+the matchup scope to `all_constructed`. Aggregate underlying valid Constructed
+Swiss W-L-D counts and recalculate the rate and interval. Do not average event
+percentages and do not merge event-overview metrics.
+
+If a second event is selected while Day 1 or Day 2 is active, switch to
+`all_constructed`. During multi-selection, keep stage controls disabled with
+an explanation when they are useful for orientation; omit them when the
+selected single event does not define those scopes. Returning to one event may
+restore its last supported single-event scope.
+
+## Consequences
+
+`all_constructed` is the initial common cross-structure aggregation scope.
+Phase 9 must expose reliable event-level supported-scope metadata and enforce
+the consumer state transition. Phase 11 remains responsible for implementing
+the multi-event raw-count aggregator and compatibility checks.
+
+This decision does not declare stage-specific multi-event aggregation invalid.
+Enabling it later requires a separate reviewed contract for compatible event
+structures, cut rules, missing stages, and selection effects.
