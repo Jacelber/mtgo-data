@@ -1119,6 +1119,27 @@ participant populations; the combined scope is a micro-aggregation of the
 underlying opportunity rows and does not pretend that all starting players had
 equal Day 2 access.
 
+P9-04 extends this contract by explicit event structure:
+
+- `constructed_day2` exposes `day1`, `day2`, and `all_constructed`; its
+  primary advancement metric is `day2_conversion`, calculated for the Day 2
+  field and each parent/subtype as evidenced Day 2 decks divided by the
+  corresponding initial deck count. High-score fields are unavailable for
+  this structure and it must not inherit the mixed Draft-selection warning.
+- `constructed_single_stage` exposes only `all_constructed`; it has no
+  fictional Day 1 or Day 2 scope. Its primary advancement metric is
+  `high_score_conversion`, using the threshold in section 8 and each deck's
+  effective theoretical round count.
+- `mixed` retains its existing three scopes, selection-bias warning, stage
+  high-score metrics, and byte-compatible output.
+
+Rates are recalculated from their raw denominators. Parent/subtype additive
+counts must conserve deck counts, points, theoretical and effective rounds,
+played W-L-D participations, and available high-score counts. Existing
+draw-adjusted records remain compatibility fields; the nested
+`literal_record` continues to declare and calculate
+`wins_over_valid_matches`.
+
 Every overview parent row is calculated directly from the participants and
 opportunities assigned to that parent. The output also includes an explicit
 `Unknown` parent bucket in deck-count, opportunity, point, completion, and

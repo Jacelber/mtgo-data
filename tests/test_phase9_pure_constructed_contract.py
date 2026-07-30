@@ -50,17 +50,19 @@ def test_contract_schema_accepts_fixture_and_is_not_a_production_mapping() -> No
     assert SCHEMA_NAME not in {item["schema"] for item in manifest["mappings"]}
 
 
-def test_contract_generalizes_only_the_p9_03_opportunity_schema() -> None:
-    opportunity_schema = json.loads(
-        (ROOT / "schemas/melee-opportunity-ledger.schema.json").read_text("utf-8")
-    )
-    assert opportunity_schema["properties"]["event_structure"] == {
-        "enum": ["mixed", "constructed_day2", "constructed_single_stage"]
-    }
-
-    for schema_name in (
+def test_contract_generalizes_only_the_p9_03_and_p9_04_schemas() -> None:
+    generalized = (
+        "melee-opportunity-ledger.schema.json",
         "melee-event-overview.schema.json",
         "melee-event-decks.schema.json",
+    )
+    for schema_name in generalized:
+        schema = json.loads((ROOT / "schemas" / schema_name).read_text("utf-8"))
+        assert schema["properties"]["event_structure"] == {
+            "enum": ["mixed", "constructed_day2", "constructed_single_stage"]
+        }
+
+    for schema_name in (
         "melee-event-matchup.schema.json",
         "melee-event-quality.schema.json",
         "melee-event-meta.schema.json",

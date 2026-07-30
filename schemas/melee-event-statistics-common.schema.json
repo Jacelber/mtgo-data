@@ -231,6 +231,7 @@
         "top8_lock_player_count": {"type": "integer", "minimum": 0},
         "top8_lock_exemptions": {"type": "integer", "minimum": 0},
         "disqualified_player_count": {"type": "integer", "minimum": 0},
+        "day2_conversion": {"$ref": "#/$defs/rate"},
         "high_score": {"$ref": "#/$defs/high_score"},
         "match_record": {"$ref": "#/$defs/match_record"}
       }

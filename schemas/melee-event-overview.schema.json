@@ -27,7 +27,9 @@
     "format": {
       "$ref": "melee-event-statistics-common.schema.json#/$defs/id"
     },
-    "event_structure": {"const": "mixed"},
+    "event_structure": {
+      "enum": ["mixed", "constructed_day2", "constructed_single_stage"]
+    },
     "input": {
       "$ref": "melee-event-statistics-common.schema.json#/$defs/input"
     },
@@ -58,13 +60,18 @@
       }
     },
     "scope_order": {
-      "const": ["day1", "day2", "all_constructed"]
+      "oneOf": [
+        {"const": ["day1", "day2", "all_constructed"]},
+        {"const": ["all_constructed"]}
+      ]
     },
     "default_scope": {"const": "all_constructed"},
+    "advancement_metric": {
+      "enum": ["day2_conversion", "high_score_conversion"]
+    },
     "scopes": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["day1", "day2", "all_constructed"],
       "properties": {
         "day1": {"$ref": "#/$defs/scope"},
         "day2": {"$ref": "#/$defs/scope"},
@@ -78,6 +85,59 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"event_structure": {"const": "mixed"}},
+        "required": ["event_structure"]
+      },
+      "then": {
+        "not": {"required": ["advancement_metric"]},
+        "properties": {
+          "scope_order": {"const": ["day1", "day2", "all_constructed"]},
+          "scopes": {"required": ["day1", "day2", "all_constructed"]}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"event_structure": {"const": "constructed_day2"}},
+        "required": ["event_structure"]
+      },
+      "then": {
+        "required": ["advancement_metric"],
+        "properties": {
+          "advancement_metric": {"const": "day2_conversion"},
+          "scope_order": {"const": ["day1", "day2", "all_constructed"]},
+          "scopes": {
+            "required": ["day1", "day2", "all_constructed"],
+            "properties": {
+              "day2": {"required": ["day2_conversion"]}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_structure": {"const": "constructed_single_stage"}
+        },
+        "required": ["event_structure"]
+      },
+      "then": {
+        "required": ["advancement_metric"],
+        "properties": {
+          "advancement_metric": {"const": "high_score_conversion"},
+          "scope_order": {"const": ["all_constructed"]},
+          "scopes": {
+            "required": ["all_constructed"],
+            "maxProperties": 1
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "scope": {
       "type": "object",
@@ -122,6 +182,9 @@
         "source_match_count": {"type": "integer", "minimum": 0},
         "eligible_match_count": {"type": "integer", "minimum": 0},
         "disqualified_matches_excluded": {"type": "integer", "minimum": 0},
+        "day2_conversion": {
+          "$ref": "melee-event-statistics-common.schema.json#/$defs/rate"
+        },
         "high_score_deck_count": {
           "type": ["integer", "null"],
           "minimum": 0
