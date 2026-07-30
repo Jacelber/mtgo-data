@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-hotfix-melee-dfc-normalization"
-  working_branch_status: "p8_hotfix_melee_dfc_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p8-closeout-v2"
+  working_branch_status: "phase_8_closeout_owner_accepted_remote_publication_and_tag_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,10 +57,10 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_hotfix_melee_dfc_owner_accepted_remote_publication_authorized"
+  status: "completed_when_closeout_record_is_on_master"
   started_on: "2026-07-25"
-  completed_on: null
-  recovery_tag: null
+  completed_on: "2026-07-30"
+  recovery_tag: "phase-8-format-first-frontends"
   objective: "Approve the final format-first UI locally, implement only its missing backend contracts, then deliver separate MTGO and Tabletop Major Events front ends."
   production_changes_allowed: false
   feature_development_allowed: false
@@ -2093,7 +2093,7 @@ phase_4_result:
 
 known_blockers:
   - id: "BLOCK-P8-11-MELEE-DFC-NORMALIZATION"
-    status: "owner_accepted_remote_publication_authorized"
+    status: "resolved_published_and_deployed_verified"
     task: "P8-11"
     observed_on: "2026-07-30"
     event_id: "434455"
@@ -2120,7 +2120,26 @@ known_blockers:
       conflicts: 0
       invalid_decks: 0
       mtgo_regression: "unchanged"
-    blocks_phase_completion: true
+    publication:
+      local_commit: "a8e7fe098feafbb7faefd39d584422c20a9c4ffd"
+      pull_request: 128
+      merge_commit: "10e6780c2c48585cb05d02492ce81702cbb869c1"
+      pr_validation_run: 30504274023
+      master_admission_run: 30504857129
+      pages_run: 30504856795
+    deployed_revalidation:
+      classified_decklists: 352
+      unknown_decklists: 10
+      conflicts: 0
+      invalid_decks: 0
+      day2_classified_decklists: 211
+      day2_unknown_decklists: 9
+      observed_parent_rows: 32
+      observed_leaf_rows: 58
+      browser_console_warnings_or_errors: 0
+      passed: true
+    resolved_on: "2026-07-30"
+    blocks_phase_completion: false
 
   - id: "BLOCK-P5-08-MELEE-LIVE-HTTP-403"
     status: "resolved"
@@ -2143,10 +2162,12 @@ open_decisions:
 
   - id: "OPEN-002"
     topic: "Exact statistical warning thresholds"
-    status: "open"
+    status: "resolved"
     target_document: "docs/STATISTICS_SPEC.md"
     target_phase: 8
-    note: "Resolve before the Tabletop front end consumes confidence-interval and low-sample presentation thresholds; P1-14 does not choose statistical values."
+    resolved_by: "DEC-060"
+    resolved_on: "2026-07-30"
+    note: "The accepted Phase 8 consumer uses one shared display warning when valid matches are fewer than 20. This is a caution marker, not a reliability threshold, publication gate, or change to win-rate eligibility."
 
   - id: "OPEN-003"
     topic: "Vintage implementation"
@@ -4127,11 +4148,11 @@ phase_7_result:
 phase_8_plan:
   id: "P8-PLANNING"
   name: "Format-first front-end and supporting data plan"
-  status: "p8_hotfix_melee_dfc_owner_accepted_remote_publication_authorized"
+  status: "completed_when_closeout_record_is_on_master"
   owner_approved: true
   owner_approved_on: "2026-07-25"
-  implementation_authorized: false
-  production_change_authorized: false
+  implementation_authorized: true
+  production_change_authorized: true
   remote_publication_authorized: false
   plan: "docs/audits/P8-FRONTEND-PLANNING.md"
   decision: "DEC-051"
@@ -4468,7 +4489,7 @@ phase_8_plan:
           mtgo_low_sample_threshold: 20
           tabletop_low_sample_threshold_in_prototype: 20
           tabletop_backend_low_sample_threshold: null
-          unified_low_sample_threshold_status: "prototype_proposal_pending_owner_confirmation"
+          unified_low_sample_threshold_status: "accepted_shared_phase8_consumer_warning"
           inactive_subtype_display: "omitted_in_active_range_or_scope"
           archetype_name_toggles_matchup_expansion: true
           matchup_row_identity_alignment: "fixed_text_edge_with_suspended_centered_toggle"
@@ -5000,7 +5021,7 @@ phase_8_plan:
         pages_run: 30459773138
     - id: "P8-11"
       name: "Cross-product regression and Phase 8 closeout"
-      status: "owner_accepted_remote_publication_authorized_closeout_blocked"
+      status: "published_deployed_reaccepted_closeout_resumed"
       branch: "codex/p8-11-phase8-closeout"
       base_commit: "3b65e2145bf2905041641b562175a391202fe25d"
       authorized_on: "2026-07-30"
@@ -5009,7 +5030,7 @@ phase_8_plan:
       owner_accepted_on: "2026-07-30"
       remote_publication_authorized: true
       remote_publication_authorized_on: "2026-07-30"
-      phase_closeout_authorized: false
+      phase_closeout_authorized: true
       phase_tag_authorized: false
       generated_data_changed: false
       statistical_formula_changed: false
@@ -5041,8 +5062,8 @@ phase_8_plan:
         narrow_viewport_verified: "390x844"
         narrow_tabletop_document_width_before: 464
         narrow_tabletop_document_width_after: 375
-      blocker: "BLOCK-P8-11-MELEE-DFC-NORMALIZATION"
-      closeout_decision: "Do not mark Phase 8 complete until the separately authorized normalization fix regenerates affected Melee products and P8-11 browser acceptance is repeated."
+      blocker: null
+      closeout_decision: "The normalization blocker is published and deployed browser acceptance has been repeated successfully. Final Phase 8 documentation and owner acceptance remain before completion."
       publication:
         local_commit: "321792414cc6697d1c3afbbf1679c6267f46c284"
         pull_request: 127
@@ -5050,10 +5071,56 @@ phase_8_plan:
         pr_validation_run: 30502479440
         master_admission_run: 30503074938
         pages_run: 30503074350
+    - id: "P8-CLOSEOUT"
+      name: "Reconcile Phase 8 completion evidence and prepare owner closeout"
+      status: "owner_accepted_remote_publication_and_tag_authorized"
+      branch: "codex/p8-closeout-v2"
+      base_commit: "10e6780c2c48585cb05d02492ce81702cbb869c1"
+      authorized_on: "2026-07-30"
+      local_execution_authorized: true
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-30"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-30"
+      phase_tag_authorized: true
+      phase_tag_authorized_on: "2026-07-30"
+      proposed_recovery_tag: "phase-8-format-first-frontends"
+      production_change: false
+      generated_data_changed: false
+      statistical_formula_changed: false
+      classifier_changed: false
+      schema_changed: false
+      workflow_changed: false
+      deliverables:
+        - "docs/STATISTICS_SPEC.md"
+        - "docs/ROADMAP.md"
+        - "docs/DECISIONS.md"
+        - "docs/STATUS.yaml"
+        - "docs/audits/P8-07.md"
+        - "docs/audits/P8-11.md"
+        - "docs/audits/P8-HOTFIX-MELEE-DFC-NORMALIZATION.md"
+        - "docs/audits/P8-CLOSEOUT.md"
+      validation:
+        focused_phase_8_tests_passed: 41
+        full_pytest_passed: 594
+        test_files_covered: 66
+        repository_python_checked: 124
+        repository_json_checked: 1590
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1856
+        standard_rule_validation: "passed"
+        modern_rule_validation: "passed"
+        schema_documents_validated: 69
+        javascript_files_checked: 9
+        yaml_parse: "passed"
+        documentation_consistency: "passed"
+        git_diff_check: "passed"
+      stop_point: "Publish the accepted closeout and recovery tag; do not begin Phase 9 without separate owner authorization."
   deferred_followups:
     - id: "P8-HOTFIX-MELEE-DFC-NORMALIZATION"
       name: "Normalize ordinary Melee double-faced card names before shared classification"
-      status: "owner_accepted_remote_publication_authorized"
+      status: "completed_published_and_deployed_verified"
       proposed_on: "2026-07-30"
       discovered_by: "P8-11"
       authorized_on: "2026-07-30"
@@ -5102,6 +5169,17 @@ phase_8_plan:
         schema_documents_validated: 69
         javascript_files_checked: 9
         git_diff_check: "passed"
+        deployed_browser_revalidation: "passed"
+        browser_console_warnings_or_errors: 0
+      publication:
+        local_commit: "a8e7fe098feafbb7faefd39d584422c20a9c4ffd"
+        pull_request: 128
+        pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/128"
+        merge_commit: "10e6780c2c48585cb05d02492ce81702cbb869c1"
+        pr_validation_run: 30504274023
+        master_admission_run: 30504857129
+        pages_run: 30504856795
+        merged_on: "2026-07-30"
       deliverables:
         - "src/mtgmeta/melee/classification.py"
         - "data/modern/melee/classifications/434455.json"
@@ -5323,25 +5401,36 @@ phase_8_plan:
         merge_commit: "bc08063a4fd1e1cbc4bfb2160e895a880a8fcfb1"
         merged_on: "2026-07-28"
 
+phase_8_result:
+  status: "completed_when_closeout_record_is_on_master"
+  completed_on: "2026-07-30"
+  closeout_task: "P8-CLOSEOUT"
+  closeout_branch: "codex/p8-closeout-v2"
+  closeout_base_commit: "10e6780c2c48585cb05d02492ce81702cbb869c1"
+  recovery_tag: "phase-8-format-first-frontends"
+  acceptance:
+    documented_criteria_passed: true
+    p8_11_cross_product_regression_passed: true
+    melee_dfc_blocker_resolved: true
+    deployed_browser_revalidation_passed: true
+    project_owner_approved: true
+    remote_publication_authorized: true
+    recovery_tag_authorized: true
+    production_behavior_changed_by_closeout: false
+
 next_approved_task:
-  id: "P8-HOTFIX-MELEE-DFC-NORMALIZATION"
-  name: "Normalize ordinary Melee double-faced card names before shared classification"
+  id: "P9-PLANNING"
+  name: "Review Phase 9 pure Constructed event strategies"
   target_paths:
-    - "src/mtgmeta/card_names.py"
-    - "src/mtgmeta/melee/"
-    - "data/modern/melee/classifications/434455.json"
-    - "data/modern/melee/opportunities/434455.json"
-    - "stats/modern/melee/"
-    - "tests/"
+    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  production_change: true
+  production_change: false
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_remote_publication_authorized"
-  local_execution_authorized: true
-  local_execution_authorized_on: "2026-07-30"
-  remote_publication_authorized: true
+  authorization_status: "not_authorized"
+  local_execution_authorized: false
+  remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "Hotfix accepted and remote publication authorized; deployed browser revalidation remains required before Phase 8 closeout"
+  planning_status: "Phase 8 is complete after closeout publication. Phase 9 planning and implementation require separate owner review and authorization."
 
 governance_baseline:
   status: "active_on_master"
@@ -5390,6 +5479,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
+  - "Do not begin Phase 9 planning or implementation without separate owner authorization."
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
   - "Do not re-dispatch the Melee production workflow without separate authorization."
