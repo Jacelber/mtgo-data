@@ -1804,6 +1804,23 @@ and return to P8-11 browser acceptance before Phase 8 can be marked complete.
 The remaining ten Unknown decklists stay explicit pending later taxonomy
 review. Detailed evidence is recorded in `docs/audits/P8-11.md`.
 
+The owner authorized the focused normalization hotfix on 2026-07-30. Impact
+testing rejected a global shared-normalizer change because it altered one
+frozen Standard classification. The accepted local implementation instead
+normalizes ordinary `front face // back face` names only in the Melee
+classification adapter before invoking the unchanged shared classifier.
+
+Deterministic regeneration recovers exactly 62 decklists: 45 Boros Energy, 16
+Ruby Storm, and one Mardu Energy. Event `434455` moves from 290 to 352
+classified decks and from 72 to ten explicit Unknowns, with zero conflicts or
+invalid decks. The opportunity and match boundaries remain 2,910 theoretical
+opportunities, 2,903 effective opportunities, and 1,394 included matches. The
+production-candidate boundary accepts exactly seven dependent Melee documents;
+MTGO Standard and Modern regression tests remain unchanged. All 594 repository
+tests pass. Publication and repeated P8-11 browser acceptance remain separately
+controlled. Full evidence is in
+`docs/audits/P8-HOTFIX-MELEE-DFC-NORMALIZATION.md`.
+
 ## Tabletop behavior
 
 The Tabletop Major Events front end supports:

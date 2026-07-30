@@ -94,30 +94,30 @@ def test_reference_scope_totals_match_the_opportunity_ledger():
         }
         for scope in overview["scope_order"]
     } == {
-        "day1": {
-            "participant_count": 362,
-            "known_deck_count": 290,
-            "unknown_deck_count": 72,
+            "day1": {
+                "participant_count": 362,
+                "known_deck_count": 352,
+                "unknown_deck_count": 10,
             "constructed_points": 2589,
             "theoretical_rounds": 1810,
             "effective_theoretical_rounds": 1810,
             "eligible_match_count": 861,
             "high_score_deck_count": 168,
         },
-        "day2": {
-            "participant_count": 220,
-            "known_deck_count": 181,
-            "unknown_deck_count": 39,
+            "day2": {
+                "participant_count": 220,
+                "known_deck_count": 211,
+                "unknown_deck_count": 9,
             "constructed_points": 1607,
             "theoretical_rounds": 1100,
             "effective_theoretical_rounds": 1093,
             "eligible_match_count": 533,
             "high_score_deck_count": 105,
         },
-        "all_constructed": {
-            "participant_count": 362,
-            "known_deck_count": 290,
-            "unknown_deck_count": 72,
+            "all_constructed": {
+                "participant_count": 362,
+                "known_deck_count": 352,
+                "unknown_deck_count": 10,
             "constructed_points": 4196,
             "theoretical_rounds": 2910,
             "effective_theoretical_rounds": 2903,
@@ -250,8 +250,8 @@ def test_quality_reports_required_exclusions_and_no_unresolved_records():
         "standings": 362,
         "submitted_decklists": 362,
         "missing_or_unavailable_decklists": 0,
-        "classified_decks": 290,
-        "unknown_decks": 72,
+        "classified_decks": 352,
+        "unknown_decks": 10,
         "classification_conflicts": 0,
         "invalid_decks": 0,
         "rounds": 19,

@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-11-phase8-closeout"
-  working_branch_status: "p8_11_owner_accepted_remote_publication_authorized_closeout_blocked"
+  current_working_branch: "codex/p8-hotfix-melee-dfc-normalization"
+  working_branch_status: "p8_hotfix_melee_dfc_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_11_owner_accepted_remote_publication_authorized_closeout_blocked"
+  status: "p8_hotfix_melee_dfc_owner_accepted_remote_publication_authorized"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -2093,7 +2093,7 @@ phase_4_result:
 
 known_blockers:
   - id: "BLOCK-P8-11-MELEE-DFC-NORMALIZATION"
-    status: "open"
+    status: "owner_accepted_remote_publication_authorized"
     task: "P8-11"
     observed_on: "2026-07-30"
     event_id: "434455"
@@ -2106,6 +2106,20 @@ known_blockers:
       remaining_unknowns_after_diagnostic: 10
     scope_boundary: "P8-11 records the defect but does not change shared normalization, taxonomy, retained data, classifications, or generated statistics."
     resolution_required: "Separately authorize P8-HOTFIX-MELEE-DFC-NORMALIZATION, regenerate dependent Melee products deterministically, prove MTGO regression, and repeat P8-11 browser acceptance."
+    local_resolution:
+      branch: "codex/p8-hotfix-melee-dfc-normalization"
+      base_commit: "96f0e234b7ca6db21c35ad00e541cc33fc2081b6"
+      normalization_boundary: "Melee classification adapter only"
+      classified_before: 290
+      classified_after: 352
+      unknown_before: 72
+      unknown_after: 10
+      recovered_boros_energy: 45
+      recovered_ruby_storm: 16
+      recovered_mardu_energy: 1
+      conflicts: 0
+      invalid_decks: 0
+      mtgo_regression: "unchanged"
     blocks_phase_completion: true
 
   - id: "BLOCK-P5-08-MELEE-LIVE-HTTP-403"
@@ -4113,7 +4127,7 @@ phase_7_result:
 phase_8_plan:
   id: "P8-PLANNING"
   name: "Format-first front-end and supporting data plan"
-  status: "p8_11_owner_accepted_remote_publication_authorized_closeout_blocked"
+  status: "p8_hotfix_melee_dfc_owner_accepted_remote_publication_authorized"
   owner_approved: true
   owner_approved_on: "2026-07-25"
   implementation_authorized: false
@@ -5029,17 +5043,76 @@ phase_8_plan:
         narrow_tabletop_document_width_after: 375
       blocker: "BLOCK-P8-11-MELEE-DFC-NORMALIZATION"
       closeout_decision: "Do not mark Phase 8 complete until the separately authorized normalization fix regenerates affected Melee products and P8-11 browser acceptance is repeated."
+      publication:
+        local_commit: "321792414cc6697d1c3afbbf1679c6267f46c284"
+        pull_request: 127
+        merge_commit: "96f0e234b7ca6db21c35ad00e541cc33fc2081b6"
+        pr_validation_run: 30502479440
+        master_admission_run: 30503074938
+        pages_run: 30503074350
   deferred_followups:
     - id: "P8-HOTFIX-MELEE-DFC-NORMALIZATION"
       name: "Normalize ordinary Melee double-faced card names before shared classification"
-      status: "local_execution_authorized"
+      status: "owner_accepted_remote_publication_authorized"
       proposed_on: "2026-07-30"
       discovered_by: "P8-11"
       authorized_on: "2026-07-30"
       local_execution_authorized: true
-      remote_publication_authorized: false
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-30"
+      branch: "codex/p8-hotfix-melee-dfc-normalization"
+      base_commit: "96f0e234b7ca6db21c35ad00e541cc33fc2081b6"
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-30"
+      global_normalizer_change_rejected: true
+      global_change_rejection_reason: "It changed one frozen Standard classification from Unknown to Mono-Black Demons."
+      implemented_boundary: "Normalize ordinary double-faced names only in the Melee classification adapter before calling the unchanged shared classifier."
+      generated_paths_changed: 7
+      result:
+        total_decklists: 362
+        classified_before: 290
+        classified_after: 352
+        unknown_before: 72
+        unknown_after: 10
+        recovered_boros_energy: 45
+        recovered_ruby_storm: 16
+        recovered_mardu_energy: 1
+        conflicts: 0
+        invalid_decks: 0
+        theoretical_opportunities: 2910
+        effective_opportunities: 2903
+        eligible_matches: 1394
+      validation:
+        red_tests_failed_as_expected: 3
+        focused_adapter_tests_passed: 19
+        affected_melee_tests_passed: 49
+        phase_8_consumer_tests_passed: 23
+        mtgo_regression_tests_passed: 62
+        full_pytest_passed: 594
+        test_files_covered: 66
+        melee_candidate_validation: "passed"
+        candidate_changed_paths: 7
+        repository_python_checked: 124
+        repository_json_checked: 1590
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1855
+        standard_rule_validation: "passed"
+        modern_rule_validation: "passed"
+        schema_documents_validated: 69
+        javascript_files_checked: 9
+        git_diff_check: "passed"
+      deliverables:
+        - "src/mtgmeta/melee/classification.py"
+        - "data/modern/melee/classifications/434455.json"
+        - "data/modern/melee/opportunities/434455.json"
+        - "stats/modern/melee/events/434455/"
+        - "tests/test_melee_classification.py"
+        - "tests/test_melee_statistics.py"
+        - "tests/test_melee_matchup.py"
+        - "docs/audits/P8-HOTFIX-MELEE-DFC-NORMALIZATION.md"
       required_scope:
-        - "Define and test a source-independent canonical front-face normalization contract without weakening explicit OM1/SPM aliases."
+        - "Define and test a Melee adapter front-face normalization contract without weakening explicit OM1/SPM aliases or changing MTGO behavior."
         - "Prove existing MTGO Standard and Modern classification behavior is unchanged."
         - "Regenerate event 434455 classification and all hash-bound dependent Melee products from source."
         - "Confirm the expected 62 recovered classifications and retain unresolved decks as explicit Unknown."
@@ -5263,12 +5336,12 @@ next_approved_task:
     - "docs/STATUS.yaml"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "local_execution_authorized"
+  authorization_status: "owner_accepted_remote_publication_authorized"
   local_execution_authorized: true
   local_execution_authorized_on: "2026-07-30"
-  remote_publication_authorized: false
+  remote_publication_authorized: true
   production_dispatch_authorized: false
-  planning_status: "P8-11 accepted; separate hotfix local execution authorized after P8-11 publication"
+  planning_status: "Hotfix accepted and remote publication authorized; deployed browser revalidation remains required before Phase 8 closeout"
 
 governance_baseline:
   status: "active_on_master"
