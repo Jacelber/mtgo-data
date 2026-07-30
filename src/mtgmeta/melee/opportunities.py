@@ -21,6 +21,9 @@ POINT_RESULT_TYPES = frozenset(
     {"played_win", "played_loss", "played_draw", "intentional_draw", "bye"}
 )
 PLAYED_RESULT_TYPES = frozenset({"played_win", "played_loss", "played_draw"})
+EVENT_STRUCTURES = frozenset(
+    {"mixed", "constructed_day2", "constructed_single_stage"}
+)
 
 
 class MeleeOpportunityError(ValueError):
@@ -101,7 +104,12 @@ def _classification_summary(record: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def _scope_for_round(round_: Mapping[str, Any]) -> str:
+def _scope_for_round(
+    round_: Mapping[str, Any],
+    event_structure: str,
+) -> str:
+    if event_structure == "constructed_single_stage":
+        return "all_constructed"
     stage = round_.get("stage")
     if stage not in {"day1", "day2"}:
         raise MeleeOpportunityError(
@@ -164,6 +172,7 @@ def _source_opportunity(
     competitors: Sequence[Mapping[str, Any]],
     competitor: Mapping[str, Any],
     disqualified_ids: set[str],
+    event_structure: str,
 ) -> dict[str, Any]:
     result_type = competitor.get("result_type")
     source_points = competitor.get("match_points")
@@ -195,7 +204,7 @@ def _source_opportunity(
         "participant_status": participant_status,
         "round_id": round_["id"],
         "round_number": round_["number"],
-        "scope": _scope_for_round(round_),
+        "scope": _scope_for_round(round_, event_structure),
         "match_id": match["id"],
         "opponent_participant_id": _opponent_id(competitors, participant_id),
         "result_type": result_type,
@@ -221,6 +230,7 @@ def _unplayed_opportunity(
     participant_id: str,
     participant_status: str,
     round_: Mapping[str, Any],
+    event_structure: str,
 ) -> dict[str, Any]:
     if participant_status == "dropped":
         result_type = "drop_unplayed"
@@ -240,7 +250,7 @@ def _unplayed_opportunity(
         "participant_status": participant_status,
         "round_id": round_["id"],
         "round_number": round_["number"],
-        "scope": _scope_for_round(round_),
+        "scope": _scope_for_round(round_, event_structure),
         "match_id": None,
         "opponent_participant_id": None,
         "result_type": result_type,
@@ -315,10 +325,13 @@ def build_opportunity_ledger(
         raise MeleeOpportunityError("event.metadata must be an object")
     event_id = metadata.get("event_id")
     format_id = metadata.get("constructed_format")
+    event_structure = event.get("event_structure")
     if metadata.get("source") != "melee":
         raise MeleeOpportunityError("event.metadata.source must be 'melee'")
-    if event.get("event_structure") != "mixed":
-        raise MeleeOpportunityError("P7-04 requires a mixed event")
+    if event_structure not in EVENT_STRUCTURES:
+        raise MeleeOpportunityError(
+            f"unsupported event structure {event_structure!r}"
+        )
     if not isinstance(event_id, str) or not EVENT_ID_PATTERN.fullmatch(event_id):
         raise MeleeOpportunityError("event.metadata.event_id must be numeric")
     if not isinstance(format_id, str) or not FORMAT_PATTERN.fullmatch(format_id):
@@ -367,10 +380,35 @@ def build_opportunity_ledger(
     )
     if not constructed_rounds:
         raise MeleeOpportunityError("event contains no Constructed Swiss rounds")
+    if event_structure != "mixed" and any(
+        item.get("round_phase") == "draft" for item in rounds.values()
+    ):
+        raise MeleeOpportunityError(
+            f"{event_structure} contains a Draft round"
+        )
     day1_rounds = [item for item in constructed_rounds if item.get("stage") == "day1"]
     day2_rounds = [item for item in constructed_rounds if item.get("stage") == "day2"]
-    if not day1_rounds or not day2_rounds:
-        raise MeleeOpportunityError("mixed event requires Day 1 and Day 2 Constructed")
+    if event_structure == "constructed_single_stage":
+        if day2_rounds:
+            raise MeleeOpportunityError(
+                "constructed_single_stage does not support Day 2 rounds"
+            )
+        if any(
+            item.get("stage") not in {"day1", "other"}
+            for item in constructed_rounds
+        ):
+            raise MeleeOpportunityError(
+                "constructed_single_stage has an unsupported Constructed stage"
+            )
+    else:
+        if not day1_rounds or not day2_rounds:
+            raise MeleeOpportunityError(
+                f"{event_structure} requires Day 1 and Day 2 Constructed"
+            )
+        if len(day1_rounds) + len(day2_rounds) != len(constructed_rounds):
+            raise MeleeOpportunityError(
+                f"{event_structure} contains a cross-structure Constructed stage"
+            )
     constructed_round_ids = {str(item["id"]) for item in constructed_rounds}
 
     matches_by_participant_round: dict[
@@ -410,7 +448,8 @@ def build_opportunity_ledger(
                     f"match {match.get('id')} references unknown participant"
                 )
             if (
-                round_.get("stage") == "day2"
+                event_structure != "constructed_single_stage"
+                and round_.get("stage") == "day2"
                 and round_.get("swiss") is True
             ):
                 day2_participants.add(str(participant_id))
@@ -424,7 +463,10 @@ def build_opportunity_ledger(
             matches_by_participant_round[key] = (match, competitors, competitor)
 
     day1_participants = set(participants)
-    if not day2_participants:
+    if (
+        event_structure != "constructed_single_stage"
+        and not day2_participants
+    ):
         raise MeleeOpportunityError("Day 2 population cannot be established")
     if not day2_participants <= day1_participants:
         raise MeleeOpportunityError("Day 2 population is not a subset of Day 1")
@@ -442,16 +484,21 @@ def build_opportunity_ledger(
             {
                 "participant_id": participant_id,
                 "participant_status": participant_status,
-                "day1_participant": True,
+                "day1_participant": (
+                    event_structure != "constructed_single_stage"
+                ),
                 "day2_participant": participant_id in day2_participants,
                 "classification": _classification_summary(
                     classification_records[participant_id]
                 ),
             }
         )
-        scheduled = list(day1_rounds)
-        if participant_id in day2_participants:
-            scheduled.extend(day2_rounds)
+        if event_structure == "constructed_single_stage":
+            scheduled = list(constructed_rounds)
+        else:
+            scheduled = list(day1_rounds)
+            if participant_id in day2_participants:
+                scheduled.extend(day2_rounds)
         for round_ in scheduled:
             match_data = matches_by_participant_round.get(
                 (participant_id, str(round_["id"]))
@@ -461,6 +508,7 @@ def build_opportunity_ledger(
                     participant_id=participant_id,
                     participant_status=str(participant_status),
                     round_=round_,
+                    event_structure=str(event_structure),
                 )
             else:
                 match, competitors, competitor = match_data
@@ -472,21 +520,48 @@ def build_opportunity_ledger(
                     competitors=competitors,
                     competitor=competitor,
                     disqualified_ids=disqualified_ids,
+                    event_structure=str(event_structure),
                 )
             opportunities.append(opportunity)
 
-    day1_opportunities = [
-        item for item in opportunities if item["scope"] == "day1"
-    ]
-    day2_opportunities = [
-        item for item in opportunities if item["scope"] == "day2"
-    ]
+    if event_structure == "constructed_single_stage":
+        scope_summaries = {
+            "all_constructed": _scope_summary(
+                opportunities,
+                len(day1_participants),
+                len(constructed_rounds),
+            )
+        }
+    else:
+        day1_opportunities = [
+            item for item in opportunities if item["scope"] == "day1"
+        ]
+        day2_opportunities = [
+            item for item in opportunities if item["scope"] == "day2"
+        ]
+        scope_summaries = {
+            "day1": _scope_summary(
+                day1_opportunities,
+                len(day1_participants),
+                len(day1_rounds),
+            ),
+            "day2": _scope_summary(
+                day2_opportunities,
+                len(day2_participants),
+                len(day2_rounds),
+            ),
+            "all_constructed": _scope_summary(
+                opportunities,
+                len(day1_participants),
+                len(constructed_rounds),
+            ),
+        }
     return {
         "schema_version": OPPORTUNITY_LEDGER_SCHEMA_VERSION,
         "source": "melee",
         "event_id": event_id,
         "format": format_id,
-        "event_structure": "mixed",
+        "event_structure": event_structure,
         "input": {
             "event_path": event_path,
             "event_sha256": event_sha256,
@@ -504,23 +579,7 @@ def build_opportunity_ledger(
             }
             for round_ in constructed_rounds
         ],
-        "scope_summaries": {
-            "day1": _scope_summary(
-                day1_opportunities,
-                len(day1_participants),
-                len(day1_rounds),
-            ),
-            "day2": _scope_summary(
-                day2_opportunities,
-                len(day2_participants),
-                len(day2_rounds),
-            ),
-            "all_constructed": _scope_summary(
-                opportunities,
-                len(day1_participants),
-                len(constructed_rounds),
-            ),
-        },
+        "scope_summaries": scope_summaries,
         "participants": participant_documents,
         "opportunities": opportunities,
     }
@@ -580,7 +639,7 @@ def write_opportunity_ledger(path: Path, payload: bytes) -> bool:
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Build one deterministic mixed-event Constructed-opportunity ledger."
+        description="Build one deterministic Constructed-opportunity ledger."
     )
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--format", required=True, dest="format_id")

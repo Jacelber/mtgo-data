@@ -32,6 +32,7 @@ CLASSIFICATION_PATH = (
     ROOT / "data/modern/melee/classifications" / f"{EVENT_ID}.json"
 )
 LEDGER_PATH = ROOT / "data/modern/melee/opportunities" / f"{EVENT_ID}.json"
+PURE_CONTRACT_PATH = ROOT / "tests/fixtures/melee/pure_constructed_contract.json"
 
 
 def _participant(number: int, status: str) -> dict[str, object]:
@@ -257,6 +258,353 @@ def _fixture_ledger() -> dict[str, object]:
         classification_path="data/modern/melee/classifications/123.json",
         classification_sha256="b" * 64,
     )
+
+
+def _classification_for_event(
+    event: dict[str, object],
+) -> dict[str, object]:
+    event_hash = sha256(json.dumps(event).encode()).hexdigest()
+    return {
+        "schema_version": "1.0.0",
+        "event_id": event["metadata"]["event_id"],
+        "format": event["metadata"]["constructed_format"],
+        "input": {"event_sha256": event_hash},
+        "quality": {"blocking": False},
+        "records": [
+            {
+                "participant_id": participant["id"],
+                "classification_status": "classified",
+                "selected": {
+                    "archetype_id": "example",
+                    "archetype_name": "Example",
+                    "subtype_id": "alpha",
+                    "subtype_name": "Alpha",
+                },
+            }
+            for participant in event["participants"]
+        ],
+    }
+
+
+def _pure_day2_inputs() -> tuple[dict[str, object], dict[str, object]]:
+    active = _participant(11, "active")
+    nonqualifier = _participant(12, "dropped")
+    qualified_drop = _participant(13, "dropped")
+    disqualified = _participant(14, "disqualified")
+    day1_rounds = [
+        _round(
+            number,
+            stage="day1",
+            round_phase="constructed",
+            game_format="modern",
+        )
+        for number in range(1, 4)
+    ]
+    day2_rounds = [
+        _round(
+            number,
+            stage="day2",
+            round_phase="constructed",
+            game_format="modern",
+        )
+        for number in range(4, 6)
+    ]
+    event = {
+        "schema_version": "2.2.0",
+        "metadata": {
+            "source": "melee",
+            "event_id": "124",
+            "constructed_format": "modern",
+        },
+        "event_structure": "constructed_day2",
+        "participants": [
+            active,
+            nonqualifier,
+            qualified_drop,
+            disqualified,
+        ],
+        "rounds": [*day1_rounds, *day2_rounds],
+        "matches": [
+            _match(
+                21,
+                day1_rounds[0],
+                [
+                    (active["id"], "played_win", 3),
+                    (nonqualifier["id"], "played_loss", 0),
+                ],
+                played=True,
+                eligible=True,
+            ),
+            _match(
+                22,
+                day1_rounds[0],
+                [
+                    (qualified_drop["id"], "played_win", 3),
+                    (disqualified["id"], "played_loss", 0),
+                ],
+                played=True,
+                eligible=False,
+            ),
+            _match(
+                23,
+                day1_rounds[1],
+                [
+                    (active["id"], "played_draw", 1),
+                    (qualified_drop["id"], "played_draw", 1),
+                ],
+                played=True,
+                eligible=True,
+            ),
+            _match(
+                24,
+                day1_rounds[1],
+                [
+                    (nonqualifier["id"], "played_win", 3),
+                    (disqualified["id"], "played_loss", 0),
+                ],
+                played=True,
+                eligible=False,
+            ),
+            _match(
+                25,
+                day1_rounds[2],
+                [(active["id"], "bye", 3)],
+                played=False,
+                eligible=False,
+            ),
+            _match(
+                26,
+                day1_rounds[2],
+                [
+                    (nonqualifier["id"], "intentional_draw", 1),
+                    (qualified_drop["id"], "intentional_draw", 1),
+                ],
+                played=False,
+                eligible=False,
+            ),
+            _match(
+                27,
+                day2_rounds[0],
+                [
+                    (active["id"], "played_win", 3),
+                    (qualified_drop["id"], "played_loss", 0),
+                ],
+                played=True,
+                eligible=True,
+            ),
+            _match(
+                28,
+                day2_rounds[1],
+                [(active["id"], "awarded_win_top8_lock", 3)],
+                played=False,
+                eligible=False,
+            ),
+        ],
+    }
+    return event, _classification_for_event(event)
+
+
+def _single_stage_inputs() -> tuple[dict[str, object], dict[str, object]]:
+    participants = [_participant(number, "active") for number in range(21, 25)]
+    rounds = [
+        _round(
+            number,
+            stage="other",
+            round_phase="constructed",
+            game_format="modern",
+        )
+        for number in range(1, 6)
+    ]
+    pairings = [
+        ((0, 3), (1, 2)),
+        ((0, 3), (1, 2)),
+        ((0, 2), (1, 3)),
+        ((0, 1), (2, 3)),
+        ((2, 0), (3, 1)),
+    ]
+    matches = []
+    match_number = 31
+    for round_, round_pairings in zip(rounds, pairings, strict=True):
+        for winner_index, loser_index in round_pairings:
+            matches.append(
+                _match(
+                    match_number,
+                    round_,
+                    [
+                        (participants[winner_index]["id"], "played_win", 3),
+                        (participants[loser_index]["id"], "played_loss", 0),
+                    ],
+                    played=True,
+                    eligible=True,
+                )
+            )
+            match_number += 1
+    event = {
+        "schema_version": "2.2.0",
+        "metadata": {
+            "source": "melee",
+            "event_id": "125",
+            "constructed_format": "modern",
+        },
+        "event_structure": "constructed_single_stage",
+        "participants": participants,
+        "rounds": rounds,
+        "matches": matches,
+    }
+    return event, _classification_for_event(event)
+
+
+def _build_fixture_ledger(
+    event: dict[str, object],
+    classification: dict[str, object],
+) -> dict[str, object]:
+    event_id = event["metadata"]["event_id"]
+    return build_opportunity_ledger(
+        event,
+        classification,
+        event_path=f"data/modern/melee/events/{event_id}.json",
+        event_sha256=classification["input"]["event_sha256"],
+        classification_path=f"data/modern/melee/classifications/{event_id}.json",
+        classification_sha256="b" * 64,
+    )
+
+
+def test_constructed_day2_dispatch_uses_evidenced_qualified_population():
+    event, classification = _pure_day2_inputs()
+    ledger = _build_fixture_ledger(event, classification)
+    contract = json.loads(PURE_CONTRACT_PATH.read_text(encoding="utf-8"))
+    expected = contract["structures"]["constructed_day2"]["expected_scopes"]
+    loaded, registry = schemas.load_schemas(ROOT / "schemas")
+
+    assert ledger["event_structure"] == "constructed_day2"
+    assert list(ledger["scope_summaries"]) == [
+        "day1",
+        "day2",
+        "all_constructed",
+    ]
+    for scope_id in ("day1", "day2", "all_constructed"):
+        assert ledger["scope_summaries"][scope_id]["theoretical_rounds"] == (
+            expected[scope_id]["theoretical_rounds"]
+        )
+        assert ledger["scope_summaries"][scope_id][
+            "effective_theoretical_rounds"
+        ] == expected[scope_id]["effective_theoretical_rounds"]
+    participants = {item["participant_id"]: item for item in ledger["participants"]}
+    assert sum(item["day2_participant"] for item in participants.values()) == 2
+    assert participants[_participant(12, "dropped")["id"]][
+        "day2_participant"
+    ] is False
+    expected_rows = {
+        _participant(11, "active")["id"]: (5, 4),
+        _participant(12, "dropped")["id"]: (3, 3),
+        _participant(13, "dropped")["id"]: (5, 5),
+        _participant(14, "disqualified")["id"]: (3, 3),
+    }
+    for participant_id, (theoretical, effective) in expected_rows.items():
+        rows = [
+            item
+            for item in ledger["opportunities"]
+            if item["participant_id"] == participant_id
+        ]
+        assert len(rows) == theoretical
+        assert sum(item["effective_theoretical_round"] for item in rows) == effective
+    assert schemas.validate_instance(
+        ledger,
+        loaded["melee-opportunity-ledger.schema.json"],
+        registry,
+    ) == []
+
+
+def test_single_stage_dispatch_exposes_only_all_constructed():
+    event, classification = _single_stage_inputs()
+    ledger = _build_fixture_ledger(event, classification)
+    contract = json.loads(PURE_CONTRACT_PATH.read_text(encoding="utf-8"))
+    expected = contract["structures"]["constructed_single_stage"][
+        "expected_scopes"
+    ]["all_constructed"]
+    loaded, registry = schemas.load_schemas(ROOT / "schemas")
+
+    assert ledger["event_structure"] == "constructed_single_stage"
+    assert list(ledger["scope_summaries"]) == ["all_constructed"]
+    assert ledger["scope_summaries"]["all_constructed"] == {
+        "participant_count": 4,
+        "scheduled_round_count": 5,
+        "theoretical_rounds": expected["theoretical_rounds"],
+        "effective_theoretical_rounds": expected[
+            "effective_theoretical_rounds"
+        ],
+        "constructed_points": 30,
+        "source_match_count": 10,
+        "win_rate_match_count": 10,
+        "matchup_match_count": 10,
+        "disqualified_matches_excluded": 0,
+        "result_counts": {"played_loss": 10, "played_win": 10},
+    }
+    assert all(
+        item["scope"] == "all_constructed"
+        for item in ledger["opportunities"]
+    )
+    assert all(
+        item["day1_participant"] is False
+        and item["day2_participant"] is False
+        for item in ledger["participants"]
+    )
+    expected_points = {
+        participant["id"]: participant["single_stage_points"]
+        for participant in contract["structures"]["constructed_single_stage"][
+            "participants"
+        ]
+    }
+    actual_points = {
+        participant_id: sum(
+            item["constructed_points"]
+            for item in ledger["opportunities"]
+            if item["participant_id"] == participant_id
+        )
+        for participant_id in (
+            _participant(number, "active")["id"] for number in range(21, 25)
+        )
+    }
+    assert list(actual_points.values()) == list(expected_points.values())
+    assert schemas.validate_instance(
+        ledger,
+        loaded["melee-opportunity-ledger.schema.json"],
+        registry,
+    ) == []
+    invalid = deepcopy(ledger)
+    invalid["scope_summaries"]["day1"] = deepcopy(
+        invalid["scope_summaries"]["all_constructed"]
+    )
+    assert schemas.validate_instance(
+        invalid,
+        loaded["melee-opportunity-ledger.schema.json"],
+        registry,
+    )
+
+
+def test_structure_dispatch_rejects_undeclared_or_cross_structure_stages():
+    event, classification = _single_stage_inputs()
+    event["event_structure"] = "unknown"
+    with pytest.raises(MeleeOpportunityError, match="unsupported event structure"):
+        _build_fixture_ledger(event, classification)
+
+    event, classification = _single_stage_inputs()
+    event["rounds"][0]["stage"] = "day2"
+    with pytest.raises(MeleeOpportunityError, match="does not support Day 2"):
+        _build_fixture_ledger(event, classification)
+
+    event, _ = _pure_day2_inputs()
+    event["rounds"].append(
+        _round(
+            6,
+            stage="day1",
+            round_phase="draft",
+            game_format="limited",
+        )
+    )
+    classification = _classification_for_event(event)
+    with pytest.raises(MeleeOpportunityError, match="contains a Draft round"):
+        _build_fixture_ledger(event, classification)
 
 
 def test_fixture_ledger_accounts_for_scopes_and_special_results():

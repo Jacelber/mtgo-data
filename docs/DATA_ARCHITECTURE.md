@@ -1239,18 +1239,27 @@ MTGO products, workflows, and front ends remain unchanged by this overlay.
 
 ### 11.8 Deterministic Constructed-opportunity ledger
 
-P7-04 stores derived mixed-event participation and scheduled Constructed
-opportunities separately at:
+P7-04 introduced the mixed-event ledger. P9-03 generalizes its construction
+through the normalized event's explicit `event_structure`, while keeping the
+same path:
 
 ```text
 data/<format>/melee/opportunities/<event_id>.json
 ```
 
 The ledger hashes both the canonical normalized event and its classification
-overlay. It joins classification by stable `participant_id`, records the Day 1
-starting field and the independently evidenced Day 2 population, and emits one
-row for every scheduled Constructed Swiss opportunity in those populations.
-Draft rounds and playoffs do not enter the ledger.
+overlay. It joins classification by stable `participant_id` and emits one row
+for every scheduled Constructed Swiss opportunity in the structure's declared
+population:
+
+- `mixed` and `constructed_day2` expose `day1`, `day2`, and
+  `all_constructed`;
+- `constructed_single_stage` exposes only `all_constructed`;
+- pure structures reject Draft rounds, and every structure excludes playoffs.
+
+Mixed and pure Day 2 events record the starting field and an independently
+evidenced Day 2 population. A single-stage event records every starter without
+inventing Day 1, Day 2, or a cut population.
 
 Each opportunity preserves the source match and official match points when
 present, while independently recording:
@@ -1263,10 +1272,11 @@ present, while independently recording:
 
 Ordinary missing rounds for a participant whose source status is `dropped`
 become zero-point `drop_unplayed` opportunities. A missing round for any
-non-terminal status fails closed instead of being guessed. Day 2 membership is
-established from actual Day 2 Swiss participation, including Draft evidence,
-so a player who drops before the Day 2 Constructed phase still receives the
-scheduled qualified-field opportunities. Non-qualifiers receive none.
+non-terminal status fails closed instead of being guessed. Mixed-event Day 2
+membership is established from actual Day 2 Swiss participation, including
+Draft evidence. Pure Day 2 membership uses actual Day 2 Constructed Swiss
+participation. A qualified participant who later drops retains the scheduled
+qualified-field opportunities; non-qualifiers receive none.
 
 A verified `awarded_win_top8_lock` retains its source result but contributes
 zero Constructed points and no effective theoretical round. Matches involving
@@ -1276,9 +1286,10 @@ later missing rounds remain explicit administrative opportunities rather than
 being mislabeled as an ordinary drop.
 
 The file contains no wall-clock or Git-derived value. Identical event and
-classification bytes must rebuild byte-identically. P7-04 does not create
-public statistics; P7-05 and P7-06 consume this ledger together with the
-retained event contract.
+classification bytes must rebuild byte-identically. P9-03 preserves the
+committed mixed-event ledger bytes while adding the two pure strategies. It
+does not create overview, deck, matchup, or other public statistics; later
+Phase 9 tasks consume the generalized ledger.
 
 ### 11.9 Deterministic per-event overview and deck statistics
 
