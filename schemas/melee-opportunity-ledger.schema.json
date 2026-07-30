@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-opportunity-ledger.schema.json",
   "x-schema-version": "1.0.0",
-  "title": "Melee mixed-event Constructed opportunity ledger",
+  "title": "Melee Constructed opportunity ledger",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -14,7 +14,9 @@
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
     "format": {"$ref": "#/$defs/id"},
-    "event_structure": {"const": "mixed"},
+    "event_structure": {
+      "enum": ["mixed", "constructed_day2", "constructed_single_stage"]
+    },
     "input": {"$ref": "#/$defs/input"},
     "rounds": {
       "type": "array",
@@ -24,7 +26,6 @@
     "scope_summaries": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["day1", "day2", "all_constructed"],
       "properties": {
         "day1": {"$ref": "#/$defs/scope_summary"},
         "day2": {"$ref": "#/$defs/scope_summary"},
@@ -40,6 +41,51 @@
       "items": {"$ref": "#/$defs/opportunity"}
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "event_structure": {"const": "constructed_single_stage"}
+        },
+        "required": ["event_structure"]
+      },
+      "then": {
+        "properties": {
+          "scope_summaries": {
+            "required": ["all_constructed"],
+            "not": {
+              "anyOf": [
+                {"required": ["day1"]},
+                {"required": ["day2"]}
+              ]
+            }
+          },
+          "participants": {
+            "items": {
+              "properties": {
+                "day1_participant": {"const": false},
+                "day2_participant": {"const": false}
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "scope_summaries": {
+            "required": ["day1", "day2", "all_constructed"]
+          },
+          "participants": {
+            "items": {
+              "properties": {
+                "day1_participant": {"const": true}
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "id": {
       "type": "string",
@@ -91,7 +137,7 @@
       "properties": {
         "round_id": {"$ref": "#/$defs/round_id"},
         "round_number": {"type": "integer", "minimum": 1},
-        "stage": {"enum": ["day1", "day2"]},
+        "stage": {"enum": ["day1", "day2", "other"]},
         "phase_id": {
           "type": "string",
           "pattern": "^[a-z0-9]+(?:[_-][a-z0-9]+)*$"
@@ -182,7 +228,7 @@
         "participant_status": {
           "enum": ["active", "dropped", "disqualified", "no_show"]
         },
-        "day1_participant": {"const": true},
+        "day1_participant": {"type": "boolean"},
         "day2_participant": {"type": "boolean"},
         "classification": {"$ref": "#/$defs/classification"}
       }
@@ -205,7 +251,7 @@
         },
         "round_id": {"$ref": "#/$defs/round_id"},
         "round_number": {"type": "integer", "minimum": 1},
-        "scope": {"enum": ["day1", "day2"]},
+        "scope": {"enum": ["day1", "day2", "all_constructed"]},
         "match_id": {
           "oneOf": [{"$ref": "#/$defs/match_id"}, {"type": "null"}]
         },
