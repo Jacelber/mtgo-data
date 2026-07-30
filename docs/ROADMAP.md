@@ -1869,6 +1869,12 @@ Phase 8 is complete when:
 
 Complete statistical support for both pure Constructed event structures.
 
+Phase 9 starts from the accepted mixed Modern event `434455` implementation.
+It generalizes the statistical and public-output boundary without redoing
+mixed-event ingestion, classification, or Phase 8 front-end work. The retained
+mixed outputs are byte-stability regression evidence for every task that
+touches a shared generator or Schema.
+
 ## Mode A: constructed with Day 2
 
 Configuration value:
@@ -1913,6 +1919,65 @@ Do not invent Day 2 metrics for single-stage events.
 Use high-score substitution only where the event has no Day 2 and the statistics specification requires it.
 
 Do not use playoff single-match samples as the primary archetype performance measure.
+
+## Task sequence
+
+1. `P9-01` — Pure Constructed readiness audit and contract plan
+   - inspect configuration, normalized data, opportunity accounting, statistics,
+     matchup, publication, Schemas, fixtures, and the Tabletop consumer;
+   - record each mixed-only guard and fixed-scope contract;
+   - freeze the smallest structure-dispatch implementation order;
+   - reconcile the Phase 8 closeout publication record as ordinary governance
+     maintenance; no production code, data, event admission, or live request.
+2. `P9-02` — Pure Constructed fixture and public-contract freeze
+   - create deterministic synthetic fixtures for `constructed_day2` and
+     `constructed_single_stage`;
+   - freeze each structure's scope set, unavailable states, denominator
+     evidence, and Schema migration boundary before changing generators;
+   - retain byte-identical mixed `434455` reproduction as a mandatory fixture.
+   - freeze the single-event scope matrix and the cross-structure multi-event
+     rule: multiple selections use only `all_constructed`, while unsupported
+     scopes are omitted and temporarily unavailable multi-event scopes are
+     disabled with an explanation.
+3. `P9-03` — Structure-dispatched opportunity ledger
+   - introduce explicit per-structure opportunity construction while sharing
+     result eligibility and diagnostics;
+   - prohibit inferred Day 2 membership, fictional cuts, and cross-structure
+     scopes.
+4. `P9-04` — Structure-specific overview and deck statistics
+   - add pure Day 2 participation/conversion metrics and single-stage
+     high-score metrics from raw opportunity counts;
+   - preserve subtype/parent conservation, drop handling, literal W-L-D, and
+     mixed output stability.
+5. `P9-05` — Matchup, quality, publication, catalog, and Schema generalization
+   - make generated documents advertise only their supported scopes;
+   - preserve source separation and reject incompatible aggregation or identity
+     mismatches;
+   - version any public-breaking Schema change deliberately.
+6. `P9-06` — Structure-aware Tabletop consumer
+   - render the scopes that the selected event declares;
+   - show Day 2 conversion only for pure Constructed Day 2 events, high-score
+     output only for single-stage events, and the selection-bias warning only
+     for mixed events.
+   - switch a stage-specific single-event selection to `all_constructed` when
+     a second event is selected, disable Day 1 and Day 2 controls during
+     multi-selection, and restore only a scope supported by the remaining
+     single event.
+7. `P9-07` — Bounded real-source pilots (optional, separately authorized)
+   - choose at most one owner-approved candidate per pure structure;
+   - perform read-only live source smoke tests before any whitelist activation,
+     retained raw snapshot, generated data, or publication decision.
+8. `P9-08` — Cross-structure regression and closeout
+   - verify both pure fixtures, mixed `434455`, public Schemas, Tabletop
+     behavior, source separation, and full validation before Phase 9 closeout.
+
+The historical Phase 10 description remains a specification reference for
+mixed events. Its substantive `434455` implementation was accepted through
+Phase 7 and Phase 8; Phase 9 must preserve it rather than reimplement it.
+
+Phase 11 remains responsible for implementing the actual compatible
+multi-event raw-count aggregation. Phase 9 freezes and exposes the event-level
+scope information and consumer selection behavior that Phase 11 will consume.
 
 ## Acceptance criteria
 
@@ -2086,6 +2151,12 @@ The matrix must identify whether it uses:
 - Day 2 Constructed only.
 
 For mixed events, the default may be all Constructed Swiss, but Day 1 and Day 2 scopes must remain available where data permits.
+
+For the initial multi-event product, selecting two or more compatible events
+forces `all_constructed`, the only scope common to all three approved event
+structures. Day 1 and Day 2 remain selectable only for one event that declares
+those scopes. A later expansion of multi-event stage-specific aggregation
+requires a separate compatibility decision.
 
 ## Acceptance criteria
 
