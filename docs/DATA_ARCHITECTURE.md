@@ -992,6 +992,32 @@ standings. It must remain sequential and rate-limited and must reject redirects,
 cross-host or unexpected paths, changing page totals, unsafe identities, and
 configured response, record, or byte limits.
 
+Large complete events use one event-local resumable staging area:
+
+```text
+data_raw/melee/<event_id>/
+  .complete-in-progress/
+  .complete-in-progress.json
+```
+
+The checkpoint records collection identity, the destination snapshot name,
+every completed response's metadata and digest, and the frozen complete-plan
+count and SHA-256. A resume must verify every existing file's byte count and
+SHA-256 and reproduce the same request-plan hash before fetching a missing
+response. Verified responses are not downloaded again.
+
+The complete collector has separate reviewed hard ceilings of 5,000 decklists
+and 10,000 responses. The ordinary manually configured raw-request client
+retains its 500-response ceiling. Both collectors retain the per-response and
+total-byte limits.
+
+The staging directory has no `manifest.json` while incomplete and is not a
+valid parser, retention, normalization, statistics, or publication input.
+After every planned response is verified, the collector writes manifest
+`2.0.0` and atomically renames the staging directory to the immutable snapshot
+name. Progress reports expose completed response count, planned response
+count, accumulated bytes, and reused response count.
+
 ### 10.1 Raw-data requirements
 
 Raw files should preserve:
@@ -1030,12 +1056,14 @@ and SHA-256 must be verified before normalization. Repository attributes treat
 `data_raw/**` as byte-preserved source evidence and explicitly unsets both text
 and end-of-line conversion for those files.
 
-Incomplete temporary snapshots, duplicate fetch logs, credentials, cookies,
-private headers, and unrelated source responses are not retained. A failed
-collection is discarded as a unit. Safe restart means either fetching a new
-complete immutable snapshot or reusing a previously completed and
-digest-verified snapshot; it never means combining partial responses from
-different source moments.
+Incomplete staging directories, duplicate fetch logs, credentials, cookies,
+private headers, and unrelated source responses are not retained as production
+snapshots. A failed complete-event collection may remain only as its
+event-local checkpoint and staging directory. Safe resume requires the same
+event identity and frozen request-plan hash and reuses only files whose size
+and SHA-256 still match the checkpoint. Any changed, untracked, or mismatched
+file fails closed. An incomplete staging directory cannot be normalized,
+committed as the event snapshot, or published.
 
 The retained event `434455` snapshot contains source-published tournament
 metadata, participant names and IDs, standings, matches, and submitted

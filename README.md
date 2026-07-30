@@ -68,7 +68,21 @@ $env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455 --complete --execute
 ```
 
-`--complete` discovers the enabled event's completed rounds, paginates its public standings and match endpoints, and retrieves only decklists referenced by the primary standings. It has no dry-run form because the request plan is discovered from the live tournament page. The verified reference event `434455` is the only enabled Melee event; every live fetch still requires separate project-owner authorization. Completed raw snapshots use `data_raw/melee/<event_id>/<UTC-snapshot>/`; re-fetching creates a new snapshot instead of overwriting prior source evidence.
+`--complete` discovers the enabled event's completed rounds, paginates its
+public standings and match endpoints, and retrieves only decklists referenced
+by the primary standings. It has no dry-run form because the request plan is
+discovered from the live tournament page. The collector freezes that plan
+before bulk retrieval, writes per-response progress to stderr, and checkpoints
+each verified response under the event directory. Re-running the same command
+after an interruption resumes the matching checkpoint without downloading
+already verified files. The partial directory is never a valid retention
+input; only a complete manifest is atomically promoted to
+`data_raw/melee/<event_id>/<UTC-snapshot>/`.
+
+The verified reference event `434455` is the only enabled Melee event; every
+live fetch still requires separate project-owner authorization. A successful
+re-fetch creates a new immutable snapshot instead of overwriting prior source
+evidence.
 
 P7-02 retains a complete snapshot as the canonical normalized production input
 only after validating its manifest, response coverage, file set, byte counts,
@@ -89,8 +103,10 @@ $env:PYTHONPATH = "src"
 The first command is a zero-side-effect path plan. `--execute` writes
 `data/modern/melee/events/434455.json` atomically. Reusing the same verified
 snapshot must produce byte-identical output; a different result cannot silently
-replace the retained input. Interrupted fetches are discarded as a unit rather
-than resumed by mixing responses collected at different source moments.
+replace the retained input. Interrupted complete-event fetches remain
+ineligible for parsing or retention but may resume their exact frozen request
+plan after every existing response passes its stored byte-count and SHA-256
+check.
 
 P7-03 classifies every submitted Modern decklist from the retained event with
 the same shared taxonomy used by MTGO Modern. The read-only command builds and
