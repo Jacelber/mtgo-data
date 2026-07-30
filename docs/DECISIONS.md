@@ -2382,3 +2382,56 @@ the multi-event raw-count aggregator and compatibility checks.
 This decision does not declare stage-specific multi-event aggregation invalid.
 Enabling it later requires a separate reviewed contract for compatible event
 structures, cut rules, missing stages, and selection effects.
+
+---
+
+# DEC-062 — Complete large-event ingestion and dynamic format labels before Phase 9 closeout
+
+Status: `Accepted`
+
+## Context
+
+The initial Phase 9 plan placed bounded real-source pilots immediately before
+cross-structure closeout. The owner-selected Standard pilot event `419742`
+contains 893 final-Swiss decklists. A complete archive is estimated to require
+1,085 successful responses, which exceeds both the current 500-decklist and
+500-response limits.
+
+Future approved tabletop events may exceed 2,000 players. This is a
+single-event ingestion constraint, not Phase 11 multi-event aggregation.
+
+The P9-06 Tabletop consumer is structure-aware but its scope labels still
+contain hard-coded Modern text. Standard source pilots expose that consumer
+genericity gap before Standard tabletop publication is enabled.
+
+## Decision
+
+Use the Phase 9 route:
+
+```text
+P9-07 -> P9-07S -> P9-08
+```
+
+P9-07 uses three owner-selected Standard events, one for each supported
+structure, and retains only aggregate audit evidence.
+
+P9-07S implements a bounded, checkpointed, resumable complete-event collector.
+It must finalize atomically and must not allow incomplete work to enter
+normalization, statistics, or publication.
+
+P9-08 replaces hard-coded Modern scope labels with labels derived from the
+selected event's format metadata and the language dictionary. It then performs
+the final cross-structure and cross-format consumer regression.
+
+## Consequences
+
+Phase 9 cannot close while an approved 893-player event is structurally valid
+but impossible to archive safely. Raising one constant is not an accepted
+solution because it provides neither resumability nor atomic completeness.
+
+Phase 11 remains responsible for compatible multi-event raw-count aggregation.
+Phase 16 may enable Standard tabletop events only after the format-neutral
+consumer behavior has already been proven in P9-08.
+
+No event is added to the whitelist and no production data is generated or
+published by this decision.

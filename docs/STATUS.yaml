@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 9
   name: "Pure Constructed event strategies"
-  status: "p9_06_local_implementation_completed_awaiting_owner_acceptance"
+  status: "p9_07_owner_accepted_awaiting_publication_then_p9_07s"
   started_on: "2026-07-30"
   objective: "Complete statistical support for the explicitly configured constructed_day2 and constructed_single_stage Tabletop Major Events structures while preserving the mixed Modern baseline."
   production_changes_allowed: false
@@ -5698,7 +5698,7 @@ phase_9_plan:
       stop_point: "P9-05 is published. P9-06 was separately authorized on 2026-07-30."
     - id: "P9-06"
       name: "Structure-aware Tabletop consumer"
-      status: "local_implementation_completed_awaiting_owner_acceptance"
+      status: "completed_accepted_and_published"
       authorized_on: "2026-07-30"
       local_execution_authorized: true
       requires_owner_authorization: false
@@ -5719,8 +5719,18 @@ phase_9_plan:
       whitelist_changed: false
       public_schema_or_formula_changed: false
       multi_event_aggregation_implemented: false
-      remote_publication_authorized: false
+      owner_accepted_on: "2026-07-30"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-30"
       production_dispatch_authorized: false
+      publication:
+        local_commit: "828a6b3ae8f823d6c839737b09c9260d7f6fca48"
+        pull_request: 134
+        pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/134"
+        merge_commit: "a1db24946a1921c14800218cf674a5d7b16e8a36"
+        pr_validation_run: 30535088007
+        master_admission_run: 30535843552
+        pages_run: 30535842988
       validation:
         new_structure_consumer_tests_passed: 4
         focused_consumer_and_contract_tests_passed: 36
@@ -5737,36 +5747,90 @@ phase_9_plan:
         modern_rule_validation: "passed"
         repository_validation_status: "passed"
         git_diff_check: "passed"
-      stop_point: "Obtain owner acceptance before commit or remote publication. P9-07 remains separately controlled."
+      stop_point: "P9-06 is published. P9-07 was separately authorized on 2026-07-30."
     - id: "P9-07"
       name: "Bounded real-source pilots"
-      status: "not_started"
-      requires_owner_authorization: true
+      status: "owner_accepted_awaiting_publication"
+      authorized_on: "2026-07-30"
+      local_execution_authorized: true
+      requires_owner_authorization: false
+      branch: "codex/p9-07-real-source-pilots"
+      base_commit: "a1db24946a1921c14800218cf674a5d7b16e8a36"
+      owner_approved_events:
+        - event_id: "415628"
+          format: "standard"
+          expected_structure: "mixed"
+        - event_id: "425324"
+          format: "standard"
+          expected_structure: "constructed_single_stage"
+        - event_id: "419742"
+          format: "standard"
+          expected_structure: "constructed_day2"
+      deliverables:
+        - "docs/ROADMAP.md"
+        - "docs/DECISIONS.md"
+        - "docs/STATUS.yaml"
+        - "docs/audits/P9-07.md"
+      production_change: false
+      generated_data_changed: false
+      live_source_used: true
+      retained_raw_source_changed: false
+      whitelist_changed: false
+      public_schema_or_formula_changed: false
+      source_identity_data_retained: false
+      owner_accepted_on: "2026-07-30"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-30"
+      production_dispatch_authorized: false
+      whitelist_or_publication_authorized: false
+      validation:
+        live_events_probed: 3
+        supported_structures_evidenced: 3
+        probe_requests: 112
+        probe_response_bytes: 4142805
+        retained_source_responses: 0
+        event_415628_estimated_complete_responses: 434
+        event_425324_estimated_complete_responses: 319
+        event_419742_estimated_complete_responses: 1085
+        event_419742_unique_decklists: 893
+        current_complete_collection_limit_result: "event_419742_exceeds_decklist_and_response_limits"
+        focused_governance_tests_passed: 43
+        focused_melee_contract_tests_passed: 34
+        repository_python_checked: 127
+        repository_json_checked: 1592
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1868
+        repository_validation_status: "passed"
+        git_diff_check: "passed"
+      stop_point: "Publish P9-07, then begin the separately authorized P9-07S task from merged master. P9-08 remains separately controlled."
+    - id: "P9-07S"
+      name: "Resumable large-event collection"
+      status: "authorized_pending_p9_07_publication"
+      authorized_on: "2026-07-30"
+      local_execution_authorized: true
+      requires_owner_authorization: false
       whitelist_or_publication_authorized: false
     - id: "P9-08"
-      name: "Cross-structure regression and closeout"
+      name: "Cross-structure and cross-format regression and closeout"
       status: "not_started"
       requires_owner_authorization: true
 
 next_approved_task:
-  id: "P9-06"
-  name: "Owner acceptance and publication decision for the structure-aware Tabletop consumer"
+  id: "P9-07S"
+  name: "Begin resumable large-event collection after P9-07 publication"
   target_paths:
-    - "assets/css/phase8-candidate.css"
-    - "assets/js/phase8/app.js"
-    - "assets/js/phase8/i18n.js"
-    - "assets/js/phase8/tabletop-controller.js"
-    - "tests/test_phase9_structure_consumer.py"
-    - "docs/audits/P9-05.md"
-    - "docs/audits/P9-06.md"
+    - "src/mtgmeta/melee/client.py"
+    - "tests/test_melee_client.py"
+    - "docs/audits/P9-07S.md"
     - "docs/STATUS.yaml"
   production_change: true
-  requires_user_confirmation: true
-  authorization_status: "local_implementation_completed_awaiting_owner_acceptance"
+  requires_user_confirmation: false
+  authorization_status: "authorized_pending_p9_07_publication"
   local_execution_authorized: true
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "P9-06 local implementation and browser regression are complete. Commit, remote publication, production dispatch, real-source access, whitelist changes, generated-output writes, and P9-07 remain unauthorized."
+  planning_status: "The owner accepted and authorized publication of P9-07 on 2026-07-30 and separately authorized P9-07S to begin immediately after that merge. P9-07S may change the local collector and tests but does not authorize whitelist changes, retained production source writes, generated-output writes, production dispatch, remote publication, or P9-08."
 
 governance_baseline:
   status: "active_on_master"
@@ -5815,7 +5879,9 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P9-07 without separate owner authorization."
+  - "Do not begin P9-07S before P9-07 is merged; do not begin P9-08 without separate owner authorization."
+  - "Do not add P9-07 pilot events to configs/melee_events.yaml without separate authorization."
+  - "Do not retain P9-07 source responses or generate or publish pilot-event data without separate authorization."
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
   - "Do not re-dispatch the Melee production workflow without separate authorization."
