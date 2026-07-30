@@ -1963,11 +1963,28 @@ Do not use playoff single-match samples as the primary archetype performance mea
      a second event is selected, disable Day 1 and Day 2 controls during
      multi-selection, and restore only a scope supported by the remaining
      single event.
-7. `P9-07` — Bounded real-source pilots (optional, separately authorized)
-   - choose at most one owner-approved candidate per pure structure;
-   - perform read-only live source smoke tests before any whitelist activation,
-     retained raw snapshot, generated data, or publication decision.
-8. `P9-08` — Cross-structure regression and closeout
+7. `P9-07` — Bounded real-source pilots (separately authorized)
+   - use the owner-approved Standard events `415628`, `425324`, and `419742`
+     as one bounded source probe for each supported event structure;
+   - read only tournament metadata, final-Swiss standings pagination, and
+     per-round match totals needed to verify source shape and estimate a
+     complete request plan;
+   - do not activate the whitelist, retain raw responses, generate production
+     data, or publish an event.
+8. `P9-07S` — Resumable large-event collection (separately authorized)
+   - replace the fixed 500-decklist and 500-response assumptions with a
+     bounded request plan suitable for reviewed 2,000-plus-player events;
+   - add checkpointed batches, retry and pacing controls, resumability,
+     progress reporting, and atomic finalization;
+   - prove that an interrupted run resumes without redownloading verified
+     responses and produces the same final snapshot as an uninterrupted run;
+   - keep incomplete snapshots ineligible for normalization, statistics, or
+     publication.
+9. `P9-08` — Cross-structure and cross-format regression and closeout
+   - replace hard-coded Modern scope labels with labels derived from the
+     selected event's format metadata and the language dictionary;
+   - verify Standard labels such as `第一日标准`, `第二日标准`, and
+     `全部标准瑞士轮` while preserving the corresponding Modern behavior;
    - verify both pure fixtures, mixed `434455`, public Schemas, Tabletop
      behavior, source separation, and full validation before Phase 9 closeout.
 
@@ -1987,7 +2004,18 @@ catalog, and public Schema boundary now supports both pure structures while
 retaining byte-identical mixed event `434455` outputs. No real event,
 whitelist, generated production file, workflow, or front-end behavior changed.
 The owner accepted P9-05 and separately authorized remote publication on
-2026-07-30. P9-06 remains a separate owner-controlled step.
+2026-07-30. P9-06 was published through pull request #134, implementation
+commit `828a6b3ae8f823d6c839737b09c9260d7f6fca48`, and merge commit
+`a1db24946a1921c14800218cf674a5d7b16e8a36`.
+
+The owner authorized P9-07 and approved the revised
+`P9-07 -> P9-07S -> P9-08` route on 2026-07-30. The bounded P9-07 probe
+confirmed all three owner-selected Standard candidates without retaining raw
+source responses. Event `419742` exposes 893 decklists and an estimated 1,085
+complete-archive responses, so the current fixed limits cannot collect it.
+P9-07S is therefore a Phase 9 prerequisite rather than a Phase 11 aggregation
+task. P9-08 owns the separate format-dynamic Tabletop label correction and the
+final cross-format consumer regression.
 
 ## Acceptance criteria
 
