@@ -1329,11 +1329,13 @@ draw-adjusted record fields remain compatibility data and their nested
 `literal_record` remains the target wins-over-valid-matches statistic.
 
 `quality.json` reconciles source, classification, ledger, exclusions, and
-stage populations without copying the full source archive. It remains
-mixed-only through P9-04; P9-05 owns its structure generalization together
-with matchup, publication, meta, and catalog contracts. Accordingly,
-`build_event_overview_and_decks` is the structure-aware P9-04 boundary, while
-the existing three-document path/CLI remains mixed-only until P9-05.
+applicable stage populations without copying the full source archive. P9-05
+generalizes the complete three-document path and CLI to all structures.
+Mixed and pure Day 2 quality reports conserve Day 1 plus Day 2 against the
+combined scope. Single-stage quality reports validate one exact
+`all_constructed` scope and omit the inapplicable `day2_participants` count.
+Only mixed events receive the Draft-influenced Day 2 selection-bias issue.
+Clean quality remains `ready`; warning-bearing quality remains `warning`.
 
 Parent rows remain the default aggregation. Only parents observed in the event
 are emitted, plus the explicit Unknown bucket. For each observed
@@ -1343,7 +1345,8 @@ subtype-defining parent with an unassigned classified deck blocks generation
 under the no-residual rule.
 
 P9-04 extends the compatible `1.0.0` overview and decks Schemas without
-changing the retained mixed document shape. Structure conditionals require
+changing the retained mixed document shape. P9-05 compatibly extends the
+quality Schema to the same three structures. Structure conditionals require
 the exact scope set, the pure-event advancement metric, the pure Day 2
 conversion field, and the correct overall-points context flag. The committed
 mixed event `434455` remains the byte-stability oracle for overview, decks,
@@ -1374,8 +1377,14 @@ The hierarchy is taken from the rebuilt P7-05 all-Constructed overview: its
 ordered parent nodes, all maintained subtype leaves, non-subtype parent
 leaves, and Unknown become a complete stable event matrix domain. The
 leaf-level matrix is canonical. The parent matrix is a deterministic
-row-and-column rollup of the leaf counts. Each of `day1`, `day2`, and
-`all_constructed` contains:
+row-and-column rollup of the leaf counts. P9-05 dispatches the matchup scope
+set from the validated event structure:
+
+- `mixed` and `constructed_day2` contain `day1`, `day2`, and
+  `all_constructed`;
+- `constructed_single_stage` contains only `all_constructed`.
+
+Each emitted scope contains:
 
 - included round numbers and physical-match reconciliation;
 - reviewed exclusion counts;
@@ -1384,11 +1393,15 @@ row-and-column rollup of the leaf counts. Each of `day1`, `day2`, and
 - non-mirror overall parent and leaf records;
 - raw W-L-D counts, derived rates, and 95% Wilson intervals.
 
+The overview and opportunity ledger must declare the same structure and exact
+ordered scope set. A mismatch fails before aggregation. Pure structures do not
+inherit the mixed Day 2 selection-bias warning. The compatible matchup Schema
+uses structure conditionals to prohibit fictional stage scopes.
+
 The command is read-only unless `--execute` is supplied. It does not fetch a
 source, modify retained data, change taxonomy, write MTGO output, or publish a
-catalog. The new document and its Schema are validated directly in P7-06 but
-remain outside `schemas/manifest.json`; P7-07 owns public discovery, manifest
-governance, `meta.json`, and workflow integration.
+catalog. Public discovery, manifest governance, `meta.json`, and workflow
+integration remain separate publication responsibilities.
 
 ### 11.11 Deterministic event publication packaging
 
@@ -1405,6 +1418,15 @@ Schema version, byte size, and SHA-256. It also carries the shared immutable
 input provenance, scopes, default scope, and reviewed quality issue codes.
 `index.json` is the format-level discovery boundary and points to the five
 event documents. Neither document contains wall-clock or Git-derived state.
+
+P9-05 makes both documents structure-aware. They advertise the exact scope
+order rebuilt in the event overview and reject a whitelist structure that
+does not match it. A clean internal quality status of `ready` is represented
+as the public catalog status `pass`; `warning` is preserved. This translation
+keeps generator terminology separate from the public discovery contract
+without changing any retained mixed-event bytes. The compatible meta and
+catalog Schemas accept all three structures and require only
+`all_constructed` for a single-stage event.
 
 The overview, decks, matchup, quality, meta, and catalog documents are all
 declared in `schemas/manifest.json`. The source-specific candidate validator

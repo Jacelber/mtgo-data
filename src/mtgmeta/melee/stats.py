@@ -907,6 +907,7 @@ def _quality_document(
     decklists: Mapping[str, Mapping[str, Any]],
     input_document: Mapping[str, Any],
 ) -> dict[str, Any]:
+    event_structure = str(event["event_structure"])
     rounds = event["rounds"]
     matches = event["matches"]
     opportunities = ledger["opportunities"]
@@ -939,36 +940,62 @@ def _quality_document(
             "id": "classification_coverage",
             "passed": classification["summary"]["total_records"] == len(participants),
         },
-        {
-            "id": "scope_participant_conservation",
-            "passed": scopes["day1"]["participant_count"] == len(participants)
-            and scopes["day2"]["participant_count"]
-            == ledger["scope_summaries"]["day2"]["participant_count"],
-        },
-        {
-            "id": "scope_points_conservation",
-            "passed": combined["constructed_points"]
-            == ledger["scope_summaries"]["day1"]["constructed_points"]
-            + ledger["scope_summaries"]["day2"]["constructed_points"],
-        },
-        {
-            "id": "scope_opportunity_conservation",
-            "passed": combined["theoretical_rounds"]
-            == ledger["scope_summaries"]["day1"]["theoretical_rounds"]
-            + ledger["scope_summaries"]["day2"]["theoretical_rounds"],
-        },
-        {
-            "id": "eligible_match_conservation",
-            "passed": combined["win_rate_match_count"]
-            == scopes["all_constructed"]["eligible_match_count"],
-        },
-        {
-            "id": "draft_and_playoff_excluded",
-            "passed": all(
-                item["scope"] in {"day1", "day2"} for item in opportunities
-            ),
-        },
     ]
+    if event_structure == "constructed_single_stage":
+        checks.append(
+            {
+                "id": "single_stage_scope_contract",
+                "passed": list(scopes) == ["all_constructed"]
+                and list(ledger["scope_summaries"]) == ["all_constructed"]
+                and scopes["all_constructed"]["participant_count"]
+                == len(participants),
+            }
+        )
+    else:
+        checks.extend(
+            [
+                {
+                    "id": "scope_participant_conservation",
+                    "passed": scopes["day1"]["participant_count"]
+                    == len(participants)
+                    and scopes["day2"]["participant_count"]
+                    == ledger["scope_summaries"]["day2"]["participant_count"],
+                },
+                {
+                    "id": "scope_points_conservation",
+                    "passed": combined["constructed_points"]
+                    == ledger["scope_summaries"]["day1"]["constructed_points"]
+                    + ledger["scope_summaries"]["day2"]["constructed_points"],
+                },
+                {
+                    "id": "scope_opportunity_conservation",
+                    "passed": combined["theoretical_rounds"]
+                    == ledger["scope_summaries"]["day1"]["theoretical_rounds"]
+                    + ledger["scope_summaries"]["day2"]["theoretical_rounds"],
+                },
+            ]
+        )
+    checks.extend(
+        [
+            {
+                "id": "eligible_match_conservation",
+                "passed": combined["win_rate_match_count"]
+                == scopes["all_constructed"]["eligible_match_count"],
+            },
+            {
+                "id": "draft_and_playoff_excluded",
+                "passed": all(
+                    item["scope"]
+                    in (
+                        {"all_constructed"}
+                        if event_structure == "constructed_single_stage"
+                        else {"day1", "day2"}
+                    )
+                    for item in opportunities
+                ),
+            },
+        ]
+    )
     failed = [item["id"] for item in checks if not item["passed"]]
     if failed:
         raise MeleeStatisticsError(
@@ -996,15 +1023,77 @@ def _quality_document(
                 ),
             }
         )
-    issues.append(
+    if event_structure == "mixed":
+        issues.append(
+            {
+                "code": "mixed_event_day2_selection_bias",
+                "severity": "warning",
+                "count": scopes["day2"]["participant_count"],
+                "message": (
+                    "Day 2 participants were selected using combined event performance, "
+                    "including Draft; Day 2 Modern statistics describe the qualified field."
+                ),
+            }
+        )
+    counts = {
+        "participants": len(participants),
+        "standings": len(event["standings"]),
+        "submitted_decklists": sum(
+            item["status"] == "submitted" for item in decklists.values()
+        ),
+        "missing_or_unavailable_decklists": sum(
+            item["status"] != "submitted" for item in decklists.values()
+        ),
+        "classified_decks": classification["summary"]["classified"],
+        "unknown_decks": classification["summary"]["unknown"],
+        "classification_conflicts": classification["summary"]["conflicts"],
+        "invalid_decks": classification["summary"]["invalid_decks"],
+        "rounds": len(rounds),
+        "unknown_rounds": sum(
+            item["round_phase"] == "unknown" for item in rounds
+        ),
+        "source_matches": len(matches),
+        "source_constructed_matches": combined["source_match_count"],
+        "eligible_constructed_matches": combined["win_rate_match_count"],
+        "unknown_result_opportunities": combined["result_counts"].get(
+            "unknown", 0
+        ),
+        "bye_count": combined["result_counts"].get("bye", 0),
+        "intentional_draw_match_count": len(intentional_draw_match_ids),
+        "intentional_draw_opportunities": combined["result_counts"].get(
+            "intentional_draw", 0
+        ),
+        "drop_player_count": len(
+            {
+                item["participant_id"]
+                for item in opportunities
+                if item["result_type"] == "drop_unplayed"
+            }
+        ),
+        "drop_unplayed_rounds": combined["result_counts"].get(
+            "drop_unplayed", 0
+        ),
+        "disqualified_participant_count": len(disqualified_ids),
+        "disqualified_matches_excluded": combined[
+            "disqualified_matches_excluded"
+        ],
+        "top8_lock_player_count": len(
+            {
+                item["participant_id"]
+                for item in opportunities
+                if item["result_type"] == "awarded_win_top8_lock"
+            }
+        ),
+        "top8_lock_exemptions": combined["result_counts"].get(
+            "awarded_win_top8_lock", 0
+        ),
+    }
+    if event_structure != "constructed_single_stage":
+        counts["day2_participants"] = scopes["day2"]["participant_count"]
+    counts.update(
         {
-            "code": "mixed_event_day2_selection_bias",
-            "severity": "warning",
-            "count": scopes["day2"]["participant_count"],
-            "message": (
-                "Day 2 participants were selected using combined event performance, "
-                "including Draft; Day 2 Modern statistics describe the qualified field."
-            ),
+            "playoff_participants": len(playoff_participants),
+            "no_show_opportunities": combined["result_counts"].get("no_show", 0),
         }
     )
     return {
@@ -1013,66 +1102,11 @@ def _quality_document(
         "source": "melee",
         "event_id": ledger["event_id"],
         "format": ledger["format"],
-        "event_structure": "mixed",
+        "event_structure": event_structure,
         "input": dict(input_document),
         "status": "warning" if issues else "ready",
         "blocking": False,
-        "counts": {
-            "participants": len(participants),
-            "standings": len(event["standings"]),
-            "submitted_decklists": sum(
-                item["status"] == "submitted" for item in decklists.values()
-            ),
-            "missing_or_unavailable_decklists": sum(
-                item["status"] != "submitted" for item in decklists.values()
-            ),
-            "classified_decks": classification["summary"]["classified"],
-            "unknown_decks": classification["summary"]["unknown"],
-            "classification_conflicts": classification["summary"]["conflicts"],
-            "invalid_decks": classification["summary"]["invalid_decks"],
-            "rounds": len(rounds),
-            "unknown_rounds": sum(
-                item["round_phase"] == "unknown" for item in rounds
-            ),
-            "source_matches": len(matches),
-            "source_constructed_matches": combined["source_match_count"],
-            "eligible_constructed_matches": combined["win_rate_match_count"],
-            "unknown_result_opportunities": combined["result_counts"].get(
-                "unknown", 0
-            ),
-            "bye_count": combined["result_counts"].get("bye", 0),
-            "intentional_draw_match_count": len(intentional_draw_match_ids),
-            "intentional_draw_opportunities": combined["result_counts"].get(
-                "intentional_draw", 0
-            ),
-            "drop_player_count": len(
-                {
-                    item["participant_id"]
-                    for item in opportunities
-                    if item["result_type"] == "drop_unplayed"
-                }
-            ),
-            "drop_unplayed_rounds": combined["result_counts"].get(
-                "drop_unplayed", 0
-            ),
-            "disqualified_participant_count": len(disqualified_ids),
-            "disqualified_matches_excluded": combined[
-                "disqualified_matches_excluded"
-            ],
-            "top8_lock_player_count": len(
-                {
-                    item["participant_id"]
-                    for item in opportunities
-                    if item["result_type"] == "awarded_win_top8_lock"
-                }
-            ),
-            "top8_lock_exemptions": combined["result_counts"].get(
-                "awarded_win_top8_lock", 0
-            ),
-            "day2_participants": scopes["day2"]["participant_count"],
-            "playoff_participants": len(playoff_participants),
-            "no_show_opportunities": combined["result_counts"].get("no_show", 0),
-        },
+        "counts": counts,
         "checks": checks,
         "issues": issues,
     }
@@ -1221,12 +1255,7 @@ def build_event_statistics(
     taxonomy_path: str,
     taxonomy_sha256: str,
 ) -> dict[str, dict[str, Any]]:
-    """Build the existing mixed-event overview, decks, and quality bundle."""
-
-    if event.get("event_structure") != "mixed":
-        raise MeleeStatisticsError(
-            "quality generation for pure structures belongs to P9-05"
-        )
+    """Build deterministic overview, decks, and quality for one event."""
     documents = build_event_overview_and_decks(
         event,
         classification,
@@ -1397,31 +1426,35 @@ def main(argv: Sequence[str] | None = None) -> int:
                     statistics_document_bytes(document),
                 )
         overview = documents["overview"]
+        scope_order = overview["scope_order"]
+        first_scope = scope_order[0]
+        summary = {
+            "event_id": args.event_id,
+            "format": args.format_id,
+            "mode": "execute" if args.execute else "dry-run",
+            "output_dir": (
+                _repository_relative(output_dir, root)
+                if args.execute
+                else None
+            ),
+            "reused": reused,
+            "participants": overview["scopes"][first_scope][
+                "participant_count"
+            ],
+            "eligible_matches": overview["scopes"]["all_constructed"][
+                "eligible_match_count"
+            ],
+            "unknown_decks": overview["scopes"][first_scope][
+                "unknown_deck_count"
+            ],
+        }
+        if "day2" in scope_order:
+            summary["day2_participants"] = overview["scopes"]["day2"][
+                "participant_count"
+            ]
         print(
             json.dumps(
-                {
-                    "event_id": args.event_id,
-                    "format": args.format_id,
-                    "mode": "execute" if args.execute else "dry-run",
-                    "output_dir": (
-                        _repository_relative(output_dir, root)
-                        if args.execute
-                        else None
-                    ),
-                    "reused": reused,
-                    "participants": overview["scopes"]["day1"][
-                        "participant_count"
-                    ],
-                    "day2_participants": overview["scopes"]["day2"][
-                        "participant_count"
-                    ],
-                    "eligible_matches": overview["scopes"]["all_constructed"][
-                        "eligible_match_count"
-                    ],
-                    "unknown_decks": overview["scopes"]["day1"][
-                        "unknown_deck_count"
-                    ],
-                },
+                summary,
                 sort_keys=True,
             )
         )

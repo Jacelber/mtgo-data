@@ -27,7 +27,9 @@
     "format": {
       "$ref": "melee-event-statistics-common.schema.json#/$defs/id"
     },
-    "event_structure": {"const": "mixed"},
+    "event_structure": {
+      "enum": ["mixed", "constructed_day2", "constructed_single_stage"]
+    },
     "input": {
       "$ref": "melee-event-statistics-common.schema.json#/$defs/input"
     },

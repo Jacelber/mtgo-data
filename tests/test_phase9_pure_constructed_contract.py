@@ -50,11 +50,14 @@ def test_contract_schema_accepts_fixture_and_is_not_a_production_mapping() -> No
     assert SCHEMA_NAME not in {item["schema"] for item in manifest["mappings"]}
 
 
-def test_contract_generalizes_only_the_p9_03_and_p9_04_schemas() -> None:
+def test_contract_generalizes_all_per_event_backend_schemas_by_p9_05() -> None:
     generalized = (
         "melee-opportunity-ledger.schema.json",
         "melee-event-overview.schema.json",
         "melee-event-decks.schema.json",
+        "melee-event-matchup.schema.json",
+        "melee-event-quality.schema.json",
+        "melee-event-meta.schema.json",
     )
     for schema_name in generalized:
         schema = json.loads((ROOT / "schemas" / schema_name).read_text("utf-8"))
@@ -62,20 +65,12 @@ def test_contract_generalizes_only_the_p9_03_and_p9_04_schemas() -> None:
             "enum": ["mixed", "constructed_day2", "constructed_single_stage"]
         }
 
-    for schema_name in (
-        "melee-event-matchup.schema.json",
-        "melee-event-quality.schema.json",
-        "melee-event-meta.schema.json",
-        "melee-event-catalog.schema.json",
-    ):
-        schema = json.loads((ROOT / "schemas" / schema_name).read_text("utf-8"))
-        if schema_name == "melee-event-catalog.schema.json":
-            event_structure = schema["$defs"]["event"]["properties"][
-                "event_structure"
-            ]
-        else:
-            event_structure = schema["properties"]["event_structure"]
-        assert event_structure == {"const": "mixed"}
+    catalog = json.loads(
+        (ROOT / "schemas/melee-event-catalog.schema.json").read_text("utf-8")
+    )
+    assert catalog["$defs"]["event"]["properties"]["event_structure"] == {
+        "enum": ["mixed", "constructed_day2", "constructed_single_stage"]
+    }
 
 
 def test_structure_scope_sets_and_advancement_metrics_are_exact() -> None:
