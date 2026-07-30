@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p8-10-tabletop-production-entry"
-  working_branch_status: "p8_10_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p8-11-phase8-closeout"
+  working_branch_status: "p8_11_owner_accepted_remote_publication_authorized_closeout_blocked"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-29"
+  last_updated: "2026-07-30"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 8
   name: "Format-first front end and supporting data contracts"
-  status: "p8_10_owner_accepted_remote_publication_authorized"
+  status: "p8_11_owner_accepted_remote_publication_authorized_closeout_blocked"
   started_on: "2026-07-25"
   completed_on: null
   recovery_tag: null
@@ -2092,6 +2092,22 @@ phase_4_result:
     phase_tag_published: true
 
 known_blockers:
+  - id: "BLOCK-P8-11-MELEE-DFC-NORMALIZATION"
+    status: "open"
+    task: "P8-11"
+    observed_on: "2026-07-30"
+    event_id: "434455"
+    symptom: "The published Tabletop overview contains 72 Unknown Modern decklists because shared normalization does not reduce ordinary front-face // back-face Melee card names to the front-face names used by classification rules."
+    evidence:
+      submitted_decklists: 362
+      unknown_decklists: 72
+      unknowns_with_double_faced_names: 63
+      reclassified_by_in_memory_front_face_diagnostic: 62
+      remaining_unknowns_after_diagnostic: 10
+    scope_boundary: "P8-11 records the defect but does not change shared normalization, taxonomy, retained data, classifications, or generated statistics."
+    resolution_required: "Separately authorize P8-HOTFIX-MELEE-DFC-NORMALIZATION, regenerate dependent Melee products deterministically, prove MTGO regression, and repeat P8-11 browser acceptance."
+    blocks_phase_completion: true
+
   - id: "BLOCK-P5-08-MELEE-LIVE-HTTP-403"
     status: "resolved"
     task: "P5-08"
@@ -4097,7 +4113,7 @@ phase_7_result:
 phase_8_plan:
   id: "P8-PLANNING"
   name: "Format-first front-end and supporting data plan"
-  status: "p8_07_backend_consumer_bridge_publication_authorized"
+  status: "p8_11_owner_accepted_remote_publication_authorized_closeout_blocked"
   owner_approved: true
   owner_approved_on: "2026-07-25"
   implementation_authorized: false
@@ -4917,7 +4933,7 @@ phase_8_plan:
         pages_run: 30451421860
     - id: "P8-10"
       name: "Tabletop Major Events production-entry connection"
-      status: "owner_accepted_remote_publication_authorized"
+      status: "completed_published_and_merged"
       branch: "codex/p8-10-tabletop-production-entry"
       base_commit: "1eac2afc87effdc06b47f40c1e8280a669403e73"
       authorized_on: "2026-07-29"
@@ -4961,10 +4977,77 @@ phase_8_plan:
         rendered_error_state: false
         mtgo_tabletop_round_trip_verified: true
         standard_fallback_verified: true
+      publication:
+        local_commit: "842700c0c26ee7f93e05854685638865f7d53c08"
+        pull_request: 126
+        merge_commit: "5ac463203e10156f9f804f7fad6339d3c88be0ca"
+        pr_validation_run: 30458902826
+        master_admission_run: 30459774463
+        pages_run: 30459773138
     - id: "P8-11"
       name: "Cross-product regression and Phase 8 closeout"
-      status: "not_started"
+      status: "owner_accepted_remote_publication_authorized_closeout_blocked"
+      branch: "codex/p8-11-phase8-closeout"
+      base_commit: "3b65e2145bf2905041641b562175a391202fe25d"
+      authorized_on: "2026-07-30"
+      owner_local_execution_authorized: true
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-30"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-30"
+      phase_closeout_authorized: false
+      phase_tag_authorized: false
+      generated_data_changed: false
+      statistical_formula_changed: false
+      classifier_changed: false
+      schema_changed: false
+      workflow_changed: false
+      deliverables:
+        - "assets/css/phase8-candidate.css"
+        - "tests/test_phase8_closeout.py"
+        - "docs/audits/P8-11.md"
+        - "docs/ROADMAP.md"
+        - "docs/STATUS.yaml"
+        - "docs/audits/P8-10.md"
+      validation:
+        focused_tests_passed: 4
+        full_pytest_passed: 593
+        test_files_covered: 66
+        repository_python_checked: 124
+        repository_json_checked: 1590
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1854
+        standard_rule_validation: "passed"
+        modern_rule_validation: "passed"
+        schema_documents_validated: 69
+        javascript_files_checked: 9
+        browser_console_errors: 0
+        deployed_cross_product_regression_passed: true
+        narrow_viewport_verified: "390x844"
+        narrow_tabletop_document_width_before: 464
+        narrow_tabletop_document_width_after: 375
+      blocker: "BLOCK-P8-11-MELEE-DFC-NORMALIZATION"
+      closeout_decision: "Do not mark Phase 8 complete until the separately authorized normalization fix regenerates affected Melee products and P8-11 browser acceptance is repeated."
   deferred_followups:
+    - id: "P8-HOTFIX-MELEE-DFC-NORMALIZATION"
+      name: "Normalize ordinary Melee double-faced card names before shared classification"
+      status: "local_execution_authorized"
+      proposed_on: "2026-07-30"
+      discovered_by: "P8-11"
+      authorized_on: "2026-07-30"
+      local_execution_authorized: true
+      remote_publication_authorized: false
+      required_scope:
+        - "Define and test a source-independent canonical front-face normalization contract without weakening explicit OM1/SPM aliases."
+        - "Prove existing MTGO Standard and Modern classification behavior is unchanged."
+        - "Regenerate event 434455 classification and all hash-bound dependent Melee products from source."
+        - "Confirm the expected 62 recovered classifications and retain unresolved decks as explicit Unknown."
+        - "Repeat the affected P8-11 browser and cross-product contracts before Phase 8 closeout."
+      prohibited_scope:
+        - "Do not guess taxonomy assignments for the remaining Unknown decklists."
+        - "Do not hand-edit classification overlays or generated statistics."
+        - "Do not close Phase 8 or publish its tag before repeated owner browser acceptance."
     - id: "P8-FOLLOWUP-12847150"
       name: "Investigate incomplete retained MTGO event 12847150"
       status: "completed_owner_accepted_publication_authorized"
@@ -5168,22 +5251,24 @@ phase_8_plan:
         merged_on: "2026-07-28"
 
 next_approved_task:
-  id: "P8-11"
-  name: "Cross-product regression and Phase 8 closeout"
+  id: "P8-HOTFIX-MELEE-DFC-NORMALIZATION"
+  name: "Normalize ordinary Melee double-faced card names before shared classification"
   target_paths:
-    - "index.html"
-    - "assets/css/"
-    - "assets/js/"
+    - "src/mtgmeta/card_names.py"
+    - "src/mtgmeta/melee/"
+    - "data/modern/melee/classifications/434455.json"
+    - "data/modern/melee/opportunities/434455.json"
+    - "stats/modern/melee/"
     - "tests/"
     - "docs/STATUS.yaml"
-  production_change: false
+  production_change: true
   requires_user_confirmation: true
-  authorization_status: "awaiting_predevelopment_explanation_and_owner_authorization"
-  local_execution_authorized: false
-  local_execution_authorized_on: null
+  authorization_status: "local_execution_authorized"
+  local_execution_authorized: true
+  local_execution_authorized_on: "2026-07-30"
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "awaiting_predevelopment_explanation_and_owner_authorization"
+  planning_status: "P8-11 accepted; separate hotfix local execution authorized after P8-11 publication"
 
 governance_baseline:
   status: "active_on_master"

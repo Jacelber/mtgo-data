@@ -1782,6 +1782,28 @@ rollups, additive subtype statistics, and additive subtype construction
 details. It changes no producer, generated data, statistical formula, or public
 contract. All 40 focused tests and all 516 repository tests pass.
 
+P8-11 completed the local cross-product regression on 2026-07-30. The deployed
+MTGO and Tabletop entries passed catalog routing, bilingual rendering,
+parent/subtype interaction, Top 8 detail, mixed-event scope, literal matchup,
+mirror-cell, and source-separation checks. A bounded narrow-screen fix prevents
+the Tabletop event selector from forcing page-level horizontal overflow while
+retaining the matchup table's independent scroller. The complete 593-test
+suite and all repository, Standard/Modern rule, Schema, and JavaScript checks
+pass.
+
+Phase 8 closeout remains blocked by a real-data defect discovered during that
+acceptance. Melee ordinary double-faced card names use
+`front face // back face`, while the shared classifier rules use the front-face
+name. Sixty-two of event `434455`'s 72 explicit Unknown decklists classify
+under existing Modern rules when only that normalization is applied in memory.
+P8-11 does not alter the shared normalizer, taxonomy, classification overlay,
+or generated statistics. A separately authorized
+`P8-HOTFIX-MELEE-DFC-NORMALIZATION` must add the shared regression contract,
+regenerate affected Melee products deterministically, prove MTGO regression,
+and return to P8-11 browser acceptance before Phase 8 can be marked complete.
+The remaining ten Unknown decklists stay explicit pending later taxonomy
+review. Detailed evidence is recorded in `docs/audits/P8-11.md`.
+
 ## Tabletop behavior
 
 The Tabletop Major Events front end supports:
