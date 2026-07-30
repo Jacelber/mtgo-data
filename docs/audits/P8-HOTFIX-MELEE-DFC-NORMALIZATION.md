@@ -1,6 +1,6 @@
 # P8-HOTFIX-MELEE-DFC-NORMALIZATION
 
-Status: `owner accepted; remote publication authorized`
+Status: `published, merged, and deployed acceptance verified`
 
 Date: 2026-07-30
 
@@ -122,3 +122,22 @@ pull-request creation, and merge on 2026-07-30.
 
 After publication, P8-11 must repeat the affected real-browser checks before
 Phase 8 completion or its recovery tag can be authorized.
+
+## Publication and deployed verification
+
+The hotfix was published through pull request #128:
+
+- implementation commit:
+  `a8e7fe098feafbb7faefd39d584422c20a9c4ffd`;
+- merge commit: `10e6780c2c48585cb05d02492ce81702cbb869c1`;
+- PR validation run: `30504274023`;
+- master admission run: `30504857129`;
+- Pages run: `30504856795`.
+
+The deployed Tabletop page then loaded event `434455` without a rendered error
+or browser console warning. Public payload checks confirmed 352 classified and
+ten Unknown decklists, zero conflicts or invalid decks, 211 classified and nine
+Unknown Day 2 decklists, and a 32-parent/58-leaf observed matchup hierarchy.
+
+This completes the hotfix and clears `BLOCK-P8-11-MELEE-DFC-NORMALIZATION`.
+Phase 8 completion and its recovery tag remain separately controlled.

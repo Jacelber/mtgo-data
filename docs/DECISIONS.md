@@ -2285,3 +2285,52 @@ P8-08 avoids a second legacy decomposition and concentrates verification on the
 accepted real-data behavior. Production entry-point changes remain isolated,
 reviewable, and independently reversible. The owner approved this revised
 P8-08 through P8-10 route on 2026-07-29.
+
+---
+
+# DEC-060 — Use one 20-match low-sample presentation warning
+
+Status: `Accepted`
+
+## Context
+
+OPEN-002 deferred the exact low-sample display threshold until the Tabletop
+consumer could be reviewed with real data. During P8-07, the owner reviewed a
+shared MTGO and Tabletop warning at fewer than 20 valid matches. The accepted
+production front end uses that same value for both products, but the durable
+specification and project status still described the decision as pending.
+
+A 20-match sample near a 50% observed win rate still has a wide 95% Wilson
+interval. Reaching 20 matches therefore cannot be presented as proof that an
+estimate is reliable.
+
+## Decision
+
+Use one Phase 8 presentation warning for both MTGO and Tabletop matchup
+consumers:
+
+- fewer than 20 valid matches: show the low-sample warning;
+- 20 or more valid matches: do not show that warning solely because of sample
+  count.
+
+The threshold is a visual caution marker only. It does not change match
+eligibility, W-L-D counts, literal win-rate calculation, confidence intervals,
+generated-data admission, or publication. Zero-match cells remain unavailable.
+Consumers must continue to expose the actual match count and 95% Wilson
+interval; the warning must state that crossing the line does not guarantee
+reliability.
+
+The shared Phase 8 consumer value is authoritative for the current static
+front end. A later configuration or generated-contract migration may relocate
+the value without changing its meaning, but must not silently choose a
+different threshold for one source product.
+
+## Consequences
+
+OPEN-002 is resolved. The existing production UI behavior is documented rather
+than changed. MTGO and Tabletop use the same warning logic while their source
+data, matrices, and statistics remain separate.
+
+This decision does not establish a decklist-coverage blocking threshold and
+does not remove the need to interpret confidence intervals and raw sample
+counts.

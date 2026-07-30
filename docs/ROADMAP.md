@@ -1782,44 +1782,48 @@ rollups, additive subtype statistics, and additive subtype construction
 details. It changes no producer, generated data, statistical formula, or public
 contract. All 40 focused tests and all 516 repository tests pass.
 
-P8-11 completed the local cross-product regression on 2026-07-30. The deployed
-MTGO and Tabletop entries passed catalog routing, bilingual rendering,
-parent/subtype interaction, Top 8 detail, mixed-event scope, literal matchup,
-mirror-cell, and source-separation checks. A bounded narrow-screen fix prevents
-the Tabletop event selector from forcing page-level horizontal overflow while
-retaining the matchup table's independent scroller. The complete 593-test
-suite and all repository, Standard/Modern rule, Schema, and JavaScript checks
-pass.
+P8-11 completed the local cross-product regression on 2026-07-30 and was
+published through pull request #127, implementation commit
+`321792414cc6697d1c3afbbf1679c6267f46c284`, and merge commit
+`96f0e234b7ca6db21c35ad00e541cc33fc2081b6`. The deployed MTGO and Tabletop
+entries passed catalog routing, bilingual rendering, parent/subtype
+interaction, Top 8 detail, mixed-event scope, literal matchup, mirror-cell,
+source-separation, and narrow-screen checks. The complete 593-test suite and
+all repository, Standard/Modern rule, Schema, and JavaScript checks passed.
 
-Phase 8 closeout remains blocked by a real-data defect discovered during that
-acceptance. Melee ordinary double-faced card names use
-`front face // back face`, while the shared classifier rules use the front-face
-name. Sixty-two of event `434455`'s 72 explicit Unknown decklists classify
-under existing Modern rules when only that normalization is applied in memory.
-P8-11 does not alter the shared normalizer, taxonomy, classification overlay,
-or generated statistics. A separately authorized
-`P8-HOTFIX-MELEE-DFC-NORMALIZATION` must add the shared regression contract,
-regenerate affected Melee products deterministically, prove MTGO regression,
-and return to P8-11 browser acceptance before Phase 8 can be marked complete.
-The remaining ten Unknown decklists stay explicit pending later taxonomy
-review. Detailed evidence is recorded in `docs/audits/P8-11.md`.
+That acceptance found a real-data classification defect: ordinary Melee
+double-faced card names used `front face // back face`, while the existing
+Modern rules used the front-face name. Impact testing rejected a global shared
+normalizer change because it altered one frozen Standard classification. The
+focused `P8-HOTFIX-MELEE-DFC-NORMALIZATION` instead normalizes only the
+temporary Melee classifier input, leaving retained card names, the shared
+normalizer, taxonomy, and MTGO behavior unchanged.
 
-The owner authorized the focused normalization hotfix on 2026-07-30. Impact
-testing rejected a global shared-normalizer change because it altered one
-frozen Standard classification. The accepted local implementation instead
-normalizes ordinary `front face // back face` names only in the Melee
-classification adapter before invoking the unchanged shared classifier.
+The hotfix was published through pull request #128, implementation commit
+`a8e7fe098feafbb7faefd39d584422c20a9c4ffd`, and merge commit
+`10e6780c2c48585cb05d02492ce81702cbb869c1`. Deterministic regeneration
+recovered exactly 62 decklists: 45 Boros Energy, 16 Ruby Storm, and one Mardu
+Energy. Event `434455` moved from 290 to 352 classified decks and from 72 to ten
+explicit Unknowns, with zero conflicts or invalid decks. The opportunity and
+match boundaries remained 2,910 theoretical opportunities, 2,903 effective
+opportunities, and 1,394 included matches. All 594 repository tests passed.
 
-Deterministic regeneration recovers exactly 62 decklists: 45 Boros Energy, 16
-Ruby Storm, and one Mardu Energy. Event `434455` moves from 290 to 352
-classified decks and from 72 to ten explicit Unknowns, with zero conflicts or
-invalid decks. The opportunity and match boundaries remain 2,910 theoretical
-opportunities, 2,903 effective opportunities, and 1,394 included matches. The
-production-candidate boundary accepts exactly seven dependent Melee documents;
-MTGO Standard and Modern regression tests remain unchanged. All 594 repository
-tests pass. Publication and repeated P8-11 browser acceptance remain separately
-controlled. Full evidence is in
-`docs/audits/P8-HOTFIX-MELEE-DFC-NORMALIZATION.md`.
+The repeated deployed acceptance then confirmed 352 classified and ten Unknown
+decklists, 211 classified and nine Unknown Day 2 decklists, 32 observed parent
+rows, 58 observed leaf rows, and zero browser console warnings or errors.
+The former P8-11 blocker is resolved. The remaining ten Unknown decklists stay
+explicit pending later taxonomy review and do not block Phase 8.
+
+The Phase 8 closeout also reconciles the already accepted shared presentation
+warning of fewer than 20 valid matches. It is a visual caution marker used by
+both MTGO and Tabletop matchup consumers, not a reliability guarantee,
+publication gate, match-eligibility rule, or change to the literal win-rate
+formula. DEC-060 records that existing production behavior.
+
+Local Phase 8 closure evidence is recorded in
+`docs/audits/P8-CLOSEOUT.md`. The owner accepted the closeout and authorized
+its remote publication and the `phase-8-format-first-frontends` recovery tag
+on 2026-07-30. Phase 9 remains separately controlled and is not authorized.
 
 ## Tabletop behavior
 

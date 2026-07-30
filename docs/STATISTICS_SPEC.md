@@ -1135,9 +1135,10 @@ the maintained taxonomy defines at least two subtypes.
 The played records expose raw W-L-D counts, match count, win rate, and a 95%
 Wilson interval. Both all-match and non-mirror records are retained; the
 non-mirror record excludes opponents assigned to the same displayed identity.
-No low-sample display threshold is hard-coded while OPEN-002 remains
-unresolved. Consumers must use the retained sample size and interval rather
-than treating an unavailable rate as zero.
+The Phase 8 consumer applies the DEC-060 shared low-sample presentation warning
+when the valid-match count is fewer than 20. Consumers must still use the
+retained sample size and interval rather than treating the warning as a
+reliability gate or treating an unavailable rate as zero.
 
 The participant-level `decks.json` preserves source-published player identity,
 standing context, submitted decklist, classification, and the same three
@@ -1356,8 +1357,11 @@ overview records exactly.
 
 Each cell and overall record contains raw wins, losses, draws, valid-match
 count, win rate, and a 95% Wilson interval. A zero-sample rate and interval are
-`null`. The output records `low_sample_threshold: null` while OPEN-002 remains
-unresolved; it must not assign a display warning by inventing a threshold.
+`null`. Existing Tabletop output may retain `low_sample_threshold: null` as a
+compatibility field; the Phase 8 consumer applies the DEC-060 shared
+presentation value of 20 to both source products. A future generated-contract
+migration may publish that value directly, but must preserve the same warning
+meaning and source separation.
 
 Excluded physical matches remain counted by reviewed reason for each scope:
 bye, intentional draw, no-show, verified Top 8 lock award, administrative
@@ -1394,15 +1398,15 @@ The resulting Wilson interval is an approximation for the half-win treatment of 
 
 ### 12.3 Low-sample warnings
 
-The exact display thresholds should be configurable rather than hard-coded only in front-end code.
+The Phase 8 display threshold is shared across MTGO and Tabletop matchup
+consumers:
 
-The initial recommended warning levels are:
+- fewer than 20 valid matches: low-sample warning;
+- 20 or more valid matches: no warning solely because of sample count.
 
-- fewer than 10 matches: very low sample;
-- 10–29 matches: low sample;
-- 30 or more matches: standard display.
-
-A warning does not require deleting the statistic.
+A warning does not require deleting the statistic and reaching 20 matches does
+not imply that the estimate is reliable. The actual sample count and 95%
+Wilson interval remain available for interpretation.
 
 The front end should reduce visual certainty rather than pretending the value is precise.
 
