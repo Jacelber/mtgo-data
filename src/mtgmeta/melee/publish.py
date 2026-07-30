@@ -76,7 +76,7 @@ def _quality_summary(quality: Mapping[str, Any]) -> dict[str, Any]:
     status = quality.get("status")
     blocking = quality.get("blocking")
     issues = quality.get("issues")
-    if status not in {"pass", "warning"} or blocking is not False or not isinstance(
+    if status not in {"ready", "warning"} or blocking is not False or not isinstance(
         issues, list
     ):
         raise MeleePublicationError("quality output is not publication-eligible")
@@ -89,7 +89,7 @@ def _quality_summary(quality: Mapping[str, Any]) -> dict[str, Any]:
     if len(issue_codes) != len(set(issue_codes)):
         raise MeleePublicationError("quality output has duplicate issue codes")
     return {
-        "status": status,
+        "status": "pass" if status == "ready" else status,
         "blocking": False,
         "issue_codes": issue_codes,
     }

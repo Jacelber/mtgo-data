@@ -8,6 +8,7 @@ from pathlib import Path
 import sys
 from typing import Any
 
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
@@ -17,8 +18,10 @@ if str(SRC) not in sys.path:
 import validate_schemas as schemas
 from mtgmeta.config import load_rule_set
 from mtgmeta.melee.opportunities import build_opportunity_ledger
+from mtgmeta.melee.matchup import MeleeMatchupError, build_event_matchup
 from mtgmeta.melee.stats import (
     build_event_overview_and_decks,
+    build_event_statistics,
     statistics_document_bytes,
 )
 
@@ -175,10 +178,10 @@ def _classification(
     )
 
 
-def _build_documents(
+def _build_inputs(
     event: dict[str, Any],
     identities: list[tuple[str, str]],
-) -> dict[str, dict[str, Any]]:
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], Any, dict[str, str]]:
     taxonomy_bytes = TAXONOMY_PATH.read_bytes()
     taxonomy_sha256 = sha256(taxonomy_bytes).hexdigest()
     classification, event_sha256 = _classification(
@@ -196,26 +199,56 @@ def _build_documents(
         ),
         classification_sha256=classification_sha256,
     )
+    paths = {
+        "event_path": f"data/modern/melee/events/{event['metadata']['event_id']}.json",
+        "event_sha256": event_sha256,
+        "classification_path": (
+            "data/modern/melee/classifications/"
+            f"{event['metadata']['event_id']}.json"
+        ),
+        "classification_sha256": classification_sha256,
+        "opportunity_path": (
+            "data/modern/melee/opportunities/"
+            f"{event['metadata']['event_id']}.json"
+        ),
+        "opportunity_sha256": "c" * 64,
+        "taxonomy_path": "my_archetypes/modern.yaml",
+        "taxonomy_sha256": taxonomy_sha256,
+    }
+    return event, classification, ledger, load_rule_set(TAXONOMY_PATH), paths
+
+
+def _build_documents(
+    event: dict[str, Any],
+    identities: list[tuple[str, str]],
+) -> dict[str, dict[str, Any]]:
+    event, classification, ledger, taxonomy, paths = _build_inputs(
+        event, identities
+    )
     return build_event_overview_and_decks(
         event,
         classification,
         ledger,
-        load_rule_set(TAXONOMY_PATH),
-        event_path=f"data/modern/melee/events/{event['metadata']['event_id']}.json",
-        event_sha256=event_sha256,
-        classification_path=(
-            "data/modern/melee/classifications/"
-            f"{event['metadata']['event_id']}.json"
-        ),
-        classification_sha256=classification_sha256,
-        opportunity_path=(
-            "data/modern/melee/opportunities/"
-            f"{event['metadata']['event_id']}.json"
-        ),
-        opportunity_sha256="c" * 64,
-        taxonomy_path="my_archetypes/modern.yaml",
-        taxonomy_sha256=taxonomy_sha256,
+        taxonomy,
+        **paths,
     )
+
+
+def _build_full_documents(
+    event: dict[str, Any],
+    identities: list[tuple[str, str]],
+) -> tuple[dict[str, dict[str, Any]], dict[str, Any]]:
+    event, classification, ledger, taxonomy, paths = _build_inputs(
+        event, identities
+    )
+    statistics = build_event_statistics(
+        event,
+        classification,
+        ledger,
+        taxonomy,
+        **paths,
+    )
+    return statistics, build_event_matchup(statistics["overview"], ledger)
 
 
 def _day2_event() -> tuple[dict[str, Any], list[tuple[str, str]]]:
@@ -354,7 +387,7 @@ def _single_stage_event() -> tuple[dict[str, Any], list[tuple[str, str]]]:
 
 def _schema_errors(documents: dict[str, dict[str, Any]]) -> list[str]:
     loaded, registry = schemas.load_schemas(ROOT / "schemas")
-    return [
+    errors = [
         *schemas.validate_instance(
             documents["overview"],
             loaded["melee-event-overview.schema.json"],
@@ -366,6 +399,23 @@ def _schema_errors(documents: dict[str, dict[str, Any]]) -> list[str]:
             registry,
         ),
     ]
+    if "quality" in documents:
+        errors.extend(
+            schemas.validate_instance(
+                documents["quality"],
+                loaded["melee-event-quality.schema.json"],
+                registry,
+            )
+        )
+    if "matchup" in documents:
+        errors.extend(
+            schemas.validate_instance(
+                documents["matchup"],
+                loaded["melee-event-matchup.schema.json"],
+                registry,
+            )
+        )
+    return errors
 
 
 def test_constructed_day2_overview_uses_conversion_without_mixed_bias():
@@ -493,3 +543,57 @@ def test_pure_parent_and_subtype_additive_fields_conserve():
                         child["high_score"]["count"]
                         for child in parent["subtypes"]
                     )
+
+
+def test_constructed_day2_full_package_has_structure_aware_quality_and_matchups():
+    event, identities = _day2_event()
+    statistics, matchup = _build_full_documents(event, identities)
+    quality = statistics["quality"]
+
+    assert quality["event_structure"] == "constructed_day2"
+    assert quality["status"] == "warning"
+    assert [issue["code"] for issue in quality["issues"]] == [
+        "disqualified_participant_matches_excluded"
+    ]
+    assert quality["counts"]["day2_participants"] == 2
+    assert all(check["passed"] for check in quality["checks"])
+    assert matchup["event_structure"] == "constructed_day2"
+    assert matchup["scope_order"] == ["day1", "day2", "all_constructed"]
+    assert list(matchup["scopes"]) == matchup["scope_order"]
+    assert matchup["warnings"] == []
+    assert _schema_errors({**statistics, "matchup": matchup}) == []
+
+
+def test_single_stage_full_package_omits_fictional_stage_scopes():
+    event, identities = _single_stage_event()
+    statistics, matchup = _build_full_documents(event, identities)
+    quality = statistics["quality"]
+
+    assert quality["event_structure"] == "constructed_single_stage"
+    assert quality["status"] == "ready"
+    assert quality["issues"] == []
+    assert "day2_participants" not in quality["counts"]
+    assert all(check["passed"] for check in quality["checks"])
+    assert matchup["event_structure"] == "constructed_single_stage"
+    assert matchup["scope_order"] == ["all_constructed"]
+    assert list(matchup["scopes"]) == ["all_constructed"]
+    assert matchup["warnings"] == []
+    assert _schema_errors({**statistics, "matchup": matchup}) == []
+
+
+def test_matchup_rejects_scope_contract_that_disagrees_with_structure():
+    event, identities = _single_stage_event()
+    event, classification, ledger, taxonomy, paths = _build_inputs(
+        event, identities
+    )
+    overview = build_event_statistics(
+        event,
+        classification,
+        ledger,
+        taxonomy,
+        **paths,
+    )["overview"]
+    overview["scope_order"] = ["day1", "day2", "all_constructed"]
+
+    with pytest.raises(MeleeMatchupError, match="scope order"):
+        build_event_matchup(overview, ledger)

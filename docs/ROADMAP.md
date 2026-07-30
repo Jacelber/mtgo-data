@@ -1979,6 +1979,16 @@ Phase 11 remains responsible for implementing the actual compatible
 multi-event raw-count aggregation. Phase 9 freezes and exposes the event-level
 scope information and consumer selection behavior that Phase 11 will consume.
 
+P9-04 was published through pull request #132, implementation commit
+`2736c700fd42dfa4d8113d4c5223df140ea24627`, and merge commit
+`f0fe8937ecacaab67abb9008bc79c473bf884e73`. P9-05 local implementation was
+authorized and completed on 2026-07-30. The remaining quality, matchup, meta,
+catalog, and public Schema boundary now supports both pure structures while
+retaining byte-identical mixed event `434455` outputs. No real event,
+whitelist, generated production file, workflow, or front-end behavior changed.
+The owner accepted P9-05 and separately authorized remote publication on
+2026-07-30. P9-06 remains a separate owner-controlled step.
+
 ## Acceptance criteria
 
 Phase 9 is complete when:

@@ -60,17 +60,44 @@
             "end": {"type": "string", "format": "date"}
           }
         },
-        "event_structure": {"const": "mixed"},
+        "event_structure": {
+          "enum": ["mixed", "constructed_day2", "constructed_single_stage"]
+        },
         "source_url": {"type": "string", "format": "uri"},
         "meta": {"type": "string", "pattern": "^events/[1-9][0-9]*/meta\\.json$"},
         "overview": {"type": "string", "pattern": "^events/[1-9][0-9]*/overview\\.json$"},
         "decks": {"type": "string", "pattern": "^events/[1-9][0-9]*/decks\\.json$"},
         "matchup": {"type": "string", "pattern": "^events/[1-9][0-9]*/matchup\\.json$"},
         "quality": {"type": "string", "pattern": "^events/[1-9][0-9]*/quality\\.json$"},
-        "scope_order": {"const": ["day1", "day2", "all_constructed"]},
+        "scope_order": {
+          "oneOf": [
+            {"const": ["day1", "day2", "all_constructed"]},
+            {"const": ["all_constructed"]}
+          ]
+        },
         "default_scope": {"const": "all_constructed"},
         "quality_status": {"enum": ["pass", "warning"]}
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "event_structure": {"const": "constructed_single_stage"}
+            },
+            "required": ["event_structure"]
+          },
+          "then": {
+            "properties": {
+              "scope_order": {"const": ["all_constructed"]}
+            }
+          },
+          "else": {
+            "properties": {
+              "scope_order": {"const": ["day1", "day2", "all_constructed"]}
+            }
+          }
+        }
+      ]
     }
   }
 }

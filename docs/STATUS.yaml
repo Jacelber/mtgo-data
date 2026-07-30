@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p9-04-structure-statistics"
-  working_branch_status: "p9_04_local_complete_pending_owner_acceptance"
+  current_working_branch: "codex/p9-05-publication-generalization"
+  working_branch_status: "p9_05_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 9
   name: "Pure Constructed event strategies"
-  status: "p9_04_local_complete_pending_owner_acceptance"
+  status: "p9_05_owner_accepted_remote_publication_authorized"
   started_on: "2026-07-30"
   objective: "Complete statistical support for the explicitly configured constructed_day2 and constructed_single_stage Tabletop Major Events structures while preserving the mixed Modern baseline."
   production_changes_allowed: false
@@ -5439,12 +5439,12 @@ phase_8_result:
 phase_9_plan:
   id: "P9-PLANNING"
   name: "Pure Constructed event strategies"
-  status: "p9_03_owner_accepted_remote_publication_authorized"
+  status: "p9_05_owner_accepted_remote_publication_authorized"
   owner_authorized_on: "2026-07-30"
   production_change_authorized: false
   remote_publication_authorized: true
   remote_publication_authorized_on: "2026-07-30"
-  remote_publication_completed: true
+  remote_publication_completed: false
   plan: "docs/audits/P9-01.md"
   mixed_regression_oracle:
     event_id: "434455"
@@ -5564,7 +5564,7 @@ phase_9_plan:
       stop_point: "P9-04 was separately authorized on 2026-07-30."
     - id: "P9-04"
       name: "Structure-specific overview and deck statistics"
-      status: "local_complete_pending_owner_acceptance"
+      status: "completed_merged"
       authorized_on: "2026-07-30"
       local_execution_authorized: true
       requires_owner_authorization: false
@@ -5585,8 +5585,18 @@ phase_9_plan:
       generated_data_changed: false
       live_source_used: false
       public_schema_mapping_changed: false
-      remote_publication_authorized: false
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-30"
+      owner_accepted_on: "2026-07-30"
       production_dispatch_authorized: false
+      publication:
+        local_commit: "2736c700fd42dfa4d8113d4c5223df140ea24627"
+        pull_request: 132
+        pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/132"
+        merge_commit: "f0fe8937ecacaab67abb9008bc79c473bf884e73"
+        pr_validation_run: 30518911976
+        master_admission_run: 30519516412
+        pages_run: 30519516110
       validation:
         focused_mixed_and_pure_statistics_tests_passed: 12
         impacted_subsystem_tests_passed: 54
@@ -5609,11 +5619,75 @@ phase_9_plan:
         standard_rule_validation: "passed"
         python_compile: "passed"
         git_diff_check: "passed"
-      stop_point: "Obtain owner acceptance and separate remote publication authorization; P9-05 remains unauthorized."
+      stop_point: "P9-05 was separately authorized on 2026-07-30."
     - id: "P9-05"
       name: "Matchup, quality, publication, catalog, and Schema generalization"
-      status: "not_started"
-      requires_owner_authorization: true
+      status: "owner_accepted_remote_publication_authorized"
+      authorized_on: "2026-07-30"
+      local_execution_authorized: true
+      requires_owner_authorization: false
+      branch: "codex/p9-05-publication-generalization"
+      base_commit: "f0fe8937ecacaab67abb9008bc79c473bf884e73"
+      deliverables:
+        - "src/mtgmeta/melee/stats.py"
+        - "src/mtgmeta/melee/matchup.py"
+        - "src/mtgmeta/melee/publish.py"
+        - "schemas/melee-event-matchup.schema.json"
+        - "schemas/melee-event-quality.schema.json"
+        - "schemas/melee-event-meta.schema.json"
+        - "schemas/melee-event-catalog.schema.json"
+        - "tests/test_melee_structure_statistics.py"
+        - "tests/test_melee_publication.py"
+        - "tests/test_phase9_pure_constructed_contract.py"
+        - "docs/DATA_ARCHITECTURE.md"
+        - "docs/ROADMAP.md"
+        - "docs/audits/P9-05.md"
+        - "docs/STATUS.yaml"
+      production_change: false
+      generated_data_changed: false
+      live_source_used: false
+      whitelist_changed: false
+      public_schema_mapping_changed: false
+      owner_accepted_on: "2026-07-30"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-30"
+      production_dispatch_authorized: false
+      validation:
+        focused_pure_full_package_contract_tests_passed: 23
+        impacted_subsystem_tests_passed: 61
+        full_pytest_passed: 615
+        repository_python_checked: 126
+        repository_json_checked: 1592
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1865
+        public_schema_documents_validated: 69
+        mixed_opportunity_byte_identity: "passed"
+        mixed_opportunity_bytes: 2565837
+        mixed_opportunity_sha256: "766bcd3fc25ba67dc693117a15e72ea4bb82bceddf25afeee4ea1c4588326e96"
+        mixed_overview_byte_identity: "passed"
+        mixed_overview_bytes: 567994
+        mixed_overview_sha256: "9d568e8317e8dbfe616869365ed7e69dc53b08acbdcadb82f7e1191f902154f6"
+        mixed_decks_byte_identity: "passed"
+        mixed_decks_bytes: 2641959
+        mixed_decks_sha256: "445797f7aed46bef4da1049c1b91359da95ebf918bbc2a5f37067cb7a66e8a9e"
+        mixed_matchup_byte_identity: "passed"
+        mixed_matchup_bytes: 7667615
+        mixed_matchup_sha256: "4895c53993dd432f580a3a8eae818affe50abd8efdb40ddddf1c716ef4464e6e"
+        mixed_quality_byte_identity: "passed"
+        mixed_quality_bytes: 3127
+        mixed_quality_sha256: "664a0d506e899e57259bd21571401263ee12fb7e6501b054fc6a3937672d2fb1"
+        mixed_meta_byte_identity: "passed"
+        mixed_meta_bytes: 2365
+        mixed_meta_sha256: "cf8815f364bfc0947d4e0f905f0f99219b4a6a2cb7122e51a7ab2c1fa430376c"
+        mixed_catalog_byte_identity: "passed"
+        mixed_catalog_bytes: 911
+        mixed_catalog_sha256: "c8e44d94fff8dc902e848a4fa1dc0b72c57e14e9aec6eb81ef537fe27b565808"
+        standard_rule_validation: "passed"
+        python_compile: "passed"
+        git_diff_check: "passed"
+      publication_record: "Exact PR, merge, and workflow identifiers are deferred to the next already-authorized business or governance change."
+      stop_point: "Publish the accepted P9-05 change; P9-06 remains unauthorized."
     - id: "P9-06"
       name: "Structure-aware Tabletop consumer"
       status: "not_started"
@@ -5629,26 +5703,23 @@ phase_9_plan:
       requires_owner_authorization: true
 
 next_approved_task:
-  id: "P9-04"
-  name: "Owner acceptance and remote publication"
+  id: "P9-06"
+  name: "Owner authorization for the structure-aware Tabletop consumer"
   target_paths:
-    - "src/mtgmeta/melee/stats.py"
-    - "schemas/melee-event-statistics-common.schema.json"
-    - "schemas/melee-event-overview.schema.json"
-    - "schemas/melee-event-decks.schema.json"
-    - "tests/test_melee_structure_statistics.py"
+    - "assets/js/phase8/tabletop-controller.js"
+    - "assets/js/phase8/matchup-model.js"
+    - "melee/index.html"
     - "tests/test_phase9_pure_constructed_contract.py"
-    - "docs/STATISTICS_SPEC.md"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/audits/P9-04.md"
+    - "tests/test_phase8_tabletop_production_entry.py"
+    - "docs/audits/P9-06.md"
     - "docs/STATUS.yaml"
-  production_change: false
+  production_change: true
   requires_user_confirmation: true
-  authorization_status: "local_complete_pending_owner_acceptance"
-  local_execution_authorized: true
+  authorization_status: "not_authorized"
+  local_execution_authorized: false
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "P9-04 is locally complete. Owner acceptance and remote publication require separate authorization; P9-05, real-source access, generated-output writes, and workflow dispatch remain unauthorized."
+  planning_status: "P9-05 was accepted and authorized for remote publication on 2026-07-30. P9-06, real-source access, whitelist changes, generated-output writes, and workflow dispatch remain unauthorized."
 
 governance_baseline:
   status: "active_on_master"
@@ -5697,7 +5768,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not publish P9-04 or begin P9-05 without separate owner authorization."
+  - "Do not begin P9-06 without separate owner authorization."
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not synthesize a residual subtype during P6-06."
   - "Do not re-dispatch the Melee production workflow without separate authorization."

@@ -29,7 +29,9 @@
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
     "format": {"$ref": "melee-event-statistics-common.schema.json#/$defs/id"},
-    "event_structure": {"const": "mixed"},
+    "event_structure": {
+      "enum": ["mixed", "constructed_day2", "constructed_single_stage"]
+    },
     "input": {
       "$ref": "melee-event-statistics-common.schema.json#/$defs/input"
     },
@@ -60,13 +62,10 @@
       }
     },
     "scope_order": {
-      "type": "array",
-      "prefixItems": [
-        {"const": "day1"},
-        {"const": "day2"},
-        {"const": "all_constructed"}
-      ],
-      "items": false
+      "oneOf": [
+        {"const": ["day1", "day2", "all_constructed"]},
+        {"const": ["all_constructed"]}
+      ]
     },
     "default_scope": {"const": "all_constructed"},
     "hierarchical": {"const": true},
@@ -91,7 +90,7 @@
     "scopes": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["day1", "day2", "all_constructed"],
+      "required": ["all_constructed"],
       "properties": {
         "day1": {"$ref": "#/$defs/scope"},
         "day2": {"$ref": "#/$defs/scope"},
@@ -105,6 +104,28 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "event_structure": {"const": "constructed_single_stage"}
+        },
+        "required": ["event_structure"]
+      },
+      "then": {
+        "properties": {
+          "scope_order": {"const": ["all_constructed"]},
+          "scopes": {"maxProperties": 1}
+        }
+      },
+      "else": {
+        "properties": {
+          "scope_order": {"const": ["day1", "day2", "all_constructed"]},
+          "scopes": {"required": ["day1", "day2", "all_constructed"]}
+        }
+      }
+    }
+  ],
   "$defs": {
     "identity": {
       "type": "string",

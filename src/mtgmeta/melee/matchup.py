@@ -15,7 +15,7 @@ from typing import Any, Mapping, Sequence
 from ..consumer import identity_display_name, literal_match_record
 from .stats import (
     MeleeStatisticsError,
-    SCOPE_ORDER,
+    STRUCTURE_SCOPE_ORDER,
     build_event_statistics_from_paths,
     statistics_document_bytes,
     write_statistics_document,
@@ -68,6 +68,7 @@ def _blank_counts() -> dict[str, int]:
 
 def _hierarchy_from_overview(
     overview: Mapping[str, Any],
+    scope_order: Sequence[str],
 ) -> tuple[dict[str, Any], list[str], list[str], dict[str, str]]:
     scopes = overview.get("scopes")
     if not isinstance(scopes, Mapping):
@@ -178,7 +179,7 @@ def _hierarchy_from_overview(
     if len(set(leaf_order)) != len(leaf_order):
         raise MeleeMatchupError("overview contains duplicate leaf identities")
     expected = set(parent_order)
-    for scope_id in SCOPE_ORDER:
+    for scope_id in scope_order:
         scope = scopes.get(scope_id)
         scope_rows = scope.get("archetypes") if isinstance(scope, Mapping) else None
         if not isinstance(scope_rows, list):
@@ -270,7 +271,11 @@ def _source_match_groups(
 
 def _match_scope(match_id: str, rows: Sequence[Mapping[str, Any]]) -> str:
     scopes = {row.get("scope") for row in rows}
-    if len(scopes) != 1 or next(iter(scopes)) not in {"day1", "day2"}:
+    if len(scopes) != 1 or next(iter(scopes)) not in {
+        "day1",
+        "day2",
+        "all_constructed",
+    }:
         raise MeleeMatchupError(f"match {match_id} has inconsistent scope")
     return str(next(iter(scopes)))
 
@@ -474,13 +479,21 @@ def _emit_overall(
     return emitted
 
 
-def _round_numbers(ledger: Mapping[str, Any], scope_id: str) -> list[int]:
+def _round_numbers(
+    ledger: Mapping[str, Any],
+    scope_id: str,
+    event_structure: str,
+) -> list[int]:
     rounds = ledger.get("rounds")
     if not isinstance(rounds, list):
         raise MeleeMatchupError("ledger.rounds must be a list")
     stages = {"day1"} if scope_id == "day1" else {"day2"}
     if scope_id == "all_constructed":
-        stages = {"day1", "day2"}
+        stages = (
+            {"day1", "other"}
+            if event_structure == "constructed_single_stage"
+            else {"day1", "day2"}
+        )
     numbers = sorted(
         {
             int(item["round_number"])
@@ -498,6 +511,7 @@ def _round_numbers(ledger: Mapping[str, Any], scope_id: str) -> list[int]:
 def _scope_document(
     *,
     scope_id: str,
+    event_structure: str,
     ledger: Mapping[str, Any],
     groups: Mapping[str, tuple[Mapping[str, Any], ...]],
     participant_leaf: Mapping[str, str],
@@ -507,7 +521,11 @@ def _scope_document(
 ) -> dict[str, Any]:
     stages = {"day1"} if scope_id == "day1" else {"day2"}
     if scope_id == "all_constructed":
-        stages = {"day1", "day2"}
+        stages = (
+            {"all_constructed"}
+            if event_structure == "constructed_single_stage"
+            else {"day1", "day2"}
+        )
     scoped_groups = {
         match_id: rows
         for match_id, rows in groups.items()
@@ -555,7 +573,7 @@ def _scope_document(
         label=f"{scope_id} parent",
     )
     return {
-        "round_numbers": _round_numbers(ledger, scope_id),
+        "round_numbers": _round_numbers(ledger, scope_id, event_structure),
         "source_match_count": source_count,
         "included_match_count": len(pairs),
         "excluded_match_count": source_count - len(pairs),
@@ -576,19 +594,28 @@ def build_event_matchup(
 ) -> dict[str, Any]:
     """Build one deterministic hierarchical event matchup document."""
 
+    event_structure = overview.get("event_structure")
     if (
         overview.get("document_type") != "overview"
         or overview.get("source") != "melee"
-        or overview.get("event_structure") != "mixed"
+        or event_structure not in STRUCTURE_SCOPE_ORDER
     ):
-        raise MeleeMatchupError("P7-06 requires a P7-05 mixed-event overview")
+        raise MeleeMatchupError("matchup generation requires a supported Melee overview")
+    scope_order = STRUCTURE_SCOPE_ORDER[str(event_structure)]
+    if overview.get("scope_order") != list(scope_order):
+        raise MeleeMatchupError("overview scope order does not match event structure")
     if (
         ledger.get("source") != "melee"
         or ledger.get("event_id") != overview.get("event_id")
         or ledger.get("format") != overview.get("format")
-        or ledger.get("event_structure") != "mixed"
+        or ledger.get("event_structure") != event_structure
     ):
         raise MeleeMatchupError("opportunity ledger identity does not match overview")
+    summaries = ledger.get("scope_summaries")
+    if not isinstance(summaries, Mapping) or list(summaries) != list(scope_order):
+        raise MeleeMatchupError(
+            "opportunity ledger scopes do not match event structure"
+        )
     input_document = overview.get("input")
     event_document = overview.get("event")
     if not isinstance(input_document, Mapping) or not isinstance(
@@ -601,12 +628,13 @@ def build_event_matchup(
         parent_order,
         leaf_order,
         leaf_to_parent,
-    ) = _hierarchy_from_overview(overview)
+    ) = _hierarchy_from_overview(overview, scope_order)
     participant_leaf = _participant_leaf_ids(ledger, leaf_to_parent)
     groups = _source_match_groups(ledger)
     scopes = {
         scope_id: _scope_document(
             scope_id=scope_id,
+            event_structure=str(event_structure),
             ledger=ledger,
             groups=groups,
             participant_leaf=participant_leaf,
@@ -614,7 +642,7 @@ def build_event_matchup(
             leaf_order=leaf_order,
             leaf_to_parent=leaf_to_parent,
         )
-        for scope_id in SCOPE_ORDER
+        for scope_id in scope_order
     }
     warnings = [
         dict(warning)
@@ -628,10 +656,10 @@ def build_event_matchup(
         "source": "melee",
         "event_id": overview["event_id"],
         "format": overview["format"],
-        "event_structure": "mixed",
+        "event_structure": event_structure,
         "input": dict(input_document),
         "event": dict(event_document),
-        "scope_order": list(SCOPE_ORDER),
+        "scope_order": list(scope_order),
         "default_scope": "all_constructed",
         "hierarchical": True,
         "canonical_level": "leaf",
@@ -654,7 +682,7 @@ def build_event_matchup_from_paths(
     taxonomy_path: Path,
     repository_root: Path,
 ) -> dict[str, Any]:
-    """Load validated P7 inputs and build one event matchup document."""
+    """Load validated per-event inputs and build one matchup document."""
 
     statistics = build_event_statistics_from_paths(
         event_path,
@@ -753,7 +781,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                         scope_id: document["scopes"][scope_id][
                             "included_match_count"
                         ]
-                        for scope_id in SCOPE_ORDER
+                        for scope_id in document["scope_order"]
                     },
                     "parents": len(document["hierarchy"]["parents"]),
                     "leaves": len(document["hierarchy"]["leaves"]),
