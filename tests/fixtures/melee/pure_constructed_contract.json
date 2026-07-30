@@ -1,0 +1,360 @@
+{
+  "contract_version": "1.0.0",
+  "rate_method": "wins_over_valid_matches",
+  "shared_result_handling": {
+    "played_win": {
+      "constructed_points": 3,
+      "win_rate_eligible": true,
+      "matchup_eligible": true,
+      "effective_theoretical_round": true,
+      "retained": true,
+      "symmetric_match_exclusion": false
+    },
+    "played_loss": {
+      "constructed_points": 0,
+      "win_rate_eligible": true,
+      "matchup_eligible": true,
+      "effective_theoretical_round": true,
+      "retained": true,
+      "symmetric_match_exclusion": false
+    },
+    "played_draw": {
+      "constructed_points": 1,
+      "win_rate_eligible": true,
+      "matchup_eligible": true,
+      "effective_theoretical_round": true,
+      "retained": true,
+      "symmetric_match_exclusion": false
+    },
+    "intentional_draw": {
+      "constructed_points": 1,
+      "win_rate_eligible": false,
+      "matchup_eligible": false,
+      "effective_theoretical_round": true,
+      "retained": true,
+      "symmetric_match_exclusion": false
+    },
+    "bye": {
+      "constructed_points": 3,
+      "win_rate_eligible": false,
+      "matchup_eligible": false,
+      "effective_theoretical_round": true,
+      "retained": true,
+      "symmetric_match_exclusion": false
+    },
+    "drop_unplayed": {
+      "constructed_points": 0,
+      "win_rate_eligible": false,
+      "matchup_eligible": false,
+      "effective_theoretical_round": true,
+      "retained": true,
+      "symmetric_match_exclusion": false
+    },
+    "awarded_win_top8_lock": {
+      "constructed_points": 0,
+      "win_rate_eligible": false,
+      "matchup_eligible": false,
+      "effective_theoretical_round": false,
+      "retained": true,
+      "symmetric_match_exclusion": false
+    },
+    "disqualified_match": {
+      "constructed_points": "context_only",
+      "win_rate_eligible": false,
+      "matchup_eligible": false,
+      "effective_theoretical_round": true,
+      "retained": true,
+      "symmetric_match_exclusion": true
+    },
+    "playoff_result": {
+      "constructed_points": 0,
+      "win_rate_eligible": false,
+      "matchup_eligible": false,
+      "effective_theoretical_round": false,
+      "retained": true,
+      "symmetric_match_exclusion": false
+    }
+  },
+  "structures": {
+    "constructed_day2": {
+      "event_structure": "constructed_day2",
+      "supported_scopes": ["day1", "day2", "all_constructed"],
+      "default_scope": "all_constructed",
+      "advancement_metric": "day2_conversion",
+      "mixed_selection_bias_warning": false,
+      "participants": [
+        {
+          "id": "player-a",
+          "status": "active",
+          "parent_id": "energy",
+          "subtype_id": "boros",
+          "day2_participation_evidence": true,
+          "day1_scheduled_rounds": 3,
+          "day2_scheduled_rounds": 2,
+          "day2_effective_rounds": 1,
+          "single_stage_scheduled_rounds": 0,
+          "single_stage_points": 0
+        },
+        {
+          "id": "player-b",
+          "status": "dropped",
+          "parent_id": "energy",
+          "subtype_id": "boros",
+          "day2_participation_evidence": false,
+          "day1_scheduled_rounds": 3,
+          "day2_scheduled_rounds": 0,
+          "day2_effective_rounds": 0,
+          "single_stage_scheduled_rounds": 0,
+          "single_stage_points": 0
+        },
+        {
+          "id": "player-c",
+          "status": "dropped",
+          "parent_id": "energy",
+          "subtype_id": "mardu",
+          "day2_participation_evidence": true,
+          "day1_scheduled_rounds": 3,
+          "day2_scheduled_rounds": 2,
+          "day2_effective_rounds": 2,
+          "single_stage_scheduled_rounds": 0,
+          "single_stage_points": 0
+        },
+        {
+          "id": "player-d",
+          "status": "disqualified",
+          "parent_id": "prowess",
+          "subtype_id": "izzet",
+          "day2_participation_evidence": false,
+          "day1_scheduled_rounds": 3,
+          "day2_scheduled_rounds": 0,
+          "day2_effective_rounds": 0,
+          "single_stage_scheduled_rounds": 0,
+          "single_stage_points": 0
+        }
+      ],
+      "expected_scopes": {
+        "day1": {
+          "population": "starting_field",
+          "participant_ids": ["player-a", "player-b", "player-c", "player-d"],
+          "theoretical_rounds": 12,
+          "effective_theoretical_rounds": 12,
+          "top8_lock_exemptions": 0,
+          "high_score_status": "unavailable",
+          "high_score_unavailable_reason": "day2_conversion_is_primary",
+          "high_score_threshold": null,
+          "high_score_count": null,
+          "day2_conversion_status": "unavailable",
+          "day2_conversion_unavailable_reason": "not_day2_scope",
+          "match_record": {
+            "wins": 3,
+            "losses": 2,
+            "draws": 1,
+            "matches": 6,
+            "win_rate": 0.5,
+            "win_rate_method": "wins_over_valid_matches",
+            "confidence_interval_95": {
+              "lower": 0.187613,
+              "upper": 0.812387
+            }
+          }
+        },
+        "day2": {
+          "population": "qualified_field",
+          "participant_ids": ["player-a", "player-c"],
+          "theoretical_rounds": 4,
+          "effective_theoretical_rounds": 3,
+          "top8_lock_exemptions": 1,
+          "high_score_status": "unavailable",
+          "high_score_unavailable_reason": "day2_conversion_is_primary",
+          "high_score_threshold": null,
+          "high_score_count": null,
+          "day2_conversion_status": "available",
+          "day2_conversion_unavailable_reason": null,
+          "match_record": {
+            "wins": 3,
+            "losses": 2,
+            "draws": 1,
+            "matches": 6,
+            "win_rate": 0.5,
+            "win_rate_method": "wins_over_valid_matches",
+            "confidence_interval_95": {
+              "lower": 0.187613,
+              "upper": 0.812387
+            }
+          }
+        },
+        "all_constructed": {
+          "population": "starting_field_with_qualified_day2_opportunities",
+          "participant_ids": ["player-a", "player-b", "player-c", "player-d"],
+          "theoretical_rounds": 16,
+          "effective_theoretical_rounds": 15,
+          "top8_lock_exemptions": 1,
+          "high_score_status": "unavailable",
+          "high_score_unavailable_reason": "day2_conversion_is_primary",
+          "high_score_threshold": null,
+          "high_score_count": null,
+          "day2_conversion_status": "unavailable",
+          "day2_conversion_unavailable_reason": "not_day2_scope",
+          "match_record": {
+            "wins": 7,
+            "losses": 7,
+            "draws": 1,
+            "matches": 15,
+            "win_rate": 0.466667,
+            "win_rate_method": "wins_over_valid_matches",
+            "confidence_interval_95": {
+              "lower": 0.248092,
+              "upper": 0.698834
+            }
+          }
+        }
+      },
+      "group_conservation": [
+        {
+          "parent_id": "energy",
+          "initial_deck_count": 3,
+          "subtype_initial_deck_counts": {"boros": 2, "mardu": 1},
+          "day2_deck_count": 2,
+          "subtype_day2_deck_counts": {"boros": 1, "mardu": 1}
+        },
+        {
+          "parent_id": "prowess",
+          "initial_deck_count": 1,
+          "subtype_initial_deck_counts": {"izzet": 1},
+          "day2_deck_count": 0,
+          "subtype_day2_deck_counts": {"izzet": 0}
+        }
+      ]
+    },
+    "constructed_single_stage": {
+      "event_structure": "constructed_single_stage",
+      "supported_scopes": ["all_constructed"],
+      "default_scope": "all_constructed",
+      "advancement_metric": "high_score_conversion",
+      "mixed_selection_bias_warning": false,
+      "participants": [
+        {
+          "id": "player-e",
+          "status": "active",
+          "parent_id": "energy",
+          "subtype_id": "boros",
+          "day2_participation_evidence": false,
+          "day1_scheduled_rounds": 0,
+          "day2_scheduled_rounds": 0,
+          "day2_effective_rounds": 0,
+          "single_stage_scheduled_rounds": 5,
+          "single_stage_points": 12
+        },
+        {
+          "id": "player-f",
+          "status": "active",
+          "parent_id": "energy",
+          "subtype_id": "mardu",
+          "day2_participation_evidence": false,
+          "day1_scheduled_rounds": 0,
+          "day2_scheduled_rounds": 0,
+          "day2_effective_rounds": 0,
+          "single_stage_scheduled_rounds": 5,
+          "single_stage_points": 9
+        },
+        {
+          "id": "player-g",
+          "status": "dropped",
+          "parent_id": "energy",
+          "subtype_id": "boros",
+          "day2_participation_evidence": false,
+          "day1_scheduled_rounds": 0,
+          "day2_scheduled_rounds": 0,
+          "day2_effective_rounds": 0,
+          "single_stage_scheduled_rounds": 5,
+          "single_stage_points": 6
+        },
+        {
+          "id": "player-h",
+          "status": "active",
+          "parent_id": "prowess",
+          "subtype_id": "izzet",
+          "day2_participation_evidence": false,
+          "day1_scheduled_rounds": 0,
+          "day2_scheduled_rounds": 0,
+          "day2_effective_rounds": 0,
+          "single_stage_scheduled_rounds": 5,
+          "single_stage_points": 3
+        }
+      ],
+      "expected_scopes": {
+        "all_constructed": {
+          "population": "starting_field",
+          "participant_ids": ["player-e", "player-f", "player-g", "player-h"],
+          "theoretical_rounds": 20,
+          "effective_theoretical_rounds": 20,
+          "top8_lock_exemptions": 0,
+          "high_score_status": "available",
+          "high_score_unavailable_reason": null,
+          "high_score_threshold": 9,
+          "high_score_count": 2,
+          "day2_conversion_status": "unavailable",
+          "day2_conversion_unavailable_reason": "no_day2_cut",
+          "match_record": {
+            "wins": 4,
+            "losses": 3,
+            "draws": 1,
+            "matches": 8,
+            "win_rate": 0.5,
+            "win_rate_method": "wins_over_valid_matches",
+            "confidence_interval_95": {
+              "lower": 0.215213,
+              "upper": 0.784787
+            }
+          }
+        }
+      },
+      "group_conservation": [
+        {
+          "parent_id": "energy",
+          "initial_deck_count": 3,
+          "subtype_initial_deck_counts": {"boros": 2, "mardu": 1},
+          "high_score_deck_count": 2,
+          "subtype_high_score_deck_counts": {"boros": 1, "mardu": 1}
+        },
+        {
+          "parent_id": "prowess",
+          "initial_deck_count": 1,
+          "subtype_initial_deck_counts": {"izzet": 1},
+          "high_score_deck_count": 0,
+          "subtype_high_score_deck_counts": {"izzet": 0}
+        }
+      ]
+    }
+  },
+  "multi_event_selection": {
+    "minimum_event_count": 2,
+    "same_source_required": true,
+    "same_format_required": true,
+    "forced_scope": "all_constructed",
+    "on_second_event_selected": "switch_to_all_constructed",
+    "stage_controls_during_multi_selection": "disabled_with_explanation",
+    "absent_single_event_scopes": "omitted",
+    "single_event_restore_policy": "last_supported_scope_or_default",
+    "aggregation_method": "sum_raw_wld_then_recalculate",
+    "overview_aggregation": "prohibited",
+    "aggregation_example": {
+      "event_records": [
+        {"event_id": "100001", "wins": 8, "losses": 1, "draws": 1},
+        {"event_id": "100002", "wins": 1, "losses": 4, "draws": 0}
+      ],
+      "combined_record": {
+        "wins": 9,
+        "losses": 5,
+        "draws": 1,
+        "matches": 15,
+        "win_rate": 0.6,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.357464,
+          "upper": 0.801758
+        }
+      }
+    }
+  }
+}

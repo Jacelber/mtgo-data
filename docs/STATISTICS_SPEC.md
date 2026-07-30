@@ -304,7 +304,7 @@ inferred from rank, late-round timing, or an apparent win alone.
 |---|---:|---:|---:|---:|---|
 | Played win | 3 | Yes | Yes | Yes | Real Constructed match |
 | Played loss | 0 | Yes | Yes | Yes | Real Constructed match |
-| Played draw | 1 | Yes | Yes | Yes | Counts as 0.5 win |
+| Played draw | 1 | Yes | Yes | Yes | Zero wins; remains in the literal valid-match denominator |
 | Intentional draw `0-0-3` | 1 | No | No | Yes | Retain separately |
 | Bye | 3 | No | No | Yes | No real opponent |
 | No-show | 0 | No | No | Conditional | Must be reviewed |
@@ -1263,11 +1263,15 @@ Then calculate:
 \[
 CombinedWinRate =
 \frac{
-CombinedW + 0.5 \times CombinedD
+CombinedW
 }{
 CombinedW + CombinedL + CombinedD
 }
 \]
+
+Normal played draws remain in the denominator and do not contribute a
+fractional win. This is the same literal `wins_over_valid_matches` method used
+by single-event target records.
 
 Do not calculate the simple average of event win-rate percentages.
 
