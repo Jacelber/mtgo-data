@@ -2435,3 +2435,75 @@ consumer behavior has already been proven in P9-08.
 
 No event is added to the whitelist and no production data is generated or
 published by this decision.
+
+---
+
+# DEC-063 — Renumber the post-Phase-9 roadmap
+
+Status: `Accepted`
+
+## Context
+
+The roadmap written before the Phase 7 through Phase 9 implementation still
+lists mixed Draft and Constructed event support as Phase 10. That work is now a
+historical specification: Phases 7 and 8 delivered the mixed-event backend and
+consumer for event `434455`, and Phase 9 preserved it while adding pure
+Constructed strategies.
+
+The former roadmap also places multi-event aggregation immediately after that
+historical phase and defers data governance, engineering-baseline, front-end
+productization, and long-term operational work. A first renumbering proposal
+omitted former Phase 12, Whitelist operations and Melee automation, and former
+Phase 18, Cleanup, operations, and release. Both contain requirements that must
+remain traceable even when their remaining work moves elsewhere.
+
+## Decision
+
+Adopt the following post-Phase-9 mapping:
+
+| Former roadmap position | Current roadmap position |
+| --- | --- |
+| Former Phase 10 — Mixed Draft and Constructed events | Retain in full as Historical Phase 10 with status `superseded_by_phases_7_and_8` |
+| Former Phase 11 — Multi-event matchup aggregation | Phase 13 — Multi-event raw-count matchup aggregation |
+| Former Phase 12 — Whitelist operations and Melee automation | Retain as a historical migration record; move remaining work to Phase 10 |
+| Former Phase 13 — Pauper and Paupergeddon | Phase 14 — Pauper MTGO and Paupergeddon |
+| Former Phase 14 — Pioneer | Phase 15 — Pioneer |
+| Former Phase 15 — Legacy | Phase 16 — Legacy and Eternal Weekend |
+| Former Phase 16 — Standard tabletop events | Phase 17 — Standard Tabletop events |
+| Former Phase 17 — Vintage decision gate | Phase 18 — Vintage decision gate |
+| Former Phase 18 — Cleanup, operations, and release | Retain as a historical migration record; split remaining work across Phases 10, 11, and 19 |
+
+Insert these current phases before multi-event and format expansion:
+
+- Phase 10 — Data governance, compliance, and production operations;
+- Phase 11 — Engineering baseline, test structure, and documentation
+  reduction;
+- Phase 12 — Front-end productization and sharing readiness.
+
+Use Phase 19 for final release and long-term maintenance closeout. Keep the
+possible Environment Trends time-series capability unnumbered unless the owner
+separately approves its product scope, data source, comparability policy, and
+statistical specification.
+
+Every current Phase 10 through Phase 19 section must use `Objective`,
+`Required work`, `Task sequence`, and `Acceptance criteria`. Listing a phase or
+task does not authorize its implementation. `docs/STATUS.yaml` remains the
+source of truth for task authorization and stop conditions.
+
+References written before DEC-063 retain their historical numbering unless
+they explicitly cite this mapping. Historical audit files and task identifiers
+must not be mass-renumbered. New planning references use the current numbering.
+
+## Consequences
+
+The roadmap preserves the complete former Phase 10 specification and explicit
+migration records for former Phases 12 and 18. Multi-event aggregation moves to
+Phase 13, format expansion moves to Phases 14 through 18, and final release
+readiness moves to Phase 19.
+
+This decision changes roadmap order and identifiers only. It does not change a
+statistical formula, match-eligibility rule, public Schema, public data path,
+production output, front-end behavior, event whitelist, or the existing
+`434455` compatibility bytes. It does not authorize R-02, any current Phase 10
+task, event activation, production dispatch, remote publication, history
+rewriting, or storage migration.

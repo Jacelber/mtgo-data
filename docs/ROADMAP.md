@@ -40,6 +40,42 @@ If a historical phase-status statement elsewhere in the repository conflicts wit
 
 ---
 
+## Phase index
+
+This index records roadmap position, not standing authority to begin work.
+`docs/STATUS.yaml` remains authoritative for current task authorization, known
+blockers, and stop conditions.
+
+| Phase | One-line objective | Roadmap status |
+| --- | --- | --- |
+| Phase 0 | Establish authoritative project documentation. | Completed |
+| Phase 1 | Protect and document the Standard regression baseline. | Completed |
+| Phase 2 | Establish shared classification foundations. | Completed |
+| Phase 3 | Generalize the Standard-only MTGO pipeline. | Completed |
+| Phase 4 | Split the MTGO front end without changing behavior. | Completed |
+| Phase 5 | Establish the controlled Melee ingestion baseline. | Completed |
+| Phase 6 | Deliver the Modern MTGO product. | Completed |
+| Phase 7 | Deliver the Tabletop mixed-event backend. | Completed |
+| Phase 8 | Deliver the format-first MTGO and Tabletop front ends. | Completed |
+| Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
+| Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
+| Phase 10 | Establish data governance, compliance, and production operations. | Planned; not authorized |
+| Phase 11 | Establish the engineering baseline and reduce structural debt. | Planned; not authorized |
+| Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
+| Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
+| Phase 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
+| Phase 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
+| Phase 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
+| Phase 17 | Add qualifying Standard Tabletop events. | Planned; not authorized |
+| Phase 18 | Decide whether Vintage should be implemented. | Decision gate; not authorized |
+| Phase 19 | Complete release and long-term maintenance readiness. | Planned; not authorized |
+
+Post-Phase-9 governance task `R-01` maintains this roadmap and its numbering.
+`R-02` is a separate future task for reconciling current repository facts and
+does not begin automatically when `R-01` is complete.
+
+---
+
 ## Development principles
 
 All phases must follow these principles:
@@ -1992,9 +2028,10 @@ The historical Phase 10 description remains a specification reference for
 mixed events. Its substantive `434455` implementation was accepted through
 Phase 7 and Phase 8; Phase 9 must preserve it rather than reimplement it.
 
-Phase 11 remains responsible for implementing the actual compatible
-multi-event raw-count aggregation. Phase 9 freezes and exposes the event-level
-scope information and consumer selection behavior that Phase 11 will consume.
+The former Phase 11, renumbered as current Phase 13 by DEC-063, remains
+responsible for implementing the actual compatible multi-event raw-count
+aggregation. Phase 9 freezes and exposes the event-level scope information and
+consumer selection behavior that current Phase 13 will consume.
 
 P9-04 was published through pull request #132, implementation commit
 `2736c700fd42dfa4d8113d4c5223df140ea24627`, and merge commit
@@ -2013,9 +2050,9 @@ The owner authorized P9-07 and approved the revised
 confirmed all three owner-selected Standard candidates without retaining raw
 source responses. Event `419742` exposes 893 decklists and an estimated 1,085
 complete-archive responses, so the current fixed limits cannot collect it.
-P9-07S is therefore a Phase 9 prerequisite rather than a Phase 11 aggregation
-task. P9-08 owns the separate format-dynamic Tabletop label correction and the
-final cross-format consumer regression.
+P9-07S is therefore a Phase 9 prerequisite rather than a former Phase 11
+(current Phase 13) aggregation task. P9-08 owns the separate format-dynamic
+Tabletop label correction and the final cross-format consumer regression.
 
 P9-07 was published through pull request #135, implementation commit
 `0a787ed916f843f3b89882e70c0048c7eb978d66`, and merge commit
@@ -2039,7 +2076,8 @@ statistical formula changed. The owner accepted P9-08 and authorized its
 publication plus the
 `phase-9-pure-constructed-events` recovery tag on 2026-07-31. Phase 9 is
 complete when this closeout reaches `master` and the tag targets that merge.
-No Phase 10 work is implied by the closeout authorization.
+No work under the then-numbered Phase 10 specification, or under the current
+post-Phase-9 roadmap, is implied by the closeout authorization.
 
 ## Acceptance criteria
 
@@ -2056,7 +2094,15 @@ Phase 9 is complete when:
 
 ---
 
-# Phase 10 — Mixed Draft and Constructed events
+# Historical Phase 10 — Mixed Draft and Constructed events
+
+Status: `superseded_by_phases_7_and_8`
+
+This historical specification is retained in full. Its substantive mixed-event
+implementation and public consumer work were completed through Phases 7 and 8,
+and Phase 9 preserved event `434455` as the mixed-event regression baseline.
+The historical `Phase 10` and `Page A` / `Page B` names below retain their
+original meaning and are not current task identifiers.
 
 ## Objective
 
@@ -2163,13 +2209,249 @@ Phase 10 is complete when:
 
 ---
 
-# Phase 11 — Multi-event matchup aggregation
+# Phase 10 — Data governance, compliance, and production operations
+
+## Objective
+
+Establish an explicit privacy, compatibility, storage, and production-operations
+boundary before adding more Tabletop events or Constructed formats.
+
+## Required work
+
+- classify retained and public identity fields by source resource and purpose;
+- define the compatibility boundary for mixed event `434455` without silently
+  changing its current public bytes;
+- minimize future raw snapshots before persistence while retaining reviewed
+  provenance and resumability requirements;
+- separate public-site publication from raw and long-term archive storage only
+  after the owner selects an approved design;
+- align supported Python runtimes and split fetch, build, publication, and
+  failure-notification responsibilities without weakening validation;
+- finish format-dynamic whitelist operations and non-programmer documentation;
+- retain explicit owner gates for history rewriting, storage migration,
+  credentials, remote writes, and production dispatch.
+
+## Task sequence
+
+1. `P10-01` — Data classification and privacy audit
+   - inventory retained identity, account, preference, provenance, and public
+     event-name fields;
+   - classify fields separately for tournament, standings, matches, and
+     decklist responses;
+   - produce documentation only.
+2. `P10-02` — Freeze the explicit `434455` compatibility manifest
+   - distinguish event-specific public bytes and reproducibility inputs from
+     global catalogs that may expand legally;
+   - require separate owner approval for any version migration.
+3. `P10-03` — Future-event privacy snapshot v3
+   - apply per-resource allowlists before persistence;
+   - replace enumerable unsalted participant pseudonyms under a reviewed
+     secret or mapping-management contract;
+   - do not regenerate the v2 `434455` baseline.
+4. `P10-04` — Privacy validation and notice update
+   - use Schemas and resource allowlists as the primary production-data gate;
+   - use prohibited-field scans only as a scoped supplemental check;
+   - document contact and removal procedures.
+5. `P10-05` — Owner gate for history rewriting
+   - prepare a private independent mirror or Git bundle and prove restoration;
+   - document force-push, tag, branch, fork, pull-request, Pages, and
+     collaborator effects;
+   - stop unless the owner gives separate written approval.
+6. `P10-06` — Data and deployment separation proposal
+   - compare same-origin Pages artifacts for public assets with independent
+     raw-archive storage options;
+   - preserve current public URLs;
+   - stop for an owner selection before implementation.
+7. `P10-07` — Implement the selected separation
+   - stop committing daily generated data to the code branch under the
+     selected design;
+   - preserve `434455` compatibility and public paths.
+8. `P10-08` — Unify the Python runtime
+   - prefer Python 3.12 for CI and production;
+   - document an explicit support matrix if Python 3.11 remains required.
+9. `P10-09` — Split production into fetch, build, and publish jobs
+   - transfer immutable artifacts between jobs;
+   - preserve clean-checkout, candidate, and publication-confirmation layers.
+10. `P10-10` — Add MTGO resumability
+    - implement checkpoint and restart behavior as a separate focused task;
+    - do not combine it with the workflow split pull request.
+11. `P10-11` — Add deduplicated failure issues
+    - grant `issues: write` only to a dedicated notification job;
+    - prevent duplicate open issues without expanding other job permissions.
+12. `P10-12` — Complete whitelist operations
+    - remove the Melee workflow's hard-coded Modern format and derive the
+      event format from the validated whitelist;
+    - document approved event addition and refresh for non-programmers;
+    - preserve manual review and publication gates.
+
+## Acceptance criteria
+
+Phase 10 is complete when:
+
+- future raw snapshots retain no unapproved fields;
+- the approved `434455` compatibility manifest remains satisfied;
+- generated data no longer enters the code branch through the daily update
+  mechanism selected for replacement;
+- fetch, build, and publication are independently observable and recoverable;
+- CI covers every supported production runtime;
+- a controlled failure creates one deduplicated issue with least privilege;
+- whitelist operations are format-dynamic and documented;
+- no statistical formula changes;
+- every owner-gated migration has an explicit recorded decision.
+
+---
+
+# Phase 11 — Engineering baseline, test structure, and documentation reduction
+
+## Objective
+
+Create a maintainable engineering baseline and reduce structural debt without
+changing production data, public paths, statistical behavior, or the frozen
+`434455` compatibility boundary.
+
+## Required work
+
+- establish standard Python packaging, linting, typing, and coverage controls;
+- establish JavaScript, workflow, and real-browser test baselines;
+- extract shared statistical APIs while retaining source-specific compatibility
+  parameters and byte output;
+- extend repository validation to the current production front end;
+- audit and remove legacy entry points only after owner approval and verified
+  replacement;
+- separate live status from historical evidence without deleting history;
+- split oversized modules incrementally under regression protection.
+
+## Task sequence
+
+1. `P11-01` — Add `pyproject.toml`, an installable package, and console scripts
+   while retaining compatible root entry points.
+2. `P11-02` — Introduce Ruff in a separate mechanical pull request.
+3. `P11-03` — Introduce mypy incrementally, beginning with stable shared
+   modules and without a global silent baseline.
+4. `P11-04` — Record the first coverage baseline and then enforce that coverage
+   does not decrease.
+5. `P11-05` — Add monthly Dependabot updates for pip and GitHub Actions.
+6. `P11-06` — Add `node:test`, matchup-model property tests, and exact Chinese
+   and English translation-key parity.
+7. `P11-07` — Add actionlint while retaining explicit workflow permission,
+   trigger, branch, and publication behavior assertions.
+8. `P11-08` — Add a Playwright real-browser baseline for both production
+   entries, both languages, Standard, Modern, desktop, and 390px width.
+9. `P11-09` — Establish shared `metrics.py` APIs while preserving the current
+   MTGO and Melee Wilson parameters and byte output.
+10. `P11-10` — Extend `validate_repository.py` to protect Phase 8 production
+    resources, both HTML entries, controllers, and JavaScript syntax.
+11. `P11-11` — Audit legacy entry points and produce an owner deletion list.
+12. `P11-12` — Delete approved entry points or move approved tools under
+    `tools/` only after replacements are verified.
+13. `P11-13` — Reduce STATUS, README, and agent-guide duplication while moving
+    retained history to `docs/history/`.
+14. `P11-14` — Add README, STATUS, and product-catalog fact-consistency checks.
+15. `P11-15` — Split `assets/js/phase8/app.js` under E2E protection without a
+    framework or deployment build step.
+
+## Acceptance criteria
+
+Phase 11 is complete when:
+
+- the package and supported commands work without setting `PYTHONPATH`;
+- CI includes Python linting, typing, coverage, JavaScript tests, actionlint,
+  and a real-browser smoke test;
+- live STATUS is approximately 10 KB and all historical evidence remains
+  traceable;
+- deliberate README, STATUS, and catalog contradictions fail validation;
+- no legacy entry point was removed before replacement verification and owner
+  approval;
+- production data, public paths, statistical behavior, and approved `434455`
+  bytes remain unchanged.
+
+---
+
+# Phase 12 — Front-end productization and sharing readiness
+
+## Objective
+
+Make the existing static MTGO and Tabletop products faster, shareable,
+accessible, resilient, and usable across desktop and mobile without changing
+their public data paths or statistical meaning.
+
+## Required work
+
+- load large documents only when the selected view needs them;
+- make supported product state shareable and recoverable through the URL;
+- correct chart semantics and identity presentation;
+- expose only freshness and completeness facts that each product actually
+  provides;
+- improve accessibility, loading, retry, matrix, mobile, image, and metadata
+  behavior under real-browser tests;
+- retain the no-framework, no-required-build-step GitHub Pages deployment.
+
+## Task sequence
+
+1. `P12-01` — View-level lazy loading
+   - do not load matchup, deck-detail, or MTGO comparison documents for an
+     overview-only view;
+   - preserve every existing public path and byte.
+2. `P12-02` — Shareable URL state
+   - cover format, product, range, sort, event, scope, view, and language;
+   - support history and `popstate` restoration;
+   - keep expanded identity sets out of the URL.
+3. `P12-03` — Correct chart semantics
+   - use an accurate Chinese product name;
+   - replace rank-colored pie charts with aligned comparison graphics that do
+     not assign identity color by sorted position.
+4. `P12-04` — Product-specific freshness strip
+   - display only dates, event counts, and completeness supplied by the active
+     product;
+   - display unknown rather than inventing a common metric.
+5. `P12-05` — Readability and accessibility baseline
+   - cover contrast, type size, target size, focus, and unavailable-navigation
+     semantics.
+6. `P12-06` — Loading, failure, and retry model
+   - separate successful caching from background refresh;
+   - evict or retry failed promises and add useful loading skeletons.
+7. `P12-07` — Large-matrix interaction
+   - add search, focused archetype, Top-N, and minimum-sample filters;
+   - use roving tabindex and directional-key navigation.
+8. `P12-08` — Mobile matrix and card-image interaction
+   - provide a single-archetype vertical opponent view;
+   - add a touch-friendly card image layer and failure placeholder.
+9. `P12-09` — Metadata and sharing
+   - add description, Open Graph, favicon, canonical URL, language memory, and
+     required Scryfall and Wizards attribution.
+10. `P12-10` — Cross-device closeout
+    - verify all five products, both languages, both public formats, desktop,
+      390px width, URL restoration, and zero application console errors.
+
+This phase does not authorize changing the 20-match warning, migrating the
+Tabletop null threshold into generated data, default-collapsing low-sample
+results, fragmenting JSON or public paths, or adding a new trend product.
+
+## Acceptance criteria
+
+Phase 12 is complete when:
+
+- overview views avoid unnecessary large-document requests;
+- supported state survives sharing, reload, back, and forward navigation;
+- chart names, order, and colors do not imply false equivalence;
+- keyboard and mobile users can inspect large matrices without traversing
+  thousands of tab stops;
+- failure states can retry safely;
+- real-browser acceptance passes across the required products, formats,
+  languages, and viewport sizes;
+- public JSON paths, statistical formulas, and `434455` bytes remain unchanged.
+
+---
+
+# Phase 13 — Multi-event raw-count matchup aggregation
 
 ## Objective
 
 Allow matchup matrices to combine selected events without merging unrelated overview statistics.
 
-## Aggregation eligibility
+## Required work
+
+### Aggregation eligibility
 
 Only combine events that:
 
@@ -2180,7 +2462,7 @@ Only combine events that:
 - are explicitly selected;
 - expose the requested matchup scope.
 
-## Aggregation method
+### Aggregation method
 
 Aggregate raw counts:
 
@@ -2191,7 +2473,7 @@ Aggregate raw counts:
 
 Do not average already calculated percentages.
 
-## Default exclusions
+### Default exclusions
 
 Exclude from primary matchup aggregation:
 
@@ -2205,7 +2487,7 @@ Exclude from primary matchup aggregation:
 - unknown results;
 - playoffs, unless a separate playoff view is explicitly selected.
 
-## Scope behavior
+### Scope behavior
 
 The matrix must identify whether it uses:
 
@@ -2221,9 +2503,27 @@ structures. Day 1 and Day 2 remain selectable only for one event that declares
 those scopes. A later expansion of multi-event stage-specific aggregation
 requires a separate compatibility decision.
 
+## Task sequence
+
+1. Freeze compatibility rules for source, Constructed format, schema version,
+   archetype identity, quality status, and supported scope.
+2. Aggregate underlying eligible W-L-D counts and recalculate all rates and
+   intervals from those counts.
+3. Keep event overview documents independent and do not average event rates.
+4. Limit initial multi-event selection to `all_constructed` as required by
+   DEC-061.
+5. When a second event is selected, switch to `all_constructed`; when selection
+   returns to one event, restore its prior scope only if the catalog still
+   declares that scope.
+6. Persist selected event identities in the shareable URL contract established
+   by Phase 12.
+7. Keep the production multi-event entry disabled until at least two compatible
+   real events are approved. Synthetic contracts may prove the engineering
+   capability but do not constitute real production acceptance.
+
 ## Acceptance criteria
 
-Phase 11 is complete when:
+Phase 13 is complete when:
 
 - single-event and multi-event matrices reconcile from raw counts;
 - cross-format selection is impossible;
@@ -2236,7 +2536,15 @@ Phase 11 is complete when:
 
 ---
 
-# Phase 12 — Whitelist operations and Melee automation
+# Historical Phase 12 — Whitelist operations and Melee automation
+
+Status: `partially_implemented_remaining_work_moved_to_phase_10`
+
+This historical specification is retained so that completed and remaining
+operational requirements are not lost. Phases 5, 7, 8, and 9 implemented the
+whitelist, controlled ingestion, quality, publication, and resumable collection
+foundations. The remaining format-dynamic workflow and non-programmer operation
+work is assigned to current Phase 10.
 
 ## Objective
 
@@ -2304,13 +2612,20 @@ Phase 12 is complete when:
 
 ---
 
-# Phase 13 — Pauper and Paupergeddon
+# Phase 14 — Pauper MTGO and Paupergeddon
 
 ## Objective
 
 Add Pauper to both product tracks after the Modern reference path and reusable event strategies are stable.
 
-## Required sequence
+## Required work
+
+Use the shared classifier and stable Pauper archetype identities for both
+sources while keeping MTGO and Tabletop inputs, outputs, statistics, catalogs,
+and product behavior separate. Depend on the engineering and front-end
+baselines established by Phases 10 through 12.
+
+## Task sequence
 
 1. Add Pauper archetype rules.
 2. Add Pauper rule fixtures.
@@ -2325,7 +2640,7 @@ Add Pauper to both product tracks after the Modern reference path and reusable e
 
 ## Acceptance criteria
 
-Phase 13 is complete when:
+Phase 14 is complete when:
 
 - shared Pauper archetype IDs are used by both sources;
 - MTGO and Melee data remain separate;
@@ -2337,13 +2652,19 @@ Phase 13 is complete when:
 
 ---
 
-# Phase 14 — Pioneer
+# Phase 15 — Pioneer
 
 ## Objective
 
 Add Pioneer using the established shared-classifier and dual-product process.
 
-## Required sequence
+## Required work
+
+Use the established shared-classifier and dual-product process without copying
+or forking the Standard-only pipeline. Depend on the engineering and front-end
+baselines established by Phases 10 through 12.
+
+## Task sequence
 
 1. Add Pioneer archetype rules.
 2. Add Pioneer fixtures.
@@ -2357,7 +2678,7 @@ Add Pioneer using the established shared-classifier and dual-product process.
 
 ## Acceptance criteria
 
-Phase 14 is complete when:
+Phase 15 is complete when:
 
 - Pioneer uses the generalized MTGO pipeline;
 - Pioneer uses the shared classifier;
@@ -2368,13 +2689,19 @@ Phase 14 is complete when:
 
 ---
 
-# Phase 15 — Legacy
+# Phase 16 — Legacy and Eternal Weekend
 
 ## Objective
 
 Add Legacy using the established process, including approved Eternal Weekend Legacy main events.
 
-## Required sequence
+## Required work
+
+Use the established shared-classifier and dual-product process for Legacy, and
+retain the approved Eternal Weekend main-event boundary. Depend on the
+engineering and front-end baselines established by Phases 10 through 12.
+
+## Task sequence
 
 1. Add Legacy archetype rules.
 2. Add Legacy fixtures.
@@ -2386,7 +2713,7 @@ Add Legacy using the established process, including approved Eternal Weekend Leg
 8. Generate event-specific Legacy statistics.
 9. Enable Legacy in both front ends.
 
-## Event restrictions
+### Event restrictions
 
 Only approved Eternal Weekend main events may be included under this policy.
 
@@ -2400,7 +2727,7 @@ Do not include:
 
 ## Acceptance criteria
 
-Phase 15 is complete when:
+Phase 16 is complete when:
 
 - only the approved main event is included;
 - side events remain excluded;
@@ -2411,13 +2738,13 @@ Phase 15 is complete when:
 
 ---
 
-# Phase 16 — Standard tabletop events
+# Phase 17 — Standard Tabletop events
 
 ## Objective
 
 Enable qualifying Standard tabletop events after the Melee pipeline is stable.
 
-## Requirements
+## Required work
 
 Only Standard events matching the approved event policy may be added.
 
@@ -2431,9 +2758,20 @@ Standard MTGO and Standard Melee must remain separate in:
 
 Qualifying mixed-format Standard events must use the mixed-event strategy.
 
+## Task sequence
+
+1. Select only owner-approved Standard events that satisfy the whitelist and
+   event-category policy.
+2. Validate each event's source completeness and declared structure.
+3. Reuse the shared Standard classifier without merging MTGO and Tabletop data.
+4. Generate event-specific Tabletop statistics and quality evidence.
+5. Validate mixed, Constructed Day 2, or single-stage behavior as applicable.
+6. Enable each event through the catalog only after separate owner approval.
+7. Run Standard MTGO regression and cross-product browser acceptance.
+
 ## Acceptance criteria
 
-Phase 16 is complete when:
+Phase 17 is complete when:
 
 - Standard tabletop events use the shared Standard classifier;
 - no MTGO and Melee statistics are merged;
@@ -2443,13 +2781,13 @@ Phase 16 is complete when:
 
 ---
 
-# Phase 17 — Vintage decision gate
+# Phase 18 — Vintage decision gate
 
 ## Objective
 
 Decide whether Vintage support should be implemented.
 
-## Required decision inputs
+## Required work
 
 Review:
 
@@ -2463,7 +2801,17 @@ Review:
 - automation impact;
 - long-term operational cost.
 
-## Possible outcomes
+## Task sequence
+
+1. Audit the available MTGO and Eternal Weekend Vintage evidence.
+2. Estimate classification, data-quality, front-end, automation, and ongoing
+   maintenance cost.
+3. Present approve, defer, and reject options to the owner.
+4. Stop for an explicit owner decision.
+5. If approved, add separately authorized implementation tasks using the
+   established process; do not enable Vintage through this decision task.
+
+### Possible outcomes
 
 The project owner may:
 
@@ -2473,7 +2821,7 @@ The project owner may:
 
 ## Acceptance criteria
 
-Phase 17 is complete when:
+Phase 18 is complete when:
 
 - the decision is recorded in `docs/DECISIONS.md`;
 - `docs/PROJECT_SCOPE.md` is updated;
@@ -2483,7 +2831,14 @@ Phase 17 is complete when:
 
 ---
 
-# Phase 18 — Cleanup, operations, and release
+# Historical Phase 18 — Cleanup, operations, and release
+
+Status: `split_across_phases_10_11_and_19`
+
+This historical specification is retained so that no cleanup, operations, or
+release requirement is dropped. Data and workflow operations move to current
+Phase 10, engineering and documentation cleanup moves to current Phase 11, and
+final release readiness moves to current Phase 19.
 
 ## Objective
 
@@ -2543,6 +2898,91 @@ Phase 18 is complete when:
 - workflows use explicit permissions and concurrency;
 - a release tag is created;
 - `docs/STATUS.yaml` records the released state.
+
+---
+
+# Phase 19 — Release and long-term maintenance closeout
+
+## Objective
+
+Prove that the completed product, data, and operational system can be released,
+recovered, rolled back, and maintained without relying on undocumented project
+history or unverified compatibility entry points.
+
+## Required work
+
+- complete only the compatibility cleanup that remains after Phase 11 owner
+  review;
+- publish current operator documentation for MTGO, Tabletop, storage, Pages,
+  workflows, schemas, rules, quality review, rollback, and recovery;
+- exercise the selected public-data and archive-storage design end to end;
+- run regression across every approved format and both product areas;
+- define long-term ownership, maintenance cadence, incident handling, and
+  release evidence;
+- retain rollback paths until the release is accepted.
+
+## Task sequence
+
+1. Reconcile the final list of compatibility entry points and remove only those
+   whose replacements and rollback paths are verified.
+2. Complete the operator runbooks and non-programmer maintenance instructions.
+3. Perform backup restoration, workflow recovery, publication rollback, and
+   Pages recovery drills.
+4. Exercise the production pipeline from approved source collection through
+   data publication without bypassing validation or review gates.
+5. Run full cross-format, cross-product, Schema, rule, repository, and
+   real-browser regression.
+6. Resolve or explicitly defer every release-blocking Unknown, conflict,
+   quality, privacy, compatibility, and operational issue.
+7. Obtain owner acceptance, publish the approved release tag, and record the
+   maintenance responsibility and cadence.
+
+## Acceptance criteria
+
+Phase 19 is complete when:
+
+- compatibility cleanup is approved, verified, documented, and reversible;
+- written operations cover routine refresh, event addition, quality review,
+  schema migration, deployment, rollback, and recovery;
+- Pages, selected data storage, and production workflows pass an end-to-end
+  recovery exercise;
+- all approved formats and both product areas pass their regression contracts;
+- production pages and public paths remain compatible;
+- a release tag is published only after separate owner authorization;
+- long-term ownership and maintenance cadence are recorded in
+  `docs/STATUS.yaml`.
+
+---
+
+# Unnumbered candidate — Environment Trends
+
+## Objective
+
+Evaluate a possible historical Environment Trends capability without treating
+it as part of Phase 12 or as approved product scope.
+
+## Required work
+
+- identify an authoritative historical weekly snapshot source;
+- define missing-week behavior;
+- define comparability across classification-rule changes;
+- determine required `docs/PROJECT_SCOPE.md` and
+  `docs/STATISTICS_SPEC.md` changes;
+- decide whether the capability is an extension of the current Environment
+  Trends product.
+
+## Task sequence
+
+1. Prepare a documentation-only feasibility proposal.
+2. Present the scope, statistical, data, and maintenance choices to the owner.
+3. Stop unless the owner explicitly approves adding this candidate to the
+   numbered roadmap.
+
+## Acceptance criteria
+
+This candidate may enter the numbered roadmap only when the owner has approved
+its product scope, historical data source, missing-data rules, classification
+comparability policy, statistical specification changes, and maintenance cost.
 
 ---
 
