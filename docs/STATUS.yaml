@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p9-08-cross-format-closeout"
-  working_branch_status: "p9_08_owner_accepted_publication_and_phase_tag_authorized"
+  current_working_branch: "codex/r-01-roadmap-renumbering"
+  working_branch_status: "r_01_owner_accepted_remote_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -62,6 +62,59 @@ current_phase:
   objective: "Complete statistical support for the explicitly configured constructed_day2 and constructed_single_stage Tabletop Major Events structures while preserving the mixed Modern baseline."
   production_changes_allowed: false
   feature_development_allowed: false
+
+current_governance_task:
+  id: "R-01"
+  name: "Roadmap maintenance and phase renumbering"
+  status: "owner_accepted_remote_publication_authorized"
+  authorized_on: "2026-07-31"
+  implemented_on: "2026-07-31"
+  owner_authorized_local_implementation: true
+  workspace: "C:/tmp/mtgo-data-r01-20260731-01"
+  branch: "codex/r-01-roadmap-renumbering"
+  base_commit: "916cd410fb638bd8ea671321ba569d10cefad244"
+  decision: "DEC-063"
+  current_project_fact_reconciliation_deferred_to: "R-02"
+  target_paths:
+    - "docs/ROADMAP.md"
+    - "docs/DECISIONS.md"
+    - "docs/STATUS.yaml"
+  protected_scope:
+    code_changed: false
+    statistical_behavior_changed: false
+    generated_data_changed: false
+    production_data_changed: false
+    frontend_changed: false
+    schema_changed: false
+    workflow_changed: false
+    public_paths_changed: false
+  validation:
+    yaml_parse: "passed"
+    repository_validation: "passed"
+    repository_python_checked: 127
+    repository_json_checked: 1592
+    repository_yaml_checked: 21
+    repository_references_checked: 30
+    repository_hygiene_checked: 1870
+    focused_publication_governance_tests_passed: 3
+    historical_phase_10_body_preserved: true
+    historical_phase_12_body_preserved: true
+    historical_phase_18_body_preserved: true
+    current_phase_10_through_19_structure: "passed"
+    former_phase_10_through_18_mapping_rows: 9
+    changed_paths_within_allowlist: true
+    protected_paths_unchanged: true
+    git_diff_check: "passed"
+    full_pytest_repeated: false
+    full_pytest_reason: "R-01 changes documentation only; the 623-test P9 closeout baseline remains the latest complete suite, and current workflow guidance requires documentation and repository validation after documentation-only edits."
+  owner_acceptance: "accepted"
+  owner_accepted_on: "2026-07-31"
+  remote_publication_authorized: true
+  remote_publication_authorized_on: "2026-07-31"
+  merge_authorized_after_passing_checks: true
+  production_dispatch_authorized: false
+  next_task_automatically_authorized: false
+  stop_point: "Publish and merge the accepted R-01 documentation change after passing checks, then stop. Do not begin R-02 or Phase 10 automatically."
 
 phase_0_pull_request:
   number: 1
@@ -5952,10 +6005,12 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P10-PLANNING"
-  name: "Owner review of the next phase plan"
+  id: "R-02"
+  name: "Reconcile current project facts after Phase 9"
   target_paths:
-    - "docs/ROADMAP.md"
+    - "README.md"
+    - "docs/PROJECT_SCOPE.md"
+    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
   production_change: false
   requires_user_confirmation: true
@@ -5963,7 +6018,7 @@ next_approved_task:
   local_execution_authorized: false
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "P9-08 was accepted and its publication plus the phase-9-pure-constructed-events tag were authorized on 2026-07-31. After that publication completes, the next phase requires a fresh owner review and authorization."
+  planning_status: "R-02 is a separate documentation task that may begin only after R-01 is accepted and published and the owner gives fresh authorization. Current Phase 10 work remains unauthorized."
 
 governance_baseline:
   status: "active_on_master"
@@ -6012,7 +6067,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin Phase 10, activate Tabletop events, or dispatch production without separate owner authorization."
+  - "Do not begin R-02 or Phase 10, activate Tabletop events, or dispatch production without separate owner authorization."
   - "Do not add P9-07 pilot events to configs/melee_events.yaml without separate authorization."
   - "Do not retain P9-07 source responses or generate or publish pilot-event data without separate authorization."
   - "Do not reuse cookies or browser sessions or bypass access controls."
