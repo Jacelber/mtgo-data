@@ -107,9 +107,9 @@
       "tabletop.matchups": "对阵胜率",
       "tabletop.select_event": "选择赛事：",
       "tabletop.event_scope": "赛事范围",
-      "tabletop.scope.day1": "第一日摩登",
-      "tabletop.scope.day2": "第二日摩登",
-      "tabletop.scope.all_constructed": "全部摩登瑞士轮",
+      "tabletop.scope.day1": "第一日{format}",
+      "tabletop.scope.day2": "第二日{format}",
+      "tabletop.scope.all_constructed": "全部{format}瑞士轮",
       "tabletop.structure.mixed": "混合赛制",
       "tabletop.structure.constructed_day2": "纯构筑 · 有 Cut",
       "tabletop.structure.constructed_single_stage": "纯构筑 · 无 Cut",
@@ -118,8 +118,8 @@
       "tabletop.quality.blocked": "阻断",
       "tabletop.issue.unknown": "有效提交的牌表中仍有明确保留为 Unknown 的记录。",
       "tabletop.issue.disqualified": "被取消资格的牌手记录继续留档，其涉及的全部对局从实战统计中对称排除。",
-      "tabletop.day2_bias": "第二日参赛者由包含轮抽在内的综合赛事表现筛选；第二日摩登统计描述入围人群。",
-      "tabletop.issue.overall_standings": "最终名次和赛事总积分仅作背景信息，不作为摩登表现积分。",
+      "tabletop.day2_bias": "第二日参赛者由包含轮抽在内的综合赛事表现筛选；第二日{format}统计描述入围人群。",
+      "tabletop.issue.overall_standings": "最终名次和赛事总积分仅作背景信息，不作为{format}表现积分。",
       "tabletop.scope_performance": "{scope}内表现",
       "tabletop.average_points": "场均分",
       "tabletop.constructed_points": "构筑积分",
@@ -262,9 +262,9 @@
       "tabletop.matchups": "Matchup Win Rates",
       "tabletop.select_event": "Select events:",
       "tabletop.event_scope": "Event scope",
-      "tabletop.scope.day1": "Day 1 Modern",
-      "tabletop.scope.day2": "Day 2 Modern",
-      "tabletop.scope.all_constructed": "All Modern Swiss Rounds",
+      "tabletop.scope.day1": "Day 1 {format}",
+      "tabletop.scope.day2": "Day 2 {format}",
+      "tabletop.scope.all_constructed": "All {format} Swiss Rounds",
       "tabletop.structure.mixed": "Mixed format",
       "tabletop.structure.constructed_day2": "Constructed · Day 2 cut",
       "tabletop.structure.constructed_single_stage": "Constructed · No cut",
@@ -273,8 +273,8 @@
       "tabletop.quality.blocked": "Blocked",
       "tabletop.issue.unknown": "Some valid submitted decklists remain explicitly classified as Unknown.",
       "tabletop.issue.disqualified": "Disqualified players remain archived, while every match involving them is symmetrically excluded from played-match statistics.",
-      "tabletop.day2_bias": "Day 2 participants were selected by combined results that include Draft. Day 2 Modern statistics describe the qualified field and are subject to selection bias.",
-      "tabletop.issue.overall_standings": "Final rank and total event points are background information only and are not used as Modern performance points.",
+      "tabletop.day2_bias": "Day 2 participants were selected by combined results that include Draft. Day 2 {format} statistics describe the qualified field and are subject to selection bias.",
+      "tabletop.issue.overall_standings": "Final rank and total event points are background information only and are not used as {format} performance points.",
       "tabletop.scope_performance": "{scope} performance",
       "tabletop.average_points": "Avg. points",
       "tabletop.constructed_points": "Constructed points",
@@ -333,9 +333,21 @@
     language = next;
   }
 
+  function tabletopScopeLabel(scope, format) {
+    const suffix = {
+      day1: "day1",
+      day2: "day2",
+      all_constructed: "all_constructed",
+    }[scope];
+    return suffix
+      ? t(`tabletop.scope.${suffix}`, { format: t(`format.${format}`) })
+      : scope;
+  }
+
   root.P8I18n = Object.freeze({
     language: () => language,
     setLanguage,
+    tabletopScopeLabel,
     t,
   });
 })(globalThis);

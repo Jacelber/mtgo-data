@@ -64,6 +64,36 @@
     };
   }
 
+  function resolveEventFormat({
+    requestedFormat,
+    index,
+    meta,
+    overview,
+    matchup,
+    quality,
+    tabletopDecks,
+    mtgoDecks,
+  }) {
+    const eventFormat = meta?.format;
+    const documents = [
+      index,
+      meta,
+      overview,
+      matchup,
+      quality,
+      tabletopDecks,
+      mtgoDecks,
+    ];
+    if (
+      !eventFormat
+      || requestedFormat !== eventFormat
+      || documents.some(document => document?.format !== eventFormat)
+    ) {
+      throw new Error("实体大赛文档的赛制不一致。");
+    }
+    return eventFormat;
+  }
+
   async function loadEvent(indexPath, selectedEventId, format, mtgoController) {
     const index = await client.fetchJson(indexPath);
     const eventEntry = index.events.find(item => item.event_id === selectedEventId)
@@ -77,8 +107,19 @@
       ...eventPaths.map(path => client.fetchJson(path)),
       mtgoController.loadComparisonDecks(format),
     ]);
+    const eventFormat = resolveEventFormat({
+      requestedFormat: format,
+      index,
+      meta,
+      overview,
+      matchup,
+      quality,
+      tabletopDecks,
+      mtgoDecks,
+    });
 
     return {
+      eventFormat,
       eventEntry,
       index,
       matchup,
@@ -92,6 +133,7 @@
 
   root.P8TabletopController = Object.freeze({
     loadEvent,
+    resolveEventFormat,
     resolveScopeState,
     structurePresentation,
   });

@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p9-07s-resumable-large-events"
-  working_branch_status: "p9_07s_owner_accepted_remote_publication_authorized"
+  current_working_branch: "codex/p9-08-cross-format-closeout"
+  working_branch_status: "p9_08_owner_accepted_publication_and_phase_tag_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-30"
+  last_updated: "2026-07-31"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -57,7 +57,7 @@ authoritative_documents:
 current_phase:
   id: 9
   name: "Pure Constructed event strategies"
-  status: "p9_07s_owner_accepted_remote_publication_authorized"
+  status: "completed_when_p9_08_is_on_master_and_phase_tag_is_published"
   started_on: "2026-07-30"
   objective: "Complete statistical support for the explicitly configured constructed_day2 and constructed_single_stage Tabletop Major Events structures while preserving the mixed Modern baseline."
   production_changes_allowed: false
@@ -5439,11 +5439,11 @@ phase_8_result:
 phase_9_plan:
   id: "P9-PLANNING"
   name: "Pure Constructed event strategies"
-  status: "p9_07s_owner_accepted_remote_publication_authorized"
+  status: "completed_when_p9_08_is_on_master_and_phase_tag_is_published"
   owner_authorized_on: "2026-07-30"
   production_change_authorized: true
   remote_publication_authorized: true
-  remote_publication_authorized_on: "2026-07-30"
+  remote_publication_authorized_on: "2026-07-31"
   remote_publication_completed: false
   plan: "docs/audits/P9-01.md"
   mixed_regression_oracle:
@@ -5814,7 +5814,7 @@ phase_9_plan:
       stop_point: "P9-07 is published. P9-07S began from merged master under the separate authorization granted on 2026-07-30."
     - id: "P9-07S"
       name: "Resumable large-event collection"
-      status: "owner_accepted_remote_publication_authorized"
+      status: "completed_accepted_and_published"
       authorized_on: "2026-07-30"
       local_execution_authorized: true
       requires_owner_authorization: false
@@ -5844,6 +5844,15 @@ phase_9_plan:
       remote_publication_authorized_on: "2026-07-30"
       production_dispatch_authorized: false
       whitelist_or_publication_authorized: false
+      publication:
+        local_commit: "5f05ef325514d93cb76c12aa24d49c0cfac840ea"
+        pull_request: 136
+        pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/136"
+        merge_commit: "b6ef3a59bd3cfbe29a8a1e3e8a3cf7b45cc84c19"
+        pr_validation_run: 30546166860
+        master_admission_run: 30546979008
+        pages_run: 30546977665
+        pages_warning: "GitHub-owned Node 20 action runtime deprecation only; publication succeeded."
       validation:
         pre_change_focused_baseline_passed: 42
         test_first_failures_confirmed: 3
@@ -5871,27 +5880,90 @@ phase_9_plan:
         real_event_manifest_schema: "passed"
         temporary_source_cleaned: true
         git_diff_check: "passed"
-      stop_point: "Publish P9-07S under the authorization granted on 2026-07-30. P9-08, whitelist activation, workflow persistence changes, retained production source writes, generated outputs, and production dispatch remain separately controlled."
+      stop_point: "P9-07S is published. P9-08 was separately authorized on 2026-07-31."
     - id: "P9-08"
       name: "Cross-structure and cross-format regression and closeout"
-      status: "not_started"
-      requires_owner_authorization: true
+      status: "owner_accepted_publication_and_phase_tag_authorized"
+      authorized_on: "2026-07-31"
+      local_execution_authorized: true
+      requires_owner_authorization: false
+      branch: "codex/p9-08-cross-format-closeout"
+      base_commit: "7249d2451668df2190eca4fc31529fa4a895713c"
+      deliverables:
+        - "assets/js/phase8/app.js"
+        - "assets/js/phase8/i18n.js"
+        - "assets/js/phase8/tabletop-controller.js"
+        - "tests/test_phase9_structure_consumer.py"
+        - "docs/ROADMAP.md"
+        - "docs/STATUS.yaml"
+        - "docs/audits/P9-08.md"
+      production_change: true
+      generated_data_changed: false
+      live_source_used: false
+      whitelist_changed: false
+      workflow_changed: false
+      public_schema_changed: false
+      statistics_formula_changed: false
+      multi_event_aggregation_implemented: false
+      owner_acceptance: "accepted"
+      owner_accepted_on: "2026-07-31"
+      remote_publication_authorized: true
+      remote_publication_authorized_on: "2026-07-31"
+      phase_tag_authorized: true
+      phase_tag_authorized_on: "2026-07-31"
+      proposed_recovery_tag: "phase-9-pure-constructed-events"
+      production_dispatch_authorized: false
+      validation:
+        test_first_failures_confirmed: 3
+        focused_phase8_phase9_tests_passed: 57
+        full_pytest_passed: 623
+        javascript_syntax_check: "passed"
+        mixed_real_browser_regression: "passed"
+        bilingual_modern_scope_labels: "passed"
+        bilingual_standard_scope_contract: "passed"
+        browser_console_errors: 0
+        standard_rule_validation: "passed"
+        modern_rule_validation: "passed"
+        repository_python_checked: 127
+        repository_json_checked: 1592
+        repository_yaml_checked: 21
+        repository_references_checked: 30
+        repository_hygiene_checked: 1870
+        repository_validation_status: "passed"
+        git_diff_check: "passed"
+      stop_point: "Publish P9-08 and the authorized Phase 9 recovery tag. Do not activate events, dispatch production, or begin the next phase."
+
+phase_9_result:
+  status: "completed_when_closeout_is_on_master_and_tag_is_published"
+  completed_on: "2026-07-31"
+  closeout_task: "P9-08"
+  closeout_branch: "codex/p9-08-cross-format-closeout"
+  closeout_base_commit: "7249d2451668df2190eca4fc31529fa4a895713c"
+  proposed_recovery_tag: "phase-9-pure-constructed-events"
+  acceptance:
+    documented_criteria_passed: true
+    cross_structure_regression_passed: true
+    cross_format_consumer_contract_passed: true
+    mixed_event_browser_regression_passed: true
+    project_owner_approved: true
+    remote_publication_authorized: true
+    recovery_tag_authorized: true
+    production_dispatch_authorized: false
+    event_activation_authorized: false
 
 next_approved_task:
-  id: "P9-07S"
-  name: "Publish accepted resumable large-event collection implementation"
+  id: "P10-PLANNING"
+  name: "Owner review of the next phase plan"
   target_paths:
-    - "src/mtgmeta/melee/client.py"
-    - "tests/test_melee_client.py"
-    - "docs/audits/P9-07S.md"
+    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  production_change: true
-  requires_user_confirmation: false
-  authorization_status: "owner_accepted_remote_publication_authorized"
+  production_change: false
+  requires_user_confirmation: true
+  authorization_status: "not_authorized"
   local_execution_authorized: false
-  remote_publication_authorized: true
+  remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "P9-07 was published through PR #135. P9-07S completed local implementation and temporary real-source acceptance for event 419742, then removed the temporary source archive. The owner accepted P9-07S and authorized commit, push, PR, and merge on 2026-07-30. Whitelist changes, workflow persistence changes, retained production source writes, generated-output writes, production dispatch, and P9-08 remain separately controlled."
+  planning_status: "P9-08 was accepted and its publication plus the phase-9-pure-constructed-events tag were authorized on 2026-07-31. After that publication completes, the next phase requires a fresh owner review and authorization."
 
 governance_baseline:
   status: "active_on_master"
@@ -5940,7 +6012,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P9-08 without separate owner authorization."
+  - "Do not begin Phase 10, activate Tabletop events, or dispatch production without separate owner authorization."
   - "Do not add P9-07 pilot events to configs/melee_events.yaml without separate authorization."
   - "Do not retain P9-07 source responses or generate or publish pilot-event data without separate authorization."
   - "Do not reuse cookies or browser sessions or bypass access controls."

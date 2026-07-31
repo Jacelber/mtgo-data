@@ -637,13 +637,8 @@ async function top8View() {
       }).join("")}</tbody></table></div>${top8PlacementDetail()}</section>`;
 }
 
-function scopeLabel(scope) {
-  const key = {
-    day1: "tabletop.scope.day1",
-    day2: "tabletop.scope.day2",
-    all_constructed: "tabletop.scope.all_constructed",
-  }[scope];
-  return key ? t(key) : scope;
+function scopeLabel(scope, formatId) {
+  return I18n.tabletopScopeLabel(scope, formatId);
 }
 
 function eventDateRange(date) {
@@ -670,14 +665,14 @@ function qualityStatusLabel(value) {
   return key ? t(key) : value;
 }
 
-function issueMessage(issue) {
+function issueMessage(issue, formatId) {
   const key = {
     unknown_classifications: "tabletop.issue.unknown",
     disqualified_participant_matches_excluded: "tabletop.issue.disqualified",
     mixed_event_day2_selection_bias: "tabletop.day2_bias",
     overall_standings_include_non_constructed_results: "tabletop.issue.overall_standings",
   }[issue.code];
-  return key ? t(key) : issue.message;
+  return key ? t(key, { format: formatLabel(formatId) }) : issue.message;
 }
 
 function overviewRecord(record) {
@@ -732,7 +727,9 @@ function tabletopDetailRow(identityId) {
     ? `${source.classification.subtype_name} ${source.classification.archetype_name}`
     : (source?.classification?.archetype_name || currentContext.tabletopIdentityNames.get(identityId) || identityId);
   const performanceHtml = performance ? `<div class="event-deck-performance">
-    <strong>${t("tabletop.scope_performance", { scope: scopeLabel(state.tabletopScope) })}</strong>
+    <strong>${t("tabletop.scope_performance", {
+      scope: scopeLabel(state.tabletopScope, currentContext.eventFormat),
+    })}</strong>
     <span>${t("tabletop.performance_summary", {
       average: number(performance.average_points_per_effective_round),
       points: performance.constructed_points,
@@ -884,7 +881,7 @@ function tabletopOverview(scope, presentation) {
     </table></div>`;
 }
 
-function tabletopMatchup(matchupDocument, scopeId) {
+function tabletopMatchup(matchupDocument, scopeId, eventFormat) {
   const scope = matchupDocument.scopes[scopeId];
   const viewDocument = ReviewData.activeMatchupDocument({
     hierarchical: true,
@@ -894,7 +891,10 @@ function tabletopMatchup(matchupDocument, scopeId) {
   }, LOW_SAMPLE_THRESHOLD);
   currentContext.matchupDisplayDocument = viewDocument;
   return `<div class="panel-toolbar"><div><h2>${t("tabletop.matchup_title")}</h2>
-      <p class="matrix-toolbar-note">${t("tabletop.matchup_note", { scope: scopeLabel(scopeId), count: scope.included_match_count })}</p></div>
+      <p class="matrix-toolbar-note">${t("tabletop.matchup_note", {
+        scope: scopeLabel(scopeId, eventFormat),
+        count: scope.included_match_count,
+      })}</p></div>
       <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
     </div>${matchupLegend(viewDocument.min_sample_hint)}${matrixHtml(viewDocument)}`;
 }
@@ -902,6 +902,7 @@ function tabletopMatchup(matchupDocument, scopeId) {
 async function tabletopView() {
   const indexPath = productEntry().path;
   const {
+    eventFormat,
     eventEntry,
     index,
     matchup,
@@ -947,6 +948,7 @@ async function tabletopView() {
   const presentation = TabletopController.structurePresentation(overview);
   currentContext = {
     tabletopIndex: index,
+    eventFormat,
     eventEntry,
     meta,
     overview,
@@ -971,7 +973,7 @@ async function tabletopView() {
   const disabledScopes = new Set(scopeState.disabled_scopes);
   const scopes = `<div class="range-buttons" aria-label="${t("tabletop.event_scope")}">${scopeState.scope_order.map(scopeId => (
     `<button type="button" data-tabletop-scope="${scopeId}" class="${state.tabletopScope === scopeId ? "active" : ""}"
-      ${disabledScopes.has(scopeId) ? 'disabled aria-disabled="true"' : ""}>${scopeLabel(scopeId)}</button>`
+      ${disabledScopes.has(scopeId) ? 'disabled aria-disabled="true"' : ""}>${scopeLabel(scopeId, eventFormat)}</button>`
   )).join("")}</div>`;
   const scopeLock = scopeState.multi_event
     ? `<p class="scope-lock-note">${t("tabletop.multi_scope_lock")}</p>`
@@ -988,7 +990,7 @@ async function tabletopView() {
         participants: quality.counts.disqualified_participant_count,
         matches: quality.counts.disqualified_matches_excluded,
       })}</li>`
-      : `<li>${escapeHtml(issueMessage(issue))}</li>`
+      : `<li>${escapeHtml(issueMessage(issue, eventFormat))}</li>`
   )).join("");
   const eventSummary = scopeState.multi_event ? "" : `
     <section class="panel event-summary"><div class="event-title-row"><strong>${escapeHtml(overview.event.name)}</strong>
@@ -1003,7 +1005,7 @@ async function tabletopView() {
       })}</div>`
     : state.tabletopView === "overview"
       ? tabletopOverview(scope, presentation)
-      : tabletopMatchup(matchup, state.tabletopScope);
+      : tabletopMatchup(matchup, state.tabletopScope, eventFormat);
   return `${viewTabs}${selector}${scopes}${scopeLock}${eventSummary}
     <section class="panel">${content}</section>`;
 }

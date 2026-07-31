@@ -2023,8 +2023,23 @@ P9-07 was published through pull request #135, implementation commit
 subsequently completed against that merged baseline. Its resumable collector
 successfully collected and parsed all 1,085 responses for temporary event
 `419742`, then removed the temporary source archive. It does not activate the
-event whitelist, retain generated or source data, change a workflow, or begin
-P9-08. The P9-07S implementation remains at its owner-acceptance stop point.
+event whitelist, retain generated or source data, or change a workflow.
+P9-07S was published through pull request #136, implementation commit
+`5f05ef325514d93cb76c12aa24d49c0cfac840ea`, and merge commit
+`b6ef3a59bd3cfbe29a8a1e3e8a3cf7b45cc84c19`.
+
+P9-08 local implementation completed on 2026-07-31 against master commit
+`7249d2451668df2190eca4fc31529fa4a895713c`. The Tabletop consumer now
+requires consistent format metadata across its loaded documents and derives
+scope labels and format-sensitive notices from that validated format and the
+language dictionary. Executable contracts cover exact Standard and Modern
+labels in both languages; browser regression preserves mixed event `434455`.
+No event was activated and no generated data, workflow, public Schema, or
+statistical formula changed. The owner accepted P9-08 and authorized its
+publication plus the
+`phase-9-pure-constructed-events` recovery tag on 2026-07-31. Phase 9 is
+complete when this closeout reaches `master` and the tag targets that merge.
+No Phase 10 work is implied by the closeout authorization.
 
 ## Acceptance criteria
 
@@ -2036,7 +2051,8 @@ Phase 9 is complete when:
 - drop handling follows the statistics specification;
 - high-score thresholds are deterministic;
 - tests cover both structures;
-- front-end labels clearly indicate which structure is being displayed.
+- front-end scope labels clearly indicate the selected event format and
+  structure-supported scope.
 
 ---
 
