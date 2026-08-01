@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/melee-compatibility-manifest.schema.json",
+  "title": "Melee reference-event compatibility manifest",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "event",
+    "migration_policy",
+    "immutable_snapshot",
+    "exact_files",
+    "catalog_projections"
+  ],
+  "properties": {
+    "contract_version": {"const": "1.0.0"},
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "event_id", "format", "snapshot_id"],
+      "properties": {
+        "source": {"const": "melee"},
+        "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "format": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+        "snapshot_id": {
+          "type": "string",
+          "pattern": "^[0-9]{8}T[0-9]{6}Z-[0-9]{2}$"
+        }
+      }
+    },
+    "migration_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exact_byte_change",
+        "catalog_growth",
+        "legacy_snapshot_regeneration"
+      ],
+      "properties": {
+        "exact_byte_change": {
+          "const": "separate_owner_approved_version_migration"
+        },
+        "catalog_growth": {
+          "const": "allowed_when_selected_projection_is_unchanged"
+        },
+        "legacy_snapshot_regeneration": {"const": "prohibited"}
+      }
+    },
+    "immutable_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest",
+        "schema_version",
+        "response_count",
+        "coverage"
+      ],
+      "properties": {
+        "manifest": {"$ref": "#/$defs/exactFile"},
+        "schema_version": {"const": "2.0.0"},
+        "response_count": {"type": "integer", "minimum": 1},
+        "coverage": {"const": "manifest_declared_file_closure"}
+      }
+    },
+    "exact_files": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/exactFile"}
+    },
+    "catalog_projections": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/catalogProjection"}
+    }
+  },
+  "$defs": {
+    "repositoryPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9._/-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "exactFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path", "bytes", "sha256"],
+      "properties": {
+        "role": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "path": {"$ref": "#/$defs/repositoryPath"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "selectionStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["collection", "field", "equals"],
+      "properties": {
+        "collection": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "field": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "equals": {"type": "string", "minLength": 1}
+      }
+    },
+    "catalogProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "path",
+        "root_requirements",
+        "selection",
+        "expected",
+        "expansion_policy"
+      ],
+      "properties": {
+        "role": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "path": {"$ref": "#/$defs/repositoryPath"},
+        "root_requirements": {"type": "object", "minProperties": 1},
+        "selection": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/selectionStep"}
+        },
+        "expected": {"type": "object", "minProperties": 1},
+        "expansion_policy": {
+          "const": "allow_unselected_entries_and_volatile_root_fields"
+        }
+      }
+    }
+  }
+}

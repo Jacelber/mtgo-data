@@ -1,0 +1,145 @@
+{
+  "contract_version": "1.0.0",
+  "event": {
+    "source": "melee",
+    "event_id": "434455",
+    "format": "modern",
+    "snapshot_id": "20260724T092458Z-01"
+  },
+  "migration_policy": {
+    "exact_byte_change": "separate_owner_approved_version_migration",
+    "catalog_growth": "allowed_when_selected_projection_is_unchanged",
+    "legacy_snapshot_regeneration": "prohibited"
+  },
+  "immutable_snapshot": {
+    "manifest": {
+      "role": "raw_snapshot_manifest",
+      "path": "data_raw/melee/434455/20260724T092458Z-01/manifest.json",
+      "bytes": 368340,
+      "sha256": "d037d03c6b104abfed0ff33138f1738bd0aa02cd27c3e5789e135a9b539f359e"
+    },
+    "schema_version": "2.0.0",
+    "response_count": 483,
+    "coverage": "manifest_declared_file_closure"
+  },
+  "exact_files": [
+    {
+      "role": "normalized_event",
+      "path": "data/modern/melee/events/434455.json",
+      "bytes": 2944810,
+      "sha256": "0b4296a9573a4facf4cfde1ce98569156f78fde6f5d2a1d3d662b54e2889e710"
+    },
+    {
+      "role": "classification_overlay",
+      "path": "data/modern/melee/classifications/434455.json",
+      "bytes": 1264702,
+      "sha256": "49e5f6a1500af113fb304f9b465f0d57c8968eb4c387d2c5a9aa87d3b20a4342"
+    },
+    {
+      "role": "opportunity_ledger",
+      "path": "data/modern/melee/opportunities/434455.json",
+      "bytes": 2565837,
+      "sha256": "766bcd3fc25ba67dc693117a15e72ea4bb82bceddf25afeee4ea1c4588326e96"
+    },
+    {
+      "role": "event_overview",
+      "path": "stats/modern/melee/events/434455/overview.json",
+      "bytes": 567994,
+      "sha256": "9d568e8317e8dbfe616869365ed7e69dc53b08acbdcadb82f7e1191f902154f6"
+    },
+    {
+      "role": "event_decks",
+      "path": "stats/modern/melee/events/434455/decks.json",
+      "bytes": 2641959,
+      "sha256": "445797f7aed46bef4da1049c1b91359da95ebf918bbc2a5f37067cb7a66e8a9e"
+    },
+    {
+      "role": "event_matchup",
+      "path": "stats/modern/melee/events/434455/matchup.json",
+      "bytes": 7667615,
+      "sha256": "4895c53993dd432f580a3a8eae818affe50abd8efdb40ddddf1c716ef4464e6e"
+    },
+    {
+      "role": "event_quality",
+      "path": "stats/modern/melee/events/434455/quality.json",
+      "bytes": 3127,
+      "sha256": "664a0d506e899e57259bd21571401263ee12fb7e6501b054fc6a3937672d2fb1"
+    },
+    {
+      "role": "event_meta",
+      "path": "stats/modern/melee/events/434455/meta.json",
+      "bytes": 2365,
+      "sha256": "cf8815f364bfc0947d4e0f905f0f99219b4a6a2cb7122e51a7ab2c1fa430376c"
+    }
+  ],
+  "catalog_projections": [
+    {
+      "role": "format_event_entry",
+      "path": "stats/modern/melee/index.json",
+      "root_requirements": {
+        "schema_version": "1.0.0",
+        "document_type": "event_catalog",
+        "source": "melee",
+        "product": "tabletop-major-events",
+        "format": "modern"
+      },
+      "selection": [
+        {
+          "collection": "events",
+          "field": "event_id",
+          "equals": "434455"
+        }
+      ],
+      "expected": {
+        "event_id": "434455",
+        "name": "Pro Tour Magic: The Gathering | Marvel Super Heroes",
+        "series": "pro_tour",
+        "date": {
+          "end": "2026-07-19",
+          "start": "2026-07-17"
+        },
+        "event_structure": "mixed",
+        "source_url": "https://melee.gg/Tournament/View/434455",
+        "meta": "events/434455/meta.json",
+        "overview": "events/434455/overview.json",
+        "decks": "events/434455/decks.json",
+        "matchup": "events/434455/matchup.json",
+        "quality": "events/434455/quality.json",
+        "scope_order": [
+          "day1",
+          "day2",
+          "all_constructed"
+        ],
+        "default_scope": "all_constructed",
+        "quality_status": "warning"
+      },
+      "expansion_policy": "allow_unselected_entries_and_volatile_root_fields"
+    },
+    {
+      "role": "global_product_route",
+      "path": "stats/catalog.json",
+      "root_requirements": {
+        "schema_version": "1.0.0",
+        "document_type": "consumer_catalog"
+      },
+      "selection": [
+        {
+          "collection": "formats",
+          "field": "id",
+          "equals": "modern"
+        },
+        {
+          "collection": "products",
+          "field": "id",
+          "equals": "tabletop-major-events"
+        }
+      ],
+      "expected": {
+        "id": "tabletop-major-events",
+        "available": true,
+        "path": "stats/modern/melee/index.json"
+      },
+      "expansion_policy": "allow_unselected_entries_and_volatile_root_fields"
+    }
+  ]
+}

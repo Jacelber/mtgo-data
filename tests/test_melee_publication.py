@@ -96,11 +96,12 @@ def test_meta_descriptors_match_exact_event_output_bytes():
         }
 
 
-def test_catalog_exposes_only_the_verified_reference_event():
+def test_catalog_exposes_the_verified_reference_event():
     catalog = _load(CATALOG_PATH)
     assert catalog["default_event_id"] == EVENT_ID
-    assert len(catalog["events"]) == 1
-    event = catalog["events"][0]
+    matching_events = [event for event in catalog["events"] if event["event_id"] == EVENT_ID]
+    assert len(matching_events) == 1
+    event = matching_events[0]
     assert event["event_id"] == EVENT_ID
     assert event["meta"] == f"events/{EVENT_ID}/meta.json"
     assert event["overview"] == f"events/{EVENT_ID}/overview.json"
