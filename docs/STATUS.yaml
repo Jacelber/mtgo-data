@@ -66,9 +66,106 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
+  id: "P10-02"
+  name: "Freeze the explicit 434455 compatibility manifest"
+  status: "owner_accepted_remote_publication_authorized"
+  authorized_on: "2026-08-01"
+  owner_authorized_local_implementation: true
+  workspace: "C:/tmp/mtgo-data-p10-02-20260801-01"
+  branch: "codex/p10-02-434455-compatibility-manifest"
+  base_commit: "837599002a43f7ce6f200bf03b357eba7e9dc2d3"
+  task_type: "executable_reference_event_compatibility_contract"
+  objective: "Freeze the exact event 434455 snapshot and reproducibility bytes while permitting unrelated legal catalog growth through selected projections."
+  target_paths:
+    - "tests/fixtures/melee/434455_compatibility_manifest.json"
+    - "schemas/melee-compatibility-manifest.schema.json"
+    - "tests/test_melee_434455_compatibility.py"
+    - "tests/test_validate_schemas.py"
+    - "tests/test_melee_publication.py"
+    - "docs/audits/P10-02.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
+    - "docs/ROADMAP.md"
+    - "docs/STATUS.yaml"
+  protected_scope:
+    production_code_changed: false
+    tests_changed: true
+    non_public_contract_schema_changed: true
+    public_schema_mapping_changed: false
+    source_configuration_changed: false
+    workflow_changed: false
+    raw_data_changed: false
+    normalized_data_changed: false
+    classification_data_changed: false
+    opportunity_data_changed: false
+    generated_data_changed: false
+    statistical_behavior_changed: false
+    public_paths_changed: false
+    frontend_changed: false
+  compatibility_boundary:
+    contract_version: "1.0.0"
+    event_id: "434455"
+    snapshot_id: "20260724T092458Z-01"
+    raw_snapshot_files: 484
+    manifest_declared_responses: 483
+    exact_explicit_files: 9
+    exact_event_inputs: 3
+    exact_event_public_documents: 5
+    expandable_catalogs:
+      - "stats/modern/melee/index.json"
+      - "stats/catalog.json"
+    expandable_catalog_policy: "selected_projection_must_remain_unchanged"
+    exact_byte_change_policy: "separate_owner_approved_version_migration"
+    legacy_snapshot_regeneration: "prohibited"
+  deliverables:
+    - "tests/fixtures/melee/434455_compatibility_manifest.json"
+    - "schemas/melee-compatibility-manifest.schema.json"
+    - "tests/test_melee_434455_compatibility.py"
+    - "docs/audits/P10-02.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
+    - "docs/ROADMAP.md"
+    - "docs/STATUS.yaml"
+  validation:
+    status: "passed"
+    yaml_parse: "passed"
+    compatibility_schema_validation: "passed"
+    exact_explicit_file_checks_passed: 9
+    raw_manifest_declared_responses_checked: 483
+    raw_snapshot_exact_files_checked: 484
+    expandable_catalog_projections_checked: 2
+    unrelated_catalog_growth_regression: "passed"
+    focused_compatibility_and_schema_tests_passed: 24
+    impacted_tests_passed: 36
+    full_pytest_passed: 630
+    full_pytest_seconds: 400.28
+    public_schema_documents_validated: 69
+    repository_validation: "passed"
+    repository_python_checked: 128
+    repository_json_checked: 1611
+    repository_yaml_checked: 21
+    repository_references_checked: 30
+    repository_hygiene_checked: 1892
+    changed_paths_within_allowlist: true
+    protected_data_paths_unchanged: true
+    added_repository_content_language_check: "passed"
+    credential_and_secret_scan: "passed"
+    git_diff_check: "passed"
+    modified_input_or_output_bytes: false
+    production_workflow_dispatched: false
+  owner_acceptance: "accepted"
+  owner_accepted_on: "2026-08-01"
+  remote_publication_authorized: true
+  remote_publication_authorized_on: "2026-08-01"
+  merge_authorized_after_passing_checks: true
+  production_dispatch_authorized: false
+  next_task_automatically_authorized: false
+  stop_point: "Commit, publish, and merge the accepted P10-02 change after passing checks, then stop. Do not begin P10-03, dispatch production, refresh data, or rewrite history without separate authorization."
+
+p10_01_result:
   id: "P10-01"
   name: "Data classification and privacy audit"
-  status: "owner_accepted_remote_publication_authorized"
+  status: "completed_published_and_merged"
   authorized_on: "2026-08-01"
   owner_authorized_local_implementation: true
   workspace: "C:/tmp/mtgo-data-p10-01-20260801-02"
@@ -142,9 +239,18 @@ current_task:
   remote_publication_authorized: true
   remote_publication_authorized_on: "2026-08-01"
   merge_authorized_after_passing_checks: true
+  publication:
+    local_commit: "ef1dc4e9582c70a6d1ba124dfc06c135e9714328"
+    pull_request: 140
+    pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/140"
+    merge_commit: "837599002a43f7ce6f200bf03b357eba7e9dc2d3"
+    merged_on: "2026-08-01"
+    pr_validation_run: 30685034964
+    master_validation_run: 30685421183
+    pages_run: 30685420869
   production_dispatch_authorized: false
   next_task_automatically_authorized: false
-  stop_point: "Commit, publish, and merge the accepted P10-01 documentation after passing checks, then stop. Do not begin P10-02 or dispatch production automatically."
+  stop_point: "P10-01 was published and merged. P10-02 required and received separate owner authorization on 2026-08-01."
 
 r_02_result:
   id: "R-02"
@@ -6163,8 +6269,8 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P10-02"
-  name: "Freeze the explicit 434455 compatibility manifest"
+  id: "P10-03"
+  name: "Future-event privacy snapshot v3"
   target_paths: "to_be_defined_after_owner_authorization"
   production_change: false
   requires_user_confirmation: true
@@ -6172,7 +6278,7 @@ next_approved_task:
   local_execution_authorized: false
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "P10-02 is the next roadmap candidate only after P10-01 owner acceptance and publication. Its exact compatibility boundary requires separate owner authorization and must distinguish event-specific bytes from legally expandable global catalogs."
+  planning_status: "P10-03 is the next roadmap candidate only after P10-02 owner acceptance and publication. It requires separate owner decisions for per-resource persistence allowlists, public participant names, and keyed pseudonym or controlled mapping management, and must not regenerate event 434455."
 
 governance_baseline:
   status: "active_on_master"
@@ -6221,8 +6327,8 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P10-02 or any later Phase 10 task without separate owner authorization."
-  - "Do not implement a privacy allowlist, remove or rename identity fields, change participant pseudonyms, or regenerate event 434455 under a new snapshot contract in P10-01."
+  - "Do not begin P10-03 or any later Phase 10 task without separate owner authorization."
+  - "Do not implement a privacy allowlist, remove or rename identity fields, change participant pseudonyms, or regenerate event 434455 under a new snapshot contract in P10-02."
   - "Do not activate Tabletop events, dispatch production, or add events to configs/melee_events.yaml without separate authorization."
   - "Do not retain new source responses or generate or publish new event data without separate authorization."
   - "Do not rewrite Git history, migrate storage, or change the retained 434455 compatibility bytes without the applicable owner gate."

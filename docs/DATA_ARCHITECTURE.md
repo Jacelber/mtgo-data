@@ -1472,6 +1472,33 @@ later review. It cannot push
 `master`, create a pull request, merge, or run on a schedule. P7-08 owns the
 first authorized real workflow execution.
 
+### 11.12 Reference-event compatibility manifest
+
+P10-02 defines the version `1.0.0` compatibility boundary for mixed Melee
+event `434455` in
+`tests/fixtures/melee/434455_compatibility_manifest.json`. Its exact-byte set
+contains the raw snapshot manifest, normalized event, classification overlay,
+opportunity ledger, and five event-specific public documents. The raw manifest
+is a closure root: validation also verifies the unique path, byte count, and
+SHA-256 of every one of its 483 declared responses and rejects any undeclared
+file in the retained snapshot directory.
+
+The format event catalog and global consumer catalog are expandable indexes,
+not immutable event payloads. Their complete bytes are excluded from the
+compatibility digest set. Validation instead freezes the complete selected
+`434455` event entry in `stats/modern/melee/index.json` and the Modern
+`tabletop-major-events` product route in `stats/catalog.json`. Unrelated event,
+format, product, default-selection, ordering, and volatile generation metadata
+may change when their own tasks authorize that work, provided the selected
+projection remains unchanged.
+
+Shared whitelist and taxonomy files are not exact-byte members of the event
+manifest. Protected `434455` derived bytes and their embedded provenance remain
+the compatibility result. Any deliberate exact-byte change requires a new
+manifest version, replacement evidence, a decision record, and separate owner
+approval. Future privacy snapshot versions must not regenerate the retained v2
+reference snapshot.
+
 ---
 
 ## 12. Statistics-output layout

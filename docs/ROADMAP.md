@@ -2287,7 +2287,7 @@ boundary before adding more Tabletop events or Constructed formats.
     - document approved event addition and refresh for non-programmers;
     - preserve manual review and publication gates.
 
-P10-01 completed its local documentation-only audit against master commit
+P10-01 completed its documentation-only audit against master commit
 `fc13babbcd5469b77f3c879de753be5fbdbeafdc`. The audit is recorded in
 `docs/audits/P10-01.md`. It found that the canonical snapshot declares 483
 responses rather than the handoff's incomplete 120-file count, classified the
@@ -2295,8 +2295,17 @@ raw and downstream identity fields without recording participant values, and
 confirmed that the committed raw paths are also currently served by GitHub
 Pages. No code, Schema, configuration, workflow, raw or generated data,
 statistical behavior, public path, or front-end behavior changed. The owner
-accepted P10-01 and authorized its publication on 2026-08-01. P10-02 is not
-authorized by this result.
+accepted P10-01, and it was published through pull request #140 and merge commit
+`837599002a43f7ce6f200bf03b357eba7e9dc2d3` on 2026-08-01.
+
+P10-02 adds the version `1.0.0` executable compatibility manifest for event
+`434455`. It freezes the raw snapshot closure, normalized event,
+classification overlay, opportunity ledger, and five event-specific public
+documents by exact bytes. It verifies only the selected event and product
+projections in the expandable format and global catalogs. No production data,
+public catalog, statistic, public path, workflow, source configuration, or
+front-end behavior changes. The owner accepted P10-02 and authorized its
+publication on 2026-08-01. P10-03 is not authorized by this result.
 
 ## Acceptance criteria
 

@@ -31,7 +31,8 @@ def test_every_public_output_embeds_the_manifest_version():
 
 def test_all_declared_schemas_are_valid_and_versioned():
     loaded, _ = schemas.load_schemas(ROOT / "schemas")
-    assert len(loaded) == 35
+    assert len(loaded) == 36
+    assert "melee-compatibility-manifest.schema.json" in loaded
     assert "melee-pure-constructed-contract.schema.json" in loaded
     assert "phase8-public-contract.schema.json" in loaded
     assert "mtgo-archetype-hierarchy.schema.json" in loaded

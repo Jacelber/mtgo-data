@@ -2516,3 +2516,55 @@ production output, front-end behavior, event whitelist, or the existing
 `434455` compatibility bytes. It does not authorize R-02, any current Phase 10
 task, event activation, production dispatch, remote publication, history
 rewriting, or storage migration.
+
+---
+
+# DEC-064 — Freeze event 434455 bytes without freezing expandable catalogs
+
+Status: `Accepted`
+
+## Context
+
+Event `434455` is the retained mixed-event regression baseline. Existing tests
+rebuild its normalized and public artifacts, but exact digests are distributed
+across tests and historical status records. The Phase 9 handoff also listed
+whole-file hashes for `stats/modern/melee/index.json` and `stats/catalog.json`.
+P10-01 proved that the latter changed during a legal production update even
+though no event-specific `434455` byte changed.
+
+Freezing only the five event statistics would omit their retained source and
+derived-input chain. Freezing either complete catalog would block unrelated
+events or products from being added legally.
+
+## Decision
+
+Adopt `tests/fixtures/melee/434455_compatibility_manifest.json` version `1.0.0`
+as the executable compatibility boundary.
+
+Freeze the exact bytes of the retained raw snapshot manifest, normalized event,
+classification overlay, opportunity ledger, and five event-specific public
+documents. Treat the raw manifest as a closure root and verify every declared
+response's unique path, byte count, and SHA-256 together with the snapshot's
+exact declared file set.
+
+Do not freeze the complete bytes of `stats/modern/melee/index.json` or
+`stats/catalog.json`. Freeze only the selected `434455` event entry and the
+Modern `tabletop-major-events` product route. Permit unrelated catalog growth
+and volatile root-field changes when those projections remain unchanged.
+
+Do not freeze the complete whitelist or Modern taxonomy as event-specific
+bytes. Their shared evolution remains separately controlled. Any protected
+byte change requires a new compatibility version, replacement evidence, this
+decision's successor, and separate owner approval. Do not regenerate the v2
+snapshot under a future privacy contract.
+
+## Consequences
+
+The compatibility boundary is explicit, Schema-validated, and enforced without
+copying 483 response hashes into a second maintained list. Later event and
+product work can expand both catalogs without weakening `434455` protection.
+
+P10-02 changes tests, a contract fixture, a non-public contract Schema, and
+documentation only. It changes no retained or generated data, public Schema
+mapping, public path, statistic, source configuration, workflow, or front end.
+P10-03 remains separately owner-gated.
