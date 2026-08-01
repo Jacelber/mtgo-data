@@ -2084,10 +2084,12 @@ apply before any classification or statistical output exists:
 - any unresolved or blocking issue makes the event non-publishable.
 
 A missing or unavailable decklist is a non-blocking warning at this ingestion
-boundary. It does not make a match result untrustworthy by itself. This rule does
-not establish a decklist-coverage threshold for later classification or public
-statistics; exact coverage and sample warning thresholds remain open under
-OPEN-002.
+boundary. It does not make a match result untrustworthy by itself. This rule
+does not establish a decklist-coverage threshold for later classification or
+public statistics; that coverage threshold remains unresolved. The matchup
+sample presentation warning is separately resolved by DEC-060: the Phase 8
+consumer warns below 20 valid matches without treating the threshold as a
+reliability or publication gate.
 
 ---
 

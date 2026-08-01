@@ -56,9 +56,13 @@ It is intended to show:
 
 ### 3.2 Supported formats
 
-The current implementation supports Standard only.
+The current public MTGO implementation supports Standard and Modern as
+complete products. Official event collection also retains archives for
+Pauper, Pioneer, Legacy, and Vintage, but archive collection alone does not
+make those formats complete or public MTGO products. Vintage remains behind
+its separate decision gate.
 
-The planned supported formats are:
+The scoped formats are:
 
 - Standard;
 - Pauper;
@@ -122,7 +126,11 @@ Each event should be independently inspectable.
 
 ### 4.2 Supported formats
 
-The planned tabletop formats are:
+The current public Tabletop implementation supports Modern through the
+explicitly whitelisted reference event `434455`. The other scoped tabletop
+formats remain planned and require separately approved events.
+
+The scoped tabletop formats are:
 
 - Pauper;
 - Modern;
@@ -534,34 +542,27 @@ Future front-end work should consider how to expose subtype information without 
 
 ## 11. Development order
 
-Development must proceed in the following broad order:
+Phases 0 through 9 established the authoritative specifications, Standard
+regression baseline, shared classification and MTGO infrastructure, split
+static front end, Modern MTGO product, approved mixed-event Modern reference
+product, and reusable pure Constructed event strategies.
 
-1. Finalize authoritative project documentation.
-2. Protect the existing Standard implementation with a baseline and regression tests.
-3. Add engineering foundations:
-   - README;
-   - license and notices;
-   - dependency lists;
-   - pytest;
-   - rule validation;
-   - JSON Schemas;
-   - CI;
-   - safer GitHub Actions.
-4. Extract and validate the shared classifier.
-5. Generalize the Standard-only MTGO pipeline.
-6. Split the existing MTGO front end without changing behavior.
-7. Implement the whitelist-based Melee collection and normalization pipeline.
-8. Implement Modern classification and MTGO Modern statistics.
-9. Implement the approved mixed-format Modern Pro Tour reference event.
-10. Implement the tabletop event overview and matchup matrix.
-11. Complete reusable pure Constructed and mixed-event strategies.
-12. Implement compatible multi-event tabletop matchup aggregation and whitelist operations.
-13. Implement Pauper for MTGO and the approved Paupergeddon event.
-14. Add Pioneer to both applicable product areas.
-15. Add Legacy to both applicable product areas.
-16. Add Standard tabletop events when an approved event is available.
-17. Decide whether to implement Vintage.
-18. Complete cleanup, operational documentation, and release procedures.
+After the separately controlled post-Phase-9 governance tasks, development
+must proceed in this broad order:
+
+1. Phase 10 — data governance, compliance, and production operations.
+2. Phase 11 — engineering baseline, test structure, and documentation reduction.
+3. Phase 12 — front-end productization and sharing readiness.
+4. Phase 13 — compatible multi-event raw-count matchup aggregation.
+5. Phase 14 — Pauper MTGO and the approved Paupergeddon event.
+6. Phase 15 — Pioneer.
+7. Phase 16 — Legacy and Eternal Weekend.
+8. Phase 17 — Standard Tabletop events when an approved event is available.
+9. Phase 18 — the Vintage decision gate.
+10. Phase 19 — release and long-term maintenance closeout.
+
+Listing a phase does not authorize it. `STATUS.yaml` controls the next allowed
+task and all stop conditions.
 
 Detailed phases and acceptance criteria belong in `ROADMAP.md`.
 

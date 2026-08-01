@@ -1,9 +1,13 @@
 # mtgo-data
 
-`mtgo-data` analyzes Constructed Magic: The Gathering tournament data. The current public **MTGO Environment Trends** site remains Standard-only, while the production data pipeline prepares both Standard and non-public Modern data. A separate **Tabletop Major Events** product and additional Constructed formats are planned, but they are not yet public production features.
+`mtgo-data` analyzes Constructed Magic: The Gathering tournament data. The
+public **MTGO Environment Trends** product supports Standard and Modern. The
+separate **Tabletop Major Events** product publishes the explicitly whitelisted
+Modern reference event `434455`. Other configured Constructed formats may have
+official MTGO event archives without yet being complete public products.
 
-The project is in Phase 7: implementing the first approved mixed-format Modern
-Pro Tour reference pipeline while keeping MTGO and tabletop products
+Phase 9 is complete. Post-Phase-9 governance and development proceed one
+separately authorized task at a time while MTGO and tabletop products remain
 source-separated. Current task authorization and project status are recorded
 in [`docs/STATUS.yaml`](docs/STATUS.yaml).
 
@@ -186,10 +190,11 @@ The document defaults to all Constructed Swiss and also retains separate Day
 explicit zero cells, Unknown, raw W-L-D counts, and 95% Wilson intervals.
 Leaf cells are canonical; parent cells are independent row-and-column rollups
 of those leaves. Only opportunity-ledger rows with symmetric
-`matchup_included: true` enter the matrices. No low-sample display threshold
-is invented while OPEN-002 remains unresolved. P7-06 does not create catalog,
-manifest, workflow, or front-end behavior; those remain P7-07 and Phase 8
-work.
+`matchup_included: true` enter the matrices. The retained Tabletop document
+keeps its compatibility value `low_sample_threshold: null`; the Phase 8
+consumer applies the DEC-060 presentation warning below 20 valid matches
+without changing those backend bytes. P7-06 did not create catalog, manifest,
+workflow, or front-end behavior; those were completed by P7-07 and Phase 8.
 
 P7-07 packages the verified event for public discovery. The first command is
 read-only; `--execute` atomically writes the event `meta.json` and Modern
