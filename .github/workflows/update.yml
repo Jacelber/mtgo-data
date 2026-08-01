@@ -6,29 +6,31 @@ on:
     - cron: "0 20 * * *"
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: production-data-update
   cancel-in-progress: false
 
 jobs:
-  update:
-    name: Fetch, generate, validate, and publish MTGO data
+  fetch:
+    name: Fetch MTGO candidate data
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    permissions:
+      contents: read
     env:
       PYTHONPATH: src
       MTGO_EVENT_FORMATS: "standard legacy pioneer pauper vintage modern"
       MTGO_PRODUCT_FORMATS: "standard modern"
-      MTGO_HIERARCHY_FORMATS: "standard modern"
     steps:
-      - name: Check out full history for metadata and publication
+      - name: Check out full history without persisted credentials
         uses: actions/checkout@v7.0.0
         with:
+          ref: ${{ github.sha }}
           fetch-depth: 0
-          persist-credentials: true
+          persist-credentials: false
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v6.3.0
@@ -59,6 +61,85 @@ jobs:
             echo "Collecting Videre match data for ${FORMAT}."
             python -B -m mtgmeta.mtgo --format "$FORMAT" fetch-matches
           done
+
+      - name: Package fetched candidate for the build job
+        shell: bash
+        run: |
+          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-fetch-candidate"
+          mkdir -p "$ARTIFACT_DIR"
+          tar -cf "$ARTIFACT_DIR/fetched-inputs.tar" data fetched.txt
+          cp "$RUNNER_TEMP/production-baseline.json" "$ARTIFACT_DIR/production-baseline.json"
+          (
+            cd "$ARTIFACT_DIR"
+            sha256sum fetched-inputs.tar production-baseline.json > SHA256SUMS
+          )
+
+      - name: Upload immutable fetched candidate
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: mtgo-fetch-candidate
+          path: ${{ runner.temp }}/mtgo-fetch-candidate
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Write fetch summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## MTGO production fetch"
+            echo
+            echo "- Job result: ${{ job.status }}"
+            echo "- Trigger: ${{ github.event_name }}"
+            echo "- Candidate transfer: immutable \\`mtgo-fetch-candidate\\` artifact"
+            echo "- Event formats: ${MTGO_EVENT_FORMATS}"
+            echo "- Match formats: ${MTGO_PRODUCT_FORMATS}"
+            echo "- No repository write permission is available to this job."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  build:
+    name: Build and validate MTGO candidate
+    if: github.ref == 'refs/heads/master'
+    needs: fetch
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    env:
+      PYTHONPATH: src
+      MTGO_PRODUCT_FORMATS: "standard modern"
+      MTGO_HIERARCHY_FORMATS: "standard modern"
+    steps:
+      - name: Check out full history without persisted credentials
+        uses: actions/checkout@v7.0.0
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6.3.0
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned runtime and validation dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Download immutable fetched candidate
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: mtgo-fetch-candidate
+          path: ${{ runner.temp }}/mtgo-fetch-candidate
+
+      - name: Verify and restore fetched candidate
+        shell: bash
+        run: |
+          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-fetch-candidate"
+          (
+            cd "$ARTIFACT_DIR"
+            sha256sum --check SHA256SUMS
+          )
+          tar -xf "$ARTIFACT_DIR/fetched-inputs.tar" -C "$GITHUB_WORKSPACE"
 
       - name: Build product statistics
         shell: bash
@@ -131,7 +212,9 @@ jobs:
           done
 
       - name: Validate production candidate scope and data increments
-        run: python -B validate_production_candidate.py validate --baseline "$RUNNER_TEMP/production-baseline.json"
+        run: >-
+          python -B validate_production_candidate.py validate
+          --baseline "$RUNNER_TEMP/mtgo-fetch-candidate/production-baseline.json"
 
       - name: Validate repository files and references
         run: python -B validate_repository.py
@@ -145,6 +228,81 @@ jobs:
 
       - name: Validate generated JSON schemas
         run: python -B validate_schemas.py
+
+      - name: Package validated output for the publish job
+        shell: bash
+        run: |
+          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-build-candidate"
+          mkdir -p "$ARTIFACT_DIR"
+          tar -cf "$ARTIFACT_DIR/validated-output.tar" data stats reports fetched.txt
+          (
+            cd "$ARTIFACT_DIR"
+            sha256sum validated-output.tar > SHA256SUMS
+          )
+
+      - name: Upload immutable validated output
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: mtgo-build-candidate
+          path: ${{ runner.temp }}/mtgo-build-candidate
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Write build summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## MTGO production build and validation"
+            echo
+            echo "- Job result: ${{ job.status }}"
+            echo "- Candidate transfer: verified \\`mtgo-fetch-candidate\\` input and immutable \\`mtgo-build-candidate\\` output"
+            echo "- Product formats: ${MTGO_PRODUCT_FORMATS}"
+            echo "- Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}"
+            echo "- Validation layers: production candidate acceptance, repository, rule, and Schema validation."
+            echo "- No repository write permission is available to this job."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  publish:
+    name: Publish validated MTGO data
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Check out full history for publication
+        uses: actions/checkout@v7.0.0
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Download immutable validated output
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: mtgo-build-candidate
+          path: ${{ runner.temp }}/mtgo-build-candidate
+
+      - name: Verify and restore validated output
+        shell: bash
+        run: |
+          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-build-candidate"
+          (
+            cd "$ARTIFACT_DIR"
+            sha256sum --check SHA256SUMS
+          )
+          if tar -tf "$ARTIFACT_DIR/validated-output.tar" | grep -Ev '^(data/|stats/|reports/|fetched\.txt$)'; then
+            echo "Validated output contains a path outside the publication boundary." >&2
+            exit 1
+          fi
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Publication checkout is not clean before restoring validated output." >&2
+            git status --short >&2
+            exit 1
+          fi
+          tar -xf "$ARTIFACT_DIR/validated-output.tar" -C "$GITHUB_WORKSPACE"
 
       - name: Commit and push generated changes
         id: publish
@@ -182,20 +340,17 @@ jobs:
           echo "commit=$LOCAL_SHA" >> "$GITHUB_OUTPUT"
           echo "Published master verified at $LOCAL_SHA."
 
-      - name: Write production update summary
+      - name: Write publication summary
         if: always()
         shell: bash
         run: |
           {
-            echo "## MTGO production data update"
+            echo "## MTGO production publication"
             echo
             echo "- Job result: ${{ job.status }}"
             echo "- Trigger: ${{ github.event_name }}"
-            echo "- Source branch: ${{ github.ref_name }}"
             echo "- Generated changes published: ${{ steps.publish.outputs.changed || 'not-reached' }}"
             echo "- Published commit verified: ${{ steps.verify.outputs.commit || 'not-reached' }}"
-            echo "- Product formats: ${MTGO_PRODUCT_FORMATS}"
-            echo "- Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}"
-            echo "- Validation layers: clean-checkout regression, production candidate acceptance, and published-commit confirmation."
-            echo "- Pipeline: all configured MTGO event archives; Standard and Modern Videre matches, statistics, hierarchical matchup statistics, range completeness, weekly Top 8 decklists, Pickup candidates, metadata, hierarchy catalogs, de-identified classification diagnostics; validation and publication."
+            echo "- Candidate transfer: verified immutable \\`mtgo-build-candidate\\` artifact"
+            echo "- Publication boundary: data/, stats/, reports/, and fetched.txt only."
           } >> "$GITHUB_STEP_SUMMARY"

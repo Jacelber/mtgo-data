@@ -2519,19 +2519,31 @@ Purpose:
 
 It should use:
 
-- explicit `contents: write`;
+- workflow-default `contents: read`, with `contents: write` only on the final
+  publication job;
 - a dedicated concurrency group;
 - `cancel-in-progress: false` unless a later decision changes it;
 - a workflow summary;
 - no-op handling when no files change.
 
-The Phase 6 production workflow uses three validation layers:
+The production workflow uses three validation layers:
 
 1. a clean-checkout regression suite before any live fetch;
 2. a dynamic, registry-aware candidate snapshot comparison after fetch and generation but before staging;
 3. confirmation that the published remote `master` commit equals the locally created generated-data commit.
 
-The candidate baseline is an ephemeral workflow artifact. Its schema version is breaking when the tracked format dimensions change; P6-08 uses version `2.0.0` to replace the former Standard-only match count with per-product match counts. New arbitrary generated JSON paths remain blocked even for complete products; only expected event archives, match archives, and dated Pickup review YAML may be newly created automatically.
+The fetch, build, and publish jobs transfer their inputs and validated output as
+short-lived immutable workflow artifacts. The build job verifies the fetched
+artifact digest before extraction; the publish job verifies the validated-output
+digest and rejects archive paths outside `data/`, `stats/`, `reports/`, and
+`fetched.txt` before extraction. These artifacts are bounded intra-run handoffs,
+not durable storage or a restart checkpoint; resumability remains a separate
+task. The candidate baseline is part of the fetched-candidate artifact. Its
+schema version is breaking when the tracked format dimensions change; P6-08 uses
+version `2.0.0` to replace the former Standard-only match count with per-product
+match counts. New arbitrary generated JSON paths remain blocked even for
+complete products; only expected event archives, match archives, and dated
+Pickup review YAML may be newly created automatically.
 
 ### 19.3 `fetch_melee.yml`
 

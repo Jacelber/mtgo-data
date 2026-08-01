@@ -2879,3 +2879,56 @@ run `30701806996`, master admission run `30702234519`, and custom Pages run
 entry points plus selected runtime documents matched the merged source bytes.
 
 Production dispatch and later Phase 10 tasks remain separately controlled.
+
+---
+
+# DEC-070 — Split MTGO production into least-privilege artifact handoffs
+
+Status: `Accepted`
+
+## Context
+
+Before P10-09, the one scheduled MTGO job fetched live inputs, generated
+statistics, ran all validation, committed, pushed, and confirmed publication
+with workflow-wide `contents: write`. Its validations were ordered correctly,
+but fetch and build did not need repository-write authority and a failed stage
+did not expose a durable job boundary within the workflow run.
+
+The owner selected A+ public Git storage in DEC-068 and directed P10-09 to
+split fetch, build, and publication without changing the daily public-Git
+commit behavior. P10-10 and P10-11 remain separate tasks for resumability and
+deduplicated failure issues.
+
+## Decision
+
+Keep one scheduled and manually dispatchable MTGO workflow, its master-only
+guard, non-cancelling concurrency group, Python 3.12 runtime, registry-derived
+format loops, and three validation layers. Split its responsibilities into:
+
+1. a read-only `fetch` job that runs clean-checkout regression before live
+   collection, snapshots the candidate baseline, and transfers the fetched
+   inputs plus baseline through `mtgo-fetch-candidate`;
+2. a read-only `build` job that verifies that immutable transfer, generates all
+   existing products, runs candidate, repository, rule, and Schema validation,
+   then transfers the validated allowed output through `mtgo-build-candidate`;
+3. a `contents: write` `publish` job that verifies the validated-output digest,
+   rejects paths outside `data/`, `stats/`, `reports/`, and `fetched.txt`, then
+   performs the existing no-op, commit, push, and remote-master confirmation.
+
+Both artifacts retain for one day. They are intra-run transfer objects, not a
+new data store, durable archive, restart checkpoint, or permission grant. Each
+job checks out the same immutable trigger SHA. No job receives issue, Pages,
+OIDC, secret, storage-provider, or other unrelated permission.
+
+## Consequences
+
+The workflow exposes fetch, build, and publication as separately observable
+steps and confines repository write access to the only step that can publish a
+fully validated candidate. A transfer or validation failure prevents the
+publish job from starting; the normal Actions status and per-job summaries
+remain the failure report until P10-11 is separately authorized.
+
+No statistical formula, source-selection rule, event whitelist, generated-data
+path, public URL, front-end behavior, Pages configuration, raw retention
+policy, storage provider, or production-data commit changes during local
+implementation. A real production dispatch remains separately owner-gated.

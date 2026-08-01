@@ -58,9 +58,9 @@ def test_public_registry_workflow_and_generated_layers_are_aligned():
         (ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"),
         Loader=yaml.BaseLoader,
     )
-    environment = workflow["jobs"]["update"]["env"]
-    assert environment["MTGO_PRODUCT_FORMATS"].split() == list(PRODUCT_FORMATS)
-    assert environment["MTGO_HIERARCHY_FORMATS"].split() == list(PRODUCT_FORMATS)
+    build_environment = workflow["jobs"]["build"]["env"]
+    assert build_environment["MTGO_PRODUCT_FORMATS"].split() == list(PRODUCT_FORMATS)
+    assert build_environment["MTGO_HIERARCHY_FORMATS"].split() == list(PRODUCT_FORMATS)
 
     for format_id in PRODUCT_FORMATS:
         base = ROOT / "stats" / format_id / "mtgo"

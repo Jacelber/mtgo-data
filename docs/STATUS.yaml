@@ -66,44 +66,42 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P10-08"
-  name: "Unify the Python runtime"
+  id: "P10-09"
+  name: "Split production into fetch, build, and publish jobs"
   status: "local_complete_owner_accepted_publication_authorized"
   authorized_on: "2026-08-01"
-  workspace: "C:/tmp/mtgo-data-p10-08-20260801-01"
-  branch: "codex/p10-08-python-312-runtime"
-  base_commit: "a2d92c384d386d0a98ab9fd4bb7632ce066b3bfd"
-  task_type: "production_runtime_alignment_without_live_data_collection"
-  objective: "Align the scheduled MTGO production update with Python 3.12, the already exercised local and GitHub Actions runtime, without changing product behavior or dispatching production."
+  workspace: "C:/tmp/mtgo-data-p10-09-20260801-01"
+  branch: "codex/p10-09-production-job-split"
+  base_commit: "3cded88f689b42377370240921e2975d53f97ab3"
+  task_type: "least_privilege_production_workflow_split_without_live_data_collection"
+  objective: "Separate the scheduled MTGO update into read-only fetch and build jobs with immutable artifact handoffs and one final publish job, without changing product behavior or dispatching production."
   authorization:
     local_implementation: true
-    workflow_runtime_configuration: true
+    workflow_job_split: true
     tests_and_documentation: true
-    commit: true
-    remote_publication: true
-    merge: true
+    commit: false
+    remote_publication: false
+    merge: false
     production_dispatch: false
     storage_migration: false
     history_rewrite: false
-    p10_09_or_later: false
+    p10_10_or_later: false
   target_paths:
     - ".github/workflows/update.yml"
     - "tests/test_production_workflow.py"
+    - "tests/test_phase6_closeout.py"
     - "README.md"
-    - "docs/audits/P10-07.md"
-    - "docs/audits/P10-08.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/audits/P10-09.md"
     - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  runtime_boundary:
-    supported_python: "3.12"
-    unsupported_python:
-      - "3.11"
-    unchanged_workflows_already_using_python_3_12:
-      - ".github/workflows/ci.yml"
-      - ".github/workflows/fetch_melee.yml"
-      - ".github/workflows/pages.yml"
-    production_workflow_to_align: ".github/workflows/update.yml"
+  job_boundary:
+    fetch: "contents_read_clean_regression_baseline_snapshot_and_live_input_collection"
+    build: "contents_read_verified_input_restore_generation_and_candidate_validation"
+    publish: "contents_write_verified_allowed_output_restore_noop_commit_push_and_remote_confirmation"
+    transfers: "one_day_immutable_actions_artifacts_with_sha256_checksums"
+    unchanged: "schedule_master_guard_concurrency_python_3_12_registry_loops_validation_layers_and_generated_path_boundary"
   protected_scope:
     raw_or_generated_data_changed: false
     statistical_behavior_changed: false
@@ -114,19 +112,48 @@ current_task:
     remote_write_performed: false
     history_rewritten: false
   acceptance:
-    focused_workflow_test_baseline: "13 passed on Python 3.12"
-    test_first_runtime_expectation: "failed while update.yml still declared Python 3.11"
-    focused_workflow_test_after_change: "26 passed on Python 3.12.7"
-    full_pytest: "655 passed in 418.69 seconds on Python 3.12.7"
-    repository_validation: "135 Python, 1613 JSON, 22 YAML, 30 references, and 1908 hygiene paths passed"
+    test_first_workflow_contract: "10 expected failures against the former single update job"
+    focused_cross_layer_tests: "84 passed in 6.05 seconds on Python 3.12.7"
+    full_pytest: "654 passed in 407.17 seconds on Python 3.12.7"
+    repository_validation: "135 Python, 1613 JSON, 22 YAML, 30 references, and 1909 hygiene paths passed"
     rule_validation: "passed"
     public_schema_validation: "69 documents passed"
+    changed_data_or_frontend_paths: false
+    production_workflow_dispatched: false
   owner_acceptance: "accepted"
-  owner_accepted_on: "2026-08-01"
+  owner_accepted_on: "2026-08-02"
   commit_authorized: true
   remote_publication_authorized: true
   merge_authorized: true
-  stop_point: "Publish the accepted P10-08 change, then stop before a real production-data dispatch or P10-09."
+  stop_point: "Publish the accepted P10-09 change, then stop before a real production-data dispatch or P10-10."
+
+p10_08_result:
+  id: "P10-08"
+  name: "Unify the Python runtime"
+  status: "completed_published_and_deployed"
+  workspace: "C:/tmp/mtgo-data-p10-08-20260801-01"
+  branch: "codex/p10-08-python-312-runtime"
+  base_commit: "a2d92c384d386d0a98ab9fd4bb7632ce066b3bfd"
+  local_commit: "16138470273477b304f72c03ce1924444e6adc0b"
+  pull_request: 147
+  pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/147"
+  merge_commit: "3cded88f689b42377370240921e2975d53f97ab3"
+  merged_on: "2026-08-01"
+  validation:
+    pull_request_validation_run: 30703719148
+    master_admission_run: 30704150549
+    pages_deployment_run: 30704150587
+    public_mtgo_entry_point_status: 200
+    public_tabletop_entry_point_status: 200
+    production_workflow_dispatched: false
+  protected_scope:
+    raw_or_generated_data_changed: false
+    statistical_behavior_changed: false
+    frontend_source_changed: false
+    event_434455_bytes_changed: false
+    pages_setting_changed: false
+    production_dispatched: false
+    history_rewritten: false
 
 p10_07_result:
   id: "P10-07"
@@ -6607,16 +6634,16 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P10-08"
-  name: "Unify the Python runtime"
-  target_paths: "P10-08_runtime_alignment_contract_only"
+  id: "P10-09"
+  name: "Split production into fetch, build, and publish jobs"
+  target_paths: "P10-09_workflow_test_and_governance_contract_only"
   production_change: true
-  requires_user_confirmation: false
+  requires_user_confirmation: true
   authorization_status: "authorized_for_publication"
   local_execution_authorized: true
   remote_publication_authorized: true
   production_dispatch_authorized: false
-  planning_status: "Commit, push, open and validate one P10-08 PR, merge only after required checks pass, then stop before a real production-data dispatch or P10-09."
+  planning_status: "Commit, push, open and validate one P10-09 PR, merge only after required checks pass, then stop before a real production-data dispatch or P10-10."
 
 governance_baseline:
   status: "active_on_master"
@@ -6665,9 +6692,9 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not dispatch the MTGO production workflow as P10-08 local validation; a real current-source fetch and generated-data publication require separate owner authorization."
+  - "Do not dispatch the MTGO production workflow as P10-09 local validation; a real current-source fetch and generated-data publication require separate owner authorization."
   - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
-  - "Do not begin P10-09 or any later Phase 10 task without separate owner authorization."
+  - "Do not begin P10-10 or any later Phase 10 task without separate owner authorization."
   - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."
   - "Do not activate Tabletop events, dispatch production, or add events to configs/melee_events.yaml without separate authorization."
   - "Do not retain new source responses or generate or publish new event data without separate authorization."
