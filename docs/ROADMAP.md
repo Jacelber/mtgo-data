@@ -2451,6 +2451,35 @@ source was fetched, no generated data changed, and no production workflow was
 dispatched. The owner accepted the local result and authorized its publication
 on 2026-08-01; P10-09 remains separately controlled.
 
+P10-08 was published through pull request #147. Its implementation commit
+`16138470273477b304f72c03ce1924444e6adc0b` merged as
+`3cded88f689b42377370240921e2975d53f97ab3` after pull-request validation run
+`30703719148` passed. Master confirmation run `30704150549` and allowlisted
+Pages deployment run `30704150587` also passed. No production-data workflow
+was dispatched, and both public product entry points returned HTTP 200.
+
+The owner authorized P10-09 local implementation on 2026-08-01. It replaces
+the single write-capable update job with read-only fetch and build jobs that
+pass one-day immutable artifacts to a final write-capable publish job. The
+clean-checkout regression, dynamic candidate validation, publication
+confirmation, schedule, master guard, concurrency, format boundaries, and
+generated-path boundary remain required. The task introduces no live fetch,
+generated-data change, statistics change, public-path change, front-end change,
+storage provider, restart behavior, failure issue, commit, remote publication,
+or merge. It stops for owner acceptance after local validation.
+
+P10-09 local implementation is complete. The former `update` job is now the
+read-only `fetch`, read-only `build`, and write-scoped `publish` sequence; both
+job handoffs verify SHA-256 checksums, and the publish archive rejects paths
+outside the existing generated-data boundary before extraction. The focused
+cross-layer suite passed 84 tests and the complete Python 3.12.7 suite passed
+all 654 tests in 407.17 seconds. Repository, Standard rule, public Schema, YAML,
+and diff validation also passed. No production workflow was dispatched and no
+data, statistic, public path, front-end, Pages setting, storage, or history
+changed. The owner accepted the local result on 2026-08-02 and separately
+authorized commit, remote publication, pull-request creation, and merge. A real
+production-data dispatch and P10-10 remain separately controlled.
+
 ## Acceptance criteria
 
 Phase 10 is complete when:

@@ -333,13 +333,13 @@ Pull requests and pushes to `master` run the clean-checkout validation sequence 
 - `tests/fixtures/standard/`: self-contained Standard classification baseline.
 - `docs/`: authoritative specifications, decisions, audits, status, and development workflow.
 - `index.html`: current GitHub Pages entry point for MTGO Environment Trends.
-- `.github/workflows/update.yml`: the single scheduled MTGO production pipeline, retaining all six official event archives and generating the complete Standard and non-public Modern product data with per-format candidate validation before publication.
+- `.github/workflows/update.yml`: the single scheduled MTGO production pipeline. Its read-only fetch and build jobs transfer short-lived immutable artifacts; only its final publish job can write the validated Standard and non-public Modern output to `master`.
 
 Generated statistics and source configurations serve different roles. Do not manually edit generated statistics as a substitute for fixing their generator.
 
 ## Production operations
 
-The production scripts and `.github/workflows/update.yml` fetch data and write committed outputs. The production workflow runs daily at `20:00 UTC` and may also be dispatched manually on `master`. It is not part of the read-only PR validation sequence. Before running or changing it, review:
+The production scripts and `.github/workflows/update.yml` fetch data and write committed outputs. The production workflow runs daily at `20:00 UTC` and may also be dispatched manually on `master`. It is not part of the read-only PR validation sequence. Its fetch job runs the clean-checkout regression suite, snapshots and retrieves the candidate inputs, then hands them to the build job through a one-day immutable workflow artifact. The build job verifies that transfer, generates the product outputs, and runs candidate, repository, rule, and Schema validation before handing the validated output to the final publish job through a second immutable artifact. Only the publish job receives `contents: write`; it verifies the transfer, stages only `data/`, `stats/`, `reports/`, and `fetched.txt`, then confirms the published `master` commit. These artifacts are temporary job handoffs, not a data store or resumability mechanism. Before running or changing it, review:
 
 - [`docs/audits/P1-01.md`](docs/audits/P1-01.md) for the current entry-point and workflow inventory;
 - [`docs/STATISTICS_SPEC.md`](docs/STATISTICS_SPEC.md) for metric definitions;

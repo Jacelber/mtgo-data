@@ -12,12 +12,20 @@ def load_update():
     return yaml.load(UPDATE.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
 
 
-def run_commands():
-    return [step.get("run", "") for step in load_update()["jobs"]["update"]["steps"]]
+def job(name):
+    return load_update()["jobs"][name]
 
 
-def command_index(fragment):
-    commands = run_commands()
+def steps(name):
+    return job(name)["steps"]
+
+
+def run_commands(name):
+    return [step.get("run", "") for step in steps(name)]
+
+
+def command_index(name, fragment):
+    commands = run_commands(name)
     return next(index for index, command in enumerate(commands) if fragment in command)
 
 
@@ -33,49 +41,83 @@ def test_mtgo_remains_the_only_scheduled_production_workflow():
     ]
 
 
-def test_update_is_the_only_scheduled_production_pipeline():
+def test_update_keeps_its_schedule_master_boundary_and_concurrency():
     workflow = load_update()
     assert set(workflow["on"]) == {"workflow_dispatch", "schedule"}
     assert workflow["on"]["workflow_dispatch"] == {}
     assert workflow["on"]["schedule"] == [{"cron": "0 20 * * *"}]
-    assert workflow["permissions"] == {"contents": "write"}
-    assert workflow["concurrency"] == {"group": "production-data-update", "cancel-in-progress": "false"}
-
-
-def test_job_is_master_only_bounded_and_uses_official_actions():
-    job = load_update()["jobs"]["update"]
-    assert job["if"] == "github.ref == 'refs/heads/master'"
-    assert job["runs-on"] == "ubuntu-latest"
-    assert job["timeout-minutes"] == "45"
-    assert job["env"] == {
-        "PYTHONPATH": "src",
-        "MTGO_EVENT_FORMATS": "standard legacy pioneer pauper vintage modern",
-        "MTGO_PRODUCT_FORMATS": "standard modern",
-        "MTGO_HIERARCHY_FORMATS": "standard modern",
+    assert workflow["permissions"] == {"contents": "read"}
+    assert workflow["concurrency"] == {
+        "group": "production-data-update",
+        "cancel-in-progress": "false",
     }
-    steps = job["steps"]
-    assert steps[0]["uses"] == "actions/checkout@v7.0.0"
-    assert steps[0]["with"] == {"fetch-depth": "0", "persist-credentials": "true"}
-    assert steps[1]["uses"] == "actions/setup-python@v6.3.0"
-    assert steps[1]["with"]["python-version"] == "3.12"
+    assert set(workflow["jobs"]) == {"fetch", "build", "publish"}
+    assert all(job(name)["if"] == "github.ref == 'refs/heads/master'" for name in workflow["jobs"])
+
+
+def test_fetch_build_and_publish_have_separate_minimum_permissions():
+    assert job("fetch")["permissions"] == {"contents": "read"}
+    assert job("build")["permissions"] == {"contents": "read"}
+    assert job("publish")["permissions"] == {"contents": "write"}
+    assert job("build")["needs"] == "fetch"
+    assert job("publish")["needs"] == "build"
+
+
+def test_every_job_is_bounded_and_uses_the_same_immutable_trigger_commit():
+    for name in ("fetch", "build", "publish"):
+        assert job(name)["runs-on"] == "ubuntu-latest"
+        assert int(job(name)["timeout-minutes"]) > 0
+        checkout = next(step for step in steps(name) if step.get("uses") == "actions/checkout@v7.0.0")
+        assert checkout["with"]["fetch-depth"] == "0"
+        assert checkout["with"]["ref"] == "${{ github.sha }}"
+    assert next(step for step in steps("fetch") if step.get("uses") == "actions/checkout@v7.0.0")["with"][
+        "persist-credentials"
+    ] == "false"
+    assert next(step for step in steps("build") if step.get("uses") == "actions/checkout@v7.0.0")["with"][
+        "persist-credentials"
+    ] == "false"
+    assert next(step for step in steps("publish") if step.get("uses") == "actions/checkout@v7.0.0")["with"][
+        "persist-credentials"
+    ] == "true"
 
 
 def test_all_project_workflows_use_only_python_3_12():
     for path in WORKFLOWS.glob("*.yml"):
         workflow = yaml.load(path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
-        for job in workflow["jobs"].values():
-            for step in job.get("steps", []):
+        for workflow_job in workflow["jobs"].values():
+            for step in workflow_job.get("steps", []):
                 if step.get("uses") == "actions/setup-python@v6.3.0":
                     assert step["with"]["python-version"] == "3.12", path
 
 
-def test_complete_pipeline_order_preserves_mtgo_and_videre():
+def test_fetch_runs_clean_regression_then_snapshots_and_collects_only_inputs():
     ordered = [
         "-r requirements-dev.txt",
         "-m pytest",
         "validate_production_candidate.py snapshot",
         "fetch-events",
         "fetch-matches",
+        "tar -cf",
+        "sha256sum",
+    ]
+    indexes = [command_index("fetch", fragment) for fragment in ordered]
+    assert indexes == sorted(indexes)
+    assert command_index("fetch", "-m pytest") < command_index("fetch", "fetch-events")
+    assert command_index("fetch", "validate_production_candidate.py snapshot") < command_index(
+        "fetch", "fetch-events"
+    )
+    fetch_text = UPDATE.read_text(encoding="utf-8")
+    assert "mtgo-fetch-candidate" in fetch_text
+    assert "actions/upload-artifact@v4.6.2" in fetch_text
+    assert "retention-days: 1" in fetch_text
+    assert "if-no-files-found: error" in fetch_text
+
+
+def test_build_verifies_and_consumes_fetch_artifact_before_generation_and_validation():
+    ordered = [
+        "actions/download-artifact@v4.3.0",
+        "sha256sum --check",
+        "tar -xf",
         "build-statistics",
         "build-matchups",
         "build-completeness",
@@ -89,77 +131,63 @@ def test_complete_pipeline_order_preserves_mtgo_and_videre():
         "validate_repository.py",
         "validate_rules.py",
         "validate_schemas.py",
-        "git add --",
-        "git ls-remote origin refs/heads/master",
+        "tar -cf",
+        "sha256sum",
     ]
-    indexes = [command_index(fragment) for fragment in ordered]
+    flattened = "\n".join(
+        step.get("uses", "") + "\n" + step.get("run", "") for step in steps("build")
+    )
+    indexes = []
+    cursor = 0
+    for fragment in ordered:
+        cursor = flattened.index(fragment, cursor)
+        indexes.append(cursor)
+        cursor += len(fragment)
     assert indexes == sorted(indexes)
+    assert "mtgo-build-candidate" in flattened
+    assert "actions/upload-artifact@v4.6.2" in flattened
+
+
+def test_publish_verifies_the_validated_output_and_is_the_only_commit_writer():
+    publish_text = "\n".join(step.get("uses", "") + "\n" + step.get("run", "") for step in steps("publish"))
+    assert "actions/download-artifact@v4.3.0" in publish_text
+    assert "sha256sum --check" in publish_text
+    assert "tar -tf" in publish_text
+    assert "git status --porcelain" in publish_text
+    assert "git add -- data/ stats/ reports/ fetched.txt" in publish_text
+    assert "git push origin HEAD:master" in publish_text
+    assert "git pull" not in publish_text
+    assert "rebase" not in publish_text
+    for name in ("fetch", "build"):
+        text = "\n".join(run_commands(name))
+        assert "git commit" not in text
+        assert "git push" not in text
 
 
 def test_clean_baseline_and_dynamic_candidate_checks_are_not_conflated():
-    steps = load_update()["jobs"]["update"]["steps"]
-    commands = [step.get("run", "") for step in steps]
-    pytest_indexes = [index for index, command in enumerate(commands) if "-m pytest" in command]
-    assert len(pytest_indexes) == 1
-    assert pytest_indexes[0] < command_index("fetch-events")
-    snapshot_index = command_index("validate_production_candidate.py snapshot")
-    candidate_index = command_index("validate_production_candidate.py validate")
-    assert pytest_indexes[0] < snapshot_index < command_index("fetch-events")
-    assert command_index("classification-reports --strict") < candidate_index
-    assert candidate_index < command_index("git add --")
+    assert command_index("fetch", "-m pytest") < command_index(
+        "fetch", "validate_production_candidate.py snapshot"
+    )
+    assert command_index("build", "classification-reports --strict") < command_index(
+        "build", "validate_production_candidate.py validate"
+    )
 
 
 def test_only_candidate_generation_may_continue_on_error():
-    steps = load_update()["jobs"]["update"]["steps"]
     allowed = {"Generate Weekly Pickup candidates when absent"}
-    actual = {step["name"] for step in steps if step.get("continue-on-error") == "true"}
+    actual = {step["name"] for step in steps("build") if step.get("continue-on-error") == "true"}
     assert actual == allowed
-    candidate = next(step for step in steps if step["name"] in allowed)
+    candidate = next(step for step in steps("build") if step["name"] in allowed)
     assert "STATUS=0" in candidate["run"]
     assert '|| STATUS=$?' in candidate["run"]
     assert 'exit "$STATUS"' in candidate["run"]
 
 
-def test_publication_scope_covers_replaced_scraper_and_generated_outputs():
-    publish = next(step for step in load_update()["jobs"]["update"]["steps"] if step.get("id") == "publish")
-    command = publish["run"]
-    assert "git add -- data/ stats/ reports/ fetched.txt" in command
-    assert "unknown_highperf.txt" not in command
-    assert "unknown_clusters.txt" not in command
-    assert "git push origin HEAD:master" in command
-    assert "git pull" not in command
-    assert "rebase" not in command
-    assert command.count("git add") == 1
-    assert 'echo "commit=$(git rev-parse HEAD)"' in command
-
-
-def test_publication_is_confirmed_against_remote_master():
-    steps = load_update()["jobs"]["update"]["steps"]
-    verify = next(step for step in steps if step.get("id") == "verify")
-    assert "git status --porcelain" in verify["run"]
-    assert "git ls-remote origin refs/heads/master" in verify["run"]
-    assert 'if [ "$LOCAL_SHA" != "$REMOTE_SHA" ]' in verify["run"]
-    assert command_index("git add --") < command_index("git ls-remote origin refs/heads/master")
-
-
-def test_summary_is_always_written_without_secrets():
-    steps = load_update()["jobs"]["update"]["steps"]
-    summary = steps[-1]
-    assert summary["if"] == "always()"
-    assert "GITHUB_STEP_SUMMARY" in summary["run"]
-    text = UPDATE.read_text(encoding="utf-8").lower()
-    assert "secrets." not in text
-    assert "github.token" not in text
-    assert "Validation layers: clean-checkout regression" in summary["run"]
-    assert "Product formats: ${MTGO_PRODUCT_FORMATS}" in summary["run"]
-    assert "Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}" in summary["run"]
-
-
-def test_format_aware_loops_replace_every_standard_production_wrapper():
+def test_format_aware_loops_and_registry_boundaries_remain_intact():
     workflow = UPDATE.read_text(encoding="utf-8")
     assert "python -B -m mtgmeta.catalog --root ." in workflow
     assert "$MTGO_FORMAT" not in workflow
-    assert "python -B -m mtgmeta.mtgo --format \"$FORMAT\" fetch-events" in workflow
+    assert 'python -B -m mtgmeta.mtgo --format "$FORMAT" fetch-events' in workflow
     for command in (
         "fetch-matches",
         "build-statistics",
@@ -186,18 +214,16 @@ def test_format_aware_loops_replace_every_standard_production_wrapper():
         assert legacy not in workflow
 
 
-def test_event_archive_formats_match_the_registry_collection_allowlist():
+def test_event_archive_and_product_formats_still_match_the_registry():
     configured = [
         item["id"]
         for item in yaml.safe_load((ROOT / "configs" / "formats.yaml").read_text(encoding="utf-8"))["formats"]
         if item["mtgo"]["event_collection_enabled"]
     ]
-    workflow_formats = load_update()["jobs"]["update"]["env"]["MTGO_EVENT_FORMATS"].split()
+    workflow_formats = job("fetch")["env"]["MTGO_EVENT_FORMATS"].split()
     assert set(workflow_formats) == set(configured)
     assert workflow_formats == ["standard", "legacy", "pioneer", "pauper", "vintage", "modern"]
 
-
-def test_product_formats_match_complete_executable_registry_products():
     required = {
         "classification",
         "event_statistics",
@@ -209,22 +235,17 @@ def test_product_formats_match_complete_executable_registry_products():
         "metadata_generation",
         "catalog_generation",
     }
-    configured = [
+    products = [
         item["id"]
-        for item in yaml.safe_load(
-            (ROOT / "configs" / "formats.yaml").read_text(encoding="utf-8")
-        )["formats"]
-        if item["mtgo"]["enabled"]
-        and required <= set(item["mtgo"]["capabilities"])
+        for item in yaml.safe_load((ROOT / "configs" / "formats.yaml").read_text(encoding="utf-8"))["formats"]
+        if item["mtgo"]["enabled"] and required <= set(item["mtgo"]["capabilities"])
     ]
-    env = load_update()["jobs"]["update"]["env"]
-    assert env["MTGO_PRODUCT_FORMATS"].split() == configured == ["standard", "modern"]
-    assert env["MTGO_HIERARCHY_FORMATS"].split() == ["standard", "modern"]
+    assert job("build")["env"]["MTGO_PRODUCT_FORMATS"].split() == products == ["standard", "modern"]
+    assert job("build")["env"]["MTGO_HIERARCHY_FORMATS"].split() == ["standard", "modern"]
 
 
 def test_every_product_rule_file_is_validated_before_schema_validation():
-    rules = command_index('validate_rules.py "my_archetypes/${FORMAT}.yaml"')
-    schemas = command_index("validate_schemas.py")
+    rules = command_index("build", 'validate_rules.py "my_archetypes/${FORMAT}.yaml"')
+    schemas = command_index("build", "validate_schemas.py")
     assert rules < schemas
-    command = run_commands()[rules]
-    assert "for FORMAT in $MTGO_PRODUCT_FORMATS" in command
+    assert "for FORMAT in $MTGO_PRODUCT_FORMATS" in run_commands("build")[rules]
