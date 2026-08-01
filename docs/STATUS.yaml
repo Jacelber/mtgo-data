@@ -66,35 +66,32 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P10-03"
-  name: "Future-event privacy snapshot v3"
-  status: "owner_accepted_remote_publication_authorized"
+  id: "P10-04"
+  name: "Privacy validation and notice update"
+  status: "local_implementation_complete_pending_owner_acceptance"
   authorized_on: "2026-08-01"
   owner_authorized_local_implementation: true
-  workspace: "C:/tmp/mtgo-data-p10-03-20260801-01"
-  branch: "codex/p10-03-future-event-privacy-snapshot-v3"
-  base_commit: "23ed3467e0501ae1796d3326433c05035abb98e5"
-  task_type: "future_event_pre_persistence_minimization_and_keyed_identity"
-  objective: "Persist only reviewed future-event resource fields and replace raw participant IDs with event-scoped HMAC references without changing event 434455."
+  workspace: "C:/tmp/mtgo-data-p10-04-20260801-01"
+  branch: "codex/p10-04-privacy-validation-notice"
+  base_commit: "c2886d20658dab2e490b39e637eccb6b7e4cb436"
+  task_type: "minimized_resource_schema_validation_and_privacy_notice"
+  objective: "Use a strict resource Schema as the primary future-v3 persistence gate, retain only a scoped supplemental key scan, and publish a contact and removal procedure without changing production data."
   owner_decisions:
-    public_display_name: "retain_source_published_DisplayName"
-    participant_reference: "hmac_sha256_event_scoped"
-    secret_provisioning: "not_in_scope"
-    legacy_event_migration: "prohibited"
+    privacy_contact: "djacerror@gmail.com"
+    resource_schema: "primary_gate_before_persistence_and_on_read"
+    prohibited_field_scan: "supplemental_v3_json_keys_only"
+    history_rewrite: "not_authorized_separate_P10-05_gate"
   target_paths:
+    - "src/mtgmeta/melee/privacy_validation.py"
     - "src/mtgmeta/melee/privacy.py"
-    - "src/mtgmeta/melee/client.py"
     - "src/mtgmeta/melee/parser.py"
-    - "src/mtgmeta/melee/assembler.py"
-    - "src/mtgmeta/melee/retention.py"
-    - "src/mtgmeta/melee/__main__.py"
-    - "schemas/melee-raw-archive.schema.json"
-    - "tests/test_melee_privacy.py"
-    - "tests/test_melee_client.py"
-    - "tests/test_melee_retention.py"
+    - "schemas/melee-minimized-resource.schema.json"
+    - "tests/test_melee_privacy_validation.py"
+    - "tests/test_melee_parser.py"
     - "tests/test_validate_schemas.py"
+    - "NOTICE.md"
     - "README.md"
-    - "docs/audits/P10-03.md"
+    - "docs/audits/P10-04.md"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
@@ -112,55 +109,78 @@ current_task:
     real_secret_configured: false
     live_fetch_performed: false
   contract:
-    complete_manifest_schema_version: "3.0.0"
     minimized_resource_schema_version: "1.0.0"
-    participant_identity_scheme: "hmac-sha256-event-v1"
-    participant_reference_prefix: "melee-v3-"
-    minimum_key_bytes: 32
-    checkpoint_records_key_id_only: true
-    source_response_written_before_minimization: false
-    legacy_parse_compatibility:
-      - "1.0.0"
-      - "2.0.0"
-      - "3.0.0"
-    production_retention_compatibility:
-      - "2.0.0"
-      - "3.0.0"
+    schema_is_primary_allowlist: true
+    pre_persistence_validation: true
+    read_time_validation: true
+    nested_additional_properties_rejected: true
+    supplemental_scan_scope: "decoded_minimized_v3_resource_keys_only"
+    supplemental_scan_values: false
+    legacy_v1_v2_scan: false
+    public_output_manifest_mapping_changed: false
+    privacy_contact: "djacerror@gmail.com"
   validation:
     status: "passed"
-    pre_change_impacted_tests_passed: 68
-    focused_privacy_client_parser_retention_schema_tests_passed: 91
-    full_pytest_passed: 636
-    full_pytest_seconds: 396.52
-    post_full_impacted_tests_passed: 29
-    post_full_impacted_tests_seconds: 1.97
+    pre_change_impacted_tests_passed: 74
+    initial_focused_privacy_parser_client_retention_compatibility_schema_tests_passed: 83
+    full_pytest_passed: 646
+    full_pytest_seconds: 404.17
+    post_full_focused_tests_passed: 84
+    post_full_focused_tests_seconds: 65.58
     compatibility_manifest_tests_passed: 7
     compatibility_manifest_seconds: 0.46
     public_schema_documents_validated: 69
     rule_validation: "passed"
     repository_validation: "passed"
-    repository_python_checked: 130
-    repository_json_checked: 1611
+    repository_python_checked: 132
+    repository_json_checked: 1612
     repository_yaml_checked: 21
     repository_references_checked: 30
-    repository_hygiene_checked: 1895
+    repository_hygiene_checked: 1899
     git_diff_check: "passed"
     changed_paths_within_scope: true
-    changed_path_count: 17
+    changed_path_count: 14
     workflow_paths_changed: false
     configuration_paths_changed: false
     production_or_public_data_paths_changed: false
     event_434455_compatibility_passed: true
+    privacy_contact_exact_match: true
     credential_and_secret_scan: "passed"
     production_workflow_dispatched: false
-  owner_acceptance: "accepted"
-  owner_accepted_on: "2026-08-01"
-  remote_publication_authorized: true
-  remote_publication_authorized_on: "2026-08-01"
-  merge_authorized: true
+  owner_acceptance: "pending"
+  owner_accepted_on: null
+  remote_publication_authorized: false
+  merge_authorized: false
   production_dispatch_authorized: false
   next_task_automatically_authorized: false
-  stop_point: "Commit, publish, and merge the accepted P10-03 change after passing checks, then stop. Do not provision a secret, dispatch production, begin P10-04, or rewrite history without separate authorization."
+  stop_point: "Complete local P10-04 validation and stop for owner acceptance. Do not commit, push, create or merge a pull request, provision a secret, dispatch production, begin P10-05, or rewrite history without separate authorization."
+
+p10_03_result:
+  id: "P10-03"
+  name: "Future-event privacy snapshot v3"
+  status: "completed_published_and_merged"
+  authorized_on: "2026-08-01"
+  owner_accepted_on: "2026-08-01"
+  branch: "codex/p10-03-future-event-privacy-snapshot-v3"
+  base_commit: "23ed3467e0501ae1796d3326433c05035abb98e5"
+  local_commit: "4aa60d21509c0108650f10428e47e08cd057f489"
+  pull_request: 142
+  merge_commit: "c2886d20658dab2e490b39e637eccb6b7e4cb436"
+  merged_on: "2026-08-01"
+  validation:
+    full_pytest_passed: 636
+    pull_request_ci_run: 30689002540
+    master_validation_run: 30689309308
+    pages_run: 30689309139
+    remote_checks_passed: true
+  protected_scope:
+    raw_data_changed: false
+    generated_data_changed: false
+    statistical_behavior_changed: false
+    workflow_changed: false
+    event_434455_regenerated: false
+    real_secret_configured: false
+    production_workflow_dispatched: false
 
 p10_02_result:
   id: "P10-02"
@@ -6373,16 +6393,16 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P10-04"
-  name: "Privacy validation and notice update"
-  target_paths: "to_be_defined_after_owner_authorization"
+  id: "P10-05"
+  name: "Owner gate for history rewriting"
+  target_paths: "not_defined_without_separate_owner_authorization"
   production_change: false
   requires_user_confirmation: true
   authorization_status: "not_authorized"
   local_execution_authorized: false
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "P10-04 is the next roadmap candidate only after P10-03 owner acceptance and publication. It owns resource Schemas as the primary production-data gate, supplemental prohibited-field scans, and notice/contact/removal procedures."
+  planning_status: "P10-05 is a separately owner-gated history-rewrite safety and impact analysis. P10-04 completion does not authorize preparation, history mutation, force-push, or any remote action."
 
 governance_baseline:
   status: "active_on_master"
@@ -6431,7 +6451,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P10-04 or any later Phase 10 task without separate owner authorization."
+  - "Do not begin P10-05 or any later Phase 10 task without separate owner authorization."
   - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."
   - "Do not activate Tabletop events, dispatch production, or add events to configs/melee_events.yaml without separate authorization."
   - "Do not retain new source responses or generate or publish new event data without separate authorization."

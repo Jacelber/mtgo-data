@@ -31,7 +31,7 @@ def test_every_public_output_embeds_the_manifest_version():
 
 def test_all_declared_schemas_are_valid_and_versioned():
     loaded, _ = schemas.load_schemas(ROOT / "schemas")
-    assert len(loaded) == 36
+    assert len(loaded) == 37
     assert "melee-compatibility-manifest.schema.json" in loaded
     assert "melee-pure-constructed-contract.schema.json" in loaded
     assert "phase8-public-contract.schema.json" in loaded
@@ -52,6 +52,7 @@ def test_all_declared_schemas_are_valid_and_versioned():
     assert "melee-event-meta.schema.json" in loaded
     assert "melee-event-catalog.schema.json" in loaded
     assert "melee-raw-archive.schema.json" in loaded
+    assert "melee-minimized-resource.schema.json" in loaded
     assert all(schema["$schema"] == "https://json-schema.org/draft/2020-12/schema" for schema in loaded.values())
     assert loaded["formats.schema.json"]["x-schema-version"] == "1.3.0"
     assert loaded["melee-events.schema.json"]["x-schema-version"] == "3.0.0"

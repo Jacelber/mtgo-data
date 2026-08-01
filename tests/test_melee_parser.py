@@ -22,6 +22,7 @@ import mtgmeta.melee.parser as parser
 from mtgmeta.melee.parser import (
     MeleeSourceParseError,
     SourceArtifact,
+    parse_minimized_response,
     parse_raw_snapshot,
     parse_source_response,
 )
@@ -323,6 +324,21 @@ def test_snapshot_rejects_wrong_byte_count_and_hash(tmp_path):
     rewrite_manifest(snapshot, lambda value: value["responses"][0].update(sha256="0" * 64))
     with pytest.raises(MeleeSourceParseError, match="SHA-256"):
         parse_raw_snapshot(snapshot)
+
+
+def test_minimized_response_schema_is_enforced_before_semantic_parsing():
+    document = {
+        "schema_version": "1.0.0",
+        "resource_type": "tournament",
+        "tournament": {
+            "source_event_id": "434455",
+            "name": "Fixture Event",
+            "Username": "must-not-persist",
+        },
+        "rounds": [],
+    }
+    with pytest.raises(MeleeSourceParseError, match="Schema validation failed"):
+        parse_minimized_response(encoded(document), artifact())
 
 
 def test_snapshot_rejects_unsafe_or_duplicate_manifest_paths(tmp_path):
