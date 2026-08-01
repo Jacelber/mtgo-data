@@ -1561,6 +1561,37 @@ correction, upstream-source requests, and Git-history rewriting are distinct
 operations. P10-04 changes no retained or generated data and does not
 authorize the separately owner-gated P10-05 history operation.
 
+### 11.15 Legacy reachability and history-rewrite sequencing
+
+P10-05 identifies commit `d8880c2126814407a873d9ba3285300cc1c87c4f`
+as the only commit that introduces `data_raw/`. The current master tree still
+contains and GitHub Pages still serves the complete 484-file event `434455`
+snapshot. Twenty-one ordinary remote branches, three phase tags, and 49
+GitHub-managed pull-request heads are reachable from the introducing commit.
+
+A branch and tag force-push cannot update GitHub's read-only pull-request refs,
+other users' clones, forks, or third-party caches. A history-only rewrite also
+does not reduce current exposure while the same raw paths remain at master.
+Removing those current paths would change the P10-02 exact-byte compatibility
+closure and requires both an approved compatibility successor and a selected
+storage destination.
+
+P10-05 therefore proves an owner-designated private independent bundle and
+restoration, then stops for an owner decision. Actual history rewriting is not
+an implicit implementation step. The preferred sequence defers any execution
+until P10-06/P10-07 resolve the active archive and public-path boundary, unless
+the owner separately accepts the full compatibility, Git-ref, collaborator,
+Pages, and GitHub Support consequences.
+
+The P10-05 base was preserved in a private bundle of 18,003,023 bytes with
+SHA-256
+`53ea51b53cd03f7cd55bdbfff61e7e0235e2c74f5556e3966f44f40e2c83a35d`.
+A no-hardlink mirror restoration reproduced all 216 named refs exactly, and a
+second master worktree passed object integrity, the seven-event compatibility
+checks, and repository validators. This proves the procedure only for base
+`48a4863a28d6ec6d9b854c7a9d72058c68a0f4aa`; any later execution requires a
+fresh bundle after refs stop moving.
+
 ---
 
 ## 12. Statistics-output layout
