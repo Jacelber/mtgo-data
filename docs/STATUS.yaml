@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p10-10-mtgo-resumability"
+  current_working_branch: "codex/p10-11-deduplicated-failure-issues"
   working_branch_status: "master_is_authoritative_and_task_branches_have_no_standing_authority"
   status: "active"
   primary_language: "Python"
@@ -66,35 +66,32 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P10-10"
-  name: "Add MTGO fetch-stage resumability"
+  id: "P10-11"
+  name: "Add deduplicated MTGO production failure issues"
   status: "local_complete_pending_owner_acceptance"
   authorized_on: "2026-08-02"
-  workspace: "C:/tmp/mtgo-data-p10-10-20260802-01"
-  branch: "codex/p10-10-mtgo-resumability"
-  base_commit: "a0cdeb1ee84c48ec6169d113ba6fc2517e3f5c62"
-  task_type: "bounded_same_commit_mtgo_fetch_restart_without_live_data_collection"
-  objective: "Allow only the read-only MTGO input-collection stage to resume verified completed operations after a failed run, without changing product behavior or dispatching production."
+  workspace: "C:/tmp/mtgo-data-p10-11-20260802-02"
+  branch: "codex/p10-11-deduplicated-failure-issues"
+  base_commit: "313cd9c307a7fea72a38251983a73bcf1048f034"
+  task_type: "bounded_issue_only_notification_for_actual_master_production_failures"
+  objective: "Record an actual failed MTGO production stage in one deduplicated GitHub Issue without broadening fetch, build, or publish permissions or changing product data."
   authorization:
     local_implementation: true
-    workflow_job_split: false
-    fetch_checkpoint_restart: true
     tests_and_documentation: true
+    local_real_issue_creation: false
     commit: false
     remote_publication: false
     merge: false
     production_dispatch: false
     storage_migration: false
     history_rewrite: false
-    p10_10_or_later: false
+    p10_12_or_later: false
   target_paths:
     - ".github/workflows/update.yml"
-    - "mtgo_fetch_checkpoint.py"
-    - "tests/test_mtgo_fetch_checkpoint.py"
     - "tests/test_production_workflow.py"
     - "README.md"
     - "docs/DATA_ARCHITECTURE.md"
-    - "docs/audits/P10-10.md"
+    - "docs/audits/P10-11.md"
     - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
@@ -102,8 +99,9 @@ current_task:
     fetch: "contents_read_actions_read_clean_regression_baseline_snapshot_safe_checkpoint_restart_and_live_input_collection"
     build: "contents_read_verified_input_restore_generation_and_candidate_validation"
     publish: "contents_write_verified_allowed_output_restore_noop_commit_push_and_remote_confirmation"
-    transfers: "one_day_immutable_candidate_artifacts_plus_seven_day_same_commit_fetch_checkpoint_with_sha256_checksums"
-    unchanged: "schedule_master_guard_concurrency_python_3_12_registry_loops_build_publish_validation_layers_and_generated_path_boundary"
+    notify: "issues_write_only_no_checkout_no_contents_access_and_only_after_an_actual_master_fetch_build_or_publish_failure"
+    deduplication: "one_open_non_pull_request_issue_per_failed_stage_using_a_stable_hidden_marker_with_a_comment_for_recurrences"
+    unchanged: "schedule_master_guard_concurrency_python_3_12_registry_loops_build_publish_validation_layers_generated_path_boundary_and_pages_behavior"
   protected_scope:
     raw_or_generated_data_changed: false
     statistical_behavior_changed: false
@@ -114,18 +112,50 @@ current_task:
     remote_write_performed: false
     history_rewritten: false
   acceptance:
-    focused_checkpoint_and_workflow_tests: "18 passed in 0.55 seconds on Python 3.12.13"
-    full_pytest: "659 passed in 412.17 seconds on Python 3.12.13"
-    repository_validation: "137 Python, 1613 JSON, 22 YAML, 30 references, and 1912 hygiene paths passed"
+    focused_workflow_tests: "16 passed in 0.70 seconds on Python 3.12.7"
+    focused_workflow_and_governance_tests: "19 passed in 0.69 seconds on Python 3.12.7"
+    full_pytest: "661 passed in 415.63 seconds on Python 3.12.7"
+    repository_validation: "137 Python, 1634 JSON, 22 YAML, 30 references, and 1934 hygiene paths passed"
     rule_validation: "passed"
     public_schema_validation: "69 documents passed"
+    workflow_and_status_yaml_parse: "passed"
+    git_diff_check: "passed"
     changed_data_or_frontend_paths: false
     production_workflow_dispatched: false
+    real_issue_created: false
   owner_acceptance: "pending"
   commit_authorized: false
   remote_publication_authorized: false
   merge_authorized: false
   stop_point: "Complete local validation, stop for owner acceptance, then require separate authorization for commit, remote publication, merge, or a real production-data dispatch."
+
+p10_10_result:
+  id: "P10-10"
+  name: "Add MTGO fetch-stage resumability"
+  status: "completed_published_and_merged"
+  workspace: "C:/tmp/mtgo-data-p10-10-20260802-01"
+  branch: "codex/p10-10-mtgo-resumability"
+  base_commit: "a0cdeb1ee84c48ec6169d113ba6fc2517e3f5c62"
+  local_commit: "1340dd0db82a1090354e8b3cf941cc124b6a469e"
+  pull_request: 149
+  pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/149"
+  merge_commit: "0c8316939d32f794d638d68a2c5b6aacaac1d6a3"
+  merged_on: "2026-08-02"
+  validation:
+    pull_request_validation_run: 30708067332
+    master_admission_run: 30708546548
+    pages_deployment_run: 30708546545
+    public_mtgo_entry_point_status: 200
+    public_tabletop_entry_point_status: 200
+    production_workflow_dispatched: false
+  protected_scope:
+    raw_or_generated_data_changed: false
+    statistical_behavior_changed: false
+    frontend_source_changed: false
+    event_434455_bytes_changed: false
+    pages_setting_changed: false
+    production_dispatched: false
+    history_rewritten: false
 
 p10_09_result:
   id: "P10-09"
@@ -6662,16 +6692,16 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P10-09"
-  name: "Split production into fetch, build, and publish jobs"
-  target_paths: "P10-09_workflow_test_and_governance_contract_only"
+  id: "P10-11"
+  name: "Add deduplicated MTGO production failure issues"
+  target_paths: "P10-11_workflow_test_and_governance_contract_only"
   production_change: true
   requires_user_confirmation: true
-  authorization_status: "authorized_for_publication"
+  authorization_status: "authorized_for_local_implementation_only"
   local_execution_authorized: true
-  remote_publication_authorized: true
+  remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "Commit, push, open and validate one P10-09 PR, merge only after required checks pass, then stop before a real production-data dispatch or P10-10."
+  planning_status: "Complete local P10-11 validation and stop for owner acceptance. A separate authorization is required before commit, push, PR creation, merge, or a real production-data dispatch."
 
 governance_baseline:
   status: "active_on_master"
@@ -6720,9 +6750,9 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not dispatch the MTGO production workflow as P10-09 local validation; a real current-source fetch and generated-data publication require separate owner authorization."
+  - "Do not dispatch the MTGO production workflow as P10-11 local validation; a real current-source fetch, generated-data publication, and any resulting failure issue require separate owner authorization."
   - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
-  - "Do not begin P10-10 or any later Phase 10 task without separate owner authorization."
+  - "Do not create a real GitHub Issue, commit, push, open a pull request, merge, or begin P10-12 or any later Phase 10 task without separate owner authorization."
   - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."
   - "Do not activate Tabletop events, dispatch production, or add events to configs/melee_events.yaml without separate authorization."
   - "Do not retain new source responses or generate or publish new event data without separate authorization."

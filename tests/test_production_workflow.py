@@ -51,16 +51,18 @@ def test_update_keeps_its_schedule_master_boundary_and_concurrency():
         "group": "production-data-update",
         "cancel-in-progress": "false",
     }
-    assert set(workflow["jobs"]) == {"fetch", "build", "publish"}
-    assert all(job(name)["if"] == "github.ref == 'refs/heads/master'" for name in workflow["jobs"])
+    assert set(workflow["jobs"]) == {"fetch", "build", "publish", "notify"}
+    assert all(job(name)["if"] == "github.ref == 'refs/heads/master'" for name in ("fetch", "build", "publish"))
 
 
 def test_fetch_build_and_publish_have_separate_minimum_permissions():
     assert job("fetch")["permissions"] == {"actions": "read", "contents": "read"}
     assert job("build")["permissions"] == {"contents": "read"}
     assert job("publish")["permissions"] == {"contents": "write"}
+    assert job("notify")["permissions"] == {"issues": "write"}
     assert job("build")["needs"] == "fetch"
     assert job("publish")["needs"] == "build"
+    assert job("notify")["needs"] == ["fetch", "build", "publish"]
 
 
 def test_every_job_is_bounded_and_uses_the_same_immutable_trigger_commit():
@@ -188,6 +190,46 @@ def test_publish_verifies_the_validated_output_and_is_the_only_commit_writer():
         text = "\n".join(run_commands(name))
         assert "git commit" not in text
         assert "git push" not in text
+
+
+def test_notification_job_creates_or_updates_only_deduplicated_failed_stage_issues():
+    notify = job("notify")
+    text = "\n".join(
+        step.get("uses", "") + "\n" + step.get("run", "") + "\n" + step.get("with", {}).get("script", "")
+        for step in steps("notify")
+    )
+    assert notify["if"] == (
+        "always() && github.ref == 'refs/heads/master' && "
+        "(needs.fetch.result == 'failure' || needs.build.result == 'failure' || needs.publish.result == 'failure')"
+    )
+    assert notify["runs-on"] == "ubuntu-latest"
+    assert notify["timeout-minutes"] == "5"
+    assert "actions/checkout" not in text
+    assert "actions/github-script@v7.0.1" in text
+    assert "github.paginate(github.rest.issues.listForRepo" in text
+    assert "<!-- mtgo-production-failure:${stage} -->" in text
+    assert "!issue.pull_request" in text
+    assert "github.rest.issues.create" in text
+    assert "github.rest.issues.createComment" in text
+    stage = next(step for step in steps("notify") if step["name"] == "Identify the failed production stage")
+    assert stage["env"] == {
+        "FETCH_RESULT": "${{ needs.fetch.result }}",
+        "BUILD_RESULT": "${{ needs.build.result }}",
+        "PUBLISH_RESULT": "${{ needs.publish.result }}",
+    }
+    assert "core.summary.write" in text
+    assert "error.message" not in text
+    assert "github.token" not in text
+    assert "secrets." not in text.lower()
+
+
+def test_only_the_dedicated_notification_job_may_write_issues():
+    workflow = load_update()
+    assert {name for name, value in workflow["jobs"].items() if "issues" in value.get("permissions", {})} == {
+        "notify"
+    }
+    for name in ("fetch", "build", "publish"):
+        assert "issues" not in job(name)["permissions"]
 
 
 def test_clean_baseline_and_dynamic_candidate_checks_are_not_conflated():
