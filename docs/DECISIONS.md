@@ -2741,3 +2741,80 @@ general-user ACL entries were removed; only the owner account, Administrators,
 and SYSTEM retain access. Any later execution must refresh the bundle after
 refs stop moving rather than treating this preparation artifact as current
 forever.
+
+---
+
+# DEC-068 — Keep public Git data storage and separate Pages publication
+
+Status: `Accepted`
+
+## Context
+
+The current scheduled MTGO workflow performs fetch, build, validation, commit,
+push, and publication in one job. It commits changes under `data/`, `stats/`,
+`reports/`, and `fetched.txt` directly to master. The manual Melee workflow
+puts raw, normalized, and public candidate data into a Git review branch.
+
+GitHub's managed branch-root Pages build currently serves representative
+paths under `data/`, `stats/`, `reports/`, and `data_raw/`. The active product
+front end consumes `stats/catalog.json` and `stats/<format>/mtgo/**`; publishing
+the other layers follows from using the repository root, not from a proven
+runtime dependency. P10-05 also established that rewriting history while the
+same raw files remain current and public has no useful privacy effect.
+
+P10-01 found unused Melee account, profile, preference, and duplicate identity
+fields in the retained legacy v2 response bodies. P10-03 and P10-04 already
+prevent those fields from entering future v3 persistence through exact
+resource allowlists, strict Schemas, and a supplemental prohibited-key scan.
+The owner does not require otherwise approved tournament data to be private.
+
+The current repository contains a 17.30 MiB Git pack. An anonymous comparison
+with `j6e/mtg-meta-analyzer` found 336,898,617 current data bytes, daily MTGO
+and Videre commits to public master, and a separate custom Pages artifact. This
+supports public Git storage at the present scale, while Videre's PostgreSQL and
+R2 architecture serves a materially broader database and API product.
+
+## Decision
+
+Adopt option A+. Keep approved source evidence, normalized inputs, generated
+data, code, tests, Schemas, reviewed configuration, and governance documents
+in the current public Git repository and history. Continue applying the
+accepted future Melee v3 minimization and validation boundary before
+persistence. Do not add a storage provider, cloud account, storage fee,
+object-store credential, or storage migration without new measured evidence
+and a separate owner decision.
+
+Replace implicit repository-root Pages publication with a custom static
+artifact assembled in a fresh directory from an explicit allowlist. The first
+artifact must preserve all approved user-facing and compatibility URLs,
+including the exact event `434455` closure. An omitted current path is treated
+as a deletion and fails unless a separate compatibility change was approved.
+
+P10-07 may implement only that Pages-artifact boundary, compatible size
+reporting, comparison, and rollback. It preserves the current public Git data
+location and daily commit behavior. P10-09 remains the separately reviewable
+task for splitting fetch, build, and publish jobs and narrowing each job's
+permissions.
+
+## Consequences
+
+The selected design adds no paid service and no cloud-storage operational
+burden. Public Git remains the durable archive, the independent P10-05 bundle
+remains a controlled backup, and bounded Actions artifacts remain transfer or
+Pages-delivery objects rather than the data source of record.
+
+Approved repository data remains public and Git history continues to grow.
+Those are accepted A+ properties, not confidentiality promises. P10-07 must
+record repository, data-tree, and Pages-artifact sizes without automatically
+deleting or migrating anything. A later storage proposal requires measured
+capacity, performance, policy, or recovery evidence rather than hypothetical
+growth alone.
+
+The Pages artifact gives publication an exact path boundary even though the
+same files remain available through the public Git repository. P10-07 narrows
+what Pages serves; it does not claim to make Git-retained data private.
+
+P10-06 changes no data, workflow, credential, public path, statistic, or front
+end. The owner selected A+ on 2026-08-01. P10-07 implementation, commit, remote
+publication, production dispatch, compatibility changes, data migration, and
+history rewriting remain separately gated.

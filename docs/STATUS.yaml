@@ -66,58 +66,96 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P10-05"
-  name: "Owner gate for history rewriting"
-  status: "local_preparation_accepted_pending_commit_authorization"
+  id: "P10-06"
+  name: "Data and deployment separation proposal"
+  status: "local_complete_owner_accepted_publication_authorized"
   authorized_on: "2026-08-01"
-  owner_authorized_preparation_stage: true
-  workspace: "C:/tmp/mtgo-data-p10-05-20260801-01"
-  branch: "codex/p10-05-history-rewrite-safety-gate"
-  base_commit: "48a4863a28d6ec6d9b854c7a9d72058c68a0f4aa"
-  task_type: "history_reachability_audit_private_bundle_restore_proof_and_owner_gate"
-  objective: "Prove an independent pre-rewrite backup and restoration, document every known Git and platform effect, and stop for an owner decision without rewriting history."
+  owner_authorized_local_proposal_preparation: true
+  owner_history_rewrite_decision: "deferred_without_current_execution_target_under_selected_A_plus_design"
+  workspace: "C:/tmp/mtgo-data-p10-06-20260801-01"
+  branch: "codex/p10-06-data-deployment-separation-proposal"
+  base_commit: "c7dbcb01f92bc70c54928efe4b300ddf9c743fc2"
+  task_type: "repository_publication_inventory_storage_option_comparison_and_owner_selection_gate"
+  objective: "Compare archive and Pages deployment separation designs, record the owner-selected public-Git plus allowlisted-Pages target, and stop without implementing storage or workflow changes."
   authorization:
-    read_only_history_and_ref_inventory: true
-    owner_designated_private_git_bundle: true
-    disposable_bundle_restore: true
+    read_only_repository_and_workflow_inventory: true
+    anonymous_public_path_validation: true
+    official_public_documentation_research: true
     documentation_changes: true
-    history_filter_or_path_removal: false
-    force_push: false
-    branch_or_tag_mutation: false
-    github_support_request: false
+    owner_architecture_selection_recording: true
+    storage_provider_or_account_selection: false
+    storage_creation_or_migration: false
+    workflow_or_configuration_change: false
+    credential_or_oidc_configuration: false
+    public_path_change: false
+    production_dispatch: false
+    history_rewrite: false
     repository_setting_change: false
-    storage_or_compatibility_migration: false
-    p10_06: false
+    p10_07: false
   target_paths:
-    - "docs/audits/P10-05.md"
+    - "docs/audits/P10-06.md"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  external_artifacts:
-    private_bundle:
-      owner_designated_path: null
-      path_status: "owner_selected_private_local_path_not_published_in_repository"
-      must_remain_outside_repository_and_disposable_workspaces: true
-      contains_controlled_legacy_source_data: true
-      filename: "mtgo-data-pre-p10-05-48a4863-20260801.bundle"
-      bytes: 18003023
-      sha256: "53ea51b53cd03f7cd55bdbfff61e7e0235e2c74f5556e3966f44f40e2c83a35d"
-      advertised_heads: 217
-      named_refs: 216
-      acl_status: "hardened_owner_administrators_system_only"
-      acl_inheritance_protected: true
-      acl_hash_reverification: "passed"
-      acl_bundle_verification: "passed"
-      committed_or_uploaded: false
-    restore_mirror_workspace: "C:/tmp/mtgo-data-p10-05-restore-20260801-01"
-    restore_worktree_workspace: "C:/tmp/mtgo-data-p10-05-restore-worktree-20260801-01"
+  inventory:
+    tracked_data_files: 1001
+    tracked_data_bytes: 158201698
+    tracked_melee_raw_files: 484
+    tracked_melee_raw_bytes: 7729288
+    tracked_statistics_files: 71
+    tracked_statistics_bytes: 31926716
+    tracked_report_files: 12
+    tracked_report_bytes: 15395593
+    mtgo_event_files: 691
+    mtgo_event_bytes: 60736100
+    mtgo_match_files: 307
+    mtgo_match_bytes: 90690249
+    normalized_melee_files: 3
+    normalized_melee_bytes: 6775349
+    master_commits: 366
+    git_pack_mib: 17.30
+    current_english_production_update_commits: 17
+    legacy_automation_update_commits: 28
+    scheduled_mtgo_publication: "daily_direct_generated_commit_to_master"
+    melee_publication: "manual_review_branch"
+    pages_source_observation: "managed_branch_root_build_on_master_push"
+    pages_representative_index_status: 200
+    pages_representative_stats_status: 200
+    pages_representative_data_status: 200
+    pages_representative_reports_status: 200
+    pages_representative_data_raw_status: 200
+    active_frontend_fetch_contract: "stats_catalog_and_stats_format_mtgo_paths"
+  selected_design:
+    status: "owner_selected_and_accepted"
+    selected_on: "2026-08-01"
+    name: "A_plus_public_git_storage_with_allowlisted_pages_artifact"
+    durable_archive: "current_public_git_repository_and_history"
+    approved_data_confidentiality_required: false
+    future_melee_privacy_boundary: "accepted_v3_exact_field_allowlists_strict_schemas_and_scoped_prohibited_key_scan"
+    storage_provider_required: false
+    storage_account_required: false
+    storage_fee_required: false
+    external_storage_credentials_required: false
+    storage_migration_required: false
+    independent_backup: "owner_local_acl_controlled_copy_not_production_archive"
+    job_transfer: "bounded_workflow_artifacts_not_durable_archive"
+    public_delivery: "fresh_allowlisted_github_pages_artifact"
+    current_daily_git_commit_behavior_preserved: true
+    p10_07_scope: "allowlisted_pages_artifact_compatibility_comparison_rollback_and_non_destructive_size_reporting"
+    p10_09_scope_preserved: "separate_fetch_build_publish_job_split_and_permission_narrowing"
+    growth_policy: "measure_before_any_new_storage_proposal_no_automatic_deletion_or_migration"
+    legacy_434455_location_preserved: true
+    legacy_434455_public_paths_preserved: true
+    history_rewrite: "deferred_without_current_execution_target"
   protected_scope:
     history_rewritten: false
     current_raw_paths_removed: false
     branches_or_tags_mutated: false
     remote_writes_performed: false
     github_support_contacted: false
+    storage_provider_selected: false
+    storage_created: false
     storage_migrated: false
     compatibility_contract_changed: false
     workflow_changed: false
@@ -131,68 +169,81 @@ current_task:
     event_434455_regenerated: false
     real_secret_configured: false
     live_fetch_performed: false
-  inventory:
-    source_introducing_commit: "d8880c2126814407a873d9ba3285300cc1c87c4f"
-    commits_touching_data_raw: 1
-    current_raw_files: 484
-    current_raw_bytes: 7729288
-    ordinary_remote_branches: 61
-    affected_ordinary_remote_branches: 21
-    tags: 9
-    affected_tags: 3
-    pull_request_head_refs: 143
-    affected_pull_request_head_refs: 49
-    affected_pull_request_range: "95-143"
-    public_forks_observed: 0
-    open_pull_requests_observed: 0
-    releases_observed: 0
-    pages_manifest_head_status: 200
-    pages_tournament_head_status: 200
   validation:
     status: "passed"
-    bundle_created: true
-    bundle_sha256: "53ea51b53cd03f7cd55bdbfff61e7e0235e2c74f5556e3966f44f40e2c83a35d"
-    bundle_verify: "passed_before_and_after_restore"
-    restore_clone: "passed_mirror_and_worktree"
-    restored_ref_comparison: "passed_216_of_216_named_refs"
-    restored_git_fsck: "passed_mirror_and_worktree"
-    restored_master_commit: "48a4863a28d6ec6d9b854c7a9d72058c68a0f4aa"
-    restored_master_tree_match: true
-    restored_tags: 9
-    restored_event_434455_compatibility_tests_passed: 7
-    restored_event_434455_compatibility_seconds: 2.07
-    restored_public_schema_documents_validated: 69
-    restored_rule_validation: "passed"
-    restored_repository_validation: "passed"
-    restored_repository_python_checked: 132
-    restored_repository_json_checked: 1612
-    restored_repository_yaml_checked: 21
-    restored_repository_references_checked: 30
-    restored_repository_hygiene_checked: 1899
-    source_event_434455_compatibility_tests_passed: 7
-    source_event_434455_compatibility_seconds: 0.72
-    source_public_schema_documents_validated: 69
-    source_rule_validation: "passed"
-    source_repository_validation: "passed"
-    source_repository_python_checked: 132
-    source_repository_json_checked: 1612
-    source_repository_yaml_checked: 21
-    source_repository_references_checked: 30
-    source_repository_hygiene_checked: 1900
+    event_434455_compatibility_tests_passed: 7
+    event_434455_compatibility_seconds: 0.45
+    public_schema_documents_validated: 69
+    rule_validation: "passed"
+    repository_validation: "passed"
+    repository_python_checked: 132
+    repository_json_checked: 1612
+    repository_yaml_checked: 21
+    repository_references_checked: 30
+    repository_hygiene_checked: 1901
     git_diff_check: "passed"
+    sensitive_literal_scan: "passed"
     changed_paths_within_scope: true
     changed_path_count: 5
     workflow_paths_changed: false
     configuration_paths_changed: false
     production_or_public_data_paths_changed: false
     production_workflow_dispatched: false
+  owner_selection: "A_plus"
+  owner_selected_on: "2026-08-01"
   owner_acceptance: "accepted"
   owner_accepted_on: "2026-08-01"
-  remote_publication_authorized: false
-  merge_authorized: false
+  commit_authorized: true
+  remote_publication_authorized: true
+  merge_authorized: true
   production_dispatch_authorized: false
   next_task_automatically_authorized: false
-  stop_point: "The owner accepted the P10-05 preparation. Stop for separate commit authorization and a separate written history-rewrite outcome. Do not filter or remove paths, rewrite history, force-push, mutate refs, contact GitHub Support, migrate compatibility or storage, publish remotely, or begin P10-06 without separate authorization."
+  stop_point: "Publish the accepted five-document P10-06 change, then stop. Do not edit workflows, change Pages settings, configure credentials, migrate or delete data, change public paths, rewrite history, dispatch production, or begin P10-07 without separate authorization."
+
+p10_05_result:
+  id: "P10-05"
+  name: "Owner gate for history rewriting"
+  status: "completed_published_and_merged_history_rewrite_deferred"
+  authorized_on: "2026-08-01"
+  owner_accepted_on: "2026-08-01"
+  owner_history_rewrite_decision_on: "2026-08-01"
+  owner_history_rewrite_decision: "deferred_until_P10-06_P10-07_archive_and_compatibility_successor"
+  branch: "codex/p10-05-history-rewrite-safety-gate"
+  base_commit: "48a4863a28d6ec6d9b854c7a9d72058c68a0f4aa"
+  local_commit: "78aa1921f78fc4bb1868ab07652b32f812482d67"
+  pull_request: 144
+  merge_commit: "c7dbcb01f92bc70c54928efe4b300ddf9c743fc2"
+  merged_on: "2026-08-01"
+  validation:
+    pull_request_ci_run: 30695943699
+    master_validation_run: 30696236965
+    pages_run: 30696236850
+    remote_checks_passed: true
+    restored_named_refs: 216
+    restored_git_fsck: "passed_mirror_and_worktree"
+    restored_event_434455_compatibility_tests_passed: 7
+  private_bundle:
+    owner_designated_path: null
+    path_status: "owner_selected_private_local_path_not_published_in_repository"
+    filename: "mtgo-data-pre-p10-05-48a4863-20260801.bundle"
+    bytes: 18003023
+    sha256: "53ea51b53cd03f7cd55bdbfff61e7e0235e2c74f5556e3966f44f40e2c83a35d"
+    acl_status: "hardened_owner_administrators_system_only"
+    committed_or_uploaded: false
+  inventory:
+    source_introducing_commit: "d8880c2126814407a873d9ba3285300cc1c87c4f"
+    current_raw_files: 484
+    current_raw_bytes: 7729288
+    affected_ordinary_remote_branches: 21
+    affected_tags: 3
+    affected_pull_request_head_refs: 49
+  protected_scope:
+    history_rewritten: false
+    current_raw_paths_removed: false
+    storage_or_compatibility_migrated: false
+    production_or_public_data_changed: false
+    workflow_changed: false
+    production_workflow_dispatched: false
 
 p10_04_result:
   id: "P10-04"
@@ -6458,16 +6509,16 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P10-05-OWNER-DECISION"
-  name: "History-rewrite execution decision"
-  target_paths: "none_until_preparation_is_complete_and_owner_decides"
+  id: "P10-07-OWNER-AUTHORIZATION"
+  name: "Owner gate for allowlisted Pages-artifact implementation"
+  target_paths: "none_until_the_owner_separately_authorizes_P10-07"
   production_change: false
   requires_user_confirmation: true
   authorization_status: "not_authorized"
   local_execution_authorized: false
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "After the private bundle and restoration proof, the owner must choose no rewrite, deferral until P10-06/P10-07, or a separately controlled execution. Preparation authorizes none of those follow-up actions automatically."
+  planning_status: "P10-06 A+ documentation is accepted and authorized for publication. Current public Git remains the durable data archive; implementing the allowlisted Pages artifact still requires separate P10-07 owner authorization."
 
 governance_baseline:
   status: "active_on_master"
@@ -6516,8 +6567,9 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, compatibility migration, or storage migration under the P10-05 preparation authorization."
-  - "Do not begin P10-06 or any later Phase 10 task without separate owner authorization."
+  - "Do not provision a storage provider, create a private archive, edit workflows, change Pages settings, configure credentials, migrate or delete data, change public paths, or implement P10-07 under the P10-06 proposal authorization."
+  - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
+  - "Do not begin P10-07 or any later Phase 10 task without separate owner authorization."
   - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."
   - "Do not activate Tabletop events, dispatch production, or add events to configs/melee_events.yaml without separate authorization."
   - "Do not retain new source responses or generate or publish new event data without separate authorization."

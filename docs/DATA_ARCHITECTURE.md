@@ -1592,6 +1592,49 @@ checks, and repository validators. This proves the procedure only for base
 `48a4863a28d6ec6d9b854c7a9d72058c68a0f4aa`; any later execution requires a
 fresh bundle after refs stop moving.
 
+### 11.16 Selected public-Git archive and Pages-artifact separation
+
+P10-06 audits the current branch-root publication model. The scheduled MTGO
+workflow fetches, builds, validates, stages `data/`, `stats/`, `reports/`, and
+`fetched.txt`, then pushes a generated commit directly to master. GitHub's
+managed Pages build publishes from the repository tree. Representative
+`data/`, `stats/`, `reports/`, and `data_raw/` paths all return HTTP 200, even
+though the active front end fetches only the `stats/` consumer contract.
+
+After comparing the current repository, `j6e/mtg-meta-analyzer`, and Videre's
+database-backed service, the owner selected the A+ architecture on 2026-08-01.
+The selected target separates storage from publication without adding a cloud
+storage provider:
+
+1. the current public Git repository continues to own code, tests, Schemas,
+   reviewed configuration, governance documents, retained source evidence,
+   normalized inputs, and generated data;
+2. accepted field minimization and Schema gates control which future Melee v3
+   source fields may enter that public Git history;
+3. bounded workflow artifacts transfer exact inputs and candidates between
+   fetch, build, validation, and deploy jobs but are not the durable archive;
+4. a fresh allowlisted static artifact contains only approved public paths and
+   is deployed to GitHub Pages independently of the repository-root tree.
+
+No storage account, provider, region, fee, object-store credential, or data
+migration is part of A+. Public source retention is intentional. The current
+repository pack and comparable public-Git projects provide no evidence of an
+immediate capacity problem, so the selected design records repository,
+data-tree, and Pages-artifact size over time and requires a later owner review
+only if measured growth affects clone, workflow, or Pages operation.
+
+This remains a selected proposal, not an active implementation. A separately
+authorized P10-07 may replace managed branch-root Pages publication with the
+allowlisted artifact while preserving the current Git data location, daily
+commit behavior, approved public closure, and every event `434455`
+compatibility byte. P10-09 remains the separate task for splitting fetch,
+build, and publish jobs. Any later cloud-storage migration, raw-path removal,
+compatibility revision, or history rewrite requires new evidence and separate
+owner authorization.
+
+The complete inventory, option matrix, permission boundary, recovery proof,
+and owner selection are recorded in `docs/audits/P10-06.md`.
+
 ---
 
 ## 12. Statistics-output layout
