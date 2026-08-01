@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-raw-archive.schema.json",
-  "x-schema-version": "2.0.0",
+  "x-schema-version": "3.0.0",
   "title": "Melee raw-response archive manifest",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "source", "event_id", "event_url", "fetched_at", "responses"],
   "properties": {
-    "schema_version": {"enum": ["1.0.0", "2.0.0"]},
+    "schema_version": {"enum": ["1.0.0", "2.0.0", "3.0.0"]},
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
     "event_url": {
@@ -15,6 +15,15 @@
       "pattern": "^https://melee\\.gg/Tournament/View/[1-9][0-9]*$"
     },
     "fetched_at": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "participant_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scheme", "key_id"],
+      "properties": {
+        "scheme": {"const": "hmac-sha256-event-v1"},
+        "key_id": {"type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"}
+      }
+    },
     "responses": {
       "type": "array",
       "minItems": 1,
@@ -37,6 +46,7 @@
           },
           "path": {"type": "string", "pattern": "^[a-z0-9_]+(?:-[a-z0-9-]+)+\\.(html|json)$"},
           "expected_content_type": {"enum": ["html", "json"]},
+          "persisted_content_type": {"const": "json"},
           "response_content_type": {"type": ["string", "null"]},
           "etag": {"type": ["string", "null"]},
           "last_modified": {"type": ["string", "null"]},
@@ -51,7 +61,13 @@
           },
           "source_round_id": {"type": ["string", "null"], "pattern": "^[1-9][0-9]*$"},
           "source_participant_id": {"type": ["string", "null"], "pattern": "^[1-9][0-9]*$"},
-          "source_decklist_id": {"type": ["string", "null"], "pattern": "^[0-9A-Fa-f-]{32,36}$"}
+          "source_decklist_id": {"type": ["string", "null"], "pattern": "^[0-9A-Fa-f-]{32,36}$"},
+          "participant_ref": {
+            "type": ["string", "null"],
+            "pattern": "^melee-v3-[0-9a-f]{64}$"
+          },
+          "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "source_bytes": {"type": "integer", "minimum": 0, "maximum": 33554432}
         }
       }
     }
@@ -67,6 +83,46 @@
                 "method", "request_body_sha256", "source_round_id",
                 "source_participant_id", "source_decklist_id"
               ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"schema_version": {"const": "3.0.0"}}},
+      "then": {
+        "required": ["participant_identity"],
+        "properties": {
+          "responses": {
+            "items": {
+              "required": [
+                "method", "request_body_sha256", "source_round_id",
+                "source_decklist_id", "participant_ref", "persisted_content_type",
+                "source_sha256", "source_bytes"
+              ],
+              "not": {"required": ["source_participant_id"]}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"schema_version": {"enum": ["1.0.0", "2.0.0"]}}
+      },
+      "then": {
+        "not": {"required": ["participant_identity"]},
+        "properties": {
+          "responses": {
+            "items": {
+              "not": {
+                "anyOf": [
+                  {"required": ["persisted_content_type"]},
+                  {"required": ["participant_ref"]},
+                  {"required": ["source_sha256"]},
+                  {"required": ["source_bytes"]}
+                ]
+              }
             }
           }
         }

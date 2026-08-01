@@ -28,6 +28,15 @@ from mtgmeta.melee.retention import MeleeRetentionError, retain_normalized_event
 
 
 WHITELIST = ROOT / "configs" / "melee_events.yaml"
+TEST_HMAC_KEY = b"p10-03-test-key-material-is-not-secret"
+TEST_HMAC_KEY_ID = "test-2026-08"
+
+
+def privacy_options():
+    return {
+        "participant_hmac_key": TEST_HMAC_KEY,
+        "participant_hmac_key_id": TEST_HMAC_KEY_ID,
+    }
 
 
 class Response:
@@ -81,6 +90,19 @@ def test_disabled_event_fails_before_transport_or_archive_side_effects(tmp_path)
         )
     assert calls == []
     assert list(tmp_path.iterdir()) == []
+
+
+def test_complete_event_requires_hmac_settings_before_network_or_archive_side_effects(tmp_path):
+    calls = []
+    with pytest.raises(ValueError, match="at least 32 bytes"):
+        fetch_complete_event(
+            "434455",
+            registry(),
+            tmp_path,
+            request_send=lambda *_args, **_kwargs: calls.append(True),
+        )
+    assert calls == []
+    assert not tmp_path.exists() or list(tmp_path.iterdir()) == []
 
 
 def test_dry_run_validates_enabled_request_plan_without_side_effects(tmp_path):
@@ -282,7 +304,7 @@ def test_cli_defaults_to_dry_run_and_requires_explicit_execute(tmp_path, capsys)
     assert calls[-1][2] is False
 
 
-def test_cli_complete_mode_requires_execute_and_uses_complete_collector(tmp_path, capsys):
+def test_cli_complete_mode_requires_execute_and_uses_complete_collector(tmp_path, capsys, monkeypatch):
     data = yaml.safe_load(WHITELIST.read_text(encoding="utf-8"))
     data["events"][0]["enabled"] = True
     registry_path = tmp_path / "events.yaml"
@@ -292,8 +314,19 @@ def test_cli_complete_mode_requires_execute_and_uses_complete_collector(tmp_path
     assert "requires --execute" in capsys.readouterr().err
     calls = []
 
-    def fake_complete(event_id, _registry, raw_root, *, progress):
+    assert melee_main([*args, "--execute"]) == 2
+    assert "MELEE_PARTICIPANT_HMAC_KEY_BASE64" in capsys.readouterr().err
+
+    monkeypatch.setenv("MELEE_PARTICIPANT_HMAC_KEY_BASE64", "cDEwLTAzLXRlc3Qta2V5LW1hdGVyaWFsLWlzLW5vdC1zZWNyZXQ=")
+    monkeypatch.setenv("MELEE_PARTICIPANT_HMAC_KEY_ID", TEST_HMAC_KEY_ID)
+
+    def fake_complete(
+        event_id, _registry, raw_root, *, progress,
+        participant_hmac_key, participant_hmac_key_id,
+    ):
         calls.append((event_id, raw_root))
+        assert participant_hmac_key == TEST_HMAC_KEY
+        assert participant_hmac_key_id == TEST_HMAC_KEY_ID
         progress({"stage": "complete", "completed_responses": 1, "planned_responses": 1})
         return MeleeRawFetchResult(event_id, False, tmp_path / "snapshot", ("https://melee.gg/Tournament/View/434455",), ())
 
@@ -342,7 +375,15 @@ def test_complete_event_collects_and_parses_real_wire_shapes_without_credentials
     </body></html>"""
 
     def player(participant_id, name):
-        return {"StatusDescription": "Active", "Players": [{"ID": participant_id, "DisplayName": name}]}
+        return {
+            "StatusDescription": "Active",
+            "Players": [{
+                "ID": participant_id,
+                "DisplayName": name,
+                "Username": f"private-{participant_id}",
+                "PronounsDescription": "unused",
+            }],
+        }
 
     standings = {
         "recordsTotal": 2,
@@ -383,9 +424,14 @@ def test_complete_event_collects_and_parses_real_wire_shapes_without_credentials
     result = fetch_complete_event(
         "434455", registry(), tmp_path, request_send=send,
         sleep=lambda _seconds: None, now=fixed_now, request_delay=0,
+        **privacy_options(),
     )
     manifest = json.loads((result.archive_path / "manifest.json").read_text(encoding="utf-8"))
-    assert manifest["schema_version"] == "2.0.0"
+    assert manifest["schema_version"] == "3.0.0"
+    assert manifest["participant_identity"] == {
+        "scheme": "hmac-sha256-event-v1",
+        "key_id": TEST_HMAC_KEY_ID,
+    }
     assert [item["resource_type"] for item in manifest["responses"]] == [
         "tournament", "standings", "matches", "decklist", "decklist"
     ]
@@ -394,10 +440,25 @@ def test_complete_event_collects_and_parses_real_wire_shapes_without_credentials
     assert calls[1][0] == calls[2][0] == "POST"
     assert manifest["responses"][1]["source_round_id"] == "101"
     assert manifest["responses"][1]["request_body_sha256"]
+    persisted_responses = b"".join(
+        (result.archive_path / item["path"]).read_bytes()
+        for item in manifest["responses"]
+    )
+    assert b'"display_name":"Alpha"' in persisted_responses
+    for forbidden in (
+        b'"Username"', b'"PronounsDescription"', b'"PlayerId"',
+        b'"source_participant_id"', b"private-11", b"private-22",
+    ):
+        assert forbidden not in persisted_responses
+    assert all(item["persisted_content_type"] == "json" for item in manifest["responses"])
+    assert all(item["source_sha256"] for item in manifest["responses"])
     loaded, schema_registry = schemas.load_schemas(ROOT / "schemas")
     assert schemas.validate_instance(manifest, loaded["melee-raw-archive.schema.json"], schema_registry) == []
 
     parsed = parse_raw_snapshot(result.archive_path)
+    assert parsed.archive_schema_version == "3.0.0"
+    assert parsed.participant_identity_scheme == "hmac-sha256-event-v1"
+    assert parsed.participant_key_id == TEST_HMAC_KEY_ID
     assert sum(len(page.standings) for page in parsed.pages) == 2
     assert sum(len(page.matches) for page in parsed.pages) == 1
     assert sum(len(page.decklists) for page in parsed.pages) == 2
@@ -406,6 +467,11 @@ def test_complete_event_collects_and_parses_real_wire_shapes_without_credentials
     )
     assert normalized["quality"]["status"] == "valid"
     assert normalized["matches"][0]["constructed_statistics_eligible"] is False
+    assert all(
+        item["id"] == item["source_id"]
+        and item["id"].startswith("melee-v3-")
+        for item in normalized["participants"]
+    )
 
     manifest["responses"][0].pop("method")
     assert schemas.validate_instance(
@@ -414,14 +480,14 @@ def test_complete_event_collects_and_parses_real_wire_shapes_without_credentials
     (result.archive_path / "manifest.json").write_text(
         json.dumps(manifest), encoding="utf-8"
     )
-    with pytest.raises(MeleeSourceParseError, match="missing v2 fields"):
+    with pytest.raises(MeleeSourceParseError, match="invalid v3 fields"):
         parse_raw_snapshot(result.archive_path)
 
 
 def test_complete_collection_resumes_verified_responses_and_matches_uninterrupted_bytes(tmp_path):
     guid_one = "11111111-1111-1111-1111-111111111111"
     guid_two = "22222222-2222-2222-2222-222222222222"
-    html = b"""<html><body>
+    html = b"""<html><head><title>Fixture Pro Tour | Melee</title></head><body>
     <button class='round-selector' data-id='101' data-name='Round 1' data-is-completed='True'></button>
     </body></html>"""
 
@@ -483,6 +549,7 @@ def test_complete_collection_resumes_verified_responses_and_matches_uninterrupte
             "434455", registry(), interrupted_root,
             request_send=interrupted_send, sleep=lambda _seconds: None,
             now=fixed_now, attempts=1, request_delay=0, progress=progress.append,
+            **privacy_options(),
         )
     event_root = interrupted_root / "melee" / "434455"
     partial = event_root / melee_client.COMPLETE_PARTIAL_DIRECTORY
@@ -490,6 +557,14 @@ def test_complete_collection_resumes_verified_responses_and_matches_uninterrupte
     assert partial.is_dir()
     assert checkpoint.is_file()
     assert not (partial / "manifest.json").exists()
+    incomplete_bytes = checkpoint.read_bytes() + b"".join(
+        path.read_bytes() for path in partial.iterdir()
+    )
+    for forbidden in (
+        b'"PlayerId"', b'"source_participant_id"', b'"Players"',
+        TEST_HMAC_KEY,
+    ):
+        assert forbidden not in incomplete_bytes
     with pytest.raises(MeleeSourceParseError, match="manifest"):
         parse_raw_snapshot(partial)
     with pytest.raises(MeleeRetentionError, match="snapshot"):
@@ -512,6 +587,7 @@ def test_complete_collection_resumes_verified_responses_and_matches_uninterrupte
         request_send=resumed_send, sleep=lambda _seconds: None,
         now=lambda: datetime(2026, 7, 22, 12, 0, tzinfo=UTC),
         attempts=1, request_delay=0, progress=progress.append,
+        **privacy_options(),
     )
     assert resumed_calls == [failed_url]
     assert resumed.resumed_responses == 4
@@ -525,6 +601,7 @@ def test_complete_collection_resumes_verified_responses_and_matches_uninterrupte
         "434455", registry(), uninterrupted_root,
         request_send=resumed_send, sleep=lambda _seconds: None,
         now=fixed_now, attempts=1, request_delay=0,
+        **privacy_options(),
     )
     resumed_files = {
         path.name: path.read_bytes()

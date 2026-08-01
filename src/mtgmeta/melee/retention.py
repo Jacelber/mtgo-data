@@ -1,6 +1,6 @@
 """Validated retention of one complete Melee snapshot as normalized input.
 
-This module never fetches data. It accepts only a complete immutable v2 raw
+This module never fetches data. It accepts only a complete immutable v2 or v3
 snapshot under the approved event path, verifies the manifest and every
 artifact, applies semantic normalization and the publication quality gate, and
 writes one canonical normalized event atomically. Re-running it with the same
@@ -91,8 +91,8 @@ def _load_manifest(snapshot: Path, schema_path: Path) -> tuple[dict[str, Any], b
         raise MeleeRetentionError(
             f"raw snapshot manifest failed Schema validation at {location}: {first.message}"
         )
-    if manifest["schema_version"] != "2.0.0":
-        raise MeleeRetentionError("production retention requires complete raw manifest 2.0.0")
+    if manifest["schema_version"] not in {"2.0.0", "3.0.0"}:
+        raise MeleeRetentionError("production retention requires complete raw manifest 2.0.0 or 3.0.0")
     return manifest, manifest_bytes
 
 
@@ -275,7 +275,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         description="Validate and retain one complete Melee raw snapshot as normalized input."
     )
     parser.add_argument("--event-id", required=True, help="Enabled verified Melee tournament ID")
-    parser.add_argument("--snapshot", type=Path, required=True, help="Complete immutable v2 snapshot")
+    parser.add_argument("--snapshot", type=Path, required=True, help="Complete immutable v2 or v3 snapshot")
     parser.add_argument("--registry", type=Path, default=Path("configs/melee_events.yaml"))
     parser.add_argument("--raw-root", type=Path, default=Path("data_raw"))
     parser.add_argument("--data-root", type=Path, default=Path("data"))

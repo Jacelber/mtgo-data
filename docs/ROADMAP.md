@@ -2305,7 +2305,20 @@ documents by exact bytes. It verifies only the selected event and product
 projections in the expandable format and global catalogs. No production data,
 public catalog, statistic, public path, workflow, source configuration, or
 front-end behavior changes. The owner accepted P10-02 and authorized its
-publication on 2026-08-01. P10-03 is not authorized by this result.
+publication on 2026-08-01. It was published through pull request #141 and
+merge commit `23ed3467e0501ae1796d3326433c05035abb98e5`.
+
+P10-03 implements complete manifest `3.0.0` for future approved events. It
+parses source responses in bounded memory, persists only explicit per-resource
+allowlists as canonical JSON, and uses event-scoped HMAC-SHA256 participant
+references under a required non-secret key ID. Source-published `DisplayName`
+is preserved by owner decision; unused account, profile, preference, duplicate
+identity, and deck metadata fields are dropped before persistence. Parsers and
+retention remain compatible with immutable v2 snapshots, and the P10-02
+contract continues to freeze event `434455` exactly. P10-03 provisions no real
+secret, changes no workflow or production data, and performs no live fetch.
+The owner accepted P10-03 and authorized commit, push, pull request, and merge
+on 2026-08-01. P10-04 remains separately owner-gated.
 
 ## Acceptance criteria
 

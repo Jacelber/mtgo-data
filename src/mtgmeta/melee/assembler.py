@@ -196,7 +196,11 @@ def assemble_parsed_snapshot(
         raise MeleeAssemblyError("snapshot does not contain standings participants")
 
     participant_ids = {
-        source_id: stable_record_id("participant", event.id, source_id)
+        source_id: (
+            source_id
+            if snapshot.participant_identity_scheme == "hmac-sha256-event-v1"
+            else stable_record_id("participant", event.id, source_id)
+        )
         for source_id in standings_by_participant
     }
     if len(set(participant_ids.values())) != len(participant_ids):

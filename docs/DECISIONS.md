@@ -2568,3 +2568,68 @@ P10-02 changes tests, a contract fixture, a non-public contract Schema, and
 documentation only. It changes no retained or generated data, public Schema
 mapping, public path, statistic, source configuration, workflow, or front end.
 P10-03 remains separately owner-gated.
+
+---
+
+# DEC-065 — Minimize future Melee snapshots before persistence
+
+Status: `Accepted`
+
+## Context
+
+The retained event `434455` snapshot is a source-preserving v2 archive and is
+now protected by the P10-02 exact-byte compatibility manifest. P10-01 found
+that its standings and match responses repeatedly retain unused account,
+profile, preference, and duplicate identity fields. The complete collector
+also wrote each source response before parsing it, so downstream filtering
+could not enforce a persistence boundary.
+
+The existing public participant IDs were deterministic unsalted hashes of
+small numeric source IDs. Anyone who knew the event ID and algorithm could
+enumerate those values. Participant names are a separate product choice: the
+owner selected continued use of source-published `DisplayName` for future
+events while rejecting unused account and profile fields.
+
+## Decision
+
+Use complete manifest `3.0.0` and minimized resource document `1.0.0` for
+future approved Melee events. Parse every bounded source response in memory,
+construct persistence from explicit tournament, standings, match, and decklist
+allowlists, and write only canonical JSON. Store transient source byte count
+and SHA-256 for provenance, but never store the unfiltered source body in the
+v3 collection path.
+
+Replace raw participant IDs with references of the form `melee-v3-<digest>`,
+where the digest is HMAC-SHA256 over:
+
+```text
+melee\0v3\0<event_id>\0participant\0<source_participant_id>
+```
+
+Require at least 32 bytes of key material and a reviewed non-secret key ID.
+Only the key ID is persisted. Missing or invalid key settings fail before
+network or filesystem side effects, and a checkpoint cannot resume under a
+different key ID. One key ID must never identify different key material.
+
+Preserve source-published `DisplayName`, statistical record/result/status
+fields, card name/quantity/section, reviewed source identifiers, request
+integrity metadata, and required source URLs. Exclude the unused fields listed
+in `docs/audits/P10-03.md` before persistence.
+
+Continue reading immutable v1/v2 fixtures and snapshots. Permit retention from
+complete v2 or v3 manifests. Do not regenerate, migrate, or otherwise change
+the retained event `434455` v2 snapshot or any byte protected by P10-02.
+
+## Consequences
+
+Future participant records remain joinable within one event but raw numeric
+participant IDs are no longer persisted or enumerable without the secret, and
+the same source ID produces a different reference in another event. Because
+`DisplayName` remains public by owner decision, this is not an anonymity
+guarantee.
+
+Production key creation, storage, rotation, workflow provisioning, and live
+collection remain separately owner-gated. P10-04 owns resource Schemas as the
+primary production-data gate, supplemental prohibited-field scans, and the
+notice/contact/removal update. P10-03 changes no statistic, production data,
+public path, whitelist, workflow, or front end.

@@ -120,6 +120,8 @@ def _complete_snapshot(tmp_path: Path, *, round_number: int = 4) -> tuple[Path, 
         sleep=lambda _seconds: None,
         now=lambda: datetime(2026, 7, 24, 10, 0, tzinfo=UTC),
         request_delay=0,
+        participant_hmac_key=b"p10-03-test-key-material-is-not-secret",
+        participant_hmac_key_id="test-2026-08",
     )
     assert result.archive_path is not None
     return raw_root, result.archive_path

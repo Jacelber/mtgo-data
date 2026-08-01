@@ -56,7 +56,7 @@ def test_all_declared_schemas_are_valid_and_versioned():
     assert loaded["formats.schema.json"]["x-schema-version"] == "1.3.0"
     assert loaded["melee-events.schema.json"]["x-schema-version"] == "3.0.0"
     assert loaded["melee-event.schema.json"]["x-schema-version"] == "2.2.0"
-    assert loaded["melee-raw-archive.schema.json"]["x-schema-version"] == "2.0.0"
+    assert loaded["melee-raw-archive.schema.json"]["x-schema-version"] == "3.0.0"
     assert all(
         schema["x-schema-version"] == "1.0.0"
         for name, schema in loaded.items()
