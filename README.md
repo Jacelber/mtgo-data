@@ -28,7 +28,9 @@ Read [`AGENTS.md`](AGENTS.md) before changing the repository. Product scope, sta
 
 ## Local setup
 
-Python 3.12 is the currently exercised local runtime. One GitHub Actions workflow still uses Python 3.11, whose compatibility has not yet been fully reproduced locally.
+Python 3.12 is the supported runtime for local validation, GitHub Actions CI,
+the manual Melee workflow, Pages artifact builds, and the scheduled MTGO
+production update. Python 3.11 is not a supported project runtime.
 
 ```powershell
 py -3.12 -m venv .venv
