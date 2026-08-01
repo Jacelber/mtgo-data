@@ -16,6 +16,11 @@ from pathlib import Path, PurePosixPath
 import re
 from typing import Any, Iterable, Mapping
 
+from .privacy_validation import (
+    MeleeResourceValidationError,
+    validate_minimized_resource,
+)
+
 
 SUPPORTED_RESOURCE_TYPES = frozenset({"tournament", "standings", "matches", "decklist"})
 SUPPORTED_CONTENT_TYPES = frozenset({"html", "json"})
@@ -830,6 +835,10 @@ def parse_minimized_response(body: bytes, artifact: SourceArtifact) -> ParsedSou
     """Parse one persisted v3 allowlisted response into legacy source records."""
 
     payload = _decode_payload(body, "json", artifact.path)
+    try:
+        validate_minimized_resource(payload, context=artifact.path)
+    except MeleeResourceValidationError as exc:
+        raise MeleeSourceParseError(str(exc)) from exc
     common = {"schema_version", "resource_type"}
     if payload.get("schema_version") != "1.0.0":
         raise MeleeSourceParseError(f"{artifact.path}: unsupported minimized resource contract")

@@ -2633,3 +2633,48 @@ collection remain separately owner-gated. P10-04 owns resource Schemas as the
 primary production-data gate, supplemental prohibited-field scans, and the
 notice/contact/removal update. P10-03 changes no statistic, production data,
 public path, whitelist, workflow, or front end.
+
+---
+
+# DEC-066 — Validate minimized Melee resources and publish the privacy contact
+
+Status: `Accepted`
+
+## Context
+
+P10-03 constructs future v3 persistence from explicit Python allowlists, but
+the minimized resource document had no standalone JSON Schema. Strict parser
+field checks provided a second implementation boundary, while a repository-
+wide text scan would create false positives in legacy v2 evidence, tests,
+documentation, and legitimate string values. The public notice also lacked a
+specific privacy contact and correction or removal procedure.
+
+## Decision
+
+Use `schemas/melee-minimized-resource.schema.json` version `1.0.0` as the
+authoritative persistence contract for tournament, standings, matches, and
+decklist documents. Reject additional properties at every persisted object
+level and validate the document before canonical serialization and again when
+reading a v3 resource.
+
+Retain a separate exact-key prohibited-field scan as supplemental defense.
+Run it only on a decoded minimized v3 resource and never on source bodies,
+string values, documentation, the repository as a whole, or immutable v1/v2
+snapshots. The Schema is the primary allowlist and the scan protects against a
+future Schema edit accidentally admitting a previously rejected source key.
+
+Publish `djacerror@gmail.com` in `NOTICE.md`. Ask requesters for the event ID
+or URL, displayed name or record, affected project location, and requested
+action, while discouraging passwords, tokens, and unrelated identity
+documents. Distinguish project-controlled current content, upstream source
+records, and repository history. Do not promise or perform a history rewrite
+under this procedure.
+
+## Consequences
+
+Future v3 persistence and all v3 consumers share one machine-readable,
+fail-closed field contract. Legacy v1/v2 parsing and the exact event `434455`
+compatibility bytes remain unchanged. P10-04 changes no production data,
+statistic, workflow, configuration, public path, or front end. Production key
+provisioning, live collection, remote publication, and P10-05 history rewriting
+remain separately owner-gated.

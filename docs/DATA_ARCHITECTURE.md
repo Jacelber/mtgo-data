@@ -1536,6 +1536,31 @@ P10-03 does not provision a production key or modify the production workflow.
 Resource Schemas as a primary production gate, supplemental prohibited-field
 scans, and notice/contact/removal updates remain P10-04 work.
 
+### 11.14 Minimized-resource validation and privacy requests
+
+P10-04 promotes `schemas/melee-minimized-resource.schema.json` to the primary
+contract for every future v3 tournament, standings, matches, and decklist
+resource document. The Schema uses strict resource-specific object shapes,
+rejects additional properties at every persisted level, constrains event,
+round, decklist, URL, and HMAC-reference formats, and is applied both before
+canonical serialization and after a persisted resource is read. Generation,
+resume, parsing, assembly, and retention therefore share the same fail-closed
+resource boundary.
+
+An exact-key recursive scan supplements the Schema for source identity,
+account, profile, preference, and unused deck metadata keys identified by the
+P10-01/P10-03 audits. The scan is called only for one decoded minimized v3
+resource. It does not scan string values, documentation, source responses,
+the repository as a whole, or immutable v1/v2 snapshots. The Schema remains
+the authoritative allowlist; the scan is defense against a future contract
+change accidentally admitting a previously rejected source key.
+
+`NOTICE.md` publishes `djacerror@gmail.com` as the project contact and defines
+the information needed for correction or removal review. Current content
+correction, upstream-source requests, and Git-history rewriting are distinct
+operations. P10-04 changes no retained or generated data and does not
+authorize the separately owner-gated P10-05 history operation.
+
 ---
 
 ## 12. Statistics-output layout

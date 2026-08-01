@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-minimized-resource.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "Melee minimized persisted resource",
+  "oneOf": [
+    {"$ref": "#/$defs/tournamentResource"},
+    {"$ref": "#/$defs/standingsResource"},
+    {"$ref": "#/$defs/matchesResource"},
+    {"$ref": "#/$defs/decklistResource"}
+  ],
+  "$defs": {
+    "nonEmptyText": {"type": "string", "minLength": 1},
+    "positiveSourceId": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "opaqueSourceId": {"type": "string", "minLength": 1},
+    "decklistId": {"type": "string", "pattern": "^[0-9A-Fa-f-]{32,36}$"},
+    "participantRef": {"type": "string", "pattern": "^melee-v3-[0-9a-f]{64}$"},
+    "tournament": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_event_id", "name"],
+      "properties": {
+        "source_event_id": {"$ref": "#/$defs/positiveSourceId"},
+        "name": {"$ref": "#/$defs/nonEmptyText"},
+        "start_text": {"$ref": "#/$defs/nonEmptyText"},
+        "end_text": {"$ref": "#/$defs/nonEmptyText"}
+      }
+    },
+    "round": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_round_id", "label"],
+      "properties": {
+        "source_round_id": {"$ref": "#/$defs/positiveSourceId"},
+        "label": {"$ref": "#/$defs/nonEmptyText"},
+        "number": {"type": "integer", "minimum": 1}
+      }
+    },
+    "standing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_standing_id", "participant_ref", "display_name"],
+      "properties": {
+        "source_standing_id": {"$ref": "#/$defs/opaqueSourceId"},
+        "participant_ref": {"$ref": "#/$defs/participantRef"},
+        "display_name": {"$ref": "#/$defs/nonEmptyText"},
+        "rank": {"type": "integer", "minimum": 1},
+        "match_points": {"type": "integer", "minimum": 0},
+        "record_text": {"$ref": "#/$defs/nonEmptyText"},
+        "status_text": {"$ref": "#/$defs/nonEmptyText"}
+      }
+    },
+    "decklistReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_decklist_id", "participant_ref", "url"],
+      "properties": {
+        "source_decklist_id": {"$ref": "#/$defs/decklistId"},
+        "participant_ref": {"$ref": "#/$defs/participantRef"},
+        "url": {
+          "type": "string",
+          "pattern": "^https://melee\\.gg/Decklist/GetDecklistDetails\\?id=[0-9A-Fa-f-]{32,36}$"
+        }
+      }
+    },
+    "competitor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["participant_ref"],
+      "properties": {
+        "participant_ref": {"$ref": "#/$defs/participantRef"},
+        "outcome_text": {"$ref": "#/$defs/nonEmptyText"},
+        "match_points": {"type": "integer", "minimum": 0}
+      }
+    },
+    "match": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_match_id", "source_round_id", "competitors"],
+      "properties": {
+        "source_match_id": {"$ref": "#/$defs/opaqueSourceId"},
+        "source_round_id": {"$ref": "#/$defs/positiveSourceId"},
+        "competitors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/competitor"}
+        },
+        "result_text": {"$ref": "#/$defs/nonEmptyText"},
+        "status_text": {"$ref": "#/$defs/nonEmptyText"},
+        "table_number": {"type": "integer", "minimum": 1}
+      }
+    },
+    "card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "quantity", "section_text"],
+      "properties": {
+        "name": {"$ref": "#/$defs/nonEmptyText"},
+        "quantity": {"type": "integer", "minimum": 1},
+        "section_text": {"$ref": "#/$defs/nonEmptyText"}
+      }
+    },
+    "decklist": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_decklist_id", "participant_ref", "cards"],
+      "properties": {
+        "source_decklist_id": {"$ref": "#/$defs/decklistId"},
+        "participant_ref": {"$ref": "#/$defs/participantRef"},
+        "format_text": {"$ref": "#/$defs/nonEmptyText"},
+        "cards": {"type": "array", "items": {"$ref": "#/$defs/card"}}
+      }
+    },
+    "tournamentResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "resource_type", "tournament", "rounds"],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "resource_type": {"const": "tournament"},
+        "tournament": {"$ref": "#/$defs/tournament"},
+        "rounds": {"type": "array", "items": {"$ref": "#/$defs/round"}}
+      }
+    },
+    "standingsResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "resource_type", "records_total", "standings", "decklist_references"],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "resource_type": {"const": "standings"},
+        "records_total": {"type": "integer", "minimum": 0},
+        "standings": {"type": "array", "items": {"$ref": "#/$defs/standing"}},
+        "decklist_references": {"type": "array", "items": {"$ref": "#/$defs/decklistReference"}}
+      }
+    },
+    "matchesResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "resource_type", "records_total", "matches"],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "resource_type": {"const": "matches"},
+        "records_total": {"type": "integer", "minimum": 0},
+        "matches": {"type": "array", "items": {"$ref": "#/$defs/match"}}
+      }
+    },
+    "decklistResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "resource_type", "decklists"],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "resource_type": {"const": "decklist"},
+        "decklists": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"$ref": "#/$defs/decklist"}
+        }
+      }
+    }
+  }
+}

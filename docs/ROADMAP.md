@@ -2318,7 +2318,17 @@ retention remain compatible with immutable v2 snapshots, and the P10-02
 contract continues to freeze event `434455` exactly. P10-03 provisions no real
 secret, changes no workflow or production data, and performs no live fetch.
 The owner accepted P10-03 and authorized commit, push, pull request, and merge
-on 2026-08-01. P10-04 remains separately owner-gated.
+on 2026-08-01. It was published through pull request #142 and merge commit
+`c2886d20658dab2e490b39e637eccb6b7e4cb436`.
+
+P10-04 adds strict resource Schema `1.0.0` as the primary gate before future
+v3 resource persistence and again on read. A resource-scoped JSON-key scan is
+supplemental defense and deliberately does not scan source bodies, values,
+documentation, the whole repository, or immutable v1/v2 snapshots. The public
+notice identifies `djacerror@gmail.com` and separates current-content review,
+upstream-source requests, and the separately owner-gated history-rewrite
+process. P10-04 changes no production data, statistic, workflow, whitelist,
+public path, or front end. P10-05 remains separately owner-gated.
 
 ## Acceptance criteria
 

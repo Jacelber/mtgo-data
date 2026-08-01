@@ -24,6 +24,29 @@ The project does not claim ownership of underlying third-party tournament record
 
 Source provenance and data-quality metadata should be preserved where the relevant generated format supports them. Removal of provenance does not expand the rights granted for source data.
 
+## Privacy contact and correction or removal requests
+
+Future Melee snapshot version 3 retains only the resource fields required by
+the reviewed event-data contract. This can include source-published display
+names, standings, match results, decklists, event metadata, and event-scoped
+participant references. The references replace raw numeric participant IDs,
+but retaining a published display name is not an anonymity guarantee.
+
+To request review, correction, or removal of project-published participant or
+tournament information, email `djacerror@gmail.com`. Include the Melee event
+ID or event URL, the displayed name or record at issue, the affected project
+URL or repository path, and the requested action. Do not send passwords,
+access tokens, or unrelated identity documents. The project will review the
+request and determine the applicable correction or removal action for content
+it controls. Requests concerning the source provider's own pages or records
+must also be directed to that provider.
+
+Removing content from the current site or branch does not by itself remove it
+from Git history, forks, clones, caches, releases, or third-party archives.
+Any repository-history rewrite is a separately reviewed owner operation with
+its own backup, restoration, publication, and collaborator-impact controls;
+this notice does not promise or authorize such a rewrite.
+
 The OM1-to-SPM card-name alias artifact in `src/mtgmeta/data/om1_spm_aliases.json` is derived from the [MTGJSON OM1 dataset](https://mtgjson.com/api/v5/OM1.json). MTGJSON is distributed under the [MIT License](https://github.com/mtgjson/mtgjson/blob/main/LICENSE). The artifact records its source version and retrieval date. This attribution does not relicense Magic card names or other Wizards of the Coast materials.
 
 ## Magic: The Gathering materials

@@ -96,6 +96,11 @@ defines this environment interface but does not provision a production secret;
 live collection and secret/workflow configuration each require separate owner
 authorization. The manifest records only the key ID and never the key.
 
+The minimized resource documents are validated against
+`schemas/melee-minimized-resource.schema.json` before persistence and again
+when read. Privacy contact information and the correction or removal request
+procedure are documented in [`NOTICE.md`](NOTICE.md).
+
 The verified reference event `434455` is the only enabled Melee event; every
 live fetch still requires separate project-owner authorization. A successful
 re-fetch creates a new immutable snapshot instead of overwriting prior source

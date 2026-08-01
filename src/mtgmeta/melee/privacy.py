@@ -17,6 +17,10 @@ import re
 from typing import Any, Mapping
 
 from .parser import ParsedSourcePage, SourceArtifact, parse_source_response
+from .privacy_validation import (
+    MeleeResourceValidationError,
+    validate_minimized_resource,
+)
 
 
 MINIMIZED_RESOURCE_SCHEMA_VERSION = "1.0.0"
@@ -219,6 +223,13 @@ def minimize_source_response(
         raise MeleePrivacyError("tournament response event identity changed")
     records_total = _records_total(body, artifact.resource_type)
     document = _document(page, pseudonymizer, records_total)
+    try:
+        validate_minimized_resource(
+            document,
+            context=f"{artifact.path} pre-persistence resource",
+        )
+    except MeleeResourceValidationError as exc:
+        raise MeleePrivacyError(str(exc)) from exc
     minimized = (
         json.dumps(document, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
         + "\n"
