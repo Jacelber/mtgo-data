@@ -55,24 +55,101 @@ authoritative_documents:
       authoritative: false
 
 current_phase:
-  id: 9
-  name: "Pure Constructed event strategies"
-  status: "completed"
-  started_on: "2026-07-30"
-  completed_on: "2026-07-31"
-  completion_pull_request: 137
-  completion_commit: "916cd410fb638bd8ea671321ba569d10cefad244"
-  recovery_tag: "phase-9-pure-constructed-events"
-  objective: "Complete statistical support for the explicitly configured constructed_day2 and constructed_single_stage Tabletop Major Events structures while preserving the mixed Modern baseline."
+  id: 10
+  name: "Data governance, compliance, and production operations"
+  status: "in_progress"
+  started_on: "2026-08-01"
+  objective: "Establish an explicit privacy, compatibility, storage, and production-operations boundary before adding more Tabletop events or Constructed formats."
   production_changes_allowed: false
   feature_development_allowed: false
-  next_phase_id: 10
+  next_phase_id: 11
   next_phase_authorized: false
 
-current_governance_task:
+current_task:
+  id: "P10-01"
+  name: "Data classification and privacy audit"
+  status: "owner_accepted_remote_publication_authorized"
+  authorized_on: "2026-08-01"
+  owner_authorized_local_implementation: true
+  workspace: "C:/tmp/mtgo-data-p10-01-20260801-02"
+  branch: "codex/p10-01-data-classification-privacy-audit"
+  base_commit: "fc13babbcd5469b77f3c879de753be5fbdbeafdc"
+  audited_master_commit: "fc13babbcd5469b77f3c879de753be5fbdbeafdc"
+  task_type: "documentation_only_data_classification_and_privacy_audit"
+  objective: "Inventory current retained and public identity, account, preference, provenance, and event-name fields by Melee resource without changing the data boundary."
+  target_paths:
+    - "docs/audits/P10-01.md"
+    - "docs/ROADMAP.md"
+    - "docs/STATUS.yaml"
+  protected_scope:
+    code_changed: false
+    tests_changed: false
+    schema_changed: false
+    configuration_changed: false
+    workflow_changed: false
+    raw_data_changed: false
+    normalized_data_changed: false
+    generated_data_changed: false
+    statistical_behavior_changed: false
+    public_paths_changed: false
+    frontend_changed: false
+  evidence:
+    canonical_snapshot: "data_raw/melee/434455/20260724T092458Z-01"
+    snapshot_files: 484
+    manifest_declared_responses: 483
+    tournament_responses: 1
+    standings_responses: 15
+    match_responses: 105
+    decklist_responses: 362
+    participant_field_occurrences:
+      standings: 362
+      matches: 4578
+      total: 4940
+    downstream_public_player_names: 362
+    deterministic_unsalted_participant_ids: true
+    irreversible_anonymization_claimed: false
+    raw_manifest_pages_head_status: 200
+    raw_standings_pages_head_status: 200
+    handoff_raw_file_count_corrected: true
+    handoff_event_specific_hashes_match: true
+    handoff_global_catalog_hash_changed_by_production_update: true
+  deliverables:
+    - "docs/audits/P10-01.md"
+    - "docs/ROADMAP.md"
+    - "docs/STATUS.yaml"
+  validation:
+    status: "passed"
+    yaml_parse: "passed"
+    repository_validation: "passed"
+    repository_python_checked: 127
+    repository_json_checked: 1609
+    repository_yaml_checked: 21
+    repository_references_checked: 30
+    repository_hygiene_checked: 1888
+    focused_publication_governance_tests_passed: 3
+    manifest_resource_counts: "passed"
+    reviewed_sensitive_field_counts: "seven_fields_each_present_4940_times"
+    participant_value_leak_check: "passed"
+    added_repository_content_language_check: "passed"
+    raw_pages_head_checks: "two_exact_paths_returned_http_200"
+    changed_paths_within_allowlist: true
+    protected_paths_unchanged: true
+    git_diff_check: "passed"
+    full_pytest_repeated: false
+    full_pytest_reason: "P10-01 changes documentation only; the 623-test P9 closeout remains the latest complete local suite, and pull-request CI will run the complete clean-checkout validation if publication is separately authorized."
+  owner_acceptance: "accepted"
+  owner_accepted_on: "2026-08-01"
+  remote_publication_authorized: true
+  remote_publication_authorized_on: "2026-08-01"
+  merge_authorized_after_passing_checks: true
+  production_dispatch_authorized: false
+  next_task_automatically_authorized: false
+  stop_point: "Commit, publish, and merge the accepted P10-01 documentation after passing checks, then stop. Do not begin P10-02 or dispatch production automatically."
+
+r_02_result:
   id: "R-02"
   name: "Reconcile current project facts after Phase 9"
-  status: "owner_accepted_remote_publication_authorized"
+  status: "completed_published_and_merged"
   authorized_on: "2026-08-01"
   owner_authorized_local_implementation: true
   workspace: "C:/tmp/mtgo-data-r02-20260801-01"
@@ -117,9 +194,15 @@ current_governance_task:
   remote_publication_authorized: true
   remote_publication_authorized_on: "2026-08-01"
   merge_authorized_after_passing_checks: true
+  publication:
+    local_commit: "1bfc441d2ae47e1c03a482fe66c32d006c6cce03"
+    pull_request: 139
+    pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/139"
+    merge_commit: "fc13babbcd5469b77f3c879de753be5fbdbeafdc"
+    merged_on: "2026-08-01"
   production_dispatch_authorized: false
   next_task_automatically_authorized: false
-  stop_point: "Publish and merge the accepted R-02 documentation change after passing checks, then stop. Do not begin P10-01, activate events, or dispatch production automatically."
+  stop_point: "R-02 was published and merged. P10-01 required and received separate owner authorization on 2026-08-01."
 
 r_01_result:
   id: "R-01"
@@ -6080,8 +6163,8 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P10-01"
-  name: "Data classification and privacy audit"
+  id: "P10-02"
+  name: "Freeze the explicit 434455 compatibility manifest"
   target_paths: "to_be_defined_after_owner_authorization"
   production_change: false
   requires_user_confirmation: true
@@ -6089,7 +6172,7 @@ next_approved_task:
   local_execution_authorized: false
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "P10-01 is the next roadmap candidate after R-02. It may begin only after R-02 is accepted and published and the owner gives fresh authorization. No later Phase 10 task is authorized."
+  planning_status: "P10-02 is the next roadmap candidate only after P10-01 owner acceptance and publication. Its exact compatibility boundary requires separate owner authorization and must distinguish event-specific bytes from legally expandable global catalogs."
 
 governance_baseline:
   status: "active_on_master"
@@ -6138,14 +6221,14 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P10-01 or any later Phase 10 task without separate owner authorization."
+  - "Do not begin P10-02 or any later Phase 10 task without separate owner authorization."
+  - "Do not implement a privacy allowlist, remove or rename identity fields, change participant pseudonyms, or regenerate event 434455 under a new snapshot contract in P10-01."
   - "Do not activate Tabletop events, dispatch production, or add events to configs/melee_events.yaml without separate authorization."
   - "Do not retain new source responses or generate or publish new event data without separate authorization."
   - "Do not rewrite Git history, migrate storage, or change the retained 434455 compatibility bytes without the applicable owner gate."
   - "Do not reuse cookies or browser sessions or bypass access controls."
   - "Do not re-dispatch the Melee production workflow without separate authorization."
   - "Do not use Superdesign or transmit project context to an external design service without the P8 external-design approval gate."
-  - "Do not expand R-02 into code, generated data, production data, schemas, workflows, public paths, statistical behavior, or front-end behavior."
   - "Do not commit directly to master."
   - "Do not begin a follow-up task without explicit owner authorization."
 
