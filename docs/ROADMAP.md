@@ -59,7 +59,7 @@ blockers, and stop conditions.
 | Phase 8 | Deliver the format-first MTGO and Tabletop front ends. | Completed |
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
-| Phase 10 | Establish data governance, compliance, and production operations. | In progress; P10-07 awaiting owner front-end acceptance |
+| Phase 10 | Establish data governance, compliance, and production operations. | In progress; P10-08 runtime alignment underway |
 | Phase 11 | Establish the engineering baseline and reduce structural debt. | Planned; not authorized |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
@@ -2432,6 +2432,24 @@ source transition immediately before the exact validated merge, custom Pages
 deployment, and restoration of legacy `master` `/` if the new path fails. It
 does not authorize a production-data dispatch, P10-08, P10-09, storage
 migration, compatibility change, or history rewrite.
+
+P10-07 was published through pull request #146. Its implementation commit
+`c97b6d2f6c6269df722dba062a08dfeafebbe9de` merged as
+`a2d92c384d386d0a98ab9fd4bb7632ce066b3bfd` after pull-request validation run
+`30701806996` passed. The repository Pages source changed from legacy
+`master` `/` to GitHub Actions immediately before merge. Master admission run
+`30702234519` and custom Pages deployment run `30702234546` passed; the MTGO
+and Tabletop entry points plus selected runtime documents matched the merged
+source bytes. No production-data workflow was dispatched, and P10-08 began
+only after separate owner authorization.
+
+P10-08 changes only the scheduled MTGO update runtime from Python 3.11 to the
+already exercised Python 3.12 environment and adds a workflow-wide 3.12
+regression assertion. All 655 Python 3.12 tests, repository validation, rule
+validation, public Schema validation, and diff validation passed locally. No
+source was fetched, no generated data changed, and no production workflow was
+dispatched. The owner accepted the local result and authorized its publication
+on 2026-08-01; P10-09 remains separately controlled.
 
 ## Acceptance criteria
 

@@ -57,7 +57,16 @@ def test_job_is_master_only_bounded_and_uses_official_actions():
     assert steps[0]["uses"] == "actions/checkout@v7.0.0"
     assert steps[0]["with"] == {"fetch-depth": "0", "persist-credentials": "true"}
     assert steps[1]["uses"] == "actions/setup-python@v6.3.0"
-    assert steps[1]["with"]["python-version"] == "3.11"
+    assert steps[1]["with"]["python-version"] == "3.12"
+
+
+def test_all_project_workflows_use_only_python_3_12():
+    for path in WORKFLOWS.glob("*.yml"):
+        workflow = yaml.load(path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+        for job in workflow["jobs"].values():
+            for step in job.get("steps", []):
+                if step.get("uses") == "actions/setup-python@v6.3.0":
+                    assert step["with"]["python-version"] == "3.12", path
 
 
 def test_complete_pipeline_order_preserves_mtgo_and_videre():

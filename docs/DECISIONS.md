@@ -2823,7 +2823,7 @@ history rewriting remain separately gated.
 
 # DEC-069 — Build Pages from explicit product paths
 
-Status: `Proposed`
+Status: `Accepted`
 
 ## Context
 
@@ -2870,7 +2870,12 @@ or front-end source changes, no external storage or credential is added, and
 the P10-09 fetch/build/publish job split remains separate.
 
 The owner confirmed both candidate front ends on 2026-08-01 and authorized
-commit and publication. Publication includes the reviewed branch, pull request,
-legacy-to-Actions Pages-source cutover, exact validated merge, custom Pages
-deployment, and rollback if the new deployment fails. Production dispatch and
-later Phase 10 tasks remain separately controlled.
+commit and publication. Pull request #146 merged implementation commit
+`c97b6d2f6c6269df722dba062a08dfeafebbe9de` as
+`a2d92c384d386d0a98ab9fd4bb7632ce066b3bfd`. The Pages setting switched to
+GitHub Actions immediately before that exact merge. Pull-request validation
+run `30701806996`, master admission run `30702234519`, and custom Pages run
+`30702234546` passed. The custom deployment required no rollback, and public
+entry points plus selected runtime documents matched the merged source bytes.
+
+Production dispatch and later Phase 10 tasks remain separately controlled.
