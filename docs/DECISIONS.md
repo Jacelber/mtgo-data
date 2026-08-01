@@ -2925,8 +2925,9 @@ OIDC, secret, storage-provider, or other unrelated permission.
 The workflow exposes fetch, build, and publication as separately observable
 steps and confines repository write access to the only step that can publish a
 fully validated candidate. A transfer or validation failure prevents the
-publish job from starting; the normal Actions status and per-job summaries
-remain the failure report until P10-11 is separately authorized.
+publish job from starting. DEC-072 subsequently adds the separately authorized
+P10-11 issue-only notification boundary; normal Actions status and per-job
+summaries remain the primary diagnostic record.
 
 ---
 
@@ -2985,3 +2986,46 @@ No statistical formula, source-selection rule, event whitelist, generated-data
 path, public URL, front-end behavior, Pages configuration, raw retention
 policy, storage provider, or production-data commit changes during local
 implementation. A real production dispatch remains separately owner-gated.
+
+---
+
+# DEC-072 — Deduplicate MTGO production failure issues by pipeline stage
+
+Status: `Accepted`
+
+## Context
+
+The split production workflow already exposes failed fetch, build, and publish
+jobs in GitHub Actions, and P10-10 retains incomplete input collection safely.
+However, a recurring production failure had no durable, deduplicated work item.
+Creating a new issue for every failed daily run would create noise, while giving
+the collection, build, or publication jobs broad issue permission would weaken
+their least-privilege boundary.
+
+## Decision
+
+Add one post-pipeline notification job. It runs only after a real `failure` in
+fetch, build, or publish, selects the first failed stage in pipeline order, and
+has only `issues: write`; it does not check out the repository or receive
+`contents`, `actions`, Pages, OIDC, storage, or publication permission.
+
+The job uses a stable hidden marker in an ordinary issue body to find an open,
+non-pull-request issue for the selected stage. It creates that issue if absent;
+otherwise it appends a compact update to the existing issue. The controlled
+message contains only the stage name, immutable trigger SHA, and Actions run
+link. It never copies raw exception text, source responses, request details,
+credentials, or production data into an Issue.
+
+Successful, skipped, and cancelled pipeline outcomes create no issue. A closed
+failure issue is not reopened automatically; a later recurrence may create a
+new issue. P10-11 does not dispatch a workflow or manufacture a failure for
+live verification.
+
+## Consequences
+
+The owner receives one maintained open work item per active failure stage
+without expanding any collection, build, or publication permission. The
+notification job is itself observable in Actions and may fail visibly if GitHub
+cannot record the notification; it cannot convert a failed production run into
+a successful one. No statistic, source policy, generated output, public path,
+front-end behavior, or durable data-store behavior changes.

@@ -343,6 +343,8 @@ The production scripts and `.github/workflows/update.yml` fetch data and write c
 
 If input collection fails after the checkpoint is prepared, the fetch job saves a separate seven-day `mtgo-fetch-checkpoint` artifact. It contains only the fetched inputs, clean baseline, checksums, and a progress manifest. A later fetch run may read that artifact only when its `master` commit and exact event/match format plan match; it verifies every checksum and archive boundary before reusing completed operations. An incomplete checkpoint never reaches the build or publish jobs, cannot create generated statistics, and expires automatically. The fetch job has `actions: read` only for locating this temporary checkpoint; it still has no repository-write permission. These artifacts are temporary workflow objects, not a data store or durable archive. Before running or changing it, review:
 
+When fetch, build, or publish fails, a separate notification job with only `issues: write` records the failed stage. It creates one ordinary open issue per stage, or adds a new run link to that stage's existing open issue. The issue contains only the stage, commit, and workflow link; it does not copy source responses or raw error output. A successful run creates no issue. This notification is separate from collection, generation, and publication, and it cannot write repository contents.
+
 - [`docs/audits/P1-01.md`](docs/audits/P1-01.md) for the current entry-point and workflow inventory;
 - [`docs/STATISTICS_SPEC.md`](docs/STATISTICS_SPEC.md) for metric definitions;
 - [`docs/DEVELOPMENT_WORKFLOW.md`](docs/DEVELOPMENT_WORKFLOW.md) for isolation, authorization, validation, and publication gates.

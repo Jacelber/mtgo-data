@@ -2561,8 +2561,9 @@ the job starts from its clean checkout instead.
 An incomplete checkpoint is not the normal fetched-candidate artifact and is
 never made available to build or publish. It therefore cannot generate
 statistics, validate a candidate, stage a commit, or alter public output. It is
-bounded recovery state, not a durable data archive, and automatic issue
-creation remains deferred to P10-11.
+bounded recovery state, not a durable data archive. P10-11 separately reports
+an actual failed pipeline stage through its dedicated issue-only notification
+job.
 
 ### 19.3 `fetch_melee.yml`
 
@@ -2598,14 +2599,25 @@ The migration must:
 
 ### 19.5 Failure reporting
 
-Initial failure reporting should use:
+Production failure reporting uses:
 
 - failed Action status;
 - GitHub’s normal workflow notifications;
 - `$GITHUB_STEP_SUMMARY`;
 - uploaded diagnostic artifacts when useful.
+- one deduplicated open GitHub issue for each failed MTGO production stage.
 
-Automatic issue creation is not required initially.
+The notification job depends on fetch, build, and publish but has no checkout,
+repository-content permission, source data, or generated candidate. It runs only
+when one of those stages has result `failure`, records the first failed stage in
+pipeline order, and has only `issues: write`. Its stable HTML comment marker
+identifies one open non-pull-request issue for `fetch`, `build`, or `publish`.
+It creates that issue when absent and adds a later run link when it already
+exists. The body contains only the controlled stage name, commit SHA, and
+workflow URL; it must not copy source responses, request details, or raw error
+messages. Skipped downstream jobs and successful or cancelled workflow runs do
+not create an issue. Closing an issue deliberately permits a later failure to
+open a new record.
 
 ---
 

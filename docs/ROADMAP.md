@@ -2501,6 +2501,14 @@ front-end, public path, Pages setting, storage provider, failure issue, commit,
 remote publication, or merge changed. It stops for owner acceptance before any
 commit or remote action.
 
+The owner authorized P10-11 local implementation on 2026-08-02. It adds one
+deduplicated failure-notification job after MTGO fetch, build, and publication.
+Only that job may receive `issues: write`; it must create or update one open
+issue per failed stage without copying raw source content or error text. Local
+work does not dispatch production, create a real issue, change data or
+statistics, alter public paths or front ends, or authorize commit, publication,
+or merge.
+
 ## Acceptance criteria
 
 Phase 10 is complete when:
