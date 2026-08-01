@@ -2266,9 +2266,12 @@ boundary before adding more Tabletop events or Constructed formats.
    - preserve current public URLs;
    - stop for an owner selection before implementation.
 7. `P10-07` — Implement the selected separation
-   - stop committing daily generated data to the code branch under the
-     selected design;
-   - preserve `434455` compatibility and public paths.
+   - retain the current public Git data archive and daily commit behavior;
+   - replace managed branch-root Pages publication with a fresh allowlisted
+     artifact;
+   - preserve `434455` compatibility and all approved current paths;
+   - report repository, data-tree, and Pages-artifact size without automatic
+     deletion or migration.
 8. `P10-08` — Unify the Python runtime
    - prefer Python 3.12 for CI and production;
    - document an explicit support matrix if Python 3.11 remains required.
@@ -2348,7 +2351,48 @@ repository validators. Backup-directory ACL hardening also passed: inherited
 general-user access was removed and only the owner account, Administrators,
 and SYSTEM retain access. The owner accepted the completed preparation on
 2026-08-01. This acceptance does not select a rewrite outcome or grant rewrite
-authority.
+authority. P10-05 was published through pull request #144, local commit
+`78aa1921f78fc4bb1868ab07652b32f812482d67`, and merge commit
+`c7dbcb01f92bc70c54928efe4b300ddf9c743fc2`; pull-request validation, master
+validation, and Pages runs all succeeded. The owner then selected deferral of
+history rewriting until P10-06/P10-07 establish an approved current archive
+destination and compatibility successor.
+
+The owner authorized local P10-06 proposal preparation on 2026-08-01. Its
+inventory confirms that the current scheduled MTGO workflow commits generated
+`data/`, `stats/`, `reports/`, and `fetched.txt` changes directly to master,
+while the branch-root Pages deployment serves representative paths from all
+four current data layers, including `data_raw/`. The active front end consumes
+the `stats/` contract, but that fact alone does not authorize removing any
+other current URL.
+
+P10-06 initially recommended a private versioned object archive, but the owner
+requested a concrete review of necessity before accepting the added provider,
+account, fee, credential, and recovery work. P10-01/P10-03/P10-04 already give
+future Melee data a fail-closed field boundary, the owner does not require
+approved tournament data to be private, the current Git pack is 17.30 MiB, and
+the comparable public `j6e/mtg-meta-analyzer` repository keeps a larger current
+data tree in public Git while deploying a separate Pages artifact. Videre's
+PostgreSQL and R2 architecture serves a broader database/API product and does
+not create a current requirement for this static site.
+
+The owner therefore selected A+ on 2026-08-01. The current public Git
+repository and daily commit behavior remain the durable data path. A
+separately authorized P10-07 may replace managed branch-root publication with
+a fresh allowlisted Pages artifact, preserve every approved URL and event
+`434455` compatibility byte, add non-destructive size reporting, and prove
+rollback. P10-09 remains the separate fetch/build/publish job split. Cloud
+storage, data migration, raw-path removal, compatibility revision, and history
+rewriting are deferred unless later measured evidence and separate owner
+authorization justify them. P10-06 itself changes no workflow, data,
+credential, public path, statistic, or front end and stops again for acceptance
+of the revised documents before commit or P10-07 implementation. The local
+proposal passed the seven event `434455` compatibility tests, repository,
+Schema, rule, and diff validation.
+
+The owner accepted the revised A+ proposal on 2026-08-01 and authorized its
+commit, push, pull request, and merge. This publication authorization closes
+only P10-06 documentation; P10-07 remains a separate owner gate.
 
 ## Acceptance criteria
 
