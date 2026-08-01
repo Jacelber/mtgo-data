@@ -59,7 +59,7 @@ blockers, and stop conditions.
 | Phase 8 | Deliver the format-first MTGO and Tabletop front ends. | Completed |
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
-| Phase 10 | Establish data governance, compliance, and production operations. | Planned; not authorized |
+| Phase 10 | Establish data governance, compliance, and production operations. | In progress; P10-01 accepted for publication |
 | Phase 11 | Establish the engineering baseline and reduce structural debt. | Planned; not authorized |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
@@ -70,9 +70,12 @@ blockers, and stop conditions.
 | Phase 18 | Decide whether Vintage should be implemented. | Decision gate; not authorized |
 | Phase 19 | Complete release and long-term maintenance readiness. | Planned; not authorized |
 
-Post-Phase-9 governance task `R-01` maintains this roadmap and its numbering.
-`R-02` is a separate future task for reconciling current repository facts and
-does not begin automatically when `R-01` is complete.
+Post-Phase-9 governance task `R-01` completed the roadmap renumbering through
+pull request #138 and merge commit
+`e8bf64f377bd31595b0f3fbbaf05276718e0c2d2`. The separate repository-fact
+reconciliation task `R-02` completed through pull request #139 and merge
+commit `fc13babbcd5469b77f3c879de753be5fbdbeafdc`. Neither governance task
+authorized Phase 10; the owner separately authorized P10-01 on 2026-08-01.
 
 ---
 
@@ -2283,6 +2286,17 @@ boundary before adding more Tabletop events or Constructed formats.
       event format from the validated whitelist;
     - document approved event addition and refresh for non-programmers;
     - preserve manual review and publication gates.
+
+P10-01 completed its local documentation-only audit against master commit
+`fc13babbcd5469b77f3c879de753be5fbdbeafdc`. The audit is recorded in
+`docs/audits/P10-01.md`. It found that the canonical snapshot declares 483
+responses rather than the handoff's incomplete 120-file count, classified the
+raw and downstream identity fields without recording participant values, and
+confirmed that the committed raw paths are also currently served by GitHub
+Pages. No code, Schema, configuration, workflow, raw or generated data,
+statistical behavior, public path, or front-end behavior changed. The owner
+accepted P10-01 and authorized its publication on 2026-08-01. P10-02 is not
+authorized by this result.
 
 ## Acceptance criteria
 
