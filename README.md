@@ -68,27 +68,40 @@ Phase 5 provides a separately controlled raw-response client for explicitly enab
 ```powershell
 $env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455
-.\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455 --execute
+$env:MELEE_PARTICIPANT_HMAC_KEY_BASE64 = "<approved base64 secret>"
+$env:MELEE_PARTICIPANT_HMAC_KEY_ID = "<approved non-secret key id>"
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455 --complete --execute
 ```
 
+The command without `--execute` remains a request-plan dry run. The historical
+source-preserving client is not an approved future production-retention path.
 `--complete` discovers the enabled event's completed rounds, paginates its
 public standings and match endpoints, and retrieves only decklists referenced
 by the primary standings. It has no dry-run form because the request plan is
-discovered from the live tournament page. The collector freezes that plan
-before bulk retrieval, writes per-response progress to stderr, and checkpoints
-each verified response under the event directory. Re-running the same command
-after an interruption resumes the matching checkpoint without downloading
-already verified files. The partial directory is never a valid retention
-input; only a complete manifest is atomically promoted to
+discovered from the live tournament page. For future snapshots, manifest v3
+holds each source response only in bounded memory, applies the reviewed
+resource allowlist, replaces source participant IDs with event-scoped
+HMAC-SHA256 references, and writes only canonical minimized JSON. The collector
+freezes that plan before bulk retrieval, writes per-response progress to
+stderr, and checkpoints each verified minimized response under the event
+directory. Re-running the same command after an interruption resumes only a
+checkpoint with the same non-secret key ID and does not download already
+verified files. The partial directory is never a valid retention input; only a
+complete manifest is atomically promoted to
 `data_raw/melee/<event_id>/<UTC-snapshot>/`.
+
+The HMAC secret must decode to at least 32 bytes. Do not place a real value in
+the repository, command history, workflow YAML, logs, or documentation. P10-03
+defines this environment interface but does not provision a production secret;
+live collection and secret/workflow configuration each require separate owner
+authorization. The manifest records only the key ID and never the key.
 
 The verified reference event `434455` is the only enabled Melee event; every
 live fetch still requires separate project-owner authorization. A successful
 re-fetch creates a new immutable snapshot instead of overwriting prior source
 evidence.
 
-P7-02 retains a complete snapshot as the canonical normalized production input
+P7-02 retains a complete immutable v2 or v3 snapshot as the canonical normalized production input
 only after validating its manifest, response coverage, file set, byte counts,
 SHA-256 values, parsed identities, normalized semantics, and publication
 quality:

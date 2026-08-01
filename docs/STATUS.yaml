@@ -66,9 +66,106 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
+  id: "P10-03"
+  name: "Future-event privacy snapshot v3"
+  status: "owner_accepted_remote_publication_authorized"
+  authorized_on: "2026-08-01"
+  owner_authorized_local_implementation: true
+  workspace: "C:/tmp/mtgo-data-p10-03-20260801-01"
+  branch: "codex/p10-03-future-event-privacy-snapshot-v3"
+  base_commit: "23ed3467e0501ae1796d3326433c05035abb98e5"
+  task_type: "future_event_pre_persistence_minimization_and_keyed_identity"
+  objective: "Persist only reviewed future-event resource fields and replace raw participant IDs with event-scoped HMAC references without changing event 434455."
+  owner_decisions:
+    public_display_name: "retain_source_published_DisplayName"
+    participant_reference: "hmac_sha256_event_scoped"
+    secret_provisioning: "not_in_scope"
+    legacy_event_migration: "prohibited"
+  target_paths:
+    - "src/mtgmeta/melee/privacy.py"
+    - "src/mtgmeta/melee/client.py"
+    - "src/mtgmeta/melee/parser.py"
+    - "src/mtgmeta/melee/assembler.py"
+    - "src/mtgmeta/melee/retention.py"
+    - "src/mtgmeta/melee/__main__.py"
+    - "schemas/melee-raw-archive.schema.json"
+    - "tests/test_melee_privacy.py"
+    - "tests/test_melee_client.py"
+    - "tests/test_melee_retention.py"
+    - "tests/test_validate_schemas.py"
+    - "README.md"
+    - "docs/audits/P10-03.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
+    - "docs/ROADMAP.md"
+    - "docs/STATUS.yaml"
+  protected_scope:
+    workflow_changed: false
+    configuration_changed: false
+    raw_data_changed: false
+    normalized_data_changed: false
+    generated_data_changed: false
+    statistical_behavior_changed: false
+    public_paths_changed: false
+    frontend_changed: false
+    event_434455_regenerated: false
+    real_secret_configured: false
+    live_fetch_performed: false
+  contract:
+    complete_manifest_schema_version: "3.0.0"
+    minimized_resource_schema_version: "1.0.0"
+    participant_identity_scheme: "hmac-sha256-event-v1"
+    participant_reference_prefix: "melee-v3-"
+    minimum_key_bytes: 32
+    checkpoint_records_key_id_only: true
+    source_response_written_before_minimization: false
+    legacy_parse_compatibility:
+      - "1.0.0"
+      - "2.0.0"
+      - "3.0.0"
+    production_retention_compatibility:
+      - "2.0.0"
+      - "3.0.0"
+  validation:
+    status: "passed"
+    pre_change_impacted_tests_passed: 68
+    focused_privacy_client_parser_retention_schema_tests_passed: 91
+    full_pytest_passed: 636
+    full_pytest_seconds: 396.52
+    post_full_impacted_tests_passed: 29
+    post_full_impacted_tests_seconds: 1.97
+    compatibility_manifest_tests_passed: 7
+    compatibility_manifest_seconds: 0.46
+    public_schema_documents_validated: 69
+    rule_validation: "passed"
+    repository_validation: "passed"
+    repository_python_checked: 130
+    repository_json_checked: 1611
+    repository_yaml_checked: 21
+    repository_references_checked: 30
+    repository_hygiene_checked: 1895
+    git_diff_check: "passed"
+    changed_paths_within_scope: true
+    changed_path_count: 17
+    workflow_paths_changed: false
+    configuration_paths_changed: false
+    production_or_public_data_paths_changed: false
+    event_434455_compatibility_passed: true
+    credential_and_secret_scan: "passed"
+    production_workflow_dispatched: false
+  owner_acceptance: "accepted"
+  owner_accepted_on: "2026-08-01"
+  remote_publication_authorized: true
+  remote_publication_authorized_on: "2026-08-01"
+  merge_authorized: true
+  production_dispatch_authorized: false
+  next_task_automatically_authorized: false
+  stop_point: "Commit, publish, and merge the accepted P10-03 change after passing checks, then stop. Do not provision a secret, dispatch production, begin P10-04, or rewrite history without separate authorization."
+
+p10_02_result:
   id: "P10-02"
   name: "Freeze the explicit 434455 compatibility manifest"
-  status: "owner_accepted_remote_publication_authorized"
+  status: "completed_published_and_merged"
   authorized_on: "2026-08-01"
   owner_authorized_local_implementation: true
   workspace: "C:/tmp/mtgo-data-p10-02-20260801-01"
@@ -157,10 +254,17 @@ current_task:
   owner_accepted_on: "2026-08-01"
   remote_publication_authorized: true
   remote_publication_authorized_on: "2026-08-01"
+  local_commit: "d346be1962f117e927d2e56ce9d7d5b4e71327db"
+  pull_request: 141
+  pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/141"
+  merge_commit: "23ed3467e0501ae1796d3326433c05035abb98e5"
+  pull_request_validation_run: 30686590676
+  master_validation_run: 30686967554
+  pages_run: 30686967188
   merge_authorized_after_passing_checks: true
   production_dispatch_authorized: false
   next_task_automatically_authorized: false
-  stop_point: "Commit, publish, and merge the accepted P10-02 change after passing checks, then stop. Do not begin P10-03, dispatch production, refresh data, or rewrite history without separate authorization."
+  stop_point: "P10-02 was published and merged. P10-03 required and received separate owner authorization on 2026-08-01."
 
 p10_01_result:
   id: "P10-01"
@@ -6269,8 +6373,8 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P10-03"
-  name: "Future-event privacy snapshot v3"
+  id: "P10-04"
+  name: "Privacy validation and notice update"
   target_paths: "to_be_defined_after_owner_authorization"
   production_change: false
   requires_user_confirmation: true
@@ -6278,7 +6382,7 @@ next_approved_task:
   local_execution_authorized: false
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "P10-03 is the next roadmap candidate only after P10-02 owner acceptance and publication. It requires separate owner decisions for per-resource persistence allowlists, public participant names, and keyed pseudonym or controlled mapping management, and must not regenerate event 434455."
+  planning_status: "P10-04 is the next roadmap candidate only after P10-03 owner acceptance and publication. It owns resource Schemas as the primary production-data gate, supplemental prohibited-field scans, and notice/contact/removal procedures."
 
 governance_baseline:
   status: "active_on_master"
@@ -6327,8 +6431,8 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P10-03 or any later Phase 10 task without separate owner authorization."
-  - "Do not implement a privacy allowlist, remove or rename identity fields, change participant pseudonyms, or regenerate event 434455 under a new snapshot contract in P10-02."
+  - "Do not begin P10-04 or any later Phase 10 task without separate owner authorization."
+  - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."
   - "Do not activate Tabletop events, dispatch production, or add events to configs/melee_events.yaml without separate authorization."
   - "Do not retain new source responses or generate or publish new event data without separate authorization."
   - "Do not rewrite Git history, migrate storage, or change the retained 434455 compatibility bytes without the applicable owner gate."

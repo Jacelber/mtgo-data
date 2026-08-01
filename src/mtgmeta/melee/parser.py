@@ -13,12 +13,14 @@ from hashlib import sha256
 from html.parser import HTMLParser
 import json
 from pathlib import Path, PurePosixPath
+import re
 from typing import Any, Iterable, Mapping
 
 
 SUPPORTED_RESOURCE_TYPES = frozenset({"tournament", "standings", "matches", "decklist"})
 SUPPORTED_CONTENT_TYPES = frozenset({"html", "json"})
 MAX_SOURCE_BYTES = 32 * 1024 * 1024
+V3_PARTICIPANT_REF_PATTERN = re.compile(r"^melee-v3-[0-9a-f]{64}$")
 
 
 class MeleeSourceParseError(ValueError):
@@ -40,6 +42,10 @@ class SourceArtifact:
     source_round_id: str | None = None
     source_participant_id: str | None = None
     source_decklist_id: str | None = None
+    participant_ref: str | None = None
+    persisted_content_type: str | None = None
+    source_sha256: str | None = None
+    source_bytes: int | None = None
 
 
 @dataclass(frozen=True)
@@ -125,6 +131,9 @@ class ParsedMeleeSnapshot:
     event_url: str
     fetched_at: str
     pages: tuple[ParsedSourcePage, ...]
+    archive_schema_version: str = "1.0.0"
+    participant_identity_scheme: str | None = None
+    participant_key_id: str | None = None
 
 
 class _JsonScriptCollector(HTMLParser):
@@ -729,6 +738,146 @@ def parse_source_response(body: bytes, artifact: SourceArtifact) -> ParsedSource
     )
 
 
+def _participant_ref(value: Any, path: str) -> str:
+    reference = _string(value, path)
+    assert reference is not None
+    if not V3_PARTICIPANT_REF_PATTERN.fullmatch(reference):
+        raise MeleeSourceParseError(f"{path}: invalid v3 participant reference")
+    return reference
+
+
+def _v3_standings(value: Any, path: str) -> tuple[SourceStanding, ...]:
+    converted = []
+    for index, item in enumerate(_list(value, path)):
+        item_path = f"{path}[{index}]"
+        data = _fields(
+            item,
+            item_path,
+            {"source_standing_id", "participant_ref", "display_name"},
+            {"rank", "match_points", "record_text", "status_text"},
+        )
+        reference = _participant_ref(
+            data.pop("participant_ref"), f"{item_path}.participant_ref"
+        )
+        converted.append({**data, "source_participant_id": reference})
+    return _parse_standings(converted, path)
+
+
+def _v3_references(value: Any, path: str) -> tuple[SourceDecklistReference, ...]:
+    converted = []
+    for index, item in enumerate(_list(value, path)):
+        item_path = f"{path}[{index}]"
+        data = _fields(
+            item,
+            item_path,
+            {"source_decklist_id", "participant_ref", "url"},
+        )
+        reference = _participant_ref(
+            data.pop("participant_ref"), f"{item_path}.participant_ref"
+        )
+        converted.append({**data, "source_participant_id": reference})
+    return _parse_decklist_references(converted, path)
+
+
+def _v3_matches(value: Any, path: str) -> tuple[SourceMatch, ...]:
+    converted = []
+    for index, item in enumerate(_list(value, path)):
+        item_path = f"{path}[{index}]"
+        data = _fields(
+            item,
+            item_path,
+            {"source_match_id", "source_round_id", "competitors"},
+            {"result_text", "status_text", "table_number"},
+        )
+        competitors = []
+        for position, competitor in enumerate(
+            _list(data.pop("competitors"), f"{item_path}.competitors")
+        ):
+            competitor_path = f"{item_path}.competitors[{position}]"
+            competitor_data = _fields(
+                competitor,
+                competitor_path,
+                {"participant_ref"},
+                {"outcome_text", "match_points"},
+            )
+            reference = _participant_ref(
+                competitor_data.pop("participant_ref"),
+                f"{competitor_path}.participant_ref",
+            )
+            competitors.append({**competitor_data, "source_participant_id": reference})
+        converted.append({**data, "competitors": competitors})
+    return _parse_matches(converted, path)
+
+
+def _v3_decklists(value: Any, path: str) -> tuple[SourceDecklist, ...]:
+    converted = []
+    for index, item in enumerate(_list(value, path)):
+        item_path = f"{path}[{index}]"
+        data = _fields(
+            item,
+            item_path,
+            {"source_decklist_id", "participant_ref", "cards"},
+            {"format_text"},
+        )
+        reference = _participant_ref(
+            data.pop("participant_ref"), f"{item_path}.participant_ref"
+        )
+        converted.append({**data, "source_participant_id": reference})
+    return tuple(_parse_decklist(item, f"{path}[{index}]") for index, item in enumerate(converted))
+
+
+def parse_minimized_response(body: bytes, artifact: SourceArtifact) -> ParsedSourcePage:
+    """Parse one persisted v3 allowlisted response into legacy source records."""
+
+    payload = _decode_payload(body, "json", artifact.path)
+    common = {"schema_version", "resource_type"}
+    if payload.get("schema_version") != "1.0.0":
+        raise MeleeSourceParseError(f"{artifact.path}: unsupported minimized resource contract")
+    if payload.get("resource_type") != artifact.resource_type:
+        raise MeleeSourceParseError(f"{artifact.path}: minimized resource type does not match manifest")
+    if artifact.resource_type == "tournament":
+        data = _fields(payload, artifact.path, common | {"tournament", "rounds"})
+        return ParsedSourcePage(
+            artifact=artifact,
+            tournament=_parse_tournament(data["tournament"], f"{artifact.path}.tournament"),
+            rounds=_parse_rounds(data["rounds"], f"{artifact.path}.rounds"),
+        )
+    if artifact.resource_type == "decklist":
+        data = _fields(payload, artifact.path, common | {"decklists"})
+        decklists = _v3_decklists(data["decklists"], f"{artifact.path}.decklists")
+        if len(decklists) != 1:
+            raise MeleeSourceParseError(
+                f"{artifact.path}.decklists: expected exactly one decklist"
+            )
+        if artifact.participant_ref != decklists[0].source_participant_id:
+            raise MeleeSourceParseError(
+                f"{artifact.path}: decklist participant reference does not match manifest"
+            )
+        return ParsedSourcePage(artifact=artifact, decklists=decklists)
+    data = _fields(
+        payload,
+        artifact.path,
+        common | {"records_total", artifact.resource_type},
+        {"decklist_references"} if artifact.resource_type == "standings" else set(),
+    )
+    _integer(data["records_total"], f"{artifact.path}.records_total")
+    if artifact.resource_type == "standings":
+        return ParsedSourcePage(
+            artifact=artifact,
+            standings=_v3_standings(data["standings"], f"{artifact.path}.standings"),
+            decklist_references=_v3_references(
+                data.get("decklist_references", []),
+                f"{artifact.path}.decklist_references",
+            ),
+        )
+    if artifact.resource_type == "matches":
+        return ParsedSourcePage(
+            artifact=artifact,
+            matches=_v3_matches(data["matches"], f"{artifact.path}.matches"),
+        )
+    raise MeleeSourceParseError(f"{artifact.path}: unsupported minimized resource type")
+
+
 def _artifact(value: Any, index: int) -> SourceArtifact:
     path = f"manifest.responses[{index}]"
     data = _fields(
@@ -751,7 +900,8 @@ def _artifact(value: Any, index: int) -> SourceArtifact:
         },
         {
             "method", "request_body_sha256", "source_round_id",
-            "source_participant_id", "source_decklist_id",
+            "source_participant_id", "source_decklist_id", "participant_ref",
+            "persisted_content_type", "source_sha256", "source_bytes",
         },
     )
     return SourceArtifact(
@@ -775,6 +925,20 @@ def _artifact(value: Any, index: int) -> SourceArtifact:
         ),
         source_decklist_id=_string(
             data.get("source_decklist_id"), f"{path}.source_decklist_id", optional=True
+        ),
+        participant_ref=_string(
+            data.get("participant_ref"), f"{path}.participant_ref", optional=True
+        ),
+        persisted_content_type=_string(
+            data.get("persisted_content_type"),
+            f"{path}.persisted_content_type",
+            optional=True,
+        ),
+        source_sha256=_string(
+            data.get("source_sha256"), f"{path}.source_sha256", optional=True
+        ),
+        source_bytes=_integer(
+            data.get("source_bytes"), f"{path}.source_bytes", optional=True
         ),
     )
 
@@ -800,12 +964,14 @@ def parse_raw_snapshot(snapshot_path: str | Path) -> ParsedMeleeSnapshot:
         manifest = _decode_json(manifest_path.read_text(encoding="utf-8"), "manifest.json")
     except (OSError, UnicodeError) as exc:
         raise MeleeSourceParseError(f"manifest.json: cannot read manifest: {exc}") from exc
-    if manifest.get("schema_version") not in {"1.0.0", "2.0.0"} or manifest.get("source") != "melee":
+    if manifest.get("schema_version") not in {"1.0.0", "2.0.0", "3.0.0"} or manifest.get("source") != "melee":
         raise MeleeSourceParseError("manifest.json: unsupported raw archive contract")
+    archive_schema_version = manifest["schema_version"]
     manifest = _fields(
         manifest,
         "manifest",
         {"schema_version", "source", "event_id", "event_url", "fetched_at", "responses"},
+        {"participant_identity"},
     )
     event_id = _string(manifest.get("event_id"), "manifest.event_id")
     event_url = _string(manifest.get("event_url"), "manifest.event_url")
@@ -813,10 +979,32 @@ def parse_raw_snapshot(snapshot_path: str | Path) -> ParsedMeleeSnapshot:
     response_values = _list(manifest.get("responses"), "manifest.responses")
     if not response_values:
         raise MeleeSourceParseError("manifest.responses: at least one response is required")
+    participant_identity_scheme = None
+    participant_key_id = None
+    if archive_schema_version == "3.0.0":
+        identity = _fields(
+            manifest.get("participant_identity"),
+            "manifest.participant_identity",
+            {"scheme", "key_id"},
+        )
+        participant_identity_scheme = _string(
+            identity["scheme"], "manifest.participant_identity.scheme"
+        )
+        participant_key_id = _string(
+            identity["key_id"], "manifest.participant_identity.key_id"
+        )
+        if participant_identity_scheme != "hmac-sha256-event-v1":
+            raise MeleeSourceParseError("manifest.json: unsupported participant identity scheme")
+        if not re.fullmatch(r"[a-z0-9]+(?:[._-][a-z0-9]+)*", participant_key_id):
+            raise MeleeSourceParseError("manifest.json: invalid participant key ID")
+    elif "participant_identity" in manifest:
+        raise MeleeSourceParseError(
+            "manifest.json: legacy archive must not declare participant_identity"
+        )
     pages = []
     seen_paths: set[str] = set()
     for index, response_value in enumerate(response_values):
-        if manifest["schema_version"] == "2.0.0":
+        if archive_schema_version == "2.0.0":
             response_mapping = _mapping(response_value, f"manifest.responses[{index}]")
             v2_fields = {
                 "method", "request_body_sha256", "source_round_id",
@@ -827,8 +1015,20 @@ def parse_raw_snapshot(snapshot_path: str | Path) -> ParsedMeleeSnapshot:
                 raise MeleeSourceParseError(
                     f"manifest.responses[{index}]: missing v2 fields {sorted(missing_v2)}"
                 )
+        if archive_schema_version == "3.0.0":
+            response_mapping = _mapping(response_value, f"manifest.responses[{index}]")
+            v3_fields = {
+                "method", "request_body_sha256", "source_round_id",
+                "source_decklist_id", "participant_ref", "persisted_content_type",
+                "source_sha256", "source_bytes",
+            }
+            missing_v3 = v3_fields - set(response_mapping)
+            if missing_v3 or "source_participant_id" in response_mapping:
+                raise MeleeSourceParseError(
+                    f"manifest.responses[{index}]: invalid v3 fields"
+                )
         artifact = _artifact(response_value, index)
-        if manifest["schema_version"] == "2.0.0":
+        if archive_schema_version in {"2.0.0", "3.0.0"}:
             post_resource = artifact.resource_type in {"standings", "matches"}
             if artifact.method != ("POST" if post_resource else "GET"):
                 raise MeleeSourceParseError(
@@ -840,10 +1040,30 @@ def parse_raw_snapshot(snapshot_path: str | Path) -> ParsedMeleeSnapshot:
                 )
             if artifact.resource_type in {"standings", "matches"} and artifact.source_round_id is None:
                 raise MeleeSourceParseError(f"{artifact.path}: round response lacks source context")
+            participant_context = (
+                artifact.participant_ref
+                if archive_schema_version == "3.0.0"
+                else artifact.source_participant_id
+            )
             if artifact.resource_type == "decklist" and (
-                artifact.source_participant_id is None or artifact.source_decklist_id is None
+                participant_context is None or artifact.source_decklist_id is None
             ):
                 raise MeleeSourceParseError(f"{artifact.path}: decklist response lacks source context")
+        if archive_schema_version == "3.0.0":
+            if artifact.persisted_content_type != "json":
+                raise MeleeSourceParseError(
+                    f"{artifact.path}: v3 persisted content type must be JSON"
+                )
+            if artifact.source_sha256 is None or not re.fullmatch(
+                r"[0-9a-f]{64}", artifact.source_sha256
+            ):
+                raise MeleeSourceParseError(f"{artifact.path}: invalid source digest")
+            if artifact.source_bytes is None:
+                raise MeleeSourceParseError(f"{artifact.path}: source byte count is missing")
+            if artifact.participant_ref is not None and not V3_PARTICIPANT_REF_PATTERN.fullmatch(
+                artifact.participant_ref
+            ):
+                raise MeleeSourceParseError(f"{artifact.path}: invalid participant reference")
         if artifact.path in seen_paths:
             raise MeleeSourceParseError("manifest.responses: duplicate response paths are not allowed")
         seen_paths.add(artifact.path)
@@ -856,13 +1076,25 @@ def parse_raw_snapshot(snapshot_path: str | Path) -> ParsedMeleeSnapshot:
             raise MeleeSourceParseError(f"{artifact.path}: byte count does not match manifest")
         if sha256(body).hexdigest() != artifact.sha256:
             raise MeleeSourceParseError(f"{artifact.path}: SHA-256 does not match manifest")
-        page = parse_source_response(body, artifact)
+        page = (
+            parse_minimized_response(body, artifact)
+            if archive_schema_version == "3.0.0"
+            else parse_source_response(body, artifact)
+        )
         if page.tournament is not None and page.tournament.source_event_id != event_id:
             raise MeleeSourceParseError(
                 f"{artifact.path}: tournament event ID does not match manifest"
             )
         pages.append(page)
-    return ParsedMeleeSnapshot(event_id, event_url, fetched_at, tuple(pages))
+    return ParsedMeleeSnapshot(
+        event_id,
+        event_url,
+        fetched_at,
+        tuple(pages),
+        archive_schema_version,
+        participant_identity_scheme,
+        participant_key_id,
+    )
 
 
 __all__ = [
@@ -879,5 +1111,6 @@ __all__ = [
     "SourceStanding",
     "SourceTournament",
     "parse_raw_snapshot",
+    "parse_minimized_response",
     "parse_source_response",
 ]

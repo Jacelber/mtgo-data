@@ -980,10 +980,21 @@ One immutable collection snapshot uses numbered source files plus a manifest:
   decklist-<decklist_guid>.json
 ```
 
-Raw manifest `2.0.0` records each response's method, URL, page, content metadata,
-byte count, SHA-256, request-body SHA-256 for DataTables POSTs, and applicable
-source round, participant, and decklist identity. Parsers retain read
-compatibility with stored manifest `1.0.0` fixtures.
+The retained event `434455` uses legacy raw manifest `2.0.0`, which records each
+source response's method, URL, page, content metadata, byte count, SHA-256,
+request-body SHA-256 for DataTables POSTs, and applicable source round,
+participant, and decklist identity. Parsers retain read compatibility with
+stored manifest `1.0.0` fixtures. Neither legacy contract is used to regenerate
+the frozen reference event.
+
+Future complete collections use minimized manifest `3.0.0`. Every source
+response is parsed in bounded memory before persistence. The snapshot contains
+canonical JSON for tournament, standings, matches, and decklists; no unfiltered
+source response body is written. Each response row distinguishes transient
+`source_sha256` / `source_bytes` from the minimized file's `sha256` / `bytes`,
+records `persisted_content_type: json`, and replaces participant source context
+with an event-scoped HMAC reference. The top-level `participant_identity`
+records only the reviewed scheme and non-secret key ID.
 
 Complete event collection begins from the exact whitelisted tournament page,
 discovers completed round IDs there, paginates the public standings and match
@@ -1000,10 +1011,12 @@ data_raw/melee/<event_id>/
   .complete-in-progress.json
 ```
 
-The checkpoint records collection identity, the destination snapshot name,
-every completed response's metadata and digest, and the frozen complete-plan
-count and SHA-256. A resume must verify every existing file's byte count and
-SHA-256 and reproduce the same request-plan hash before fetching a missing
+The v3 checkpoint records collection identity, the destination snapshot name,
+the HMAC scheme and non-secret key ID, every completed minimized response's
+allowlisted metadata and digest, and the frozen complete-plan count and
+SHA-256. It records neither source participant IDs nor HMAC key material. A
+resume must use the same key ID, verify every existing file's byte count and
+SHA-256, and reproduce the same request-plan hash before fetching a missing
 response. Verified responses are not downloaded again.
 
 The complete collector has separate reviewed hard ceilings of 5,000 decklists
@@ -1013,14 +1026,14 @@ total-byte limits.
 
 The staging directory has no `manifest.json` while incomplete and is not a
 valid parser, retention, normalization, statistics, or publication input.
-After every planned response is verified, the collector writes manifest
-`2.0.0` and atomically renames the staging directory to the immutable snapshot
-name. Progress reports expose completed response count, planned response
-count, accumulated bytes, and reused response count.
+After every planned response is verified, the future collector writes manifest
+`3.0.0` and atomically renames the staging directory to the immutable snapshot
+name. Progress reports expose completed response count, planned response count,
+accumulated persisted bytes, and reused response count.
 
 ### 10.1 Raw-data requirements
 
-Raw files should preserve:
+Legacy v1/v2 raw files preserve:
 
 - source record IDs;
 - source field names;
@@ -1030,7 +1043,8 @@ Raw files should preserve:
 - pagination information;
 - status or error information.
 
-Do not replace raw source values with normalized values in place.
+Do not replace a retained legacy source value in place. Future v3 snapshots are
+new immutable minimized collections, not rewrites of a legacy snapshot.
 
 ### 10.2 Sensitive information
 
@@ -1071,7 +1085,8 @@ decklists required for the approved product. These third-party records remain
 subject to `NOTICE.md` and are not relicensed as project code. Any later refresh
 must create a separate snapshot, pass the same boundary, and receive an
 explicit repository-size and production-input review before it can replace or
-supplement the reference input.
+supplement the reference input. A future approved event must use manifest
+`3.0.0`; it must not create a new source-preserving v2 production snapshot.
 
 Do not silently discard raw data after generating statistics.
 
@@ -1498,6 +1513,28 @@ the compatibility result. Any deliberate exact-byte change requires a new
 manifest version, replacement evidence, a decision record, and separate owner
 approval. Future privacy snapshot versions must not regenerate the retained v2
 reference snapshot.
+
+### 11.13 Future-event participant and field minimization
+
+P10-03 defines minimized resource document `1.0.0` and complete snapshot
+manifest `3.0.0` for future approved events. The exact per-resource allowlists,
+discarded field groups, HMAC input domain, key requirements, and compatibility
+boundary are recorded in `docs/audits/P10-03.md` and DEC-065.
+
+Participant references use `hmac-sha256-event-v1` over the source participant
+ID with the event ID in the message domain. They are stable inside one event
+and differ across events. Normalized v3 participant `id` and `source_id` use
+the already-derived reference, so downstream joins require no secret and do
+not restore the raw source ID. The retained `DisplayName` remains an explicit
+public product field; the HMAC contract is therefore a source-ID minimization
+and anti-enumeration control, not a claim that tournament participants are
+anonymous.
+
+The complete collector requires key material and a key ID before network or
+filesystem side effects. Only the key ID may enter a checkpoint or manifest.
+P10-03 does not provision a production key or modify the production workflow.
+Resource Schemas as a primary production gate, supplemental prohibited-field
+scans, and notice/contact/removal updates remain P10-04 work.
 
 ---
 
