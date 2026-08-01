@@ -140,6 +140,34 @@ Repository validation uses three distinct layers. Do not treat them as interchan
 
 A clean-checkout baseline test protects reproducibility across code and rule changes; it is not evidence that newly fetched data is acceptable. A production candidate check protects the current data increment; it does not replace fixture-based unit and regression tests. Adding a new generated path or allowing an automatic deletion requires explicit review of the candidate publication boundary.
 
+### Allowlisted Pages build and cutover
+
+`build_pages_artifact.py` is the repository-owned Pages packaging boundary. It
+must build into a new directory outside the checkout from
+`configs/pages_publication.json`, preserve source bytes, validate the complete
+event `434455` compatibility closure, reject symbolic links and unsafe paths,
+and report repository, data-tree, artifact, protected-file, and excluded-file
+sizes. Pull requests may build the candidate but must not deploy it. The Pages
+deploy job may run only for `master` pushes and has only `pages: write` and
+`id-token: write`; it must not receive repository write access or persisted Git
+credentials.
+
+The initial cutover is separately gated from local implementation, commit, and
+pull-request review. Before changing the repository setting, capture the active
+Pages configuration and a successful deployment artifact. The P10-07 recovery
+baseline is legacy branch-root publication from `master` at `/`. Immediately
+before an authorized merge, change the Pages source to GitHub Actions, merge the
+already validated exact PR head, wait for the custom deployment, and verify both
+product entry points plus their runtime JSON requests. Do not dispatch a data
+workflow as part of this cutover.
+
+If the first custom deployment or front-end verification fails, restore the
+captured legacy `master` `/` Pages source and confirm a managed Pages build
+succeeds. The prior artifact and configuration record are recovery evidence,
+not a second data archive. Keep the recovery procedure until at least one
+scheduled MTGO data commit is followed by a successful custom Pages deployment
+and owner-visible front-end verification.
+
 ### Validation economy
 
 Use the following ladder and rerun only the layer invalidated by a change:

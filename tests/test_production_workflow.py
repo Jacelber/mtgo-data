@@ -28,6 +28,7 @@ def test_mtgo_remains_the_only_scheduled_production_workflow():
     assert sorted(path.name for path in WORKFLOWS.glob("*.yml")) == [
         "ci.yml",
         "fetch_melee.yml",
+        "pages.yml",
         "update.yml",
     ]
 

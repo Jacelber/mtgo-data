@@ -52,6 +52,27 @@ Run the read-only repository validator, rule validator, and tests from the repos
 
 These commands validate repository syntax and references, Standard archetype rules, versioned shared rule files, generated classification diagnostics, Standard JSON Schemas, and the frozen Standard classification baseline. They do not fetch tournament data or regenerate production statistics.
 
+## Pages publication artifact
+
+The public site is assembled from the explicit product-path policy in
+`configs/pages_publication.json`. The builder requires a new output directory,
+copies approved files without modifying their bytes, validates the complete
+event `434455` compatibility closure, writes `.nojekyll`, and reports repository,
+data-tree, and artifact sizes:
+
+```powershell
+.\.venv\Scripts\python.exe -B build_pages_artifact.py `
+  --output C:\tmp\mtgo-data-pages-site `
+  --report C:\tmp\mtgo-data-pages-report.json
+```
+
+The output directory must not already exist and must be outside the repository.
+This command does not fetch data, change statistics, commit files, or deploy a
+site. `.github/workflows/pages.yml` performs the same fresh build for relevant
+pull requests. Only a push to `master` may upload and deploy the verified Pages
+artifact, and that deployment becomes active only after the repository Pages
+source is separately changed from the legacy branch-root mode to GitHub Actions.
+
 The complete pytest suite is a clean-checkout gate. Tests marked `committed_baseline` reproduce the current committed Standard snapshot using its own versioned dates, timestamps, and aggregate metadata, then require byte-identical generator output. They must not be interpreted as validation of a checkout after live production data has been added. The production workflow separately captures a dynamic baseline and runs `validate_production_candidate.py` after fetching and generation:
 
 ```powershell

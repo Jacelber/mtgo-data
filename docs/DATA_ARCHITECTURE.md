@@ -1635,6 +1635,47 @@ owner authorization.
 The complete inventory, option matrix, permission boundary, recovery proof,
 and owner selection are recorded in `docs/audits/P10-06.md`.
 
+### 11.17 Allowlisted Pages artifact implementation
+
+P10-07 implements the selected A+ publication boundary without changing the
+public Git archive. `configs/pages_publication.json` admits the two static entry
+points, the fetched ledger, and the `assets/`, `data/`, `data_raw/`, `melee/`,
+`reports/`, and `stats/` product trees. `build_pages_artifact.py` copies those
+paths into a new external directory, generates an empty `.nojekyll`, rejects
+unsafe paths and symbolic links, verifies every copied byte, enforces the
+one-gibibyte site ceiling, and validates the complete event `434455`
+compatibility closure before producing a size and digest report.
+
+The policy is a publication boundary, not a confidentiality claim. Python
+source, tests, internal governance documents, and development configuration
+remain available through public Git but are not site payloads. New approved
+product data continues to enter the selected product trees through the existing
+candidate and Schema gates; a new repository path outside those trees cannot
+become a Pages path merely because it was committed.
+
+`.github/workflows/pages.yml` builds the candidate for relevant pull requests
+and every `master` push. Pull requests cannot upload or deploy the Pages
+artifact. On `master`, the read-only build job may upload the verified artifact,
+and a separate job with only `pages: write` and `id-token: write` may deploy it
+through the protected `github-pages` environment. The workflow does not fetch
+tournament data, modify the repository, or split the P10-09 production chain.
+
+The initial legacy baseline is Pages run `30699810612`, built from merge commit
+`82a28d954546cb6112ad0655223fd609035b0b40`. Its retained artifact contains
+1,996 files and 226,062,320 unpacked bytes. The first local P10-07 candidate
+contains 1,584 files and 213,481,951 bytes. Apart from generated `.nojekyll`,
+all 1,583 candidate files exist in that legacy artifact with identical bytes.
+The 413 omitted legacy outputs are repository code, tests, internal documents,
+configuration, rules, Schemas, Markdown-rendering outputs, and one generated
+Jekyll theme stylesheet; neither product entry point references them.
+
+The repository Pages setting remains the legacy `master` `/` source during
+local work and pull-request review. A separately authorized cutover changes it
+to GitHub Actions immediately before the accepted PR merge. Rollback restores
+the recorded legacy source and confirms a managed build. The legacy setting
+record and artifact remain recovery evidence until a scheduled MTGO update is
+followed by a successful custom deployment and front-end acceptance.
+
 ---
 
 ## 12. Statistics-output layout
