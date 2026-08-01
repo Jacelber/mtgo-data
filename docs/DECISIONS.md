@@ -986,7 +986,7 @@ intervals remain available for every nonzero valid-match sample.
 
 ## Remaining statistical warning and quality thresholds
 
-Status: `Proposed`
+Status: `Accepted`
 
 The project still needs exact policies where applicable for:
 
@@ -2678,3 +2678,66 @@ compatibility bytes remain unchanged. P10-04 changes no production data,
 statistic, workflow, configuration, public path, or front end. Production key
 provisioning, live collection, remote publication, and P10-05 history rewriting
 remain separately owner-gated.
+
+---
+
+# DEC-067 — Require a restoration proof before any history-rewrite decision
+
+Status: `Proposed`
+
+## Context
+
+P10-01 found unused account, profile, preference, and duplicate identity data
+in the retained v2 event `434455` source snapshot. P10-03 and P10-04 prevent
+the same unapproved fields from entering future v3 persistence, but they do
+not remove the legacy snapshot from current master, Pages, Git history, or
+other reachable refs.
+
+P10-05 inventory finds one introducing commit, 21 affected ordinary remote
+branches, three affected phase tags, and 49 affected GitHub pull-request head
+refs. GitHub's pull-request refs are read-only, while external clones, forks,
+and caches are outside a force-push's control. The current master files also
+remain protected by the P10-02 exact-byte compatibility contract.
+
+## Proposed decision
+
+Before deciding whether to rewrite history, create an owner-designated private
+independent Git bundle outside the repository and all disposable workspaces.
+Record its byte count and SHA-256 without publishing its private absolute path,
+verify the bundle, clone it into a second disposable repository, compare refs,
+run `git fsck --full`, and pass the event `434455` compatibility and repository
+validators in the restored clone.
+
+Treat the bundle as controlled legacy source data. Do not commit, upload, or
+publicly synchronize it. A tag or another clone sharing the same repository
+storage is not an independent backup.
+
+Do not execute a history rewrite during the preparation stage. After the
+restoration proof, stop for a written owner choice to reject, defer, or
+separately authorize execution. Prefer deferral until P10-06/P10-07 establish
+an approved current raw-archive destination and compatibility successor,
+because a history-only rewrite leaves the same files public at master and
+Pages.
+
+## Consequences
+
+Preparation creates a recoverable pre-rewrite checkpoint without changing any
+Git history, ref, production data, public path, workflow, or statistic. The
+bundle itself carries the legacy exposure and needs deliberate retention and
+eventual disposal.
+
+Any later execution must separately authorize the exact filter, removal from
+the current tree, compatibility migration, force-push, affected branch and tag
+handling, collaborator instructions, Pages verification, and any GitHub
+Support request. GitHub Support eligibility and removal of third-party copies
+cannot be guaranteed by this project.
+
+The preparation proof produced an 18,003,023-byte bundle at base
+`48a4863a28d6ec6d9b854c7a9d72058c68a0f4aa`, verified SHA-256
+`53ea51b53cd03f7cd55bdbfff61e7e0235e2c74f5556e3966f44f40e2c83a35d`,
+restored all 216 named refs exactly, and passed object, compatibility, Schema,
+rule, and repository validation. After explicit owner authorization, inherited
+general-user ACL entries were removed; only the owner account, Administrators,
+and SYSTEM retain access. Any later execution must refresh the bundle after
+refs stop moving rather than treating this preparation artifact as current
+forever.

@@ -2330,6 +2330,26 @@ upstream-source requests, and the separately owner-gated history-rewrite
 process. P10-04 changes no production data, statistic, workflow, whitelist,
 public path, or front end. P10-05 remains separately owner-gated.
 
+The owner authorized only the P10-05 preparation stage on 2026-08-01. Its
+read-only inventory found one introducing commit, 484 current raw files, 21
+affected ordinary remote branches, three affected phase tags, and 49 affected
+GitHub-managed pull-request heads. The current raw manifest and tournament
+paths remain HTTP 200 on Pages. Preparation must create an owner-designated
+private independent bundle, prove restoration, document the platform and
+collaborator effects, and stop again. It does not authorize a history filter,
+path deletion, force-push, ref mutation, GitHub Support request, compatibility
+migration, storage migration, or P10-06.
+
+The private bundle and restoration proof succeeded for base
+`48a4863a28d6ec6d9b854c7a9d72058c68a0f4aa`: all 216 named refs matched, both
+restored repositories passed `git fsck --full`, the master tree matched, and
+the restored worktree passed the seven `434455` compatibility tests plus all
+repository validators. Backup-directory ACL hardening also passed: inherited
+general-user access was removed and only the owner account, Administrators,
+and SYSTEM retain access. The owner accepted the completed preparation on
+2026-08-01. This acceptance does not select a rewrite outcome or grant rewrite
+authority.
+
 ## Acceptance criteria
 
 Phase 10 is complete when:
