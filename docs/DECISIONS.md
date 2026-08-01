@@ -2928,6 +2928,59 @@ fully validated candidate. A transfer or validation failure prevents the
 publish job from starting; the normal Actions status and per-job summaries
 remain the failure report until P10-11 is separately authorized.
 
+---
+
+# DEC-071 — Resume only verified incomplete MTGO input collection
+
+Status: `Accepted`
+
+## Context
+
+P10-09 made the MTGO fetch, build, and publication boundary explicit, but an
+input-collection failure still discarded its runner-local progress at the end
+of the run. Repeating a failed scheduled run could therefore repeat already
+completed format collections even when the source code, configuration, and
+master commit had not changed. The owner authorized P10-10 as the separate
+resumability task, without authorizing a live production dispatch, a new data
+store, a repository write, or P10-11 failure issues.
+
+## Decision
+
+The read-only fetch job records a versioned progress manifest after its clean
+baseline is available. It defines every event-format and match-format operation
+as `pending` or `complete`. An operation becomes complete only after its
+existing collection command succeeds. If any planned operation fails, the job
+finishes every remaining pending operation it can, fails overall, and uploads a
+separate immutable `mtgo-fetch-checkpoint` artifact for seven days. That
+artifact contains only the collected inputs, the clean baseline, the progress
+manifest, and SHA-256 sums.
+
+At the start of a later fetch run, `actions: read` may locate the newest
+unexpired checkpoint only for the same `master` head SHA. The job then verifies
+the artifact digest, accepted archive paths, repository identity, full commit,
+and exact event/match plan before restoring it. It skips only manifest-complete
+operations. Any mismatch, corruption, expiration, or absence fails closed to a
+new clean collection; it never resumes a different code or configuration
+version.
+
+The normal one-day `mtgo-fetch-candidate` handoff remains the sole fetch input
+to build. The checkpoint is not downloaded by build or publish, does not
+contain generated statistics, and cannot lead to staging or publication. No
+job gains `contents: write`, and P10-11 remains the sole owner of failure issue
+creation.
+
+## Consequences
+
+An interrupted MTGO input collection can reuse successful work for up to seven
+days while keeping the daily repository commit and public data architecture
+unchanged. The checkpoint is intentionally temporary, bounded, and rejected
+across code/configuration changes. Successful later work leaves an older
+checkpoint to expire rather than granting additional deletion permission.
+
+No statistical formula, source-selection rule, generated-data path, public
+URL, front-end behavior, Pages configuration, storage provider, production-data
+dispatch, or repository write is part of P10-10 local implementation.
+
 No statistical formula, source-selection rule, event whitelist, generated-data
 path, public URL, front-end behavior, Pages configuration, raw retention
 policy, storage provider, or production-data commit changes during local

@@ -56,7 +56,7 @@ def test_update_keeps_its_schedule_master_boundary_and_concurrency():
 
 
 def test_fetch_build_and_publish_have_separate_minimum_permissions():
-    assert job("fetch")["permissions"] == {"contents": "read"}
+    assert job("fetch")["permissions"] == {"actions": "read", "contents": "read"}
     assert job("build")["permissions"] == {"contents": "read"}
     assert job("publish")["permissions"] == {"contents": "write"}
     assert job("build")["needs"] == "fetch"
@@ -97,8 +97,6 @@ def test_fetch_runs_clean_regression_then_snapshots_and_collects_only_inputs():
         "validate_production_candidate.py snapshot",
         "fetch-events",
         "fetch-matches",
-        "tar -cf",
-        "sha256sum",
     ]
     indexes = [command_index("fetch", fragment) for fragment in ordered]
     assert indexes == sorted(indexes)
@@ -106,11 +104,39 @@ def test_fetch_runs_clean_regression_then_snapshots_and_collects_only_inputs():
     assert command_index("fetch", "validate_production_candidate.py snapshot") < command_index(
         "fetch", "fetch-events"
     )
+    candidate_package = next(
+        step["run"] for step in steps("fetch") if step["name"] == "Package fetched candidate for the build job"
+    )
+    assert "tar -cf" in candidate_package
+    assert "sha256sum" in candidate_package
     fetch_text = UPDATE.read_text(encoding="utf-8")
     assert "mtgo-fetch-candidate" in fetch_text
     assert "actions/upload-artifact@v4.6.2" in fetch_text
     assert "retention-days: 1" in fetch_text
     assert "if-no-files-found: error" in fetch_text
+
+
+def test_fetch_resumes_only_a_verified_same_commit_checkpoint_and_never_builds_it():
+    fetch_text = UPDATE.read_text(encoding="utf-8")
+    assert "actions/github-script@v7.0.1" in fetch_text
+    assert "mtgo-fetch-checkpoint" in fetch_text
+    assert "artifact.workflow_run?.head_sha === context.sha" in fetch_text
+    assert "actions/download-artifact@v4.3.0" in fetch_text
+    assert "github-token: ${{ github.token }}" in fetch_text
+    assert "mtgo_fetch_checkpoint.py validate" in fetch_text
+    assert "cmp \"$ARTIFACT_DIR/production-baseline.json\" \"$RUNNER_TEMP/production-baseline.json\"" in fetch_text
+    assert "tar -tf" in fetch_text
+    assert "mtgo_fetch_checkpoint.py is-complete" in fetch_text
+    assert "mtgo_fetch_checkpoint.py complete" in fetch_text
+    assert "retention-days: 7" in fetch_text
+    assert "Package resumable fetch checkpoint" in fetch_text
+    assert "if: failure() && steps.checkpoint.outcome == 'success'" in fetch_text
+    assert "mtgo-fetch-checkpoint" not in "\n".join(
+        step.get("uses", "") + "\n" + step.get("run", "") for step in steps("build")
+    )
+    assert "mtgo-fetch-checkpoint" not in "\n".join(
+        step.get("uses", "") + "\n" + step.get("run", "") for step in steps("publish")
+    )
 
 
 def test_build_verifies_and_consumes_fetch_artifact_before_generation_and_validation():

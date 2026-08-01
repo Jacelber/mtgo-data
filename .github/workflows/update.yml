@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
+      actions: read
       contents: read
     env:
       PYTHONPATH: src
@@ -46,21 +47,145 @@ jobs:
       - name: Snapshot production data baseline
         run: python -B validate_production_candidate.py snapshot --output "$RUNNER_TEMP/production-baseline.json"
 
-      - name: Fetch configured MTGO event archives
-        shell: bash
-        run: |
-          for FORMAT in $MTGO_EVENT_FORMATS; do
-            echo "Collecting MTGO event raw data for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" fetch-events
-          done
+      - name: Find a compatible incomplete fetch checkpoint
+        id: previous-checkpoint
+        uses: actions/github-script@v7.0.1
+        with:
+          script: |
+            const artifacts = await github.paginate(
+              github.rest.actions.listArtifactsForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: "mtgo-fetch-checkpoint",
+                per_page: 100,
+              },
+            );
+            const checkpoint = artifacts
+              .filter(
+                (artifact) =>
+                  !artifact.expired &&
+                  artifact.workflow_run?.head_branch === "master" &&
+                  artifact.workflow_run?.head_sha === context.sha,
+              )
+              .sort((left, right) => Date.parse(right.created_at) - Date.parse(left.created_at))[0];
+            core.setOutput("found", checkpoint ? "true" : "false");
+            core.setOutput("run-id", checkpoint ? String(checkpoint.workflow_run.id) : "");
 
-      - name: Fetch Videre matches for product formats
+      - name: Download compatible incomplete fetch checkpoint
+        if: steps.previous-checkpoint.outputs.found == 'true'
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: mtgo-fetch-checkpoint
+          path: ${{ runner.temp }}/mtgo-fetch-resume
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.previous-checkpoint.outputs.run-id }}
+
+      - name: Verify and restore compatible incomplete fetch checkpoint
+        if: steps.previous-checkpoint.outputs.found == 'true'
         shell: bash
         run: |
-          for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            echo "Collecting Videre match data for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" fetch-matches
+          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-fetch-resume"
+          (
+            cd "$ARTIFACT_DIR"
+            sha256sum --check SHA256SUMS
+          )
+          python -B mtgo_fetch_checkpoint.py validate \
+            --checkpoint "$ARTIFACT_DIR/checkpoint.json" \
+            --repository "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
+            --event-formats "$MTGO_EVENT_FORMATS" --match-formats "$MTGO_PRODUCT_FORMATS"
+          cmp "$ARTIFACT_DIR/production-baseline.json" "$RUNNER_TEMP/production-baseline.json"
+          if tar -tf "$ARTIFACT_DIR/fetched-inputs.tar" | grep -Ev '^(data/|fetched\.txt$)'; then
+            echo "Fetch checkpoint contains a path outside the input boundary." >&2
+            exit 1
+          fi
+          tar -xf "$ARTIFACT_DIR/fetched-inputs.tar" -C "$GITHUB_WORKSPACE"
+          cp "$ARTIFACT_DIR/checkpoint.json" "$RUNNER_TEMP/mtgo-fetch-checkpoint.json"
+
+      - name: Prepare fetch checkpoint
+        id: checkpoint
+        shell: bash
+        run: |
+          CHECKPOINT="$RUNNER_TEMP/mtgo-fetch-checkpoint.json"
+          if [ ! -f "$CHECKPOINT" ]; then
+            python -B mtgo_fetch_checkpoint.py initialize \
+              --checkpoint "$CHECKPOINT" --repository "$GITHUB_REPOSITORY" \
+              --commit "$GITHUB_SHA" --event-formats "$MTGO_EVENT_FORMATS" \
+              --match-formats "$MTGO_PRODUCT_FORMATS"
+          fi
+          python -B mtgo_fetch_checkpoint.py validate \
+            --checkpoint "$CHECKPOINT" --repository "$GITHUB_REPOSITORY" \
+            --commit "$GITHUB_SHA" --event-formats "$MTGO_EVENT_FORMATS" \
+            --match-formats "$MTGO_PRODUCT_FORMATS"
+
+      - name: Fetch every pending MTGO input operation
+        shell: bash
+        run: |
+          CHECKPOINT="$RUNNER_TEMP/mtgo-fetch-checkpoint.json"
+          STATUS=0
+          for FORMAT in $MTGO_EVENT_FORMATS; do
+            OPERATION="events/${FORMAT}"
+            if python -B mtgo_fetch_checkpoint.py is-complete \
+              --checkpoint "$CHECKPOINT" --repository "$GITHUB_REPOSITORY" \
+              --commit "$GITHUB_SHA" --event-formats "$MTGO_EVENT_FORMATS" \
+              --match-formats "$MTGO_PRODUCT_FORMATS" --operation "$OPERATION"; then
+              echo "Reusing completed MTGO event collection for ${FORMAT}."
+              continue
+            fi
+            echo "Collecting MTGO event raw data for ${FORMAT}."
+            if python -B -m mtgmeta.mtgo --format "$FORMAT" fetch-events; then
+              python -B mtgo_fetch_checkpoint.py complete \
+                --checkpoint "$CHECKPOINT" --repository "$GITHUB_REPOSITORY" \
+                --commit "$GITHUB_SHA" --event-formats "$MTGO_EVENT_FORMATS" \
+                --match-formats "$MTGO_PRODUCT_FORMATS" --operation "$OPERATION"
+            else
+              STATUS=1
+            fi
           done
+          for FORMAT in $MTGO_PRODUCT_FORMATS; do
+            OPERATION="matches/${FORMAT}"
+            if python -B mtgo_fetch_checkpoint.py is-complete \
+              --checkpoint "$CHECKPOINT" --repository "$GITHUB_REPOSITORY" \
+              --commit "$GITHUB_SHA" --event-formats "$MTGO_EVENT_FORMATS" \
+              --match-formats "$MTGO_PRODUCT_FORMATS" --operation "$OPERATION"; then
+              echo "Reusing completed Videre match collection for ${FORMAT}."
+              continue
+            fi
+            echo "Collecting Videre match data for ${FORMAT}."
+            if python -B -m mtgmeta.mtgo --format "$FORMAT" fetch-matches; then
+              python -B mtgo_fetch_checkpoint.py complete \
+                --checkpoint "$CHECKPOINT" --repository "$GITHUB_REPOSITORY" \
+                --commit "$GITHUB_SHA" --event-formats "$MTGO_EVENT_FORMATS" \
+                --match-formats "$MTGO_PRODUCT_FORMATS" --operation "$OPERATION"
+            else
+              STATUS=1
+            fi
+          done
+          exit "$STATUS"
+
+      - name: Package resumable fetch checkpoint
+        if: failure() && steps.checkpoint.outcome == 'success'
+        shell: bash
+        run: |
+          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-fetch-checkpoint"
+          mkdir -p "$ARTIFACT_DIR"
+          tar -cf "$ARTIFACT_DIR/fetched-inputs.tar" data fetched.txt
+          cp "$RUNNER_TEMP/production-baseline.json" "$ARTIFACT_DIR/production-baseline.json"
+          cp "$RUNNER_TEMP/mtgo-fetch-checkpoint.json" "$ARTIFACT_DIR/checkpoint.json"
+          (
+            cd "$ARTIFACT_DIR"
+            sha256sum fetched-inputs.tar production-baseline.json checkpoint.json > SHA256SUMS
+          )
+
+      - name: Upload immutable resumable fetch checkpoint
+        if: failure() && steps.checkpoint.outcome == 'success'
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: mtgo-fetch-checkpoint
+          path: ${{ runner.temp }}/mtgo-fetch-checkpoint
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Package fetched candidate for the build job
         shell: bash
@@ -92,9 +217,11 @@ jobs:
             echo "- Job result: ${{ job.status }}"
             echo "- Trigger: ${{ github.event_name }}"
             echo "- Candidate transfer: immutable \\`mtgo-fetch-candidate\\` artifact"
+            echo "- Restart transfer: a same-commit, seven-day \\`mtgo-fetch-checkpoint\\` artifact only after incomplete collection"
             echo "- Event formats: ${MTGO_EVENT_FORMATS}"
             echo "- Match formats: ${MTGO_PRODUCT_FORMATS}"
-            echo "- No repository write permission is available to this job."
+            echo "- The checkpoint is verified before reuse and is never sent to build or publish."
+            echo "- No repository write permission is available to this job; Actions read is limited to locating a prior checkpoint."
           } >> "$GITHUB_STEP_SUMMARY"
 
   build:

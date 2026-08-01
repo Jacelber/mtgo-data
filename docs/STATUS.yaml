@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: null
+  current_working_branch: "codex/p10-10-mtgo-resumability"
   working_branch_status: "master_is_authoritative_and_task_branches_have_no_standing_authority"
   status: "active"
   primary_language: "Python"
@@ -12,7 +12,7 @@ project:
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-08-01"
+  last_updated: "2026-08-02"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -66,18 +66,19 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P10-09"
-  name: "Split production into fetch, build, and publish jobs"
-  status: "local_complete_owner_accepted_publication_authorized"
-  authorized_on: "2026-08-01"
-  workspace: "C:/tmp/mtgo-data-p10-09-20260801-01"
-  branch: "codex/p10-09-production-job-split"
-  base_commit: "3cded88f689b42377370240921e2975d53f97ab3"
-  task_type: "least_privilege_production_workflow_split_without_live_data_collection"
-  objective: "Separate the scheduled MTGO update into read-only fetch and build jobs with immutable artifact handoffs and one final publish job, without changing product behavior or dispatching production."
+  id: "P10-10"
+  name: "Add MTGO fetch-stage resumability"
+  status: "local_complete_pending_owner_acceptance"
+  authorized_on: "2026-08-02"
+  workspace: "C:/tmp/mtgo-data-p10-10-20260802-01"
+  branch: "codex/p10-10-mtgo-resumability"
+  base_commit: "a0cdeb1ee84c48ec6169d113ba6fc2517e3f5c62"
+  task_type: "bounded_same_commit_mtgo_fetch_restart_without_live_data_collection"
+  objective: "Allow only the read-only MTGO input-collection stage to resume verified completed operations after a failed run, without changing product behavior or dispatching production."
   authorization:
     local_implementation: true
-    workflow_job_split: true
+    workflow_job_split: false
+    fetch_checkpoint_restart: true
     tests_and_documentation: true
     commit: false
     remote_publication: false
@@ -88,20 +89,21 @@ current_task:
     p10_10_or_later: false
   target_paths:
     - ".github/workflows/update.yml"
+    - "mtgo_fetch_checkpoint.py"
+    - "tests/test_mtgo_fetch_checkpoint.py"
     - "tests/test_production_workflow.py"
-    - "tests/test_phase6_closeout.py"
     - "README.md"
     - "docs/DATA_ARCHITECTURE.md"
-    - "docs/audits/P10-09.md"
+    - "docs/audits/P10-10.md"
     - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   job_boundary:
-    fetch: "contents_read_clean_regression_baseline_snapshot_and_live_input_collection"
+    fetch: "contents_read_actions_read_clean_regression_baseline_snapshot_safe_checkpoint_restart_and_live_input_collection"
     build: "contents_read_verified_input_restore_generation_and_candidate_validation"
     publish: "contents_write_verified_allowed_output_restore_noop_commit_push_and_remote_confirmation"
-    transfers: "one_day_immutable_actions_artifacts_with_sha256_checksums"
-    unchanged: "schedule_master_guard_concurrency_python_3_12_registry_loops_validation_layers_and_generated_path_boundary"
+    transfers: "one_day_immutable_candidate_artifacts_plus_seven_day_same_commit_fetch_checkpoint_with_sha256_checksums"
+    unchanged: "schedule_master_guard_concurrency_python_3_12_registry_loops_build_publish_validation_layers_and_generated_path_boundary"
   protected_scope:
     raw_or_generated_data_changed: false
     statistical_behavior_changed: false
@@ -112,20 +114,46 @@ current_task:
     remote_write_performed: false
     history_rewritten: false
   acceptance:
-    test_first_workflow_contract: "10 expected failures against the former single update job"
-    focused_cross_layer_tests: "84 passed in 6.05 seconds on Python 3.12.7"
-    full_pytest: "654 passed in 407.17 seconds on Python 3.12.7"
-    repository_validation: "135 Python, 1613 JSON, 22 YAML, 30 references, and 1909 hygiene paths passed"
+    focused_checkpoint_and_workflow_tests: "18 passed in 0.55 seconds on Python 3.12.13"
+    full_pytest: "659 passed in 412.17 seconds on Python 3.12.13"
+    repository_validation: "137 Python, 1613 JSON, 22 YAML, 30 references, and 1912 hygiene paths passed"
     rule_validation: "passed"
     public_schema_validation: "69 documents passed"
     changed_data_or_frontend_paths: false
     production_workflow_dispatched: false
-  owner_acceptance: "accepted"
-  owner_accepted_on: "2026-08-02"
-  commit_authorized: true
-  remote_publication_authorized: true
-  merge_authorized: true
-  stop_point: "Publish the accepted P10-09 change, then stop before a real production-data dispatch or P10-10."
+  owner_acceptance: "pending"
+  commit_authorized: false
+  remote_publication_authorized: false
+  merge_authorized: false
+  stop_point: "Complete local validation, stop for owner acceptance, then require separate authorization for commit, remote publication, merge, or a real production-data dispatch."
+
+p10_09_result:
+  id: "P10-09"
+  name: "Split production into fetch, build, and publish jobs"
+  status: "completed_published_and_merged"
+  workspace: "C:/tmp/mtgo-data-p10-09-20260801-01"
+  branch: "codex/p10-09-production-job-split"
+  base_commit: "3cded88f689b42377370240921e2975d53f97ab3"
+  local_commit: "f9618d493e89b0223f90b347a1438d23eebbc187"
+  pull_request: 148
+  pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/148"
+  merge_commit: "a0cdeb1ee84c48ec6169d113ba6fc2517e3f5c62"
+  merged_on: "2026-08-02"
+  validation:
+    pull_request_validation_run: 30706588869
+    master_admission_run: 30706927868
+    pages_deployment_run: 30706927874
+    public_mtgo_entry_point_status: 200
+    public_tabletop_entry_point_status: 200
+    production_workflow_dispatched: false
+  protected_scope:
+    raw_or_generated_data_changed: false
+    statistical_behavior_changed: false
+    frontend_source_changed: false
+    event_434455_bytes_changed: false
+    pages_setting_changed: false
+    production_dispatched: false
+    history_rewritten: false
 
 p10_08_result:
   id: "P10-08"

@@ -2536,14 +2536,33 @@ The fetch, build, and publish jobs transfer their inputs and validated output as
 short-lived immutable workflow artifacts. The build job verifies the fetched
 artifact digest before extraction; the publish job verifies the validated-output
 digest and rejects archive paths outside `data/`, `stats/`, `reports/`, and
-`fetched.txt` before extraction. These artifacts are bounded intra-run handoffs,
-not durable storage or a restart checkpoint; resumability remains a separate
-task. The candidate baseline is part of the fetched-candidate artifact. Its
+`fetched.txt` before extraction. The normal candidate artifacts are one-day
+intra-run handoffs, not durable storage. The candidate baseline is part of the
+fetched-candidate artifact. Its
 schema version is breaking when the tracked format dimensions change; P6-08 uses
 version `2.0.0` to replace the former Standard-only match count with per-product
 match counts. New arbitrary generated JSON paths remain blocked even for
 complete products; only expected event archives, match archives, and dated
 Pickup review YAML may be newly created automatically.
+
+When an MTGO input collection fails after the clean baseline and checkpoint
+manifest are prepared, the read-only fetch job may retain a separate
+`mtgo-fetch-checkpoint` artifact for seven days. It contains only `data/`,
+`fetched.txt`, the clean baseline, SHA-256 sums, and a versioned manifest of the
+exact repository, full trigger SHA, configured event formats, configured match
+formats, and each operation's `pending` or `complete` state. The next fetch job
+may discover it with `actions: read` only when the artifact metadata and its
+manifest both match the exact master SHA and current plan. It verifies checksums
+and rejects archive paths outside `data/` and `fetched.txt` before restoration.
+It skips only recorded-complete collection operations and reruns every pending
+one. An incompatible, corrupt, expired, or absent checkpoint is never reused;
+the job starts from its clean checkout instead.
+
+An incomplete checkpoint is not the normal fetched-candidate artifact and is
+never made available to build or publish. It therefore cannot generate
+statistics, validate a candidate, stage a commit, or alter public output. It is
+bounded recovery state, not a durable data archive, and automatic issue
+creation remains deferred to P10-11.
 
 ### 19.3 `fetch_melee.yml`
 

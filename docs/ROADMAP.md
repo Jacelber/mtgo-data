@@ -2480,6 +2480,27 @@ changed. The owner accepted the local result on 2026-08-02 and separately
 authorized commit, remote publication, pull-request creation, and merge. A real
 production-data dispatch and P10-10 remain separately controlled.
 
+The owner authorized P10-10 local implementation on 2026-08-02. It adds only
+bounded MTGO fetch-stage restart behavior: a failed collection may retain a
+seven-day, same-commit checkpoint of inputs and completed operations; a later
+matching fetch run verifies it and repeats only pending work. An incomplete
+checkpoint must not reach build or publication. No live fetch, generated data,
+statistic, public path, front-end, storage-provider, commit, remote publication,
+merge, or failure issue is authorized during local implementation.
+
+P10-10 local implementation is complete. The read-only fetch job now records
+only completed format operations, retains a failed collection for seven days,
+and accepts a prior checkpoint only after the Action metadata, exact master SHA,
+collection plan, baseline, checksums, and archive path boundary all verify. It
+continues attempting independent pending operations before failing, but build
+and publish receive only a fully successful one-day fetch candidate. The
+focused suite passed 18 tests and the complete Python 3.12.13 suite passed all
+659 tests in 412.17 seconds; repository, rule, and public Schema validation
+also passed. No production workflow was dispatched and no data, statistic,
+front-end, public path, Pages setting, storage provider, failure issue, commit,
+remote publication, or merge changed. It stops for owner acceptance before any
+commit or remote action.
+
 ## Acceptance criteria
 
 Phase 10 is complete when:
