@@ -975,18 +975,27 @@ The approved licensing structure includes:
 
 The approved license combination is recorded in DEC-030.
 
-## Statistical warning thresholds
+## Low-sample matchup presentation warning
+
+Status: `Resolved by DEC-060`
+
+The Phase 8 MTGO and Tabletop consumers warn when a matchup has fewer than 20
+valid matches. This is a presentation caution only, not a reliability,
+eligibility, confidence-interval, or publication threshold. Confidence
+intervals remain available for every nonzero valid-match sample.
+
+## Remaining statistical warning and quality thresholds
 
 Status: `Proposed`
 
-The project still needs exact thresholds for:
+The project still needs exact policies where applicable for:
 
-- low matchup sample warnings;
 - Day 1 versus all-Constructed difference warnings;
-- minimum sample size for confidence intervals;
-- event publication quality failures.
+- configurable decklist-coverage blocking thresholds;
+- event publication quality failures beyond the existing deterministic gates.
 
-These values should be finalized in `docs/STATISTICS_SPEC.md` and covered by tests.
+These values must be finalized in `docs/STATISTICS_SPEC.md` or an applicable
+quality specification and covered by tests before implementation.
 
 ## Vintage implementation
 

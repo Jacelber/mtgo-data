@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/r-01-roadmap-renumbering"
-  working_branch_status: "r_01_owner_accepted_remote_publication_authorized"
+  current_working_branch: null
+  working_branch_status: "master_is_authoritative_and_task_branches_have_no_standing_authority"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-07-31"
+  last_updated: "2026-08-01"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -57,22 +57,85 @@ authoritative_documents:
 current_phase:
   id: 9
   name: "Pure Constructed event strategies"
-  status: "completed_when_p9_08_is_on_master_and_phase_tag_is_published"
+  status: "completed"
   started_on: "2026-07-30"
+  completed_on: "2026-07-31"
+  completion_pull_request: 137
+  completion_commit: "916cd410fb638bd8ea671321ba569d10cefad244"
+  recovery_tag: "phase-9-pure-constructed-events"
   objective: "Complete statistical support for the explicitly configured constructed_day2 and constructed_single_stage Tabletop Major Events structures while preserving the mixed Modern baseline."
   production_changes_allowed: false
   feature_development_allowed: false
+  next_phase_id: 10
+  next_phase_authorized: false
 
 current_governance_task:
+  id: "R-02"
+  name: "Reconcile current project facts after Phase 9"
+  status: "owner_accepted_remote_publication_authorized"
+  authorized_on: "2026-08-01"
+  owner_authorized_local_implementation: true
+  workspace: "C:/tmp/mtgo-data-r02-20260801-01"
+  branch: "codex/r-02-project-fact-reconciliation"
+  base_commit: "0c2371bf4ccfd0a127626d8278ae0a65f9982948"
+  target_paths:
+    - "README.md"
+    - "docs/PROJECT_SCOPE.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DECISIONS.md"
+    - "docs/STATUS.yaml"
+  scope_extension:
+    owner_approved_on: "2026-08-01"
+    added_path: "docs/STATISTICS_SPEC.md"
+    reason: "Remove the remaining authoritative OPEN-002 sample-warning conflict discovered during read-only R-02 planning."
+  protected_scope:
+    code_changed: false
+    statistical_behavior_changed: false
+    generated_data_changed: false
+    production_data_changed: false
+    frontend_changed: false
+    schema_changed: false
+    workflow_changed: false
+    public_paths_changed: false
+  validation:
+    yaml_parse: "passed"
+    repository_validation: "passed"
+    repository_python_checked: 127
+    repository_json_checked: 1609
+    repository_yaml_checked: 21
+    repository_references_checked: 30
+    repository_hygiene_checked: 1887
+    focused_publication_governance_tests_passed: 3
+    current_fact_checks: "passed"
+    changed_paths_within_allowlist: true
+    protected_paths_unchanged: true
+    git_diff_check: "passed"
+    full_pytest_repeated: false
+    full_pytest_reason: "R-02 changes authoritative documentation only; GitHub pull-request validation will repeat the complete clean-checkout suite before any separately authorized merge."
+  owner_acceptance: "accepted"
+  owner_accepted_on: "2026-08-01"
+  remote_publication_authorized: true
+  remote_publication_authorized_on: "2026-08-01"
+  merge_authorized_after_passing_checks: true
+  production_dispatch_authorized: false
+  next_task_automatically_authorized: false
+  stop_point: "Publish and merge the accepted R-02 documentation change after passing checks, then stop. Do not begin P10-01, activate events, or dispatch production automatically."
+
+r_01_result:
   id: "R-01"
   name: "Roadmap maintenance and phase renumbering"
-  status: "owner_accepted_remote_publication_authorized"
+  status: "merged"
   authorized_on: "2026-07-31"
   implemented_on: "2026-07-31"
   owner_authorized_local_implementation: true
   workspace: "C:/tmp/mtgo-data-r01-20260731-01"
   branch: "codex/r-01-roadmap-renumbering"
   base_commit: "916cd410fb638bd8ea671321ba569d10cefad244"
+  local_commit: "539d4432ce11b78db6e0daec6545e91deea35bc6"
+  pull_request: 138
+  pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/138"
+  merge_commit: "e8bf64f377bd31595b0f3fbbaf05276718e0c2d2"
+  merged_on: "2026-07-31"
   decision: "DEC-063"
   current_project_fact_reconciliation_deferred_to: "R-02"
   target_paths:
@@ -114,7 +177,7 @@ current_governance_task:
   merge_authorized_after_passing_checks: true
   production_dispatch_authorized: false
   next_task_automatically_authorized: false
-  stop_point: "Publish and merge the accepted R-01 documentation change after passing checks, then stop. Do not begin R-02 or Phase 10 automatically."
+  stop_point: "R-01 was published and merged. R-02 and Phase 10 remained separately controlled."
 
 phase_0_pull_request:
   number: 1
@@ -244,44 +307,43 @@ current_repository_state:
   phase_1_audit: "docs/audits/P1-01.md"
   standard_classification_baseline: "docs/audits/P1-06.md"
   known_existing_capabilities:
-    - "Standard MTGO event processing"
-    - "Standard archetype classification"
-    - "Standard generated statistics"
-    - "MTGO matchup statistics"
-    - "Weekly Pickup output"
-    - "GitHub Pages front end"
-    - "existing GitHub Actions workflows"
+    - "Complete public Standard and Modern MTGO products"
+    - "Public Modern Tabletop Major Events reference product for whitelisted event 434455"
+    - "Shared format-aware classification with stable archetype, subtype, and rule identities"
+    - "Source-separated MTGO and Tabletop statistics, catalogs, workflows, and front-end controllers"
+    - "Static GitHub Pages entry points for MTGO Environment Trends and Tabletop Major Events"
+    - "Regression-protected Standard and Modern statistics, matchups, completeness, Top 8, and consumer behavior"
+    - "Reusable mixed, constructed_day2, and constructed_single_stage event strategies"
   known_legacy_characteristics:
-    - "current pipeline is primarily Standard-specific"
     - "root directory contains multiple Python entry-point scripts"
-    - "index.html is monolithic"
-    - "classification rules need stable IDs and explicit priorities"
-    - "automated regression protection is incomplete"
+    - "compatibility entry points remain pending an audited removal or tools migration"
+    - "active status and historical acceptance records remain combined in this large file pending Phase 11 documentation reduction"
 
 product_tracks:
   mtgo:
     product_name: "MTGO Environment Trends"
-    status: "existing_standard_only"
+    status: "standard_and_modern_public_products"
     data_merging_with_melee: false
     formats:
       standard:
-        implementation_status: "existing_baseline"
-        verification_status: "classification_baseline_completed_phase_1"
+        implementation_status: "complete_public_product"
+        verification_status: "regression_baseline_and_format_aware_pipeline_complete"
       pauper:
-        implementation_status: "not_started"
+        implementation_status: "official_event_archive_only_not_a_public_product"
       modern:
-        implementation_status: "not_started"
+        implementation_status: "complete_public_product"
+        verification_status: "format_aware_pipeline_and_frontend_complete"
       pioneer:
-        implementation_status: "not_started"
+        implementation_status: "official_event_archive_only_not_a_public_product"
       legacy:
-        implementation_status: "not_started"
+        implementation_status: "official_event_archive_only_not_a_public_product"
       vintage:
-        implementation_status: "deferred_pending_decision"
+        implementation_status: "official_event_archive_only_product_deferred_pending_decision"
 
   tabletop:
     product_name: "Tabletop Major Events"
     internal_source_name: "melee"
-    status: "phase_7_reference_pipeline_in_progress"
+    status: "public_modern_reference_product"
     data_merging_with_mtgo: false
     event_discovery: "manual_whitelist_only"
     formats:
@@ -290,12 +352,13 @@ product_tracks:
         planned_reference_event_category: "paupergeddon_main_event"
         priority: "after_modern_reference_path"
       modern:
-        implementation_status: "reference_event_activation_in_progress"
+        implementation_status: "public_reference_event_complete"
         first_approved_event:
           name: "Pro Tour Magic: The Gathering | Marvel Super Heroes"
           melee_event_id: "434455"
           event_structure: "mixed"
           whitelist_enabled: true
+          public_catalog_available: true
       pioneer:
         implementation_status: "not_started"
       legacy:
@@ -307,11 +370,11 @@ product_tracks:
 
 approved_event_structures:
   - id: "constructed_day2"
-    implementation_status: "opportunity_overview_and_decks_complete_phase9_p9_04"
+    implementation_status: "reusable_strategy_and_consumer_contract_complete_phase9_no_public_event_enabled"
   - id: "constructed_single_stage"
-    implementation_status: "opportunity_overview_and_decks_complete_phase9_p9_04"
+    implementation_status: "reusable_strategy_and_consumer_contract_complete_phase9_no_public_event_enabled"
   - id: "mixed"
-    implementation_status: "ingestion_baseline_completed_phase_5_statistics_in_progress_phase_7"
+    implementation_status: "public_reference_event_complete_phases_7_and_8"
 
 engineering_quality:
   readme:
@@ -2223,7 +2286,7 @@ open_decisions:
   - id: "OPEN-003"
     topic: "Vintage implementation"
     status: "deferred"
-    target_phase: 17
+    target_phase: 18
 
   - id: "OPEN-004"
     topic: "Automatic Melee event discovery"
@@ -5492,12 +5555,15 @@ phase_8_result:
 phase_9_plan:
   id: "P9-PLANNING"
   name: "Pure Constructed event strategies"
-  status: "completed_when_p9_08_is_on_master_and_phase_tag_is_published"
+  status: "completed"
   owner_authorized_on: "2026-07-30"
   production_change_authorized: true
   remote_publication_authorized: true
   remote_publication_authorized_on: "2026-07-31"
-  remote_publication_completed: false
+  remote_publication_completed: true
+  completed_on: "2026-07-31"
+  completion_commit: "916cd410fb638bd8ea671321ba569d10cefad244"
+  recovery_tag: "phase-9-pure-constructed-events"
   plan: "docs/audits/P9-01.md"
   mixed_regression_oracle:
     event_id: "434455"
@@ -5936,12 +6002,16 @@ phase_9_plan:
       stop_point: "P9-07S is published. P9-08 was separately authorized on 2026-07-31."
     - id: "P9-08"
       name: "Cross-structure and cross-format regression and closeout"
-      status: "owner_accepted_publication_and_phase_tag_authorized"
+      status: "completed_published_and_tagged"
       authorized_on: "2026-07-31"
       local_execution_authorized: true
       requires_owner_authorization: false
       branch: "codex/p9-08-cross-format-closeout"
       base_commit: "7249d2451668df2190eca4fc31529fa4a895713c"
+      local_commit: "9473dac0cf2fce3f6ef6894afd94aa18ed2b2d7d"
+      pull_request: 137
+      pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/137"
+      merge_commit: "916cd410fb638bd8ea671321ba569d10cefad244"
       deliverables:
         - "assets/js/phase8/app.js"
         - "assets/js/phase8/i18n.js"
@@ -5964,7 +6034,7 @@ phase_9_plan:
       remote_publication_authorized_on: "2026-07-31"
       phase_tag_authorized: true
       phase_tag_authorized_on: "2026-07-31"
-      proposed_recovery_tag: "phase-9-pure-constructed-events"
+      recovery_tag: "phase-9-pure-constructed-events"
       production_dispatch_authorized: false
       validation:
         test_first_failures_confirmed: 3
@@ -5984,15 +6054,20 @@ phase_9_plan:
         repository_hygiene_checked: 1870
         repository_validation_status: "passed"
         git_diff_check: "passed"
-      stop_point: "Publish P9-08 and the authorized Phase 9 recovery tag. Do not activate events, dispatch production, or begin the next phase."
+      stop_point: "P9-08 and its recovery tag are published. Later tasks remain separately controlled."
 
 phase_9_result:
-  status: "completed_when_closeout_is_on_master_and_tag_is_published"
+  status: "completed"
   completed_on: "2026-07-31"
   closeout_task: "P9-08"
   closeout_branch: "codex/p9-08-cross-format-closeout"
   closeout_base_commit: "7249d2451668df2190eca4fc31529fa4a895713c"
-  proposed_recovery_tag: "phase-9-pure-constructed-events"
+  closeout_local_commit: "9473dac0cf2fce3f6ef6894afd94aa18ed2b2d7d"
+  closeout_pull_request: 137
+  closeout_pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/137"
+  closeout_merge_commit: "916cd410fb638bd8ea671321ba569d10cefad244"
+  recovery_tag: "phase-9-pure-constructed-events"
+  recovery_tag_target: "916cd410fb638bd8ea671321ba569d10cefad244"
   acceptance:
     documented_criteria_passed: true
     cross_structure_regression_passed: true
@@ -6005,20 +6080,16 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "R-02"
-  name: "Reconcile current project facts after Phase 9"
-  target_paths:
-    - "README.md"
-    - "docs/PROJECT_SCOPE.md"
-    - "docs/DECISIONS.md"
-    - "docs/STATUS.yaml"
+  id: "P10-01"
+  name: "Data classification and privacy audit"
+  target_paths: "to_be_defined_after_owner_authorization"
   production_change: false
   requires_user_confirmation: true
   authorization_status: "not_authorized"
   local_execution_authorized: false
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "R-02 is a separate documentation task that may begin only after R-01 is accepted and published and the owner gives fresh authorization. Current Phase 10 work remains unauthorized."
+  planning_status: "P10-01 is the next roadmap candidate after R-02. It may begin only after R-02 is accepted and published and the owner gives fresh authorization. No later Phase 10 task is authorized."
 
 governance_baseline:
   status: "active_on_master"
@@ -6067,21 +6138,14 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin R-02 or Phase 10, activate Tabletop events, or dispatch production without separate owner authorization."
-  - "Do not add P9-07 pilot events to configs/melee_events.yaml without separate authorization."
-  - "Do not retain P9-07 source responses or generate or publish pilot-event data without separate authorization."
+  - "Do not begin P10-01 or any later Phase 10 task without separate owner authorization."
+  - "Do not activate Tabletop events, dispatch production, or add events to configs/melee_events.yaml without separate authorization."
+  - "Do not retain new source responses or generate or publish new event data without separate authorization."
+  - "Do not rewrite Git history, migrate storage, or change the retained 434455 compatibility bytes without the applicable owner gate."
   - "Do not reuse cookies or browser sessions or bypass access controls."
-  - "Do not synthesize a residual subtype during P6-06."
   - "Do not re-dispatch the Melee production workflow without separate authorization."
   - "Do not use Superdesign or transmit project context to an external design service without the P8 external-design approval gate."
-  - "Do not begin Phase 8 backend production changes before P8-03 owner UI acceptance."
-  - "Do not begin the final Phase 8 production front end before P8-07 backend consumer-readiness and real-data UI acceptance."
-  - "Do not replace the retained P7-02 snapshot or normalized event with a different source snapshot without explicit review."
-  - "Do not begin a follow-up task without separate explicit owner authorization."
-  - "Do not implement Modern classification or statistics during Phase 5."
-  - "Do not add new Constructed formats yet."
-  - "Do not delete or disable existing workflows before their responsibilities are audited."
-  - "Do not change public Standard output without regression protection."
+  - "Do not expand R-02 into code, generated data, production data, schemas, workflows, public paths, statistical behavior, or front-end behavior."
   - "Do not commit directly to master."
   - "Do not begin a follow-up task without explicit owner authorization."
 
