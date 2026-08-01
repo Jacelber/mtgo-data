@@ -59,7 +59,7 @@ blockers, and stop conditions.
 | Phase 8 | Deliver the format-first MTGO and Tabletop front ends. | Completed |
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
-| Phase 10 | Establish data governance, compliance, and production operations. | In progress; P10-01 accepted for publication |
+| Phase 10 | Establish data governance, compliance, and production operations. | In progress; P10-07 awaiting owner front-end acceptance |
 | Phase 11 | Establish the engineering baseline and reduce structural debt. | Planned; not authorized |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
@@ -2393,6 +2393,45 @@ Schema, rule, and diff validation.
 The owner accepted the revised A+ proposal on 2026-08-01 and authorized its
 commit, push, pull request, and merge. This publication authorization closes
 only P10-06 documentation; P10-07 remains a separate owner gate.
+
+P10-06 was published through pull request #145, implementation commit
+`f4cd4100071976c18df9d026224f5d5177c0bc0f`, and merge commit
+`82a28d954546cb6112ad0655223fd609035b0b40`. Pull-request validation run
+`30699399303`, master confirmation run `30699811157`, and Pages run
+`30699810612` all succeeded. The owner then authorized P10-07 local
+implementation on 2026-08-01 and directed that the only owner-facing pre-commit
+acceptance be verification that both final front ends operate normally; the
+agent remains responsible for file, code, permission, compatibility, and
+rollback review.
+
+P10-07 builds a fresh artifact from the explicit product roots and preserves
+the current public Git data archive and daily commit behavior. The downloaded
+legacy Pages baseline contains 1,996 files and 226,062,320 unpacked bytes. The
+first local candidate contains 1,584 files and 213,481,951 bytes; its 1,583
+source files all match the legacy artifact byte for byte, it adds only an empty
+`.nojekyll`, and all 494 protected `434455` paths pass. Code, tests, and internal
+development documents remain public through Git but are not copied into the
+site. Local implementation does not authorize commit, remote publication,
+Pages-source changes, deployment, merge, production dispatch, P10-08, or
+P10-09. It stops for owner front-end acceptance before any commit.
+
+The completed local implementation passed 28 focused tests, all 654 repository
+tests in 402.73 seconds, repository validation for 135 Python, 1,613 JSON, 22
+YAML, 30 reference, and 1,907 hygiene checks, all 69 public Schema documents,
+rule validation, and diff validation. A local HTTP server returned all 1,584
+candidate files and 213,481,951 bytes exactly. Codex browser automation could
+not initialize because its local kernel-asset path was unavailable after one
+reset and retry; this infrastructure failure did not reach the candidate site.
+Owner browser verification of the two candidate front ends remains the final
+pre-commit gate.
+
+The owner completed that browser verification on 2026-08-01 and accepted both
+candidate front ends. Commit and publication were authorized. The publication
+scope includes branch push, pull request, the recorded legacy-to-Actions Pages
+source transition immediately before the exact validated merge, custom Pages
+deployment, and restoration of legacy `master` `/` if the new path fails. It
+does not authorize a production-data dispatch, P10-08, P10-09, storage
+migration, compatibility change, or history rewrite.
 
 ## Acceptance criteria
 

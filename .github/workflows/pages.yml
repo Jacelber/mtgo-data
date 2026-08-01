@@ -1,0 +1,83 @@
+name: Allowlisted Pages deployment
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/pages.yml"
+      - "assets/**"
+      - "build_pages_artifact.py"
+      - "configs/pages_publication.json"
+      - "data/**"
+      - "data_raw/**"
+      - "fetched.txt"
+      - "index.html"
+      - "melee/**"
+      - "reports/**"
+      - "stats/**"
+      - "tests/fixtures/melee/434455_compatibility_manifest.json"
+      - "tests/test_pages_artifact.py"
+      - "tests/test_pages_workflow.py"
+  push:
+    branches:
+      - master
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build and verify allowlisted site
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Check out full history without persisted credentials
+        uses: actions/checkout@v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6.3.0
+        with:
+          python-version: "3.12"
+
+      - name: Build fresh allowlisted Pages artifact
+        run: >-
+          python -B build_pages_artifact.py
+          --output "$RUNNER_TEMP/pages-site"
+          --report "$RUNNER_TEMP/pages-report.json"
+          --summary "$GITHUB_STEP_SUMMARY"
+
+      - name: Configure GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/pages-site
+
+  deploy:
+    name: Deploy verified site
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

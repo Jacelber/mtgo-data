@@ -66,9 +66,121 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
+  id: "P10-07"
+  name: "Implement the selected allowlisted Pages separation"
+  status: "local_complete_owner_accepted_publication_authorized"
+  authorized_on: "2026-08-01"
+  workspace: "C:/tmp/mtgo-data-p10-07-20260801-01"
+  branch: "codex/p10-07-allowlisted-pages-artifact"
+  base_commit: "82a28d954546cb6112ad0655223fd609035b0b40"
+  task_type: "pages_artifact_boundary_workflow_compatibility_and_rollback_implementation"
+  objective: "Build and validate a fresh allowlisted Pages artifact while preserving public Git storage, daily data commits, both front ends, and the event 434455 byte contract."
+  authorization:
+    local_implementation: true
+    workflow_and_publication_configuration_files: true
+    non_production_artifact_build: true
+    legacy_pages_artifact_download_and_comparison: true
+    automated_compatibility_and_frontend_validation: true
+    owner_pre_commit_review_scope: "final_frontends_only"
+    commit: true
+    remote_publication: true
+    pages_repository_setting_change: true
+    deployment: true
+    production_dispatch: false
+    storage_migration: false
+    history_rewrite: false
+    p10_08_or_later: false
+  target_paths:
+    - ".github/workflows/pages.yml"
+    - "build_pages_artifact.py"
+    - "configs/pages_publication.json"
+    - "tests/test_pages_artifact.py"
+    - "tests/test_pages_workflow.py"
+    - "tests/test_production_workflow.py"
+    - "README.md"
+    - "docs/audits/P10-07.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
+    - "docs/DEVELOPMENT_WORKFLOW.md"
+    - "docs/ROADMAP.md"
+    - "docs/STATUS.yaml"
+  baseline:
+    pages_build_type: "legacy"
+    pages_source_branch: "master"
+    pages_source_path: "/"
+    pages_run: 30699810612
+    pages_commit: "82a28d954546cb6112ad0655223fd609035b0b40"
+    legacy_artifact_files: 1996
+    legacy_artifact_unpacked_bytes: 226062320
+  implementation:
+    policy: "index_fetched_and_assets_data_data_raw_melee_reports_stats_product_paths"
+    fresh_external_directory_required: true
+    generated_nojekyll: true
+    symbolic_links_allowed: false
+    unsafe_paths_allowed: false
+    artifact_maximum_bytes: 1073741824
+    pr_deployment_allowed: false
+    master_push_deployment_only: true
+    build_permissions: "contents_read"
+    deploy_permissions: "pages_write_and_id_token_write"
+    repository_write_from_pages_workflow: false
+    external_storage_added: false
+    daily_git_data_commit_behavior_changed: false
+    p10_09_job_split_performed: false
+  local_evidence:
+    candidate_files: 1584
+    candidate_bytes: 213481951
+    candidate_source_files_matching_legacy_bytes: 1583
+    candidate_source_files_missing_from_legacy: 0
+    candidate_source_files_changed_from_legacy: 0
+    generated_artifact_only_files: 1
+    generated_artifact_only_path: ".nojekyll"
+    protected_434455_files: 494
+    excluded_legacy_files: 413
+    excluded_legacy_bytes: 12580369
+    artifact_manifest_sha256: "faa7a04209e6eb7719599a8779bae07340fd098b687d0f5bed637dd7896716b0"
+    focused_tests_passed: 28
+    full_pytest_passed: 654
+    full_pytest_seconds: 402.73
+    repository_validation: "passed"
+    repository_python_checked: 135
+    repository_json_checked: 1613
+    repository_yaml_checked: 22
+    repository_references_checked: 30
+    repository_hygiene_checked: 1907
+    public_schema_documents_validated: 69
+    rule_validation: "passed"
+    git_diff_check: "passed"
+    candidate_http_files_checked: 1584
+    candidate_http_bytes_checked: 213481951
+    candidate_http_status: "all_files_returned_200_with_exact_bytes"
+    sensitive_literal_scan: "passed_only_pre_existing_public_notice_contact_matched"
+    automated_browser_status: "unavailable_node_kernel_asset_path_error_after_one_reset_and_retry"
+    owner_browser_validation_status: "passed"
+  protected_scope:
+    raw_or_generated_data_changed: false
+    statistical_behavior_changed: false
+    frontend_source_changed: false
+    event_434455_bytes_changed: false
+    storage_location_changed: false
+    production_dispatched: false
+    pages_setting_changed: false
+    remote_write_performed: false
+    history_rewritten: false
+  owner_acceptance: "accepted"
+  owner_accepted_on: "2026-08-01"
+  commit_authorized: true
+  remote_publication_authorized: true
+  pages_cutover_authorized: true
+  merge_authorized: true
+  production_dispatch_authorized: false
+  next_task_automatically_authorized: false
+  stop_point: "Publish the accepted P10-07 change, cut Pages over from legacy master / to GitHub Actions immediately before the exact validated merge, verify custom deployment and both front ends, then stop before P10-08."
+
+p10_06_result:
   id: "P10-06"
   name: "Data and deployment separation proposal"
-  status: "local_complete_owner_accepted_publication_authorized"
+  status: "completed_published_and_merged"
   authorized_on: "2026-08-01"
   owner_authorized_local_proposal_preparation: true
   owner_history_rewrite_decision: "deferred_without_current_execution_target_under_selected_A_plus_design"
@@ -198,7 +310,14 @@ current_task:
   merge_authorized: true
   production_dispatch_authorized: false
   next_task_automatically_authorized: false
-  stop_point: "Publish the accepted five-document P10-06 change, then stop. Do not edit workflows, change Pages settings, configure credentials, migrate or delete data, change public paths, rewrite history, dispatch production, or begin P10-07 without separate authorization."
+  local_commit: "f4cd4100071976c18df9d026224f5d5177c0bc0f"
+  pull_request: 145
+  merge_commit: "82a28d954546cb6112ad0655223fd609035b0b40"
+  merged_on: "2026-08-01"
+  pull_request_ci_run: 30699399303
+  master_validation_run: 30699811157
+  pages_run: 30699810612
+  stop_point: "P10-06 is closed. P10-07 began only after separate owner authorization."
 
 p10_05_result:
   id: "P10-05"
@@ -6509,16 +6628,16 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P10-07-OWNER-AUTHORIZATION"
-  name: "Owner gate for allowlisted Pages-artifact implementation"
-  target_paths: "none_until_the_owner_separately_authorizes_P10-07"
-  production_change: false
-  requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  local_execution_authorized: false
-  remote_publication_authorized: false
+  id: "P10-07-PUBLICATION-AND-PAGES-CUTOVER"
+  name: "Publish the accepted allowlisted Pages implementation"
+  target_paths: "accepted_P10-07_change_only"
+  production_change: true
+  requires_user_confirmation: false
+  authorization_status: "authorized"
+  local_execution_authorized: true
+  remote_publication_authorized: true
   production_dispatch_authorized: false
-  planning_status: "P10-06 A+ documentation is accepted and authorized for publication. Current public Git remains the durable data archive; implementing the allowlisted Pages artifact still requires separate P10-07 owner authorization."
+  planning_status: "Commit, push, open and validate one PR, cut Pages from legacy master / to GitHub Actions immediately before merge, verify deployment and front ends, roll back on failure, then stop before P10-08."
 
 governance_baseline:
   status: "active_on_master"
@@ -6567,9 +6686,9 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not provision a storage provider, create a private archive, edit workflows, change Pages settings, configure credentials, migrate or delete data, change public paths, or implement P10-07 under the P10-06 proposal authorization."
+  - "Do not publish paths outside the accepted P10-07 change or leave Pages in GitHub Actions mode if the first custom deployment fails; restore legacy master / on failure."
   - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
-  - "Do not begin P10-07 or any later Phase 10 task without separate owner authorization."
+  - "Do not begin P10-08 or any later Phase 10 task without separate owner authorization."
   - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."
   - "Do not activate Tabletop events, dispatch production, or add events to configs/melee_events.yaml without separate authorization."
   - "Do not retain new source responses or generate or publish new event data without separate authorization."

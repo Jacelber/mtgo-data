@@ -2683,7 +2683,7 @@ remain separately owner-gated.
 
 # DEC-067 — Require a restoration proof before any history-rewrite decision
 
-Status: `Proposed`
+Status: `Accepted`
 
 ## Context
 
@@ -2818,3 +2818,59 @@ P10-06 changes no data, workflow, credential, public path, statistic, or front
 end. The owner selected A+ on 2026-08-01. P10-07 implementation, commit, remote
 publication, production dispatch, compatibility changes, data migration, and
 history rewriting remain separately gated.
+
+---
+
+# DEC-069 — Build Pages from explicit product paths
+
+Status: `Proposed`
+
+## Context
+
+The accepted A+ design keeps approved data in public Git but requires Pages to
+deploy a fresh allowlisted artifact. The successful legacy Pages artifact from
+run `30699810612` contains 1,996 files and 226,062,320 unpacked bytes. Besides
+the two products and their data, it includes Python source, tests, internal
+governance documents, reviewed configuration, rule files, Schemas, and
+Jekyll-rendered Markdown output. The front ends consume only their static entry
+points, assets, and `stats/` documents, while the approved compatibility
+boundary also retains current `data/`, `data_raw/`, `reports/`, and fetched
+ledger paths.
+
+## Decision
+
+Build the Pages artifact from `index.html`, `fetched.txt`, and the complete
+`assets/`, `data/`, `data_raw/`, `melee/`, `reports/`, and `stats/` trees. Build
+only into a new external directory, generate `.nojekyll`, prohibit symbolic
+links and unsafe paths, preserve bytes, validate all 494 protected event
+`434455` files, and fail above 1 GiB. Record tracked-repository, Git-object,
+data-tree, artifact, protected-file, and excluded-file measurements on every
+build.
+
+Use a repository-owned custom Pages workflow. Pull requests build but do not
+deploy. Every `master` push builds the current Git data state; only that event
+may upload the Pages artifact and invoke a separate deployment job. The build
+job has `contents: read`; the deploy job has only `pages: write` and
+`id-token: write` and uses the protected `github-pages` environment.
+
+Keep the repository Pages source in legacy `master` `/` mode through local and
+pull-request validation. A separate remote authorization is required to switch
+to GitHub Actions immediately before the accepted merge. If deployment or
+front-end verification fails, restore the captured legacy source and require a
+successful managed build.
+
+## Consequences
+
+The first candidate has 1,584 files and 213,481,951 bytes. Its 1,583 source
+files are byte-identical to the same paths in the legacy artifact, and the only
+new site file is empty `.nojekyll`. Repository code, tests, internal documents,
+configuration, rules, Schemas, and Jekyll-only rendering output remain public in
+Git but stop being Pages payloads. No data is deleted or migrated, no statistic
+or front-end source changes, no external storage or credential is added, and
+the P10-09 fetch/build/publish job split remains separate.
+
+The owner confirmed both candidate front ends on 2026-08-01 and authorized
+commit and publication. Publication includes the reviewed branch, pull request,
+legacy-to-Actions Pages-source cutover, exact validated merge, custom Pages
+deployment, and rollback if the new deployment fails. Production dispatch and
+later Phase 10 tasks remain separately controlled.
