@@ -66,63 +66,68 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P11-09"
-  name: "Record the owner-approved skip and Phase 19 draw-adjusted metric retirement route"
+  id: "P11-10"
+  name: "Protect Phase 8 production resources and JavaScript syntax in repository validation"
   status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-02"
-  workspace: "C:/tmp/mtgo-data-p11-09-skip-20260802-01"
-  branch: "codex/p11-09-skip-record"
-  base_commit: "26341162d4d303d179a0bd4f6de156e4ea3fc04b"
-  task_type: "owner_statistical_scope_decision_documentation"
-  objective: "Skip throwaway shared-API work for the draw-adjusted compatibility calculation and fix its explicit versioned removal as the first Phase 19 compatibility migration."
+  workspace: "C:/tmp/mtgo-data-p11-10-repository-validation-20260802-02"
+  branch: "codex/p11-10-repository-front-end-validation"
+  base_commit: "c4ce0bd2f1fe8e5aafb9a3380185a8b4c9ee9e2c"
+  task_type: "repository_validation_and_ci_baseline"
+  objective: "Make repository validation fail early when either published Phase 8 entry, a required production resource, a controller order, or maintained JavaScript syntax is broken."
   authorization:
     local_implementation: true
-    documentation_only: true
-    commit: true
-    remote_publication: true
-    merge: true
+    commit: false
+    remote_publication: false
+    merge: false
   target_paths:
-    - "docs/STATISTICS_SPEC.md"
-    - "docs/ROADMAP.md"
-    - "docs/DECISIONS.md"
+    - "validate_repository.py"
+    - "tests/test_validate_repository.py"
+    - ".github/workflows/ci.yml"
+    - "tests/test_ci_workflow.py"
     - "docs/STATUS.yaml"
-    - "docs/audits/P11-09.md"
+    - "docs/audits/P11-10.md"
   protected_scope:
     raw_or_generated_data_changed: false
     statistical_behavior_changed: false
     frontend_source_changed: false
     event_434455_bytes_changed: false
     schema_changed: false
-    code_changed: false
+    production_public_paths_changed: false
+    production_resources_changed: false
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    decision: "P11-09 is explicitly skipped; no shared API is created for the draw-adjusted compatibility calculation"
-    route: "P11-10 is next and separately gated; draw-adjusted calculation and field retirement is the first Phase 19 versioned compatibility migration"
-    migration_boundary: "Phase 19 must update the specification, Schemas, generators, public MTGO and Tabletop data, protected 434455 manifest, legacy JavaScript, tests, and rollback evidence without silently reinterpreting an existing field"
-    current_scope: "this record changes documentation only and preserves all current code, Schemas, generated data, front-end behavior, and protected 434455 bytes"
-  owner_decision: "accepted_on_2026-08-02"
+    both_published_entries: "index.html and melee/index.html retain their declared Phase 8 stylesheet and script order"
+    protected_resources: "both stylesheets and all six Phase 8 runtime/controller/application modules are tracked regular files"
+    javascript_syntax: "all nine maintained legacy and Phase 8 browser JavaScript files pass node --check"
+    ci_runtime: "static validation pins Node.js 24 before invoking validate_repository.py"
+    user_visible_behavior: "no HTML, CSS, JavaScript, data, statistical, Schema, public-path, or protected 434455 bytes change"
   owner_acceptance: "accepted"
-  owner_accepted_on: "2026-08-02"
+  owner_accepted_on: "2026-08-03"
   commit_authorized: true
   remote_publication_authorized: true
   merge_authorized: true
   validation:
-    status_contract: "passed: P11-09 skip record, unapproved P11-10 next action, and protected scope parsed from STATUS"
-    publication_governance_docs: "passed: 3 tests in 0.03 seconds on Python 3.12.13"
-    repository_validation: "passed: 145 Python, 1636 JSON, 23 YAML, 30 references, and 1959 hygiene checks"
+    focused_repository_and_ci_tests: "passed: 54 tests in 3.62 seconds on Python 3.12.13 and Node.js 24.12.0"
+    full_pytest_ordinary: "passed: 671 tests, 9 deselected in 274.30 seconds"
+    full_pytest_committed_baseline: "passed: 9 tests, 671 deselected in 127.42 seconds"
+    playwright_production_pages: "passed: 16 tests in 5.5 seconds"
+    ruff: "passed"
+    mypy: "passed: 4 source files"
+    repository_validation: "passed: 145 Python, 9 JavaScript, 1636 JSON, 23 YAML, 40 references, and 1960 hygiene checks"
+    rule_validation: "passed: my_archetypes/standard.yaml"
+    schema_validation: "passed: 69 public generated JSON documents"
     diff_check: "passed"
-    raw_or_generated_data_changed: false
-    statistical_behavior_changed: false
-    frontend_source_changed: false
-    event_434455_bytes_changed: false
+    changed_paths_reviewed: "passed: validator, validator tests, static CI setup, STATUS, and audit only"
   predecessor_status:
     p11_04: "skipped_by_owner_on_2026-08-02_after_whole_package_coverage_measurement_showed_an_unacceptable_required_CI_duration"
     p11_05: "published_and_merged_via_pull_request_156_at_c2e8939967072cc688673b60799323804bc7cb61"
     p11_06: "published_and_merged_via_pull_request_165_at_419c382148dd96ec266a8a9b2abe4975f99235f9"
     p11_07: "published_and_merged_via_pull_request_166_at_feadb7ebe6f06969f5b1bb0ab9b4c09827956315"
     p11_08: "published_and_merged_via_pull_request_167_at_26341162d4d303d179a0bd4f6de156e4ea3fc04b"
-  stop_point: "Commit, remote publication, and merge are authorized for this P11-09 skip record only. P11-10 and the Phase 19 migration require separate owner authorization."
+    p11_09: "skipped_by_owner_on_2026-08-02_with_DEC-078_recording_the_first_Phase_19_versioned_draw_adjusted_metric_retirement_route"
+  stop_point: "Commit, remote publication, pull request creation, and merge are authorized for P11-10 only. P11-11 remains separately gated."
 
 p11_08_result:
   id: "P11-08"
@@ -6880,8 +6885,8 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P11-10"
-  name: "Protect Phase 8 production resources and JavaScript syntax in repository validation"
+  id: "P11-11"
+  name: "Audit legacy entry points and produce an owner deletion list"
   target_paths: "to_be_confirmed_before_authorization"
   production_change: false
   requires_user_confirmation: true
@@ -6889,7 +6894,7 @@ next_approved_task:
   local_execution_authorized: false
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "P11-08 was published through PR #167. The owner skipped P11-09 on 2026-08-02 and selected DEC-078: retain current compatibility bytes through Phase 11, make P11-10 the next separately authorized task, and retire draw-adjusted calculations through the first versioned Phase 19 compatibility migration."
+  planning_status: "P11-10 awaits owner acceptance. P11-11 may begin only after its separate owner authorization; DEC-078 keeps draw-adjusted compatibility retirement as the first Phase 19 versioned migration."
 
 governance_baseline:
   status: "active_on_master"
@@ -6938,7 +6943,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P11-10 or any later development task without separate owner authorization."
+  - "Do not begin P11-11 or any later development task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
   - "Do not change configs/melee_events.yaml, activate an event, dispatch Melee production, retain new source responses, or publish new event data without separate owner authorization."

@@ -3,13 +3,11 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 import subprocess
 import sys
 from pathlib import Path
 
 import pytest
-import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,6 +46,32 @@ def test_unknown_python_encoding_is_failure(tmp_path):
     (tmp_path / "bad.py").write_bytes(b"# coding: unknown_codec\nx=1\n")
     _, failures, _ = validator.validate_files(tmp_path, ["bad.py"])
     assert failures[0].category == "Python"
+
+
+def test_valid_maintained_javascript_syntax(tmp_path, monkeypatch):
+    (tmp_path / "good.js").write_text("const value = 1;\n", encoding="utf-8")
+    monkeypatch.setattr(validator, "MAINTAINED_JAVASCRIPT", ("good.js",))
+    counts, failures, _ = validator.validate_files(tmp_path, ["good.js"])
+    assert counts["JavaScript"] == 1 and not failures
+
+
+def test_invalid_maintained_javascript_syntax_is_failure(tmp_path, monkeypatch):
+    (tmp_path / "bad.js").write_text("const = ;\n", encoding="utf-8")
+    monkeypatch.setattr(validator, "MAINTAINED_JAVASCRIPT", ("bad.js",))
+    _, failures, _ = validator.validate_files(tmp_path, ["bad.js"])
+    assert len(failures) == 1
+    assert failures[0].category == "JavaScript"
+    assert "node --check failed" in failures[0].message
+
+
+def test_missing_maintained_javascript_is_failure(tmp_path, monkeypatch):
+    monkeypatch.setattr(validator, "MAINTAINED_JAVASCRIPT", ("missing.js",))
+    _, failures, _ = validator.validate_files(tmp_path, ["missing.js"])
+    assert failures == [
+        validator.Failure(
+            "JavaScript", "missing.js", "missing maintained JavaScript file"
+        )
+    ]
 
 
 def test_valid_json(tmp_path):
@@ -164,12 +188,12 @@ def test_reference_invalid_values(tmp_path):
         status["authoritative_documents"]["reading_order"][0]["path"] = value
         checked, failures, _ = validator.validate_references(tmp_path, ["ok.txt"], status)
         matching = [f for f in failures if repr(value) in f.message]
-        assert checked == 14 and len(matching) == 1 and matching[0].category == "References"
+        assert checked == 24 and len(matching) == 1 and matching[0].category == "References"
 
 
 def test_status_structure_failure(tmp_path):
     checked, failures, _ = validator.validate_references(tmp_path, [], {"authoritative_documents": {}})
-    assert checked == 11 and len(failures) == 15 and all(f.category == "References" for f in failures)
+    assert checked == 21 and len(failures) == 25 and all(f.category == "References" for f in failures)
 
 
 def test_requirement_include_forms(tmp_path):
@@ -177,14 +201,14 @@ def test_requirement_include_forms(tmp_path):
     status = {"authoritative_documents": {s: [] for s in ("reading_order", "agent_adapter_documents", "historical_documents")}}
     (tmp_path / "requirements-dev.txt").write_text("-r requirements.txt\n-rrequirements.txt\n-r=requirements.txt\n--requirement requirements.txt\n--requirement=requirements.txt\n", encoding="utf-8")
     checked, failures, _ = validator.validate_references(tmp_path, ["requirements.txt", "requirements-dev.txt"], status)
-    assert checked == 16 and not [f for f in failures if f.path.startswith("requirements-dev.txt")]
+    assert checked == 26 and not [f for f in failures if f.path.startswith("requirements-dev.txt")]
 
 
 def test_frontend_and_standard_missing_references(tmp_path):
     status = {"authoritative_documents": {s: [] for s in ("reading_order", "agent_adapter_documents", "historical_documents")}}
     (tmp_path / "index.html").write_text("", encoding="utf-8")
     checked, failures, _ = validator.validate_references(tmp_path, ["index.html"], status)
-    assert checked == 17 and len(failures) == 20
+    assert checked == 27 and len(failures) == 31
     assert {failure.path for failure in failures if failure.message == "missing front-end asset"} == {
         "assets/js/common.js",
         "assets/js/matchup.js",
@@ -209,6 +233,62 @@ def test_all_frontend_templates_are_recognized(tmp_path):
     _, failures, breakdown = validator.validate_references(tmp_path, ["index.html"], status)
     assert breakdown["front-end templates"] == 6
     assert not [f for f in failures if "template" in f.message]
+
+
+def _write_phase8_production_tree(tmp_path):
+    names = list(validator.PHASE8_PRODUCTION_RESOURCES)
+    for name in names:
+        path = tmp_path / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("/* stylesheet */\n" if name.endswith(".css") else "const ok = true;\n", encoding="utf-8")
+    for entry, expected in validator.PHASE8_FRONTEND_ENTRIES.items():
+        path = tmp_path / entry
+        path.parent.mkdir(parents=True, exist_ok=True)
+        styles = "\n".join(
+            f'<link rel="stylesheet" href="{href}">' for href in expected["stylesheets"]
+        )
+        scripts = "\n".join(
+            f'<script src="{source}"></script>' for source in expected["scripts"]
+        )
+        path.write_text(f"<html><head>{styles}</head><body>{scripts}</body></html>\n", encoding="utf-8")
+        names.append(entry)
+    return names
+
+
+def test_phase8_production_entries_and_resources_are_protected(tmp_path):
+    names = _write_phase8_production_tree(tmp_path)
+    checked, failures = validator.validate_phase8_frontend_references(tmp_path, names)
+    assert checked == 10
+    assert failures == []
+
+
+def test_phase8_reference_validation_reports_missing_resource(tmp_path):
+    names = _write_phase8_production_tree(tmp_path)
+    (tmp_path / "assets/js/phase8/tabletop-controller.js").unlink()
+    _, failures = validator.validate_phase8_frontend_references(tmp_path, names)
+    assert failures == [
+        validator.Failure(
+            "References",
+            "assets/js/phase8/tabletop-controller.js",
+            "missing tracked Phase 8 production resource",
+        )
+    ]
+
+
+def test_phase8_reference_validation_reports_wrong_controller_order(tmp_path):
+    names = _write_phase8_production_tree(tmp_path)
+    entry = tmp_path / "melee/index.html"
+    entry.write_text(
+        entry.read_text(encoding="utf-8").replace(
+            "../assets/js/phase8/mtgo-controller.js\"></script>\n<script src=\"../assets/js/phase8/tabletop-controller.js",
+            "../assets/js/phase8/tabletop-controller.js\"></script>\n<script src=\"../assets/js/phase8/mtgo-controller.js",
+        ),
+        encoding="utf-8",
+    )
+    _, failures = validator.validate_phase8_frontend_references(tmp_path, names)
+    assert len(failures) == 1
+    assert failures[0].path == "melee/index.html"
+    assert "unexpected Phase 8 script references" in failures[0].message
 
 
 def test_all_standard_reference_paths_are_regular_json(tmp_path):
@@ -236,7 +316,7 @@ def test_posix_absolute_authoritative_path_is_structured_failure(tmp_path):
     status["authoritative_documents"]["reading_order"][0]["path"] = "/absolute/path.md"
     checked, failures, _ = validator.validate_references(tmp_path, ["ok.txt"], status)
     matching = [f for f in failures if repr("/absolute/path.md") in f.message]
-    assert checked == 14 and len(matching) == 1 and matching[0].category == "References"
+    assert checked == 24 and len(matching) == 1 and matching[0].category == "References"
 
 
 def test_pickup_valid_entry(tmp_path):
@@ -246,7 +326,7 @@ def test_pickup_valid_entry(tmp_path):
     (pickup / "w.json").write_text("{}", encoding="utf-8")
     status = {"authoritative_documents": {s: [] for s in ("reading_order", "agent_adapter_documents", "historical_documents")}}
     checked, failures, _ = validator.validate_references(tmp_path, ["stats/standard/mtgo/pickup/index.json", "stats/standard/mtgo/pickup/w.json"], status)
-    assert checked == 12 and not [f for f in failures if "pickup" in f.path]
+    assert checked == 22 and not [f for f in failures if "pickup" in f.path]
 
 
 def test_pickup_malformed_structure(tmp_path):
@@ -261,7 +341,7 @@ def test_pickup_malformed_structure(tmp_path):
 def test_content_failure_exit(monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["validate_repository.py"])
     monkeypatch.setattr(validator, "tracked_files", lambda root: [])
-    monkeypatch.setattr(validator, "validate_files", lambda root, names: ({"Python": 0, "JSON": 0, "YAML": 0}, [validator.Failure("JSON", "a.json", "bad")], {}))
+    monkeypatch.setattr(validator, "validate_files", lambda root, names: ({"Python": 0, "JavaScript": 0, "JSON": 0, "YAML": 0}, [validator.Failure("JSON", "a.json", "bad")], {}))
     assert validator.main() == 1 and "RESULT: FAIL" in capsys.readouterr().out
 
 

@@ -10,6 +10,7 @@ import ntpath
 import subprocess
 import tokenize
 from dataclasses import dataclass
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -29,11 +30,92 @@ class Failure:
     column: int | None = None
 
 
-CATEGORY_ORDER = {"Python": 0, "JSON": 1, "YAML": 2, "References": 3, "Hygiene": 4}
+CATEGORY_ORDER = {
+    "Python": 0,
+    "JavaScript": 1,
+    "JSON": 2,
+    "YAML": 3,
+    "References": 4,
+    "Hygiene": 5,
+}
 
 FORBIDDEN_TRACKED_PARTS = {"__pycache__", ".pytest_cache", ".venv", "node_modules"}
 FORBIDDEN_TRACKED_NAMES = {".ds_store", "thumbs.db"}
 FORBIDDEN_TRACKED_SUFFIXES = (".pyc", ".pyo", ".log", ".tmp", ".bak", ".swp")
+
+PHASE8_PRODUCTION_RESOURCES = (
+    "assets/css/phase8-base.css",
+    "assets/css/phase8-candidate.css",
+    "assets/js/phase8/runtime.js",
+    "assets/js/phase8/i18n.js",
+    "assets/js/phase8/matchup-model.js",
+    "assets/js/phase8/mtgo-controller.js",
+    "assets/js/phase8/tabletop-controller.js",
+    "assets/js/phase8/app.js",
+)
+MAINTAINED_JAVASCRIPT = (
+    "assets/js/common.js",
+    "assets/js/matchup.js",
+    "assets/js/mtgo.js",
+    "assets/js/phase8/runtime.js",
+    "assets/js/phase8/i18n.js",
+    "assets/js/phase8/matchup-model.js",
+    "assets/js/phase8/mtgo-controller.js",
+    "assets/js/phase8/tabletop-controller.js",
+    "assets/js/phase8/app.js",
+)
+PHASE8_FRONTEND_ENTRIES = {
+    "index.html": {
+        "stylesheets": (
+            "assets/css/phase8-base.css",
+            "assets/css/phase8-candidate.css",
+        ),
+        "scripts": (
+            "assets/js/phase8/runtime.js",
+            "assets/js/phase8/i18n.js",
+            "assets/js/phase8/matchup-model.js",
+            "assets/js/phase8/mtgo-controller.js",
+            "assets/js/phase8/app.js",
+        ),
+    },
+    "melee/index.html": {
+        "stylesheets": (
+            "../assets/css/phase8-base.css",
+            "../assets/css/phase8-candidate.css",
+        ),
+        "scripts": (
+            "../assets/js/phase8/runtime.js",
+            "../assets/js/phase8/i18n.js",
+            "../assets/js/phase8/matchup-model.js",
+            "../assets/js/phase8/mtgo-controller.js",
+            "../assets/js/phase8/tabletop-controller.js",
+            "../assets/js/phase8/app.js",
+        ),
+    },
+}
+
+
+class FrontendAssetParser(HTMLParser):
+    """Collect local stylesheet and script references from an HTML entry."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.stylesheets: list[str] = []
+        self.scripts: list[str] = []
+
+    def handle_starttag(
+        self, tag: str, attrs: list[tuple[str, str | None]]
+    ) -> None:
+        attributes = dict(attrs)
+        if tag == "link":
+            rel = attributes.get("rel", "")
+            href = attributes.get("href")
+            if href and "stylesheet" in rel.lower().split():
+                self.stylesheets.append(href)
+        elif tag == "script":
+            source = attributes.get("src")
+            if source:
+                self.scripts.append(source)
 
 
 def repository_root() -> Path:
@@ -103,11 +185,44 @@ def decode_python(data: bytes) -> str:
     return data.decode(encoding)
 
 
+def validate_javascript_syntax(root: Path, names: list[str]) -> list[Failure]:
+    """Use Node.js to parse every maintained browser JavaScript file."""
+
+    failures: list[Failure] = []
+    for name in names:
+        path = safe_path(root, name)
+        if not path.is_file():
+            failures.append(Failure("JavaScript", name, "missing maintained JavaScript file"))
+            continue
+        try:
+            result = subprocess.run(
+                ["node", "--check", str(path)],
+                cwd=root,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                check=False,
+            )
+        except OSError as exc:
+            raise InfrastructureError(f"cannot run Node.js syntax check: {exc}") from exc
+        if result.returncode:
+            detail = (result.stderr or result.stdout).strip().replace("\n", " ")
+            failures.append(
+                Failure(
+                    "JavaScript",
+                    name,
+                    f"node --check failed: {detail or f'exit status {result.returncode}'}",
+                )
+            )
+    return failures
+
+
 def validate_files(root: Path, names: list[str]) -> tuple[dict[str, int], list[Failure], dict[str, Any]]:
     failures: list[Failure] = []
     parsed_status: dict[str, Any] = {}
     groups = {
         "Python": [n for n in names if n.lower().endswith(".py")],
+        "JavaScript": [n for n in MAINTAINED_JAVASCRIPT if n in names],
         "JSON": [n for n in names if n.lower().endswith(".json")],
         "YAML": [n for n in names if n.lower().endswith((".yaml", ".yml"))],
     }
@@ -118,6 +233,7 @@ def validate_files(root: Path, names: list[str]) -> tuple[dict[str, int], list[F
             failures.append(content_failure("Python", name, exc))
         except (tokenize.TokenError, LookupError, UnicodeError) as exc:
             failures.append(content_failure("Python", name, exc))
+    failures.extend(validate_javascript_syntax(root, groups["JavaScript"]))
     for name in groups["JSON"]:
         try:
             json.loads(read_bytes(root, name).decode("utf-8"))
@@ -153,10 +269,61 @@ def reference_check(failures: list[Failure], path: str, message: str | None) -> 
         failures.append(Failure("References", path, message))
 
 
+def validate_phase8_frontend_references(
+    root: Path, names: list[str]
+) -> tuple[int, list[Failure]]:
+    """Protect both published entries and their declared Phase 8 resources."""
+
+    failures: list[Failure] = []
+    tracked = set(names)
+    checked = 0
+    for resource in PHASE8_PRODUCTION_RESOURCES:
+        checked += 1
+        reference_check(
+            failures,
+            resource,
+            None
+            if tracked_regular(root, tracked, resource)
+            else "missing tracked Phase 8 production resource",
+        )
+    for entry, expected in PHASE8_FRONTEND_ENTRIES.items():
+        checked += 1
+        if not tracked_regular(root, tracked, entry):
+            reference_check(failures, entry, "missing tracked production HTML entry")
+            continue
+        try:
+            source = read_bytes(root, entry).decode("utf-8")
+        except UnicodeDecodeError as exc:
+            reference_check(
+                failures,
+                entry,
+                f"production HTML entry is not UTF-8: {exc}",
+            )
+            continue
+        parser = FrontendAssetParser()
+        parser.feed(source)
+        parser.close()
+        if tuple(parser.stylesheets) != expected["stylesheets"]:
+            reference_check(
+                failures,
+                entry,
+                "unexpected Phase 8 stylesheet references "
+                f"{parser.stylesheets!r}; expected {list(expected['stylesheets'])!r}",
+            )
+        if tuple(parser.scripts) != expected["scripts"]:
+            reference_check(
+                failures,
+                entry,
+                "unexpected Phase 8 script references "
+                f"{parser.scripts!r}; expected {list(expected['scripts'])!r}",
+            )
+    return checked, failures
+
+
 def validate_references(root: Path, names: list[str], status: dict[str, Any]) -> tuple[int, list[Failure], dict[str, int]]:
     failures: list[Failure] = []
     tracked = set(names)
-    breakdown = {"authoritative-document paths": 0, "requirement includes": 0, "front-end templates": 0, "required Standard files": 0, "pickup week entries": 0}
+    breakdown = {"authoritative-document paths": 0, "requirement includes": 0, "front-end templates": 0, "Phase 8 production resources": 0, "required Standard files": 0, "pickup week entries": 0}
     authoritative = status.get("authoritative_documents") if isinstance(status, dict) else None
     sections = ("reading_order", "agent_adapter_documents", "historical_documents")
     for section in sections:
@@ -263,6 +430,9 @@ def validate_references(root: Path, names: list[str], status: dict[str, Any]) ->
                     value = entry.get("file") if isinstance(entry, dict) else None
                     valid = isinstance(value, str) and bool(value) and value.endswith(".json") and Path(value).name == value and value not in (".", "..") and not Path(value).is_absolute() and "/" not in value and "\\" not in value and tracked_regular(root, tracked, f"stats/standard/mtgo/pickup/{value}", ".json")
                     reference_check(failures, f"{pickup}:weeks[{index}]", None if valid else f"invalid pickup week file {value!r}")
+    phase8_checked, phase8_failures = validate_phase8_frontend_references(root, names)
+    breakdown["Phase 8 production resources"] = phase8_checked
+    failures.extend(phase8_failures)
     checked = sum(breakdown.values())
     return checked, failures, breakdown
 
@@ -291,7 +461,9 @@ def main() -> int:
     try:
         root = repository_root()
         tracked = tracked_files(root)
-        candidates = sorted(set(tracked) | {"validate_repository.py"})
+        candidates = sorted(
+            set(tracked) | {"validate_repository.py"} | set(MAINTAINED_JAVASCRIPT)
+        )
         counts, failures, parsed = validate_files(root, candidates)
         reference_count, reference_failures, breakdown = validate_references(root, tracked, parsed.get("docs/STATUS.yaml"))
         failures.extend(reference_failures)
@@ -301,7 +473,7 @@ def main() -> int:
         failed_paths = {category: {f.path for f in failures if f.category == category} for category in CATEGORY_ORDER}
         print("Repository validation")
         print(f"Repository root: {root}")
-        for category in ("Python", "JSON", "YAML"):
+        for category in ("Python", "JavaScript", "JSON", "YAML"):
             checked = counts[category]
             failed = len(failed_paths[category])
             print(f"{category}: checked={checked} passed={checked - failed} failed={failed}")

@@ -87,6 +87,11 @@ jobs:
       - name: Type-check stable shared Python modules with mypy
         run: python -B -m mypy
 
+      - name: Set up Node.js 24 for JavaScript syntax validation
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
       - name: Validate repository files and references
         run: python -B validate_repository.py
 
