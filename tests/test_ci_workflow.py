@@ -96,6 +96,16 @@ def test_pytest_shards_are_exact_marker_complements():
 
 def test_static_validation_and_aggregate_check_are_complete():
     jobs = load_workflow()["jobs"]
+    actionlint_step = next(
+        step
+        for step in jobs["static-validation"]["steps"]
+        if step.get("name") == "Lint GitHub Actions workflows"
+    )
+    assert actionlint_step == {
+        "name": "Lint GitHub Actions workflows",
+        "uses": "docker://rhysd/actionlint:1.7.12",
+        "with": {"args": "-ignore=SC(1009|1072|1073|2129)"},
+    }
     static_commands = "\n".join(
         step.get("run", "") for step in jobs["static-validation"]["steps"]
     )
