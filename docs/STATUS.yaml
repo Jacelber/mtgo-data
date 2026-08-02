@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p11-05-dependabot"
+  current_working_branch: "codex/p11-06-browser-test-baseline"
   working_branch_status: "master_is_authoritative_and_task_branches_have_no_standing_authority"
   status: "active"
   primary_language: "Python"
@@ -66,15 +66,15 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P11-05"
-  name: "Add monthly Dependabot updates for pip and GitHub Actions"
+  id: "P11-06"
+  name: "Add native Node.js tests for Phase 8 matchup and translation contracts"
   status: "local_validation_passed_owner_acceptance_pending"
   authorized_on: "2026-08-02"
-  workspace: "C:/tmp/mtgo-data-p11-05-20260802-01"
-  branch: "codex/p11-05-dependabot"
-  base_commit: "eba8e3a3c6b3b86c0dc756ecd75143b4e2cffab8"
-  task_type: "engineering_baseline_monthly_review_only_dependency_proposals"
-  objective: "Add review-only monthly Dependabot proposals for pinned Python dependencies and GitHub Actions references without changing product behavior."
+  workspace: "C:/tmp/mtgo-data-p11-06-20260802-01"
+  branch: "codex/p11-06-browser-test-baseline"
+  base_commit: "408d3cbfef4464c008e146d480eeb346701c8764"
+  task_type: "engineering_baseline_native_frontend_test_contract"
+  objective: "Add native Node.js property tests for the existing matchup model and exact Chinese and English translation-key parity without changing product behavior."
   authorization:
     local_implementation: true
     documentation_and_tests: true
@@ -82,45 +82,45 @@ current_task:
     remote_publication: false
     merge: false
   target_paths:
-    - ".github/dependabot.yml"
-    - "tests/test_dependabot_config.py"
-    - "docs/DECISIONS.md"
+    - "assets/js/phase8/i18n.js"
+    - "tests/js/phase8-matchup-model.test.js"
+    - "tests/test_node_test_suite.py"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P11-05.md"
+    - "docs/audits/P11-06.md"
   protected_scope:
     raw_or_generated_data_changed: false
     statistical_behavior_changed: false
-    frontend_source_changed: false
+    frontend_source_changed: true
     event_434455_bytes_changed: false
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    dependabot: "the configuration must contain exactly one root pip entry and one root github-actions entry, both monthly"
-    review_boundary: "Dependabot proposals must not configure auto-merge, private registries, special permissions, workflow changes, or a product deployment"
+    native_tests: "Node's built-in node:test must execute property checks for literal matchup aggregation and exact zh/en translation-key parity"
     regression: "full pytest, repository validation, rule validation, Schema validation, and protected 434455 and Pages compatibility checks must pass"
-    scope: "no production data, public path, statistical behavior, front-end source, or frozen 434455 byte change"
+    scope: "no production data, public path, statistical behavior, workflow permission, or frozen 434455 byte change; the i18n source may expose read-only translation keys for the native test contract"
   owner_acceptance: "accepted"
   owner_accepted_on: "2026-08-02"
   commit_authorized: true
   remote_publication_authorized: true
   merge_authorized: true
   validation:
-    focused_dependabot_test: "1 passed in 0.06 seconds on Python 3.12.7"
-    focused_contract_and_protected_boundary_tests: "23 passed in 1.63 seconds on Python 3.12.7"
-    full_pytest: "670 passed in 483.23 seconds on Python 3.12.7"
-    mypy: "passed: no issues found in 4 configured source files"
+    native_node_test: "3 passed in 0.05 seconds on Node 24.12.0"
+    focused_frontend_contract_tests: "25 passed in 0.56 seconds on Python 3.12.13"
+    full_pytest: "671 passed in 417.22 seconds on Python 3.12.13"
     ruff: "passed: ruff check src --no-cache"
-    repository_validation: "passed: 143 Python, 1634 JSON, 23 YAML, 30 references, and 1948 hygiene checks"
+    mypy: "passed: no issues found in 4 configured source files"
+    repository_validation: "passed: 144 Python, 1634 JSON, 23 YAML, 30 references, and 1951 hygiene checks"
     rule_validation: "passed: my_archetypes/standard.yaml"
     public_schema_validation: "passed: 69 public-generated JSON documents"
-    protected_434455_and_pages_tests: "passed within the 23 focused tests"
+    protected_434455_and_pages_tests: "15 passed in 0.62 seconds on Python 3.12.13"
     raw_or_generated_data_changed: false
-    frontend_source_changed: false
+    frontend_source_changed: true
     event_434455_bytes_changed: false
   predecessor_status:
     p11_04: "skipped_by_owner_on_2026-08-02_after_whole_package_coverage_measurement_showed_an_unacceptable_required_CI_duration"
-  stop_point: "Stop for owner acceptance after local validation. P11-06 and every later task require separate owner authorization."
+    p11_05: "published_and_merged_via_pull_request_156_at_c2e8939967072cc688673b60799323804bc7cb61"
+  stop_point: "Stop for owner acceptance after local validation. Commit, remote publication, merge, and P11-07 require separate owner authorization."
 
 p11_03_result:
   id: "P11-03"
@@ -6850,16 +6850,16 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P11-05"
-  name: "Add monthly Dependabot updates for pip and GitHub Actions"
+  id: "P11-06"
+  name: "Add native Node.js tests for Phase 8 matchup and translation contracts"
   target_paths: "see current_task.target_paths"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "local_implementation_authorized"
+  authorization_status: "local_implementation_authorized_by_owner_on_2026-08-02"
   local_execution_authorized: true
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "The owner skipped P11-04 after reviewing its CI duration. P11-05 local validation was accepted on 2026-08-02; commit, remote publication, and merge are authorized for this focused task only."
+  planning_status: "The owner skipped P11-04 after reviewing its CI duration. P11-05 was published through PR #156. The owner authorized local P11-06 implementation on 2026-08-02; commit, remote publication, and merge remain separately controlled."
 
 governance_baseline:
   status: "active_on_master"
@@ -6908,7 +6908,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P11-06 or any later task without separate owner authorization."
+  - "Do not begin P11-07 or any later task without separate owner authorization."
   - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
   - "Do not change configs/melee_events.yaml, activate an event, dispatch Melee production, retain new source responses, or publish new event data without separate owner authorization."
   - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."

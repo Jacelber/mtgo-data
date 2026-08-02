@@ -349,5 +349,6 @@
     setLanguage,
     tabletopScopeLabel,
     t,
+    translationKeys: languageId => Object.keys(dictionaries[languageId] || {}),
   });
 })(globalThis);
