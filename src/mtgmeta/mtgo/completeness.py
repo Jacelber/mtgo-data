@@ -9,7 +9,7 @@ import math
 from pathlib import Path
 from typing import Any, Iterable
 
-from public_contract import versioned
+from mtgmeta.public_contract import versioned
 
 from . import load_mtgo_context
 from .stats import (

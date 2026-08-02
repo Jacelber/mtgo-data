@@ -14,7 +14,7 @@ from typing import Any
 from mtgmeta.classifier import classify_deck
 from mtgmeta.legacy_rules import LegacyArchetypeRules
 from mtgmeta.rules import RuleSet
-from public_contract import versioned
+from mtgmeta.public_contract import versioned
 from mtgmeta.consumer import identity_display_name
 
 from . import load_mtgo_context

@@ -39,6 +39,27 @@ py -3.12 -m venv .venv
 
 Runtime dependencies are pinned in `requirements.txt`. Test and validation dependencies are pinned in `requirements-dev.txt`.
 
+For a local installed-package check, install the repository into the same
+virtual environment:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install .
+```
+
+This adds three convenience commands: `mtgo-data-mtgo`, `mtgo-data-melee`, and
+`mtgo-data-catalog`. Run them from the repository root and supply `--root .`
+to the MTGO and catalog commands when they need repository configuration or
+data. For example:
+
+```powershell
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-statistics
+.\.venv\Scripts\mtgo-data-catalog.exe --root .
+```
+
+Installing the package adds no credentials, network access, scheduled jobs, or
+production-data changes. All root-level Python scripts remain supported
+compatibility entry points.
+
 ## Validation
 
 Run the read-only repository validator, rule validator, and tests from the repository root:

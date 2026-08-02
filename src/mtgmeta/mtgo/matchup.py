@@ -23,7 +23,7 @@ from mtgmeta.consumer import (
     wilson_interval as literal_wilson_interval,
 )
 from mtgmeta.rules import RuleSet
-from public_contract import versioned
+from mtgmeta.public_contract import versioned
 
 from . import load_mtgo_context
 from .classification import load_mtgo_events_for_format

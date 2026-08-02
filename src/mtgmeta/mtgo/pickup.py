@@ -11,7 +11,7 @@ from typing import Any, Callable, Mapping
 import yaml
 
 from mtgmeta.classifier import classify_deck
-from public_contract import versioned
+from mtgmeta.public_contract import versioned
 
 from . import load_mtgo_context
 from . import matchup

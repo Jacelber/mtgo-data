@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mtgo-data"
+version = "0.1.0"
+description = "Constructed Magic tournament data tools"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "jsonschema==4.26.0",
+  "PyYAML==6.0.3",
+  "requests==2.34.2",
+]
+
+[project.scripts]
+mtgo-data-catalog = "mtgmeta.catalog:main"
+mtgo-data-melee = "mtgmeta.melee.__main__:main"
+mtgo-data-mtgo = "mtgmeta.mtgo.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+mtgmeta = ["data/*.json"]
