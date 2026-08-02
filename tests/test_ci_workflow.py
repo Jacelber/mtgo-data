@@ -104,7 +104,7 @@ def test_static_validation_and_aggregate_check_are_complete():
     assert actionlint_step == {
         "name": "Lint GitHub Actions workflows",
         "uses": "docker://rhysd/actionlint:1.7.12",
-        "with": {"args": "-ignore 'SC(1009|1072|1073|2129)'"},
+        "with": {"args": "-ignore=SC(1009|1072|1073|2129)"},
     }
     static_commands = "\n".join(
         step.get("run", "") for step in jobs["static-validation"]["steps"]
