@@ -3184,3 +3184,32 @@ contract regresses. Expanding the typed surface, changing imported modules,
 or introducing an ignore baseline requires a separately reviewed task. No
 production data, statistic, public path, front-end source, workflow permission,
 or event `434455` byte changes.
+
+---
+
+# DEC-077 — Use monthly review-only Dependabot proposals
+
+Status: `Accepted`
+
+## Context
+
+The owner declined P11-04 after measurement showed that whole-package
+coverage instrumentation would extend the required validation path to about
+twenty minutes. The project still needs a small, reviewable mechanism to
+surface maintenance updates for its pinned Python dependencies and GitHub
+Actions references.
+
+## Decision
+
+Add the minimum Dependabot version-update configuration for the repository
+root: one monthly `pip` entry and one monthly `github-actions` entry. Do not
+configure grouping, auto-merge, private registries, assignees, labels, target
+branches, or special permissions. Dependabot may open proposal pull requests;
+each remains subject to ordinary CI and explicit human review and merge.
+
+## Consequences
+
+This decision does not install or upgrade dependencies, change production
+workflows, grant repository write permissions, dispatch workflows, publish
+data, or alter product behavior. P11-04 remains skipped and may be reconsidered
+only as a separately authorized CI-economy task.
