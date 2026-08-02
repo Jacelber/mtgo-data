@@ -79,6 +79,9 @@ jobs:
       - name: Check maintained Python package with Ruff
         run: python -B -m ruff check src
 
+      - name: Type-check stable shared Python modules with mypy
+        run: python -B -m mypy
+
       - name: Validate repository files and references
         run: python -B validate_repository.py
 

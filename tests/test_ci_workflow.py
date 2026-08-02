@@ -102,6 +102,7 @@ def test_static_validation_and_aggregate_check_are_complete():
     for expected in (
         "-r requirements-dev.txt",
         "python -B -m ruff check src",
+        "python -B -m mypy",
         "validate_repository.py",
         "validate_rules.py",
         "validate_schemas.py",

@@ -67,6 +67,7 @@ Run the read-only repository validator, rule validator, and tests from the repos
 ```powershell
 .\.venv\Scripts\python.exe validate_repository.py
 .\.venv\Scripts\python.exe -m ruff check src
+.\.venv\Scripts\python.exe -m mypy
 .\.venv\Scripts\python.exe validate_rules.py
 .\.venv\Scripts\python.exe validate_rules.py path\to\versioned-rules.yaml
 .\.venv\Scripts\python.exe generate_classification_reports.py --strict

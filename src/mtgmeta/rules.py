@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, TypeGuard
 
 
 RULE_SCHEMA_VERSION = "1.0.0"
@@ -58,7 +58,7 @@ class RuleSet:
     archetypes: tuple[ArchetypeDefinition, ...]
 
 
-def _is_nonempty_string(value: Any) -> bool:
+def _is_nonempty_string(value: object) -> TypeGuard[str]:
     return isinstance(value, str) and bool(value.strip())
 
 

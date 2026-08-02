@@ -30,3 +30,14 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["F"]
+
+[tool.mypy]
+files = [
+  "src/mtgmeta/card_names.py",
+  "src/mtgmeta/deck.py",
+  "src/mtgmeta/rules.py",
+  "src/mtgmeta/classifier.py",
+]
+follow_imports = "skip"
+python_version = "3.12"
+strict = true

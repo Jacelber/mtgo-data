@@ -112,7 +112,11 @@ def evaluate_matches(
                         archetype_id=archetype.id,
                         archetype_name=archetype.name,
                         subtype_id=rule.subtype_id,
-                        subtype_name=subtype_names.get(rule.subtype_id),
+                        subtype_name=(
+                            subtype_names.get(rule.subtype_id)
+                            if rule.subtype_id is not None
+                            else None
+                        ),
                         rule_id=rule.id,
                         priority=rule.priority,
                         evidence=evidence,

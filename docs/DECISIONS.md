@@ -3138,3 +3138,49 @@ Root scripts, tests, E-style/layout rules, import sorting, and Ruff formatting
 remain outside this task and require deliberate later scope. No production
 data, statistic, public path, front-end source, workflow permission, or event
 `434455` byte changes.
+
+---
+
+# DEC-076 — Establish a strict, narrow mypy baseline for stable shared modules
+
+Status: `Accepted`
+
+## Context
+
+The shared card-name, deck-normalization, rule-validation, and classification
+modules serve both MTGO and Tabletop processing. They already expose typed
+interfaces, but Python alone cannot verify that values validated from external
+documents are narrowed before they become internal rule identifiers.
+
+The broader package still contains legacy compatibility scripts and modules
+whose imports would create unrelated findings. Treating every existing module
+as typed, or silencing the results with global ignores, would not establish a
+meaningful baseline.
+
+## Decision
+
+Pin mypy 2.3.0 and its direct transitive dependencies in the development
+requirements. Run mypy in strict mode on exactly these four stable shared
+modules:
+
+- `src/mtgmeta/card_names.py`;
+- `src/mtgmeta/deck.py`;
+- `src/mtgmeta/rules.py`;
+- `src/mtgmeta/classifier.py`.
+
+Set `follow_imports = "skip"` so imports outside that explicit initial scope
+are not silently treated as part of the baseline. Preserve strict checking for
+every listed module. Add the same `python -B -m mypy` command to the existing
+read-only CI static-validation job.
+
+Use a type guard for validated non-empty identifiers and an explicit optional
+subtype branch. These changes clarify existing validation results without
+changing classification behavior.
+
+## Consequences
+
+The selected shared modules now fail locally and in CI when their strict type
+contract regresses. Expanding the typed surface, changing imported modules,
+or introducing an ignore baseline requires a separately reviewed task. No
+production data, statistic, public path, front-end source, workflow permission,
+or event `434455` byte changes.
