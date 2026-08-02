@@ -247,7 +247,7 @@ def _run_hierarchy(args: argparse.Namespace, root: Path, registry: Path) -> int:
 
 
 def _run_reports(args: argparse.Namespace, root: Path, registry: Path) -> int:
-    from generate_classification_reports import generate_reports
+    from mtgmeta.classification_reports_cli import generate_reports
     from mtgmeta.reports import has_blocking_diagnostics
 
     reports = generate_reports(

@@ -60,7 +60,7 @@ blockers, and stop conditions.
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
 | Phase 10 | Establish data governance, compliance, and production operations. | In progress; P10-08 runtime alignment underway |
-| Phase 11 | Establish the engineering baseline and reduce structural debt. | Planned; not authorized |
+| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-01 accepted; publication authorized |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | Phase 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
@@ -2527,8 +2527,9 @@ commit, publication, or merge.
 Phase 10 closed on 2026-08-02 after owner acceptance of P10-01 through P10-12.
 P10-12 was published through pull request #151 and merge commit
 `6806a71b2cf3975d6993a3c2465529e028df4665`; its pull-request validation,
-master admission, and Pages deployment passed. Phase 11 remains planned and
-requires separate owner authorization.
+master admission, and Pages deployment passed. P11-01 local implementation was
+separately authorized on 2026-08-02; acceptance and every later task remain
+separately controlled.
 
 ## Acceptance criteria
 

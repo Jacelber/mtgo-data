@@ -3066,3 +3066,41 @@ Future approved events can use their reviewed format without a second workflow
 edit, while an event lacking a maintained rule file fails before it can fetch
 or write candidate data. Existing Modern event `434455`, its protected bytes,
 all statistical formulas, public paths, and front ends remain unchanged.
+
+---
+
+# DEC-074 — Package Python commands while retaining root-script compatibility
+
+Status: `Accepted`
+
+## Context
+
+The project Python modules already live under `src/mtgmeta/`, but operators and
+automation must set `PYTHONPATH=src` to use them as modules. Root-level scripts
+remain referenced by tests and documentation, so removing or renaming them as
+part of the packaging baseline would break established compatibility before the
+Phase 11 legacy-entry-point review.
+
+## Decision
+
+Add a minimal `pyproject.toml` using setuptools, require Python 3.12 or newer,
+and expose the existing catalog, MTGO, and Tabletop module entry points as
+`mtgo-data-catalog`, `mtgo-data-mtgo`, and `mtgo-data-melee`. Include the
+package's JSON alias data in the installation artifact.
+
+Move only package-internal helpers that prevented installed execution into
+`mtgmeta`: the public-schema helper and classification-report command logic.
+Retain `public_contract.py` and `generate_classification_reports.py` at the
+repository root as compatible entry points. The root report script preserves
+its existing repository-root default and delegates to the installed package
+implementation.
+
+## Consequences
+
+Operators may install the repository into a Python 3.12 virtual environment
+and use supported commands without setting `PYTHONPATH`. Commands that read
+repository configuration or data still require a repository checkout and an
+explicit `--root .` where supported. Installation does not add credentials,
+network calls, scheduled jobs, production-data changes, or a new build
+framework. Root scripts remain until a separately authorized Phase 11 audit
+and deletion decision.

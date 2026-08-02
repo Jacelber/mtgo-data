@@ -8,7 +8,7 @@ from pathlib import Path
 import re
 from typing import Any
 
-from public_contract import versioned
+from mtgmeta.public_contract import versioned
 from mtgmeta.consumer import identity_display_name
 
 from . import load_mtgo_context

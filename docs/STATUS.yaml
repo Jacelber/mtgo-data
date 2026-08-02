@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p10-12-whitelist-operations"
+  current_working_branch: "codex/p11-01-python-packaging"
   working_branch_status: "master_is_authoritative_and_task_branches_have_no_standing_authority"
   status: "active"
   primary_language: "Python"
@@ -55,36 +55,50 @@ authoritative_documents:
       authoritative: false
 
 current_phase:
-  id: 10
-  name: "Data governance, compliance, and production operations"
-  status: "completed"
-  started_on: "2026-08-01"
-  objective: "Establish an explicit privacy, compatibility, storage, and production-operations boundary before adding more Tabletop events or Constructed formats."
+  id: 11
+  name: "Engineering baseline, test structure, and documentation reduction"
+  status: "in_progress"
+  started_on: "2026-08-02"
+  objective: "Create a maintainable engineering baseline and reduce structural debt without changing production data, public paths, statistical behavior, or the frozen 434455 compatibility boundary."
   production_changes_allowed: false
-  feature_development_allowed: false
-  next_phase_id: 11
+  feature_development_allowed: true
+  next_phase_id: 12
   next_phase_authorized: false
 
 current_task:
-  id: "P10-CLOSEOUT"
-  name: "Phase 10 governance closeout"
+  id: "P11-01"
+  name: "Add Python packaging and compatible console scripts"
   status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-02"
-  workspace: "C:/tmp/mtgo-data-p10-closeout-20260802-01"
-  branch: "codex/p10-closeout"
-  base_commit: "6806a71b2cf3975d6993a3c2465529e028df4665"
-  task_type: "documentation_only_phase_closeout"
-  objective: "Record accepted Phase 10 completion and preserve the explicit authorization stop before Phase 11."
+  workspace: "C:/tmp/mtgo-data-p11-01-20260802-01"
+  branch: "codex/p11-01-python-packaging"
+  base_commit: "b6175ffa2f916613115214c881e586f6637aa1c6"
+  task_type: "engineering_baseline_python_packaging"
+  objective: "Add a standard installable Python package and supported console scripts while retaining compatible root entry points."
   authorization:
     local_implementation: true
-    documentation_only: true
-    commit: true
-    remote_publication: true
-    merge: true
+    documentation_and_tests: true
+    commit: false
+    remote_publication: false
+    merge: false
   target_paths:
+    - "pyproject.toml"
+    - "README.md"
+    - "generate_classification_reports.py"
+    - "src/mtgmeta/public_contract.py"
+    - "src/mtgmeta/classification_reports_cli.py"
+    - "src/mtgmeta/catalog.py"
+    - "src/mtgmeta/mtgo/__main__.py"
+    - "src/mtgmeta/mtgo/completeness.py"
+    - "src/mtgmeta/mtgo/matchup.py"
+    - "src/mtgmeta/mtgo/pickup.py"
+    - "src/mtgmeta/mtgo/stats.py"
+    - "src/mtgmeta/mtgo/top8.py"
+    - "tests/test_python_packaging.py"
+    - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P10-CLOSEOUT.md"
+    - "docs/audits/P11-01.md"
   protected_scope:
     raw_or_generated_data_changed: false
     statistical_behavior_changed: false
@@ -93,12 +107,44 @@ current_task:
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    phase_10_acceptance_criteria: "satisfied_by_P10-01_through_P10-12_records"
+    package_install: "must succeed in a task-local Python 3.12 environment"
+    command_compatibility: "supported console commands and retained root entry points must work without PYTHONPATH"
+    regression: "full pytest, repository validation, rule validation, Schema validation, and protected 434455 compatibility checks must pass"
+    scope: "no production data, public path, statistical behavior, front-end source, or frozen 434455 byte change"
   owner_acceptance: "accepted"
+  owner_accepted_on: "2026-08-02"
   commit_authorized: true
   remote_publication_authorized: true
   merge_authorized: true
-  stop_point: "Phase 10 is complete. Phase 11 requires separate owner authorization."
+  validation:
+    focused_package_and_compatibility_tests: "20 passed in 29.16 seconds on Python 3.12.7"
+    task_local_package_install: "passed with --no-deps --no-build-isolation after installing declared build tool setuptools into the task-local virtual environment"
+    installed_commands: "mtgo-data-mtgo, mtgo-data-melee, and mtgo-data-catalog help passed without PYTHONPATH"
+    installed_classification_reports: "passed with strict disposable output; decks=4477 unknown=97 conflicts=0 invalid=0"
+    repository_validation: "140 Python, 1634 JSON, 22 YAML, 30 references, and 1941 hygiene paths passed"
+    rule_validation: "passed"
+    public_schema_validation: "69 documents passed"
+    protected_434455_and_pages_tests: "11 passed in 1.23 seconds"
+    full_pytest: "665 passed in 407.87 seconds on Python 3.12.7"
+    raw_or_generated_data_changed: false
+    frontend_source_changed: false
+    event_434455_bytes_changed: false
+  stop_point: "Publication is authorized for P11-01 only. P11-02 and every later task require separate owner authorization."
+
+p10_closeout_result:
+  id: "P10-CLOSEOUT"
+  name: "Phase 10 governance closeout"
+  status: "completed_published_and_merged"
+  local_commit: "abd45a2b0bc73a6b0149e50dd392ebfd7f9b2a3a"
+  pull_request: 152
+  merge_commit: "b6175ffa2f916613115214c881e586f6637aa1c6"
+  merged_on: "2026-08-02"
+  protected_scope:
+    raw_or_generated_data_changed: false
+    statistical_behavior_changed: false
+    frontend_source_changed: false
+    event_434455_bytes_changed: false
+    production_dispatched: false
 
 p10_12_result:
   id: "P10-12"
@@ -6763,14 +6809,14 @@ phase_9_result:
 next_approved_task:
   id: "P11-01"
   name: "Add Python packaging and compatible console scripts"
-  target_paths: "not_authorized"
+  target_paths: "see current_task.target_paths"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "not_authorized"
-  local_execution_authorized: false
+  authorization_status: "local_implementation_authorized"
+  local_execution_authorized: true
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "Phase 11 is planned but requires separate owner authorization after Phase 10 closeout publication."
+  planning_status: "Owner authorized local P11-01 implementation on 2026-08-02. Acceptance, commit, remote publication, and merge remain separately controlled."
 
 governance_baseline:
   status: "active_on_master"
@@ -6819,7 +6865,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P11-01 or any later phase without separate owner authorization."
+  - "Do not begin P11-02 or any later task without separate owner authorization."
   - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
   - "Do not change configs/melee_events.yaml, activate an event, dispatch Melee production, retain new source responses, or publish new event data without separate owner authorization."
   - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."

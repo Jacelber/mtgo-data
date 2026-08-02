@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from typing import Any, Sequence
 
-from public_contract import versioned
+from mtgmeta.public_contract import versioned
 
 from .config import load_format_registry
 
