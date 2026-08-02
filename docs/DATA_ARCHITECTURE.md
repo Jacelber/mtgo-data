@@ -1487,6 +1487,16 @@ later review. It cannot push
 `master`, create a pull request, merge, or run on a schedule. P7-08 owns the
 first authorized real workflow execution.
 
+P10-12 resolves the Constructed format before any candidate baseline, retained
+snapshot lookup, or live request. It loads the authoritative whitelist through
+the strict registry parser and requires the selected event to be both enabled
+and verified. The resulting format becomes the workflow's sole `FORMAT` value
+for all data paths, classification rules, statistics, publication, and staged
+candidate paths. A missing, disabled, unverified, malformed, or unsupported
+entry fails before source access and has no fallback format. Manual dispatch,
+review-branch publication, and owner-controlled pull-request review remain
+unchanged.
+
 ### 11.12 Reference-event compatibility manifest
 
 P10-02 defines the version `1.0.0` compatibility boundary for mixed Melee

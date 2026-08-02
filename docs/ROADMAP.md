@@ -2509,6 +2509,21 @@ work does not dispatch production, create a real issue, change data or
 statistics, alter public paths or front ends, or authorize commit, publication,
 or merge.
 
+P10-11 was accepted and published on 2026-08-02 through pull request #150 and
+merge commit `bf9749bd5871a65273f62fd379a4be987bd33df2`. Its 19 focused tests,
+661-test local suite, pull-request validation, master admission, and Pages
+deployment passed. No production workflow was dispatched and no real failure
+issue was created during acceptance.
+
+The owner authorized P10-12 local implementation on 2026-08-02. It removes
+the manual Melee workflow's hard-coded Modern format and resolves the one
+enabled verified event format from the strict whitelist before any candidate
+baseline, retained snapshot lookup, or source request. It documents the
+unchanged manual event-addition, review-branch, and owner pull-request gates.
+P10-12 does not edit the whitelist, activate an event, dispatch a workflow,
+contact Melee, generate data, alter statistics or front ends, or authorize
+commit, publication, or merge.
+
 ## Acceptance criteria
 
 Phase 10 is complete when:

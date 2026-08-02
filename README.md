@@ -259,6 +259,27 @@ pushes `master`, creates a pull request, or merges. An already retained
 canonical event reuses its exact immutable snapshot; only a newly approved
 event without canonical input performs a live fetch.
 
+### Operating an approved Tabletop event
+
+This workflow is not an event-discovery tool. A tournament is eligible only
+after the owner has separately approved it and a reviewed pull request has
+added its complete entry to `configs/melee_events.yaml`. Adding an event is not
+the same as publishing it.
+
+For an approved event, the operator selects **Melee production candidate** in
+the repository Actions page and enters the exact whitelist event ID. Before it
+creates a candidate baseline, reads retained data, or contacts Melee, the
+workflow validates the whitelist entry, requires that it is enabled and
+verified, and derives its Constructed format from that entry. There is no
+format field to enter manually and no fallback to Modern.
+
+Review the resulting Actions summary and, if the candidate changed, the
+separate `data/melee-<event_id>` branch. The workflow never opens a pull
+request, merges, or writes to `master`; the owner must separately review and
+approve any candidate pull request. Do not dispatch the workflow for an event
+that has not received separate owner authorization, even if its whitelist
+entry already exists.
+
 ## Format-aware MTGO commands
 
 The production MTGO pipeline uses one explicit command entry point. Set `PYTHONPATH` to `src` when running it from a source checkout:

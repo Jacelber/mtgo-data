@@ -37,12 +37,38 @@ def test_workflow_is_master_dispatched_bounded_and_source_separated():
     assert job["env"] == {
         "PYTHONPATH": "src",
         "EVENT_ID": "${{ inputs.event_id }}",
-        "FORMAT": "modern",
     }
     text = WORKFLOW.read_text(encoding="utf-8")
     assert "mtgmeta.mtgo" not in text
     assert "update.yml" not in text
     assert "schedule:" not in text
+
+
+def test_workflow_resolves_the_format_from_a_verified_whitelist_entry_first():
+    workflow = _load()
+    steps = workflow["jobs"]["candidate"]["steps"]
+    resolve_index = next(
+        index for index, step in enumerate(steps) if step["name"] == "Resolve verified whitelist format"
+    )
+    snapshot_index = next(
+        index for index, step in enumerate(steps) if step["name"] == "Snapshot Melee candidate baseline"
+    )
+    source_index = next(
+        index
+        for index, step in enumerate(steps)
+        if step["name"] == "Resolve retained snapshot or fetch a new whitelisted event"
+    )
+    resolve = steps[resolve_index]
+    text = WORKFLOW.read_text(encoding="utf-8")
+
+    assert resolve_index < snapshot_index < source_index
+    assert resolve["id"] == "whitelist"
+    assert resolve["env"] == {"EVENT_ID": "${{ inputs.event_id }}"}
+    assert "load_melee_event_registry" in resolve["run"]
+    assert "require_fetchable" in resolve["run"]
+    assert 'echo "FORMAT=$EVENT_FORMAT" >> "$GITHUB_ENV"' in resolve["run"]
+    assert 'echo "format=$EVENT_FORMAT" >> "$GITHUB_OUTPUT"' in resolve["run"]
+    assert "FORMAT: modern" not in text
 
 
 def test_pipeline_order_is_complete_and_fail_closed():

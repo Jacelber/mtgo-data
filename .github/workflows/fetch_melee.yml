@@ -25,7 +25,6 @@ jobs:
     env:
       PYTHONPATH: src
       EVENT_ID: ${{ inputs.event_id }}
-      FORMAT: modern
     steps:
       - name: Check out full history for candidate publication
         uses: actions/checkout@v7.0.0
@@ -43,6 +42,17 @@ jobs:
 
       - name: Verify clean-checkout code and committed baseline
         run: python -B -m pytest
+
+      - name: Resolve verified whitelist format
+        id: whitelist
+        shell: bash
+        env:
+          EVENT_ID: ${{ inputs.event_id }}
+        run: |
+          EVENT_FORMAT="$(python -B -c 'from mtgmeta.melee.config import load_melee_event_registry; import sys; print(load_melee_event_registry("configs/melee_events.yaml").require_fetchable(sys.argv[1]).format)' "$EVENT_ID")"
+          test -f "my_archetypes/${EVENT_FORMAT}.yaml"
+          echo "FORMAT=$EVENT_FORMAT" >> "$GITHUB_ENV"
+          echo "format=$EVENT_FORMAT" >> "$GITHUB_OUTPUT"
 
       - name: Snapshot Melee candidate baseline
         run: >-

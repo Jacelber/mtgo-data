@@ -3029,3 +3029,40 @@ notification job is itself observable in Actions and may fail visibly if GitHub
 cannot record the notification; it cannot convert a failed production run into
 a successful one. No statistic, source policy, generated output, public path,
 front-end behavior, or durable data-store behavior changes.
+
+---
+
+# DEC-073 — Derive Melee workflow format from the verified whitelist
+
+Status: `Accepted`
+
+## Context
+
+The manual Melee candidate workflow accepted an event ID but set its format to
+`modern` unconditionally. The whitelist already contains each event's reviewed
+Constructed format and the strict registry loader already rejects malformed,
+unknown, disabled, and unverified entries. Keeping a separate hard-coded
+workflow value could send a future approved non-Modern event through the wrong
+rules and paths.
+
+## Decision
+
+Before any candidate baseline, retained-snapshot lookup, or live collection,
+the workflow loads `configs/melee_events.yaml` through the existing strict
+registry and calls `require_fetchable` for the supplied event ID. It exports
+the resulting format only after confirming that the corresponding rule file is
+present. All existing later workflow steps continue to use that one derived
+`FORMAT` value.
+
+The dispatch has no user-entered format input and no fallback value. A missing,
+malformed, disabled, unverified, or unsupported entry stops before source
+access. This decision does not add a whitelist event, enable an event, dispatch
+the workflow, retain source responses, or alter the review-branch and manual
+pull-request gates.
+
+## Consequences
+
+Future approved events can use their reviewed format without a second workflow
+edit, while an event lacking a maintained rule file fails before it can fetch
+or write candidate data. Existing Modern event `434455`, its protected bytes,
+all statistical formulas, public paths, and front ends remain unchanged.
