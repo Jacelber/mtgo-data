@@ -2524,6 +2524,12 @@ P10-12 does not edit the whitelist, activate an event, dispatch a workflow,
 contact Melee, generate data, alter statistics or front ends, or authorize
 commit, publication, or merge.
 
+Phase 10 closed on 2026-08-02 after owner acceptance of P10-01 through P10-12.
+P10-12 was published through pull request #151 and merge commit
+`6806a71b2cf3975d6993a3c2465529e028df4665`; its pull-request validation,
+master admission, and Pages deployment passed. Phase 11 remains planned and
+requires separate owner authorization.
+
 ## Acceptance criteria
 
 Phase 10 is complete when:
