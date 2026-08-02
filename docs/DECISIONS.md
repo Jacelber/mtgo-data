@@ -3213,3 +3213,53 @@ This decision does not install or upgrade dependencies, change production
 workflows, grant repository write permissions, dispatch workflows, publish
 data, or alter product behavior. P11-04 remains skipped and may be reconsidered
 only as a separately authorized CI-economy task.
+
+---
+
+# DEC-078 — Defer draw-adjusted metric retirement to Phase 19
+
+Status: `Accepted`
+
+## Context
+
+The Phase 8 production front end now presents the declared literal method:
+normal played draws remain in the valid-match denominator and contribute zero
+wins. MTGO and Tabletop generators, public Schemas, fixtures, retained legacy
+JavaScript, and protected event `434455` nevertheless preserve older
+draw-adjusted compatibility fields that count each normal draw as half a win.
+
+P11-09 proposed extracting shared metric APIs while preserving both source
+products' current bytes. The owner selected eventual removal of the
+draw-adjusted calculation because it is not part of the final product's win-rate
+meaning. Extracting that calculation now would invest in an obsolete contract
+without advancing its safe removal.
+
+## Decision
+
+Skip P11-09. Do not create a shared API for the draw-adjusted compatibility
+calculation and do not change current production data, Schemas, statistical
+outputs, front-end behavior, or protected `434455` bytes during Phase 11.
+P11-10 becomes the next separately authorized development task. P11-10 through
+P11-12 retain their planned production-resource protection and legacy-entry
+audit sequence.
+
+Make draw-adjusted metric retirement the first compatibility-migration task in
+Phase 19. That task must remove the calculation and obsolete fields from both
+source products under an explicit Schema version, regenerate every affected
+public document, update the protected `434455` manifest and rollback evidence,
+remove retained legacy JavaScript dependencies, and pass full cross-product,
+Schema, committed-baseline, and real-browser regression. It must not silently
+assign the literal method to a field whose published meaning was draw-adjusted.
+
+Until that separately authorized migration is accepted and published, existing
+compatibility fields retain their historical meaning and bytes. No new product,
+generator, or consumer may depend on them.
+
+## Consequences
+
+Phase 11 avoids throwaway abstraction work and retains its no-production-change
+boundary. The current website remains unchanged because it already uses literal
+records. Public JSON and unknown external consumers keep their present contract
+until the deliberate versioned migration. Phase 19 must treat the removal as a
+breaking data-contract change with explicit owner acceptance and a verified
+rollback path, not as routine code cleanup.

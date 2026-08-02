@@ -60,7 +60,7 @@ blockers, and stop conditions.
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
 | Phase 10 | Establish data governance, compliance, and production operations. | In progress; P10-08 runtime alignment underway |
-| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 skipped after owner review of CI duration; P11-05 through P11-07 published; P11-08 accepted and authorized for publication |
+| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 and P11-09 skipped by owner decision; P11-05 through P11-08 published; P11-09 skip record accepted for publication; P11-10 is next and not authorized |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | Phase 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
@@ -2537,10 +2537,13 @@ was published through pull request #156 and merge commit
 pull request #165 and merge commit
 `419c382148dd96ec266a8a9b2abe4975f99235f9`. P11-07 was published through
 pull request #166 and merge commit
-`feadb7ebe6f06969f5b1bb0ab9b4c09827956315`. The owner authorized local
-P11-08 implementation on 2026-08-02, accepted its local result, and separately
-authorized commit, remote publication, and merge. Every later task remains
-separately controlled.
+`feadb7ebe6f06969f5b1bb0ab9b4c09827956315`. P11-08 was published through
+pull request #167 and merge commit
+`26341162d4d303d179a0bd4f6de156e4ea3fc04b`; pull-request validation,
+master admission, and Pages deployment passed. On 2026-08-02 the owner
+skipped P11-09 because extracting shared APIs for draw-adjusted compatibility
+metrics would invest in logic selected for eventual removal. P11-10 is next
+but remains separately controlled.
 
 ## Acceptance criteria
 
@@ -2571,8 +2574,8 @@ changing production data, public paths, statistical behavior, or the frozen
 
 - establish standard Python packaging, linting, typing, and coverage controls;
 - establish JavaScript, workflow, and real-browser test baselines;
-- extract shared statistical APIs while retaining source-specific compatibility
-  parameters and byte output;
+- do not extract the deprecated draw-adjusted compatibility calculation into a
+  shared API; retain its current bytes until the Phase 19 contract migration;
 - extend repository validation to the current production front end;
 - audit and remove legacy entry points only after owner approval and verified
   replacement;
@@ -2595,8 +2598,9 @@ changing production data, public paths, statistical behavior, or the frozen
    trigger, branch, and publication behavior assertions.
 8. `P11-08` — Add a Playwright real-browser baseline for both production
    entries, both languages, Standard, Modern, desktop, and 390px width.
-9. `P11-09` — Establish shared `metrics.py` APIs while preserving the current
-   MTGO and Melee Wilson parameters and byte output.
+9. `P11-09` — Skipped by owner decision on 2026-08-02. Do not establish a
+   shared API around the draw-adjusted compatibility calculation selected for
+   removal in Phase 19; retain current production bytes until that migration.
 10. `P11-10` — Extend `validate_repository.py` to protect Phase 8 production
     resources, both HTML entries, controllers, and JavaScript syntax.
 11. `P11-11` — Audit legacy entry points and produce an owner deletion list.
@@ -2607,6 +2611,14 @@ changing production data, public paths, statistical behavior, or the frozen
 14. `P11-14` — Add README, STATUS, and product-catalog fact-consistency checks.
 15. `P11-15` — Split `assets/js/phase8/app.js` under E2E protection without a
     framework or deployment build step.
+
+DEC-078 records the retirement route. Phase 11 does not reinterpret, remove,
+or regenerate any compatibility field. P11-10 through P11-12 establish and
+audit the production and legacy-entry boundaries first. The first Phase 19
+compatibility-migration task then removes the draw-adjusted calculation and its
+obsolete public contract under an explicit Schema version, generated-data,
+`434455`, rollback, and owner-authorization gate. It must not silently assign
+the literal method to an old field whose published meaning was draw-adjusted.
 
 ## Acceptance criteria
 
@@ -3170,7 +3182,7 @@ history or unverified compatibility entry points.
 ## Required work
 
 - complete only the compatibility cleanup that remains after Phase 11 owner
-  review;
+  review, beginning with the DEC-078 draw-adjusted metric retirement;
 - publish current operator documentation for MTGO, Tabletop, storage, Pages,
   workflows, schemas, rules, quality review, rollback, and recovery;
 - exercise the selected public-data and archive-storage design end to end;
@@ -3181,18 +3193,23 @@ history or unverified compatibility entry points.
 
 ## Task sequence
 
-1. Reconcile the final list of compatibility entry points and remove only those
-   whose replacements and rollback paths are verified.
-2. Complete the operator runbooks and non-programmer maintenance instructions.
-3. Perform backup restoration, workflow recovery, publication rollback, and
+1. Retire the draw-adjusted win-rate calculation and compatibility fields under
+   a dedicated versioned contract migration. Update the statistical
+   specification, Schemas, generators, fixtures, tests, public MTGO and
+   Tabletop documents, the protected `434455` manifest, legacy JavaScript, and
+   rollback evidence without silently changing an existing field's meaning.
+2. Reconcile the final list of other compatibility entry points and remove only
+   those whose replacements and rollback paths are verified.
+3. Complete the operator runbooks and non-programmer maintenance instructions.
+4. Perform backup restoration, workflow recovery, publication rollback, and
    Pages recovery drills.
-4. Exercise the production pipeline from approved source collection through
+5. Exercise the production pipeline from approved source collection through
    data publication without bypassing validation or review gates.
-5. Run full cross-format, cross-product, Schema, rule, repository, and
+6. Run full cross-format, cross-product, Schema, rule, repository, and
    real-browser regression.
-6. Resolve or explicitly defer every release-blocking Unknown, conflict,
+7. Resolve or explicitly defer every release-blocking Unknown, conflict,
    quality, privacy, compatibility, and operational issue.
-7. Obtain owner acceptance, publish the approved release tag, and record the
+8. Obtain owner acceptance, publish the approved release tag, and record the
    maintenance responsibility and cadence.
 
 ## Acceptance criteria
@@ -3200,6 +3217,9 @@ history or unverified compatibility entry points.
 Phase 19 is complete when:
 
 - compatibility cleanup is approved, verified, documented, and reversible;
+- no production generator or retained front-end asset calculates a draw as
+  half a win, and the sole published win-rate meaning is declared as
+  `wins_over_valid_matches` under the migrated Schema contract;
 - written operations cover routine refresh, event addition, quality review,
   schema migration, deployment, rollback, and recovery;
 - Pages, selected data storage, and production workflows pass an end-to-end
