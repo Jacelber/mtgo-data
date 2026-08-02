@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p10-11-deduplicated-failure-issues"
+  current_working_branch: "codex/p10-12-whitelist-operations"
   working_branch_status: "master_is_authoritative_and_task_branches_have_no_standing_authority"
   status: "active"
   primary_language: "Python"
@@ -66,9 +66,61 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
+  id: "P10-12"
+  name: "Complete format-dynamic Melee whitelist operations"
+  status: "local_complete_pending_owner_acceptance"
+  authorized_on: "2026-08-02"
+  workspace: "C:/tmp/mtgo-data-p10-12-20260802-01"
+  branch: "codex/p10-12-whitelist-operations"
+  base_commit: "bf9749bd5871a65273f62fd379a4be987bd33df2"
+  task_type: "bounded_manual_melee_workflow_format_resolution_without_event_activation"
+  objective: "Derive the manual Melee candidate format from the enabled verified whitelist entry before any candidate or source operation, while documenting the unchanged owner review gates."
+  authorization:
+    local_implementation: true
+    workflow_tests_and_documentation: true
+    whitelist_entry_change: false
+    event_activation: false
+    live_source_access: false
+    workflow_dispatch: false
+    generated_data_change: false
+    commit: false
+    remote_publication: false
+    merge: false
+  target_paths:
+    - ".github/workflows/fetch_melee.yml"
+    - "tests/test_melee_workflow.py"
+    - "README.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/audits/P10-12.md"
+    - "docs/DECISIONS.md"
+    - "docs/ROADMAP.md"
+    - "docs/STATUS.yaml"
+  protected_scope:
+    whitelist_changed: false
+    raw_or_generated_data_changed: false
+    statistical_behavior_changed: false
+    frontend_source_changed: false
+    event_434455_bytes_changed: false
+    production_dispatched: false
+    remote_write_performed: false
+  acceptance:
+    focused_workflow_and_config_tests: "25 passed in 0.37 seconds on Python 3.12.7"
+    full_pytest: "662 passed in 413.69 seconds on Python 3.12.7"
+    repository_validation: "137 Python, 1634 JSON, 22 YAML, 30 references, and 1935 hygiene paths passed"
+    rule_validation: "passed"
+    public_schema_validation: "69 documents passed"
+    workflow_and_status_yaml_parse: "passed"
+    git_diff_check: "passed"
+  owner_acceptance: "pending"
+  commit_authorized: false
+  remote_publication_authorized: false
+  merge_authorized: false
+  stop_point: "Complete local validation, stop for owner acceptance, then require separate authorization for commit, remote publication, merge, event activation, or a real Melee workflow dispatch."
+
+p10_11_result:
   id: "P10-11"
   name: "Add deduplicated MTGO production failure issues"
-  status: "local_complete_pending_owner_acceptance"
+  status: "completed_published_and_merged"
   authorized_on: "2026-08-02"
   workspace: "C:/tmp/mtgo-data-p10-11-20260802-02"
   branch: "codex/p10-11-deduplicated-failure-issues"
@@ -123,11 +175,23 @@ current_task:
     changed_data_or_frontend_paths: false
     production_workflow_dispatched: false
     real_issue_created: false
-  owner_acceptance: "pending"
-  commit_authorized: false
-  remote_publication_authorized: false
-  merge_authorized: false
-  stop_point: "Complete local validation, stop for owner acceptance, then require separate authorization for commit, remote publication, merge, or a real production-data dispatch."
+  owner_acceptance: "accepted"
+  commit_authorized: true
+  remote_publication_authorized: true
+  merge_authorized: true
+  local_commit: "a07aaa63087cea7952665ee0bdc3cd2a2a06904d"
+  pull_request: 150
+  pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/150"
+  merge_commit: "bf9749bd5871a65273f62fd379a4be987bd33df2"
+  merged_on: "2026-08-02"
+  publication_validation:
+    pull_request_validation_run: 30723890461
+    master_admission_run: 30724173292
+    pages_deployment_run: 30724173296
+    public_mtgo_entry_point_status: 200
+    public_tabletop_entry_point_status: 200
+    production_workflow_dispatched: false
+  stop_point: "P10-11 is published. P10-12 began only after separate owner authorization."
 
 p10_10_result:
   id: "P10-10"
@@ -6692,16 +6756,16 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P10-11"
-  name: "Add deduplicated MTGO production failure issues"
-  target_paths: "P10-11_workflow_test_and_governance_contract_only"
+  id: "P10-12"
+  name: "Complete format-dynamic Melee whitelist operations"
+  target_paths: "P10-12_workflow_test_and_governance_contract_only"
   production_change: true
   requires_user_confirmation: true
   authorization_status: "authorized_for_local_implementation_only"
   local_execution_authorized: true
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "Complete local P10-11 validation and stop for owner acceptance. A separate authorization is required before commit, push, PR creation, merge, or a real production-data dispatch."
+  planning_status: "Complete local P10-12 validation and stop for owner acceptance. A separate authorization is required before commit, push, PR creation, merge, event activation, or a real Melee workflow dispatch."
 
 governance_baseline:
   status: "active_on_master"
@@ -6750,9 +6814,9 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not dispatch the MTGO production workflow as P10-11 local validation; a real current-source fetch, generated-data publication, and any resulting failure issue require separate owner authorization."
+  - "Do not dispatch the Melee production workflow as P10-12 local validation; a real source fetch, candidate publication, or review branch requires separate owner authorization."
   - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
-  - "Do not create a real GitHub Issue, commit, push, open a pull request, merge, or begin P10-12 or any later Phase 10 task without separate owner authorization."
+  - "Do not change configs/melee_events.yaml, activate an event, commit, push, open a pull request, merge, or begin P10-13 or any later Phase 10 task without separate owner authorization."
   - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."
   - "Do not activate Tabletop events, dispatch production, or add events to configs/melee_events.yaml without separate authorization."
   - "Do not retain new source responses or generate or publish new event data without separate authorization."
