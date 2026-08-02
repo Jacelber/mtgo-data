@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p11-02-ruff"
+  current_working_branch: "codex/p11-03-mypy"
   working_branch_status: "master_is_authoritative_and_task_branches_have_no_standing_authority"
   status: "active"
   primary_language: "Python"
@@ -66,15 +66,15 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P11-02"
-  name: "Introduce Ruff in a separate mechanical pull request"
+  id: "P11-03"
+  name: "Introduce mypy incrementally for stable shared modules"
   status: "local_validation_passed_owner_acceptance_pending"
   authorized_on: "2026-08-02"
-  workspace: "C:/tmp/mtgo-data-p11-02-20260802-01"
-  branch: "codex/p11-02-ruff"
-  base_commit: "5f7ee45c30f91192cdd775db7a91e9a18f6da275"
-  task_type: "engineering_baseline_mechanical_linting"
-  objective: "Introduce a pinned Ruff baseline for maintained package code without changing product behavior or broadening into legacy-script cleanup."
+  workspace: "C:/tmp/mtgo-data-p11-03-20260802-01"
+  branch: "codex/p11-03-mypy"
+  base_commit: "9ebb99133f7e410681cd2b2a2b8237f07a744586"
+  task_type: "engineering_baseline_incremental_strict_typing"
+  objective: "Introduce a strict, explicit mypy baseline for stable shared modules without a global ignore baseline or product behavior change."
   authorization:
     local_implementation: true
     documentation_and_tests: true
@@ -86,14 +86,14 @@ current_task:
     - "requirements-dev.txt"
     - "pyproject.toml"
     - ".github/workflows/ci.yml"
-    - "src/mtgmeta/melee/assembler.py"
-    - "src/mtgmeta/mtgo/stats.py"
+    - "src/mtgmeta/rules.py"
+    - "src/mtgmeta/classifier.py"
     - "tests/test_ci_workflow.py"
-    - "tests/test_ruff_baseline.py"
+    - "tests/test_mypy_baseline.py"
     - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P11-02.md"
+    - "docs/audits/P11-03.md"
   protected_scope:
     raw_or_generated_data_changed: false
     statistical_behavior_changed: false
@@ -102,8 +102,8 @@ current_task:
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    ruff_baseline: "pinned Ruff must pass for src with the explicit F-rule baseline"
-    ci: "read-only CI must install the pinned development dependencies and run the same Ruff command"
+    mypy_baseline: "pinned mypy must strictly pass for the explicit four-module shared baseline without importing unrelated modules into scope"
+    ci: "read-only CI must install the pinned development dependencies and run the same mypy command"
     regression: "full pytest, repository validation, rule validation, Schema validation, and protected 434455 compatibility checks must pass"
     scope: "no production data, public path, statistical behavior, front-end source, or frozen 434455 byte change"
   owner_acceptance: "accepted"
@@ -112,17 +112,20 @@ current_task:
   remote_publication_authorized: true
   merge_authorized: true
   validation:
-    ruff: "ruff 0.15.22 check src passed"
-    focused_ruff_ci_melee_stats_packaging_tests: "39 passed in 18.34 seconds on Python 3.12.7"
-    repository_validation: "179 Python, 1635 JSON, 22 YAML, 30 references, and 1988 hygiene paths passed"
+    initial_strict_mypy_errors: "5 findings in selected modules; all are explicit identifier or optional-value narrowing gaps"
+    strict_mypy_after_repair: "passed for 4 source files"
+    focused_shared_rule_and_classifier_tests: "33 passed in 15.51 seconds on Python 3.12.7"
+    focused_mypy_ruff_ci_and_shared_tests: "32 passed in 1.40 seconds on Python 3.12.7"
+    focused_mypy_ci_and_shared_tests: "45 passed in 13.60 seconds on Python 3.12.7"
+    full_pytest: "669 passed in 415.32 seconds on Python 3.12.7"
+    repository_validation: "142 Python, 1634 JSON, 22 YAML, 30 references, and 1945 hygiene paths passed"
     rule_validation: "passed"
     public_schema_validation: "69 documents passed"
-    protected_434455_and_pages_tests: "11 passed in 1.29 seconds"
-    full_pytest: "667 passed in 412.80 seconds on Python 3.12.7"
+    protected_434455_and_pages_tests: "11 passed in 0.87 seconds"
     raw_or_generated_data_changed: false
     frontend_source_changed: false
     event_434455_bytes_changed: false
-  stop_point: "Stop for owner acceptance after local validation. P11-03 and every later task require separate owner authorization."
+  stop_point: "Stop for owner acceptance after local validation. P11-04 and every later task require separate owner authorization."
 
 p11_01_result:
   id: "P11-01"
@@ -138,6 +141,23 @@ p11_01_result:
     pull_request_validation_run: 30735105544
     master_validation_run: 30735477821
     pages_deployment_run: 30735477873
+    raw_or_generated_data_changed: false
+    frontend_source_changed: false
+    event_434455_bytes_changed: false
+
+p11_02_result:
+  id: "P11-02"
+  name: "Introduce Ruff in a separate mechanical pull request"
+  status: "completed_published_and_merged"
+  local_commit: "df61456f2bc4186de50bd5be1bbf0203618883b8"
+  pull_request: 154
+  pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/154"
+  merge_commit: "9ebb99133f7e410681cd2b2a2b8237f07a744586"
+  merged_on: "2026-08-02"
+  validation:
+    pull_request_validation_run: 30738629684
+    master_validation_run: 30739041412
+    pages_deployment_run: 30739041407
     raw_or_generated_data_changed: false
     frontend_source_changed: false
     event_434455_bytes_changed: false
@@ -6818,8 +6838,8 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P11-02"
-  name: "Introduce Ruff in a separate mechanical pull request"
+  id: "P11-03"
+  name: "Introduce mypy incrementally for stable shared modules"
   target_paths: "see current_task.target_paths"
   production_change: false
   requires_user_confirmation: true
@@ -6827,7 +6847,7 @@ next_approved_task:
   local_execution_authorized: true
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "Owner authorized local P11-02 implementation on 2026-08-02. Acceptance, commit, remote publication, and merge remain separately controlled."
+  planning_status: "Owner authorized local P11-03 implementation on 2026-08-02. Acceptance, commit, remote publication, and merge remain separately controlled."
 
 governance_baseline:
   status: "active_on_master"
@@ -6876,7 +6896,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P11-03 or any later task without separate owner authorization."
+  - "Do not begin P11-04 or any later task without separate owner authorization."
   - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
   - "Do not change configs/melee_events.yaml, activate an event, dispatch Melee production, retain new source responses, or publish new event data without separate owner authorization."
   - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."
