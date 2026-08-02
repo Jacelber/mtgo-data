@@ -60,7 +60,7 @@ blockers, and stop conditions.
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
 | Phase 10 | Establish data governance, compliance, and production operations. | In progress; P10-08 runtime alignment underway |
-| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 skipped after owner review of CI duration; P11-05 local validation passed and awaits owner acceptance |
+| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 skipped after owner review of CI duration; P11-05 published; P11-06 local validation passed and awaits owner acceptance |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | Phase 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
@@ -2532,8 +2532,11 @@ pull request #154 and merge commit `9ebb99133f7e410681cd2b2a2b8237f07a744586`.
 P11-03 was published through pull request #155 and merge commit
 `eba8e3a3c6b3b86c0dc756ecd75143b4e2cffab8`. The owner skipped P11-04 after
 the measured whole-package coverage path was too slow for required CI. P11-05
-local validation passed on 2026-08-02 and awaits owner acceptance; every later
-task remains separately controlled.
+was published through pull request #156 and merge commit
+`c2e8939967072cc688673b60799323804bc7cb61`. P11-06 local validation passed
+and was accepted by the owner on 2026-08-02; commit, remote publication, and
+merge are authorized only for that focused task. Every later task remains
+separately controlled.
 
 ## Acceptance criteria
 
