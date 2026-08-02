@@ -50,6 +50,7 @@ def test_execution_jobs_are_bounded_and_use_current_official_actions():
     assert jobs["admission"]["timeout-minutes"] == "5"
     assert jobs["static-validation"]["timeout-minutes"] == "10"
     assert jobs["pytest"]["timeout-minutes"] == "30"
+    assert jobs["browser-validation"]["timeout-minutes"] == "10"
     assert jobs["post-merge-confirmation"]["timeout-minutes"] == "5"
     assert jobs["validate"]["timeout-minutes"] == "5"
 
@@ -126,6 +127,7 @@ def test_static_validation_and_aggregate_check_are_complete():
         "admission",
         "static-validation",
         "pytest",
+        "browser-validation",
         "post-merge-confirmation",
     ]
     assert aggregate["steps"][0]["if"] == "github.event_name == 'pull_request'"
@@ -135,6 +137,7 @@ def test_static_validation_and_aggregate_check_are_complete():
     assert "needs.admission.outputs.mode" in command
     assert "needs.static-validation.result" in command
     assert "needs.pytest.result" in command
+    assert "needs.browser-validation.result" in command
     assert "needs.post-merge-confirmation.result" in command
     assert "exit 1" in command
 
@@ -149,10 +152,14 @@ def test_master_admission_is_fail_safe_and_full_suite_is_default():
 
     assert jobs["static-validation"]["needs"] == "admission"
     assert jobs["pytest"]["needs"] == "admission"
+    assert jobs["browser-validation"]["needs"] == "admission"
     assert jobs["static-validation"]["if"] == (
         "needs.admission.outputs.mode == 'full'"
     )
     assert jobs["pytest"]["if"] == "needs.admission.outputs.mode == 'full'"
+    assert jobs["browser-validation"]["if"] == (
+        "needs.admission.outputs.mode == 'full'"
+    )
     assert jobs["post-merge-confirmation"]["if"] == (
         "needs.admission.outputs.mode == 'pr-confirmation'"
     )
