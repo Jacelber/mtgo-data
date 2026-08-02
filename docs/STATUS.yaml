@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p11-08-playwright-baseline"
+  current_working_branch: "codex/p11-09-skip-record"
   working_branch_status: "master_is_authoritative_and_task_branches_have_no_standing_authority"
   status: "active"
   primary_language: "Python"
@@ -66,61 +66,54 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P11-08"
-  name: "Add a Playwright real-browser production baseline"
+  id: "P11-09"
+  name: "Record the owner-approved skip and Phase 19 draw-adjusted metric retirement route"
   status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-02"
-  workspace: "C:/tmp/mtgo-data-p11-08-20260802-01"
-  branch: "codex/p11-08-playwright-baseline"
-  base_commit: "feadb7ebe6f06969f5b1bb0ab9b4c09827956315"
-  task_type: "engineering_baseline_real_browser_contract"
-  objective: "Add a pinned Playwright Chromium baseline for both production entries, both languages, Standard and Modern availability behavior, desktop, and 390px width without changing product code or data."
+  workspace: "C:/tmp/mtgo-data-p11-09-skip-20260802-01"
+  branch: "codex/p11-09-skip-record"
+  base_commit: "26341162d4d303d179a0bd4f6de156e4ea3fc04b"
+  task_type: "owner_statistical_scope_decision_documentation"
+  objective: "Skip throwaway shared-API work for the draw-adjusted compatibility calculation and fix its explicit versioned removal as the first Phase 19 compatibility migration."
   authorization:
     local_implementation: true
-    documentation_and_tests: true
+    documentation_only: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - ".gitignore"
-    - ".github/workflows/ci.yml"
-    - "package.json"
-    - "package-lock.json"
-    - "playwright.config.js"
-    - "tests/browser/production-pages.spec.js"
-    - "tests/test_ci_workflow.py"
-    - "tests/test_playwright_baseline.py"
+    - "docs/STATISTICS_SPEC.md"
     - "docs/ROADMAP.md"
+    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P11-08.md"
+    - "docs/audits/P11-09.md"
   protected_scope:
     raw_or_generated_data_changed: false
     statistical_behavior_changed: false
     frontend_source_changed: false
     event_434455_bytes_changed: false
+    schema_changed: false
+    code_changed: false
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    browser_matrix: "Chromium must load both production entries in Chinese and English at desktop and 390px widths, covering MTGO Standard and Modern, Tabletop Modern, and the defined Tabletop Standard fallback"
-    regression: "full pytest, actionlint, Ruff, mypy, repository validation, rule validation, schema validation, and protected 434455 and Pages compatibility checks must pass"
-    scope: "no production data, public path, statistical behavior, front-end source, workflow permission, trigger, publication behavior, or frozen 434455 byte change"
+    decision: "P11-09 is explicitly skipped; no shared API is created for the draw-adjusted compatibility calculation"
+    route: "P11-10 is next and separately gated; draw-adjusted calculation and field retirement is the first Phase 19 versioned compatibility migration"
+    migration_boundary: "Phase 19 must update the specification, Schemas, generators, public MTGO and Tabletop data, protected 434455 manifest, legacy JavaScript, tests, and rollback evidence without silently reinterpreting an existing field"
+    current_scope: "this record changes documentation only and preserves all current code, Schemas, generated data, front-end behavior, and protected 434455 bytes"
+  owner_decision: "accepted_on_2026-08-02"
   owner_acceptance: "accepted"
   owner_accepted_on: "2026-08-02"
   commit_authorized: true
   remote_publication_authorized: true
   merge_authorized: true
   validation:
-    actionlint: "passed: actionlint 1.7.12 scanned all workflow files"
-    focused_contract_tests: "30 passed in 0.85 seconds on Python 3.12.13"
-    playwright: "passed: 16 Chromium cases in 5.5 seconds"
-    full_pytest: "674 passed in 416.76 seconds on Python 3.12.13"
-    npm_audit: "passed: 0 vulnerabilities"
-    ruff: "passed: ruff check src --no-cache"
-    mypy: "passed: no issues found in 4 configured source files"
-    repository_validation: "passed: 145 Python, 1636 JSON, 23 YAML, 30 references, and 1958 hygiene checks"
-    rule_validation: "passed: my_archetypes/standard.yaml"
-    public_schema_validation: "passed: 69 public-generated JSON documents"
+    status_contract: "passed: P11-09 skip record, unapproved P11-10 next action, and protected scope parsed from STATUS"
+    publication_governance_docs: "passed: 3 tests in 0.03 seconds on Python 3.12.13"
+    repository_validation: "passed: 145 Python, 1636 JSON, 23 YAML, 30 references, and 1959 hygiene checks"
+    diff_check: "passed"
     raw_or_generated_data_changed: false
+    statistical_behavior_changed: false
     frontend_source_changed: false
     event_434455_bytes_changed: false
   predecessor_status:
@@ -128,7 +121,26 @@ current_task:
     p11_05: "published_and_merged_via_pull_request_156_at_c2e8939967072cc688673b60799323804bc7cb61"
     p11_06: "published_and_merged_via_pull_request_165_at_419c382148dd96ec266a8a9b2abe4975f99235f9"
     p11_07: "published_and_merged_via_pull_request_166_at_feadb7ebe6f06969f5b1bb0ab9b4c09827956315"
-  stop_point: "Commit, remote publication, and merge are authorized for P11-08 only. Do not begin P11-09 without separate owner authorization."
+    p11_08: "published_and_merged_via_pull_request_167_at_26341162d4d303d179a0bd4f6de156e4ea3fc04b"
+  stop_point: "Commit, remote publication, and merge are authorized for this P11-09 skip record only. P11-10 and the Phase 19 migration require separate owner authorization."
+
+p11_08_result:
+  id: "P11-08"
+  name: "Add a Playwright real-browser production baseline"
+  status: "completed_published_merged_and_deployed"
+  local_commit: "4cbeddc76e5f26cabcee189fdc820d19b5254ff6"
+  pull_request: 167
+  pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/167"
+  merge_commit: "26341162d4d303d179a0bd4f6de156e4ea3fc04b"
+  merged_on: "2026-08-02"
+  validation:
+    pull_request_validation_run: 30750853592
+    master_validation_run: 30751292109
+    pages_deployment_run: 30751292114
+    playwright_job: "passed_in_45_seconds"
+    raw_or_generated_data_changed: false
+    frontend_source_changed: false
+    event_434455_bytes_changed: false
 
 p11_07_result:
   id: "P11-07"
@@ -6868,16 +6880,16 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P11-08"
-  name: "Add a Playwright real-browser production baseline"
-  target_paths: "see current_task.target_paths"
+  id: "P11-10"
+  name: "Protect Phase 8 production resources and JavaScript syntax in repository validation"
+  target_paths: "to_be_confirmed_before_authorization"
   production_change: false
   requires_user_confirmation: true
-  authorization_status: "owner_accepted_and_authorized_commit_remote_publication_and_merge_on_2026-08-02"
-  local_execution_authorized: true
-  remote_publication_authorized: true
+  authorization_status: "not_authorized"
+  local_execution_authorized: false
+  remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "The owner skipped P11-04 after reviewing its CI duration. P11-05 through P11-07 were published through PRs #156, #165, and #166. The owner accepted P11-08 and authorized commit, remote publication, and merge on 2026-08-02. P11-09 remains separately controlled."
+  planning_status: "P11-08 was published through PR #167. The owner skipped P11-09 on 2026-08-02 and selected DEC-078: retain current compatibility bytes through Phase 11, make P11-10 the next separately authorized task, and retire draw-adjusted calculations through the first versioned Phase 19 compatibility migration."
 
 governance_baseline:
   status: "active_on_master"
@@ -6926,7 +6938,8 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P11-09 or any later task without separate owner authorization."
+  - "Do not begin P11-10 or any later development task without separate owner authorization."
+  - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
   - "Do not change configs/melee_events.yaml, activate an event, dispatch Melee production, retain new source responses, or publish new event data without separate owner authorization."
   - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."

@@ -966,6 +966,23 @@ A browser must not reinterpret a legacy percentage. A target record declares
 `win_rate_method: "wins_over_valid_matches"`; an output without that declaration
 remains governed by its existing Schema and producer behavior.
 
+### 10.0.1 Planned retirement of draw-adjusted compatibility data
+
+DEC-078 records the owner's decision that the draw-adjusted calculation is not
+part of the final product contract. P11-09 is skipped so that the project does
+not build a new shared API around logic selected for removal. Current generated
+documents, Schemas, and protected event `434455` bytes remain unchanged through
+Phase 11.
+
+The first Phase 19 compatibility-migration task must remove the draw-adjusted
+calculation and obsolete compatibility fields through an explicit Schema
+version and generated-data migration. It must not silently reinterpret an
+existing field whose published meaning was draw-adjusted. The migration must
+update both source products, retained legacy JavaScript, fixtures, validation,
+the protected `434455` manifest, and rollback evidence. Until that separately
+authorized migration is complete, existing compatibility fields retain their
+current historical meaning and no new consumer may depend on them.
+
 ### 10.1 General formula
 
 For valid played matches:
@@ -1426,7 +1443,10 @@ A percentage without a valid match count is incomplete.
 
 Where confidence intervals are shown, use a 95% Wilson score interval.
 
-For a record containing draws, use:
+The approved target and visible record uses literal wins as successes and
+`wins + losses + normal played draws` as trials, as specified in section 10.
+
+An existing draw-adjusted compatibility record instead uses:
 
 
 \[
@@ -1438,7 +1458,9 @@ effective\ wins = wins + 0.5 \times draws
 n = wins + losses + draws
 \]
 
-The resulting Wilson interval is an approximation for the half-win treatment of draws and should be documented in output metadata.
+The resulting compatibility interval is an approximation for the half-win
+treatment of draws. DEC-078 prohibits new consumers and schedules this
+calculation and its fields for versioned removal in Phase 19.
 
 ### 12.3 Low-sample warnings
 
@@ -1880,8 +1902,10 @@ P8-06 also adds `literal_record` to every MTGO parent and leaf matrix cell.
 Each range document exposes `parent_match_records` and `leaf_match_records`;
 each identity record contains `all_matches`, `non_mirror`, and the physical
 `mirror_match_count`. The existing `parent_overall`, `leaf_overall`, Standard
-name aliases, and their draw-adjusted compatibility fields remain available
-until the production front end migrates in P8-09.
+name aliases, and their draw-adjusted compatibility fields were retained while
+the production front end migrated in P8-09. The front end now consumes literal
+records; DEC-078 retains the old fields only until their versioned Phase 19
+removal.
 
 ### 16.8 Weekly MTGO Top 8 decklist presentation data
 
@@ -1956,7 +1980,9 @@ Includes:
 
 P8-07 preserves the existing draw-adjusted overview records as compatibility
 data and adds `literal_record` to each all-match and non-mirror record. The
-literal method is wins divided by wins, losses, and normal played draws.
+literal method is wins divided by wins, losses, and normal played draws. The
+production front end now uses that literal method; DEC-078 schedules the
+draw-adjusted compatibility records for versioned Phase 19 removal.
 
 ### 17.3 Deck data
 
