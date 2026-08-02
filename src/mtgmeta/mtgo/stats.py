@@ -1151,8 +1151,8 @@ if __name__ == "__main__":
         print(f"  {r} 轮 -> 门槛 >= {high_score_threshold(r)}")
 
     print("\n=== 单赛事处理测试 ===")
-    archetypes = load_rules()
-    files = sorted(glob.glob(os.path.join(DATA_DIR, "*.json")))
+    archetypes = load_rules()  # noqa: F821 - unreachable legacy self-test
+    files = sorted(glob.glob(os.path.join(DATA_DIR, "*.json")))  # noqa: F821 - unreachable legacy self-test
     if not files:
         print("  没找到赛事文件，检查 DATA_DIR")
     else:

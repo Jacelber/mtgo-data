@@ -60,7 +60,7 @@ blockers, and stop conditions.
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
 | Phase 10 | Establish data governance, compliance, and production operations. | In progress; P10-08 runtime alignment underway |
-| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-01 accepted; publication authorized |
+| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-02 local implementation authorized; acceptance pending |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | Phase 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |

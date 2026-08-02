@@ -3104,3 +3104,37 @@ explicit `--root .` where supported. Installation does not add credentials,
 network calls, scheduled jobs, production-data changes, or a new build
 framework. Root scripts remain until a separately authorized Phase 11 audit
 and deletion decision.
+
+---
+
+# DEC-075 — Establish a narrow Ruff baseline for maintained package code
+
+Status: `Accepted`
+
+## Context
+
+The first Ruff scan found 189 existing findings across root compatibility
+scripts, tests, and package code, and would reformat 124 files. Treating that
+as one mechanical task would obscure the P11-02 review and pull legacy-entry
+point cleanup forward from its separately authorized Phase 11 work.
+
+## Decision
+
+Pin Ruff in the development dependencies and configure it for Python 3.12.
+The initial CI baseline runs `python -B -m ruff check src` and selects only
+the F rule family. This protects the maintained installable package against
+undefined names and unused imports without prescribing a repository-wide
+format or changing root-script compatibility behavior.
+
+Remove two unused package imports. Preserve the four F821 findings in an
+unreachable legacy self-test block with narrow inline `noqa` comments; the
+module already raises before that block can run. The exception does not disable
+F821 checks elsewhere in the package.
+
+## Consequences
+
+New F-family findings in maintained `src/` code now fail locally and in CI.
+Root scripts, tests, E-style/layout rules, import sorting, and Ruff formatting
+remain outside this task and require deliberate later scope. No production
+data, statistic, public path, front-end source, workflow permission, or event
+`434455` byte changes.

@@ -21,8 +21,6 @@ from .parser import (
     ParsedMeleeSnapshot,
     SourceDecklist,
     SourceDecklistReference,
-    SourceMatch,
-    SourceRound,
     SourceStanding,
     SourceTournament,
     parse_raw_snapshot,
