@@ -76,6 +76,9 @@ jobs:
       - name: Install pinned development dependencies
         run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
 
+      - name: Check maintained Python package with Ruff
+        run: python -B -m ruff check src
+
       - name: Validate repository files and references
         run: python -B validate_repository.py
 

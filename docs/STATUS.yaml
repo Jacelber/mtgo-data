@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p11-01-python-packaging"
+  current_working_branch: "codex/p11-02-ruff"
   working_branch_status: "master_is_authoritative_and_task_branches_have_no_standing_authority"
   status: "active"
   primary_language: "Python"
@@ -66,15 +66,15 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P11-01"
-  name: "Add Python packaging and compatible console scripts"
-  status: "owner_accepted_publication_authorized"
+  id: "P11-02"
+  name: "Introduce Ruff in a separate mechanical pull request"
+  status: "local_validation_passed_owner_acceptance_pending"
   authorized_on: "2026-08-02"
-  workspace: "C:/tmp/mtgo-data-p11-01-20260802-01"
-  branch: "codex/p11-01-python-packaging"
-  base_commit: "b6175ffa2f916613115214c881e586f6637aa1c6"
-  task_type: "engineering_baseline_python_packaging"
-  objective: "Add a standard installable Python package and supported console scripts while retaining compatible root entry points."
+  workspace: "C:/tmp/mtgo-data-p11-02-20260802-01"
+  branch: "codex/p11-02-ruff"
+  base_commit: "5f7ee45c30f91192cdd775db7a91e9a18f6da275"
+  task_type: "engineering_baseline_mechanical_linting"
+  objective: "Introduce a pinned Ruff baseline for maintained package code without changing product behavior or broadening into legacy-script cleanup."
   authorization:
     local_implementation: true
     documentation_and_tests: true
@@ -82,23 +82,18 @@ current_task:
     remote_publication: false
     merge: false
   target_paths:
-    - "pyproject.toml"
     - "README.md"
-    - "generate_classification_reports.py"
-    - "src/mtgmeta/public_contract.py"
-    - "src/mtgmeta/classification_reports_cli.py"
-    - "src/mtgmeta/catalog.py"
-    - "src/mtgmeta/mtgo/__main__.py"
-    - "src/mtgmeta/mtgo/completeness.py"
-    - "src/mtgmeta/mtgo/matchup.py"
-    - "src/mtgmeta/mtgo/pickup.py"
+    - "requirements-dev.txt"
+    - "pyproject.toml"
+    - ".github/workflows/ci.yml"
+    - "src/mtgmeta/melee/assembler.py"
     - "src/mtgmeta/mtgo/stats.py"
-    - "src/mtgmeta/mtgo/top8.py"
-    - "tests/test_python_packaging.py"
+    - "tests/test_ci_workflow.py"
+    - "tests/test_ruff_baseline.py"
     - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P11-01.md"
+    - "docs/audits/P11-02.md"
   protected_scope:
     raw_or_generated_data_changed: false
     statistical_behavior_changed: false
@@ -107,8 +102,8 @@ current_task:
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    package_install: "must succeed in a task-local Python 3.12 environment"
-    command_compatibility: "supported console commands and retained root entry points must work without PYTHONPATH"
+    ruff_baseline: "pinned Ruff must pass for src with the explicit F-rule baseline"
+    ci: "read-only CI must install the pinned development dependencies and run the same Ruff command"
     regression: "full pytest, repository validation, rule validation, Schema validation, and protected 434455 compatibility checks must pass"
     scope: "no production data, public path, statistical behavior, front-end source, or frozen 434455 byte change"
   owner_acceptance: "accepted"
@@ -117,19 +112,35 @@ current_task:
   remote_publication_authorized: true
   merge_authorized: true
   validation:
-    focused_package_and_compatibility_tests: "20 passed in 29.16 seconds on Python 3.12.7"
-    task_local_package_install: "passed with --no-deps --no-build-isolation after installing declared build tool setuptools into the task-local virtual environment"
-    installed_commands: "mtgo-data-mtgo, mtgo-data-melee, and mtgo-data-catalog help passed without PYTHONPATH"
-    installed_classification_reports: "passed with strict disposable output; decks=4477 unknown=97 conflicts=0 invalid=0"
-    repository_validation: "140 Python, 1634 JSON, 22 YAML, 30 references, and 1941 hygiene paths passed"
+    ruff: "ruff 0.15.22 check src passed"
+    focused_ruff_ci_melee_stats_packaging_tests: "39 passed in 18.34 seconds on Python 3.12.7"
+    repository_validation: "179 Python, 1635 JSON, 22 YAML, 30 references, and 1988 hygiene paths passed"
     rule_validation: "passed"
     public_schema_validation: "69 documents passed"
-    protected_434455_and_pages_tests: "11 passed in 1.23 seconds"
-    full_pytest: "665 passed in 407.87 seconds on Python 3.12.7"
+    protected_434455_and_pages_tests: "11 passed in 1.29 seconds"
+    full_pytest: "667 passed in 412.80 seconds on Python 3.12.7"
     raw_or_generated_data_changed: false
     frontend_source_changed: false
     event_434455_bytes_changed: false
-  stop_point: "Publication is authorized for P11-01 only. P11-02 and every later task require separate owner authorization."
+  stop_point: "Stop for owner acceptance after local validation. P11-03 and every later task require separate owner authorization."
+
+p11_01_result:
+  id: "P11-01"
+  name: "Add Python packaging and compatible console scripts"
+  status: "completed_published_and_merged"
+  local_commit: "4d9c3b76e571e461723835fb5fc84a02e5df8a7b"
+  pull_request: 153
+  pull_request_url: "https://github.com/Jacelber/mtgo-data/pull/153"
+  merge_commit: "5f7ee45c30f91192cdd775db7a91e9a18f6da275"
+  merged_on: "2026-08-02"
+  validation:
+    full_pytest: "665 passed in 407.87 seconds on Python 3.12.7"
+    pull_request_validation_run: 30735105544
+    master_validation_run: 30735477821
+    pages_deployment_run: 30735477873
+    raw_or_generated_data_changed: false
+    frontend_source_changed: false
+    event_434455_bytes_changed: false
 
 p10_closeout_result:
   id: "P10-CLOSEOUT"
@@ -6807,8 +6818,8 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P11-01"
-  name: "Add Python packaging and compatible console scripts"
+  id: "P11-02"
+  name: "Introduce Ruff in a separate mechanical pull request"
   target_paths: "see current_task.target_paths"
   production_change: false
   requires_user_confirmation: true
@@ -6816,7 +6827,7 @@ next_approved_task:
   local_execution_authorized: true
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "Owner authorized local P11-01 implementation on 2026-08-02. Acceptance, commit, remote publication, and merge remain separately controlled."
+  planning_status: "Owner authorized local P11-02 implementation on 2026-08-02. Acceptance, commit, remote publication, and merge remain separately controlled."
 
 governance_baseline:
   status: "active_on_master"
@@ -6865,7 +6876,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not begin P11-02 or any later task without separate owner authorization."
+  - "Do not begin P11-03 or any later task without separate owner authorization."
   - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
   - "Do not change configs/melee_events.yaml, activate an event, dispatch Melee production, retain new source responses, or publish new event data without separate owner authorization."
   - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."
