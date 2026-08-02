@@ -161,6 +161,49 @@ jobs:
             echo "- Pytest timing report was unavailable because pytest did not reach its session-finish hook." >> "$GITHUB_STEP_SUMMARY"
           fi
 
+  browser-validation:
+    name: Playwright production pages
+    needs: admission
+    if: needs.admission.outputs.mode == 'full'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository without persisted credentials
+        uses: actions/checkout@v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Verify checked-out PR merge subject
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          ACTUAL_PARENTS="$(git cat-file -p HEAD | awk '/^parent / { if (count++) printf " "; printf "%s", $2 } END { print "" }')"
+          EXPECTED_PARENTS="${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}"
+          if [ "$ACTUAL_PARENTS" != "$EXPECTED_PARENTS" ]; then
+            echo "Checked-out PR merge subject mismatch." >&2
+            exit 1
+          fi
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Set up Python 3.12 for the static web server
+        uses: actions/setup-python@v6.3.0
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned browser-test package
+        run: npm ci
+
+      - name: Install Chromium with runner dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: Run production-page browser baseline
+        run: npm run test:browser
+
   post-merge-confirmation:
     name: Confirm previously validated merge
     needs: admission
@@ -194,6 +237,7 @@ jobs:
       - admission
       - static-validation
       - pytest
+      - browser-validation
       - post-merge-confirmation
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -212,6 +256,7 @@ jobs:
             echo "- Validation mode: ${{ needs.admission.outputs.mode }}"
             echo "- Static validation: ${{ needs.static-validation.result }}"
             echo "- Pytest shards: ${{ needs.pytest.result }}"
+            echo "- Playwright browser baseline: ${{ needs.browser-validation.result }}"
             echo "- Exact merged-PR confirmation: ${{ needs.post-merge-confirmation.result }}"
             echo "- This workflow does not fetch tournament data or publish repository changes."
           } >> "$GITHUB_STEP_SUMMARY"
@@ -221,12 +266,14 @@ jobs:
           if [ "${{ needs.admission.outputs.mode }}" = "full" ] &&
              [ "${{ needs.static-validation.result }}" = "success" ] &&
              [ "${{ needs.pytest.result }}" = "success" ] &&
+             [ "${{ needs.browser-validation.result }}" = "success" ] &&
              [ "${{ needs.post-merge-confirmation.result }}" = "skipped" ]; then
             exit 0
           fi
           if [ "${{ needs.admission.outputs.mode }}" = "pr-confirmation" ] &&
              [ "${{ needs.static-validation.result }}" = "skipped" ] &&
              [ "${{ needs.pytest.result }}" = "skipped" ] &&
+             [ "${{ needs.browser-validation.result }}" = "skipped" ] &&
              [ "${{ needs.post-merge-confirmation.result }}" = "success" ]; then
             exit 0
           fi
