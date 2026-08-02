@@ -107,6 +107,16 @@ def test_static_validation_and_aggregate_check_are_complete():
         "uses": "docker://rhysd/actionlint:1.7.12",
         "with": {"args": "-ignore=SC(1009|1072|1073|2129)"},
     }
+    node_step = next(
+        step
+        for step in jobs["static-validation"]["steps"]
+        if step.get("name") == "Set up Node.js 24 for JavaScript syntax validation"
+    )
+    assert node_step == {
+        "name": "Set up Node.js 24 for JavaScript syntax validation",
+        "uses": "actions/setup-node@v6",
+        "with": {"node-version": "24"},
+    }
     static_commands = "\n".join(
         step.get("run", "") for step in jobs["static-validation"]["steps"]
     )
