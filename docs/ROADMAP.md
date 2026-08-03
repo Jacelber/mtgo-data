@@ -59,8 +59,8 @@ blockers, and stop conditions.
 | Phase 8 | Deliver the format-first MTGO and Tabletop front ends. | Completed |
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
-| Phase 10 | Establish data governance, compliance, and production operations. | In progress; P10-08 runtime alignment underway |
-| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 and P11-09 skipped by owner decision; P11-05 through P11-08 published; P11-09 skip record accepted for publication; P11-10 is next and not authorized |
+| Phase 10 | Establish data governance, compliance, and production operations. | Completed on 2026-08-02 |
+| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 and P11-09 skipped by owner decision; P11-01 through P11-10 otherwise published; P11-11 accepted and authorized for publication |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | Phase 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
@@ -2542,8 +2542,10 @@ pull request #167 and merge commit
 `26341162d4d303d179a0bd4f6de156e4ea3fc04b`; pull-request validation,
 master admission, and Pages deployment passed. On 2026-08-02 the owner
 skipped P11-09 because extracting shared APIs for draw-adjusted compatibility
-metrics would invest in logic selected for eventual removal. P11-10 is next
-but remains separately controlled.
+metrics would invest in logic selected for eventual removal. P11-10 was
+published through pull request #169 and merge commit
+`c448332b1444b3734bd3fcf5eb37d8f4d1777e9e`; its pull-request validation,
+master admission, and Pages deployment passed.
 
 ## Acceptance criteria
 
@@ -2619,6 +2621,18 @@ compatibility-migration task then removes the draw-adjusted calculation and its
 obsolete public contract under an explicit Schema version, generated-data,
 `434455`, rollback, and owner-authorization gate. It must not silently assign
 the literal method to an old field whose published meaning was draw-adjusted.
+
+P11-11 completed its local audit on 2026-08-03 against `master` commit
+`43476a3076127bbae7b6950f8c7da9099ef044d0`. It classified all 26 root Python
+files, identified nine active workflow or publication tools to retain, nine
+compatibility wrappers with verified package replacements, seven obsolete or
+one-off scripts, and one maintained quality validator suitable for relocation
+under `tools/`. It also identified the two retained text outputs belonging to
+the retired identity-bearing diagnostics. `docs/audits/P11-11.md` contains the
+individual evidence, migration conditions, rollback requirement, and owner
+decision list. P11-11 deletes or moves nothing. The owner accepted the
+recommended list and authorized P11-11 commit and publication on 2026-08-03.
+P11-12 remains separately gated.
 
 ## Acceptance criteria
 
