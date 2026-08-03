@@ -1,14 +1,19 @@
 # mtgo-data
 
-`mtgo-data` analyzes Constructed Magic: The Gathering tournament data. The
-public **MTGO Environment Trends** product supports Standard and Modern. The
-separate **Tabletop Major Events** product publishes explicitly whitelisted
-events; the current reference event is Modern event `434455`.
+`mtgo-data` analyzes Constructed Magic: The Gathering tournament data. Current
+public product coverage is summarized below.
 
 Development proceeds one owner-authorized task at a time. Read [`AGENTS.md`](AGENTS.md)
 before changing the repository. Current phase, task, authorization, blockers,
 and stop conditions are recorded only in [`docs/STATUS.yaml`](docs/STATUS.yaml).
 Completed-task history is indexed under [`docs/history/`](docs/history/README.md).
+
+## Current public products
+
+| Product | Public formats | Entry |
+| --- | --- | --- |
+| MTGO Environment Trends | Standard, Modern | `/index.html` |
+| Tabletop Major Events | Modern (event `434455`) | `/melee/index.html` |
 
 ## Product boundaries
 
