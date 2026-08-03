@@ -185,6 +185,88 @@ def decode_python(data: bytes) -> str:
     return data.decode(encoding)
 
 
+def validate_test_subprocess_environments(name: str, tree: ast.AST) -> list[Failure]:
+    """Require source-tree package subprocesses to declare their import path."""
+
+    parts = Path(name).parts
+    if not parts or parts[0] != "tests":
+        return []
+
+    def references_package(node: ast.AST) -> bool:
+        return any(
+            isinstance(value, ast.Constant)
+            and isinstance(value.value, str)
+            and "mtgmeta" in value.value
+            for value in ast.walk(node)
+        )
+
+    command_factories = {
+        node.name
+        for node in getattr(tree, "body", [])
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        and references_package(node)
+    }
+    command_values: set[str] = set()
+    for node in getattr(tree, "body", []):
+        if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+            continue
+        value = node.value
+        if value is None or not references_package(value):
+            continue
+        targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+        command_values.update(
+            target.id for target in targets if isinstance(target, ast.Name)
+        )
+
+    failures: list[Failure] = []
+    for node in ast.walk(tree):
+        if not (
+            isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Attribute)
+            and isinstance(node.func.value, ast.Name)
+            and node.func.value.id == "subprocess"
+            and node.func.attr == "run"
+        ):
+            continue
+        if not node.args:
+            continue
+        command = node.args[0]
+        invokes_package = (
+            references_package(command)
+            or any(
+                isinstance(value, ast.Name) and value.id in command_values
+                for value in ast.walk(command)
+            )
+            or any(
+                isinstance(value, ast.Call)
+                and isinstance(value.func, ast.Name)
+                and value.func.id in command_factories
+                for value in ast.walk(command)
+            )
+        )
+        if not invokes_package:
+            continue
+        explicit_source_path = any(
+            keyword.arg == "env"
+            and any(
+                isinstance(value, ast.Constant) and value.value == "PYTHONPATH"
+                for value in ast.walk(keyword.value)
+            )
+            for keyword in node.keywords
+        )
+        if not explicit_source_path:
+            failures.append(
+                Failure(
+                    "Python",
+                    name,
+                    "mtgmeta test subprocess must declare PYTHONPATH in env",
+                    node.lineno,
+                    node.col_offset + 1,
+                )
+            )
+    return failures
+
+
 def validate_javascript_syntax(root: Path, names: list[str]) -> list[Failure]:
     """Use Node.js to parse every maintained browser JavaScript file."""
 
@@ -228,7 +310,8 @@ def validate_files(root: Path, names: list[str]) -> tuple[dict[str, int], list[F
     }
     for name in groups["Python"]:
         try:
-            ast.parse(decode_python(read_bytes(root, name)), filename=name)
+            tree = ast.parse(decode_python(read_bytes(root, name)), filename=name)
+            failures.extend(validate_test_subprocess_environments(name, tree))
         except SyntaxError as exc:
             failures.append(content_failure("Python", name, exc))
         except (tokenize.TokenError, LookupError, UnicodeError) as exc:

@@ -48,6 +48,52 @@ def test_unknown_python_encoding_is_failure(tmp_path):
     assert failures[0].category == "Python"
 
 
+def test_package_subprocess_requires_explicit_source_path(tmp_path):
+    package = "mtg" + "meta"
+    source = (
+        "import subprocess\n"
+        "import sys\n"
+        f'PROBE = "from {package} import config"\n'
+        "subprocess.run([sys.executable, '-c', PROBE])\n"
+    )
+    path = tmp_path / "tests" / "probe.py"
+    path.parent.mkdir()
+    path.write_text(source, encoding="utf-8")
+
+    _, failures, _ = validator.validate_files(tmp_path, ["tests/probe.py"])
+
+    assert failures == [
+        validator.Failure(
+            "Python",
+            "tests/probe.py",
+            f"{package} test subprocess must declare PYTHONPATH in env",
+            4,
+            1,
+        )
+    ]
+
+
+def test_package_subprocess_accepts_explicit_source_path(tmp_path):
+    package = "mtg" + "meta"
+    source = (
+        "import os\n"
+        "import subprocess\n"
+        "import sys\n"
+        f'PROBE = "from {package} import config"\n'
+        "subprocess.run(\n"
+        "    [sys.executable, '-c', PROBE],\n"
+        "    env={**os.environ, 'PYTHONPATH': 'src'},\n"
+        ")\n"
+    )
+    path = tmp_path / "tests" / "probe.py"
+    path.parent.mkdir()
+    path.write_text(source, encoding="utf-8")
+
+    _, failures, _ = validator.validate_files(tmp_path, ["tests/probe.py"])
+
+    assert failures == []
+
+
 def test_valid_maintained_javascript_syntax(tmp_path, monkeypatch):
     (tmp_path / "good.js").write_text("const value = 1;\n", encoding="utf-8")
     monkeypatch.setattr(validator, "MAINTAINED_JAVASCRIPT", ("good.js",))

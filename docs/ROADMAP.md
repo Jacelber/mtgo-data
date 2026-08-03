@@ -2639,11 +2639,12 @@ wrappers, seven obsolete one-off scripts, and two retired identity-bearing text
 diagnostics approved in P11-11. It moves the frozen Standard aggregate quality
 validator to `tools/`, migrates live tests and README commands to installed
 commands or package APIs, and preserves the Phase 3 inventory as an explicitly
-historical fixture. The nine active root workflow and publication tools remain
-unchanged. P11-12 changes no workflow, data, statistics, Schema, public path,
-front-end source, or protected event `434455` byte. The owner accepted P11-12
-and authorized commit, push, pull-request creation, CI monitoring, and merge on
-2026-08-04.
+historical fixture. The nine active root workflow and publication tools remain;
+after the first clean-checkout PR run, `validate_repository.py` gained a fast
+AST rule requiring `mtgmeta` test subprocesses to declare `PYTHONPATH`. P11-12
+changes no workflow, data, statistics, Schema, public path, front-end source,
+or protected event `434455` byte. The owner accepted P11-12 and authorized
+commit, push, pull-request creation, CI monitoring, and merge on 2026-08-04.
 
 ## Acceptance criteria
 

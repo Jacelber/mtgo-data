@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -167,6 +168,7 @@ def test_cli_regenerates_and_strictly_validates_in_any_working_directory(tmp_pat
     result = subprocess.run(
         classification_cli(ROOT, "standard", output=output, strict=True),
         cwd=tmp_path,
+        env={**os.environ, "PYTHONPATH": str(SRC)},
         text=True,
         capture_output=True,
     )
@@ -208,6 +210,7 @@ def test_cli_writes_conflict_report_before_strict_failure(tmp_path):
             registry=ROOT / "configs" / "formats.yaml",
         ),
         cwd=tmp_path,
+        env={**os.environ, "PYTHONPATH": str(SRC)},
         text=True,
         capture_output=True,
     )
@@ -240,6 +243,7 @@ def test_cli_rejects_cross_format_event_before_writing_reports(tmp_path):
             registry=ROOT / "configs" / "formats.yaml",
         ),
         cwd=tmp_path,
+        env={**os.environ, "PYTHONPATH": str(SRC)},
         text=True,
         capture_output=True,
     )
@@ -254,6 +258,7 @@ def test_cli_rejects_a_disabled_format_before_creating_report_output(tmp_path):
     result = subprocess.run(
         classification_cli(ROOT, "pauper", output=output),
         cwd=tmp_path,
+        env={**os.environ, "PYTHONPATH": str(SRC)},
         text=True,
         capture_output=True,
     )
