@@ -403,6 +403,123 @@ def validate_phase8_frontend_references(
     return checked, failures
 
 
+def validate_public_product_facts(
+    root: Path, names: list[str], status: dict[str, Any]
+) -> tuple[int, list[Failure]]:
+    """Require README and live status to match the consumer product catalog."""
+
+    failures: list[Failure] = []
+    tracked = set(names)
+    required = ("README.md", "stats/catalog.json")
+    checked = len(required)
+    for name in required:
+        if not tracked_regular(root, tracked, name):
+            reference_check(failures, name, "missing public-product fact source")
+    if failures:
+        return checked, failures
+
+    try:
+        readme = read_bytes(root, "README.md").decode("utf-8")
+        catalog = json.loads(read_bytes(root, "stats/catalog.json").decode("utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        reference_check(failures, "stats/catalog.json", f"invalid product catalog: {exc}")
+        return checked, failures
+
+    formats = catalog.get("formats") if isinstance(catalog, dict) else None
+    tracks = status.get("product_tracks") if isinstance(status, dict) else None
+    mtgo = tracks.get("mtgo") if isinstance(tracks, dict) else None
+    tabletop = tracks.get("tabletop") if isinstance(tracks, dict) else None
+    if not isinstance(formats, list) or not isinstance(mtgo, dict) or not isinstance(tabletop, dict):
+        reference_check(failures, "public product facts", "missing catalog formats or STATUS product tracks")
+        return checked, failures
+
+    labels: dict[str, str] = {}
+    catalog_products: dict[str, set[str]] = {}
+    for entry in formats:
+        if not isinstance(entry, dict):
+            continue
+        format_id = entry.get("id")
+        display_name = entry.get("display_name")
+        products = entry.get("products")
+        if not isinstance(format_id, str) or not isinstance(display_name, str) or not isinstance(products, list):
+            continue
+        labels[format_id] = display_name
+        catalog_products[format_id] = {
+            product["id"]
+            for product in products
+            if isinstance(product, dict)
+            and isinstance(product.get("id"), str)
+            and product.get("available") is True
+        }
+
+    mtgo_catalog_formats = tuple(
+        format_id for format_id in labels if "mtgo-statistics" in catalog_products[format_id]
+    )
+    tabletop_catalog_formats = tuple(
+        format_id
+        for format_id in labels
+        if "tabletop-major-events" in catalog_products[format_id]
+    )
+    status_mtgo_formats = tuple(mtgo.get("public_formats", []))
+    events = tabletop.get("public_events", [])
+    if not all(isinstance(value, str) for value in status_mtgo_formats):
+        reference_check(failures, "docs/STATUS.yaml:product_tracks.mtgo.public_formats", "must be a list of format IDs")
+    elif status_mtgo_formats != mtgo_catalog_formats:
+        reference_check(
+            failures,
+            "docs/STATUS.yaml:product_tracks.mtgo.public_formats",
+            f"does not match catalog MTGO formats {mtgo_catalog_formats!r}",
+        )
+    if not isinstance(events, list) or not all(isinstance(event, dict) for event in events):
+        reference_check(failures, "docs/STATUS.yaml:product_tracks.tabletop.public_events", "must be a list of event mappings")
+        return checked, failures
+
+    event_ids_by_format: dict[str, list[str]] = {format_id: [] for format_id in tabletop_catalog_formats}
+    for event in events:
+        format_id = event.get("format")
+        event_id = event.get("event_id")
+        if not isinstance(format_id, str) or not isinstance(event_id, (str, int)):
+            reference_check(failures, "docs/STATUS.yaml:product_tracks.tabletop.public_events", "event requires format and event_id")
+            continue
+        if format_id not in event_ids_by_format:
+            reference_check(
+                failures,
+                "docs/STATUS.yaml:product_tracks.tabletop.public_events",
+                f"event format {format_id!r} is not available in the product catalog",
+            )
+            continue
+        event_ids_by_format[format_id].append(str(event_id))
+
+    if set(event_ids_by_format) != {event.get("format") for event in events if isinstance(event, dict)}:
+        reference_check(
+            failures,
+            "docs/STATUS.yaml:product_tracks.tabletop.public_events",
+            "every catalogued Tabletop format requires at least one public event",
+        )
+
+    def format_label(format_id: str, event_ids: list[str] | None = None) -> str:
+        label = labels[format_id]
+        if not event_ids:
+            return label
+        noun = "event" if len(event_ids) == 1 else "events"
+        rendered_ids = ", ".join(f"`{event_id}`" for event_id in event_ids)
+        return f"{label} ({noun} {rendered_ids})"
+
+    expected_rows = (
+        f"| {mtgo.get('user_facing_name')} | "
+        f"{', '.join(format_label(format_id) for format_id in mtgo_catalog_formats)} | "
+        f"`{mtgo.get('public_entry')}` |",
+        f"| {tabletop.get('user_facing_name')} | "
+        f"{', '.join(format_label(format_id, event_ids_by_format[format_id]) for format_id in tabletop_catalog_formats)} | "
+        f"`{tabletop.get('public_entry')}` |",
+    )
+    checked += len(expected_rows) + 2
+    for row in expected_rows:
+        if row not in readme:
+            reference_check(failures, "README.md:Current public products", f"missing or inconsistent row {row!r}")
+    return checked, failures
+
+
 def validate_references(root: Path, names: list[str], status: dict[str, Any]) -> tuple[int, list[Failure], dict[str, int]]:
     failures: list[Failure] = []
     tracked = set(names)
@@ -550,6 +667,11 @@ def main() -> int:
         counts, failures, parsed = validate_files(root, candidates)
         reference_count, reference_failures, breakdown = validate_references(root, tracked, parsed.get("docs/STATUS.yaml"))
         failures.extend(reference_failures)
+        fact_count, fact_failures = validate_public_product_facts(
+            root, tracked, parsed.get("docs/STATUS.yaml", {})
+        )
+        reference_count += fact_count
+        failures.extend(fact_failures)
         hygiene_count, hygiene_failures = validate_hygiene(tracked)
         failures.extend(hygiene_failures)
         failures.sort(key=lambda f: (CATEGORY_ORDER[f.category], f.path, f.line or 0, f.column or 0, f.message))

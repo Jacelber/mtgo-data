@@ -60,7 +60,7 @@ blockers, and stop conditions.
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
 | Phase 10 | Establish data governance, compliance, and production operations. | Completed on 2026-08-02 |
-| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 and P11-09 skipped by owner decision; P11-01 through P11-12 otherwise published; P11-13 accepted and authorized for publication |
+| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 and P11-09 skipped by owner decision; P11-01 through P11-13 otherwise published; P11-14 accepted and authorized for publication |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | Phase 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
@@ -2652,6 +2652,14 @@ for local development on 2026-08-04. It reduces live STATUS, README, and agent
 guide duplication and preserves the complete pre-split STATUS under
 `docs/history/`. It does not implement the P11-14 cross-document fact checker.
 The owner accepted the local P11-13 result and authorized commit, push,
+pull-request creation, CI monitoring, and merge on 2026-08-04.
+PR #174 merged P11-13 as commit
+`0a6f7d23021960476026d382605ba76214b5c323`; its pull-request validation,
+master validation, and Pages publication passed. P11-14 was separately
+authorized for local development on 2026-08-04. It adds deliberate
+README/STATUS/catalog contradiction checks to the existing repository validator
+without adding a workflow or a separate CI job.
+The owner accepted the local P11-14 result and authorized commit, push,
 pull-request creation, CI monitoring, and merge on 2026-08-04.
 
 ## Acceptance criteria

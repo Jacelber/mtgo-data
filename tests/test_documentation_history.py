@@ -22,15 +22,18 @@ def test_live_status_is_small_current_state_and_points_to_history():
     assert 8 * 1024 <= len(status_bytes) <= 16 * 1024
     assert status["status_document"]["live_state_only"] is True
     assert status["current_phase"]["id"] == 11
-    assert status["current_task"]["id"] == "P11-13"
-    assert status["current_task"]["authorization"] == {
-        "local_implementation": True,
-        "commit": True,
-        "remote_publication": True,
-        "merge": True,
+    assert {"id", "name", "authorization", "stop_point"} <= set(status["current_task"])
+    assert set(status["current_task"]["authorization"]) == {
+        "local_implementation",
+        "commit",
+        "remote_publication",
+        "merge",
     }
+    assert all(
+        isinstance(value, bool)
+        for value in status["current_task"]["authorization"].values()
+    )
     assert status["known_blockers"] == []
-    assert status["next_approved_task"]["id"] == "P11-14"
     assert status["next_approved_task"]["local_execution_authorized"] is False
 
     historical_paths = {

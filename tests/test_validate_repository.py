@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import subprocess
 import sys
 from pathlib import Path
 
 import pytest
+import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -382,6 +384,67 @@ def test_pickup_malformed_structure(tmp_path):
     status = {"authoritative_documents": {s: [] for s in ("reading_order", "agent_adapter_documents", "historical_documents")}}
     _, failures, _ = validator.validate_references(tmp_path, ["stats/standard/mtgo/pickup/index.json"], status)
     assert failures and failures[0].category == "References"
+
+
+def _public_product_fact_fixture(tmp_path):
+    status = yaml.safe_load((ROOT / "docs" / "STATUS.yaml").read_text(encoding="utf-8"))
+    catalog = json.loads((ROOT / "stats" / "catalog.json").read_text(encoding="utf-8"))
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "stats").mkdir()
+    (tmp_path / "README.md").write_text(
+        (ROOT / "README.md").read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    (tmp_path / "stats" / "catalog.json").write_text(
+        json.dumps(catalog), encoding="utf-8"
+    )
+    return status, catalog, ["README.md", "stats/catalog.json"]
+
+
+def test_public_product_facts_reconcile_readme_status_and_catalog(tmp_path):
+    status, _, names = _public_product_fact_fixture(tmp_path)
+    checked, failures = validator.validate_public_product_facts(tmp_path, names, status)
+
+    assert checked == 6
+    assert failures == []
+
+
+def test_public_product_facts_reject_status_format_contradiction(tmp_path):
+    status, _, names = _public_product_fact_fixture(tmp_path)
+    status["product_tracks"]["mtgo"]["public_formats"] = ["standard"]
+
+    _, failures = validator.validate_public_product_facts(tmp_path, names, status)
+
+    assert failures == [
+        validator.Failure(
+            "References",
+            "docs/STATUS.yaml:product_tracks.mtgo.public_formats",
+            "does not match catalog MTGO formats ('standard', 'modern')",
+        )
+    ]
+
+
+def test_public_product_facts_reject_readme_contradiction(tmp_path):
+    status, _, names = _public_product_fact_fixture(tmp_path)
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        readme.read_text(encoding="utf-8").replace("Standard, Modern", "Standard, Legacy", 1),
+        encoding="utf-8",
+    )
+
+    _, failures = validator.validate_public_product_facts(tmp_path, names, status)
+
+    assert failures and failures[0].path == "README.md:Current public products"
+
+
+def test_public_product_facts_reject_catalog_contradiction(tmp_path):
+    status, catalog, names = _public_product_fact_fixture(tmp_path)
+    standard = next(entry for entry in catalog["formats"] if entry["id"] == "standard")
+    next(product for product in standard["products"] if product["id"] == "mtgo-statistics")["available"] = False
+    (tmp_path / "stats" / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
+
+    _, failures = validator.validate_public_product_facts(tmp_path, names, status)
+
+    assert failures and failures[0].path == "docs/STATUS.yaml:product_tracks.mtgo.public_formats"
 
 
 def test_content_failure_exit(monkeypatch, capsys):
