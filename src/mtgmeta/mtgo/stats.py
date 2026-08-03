@@ -1,6 +1,4 @@
-# stats_standard.py —— MTGO standard 赛制统计模块
-# 阶段一：底层工具 + 单赛事处理
-# 阶段二：平均牌表 & 偏离度（固定 4 周 base + 全局 D99）
+"""Format-aware MTGO event and rolling-range statistics."""
 
 from __future__ import annotations
 
@@ -1138,7 +1136,9 @@ def _neg_time_key(starttime):
 # ---------- 自测块（始终放在文件最末尾） ----------
 
 if __name__ == "__main__":
-    raise SystemExit("Run the repository-level stats_standard.py compatibility command")
+    raise SystemExit(
+        "Run 'mtgo-data-mtgo --root . --format <id> build-statistics'"
+    )
     print("=== to_int 测试 ===")
     print(to_int("10"), to_int(10), to_int(None), to_int(""), to_int("abc"), to_int("  7 "))
 

@@ -673,8 +673,6 @@ def test_hierarchical_loader_rejects_cross_format_input(tmp_path):
 
 @pytest.mark.committed_baseline
 def test_fixed_reference_standard_hierarchical_matchups_are_byte_identical(tmp_path):
-    import stats_matchup
-
     committed_directory = ROOT / "stats" / "standard" / "mtgo"
     committed_index = json.loads(
         (committed_directory / "matchup_index.json").read_text(encoding="utf-8")
@@ -682,7 +680,9 @@ def test_fixed_reference_standard_hierarchical_matchups_are_byte_identical(tmp_p
     if committed_index.get("hierarchical") is not True:
         pytest.skip("committed baseline predates the P6-09 hierarchical migration")
     reference_date = date.fromisoformat(committed_index["generated"][:10])
-    written, _statistics = stats_matchup.build_all_matchups(
+    written, _statistics = build_all_matchups(
+        ROOT,
+        "standard",
         today=reference_date,
         generated_at=committed_index["generated"],
         output_directory=tmp_path,
@@ -758,35 +758,3 @@ def test_disabled_matchup_generation_has_no_output_side_effect(tmp_path):
     with pytest.raises(DisabledFormatError):
         build_all_matchups(ROOT, "pauper", output_directory=output)
     assert not output.exists()
-
-
-def test_legacy_standard_wrapper_matches_shared_event_mapping():
-    import stats_matchup
-
-    legacy = stats_matchup.load_official_events(stats_matchup.load_rules())
-    from mtgmeta.mtgo.matchup import load_official_events
-
-    assert legacy == load_official_events(ROOT, "standard")
-
-
-def test_legacy_fetch_wrapper_selects_standard(monkeypatch):
-    import fetch_videre_matches
-
-    captured = {}
-
-    def fake_fetch(root, format_id, **kwargs):
-        captured.update(root=root, format_id=format_id, kwargs=kwargs)
-        return {
-            "requested": 1,
-            "fetched": 0,
-            "skipped": 1,
-            "not_found": 0,
-            "failed": 0,
-            "missing_event_ids": [],
-            "errors": [],
-        }
-
-    monkeypatch.setattr(fetch_videre_matches._shared, "fetch_and_store_matches", fake_fetch)
-    assert fetch_videre_matches.main(["123"]) == 0
-    assert captured["format_id"] == "standard"
-    assert captured["kwargs"]["event_ids"] == ["123"]

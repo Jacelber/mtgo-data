@@ -17,9 +17,7 @@ for candidate in (ROOT, SRC):
     if str(candidate) not in sys.path:
         sys.path.insert(0, str(candidate))
 
-import batch_mtgo
-import classify_standard
-import fetch_mtgo
+from mtgmeta.classifier import classify_deck
 from mtgmeta.config import DisabledFormatError
 from mtgmeta.mtgo.fetch import (
     MTGOFetchError,
@@ -147,26 +145,19 @@ class Response:
         return None
 
 
-def test_embedded_json_parser_handles_braces_quotes_and_legacy_wrappers():
+def test_embedded_json_parser_handles_braces_and_quotes():
     html = embedded_html()
     assert extract_event_data(html) == raw_event()
-    assert batch_mtgo.extract_data(html) == raw_event()
-    assert fetch_mtgo.extract_data(html) == raw_event()
-    assert batch_mtgo.extract_data("missing") is None
-    with pytest.raises(RuntimeError, match="页面里没找到数据标记"):
-        fetch_mtgo.extract_data("missing")
     with pytest.raises(MTGOParseError, match="marker"):
         extract_event_data("missing")
     with pytest.raises(MTGOParseError, match="did not end"):
         extract_event_data("window.MTGO.decklists.data = {")
     malformed = "window.MTGO.decklists.data = {bad};"
-    with pytest.raises(json.JSONDecodeError):
-        batch_mtgo.extract_data(malformed)
-    with pytest.raises(json.JSONDecodeError):
-        fetch_mtgo.extract_data(malformed)
+    with pytest.raises(MTGOParseError, match="invalid"):
+        extract_event_data(malformed)
 
 
-def test_completeness_and_normalization_freeze_both_legacy_output_shapes():
+def test_completeness_and_normalization_freeze_both_supported_output_shapes():
     raw = raw_event()
     expected = expected_batch_event()
     assert is_event_data_complete(raw) is True
@@ -186,11 +177,9 @@ def test_completeness_and_normalization_freeze_both_legacy_output_shapes():
         }
     ) is True
     assert normalize_event(raw) == expected
-    assert batch_mtgo.build_clean_data(raw) == expected
     expected_fetch = dict(expected)
     expected_fetch.pop("inplayoffs")
     assert normalize_event(raw, include_inplayoffs=False) == expected_fetch
-    assert fetch_mtgo.build_clean_data(raw) == expected_fetch
 
 
 def test_download_retry_policy_is_injectable_and_bounded():
@@ -393,10 +382,6 @@ def test_link_discovery_is_exact_and_does_not_confuse_premodern_or_leagues():
         "/decklist/standard-challenge-32-2026-07-201234",
     ]
     assert parse_event_link("/decklist/premodern-challenge-2026-07-201236", FORMATS)[0] == "other"
-    assert batch_mtgo.parse_link("/decklist/modern-challenge-2026-07-201238") == (
-        "modern",
-        "2026-07-20",
-    )
 
 
 def test_fetched_record_and_filename_storage_are_deterministic(tmp_path):
@@ -730,16 +715,14 @@ def test_url_format_mismatch_fails_before_network_or_storage(tmp_path):
     assert list(tmp_path.iterdir()) == []
 
 
-def test_standard_classification_dispatch_matches_the_legacy_parent_api():
+def test_standard_classification_dispatch_matches_the_package_classifier():
     event_path = ROOT / "data" / "standard" / "Standard_Challenge_32_12838092.json"
     event = json.loads(event_path.read_text(encoding="utf-8"))
     rule_set = load_rules_for_format(ROOT, "standard")
     results = classify_event(event, rule_set)
-    legacy_rules = classify_standard.load_rules()
     assert len(results) == len(event["players"])
     for player, result in zip(event["players"], results, strict=True):
-        main, side = classify_standard.deck_to_counts(player)
-        assert result.archetype_name == classify_standard.match_archetype(main, side, legacy_rules)
+        assert result == classify_deck(rule_set, player)
 
     modern_rules = load_rules_for_format(ROOT, "modern")
     assert modern_rules.format == "modern"

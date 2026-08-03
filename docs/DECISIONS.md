@@ -3302,3 +3302,39 @@ records. Public JSON and unknown external consumers keep their present contract
 until the deliberate versioned migration. Phase 19 must treat the removal as a
 breaking data-contract change with explicit owner acceptance and a verified
 rollback path, not as routine code cleanup.
+
+---
+
+# DEC-080 — Retire audited root compatibility entry points
+
+Status: `Accepted`
+
+## Context
+
+P11-11 verified installed package replacements and current callers for all 26
+repository-root Python files. The owner accepted its recommendation to keep
+nine active workflow or publication tools, delete nine compatibility wrappers
+and seven obsolete one-off scripts, remove two outputs of retired
+identity-bearing diagnostics, and relocate one maintained aggregate-only
+quality validator.
+
+## Decision
+
+Perform that exact cleanup in P11-12. Current tests and README commands must use
+the installed commands or `mtgmeta` package APIs before the corresponding root
+files are removed. Move `validate_standard_quality.py` to `tools/` and preserve
+its frozen result exactly. Keep the Phase 3 entry-point inventory as an
+explicitly historical snapshot instead of asserting that retired files still
+exist.
+
+Retain the nine active root workflow and publication tools identified by
+P11-11. Do not change workflows, production data, generated statistics,
+Schemas, public paths, either front end, or protected event `434455` bytes.
+
+## Consequences
+
+Supported operations have one package-command boundary and live tests no
+longer depend on deleted wrappers. Historical audits continue to name former
+commands accurately. An unrecorded external caller of a deleted root script
+must migrate to the documented installed command; the parent commit and the
+P11-12 pull-request diff remain the exact rollback source.

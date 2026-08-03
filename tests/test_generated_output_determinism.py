@@ -10,11 +10,12 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+SRC = ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
 
-from stats_matchup import build_window_output
-from stats_standard import deck_diff, weighted_l1
+from mtgmeta.mtgo.matchup import build_window_output
+from mtgmeta.mtgo.stats import deck_diff, weighted_l1
 
 
 def cell(wins, losses=0, draws=0):
@@ -49,8 +50,8 @@ def test_weighted_distance_uses_stable_high_precision_sum():
 
 HASH_SEED_PROBE = r"""
 import json
-from stats_matchup import build_window_output
-from stats_standard import deck_diff, weighted_l1
+from mtgmeta.mtgo.matchup import build_window_output
+from mtgmeta.mtgo.stats import deck_diff, weighted_l1
 
 def cell(wins):
     return {"wins": wins, "losses": 0, "draws": 0}
@@ -79,7 +80,7 @@ def test_generated_tie_behavior_is_independent_of_python_hash_seed():
         result = subprocess.run(
             [sys.executable, "-B", "-c", HASH_SEED_PROBE],
             cwd=ROOT,
-            env=environment,
+            env={**environment, "PYTHONPATH": str(SRC)},
             text=True,
             capture_output=True,
         )

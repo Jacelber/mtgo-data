@@ -32,8 +32,7 @@ def test_console_scripts_continue_to_use_existing_module_entry_points() -> None:
     }
 
 
-def test_legacy_classification_report_entry_point_delegates_to_package() -> None:
-    from generate_classification_reports import generate_reports as legacy_generate_reports
-    from mtgmeta.classification_reports_cli import generate_reports as package_generate_reports
+def test_classification_report_api_is_packaged() -> None:
+    from mtgmeta.classification_reports_cli import generate_reports
 
-    assert legacy_generate_reports is package_generate_reports
+    assert callable(generate_reports)

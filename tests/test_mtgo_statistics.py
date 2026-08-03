@@ -16,7 +16,6 @@ for candidate in (ROOT, SRC):
     if str(candidate) not in sys.path:
         sys.path.insert(0, str(candidate))
 
-import stats_standard
 from mtgmeta.config import DisabledFormatError
 from mtgmeta.mtgo import stats as mtgo_stats
 
@@ -109,20 +108,6 @@ def test_fixed_reference_regeneration_is_byte_identical(tmp_path):
     committed = ROOT / "stats" / "standard" / "mtgo"
     for filename in sorted(EXPECTED_FILES):
         assert written[filename].read_bytes() == (committed / filename).read_bytes(), filename
-
-
-@pytest.mark.committed_baseline
-def test_legacy_standard_wrapper_uses_the_same_fixed_output(tmp_path):
-    reference_today, reference_generated = committed_statistics_reference()
-    written = stats_standard.build_all_stats(
-        today=reference_today,
-        generated_at=reference_generated,
-        output_directory=tmp_path,
-    )
-    assert set(written) == EXPECTED_FILES
-    assert stats_standard.deck_diff is mtgo_stats.deck_diff
-    assert stats_standard.weighted_l1 is mtgo_stats.weighted_l1
-    assert stats_standard.load_all_events() == mtgo_stats.load_all_events(ROOT, "standard")
 
 
 def test_disabled_format_fails_before_output_side_effects(tmp_path):
