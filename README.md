@@ -2,68 +2,49 @@
 
 `mtgo-data` analyzes Constructed Magic: The Gathering tournament data. The
 public **MTGO Environment Trends** product supports Standard and Modern. The
-separate **Tabletop Major Events** product publishes the explicitly whitelisted
-Modern reference event `434455`. Other configured Constructed formats may have
-official MTGO event archives without yet being complete public products.
+separate **Tabletop Major Events** product publishes explicitly whitelisted
+events; the current reference event is Modern event `434455`.
 
-Phase 9 is complete. Post-Phase-9 governance and development proceed one
-separately authorized task at a time while MTGO and tabletop products remain
-source-separated. Current task authorization and project status are recorded
-in [`docs/STATUS.yaml`](docs/STATUS.yaml).
-
-The current Standard page compatibility baseline is documented in [`docs/audits/P1-11.md`](docs/audits/P1-11.md). Run `python -m pytest tests/test_standard_public_contract.py` for its automated checks and use [`docs/checklists/STANDARD_FRONTEND_SMOKE.md`](docs/checklists/STANDARD_FRONTEND_SMOKE.md) for browser verification.
-
-The legacy Standard classification-quality baseline is documented in [`docs/audits/P1-12.md`](docs/audits/P1-12.md). Run `python tools/validate_standard_quality.py` to verify frozen Unknown and multiple-match aggregates without reading mutable production data.
-
-Standard public JSON embeds `schema_version: "1.0.0"`. The producer migration and compatibility proof are documented in [`docs/audits/P1-13.md`](docs/audits/P1-13.md); run `python validate_schemas.py` to verify all declared outputs.
+Development proceeds one owner-authorized task at a time. Read [`AGENTS.md`](AGENTS.md)
+before changing the repository. Current phase, task, authorization, blockers,
+and stop conditions are recorded only in [`docs/STATUS.yaml`](docs/STATUS.yaml).
+Completed-task history is indexed under [`docs/history/`](docs/history/README.md).
 
 ## Product boundaries
 
-- MTGO and tabletop source data, normalized data, statistics, workflows, and front ends remain separate.
-- Tabletop events must be explicitly whitelisted; the project does not crawl all Melee tournaments.
-- Standard remains the regression baseline until the shared pipeline is protected by sufficient tests and schemas.
-- Existing public Standard JSON paths must remain compatible unless a migration plan is approved.
+- MTGO and tabletop source data, normalized data, statistics, workflows,
+  catalogs, and front ends remain separate.
+- Tabletop events must be explicitly registered in
+  [`configs/melee_events.yaml`](configs/melee_events.yaml); the project does
+  not crawl all Melee tournaments.
+- `/index.html` serves MTGO Environment Trends and `/melee/index.html` serves
+  Tabletop Major Events.
+- Public data paths and statistical meaning require an approved migration.
 
-Read [`AGENTS.md`](AGENTS.md) before changing the repository. Product scope, statistical definitions, architecture, roadmap, decisions, live status, and development controls are maintained under [`docs/`](docs/).
+Use [`docs/PROJECT_SCOPE.md`](docs/PROJECT_SCOPE.md) for product scope,
+[`docs/STATISTICS_SPEC.md`](docs/STATISTICS_SPEC.md) for metric definitions,
+and [`docs/DATA_ARCHITECTURE.md`](docs/DATA_ARCHITECTURE.md) for data and public
+path contracts.
 
 ## Local setup
 
-Python 3.12 is the supported runtime for local validation, GitHub Actions CI,
-the manual Melee workflow, Pages artifact builds, and the scheduled MTGO
-production update. Python 3.11 is not a supported project runtime.
+Python 3.12 is the supported runtime for local validation and GitHub Actions.
+Create a virtual environment, install pinned development dependencies, and
+install this repository into that environment:
 
 ```powershell
 py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
-```
-
-Runtime dependencies are pinned in `requirements.txt`. Test and validation dependencies are pinned in `requirements-dev.txt`.
-
-For a local installed-package check, install the repository into the same
-virtual environment:
-
-```powershell
 .\.venv\Scripts\python.exe -m pip install .
 ```
 
-This adds three convenience commands: `mtgo-data-mtgo`, `mtgo-data-melee`, and
-`mtgo-data-catalog`. Run them from the repository root and supply `--root .`
-to the MTGO and catalog commands when they need repository configuration or
-data. For example:
+The installation adds `mtgo-data-mtgo`, `mtgo-data-melee`, and
+`mtgo-data-catalog`. It does not add credentials, network access, scheduled
+jobs, or production-data changes.
 
-```powershell
-.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-statistics
-.\.venv\Scripts\mtgo-data-catalog.exe --root .
-```
+## Read-only validation
 
-Installing the package adds no credentials, network access, scheduled jobs, or
-production-data changes. Maintained operational validators and publication
-tools remain at the repository root; retired compatibility commands are
-replaced by the installed package commands shown below.
-
-## Validation
-
-Run the read-only repository validator, rule validator, and tests from the repository root:
+Run the applicable checks from the repository root:
 
 ```powershell
 .\.venv\Scripts\python.exe validate_repository.py
@@ -77,15 +58,20 @@ Run the read-only repository validator, rule validator, and tests from the repos
 .\.venv\Scripts\python.exe -m pytest
 ```
 
-These commands validate repository syntax and references, Standard archetype rules, versioned shared rule files, generated classification diagnostics, Standard JSON Schemas, and the frozen Standard classification baseline. They do not fetch tournament data or regenerate production statistics.
+These commands validate repository content, maintained code, archetype rules,
+classification diagnostics, public JSON Schemas, and regression fixtures. They
+do not fetch tournament data or regenerate production statistics.
+
+The Standard public-contract and frozen classification baselines are documented
+in [`docs/audits/P1-11.md`](docs/audits/P1-11.md) and
+[`docs/audits/P1-12.md`](docs/audits/P1-12.md). Generated public JSON uses the
+Schema mapping in [`schemas/manifest.json`](schemas/manifest.json).
 
 ## Pages publication artifact
 
-The public site is assembled from the explicit product-path policy in
-`configs/pages_publication.json`. The builder requires a new output directory,
-copies approved files without modifying their bytes, validates the complete
-event `434455` compatibility closure, writes `.nojekyll`, and reports repository,
-data-tree, and artifact sizes:
+The public site is assembled from the allowlist in
+[`configs/pages_publication.json`](configs/pages_publication.json). Build it
+into a new directory outside the repository:
 
 ```powershell
 .\.venv\Scripts\python.exe -B build_pages_artifact.py `
@@ -93,74 +79,59 @@ data-tree, and artifact sizes:
   --report C:\tmp\mtgo-data-pages-report.json
 ```
 
-The output directory must not already exist and must be outside the repository.
-This command does not fetch data, change statistics, commit files, or deploy a
-site. `.github/workflows/pages.yml` performs the same fresh build for relevant
-pull requests. Only a push to `master` may upload and deploy the verified Pages
-artifact, and that deployment becomes active only after the repository Pages
-source is separately changed from the legacy branch-root mode to GitHub Actions.
+The builder copies approved files without modifying their bytes, validates the
+complete event `434455` compatibility closure, writes `.nojekyll`, and reports
+repository, data-tree, and artifact sizes. It does not fetch data, commit files,
+or deploy the site.
 
-The complete pytest suite is a clean-checkout gate. Tests marked `committed_baseline` reproduce the current committed Standard snapshot using its own versioned dates, timestamps, and aggregate metadata, then require byte-identical generator output. They must not be interpreted as validation of a checkout after live production data has been added. The production workflow separately captures a dynamic baseline and runs `validate_production_candidate.py` after fetching and generation:
+Production candidate comparison uses a temporary baseline that must not be
+committed:
 
 ```powershell
 .\.venv\Scripts\python.exe validate_production_candidate.py snapshot --output production-baseline.json
 .\.venv\Scripts\python.exe validate_production_candidate.py validate --baseline production-baseline.json
 ```
 
-The baseline file is a temporary workflow artifact and must not be committed. Candidate validation discovers the six raw-event collection formats and the complete Standard and Modern products from `configs/formats.yaml`. It permits only their declared generated-data scopes, rejects deletions and cross-product writes, validates changed documents and per-format count deltas, and runs before staging or publication.
+## Tabletop event pipeline
 
-## Melee raw-response client
+Only an enabled, verified event in `configs/melee_events.yaml` may enter this
+pipeline. Live collection, whitelist changes, candidate publication, and
+production dispatch each require the applicable owner authorization.
 
-Phase 5 provides a separately controlled raw-response client for explicitly enabled events in `configs/melee_events.yaml`. The command defaults to a zero-side-effect dry run; live requests additionally require the explicit `--execute` flag:
+### Collect a minimized source snapshot
+
+The collection command defaults to a zero-side-effect request-plan dry run.
+Live collection additionally requires `--complete --execute` and an approved
+event-scoped HMAC key:
 
 ```powershell
-$env:PYTHONPATH = "src"
-.\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455
+.\.venv\Scripts\mtgo-data-melee.exe --event-id 434455
 $env:MELEE_PARTICIPANT_HMAC_KEY_BASE64 = "<approved base64 secret>"
 $env:MELEE_PARTICIPANT_HMAC_KEY_ID = "<approved non-secret key id>"
-.\.venv\Scripts\python.exe -B -m mtgmeta.melee --event-id 434455 --complete --execute
+.\.venv\Scripts\mtgo-data-melee.exe --event-id 434455 --complete --execute
 ```
 
-The command without `--execute` remains a request-plan dry run. The historical
-source-preserving client is not an approved future production-retention path.
-`--complete` discovers the enabled event's completed rounds, paginates its
-public standings and match endpoints, and retrieves only decklists referenced
-by the primary standings. It has no dry-run form because the request plan is
-discovered from the live tournament page. For future snapshots, manifest v3
-holds each source response only in bounded memory, applies the reviewed
-resource allowlist, replaces source participant IDs with event-scoped
-HMAC-SHA256 references, and writes only canonical minimized JSON. The collector
-freezes that plan before bulk retrieval, writes per-response progress to
-stderr, and checkpoints each verified minimized response under the event
-directory. Re-running the same command after an interruption resumes only a
-checkpoint with the same non-secret key ID and does not download already
-verified files. The partial directory is never a valid retention input; only a
-complete manifest is atomically promoted to
+The secret must decode to at least 32 bytes and must never appear in the
+repository, command history, workflow YAML, logs, or documentation. The
+collector keeps responses in bounded memory, accepts only reviewed public
+resource fields, replaces source participant IDs with event-scoped HMAC
+references, and persists canonical minimized JSON. Interrupted collection may
+resume only its verified frozen request plan. A partial directory is never a
+valid retained input; a complete snapshot is promoted atomically under
 `data_raw/melee/<event_id>/<UTC-snapshot>/`.
 
-The HMAC secret must decode to at least 32 bytes. Do not place a real value in
-the repository, command history, workflow YAML, logs, or documentation. P10-03
-defines this environment interface but does not provision a production secret;
-live collection and secret/workflow configuration each require separate owner
-authorization. The manifest records only the key ID and never the key.
+Privacy contact information and correction or removal handling are documented
+in [`NOTICE.md`](NOTICE.md).
 
-The minimized resource documents are validated against
-`schemas/melee-minimized-resource.schema.json` before persistence and again
-when read. Privacy contact information and the correction or removal request
-procedure are documented in [`NOTICE.md`](NOTICE.md).
+### Build and validate an event candidate
 
-The verified reference event `434455` is the only enabled Melee event; every
-live fetch still requires separate project-owner authorization. A successful
-re-fetch creates a new immutable snapshot instead of overwriting prior source
-evidence.
+The following commands are read-only without `--execute`. The corresponding
+`--execute` form atomically writes the described candidate. Replace the sample
+snapshot only with the separately approved, complete snapshot path.
 
-P7-02 retains a complete immutable v2 or v3 snapshot as the canonical normalized production input
-only after validating its manifest, response coverage, file set, byte counts,
-SHA-256 values, parsed identities, normalized semantics, and publication
-quality:
+Normalize and retain the verified source snapshot:
 
 ```powershell
-$env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee.retention `
   --event-id 434455 `
   --snapshot data_raw/melee/434455/20260724T092458Z-01
@@ -170,246 +141,168 @@ $env:PYTHONPATH = "src"
   --execute
 ```
 
-The first command is a zero-side-effect path plan. `--execute` writes
-`data/modern/melee/events/434455.json` atomically. Reusing the same verified
-snapshot must produce byte-identical output; a different result cannot silently
-replace the retained input. Interrupted complete-event fetches remain
-ineligible for parsing or retention but may resume their exact frozen request
-plan after every existing response passes its stored byte-count and SHA-256
-check.
-
-P7-03 classifies every submitted Modern decklist from the retained event with
-the same shared taxonomy used by MTGO Modern. The read-only command builds and
-strictly validates the overlay in memory; `--execute` atomically writes the
-participant-keyed result:
+Classify submitted decks with the shared Modern taxonomy:
 
 ```powershell
-$env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee.classification `
   --root . --format modern --event-id 434455 --strict
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee.classification `
   --root . --format modern --event-id 434455 --execute --strict
 ```
 
-The output is `data/modern/melee/classifications/434455.json`. It records the
-exact normalized-event and rule-file SHA-256 values, preserves every matched
-rule and condition evidence, retains reviewable deck evidence for Unknowns,
-and blocks strict generation on conflicts, invalid inputs, or an unassigned
-subtype under a parent that defines subtypes. It does not rewrite the
-normalized event or change MTGO statistics.
-
-P7-04 converts the retained event and classification overlay into an explicit
-mixed-event Constructed-opportunity ledger. The first command is read-only;
-`--execute` atomically writes the deterministic candidate:
+Build the Constructed-opportunity ledger:
 
 ```powershell
-$env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee.opportunities `
   --root . --format modern --event-id 434455
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee.opportunities `
   --root . --format modern --event-id 434455 --execute
 ```
 
-The output is `data/modern/melee/opportunities/434455.json`. It records one
-row for every scheduled Day 1 or qualified-field Day 2 Constructed Swiss
-opportunity, including unplayed drop rounds, byes, intentional draws,
-disqualification exclusions, and verified Top 8 lock exemptions. It excludes
-Draft and playoffs and does not calculate archetype aggregates, win rates, or
-matchup matrices; those remain P7-05 and P7-06 work.
-
-P7-05 turns the retained event, classification overlay, opportunity ledger,
-and unchanged Modern taxonomy into deterministic per-event overview, deck,
-and quality statistics. The first command is read-only; `--execute` atomically
-writes the three candidates:
+Build event overview, deck, and quality statistics:
 
 ```powershell
-$env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee.stats `
   --root . --format modern --event-id 434455
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee.stats `
   --root . --format modern --event-id 434455 --execute
 ```
 
-The outputs are `overview.json`, `decks.json`, and `quality.json` under
-`stats/modern/melee/events/434455/`. They retain separate Day 1, Day 2, and
-all-Constructed-Swiss scopes, direct parent and maintained-subtype metrics,
-explicit Unknown rows, raw W-L-D samples, Wilson intervals, and reviewed
-quality exclusions. A combined high-score metric is intentionally absent
-because the two stages have different participant populations. P7-05 does not
-generate `matchup.json`, `meta.json`, a public event catalog, a workflow, or
-front-end behavior; those remain later tasks.
-
-P7-06 generates the source-separated hierarchical matchup candidate from the
-same four validated inputs. The first command is read-only; `--execute`
-atomically writes `stats/modern/melee/events/434455/matchup.json`:
+Build the hierarchical matchup document:
 
 ```powershell
-$env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee.matchup `
   --root . --format modern --event-id 434455
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee.matchup `
   --root . --format modern --event-id 434455 --execute
 ```
 
-The document defaults to all Constructed Swiss and also retains separate Day
-1 and Day 2 scopes. Its complete 29-parent and 55-leaf matrices include
-explicit zero cells, Unknown, raw W-L-D counts, and 95% Wilson intervals.
-Leaf cells are canonical; parent cells are independent row-and-column rollups
-of those leaves. Only opportunity-ledger rows with symmetric
-`matchup_included: true` enter the matrices. The retained Tabletop document
-keeps its compatibility value `low_sample_threshold: null`; the Phase 8
-consumer applies the DEC-060 presentation warning below 20 valid matches
-without changing those backend bytes. P7-06 did not create catalog, manifest,
-workflow, or front-end behavior; those were completed by P7-07 and Phase 8.
-
-P7-07 packages the verified event for public discovery. The first command is
-read-only; `--execute` atomically writes the event `meta.json` and Modern
-Melee `index.json`:
+Build the event metadata and public event catalog:
 
 ```powershell
-$env:PYTHONPATH = "src"
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee.publish `
   --root . --format modern --event-id 434455
 .\.venv\Scripts\python.exe -B -m mtgmeta.melee.publish `
   --root . --format modern --event-id 434455 --execute
 ```
 
-The metadata binds the exact overview, decks, matchup, and quality bytes by
-Schema version, size, and SHA-256. The catalog exposes only the enabled,
-verified reference event. All six Melee public documents are governed by
-`schemas/manifest.json`. `.github/workflows/fetch_melee.yml` is manual-only
-and source-separated: after a separately authorized dispatch it builds one
-event candidate and may push only `data/melee-<event_id>` for review. It never
-pushes `master`, creates a pull request, or merges. An already retained
-canonical event reuses its exact immutable snapshot; only a newly approved
-event without canonical input performs a live fetch.
+The retained normalized event and deterministic overlays are under
+`data/<format>/melee/`; public event documents are under
+`stats/<format>/melee/events/<event_id>/`. Exact schemas and producer-to-output
+relationships are documented in `docs/DATA_ARCHITECTURE.md`.
 
-### Operating an approved Tabletop event
+### Operate an approved event
 
-This workflow is not an event-discovery tool. A tournament is eligible only
-after the owner has separately approved it and a reviewed pull request has
-added its complete entry to `configs/melee_events.yaml`. Adding an event is not
-the same as publishing it.
+Adding a whitelist entry is not the same as publishing an event. After an
+owner-approved pull request adds and verifies the complete entry, an authorized
+operator selects **Melee production candidate** in GitHub Actions and enters
+the exact event ID. The workflow derives the format from the whitelist; there
+is no manual format field or Modern fallback.
 
-For an approved event, the operator selects **Melee production candidate** in
-the repository Actions page and enters the exact whitelist event ID. Before it
-creates a candidate baseline, reads retained data, or contacts Melee, the
-workflow validates the whitelist entry, requires that it is enabled and
-verified, and derives its Constructed format from that entry. There is no
-format field to enter manually and no fallback to Modern.
-
-Review the resulting Actions summary and, if the candidate changed, the
-separate `data/melee-<event_id>` branch. The workflow never opens a pull
-request, merges, or writes to `master`; the owner must separately review and
-approve any candidate pull request. Do not dispatch the workflow for an event
-that has not received separate owner authorization, even if its whitelist
-entry already exists.
+Review the Actions summary and any `data/melee-<event_id>` candidate branch.
+The workflow never opens a pull request, merges, or writes to `master`; those
+remain separate owner-reviewed actions.
 
 ## Format-aware MTGO commands
 
-The production MTGO pipeline uses one explicit command entry point. Set `PYTHONPATH` to `src` when running it from a source checkout:
+The format argument is mandatory. The installed command works without setting
+`PYTHONPATH`:
 
 ```powershell
-$env:PYTHONPATH = "src"
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard fetch-events
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard fetch-matches
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard build-statistics
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard build-matchups
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard build-completeness
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard build-top8
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard pickup candidates --if-absent
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard generate-hierarchy
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard generate-metadata
-.\.venv\Scripts\python.exe -B -m mtgmeta.catalog --root .
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format standard classification-reports --strict
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern fetch-matches
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern build-statistics
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern build-matchups
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern build-completeness
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern build-top8
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern classification-reports --strict
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard fetch-events
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard fetch-matches
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-statistics
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-matchups
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-completeness
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-top8
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard pickup candidates --if-absent
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard generate-hierarchy
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard generate-metadata
+.\.venv\Scripts\mtgo-data-catalog.exe --root .
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard classification-reports --strict
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern fetch-matches
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-statistics
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-matchups
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-completeness
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-top8
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern classification-reports --strict
 ```
 
-The format argument is mandatory. Standard and Modern are complete public MTGO products and support the same command set. The scheduled workflow runs Videre collection, statistics, hierarchical matchups, range-specific completeness, complete-week Top 8, Pickup candidate preparation, metadata, the global consumer catalog, hierarchy catalogs, and strict classification diagnostics for both formats. `build-completeness` writes `stats/<format>/mtgo/completeness/index.json` and the catalogued 1-, 4-, 12-, and 36-week documents; these keep Videre available/missing event identities and modeled-versus-observed high-score decklist counts separate. `build-top8` retains each catalogued `YYYY-Www.json` with an immutable same-week `YYYY-Www-bases.json`; an existing frozen week must rebuild byte-identically. `python -B -m mtgmeta.catalog --root .` writes `stats/catalog.json` from the format registry and actual published product catalogs. Official MTGO event raw-data collection is controlled separately by `event_collection_enabled`; Standard, Pauper, Modern, Pioneer, Legacy, and Vintage continue to receive the daily official-event archive, while the four incomplete products receive no Videre, statistics, report, or metadata generation. `fetch-events` checks the current and previous calendar month by default and accepts repeatable `--month YYYY-MM` overrides. `fetch-matches` accepts optional numeric event IDs and `--force`. Each Videre page request makes at most three attempts for HTTP 408, 425, 429, 5xx, connection errors, and timeouts, with a bounded delay between attempts. Explicit `400 No results found` responses remain non-failing missing archives; non-transient HTTP errors and exhausted retries remain publication-blocking failures. Classification reports may be directed to a disposable location with `--output-dir`.
+Standard and Modern are complete public MTGO products. The format registry also
+keeps official-event archive collection separate for incomplete formats. The
+scheduled pipeline builds statistics, matchups, completeness, immutable weekly
+Top 8 bases, metadata, the product catalog, hierarchy catalogs, strict
+classification diagnostics, and Weekly Pickup candidates for enabled products.
 
-Weekly Pickup publication remains a separate manual approval step. After reviewing and approving a candidate YAML, run `python -B -m mtgmeta.mtgo --format <standard-or-modern> pickup publish`. The scheduled workflow generates candidates only and preserves an existing candidate file for the latest complete week. A failure in one format's candidate preparation does not prevent the other format from being attempted and does not by itself block the remaining production pipeline.
-
-Modern uses the same public product path. Bootstrap its stable-ID known state
-once, generate the maintained hierarchy and metadata, and then create the
-weekly review file:
+Weekly Pickup publication is manual. Candidate generation never approves a
+row, publishes a week, or changes known-archetype state. After review and
+approval, publish with:
 
 ```powershell
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern generate-hierarchy
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern generate-metadata
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern pickup initialize-known
-.\.venv\Scripts\python.exe -B -m mtgmeta.mtgo --format modern pickup candidates --if-absent
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format <standard-or-modern> pickup publish
 ```
 
-`initialize-known` refuses to overwrite existing state. Modern candidate rows
-carry stable parent IDs and optional subtype information, but selection and
-publication remain manual. Generating candidates does not approve a row,
-publish a week, or update known state.
+For a new Modern known-state bootstrap, run only under the applicable approval:
 
-The MTGO front end exposes Standard and Modern through one format selector.
-The matchup matrix defaults to collapsed parent archetypes. Parents with at
-least two maintained subtypes expose independent row and column expansion
-buttons, and the global control expands or collapses every eligible parent.
-Parents with zero or one subtype remain non-expandable. Interactive cells are
-recalculated from canonical W-L-D counts; displayed percentages are never
-averaged together.
+```powershell
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern generate-hierarchy
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern generate-metadata
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern pickup initialize-known
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern pickup candidates --if-absent
+```
 
-Classification reports use the format-aware `mtgo-data-mtgo` command above.
-They omit player names, login IDs, and raw player records while retaining event
-context, stable pseudonymous deck IDs, matched rule evidence, and Unknown
-decklists. `--strict` returns a failure when an unresolved classification
-conflict or invalid deck input is present. These reports are operational
-diagnostics and are not consumed by the current front end.
+`initialize-known` refuses to overwrite existing state. Classification reports
+omit player names, login IDs, and raw player records; `--strict` fails on an
+unresolved conflict or invalid deck input.
 
-The former root-level Standard compatibility commands were retired in P11-12.
-Use `mtgo-data-mtgo --root . --format <id>` with `fetch-events`,
-`fetch-matches`, `build-statistics`, `build-matchups`, `pickup`,
-`generate-metadata`, or `classification-reports` as applicable. Candidate
-generation never publishes or changes the known-archetype state by itself.
+## Repository layout
 
-The Schema mapping in `schemas/manifest.json` is versioned as `1.0.0`. It protects the existing Standard MTGO page-consumed JSON and the classification diagnostic reports; every declared output embeds `schema_version: "1.0.0"`.
+- `configs/`: manually maintained format, event, and publication policy.
+- `data_raw/`: approved minimized source snapshots.
+- `data/<format>/`: normalized source-specific data and deterministic overlays.
+- `stats/<format>/`: generated source-specific product documents.
+- `src/mtgmeta/`: maintained package code and command implementations.
+- `schemas/`: versioned public and intermediate data contracts.
+- `reports/`: generated de-identified operational diagnostics.
+- `tests/fixtures/`: self-contained regression evidence.
+- `docs/`: authoritative specifications, decisions, audits, live status, and
+  non-authoritative history.
+- `index.html` and `melee/index.html`: GitHub Pages product entries.
 
-Pull requests and pushes to `master` run the clean-checkout validation sequence through `.github/workflows/ci.yml`. The CI workflow has read-only repository permissions, does not persist checkout credentials, and does not fetch or regenerate production tournament data. The production workflow adds candidate-data acceptance and published-commit confirmation as separate validation layers.
-
-## Current repository layout
-
-- `data/<format>/melee/`: retained normalized events and deterministic
-  classification and opportunity-ledger overlays for approved tabletop events.
-- `configs/formats.yaml`: validated registry of known formats, raw-event collection state, product execution state, capabilities, and format-specific paths.
-- `my_archetypes/standard.yaml`: current legacy Standard classification rules.
-- `src/mtgmeta/`: shared normalization, classification, configuration, and format-aware MTGO event-I/O, rolling-statistics, Videre, matchup, Weekly Pickup, metadata, catalog, and report-routing utilities.
-- `schemas/classification-rules.schema.json`: machine-readable contract for versioned shared rule files.
-- `reports/standard/mtgo/`: generated, de-identified Standard classification diagnostics.
-- `stats/standard/mtgo/`: generated Standard MTGO statistics consumed by the public page.
-- `tests/fixtures/standard/`: self-contained Standard classification baseline.
-- `docs/`: authoritative specifications, decisions, audits, status, and development workflow.
-- `index.html`: current GitHub Pages entry point for MTGO Environment Trends.
-- `.github/workflows/update.yml`: the single scheduled MTGO production pipeline. Its read-only fetch and build jobs transfer short-lived immutable artifacts; only its final publish job can write the validated Standard and non-public Modern output to `master`.
-
-Generated statistics and source configurations serve different roles. Do not manually edit generated statistics as a substitute for fixing their generator.
+Generated statistics and manually maintained configuration have different
+roles. Do not manually edit generated output as a permanent fix.
 
 ## Production operations
 
-The production scripts and `.github/workflows/update.yml` fetch data and write committed outputs. The production workflow runs daily at `20:00 UTC` and may also be dispatched manually on `master`. It is not part of the read-only PR validation sequence. Its fetch job runs the clean-checkout regression suite, snapshots and retrieves the candidate inputs, then hands them to the build job through a one-day immutable workflow artifact. The build job verifies that transfer, generates the product outputs, and runs candidate, repository, rule, and Schema validation before handing the validated output to the final publish job through a second immutable artifact. Only the publish job receives `contents: write`; it verifies the transfer, stages only `data/`, `stats/`, `reports/`, and `fetched.txt`, then confirms the published `master` commit.
+`.github/workflows/update.yml` runs the scheduled MTGO production pipeline
+daily at `20:00 UTC` and may be manually dispatched on `master`. Read-only fetch
+and build jobs exchange short-lived verified artifacts; only the final publish
+job receives `contents: write`, stages the approved generated scopes, and
+confirms the published commit.
 
-If input collection fails after the checkpoint is prepared, the fetch job saves a separate seven-day `mtgo-fetch-checkpoint` artifact. It contains only the fetched inputs, clean baseline, checksums, and a progress manifest. A later fetch run may read that artifact only when its `master` commit and exact event/match format plan match; it verifies every checksum and archive boundary before reusing completed operations. An incomplete checkpoint never reaches the build or publish jobs, cannot create generated statistics, and expires automatically. The fetch job has `actions: read` only for locating this temporary checkpoint; it still has no repository-write permission. These artifacts are temporary workflow objects, not a data store or durable archive. Before running or changing it, review:
+An interrupted input collection may produce a seven-day checkpoint artifact.
+It is reusable only for the same master commit and exact operation plan after
+checksum and archive-boundary validation. It cannot reach generation or
+publication while incomplete and is not durable storage.
 
-When fetch, build, or publish fails, a separate notification job with only `issues: write` records the failed stage. It creates one ordinary open issue per stage, or adds a new run link to that stage's existing open issue. The issue contains only the stage, commit, and workflow link; it does not copy source responses or raw error output. A successful run creates no issue. This notification is separate from collection, generation, and publication, and it cannot write repository contents.
+On failure, a separate least-privilege notification job creates or updates one
+ordinary open issue for the failed pipeline stage. It records only the stage,
+commit, and workflow link; it cannot write repository contents. A successful
+run creates no issue.
 
-- [`docs/audits/P1-01.md`](docs/audits/P1-01.md) for the current entry-point and workflow inventory;
-- [`docs/STATISTICS_SPEC.md`](docs/STATISTICS_SPEC.md) for metric definitions;
-- [`docs/DEVELOPMENT_WORKFLOW.md`](docs/DEVELOPMENT_WORKFLOW.md) for isolation, authorization, validation, and publication gates.
-
-Do not develop directly on `master`, run unapproved production fetches, or begin a task that is not authorized by the project owner.
+Before operating or changing production, review
+[`docs/DEVELOPMENT_WORKFLOW.md`](docs/DEVELOPMENT_WORKFLOW.md),
+[`docs/STATISTICS_SPEC.md`](docs/STATISTICS_SPEC.md), and the live
+[`docs/STATUS.yaml`](docs/STATUS.yaml). Do not run an unapproved fetch or
+production dispatch.
 
 ## Licensing and data notice
 
 - Repository code is licensed under the [MIT License](LICENSE).
-- Project-authored documentation and archetype classification rules are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-- Tournament records, decklists, card names, artwork, trademarks, and other third-party materials are not relicensed by this repository.
+- Project-authored documentation and archetype rules are licensed under
+  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- Tournament records, decklists, card names, artwork, trademarks, and other
+  third-party materials are not relicensed by this repository.
 
-See [`NOTICE.md`](NOTICE.md) for scope, attribution, and third-party data information.
+See [`NOTICE.md`](NOTICE.md) for attribution, privacy contact, and third-party
+data information.

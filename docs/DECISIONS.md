@@ -3338,3 +3338,49 @@ longer depend on deleted wrappers. Historical audits continue to name former
 commands accurately. An unrecorded external caller of a deleted root script
 must migrate to the documented installed command; the parent commit and the
 P11-12 pull-request diff remain the exact rollback source.
+
+---
+
+# DEC-081 — Separate live status from byte-preserved history
+
+Status: `Accepted`
+
+## Context
+
+`docs/STATUS.yaml` had grown to about 286 KB because current authorization,
+completed phase records, resolved blockers, maintenance evidence, and old task
+results shared one file. README and tool-specific agent guides also repeated
+authoritative scope and statistics or retained stale phase snapshots. That made
+the small set of current facts harder to find and increased the risk that an
+agent would follow obsolete state.
+
+P11-13 must reduce that duplication without deleting evidence, weakening the
+mandatory `AGENTS.md` entry point, changing operational commands, or altering
+product behavior.
+
+## Decision
+
+Keep `docs/STATUS.yaml` as a small live-state document containing the current
+phase, current task and authorization, recent completion handoff, blockers,
+deferred decisions, active governance controls, and prohibited actions.
+
+Preserve the complete pre-P11-13 STATUS byte-for-byte as
+`docs/history/STATUS-2026-08-04-pre-P11-13.yaml`, identify its source commit and
+SHA-256 in `docs/history/README.md`, and mark the directory non-authoritative.
+Historical snapshots can explain earlier state but can never authorize work.
+
+Keep `AGENTS.md` as the mandatory stable operating guide and authoritative
+document router. Make `CLAUDE.md` and `.github/copilot-instructions.md` thin
+adapters that point back to it instead of copying project rules or current
+phase text. Keep README focused on current product orientation and supported
+operator commands; detailed scope, formulas, architecture, history, and
+workflow gates remain in their authoritative documents.
+
+## Consequences
+
+Current authorization is visible in an approximately 10 KB file while every
+prior STATUS field remains recoverable from the byte-preserved snapshot. Agent
+tools share one stable instruction source and cannot rely on a stale phase
+copy. P11-13 changes no code, workflow, generated or source data, statistical
+behavior, Schema, public path, front-end source, or protected event `434455`
+byte. Cross-document fact consistency remains the separate P11-14 task.

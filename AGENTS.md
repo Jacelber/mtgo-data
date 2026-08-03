@@ -2,17 +2,13 @@
 
 ## Purpose
 
-This file is the mandatory entry point for any AI assistant, coding agent, or human developer working on this repository.
+This file is the mandatory entry point for every AI assistant, coding agent,
+and developer working on this repository. It defines stable operating rules;
+it does not duplicate the full product, statistics, architecture, or current
+task specifications.
 
-Before changing code, data structures, statistics, workflows, or front-end behavior, read the authoritative documents listed below.
-
-Do not infer the project scope only from existing legacy code. The repository is being reorganized from a Standard-only MTGO project into a multi-format constructed-data project with separate MTGO and Melee products.
-
----
-
-## Authoritative document order
-
-Read the following files in this order:
+Before analyzing or changing the repository, read these documents completely
+and in this order:
 
 1. `AGENTS.md`
 2. `docs/PROJECT_SCOPE.md`
@@ -23,347 +19,118 @@ Read the following files in this order:
 7. `docs/STATUS.yaml`
 8. `docs/DEVELOPMENT_WORKFLOW.md`
 
-Additional instructions:
-
-- `PROJECT_NOTES.md` is a historical record and is not the current specification.
-- Existing code describes the current implementation, not necessarily the intended final architecture.
-- If documents conflict, use the document appearing earlier in the list above.
-- If a current user instruction conflicts with the established project scope, stop and request explicit confirmation before changing the scope.
-- Do not silently redefine statistical metrics.
-- `docs/DEVELOPMENT_WORKFLOW.md` is the authoritative operational workflow for workspace isolation, approvals, publication, and stop conditions.
-- Use a disposable isolated development workspace unless another environment is explicitly approved.
-- Narrow local Git metadata operations may use Auto-review in the isolated workspace.
-- Anonymous read-only access to the approved repository or necessary public documentation may be used for an approved focused task. Credentialed access, uploads, remote writes, unrelated network access, push, PR creation, merge, and protected-branch changes require separate owner authorization.
-- Full access is prohibited. A stop point pauses execution pending a continuation instruction; a compliant pause does not by itself terminate delegated local authority for the same approved focused task. Authorization does not carry over to another task or phase, and remote publication remains separately controlled.
-
-Some documents in the list may be added progressively during Phase 0. Until Phase 0 is complete, do not begin feature refactoring unless explicitly instructed.
-
----
-
-## Project objective
-
-The project analyzes constructed Magic: The Gathering tournament data.
-
-It has two separate product areas:
-
-1. **MTGO Environment Trends**
-2. **Tabletop Major Events**
-
-The second product uses selected Melee tournament data, but the user-facing product name should be “Tabletop Major Events” rather than simply “Melee.”
-
-The project should eventually support these constructed formats:
-
-- Standard
-- Pauper
-- Modern
-- Pioneer
-- Legacy
-- Vintage, if approved later
-
-The intended format-development order is:
-
-1. Preserve Standard as the regression baseline.
-2. Generalize the existing Standard-only MTGO pipeline.
-3. Implement Modern for MTGO and the selected mixed-format Modern Pro Tour event.
-4. Implement Pauper for MTGO and the selected Paupergeddon Melee event.
-5. Implement Pioneer.
-6. Implement Legacy.
-7. Decide whether to implement Vintage.
-
----
-
-## MTGO and Melee separation
-
-MTGO and Melee may share reusable classification and statistical utility code, but their source data, normalized event data, generated statistics, and front-end product behavior must remain separate.
-
-Do not merge MTGO and Melee event results into one statistic.
-
-Shared capabilities may include:
-
-- card-name normalization;
-- archetype IDs;
-- archetype classification;
-- YAML rule loading;
-- rule priority handling;
-- rule conflict detection;
-- Unknown classification reporting;
-- common win-rate calculations;
-- confidence intervals;
-- high-score threshold helpers;
-- reusable deck and card utilities.
-
-MTGO-specific capabilities include:
-
-- rolling time ranges;
-- MTGO event fetching;
-- weekly metagame statistics;
-- high-score and Top 8 statistics;
-- average decklists;
-- deck-construction deviation;
-- Weekly Pickup;
-- Videre-based matchup data.
-
-Melee-specific capabilities include:
-
-- manually whitelisted events;
-- standings and round parsing;
-- Day 1 and Day 2 separation;
-- mixed Draft and Constructed phase handling;
-- drop, bye, intentional-draw, no-show, and awarded-win handling;
-- per-event statistics;
-- optional same-format multi-event matchup aggregation.
-
----
-
-## Melee event inclusion policy
-
-Do not automatically crawl all Melee tournaments.
-
-Only collect events explicitly registered in:
-
-`configs/melee_events.yaml`
-
-Target event categories are:
-
-- World Championships;
-- Pro Tours;
-- Regional Championships;
-- Magic Spotlight Series;
-- Paupergeddon main events;
-- Eternal Weekend Legacy main events;
-- Eternal Weekend Vintage main events, if Vintage is enabled later.
-
-Exclude:
-
-- team events;
-- pure Limited events;
-- side events;
-- qualifiers not explicitly approved;
-- unrelated local tournaments;
-- events not present in the whitelist.
-
-Mixed-format events are allowed only when their Constructed rounds can be identified reliably.
-
----
-
-## Melee statistical modes
-
-Melee events must be assigned one of these structures:
-
-1. `constructed_day2`
-   - Pure Constructed event with a Day 2 cut.
-
-2. `constructed_single_stage`
-   - Pure Constructed event without a separate Day 2 cut.
-
-3. `mixed`
-   - Draft plus Constructed, such as a Pro Tour or World Championship.
-
-Do not apply one event structure’s statistical rules to another structure without an explicit specification change.
-
----
-
-## Mixed-format event principles
-
-For mixed Draft and Constructed events:
-
-- Draft results must not be included in Constructed deck-performance statistics.
-- Overall standings points must not be treated as Constructed deck points.
-- Day 2 qualification must not be presented as a pure deck-performance conversion metric because qualification is influenced by Draft results.
-- Every round must be labeled as one of:
-  - `draft`
-  - `constructed`
-  - `playoff`
-  - `unknown`
-- Unknown round types must be reported and reviewed instead of silently counted.
-
-The product should provide separate scopes where data permits:
-
-- Day 1 Constructed;
-- Day 2 Constructed;
-- all Constructed Swiss rounds;
-- playoffs as contextual results only.
-
-For mixed events:
-
-- Day 1 Constructed metrics measure the broad initial field.
-- Day 2 Constructed metrics measure the qualified field and must show sample size and selection-bias warnings.
-- Combined Constructed win rate may include Day 1 and Day 2 real Constructed Swiss matches.
-- Matchup matrices should allow switching between all Constructed Swiss rounds, Day 1 only, and Day 2 only.
-- Day 2 average score must not be shown as the only measure of Day 2 deck performance.
-
----
-
-## Match result handling
-
-The detailed formulas belong in `docs/STATISTICS_SPEC.md`.
-
-At minimum, preserve these principles:
-
-- Real wins and losses count toward points, win rate, and matchup statistics.
-- Normal played draws count toward points and may count as half a win in win-rate calculations.
-- Intentional draws reported as `0-0-3` award standings points but are excluded from win-rate and matchup calculations.
-- Byes may award standings points but are excluded from win-rate and matchup calculations.
-- No-shows are excluded and must be reported.
-- Dropped or unplayed scheduled rounds contribute zero points when the applicable metric uses theoretical rounds.
-- Official awarded wins after a player has locked Top 8 must not be treated as played matches.
-- Awarded-win rounds are excluded from win-rate and matchup statistics.
-- Awarded-win rounds may be exempted from effective theoretical rounds when the official event structure confirms that the player no longer had to play.
-- Draft rounds are excluded from Constructed statistics.
-- Playoff matches are excluded from primary Swiss performance statistics and the primary matchup matrix.
-
-These cases must be represented explicitly in normalized data. Do not rely only on final standings totals.
-
----
-
-## Front-end boundaries
-
-The current `index.html` is the MTGO product and must continue working during refactoring.
-
-The primary analysis selector is the Constructed format. After selecting a
-format, users choose among the available MTGO official statistics, MTGO
-matchup, MTGO weekly Top 8, Tabletop Major Events, and Weekly Pickup products.
-Availability must be catalog-driven.
-
-MTGO Environment Trends and Tabletop Major Events remain separate source
-products. Format-first navigation may connect their entry points while
-retaining the selected format, but it must not merge their data or statistics.
-
-The intended front-end structure is:
-
-- `/index.html` for MTGO;
-- `/melee/index.html` for tabletop major events;
-- shared static assets under `/assets/`.
-
-The existing monolithic `index.html` must be split before major multi-format front-end expansion.
-
-The split must preserve current behavior, appearance, data paths, and GitHub Pages compatibility. Do not introduce a mandatory JavaScript build framework unless separately approved.
-
-Phase 8 uses local prototypes by default and freezes the owner-approved UI
-before backend additions or final front-end implementation. Superdesign or
-another external generative design service requires separate owner
-authorization after cost, quota, transmitted-context, privacy, and local
-alternative review.
-
----
-
-## Engineering requirements
-
-Before major feature expansion, the project must add or improve:
-
-- `README.md`;
-- code license and data notice;
-- production and development dependency lists;
-- pytest tests;
-- rule validation;
-- archetype IDs;
-- rule IDs;
-- explicit rule priorities;
-- classification conflict reports;
-- Unknown classification reports;
-- JSON Schemas with schema versions;
-- CI checks;
-- GitHub Actions permissions using least privilege;
-- workflow concurrency controls;
-- useful workflow summaries and failure reporting;
-- regression protection for the current Standard page and data pipeline.
-
-Generated data and manually maintained source configuration must be distinguishable.
-
-Do not manually edit generated statistics as a substitute for fixing the generator.
-
----
-
-## Git and change-safety rules
-
-- Do not make development changes directly on `master`.
-- Use a dedicated branch for each phase or focused task.
-- Follow the mandatory bootstrap, impact-discovery, validation-economy, and
-  publication-preflight procedures in `docs/DEVELOPMENT_WORKFLOW.md`. These
-  controls were added after repeated avoidable rework and are not optional.
-- On Windows, set `core.autocrlf=false` as part of the clone command, before
-  the first checkout is created. Setting it only after a normal clone is too
-  late. Abandon a new disposable workspace if its initial status is not clean;
-  do not normalize or repair the checkout in place.
-- Preserve the current Standard implementation until regression checks exist.
-- Prefer small, reviewable commits.
-- Do not combine documentation, large refactoring, new data ingestion, and front-end redesign in one commit.
-- Before committing, run the checks required by the current phase.
-- Do not delete legacy entry points until replacements are verified.
-- Do not rename public data paths without a compatibility plan.
-- Do not commit secrets, credentials, access tokens, or private user data.
-- Do not overwrite unexplained local changes.
-- If repository state is not clean, inspect it before proceeding.
-- Do not test remote-write authorization by attempting a push. After the owner
-  authorizes publication, complete the publication preflight and use one
-  documented push/PR path.
-- For this repository, the documented remote-mutation client is `gh`. Use the
-  repository-specific `gh` publication commands in
-  `docs/DEVELOPMENT_WORKFLOW.md`; do not first attempt PR creation, merge, file
-  writes, or Git-data writes through a GitHub app or connector.
-- A credential failure observed only in an isolated, elevated, or
-  non-interactive execution context means that context could not use the
-  credential until the documented preflight proves otherwise. Do not tell the
-  owner that their token expired unless the same publication context fails both
-  `gh auth status` and an authenticated read-only `gh api` identity check.
-- Do not create a second pull request solely to record the preceding pull
-  request number, merge SHA, workflow run IDs, or Pages result. Report those
-  facts in the handoff and reconcile them in the next already-authorized
-  development or governance change, or at phase closeout. Immediate repository
-  reconciliation requires an explicit owner request or a demonstrated safety
-  blocker.
-
----
-
-## Required task format for AI assistants
-
-When guiding a non-programmer, work one task at a time.
-
-For each task, provide:
-
-1. purpose;
-2. exact target file path;
-3. exact operations;
-4. complete copyable file content when applicable;
-5. commands to run;
-6. expected output;
-7. verification steps;
-8. commit commands;
-9. a clear stop point for user confirmation.
-
-Do not provide several large file-creation tasks at once unless explicitly requested.
-
-If a command fails, ask for the complete error output before proposing unrelated changes.
-
----
-
-## Documentation maintenance
-
-At the completion of every development phase:
+If they conflict, the earlier document in this list controls. `PROJECT_NOTES.md`
+and files under `docs/history/` are historical evidence, not current
+specifications. Existing code describes the current implementation, not
+necessarily the approved target.
+
+`docs/STATUS.yaml` is the live source of truth for the current phase, current
+task, blockers, authorization, and prohibited next actions. Historical task
+evidence belongs in `docs/history/`, audits, decisions, the roadmap, pull
+requests, and Git history. Never use a historical snapshot to authorize work.
+
+## Stable product boundaries
+
+The repository analyzes Constructed Magic: The Gathering tournament data in
+two separate products:
+
+- **MTGO Environment Trends** at `/index.html`;
+- **Tabletop Major Events** at `/melee/index.html`.
+
+MTGO and tabletop may share reusable classification and statistical utilities,
+but source data, normalized data, generated statistics, catalogs, workflows,
+and front-end behavior remain separate. Never merge their event results into
+one statistic.
+
+The tabletop product uses only events explicitly registered in
+`configs/melee_events.yaml`. Do not crawl arbitrary Melee events. Mixed events
+require reliable Draft, Constructed, playoff, and unknown round labels; unknown
+rounds must be reported and excluded pending review.
+
+For full product scope and event policy, use `docs/PROJECT_SCOPE.md`. For exact
+match-result treatment and formulas, use `docs/STATISTICS_SPEC.md`. For source,
+normalized, generated, and public path boundaries, use
+`docs/DATA_ARCHITECTURE.md`.
+
+## Authorization and workspace rules
+
+Before proposing or starting a task, read `docs/STATUS.yaml` and confirm:
+
+- the current phase and task;
+- local, commit, remote-publication, merge, and production authorization;
+- active blockers and prohibited actions;
+- the current working branch and protected paths.
+
+Work one focused task at a time and use a disposable isolated workspace unless
+another environment is explicitly approved. Do not develop directly on
+`master`. Inspect branch and worktree state before editing, and do not overwrite
+unexplained changes.
+
+Local task authorization does not authorize credentials, push, pull-request
+creation, merge, production dispatch, protected-branch changes, another task,
+or another phase. Follow the exact gates and stop conditions in
+`docs/DEVELOPMENT_WORKFLOW.md`.
+
+The documented remote-mutation client is `gh`; do not first attempt PR creation
+or merge through an unavailable connector and then misreport that local client
+context as expired credentials. Use only the command-scoped credential method
+defined in the workflow document after separate remote authorization.
+
+Do not create a second pull request solely to record metadata that GitHub or
+Git already records. Carry material status changes into the next already
+authorized repository change or a separately approved closeout task.
+
+## Change controls
+
+- Do not silently change product scope or statistical meaning. If a user
+  instruction conflicts with established scope, stop and request explicit
+  confirmation.
+- Do not manually edit generated statistics as a substitute for fixing their
+  generator.
+- Do not mix documentation cleanup, large refactoring, ingestion, generated
+  data, statistical changes, workflow redesign, and front-end redesign in one
+  task unless explicitly approved.
+- Preserve public data paths and verified legacy entry points until an approved
+  compatibility or retirement plan is validated.
+- Do not fetch arbitrary events, retain new source responses, dispatch
+  production, or change an event whitelist without explicit authorization.
+- Do not introduce a mandatory front-end build framework unless separately
+  approved.
+- Do not commit secrets, tokens, cookies, credentials, private user data, or
+  real HMAC keys.
+- GitHub Actions changes must preserve least privilege, explicit concurrency,
+  validation before publication, and useful failure reporting.
+
+Any change to statistics must update the applicable specification, decision,
+tests, Schema, output version, and front-end labels as required. Any data-shape
+change must update producers, consumers, fixtures, Schemas, and compatibility
+handling as required. Classification changes must preserve stable archetype
+and rule IDs, explicit priorities, conflict reporting, Unknown reporting, and
+shared same-format behavior across sources.
+
+## Verification and documentation
+
+Before committing, run checks proportionate to the changed scope and review the
+complete diff. Preserve the current Standard regression baseline until its
+replacement is explicitly verified. Do not delete a legacy entry point until
+its replacement and live callers are verified.
+
+At the completion of a development phase:
 
 - update `docs/STATUS.yaml`;
-- update `docs/ROADMAP.md` if phase status changed;
-- add a record to `docs/DECISIONS.md` if a scope or statistical decision changed;
-- update schemas when normalized or output data structures change;
-- update tests when statistical behavior changes;
-- update README instructions when commands or workflows change.
+- update `docs/ROADMAP.md` when phase status changes;
+- record scope or statistical decisions in `docs/DECISIONS.md`;
+- update Schemas and tests when data or statistics change;
+- update README commands when supported operations change.
 
-A code change that alters statistics without updating the relevant specification and tests is incomplete.
+A task is not complete because files were edited. Required outputs, tests,
+validation, regression review, documentation consistency, authorization, and
+owner acceptance must all be satisfied where applicable.
 
----
+## Guidance for a non-programmer owner
 
-## Current phase source of truth
-
-The current implementation phase is not hard-coded in this file.
-
-Before starting or proposing any task, read `docs/STATUS.yaml` and confirm:
-
-- `current_phase`;
-- `next_approved_task`;
-- active blockers, if any;
-- `prohibited_next_actions`;
-- the current working branch.
-
-`AGENTS.md` defines stable repository-wide operating rules. `docs/STATUS.yaml` is authoritative for current phase, task completion state, known blockers, and the next approved action.
-
-Do not begin a later phase or an unapproved task unless the project owner explicitly approves the change and the project status is updated.
+Work one task at a time. Explain the purpose and user-visible result in plain
+language. When owner action is required, provide exact paths, commands,
+expected output, verification scope, and a clear stop point. Provide commit or
+publication commands only after the applicable authorization. If a command
+fails, inspect or request its complete output before proposing unrelated work.
