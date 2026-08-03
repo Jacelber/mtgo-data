@@ -17,11 +17,7 @@ for candidate in (ROOT, SRC):
     if str(candidate) not in sys.path:
         sys.path.insert(0, str(candidate))
 
-import gen_meta
-import stats_standard
-import stats_matchup
-import weekly_pickup
-from mtgmeta.config import DisabledFormatError, UnknownFormatError
+from mtgmeta.config import DisabledFormatError, UnknownFormatError, load_rule_set
 from mtgmeta.mtgo import matchup as mtgo_matchup
 from mtgmeta.mtgo import pickup
 from mtgmeta.mtgo import stats as mtgo_stats
@@ -133,16 +129,14 @@ def test_publish_preserves_manual_approval_and_catalog_state(tmp_path):
         set(json.loads((PICKUP / "known_archetypes.json").read_text(encoding="utf-8"))["known"])
         | pickup.archetypes_in_window(
             mtgo_stats.load_all_events(ROOT, "standard"),
-            stats_standard.load_rules(),
+            load_rule_set(ROOT / "my_archetypes" / "standard.yaml"),
             date(2026, 7, 6),
             1,
         )
     )
 
 
-def test_fixed_reference_metadata_and_legacy_wrapper_are_byte_identical(
-    tmp_path, monkeypatch
-):
+def test_fixed_reference_metadata_and_rules_timestamp_are_deterministic(tmp_path):
     expected = json.loads((PUBLIC / "meta.json").read_text(encoding="utf-8"))
     destination = pickup.generate_metadata(
         ROOT,
@@ -151,13 +145,7 @@ def test_fixed_reference_metadata_and_legacy_wrapper_are_byte_identical(
         data_updated=expected["data_updated"],
         output_directory=tmp_path / "shared",
     )
-    wrapped = gen_meta.generate_metadata(
-        rules_updated=expected["rules_updated"],
-        data_updated=expected["data_updated"],
-        output_directory=tmp_path / "legacy",
-    )
     assert destination.read_bytes() == (PUBLIC / "meta.json").read_bytes()
-    assert wrapped.read_bytes() == destination.read_bytes()
     captured = {}
 
     def fake_runner(command, **kwargs):
@@ -185,12 +173,6 @@ def test_fixed_reference_metadata_and_legacy_wrapper_are_byte_identical(
         "check": True,
     }
 
-    monkeypatch.setattr(
-        gen_meta._shared,
-        "rules_last_commit_iso",
-        lambda root, rules_file: "2026-07-20T05:34:31+09:00",
-    )
-    assert gen_meta.rules_last_commit_iso() == "2026-07-20T05:34:31+09:00"
 
 
 @pytest.mark.parametrize(
@@ -252,26 +234,6 @@ def test_catalog_capability_does_not_gate_range_or_matchup_statistics(tmp_path):
     assert destinations[0].exists()
     assert destinations[1].exists()
     assert not destinations[2].exists()
-
-
-def test_legacy_commands_route_to_shared_format_aware_implementation(monkeypatch):
-    captured = {}
-
-    def fake_candidates(root, format_id):
-        captured["pickup"] = (root, format_id)
-        return None
-
-    def fake_metadata(root, format_id, **kwargs):
-        captured["metadata"] = (root, format_id, kwargs)
-        return Path(kwargs["output_directory"]) / "meta.json"
-
-    monkeypatch.setattr(weekly_pickup._shared, "generate_candidates", fake_candidates)
-    monkeypatch.setattr(gen_meta._shared, "generate_metadata", fake_metadata)
-    assert weekly_pickup.generate_candidates() is None
-    destination = gen_meta.generate_metadata(output_directory="target")
-    assert captured["pickup"] == (ROOT, "standard")
-    assert captured["metadata"][0:2] == (ROOT, "standard")
-    assert destination == Path("target") / "meta.json"
 
 
 def test_shared_publication_module_has_no_implicit_standard_paths():

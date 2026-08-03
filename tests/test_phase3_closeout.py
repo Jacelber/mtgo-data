@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from generate_classification_reports import generate_reports
+from mtgmeta.classification_reports_cli import generate_reports
 from mtgmeta.mtgo import __main__ as cli
 from mtgmeta.mtgo import matchup, pickup, stats
 

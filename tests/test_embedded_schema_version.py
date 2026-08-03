@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from public_contract import PUBLIC_SCHEMA_VERSION, versioned
+from mtgmeta.public_contract import PUBLIC_SCHEMA_VERSION, versioned
 
 
 ROOT = Path(__file__).resolve().parents[1]

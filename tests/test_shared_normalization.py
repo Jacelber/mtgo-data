@@ -3,18 +3,13 @@
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
-if str(SRC) not in sys.path:
-    sys.path.insert(0, str(SRC))
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-
-from classify_standard import load_rules, match_archetype
 from mtgmeta.card_names import CARD_ALIASES, normalize_card_name
+from mtgmeta.classifier import classify_counts
+from mtgmeta.config import load_rule_set
 from mtgmeta.deck import count_card, deck_to_counts
 
 
@@ -79,7 +74,7 @@ def test_deck_normalization_merges_aliases_duplicates_and_zones_without_mutation
 
 def test_full_om1_mapping_improves_normalization_without_changing_3936_parent_results():
     records = json.loads(CORPUS_PATH.read_text(encoding="utf-8"))["records"]
-    rules = load_rules()
+    rules = load_rule_set(RULE_PATH)
     changed_decks = 0
     changed_alias_names = set()
     parent_differences = []
@@ -102,7 +97,7 @@ def test_full_om1_mapping_improves_normalization_without_changing_3936_parent_re
             changed_decks += 1
             changed_alias_names.update((set(legacy_main) | set(legacy_side)) & set(CARD_ALIASES))
 
-        selected = match_archetype(shared_main, shared_side, rules) or "Unknown"
+        selected = classify_counts(rules, shared_main, shared_side).archetype_name or "Unknown"
         if selected != record["expected"]:
             parent_differences.append((record["id"], record["expected"], selected))
 

@@ -2430,24 +2430,19 @@ These command shapes are architectural examples, not confirmation that the modul
 
 Final commands must be documented in `README.md` and tested before legacy commands are removed.
 
-### 17.1 Temporary compatibility wrappers
+### 17.1 Retired compatibility wrappers
 
-Existing scripts such as:
+P11-12 removed the temporary root compatibility wrappers after the installed
+package commands, package APIs, workflows, tests, and current README commands
+were verified. Supported MTGO operations now use `mtgo-data-mtgo --root .
+--format <id> <command>` or the equivalent `python -m mtgmeta.mtgo` form.
+Shared helpers are imported from `mtgmeta`, and the frozen aggregate Standard
+quality validator lives at `tools/validate_standard_quality.py`.
 
-- `classify_standard.py`;
-- `stats_standard.py`;
-- `stats_matchup.py`;
-- `batch_mtgo.py`;
-- `weekly_pickup.py`;
-
-may temporarily call the new package.
-
-A wrapper should:
-
-- preserve the old command where practical;
-- display deprecation information only after the replacement is stable;
-- avoid duplicating the full implementation;
-- be removed only in a documented cleanup phase.
+Historical audits and the Phase 3 inventory continue to name the former files
+as evidence of the migration. Their presence in those records does not make
+them current executable entry points. The parent commit and P11-12 pull-request
+diff are the rollback source for every removed file.
 
 ---
 

@@ -13,7 +13,7 @@ in [`docs/STATUS.yaml`](docs/STATUS.yaml).
 
 The current Standard page compatibility baseline is documented in [`docs/audits/P1-11.md`](docs/audits/P1-11.md). Run `python -m pytest tests/test_standard_public_contract.py` for its automated checks and use [`docs/checklists/STANDARD_FRONTEND_SMOKE.md`](docs/checklists/STANDARD_FRONTEND_SMOKE.md) for browser verification.
 
-The legacy Standard classification-quality baseline is documented in [`docs/audits/P1-12.md`](docs/audits/P1-12.md). Run `python validate_standard_quality.py` to verify frozen Unknown and multiple-match aggregates without reading mutable production data.
+The legacy Standard classification-quality baseline is documented in [`docs/audits/P1-12.md`](docs/audits/P1-12.md). Run `python tools/validate_standard_quality.py` to verify frozen Unknown and multiple-match aggregates without reading mutable production data.
 
 Standard public JSON embeds `schema_version: "1.0.0"`. The producer migration and compatibility proof are documented in [`docs/audits/P1-13.md`](docs/audits/P1-13.md); run `python validate_schemas.py` to verify all declared outputs.
 
@@ -57,8 +57,9 @@ data. For example:
 ```
 
 Installing the package adds no credentials, network access, scheduled jobs, or
-production-data changes. All root-level Python scripts remain supported
-compatibility entry points.
+production-data changes. Maintained operational validators and publication
+tools remain at the repository root; retired compatibility commands are
+replaced by the installed package commands shown below.
 
 ## Validation
 
@@ -70,7 +71,8 @@ Run the read-only repository validator, rule validator, and tests from the repos
 .\.venv\Scripts\python.exe -m mypy
 .\.venv\Scripts\python.exe validate_rules.py
 .\.venv\Scripts\python.exe validate_rules.py path\to\versioned-rules.yaml
-.\.venv\Scripts\python.exe generate_classification_reports.py --strict
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard classification-reports --strict
+.\.venv\Scripts\python.exe tools\validate_standard_quality.py
 .\.venv\Scripts\python.exe validate_schemas.py
 .\.venv\Scripts\python.exe -m pytest
 ```
@@ -356,9 +358,18 @@ Parents with zero or one subtype remain non-expandable. Interactive cells are
 recalculated from canonical W-L-D counts; displayed percentages are never
 averaged together.
 
-`generate_classification_reports.py` remains a legacy Standard compatibility command. The production workflow now uses the format-aware command above. The reports omit player names, login IDs, and raw player records while retaining event context, stable pseudonymous deck IDs, matched rule evidence, and Unknown decklists. `--strict` returns a failure when an unresolved classification conflict or invalid deck input is present. These reports are operational diagnostics and are not consumed by the current front end.
+Classification reports use the format-aware `mtgo-data-mtgo` command above.
+They omit player names, login IDs, and raw player records while retaining event
+context, stable pseudonymous deck IDs, matched rule evidence, and Unknown
+decklists. `--strict` returns a failure when an unresolved classification
+conflict or invalid deck input is present. These reports are operational
+diagnostics and are not consumed by the current front end.
 
-The root-level `batch_mtgo.py`, `fetch_videre_matches.py`, `stats_standard.py`, `stats_matchup.py`, `weekly_pickup.py`, and `gen_meta.py` commands remain compatibility entry points. They are no longer production-workflow dependencies and are not removed during Phase 3 migration. Candidate generation never publishes or changes the known-archetype state by itself.
+The former root-level Standard compatibility commands were retired in P11-12.
+Use `mtgo-data-mtgo --root . --format <id>` with `fetch-events`,
+`fetch-matches`, `build-statistics`, `build-matchups`, `pickup`,
+`generate-metadata`, or `classification-reports` as applicable. Candidate
+generation never publishes or changes the known-archetype state by itself.
 
 The Schema mapping in `schemas/manifest.json` is versioned as `1.0.0`. It protects the existing Standard MTGO page-consumed JSON and the classification diagnostic reports; every declared output embeds `schema_version: "1.0.0"`.
 

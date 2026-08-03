@@ -31,6 +31,32 @@ RULE_FIXTURE = ROOT / "tests" / "fixtures" / "rules" / "valid_shared_rules.yaml"
 REPORT_DIR = ROOT / "reports" / "standard" / "mtgo"
 
 
+def classification_cli(
+    root: Path,
+    format_id: str,
+    *,
+    output: Path | None = None,
+    strict: bool = False,
+    registry: Path | None = None,
+) -> list[str]:
+    command = [
+        sys.executable,
+        "-B",
+        "-m",
+        "mtgmeta.mtgo",
+        "--root",
+        str(root),
+    ]
+    if registry is not None:
+        command.extend(["--registry", str(registry)])
+    command.extend(["--format", format_id, "classification-reports"])
+    if output is not None:
+        command.extend(["--output-dir", str(output)])
+    if strict:
+        command.append("--strict")
+    return command
+
+
 def production_reports():
     events = load_events((ROOT / "data" / "standard").glob("*.json"), ROOT)
     return build_classification_reports(events, load_rule_set(STANDARD_RULES))
@@ -137,10 +163,9 @@ def test_equal_priority_conflict_is_reported_and_blocks_strict_validation():
 
 
 def test_cli_regenerates_and_strictly_validates_in_any_working_directory(tmp_path):
-    script = ROOT / "generate_classification_reports.py"
     output = tmp_path / "reports"
     result = subprocess.run(
-        [sys.executable, "-B", str(script), "--output-dir", str(output), "--strict"],
+        classification_cli(ROOT, "standard", output=output, strict=True),
         cwd=tmp_path,
         text=True,
         capture_output=True,
@@ -172,15 +197,16 @@ def test_cli_writes_conflict_report_before_strict_failure(tmp_path):
     }
     (data_dir / "fixture.json").write_text(json.dumps(event), encoding="utf-8")
     rule_text = RULE_FIXTURE.read_text(encoding="utf-8").replace("priority: 50", "priority: 100")
-    rules = tmp_path / "rules.yaml"
+    rules = tmp_path / "my_archetypes" / "standard.yaml"
+    rules.parent.mkdir()
     rules.write_text(rule_text, encoding="utf-8")
-    script = ROOT / "generate_classification_reports.py"
     result = subprocess.run(
-        [
-            sys.executable, "-B", str(script), "--root", str(tmp_path),
-            "--registry", str(ROOT / "configs" / "formats.yaml"),
-            "--rules", str(rules), "--strict",
-        ],
+        classification_cli(
+            tmp_path,
+            "standard",
+            strict=True,
+            registry=ROOT / "configs" / "formats.yaml",
+        ),
         cwd=tmp_path,
         text=True,
         capture_output=True,
@@ -207,48 +233,30 @@ def test_cli_rejects_cross_format_event_before_writing_reports(tmp_path):
     )
     output = tmp_path / "reports"
     result = subprocess.run(
-        [
-            sys.executable,
-            "-B",
-            str(ROOT / "generate_classification_reports.py"),
-            "--root",
-            str(tmp_path),
-            "--registry",
-            str(ROOT / "configs" / "formats.yaml"),
-            "--data-dir",
-            str(data_dir),
-            "--rules",
-            str(STANDARD_RULES),
-            "--output-dir",
-            str(output),
-        ],
+        classification_cli(
+            tmp_path,
+            "standard",
+            output=output,
+            registry=ROOT / "configs" / "formats.yaml",
+        ),
         cwd=tmp_path,
         text=True,
         capture_output=True,
     )
     assert result.returncode == 2
-    assert "cross-format event input rejected" in result.stdout
-    assert "CMODERN" in result.stdout
+    assert "cross-format event input rejected" in result.stderr
+    assert "CMODERN" in result.stderr
     assert not output.exists()
 
 
 def test_cli_rejects_a_disabled_format_before_creating_report_output(tmp_path):
-    script = ROOT / "generate_classification_reports.py"
     output = tmp_path / "reports"
     result = subprocess.run(
-        [
-            sys.executable,
-            "-B",
-            str(script),
-            "--format",
-            "pauper",
-            "--output-dir",
-            str(output),
-        ],
+        classification_cli(ROOT, "pauper", output=output),
         cwd=tmp_path,
         text=True,
         capture_output=True,
     )
     assert result.returncode == 2
-    assert "not enabled" in result.stdout
+    assert "not enabled" in result.stderr
     assert not output.exists()

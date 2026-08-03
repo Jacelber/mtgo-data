@@ -2,19 +2,15 @@
 
 import hashlib
 import json
-import sys
 from pathlib import Path
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-repository_root_text = str(REPOSITORY_ROOT)
-if repository_root_text not in sys.path:
-    sys.path.insert(0, repository_root_text)
-
-from classify_standard import load_rules, match_archetype
+from mtgmeta.classifier import classify_counts
+from mtgmeta.config import load_rule_set
 
 
-ROOT = REPOSITORY_ROOT
+ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
+RULES = ROOT / "my_archetypes" / "standard.yaml"
 EXPECTED_DIGEST = "af1b6af542c7185ba507994e8f666c89272dc67e00318fc9399b0a1c3623fe0b"
 
 
@@ -23,7 +19,7 @@ def load_records():
 
 
 def legacy_rules():
-    return load_rules()
+    return load_rule_set(RULES)
 
 
 def digest(records):
@@ -41,6 +37,7 @@ def test_frozen_corpus_is_complete_deterministic_and_reclassified():
     for record in records:
         main = dict(record["main"])
         side = dict(record["side"])
-        actual = match_archetype(main, side, rules) or "Unknown"
+        result = classify_counts(rules, main, side)
+        actual = result.archetype_name or "Unknown"
         assert actual == record["expected"], record["id"]
     assert sum(record["expected"] == "Unknown" for record in records) == 71

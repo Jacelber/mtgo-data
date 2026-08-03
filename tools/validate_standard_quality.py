@@ -7,14 +7,19 @@ import hashlib
 import json
 from collections import Counter
 from pathlib import Path
+import sys
 from typing import Any
 
-from classify_standard import all_matching_archetype_names
+ROOT = Path(__file__).resolve().parents[1]
+SHARED_SRC = ROOT / "src"
+if str(SHARED_SRC) not in sys.path:
+    sys.path.insert(0, str(SHARED_SRC))
+
+from mtgmeta.classifier import evaluate_matches
 from mtgmeta.config import load_rule_set
-from mtgmeta.legacy_rules import to_legacy_archetypes
+from mtgmeta.rules import RuleSet
 
 
-ROOT = Path(__file__).resolve().parent
 CORPUS = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
 BASELINE = ROOT / "tests" / "fixtures" / "standard" / "quality_baseline.json"
 RULES = ROOT / "my_archetypes" / "standard.yaml"
@@ -24,18 +29,18 @@ def load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def matching_names(record: dict[str, Any], rules: list[dict[str, Any]]) -> list[str]:
+def matching_names(record: dict[str, Any], rule_set: RuleSet) -> list[str]:
     main = dict(record["main"])
     side = dict(record["side"])
-    return all_matching_archetype_names(main, side, rules)
+    return [match.archetype_name for match in evaluate_matches(rule_set, main, side)]
 
 
-def analyze(records: list[dict[str, Any]], rules: list[dict[str, Any]]) -> dict[str, Any]:
+def analyze(records: list[dict[str, Any]], rule_set: RuleSet) -> dict[str, Any]:
     unknown = 0
     multiple = []
     maximum = 0
     for record in records:
-        matches = matching_names(record, rules)
+        matches = matching_names(record, rule_set)
         maximum = max(maximum, len(matches))
         if not matches:
             unknown += 1
@@ -43,13 +48,19 @@ def analyze(records: list[dict[str, Any]], rules: list[dict[str, Any]]) -> dict[
             multiple.append({"id": record["id"], "matches": matches})
 
     canonical = json.dumps(multiple, ensure_ascii=False, separators=(",", ":"))
+    rule_names = [
+        archetype.name
+        for archetype in rule_set.archetypes
+        for _rule in archetype.rules
+    ]
     duplicate_names = {
-        name: count for name, count in sorted(Counter(rule["name"] for rule in rules).items())
+        name: count
+        for name, count in sorted(Counter(rule_names).items())
         if count > 1
     }
     return {
         "records": len(records),
-        "rules": len(rules),
+        "rules": len(rule_names),
         "unknown": unknown,
         "multiple_matches": len(multiple),
         "maximum_matches_per_deck": maximum,
@@ -61,8 +72,7 @@ def analyze(records: list[dict[str, Any]], rules: list[dict[str, Any]]) -> dict[
 def validate() -> list[str]:
     baseline = load_json(BASELINE)
     records = load_json(CORPUS)["records"]
-    rules = to_legacy_archetypes(load_rule_set(RULES))
-    actual = analyze(records, rules)
+    actual = analyze(records, load_rule_set(RULES))
     failures = []
     for key in actual:
         if actual[key] != baseline.get(key):

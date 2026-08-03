@@ -1,29 +1,16 @@
-"""P2-06 tests for routing legacy Standard entry points through the shared classifier."""
+"""Integration tests for Standard package classification consumers."""
 
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
-import pytest
+from mtgmeta.classifier import classify_counts, classify_deck
+from mtgmeta.config import load_rule_set
+from mtgmeta.mtgo import stats
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "src"
-for path in (ROOT, SRC):
-    if str(path) not in sys.path:
-        sys.path.insert(0, str(path))
-
-import classify_standard
-import cluster_unknown
-import dump_unknown_highperf
-import event_report
-import stats_matchup
-import stats_standard
-from mtgmeta.config import load_rule_set
-from mtgmeta.legacy_rules import LegacyArchetypeRules, to_legacy_archetypes
-
-
+STANDARD_RULES = ROOT / "my_archetypes" / "standard.yaml"
 CONFLICT_RULES = ROOT / "tests" / "fixtures" / "rules" / "valid_shared_rules.yaml"
 
 
@@ -38,101 +25,66 @@ def monument_player():
     }
 
 
-def test_loaded_legacy_view_retains_rule_set_and_shared_full_result():
-    rules = classify_standard.load_rules()
-    assert isinstance(rules, LegacyArchetypeRules)
-    assert len(rules) == 76
-    assert len(rules.rule_set.archetypes) == 74
+def test_loaded_rules_and_full_result_use_package_apis():
+    rule_set = load_rule_set(STANDARD_RULES)
+    assert len(rule_set.archetypes) == 74
+    assert sum(len(archetype.rules) for archetype in rule_set.archetypes) == 76
 
-    main, side = classify_standard.deck_to_counts(monument_player())
-    result = classify_standard.classify_standard_result(main, side, rules)
+    result = classify_deck(rule_set, monument_player())
     assert result.status == "classified"
     assert result.archetype_id == "monument-lessons"
     assert result.archetype_name == "Monument Lessons"
-    assert classify_standard.match_archetype(main, side, rules) == "Monument Lessons"
 
 
-def test_compatibility_match_calls_shared_classifier(monkeypatch):
+def test_standard_stats_process_event_uses_shared_classifier(monkeypatch):
     calls = []
-    shared = classify_standard.classify_counts
+    shared = stats.classify_deck
 
-    def recording_classifier(rule_set, main, side):
-        calls.append((rule_set, main, side))
-        return shared(rule_set, main, side)
-
-    monkeypatch.setattr(classify_standard, "classify_counts", recording_classifier)
-    rules = classify_standard.load_rules()
-    main, side = classify_standard.deck_to_counts(monument_player())
-    assert classify_standard.match_archetype(main, side, rules) == "Monument Lessons"
-    assert len(calls) == 1
-    assert calls[0][0] is rules.rule_set
-
-
-def test_standard_stats_process_event_uses_shared_compatibility_path(monkeypatch):
-    calls = []
-    shared = classify_standard.classify_counts
-
-    def recording_classifier(rule_set, main, side):
+    def recording_classifier(rule_set, player):
         calls.append(rule_set)
-        return shared(rule_set, main, side)
+        return shared(rule_set, player)
 
-    monkeypatch.setattr(classify_standard, "classify_counts", recording_classifier)
+    monkeypatch.setattr(stats, "classify_deck", recording_classifier)
     event = {
         "player_count": 32,
         "starttime": "2026-01-01T00:00:00Z",
         "description": "Integration fixture",
-        "players": [dict(monument_player(), swiss_score=12, final_rank=1, player="Fixture")],
+        "players": [
+            dict(monument_player(), swiss_score=12, final_rank=1, player="Fixture")
+        ],
     }
-    rules = classify_standard.load_rules()
-    processed = stats_standard.process_event(event, rules)
+    rule_set = load_rule_set(STANDARD_RULES)
+    processed = stats.process_event(event, rule_set)
     assert processed["records"][0]["archetype"] == "Monument Lessons"
-    assert calls == [rules.rule_set]
+    assert calls == [rule_set]
 
 
 def test_selected_subtype_is_available_without_changing_parent_string():
-    rules = classify_standard.load_rules()
-    main = {
-        "Scalding Viper": 3,
-        "Razorkin Needlehead": 3,
-        "Spirebluff Canal": 1,
-    }
-    result = classify_standard.classify_standard_result(main, {}, rules)
+    result = classify_counts(
+        load_rule_set(STANDARD_RULES),
+        {
+            "Scalding Viper": 3,
+            "Razorkin Needlehead": 3,
+            "Spirebluff Canal": 1,
+        },
+        {},
+    )
     assert (result.archetype_id, result.subtype_id) == (
         "izzet-aggro",
         "razorkin-needlehead",
     )
-    assert classify_standard.match_archetype(main, {}, rules) == "Izzet Aggro"
+    assert result.archetype_name == "Izzet Aggro"
 
 
-def test_conflict_and_invalid_input_fail_explicitly_in_legacy_string_api():
-    rules = to_legacy_archetypes(load_rule_set(CONFLICT_RULES))
-    with pytest.raises(classify_standard.StandardClassificationConflict) as conflict:
-        classify_standard.match_archetype(
-            {"Example Engine": 3, "Example Answer": 4},
-            {},
-            rules,
-        )
-    assert conflict.value.result.status == "conflict"
-    assert conflict.value.result.conflict_kind == "subtype"
+def test_conflict_and_invalid_input_are_explicit_package_results():
+    rule_set = load_rule_set(CONFLICT_RULES)
+    conflict = classify_counts(
+        rule_set,
+        {"Example Engine": 3, "Example Answer": 4},
+        {},
+    )
+    assert conflict.status == "conflict"
+    assert conflict.conflict_kind == "subtype"
 
-    with pytest.raises(classify_standard.StandardInvalidDeck) as invalid:
-        classify_standard.match_archetype({"Example Threat": True}, {}, rules)
-    assert invalid.value.result.status == "invalid_deck"
-
-
-def test_plain_legacy_lists_remain_supported_for_external_compatibility():
-    rules = [
-        {"name": "Legacy", "signatureCards": [{"name": "Card", "minCopies": 2}]}
-    ]
-    assert classify_standard.match_archetype({"Card": 2}, {}, rules) == "Legacy"
-    assert classify_standard.match_archetype({"Card": 1}, {}, rules) is None
-
-
-def test_auxiliary_entry_points_share_the_central_match_function():
-    assert event_report.match_archetype is classify_standard.match_archetype
-    assert stats_standard.match_archetype is classify_standard.match_archetype
-    assert stats_matchup.match_archetype is classify_standard.match_archetype
-    rules = classify_standard.load_rules()
-    main, side = classify_standard.deck_to_counts(monument_player())
-    assert cluster_unknown.is_unknown(main, side, rules) is False
-    assert dump_unknown_highperf.is_unknown(main, side, rules) is False
+    invalid = classify_counts(rule_set, {"Example Threat": True}, {})
+    assert invalid.status == "invalid_deck"

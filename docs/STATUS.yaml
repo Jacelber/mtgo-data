@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p11-09-skip-record"
+  current_working_branch: "codex/p11-12-legacy-entry-cleanup"
   working_branch_status: "master_is_authoritative_and_task_branches_have_no_standing_authority"
   status: "active"
   primary_language: "Python"
@@ -12,7 +12,7 @@ project:
 
 status_document:
   purpose: "Machine-readable record of current project progress and next actions."
-  last_updated: "2026-08-02"
+  last_updated: "2026-08-03"
   updated_by: "project-owner-with-ai-assistance"
   update_required_after_each_phase: true
   authoritative_for:
@@ -66,27 +66,36 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P11-11"
-  name: "Audit legacy entry points and produce an owner deletion list"
+  id: "P11-12"
+  name: "Delete approved entry points or move approved tools under tools"
   status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-03"
-  workspace: "C:/tmp/mtgo-data-p11-11-legacy-entry-audit-20260803-02"
-  branch: "codex/p11-11-legacy-entry-audit"
-  base_commit: "43476a3076127bbae7b6950f8c7da9099ef044d0"
-  task_type: "documentation_and_repository_entry_point_audit"
-  objective: "Inventory every repository-root Python entry point, verify current callers and replacements, and produce a conservative owner deletion or relocation list without deleting or moving any entry point."
+  workspace: "C:/tmp/mtgo-data-p11-12-legacy-entry-cleanup-20260803-01"
+  branch: "codex/p11-12-legacy-entry-cleanup"
+  base_commit: "fa0409b3ab77177632e656a249ae485755b531ce"
+  task_type: "approved_legacy_entry_point_retirement_and_tool_relocation"
+  objective: "Execute the exact P11-11 owner-approved cleanup list after migrating live callers to installed commands and package APIs, without changing production or public behavior."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "docs/audits/P11-11.md"
+    - "approved P11-11 legacy entry points and retained diagnostics"
+    - "tools/validate_standard_quality.py"
+    - "README.md"
+    - "live tests that imported or invoked retired entry points"
+    - "tests/fixtures/mtgo/format_pipeline_contract.json"
+    - "src/mtgmeta/mtgo/stats.py"
+    - "docs/audits/P11-12.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    entry_points_deleted_or_moved: false
-    executable_code_changed: false
+    approved_entry_points_deleted: 18
+    approved_tools_moved: 1
+    active_root_tools_retained: 9
     workflow_changed: false
     raw_or_generated_data_changed: false
     statistical_behavior_changed: false
@@ -97,19 +106,26 @@ current_task:
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    complete_inventory: "All 26 repository-root Python files are classified as active, compatibility, obsolete, or relocatable."
-    owner_decision_list: "The audit provides an individual evidence-backed recommendation and required P11-12 condition for every non-active entry point."
-    no_implementation: "No audited entry point or related artifact is deleted, moved, or behaviorally changed during P11-11."
+    exact_cleanup: "The nine compatibility wrappers, seven obsolete scripts, and two retired diagnostic outputs approved in P11-11 are deleted; the nine active root tools remain."
+    quality_tool: "The Standard quality validator is under tools, uses package APIs, and preserves the frozen 3936-record aggregate result."
+    caller_migration: "Current README commands and live tests use installed commands or mtgmeta package APIs; the Phase 3 fixture is explicitly historical."
+    protected_behavior: "No workflow, data, statistics, Schema, public path, front-end source, or protected event 434455 byte changes."
   validation:
-    repository_reference_audit: "passed: 26 of 26 root Python files classified; 9 active workflow tools matched exactly; 0 audited non-active candidates referenced by workflows"
+    focused_migration_tests: "passed: 140 tests, 5 deselected in 55.33 seconds"
+    full_pytest_ordinary: "passed: 666 tests, 8 deselected in 278.61 seconds"
+    full_pytest_committed_baseline: "passed: 8 tests, 666 deselected in 118.13 seconds"
+    standard_quality: "passed: records=3936 unknown=71 multiple_matches=947"
     installed_command_smoke: "passed: mtgo-data-mtgo, mtgo-data-catalog, and mtgo-data-melee help loaded from the installed package"
-    documentation_validation: "passed: 3 publication-governance documentation tests"
-    repository_validation: "passed: 145 Python, 9 JavaScript, 1636 JSON, 23 YAML, 40 references, and 1962 hygiene checks"
-    protected_path_review: "passed: only docs/audits/P11-11.md, docs/ROADMAP.md, and docs/STATUS.yaml changed; no deletion, move, executable, workflow, data, Schema, or front-end diff"
-  owner_acceptance: "accepted_recommended_list"
-  owner_accepted_on: "2026-08-03"
-  owner_publication_authorized_on: "2026-08-03"
-  stop_point: "Commit, push, pull request creation, CI monitoring, and merge are authorized for P11-11. Do not begin P11-12 without separate owner authorization."
+    ruff: "passed"
+    mypy: "passed: 4 source files"
+    repository_validation: "passed: 129 Python, 9 JavaScript, 1636 JSON, 23 YAML, 40 references, and 1945 hygiene checks"
+    rule_validation: "passed: my_archetypes/standard.yaml"
+    schema_validation: "passed: 69 public generated JSON documents"
+    protected_path_review: "passed: no data, data_raw, stats, Schema, workflow, HTML, CSS, JavaScript, public-path, or event 434455 diff"
+  owner_acceptance: "accepted"
+  owner_accepted_on: "2026-08-04"
+  owner_publication_authorized_on: "2026-08-04"
+  stop_point: "P11-12 commit, push, pull-request creation, CI monitoring, and merge are authorized. Do not dispatch production or begin P11-13."
 
 modern_selesnya_eldrazi_ramp_hotfix_result:
   id: "HOTFIX-2026-08-03-MODERN-SELESNYA-ELDRAZI-RAMP-SUBTYPE"
@@ -6972,8 +6988,8 @@ phase_9_result:
     event_activation_authorized: false
 
 next_approved_task:
-  id: "P11-12"
-  name: "Delete approved entry points or move approved tools under tools"
+  id: "P11-13"
+  name: "Reduce STATUS, README, and agent-guide duplication"
   target_paths: "to_be_confirmed_before_authorization"
   production_change: false
   requires_user_confirmation: true
@@ -6981,7 +6997,7 @@ next_approved_task:
   local_execution_authorized: false
   remote_publication_authorized: false
   production_dispatch_authorized: false
-  planning_status: "P11-11 awaits owner acceptance and deletion-list selection. P11-12 may begin only after separate owner authorization; DEC-078 keeps draw-adjusted compatibility retirement as the first Phase 19 versioned migration."
+  planning_status: "P11-12 is accepted and authorized for publication. P11-13 must not begin automatically; DEC-078 keeps draw-adjusted compatibility retirement as the first Phase 19 versioned migration."
 
 governance_baseline:
   status: "active_on_master"
@@ -7030,8 +7046,7 @@ delegated_local_execution_governance:
   completes_p1_06: true
 
 prohibited_next_actions:
-  - "Do not commit or remotely publish P11-11 without separate owner authorization."
-  - "Do not delete or move any audited entry point, delete a related retained diagnostic, or begin P11-12 or any later development task without separate owner authorization."
+  - "Do not begin P11-13 or any later development task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not execute a history filter, path deletion, force-push, branch/tag mutation, GitHub Support request, or compatibility migration; the owner selected continued public Git retention and deferred history rewriting."
   - "Do not change configs/melee_events.yaml, activate an event, dispatch Melee production, retain new source responses, or publish new event data without separate owner authorization."

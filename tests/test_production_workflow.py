@@ -32,7 +32,7 @@ def command_index(name, fragment):
 def test_mtgo_remains_the_only_scheduled_production_workflow():
     assert not (WORKFLOWS / "scrape.yml").exists()
     assert UPDATE.exists()
-    assert (ROOT / "batch_mtgo.py").exists()
+    assert (ROOT / "src" / "mtgmeta" / "mtgo" / "__main__.py").exists()
     assert sorted(path.name for path in WORKFLOWS.glob("*.yml")) == [
         "ci.yml",
         "fetch_melee.yml",

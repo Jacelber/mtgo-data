@@ -23,6 +23,7 @@ def test_contract_is_pinned_to_the_phase_2_recovery_baseline():
         "tag": "phase-2-shared-classifier-baseline",
         "commit": "a9e35a2c957d32f2bc0fb43c8a0777a25f71c31c",
     }
+    assert contract["inventory_status"] == "historical_snapshot_retained_after_p11_12"
     assert not any(contract["scope"].values())
 
 
@@ -86,13 +87,18 @@ def test_migration_sequence_covers_every_phase_3_pipeline_capability_once():
     assert tasks == ["P3-02", "P3-03", "P3-04", "P3-05", "P3-06", "P3-07", "P3-08"]
     assert len(covered) == len(set(covered))
     assert set(covered) == set(contract["required_capabilities"])
-    for unit in units:
-        for entry_point in unit["current_entry_points"]:
-            assert (ROOT / entry_point).is_file(), entry_point
+    assert all(unit["current_entry_points"] for unit in units)
+    assert all(
+        (ROOT / target).is_file()
+        for unit in units
+        for target in unit["target_modules"]
+    )
 
 
-def test_hardcoded_inventory_tracks_migrated_and_remaining_boundaries():
-    inventory = load_json(CONTRACT_PATH)["hardcoded_inventory"]
+def test_historical_hardcoded_inventory_retains_migration_evidence():
+    contract = load_json(CONTRACT_PATH)
+    inventory = contract["hardcoded_inventory"]
+    retired = set(contract["standard_contract"]["legacy_entry_points"])
     migrated_snippets = {
         "batch_mtgo.py": {"folder = os.path.join(DATA_DIR, fmt)"},
         "classify_standard.py": {
@@ -136,7 +142,10 @@ def test_hardcoded_inventory_tracks_migrated_and_remaining_boundaries():
     assert len(inventory) == 12
     for item in inventory:
         path = ROOT / item["file"]
-        assert path.is_file(), item["file"]
+        if not path.is_file():
+            assert item["file"] in retired
+            assert item["snippets"]
+            continue
         source = path.read_text(encoding="utf-8")
         for snippet in item["snippets"]:
             if snippet in migrated_snippets.get(item["file"], set()):

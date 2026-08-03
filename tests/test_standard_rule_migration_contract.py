@@ -5,25 +5,19 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-import sys
 from collections import Counter, defaultdict
 from dataclasses import replace
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-root_text = str(ROOT)
-if root_text not in sys.path:
-    sys.path.insert(0, root_text)
-
-from classify_standard import deck_to_counts, load_rules as load_production_rules, signature_card_met
+from mtgmeta.classifier import evaluate_matches
 from mtgmeta.config import load_rule_set
 from mtgmeta.legacy_rules import to_legacy_archetypes
 
 
+ROOT = Path(__file__).resolve().parents[1]
 CONTRACT_PATH = ROOT / "tests" / "fixtures" / "standard" / "rule_migration_contract.json"
 CORPUS_PATH = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
 RULE_PATH = ROOT / "my_archetypes" / "standard.yaml"
-CLASSIFIER_PATH = ROOT / "classify_standard.py"
 ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
@@ -32,7 +26,7 @@ def load_contract():
 
 
 def load_rules():
-    return load_production_rules()
+    return to_legacy_archetypes(load_rule_set(RULE_PATH))
 
 
 def canonical_digest(value):
@@ -44,18 +38,9 @@ def normalized_text_sha256(path):
     return hashlib.sha256(path.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
 
 
-def matched_rule_indexes(record, legacy_rules):
-    player = {
-        "main_deck": [{"name": name, "qty": qty} for name, qty in record["main"]],
-        "sideboard": [{"name": name, "qty": qty} for name, qty in record["side"]],
-    }
-    main, side = deck_to_counts(player)
-    return [
-        index
-        for index, rule in enumerate(legacy_rules)
-        if rule.get("signatureCards")
-        and all(signature_card_met(card, main, side) for card in rule["signatureCards"])
-    ]
+def matched_rule_indexes(record, rule_set, indexes_by_rule_id):
+    matches = evaluate_matches(rule_set, dict(record["main"]), dict(record["side"]))
+    return sorted(indexes_by_rule_id[match.rule_id] for match in matches)
 
 
 def test_contract_identity_and_phase_1_baseline_remains_frozen_after_migration():
@@ -170,7 +155,10 @@ def test_archetype_and_subtype_scope_is_exactly_the_owner_approved_migration():
 def test_explicit_priorities_preserve_all_3936_parent_archetypes_and_quality_counts():
     contract = load_contract()
     mappings = contract["rules"]
-    legacy_rules = load_rules()
+    rule_set = load_rule_set(RULE_PATH)
+    indexes_by_rule_id = {
+        mapping["rule_id"]: mapping["legacy_index"] for mapping in mappings
+    }
     records = json.loads(CORPUS_PATH.read_text(encoding="utf-8"))["records"]
     parent_differences = []
     unknown = 0
@@ -180,7 +168,7 @@ def test_explicit_priorities_preserve_all_3936_parent_archetypes_and_quality_cou
     same_parent_multi_subtype = 0
 
     for record in records:
-        indexes = matched_rule_indexes(record, legacy_rules)
+        indexes = matched_rule_indexes(record, rule_set, indexes_by_rule_id)
         maximum_matches = max(maximum_matches, len(indexes))
         multiple += len(indexes) > 1
         if not indexes:
