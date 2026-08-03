@@ -58,12 +58,13 @@ def test_all_declared_schemas_are_valid_and_versioned():
     assert loaded["melee-events.schema.json"]["x-schema-version"] == "3.0.0"
     assert loaded["melee-event.schema.json"]["x-schema-version"] == "2.2.0"
     assert loaded["melee-raw-archive.schema.json"]["x-schema-version"] == "3.0.0"
+    assert loaded["melee-compatibility-manifest.schema.json"]["x-schema-version"] == "1.1.0"
     assert all(
         schema["x-schema-version"] == "1.0.0"
         for name, schema in loaded.items()
         if name not in {
             "formats.schema.json", "melee-events.schema.json", "melee-event.schema.json",
-            "melee-raw-archive.schema.json"
+            "melee-raw-archive.schema.json", "melee-compatibility-manifest.schema.json"
         }
     )
 

@@ -1499,7 +1499,8 @@ unchanged.
 
 ### 11.12 Reference-event compatibility manifest
 
-P10-02 defines the version `1.0.0` compatibility boundary for mixed Melee
+The Selesnya Eldrazi Ramp subtype hotfix updates the version `1.1.0`
+compatibility boundary for mixed Melee
 event `434455` in
 `tests/fixtures/melee/434455_compatibility_manifest.json`. Its exact-byte set
 contains the raw snapshot manifest, normalized event, classification overlay,

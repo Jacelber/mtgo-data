@@ -3255,6 +3255,45 @@ Until that separately authorized migration is accepted and published, existing
 compatibility fields retain their historical meaning and bytes. No new product,
 generator, or consumer may depend on them.
 
+---
+
+# DEC-079 - Version the 434455 compatibility closure for Selesnya Eldrazi Ramp
+
+Status: `Accepted`
+
+## Context
+
+The 2026-08-02 MTGO production run stopped before publication because two
+Selesnya Eldrazi Ramp decks selected the maintained `eldrazi-ramp` parent but
+no subtype. The strict classifier correctly rejected that residual state.
+
+Adding the explicit `eldrazi-ramp/selesnya` taxonomy leaf changes the rule
+provenance embedded in the retained event `434455` classification overlay and
+the complete hierarchy enumerated by its derived documents. The event's raw
+snapshot and normalized event remain immutable, but their derived exact bytes
+must not be changed silently under the version `1.0.0` compatibility contract.
+
+## Decision
+
+The owner authorizes this narrow compatibility migration. Add the explicit
+Selesnya Eldrazi Ramp subtype and regenerate derived Modern documents from
+their committed inputs using the prior MTGO statistics cutoff. Do not fetch,
+retain, or publish new source responses; do not change statistical formulas,
+schemas for product documents, front-end code, or public paths.
+
+Advance `tests/fixtures/melee/434455_compatibility_manifest.json` and its
+schema contract from `1.0.0` to `1.1.0`, recording the new deterministic bytes
+for the classification overlay, opportunity ledger, and five event outputs.
+The raw snapshot, normalized event, selected catalog projections, and every
+event-performance sample remain unchanged. The regenerated MTGO windows add
+only the zero-count `eldrazi-ramp/selesnya` hierarchy leaf.
+
+## Consequences
+
+Future exact-byte validation uses the explicit version `1.1.0` contract. The
+same previously unclassified Selesnya deck signature is now classified without
+weakening the residual-subtype stop for future unknown Eldrazi Ramp variants.
+
 ## Consequences
 
 Phase 11 avoids throwaway abstraction work and retains its no-production-change

@@ -43,8 +43,8 @@ def test_taxonomy_structure_uses_stable_unique_identities_and_mainboard_rules():
     assert rules.format == contract["format"] == "modern"
     assert hashlib.sha256(RULE_PATH.read_bytes()).hexdigest() == expected["rules_sha256"]
     assert len(rules.archetypes) == expected["parents_defined"] == 55
-    assert len(all_rules) == expected["rules_defined"] == 101
-    assert len(all_subtypes) == expected["subtypes_defined"] == 54
+    assert len(all_rules) == expected["rules_defined"] == 102
+    assert len(all_subtypes) == expected["subtypes_defined"] == 55
     assert len({parent.id for parent in rules.archetypes}) == len(rules.archetypes)
     assert len({rule.id for rule in all_rules}) == len(all_rules)
     assert len({rule.priority for rule in all_rules}) == len(all_rules)
@@ -81,6 +81,14 @@ def test_owner_approved_parent_and_subtype_boundaries_are_explicit():
         "mono-green",
         "mono-black",
     }
+    assert {subtype.id for subtype in by_id["eldrazi-ramp"].subtypes} == {
+        "golgari",
+        "gruul",
+        "selesnya",
+        "simic",
+        "sultai",
+        "temur",
+    }
     assert {subtype.id for subtype in by_id["oculus-ritual"].subtypes} == {
         "sultai",
         "simic",
@@ -111,6 +119,28 @@ def test_golgari_eldrazi_ramp_accepts_underground_mortuary_build():
     assert result.archetype_id == "eldrazi-ramp"
     assert result.subtype_id == "golgari"
     assert result.selected_rule_id == "eldrazi-ramp-golgari-underground-mortuary"
+
+
+def test_selesnya_eldrazi_ramp_selects_an_explicit_subtype():
+    rules = load_rule_set(RULE_PATH)
+    result = classify_counts(
+        rules,
+        {
+            "Sowing Mycospawn": 4,
+            "Ugin's Labyrinth": 4,
+            "Eldrazi Temple": 4,
+            "Talisman of Unity": 4,
+            "Temple Garden": 2,
+            "Windswept Heath": 4,
+            "Kozilek's Command": 4,
+            "Wrath of the Skies": 3,
+        },
+        {},
+    )
+
+    assert result.archetype_id == "eldrazi-ramp"
+    assert result.subtype_id == "selesnya"
+    assert result.selected_rule_id == "eldrazi-ramp-selesnya"
 
 
 def test_full_corpus_matches_the_p6_03_difference_contract():

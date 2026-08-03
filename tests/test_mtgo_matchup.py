@@ -369,7 +369,7 @@ def test_modern_hierarchy_uses_stable_parent_and_composite_subtype_ids():
     rules = matchup.load_rule_set(ROOT / "my_archetypes" / "modern.yaml")
     hierarchy = build_matchup_hierarchy(rules)
     assert len(hierarchy["parents"]) == 55
-    assert len(hierarchy["leaves"]) == 92
+    assert len(hierarchy["leaves"]) == 93
     assert sum(item["expandable"] for item in hierarchy["parents"]) == 17
     broodscale = next(
         item for item in hierarchy["parents"] if item["id"] == "broodscale-combo"
