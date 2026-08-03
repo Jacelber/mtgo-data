@@ -60,7 +60,7 @@ blockers, and stop conditions.
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
 | Phase 10 | Establish data governance, compliance, and production operations. | Completed on 2026-08-02 |
-| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 and P11-09 skipped by owner decision; P11-01 through P11-11 otherwise published; P11-12 accepted and authorized for publication |
+| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 and P11-09 skipped by owner decision; P11-01 through P11-12 otherwise published; P11-13 accepted and authorized for publication |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | Phase 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
@@ -2645,6 +2645,14 @@ AST rule requiring `mtgmeta` test subprocesses to declare `PYTHONPATH`. P11-12
 changes no workflow, data, statistics, Schema, public path, front-end source,
 or protected event `434455` byte. The owner accepted P11-12 and authorized
 commit, push, pull-request creation, CI monitoring, and merge on 2026-08-04.
+PR #173 merged P11-12 as commit
+`83a54fe0907e1c8775b643295fd9e15327e0daf5`; pull-request validation, master
+validation, and Pages publication all passed. P11-13 was separately authorized
+for local development on 2026-08-04. It reduces live STATUS, README, and agent
+guide duplication and preserves the complete pre-split STATUS under
+`docs/history/`. It does not implement the P11-14 cross-document fact checker.
+The owner accepted the local P11-13 result and authorized commit, push,
+pull-request creation, CI monitoring, and merge on 2026-08-04.
 
 ## Acceptance criteria
 
