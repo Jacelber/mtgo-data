@@ -386,8 +386,8 @@ def test_committed_overlay_hashes_exact_input_and_shared_taxonomy():
     assert overlay["taxonomy"]["rule_path"] == "my_archetypes/modern.yaml"
     assert overlay["taxonomy"]["rule_sha256"] == _digest(RULE_PATH)
     assert overlay["taxonomy"]["archetype_count"] == 55
-    assert overlay["taxonomy"]["rule_count"] == 101
-    assert overlay["taxonomy"]["subtype_count"] == 54
+    assert overlay["taxonomy"]["rule_count"] == 102
+    assert overlay["taxonomy"]["subtype_count"] == 55
 
 
 def test_unknowns_keep_deck_evidence_and_disqualified_deck_is_classified():

@@ -35,7 +35,7 @@ def test_modern_hierarchy_catalog_is_complete_stable_and_matchup_aligned(tmp_pat
     assert document["format"] == "modern"
     assert document["summary"] == {
         "parents": 55,
-        "leaves": 92,
+            "leaves": 93,
         "expandable_parents": 17,
     }
     assert all(
