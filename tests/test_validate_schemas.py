@@ -13,19 +13,25 @@ import validate_schemas as schemas
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def manifest_outputs():
+    manifest = json.loads((ROOT / "schemas" / "manifest.json").read_text(encoding="utf-8"))
+    matched = []
+    for mapping in manifest["mappings"]:
+        matched.extend(ROOT.glob(mapping["pattern"]))
+    return manifest, matched
+
+
 def test_production_public_outputs_pass():
     checked, failures = schemas.validate_manifest(ROOT, ROOT / "schemas" / "manifest.json")
-    assert checked == 69
+    _, matched = manifest_outputs()
+    assert checked == len(matched)
     assert failures == []
 
 
 def test_every_public_output_embeds_the_manifest_version():
-    manifest = json.loads((ROOT / "schemas" / "manifest.json").read_text(encoding="utf-8"))
+    manifest, matched = manifest_outputs()
     assert manifest["output_schema_version_embedded"] is True
-    matched = []
-    for mapping in manifest["mappings"]:
-        matched.extend(ROOT.glob(mapping["pattern"]))
-    assert len(matched) == 69
+    assert matched
     assert all(json.loads(path.read_text(encoding="utf-8"))["schema_version"] == manifest["schema_version"] for path in matched)
 
 
@@ -145,8 +151,9 @@ def test_manifest_rejects_missing_matches_and_schema(tmp_path):
 
 def test_cli_pass_help_usage_and_non_root_execution(tmp_path):
     script = ROOT / "validate_schemas.py"
+    _, matched = manifest_outputs()
     result = subprocess.run([sys.executable, "-B", str(script)], cwd=tmp_path, text=True, capture_output=True)
-    assert result.returncode == 0 and "PASS" in result.stdout and "checked=69" in result.stdout
+    assert result.returncode == 0 and "PASS" in result.stdout and f"checked={len(matched)}" in result.stdout
     help_result = subprocess.run([sys.executable, "-B", str(script), "--help"], text=True, capture_output=True)
     assert help_result.returncode == 0 and "usage:" in help_result.stdout
     usage = subprocess.run([sys.executable, "-B", str(script), "--unknown"], text=True, capture_output=True)

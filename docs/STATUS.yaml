@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p11-closeout"
+  current_working_branch: "codex/ops-videre-degraded-fetch"
   working_branch_status: "isolated_local_task_branch"
   status: "active"
   primary_language: "Python"
@@ -73,28 +73,38 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P11-CLOSEOUT"
-  name: "Record Phase 11 completion and P11-15 publication evidence"
-  status: "owner_authorized_publication"
+  id: "OPS-VIDERE-DEGRADED-FETCH"
+  name: "Degrade bounded Videre source outages without suppressing MTGO updates"
+  status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-04"
-  workspace: "C:/tmp/mtgo-data-p11-closeout-20260804-01"
-  branch: "codex/p11-closeout"
-  base_commit: "f90a26721c406e59f5071c79a360a133fbf6920d"
-  task_type: "phase_completion_documentation"
-  objective: "Record the published P11-15 evidence, mark Phase 11 complete, and preserve the explicit stop before Phase 12."
+  workspace: "C:/tmp/mtgo-data-ops-videre-degraded-20260804-01"
+  branch: "codex/ops-videre-degraded-fetch"
+  base_commit: "643dbd17bb2ba0d959fb63f649ab325441af8e93"
+  task_type: "production_source_availability_maintenance"
+  objective: "Allow exhausted retryable Videre outages to lower disclosed matchup completeness while unrelated MTGO data continues through validated publication."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
+    - ".github/workflows/update.yml"
+    - "src/mtgmeta/mtgo/matchup.py"
+    - "src/mtgmeta/mtgo/__main__.py"
+    - "tests/test_mtgo_matchup.py"
+    - "tests/test_mtgo_cli.py"
+    - "tests/test_production_workflow.py"
+    - "tests/test_mtgo_top8.py"
+    - "tests/test_validate_schemas.py"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-    - "docs/ROADMAP.md"
   protected_scope:
-    code_changed: "none; documentation-only closeout"
-    workflow_changed: false
+    code_changed: "Videre transient-source classification and CLI reporting only"
+    workflow_changed: "job-summary shell quoting only; pipeline structure and permissions unchanged"
     raw_or_generated_data_changed: false
-    statistical_behavior_changed: false
+    statistical_behavior_changed: "no formula change; missing Videre archives remain disclosed and matchup calculations use available archives only"
     schema_changed: false
     frontend_source_changed: false
     public_paths_changed: false
@@ -102,12 +112,15 @@ current_task:
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    evidence_reconciled: "P11-15 PR, task commit, merge commit, pull-request validation, master validation, and Pages publication are recorded from GitHub and Git history."
-    phase_completion: "P11 completion criteria and the accepted P11-04 and P11-09 skip decisions are recorded without changing implementation behavior."
-    protected_behavior: "No code, workflow, data, statistic, Schema, public path, CSS, or protected event 434455 byte changes."
-  owner_acceptance: "not_required_for_documentation_closeout"
+    graceful_degradation: "Exhausted retryable Videre HTTP, timeout, and transport failures are warnings and do not block unrelated MTGO candidate generation or publication."
+    fatal_boundary: "Non-retryable HTTP, malformed source contracts, invalid identities, storage failures, and unclassified exceptions remain fatal."
+    completeness: "An admitted event without a usable Videre archive remains in missing_event_ids and lowers videre-range-coverage-v1 without being represented as zero matches."
+    production_baseline_tests: "Top 8 history and Schema-count assertions derive from the committed production snapshot instead of the prior week's hard-coded counts."
+    protected_behavior: "No source or generated data, formula, Schema, front-end source, public path, or protected event 434455 byte changes."
+  owner_acceptance: "accepted"
+  owner_accepted_on: "2026-08-04"
   owner_publication_authorized_on: "2026-08-04"
-  stop_point: "P11 closeout commit, push, pull-request creation, CI monitoring, and merge are authorized. Do not dispatch production or begin P12-01 or Phase 12."
+  stop_point: "Commit, push, pull-request creation, CI monitoring, and merge are authorized for OPS-VIDERE-DEGRADED-FETCH. Do not dispatch production or begin P12-01 or Phase 12."
 
 recent_completed_task:
   id: "P11-15"
@@ -124,7 +137,7 @@ recent_completed_task:
   result: "The Phase 8 application renderer was split into focused classic scripts under real-browser protection without changing public behavior, data, statistics, deployment architecture, or protected event 434455 bytes."
 
 current_repository_state:
-  baseline_commit: "f90a26721c406e59f5071c79a360a133fbf6920d"
+  baseline_commit: "643dbd17bb2ba0d959fb63f649ab325441af8e93"
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -237,7 +250,7 @@ publication_workflow_control:
   p8_08_authorized: false
 
 prohibited_next_actions:
-  - "Do not dispatch production as part of P11 closeout; only its documentation commit, push, pull request, CI monitoring, and merge are authorized."
+  - "Do not dispatch production as part of OPS-VIDERE-DEGRADED-FETCH."
   - "Do not begin P12-01 or Phase 12, or start another task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."

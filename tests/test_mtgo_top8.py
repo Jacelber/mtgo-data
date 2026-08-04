@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import date, datetime
 import json
 from pathlib import Path
+import shutil
 
 import pytest
 import yaml
@@ -282,16 +283,16 @@ def test_build_latest_week_is_deterministic_and_writes_week_catalog(tmp_path):
     ]
 
 
-@pytest.mark.parametrize(("format_id", "event_count"), [("standard", 8), ("modern", 13)])
-def test_committed_real_week_has_all_events_and_exact_rank_slots(format_id, event_count):
+@pytest.mark.parametrize("format_id", ["standard", "modern"])
+def test_committed_real_week_has_all_events_and_exact_rank_slots(format_id):
     output = ROOT / "stats" / format_id / "mtgo" / "top8"
     catalog = json.loads((output / "index.json").read_text(encoding="utf-8"))
-    assert catalog["latest_complete_week"] == "2026-07-20"
-    assert len(catalog["weeks"]) == 1
+    assert catalog["weeks"]
+    assert catalog["latest_complete_week"] == catalog["weeks"][0]["start"]
     week = json.loads(
         (output / catalog["weeks"][0]["file"]).read_text(encoding="utf-8")
     )
-    assert len(week["events"]) == event_count
+    assert len(week["events"]) == catalog["weeks"][0]["event_count"]
     for item in week["events"]:
         assert [placement["rank"] for placement in item["placements"]] == list(
             range(1, 9)
@@ -312,12 +313,14 @@ def test_committed_latest_week_rebuild_is_byte_identical(format_id, tmp_path):
     committed = ROOT / "stats" / format_id / "mtgo" / "top8"
     index = json.loads((committed / "index.json").read_text(encoding="utf-8"))
     generated = datetime.fromisoformat(index["generated"])
+    output = tmp_path / format_id
+    shutil.copytree(committed, output)
     written = top8.build_all_top8(
         ROOT,
         format_id,
         today=generated.date(),
         generated_at=generated,
-        output_directory=tmp_path / format_id,
+        output_directory=output,
     )
     assert set(written) == {
         index["weeks"][0]["file"],

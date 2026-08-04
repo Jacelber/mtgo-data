@@ -743,6 +743,16 @@ Beginning with P6-08, the single production workflow distinguishes two registry-
 
 Standard and Modern are the complete products during P6-08. Standard, Legacy, Pioneer, Pauper, Vintage, and Modern remain event-collection formats. The production workflow may express these sets as explicit environment lists for readable command dispatch, but workflow tests must prove that those lists match the registry. The dynamic production-candidate validator independently derives the same sets from the registry, records per-format event and match counts, and restricts statistics and reports to complete products. A planned or raw-archive-only format cannot gain generated product output merely by being added to the event loop.
 
+Videre match collection has a narrower availability boundary than official MTGO
+event collection. After bounded retries, retryable HTTP, timeout, and transport
+failures are retained as explicit source-unavailable warnings for their event
+IDs. They create no matchup archive but do not block transfer of the remaining
+candidate into generation and validation. The completeness generator derives
+those absent admitted archives as `missing`, while matchup generation consumes
+only usable retained archives. Non-retryable responses, malformed response
+contracts, invalid identities, and storage failures remain fatal and prevent
+candidate publication.
+
 Weekly Pickup remains candidate-only in scheduled automation. Candidate generation may continue on error so that review preparation cannot suppress unrelated generated data, but every product format must still be attempted. Approval, publication, and known-state changes remain manual.
 
 P6-08 initially regenerated the maintained hierarchy catalog only for Modern.

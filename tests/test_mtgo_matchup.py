@@ -27,9 +27,11 @@ from mtgmeta.rules import (
     SubtypeDefinition,
 )
 from mtgmeta.mtgo import matchup
+from mtgmeta.mtgo.completeness import build_videre_coverage
 from mtgmeta.mtgo.matchup import (
     MatchupIdentity,
     MTGOMatchupError,
+    VidereUnavailable,
     accumulate_hierarchical_event,
     aggregate_matchup_counts,
     build_all_matchups,
@@ -179,7 +181,7 @@ def test_videre_request_retries_408_then_preserves_no_results_contract():
     assert waits == [1]
 
 
-def test_videre_request_exhausts_bounded_retries_and_keeps_original_error():
+def test_videre_request_exhausts_bounded_retries_as_source_unavailable():
     calls = []
     waits = []
 
@@ -187,7 +189,7 @@ def test_videre_request_exhausts_bounded_retries_and_keeps_original_error():
         calls.append(True)
         raise videre_http_error(408)
 
-    with pytest.raises(urllib.error.HTTPError) as captured:
+    with pytest.raises(VidereUnavailable) as captured:
         api_get(
             "modern",
             {"event_id": "12838888"},
@@ -196,7 +198,8 @@ def test_videre_request_exhausts_bounded_retries_and_keeps_original_error():
             retry_delay=1,
             sleep=waits.append,
         )
-    assert captured.value.code == 408
+    assert isinstance(captured.value.__cause__, urllib.error.HTTPError)
+    assert captured.value.__cause__.code == 408
     assert len(calls) == 3
     assert waits == [1, 1]
 
@@ -283,6 +286,65 @@ def test_standard_fetch_uses_registry_match_path_and_skip_contract(tmp_path):
     )
     assert second["skipped"] == 1
     assert calls == [("standard", "123")]
+
+
+def test_transient_videre_outage_is_reported_as_missing_without_blocking_other_events(tmp_path):
+    root = make_repository(tmp_path)
+
+    def fetcher(_format_id, event_id):
+        if event_id == "123":
+            raise VidereUnavailable("HTTP Error 503: Service Unavailable")
+        return [{"player": "A", "opponent": "B", "result": "win", "round": 1}]
+
+    summary = fetch_and_store_matches(
+        root,
+        "standard",
+        event_ids=["123", "124"],
+        api_fetcher=fetcher,
+        sleep=lambda _: None,
+    )
+
+    assert summary["source_unavailable"] == 1
+    assert summary["source_unavailable_event_ids"] == ["123"]
+    assert summary["missing_event_ids"] == ["123"]
+    assert summary["warnings"] == [("123", "HTTP Error 503: Service Unavailable")]
+    assert summary["fetched"] == 1
+    assert summary["failed"] == 0
+    matches = root / "data" / "standard" / "mtgo" / "matches"
+    assert (matches / "124.json").is_file()
+
+    coverage = build_videre_coverage(
+        [
+            (date(2026, 7, 18), {"event_id": 123}),
+            (date(2026, 7, 19), {"event_id": 124}),
+        ],
+        matches,
+        period_start=date(2026, 7, 13),
+        period_end=date(2026, 7, 19),
+    )
+    assert coverage["available_event_ids"] == ["124"]
+    assert coverage["missing_event_ids"] == ["123"]
+    assert coverage["completeness_rate"] == 0.5
+
+
+def test_non_transient_match_fetch_error_remains_fatal(tmp_path):
+    root = make_repository(tmp_path)
+
+    def fetcher(_format_id, _event_id):
+        raise MTGOMatchupError("Videre response data must be a list of objects")
+
+    summary = fetch_and_store_matches(
+        root,
+        "standard",
+        event_ids=["123"],
+        api_fetcher=fetcher,
+    )
+
+    assert summary["source_unavailable"] == 0
+    assert summary["failed"] == 1
+    assert summary["errors"] == [
+        ("123", "Videre response data must be a list of objects")
+    ]
 
 
 @pytest.mark.parametrize("format_id,error", [("pauper", DisabledFormatError), ("missing", UnknownFormatError)])

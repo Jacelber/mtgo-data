@@ -216,8 +216,8 @@ jobs:
             echo
             echo "- Job result: ${{ job.status }}"
             echo "- Trigger: ${{ github.event_name }}"
-            echo "- Candidate transfer: immutable \\`mtgo-fetch-candidate\\` artifact"
-            echo "- Restart transfer: a same-commit, seven-day \\`mtgo-fetch-checkpoint\\` artifact only after incomplete collection"
+            echo '- Candidate transfer: immutable `mtgo-fetch-candidate` artifact'
+            echo '- Restart transfer: a same-commit, seven-day `mtgo-fetch-checkpoint` artifact only after incomplete collection'
             echo "- Event formats: ${MTGO_EVENT_FORMATS}"
             echo "- Match formats: ${MTGO_PRODUCT_FORMATS}"
             echo "- The checkpoint is verified before reuse and is never sent to build or publish."
@@ -383,7 +383,7 @@ jobs:
             echo "## MTGO production build and validation"
             echo
             echo "- Job result: ${{ job.status }}"
-            echo "- Candidate transfer: verified \\`mtgo-fetch-candidate\\` input and immutable \\`mtgo-build-candidate\\` output"
+            echo '- Candidate transfer: verified `mtgo-fetch-candidate` input and immutable `mtgo-build-candidate` output'
             echo "- Product formats: ${MTGO_PRODUCT_FORMATS}"
             echo "- Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}"
             echo "- Validation layers: production candidate acceptance, repository, rule, and Schema validation."
@@ -478,7 +478,7 @@ jobs:
             echo "- Trigger: ${{ github.event_name }}"
             echo "- Generated changes published: ${{ steps.publish.outputs.changed || 'not-reached' }}"
             echo "- Published commit verified: ${{ steps.verify.outputs.commit || 'not-reached' }}"
-            echo "- Candidate transfer: verified immutable \\`mtgo-build-candidate\\` artifact"
+            echo '- Candidate transfer: verified immutable `mtgo-build-candidate` artifact'
             echo "- Publication boundary: data/, stats/, reports/, and fetched.txt only."
           } >> "$GITHUB_STEP_SUMMARY"
 
