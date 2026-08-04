@@ -397,6 +397,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
+      actions: write
       contents: write
     steps:
       - name: Check out full history for publication
@@ -466,6 +467,18 @@ jobs:
           fi
           echo "commit=$LOCAL_SHA" >> "$GITHUB_OUTPUT"
           echo "Published master verified at $LOCAL_SHA."
+
+      - name: Dispatch Pages deployment for published data
+        if: steps.publish.outputs.changed == 'true'
+        uses: actions/github-script@v7.0.1
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: "pages.yml",
+              ref: "master",
+            });
 
       - name: Write publication summary
         if: always()

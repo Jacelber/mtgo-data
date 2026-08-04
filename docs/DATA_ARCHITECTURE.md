@@ -1681,12 +1681,16 @@ product data continues to enter the selected product trees through the existing
 candidate and Schema gates; a new repository path outside those trees cannot
 become a Pages path merely because it was committed.
 
-`.github/workflows/pages.yml` builds the candidate for relevant pull requests
-and every `master` push. Pull requests cannot upload or deploy the Pages
-artifact. On `master`, the read-only build job may upload the verified artifact,
-and a separate job with only `pages: write` and `id-token: write` may deploy it
-through the protected `github-pages` environment. The workflow does not fetch
-tournament data, modify the repository, or split the P10-09 production chain.
+`.github/workflows/pages.yml` builds the candidate for relevant pull requests,
+every `master` push, and an explicit `master` dispatch from the production
+publisher. Pull requests cannot upload or deploy the Pages artifact. A master
+push or production dispatch may upload the verified artifact, and a separate
+job with only `pages: write` and `id-token: write` may deploy it through the
+protected `github-pages` environment. The production publish job dispatches
+this workflow only after generated changes are committed and the remote master
+commit is verified; this is required because a push made with `GITHUB_TOKEN`
+does not recursively trigger the push workflow. The Pages workflow does not
+fetch tournament data or modify the repository.
 
 The initial legacy baseline is Pages run `30699810612`, built from merge commit
 `82a28d954546cb6112ad0655223fd609035b0b40`. Its retained artifact contains

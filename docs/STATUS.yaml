@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/ops-week-sealing-followup"
+  current_working_branch: "codex/ops-production-pages-dispatch"
   working_branch_status: "isolated_local_task_branch"
   status: "active"
   primary_language: "Python"
@@ -73,73 +73,48 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "OPS-MTGO-WEEK-SEALING-FOLLOWUP"
-  name: "Retain known MTGO links when old monthly listings shrink"
+  id: "OPS-PRODUCTION-PAGES-DISPATCH"
+  name: "Deploy Pages after generated production data is published"
   status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-04"
   workspace: "C:/tmp/mtgo-data-ops-week-sealing-20260804-01"
-  branch: "codex/ops-week-sealing-followup"
-  base_commit: "69cd9c7257ffe6671ca53d0cb4793c666876f2ac"
-  task_type: "production_listing_observation_hotfix"
-  objective: "Keep three-observation discovery while preventing normal shrinkage of old MTGO monthly pages from blocking all production updates."
+  branch: "codex/ops-production-pages-dispatch"
+  base_commit: "aa1fddeed3dc4cb0f63191e4190a8fa4cd831aa3"
+  task_type: "production_pages_dispatch_hotfix"
+  objective: "Ensure a successful generated-data publication deploys the verified current master tree to GitHub Pages."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "src/mtgmeta/mtgo/fetch.py"
-    - "src/mtgmeta/mtgo/top8.py"
-    - "src/mtgmeta/mtgo/pickup.py"
-    - "src/mtgmeta/mtgo/__main__.py"
-    - "src/mtgmeta/mtgo/week_lifecycle.py"
-    - "validate_production_candidate.py"
-    - "schemas/mtgo-event-discovery.schema.json"
-    - "schemas/mtgo-top8-index.schema.json"
-    - "assets/js/phase8/i18n.js"
-    - "stats/standard/mtgo/top8/index.json"
-    - "stats/modern/mtgo/top8/index.json"
-    - "stats/standard/mtgo/pickup/candidates_2026-W28.yaml"
-    - "stats/standard/mtgo/pickup/base_reference_2026-W28.yaml"
-    - "stats/standard/mtgo/pickup/candidates_2026-W31.yaml"
-    - "stats/standard/mtgo/pickup/base_reference_2026-W31.yaml"
-    - "stats/modern/mtgo/pickup/candidates_2026-W29.yaml"
-    - "stats/modern/mtgo/pickup/base_reference_2026-W29.yaml"
-    - "tests/test_mtgo_event_io.py"
-    - "tests/test_mtgo_pickup.py"
-    - "tests/test_mtgo_top8.py"
-    - "tests/test_phase8_consumer_bridge.py"
-    - "tests/test_phase8_mtgo_production_entry.py"
-    - "tests/test_production_candidate_validation.py"
-    - "tests/test_validate_schemas.py"
-    - "README.md"
-    - "docs/STATISTICS_SPEC.md"
+    - ".github/workflows/pages.yml"
+    - ".github/workflows/update.yml"
+    - "tests/test_pages_workflow.py"
+    - "tests/test_production_workflow.py"
     - "docs/DATA_ARCHITECTURE.md"
-    - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    code_changed: "MTGO listing observation, discovery state, weekly lifecycle, and Pickup candidate refresh"
-    workflow_changed: "none"
-    raw_or_generated_data_changed: "Top 8 indexes and deterministic Pickup fixtures only; no source event payload changes"
-    statistical_behavior_changed: "no formula change; provisional weeks may safely add late official events"
-    schema_changed: "Top 8 index lifecycle and event discovery ledger"
-    frontend_source_changed: "Top 8 source note no longer describes the latest comparison base as immediately immutable; no lifecycle warning is shown"
+    code_changed: "none"
+    workflow_changed: "production publish dispatches allowlisted Pages only after a changed, verified master publication"
+    raw_or_generated_data_changed: "none in this hotfix"
+    statistical_behavior_changed: "none"
+    schema_changed: "none"
+    frontend_source_changed: "none; only deployment freshness changes"
     public_paths_changed: false
     event_434455_bytes_changed: false
-    production_dispatched: false
-    remote_write_performed: false
+    production_dispatched: true
+    remote_write_performed: true
   acceptance:
-    listing_observation: "Every monthly page is observed three times and unioned; recorded links remain eligible even when MTGO later omits them from an old listing."
-    provisional_week: "Late events may only be added during the seven-day window; prior event identity and exact deck sources cannot change."
-    sealed_week: "Week and comparison-base bytes are immutable from the second Monday onward."
-    pickup_timeliness: "Pickup generates immediately after week end; unreviewed stale candidates refresh and reviewed candidates require re-review."
-    frontend: "The internal recovery lifecycle is not presented as a user-facing warning; the Top 8 page otherwise remains unchanged."
+    production_dispatch: "Only a changed publication dispatches pages.yml, after remote master verification."
+    pages_boundary: "Pull requests remain build-only; master push and explicit master dispatch use the same allowlisted artifact and protected deploy job."
+    frontend: "The deployed Modern W31 Top 8 index reports 12 events without new lifecycle messaging."
   owner_acceptance: "accepted"
   owner_accepted_on: "2026-08-04"
   owner_publication_authorized_on: "2026-08-04"
   owner_production_dispatch_authorized_on: "2026-08-04"
-  stop_point: "Commit, push, pull-request creation, CI monitoring, merge, and one further post-merge production retry are authorized for OPS-MTGO-WEEK-SEALING-FOLLOWUP. Do not begin P12-01 or Phase 12."
+  stop_point: "Commit, push, pull-request creation, CI monitoring, merge, and Pages verification are authorized to complete the accepted production publication outcome. Do not begin P12-01 or Phase 12."
 
 recent_completed_task:
   id: "P11-15"
@@ -156,7 +131,7 @@ recent_completed_task:
   result: "The Phase 8 application renderer was split into focused classic scripts under real-browser protection without changing public behavior, data, statistics, deployment architecture, or protected event 434455 bytes."
 
 current_repository_state:
-  baseline_commit: "69cd9c7257ffe6671ca53d0cb4793c666876f2ac"
+  baseline_commit: "aa1fddeed3dc4cb0f63191e4190a8fa4cd831aa3"
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"

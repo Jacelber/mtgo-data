@@ -58,7 +58,7 @@ def test_update_keeps_its_schedule_master_boundary_and_concurrency():
 def test_fetch_build_and_publish_have_separate_minimum_permissions():
     assert job("fetch")["permissions"] == {"actions": "read", "contents": "read"}
     assert job("build")["permissions"] == {"contents": "read"}
-    assert job("publish")["permissions"] == {"contents": "write"}
+    assert job("publish")["permissions"] == {"actions": "write", "contents": "write"}
     assert job("notify")["permissions"] == {"issues": "write"}
     assert job("build")["needs"] == "fetch"
     assert job("publish")["needs"] == "build"
@@ -201,6 +201,18 @@ def test_publish_verifies_the_validated_output_and_is_the_only_commit_writer():
         text = "\n".join(run_commands(name))
         assert "git commit" not in text
         assert "git push" not in text
+
+
+def test_published_changes_dispatch_the_allowlisted_pages_workflow():
+    dispatch = next(
+        step for step in steps("publish") if step["name"] == "Dispatch Pages deployment for published data"
+    )
+    assert dispatch["if"] == "steps.publish.outputs.changed == 'true'"
+    assert dispatch["uses"] == "actions/github-script@v7.0.1"
+    script = dispatch["with"]["script"]
+    assert "github.rest.actions.createWorkflowDispatch" in script
+    assert 'workflow_id: "pages.yml"' in script
+    assert 'ref: "master"' in script
 
 
 def test_notification_job_creates_or_updates_only_deduplicated_failed_stage_issues():

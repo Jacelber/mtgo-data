@@ -56,18 +56,18 @@ jobs:
           --summary "$GITHUB_STEP_SUMMARY"
 
       - name: Configure GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
         uses: actions/configure-pages@v5
 
       - name: Upload GitHub Pages artifact
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v4
         with:
           path: ${{ runner.temp }}/pages-site
 
   deploy:
     name: Deploy verified site
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
