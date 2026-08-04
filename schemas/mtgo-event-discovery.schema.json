@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-event-discovery.schema.json",
+  "title": "MTGO event discovery state",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source", "format", "events"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "source": {"const": "mtgo"},
+    "format": {"enum": ["standard", "pauper", "modern", "pioneer", "legacy", "vintage"]},
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["link", "event_date", "status"],
+        "properties": {
+          "link": {"type": "string", "pattern": "^/decklist/[a-zA-Z0-9-]+$"},
+          "event_date": {"type": "string", "format": "date"},
+          "status": {"enum": ["discovered", "processed", "retained", "excluded_no_playoff", "deferred_incomplete"]}
+        }
+      }
+    }
+  }
+}

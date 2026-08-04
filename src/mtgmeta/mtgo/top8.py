@@ -14,6 +14,7 @@ from mtgmeta.consumer import identity_display_name
 from . import load_mtgo_context
 from . import stats
 from .normalize import load_rules_for_format
+from . import week_lifecycle
 
 
 SOURCE_ID = "mtgo"
@@ -107,9 +108,7 @@ def _available_placement(
                 else None
             ),
             "deviation_diff": (
-                stats.deck_diff(vector, base["mean"])
-                if base_available
-                else None
+                stats.deck_diff(vector, base["mean"]) if base_available else None
             ),
         },
         "comparison": {
@@ -226,6 +225,7 @@ def _comparison_bases(
     )
     definitions = {item.id: item for item in rules.archetypes}
     bases: dict[str, dict[str, Any]] = {}
+
     def empty_base(display_name: str) -> dict[str, Any]:
         return {
             "display_name": display_name,
@@ -256,9 +256,7 @@ def _comparison_bases(
         }
     for (parent_id, subtype_id), base in subtype_bases.items():
         parent = definitions[parent_id]
-        subtype = next(
-            item for item in parent.subtypes if item.id == subtype_id
-        )
+        subtype = next(item for item in parent.subtypes if item.id == subtype_id)
         identity_id = f"{parent_id}/{subtype_id}"
         bases[identity_id] = {
             **base,
@@ -382,9 +380,88 @@ def _verify_immutable_file(
     document: dict[str, Any],
 ) -> None:
     if path.read_bytes() != _document_bytes(document):
+        raise MTGOTop8Error(f"immutable historical Top 8 document changed: {path.name}")
+
+
+def _load_document(path: Path) -> dict[str, Any]:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise MTGOTop8Error(
-            f"immutable historical Top 8 document changed: {path.name}"
+            f"existing Top 8 document is unreadable: {path.name}"
+        ) from exc
+    if not isinstance(value, dict):
+        raise MTGOTop8Error(f"existing Top 8 document is malformed: {path.name}")
+    return value
+
+
+def _placement_source(placement: dict[str, Any]) -> dict[str, Any]:
+    exact = placement.get("exact_deck")
+    return {
+        "rank": placement.get("rank"),
+        "deck_status": placement.get("deck_status"),
+        "identity": placement.get("identity"),
+        "exact_deck": (
+            {
+                "player": exact.get("player"),
+                "main_deck": exact.get("main_deck"),
+                "sideboard": exact.get("sideboard"),
+            }
+            if isinstance(exact, dict)
+            else None
+        ),
+    }
+
+
+def _event_source(event: dict[str, Any]) -> dict[str, Any]:
+    return {
+        key: event.get(key)
+        for key in ("event_id", "name", "display_name", "date", "player_count")
+    } | {
+        "placements": [
+            _placement_source(item)
+            for item in event.get("placements", [])
+            if isinstance(item, dict)
+        ]
+    }
+
+
+def _verify_provisional_addition(path: Path, document: dict[str, Any]) -> None:
+    previous = _load_document(path)
+    previous_events = {
+        str(item.get("event_id")): item
+        for item in previous.get("events", [])
+        if isinstance(item, dict)
+    }
+    current_events = {
+        str(item.get("event_id")): item
+        for item in document.get("events", [])
+        if isinstance(item, dict)
+    }
+    removed = sorted(set(previous_events) - set(current_events))
+    if removed:
+        raise MTGOTop8Error(
+            "provisional Top 8 update removed existing events: " + ", ".join(removed)
         )
+    for event_id, prior in previous_events.items():
+        if _event_source(prior) != _event_source(current_events[event_id]):
+            raise MTGOTop8Error(f"provisional Top 8 existing event changed: {event_id}")
+    added = set(current_events) - set(previous_events)
+    if path.read_bytes() != _document_bytes(document) and not added:
+        raise MTGOTop8Error(
+            f"provisional Top 8 changed without adding an event: {path.name}"
+        )
+
+
+def _entry_lifecycle(
+    monday: date, *, today: date, already_sealed: bool = False
+) -> dict[str, str]:
+    sealed = already_sealed or week_lifecycle.is_sealed(monday, today=today)
+    return {
+        "status": "sealed" if sealed else "provisional",
+        "provisional_through": week_lifecycle.provisional_through(monday).isoformat(),
+        "seal_on": week_lifecycle.seal_on(monday).isoformat(),
+    }
 
 
 def write_latest_week(
@@ -396,6 +473,7 @@ def write_latest_week(
     today: date | None = None,
     generated_at: datetime | str | None = None,
 ) -> dict[str, Path]:
+    reference_today = today or date.today()
     monday = stats.latest_complete_week(events, today=today)
     if monday is None:
         raise MTGOTop8Error("no complete MTGO event week is available")
@@ -423,23 +501,48 @@ def write_latest_week(
     )
     if (
         isinstance(existing_current, dict)
-        and existing_current.get("comparison_bases_file")
-        == comparison_bases_filename
+        and existing_current.get("comparison_bases_file") == comparison_bases_filename
     ):
-        _verify_immutable_file(output / filename, week)
-        _verify_immutable_file(
-            output / comparison_bases_filename,
-            comparison_bases,
-        )
+        already_sealed = existing_current.get("status") == "sealed"
+        if already_sealed or week_lifecycle.is_sealed(monday, today=reference_today):
+            _verify_immutable_file(output / filename, week)
+            _verify_immutable_file(
+                output / comparison_bases_filename,
+                comparison_bases,
+            )
+        else:
+            _verify_provisional_addition(output / filename, week)
+            if output.joinpath(filename).read_bytes() == _document_bytes(week):
+                _verify_immutable_file(
+                    output / comparison_bases_filename,
+                    comparison_bases,
+                )
     current_entry = {
         "file": filename,
         "comparison_bases_file": comparison_bases_filename,
         "start": week["week"]["start"],
         "end": week["week"]["end"],
         "event_count": len(week["events"]),
+        **_entry_lifecycle(
+            monday,
+            today=reference_today,
+            already_sealed=(
+                isinstance(existing_current, dict)
+                and existing_current.get("status") == "sealed"
+            ),
+        ),
     }
     retained_entries = [
-        item for item in existing_entries if item.get("file") != filename
+        {
+            **item,
+            **_entry_lifecycle(
+                date.fromisoformat(item["start"]),
+                today=reference_today,
+                already_sealed=item.get("status") == "sealed",
+            ),
+        }
+        for item in existing_entries
+        if item.get("file") != filename
     ]
     catalog_entries = sorted(
         [current_entry, *retained_entries],
@@ -453,7 +556,7 @@ def write_latest_week(
             "format": format_id,
             "generated": generated_value,
             "latest_complete_week": monday.isoformat(),
-            "history_policy": "immutable_weekly_comparison_bases",
+            "history_policy": "one_week_provisional_then_immutable",
             "weeks": catalog_entries,
         }
     )

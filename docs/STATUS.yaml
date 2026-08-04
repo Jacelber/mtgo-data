@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/ops-videre-degraded-fetch"
+  current_working_branch: "codex/ops-week-sealing"
   working_branch_status: "isolated_local_task_branch"
   status: "active"
   primary_language: "Python"
@@ -73,54 +73,73 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "OPS-VIDERE-DEGRADED-FETCH"
-  name: "Degrade bounded Videre source outages without suppressing MTGO updates"
+  id: "OPS-MTGO-WEEK-SEALING"
+  name: "Allow safe late-event additions before weekly MTGO data is sealed"
   status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-04"
-  workspace: "C:/tmp/mtgo-data-ops-videre-degraded-20260804-01"
-  branch: "codex/ops-videre-degraded-fetch"
-  base_commit: "643dbd17bb2ba0d959fb63f649ab325441af8e93"
-  task_type: "production_source_availability_maintenance"
-  objective: "Allow exhausted retryable Videre outages to lower disclosed matchup completeness while unrelated MTGO data continues through validated publication."
+  workspace: "C:/tmp/mtgo-data-ops-week-sealing-20260804-01"
+  branch: "codex/ops-week-sealing"
+  base_commit: "922de5dc6ce57c8fe90400f191fdb17d0270fc97"
+  task_type: "production_week_lifecycle_maintenance"
+  objective: "Recover late-listed official MTGO events during a seven-day provisional window without weakening sealed-history immutability or delaying Weekly Pickup."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - ".github/workflows/update.yml"
-    - "src/mtgmeta/mtgo/matchup.py"
+    - "src/mtgmeta/mtgo/fetch.py"
+    - "src/mtgmeta/mtgo/top8.py"
+    - "src/mtgmeta/mtgo/pickup.py"
     - "src/mtgmeta/mtgo/__main__.py"
-    - "tests/test_mtgo_matchup.py"
-    - "tests/test_mtgo_cli.py"
-    - "tests/test_production_workflow.py"
+    - "src/mtgmeta/mtgo/week_lifecycle.py"
+    - "validate_production_candidate.py"
+    - "schemas/mtgo-event-discovery.schema.json"
+    - "schemas/mtgo-top8-index.schema.json"
+    - "assets/js/phase8/i18n.js"
+    - "stats/standard/mtgo/top8/index.json"
+    - "stats/modern/mtgo/top8/index.json"
+    - "stats/standard/mtgo/pickup/candidates_2026-W28.yaml"
+    - "stats/standard/mtgo/pickup/base_reference_2026-W28.yaml"
+    - "stats/standard/mtgo/pickup/candidates_2026-W31.yaml"
+    - "stats/standard/mtgo/pickup/base_reference_2026-W31.yaml"
+    - "stats/modern/mtgo/pickup/candidates_2026-W29.yaml"
+    - "stats/modern/mtgo/pickup/base_reference_2026-W29.yaml"
+    - "tests/test_mtgo_event_io.py"
+    - "tests/test_mtgo_pickup.py"
     - "tests/test_mtgo_top8.py"
+    - "tests/test_phase8_consumer_bridge.py"
+    - "tests/test_phase8_mtgo_production_entry.py"
+    - "tests/test_production_candidate_validation.py"
     - "tests/test_validate_schemas.py"
+    - "README.md"
     - "docs/STATISTICS_SPEC.md"
     - "docs/DATA_ARCHITECTURE.md"
+    - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    code_changed: "Videre transient-source classification and CLI reporting only"
-    workflow_changed: "job-summary shell quoting only; pipeline structure and permissions unchanged"
-    raw_or_generated_data_changed: false
-    statistical_behavior_changed: "no formula change; missing Videre archives remain disclosed and matchup calculations use available archives only"
-    schema_changed: false
-    frontend_source_changed: false
+    code_changed: "MTGO listing observation, discovery state, weekly lifecycle, and Pickup candidate refresh"
+    workflow_changed: "none"
+    raw_or_generated_data_changed: "Top 8 indexes and deterministic Pickup fixtures only; no source event payload changes"
+    statistical_behavior_changed: "no formula change; provisional weeks may safely add late official events"
+    schema_changed: "Top 8 index lifecycle and event discovery ledger"
+    frontend_source_changed: "Top 8 source note no longer describes the latest comparison base as immediately immutable; no lifecycle warning is shown"
     public_paths_changed: false
     event_434455_bytes_changed: false
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    graceful_degradation: "Exhausted retryable Videre HTTP, timeout, and transport failures are warnings and do not block unrelated MTGO candidate generation or publication."
-    fatal_boundary: "Non-retryable HTTP, malformed source contracts, invalid identities, storage failures, and unclassified exceptions remain fatal."
-    completeness: "An admitted event without a usable Videre archive remains in missing_event_ids and lowers videre-range-coverage-v1 without being represented as zero matches."
-    production_baseline_tests: "Top 8 history and Schema-count assertions derive from the committed production snapshot instead of the prior week's hard-coded counts."
-    protected_behavior: "No source or generated data, formula, Schema, front-end source, public path, or protected event 434455 byte changes."
+    listing_observation: "Known monthly links cannot disappear silently; bounded retries are unioned and persistent regression fails closed."
+    provisional_week: "Late events may only be added during the seven-day window; prior event identity and exact deck sources cannot change."
+    sealed_week: "Week and comparison-base bytes are immutable from the second Monday onward."
+    pickup_timeliness: "Pickup generates immediately after week end; unreviewed stale candidates refresh and reviewed candidates require re-review."
+    frontend: "The internal recovery lifecycle is not presented as a user-facing warning; the Top 8 page otherwise remains unchanged."
   owner_acceptance: "accepted"
   owner_accepted_on: "2026-08-04"
   owner_publication_authorized_on: "2026-08-04"
-  stop_point: "Commit, push, pull-request creation, CI monitoring, and merge are authorized for OPS-VIDERE-DEGRADED-FETCH. Do not dispatch production or begin P12-01 or Phase 12."
+  owner_production_dispatch_authorized_on: "2026-08-04"
+  stop_point: "Commit, push, pull-request creation, CI monitoring, merge, and one post-merge production retry are authorized for OPS-MTGO-WEEK-SEALING. Do not begin P12-01 or Phase 12."
 
 recent_completed_task:
   id: "P11-15"
@@ -137,7 +156,7 @@ recent_completed_task:
   result: "The Phase 8 application renderer was split into focused classic scripts under real-browser protection without changing public behavior, data, statistics, deployment architecture, or protected event 434455 bytes."
 
 current_repository_state:
-  baseline_commit: "643dbd17bb2ba0d959fb63f649ab325441af8e93"
+  baseline_commit: "922de5dc6ce57c8fe90400f191fdb17d0270fc97"
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -250,7 +269,7 @@ publication_workflow_control:
   p8_08_authorized: false
 
 prohibited_next_actions:
-  - "Do not dispatch production as part of OPS-VIDERE-DEGRADED-FETCH."
+  - "Do not dispatch production except for the one owner-authorized post-merge retry of the failed MTGO update workflow."
   - "Do not begin P12-01 or Phase 12, or start another task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."

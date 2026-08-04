@@ -37,12 +37,14 @@ def test_fixed_reference_candidates_and_base_are_byte_identical(tmp_path):
     )
     assert result is not None
     assert result["week"] == "2026-W28"
-    assert result["candidate_path"].read_bytes() == (
-        PICKUP / "candidates_2026-W28.yaml"
-    ).read_bytes()
-    assert result["base_reference_path"].read_bytes() == (
-        PICKUP / "base_reference_2026-W28.yaml"
-    ).read_bytes()
+    assert (
+        result["candidate_path"].read_bytes()
+        == (PICKUP / "candidates_2026-W28.yaml").read_bytes()
+    )
+    assert (
+        result["base_reference_path"].read_bytes()
+        == (PICKUP / "base_reference_2026-W28.yaml").read_bytes()
+    )
 
 
 def test_candidate_preservation_does_not_overwrite_manual_review(tmp_path):
@@ -67,6 +69,91 @@ def test_candidate_preservation_does_not_overwrite_manual_review(tmp_path):
     assert candidate.read_text(encoding="utf-8") == reviewed
 
 
+def test_pickup_generates_during_provisional_week(tmp_path):
+    result = pickup.generate_candidates(
+        ROOT,
+        "standard",
+        today=date(2026, 7, 19),
+        output_directory=tmp_path,
+    )
+    assert result is not None
+    assert result["week"] == "2026-W28"
+    document = yaml.safe_load(result["candidate_path"].read_text(encoding="utf-8"))
+    assert document["week_status"] == "provisional"
+    assert document["provisional_through"] == "2026-07-19"
+    assert document["seal_on"] == "2026-07-20"
+    assert document["source_event_ids"]
+
+
+def test_changed_source_preserves_reviewed_candidate_for_re_review(tmp_path):
+    generated = pickup.generate_candidates(
+        ROOT,
+        "standard",
+        today=REFERENCE_TODAY,
+        output_directory=tmp_path,
+    )
+    candidate = generated["candidate_path"]
+    document = yaml.safe_load(candidate.read_text(encoding="utf-8"))
+    document["source_event_ids"] = document["source_event_ids"][:-1]
+    document["existing_changes"][0]["comment_zh"] = "已经人工审核"
+    candidate.write_text(
+        yaml.dump(document, allow_unicode=True, sort_keys=False, width=1000),
+        encoding="utf-8",
+    )
+    reviewed = candidate.read_bytes()
+
+    refreshed = pickup.generate_candidates(
+        ROOT,
+        "standard",
+        today=REFERENCE_TODAY,
+        output_directory=tmp_path,
+        preserve_existing=True,
+    )
+
+    assert refreshed["skipped_existing"] is True
+    assert refreshed["review_required"] is True
+    assert candidate.read_bytes() == reviewed
+
+    with pytest.raises(pickup.MTGOPickupError, match="source events changed"):
+        pickup.publish(
+            ROOT,
+            "standard",
+            today=REFERENCE_TODAY,
+            candidate_directory=tmp_path,
+            output_directory=tmp_path / "published",
+        )
+
+
+def test_changed_source_refreshes_unreviewed_candidate(tmp_path):
+    generated = pickup.generate_candidates(
+        ROOT,
+        "standard",
+        today=REFERENCE_TODAY,
+        output_directory=tmp_path,
+    )
+    candidate = generated["candidate_path"]
+    document = yaml.safe_load(candidate.read_text(encoding="utf-8"))
+    expected_ids = document["source_event_ids"]
+    document["source_event_ids"] = expected_ids[:-1]
+    candidate.write_text(
+        yaml.dump(document, allow_unicode=True, sort_keys=False, width=1000),
+        encoding="utf-8",
+    )
+
+    refreshed = pickup.generate_candidates(
+        ROOT,
+        "standard",
+        today=REFERENCE_TODAY,
+        output_directory=tmp_path,
+        preserve_existing=True,
+    )
+
+    assert refreshed["skipped_existing"] is False
+    assert refreshed["review_required"] is False
+    updated = yaml.safe_load(candidate.read_text(encoding="utf-8"))
+    assert updated["source_event_ids"] == expected_ids
+
+
 def test_unapproved_candidates_do_not_publish_or_update_state(tmp_path):
     candidates = tmp_path / "candidates"
     output = tmp_path / "published"
@@ -76,13 +163,16 @@ def test_unapproved_candidates_do_not_publish_or_update_state(tmp_path):
         today=REFERENCE_TODAY,
         output_directory=candidates,
     )
-    assert pickup.publish(
-        ROOT,
-        "standard",
-        today=REFERENCE_TODAY,
-        candidate_directory=candidates,
-        output_directory=output,
-    ) is None
+    assert (
+        pickup.publish(
+            ROOT,
+            "standard",
+            today=REFERENCE_TODAY,
+            candidate_directory=candidates,
+            output_directory=output,
+        )
+        is None
+    )
     assert not output.exists()
 
 
@@ -125,8 +215,14 @@ def test_publish_preserves_manual_approval_and_catalog_state(tmp_path):
     catalog = json.loads(result["index_path"].read_text(encoding="utf-8"))
     assert [entry["week"] for entry in catalog["weeks"]] == ["2026-W28", "2026-W27"]
     assert catalog["weeks"][0]["existing_count"] == 1
-    assert json.loads(result["known_path"].read_text(encoding="utf-8"))["known"] == sorted(
-        set(json.loads((PICKUP / "known_archetypes.json").read_text(encoding="utf-8"))["known"])
+    assert json.loads(result["known_path"].read_text(encoding="utf-8"))[
+        "known"
+    ] == sorted(
+        set(
+            json.loads((PICKUP / "known_archetypes.json").read_text(encoding="utf-8"))[
+                "known"
+            ]
+        )
         | pickup.archetypes_in_window(
             mtgo_stats.load_all_events(ROOT, "standard"),
             load_rule_set(ROOT / "my_archetypes" / "standard.yaml"),
@@ -153,11 +249,14 @@ def test_fixed_reference_metadata_and_rules_timestamp_are_deterministic(tmp_path
         captured["kwargs"] = kwargs
         return type("Result", (), {"stdout": "2026-07-20T05:34:31+09:00\n"})()
 
-    assert pickup.rules_last_commit_iso(
-        ROOT,
-        ROOT / "my_archetypes" / "standard.yaml",
-        runner=fake_runner,
-    ) == "2026-07-20T05:34:31+09:00"
+    assert (
+        pickup.rules_last_commit_iso(
+            ROOT,
+            ROOT / "my_archetypes" / "standard.yaml",
+            runner=fake_runner,
+        )
+        == "2026-07-20T05:34:31+09:00"
+    )
     assert captured["command"] == [
         "git",
         "log",
@@ -172,7 +271,6 @@ def test_fixed_reference_metadata_and_rules_timestamp_are_deterministic(tmp_path
         "text": True,
         "check": True,
     }
-
 
 
 @pytest.mark.parametrize(
@@ -193,7 +291,9 @@ def test_unavailable_formats_fail_before_pickup_or_metadata_output(
 
 
 def test_catalog_capability_does_not_gate_range_or_matchup_statistics(tmp_path):
-    registry = yaml.safe_load((ROOT / "configs" / "formats.yaml").read_text(encoding="utf-8"))
+    registry = yaml.safe_load(
+        (ROOT / "configs" / "formats.yaml").read_text(encoding="utf-8")
+    )
     standard = next(item for item in registry["formats"] if item["id"] == "standard")
     standard["mtgo"]["capabilities"].remove("catalog_generation")
     registry_path = tmp_path / "formats.yaml"
@@ -240,7 +340,9 @@ def test_shared_publication_module_has_no_implicit_standard_paths():
     source = (SRC / "mtgmeta" / "mtgo" / "pickup.py").read_text(encoding="utf-8")
     assert '"standard"' not in source
     assert "stats/standard/mtgo" not in source
-    workflow = (ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8")
+    workflow = (ROOT / ".github" / "workflows" / "update.yml").read_text(
+        encoding="utf-8"
+    )
     assert "python -B weekly_pickup.py" not in workflow
     assert "python -B gen_meta.py" not in workflow
     assert "pickup candidates --if-absent" in workflow

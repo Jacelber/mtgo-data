@@ -264,14 +264,12 @@ def test_build_latest_week_is_deterministic_and_writes_week_catalog(tmp_path):
         "2026-W30-bases.json",
         "index.json",
     }
-    assert {
-        name: path.read_bytes() for name, path in first_written.items()
-    } == {
+    assert {name: path.read_bytes() for name, path in first_written.items()} == {
         name: path.read_bytes() for name, path in second_written.items()
     }
     catalog = json.loads((first / "index.json").read_text(encoding="utf-8"))
     assert catalog["latest_complete_week"] == "2026-07-20"
-    assert catalog["history_policy"] == "immutable_weekly_comparison_bases"
+    assert catalog["history_policy"] == "one_week_provisional_then_immutable"
     assert catalog["weeks"] == [
         {
             "file": "2026-W30.json",
@@ -279,8 +277,87 @@ def test_build_latest_week_is_deterministic_and_writes_week_catalog(tmp_path):
             "start": "2026-07-20",
             "end": "2026-07-26",
             "event_count": 1,
+            "status": "provisional",
+            "provisional_through": "2026-08-02",
+            "seal_on": "2026-08-03",
         }
     ]
+
+
+def test_provisional_week_accepts_only_additive_late_events(tmp_path):
+    first = event(
+        "202",
+        "Modern Challenge 32",
+        "2026-07-20",
+        [player(rank, "Grixis Card") for rank in range(1, 9)],
+    )
+    second = event(
+        "203",
+        "Modern Challenge 64",
+        "2026-07-21",
+        [player(rank, "Energy Card") for rank in range(1, 9)],
+    )
+    output = tmp_path / "top8"
+    top8.write_latest_week(
+        [(date(2026, 7, 20), first)],
+        rules(),
+        output,
+        format_id="modern",
+        today=date(2026, 7, 28),
+        generated_at="2026-07-28T12:00:00",
+    )
+    top8.write_latest_week(
+        [(date(2026, 7, 20), first), (date(2026, 7, 21), second)],
+        rules(),
+        output,
+        format_id="modern",
+        today=date(2026, 7, 29),
+        generated_at="2026-07-29T12:00:00",
+    )
+    catalog = json.loads((output / "index.json").read_text(encoding="utf-8"))
+    assert catalog["weeks"][0]["event_count"] == 2
+    assert catalog["weeks"][0]["status"] == "provisional"
+
+    changed = json.loads(json.dumps(first))
+    changed["player_count"] = 64
+    with pytest.raises(top8.MTGOTop8Error, match="existing event changed"):
+        top8.write_latest_week(
+            [(date(2026, 7, 20), changed), (date(2026, 7, 21), second)],
+            rules(),
+            output,
+            format_id="modern",
+            today=date(2026, 7, 30),
+        )
+
+
+def test_sealed_week_remains_byte_immutable(tmp_path):
+    first = event(
+        "202",
+        "Modern Challenge 32",
+        "2026-07-20",
+        [player(rank, "Grixis Card") for rank in range(1, 9)],
+    )
+    output = tmp_path / "top8"
+    top8.write_latest_week(
+        [(date(2026, 7, 20), first)],
+        rules(),
+        output,
+        format_id="modern",
+        today=date(2026, 8, 3),
+        generated_at="2026-08-03T12:00:00",
+    )
+    week_path = output / "2026-W30.json"
+    document = json.loads(week_path.read_text(encoding="utf-8"))
+    document["events"][0]["name"] = "mutated"
+    week_path.write_text(json.dumps(document, indent=2), encoding="utf-8")
+    with pytest.raises(top8.MTGOTop8Error, match="immutable historical"):
+        top8.write_latest_week(
+            [(date(2026, 7, 20), first)],
+            rules(),
+            output,
+            format_id="modern",
+            today=date(2026, 8, 4),
+        )
 
 
 @pytest.mark.parametrize("format_id", ["standard", "modern"])
@@ -298,8 +375,7 @@ def test_committed_real_week_has_all_events_and_exact_rank_slots(format_id):
             range(1, 9)
         )
         assert all(
-            placement["deck_status"] == "available"
-            for placement in item["placements"]
+            placement["deck_status"] == "available" for placement in item["placements"]
         )
         assert all(
             placement["comparison"]["base_period_end"] == week["week"]["end"]
@@ -336,37 +412,44 @@ def test_committed_top8_documents_match_formal_schemas(format_id):
     loaded, registry = validate_schemas.load_schemas(ROOT / "schemas")
     output = ROOT / "stats" / format_id / "mtgo" / "top8"
     catalog = json.loads((output / "index.json").read_text(encoding="utf-8"))
-    assert validate_schemas.validate_instance(
-        catalog,
-        loaded["mtgo-top8-index.schema.json"],
-        registry,
-    ) == []
+    assert (
+        validate_schemas.validate_instance(
+            catalog,
+            loaded["mtgo-top8-index.schema.json"],
+            registry,
+        )
+        == []
+    )
     week = json.loads(
         (output / catalog["weeks"][0]["file"]).read_text(encoding="utf-8")
     )
-    assert validate_schemas.validate_instance(
-        week,
-        loaded["mtgo-top8-week.schema.json"],
-        registry,
-    ) == []
+    assert (
+        validate_schemas.validate_instance(
+            week,
+            loaded["mtgo-top8-week.schema.json"],
+            registry,
+        )
+        == []
+    )
     bases = json.loads(
         (output / catalog["weeks"][0]["comparison_bases_file"]).read_text(
             encoding="utf-8"
         )
     )
-    assert validate_schemas.validate_instance(
-        bases,
-        loaded["mtgo-top8-comparison-bases.schema.json"],
-        registry,
-    ) == []
+    assert (
+        validate_schemas.validate_instance(
+            bases,
+            loaded["mtgo-top8-comparison-bases.schema.json"],
+            registry,
+        )
+        == []
+    )
 
 
 @pytest.mark.parametrize("format_id", ["standard", "modern"])
 def test_committed_comparison_identities_resolve_in_same_period_deck_data(format_id):
     output = ROOT / "stats" / format_id / "mtgo"
-    decks = json.loads((output / "decks_4w.json").read_text(encoding="utf-8"))[
-        "decks"
-    ]
+    decks = json.loads((output / "decks_4w.json").read_text(encoding="utf-8"))["decks"]
     available_identities = set()
     for parent in decks.values():
         parent_id = parent.get("archetype_id")
@@ -377,9 +460,7 @@ def test_committed_comparison_identities_resolve_in_same_period_deck_data(format
             for subtype in parent.get("subtypes", [])
         )
 
-    catalog = json.loads(
-        (output / "top8" / "index.json").read_text(encoding="utf-8")
-    )
+    catalog = json.loads((output / "top8" / "index.json").read_text(encoding="utf-8"))
     week = json.loads(
         (output / "top8" / catalog["weeks"][0]["file"]).read_text(encoding="utf-8")
     )

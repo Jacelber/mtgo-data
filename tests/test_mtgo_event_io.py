@@ -37,7 +37,12 @@ from mtgmeta.mtgo.fetch import (
     parse_event_link,
     refresh_existing_event,
 )
-from mtgmeta.mtgo.normalize import classify_event, load_rules_for_format, normalize_event
+from mtgmeta.mtgo.normalize import (
+    classify_event,
+    load_rules_for_format,
+    normalize_event,
+)
+import validate_schemas
 
 
 REGISTRY = ROOT / "configs" / "formats.yaml"
@@ -168,14 +173,17 @@ def test_completeness_and_normalization_freeze_both_supported_output_shapes():
         key: value for key, value in raw.items() if key != "inplayoffs"
     }
     assert is_event_data_complete(without_playoff_marker) is False
-    assert is_event_data_complete(
-        {
-            **raw,
-            "inplayoffs": "0",
-            "standings": [],
-            "final_rank": [],
-        }
-    ) is True
+    assert (
+        is_event_data_complete(
+            {
+                **raw,
+                "inplayoffs": "0",
+                "standings": [],
+                "final_rank": [],
+            }
+        )
+        is True
+    )
     assert normalize_event(raw) == expected
     expected_fetch = dict(expected)
     expected_fetch.pop("inplayoffs")
@@ -192,13 +200,16 @@ def test_download_retry_policy_is_injectable_and_bounded():
             raise OSError("temporary")
         return Response("ok")
 
-    assert download_page(
-        "https://example.test/event",
-        attempts=3,
-        retry_delay=1,
-        request_get=request,
-        sleep=waits.append,
-    ) == "ok"
+    assert (
+        download_page(
+            "https://example.test/event",
+            attempts=3,
+            retry_delay=1,
+            request_get=request,
+            sleep=waits.append,
+        )
+        == "ok"
+    )
     assert len(calls) == 3
     assert waits == [1, 1]
     assert calls[0][1]["timeout"] == 90
@@ -209,7 +220,9 @@ def test_download_retry_policy_is_injectable_and_bounded():
             "https://example.test/fail",
             attempts=2,
             retry_delay=0,
-            request_get=lambda *_args, **_kwargs: (_ for _ in ()).throw(OSError("down")),
+            request_get=lambda *_args, **_kwargs: (_ for _ in ()).throw(
+                OSError("down")
+            ),
         )
 
 
@@ -221,13 +234,16 @@ def test_event_download_retries_parse_failures_until_complete():
         calls.append(True)
         return Response("missing" if len(calls) == 1 else embedded_html())
 
-    assert download_event_data(
-        "https://example.test/event",
-        attempts=2,
-        retry_delay=1,
-        request_get=request,
-        sleep=waits.append,
-    ) == raw_event()
+    assert (
+        download_event_data(
+            "https://example.test/event",
+            attempts=2,
+            retry_delay=1,
+            request_get=request,
+            sleep=waits.append,
+        )
+        == raw_event()
+    )
     assert len(calls) == 2
     assert waits == [1]
 
@@ -241,12 +257,15 @@ def test_event_download_retries_partial_publication_until_complete():
         calls.append(True)
         return Response(embedded_html(partial if len(calls) == 1 else raw_event()))
 
-    assert download_event_data(
-        "https://example.test/event",
-        attempts=2,
-        retry_delay=0,
-        request_get=request,
-    ) == raw_event()
+    assert (
+        download_event_data(
+            "https://example.test/event",
+            attempts=2,
+            retry_delay=0,
+            request_get=request,
+        )
+        == raw_event()
+    )
     assert len(calls) == 2
 
 
@@ -258,12 +277,15 @@ def test_event_download_retries_until_standings_cover_every_deck():
         calls.append(True)
         return Response(embedded_html(partial if len(calls) == 1 else raw_event()))
 
-    assert download_event_data(
-        "https://example.test/event",
-        attempts=2,
-        retry_delay=0,
-        request_get=request,
-    ) == raw_event()
+    assert (
+        download_event_data(
+            "https://example.test/event",
+            attempts=2,
+            retry_delay=0,
+            request_get=request,
+        )
+        == raw_event()
+    )
     assert len(calls) == 2
 
 
@@ -381,7 +403,10 @@ def test_link_discovery_is_exact_and_does_not_confuse_premodern_or_leagues():
         "/decklist/pauper-challenge-2026-07-201237",
         "/decklist/standard-challenge-32-2026-07-201234",
     ]
-    assert parse_event_link("/decklist/premodern-challenge-2026-07-201236", FORMATS)[0] == "other"
+    assert (
+        parse_event_link("/decklist/premodern-challenge-2026-07-201236", FORMATS)[0]
+        == "other"
+    )
 
 
 def test_fetched_record_and_filename_storage_are_deterministic(tmp_path):
@@ -429,7 +454,10 @@ def test_standard_fetch_uses_registry_path_and_normalizes_before_storage(tmp_pat
         request_get=request,
         sleep=lambda _seconds: None,
     )
-    assert destination == tmp_path / "data" / "standard" / "Standard_Challenge_32_12345.json"
+    assert (
+        destination
+        == tmp_path / "data" / "standard" / "Standard_Challenge_32_12345.json"
+    )
     assert json.loads(destination.read_text(encoding="utf-8")) == expected_batch_event()
     assert len(calls) == 1
 
@@ -440,7 +468,9 @@ def test_controlled_refresh_replaces_only_matching_existing_event(tmp_path):
     existing["players"][1]["swiss_wins"] = 4
     destination = tmp_path / "data" / "standard" / "Standard_Challenge_32_12345.json"
     destination.parent.mkdir(parents=True)
-    destination.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
+    destination.write_text(
+        json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
     refreshed = refresh_existing_event(
         tmp_path,
@@ -458,7 +488,9 @@ def test_controlled_refresh_replaces_only_matching_existing_event(tmp_path):
     assert not list(destination.parent.glob("*.tmp"))
 
 
-def test_controlled_refresh_preserves_original_when_identity_or_placement_changes(tmp_path):
+def test_controlled_refresh_preserves_original_when_identity_or_placement_changes(
+    tmp_path,
+):
     destination = tmp_path / "data" / "standard" / "Standard_Challenge_32_12345.json"
     destination.parent.mkdir(parents=True)
     destination.write_text(
@@ -508,11 +540,124 @@ def test_format_aware_month_fetch_preserves_playoff_filter_and_ledger(tmp_path):
     assert summary["failed"] == 0
     assert calls == [
         "https://www.mtgo.com/decklists/2026/07",
+        "https://www.mtgo.com/decklists/2026/07",
+        "https://www.mtgo.com/decklists/2026/07",
         f"https://www.mtgo.com{event_link}",
     ]
     assert (tmp_path / "fetched.txt").read_text(encoding="utf-8") == event_link + "\n"
     destination = tmp_path / "data" / "standard" / "Standard_Challenge_32_12345.json"
     assert json.loads(destination.read_text(encoding="utf-8")) == expected_batch_event()
+
+
+def test_month_listing_regression_retries_unions_and_fails_if_still_incomplete(
+    tmp_path,
+):
+    known = "/decklist/modern-challenge-32-2026-08-0112849467"
+    fresh = "/decklist/modern-challenge-64-2026-08-0212849474"
+    (tmp_path / "fetched.txt").write_text(known + "\n", encoding="utf-8")
+    listings = [fresh, fresh, fresh]
+
+    def request(url, **_kwargs):
+        assert "/decklists/" in url
+        return Response(listings.pop(0))
+
+    summary = fetch_event_months(
+        tmp_path,
+        "modern",
+        months=[(2026, 8)],
+        now=datetime(2026, 8, 4),
+        registry_path=REGISTRY,
+        request_get=request,
+        sleep=lambda _seconds: None,
+        inter_event_delay=0,
+    )
+    assert summary["failed"] == 1
+    assert summary["candidates"] == 0
+    assert "listing omitted 1 previously known event link" in summary["errors"][0][1]
+    assert not (tmp_path / "data" / "modern" / "mtgo" / "discovery.json").exists()
+
+
+def test_month_listing_retry_unions_observations_and_persists_deferred_state(tmp_path):
+    known = "/decklist/modern-challenge-32-2026-08-0112849467"
+    late = "/decklist/modern-challenge-64-2026-08-0212849474"
+    (tmp_path / "fetched.txt").write_text(known + "\n", encoding="utf-8")
+    listings = [late, f"{known} {late}", late]
+    pending = {**raw_event(), "description": "Modern Challenge 64", "decklists": []}
+
+    def request(url, **_kwargs):
+        if "/decklists/" in url:
+            return Response(listings.pop(0))
+        return Response(embedded_html(pending))
+
+    summary = fetch_event_months(
+        tmp_path,
+        "modern",
+        months=[(2026, 8)],
+        now=datetime(2026, 8, 3),
+        registry_path=REGISTRY,
+        request_get=request,
+        sleep=lambda _seconds: None,
+        inter_event_delay=0,
+    )
+    assert summary["candidates"] == 2
+    assert summary["skipped"] == 1
+    assert summary["deferred_incomplete"] == 1
+    state = json.loads(
+        (tmp_path / "data" / "modern" / "mtgo" / "discovery.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert state["events"] == [
+        {
+            "link": known,
+            "event_date": "2026-08-01",
+            "status": "processed",
+        },
+        {
+            "link": late,
+            "event_date": "2026-08-02",
+            "status": "deferred_incomplete",
+        },
+    ]
+    loaded, schema_registry = validate_schemas.load_schemas(ROOT / "schemas")
+    assert (
+        validate_schemas.validate_instance(
+            state,
+            loaded["mtgo-event-discovery.schema.json"],
+            schema_registry,
+        )
+        == []
+    )
+
+
+def test_new_month_unions_three_observations_without_prior_links(tmp_path):
+    first = "/decklist/modern-challenge-32-2026-08-0112849467"
+    late = "/decklist/modern-challenge-64-2026-08-0212849474"
+    listings = [first, late, first]
+    pending = {**raw_event(), "description": "Modern Challenge 64", "decklists": []}
+
+    def request(url, **_kwargs):
+        if "/decklists/" in url:
+            return Response(listings.pop(0))
+        return Response(embedded_html(pending))
+
+    summary = fetch_event_months(
+        tmp_path,
+        "modern",
+        months=[(2026, 8)],
+        now=datetime(2026, 8, 3),
+        registry_path=REGISTRY,
+        request_get=request,
+        sleep=lambda _seconds: None,
+        inter_event_delay=0,
+    )
+
+    assert summary["candidates"] == 2
+    assert summary["deferred_incomplete"] == 2
+    state = json.loads(
+        (tmp_path / "data" / "modern" / "mtgo" / "discovery.json").read_text()
+    )
+    assert [item["link"] for item in state["events"]] == [first, late]
 
 
 def test_month_fetch_defers_listed_event_until_decklists_are_published(tmp_path):
@@ -542,7 +687,17 @@ def test_month_fetch_defers_listed_event_until_decklists_are_published(tmp_path)
         )
     ]
     assert not (tmp_path / "fetched.txt").exists()
-    assert not (tmp_path / "data").exists()
+    assert not list((tmp_path / "data" / "legacy").glob("*.json"))
+    state = json.loads(
+        (tmp_path / "data" / "legacy" / "mtgo" / "discovery.json").read_text()
+    )
+    assert state["events"] == [
+        {
+            "link": event_link,
+            "event_date": "2026-07-19",
+            "status": "deferred_incomplete",
+        }
+    ]
 
 
 def test_month_fetch_defers_recent_partial_event_without_writing(tmp_path):
@@ -573,10 +728,16 @@ def test_month_fetch_defers_recent_partial_event_without_writing(tmp_path):
         )
     ]
     assert not (tmp_path / "fetched.txt").exists()
-    assert not (tmp_path / "data").exists()
+    assert not list((tmp_path / "data" / "modern").glob("*.json"))
+    state = json.loads(
+        (tmp_path / "data" / "modern" / "mtgo" / "discovery.json").read_text()
+    )
+    assert state["events"][0]["status"] == "deferred_incomplete"
 
 
-def test_month_fetch_defers_recent_event_with_missing_standings_without_writing(tmp_path):
+def test_month_fetch_defers_recent_event_with_missing_standings_without_writing(
+    tmp_path,
+):
     event_link = "/decklist/modern-challenge-64-2026-07-2712849000"
     partial = {**raw_event(), "description": "Modern Challenge 64", "standings": []}
 
@@ -597,7 +758,11 @@ def test_month_fetch_defers_recent_event_with_missing_standings_without_writing(
     assert summary["failed"] == 0
     assert "standings have not been published" in summary["warnings"][0][1]
     assert not (tmp_path / "fetched.txt").exists()
-    assert not (tmp_path / "data").exists()
+    assert not list((tmp_path / "data" / "modern").glob("*.json"))
+    state = json.loads(
+        (tmp_path / "data" / "modern" / "mtgo" / "discovery.json").read_text()
+    )
+    assert state["events"][0]["status"] == "deferred_incomplete"
 
 
 def test_month_fetch_escalates_partial_event_after_grace_period(tmp_path):
@@ -628,7 +793,11 @@ def test_month_fetch_escalates_partial_event_after_grace_period(tmp_path):
         )
     ]
     assert not (tmp_path / "fetched.txt").exists()
-    assert not (tmp_path / "data").exists()
+    assert not list((tmp_path / "data" / "modern").glob("*.json"))
+    state = json.loads(
+        (tmp_path / "data" / "modern" / "mtgo" / "discovery.json").read_text()
+    )
+    assert state["events"][0]["status"] == "discovered"
 
 
 def test_month_fetch_keeps_persistent_parse_failure_fatal(tmp_path):
@@ -678,7 +847,10 @@ def test_modern_event_collection_and_classification_use_their_own_paths(tmp_path
     rule_path = tmp_path / "my_archetypes" / "modern.yaml"
     rule_path.parent.mkdir(parents=True)
     rule_path.write_bytes((ROOT / "my_archetypes" / "modern.yaml").read_bytes())
-    assert load_rules_for_format(tmp_path, "modern", registry_path=REGISTRY).format == "modern"
+    assert (
+        load_rules_for_format(tmp_path, "modern", registry_path=REGISTRY).format
+        == "modern"
+    )
 
 
 def test_collection_disabled_format_fails_before_ledger_network_or_storage(tmp_path):
@@ -686,7 +858,9 @@ def test_collection_disabled_format_fails_before_ledger_network_or_storage(tmp_p
     modern = next(item for item in registry["formats"] if item["id"] == "modern")
     modern["mtgo"]["event_collection_enabled"] = False
     registry_path = tmp_path / "formats.yaml"
-    registry_path.write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")
+    registry_path.write_text(
+        yaml.safe_dump(registry, sort_keys=False), encoding="utf-8"
+    )
     calls = []
     with pytest.raises(DisabledFormatError, match="event collection"):
         fetch_event_months(
@@ -731,12 +905,14 @@ def test_standard_classification_dispatch_matches_the_package_classifier():
 
 def test_p3_03_target_modules_exist_and_production_workflow_is_unchanged():
     contract = json.loads(
-        (ROOT / "tests" / "fixtures" / "mtgo" / "format_pipeline_contract.json").read_text(
-            encoding="utf-8"
-        )
+        (
+            ROOT / "tests" / "fixtures" / "mtgo" / "format_pipeline_contract.json"
+        ).read_text(encoding="utf-8")
     )
     unit = next(item for item in contract["migration_units"] if item["task"] == "P3-03")
     assert all((ROOT / path).is_file() for path in unit["target_modules"])
-    workflow = (ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8")
+    workflow = (ROOT / ".github" / "workflows" / "update.yml").read_text(
+        encoding="utf-8"
+    )
     assert "python -B batch_mtgo.py" not in workflow
     assert "python -B -m mtgmeta.mtgo" in workflow

@@ -209,6 +209,11 @@ def _run_pickup(args: argparse.Namespace, root: Path, registry: Path) -> int:
         )
         if result is None:
             print(f"No complete MTGO event week is available for {args.format_id}.")
+        elif result.get("review_required"):
+            print(
+                "Weekly Pickup candidates need review after source events changed: "
+                f"{result['candidate_path']}"
+            )
         elif result["skipped_existing"]:
             print(f"Weekly Pickup candidates preserved: {result['candidate_path']}")
         else:

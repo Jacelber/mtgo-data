@@ -235,13 +235,15 @@ The format argument is mandatory. The installed command works without setting
 
 Standard and Modern are complete public MTGO products. The format registry also
 keeps official-event archive collection separate for incomplete formats. The
-scheduled pipeline builds statistics, matchups, completeness, immutable weekly
-Top 8 bases, metadata, the product catalog, hierarchy catalogs, strict
+scheduled pipeline builds statistics, matchups, completeness, provisional then
+sealed weekly Top 8 data and bases, metadata, the product catalog, hierarchy catalogs, strict
 classification diagnostics, and Weekly Pickup candidates for enabled products.
 
 Weekly Pickup publication is manual. Candidate generation never approves a
-row, publishes a week, or changes known-archetype state. After review and
-approval, publish with:
+row, publishes a week, or changes known-archetype state. Candidates are
+available immediately after a natural week ends and unreviewed candidates may
+refresh when late events arrive during that week's seven-day provisional
+window. After review and approval, publish with:
 
 ```powershell
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format <standard-or-modern> pickup publish

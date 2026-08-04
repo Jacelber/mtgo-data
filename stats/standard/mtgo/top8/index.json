@@ -5,21 +5,27 @@
   "format": "standard",
   "generated": "2026-08-04T11:13:39",
   "latest_complete_week": "2026-07-27",
-  "history_policy": "immutable_weekly_comparison_bases",
+  "history_policy": "one_week_provisional_then_immutable",
   "weeks": [
     {
       "file": "2026-W31.json",
       "comparison_bases_file": "2026-W31-bases.json",
       "start": "2026-07-27",
       "end": "2026-08-02",
-      "event_count": 9
+      "event_count": 9,
+      "status": "provisional",
+      "provisional_through": "2026-08-09",
+      "seal_on": "2026-08-10"
     },
     {
       "file": "2026-W30.json",
       "comparison_bases_file": "2026-W30-bases.json",
       "start": "2026-07-20",
       "end": "2026-07-26",
-      "event_count": 8
+      "event_count": 8,
+      "status": "sealed",
+      "provisional_through": "2026-08-02",
+      "seal_on": "2026-08-03"
     }
   ]
 }
