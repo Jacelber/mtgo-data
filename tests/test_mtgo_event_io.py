@@ -549,17 +549,17 @@ def test_format_aware_month_fetch_preserves_playoff_filter_and_ledger(tmp_path):
     assert json.loads(destination.read_text(encoding="utf-8")) == expected_batch_event()
 
 
-def test_month_listing_regression_retries_unions_and_fails_if_still_incomplete(
-    tmp_path,
-):
+def test_month_listing_omission_retains_known_links_without_blocking(tmp_path):
     known = "/decklist/modern-challenge-32-2026-08-0112849467"
     fresh = "/decklist/modern-challenge-64-2026-08-0212849474"
     (tmp_path / "fetched.txt").write_text(known + "\n", encoding="utf-8")
     listings = [fresh, fresh, fresh]
+    pending = {**raw_event(), "description": "Modern Challenge 64", "decklists": []}
 
     def request(url, **_kwargs):
-        assert "/decklists/" in url
-        return Response(listings.pop(0))
+        if "/decklists/" in url:
+            return Response(listings.pop(0))
+        return Response(embedded_html(pending))
 
     summary = fetch_event_months(
         tmp_path,
@@ -571,10 +571,14 @@ def test_month_listing_regression_retries_unions_and_fails_if_still_incomplete(
         sleep=lambda _seconds: None,
         inter_event_delay=0,
     )
-    assert summary["failed"] == 1
-    assert summary["candidates"] == 0
-    assert "listing omitted 1 previously known event link" in summary["errors"][0][1]
-    assert not (tmp_path / "data" / "modern" / "mtgo" / "discovery.json").exists()
+    assert summary["failed"] == 0
+    assert summary["candidates"] == 2
+    assert summary["skipped"] == 1
+    assert summary["deferred_incomplete"] == 1
+    state = json.loads(
+        (tmp_path / "data" / "modern" / "mtgo" / "discovery.json").read_text()
+    )
+    assert [item["link"] for item in state["events"]] == [known, fresh]
 
 
 def test_month_listing_retry_unions_observations_and_persists_deferred_state(tmp_path):

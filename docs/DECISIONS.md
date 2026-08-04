@@ -3462,11 +3462,13 @@ present a provisional or sealed warning. The recovery window is an internal
 reliability mechanism, not a statement that the latest week is probably
 incomplete.
 
-Monthly listing collection compares observations with the fetched ledger and a
-persistent per-format discovery ledger. A missing known link causes bounded
-re-observation; observations are unioned, and a persistent regression remains
-fatal. The discovery ledger retains processed, excluded, and deferred links so
-later runs can reason about previously observed source state.
+Monthly listing collection observes every requested page three times and unions
+the results with the fetched ledger and a persistent per-format discovery
+ledger. MTGO may permanently remove older links from a monthly page, so such an
+omission does not erase or invalidate a recorded link: already fetched links
+are skipped and unfinished links remain eligible for direct retry. The
+discovery ledger retains processed, excluded, and deferred links so later runs
+can reason about previously observed source state.
 
 Weekly Pickup continues to generate immediately after the natural week ends.
 Candidates and base references record source event IDs. An unreviewed candidate

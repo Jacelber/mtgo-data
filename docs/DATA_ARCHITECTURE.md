@@ -2572,6 +2572,11 @@ paths remain blocked even for complete products; only expected event archives,
 match archives, discovery ledgers, and dated Pickup review YAML may be newly
 created automatically.
 
+Each requested monthly listing is observed three times and the observations
+are unioned with recorded links. A link does not become invalid merely because
+MTGO later removes it from an older listing: completed links remain skipped and
+unfinished links remain directly retryable from the discovery ledger.
+
 When an MTGO input collection fails after the clean baseline and checkpoint
 manifest are prepared, the read-only fetch job may retain a separate
 `mtgo-fetch-checkpoint` artifact for seven days. It contains only `data/`,
