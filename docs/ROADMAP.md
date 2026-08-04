@@ -60,7 +60,7 @@ blockers, and stop conditions.
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
 | Phase 10 | Establish data governance, compliance, and production operations. | Completed on 2026-08-02 |
-| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 and P11-09 skipped by owner decision; P11-01 through P11-14 otherwise published; P11-15 accepted and authorized for publication |
+| Phase 11 | Establish the engineering baseline and reduce structural debt. | Completed on 2026-08-04; P11-04 and P11-09 remain skipped by owner decision, and P11-01 through P11-15 are published |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | Phase 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
@@ -2670,6 +2670,14 @@ retains direct static loading without a framework or deployment build step,
 and changes no public path, data, statistical behavior, or protected event
 `434455` byte. The owner accepted the local P11-15 front end and authorized
 commit, push, pull-request creation, CI monitoring, and merge on 2026-08-04.
+PR #177 merged P11-15 as task commit
+`28a7336c5ff888f584ae4229b39bfc710577e0f1` and merge commit
+`f90a26721c406e59f5071c79a360a133fbf6920d`; pull-request validation,
+master validation, and Pages publication all passed. Phase 11 is therefore
+complete. Its accepted skips remain P11-04, where the owner declined the
+coverage baseline because measured CI time was unacceptable, and P11-09, where
+the owner declined a premature shared API for the draw-adjusted compatibility
+calculation scheduled for an explicit Phase 19 migration.
 
 ## Acceptance criteria
 
