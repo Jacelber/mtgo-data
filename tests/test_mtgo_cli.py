@@ -50,7 +50,9 @@ def test_event_and_match_fetch_arguments_are_forwarded(monkeypatch):
             "fetched": 1,
             "skipped": 0,
             "not_found": 0,
+            "source_unavailable": 0,
             "failed": 0,
+            "warnings": [],
             "errors": [],
         }
 
@@ -67,6 +69,52 @@ def test_event_and_match_fetch_arguments_are_forwarded(monkeypatch):
     assert captured["matches"][0:2] == (ROOT, "standard")
     assert captured["matches"][2]["event_ids"] == ["123"]
     assert captured["matches"][2]["force"] is True
+
+
+def test_match_fetch_reports_source_unavailable_without_failing(monkeypatch, capsys):
+    monkeypatch.setattr(
+        cli.matchup,
+        "fetch_and_store_matches",
+        lambda *_args, **_kwargs: {
+            "requested": 2,
+            "fetched": 1,
+            "skipped": 0,
+            "not_found": 0,
+            "source_unavailable": 1,
+            "failed": 0,
+            "warnings": [("123", "HTTP Error 503: Service Unavailable")],
+            "errors": [],
+        },
+    )
+
+    assert cli.main([
+        "--root", str(ROOT), "--format", "standard", "fetch-matches", "123", "124"
+    ]) == 0
+    captured = capsys.readouterr()
+    assert "source_unavailable=1 failed=0" in captured.out
+    assert "SOURCE UNAVAILABLE 123" in captured.err
+
+
+def test_match_fetch_keeps_non_transient_errors_fatal(monkeypatch, capsys):
+    monkeypatch.setattr(
+        cli.matchup,
+        "fetch_and_store_matches",
+        lambda *_args, **_kwargs: {
+            "requested": 1,
+            "fetched": 0,
+            "skipped": 0,
+            "not_found": 0,
+            "source_unavailable": 0,
+            "failed": 1,
+            "warnings": [],
+            "errors": [("123", "Videre response data must be a list of objects")],
+        },
+    )
+
+    assert cli.main([
+        "--root", str(ROOT), "--format", "standard", "fetch-matches", "123"
+    ]) == 1
+    assert "ERROR 123" in capsys.readouterr().err
 
 
 def test_controlled_event_refresh_is_explicit_and_format_authorized(monkeypatch):

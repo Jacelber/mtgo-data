@@ -3384,3 +3384,48 @@ tools share one stable instruction source and cannot rely on a stale phase
 copy. P11-13 changes no code, workflow, generated or source data, statistical
 behavior, Schema, public path, front-end source, or protected event `434455`
 byte. Cross-document fact consistency remains the separate P11-14 task.
+
+---
+
+# DEC-082 - Degrade bounded Videre source outages without suppressing MTGO updates
+
+Status: `Accepted`
+
+## Context
+
+Scheduled production run `30853542523` exhausted three bounded attempts for
+multiple Standard and Modern Videre requests because the third-party service
+returned HTTP 500. The fetch job correctly prevented incomplete matchup data
+from being presented as complete, but it also suppressed unrelated official
+event, metagame, high-score, Top 8, Weekly Pickup, metadata, catalog, and
+completeness updates. Manual run `30902426056` succeeded after Videre recovered.
+
+The existing `videre-range-coverage-v1` contract already distinguishes usable
+archives from admitted events with missing archives and exposes the counts,
+event IDs, and resulting completeness rate to the browser. Missing matchup
+source data therefore need not be converted to zero or hidden to permit other
+product data to advance.
+
+## Decision
+
+After existing bounded retries, retryable Videre HTTP responses, timeouts, and
+transport failures are source-unavailable warnings. The affected events create
+no new matchup archive, remain visible as `missing` in completeness output, and
+do not make the MTGO fetch command fail. Successfully collected inputs and all
+other generated MTGO products may continue through the existing candidate
+validation and publication boundary.
+
+Do not generalize this exception. Non-retryable HTTP responses, malformed JSON
+or response structures, invalid event identities, filesystem failures, and
+unclassified exceptions remain fatal. Matchup generation continues to use
+only usable retained archives and never invents zero-match rows for missing
+events. The next scheduled run retries any event that still lacks an archive.
+
+## Consequences
+
+A temporary Videre outage can make matchup statistics less complete while the
+rest of the MTGO product remains current. The front end already presents the
+available, expected, deferred, missing, excluded, and completeness values, so
+no front-end or Schema change is required. Workflow logs distinguish source
+unavailability from fatal errors, and literal Markdown backticks in job
+summaries no longer trigger unintended shell command substitution.

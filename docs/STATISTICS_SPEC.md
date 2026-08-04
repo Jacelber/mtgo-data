@@ -1898,6 +1898,21 @@ unless a future reviewed source-status record supplies explicit temporary
 incompleteness evidence. This keeps the rate reproducible and prevents an
 unverified absence from being removed from the denominator.
 
+An exhausted bounded retry for a retryable Videre HTTP response, timeout, or
+transport failure is a source-availability warning, not a reason to suppress
+unrelated MTGO product updates. The affected event produces no new matchup
+archive, remains in the admitted population, and is therefore reported as
+`missing` by the generated completeness document. Matchup statistics use only
+usable retained archives and must not synthesize zero-match records for the
+missing event. The remaining official-event, metagame, high-score, Top 8,
+Weekly Pickup, metadata, catalog, and completeness outputs may continue through
+candidate validation and publication.
+
+This degradation rule is narrow. A non-retryable HTTP response, malformed JSON
+or response structure, invalid event identity, local storage failure, or other
+unclassified exception remains fatal. Such failures must stop publication
+rather than being relabeled as third-party unavailability.
+
 P8-06 also adds `literal_record` to every MTGO parent and leaf matrix cell.
 Each range document exposes `parent_match_records` and `leaf_match_records`;
 each identity record contains `all_matches`, `non_mirror`, and the physical

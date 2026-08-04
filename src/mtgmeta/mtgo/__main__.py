@@ -141,8 +141,11 @@ def _run_fetch_matches(args: argparse.Namespace, root: Path, registry: Path) -> 
     print(
         "Videre matches: "
         f"format={args.format_id} requested={summary['requested']} fetched={summary['fetched']} "
-        f"skipped={summary['skipped']} not_found={summary['not_found']} failed={summary['failed']}"
+        f"skipped={summary['skipped']} not_found={summary['not_found']} "
+        f"source_unavailable={summary['source_unavailable']} failed={summary['failed']}"
     )
+    for event_id, message in summary["warnings"]:
+        print(f"SOURCE UNAVAILABLE {event_id}: {message}", file=sys.stderr)
     for event_id, message in summary["errors"]:
         print(f"ERROR {event_id}: {message}", file=sys.stderr)
     return 1 if summary["failed"] else 0

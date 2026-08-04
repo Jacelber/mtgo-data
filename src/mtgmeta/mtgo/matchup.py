@@ -48,6 +48,10 @@ class NoResults(Exception):
     """Raised when Videre has no rows for an event."""
 
 
+class VidereUnavailable(RuntimeError):
+    """Raised when bounded retries exhaust for a transient source failure."""
+
+
 class MTGOMatchupError(RuntimeError):
     """Raised when matchup input cannot be classified or generated safely."""
 
@@ -127,7 +131,7 @@ def api_get(
         except (urllib.error.URLError, TimeoutError, ConnectionError) as exc:
             error = exc
         if attempt >= attempts:
-            raise error
+            raise VidereUnavailable(str(error)) from error
         LOGGER.warning(
             "Videre request attempt %d/%d failed with %s; retrying in %.1f seconds",
             attempt,
@@ -221,9 +225,12 @@ def fetch_and_store_matches(
         "fetched": 0,
         "skipped": 0,
         "not_found": 0,
+        "source_unavailable": 0,
         "failed": 0,
         "missing_event_ids": [],
+        "source_unavailable_event_ids": [],
         "written": [],
+        "warnings": [],
         "errors": [],
     }
     for event_id in selected:
@@ -249,6 +256,11 @@ def fetch_and_store_matches(
         except NoResults:
             summary["not_found"] += 1
             summary["missing_event_ids"].append(event_id)
+        except VidereUnavailable as exc:
+            summary["source_unavailable"] += 1
+            summary["missing_event_ids"].append(event_id)
+            summary["source_unavailable_event_ids"].append(event_id)
+            summary["warnings"].append((event_id, str(exc)))
         except Exception as exc:  # Keep independent events fetchable after one failure.
             summary["failed"] += 1
             summary["errors"].append((event_id, str(exc)))
@@ -1126,6 +1138,7 @@ __all__ = [
     "MIN_MATCHUP_SAMPLE",
     "MTGOMatchupError",
     "NoResults",
+    "VidereUnavailable",
     "VIDERE_BASE_URL",
     "WILSON_Z",
     "MatchupIdentity",
