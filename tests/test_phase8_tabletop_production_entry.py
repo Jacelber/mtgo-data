@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ROOT_ENTRY = ROOT / "index.html"
 TABLETOP_ENTRY = ROOT / "melee" / "index.html"
 PHASE8_JS = ROOT / "assets" / "js" / "phase8"
+APP_FILES = ("app-core.js", "app-mtgo.js", "app-tabletop.js", "app.js")
 
 
 def _scripts(path: Path) -> list[str]:
@@ -41,6 +42,9 @@ def test_tabletop_entry_loads_both_scoped_clients_in_order() -> None:
         "../assets/js/phase8/matchup-model.js",
         "../assets/js/phase8/mtgo-controller.js",
         "../assets/js/phase8/tabletop-controller.js",
+        "../assets/js/phase8/app-core.js",
+        "../assets/js/phase8/app-mtgo.js",
+        "../assets/js/phase8/app-tabletop.js",
         "../assets/js/phase8/app.js",
     ]
 
@@ -54,7 +58,10 @@ def test_root_keeps_the_mtgo_boundary_and_declares_tabletop_route() -> None:
 
 
 def test_app_routes_products_between_surfaces_and_reads_url_state() -> None:
-    app = (PHASE8_JS / "app.js").read_text(encoding="utf-8")
+    app = "\n".join(
+        (PHASE8_JS / name).read_text(encoding="utf-8")
+        for name in APP_FILES
+    )
 
     assert 'const PRODUCT_SURFACES = {' in app
     assert '"tabletop-major-events": "tabletop"' in app
@@ -67,13 +74,10 @@ def test_app_routes_products_between_surfaces_and_reads_url_state() -> None:
 
 
 def test_tabletop_copy_is_bilingual_and_not_embedded_in_renderer() -> None:
-    app = (PHASE8_JS / "app.js").read_text(encoding="utf-8")
+    app = (PHASE8_JS / "app-tabletop.js").read_text(encoding="utf-8")
     i18n = (PHASE8_JS / "i18n.js").read_text(encoding="utf-8")
-    start = app.index("function scopeLabel")
-    end = app.index("function pickupDeck")
-    tabletop_renderer = app[start:end]
 
-    assert not re.search(r"[\u4e00-\u9fff]", tabletop_renderer)
+    assert not re.search(r"[\u4e00-\u9fff]", app)
     for key in (
         "tabletop.overview",
         "tabletop.matchups",

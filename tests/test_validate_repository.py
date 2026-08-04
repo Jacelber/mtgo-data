@@ -236,12 +236,12 @@ def test_reference_invalid_values(tmp_path):
         status["authoritative_documents"]["reading_order"][0]["path"] = value
         checked, failures, _ = validator.validate_references(tmp_path, ["ok.txt"], status)
         matching = [f for f in failures if repr(value) in f.message]
-        assert checked == 24 and len(matching) == 1 and matching[0].category == "References"
+        assert checked == 27 and len(matching) == 1 and matching[0].category == "References"
 
 
 def test_status_structure_failure(tmp_path):
     checked, failures, _ = validator.validate_references(tmp_path, [], {"authoritative_documents": {}})
-    assert checked == 21 and len(failures) == 25 and all(f.category == "References" for f in failures)
+    assert checked == 24 and len(failures) == 28 and all(f.category == "References" for f in failures)
 
 
 def test_requirement_include_forms(tmp_path):
@@ -249,14 +249,14 @@ def test_requirement_include_forms(tmp_path):
     status = {"authoritative_documents": {s: [] for s in ("reading_order", "agent_adapter_documents", "historical_documents")}}
     (tmp_path / "requirements-dev.txt").write_text("-r requirements.txt\n-rrequirements.txt\n-r=requirements.txt\n--requirement requirements.txt\n--requirement=requirements.txt\n", encoding="utf-8")
     checked, failures, _ = validator.validate_references(tmp_path, ["requirements.txt", "requirements-dev.txt"], status)
-    assert checked == 26 and not [f for f in failures if f.path.startswith("requirements-dev.txt")]
+    assert checked == 29 and not [f for f in failures if f.path.startswith("requirements-dev.txt")]
 
 
 def test_frontend_and_standard_missing_references(tmp_path):
     status = {"authoritative_documents": {s: [] for s in ("reading_order", "agent_adapter_documents", "historical_documents")}}
     (tmp_path / "index.html").write_text("", encoding="utf-8")
     checked, failures, _ = validator.validate_references(tmp_path, ["index.html"], status)
-    assert checked == 27 and len(failures) == 31
+    assert checked == 30 and len(failures) == 34
     assert {failure.path for failure in failures if failure.message == "missing front-end asset"} == {
         "assets/js/common.js",
         "assets/js/matchup.js",
@@ -306,7 +306,7 @@ def _write_phase8_production_tree(tmp_path):
 def test_phase8_production_entries_and_resources_are_protected(tmp_path):
     names = _write_phase8_production_tree(tmp_path)
     checked, failures = validator.validate_phase8_frontend_references(tmp_path, names)
-    assert checked == 10
+    assert checked == 13
     assert failures == []
 
 
@@ -364,7 +364,7 @@ def test_posix_absolute_authoritative_path_is_structured_failure(tmp_path):
     status["authoritative_documents"]["reading_order"][0]["path"] = "/absolute/path.md"
     checked, failures, _ = validator.validate_references(tmp_path, ["ok.txt"], status)
     matching = [f for f in failures if repr("/absolute/path.md") in f.message]
-    assert checked == 24 and len(matching) == 1 and matching[0].category == "References"
+    assert checked == 27 and len(matching) == 1 and matching[0].category == "References"
 
 
 def test_pickup_valid_entry(tmp_path):
@@ -374,7 +374,7 @@ def test_pickup_valid_entry(tmp_path):
     (pickup / "w.json").write_text("{}", encoding="utf-8")
     status = {"authoritative_documents": {s: [] for s in ("reading_order", "agent_adapter_documents", "historical_documents")}}
     checked, failures, _ = validator.validate_references(tmp_path, ["stats/standard/mtgo/pickup/index.json", "stats/standard/mtgo/pickup/w.json"], status)
-    assert checked == 22 and not [f for f in failures if "pickup" in f.path]
+    assert checked == 25 and not [f for f in failures if "pickup" in f.path]
 
 
 def test_pickup_malformed_structure(tmp_path):

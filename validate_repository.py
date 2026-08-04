@@ -51,6 +51,9 @@ PHASE8_PRODUCTION_RESOURCES = (
     "assets/js/phase8/matchup-model.js",
     "assets/js/phase8/mtgo-controller.js",
     "assets/js/phase8/tabletop-controller.js",
+    "assets/js/phase8/app-core.js",
+    "assets/js/phase8/app-mtgo.js",
+    "assets/js/phase8/app-tabletop.js",
     "assets/js/phase8/app.js",
 )
 MAINTAINED_JAVASCRIPT = (
@@ -62,6 +65,9 @@ MAINTAINED_JAVASCRIPT = (
     "assets/js/phase8/matchup-model.js",
     "assets/js/phase8/mtgo-controller.js",
     "assets/js/phase8/tabletop-controller.js",
+    "assets/js/phase8/app-core.js",
+    "assets/js/phase8/app-mtgo.js",
+    "assets/js/phase8/app-tabletop.js",
     "assets/js/phase8/app.js",
 )
 PHASE8_FRONTEND_ENTRIES = {
@@ -75,6 +81,8 @@ PHASE8_FRONTEND_ENTRIES = {
             "assets/js/phase8/i18n.js",
             "assets/js/phase8/matchup-model.js",
             "assets/js/phase8/mtgo-controller.js",
+            "assets/js/phase8/app-core.js",
+            "assets/js/phase8/app-mtgo.js",
             "assets/js/phase8/app.js",
         ),
     },
@@ -89,6 +97,9 @@ PHASE8_FRONTEND_ENTRIES = {
             "../assets/js/phase8/matchup-model.js",
             "../assets/js/phase8/mtgo-controller.js",
             "../assets/js/phase8/tabletop-controller.js",
+            "../assets/js/phase8/app-core.js",
+            "../assets/js/phase8/app-mtgo.js",
+            "../assets/js/phase8/app-tabletop.js",
             "../assets/js/phase8/app.js",
         ),
     },
