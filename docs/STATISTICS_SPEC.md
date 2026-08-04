@@ -1759,6 +1759,14 @@ whether an archetype is already known, while subtype ID and display name may be
 retained as informational review fields. Subtypes do not split the base pack,
 the existing/new decision, or the Pickup population.
 
+Candidate generation remains timely: it runs as soon as a Monday-through-
+Sunday week has ended and does not wait for that week to become sealed. Each
+candidate records the source event IDs used to generate it. During the
+following seven-day provisional window, an additive late-event arrival
+regenerates an unreviewed candidate. A candidate containing an approval or a
+non-empty reviewer comment is not overwritten; it is retained and reported for
+human re-review. Publication and known-archetype changes remain manual.
+
 ### 16.7 Phase 8 MTGO source-completeness contracts
 
 Phase 8 must expose two separate completeness products. They must not be merged
@@ -1941,7 +1949,7 @@ deck in browser code.
 P8-05 formalizes this product as
 `stats/<format>/mtgo/top8/YYYY-Www.json`, with discovery through
 `stats/<format>/mtgo/top8/index.json`. P8-07 extends the producer with one
-immutable `YYYY-Www-bases.json` companion for each retained weekly document.
+`YYYY-Www-bases.json` companion for each retained weekly document.
 Every available placement embeds the exact main deck and sideboard, carries a
 stable identity, and references the companion base whose `base_period_end`
 equals the selected week's Sunday. Where the four-week minimum sample exists,
@@ -1950,11 +1958,16 @@ formula. Where it does not, `base_status` is `unavailable` and deviation fields
 are null rather than inferred.
 
 The catalog accumulates complete weeks from the first safely established
-historical baseline, 2026-W30. Once an index entry declares
-`immutable_weekly_comparison_bases`, regeneration must produce byte-identical
-week and base documents or fail before overwriting either file. Earlier weeks
-are not backfilled unless a separate task can reproduce and validate their
-original same-period construction inputs.
+historical baseline, 2026-W30. A complete week is `provisional` for the next
+seven calendar days and becomes `sealed` on the following Monday. During that
+window, regeneration may only add newly discovered event IDs: it must preserve
+every previously recorded event and the exact source identity and decklist of
+each prior placement. Removal, count regression, duplicate identity, or a
+change without an added event fails closed. Once sealed, regeneration must
+produce byte-identical week and base documents. The catalog exposes the status,
+`provisional_through`, and `seal_on` dates. Earlier weeks are not backfilled
+unless a separate task can reproduce and validate their original same-period
+construction inputs.
 
 ---
 

@@ -17,6 +17,7 @@ from . import load_mtgo_context
 from . import matchup
 from . import stats
 from .normalize import load_rules_for_format
+from .week_lifecycle import is_sealed, provisional_through, seal_on
 
 
 SOURCE_ID = "mtgo"
@@ -91,7 +92,9 @@ def record_deck_cards(record) -> dict[str, list[dict[str, Any]]]:
     }
 
 
-def deck_fingerprint(record) -> tuple[tuple[tuple[str, int], ...], tuple[tuple[str, int], ...]]:
+def deck_fingerprint(
+    record,
+) -> tuple[tuple[tuple[str, int], ...], tuple[tuple[str, int], ...]]:
     main = tuple(
         (card["name"], card["qty"])
         for card in stats.merge_cards(record.get("main_deck", []))
@@ -124,7 +127,9 @@ def _pickup_directories(
         registry_path=registry_path,
     )
     configured = context.paths["statistics"] / "pickup"
-    output = Path(output_directory).resolve() if output_directory is not None else configured
+    output = (
+        Path(output_directory).resolve() if output_directory is not None else configured
+    )
     return configured, output
 
 
@@ -158,7 +163,11 @@ def _candidate_documents(
     week_label = iso_week_label(end_monday)
     end_sunday = end_monday + timedelta(days=6)
     base_pack, d99 = stats.build_base_pack(events, rules, end_monday)
-    top8_records = [record for record in week_records(events, rules, end_monday) if record["is_top8"]]
+    top8_records = [
+        record
+        for record in week_records(events, rules, end_monday)
+        if record["is_top8"]
+    ]
 
     deduplicated: dict[tuple[str, object], dict[str, Any]] = {}
     for record in top8_records:
@@ -179,7 +188,9 @@ def _candidate_documents(
         entry = {
             "archetype": archetype,
             "player": record["player"],
-            "final_rank": record["final_rank"] if record["final_rank"] != 9999 else None,
+            "final_rank": record["final_rank"]
+            if record["final_rank"] != 9999
+            else None,
             "swiss_score": record["swiss_score"],
             "player_count": record["player_count"],
             "starttime": record["starttime"],
@@ -255,13 +266,22 @@ def generate_candidates(
         registry_path=registry_path,
         output_directory=output_directory,
     )
-    rules = load_rules_for_format(repository_root, format_id, registry_path=registry_path)
-    events = stats.load_all_events(repository_root, format_id, registry_path=registry_path)
-    end_monday = stats.latest_complete_week(events, today=today)
+    rules = load_rules_for_format(
+        repository_root, format_id, registry_path=registry_path
+    )
+    events = stats.load_all_events(
+        repository_root, format_id, registry_path=registry_path
+    )
+    reference_today = today or datetime.now().date()
+    end_monday = stats.latest_complete_week(events, today=reference_today)
     if end_monday is None:
         return None
 
-    known_path = Path(known_file) if known_file is not None else configured / "known_archetypes.json"
+    known_path = (
+        Path(known_file)
+        if known_file is not None
+        else configured / "known_archetypes.json"
+    )
     stable_ids = format_id == "modern"
     known = load_known(known_path, stable_ids=stable_ids)
     first_run = known is None
@@ -280,12 +300,36 @@ def generate_candidates(
         known,
         stable_ids=stable_ids,
     )
+    source_event_ids = _source_event_ids(events, end_monday)
+    week_status = (
+        "sealed" if is_sealed(end_monday, today=reference_today) else "provisional"
+    )
+    lifecycle = {
+        "week_status": week_status,
+        "provisional_through": provisional_through(end_monday).isoformat(),
+        "seal_on": seal_on(end_monday).isoformat(),
+        "source_event_ids": source_event_ids,
+    }
+    candidates.update(lifecycle)
+    base_reference.update(lifecycle)
 
     output.mkdir(parents=True, exist_ok=True)
     week = candidates["week"]
     candidate_path = output / f"candidates_{week}.yaml"
     base_path = output / f"base_reference_{week}.yaml"
-    if preserve_existing and candidate_path.exists():
+    existing_document: Mapping[str, Any] | None = None
+    if candidate_path.exists():
+        try:
+            loaded = yaml.safe_load(candidate_path.read_text(encoding="utf-8"))
+            if isinstance(loaded, Mapping):
+                existing_document = loaded
+        except (OSError, UnicodeError, yaml.YAMLError):
+            existing_document = None
+    same_source = (
+        existing_document is not None
+        and existing_document.get("source_event_ids") == source_event_ids
+    )
+    if preserve_existing and same_source:
         return {
             "week": week,
             "candidate_path": candidate_path,
@@ -296,6 +340,24 @@ def generate_candidates(
             "deduplicated_count": deduplicated_count,
             "first_run": first_run,
             "skipped_existing": True,
+            "review_required": False,
+        }
+    if (
+        preserve_existing
+        and existing_document is not None
+        and _has_manual_review(existing_document)
+    ):
+        return {
+            "week": week,
+            "candidate_path": candidate_path,
+            "base_reference_path": base_path,
+            "existing_count": len(candidates["existing_changes"]),
+            "new_count": len(candidates["new_archetypes"]),
+            "top8_count": top8_count,
+            "deduplicated_count": deduplicated_count,
+            "first_run": first_run,
+            "skipped_existing": True,
+            "review_required": True,
         }
     candidate_path.write_text(
         yaml.dump(
@@ -329,7 +391,38 @@ def generate_candidates(
         "deduplicated_count": deduplicated_count,
         "first_run": first_run,
         "skipped_existing": False,
+        "review_required": False,
     }
+
+
+def _has_manual_review(document: Mapping[str, Any]) -> bool:
+    """Return whether a candidate contains decisions that must not be overwritten."""
+
+    for key in ("existing_changes", "new_archetypes"):
+        entries = document.get(key, [])
+        if not isinstance(entries, list):
+            return True
+        for entry in entries:
+            if not isinstance(entry, Mapping):
+                return True
+            if entry.get("approved") is True:
+                return True
+            if str(entry.get("comment_zh") or "").strip():
+                return True
+            if str(entry.get("comment_en") or "").strip():
+                return True
+    return False
+
+
+def _source_event_ids(events, monday: date) -> list[str]:
+    return sorted(
+        {
+            str(event.get("event_id"))
+            for event_date, event in events
+            if monday <= event_date <= monday + timedelta(days=6)
+            and event.get("event_id") is not None
+        }
+    )
 
 
 def _approved_entries(document: Mapping[str, Any], key: str) -> list[dict[str, Any]]:
@@ -343,19 +436,19 @@ def _approved_entries(document: Mapping[str, Any], key: str) -> list[dict[str, A
         if not entry.get("approved"):
             continue
         published_entry = {
-                "archetype": entry["archetype"],
-                "player": entry.get("player"),
-                "final_rank": entry.get("final_rank"),
-                "swiss_score": entry.get("swiss_score"),
-                "player_count": entry.get("player_count"),
-                "starttime": entry.get("starttime"),
-                "deviation": entry.get("deviation"),
-                "source": entry.get("source"),
-                "comment_zh": (entry.get("comment_zh") or "").strip(),
-                "comment_en": (entry.get("comment_en") or "").strip(),
-                "main_deck": entry.get("main_deck", []),
-                "side_deck": entry.get("side_deck", []),
-            }
+            "archetype": entry["archetype"],
+            "player": entry.get("player"),
+            "final_rank": entry.get("final_rank"),
+            "swiss_score": entry.get("swiss_score"),
+            "player_count": entry.get("player_count"),
+            "starttime": entry.get("starttime"),
+            "deviation": entry.get("deviation"),
+            "source": entry.get("source"),
+            "comment_zh": (entry.get("comment_zh") or "").strip(),
+            "comment_en": (entry.get("comment_en") or "").strip(),
+            "main_deck": entry.get("main_deck", []),
+            "side_deck": entry.get("side_deck", []),
+        }
         if "archetype_id" in entry:
             published_entry = {
                 "archetype_id": entry["archetype_id"],
@@ -392,20 +485,31 @@ def publish(
         "catalog_generation",
         registry_path=registry_path,
     )
-    rules = load_rules_for_format(repository_root, format_id, registry_path=registry_path)
-    events = stats.load_all_events(repository_root, format_id, registry_path=registry_path)
-    end_monday = stats.latest_complete_week(events, today=today)
+    rules = load_rules_for_format(
+        repository_root, format_id, registry_path=registry_path
+    )
+    events = stats.load_all_events(
+        repository_root, format_id, registry_path=registry_path
+    )
+    reference_today = today or datetime.now().date()
+    end_monday = stats.latest_complete_week(events, today=reference_today)
     if end_monday is None:
         return None
 
     week = iso_week_label(end_monday)
-    candidate_root = Path(candidate_directory) if candidate_directory is not None else output
+    candidate_root = (
+        Path(candidate_directory) if candidate_directory is not None else output
+    )
     candidate_path = candidate_root / f"candidates_{week}.yaml"
     if not candidate_path.is_file():
         return None
     document = yaml.safe_load(candidate_path.read_text(encoding="utf-8"))
     if not isinstance(document, Mapping):
         raise MTGOPickupError(f"{candidate_path}: expected a mapping")
+    if document.get("source_event_ids") != _source_event_ids(events, end_monday):
+        raise MTGOPickupError(
+            f"{candidate_path}: Pickup candidate source events changed; regenerate and re-review"
+        )
     existing = _approved_entries(document, "existing_changes")
     new_archetypes = _approved_entries(document, "new_archetypes")
     if not existing and not new_archetypes:
@@ -481,7 +585,9 @@ def publish(
         stable_ids=stable_ids,
     )
     known_path = output / "known_archetypes.json"
-    known_document = {"known_ids": sorted(known)} if stable_ids else {"known": sorted(known)}
+    known_document = (
+        {"known_ids": sorted(known)} if stable_ids else {"known": sorted(known)}
+    )
     known_path.write_text(
         json.dumps(known_document, ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -523,9 +629,14 @@ def initialize_known_state(
     destination = output / "known_archetypes.json"
     if destination.exists():
         raise MTGOPickupError(f"{destination}: known state already exists")
-    rules = load_rules_for_format(repository_root, format_id, registry_path=registry_path)
-    events = stats.load_all_events(repository_root, format_id, registry_path=registry_path)
-    end_monday = stats.latest_complete_week(events, today=today)
+    rules = load_rules_for_format(
+        repository_root, format_id, registry_path=registry_path
+    )
+    events = stats.load_all_events(
+        repository_root, format_id, registry_path=registry_path
+    )
+    reference_today = today or datetime.now().date()
+    end_monday = stats.latest_complete_week(events, today=reference_today)
     if end_monday is None:
         return None
     stable_ids = format_id == "modern"
@@ -562,7 +673,9 @@ def generate_hierarchy_catalog(
         "catalog_generation",
         registry_path=registry_path,
     )
-    rules = load_rules_for_format(repository_root, format_id, registry_path=registry_path)
+    rules = load_rules_for_format(
+        repository_root, format_id, registry_path=registry_path
+    )
     if rules_updated is None:
         rules_updated = rules_last_commit_iso(
             context.repository_root,
@@ -702,9 +815,7 @@ def generate_metadata(
             "completeness_catalog": (
                 "completeness/index.json"
                 if (
-                    context.paths["statistics"]
-                    / "completeness"
-                    / "index.json"
+                    context.paths["statistics"] / "completeness" / "index.json"
                 ).is_file()
                 else None
             ),

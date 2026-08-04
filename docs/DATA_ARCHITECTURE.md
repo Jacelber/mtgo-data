@@ -753,7 +753,14 @@ only usable retained archives. Non-retryable responses, malformed response
 contracts, invalid identities, and storage failures remain fatal and prevent
 candidate publication.
 
-Weekly Pickup remains candidate-only in scheduled automation. Candidate generation may continue on error so that review preparation cannot suppress unrelated generated data, but every product format must still be attempted. Approval, publication, and known-state changes remain manual.
+Weekly Pickup remains candidate-only in scheduled automation. It generates as
+soon as a natural week ends, including while that week is provisional. The
+candidate and base reference record their source event IDs. If an additive
+late event changes those IDs, an unreviewed candidate is refreshed; an approved
+or commented candidate is retained and reported for human re-review. Candidate
+generation may continue on error so that review preparation cannot suppress
+unrelated generated data, but every product format must still be attempted.
+Approval, publication, and known-state changes remain manual.
 
 P6-08 initially regenerated the maintained hierarchy catalog only for Modern.
 P6-09 moves Standard to the same shared hierarchical calculation, adds its
@@ -1844,16 +1851,17 @@ Each weekly document includes:
 - stable parent and subtype identity;
 - a stable self-contained subtype display label;
 - an exact decklist reference or explicit missing-deck state;
-- an immutable same-week subtype or parent construction-base reference;
+- a same-week subtype or parent construction-base reference governed by the
+  same provisional/sealed lifecycle;
 - exact-deck deviation and card differences when that base has sufficient
   samples, or an explicit unavailable state otherwise.
 
-P8-07 establishes 2026-W30 as the first immutable historical baseline. Future
-production runs append a new complete week and companion base while retaining
-older catalog entries. Rebuilding an already immutable week must be
-byte-identical. The initial migration may replace the pre-contract rolling
-reference for 2026-W30 exactly once; after that, changed historical bytes fail
-closed.
+P8-07 establishes 2026-W30 as the first historical baseline. A newly complete
+Monday-through-Sunday week remains provisional for seven days. Within that
+window, the producer may add late-discovered events while proving that no prior
+event, placement identity, or exact source deck changed. The next Monday seals
+the week and its companion base; subsequent rebuilding must be byte-identical.
+The index records `status`, `provisional_through`, and `seal_on` for every week.
 
 Phase 8 may also extend MTGO metadata or range documents with approved
 completeness payloads. Matchup completeness must retain the expected/admitted,
@@ -2555,11 +2563,14 @@ digest and rejects archive paths outside `data/`, `stats/`, `reports/`, and
 `fetched.txt` before extraction. The normal candidate artifacts are one-day
 intra-run handoffs, not durable storage. The candidate baseline is part of the
 fetched-candidate artifact. Its
-schema version is breaking when the tracked format dimensions change; P6-08 uses
-version `2.0.0` to replace the former Standard-only match count with per-product
-match counts. New arbitrary generated JSON paths remain blocked even for
-complete products; only expected event archives, match archives, and dated
-Pickup review YAML may be newly created automatically.
+schema version is breaking when the tracked format dimensions change; P6-08
+used version `2.0.0` to replace the former Standard-only match count with
+per-product match counts. The discovery-ledger addition uses version `3.0.0`.
+Each `data/<format>/mtgo/discovery.json` records observed event links and their
+processed, retained, excluded, or deferred state. New arbitrary generated JSON
+paths remain blocked even for complete products; only expected event archives,
+match archives, discovery ledgers, and dated Pickup review YAML may be newly
+created automatically.
 
 When an MTGO input collection fails after the clean baseline and checkpoint
 manifest are prepared, the read-only fetch job may retain a separate

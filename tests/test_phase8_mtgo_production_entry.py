@@ -133,3 +133,13 @@ def test_i18n_defines_both_languages_for_every_mtgo_product() -> None:
         "deck.representative",
     ):
         assert f'"{key}"' in i18n
+
+
+def test_top8_view_does_not_present_internal_week_lifecycle() -> None:
+    app = (PHASE8_JS / "app-mtgo.js").read_text(encoding="utf-8")
+    i18n = (PHASE8_JS / "i18n.js").read_text(encoding="utf-8")
+
+    assert "weekEntry.status" not in app
+    assert "weekEntry.seal_on" not in app
+    for key in ("top8.provisional", "top8.sealed"):
+        assert f'"{key}"' not in i18n

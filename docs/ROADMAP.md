@@ -2679,6 +2679,15 @@ coverage baseline because measured CI time was unacceptable, and P11-09, where
 the owner declined a premature shared API for the draw-adjusted compatibility
 calculation scheduled for an explicit Phase 19 migration.
 
+After Phase 11, the owner separately authorized an operational reliability
+repair from master commit `922de5dc6ce57c8fe90400f191fdb17d0270fc97`.
+The repair gives newly complete MTGO weeks a seven-day provisional window for
+safe additive late-event discovery, then seals their Top 8 week and comparison
+base. Weekly Pickup deliberately remains timely: it generates immediately and
+refreshes unreviewed candidates when the source event list grows. Reviewed
+candidates are preserved for explicit re-review. This maintenance task does
+not authorize Phase 12.
+
 ## Acceptance criteria
 
 Phase 11 is complete when:

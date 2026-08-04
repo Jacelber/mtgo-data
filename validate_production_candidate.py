@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 from dataclasses import dataclass
+from datetime import date
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -16,7 +17,7 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parent
-BASELINE_SCHEMA_VERSION = "2.0.0"
+BASELINE_SCHEMA_VERSION = "3.0.0"
 PRODUCTION_CAPABILITIES = frozenset(
     {
         "classification",
@@ -68,14 +69,18 @@ def collect_changes(root: Path) -> list[Change]:
     while index < len(records) and records[index]:
         record = records[index]
         if len(record) < 4 or record[2] != " ":
-            raise CandidateValidationError(f"unrecognized git status record: {record!r}")
+            raise CandidateValidationError(
+                f"unrecognized git status record: {record!r}"
+            )
         status = record[:2]
         path = record[3:].replace("\\", "/")
         previous = None
         index += 1
         if "R" in status or "C" in status:
             if index >= len(records) or not records[index]:
-                raise CandidateValidationError("rename/copy status omitted its original path")
+                raise CandidateValidationError(
+                    "rename/copy status omitted its original path"
+                )
             previous = records[index].replace("\\", "/")
             index += 1
         changes.append(Change(status=status, path=path, previous_path=previous))
@@ -95,7 +100,9 @@ def _configured_formats(root: Path) -> tuple[tuple[str, ...], tuple[str, ...]]:
             raise CandidateValidationError(f"{registry_path}: invalid format entry")
         mtgo = item.get("mtgo")
         if not isinstance(mtgo, dict):
-            raise CandidateValidationError(f"{registry_path}: invalid MTGO format entry")
+            raise CandidateValidationError(
+                f"{registry_path}: invalid MTGO format entry"
+            )
         if mtgo.get("event_collection_enabled") is True:
             collection_formats.append(item["id"])
         capabilities = mtgo.get("capabilities")
@@ -108,9 +115,13 @@ def _configured_formats(root: Path) -> tuple[tuple[str, ...], tuple[str, ...]]:
         if mtgo.get("enabled") is True and PRODUCTION_CAPABILITIES <= set(capabilities):
             product_formats.append(item["id"])
     if not collection_formats:
-        raise CandidateValidationError(f"{registry_path}: no MTGO collection formats enabled")
+        raise CandidateValidationError(
+            f"{registry_path}: no MTGO collection formats enabled"
+        )
     if not product_formats:
-        raise CandidateValidationError(f"{registry_path}: no complete MTGO products enabled")
+        raise CandidateValidationError(
+            f"{registry_path}: no complete MTGO products enabled"
+        )
     return tuple(collection_formats), tuple(product_formats)
 
 
@@ -118,7 +129,11 @@ def _ledger_entries(root: Path) -> list[str]:
     path = root / "fetched.txt"
     if not path.exists():
         return []
-    return [line.strip() for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    return [
+        line.strip()
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
 
 
 def snapshot_state(root: Path) -> dict[str, Any]:
@@ -136,7 +151,23 @@ def snapshot_state(root: Path) -> dict[str, Any]:
             for format_id in product_formats
         },
         "fetched_entries": len(_ledger_entries(root)),
+        "discovery_entries": {
+            format_id: _discovery_entry_count(root, format_id)
+            for format_id in collection_formats
+        },
     }
+
+
+def _discovery_entry_count(root: Path, format_id: str) -> int:
+    path = root / "data" / format_id / "mtgo" / "discovery.json"
+    if not path.is_file():
+        return 0
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return -1
+    events = value.get("events") if isinstance(value, dict) else None
+    return len(events) if isinstance(events, list) else -1
 
 
 def _allowed_path(
@@ -148,6 +179,13 @@ def _allowed_path(
     if path == "fetched.txt":
         return True
     if path == "stats/catalog.json":
+        return True
+    if (
+        len(parts) == 4
+        and parts[0] == "data"
+        and parts[1] in collection_formats
+        and parts[2:] == ("mtgo", "discovery.json")
+    ):
         return True
     if len(parts) == 3 and parts[0] == "data" and parts[1] in collection_formats:
         return parts[2].endswith(".json")
@@ -172,12 +210,14 @@ def _area(path: str) -> str:
     if path == "stats/catalog.json":
         return "statistics_catalog"
     parts = PurePosixPath(path).parts
-    if (
-        len(parts) >= 4
-        and parts[0] == "data"
-        and parts[2:4] == ("mtgo", "matches")
-    ):
+    if len(parts) >= 4 and parts[0] == "data" and parts[2:4] == ("mtgo", "matches"):
         return f"matches_{parts[1]}"
+    if (
+        len(parts) == 4
+        and parts[0] == "data"
+        and parts[2:] == ("mtgo", "discovery.json")
+    ):
+        return f"discovery_{parts[1]}"
     if parts and parts[0] == "data" and len(parts) > 1:
         return f"events_{parts[1]}"
     if len(parts) > 1 and parts[0] == "stats":
@@ -194,6 +234,13 @@ def _allowed_new_path(
 ) -> bool:
     parts = PurePosixPath(path).parts
     if path == "stats/catalog.json":
+        return True
+    if (
+        len(parts) == 4
+        and parts[0] == "data"
+        and parts[1] in collection_formats
+        and parts[2:] == ("mtgo", "discovery.json")
+    ):
         return True
     if len(parts) == 3 and parts[0] == "data" and parts[1] in collection_formats:
         return parts[2].endswith(".json")
@@ -237,9 +284,19 @@ def _allowed_new_path(
 def _validate_event_document(path: str, value: Any) -> list[str]:
     if not isinstance(value, dict):
         return [f"{path}: event JSON must be an object"]
-    required = {"event_id", "description", "format", "starttime", "player_count", "inplayoffs", "players"}
+    required = {
+        "event_id",
+        "description",
+        "format",
+        "starttime",
+        "player_count",
+        "inplayoffs",
+        "players",
+    }
     missing = sorted(required - set(value))
-    failures = [f"{path}: missing event fields: {', '.join(missing)}"] if missing else []
+    failures = (
+        [f"{path}: missing event fields: {', '.join(missing)}"] if missing else []
+    )
     if "inplayoffs" in value and str(value["inplayoffs"]) != "1":
         failures.append(f"{path}: retained event must have inplayoffs=1")
     players = value.get("players")
@@ -258,7 +315,9 @@ def _validate_event_document(path: str, value: Any) -> list[str]:
                 or not isinstance(login_id, (str, int))
                 or not str(login_id).strip()
             ):
-                failures.append(f"{prefix}.loginid must be a non-empty string or integer")
+                failures.append(
+                    f"{prefix}.loginid must be a non-empty string or integer"
+                )
             elif login_id in seen_login_ids:
                 failures.append(f"{prefix}.loginid duplicates {login_id!r}")
             else:
@@ -347,12 +406,60 @@ def _validate_changed_document(root: Path, change: Change) -> list[str]:
     if len(parts) == 3 and parts[0] == "data":
         return _validate_event_document(change.path, value)
     if (
-        len(parts) == 5
+        len(parts) == 4
         and parts[0] == "data"
-        and parts[2:4] == ("mtgo", "matches")
+        and parts[2:] == ("mtgo", "discovery.json")
     ):
+        return _validate_discovery_document(change.path, value)
+    if len(parts) == 5 and parts[0] == "data" and parts[2:4] == ("mtgo", "matches"):
         return _validate_match_document(change.path, value)
     return []
+
+
+def _validate_discovery_document(path: str, value: Any) -> list[str]:
+    if not isinstance(value, dict) or set(value) != {
+        "schema_version",
+        "source",
+        "format",
+        "events",
+    }:
+        return [f"{path}: discovery state is malformed"]
+    failures = []
+    if value.get("schema_version") != "1.0.0" or value.get("source") != "mtgo":
+        failures.append(f"{path}: discovery state has invalid provenance")
+    parts = PurePosixPath(path).parts
+    if value.get("format") != parts[1]:
+        failures.append(f"{path}: discovery format does not match its path")
+    events = value.get("events")
+    if not isinstance(events, list):
+        return [*failures, f"{path}: discovery events must be a list"]
+    links = []
+    for index, item in enumerate(events):
+        if not isinstance(item, dict) or set(item) != {"link", "event_date", "status"}:
+            failures.append(f"{path}: discovery events[{index}] is malformed")
+            continue
+        link = item.get("link")
+        links.append(link)
+        if (
+            not isinstance(link, str)
+            or re.fullmatch(r"/decklist/[A-Za-z0-9-]+", link) is None
+        ):
+            failures.append(f"{path}: discovery events[{index}] has an invalid link")
+        try:
+            date.fromisoformat(item.get("event_date"))
+        except (TypeError, ValueError):
+            failures.append(f"{path}: discovery events[{index}] has an invalid date")
+        if item.get("status") not in {
+            "discovered",
+            "processed",
+            "retained",
+            "excluded_no_playoff",
+            "deferred_incomplete",
+        }:
+            failures.append(f"{path}: discovery events[{index}] has an invalid status")
+    if len(links) != len(set(links)):
+        failures.append(f"{path}: discovery state contains duplicate links")
+    return failures
 
 
 def validate_candidate(
@@ -366,11 +473,12 @@ def validate_candidate(
     if baseline.get("schema_version") != BASELINE_SCHEMA_VERSION:
         failures.append("baseline snapshot has an unsupported schema_version")
     baseline_events = baseline.get("event_files")
-    if (
-        not isinstance(baseline_events, dict)
-        or set(baseline_events) != set(collection_formats)
+    if not isinstance(baseline_events, dict) or set(baseline_events) != set(
+        collection_formats
     ):
-        failures.append("baseline snapshot does not match the configured collection formats")
+        failures.append(
+            "baseline snapshot does not match the configured collection formats"
+        )
         baseline_events = {}
     for format_id in collection_formats:
         before = baseline_events.get(format_id)
@@ -378,13 +486,16 @@ def validate_candidate(
         if not isinstance(before, int):
             failures.append(f"baseline event count for {format_id} is invalid")
         elif after < before:
-            failures.append(f"event file count decreased for {format_id}: {before} -> {after}")
+            failures.append(
+                f"event file count decreased for {format_id}: {before} -> {after}"
+            )
     baseline_matches = baseline.get("match_files")
-    if (
-        not isinstance(baseline_matches, dict)
-        or set(baseline_matches) != set(product_formats)
+    if not isinstance(baseline_matches, dict) or set(baseline_matches) != set(
+        product_formats
     ):
-        failures.append("baseline snapshot does not match the configured product formats")
+        failures.append(
+            "baseline snapshot does not match the configured product formats"
+        )
         baseline_matches = {}
     for format_id in product_formats:
         before = baseline_matches.get(format_id)
@@ -402,19 +513,46 @@ def validate_candidate(
         failures.append(
             f"fetched_entries decreased: {before_fetched} -> {current['fetched_entries']}"
         )
+    baseline_discovery = baseline.get("discovery_entries")
+    if not isinstance(baseline_discovery, dict) or set(baseline_discovery) != set(
+        collection_formats
+    ):
+        failures.append(
+            "baseline discovery state does not match the configured collection formats"
+        )
+        baseline_discovery = {}
+    for format_id in collection_formats:
+        before = baseline_discovery.get(format_id)
+        after = current["discovery_entries"][format_id]
+        if not isinstance(before, int) or before < 0 or after < 0:
+            failures.append(f"discovery entry count for {format_id} is invalid")
+        elif after < before:
+            failures.append(
+                f"discovery entry count decreased for {format_id}: {before} -> {after}"
+            )
 
     for change in changes:
         if "U" in change.status:
             failures.append(f"{change.path}: unmerged candidate change")
             continue
-        if change.previous_path is not None or "R" in change.status or "C" in change.status:
-            failures.append(f"{change.path}: rename/copy is not allowed in production output")
+        if (
+            change.previous_path is not None
+            or "R" in change.status
+            or "C" in change.status
+        ):
+            failures.append(
+                f"{change.path}: rename/copy is not allowed in production output"
+            )
             continue
         if "D" in change.status:
-            failures.append(f"{change.path}: deletion is not allowed in production output")
+            failures.append(
+                f"{change.path}: deletion is not allowed in production output"
+            )
             continue
         if not _allowed_path(change.path, collection_formats, product_formats):
-            failures.append(f"{change.path}: change is outside the production publication scope")
+            failures.append(
+                f"{change.path}: change is outside the production publication scope"
+            )
             continue
         if (change.status == "??" or "A" in change.status) and not _allowed_new_path(
             change.path,
@@ -442,7 +580,8 @@ def validate_candidate(
         "baseline": baseline,
         "candidate": current,
         "event_file_deltas": {
-            format_id: current["event_files"][format_id] - baseline_events.get(format_id, current["event_files"][format_id])
+            format_id: current["event_files"][format_id]
+            - baseline_events.get(format_id, current["event_files"][format_id])
             for format_id in collection_formats
         },
         "match_file_deltas": {
@@ -450,7 +589,8 @@ def validate_candidate(
             - baseline_matches.get(format_id, current["match_files"][format_id])
             for format_id in product_formats
         },
-        "fetched_entry_delta": current["fetched_entries"] - baseline.get("fetched_entries", current["fetched_entries"]),
+        "fetched_entry_delta": current["fetched_entries"]
+        - baseline.get("fetched_entries", current["fetched_entries"]),
     }
     return report, sorted(set(failures))
 
@@ -463,7 +603,9 @@ def _append_actions_summary(report: dict[str, Any], failures: list[str]) -> None
         handle.write("## Production candidate validation\n\n")
         handle.write(f"- Result: {'FAIL' if failures else 'PASS'}\n")
         handle.write(f"- Candidate changes: {report['change_count']}\n")
-        handle.write(f"- Event deltas: `{json.dumps(report['event_file_deltas'], sort_keys=True)}`\n")
+        handle.write(
+            f"- Event deltas: `{json.dumps(report['event_file_deltas'], sort_keys=True)}`\n"
+        )
         handle.write(
             f"- Match-file deltas: `{json.dumps(report['match_file_deltas'], sort_keys=True)}`\n"
         )
@@ -476,9 +618,13 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
     commands = parser.add_subparsers(dest="command", required=True)
-    snapshot = commands.add_parser("snapshot", help="record the clean production baseline")
+    snapshot = commands.add_parser(
+        "snapshot", help="record the clean production baseline"
+    )
     snapshot.add_argument("--output", type=Path, required=True)
-    validate = commands.add_parser("validate", help="validate generated candidate changes")
+    validate = commands.add_parser(
+        "validate", help="validate generated candidate changes"
+    )
     validate.add_argument("--baseline", type=Path, required=True)
     args = parser.parse_args(argv)
     root = args.root.resolve()
@@ -502,9 +648,20 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(report, indent=2, sort_keys=True))
         for failure in failures:
             print(f"FAIL: {failure}")
-        print("Production candidate validation PASS" if not failures else "Production candidate validation FAIL")
+        print(
+            "Production candidate validation PASS"
+            if not failures
+            else "Production candidate validation FAIL"
+        )
         return 0 if not failures else 1
-    except (CandidateValidationError, OSError, UnicodeError, json.JSONDecodeError, yaml.YAMLError, ValueError) as exc:
+    except (
+        CandidateValidationError,
+        OSError,
+        UnicodeError,
+        json.JSONDecodeError,
+        yaml.YAMLError,
+        ValueError,
+    ) as exc:
         print(f"Production candidate validation ERROR: {exc}")
         return 2
 

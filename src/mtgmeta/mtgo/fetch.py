@@ -27,6 +27,8 @@ REQUIRED_EVENT_FIELDS = frozenset(
 )
 PLAYOFF_REQUIRED_EVENT_FIELDS = frozenset({"standings", "final_rank"})
 INCOMPLETE_EVENT_GRACE_DAYS = 2
+LISTING_OBSERVATION_ATTEMPTS = 3
+DISCOVERY_SCHEMA_VERSION = "1.0.0"
 
 
 class MTGOFetchError(RuntimeError):
@@ -68,13 +70,17 @@ def download_page(
             response = request(url, headers=DEFAULT_HEADERS, timeout=timeout)
             response.raise_for_status()
             return response.text
-        except Exception as exc:  # Preserve legacy retry behavior across request adapters.
+        except (
+            Exception
+        ) as exc:  # Preserve legacy retry behavior across request adapters.
             last_error = exc
             if on_error is not None:
                 on_error(attempt, attempts, exc)
             if retry_delay and attempt < attempts:
                 wait(retry_delay)
-    raise MTGOFetchError(f"failed to download {url!r} after {attempts} attempts") from last_error
+    raise MTGOFetchError(
+        f"failed to download {url!r} after {attempts} attempts"
+    ) from last_error
 
 
 def extract_event_data(html: str) -> dict[str, Any]:
@@ -105,9 +111,11 @@ def extract_event_data(html: str) -> dict[str, Any]:
                 depth -= 1
                 if depth == 0:
                     try:
-                        value = json.loads(html[brace_start:index + 1])
+                        value = json.loads(html[brace_start : index + 1])
                     except json.JSONDecodeError as exc:
-                        raise MTGOParseError(f"MTGO event JSON is invalid: {exc.msg}") from exc
+                        raise MTGOParseError(
+                            f"MTGO event JSON is invalid: {exc.msg}"
+                        ) from exc
                     if not isinstance(value, dict):
                         raise MTGOParseError("MTGO event JSON must be an object")
                     return value
@@ -153,7 +161,11 @@ def _invalid_event_message(data: Any) -> str | None:
             if name == "standings":
                 for field, minimum in (("rank", 1), ("score", 0)):
                     value = record.get(field)
-                    if value is not None and value != "" and not _is_int_at_least(value, minimum):
+                    if (
+                        value is not None
+                        and value != ""
+                        and not _is_int_at_least(value, minimum)
+                    ):
                         return f"MTGO event standings[{index}].{field} is invalid"
             elif name == "final_rank":
                 value = record.get("rank")
@@ -164,8 +176,7 @@ def _invalid_event_message(data: Any) -> str | None:
 
 def is_event_data_complete(data: Any) -> bool:
     return (
-        _invalid_event_message(data) is None
-        and _incomplete_event_message(data) is None
+        _invalid_event_message(data) is None and _incomplete_event_message(data) is None
     )
 
 
@@ -226,8 +237,7 @@ def _incomplete_event_message(data: Any) -> str | None:
             f"for {missing_standing_values} published decklists"
         )
     missing_final_ranks = sum(
-        final_ranks_by_id[login_id].get("rank") in (None, "")
-        for login_id in deck_ids
+        final_ranks_by_id[login_id].get("rank") in (None, "") for login_id in deck_ids
     )
     if missing_final_ranks:
         return (
@@ -294,13 +304,18 @@ def download_event_data(
     raise last_error
 
 
-def parse_event_link(link: str, recognized_format_ids: Iterable[str]) -> tuple[str, str | None]:
+def parse_event_link(
+    link: str, recognized_format_ids: Iterable[str]
+) -> tuple[str, str | None]:
     path = urlparse(link).path
     name = path.removeprefix("/decklist/")
     date_match = re.search(r"(\d{4}-\d{2}-\d{2})", name)
     first_word = name.split("-", 1)[0].lower()
     recognized = frozenset(recognized_format_ids)
-    return (first_word if first_word in recognized else "other", date_match.group(1) if date_match else None)
+    return (
+        first_word if first_word in recognized else "other",
+        date_match.group(1) if date_match else None,
+    )
 
 
 def discover_event_links(html: str, recognized_format_ids: Iterable[str]) -> list[str]:
@@ -328,7 +343,9 @@ def save_event(event: dict[str, Any], output_directory: str | Path) -> Path:
     directory = Path(output_directory)
     directory.mkdir(parents=True, exist_ok=True)
     destination = directory / event_filename(event)
-    destination.write_text(json.dumps(event, ensure_ascii=False, indent=2), encoding="utf-8")
+    destination.write_text(
+        json.dumps(event, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     return destination
 
 
@@ -336,7 +353,11 @@ def load_fetched(path: str | Path) -> set[str]:
     source = Path(path)
     if not source.exists():
         return set()
-    return {line.strip() for line in source.read_text(encoding="utf-8").splitlines() if line.strip()}
+    return {
+        line.strip()
+        for line in source.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    }
 
 
 def mark_fetched(path: str | Path, link: str) -> None:
@@ -344,11 +365,122 @@ def mark_fetched(path: str | Path, link: str) -> None:
         handle.write(link + "\n")
 
 
+def _discovery_path(events_directory: Path) -> Path:
+    return events_directory / "mtgo" / "discovery.json"
+
+
+def _load_discovery(path: Path, format_id: str) -> dict[str, dict[str, str]]:
+    if not path.is_file():
+        return {}
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise MTGOStorageError("MTGO discovery state is unreadable") from exc
+    if (
+        not isinstance(value, dict)
+        or value.get("schema_version") != DISCOVERY_SCHEMA_VERSION
+        or value.get("source") != "mtgo"
+        or value.get("format") != format_id
+        or not isinstance(value.get("events"), list)
+    ):
+        raise MTGOStorageError("MTGO discovery state is malformed")
+    records: dict[str, dict[str, str]] = {}
+    for item in value["events"]:
+        if not isinstance(item, dict) or set(item) != {"link", "event_date", "status"}:
+            raise MTGOStorageError("MTGO discovery state contains a malformed event")
+        link = item["link"]
+        parsed_format, parsed_date = parse_event_link(link, (format_id,))
+        if parsed_format != format_id or parsed_date != item["event_date"]:
+            raise MTGOStorageError(
+                "MTGO discovery state contains an invalid event identity"
+            )
+        if item["status"] not in {
+            "discovered",
+            "processed",
+            "retained",
+            "excluded_no_playoff",
+            "deferred_incomplete",
+        }:
+            raise MTGOStorageError("MTGO discovery state contains an invalid status")
+        if link in records:
+            raise MTGOStorageError("MTGO discovery state contains duplicate links")
+        records[link] = dict(item)
+    return records
+
+
+def _write_discovery(
+    path: Path, format_id: str, records: dict[str, dict[str, str]]
+) -> None:
+    document = {
+        "schema_version": DISCOVERY_SCHEMA_VERSION,
+        "source": "mtgo",
+        "format": format_id,
+        "events": sorted(
+            records.values(), key=lambda item: (item["event_date"], item["link"])
+        ),
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        "w",
+        encoding="utf-8",
+        newline="\n",
+        dir=path.parent,
+        delete=False,
+        suffix=".tmp",
+    ) as handle:
+        json.dump(document, handle, ensure_ascii=False, indent=2)
+        temporary = Path(handle.name)
+    temporary.replace(path)
+
+
+def _links_for_month(
+    links: Iterable[str], format_id: str, year: int, month: int
+) -> set[str]:
+    prefix = f"{year:04d}-{month:02d}-"
+    selected = set()
+    for link in links:
+        parsed_format, event_date = parse_event_link(link, (format_id,))
+        if (
+            parsed_format == format_id
+            and event_date is not None
+            and event_date.startswith(prefix)
+        ):
+            selected.add(link)
+    return selected
+
+
+def _observe_listing(
+    url: str,
+    format_id: str,
+    expected_links: set[str],
+    *,
+    request_get: Callable[..., Any] | None,
+    wait: Callable[[float], None],
+) -> list[str]:
+    observed: set[str] = set()
+    for attempt in range(1, LISTING_OBSERVATION_ATTEMPTS + 1):
+        listing = download_page(url, request_get=request_get, sleep=wait)
+        observed.update(discover_event_links(listing, (format_id,)))
+        if attempt < LISTING_OBSERVATION_ATTEMPTS:
+            wait(2)
+    missing = expected_links - observed
+    if not missing:
+        return sorted(observed)
+    raise MTGOFetchError(
+        f"MTGO monthly listing omitted {len(missing)} "
+        "previously known event link(s) after 3 observations"
+    )
+
+
 def recent_months(now: datetime | None = None) -> list[tuple[int, int]]:
     """Return the current and previous calendar month in stable order."""
 
     current = now or datetime.now()
-    previous = (current.year - 1, 12) if current.month == 1 else (current.year, current.month - 1)
+    previous = (
+        (current.year - 1, 12)
+        if current.month == 1
+        else (current.year, current.month - 1)
+    )
     return [(current.year, current.month), previous]
 
 
@@ -372,7 +504,9 @@ def fetch_event_months(
         registry_path=registry_path,
     )
     reference_now = now or datetime.now()
-    selected_months = list(months) if months is not None else recent_months(reference_now)
+    selected_months = (
+        list(months) if months is not None else recent_months(reference_now)
+    )
     if not selected_months or any(
         not isinstance(year, int)
         or not isinstance(month, int)
@@ -382,8 +516,14 @@ def fetch_event_months(
     ):
         raise ValueError("months must contain valid (year, month) pairs")
 
-    ledger = Path(fetched_path) if fetched_path is not None else context.repository_root / "fetched.txt"
+    ledger = (
+        Path(fetched_path)
+        if fetched_path is not None
+        else context.repository_root / "fetched.txt"
+    )
     fetched = load_fetched(ledger)
+    discovery_path = _discovery_path(context.paths["events"])
+    discovery = _load_discovery(discovery_path, format_id)
     wait = sleep or time.sleep
     summary: dict[str, Any] = {
         "format": format_id,
@@ -401,19 +541,33 @@ def fetch_event_months(
     for year, month in selected_months:
         list_url = f"{MTGO_BASE_URL}/decklists/{year}/{month:02d}"
         try:
-            listing = download_page(
+            expected = _links_for_month(
+                set(fetched) | set(discovery), format_id, year, month
+            )
+            candidates = _observe_listing(
                 list_url,
+                format_id,
+                expected,
                 request_get=request_get,
-                sleep=wait,
+                wait=wait,
             )
         except MTGOFetchError as exc:
             summary["failed"] += 1
             summary["errors"].append((list_url, str(exc)))
             continue
-        candidates = discover_event_links(listing, (format_id,))
         summary["candidates"] += len(candidates)
         for link in candidates:
+            _format, event_date_value = parse_event_link(link, (format_id,))
+            discovery.setdefault(
+                link,
+                {
+                    "link": link,
+                    "event_date": str(event_date_value),
+                    "status": "processed" if link in fetched else "discovered",
+                },
+            )
             if link in fetched:
+                discovery[link]["status"] = "processed"
                 summary["skipped"] += 1
                 continue
             event_url = f"{MTGO_BASE_URL}{link}"
@@ -427,16 +581,19 @@ def fetch_event_months(
                 if str(clean.get("inplayoffs")) != "1":
                     mark_fetched(ledger, link)
                     fetched.add(link)
+                    discovery[link]["status"] = "excluded_no_playoff"
                     summary["excluded_no_playoff"] += 1
                 else:
                     destination = save_event(clean, context.paths["events"])
                     mark_fetched(ledger, link)
                     fetched.add(link)
+                    discovery[link]["status"] = "retained"
                     summary["fetched"] += 1
                     summary["written"].append(destination)
             except MTGOIncompleteEventError as exc:
                 if _is_within_incomplete_event_grace(link, reference_now):
                     summary["deferred_incomplete"] += 1
+                    discovery[link]["status"] = "deferred_incomplete"
                     summary["warnings"].append(
                         (event_url, f"{exc}; will retry on a later scheduled run")
                     )
@@ -454,6 +611,7 @@ def fetch_event_months(
                 summary["errors"].append((event_url, str(exc)))
             if inter_event_delay:
                 wait(inter_event_delay)
+        _write_discovery(discovery_path, format_id, discovery)
     return summary
 
 
@@ -474,14 +632,19 @@ def fetch_and_store_event(
         "event_fetching",
         registry_path=registry_path,
     )
-    missing = {"raw_event_storage", "normalization"} - context.definition.mtgo.capabilities
+    missing = {
+        "raw_event_storage",
+        "normalization",
+    } - context.definition.mtgo.capabilities
     if missing:
         raise MTGOStorageError(
             f"MTGO format {format_id!r} lacks required capabilities: {', '.join(sorted(missing))}"
         )
     link_format, _ = parse_event_link(url, (format_id,))
     if link_format != format_id:
-        raise MTGOFetchError(f"event URL does not identify requested format {format_id!r}")
+        raise MTGOFetchError(
+            f"event URL does not identify requested format {format_id!r}"
+        )
     raw = download_event_data(url, request_get=request_get, sleep=sleep)
     clean = normalize_event(raw, include_inplayoffs=True)
     return save_event(clean, context.paths["events"])
@@ -501,7 +664,9 @@ def _player_final_ranks(event: dict[str, Any]) -> dict[str | int, int]:
             or not isinstance(login_id, (str, int))
             or not str(login_id).strip()
         ):
-            raise MTGOStorageError(f"retained event players[{index}] has an invalid loginid")
+            raise MTGOStorageError(
+                f"retained event players[{index}] has an invalid loginid"
+            )
         if login_id in ranks:
             raise MTGOStorageError(f"retained event has duplicate loginid {login_id!r}")
         final_rank = player.get("final_rank")
@@ -531,7 +696,9 @@ def refresh_existing_event(
     )
     link_format, _ = parse_event_link(url, (format_id,))
     if link_format != format_id:
-        raise MTGOFetchError(f"event URL does not identify requested format {format_id!r}")
+        raise MTGOFetchError(
+            f"event URL does not identify requested format {format_id!r}"
+        )
     clean = normalize_event(
         download_event_data(url, request_get=request_get, sleep=sleep),
         include_inplayoffs=True,
@@ -551,13 +718,17 @@ def refresh_existing_event(
     try:
         retained = json.loads(destination.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        raise MTGOStorageError(f"cannot read retained event {destination.name}: {exc}") from exc
+        raise MTGOStorageError(
+            f"cannot read retained event {destination.name}: {exc}"
+        ) from exc
     if str(retained.get("event_id")) != event_id:
         raise MTGOStorageError("retained event_id does not match refreshed event")
     retained_format = str(retained.get("format", "")).lower().removeprefix("c")
     refreshed_format = str(clean.get("format", "")).lower().removeprefix("c")
     if retained_format != format_id or refreshed_format != format_id:
-        raise MTGOStorageError("retained or refreshed event format does not match request")
+        raise MTGOStorageError(
+            "retained or refreshed event format does not match request"
+        )
     retained_ranks = _player_final_ranks(retained)
     refreshed_ranks = _player_final_ranks(clean)
     if set(retained_ranks) != set(refreshed_ranks):

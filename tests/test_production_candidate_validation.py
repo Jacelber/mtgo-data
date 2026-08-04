@@ -23,14 +23,18 @@ FORMATS = ("standard", "legacy", "pioneer", "pauper", "vintage", "modern")
 
 def make_candidate_root(tmp_path: Path) -> Path:
     (tmp_path / "configs").mkdir()
-    shutil.copyfile(ROOT / "configs" / "formats.yaml", tmp_path / "configs" / "formats.yaml")
+    shutil.copyfile(
+        ROOT / "configs" / "formats.yaml", tmp_path / "configs" / "formats.yaml"
+    )
     for format_id in FORMATS:
         (tmp_path / "data" / format_id).mkdir(parents=True)
     for format_id in ("standard", "modern"):
         (tmp_path / "data" / format_id / "mtgo" / "matches").mkdir(parents=True)
         (tmp_path / "stats" / format_id / "mtgo").mkdir(parents=True)
         (tmp_path / "reports" / format_id / "mtgo").mkdir(parents=True)
-    (tmp_path / "fetched.txt").write_text("/decklist/standard-existing\n", encoding="utf-8")
+    (tmp_path / "fetched.txt").write_text(
+        "/decklist/standard-existing\n", encoding="utf-8"
+    )
     return tmp_path
 
 
@@ -54,13 +58,28 @@ def event_document(format_id: str = "standard"):
     }
 
 
+def discovery_document(format_id: str = "modern"):
+    return {
+        "schema_version": "1.0.0",
+        "source": "mtgo",
+        "format": format_id,
+        "events": [
+            {
+                "link": f"/decklist/{format_id}-challenge-32-2026-08-0112345678",
+                "event_date": "2026-08-01",
+                "status": "retained",
+            }
+        ],
+    }
+
+
 def test_snapshot_records_collection_counts_without_historical_constants(tmp_path):
     root = make_candidate_root(tmp_path)
     (root / "data" / "standard" / "event.json").write_text(
         json.dumps(event_document()), encoding="utf-8"
     )
     state = snapshot_state(root)
-    assert state["schema_version"] == "2.0.0"
+    assert state["schema_version"] == "3.0.0"
     assert state["event_files"] == {
         "standard": 1,
         "pauper": 0,
@@ -71,6 +90,14 @@ def test_snapshot_records_collection_counts_without_historical_constants(tmp_pat
     }
     assert state["match_files"] == {"standard": 0, "modern": 0}
     assert state["fetched_entries"] == 1
+    assert state["discovery_entries"] == {
+        "standard": 0,
+        "pauper": 0,
+        "modern": 0,
+        "pioneer": 0,
+        "legacy": 0,
+        "vintage": 0,
+    }
 
 
 def test_pre_p6_08_baseline_shape_fails_closed(tmp_path):
@@ -95,6 +122,8 @@ def test_valid_candidate_reports_dynamic_deltas_and_source_separation(tmp_path):
         json.dumps({"event_id": "123", "matches": []}),
         encoding="utf-8",
     )
+    discovery = root / "data" / "modern" / "mtgo" / "discovery.json"
+    discovery.write_text(json.dumps(discovery_document()), encoding="utf-8")
     modern_report = root / "reports" / "modern" / "mtgo" / "index.json"
     modern_report.write_text(json.dumps({"schema_version": "1.0.0"}), encoding="utf-8")
     (root / "fetched.txt").write_text(
@@ -106,6 +135,7 @@ def test_valid_candidate_reports_dynamic_deltas_and_source_separation(tmp_path):
         [
             Change("??", "data/modern/Modern_Challenge_32_123.json"),
             Change("??", "data/modern/mtgo/matches/123.json"),
+            Change("??", "data/modern/mtgo/discovery.json"),
             Change(" M", "stats/standard/mtgo/index.json"),
             Change(" M", "reports/modern/mtgo/index.json"),
             Change(" M", "fetched.txt"),
@@ -116,6 +146,7 @@ def test_valid_candidate_reports_dynamic_deltas_and_source_separation(tmp_path):
     assert report["match_file_deltas"] == {"standard": 0, "modern": 1}
     assert report["fetched_entry_delta"] == 1
     assert report["changes_by_area"] == {
+        "discovery_modern": 1,
         "events_modern": 1,
         "ledger": 1,
         "matches_modern": 1,
@@ -138,7 +169,9 @@ def test_candidate_rejects_event_without_complete_swiss_evidence(tmp_path):
         [Change("??", "data/standard/Standard_Challenge_32_123.json")],
     )
 
-    assert any("swiss_score must be a non-negative integer" in item for item in failures)
+    assert any(
+        "swiss_score must be a non-negative integer" in item for item in failures
+    )
 
 
 def test_candidate_rejects_duplicate_login_and_missing_placement(tmp_path):
@@ -213,7 +246,9 @@ def test_candidate_blocks_deletion_cross_source_write_and_malformed_json(tmp_pat
         ],
     )
     assert any("deletion is not allowed" in failure for failure in failures)
-    assert any("outside the production publication scope" in failure for failure in failures)
+    assert any(
+        "outside the production publication scope" in failure for failure in failures
+    )
     assert any("cannot parse candidate file" in failure for failure in failures)
     assert any("embedded format" in failure for failure in failures)
     assert any("match JSON is missing event_id" in failure for failure in failures)
@@ -225,6 +260,7 @@ def test_candidate_blocks_count_regression_duplicate_ledger_and_code_changes(tmp
     baseline = snapshot_state(root)
     baseline["event_files"]["standard"] = 1
     baseline["match_files"]["modern"] = 1
+    baseline["discovery_entries"]["modern"] = 1
     (root / "fetched.txt").write_text(
         "/decklist/standard-existing\n/decklist/standard-existing\n", encoding="utf-8"
     )
@@ -236,10 +272,38 @@ def test_candidate_blocks_count_regression_duplicate_ledger_and_code_changes(tmp
         baseline,
         [Change("??", "src/unexpected.py"), Change(" M", "fetched.txt")],
     )
-    assert any("event file count decreased for standard" in failure for failure in failures)
-    assert any("match file count decreased for modern" in failure for failure in failures)
+    assert any(
+        "event file count decreased for standard" in failure for failure in failures
+    )
+    assert any(
+        "match file count decreased for modern" in failure for failure in failures
+    )
+    assert any(
+        "discovery entry count decreased for modern" in failure for failure in failures
+    )
     assert any("duplicate entries" in failure for failure in failures)
-    assert any("outside the production publication scope" in failure for failure in failures)
+    assert any(
+        "outside the production publication scope" in failure for failure in failures
+    )
+
+
+def test_candidate_rejects_malformed_discovery_state(tmp_path):
+    root = make_candidate_root(tmp_path)
+    baseline = snapshot_state(root)
+    document = discovery_document()
+    document["events"][0]["status"] = "forgotten"
+    path = root / "data" / "modern" / "mtgo" / "discovery.json"
+    path.write_text(json.dumps(document), encoding="utf-8")
+
+    _report, failures = validate_candidate(
+        root,
+        baseline,
+        [Change("??", "data/modern/mtgo/discovery.json")],
+    )
+
+    assert failures == [
+        "data/modern/mtgo/discovery.json: discovery events[0] has an invalid status"
+    ]
 
 
 def test_candidate_blocks_unapproved_new_generated_paths(tmp_path):
@@ -250,12 +314,7 @@ def test_candidate_blocks_unapproved_new_generated_paths(tmp_path):
     unexpected_modern = root / "stats" / "modern" / "mtgo" / "unexpected.json"
     unexpected_modern.write_text("{}", encoding="utf-8")
     approved = (
-        root
-        / "stats"
-        / "standard"
-        / "mtgo"
-        / "pickup"
-        / "candidates_2026-W29.yaml"
+        root / "stats" / "standard" / "mtgo" / "pickup" / "candidates_2026-W29.yaml"
     )
     approved.parent.mkdir(parents=True)
     approved.write_text(yaml.safe_dump({"approved": False}), encoding="utf-8")
@@ -268,9 +327,7 @@ def test_candidate_blocks_unapproved_new_generated_paths(tmp_path):
     completeness_index = (
         root / "stats" / "standard" / "mtgo" / "completeness" / "index.json"
     )
-    completeness_range = (
-        root / "stats" / "modern" / "mtgo" / "completeness" / "4w.json"
-    )
+    completeness_range = root / "stats" / "modern" / "mtgo" / "completeness" / "4w.json"
     completeness_index.parent.mkdir(parents=True)
     completeness_range.parent.mkdir(parents=True)
     completeness_index.write_text("{}", encoding="utf-8")
@@ -300,12 +357,7 @@ def test_candidate_accepts_valid_changed_yaml_and_rejects_renames(tmp_path):
     candidates = []
     for format_id in ("standard", "modern"):
         candidate = (
-            root
-            / "stats"
-            / format_id
-            / "mtgo"
-            / "pickup"
-            / "candidates_2026-W29.yaml"
+            root / "stats" / format_id / "mtgo" / "pickup" / "candidates_2026-W29.yaml"
         )
         candidate.parent.mkdir(parents=True)
         candidate.write_text(yaml.safe_dump({"approved": False}), encoding="utf-8")
@@ -327,9 +379,13 @@ def test_git_change_collection_drives_an_end_to_end_candidate_check(tmp_path):
     root = make_candidate_root(tmp_path)
     subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True)
     subprocess.run(["git", "config", "user.name", "Fixture"], cwd=root, check=True)
-    subprocess.run(["git", "config", "user.email", "fixture@example.test"], cwd=root, check=True)
+    subprocess.run(
+        ["git", "config", "user.email", "fixture@example.test"], cwd=root, check=True
+    )
     subprocess.run(["git", "add", "."], cwd=root, check=True)
-    subprocess.run(["git", "commit", "-m", "baseline"], cwd=root, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "baseline"], cwd=root, check=True, capture_output=True
+    )
     baseline = snapshot_state(root)
 
     event = root / "data" / "standard" / "Standard_Challenge_32_123.json"
@@ -351,9 +407,13 @@ def test_snapshot_cli_requires_a_clean_checkout(tmp_path):
     root = make_candidate_root(tmp_path)
     subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True)
     subprocess.run(["git", "config", "user.name", "Fixture"], cwd=root, check=True)
-    subprocess.run(["git", "config", "user.email", "fixture@example.test"], cwd=root, check=True)
+    subprocess.run(
+        ["git", "config", "user.email", "fixture@example.test"], cwd=root, check=True
+    )
     subprocess.run(["git", "add", "."], cwd=root, check=True)
-    subprocess.run(["git", "commit", "-m", "baseline"], cwd=root, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "baseline"], cwd=root, check=True, capture_output=True
+    )
     output = tmp_path.parent / f"{tmp_path.name}-baseline.json"
     command = [
         sys.executable,

@@ -3429,3 +3429,54 @@ available, expected, deferred, missing, excluded, and completeness values, so
 no front-end or Schema change is required. Workflow logs distinguish source
 unavailability from fatal errors, and literal Markdown backticks in job
 summaries no longer trigger unintended shell command substitution.
+
+---
+
+# DEC-083 - Use a provisional week before sealing MTGO weekly history
+
+Status: `Accepted`
+
+## Context
+
+Three Modern events published late for 2026-W31 were collected after that
+week's first production build. The existing byte-immutability guard then
+rejected the legitimate additive Top 8 update. The monthly listing endpoint had
+also returned HTTP 200 with fewer links than a later request, so HTTP success
+alone did not prove complete discovery.
+
+A seven-day recovery window is appropriate because MTGO normally finishes
+publishing the prior natural week's results by Monday in Japan, but delayed
+publication can occur. Weekly Pickup cannot wait for that window to expire: its
+purpose depends on producing candidates promptly after the week ends.
+
+## Decision
+
+A complete Monday-through-Sunday MTGO week is provisional for the next seven
+calendar days and seals on the following Monday. During the provisional window,
+Top 8 regeneration may only add event IDs. Every prior event, placement source
+identity, and exact decklist must remain unchanged. Removals, regressions,
+duplicates, or unexplained changes fail closed. Once sealed, the weekly and
+same-week comparison-base files remain byte-immutable. The index records the
+lifecycle dates for deterministic generation, but the front end does not
+present a provisional or sealed warning. The recovery window is an internal
+reliability mechanism, not a statement that the latest week is probably
+incomplete.
+
+Monthly listing collection compares observations with the fetched ledger and a
+persistent per-format discovery ledger. A missing known link causes bounded
+re-observation; observations are unioned, and a persistent regression remains
+fatal. The discovery ledger retains processed, excluded, and deferred links so
+later runs can reason about previously observed source state.
+
+Weekly Pickup continues to generate immediately after the natural week ends.
+Candidates and base references record source event IDs. An unreviewed candidate
+refreshes when additive late events change that list. A candidate with an
+approval or reviewer comment is preserved and reported for human re-review;
+publication and known-archetype mutation remain manual.
+
+## Consequences
+
+Late official events can reach current weekly products for one week without
+weakening older history or making normally complete weeks look unreliable.
+Pickup remains timely, while human decisions are never silently overwritten.
+The repair changes no statistical formula and does not authorize Phase 12.

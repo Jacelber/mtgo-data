@@ -105,7 +105,7 @@ def test_tabletop_preserves_legacy_rate_and_adds_literal_rate_and_labels():
 def test_top8_uses_immutable_week_base_and_publishes_deviation(format_id):
     root = ROOT / "stats" / format_id / "mtgo" / "top8"
     index = _json(root / "index.json")
-    assert index["history_policy"] == "immutable_weekly_comparison_bases"
+    assert index["history_policy"] == "one_week_provisional_then_immutable"
     entry = index["weeks"][0]
     week = _json(root / entry["file"])
     bases = _json(root / entry["comparison_bases_file"])
@@ -131,7 +131,7 @@ def test_top8_uses_immutable_week_base_and_publishes_deviation(format_id):
             assert placement["exact_deck"]["deviation_diff"] is None
 
 
-def test_existing_week_and_base_are_immutable(tmp_path):
+def test_existing_provisional_event_cannot_be_rewritten(tmp_path):
     committed = _json(ROOT / "stats" / "modern" / "mtgo" / "top8" / "index.json")
     generated = datetime.fromisoformat(committed["generated"])
     output = tmp_path / "top8"
@@ -148,7 +148,7 @@ def test_existing_week_and_base_are_immutable(tmp_path):
     week_path.write_text(json.dumps(week, indent=2), encoding="utf-8")
     with pytest.raises(
         top8.MTGOTop8Error,
-        match="immutable historical Top 8 document changed",
+        match="provisional Top 8 existing event changed",
     ):
         top8.build_all_top8(
             ROOT,
