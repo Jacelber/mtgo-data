@@ -3482,3 +3482,33 @@ Late official events can reach current weekly products for one week without
 weakening older history or making normally complete weeks look unreliable.
 Pickup remains timely, while human decisions are never silently overwritten.
 The repair changes no statistical formula and does not authorize Phase 12.
+
+---
+
+# DEC-084 - Dispatch Pages after a production data publication
+
+Status: `Accepted`
+
+## Context
+
+The MTGO production publisher successfully committed generated data to
+`master`, but the public site remained on the preceding deployment. GitHub does
+not start a second workflow from a push made with the workflow's own
+`GITHUB_TOKEN`, so the `pages.yml` push trigger did not observe that production
+commit.
+
+## Decision
+
+After the publish job commits generated changes and verifies the remote master
+commit, it dispatches `pages.yml` on `master` with job-scoped `actions: write`.
+The Pages workflow treats that explicit master dispatch as a deployable event,
+using the same allowlisted artifact builder and the same protected deployment
+job as a master push. A no-change production run does not dispatch Pages.
+
+## Consequences
+
+Successful generated-data publications reach the public site without an empty
+follow-up commit or a direct manual deployment. Pull requests remain
+build-only, the Pages job remains unable to modify repository contents, and no
+statistics, data paths, or front-end behavior change. Phase 12 remains
+unauthorized.

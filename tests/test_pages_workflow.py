@@ -42,9 +42,12 @@ def test_build_is_fresh_bounded_read_only_and_credential_free() -> None:
     assert '"$GITHUB_STEP_SUMMARY"' in command
 
 
-def test_only_master_push_uploads_and_deploys() -> None:
+def test_only_master_publication_events_upload_and_deploy() -> None:
     workflow = _load()
-    condition = "github.event_name == 'push' && github.ref == 'refs/heads/master'"
+    condition = (
+        "(github.event_name == 'push' || github.event_name == 'workflow_dispatch') "
+        "&& github.ref == 'refs/heads/master'"
+    )
     build_steps = workflow["jobs"]["build"]["steps"]
     configure = next(step for step in build_steps if "configure-pages" in step.get("uses", ""))
     upload = next(step for step in build_steps if "upload-pages-artifact" in step.get("uses", ""))
