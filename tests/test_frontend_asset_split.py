@@ -10,6 +10,13 @@ MATCHUP_JS = REPO_ROOT / "assets" / "js" / "matchup.js"
 MTGO_JS = REPO_ROOT / "assets" / "js" / "mtgo.js"
 PHASE8_CSS = REPO_ROOT / "assets" / "css" / "phase8-base.css"
 PHASE8_CANDIDATE_CSS = REPO_ROOT / "assets" / "css" / "phase8-candidate.css"
+PHASE8_JS = REPO_ROOT / "assets" / "js" / "phase8"
+PHASE8_APP_FILES = (
+    "app-core.js",
+    "app-mtgo.js",
+    "app-tabletop.js",
+    "app.js",
+)
 
 
 def test_frontend_uses_ordered_static_assets_without_inline_blocks():
@@ -28,6 +35,8 @@ def test_frontend_uses_ordered_static_assets_without_inline_blocks():
         "assets/js/phase8/i18n.js",
         "assets/js/phase8/matchup-model.js",
         "assets/js/phase8/mtgo-controller.js",
+        "assets/js/phase8/app-core.js",
+        "assets/js/phase8/app-mtgo.js",
         "assets/js/phase8/app.js",
     ]
     assert 'type="module"' not in html
@@ -43,6 +52,25 @@ def test_frontend_assets_are_present_and_index_is_materially_smaller():
     assert MATCHUP_JS.is_file()
     assert MTGO_JS.is_file()
     assert len(INDEX.read_text(encoding="utf-8").splitlines()) < 100
+
+
+def test_phase8_app_is_split_into_focused_classic_scripts():
+    sources = {
+        name: (PHASE8_JS / name).read_text(encoding="utf-8")
+        for name in PHASE8_APP_FILES
+    }
+
+    assert all((PHASE8_JS / name).stat().st_size < 25_000 for name in sources)
+    assert "const state = {" in sources["app-core.js"]
+    assert "async function statsView()" in sources["app-mtgo.js"]
+    assert "async function pickupView()" in sources["app-mtgo.js"]
+    assert "async function tabletopView()" in sources["app-tabletop.js"]
+    assert "async function renderView()" in sources["app.js"]
+    assert "async function initialize()" in sources["app.js"]
+    assert all(
+        "import " not in source and "export " not in source
+        for source in sources.values()
+    )
 
 
 def test_split_retains_classic_assets_as_an_unchanged_rollback_baseline():

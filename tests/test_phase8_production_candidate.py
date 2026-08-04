@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 P8_07 = ROOT / "docs" / "prototypes" / "P8-07" / "index.html"
 P8_08 = ROOT / "docs" / "prototypes" / "P8-08" / "index.html"
 PHASE8_JS = ROOT / "assets" / "js" / "phase8"
+APP_FILES = ("app-core.js", "app-mtgo.js", "app-tabletop.js", "app.js")
 
 
 def _scripts(path: Path) -> list[str]:
@@ -26,6 +27,9 @@ def test_candidate_and_review_entries_use_the_same_ordered_modules() -> None:
         "../../../assets/js/phase8/matchup-model.js",
         "../../../assets/js/phase8/mtgo-controller.js",
         "../../../assets/js/phase8/tabletop-controller.js",
+        "../../../assets/js/phase8/app-core.js",
+        "../../../assets/js/phase8/app-mtgo.js",
+        "../../../assets/js/phase8/app-tabletop.js",
         "../../../assets/js/phase8/app.js",
     ]
 
@@ -62,7 +66,10 @@ def test_scoped_clients_admit_only_their_source_tree() -> None:
 
 
 def test_app_delegates_all_product_loading_to_scoped_controllers() -> None:
-    app = (PHASE8_JS / "app.js").read_text(encoding="utf-8")
+    app = "\n".join(
+        (PHASE8_JS / name).read_text(encoding="utf-8")
+        for name in APP_FILES
+    )
 
     assert re.search(r"MtgoController\s*\.loadStatistics", app)
     assert re.search(r"MtgoController\s*\.loadMatchup", app)

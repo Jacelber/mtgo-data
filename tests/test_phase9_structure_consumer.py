@@ -9,6 +9,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 PHASE8_JS = ROOT / "assets" / "js" / "phase8"
+APP_FILES = ("app-core.js", "app-mtgo.js", "app-tabletop.js", "app.js")
 
 
 def _controller_result(script: str) -> dict:
@@ -231,7 +232,10 @@ process.stdout.write(JSON.stringify({
 
 
 def test_renderer_exposes_bilingual_structure_states_without_aggregation() -> None:
-    app = (PHASE8_JS / "app.js").read_text(encoding="utf-8")
+    app = "\n".join(
+        (PHASE8_JS / name).read_text(encoding="utf-8")
+        for name in APP_FILES
+    )
     i18n = (PHASE8_JS / "i18n.js").read_text(encoding="utf-8")
 
     for key in (

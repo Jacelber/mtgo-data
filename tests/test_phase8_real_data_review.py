@@ -12,6 +12,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 PROTOTYPE = ROOT / "docs" / "prototypes" / "P8-07"
 PHASE8_ASSETS = ROOT / "assets" / "js" / "phase8"
+APP_FILES = ("app-core.js", "app-mtgo.js", "app-tabletop.js", "app.js")
 
 
 def _json(path: str) -> dict:
@@ -31,7 +32,10 @@ def _node(script: str, *args: str) -> dict:
 
 def test_review_entry_point_is_chinese_first_and_uses_candidate_assets() -> None:
     html = (PROTOTYPE / "index.html").read_text(encoding="utf-8")
-    app = (PHASE8_ASSETS / "app.js").read_text(encoding="utf-8")
+    app = "\n".join(
+        (PHASE8_ASSETS / name).read_text(encoding="utf-8")
+        for name in APP_FILES
+    )
     copy = app + (PHASE8_ASSETS / "i18n.js").read_text(encoding="utf-8")
 
     assert "P8-07 真实生产数据评审" in html

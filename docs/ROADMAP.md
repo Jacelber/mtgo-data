@@ -60,7 +60,7 @@ blockers, and stop conditions.
 | Phase 9 | Support pure Constructed Tabletop event structures. | Completed |
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
 | Phase 10 | Establish data governance, compliance, and production operations. | Completed on 2026-08-02 |
-| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 and P11-09 skipped by owner decision; P11-01 through P11-13 otherwise published; P11-14 accepted and authorized for publication |
+| Phase 11 | Establish the engineering baseline and reduce structural debt. | P11-04 and P11-09 skipped by owner decision; P11-01 through P11-14 otherwise published; P11-15 accepted and authorized for publication |
 | Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | Phase 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
@@ -2660,7 +2660,16 @@ authorized for local development on 2026-08-04. It adds deliberate
 README/STATUS/catalog contradiction checks to the existing repository validator
 without adding a workflow or a separate CI job.
 The owner accepted the local P11-14 result and authorized commit, push,
-pull-request creation, CI monitoring, and merge on 2026-08-04.
+pull-request creation, CI monitoring, and merge on 2026-08-04. PR #176 merged
+P11-14 as task commit `7e035d57834368634cdaa126db248603ef0c0699` and
+merge commit `ac48566acc8ab76c9ec33533bb3fdbbd37aaa4f4`; pull-request
+validation, master validation, and Pages publication all passed. P11-15 was
+separately authorized for local development on 2026-08-04 from that published
+base. It splits the Phase 8 application renderer into focused classic scripts,
+retains direct static loading without a framework or deployment build step,
+and changes no public path, data, statistical behavior, or protected event
+`434455` byte. The owner accepted the local P11-15 front end and authorized
+commit, push, pull-request creation, CI monitoring, and merge on 2026-08-04.
 
 ## Acceptance criteria
 

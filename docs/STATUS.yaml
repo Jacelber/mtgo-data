@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p11-14-product-fact-consistency"
+  current_working_branch: "codex/p11-15-phase8-app-split"
   working_branch_status: "isolated_local_task_branch"
   status: "active"
   primary_language: "Python"
@@ -72,63 +72,70 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P11-14"
-  name: "Add README, STATUS, and product-catalog fact-consistency checks"
+  id: "P11-15"
+  name: "Split assets/js/phase8/app.js under E2E protection"
   status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-04"
-  workspace: "C:/tmp/mtgo-data-p11-14-product-fact-consistency-20260804-01"
-  branch: "codex/p11-14-product-fact-consistency"
-  base_commit: "0a6f7d23021960476026d382605ba76214b5c323"
-  task_type: "public_product_fact_consistency_validation"
-  objective: "Make deliberate contradictions among the README public-product table, live STATUS product tracks, and generated consumer catalog fail the existing repository validator."
+  workspace: "C:/tmp/mtgo-data-p11-15-phase8-app-split-20260804-01"
+  branch: "codex/p11-15-phase8-app-split"
+  base_commit: "ac48566acc8ab76c9ec33533bb3fdbbd37aaa4f4"
+  task_type: "front_end_structure_refactor"
+  objective: "Split the oversized Phase 8 application renderer into focused static scripts while preserving both production entries, behavior, deployment, public data paths, and statistical meaning."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "README.md"
+    - "assets/js/phase8/app-core.js"
+    - "assets/js/phase8/app-mtgo.js"
+    - "assets/js/phase8/app-tabletop.js"
+    - "assets/js/phase8/app.js"
+    - "index.html"
+    - "melee/index.html"
+    - "docs/prototypes/P8-07/index.html"
+    - "docs/prototypes/P8-08/index.html"
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
     - "validate_repository.py"
-    - "tests/test_validate_repository.py"
+    - "tests/"
   protected_scope:
-    code_changed: "repository validation only"
+    code_changed: "front-end renderer file boundaries and matching validation only"
     workflow_changed: false
     raw_or_generated_data_changed: false
     statistical_behavior_changed: false
     schema_changed: false
-    frontend_source_changed: false
+    frontend_source_changed: true
     public_paths_changed: false
     event_434455_bytes_changed: false
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    canonical_facts: "The validator derives public MTGO and Tabletop availability from stats/catalog.json and compares it with the live STATUS product tracks and the readable README table."
-    contradiction_tests: "Deliberate STATUS, README, and catalog contradictions fail with the affected file and fact."
-    ci_cost: "The checks run inside the existing repository validator; no workflow or separate CI job is added."
-    protected_behavior: "No code, workflow, data, statistic, Schema, public path, front-end source, or protected event 434455 byte changes."
+    static_boundary: "The application remains classic static JavaScript with no framework, module loader, mandatory build, or deployment-step change."
+    focused_scripts: "Common state and helpers, MTGO views, Tabletop views, and bootstrap interactions are maintained in focused files below 25 KB each."
+    browser_regression: "Playwright covers both production entries, both languages, Standard and Modern MTGO, Tabletop Modern, desktop, and 390px width with no page errors."
+    protected_behavior: "No workflow, raw or generated data, statistic, Schema, public path, CSS, or protected event 434455 byte changes."
   owner_acceptance: "accepted"
   owner_accepted_on: "2026-08-04"
   owner_publication_authorized_on: "2026-08-04"
-  stop_point: "P11-14 commit, push, pull-request creation, CI monitoring, and merge are authorized. Do not dispatch production or begin P11-15."
+  stop_point: "P11-15 commit, push, pull-request creation, CI monitoring, and merge are authorized. Do not dispatch production, close Phase 11, or begin Phase 12."
 
 recent_completed_task:
-  id: "P11-13"
-  name: "Reduce STATUS, README, and agent-guide duplication"
+  id: "P11-14"
+  name: "Add README, STATUS, and product-catalog fact-consistency checks"
   status: "completed_published_and_merged"
   owner_accepted_on: "2026-08-04"
-  pull_request: 174
-  task_commit: "4cb5e5bf46329b0135a0cbeb6c276c2bc81c3317"
-  merge_commit: "0a6f7d23021960476026d382605ba76214b5c323"
-  merged_at: "2026-08-03T17:14:28Z"
-  pr_validation_run: 30834917148
-  master_validation_run: 30835847124
-  pages_run: 30835846734
-  result: "Live status was reduced to current facts, the complete prior snapshot was preserved byte-for-byte under docs/history, and agent adapters no longer carry stale phase state."
+  pull_request: 176
+  task_commit: "7e035d57834368634cdaa126db248603ef0c0699"
+  merge_commit: "ac48566acc8ab76c9ec33533bb3fdbbd37aaa4f4"
+  merged_at: "2026-08-03T23:30:33Z"
+  pr_validation_run: 30861858695
+  master_validation_run: 30862499121
+  pages_run: 30862499321
+  result: "The existing repository validator now fails deliberate contradictions among the README public-product table, live STATUS product tracks, and generated public catalog without adding a workflow or CI job."
 
 current_repository_state:
-  baseline_commit: "0a6f7d23021960476026d382605ba76214b5c323"
+  baseline_commit: "ac48566acc8ab76c9ec33533bb3fdbbd37aaa4f4"
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -198,15 +205,15 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P11-15"
-  name: "Split assets/js/phase8/app.js under E2E protection"
+  id: "P12-01"
+  name: "View-level lazy loading"
   status: "planned_not_authorized"
-  production_change: false
+  production_change: true
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "This is the next roadmap item only; P11-14 does not authorize or implement it."
+  note: "This is the next roadmap item only. P11-15 does not authorize Phase 11 closeout, P12-01, or any Phase 12 implementation."
 
 governance_baseline:
   status: "active_on_master"
@@ -241,8 +248,8 @@ publication_workflow_control:
   p8_08_authorized: false
 
 prohibited_next_actions:
-  - "Do not dispatch production as part of P11-14; only its repository-validation commit, push, pull request, CI monitoring, and merge are authorized."
-  - "Do not begin P11-15, Phase 12, or another task without separate owner authorization."
+  - "Do not dispatch production as part of P11-15; only its commit, push, pull request, CI monitoring, and merge are authorized."
+  - "Do not close Phase 11, begin P12-01 or Phase 12, or start another task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."

@@ -102,6 +102,9 @@ def test_real_publication_plan_preserves_products_and_434455_bytes() -> None:
     assert {
         "index.html",
         "melee/index.html",
+        "assets/js/phase8/app-core.js",
+        "assets/js/phase8/app-mtgo.js",
+        "assets/js/phase8/app-tabletop.js",
         "assets/js/phase8/app.js",
         "stats/catalog.json",
         "data/modern/melee/events/434455.json",
