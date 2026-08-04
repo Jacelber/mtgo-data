@@ -121,12 +121,12 @@ def test_fetch_runs_clean_regression_then_snapshots_and_collects_only_inputs():
 def test_workflow_summary_backticks_are_literal_shell_text():
     workflow = UPDATE.read_text(encoding="utf-8")
     assert "\\\\`" not in workflow
-    assert "echo '- Candidate transfer: immutable `mtgo-fetch-candidate` artifact'" in workflow
+    assert 'echo "- Candidate transfer: immutable \\`mtgo-fetch-candidate\\` artifact"' in workflow
     assert (
-        "echo '- Candidate transfer: verified `mtgo-fetch-candidate` input and "
-        "immutable `mtgo-build-candidate` output'"
+        'echo "- Candidate transfer: verified \\`mtgo-fetch-candidate\\` input and '
+        'immutable \\`mtgo-build-candidate\\` output"'
     ) in workflow
-    assert "echo '- Candidate transfer: verified immutable `mtgo-build-candidate` artifact'" in workflow
+    assert 'echo "- Candidate transfer: verified immutable \\`mtgo-build-candidate\\` artifact"' in workflow
 
 
 def test_fetch_resumes_only_a_verified_same_commit_checkpoint_and_never_builds_it():
