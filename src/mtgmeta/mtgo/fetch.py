@@ -463,13 +463,7 @@ def _observe_listing(
         observed.update(discover_event_links(listing, (format_id,)))
         if attempt < LISTING_OBSERVATION_ATTEMPTS:
             wait(2)
-    missing = expected_links - observed
-    if not missing:
-        return sorted(observed)
-    raise MTGOFetchError(
-        f"MTGO monthly listing omitted {len(missing)} "
-        "previously known event link(s) after 3 observations"
-    )
+    return sorted(observed | expected_links)
 
 
 def recent_months(now: datetime | None = None) -> list[tuple[int, int]]:

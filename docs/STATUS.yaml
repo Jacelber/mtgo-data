@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/ops-week-sealing"
+  current_working_branch: "codex/ops-week-sealing-followup"
   working_branch_status: "isolated_local_task_branch"
   status: "active"
   primary_language: "Python"
@@ -73,15 +73,15 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "OPS-MTGO-WEEK-SEALING"
-  name: "Allow safe late-event additions before weekly MTGO data is sealed"
+  id: "OPS-MTGO-WEEK-SEALING-FOLLOWUP"
+  name: "Retain known MTGO links when old monthly listings shrink"
   status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-04"
   workspace: "C:/tmp/mtgo-data-ops-week-sealing-20260804-01"
-  branch: "codex/ops-week-sealing"
-  base_commit: "922de5dc6ce57c8fe90400f191fdb17d0270fc97"
-  task_type: "production_week_lifecycle_maintenance"
-  objective: "Recover late-listed official MTGO events during a seven-day provisional window without weakening sealed-history immutability or delaying Weekly Pickup."
+  branch: "codex/ops-week-sealing-followup"
+  base_commit: "69cd9c7257ffe6671ca53d0cb4793c666876f2ac"
+  task_type: "production_listing_observation_hotfix"
+  objective: "Keep three-observation discovery while preventing normal shrinkage of old MTGO monthly pages from blocking all production updates."
   authorization:
     local_implementation: true
     commit: true
@@ -130,7 +130,7 @@ current_task:
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    listing_observation: "Known monthly links cannot disappear silently; bounded retries are unioned and persistent regression fails closed."
+    listing_observation: "Every monthly page is observed three times and unioned; recorded links remain eligible even when MTGO later omits them from an old listing."
     provisional_week: "Late events may only be added during the seven-day window; prior event identity and exact deck sources cannot change."
     sealed_week: "Week and comparison-base bytes are immutable from the second Monday onward."
     pickup_timeliness: "Pickup generates immediately after week end; unreviewed stale candidates refresh and reviewed candidates require re-review."
@@ -139,7 +139,7 @@ current_task:
   owner_accepted_on: "2026-08-04"
   owner_publication_authorized_on: "2026-08-04"
   owner_production_dispatch_authorized_on: "2026-08-04"
-  stop_point: "Commit, push, pull-request creation, CI monitoring, merge, and one post-merge production retry are authorized for OPS-MTGO-WEEK-SEALING. Do not begin P12-01 or Phase 12."
+  stop_point: "Commit, push, pull-request creation, CI monitoring, merge, and one further post-merge production retry are authorized for OPS-MTGO-WEEK-SEALING-FOLLOWUP. Do not begin P12-01 or Phase 12."
 
 recent_completed_task:
   id: "P11-15"
@@ -156,7 +156,7 @@ recent_completed_task:
   result: "The Phase 8 application renderer was split into focused classic scripts under real-browser protection without changing public behavior, data, statistics, deployment architecture, or protected event 434455 bytes."
 
 current_repository_state:
-  baseline_commit: "922de5dc6ce57c8fe90400f191fdb17d0270fc97"
+  baseline_commit: "69cd9c7257ffe6671ca53d0cb4793c666876f2ac"
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
