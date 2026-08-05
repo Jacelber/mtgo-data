@@ -38,6 +38,52 @@ A workspace created during the current authorized task may continue after a comp
 
 Never start the next task automatically.
 
+## Artifact-impact and owner-acceptance protocol
+
+At Gate 1, every task contract must declare the expected artifact impact before
+implementation. Select every applicable value from this closed list:
+
+- `none` — no committed, generated, rendered, or public artifact is expected
+  to change;
+- `internal_diagnostics` — only non-public diagnostics or reports are expected
+  to change;
+- `user_visible_ui` — a rendered user-visible page, interaction, copy, or
+  layout is expected to change;
+- `statistical_json_structure` — a public statistical JSON structure is
+  expected to change; or
+- `public_path` — a public URL, runtime request path, compatibility path, or
+  Pages publication boundary is expected to change.
+
+The declaration is a contract, not a prediction to revise after a test fails.
+If a task declared `none` but Gate 3 or Gate 4 finds an artifact change, stop
+and treat it as a contract mismatch. Do not describe the mismatch merely as a
+baseline-test failure or accept it by updating a snapshot.
+
+During Gate 3, run the smallest focused generator, renderer, or browser check
+that can expose the declared impact. Before the full suite, inspect a
+human-readable comparison: `git diff --stat`, the relevant `git diff`, and,
+where useful, `git diff --numstat` or a bounded rendered screenshot or JSON
+comparison. Record which files changed, whether they are within the declared
+impact, and the relevant field, DOM, or runtime-request difference. This is a
+fast review aid; it does not replace a validator or a complete diff review.
+
+Gate 4 retains the strict committed-baseline behavior. Do not add a non-failing
+review mode, an automatic baseline-acceptance command, or a test bypass.
+Committed-baseline tests continue to require byte-identical outputs against the
+committed snapshot. A declared and owner-accepted artifact-contract change may
+require an explicit, separately reviewed snapshot edit followed by the same
+strict validation; it is never accepted by a review-mode test or automation.
+
+At Gate 5, present the owner with the original declaration, the actual changed
+artifact list, the relevant source or rendered diff, and verification matched
+to the impact: browser behavior for `user_visible_ui`, field and consumer
+evidence for `statistical_json_structure`, and compatibility plus Pages
+evidence for `public_path`. A Phase 12 UI task, for example, declares
+`user_visible_ui`, runs its focused renderer and browser check during Gate 3,
+shows the owner the changed state and screenshot or URL before acceptance, and
+then runs the unchanged strict Gate 4 suite. The owner accepts the disclosed
+change, not an opaque statement that refreshed baselines pass.
+
 ## Mandatory Gate 2 bootstrap
 
 Run the following sequence for every new native-Windows disposable workspace.
@@ -148,9 +194,18 @@ must build into a new directory outside the checkout from
 event `434455` compatibility closure, reject symbolic links and unsafe paths,
 and report repository, data-tree, artifact, protected-file, and excluded-file
 sizes. Pull requests may build the candidate but must not deploy it. The Pages
-deploy job may run only for `master` pushes and has only `pages: write` and
+deploy job may run only for `master` pushes or the accepted explicit
+production-publication dispatch on `master`, and has only `pages: write` and
 `id-token: write`; it must not receive repository write access or persisted Git
 credentials.
+
+When a production data publication changes `master`, its publish job must first
+confirm the remote `master` commit and then explicitly dispatch the allowlisted
+Pages workflow on `master`, as defined by DEC-084. GitHub does not trigger the
+Pages push workflow from a commit made with that production workflow's own
+`GITHUB_TOKEN`. A no-change production publication does not dispatch Pages;
+pull-request builds remain non-deploying, and the Pages deployment job retains
+its existing no-repository-write boundary.
 
 The initial cutover is separately gated from local implementation, commit, and
 pull-request review. Before changing the repository setting, capture the active
