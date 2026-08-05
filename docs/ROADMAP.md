@@ -61,7 +61,7 @@ blockers, and stop conditions.
 | Historical Phase 10 | Specify mixed Draft and Constructed event behavior. | `superseded_by_phases_7_and_8` |
 | Phase 10 | Establish data governance, compliance, and production operations. | Completed on 2026-08-02 |
 | Phase 11 | Establish the engineering baseline and reduce structural debt. | Completed on 2026-08-04; P11-04 and P11-09 remain skipped by owner decision, and P11-01 through P11-15 are published |
-| Phase 12 | Productize front-end loading, state, accessibility, and sharing. | Planned; not authorized |
+| Phase 12 | Productize loading, state, accessibility, sharing, and an editorial MTGO landing experience under one durable visual system. | Planned; not authorized |
 | Phase 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | Phase 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | Phase 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
@@ -2705,65 +2705,322 @@ Phase 11 is complete when:
 
 ---
 
-# Phase 12 — Front-end productization and sharing readiness
+# Pre-Phase 12 readiness — Planned; not authorized
+
+## Objective
+
+Remove avoidable acceptance and CI friction before Phase 12 changes visible
+front-end behavior, while preserving the existing strict committed baseline,
+production-data admission boundary, public paths, statistical meaning, and
+owner authorization gates.
+
+These are three independent focused tasks. Each task requires separate owner
+authorization and one pull request. Completing this planning section does not
+authorize any readiness task or Phase 12 implementation.
+
+## Required work
+
+- make expected artifact impact explicit before implementation and present
+  human-readable evidence at owner acceptance;
+- measure a bounded ordinary-pytest parallelization prototype before retaining
+  any CI dependency or workflow change;
+- machine-enforce the compact live-status contract and close the deferred
+  history-rewrite question with measurable re-evaluation triggers;
+- do not weaken byte-level committed-baseline tests, production candidate
+  validation, public-product fact checks, or remote publication controls;
+- keep Phase 12 front-end work free of generated statistics, production data,
+  and public-path changes unless a later task explicitly changes that contract.
+
+## Task sequence
+
+1. `P12-00-A` — Artifact-impact and owner-acceptance protocol
+   - add a Gate 1 artifact-impact declaration covering no artifact change,
+     internal diagnostics, user-visible UI, statistical JSON structure, and
+     public paths;
+   - document a lightweight Gate 3 comparison using focused generation or
+     rendering plus human-readable `git diff` summaries before the full suite;
+   - retain the current strict Gate 4 committed-baseline behavior instead of
+     adding a non-failing pytest review mode or an automatic baseline-acceptance
+     tool;
+   - require Gate 5 acceptance evidence to show the declared impact, relevant
+     source or rendered diff, and browser or data verification appropriate to
+     that impact;
+   - reconcile the Pages workflow description with the accepted production
+     publication dispatch behavior recorded by DEC-084.
+2. `P12-00-B` — Measured ordinary-pytest parallelization prototype
+   - record matched before-and-after pull-request timing evidence;
+   - prototype only the ordinary pytest shard with fixed bounded parallelism,
+     initially `-n 2 --dist worksteal`;
+   - keep the committed-baseline shard serial and do not add path filters for
+     Playwright, `node --check`, actionlint, public-product facts, Schemas, or
+     compatibility validation;
+   - retain `pytest-xdist` only if the prototype saves at least 60 seconds in
+     the ordinary shard without flakiness, shared-state leakage, or a longer
+     end-to-end pull-request critical path; otherwise remove the prototype and
+     record the measured no-change result.
+3. `P12-00-C` — Lightweight governance closeout
+   - add a fast repository check that keeps `docs/STATUS.yaml` at or below 16
+     KiB and requires `live_state_only: true` plus a non-empty
+     `history_policy`;
+   - preserve DEC-067 and add a new decision closing P10-05 without rewriting
+     history at the current repository size;
+   - require a fresh evaluation, not an automatic rewrite, if the Git pack
+     exceeds 100 MiB, the median of three controlled clean clones exceeds 30
+     seconds, a valid privacy or legal removal request arises, or an approved
+     current public path is retired with a verified compatibility successor.
+
+## Acceptance criteria
+
+Pre-Phase 12 readiness is complete when:
+
+- the artifact-impact protocol contains a complete Phase 12 UI example and
+  leaves non-review committed-baseline tests byte-strict;
+- the CI prototype has reproducible timing evidence and is either retained by
+  the stated threshold or completely removed with the result recorded;
+- deliberate STATUS growth beyond 16 KiB and missing live-state policy fields
+  fail the fast repository check in under five seconds;
+- the history-rewrite decision is closed with explicit re-evaluation triggers
+  and no Git history, tag, branch, or public path is changed;
+- all three focused tasks are independently accepted and published before any
+  Phase 12 implementation begins.
+
+---
+
+# Phase 12 — Front-end productization, editorial landing, and visual system
 
 ## Objective
 
 Make the existing static MTGO and Tabletop products faster, shareable,
-accessible, resilient, and usable across desktop and mobile without changing
-their public data paths or statistical meaning.
+accessible, resilient, and usable across desktop and mobile. Add a curated
+MTGO weekly landing view that answers what changed, what the environment looks
+like now, and what new decks or technology deserve attention. Establish one
+durable visual system and apply it incrementally without changing existing
+statistical meaning, mixing MTGO with Tabletop data, or moving established
+public entry points.
 
 ## Required work
 
 - load large documents only when the selected view needs them;
 - make supported product state shareable and recoverable through the URL;
-- correct chart semantics and identity presentation;
+- freeze the Landing product, data, editorial, weekly-lifecycle, and
+  compatibility contract before implementing its producer or front end;
+- establish an owner-approved visual system before the first broad redesign and
+  implement reusable tokens and components before composing the Landing page;
+- extend the existing Weekly Pickup review and publication boundary instead of
+  creating a parallel candidate or approval system;
+- publish structured Landing facts separately from fixed interface translations
+  and human editorial copy;
+- correct chart semantics and identity presentation without assigning changing
+  rank colors as stable archetype identity;
 - expose only freshness and completeness facts that each product actually
-  provides;
+  provides, without a provisional-week warning;
 - improve accessibility, loading, retry, matrix, mobile, image, and metadata
-  behavior under real-browser tests;
-- retain the no-framework, no-required-build-step GitHub Pages deployment.
+  behavior under semantic and real-browser tests;
+- retain the no-framework, classic-script, no-required-build-step GitHub Pages
+  deployment.
 
 ## Task sequence
 
 1. `P12-01` — View-level lazy loading
-   - do not load matchup, deck-detail, or MTGO comparison documents for an
-     overview-only view;
-   - preserve every existing public path and byte.
+   - record the current clean-browser request count, transferred bytes, and
+     readable-content timing for representative MTGO and Tabletop overview
+     views before changing their loading behavior;
+   - do not load matchup, deck-detail, comparison, Pickup, or future Landing
+     documents until the selected view needs them;
+   - preserve every existing public path, generated byte, and visible behavior.
 2. `P12-02` — Shareable URL state
-   - cover format, product, range, sort, event, scope, view, and language;
-   - support history and `popstate` restoration;
-   - keep expanded identity sets out of the URL.
-3. `P12-03` — Correct chart semantics
-   - use an accurate Chinese product name;
+   - cover format, product, range, sort, event, scope, view, language, and a
+     stable archetype or deck-detail identity where supported;
+   - support reload, history, and `popstate` restoration;
+   - reserve a canonical representation for future multi-event selection so
+     Phase 13 can persist selected event IDs without putting transient expanded
+     table rows into the URL;
+   - retain existing URLs and keep transient expanded identity sets out of the
+     URL.
+3. `P12-03` — Landing product, data, and editorial contract
+   - define the Landing as the eventual default MTGO weekly overview inside
+     `/index.html`, switching independently between Standard and Modern while
+     Tabletop Major Events remains a separate product and data source;
+   - preserve the existing default view during P12-11 and P12-12, expose the
+     in-progress Landing only through an explicit shareable URL, and reserve
+     the bare-entry cutover for P12-16 after complete owner acceptance;
+   - freeze one format-scoped, versioned latest-only public document at
+     `stats/<format>/mtgo/landing/current.json`, discovered through the product
+     catalog, without a public weekly archive or historical-browsing index;
+   - define machine-generated structured facts, fixed i18n templates, and
+     manually reviewed editorial copy as three separate responsibilities;
+   - store Chinese and English editorial fields as localized alternatives, use
+     the existing site-wide language control, URL state, and fallback policy to
+     select one active language, and never render Chinese and English editorial
+     versions together;
+   - retain the latest complete natural week and DEC-083 additive provisional
+     refresh behavior without presenting provisional or sealed warnings;
+   - require current-week, previous-week, and four-week reference populations
+     to be classified in one reproducible run with the same rule set; record the
+     rule version or digest, and emit no change claim when comparable inputs
+     cannot be established;
+   - run a read-only shadow evaluation over the most recent eight to twelve
+     complete weeks available for both Standard and Modern before freezing the
+     rules; report the weekly observation count, environment-list row count,
+     new-deck and new-technology candidate count, empty-state frequency, and
+     representative key-card selections without writing production outputs;
+   - define `share_move`, `build_shift`, `new_entry`, and `exit` facts using
+     high-score share and raw counts; use `notable` for an absolute movement of
+     at least two percentage points and do not claim statistical significance;
+   - retain the owner-approved one-Top-8 minimum for a new-deck candidate and
+     freeze the exact prior-state rule before implementation;
+   - reuse the existing Weekly Pickup deviation and review workflow for
+     new-technology candidates unless a separately reviewed formula change is
+     approved;
+   - do not reuse the 20-match matchup warning as a 20-deck Landing filter;
+   - define catalog-driven availability so a future format without an admitted
+     Landing document falls back to its first available product rather than
+     requesting a missing file;
+   - define invalid generated Landing data as publication-blocking, while no
+     admitted events and no manually approved feature are separate valid empty
+     states; external card-image failure remains non-blocking;
+   - freeze the environment-list threshold, key-card selection and fallback,
+     editorial refresh, empty-state, direct-link, and mobile-content rules with
+     owner review before code begins.
+4. `P12-04` — Visual direction and durable design-system contract
+   - publish the durable repository authority at
+     `docs/FRONTEND_DESIGN_SYSTEM.md`, covering product personality,
+     typography, color, spacing, density, hierarchy, controls, panels, tables,
+     card images, responsive behavior, motion, and accessibility principles;
+   - compare the current rendered product with two coherent design directions
+     and obtain owner selection before production implementation;
+   - treat the selected Landing composition as the reference expression of the
+     system while keeping shared tokens suitable for all existing views;
+   - do not transmit repository content to an external design service without
+     separate owner authorization, and do not change production front-end
+     source in this design-contract task.
+5. `P12-05` — Shared visual foundation
+   - implement the accepted colors, type scale, spacing, focus, elevation,
+     panel, control, table, link, and responsive tokens in shared static assets;
+   - migrate the shared shell, navigation, format tabs, product tabs, notices,
+     and common loading containers first;
+   - preserve content order, data meaning, URLs, and product availability while
+     the remaining views migrate incrementally.
+6. `P12-06` — Correct chart semantics
+   - use accurate Chinese product and metric names;
    - replace rank-colored pie charts with aligned comparison graphics that do
-     not assign identity color by sorted position.
-4. `P12-04` — Product-specific freshness strip
-   - display only dates, event counts, and completeness supplied by the active
-     product;
-   - display unknown rather than inventing a common metric.
-5. `P12-05` — Readability and accessibility baseline
-   - cover contrast, type size, target size, focus, and unavailable-navigation
-     semantics.
-6. `P12-06` — Loading, failure, and retry model
+     not assign identity color by sorted position;
+   - let Landing composition colors express hierarchy or selection, not a
+     changing archetype identity, and keep labels and values authoritative.
+7. `P12-07` — Product-specific freshness strip
+   - display only dates, coverage, event counts, deck counts, and completeness
+     supplied by the active product;
+   - display unknown rather than inventing a common metric;
+   - keep DEC-083 provisional and sealed lifecycle state internal.
+8. `P12-08` — Readability and accessibility baseline
+   - cover contrast, type size, target size, focus, headings, landmarks,
+     reduced motion, and unavailable-navigation semantics;
+   - establish reusable accessible link or button behavior for future Landing
+     stacked-bar segments rather than hiding interactive children in one image
+     role.
+9. `P12-09` — Loading, failure, and retry model
    - separate successful caching from background refresh;
-   - evict or retry failed promises and add useful loading skeletons.
-7. `P12-07` — Large-matrix interaction
-   - add search, focused archetype, Top-N, and minimum-sample filters;
-   - use roving tabindex and directional-key navigation.
-8. `P12-08` — Mobile matrix and card-image interaction
-   - provide a single-archetype vertical opponent view;
-   - add a touch-friendly card image layer and failure placeholder.
-9. `P12-09` — Metadata and sharing
-   - add description, Open Graph, favicon, canonical URL, language memory, and
-     required Scryfall and Wizards attribution.
-10. `P12-10` — Cross-device closeout
-    - verify all five products, both languages, both public formats, desktop,
-      390px width, URL restoration, and zero application console errors.
+   - evict or retry failed promises and add useful text-first skeletons;
+   - reserve card-image dimensions so progressive image loading does not move
+     already readable content;
+   - keep the MTGO shell usable when the Landing document cannot be loaded by
+     offering retry and a deterministic route to the first available existing
+     product rather than rendering a blank default page;
+   - treat Scryfall image or preview unavailability as a bounded placeholder,
+     not as a blocker for readable product content;
+   - defer below-the-fold card images until they approach the viewport and use
+     bounded concurrent image loading so the Landing does not issue an
+     uncontrolled burst of third-party requests.
+10. `P12-10` — Landing weekly-facts producer and Pickup integration
+    - add the Schema-validated latest-only
+      `stats/<format>/mtgo/landing/current.json` document under the reviewed
+      manifest, catalog, workflow, production-candidate, and Pages-allowlist
+      boundaries;
+    - generate byte-deterministic structured changes, trends, raw counts,
+      selected key-card identities, source event IDs, and the common classifier
+      rule version or digest without generated Chinese or English prose;
+    - extend the existing format-scoped Weekly Pickup candidates and manual
+      publication fields for Landing headlines, positioning copy, and approved
+      featured items; do not add parallel root-level candidate configuration;
+    - refresh unreviewed provisional-week facts after additive late events,
+      preserve reviewed content for explicit re-review, and never auto-publish
+      an unreviewed candidate;
+    - produce a Schema-valid no-event document and a Schema-valid empty-feature
+      list when those are the truthful states; fail publication for malformed,
+      internally inconsistent, or missing required Landing output;
+    - exclude candidate, review-note, design, and other non-public working files
+      from the Pages artifact, and prove that only the admitted current document
+      is deployable;
+    - keep every pre-existing statistic, Pickup public document, rule,
+      comparison base, and protected `434455` byte unchanged unless its exact
+      extension was authorized in P12-03.
+11. `P12-11` — Landing weekly summary and environment structure
+    - render three to five structured weekly observations, the environment
+      composition strip, and the high-score-share structure list from the same
+      P12-10 document;
+    - show every archetype above the owner-approved high-score-share threshold,
+      show raw deck counts, display Top 8 share only as supporting information,
+      and do not apply a 20-deck exclusion;
+    - make the composition segments and list rows use the same archetype set and
+      the P12-02 shareable detail URL;
+    - render text before progressively loaded key-card images and provide a
+      useful no-event state;
+    - keep this view non-default and reachable through its explicit P12-02 URL
+      until the complete Landing is accepted in P12-16.
+12. `P12-12` — Landing curated new-deck and new-technology panel
+    - show at most two manually approved Weekly Pickup items with category,
+      archetype, editorial positioning, eight-card wall, supporting facts, and
+      a shareable full-deck link;
+    - render only the currently selected language, rerender the same item when
+      the existing Chinese or English control changes, and do not introduce a
+      side-by-side bilingual Landing mode;
+    - reuse the common card-image preview, placeholder, and failure behavior;
+    - show a stable-environment empty state when no item was approved and never
+      expose a pending-review state to users.
+13. `P12-13` — Large-matrix interaction
+    - add search, focused archetype, Top-N, and minimum-match filters;
+    - retain the established 20-match warning and use roving tabindex plus
+      directional-key navigation.
+14. `P12-14` — Mobile matrix and card-image interaction
+    - provide a single-archetype vertical opponent view;
+    - add a touch-friendly card image layer and failure placeholder;
+    - verify the selected Landing list-image treatment at 390px without hiding
+      required names, values, trends, or navigation.
+15. `P12-15` — Metadata and sharing
+    - add description, Open Graph, favicon, canonical URL, language memory, and
+      required Scryfall and Wizards attribution;
+    - provide appropriate Landing metadata without presenting machine facts as
+      human editorial claims.
+16. `P12-16` — Cross-device and visual-system closeout
+    - verify the Landing plus all five existing product views in Chinese and
+      English independently, both public MTGO formats, the protected Tabletop
+      product, desktop, 390px width, language switching, URL restoration, and
+      zero application console errors;
+    - after the complete Landing, empty states, failure fallback, direct links,
+      and Pages artifact are accepted, make it the bare `/index.html` MTGO
+      default while retaining every explicit existing product URL;
+    - verify that a catalog-supported format without Landing capability opens
+      its first available product and never requests `landing/current.json`;
+    - compare request count, transferred bytes, readable-content timing, image
+      request behavior, and layout stability with the P12-01 baseline; stop for
+      review on an unexplained material regression rather than inventing an
+      arbitrary pre-measurement limit;
+    - keep the default-product selection independently reversible and exercise
+      a local rollback that restores the prior statistics default without
+      deleting the Landing document or changing any explicit public URL;
+    - audit every migrated view against the accepted visual-system contract and
+      record any intentionally deferred component rather than silently leaving
+      a second visual language.
 
-This phase does not authorize changing the 20-match warning, migrating the
-Tabletop null threshold into generated data, default-collapsing low-sample
-results, fragmenting JSON or public paths, or adding a new trend product.
+This phase does not authorize changing the existing 20-match warning,
+migrating the Tabletop null threshold into generated data, merging MTGO and
+Tabletop statistics, claiming statistical significance from interval overlap,
+automatically publishing editorial candidates, presenting the DEC-083 internal
+week lifecycle as a user warning, or changing an established generated path.
+The only new public-data boundary is the format-scoped Landing product after
+separate P12-03 contract acceptance and P12-10 implementation authorization.
+Phase 12 publishes only the latest Landing document; it does not authorize
+historical Landing browsing or cross-classification-version trend analysis.
 
 ## Acceptance criteria
 
@@ -2771,13 +3028,34 @@ Phase 12 is complete when:
 
 - overview views avoid unnecessary large-document requests;
 - supported state survives sharing, reload, back, and forward navigation;
-- chart names, order, and colors do not imply false equivalence;
-- keyboard and mobile users can inspect large matrices without traversing
-  thousands of tab stops;
-- failure states can retry safely;
+- the selected visual system governs the Landing, shared shell, and every
+  migrated existing view without a required framework or build step;
+- the Landing answers what changed, what the current environment looks like,
+  and what new decks or technology were manually selected, using one
+  format-scoped structured source;
+- the bare MTGO entry changes to the Landing only in P12-16 after complete
+  acceptance, while existing explicit product links remain compatible;
+- machine facts, fixed translations, and human editorial copy remain separate,
+  and no unreviewed candidate reaches the public product;
+- no 20-deck filter or unsupported statistical-significance claim is introduced;
+- chart names, order, and colors do not imply false equivalence or changing
+  identity;
+- keyboard and mobile users can operate Landing links and inspect large
+  matrices without traversing thousands of tab stops;
+- failure states can retry safely and progressive images do not block readable
+  content or shift established layout;
+- weekly comparisons use one recorded classifier rule version, and unavailable
+  comparability produces no false environment-change claim;
 - real-browser acceptance passes across the required products, formats,
-  languages, and viewport sizes;
-- public JSON paths, statistical formulas, and `434455` bytes remain unchanged.
+  languages, and viewport sizes, with exactly one selected language rendered at
+  a time;
+- the Pages artifact contains the admitted latest Landing document but no
+  candidate, review, design, or other working file;
+- measured loading behavior has no unexplained material regression, and the
+  bare-entry Landing cutover has a verified reversible default-state rollback;
+- all pre-existing public JSON paths, statistical formulas, and protected
+  `434455` bytes remain unchanged, while the new Landing documents pass their
+  versioned Schema and production-publication boundaries.
 
 ---
 
@@ -2853,8 +3131,9 @@ requires a separate compatibility decision.
 5. When a second event is selected, switch to `all_constructed`; when selection
    returns to one event, restore its prior scope only if the catalog still
    declares that scope.
-6. Persist selected event identities in the shareable URL contract established
-   by Phase 12.
+6. Persist selected event identities through the canonical multi-event URL
+   representation reserved by P12-02; selected events are durable user state,
+   while transient expanded table rows remain outside the URL.
 7. Keep the production multi-event entry disabled until at least two compatible
    real events are approved. Synthetic contracts may prove the engineering
    capability but do not constitute real production acceptance.
@@ -2963,6 +3242,11 @@ sources while keeping MTGO and Tabletop inputs, outputs, statistics, catalogs,
 and product behavior separate. Depend on the engineering and front-end
 baselines established by Phases 10 through 12.
 
+Landing availability remains capability-driven. Pauper must either publish an
+admitted Landing product under the Phase 12 contract or fall back to its first
+available catalog product; enabling the format must not cause a request for a
+missing Landing document.
+
 ## Task sequence
 
 1. Add Pauper archetype rules.
@@ -2974,7 +3258,8 @@ baselines established by Phases 10 through 12.
 7. Register the approved Paupergeddon main event.
 8. Normalize and validate that event as `constructed_day2`.
 9. Generate event-specific Pauper statistics.
-10. Enable Pauper in both front ends.
+10. Enable Pauper in both front ends, declaring Landing capability only if its
+    reviewed Landing document is produced and admitted.
 
 ## Acceptance criteria
 
@@ -2986,6 +3271,8 @@ Phase 14 is complete when:
 - Pauper rules pass validation;
 - Standard and Modern regression tests pass;
 - front-end format selection is catalog-driven;
+- a format without Landing capability opens its first available product without
+  a missing-document request;
 - quality reports are available.
 
 ---
@@ -3002,6 +3289,10 @@ Use the established shared-classifier and dual-product process without copying
 or forking the Standard-only pipeline. Depend on the engineering and front-end
 baselines established by Phases 10 through 12.
 
+Pioneer Landing availability remains capability-driven. Front-end enablement
+must either admit a reviewed Landing document or fall back to the first
+available catalog product.
+
 ## Task sequence
 
 1. Add Pioneer archetype rules.
@@ -3012,7 +3303,8 @@ baselines established by Phases 10 through 12.
 6. Register an approved Pioneer Melee event.
 7. Normalize and validate the event.
 8. Generate event-specific Pioneer statistics.
-9. Enable Pioneer in both front ends.
+9. Enable Pioneer in both front ends, declaring Landing capability only when
+   the corresponding product is generated and admitted.
 
 ## Acceptance criteria
 
@@ -3023,6 +3315,8 @@ Phase 15 is complete when:
 - MTGO and Melee remain separate;
 - no copied Standard-only pipeline is introduced;
 - rules, tests, schemas, and catalogs are updated;
+- missing Landing capability falls back without requesting an unavailable
+  document;
 - prior-format regression tests pass.
 
 ---
@@ -3039,6 +3333,10 @@ Use the established shared-classifier and dual-product process for Legacy, and
 retain the approved Eternal Weekend main-event boundary. Depend on the
 engineering and front-end baselines established by Phases 10 through 12.
 
+Legacy Landing availability remains capability-driven. Front-end enablement
+must either admit a reviewed Landing document or fall back to the first
+available catalog product.
+
 ## Task sequence
 
 1. Add Legacy archetype rules.
@@ -3049,7 +3347,8 @@ engineering and front-end baselines established by Phases 10 through 12.
 6. Register an Eternal Weekend Legacy main event.
 7. Normalize and validate the event.
 8. Generate event-specific Legacy statistics.
-9. Enable Legacy in both front ends.
+9. Enable Legacy in both front ends, declaring Landing capability only when the
+   corresponding product is generated and admitted.
 
 ### Event restrictions
 
@@ -3071,6 +3370,8 @@ Phase 16 is complete when:
 - side events remain excluded;
 - shared Legacy archetype IDs are stable;
 - MTGO and Melee remain separate;
+- missing Landing capability falls back without requesting an unavailable
+  document;
 - prior-format regressions pass;
 - front-end catalogs are updated.
 
@@ -3251,8 +3552,9 @@ history or unverified compatibility entry points.
 
 - complete only the compatibility cleanup that remains after Phase 11 owner
   review, beginning with the DEC-078 draw-adjusted metric retirement;
-- publish current operator documentation for MTGO, Tabletop, storage, Pages,
-  workflows, schemas, rules, quality review, rollback, and recovery;
+- publish current operator documentation for MTGO, Tabletop, Landing and Weekly
+  Pickup editorial review, late-event re-review, storage, Pages, workflows,
+  schemas, rules, quality review, rollback, and recovery;
 - exercise the selected public-data and archive-storage design end to end;
 - run regression across every approved format and both product areas;
 - define long-term ownership, maintenance cadence, incident handling, and
@@ -3268,7 +3570,10 @@ history or unverified compatibility entry points.
    rollback evidence without silently changing an existing field's meaning.
 2. Reconcile the final list of other compatibility entry points and remove only
    those whose replacements and rollback paths are verified.
-3. Complete the operator runbooks and non-programmer maintenance instructions.
+3. Complete the operator runbooks and non-programmer maintenance instructions,
+   including weekly Landing and Pickup candidate review, publication, valid
+   empty states, additive late-event re-review, stale-content diagnosis, and
+   Landing fallback recovery.
 4. Perform backup restoration, workflow recovery, publication rollback, and
    Pages recovery drills.
 5. Exercise the production pipeline from approved source collection through
@@ -3288,8 +3593,9 @@ Phase 19 is complete when:
 - no production generator or retained front-end asset calculates a draw as
   half a win, and the sole published win-rate meaning is declared as
   `wins_over_valid_matches` under the migrated Schema contract;
-- written operations cover routine refresh, event addition, quality review,
-  schema migration, deployment, rollback, and recovery;
+- written operations cover routine refresh, event addition, Landing and Pickup
+  editorial review, late-event re-review, quality review, schema migration,
+  deployment, rollback, and recovery;
 - Pages, selected data storage, and production workflows pass an end-to-end
   recovery exercise;
 - all approved formats and both product areas pass their regression contracts;
@@ -3307,6 +3613,11 @@ Phase 19 is complete when:
 Evaluate a possible historical Environment Trends capability without treating
 it as part of Phase 12 or as approved product scope.
 
+Phase 12 publishes only a latest-state `landing/current.json`. That current
+document, its Git history, and the existing Weekly Pickup archive do not by
+themselves authorize historical Landing browsing or establish an authoritative
+cross-week trend series.
+
 ## Required work
 
 - identify an authoritative historical weekly snapshot source;
@@ -3314,6 +3625,8 @@ it as part of Phase 12 or as approved product scope.
 - define comparability across classification-rule changes;
 - determine required `docs/PROJECT_SCOPE.md` and
   `docs/STATISTICS_SPEC.md` changes;
+- decide whether immutable Landing-week retention is appropriate and how it
+  remains comparable across classification-rule and Schema versions;
 - decide whether the capability is an extension of the current Environment
   Trends product.
 
@@ -3328,7 +3641,9 @@ it as part of Phase 12 or as approved product scope.
 
 This candidate may enter the numbered roadmap only when the owner has approved
 its product scope, historical data source, missing-data rules, classification
-comparability policy, statistical specification changes, and maintenance cost.
+comparability policy, statistical specification changes, retention and
+migration policy, and maintenance cost. It must not treat Phase 12's
+latest-only document or Git history as an approved historical product source.
 
 ---
 
