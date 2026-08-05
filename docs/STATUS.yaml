@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/ops-production-pages-dispatch"
+  current_working_branch: "codex/pre-phase12-roadmap-planning"
   working_branch_status: "isolated_local_task_branch"
   status: "active"
   primary_language: "Python"
@@ -12,7 +12,7 @@ project:
 
 status_document:
   purpose: "Small machine-readable record of current project state and authorization."
-  last_updated: "2026-08-04"
+  last_updated: "2026-08-05"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   update_required_after_each_phase: true
@@ -73,48 +73,42 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "OPS-PRODUCTION-PAGES-DISPATCH"
-  name: "Deploy Pages after generated production data is published"
+  id: "PRE-P12-ROADMAP-REVISION"
+  name: "Revise Pre-Phase 12 readiness and Phase 12 Landing roadmap"
   status: "owner_accepted_publication_authorized"
-  authorized_on: "2026-08-04"
-  workspace: "C:/tmp/mtgo-data-ops-week-sealing-20260804-01"
-  branch: "codex/ops-production-pages-dispatch"
-  base_commit: "aa1fddeed3dc4cb0f63191e4190a8fa4cd831aa3"
-  task_type: "production_pages_dispatch_hotfix"
-  objective: "Ensure a successful generated-data publication deploys the verified current master tree to GitHub Pages."
+  authorized_on: "2026-08-05"
+  workspace: "C:/tmp/mtgo-data-prephase12-planning-20260805-01"
+  branch: "codex/pre-phase12-roadmap-planning"
+  base_commit: "870f4bdf6a805c6b6fb515c3cc34c525c2b31029"
+  task_type: "documentation_only_roadmap_revision"
+  objective: "Add measured Pre-Phase 12 readiness tasks and revise Phase 12 around a curated latest-state MTGO Landing product, durable visual system, and explicit compatibility, review, performance, and rollback boundaries."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - ".github/workflows/pages.yml"
-    - ".github/workflows/update.yml"
-    - "tests/test_pages_workflow.py"
-    - "tests/test_production_workflow.py"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DECISIONS.md"
+    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   protected_scope:
     code_changed: "none"
-    workflow_changed: "production publish dispatches allowlisted Pages only after a changed, verified master publication"
-    raw_or_generated_data_changed: "none in this hotfix"
+    workflow_changed: "none"
+    raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
-    frontend_source_changed: "none; only deployment freshness changes"
+    frontend_source_changed: "none"
     public_paths_changed: false
     event_434455_bytes_changed: false
-    production_dispatched: true
-    remote_write_performed: true
+    production_dispatched: false
+    remote_write_performed: false
   acceptance:
-    production_dispatch: "Only a changed publication dispatches pages.yml, after remote master verification."
-    pages_boundary: "Pull requests remain build-only; master push and explicit master dispatch use the same allowlisted artifact and protected deploy job."
-    frontend: "The deployed Modern W31 Top 8 index reports 12 events without new lifecycle messaging."
+    readiness: "P12-00-A through P12-00-C are separate planned tasks with measured retention and owner gates; none is authorized by this planning publication."
+    landing: "Phase 12 separates Landing contract, design system, shared visual foundation, latest-state producer, UI composition, curated Pickup integration, and final default-entry cutover."
+    boundaries: "The plan retains one active language, same-rule weekly comparison, catalog fallback, Pages allowlisting, measured performance review, and reversible default-state rollback."
   owner_acceptance: "accepted"
-  owner_accepted_on: "2026-08-04"
-  owner_publication_authorized_on: "2026-08-04"
-  owner_production_dispatch_authorized_on: "2026-08-04"
-  stop_point: "Commit, push, pull-request creation, CI monitoring, merge, and Pages verification are authorized to complete the accepted production publication outcome. Do not begin P12-01 or Phase 12."
+  owner_accepted_on: "2026-08-05"
+  owner_publication_authorized_on: "2026-08-05"
+  stop_point: "Commit, push, pull-request creation, CI monitoring, merge, and documentation publication are authorized for this roadmap revision. Do not begin P12-00-A, P12-01, or Phase 12."
 
 recent_completed_task:
   id: "P11-15"
@@ -131,7 +125,7 @@ recent_completed_task:
   result: "The Phase 8 application renderer was split into focused classic scripts under real-browser protection without changing public behavior, data, statistics, deployment architecture, or protected event 434455 bytes."
 
 current_repository_state:
-  baseline_commit: "aa1fddeed3dc4cb0f63191e4190a8fa4cd831aa3"
+  baseline_commit: "870f4bdf6a805c6b6fb515c3cc34c525c2b31029"
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -201,15 +195,15 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-01"
-  name: "View-level lazy loading"
+  id: "P12-00-A"
+  name: "Artifact-impact and owner-acceptance protocol"
   status: "planned_not_authorized"
-  production_change: true
+  production_change: false
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "This is the next roadmap item only. P11-15 does not authorize Phase 11 closeout, P12-01, or any Phase 12 implementation."
+  note: "This is the next roadmap item only. Publishing the roadmap revision does not authorize P12-00-A, P12-01, or any Phase 12 implementation."
 
 governance_baseline:
   status: "active_on_master"
@@ -244,8 +238,8 @@ publication_workflow_control:
   p8_08_authorized: false
 
 prohibited_next_actions:
-  - "Do not dispatch production except for the one owner-authorized post-merge retry of the failed MTGO update workflow."
-  - "Do not begin P12-01 or Phase 12, or start another task without separate owner authorization."
+  - "Do not dispatch production without separate owner authorization."
+  - "Do not begin P12-00-A, P12-01, or Phase 12, or start another task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."
