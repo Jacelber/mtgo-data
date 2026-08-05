@@ -73,22 +73,22 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "PRE-P12-ROADMAP-REVISION"
-  name: "Revise Pre-Phase 12 readiness and Phase 12 Landing roadmap"
+  id: "P12-00-A"
+  name: "Artifact-impact and owner-acceptance protocol"
   status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-05"
-  workspace: "C:/tmp/mtgo-data-prephase12-planning-20260805-01"
-  branch: "codex/pre-phase12-roadmap-planning"
-  base_commit: "870f4bdf6a805c6b6fb515c3cc34c525c2b31029"
-  task_type: "documentation_only_roadmap_revision"
-  objective: "Add measured Pre-Phase 12 readiness tasks and revise Phase 12 around a curated latest-state MTGO Landing product, durable visual system, and explicit compatibility, review, performance, and rollback boundaries."
+  workspace: "C:/tmp/mtgo-data-p12-00-a-20260805-01"
+  branch: "codex/p12-00-a-artifact-acceptance"
+  base_commit: "70dbc27351d8f09b1fc58177f7c81495618580fc"
+  task_type: "documentation_only_acceptance_protocol"
+  objective: "Make declared artifact impact and human-readable owner evidence part of the existing gate process without weakening strict committed-baseline validation, changing production behavior, or beginning Phase 12 implementation."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "docs/ROADMAP.md"
+    - "docs/DEVELOPMENT_WORKFLOW.md"
     - "docs/STATUS.yaml"
   protected_scope:
     code_changed: "none"
@@ -102,13 +102,13 @@ current_task:
     production_dispatched: false
     remote_write_performed: false
   acceptance:
-    readiness: "P12-00-A through P12-00-C are separate planned tasks with measured retention and owner gates; none is authorized by this planning publication."
-    landing: "Phase 12 separates Landing contract, design system, shared visual foundation, latest-state producer, UI composition, curated Pickup integration, and final default-entry cutover."
-    boundaries: "The plan retains one active language, same-rule weekly comparison, catalog fallback, Pages allowlisting, measured performance review, and reversible default-state rollback."
+    protocol: "Gate 1 declares artifact impact; Gate 3 exposes a focused human-readable comparison; Gate 4 remains byte-strict; Gate 5 presents disclosed evidence matched to the declared impact."
+    pages: "The workflow documentation records DEC-084's explicit Pages dispatch after a changed production data publication without changing any workflow file."
+    boundaries: "No code, test, workflow, data, statistic, schema, frontend, public-path, or committed-baseline snapshot change is allowed."
   owner_acceptance: "accepted"
   owner_accepted_on: "2026-08-05"
   owner_publication_authorized_on: "2026-08-05"
-  stop_point: "Commit, push, pull-request creation, CI monitoring, merge, and documentation publication are authorized for this roadmap revision. Do not begin P12-00-A, P12-01, or Phase 12."
+  stop_point: "Commit, push, pull-request creation, CI monitoring, merge, and documentation publication are authorized for P12-00-A. Do not dispatch production, begin P12-00-B, P12-00-C, P12-01, or Phase 12."
 
 recent_completed_task:
   id: "P11-15"
@@ -195,15 +195,15 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-00-A"
-  name: "Artifact-impact and owner-acceptance protocol"
+  id: "P12-00-B"
+  name: "Measured ordinary-pytest parallelization prototype"
   status: "planned_not_authorized"
   production_change: false
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "This is the next roadmap item only. Publishing the roadmap revision does not authorize P12-00-A, P12-01, or any Phase 12 implementation."
+  note: "This is the next planned roadmap item only. Starting P12-00-A does not authorize P12-00-B, P12-00-C, P12-01, or any Phase 12 implementation."
 
 governance_baseline:
   status: "active_on_master"
@@ -239,7 +239,7 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not begin P12-00-A, P12-01, or Phase 12, or start another task without separate owner authorization."
+  - "Do not begin P12-00-B, P12-00-C, P12-01, or Phase 12, or start another task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."
