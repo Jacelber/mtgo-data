@@ -1,7 +1,9 @@
 from ci_master_admission import (
     AGGREGATE_JOB,
     AdmissionDecision,
+    decide_from_environment,
     decide_master_push,
+    decide_pull_request,
     validation_subject_step,
 )
 
@@ -10,6 +12,40 @@ REPOSITORY_API = "https://api.github.test/repos/owner/repo"
 BASE_SHA = "a" * 40
 HEAD_SHA = "b" * 40
 MERGE_SHA = "c" * 40
+
+
+def pull_request_event(
+    *,
+    body="<!-- artifact-impact: user_visible_ui -->",
+    draft=True,
+    action="synchronize",
+):
+    return {
+        "action": action,
+        "pull_request": {
+            "number": 184,
+            "body": body,
+            "draft": draft,
+        },
+    }
+
+
+def decide_pr(files, **event_overrides):
+    event = pull_request_event(**event_overrides)
+    files_url = f"{REPOSITORY_API}/pulls/184/files?per_page=100&page=1"
+
+    def fetch(url):
+        assert url == files_url
+        if isinstance(files, Exception):
+            raise files
+        return files
+
+    return decide_pull_request(
+        event_payload=event,
+        repository="owner/repo",
+        fetch_json=fetch,
+        api_url="https://api.github.test",
+    )
 
 
 def valid_responses():
@@ -161,3 +197,129 @@ def test_api_failure_is_fail_safe_full_validation():
     decision = decide(responses)
     assert decision.mode == "full"
     assert "temporary_API_failure" in decision.reason
+
+
+def test_draft_safe_docs_only_uses_focused_feedback():
+    decision = decide_pr(
+        [{"filename": "docs/audits/example.md", "status": "modified"}],
+        body="<!-- artifact-impact: internal_diagnostics -->",
+    )
+    assert decision == AdmissionDecision(
+        mode="draft-docs",
+        reason="draft_safe_docs",
+    )
+
+
+def test_draft_safe_user_visible_ui_uses_browser_feedback():
+    decision = decide_pr(
+        [
+            {"filename": "assets/js/phase8/app.js", "status": "modified"},
+            {
+                "filename": "tests/browser/production-pages.spec.js",
+                "status": "modified",
+            },
+        ]
+    )
+    assert decision == AdmissionDecision(
+        mode="draft-ui",
+        reason="draft_safe_user_visible_ui",
+    )
+
+
+def test_draft_backend_or_unknown_path_falls_back_to_full():
+    decision = decide_pr(
+        [{"filename": "src/mtgmeta/statistics.py", "status": "modified"}]
+    )
+    assert decision.mode == "full"
+    assert "path_not_fast_allowlisted" in decision.reason
+
+
+def test_draft_workflow_change_falls_back_to_full():
+    decision = decide_pr(
+        [{"filename": ".github/workflows/ci.yml", "status": "modified"}]
+    )
+    assert decision.mode == "full"
+    assert "path_not_fast_allowlisted" in decision.reason
+
+
+def test_draft_delete_and_rename_fall_back_to_full():
+    removed = decide_pr(
+        [{"filename": "assets/js/phase8/app.js", "status": "removed"}]
+    )
+    renamed = decide_pr(
+        [
+            {
+                "filename": "assets/js/phase8/application.js",
+                "previous_filename": "assets/js/phase8/app.js",
+                "status": "renamed",
+            }
+        ]
+    )
+    assert removed.mode == "full"
+    assert "removed" in removed.reason
+    assert renamed.mode == "full"
+    assert "renamed" in renamed.reason
+
+
+def test_missing_invalid_or_conflicting_declaration_is_fail_safe_full():
+    missing = decide_pr(
+        [{"filename": "assets/js/phase8/app.js", "status": "modified"}],
+        body="No declaration",
+    )
+    invalid = decide_pr(
+        [{"filename": "assets/js/phase8/app.js", "status": "modified"}],
+        body="<!-- artifact-impact: cosmetic -->",
+    )
+    conflicting = decide_pr(
+        [{"filename": "assets/js/phase8/app.js", "status": "modified"}],
+        body=(
+            "<!-- artifact-impact: user_visible_ui -->\n"
+            "<!-- artifact-impact: internal_diagnostics -->"
+        ),
+    )
+    assert missing.mode == "full"
+    assert "artifact_impact_declaration" in missing.reason
+    assert invalid.mode == "full"
+    assert "unknown_artifact_impact" in invalid.reason
+    assert conflicting.mode == "full"
+    assert "artifact_impact_declaration" in conflicting.reason
+
+
+def test_classification_api_failure_is_fail_safe_full():
+    decision = decide_pr(RuntimeError("files API unavailable"))
+    assert decision.mode == "full"
+    assert "files_API_unavailable" in decision.reason
+
+
+def test_ready_pr_events_always_use_full_validation_without_file_api():
+    for action in ("opened", "synchronize", "reopened", "ready_for_review"):
+        decision = decide_pr(RuntimeError("must not fetch files"), draft=False, action=action)
+        assert decision == AdmissionDecision(
+            mode="full",
+            reason=f"ready_pull_request:{action}",
+        )
+
+
+def test_converted_to_draft_restores_safe_fast_classification():
+    decision = decide_pr(
+        [{"filename": "assets/css/main.css", "status": "modified"}],
+        action="converted_to_draft",
+    )
+    assert decision.mode == "draft-ui"
+
+
+def test_authoritative_statistics_document_is_not_safe_docs_only():
+    decision = decide_pr(
+        [{"filename": "docs/STATISTICS_SPEC.md", "status": "modified"}],
+        body="<!-- artifact-impact: internal_diagnostics -->",
+    )
+    assert decision.mode == "full"
+    assert "path_not_fast_allowlisted" in decision.reason
+
+
+def test_workflow_dispatch_remains_full_validation(monkeypatch):
+    monkeypatch.setenv("GITHUB_EVENT_NAME", "workflow_dispatch")
+    assert decide_from_environment() == AdmissionDecision(
+        mode="full",
+        reason="event:workflow_dispatch",
+    )

@@ -1,8 +1,9 @@
-"""Fail-safe admission decision for post-merge master validation.
+"""Fail-safe admission decisions for pull requests and master validation.
 
-Pull requests and manual runs always execute the full validation suite. A push
-to master may use the lighter confirmation path only when GitHub metadata proves
-that the exact two-parent merge was already validated by this workflow.
+Ready pull requests and ambiguous Draft pull requests execute the full suite.
+Strictly allowlisted Draft changes may use focused feedback. A push to master
+may use the lighter confirmation path only when GitHub metadata proves that the
+exact two-parent merge was already validated by this workflow.
 """
 
 from __future__ import annotations
@@ -28,6 +29,24 @@ REQUIRED_SUCCESSFUL_JOBS = {
     AGGREGATE_JOB,
 }
 SUBJECT_PREFIX = "Validated merge subject:"
+ARTIFACT_IMPACTS = frozenset(
+    {
+        "none",
+        "internal_diagnostics",
+        "user_visible_ui",
+        "statistical_json_structure",
+        "public_path",
+    }
+)
+ARTIFACT_IMPACT_PATTERN = re.compile(
+    r"<!--\s*artifact-impact:\s*([^<>]+?)\s*-->", re.IGNORECASE
+)
+SAFE_DOC_PREFIXES = ("docs/audits/", "docs/history/")
+SAFE_UI_SUFFIXES = {
+    "assets/js/": ".js",
+    "assets/css/": ".css",
+    "tests/browser/": ".js",
+}
 
 
 @dataclass(frozen=True)
@@ -39,6 +58,125 @@ class AdmissionDecision:
 
 
 FetchJson = Callable[[str], object]
+
+
+def _fail_safe_reason(exc: Exception) -> str:
+    detail = re.sub(
+        r"[^A-Za-z0-9_.:-]+", "_", f"{type(exc).__name__}:{exc}"
+    )[:160]
+    return f"fail_safe:{detail}"
+
+
+def _parse_artifact_impacts(body: object) -> frozenset[str]:
+    if not isinstance(body, str):
+        raise ValueError("missing_artifact_impact_declaration")
+    declarations = ARTIFACT_IMPACT_PATTERN.findall(body)
+    if len(declarations) != 1:
+        raise ValueError("expected_one_artifact_impact_declaration")
+    values = [value.strip().lower() for value in declarations[0].split(",")]
+    if not values or any(not value for value in values) or len(values) != len(set(values)):
+        raise ValueError("invalid_artifact_impact_declaration")
+    unknown = sorted(set(values) - ARTIFACT_IMPACTS)
+    if unknown:
+        raise ValueError(f"unknown_artifact_impact:{','.join(unknown)}")
+    return frozenset(values)
+
+
+def _pull_request_files(
+    *, repository_api: str, pull_request: int, fetch_json: FetchJson
+) -> list[dict]:
+    payload = fetch_json(
+        f"{repository_api}/pulls/{pull_request}/files?per_page=100&page=1"
+    )
+    if not isinstance(payload, list) or not payload:
+        raise ValueError("pull_request_files_missing")
+    if len(payload) >= 100:
+        raise ValueError("pull_request_files_require_pagination")
+    if not all(isinstance(item, dict) for item in payload):
+        raise ValueError("pull_request_file_entry_invalid")
+    return payload
+
+
+def _validated_path(item: dict) -> str:
+    path = item.get("filename")
+    status = item.get("status")
+    if not isinstance(path, str) or not path or "\\" in path or path.startswith("/"):
+        raise ValueError("pull_request_path_invalid")
+    if ".." in path.split("/"):
+        raise ValueError("pull_request_path_invalid")
+    if item.get("previous_filename") or status not in {"added", "modified"}:
+        raise ValueError(f"pull_request_file_status:{status or 'missing'}")
+    return path
+
+
+def _is_safe_doc_path(path: str) -> bool:
+    return path.endswith(".md") and path.startswith(SAFE_DOC_PREFIXES)
+
+
+def _is_safe_ui_path(path: str) -> bool:
+    return any(
+        path.startswith(prefix) and path.endswith(suffix)
+        for prefix, suffix in SAFE_UI_SUFFIXES.items()
+    )
+
+
+def decide_pull_request(
+    *,
+    event_payload: object,
+    repository: str,
+    fetch_json: FetchJson,
+    api_url: str = "https://api.github.com",
+) -> AdmissionDecision:
+    """Classify Draft feedback without weakening Ready pull-request validation."""
+
+    try:
+        if not isinstance(event_payload, dict):
+            raise ValueError("pull_request_event_missing")
+        pull_request = event_payload.get("pull_request")
+        if not isinstance(pull_request, dict):
+            raise ValueError("pull_request_payload_missing")
+        action = event_payload.get("action")
+        if not isinstance(action, str) or not action:
+            raise ValueError("pull_request_action_missing")
+        draft = pull_request.get("draft")
+        if not isinstance(draft, bool):
+            raise ValueError("pull_request_draft_state_missing")
+        if not draft:
+            return AdmissionDecision(
+                mode="full", reason=f"ready_pull_request:{action}"
+            )
+
+        impacts = _parse_artifact_impacts(pull_request.get("body"))
+        number = pull_request.get("number", event_payload.get("number"))
+        if not isinstance(number, int):
+            raise ValueError("pull_request_number_missing")
+        if not repository:
+            raise ValueError("repository_missing")
+        repository_api = f"{api_url.rstrip('/')}/repos/{repository}"
+        files = _pull_request_files(
+            repository_api=repository_api,
+            pull_request=number,
+            fetch_json=fetch_json,
+        )
+        paths = [_validated_path(item) for item in files]
+
+        if impacts == {"internal_diagnostics"} and all(
+            _is_safe_doc_path(path) for path in paths
+        ):
+            return AdmissionDecision(
+                mode="draft-docs", reason="draft_safe_docs"
+            )
+        if impacts == {"user_visible_ui"} and all(
+            _is_safe_ui_path(path) for path in paths
+        ):
+            return AdmissionDecision(
+                mode="draft-ui", reason="draft_safe_user_visible_ui"
+            )
+        return AdmissionDecision(
+            mode="full", reason="draft_requires_full:path_not_fast_allowlisted"
+        )
+    except Exception as exc:
+        return AdmissionDecision(mode="full", reason=_fail_safe_reason(exc))
 
 
 def validation_subject_step(
@@ -220,12 +358,9 @@ def decide_master_push(
                 )
         raise ValueError("no successful full validation matched the exact merge")
     except Exception as exc:
-        detail = re.sub(
-            r"[^A-Za-z0-9_.:-]+", "_", f"{type(exc).__name__}:{exc}"
-        )[:160]
         return AdmissionDecision(
             mode="full",
-            reason=f"fail_safe:{detail}",
+            reason=_fail_safe_reason(exc),
         )
 
 
@@ -248,6 +383,25 @@ def github_fetcher(token: str) -> FetchJson:
 
 def decide_from_environment() -> AdmissionDecision:
     event_name = os.environ.get("GITHUB_EVENT_NAME", "")
+    if event_name == "pull_request":
+        repository = os.environ.get("GITHUB_REPOSITORY", "")
+        token = os.environ.get("GITHUB_TOKEN", "")
+        event_path = os.environ.get("GITHUB_EVENT_PATH", "")
+        if not repository or not token or not event_path:
+            return AdmissionDecision(
+                mode="full", reason="missing_pull_request_context"
+            )
+        try:
+            with Path(event_path).open(encoding="utf-8") as handle:
+                event_payload = json.load(handle)
+        except Exception as exc:
+            return AdmissionDecision(mode="full", reason=_fail_safe_reason(exc))
+        return decide_pull_request(
+            event_payload=event_payload,
+            repository=repository,
+            fetch_json=github_fetcher(token),
+            api_url=os.environ.get("GITHUB_API_URL", "https://api.github.com"),
+        )
     if event_name != "push":
         return AdmissionDecision(mode="full", reason=f"event:{event_name or 'unknown'}")
     repository = os.environ.get("GITHUB_REPOSITORY", "")
@@ -289,7 +443,7 @@ def main() -> int:
     _append_lines(
         args.summary,
         [
-            "## Master validation admission",
+            "## CI validation admission",
             "",
             f"- Mode: `{decision.mode}`",
             f"- Reason: `{decision.reason}`",

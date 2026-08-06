@@ -7,22 +7,27 @@ and developer working on this repository. It defines stable operating rules;
 it does not duplicate the full product, statistics, architecture, or current
 task specifications.
 
-Before analyzing or changing the repository, read these documents completely
-and in this order:
+Before analyzing or changing the repository, always read `AGENTS.md`,
+`docs/STATUS.yaml`, the current task and phase subsections of
+`docs/ROADMAP.md`, and the relevant Gate and authorization sections of
+`docs/DEVELOPMENT_WORKFLOW.md`. Then expand the reading set according to the
+approved paths and artifact impact:
 
-1. `AGENTS.md`
-2. `docs/PROJECT_SCOPE.md`
-3. `docs/STATISTICS_SPEC.md`
-4. `docs/DATA_ARCHITECTURE.md`
-5. `docs/ROADMAP.md`
-6. `docs/DECISIONS.md`
-7. `docs/STATUS.yaml`
-8. `docs/DEVELOPMENT_WORKFLOW.md`
+- read `docs/PROJECT_SCOPE.md` for product-scope or navigation work;
+- read `docs/STATISTICS_SPEC.md` for statistical code, formulas, semantics, or
+  statistical artifacts;
+- read `docs/DATA_ARCHITECTURE.md` for data, Schemas, public paths, production,
+  privacy, or retention boundaries; and
+- read only the directly relevant entries in `docs/DECISIONS.md`.
 
-If they conflict, the earlier document in this list controls. `PROJECT_NOTES.md`
-and files under `docs/history/` are historical evidence, not current
-specifications. Existing code describes the current implementation, not
-necessarily the approved target.
+Read a wider authoritative set when an authoritative document itself changes,
+the impact is unclear, or the task requires the highest-strength process. A
+file is not low risk merely because it is under `docs/`. When multiple
+documents apply, authority remains, in order: `AGENTS.md`, project scope,
+statistics specification, data architecture, roadmap, decisions, status, then
+development workflow. `PROJECT_NOTES.md` and files under `docs/history/` are
+historical evidence, not current specifications. Existing code describes the
+current implementation, not necessarily the approved target.
 
 `docs/STATUS.yaml` is the live source of truth for the current phase, current
 task, blockers, authorization, and prohibited next actions. Historical task
