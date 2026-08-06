@@ -148,7 +148,9 @@ function sortedArchetypes(archetypes) {
 
 async function statsView() {
   const { meta, range, decks, completeness } = await MtgoController
-    .loadStatistics(state.format, state.statsRange);
+    .loadStatistics(state.format, state.statsRange, {
+      includeDecks: Boolean(state.detailIdentity),
+    });
   const archetypes = sortedArchetypes(range.archetypes);
   const identityNames = new Map();
   range.archetypes.forEach(parent => {
@@ -314,7 +316,9 @@ function top8PlacementDetail() {
 async function top8View() {
   const indexPath = productEntry().path;
   const { index, weekEntry, top8, bases } = await MtgoController
-    .loadTop8(indexPath, state.top8WeekFile);
+    .loadTop8(indexPath, state.top8WeekFile, {
+      includeBases: Boolean(state.top8Detail),
+    });
   state.top8WeekFile = weekEntry.file;
   currentContext = { top8Index: index, top8, bases };
   return `<section class="source-note"><p>${t("source.top8")}</p></section>

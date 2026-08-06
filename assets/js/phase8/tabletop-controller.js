@@ -83,7 +83,7 @@
       quality,
       tabletopDecks,
       mtgoDecks,
-    ];
+    ].filter(Boolean);
     if (
       !eventFormat
       || requestedFormat !== eventFormat
@@ -94,18 +94,30 @@
     return eventFormat;
   }
 
-  async function loadEvent(indexPath, selectedEventId, format, mtgoController) {
+  async function loadEvent(
+    indexPath,
+    selectedEventId,
+    format,
+    mtgoController,
+    { includeMatchup = false, includeDecks = false } = {}
+  ) {
     const index = await client.fetchJson(indexPath);
     const eventEntry = index.events.find(item => item.event_id === selectedEventId)
       || index.events[0];
     if (!eventEntry) throw new Error("实体大赛目录中没有可用赛事。");
 
     const base = Runtime.dirname(indexPath);
-    const eventPaths = ["meta", "overview", "matchup", "quality", "decks"]
-      .map(key => Runtime.joinPath(base, eventEntry[key]));
     const [meta, overview, matchup, quality, tabletopDecks, mtgoDecks] = await Promise.all([
-      ...eventPaths.map(path => client.fetchJson(path)),
-      mtgoController.loadComparisonDecks(format),
+      client.fetchJson(Runtime.joinPath(base, eventEntry.meta)),
+      client.fetchJson(Runtime.joinPath(base, eventEntry.overview)),
+      includeMatchup
+        ? client.fetchJson(Runtime.joinPath(base, eventEntry.matchup))
+        : null,
+      client.fetchJson(Runtime.joinPath(base, eventEntry.quality)),
+      includeDecks
+        ? client.fetchJson(Runtime.joinPath(base, eventEntry.decks))
+        : null,
+      includeDecks ? mtgoController.loadComparisonDecks(format) : null,
     ]);
     const eventFormat = resolveEventFormat({
       requestedFormat: format,
