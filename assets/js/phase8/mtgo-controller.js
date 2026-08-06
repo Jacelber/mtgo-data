@@ -11,12 +11,12 @@
     return `stats/${format}/mtgo`;
   }
 
-  async function loadStatistics(format, weeks) {
+  async function loadStatistics(format, weeks, { includeDecks = false } = {}) {
     const base = rootPath(format);
     const [meta, range, decks, completeness] = await Promise.all([
       client.fetchJson(`${base}/meta.json`),
       client.fetchJson(`${base}/range_${weeks}w.json`),
-      client.fetchJson(`${base}/decks_${weeks}w.json`),
+      includeDecks ? client.fetchJson(`${base}/decks_${weeks}w.json`) : null,
       client.fetchJson(`${base}/completeness/${weeks}w.json`),
     ]);
     return { meta, range, decks, completeness };
@@ -31,7 +31,7 @@
     return { document, completeness };
   }
 
-  async function loadTop8(indexPath, selectedFile) {
+  async function loadTop8(indexPath, selectedFile, { includeBases = false } = {}) {
     const index = await client.fetchJson(indexPath);
     const weekEntry = index.weeks.find(item => item.file === selectedFile)
       || index.weeks[0];
@@ -39,7 +39,9 @@
     const base = Runtime.dirname(indexPath);
     const [top8, bases] = await Promise.all([
       client.fetchJson(Runtime.joinPath(base, weekEntry.file)),
-      client.fetchJson(Runtime.joinPath(base, weekEntry.comparison_bases_file)),
+      includeBases
+        ? client.fetchJson(Runtime.joinPath(base, weekEntry.comparison_bases_file))
+        : null,
     ]);
     return { index, weekEntry, top8, bases };
   }

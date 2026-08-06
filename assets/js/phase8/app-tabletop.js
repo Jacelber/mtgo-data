@@ -278,7 +278,12 @@ async function tabletopView() {
     indexPath,
     state.tabletopEventId,
     state.format,
-    MtgoController
+    MtgoController,
+    {
+      includeMatchup: state.tabletopView === "matchup",
+      includeDecks: state.tabletopView === "overview"
+        && Boolean(state.tabletopDetailIdentity),
+    }
   );
   state.tabletopEventId = eventEntry.event_id;
   const catalogEventIds = new Set(index.events.map(item => item.event_id));
