@@ -38,7 +38,7 @@ def test_live_status_is_small_current_state_and_points_to_history():
     assert live_status_policy_errors(status_bytes) == []
     assert status["status_document"]["live_state_only"] is True
     assert status["status_document"]["history_policy"].strip()
-    assert status["current_phase"]["id"] == 11
+    assert status["current_phase"]["id"] == 12
     assert {"id", "name", "authorization", "stop_point"} <= set(status["current_task"])
     assert set(status["current_task"]["authorization"]) == {
         "local_implementation",
