@@ -28,7 +28,16 @@ def test_triggers_are_review_and_validation_only():
     triggers = workflow["on"]
     assert set(triggers) == {"pull_request", "push", "workflow_dispatch"}
     assert triggers["push"] == {"branches": ["master"]}
-    assert triggers["pull_request"] == {}
+    assert triggers["pull_request"] == {
+        "types": [
+            "opened",
+            "synchronize",
+            "reopened",
+            "ready_for_review",
+            "converted_to_draft",
+            "edited",
+        ]
+    }
     assert triggers["workflow_dispatch"] == {}
 
 
@@ -48,6 +57,7 @@ def test_permissions_and_concurrency_are_least_privilege():
 def test_execution_jobs_are_bounded_and_use_current_official_actions():
     jobs = load_workflow()["jobs"]
     assert jobs["admission"]["timeout-minutes"] == "5"
+    assert jobs["draft-feedback"]["timeout-minutes"] == "10"
     assert jobs["static-validation"]["timeout-minutes"] == "10"
     assert jobs["pytest"]["timeout-minutes"] == "30"
     assert jobs["browser-validation"]["timeout-minutes"] == "10"
@@ -135,6 +145,7 @@ def test_static_validation_and_aggregate_check_are_complete():
     assert aggregate["if"] == "always()"
     assert aggregate["needs"] == [
         "admission",
+        "draft-feedback",
         "static-validation",
         "pytest",
         "browser-validation",
@@ -145,6 +156,7 @@ def test_static_validation_and_aggregate_check_are_complete():
     command = aggregate["steps"][1]["run"]
     assert "needs.admission.result" in command
     assert "needs.admission.outputs.mode" in command
+    assert "needs.draft-feedback.result" in command
     assert "needs.static-validation.result" in command
     assert "needs.pytest.result" in command
     assert "needs.browser-validation.result" in command
@@ -161,14 +173,20 @@ def test_master_admission_is_fail_safe_and_full_suite_is_default():
     assert classify["env"] == {"GITHUB_TOKEN": "${{ github.token }}"}
 
     assert jobs["static-validation"]["needs"] == "admission"
+    assert jobs["draft-feedback"]["needs"] == "admission"
     assert jobs["pytest"]["needs"] == "admission"
     assert jobs["browser-validation"]["needs"] == "admission"
     assert jobs["static-validation"]["if"] == (
         "needs.admission.outputs.mode == 'full'"
     )
     assert jobs["pytest"]["if"] == "needs.admission.outputs.mode == 'full'"
+    assert jobs["draft-feedback"]["if"] == (
+        "needs.admission.outputs.mode == 'draft-docs' || "
+        "needs.admission.outputs.mode == 'draft-ui'"
+    )
     assert jobs["browser-validation"]["if"] == (
-        "needs.admission.outputs.mode == 'full'"
+        "needs.admission.outputs.mode == 'full' || "
+        "needs.admission.outputs.mode == 'draft-ui'"
     )
     assert jobs["post-merge-confirmation"]["if"] == (
         "needs.admission.outputs.mode == 'pr-confirmation'"
@@ -196,3 +214,47 @@ def test_workflow_contains_no_secret_or_token_expression():
     text = WORKFLOW.read_text(encoding="utf-8").lower()
     assert "secrets." not in text
     assert text.count("github.token") == 1
+
+
+def test_draft_feedback_is_focused_and_full_ready_jobs_remain_unchanged():
+    jobs = load_workflow()["jobs"]
+    draft_steps = jobs["draft-feedback"]["steps"]
+    draft_commands = "\n".join(step.get("run", "") for step in draft_steps)
+    draft_uses = {step.get("uses") for step in draft_steps}
+
+    assert "actions/checkout@v7.0.0" in draft_uses
+    assert "actions/setup-python@v6.3.0" in draft_uses
+    assert "actions/setup-node@v6" in draft_uses
+    assert "validate_repository.py" in draft_commands
+    assert "tests/test_documentation_history.py" in draft_commands
+    assert "validate_rules.py" not in draft_commands
+    assert "validate_schemas.py" not in draft_commands
+    assert "-m committed_baseline" not in draft_commands
+
+    full_commands = "\n".join(
+        step.get("run", "")
+        for job_name in ("static-validation", "pytest", "browser-validation")
+        for step in jobs[job_name]["steps"]
+    )
+    for expected in (
+        "python -B -m pytest",
+        "validate_rules.py",
+        "validate_schemas.py",
+        "python -B -m ruff check src",
+        "python -B -m mypy",
+        "validate_repository.py",
+        "npm run test:browser",
+    ):
+        assert expected in full_commands
+    marker_expressions = {
+        item["marker_expression"]
+        for item in jobs["pytest"]["strategy"]["matrix"]["include"]
+    }
+    assert marker_expressions == {"not committed_baseline", "committed_baseline"}
+
+
+def test_aggregate_accepts_only_the_four_explicit_execution_paths():
+    command = load_workflow()["jobs"]["validate"]["steps"][1]["run"]
+    for mode in ("full", "draft-docs", "draft-ui", "pr-confirmation"):
+        assert f'= "{mode}"' in command
+    assert "Unexpected or incomplete validation path." in command

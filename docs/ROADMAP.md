@@ -2747,27 +2747,29 @@ authorize any readiness task or Phase 12 implementation.
      that impact;
    - reconcile the Pages workflow description with the accepted production
      publication dispatch behavior recorded by DEC-084.
-2. `P12-00-B` — Measured ordinary-pytest parallelization prototype
-   - record matched before-and-after pull-request timing evidence;
-   - prototype only the ordinary pytest shard with fixed bounded parallelism,
-     initially `-n 2 --dist worksteal`;
-   - keep the committed-baseline shard serial and do not add path filters for
-     Playwright, `node --check`, actionlint, public-product facts, Schemas, or
-     compatibility validation;
-   - retain `pytest-xdist` only if the prototype saves at least 60 seconds in
-     the ordinary shard without flakiness, shared-state leakage, or a longer
-     end-to-end pull-request critical path; otherwise remove the prototype and
-     record the measured no-change result.
-3. `P12-00-C` — Lightweight governance closeout
-   - add a fast repository check that keeps `docs/STATUS.yaml` at or below 16
-     KiB and requires `live_state_only: true` plus a non-empty
-     `history_policy`;
-   - preserve DEC-067 and add a new decision closing P10-05 without rewriting
-     history at the current repository size;
-   - require a fresh evaluation, not an automatic rewrite, if the Git pack
-     exceeds 100 MiB, the median of three controlled clean clones exceeds 30
-     seconds, a valid privacy or legal removal request arises, or an approved
-     current public path is retired with a verified compatibility successor.
+2. `P12-00-B` — CI feedback-time optimization and governance closeout
+   - route strictly allowlisted Draft documentation and user-visible UI changes
+     to focused feedback while every Ready pull request retains the complete
+     ordinary pytest, committed-baseline, Schema/rules, Ruff, mypy, Node,
+     Playwright, and repository validation path;
+   - keep one stable aggregate check, preserve exact-merge confirmation on
+     `master`, and fail safe to complete validation for missing, ambiguous, or
+     higher-impact evidence;
+   - replace mandatory full-document rereading with task-scoped authoritative
+     reading, permit bounded authorization batches, and keep ordinary task
+     evidence in pull requests and Git while STATUS remains live state only;
+   - measure Draft and Ready timing after the split. Do not introduce xdist in
+     this task. Re-evaluate ordinary-pytest parallelism only if it remains the
+     principal bottleneck; abandon it if measured improvement is below about
+     30 percent, test semantics change, ordering dependencies appear, or flaky
+     behavior increases.
+3. `P12-00-C` — Folded into P12-00-B; no independent prerequisite
+   - retain the existing STATUS size and `live_state_only` checks and add the
+     missing non-empty `history_policy` assertion in P12-00-B;
+   - defer the P10-05 history-rewrite decision until an existing pack-size,
+     controlled-clone, valid privacy or legal, or approved public-path
+     retirement trigger actually occurs;
+   - do not create P12-00-D, P12-00-E, or P12-00-F.
 
 ## Acceptance criteria
 
@@ -2775,14 +2777,13 @@ Pre-Phase 12 readiness is complete when:
 
 - the artifact-impact protocol contains a complete Phase 12 UI example and
   leaves non-review committed-baseline tests byte-strict;
-- the CI prototype has reproducible timing evidence and is either retained by
-  the stated threshold or completely removed with the result recorded;
+- Draft and Ready validation are separated without reducing any Ready
+  pull-request validation, and runtime timing evidence is reserved for P12-01;
 - deliberate STATUS growth beyond 16 KiB and missing live-state policy fields
   fail the fast repository check in under five seconds;
-- the history-rewrite decision is closed with explicit re-evaluation triggers
-  and no Git history, tag, branch, or public path is changed;
-- all three focused tasks are independently accepted and published before any
-  Phase 12 implementation begins.
+- the deferred history-rewrite triggers remain explicit and no Git history,
+  tag, branch, or public path is changed; and
+- P12-00-A and P12-00-B are accepted and published before P12-01 begins.
 
 ---
 

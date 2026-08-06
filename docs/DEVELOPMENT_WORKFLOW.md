@@ -4,6 +4,17 @@
 
 This document governs workspace isolation, execution permissions, task contracts, validation gates, publication gates, and stop conditions. Existing project-scope, statistics, architecture, roadmap, decision, and status documents retain their existing authority. `docs/STATUS.yaml` controls current project state and task authorization.
 
+For every task, read `AGENTS.md`, `docs/STATUS.yaml`, the relevant current-task
+and current-phase roadmap subsections, and the Gate and authorization sections
+needed for the task. Expand that set from the approved paths and artifact
+impact: product-scope or navigation work requires `docs/PROJECT_SCOPE.md`;
+statistical code, formulas, semantics, or artifacts require
+`docs/STATISTICS_SPEC.md`; data, Schemas, public paths, production, privacy, or
+retention work requires `docs/DATA_ARCHITECTURE.md`; and decision reading may
+be limited to directly relevant entries. Read more when an authoritative
+document changes, the impact is unclear, or the highest-strength process is
+required. A path under `docs/` is not inherently low risk.
+
 ## Isolation baseline
 
 Use a fresh disposable native-Windows clone for each focused task, created with `--no-hardlinks` and independent internal Git metadata. Keep the protected source repository read-only. Disable the repository-local credential helper with an empty override. Disable push or redirect it to a non-repository sentinel destination. Never use Full access. WSL2 and Dev Containers may be reconsidered later but are not required.
@@ -54,10 +65,37 @@ implementation. Select every applicable value from this closed list:
 - `public_path` — a public URL, runtime request path, compatibility path, or
   Pages publication boundary is expected to change.
 
+For pull requests, the PR body is the single machine-readable task declaration
+source and must contain exactly one marker:
+
+`<!-- artifact-impact: user_visible_ui -->`
+
+Multiple applicable values use one comma-separated marker. Do not repeat the
+task declaration in `docs/STATUS.yaml` or another machine-maintained field.
+`docs/DEVELOPMENT_WORKFLOW.md` remains the authority for the closed value set.
+Missing, unreadable, duplicate, empty, conflicting, or unknown declarations
+select complete validation.
+
 The declaration is a contract, not a prediction to revise after a test fails.
 If a task declared `none` but Gate 3 or Gate 4 finds an artifact change, stop
 and treat it as a contract mismatch. Do not describe the mismatch merely as a
 baseline-test failure or accept it by updating a snapshot.
+
+The effective validation path is the strictest result required by the declared
+impact, actual changed paths and file statuses, any low-cost observable DOM,
+JSON, snapshot, or committed-artifact difference, and the mandatory-full
+conditions below. The declaration may never lower the result implied by the
+other evidence. Draft fast feedback uses conservative changed-path allowlists;
+it does not run a complete generator merely to prove that generation was
+unchanged. Unknown paths or classification failures select complete validation.
+
+Complete validation and the applicable separate Owner authorization are
+mandatory for statistical definitions, formulas, or semantics; Schema or
+compatibility changes; public paths; production fetch, dispatch, or real-data
+writes; workflow write-permission changes; secrets, HMAC, or credentials;
+privacy or retention boundaries; deletion, rename, or destructive migration;
+baseline refreshes or expected statistical-artifact changes; unknown paths;
+or incomplete GitHub evidence.
 
 During Gate 3, run the smallest focused generator, renderer, or browser check
 that can expose the declared impact. Before the full suite, inspect a
@@ -134,6 +172,24 @@ A validation failure does not itself require new Owner authorization. Codex may 
 
 Every contract requires a unique task ID, exact workspace, objective, authoritative reading list, initial checks, expected deliverable paths, explicitly protected or prohibited paths, delegated local authority, separate remote-publication authority, validation, product or phase stop conditions, report title, and controlled conclusions.
 
+A bounded batch contract may group small, non-production tasks only when they
+share one area and artifact impact. It must state:
+
+- `batch_id`;
+- `objective`;
+- `artifact_impact`;
+- `allowed_paths`;
+- `prohibited_changes`;
+- `allowed_actions`; and
+- `stop_conditions`.
+
+One batch may share one isolated workspace, authorization, branch, pull
+request, and final complete CI run. The final report must still disclose every
+sub-item separately. Merge, production dispatch, real production-data writes,
+secret/HMAC/credential operations, workflow write-permission expansion, public
+path deletion, statistical-meaning changes, incompatible Schema migration, and
+privacy-boundary changes always require separate authorization.
+
 The task contract must distinguish audit or baseline import, shared-framework
 integration, taxonomy or statistical decisions, product enablement, workflow
 changes, and front-end changes. Convenience is not authority to pull work from
@@ -180,7 +236,7 @@ Review the complete diff; run applicable tests and validators; verify changed pa
 
 Repository validation uses three distinct layers. Do not treat them as interchangeable:
 
-1. **Clean-checkout code and committed-baseline validation** runs in read-only CI for every pull request, manual validation dispatch, direct `master` push, and any `master` push whose prior validation cannot be proved exactly. It includes the complete pytest suite, partitioned into exact complementary `ordinary` and `committed_baseline` shards on independent runners. An exact two-parent PR merge may use the lighter post-merge confirmation only when the read-only admission job proves that the successful PR run covered the final merge's exact PR number, base SHA, and head SHA and that static validation plus both shards passed. Missing, stale, ambiguous, or unavailable evidence fails safe to the complete suite. The established aggregate check passes only when the selected path completes correctly. Tests marked `committed_baseline` intentionally reproduce generators, diagnostics, and public outputs from the current committed production snapshot and require byte-identical results. Volatile dates, timestamps, and aggregate counts come from the committed snapshot metadata rather than a previous run's hard-coded values. These tests must run before any production fetch mutates the checkout. The exact admission predicates, production boundary, failure visibility, remote acceptance, and rollback are defined in `docs/audits/CI-MASTER-ADMISSION.md`.
+1. **Clean-checkout code and committed-baseline validation** runs in read-only CI for every Ready pull request, manual validation dispatch, direct `master` push, and any `master` push whose prior validation cannot be proved exactly. It includes the complete pytest suite, partitioned into exact complementary `ordinary` and `committed_baseline` shards on independent runners. Strictly allowlisted Draft pull requests may run focused documentation feedback or focused repository, Node, and Playwright feedback; backend, workflow, statistical, Schema, deletion, rename, unknown, ambiguous, or unreadable Draft changes run the complete path. Moving a Draft to Ready and every later Ready synchronization run the complete path, including docs-only Ready pull requests. The aggregate check remains present for every path. An exact two-parent PR merge may use the lighter post-merge confirmation only when the read-only admission job proves that the successful PR run covered the final merge's exact PR number, base SHA, and head SHA and that static validation plus both shards passed. Missing, stale, ambiguous, or unavailable evidence fails safe to the complete suite. Tests marked `committed_baseline` intentionally reproduce generators, diagnostics, and public outputs from the current committed production snapshot and require byte-identical results. Volatile dates, timestamps, and aggregate counts come from the committed snapshot metadata rather than a previous run's hard-coded values. These tests must run before any production fetch mutates the checkout. The exact admission predicates, production boundary, failure visibility, remote acceptance, and rollback are defined in `docs/audits/CI-MASTER-ADMISSION.md`.
 2. **Production candidate validation** runs after authorized fetching and generation but before staging or publication. It compares the candidate with a baseline snapshot captured at the start of the run, permits only declared generated-data paths, rejects deletions and cross-product writes, parses changed JSON and YAML, verifies event and match document shape, prevents event, match, or fetched-ledger count regression, and retains strict classification, repository, rule, and Schema validation. Candidate acceptance must use dynamic deltas rather than historical hard-coded deck or event counts.
 3. **Publication confirmation** runs after the generated commit is pushed. It requires a clean production workspace and confirms that the remote `master` commit equals the locally published commit.
 
@@ -387,6 +443,13 @@ Inspect evidence progressively:
 4. retrieve only failed job and failed step logs before expanding to full logs;
 5. never dump large generated JSON, fixtures, or complete CI logs when a
    targeted query answers the question.
+
+Keep completed-task validation and publication evidence in the pull request and
+Git whenever those systems already record it. `docs/STATUS.yaml` stores live
+state, authorization, blockers, and the next planned task; ordinary tasks do
+not require a separate history entry by default. Add durable history only when
+the evidence is not otherwise preserved or a phase-closeout contract requires
+it.
 
 This rule reduces both diagnostic noise and repeated work. A truncated output
 is a signal to narrow the query, not to repeat the same broad read.

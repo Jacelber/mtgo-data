@@ -1,7 +1,14 @@
 name: Pull request validation
 
 on:
-  pull_request: {}
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      - converted_to_draft
+      - edited
   push:
     branches:
       - master
@@ -42,6 +49,48 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python -B ci_master_admission.py
+
+  draft-feedback:
+    name: Focused Draft feedback
+    needs: admission
+    if: needs.admission.outputs.mode == 'draft-docs' || needs.admission.outputs.mode == 'draft-ui'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository without persisted credentials
+        uses: actions/checkout@v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6.3.0
+        with:
+          python-version: "3.12"
+
+      - name: Verify checked-out PR merge subject
+        shell: bash
+        run: |
+          ACTUAL_PARENTS="$(git cat-file -p HEAD | awk '/^parent / { if (count++) printf " "; printf "%s", $2 } END { print "" }')"
+          EXPECTED_PARENTS="${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}"
+          if [ "$ACTUAL_PARENTS" != "$EXPECTED_PARENTS" ]; then
+            echo "Checked-out PR merge subject mismatch." >&2
+            exit 1
+          fi
+
+      - name: Install pinned development dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Set up Node.js 24 for repository validation
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Validate repository files and JavaScript syntax
+        run: python -B validate_repository.py
+
+      - name: Validate live documentation policy
+        if: needs.admission.outputs.mode == 'draft-docs'
+        run: python -B -m pytest tests/test_documentation_history.py
 
   static-validation:
     name: Repository files, rules, and schemas
@@ -169,7 +218,7 @@ jobs:
   browser-validation:
     name: Playwright production pages
     needs: admission
-    if: needs.admission.outputs.mode == 'full'
+    if: needs.admission.outputs.mode == 'full' || needs.admission.outputs.mode == 'draft-ui'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -240,6 +289,7 @@ jobs:
     if: always()
     needs:
       - admission
+      - draft-feedback
       - static-validation
       - pytest
       - browser-validation
@@ -259,6 +309,7 @@ jobs:
             echo
             echo "- Admission: ${{ needs.admission.result }}"
             echo "- Validation mode: ${{ needs.admission.outputs.mode }}"
+            echo "- Focused Draft feedback: ${{ needs.draft-feedback.result }}"
             echo "- Static validation: ${{ needs.static-validation.result }}"
             echo "- Pytest shards: ${{ needs.pytest.result }}"
             echo "- Playwright browser baseline: ${{ needs.browser-validation.result }}"
@@ -269,13 +320,31 @@ jobs:
             exit 1
           fi
           if [ "${{ needs.admission.outputs.mode }}" = "full" ] &&
+             [ "${{ needs.draft-feedback.result }}" = "skipped" ] &&
              [ "${{ needs.static-validation.result }}" = "success" ] &&
              [ "${{ needs.pytest.result }}" = "success" ] &&
              [ "${{ needs.browser-validation.result }}" = "success" ] &&
              [ "${{ needs.post-merge-confirmation.result }}" = "skipped" ]; then
             exit 0
           fi
+          if [ "${{ needs.admission.outputs.mode }}" = "draft-docs" ] &&
+             [ "${{ needs.draft-feedback.result }}" = "success" ] &&
+             [ "${{ needs.static-validation.result }}" = "skipped" ] &&
+             [ "${{ needs.pytest.result }}" = "skipped" ] &&
+             [ "${{ needs.browser-validation.result }}" = "skipped" ] &&
+             [ "${{ needs.post-merge-confirmation.result }}" = "skipped" ]; then
+            exit 0
+          fi
+          if [ "${{ needs.admission.outputs.mode }}" = "draft-ui" ] &&
+             [ "${{ needs.draft-feedback.result }}" = "success" ] &&
+             [ "${{ needs.static-validation.result }}" = "skipped" ] &&
+             [ "${{ needs.pytest.result }}" = "skipped" ] &&
+             [ "${{ needs.browser-validation.result }}" = "success" ] &&
+             [ "${{ needs.post-merge-confirmation.result }}" = "skipped" ]; then
+            exit 0
+          fi
           if [ "${{ needs.admission.outputs.mode }}" = "pr-confirmation" ] &&
+             [ "${{ needs.draft-feedback.result }}" = "skipped" ] &&
              [ "${{ needs.static-validation.result }}" = "skipped" ] &&
              [ "${{ needs.pytest.result }}" = "skipped" ] &&
              [ "${{ needs.browser-validation.result }}" = "skipped" ] &&
