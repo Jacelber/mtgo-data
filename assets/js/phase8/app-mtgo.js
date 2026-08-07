@@ -153,10 +153,19 @@ async function statsView() {
     });
   const archetypes = sortedArchetypes(range.archetypes);
   const identityNames = new Map();
+  const detailIdentities = new Set();
   range.archetypes.forEach(parent => {
     identityNames.set(parent.id, parent.name);
-    (parent.subtypes || []).forEach(subtype => identityNames.set(`${parent.id}/${subtype.id}`, subtype.display_name));
+    const subtypes = activeStatisticsSubtypes(parent);
+    subtypes.forEach(subtype => identityNames.set(`${parent.id}/${subtype.id}`, subtype.display_name));
+    if (subtypes.length === 1) detailIdentities.add(`${parent.id}/${subtypes[0].id}`);
+    else if (subtypes.length >= 2) {
+      subtypes.forEach(subtype => detailIdentities.add(`${parent.id}/${subtype.id}`));
+    } else detailIdentities.add(parent.id);
   });
+  if (state.detailIdentity && !detailIdentities.has(state.detailIdentity)) {
+    state.detailIdentity = null;
+  }
   currentContext = { meta, range, decks, completeness, identityNames };
   const hs = completeness.high_score_decklist_completeness;
   const expandable = range.archetypes.filter(item => activeStatisticsSubtypes(item).length >= 2);
@@ -320,6 +329,14 @@ async function top8View() {
       includeBases: Boolean(state.top8Detail),
     });
   state.top8WeekFile = weekEntry.file;
+  const availableDetails = new Set(top8.events.flatMap(event => (
+    event.placements
+      .filter(placement => placement.deck_status === "available")
+      .map(placement => `${event.event_id}:${placement.rank}`)
+  )));
+  if (state.top8Detail && !availableDetails.has(state.top8Detail)) {
+    state.top8Detail = null;
+  }
   currentContext = { top8Index: index, top8, bases };
   return `<section class="source-note"><p>${t("source.top8")}</p></section>
     <div class="select-row"><label for="top8-week">${t("top8.week")}</label>

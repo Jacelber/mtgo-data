@@ -313,6 +313,23 @@ async function tabletopView() {
   }
   state.tabletopWasMultiEvent = scopeState.multi_event;
   const scope = overview.scopes[state.tabletopScope];
+  const detailIdentities = new Set();
+  scope.archetypes.forEach(parent => {
+    const subtypes = activeTabletopSubtypes(parent);
+    if (subtypes.length === 1) {
+      detailIdentities.add(`${parent.archetype_id}/${subtypes[0].subtype_id}`);
+    } else if (subtypes.length >= 2) {
+      subtypes.forEach(subtype => {
+        detailIdentities.add(`${parent.archetype_id}/${subtype.subtype_id}`);
+      });
+    } else if (parent.archetype_id) detailIdentities.add(parent.archetype_id);
+  });
+  if (
+    state.tabletopDetailIdentity
+    && !detailIdentities.has(state.tabletopDetailIdentity)
+  ) {
+    state.tabletopDetailIdentity = null;
+  }
   const presentation = TabletopController.structurePresentation(overview);
   currentContext = {
     tabletopIndex: index,

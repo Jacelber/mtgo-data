@@ -1,5 +1,180 @@
 "use strict";
 
+const STATS_SORT_KEYS = new Set([
+  "name",
+  "avg_points_per_round",
+  "high_score_count",
+  "high_score_share",
+  "top8_count",
+  "top8_share",
+  "conversion",
+]);
+const TABLETOP_SORT_KEYS = new Set([
+  "name",
+  "deck_count",
+  "metagame_share",
+  "average_points_per_effective_round",
+  "win_rate",
+  "matches",
+  "completion_rate",
+  "day2_conversion",
+  "high_score",
+]);
+const TABLETOP_VIEWS = new Set(["overview", "matchup"]);
+const TABLETOP_SCOPES = new Set(["day1", "day2", "all_constructed"]);
+const EXTENDED_URL_KEYS = [
+  "range", "sort", "dir", "week", "event", "events", "view", "scope", "detail",
+];
+let pendingUrlWrite = null;
+
+function resetUrlBackedState() {
+  state.format = "modern";
+  state.product = "mtgo-statistics";
+  state.statsRange = 1;
+  state.matchupRange = 4;
+  state.statsSort = "high_score_share";
+  state.statsDirection = "desc";
+  state.detailMode = "average";
+  state.top8WeekFile = null;
+  state.pickupWeekFile = null;
+  state.pickupOpen.clear();
+  state.tabletopView = "overview";
+  state.tabletopEventId = null;
+  state.tabletopSelectedEvents.clear();
+  state.tabletopLastSelectedEventId = null;
+  state.tabletopLastScopeByEvent.clear();
+  state.tabletopWasMultiEvent = false;
+  state.tabletopScope = "all_constructed";
+  state.tabletopSort = "deck_count";
+  state.tabletopDirection = "desc";
+  pendingUrlWrite = null;
+  resetInteractions();
+}
+
+function requestedWeekFile(parameters) {
+  const week = parameters.get("week");
+  return /^\d{4}-W\d{2}$/.test(week || "") ? `${week}.json` : null;
+}
+
+function applyUrlState(parameters) {
+  const language = parameters.get("lang");
+  updateLanguageChrome(language === "en" ? "en" : "zh");
+
+  const requestedFormat = parameters.get("format");
+  if (
+    requestedFormat
+    && state.catalog.formats.some(item => (
+      item.id === requestedFormat && availableProductIds(item.id).length
+    ))
+  ) {
+    state.format = requestedFormat;
+  }
+  const initialFormat = state.catalog.formats.find(item => item.id === state.format);
+  const requestedProduct = parameters.get("product");
+  const preferredProduct = requestedProduct
+    || (ENTRY_SURFACE === "tabletop" ? "tabletop-major-events" : state.product);
+  if (availableProductIds(state.format).includes(preferredProduct)) {
+    state.product = preferredProduct;
+  } else {
+    state.product = availableProductIds(state.format)[0]
+      || initialFormat.default_product_id;
+  }
+
+  const range = Number(parameters.get("range"));
+  const sort = parameters.get("sort");
+  const direction = parameters.get("dir");
+  const detail = parameters.get("detail");
+  if (state.product === "mtgo-statistics") {
+    if (RANGE_OPTIONS.includes(range)) state.statsRange = range;
+    if (STATS_SORT_KEYS.has(sort)) state.statsSort = sort;
+    if (direction === "asc" || direction === "desc") state.statsDirection = direction;
+    if (detail) {
+      state.detailIdentity = detail;
+      if (detail.includes("/")) state.statsExpanded.add(detail.split("/", 1)[0]);
+    }
+  } else if (state.product === "mtgo-matchups") {
+    if (RANGE_OPTIONS.includes(range)) state.matchupRange = range;
+  } else if (state.product === "mtgo-top8") {
+    state.top8WeekFile = requestedWeekFile(parameters);
+    if (detail) state.top8Detail = detail;
+  } else if (state.product === "weekly-pickup") {
+    state.pickupWeekFile = requestedWeekFile(parameters);
+  } else if (state.product === "tabletop-major-events") {
+    const view = parameters.get("view");
+    const eventId = parameters.get("event");
+    const scope = parameters.get("scope");
+    if (TABLETOP_VIEWS.has(view)) state.tabletopView = view;
+    if (eventId) {
+      state.tabletopEventId = eventId;
+      state.tabletopSelectedEvents.add(eventId);
+      state.tabletopLastSelectedEventId = eventId;
+    }
+    if (TABLETOP_SCOPES.has(scope)) state.tabletopScope = scope;
+    if (TABLETOP_SORT_KEYS.has(sort)) state.tabletopSort = sort;
+    if (direction === "asc" || direction === "desc") state.tabletopDirection = direction;
+    if (state.tabletopView === "overview" && detail) {
+      state.tabletopDetailIdentity = detail;
+      if (detail.includes("/")) state.tabletopExpanded.add(detail.split("/", 1)[0]);
+    }
+  }
+}
+
+function weekId(file) {
+  return file?.endsWith(".json") ? file.slice(0, -5) : null;
+}
+
+function urlStateParameters() {
+  const parameters = new URLSearchParams();
+  parameters.set("format", state.format);
+  parameters.set("product", state.product);
+  if (state.product === "mtgo-statistics") {
+    parameters.set("range", String(state.statsRange));
+    parameters.set("sort", state.statsSort);
+    parameters.set("dir", state.statsDirection);
+    if (state.detailIdentity) parameters.set("detail", state.detailIdentity);
+  } else if (state.product === "mtgo-matchups") {
+    parameters.set("range", String(state.matchupRange));
+  } else if (state.product === "mtgo-top8") {
+    if (weekId(state.top8WeekFile)) parameters.set("week", weekId(state.top8WeekFile));
+    if (state.top8Detail) parameters.set("detail", state.top8Detail);
+  } else if (state.product === "weekly-pickup") {
+    if (weekId(state.pickupWeekFile)) parameters.set("week", weekId(state.pickupWeekFile));
+  } else if (state.product === "tabletop-major-events") {
+    parameters.set("view", state.tabletopView);
+    if (state.tabletopEventId) parameters.set("event", state.tabletopEventId);
+    parameters.set("scope", state.tabletopScope);
+    if (state.tabletopView === "overview") {
+      parameters.set("sort", state.tabletopSort);
+      parameters.set("dir", state.tabletopDirection);
+      if (state.tabletopDetailIdentity) {
+        parameters.set("detail", state.tabletopDetailIdentity);
+      }
+    }
+  }
+  // Phase 13 owns `events=<sorted,unique,event,ids>`; P12-02 reserves but omits it.
+  parameters.set("lang", I18n.language());
+  return parameters;
+}
+
+function queueUrlWrite(mode = "push") {
+  pendingUrlWrite = mode;
+}
+
+function flushUrlWrite() {
+  if (!pendingUrlWrite) return;
+  const mode = pendingUrlWrite;
+  pendingUrlWrite = null;
+  const target = new URL(window.location.href);
+  target.search = urlStateParameters().toString();
+  const next = `${target.pathname}${target.search}${target.hash}`;
+  const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  if (next !== current) window.history[`${mode}State`]({}, "", next);
+}
+
+function hasExtendedUrlState(parameters) {
+  return EXTENDED_URL_KEYS.some(key => parameters.has(key));
+}
+
 async function renderView() {
   const root = document.querySelector("#view");
   const token = ++state.renderToken;
@@ -23,6 +198,7 @@ async function renderView() {
     document.querySelector("#payload-status").textContent = t("loading.failed");
     console.error(error);
   }
+  flushUrlWrite();
 }
 
 function resetInteractions() {
@@ -51,6 +227,7 @@ document.addEventListener("click", async event => {
     resetInteractions();
     setMessage("");
     renderNavigation();
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.product) {
     if (!productEntry(button.dataset.product)?.available) {
@@ -65,13 +242,16 @@ document.addEventListener("click", async event => {
     resetInteractions();
     setMessage("");
     renderNavigation();
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.statsRange) {
     state.statsRange = Number(button.dataset.statsRange);
     state.detailIdentity = null;
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.matchupRange) {
     state.matchupRange = Number(button.dataset.matchupRange);
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.statsToggle) {
     toggleSet(state.statsExpanded, button.dataset.statsToggle);
@@ -83,6 +263,7 @@ document.addEventListener("click", async event => {
       state.statsSort = button.dataset.statsSort;
       state.statsDirection = state.statsSort === "name" ? "asc" : "desc";
     }
+    queueUrlWrite();
     await renderView();
   } else if (button.id === "stats-expand-all") {
     const expandable = currentContext.range.archetypes.filter(item => activeStatisticsSubtypes(item).length >= 2);
@@ -95,9 +276,11 @@ document.addEventListener("click", async event => {
       ? null
       : button.dataset.detailIdentity;
     state.detailMode = "average";
+    queueUrlWrite();
     await renderView();
   } else if (button.hasAttribute("data-close-detail")) {
     state.detailIdentity = null;
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.deckMode) {
     state.detailMode = button.dataset.deckMode;
@@ -128,9 +311,11 @@ document.addEventListener("click", async event => {
       ? null
       : button.dataset.top8Detail;
     state.detailMode = "average";
+    queueUrlWrite();
     await renderView();
   } else if (button.hasAttribute("data-close-top8")) {
     state.top8Detail = null;
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.tabletopView) {
     state.tabletopView = button.dataset.tabletopView;
@@ -139,6 +324,7 @@ document.addEventListener("click", async event => {
     }
     state.matchupRows.clear();
     state.matchupColumns.clear();
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.tabletopScope) {
     state.tabletopScope = button.dataset.tabletopScope;
@@ -147,6 +333,7 @@ document.addEventListener("click", async event => {
       state.tabletopScope
     );
     state.tabletopDetailIdentity = null;
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.tabletopToggle) {
     toggleSet(state.tabletopExpanded, button.dataset.tabletopToggle);
@@ -157,9 +344,11 @@ document.addEventListener("click", async event => {
       ? null
       : button.dataset.tabletopDetail;
     state.detailMode = "average";
+    queueUrlWrite();
     await renderView();
   } else if (button.hasAttribute("data-close-tabletop-detail")) {
     state.tabletopDetailIdentity = null;
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.tabletopSort) {
     if (state.tabletopSort === button.dataset.tabletopSort) {
@@ -168,6 +357,7 @@ document.addEventListener("click", async event => {
       state.tabletopSort = button.dataset.tabletopSort;
       state.tabletopDirection = state.tabletopSort === "name" ? "asc" : "desc";
     }
+    queueUrlWrite();
     await renderView();
   } else if (button.id === "tabletop-expand-all") {
     const parents = currentContext.overview.scopes[state.tabletopScope].archetypes
@@ -179,6 +369,7 @@ document.addEventListener("click", async event => {
   } else if (button.dataset.pickupWeek) {
     state.pickupWeekFile = button.dataset.pickupWeek;
     state.pickupOpen.clear();
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.pickupToggle) {
     toggleSet(state.pickupOpen, button.dataset.pickupToggle);
@@ -190,6 +381,7 @@ document.addEventListener("change", async event => {
   if (event.target.id === "top8-week") {
     state.top8WeekFile = event.target.value;
     state.top8Detail = null;
+    queueUrlWrite();
     await renderView();
   } else if (event.target.id === "tabletop-event") {
     state.tabletopEventId = event.target.value;
@@ -197,6 +389,7 @@ document.addEventListener("change", async event => {
     state.tabletopSelectedEvents = new Set([event.target.value]);
     state.tabletopWasMultiEvent = false;
     state.tabletopDetailIdentity = null;
+    queueUrlWrite();
     await renderView();
   } else if (event.target.dataset.tabletopEventCheck) {
     const id = event.target.dataset.tabletopEventCheck;
@@ -344,6 +537,7 @@ async function changeLanguage(language) {
   updateLanguageChrome(language);
   setMessage("");
   renderNavigation();
+  queueUrlWrite();
   await renderView();
 }
 
@@ -364,30 +558,10 @@ async function initialize() {
   try {
     state.catalog = await Runtime.catalog.fetchJson("stats/catalog.json");
     const parameters = new URLSearchParams(window.location.search);
-    const requestedLanguage = parameters.get("lang");
-    if (requestedLanguage === "zh" || requestedLanguage === "en") {
-      updateLanguageChrome(requestedLanguage);
-    }
-    const requestedFormat = parameters.get("format");
-    if (
-      requestedFormat
-      && state.catalog.formats.some(item => (
-        item.id === requestedFormat && availableProductIds(item.id).length
-      ))
-    ) {
-      state.format = requestedFormat;
-    }
-    const initialFormat = state.catalog.formats.find(item => item.id === state.format);
-    const requestedProduct = parameters.get("product");
-    const preferredProduct = requestedProduct
-      || (ENTRY_SURFACE === "tabletop" ? "tabletop-major-events" : state.product);
-    if (availableProductIds(state.format).includes(preferredProduct)) {
-      state.product = preferredProduct;
-    } else {
-      state.product = availableProductIds(state.format)[0]
-        || initialFormat.default_product_id;
-    }
+    resetUrlBackedState();
+    applyUrlState(parameters);
     if (navigateToProductEntry(state.product, state.format)) return;
+    if (hasExtendedUrlState(parameters)) queueUrlWrite("replace");
     renderNavigation();
     await renderView();
   } catch (error) {
@@ -396,5 +570,15 @@ async function initialize() {
     console.error(error);
   }
 }
+
+window.addEventListener("popstate", async () => {
+  if (!state.catalog) return;
+  resetUrlBackedState();
+  applyUrlState(new URLSearchParams(window.location.search));
+  if (navigateToProductEntry(state.product, state.format)) return;
+  setMessage("");
+  renderNavigation();
+  await renderView();
+});
 
 initialize();

@@ -2360,6 +2360,32 @@ expected deliverables, current cost or quota limits, transmitted context, data
 minimization, and the local alternative. Its output is advisory and does not
 replace repository specifications, tests, or owner acceptance.
 
+### 15.10 Shareable URL state
+
+The two established entry paths remain `/index.html` and
+`/melee/index.html`. P12-02 extends their query state without changing those
+paths or any runtime JSON request path.
+
+Both surfaces use `format`, `product`, and `lang`. The active product may add:
+
+- `range`, `sort`, and `dir` for range and table-order state;
+- `week` for a selected weekly MTGO document;
+- `event`, `view`, and `scope` for Tabletop Major Events; and
+- `detail` for a stable archetype, subtype, or exact-deck identity.
+
+Values must be validated against the active catalog and loaded product
+document. Unsupported or stale values fall back to the product default and are
+removed when an extended URL is canonicalized. User changes to durable state
+create browser-history entries. Reload and `popstate` restore the same supported
+state without changing statistical meaning or combining product caches.
+
+The parameter `events` is reserved for Phase 13 as sorted, unique event IDs
+joined by commas. P12-02 does not read or write that parameter. Transient
+expanded row or column sets, hover state, chart pins, and Pickup card expansion
+remain outside the URL. A stable subtype `detail` may derive the minimum parent
+expansion needed to reveal that detail; the derived expansion itself is not
+serialized.
+
 ---
 
 ## 16. Test architecture
