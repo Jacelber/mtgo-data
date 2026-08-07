@@ -2748,17 +2748,24 @@ authorize any readiness task or Phase 12 implementation.
    - reconcile the Pages workflow description with the accepted production
      publication dispatch behavior recorded by DEC-084.
 2. `P12-00-B` — CI feedback-time optimization and governance closeout
-   - route strictly allowlisted Draft documentation and user-visible UI changes
-     to focused feedback while every Ready pull request retains the complete
-     ordinary pytest, committed-baseline, Schema/rules, Ruff, mypy, Node,
-     Playwright, and repository validation path;
+   - route strictly allowlisted documentation and user-visible UI changes to
+     focused validation regardless of Draft or Ready maturity, while every
+     backend, workflow, authoritative-document, statistical, Schema,
+     public-path, deletion, rename, unknown, ambiguous, or unreadable change
+     retains the complete ordinary pytest, committed-baseline, Schema/rules,
+     Ruff, mypy, Node, Playwright, and repository validation path;
+   - publish locally completed work Ready by default, keep Draft optional for
+     explicitly requested incomplete-work review, and do not trigger an
+     identical suite for a state-only Draft/Ready transition;
    - keep one stable aggregate check, preserve exact-merge confirmation on
-     `master`, and fail safe to complete validation for missing, ambiguous, or
+     `master` only after current declaration, complete file evidence, exact job
+     class, base, head, PR, workflow, and pre-merge timing are reproved, and fail
+     safe to complete validation for missing, changed, ambiguous, or
      higher-impact evidence;
    - replace mandatory full-document rereading with task-scoped authoritative
      reading, permit bounded authorization batches, and keep ordinary task
      evidence in pull requests and Git while STATUS remains live state only;
-   - measure Draft and Ready timing after the split. Do not introduce xdist in
+   - measure validation-class timing after the split. Do not introduce xdist in
      this task. Re-evaluate ordinary-pytest parallelism only if it remains the
      principal bottleneck; abandon it if measured improvement is below about
      30 percent, test semantics change, ordering dependencies appear, or flaky
@@ -2777,8 +2784,9 @@ Pre-Phase 12 readiness is complete when:
 
 - the artifact-impact protocol contains a complete Phase 12 UI example and
   leaves non-review committed-baseline tests byte-strict;
-- Draft and Ready validation are separated without reducing any Ready
-  pull-request validation, and runtime timing evidence is reserved for P12-01;
+- pull-request maturity and validation class are separated, the conservative
+  focused allowlists and complete fail-safe path are enforced for both Draft
+  and Ready pull requests, and runtime timing evidence is reserved for P12-01;
 - deliberate STATUS growth beyond 16 KiB and missing live-state policy fields
   fail the fast repository check in under five seconds;
 - the deferred history-rewrite triggers remain explicit and no Git history,

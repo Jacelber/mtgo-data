@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-02-shareable-url-state"
-  working_branch_status: "isolated_local_task_branch"
+  current_working_branch: "master"
+  working_branch_status: "governance_landed"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -72,53 +72,64 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-02"
-  name: "Shareable URL state"
-  status: "ready_full_validation_and_merge_authorized"
-  authorized_on: "2026-08-06"
-  workspace: "C:/tmp/mtgo-data-p12-02-20260806-01"
-  branch: "codex/p12-02-shareable-url-state"
-  base_commit: "856ac4202afd5f8b61d411c2e129e8a67e3891a7"
-  task_type: "user_visible_ui_and_public_query_state"
-  objective: "Make supported MTGO and Tabletop product state shareable and recoverable through canonical query parameters, reload, browser history, and popstate without changing entry paths, statistical behavior, generated data, or product separation."
+  id: "GOV-03-READY-IMPACT-CI"
+  name: "Impact-classified pull-request validation"
+  status: "completed_on_merge"
+  authorized_on: "2026-08-07"
+  workspace: "C:/tmp/mtgo-data-gov-03-20260807-01"
+  branch: "codex/gov-03-ready-impact-ci"
+  base_commit: "08e2107d0b797f187752310dd23b9610462b4eed"
+  task_type: "governance_and_ci_admission"
+  artifact_impact: "none"
+  objective: "Select pull-request validation from declared artifact impact and complete changed-file evidence, avoid maturity-state duplicate runs, and preserve fail-closed complete validation and separate merge authorization."
   authorization:
-    local_implementation: true
-    commit: true
-    remote_publication: true
-    merge: true
+    local_implementation: false
+    commit: false
+    remote_publication: false
+    merge: false
   target_paths:
-    - "assets/js/phase8/app-mtgo.js"
-    - "assets/js/phase8/app-tabletop.js"
-    - "assets/js/phase8/app.js"
-    - "docs/DATA_ARCHITECTURE.md"
+    - ".github/workflows/ci.yml"
+    - "ci_master_admission.py"
+    - "tests/test_ci_master_admission.py"
+    - "tests/test_ci_workflow.py"
+    - "tests/test_documentation_history.py"
+    - "AGENTS.md"
+    - "docs/DEVELOPMENT_WORKFLOW.md"
+    - "docs/ROADMAP.md"
+    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-    - "tests/browser/url-state.spec.js"
+    - "docs/audits/CI-MASTER-ADMISSION.md"
+    - "docs/audits/CI_EFFICIENCY_PLAN.md"
   protected_scope:
-    code_changed: "Front-end URL parsing, serialization, durable state transitions, and history restoration only"
-    workflow_changed: "none"
+    code_changed: "CI admission and its deterministic tests only"
+    workflow_changed: "State-neutral focused documentation, focused UI, complete, metadata-only, and exact-merge confirmation paths"
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
-    frontend_source_changed: "Shareable query-state behavior only; no visual or content redesign"
-    public_paths_changed: "Query-state contract only; /index.html, /melee/index.html, and runtime request paths remain unchanged"
+    frontend_source_changed: "none"
+    public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
-    remote_write_performed: "Owner-authorized task-branch and Draft PR publication; exact remote identifiers are recorded by GitHub."
+    remote_write_performed: "Task publication details remain in GitHub and Git history."
   allowed_actions:
-    - "Implement and validate the focused P12-02 query-state contract in the isolated workspace."
-    - "Reconcile the completed P12-01 merge state as part of this already-authorized task change."
-    - "Run focused browser tests, applicable static tests, repository validation, and the complete local suite."
-    - "Commit the validated six-path task change, push the task branch through the repository-specific credential path, and create a Draft pull request."
-    - "Mark the P12-02 pull request Ready after its synchronized Draft head passes complete validation, then merge it by the standard merge-commit method after the same locked Ready head and base pass complete validation."
+    - "No further GOV-03 action is automatically authorized after this landing state."
   prohibited_changes:
     - "Production dispatch, real-data write, Pages publication, or dependency-manifest change."
-    - "Statistics, Schema, generated data, HTML, CSS, runtime request path, privacy, retention, event whitelist, or workflow changes."
+    - "Statistics, Schema, generated data, product HTML, CSS, JavaScript, runtime request path, privacy, retention, or event-whitelist changes."
     - "P12-03 or any other task implementation."
-    - "Persist future multi-event selection before Phase 13; reserve its canonical query representation only."
-  stop_point: "Stop immediately if Draft or Ready complete validation fails, head/base/diff changes unexpectedly, or merge conditions are not met; otherwise merge PR #187 by the standard merge-commit method and stop after successful exact master and post-merge confirmation."
+  stop_point: "GOV-03 is complete only when merged under separate owner authorization. Do not start P12-03 automatically."
+
+recent_completion_handoff:
+  id: "P12-02"
+  name: "Shareable URL state"
+  status: "completed_and_merged"
+  pull_request: 187
+  merge_commit: "7d3bc8a06b1a449eb8a80a4b6dcc5b0044f6542d"
+  note: "GitHub and Git history retain the detailed validation, publication, and Pages evidence."
 
 current_repository_state:
-  baseline_commit: "856ac4202afd5f8b61d411c2e129e8a67e3891a7"
+  baseline_commit: "08e2107d0b797f187752310dd23b9610462b4eed"
+  baseline_note: "Verified live master used as the GOV-03 base after the 2026-08-07 production update."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -232,7 +243,6 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not merge PR #187 unless complete Ready validation succeeds for the locked head, base, and task diff."
   - "Do not begin P12-03 or another task automatically."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."

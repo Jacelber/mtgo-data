@@ -1,9 +1,9 @@
 """Fail-safe admission decisions for pull requests and master validation.
 
-Ready pull requests and ambiguous Draft pull requests execute the full suite.
-Strictly allowlisted Draft changes may use focused feedback. A push to master
-may use the lighter confirmation path only when GitHub metadata proves that the
-exact two-parent merge was already validated by this workflow.
+Pull-request maturity is not a validation input. Artifact declarations, changed
+paths, file statuses, and complete GitHub evidence select focused or complete
+validation. A push to master may use the lighter confirmation path only when
+the exact two-parent merge was already validated in its still-required class.
 """
 
 from __future__ import annotations
@@ -22,13 +22,30 @@ from urllib.request import Request, urlopen
 
 WORKFLOW_PATH = ".github/workflows/ci.yml"
 AGGREGATE_JOB = "Repository validation (Python 3.12)"
-REQUIRED_SUCCESSFUL_JOBS = {
-    "Repository files, rules, and schemas",
-    "Pytest shard (ordinary)",
-    "Pytest shard (committed-baseline)",
-    AGGREGATE_JOB,
+ADMISSION_JOB = "Select PR validation class or exact-merge confirmation"
+FOCUSED_JOB = "Focused PR validation"
+STATIC_JOB = "Repository files, rules, and schemas"
+ORDINARY_JOB = "Pytest shard (ordinary)"
+COMMITTED_BASELINE_JOB = "Pytest shard (committed-baseline)"
+BROWSER_JOB = "Playwright production pages"
+EXPECTED_SUCCESSFUL_JOBS = {
+    "focused-docs": frozenset({ADMISSION_JOB, FOCUSED_JOB, AGGREGATE_JOB}),
+    "focused-ui": frozenset(
+        {ADMISSION_JOB, FOCUSED_JOB, BROWSER_JOB, AGGREGATE_JOB}
+    ),
+    "full": frozenset(
+        {
+            ADMISSION_JOB,
+            STATIC_JOB,
+            ORDINARY_JOB,
+            COMMITTED_BASELINE_JOB,
+            BROWSER_JOB,
+            AGGREGATE_JOB,
+        }
+    ),
 }
 SUBJECT_PREFIX = "Validated merge subject:"
+CLASS_PREFIX = "Validated PR class:"
 ARTIFACT_IMPACTS = frozenset(
     {
         "none",
@@ -42,11 +59,22 @@ ARTIFACT_IMPACT_PATTERN = re.compile(
     r"<!--\s*artifact-impact:\s*([^<>]+?)\s*-->", re.IGNORECASE
 )
 SAFE_DOC_PREFIXES = ("docs/audits/", "docs/history/")
-SAFE_UI_SUFFIXES = {
-    "assets/js/": ".js",
-    "assets/css/": ".css",
-    "tests/browser/": ".js",
-}
+FULL_VALIDATION_DOCS = frozenset(
+    {
+        "docs/audits/CI-MASTER-ADMISSION.md",
+        "docs/audits/CI_EFFICIENCY_PLAN.md",
+    }
+)
+SAFE_UI_PATHS = frozenset(
+    {
+        "assets/css/phase8-base.css",
+        "assets/css/phase8-candidate.css",
+        "tests/browser/production-pages.spec.js",
+        "tests/browser/url-state.spec.js",
+        "tests/browser/view-lazy-loading.spec.js",
+    }
+)
+VALIDATING_ACTIONS = frozenset({"opened", "synchronize", "reopened", "edited"})
 
 
 @dataclass(frozen=True)
@@ -55,6 +83,7 @@ class AdmissionDecision:
     reason: str
     pull_request: int | None = None
     workflow_run: int | None = None
+    validation_class: str | None = None
 
 
 FetchJson = Callable[[str], object]
@@ -110,13 +139,43 @@ def _validated_path(item: dict) -> str:
 
 
 def _is_safe_doc_path(path: str) -> bool:
-    return path.endswith(".md") and path.startswith(SAFE_DOC_PREFIXES)
+    return (
+        path.endswith(".md")
+        and path.startswith(SAFE_DOC_PREFIXES)
+        and path not in FULL_VALIDATION_DOCS
+    )
 
 
 def _is_safe_ui_path(path: str) -> bool:
-    return any(
-        path.startswith(prefix) and path.endswith(suffix)
-        for prefix, suffix in SAFE_UI_SUFFIXES.items()
+    return path in SAFE_UI_PATHS
+
+
+def _classify_pull_request_evidence(
+    *, pull_request: dict, files: list[dict]
+) -> AdmissionDecision:
+    impacts = _parse_artifact_impacts(pull_request.get("body"))
+    paths = [_validated_path(item) for item in files]
+
+    if impacts == {"internal_diagnostics"} and all(
+        _is_safe_doc_path(path) for path in paths
+    ):
+        return AdmissionDecision(
+            mode="focused-docs",
+            reason="safe_internal_documentation",
+            validation_class="focused-docs",
+        )
+    if impacts == {"user_visible_ui"} and all(
+        _is_safe_ui_path(path) for path in paths
+    ):
+        return AdmissionDecision(
+            mode="focused-ui",
+            reason="safe_user_visible_ui",
+            validation_class="focused-ui",
+        )
+    return AdmissionDecision(
+        mode="full",
+        reason="complete_validation_required:path_or_impact_not_focused",
+        validation_class="full",
     )
 
 
@@ -127,7 +186,7 @@ def decide_pull_request(
     fetch_json: FetchJson,
     api_url: str = "https://api.github.com",
 ) -> AdmissionDecision:
-    """Classify Draft feedback without weakening Ready pull-request validation."""
+    """Classify a PR independently of its Draft or Ready state."""
 
     try:
         if not isinstance(event_payload, dict):
@@ -138,15 +197,19 @@ def decide_pull_request(
         action = event_payload.get("action")
         if not isinstance(action, str) or not action:
             raise ValueError("pull_request_action_missing")
-        draft = pull_request.get("draft")
-        if not isinstance(draft, bool):
-            raise ValueError("pull_request_draft_state_missing")
-        if not draft:
-            return AdmissionDecision(
-                mode="full", reason=f"ready_pull_request:{action}"
-            )
+        if action not in VALIDATING_ACTIONS:
+            raise ValueError(f"pull_request_action_not_supported:{action}")
+        if action == "edited":
+            changes = event_payload.get("changes")
+            if not isinstance(changes, dict):
+                raise ValueError("edited_changes_missing")
+            if not ({"body", "base"} & set(changes)):
+                return AdmissionDecision(
+                    mode="metadata-only",
+                    reason="edited_metadata_does_not_change_validation_subject",
+                    validation_class="metadata-only",
+                )
 
-        impacts = _parse_artifact_impacts(pull_request.get("body"))
         number = pull_request.get("number", event_payload.get("number"))
         if not isinstance(number, int):
             raise ValueError("pull_request_number_missing")
@@ -158,25 +221,20 @@ def decide_pull_request(
             pull_request=number,
             fetch_json=fetch_json,
         )
-        paths = [_validated_path(item) for item in files]
-
-        if impacts == {"internal_diagnostics"} and all(
-            _is_safe_doc_path(path) for path in paths
-        ):
-            return AdmissionDecision(
-                mode="draft-docs", reason="draft_safe_docs"
-            )
-        if impacts == {"user_visible_ui"} and all(
-            _is_safe_ui_path(path) for path in paths
-        ):
-            return AdmissionDecision(
-                mode="draft-ui", reason="draft_safe_user_visible_ui"
-            )
-        return AdmissionDecision(
-            mode="full", reason="draft_requires_full:path_not_fast_allowlisted"
+        decision = _classify_pull_request_evidence(
+            pull_request=pull_request, files=files
         )
+        if decision.mode == "full":
+            return AdmissionDecision(
+                mode=decision.mode,
+                reason=f"{decision.reason}:{action}",
+                validation_class=decision.validation_class,
+            )
+        return decision
     except Exception as exc:
-        return AdmissionDecision(mode="full", reason=_fail_safe_reason(exc))
+        return AdmissionDecision(
+            mode="full", reason=_fail_safe_reason(exc), validation_class="full"
+        )
 
 
 def validation_subject_step(
@@ -185,6 +243,10 @@ def validation_subject_step(
     return (
         f"{SUBJECT_PREFIX} pr={pull_request}; base={base_sha}; head={head_sha}"
     )
+
+
+def validation_class_step(validation_class: str) -> str:
+    return f"{CLASS_PREFIX} {validation_class}"
 
 
 def _parse_time(value: object) -> datetime:
@@ -230,6 +292,7 @@ def _run_matches_subject(
     base_sha: str,
     head_sha: str,
     merged_at: datetime,
+    validation_class: str,
     fetch_json: FetchJson,
     repository_api: str,
 ) -> bool:
@@ -255,15 +318,26 @@ def _run_matches_subject(
     if not isinstance(jobs_payload, dict):
         return False
     jobs = jobs_payload.get("jobs")
-    if not isinstance(jobs, list):
+    total_count = jobs_payload.get("total_count")
+    if (
+        not isinstance(jobs, list)
+        or not isinstance(total_count, int)
+        or total_count != len(jobs)
+        or total_count >= 100
+    ):
         return False
 
-    successful = {
+    successful_names = [
         job.get("name")
         for job in jobs
         if isinstance(job, dict) and job.get("conclusion") == "success"
-    }
-    if not REQUIRED_SUCCESSFUL_JOBS.issubset(successful):
+    ]
+    expected_successful = EXPECTED_SUCCESSFUL_JOBS.get(validation_class)
+    if (
+        expected_successful is None
+        or len(successful_names) != len(set(successful_names))
+        or set(successful_names) != expected_successful
+    ):
         return False
 
     aggregate_jobs = [
@@ -276,13 +350,16 @@ def _run_matches_subject(
     if len(aggregate_jobs) != 1:
         return False
     expected_step = validation_subject_step(pull_request, base_sha, head_sha)
+    expected_class_step = validation_class_step(validation_class)
     steps = aggregate_jobs[0].get("steps")
-    if not isinstance(steps, list) or not any(
-        isinstance(step, dict)
-        and step.get("name") == expected_step
-        and step.get("conclusion") == "success"
+    if not isinstance(steps, list):
+        return False
+    successful_steps = {
+        step.get("name")
         for step in steps
-    ):
+        if isinstance(step, dict) and step.get("conclusion") == "success"
+    }
+    if not {expected_step, expected_class_step}.issubset(successful_steps):
         return False
 
     return True
@@ -316,6 +393,29 @@ def decide_master_push(
         if not isinstance(number, int):
             raise ValueError("pull request number is missing")
         merged_at = _parse_time(pull_request.get("merged_at"))
+        current_pull_request = fetch_json(f"{repository_api}/pulls/{number}")
+        if not isinstance(current_pull_request, dict):
+            raise ValueError("current pull request response was not an object")
+        if (
+            current_pull_request.get("number") != number
+            or current_pull_request.get("base", {}).get("ref") != base_ref
+            or current_pull_request.get("base", {}).get("sha") != base_sha
+            or current_pull_request.get("head", {}).get("sha") != head_sha
+            or current_pull_request.get("merge_commit_sha") != merge_sha
+            or _parse_time(current_pull_request.get("merged_at")) != merged_at
+        ):
+            raise ValueError("current pull request metadata changed")
+        files = _pull_request_files(
+            repository_api=repository_api,
+            pull_request=number,
+            fetch_json=fetch_json,
+        )
+        required = _classify_pull_request_evidence(
+            pull_request=current_pull_request, files=files
+        )
+        validation_class = required.validation_class
+        if validation_class not in EXPECTED_SUCCESSFUL_JOBS:
+            raise ValueError("merged pull request validation class is unsupported")
         query = urlencode(
             {
                 "event": "pull_request",
@@ -331,7 +431,13 @@ def decide_master_push(
         if not isinstance(runs_payload, dict):
             raise ValueError("workflow run response was not an object")
         runs = runs_payload.get("workflow_runs")
-        if not isinstance(runs, list):
+        total_count = runs_payload.get("total_count")
+        if (
+            not isinstance(runs, list)
+            or not isinstance(total_count, int)
+            or total_count != len(runs)
+            or total_count >= 100
+        ):
             raise ValueError("workflow run list is missing")
         runs = sorted(
             runs,
@@ -347,20 +453,25 @@ def decide_master_push(
                 base_sha=base_sha,
                 head_sha=head_sha,
                 merged_at=merged_at,
+                validation_class=validation_class,
                 fetch_json=fetch_json,
                 repository_api=repository_api,
             ):
                 return AdmissionDecision(
                     mode="pr-confirmation",
-                    reason="exact_validated_merge",
+                    reason=f"exact_validated_merge:{validation_class}",
                     pull_request=number,
                     workflow_run=run["id"],
+                    validation_class=validation_class,
                 )
-        raise ValueError("no successful full validation matched the exact merge")
+        raise ValueError(
+            f"no successful {validation_class} validation matched the exact merge"
+        )
     except Exception as exc:
         return AdmissionDecision(
             mode="full",
             reason=_fail_safe_reason(exc),
+            validation_class="full",
         )
 
 
@@ -389,13 +500,17 @@ def decide_from_environment() -> AdmissionDecision:
         event_path = os.environ.get("GITHUB_EVENT_PATH", "")
         if not repository or not token or not event_path:
             return AdmissionDecision(
-                mode="full", reason="missing_pull_request_context"
+                mode="full",
+                reason="missing_pull_request_context",
+                validation_class="full",
             )
         try:
             with Path(event_path).open(encoding="utf-8") as handle:
                 event_payload = json.load(handle)
         except Exception as exc:
-            return AdmissionDecision(mode="full", reason=_fail_safe_reason(exc))
+            return AdmissionDecision(
+                mode="full", reason=_fail_safe_reason(exc), validation_class="full"
+            )
         return decide_pull_request(
             event_payload=event_payload,
             repository=repository,
@@ -403,12 +518,18 @@ def decide_from_environment() -> AdmissionDecision:
             api_url=os.environ.get("GITHUB_API_URL", "https://api.github.com"),
         )
     if event_name != "push":
-        return AdmissionDecision(mode="full", reason=f"event:{event_name or 'unknown'}")
+        return AdmissionDecision(
+            mode="full",
+            reason=f"event:{event_name or 'unknown'}",
+            validation_class="full",
+        )
     repository = os.environ.get("GITHUB_REPOSITORY", "")
     merge_sha = os.environ.get("GITHUB_SHA", "")
     token = os.environ.get("GITHUB_TOKEN", "")
     if not repository or not merge_sha or not token:
-        return AdmissionDecision(mode="full", reason="missing_github_context")
+        return AdmissionDecision(
+            mode="full", reason="missing_github_context", validation_class="full"
+        )
     return decide_master_push(
         repository=repository,
         merge_sha=merge_sha,
@@ -438,6 +559,7 @@ def main() -> int:
             f"reason={decision.reason}",
             f"pull_request={decision.pull_request or ''}",
             f"workflow_run={decision.workflow_run or ''}",
+            f"validation_class={decision.validation_class or ''}",
         ],
     )
     _append_lines(
@@ -448,7 +570,8 @@ def main() -> int:
             f"- Mode: `{decision.mode}`",
             f"- Reason: `{decision.reason}`",
             f"- Pull request: `{decision.pull_request or 'not-applicable'}`",
-            f"- Prior full-validation run: `{decision.workflow_run or 'not-applicable'}`",
+            f"- Validation class: `{decision.validation_class or 'not-applicable'}`",
+            f"- Prior validation run: `{decision.workflow_run or 'not-applicable'}`",
             "- Ambiguous, missing, or unavailable evidence always selects full validation.",
         ],
     )

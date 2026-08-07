@@ -52,6 +52,32 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
+    assert status["current_task"]["id"] == "GOV-03-READY-IMPACT-CI"
+    assert status["current_task"]["status"] == "completed_on_merge"
+    assert status["current_task"]["base_commit"] == (
+        "08e2107d0b797f187752310dd23b9610462b4eed"
+    )
+    assert status["current_task"]["authorization"] == {
+        "local_implementation": False,
+        "commit": False,
+        "remote_publication": False,
+        "merge": False,
+    }
+    assert status["recent_completion_handoff"] == {
+        "id": "P12-02",
+        "name": "Shareable URL state",
+        "status": "completed_and_merged",
+        "pull_request": 187,
+        "merge_commit": "7d3bc8a06b1a449eb8a80a4b6dcc5b0044f6542d",
+        "note": (
+            "GitHub and Git history retain the detailed validation, publication, "
+            "and Pages evidence."
+        ),
+    }
+    assert status["next_approved_task"]["id"] == "P12-03"
+    assert status["next_approved_task"]["status"] == "planned_not_authorized"
+    assert status["next_approved_task"]["requires_user_confirmation"] is True
+    assert status["next_approved_task"]["remote_publication_authorized"] is False
 
     historical_paths = {
         item["path"] for item in status["authoritative_documents"]["historical_documents"]
@@ -128,3 +154,22 @@ def test_readme_keeps_supported_operations_without_phase_narrative():
     assert "-m mtgmeta.melee.retention" in readme
     assert "Melee production candidate" in readme
     assert "docs/STATUS.yaml" in readme
+
+
+def test_pr_maturity_and_validation_class_policy_is_consistent():
+    agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+    workflow = (ROOT / "docs" / "DEVELOPMENT_WORKFLOW.md").read_text(
+        encoding="utf-8"
+    )
+    roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
+    decisions = (ROOT / "docs" / "DECISIONS.md").read_text(encoding="utf-8")
+    admission = (
+        ROOT / "docs" / "audits" / "CI-MASTER-ADMISSION.md"
+    ).read_text(encoding="utf-8")
+
+    assert "Pull-request maturity and validation scope are separate" in agents
+    assert "Pull-request maturity is not an input to validation strength" in workflow
+    assert "pull-request maturity and validation class are separated" in roadmap
+    assert "# DEC-085 - Separate pull-request maturity from validation class" in decisions
+    assert "Draft and Ready\npull requests use the same" in admission
+    assert "every Ready pull request retains the complete" not in roadmap
