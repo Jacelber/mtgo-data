@@ -2868,29 +2868,45 @@ public entry points.
      to be classified in one reproducible run with the same rule set; record the
      rule version or digest, and emit no change claim when comparable inputs
      cannot be established;
-   - run a read-only shadow evaluation over the most recent eight to twelve
-     complete weeks available for both Standard and Modern before freezing the
-     rules; report the weekly observation count, environment-list row count,
-     new-deck and new-technology candidate count, empty-state frequency, and
-     representative key-card selections without writing production outputs;
-   - define `share_move`, `build_shift`, `new_entry`, and `exit` facts using
-     high-score share and raw counts; use `notable` for an absolute movement of
-     at least two percentage points and do not claim statistical significance;
-   - retain the owner-approved one-Top-8 minimum for a new-deck candidate and
-     freeze the exact prior-state rule before implementation;
-   - reuse the existing Weekly Pickup deviation and review workflow for
-     new-technology candidates unless a separately reviewed formula change is
-     approved;
+   - complete P12-03A as an eight-to-twelve-week read-only Standard and Modern
+     shadow, then complete P12-03B by recording the owner-selected contract in
+     `PROJECT_SCOPE.md`, `STATISTICS_SPEC.md`, `DATA_ARCHITECTURE.md`,
+     `DECISIONS.md`, and the P12-03 audit without writing production outputs;
+   - include every current parent at or above 3% high-score share in the
+     environment list and show current-week, previous-week, and aggregated
+     previous-four-week counts and shares; retain `other_classified` and
+     `Unknown` as separate residuals;
+   - emit `share_move` only for an absolute current-versus-previous-four-week
+     movement of at least five percentage points, use a return state for a
+     known archetype that rises from no four-week observation to at least 5%,
+     retain `exit` for at least 5% to no current observation, and remove the
+     redundant public `notable` and statistical `new_entry` concepts;
+   - publish a new deck only from an owner-approved one-Top-8 Weekly Pickup
+     `new_archetype` item; a returning known archetype is not a new deck;
+   - define `build_shift` from one concrete current-week Top 8 deck whose
+     maintained subtype has at least eight previous-four-week reference decks
+     and whose existing construction-deviation score is at least 20; never
+     fall back to the parent identity;
+   - reuse the existing Weekly Pickup review workflow for new-technology
+     features, generate difference-card suggestions from cards newly present
+     or increased against the subtype base, and leave the final eight-card wall
+     to the reviewer;
    - do not reuse the 20-match matchup warning as a 20-deck Landing filter;
-   - define catalog-driven availability so a future format without an admitted
-     Landing document falls back to its first available product rather than
-     requesting a missing file;
+   - require future formats to admit Landing and all required MTGO products in
+     one public launch; Standard and Modern are explicit Phase 12 migration
+     exceptions and must satisfy the same rule at P12-16;
    - define invalid generated Landing data as publication-blocking, while no
      admitted events and no manually approved feature are separate valid empty
      states; external card-image failure remains non-blocking;
-   - freeze the environment-list threshold, key-card selection and fallback,
-     editorial refresh, empty-state, direct-link, and mobile-content rules with
-     owner review before code begins.
+   - keep representative key cards manually selected outside classifier rules,
+     prefer subtype pairs, use parent fallback only when explicitly allowed,
+     and remain text-only instead of guessing when no mapping exists;
+   - freeze editorial refresh, empty-state, `mtgo-landing` direct-link, and
+     mobile content-floor rules before code begins;
+   - block P12-10 until a separately authorized classifier remediation is
+     accepted, known-archetype state is validated or migrated, the shadow is
+     rerun, the three numeric thresholds are rechecked with the owner, and the
+     manual representative-card map is then approved.
 4. `P12-04` — Visual direction and durable design-system contract
    - publish the durable repository authority at
      `docs/FRONTEND_DESIGN_SYSTEM.md`, covering product personality,
@@ -2941,6 +2957,9 @@ public entry points.
      bounded concurrent image loading so the Landing does not issue an
      uncontrolled burst of third-party requests.
 10. `P12-10` — Landing weekly-facts producer and Pickup integration
+    - do not start until the P12-03 classifier-remediation gate, refreshed
+      shadow, owner threshold confirmation, known-state migration check, and
+      representative-card approval are complete;
     - add the Schema-validated latest-only
       `stats/<format>/mtgo/landing/current.json` document under the reviewed
       manifest, catalog, workflow, production-candidate, and Pages-allowlist
@@ -2964,12 +2983,13 @@ public entry points.
       comparison base, and protected `434455` byte unchanged unless its exact
       extension was authorized in P12-03.
 11. `P12-11` — Landing weekly summary and environment structure
-    - render three to five structured weekly observations, the environment
-      composition strip, and the high-score-share structure list from the same
-      P12-10 document;
+    - render up to five truthful structured weekly observations without forcing
+      a minimum, plus the environment composition strip and high-score-share
+      structure list from the same P12-10 document;
     - show every archetype above the owner-approved high-score-share threshold,
-      show raw deck counts, display Top 8 share only as supporting information,
-      and do not apply a 20-deck exclusion;
+      show current, previous-week, and aggregated previous-four-week raw counts
+      and high-score shares, display current Top 8 share only as supporting
+      information, and do not apply a 20-deck exclusion;
     - make the composition segments and list rows use the same archetype set and
       the P12-02 shareable detail URL;
     - render text before progressively loaded key-card images and provide a
@@ -3008,8 +3028,9 @@ public entry points.
     - after the complete Landing, empty states, failure fallback, direct links,
       and Pages artifact are accepted, make it the bare `/index.html` MTGO
       default while retaining every explicit existing product URL;
-    - verify that a catalog-supported format without Landing capability opens
-      its first available product and never requests `landing/current.json`;
+    - verify that no future format can be catalog-public without an admitted
+      Landing and all required MTGO products, while the Standard and Modern
+      migration exceptions both satisfy this invariant at closeout;
     - compare request count, transferred bytes, readable-content timing, image
       request behavior, and layout stability with the P12-01 baseline; stop for
       review on an unexplained material regression rather than inventing an
@@ -3251,10 +3272,9 @@ sources while keeping MTGO and Tabletop inputs, outputs, statistics, catalogs,
 and product behavior separate. Depend on the engineering and front-end
 baselines established by Phases 10 through 12.
 
-Landing availability remains capability-driven. Pauper must either publish an
-admitted Landing product under the Phase 12 contract or fall back to its first
-available catalog product; enabling the format must not cause a request for a
-missing Landing document.
+Pauper must publish an admitted Landing under the Phase 12 contract in the same
+public launch as its other required MTGO products. Until that complete set is
+ready, the format remains unavailable in the public catalog.
 
 ## Task sequence
 
@@ -3267,8 +3287,8 @@ missing Landing document.
 7. Register the approved Paupergeddon main event.
 8. Normalize and validate that event as `constructed_day2`.
 9. Generate event-specific Pauper statistics.
-10. Enable Pauper in both front ends, declaring Landing capability only if its
-    reviewed Landing document is produced and admitted.
+10. Enable Pauper in both front ends only when its reviewed Landing and every
+    required product are produced and admitted together.
 
 ## Acceptance criteria
 
@@ -3280,8 +3300,8 @@ Phase 14 is complete when:
 - Pauper rules pass validation;
 - Standard and Modern regression tests pass;
 - front-end format selection is catalog-driven;
-- a format without Landing capability opens its first available product without
-  a missing-document request;
+- Pauper is not public until Landing and every required MTGO product are
+  admitted together;
 - quality reports are available.
 
 ---
@@ -3298,9 +3318,9 @@ Use the established shared-classifier and dual-product process without copying
 or forking the Standard-only pipeline. Depend on the engineering and front-end
 baselines established by Phases 10 through 12.
 
-Pioneer Landing availability remains capability-driven. Front-end enablement
-must either admit a reviewed Landing document or fall back to the first
-available catalog product.
+Pioneer must admit a reviewed Landing and every required MTGO product in one
+public launch. It remains unavailable in the public catalog until that set is
+complete.
 
 ## Task sequence
 
@@ -3312,8 +3332,8 @@ available catalog product.
 6. Register an approved Pioneer Melee event.
 7. Normalize and validate the event.
 8. Generate event-specific Pioneer statistics.
-9. Enable Pioneer in both front ends, declaring Landing capability only when
-   the corresponding product is generated and admitted.
+9. Enable Pioneer in both front ends only when Landing and every required
+   product are generated and admitted together.
 
 ## Acceptance criteria
 
@@ -3324,8 +3344,8 @@ Phase 15 is complete when:
 - MTGO and Melee remain separate;
 - no copied Standard-only pipeline is introduced;
 - rules, tests, schemas, and catalogs are updated;
-- missing Landing capability falls back without requesting an unavailable
-  document;
+- Pioneer is not public without an admitted Landing and complete required
+  product set;
 - prior-format regression tests pass.
 
 ---
@@ -3342,9 +3362,9 @@ Use the established shared-classifier and dual-product process for Legacy, and
 retain the approved Eternal Weekend main-event boundary. Depend on the
 engineering and front-end baselines established by Phases 10 through 12.
 
-Legacy Landing availability remains capability-driven. Front-end enablement
-must either admit a reviewed Landing document or fall back to the first
-available catalog product.
+Legacy must admit a reviewed Landing and every required MTGO product in one
+public launch. It remains unavailable in the public catalog until that set is
+complete.
 
 ## Task sequence
 
@@ -3356,8 +3376,8 @@ available catalog product.
 6. Register an Eternal Weekend Legacy main event.
 7. Normalize and validate the event.
 8. Generate event-specific Legacy statistics.
-9. Enable Legacy in both front ends, declaring Landing capability only when the
-   corresponding product is generated and admitted.
+9. Enable Legacy in both front ends only when Landing and every required
+   product are generated and admitted together.
 
 ### Event restrictions
 
@@ -3379,8 +3399,8 @@ Phase 16 is complete when:
 - side events remain excluded;
 - shared Legacy archetype IDs are stable;
 - MTGO and Melee remain separate;
-- missing Landing capability falls back without requesting an unavailable
-  document;
+- Legacy is not public without an admitted Landing and complete required
+  product set;
 - prior-format regressions pass;
 - front-end catalogs are updated.
 

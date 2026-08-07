@@ -3562,3 +3562,84 @@ still-valid focused or complete PR run; any changed or incomplete evidence
 falls back to the complete suite. Product behavior, statistics, Schemas,
 generated data, production publication, Pages content, and Phase 12 product
 authorization do not change.
+
+---
+
+# DEC-086 - Freeze the reviewed MTGO Landing contract and classifier gate
+
+Status: `Accepted`
+
+## Context
+
+P12-03A reclassified the same twelve complete weeks, 2026-W20 through
+2026-W31, under one current rule set for Standard and Modern. The shadow covered
+95 Standard events with 3,037 decks and 144 Modern events with 4,608 decks. A
+3% current high-score-share threshold produced a readable environment list,
+while 2% made Modern too dense and 5% discarded too much of its observed
+environment.
+
+The initial plan used the previous week for movement and separated
+`share_move` from a two-percentage-point `notable` flag. Owner review instead
+selected the aggregated previous four complete weeks as the movement baseline,
+retained the immediately previous week as a displayed reference, and requested
+one strict public movement threshold. A five-percentage-point shadow produced
+one to five Standard movements per week with a median of three, but only zero
+to two Modern movements and nine empty Modern weeks. Higher thresholds made the
+Modern fact nearly disappear.
+
+Owner review also established that public new decks and Weekly Pickup new
+archetypes are one concept, that subtype construction change requires a
+successful concrete version rather than a parent-share proxy, and that humans
+must choose representative and feature cards. The current classifier is a
+provisional validation baseline with known material errors and is not suitable
+for freezing final Landing identities.
+
+## Decision
+
+Use 3% current high-score share for the parent environment list. Display raw
+counts and shares for the current week, previous week, and aggregated previous
+four weeks. Keep below-threshold classified decks and `Unknown` separate.
+
+Use `share_move` for an absolute current-versus-four-week change of at least
+five percentage points. A known archetype returning from no four-week record to
+at least 5% is an upward movement state. Use `exit` for at least 5% in the
+reference and no current record. Remove public `notable` and statistical
+`new_entry`; Landing new decks come only from human-approved one-Top-8 Weekly
+Pickup new-archetype items.
+
+Use `build_shift` only for a maintained subtype with at least eight prior-four-
+week reference decks and at least one current Top 8 deck whose existing
+main-deck construction-deviation score is at least 20. Select the most-deviant
+qualifying Top 8 deck per subtype and week without parent fallback. Reuse Weekly
+Pickup approval for a public new-technology feature. The generator suggests
+newly present or increased cards, while the reviewer selects the final exact
+eight-card wall.
+
+Keep environment representative cards in separate manual product metadata,
+not classifier rules or generated statistics. Prefer an explicit subtype pair,
+allow parent fallback only when configured, and use text-only output rather
+than guessing. Preserve reviewed editorial content for re-review after a
+late-event fact change and keep the last admitted Landing public until the
+review is complete.
+
+After Phase 12, every newly public MTGO format must admit Landing and all
+required products atomically. Standard and Modern are explicit migration
+exceptions because their current products predate Landing; they remain online
+during Phase 12 and satisfy the same invariant at P12-16.
+
+Block P12-10 until a separately authorized classifier remediation is accepted,
+Weekly Pickup known state is validated or migrated, the Standard and Modern
+shadow is rerun, the 3%, five-percentage-point, and 20-point thresholds receive
+refreshed owner confirmation, and representative cards are then approved.
+P12-04 through P12-09 remain separately authorizable because they do not
+produce Landing facts or freeze classifier identities.
+
+## Consequences
+
+Landing has one readable current environment, one stable four-week comparison,
+one public share-movement threshold, and no duplicate new-deck or notable
+concepts. Quiet Modern weeks remain truthful and may be supplemented only by a
+qualified subtype shift or approved Pickup feature. Future formats cannot leak
+into the public catalog as partial products. No Landing generator, Schema,
+configuration, production data, classifier change, public path, or publication
+is authorized by this decision; those remain later task gates.

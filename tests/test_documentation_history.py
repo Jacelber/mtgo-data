@@ -52,32 +52,38 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "GOV-03-READY-IMPACT-CI"
-    assert status["current_task"]["status"] == "completed_on_merge"
+    assert status["current_task"]["id"] == "P12-03B"
+    assert status["current_task"]["status"] == (
+        "local_contract_complete_ready_pr_publication_authorized"
+    )
     assert status["current_task"]["base_commit"] == (
-        "08e2107d0b797f187752310dd23b9610462b4eed"
+        "ec00f59c8a260bf0975af9fffa0badfabac430d3"
     )
     assert status["current_task"]["authorization"] == {
-        "local_implementation": False,
-        "commit": False,
-        "remote_publication": False,
+        "local_implementation": True,
+        "commit": True,
+        "remote_publication": True,
         "merge": False,
     }
     assert status["recent_completion_handoff"] == {
-        "id": "P12-02",
-        "name": "Shareable URL state",
+        "id": "GOV-03-READY-IMPACT-CI",
+        "name": "Impact-classified pull-request validation",
         "status": "completed_and_merged",
-        "pull_request": 187,
-        "merge_commit": "7d3bc8a06b1a449eb8a80a4b6dcc5b0044f6542d",
+        "pull_request": 188,
+        "merge_commit": "ec00f59c8a260bf0975af9fffa0badfabac430d3",
         "note": (
             "GitHub and Git history retain the detailed validation, publication, "
             "and Pages evidence."
         ),
     }
-    assert status["next_approved_task"]["id"] == "P12-03"
+    assert status["next_approved_task"]["id"] == "P12-04"
     assert status["next_approved_task"]["status"] == "planned_not_authorized"
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
+    assert status["future_task_gates"][0]["task"] == "P12-10"
+    assert status["future_task_gates"][0]["status"] == (
+        "blocked_pending_separate_authorization_and_evidence"
+    )
 
     historical_paths = {
         item["path"] for item in status["authoritative_documents"]["historical_documents"]
@@ -173,3 +179,36 @@ def test_pr_maturity_and_validation_class_policy_is_consistent():
     assert "# DEC-085 - Separate pull-request maturity from validation class" in decisions
     assert "Draft and Ready\npull requests use the same" in admission
     assert "every Ready pull request retains the complete" not in roadmap
+
+
+def test_p12_03_landing_contract_is_consistent():
+    scope = (ROOT / "docs" / "PROJECT_SCOPE.md").read_text(encoding="utf-8")
+    statistics = (ROOT / "docs" / "STATISTICS_SPEC.md").read_text(
+        encoding="utf-8"
+    )
+    architecture = (ROOT / "docs" / "DATA_ARCHITECTURE.md").read_text(
+        encoding="utf-8"
+    )
+    roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
+    decisions = (ROOT / "docs" / "DECISIONS.md").read_text(encoding="utf-8")
+    audit = (ROOT / "docs" / "audits" / "P12-03.md").read_text(
+        encoding="utf-8"
+    )
+
+    for document in (statistics, roadmap, decisions, audit):
+        assert "five percentage points" in document
+        assert "Weekly Pickup" in document
+
+    assert "five-percentage-point movement" in architecture
+    assert "Weekly Pickup" in architecture
+
+    assert "at least `0.03`" in statistics
+    assert "construction-deviation score of at least `20`" in statistics
+    assert "There is no separate public `notable`" in statistics
+    assert "does not derive a statistical `new_entry`" in statistics
+    assert "product ID `mtgo-landing`" in architecture
+    assert "Standard and Modern are the explicit migration exceptions" in architecture
+    assert "P12-10 is blocked" in architecture
+    assert "future formats to admit Landing" in roadmap
+    assert "# DEC-086 - Freeze the reviewed MTGO Landing contract" in decisions
+    assert "products predate Landing" in scope

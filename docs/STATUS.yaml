@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "master"
-  working_branch_status: "governance_landed"
+  current_working_branch: "codex/p12-03b-landing-contract"
+  working_branch_status: "isolated_local_contract_complete"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -72,64 +72,61 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-03-READY-IMPACT-CI"
-  name: "Impact-classified pull-request validation"
-  status: "completed_on_merge"
+  id: "P12-03B"
+  name: "Landing product, data, and editorial contract freeze"
+  status: "local_contract_complete_ready_pr_publication_authorized"
   authorized_on: "2026-08-07"
-  workspace: "C:/tmp/mtgo-data-gov-03-20260807-01"
-  branch: "codex/gov-03-ready-impact-ci"
-  base_commit: "08e2107d0b797f187752310dd23b9610462b4eed"
-  task_type: "governance_and_ci_admission"
+  workspace: "C:/tmp/mtgo-data-p12-03b-20260807-01"
+  branch: "codex/p12-03b-landing-contract"
+  base_commit: "ec00f59c8a260bf0975af9fffa0badfabac430d3"
+  task_type: "product_statistical_and_editorial_contract"
   artifact_impact: "none"
-  objective: "Select pull-request validation from declared artifact impact and complete changed-file evidence, avoid maturity-state duplicate runs, and preserve fail-closed complete validation and separate merge authorization."
+  objective: "Freeze the owner-reviewed MTGO Landing product, statistical, data, editorial, lifecycle, fallback, and pre-P12-10 classifier-gate contract without implementing or publishing the product."
   authorization:
-    local_implementation: false
-    commit: false
-    remote_publication: false
+    local_implementation: true
+    commit: true
+    remote_publication: true
     merge: false
   target_paths:
-    - ".github/workflows/ci.yml"
-    - "ci_master_admission.py"
-    - "tests/test_ci_master_admission.py"
-    - "tests/test_ci_workflow.py"
-    - "tests/test_documentation_history.py"
-    - "AGENTS.md"
-    - "docs/DEVELOPMENT_WORKFLOW.md"
+    - "docs/PROJECT_SCOPE.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/CI-MASTER-ADMISSION.md"
-    - "docs/audits/CI_EFFICIENCY_PLAN.md"
+    - "docs/audits/P12-03.md"
+    - "tests/test_documentation_history.py"
   protected_scope:
-    code_changed: "CI admission and its deterministic tests only"
-    workflow_changed: "State-neutral focused documentation, focused UI, complete, metadata-only, and exact-merge confirmation paths"
+    code_changed: "none"
+    workflow_changed: "none"
     raw_or_generated_data_changed: "none"
-    statistical_behavior_changed: "none"
+    statistical_behavior_changed: "future Landing contract only; no current generator or product changed"
     schema_changed: "none"
     frontend_source_changed: "none"
     public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
-    remote_write_performed: "Task publication details remain in GitHub and Git history."
+    remote_write_performed: "none"
   allowed_actions:
-    - "No further GOV-03 action is automatically authorized after this landing state."
+    - "Create one exact P12-03B documentation commit from the reviewed file set."
+    - "Push only codex/p12-03b-landing-contract and open one Ready pull request against master."
   prohibited_changes:
     - "Production dispatch, real-data write, Pages publication, or dependency-manifest change."
-    - "Statistics, Schema, generated data, product HTML, CSS, JavaScript, runtime request path, privacy, retention, or event-whitelist changes."
-    - "P12-03 or any other task implementation."
-  stop_point: "GOV-03 is complete only when merged under separate owner authorization. Do not start P12-03 automatically."
+    - "Classifier rules, known-archetype state, Schema, generated data, product HTML, CSS, JavaScript, workflow, runtime request path, privacy, retention, or event-whitelist changes."
+    - "P12-04, classifier remediation, P12-10, merge, or production implementation."
+  stop_point: "Stop after the Ready pull request is published for separate merge authorization. Do not start P12-04, classifier remediation, or P12-10 automatically."
 
 recent_completion_handoff:
-  id: "P12-02"
-  name: "Shareable URL state"
+  id: "GOV-03-READY-IMPACT-CI"
+  name: "Impact-classified pull-request validation"
   status: "completed_and_merged"
-  pull_request: 187
-  merge_commit: "7d3bc8a06b1a449eb8a80a4b6dcc5b0044f6542d"
+  pull_request: 188
+  merge_commit: "ec00f59c8a260bf0975af9fffa0badfabac430d3"
   note: "GitHub and Git history retain the detailed validation, publication, and Pages evidence."
 
 current_repository_state:
-  baseline_commit: "08e2107d0b797f187752310dd23b9610462b4eed"
-  baseline_note: "Verified live master used as the GOV-03 base after the 2026-08-07 production update."
+  baseline_commit: "ec00f59c8a260bf0975af9fffa0badfabac430d3"
+  baseline_note: "Verified live master after GOV-03 merge, used as the isolated P12-03B contract base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -188,6 +185,17 @@ engineering_quality:
 
 known_blockers: []
 
+future_task_gates:
+  - task: "P12-10"
+    status: "blocked_pending_separate_authorization_and_evidence"
+    requirements:
+      - "Complete and accept the separately authorized Standard and Modern classifier remediation."
+      - "Freeze corrected stable parent and subtype identities."
+      - "Validate or explicitly migrate Weekly Pickup known-archetype state."
+      - "Rerun the 8-12 week Standard and Modern Landing shadow."
+      - "Reconfirm the 3% environment, 5 percentage-point share movement, and 20-point subtype build-shift thresholds with the owner."
+      - "Approve the manual representative-card map after identity freeze."
+
 open_decisions:
   - id: "OPEN-003"
     question: "Enable Vintage as a supported format?"
@@ -199,15 +207,15 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-03"
-  name: "Landing product, data, and editorial contract"
+  id: "P12-04"
+  name: "Visual direction and durable design-system contract"
   status: "planned_not_authorized"
   production_change: false
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "P12-03 remains a separately authorized contract task and must not start automatically after P12-02."
+  note: "P12-04 remains separately owner-gated after P12-03B acceptance; classifier remediation is also a separate task and P12-10 retains the recorded hard gate."
 
 governance_baseline:
   status: "active_on_master"
@@ -243,7 +251,7 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not begin P12-03 or another task automatically."
+  - "Do not begin P12-04, classifier remediation, P12-10, or another task automatically."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."
