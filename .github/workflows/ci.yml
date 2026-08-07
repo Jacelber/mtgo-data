@@ -6,8 +6,6 @@ on:
       - opened
       - synchronize
       - reopened
-      - ready_for_review
-      - converted_to_draft
       - edited
   push:
     branches:
@@ -25,7 +23,7 @@ concurrency:
 
 jobs:
   admission:
-    name: Select full validation or exact-merge confirmation
+    name: Select PR validation class or exact-merge confirmation
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
@@ -33,6 +31,7 @@ jobs:
       reason: ${{ steps.classify.outputs.reason }}
       pull_request: ${{ steps.classify.outputs.pull_request }}
       workflow_run: ${{ steps.classify.outputs.workflow_run }}
+      validation_class: ${{ steps.classify.outputs.validation_class }}
     steps:
       - name: Check out admission logic without persisted credentials
         uses: actions/checkout@v7.0.0
@@ -50,10 +49,10 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: python -B ci_master_admission.py
 
-  draft-feedback:
-    name: Focused Draft feedback
+  focused-validation:
+    name: Focused PR validation
     needs: admission
-    if: needs.admission.outputs.mode == 'draft-docs' || needs.admission.outputs.mode == 'draft-ui'
+    if: needs.admission.outputs.mode == 'focused-docs' || needs.admission.outputs.mode == 'focused-ui'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -89,8 +88,12 @@ jobs:
         run: python -B validate_repository.py
 
       - name: Validate live documentation policy
-        if: needs.admission.outputs.mode == 'draft-docs'
+        if: needs.admission.outputs.mode == 'focused-docs'
         run: python -B -m pytest tests/test_documentation_history.py
+
+      - name: Run native Node.js frontend tests
+        if: needs.admission.outputs.mode == 'focused-ui'
+        run: node --test tests/js/phase8-matchup-model.test.js
 
   static-validation:
     name: Repository files, rules, and schemas
@@ -218,7 +221,7 @@ jobs:
   browser-validation:
     name: Playwright production pages
     needs: admission
-    if: needs.admission.outputs.mode == 'full' || needs.admission.outputs.mode == 'draft-ui'
+    if: needs.admission.outputs.mode == 'full' || needs.admission.outputs.mode == 'focused-ui'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -272,24 +275,29 @@ jobs:
             echo "## Exact merged-PR confirmation"
             echo
             echo "- Pull request: #${{ needs.admission.outputs.pull_request }}"
-            echo "- Prior full-validation run: ${{ needs.admission.outputs.workflow_run }}"
+            echo "- Prior validation run: ${{ needs.admission.outputs.workflow_run }}"
+            echo "- Prior validation class: ${{ needs.admission.outputs.validation_class }}"
             echo "- Admission reason: ${{ needs.admission.outputs.reason }}"
-            echo "- The full suite is retained for direct pushes and every ambiguous or unavailable evidence path."
+            echo "- Complete validation is retained for direct pushes and every ambiguous or unavailable evidence path."
           } >> "$GITHUB_STEP_SUMMARY"
           if [ "${{ github.event_name }}" != "push" ] ||
              [ "${{ github.ref }}" != "refs/heads/master" ] ||
-             [ "${{ needs.admission.outputs.reason }}" != "exact_validated_merge" ] ||
              [ -z "${{ needs.admission.outputs.pull_request }}" ] ||
-             [ -z "${{ needs.admission.outputs.workflow_run }}" ]; then
+             [ -z "${{ needs.admission.outputs.workflow_run }}" ] ||
+             [ -z "${{ needs.admission.outputs.validation_class }}" ]; then
             exit 1
           fi
+          case "${{ needs.admission.outputs.reason }}" in
+            exact_validated_merge:*) ;;
+            *) exit 1 ;;
+          esac
 
   validate:
     name: Repository validation (Python 3.12)
     if: always()
     needs:
       - admission
-      - draft-feedback
+      - focused-validation
       - static-validation
       - pytest
       - browser-validation
@@ -301,7 +309,11 @@ jobs:
         if: github.event_name == 'pull_request'
         run: "true"
 
-      - name: Require every validation shard
+      - name: "Validated PR class: ${{ needs.admission.outputs.mode }}"
+        if: github.event_name == 'pull_request'
+        run: "true"
+
+      - name: Require exact validation class job matrix
         shell: bash
         run: |
           {
@@ -309,7 +321,7 @@ jobs:
             echo
             echo "- Admission: ${{ needs.admission.result }}"
             echo "- Validation mode: ${{ needs.admission.outputs.mode }}"
-            echo "- Focused Draft feedback: ${{ needs.draft-feedback.result }}"
+            echo "- Focused PR validation: ${{ needs.focused-validation.result }}"
             echo "- Static validation: ${{ needs.static-validation.result }}"
             echo "- Pytest shards: ${{ needs.pytest.result }}"
             echo "- Playwright browser baseline: ${{ needs.browser-validation.result }}"
@@ -320,31 +332,39 @@ jobs:
             exit 1
           fi
           if [ "${{ needs.admission.outputs.mode }}" = "full" ] &&
-             [ "${{ needs.draft-feedback.result }}" = "skipped" ] &&
+             [ "${{ needs.focused-validation.result }}" = "skipped" ] &&
              [ "${{ needs.static-validation.result }}" = "success" ] &&
              [ "${{ needs.pytest.result }}" = "success" ] &&
              [ "${{ needs.browser-validation.result }}" = "success" ] &&
              [ "${{ needs.post-merge-confirmation.result }}" = "skipped" ]; then
             exit 0
           fi
-          if [ "${{ needs.admission.outputs.mode }}" = "draft-docs" ] &&
-             [ "${{ needs.draft-feedback.result }}" = "success" ] &&
+          if [ "${{ needs.admission.outputs.mode }}" = "focused-docs" ] &&
+             [ "${{ needs.focused-validation.result }}" = "success" ] &&
              [ "${{ needs.static-validation.result }}" = "skipped" ] &&
              [ "${{ needs.pytest.result }}" = "skipped" ] &&
              [ "${{ needs.browser-validation.result }}" = "skipped" ] &&
              [ "${{ needs.post-merge-confirmation.result }}" = "skipped" ]; then
             exit 0
           fi
-          if [ "${{ needs.admission.outputs.mode }}" = "draft-ui" ] &&
-             [ "${{ needs.draft-feedback.result }}" = "success" ] &&
+          if [ "${{ needs.admission.outputs.mode }}" = "focused-ui" ] &&
+             [ "${{ needs.focused-validation.result }}" = "success" ] &&
              [ "${{ needs.static-validation.result }}" = "skipped" ] &&
              [ "${{ needs.pytest.result }}" = "skipped" ] &&
              [ "${{ needs.browser-validation.result }}" = "success" ] &&
              [ "${{ needs.post-merge-confirmation.result }}" = "skipped" ]; then
             exit 0
           fi
+          if [ "${{ needs.admission.outputs.mode }}" = "metadata-only" ] &&
+             [ "${{ needs.focused-validation.result }}" = "skipped" ] &&
+             [ "${{ needs.static-validation.result }}" = "skipped" ] &&
+             [ "${{ needs.pytest.result }}" = "skipped" ] &&
+             [ "${{ needs.browser-validation.result }}" = "skipped" ] &&
+             [ "${{ needs.post-merge-confirmation.result }}" = "skipped" ]; then
+            exit 0
+          fi
           if [ "${{ needs.admission.outputs.mode }}" = "pr-confirmation" ] &&
-             [ "${{ needs.draft-feedback.result }}" = "skipped" ] &&
+             [ "${{ needs.focused-validation.result }}" = "skipped" ] &&
              [ "${{ needs.static-validation.result }}" = "skipped" ] &&
              [ "${{ needs.pytest.result }}" = "skipped" ] &&
              [ "${{ needs.browser-validation.result }}" = "skipped" ] &&

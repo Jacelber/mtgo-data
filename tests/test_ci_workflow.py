@@ -33,8 +33,6 @@ def test_triggers_are_review_and_validation_only():
             "opened",
             "synchronize",
             "reopened",
-            "ready_for_review",
-            "converted_to_draft",
             "edited",
         ]
     }
@@ -57,7 +55,7 @@ def test_permissions_and_concurrency_are_least_privilege():
 def test_execution_jobs_are_bounded_and_use_current_official_actions():
     jobs = load_workflow()["jobs"]
     assert jobs["admission"]["timeout-minutes"] == "5"
-    assert jobs["draft-feedback"]["timeout-minutes"] == "10"
+    assert jobs["focused-validation"]["timeout-minutes"] == "10"
     assert jobs["static-validation"]["timeout-minutes"] == "10"
     assert jobs["pytest"]["timeout-minutes"] == "30"
     assert jobs["browser-validation"]["timeout-minutes"] == "10"
@@ -145,7 +143,7 @@ def test_static_validation_and_aggregate_check_are_complete():
     assert aggregate["if"] == "always()"
     assert aggregate["needs"] == [
         "admission",
-        "draft-feedback",
+        "focused-validation",
         "static-validation",
         "pytest",
         "browser-validation",
@@ -153,10 +151,12 @@ def test_static_validation_and_aggregate_check_are_complete():
     ]
     assert aggregate["steps"][0]["if"] == "github.event_name == 'pull_request'"
     assert "Validated merge subject:" in aggregate["steps"][0]["name"]
-    command = aggregate["steps"][1]["run"]
+    assert aggregate["steps"][1]["if"] == "github.event_name == 'pull_request'"
+    assert "Validated PR class:" in aggregate["steps"][1]["name"]
+    command = aggregate["steps"][2]["run"]
     assert "needs.admission.result" in command
     assert "needs.admission.outputs.mode" in command
-    assert "needs.draft-feedback.result" in command
+    assert "needs.focused-validation.result" in command
     assert "needs.static-validation.result" in command
     assert "needs.pytest.result" in command
     assert "needs.browser-validation.result" in command
@@ -168,25 +168,28 @@ def test_master_admission_is_fail_safe_and_full_suite_is_default():
     jobs = load_workflow()["jobs"]
     admission = jobs["admission"]
     assert admission["outputs"]["mode"] == "${{ steps.classify.outputs.mode }}"
+    assert admission["outputs"]["validation_class"] == (
+        "${{ steps.classify.outputs.validation_class }}"
+    )
     classify = admission["steps"][2]
     assert classify["run"] == "python -B ci_master_admission.py"
     assert classify["env"] == {"GITHUB_TOKEN": "${{ github.token }}"}
 
     assert jobs["static-validation"]["needs"] == "admission"
-    assert jobs["draft-feedback"]["needs"] == "admission"
+    assert jobs["focused-validation"]["needs"] == "admission"
     assert jobs["pytest"]["needs"] == "admission"
     assert jobs["browser-validation"]["needs"] == "admission"
     assert jobs["static-validation"]["if"] == (
         "needs.admission.outputs.mode == 'full'"
     )
     assert jobs["pytest"]["if"] == "needs.admission.outputs.mode == 'full'"
-    assert jobs["draft-feedback"]["if"] == (
-        "needs.admission.outputs.mode == 'draft-docs' || "
-        "needs.admission.outputs.mode == 'draft-ui'"
+    assert jobs["focused-validation"]["if"] == (
+        "needs.admission.outputs.mode == 'focused-docs' || "
+        "needs.admission.outputs.mode == 'focused-ui'"
     )
     assert jobs["browser-validation"]["if"] == (
         "needs.admission.outputs.mode == 'full' || "
-        "needs.admission.outputs.mode == 'draft-ui'"
+        "needs.admission.outputs.mode == 'focused-ui'"
     )
     assert jobs["post-merge-confirmation"]["if"] == (
         "needs.admission.outputs.mode == 'pr-confirmation'"
@@ -216,20 +219,21 @@ def test_workflow_contains_no_secret_or_token_expression():
     assert text.count("github.token") == 1
 
 
-def test_draft_feedback_is_focused_and_full_ready_jobs_remain_unchanged():
+def test_focused_feedback_runs_repository_node_and_applicable_browser_checks():
     jobs = load_workflow()["jobs"]
-    draft_steps = jobs["draft-feedback"]["steps"]
-    draft_commands = "\n".join(step.get("run", "") for step in draft_steps)
-    draft_uses = {step.get("uses") for step in draft_steps}
+    focused_steps = jobs["focused-validation"]["steps"]
+    focused_commands = "\n".join(step.get("run", "") for step in focused_steps)
+    focused_uses = {step.get("uses") for step in focused_steps}
 
-    assert "actions/checkout@v7.0.0" in draft_uses
-    assert "actions/setup-python@v6.3.0" in draft_uses
-    assert "actions/setup-node@v6" in draft_uses
-    assert "validate_repository.py" in draft_commands
-    assert "tests/test_documentation_history.py" in draft_commands
-    assert "validate_rules.py" not in draft_commands
-    assert "validate_schemas.py" not in draft_commands
-    assert "-m committed_baseline" not in draft_commands
+    assert "actions/checkout@v7.0.0" in focused_uses
+    assert "actions/setup-python@v6.3.0" in focused_uses
+    assert "actions/setup-node@v6" in focused_uses
+    assert "validate_repository.py" in focused_commands
+    assert "tests/test_documentation_history.py" in focused_commands
+    assert "node --test tests/js/phase8-matchup-model.test.js" in focused_commands
+    assert "validate_rules.py" not in focused_commands
+    assert "validate_schemas.py" not in focused_commands
+    assert "-m committed_baseline" not in focused_commands
 
     full_commands = "\n".join(
         step.get("run", "")
@@ -253,8 +257,26 @@ def test_draft_feedback_is_focused_and_full_ready_jobs_remain_unchanged():
     assert marker_expressions == {"not committed_baseline", "committed_baseline"}
 
 
-def test_aggregate_accepts_only_the_four_explicit_execution_paths():
-    command = load_workflow()["jobs"]["validate"]["steps"][1]["run"]
-    for mode in ("full", "draft-docs", "draft-ui", "pr-confirmation"):
+def test_aggregate_accepts_only_the_five_explicit_execution_paths():
+    command = load_workflow()["jobs"]["validate"]["steps"][2]["run"]
+    for mode in (
+        "full",
+        "focused-docs",
+        "focused-ui",
+        "metadata-only",
+        "pr-confirmation",
+    ):
         assert f'= "{mode}"' in command
     assert "Unexpected or incomplete validation path." in command
+
+
+def test_pr_maturity_state_triggers_and_draft_job_names_are_absent():
+    text = WORKFLOW.read_text(encoding="utf-8")
+    for retired in (
+        "ready_for_review",
+        "converted_to_draft",
+        "draft-feedback",
+        "draft-docs",
+        "draft-ui",
+    ):
+        assert retired not in text

@@ -1,126 +1,115 @@
-# Gate 4 master-admission design
+# Pull-request validation and master-admission design
 
 ## Purpose
 
-Gate 4 removes one specific duplication: a normal pull request that has already
-passed the complete clean-checkout suite should not repeat that same complete
-suite after an exact merge to `master`.
+CI separates pull-request maturity from validation strength. Draft and Ready
+pull requests use the same artifact-impact and changed-file classification.
+Locally completed work is published Ready by default; Draft is optional only
+for explicitly requested incomplete-work review.
 
-This is not a test reduction. Pull requests still run static validation and
-both exact complementary pytest shards. Direct pushes and every unproven
-`master` update still run that same complete validation.
+The workflow also avoids repeating an already successful pull-request suite
+after an exact two-parent merge to `master`. Direct pushes and every unproven
+merge still run complete validation.
 
-## Trigger decision
+## Pull-request classification
 
-The workflow begins with a read-only `admission` job. Its default and fail-safe
-result is `full`.
+The read-only `admission` job defaults and fails safe to `full`. It reads the
+single PR-body `artifact-impact` marker and the complete GitHub changed-file
+list. Added and modified files are the only statuses eligible for a focused
+class. Missing, duplicate, malformed, stale, conflicting, incomplete,
+paginated-beyond-support, or unavailable evidence selects `full`.
 
-| Event or evidence | Selected path |
-| --- | --- |
-| `pull_request` | Complete static validation and both pytest shards |
-| `workflow_dispatch` | Complete static validation and both pytest shards |
-| Direct one-parent push to `master` | Complete static validation and both pytest shards |
-| Squash, rebase, octopus, or otherwise non-exact merge | Complete static validation and both pytest shards |
-| GitHub API error, timeout, malformed response, missing job, stale run, or ambiguous PR | Complete static validation and both pytest shards |
-| Exact two-parent PR merge with all predicates below | Lightweight merged-PR confirmation |
+| Class | Required evidence | Successful execution jobs |
+| --- | --- | --- |
+| `focused-docs` | Exactly `internal_diagnostics`; only added or modified Markdown under `docs/audits/` or `docs/history/`; no CI-admission authority document | Admission, focused PR validation, aggregate |
+| `focused-ui` | Exactly `user_visible_ui`; only added or modified paths from the explicit CSS/browser-test allowlist | Admission, focused PR validation, Playwright production pages, aggregate |
+| `full` | Every other declaration, path, status, or evidence state | Admission, repository/rules/Schemas, both exact pytest shards, Playwright production pages, aggregate |
+| `metadata-only` | An `edited` event proves that neither body nor base changed | Admission and aggregate only |
 
-The lightweight path requires all of these predicates:
+The focused UI allowlist is deliberately limited to:
 
-1. the event is a `push` to `refs/heads/master`;
-2. the pushed commit has exactly two parents;
-3. GitHub associates exactly one merged PR with that merge commit;
-4. the PR targets `master`;
-5. the PR merge SHA equals the pushed SHA;
-6. the PR base and head SHAs equal the merge commit's first and second parents;
-7. a successful run of `.github/workflows/ci.yml` exists for that exact PR head;
-8. the run completed before the PR was merged;
-9. static validation and both pytest shards each confirm that their checked-out
-   merge commit's parents equal the PR event's exact base and head SHAs;
-10. the same run reports success for static validation, the ordinary pytest
-    shard, the committed-baseline pytest shard, and the established aggregate
-    check; and
-11. the aggregate job contains a successful subject step recording the exact
-    PR number, base SHA, and head SHA.
+- `assets/css/phase8-base.css`;
+- `assets/css/phase8-candidate.css`;
+- `tests/browser/production-pages.spec.js`;
+- `tests/browser/url-state.spec.js`; and
+- `tests/browser/view-lazy-loading.spec.js`.
 
-The last predicate proves that the successful PR run used the same base/head
-pair as the final merge. A successful run for an older base, another PR, or only
-the same head commit is insufficient.
+Application state, runtime, controllers, data models, i18n, legacy assets, HTML,
+public paths, workflows, authoritative documents, backend code, Schemas,
+statistics, baselines, generated data, deletion, and rename are not focused UI.
+Focused UI runs repository JavaScript validation, the native Node frontend
+suite, and the complete applicable Playwright production-page suite.
 
-## Retained validation and failure visibility
+The workflow does not subscribe to `ready_for_review` or
+`converted_to_draft`. A state-only transition therefore creates no duplicate
+run. `opened`, `synchronize`, `reopened`, and `edited` remain subscribed because
+they can create or change the validation subject. Body and base edits reclassify
+the subject; title-only edits take the `metadata-only` aggregate path. Missing
+`edited` change metadata selects `full`.
 
-The established check name remains `Repository validation (Python 3.12)`.
+## Exact-merge confirmation
 
-- In `full` mode it passes only after static validation and both pytest shards
-  pass.
-- In `pr-confirmation` mode it passes only after the admission evidence is
-  complete and the lightweight confirmation job succeeds.
-- Any unexpected mix of completed and skipped jobs fails the aggregate check.
-- The admission reason, PR number, and prior workflow run ID are written to the
-  workflow summary.
+A `push` to `master` may select `pr-confirmation` only when all predicates hold:
 
-The admission token has only `actions: read`, `contents: read`, and
-`pull-requests: read`. The workflow cannot fetch tournament data, commit, push,
-or publish.
+1. the pushed commit has exactly two parents;
+2. GitHub associates exactly one merged PR targeting `master` with that commit;
+3. the merge SHA and the current PR base and head equal the pushed commit and
+   its first and second parents;
+4. the current PR number, body declaration, merged timestamp, and complete
+   changed-file list are readable and internally consistent;
+5. current evidence still classifies as `focused-docs`, `focused-ui`, or
+   `full`;
+6. a successful `.github/workflows/ci.yml` run exists for the exact head and
+   completed before merge;
+7. its successful job names equal the class matrix above, including exactly one
+   aggregate job;
+8. the aggregate contains successful steps recording the exact PR number, base
+   SHA, head SHA, and validation class; and
+9. workflow-run and job responses are complete within the supported single
+   100-item GitHub API page.
 
-## Production publication boundary
+A stale run, wrong PR/base/head/workflow/class, missing or extra successful job,
+changed declaration, changed file classification, post-merge completion,
+pagination, malformed response, timeout, or API error selects `full`.
 
-The production workflow is unchanged. It still runs:
+## Retained guarantees and failure visibility
 
-1. the complete clean-checkout pytest suite before fetching;
-2. production-candidate validation after fetching and generation; and
-3. published-commit and clean-workspace confirmation after pushing.
+The established check name remains `Repository validation (Python 3.12)` and is
+present for every triggered path. Its shell contract accepts only the five
+explicit execution matrices: `focused-docs`, `focused-ui`, `full`,
+`metadata-only`, and `pr-confirmation`. Any unexpected success/skip combination
+fails.
 
-Generated commits pushed with the production workflow's built-in
-`GITHUB_TOKEN` do not recursively trigger the ordinary `push` workflow. If a
-future publisher does trigger it, the generated commit is a direct one-parent
-push and therefore selects `full`, never `pr-confirmation`.
+Complete validation retains Ruff, mypy, actionlint, repository/rule/Schema
+validation, both exact complementary pytest shards, strict committed-baseline
+tests, and Playwright. The admission token remains limited to `actions: read`,
+`contents: read`, and `pull-requests: read`; checkout never persists
+credentials. Timeouts, concurrency cancellation, summaries, and failure output
+remain explicit. The workflow cannot fetch tournament data, commit, push,
+deploy, or publish.
 
-## Tests and acceptance
+## Production boundary
 
-Local deterministic tests cover:
+The production workflow is unchanged. It still runs clean-checkout validation
+before fetching, production-candidate validation after generation, and remote
+commit confirmation after publication. A direct or otherwise unproved
+`master` update always selects `full`.
 
-- the one allowed exact-merge confirmation;
-- direct-push fallback;
-- base/head mismatch;
-- a missing pytest shard;
-- a mismatched PR/base/head subject;
-- validation that completed after merge; and
-- GitHub API failure.
+## Deterministic and remote acceptance
 
-Remote acceptance requires one real PR and its resulting `master` run:
+Tests cover Draft/Ready equivalence, each focused class, all mandatory-full
+families, malformed declarations, file statuses, unsupported pagination,
+title/body/base edits, exact job matrices, current declaration and file
+reclassification, stale runs, wrong subjects, API failures, and the retained
+complete path.
 
-1. the PR run must execute static validation and both pytest shards;
-2. all collected tests must be selected exactly once across the two shards;
-3. the aggregate PR check must pass and expose the exact subject step;
-4. after an exact merge, the `master` run must report
-   `exact_validated_merge`;
-5. the post-merge run must skip static validation and both pytest shards;
-6. the lightweight confirmation and established aggregate check must pass; and
-7. Pages behavior and the production workflow must remain unchanged.
-
-## Remote acceptance result
-
-Gate 4 was published through pull request 120. Its exact PR validation run
-`30344264614` passed static validation and both complementary pytest shards:
-555 ordinary tests and nine committed-baseline tests, with 564 tests selected
-exactly once and the aggregate check successful.
-
-The resulting exact two-parent merge
-`491f5d79c7931e429272225b12485b82eb33d178` triggered master run
-`30345131617`. Admission reported `exact_validated_merge`, identified pull
-request 120 and prior run `30344264614`, skipped static validation and both
-pytest shards, and passed the lightweight confirmation plus the established
-aggregate check. The run completed in approximately 35 seconds. Pages run
-`30345130308` also passed.
-
-This evidence satisfies the remote acceptance criteria. Direct pushes,
-non-exact merges, manual dispatches, and missing or ambiguous evidence continue
-to fail safe to the complete suite.
+The GOV-03 pull request itself declares `none` but changes workflow and
+authoritative governance paths, so it must select `full` once for its final
+unchanged head. Remote acceptance requires that Ready run to pass the complete
+matrix and aggregate. Do not create a Draft cycle to test removed triggers.
 
 ## Rollback
 
-Rollback is a single workflow change: remove the admission and confirmation
-jobs, remove their conditions, and restore the aggregate job to require static
-validation and pytest on every trigger. `ci_master_admission.py` and its focused
-tests can then be removed. No data, statistics, schemas, production workflow, or
-public path needs migration.
+Rollback restores the preceding workflow and admission implementation from the
+parent commit. No data, statistics, Schema, production workflow, public path,
+Pages content, or repository setting requires migration.

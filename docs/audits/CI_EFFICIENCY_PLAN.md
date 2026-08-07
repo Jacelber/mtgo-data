@@ -9,8 +9,11 @@ modify the production workflow.
 
 ## Fixed boundaries
 
-- Pull-request and `master` validation continue to run the complete pytest
-  suite until a separately approved replacement has passed its own validation.
+- Pull requests use only the separately approved, fail-closed validation-class
+  policy recorded by DEC-085 and `CI-MASTER-ADMISSION.md`; every path outside
+  its narrow documentation and UI allowlists runs the complete pytest suite.
+- `master` uses exact prior-class confirmation only for a proved two-parent PR
+  merge; direct and unproved updates run complete validation.
 - The `committed_baseline` marker remains part of the complete suite and may
   not be omitted, weakened, or run against a mutable production candidate.
 - Production candidate validation and post-publication commit confirmation are
@@ -206,6 +209,23 @@ unchanged, and the complete predicates and rollback are documented in
 `docs/audits/CI-MASTER-ADMISSION.md`. Local deterministic validation is
 complete. Gate 4 remains pending owner acceptance, separate remote-publication
 authorization, and real PR/post-merge acceptance evidence.
+
+### Gate 5 - PR maturity and validation-class decision
+
+On 2026-08-07 the Owner separately approved GOV-03. Draft and Ready are review
+maturity states, not validation-strength inputs. Locally completed work is
+published Ready by default, while Draft is optional only for explicitly
+requested incomplete-work review. Both states use the same conservative
+artifact-impact, changed-path, and file-status classifier.
+
+State-only `ready_for_review` and `converted_to_draft` triggers are retired.
+Strictly allowlisted documentation and UI work may run focused validation;
+workflow, authoritative-document, backend, statistical, Schema, public-path,
+baseline, generated-data, deletion, rename, unknown, mismatched, or incomplete
+evidence runs complete validation. Exact-merge confirmation must reprove the
+current class and its exact successful-job matrix. DEC-085 and
+`docs/audits/CI-MASTER-ADMISSION.md` are the current contract; the preceding
+Gate 1 through Gate 4 measurements remain historical evidence.
 
 ## Explicit non-priorities
 

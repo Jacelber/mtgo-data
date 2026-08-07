@@ -3512,3 +3512,53 @@ follow-up commit or a direct manual deployment. Pull requests remain
 build-only, the Pages job remains unable to modify repository contents, and no
 statistics, data paths, or front-end behavior change. Phase 12 remains
 unauthorized.
+
+---
+
+# DEC-085 - Separate pull-request maturity from validation class
+
+Status: `Accepted`
+
+## Context
+
+The P12-00-B workflow allowed narrow Draft documentation and UI changes to use
+focused feedback, but required every Ready pull request to repeat complete
+validation. Locally completed tasks therefore ran an identical complete suite
+once as Draft and again after the required Ready transition. Draft or Ready is
+a review-maturity signal; it does not describe artifact risk.
+
+## Decision
+
+Select pull-request validation from the single artifact-impact declaration,
+the complete changed-file list, file statuses, and conservative repository
+allowlists. Apply the same classification to Draft and Ready pull requests.
+Locally completed work is published Ready by default; Draft remains optional
+only when the Owner explicitly requests remote incomplete-work review. Remove
+state-only workflow triggers so an unchanged Draft-to-Ready or Ready-to-Draft
+transition does not rerun the same suite.
+
+Focused documentation validation is limited to added or modified Markdown
+files under approved audit and history paths, excluding CI-admission authority.
+Focused UI validation is limited to an explicit maintained set of Phase 8 CSS
+and browser-test files and runs repository, native Node, and complete applicable
+Playwright checks. Backend, shared runtime, controller, model, i18n, workflow,
+authoritative-document, statistical, Schema, public-path, privacy, retention,
+baseline, generated-data, deletion, rename, unknown, or mismatched changes run
+complete validation. Missing, malformed, stale, incomplete, ambiguous, or
+unavailable evidence also runs complete validation.
+
+Post-merge confirmation must reclassify the current PR declaration and complete
+file set and match the exact PR, base, head, workflow, validation class,
+successful-job matrix, aggregate subject, and pre-merge completion time. Merge
+remains separately Owner-authorized.
+
+## Consequences
+
+Safe documentation and narrowly bounded UI pull requests receive the same
+focused validation whether Draft or Ready, while higher-impact work retains the
+complete ordinary and committed-baseline shards plus static and browser checks.
+State changes no longer manufacture duplicate CI work. Exact merges may reuse a
+still-valid focused or complete PR run; any changed or incomplete evidence
+falls back to the complete suite. Product behavior, statistics, Schemas,
+generated data, production publication, Pages content, and Phase 12 product
+authorization do not change.

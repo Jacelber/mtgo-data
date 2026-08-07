@@ -105,6 +105,13 @@ authorized repository change or a separately approved closeout task.
   real HMAC keys.
 - GitHub Actions changes must preserve least privilege, explicit concurrency,
   validation before publication, and useful failure reporting.
+- Pull-request maturity and validation scope are separate. Locally completed
+  work is published Ready by default; Draft is optional only for explicitly
+  requested incomplete-work review. CI selects focused documentation, focused
+  UI, or complete validation from the artifact-impact declaration, complete
+  changed-file evidence, and file statuses. Missing, conflicting, ambiguous,
+  or unavailable evidence selects complete validation. Merge remains separately
+  owner-authorized.
 
 Any change to statistics must update the applicable specification, decision,
 tests, Schema, output version, and front-end labels as required. Any data-shape
