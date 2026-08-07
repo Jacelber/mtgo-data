@@ -2930,3 +2930,144 @@ An architecture change must:
 7. preserve existing Standard behavior unless a statistical change is separately approved.
 
 Do not implement a new architecture only through undocumented directory creation.
+
+---
+
+## 25. MTGO Landing contract
+
+### 25.1 Public product and history boundary
+
+Landing is a format-scoped MTGO product with product ID `mtgo-landing`. Its
+only public data document is:
+
+```text
+stats/<format>/mtgo/landing/current.json
+```
+
+The document is versioned and discovered through `stats/catalog.json`. Phase
+12 does not create a public Landing archive, weekly index, or historical
+browsing contract. Git history and Weekly Pickup history do not substitute for
+such a contract.
+
+The explicit pre-closeout URL is:
+
+```text
+/index.html?format=<format>&product=mtgo-landing&lang=<zh|en>
+```
+
+Landing remains non-default through P12-11 and P12-12. The bare MTGO entry may
+switch only at P12-16 after complete owner acceptance.
+
+### 25.2 Responsibility separation
+
+The public document combines three validated sources without merging their
+authority:
+
+- deterministic machine facts contain weeks, populations, raw counts, shares,
+  deltas, construction scores, stable identities, source event IDs, and the
+  classifier rule digest;
+- fixed Chinese and English interface templates remain front-end i18n assets
+  and are not generated prose;
+- approved editorial fields originate in the existing format-scoped Weekly
+  Pickup review path and remain human-authored localized alternatives.
+
+Only one active language is rendered. Pending candidates, reviewer notes,
+design files, and non-public configuration do not enter the Pages artifact.
+
+### 25.3 Required public-document structure
+
+The P12-10 Schema must require, at minimum:
+
+- `schema_version`, `product`, and `format`;
+- current-week ID, start, and end dates;
+- document state `ready` or `no_events`;
+- sorted unique `source_event_ids` and a common classifier rule digest;
+- current, previous-week, and previous-four-week population descriptors;
+- a comparison-availability value and explicit unavailable reason;
+- the fixed `0.03` environment threshold;
+- environment rows with stable parent identity, display name, three-period
+  high-score counts, denominators and shares, current Top 8 supporting values,
+  and zero or two manually selected key-card identities;
+- separate `other_classified` and `unknown` aggregates;
+- zero to five structured `share_move`, `exit`, or `build_shift`
+  observations with the evidence required by `STATISTICS_SPEC.md` section 24;
+- zero to two approved `new_deck` or `new_technology` feature items with exact
+  deck identity, localized headline and positioning fields, supporting facts,
+  and eight reviewer-selected cards; and
+- enough source and review binding to detect a late-event fact change without
+  silently reusing stale editorial content.
+
+`new_entry` and `notable` are not public fields. New decks come only from
+approved Weekly Pickup items. A known-archetype return is a `share_move` state.
+
+### 25.4 Manual representative cards
+
+Environment-list key cards are manually maintained product metadata keyed by
+stable parent or subtype identity and kept outside classifier rule files and
+generated statistics. P12-10 may introduce a format-scoped source under
+`configs/` only after the classifier gate in section 25.7 is satisfied.
+
+An explicit subtype pair takes priority. Parent cards may be used only when the
+configuration explicitly permits parent fallback. If neither is available,
+the row remains readable and text-only; the generator must not guess. A
+configured card absent from every current related deck creates a review
+diagnostic rather than an automatic replacement. An image request failure
+uses a dimensionally stable placeholder while retaining the card name.
+
+The complete representative-card map is an owner-reviewed P12-10 input, not a
+P12-03B repository artifact.
+
+### 25.5 Weekly Pickup integration
+
+Landing extends the existing format-scoped Pickup candidate and approval
+boundary. It must not create a parallel root candidate workflow. The generator
+may suggest exact-deck cards newly present or increased against the four-week
+reference, but the reviewer owns the final category, localized editorial copy,
+featured deck, and eight-card wall. Approval binds those fields to exact source
+event IDs, classifier digest, machine-fact digest, and deck identity.
+
+### 25.6 Availability and failure states
+
+After Phase 12 closeout, a public format is valid only when its admitted
+Landing and all of its required MTGO products are available together. Future
+formats therefore have no catalog-level fallback that permits a public partial
+launch without Landing. Catalog, production-candidate, and Pages validation
+must reject that state.
+
+Standard and Modern are the explicit migration exceptions because their
+existing public products predate Landing. They remain online during Phase 12
+and must satisfy the complete-product rule at P12-16. A runtime failure to load
+an admitted Landing is different from missing capability: the shell remains
+usable, offers retry, and provides a deterministic route to statistics.
+
+Valid degradations are limited to Schema-valid `no_events`, an empty approved-
+feature list, unavailable comparison values with reasons, text-only missing
+key-card configuration, a single-language editorial fallback under the
+existing language policy, and external-image placeholders. These states do
+not permit malformed or internally inconsistent generated data.
+
+At 390px, layout may stack values, scroll bounded regions, defer images, or
+replace images with placeholders. It must retain the archetype name, current,
+previous-week and previous-four-week values, movement direction, feature
+category, and stable detail navigation.
+
+### 25.7 Classifier gate before P12-10
+
+The current Standard and Modern classifier rules remain a provisional Phase 12
+planning baseline and are not approved as the production Landing identity
+contract. P12-10 is blocked until a separately authorized classifier
+remediation is implemented and accepted.
+
+After that remediation and before P12-10 begins, the project must:
+
+1. freeze the corrected stable parent and subtype identities;
+2. validate or explicitly migrate Weekly Pickup known-archetype state;
+3. rerun the eight-to-twelve-week Standard and Modern Landing shadow;
+4. recheck the 3% environment, five-percentage-point movement, and 20-point
+   subtype construction thresholds;
+5. obtain owner confirmation of the refreshed results; and
+6. only then populate the manual representative-card configuration.
+
+P12-04 through P12-09 may proceed when separately authorized because they do
+not produce Landing facts or freeze classifier identities. This gate does not
+authorize the classifier remediation or P12-10.

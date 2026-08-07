@@ -47,6 +47,8 @@ MTGO Environment Trends analyzes recurring Magic Online tournament results over 
 
 It is intended to show:
 
+- a curated weekly Landing overview of what changed and what the current
+  environment looks like;
 - the current online metagame;
 - archetype representation;
 - high-performing archetypes;
@@ -109,6 +111,14 @@ observed high-score decklist completeness measure with their raw numerators,
 denominators, exclusions, and unavailable states.
 
 The existing Standard page must remain functional during refactoring.
+
+After Phase 12 closeout, a complete public MTGO format includes an admitted
+Landing product together with its other required products. A future format
+must not become public through a partial launch that omits Landing. Standard
+and Modern are the explicit migration exceptions because their existing
+products predate Landing; they must satisfy the same complete-product rule at
+Phase 12 closeout without taking their current products offline during the
+migration.
 
 ---
 

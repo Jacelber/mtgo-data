@@ -2275,3 +2275,121 @@ The following may be finalized during implementation without changing the approv
 Any resolution must be recorded in configuration, tests, or `DECISIONS.md` as appropriate.
 
 Implementation details must not contradict the formulas and exclusions in this document.
+
+---
+
+## 24. MTGO weekly Landing semantics
+
+### 24.1 Comparable populations
+
+Landing uses the latest complete Monday-through-Sunday MTGO week. The current
+week, immediately previous complete week, and previous four complete weeks
+must be classified in one reproducible run with the same rule set and recorded
+rule digest. If any required population is unavailable or not comparable, the
+current environment may be shown but no change fact may be emitted.
+
+For every period, archetype high-score share uses the high-score population
+defined in section 8.4. The denominator includes classified and valid
+`Unknown` high-score decks. The four-week reference share is calculated from
+aggregated raw counts:
+
+\[
+FourWeekHighScoreShare_a =
+\frac{\sum HighScoreCount_{a,w}}{\sum TotalHighScoreDecks_w}
+\]
+
+It is not the arithmetic mean of four weekly percentages.
+
+### 24.2 Environment list
+
+The Landing environment list contains every classified parent archetype whose
+current-week high-score share is at least `0.03`. It does not split or
+double-count maintained subtypes. Each row retains current-week, previous-week,
+and previous-four-week high-score raw counts, denominators, and shares. Current
+Top 8 count and share are supporting values only.
+
+Classified high-score decks below the threshold are represented as an explicit
+`other_classified` residual. `Unknown` remains a separate quality value and is
+never folded into that residual. The composition graphic and the environment
+list must use the same current-week archetype set.
+
+### 24.3 High-score-share movement
+
+`share_move` is the only ordinary public high-score-share movement fact. It is
+eligible when a maintained known parent archetype's current-week share differs
+from its previous-four-week aggregated share by at least `0.05`, meaning five
+percentage points rather than five percent relative change. The fact records
+both raw populations, both shares, signed `delta_pp`, and direction.
+
+A maintained known archetype with no previous-four-week high-score record and
+a current share of at least `0.05` is an upward `share_move` with a return
+state; it is not a new deck. A maintained known archetype with a previous-four-
+week share of at least `0.05` and no current high-score record is an `exit` and
+must be described as not observed in the current week rather than proven to
+have left the environment.
+
+There is no separate public `notable` flag or two-percentage-point threshold.
+No Landing movement is described as statistically significant.
+
+### 24.4 New decks and Weekly Pickup
+
+Landing does not derive a statistical `new_entry` fact from weekly share.
+A public new deck exists only when the format-scoped Weekly Pickup process
+classifies it as new against the maintained known-archetype state and a human
+reviewer approves it. Without an approved new-deck Pickup item, Landing has no
+new-deck item. A returning known archetype remains a `share_move` as defined in
+section 24.3.
+
+The existing one-Top-8 minimum, stable parent identity, source-event evidence,
+manual approval, reviewer comment, and provisional-week re-review rules remain
+authoritative for new-deck publication.
+
+### 24.5 Subtype construction shift
+
+`build_shift` is subtype-specific. It does not fall back to a parent identity.
+For one maintained `(parent_id, subtype_id)`, compare a concrete current-week
+Top 8 main deck against the mean main-deck vector from the previous four
+complete weeks for the same subtype. The reference requires at least eight
+classified decks. The existing weighted-L1 absolute construction-deviation
+formula and 0-100 scale remain unchanged.
+
+A subtype is eligible when at least one current-week Top 8 deck has a
+construction-deviation score of at least `20`. One Top 8 result is sufficient.
+If multiple decks qualify for the same subtype and week, the highest-deviation
+deck is the representative candidate and all supporting Top 8 evidence is
+retained. Missing subtype identity, insufficient history, or an incomparable
+rule version makes the fact unavailable rather than zero.
+
+This fact may supply a structured weekly observation. Publication as a curated
+new-technology feature remains separately human-approved through Weekly
+Pickup.
+
+### 24.6 Observation and feature limits
+
+Landing may render up to five truthful structured weekly observations. It
+normally aims for three to five but may show fewer; it must not relax a
+threshold, manufacture a claim, or expose an unreviewed Pickup item to fill the
+layout. Eligible share and exit facts rank by absolute share movement, and
+eligible construction shifts rank by deviation score.
+
+The curated feature panel contains at most two approved Weekly Pickup items,
+categorized as `new_deck` or `new_technology`. Difference-card suggestions
+prioritize cards newly present or increased against the same four-week
+construction reference. Those suggestions do not choose the final eight-card
+wall; a reviewer selects eight cards from the exact featured deck. Main-deck
+construction deviation remains the eligibility formula, while sideboard cards
+may be chosen editorially but do not trigger `build_shift`.
+
+### 24.7 Empty and refresh states
+
+No admitted event is a valid `no_events` state. Events with no approved feature
+are a valid empty-feature state and retain the current environment and any
+truthful machine facts. Missing comparison data is unavailable, not zero.
+Malformed, internally inconsistent, or missing required Landing data blocks
+publication.
+
+An additive late event may refresh unreviewed machine facts. If it changes the
+facts behind reviewed editorial content, the last admitted Landing remains
+public until explicit re-review; refreshed facts must not be combined with
+stale approved copy. External card-image failure is non-blocking and must not
+remove readable names, values, or navigation.
