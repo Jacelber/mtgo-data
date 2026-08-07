@@ -34,7 +34,7 @@ jobs:
       validation_class: ${{ steps.classify.outputs.validation_class }}
     steps:
       - name: Check out admission logic without persisted credentials
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
@@ -57,7 +57,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check out repository without persisted credentials
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
@@ -103,7 +103,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check out repository without persisted credentials
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
@@ -169,7 +169,7 @@ jobs:
             marker_expression: committed_baseline
     steps:
       - name: Check out repository without persisted credentials
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
@@ -226,7 +226,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check out repository without persisted credentials
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
