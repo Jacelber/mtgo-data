@@ -1,5 +1,123 @@
 "use strict";
 
+const MANA_IDENTITIES = Object.freeze({
+  standard: Object.freeze({
+    "izzet-prowess": ["u", "r"],
+    "izzet-spellementals": ["u", "r"],
+    "jeskai-lessons": ["w", "u", "r"],
+    "selesnya-offense": ["w", "g"],
+    "mono-green-landfall": ["g"],
+    "dimir-excruciator": ["u", "b"],
+    "4-color-tablet": ["w", "u", "b", "r"],
+    "izzet-lessons": ["u", "r"],
+    "sultai-reanimator": ["u", "b", "g"],
+    "izzet-aggro": ["u", "r"],
+    "izzet-aggro/razorkin-needlehead": ["u", "r"],
+    "izzet-aggro/hired-claw": ["u", "r"],
+    "izzet-fling": ["u", "r"],
+    "dimir-midrange": ["u", "b"],
+    "monument-lessons": ["u", "r"],
+    "jeskai-tablet": ["w", "u", "r"],
+    "golgari-midrange": ["b", "g"],
+    "dimir-control": ["u", "b"],
+    "boros-manufacturing": ["w", "r"],
+    "jeskai-artifacts": ["w", "u", "r"],
+    "simic-kona": ["u", "g"],
+    "mono-red-aggro": ["r"],
+    "dimir-deceit": ["u", "b"],
+    "selesnya-landfall": ["w", "g"],
+  }),
+  modern: Object.freeze({
+    "goryos-reanimator": ["u", "b"],
+    "goryos-reanimator/esper": ["w", "u", "b"],
+    "goryos-reanimator/grixis": ["u", "b", "r"],
+    "boros-energy": ["w", "r"],
+    "broodscale-combo": ["g"],
+    "broodscale-combo/gruul": ["r", "g"],
+    "broodscale-combo/mono-green": ["g"],
+    "broodscale-combo/golgari": ["b", "g"],
+    "blue-black-tempo": ["u", "b"],
+    "blue-black-tempo/dimir": ["u", "b"],
+    "blue-black-tempo/grixis": ["u", "b", "r"],
+    "blue-black-tempo/esper": ["w", "u", "b"],
+    "fight-rigging": ["g"],
+    "prowess": ["u", "r"],
+    "prowess/izzet": ["u", "r"],
+    "prowess/temur": ["u", "r", "g"],
+    "prowess/grixis": ["u", "b", "r"],
+    "prowess/jeskai": ["w", "u", "r"],
+    "prowess/lessons": ["u", "r"],
+    "devoted-druid-combo": ["w", "b", "g"],
+    "affinity": ["u"],
+    "hollow-one": ["r"],
+    "hollow-one/rakdos": ["b", "r"],
+    "hollow-one/vengevine": ["b", "r", "g"],
+    "domain-zoo": ["w", "u", "b", "r", "g"],
+    "blink": ["w"],
+    "blink/esper": ["w", "u", "b"],
+    "blink/azorius": ["w", "u"],
+    "blink/jeskai": ["w", "u", "r"],
+    "blink/mardu": ["w", "b", "r"],
+    "blink/orzhov": ["w", "b"],
+    "simic-neoform": ["u", "g"],
+    "amulet-titan": ["g"],
+    "persist-reanimator": ["b"],
+    "persist-reanimator/grixis": ["u", "b", "r"],
+    "persist-reanimator/golgari": ["b", "g"],
+    "persist-reanimator/esper": ["w", "u", "b"],
+    "living-end": ["u", "r", "g"],
+    "ruby-storm": ["r"],
+    "azorius-control": ["w", "u"],
+    "boros-land-destruction": ["w", "r"],
+    "eldrazi-tron": ["c"],
+    "eldrazi-tron/colorless": ["c"],
+    "eldrazi-tron/mono-green": ["g"],
+    "eldrazi-tron/mono-black": ["b"],
+    "fling-goyf": ["r", "g"],
+    "golgari-yawgmoth": ["b", "g"],
+    "eldrazi-ramp": ["c"],
+    "eldrazi-ramp/gruul": ["r", "g"],
+    "eldrazi-ramp/temur": ["u", "r", "g"],
+    "eldrazi-ramp/sultai": ["u", "b", "g"],
+    "eldrazi-ramp/simic": ["u", "g"],
+    "eldrazi-ramp/golgari": ["b", "g"],
+    "eldrazi-ramp/selesnya": ["w", "g"],
+    "mono-blue-belcher": ["u"],
+    "mono-black-eldrazi": ["b"],
+    "mardu-energy": ["w", "b", "r"],
+    "eldrazi-aggro": ["c"],
+    "sam-combo": ["w", "b", "g"],
+    "steel-cutter": ["r"],
+    "steel-cutter/izzet": ["u", "r"],
+    "steel-cutter/rakdos": ["b", "r"],
+    "steel-cutter/mono-red": ["r"],
+    "burn": ["r"],
+    "burn/boros": ["w", "r"],
+    "burn/rakdos": ["b", "r"],
+    "burn/mono-red": ["r"],
+    "chant-control": ["w", "u"],
+    "chant-control/jeskai": ["w", "u", "r"],
+    "azorius-energy": ["w", "u"],
+    "dredge": ["u", "b", "r", "g"],
+    "oculus-ritual": ["u", "g"],
+    "oculus-ritual/sultai": ["u", "b", "g"],
+    "oculus-ritual/simic": ["u", "g"],
+    "oculus-ritual/temur": ["u", "r", "g"],
+    "song-of-creation": ["u", "r", "g"],
+    "jeskai-energy": ["w", "u", "r"],
+    "izzet-wizards": ["u", "r"],
+  }),
+});
+
+function manaIdentityHtml(identityId) {
+  const colors = MANA_IDENTITIES[state.format]?.[identityId];
+  if (!colors?.length) return "";
+  const names = colors.map(color => t(`mana.${color}`)).join(t("mana.separator"));
+  return `<span class="mana-identity" aria-label="${escapeHtml(t("mana.identity", { colors: names }))}">
+    ${colors.map(color => `<img src="assets/images/mana/${color}.svg" alt="">`).join("")}
+  </span>`;
+}
+
 function locateDeck(decksDocument, identityId) {
   for (const value of Object.values(decksDocument.decks || {})) {
     if (value.archetype_id === identityId) {
@@ -30,20 +148,24 @@ function statsRows(archetypes) {
     const directId = subtypes.length === 1
       ? `${parent.id}/${subtypes[0].id}`
       : parent.id;
+    const parentIdentity = `${manaIdentityHtml(directId)}<span class="identity-label">${escapeHtml(parent.name)}</span>`;
     const parentName = expandable
-      ? `<button class="name-button hierarchy-toggle" type="button" data-stats-toggle="${escapeHtml(parent.id)}">
-          <span class="round-toggle">${open ? "−" : "+"}</span><span class="identity-label">${escapeHtml(parent.name)}</span></button>`
-      : `<button class="name-button" type="button" data-detail-identity="${escapeHtml(directId)}">
-          <span class="identity-label">${escapeHtml(parent.name)}</span></button>`;
+      ? `<button class="name-button hierarchy-toggle" type="button" data-stats-parent="${escapeHtml(parent.id)}"
+          data-stats-toggle="${escapeHtml(parent.id)}">
+          <span class="round-toggle">${open ? "−" : "+"}</span>${parentIdentity}</button>`
+      : `<button class="name-button" type="button" data-detail-identity="${escapeHtml(directId)}"
+          data-stats-parent="${escapeHtml(parent.id)}">
+          ${parentIdentity}</button>`;
     const rows = [statsRow(parent, parentName, "")];
-    if (!expandable && state.detailIdentity === directId) rows.push(statsDetailRow(directId));
+    if (state.detailIdentity === parent.id) rows.push(statsDetailRow(parent.id));
+    else if (!expandable && state.detailIdentity === directId) rows.push(statsDetailRow(directId));
     if (open) {
       subtypes.forEach(subtype => {
         const identityId = `${parent.id}/${subtype.id}`;
         rows.push(statsRow(
           subtype,
           `<button class="name-button" type="button" data-detail-identity="${escapeHtml(identityId)}">
-            <span class="identity-label">${escapeHtml(subtype.display_name)}</span></button>`,
+            ${manaIdentityHtml(identityId)}<span class="identity-label">${escapeHtml(subtype.display_name)}</span></button>`,
           "subtype-row"
         ));
         if (state.detailIdentity === identityId) rows.push(statsDetailRow(identityId));
@@ -76,64 +198,53 @@ function statsDetailRow(identityId) {
   })}</td></tr>`;
 }
 
-function piePoint(percent, radius = 88) {
-  const angle = (percent * 3.6 - 90) * Math.PI / 180;
-  return {
-    x: 100 + radius * Math.cos(angle),
-    y: 100 + radius * Math.sin(angle),
-  };
-}
-
-function piePath(startPercent, endPercent) {
-  const start = piePoint(startPercent);
-  const end = piePoint(endPercent >= 100 ? 99.9999 : endPercent);
-  const largeArc = endPercent - startPercent > 50 ? 1 : 0;
-  return `M 100 100 L ${start.x.toFixed(3)} ${start.y.toFixed(3)}
-    A 88 88 0 ${largeArc} 1 ${end.x.toFixed(3)} ${end.y.toFixed(3)} Z`;
-}
-
-function pieChart(archetypes, key, label) {
-  const countKey = key === "high_score_share" ? "high_score_count" : "top8_count";
-  const sorted = [...archetypes].sort((a, b) => (b[key] || 0) - (a[key] || 0));
-  const visible = sorted.filter(item => Number(item[key]) > 0.02);
-  const remainder = sorted.filter(item => Number(item[key]) <= 0.02)
-    .reduce((sum, item) => sum + (Number(item[key]) || 0), 0);
-  const remainderCount = sorted.filter(item => Number(item[key]) <= 0.02)
-    .reduce((sum, item) => sum + (Number(item[countKey]) || 0), 0);
-  const slices = remainder > 0
-    ? [...visible, { name: t("chart.other"), [key]: remainder, [countKey]: remainderCount, other: true }]
-    : visible;
-  let cursor = 0;
-  const segments = slices.map((item, index) => {
-    const start = cursor;
-    cursor += (Number(item[key]) || 0) * 100;
-    const color = item.other ? "#c7ccd1" : PIE_COLORS[index % PIE_COLORS.length];
-    const detail = `${item.name} · ${pct(item[key])} · ${t("chart.decks", { count: Number(item[countKey]) || 0 })}`;
-    return `<path class="pie-slice" d="${piePath(start, cursor)}" fill="${color}"
-      tabindex="0" data-pie-detail="${escapeHtml(detail)}" aria-label="${escapeHtml(detail)}">
-      <title>${escapeHtml(detail)}</title></path>`;
-  });
-  if (cursor < 99.999) {
-    segments.push(`<path class="pie-slice pie-slice-unavailable" d="${piePath(cursor, 100)}" fill="#eef0f2"
-      tabindex="0" data-pie-detail="${t("chart.unassigned")} · ${(100 - cursor).toFixed(1)}% · ${t("chart.decks", { count: 0 })}"
-      aria-label="${t("chart.unassigned")} · ${(100 - cursor).toFixed(1)}% · ${t("chart.decks", { count: 0 })}"></path>`);
-  }
-  const legend = slices.map((item, index) => (
-    `<li><i style="background:${item.other ? "#c7ccd1" : PIE_COLORS[index % PIE_COLORS.length]}"></i>
-      <span>${escapeHtml(item.name)}</span><strong>${pct(item[key])}</strong>
-      <small>${t("chart.count", { count: Number(item[countKey]) || 0 })}</small></li>`
-  )).join("");
-  return `<article class="pie-card"><h3>${label}</h3><div class="pie-body">
-    <div class="pie-chart-shell"><svg class="pie" viewBox="0 0 200 200" role="img" aria-label="${label}">
-      ${segments.join("")}</svg>
-      <div class="pie-readout" role="status">${t("chart.help")}</div></div>
-    <ul class="pie-legend">${legend}</ul></div></article>`;
-}
-
 function chartHtml(archetypes) {
-  return `<section class="panel pie-panel" aria-label="${t("chart.aria")}">
-    ${pieChart(archetypes, "high_score_share", t("stats.high_share"))}
-    ${pieChart(archetypes, "top8_share", t("stats.top8_share"))}
+  const sorted = [...archetypes]
+    .sort((a, b) => (Number(b.high_score_share) || 0) - (Number(a.high_score_share) || 0));
+  const known = sorted.filter(item => item.id !== "unknown");
+  const unknown = sorted.find(item => item.id === "unknown");
+  const visible = known.filter(item => Number(item.high_score_share) >= 0.03);
+  const remainder = known.filter(item => Number(item.high_score_share) < 0.03)
+    .reduce((sum, item) => sum + (Number(item.high_score_share) || 0), 0);
+  const segments = visible.map((item, index) => ({
+    id: item.id,
+    name: item.name,
+    share: Number(item.high_score_share) || 0,
+    color: `composition-color-${index % 6 + 1}`,
+    image: REPRESENTATIVE_CARD_ART[state.format]?.[item.id],
+  }));
+  if (remainder > 0) {
+    segments.push({ name: t("chart.other"), share: remainder, color: "other" });
+  }
+  if (Number(unknown?.high_score_share) > 0) {
+    segments.push({ name: t("chart.unknown"), share: Number(unknown.high_score_share), color: "unknown" });
+  }
+  const assigned = segments.reduce((sum, item) => sum + item.share, 0);
+  if (assigned < 0.99999) {
+    segments.push({
+      name: t("chart.unassigned"),
+      share: Math.max(0, 1 - assigned),
+      color: "unassigned",
+    });
+  }
+  const bar = segments.map(item => {
+    const value = pct(item.share);
+    const detail = `${item.name} · ${value}`;
+    const className = `composition-segment ${item.color}${item.image ? " has-card-art" : ""}${state.detailIdentity === item.id ? " selected" : ""}`;
+    const style = `--composition-share:${(item.share * 100).toFixed(6)}%${item.image ? `;--composition-image:url(${item.image})` : ""}`;
+    if (item.id) {
+      return `<button class="${className}" type="button" style="${style}"
+        data-composition-identity="${escapeHtml(item.id)}" data-tooltip="${escapeHtml(detail)}"
+        aria-label="${escapeHtml(detail)}"><span class="sr-only">${escapeHtml(detail)}</span></button>`;
+    }
+    return `<span class="${className}" style="${style}" tabindex="0" role="img"
+      data-tooltip="${escapeHtml(detail)}" aria-label="${escapeHtml(detail)}"></span>`;
+  }).join("");
+  return `<section class="panel composition-panel" aria-label="${t("chart.aria")}">
+    <div class="composition-heading"><div><h2>${t("chart.title")}</h2><small>${t("chart.threshold")}</small></div>
+      <p><span class="desktop-instruction">${t("chart.desktop_instruction")}</span><span class="mobile-instruction">${t("chart.mobile_instruction")}</span></p></div>
+    <div class="composition-bar">${bar}</div>
+    <p class="composition-note">${t("chart.description")}</p>
   </section>`;
 }
 
@@ -158,10 +269,11 @@ async function statsView() {
     identityNames.set(parent.id, parent.name);
     const subtypes = activeStatisticsSubtypes(parent);
     subtypes.forEach(subtype => identityNames.set(`${parent.id}/${subtype.id}`, subtype.display_name));
+    detailIdentities.add(parent.id);
     if (subtypes.length === 1) detailIdentities.add(`${parent.id}/${subtypes[0].id}`);
     else if (subtypes.length >= 2) {
       subtypes.forEach(subtype => detailIdentities.add(`${parent.id}/${subtype.id}`));
-    } else detailIdentities.add(parent.id);
+    }
   });
   if (state.detailIdentity && !detailIdentities.has(state.detailIdentity)) {
     state.detailIdentity = null;

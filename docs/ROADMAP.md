@@ -2936,6 +2936,20 @@ public entry points.
      not assign identity color by sorted position;
    - let Landing composition colors express hierarchy or selection, not a
      changing archetype identity, and keep labels and values authoritative.
+   - local implementation on 2026-08-08 selected the Landing composition
+     contract: current-week archetypes at or above the fixed 3% high-score-share
+     threshold remain interactive segments, lower classified share is grouped
+     as Other, Unknown and genuine unassigned share stay separate, and Top 8
+     metrics remain in the authoritative table;
+   - the owner-selected B revision changes only mapped segment fills to the
+     first manually maintained representative-card image; tooltips keep only
+     deck name and share, with no legend, while desktop click and mobile
+     first-tap/second-tap navigation open detail beneath the corresponding row;
+   - explicit maintained mana-identity mappings add local W/U/B/R/G/C symbols
+     to MTGO parent and subtype names without runtime name inference or changes
+     to classifier, statistics, generated data, product name, or public paths;
+   - owner acceptance, commit, publication, merge, deployment, and P12-07
+     remain separate authorization gates.
 7. `P12-07` — Product-specific freshness strip
    - display only dates, coverage, event counts, deck counts, and completeness
      supplied by the active product;

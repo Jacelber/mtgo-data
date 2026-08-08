@@ -50,10 +50,12 @@ def test_review_entry_point_is_chinese_first_and_uses_candidate_assets() -> None
     assert "const RANGE_OPTIONS = [1, 4, 12];" in app
     assert "const DIFF_MIN = 1;" in app
     assert "const LOW_SAMPLE_THRESHOLD = 20;" in app
-    assert 'class="pie-slice"' in app
-    assert "data-pie-detail" in app
-    assert "悬停或点击分区查看名称、占比和数量" in copy
-    assert "Number(item[key]) > 0.02" in app
+    assert 'class="pie-slice"' not in app
+    assert "data-pie-detail" not in app
+    assert 'const className = `composition-segment' in app
+    assert '"chart.title": "高分牌表环境构成"' in copy
+    assert "Number(item.high_score_share) >= 0.03" in app
+    assert "composition-legend" not in app
     assert "data-tabletop-sort" in app
     assert "data-tabletop-detail" in app
     assert "MTGO 最近4周平均构筑与典型牌表" in copy

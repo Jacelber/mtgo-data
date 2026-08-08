@@ -38,12 +38,16 @@ const FORMAT_LABEL_KEYS = {
 const RANGE_OPTIONS = [1, 4, 12];
 const DIFF_MIN = 1;
 const LOW_SAMPLE_THRESHOLD = 20;
-const PIE_COLORS = [
-  "#244968", "#2f6288", "#3f77a3", "#568eb8", "#70a4ca",
-  "#91bddb", "#a9cde5", "#8f6a2e", "#aa8038", "#c39745",
-  "#d5ad5b", "#e0bf78", "#625783", "#766a98", "#8b80aa",
-  "#a198bc", "#3f705f", "#588876", "#73a08d", "#93b6a6",
-];
+const REPRESENTATIVE_CARD_ART = Object.freeze({
+  standard: Object.freeze({
+    "izzet-prowess": "../images/representative-cards/standard/boomerang-basics.jpg",
+    "izzet-spellementals": "../images/representative-cards/standard/sunderflock.jpg",
+    "mono-green-landfall": "../images/representative-cards/standard/earthbender-ascension.jpg",
+    "selesnya-offense": "../images/representative-cards/standard/practiced-offense.jpg",
+    "jeskai-lessons": "../images/representative-cards/standard/accumulate-wisdom.jpg",
+    "4-color-tablet": "../images/representative-cards/standard/inevitable-defeat.jpg",
+  }),
+});
 const state = {
   catalog: null,
   format: "modern",

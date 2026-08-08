@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-05-shared-visual-foundation"
+  current_working_branch: "codex/p12-06-chart-semantics"
   working_branch_status: "isolated_owner_accepted_publication_authorized_pending_commit"
   status: "active"
   primary_language: "Python"
@@ -72,71 +72,77 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-05"
-  name: "Shared visual foundation"
+  id: "P12-06"
+  name: "Correct chart semantics"
   status: "owner_accepted_publication_authorized_pending_commit"
   authorized_on: "2026-08-08"
   completed_on: "2026-08-08"
-  selected_direction: "A3_editorial_analysis_console_with_B_responsive_line_art_watermark"
-  workspace: "C:/tmp/mtgo-data-p12-05-20260808-01"
-  branch: "codex/p12-05-shared-visual-foundation"
-  base_commit: "91f81dc282af09f52bd3e1993e680fe0f0c5c977"
+  selected_direction: "B_landing_composition_with_representative_card_fill"
+  workspace: "C:/tmp/mtgo-data-p12-06-20260808-01"
+  branch: "codex/p12-06-chart-semantics"
+  base_commit: "0b8464d2a5dcbd354d3520255d0dc7764cc7ccf4"
   task_type: "local_user_visible_ui_implementation"
   artifact_impact: "user_visible_ui"
-  objective: "Implement the accepted shared visual tokens and responsive shell for MTGO and Tabletop while preserving all current product routes, data meaning, and availability, and record the accepted later P12-08A small-screen list route without implementing it early."
+  objective: "Replace rank-colored MTGO statistics pie charts with the owner-selected Landing composition contract, use explicit owner-maintained representative-card fills and mana identities, and preserve product names, statistics, generated data, and public paths."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "index.html"
-    - "melee/index.html"
-    - "assets/css/phase8-base.css"
     - "assets/css/phase8-candidate.css"
-    - "assets/images/"
+    - "assets/images/mana/"
+    - "assets/images/representative-cards/standard/"
+    - "assets/js/phase8/app-core.js"
+    - "assets/js/phase8/app-mtgo.js"
     - "assets/js/phase8/app.js"
     - "assets/js/phase8/i18n.js"
     - "tests/browser/production-pages.spec.js"
-    - "tests/test_phase12_shared_visual_foundation.py"
+    - "tests/test_documentation_history.py"
+    - "tests/test_phase8_real_data_review.py"
+    - "tests/test_phase12_chart_semantics.py"
     - "docs/ROADMAP.md"
     - "docs/FRONTEND_DESIGN_SYSTEM.md"
-    - "docs/audits/P12-05.md"
+    - "docs/audits/P12-06.md"
+    - "docs/design/p12-04a-selected-desktop.html"
+    - "docs/design/p12-06-composition-comparison.html"
     - "docs/STATUS.yaml"
-    - "tests/test_documentation_history.py"
   protected_scope:
-    code_changed: "shared static shell, styling, local decorative asset, and language selection state only"
+    code_changed: "MTGO statistics composition rendering and interaction, explicit deck mana identity, explicit representative-card artwork, local visual assets, styling, copy, prototypes, and regression coverage only"
     workflow_changed: "none"
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
-    frontend_source_changed: "shared HTML, CSS, and language-state JavaScript only"
+    frontend_source_changed: "shared CSS and MTGO statistics JavaScript/i18n only; Tabletop rendering and product routes are preserved"
     public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Publish accepted semantic color, type, spacing, density, focus, elevation, panel, control, table, link, and responsive tokens in shared static CSS."
-    - "Migrate both public entries to the shared branded shell and preserve current navigation states and URLs."
-    - "Use the accepted local cat watermark, visually separate language, format, product, and future in-page section navigation, and run complete validation."
-    - "Record the owner-approved P12-08A route for later existing-product small-screen list remediation without implementing it in P12-05."
+    - "Replace both rank-colored pie charts with the accepted Landing composition contract using the fixed at-least-three-percent current-week high-score-share threshold."
+    - "Group lower classified share as Other, keep Unknown and genuine unassigned remainder separate, omit a legend, and keep Top 8 metrics in the authoritative table."
+    - "Use the owner-supplied first representative card as the fill for six explicit Standard archetype IDs without showing card names in chart copy; preserve the accepted fallback palette for unmapped decks."
+    - "Keep hover and keyboard disclosure, desktop single-click expansion, and mobile first-tap disclosure plus second-tap expansion aligned with Landing."
+    - "Add explicit maintained W/U/B/R/G/C identity mappings and local SVG symbols to MTGO parent and subtype deck names without runtime name inference."
+    - "Update Chinese and English chart copy, responsive styling, browser coverage, task audit, and live status."
   prohibited_changes:
-    - "Generated data, Schema, workflow, runtime request path, catalog, Pages policy, or product-availability changes."
-    - "P12-06 chart-semantic work, P12-08A implementation, P12-09 loading architecture, Landing implementation, classifier remediation, or P12-10 producer work."
-    - "Removing Weekly Pickup from its existing product navigation before P12-16."
-  stop_point: "Stop after the authorized commit, Ready pull request, merge, and Pages verification. Do not begin P12-06 or P12-08A automatically."
+    - "Renaming MTGO占比统计 or redefining high-score share, Top 8 share, counts, conversion, or the official-publication completeness caveat."
+    - "Generated data, Schema, workflow, runtime request path, catalog, Pages policy, product availability, or Tabletop statistic changes."
+    - "P12-07 freshness work, P12-08A implementation, P12-09 loading architecture, production Landing implementation beyond the explicitly requested prototype fill update, classifier remediation, or P12-10 producer work."
+    - "Force-push, direct master development, workflow mutation, repository-setting changes, or another remote write outside the documented P12-06 publication sequence."
+  stop_point: "Stop after the authorized commit, Ready pull request, successful CI, merge, and Pages verification. Do not begin P12-07 automatically."
 
 recent_completion_handoff:
-  id: "P12-04B"
-  name: "Durable design-system and product-route contract freeze"
+  id: "P12-05"
+  name: "Shared visual foundation"
   status: "completed_and_merged"
-  pull_request: 190
-  merge_commit: "91f81dc282af09f52bd3e1993e680fe0f0c5c977"
+  pull_request: 191
+  merge_commit: "0b8464d2a5dcbd354d3520255d0dc7764cc7ccf4"
   note: "GitHub and Git history retain the detailed validation, publication, and Pages evidence."
 
 current_repository_state:
-  baseline_commit: "91f81dc282af09f52bd3e1993e680fe0f0c5c977"
-  baseline_note: "Verified master after merged PR 190; used as the isolated P12-05 base."
+  baseline_commit: "0b8464d2a5dcbd354d3520255d0dc7764cc7ccf4"
+  baseline_note: "Verified master after merged PR 191; used as the isolated P12-06 base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -225,15 +231,15 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-06"
-  name: "Correct chart semantics"
-  status: "planned_pending_p12_05_publication_not_authorized"
+  id: "P12-07"
+  name: "Product-specific freshness strip"
+  status: "planned_pending_p12_06_owner_acceptance_not_authorized"
   production_change: true
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "P12-06 requires successful publication of P12-05 plus separate implementation authorization. P12-08A, classifier remediation, and P12-10 remain later separate gates."
+  note: "P12-07 requires owner acceptance and separately authorized publication of P12-06 plus separate implementation authorization. P12-08A, classifier remediation, and P12-10 remain later separate gates."
 
 governance_baseline:
   status: "active_on_master"
@@ -269,7 +275,7 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not begin P12-06, P12-08A, classifier remediation, P12-10, or another task automatically."
+  - "Do not begin P12-07, P12-08A, classifier remediation, P12-10, or another task automatically."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."

@@ -245,11 +245,12 @@
       transition: opacity .15s ease, transform .15s ease;
     }
     .segment:hover::after, .segment:focus-visible::after, .segment.touch-active::after { opacity: 1; transform: translate(-50%, 0); }
-    .segment.s1 { width: 16.2%; background: #374f82; }
-    .segment.s2 { width: 13.2%; background: #617aab; }
-    .segment.s3 { width: 13.2%; background: #76917d; }
-    .segment.s4 { width: 10.3%; background: #b76b45; }
-    .segment.s5 { width: 9.6%; background: #ca9955; }
+    .segment.s1, .segment.s2, .segment.s3, .segment.s4, .segment.s5 { background-position: center 34%; background-size: cover; }
+    .segment.s1 { width: 16.2%; background-color: #374f82; background-image: linear-gradient(rgba(18,25,25,.08), rgba(18,25,25,.2)), url("../../assets/images/representative-cards/standard/boomerang-basics.jpg"); }
+    .segment.s2 { width: 13.2%; background-color: #617aab; background-image: linear-gradient(rgba(18,25,25,.08), rgba(18,25,25,.2)), url("../../assets/images/representative-cards/standard/sunderflock.jpg"); }
+    .segment.s3 { width: 13.2%; background-color: #76917d; background-image: linear-gradient(rgba(18,25,25,.08), rgba(18,25,25,.2)), url("../../assets/images/representative-cards/standard/earthbender-ascension.jpg"); }
+    .segment.s4 { width: 10.3%; background-color: #b76b45; background-image: linear-gradient(rgba(18,25,25,.08), rgba(18,25,25,.2)), url("../../assets/images/representative-cards/standard/practiced-offense.jpg"); }
+    .segment.s5 { width: 9.6%; background-color: #ca9955; background-image: linear-gradient(rgba(18,25,25,.08), rgba(18,25,25,.2)), url("../../assets/images/representative-cards/standard/accumulate-wisdom.jpg"); }
     .segment.s6 { width: 37.5%; background: #8d8c83; }
     .composition-note { margin: 9px 0 0; color: var(--muted); font-size: 13px; }
     .table-wrap { overflow-x: auto; }

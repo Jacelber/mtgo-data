@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>P12-06 高分牌表环境构成方案比较</title>
+  <style>
+    :root {
+      --paper: #f2eee7;
+      --panel: #fffdf9;
+      --ink: #172728;
+      --muted: #64706d;
+      --line: #d8d1c5;
+      --accent: #155f64;
+      --shadow: 0 10px 28px rgba(35, 28, 20, .08);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    }
+    button, a { font: inherit; }
+    button:focus-visible, a:focus-visible { outline: 3px solid #e3a63f; outline-offset: 3px; }
+    .topbar {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 13px max(18px, calc((100vw - 1180px) / 2));
+      border-bottom: 1px solid var(--line);
+      background: rgba(242, 238, 231, .94);
+      backdrop-filter: blur(12px);
+    }
+    .topbar strong { font-family: Georgia, "Noto Serif SC", serif; font-size: 20px; }
+    .switcher { display: flex; gap: 7px; }
+    .switcher button {
+      min-height: 36px;
+      padding: 7px 12px;
+      border: 1px solid #b9b0a4;
+      border-radius: 999px;
+      background: #fffaf2;
+      color: #41504d;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    .switcher button.active { border-color: #173f42; background: #173f42; color: #fff; }
+    main { width: min(1180px, calc(100% - 32px)); margin: 30px auto 70px; }
+    .intro { margin-bottom: 20px; }
+    .intro h1 { margin: 0 0 8px; font-family: Georgia, "Noto Serif SC", serif; font-size: clamp(27px, 4vw, 43px); }
+    .intro p { max-width: 880px; margin: 0; color: var(--muted); line-height: 1.7; }
+    .comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; align-items: start; }
+    body[data-variant="a"] .variant-b, body[data-variant="b"] .variant-a { display: none; }
+    body[data-variant="a"] .comparison, body[data-variant="b"] .comparison { grid-template-columns: minmax(0, 1fr); }
+    .variant {
+      min-width: 0;
+      overflow: visible;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .variant-label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #173f42;
+      color: #fff;
+    }
+    .variant-label h2 { margin: 0; font-family: Georgia, "Noto Serif SC", serif; font-size: 21px; }
+    .variant-label span { color: #dbe7e5; font-size: 12px; }
+    .panel-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px;
+    }
+    .environment-title { display: flex; align-items: baseline; gap: 10px; }
+    .environment-title h3 { margin: 0; font-family: Georgia, "Noto Serif SC", serif; font-size: 21px; }
+    .environment-title small, .panel-head p { color: var(--muted); font-size: 12px; }
+    .panel-head p { margin: 0; text-align: right; }
+    .mobile-instruction { display: none; }
+    .composition-wrap { padding: 16px 18px 17px; border-top: 1px solid #eee8de; }
+    .composition {
+      display: flex;
+      width: 100%;
+      height: 36px;
+      overflow: visible;
+      border-radius: 4px;
+      background: #e6e1d9;
+      box-shadow: inset 0 0 0 1px rgba(23, 39, 40, .12);
+    }
+    .segment {
+      position: relative;
+      display: block;
+      height: 36px;
+      border-right: 1px solid rgba(255, 255, 255, .7);
+      outline-offset: 3px;
+      cursor: pointer;
+      transition: filter .15s ease, transform .15s ease;
+    }
+    .segment:hover, .segment:focus-visible, .segment.touch-active { z-index: 3; filter: brightness(1.12) saturate(1.08); }
+    .segment.selected { z-index: 2; box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 5px #172728; }
+    .segment:first-child { border-radius: 4px 0 0 4px; }
+    .segment:last-child { border-right: 0; border-radius: 0 4px 4px 0; }
+    .segment::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      z-index: 5;
+      bottom: calc(100% + 9px);
+      left: 50%;
+      width: max-content;
+      max-width: 220px;
+      padding: 6px 9px;
+      border-radius: 4px;
+      background: #172728;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.3;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 5px);
+      transition: opacity .15s ease, transform .15s ease;
+    }
+    .segment:hover::after, .segment:focus-visible::after, .segment.touch-active::after { opacity: 1; transform: translate(-50%, 0); }
+    .s1 { width: 16.18%; }
+    .s2 { width: 13.24%; }
+    .s3 { width: 13.24%; }
+    .s4 { width: 10.29%; }
+    .s5 { width: 9.56%; }
+    .s6 { width: 9.56%; }
+    .s-other { width: 27.93%; }
+    .variant-a .s1 { background: #374f82; }
+    .variant-a .s2 { background: #617aab; }
+    .variant-a .s3 { background: #76917d; }
+    .variant-a .s4 { background: #b76b45; }
+    .variant-a .s5 { background: #ca9955; }
+    .variant-a .s6 { background: #725c88; }
+    .variant-a .s-other, .variant-b .s-other { background: #8d8c83; }
+    .variant-b .segment[data-image] {
+      background-image: linear-gradient(rgba(18, 25, 25, .08), rgba(18, 25, 25, .2)), var(--card-image);
+      background-position: center 34%;
+      background-size: cover;
+    }
+    .variant-b .s1 { --card-image: url("../../assets/images/representative-cards/standard/boomerang-basics.jpg"); }
+    .variant-b .s2 { --card-image: url("../../assets/images/representative-cards/standard/sunderflock.jpg"); }
+    .variant-b .s3 { --card-image: url("../../assets/images/representative-cards/standard/earthbender-ascension.jpg"); }
+    .variant-b .s4 { --card-image: url("../../assets/images/representative-cards/standard/practiced-offense.jpg"); }
+    .variant-b .s5 { --card-image: url("../../assets/images/representative-cards/standard/accumulate-wisdom.jpg"); }
+    .variant-b .s6 { --card-image: url("../../assets/images/representative-cards/standard/inevitable-defeat.jpg"); }
+    .composition-note { margin: 9px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .deck-table { border-top: 1px solid var(--line); }
+    .deck-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 55px;
+      padding: 11px 18px;
+      border-bottom: 1px solid #e7e1d7;
+      scroll-margin-top: 82px;
+    }
+    .deck-row.selected { background: #f4eadc; box-shadow: inset 4px 0 #b76b45; }
+    .deck-row strong { color: #164f53; font-size: 15px; }
+    .deck-row span { font-variant-numeric: tabular-nums; font-weight: 800; }
+    .detail-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      padding: 17px 18px 19px;
+      border-bottom: 1px solid var(--line);
+      background: #fbf6ef;
+    }
+    .detail-row[hidden] { display: none; }
+    .detail-row h4 { margin: 0 0 6px; font-family: Georgia, "Noto Serif SC", serif; font-size: 19px; }
+    .detail-row p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .detail-row b { align-self: center; color: #a04c2e; font-size: 23px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    @media (max-width: 880px) {
+      .comparison { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 780px) {
+      .topbar { align-items: flex-start; padding: 10px 12px; }
+      .topbar strong { font-size: 16px; }
+      .switcher { flex-wrap: wrap; justify-content: flex-end; }
+      .switcher button { min-height: 32px; padding: 5px 9px; font-size: 11px; }
+      main { width: min(100% - 20px, 720px); margin-top: 18px; }
+      .intro h1 { font-size: 27px; }
+      .intro p { font-size: 13px; }
+      .panel-head { flex-direction: column; align-items: flex-start; gap: 5px; padding: 13px; }
+      .environment-title { display: block; }
+      .environment-title h3 { font-size: 18px; }
+      .environment-title small { display: block; margin-top: 3px; }
+      .panel-head p { text-align: left; }
+      .desktop-instruction { display: none; }
+      .mobile-instruction { display: inline; }
+      .composition-wrap { padding: 15px 13px 13px; }
+      .composition, .segment { height: 31px; }
+      .segment::after { max-width: 168px; font-size: 10px; }
+      .segment:first-child::after { left: 0; transform: translate(0, 5px); }
+      .segment:first-child:hover::after, .segment:first-child:focus-visible::after, .segment:first-child.touch-active::after { transform: translate(0, 0); }
+      .segment:last-child::after { right: 0; left: auto; transform: translate(0, 5px); }
+      .segment:last-child:hover::after, .segment:last-child:focus-visible::after, .segment:last-child.touch-active::after { transform: translate(0, 0); }
+      .composition-note { font-size: 11px; }
+      .deck-row { min-height: 51px; padding: 10px 13px; }
+      .detail-row { grid-template-columns: 1fr; padding: 15px 13px; }
+    }
+  </style>
+</head>
+<body data-variant="all">
+  <header class="topbar">
+    <strong>P12-06 构成条比较</strong>
+    <nav class="switcher" aria-label="方案选择">
+      <button type="button" data-show="all" class="active">并排比较</button>
+      <button type="button" data-show="a">A · Landing 原版</button>
+      <button type="button" data-show="b">B · 代表卡填充</button>
+    </nav>
+  </header>
+  <main>
+    <section class="intro">
+      <h1>高分牌表环境构成</h1>
+      <p>两版使用相同的 Landing 组件、固定 3% 纳入阈值、区段宽度和触摸合同，不显示图例。A 完全复用已确认的独立色块；B 仅把六个套牌的填充换成第一张代表单卡的卡图。</p>
+    </section>
+    <div class="comparison">
+      <section class="variant variant-a" data-chart="a">
+        <div class="variant-label"><h2>A · Landing 原版</h2><span>独立高对比色块</span></div>
+        <div class="panel-head">
+          <div class="environment-title"><h3>高分牌表环境构成</h3><small>固定 3% 纳入阈值 · 本周高分牌表占比</small></div>
+          <p><span class="desktop-instruction">Hover 查看名称和占比 · 点击在对应套牌行下展开</span><span class="mobile-instruction">首次点按查看名称和占比 · 再次点按展开</span></p>
+        </div>
+        <div class="composition-wrap">
+          <div class="composition" aria-label="高分牌表环境构成">
+            <a class="segment s1" href="#a-izzet-prowess" data-deck="izzet-prowess" data-tooltip="Izzet Prowess · 16.2%"><span class="sr-only">Izzet Prowess 16.2%</span></a>
+            <a class="segment s2" href="#a-izzet-spellementals" data-deck="izzet-spellementals" data-tooltip="Izzet Spellementals · 13.2%"><span class="sr-only">Izzet Spellementals 13.2%</span></a>
+            <a class="segment s3" href="#a-mono-green-landfall" data-deck="mono-green-landfall" data-tooltip="Mono-Green Landfall · 13.2%"><span class="sr-only">Mono-Green Landfall 13.2%</span></a>
+            <a class="segment s4" href="#a-selesnya-offense" data-deck="selesnya-offense" data-tooltip="Selesnya Offense · 10.3%"><span class="sr-only">Selesnya Offense 10.3%</span></a>
+            <a class="segment s5" href="#a-jeskai-lessons" data-deck="jeskai-lessons" data-tooltip="Jeskai Lessons · 9.6%"><span class="sr-only">Jeskai Lessons 9.6%</span></a>
+            <a class="segment s6" href="#a-4-color-tablet" data-deck="4-color-tablet" data-tooltip="4-Color Tablet · 9.6%"><span class="sr-only">4-Color Tablet 9.6%</span></a>
+            <span class="segment s-other" tabindex="0" data-tooltip="其他套牌 · 27.9%"><span class="sr-only">其他套牌 27.9%</span></span>
+          </div>
+          <p class="composition-note">构成条采用固定 3% 纳入阈值；低于阈值的套牌合并为“其他”。本比较稿以你提供代表单卡的六个套牌作为视觉样本。</p>
+        </div>
+        <div class="deck-table" data-table></div>
+      </section>
+
+      <section class="variant variant-b" data-chart="b">
+        <div class="variant-label"><h2>B · 代表卡填充</h2><span>唯一变量：色块背景</span></div>
+        <div class="panel-head">
+          <div class="environment-title"><h3>高分牌表环境构成</h3><small>固定 3% 纳入阈值 · 本周高分牌表占比</small></div>
+          <p><span class="desktop-instruction">Hover 查看名称和占比 · 点击在对应套牌行下展开</span><span class="mobile-instruction">首次点按查看名称和占比 · 再次点按展开</span></p>
+        </div>
+        <div class="composition-wrap">
+          <div class="composition" aria-label="高分牌表环境构成">
+            <a class="segment s1" data-image href="#b-izzet-prowess" data-deck="izzet-prowess" data-tooltip="Izzet Prowess · 16.2%"><span class="sr-only">Izzet Prowess 16.2%</span></a>
+            <a class="segment s2" data-image href="#b-izzet-spellementals" data-deck="izzet-spellementals" data-tooltip="Izzet Spellementals · 13.2%"><span class="sr-only">Izzet Spellementals 13.2%</span></a>
+            <a class="segment s3" data-image href="#b-mono-green-landfall" data-deck="mono-green-landfall" data-tooltip="Mono-Green Landfall · 13.2%"><span class="sr-only">Mono-Green Landfall 13.2%</span></a>
+            <a class="segment s4" data-image href="#b-selesnya-offense" data-deck="selesnya-offense" data-tooltip="Selesnya Offense · 10.3%"><span class="sr-only">Selesnya Offense 10.3%</span></a>
+            <a class="segment s5" data-image href="#b-jeskai-lessons" data-deck="jeskai-lessons" data-tooltip="Jeskai Lessons · 9.6%"><span class="sr-only">Jeskai Lessons 9.6%</span></a>
+            <a class="segment s6" data-image href="#b-4-color-tablet" data-deck="4-color-tablet" data-tooltip="4-Color Tablet · 9.6%"><span class="sr-only">4-Color Tablet 9.6%</span></a>
+            <span class="segment s-other" tabindex="0" data-tooltip="其他套牌 · 27.9%"><span class="sr-only">其他套牌 27.9%</span></span>
+          </div>
+          <p class="composition-note">卡图仅改变视觉填充；阈值、宽度、提示、点击和移动端两次点按行为与 A 版完全一致。</p>
+        </div>
+        <div class="deck-table" data-table></div>
+      </section>
+    </div>
+  </main>
+  <script>
+    const decks = [
+      ["izzet-prowess", "Izzet Prowess", "16.2%"],
+      ["izzet-spellementals", "Izzet Spellementals", "13.2%"],
+      ["mono-green-landfall", "Mono-Green Landfall", "13.2%"],
+      ["selesnya-offense", "Selesnya Offense", "10.3%"],
+      ["jeskai-lessons", "Jeskai Lessons", "9.6%"],
+      ["4-color-tablet", "4-Color Tablet", "9.6%"],
+    ];
+    document.querySelectorAll("[data-chart]").forEach((chart) => {
+      const prefix = chart.dataset.chart;
+      const table = chart.querySelector("[data-table]");
+      table.innerHTML = decks.map(([id, name, share]) => `
+        <div class="deck-row" id="${prefix}-${id}" data-row-deck="${id}"><strong>${name}</strong><span>${share}</span></div>
+      `).join("") + `<div class="detail-row" data-detail hidden><div><h4 data-detail-name></h4><p>已跳转至对应套牌，并在该行正下方展开现有占比统计详情。</p></div><b data-detail-share></b></div>`;
+
+      let touchedSegment = null;
+      let touchedAt = 0;
+      function showDeck(segment) {
+        const row = chart.querySelector(`[data-row-deck="${segment.dataset.deck}"]`);
+        const detail = chart.querySelector("[data-detail]");
+        const deck = decks.find((item) => item[0] === segment.dataset.deck);
+        chart.querySelectorAll(".selected").forEach((item) => item.classList.remove("selected"));
+        segment.classList.add("selected");
+        row.classList.add("selected");
+        row.after(detail);
+        detail.querySelector("[data-detail-name]").textContent = deck[1];
+        detail.querySelector("[data-detail-share]").textContent = deck[2];
+        detail.hidden = false;
+        row.scrollIntoView({ block: "center", behavior: "smooth" });
+        history.replaceState({}, "", `#${row.id}`);
+      }
+      chart.querySelectorAll("a.segment[data-deck]").forEach((segment) => {
+        segment.addEventListener("click", (event) => {
+          const isTouch = matchMedia("(hover: none)").matches || matchMedia("(max-width: 780px)").matches;
+          const now = Date.now();
+          if (isTouch && (touchedSegment !== segment || now - touchedAt > 1800)) {
+            event.preventDefault();
+            chart.querySelectorAll(".touch-active").forEach((item) => item.classList.remove("touch-active"));
+            segment.classList.add("touch-active");
+            touchedSegment = segment;
+            touchedAt = now;
+            return;
+          }
+          event.preventDefault();
+          showDeck(segment);
+        });
+      });
+    });
+
+    function selectVariant(value) {
+      const allowed = ["all", "a", "b"];
+      const variant = allowed.includes(value) ? value : "all";
+      document.body.dataset.variant = variant;
+      document.querySelectorAll("[data-show]").forEach((button) => button.classList.toggle("active", button.dataset.show === variant));
+      const url = new URL(location.href);
+      if (variant === "all") url.searchParams.delete("variant");
+      else url.searchParams.set("variant", variant);
+      history.replaceState({}, "", url);
+    }
+    document.querySelectorAll("[data-show]").forEach((button) => button.addEventListener("click", () => selectVariant(button.dataset.show)));
+    selectVariant(new URLSearchParams(location.search).get("variant") || "all");
+  </script>
+</body>
+</html>

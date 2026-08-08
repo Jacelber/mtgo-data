@@ -125,6 +125,13 @@ touch uses first tap for disclosure and second tap for navigation. A selected
 deck detail opens directly beneath its row or card and reuses the established
 statistics/Weekly Pickup deck-detail component.
 
+When an owner-maintained first representative card is available, its art crop
+is the composition segment fill. This changes only the fill: segment order,
+width, threshold, tooltip, keyboard behavior, and click/touch navigation remain
+the same. The tooltip renders only the deck name and share, never the card name.
+An unmapped or failed image falls back to the accepted high-contrast segment
+palette without guessing from classifier rules.
+
 P12-08A applies that semantic-card rule to the retained statistics, Tabletop
 deck, Top 8, and Weekly Pickup one-dimensional lists. Deck identity, core and
 secondary metrics, and the existing expansion action remain available, with
