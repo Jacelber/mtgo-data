@@ -175,23 +175,46 @@ function fixedColumns(count) {
   ).join("")}</colgroup>`;
 }
 
+function accessibleCompositionSegment({ className, style, label, identity = null, expanded = false }) {
+  const safeClass = escapeHtml(className);
+  const safeStyle = escapeHtml(style);
+  const safeLabel = escapeHtml(label);
+  if (identity) {
+    return `<button class="${safeClass}" type="button" style="${safeStyle}"
+      data-composition-identity="${escapeHtml(identity)}" data-tooltip="${safeLabel}"
+      aria-label="${safeLabel}" aria-expanded="${expanded}"><span class="sr-only">${safeLabel}</span></button>`;
+  }
+  return `<span class="${safeClass}" style="${safeStyle}" tabindex="0" role="img"
+    data-tooltip="${safeLabel}" aria-label="${safeLabel}"></span>`;
+}
+
 function renderNavigation() {
   const formatRoot = document.querySelector("#format-tabs");
   const productRoot = document.querySelector("#product-tabs");
+  const focusedFormat = document.activeElement?.dataset.format;
+  const focusedProduct = document.activeElement?.dataset.product;
+  const unavailableDescription = document.querySelector("#unavailable-navigation-description");
+  if (unavailableDescription) unavailableDescription.textContent = t("availability.developing");
   formatRoot.innerHTML = state.catalog.formats.map(format => {
     const available = format.products.some(item => item.available);
+    const describedBy = available ? "" : ' aria-describedby="unavailable-navigation-description"';
     return `<button type="button" data-format="${escapeHtml(format.id)}"
       class="${state.format === format.id ? "active" : ""} ${available ? "" : "unavailable"}"
-      aria-pressed="${state.format === format.id}" aria-disabled="${!available}"
+      aria-pressed="${state.format === format.id}" aria-disabled="${!available}"${describedBy}
       title="${available ? "" : t("availability.developing")}">${formatLabel(format.id, escapeHtml(format.display_name))}</button>`;
   }).join("");
   productRoot.innerHTML = PRODUCT_ORDER.map(productId => {
     const available = Boolean(productEntry(productId)?.available);
+    const describedBy = available ? "" : ' aria-describedby="unavailable-navigation-description"';
     return `<button type="button" data-product="${productId}"
       class="${state.product === productId ? "active" : ""} ${available ? "" : "unavailable"}"
-      aria-pressed="${state.product === productId}" aria-disabled="${!available}"
+      aria-pressed="${state.product === productId}" aria-disabled="${!available}"${describedBy}
       title="${available ? "" : t("availability.developing")}">${productLabel(productId)}</button>`;
   }).join("");
+  const focusTarget = focusedFormat
+    ? formatRoot.querySelector(`[data-format="${CSS.escape(focusedFormat)}"]`)
+    : productRoot.querySelector(`[data-product="${CSS.escape(focusedProduct || "")}"]`);
+  focusTarget?.focus({ preventScroll: true });
 }
 
 function cardLink(card) {

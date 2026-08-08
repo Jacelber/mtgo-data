@@ -38,7 +38,7 @@ def test_shared_styles_publish_the_accepted_semantic_tokens() -> None:
         "--accent-soft": "#f2dbcd",
         "--positive": "#1f7459",
         "--negative": "#aa4740",
-        "--steady": "#737a78",
+        "--steady": "#68706e",
     }
     for name, value in expected_tokens.items():
         assert f"{name}: {value};" in css

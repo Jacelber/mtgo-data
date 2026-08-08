@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-07-product-freshness"
-  working_branch_status: "isolated_owner_accepted_publication_authorized_pending_commit"
+  current_working_branch: "codex/p12-08-accessibility-baseline"
+  working_branch_status: "isolated_owner_accepted_publication_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -72,17 +72,17 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-07"
-  name: "Product-specific freshness strip"
-  status: "owner_accepted_publication_authorized_pending_commit"
+  id: "P12-08"
+  name: "Readability and accessibility baseline"
+  status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-08"
-  completed_on: "2026-08-08"
-  workspace: "C:/tmp/mtgo-data-p12-07-20260808-01"
-  branch: "codex/p12-07-product-freshness"
-  base_commit: "eb3a183c351f2a2e316821eef53e090c89407fb4"
+  completed_on: "2026-08-09"
+  workspace: "C:/tmp/mtgo-data-p12-08-20260808-01"
+  branch: "codex/p12-08-accessibility-baseline"
+  base_commit: "1f0fde6fe36d94b249a3a0bde69b01b5f9b64bb7"
   task_type: "local_user_visible_ui_implementation"
   artifact_impact: "user_visible_ui"
-  objective: "Add a shared responsive freshness strip whose visible facts remain owned by the active product, render missing values explicitly, and keep internal lifecycle state out of the public interface."
+  objective: "Establish a shared readability and accessibility floor for the retained MTGO and Tabletop products without taking on the P12-08A small-screen list conversion."
   authorization:
     local_implementation: true
     commit: true
@@ -90,64 +90,58 @@ current_task:
     merge: true
   target_paths:
     - "assets/css/phase8-base.css"
-    - "assets/js/phase8/app-freshness.js"
-    - "assets/js/phase8/app.js"
+    - "assets/css/phase8-candidate.css"
+    - "assets/js/phase8/app-core.js"
     - "assets/js/phase8/app-mtgo.js"
     - "assets/js/phase8/app-tabletop.js"
+    - "assets/js/phase8/app.js"
     - "assets/js/phase8/i18n.js"
     - "index.html"
     - "melee/index.html"
-    - "validate_repository.py"
-    - "tests/browser/production-pages.spec.js"
+    - "tests/browser/accessibility.spec.js"
     - "tests/test_documentation_history.py"
     - "tests/test_frontend_asset_split.py"
-    - "tests/test_pages_artifact.py"
-    - "tests/test_phase6_closeout.py"
-    - "tests/test_phase8_mtgo_production_entry.py"
-    - "tests/test_phase8_production_candidate.py"
-    - "tests/test_phase8_real_data_review.py"
-    - "tests/test_phase8_tabletop_production_entry.py"
-    - "tests/test_phase9_structure_consumer.py"
-    - "tests/test_validate_repository.py"
-    - "tests/test_phase12_freshness_strip.py"
+    - "tests/test_phase12_accessibility_baseline.py"
+    - "tests/test_phase12_chart_semantics.py"
+    - "tests/test_phase12_shared_visual_foundation.py"
+    - "docs/FRONTEND_DESIGN_SYSTEM.md"
     - "docs/ROADMAP.md"
-    - "docs/audits/P12-07.md"
+    - "docs/audits/P12-08.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    code_changed: "Shared freshness-strip presentation plus explicit MTGO statistics, matchup, Top 8, Weekly Pickup, and Tabletop fact mappings only"
+    code_changed: "Shared typography, contrast, focus, target-size, landmark, heading, unavailable-navigation, composition-segment, and dynamic-focus behavior only"
     workflow_changed: "none"
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
-    frontend_source_changed: "shared CSS, a focused classic-script renderer and product fact mapper, product consumers, entry-point script references, and bilingual copy only"
-    public_paths_changed: "no public entry or data path changed; one maintained static script asset was added"
+    frontend_source_changed: "shared CSS, classic-script view renderers, bilingual region labels, and static entry semantics only"
+    public_paths_changed: "no public entry, asset, or data path changed"
     event_434455_bytes_changed: false
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Render dates, coverage, event counts, deck counts, and completeness only when supplied by the active product document."
-    - "Use one shared responsive visual component while keeping fact selection and meaning inside each product consumer."
-    - "Render missing values as explicit localized Unknown text rather than zero, an empty dash, or an invented substitute."
-    - "Keep DEC-083 provisional_through, seal_on, and status lifecycle fields internal and absent from public Top 8 copy."
-    - "Add Chinese and English copy, browser isolation coverage, 390- and 412-pixel visual verification, task audit, and live status."
+    - "Raise shared body, table, secondary-copy, and compact-language text to the documented readability floor."
+    - "Use separate high-contrast focus indicators for light and dark surfaces and a 24-by-24-pixel target floor."
+    - "Label dynamic regions, add a Top 8 heading, expose unavailable-navigation reasons, and restore focus after rerenders and detail closure."
+    - "Render each mapped composition segment as an independent accessible button while preserving proportional width and equivalent table navigation."
+    - "Add focused source and real-browser tests, update the design authority and roadmap, and record local acceptance evidence."
   prohibited_changes:
     - "Any statistical formula, generated data, Schema, workflow, catalog, Pages policy, runtime request path, product availability, or public-path change."
-    - "Exposing DEC-083 internal lifecycle state or inventing a common freshness metric across products."
-    - "P12-08 or P12-08A implementation, classifier remediation, P12-09 loading architecture, P12-10 producer work, or another task."
-    - "Force-push, direct master development, workflow mutation, repository-setting changes, or another remote write outside the documented P12-07 publication sequence."
-  stop_point: "Stop after the authorized commit, Ready pull request, successful CI, merge, and Pages verification. Do not begin P12-08 automatically."
+    - "P12-08A small-screen card conversion, classifier remediation, P12-09 loading architecture, P12-10 producer work, or another task."
+    - "Force-push, direct master development, workflow mutation, repository-setting changes, or protected event 434455 byte changes."
+  stop_point: "Stop after the authorized commit, Ready pull request, successful CI, merge, and Pages verification. Do not begin P12-08A automatically."
 
 recent_completion_handoff:
-  id: "P12-06"
-  name: "Correct chart semantics"
+  id: "P12-07"
+  name: "Product-specific freshness strip"
   status: "completed_and_merged"
-  pull_request: 192
-  merge_commit: "eb3a183c351f2a2e316821eef53e090c89407fb4"
-  note: "GitHub and Git history retain the detailed validation, publication, and Pages evidence."
+  pull_request: 193
+  merge_commit: "1f0fde6fe36d94b249a3a0bde69b01b5f9b64bb7"
+  note: "P12-08 started from the verified merged P12-07 master commit; GitHub and Git history retain detailed publication evidence."
 
 current_repository_state:
-  baseline_commit: "eb3a183c351f2a2e316821eef53e090c89407fb4"
-  baseline_note: "Verified master after merged PR 192; used as the isolated P12-07 base."
+  baseline_commit: "1f0fde6fe36d94b249a3a0bde69b01b5f9b64bb7"
+  baseline_note: "Verified master after merged PR 193; used as the isolated P12-08 base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -208,9 +202,9 @@ known_blockers: []
 
 future_task_gates:
   - task: "P12-08A"
-    status: "planned_pending_p12_08_acceptance_and_separate_authorization"
+    status: "planned_pending_separate_authorization"
     requirements:
-      - "Complete and accept P12-08 readability and accessibility baseline."
+      - "Publish the owner-accepted P12-08 readability and accessibility baseline."
       - "Separately authorize P12-08A implementation."
       - "Preserve all one-dimensional list data in semantic small-screen cards."
       - "Keep true two-dimensional matrices and cross-event comparisons in bounded scrollers with a sticky identity column."
@@ -236,15 +230,15 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-08"
-  name: "Readability and accessibility baseline"
-  status: "planned_pending_p12_07_owner_acceptance_not_authorized"
+  id: "P12-08A"
+  name: "Existing-product small-screen list remediation"
+  status: "planned_pending_separate_authorization_not_authorized"
   production_change: true
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "P12-08 requires owner acceptance and separately authorized publication of P12-07 plus separate implementation authorization. P12-08A, classifier remediation, and P12-10 remain later separate gates."
+  note: "P12-08 is owner accepted and authorized for publication. P12-08A still requires separate implementation authorization; classifier remediation, P12-09, and P12-10 remain later separate gates."
 
 governance_baseline:
   status: "active_on_master"
@@ -280,7 +274,7 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not begin P12-08, P12-08A, classifier remediation, P12-10, or another task automatically."
+  - "Do not begin P12-08A, classifier remediation, P12-09, P12-10, or another task automatically."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."

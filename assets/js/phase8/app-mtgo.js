@@ -154,6 +154,7 @@ function statsRows(archetypes) {
           data-stats-toggle="${escapeHtml(parent.id)}">
           <span class="round-toggle">${open ? "−" : "+"}</span>${parentIdentity}</button>`
       : `<button class="name-button" type="button" data-detail-identity="${escapeHtml(directId)}"
+          aria-expanded="${state.detailIdentity === directId}"
           data-stats-parent="${escapeHtml(parent.id)}">
           ${parentIdentity}</button>`;
     const rows = [statsRow(parent, parentName, "")];
@@ -164,7 +165,8 @@ function statsRows(archetypes) {
         const identityId = `${parent.id}/${subtype.id}`;
         rows.push(statsRow(
           subtype,
-          `<button class="name-button" type="button" data-detail-identity="${escapeHtml(identityId)}">
+          `<button class="name-button" type="button" data-detail-identity="${escapeHtml(identityId)}"
+            aria-expanded="${state.detailIdentity === identityId}">
             ${manaIdentityHtml(identityId)}<span class="identity-label">${escapeHtml(subtype.display_name)}</span></button>`,
           "subtype-row"
         ));
@@ -232,13 +234,13 @@ function chartHtml(archetypes) {
     const detail = `${item.name} · ${value}`;
     const className = `composition-segment ${item.color}${item.image ? " has-card-art" : ""}${state.detailIdentity === item.id ? " selected" : ""}`;
     const style = `--composition-share:${(item.share * 100).toFixed(6)}%${item.image ? `;--composition-image:url(${item.image})` : ""}`;
-    if (item.id) {
-      return `<button class="${className}" type="button" style="${style}"
-        data-composition-identity="${escapeHtml(item.id)}" data-tooltip="${escapeHtml(detail)}"
-        aria-label="${escapeHtml(detail)}"><span class="sr-only">${escapeHtml(detail)}</span></button>`;
-    }
-    return `<span class="${className}" style="${style}" tabindex="0" role="img"
-      data-tooltip="${escapeHtml(detail)}" aria-label="${escapeHtml(detail)}"></span>`;
+    return accessibleCompositionSegment({
+      className,
+      style,
+      label: detail,
+      identity: item.id,
+      expanded: state.detailIdentity === item.id,
+    });
   }).join("");
   return `<section class="panel composition-panel" aria-label="${t("chart.aria")}">
     <div class="composition-heading"><div><h2>${t("chart.title")}</h2><small>${t("chart.threshold")}</small></div>
@@ -281,12 +283,14 @@ async function statsView() {
   currentContext = { meta, range, decks, completeness, identityNames };
   const expandable = range.archetypes.filter(item => activeStatisticsSubtypes(item).length >= 2);
   const sortHeader = (label, key, tip) => {
-    const arrow = state.statsSort === key ? (state.statsDirection === "desc" ? " ▼" : " ▲") : "";
-    return `<button class="sort-button" type="button" data-stats-sort="${key}">${label}${arrow}</button>${tip ? infoTip(tip) : ""}`;
+    const arrow = state.statsSort === key ? (state.statsDirection === "desc" ? "▼" : "▲") : "";
+    const accessories = `${arrow ? `<span class="sort-indicator" aria-hidden="true">${arrow}</span>` : ""}${tip ? infoTip(tip) : ""}`;
+    return `<button class="sort-button" type="button" data-stats-sort="${key}">
+      <span class="sort-label">${label}</span></button>${accessories ? `<span class="sort-accessories">${accessories}</span>` : ""}`;
   };
-  return `<section class="source-note">
+  return `<aside class="source-note" aria-label="${t("source.label")}">
       <p>${t("source.stats")}</p>
-    </section>
+    </aside>
     ${rangeButtons(state.statsRange, "data-stats-range")}
     ${statisticsFreshness(meta, range, completeness)}
     ${chartHtml(archetypes)}
@@ -381,9 +385,9 @@ async function matchupView() {
   const displayDocument = ReviewData.activeMatchupDocument(document, LOW_SAMPLE_THRESHOLD);
   currentContext = { matchupDocument: displayDocument, completeness };
   return `${rangeButtons(state.matchupRange, "data-matchup-range")}
-    <section class="source-note">
+    <aside class="source-note" aria-label="${t("source.label")}">
       <p>${t("source.matchups")}</p>
-    </section>
+    </aside>
     ${matchupFreshness(completeness)}
     <section class="panel"><div class="panel-toolbar"><div><h2>${t("matchup.title")}</h2>
       <p class="matrix-toolbar-note">${t("matchup.note")}</p></div>
@@ -424,14 +428,14 @@ async function top8View() {
     state.top8Detail = null;
   }
   currentContext = { top8Index: index, top8, bases };
-  return `<section class="source-note"><p>${t("source.top8")}</p></section>
+  return `<aside class="source-note" aria-label="${t("source.label")}"><p>${t("source.top8")}</p></aside>
     <div class="select-row"><label for="top8-week">${t("top8.week")}</label>
       <select id="top8-week">${index.weeks.map(item => (
         `<option value="${escapeHtml(item.file)}" ${item.file === state.top8WeekFile ? "selected" : ""}>${item.start} ～ ${item.end}</option>`
       )).join("")}</select>
     </div>
     ${top8Freshness(top8, weekEntry)}
-    <section class="panel">
+    <section class="panel"><h2 class="sr-only">${t("top8.title")}</h2>
       <div class="table-scroll"><table class="top8-table top8-week-table"><thead><tr><th>${t("top8.rank")}</th>
         ${top8.events.map(event => `<th title="${escapeHtml(event.name)}"><strong>${escapeHtml(event.display_name)}</strong>
           <small>${event.date} · ${t("top8.players", { count: event.player_count })}</small></th>`).join("")}
@@ -440,7 +444,9 @@ async function top8View() {
         return `<tr><td>${rank}</td>${top8.events.map(event => {
           const placement = event.placements.find(item => item.rank === rank);
           if (!placement || placement.deck_status !== "available") return `<td class="missing-deck">${t("top8.unavailable")}</td>`;
-          return `<td><button class="name-button" type="button" data-top8-detail="${escapeHtml(event.event_id)}:${rank}">${escapeHtml(placement.identity.display_name)}</button></td>`;
+          const detailId = `${event.event_id}:${rank}`;
+          return `<td><button class="name-button" type="button" data-top8-detail="${escapeHtml(detailId)}"
+            aria-expanded="${state.top8Detail === detailId}">${escapeHtml(placement.identity.display_name)}</button></td>`;
         }).join("")}</tr>`;
       }).join("")}</tbody></table></div>${top8PlacementDetail()}</section>`;
 }
@@ -473,7 +479,7 @@ async function pickupView() {
     [t("pickup.new_tech"), "existing_changes"],
     [t("pickup.new_decks"), "new_archetypes"],
   ];
-  return `<section class="source-note"><p>${t("source.pickup")}</p></section>
+  return `<aside class="source-note" aria-label="${t("source.label")}"><p>${t("source.pickup")}</p></aside>
     ${pickupFreshness(week, document)}
     <div class="pickup-layout"><aside class="pickup-weeks"><h2>${t("pickup.archive")}</h2>${index.weeks.map(item => (
       `<button type="button" data-pickup-week="${escapeHtml(item.file)}" class="${item.file === state.pickupWeekFile ? "active" : ""}">

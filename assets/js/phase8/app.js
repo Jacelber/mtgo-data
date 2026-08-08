@@ -177,8 +177,31 @@ function hasExtendedUrlState(parameters) {
   return EXTENDED_URL_KEYS.some(key => parameters.has(key));
 }
 
+function renderFocusSelector(element, root) {
+  if (!element || !root.contains(element)) return null;
+  if (element.id) return `#${CSS.escape(element.id)}`;
+  const stableAttribute = [...element.attributes].find(attribute => (
+    attribute.name.startsWith("data-")
+    && attribute.name !== "data-tooltip"
+    && attribute.name !== "data-tip"
+  ));
+  return stableAttribute
+    ? `[${stableAttribute.name}="${CSS.escape(stableAttribute.value)}"]`
+    : null;
+}
+
+function restoreRenderFocus(root, selector) {
+  if (!selector) return;
+  requestAnimationFrame(() => root.querySelector(selector)?.focus({ preventScroll: true }));
+}
+
 async function renderView() {
+  return renderViewWithFocus();
+}
+
+async function renderViewWithFocus(focusOverride = null) {
   const root = document.querySelector("#view");
+  const focusSelector = focusOverride || renderFocusSelector(document.activeElement, root);
   const token = ++state.renderToken;
   root.innerHTML = `<p class="loading-state">${t("loading.data")}</p>`;
   try {
@@ -191,6 +214,7 @@ async function renderView() {
     if (token !== state.renderToken) return;
     root.innerHTML = html;
     scheduleFreshnessLayouts(root);
+    restoreRenderFocus(root, focusSelector);
     document.querySelector("#payload-status").textContent = t("loading.loaded", {
       format: formatLabel(state.format),
       product: productLabel(state.product),
@@ -266,7 +290,8 @@ document.addEventListener("click", async event => {
     queueUrlWrite();
     await renderView();
     const row = document.querySelector(`[data-stats-parent="${CSS.escape(identity)}"]`)?.closest("tr");
-    row?.scrollIntoView({ block: "center", behavior: "smooth" });
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    row?.scrollIntoView({ block: "center", behavior: reduceMotion ? "auto" : "smooth" });
   } else if (button.dataset.statsRange) {
     state.statsRange = Number(button.dataset.statsRange);
     state.detailIdentity = null;
@@ -302,9 +327,10 @@ document.addEventListener("click", async event => {
     queueUrlWrite();
     await renderView();
   } else if (button.hasAttribute("data-close-detail")) {
+    const identity = state.detailIdentity;
     state.detailIdentity = null;
     queueUrlWrite();
-    await renderView();
+    await renderViewWithFocus(`[data-detail-identity="${CSS.escape(identity || "")}"]`);
   } else if (button.dataset.deckMode) {
     state.detailMode = button.dataset.deckMode;
     await renderView();
@@ -337,9 +363,10 @@ document.addEventListener("click", async event => {
     queueUrlWrite();
     await renderView();
   } else if (button.hasAttribute("data-close-top8")) {
+    const detail = state.top8Detail;
     state.top8Detail = null;
     queueUrlWrite();
-    await renderView();
+    await renderViewWithFocus(`[data-top8-detail="${CSS.escape(detail || "")}"]`);
   } else if (button.dataset.tabletopView) {
     state.tabletopView = button.dataset.tabletopView;
     if (state.tabletopView === "overview" && state.tabletopLastSelectedEventId) {
@@ -370,9 +397,10 @@ document.addEventListener("click", async event => {
     queueUrlWrite();
     await renderView();
   } else if (button.hasAttribute("data-close-tabletop-detail")) {
+    const identity = state.tabletopDetailIdentity;
     state.tabletopDetailIdentity = null;
     queueUrlWrite();
-    await renderView();
+    await renderViewWithFocus(`[data-tabletop-detail="${CSS.escape(identity || "")}"]`);
   } else if (button.dataset.tabletopSort) {
     if (state.tabletopSort === button.dataset.tabletopSort) {
       state.tabletopDirection = state.tabletopDirection === "desc" ? "asc" : "desc";

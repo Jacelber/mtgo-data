@@ -198,7 +198,8 @@ function tabletopOverview(scope, presentation) {
       ? `<button class="name-button hierarchy-toggle" type="button" data-tabletop-toggle="${escapeHtml(parent.archetype_id)}">
           <span class="round-toggle">${open ? "−" : "+"}</span><span class="identity-label">${escapeHtml(parent.archetype_name)}</span></button>`
       : directIdentity
-        ? `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(directIdentity)}">
+        ? `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(directIdentity)}"
+            aria-expanded="${state.tabletopDetailIdentity === directIdentity}">
             <span class="identity-label">${escapeHtml(parent.archetype_name)}</span></button>`
         : `<span class="identity-label">${escapeHtml(parent.archetype_name)}</span>`;
     const output = [tabletopRow({ ...parent, nameHtml }, "", advancementMetric)];
@@ -211,7 +212,8 @@ function tabletopOverview(scope, presentation) {
         output.push(tabletopRow({
           ...subtype,
           literal_record: overviewRecord(subtype.match_record?.all_matches),
-          nameHtml: `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(identityId)}">
+          nameHtml: `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(identityId)}"
+            aria-expanded="${state.tabletopDetailIdentity === identityId}">
             <span class="identity-label">${escapeHtml(subtype.display_name)}</span></button>`,
         }, "subtype-row", advancementMetric));
         if (state.tabletopDetailIdentity === identityId) output.push(tabletopDetailRow(identityId));
@@ -220,8 +222,10 @@ function tabletopOverview(scope, presentation) {
     return output.join("");
   }).join("");
   const sortHeader = (label, key, tip) => {
-    const arrow = state.tabletopSort === key ? (state.tabletopDirection === "desc" ? " ▼" : " ▲") : "";
-    return `<button class="sort-button" type="button" data-tabletop-sort="${key}">${label}${arrow}</button>${tip ? infoTip(tip) : ""}`;
+    const arrow = state.tabletopSort === key ? (state.tabletopDirection === "desc" ? "▼" : "▲") : "";
+    const accessories = `${arrow ? `<span class="sort-indicator" aria-hidden="true">${arrow}</span>` : ""}${tip ? infoTip(tip) : ""}`;
+    return `<button class="sort-button" type="button" data-tabletop-sort="${key}">
+      <span class="sort-label">${label}</span></button>${accessories ? `<span class="sort-accessories">${accessories}</span>` : ""}`;
   };
   const advancementHeader = advancementMetric === "day2_conversion"
     ? sortHeader(
@@ -381,7 +385,7 @@ async function tabletopView() {
       : `<li>${escapeHtml(issueMessage(issue, eventFormat))}</li>`
   )).join("");
   const eventSummary = scopeState.multi_event ? "" : `
-    <section class="panel event-summary"><div class="event-title-row"><strong>${escapeHtml(overview.event.name)}</strong>
+    <section class="panel event-summary" aria-label="${escapeHtml(overview.event.name)}"><div class="event-title-row"><strong>${escapeHtml(overview.event.name)}</strong>
       <a href="${escapeHtml(overview.event.source_url)}" target="_blank" rel="noopener">${t("tabletop.source_event")}</a></div>
       <p>${escapeHtml(eventStructureLabel(overview.event_structure))} · ${t("tabletop.event_id", { id: escapeHtml(overview.event_id) })}</p>
       <div class="quality-notice"><strong>${t("tabletop.data_quality")}</strong>
