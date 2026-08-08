@@ -189,7 +189,9 @@ test("unavailable freshness values render as Unknown rather than zero", async ({
 });
 
 test("freshness facts move together below the title only when needed", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+  // Use a deliberately wide viewport so platform font metrics cannot turn the
+  // "fits on one line" assertion into a fixed-width breakpoint assertion.
+  await page.setViewportSize({ width: 2560, height: 900 });
   await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=zh");
   const strip = page.locator(".freshness-strip");
   await expect(strip).not.toHaveClass(/freshness-stacked/);
