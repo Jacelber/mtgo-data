@@ -1,0 +1,185 @@
+# Front-end design system
+
+## 1. Authority and scope
+
+This document is the durable visual and interaction authority for the MTGO and
+Tabletop static products. It freezes the owner-accepted P12-04 direction before
+production implementation. `docs/design/p12-04a-selected-desktop.html` is the
+reference composition; its sample values are illustrative, not product data.
+
+The system is named **Editorial Analysis Console (A3)**: an editorial reading
+surface with the information architecture and operational clarity of an
+analysis console. It applies to the shared shell, Landing, statistics, matchup,
+weekly Top 8, Tabletop, and reusable deck-detail surfaces. It does not merge
+their data or force every view to use Landing's density.
+
+Production implementation begins only in separately authorized P12-05 and later
+tasks. This contract changes no front-end source, public path, generated data,
+Schema, workflow, or statistical meaning.
+
+## 2. Product identity
+
+The Chinese header title is **猫猫万智周报**. It has no English subtitle while
+Chinese is active. The selected cat treatment is direction B: the local
+transparent line-art asset
+`docs/design/assets/p12-04a/cat-line-art-watermark.png` appears as a decorative
+header watermark. It is not data, a control, or a replacement for text.
+
+The header palette is inspired by the warm brown, burnt orange, muted blue, and
+turquoise relationships of a Magic card back without copying card-back artwork.
+Do not use the Magic or Wizards logo as the site brand. Repository-owned brand
+assets must record their source and transformation; production assets must be
+local and must not depend on a third-party runtime request.
+
+## 3. Color
+
+Use these semantic tokens as the shared starting palette:
+
+```css
+--canvas: #efece5;
+--surface: #fffdf8;
+--surface-strong: #ffffff;
+--ink: #1a292b;
+--muted: #66716f;
+--line: #d8d1c5;
+--brand: #4b2c1f;
+--brand-2: #9a542c;
+--brand-blue: #637aa5;
+--brand-teal: #4c9992;
+--accent: #b9562f;
+--accent-soft: #f2dbcd;
+--positive: #1f7459;
+--negative: #aa4740;
+--steady: #737a78;
+--shadow: 0 3px 12px rgba(30, 42, 42, .05);
+```
+
+The selected header background is:
+
+```css
+background:
+  radial-gradient(circle at 70% 45%, rgba(213, 151, 73, .2), transparent 32%),
+  linear-gradient(112deg, #281b17 0%, #694020 19%, #ad6031 49%, #7c4827 77%, #2b201a 100%);
+```
+
+Text and controls must meet the applicable WCAG contrast target. Positive,
+negative, and steady colors are supplementary: labels, values, icons, or
+patterns must carry the meaning without color.
+
+## 4. Typography
+
+Use the platform system UI stack for controls, operational labels, tables, and
+body copy. Use `Georgia`, `"Noto Serif SC"`, and a serif fallback for the brand
+and selected editorial headings. Numeric columns use tabular numerals.
+
+The accepted Landing table baseline is 14 CSS pixels for headings, 17 pixels
+for values and body copy, and 19 pixels for deck names. Mobile may adjust the
+scale to fit its semantic-card layout but must remain comfortably readable and
+must not hide required text. Establish the complete production type ramp once
+in shared tokens during P12-05 rather than adding page-local sizes.
+
+## 5. Spacing, density, and hierarchy
+
+Use a small shared spacing scale and three explicit density roles:
+
+- **editorial** for the weekly brief and featured narratives;
+- **standard** for shared panels, notices, selectors, and deck details;
+- **compact** for data-dense tables and matrices.
+
+Warm canvas separates the page from white reading surfaces. Borders are quiet;
+shadow is shallow and never the only boundary. Section order communicates the
+Landing story: header, weekly change brief, completeness, current environment,
+then approved new-deck and new-technology features. Do not apply large empty
+spacing to dense statistical views merely to resemble Landing.
+
+## 6. Navigation and controls
+
+Format selectors are bordered pills. The Chinese/English control is smaller,
+borderless text in the upper-right, with the active language indicated by
+weight, color, underline, and programmatic state. It must not resemble a format
+button.
+
+Top-level product navigation and in-page Landing section navigation are
+different concepts and must be visually distinguishable. After P12-16,
+Weekly Pickup is not a top-level product: its current and historical approved
+content appears in the Landing feature section. The section may have a week
+selector, but selecting a week changes only feature content.
+
+Controls use semantic `button`, `a`, `select`, or appropriate form elements,
+visible focus, meaningful accessible names, and touch-friendly targets. A
+disabled or unavailable product is explicit rather than silently inert.
+
+## 7. Panels, tables, and deck details
+
+Weekly brief entries are full-width editorial lines. They may include an
+environment observation, a linked event result, schedule information, or
+another editor-added row. Deck names and changed values may be emphasized;
+internal row tags and approval vocabulary are not rendered. No mandatory large
+weekly conclusion or KPI card is required.
+
+Desktop environment data uses an aligned table; mobile translates the same
+records into semantic deck cards rather than forcing page-level horizontal
+scrolling. The composition strip and environment list use the same current-week
+3% inclusion set. Names and percentages are available on hover and keyboard;
+touch uses first tap for disclosure and second tap for navigation. A selected
+deck detail opens directly beneath its row or card and reuses the established
+statistics/Weekly Pickup deck-detail component.
+
+Bounded horizontal scrolling is acceptable for format or product navigation
+and truly wide matrices. It must not create page overflow or hide the active
+item without a discoverable way to reach it.
+
+## 8. Card images and mana identity
+
+Each Landing environment row may show two manually selected representative
+cards in a fixed column. The accepted pre-overlap size is 84 by 117 CSS pixels
+on desktop and 70 by 98 pixels on mobile. Each approved feature shows exactly
+four reviewer-selected display cards; all approved items are present, with new
+decks before new technology.
+
+Card and mana-color identity is metadata maintained outside classifier rules.
+Reserve image dimensions before loading, lazy-load below-the-fold images, bound
+third-party concurrency, and use a stable placeholder on failure. The readable
+card or deck name and navigation must remain available without the image.
+
+## 9. Responsive behavior
+
+Use one semantic markup contract with a primary breakpoint at 780 CSS pixels.
+Design and test desktop plus 390- and 412-pixel widths. The accepted cat
+watermark frame is 230 by 114 pixels on desktop and a compact 84 by 64 pixels on
+mobile; both use the same asset and are `aria-hidden`.
+
+On small screens, navigation becomes bounded horizontal scrollers, completeness
+facts wrap, environment rows become cards, deck details and feature details use
+one column, and the four feature cards move below their copy. Every current,
+previous-week, and previous-four-week share, direction, deck identity, feature
+category, week selector, and detail route remains available.
+
+## 10. Interaction and motion
+
+One action expands a deck or feature detail; do not require a second nested
+expansion. Hover interactions must have focus and touch equivalents. No required
+information may depend on animation. Motion is brief, functional, and disabled
+or reduced under `prefers-reduced-motion`.
+
+## 11. Accessibility and failure states
+
+Use semantic landmarks, headings, tables or labelled cards, explicit form
+labels, visible focus, logical source order, and useful accessible names. Keep
+names and values in text; never encode identity or direction only by color,
+position, or an image. Decorative cat art is ignored by assistive technology.
+
+Unavailable, unknown, `no_events`, empty approved-feature, loading, and retry
+states must be distinguishable. A malformed or inconsistent admitted document
+is an error, not an empty state. Card-image failure is non-blocking. Internal
+terms such as candidate, artificial/manual review, reviewer, or approval must
+not appear in reader-facing UI; the user sees only finished editorial content.
+
+## 12. Implementation and acceptance
+
+P12-05 turns these values into shared static tokens and shell components.
+P12-06 through P12-15 migrate and extend individual views. P12-16 verifies all
+retained products, formats, languages, desktop and 390-pixel behavior, URLs,
+compatibility, loading, console state, and reversible Landing cutover. Any
+intentional deviation from this authority must be documented and owner-approved
+rather than introduced as a page-local exception.

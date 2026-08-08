@@ -52,32 +52,37 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "P12-03B"
+    assert status["current_task"]["id"] == "P12-04B"
     assert status["current_task"]["status"] == (
-        "local_contract_complete_ready_pr_publication_authorized"
+        "local_contract_complete_pending_owner_acceptance"
     )
     assert status["current_task"]["base_commit"] == (
-        "ec00f59c8a260bf0975af9fffa0badfabac430d3"
+        "fa931372bee2dd2963007cb38ecdc1439ca36a16"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
-        "commit": True,
-        "remote_publication": True,
+        "commit": False,
+        "remote_publication": False,
         "merge": False,
     }
     assert status["recent_completion_handoff"] == {
-        "id": "GOV-03-READY-IMPACT-CI",
-        "name": "Impact-classified pull-request validation",
+        "id": "P12-03B",
+        "name": "Landing product, data, and editorial contract freeze",
         "status": "completed_and_merged",
-        "pull_request": 188,
-        "merge_commit": "ec00f59c8a260bf0975af9fffa0badfabac430d3",
+        "pull_request": 189,
+        "merge_commit": "9a2e83317a7a08d2ab346a2466f4ee8afadf8e3e",
         "note": (
             "GitHub and Git history retain the detailed validation, publication, "
             "and Pages evidence."
         ),
     }
-    assert status["next_approved_task"]["id"] == "P12-04"
-    assert status["next_approved_task"]["status"] == "planned_not_authorized"
+    assert status["next_approved_task"]["id"] == "P12-05"
+    assert status["current_task"]["selected_direction"] == (
+        "A3_editorial_analysis_console_with_B_responsive_line_art_watermark"
+    )
+    assert status["next_approved_task"]["status"] == (
+        "planned_pending_p12_04b_acceptance_not_authorized"
+    )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
     assert status["future_task_gates"][0]["task"] == "P12-10"
@@ -212,3 +217,226 @@ def test_p12_03_landing_contract_is_consistent():
     assert "future formats to admit Landing" in roadmap
     assert "# DEC-086 - Freeze the reviewed MTGO Landing contract" in decisions
     assert "products predate Landing" in scope
+
+
+def test_p12_04b_design_and_pickup_integration_contract_is_consistent():
+    design_system = (
+        ROOT / "docs" / "FRONTEND_DESIGN_SYSTEM.md"
+    ).read_text(encoding="utf-8")
+    scope = (ROOT / "docs" / "PROJECT_SCOPE.md").read_text(encoding="utf-8")
+    statistics = (ROOT / "docs" / "STATISTICS_SPEC.md").read_text(
+        encoding="utf-8"
+    )
+    architecture = (ROOT / "docs" / "DATA_ARCHITECTURE.md").read_text(
+        encoding="utf-8"
+    )
+    roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
+    decisions = (ROOT / "docs" / "DECISIONS.md").read_text(encoding="utf-8")
+    audit = (ROOT / "docs" / "audits" / "P12-04.md").read_text(
+        encoding="utf-8"
+    )
+
+    for term in (
+        "Editorial Analysis Console (A3)",
+        "猫猫万智周报",
+        "--canvas: #efece5",
+        "--brand: #4b2c1f",
+        "780 CSS pixels",
+        "390- and 412-pixel widths",
+        "prefers-reduced-motion",
+        "not a top-level product",
+    ):
+        assert term in design_system
+
+    navigation_section = scope.split("### 9.1 Navigation hierarchy", 1)[1].split(
+        "### 9.2 MTGO page", 1
+    )[0]
+    assert "MTGO weekly Landing" in navigation_section
+    assert "- Weekly Pickup." not in navigation_section
+    assert "internal Weekly Pickup capability" in scope
+
+    assert "every approved Weekly Pickup item" in statistics
+    assert "final four-card display" in statistics
+    assert "section-level selection changes" in statistics
+    assert "only the curated feature content" in statistics
+    assert "not a standalone" in statistics
+    assert "user-facing product" in statistics
+
+    assert "zero or more approved `new_deck`" in architecture
+    assert "four reviewer-selected cards" in architecture
+    assert "stats/<format>/mtgo/pickup/index.json" in architecture
+    assert "product=weekly-pickup&week=<week>" in architecture
+    assert "product=mtgo-landing&section=features&week=<week>" in architecture
+
+    assert "duplicate standalone product" in roadmap
+    assert "show every approved item for the selected feature week" in roadmap
+    assert "four retained top-level product views" in roadmap
+    assert "remove `weekly-pickup` from the product navigation" in roadmap
+    assert "bounded archive view" in roadmap
+
+    assert "# DEC-087 - Integrate Weekly Pickup into the accepted Landing design" in decisions
+    assert "supersede DEC-086's maximum of two items and eight-card display" in decisions
+    assert "## P12-04B contract freeze" in audit
+    assert "P12-04B changes no production HTML" in audit
+
+
+def test_p12_04a_visual_comparison_is_local_and_self_contained():
+    comparison = (
+        ROOT / "docs" / "design" / "p12-04a-comparison.html"
+    ).read_text(encoding="utf-8")
+    audit = (ROOT / "docs" / "audits" / "P12-04.md").read_text(
+        encoding="utf-8"
+    )
+    selected = (
+        ROOT / "docs" / "design" / "p12-04a-selected-desktop.html"
+    ).read_text(encoding="utf-8")
+    cat_comparison = (
+        ROOT / "docs" / "design" / "p12-04a-cat-brand-comparison.html"
+    ).read_text(encoding="utf-8")
+    talent_image = (
+        ROOT
+        / "docs"
+        / "design"
+        / "assets"
+        / "p12-04a"
+        / "stormchasers-talent.jpg"
+    ).read_bytes()
+    basics_image = (
+        ROOT
+        / "docs"
+        / "design"
+        / "assets"
+        / "p12-04a"
+        / "boomerang-basics.jpg"
+    ).read_bytes()
+
+    assert "方向 A · 编辑观察站" in comparison
+    assert "方向 B · 分析控制台" in comparison
+    assert "所有数值与文案均为布局示意" in comparison
+    assert "data-direction=\"a\"" in comparison
+    assert "<link " not in comparison
+    assert "<script src=" not in comparison
+    assert "http://" not in comparison
+    assert "https://" not in comparison
+    assert "Production front-end, code, data, or public path changed: no" in audit
+    assert "No repository content was transmitted" in audit
+    assert "select **Direction A**" in audit
+    assert "牌背配色题头" in selected
+    assert "本周环境变化" in selected
+    assert "数据完整度" in selected
+    assert "本周环境占比" in selected
+    assert "代表单卡" in selected
+    assert "此前四周占比" in selected
+    assert "本周全部精选内容" in selected
+    assert "固定 3% 纳入阈值" in selected
+    assert "与下表采用相同的 3%" in selected
+    assert "Stormchaser's Talent" in selected
+    assert "Boomerang Basics" in selected
+    assert "推荐档层叠卡图" in selected
+    assert "data-set-card-scale" not in selected
+    assert "color-pips" in selected
+    assert selected.count('class="mana-pip"') == 10
+    for symbol in ("w", "u", "r", "g"):
+        assert f'assets/p12-04a/mana-{symbol}.svg' in selected
+    assert "brief-type" not in selected
+    assert 'id="inline-detail-row"' in selected
+    assert "查看完整环境占比统计" in selected
+    assert "展开完整牌表和详情" not in selected
+    assert "人工" not in selected
+    assert "审核" not in selected
+    assert "批准" not in selected
+    assert "font-size: 17px" in selected
+    assert "font-size: 19px" in selected
+    assert selected.count('class="feature-card"') == 12
+    assert talent_image.startswith(b"\xff\xd8") and len(talent_image) > 50_000
+    assert basics_image.startswith(b"\xff\xd8") and len(basics_image) > 50_000
+    for symbol in ("w", "u", "b", "r", "g"):
+        symbol_image = (
+            ROOT
+            / "docs"
+            / "design"
+            / "assets"
+            / "p12-04a"
+            / f"mana-{symbol}.svg"
+        ).read_bytes()
+        assert symbol_image.startswith(b"<svg")
+        assert b"<script" not in symbol_image.lower()
+    assert "<link " not in selected
+    assert "<script src=" not in selected
+    assert "http://" not in selected
+    assert "https://" not in selected
+    assert "Repository-managed editorial input" in audit
+    assert "does not require or prefer a web editor" in audit
+    assert "## P12-04A-MOBILE responsive translation" in audit
+    assert "390 to 412 pixels" in audit
+    assert "@media (max-width: 780px)" in selected
+    assert selected.count("assets/p12-04a/cat-line-art-watermark.png") == 1
+    assert 'class="cat-brand-watermark" aria-hidden="true"' in selected
+    assert selected.count('href="#features">本周精选</a>') == 1
+    assert "往期精选" not in selected
+    assert 'id="feature-week" aria-label="选择精选周次"' in selected
+    assert "选择过去周次即可查看这一板块的历史内容" in selected
+    assert "其他区域仍显示本周数据" in selected
+    assert "桌面最终稿＋小屏翻译" in selected
+    assert '<div class="brand"><strong>猫猫万智周报</strong></div>' in selected
+    assert '<div class="brand"><small>' not in selected
+    assert 'class="header-actions" aria-label="语言"' in selected
+    assert 'aria-pressed="true">中文' in selected
+    assert ".header-actions button {" in selected
+    assert "border: 0;" in selected
+    assert ".brand { grid-column: 1; grid-row: 1; }" in selected
+    assert ".header-actions { grid-column: 2; grid-row: 1;" in selected
+    assert "## Owner responsive-review refinements" in audit
+    assert "## Cat-brand four-direction comparison" in audit
+    assert 'data-variant="a"' in cat_comparison
+    assert 'data-variant="b"' in cat_comparison
+    assert 'data-variant="c"' not in cat_comparison
+    assert 'data-variant="d"' not in cat_comparison
+    assert cat_comparison.count("猫猫万智周报") == 3
+    assert "MTGO Environment Trends" not in cat_comparison
+    assert cat_comparison.count("assets/p12-04a/cat-line-art-prototype.png") == 1
+    assert cat_comparison.count("assets/p12-04a/cat-line-art-watermark.png") == 1
+    assert "assets/p12-04a/cat-portrait-prototype.png" not in cat_comparison
+    assert "cat-medallion" in cat_comparison
+    assert "cat-watermark" in cat_comparison
+    assert "top: -5px;" in cat_comparison
+    assert "right: 68px;" in cat_comparison
+    assert "width: 84px;" in cat_comparison
+    assert "height: 64px;" in cat_comparison
+    assert ".cat-watermark { display: none; }" not in cat_comparison
+    assert "ear-mark" not in cat_comparison
+    assert "paw-mark" not in cat_comparison
+    assert "cat-eye" not in cat_comparison
+    assert "fur-stripe" not in cat_comparison
+    assert "Cat-brand direction refinement" in audit
+    assert "Owner-supplied line-art finalist comparison" in audit
+    assert "http://" not in cat_comparison
+    assert "https://" not in cat_comparison
+    cat_line_art = (
+        ROOT
+        / "docs"
+        / "design"
+        / "assets"
+        / "p12-04a"
+        / "cat-line-art-prototype.png"
+    ).read_bytes()
+    assert cat_line_art.startswith(b"\x89PNG\r\n\x1a\n")
+    assert len(cat_line_art) > 100_000
+    cat_watermark = (
+        ROOT
+        / "docs"
+        / "design"
+        / "assets"
+        / "p12-04a"
+        / "cat-line-art-watermark.png"
+    ).read_bytes()
+    assert cat_watermark.startswith(b"\x89PNG\r\n\x1a\n")
+    assert cat_watermark[25] in (4, 6)
+    assert len(cat_watermark) > 100_000
+    assert "首次点按查看名称和占比" in selected
+    assert "grid-template-columns: repeat(3, minmax(0, 1fr)) 116px" in selected
+    assert "--rep-width: 70px" in selected
+    assert "--rep-height: 98px" in selected
+    assert not (
+        ROOT / "docs" / "design" / "p12-04a-selected-mobile.html"
+    ).exists()

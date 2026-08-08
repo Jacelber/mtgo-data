@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>P12-04A · 猫元素 A/B 比较</title>
+  <style>
+    :root {
+      --ink: #182321;
+      --muted: #66716e;
+      --line: #d4cec4;
+      --paper: #f2efe9;
+      --surface: #fffdf8;
+      --blue: #637aa5;
+      --teal: #57a9a0;
+      --cat-gold: #d4a06c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      min-width: 320px;
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    }
+    button, a { font: inherit; }
+    .review-note {
+      padding: 9px max(18px, calc((100vw - 1180px) / 2));
+      border-bottom: 1px solid #ccd1cf;
+      background: #f8faf9;
+      color: #3d4947;
+      font-size: 12px;
+    }
+    .review-note strong { margin-right: 14px; }
+    .page { max-width: 1180px; margin: 0 auto; padding: 22px 18px 60px; }
+    .intro { display: flex; justify-content: space-between; gap: 28px; align-items: end; margin-bottom: 18px; }
+    .intro h1 { margin: 0 0 6px; font: 700 29px/1.15 Georgia, "Noto Serif SC", serif; }
+    .intro p { max-width: 720px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .filters { display: flex; flex-wrap: wrap; gap: 6px; }
+    .filters a {
+      padding: 7px 11px;
+      border: 1px solid #bdb5aa;
+      border-radius: 999px;
+      color: #40504d;
+      font-size: 12px;
+      text-decoration: none;
+    }
+    .filters a.active { border-color: #7f4d33; background: #7f4d33; color: #fff; }
+    .prototype { margin: 0 0 22px; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 10px 28px rgba(43, 35, 29, .08); }
+    .prototype-head { display: flex; justify-content: space-between; gap: 20px; padding: 13px 16px; border-bottom: 1px solid var(--line); }
+    .prototype-head h2 { margin: 0; font-size: 16px; }
+    .prototype-head p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+    .prototype-tag { align-self: start; padding: 4px 7px; border: 1px solid #c8beb1; color: #795139; font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+    body:not([data-variant="all"]) .prototype { display: none; }
+    body[data-variant="a"] .prototype[data-variant="a"],
+    body[data-variant="b"] .prototype[data-variant="b"] { display: block; }
+
+    .mock-header {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 3px solid var(--blue);
+      background:
+        radial-gradient(circle at 70% 45%, rgba(213, 151, 73, .2), transparent 27%),
+        linear-gradient(112deg, #281b17 0%, #694020 19%, #ad6031 49%, #7c4827 77%, #2b201a 100%);
+      color: #fff;
+    }
+    .header-main {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 260px 1fr auto;
+      align-items: center;
+      gap: 24px;
+      padding: 17px 21px 13px;
+    }
+    .brand-lockup { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand-title { white-space: nowrap; font: 700 25px/1.1 Georgia, "Noto Serif SC", serif; }
+    .formats, .languages, .product-nav { display: flex; gap: 6px; }
+    .formats button {
+      min-height: 34px;
+      padding: 6px 11px;
+      border: 1px solid rgba(189, 198, 220, .58);
+      border-radius: 999px;
+      background: transparent;
+      color: #f2e8da;
+    }
+    .formats button.active { border-color: #8da4cf; background: rgba(76, 48, 34, .72); color: #fff; font-weight: 750; }
+    .languages { align-self: start; justify-self: end; gap: 3px; margin-top: -3px; }
+    .languages button { min-height: 24px; padding: 2px 4px; border: 0; background: transparent; color: #e4d7c4; font-size: 11px; opacity: .72; }
+    .languages button.active { color: #fff; font-weight: 750; opacity: 1; text-decoration: underline; text-decoration-color: #8dc9c2; text-underline-offset: 4px; }
+    .product-nav { position: relative; z-index: 1; gap: 25px; padding: 0 21px; background: rgba(34, 23, 18, .32); }
+    .product-nav a { padding: 10px 0 9px; border-bottom: 3px solid transparent; color: #eadfce; font-size: 13px; text-decoration: none; }
+    .product-nav a.active { border-color: var(--teal); color: #fff; font-weight: 750; }
+
+    .cat-medallion {
+      position: relative;
+      flex: 0 0 52px;
+      width: 52px;
+      height: 52px;
+      overflow: hidden;
+      border: 2px solid #d2a069;
+      border-radius: 17px;
+      background: #f5f0e7;
+      box-shadow: 0 3px 10px rgba(0,0,0,.28);
+    }
+    .cat-medallion img {
+      position: absolute;
+      left: 50%;
+      top: -5px;
+      width: 164%;
+      max-width: none;
+      transform: translateX(-50%);
+    }
+    .cat-watermark {
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      right: 70px;
+      width: 230px;
+      height: 114px;
+      overflow: hidden;
+      opacity: .2;
+    }
+    .cat-watermark img {
+      position: absolute;
+      left: 50%;
+      top: -13px;
+      width: 82%;
+      max-width: none;
+      transform: translateX(-50%);
+      filter: sepia(.18) saturate(.78) contrast(1.08);
+    }
+
+    .prototype-foot { padding: 10px 16px 12px; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    @media (max-width: 780px) {
+      .review-note { padding: 8px 11px; font-size: 10px; }
+      .page { padding: 14px 10px 42px; }
+      .intro { display: block; }
+      .intro h1 { font-size: 23px; }
+      .filters { margin-top: 13px; }
+      .prototype-head { display: block; padding: 11px 12px; }
+      .prototype-tag { display: inline-block; margin-top: 7px; }
+      .header-main { grid-template-columns: minmax(0, 1fr) auto; gap: 11px; padding: 13px 12px 10px; }
+      .brand-lockup { grid-column: 1; grid-row: 1; gap: 8px; }
+      .brand-title { font-size: 22px; }
+      .formats { grid-column: 1 / -1; grid-row: 2; gap: 7px; overflow-x: auto; scrollbar-width: none; }
+      .formats button { min-height: 32px; padding: 5px 9px; font-size: 12px; }
+      .languages { grid-column: 2; grid-row: 1; }
+      .languages button { min-height: 21px; padding: 1px 3px; font-size: 10px; }
+      .product-nav { gap: 20px; padding: 0 12px; overflow-x: auto; scrollbar-width: none; }
+      .formats::-webkit-scrollbar, .product-nav::-webkit-scrollbar { display: none; }
+      .product-nav a { flex: 0 0 auto; padding: 9px 0 8px; font-size: 12px; }
+      .cat-medallion { flex-basis: 40px; width: 40px; height: 40px; border-radius: 13px; }
+      .cat-watermark {
+        display: block;
+        top: 0;
+        right: 68px;
+        width: 84px;
+        height: 64px;
+        opacity: .16;
+      }
+      .cat-watermark img { top: -4px; width: 94%; }
+      .prototype-foot { padding: 9px 12px 11px; }
+    }
+  </style>
+</head>
+<body data-variant="all">
+  <div class="review-note"><strong>P12-04A · 猫品牌元素比较</strong><span>同一响应式题头，仅比较猫元素位置和表现方式；非生产页面</span></div>
+  <main class="page">
+    <section class="intro">
+      <div><h1>“猫猫万智周报”A/B 方案</h1><p>已排除 C、D。两个方案均使用所有者提供的线稿猫图：A 保留纸张质感，B 让背景融入牌背棕色题头。</p></div>
+      <nav class="filters" aria-label="方案筛选"><a href="?variant=all">全部</a><a href="?variant=a">A 线稿徽记</a><a href="?variant=b">B 线稿水印</a></nav>
+    </section>
+
+    <article class="prototype" data-variant="a">
+      <header class="prototype-head"><div><h2>A · 线稿猫头徽记</h2><p>保留原图浅米色纸张背景，桌面与小屏都显示。</p></div><span class="prototype-tag">清晰识别</span></header>
+      <div class="mock-header">
+        <div class="header-main"><div class="brand-lockup"><span class="cat-medallion"><img src="assets/p12-04a/cat-line-art-prototype.png" alt="猫猫线稿头像"></span><strong class="brand-title">猫猫万智周报</strong></div><nav class="formats" aria-label="赛制"><button class="active">标准</button><button>摩登</button><button>纯铁</button></nav><div class="languages"><button class="active">中文</button><button>EN</button></div></div>
+        <nav class="product-nav"><a class="active">本周环境</a><a>占比统计</a><a>对阵胜率</a><a>八强牌表</a><a>本周精选</a><a>实体大赛</a></nav>
+      </div>
+      <div class="prototype-foot">优点：线条和绿眼在小尺寸下仍然清晰，移动端保持同一品牌标记。注意：浅米色方形底会成为徽记的一部分。</div>
+    </article>
+
+    <article class="prototype" data-variant="b">
+      <header class="prototype-head"><div><h2>B · 响应式线稿水印</h2><p>桌面使用完整水印；小屏缩为标题与语言区之间的紧凑水印。</p></div><span class="prototype-tag">氛围最强</span></header>
+      <div class="mock-header">
+        <span class="cat-watermark" aria-hidden="true"><img src="assets/p12-04a/cat-line-art-watermark.png" alt=""></span>
+        <div class="header-main"><div class="brand-lockup"><strong class="brand-title">猫猫万智周报</strong></div><nav class="formats" aria-label="赛制"><button class="active">标准</button><button>摩登</button><button>纯铁</button></nav><div class="languages"><button class="active">中文</button><button>EN</button></div></div>
+        <nav class="product-nav"><a class="active">本周环境</a><a>占比统计</a><a>对阵胜率</a><a>八强牌表</a><a>本周精选</a><a>实体大赛</a></nav>
+      </div>
+      <div class="prototype-foot">优点：线稿比照片水印更轻；桌面保留完整猫头，小屏通过独立尺寸和锚点避免溢出，并与语言区保持间隔。</div>
+    </article>
+  </main>
+  <script>
+    const requested = new URLSearchParams(location.search).get("variant") || "all";
+    const variant = ["all", "a", "b"].includes(requested) ? requested : "all";
+    document.body.dataset.variant = variant;
+    document.querySelectorAll(".filters a").forEach((link) => {
+      link.classList.toggle("active", link.getAttribute("href") === `?variant=${variant}`);
+    });
+  </script>
+</body>
+</html>

@@ -1729,7 +1729,10 @@ no best deck and an empty average-deck state.
 
 ### 16.5 Weekly Pickup
 
-Weekly Pickup remains an MTGO-specific product feature.
+Weekly Pickup remains an MTGO-specific candidate, approval, known-archetype,
+and history capability. After the Phase 12 cutover it supplies the curated
+new-deck and new-technology section inside Landing and is not a standalone
+user-facing product.
 
 It must not be applied automatically to isolated tabletop events.
 
@@ -2372,13 +2375,22 @@ threshold, manufacture a claim, or expose an unreviewed Pickup item to fill the
 layout. Eligible share and exit facts rank by absolute share movement, and
 eligible construction shifts rank by deviation score.
 
-The curated feature panel contains at most two approved Weekly Pickup items,
-categorized as `new_deck` or `new_technology`. Difference-card suggestions
-prioritize cards newly present or increased against the same four-week
-construction reference. Those suggestions do not choose the final eight-card
-wall; a reviewer selects eight cards from the exact featured deck. Main-deck
-construction deviation remains the eligibility formula, while sideboard cards
-may be chosen editorially but do not trigger `build_shift`.
+The curated feature panel contains every approved Weekly Pickup item for its
+selected week, categorized as `new_deck` or `new_technology`. `new_deck` items
+sort before `new_technology` items; ordering within a category is maintained by
+the reviewed source. Difference-card suggestions prioritize cards newly
+present or increased against the same four-week construction reference. Those
+suggestions do not choose the final four-card display; a reviewer selects four
+cards from the exact featured deck. Main-deck construction deviation remains
+the eligibility formula, while sideboard cards may be chosen editorially but
+do not trigger `build_shift`.
+
+The feature panel defaults to the current week and may load a prior approved
+Pickup week from the existing history. This section-level selection changes
+only the curated feature content. The Landing weekly brief, environment shares,
+composition, and construction-change observations continue to describe the
+current Landing document. Pickup history is therefore not a historical Landing
+statistics contract.
 
 ### 24.7 Empty and refresh states
 

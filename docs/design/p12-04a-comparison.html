@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>P12-04A · Landing 视觉方向比较</title>
+  <style>
+    * { box-sizing: border-box; }
+    html { color-scheme: light; }
+    body { margin: 0; }
+    button, a { font: inherit; }
+    .comparison-bar {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px max(16px, calc((100vw - 1280px) / 2));
+      border-bottom: 1px solid #cbd2da;
+      background: rgba(250, 251, 252, .96);
+      color: #27313d;
+      font: 600 13px/1.3 system-ui, -apple-system, "Segoe UI", sans-serif;
+      backdrop-filter: blur(12px);
+    }
+    .comparison-bar p { margin: 0; }
+    .comparison-bar small { display: block; margin-top: 2px; color: #66717d; font-weight: 400; }
+    .switcher { display: flex; gap: 6px; }
+    .switcher button {
+      min-height: 38px;
+      padding: 7px 12px;
+      border: 1px solid #9ba6b2;
+      border-radius: 7px;
+      background: #fff;
+      color: #34404d;
+      cursor: pointer;
+    }
+    .switcher button[aria-pressed="true"] { border-color: #173d4a; background: #173d4a; color: #fff; }
+    .concept { min-height: 100vh; }
+    body[data-direction="a"] .concept-b,
+    body[data-direction="b"] .concept-a { display: none; }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .trend-up { color: var(--positive); }
+    .trend-down { color: var(--negative); }
+    .num { font-variant-numeric: tabular-nums; }
+
+    /* Direction A — Editorial Observatory */
+    .concept-a {
+      --canvas: #f2eee6;
+      --surface: #fffdf8;
+      --ink: #1c292b;
+      --muted: #66706e;
+      --line: #d9d2c5;
+      --brand: #153f43;
+      --accent: #c45e36;
+      --accent-soft: #f2ded1;
+      --positive: #236f59;
+      --negative: #a6453e;
+      background: var(--canvas);
+      color: var(--ink);
+      font: 15px/1.55 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+    .a-shell { max-width: 1240px; margin: 0 auto; padding: 28px 28px 60px; }
+    .a-masthead {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 28px;
+      align-items: end;
+      padding-bottom: 18px;
+      border-bottom: 2px solid var(--brand);
+    }
+    .a-brand small { display: block; color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .a-brand strong { display: block; margin-top: 3px; font: 700 26px/1.05 Georgia, "Noto Serif SC", serif; letter-spacing: -.02em; }
+    .a-primary-nav { display: flex; justify-content: center; gap: 22px; }
+    .a-primary-nav a { padding: 6px 0; color: var(--muted); text-decoration: none; }
+    .a-primary-nav a.active { border-bottom: 2px solid var(--accent); color: var(--ink); font-weight: 750; }
+    .a-actions { display: flex; gap: 6px; }
+    .a-actions button {
+      min-height: 38px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+    }
+    .a-subnav { display: flex; gap: 8px; padding: 16px 0 24px; overflow-x: auto; }
+    .a-subnav button {
+      flex: none;
+      padding: 7px 13px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+    }
+    .a-subnav button.active { border-color: var(--brand); background: var(--brand); color: #fff; }
+    .a-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(320px, .6fr);
+      gap: 32px;
+      padding: 42px 0 36px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow { margin: 0 0 12px; color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .a-hero h1 { max-width: 760px; margin: 0; font: 700 clamp(36px, 5vw, 64px)/1.04 Georgia, "Noto Serif SC", serif; letter-spacing: -.045em; }
+    .a-deck { max-width: 720px; margin: 20px 0 0; color: #4f5d5c; font-size: 17px; }
+    .a-feature-fact {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+      border-left: 4px solid var(--accent);
+      background: var(--surface);
+    }
+    .a-feature-fact span { color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: .08em; }
+    .a-feature-fact strong { display: block; margin: 10px 0; font: 700 52px/1 Georgia, serif; }
+    .a-feature-fact p { margin: 0; color: var(--muted); }
+    .a-meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 16px 0 0; color: var(--muted); font-size: 12px; }
+    .a-observations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin: 28px 0; background: var(--line); border: 1px solid var(--line); }
+    .a-observation { min-height: 150px; padding: 20px; background: var(--surface); }
+    .a-observation b { display: block; margin-bottom: 24px; color: var(--muted); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; }
+    .a-observation strong { font: 700 20px/1.2 Georgia, "Noto Serif SC", serif; }
+    .a-observation p { margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+    .a-section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 42px 0 18px; }
+    .a-section-head h2 { margin: 0; font: 700 30px/1.1 Georgia, "Noto Serif SC", serif; }
+    .a-section-head p { max-width: 520px; margin: 0; color: var(--muted); font-size: 13px; text-align: right; }
+    .a-composition { padding: 22px; border: 1px solid var(--line); background: var(--surface); }
+    .a-bar { display: flex; height: 42px; overflow: hidden; border-radius: 4px; background: #e2ddd4; }
+    .a-bar span { display: grid; place-items: center; min-width: 32px; color: #fff; font-size: 11px; font-weight: 750; }
+    .a-bar span:nth-child(1) { width: 22%; background: #153f43; }
+    .a-bar span:nth-child(2) { width: 18%; background: #2e6968; }
+    .a-bar span:nth-child(3) { width: 15%; background: #6e8b79; }
+    .a-bar span:nth-child(4) { width: 13%; background: #b46b46; }
+    .a-bar span:nth-child(5) { width: 11%; background: #c89958; }
+    .a-bar span:nth-child(6) { width: 21%; background: #88877e; }
+    .a-table { width: 100%; margin-top: 18px; border-collapse: collapse; font-size: 13px; }
+    .a-table th, .a-table td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: right; }
+    .a-table th:first-child, .a-table td:first-child { text-align: left; }
+    .a-table th { color: var(--muted); font-size: 11px; letter-spacing: .04em; }
+    .a-table td:first-child { font-weight: 700; }
+    .a-table tr:last-child td { border-bottom: 0; }
+    .a-editorial {
+      display: grid;
+      grid-template-columns: .82fr 1.18fr;
+      gap: 28px;
+      margin-top: 42px;
+      padding: 30px;
+      background: var(--brand);
+      color: #fff;
+    }
+    .a-editorial h2 { margin: 0 0 12px; font: 700 34px/1.1 Georgia, "Noto Serif SC", serif; }
+    .a-editorial p { color: #d7e2df; }
+    .a-editorial .tag { color: #efad82; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .card-wall { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-self: center; }
+    .mock-card { aspect-ratio: 5 / 7; display: flex; align-items: end; padding: 9px; border: 1px solid rgba(255,255,255,.22); border-radius: 7px; background: linear-gradient(155deg, #ccb88f 0 32%, #2d504c 32% 100%); box-shadow: 0 10px 24px rgba(0,0,0,.18); font-size: 10px; font-weight: 750; }
+    .mock-card:nth-child(2n) { background: linear-gradient(155deg, #d5c9ad 0 32%, #934f38 32% 100%); }
+    .a-footer { display: flex; justify-content: space-between; gap: 24px; margin-top: 34px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+
+    /* Direction B — Analytical Console */
+    .concept-b {
+      --canvas: #eaf0f5;
+      --surface: #ffffff;
+      --ink: #122334;
+      --muted: #5c6b79;
+      --line: #cbd6e0;
+      --brand: #112f46;
+      --accent: #0b7f8c;
+      --accent-soft: #d9f0f1;
+      --positive: #08785d;
+      --negative: #c13f4c;
+      background: var(--canvas);
+      color: var(--ink);
+      font: 14px/1.45 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+    .b-shell { max-width: 1340px; margin: 0 auto; padding: 0 20px 56px; }
+    .b-header { margin: 0 -20px; padding: 16px 20px 0; background: var(--brand); color: #fff; }
+    .b-header-row { display: grid; grid-template-columns: auto 1fr auto; gap: 22px; align-items: center; max-width: 1300px; margin: 0 auto; }
+    .b-brand strong { display: block; font-size: 21px; letter-spacing: -.02em; }
+    .b-brand small { color: #91cbd0; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    .b-formats { display: flex; gap: 4px; }
+    .b-formats button, .b-actions button {
+      min-height: 36px;
+      padding: 7px 11px;
+      border: 1px solid #355268;
+      border-radius: 4px;
+      background: transparent;
+      color: #cad7e0;
+    }
+    .b-formats button.active { border-color: #5fc6ce; background: #164d60; color: #fff; }
+    .b-products { display: flex; gap: 26px; max-width: 1300px; margin: 16px auto 0; overflow-x: auto; }
+    .b-products a { flex: none; padding: 11px 0 12px; border-bottom: 3px solid transparent; color: #aebecb; text-decoration: none; }
+    .b-products a.active { border-color: #65d4db; color: #fff; font-weight: 750; }
+    .b-status {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+      margin: 18px 0;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.68);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .b-status strong { color: var(--ink); }
+    .b-status .health { color: var(--positive); font-weight: 750; }
+    .b-dashboard { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(310px, .55fr); gap: 16px; }
+    .b-panel { border: 1px solid var(--line); background: var(--surface); box-shadow: 0 2px 8px rgba(23,49,70,.05); }
+    .b-panel-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 13px 15px; border-bottom: 1px solid var(--line); }
+    .b-panel-head h2 { margin: 0; font-size: 13px; letter-spacing: .03em; text-transform: uppercase; }
+    .b-panel-head span { color: var(--muted); font-size: 11px; }
+    .b-lead { padding: 22px; }
+    .b-lead .label { color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .b-lead h1 { max-width: 790px; margin: 10px 0 14px; font-size: clamp(28px, 4vw, 44px); line-height: 1.08; letter-spacing: -.035em; }
+    .b-lead p { max-width: 760px; margin: 0; color: var(--muted); }
+    .b-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 24px; }
+    .b-kpi { padding: 13px; border: 1px solid var(--line); background: #f7fafc; }
+    .b-kpi small { display: block; color: var(--muted); font-size: 10px; text-transform: uppercase; }
+    .b-kpi strong { display: block; margin-top: 5px; font: 750 23px/1.1 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .b-changes { padding: 6px 15px 12px; }
+    .b-change { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: start; padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .b-change:last-child { border-bottom: 0; }
+    .b-change .badge { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 800; }
+    .b-change b { display: block; font-size: 13px; }
+    .b-change p { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
+    .b-change strong { font: 750 13px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .b-environment { grid-column: 1 / -1; }
+    .b-stack { display: flex; height: 28px; margin: 16px; overflow: hidden; border-radius: 3px; background: #dde5eb; }
+    .b-stack span:nth-child(1) { width: 22%; background: #123d59; }
+    .b-stack span:nth-child(2) { width: 18%; background: #0b7f8c; }
+    .b-stack span:nth-child(3) { width: 15%; background: #4c9ba0; }
+    .b-stack span:nth-child(4) { width: 13%; background: #7f8e9b; }
+    .b-stack span:nth-child(5) { width: 11%; background: #cf8a3d; }
+    .b-stack span:nth-child(6) { width: 21%; background: #b7c2ca; }
+    .b-table-wrap { overflow-x: auto; }
+    .b-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .b-table th, .b-table td { padding: 9px 13px; border-top: 1px solid #e0e6eb; text-align: right; white-space: nowrap; }
+    .b-table th:first-child, .b-table td:first-child { text-align: left; }
+    .b-table th { background: #f3f6f8; color: var(--muted); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+    .b-table td:not(:first-child) { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .b-table td:first-child { color: #154b66; font-weight: 750; }
+    .b-feature { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; padding: 18px; }
+    .b-feature .tag { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .b-feature h2 { margin: 6px 0 8px; font-size: 20px; }
+    .b-feature p { max-width: 620px; margin: 0; color: var(--muted); font-size: 12px; }
+    .b-mini-wall { display: grid; grid-template-columns: repeat(4, 44px); gap: 5px; }
+    .b-mini-wall span { aspect-ratio: 5 / 7; border-radius: 3px; background: linear-gradient(145deg, #c6d8df 0 30%, #164d60 30% 100%); }
+    .b-mini-wall span:nth-child(2n) { background: linear-gradient(145deg, #f0d1a2 0 30%, #a8543b 30% 100%); }
+    .b-footer { display: flex; justify-content: space-between; gap: 24px; margin-top: 18px; color: var(--muted); font-size: 11px; }
+
+    @media (max-width: 780px) {
+      .comparison-bar { position: static; align-items: flex-start; padding: 10px; }
+      .comparison-bar small { max-width: 210px; }
+      .switcher { flex-direction: column; }
+      .switcher button { min-height: 34px; padding: 5px 9px; }
+      .a-shell { padding: 18px 14px 40px; }
+      .a-masthead { grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+      .a-primary-nav { display: none; }
+      .a-brand strong { font-size: 21px; }
+      .a-subnav { padding-bottom: 16px; }
+      .a-hero { grid-template-columns: 1fr; gap: 20px; padding: 26px 0; }
+      .a-hero h1 { font-size: 38px; }
+      .a-deck { margin-top: 14px; font-size: 15px; }
+      .a-feature-fact { min-height: 150px; }
+      .a-feature-fact strong { font-size: 44px; }
+      .a-observations { grid-template-columns: 1fr; }
+      .a-observation { min-height: 0; }
+      .a-observation b { margin-bottom: 10px; }
+      .a-section-head { display: block; }
+      .a-section-head h2 { font-size: 26px; }
+      .a-section-head p { margin-top: 8px; text-align: left; }
+      .a-composition { padding: 14px; }
+      .a-bar { height: 32px; }
+      .a-table { font-size: 12px; }
+      .a-table th, .a-table td { padding: 10px 5px; }
+      .a-table th:nth-child(2), .a-table td:nth-child(2) { display: none; }
+      .a-editorial { grid-template-columns: 1fr; padding: 22px; }
+      .a-editorial h2 { font-size: 28px; }
+      .a-footer { display: block; }
+      .a-footer span { display: block; margin-top: 6px; }
+
+      .b-shell { padding: 0 10px 40px; }
+      .b-header { margin: 0 -10px; padding: 12px 10px 0; }
+      .b-header-row { grid-template-columns: 1fr auto; gap: 10px; }
+      .b-formats { grid-column: 1 / -1; order: 3; overflow-x: auto; }
+      .b-products { gap: 18px; margin-top: 10px; }
+      .b-status { grid-template-columns: 1fr; gap: 5px; margin: 10px 0; }
+      .b-dashboard { grid-template-columns: 1fr; gap: 10px; }
+      .b-dashboard > * { min-width: 0; }
+      .b-lead { padding: 17px; }
+      .b-lead h1 { font-size: 30px; }
+      .b-kpis { grid-template-columns: 1fr 1fr; }
+      .b-kpi:first-child { grid-column: 1 / -1; }
+      .b-environment { grid-column: auto; }
+      .b-table th, .b-table td { padding: 8px 10px; }
+      .b-table { min-width: 720px; }
+      .b-feature { grid-template-columns: 1fr; }
+      .b-mini-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .b-footer { display: block; }
+      .b-footer span { display: block; margin-top: 5px; }
+    }
+  </style>
+</head>
+<body data-direction="a">
+  <div class="comparison-bar" role="region" aria-label="设计方向切换">
+    <p>P12-04A · Landing 视觉方向比较<small>所有数值与文案均为布局示意，不代表真实环境事实。</small></p>
+    <div class="switcher">
+      <button type="button" data-set-direction="a" aria-pressed="true">方向 A · 编辑观察站</button>
+      <button type="button" data-set-direction="b" aria-pressed="false">方向 B · 分析控制台</button>
+    </div>
+  </div>
+
+  <main class="concept concept-a">
+    <div class="a-shell">
+      <header class="a-masthead">
+        <div class="a-brand"><small>MTGO Environment Trends</small><strong>环境周刊</strong></div>
+        <nav class="a-primary-nav" aria-label="产品"><a class="active" href="#">MTGO 环境</a><a href="#">实体大赛</a></nav>
+        <div class="a-actions"><button type="button">标准</button><button type="button">中 / EN</button></div>
+      </header>
+      <nav class="a-subnav" aria-label="MTGO 产品"><button class="active" type="button">本周观察</button><button type="button">环境占比</button><button type="button">对阵胜率</button><button type="button">八强牌表</button><button type="button">每周精选</button></nav>
+
+      <section class="a-hero">
+        <div>
+          <p class="eyebrow">2026 年 8 月 3 日—9 日 · 标准</p>
+          <h1>速度套牌重新定义本周的环境上限</h1>
+          <p class="a-deck">领先集团继续集中，但变化来自构筑而不是单纯数量：两套红蓝策略的合计占比上升，绿色落地套牌保持了更稳定的八强转换。</p>
+          <div class="a-meta"><span>285 份公开牌表</span><span>136 份高分牌表</span><span>72 份八强牌表</span><span>完整度 97.9%</span></div>
+        </div>
+        <aside class="a-feature-fact"><span>本周最大环境变化</span><strong class="trend-up num">+6.2pp</strong><p>Izzet Prowess 相比此前四周的合并基线明显上升。</p></aside>
+      </section>
+
+      <section class="a-observations" aria-label="本周观察">
+        <article class="a-observation"><b>环境上升</b><strong>Izzet Prowess</strong><p>本周 16.2% · 上周 11.1% · 此前四周 10.0%</p></article>
+        <article class="a-observation"><b>构筑偏移</b><strong>Blue-Red Spellementals</strong><p>一个进入八强的子类型版本达到 24 分构筑偏离。</p></article>
+        <article class="a-observation"><b>环境回落</b><strong>Dimir Midrange</strong><p>此前四周 7.2%，本周未在高分牌表中出现。</p></article>
+      </section>
+
+      <section>
+        <div class="a-section-head"><h2>本周环境结构</h2><p>同一组套牌同时用于构成条和明细表；比较基线为此前四个完整周的合并牌表。</p></div>
+        <div class="a-composition">
+          <div class="a-bar" role="img" aria-label="示意环境构成"><span>22%</span><span>18%</span><span>15%</span><span>13%</span><span>11%</span><span>其他</span></div>
+          <table class="a-table">
+            <thead><tr><th>套牌</th><th>本周数量</th><th>本周占比</th><th>上周占比</th><th>此前四周</th><th>变化</th></tr></thead>
+            <tbody>
+              <tr><td>Izzet Prowess</td><td class="num">22</td><td class="num">16.2%</td><td class="num">11.1%</td><td class="num">10.0%</td><td class="trend-up num">+6.2pp</td></tr>
+              <tr><td>Mono-Green Landfall</td><td class="num">18</td><td class="num">13.2%</td><td class="num">12.7%</td><td class="num">12.3%</td><td class="trend-up num">+0.9pp</td></tr>
+              <tr><td>Selesnya Offense</td><td class="num">14</td><td class="num">10.3%</td><td class="num">11.4%</td><td class="num">12.1%</td><td class="trend-down num">−1.8pp</td></tr>
+              <tr><td>Jeskai Lessons</td><td class="num">13</td><td class="num">9.6%</td><td class="num">8.9%</td><td class="num">8.4%</td><td class="trend-up num">+1.2pp</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="a-editorial">
+        <div><span class="tag">人工审核 · 新技术</span><h2>更轻的互动组件进入红蓝快攻</h2><p>候选来自与既有构筑不同的单卡；最终标题、定位、牌表与八张展示卡由编辑审核。本区域只展示已批准内容。</p></div>
+        <div class="card-wall" aria-label="八张示意卡牌"><span class="mock-card">示意卡 A</span><span class="mock-card">示意卡 B</span><span class="mock-card">示意卡 C</span><span class="mock-card">示意卡 D</span><span class="mock-card">示意卡 E</span><span class="mock-card">示意卡 F</span><span class="mock-card">示意卡 G</span><span class="mock-card">示意卡 H</span></div>
+      </section>
+      <footer class="a-footer"><strong>MTGO Environment Trends</strong><span>最近刷新 08:40 JST · 数据与编辑状态均为示意</span></footer>
+    </div>
+  </main>
+
+  <main class="concept concept-b">
+    <div class="b-shell">
+      <header class="b-header">
+        <div class="b-header-row">
+          <div class="b-brand"><strong>MTG Meta</strong><small>Environment Intelligence</small></div>
+          <div class="b-formats" aria-label="赛制"><button class="active" type="button">标准</button><button type="button">摩登</button><button type="button">纯铁</button></div>
+          <div class="b-actions"><button type="button">中文</button></div>
+        </div>
+        <nav class="b-products" aria-label="产品"><a class="active" href="#">本周环境</a><a href="#">占比统计</a><a href="#">对阵胜率</a><a href="#">八强牌表</a><a href="#">每周精选</a><a href="#">实体大赛</a></nav>
+      </header>
+
+      <div class="b-status"><span><strong>标准 · 2026-08-03—08-09</strong>　285 份牌表　136 高分　72 八强</span><span class="health">● 数据完整度 97.9%</span></div>
+
+      <section class="b-dashboard">
+        <article class="b-panel">
+          <div class="b-panel-head"><h2>Weekly Brief</h2><span>最后审核 08:40 JST</span></div>
+          <div class="b-lead"><span class="label">本周结论</span><h1>速度套牌重新定义环境上限</h1><p>领先集团继续集中；关键变化来自两套红蓝策略的合计占比上升，以及进入八强的子类型构筑偏移。</p>
+            <div class="b-kpis"><div class="b-kpi"><small>最大占比变化</small><strong class="trend-up">+6.2pp</strong></div><div class="b-kpi"><small>有效观察</small><strong>3</strong></div><div class="b-kpi"><small>人工精选</small><strong>1</strong></div></div>
+          </div>
+        </article>
+
+        <aside class="b-panel">
+          <div class="b-panel-head"><h2>Change Feed</h2><span>本周 vs 此前四周</span></div>
+          <div class="b-changes">
+            <div class="b-change"><span class="badge">↑</span><div><b>Izzet Prowess</b><p>份额移动 · 22 份高分牌表</p></div><strong class="trend-up">+6.2pp</strong></div>
+            <div class="b-change"><span class="badge">Δ</span><div><b>Spellementals</b><p>子类型构筑偏移 · 1 份八强</p></div><strong>24 pts</strong></div>
+            <div class="b-change"><span class="badge">↓</span><div><b>Dimir Midrange</b><p>本周未观察到高分牌表</p></div><strong class="trend-down">−7.2pp</strong></div>
+          </div>
+        </aside>
+
+        <article class="b-panel b-environment">
+          <div class="b-panel-head"><h2>Environment Structure</h2><span>3% 纳入阈值 · 高分占比</span></div>
+          <div class="b-stack" role="img" aria-label="示意环境构成"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="b-table-wrap"><table class="b-table">
+            <thead><tr><th>套牌</th><th>本周数量</th><th>本周占比</th><th>上周占比</th><th>此前四周数量</th><th>此前四周占比</th><th>变化</th><th>八强</th></tr></thead>
+            <tbody>
+              <tr><td>Izzet Prowess</td><td>22</td><td>16.2%</td><td>11.1%</td><td>54</td><td>10.0%</td><td class="trend-up">+6.2pp</td><td>15</td></tr>
+              <tr><td>Mono-Green Landfall</td><td>18</td><td>13.2%</td><td>12.7%</td><td>66</td><td>12.3%</td><td class="trend-up">+0.9pp</td><td>12</td></tr>
+              <tr><td>Selesnya Offense</td><td>14</td><td>10.3%</td><td>11.4%</td><td>65</td><td>12.1%</td><td class="trend-down">−1.8pp</td><td>6</td></tr>
+              <tr><td>Jeskai Lessons</td><td>13</td><td>9.6%</td><td>8.9%</td><td>45</td><td>8.4%</td><td class="trend-up">+1.2pp</td><td>7</td></tr>
+              <tr><td>4-Color Tablet</td><td>13</td><td>9.6%</td><td>9.3%</td><td>51</td><td>9.5%</td><td class="trend-up">+0.1pp</td><td>7</td></tr>
+            </tbody>
+          </table></div>
+        </article>
+
+        <article class="b-panel b-environment">
+          <div class="b-feature"><div><span class="tag">Reviewed Feature · 新技术</span><h2>更轻的互动组件进入红蓝快攻</h2><p>由 Weekly Pickup 复用审核边界；差异单卡只是候选，最终八张展示卡和定位文案由编辑选择。</p></div><div class="b-mini-wall" aria-label="八张示意卡牌"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+        </article>
+      </section>
+      <footer class="b-footer"><strong>MTGO Environment Trends</strong><span>所有数据与文案均为设计比较示意 · 非生产页面</span></footer>
+    </div>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const initial = params.get("direction") === "b" ? "b" : "a";
+    function setDirection(direction) {
+      document.body.dataset.direction = direction;
+      document.querySelectorAll("[data-set-direction]").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.setDirection === direction));
+      });
+      const url = new URL(location.href);
+      url.searchParams.set("direction", direction);
+      history.replaceState(null, "", url);
+    }
+    document.querySelectorAll("[data-set-direction]").forEach((button) => {
+      button.addEventListener("click", () => setDirection(button.dataset.setDirection));
+    });
+    setDirection(initial);
+  </script>
+</body>
+</html>

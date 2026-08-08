@@ -93,7 +93,9 @@ The MTGO product should retain or develop the following capabilities:
 - average points per theoretical round;
 - representative or average decklists;
 - deck-construction deviation;
-- Weekly Pickup;
+- a repository-managed Weekly Pickup candidate, approval, known-state, and
+  history capability that supplies the Landing feature section but is not a
+  standalone user-facing product after Phase 12;
 - matchup and win-rate statistics based on the appropriate MTGO match source;
 - Unknown deck reporting;
 - classification conflict reporting;
@@ -113,7 +115,11 @@ denominators, exclusions, and unavailable states.
 The existing Standard page must remain functional during refactoring.
 
 After Phase 12 closeout, a complete public MTGO format includes an admitted
-Landing product together with its other required products. A future format
+Landing product together with official statistics, matchup win rates, weekly
+Top 8 decklists, and every other format-applicable required product. Its
+Landing includes the approved new-deck and new-technology feature section fed
+by the internal Weekly Pickup capability; a separate Pickup product is not
+required. A future format
 must not become public through a partial launch that omits Landing. Standard
 and Modern are the explicit migration exceptions because their existing
 products predate Landing; they must satisfy the same complete-product rule at
@@ -406,11 +412,16 @@ The primary analysis selector is the Constructed format.
 After selecting a format, the user should be able to choose the products
 available for that format:
 
+- MTGO weekly Landing;
 - MTGO official event statistics;
 - MTGO matchup win rates;
 - MTGO weekly Top 8 decklists;
-- Tabletop Major Events;
-- Weekly Pickup.
+- Tabletop Major Events.
+
+The Landing feature section may select the current or a prior approved Pickup
+week. That section-level control does not make Weekly Pickup a separate product
+and does not change the week used by the Landing brief, environment, or
+construction-change facts.
 
 Availability must come from generated catalogs rather than a hard-coded
 assumption that every format supports every product.
