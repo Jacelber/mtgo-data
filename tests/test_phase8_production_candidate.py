@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 P8_07 = ROOT / "docs" / "prototypes" / "P8-07" / "index.html"
 P8_08 = ROOT / "docs" / "prototypes" / "P8-08" / "index.html"
 PHASE8_JS = ROOT / "assets" / "js" / "phase8"
-APP_FILES = ("app-core.js", "app-mtgo.js", "app-tabletop.js", "app.js")
+APP_FILES = ("app-core.js", "app-freshness.js", "app-mtgo.js", "app-tabletop.js", "app.js")
 
 
 def _scripts(path: Path) -> list[str]:

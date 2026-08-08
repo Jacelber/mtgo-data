@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ROOT_ENTRY = ROOT / "index.html"
 TABLETOP_ENTRY = ROOT / "melee" / "index.html"
 PHASE8_JS = ROOT / "assets" / "js" / "phase8"
-APP_FILES = ("app-core.js", "app-mtgo.js", "app-tabletop.js", "app.js")
+APP_FILES = ("app-core.js", "app-freshness.js", "app-mtgo.js", "app-tabletop.js", "app.js")
 
 
 def _scripts(path: Path) -> list[str]:
@@ -43,6 +43,7 @@ def test_tabletop_entry_loads_both_scoped_clients_in_order() -> None:
         "../assets/js/phase8/mtgo-controller.js",
         "../assets/js/phase8/tabletop-controller.js",
         "../assets/js/phase8/app-core.js",
+        "../assets/js/phase8/app-freshness.js",
         "../assets/js/phase8/app-mtgo.js",
         "../assets/js/phase8/app-tabletop.js",
         "../assets/js/phase8/app.js",

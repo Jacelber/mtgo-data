@@ -139,3 +139,73 @@ test("mobile composition uses first tap for disclosure and second tap for detail
   await expect(page.locator('[data-stats-parent="izzet-prowess"]').locator("xpath=ancestor::tr/following-sibling::tr[1]"))
     .toHaveClass(/deck-detail-row/);
 });
+
+test("each product shows only its own freshness facts", async ({ page }) => {
+  await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
+  await expect(page.locator('.freshness-strip')).toHaveAttribute("aria-label", "Data status");
+  await expect(page.locator('[data-freshness-key="high-score-completeness"]')).toContainText("136 / 139 · 97.9%");
+  await expect(page.locator('[data-freshness-key="decks"]')).toContainText("285");
+  await expect(page.locator('[data-freshness-key="matchup-coverage"]')).toHaveCount(0);
+
+  await page.goto("/index.html?format=standard&product=mtgo-matchups&range=1&lang=en");
+  await expect(page.locator('[data-freshness-key="matchup-coverage"]')).toContainText("9 / 9 · 100.0%");
+  await expect(page.locator('[data-freshness-key="missing-events"]')).toContainText("0");
+  await expect(page.locator('[data-freshness-key="high-score-completeness"]')).toHaveCount(0);
+
+  await page.goto("/index.html?format=standard&product=mtgo-top8&lang=en");
+  await expect(page.locator('[data-freshness-key="events"]')).toContainText("9");
+  await expect(page.locator('[data-freshness-key="placements"]')).toContainText("72");
+  await expect(page.locator('[data-freshness-key="available-decks"]')).toContainText("72");
+  await expect(page.locator("#view")).not.toContainText(/provisional|sealed/i);
+
+  await page.goto("/index.html?format=standard&product=weekly-pickup&lang=en");
+  await expect(page.locator('[data-freshness-key="week"]')).toContainText("2026-06-29 – 2026-07-05");
+  await expect(page.locator('[data-freshness-key="featured-decks"]')).toContainText("1");
+  await expect(page.locator('[data-freshness-key="events"]')).toHaveCount(0);
+
+  await page.goto("/melee/index.html?format=modern&product=tabletop-major-events&scope=all_constructed&lang=en");
+  await expect(page.locator('[data-freshness-key="event-date"]')).toContainText("2026-07-17 – 2026-07-19");
+  await expect(page.locator('[data-freshness-key="selected-events"]')).toContainText("1");
+  await expect(page.locator('[data-freshness-key="scope-decks"]')).toContainText("362");
+  await expect(page.locator('[data-freshness-key="submitted-decks"]')).toContainText("362");
+  await expect(page.locator('[data-freshness-key="unavailable-decks"]')).toContainText("0");
+  await expect(page.locator('[data-freshness-key="high-score-completeness"]')).toHaveCount(0);
+});
+
+test("unavailable freshness values render as Unknown rather than zero", async ({ page }) => {
+  await page.route("**/stats/standard/mtgo/completeness/1w.json", async route => {
+    const response = await route.fetch();
+    const body = await response.json();
+    body.high_score_decklist_completeness.status = "unavailable";
+    body.high_score_decklist_completeness.expected_decklist_count = null;
+    body.high_score_decklist_completeness.expected_decklist_count_display = null;
+    body.high_score_decklist_completeness.completeness_rate = null;
+    await route.fulfill({ response, json: body });
+  });
+  await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
+  const fact = page.locator('[data-freshness-key="high-score-completeness"]');
+  await expect(fact).toContainText("136 / Unknown · Unknown");
+  await expect(fact).not.toContainText("0 / 0");
+});
+
+test("freshness facts move together below the title only when needed", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=zh");
+  const strip = page.locator(".freshness-strip");
+  await expect(strip).not.toHaveClass(/freshness-stacked/);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(strip).toHaveClass(/freshness-stacked/);
+  const positions = await strip.evaluate(element => {
+    const titleBox = element.querySelector(".freshness-title").getBoundingClientRect();
+    const factsBox = element.querySelector(".freshness-facts").getBoundingClientRect();
+    return {
+      titleLeft: titleBox.left,
+      titleBottom: titleBox.bottom,
+      factsLeft: factsBox.left,
+      factsTop: factsBox.top,
+    };
+  });
+  expect(Math.abs(positions.factsLeft - positions.titleLeft)).toBeLessThan(1);
+  expect(positions.factsTop).toBeGreaterThanOrEqual(positions.titleBottom);
+});

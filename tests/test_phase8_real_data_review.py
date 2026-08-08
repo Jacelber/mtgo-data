@@ -12,7 +12,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 PROTOTYPE = ROOT / "docs" / "prototypes" / "P8-07"
 PHASE8_ASSETS = ROOT / "assets" / "js" / "phase8"
-APP_FILES = ("app-core.js", "app-mtgo.js", "app-tabletop.js", "app.js")
+APP_FILES = ("app-core.js", "app-freshness.js", "app-mtgo.js", "app-tabletop.js", "app.js")
 
 
 def _json(path: str) -> dict:

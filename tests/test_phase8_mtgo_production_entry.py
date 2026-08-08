@@ -11,7 +11,7 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 PHASE8_JS = ROOT / "assets" / "js" / "phase8"
-APP_FILES = ("app-core.js", "app-mtgo.js", "app-tabletop.js", "app.js")
+APP_FILES = ("app-core.js", "app-freshness.js", "app-mtgo.js", "app-tabletop.js", "app.js")
 P8_07 = ROOT / "docs" / "prototypes" / "P8-07" / "index.html"
 P8_08 = ROOT / "docs" / "prototypes" / "P8-08" / "index.html"
 
@@ -96,6 +96,7 @@ def test_root_uses_only_the_mtgo_phase8_module_boundary() -> None:
         "assets/js/phase8/matchup-model.js",
         "assets/js/phase8/mtgo-controller.js",
         "assets/js/phase8/app-core.js",
+        "assets/js/phase8/app-freshness.js",
         "assets/js/phase8/app-mtgo.js",
         "assets/js/phase8/app.js",
     ]

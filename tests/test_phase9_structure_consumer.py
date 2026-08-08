@@ -9,7 +9,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 PHASE8_JS = ROOT / "assets" / "js" / "phase8"
-APP_FILES = ("app-core.js", "app-mtgo.js", "app-tabletop.js", "app.js")
+APP_FILES = ("app-core.js", "app-freshness.js", "app-mtgo.js", "app-tabletop.js", "app.js")
 
 
 def _controller_result(script: str) -> dict:
