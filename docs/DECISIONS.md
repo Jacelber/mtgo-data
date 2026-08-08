@@ -3643,3 +3643,74 @@ qualified subtype shift or approved Pickup feature. Future formats cannot leak
 into the public catalog as partial products. No Landing generator, Schema,
 configuration, production data, classifier change, public path, or publication
 is authorized by this decision; those remain later task gates.
+
+---
+
+# DEC-087 - Integrate Weekly Pickup into the accepted Landing design
+
+Status: `Accepted`
+
+## Context
+
+P12-04A translated the accepted Landing contract into desktop, 390-pixel, and
+412-pixel prototypes. Owner review selected the A3 Editorial Analysis Console
+direction, the responsive line-art cat watermark, and one week selector inside
+the new-deck and new-technology feature section. Once that section could show
+approved historical weeks, a separate Weekly Pickup product duplicated the same
+reader task, deck detail, and archive.
+
+The underlying Pickup process still has distinct operational value. Its
+candidate preparation, manual approval, known-archetype state, localized copy,
+approved week documents, and index are inputs and history that Landing needs.
+Removing the duplicate product must not delete those capabilities or break old
+links.
+
+## Decision
+
+Adopt `docs/FRONTEND_DESIGN_SYSTEM.md` as the durable visual and interaction
+authority. The selected direction is A3: warm editorial surfaces, analytical
+information architecture, the card-back-inspired header palette, the Chinese
+title `猫猫万智周报`, a borderless upper-right language control, and direction
+B's responsive transparent line-art cat watermark. The accepted Landing table,
+representative-card, feature-card, inline-detail, and 390/412-pixel contracts
+are part of that authority.
+
+After the tested P12-16 cutover, Weekly Pickup is not a standalone user-facing
+product. It remains a format-scoped internal candidate, approval, known-state,
+and history capability that supplies the Landing new-deck and new-technology
+feature section. The reader sees finished editorial content, not approval or
+review terminology.
+
+The feature section defaults to the current week and may select an approved
+historical Pickup week. That selection changes only the feature section; the
+weekly brief, environment shares, composition, and construction observations
+continue to come from the current `landing/current.json`. This is not a public
+historical Landing contract.
+
+Show every approved item for the selected feature week, sort every `new_deck`
+before every `new_technology`, and show four reviewer-selected cards per item.
+These clauses supersede DEC-086's maximum of two items and eight-card display;
+its statistical thresholds, classifier gate, evidence binding, and human
+publication boundary remain unchanged.
+
+Preserve `stats/<format>/mtgo/pickup/index.json`, approved week documents,
+candidate/review inputs, and known-archetype state throughout the migration.
+At P12-16, legacy `product=weekly-pickup&week=<week>` URLs resolve compatibly to
+the Landing feature section and requested week before the standalone product
+identity is removed from navigation and catalogs. P12-04B itself deletes or
+rewrites none of those resources.
+
+## Consequences
+
+Landing becomes the single reader-facing weekly overview and archive entry,
+while the proven human-control and history pipeline remains reusable. P12-05
+must distinguish products from Landing sections; P12-09 must isolate feature-
+history loading and failure; P12-12 must render the integrated panel; P12-14
+must verify it on small screens; P12-15 must define canonical and legacy URL
+behavior; and P12-16 must test compatibility, remove the duplicate product
+identity, and retain a rollback path.
+
+This decision changes product and Phase 12 contracts only. It authorizes no
+production UI, producer, Schema, generated data, workflow, publication, commit,
+or remote operation, and it does not start P12-05, classifier remediation, or
+P12-10.

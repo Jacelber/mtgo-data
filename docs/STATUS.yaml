@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-03b-landing-contract"
-  working_branch_status: "isolated_local_contract_complete"
+  current_working_branch: "codex/p12-04b-design-contract"
+  working_branch_status: "isolated_contract_complete_pending_owner_acceptance"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Small machine-readable record of current project state and authorization."
-  last_updated: "2026-08-07"
+  last_updated: "2026-08-08"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   update_required_after_each_phase: true
@@ -72,35 +72,39 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-03B"
-  name: "Landing product, data, and editorial contract freeze"
-  status: "local_contract_complete_ready_pr_publication_authorized"
-  authorized_on: "2026-08-07"
-  workspace: "C:/tmp/mtgo-data-p12-03b-20260807-01"
-  branch: "codex/p12-03b-landing-contract"
-  base_commit: "ec00f59c8a260bf0975af9fffa0badfabac430d3"
-  task_type: "product_statistical_and_editorial_contract"
-  artifact_impact: "none"
-  objective: "Freeze the owner-reviewed MTGO Landing product, statistical, data, editorial, lifecycle, fallback, and pre-P12-10 classifier-gate contract without implementing or publishing the product."
+  id: "P12-04B"
+  name: "Durable design-system and product-route contract freeze"
+  status: "local_contract_complete_pending_owner_acceptance"
+  authorized_on: "2026-08-08"
+  completed_on: "2026-08-08"
+  selected_direction: "A3_editorial_analysis_console_with_B_responsive_line_art_watermark"
+  workspace: "C:/tmp/mtgo-data-p12-04b-20260808-01"
+  branch: "codex/p12-04b-design-contract"
+  base_commit: "fa931372bee2dd2963007cb38ecdc1439ca36a16"
+  task_type: "local_authoritative_design_and_product_contract"
+  artifact_impact: "internal_diagnostics"
+  objective: "Freeze the owner-selected durable front-end design system, integrate Weekly Pickup into the Landing feature section, and amend the remaining Phase 12 route without changing production code or data."
   authorization:
     local_implementation: true
-    commit: true
-    remote_publication: true
+    commit: false
+    remote_publication: false
     merge: false
   target_paths:
+    - "docs/FRONTEND_DESIGN_SYSTEM.md"
     - "docs/PROJECT_SCOPE.md"
     - "docs/STATISTICS_SPEC.md"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
+    - "docs/design/"
+    - "docs/audits/P12-04.md"
     - "docs/STATUS.yaml"
-    - "docs/audits/P12-03.md"
     - "tests/test_documentation_history.py"
   protected_scope:
     code_changed: "none"
     workflow_changed: "none"
     raw_or_generated_data_changed: "none"
-    statistical_behavior_changed: "future Landing contract only; no current generator or product changed"
+    statistical_behavior_changed: "none; every mock value is explicitly illustrative"
     schema_changed: "none"
     frontend_source_changed: "none"
     public_paths_changed: "none"
@@ -108,25 +112,28 @@ current_task:
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Create one exact P12-03B documentation commit from the reviewed file set."
-    - "Push only codex/p12-03b-landing-contract and open one Ready pull request against master."
+    - "Freeze the owner-accepted A3 visual and responsive system in docs/FRONTEND_DESIGN_SYSTEM.md."
+    - "Amend the product, statistics, architecture, roadmap, decision, audit, status, and documentation-test contracts for Landing and Weekly Pickup consolidation."
+    - "Preserve the accepted P12-04A artifacts as local design evidence and run complete repository validation."
   prohibited_changes:
-    - "Production dispatch, real-data write, Pages publication, or dependency-manifest change."
-    - "Classifier rules, known-archetype state, Schema, generated data, product HTML, CSS, JavaScript, workflow, runtime request path, privacy, retention, or event-whitelist changes."
-    - "P12-04, classifier remediation, P12-10, merge, or production implementation."
-  stop_point: "Stop after the Ready pull request is published for separate merge authorization. Do not start P12-04, classifier remediation, or P12-10 automatically."
+    - "Production HTML, CSS, JavaScript, generated data, Schema, workflow, runtime request path, catalog, or Pages changes."
+    - "Transmission of repository content to Superdesign or another external design service."
+    - "Deleting or rewriting Pickup candidate, approval, known-state, index, week-history, or compatibility resources."
+    - "Starting P12-05, classifier remediation, P12-10, or another task."
+    - "Commit, push, pull-request creation, merge, or production publication."
+  stop_point: "Stop after local contract validation and owner review. Await separate acceptance and any commit or publication authorization."
 
 recent_completion_handoff:
-  id: "GOV-03-READY-IMPACT-CI"
-  name: "Impact-classified pull-request validation"
+  id: "P12-03B"
+  name: "Landing product, data, and editorial contract freeze"
   status: "completed_and_merged"
-  pull_request: 188
-  merge_commit: "ec00f59c8a260bf0975af9fffa0badfabac430d3"
+  pull_request: 189
+  merge_commit: "9a2e83317a7a08d2ab346a2466f4ee8afadf8e3e"
   note: "GitHub and Git history retain the detailed validation, publication, and Pages evidence."
 
 current_repository_state:
-  baseline_commit: "ec00f59c8a260bf0975af9fffa0badfabac430d3"
-  baseline_note: "Verified live master after GOV-03 merge, used as the isolated P12-03B contract base."
+  baseline_commit: "fa931372bee2dd2963007cb38ecdc1439ca36a16"
+  baseline_note: "Verified live master after the 2026-08-07 production-data update; used as the isolated P12-04B base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -207,15 +214,15 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-04"
-  name: "Visual direction and durable design-system contract"
-  status: "planned_not_authorized"
-  production_change: false
+  id: "P12-05"
+  name: "Shared visual foundation"
+  status: "planned_pending_p12_04b_acceptance_not_authorized"
+  production_change: true
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "P12-04 remains separately owner-gated after P12-03B acceptance; classifier remediation is also a separate task and P12-10 retains the recorded hard gate."
+  note: "P12-05 requires owner acceptance and publication of the P12-04B contract plus separate implementation authorization. Classifier remediation and P12-10 remain later separate gates."
 
 governance_baseline:
   status: "active_on_master"
@@ -251,7 +258,7 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not begin P12-04, classifier remediation, P12-10, or another task automatically."
+  - "Do not begin P12-05, classifier remediation, P12-10, or another task automatically."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."

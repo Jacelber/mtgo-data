@@ -2815,8 +2815,9 @@ public entry points.
   compatibility contract before implementing its producer or front end;
 - establish an owner-approved visual system before the first broad redesign and
   implement reusable tokens and components before composing the Landing page;
-- extend the existing Weekly Pickup review and publication boundary instead of
-  creating a parallel candidate or approval system;
+- integrate the existing Weekly Pickup review, publication, known-state, and
+  history boundary into the Landing feature section instead of preserving a
+  duplicate standalone product or creating a parallel approval system;
 - publish structured Landing facts separately from fixed interface translations
   and human editorial copy;
 - correct chart semantics and identity presentation without assigning changing
@@ -2889,8 +2890,8 @@ public entry points.
      fall back to the parent identity;
    - reuse the existing Weekly Pickup review workflow for new-technology
      features, generate difference-card suggestions from cards newly present
-     or increased against the subtype base, and leave the final eight-card wall
-     to the reviewer;
+     or increased against the subtype base, and leave the final four-card
+     display to the reviewer;
    - do not reuse the 20-match matchup warning as a 20-deck Landing filter;
    - require future formats to admit Landing and all required MTGO products in
      one public launch; Standard and Modern are explicit Phase 12 migration
@@ -2923,9 +2924,12 @@ public entry points.
    - implement the accepted colors, type scale, spacing, focus, elevation,
      panel, control, table, link, and responsive tokens in shared static assets;
    - migrate the shared shell, navigation, format tabs, product tabs, notices,
-     and common loading containers first;
+     and common loading containers first; distinguish top-level products from
+     in-page Landing sections and keep the language control visually distinct
+     from the format selector;
    - preserve content order, data meaning, URLs, and product availability while
-     the remaining views migrate incrementally.
+     the remaining views migrate incrementally. Weekly Pickup remains reachable
+     through its existing product state until the tested P12-16 cutover.
 6. `P12-06` — Correct chart semantics
    - use accurate Chinese product and metric names;
    - replace rank-colored pie charts with aligned comparison graphics that do
@@ -2955,7 +2959,10 @@ public entry points.
      not as a blocker for readable product content;
    - defer below-the-fold card images until they approach the viewport and use
      bounded concurrent image loading so the Landing does not issue an
-     uncontrolled burst of third-party requests.
+     uncontrolled burst of third-party requests;
+   - lazy-load the Pickup index and a selected historical feature document only
+     when the Landing feature section needs them, and isolate their loading,
+     empty, failure, and retry states from the current Landing facts.
 10. `P12-10` — Landing weekly-facts producer and Pickup integration
     - do not start until the P12-03 classifier-remediation gate, refreshed
       shadow, owner threshold confirmation, known-state migration check, and
@@ -2979,9 +2986,10 @@ public entry points.
     - exclude candidate, review-note, design, and other non-public working files
       from the Pages artifact, and prove that only the admitted current document
       is deployable;
-    - keep every pre-existing statistic, Pickup public document, rule,
-      comparison base, and protected `434455` byte unchanged unless its exact
-      extension was authorized in P12-03.
+    - preserve every pre-existing statistic, Pickup public document and history
+      index, rule, comparison base, and protected `434455` byte. The P12-04B
+      product-contract migration authorizes using Pickup as Landing's internal
+      feature source, not deleting or rewriting those documents.
 11. `P12-11` — Landing weekly summary and environment structure
     - render up to five truthful structured weekly observations without forcing
       a minimum, plus the environment composition strip and high-score-share
@@ -2997,15 +3005,22 @@ public entry points.
     - keep this view non-default and reachable through its explicit P12-02 URL
       until the complete Landing is accepted in P12-16.
 12. `P12-12` — Landing curated new-deck and new-technology panel
-    - show at most two manually approved Weekly Pickup items with category,
-      archetype, editorial positioning, eight-card wall, supporting facts, and
-      a shareable full-deck link;
+    - show every approved item for the selected feature week, with all
+      `new_deck` items before all `new_technology` items, category, archetype,
+      editorial positioning, four reviewer-selected cards, supporting facts,
+      and a shareable full-deck link;
+    - place one week selector inside the Landing feature panel, default it to
+      the current week, and reuse the existing Pickup index and week documents;
+      selecting history changes only this panel and never the current Landing
+      brief, environment, composition, or construction-change facts;
     - render only the currently selected language, rerender the same item when
       the existing Chinese or English control changes, and do not introduce a
       side-by-side bilingual Landing mode;
     - reuse the common card-image preview, placeholder, and failure behavior;
-    - show a stable-environment empty state when no item was approved and never
-      expose a pending-review state to users.
+    - use one disclosure action per item and the shared deck-detail view; show a
+      stable-environment empty state when no item was approved, never expose a
+      pending-review state or internal approval vocabulary, and introduce no
+      standalone Weekly Pickup front-end state.
 13. `P12-13` — Large-matrix interaction
     - add search, focused archetype, Top-N, and minimum-match filters;
     - retain the established 20-match warning and use roving tabindex plus
@@ -3013,21 +3028,32 @@ public entry points.
 14. `P12-14` — Mobile matrix and card-image interaction
     - provide a single-archetype vertical opponent view;
     - add a touch-friendly card image layer and failure placeholder;
-    - verify the selected Landing list-image treatment at 390px without hiding
-      required names, values, trends, or navigation.
+    - verify the selected Landing list-image treatment, feature week selector,
+      multiple approved items, and shared inline deck detail at 390px without
+      hiding required names, values, trends, or navigation.
 15. `P12-15` — Metadata and sharing
     - add description, Open Graph, favicon, canonical URL, language memory, and
       required Scryfall and Wizards attribution;
     - provide appropriate Landing metadata without presenting machine facts as
-      human editorial claims.
+      human editorial claims;
+    - define a canonical Landing feature URL and map legacy
+      `product=weekly-pickup&week=<week>` state to
+      `product=mtgo-landing&section=features&week=<week>`, with the week scoped
+      only to the feature panel.
 16. `P12-16` — Cross-device and visual-system closeout
-    - verify the Landing plus all five existing product views in Chinese and
-      English independently, both public MTGO formats, the protected Tabletop
-      product, desktop, 390px width, language switching, URL restoration, and
-      zero application console errors;
+    - verify the Landing plus the four retained top-level product views in
+      Chinese and English independently, both public MTGO formats, the protected
+      Tabletop product, desktop, 390px width, language switching, URL
+      restoration, and zero application console errors;
     - after the complete Landing, empty states, failure fallback, direct links,
       and Pages artifact are accepted, make it the bare `/index.html` MTGO
-      default while retaining every explicit existing product URL;
+      default while retaining every explicit existing product URL through a
+      compatible destination;
+    - remove `weekly-pickup` from the product navigation, product order, and
+      standalone product identity only after its old URLs have been verified to
+      open the Landing feature section at the requested week. Preserve its
+      generated history, internal candidate/review capability, known state, and
+      rollback path;
     - verify that no future format can be catalog-public without an admitted
       Landing and all required MTGO products, while the Standard and Modern
       migration exceptions both satisfy this invariant at closeout;
@@ -3051,6 +3077,8 @@ The only new public-data boundary is the format-scoped Landing product after
 separate P12-03 contract acceptance and P12-10 implementation authorization.
 Phase 12 publishes only the latest Landing document; it does not authorize
 historical Landing browsing or cross-classification-version trend analysis.
+Selecting an approved historical Pickup week inside the feature section is a
+bounded archive view and does not change that rule.
 
 ## Acceptance criteria
 
@@ -3064,7 +3092,8 @@ Phase 12 is complete when:
   and what new decks or technology were manually selected, using one
   format-scoped structured source;
 - the bare MTGO entry changes to the Landing only in P12-16 after complete
-  acceptance, while existing explicit product links remain compatible;
+  acceptance, while existing explicit product links remain compatible and old
+  Weekly Pickup links resolve to the corresponding Landing feature week;
 - machine facts, fixed translations, and human editorial copy remain separate,
   and no unreviewed candidate reaches the public product;
 - no 20-deck filter or unsupported statistical-significance claim is introduced;

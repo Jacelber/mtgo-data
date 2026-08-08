@@ -2206,11 +2206,15 @@ The tabletop entry point is:
 The visible analysis hierarchy is format-first. A shared shell retains the
 selected format while routing to the products available for that format:
 
+- MTGO weekly Landing;
 - MTGO official event statistics;
 - MTGO matchup win rates;
 - MTGO weekly Top 8 decklists;
-- Tabletop Major Events;
-- Weekly Pickup.
+- Tabletop Major Events.
+
+After the P12-16 cutover, approved Weekly Pickup content is an in-page Landing
+feature source and archive, not a separately routed product. Legacy Pickup URLs
+remain compatibility inputs as defined in section 25.5.
 
 The shell must obtain product availability and public paths from generated
 catalogs. Routing between entry points must not combine MTGO and tabletop
@@ -2947,7 +2951,9 @@ stats/<format>/mtgo/landing/current.json
 The document is versioned and discovered through `stats/catalog.json`. Phase
 12 does not create a public Landing archive, weekly index, or historical
 browsing contract. Git history and Weekly Pickup history do not substitute for
-such a contract.
+such a contract. The Landing feature section may reuse approved Pickup history,
+but selecting a prior feature week does not replace or reinterpret the current
+Landing brief, environment, composition, or construction-change facts.
 
 The explicit pre-closeout URL is:
 
@@ -2991,9 +2997,9 @@ The P12-10 Schema must require, at minimum:
 - separate `other_classified` and `unknown` aggregates;
 - zero to five structured `share_move`, `exit`, or `build_shift`
   observations with the evidence required by `STATISTICS_SPEC.md` section 24;
-- zero to two approved `new_deck` or `new_technology` feature items with exact
+- zero or more approved `new_deck` or `new_technology` feature items with exact
   deck identity, localized headline and positioning fields, supporting facts,
-  and eight reviewer-selected cards; and
+  and four reviewer-selected cards; and
 - enough source and review binding to detect a late-event fact change without
   silently reusing stale editorial content.
 
@@ -3023,8 +3029,30 @@ Landing extends the existing format-scoped Pickup candidate and approval
 boundary. It must not create a parallel root candidate workflow. The generator
 may suggest exact-deck cards newly present or increased against the four-week
 reference, but the reviewer owns the final category, localized editorial copy,
-featured deck, and eight-card wall. Approval binds those fields to exact source
-event IDs, classifier digest, machine-fact digest, and deck identity.
+featured deck, ordering, and four-card display. Approval binds those fields to
+exact source event IDs, classifier digest, machine-fact digest, and deck
+identity.
+
+After the P12-16 cutover, Weekly Pickup is an internal producer, review,
+known-state, and history capability rather than a standalone product identity.
+Landing renders every approved item for the selected feature week, with
+`new_deck` before `new_technology`, through one disclosure action and the shared
+deck-detail presentation. Internal approval state and reviewer terminology are
+never rendered to readers.
+
+Existing public history remains the migration and compatibility source:
+
+```text
+stats/<format>/mtgo/pickup/index.json
+stats/<format>/mtgo/pickup/<week>.json
+```
+
+Those documents are not deleted, rewritten, or converted into Landing history
+during P12-04B. P12-09 and P12-12 may load them lazily for the feature section.
+At P12-16, an old URL using `product=weekly-pickup&week=<week>` must resolve to
+Landing with its feature section and selected week, equivalent to
+`product=mtgo-landing&section=features&week=<week>`. The `week` parameter affects
+only that section; it does not select a historical Landing document.
 
 ### 25.6 Availability and failure states
 
