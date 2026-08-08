@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_statistics_uses_one_high_score_composition_bar() -> None:
     mtgo = (ROOT / "assets/js/phase8/app-mtgo.js").read_text(encoding="utf-8")
+    core = (ROOT / "assets/js/phase8/app-core.js").read_text(encoding="utf-8")
     interaction = (ROOT / "assets/js/phase8/app.js").read_text(encoding="utf-8")
     styles = (ROOT / "assets/css/phase8-candidate.css").read_text(encoding="utf-8")
 
@@ -17,8 +18,9 @@ def test_statistics_uses_one_high_score_composition_bar() -> None:
     assert 'item.id !== "unknown"' in chart
     assert 'item.id === "unknown"' in chart
     assert "composition-legend" not in chart
-    assert "data-composition-identity" in chart
-    assert "data-tooltip" in chart
+    assert "accessibleCompositionSegment({" in chart
+    assert "data-composition-identity" in core
+    assert "data-tooltip" in core
     assert "top8_share" not in chart
     assert "pie" not in mtgo.lower()
     assert "pie" not in interaction.lower()

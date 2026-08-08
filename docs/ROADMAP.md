@@ -2977,7 +2977,24 @@ public entry points.
      reduced motion, and unavailable-navigation semantics;
    - establish reusable accessible link or button behavior for future Landing
      stacked-bar segments rather than hiding interactive children in one image
-     role.
+     role;
+   - use a 16-pixel body, 14-pixel table/key-label, and 13-pixel secondary-copy
+     baseline, with a 24-by-24-pixel interactive-target floor and explicit
+     light/dark focus colors;
+   - keep proportional composition-segment widths as an essential visualization
+     exception only where the accompanying table or card list provides an
+     equivalent named control;
+   - restore keyboard focus after dynamic rerenders and inline-detail closure,
+     label content regions, and expose unavailable-navigation reasons through
+     programmatic descriptions;
+   - verify all retained product routes in Chinese and English at desktop,
+     390-pixel, and 412-pixel widths without taking on the semantic-card list
+     conversion reserved for P12-08A;
+   - owner acceptance, commit, publication, merge, deployment, and P12-08A
+     remain separate authorization gates.
+
+   P12-08 is owner accepted and authorized for publication. P12-08A remains a
+   separate owner-authorization gate.
 8A. `P12-08A` — Existing-product small-screen list remediation
    - translate one-dimensional statistics, Tabletop deck, Top 8, and Weekly
      Pickup lists into semantic cards at 780 CSS pixels and below rather than

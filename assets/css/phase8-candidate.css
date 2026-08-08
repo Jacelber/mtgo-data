@@ -41,7 +41,7 @@
 .real-data-note {
   margin: 8px 0 16px;
   color: #5d6670;
-  font-size: 12px;
+  font-size: var(--text-xs);
 }
 
 .metric-unavailable {
@@ -116,7 +116,7 @@
 .deck-detail .detail-status {
   margin: 6px 0 12px;
   color: #5d6670;
-  font-size: 12px;
+  font-size: var(--text-xs);
 }
 
 .deck-column .card-list {
@@ -175,7 +175,7 @@
 
 .composition-heading small {
   color: #5d6670;
-  font-size: 12px;
+  font-size: var(--text-xs);
   font-weight: 400;
 }
 
@@ -183,7 +183,7 @@
   max-width: 760px;
   margin: 0;
   color: #5d6670;
-  font-size: 12px;
+  font-size: var(--text-xs);
   text-align: right;
 }
 
@@ -293,7 +293,7 @@
 .composition-note {
   margin: 9px 0 0;
   color: #5d6670;
-  font-size: 12px;
+  font-size: var(--text-xs);
   line-height: 1.55;
 }
 
@@ -316,6 +316,7 @@
 }
 
 .axis-label-button {
+  min-height: var(--target-min);
   border: 0;
   background: transparent;
   color: inherit;
@@ -530,7 +531,7 @@
   .composition-heading small {
     display: block;
     margin-top: 3px;
-    font-size: 11px;
+    font-size: var(--text-xs);
   }
 
   .composition-heading p {

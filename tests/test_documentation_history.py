@@ -52,12 +52,10 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "P12-07"
-    assert status["current_task"]["status"] == (
-        "owner_accepted_publication_authorized_pending_commit"
-    )
+    assert status["current_task"]["id"] == "P12-08"
+    assert status["current_task"]["status"] == "owner_accepted_publication_authorized"
     assert status["current_task"]["base_commit"] == (
-        "eb3a183c351f2a2e316821eef53e090c89407fb4"
+        "1f0fde6fe36d94b249a3a0bde69b01b5f9b64bb7"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -66,28 +64,24 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "merge": True,
     }
     assert status["recent_completion_handoff"] == {
-        "id": "P12-06",
-        "name": "Correct chart semantics",
+        "id": "P12-07",
+        "name": "Product-specific freshness strip",
         "status": "completed_and_merged",
-        "pull_request": 192,
-        "merge_commit": "eb3a183c351f2a2e316821eef53e090c89407fb4",
+        "pull_request": 193,
+        "merge_commit": "1f0fde6fe36d94b249a3a0bde69b01b5f9b64bb7",
         "note": (
-            "GitHub and Git history retain the detailed validation, publication, "
-            "and Pages evidence."
+            "P12-08 started from the verified merged P12-07 master commit; GitHub "
+            "and Git history retain detailed publication evidence."
         ),
     }
-    assert status["next_approved_task"]["id"] == "P12-08"
-    assert status["next_approved_task"]["status"] == (
-        "planned_pending_p12_07_owner_acceptance_not_authorized"
-    )
+    assert status["next_approved_task"]["id"] == "P12-08A"
+    assert status["next_approved_task"]["status"] == "planned_pending_separate_authorization_not_authorized"
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
     future_task_gates = {
         gate["task"]: gate for gate in status["future_task_gates"]
     }
-    assert future_task_gates["P12-08A"]["status"] == (
-        "planned_pending_p12_08_acceptance_and_separate_authorization"
-    )
+    assert future_task_gates["P12-08A"]["status"] == "planned_pending_separate_authorization"
     assert future_task_gates["P12-10"]["status"] == (
         "blocked_pending_separate_authorization_and_evidence"
     )

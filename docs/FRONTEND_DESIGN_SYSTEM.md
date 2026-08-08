@@ -50,7 +50,7 @@ Use these semantic tokens as the shared starting palette:
 --accent-soft: #f2dbcd;
 --positive: #1f7459;
 --negative: #aa4740;
---steady: #737a78;
+--steady: #68706e;
 --shadow: 0 3px 12px rgba(30, 42, 42, .05);
 ```
 
@@ -59,7 +59,7 @@ The selected header background is:
 ```css
 background:
   radial-gradient(circle at 70% 45%, rgba(213, 151, 73, .2), transparent 32%),
-  linear-gradient(112deg, #281b17 0%, #694020 19%, #ad6031 49%, #7c4827 77%, #2b201a 100%);
+  linear-gradient(112deg, #281b17 0%, #694020 19%, #8f4827 49%, #7c4827 77%, #2b201a 100%);
 ```
 
 Text and controls must meet the applicable WCAG contrast target. Positive,
@@ -72,6 +72,10 @@ Use the platform system UI stack for controls, operational labels, tables, and
 body copy. Use `Georgia`, `"Noto Serif SC"`, and a serif fallback for the brand
 and selected editorial headings. Numeric columns use tabular numerals.
 
+The shared production baseline is 16 CSS pixels for body copy, 14 pixels for
+table and key operational labels, and 13 pixels for secondary source or status
+copy. The language switch may remain visually compact at 12 pixels because its
+two controls retain accessible names, programmatic state, and 24-pixel targets.
 The accepted Landing table baseline is 14 CSS pixels for headings, 17 pixels
 for values and body copy, and 19 pixels for deck names. Mobile may adjust the
 scale to fit its semantic-card layout but must remain comfortably readable and
@@ -106,7 +110,13 @@ content appears in the Landing feature section. The section may have a week
 selector, but selecting a week changes only feature content.
 
 Controls use semantic `button`, `a`, `select`, or appropriate form elements,
-visible focus, meaningful accessible names, and touch-friendly targets. A
+visible focus, meaningful accessible names, and touch-friendly targets. Normal
+text meets 4.5:1 contrast; large text, controls, and focus indicators meet
+3:1. Interactive targets have a 24 by 24 CSS-pixel floor, while primary touch
+controls should remain larger where the layout permits. The target floor
+applies to the interactive hit area and focus indicator; compact informational
+or expansion glyphs may remain visually smaller when their parent control keeps
+the full target. A
 disabled or unavailable product is explicit rather than silently inert.
 
 ## 7. Panels, tables, and deck details
@@ -131,6 +141,20 @@ width, threshold, tooltip, keyboard behavior, and click/touch navigation remain
 the same. The tooltip renders only the deck name and share, never the card name.
 An unmapped or failed image falls back to the accepted high-contrast segment
 palette without guessing from classifier rules.
+
+Composition segment widths remain proportional to the underlying share and
+therefore may be narrower than 24 CSS pixels. This is an essential visualization
+exception, not the only route to the information: each included identity has an
+equivalent named control in the accompanying table or card list. Every mapped
+segment is still an independent button with its own accessible name and expanded
+state; residual non-navigation segments are labelled, focusable images without
+interactive descendants.
+
+Numeric table headers and their column values share the same right-alignment
+anchor. Optional help icons and active sort arrows use a reserved accessory rail
+that starts 4 pixels to the right of that anchor. They form one compact group,
+do not participate in the label's normal flow, and do not shift the label away
+from its data column.
 
 P12-08A applies that semantic-card rule to the retained statistics, Tabletop
 deck, Top 8, and Weekly Pickup one-dimensional lists. Deck identity, core and
@@ -182,6 +206,12 @@ Use semantic landmarks, headings, tables or labelled cards, explicit form
 labels, visible focus, logical source order, and useful accessible names. Keep
 names and values in text; never encode identity or direction only by color,
 position, or an image. Decorative cat art is ignored by assistive technology.
+
+Dynamic product rerenders restore focus to the equivalent initiating control,
+and closing an inline detail returns focus to its originating deck control.
+Unavailable navigation exposes its reason through `aria-describedby` while
+remaining focusable so the visible status message and explanation are available
+to keyboard and assistive-technology users.
 
 Unavailable, unknown, `no_events`, empty approved-feature, loading, and retry
 states must be distinguishable. A malformed or inconsistent admitted document
