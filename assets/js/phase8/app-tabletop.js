@@ -363,6 +363,9 @@ async function tabletopView() {
   const scopeLock = scopeState.multi_event
     ? `<p class="scope-lock-note">${t("tabletop.multi_scope_lock")}</p>`
     : "";
+  const freshness = tabletopFreshness(
+    scopeState, selectedEventIds, overview, scope, quality
+  );
   const retainedQualityCodes = new Set([
     "disqualified_participant_matches_excluded",
   ]);
@@ -380,7 +383,7 @@ async function tabletopView() {
   const eventSummary = scopeState.multi_event ? "" : `
     <section class="panel event-summary"><div class="event-title-row"><strong>${escapeHtml(overview.event.name)}</strong>
       <a href="${escapeHtml(overview.event.source_url)}" target="_blank" rel="noopener">${t("tabletop.source_event")}</a></div>
-      <p>${eventDateRange(overview.event.date)} · ${escapeHtml(eventStructureLabel(overview.event_structure))} · ${t("tabletop.event_id", { id: escapeHtml(overview.event_id) })}</p>
+      <p>${escapeHtml(eventStructureLabel(overview.event_structure))} · ${t("tabletop.event_id", { id: escapeHtml(overview.event_id) })}</p>
       <div class="quality-notice"><strong>${t("tabletop.data_quality")}</strong>
         <ul class="quality-list">${issueList}</ul></div>
     </section>`;
@@ -391,6 +394,6 @@ async function tabletopView() {
     : state.tabletopView === "overview"
       ? tabletopOverview(scope, presentation)
       : tabletopMatchup(matchup, state.tabletopScope, eventFormat);
-  return `${viewTabs}${selector}${scopes}${scopeLock}${eventSummary}
+  return `${viewTabs}${selector}${scopes}${scopeLock}${freshness}${eventSummary}
     <section class="panel">${content}</section>`;
 }

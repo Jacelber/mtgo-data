@@ -279,7 +279,6 @@ async function statsView() {
     state.detailIdentity = null;
   }
   currentContext = { meta, range, decks, completeness, identityNames };
-  const hs = completeness.high_score_decklist_completeness;
   const expandable = range.archetypes.filter(item => activeStatisticsSubtypes(item).length >= 2);
   const sortHeader = (label, key, tip) => {
     const arrow = state.statsSort === key ? (state.statsDirection === "desc" ? " ▼" : " ▲") : "";
@@ -287,26 +286,9 @@ async function statsView() {
   };
   return `<section class="source-note">
       <p>${t("source.stats")}</p>
-      <p>${t("stats.updated", {
-        rules: dateText(meta.rules_updated),
-        data: dateText(meta.data_updated),
-      })}</p>
     </section>
     ${rangeButtons(state.statsRange, "data-stats-range")}
-    <div class="period-info">
-      <span>${t("stats.period", {
-        start: range.period.start,
-        end: range.period.end,
-        decks: range.total_decks,
-        high: range.total_high_score,
-        top8: range.total_top8,
-      })}</span>
-      <strong>${t("stats.completeness", {
-        observed: hs.observed_decklist_count,
-        expected: hs.expected_decklist_count_display ?? hs.expected_decklist_count,
-        rate: pct(hs.completeness_rate),
-      })}</strong>
-    </div>
+    ${statisticsFreshness(meta, range, completeness)}
     ${chartHtml(archetypes)}
     <section class="panel">
       <div class="panel-toolbar"><h2>${t("stats.title")}</h2>
@@ -398,19 +380,11 @@ async function matchupView() {
     .loadMatchup(state.format, state.matchupRange);
   const displayDocument = ReviewData.activeMatchupDocument(document, LOW_SAMPLE_THRESHOLD);
   currentContext = { matchupDocument: displayDocument, completeness };
-  const coverage = completeness.matchup_coverage;
   return `${rangeButtons(state.matchupRange, "data-matchup-range")}
     <section class="source-note">
       <p>${t("source.matchups")}</p>
-      <p><strong>${t("matchup.completeness", {
-        expected: coverage.expected_event_count,
-        available: coverage.available_event_count,
-        rate: pct(coverage.completeness_rate),
-        deferred: coverage.deferred_event_count,
-        missing: coverage.missing_event_count,
-        excluded: coverage.excluded_event_count,
-      })}</strong></p>
     </section>
+    ${matchupFreshness(completeness)}
     <section class="panel"><div class="panel-toolbar"><div><h2>${t("matchup.title")}</h2>
       <p class="matrix-toolbar-note">${t("matchup.note")}</p></div>
       <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
@@ -456,10 +430,8 @@ async function top8View() {
         `<option value="${escapeHtml(item.file)}" ${item.file === state.top8WeekFile ? "selected" : ""}>${item.start} ～ ${item.end}</option>`
       )).join("")}</select>
     </div>
-    <section class="panel"><p class="real-data-note">${t("top8.summary", {
-      events: top8.events.length,
-      placements: top8.events.reduce((sum, event) => sum + event.placements.length, 0),
-    })}</p>
+    ${top8Freshness(top8, weekEntry)}
+    <section class="panel">
       <div class="table-scroll"><table class="top8-table top8-week-table"><thead><tr><th>${t("top8.rank")}</th>
         ${top8.events.map(event => `<th title="${escapeHtml(event.name)}"><strong>${escapeHtml(event.display_name)}</strong>
           <small>${event.date} · ${t("top8.players", { count: event.player_count })}</small></th>`).join("")}
@@ -502,6 +474,7 @@ async function pickupView() {
     [t("pickup.new_decks"), "new_archetypes"],
   ];
   return `<section class="source-note"><p>${t("source.pickup")}</p></section>
+    ${pickupFreshness(week, document)}
     <div class="pickup-layout"><aside class="pickup-weeks"><h2>${t("pickup.archive")}</h2>${index.weeks.map(item => (
       `<button type="button" data-pickup-week="${escapeHtml(item.file)}" class="${item.file === state.pickupWeekFile ? "active" : ""}">
         ${escapeHtml(item.week)}<span>${item.start} ～ ${item.end}</span></button>`

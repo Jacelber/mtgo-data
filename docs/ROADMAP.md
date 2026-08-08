@@ -2955,6 +2955,23 @@ public entry points.
      supplied by the active product;
    - display unknown rather than inventing a common metric;
    - keep DEC-083 provisional and sealed lifecycle state internal.
+   - local implementation on 2026-08-08 adds one shared, responsive strip
+     renderer while keeping the fact selection product-specific: MTGO statistics
+     shows its rolling period, updates, deck counts, and publication
+     completeness; matchups shows its own coverage and exclusions; Top 8 and
+     Weekly Pickup show only their week and available counts; Tabletop shows the
+     selected event date, event count, scoped deck count, and submission
+     availability;
+   - missing source values render as an explicit localized Unknown value rather
+     than zero, an empty dash, or a cross-product substitute;
+   - responsive verification covers Chinese and English product routes plus
+     390- and 412-pixel viewports without taking on the broader list conversion
+     reserved for P12-08A;
+   - the strip measures its rendered content: it keeps the title and all facts
+     on one row when they fit, but moves the complete fact group to a new row
+     aligned with the title's left edge as soon as they do not;
+   - owner acceptance, commit, publication, merge, deployment, and P12-08 remain
+     separate authorization gates.
 8. `P12-08` — Readability and accessibility baseline
    - cover contrast, type size, target size, focus, headings, landmarks,
      reduced motion, and unavailable-navigation semantics;

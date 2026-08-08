@@ -188,7 +188,7 @@ def test_public_format_selector_uses_the_shared_hierarchical_renderer():
     phase8 = ROOT / "assets" / "js" / "phase8"
     app = "\n".join(
         (phase8 / name).read_text(encoding="utf-8")
-        for name in ("app-core.js", "app-mtgo.js", "app-tabletop.js", "app.js")
+        for name in ("app-core.js", "app-freshness.js", "app-mtgo.js", "app-tabletop.js", "app.js")
     )
     legacy = (ROOT / "assets" / "js" / "mtgo.js").read_text(encoding="utf-8")
 

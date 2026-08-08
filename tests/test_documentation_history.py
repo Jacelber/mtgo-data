@@ -52,12 +52,12 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "P12-06"
+    assert status["current_task"]["id"] == "P12-07"
     assert status["current_task"]["status"] == (
         "owner_accepted_publication_authorized_pending_commit"
     )
     assert status["current_task"]["base_commit"] == (
-        "0b8464d2a5dcbd354d3520255d0dc7764cc7ccf4"
+        "eb3a183c351f2a2e316821eef53e090c89407fb4"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -66,22 +66,19 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "merge": True,
     }
     assert status["recent_completion_handoff"] == {
-        "id": "P12-05",
-        "name": "Shared visual foundation",
+        "id": "P12-06",
+        "name": "Correct chart semantics",
         "status": "completed_and_merged",
-        "pull_request": 191,
-        "merge_commit": "0b8464d2a5dcbd354d3520255d0dc7764cc7ccf4",
+        "pull_request": 192,
+        "merge_commit": "eb3a183c351f2a2e316821eef53e090c89407fb4",
         "note": (
             "GitHub and Git history retain the detailed validation, publication, "
             "and Pages evidence."
         ),
     }
-    assert status["next_approved_task"]["id"] == "P12-07"
-    assert status["current_task"]["selected_direction"] == (
-        "B_landing_composition_with_representative_card_fill"
-    )
+    assert status["next_approved_task"]["id"] == "P12-08"
     assert status["next_approved_task"]["status"] == (
-        "planned_pending_p12_06_owner_acceptance_not_authorized"
+        "planned_pending_p12_07_owner_acceptance_not_authorized"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
@@ -96,6 +93,7 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
 
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
+    audit = (ROOT / "docs" / "audits" / "P12-07.md").read_text(encoding="utf-8")
     design_system = (
         ROOT / "docs" / "FRONTEND_DESIGN_SYSTEM.md"
     ).read_text(encoding="utf-8")
@@ -103,6 +101,8 @@ def test_live_status_is_small_current_state_and_points_to_history():
         assert "P12-08A" in document
         assert "semantic" in document.lower()
         assert "sticky identity column" in document
+    assert "Product-specific freshness strip" in audit
+    assert "DEC-083" in audit
 
     historical_paths = {
         item["path"] for item in status["authoritative_documents"]["historical_documents"]

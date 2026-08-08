@@ -190,6 +190,7 @@ async function renderView() {
     else html = await pickupView();
     if (token !== state.renderToken) return;
     root.innerHTML = html;
+    scheduleFreshnessLayouts(root);
     document.querySelector("#payload-status").textContent = t("loading.loaded", {
       format: formatLabel(state.format),
       product: productLabel(state.product),
