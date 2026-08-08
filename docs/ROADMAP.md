@@ -2947,6 +2947,18 @@ public entry points.
    - establish reusable accessible link or button behavior for future Landing
      stacked-bar segments rather than hiding interactive children in one image
      role.
+8A. `P12-08A` — Existing-product small-screen list remediation
+   - translate one-dimensional statistics, Tabletop deck, Top 8, and Weekly
+     Pickup lists into semantic cards at 780 CSS pixels and below rather than
+     exposing only the first columns of a desktop table;
+   - preserve deck identity, core metrics, secondary metrics, and the existing
+     expand action without hiding data merely to make the layout fit;
+   - open detail directly beneath the originating card;
+   - keep truly two-dimensional matrices and cross-event comparison tables in
+     bounded horizontal scrollers with a sticky identity column;
+   - verify Chinese and English behavior at 390- and 412-pixel widths;
+   - do not begin until P12-08 is accepted and the owner separately authorizes
+     P12-08A implementation.
 9. `P12-09` — Loading, failure, and retry model
    - separate successful caching from background refresh;
    - evict or retry failed promises and add useful text-first skeletons;

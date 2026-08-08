@@ -5,7 +5,8 @@ const { expect, test } = require("@playwright/test");
 const languages = ["zh", "en"];
 const viewports = [
   { name: "desktop", width: 1440, height: 900 },
-  { name: "mobile", width: 390, height: 844 },
+  { name: "mobile-390", width: 390, height: 844 },
+  { name: "mobile-412", width: 412, height: 915 },
 ];
 
 async function expectLoaded(page, { language, format, product, surface }) {
@@ -15,11 +16,31 @@ async function expectLoaded(page, { language, format, product, surface }) {
     language === "zh" ? "zh-CN" : "en"
   );
   await expect(page.locator(`#lang-${language}`)).toHaveClass(/active/);
+  await expect(page.locator(`#lang-${language}`)).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator(`[data-format="${format}"]`)).toHaveClass(/active/);
   await expect(page.locator(`[data-product="${product}"]`)).toHaveClass(/active/);
   await expect(page.locator("#view .loading-state")).toHaveCount(0);
   await expect(page.locator("#view .error-state")).toHaveCount(0);
   await expect(page.locator("#view .panel").first()).toBeVisible();
+  await expect(page.locator(".cat-brand-watermark")).toHaveAttribute("aria-hidden", "true");
+  await expect(page.locator(".cat-brand-watermark img")).toBeVisible();
+  expect(await page.evaluate(() => (
+    document.documentElement.scrollWidth <= document.documentElement.clientWidth
+  ))).toBe(true);
+
+  const shellStyles = await page.evaluate(() => {
+    const languageButton = document.querySelector(".lang-switch button");
+    const formatButton = document.querySelector(".format-tabs button");
+    const productButton = document.querySelector(".product-tabs button.active");
+    return {
+      languageBorder: getComputedStyle(languageButton).borderTopWidth,
+      formatRadius: Number.parseFloat(getComputedStyle(formatButton).borderTopLeftRadius),
+      productBorder: Number.parseFloat(getComputedStyle(productButton).borderBottomWidth),
+    };
+  });
+  expect(shellStyles.languageBorder).toBe("0px");
+  expect(shellStyles.formatRadius).toBeGreaterThan(15);
+  expect(shellStyles.productBorder).toBeGreaterThanOrEqual(3);
 }
 
 for (const language of languages) {
