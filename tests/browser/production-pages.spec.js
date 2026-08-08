@@ -57,6 +57,18 @@ for (const language of languages) {
           product: "mtgo-statistics",
           surface: "mtgo",
         });
+        await expect(page.locator(".composition-panel")).toBeVisible();
+        await expect(page.locator(".composition-heading h2")).toHaveText(
+          language === "zh" ? "高分牌表环境构成" : "High-score deck environment composition"
+        );
+        expect(await page.locator(".composition-segment").count()).toBeGreaterThan(1);
+        await expect(page.locator(".composition-legend")).toHaveCount(0);
+        await expect(page.locator(".pie-panel, .pie-card, .pie-slice")).toHaveCount(0);
+        await expect(page.locator(".data-table .mana-identity").first()).toBeVisible();
+        await expect(page.locator(".data-table .mana-identity img").first()).toHaveAttribute(
+          "src",
+          /assets\/images\/mana\/[wubrgc]\.svg$/
+        );
         expect(errors).toEqual([]);
       });
     }
@@ -88,3 +100,42 @@ for (const language of languages) {
     });
   }
 }
+
+test("MTGO subtype rows use explicit mana symbols", async ({ page }) => {
+  await page.goto("/index.html?format=modern&product=mtgo-statistics&lang=zh");
+  const esper = page.locator('button[data-detail-identity="goryos-reanimator/esper"]');
+  await expect(esper).toBeVisible();
+  await expect(esper.locator(".mana-identity")).toHaveAttribute(
+    "aria-label",
+    "法术力颜色：白、蓝、黑"
+  );
+  await expect(esper.locator(".mana-identity img")).toHaveCount(3);
+});
+
+test("Standard composition uses card art and opens detail from one desktop click", async ({ page }) => {
+  await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
+  const segment = page.locator('[data-composition-identity="izzet-prowess"]');
+  await expect(segment).toHaveAttribute("data-tooltip", /Izzet Prowess .* 16\.2%/);
+  await expect(segment).not.toHaveAttribute("data-tooltip", /Boomerang Basics/);
+  const backgroundImage = await segment.evaluate(node => getComputedStyle(node).backgroundImage);
+  expect(backgroundImage).toContain("boomerang-basics.jpg");
+  const imageUrl = backgroundImage.match(/url\("([^"]*boomerang-basics\.jpg)"\)/)[1];
+  expect((await page.request.get(imageUrl)).ok()).toBe(true);
+  await segment.click();
+  await expect(page).toHaveURL(/detail=izzet-prowess/);
+  await expect(page.locator('[data-stats-parent="izzet-prowess"]').locator("xpath=ancestor::tr/following-sibling::tr[1]"))
+    .toHaveClass(/deck-detail-row/);
+});
+
+test("mobile composition uses first tap for disclosure and second tap for detail", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
+  const segment = page.locator('[data-composition-identity="izzet-prowess"]');
+  await segment.click();
+  await expect(segment).toHaveClass(/touch-active/);
+  await expect(page).not.toHaveURL(/detail=/);
+  await segment.click();
+  await expect(page).toHaveURL(/detail=izzet-prowess/);
+  await expect(page.locator('[data-stats-parent="izzet-prowess"]').locator("xpath=ancestor::tr/following-sibling::tr[1]"))
+    .toHaveClass(/deck-detail-row/);
+});

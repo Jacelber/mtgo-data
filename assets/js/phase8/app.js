@@ -26,6 +26,8 @@ const EXTENDED_URL_KEYS = [
   "range", "sort", "dir", "week", "event", "events", "view", "scope", "detail",
 ];
 let pendingUrlWrite = null;
+let touchedCompositionIdentity = null;
+let touchedCompositionAt = 0;
 
 function resetUrlBackedState() {
   state.format = "modern";
@@ -244,6 +246,26 @@ document.addEventListener("click", async event => {
     renderNavigation();
     queueUrlWrite();
     await renderView();
+  } else if (button.dataset.compositionIdentity) {
+    const identity = button.dataset.compositionIdentity;
+    const now = Date.now();
+    const touchContract = matchMedia("(hover: none)").matches || matchMedia("(max-width: 780px)").matches;
+    if (touchContract && (touchedCompositionIdentity !== identity || now - touchedCompositionAt > 1800)) {
+      document.querySelectorAll(".composition-segment.touch-active")
+        .forEach(segment => segment.classList.remove("touch-active"));
+      button.classList.add("touch-active");
+      touchedCompositionIdentity = identity;
+      touchedCompositionAt = now;
+      return;
+    }
+    touchedCompositionIdentity = null;
+    touchedCompositionAt = 0;
+    state.detailIdentity = identity;
+    state.detailMode = "average";
+    queueUrlWrite();
+    await renderView();
+    const row = document.querySelector(`[data-stats-parent="${CSS.escape(identity)}"]`)?.closest("tr");
+    row?.scrollIntoView({ block: "center", behavior: "smooth" });
   } else if (button.dataset.statsRange) {
     state.statsRange = Number(button.dataset.statsRange);
     state.detailIdentity = null;
@@ -414,38 +436,7 @@ document.addEventListener("change", async event => {
   }
 });
 
-function setPieReadout(slice, pin = false) {
-  const card = slice.closest(".pie-card");
-  const readout = card?.querySelector(".pie-readout");
-  if (!card || !readout) return;
-  if (pin) {
-    const alreadyPinned = card.dataset.pinnedPieDetail === slice.dataset.pieDetail;
-    card.querySelectorAll(".pie-slice.pinned").forEach(item => item.classList.remove("pinned"));
-    if (alreadyPinned) {
-      delete card.dataset.pinnedPieDetail;
-      readout.textContent = t("chart.help");
-      return;
-    }
-    card.dataset.pinnedPieDetail = slice.dataset.pieDetail;
-    slice.classList.add("pinned");
-  }
-  readout.textContent = slice.dataset.pieDetail;
-}
-
-function restorePieReadout(slice) {
-  const card = slice.closest(".pie-card");
-  const readout = card?.querySelector(".pie-readout");
-  if (!card || !readout) return;
-  readout.textContent = card.dataset.pinnedPieDetail
-    || t("chart.help");
-}
-
 document.addEventListener("mouseover", event => {
-  const slice = event.target.closest(".pie-slice");
-  if (slice) {
-    slice.classList.add("hovered");
-    setPieReadout(slice);
-  }
   const link = event.target.closest("[data-card-image]");
   if (!link) return;
   const preview = document.querySelector("#card-preview");
@@ -454,11 +445,6 @@ document.addEventListener("mouseover", event => {
 });
 
 document.addEventListener("mousemove", event => {
-  const slice = event.target.closest(".pie-slice");
-  if (slice) {
-    slice.classList.add("hovered");
-    setPieReadout(slice);
-  }
   const preview = document.querySelector("#card-preview");
   if (preview.style.display === "block") {
     preview.style.left = `${Math.min(window.innerWidth - 255, event.clientX + 16)}px`;
@@ -475,11 +461,6 @@ document.addEventListener("mousemove", event => {
 });
 
 document.addEventListener("mouseout", event => {
-  const slice = event.target.closest(".pie-slice");
-  if (slice) {
-    slice.classList.remove("hovered");
-    restorePieReadout(slice);
-  }
   if (event.target.closest("[data-card-image]")) {
     const preview = document.querySelector("#card-preview");
     preview.style.display = "none";
@@ -492,8 +473,6 @@ document.addEventListener("mouseout", event => {
 });
 
 document.addEventListener("focusin", event => {
-  const slice = event.target.closest(".pie-slice");
-  if (slice) setPieReadout(slice);
   const cell = event.target.closest("[data-record]");
   if (!cell) return;
   const node = document.querySelector("#matrix-record");
@@ -503,17 +482,7 @@ document.addEventListener("focusin", event => {
   }
 });
 
-document.addEventListener("focusout", event => {
-  const slice = event.target.closest(".pie-slice");
-  if (slice) restorePieReadout(slice);
-});
-
 document.addEventListener("click", event => {
-  const slice = event.target.closest(".pie-slice");
-  if (slice) {
-    setPieReadout(slice, true);
-    return;
-  }
   const cell = event.target.closest("[data-record]");
   if (!cell) return;
   const node = document.querySelector("#matrix-record");

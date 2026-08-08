@@ -52,12 +52,12 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "P12-05"
+    assert status["current_task"]["id"] == "P12-06"
     assert status["current_task"]["status"] == (
         "owner_accepted_publication_authorized_pending_commit"
     )
     assert status["current_task"]["base_commit"] == (
-        "91f81dc282af09f52bd3e1993e680fe0f0c5c977"
+        "0b8464d2a5dcbd354d3520255d0dc7764cc7ccf4"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -66,22 +66,22 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "merge": True,
     }
     assert status["recent_completion_handoff"] == {
-        "id": "P12-04B",
-        "name": "Durable design-system and product-route contract freeze",
+        "id": "P12-05",
+        "name": "Shared visual foundation",
         "status": "completed_and_merged",
-        "pull_request": 190,
-        "merge_commit": "91f81dc282af09f52bd3e1993e680fe0f0c5c977",
+        "pull_request": 191,
+        "merge_commit": "0b8464d2a5dcbd354d3520255d0dc7764cc7ccf4",
         "note": (
             "GitHub and Git history retain the detailed validation, publication, "
             "and Pages evidence."
         ),
     }
-    assert status["next_approved_task"]["id"] == "P12-06"
+    assert status["next_approved_task"]["id"] == "P12-07"
     assert status["current_task"]["selected_direction"] == (
-        "A3_editorial_analysis_console_with_B_responsive_line_art_watermark"
+        "B_landing_composition_with_representative_card_fill"
     )
     assert status["next_approved_task"]["status"] == (
-        "planned_pending_p12_05_publication_not_authorized"
+        "planned_pending_p12_06_owner_acceptance_not_authorized"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
