@@ -529,8 +529,12 @@ function updateLanguageChrome(language) {
   document.title = t("site.title");
   const siteTitle = document.querySelector("#site-title");
   if (siteTitle) siteTitle.textContent = t("site.title");
-  document.querySelector("#lang-zh").classList.toggle("active", language === "zh");
-  document.querySelector("#lang-en").classList.toggle("active", language === "en");
+  const zhButton = document.querySelector("#lang-zh");
+  const enButton = document.querySelector("#lang-en");
+  zhButton.classList.toggle("active", language === "zh");
+  enButton.classList.toggle("active", language === "en");
+  zhButton.setAttribute("aria-pressed", String(language === "zh"));
+  enButton.setAttribute("aria-pressed", String(language === "en"));
 }
 
 async function changeLanguage(language) {

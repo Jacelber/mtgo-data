@@ -3,7 +3,7 @@
 
   const dictionaries = {
     zh: {
-      "site.title": "MTG Meta 数据分析",
+      "site.title": "猫猫万智周报",
       "format.standard": "标准",
       "format.pauper": "纯铁",
       "format.modern": "摩登",

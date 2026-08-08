@@ -52,43 +52,57 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "P12-04B"
+    assert status["current_task"]["id"] == "P12-05"
     assert status["current_task"]["status"] == (
-        "local_contract_complete_pending_owner_acceptance"
+        "owner_accepted_publication_authorized_pending_commit"
     )
     assert status["current_task"]["base_commit"] == (
-        "fa931372bee2dd2963007cb38ecdc1439ca36a16"
+        "91f81dc282af09f52bd3e1993e680fe0f0c5c977"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
-        "commit": False,
-        "remote_publication": False,
-        "merge": False,
+        "commit": True,
+        "remote_publication": True,
+        "merge": True,
     }
     assert status["recent_completion_handoff"] == {
-        "id": "P12-03B",
-        "name": "Landing product, data, and editorial contract freeze",
+        "id": "P12-04B",
+        "name": "Durable design-system and product-route contract freeze",
         "status": "completed_and_merged",
-        "pull_request": 189,
-        "merge_commit": "9a2e83317a7a08d2ab346a2466f4ee8afadf8e3e",
+        "pull_request": 190,
+        "merge_commit": "91f81dc282af09f52bd3e1993e680fe0f0c5c977",
         "note": (
             "GitHub and Git history retain the detailed validation, publication, "
             "and Pages evidence."
         ),
     }
-    assert status["next_approved_task"]["id"] == "P12-05"
+    assert status["next_approved_task"]["id"] == "P12-06"
     assert status["current_task"]["selected_direction"] == (
         "A3_editorial_analysis_console_with_B_responsive_line_art_watermark"
     )
     assert status["next_approved_task"]["status"] == (
-        "planned_pending_p12_04b_acceptance_not_authorized"
+        "planned_pending_p12_05_publication_not_authorized"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
-    assert status["future_task_gates"][0]["task"] == "P12-10"
-    assert status["future_task_gates"][0]["status"] == (
+    future_task_gates = {
+        gate["task"]: gate for gate in status["future_task_gates"]
+    }
+    assert future_task_gates["P12-08A"]["status"] == (
+        "planned_pending_p12_08_acceptance_and_separate_authorization"
+    )
+    assert future_task_gates["P12-10"]["status"] == (
         "blocked_pending_separate_authorization_and_evidence"
     )
+
+    roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
+    design_system = (
+        ROOT / "docs" / "FRONTEND_DESIGN_SYSTEM.md"
+    ).read_text(encoding="utf-8")
+    for document in (roadmap, design_system):
+        assert "P12-08A" in document
+        assert "semantic" in document.lower()
+        assert "sticky identity column" in document
 
     historical_paths = {
         item["path"] for item in status["authoritative_documents"]["historical_documents"]

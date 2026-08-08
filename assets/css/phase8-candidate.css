@@ -17,7 +17,8 @@
 }
 
 #payload-status {
-  margin-left: auto;
+  width: 1px;
+  margin: -1px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -27,8 +28,9 @@
   margin: 24px 0;
   padding: 18px;
   border: 1px solid var(--line, #d9d9d9);
-  border-radius: 8px;
-  background: #fff;
+  border-radius: var(--radius-md, 8px);
+  background: var(--surface, #fff);
+  box-shadow: var(--shadow, none);
 }
 
 .error-state {
@@ -432,12 +434,7 @@
   top: 8px;
 }
 
-@media (max-width: 760px) {
-  #payload-status {
-    width: 100%;
-    margin-left: 0;
-  }
-
+@media (max-width: 780px) {
   .metric-columns .identity-column {
     width: 210px;
   }

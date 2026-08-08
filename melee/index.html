@@ -4,25 +4,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MTG Meta 数据分析</title>
+  <title>猫猫万智周报</title>
   <link rel="stylesheet" href="../assets/css/phase8-base.css">
   <link rel="stylesheet" href="../assets/css/phase8-candidate.css">
 </head>
 <body>
-  <header class="topbar">
-    <div>
-      <h1 id="site-title">MTG Meta 数据分析</h1>
+  <header class="app-header">
+    <span class="cat-brand-watermark" aria-hidden="true"><img src="../assets/images/cat-line-art-watermark.png" alt=""></span>
+    <div class="header-main">
+      <div class="brand">
+        <h1 id="site-title">猫猫万智周报</h1>
+      </div>
+      <nav class="format-tabs" id="format-tabs" aria-label="赛制"></nav>
+      <div class="lang-switch" aria-label="语言">
+        <button id="lang-zh" class="active" type="button" aria-pressed="true">中文</button>
+        <button id="lang-en" type="button" aria-pressed="false">EN</button>
+      </div>
     </div>
-    <div class="lang-switch" aria-label="语言">
-      <button id="lang-zh" class="active" type="button">中文</button>
-      <button id="lang-en" type="button">EN</button>
-    </div>
+    <nav class="product-tabs" id="product-tabs" aria-label="产品"></nav>
   </header>
 
-  <main>
+  <main class="page-shell">
     <span id="payload-status" class="sr-only" role="status">正在载入产品目录……</span>
-    <nav class="format-tabs" id="format-tabs" aria-label="赛制"></nav>
-    <nav class="product-tabs" id="product-tabs" aria-label="产品"></nav>
     <p id="availability-message" class="availability-message" role="status" hidden></p>
     <section id="view" aria-live="polite"><p class="loading-state">正在载入真实数据……</p></section>
   </main>

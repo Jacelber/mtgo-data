@@ -125,6 +125,13 @@ touch uses first tap for disclosure and second tap for navigation. A selected
 deck detail opens directly beneath its row or card and reuses the established
 statistics/Weekly Pickup deck-detail component.
 
+P12-08A applies that semantic-card rule to the retained statistics, Tabletop
+deck, Top 8, and Weekly Pickup one-dimensional lists. Deck identity, core and
+secondary metrics, and the existing expansion action remain available, with
+detail inserted directly beneath the originating card. Truly two-dimensional
+matrices and cross-event comparison tables remain bounded horizontal scrollers
+with a sticky identity column. Responsive adaptation must not discard data.
+
 Bounded horizontal scrolling is acceptable for format or product navigation
 and truly wide matrices. It must not create page overflow or hide the active
 item without a discoverable way to reach it.
