@@ -127,17 +127,113 @@ test("Standard composition uses card art and opens detail from one desktop click
     .toHaveClass(/deck-detail-row/);
 });
 
-test("mobile composition uses first tap for disclosure and second tap for detail", async ({ page }) => {
+for (const width of [390, 412]) {
+  test(`mobile ${width} composition keeps disclosure until the same item is tapped again`, async ({ page }) => {
+    const requests = [];
+    page.on("request", request => requests.push(new URL(request.url()).pathname));
+    await page.addInitScript(() => {
+      const original = Element.prototype.scrollIntoView;
+      window.__scrollIntoViewCalls = [];
+      Element.prototype.scrollIntoView = function scrollIntoView(options) {
+        window.__scrollIntoViewCalls.push(options);
+        return original.call(this, options);
+      };
+    });
+    await page.setViewportSize({ width, height: width === 412 ? 915 : 844 });
+    await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
+    const segments = page.locator("button.composition-segment");
+    const first = segments.nth(0);
+    const second = segments.nth(1);
+    const identity = await second.getAttribute("data-composition-identity");
+    const decksPath = "/stats/standard/mtgo/decks_1w.json";
+
+    await first.click();
+    await expect(first).toHaveClass(/touch-active/);
+    await expect(page).not.toHaveURL(/detail=/);
+    expect(requests).not.toContain(decksPath);
+
+    await second.click();
+    await expect(first).not.toHaveClass(/touch-active/);
+    await expect(second).toHaveClass(/touch-active/);
+    await expect(page).not.toHaveURL(/detail=/);
+    expect(requests).not.toContain(decksPath);
+
+    await page.waitForTimeout(1900);
+    await second.click();
+    await expect(page).toHaveURL(new RegExp(`detail=${identity}`));
+    await expect(page.locator(`[data-stats-parent="${identity}"]`).locator("xpath=ancestor::tr/following-sibling::tr[1]"))
+      .toHaveClass(/deck-detail-row/);
+    expect(requests.filter(path => path === decksPath)).toHaveLength(1);
+    await expect.poll(() => page.evaluate(() => window.__scrollIntoViewCalls.at(-1)?.behavior))
+      .toBe("smooth");
+  });
+}
+
+test("mobile statistics expands rows without rebuilding the view and preserves anchors", async ({ page }) => {
+  const requests = [];
+  page.on("request", request => requests.push(new URL(request.url()).pathname));
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
-  const segment = page.locator('[data-composition-identity="izzet-prowess"]');
-  await segment.click();
-  await expect(segment).toHaveClass(/touch-active/);
-  await expect(page).not.toHaveURL(/detail=/);
-  await segment.click();
-  await expect(page).toHaveURL(/detail=izzet-prowess/);
-  await expect(page.locator('[data-stats-parent="izzet-prowess"]').locator("xpath=ancestor::tr/following-sibling::tr[1]"))
-    .toHaveClass(/deck-detail-row/);
+  await page.goto("/index.html?format=modern&product=mtgo-statistics&range=1&lang=en");
+  await expect(page.locator("#view .panel").first()).toBeVisible();
+  await page.evaluate(() => {
+    window.__loadingInsertions = 0;
+    new MutationObserver(records => {
+      records.flatMap(record => [...record.addedNodes]).forEach(node => {
+        if (!(node instanceof Element)) return;
+        if (node.matches(".loading-state") || node.querySelector(".loading-state")) {
+          window.__loadingInsertions += 1;
+        }
+      });
+    }).observe(document.querySelector("#view"), { childList: true, subtree: true });
+    document.querySelector(".composition-panel").dataset.renderMarker = "preserved";
+  });
+
+  const toggle = page.locator("button[data-stats-toggle]").first();
+  await toggle.scrollIntoViewIfNeeded();
+  const beforeToggleTop = await toggle.evaluate(node => node.getBoundingClientRect().top);
+  const jsonRequestCount = requests.filter(path => path.endsWith(".json")).length;
+  await toggle.click();
+  await expect(page.locator("tr.subtype-row").first()).toBeVisible();
+  const afterToggleTop = await page.locator("button[data-stats-toggle]").first()
+    .evaluate(node => node.getBoundingClientRect().top);
+  expect(Math.abs(afterToggleTop - beforeToggleTop)).toBeLessThan(2);
+  expect(requests.filter(path => path.endsWith(".json"))).toHaveLength(jsonRequestCount);
+  expect(await page.evaluate(() => window.__loadingInsertions)).toBe(0);
+  await expect(page.locator('.composition-panel[data-render-marker="preserved"]')).toBeVisible();
+
+  const expandAll = page.locator("#stats-expand-all");
+  await expandAll.scrollIntoViewIfNeeded();
+  const beforeExpandAllTop = await expandAll.evaluate(node => node.getBoundingClientRect().top);
+  await expandAll.click();
+  const afterExpandAllTop = await expandAll.evaluate(node => node.getBoundingClientRect().top);
+  expect(Math.abs(afterExpandAllTop - beforeExpandAllTop)).toBeLessThan(2);
+  expect(await page.evaluate(() => window.__loadingInsertions)).toBe(0);
+
+  const tableScroll = page.locator(".table-scroll").last();
+  await tableScroll.evaluate(node => { node.scrollLeft = 320; });
+  const sort = page.locator('button[data-stats-sort="high_score_share"]');
+  await sort.evaluate(node => {
+    node.focus({ preventScroll: true });
+    node.click();
+  });
+  await expect(sort).toBeFocused();
+  await expect.poll(() => tableScroll.evaluate(node => node.scrollLeft)).toBe(320);
+  expect(await page.evaluate(() => window.__loadingInsertions)).toBe(0);
+
+  const detail = page.locator("button[data-detail-identity]").first();
+  await detail.click();
+  await expect(page.locator(".deck-detail-row")).toBeVisible();
+  const close = page.locator("button[data-close-detail]");
+  await close.scrollIntoViewIfNeeded();
+  const detailIdentity = await detail.getAttribute("data-detail-identity");
+  const restoredDetail = page.locator(`button[data-detail-identity="${detailIdentity}"]`);
+  const beforeCloseTop = await restoredDetail.evaluate(node => node.getBoundingClientRect().top);
+  await close.click();
+  await expect(page.locator(".deck-detail-row")).toHaveCount(0);
+  await expect(restoredDetail).toBeFocused();
+  const afterCloseTop = await restoredDetail.evaluate(node => node.getBoundingClientRect().top);
+  expect(Math.abs(afterCloseTop - beforeCloseTop)).toBeLessThan(2);
+  expect(await page.evaluate(() => window.__loadingInsertions)).toBe(0);
 });
 
 test("each product shows only its own freshness facts", async ({ page }) => {

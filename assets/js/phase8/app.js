@@ -27,7 +27,12 @@ const EXTENDED_URL_KEYS = [
 ];
 let pendingUrlWrite = null;
 let touchedCompositionIdentity = null;
-let touchedCompositionAt = 0;
+
+function clearTouchedComposition() {
+  document.querySelectorAll(".composition-segment.touch-active")
+    .forEach(segment => segment.classList.remove("touch-active"));
+  touchedCompositionIdentity = null;
+}
 
 function resetUrlBackedState() {
   state.format = "modern";
@@ -192,7 +197,53 @@ function renderFocusSelector(element, root) {
 
 function restoreRenderFocus(root, selector) {
   if (!selector) return;
-  requestAnimationFrame(() => root.querySelector(selector)?.focus({ preventScroll: true }));
+  root.querySelector(selector)?.focus({ preventScroll: true });
+}
+
+function captureRenderPosition(root, selector) {
+  const anchor = selector ? root.querySelector(selector) : null;
+  return {
+    anchorTop: anchor?.getBoundingClientRect().top ?? null,
+    scrollY: window.scrollY,
+    scrollers: [...root.querySelectorAll(".table-scroll")].map(scroller => ({
+      left: scroller.scrollLeft,
+      top: scroller.scrollTop,
+    })),
+  };
+}
+
+function restoreRenderPosition(root, selector, position) {
+  [...root.querySelectorAll(".table-scroll")].forEach((scroller, index) => {
+    const saved = position.scrollers[index];
+    if (!saved) return;
+    scroller.scrollLeft = saved.left;
+    scroller.scrollTop = saved.top;
+  });
+  const anchor = selector ? root.querySelector(selector) : null;
+  if (anchor && position.anchorTop !== null) {
+    window.scrollBy(0, anchor.getBoundingClientRect().top - position.anchorTop);
+  } else {
+    window.scrollTo(0, position.scrollY);
+  }
+}
+
+function renderStatsExpansion(trigger) {
+  const root = document.querySelector("#view");
+  const body = root.querySelector(".data-table.metric-columns tbody");
+  if (!body || !currentContext?.range) return false;
+  const focusSelector = renderFocusSelector(trigger, root);
+  const position = captureRenderPosition(root, focusSelector);
+  body.innerHTML = statsRows(sortedArchetypes(currentContext.range.archetypes));
+  const expandAll = root.querySelector("#stats-expand-all");
+  if (expandAll) {
+    expandAll.textContent = state.statsExpanded.size
+      ? t("stats.hide_subtypes")
+      : t("stats.show_subtypes");
+  }
+  restoreRenderPosition(root, focusSelector, position);
+  restoreRenderFocus(root, focusSelector);
+  flushUrlWrite();
+  return true;
 }
 
 async function renderView() {
@@ -201,9 +252,19 @@ async function renderView() {
 
 async function renderViewWithFocus(focusOverride = null) {
   const root = document.querySelector("#view");
+  clearTouchedComposition();
   const focusSelector = focusOverride || renderFocusSelector(document.activeElement, root);
+  const position = captureRenderPosition(root, focusSelector);
+  const preserveExistingContent = root.childElementCount > 0
+    && !root.querySelector(".loading-state, .error-state");
   const token = ++state.renderToken;
-  root.innerHTML = `<p class="loading-state">${t("loading.data")}</p>`;
+  root.setAttribute("aria-busy", "true");
+  root.inert = true;
+  if (preserveExistingContent) {
+    root.style.minHeight = `${Math.ceil(root.getBoundingClientRect().height)}px`;
+  } else {
+    root.innerHTML = `<p class="loading-state">${t("loading.data")}</p>`;
+  }
   try {
     let html;
     if (state.product === "mtgo-statistics") html = await statsView();
@@ -213,8 +274,19 @@ async function renderViewWithFocus(focusOverride = null) {
     else html = await pickupView();
     if (token !== state.renderToken) return;
     root.innerHTML = html;
-    scheduleFreshnessLayouts(root);
-    restoreRenderFocus(root, focusSelector);
+    root.removeAttribute("aria-busy");
+    root.inert = false;
+    updateFreshnessLayouts(root);
+    restoreRenderPosition(root, focusSelector, position);
+    requestAnimationFrame(() => {
+      updateFreshnessLayouts(root);
+      restoreRenderPosition(root, focusSelector, position);
+      root.style.removeProperty("min-height");
+      requestAnimationFrame(() => {
+        restoreRenderPosition(root, focusSelector, position);
+        restoreRenderFocus(root, focusSelector);
+      });
+    });
     document.querySelector("#payload-status").textContent = t("loading.loaded", {
       format: formatLabel(state.format),
       product: productLabel(state.product),
@@ -222,6 +294,9 @@ async function renderViewWithFocus(focusOverride = null) {
   } catch (error) {
     if (token !== state.renderToken) return;
     root.innerHTML = `<p class="error-state"><strong>${t("loading.error")}</strong><br>${escapeHtml(error.message)}</p>`;
+    root.removeAttribute("aria-busy");
+    root.inert = false;
+    root.style.removeProperty("min-height");
     document.querySelector("#payload-status").textContent = t("loading.failed");
     console.error(error);
   }
@@ -229,6 +304,7 @@ async function renderViewWithFocus(focusOverride = null) {
 }
 
 function resetInteractions() {
+  clearTouchedComposition();
   state.statsExpanded.clear();
   state.matchupRows.clear();
   state.matchupColumns.clear();
@@ -239,6 +315,8 @@ function resetInteractions() {
 }
 
 document.addEventListener("click", async event => {
+  const compositionButton = event.target.closest("button[data-composition-identity]");
+  if (!compositionButton) clearTouchedComposition();
   const button = event.target.closest("button");
   if (!button) return;
   if (button.dataset.format) {
@@ -273,18 +351,14 @@ document.addEventListener("click", async event => {
     await renderView();
   } else if (button.dataset.compositionIdentity) {
     const identity = button.dataset.compositionIdentity;
-    const now = Date.now();
     const touchContract = matchMedia("(hover: none)").matches || matchMedia("(max-width: 780px)").matches;
-    if (touchContract && (touchedCompositionIdentity !== identity || now - touchedCompositionAt > 1800)) {
-      document.querySelectorAll(".composition-segment.touch-active")
-        .forEach(segment => segment.classList.remove("touch-active"));
+    if (touchContract && touchedCompositionIdentity !== identity) {
+      clearTouchedComposition();
       button.classList.add("touch-active");
       touchedCompositionIdentity = identity;
-      touchedCompositionAt = now;
       return;
     }
-    touchedCompositionIdentity = null;
-    touchedCompositionAt = 0;
+    clearTouchedComposition();
     state.detailIdentity = identity;
     state.detailMode = "average";
     queueUrlWrite();
@@ -303,8 +377,9 @@ document.addEventListener("click", async event => {
     await renderView();
   } else if (button.dataset.statsToggle) {
     toggleSet(state.statsExpanded, button.dataset.statsToggle);
+    if (state.detailIdentity) queueUrlWrite();
     state.detailIdentity = null;
-    await renderView();
+    if (!renderStatsExpansion(button)) await renderView();
   } else if (button.dataset.statsSort) {
     if (state.statsSort === button.dataset.statsSort) state.statsDirection = state.statsDirection === "desc" ? "asc" : "desc";
     else {
@@ -317,8 +392,9 @@ document.addEventListener("click", async event => {
     const expandable = currentContext.range.archetypes.filter(item => activeStatisticsSubtypes(item).length >= 2);
     if (state.statsExpanded.size) state.statsExpanded.clear();
     else expandable.forEach(item => state.statsExpanded.add(item.id));
+    if (state.detailIdentity) queueUrlWrite();
     state.detailIdentity = null;
-    await renderView();
+    if (!renderStatsExpansion(button)) await renderView();
   } else if (button.dataset.detailIdentity) {
     state.detailIdentity = state.detailIdentity === button.dataset.detailIdentity
       ? null
