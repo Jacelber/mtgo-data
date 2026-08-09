@@ -281,3 +281,23 @@ test("composition segments are independent controls and reduced motion is honore
   await expect(page.locator(".deck-detail")).toBeVisible();
   await expect(page.locator("button.composition-segment[aria-expanded=true]")).toBeFocused();
 });
+
+test("mobile composition uses non-animated navigation when reduced motion is requested", async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = Element.prototype.scrollIntoView;
+    window.__scrollIntoViewCalls = [];
+    Element.prototype.scrollIntoView = function scrollIntoView(options) {
+      window.__scrollIntoViewCalls.push(options);
+      return original.call(this, options);
+    };
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
+  const segment = page.locator("button.composition-segment").first();
+  await segment.click();
+  await segment.click();
+  await expect(page.locator(".deck-detail")).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__scrollIntoViewCalls.at(-1)?.behavior))
+    .toBe("auto");
+});

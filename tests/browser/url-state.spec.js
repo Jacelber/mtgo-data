@@ -87,6 +87,7 @@ test("Top 8 week and deck detail survive reload", async ({ page }) => {
   expect(await weeks.count()).toBeGreaterThan(1);
   const olderFile = await weeks.nth(1).getAttribute("value");
   await page.locator("#top8-week").selectOption(olderFile);
+  await expect(page.locator("#view")).not.toHaveAttribute("aria-busy", "true");
   const detail = page.locator("button[data-top8-detail]").first();
   const detailId = await detail.getAttribute("data-top8-detail");
   await detail.click();
