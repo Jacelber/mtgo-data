@@ -297,7 +297,7 @@ test("mobile composition uses non-animated navigation when reduced motion is req
   const segment = page.locator("button.composition-segment").first();
   await segment.click();
   await segment.click();
-  await expect(page.locator(".deck-detail")).toBeVisible();
+  await expect(page.locator(".mobile-deck-detail")).toBeVisible();
   await expect.poll(() => page.evaluate(() => window.__scrollIntoViewCalls.at(-1)?.behavior))
     .toBe("auto");
 });

@@ -81,6 +81,12 @@ function eventDeckForDisplay(deck) {
 }
 
 function tabletopDetailRow(identityId) {
+  return `<tr class="deck-detail-row"><td colspan="9">${tabletopDeckDetail(identityId, {
+    responsiveKey: `tabletop-detail:${identityId}`,
+  })}</td></tr>`;
+}
+
+function tabletopDeckDetail(identityId, options = {}) {
   const source = bestEventDeck(identityId, state.tabletopScope);
   const exactDeck = eventDeckForDisplay(source);
   const mtgoBase = locateDeck(currentContext.mtgoDecks, identityId);
@@ -100,7 +106,7 @@ function tabletopDetailRow(identityId) {
     })}</span>
     <small>${t("tabletop.selection_rule")}</small>
   </div>` : "";
-  return `<tr class="deck-detail-row"><td colspan="9">${deckDetailHtml({
+  return deckDetailHtml({
     title,
     exactDeck,
     exactDeckTitle: t("tabletop.best_deck"),
@@ -110,7 +116,8 @@ function tabletopDetailRow(identityId) {
     referenceNote: t("tabletop.mtgo_reference"),
     performanceHtml,
     showDeviation: false,
-  })}</td></tr>`;
+    ...options,
+  });
 }
 
 function tabletopOverall(scope, advancementMetric) {
@@ -176,8 +183,21 @@ function activeTabletopSubtypes(parent) {
   return (parent.subtypes || []).filter(subtype => Number(subtype.deck_count) > 0);
 }
 
+function tabletopGroups(scope) {
+  return sortedTabletopArchetypes(scope.archetypes).map(parent => {
+    const subtypes = activeTabletopSubtypes(parent);
+    const expandable = subtypes.length >= 2;
+    const open = expandable && state.tabletopExpanded.has(parent.archetype_id);
+    const directIdentity = subtypes.length === 1
+      ? `${parent.archetype_id}/${subtypes[0].subtype_id}`
+      : parent.archetype_id;
+    return { parent, subtypes, expandable, open, directIdentity };
+  });
+}
+
 function tabletopOverview(scope, presentation) {
   const advancementMetric = presentation.advancement_metric;
+  const overall = tabletopOverall(scope, advancementMetric);
   const identityNames = new Map();
   scope.archetypes.forEach(parent => {
     if (parent.archetype_id) identityNames.set(parent.archetype_id, parent.archetype_name);
@@ -186,19 +206,15 @@ function tabletopOverview(scope, presentation) {
     });
   });
   currentContext.tabletopIdentityNames = identityNames;
-  const rows = sortedTabletopArchetypes(scope.archetypes).map(parent => {
-    const subtypes = activeTabletopSubtypes(parent);
-    const expandable = subtypes.length >= 2;
-    const open = expandable && state.tabletopExpanded.has(parent.archetype_id);
-    const parentIdentity = parent.archetype_id;
-    const directIdentity = subtypes.length === 1
-      ? `${parent.archetype_id}/${subtypes[0].subtype_id}`
-      : parentIdentity;
+  const groups = tabletopGroups(scope);
+  const rows = groups.map(({ parent, subtypes, expandable, open, directIdentity }) => {
     const nameHtml = expandable
-      ? `<button class="name-button hierarchy-toggle" type="button" data-tabletop-toggle="${escapeHtml(parent.archetype_id)}">
+      ? `<button class="name-button hierarchy-toggle" type="button" data-tabletop-toggle="${escapeHtml(parent.archetype_id)}"
+          data-responsive-key="tabletop-action:${escapeHtml(parent.archetype_id)}" aria-expanded="${open}">
           <span class="round-toggle">${open ? "−" : "+"}</span><span class="identity-label">${escapeHtml(parent.archetype_name)}</span></button>`
       : directIdentity
         ? `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(directIdentity)}"
+            data-responsive-key="tabletop-action:${escapeHtml(directIdentity)}"
             aria-expanded="${state.tabletopDetailIdentity === directIdentity}">
             <span class="identity-label">${escapeHtml(parent.archetype_name)}</span></button>`
         : `<span class="identity-label">${escapeHtml(parent.archetype_name)}</span>`;
@@ -213,6 +229,7 @@ function tabletopOverview(scope, presentation) {
           ...subtype,
           literal_record: overviewRecord(subtype.match_record?.all_matches),
           nameHtml: `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(identityId)}"
+            data-responsive-key="tabletop-action:${escapeHtml(identityId)}"
             aria-expanded="${state.tabletopDetailIdentity === identityId}">
             <span class="identity-label">${escapeHtml(subtype.display_name)}</span></button>`,
         }, "subtype-row", advancementMetric));
@@ -224,7 +241,8 @@ function tabletopOverview(scope, presentation) {
   const sortHeader = (label, key, tip) => {
     const arrow = state.tabletopSort === key ? (state.tabletopDirection === "desc" ? "▼" : "▲") : "";
     const accessories = `${arrow ? `<span class="sort-indicator" aria-hidden="true">${arrow}</span>` : ""}${tip ? infoTip(tip) : ""}`;
-    return `<button class="sort-button" type="button" data-tabletop-sort="${key}">
+    return `<button class="sort-button" type="button" data-tabletop-sort="${key}"
+      data-responsive-key="tabletop-sort-field:${escapeHtml(key)}">
       <span class="sort-label">${label}</span></button>${accessories ? `<span class="sort-accessories">${accessories}</span>` : ""}`;
   };
   const advancementHeader = advancementMetric === "day2_conversion"
@@ -234,9 +252,21 @@ function tabletopOverview(scope, presentation) {
         t("tabletop.day2_conversion_tip")
       )
     : sortHeader(t("tabletop.high_score_decks"), "high_score");
+  const sortOptions = [
+    ["name", t("tabletop.deck_type")],
+    ["deck_count", t("tabletop.deck_count")],
+    ["metagame_share", t("tabletop.metagame_share")],
+    ["average_points_per_effective_round", t("tabletop.average_points")],
+    ["win_rate", t("tabletop.win_rate")],
+    ["matches", t("tabletop.valid_matches")],
+    ["completion_rate", t("tabletop.completion_rate")],
+    advancementMetric === "day2_conversion"
+      ? ["day2_conversion", t("tabletop.day2_conversion")]
+      : ["high_score", t("tabletop.high_score_decks")],
+  ].map(([key, label]) => ({ key, label }));
   return `<div class="panel-toolbar"><h2>${t("tabletop.overview_title")}</h2>
       <button id="tabletop-expand-all" class="secondary-button" type="button">${state.tabletopExpanded.size ? t("stats.hide_subtypes") : t("stats.show_subtypes")}</button>
-    </div><div class="table-scroll"><table class="data-table metric-columns" style="width:1250px;min-width:100%">
+    </div><div class="desktop-metric-table table-scroll"><table class="data-table metric-columns" style="width:1250px;min-width:100%">
       ${fixedColumns(9)}<thead><tr><th>${sortHeader(t("tabletop.deck_type"), "name")}</th><th class="number">${sortHeader(t("tabletop.deck_count"), "deck_count")}</th>
         <th class="number">${sortHeader(t("tabletop.metagame_share"), "metagame_share")}</th>
         <th class="number">${sortHeader(t("tabletop.average_points"), "average_points_per_effective_round", t("tabletop.average_points_tip"))}</th>
@@ -244,8 +274,17 @@ function tabletopOverview(scope, presentation) {
         <th class="number">${sortHeader(t("tabletop.valid_matches"), "matches", t("tabletop.valid_matches_tip"))}</th>
         <th class="number">${sortHeader(t("tabletop.completion_rate"), "completion_rate", t("tabletop.completion_rate_tip"))}</th>
         <th class="number">${advancementHeader}</th></tr></thead>
-      <tbody>${tabletopRow(tabletopOverall(scope, advancementMetric), "overall-row", advancementMetric)}${rows}</tbody>
-    </table></div>`;
+      <tbody>${tabletopRow(overall, "overall-row", advancementMetric)}${rows}</tbody>
+    </table></div>
+    <div class="mobile-metric-layout">
+      ${mobileSortControls({
+        kind: "tabletop",
+        current: state.tabletopSort,
+        direction: state.tabletopDirection,
+        options: sortOptions,
+      })}
+      ${tabletopCards(groups, overall, advancementMetric)}
+    </div>`;
 }
 
 function tabletopMatchup(matchupDocument, scopeId, eventFormat) {
