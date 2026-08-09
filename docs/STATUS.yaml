@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-08a-mobile-list-remediation"
+  current_working_branch: "codex/p12-09-loading-retry"
   working_branch_status: "owner_accepted_publication_and_merge_authorized"
   status: "active"
   primary_language: "Python"
@@ -72,82 +72,89 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-08A"
-  name: "Existing-product small-screen list remediation"
+  id: "P12-09"
+  name: "Loading, failure, and retry model"
   status: "owner_accepted_publication_and_merge_authorized"
   authorized_on: "2026-08-09"
-  completed_on: "2026-08-09"
-  workspace: "C:/Users/jacel/AppData/Local/Temp/mtgo-data-p12-08a-20260809-01"
-  branch: "codex/p12-08a-mobile-list-remediation"
-  base_commit: "92151525f192c747dfdbd372d97b65dc0a0a78b2"
+  completed_on: null
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-09-20260809-02"
+  branch: "codex/p12-09-loading-retry"
+  base_commit: "20e6115ea9b4a648879addfa8064af4e5e2eb2e7"
   task_type: "local_user_visible_ui_implementation"
   artifact_impact: "user_visible_ui"
-  objective: "Make retained one-dimensional environment lists readable and fully operable on small screens while preserving desktop tables, statistical meaning, product separation, public paths, and true two-dimensional comparison behavior."
+  objective: "Separate successful caching from refresh and failure state, provide scoped loading and retry behavior, bound progressive card-image loading, and add an accessible touch-only card-preview modal without changing statistical meaning, product separation, or public paths."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "assets/css/phase8-base.css"
-    - "assets/css/phase8-candidate.css"
+    - "assets/js/phase8/runtime.js"
+    - "assets/js/phase8/mtgo-controller.js"
+    - "assets/js/phase8/tabletop-controller.js"
     - "assets/js/phase8/app-core.js"
-    - "assets/js/phase8/app-mtgo.js"
-    - "assets/js/phase8/app-tabletop.js"
-    - "assets/js/phase8/app-mobile-render.js"
-    - "assets/js/phase8/app-mobile-interactions.js"
+    - "assets/js/phase8/app-card-preview.js"
+    - "assets/js/phase8/app-loading.js"
     - "assets/js/phase8/app.js"
     - "assets/js/phase8/i18n.js"
+    - "assets/css/phase8-base.css"
+    - "assets/css/phase8-candidate.css"
     - "index.html"
     - "melee/index.html"
     - "tests/browser/accessibility.spec.js"
-    - "tests/browser/mobile-lists.spec.js"
-    - "tests/browser/production-pages.spec.js"
+    - "tests/browser/loading-retry.spec.js"
+    - "tests/browser/card-preview.spec.js"
+    - "tests/browser/view-lazy-loading.spec.js"
+    - "tests/js/phase8-runtime.test.js"
     - "tests/test_documentation_history.py"
     - "tests/test_frontend_asset_split.py"
+    - "tests/test_node_test_suite.py"
+    - "tests/test_phase8_production_candidate.py"
     - "tests/test_phase8_mtgo_production_entry.py"
     - "tests/test_phase8_tabletop_production_entry.py"
     - "tests/test_validate_repository.py"
     - "validate_repository.py"
+    - "docs/prototypes/P8-07/index.html"
+    - "docs/prototypes/P8-08/index.html"
     - "docs/FRONTEND_DESIGN_SYSTEM.md"
     - "docs/ROADMAP.md"
-    - "docs/audits/P12-08A.md"
+    - "docs/audits/P12-09.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    code_changed: "Responsive MTGO statistics and Tabletop overview cards, mobile sorting, focus and minimum visibility restoration, bounded comparison cues, compact two-line mobile matchup identities, synchronized sticky matchup opponent headers, Top 8 sticky identity, and Weekly Pickup narrow wrapping only"
+    code_changed: "Runtime JSON cache and refresh state, scoped loading and retry UI, bounded card-image loading and placeholders, and touch-only card preview only"
     workflow_changed: "none"
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
-    frontend_source_changed: "shared classic-script renderers, interaction controller, bilingual copy, and candidate responsive CSS only"
+    frontend_source_changed: "shared classic-script runtime, controllers, interaction layer, bilingual copy, and shared CSS only"
     public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Render MTGO statistics and Tabletop overview as complete semantic cards at 780 CSS pixels and below while preserving desktop tables above the breakpoint."
-    - "Reuse existing sort keys, directions, URL state, expansion state, detail data, and event handlers through explicit mobile controls."
-    - "Keep every primary and secondary metric visible, insert detail under its source card, preserve trigger focus, and make newly expanded content minimally visible."
-    - "Keep matchup matrices and Top 8 as bounded horizontal comparisons with a sticky first column and dismissible localized cue."
-    - "Retain Weekly Pickup cards and wrap only their narrow heading metrics."
-    - "Add focused real-browser coverage, update responsive design authority and roadmap, and record local acceptance evidence."
+    - "Implement the owner-approved session cache, LRU eviction, timeout, manual retry, visibility refresh, staged update, and stale-render contract."
+    - "Replace destructive global loading and deferred-error behavior with text-first initial skeletons and scoped detail, refresh, image, and catalog states."
+    - "Reserve card-image dimensions, defer near-viewport requests, bound image concurrency, and provide one explicit retry after an external-image failure."
+    - "Add a touch-only full-screen card preview with accessible dismissal, history, focus, scroll restoration, and an explicit Scryfall link while preserving desktop hover and click."
+    - "Prepare reusable Landing and Pickup loading boundaries without generating Landing data, adding its UI, or changing current product availability."
+    - "Add focused real-browser coverage, update design and roadmap authority, and record local acceptance evidence."
   prohibited_changes:
-    - "Any statistical formula, generated data, Schema, workflow, catalog, Pages policy, runtime request path, product availability, event whitelist, or public-path change."
-    - "Pagination, virtualization, a mandatory front-end framework, classifier remediation, P12-09 loading architecture, P12-10 producer work, or another task."
-    - "Commit, push, pull-request creation, merge, production dispatch, force-push, direct master development, workflow mutation, repository-setting changes, or protected event 434455 byte changes."
-  stop_point: "After owner acceptance on 2026-08-09, publish through one Ready pull request, complete CI, normal merge, and merge-triggered Pages confirmation; then stop before P12-09 or any manual production dispatch."
+    - "Any statistical formula, generated data, Schema, workflow, catalog, Pages policy, request path, product availability, event whitelist, or public-path change."
+    - "Landing producer or reader UI, classifier remediation, P12-10 work, Weekly Pickup migration, service worker, mandatory front-end framework, or another task."
+    - "Manual production dispatch, force-push, direct master development, workflow mutation, repository-setting changes, or protected event 434455 byte changes."
+  stop_point: "After the authorized commit, Ready pull request, successful CI, normal merge, remote-master confirmation, and merge-triggered Pages verification, stop without beginning P12-10, classifier remediation, another task, or a manual production dispatch."
 
 recent_completion_handoff:
-  id: "P12-08"
-  name: "Readability and accessibility baseline"
+  id: "P12-08A"
+  name: "Existing-product small-screen list remediation"
   status: "completed_and_merged"
-  pull_request: 194
-  merge_commit: "f26ae788c3246daa223af31b4c6de6710169fcc3"
-  note: "P12-08A starts from verified master commit 92151525, which also includes the subsequent production-data update and merged mobile interaction stability PR 195."
+  pull_request: 196
+  merge_commit: "20e6115ea9b4a648879addfa8064af4e5e2eb2e7"
+  note: "P12-09 starts from the verified merge commit for the owner-accepted P12-08A mobile list remediation."
 
 current_repository_state:
-  baseline_commit: "92151525f192c747dfdbd372d97b65dc0a0a78b2"
-  baseline_note: "Verified remote master after merged P12-08 PR 194, production data update, and mobile interaction stability PR 195; used as the isolated P12-08A base."
+  baseline_commit: "20e6115ea9b4a648879addfa8064af4e5e2eb2e7"
+  baseline_note: "Verified remote master after merged P12-08A PR 196; used as the independent isolated P12-09 base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -207,12 +214,6 @@ engineering_quality:
 known_blockers: []
 
 future_task_gates:
-  - task: "P12-09"
-    status: "planned_pending_separate_authorization"
-    requirements:
-      - "Accept and publish the separately authorized P12-08A small-screen remediation."
-      - "Separately authorize P12-09 implementation."
-      - "Define the loading, failure, retry, and cache-eviction contract before changing runtime behavior."
   - task: "P12-10"
     status: "blocked_pending_separate_authorization_and_evidence"
     requirements:
@@ -234,15 +235,15 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-09"
-  name: "Loading, failure, and retry model"
-  status: "planned_pending_separate_authorization_not_authorized"
+  id: "P12-10"
+  name: "Landing weekly-facts producer and Pickup integration"
+  status: "blocked_pending_separate_authorization_and_evidence"
   production_change: true
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "P12-08A was owner-accepted on 2026-08-09 with commit, remote publication, and merge authorized. P12-09, classifier remediation, P12-10, and manual production dispatch remain separately unauthorized."
+  note: "P12-09 was owner-accepted and authorized through commit, Ready publication, and normal merge on 2026-08-09. Classifier remediation, P12-10, another task, and manual production dispatch remain separately unauthorized."
 
 governance_baseline:
   status: "active_on_master"
@@ -278,7 +279,7 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not begin classifier remediation, P12-09, P12-10, or another task without separate owner authorization."
+  - "Do not begin classifier remediation, P12-10, or another task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."

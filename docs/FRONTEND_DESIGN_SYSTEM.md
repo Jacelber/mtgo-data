@@ -182,6 +182,15 @@ Reserve image dimensions before loading, lazy-load below-the-fold images, bound
 third-party concurrency, and use a stable placeholder on failure. The readable
 card or deck name and navigation must remain available without the image.
 
+Card frames use the physical-card ratio of 63:88 before a request starts.
+Third-party images begin loading within 400 CSS pixels of the viewport, with at
+most four requests in flight. A failed image remains a labelled placeholder and
+offers one explicit retry; it never blocks the surrounding deck or feature.
+Touch-first devices open card art in a focus-trapped full-screen preview on the
+first card-name tap. Backdrop, close button, Escape, and browser Back dismiss it
+and restore focus and scroll; an explicit button opens Scryfall in a new tab.
+Pointer devices retain the established hover preview and direct card-name link.
+
 ## 9. Responsive behavior
 
 Use one semantic markup contract with a primary breakpoint at 780 CSS pixels.
@@ -221,10 +230,26 @@ is an error, not an empty state. Card-image failure is non-blocking. Internal
 terms such as candidate, artificial/manual review, reviewer, or approval must
 not appear in reader-facing UI; the user sees only finished editorial content.
 
+Initial loading uses text-first structural placeholders without invented
+values. Already readable content stays visible during deferred requests and
+refresh checks; a failure is reported next to the control or record that caused
+it, with a foreground retry that always starts a new request. Only successful
+documents enter the session cache. Cache entries are bounded by count and byte
+budget, while in-flight foreground and refresh requests remain separate.
+
+When a visible tab returns after five minutes, the current view may check for
+updates without replacing readable content. Every document needed for that view
+is staged as one group; unchanged groups are accepted silently, changed groups
+wait for an explicit Apply action, and a partial or failed group leaves the old
+view intact. Offline-to-online changes announce availability but do not retry
+automatically. Loading, retry, stale, and pending-update state is transient and
+does not enter shareable URLs.
+
 ## 12. Implementation and acceptance
 
 P12-05 turns these values into shared static tokens and shell components.
-P12-06 through P12-15 migrate and extend individual views. P12-16 verifies all
+P12-09 establishes the shared loading, retry, refresh, and card-preview rules
+above. P12-06 through P12-15 migrate and extend individual views. P12-16 verifies all
 retained products, formats, languages, desktop and 390-pixel behavior, URLs,
 compatibility, loading, console state, and reversible Landing cutover. Any
 intentional deviation from this authority must be documented and owner-approved

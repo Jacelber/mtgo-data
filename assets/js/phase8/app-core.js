@@ -78,6 +78,10 @@ const state = {
   tabletopDirection: "desc",
   scrollHintsSeen: new Set(),
   renderToken: 0,
+  failedRender: null,
+  pendingRefresh: null,
+  refreshInProgress: false,
+  viewCheckedAt: new Map(),
 };
 let currentContext = {};
 
@@ -226,7 +230,8 @@ function cardLink(card) {
   const rate = card.rate === undefined ? "" : ` <small>(${pct(card.rate)})</small>`;
   return `<li><span class="qty">${escapeHtml(quantity)}</span><a class="card-link"
     href="${search}" target="_blank" rel="noopener"
-    data-card-image="${escapeHtml(image)}">${escapeHtml(name)}</a>${rate}</li>`;
+    data-card-image="${escapeHtml(image)}" data-card-name="${escapeHtml(name)}"
+    data-scryfall-url="${escapeHtml(search)}">${escapeHtml(name)}</a>${rate}</li>`;
 }
 
 function cardList(cards) {

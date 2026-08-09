@@ -186,7 +186,11 @@ async function renderView() {
   return renderViewWithFocus();
 }
 
-async function renderViewWithFocus(focusOverride = null, revealSelector = null) {
+async function renderViewWithFocus(
+  focusOverride = null,
+  revealSelector = null,
+  { focusTitle = false } = {}
+) {
   const root = document.querySelector("#view");
   clearTouchedComposition();
   const focusSelector = focusOverride || renderFocusSelector(document.activeElement, root);
@@ -194,12 +198,13 @@ async function renderViewWithFocus(focusOverride = null, revealSelector = null) 
   const preserveExistingContent = root.childElementCount > 0
     && !root.querySelector(".loading-state, .error-state");
   const token = ++state.renderToken;
+  root.querySelectorAll(".inline-error-state, .load-error-row").forEach(node => node.remove());
   root.setAttribute("aria-busy", "true");
   root.inert = true;
   if (preserveExistingContent) {
     root.style.minHeight = `${Math.ceil(root.getBoundingClientRect().height)}px`;
   } else {
-    root.innerHTML = `<p class="loading-state">${t("loading.data")}</p>`;
+    root.innerHTML = loadingSkeleton();
   }
   try {
     let html;
@@ -212,7 +217,12 @@ async function renderViewWithFocus(focusOverride = null, revealSelector = null) 
     root.innerHTML = html;
     root.removeAttribute("aria-busy");
     root.inert = false;
+    state.failedRender = null;
+    if (!state.viewCheckedAt.has(currentViewKey())) {
+      state.viewCheckedAt.set(currentViewKey(), Date.now());
+    }
     updateFreshnessLayouts(root);
+    globalThis.P8CardImages?.observe(root);
     restoreRenderPosition(root, focusSelector, position);
     requestAnimationFrame(() => {
       updateFreshnessLayouts(root);
@@ -220,7 +230,8 @@ async function renderViewWithFocus(focusOverride = null, revealSelector = null) 
       root.style.removeProperty("min-height");
       requestAnimationFrame(() => {
         restoreRenderPosition(root, focusSelector, position);
-        restoreRenderFocus(root, focusSelector);
+        if (focusTitle) focusViewTitle(root);
+        else restoreRenderFocus(root, focusSelector);
         revealExpandedContent(root, revealSelector);
         updateMatrixPresentation();
       });
@@ -231,7 +242,18 @@ async function renderViewWithFocus(focusOverride = null, revealSelector = null) 
     });
   } catch (error) {
     if (token !== state.renderToken) return;
-    root.innerHTML = `<p class="error-state"><strong>${t("loading.error")}</strong><br>${escapeHtml(error.message)}</p>`;
+    state.failedRender = {
+      error,
+      focusSelector,
+      preserveExistingContent,
+      revealSelector,
+    };
+    if (preserveExistingContent) {
+      placeScopedError(root, focusSelector);
+    } else {
+      root.innerHTML = `<section class="error-state" role="alert">${retryMarkup()}</section>`;
+      root.querySelector("button")?.focus({ preventScroll: true });
+    }
     root.removeAttribute("aria-busy");
     root.inert = false;
     root.style.removeProperty("min-height");
@@ -258,8 +280,37 @@ document.addEventListener("click", async event => {
   if (!compositionButton) clearTouchedComposition();
   const button = event.target.closest("button");
   if (!button) return;
+  if (button.hasAttribute("data-retry-view")) {
+    const failed = state.failedRender;
+    button.disabled = true;
+    button.textContent = t("loading.retrying");
+    await renderViewWithFocus(
+      failed?.focusSelector || null,
+      failed?.revealSelector || null,
+      { focusTitle: !failed?.preserveExistingContent }
+    );
+    return;
+  }
+  if (button.hasAttribute("data-retry-catalog")) {
+    button.disabled = true;
+    button.textContent = t("loading.retrying");
+    await initialize({ retry: true });
+    return;
+  }
+  if (button.hasAttribute("data-retry-refresh")) {
+    button.disabled = true;
+    button.textContent = t("loading.retrying");
+    await checkForUpdates();
+    return;
+  }
+  if (button.hasAttribute("data-apply-refresh")) {
+    commitPendingRefresh();
+    await renderViewWithFocus(null, null, { focusTitle: true });
+    return;
+  }
   if (await handleMobileListClick(button)) return;
   if (button.dataset.format) {
+    discardPendingRefresh();
     const next = button.dataset.format;
     const available = availableProductIds(next);
     if (!available.length) {
@@ -275,6 +326,7 @@ document.addEventListener("click", async event => {
     queueUrlWrite();
     await renderView();
   } else if (button.dataset.product) {
+    discardPendingRefresh();
     if (!productEntry(button.dataset.product)?.available) {
       setMessage(t("availability.product", {
         format: formatLabel(state.format),
@@ -309,11 +361,13 @@ document.addEventListener("click", async event => {
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
     row?.scrollIntoView({ block: "center", behavior: reduceMotion ? "auto" : "smooth" });
   } else if (button.dataset.statsRange) {
+    discardPendingRefresh();
     state.statsRange = Number(button.dataset.statsRange);
     state.detailIdentity = null;
     queueUrlWrite();
     await renderView();
   } else if (button.dataset.matchupRange) {
+    discardPendingRefresh();
     state.matchupRange = Number(button.dataset.matchupRange);
     queueUrlWrite();
     await renderView();
@@ -386,6 +440,7 @@ document.addEventListener("click", async event => {
     queueUrlWrite();
     await renderViewWithFocus(`[data-top8-detail="${CSS.escape(detail || "")}"]`);
   } else if (button.dataset.tabletopView) {
+    discardPendingRefresh();
     state.tabletopView = button.dataset.tabletopView;
     state.scrollHintsSeen.clear();
     if (state.tabletopView === "overview" && state.tabletopLastSelectedEventId) {
@@ -396,6 +451,7 @@ document.addEventListener("click", async event => {
     queueUrlWrite();
     await renderView();
   } else if (button.dataset.tabletopScope) {
+    discardPendingRefresh();
     state.tabletopScope = button.dataset.tabletopScope;
     state.tabletopLastScopeByEvent.set(
       state.tabletopEventId,
@@ -437,6 +493,7 @@ document.addEventListener("click", async event => {
     state.tabletopDetailIdentity = null;
     await renderView();
   } else if (button.dataset.pickupWeek) {
+    discardPendingRefresh();
     state.pickupWeekFile = button.dataset.pickupWeek;
     state.pickupOpen.clear();
     queueUrlWrite();
@@ -450,11 +507,13 @@ document.addEventListener("click", async event => {
 document.addEventListener("change", async event => {
   if (await handleMobileListChange(event.target)) return;
   if (event.target.id === "top8-week") {
+    discardPendingRefresh();
     state.top8WeekFile = event.target.value;
     state.top8Detail = null;
     queueUrlWrite();
     await renderView();
   } else if (event.target.id === "tabletop-event") {
+    discardPendingRefresh();
     state.tabletopEventId = event.target.value;
     state.tabletopLastSelectedEventId = event.target.value;
     state.tabletopSelectedEvents = new Set([event.target.value]);
@@ -463,6 +522,7 @@ document.addEventListener("change", async event => {
     queueUrlWrite();
     await renderView();
   } else if (event.target.dataset.tabletopEventCheck) {
+    discardPendingRefresh();
     const id = event.target.dataset.tabletopEventCheck;
     if (event.target.checked) {
       state.tabletopSelectedEvents.add(id);
@@ -485,20 +545,7 @@ document.addEventListener("change", async event => {
   }
 });
 
-document.addEventListener("mouseover", event => {
-  const link = event.target.closest("[data-card-image]");
-  if (!link) return;
-  const preview = document.querySelector("#card-preview");
-  preview.src = link.dataset.cardImage;
-  preview.style.display = "block";
-});
-
 document.addEventListener("mousemove", event => {
-  const preview = document.querySelector("#card-preview");
-  if (preview.style.display === "block") {
-    preview.style.left = `${Math.min(window.innerWidth - 255, event.clientX + 16)}px`;
-    preview.style.top = `${Math.max(8, Math.min(window.innerHeight - 345, event.clientY + 16))}px`;
-  }
   const cell = event.target.closest("[data-record]");
   const pop = document.querySelector("#matrix-hover-pop");
   if (cell && pop) {
@@ -510,11 +557,6 @@ document.addEventListener("mousemove", event => {
 });
 
 document.addEventListener("mouseout", event => {
-  if (event.target.closest("[data-card-image]")) {
-    const preview = document.querySelector("#card-preview");
-    preview.style.display = "none";
-    preview.removeAttribute("src");
-  }
   if (event.target.closest("[data-record]")) {
     const pop = document.querySelector("#matrix-hover-pop");
     if (pop) pop.hidden = true;
@@ -556,6 +598,7 @@ function updateLanguageChrome(language) {
 }
 
 async function changeLanguage(language) {
+  discardPendingRefresh();
   updateLanguageChrome(language);
   setMessage("");
   renderNavigation();
@@ -576,7 +619,12 @@ function toggleSet(set, value) {
   else set.add(value);
 }
 
-async function initialize() {
+async function initialize({ retry = false } = {}) {
+  const view = document.querySelector("#view");
+  if (retry) {
+    view.setAttribute("aria-busy", "true");
+    view.innerHTML = loadingSkeleton();
+  }
   try {
     state.catalog = await Runtime.catalog.fetchJson("stats/catalog.json");
     const parameters = new URLSearchParams(window.location.search);
@@ -587,7 +635,14 @@ async function initialize() {
     renderNavigation();
     await renderView();
   } catch (error) {
-    document.querySelector("#view").innerHTML = `<p class="error-state"><strong>${t("loading.catalog_error")}</strong><br>${escapeHtml(error.message)}</p>`;
+    state.failedRender = { error, preserveExistingContent: false };
+    view.removeAttribute("aria-busy");
+    view.innerHTML = `<section class="error-state" role="alert">
+      <strong>${t("loading.catalog_error")}</strong>
+      <p class="resource-error-message">${resourceErrorMessage(error)}</p>
+      <button class="secondary-button" type="button" data-retry-catalog>${t("loading.catalog_retry")}</button>
+    </section>`;
+    view.querySelector("button")?.focus({ preventScroll: true });
     document.querySelector("#payload-status").textContent = t("loading.failed");
     console.error(error);
   }
@@ -595,6 +650,7 @@ async function initialize() {
 
 window.addEventListener("popstate", async () => {
   if (!state.catalog) return;
+  discardPendingRefresh();
   resetUrlBackedState();
   applyUrlState(new URLSearchParams(window.location.search));
   if (navigateToProductEntry(state.product, state.format)) return;

@@ -3034,6 +3034,16 @@ public entry points.
    - lazy-load the Pickup index and a selected historical feature document only
      when the Landing feature section needs them, and isolate their loading,
      empty, failure, and retry states from the current Landing facts.
+
+   Local P12-09 implementation was owner-authorized on 2026-08-09. The current
+   review candidate separates bounded successful caches from foreground and
+   refresh requests, stages grouped refreshes before an explicit Apply action,
+   preserves readable content on scoped failure, and adds bounded progressive
+   card images plus a touch-only accessible preview. It also exposes separate
+   Pickup index and historical-document loaders for the later Landing consumer
+   without adding Landing data or UI. The owner accepted the local result and
+   authorized commit, Ready publication, and normal merge on 2026-08-09.
+   Production dispatch and P12-10 remain separate gates.
 10. `P12-10` — Landing weekly-facts producer and Pickup integration
     - do not start until the P12-03 classifier-remediation gate, refreshed
       shadow, owner threshold confirmation, known-state migration check, and

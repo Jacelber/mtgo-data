@@ -18,6 +18,8 @@ APP_FILES = (
     "app-tabletop.js",
     "app-mobile-render.js",
     "app-mobile-interactions.js",
+    "app-loading.js",
+    "app-card-preview.js",
     "app.js",
 )
 
@@ -56,6 +58,8 @@ def test_tabletop_entry_loads_both_scoped_clients_in_order() -> None:
         "../assets/js/phase8/app-tabletop.js",
         "../assets/js/phase8/app-mobile-render.js",
         "../assets/js/phase8/app-mobile-interactions.js",
+        "../assets/js/phase8/app-loading.js",
+        "../assets/js/phase8/app-card-preview.js",
         "../assets/js/phase8/app.js",
     ]
 

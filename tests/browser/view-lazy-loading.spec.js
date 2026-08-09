@@ -130,15 +130,24 @@ test("Tabletop views and details load on first activation only", async ({ page }
   expect(errors).toEqual([]);
 });
 
-test("deferred request failure is rendered without an unhandled error", async ({ page }) => {
+test("deferred request failure stays local and retries with a new request", async ({ page }) => {
   const errors = [];
-  await page.route("**/stats/modern/mtgo/decks_1w.json", route => route.abort());
+  let attempts = 0;
+  await page.route("**/stats/modern/mtgo/decks_1w.json", route => {
+    attempts += 1;
+    if (attempts === 1) route.abort();
+    else route.continue();
+  });
   await loadReadable(
     page,
     "/index.html?format=modern&product=mtgo-statistics&lang=zh",
     errors
   );
   await page.locator("button[data-detail-identity]").first().click();
-  await expect(page.locator("#view .error-state")).toBeVisible();
+  await expect(page.locator("#view .inline-error-state")).toBeVisible();
+  await expect(page.locator("#view .data-table")).toBeVisible();
+  await page.locator("button[data-retry-view]").click();
+  await expect(page.locator(".deck-detail-row")).toBeVisible();
+  expect(attempts).toBe(2);
   expect(errors).toEqual([]);
 });
