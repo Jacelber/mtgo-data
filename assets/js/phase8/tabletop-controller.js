@@ -143,10 +143,55 @@
     };
   }
 
+  async function stageEvent(
+    indexPath,
+    eventEntry,
+    format,
+    mtgoController,
+    { includeMatchup = false, includeDecks = false } = {}
+  ) {
+    const base = Runtime.dirname(indexPath);
+    const metaPath = Runtime.joinPath(base, eventEntry.meta);
+    const overviewPath = Runtime.joinPath(base, eventEntry.overview);
+    const qualityPath = Runtime.joinPath(base, eventEntry.quality);
+    const matchupPath = includeMatchup
+      ? Runtime.joinPath(base, eventEntry.matchup)
+      : null;
+    const decksPath = includeDecks
+      ? Runtime.joinPath(base, eventEntry.decks)
+      : null;
+    const paths = [indexPath, metaPath, overviewPath, qualityPath];
+    if (matchupPath) paths.push(matchupPath);
+    if (decksPath) paths.push(decksPath);
+    const [staged, mtgoStaged] = await Promise.all([
+      client.stage(paths),
+      includeDecks ? mtgoController.stageComparisonDecks(format) : null,
+    ]);
+    resolveEventFormat({
+      requestedFormat: format,
+      index: staged.get(indexPath),
+      meta: staged.get(metaPath),
+      overview: staged.get(overviewPath),
+      matchup: matchupPath ? staged.get(matchupPath) : null,
+      quality: staged.get(qualityPath),
+      tabletopDecks: decksPath ? staged.get(decksPath) : null,
+      mtgoDecks: mtgoStaged?.values[`stats/${format}/mtgo/decks_4w.json`],
+    });
+    if (!mtgoStaged) return staged;
+    return Object.freeze({
+      changed: staged.changed || mtgoStaged.changed,
+      commit() {
+        staged.commit();
+        mtgoStaged.commit();
+      },
+    });
+  }
+
   root.P8TabletopController = Object.freeze({
     loadEvent,
     resolveEventFormat,
     resolveScopeState,
+    stageEvent,
     structurePresentation,
   });
 })(globalThis);

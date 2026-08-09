@@ -30,6 +30,7 @@ def test_candidate_and_review_entries_use_the_same_ordered_modules() -> None:
         "../../../assets/js/phase8/app-core.js",
         "../../../assets/js/phase8/app-mtgo.js",
         "../../../assets/js/phase8/app-tabletop.js",
+        "../../../assets/js/phase8/app-loading.js",
         "../../../assets/js/phase8/app.js",
     ]
 
@@ -56,7 +57,9 @@ def test_scoped_clients_admit_only_their_source_tree() -> None:
         encoding="utf-8"
     )
 
-    assert "const cache = new Map()" in runtime
+    assert "const successful = new Map()" in runtime
+    assert "const foregroundRequests = new Map()" in runtime
+    assert "const refreshRequests = new Map()" in runtime
     assert 'path === "stats/catalog.json"' in runtime
     assert r"\/mtgo\/" in mtgo
     assert r"\/melee\/" not in mtgo

@@ -18,6 +18,8 @@ PHASE8_APP_FILES = (
     "app-tabletop.js",
     "app-mobile-render.js",
     "app-mobile-interactions.js",
+    "app-loading.js",
+    "app-card-preview.js",
     "app.js",
 )
 
@@ -43,6 +45,8 @@ def test_frontend_uses_ordered_static_assets_without_inline_blocks():
         "assets/js/phase8/app-mtgo.js",
         "assets/js/phase8/app-mobile-render.js",
         "assets/js/phase8/app-mobile-interactions.js",
+        "assets/js/phase8/app-loading.js",
+        "assets/js/phase8/app-card-preview.js",
         "assets/js/phase8/app.js",
     ]
     assert 'type="module"' not in html
@@ -74,8 +78,12 @@ def test_phase8_app_is_split_into_focused_classic_scripts():
     assert "async function tabletopView()" in sources["app-tabletop.js"]
     assert "function statsCards(groups)" in sources["app-mobile-render.js"]
     assert "async function handleMobileListClick(button)" in sources["app-mobile-interactions.js"]
+    assert "async function checkForUpdates()" in sources["app-loading.js"]
+    assert "const MAX_CONCURRENT_IMAGES = 4" in sources["app-card-preview.js"]
+    assert 'rootMargin: "400px 0px"' in sources["app-card-preview.js"]
+    assert 'matchMedia("(any-hover: none)")' in sources["app-card-preview.js"]
     assert "async function renderView()" in sources["app.js"]
-    assert "async function initialize()" in sources["app.js"]
+    assert "async function initialize({ retry = false } = {})" in sources["app.js"]
     assert all(
         "import " not in source and "export " not in source
         for source in sources.values()

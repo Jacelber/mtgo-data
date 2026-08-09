@@ -18,6 +18,8 @@ APP_FILES = (
     "app-tabletop.js",
     "app-mobile-render.js",
     "app-mobile-interactions.js",
+    "app-loading.js",
+    "app-card-preview.js",
     "app.js",
 )
 P8_07 = ROOT / "docs" / "prototypes" / "P8-07" / "index.html"
@@ -108,6 +110,8 @@ def test_root_uses_only_the_mtgo_phase8_module_boundary() -> None:
         "assets/js/phase8/app-mtgo.js",
         "assets/js/phase8/app-mobile-render.js",
         "assets/js/phase8/app-mobile-interactions.js",
+        "assets/js/phase8/app-loading.js",
+        "assets/js/phase8/app-card-preview.js",
         "assets/js/phase8/app.js",
     ]
 

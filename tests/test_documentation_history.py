@@ -52,12 +52,12 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "P12-08A"
+    assert status["current_task"]["id"] == "P12-09"
     assert status["current_task"]["status"] == (
         "owner_accepted_publication_and_merge_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "92151525f192c747dfdbd372d97b65dc0a0a78b2"
+        "20e6115ea9b4a648879addfa8064af4e5e2eb2e7"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -66,41 +66,41 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "merge": True,
     }
     assert status["recent_completion_handoff"] == {
-        "id": "P12-08",
-        "name": "Readability and accessibility baseline",
+        "id": "P12-08A",
+        "name": "Existing-product small-screen list remediation",
         "status": "completed_and_merged",
-        "pull_request": 194,
-        "merge_commit": "f26ae788c3246daa223af31b4c6de6710169fcc3",
+        "pull_request": 196,
+        "merge_commit": "20e6115ea9b4a648879addfa8064af4e5e2eb2e7",
         "note": (
-            "P12-08A starts from verified master commit 92151525, which also "
-            "includes the subsequent production-data update and merged mobile "
-            "interaction stability PR 195."
+            "P12-09 starts from the verified merge commit for the owner-accepted "
+            "P12-08A mobile list remediation."
         ),
     }
-    assert status["next_approved_task"]["id"] == "P12-09"
-    assert status["next_approved_task"]["status"] == "planned_pending_separate_authorization_not_authorized"
+    assert status["next_approved_task"]["id"] == "P12-10"
+    assert status["next_approved_task"]["status"] == (
+        "blocked_pending_separate_authorization_and_evidence"
+    )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
     future_task_gates = {
         gate["task"]: gate for gate in status["future_task_gates"]
     }
-    assert future_task_gates["P12-09"]["status"] == "planned_pending_separate_authorization"
     assert future_task_gates["P12-10"]["status"] == (
         "blocked_pending_separate_authorization_and_evidence"
     )
 
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
-    audit = (ROOT / "docs" / "audits" / "P12-08A.md").read_text(encoding="utf-8")
+    audit = (ROOT / "docs" / "audits" / "P12-09.md").read_text(encoding="utf-8")
     design_system = (
         ROOT / "docs" / "FRONTEND_DESIGN_SYSTEM.md"
     ).read_text(encoding="utf-8")
     for document in (roadmap, design_system):
-        assert "P12-08A" in document
-        assert "semantic" in document.lower()
-        assert "sticky identity column" in document
-    assert "small-screen list remediation" in audit
+        assert "P12-09" in document
+        assert "retry" in document.lower()
+        assert "successful" in document.lower()
+    assert "successful JSON" in audit
     assert "Ready pull request" in audit
-    assert "manual production dispatch" in audit
+    assert "production dispatch" in audit
 
     historical_paths = {
         item["path"] for item in status["authoritative_documents"]["historical_documents"]
