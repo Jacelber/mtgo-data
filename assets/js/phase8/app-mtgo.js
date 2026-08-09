@@ -140,7 +140,7 @@ function activeStatisticsSubtypes(parent) {
   ));
 }
 
-function statsRows(archetypes) {
+function statisticsGroups(archetypes) {
   return archetypes.map(parent => {
     const subtypes = activeStatisticsSubtypes(parent);
     const expandable = subtypes.length >= 2;
@@ -148,13 +148,20 @@ function statsRows(archetypes) {
     const directId = subtypes.length === 1
       ? `${parent.id}/${subtypes[0].id}`
       : parent.id;
+    return { parent, subtypes, expandable, open, directId };
+  });
+}
+
+function statsRows(groups) {
+  return groups.map(({ parent, subtypes, expandable, open, directId }) => {
     const parentIdentity = `${manaIdentityHtml(directId)}<span class="identity-label">${escapeHtml(parent.name)}</span>`;
     const parentName = expandable
       ? `<button class="name-button hierarchy-toggle" type="button" data-stats-parent="${escapeHtml(parent.id)}"
-          data-stats-toggle="${escapeHtml(parent.id)}">
+          data-stats-toggle="${escapeHtml(parent.id)}" data-responsive-key="stats-action:${escapeHtml(parent.id)}"
+          aria-expanded="${open}">
           <span class="round-toggle">${open ? "−" : "+"}</span>${parentIdentity}</button>`
       : `<button class="name-button" type="button" data-detail-identity="${escapeHtml(directId)}"
-          aria-expanded="${state.detailIdentity === directId}"
+          data-responsive-key="stats-action:${escapeHtml(directId)}" aria-expanded="${state.detailIdentity === directId}"
           data-stats-parent="${escapeHtml(parent.id)}">
           ${parentIdentity}</button>`;
     const rows = [statsRow(parent, parentName, "")];
@@ -166,7 +173,7 @@ function statsRows(archetypes) {
         rows.push(statsRow(
           subtype,
           `<button class="name-button" type="button" data-detail-identity="${escapeHtml(identityId)}"
-            aria-expanded="${state.detailIdentity === identityId}">
+            data-responsive-key="stats-action:${escapeHtml(identityId)}" aria-expanded="${state.detailIdentity === identityId}">
             ${manaIdentityHtml(identityId)}<span class="identity-label">${escapeHtml(subtype.display_name)}</span></button>`,
           "subtype-row"
         ));
@@ -187,17 +194,6 @@ function statsRow(record, nameHtml, rowClass) {
     <td class="number">${pct(record.top8_share)}</td>
     <td class="number">${pct(record.conversion)}</td>
   </tr>`;
-}
-
-function statsDetailRow(identityId) {
-  const record = locateDeck(currentContext.decks, identityId);
-  const title = record?.display_name || record?.name || currentContext.identityNames?.get(identityId) || identityId;
-  return `<tr class="deck-detail-row"><td colspan="7">${deckDetailHtml({
-    title,
-    bestDeck: record?.best_deck,
-    averageDeck: record?.average_deck,
-    closeAction: "data-close-detail",
-  })}</td></tr>`;
 }
 
 function chartHtml(archetypes) {
@@ -281,13 +277,23 @@ async function statsView() {
     state.detailIdentity = null;
   }
   currentContext = { meta, range, decks, completeness, identityNames };
-  const expandable = range.archetypes.filter(item => activeStatisticsSubtypes(item).length >= 2);
+  const groups = statisticsGroups(archetypes);
+  const expandable = groups.filter(item => item.expandable);
   const sortHeader = (label, key, tip) => {
     const arrow = state.statsSort === key ? (state.statsDirection === "desc" ? "▼" : "▲") : "";
     const accessories = `${arrow ? `<span class="sort-indicator" aria-hidden="true">${arrow}</span>` : ""}${tip ? infoTip(tip) : ""}`;
-    return `<button class="sort-button" type="button" data-stats-sort="${key}">
+    return `<button class="sort-button" type="button" data-stats-sort="${key}" data-responsive-key="stats-sort-field:${escapeHtml(key)}">
       <span class="sort-label">${label}</span></button>${accessories ? `<span class="sort-accessories">${accessories}</span>` : ""}`;
   };
+  const sortOptions = [
+    ["name", t("stats.deck")],
+    ["avg_points_per_round", t("stats.average_points")],
+    ["high_score_count", t("stats.high_count")],
+    ["high_score_share", t("stats.high_share")],
+    ["top8_count", t("stats.top8_count")],
+    ["top8_share", t("stats.top8_share")],
+    ["conversion", t("stats.conversion")],
+  ].map(([key, label]) => ({ key, label }));
   return `<aside class="source-note" aria-label="${t("source.label")}">
       <p>${t("source.stats")}</p>
     </aside>
@@ -299,7 +305,7 @@ async function statsView() {
         ${expandable.length ? `<button id="stats-expand-all" class="secondary-button" type="button">${state.statsExpanded.size ? t("stats.hide_subtypes") : t("stats.show_subtypes")}</button>` : ""}
       </div>
       <p class="real-data-note">${t("stats.note")}</p>
-      <div class="table-scroll"><table class="data-table metric-columns" style="width:980px;min-width:100%">
+      <div class="desktop-metric-table table-scroll"><table class="data-table metric-columns" style="width:980px;min-width:100%">
         ${fixedColumns(7)}
         <thead><tr><th>${sortHeader(t("stats.deck"), "name")}</th>
           <th class="number">${sortHeader(t("stats.average_points"), "avg_points_per_round", t("stats.average_points_tip"))}</th>
@@ -308,8 +314,17 @@ async function statsView() {
           <th class="number">${sortHeader(t("stats.top8_count"), "top8_count")}</th>
           <th class="number">${sortHeader(t("stats.top8_share"), "top8_share")}</th>
           <th class="number">${sortHeader(t("stats.conversion"), "conversion", t("stats.conversion_tip"))}</th>
-        </tr></thead><tbody>${statsRows(archetypes)}</tbody>
+        </tr></thead><tbody>${statsRows(groups)}</tbody>
       </table></div>
+      <div class="mobile-metric-layout">
+        ${mobileSortControls({
+          kind: "stats",
+          current: state.statsSort,
+          direction: state.statsDirection,
+          options: sortOptions,
+        })}
+        ${statsCards(groups)}
+      </div>
     </section>`;
 }
 
@@ -353,7 +368,7 @@ function matrixCell(record) {
 
 function matrixHtml(document) {
   const view = ReviewData.buildView(document, state.matchupRows, state.matchupColumns);
-  return `<div class="table-scroll matrix-scroll"><table class="matchup-table">
+  const table = `<table class="matchup-table">
     <thead><tr><th class="corner"></th><th class="column-head overall">${t("matchup.overall")}</th>
       ${view.columns.map(column => {
         const open = state.matchupColumns.has(column.parentId);
@@ -370,12 +385,13 @@ function matrixHtml(document) {
         const content = row.kind === "archetype" && row.expandable
           ? `<button type="button" class="axis-label-button row-axis-label" data-matchup-row="${escapeHtml(row.parentId)}"
               aria-label="${open ? t("matchup.collapse") : t("matchup.expand")}${escapeHtml(row.name)}">
-              <span class="axis-toggle">${open ? "−" : "+"}</span><span>${escapeHtml(row.name)}</span></button>`
-          : `<span>${escapeHtml(row.name)}</span>`;
+              <span class="axis-toggle">${open ? "−" : "+"}</span><span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</span></button>`
+          : `<span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</span>`;
         return `<tr><th class="row-head ${row.kind === "subtype" ? "subtype-head" : ""}">${content}</th>
           ${matrixCell(view.overall[row.id])}${view.columns.map(column => matrixCell(view.matrix[row.id][column.id])).join("")}</tr>`;
       }).join("")}
-    </tbody></table></div><div id="matrix-record" class="matrix-record" role="status" hidden></div>
+    </tbody></table>`;
+  return `${horizontalScrollFrame("matchup", "table-scroll matrix-scroll", table, matrixStickyHeader(view.columns))}<div id="matrix-record" class="matrix-record" role="status" hidden></div>
     <div id="matrix-hover-pop" class="matrix-hover-pop" role="tooltip" hidden></div>`;
 }
 
@@ -436,7 +452,7 @@ async function top8View() {
     </div>
     ${top8Freshness(top8, weekEntry)}
     <section class="panel"><h2 class="sr-only">${t("top8.title")}</h2>
-      <div class="table-scroll"><table class="top8-table top8-week-table"><thead><tr><th>${t("top8.rank")}</th>
+      ${horizontalScrollFrame("top8", "table-scroll", `<table class="top8-table top8-week-table"><thead><tr><th>${t("top8.rank")}</th>
         ${top8.events.map(event => `<th title="${escapeHtml(event.name)}"><strong>${escapeHtml(event.display_name)}</strong>
           <small>${event.date} · ${t("top8.players", { count: event.player_count })}</small></th>`).join("")}
       </tr></thead><tbody>${Array.from({ length: 8 }, (_, offset) => {
@@ -448,7 +464,7 @@ async function top8View() {
           return `<td><button class="name-button" type="button" data-top8-detail="${escapeHtml(detailId)}"
             aria-expanded="${state.top8Detail === detailId}">${escapeHtml(placement.identity.display_name)}</button></td>`;
         }).join("")}</tr>`;
-      }).join("")}</tbody></table></div>${top8PlacementDetail()}</section>`;
+      }).join("")}</tbody></table>`)}${top8PlacementDetail()}</section>`;
 }
 
 function pickupDeck(item, key) {

@@ -182,75 +182,11 @@ function hasExtendedUrlState(parameters) {
   return EXTENDED_URL_KEYS.some(key => parameters.has(key));
 }
 
-function renderFocusSelector(element, root) {
-  if (!element || !root.contains(element)) return null;
-  if (element.id) return `#${CSS.escape(element.id)}`;
-  const stableAttribute = [...element.attributes].find(attribute => (
-    attribute.name.startsWith("data-")
-    && attribute.name !== "data-tooltip"
-    && attribute.name !== "data-tip"
-  ));
-  return stableAttribute
-    ? `[${stableAttribute.name}="${CSS.escape(stableAttribute.value)}"]`
-    : null;
-}
-
-function restoreRenderFocus(root, selector) {
-  if (!selector) return;
-  root.querySelector(selector)?.focus({ preventScroll: true });
-}
-
-function captureRenderPosition(root, selector) {
-  const anchor = selector ? root.querySelector(selector) : null;
-  return {
-    anchorTop: anchor?.getBoundingClientRect().top ?? null,
-    scrollY: window.scrollY,
-    scrollers: [...root.querySelectorAll(".table-scroll")].map(scroller => ({
-      left: scroller.scrollLeft,
-      top: scroller.scrollTop,
-    })),
-  };
-}
-
-function restoreRenderPosition(root, selector, position) {
-  [...root.querySelectorAll(".table-scroll")].forEach((scroller, index) => {
-    const saved = position.scrollers[index];
-    if (!saved) return;
-    scroller.scrollLeft = saved.left;
-    scroller.scrollTop = saved.top;
-  });
-  const anchor = selector ? root.querySelector(selector) : null;
-  if (anchor && position.anchorTop !== null) {
-    window.scrollBy(0, anchor.getBoundingClientRect().top - position.anchorTop);
-  } else {
-    window.scrollTo(0, position.scrollY);
-  }
-}
-
-function renderStatsExpansion(trigger) {
-  const root = document.querySelector("#view");
-  const body = root.querySelector(".data-table.metric-columns tbody");
-  if (!body || !currentContext?.range) return false;
-  const focusSelector = renderFocusSelector(trigger, root);
-  const position = captureRenderPosition(root, focusSelector);
-  body.innerHTML = statsRows(sortedArchetypes(currentContext.range.archetypes));
-  const expandAll = root.querySelector("#stats-expand-all");
-  if (expandAll) {
-    expandAll.textContent = state.statsExpanded.size
-      ? t("stats.hide_subtypes")
-      : t("stats.show_subtypes");
-  }
-  restoreRenderPosition(root, focusSelector, position);
-  restoreRenderFocus(root, focusSelector);
-  flushUrlWrite();
-  return true;
-}
-
 async function renderView() {
   return renderViewWithFocus();
 }
 
-async function renderViewWithFocus(focusOverride = null) {
+async function renderViewWithFocus(focusOverride = null, revealSelector = null) {
   const root = document.querySelector("#view");
   clearTouchedComposition();
   const focusSelector = focusOverride || renderFocusSelector(document.activeElement, root);
@@ -285,6 +221,8 @@ async function renderViewWithFocus(focusOverride = null) {
       requestAnimationFrame(() => {
         restoreRenderPosition(root, focusSelector, position);
         restoreRenderFocus(root, focusSelector);
+        revealExpandedContent(root, revealSelector);
+        updateMatrixPresentation();
       });
     });
     document.querySelector("#payload-status").textContent = t("loading.loaded", {
@@ -312,6 +250,7 @@ function resetInteractions() {
   state.detailIdentity = null;
   state.top8Detail = null;
   state.tabletopDetailIdentity = null;
+  state.scrollHintsSeen.clear();
 }
 
 document.addEventListener("click", async event => {
@@ -319,6 +258,7 @@ document.addEventListener("click", async event => {
   if (!compositionButton) clearTouchedComposition();
   const button = event.target.closest("button");
   if (!button) return;
+  if (await handleMobileListClick(button)) return;
   if (button.dataset.format) {
     const next = button.dataset.format;
     const available = availableProductIds(next);
@@ -363,7 +303,9 @@ document.addEventListener("click", async event => {
     state.detailMode = "average";
     queueUrlWrite();
     await renderView();
-    const row = document.querySelector(`[data-stats-parent="${CSS.escape(identity)}"]`)?.closest("tr");
+    const row = matchMedia("(max-width: 780px)").matches
+      ? document.querySelector(`[data-mobile-card-identity="${CSS.escape(identity)}"]`)
+      : document.querySelector(`[data-stats-parent="${CSS.escape(identity)}"]`)?.closest("tr");
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
     row?.scrollIntoView({ block: "center", behavior: reduceMotion ? "auto" : "smooth" });
   } else if (button.dataset.statsRange) {
@@ -445,6 +387,7 @@ document.addEventListener("click", async event => {
     await renderViewWithFocus(`[data-top8-detail="${CSS.escape(detail || "")}"]`);
   } else if (button.dataset.tabletopView) {
     state.tabletopView = button.dataset.tabletopView;
+    state.scrollHintsSeen.clear();
     if (state.tabletopView === "overview" && state.tabletopLastSelectedEventId) {
       state.tabletopEventId = state.tabletopLastSelectedEventId;
     }
@@ -505,6 +448,7 @@ document.addEventListener("click", async event => {
 });
 
 document.addEventListener("change", async event => {
+  if (await handleMobileListChange(event.target)) return;
   if (event.target.id === "top8-week") {
     state.top8WeekFile = event.target.value;
     state.top8Detail = null;

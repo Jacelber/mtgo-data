@@ -156,12 +156,14 @@ that starts 4 pixels to the right of that anchor. They form one compact group,
 do not participate in the label's normal flow, and do not shift the label away
 from its data column.
 
-P12-08A applies that semantic-card rule to the retained statistics, Tabletop
-deck, Top 8, and Weekly Pickup one-dimensional lists. Deck identity, core and
-secondary metrics, and the existing expansion action remain available, with
-detail inserted directly beneath the originating card. Truly two-dimensional
-matrices and cross-event comparison tables remain bounded horizontal scrollers
-with a sticky identity column. Responsive adaptation must not discard data.
+P12-08A applies that semantic-card rule to the retained MTGO statistics and
+Tabletop overview lists. Deck identity, core and secondary metrics, and the
+existing expansion action remain available, with detail inserted directly
+beneath the originating card. Weekly Pickup already uses semantic cards and
+only needs narrow-screen heading and metric wrapping. The Top 8 cross-event
+comparison and matchup matrices remain bounded horizontal scrollers with a
+sticky identity column and a dismissible first-use scroll cue. Responsive
+adaptation must not discard data.
 
 Bounded horizontal scrolling is acceptable for format or product navigation
 and truly wide matrices. It must not create page overflow or hide the active

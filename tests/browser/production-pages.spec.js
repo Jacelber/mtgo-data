@@ -64,8 +64,9 @@ for (const language of languages) {
         expect(await page.locator(".composition-segment").count()).toBeGreaterThan(1);
         await expect(page.locator(".composition-legend")).toHaveCount(0);
         await expect(page.locator(".pie-panel, .pie-card, .pie-slice")).toHaveCount(0);
-        await expect(page.locator(".data-table .mana-identity").first()).toBeVisible();
-        await expect(page.locator(".data-table .mana-identity img").first()).toHaveAttribute(
+        const visibleStats = viewport.width <= 780 ? ".mobile-metric-layout" : ".desktop-metric-table";
+        await expect(page.locator(`${visibleStats} .mana-identity`).first()).toBeVisible();
+        await expect(page.locator(`${visibleStats} .mana-identity img`).first()).toHaveAttribute(
           "src",
           /assets\/images\/mana\/[wubrgc]\.svg$/
         );
@@ -188,13 +189,13 @@ test("mobile statistics expands rows without rebuilding the view and preserves a
     document.querySelector(".composition-panel").dataset.renderMarker = "preserved";
   });
 
-  const toggle = page.locator("button[data-stats-toggle]").first();
+  const toggle = page.locator("button[data-mobile-stats-toggle]").first();
   await toggle.scrollIntoViewIfNeeded();
   const beforeToggleTop = await toggle.evaluate(node => node.getBoundingClientRect().top);
   const jsonRequestCount = requests.filter(path => path.endsWith(".json")).length;
   await toggle.click();
-  await expect(page.locator("tr.subtype-row").first()).toBeVisible();
-  const afterToggleTop = await page.locator("button[data-stats-toggle]").first()
+  await expect(page.locator(".mobile-subtype-list").first()).toBeVisible();
+  const afterToggleTop = await page.locator("button[data-mobile-stats-toggle]").first()
     .evaluate(node => node.getBoundingClientRect().top);
   expect(Math.abs(afterToggleTop - beforeToggleTop)).toBeLessThan(2);
   expect(requests.filter(path => path.endsWith(".json"))).toHaveLength(jsonRequestCount);
@@ -209,27 +210,25 @@ test("mobile statistics expands rows without rebuilding the view and preserves a
   expect(Math.abs(afterExpandAllTop - beforeExpandAllTop)).toBeLessThan(2);
   expect(await page.evaluate(() => window.__loadingInsertions)).toBe(0);
 
-  const tableScroll = page.locator(".table-scroll").last();
-  await tableScroll.evaluate(node => { node.scrollLeft = 320; });
-  const sort = page.locator('button[data-stats-sort="high_score_share"]');
-  await sort.evaluate(node => {
-    node.focus({ preventScroll: true });
-    node.click();
-  });
+  const sort = page.locator("[data-mobile-stats-sort]");
+  await sort.scrollIntoViewIfNeeded();
+  const beforeSortTop = await sort.evaluate(node => node.getBoundingClientRect().top);
+  await sort.selectOption("name");
   await expect(sort).toBeFocused();
-  await expect.poll(() => tableScroll.evaluate(node => node.scrollLeft)).toBe(320);
+  const afterSortTop = await sort.evaluate(node => node.getBoundingClientRect().top);
+  expect(Math.abs(afterSortTop - beforeSortTop)).toBeLessThan(2);
   expect(await page.evaluate(() => window.__loadingInsertions)).toBe(0);
 
-  const detail = page.locator("button[data-detail-identity]").first();
+  const detail = page.locator("button[data-mobile-stats-detail]").first();
   await detail.click();
-  await expect(page.locator(".deck-detail-row")).toBeVisible();
-  const close = page.locator("button[data-close-detail]");
+  await expect(page.locator(".mobile-card-detail")).toBeVisible();
+  const close = page.locator("button[data-close-mobile-stats-detail]");
   await close.scrollIntoViewIfNeeded();
-  const detailIdentity = await detail.getAttribute("data-detail-identity");
-  const restoredDetail = page.locator(`button[data-detail-identity="${detailIdentity}"]`);
+  const detailIdentity = await detail.getAttribute("data-mobile-stats-detail");
+  const restoredDetail = page.locator(`button[data-mobile-stats-detail="${detailIdentity}"]`);
   const beforeCloseTop = await restoredDetail.evaluate(node => node.getBoundingClientRect().top);
   await close.click();
-  await expect(page.locator(".deck-detail-row")).toHaveCount(0);
+  await expect(page.locator(".mobile-card-detail")).toHaveCount(0);
   await expect(restoredDetail).toBeFocused();
   const afterCloseTop = await restoredDetail.evaluate(node => node.getBoundingClientRect().top);
   expect(Math.abs(afterCloseTop - beforeCloseTop)).toBeLessThan(2);

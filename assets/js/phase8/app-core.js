@@ -76,6 +76,7 @@ const state = {
   tabletopDetailIdentity: null,
   tabletopSort: "deck_count",
   tabletopDirection: "desc",
+  scrollHintsSeen: new Set(),
   renderToken: 0,
 };
 let currentContext = {};
@@ -288,14 +289,19 @@ function deckDetailHtml({
   referenceNote = "",
   performanceHtml = "",
   showDeviation = true,
+  className = "deck-detail",
+  responsiveKey = "",
 }) {
   const deck = exactDeck || bestDeck;
   const deckTitle = exactDeck ? exactDeckTitle : t("deck.best");
   const baseStatus = comparison?.base_status;
   const deviation = deck?.deviation;
   const diff = deck?.deviation_diff;
-  return `<section class="deck-detail">
-    <button class="deck-close" type="button" ${closeAction} aria-label="${t("deck.close")}">✕</button>
+  const responsiveAttribute = suffix => responsiveKey
+    ? ` data-responsive-key="${escapeHtml(`${responsiveKey}:${suffix}`)}"`
+    : "";
+  return `<section class="${className}">
+    <button class="deck-close" type="button" ${closeAction}${responsiveAttribute("close")} aria-label="${t("deck.close")}">✕</button>
     <h3>${escapeHtml(title)}</h3>
     ${baseStatus === "unavailable" ? `<p class="detail-status">${t("deck.comparison_unavailable")}</p>` : ""}
     <div class="deck-columns">
@@ -314,8 +320,8 @@ function deckDetailHtml({
       <div class="deck-column">
         ${referenceNote ? `<p class="reference-note">${escapeHtml(referenceNote)}</p>` : ""}
         <div class="deck-mode" role="group" aria-label="${t("deck.average")} / ${t("deck.representative")}">
-          <button type="button" data-deck-mode="average" class="${state.detailMode === "average" ? "active" : ""}">${t("deck.average")}</button>
-          <button type="button" data-deck-mode="typical" class="${state.detailMode === "typical" ? "active" : ""}">${t("deck.representative")}</button>
+          <button type="button" data-deck-mode="average"${responsiveAttribute("mode-average")} class="${state.detailMode === "average" ? "active" : ""}">${t("deck.average")}</button>
+          <button type="button" data-deck-mode="typical"${responsiveAttribute("mode-typical")} class="${state.detailMode === "typical" ? "active" : ""}">${t("deck.representative")}</button>
           <span>（${t("deck.sample", { count: averageDeck?.sample_size ?? "—" })}）</span>
         </div>
         ${averageDeckHtml(averageDeck)}

@@ -2993,20 +2993,31 @@ public entry points.
    - owner acceptance, commit, publication, merge, deployment, and P12-08A
      remain separate authorization gates.
 
-   P12-08 is owner accepted and authorized for publication. P12-08A remains a
-   separate owner-authorization gate.
+   P12-08 was merged in PR 194 at `f26ae788`. P12-08A received separate local
+   implementation authorization on 2026-08-09; commit and publication remain
+   separate owner gates.
 8A. `P12-08A` — Existing-product small-screen list remediation
-   - translate one-dimensional statistics, Tabletop deck, Top 8, and Weekly
-     Pickup lists into semantic cards at 780 CSS pixels and below rather than
-     exposing only the first columns of a desktop table;
+   - translate the one-dimensional statistics and Tabletop overview lists into
+     semantic cards at 780 CSS pixels and below rather than exposing only the
+     first columns of a desktop table;
    - preserve deck identity, core metrics, secondary metrics, and the existing
-     expand action without hiding data merely to make the layout fit;
+     expand or deck-detail action without hiding data merely to make the layout
+     fit;
    - open detail directly beneath the originating card;
-   - keep truly two-dimensional matrices and cross-event comparison tables in
-     bounded horizontal scrollers with a sticky identity column;
-   - verify Chinese and English behavior at 390- and 412-pixel widths;
+   - provide a mobile sort selector and direction control that reuse the
+     existing sort state, URL contract, and history behavior;
+   - keep matchup matrices and the Top 8 cross-event comparison in bounded
+     horizontal scrollers with a sticky identity column and first-use cue;
+   - retain Weekly Pickup's existing card semantics and wrap its secondary
+     metric without clipping at narrow widths;
+   - verify Chinese and English behavior at 390- and 412-pixel widths plus the
+     780/781-pixel boundary, focus restoration, and page-overflow contract;
    - do not begin until P12-08 is accepted and the owner separately authorizes
      P12-08A implementation.
+
+   P12-08A local implementation was owner-accepted on 2026-08-09, with commit,
+   remote publication, and merge authorized. P12-09 and any manual production
+   dispatch remain separate authorization gates.
 9. `P12-09` — Loading, failure, and retry model
    - separate successful caching from background refresh;
    - evict or retry failed promises and add useful text-first skeletons;

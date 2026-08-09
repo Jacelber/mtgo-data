@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-08-accessibility-baseline"
-  working_branch_status: "isolated_owner_accepted_publication_authorized"
+  current_working_branch: "codex/p12-08a-mobile-list-remediation"
+  working_branch_status: "owner_accepted_publication_and_merge_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Small machine-readable record of current project state and authorization."
-  last_updated: "2026-08-08"
+  last_updated: "2026-08-09"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   update_required_after_each_phase: true
@@ -72,17 +72,17 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-08"
-  name: "Readability and accessibility baseline"
-  status: "owner_accepted_publication_authorized"
-  authorized_on: "2026-08-08"
+  id: "P12-08A"
+  name: "Existing-product small-screen list remediation"
+  status: "owner_accepted_publication_and_merge_authorized"
+  authorized_on: "2026-08-09"
   completed_on: "2026-08-09"
-  workspace: "C:/tmp/mtgo-data-p12-08-20260808-01"
-  branch: "codex/p12-08-accessibility-baseline"
-  base_commit: "1f0fde6fe36d94b249a3a0bde69b01b5f9b64bb7"
+  workspace: "C:/Users/jacel/AppData/Local/Temp/mtgo-data-p12-08a-20260809-01"
+  branch: "codex/p12-08a-mobile-list-remediation"
+  base_commit: "92151525f192c747dfdbd372d97b65dc0a0a78b2"
   task_type: "local_user_visible_ui_implementation"
   artifact_impact: "user_visible_ui"
-  objective: "Establish a shared readability and accessibility floor for the retained MTGO and Tabletop products without taking on the P12-08A small-screen list conversion."
+  objective: "Make retained one-dimensional environment lists readable and fully operable on small screens while preserving desktop tables, statistical meaning, product separation, public paths, and true two-dimensional comparison behavior."
   authorization:
     local_implementation: true
     commit: true
@@ -94,54 +94,60 @@ current_task:
     - "assets/js/phase8/app-core.js"
     - "assets/js/phase8/app-mtgo.js"
     - "assets/js/phase8/app-tabletop.js"
+    - "assets/js/phase8/app-mobile-render.js"
+    - "assets/js/phase8/app-mobile-interactions.js"
     - "assets/js/phase8/app.js"
     - "assets/js/phase8/i18n.js"
     - "index.html"
     - "melee/index.html"
     - "tests/browser/accessibility.spec.js"
+    - "tests/browser/mobile-lists.spec.js"
+    - "tests/browser/production-pages.spec.js"
     - "tests/test_documentation_history.py"
     - "tests/test_frontend_asset_split.py"
-    - "tests/test_phase12_accessibility_baseline.py"
-    - "tests/test_phase12_chart_semantics.py"
-    - "tests/test_phase12_shared_visual_foundation.py"
+    - "tests/test_phase8_mtgo_production_entry.py"
+    - "tests/test_phase8_tabletop_production_entry.py"
+    - "tests/test_validate_repository.py"
+    - "validate_repository.py"
     - "docs/FRONTEND_DESIGN_SYSTEM.md"
     - "docs/ROADMAP.md"
-    - "docs/audits/P12-08.md"
+    - "docs/audits/P12-08A.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    code_changed: "Shared typography, contrast, focus, target-size, landmark, heading, unavailable-navigation, composition-segment, and dynamic-focus behavior only"
+    code_changed: "Responsive MTGO statistics and Tabletop overview cards, mobile sorting, focus and minimum visibility restoration, bounded comparison cues, compact two-line mobile matchup identities, synchronized sticky matchup opponent headers, Top 8 sticky identity, and Weekly Pickup narrow wrapping only"
     workflow_changed: "none"
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
-    frontend_source_changed: "shared CSS, classic-script view renderers, bilingual region labels, and static entry semantics only"
-    public_paths_changed: "no public entry, asset, or data path changed"
+    frontend_source_changed: "shared classic-script renderers, interaction controller, bilingual copy, and candidate responsive CSS only"
+    public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Raise shared body, table, secondary-copy, and compact-language text to the documented readability floor."
-    - "Use separate high-contrast focus indicators for light and dark surfaces and a 24-by-24-pixel target floor."
-    - "Label dynamic regions, add a Top 8 heading, expose unavailable-navigation reasons, and restore focus after rerenders and detail closure."
-    - "Render each mapped composition segment as an independent accessible button while preserving proportional width and equivalent table navigation."
-    - "Add focused source and real-browser tests, update the design authority and roadmap, and record local acceptance evidence."
+    - "Render MTGO statistics and Tabletop overview as complete semantic cards at 780 CSS pixels and below while preserving desktop tables above the breakpoint."
+    - "Reuse existing sort keys, directions, URL state, expansion state, detail data, and event handlers through explicit mobile controls."
+    - "Keep every primary and secondary metric visible, insert detail under its source card, preserve trigger focus, and make newly expanded content minimally visible."
+    - "Keep matchup matrices and Top 8 as bounded horizontal comparisons with a sticky first column and dismissible localized cue."
+    - "Retain Weekly Pickup cards and wrap only their narrow heading metrics."
+    - "Add focused real-browser coverage, update responsive design authority and roadmap, and record local acceptance evidence."
   prohibited_changes:
-    - "Any statistical formula, generated data, Schema, workflow, catalog, Pages policy, runtime request path, product availability, or public-path change."
-    - "P12-08A small-screen card conversion, classifier remediation, P12-09 loading architecture, P12-10 producer work, or another task."
-    - "Force-push, direct master development, workflow mutation, repository-setting changes, or protected event 434455 byte changes."
-  stop_point: "Stop after the authorized commit, Ready pull request, successful CI, merge, and Pages verification. Do not begin P12-08A automatically."
+    - "Any statistical formula, generated data, Schema, workflow, catalog, Pages policy, runtime request path, product availability, event whitelist, or public-path change."
+    - "Pagination, virtualization, a mandatory front-end framework, classifier remediation, P12-09 loading architecture, P12-10 producer work, or another task."
+    - "Commit, push, pull-request creation, merge, production dispatch, force-push, direct master development, workflow mutation, repository-setting changes, or protected event 434455 byte changes."
+  stop_point: "After owner acceptance on 2026-08-09, publish through one Ready pull request, complete CI, normal merge, and merge-triggered Pages confirmation; then stop before P12-09 or any manual production dispatch."
 
 recent_completion_handoff:
-  id: "P12-07"
-  name: "Product-specific freshness strip"
+  id: "P12-08"
+  name: "Readability and accessibility baseline"
   status: "completed_and_merged"
-  pull_request: 193
-  merge_commit: "1f0fde6fe36d94b249a3a0bde69b01b5f9b64bb7"
-  note: "P12-08 started from the verified merged P12-07 master commit; GitHub and Git history retain detailed publication evidence."
+  pull_request: 194
+  merge_commit: "f26ae788c3246daa223af31b4c6de6710169fcc3"
+  note: "P12-08A starts from verified master commit 92151525, which also includes the subsequent production-data update and merged mobile interaction stability PR 195."
 
 current_repository_state:
-  baseline_commit: "1f0fde6fe36d94b249a3a0bde69b01b5f9b64bb7"
-  baseline_note: "Verified master after merged PR 193; used as the isolated P12-08 base."
+  baseline_commit: "92151525f192c747dfdbd372d97b65dc0a0a78b2"
+  baseline_note: "Verified remote master after merged P12-08 PR 194, production data update, and mobile interaction stability PR 195; used as the isolated P12-08A base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -201,14 +207,12 @@ engineering_quality:
 known_blockers: []
 
 future_task_gates:
-  - task: "P12-08A"
+  - task: "P12-09"
     status: "planned_pending_separate_authorization"
     requirements:
-      - "Publish the owner-accepted P12-08 readability and accessibility baseline."
-      - "Separately authorize P12-08A implementation."
-      - "Preserve all one-dimensional list data in semantic small-screen cards."
-      - "Keep true two-dimensional matrices and cross-event comparisons in bounded scrollers with a sticky identity column."
-      - "Verify Chinese and English behavior at 390- and 412-pixel widths."
+      - "Accept and publish the separately authorized P12-08A small-screen remediation."
+      - "Separately authorize P12-09 implementation."
+      - "Define the loading, failure, retry, and cache-eviction contract before changing runtime behavior."
   - task: "P12-10"
     status: "blocked_pending_separate_authorization_and_evidence"
     requirements:
@@ -230,15 +234,15 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-08A"
-  name: "Existing-product small-screen list remediation"
+  id: "P12-09"
+  name: "Loading, failure, and retry model"
   status: "planned_pending_separate_authorization_not_authorized"
   production_change: true
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "P12-08 is owner accepted and authorized for publication. P12-08A still requires separate implementation authorization; classifier remediation, P12-09, and P12-10 remain later separate gates."
+  note: "P12-08A was owner-accepted on 2026-08-09 with commit, remote publication, and merge authorized. P12-09, classifier remediation, P12-10, and manual production dispatch remain separately unauthorized."
 
 governance_baseline:
   status: "active_on_master"
@@ -274,7 +278,7 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not begin P12-08A, classifier remediation, P12-09, P12-10, or another task automatically."
+  - "Do not begin classifier remediation, P12-09, P12-10, or another task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."
