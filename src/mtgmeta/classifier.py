@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any, Literal
 
+from .classifier_features import SemanticFeatureError, augment_semantic_counts
 from .deck import count_card, deck_to_counts
 from .rules import CardCondition, ClassificationRule, RuleSet
 
@@ -166,6 +167,18 @@ def classify_counts(
     errors = _count_errors("main", main_counts) + _count_errors("side", side_counts)
     if errors:
         return _invalid_result(*dict.fromkeys(errors))
+
+    if rule_set.semantic_feature_path is not None:
+        if rule_set.semantic_features is None:
+            return _invalid_result("rules: semantic feature manifest is not loaded")
+        try:
+            main_counts, side_counts = augment_semantic_counts(
+                main_counts,
+                side_counts,
+                rule_set.semantic_features,
+            )
+        except SemanticFeatureError as exc:
+            return _invalid_result(f"deck: cannot add semantic features ({exc})")
 
     matches = evaluate_matches(rule_set, main_counts, side_counts)
     if not matches:

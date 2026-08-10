@@ -10,7 +10,14 @@ from mtgmeta.config import load_rule_set
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
-RULES = ROOT / "my_archetypes" / "standard.yaml"
+RULES = (
+    ROOT
+    / "docs"
+    / "audits"
+    / "classifier-r2"
+    / "baseline_rules"
+    / "standard.yaml"
+)
 EXPECTED_DIGEST = "af1b6af542c7185ba507994e8f666c89272dc67e00318fc9399b0a1c3623fe0b"
 
 

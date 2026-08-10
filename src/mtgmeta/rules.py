@@ -4,10 +4,14 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Any, TypeGuard
+from typing import TYPE_CHECKING, Any, TypeGuard
+
+if TYPE_CHECKING:
+    from .classifier_features import SemanticFeatureManifest
 
 
-RULE_SCHEMA_VERSION = "1.0.0"
+RULE_SCHEMA_VERSION = "1.1.0"
+SUPPORTED_RULE_SCHEMA_VERSIONS = frozenset({"1.0.0", RULE_SCHEMA_VERSION})
 ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 ZONES = frozenset({"any", "main", "side"})
 
@@ -56,6 +60,9 @@ class RuleSet:
     schema_version: str
     format: str
     archetypes: tuple[ArchetypeDefinition, ...]
+    semantic_feature_path: str | None = None
+    semantic_feature_sha256: str | None = None
+    semantic_features: SemanticFeatureManifest | None = None
 
 
 def _is_nonempty_string(value: object) -> TypeGuard[str]:
@@ -74,9 +81,60 @@ def validate_rule_data(data: Any) -> list[RuleValidationFailure]:
     failures: list[RuleValidationFailure] = []
     if not isinstance(data, dict):
         return [RuleValidationFailure("root", "must be a mapping")]
-    failures.extend(_unexpected_keys(data, {"schema_version", "format", "archetypes"}, "root"))
-    if data.get("schema_version") != RULE_SCHEMA_VERSION:
-        failures.append(RuleValidationFailure("schema_version", f"must equal {RULE_SCHEMA_VERSION!r}"))
+    schema_version = data.get("schema_version")
+    allowed_root = {"schema_version", "format", "archetypes"}
+    if schema_version == RULE_SCHEMA_VERSION:
+        allowed_root.add("semantic_features")
+    failures.extend(_unexpected_keys(data, allowed_root, "root"))
+    if schema_version not in SUPPORTED_RULE_SCHEMA_VERSIONS:
+        failures.append(
+            RuleValidationFailure(
+                "schema_version",
+                f"must be one of {sorted(SUPPORTED_RULE_SCHEMA_VERSIONS)!r}",
+            )
+        )
+    semantic_features = data.get("semantic_features")
+    if schema_version == RULE_SCHEMA_VERSION:
+        if not isinstance(semantic_features, dict):
+            failures.append(
+                RuleValidationFailure(
+                    "semantic_features",
+                    f"is required for schema {RULE_SCHEMA_VERSION}",
+                )
+            )
+        else:
+            failures.extend(
+                _unexpected_keys(
+                    semantic_features,
+                    {"manifest_path", "manifest_sha256"},
+                    "semantic_features",
+                )
+            )
+            manifest_path = semantic_features.get("manifest_path")
+            if (
+                not _is_nonempty_string(manifest_path)
+                or not re.fullmatch(
+                    r"configs/[a-z0-9][a-z0-9_./-]*\.ya?ml",
+                    manifest_path,
+                )
+                or ".." in manifest_path.split("/")
+            ):
+                failures.append(
+                    RuleValidationFailure(
+                        "semantic_features.manifest_path",
+                        "must be a safe repository-relative YAML path under configs/",
+                    )
+                )
+            digest = semantic_features.get("manifest_sha256")
+            if not _is_nonempty_string(digest) or not re.fullmatch(
+                r"[a-fA-F0-9]{64}", digest
+            ):
+                failures.append(
+                    RuleValidationFailure(
+                        "semantic_features.manifest_sha256",
+                        "must be a 64-character SHA-256 digest",
+                    )
+                )
     if not _is_nonempty_string(data.get("format")) or not ID_PATTERN.fullmatch(str(data.get("format", ""))):
         failures.append(RuleValidationFailure("format", "must be a lowercase hyphenated identifier"))
     archetypes = data.get("archetypes")
@@ -197,4 +255,19 @@ def build_rule_set(data: dict[str, Any]) -> RuleSet:
                 ))
             rules.append(ClassificationRule(rule["id"], rule["priority"], rule.get("subtype_id"), tuple(conditions)))
         archetypes.append(ArchetypeDefinition(archetype["id"], archetype["name"], archetype["priority"], subtypes, tuple(rules)))
-    return RuleSet(data["schema_version"], data["format"], tuple(archetypes))
+    semantic_features = data.get("semantic_features")
+    return RuleSet(
+        data["schema_version"],
+        data["format"],
+        tuple(archetypes),
+        (
+            semantic_features["manifest_path"]
+            if isinstance(semantic_features, dict)
+            else None
+        ),
+        (
+            semantic_features["manifest_sha256"].lower()
+            if isinstance(semantic_features, dict)
+            else None
+        ),
+    )

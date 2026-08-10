@@ -1,16 +1,19 @@
 # Adapted from Joan G.E., j6e/mtg-meta-analyzer, data/archetypes/modern.yaml
 # at commit 0ecd26bd734cedc6c40e7c753115f796613a32ba (CC BY 4.0).
 # Changes: shared schema, stable IDs, explicit priorities and main zones, explicit Unknown,
-# and omission of the upstream corpus-dependent centroid fallback.
-schema_version: 1.0.0
+# reviewed R1/R2 taxonomy, and omission of the upstream corpus-dependent centroid fallback.
+schema_version: 1.1.0
 format: modern
+semantic_features:
+  manifest_path: configs/classifier_semantic_features.yaml
+  manifest_sha256: 0cd94ee3a4d6974f88446a660e661943d1cc2c4d8a25891dd6d214931a6aa999
 archetypes:
 - id: mardu-energy
   name: Mardu Energy
-  priority: 6870
+  priority: 687000
   rules:
   - id: mardu-energy-primary
-    priority: 6870
+    priority: 687000
     subtype_id: null
     conditions:
       all:
@@ -27,7 +30,7 @@ archetypes:
         zone: main
         min_count: 2
   - id: mardu-energy-nightmare
-    priority: 6865
+    priority: 686500
     subtype_id: null
     conditions:
       all:
@@ -48,10 +51,10 @@ archetypes:
         min_count: 1
 - id: boros-energy
   name: Boros Energy
-  priority: 5370
+  priority: 537000
   rules:
   - id: boros-energy-primary
-    priority: 5370
+    priority: 537000
     subtype_id: null
     conditions:
       all:
@@ -72,10 +75,10 @@ archetypes:
         exact_count: 0
 - id: jeskai-energy
   name: Jeskai Energy
-  priority: 6860
+  priority: 686000
   rules:
   - id: jeskai-energy-primary
-    priority: 6860
+    priority: 686000
     subtype_id: null
     conditions:
       all:
@@ -90,10 +93,10 @@ archetypes:
         min_count: 3
 - id: azorius-energy
   name: Azorius Energy
-  priority: 6840
+  priority: 684000
   rules:
   - id: azorius-energy-primary
-    priority: 6840
+    priority: 684000
     subtype_id: null
     conditions:
       all:
@@ -111,10 +114,10 @@ archetypes:
         min_count: 1
 - id: selesnya-energy
   name: Selesnya Energy
-  priority: 6850
+  priority: 685000
   rules:
   - id: selesnya-energy-primary
-    priority: 6850
+    priority: 685000
     subtype_id: null
     conditions:
       all:
@@ -129,10 +132,10 @@ archetypes:
         min_count: 2
 - id: esper-energy
   name: Esper Energy
-  priority: 6880
+  priority: 688000
   rules:
   - id: esper-energy-primary
-    priority: 6880
+    priority: 688000
     subtype_id: null
     conditions:
       all:
@@ -147,10 +150,10 @@ archetypes:
         min_count: 2
 - id: affinity
   name: Affinity
-  priority: 4350
+  priority: 435000
   rules:
   - id: affinity-primary
-    priority: 4350
+    priority: 435000
     subtype_id: null
     conditions:
       all:
@@ -164,18 +167,14 @@ archetypes:
         zone: main
         min_count: 3
 - id: steel-cutter
-  name: Steel-Cutter
-  priority: 6750
+  name: Izzet Steel-Cutter
+  priority: 675000
   subtypes:
   - id: izzet
     name: Izzet
-  - id: rakdos
-    name: Rakdos
-  - id: mono-red
-    name: Mono-Red
   rules:
   - id: steel-cutter-izzet
-    priority: 6750
+    priority: 675000
     subtype_id: izzet
     conditions:
       all:
@@ -188,37 +187,9 @@ archetypes:
       - card: Mishra's Bauble
         zone: main
         min_count: 3
-  - id: steel-cutter-rakdos
-    priority: 6740
-    subtype_id: rakdos
-    conditions:
-      all:
-      - card: Cori-Steel Cutter
-        zone: main
-        min_count: 3
-      - card: Detective's Phoenix
-        zone: main
-        min_count: 3
-      - card: Blood Crypt
-        zone: main
-        min_count: 1
-  - id: steel-cutter-mono-red
-    priority: 6730
-    subtype_id: mono-red
-    conditions:
-      all:
-      - card: Cori-Steel Cutter
-        zone: main
-        min_count: 3
-      - card: Barbarian Ring
-        zone: main
-        min_count: 3
-      - card: Steam Vents
-        zone: main
-        exact_count: 0
 - id: prowess
   name: Prowess
-  priority: 6720
+  priority: 672900
   subtypes:
   - id: izzet
     name: Izzet
@@ -230,87 +201,102 @@ archetypes:
     name: Jeskai
   - id: lessons
     name: Lessons
+  - id: boros
+    name: Boros
+  - id: mono-red
+    name: Mono-Red
+  - id: mardu
+    name: Mardu
   rules:
   - id: prowess-lessons
-    priority: 6720
+    priority: 672900
     subtype_id: lessons
     conditions:
       all:
-      - card: Cori-Steel Cutter
+      - &id001
+        card: Cori-Steel Cutter
+        zone: main
+        min_count: 3
+      - &id002
+        card: Lava Dart
         zone: main
         min_count: 3
       - card: Academic Dispute
         zone: main
         min_count: 3
       - card: Boomerang Basics
+        zone: any
+        min_count: 3
+  - id: prowess-mardu
+    priority: 672800
+    subtype_id: mardu
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - &id003
+        card: Dragon's Rage Channeler
         zone: main
         min_count: 3
-      - card: Lava Dart
+      - &id004
+        card: Monastery Swiftspear
         zone: main
         min_count: 3
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
   - id: prowess-grixis
-    priority: 6710
+    priority: 672700
     subtype_id: grixis
     conditions:
       all:
-      - card: Cori-Steel Cutter
-        zone: main
-        min_count: 3
+      - *id001
+      - *id002
       - card: Preordain
         zone: main
         min_count: 2
-      - card: Blood Crypt
-        zone: main
+      - card: __classifier-semantic-any-black-spell__
+        zone: any
         min_count: 1
-      - card: Lava Dart
-        zone: main
-        min_count: 3
   - id: prowess-jeskai
-    priority: 6700
+    priority: 672600
     subtype_id: jeskai
     conditions:
       all:
-      - card: Cori-Steel Cutter
-        zone: main
-        min_count: 3
-      - card: Hallowed Fountain
-        zone: main
-        min_count: 1
-      - card: Lava Dart
-        zone: main
-        min_count: 3
-  - id: prowess-temur
-    priority: 6690
-    subtype_id: temur
-    conditions:
-      all:
-      - card: Cori-Steel Cutter
-        zone: main
-        min_count: 3
-      - card: Stomping Ground
-        zone: main
-        min_count: 1
-      - card: Lava Dart
-        zone: main
-        min_count: 3
-  - id: prowess-izzet
-    priority: 6680
-    subtype_id: izzet
-    conditions:
-      all:
-      - card: Cori-Steel Cutter
-        zone: main
-        min_count: 3
+      - *id001
+      - *id002
       - card: Preordain
         zone: main
         min_count: 2
-      - card: Monastery Swiftspear
-        zone: main
-        min_count: 3
-      - card: Lava Dart
-        zone: main
-        min_count: 3
-      - card: Stomping Ground
+      - card: __classifier-semantic-any-white-spell__
+        zone: any
+        min_count: 1
+  - id: prowess-temur
+    priority: 672500
+    subtype_id: temur
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - card: __classifier-semantic-any-green-spell__
+        zone: any
+        min_count: 1
+  - id: prowess-boros
+    priority: 672400
+    subtype_id: boros
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - *id003
+      - *id004
+      - card: __classifier-semantic-any-white-spell__
+        zone: any
+        min_count: 1
+      - card: Preordain
         zone: main
         exact_count: 0
       - card: Blood Crypt
@@ -319,12 +305,60 @@ archetypes:
       - card: Hallowed Fountain
         zone: main
         exact_count: 0
+      - card: Arclight Phoenix
+        zone: main
+        exact_count: 0
+  - id: prowess-mono-red
+    priority: 672300
+    subtype_id: mono-red
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - *id003
+      - *id004
+      - card: __classifier-semantic-any-white-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-blue-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-black-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-green-spell__
+        zone: any
+        exact_count: 0
+      - card: Arclight Phoenix
+        zone: main
+        exact_count: 0
+  - id: prowess-izzet
+    priority: 672200
+    subtype_id: izzet
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - *id003
+      - *id004
+      - card: Preordain
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-any-white-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-black-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-green-spell__
+        zone: any
+        exact_count: 0
 - id: amulet-titan
   name: Amulet Titan
-  priority: 6670
+  priority: 667000
   rules:
   - id: amulet-titan-primary
-    priority: 2320
+    priority: 232000
     subtype_id: null
     conditions:
       all:
@@ -335,7 +369,7 @@ archetypes:
         zone: main
         min_count: 4
   - id: amulet-titan-spelunking
-    priority: 6670
+    priority: 667000
     subtype_id: null
     conditions:
       all:
@@ -348,109 +382,12 @@ archetypes:
       - card: Spelunking
         zone: main
         min_count: 3
-- id: blink
-  name: Blink
-  priority: 6320
-  subtypes:
-  - id: esper
-    name: Esper
-  - id: azorius
-    name: Azorius
-  - id: jeskai
-    name: Jeskai
-  - id: mardu
-    name: Mardu
-  - id: orzhov
-    name: Orzhov
-  rules:
-  - id: blink-esper
-    priority: 3310
-    subtype_id: esper
-    conditions:
-      all:
-      - card: Phelia, Exuberant Shepherd
-        zone: main
-        min_count: 3
-      - card: Overlord of the Balemurk
-        zone: main
-        min_count: 3
-      - card: Quantum Riddler
-        zone: main
-        min_count: 3
-  - id: blink-jeskai
-    priority: 2290
-    subtype_id: jeskai
-    conditions:
-      all:
-      - card: Phelia, Exuberant Shepherd
-        zone: main
-        min_count: 3
-      - card: Consign to Memory
-        zone: main
-        min_count: 3
-      - card: Thundering Falls
-        zone: main
-        min_count: 1
-  - id: blink-mardu
-    priority: 6320
-    subtype_id: mardu
-    conditions:
-      all:
-      - card: Phelia, Exuberant Shepherd
-        zone: main
-        min_count: 3
-      - card: Detective's Phoenix
-        zone: main
-        min_count: 2
-      - card: Solitude
-        zone: main
-        min_count: 3
-  - id: blink-orzhov
-    priority: 6310
-    subtype_id: orzhov
-    conditions:
-      all:
-      - card: Phelia, Exuberant Shepherd
-        zone: main
-        min_count: 3
-      - card: Overlord of the Balemurk
-        zone: main
-        min_count: 3
-      - card: Ephemerate
-        zone: main
-        min_count: 3
-      - card: Quantum Riddler
-        zone: main
-        exact_count: 0
-  - id: blink-azorius
-    priority: 6300
-    subtype_id: azorius
-    conditions:
-      all:
-      - card: Ephemerate
-        zone: main
-        min_count: 3
-      - card: Quantum Riddler
-        zone: main
-        min_count: 3
-      - card: Guide of Souls
-        zone: main
-        exact_count: 0
-      - card: Overlord of the Balemurk
-        zone: main
-        exact_count: 0
-      - card: Galvanic Discharge
-        zone: main
-        exact_count: 0
-      - card: Goryo's Vengeance
-        zone: main
-        exact_count: 0
 - id: boros-land-destruction
-  name: Boros Land Destruction
-  priority: 6610
+  name: Boros Ponza
+  priority: 661000
   rules:
   - id: boros-land-destruction-primary
-    priority: 6610
+    priority: 661000
     subtype_id: null
     conditions:
       all:
@@ -464,7 +401,7 @@ archetypes:
         zone: main
         min_count: 2
   - id: boros-land-destruction-legacy
-    priority: 3280
+    priority: 328000
     subtype_id: null
     conditions:
       all:
@@ -479,10 +416,10 @@ archetypes:
         min_count: 3
 - id: domain-zoo
   name: Domain Zoo
-  priority: 3270
+  priority: 327000
   rules:
   - id: domain-zoo-primary
-    priority: 3270
+    priority: 327000
     subtype_id: null
     conditions:
       all:
@@ -497,10 +434,10 @@ archetypes:
         min_count: 3
 - id: mono-blue-belcher
   name: Mono-Blue Belcher
-  priority: 2260
+  priority: 306300
   rules:
   - id: mono-blue-belcher-primary
-    priority: 2260
+    priority: 306300
     subtype_id: null
     conditions:
       all:
@@ -512,10 +449,10 @@ archetypes:
         min_count: 3
 - id: boros-belcher
   name: Boros Belcher
-  priority: 2255
+  priority: 306200
   rules:
   - id: boros-belcher-primary
-    priority: 2250
+    priority: 306100
     subtype_id: null
     conditions:
       all:
@@ -526,7 +463,7 @@ archetypes:
         zone: main
         min_count: 3
   - id: boros-belcher-ritual
-    priority: 2255
+    priority: 306200
     subtype_id: null
     conditions:
       all:
@@ -541,7 +478,7 @@ archetypes:
         min_count: 3
 - id: oculus-ritual
   name: Oculus Ritual
-  priority: 6600
+  priority: 660000
   subtypes:
   - id: sultai
     name: Sultai
@@ -551,7 +488,7 @@ archetypes:
     name: Temur
   rules:
   - id: oculus-ritual-sultai
-    priority: 6600
+    priority: 660000
     subtype_id: sultai
     conditions:
       all:
@@ -565,7 +502,7 @@ archetypes:
         zone: main
         min_count: 1
   - id: oculus-ritual-temur
-    priority: 6590
+    priority: 659000
     subtype_id: temur
     conditions:
       all:
@@ -582,7 +519,7 @@ archetypes:
         zone: main
         min_count: 3
   - id: oculus-ritual-simic
-    priority: 6580
+    priority: 658000
     subtype_id: simic
     conditions:
       all:
@@ -603,10 +540,10 @@ archetypes:
         min_count: 3
 - id: five-color-ritual
   name: Five-Color Ritual
-  priority: 3240
+  priority: 324000
   rules:
   - id: five-color-ritual-primary
-    priority: 3240
+    priority: 324000
     subtype_id: null
     conditions:
       all:
@@ -624,10 +561,10 @@ archetypes:
         min_count: 1
 - id: sam-combo
   name: Sam Combo
-  priority: 2230
+  priority: 223000
   rules:
   - id: sam-combo-primary
-    priority: 2230
+    priority: 223000
     subtype_id: null
     conditions:
       all:
@@ -637,49 +574,12 @@ archetypes:
       - card: Cauldron Familiar
         zone: main
         min_count: 3
-- id: goryos-reanimator
-  name: Goryo's Reanimator
-  priority: 3220
-  subtypes:
-  - id: esper
-    name: Esper
-  - id: grixis
-    name: Grixis
-  rules:
-  - id: goryos-reanimator-esper
-    priority: 3210
-    subtype_id: esper
-    conditions:
-      all:
-      - card: Atraxa, Grand Unifier
-        zone: main
-        min_count: 3
-      - card: Psychic Frog
-        zone: main
-        min_count: 3
-      - card: Goryo's Vengeance
-        zone: main
-        min_count: 3
-  - id: goryos-reanimator-grixis
-    priority: 3220
-    subtype_id: grixis
-    conditions:
-      all:
-      - card: Goryo's Vengeance
-        zone: main
-        min_count: 3
-      - card: Faithless Looting
-        zone: main
-        min_count: 3
-      - card: Blood Crypt
-        zone: main
-        min_count: 1
 - id: golgari-yawgmoth
   name: Golgari Yawgmoth
-  priority: 2210
+  priority: 221000
   rules:
   - id: golgari-yawgmoth-primary
-    priority: 2210
+    priority: 221000
     subtype_id: null
     conditions:
       all:
@@ -691,7 +591,7 @@ archetypes:
         min_count: 1
 - id: broodscale-combo
   name: Broodscale Combo
-  priority: 6520
+  priority: 653000
   subtypes:
   - id: gruul
     name: Gruul
@@ -699,9 +599,11 @@ archetypes:
     name: Mono-Green
   - id: golgari
     name: Golgari
+  - id: simic
+    name: Simic
   rules:
   - id: broodscale-combo-golgari
-    priority: 6520
+    priority: 652000
     subtype_id: golgari
     conditions:
       all:
@@ -715,7 +617,7 @@ archetypes:
         zone: main
         min_count: 2
   - id: broodscale-combo-gruul
-    priority: 6510
+    priority: 651000
     subtype_id: gruul
     conditions:
       all:
@@ -729,7 +631,7 @@ archetypes:
         zone: main
         min_count: 1
   - id: broodscale-combo-mono-green
-    priority: 6500
+    priority: 650000
     subtype_id: mono-green
     conditions:
       all:
@@ -745,9 +647,26 @@ archetypes:
       - card: Stomping Ground
         zone: main
         exact_count: 0
+  - id: broodscale-combo-simic
+    priority: 653000
+    subtype_id: simic
+    conditions:
+      all:
+      - card: Basking Broodscale
+        zone: main
+        min_count: 3
+      - card: Blade of the Bloodchief
+        zone: main
+        min_count: 2
+      - card: Breeding Pool
+        zone: main
+        min_count: 1
+      - card: Talisman of Curiosity
+        zone: main
+        min_count: 2
 - id: eldrazi-tron
   name: Eldrazi Tron
-  priority: 6490
+  priority: 649000
   subtypes:
   - id: colorless
     name: Colorless
@@ -757,7 +676,7 @@ archetypes:
     name: Mono-Black
   rules:
   - id: eldrazi-tron-mono-black
-    priority: 6490
+    priority: 649000
     subtype_id: mono-black
     conditions:
       all:
@@ -771,7 +690,7 @@ archetypes:
         zone: main
         min_count: 2
   - id: eldrazi-tron-mono-green
-    priority: 6480
+    priority: 648000
     subtype_id: mono-green
     conditions:
       all:
@@ -797,7 +716,7 @@ archetypes:
         zone: main
         min_count: 3
   - id: eldrazi-tron-colorless
-    priority: 6470
+    priority: 647000
     subtype_id: colorless
     conditions:
       all:
@@ -823,7 +742,7 @@ archetypes:
         zone: main
         exact_count: 0
   - id: eldrazi-tron-colorless-map
-    priority: 6469
+    priority: 646900
     subtype_id: colorless
     conditions:
       all:
@@ -847,10 +766,10 @@ archetypes:
         exact_count: 0
 - id: mono-black-eldrazi
   name: Mono-Black Eldrazi
-  priority: 3170
+  priority: 317000
   rules:
   - id: mono-black-eldrazi-primary
-    priority: 3170
+    priority: 317000
     subtype_id: null
     conditions:
       all:
@@ -865,7 +784,7 @@ archetypes:
         min_count: 3
 - id: eldrazi-ramp
   name: Eldrazi Ramp
-  priority: 6460
+  priority: 646000
   subtypes:
   - id: gruul
     name: Gruul
@@ -877,11 +796,9 @@ archetypes:
     name: Simic
   - id: golgari
     name: Golgari
-  - id: selesnya
-    name: Selesnya
   rules:
   - id: eldrazi-ramp-sultai
-    priority: 6460
+    priority: 646000
     subtype_id: sultai
     conditions:
       all:
@@ -904,7 +821,7 @@ archetypes:
         zone: main
         exact_count: 0
   - id: eldrazi-ramp-golgari
-    priority: 6450
+    priority: 645000
     subtype_id: golgari
     conditions:
       all:
@@ -924,7 +841,7 @@ archetypes:
         zone: main
         exact_count: 0
   - id: eldrazi-ramp-golgari-underground-mortuary
-    priority: 6445
+    priority: 644500
     subtype_id: golgari
     conditions:
       all:
@@ -944,7 +861,7 @@ archetypes:
         zone: main
         exact_count: 0
   - id: eldrazi-ramp-temur
-    priority: 6440
+    priority: 644000
     subtype_id: temur
     conditions:
       all:
@@ -960,34 +877,8 @@ archetypes:
       - card: Kozilek's Return
         zone: main
         min_count: 2
-  - id: eldrazi-ramp-selesnya
-    priority: 6435
-    subtype_id: selesnya
-    conditions:
-      all:
-      - card: Sowing Mycospawn
-        zone: main
-        min_count: 3
-      - card: Ugin's Labyrinth
-        zone: main
-        min_count: 3
-      - card: Eldrazi Temple
-        zone: main
-        min_count: 3
-      - card: Talisman of Unity
-        zone: main
-        min_count: 1
-      - card: Temple Garden
-        zone: main
-        min_count: 1
-      - card: Fight Rigging
-        zone: main
-        exact_count: 0
-      - card: Eldrazi Linebreaker
-        zone: main
-        exact_count: 0
   - id: eldrazi-ramp-simic
-    priority: 6430
+    priority: 643000
     subtype_id: simic
     conditions:
       all:
@@ -1007,7 +898,7 @@ archetypes:
         zone: main
         exact_count: 0
   - id: eldrazi-ramp-gruul
-    priority: 6420
+    priority: 642000
     subtype_id: gruul
     conditions:
       all:
@@ -1030,7 +921,7 @@ archetypes:
         zone: main
         exact_count: 0
   - id: eldrazi-ramp-fallback
-    priority: 3160
+    priority: 316000
     subtype_id: null
     conditions:
       all:
@@ -1051,10 +942,10 @@ archetypes:
         exact_count: 0
 - id: fight-rigging
   name: Fight Rigging
-  priority: 6410
+  priority: 641000
   rules:
   - id: fight-rigging-primary
-    priority: 6410
+    priority: 641000
     subtype_id: null
     conditions:
       all:
@@ -1069,10 +960,10 @@ archetypes:
         min_count: 3
 - id: eldrazi-aggro
   name: Eldrazi Aggro
-  priority: 6400
+  priority: 640000
   rules:
   - id: eldrazi-aggro-primary
-    priority: 6400
+    priority: 640000
     subtype_id: null
     conditions:
       all:
@@ -1084,10 +975,10 @@ archetypes:
         min_count: 3
 - id: ruby-storm
   name: Ruby Storm
-  priority: 2140
+  priority: 214000
   rules:
   - id: ruby-storm-primary
-    priority: 2140
+    priority: 214000
     subtype_id: null
     conditions:
       all:
@@ -1099,101 +990,109 @@ archetypes:
         min_count: 3
 - id: living-end
   name: Living End
-  priority: 1130
-  rules:
-  - id: living-end-primary
-    priority: 1130
-    subtype_id: null
-    conditions:
-      all:
-      - card: Living End
-        zone: main
-        min_count: 3
-- id: blue-black-tempo
-  name: Blue-Black Tempo
-  priority: 6380
+  priority: 113050
   subtypes:
-  - id: dimir
-    name: Dimir
-  - id: grixis
-    name: Grixis
-  - id: esper
-    name: Esper
+  - id: four-color
+    name: Four-Color
+  - id: temur
+    name: Temur
+  - id: sultai
+    name: Sultai
+  - id: bant
+    name: Bant
+  - id: rakdos
+    name: Rakdos
   rules:
-  - id: blue-black-tempo-grixis
-    priority: 6380
-    subtype_id: grixis
+  - id: living-end-four-color
+    priority: 113050
+    subtype_id: four-color
     conditions:
       all:
-      - card: Fatal Push
+      - &id005
+        card: Living End
         zone: main
         min_count: 3
-      - card: Counterspell
+      - card: Shardless Agent
         zone: main
         min_count: 3
-      - card: Watery Grave
+      - card: Violent Outburst
         zone: main
-        min_count: 1
-      - card: Steam Vents
+        min_count: 3
+      - card: Overlord of the Balemurk
         zone: main
-        min_count: 1
-  - id: blue-black-tempo-esper
-    priority: 6370
-    subtype_id: esper
+        min_count: 3
+  - id: living-end-temur
+    priority: 113040
+    subtype_id: temur
     conditions:
       all:
-      - card: Fatal Push
+      - *id005
+      - card: Shardless Agent
         zone: main
         min_count: 3
-      - card: Counterspell
+      - card: Violent Outburst
         zone: main
         min_count: 3
-      - card: Watery Grave
-        zone: main
-        min_count: 1
-      - card: Hallowed Fountain
-        zone: main
-        min_count: 1
-  - id: blue-black-tempo-dimir
-    priority: 2120
-    subtype_id: dimir
-    conditions:
-      all:
-      - card: Psychic Frog
-        zone: main
-        min_count: 3
-      - card: Fatal Push
-        zone: main
-        min_count: 3
-  - id: blue-black-tempo-dimir-control
-    priority: 2119
-    subtype_id: dimir
-    conditions:
-      all:
-      - card: Fatal Push
-        zone: main
-        min_count: 3
-      - card: Counterspell
-        zone: main
-        min_count: 3
-      - card: Orcish Bowmasters
-        zone: main
-        min_count: 2
-      - card: Watery Grave
-        zone: main
-        min_count: 1
-      - card: Steam Vents
+      - card: Overlord of the Balemurk
         zone: main
         exact_count: 0
-      - card: Hallowed Fountain
+  - id: living-end-sultai
+    priority: 113030
+    subtype_id: sultai
+    conditions:
+      all:
+      - *id005
+      - card: Shardless Agent
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+      - card: Violent Outburst
+        zone: main
+        exact_count: 0
+  - id: living-end-bant
+    priority: 113020
+    subtype_id: bant
+    conditions:
+      all:
+      - *id005
+      - card: Shardless Agent
+        zone: main
+        min_count: 3
+      - card: Ardent Plea
+        zone: main
+        min_count: 3
+      - card: Violent Outburst
+        zone: main
+        exact_count: 0
+      - card: Overlord of the Balemurk
+        zone: main
+        exact_count: 0
+  - id: living-end-rakdos
+    priority: 113010
+    subtype_id: rakdos
+    conditions:
+      all:
+      - *id005
+      - card: Electrodominance
+        zone: main
+        min_count: 3
+      - card: Shardless Agent
+        zone: main
+        exact_count: 0
+      - card: Violent Outburst
+        zone: main
+        exact_count: 0
+      - card: Overlord of the Balemurk
         zone: main
         exact_count: 0
 - id: dimir-mill
   name: Dimir Mill
-  priority: 2110
+  priority: 211000
   rules:
   - id: dimir-mill-primary
-    priority: 2110
+    priority: 211000
     subtype_id: null
     conditions:
       all:
@@ -1205,72 +1104,22 @@ archetypes:
         min_count: 3
 - id: simic-neoform
   name: Simic Neoform
-  priority: 1100
+  priority: 110000
   rules:
   - id: simic-neoform-primary
-    priority: 1100
+    priority: 110000
     subtype_id: null
     conditions:
       all:
       - card: Neoform
         zone: main
         min_count: 3
-- id: persist-reanimator
-  name: Persist Reanimator
-  priority: 6330
-  subtypes:
-  - id: grixis
-    name: Grixis
-  - id: golgari
-    name: Golgari
-  - id: esper
-    name: Esper
-  rules:
-  - id: persist-reanimator-grixis
-    priority: 3080
-    subtype_id: grixis
-    conditions:
-      all:
-      - card: Persist
-        zone: main
-        min_count: 3
-      - card: Archon of Cruelty
-        zone: main
-        min_count: 3
-      - card: Faithless Looting
-        zone: main
-        min_count: 3
-  - id: persist-reanimator-golgari
-    priority: 2090
-    subtype_id: golgari
-    conditions:
-      all:
-      - card: Eyetwitch
-        zone: main
-        min_count: 3
-      - card: Persist
-        zone: main
-        min_count: 3
-  - id: persist-reanimator-esper
-    priority: 6330
-    subtype_id: esper
-    conditions:
-      all:
-      - card: Persist
-        zone: main
-        min_count: 3
-      - card: Archon of Cruelty
-        zone: main
-        min_count: 3
-      - card: Faithful Mending
-        zone: main
-        min_count: 2
 - id: dredge
   name: Dredge
-  priority: 2070
+  priority: 207000
   rules:
   - id: dredge-primary
-    priority: 2070
+    priority: 207000
     subtype_id: null
     conditions:
       all:
@@ -1288,10 +1137,10 @@ archetypes:
         min_count: 3
 - id: izzet-phoenix
   name: Izzet Phoenix
-  priority: 2075
+  priority: 207500
   rules:
   - id: izzet-phoenix-primary
-    priority: 2075
+    priority: 207500
     subtype_id: null
     conditions:
       all:
@@ -1309,7 +1158,7 @@ archetypes:
         exact_count: 0
 - id: burn
   name: Burn
-  priority: 2063
+  priority: 206300
   subtypes:
   - id: boros
     name: Boros
@@ -1319,7 +1168,7 @@ archetypes:
     name: Mono-Red
   rules:
   - id: burn-boros
-    priority: 2063
+    priority: 206300
     subtype_id: boros
     conditions:
       all:
@@ -1333,7 +1182,7 @@ archetypes:
         zone: main
         min_count: 1
   - id: burn-rakdos
-    priority: 2062
+    priority: 206200
     subtype_id: rakdos
     conditions:
       all:
@@ -1347,7 +1196,7 @@ archetypes:
         zone: main
         min_count: 1
   - id: burn-mono-red
-    priority: 2061
+    priority: 206100
     subtype_id: mono-red
     conditions:
       all:
@@ -1365,50 +1214,41 @@ archetypes:
         exact_count: 0
 - id: chant-control
   name: Chant Control
-  priority: 3060
+  priority: 306000
   subtypes:
+  - id: azorius
+    name: Azorius
   - id: jeskai
     name: Jeskai
-  - id: four-color
-    name: Four-Color
   rules:
-  - id: chant-control-four-color
-    priority: 3060
-    subtype_id: four-color
-    conditions:
-      all:
-      - card: Orim's Chant
-        zone: main
-        min_count: 2
-      - card: Wrath of the Skies
-        zone: main
-        min_count: 2
-      - card: Galvanic Discharge
-        zone: main
-        min_count: 2
-      - card: Breeding Pool
-        zone: main
-        min_count: 1
   - id: chant-control-jeskai
-    priority: 3050
+    priority: 306000
     subtype_id: jeskai
     conditions:
       all:
       - card: Orim's Chant
         zone: main
-        min_count: 2
-      - card: Wrath of the Skies
+        min_count: 3
+      - card: __classifier-semantic-any-red-spell__
+        zone: any
+        min_count: 1
+  - id: chant-control-azorius
+    priority: 305900
+    subtype_id: azorius
+    conditions:
+      all:
+      - card: Orim's Chant
         zone: main
-        min_count: 2
-      - card: Galvanic Discharge
-        zone: main
-        min_count: 2
+        min_count: 3
+      - card: __classifier-semantic-any-red-spell__
+        zone: any
+        exact_count: 0
 - id: jeskai-control
   name: Jeskai Control
-  priority: 3045
+  priority: 304500
   rules:
   - id: jeskai-control-primary
-    priority: 3045
+    priority: 304500
     subtype_id: null
     conditions:
       all:
@@ -1427,29 +1267,15 @@ archetypes:
       - card: Orim's Chant
         zone: main
         exact_count: 0
-- id: azorius-control
-  name: Azorius Control
-  priority: 4040
-  rules:
-  - id: azorius-control-primary
-    priority: 4040
-    subtype_id: null
-    conditions:
-      all:
-      - card: Teferi, Time Raveler
-        zone: main
-        min_count: 2
       - card: Isochron Scepter
         zone: main
-        min_count: 1
-      - card: Orim's Chant
-        zone: main
-        min_count: 1
-      - card: Galvanic Discharge
-        zone: main
         exact_count: 0
-  - id: azorius-control-broad
-    priority: 3040
+- id: azorius-control
+  name: Azorius Control
+  priority: 304000
+  rules:
+  - id: azorius-control-primary
+    priority: 304000
     subtype_id: null
     conditions:
       all:
@@ -1465,12 +1291,18 @@ archetypes:
       - card: Counterspell
         zone: main
         min_count: 2
+      - card: Orim's Chant
+        zone: main
+        exact_count: 0
+      - card: Isochron Scepter
+        zone: main
+        exact_count: 0
       - card: Galvanic Discharge
         zone: main
         exact_count: 0
 - id: necrodominance
   name: Necrodominance
-  priority: 6360
+  priority: 636000
   subtypes:
   - id: mono-black
     name: Mono-Black
@@ -1482,7 +1314,7 @@ archetypes:
     name: Rakdos
   rules:
   - id: necrodominance-golgari
-    priority: 6360
+    priority: 636000
     subtype_id: golgari
     conditions:
       all:
@@ -1496,7 +1328,7 @@ archetypes:
         zone: main
         min_count: 1
   - id: necrodominance-dimir
-    priority: 6350
+    priority: 635000
     subtype_id: dimir
     conditions:
       all:
@@ -1507,7 +1339,7 @@ archetypes:
         zone: main
         min_count: 1
   - id: necrodominance-rakdos
-    priority: 6340
+    priority: 634000
     subtype_id: rakdos
     conditions:
       all:
@@ -1518,7 +1350,7 @@ archetypes:
         zone: main
         min_count: 1
   - id: necrodominance-mono-black
-    priority: 2030
+    priority: 203000
     subtype_id: mono-black
     conditions:
       all:
@@ -1539,10 +1371,10 @@ archetypes:
         exact_count: 0
 - id: fling-goyf
   name: Fling Goyf
-  priority: 6290
+  priority: 629000
   rules:
   - id: fling-goyf-primary
-    priority: 6290
+    priority: 629000
     subtype_id: null
     conditions:
       all:
@@ -1555,49 +1387,12 @@ archetypes:
       - card: Plunge into Darkness
         zone: main
         min_count: 3
-- id: hollow-one
-  name: Hollow One
-  priority: 6280
-  subtypes:
-  - id: rakdos
-    name: Rakdos
-  - id: vengevine
-    name: Vengevine
-  rules:
-  - id: hollow-one-vengevine
-    priority: 6280
-    subtype_id: vengevine
-    conditions:
-      all:
-      - card: Hollow One
-        zone: main
-        min_count: 3
-      - card: Vengevine
-        zone: main
-        min_count: 3
-      - card: Blazing Rootwalla
-        zone: main
-        min_count: 3
-  - id: hollow-one-rakdos
-    priority: 6279
-    subtype_id: rakdos
-    conditions:
-      all:
-      - card: Hollow One
-        zone: main
-        min_count: 3
-      - card: Burning Inquiry
-        zone: main
-        min_count: 3
-      - card: Detective's Phoenix
-        zone: main
-        min_count: 3
 - id: five-color-creativity
   name: Five-Color Creativity
-  priority: 6270
+  priority: 627000
   rules:
   - id: five-color-creativity-primary
-    priority: 6270
+    priority: 627000
     subtype_id: null
     conditions:
       all:
@@ -1612,7 +1407,7 @@ archetypes:
         min_count: 1
 - id: hammer-time
   name: Hammer Time
-  priority: 6260
+  priority: 626000
   subtypes:
   - id: azorius
     name: Azorius
@@ -1620,7 +1415,7 @@ archetypes:
     name: Mono-White
   rules:
   - id: hammer-time-azorius
-    priority: 6260
+    priority: 626000
     subtype_id: azorius
     conditions:
       all:
@@ -1634,7 +1429,7 @@ archetypes:
         zone: main
         min_count: 2
   - id: hammer-time-mono-white
-    priority: 6259
+    priority: 625900
     subtype_id: mono-white
     conditions:
       all:
@@ -1652,10 +1447,10 @@ archetypes:
         exact_count: 0
 - id: devoted-druid-combo
   name: Devoted Druid Combo
-  priority: 6250
+  priority: 625000
   rules:
   - id: devoted-druid-combo-primary
-    priority: 6250
+    priority: 625000
     subtype_id: null
     conditions:
       all:
@@ -1670,7 +1465,7 @@ archetypes:
         min_count: 3
 - id: rhinos
   name: Rhinos
-  priority: 6240
+  priority: 624000
   subtypes:
   - id: temur
     name: Temur
@@ -1680,7 +1475,7 @@ archetypes:
     name: Domain
   rules:
   - id: rhinos-domain
-    priority: 6240
+    priority: 624000
     subtype_id: domain
     conditions:
       all:
@@ -1694,7 +1489,7 @@ archetypes:
         zone: main
         min_count: 1
   - id: rhinos-four-color
-    priority: 6239
+    priority: 623900
     subtype_id: four-color
     conditions:
       all:
@@ -1708,7 +1503,7 @@ archetypes:
         zone: main
         min_count: 1
   - id: rhinos-temur
-    priority: 6238
+    priority: 623800
     subtype_id: temur
     conditions:
       all:
@@ -1726,10 +1521,10 @@ archetypes:
         exact_count: 0
 - id: lantern-control
   name: Lantern Control
-  priority: 6230
+  priority: 623000
   rules:
   - id: lantern-control-primary
-    priority: 6230
+    priority: 623000
     subtype_id: null
     conditions:
       all:
@@ -1744,10 +1539,10 @@ archetypes:
         min_count: 3
 - id: izzet-wizards
   name: Izzet Wizards
-  priority: 6220
+  priority: 622000
   rules:
   - id: izzet-wizards-primary
-    priority: 6220
+    priority: 622000
     subtype_id: null
     conditions:
       all:
@@ -1760,31 +1555,20 @@ archetypes:
       - card: Lightning Bolt
         zone: main
         min_count: 2
-- id: blue-eldrazi
-  name: Blue Eldrazi
-  priority: 6210
-  rules:
-  - id: blue-eldrazi-primary
-    priority: 6210
-    subtype_id: null
-    conditions:
-      all:
-      - card: Portent of Calamity
-        zone: main
-        min_count: 3
-      - card: Ugin's Labyrinth
-        zone: main
-        min_count: 2
-      - card: Kozilek's Command
-        zone: main
-        min_count: 2
 - id: deaths-shadow
   name: Death's Shadow
-  priority: 6200
+  priority: 620030
+  subtypes:
+  - id: grixis
+    name: Grixis
+  - id: dimir
+    name: Dimir
+  - id: rakdos
+    name: Rakdos
   rules:
-  - id: deaths-shadow-primary
-    priority: 6200
-    subtype_id: null
+  - id: deaths-shadow-grixis
+    priority: 620030
+    subtype_id: grixis
     conditions:
       all:
       - card: Death's Shadow
@@ -1796,9 +1580,70 @@ archetypes:
       - card: Stubborn Denial
         zone: main
         min_count: 2
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+  - id: deaths-shadow-dimir
+    priority: 620020
+    subtype_id: dimir
+    conditions:
+      all:
+      - card: Death's Shadow
+        zone: main
+        min_count: 3
+      - card: Thoughtseize
+        zone: main
+        min_count: 3
+      - card: Stubborn Denial
+        zone: main
+        min_count: 2
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        exact_count: 0
+      - card: Steam Vents
+        zone: main
+        exact_count: 0
+  - id: deaths-shadow-rakdos
+    priority: 620010
+    subtype_id: rakdos
+    conditions:
+      all:
+      - card: Death's Shadow
+        zone: main
+        min_count: 3
+      - card: Thoughtseize
+        zone: main
+        min_count: 3
+      - card: Nethergoyf
+        zone: main
+        min_count: 3
+      - card: Moonshadow
+        zone: main
+        min_count: 3
+      - card: Street Wraith
+        zone: main
+        min_count: 3
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+      - card: Stubborn Denial
+        zone: main
+        exact_count: 0
+      - card: Watery Grave
+        zone: main
+        exact_count: 0
+      - card: Steam Vents
+        zone: main
+        exact_count: 0
 - id: soultrader
   name: Soultrader
-  priority: 6190
+  priority: 619000
   subtypes:
   - id: golgari
     name: Golgari
@@ -1808,7 +1653,7 @@ archetypes:
     name: Dimir
   rules:
   - id: soultrader-sultai
-    priority: 6190
+    priority: 619000
     subtype_id: sultai
     conditions:
       all:
@@ -1822,7 +1667,7 @@ archetypes:
         zone: main
         min_count: 3
   - id: soultrader-dimir
-    priority: 6189
+    priority: 618900
     subtype_id: dimir
     conditions:
       all:
@@ -1836,7 +1681,7 @@ archetypes:
         zone: main
         min_count: 3
   - id: soultrader-golgari
-    priority: 6188
+    priority: 618800
     subtype_id: golgari
     conditions:
       all:
@@ -1851,10 +1696,10 @@ archetypes:
         min_count: 1
 - id: song-of-creation
   name: Song of Creation
-  priority: 6180
+  priority: 618000
   rules:
   - id: song-of-creation-primary
-    priority: 6180
+    priority: 618000
     subtype_id: null
     conditions:
       all:
@@ -1869,10 +1714,10 @@ archetypes:
         min_count: 3
 - id: pensive-combo
   name: Pensive Combo
-  priority: 6170
+  priority: 617000
   rules:
   - id: pensive-combo-primary
-    priority: 6170
+    priority: 617000
     subtype_id: null
     conditions:
       all:
@@ -1890,10 +1735,10 @@ archetypes:
         min_count: 3
 - id: esper-control
   name: Esper Control
-  priority: 6390
+  priority: 639000
   rules:
   - id: esper-control-primary
-    priority: 6390
+    priority: 639000
     subtype_id: null
     conditions:
       all:
@@ -1917,10 +1762,10 @@ archetypes:
         min_count: 3
 - id: mono-blue-merfolk
   name: Mono-Blue Merfolk
-  priority: 1020
+  priority: 102000
   rules:
   - id: mono-blue-merfolk-primary
-    priority: 1020
+    priority: 102000
     subtype_id: null
     conditions:
       all:
@@ -1929,10 +1774,10 @@ archetypes:
         min_count: 3
 - id: jund-sagavan
   name: Jund Sagavan
-  priority: 3010
+  priority: 301000
   rules:
   - id: jund-sagavan-primary
-    priority: 3010
+    priority: 301000
     subtype_id: null
     conditions:
       all:
@@ -1945,3 +1790,671 @@ archetypes:
       - card: Urza's Saga
         zone: main
         min_count: 3
+- id: grixis-persist
+  name: Grixis Persist
+  priority: 639900
+  rules:
+  - id: grixis-persist-primary
+    priority: 639900
+    subtype_id: null
+    conditions:
+      all:
+      - card: Persist
+        zone: main
+        min_count: 3
+      - card: Archon of Cruelty
+        zone: main
+        min_count: 3
+      - card: Faithless Looting
+        zone: main
+        min_count: 3
+      - card: Abhorrent Oculus
+        zone: main
+        min_count: 3
+- id: agadeem-persist
+  name: Agadeem Persist
+  priority: 639800
+  rules:
+  - id: agadeem-persist-primary
+    priority: 639800
+    subtype_id: null
+    conditions:
+      all:
+      - card: Persist
+        zone: main
+        min_count: 3
+      - card: Crypt of Agadeem
+        zone: main
+        min_count: 3
+- id: esper-persist
+  name: Esper Persist
+  priority: 639700
+  rules:
+  - id: esper-persist-primary
+    priority: 639700
+    subtype_id: null
+    conditions:
+      all:
+      - card: Persist
+        zone: main
+        min_count: 3
+      - card: Archon of Cruelty
+        zone: main
+        min_count: 3
+      - card: Faithful Mending
+        zone: main
+        min_count: 2
+- id: cremator-goryos
+  name: Cremator Goryo's
+  priority: 641300
+  rules:
+  - id: cremator-goryos-primary
+    priority: 641300
+    subtype_id: null
+    conditions:
+      all:
+      - card: Goryo's Vengeance
+        zone: main
+        min_count: 3
+      - card: Cragganwick Cremator
+        zone: main
+        min_count: 3
+      - card: Emrakul, the Aeons Torn
+        zone: main
+        min_count: 3
+- id: esper-goryos
+  name: Esper Goryo's
+  priority: 641200
+  rules:
+  - id: esper-goryos-primary
+    priority: 641200
+    subtype_id: null
+    conditions:
+      all:
+      - card: Goryo's Vengeance
+        zone: main
+        min_count: 3
+      - card: Atraxa, Grand Unifier
+        zone: main
+        min_count: 3
+      - card: Psychic Frog
+        zone: main
+        min_count: 3
+      - card: Ephemerate
+        zone: main
+        min_count: 3
+- id: grixis-goryos
+  name: Grixis Goryo's
+  priority: 641100
+  rules:
+  - id: grixis-goryos-primary
+    priority: 641100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Goryo's Vengeance
+        zone: main
+        min_count: 3
+      - card: Faithless Looting
+        zone: main
+        min_count: 3
+      - card: Psychic Frog
+        zone: main
+        min_count: 3
+      - card: Ephemerate
+        zone: main
+        exact_count: 0
+- id: dimir-tempo
+  name: Dimir Tempo
+  priority: 638000
+  subtypes:
+  - id: dimir
+    name: Dimir
+  - id: grixis
+    name: Grixis
+  - id: esper
+    name: Esper
+  rules:
+  - id: dimir-tempo-grixis
+    priority: 638000
+    subtype_id: grixis
+    conditions:
+      all:
+      - card: Fatal Push
+        zone: main
+        min_count: 3
+      - card: Counterspell
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        min_count: 1
+  - id: dimir-tempo-esper
+    priority: 637000
+    subtype_id: esper
+    conditions:
+      all:
+      - card: Fatal Push
+        zone: main
+        min_count: 3
+      - card: Counterspell
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+  - id: dimir-tempo-dimir-frog
+    priority: 212010
+    subtype_id: dimir
+    conditions:
+      all:
+      - card: Fatal Push
+        zone: main
+        min_count: 3
+      - card: Psychic Frog
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Goryo's Vengeance
+        zone: main
+        exact_count: 0
+      - card: Persist
+        zone: main
+        exact_count: 0
+      - &id006
+        card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - &id007
+        card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - &id008
+        card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+  - id: dimir-tempo-dimir-bowmasters
+    priority: 212000
+    subtype_id: dimir
+    conditions:
+      all:
+      - card: Psychic Frog
+        zone: main
+        max_count: 2
+      - card: Fatal Push
+        zone: main
+        min_count: 3
+      - card: Orcish Bowmasters
+        zone: main
+        min_count: 2
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Goryo's Vengeance
+        zone: main
+        exact_count: 0
+      - card: Persist
+        zone: main
+        exact_count: 0
+      - *id006
+      - *id007
+      - *id008
+- id: esper-ketramose
+  name: Esper Ketramose
+  priority: 632900
+  rules:
+  - id: esper-ketramose-primary
+    priority: 632900
+    subtype_id: null
+    conditions:
+      all:
+      - card: Relic of Progenitus
+        zone: main
+        min_count: 3
+      - card: Ketramose, the New Dawn
+        zone: main
+        min_count: 3
+      - card: Psychic Frog
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - &id009
+        card: Goryo's Vengeance
+        zone: main
+        exact_count: 0
+- id: esper-blink
+  name: Esper Blink
+  priority: 632800
+  rules:
+  - id: esper-blink-overlord
+    priority: 632800
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+      - card: Quantum Riddler
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - *id009
+  - id: esper-blink-psychic-frog
+    priority: 632700
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Quantum Riddler
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: Psychic Frog
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        max_count: 2
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - *id009
+- id: azorius-blink
+  name: Azorius Blink
+  priority: 632200
+  rules:
+  - id: azorius-blink-primary
+    priority: 632200
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Quantum Riddler
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: Ephemerate
+        zone: main
+        min_count: 2
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - *id009
+- id: jeskai-stoneforge
+  name: Jeskai Stoneforge
+  priority: 632600
+  rules:
+  - id: jeskai-stoneforge-primary
+    priority: 632600
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Quantum Riddler
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: Stoneforge Mystic
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-equipment__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - *id009
+- id: jeskai-blink
+  name: Jeskai Blink
+  priority: 632500
+  rules:
+  - id: jeskai-blink-primary
+    priority: 632500
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Quantum Riddler
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: Stoneforge Mystic
+        zone: main
+        max_count: 2
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - *id009
+- id: mardu-blink
+  name: Mardu Blink
+  priority: 632400
+  rules:
+  - id: mardu-blink-primary
+    priority: 632400
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+      - card: Detective's Phoenix
+        zone: main
+        min_count: 2
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - *id009
+- id: orzhov-blink
+  name: Orzhov Blink
+  priority: 632300
+  rules:
+  - id: orzhov-blink-primary
+    priority: 632300
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+      - card: Ephemerate
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - *id009
+- id: eldrazi-ramp-chant
+  name: Eldrazi Ramp Chant
+  priority: 646850
+  rules:
+  - id: eldrazi-ramp-chant-primary
+    priority: 646850
+    subtype_id: null
+    conditions:
+      all:
+      - card: Sowing Mycospawn
+        zone: main
+        min_count: 3
+      - card: Ugin's Labyrinth
+        zone: main
+        min_count: 3
+      - card: Eldrazi Temple
+        zone: main
+        min_count: 3
+      - card: Orim's Chant
+        zone: main
+        min_count: 3
+- id: omnath-midrange
+  name: Omnath Midrange
+  priority: 307000
+  rules:
+  - id: omnath-midrange-primary
+    priority: 307000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Omnath, Locus of Creation
+        zone: main
+        min_count: 2
+      - card: Wrenn and Six
+        zone: main
+        min_count: 2
+      - card: Teferi, Time Raveler
+        zone: main
+        min_count: 2
+- id: hollowvine
+  name: Hollowvine
+  priority: 628000
+  rules:
+  - id: hollowvine-primary
+    priority: 628000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Hollow One
+        zone: main
+        min_count: 3
+      - card: Vengevine
+        zone: main
+        min_count: 3
+      - card: Blazing Rootwalla
+        zone: main
+        min_count: 3
+- id: rakdos-hollow-one
+  name: Rakdos Hollow One
+  priority: 627930
+  subtypes:
+  - id: rakdos
+    name: Rakdos
+  - id: mardu
+    name: Mardu
+  rules:
+  - id: rakdos-hollow-one-mardu-practiced-offense
+    priority: 627930
+    subtype_id: mardu
+    conditions:
+      all:
+      - &id010
+        card: Hollow One
+        zone: main
+        min_count: 3
+      - &id011
+        card: Burning Inquiry
+        zone: main
+        min_count: 3
+      - &id012
+        card: Detective's Phoenix
+        zone: main
+        min_count: 3
+      - &id013
+        card: Vengevine
+        zone: main
+        exact_count: 0
+      - card: Practiced Offense
+        zone: main
+        min_count: 1
+  - id: rakdos-hollow-one-mardu-hardened-academic
+    priority: 627920
+    subtype_id: mardu
+    conditions:
+      all:
+      - *id010
+      - *id011
+      - *id012
+      - *id013
+      - card: Hardened Academic
+        zone: main
+        min_count: 1
+  - id: rakdos-hollow-one-mardu-wear-tear
+    priority: 627910
+    subtype_id: mardu
+    conditions:
+      all:
+      - *id010
+      - *id011
+      - *id012
+      - *id013
+      - card: Wear/Tear
+        zone: any
+        min_count: 1
+  - id: rakdos-hollow-one-rakdos
+    priority: 627900
+    subtype_id: rakdos
+    conditions:
+      all:
+      - *id010
+      - *id011
+      - *id012
+      - *id013
+      - card: Practiced Offense
+        zone: main
+        exact_count: 0
+      - card: Hardened Academic
+        zone: main
+        exact_count: 0
+      - card: Wear/Tear
+        zone: any
+        exact_count: 0
+- id: rakdos-steel-cutter
+  name: Rakdos Steel-Cutter
+  priority: 674500
+  rules:
+  - id: rakdos-steel-cutter-primary
+    priority: 674500
+    subtype_id: null
+    conditions:
+      all:
+      - card: Cori-Steel Cutter
+        zone: main
+        min_count: 3
+      - card: Dragon's Rage Channeler
+        zone: main
+        min_count: 3
+      - card: Lava Dart
+        zone: main
+        min_count: 3
+      - card: Nethergoyf
+        zone: main
+        min_count: 3
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+- id: mono-red-artifact
+  name: Mono-Red Artifact
+  priority: 674000
+  rules:
+  - id: mono-red-artifact-primary
+    priority: 674000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Mox Opal
+        zone: main
+        min_count: 3
+      - card: Urza's Saga
+        zone: main
+        min_count: 3
+      - card: Cori-Steel Cutter
+        zone: main
+        min_count: 3
+      - card: Weapons Manufacturing
+        zone: main
+        min_count: 3
+- id: mono-blue-tron
+  name: Mono-Blue Tron
+  priority: 621000
+  rules:
+  - id: mono-blue-tron-primary
+    priority: 621000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Urza's Mine
+        zone: main
+        min_count: 4
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 4
+      - card: Urza's Tower
+        zone: main
+        min_count: 4
+      - card: Expedition Map
+        zone: main
+        min_count: 3
+      - card: Island
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0

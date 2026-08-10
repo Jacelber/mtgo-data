@@ -27,8 +27,8 @@ def monument_player():
 
 def test_loaded_rules_and_full_result_use_package_apis():
     rule_set = load_rule_set(STANDARD_RULES)
-    assert len(rule_set.archetypes) == 74
-    assert sum(len(archetype.rules) for archetype in rule_set.archetypes) == 76
+    assert len(rule_set.archetypes) == 72
+    assert sum(len(archetype.rules) for archetype in rule_set.archetypes) == 82
 
     result = classify_deck(rule_set, monument_player())
     assert result.status == "classified"
@@ -63,17 +63,17 @@ def test_selected_subtype_is_available_without_changing_parent_string():
     result = classify_counts(
         load_rule_set(STANDARD_RULES),
         {
-            "Scalding Viper": 3,
-            "Razorkin Needlehead": 3,
-            "Spirebluff Canal": 1,
+            "Kona, Rescue Beastie": 4,
+            "Omniscience": 4,
+            "Uthros, Titanic Godcore": 3,
         },
         {},
     )
     assert (result.archetype_id, result.subtype_id) == (
-        "izzet-aggro",
-        "razorkin-needlehead",
+        "kona-omniscience",
+        "simic",
     )
-    assert result.archetype_name == "Izzet Aggro"
+    assert result.archetype_name == "Kona Omniscience"
 
 
 def test_conflict_and_invalid_input_are_explicit_package_results():

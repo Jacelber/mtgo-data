@@ -197,3 +197,13 @@ R3, owner review should explicitly decide whether to accept:
    rules that have synthetic coverage only; and
 2. the narrow fail-closed semantic manifest or a separately scoped,
    authoritative metadata expansion.
+
+## R3 reproducibility handoff
+
+On 2026-08-11 the Owner separately authorized R3 local production migration and
+accepted the narrow fail-closed manifest option. R3 freezes the exact R2 source
+rules and Pickup states under `docs/audits/classifier-r2/baseline_rules/` and
+`docs/audits/classifier-r2/baseline_pickup/`. The R2 builders and tests read
+those frozen paths, so this historical audit remains reproducible after the
+production files change. This handoff does not retroactively change R2's shadow
+results or authorize R3 commit or publication.

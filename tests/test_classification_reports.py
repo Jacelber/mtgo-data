@@ -79,10 +79,14 @@ def test_production_report_baseline_and_subtype_contract():
     assert summary["strict_validation"] == "pass"
     subtype = reports["subtype_diagnostics"]["summary"]
     assert set(subtype["selected_by_subtype"]) == {
-        "4-color-control/inevitable-defeat",
-        "4-color-control/rakshasas-bargain",
-        "izzet-aggro/hired-claw",
-        "izzet-aggro/razorkin-needlehead",
+        "boros-manufacturing/boros",
+        "boros-manufacturing/jeskai",
+        "boros-manufacturing/mardu",
+        "kona-omniscience/simic",
+        "kona-omniscience/temur",
+        "leyline-aggro/boros",
+        "leyline-aggro/izzet",
+        "leyline-aggro/rakdos",
     }
     assert summary["selected_subtypes"] == sum(subtype["selected_by_subtype"].values())
     assert reports["classification_conflicts"]["records"] == []

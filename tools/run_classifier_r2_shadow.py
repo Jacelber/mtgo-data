@@ -52,12 +52,12 @@ def build_audit() -> dict[str, Any]:
 
     formats = {
         "modern": {
-            "baseline": ROOT / "my_archetypes" / "modern.yaml",
+            "baseline": AUDIT_ROOT / "baseline_rules" / "modern.yaml",
             "shadow": AUDIT_ROOT / "shadow_rules" / "modern.yaml",
             "corpus": ROOT / "tests" / "fixtures" / "modern" / "frozen_j6e_corpus.json",
         },
         "standard": {
-            "baseline": ROOT / "my_archetypes" / "standard.yaml",
+            "baseline": AUDIT_ROOT / "baseline_rules" / "standard.yaml",
             "shadow": AUDIT_ROOT / "shadow_rules" / "standard.yaml",
             "corpus": ROOT
             / "tests"
@@ -93,7 +93,14 @@ def build_audit() -> dict[str, Any]:
         modern_shadow,
         manifest,
     )
-    pickup = pickup_dry_run(ROOT, transition_path)
+    pickup = pickup_dry_run(
+        ROOT,
+        transition_path,
+        source_overrides={
+            "modern": AUDIT_ROOT / "baseline_pickup" / "modern_known_archetypes.json",
+            "standard": AUDIT_ROOT / "baseline_pickup" / "standard_known_archetypes.json",
+        },
+    )
 
     inputs = {
         "feature_manifest": sha256_path(manifest_path),

@@ -80,7 +80,14 @@ def parent(
 
 
 def _load(format_id: str) -> dict[str, Any]:
-    path = ROOT / "my_archetypes" / f"{format_id}.yaml"
+    path = (
+        ROOT
+        / "docs"
+        / "audits"
+        / "classifier-r2"
+        / "baseline_rules"
+        / f"{format_id}.yaml"
+    )
     value = yaml.safe_load(path.read_text(encoding="utf-8"))
     assert isinstance(value, dict)
     for archetype in value["archetypes"]:

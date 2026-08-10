@@ -169,3 +169,11 @@ normalization.
 R1 stops after local validation and Owner review. It does not authorize a
 commit, push, pull request, merge, production dispatch, production classifier
 edit, Pickup migration, generated-artifact refresh, R2, or P12-10.
+
+## Later-stage reproducibility handoff
+
+The Owner later accepted and locally committed R1, accepted and locally
+committed R2, and authorized R3 local implementation on 2026-08-11. R3 records
+frozen pre-migration rule and Pickup paths in the R1 identity dictionary and
+transition map. R1's evidence therefore remains anchored to its reviewed input
+bytes; this note does not change the historical R1 authorization boundary.

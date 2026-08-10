@@ -11,7 +11,14 @@ from mtgmeta.deck import count_card, deck_to_counts
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
-RULES = ROOT / "my_archetypes" / "standard.yaml"
+RULES = (
+    ROOT
+    / "docs"
+    / "audits"
+    / "classifier-r2"
+    / "baseline_rules"
+    / "standard.yaml"
+)
 
 
 def rules():

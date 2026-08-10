@@ -31,11 +31,11 @@ MODERN = load_rule_set(AUDIT_ROOT / "shadow_rules" / "modern.yaml")
 STANDARD = load_rule_set(AUDIT_ROOT / "shadow_rules" / "standard.yaml")
 
 PROTECTED_HASHES = {
-    "my_archetypes/modern.yaml": "3DF393EF3CBEBD655D6BE68BFAC8012E488673D52CBF663706906297378FE411",
-    "my_archetypes/standard.yaml": "DCEE23F09920290E16532C01A8AF5B7CA7106C73F5ED3F9626DE03200C6C063C",
+    "docs/audits/classifier-r2/baseline_rules/modern.yaml": "3DF393EF3CBEBD655D6BE68BFAC8012E488673D52CBF663706906297378FE411",
+    "docs/audits/classifier-r2/baseline_rules/standard.yaml": "DCEE23F09920290E16532C01A8AF5B7CA7106C73F5ED3F9626DE03200C6C063C",
     "data/modern/melee/events/434455.json": "0B4296A9573A4FACF4CFDE1CE98569156F78FDE6F5D2A1D3D662B54E2889E710",
-    "stats/modern/mtgo/pickup/known_archetypes.json": "6C3868B160E61F61F5FBF509EB6E56AA4E8EFB61AB26D4EA5E0D467A10D2F178",
-    "stats/standard/mtgo/pickup/known_archetypes.json": "311E102E971D6E5B12DBBBF8E50D8DF1D34D44EC4AA6E15684C1F6C340156032",
+    "docs/audits/classifier-r2/baseline_pickup/modern_known_archetypes.json": "6C3868B160E61F61F5FBF509EB6E56AA4E8EFB61AB26D4EA5E0D467A10D2F178",
+    "docs/audits/classifier-r2/baseline_pickup/standard_known_archetypes.json": "311E102E971D6E5B12DBBBF8E50D8DF1D34D44EC4AA6E15684C1F6C340156032",
 }
 
 FEATURE_REPRESENTATIVES = {
@@ -166,7 +166,7 @@ def test_generated_shadow_rules_are_reproducible_and_valid() -> None:
         assert inventory["priority_collisions"] == []
 
 
-def test_production_rules_pickup_state_and_event_are_byte_preserved() -> None:
+def test_r2_baseline_rules_pickup_state_and_event_are_byte_preserved() -> None:
     assert {
         path: _sha256(ROOT / path) for path in PROTECTED_HASHES
     } == PROTECTED_HASHES

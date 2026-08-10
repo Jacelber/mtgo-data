@@ -2908,6 +2908,22 @@ public entry points.
      accepted, known-archetype state is validated or migrated, the shadow is
      rerun, the three numeric thresholds are rechecked with the owner, and the
      manual representative-card map is then approved.
+
+   The Owner accepted the R1 stable-identity contract and R2 full-corpus shadow
+   audit, then authorized `CLASSIFIER-R3-PRODUCTION-MIGRATION` for local
+   implementation only on 2026-08-11. R3 promotes the exact accepted Standard
+   and Modern rules through a narrow, fail-closed semantic-feature manifest;
+   migrates only the parent-keyed Pickup known state; refreshes the existing
+   MTGO and Tabletop classification-derived closure; and freezes R1/R2 baselines
+   so the pre-migration evidence remains reproducible. It changes no source
+   event, formula, public path, workflow, front end, or product boundary. R3
+   acceptance, commit, publication, R4 residual-Unknown review, the Landing
+   shadow rerun and threshold confirmation, representative-card approval, and
+   P12-10 remain separate gates.
+
+   The Owner accepted the validated local R3 implementation and authorized its
+   local commit on 2026-08-11. Publication, R4, and P12-10 remain separately
+   unauthorized.
 4. `P12-04` — Visual direction and durable design-system contract
    - publish the durable repository authority at
      `docs/FRONTEND_DESIGN_SYSTEM.md`, covering product personality,

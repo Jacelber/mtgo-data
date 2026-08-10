@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/production-baseline-drift-hotfix"
-  working_branch_status: "owner_accepted_commit_publication_merge_and_postmerge_dispatch_authorized"
+  current_working_branch: "codex/classifier-r3-production-migration"
+  working_branch_status: "owner_accepted_and_locally_committed"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Small machine-readable record of current project state and authorization."
-  last_updated: "2026-08-12"
+  last_updated: "2026-08-11"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   update_required_after_each_phase: true
@@ -72,68 +72,82 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "OPS-PRODUCTION-BASELINE-DRIFT-20260812"
-  name: "Dynamic production baseline and candidate consumer validation hotfix"
-  status: "owner_accepted_commit_publication_merge_and_postmerge_dispatch_authorized"
-  authorized_on: "2026-08-12"
-  completed_on: null
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/prod-baseline-hotfix-20260812-01"
-  branch: "codex/production-baseline-drift-hotfix"
-  base_commit: "c785b2a8e7da6ab41ac4da97975ee219c32ca16a"
-  task_type: "local_production_workflow_reliability_remediation"
-  artifact_impact: "internal_diagnostics"
-  objective: "Replace volatile rolling-data assertions with structural and data-derived consumer invariants, validate freshly generated consumers in Python and Chromium before publication, and distinguish clean-baseline failures from input-fetch failures without changing data, statistics, or production state."
+  id: "CLASSIFIER-R3-PRODUCTION-MIGRATION"
+  name: "Accepted classifier production and Pickup migration"
+  status: "owner_accepted_and_locally_committed"
+  authorized_on: "2026-08-11"
+  completed_on: "2026-08-11"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/classifier-r3-20260810-01"
+  branch: "codex/classifier-r3-production-migration"
+  base_commit: "f586bff875c46c9f4cedcb3b84dc74427700f30c"
+  task_type: "local_statistical_artifact_migration"
+  artifact_impact: "statistical_json_structure"
+  objective: "Promote the owner-accepted R1 identities and R2 shadow rules into the shared production classifier, atomically migrate parent-keyed Pickup known state, and deterministically refresh existing MTGO and Tabletop classification-derived artifacts without changing formulas, source data, product separation, public paths, or workflows."
   authorization:
     local_implementation: true
     commit: true
-    remote_publication: true
-    merge: true
+    remote_publication: false
+    merge: false
   target_paths:
-    - ".github/workflows/update.yml"
-    - "tests/browser/production-pages.spec.js"
-    - "tests/test_generated_consumer_contracts.py"
-    - "tests/test_phase8_real_data_review.py"
-    - "tests/test_production_workflow.py"
-    - "tests/test_documentation_history.py"
-    - "docs/DATA_ARCHITECTURE.md"
+    - "my_archetypes/modern.yaml"
+    - "my_archetypes/standard.yaml"
+    - "configs/classifier_semantic_features.yaml"
+    - "src/mtgmeta/classifier*.py"
+    - "src/mtgmeta/config.py"
+    - "src/mtgmeta/rules.py"
+    - "schemas/classification-rules.schema.json"
+    - "schemas/classifier-semantic-features.schema.json"
+    - "schemas/melee-compatibility-manifest.schema.json"
+    - "reports/{modern,standard}/mtgo/*.json"
+    - "stats/{modern,standard}/mtgo/**"
+    - "data/modern/melee/classifications/434455.json"
+    - "data/modern/melee/opportunities/434455.json"
+    - "stats/modern/melee/events/434455/*.json"
+    - "stats/catalog.json"
+    - "tests/fixtures/melee/434455_compatibility_manifest.json"
+    - "docs/audits/classifier-r{1,2,3}/**"
+    - "tools/*classifier_r{2,3}*.py"
+    - "tests/test_classifier_r{1,2,3}*.py"
+    - "tests and validators directly affected by the migration"
+    - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
-    - "docs/DEVELOPMENT_WORKFLOW.md"
+    - "docs/audits/CLASSIFIER-R3-PRODUCTION-MIGRATION.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    code_changed: "none"
-    workflow_changed: "production candidate consumer validation, focused generated-page Chromium smoke, and controlled failure-stage reporting only"
-    raw_or_generated_data_changed: "none"
-    statistical_behavior_changed: "none"
-    schema_changed: "none"
+    code_changed: "Shared classifier semantic-feature binding, deterministic R3 rule and Pickup migration tools, and R1/R2 evidence compatibility only"
+    workflow_changed: "none"
+    raw_or_generated_data_changed: "classification-derived MTGO and Tabletop artifacts only; no source-event or retained-response change"
+    statistical_behavior_changed: "classification identity only; no formula, window, opportunity, match, or rounding change"
+    schema_changed: "classification rule semantic-manifest binding and versioned 434455 derived-artifact compatibility contract only"
     frontend_source_changed: "none"
     public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
-    remote_write_performed: "ready_pull_request_200_open"
+    remote_write_performed: "none"
   allowed_actions:
-    - "Replace the volatile exact Modern matchup row-count assertion with full ordered parent-row identity comparison and dynamic expandable-parent checks."
-    - "Replace rolling MTGO identities, counts, percentages, and dates in the production-page browser baseline with expectations derived from the current generated documents."
-    - "Run a dedicated dynamic generated-consumer contract after candidate generation and validation but before packaging."
-    - "Render the generated production pages through the focused Playwright production-page baseline before packaging."
-    - "Report fetch-job clean-baseline failures as baseline while retaining fetch, build, and publish stages."
-    - "Update focused workflow tests and the directly governing production-validation and notification contracts."
+    - "Promote the exact owner-accepted R2 shadow inventories and globally unique priorities into production rules."
+    - "Bind production rules to the narrow fail-closed semantic feature manifest by versioned path and SHA-256."
+    - "Apply the exact R2 Pickup known-state migration and prove that accepted identity changes do not create false new-archetype candidates."
+    - "Refresh existing Standard and Modern MTGO reports/statistics and the existing Tabletop 434455 classification-derived closure."
+    - "Freeze R1/R2 baselines so their historical evidence remains byte-reproducible after production migration."
+    - "Run complete validation and prepare local owner-review evidence."
   prohibited_changes:
-    - "Any local source fetch, generated-data update, statistical formula, Schema, catalog, Pages policy, front-end, classifier, event whitelist, or public-path change."
-    - "Production dispatch before the authorized fix merge or more than one post-merge update.yml dispatch."
-    - "Force-push, direct master development, repository-setting mutation, P12-10, classifier remediation, another task, or broader production-workflow redesign."
-  stop_point: "After the authorized commit, Ready pull request, complete CI, normal merge, remote-master confirmation, one post-merge update.yml dispatch on the new master, and any resulting Pages verification, stop without beginning another task."
+    - "Any statistical formula, source event, retained response, workflow, Pages policy, request path, product availability, event whitelist, public-path, or front-end change."
+    - "Any rewrite of reviewed Pickup candidates, comments, approvals, published weeks, or history indexes beyond classification-derived existing Top8 week contents."
+    - "R4 residual-Unknown review, P12-10 Landing work, another task, push, pull request, merge, or production dispatch."
+    - "Force-push, direct master development, repository-setting changes, or protected event 434455 source-byte changes."
+  stop_point: "After the Owner-authorized local commit, stop without publishing, starting R4, or starting P12-10."
 
 recent_completion_handoff:
-  id: "P12-09"
-  name: "Loading, failure, retry, and composition-detail navigation remediation"
-  status: "completed_and_merged"
-  pull_request: 198
-  merge_commit: "a99ca08a294f173c9a17fe6fd70c5e52d36cec98"
-  note: "GitHub and Git history retain the detailed P12-09 validation, publication, merge, and Pages evidence."
+  id: "CLASSIFIER-R2-SHADOW-AUDIT"
+  name: "Accepted classifier shadow implementation and full-corpus audit"
+  status: "owner_accepted_and_locally_committed"
+  local_commit: "f586bff875c46c9f4cedcb3b84dc74427700f30c"
+  note: "R3 starts from the local R1/R2 commit chain; neither commit has been remotely published by this task."
 
 current_repository_state:
-  baseline_commit: "c785b2a8e7da6ab41ac4da97975ee219c32ca16a"
-  baseline_note: "Verified remote master after the successful 2026-08-10 MTGO production publication; used as the isolated baseline-drift hotfix base."
+  baseline_commit: "f586bff875c46c9f4cedcb3b84dc74427700f30c"
+  baseline_note: "Owner-authorized local R2 commit above remote master a99ca08; used as the independent isolated R3 base with push disabled."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -214,15 +228,15 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-10"
-  name: "Landing weekly-facts producer and Pickup integration"
-  status: "blocked_pending_separate_authorization_and_evidence"
-  production_change: true
+  id: "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
+  name: "Residual Unknown review and explicit disposition"
+  status: "blocked_pending_separate_authorization"
+  production_change: false
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "P12-09 was owner-accepted and authorized through commit, Ready publication, and normal merge on 2026-08-09. Classifier remediation, P12-10, another task, and manual production dispatch remain separately unauthorized."
+  note: "R3 local implementation is Owner-accepted and its local commit is authorized. R4, P12-10, publication, and production dispatch remain separately unauthorized."
 
 governance_baseline:
   status: "active_on_master"
@@ -258,7 +272,7 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not begin classifier remediation, P12-10, or another task without separate owner authorization."
+  - "Do not begin R4, P12-10, or another task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."

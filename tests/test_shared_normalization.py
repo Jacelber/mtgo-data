@@ -15,7 +15,7 @@ from mtgmeta.deck import count_card, deck_to_counts
 
 ALIAS_PATH = SRC / "mtgmeta" / "data" / "om1_spm_aliases.json"
 CORPUS_PATH = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
-RULE_PATH = ROOT / "my_archetypes" / "standard.yaml"
+RULE_PATH = ROOT / "docs" / "audits" / "classifier-r2" / "baseline_rules" / "standard.yaml"
 LEGACY_ALIASES = {
     "Kavaero, Mind-Bitten": "Superior Spider-Man",
     "Leyline Weaver": "Spider Manifestation",

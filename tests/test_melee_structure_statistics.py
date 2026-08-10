@@ -339,7 +339,7 @@ def _day2_event() -> tuple[dict[str, Any], list[tuple[str, str]]]:
         ("prowess", "izzet"),
         ("prowess", "izzet"),
         ("prowess", "grixis"),
-        ("steel-cutter", "mono-red"),
+        ("rakdos-hollow-one", "rakdos"),
     ]
     return event, identities
 
@@ -380,7 +380,7 @@ def _single_stage_event() -> tuple[dict[str, Any], list[tuple[str, str]]]:
         ("prowess", "izzet"),
         ("prowess", "grixis"),
         ("prowess", "izzet"),
-        ("steel-cutter", "mono-red"),
+        ("rakdos-hollow-one", "rakdos"),
     ]
     return event, identities
 

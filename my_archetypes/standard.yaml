@@ -1,12 +1,15 @@
-schema_version: 1.0.0
+schema_version: 1.1.0
 format: standard
+semantic_features:
+  manifest_path: configs/classifier_semantic_features.yaml
+  manifest_sha256: 0cd94ee3a4d6974f88446a660e661943d1cc2c4d8a25891dd6d214931a6aa999
 archetypes:
 - id: monument-lessons
   name: Monument Lessons
-  priority: 760
+  priority: 76000
   rules:
   - id: monument-lessons-primary
-    priority: 760
+    priority: 76000
     subtype_id: null
     conditions:
       all:
@@ -18,10 +21,10 @@ archetypes:
         min_count: 3
 - id: jeskai-lessons
   name: Jeskai Lessons
-  priority: 750
+  priority: 75000
   rules:
   - id: jeskai-lessons-primary
-    priority: 750
+    priority: 75000
     subtype_id: null
     conditions:
       all:
@@ -31,10 +34,10 @@ archetypes:
         min_count: 2
 - id: izzet-lessons
   name: Izzet Lessons
-  priority: 740
+  priority: 74000
   rules:
   - id: izzet-lessons-primary
-    priority: 740
+    priority: 74000
     subtype_id: null
     conditions:
       all:
@@ -48,10 +51,10 @@ archetypes:
         exact_count: 0
 - id: mono-green-landfall
   name: Mono-Green Landfall
-  priority: 730
+  priority: 73000
   rules:
   - id: mono-green-landfall-primary
-    priority: 730
+    priority: 73000
     subtype_id: null
     conditions:
       all:
@@ -75,10 +78,10 @@ archetypes:
         exact_count: 0
 - id: gruul-landfall
   name: Gruul Landfall
-  priority: 720
+  priority: 72000
   rules:
   - id: gruul-landfall-primary
-    priority: 720
+    priority: 72000
     subtype_id: null
     conditions:
       all:
@@ -94,10 +97,10 @@ archetypes:
         min_count: 3
 - id: selesnya-landfall
   name: Selesnya Landfall
-  priority: 710
+  priority: 71000
   rules:
   - id: selesnya-landfall-primary
-    priority: 710
+    priority: 71000
     subtype_id: null
     conditions:
       all:
@@ -113,10 +116,10 @@ archetypes:
         min_count: 1
 - id: dimir-excruciator
   name: Dimir Excruciator
-  priority: 700
+  priority: 70000
   rules:
   - id: dimir-excruciator-primary
-    priority: 700
+    priority: 70000
     subtype_id: null
     conditions:
       all:
@@ -128,10 +131,10 @@ archetypes:
         min_count: 3
 - id: bant-rhythm
   name: Bant Rhythm
-  priority: 690
+  priority: 69000
   rules:
   - id: bant-rhythm-primary
-    priority: 690
+    priority: 69000
     subtype_id: null
     conditions:
       all:
@@ -147,10 +150,10 @@ archetypes:
         min_count: 1
 - id: simic-rhythm
   name: Simic Rhythm
-  priority: 680
+  priority: 68000
   rules:
   - id: simic-rhythm-primary
-    priority: 680
+    priority: 68000
     subtype_id: null
     conditions:
       all:
@@ -170,10 +173,10 @@ archetypes:
         exact_count: 0
 - id: selesnya-rhythm
   name: Selesnya Rhythm
-  priority: 670
+  priority: 67000
   rules:
   - id: selesnya-rhythm-primary
-    priority: 670
+    priority: 67000
     subtype_id: null
     conditions:
       all:
@@ -193,10 +196,10 @@ archetypes:
         exact_count: 0
 - id: dimir-midrange
   name: Dimir Midrange
-  priority: 660
+  priority: 66000
   rules:
   - id: dimir-midrange-primary
-    priority: 660
+    priority: 66000
     subtype_id: null
     conditions:
       all:
@@ -208,25 +211,12 @@ archetypes:
         min_count: 4
       - card: Soulstone Sanctuary
         min_count: 1
-- id: azorius-tempo
-  name: Azorius Tempo
-  priority: 650
-  rules:
-  - id: azorius-tempo-primary
-    priority: 650
-    subtype_id: null
-    conditions:
-      all:
-      - card: Aang, Swift Savior
-        min_count: 3
-      - card: High Noon
-        min_count: 3
 - id: izzet-spellementals
   name: Izzet Spellementals
-  priority: 640
+  priority: 64000
   rules:
   - id: izzet-spellementals-primary
-    priority: 640
+    priority: 64000
     subtype_id: null
     conditions:
       all:
@@ -238,10 +228,10 @@ archetypes:
         min_count: 1
 - id: mono-blue-spellementals
   name: Mono-Blue Spellementals
-  priority: 630
+  priority: 63000
   rules:
   - id: mono-blue-spellementals-primary
-    priority: 630
+    priority: 63000
     subtype_id: null
     conditions:
       all:
@@ -255,10 +245,10 @@ archetypes:
         min_count: 3
 - id: temur-elementals
   name: Temur Elementals
-  priority: 620
+  priority: 62000
   rules:
   - id: temur-elementals-primary
-    priority: 620
+    priority: 62000
     subtype_id: null
     conditions:
       all:
@@ -274,10 +264,10 @@ archetypes:
         exact_count: 0
 - id: grixis-elementals
   name: Grixis Elementals
-  priority: 610
+  priority: 61000
   rules:
   - id: grixis-elementals-primary
-    priority: 610
+    priority: 61000
     subtype_id: null
     conditions:
       all:
@@ -291,10 +281,10 @@ archetypes:
         min_count: 2
 - id: temur-tablet
   name: Temur Tablet
-  priority: 600
+  priority: 60000
   rules:
   - id: temur-tablet-primary
-    priority: 600
+    priority: 60000
     subtype_id: null
     conditions:
       all:
@@ -306,10 +296,10 @@ archetypes:
         min_count: 1
 - id: 4-color-tablet
   name: 4-Color Tablet
-  priority: 590
+  priority: 59000
   rules:
   - id: 4-color-tablet-primary
-    priority: 590
+    priority: 59000
     subtype_id: null
     conditions:
       all:
@@ -321,10 +311,10 @@ archetypes:
         min_count: 2
 - id: jeskai-tablet
   name: Jeskai Tablet
-  priority: 580
+  priority: 58000
   rules:
   - id: jeskai-tablet-primary
-    priority: 580
+    priority: 58000
     subtype_id: null
     conditions:
       all:
@@ -340,10 +330,10 @@ archetypes:
         exact_count: 0
 - id: jeskai-control
   name: Jeskai Control
-  priority: 570
+  priority: 57000
   rules:
   - id: jeskai-control-primary
-    priority: 570
+    priority: 57000
     subtype_id: null
     conditions:
       all:
@@ -353,47 +343,12 @@ archetypes:
         min_count: 2
       - card: Stock Up
         min_count: 2
-- id: 4-color-control
-  name: 4-Color Control
-  priority: 560
-  subtypes:
-  - id: inevitable-defeat
-    name: Inevitable Defeat
-  - id: rakshasas-bargain
-    name: Rakshasa's Bargain
-  rules:
-  - id: 4-color-control-inevitable-defeat
-    priority: 560
-    subtype_id: inevitable-defeat
-    conditions:
-      all:
-      - card: Inevitable Defeat
-        min_count: 2
-      - card: Jeskai Revelation
-        min_count: 1
-      - card: Stock Up
-        min_count: 1
-  - id: 4-color-control-rakshasas-bargain
-    priority: 120
-    subtype_id: rakshasas-bargain
-    conditions:
-      all:
-      - card: Rakshasa's Bargain
-        min_count: 2
-      - card: Aang, Swift Savior
-        min_count: 2
-      - card: Three Steps Ahead
-        min_count: 2
-      - card: Emeritus of Abundance
-        min_count: 2
-      - card: Flow State
-        exact_count: 0
 - id: boros-dragons
   name: Boros Dragons
-  priority: 550
+  priority: 55000
   rules:
   - id: boros-dragons-primary
-    priority: 550
+    priority: 55000
     subtype_id: null
     conditions:
       all:
@@ -405,10 +360,10 @@ archetypes:
         min_count: 3
 - id: boros-token
   name: Boros Token
-  priority: 540
+  priority: 54000
   rules:
   - id: boros-token-primary
-    priority: 540
+    priority: 54000
     subtype_id: null
     conditions:
       all:
@@ -420,10 +375,10 @@ archetypes:
         min_count: 2
 - id: izzet-fling
   name: Izzet Fling
-  priority: 530
+  priority: 53000
   rules:
   - id: izzet-fling-primary
-    priority: 530
+    priority: 53000
     subtype_id: null
     conditions:
       all:
@@ -435,10 +390,10 @@ archetypes:
         min_count: 1
 - id: gruul-fling
   name: Gruul Fling
-  priority: 520
+  priority: 52000
   rules:
   - id: gruul-fling-primary
-    priority: 520
+    priority: 52000
     subtype_id: null
     conditions:
       all:
@@ -450,10 +405,10 @@ archetypes:
         min_count: 3
 - id: izzet-prowess
   name: Izzet Prowess
-  priority: 510
+  priority: 51000
   rules:
   - id: izzet-prowess-primary
-    priority: 510
+    priority: 51000
     subtype_id: null
     conditions:
       all:
@@ -469,10 +424,10 @@ archetypes:
         exact_count: 0
 - id: bant-airbending
   name: Bant Airbending
-  priority: 500
+  priority: 50000
   rules:
   - id: bant-airbending-primary
-    priority: 500
+    priority: 50000
     subtype_id: null
     conditions:
       all:
@@ -484,10 +439,10 @@ archetypes:
         min_count: 3
 - id: temur-harmonizer
   name: Temur Harmonizer
-  priority: 490
+  priority: 49000
   rules:
   - id: temur-harmonizer-primary
-    priority: 490
+    priority: 49000
     subtype_id: null
     conditions:
       all:
@@ -497,10 +452,10 @@ archetypes:
         min_count: 3
 - id: mono-red-aggro
   name: Mono-Red Aggro
-  priority: 480
+  priority: 48000
   rules:
   - id: mono-red-aggro-primary
-    priority: 480
+    priority: 48000
     subtype_id: null
     conditions:
       all:
@@ -512,10 +467,10 @@ archetypes:
         min_count: 12
 - id: mardu-discard
   name: Mardu Discard
-  priority: 470
+  priority: 47000
   rules:
   - id: mardu-discard-primary
-    priority: 470
+    priority: 47000
     subtype_id: null
     conditions:
       all:
@@ -527,10 +482,10 @@ archetypes:
         min_count: 3
 - id: rakdos-discard
   name: Rakdos Discard
-  priority: 460
+  priority: 46000
   rules:
   - id: rakdos-discard-primary
-    priority: 460
+    priority: 46000
     subtype_id: null
     conditions:
       all:
@@ -544,10 +499,10 @@ archetypes:
         exact_count: 0
 - id: grixis-discard
   name: Grixis Discard
-  priority: 450
+  priority: 45000
   rules:
   - id: grixis-discard-primary
-    priority: 450
+    priority: 45000
     subtype_id: null
     conditions:
       all:
@@ -559,10 +514,10 @@ archetypes:
         min_count: 2
 - id: izzet-blink
   name: Izzet Blink
-  priority: 440
+  priority: 44000
   rules:
   - id: izzet-blink-primary
-    priority: 440
+    priority: 44000
     subtype_id: null
     conditions:
       all:
@@ -574,10 +529,10 @@ archetypes:
         min_count: 4
 - id: sultai-reanimator
   name: Sultai Reanimator
-  priority: 430
+  priority: 43000
   rules:
   - id: sultai-reanimator-primary
-    priority: 430
+    priority: 43000
     subtype_id: null
     conditions:
       all:
@@ -589,10 +544,10 @@ archetypes:
         min_count: 2
 - id: esper-pixie
   name: Esper Pixie
-  priority: 420
+  priority: 42000
   rules:
   - id: esper-pixie-primary
-    priority: 420
+    priority: 42000
     subtype_id: null
     conditions:
       all:
@@ -602,27 +557,12 @@ archetypes:
         min_count: 4
       - card: Kaito, Bane of Nightmares
         min_count: 1
-- id: simic-kona
-  name: Simic Kona
-  priority: 410
-  rules:
-  - id: simic-kona-primary
-    priority: 410
-    subtype_id: null
-    conditions:
-      all:
-      - card: Kona, Rescue Beastie
-        min_count: 4
-      - card: Omniscience
-        min_count: 4
-      - card: Uthros, Titanic Godcore
-        min_count: 3
 - id: dimir-control
   name: Dimir Control
-  priority: 400
+  priority: 40000
   rules:
   - id: dimir-control-primary
-    priority: 400
+    priority: 40000
     subtype_id: null
     conditions:
       all:
@@ -636,10 +576,10 @@ archetypes:
         min_count: 3
 - id: azorius-control
   name: Azorius Control
-  priority: 390
+  priority: 39000
   rules:
   - id: azorius-control-primary
-    priority: 390
+    priority: 39000
     subtype_id: null
     conditions:
       all:
@@ -655,10 +595,10 @@ archetypes:
         exact_count: 0
 - id: mono-white-momo
   name: Mono-White Momo
-  priority: 380
+  priority: 38000
   rules:
   - id: mono-white-momo-primary
-    priority: 380
+    priority: 38000
     subtype_id: null
     conditions:
       all:
@@ -672,10 +612,10 @@ archetypes:
         exact_count: 0
 - id: azorius-momo
   name: Azorius Momo
-  priority: 370
+  priority: 37000
   rules:
   - id: azorius-momo-primary
-    priority: 370
+    priority: 37000
     subtype_id: null
     conditions:
       all:
@@ -689,10 +629,10 @@ archetypes:
         min_count: 1
 - id: azorius-otters
   name: Azorius Otters
-  priority: 360
+  priority: 36000
   rules:
   - id: azorius-otters-primary
-    priority: 360
+    priority: 36000
     subtype_id: null
     conditions:
       all:
@@ -704,10 +644,10 @@ archetypes:
         min_count: 4
 - id: golgari-rhythm
   name: Golgari Rhythm
-  priority: 350
+  priority: 35000
   rules:
   - id: golgari-rhythm-primary
-    priority: 350
+    priority: 35000
     subtype_id: null
     conditions:
       all:
@@ -719,10 +659,10 @@ archetypes:
         min_count: 2
 - id: golgari-demon
   name: Golgari Demon
-  priority: 340
+  priority: 34000
   rules:
   - id: golgari-demon-primary
-    priority: 340
+    priority: 34000
     subtype_id: null
     conditions:
       all:
@@ -734,10 +674,10 @@ archetypes:
         exact_count: 0
 - id: sultai-demon
   name: Sultai Demon
-  priority: 330
+  priority: 33000
   rules:
   - id: sultai-demon-primary
-    priority: 330
+    priority: 33000
     subtype_id: null
     conditions:
       all:
@@ -751,10 +691,10 @@ archetypes:
         min_count: 1
 - id: boros-burn
   name: Boros Burn
-  priority: 320
+  priority: 32000
   rules:
   - id: boros-burn-primary
-    priority: 320
+    priority: 32000
     subtype_id: null
     conditions:
       all:
@@ -766,10 +706,10 @@ archetypes:
         min_count: 3
 - id: simic-jackal
   name: Simic Jackal
-  priority: 310
+  priority: 31000
   rules:
   - id: simic-jackal-primary
-    priority: 310
+    priority: 31000
     subtype_id: null
     conditions:
       all:
@@ -781,10 +721,10 @@ archetypes:
         min_count: 4
 - id: temur-battlecrier
   name: Temur Battlecrier
-  priority: 300
+  priority: 30000
   rules:
   - id: temur-battlecrier-primary
-    priority: 300
+    priority: 30000
     subtype_id: null
     conditions:
       all:
@@ -794,10 +734,10 @@ archetypes:
         min_count: 4
 - id: izzet-looting
   name: Izzet Looting
-  priority: 290
+  priority: 29000
   rules:
   - id: izzet-looting-primary
-    priority: 290
+    priority: 29000
     subtype_id: null
     conditions:
       all:
@@ -809,10 +749,10 @@ archetypes:
         min_count: 3
 - id: jeskai-artifacts
   name: Jeskai Artifacts
-  priority: 280
+  priority: 28000
   rules:
   - id: jeskai-artifacts-primary
-    priority: 280
+    priority: 28000
     subtype_id: null
     conditions:
       all:
@@ -826,25 +766,126 @@ archetypes:
         exact_count: 0
 - id: leyline-aggro
   name: Leyline Aggro
-  priority: 270
+  priority: 27040
+  subtypes:
+  - id: izzet
+    name: Izzet
+  - id: gruul
+    name: Gruul
+  - id: boros
+    name: Boros
+  - id: rakdos
+    name: Rakdos
+  - id: mono-red
+    name: Mono-Red
   rules:
-  - id: leyline-aggro-primary
-    priority: 270
-    subtype_id: null
+  - id: leyline-aggro-izzet
+    priority: 27040
+    subtype_id: izzet
     conditions:
       all:
-      - card: Leyline of Resonance
+      - &id001
+        card: Leyline of Resonance
+        zone: main
         min_count: 4
-      - card: Callous Sell-Sword
-        min_count: 3
-      - card: Might of the Meek
+      - &id002
+        card: Slickshot Show-Off
+        zone: main
         min_count: 4
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+  - id: leyline-aggro-gruul
+    priority: 27030
+    subtype_id: gruul
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+  - id: leyline-aggro-boros
+    priority: 27020
+    subtype_id: boros
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+  - id: leyline-aggro-rakdos
+    priority: 27010
+    subtype_id: rakdos
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+  - id: leyline-aggro-mono-red
+    priority: 27000
+    subtype_id: mono-red
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
 - id: 4-color-allies
-  name: 4-Color Allies
-  priority: 260
+  name: Allies Kindred
+  priority: 26000
   rules:
   - id: 4-color-allies-primary
-    priority: 260
+    priority: 26000
     subtype_id: null
     conditions:
       all:
@@ -856,10 +897,10 @@ archetypes:
         min_count: 3
 - id: temur-otters
   name: Temur Otters
-  priority: 250
+  priority: 25000
   rules:
   - id: temur-otters-primary
-    priority: 250
+    priority: 25000
     subtype_id: null
     conditions:
       all:
@@ -871,10 +912,10 @@ archetypes:
         min_count: 4
 - id: mono-black-demons
   name: Mono-Black Demons
-  priority: 240
+  priority: 24000
   rules:
   - id: mono-black-demons-primary
-    priority: 240
+    priority: 24000
     subtype_id: null
     conditions:
       all:
@@ -886,10 +927,10 @@ archetypes:
         min_count: 10
 - id: selesnya-offense
   name: Selesnya Offense
-  priority: 230
+  priority: 23000
   rules:
   - id: selesnya-offense-primary
-    priority: 230
+    priority: 23000
     subtype_id: null
     conditions:
       all:
@@ -901,41 +942,28 @@ archetypes:
         max_count: 1
 - id: izzet-aggro
   name: Izzet Aggro
-  priority: 220
-  subtypes:
-  - id: razorkin-needlehead
-    name: Razorkin Needlehead
-  - id: hired-claw
-    name: Hired Claw
+  priority: 22000
   rules:
-  - id: izzet-aggro-razorkin-needlehead
-    priority: 220
-    subtype_id: razorkin-needlehead
+  - id: izzet-aggro-primary
+    priority: 22000
+    subtype_id: null
     conditions:
       all:
       - card: Scalding Viper
-        min_count: 3
-      - card: Razorkin Needlehead
-        min_count: 3
-      - card: Spirebluff Canal
-        min_count: 1
-  - id: izzet-aggro-hired-claw
-    priority: 170
-    subtype_id: hired-claw
-    conditions:
-      all:
-      - card: Scalding Viper
+        zone: main
         min_count: 3
       - card: Hired Claw
+        zone: main
         min_count: 3
       - card: Spirebluff Canal
+        zone: main
         min_count: 1
 - id: gruul-delirium
   name: Gruul Delirium
-  priority: 210
+  priority: 21000
   rules:
   - id: gruul-delirium-primary
-    priority: 210
+    priority: 21000
     subtype_id: null
     conditions:
       all:
@@ -945,10 +973,10 @@ archetypes:
         min_count: 3
 - id: bant-bounce
   name: Bant Bounce
-  priority: 200
+  priority: 20000
   rules:
   - id: bant-bounce-primary
-    priority: 200
+    priority: 20000
     subtype_id: null
     conditions:
       all:
@@ -958,27 +986,27 @@ archetypes:
         min_count: 3
 - id: dimir-deceit
   name: Dimir Deceit
-  priority: 190
+  priority: 19000
   rules:
   - id: dimir-deceit-primary
-    priority: 190
+    priority: 19000
     subtype_id: null
     conditions:
       all:
       - card: Deceit
         min_count: 3
       - card: Requiting Hex
-        min_count: 3
+        min_count: 2
       - card: Superior Spider-Man
         min_count: 3
       - card: Doomsday Excruciator
         exact_count: 0
 - id: izzet-opus
   name: Izzet Opus
-  priority: 180
+  priority: 18000
   rules:
   - id: izzet-opus-primary
-    priority: 180
+    priority: 18000
     subtype_id: null
     conditions:
       all:
@@ -988,46 +1016,71 @@ archetypes:
         min_count: 3
       - card: Spirebluff Canal
         min_count: 1
-- id: jeskai-manufacturing
-  name: Jeskai Manufacturing
-  priority: 160
-  rules:
-  - id: jeskai-manufacturing-primary
-    priority: 160
-    subtype_id: null
-    conditions:
-      all:
-      - card: Weapons Manufacturing
-        min_count: 3
-      - card: United Battlefront
-        min_count: 3
-      - card: Cryogen Relic
-        min_count: 2
-      - card: Sacred Foundry
-        min_count: 1
 - id: boros-manufacturing
   name: Boros Manufacturing
-  priority: 150
+  priority: 16000
+  subtypes:
+  - id: jeskai
+    name: Jeskai
+  - id: mardu
+    name: Mardu
+  - id: boros
+    name: Boros
   rules:
-  - id: boros-manufacturing-primary
-    priority: 150
-    subtype_id: null
+  - id: boros-manufacturing-jeskai
+    priority: 16000
+    subtype_id: jeskai
     conditions:
       all:
-      - card: Weapons Manufacturing
+      - &id003
+        card: Weapons Manufacturing
+        zone: main
         min_count: 3
-      - card: United Battlefront
+      - &id004
+        card: United Battlefront
+        zone: main
         min_count: 3
-      - card: Sacred Foundry
+      - &id005
+        card: Sacred Foundry
+        zone: main
         min_count: 1
-      - card: Hallowed Fountain
-        exact_count: 0
+      - card: Cryogen Relic
+        zone: main
+        min_count: 2
+  - id: boros-manufacturing-mardu
+    priority: 15950
+    subtype_id: mardu
+    conditions:
+      all:
+      - *id003
+      - *id004
+      - *id005
+      - card: Cryogen Relic
+        zone: main
+        max_count: 1
+      - card: Tithing Blade
+        zone: main
+        min_count: 2
+  - id: boros-manufacturing-boros
+    priority: 15900
+    subtype_id: boros
+    conditions:
+      all:
+      - *id003
+      - *id004
+      - *id005
+      - card: Cryogen Relic
+        zone: main
+        max_count: 1
+      - card: Tithing Blade
+        zone: main
+        max_count: 1
 - id: golgari-reanimator
   name: Golgari Reanimator
-  priority: 140
+  priority: 14000
   rules:
   - id: golgari-reanimator-primary
-    priority: 140
+    priority: 14000
     subtype_id: null
     conditions:
       all:
@@ -1039,10 +1092,10 @@ archetypes:
         min_count: 3
 - id: sultai-control
   name: Sultai Control
-  priority: 130
+  priority: 13000
   rules:
   - id: sultai-control-primary
-    priority: 130
+    priority: 13000
     subtype_id: null
     conditions:
       all:
@@ -1052,12 +1105,32 @@ archetypes:
         min_count: 3
       - card: Willowrush Verge
         min_count: 1
+  - id: sultai-control-bargain
+    priority: 12990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Rakshasa's Bargain
+        zone: any
+        min_count: 2
+      - card: Three Steps Ahead
+        zone: any
+        min_count: 2
+      - card: Emeritus of Abundance
+        zone: any
+        min_count: 2
+      - card: Flow State
+        zone: any
+        exact_count: 0
+      - card: Aang, Swift Savior
+        zone: any
+        exact_count: 0
 - id: orzhov-repartee
   name: Orzhov Repartee
-  priority: 110
+  priority: 11000
   rules:
   - id: orzhov-repartee-primary
-    priority: 110
+    priority: 11000
     subtype_id: null
     conditions:
       all:
@@ -1069,10 +1142,10 @@ archetypes:
         min_count: 2
 - id: mono-black-aggro
   name: Mono-Black Aggro
-  priority: 100
+  priority: 10000
   rules:
   - id: mono-black-aggro-primary
-    priority: 100
+    priority: 10000
     subtype_id: null
     conditions:
       all:
@@ -1084,10 +1157,10 @@ archetypes:
         min_count: 2
 - id: golgari-crime
   name: Golgari Crime
-  priority: 90
+  priority: 9000
   rules:
   - id: golgari-crime-primary
-    priority: 90
+    priority: 9000
     subtype_id: null
     conditions:
       all:
@@ -1097,10 +1170,10 @@ archetypes:
         min_count: 3
 - id: golgari-roots
   name: Golgari Roots
-  priority: 80
+  priority: 8000
   rules:
   - id: golgari-roots-primary
-    priority: 80
+    priority: 8000
     subtype_id: null
     conditions:
       all:
@@ -1110,10 +1183,10 @@ archetypes:
         min_count: 4
 - id: orzhov-control
   name: Orzhov Control
-  priority: 70
+  priority: 7000
   rules:
   - id: orzhov-control-primary
-    priority: 70
+    priority: 7000
     subtype_id: null
     conditions:
       all:
@@ -1125,38 +1198,12 @@ archetypes:
         min_count: 3
       - card: Deadly Cover-Up
         min_count: 2
-- id: boros-leyline
-  name: Boros Leyline
-  priority: 60
-  rules:
-  - id: boros-leyline-primary
-    priority: 60
-    subtype_id: null
-    conditions:
-      all:
-      - card: Leyline of Resonance
-        min_count: 3
-      - card: Inspiring Vantage
-        min_count: 3
-- id: mono-red-leyline
-  name: Mono-Red Leyline
-  priority: 50
-  rules:
-  - id: mono-red-leyline-primary
-    priority: 50
-    subtype_id: null
-    conditions:
-      all:
-      - card: Leyline of Resonance
-        min_count: 3
-      - card: Mountain
-        min_count: 12
 - id: simic-ramp
   name: Simic Ramp
-  priority: 40
+  priority: 4000
   rules:
   - id: simic-ramp-primary
-    priority: 40
+    priority: 4000
     subtype_id: null
     conditions:
       all:
@@ -1166,10 +1213,10 @@ archetypes:
         min_count: 4
 - id: mono-green-aggro
   name: Mono-Green Aggro
-  priority: 30
+  priority: 3000
   rules:
   - id: mono-green-aggro-primary
-    priority: 30
+    priority: 3000
     subtype_id: null
     conditions:
       all:
@@ -1179,10 +1226,10 @@ archetypes:
         min_count: 4
 - id: golgari-midrange
   name: Golgari Midrange
-  priority: 20
+  priority: 2000
   rules:
   - id: golgari-midrange-primary
-    priority: 20
+    priority: 2000
     subtype_id: null
     conditions:
       all:
@@ -1200,10 +1247,10 @@ archetypes:
         max_count: 1
 - id: selesnya-midrange
   name: Selesnya Midrange
-  priority: 10
+  priority: 1000
   rules:
   - id: selesnya-midrange-primary
-    priority: 10
+    priority: 1000
     subtype_id: null
     conditions:
       all:
@@ -1213,3 +1260,148 @@ archetypes:
         min_count: 2
       - card: Plains
         min_count: 1
+- id: azorius-prison
+  name: Azorius Prison
+  priority: 65000
+  rules:
+  - id: azorius-prison-primary
+    priority: 65000
+    subtype_id: null
+    conditions:
+      all:
+      - card: High Noon
+        zone: main
+        min_count: 3
+      - card: Aang, Swift Savior
+        zone: main
+        min_count: 2
+      - card: Aven Interrupter
+        zone: main
+        min_count: 3
+- id: kona-omniscience
+  name: Kona Omniscience
+  priority: 41020
+  subtypes:
+  - id: temur
+    name: Temur
+  - id: bant
+    name: Bant
+  - id: simic
+    name: Simic
+  rules:
+  - id: kona-omniscience-temur
+    priority: 41020
+    subtype_id: temur
+    conditions:
+      all:
+      - &id006
+        card: Kona, Rescue Beastie
+        zone: main
+        min_count: 4
+      - &id007
+        card: Omniscience
+        zone: main
+        min_count: 4
+      - &id008
+        card: Uthros, Titanic Godcore
+        zone: main
+        min_count: 3
+      - card: Ashling, Rekindled
+        zone: main
+        min_count: 1
+      - card: Adagia, Windswept Bastion
+        zone: main
+        exact_count: 0
+      - card: Hallowed Fountain
+        zone: main
+        exact_count: 0
+  - id: kona-omniscience-bant-adagia
+    priority: 41010
+    subtype_id: bant
+    conditions:
+      all:
+      - *id006
+      - *id007
+      - *id008
+      - card: Adagia, Windswept Bastion
+        zone: main
+        min_count: 1
+      - card: Ashling, Rekindled
+        zone: main
+        exact_count: 0
+  - id: kona-omniscience-bant-hallowed-fountain
+    priority: 41005
+    subtype_id: bant
+    conditions:
+      all:
+      - *id006
+      - *id007
+      - *id008
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+      - card: Ashling, Rekindled
+        zone: main
+        exact_count: 0
+  - id: kona-omniscience-simic
+    priority: 41000
+    subtype_id: simic
+    conditions:
+      all:
+      - *id006
+      - *id007
+      - *id008
+      - card: Ashling, Rekindled
+        zone: main
+        exact_count: 0
+      - card: Adagia, Windswept Bastion
+        zone: main
+        exact_count: 0
+      - card: Hallowed Fountain
+        zone: main
+        exact_count: 0
+- id: dark-jeskai-control
+  name: Dark Jeskai Control
+  priority: 56000
+  rules:
+  - id: dark-jeskai-control-primary
+    priority: 56000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Inevitable Defeat
+        zone: main
+        min_count: 2
+      - card: Jeskai Revelation
+        zone: main
+        min_count: 1
+      - card: Stock Up
+        zone: main
+        min_count: 1
+      - card: Tablet of Discovery
+        zone: main
+        max_count: 1
+- id: white-sultai-control
+  name: White Sultai Control
+  priority: 13010
+  rules:
+  - id: white-sultai-control-primary
+    priority: 13010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Rakshasa's Bargain
+        zone: any
+        min_count: 2
+      - card: Aang, Swift Savior
+        zone: any
+        min_count: 2
+      - card: Three Steps Ahead
+        zone: any
+        min_count: 2
+      - card: Emeritus of Abundance
+        zone: any
+        min_count: 2
+      - card: Flow State
+        zone: any
+        exact_count: 0

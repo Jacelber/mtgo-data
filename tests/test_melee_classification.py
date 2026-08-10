@@ -355,14 +355,14 @@ def test_committed_reference_overlay_conserves_all_submitted_decklists():
     assert summary == {
         **summary,
         "total_records": 362,
-        "classified": 352,
-        "unknown": 10,
+        "classified": 351,
+        "unknown": 11,
         "conflicts": 0,
         "invalid_decks": 0,
-        "multiple_matches": 76,
-        "overridden_matches": 76,
-        "selected_subtypes": 153,
-        "parent_only": 199,
+        "multiple_matches": 64,
+        "overridden_matches": 64,
+        "selected_subtypes": 116,
+        "parent_only": 235,
         "same_parent_multiple_subtype_matches": 2,
         "residual_subtype_violations": 0,
         "strict_validation": "pass",
@@ -385,9 +385,9 @@ def test_committed_overlay_hashes_exact_input_and_shared_taxonomy():
     }
     assert overlay["taxonomy"]["rule_path"] == "my_archetypes/modern.yaml"
     assert overlay["taxonomy"]["rule_sha256"] == _digest(RULE_PATH)
-    assert overlay["taxonomy"]["archetype_count"] == 55
-    assert overlay["taxonomy"]["rule_count"] == 102
-    assert overlay["taxonomy"]["subtype_count"] == 55
+    assert overlay["taxonomy"]["archetype_count"] == 70
+    assert overlay["taxonomy"]["rule_count"] == 119
+    assert overlay["taxonomy"]["subtype_count"] == 54
 
 
 def test_unknowns_keep_deck_evidence_and_disqualified_deck_is_classified():
@@ -406,7 +406,7 @@ def test_unknowns_keep_deck_evidence_and_disqualified_deck_is_classified():
         if item["participant_id"] == disqualified_id
     )
 
-    assert len(unknowns) == 10
+    assert len(unknowns) == 11
     assert all(item["unknown_deck"]["main_deck"] for item in unknowns)
     assert all(
         " // " not in card["name"]

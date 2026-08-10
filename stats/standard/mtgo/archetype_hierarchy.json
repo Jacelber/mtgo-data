@@ -4,25 +4,16 @@
   "source": "mtgo",
   "rules_updated": "2026-07-20T05:34:31+09:00",
   "summary": {
-    "parents": 74,
-    "leaves": 76,
-    "expandable_parents": 2
+    "parents": 72,
+    "leaves": 80,
+    "expandable_parents": 3
   },
   "parents": [
     {
       "id": "4-color-allies",
-      "name": "4-Color Allies",
+      "name": "Allies Kindred",
       "expandable": false,
       "subtype_ids": []
-    },
-    {
-      "id": "4-color-control",
-      "name": "4-Color Control",
-      "expandable": true,
-      "subtype_ids": [
-        "4-color-control/inevitable-defeat",
-        "4-color-control/rakshasas-bargain"
-      ]
     },
     {
       "id": "4-color-tablet",
@@ -49,8 +40,8 @@
       "subtype_ids": []
     },
     {
-      "id": "azorius-tempo",
-      "name": "Azorius Tempo",
+      "id": "azorius-prison",
+      "name": "Azorius Prison",
       "expandable": false,
       "subtype_ids": []
     },
@@ -85,20 +76,24 @@
       "subtype_ids": []
     },
     {
-      "id": "boros-leyline",
-      "name": "Boros Leyline",
-      "expandable": false,
-      "subtype_ids": []
-    },
-    {
       "id": "boros-manufacturing",
       "name": "Boros Manufacturing",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "boros-manufacturing/boros",
+        "boros-manufacturing/jeskai",
+        "boros-manufacturing/mardu"
+      ]
     },
     {
       "id": "boros-token",
       "name": "Boros Token",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "dark-jeskai-control",
+      "name": "Dark Jeskai Control",
       "expandable": false,
       "subtype_ids": []
     },
@@ -201,11 +196,8 @@
     {
       "id": "izzet-aggro",
       "name": "Izzet Aggro",
-      "expandable": true,
-      "subtype_ids": [
-        "izzet-aggro/hired-claw",
-        "izzet-aggro/razorkin-needlehead"
-      ]
+      "expandable": false,
+      "subtype_ids": []
     },
     {
       "id": "izzet-blink",
@@ -268,22 +260,32 @@
       "subtype_ids": []
     },
     {
-      "id": "jeskai-manufacturing",
-      "name": "Jeskai Manufacturing",
-      "expandable": false,
-      "subtype_ids": []
-    },
-    {
       "id": "jeskai-tablet",
       "name": "Jeskai Tablet",
       "expandable": false,
       "subtype_ids": []
     },
     {
+      "id": "kona-omniscience",
+      "name": "Kona Omniscience",
+      "expandable": true,
+      "subtype_ids": [
+        "kona-omniscience/bant",
+        "kona-omniscience/simic",
+        "kona-omniscience/temur"
+      ]
+    },
+    {
       "id": "leyline-aggro",
       "name": "Leyline Aggro",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "leyline-aggro/boros",
+        "leyline-aggro/gruul",
+        "leyline-aggro/izzet",
+        "leyline-aggro/mono-red",
+        "leyline-aggro/rakdos"
+      ]
     },
     {
       "id": "mardu-discard",
@@ -324,12 +326,6 @@
     {
       "id": "mono-red-aggro",
       "name": "Mono-Red Aggro",
-      "expandable": false,
-      "subtype_ids": []
-    },
-    {
-      "id": "mono-red-leyline",
-      "name": "Mono-Red Leyline",
       "expandable": false,
       "subtype_ids": []
     },
@@ -394,12 +390,6 @@
       "subtype_ids": []
     },
     {
-      "id": "simic-kona",
-      "name": "Simic Kona",
-      "expandable": false,
-      "subtype_ids": []
-    },
-    {
       "id": "simic-ramp",
       "name": "Simic Ramp",
       "expandable": false,
@@ -458,32 +448,22 @@
       "name": "Temur Tablet",
       "expandable": false,
       "subtype_ids": []
+    },
+    {
+      "id": "white-sultai-control",
+      "name": "White Sultai Control",
+      "expandable": false,
+      "subtype_ids": []
     }
   ],
   "leaves": [
     {
       "id": "4-color-allies",
       "kind": "archetype",
-      "name": "4-Color Allies",
-      "display_name": "4-Color Allies",
+      "name": "Allies Kindred",
+      "display_name": "Allies Kindred",
       "parent_id": "4-color-allies",
       "subtype_id": null
-    },
-    {
-      "id": "4-color-control/inevitable-defeat",
-      "kind": "subtype",
-      "name": "Inevitable Defeat",
-      "display_name": "Inevitable Defeat 4-Color Control",
-      "parent_id": "4-color-control",
-      "subtype_id": "inevitable-defeat"
-    },
-    {
-      "id": "4-color-control/rakshasas-bargain",
-      "kind": "subtype",
-      "name": "Rakshasa's Bargain",
-      "display_name": "Rakshasa's Bargain 4-Color Control",
-      "parent_id": "4-color-control",
-      "subtype_id": "rakshasas-bargain"
     },
     {
       "id": "4-color-tablet",
@@ -518,11 +498,11 @@
       "subtype_id": null
     },
     {
-      "id": "azorius-tempo",
+      "id": "azorius-prison",
       "kind": "archetype",
-      "name": "Azorius Tempo",
-      "display_name": "Azorius Tempo",
-      "parent_id": "azorius-tempo",
+      "name": "Azorius Prison",
+      "display_name": "Azorius Prison",
+      "parent_id": "azorius-prison",
       "subtype_id": null
     },
     {
@@ -566,20 +546,28 @@
       "subtype_id": null
     },
     {
-      "id": "boros-leyline",
-      "kind": "archetype",
-      "name": "Boros Leyline",
-      "display_name": "Boros Leyline",
-      "parent_id": "boros-leyline",
-      "subtype_id": null
+      "id": "boros-manufacturing/boros",
+      "kind": "subtype",
+      "name": "Boros",
+      "display_name": "Boros Boros Manufacturing",
+      "parent_id": "boros-manufacturing",
+      "subtype_id": "boros"
     },
     {
-      "id": "boros-manufacturing",
-      "kind": "archetype",
-      "name": "Boros Manufacturing",
-      "display_name": "Boros Manufacturing",
+      "id": "boros-manufacturing/jeskai",
+      "kind": "subtype",
+      "name": "Jeskai",
+      "display_name": "Jeskai Boros Manufacturing",
       "parent_id": "boros-manufacturing",
-      "subtype_id": null
+      "subtype_id": "jeskai"
+    },
+    {
+      "id": "boros-manufacturing/mardu",
+      "kind": "subtype",
+      "name": "Mardu",
+      "display_name": "Mardu Boros Manufacturing",
+      "parent_id": "boros-manufacturing",
+      "subtype_id": "mardu"
     },
     {
       "id": "boros-token",
@@ -587,6 +575,14 @@
       "name": "Boros Token",
       "display_name": "Boros Token",
       "parent_id": "boros-token",
+      "subtype_id": null
+    },
+    {
+      "id": "dark-jeskai-control",
+      "kind": "archetype",
+      "name": "Dark Jeskai Control",
+      "display_name": "Dark Jeskai Control",
+      "parent_id": "dark-jeskai-control",
       "subtype_id": null
     },
     {
@@ -718,20 +714,12 @@
       "subtype_id": null
     },
     {
-      "id": "izzet-aggro/hired-claw",
-      "kind": "subtype",
-      "name": "Hired Claw",
-      "display_name": "Hired Claw Izzet Aggro",
+      "id": "izzet-aggro",
+      "kind": "archetype",
+      "name": "Izzet Aggro",
+      "display_name": "Izzet Aggro",
       "parent_id": "izzet-aggro",
-      "subtype_id": "hired-claw"
-    },
-    {
-      "id": "izzet-aggro/razorkin-needlehead",
-      "kind": "subtype",
-      "name": "Razorkin Needlehead",
-      "display_name": "Razorkin Needlehead Izzet Aggro",
-      "parent_id": "izzet-aggro",
-      "subtype_id": "razorkin-needlehead"
+      "subtype_id": null
     },
     {
       "id": "izzet-blink",
@@ -814,14 +802,6 @@
       "subtype_id": null
     },
     {
-      "id": "jeskai-manufacturing",
-      "kind": "archetype",
-      "name": "Jeskai Manufacturing",
-      "display_name": "Jeskai Manufacturing",
-      "parent_id": "jeskai-manufacturing",
-      "subtype_id": null
-    },
-    {
       "id": "jeskai-tablet",
       "kind": "archetype",
       "name": "Jeskai Tablet",
@@ -830,12 +810,68 @@
       "subtype_id": null
     },
     {
-      "id": "leyline-aggro",
-      "kind": "archetype",
-      "name": "Leyline Aggro",
-      "display_name": "Leyline Aggro",
+      "id": "kona-omniscience/bant",
+      "kind": "subtype",
+      "name": "Bant",
+      "display_name": "Bant Kona Omniscience",
+      "parent_id": "kona-omniscience",
+      "subtype_id": "bant"
+    },
+    {
+      "id": "kona-omniscience/simic",
+      "kind": "subtype",
+      "name": "Simic",
+      "display_name": "Simic Kona Omniscience",
+      "parent_id": "kona-omniscience",
+      "subtype_id": "simic"
+    },
+    {
+      "id": "kona-omniscience/temur",
+      "kind": "subtype",
+      "name": "Temur",
+      "display_name": "Temur Kona Omniscience",
+      "parent_id": "kona-omniscience",
+      "subtype_id": "temur"
+    },
+    {
+      "id": "leyline-aggro/boros",
+      "kind": "subtype",
+      "name": "Boros",
+      "display_name": "Boros Leyline Aggro",
       "parent_id": "leyline-aggro",
-      "subtype_id": null
+      "subtype_id": "boros"
+    },
+    {
+      "id": "leyline-aggro/gruul",
+      "kind": "subtype",
+      "name": "Gruul",
+      "display_name": "Gruul Leyline Aggro",
+      "parent_id": "leyline-aggro",
+      "subtype_id": "gruul"
+    },
+    {
+      "id": "leyline-aggro/izzet",
+      "kind": "subtype",
+      "name": "Izzet",
+      "display_name": "Izzet Leyline Aggro",
+      "parent_id": "leyline-aggro",
+      "subtype_id": "izzet"
+    },
+    {
+      "id": "leyline-aggro/mono-red",
+      "kind": "subtype",
+      "name": "Mono-Red",
+      "display_name": "Mono-Red Leyline Aggro",
+      "parent_id": "leyline-aggro",
+      "subtype_id": "mono-red"
+    },
+    {
+      "id": "leyline-aggro/rakdos",
+      "kind": "subtype",
+      "name": "Rakdos",
+      "display_name": "Rakdos Leyline Aggro",
+      "parent_id": "leyline-aggro",
+      "subtype_id": "rakdos"
     },
     {
       "id": "mardu-discard",
@@ -891,14 +927,6 @@
       "name": "Mono-Red Aggro",
       "display_name": "Mono-Red Aggro",
       "parent_id": "mono-red-aggro",
-      "subtype_id": null
-    },
-    {
-      "id": "mono-red-leyline",
-      "kind": "archetype",
-      "name": "Mono-Red Leyline",
-      "display_name": "Mono-Red Leyline",
-      "parent_id": "mono-red-leyline",
       "subtype_id": null
     },
     {
@@ -982,14 +1010,6 @@
       "subtype_id": null
     },
     {
-      "id": "simic-kona",
-      "kind": "archetype",
-      "name": "Simic Kona",
-      "display_name": "Simic Kona",
-      "parent_id": "simic-kona",
-      "subtype_id": null
-    },
-    {
       "id": "simic-ramp",
       "kind": "archetype",
       "name": "Simic Ramp",
@@ -1067,6 +1087,14 @@
       "name": "Temur Tablet",
       "display_name": "Temur Tablet",
       "parent_id": "temur-tablet",
+      "subtype_id": null
+    },
+    {
+      "id": "white-sultai-control",
+      "kind": "archetype",
+      "name": "White Sultai Control",
+      "display_name": "White Sultai Control",
+      "parent_id": "white-sultai-control",
       "subtype_id": null
     }
   ]

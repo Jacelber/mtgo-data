@@ -125,6 +125,9 @@ def test_cross_format_input_is_rejected_before_output(tmp_path):
     (config_directory / "formats.yaml").write_bytes(
         (ROOT / "configs" / "formats.yaml").read_bytes()
     )
+    (config_directory / "classifier_semantic_features.yaml").write_bytes(
+        (ROOT / "configs" / "classifier_semantic_features.yaml").read_bytes()
+    )
     (rules_directory / "modern.yaml").write_bytes(
         (ROOT / "my_archetypes" / "modern.yaml").read_bytes()
     )

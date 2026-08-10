@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import subprocess
 
 import pytest
 
@@ -16,6 +17,17 @@ APP_FILES = ("app-core.js", "app-freshness.js", "app-mtgo.js", "app-tabletop.js"
 
 def _json(path: str) -> dict:
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
+
+
+def _node(script: str, *args: str) -> dict:
+    result = subprocess.run(
+        ["node", "-e", script, *args],
+        cwd=ROOT,
+        check=True,
+        text=True,
+        capture_output=True,
+    )
+    return json.loads(result.stdout)
 
 
 def test_review_entry_point_is_chinese_first_and_uses_candidate_assets() -> None:
@@ -82,7 +94,7 @@ def test_catalog_and_real_review_payloads_have_expected_density() -> None:
 def test_top8_review_uses_immutable_bases_and_explicit_unavailable_states() -> None:
     for format_id, expected_available, expected_unavailable in (
         ("standard", 61, 3),
-        ("modern", 100, 4),
+        ("modern", 99, 5),
     ):
         top8 = _json(f"stats/{format_id}/mtgo/top8/2026-W30.json")
         bases = _json(f"stats/{format_id}/mtgo/top8/2026-W30-bases.json")
@@ -102,6 +114,52 @@ def test_top8_review_uses_immutable_bases_and_explicit_unavailable_states() -> N
             for event in top8["events"]
             for placement in event["placements"]
         )
+
+
+def test_review_matrix_retains_parents_and_uses_literal_wins_over_matches() -> None:
+    script = r"""
+const fs = require("fs");
+const review = require("./assets/js/phase8/matchup-model.js");
+const source = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+const document = review.activeMatchupDocument(source, 20);
+const collapsed = review.buildView(document, [], []);
+const expanded = review.buildView(
+  document,
+  ["broodscale-combo"],
+  ["broodscale-combo"]
+);
+const drawRecord = review.literalRecord({wins: 1, losses: 1, draws: 1});
+process.stdout.write(JSON.stringify({
+  collapsedRows: collapsed.rows.length,
+  parentRetained: expanded.rows.some(row => row.id === "broodscale-combo"),
+  subtypeLabels: expanded.rows
+    .filter(row => row.parentId === "broodscale-combo" && row.kind === "subtype")
+    .map(row => row.name),
+  crossLevel: expanded.matrix["broodscale-combo"]["broodscale-combo/gruul"],
+  necroSubtypeIds: document.hierarchy.parents
+    .find(parent => parent.id === "necrodominance").subtype_ids,
+  minSampleHint: document.min_sample_hint,
+  drawRecord,
+}));
+"""
+    result = _node(
+        script,
+        "stats/modern/mtgo/matchup_4w.json",
+    )
+
+    assert result["collapsedRows"] == 57
+    assert result["parentRetained"] is True
+    assert "Gruul Broodscale Combo" in result["subtypeLabels"]
+    assert result["necroSubtypeIds"] == [
+        "necrodominance/golgari",
+        "necrodominance/mono-black",
+    ]
+    assert result["minSampleHint"] == 20
+    cross_level = result["crossLevel"]
+    assert cross_level["matches"] == (
+        cross_level["wins"] + cross_level["losses"] + cross_level["draws"]
+    )
+    assert result["drawRecord"]["win_rate"] == 1 / 3
 
 
 def test_tabletop_review_reads_literal_records_and_real_diagonal() -> None:

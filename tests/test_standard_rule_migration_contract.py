@@ -17,7 +17,14 @@ from mtgmeta.legacy_rules import to_legacy_archetypes
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT_PATH = ROOT / "tests" / "fixtures" / "standard" / "rule_migration_contract.json"
 CORPUS_PATH = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
-RULE_PATH = ROOT / "my_archetypes" / "standard.yaml"
+RULE_PATH = (
+    ROOT
+    / "docs"
+    / "audits"
+    / "classifier-r2"
+    / "baseline_rules"
+    / "standard.yaml"
+)
 ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 

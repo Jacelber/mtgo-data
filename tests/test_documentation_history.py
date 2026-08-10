@@ -52,33 +52,35 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "OPS-PRODUCTION-BASELINE-DRIFT-20260812"
+    assert status["current_task"]["id"] == "CLASSIFIER-R3-PRODUCTION-MIGRATION"
     assert status["current_task"]["status"] == (
-        "owner_accepted_commit_publication_merge_and_postmerge_dispatch_authorized"
+        "owner_accepted_and_locally_committed"
     )
+    assert status["current_task"]["completed_on"] == "2026-08-11"
     assert status["current_task"]["base_commit"] == (
-        "c785b2a8e7da6ab41ac4da97975ee219c32ca16a"
+        "f586bff875c46c9f4cedcb3b84dc74427700f30c"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
         "commit": True,
-        "remote_publication": True,
-        "merge": True,
+        "remote_publication": False,
+        "merge": False,
     }
     assert status["recent_completion_handoff"] == {
-        "id": "P12-09",
-        "name": "Loading, failure, retry, and composition-detail navigation remediation",
-        "status": "completed_and_merged",
-        "pull_request": 198,
-        "merge_commit": "a99ca08a294f173c9a17fe6fd70c5e52d36cec98",
+        "id": "CLASSIFIER-R2-SHADOW-AUDIT",
+        "name": "Accepted classifier shadow implementation and full-corpus audit",
+        "status": "owner_accepted_and_locally_committed",
+        "local_commit": "f586bff875c46c9f4cedcb3b84dc74427700f30c",
         "note": (
-            "GitHub and Git history retain the detailed P12-09 validation, "
-            "publication, merge, and Pages evidence."
+            "R3 starts from the local R1/R2 commit chain; neither commit has been "
+            "remotely published by this task."
         ),
     }
-    assert status["next_approved_task"]["id"] == "P12-10"
+    assert status["next_approved_task"]["id"] == (
+        "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
+    )
     assert status["next_approved_task"]["status"] == (
-        "blocked_pending_separate_authorization_and_evidence"
+        "blocked_pending_separate_authorization"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
@@ -90,17 +92,19 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
 
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
-    audit = (ROOT / "docs" / "audits" / "P12-09.md").read_text(encoding="utf-8")
-    design_system = (
-        ROOT / "docs" / "FRONTEND_DESIGN_SYSTEM.md"
+    audit = (
+        ROOT / "docs" / "audits" / "CLASSIFIER-R3-PRODUCTION-MIGRATION.md"
     ).read_text(encoding="utf-8")
-    for document in (roadmap, design_system):
-        assert "P12-09" in document
-        assert "retry" in document.lower()
-        assert "successful" in document.lower()
-    assert "successful JSON" in audit
-    assert "Ready pull request" in audit
-    assert "production dispatch" in audit
+    decisions = (ROOT / "docs" / "DECISIONS.md").read_text(encoding="utf-8")
+    for document in (roadmap, audit, decisions):
+        assert "R3" in document
+        assert "fail-closed" in document
+        assert "P12-10" in document
+    assert "commit" in audit
+    assert "publish" in audit
+    assert "R4" in audit
+    assert "production" in audit
+    assert "dispatch" in audit
 
     historical_paths = {
         item["path"] for item in status["authoritative_documents"]["historical_documents"]

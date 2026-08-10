@@ -96,8 +96,8 @@ def test_reference_scope_totals_match_the_opportunity_ledger():
     } == {
             "day1": {
                 "participant_count": 362,
-                "known_deck_count": 352,
-                "unknown_deck_count": 10,
+                "known_deck_count": 351,
+                "unknown_deck_count": 11,
             "constructed_points": 2589,
             "theoretical_rounds": 1810,
             "effective_theoretical_rounds": 1810,
@@ -106,8 +106,8 @@ def test_reference_scope_totals_match_the_opportunity_ledger():
         },
             "day2": {
                 "participant_count": 220,
-                "known_deck_count": 211,
-                "unknown_deck_count": 9,
+                "known_deck_count": 210,
+                "unknown_deck_count": 10,
             "constructed_points": 1607,
             "theoretical_rounds": 1100,
             "effective_theoretical_rounds": 1093,
@@ -116,8 +116,8 @@ def test_reference_scope_totals_match_the_opportunity_ledger():
         },
             "all_constructed": {
                 "participant_count": 362,
-                "known_deck_count": 352,
-                "unknown_deck_count": 10,
+                "known_deck_count": 351,
+                "unknown_deck_count": 11,
             "constructed_points": 4196,
             "theoretical_rounds": 2910,
             "effective_theoretical_rounds": 2903,
@@ -250,8 +250,8 @@ def test_quality_reports_required_exclusions_and_no_unresolved_records():
         "standings": 362,
         "submitted_decklists": 362,
         "missing_or_unavailable_decklists": 0,
-        "classified_decks": 352,
-        "unknown_decks": 10,
+        "classified_decks": 351,
+        "unknown_decks": 11,
         "classification_conflicts": 0,
         "invalid_decks": 0,
         "rounds": 19,

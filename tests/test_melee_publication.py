@@ -123,12 +123,14 @@ def test_changed_committed_statistic_fails_closed(tmp_path):
     )
     copied_taxonomy = copied / "my_archetypes/modern.yaml"
     copied_registry = copied / "configs/melee_events.yaml"
+    copied_features = copied / "configs/classifier_semantic_features.yaml"
     for source, destination in (
         (EVENT_PATH, copied_event),
         (CLASSIFICATION_PATH, copied_classification),
         (OPPORTUNITY_PATH, copied_opportunity),
         (TAXONOMY_PATH, copied_taxonomy),
         (REGISTRY_PATH, copied_registry),
+        (ROOT / "configs/classifier_semantic_features.yaml", copied_features),
     ):
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_bytes(source.read_bytes())

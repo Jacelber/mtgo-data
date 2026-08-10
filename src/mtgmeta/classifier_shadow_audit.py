@@ -346,7 +346,12 @@ def audit_melee_event(
     }
 
 
-def pickup_dry_run(root: Path, transition_path: Path) -> dict[str, Any]:
+def pickup_dry_run(
+    root: Path,
+    transition_path: Path,
+    *,
+    source_overrides: Mapping[str, Path] | None = None,
+) -> dict[str, Any]:
     transitions = yaml.safe_load(transition_path.read_text(encoding="utf-8"))
     plan = transitions["pickup_target_plan"]
     result: dict[str, Any] = {
@@ -354,10 +359,11 @@ def pickup_dry_run(root: Path, transition_path: Path) -> dict[str, Any]:
         "status": "dry_run_not_applied",
         "formats": {},
     }
-    source_paths = {
+    production_paths = {
         "modern": root / "stats" / "modern" / "mtgo" / "pickup" / "known_archetypes.json",
         "standard": root / "stats" / "standard" / "mtgo" / "pickup" / "known_archetypes.json",
     }
+    source_paths = source_overrides or production_paths
     for format_id, source_path in source_paths.items():
         source_hash = sha256_path(source_path)
         document = json.loads(source_path.read_text(encoding="utf-8"))
@@ -371,7 +377,7 @@ def pickup_dry_run(root: Path, transition_path: Path) -> dict[str, Any]:
             add = set(plan[format_id]["known_display_names_add"])
         migrated = current - remove | add
         result["formats"][format_id] = {
-            "source_path": source_path.relative_to(root).as_posix(),
+            "source_path": production_paths[format_id].relative_to(root).as_posix(),
             "source_sha256_before": source_hash,
             "source_sha256_after": sha256_path(source_path),
             "source_bytes_unchanged": source_hash == sha256_path(source_path),

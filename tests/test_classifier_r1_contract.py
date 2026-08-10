@@ -26,7 +26,14 @@ def _sha256(path: Path) -> str:
 
 
 def _rules(format_id: str) -> dict[str, Any]:
-    return _load_yaml(ROOT / "my_archetypes" / f"{format_id}.yaml")
+    return _load_yaml(
+        ROOT
+        / "docs"
+        / "audits"
+        / "classifier-r2"
+        / "baseline_rules"
+        / f"{format_id}.yaml"
+    )
 
 
 def _parent_ids(rule_document: dict[str, Any]) -> set[str]:
@@ -64,7 +71,7 @@ def test_r1_contract_uses_the_exact_reviewed_rule_baseline() -> None:
 
     for format_id in ("modern", "standard"):
         source = identity["base"]["rule_sources"][format_id]
-        source_path = ROOT / source["path"]
+        source_path = ROOT / source["frozen_path"]
         rules = _rules(format_id)
         assert _sha256(source_path) == source["sha256"]
         assert len(rules["archetypes"]) == source["parent_count"]
@@ -162,8 +169,8 @@ def test_pickup_plan_matches_the_exact_known_state_sources() -> None:
     transitions = _load_yaml(TRANSITION_PATH)
     sources = transitions["base"]["pickup_known_state"]
 
-    modern_path = ROOT / sources["modern"]["path"]
-    standard_path = ROOT / sources["standard"]["path"]
+    modern_path = ROOT / sources["modern"]["frozen_path"]
+    standard_path = ROOT / sources["standard"]["frozen_path"]
     modern_known = set(json.loads(modern_path.read_text(encoding="utf-8"))["known_ids"])
     standard_known = set(json.loads(standard_path.read_text(encoding="utf-8"))["known"])
 
@@ -209,7 +216,7 @@ def test_validation_matrix_covers_every_target_overlay_family() -> None:
         assert matrix_families == overlay_families
 
 
-def test_r1_contract_does_not_change_production_inputs() -> None:
+def test_r1_contract_keeps_its_reviewed_inputs_frozen() -> None:
     identity = _load_yaml(IDENTITY_PATH)
     transitions = _load_yaml(TRANSITION_PATH)
     validation = _load_yaml(VALIDATION_PATH)
@@ -219,9 +226,6 @@ def test_r1_contract_does_not_change_production_inputs() -> None:
     )
     assert transitions["status"] == "migration_plan_not_applied"
     assert validation["status"] == "specified_for_r2_not_executed"
-    assert _sha256(ROOT / "my_archetypes" / "modern.yaml") == identity["base"][
-        "rule_sources"
-    ]["modern"]["sha256"]
-    assert _sha256(ROOT / "my_archetypes" / "standard.yaml") == identity["base"][
-        "rule_sources"
-    ]["standard"]["sha256"]
+    for format_id in ("modern", "standard"):
+        source = identity["base"]["rule_sources"][format_id]
+        assert _sha256(ROOT / source["frozen_path"]) == source["sha256"]

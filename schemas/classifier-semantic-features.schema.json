@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/classifier-semantic-features.schema.json",
+  "title": "Reviewed classifier semantic card features",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "required": ["schema_version", "task_id", "status", "scope", "cards"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "task_id": {"const": "CLASSIFIER-R3-PRODUCTION-MIGRATION"},
+    "status": {"const": "owner_accepted_narrow_fail_closed_production_manifest"},
+    "scope": {"type": "string", "minLength": 1},
+    "cards": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/card_features"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "colors": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["white", "blue", "black", "red", "green"]}
+    },
+    "card_features": {
+      "type": "object",
+      "required": ["evidence"],
+      "properties": {
+        "mana_sources": {"$ref": "#/$defs/colors"},
+        "spell_colors": {"$ref": "#/$defs/colors"},
+        "equipment": {"type": "boolean"},
+        "phyrexian_color_neutral": {"type": "boolean"},
+        "evidence": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false,
+      "not": {
+        "allOf": [
+          {"properties": {"phyrexian_color_neutral": {"const": true}}, "required": ["phyrexian_color_neutral"]},
+          {"required": ["spell_colors"], "properties": {"spell_colors": {"minItems": 1}}}
+        ]
+      }
+    }
+  }
+}
