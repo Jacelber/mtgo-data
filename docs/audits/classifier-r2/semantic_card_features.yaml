@@ -1,0 +1,98 @@
+schema_version: "1.0.0"
+task_id: CLASSIFIER-R2-SHADOW-CLASSIFIER-AUDIT
+status: reviewed_r0_markers_for_shadow_only
+scope: >-
+  Minimal semantic features needed by the accepted R1 color, Equipment, and
+  Phyrexian-mana boundaries. This is not a general card database and production
+  classification does not read it.
+
+cards:
+  Plains: {mana_sources: [white], evidence: basic_land}
+  Island: {mana_sources: [blue], evidence: basic_land}
+  Swamp: {mana_sources: [black], evidence: basic_land}
+  Mountain: {mana_sources: [red], evidence: basic_land}
+  Forest: {mana_sources: [green], evidence: basic_land}
+
+  Hallowed Fountain: {mana_sources: [white, blue], evidence: reviewed_typed_dual}
+  Watery Grave: {mana_sources: [blue, black], evidence: reviewed_typed_dual}
+  Blood Crypt: {mana_sources: [black, red], evidence: reviewed_typed_dual}
+  Stomping Ground: {mana_sources: [red, green], evidence: reviewed_typed_dual}
+  Temple Garden: {mana_sources: [green, white], evidence: reviewed_typed_dual}
+  Godless Shrine: {mana_sources: [white, black], evidence: reviewed_typed_dual}
+  Steam Vents: {mana_sources: [blue, red], evidence: reviewed_typed_dual}
+  Breeding Pool: {mana_sources: [green, blue], evidence: reviewed_typed_dual}
+  Overgrown Tomb: {mana_sources: [black, green], evidence: reviewed_typed_dual}
+  Sacred Foundry: {mana_sources: [red, white], evidence: reviewed_typed_dual}
+
+  Meticulous Archive: {mana_sources: [white, blue], evidence: reviewed_surveillance_land}
+  Undercity Sewers: {mana_sources: [blue, black], evidence: reviewed_surveillance_land}
+  Raucous Theater: {mana_sources: [black, red], evidence: reviewed_surveillance_land}
+  Commercial District: {mana_sources: [red, green], evidence: reviewed_surveillance_land}
+  Lush Portico: {mana_sources: [green, white], evidence: reviewed_surveillance_land}
+  Shadowy Backstreet: {mana_sources: [white, black], evidence: reviewed_surveillance_land}
+  Thundering Falls: {mana_sources: [blue, red], evidence: reviewed_surveillance_land}
+  Hedge Maze: {mana_sources: [green, blue], evidence: reviewed_surveillance_land}
+  Underground Mortuary: {mana_sources: [black, green], evidence: reviewed_surveillance_land}
+  Elegant Parlor: {mana_sources: [red, white], evidence: reviewed_surveillance_land}
+
+  Ziatora's Proving Ground: {mana_sources: [black, red, green], evidence: reviewed_typed_land}
+  Spara's Headquarters: {mana_sources: [green, white, blue], evidence: reviewed_typed_land}
+  Raffine's Tower: {mana_sources: [white, blue, black], evidence: reviewed_typed_land}
+  Xander's Lounge: {mana_sources: [blue, black, red], evidence: reviewed_typed_land}
+  Jetmir's Garden: {mana_sources: [red, green, white], evidence: reviewed_typed_land}
+  Indatha Triome: {mana_sources: [white, black, green], evidence: reviewed_typed_land}
+  Ketria Triome: {mana_sources: [blue, red, green], evidence: reviewed_typed_land}
+
+  Darkslick Shores: {mana_sources: [blue, black], evidence: reviewed_fast_land}
+  Spirebluff Canal: {mana_sources: [blue, red], evidence: reviewed_fast_land}
+  Blackcleave Cliffs: {mana_sources: [black, red], evidence: reviewed_fast_land}
+  Inspiring Vantage: {mana_sources: [red, white], evidence: reviewed_fast_land}
+  Blooming Marsh: {mana_sources: [black, green], evidence: reviewed_fast_land}
+  Botanical Sanctum: {mana_sources: [green, blue], evidence: reviewed_fast_land}
+
+  Riverpyre Verge: {mana_sources: [blue, red], evidence: reviewed_verge}
+  Floodfarm Verge: {mana_sources: [white, blue], evidence: reviewed_verge}
+  Gloomlake Verge: {mana_sources: [blue, black], evidence: reviewed_verge}
+  Blazemire Verge: {mana_sources: [black, red], evidence: reviewed_verge}
+  Thornspire Verge: {mana_sources: [red, green], evidence: reviewed_verge}
+  Hushwood Verge: {mana_sources: [green, white], evidence: reviewed_verge}
+  Willowrush Verge: {mana_sources: [black, green], evidence: reviewed_verge}
+
+  Arena of Glory: {mana_sources: [red], evidence: reviewed_utility_land}
+  Barbarian Ring: {mana_sources: [red], evidence: reviewed_utility_land}
+  River of Tears: {mana_sources: [blue, black], evidence: reviewed_utility_land}
+  Mystic Gate: {mana_sources: [white, blue], evidence: reviewed_filter_land}
+  Sunken Ruins: {mana_sources: [blue, black], evidence: reviewed_filter_land}
+  Graven Cairns: {mana_sources: [black, red], evidence: reviewed_filter_land}
+  Rugged Prairie: {mana_sources: [red, white], evidence: reviewed_filter_land}
+
+  Galvanic Discharge: {spell_colors: [red], evidence: R0_chant_red_marker}
+  Pyroclasm: {spell_colors: [red], evidence: R0_chant_red_marker}
+  Fire Magic: {spell_colors: [red], evidence: R0_chant_red_marker}
+  "Phlage, Titan of Fire's Fury": {spell_colors: [red, white], evidence: R0_chant_red_marker}
+
+  Wear/Tear: {spell_colors: [white, red], evidence: R0_prowess_white_marker}
+  "Orim's Chant": {spell_colors: [white], evidence: R0_prowess_white_marker}
+  Path to Exile: {spell_colors: [white], evidence: R0_prowess_white_marker}
+  Deflecting Palm: {spell_colors: [white, red], evidence: R0_prowess_white_marker}
+  Prismatic Ending: {spell_colors: [white], evidence: R0_prowess_white_marker}
+  Boros Charm: {spell_colors: [white, red], evidence: R0_prowess_white_marker}
+  Bandage: {spell_colors: [white], evidence: R0_prowess_white_marker}
+  "Steelshaper's Gift": {spell_colors: [white], evidence: R0_prowess_white_marker}
+  Thraben Charm: {spell_colors: [white], evidence: R0_prowess_white_marker}
+
+  Thoughtseize: {spell_colors: [black], evidence: R0_prowess_black_marker}
+  Fatal Push: {spell_colors: [black], evidence: R0_prowess_black_marker}
+  Feed the Swarm: {spell_colors: [black], evidence: R0_prowess_black_marker}
+  Pick Your Poison: {spell_colors: [green], evidence: R0_prowess_green_marker}
+  Heritage Reclamation: {spell_colors: [green], evidence: R0_prowess_green_marker}
+  Questing Druid: {spell_colors: [green], evidence: R0_prowess_green_marker}
+  Preordain: {spell_colors: [blue], evidence: existing_prowess_blue_marker}
+
+  "Apostle's Blessing": {phyrexian_color_neutral: true, evidence: R0_owner_decision}
+  Mutagenic Growth: {phyrexian_color_neutral: true, evidence: R0_owner_decision}
+
+  Batterskull: {equipment: true, evidence: R0_observed_stoneforge_package}
+  Cryptic Coat: {equipment: true, evidence: R0_observed_stoneforge_package}
+  Meteor Sword: {equipment: true, evidence: R0_observed_stoneforge_package}
+  Kaldra Compleat: {equipment: true, evidence: R0_observed_stoneforge_package}
