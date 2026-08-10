@@ -354,12 +354,10 @@ document.addEventListener("click", async event => {
     state.detailIdentity = identity;
     state.detailMode = "average";
     queueUrlWrite();
-    await renderView();
-    const row = matchMedia("(max-width: 780px)").matches
-      ? document.querySelector(`[data-mobile-card-identity="${CSS.escape(identity)}"]`)
-      : document.querySelector(`[data-stats-parent="${CSS.escape(identity)}"]`)?.closest("tr");
-    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    row?.scrollIntoView({ block: "center", behavior: reduceMotion ? "auto" : "smooth" });
+    const revealSelector = matchMedia("(max-width: 780px)").matches
+      ? `[data-mobile-expanded-content="stats:${CSS.escape(identity)}"]`
+      : ".deck-detail-row";
+    await renderViewWithFocus(null, revealSelector);
   } else if (button.dataset.statsRange) {
     discardPendingRefresh();
     state.statsRange = Number(button.dataset.statsRange);

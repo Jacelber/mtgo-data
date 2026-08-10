@@ -128,6 +128,21 @@ test("Standard composition uses card art and opens detail from one desktop click
     .toHaveClass(/deck-detail-row/);
 });
 
+test("desktop composition reveals an off-screen detail after rendering settles", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto("/index.html?format=modern&product=mtgo-statistics&range=1&lang=en");
+  const segment = page.locator('[data-composition-identity="ruby-storm"]');
+  await segment.click();
+  await expect(page).toHaveURL(/detail=ruby-storm/);
+  const detailClose = page.locator('[data-responsive-key="stats-detail:ruby-storm:close"]')
+    .filter({ visible: true });
+  await expect(detailClose).toBeVisible();
+  await expect.poll(() => detailClose.evaluate(node => {
+    const rect = node.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  })).toBe(true);
+});
+
 for (const width of [390, 412]) {
   test(`mobile ${width} composition keeps disclosure until the same item is tapped again`, async ({ page }) => {
     const requests = [];
@@ -164,6 +179,12 @@ for (const width of [390, 412]) {
     await expect(page).toHaveURL(new RegExp(`detail=${identity}`));
     await expect(page.locator(`[data-stats-parent="${identity}"]`).locator("xpath=ancestor::tr/following-sibling::tr[1]"))
       .toHaveClass(/deck-detail-row/);
+    const mobileDetail = page.locator(`[data-mobile-expanded-content="stats:${identity}"]`);
+    await expect(mobileDetail).toBeVisible();
+    await expect.poll(() => mobileDetail.evaluate(node => {
+      const rect = node.getBoundingClientRect();
+      return rect.top < window.innerHeight && rect.bottom > 0;
+    })).toBe(true);
     expect(requests.filter(path => path === decksPath)).toHaveLength(1);
     await expect.poll(() => page.evaluate(() => window.__scrollIntoViewCalls.at(-1)?.behavior))
       .toBe("smooth");

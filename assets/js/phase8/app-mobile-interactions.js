@@ -78,7 +78,7 @@ function renderStatsExpansion(trigger) {
 }
 
 function revealExpandedContent(root, selector) {
-  if (!selector || !matchMedia("(max-width: 780px)").matches) return;
+  if (!selector) return;
   const target = renderTarget(root, selector);
   if (!target) return;
   const rect = target.getBoundingClientRect();
