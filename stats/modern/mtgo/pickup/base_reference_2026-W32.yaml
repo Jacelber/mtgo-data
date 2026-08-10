@@ -1,0 +1,3352 @@
+week: 2026-W32
+base_weeks: 4
+global_d99: 32.0891
+note: 每套牌最近 4 周架空平均构筑（Core=常备/Flex=自选），mean_qty 为均值张数，rate 为出现率（权重）。用于人工核对某副牌偏离度是否合理。
+archetypes:
+  Affinity:
+    sample_size: 74
+    core:
+    - name: Mishra's Bauble
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Mox Opal
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Urza's Saga
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Kappa Cannoneer
+      mean_qty: 3.5
+      rate: 0.865
+    - name: Pinnacle Emissary
+      mean_qty: 3.5
+      rate: 0.865
+    - name: Engineered Explosives
+      mean_qty: 3.4
+      rate: 0.865
+    - name: Tormod's Crypt
+      mean_qty: 3.3
+      rate: 0.959
+    - name: Spirebluff Canal
+      mean_qty: 3.2
+      rate: 0.811
+    - name: Weapons Manufacturing
+      mean_qty: 3.2
+      rate: 0.838
+    - name: Fiery Islet
+      mean_qty: 3.1
+      rate: 0.811
+    - name: Metallic Rebuke
+      mean_qty: 2.7
+      rate: 0.919
+    - name: Claws of Gix
+      mean_qty: 2.3
+      rate: 0.838
+    - name: Emry, Lurker of the Loch
+      mean_qty: 2.0
+      rate: 0.811
+    - name: Island
+      mean_qty: 1.9
+      rate: 0.973
+    - name: Welding Jar
+      mean_qty: 1.2
+      rate: 0.811
+    - name: Skateboard
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Pithing Needle
+      mean_qty: 0.9
+      rate: 0.905
+    - name: Shadowspear
+      mean_qty: 0.8
+      rate: 0.838
+    flex:
+    - name: Preordain
+      mean_qty: 1.6
+      rate: 0.581
+    - name: Shivan Reef
+      mean_qty: 1.2
+      rate: 0.77
+    - name: Sink into Stupor
+      mean_qty: 0.9
+      rate: 0.568
+    - name: Steam Vents
+      mean_qty: 0.9
+      rate: 0.77
+    - name: Tamiyo, Inquisitive Student
+      mean_qty: 0.6
+      rate: 0.176
+    - name: Arcbound Ravager
+      mean_qty: 0.5
+      rate: 0.324
+    - name: Mox Amber
+      mean_qty: 0.5
+      rate: 0.176
+    - name: Flooded Strand
+      mean_qty: 0.4
+      rate: 0.122
+    - name: Loki, God of Mischief
+      mean_qty: 0.4
+      rate: 0.135
+    - name: Scalding Tarn
+      mean_qty: 0.4
+      rate: 0.122
+    - name: Sewer-veillance Cam
+      mean_qty: 0.4
+      rate: 0.135
+    - name: Thoughtcast
+      mean_qty: 0.4
+      rate: 0.149
+    - name: Oswald Fiddlebender
+      mean_qty: 0.3
+      rate: 0.081
+    - name: Portable Hole
+      mean_qty: 0.3
+      rate: 0.095
+    - name: Aether Spellbomb
+      mean_qty: 0.2
+      rate: 0.23
+    - name: Grinding Station
+      mean_qty: 0.2
+      rate: 0.122
+    - name: Hallowed Fountain
+      mean_qty: 0.2
+      rate: 0.149
+    - name: Memnite
+      mean_qty: 0.2
+      rate: 0.068
+    - name: Otawara, Soaring City
+      mean_qty: 0.2
+      rate: 0.149
+    - name: Seachrome Coast
+      mean_qty: 0.2
+      rate: 0.068
+    medoid: nedyahiske
+  Amulet Titan:
+    sample_size: 40
+    core:
+    - name: Amulet of Vigor
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Arboreal Grazer
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Spelunking
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Urza's Saga
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Crumbling Vestige
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Forest
+      mean_qty: 3.8
+      rate: 1.0
+    - name: Scapeshift
+      mean_qty: 3.7
+      rate: 0.925
+    - name: Simic Growth Chamber
+      mean_qty: 3.7
+      rate: 1.0
+    - name: Primeval Titan
+      mean_qty: 3.2
+      rate: 1.0
+    - name: Green Sun's Zenith
+      mean_qty: 3.1
+      rate: 1.0
+    - name: Malevolent Rumble
+      mean_qty: 3.1
+      rate: 0.925
+    - name: Boseiju, Who Endures
+      mean_qty: 2.9
+      rate: 1.0
+    - name: Gruul Turf
+      mean_qty: 2.6
+      rate: 1.0
+    - name: Summoner's Pact
+      mean_qty: 2.1
+      rate: 1.0
+    - name: The Mycosynth Gardens
+      mean_qty: 1.9
+      rate: 0.95
+    - name: Cultivator Colossus
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Echoing Deeps
+      mean_qty: 1.0
+      rate: 0.975
+    - name: Hanweir Battlements
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Mirrorpool
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Otawara, Soaring City
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Tolaria West
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Aftermath Analyst
+      mean_qty: 0.9
+      rate: 0.875
+    - name: Dryad Arbor
+      mean_qty: 0.9
+      rate: 0.875
+    - name: Shifting Woodland
+      mean_qty: 0.9
+      rate: 0.9
+    flex:
+    - name: Dryad of the Ilysian Grove
+      mean_qty: 0.3
+      rate: 0.075
+    - name: Explore
+      mean_qty: 0.3
+      rate: 0.125
+    - name: Selesnya Sanctuary
+      mean_qty: 0.3
+      rate: 0.075
+    - name: Vesuva
+      mean_qty: 0.2
+      rate: 0.175
+    - name: Zuran Orb
+      mean_qty: 0.1
+      rate: 0.15
+    medoid: reidq7
+  Azorius Control:
+    sample_size: 44
+    core:
+    - name: Flooded Strand
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Counterspell
+      mean_qty: 3.4
+      rate: 1.0
+    - name: Wrath of the Skies
+      mean_qty: 3.4
+      rate: 0.977
+    - name: Orim's Chant
+      mean_qty: 3.3
+      rate: 0.841
+    - name: Prismatic Ending
+      mean_qty: 3.3
+      rate: 1.0
+    - name: Consult the Star Charts
+      mean_qty: 3.2
+      rate: 0.955
+    - name: Solitude
+      mean_qty: 3.1
+      rate: 0.977
+    - name: Teferi, Time Raveler
+      mean_qty: 2.8
+      rate: 1.0
+    - name: Island
+      mean_qty: 2.3
+      rate: 1.0
+    - name: Meticulous Archive
+      mean_qty: 2.2
+      rate: 1.0
+    - name: Plains
+      mean_qty: 2.1
+      rate: 1.0
+    - name: Arid Mesa
+      mean_qty: 2.0
+      rate: 0.818
+    - name: Hallowed Fountain
+      mean_qty: 2.0
+      rate: 1.0
+    - name: Spell Snare
+      mean_qty: 1.8
+      rate: 0.841
+    - name: Isochron Scepter
+      mean_qty: 1.7
+      rate: 0.841
+    - name: Scalding Tarn
+      mean_qty: 1.7
+      rate: 0.932
+    - name: Mystic Gate
+      mean_qty: 1.4
+      rate: 0.955
+    - name: Teferi, Hero of Dominaria
+      mean_qty: 1.0
+      rate: 0.841
+    - name: Monumental Henge
+      mean_qty: 0.9
+      rate: 0.864
+    - name: Hall of Storm Giants
+      mean_qty: 0.8
+      rate: 0.818
+    flex:
+    - name: Narset, Parter of Veils
+      mean_qty: 1.9
+      rate: 0.659
+    - name: Tune the Narrative
+      mean_qty: 1.4
+      rate: 0.545
+    - name: Supreme Verdict
+      mean_qty: 0.8
+      rate: 0.773
+    - name: Brainsurge
+      mean_qty: 0.7
+      rate: 0.227
+    - name: Day's Undoing
+      mean_qty: 0.7
+      rate: 0.659
+    - name: Geier Reach Sanitarium
+      mean_qty: 0.6
+      rate: 0.568
+    - name: March of Otherworldly Light
+      mean_qty: 0.5
+      rate: 0.5
+    - name: Thundering Falls
+      mean_qty: 0.5
+      rate: 0.5
+    - name: Watery Grave
+      mean_qty: 0.5
+      rate: 0.477
+    - name: Field of Ruin
+      mean_qty: 0.4
+      rate: 0.182
+    - name: Force of Negation
+      mean_qty: 0.4
+      rate: 0.409
+    - name: Misty Rainforest
+      mean_qty: 0.4
+      rate: 0.295
+    - name: Otawara, Soaring City
+      mean_qty: 0.4
+      rate: 0.432
+    - name: Steam Vents
+      mean_qty: 0.4
+      rate: 0.432
+    - name: Terminus
+      mean_qty: 0.4
+      rate: 0.091
+    - name: The Wandering Emperor
+      mean_qty: 0.4
+      rate: 0.409
+    - name: Windswept Heath
+      mean_qty: 0.4
+      rate: 0.273
+    - name: Floodfarm Verge
+      mean_qty: 0.3
+      rate: 0.136
+    - name: Logic Knot
+      mean_qty: 0.3
+      rate: 0.227
+    - name: Consign to Memory
+      mean_qty: 0.2
+      rate: 0.091
+    - name: Hedge Maze
+      mean_qty: 0.2
+      rate: 0.227
+    - name: Lórien Revealed
+      mean_qty: 0.2
+      rate: 0.182
+    - name: Polluted Delta
+      mean_qty: 0.2
+      rate: 0.136
+    - name: Snapcaster Mage
+      mean_qty: 0.2
+      rate: 0.114
+    - name: Undercity Sewers
+      mean_qty: 0.2
+      rate: 0.159
+    medoid: wft
+  Azorius Energy:
+    sample_size: 8
+    core:
+    - name: Guide of Souls
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ocelot Pride
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Phelia, Exuberant Shepherd
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Flooded Strand
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Quantum Riddler
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Solitude
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Hallowed Fountain
+      mean_qty: 3.6
+      rate: 1.0
+    - name: Ephemerate
+      mean_qty: 3.4
+      rate: 1.0
+    - name: Witch Enchanter
+      mean_qty: 3.2
+      rate: 1.0
+    - name: Arid Mesa
+      mean_qty: 3.1
+      rate: 0.875
+    - name: Starfield Shepherd
+      mean_qty: 2.6
+      rate: 0.875
+    - name: Meticulous Archive
+      mean_qty: 2.0
+      rate: 1.0
+    flex:
+    - name: Plains
+      mean_qty: 2.5
+      rate: 0.75
+    - name: Prismatic Ending
+      mean_qty: 1.4
+      rate: 0.625
+    - name: Consign to Memory
+      mean_qty: 1.2
+      rate: 0.75
+    - name: Ranger-Captain of Eos
+      mean_qty: 1.2
+      rate: 0.625
+    - name: White Orchid Phantom
+      mean_qty: 1.1
+      rate: 0.375
+    - name: March of Otherworldly Light
+      mean_qty: 1.0
+      rate: 0.75
+    - name: Momo, Friendly Flier
+      mean_qty: 1.0
+      rate: 0.375
+    - name: Windswept Heath
+      mean_qty: 0.9
+      rate: 0.5
+    - name: Flagstones of Trokair
+      mean_qty: 0.8
+      rate: 0.25
+    - name: Snow-Covered Plains
+      mean_qty: 0.8
+      rate: 0.25
+    - name: Haliya, Guided by Light
+      mean_qty: 0.5
+      rate: 0.375
+    - name: Mockingbird
+      mean_qty: 0.5
+      rate: 0.5
+    - name: Sacred Foundry
+      mean_qty: 0.5
+      rate: 0.5
+    - name: Aang, Swift Savior
+      mean_qty: 0.4
+      rate: 0.25
+    - name: Island
+      mean_qty: 0.4
+      rate: 0.375
+    - name: Spell Pierce
+      mean_qty: 0.4
+      rate: 0.375
+    - name: Tamiyo, Inquisitive Student
+      mean_qty: 0.4
+      rate: 0.375
+    - name: Teferi, Time Raveler
+      mean_qty: 0.4
+      rate: 0.25
+    - name: Thraben Charm
+      mean_qty: 0.4
+      rate: 0.25
+    - name: Cloudshift
+      mean_qty: 0.2
+      rate: 0.25
+    - name: Erode
+      mean_qty: 0.2
+      rate: 0.25
+    - name: Mana Tithe
+      mean_qty: 0.2
+      rate: 0.125
+    - name: Marsh Flats
+      mean_qty: 0.2
+      rate: 0.125
+    - name: Misty Rainforest
+      mean_qty: 0.2
+      rate: 0.125
+    - name: No More Lies
+      mean_qty: 0.2
+      rate: 0.125
+    - name: Political Triumph
+      mean_qty: 0.2
+      rate: 0.125
+    - name: Scout for Survivors
+      mean_qty: 0.2
+      rate: 0.25
+    - name: Spell Snare
+      mean_qty: 0.2
+      rate: 0.25
+    medoid: CrispyFrog
+  Blink:
+    sample_size: 53
+    core:
+    - name: Solitude
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Quantum Riddler
+      mean_qty: 3.8
+      rate: 0.962
+    - name: Marsh Flats
+      mean_qty: 3.7
+      rate: 0.943
+    - name: Flooded Strand
+      mean_qty: 3.6
+      rate: 1.0
+    - name: Thoughtseize
+      mean_qty: 3.6
+      rate: 0.925
+    - name: Ephemerate
+      mean_qty: 3.3
+      rate: 1.0
+    - name: Polluted Delta
+      mean_qty: 2.4
+      rate: 0.925
+    - name: Prismatic Ending
+      mean_qty: 2.2
+      rate: 0.887
+    - name: Plains
+      mean_qty: 1.5
+      rate: 0.981
+    - name: Godless Shrine
+      mean_qty: 1.4
+      rate: 0.943
+    - name: Hallowed Fountain
+      mean_qty: 1.0
+      rate: 0.962
+    - name: Meticulous Archive
+      mean_qty: 1.0
+      rate: 0.962
+    - name: Shadowy Backstreet
+      mean_qty: 1.0
+      rate: 0.943
+    - name: Swamp
+      mean_qty: 1.0
+      rate: 0.943
+    - name: Watery Grave
+      mean_qty: 0.9
+      rate: 0.906
+    - name: Undercity Sewers
+      mean_qty: 0.8
+      rate: 0.83
+    flex:
+    - name: Phelia, Exuberant Shepherd
+      mean_qty: 2.3
+      rate: 0.585
+    - name: Overlord of the Balemurk
+      mean_qty: 2.1
+      rate: 0.547
+    - name: Psychic Frog
+      mean_qty: 2.1
+      rate: 0.566
+    - name: Witch Enchanter
+      mean_qty: 2.0
+      rate: 0.585
+    - name: Fatal Push
+      mean_qty: 1.7
+      rate: 0.472
+    - name: Ketramose, the New Dawn
+      mean_qty: 1.6
+      rate: 0.434
+    - name: Relic of Progenitus
+      mean_qty: 1.5
+      rate: 0.377
+    - name: Flickerwisp
+      mean_qty: 1.4
+      rate: 0.528
+    - name: Emperor of Bones
+      mean_qty: 1.3
+      rate: 0.509
+    - name: Teferi, Time Raveler
+      mean_qty: 1.0
+      rate: 0.566
+    - name: Orcish Bowmasters
+      mean_qty: 0.9
+      rate: 0.415
+    - name: No More Lies
+      mean_qty: 0.8
+      rate: 0.358
+    - name: Inquisition of Kozilek
+      mean_qty: 0.7
+      rate: 0.34
+    - name: Island
+      mean_qty: 0.7
+      rate: 0.66
+    - name: Bleachbone Verge
+      mean_qty: 0.5
+      rate: 0.453
+    - name: Boggart Trawler
+      mean_qty: 0.5
+      rate: 0.509
+    - name: Spell Snare
+      mean_qty: 0.5
+      rate: 0.245
+    - name: Floodfarm Verge
+      mean_qty: 0.4
+      rate: 0.396
+    - name: March of Otherworldly Light
+      mean_qty: 0.4
+      rate: 0.321
+    - name: Aether Vial
+      mean_qty: 0.2
+      rate: 0.038
+    - name: Force of Negation
+      mean_qty: 0.2
+      rate: 0.075
+    - name: White Orchid Phantom
+      mean_qty: 0.2
+      rate: 0.075
+    medoid: almostomniscient
+  Blue-Black Tempo:
+    sample_size: 86
+    core:
+    - name: Polluted Delta
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Fatal Push
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Psychic Frog
+      mean_qty: 3.7
+      rate: 0.93
+    - name: Thoughtseize
+      mean_qty: 3.4
+      rate: 0.919
+    - name: Counterspell
+      mean_qty: 3.0
+      rate: 0.872
+    - name: Quantum Riddler
+      mean_qty: 2.8
+      rate: 0.849
+    - name: Watery Grave
+      mean_qty: 2.8
+      rate: 1.0
+    - name: Force of Negation
+      mean_qty: 2.7
+      rate: 0.977
+    - name: Orcish Bowmasters
+      mean_qty: 2.7
+      rate: 0.872
+    - name: Subtlety
+      mean_qty: 2.5
+      rate: 0.884
+    - name: Island
+      mean_qty: 2.3
+      rate: 0.977
+    - name: Spell Snare
+      mean_qty: 2.3
+      rate: 0.953
+    - name: Undercity Sewers
+      mean_qty: 2.0
+      rate: 1.0
+    - name: Flooded Strand
+      mean_qty: 1.7
+      rate: 0.837
+    - name: Sink into Stupor
+      mean_qty: 1.5
+      rate: 0.895
+    - name: Sheoldred's Edict
+      mean_qty: 1.3
+      rate: 0.837
+    - name: Swamp
+      mean_qty: 1.1
+      rate: 0.965
+    flex:
+    - name: Tamiyo, Inquisitive Student
+      mean_qty: 1.2
+      rate: 0.535
+    - name: Darkslick Shores
+      mean_qty: 1.1
+      rate: 0.674
+    - name: Marsh Flats
+      mean_qty: 1.1
+      rate: 0.535
+    - name: Preordain
+      mean_qty: 1.0
+      rate: 0.488
+    - name: Bloodstained Mire
+      mean_qty: 0.9
+      rate: 0.419
+    - name: Kaito, Bane of Nightmares
+      mean_qty: 0.9
+      rate: 0.651
+    - name: Consign to Memory
+      mean_qty: 0.7
+      rate: 0.372
+    - name: Otawara, Soaring City
+      mean_qty: 0.7
+      rate: 0.686
+    - name: Cling to Dust
+      mean_qty: 0.6
+      rate: 0.558
+    - name: Murktide Regent
+      mean_qty: 0.6
+      rate: 0.477
+    - name: Scalding Tarn
+      mean_qty: 0.6
+      rate: 0.337
+    - name: Misty Rainforest
+      mean_qty: 0.5
+      rate: 0.372
+    - name: Wan Shi Tong, Librarian
+      mean_qty: 0.4
+      rate: 0.244
+    - name: Abhorrent Oculus
+      mean_qty: 0.3
+      rate: 0.081
+    - name: Consult the Star Charts
+      mean_qty: 0.3
+      rate: 0.105
+    - name: Drown in the Loch
+      mean_qty: 0.3
+      rate: 0.221
+    - name: Field of Ruin
+      mean_qty: 0.3
+      rate: 0.07
+    - name: Gloomlake Verge
+      mean_qty: 0.3
+      rate: 0.314
+    - name: Harbinger of the Seas
+      mean_qty: 0.3
+      rate: 0.198
+    - name: Thought Scour
+      mean_qty: 0.3
+      rate: 0.081
+    - name: Unearth
+      mean_qty: 0.3
+      rate: 0.081
+    - name: Flow State
+      mean_qty: 0.2
+      rate: 0.07
+    - name: Ragavan, Nimble Pilferer
+      mean_qty: 0.2
+      rate: 0.047
+    - name: Snapcaster Mage
+      mean_qty: 0.2
+      rate: 0.128
+    - name: Spell Pierce
+      mean_qty: 0.2
+      rate: 0.105
+    medoid: ETBJezus
+  Boros Energy:
+    sample_size: 138
+    core:
+    - name: Ajani, Nacatl Pariah
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Arid Mesa
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Galvanic Discharge
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Guide of Souls
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ocelot Pride
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ragavan, Nimble Pilferer
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Voice of Victory
+      mean_qty: 3.5
+      rate: 1.0
+    - name: Marsh Flats
+      mean_qty: 3.4
+      rate: 0.978
+    - name: Goblin Bombardment
+      mean_qty: 3.3
+      rate: 1.0
+    - name: Flooded Strand
+      mean_qty: 3.1
+      rate: 0.942
+    - name: Sacred Foundry
+      mean_qty: 3.1
+      rate: 1.0
+    - name: Seasoned Pyromancer
+      mean_qty: 2.9
+      rate: 0.971
+    - name: Plains
+      mean_qty: 2.6
+      rate: 0.978
+    - name: Thraben Charm
+      mean_qty: 2.2
+      rate: 1.0
+    - name: Ranger-Captain of Eos
+      mean_qty: 2.0
+      rate: 0.862
+    - name: Elegant Parlor
+      mean_qty: 1.9
+      rate: 1.0
+    - name: Dalkovan Encampment
+      mean_qty: 1.3
+      rate: 0.971
+    - name: Arena of Glory
+      mean_qty: 1.0
+      rate: 0.877
+    - name: Mountain
+      mean_qty: 1.0
+      rate: 0.978
+    flex:
+    - name: Blood Moon
+      mean_qty: 0.7
+      rate: 0.63
+    - name: Lightning Bolt
+      mean_qty: 0.6
+      rate: 0.478
+    - name: Windswept Heath
+      mean_qty: 0.6
+      rate: 0.188
+    - name: Static Prison
+      mean_qty: 0.4
+      rate: 0.362
+    - name: The Legend of Roku
+      mean_qty: 0.4
+      rate: 0.283
+    - name: Haliya, Guided by Light
+      mean_qty: 0.3
+      rate: 0.203
+    - name: Reckless Pyrosurfer
+      mean_qty: 0.3
+      rate: 0.109
+    - name: Solitude
+      mean_qty: 0.3
+      rate: 0.203
+    - name: Boromir, Warden of the Tower
+      mean_qty: 0.2
+      rate: 0.188
+    - name: Fable of the Mirror-Breaker
+      mean_qty: 0.2
+      rate: 0.072
+    - name: Mana Tithe
+      mean_qty: 0.2
+      rate: 0.109
+    medoid: aidiot
+  Boros Land Destruction:
+    sample_size: 34
+    core:
+    - name: Cleansing Wildfire
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Field of Ruin
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Price of Freedom
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Demolition Field
+      mean_qty: 3.9
+      rate: 0.971
+    - name: Erode
+      mean_qty: 3.9
+      rate: 0.971
+    - name: Plains
+      mean_qty: 3.9
+      rate: 0.971
+    - name: Solitude
+      mean_qty: 3.8
+      rate: 0.971
+    - name: Wrath of the Skies
+      mean_qty: 3.8
+      rate: 0.971
+    - name: Cori Mountain Monastery
+      mean_qty: 3.6
+      rate: 0.971
+    - name: Path to Exile
+      mean_qty: 3.5
+      rate: 0.971
+    - name: Galvanic Discharge
+      mean_qty: 3.3
+      rate: 0.941
+    - name: Sacred Foundry
+      mean_qty: 3.0
+      rate: 0.971
+    - name: High Noon
+      mean_qty: 2.9
+      rate: 0.853
+    - name: Sunken Citadel
+      mean_qty: 2.8
+      rate: 0.971
+    - name: Avengers Disassembled
+      mean_qty: 2.6
+      rate: 1.0
+    - name: Mountain
+      mean_qty: 1.9
+      rate: 0.971
+    - name: The Legend of Roku
+      mean_qty: 1.1
+      rate: 0.824
+    - name: Castle Ardenvale
+      mean_qty: 0.9
+      rate: 0.912
+    flex:
+    - name: Rustvale Bridge
+      mean_qty: 0.4
+      rate: 0.176
+    - name: Wrath of God
+      mean_qty: 0.3
+      rate: 0.294
+    - name: Reprieve
+      mean_qty: 0.2
+      rate: 0.088
+    - name: Rest in Peace
+      mean_qty: 0.2
+      rate: 0.118
+    - name: Snow-Covered Mountain
+      mean_qty: 0.2
+      rate: 0.029
+    medoid: Diomed_Tidid
+  Broodscale Combo:
+    sample_size: 118
+    core:
+    - name: Basking Broodscale
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Eldrazi Temple
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Kozilek's Command
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Malevolent Rumble
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Urza's Saga
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ancient Stirrings
+      mean_qty: 3.9
+      rate: 0.992
+    - name: Forest
+      mean_qty: 3.6
+      rate: 1.0
+    - name: Grove of the Burnwillows
+      mean_qty: 3.4
+      rate: 0.958
+    - name: Blade of the Bloodchief
+      mean_qty: 3.1
+      rate: 1.0
+    - name: Glaring Fleshraker
+      mean_qty: 3.0
+      rate: 0.958
+    - name: Emrakul, the Promised End
+      mean_qty: 2.8
+      rate: 1.0
+    - name: Vexing Bauble
+      mean_qty: 1.9
+      rate: 0.975
+    - name: Boseiju, Who Endures
+      mean_qty: 1.5
+      rate: 1.0
+    - name: Haywire Mite
+      mean_qty: 1.0
+      rate: 0.992
+    - name: Springleaf Drum
+      mean_qty: 1.0
+      rate: 0.966
+    - name: Cavern of Souls
+      mean_qty: 0.9
+      rate: 0.864
+    - name: Soul-Guide Lantern
+      mean_qty: 0.9
+      rate: 0.949
+    flex:
+    - name: Sowing Mycospawn
+      mean_qty: 2.3
+      rate: 0.695
+    - name: Writhing Chrysalis
+      mean_qty: 1.1
+      rate: 0.314
+    - name: Ugin's Labyrinth
+      mean_qty: 0.9
+      rate: 0.288
+    - name: Unholy Heat
+      mean_qty: 0.9
+      rate: 0.364
+    - name: Delighted Halfling
+      mean_qty: 0.8
+      rate: 0.331
+    - name: Devourer of Destiny
+      mean_qty: 0.7
+      rate: 0.169
+    - name: Dismember
+      mean_qty: 0.5
+      rate: 0.314
+    - name: Stomping Ground
+      mean_qty: 0.5
+      rate: 0.492
+    - name: Wooded Foothills
+      mean_qty: 0.5
+      rate: 0.407
+    - name: Commercial District
+      mean_qty: 0.4
+      rate: 0.432
+    - name: Gemstone Caverns
+      mean_qty: 0.4
+      rate: 0.381
+    - name: Misty Rainforest
+      mean_qty: 0.4
+      rate: 0.339
+    - name: Shifting Woodland
+      mean_qty: 0.4
+      rate: 0.39
+    - name: Verdant Catacombs
+      mean_qty: 0.4
+      rate: 0.364
+    - name: Walking Ballista
+      mean_qty: 0.4
+      rate: 0.407
+    - name: Pithing Needle
+      mean_qty: 0.3
+      rate: 0.271
+    - name: Windswept Heath
+      mean_qty: 0.3
+      rate: 0.271
+    - name: Talisman of Impulse
+      mean_qty: 0.2
+      rate: 0.186
+    - name: Traverse the Ulvenwald
+      mean_qty: 0.2
+      rate: 0.11
+    - name: Yavimaya, Cradle of Growth
+      mean_qty: 0.2
+      rate: 0.153
+    medoid: Spicychicken420
+  Burn:
+    sample_size: 18
+    core:
+    - name: Mountain
+      mean_qty: 4.2
+      rate: 1.0
+    - name: Boltwave
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Lava Spike
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Lightning Bolt
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Monastery Swiftspear
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Goblin Guide
+      mean_qty: 3.6
+      rate: 0.889
+    - name: Skewer the Critics
+      mean_qty: 3.6
+      rate: 0.889
+    - name: Barbarian Ring
+      mean_qty: 3.2
+      rate: 1.0
+    - name: Eidolon of the Great Revel
+      mean_qty: 2.3
+      rate: 0.889
+    - name: Bloodstained Mire
+      mean_qty: 1.7
+      rate: 1.0
+    - name: Wooded Foothills
+      mean_qty: 1.2
+      rate: 0.944
+    flex:
+    - name: Rift Bolt
+      mean_qty: 2.9
+      rate: 0.722
+    - name: Seal of Fire
+      mean_qty: 2.9
+      rate: 0.722
+    - name: Chandra's Incinerator
+      mean_qty: 2.3
+      rate: 0.722
+    - name: Arena of Glory
+      mean_qty: 2.2
+      rate: 0.722
+    - name: Bump in the Night
+      mean_qty: 2.2
+      rate: 0.556
+    - name: Boros Charm
+      mean_qty: 1.6
+      rate: 0.389
+    - name: Searing Blaze
+      mean_qty: 1.6
+      rate: 0.389
+    - name: Arid Mesa
+      mean_qty: 1.5
+      rate: 0.778
+    - name: Blood Crypt
+      mean_qty: 1.2
+      rate: 0.611
+    - name: Inspiring Vantage
+      mean_qty: 1.1
+      rate: 0.278
+    - name: Sunbaked Canyon
+      mean_qty: 1.1
+      rate: 0.278
+    - name: Skullcrack
+      mean_qty: 0.9
+      rate: 0.222
+    - name: Dragon's Rage Channeler
+      mean_qty: 0.7
+      rate: 0.167
+    - name: Scalding Tarn
+      mean_qty: 0.7
+      rate: 0.389
+    - name: Ragavan, Nimble Pilferer
+      mean_qty: 0.6
+      rate: 0.611
+    - name: Raucous Theater
+      mean_qty: 0.6
+      rate: 0.611
+    - name: Sacred Foundry
+      mean_qty: 0.6
+      rate: 0.389
+    - name: Elegant Parlor
+      mean_qty: 0.2
+      rate: 0.167
+    - name: Lightning Helix
+      mean_qty: 0.2
+      rate: 0.056
+    medoid: DemianDesposito10
+  Chant Control:
+    sample_size: 15
+    core:
+    - name: Flooded Strand
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Orim's Chant
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Arid Mesa
+      mean_qty: 3.7
+      rate: 1.0
+    - name: Galvanic Discharge
+      mean_qty: 3.3
+      rate: 1.0
+    - name: Consult the Star Charts
+      mean_qty: 3.2
+      rate: 0.933
+    - name: Solitude
+      mean_qty: 3.2
+      rate: 1.0
+    - name: Teferi, Time Raveler
+      mean_qty: 3.2
+      rate: 1.0
+    - name: Wrath of the Skies
+      mean_qty: 3.2
+      rate: 1.0
+    - name: Counterspell
+      mean_qty: 2.8
+      rate: 0.933
+    - name: Narset, Parter of Veils
+      mean_qty: 2.6
+      rate: 0.867
+    - name: Island
+      mean_qty: 2.1
+      rate: 1.0
+    - name: Plains
+      mean_qty: 2.0
+      rate: 1.0
+    - name: Hallowed Fountain
+      mean_qty: 1.9
+      rate: 1.0
+    - name: Prismatic Ending
+      mean_qty: 1.9
+      rate: 0.933
+    - name: Scalding Tarn
+      mean_qty: 1.9
+      rate: 0.933
+    - name: Isochron Scepter
+      mean_qty: 1.7
+      rate: 0.933
+    - name: Meticulous Archive
+      mean_qty: 1.7
+      rate: 1.0
+    - name: Spell Snare
+      mean_qty: 1.6
+      rate: 0.867
+    - name: Steam Vents
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Thundering Falls
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Monumental Henge
+      mean_qty: 0.9
+      rate: 0.933
+    - name: Otawara, Soaring City
+      mean_qty: 0.8
+      rate: 0.8
+    flex:
+    - name: Day's Undoing
+      mean_qty: 0.9
+      rate: 0.733
+    - name: Teferi, Hero of Dominaria
+      mean_qty: 0.9
+      rate: 0.667
+    - name: Supreme Verdict
+      mean_qty: 0.8
+      rate: 0.733
+    - name: Geier Reach Sanitarium
+      mean_qty: 0.7
+      rate: 0.733
+    - name: Sacred Foundry
+      mean_qty: 0.6
+      rate: 0.6
+    - name: Force of Negation
+      mean_qty: 0.5
+      rate: 0.467
+    - name: Stock Up
+      mean_qty: 0.5
+      rate: 0.267
+    - name: Lórien Revealed
+      mean_qty: 0.4
+      rate: 0.267
+    - name: Mistrise Village
+      mean_qty: 0.4
+      rate: 0.4
+    - name: Mystic Gate
+      mean_qty: 0.4
+      rate: 0.333
+    - name: Tune the Narrative
+      mean_qty: 0.4
+      rate: 0.2
+    - name: Elegant Parlor
+      mean_qty: 0.3
+      rate: 0.333
+    - name: Flashback
+      mean_qty: 0.3
+      rate: 0.2
+    - name: Hall of Storm Giants
+      mean_qty: 0.3
+      rate: 0.267
+    - name: Thundertrap Trainer
+      mean_qty: 0.3
+      rate: 0.067
+    - name: Brainsurge
+      mean_qty: 0.2
+      rate: 0.133
+    medoid: xl_snapcaster
+  Devoted Druid Combo:
+    sample_size: 56
+    core:
+    - name: Badgermole Cub
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Delighted Halfling
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Devoted Druid
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Green Sun's Zenith
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Nature's Rhythm
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Tyvar, Jubilant Brawler
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Leyline of Abundance
+      mean_qty: 3.7
+      rate: 0.929
+    - name: Verdant Catacombs
+      mean_qty: 3.0
+      rate: 1.0
+    - name: Forest
+      mean_qty: 2.7
+      rate: 0.929
+    - name: Windswept Heath
+      mean_qty: 2.4
+      rate: 1.0
+    - name: Birds of Paradise
+      mean_qty: 2.1
+      rate: 1.0
+    - name: Dryad Arbor
+      mean_qty: 1.9
+      rate: 1.0
+    - name: Overgrown Tomb
+      mean_qty: 1.9
+      rate: 1.0
+    - name: Misty Rainforest
+      mean_qty: 1.8
+      rate: 0.857
+    - name: Agatha's Soul Cauldron
+      mean_qty: 1.7
+      rate: 0.839
+    - name: Wooded Foothills
+      mean_qty: 1.7
+      rate: 0.875
+    - name: Vizier of Remedies
+      mean_qty: 1.2
+      rate: 1.0
+    - name: Boseiju, Who Endures
+      mean_qty: 1.0
+      rate: 0.964
+    - name: Duskwatch Recruiter
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Temple Garden
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Underground Mortuary
+      mean_qty: 1.0
+      rate: 0.964
+    - name: Fiend Artisan
+      mean_qty: 0.9
+      rate: 0.821
+    - name: Shang-Chi, Master of Kung Fu
+      mean_qty: 0.9
+      rate: 0.893
+    - name: Craterhoof Behemoth
+      mean_qty: 0.8
+      rate: 0.839
+    - name: Walking Ballista
+      mean_qty: 0.8
+      rate: 0.821
+    flex:
+    - name: Malevolent Rumble
+      mean_qty: 0.8
+      rate: 0.268
+    - name: Nurturing Peatland
+      mean_qty: 0.8
+      rate: 0.786
+    - name: Eternal Witness
+      mean_qty: 0.6
+      rate: 0.643
+    - name: Ouroboroid
+      mean_qty: 0.6
+      rate: 0.571
+    - name: Formidable Speaker
+      mean_qty: 0.2
+      rate: 0.161
+    - name: Shifting Woodland
+      mean_qty: 0.2
+      rate: 0.107
+    - name: Snow-Covered Forest
+      mean_qty: 0.2
+      rate: 0.071
+    - name: Tyvar, the Pummeler
+      mean_qty: 0.2
+      rate: 0.214
+    medoid: RAND0MSLAY3R
+  Domain Zoo:
+    sample_size: 58
+    core:
+    - name: Leyline Binding
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Leyline of the Guildpact
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Scion of Draco
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Territorial Kavu
+      mean_qty: 3.7
+      rate: 0.914
+    - name: Flooded Strand
+      mean_qty: 3.6
+      rate: 0.897
+    - name: Ragavan, Nimble Pilferer
+      mean_qty: 3.6
+      rate: 0.914
+    - name: Arid Mesa
+      mean_qty: 3.4
+      rate: 0.862
+    - name: Stubborn Denial
+      mean_qty: 3.2
+      rate: 0.914
+    - name: Steam Vents
+      mean_qty: 1.5
+      rate: 1.0
+    - name: Plains
+      mean_qty: 1.0
+      rate: 0.983
+    - name: Indatha Triome
+      mean_qty: 0.9
+      rate: 0.879
+    - name: Temple Garden
+      mean_qty: 0.9
+      rate: 0.897
+    - name: Thundering Falls
+      mean_qty: 0.9
+      rate: 0.879
+    - name: Blood Crypt
+      mean_qty: 0.8
+      rate: 0.81
+    - name: Godless Shrine
+      mean_qty: 0.8
+      rate: 0.81
+    flex:
+    - name: Wooded Foothills
+      mean_qty: 2.4
+      rate: 0.603
+    - name: Lightning Bolt
+      mean_qty: 2.1
+      rate: 0.603
+    - name: Quantum Riddler
+      mean_qty: 2.1
+      rate: 0.586
+    - name: Fatal Push
+      mean_qty: 1.7
+      rate: 0.655
+    - name: Polluted Delta
+      mean_qty: 1.6
+      rate: 0.397
+    - name: Psychic Frog
+      mean_qty: 1.5
+      rate: 0.379
+    - name: Doorkeeper Thrull
+      mean_qty: 1.3
+      rate: 0.328
+    - name: Arena of Glory
+      mean_qty: 1.0
+      rate: 0.69
+    - name: Nishoba Brawler
+      mean_qty: 0.8
+      rate: 0.362
+    - name: Kroxa, Titan of Death's Hunger
+      mean_qty: 0.7
+      rate: 0.362
+    - name: Mountain
+      mean_qty: 0.7
+      rate: 0.672
+    - name: Phelia, Exuberant Shepherd
+      mean_qty: 0.6
+      rate: 0.207
+    - name: Practiced Offense
+      mean_qty: 0.6
+      rate: 0.241
+    - name: Consign to Memory
+      mean_qty: 0.5
+      rate: 0.259
+    - name: Pest Control
+      mean_qty: 0.5
+      rate: 0.31
+    - name: Winternight Stories
+      mean_qty: 0.4
+      rate: 0.31
+    - name: Breeding Pool
+      mean_qty: 0.3
+      rate: 0.328
+    - name: Force of Negation
+      mean_qty: 0.3
+      rate: 0.086
+    - name: Hallowed Fountain
+      mean_qty: 0.3
+      rate: 0.31
+    - name: Meticulous Archive
+      mean_qty: 0.3
+      rate: 0.293
+    - name: Misty Rainforest
+      mean_qty: 0.3
+      rate: 0.086
+    - name: Shardless Agent
+      mean_qty: 0.3
+      rate: 0.086
+    - name: Subtlety
+      mean_qty: 0.3
+      rate: 0.086
+    - name: Windswept Heath
+      mean_qty: 0.3
+      rate: 0.103
+    - name: Fire/Ice
+      mean_qty: 0.2
+      rate: 0.052
+    - name: Lush Portico
+      mean_qty: 0.2
+      rate: 0.19
+    - name: Nulldrifter
+      mean_qty: 0.2
+      rate: 0.069
+    - name: Spell Snare
+      mean_qty: 0.2
+      rate: 0.103
+    - name: Tribal Flames
+      mean_qty: 0.2
+      rate: 0.086
+    - name: Wrath of the Skies
+      mean_qty: 0.2
+      rate: 0.121
+    medoid: Lat_Drop
+  Eldrazi Aggro:
+    sample_size: 8
+    core:
+    - name: Cavern of Souls
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Devourer of Destiny
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Eldrazi Linebreaker
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Eldrazi Temple
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Kozilek's Command
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Thought-Knot Seer
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ugin's Labyrinth
+      mean_qty: 4.0
+      rate: 1.0
+    - name: It That Heralds the End
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Sire of Seven Deaths
+      mean_qty: 3.4
+      rate: 1.0
+    - name: Secluded Courtyard
+      mean_qty: 3.1
+      rate: 1.0
+    - name: Chalice of the Void
+      mean_qty: 2.9
+      rate: 1.0
+    - name: Glaring Fleshraker
+      mean_qty: 2.8
+      rate: 0.875
+    - name: Unclaimed Territory
+      mean_qty: 2.0
+      rate: 1.0
+    - name: Forest
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Gemstone Caverns
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Mountain
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Wastes
+      mean_qty: 1.0
+      rate: 0.875
+    flex:
+    - name: Serum Powder
+      mean_qty: 2.0
+      rate: 0.5
+    - name: Sowing Mycospawn
+      mean_qty: 2.0
+      rate: 0.75
+    - name: Eternal Scourge
+      mean_qty: 1.9
+      rate: 0.5
+    - name: Wastescape Battlemage
+      mean_qty: 1.5
+      rate: 0.625
+    - name: All Is Dust
+      mean_qty: 0.5
+      rate: 0.5
+    - name: Sanctum of Ugin
+      mean_qty: 0.5
+      rate: 0.5
+    - name: Bojuka Bog
+      mean_qty: 0.2
+      rate: 0.25
+    - name: Dismember
+      mean_qty: 0.2
+      rate: 0.25
+    - name: Nulldrifter
+      mean_qty: 0.2
+      rate: 0.125
+    - name: Phyrexian Metamorph
+      mean_qty: 0.2
+      rate: 0.125
+    - name: Vexing Bauble
+      mean_qty: 0.2
+      rate: 0.125
+    medoid: Joey_Wheeler
+  Eldrazi Ramp:
+    sample_size: 21
+    core:
+    - name: Eldrazi Temple
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Kozilek's Command
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Malevolent Rumble
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Sowing Mycospawn
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ugin's Labyrinth
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Utopia Sprawl
+      mean_qty: 3.2
+      rate: 0.81
+    - name: Forest
+      mean_qty: 3.1
+      rate: 1.0
+    - name: Emrakul, the Promised End
+      mean_qty: 3.0
+      rate: 1.0
+    - name: Icetill Explorer
+      mean_qty: 1.9
+      rate: 0.905
+    - name: Devourer of Destiny
+      mean_qty: 1.8
+      rate: 0.952
+    - name: Sire of Seven Deaths
+      mean_qty: 1.7
+      rate: 0.857
+    - name: Windswept Heath
+      mean_qty: 1.5
+      rate: 0.905
+    - name: World Breaker
+      mean_qty: 1.0
+      rate: 0.952
+    flex:
+    - name: Talisman of Impulse
+      mean_qty: 2.4
+      rate: 0.619
+    - name: Formidable Speaker
+      mean_qty: 1.6
+      rate: 0.571
+    - name: Kozilek's Return
+      mean_qty: 1.4
+      rate: 0.667
+    - name: Stomping Ground
+      mean_qty: 1.3
+      rate: 0.667
+    - name: Herigast, Erupting Nullkite
+      mean_qty: 1.1
+      rate: 0.571
+    - name: Ugin, Eye of the Storms
+      mean_qty: 1.1
+      rate: 0.762
+    - name: Wooded Foothills
+      mean_qty: 1.0
+      rate: 0.762
+    - name: Ancient Stirrings
+      mean_qty: 0.8
+      rate: 0.19
+    - name: Orim's Chant
+      mean_qty: 0.8
+      rate: 0.19
+    - name: Shifting Woodland
+      mean_qty: 0.8
+      rate: 0.762
+    - name: Talisman of Unity
+      mean_qty: 0.8
+      rate: 0.19
+    - name: Gathering Place
+      mean_qty: 0.7
+      rate: 0.19
+    - name: Ghost Quarter
+      mean_qty: 0.7
+      rate: 0.667
+    - name: Misty Rainforest
+      mean_qty: 0.7
+      rate: 0.619
+    - name: Bojuka Bog
+      mean_qty: 0.6
+      rate: 0.571
+    - name: Commercial District
+      mean_qty: 0.6
+      rate: 0.619
+    - name: Emeritus of Abundance
+      mean_qty: 0.6
+      rate: 0.524
+    - name: Wrath of the Skies
+      mean_qty: 0.6
+      rate: 0.19
+    - name: Boseiju, Who Endures
+      mean_qty: 0.5
+      rate: 0.524
+    - name: Sanctum of Ugin
+      mean_qty: 0.5
+      rate: 0.476
+    - name: Talisman of Resilience
+      mean_qty: 0.5
+      rate: 0.143
+    - name: Temple Garden
+      mean_qty: 0.4
+      rate: 0.19
+    - name: Fatal Push
+      mean_qty: 0.3
+      rate: 0.095
+    - name: Overgrown Tomb
+      mean_qty: 0.3
+      rate: 0.095
+    - name: Unholy Heat
+      mean_qty: 0.3
+      rate: 0.333
+    - name: Cavern of Souls
+      mean_qty: 0.2
+      rate: 0.238
+    - name: Cosmic Rebirth
+      mean_qty: 0.2
+      rate: 0.095
+    - name: Lush Portico
+      mean_qty: 0.2
+      rate: 0.19
+    - name: Nulldrifter
+      mean_qty: 0.2
+      rate: 0.048
+    - name: Plains
+      mean_qty: 0.2
+      rate: 0.19
+    - name: Verdant Catacombs
+      mean_qty: 0.2
+      rate: 0.19
+    medoid: Lightspirit
+  Eldrazi Tron:
+    sample_size: 63
+    core:
+    - name: Eldrazi Temple
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Expedition Map
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Karn, the Great Creator
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Kozilek's Command
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ugin's Labyrinth
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Urza's Mine
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Urza's Power Plant
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Urza's Tower
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Mind Stone
+      mean_qty: 3.8
+      rate: 0.984
+    - name: Ugin, Eye of the Storms
+      mean_qty: 3.8
+      rate: 1.0
+    - name: Devourer of Destiny
+      mean_qty: 3.5
+      rate: 1.0
+    - name: Thought-Knot Seer
+      mean_qty: 2.9
+      rate: 0.905
+    - name: Glaring Fleshraker
+      mean_qty: 2.6
+      rate: 0.857
+    - name: Dismember
+      mean_qty: 2.1
+      rate: 1.0
+    - name: Chalice of the Void
+      mean_qty: 1.9
+      rate: 0.952
+    - name: Trinisphere
+      mean_qty: 1.4
+      rate: 0.81
+    - name: Emrakul, the Promised End
+      mean_qty: 1.3
+      rate: 0.921
+    - name: Swamp
+      mean_qty: 1.1
+      rate: 0.968
+    - name: All Is Dust
+      mean_qty: 0.9
+      rate: 0.873
+    flex:
+    - name: Vexing Bauble
+      mean_qty: 0.7
+      rate: 0.714
+    - name: Wastes
+      mean_qty: 0.5
+      rate: 0.444
+    - name: Relic of Progenitus
+      mean_qty: 0.3
+      rate: 0.302
+    - name: Disruptor Flute
+      mean_qty: 0.2
+      rate: 0.111
+    - name: Ulamog, the Ceaseless Hunger
+      mean_qty: 0.2
+      rate: 0.143
+    medoid: Porks
+  Fight Rigging:
+    sample_size: 65
+    core:
+    - name: Forest
+      mean_qty: 5.0
+      rate: 1.0
+    - name: Disciple of Freyalise
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Eldrazi Temple
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Fanatic of Rhonas
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Fight Rigging
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Green Sun's Zenith
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Kozilek's Command
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Slumbering Trudge
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ugin's Labyrinth
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Emrakul, the Promised End
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Malevolent Rumble
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Sowing Mycospawn
+      mean_qty: 3.8
+      rate: 0.969
+    - name: Ulamog, the Ceaseless Hunger
+      mean_qty: 1.9
+      rate: 0.938
+    - name: Drowner of Truth
+      mean_qty: 1.8
+      rate: 0.892
+    - name: Ugin, Eye of the Storms
+      mean_qty: 1.8
+      rate: 0.938
+    - name: Boseiju, Who Endures
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Dryad Arbor
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Mosswort Bridge
+      mean_qty: 1.0
+      rate: 0.985
+    - name: Gemstone Caverns
+      mean_qty: 0.9
+      rate: 0.938
+    flex:
+    - name: Cavern of Souls
+      mean_qty: 0.7
+      rate: 0.738
+    - name: Emrakul, the Aeons Torn
+      mean_qty: 0.2
+      rate: 0.108
+    - name: Ghost Quarter
+      mean_qty: 0.2
+      rate: 0.246
+    - name: Thought-Knot Seer
+      mean_qty: 0.2
+      rate: 0.062
+    - name: Turntimber Symbiosis
+      mean_qty: 0.2
+      rate: 0.108
+    medoid: E_Kaminuma
+  Fling Goyf:
+    sample_size: 18
+    core:
+    - name: Blackcleave Cliffs
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Blooming Marsh
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Cosmogoyf
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Devourer of Destiny
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Gemstone Mine
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Plunge into Darkness
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Serum Powder
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Spoils of the Vault
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Thud
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Gemstone Caverns
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Inquisition of Kozilek
+      mean_qty: 3.8
+      rate: 0.944
+    - name: Copperline Gorge
+      mean_qty: 3.1
+      rate: 1.0
+    - name: Summoner's Pact
+      mean_qty: 2.4
+      rate: 1.0
+    - name: Cavern of Souls
+      mean_qty: 1.6
+      rate: 0.944
+    flex:
+    - name: Chancellor of the Annex
+      mean_qty: 1.7
+      rate: 0.444
+    - name: Darkbore Pathway
+      mean_qty: 1.5
+      rate: 0.556
+    - name: Chancellor of the Dross
+      mean_qty: 1.4
+      rate: 0.444
+    - name: Callous Sell-Sword
+      mean_qty: 0.8
+      rate: 0.444
+    - name: Pact of Negation
+      mean_qty: 0.7
+      rate: 0.389
+    - name: Swamp
+      mean_qty: 0.7
+      rate: 0.722
+    - name: Aloe Alchemist
+      mean_qty: 0.6
+      rate: 0.611
+    - name: Blightstep Pathway
+      mean_qty: 0.6
+      rate: 0.5
+    - name: Chancellor of the Tangle
+      mean_qty: 0.4
+      rate: 0.111
+    - name: Forest
+      mean_qty: 0.3
+      rate: 0.278
+    - name: Ghor-Clan Rampager
+      mean_qty: 0.3
+      rate: 0.333
+    medoid: Terribad
+  Golgari Yawgmoth:
+    sample_size: 17
+    core:
+    - name: Agatha's Soul Cauldron
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Badgermole Cub
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Delighted Halfling
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Verdant Catacombs
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Young Wolf
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Malevolent Rumble
+      mean_qty: 3.8
+      rate: 1.0
+    - name: Yawgmoth, Thran Physician
+      mean_qty: 3.8
+      rate: 1.0
+    - name: Windswept Heath
+      mean_qty: 3.2
+      rate: 1.0
+    - name: Green Sun's Zenith
+      mean_qty: 3.0
+      rate: 1.0
+    - name: Overgrown Tomb
+      mean_qty: 3.0
+      rate: 1.0
+    - name: Walking Ballista
+      mean_qty: 3.0
+      rate: 1.0
+    - name: Spymaster's Vault
+      mean_qty: 2.8
+      rate: 1.0
+    - name: Dredger's Insight
+      mean_qty: 2.4
+      rate: 1.0
+    - name: Boseiju, Who Endures
+      mean_qty: 2.0
+      rate: 1.0
+    - name: Forest
+      mean_qty: 2.0
+      rate: 1.0
+    - name: Dryad Arbor
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Formidable Speaker
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Grist, the Hunger Tide
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Ouroboroid
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Strangleroot Geist
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Swamp
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Underground Mortuary
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Endurance
+      mean_qty: 0.8
+      rate: 0.824
+    flex:
+    - name: Ignoble Hierarch
+      mean_qty: 0.6
+      rate: 0.588
+    - name: Wooded Foothills
+      mean_qty: 0.6
+      rate: 0.294
+    - name: Haywire Mite
+      mean_qty: 0.5
+      rate: 0.529
+    - name: Virulent Emissary
+      mean_qty: 0.4
+      rate: 0.353
+    - name: Ghost Quarter
+      mean_qty: 0.2
+      rate: 0.176
+    - name: Icetill Explorer
+      mean_qty: 0.2
+      rate: 0.176
+    - name: Misty Rainforest
+      mean_qty: 0.2
+      rate: 0.118
+    - name: Mole Man, Moloid Master
+      mean_qty: 0.2
+      rate: 0.176
+    - name: Shifting Woodland
+      mean_qty: 0.2
+      rate: 0.176
+    medoid: Xerk
+  Goryo's Reanimator:
+    sample_size: 130
+    core:
+    - name: Atraxa, Grand Unifier
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Goryo's Vengeance
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Polluted Delta
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Psychic Frog
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ephemerate
+      mean_qty: 3.9
+      rate: 0.969
+    - name: Flooded Strand
+      mean_qty: 3.5
+      rate: 0.977
+    - name: Marsh Flats
+      mean_qty: 3.5
+      rate: 0.977
+    - name: Solitude
+      mean_qty: 3.4
+      rate: 0.962
+    - name: Thoughtseize
+      mean_qty: 3.1
+      rate: 1.0
+    - name: Faithful Mending
+      mean_qty: 2.7
+      rate: 0.969
+    - name: Force of Negation
+      mean_qty: 2.2
+      rate: 1.0
+    - name: Prismatic Ending
+      mean_qty: 2.0
+      rate: 0.969
+    - name: Griselbrand
+      mean_qty: 1.5
+      rate: 1.0
+    - name: Godless Shrine
+      mean_qty: 1.0
+      rate: 0.969
+    - name: Hallowed Fountain
+      mean_qty: 1.0
+      rate: 0.969
+    - name: Island
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Meticulous Archive
+      mean_qty: 1.0
+      rate: 0.969
+    - name: Plains
+      mean_qty: 1.0
+      rate: 0.969
+    - name: Shadowy Backstreet
+      mean_qty: 1.0
+      rate: 0.962
+    - name: Swamp
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Undercity Sewers
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Watery Grave
+      mean_qty: 1.0
+      rate: 1.0
+    flex:
+    - name: Quantum Riddler
+      mean_qty: 2.5
+      rate: 0.731
+    - name: Fallaji Archaeologist
+      mean_qty: 1.5
+      rate: 0.423
+    - name: March of Otherworldly Light
+      mean_qty: 0.9
+      rate: 0.708
+    - name: Otherworldly Gaze
+      mean_qty: 0.8
+      rate: 0.438
+    - name: Superior Spider-Man
+      mean_qty: 0.8
+      rate: 0.608
+    - name: Breeding Pool
+      mean_qty: 0.5
+      rate: 0.531
+    - name: Consign to Memory
+      mean_qty: 0.4
+      rate: 0.269
+    - name: Overgrown Tomb
+      mean_qty: 0.3
+      rate: 0.331
+    - name: Teferi, Time Raveler
+      mean_qty: 0.3
+      rate: 0.208
+    - name: Fatal Push
+      mean_qty: 0.2
+      rate: 0.069
+    - name: Pest Control
+      mean_qty: 0.2
+      rate: 0.154
+    medoid: _Stream
+  Hollow One:
+    sample_size: 45
+    core:
+    - name: Faithless Looting
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Hollow One
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Marauding Mako
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Street Wraith
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Burning Inquiry
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Detective's Phoenix
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Bloodstained Mire
+      mean_qty: 3.2
+      rate: 0.978
+    - name: Mountain
+      mean_qty: 3.0
+      rate: 0.978
+    - name: Lightning Bolt
+      mean_qty: 2.7
+      rate: 0.933
+    - name: Arid Mesa
+      mean_qty: 2.4
+      rate: 0.933
+    - name: Ox of Agonas
+      mean_qty: 1.1
+      rate: 0.822
+    flex:
+    - name: Blazing Rootwalla
+      mean_qty: 2.7
+      rate: 0.667
+    - name: Vengevine
+      mean_qty: 2.7
+      rate: 0.667
+    - name: Hardened Academic
+      mean_qty: 2.5
+      rate: 0.622
+    - name: Scalding Tarn
+      mean_qty: 2.2
+      rate: 0.756
+    - name: Sacred Foundry
+      mean_qty: 1.9
+      rate: 0.667
+    - name: Blood Crypt
+      mean_qty: 1.2
+      rate: 0.422
+    - name: Moonshadow
+      mean_qty: 1.2
+      rate: 0.289
+    - name: Practiced Offense
+      mean_qty: 1.2
+      rate: 0.644
+    - name: Wooded Foothills
+      mean_qty: 1.2
+      rate: 0.489
+    - name: Nethergoyf
+      mean_qty: 1.0
+      rate: 0.356
+    - name: Orcish Bowmasters
+      mean_qty: 0.9
+      rate: 0.311
+    - name: Elegant Parlor
+      mean_qty: 0.7
+      rate: 0.644
+    - name: Fear of Missing Out
+      mean_qty: 0.7
+      rate: 0.244
+    - name: Arena of Glory
+      mean_qty: 0.6
+      rate: 0.4
+    - name: Fatal Push
+      mean_qty: 0.3
+      rate: 0.133
+    - name: Raucous Theater
+      mean_qty: 0.3
+      rate: 0.289
+    - name: Dragon's Rage Channeler
+      mean_qty: 0.2
+      rate: 0.044
+    - name: Goblin Lore
+      mean_qty: 0.2
+      rate: 0.067
+    - name: Marsh Flats
+      mean_qty: 0.2
+      rate: 0.178
+    medoid: bananadisaster
+  Living End:
+    sample_size: 56
+    core:
+    - name: Endurance
+      mean_qty: 3.9
+      rate: 0.982
+    - name: Force of Negation
+      mean_qty: 3.9
+      rate: 0.982
+    - name: Shardless Agent
+      mean_qty: 3.9
+      rate: 0.982
+    - name: Subtlety
+      mean_qty: 3.9
+      rate: 0.982
+    - name: Generous Ent
+      mean_qty: 3.8
+      rate: 0.982
+    - name: Misty Rainforest
+      mean_qty: 3.8
+      rate: 0.946
+    - name: Wistfulness
+      mean_qty: 3.8
+      rate: 0.964
+    - name: Street Wraith
+      mean_qty: 3.2
+      rate: 0.911
+    - name: Living End
+      mean_qty: 3.1
+      rate: 1.0
+    - name: Sink into Stupor
+      mean_qty: 1.1
+      rate: 0.946
+    - name: Breeding Pool
+      mean_qty: 1.0
+      rate: 0.982
+    - name: Forest
+      mean_qty: 1.0
+      rate: 0.982
+    - name: Hedge Maze
+      mean_qty: 1.0
+      rate: 0.964
+    - name: Island
+      mean_qty: 1.0
+      rate: 0.982
+    - name: Colossal Skyturtle
+      mean_qty: 0.9
+      rate: 0.875
+    flex:
+    - name: Violent Outburst
+      mean_qty: 3.0
+      rate: 0.75
+    - name: Oliphaunt
+      mean_qty: 2.2
+      rate: 0.75
+    - name: Curator of Mysteries
+      mean_qty: 1.5
+      rate: 0.643
+    - name: Waker of Waves
+      mean_qty: 1.5
+      rate: 0.607
+    - name: Overlord of the Balemurk
+      mean_qty: 0.9
+      rate: 0.232
+    - name: Striped Riverwinder
+      mean_qty: 0.9
+      rate: 0.286
+    - name: Commercial District
+      mean_qty: 0.8
+      rate: 0.75
+    - name: Steam Vents
+      mean_qty: 0.8
+      rate: 0.75
+    - name: Stomping Ground
+      mean_qty: 0.8
+      rate: 0.75
+    - name: Thundering Falls
+      mean_qty: 0.7
+      rate: 0.732
+    - name: Temple Garden
+      mean_qty: 0.6
+      rate: 0.554
+    - name: Formidable Speaker
+      mean_qty: 0.5
+      rate: 0.232
+    - name: Sacred Foundry
+      mean_qty: 0.5
+      rate: 0.482
+    - name: Valakut Awakening
+      mean_qty: 0.5
+      rate: 0.536
+    - name: Mistrise Village
+      mean_qty: 0.4
+      rate: 0.321
+    - name: Troll of Khazad-dûm
+      mean_qty: 0.4
+      rate: 0.196
+    - name: Flooded Grove
+      mean_qty: 0.3
+      rate: 0.268
+    - name: Otawara, Soaring City
+      mean_qty: 0.3
+      rate: 0.321
+    - name: Underground Mortuary
+      mean_qty: 0.3
+      rate: 0.232
+    - name: Boseiju, Who Endures
+      mean_qty: 0.2
+      rate: 0.25
+    - name: Brazen Borrower
+      mean_qty: 0.2
+      rate: 0.089
+    - name: Disciple of Freyalise
+      mean_qty: 0.2
+      rate: 0.196
+    - name: Flare of Denial
+      mean_qty: 0.2
+      rate: 0.179
+    - name: Halo Forager
+      mean_qty: 0.2
+      rate: 0.214
+    - name: Overgrown Tomb
+      mean_qty: 0.2
+      rate: 0.232
+    - name: Polluted Delta
+      mean_qty: 0.2
+      rate: 0.071
+    - name: Superior Spider-Man
+      mean_qty: 0.2
+      rate: 0.196
+    - name: Swamp
+      mean_qty: 0.2
+      rate: 0.161
+    - name: Undercity Sewers
+      mean_qty: 0.2
+      rate: 0.232
+    - name: Watery Grave
+      mean_qty: 0.2
+      rate: 0.232
+    medoid: MeninooNey
+  Mardu Energy:
+    sample_size: 10
+    core:
+    - name: Ajani, Nacatl Pariah
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Arid Mesa
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Guide of Souls
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Marsh Flats
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ocelot Pride
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ragavan, Nimble Pilferer
+      mean_qty: 3.5
+      rate: 1.0
+    - name: Galvanic Discharge
+      mean_qty: 2.9
+      rate: 1.0
+    - name: Goblin Bombardment
+      mean_qty: 2.8
+      rate: 1.0
+    - name: Voice of Victory
+      mean_qty: 2.8
+      rate: 0.9
+    - name: Sacred Foundry
+      mean_qty: 2.3
+      rate: 1.0
+    - name: Bloodstained Mire
+      mean_qty: 2.2
+      rate: 1.0
+    - name: Seasoned Pyromancer
+      mean_qty: 2.2
+      rate: 0.8
+    - name: Fatal Push
+      mean_qty: 2.1
+      rate: 0.9
+    - name: Plains
+      mean_qty: 1.9
+      rate: 1.0
+    - name: Blood Crypt
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Elegant Parlor
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Godless Shrine
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Mountain
+      mean_qty: 0.9
+      rate: 0.9
+    flex:
+    - name: Thoughtseize
+      mean_qty: 1.8
+      rate: 0.6
+    - name: Flooded Strand
+      mean_qty: 1.3
+      rate: 0.7
+    - name: Orcish Bowmasters
+      mean_qty: 1.2
+      rate: 0.4
+    - name: Ranger-Captain of Eos
+      mean_qty: 1.2
+      rate: 0.7
+    - name: Thraben Charm
+      mean_qty: 1.2
+      rate: 0.7
+    - name: Fable of the Mirror-Breaker
+      mean_qty: 0.8
+      rate: 0.6
+    - name: Chthonian Nightmare
+      mean_qty: 0.7
+      rate: 0.4
+    - name: Dalkovan Encampment
+      mean_qty: 0.6
+      rate: 0.6
+    - name: Reckless Pyrosurfer
+      mean_qty: 0.6
+      rate: 0.3
+    - name: Shadowy Backstreet
+      mean_qty: 0.6
+      rate: 0.6
+    - name: Ob Nixilis, the Adversary
+      mean_qty: 0.4
+      rate: 0.2
+    - name: Swamp
+      mean_qty: 0.4
+      rate: 0.3
+    - name: Haliya, Guided by Light
+      mean_qty: 0.3
+      rate: 0.2
+    - name: Prismatic Ending
+      mean_qty: 0.3
+      rate: 0.1
+    - name: Raucous Theater
+      mean_qty: 0.3
+      rate: 0.3
+    - name: Arena of Glory
+      mean_qty: 0.2
+      rate: 0.1
+    - name: Blood Moon
+      mean_qty: 0.2
+      rate: 0.1
+    - name: Kroxa, Titan of Death's Hunger
+      mean_qty: 0.2
+      rate: 0.1
+    - name: Lightning Bolt
+      mean_qty: 0.2
+      rate: 0.2
+    - name: Solitude
+      mean_qty: 0.2
+      rate: 0.1
+    - name: Windswept Heath
+      mean_qty: 0.2
+      rate: 0.1
+    - name: Witch Enchanter
+      mean_qty: 0.2
+      rate: 0.1
+    medoid: Mortaa
+  Mono-Black Eldrazi:
+    sample_size: 8
+    core:
+    - name: Eldrazi Temple
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Emperor of Bones
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Fatal Push
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ifnir Deadlands
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Kozilek's Command
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Mishra's Bauble
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Nethergoyf
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Prismatic Vista
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Swamp
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Thought-Knot Seer
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Thoughtseize
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Urza's Saga
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Orcish Bowmasters
+      mean_qty: 3.0
+      rate: 1.0
+    - name: Inquisition of Kozilek
+      mean_qty: 2.0
+      rate: 1.0
+    - name: Urborg, Tomb of Yawgmoth
+      mean_qty: 2.0
+      rate: 1.0
+    - name: Marsh Flats
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Nihil Spellbomb
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Pithing Needle
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Shadowspear
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Wastes
+      mean_qty: 1.0
+      rate: 1.0
+    flex: []
+    medoid: Selfeisek
+  Mono-Blue Belcher:
+    sample_size: 32
+    core:
+    - name: Disrupting Shoal
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Goblin Charbelcher
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Hydroelectric Specimen
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Jwari Disruption
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Lotus Bloom
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Sea Gate Restoration
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Sink into Stupor
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Suppression Ray
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Tameshi, Reality Architect
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Whir of Invention
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Waterlogged Teachings
+      mean_qty: 3.5
+      rate: 1.0
+    - name: Force of Negation
+      mean_qty: 2.8
+      rate: 1.0
+    - name: Into the Flood Maw
+      mean_qty: 2.7
+      rate: 1.0
+    - name: Counterspell
+      mean_qty: 2.5
+      rate: 0.906
+    - name: Spell Snare
+      mean_qty: 2.2
+      rate: 1.0
+    - name: Preordain
+      mean_qty: 2.0
+      rate: 0.875
+    - name: Stern Scolding
+      mean_qty: 1.7
+      rate: 0.875
+    - name: Beyeen Veil
+      mean_qty: 0.9
+      rate: 0.844
+    flex:
+    - name: Stock Up
+      mean_qty: 0.8
+      rate: 0.781
+    - name: Thundertrap Trainer
+      mean_qty: 0.6
+      rate: 0.156
+    - name: Flare of Denial
+      mean_qty: 0.3
+      rate: 0.094
+    - name: Fallaji Archaeologist
+      mean_qty: 0.2
+      rate: 0.094
+    - name: Strix Serenade
+      mean_qty: 0.2
+      rate: 0.219
+    - name: Tamiyo, Inquisitive Student
+      mean_qty: 0.2
+      rate: 0.125
+    medoid: Cyberzilla
+  Persist Reanimator:
+    sample_size: 44
+    core:
+    - name: Archon of Cruelty
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Persist
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Polluted Delta
+      mean_qty: 3.7
+      rate: 0.932
+    - name: Psychic Frog
+      mean_qty: 3.6
+      rate: 0.909
+    - name: Thoughtseize
+      mean_qty: 3.4
+      rate: 0.886
+    - name: Emperor of Bones
+      mean_qty: 2.8
+      rate: 0.955
+    - name: Swamp
+      mean_qty: 1.5
+      rate: 0.864
+    - name: Watery Grave
+      mean_qty: 1.4
+      rate: 0.909
+    - name: Undercity Sewers
+      mean_qty: 1.0
+      rate: 0.909
+    flex:
+    - name: Abhorrent Oculus
+      mean_qty: 3.1
+      rate: 0.795
+    - name: Bloodstained Mire
+      mean_qty: 3.0
+      rate: 0.795
+    - name: Faithless Looting
+      mean_qty: 3.0
+      rate: 0.75
+    - name: Fatal Push
+      mean_qty: 3.0
+      rate: 0.773
+    - name: Unearth
+      mean_qty: 2.8
+      rate: 0.75
+    - name: Thought Scour
+      mean_qty: 1.6
+      rate: 0.5
+    - name: Scalding Tarn
+      mean_qty: 1.3
+      rate: 0.727
+    - name: Spell Pierce
+      mean_qty: 0.9
+      rate: 0.568
+    - name: Blood Crypt
+      mean_qty: 0.8
+      rate: 0.75
+    - name: Island
+      mean_qty: 0.8
+      rate: 0.773
+    - name: Quantum Riddler
+      mean_qty: 0.8
+      rate: 0.295
+    - name: Raucous Theater
+      mean_qty: 0.7
+      rate: 0.659
+    - name: Steam Vents
+      mean_qty: 0.7
+      rate: 0.727
+    - name: Inquisition of Kozilek
+      mean_qty: 0.6
+      rate: 0.364
+    - name: Ephemerate
+      mean_qty: 0.5
+      rate: 0.136
+    - name: Eyetwitch
+      mean_qty: 0.5
+      rate: 0.114
+    - name: Faithful Mending
+      mean_qty: 0.5
+      rate: 0.136
+    - name: Flooded Strand
+      mean_qty: 0.5
+      rate: 0.136
+    - name: Gran-Gran
+      mean_qty: 0.5
+      rate: 0.136
+    - name: Marsh Flats
+      mean_qty: 0.5
+      rate: 0.136
+    - name: Prismatic Ending
+      mean_qty: 0.5
+      rate: 0.136
+    - name: Solitude
+      mean_qty: 0.5
+      rate: 0.136
+    - name: Stitcher's Supplier
+      mean_qty: 0.5
+      rate: 0.136
+    - name: Verdant Catacombs
+      mean_qty: 0.5
+      rate: 0.182
+    - name: Flare of Malice
+      mean_qty: 0.4
+      rate: 0.136
+    - name: Thundering Falls
+      mean_qty: 0.4
+      rate: 0.432
+    - name: Crypt of Agadeem
+      mean_qty: 0.3
+      rate: 0.068
+    - name: Overlord of the Balemurk
+      mean_qty: 0.3
+      rate: 0.114
+    - name: Phyrexian Tower
+      mean_qty: 0.3
+      rate: 0.114
+    - name: Snow-Covered Swamp
+      mean_qty: 0.3
+      rate: 0.136
+    - name: Boggart Trawler
+      mean_qty: 0.2
+      rate: 0.114
+    - name: Darkslick Shores
+      mean_qty: 0.2
+      rate: 0.182
+    - name: Force of Negation
+      mean_qty: 0.2
+      rate: 0.091
+    - name: Orcish Bowmasters
+      mean_qty: 0.2
+      rate: 0.068
+    - name: Otherworldly Gaze
+      mean_qty: 0.2
+      rate: 0.068
+    - name: Overgrown Tomb
+      mean_qty: 0.2
+      rate: 0.114
+    - name: Preordain
+      mean_qty: 0.2
+      rate: 0.114
+    - name: Street Wraith
+      mean_qty: 0.2
+      rate: 0.068
+    medoid: Alico
+  Prowess:
+    sample_size: 78
+    core:
+    - name: Cori-Steel Cutter
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Dragon's Rage Channeler
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Lava Dart
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Lightning Bolt
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Mishra's Bauble
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Monastery Swiftspear
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Preordain
+      mean_qty: 3.9
+      rate: 0.987
+    - name: Slickshot Show-Off
+      mean_qty: 3.7
+      rate: 0.936
+    - name: Mutagenic Growth
+      mean_qty: 3.0
+      rate: 0.859
+    - name: Steam Vents
+      mean_qty: 3.0
+      rate: 0.987
+    - name: Bloodstained Mire
+      mean_qty: 2.8
+      rate: 0.974
+    - name: Mountain
+      mean_qty: 2.6
+      rate: 1.0
+    - name: Wooded Foothills
+      mean_qty: 2.3
+      rate: 0.949
+    - name: Arid Mesa
+      mean_qty: 2.0
+      rate: 0.91
+    - name: Fiery Islet
+      mean_qty: 1.6
+      rate: 0.974
+    - name: Thundering Falls
+      mean_qty: 1.0
+      rate: 0.987
+    flex:
+    - name: Expressive Iteration
+      mean_qty: 2.9
+      rate: 0.769
+    - name: Scalding Tarn
+      mean_qty: 2.0
+      rate: 0.654
+    - name: Violent Urge
+      mean_qty: 1.0
+      rate: 0.667
+    - name: Unholy Heat
+      mean_qty: 0.8
+      rate: 0.436
+    - name: Stormchaser's Talent
+      mean_qty: 0.6
+      rate: 0.295
+    - name: Monstrous Rage
+      mean_qty: 0.5
+      rate: 0.179
+    - name: Boomerang Basics
+      mean_qty: 0.4
+      rate: 0.141
+    - name: Assault Strobe
+      mean_qty: 0.3
+      rate: 0.141
+    - name: Flashback
+      mean_qty: 0.3
+      rate: 0.282
+    - name: Surgical Extraction
+      mean_qty: 0.3
+      rate: 0.154
+    - name: Blood Crypt
+      mean_qty: 0.2
+      rate: 0.154
+    - name: Experimental Synthesizer
+      mean_qty: 0.2
+      rate: 0.051
+    - name: Stomping Ground
+      mean_qty: 0.2
+      rate: 0.192
+    medoid: therock988
+  Ruby Storm:
+    sample_size: 50
+    core:
+    - name: Desperate Ritual
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Manamorphose
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Pyretic Ritual
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ral, Monsoon Mage
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Reckless Impulse
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Ruby Medallion
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Wrenn's Resolve
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Mountain
+      mean_qty: 3.8
+      rate: 0.98
+    - name: Hex Magic
+      mean_qty: 3.6
+      rate: 1.0
+    - name: Past in Flames
+      mean_qty: 3.0
+      rate: 1.0
+    - name: Bloodstained Mire
+      mean_qty: 2.4
+      rate: 0.96
+    - name: Arid Mesa
+      mean_qty: 2.2
+      rate: 0.86
+    - name: Scalding Tarn
+      mean_qty: 2.2
+      rate: 0.92
+    - name: Wooded Foothills
+      mean_qty: 2.2
+      rate: 1.0
+    - name: Wish
+      mean_qty: 2.1
+      rate: 1.0
+    - name: Valakut Awakening
+      mean_qty: 2.0
+      rate: 1.0
+    - name: Artist's Talent
+      mean_qty: 1.7
+      rate: 0.98
+    - name: Elegant Parlor
+      mean_qty: 1.1
+      rate: 0.88
+    - name: Gemstone Caverns
+      mean_qty: 0.9
+      rate: 0.88
+    - name: Grapeshot
+      mean_qty: 0.9
+      rate: 0.9
+    - name: Sacred Foundry
+      mean_qty: 0.9
+      rate: 0.88
+    flex:
+    - name: Commercial District
+      mean_qty: 0.8
+      rate: 0.72
+    - name: Sunbaked Canyon
+      mean_qty: 0.7
+      rate: 0.66
+    - name: Stomping Ground
+      mean_qty: 0.4
+      rate: 0.42
+    - name: Flashback
+      mean_qty: 0.3
+      rate: 0.3
+    - name: Boseiju, Who Endures
+      mean_qty: 0.2
+      rate: 0.12
+    medoid: Sc0rp
+  Sam Combo:
+    sample_size: 11
+    core:
+    - name: Cauldron Familiar
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Chord of Calling
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Gilded Goose
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Samwise Gamgee
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Birthing Ritual
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Verdant Catacombs
+      mean_qty: 3.9
+      rate: 1.0
+    - name: Windswept Heath
+      mean_qty: 3.8
+      rate: 1.0
+    - name: Young Wolf
+      mean_qty: 2.3
+      rate: 0.818
+    - name: Boseiju, Who Endures
+      mean_qty: 1.8
+      rate: 1.0
+    - name: Viscera Seer
+      mean_qty: 1.7
+      rate: 1.0
+    - name: Overgrown Tomb
+      mean_qty: 1.6
+      rate: 1.0
+    - name: Carrion Feeder
+      mean_qty: 1.4
+      rate: 0.818
+    - name: Temple Garden
+      mean_qty: 1.2
+      rate: 1.0
+    - name: Forest
+      mean_qty: 1.1
+      rate: 1.0
+    - name: Wooded Foothills
+      mean_qty: 1.1
+      rate: 0.909
+    - name: Dryad Arbor
+      mean_qty: 0.9
+      rate: 0.909
+    - name: Godless Shrine
+      mean_qty: 0.9
+      rate: 0.909
+    - name: Haywire Mite
+      mean_qty: 0.9
+      rate: 0.909
+    - name: Lush Portico
+      mean_qty: 0.9
+      rate: 0.909
+    - name: Yawgmoth, Thran Physician
+      mean_qty: 0.9
+      rate: 0.909
+    - name: Endurance
+      mean_qty: 0.8
+      rate: 0.818
+    flex:
+    - name: Badgermole Cub
+      mean_qty: 1.9
+      rate: 0.636
+    - name: Ajani, Nacatl Pariah
+      mean_qty: 1.1
+      rate: 0.273
+    - name: City of Brass
+      mean_qty: 1.0
+      rate: 0.636
+    - name: Goblin Bombardment
+      mean_qty: 0.8
+      rate: 0.273
+    - name: Misty Rainforest
+      mean_qty: 0.7
+      rate: 0.545
+    - name: Sylvan Safekeeper
+      mean_qty: 0.7
+      rate: 0.727
+    - name: Underground Mortuary
+      mean_qty: 0.6
+      rate: 0.636
+    - name: Abhorrent Oculus
+      mean_qty: 0.5
+      rate: 0.545
+    - name: Breeding Pool
+      mean_qty: 0.5
+      rate: 0.545
+    - name: Dewdrop Cure
+      mean_qty: 0.5
+      rate: 0.455
+    - name: Orcish Bowmasters
+      mean_qty: 0.5
+      rate: 0.364
+    - name: Voice of Victory
+      mean_qty: 0.5
+      rate: 0.364
+    - name: Academy Manufactor
+      mean_qty: 0.4
+      rate: 0.091
+    - name: Birds of Paradise
+      mean_qty: 0.4
+      rate: 0.364
+    - name: Collected Company
+      mean_qty: 0.4
+      rate: 0.091
+    - name: Delighted Halfling
+      mean_qty: 0.4
+      rate: 0.091
+    - name: Haliya, Guided by Light
+      mean_qty: 0.4
+      rate: 0.364
+    - name: Malevolent Rumble
+      mean_qty: 0.4
+      rate: 0.182
+    - name: Nurturing Peatland
+      mean_qty: 0.4
+      rate: 0.364
+    - name: Witherbloom Charm
+      mean_qty: 0.4
+      rate: 0.273
+    - name: Marionette Apprentice
+      mean_qty: 0.3
+      rate: 0.091
+    - name: Stomping Ground
+      mean_qty: 0.3
+      rate: 0.273
+    - name: Warren Soultrader
+      mean_qty: 0.3
+      rate: 0.091
+    - name: Arboreal Grazer
+      mean_qty: 0.2
+      rate: 0.091
+    - name: Blooming Marsh
+      mean_qty: 0.2
+      rate: 0.091
+    - name: Lonis, Cryptozoologist
+      mean_qty: 0.2
+      rate: 0.091
+    - name: Swamp
+      mean_qty: 0.2
+      rate: 0.182
+    medoid: Sam_Lewin
+  Simic Neoform:
+    sample_size: 55
+    core:
+    - name: Allosaurus Rider
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Consign to Memory
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Eldritch Evolution
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Misty Rainforest
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Neoform
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Summoner's Pact
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Planar Genesis
+      mean_qty: 3.9
+      rate: 0.982
+    - name: Pact of Negation
+      mean_qty: 3.1
+      rate: 1.0
+    - name: Hedge Maze
+      mean_qty: 2.9
+      rate: 1.0
+    - name: Disciple of Freyalise
+      mean_qty: 2.2
+      rate: 1.0
+    - name: Veil of Summer
+      mean_qty: 2.2
+      rate: 0.982
+    - name: Ghalta, Stampede Tyrant
+      mean_qty: 2.1
+      rate: 1.0
+    - name: Generous Ent
+      mean_qty: 1.8
+      rate: 0.982
+    - name: Bridgeworks Battle
+      mean_qty: 1.2
+      rate: 1.0
+    - name: Breeding Pool
+      mean_qty: 1.1
+      rate: 1.0
+    - name: Flooded Strand
+      mean_qty: 1.1
+      rate: 0.964
+    - name: Hooting Mandrills
+      mean_qty: 1.1
+      rate: 1.0
+    - name: Scalding Tarn
+      mean_qty: 1.1
+      rate: 0.836
+    - name: Atraxa, Grand Unifier
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Endurance
+      mean_qty: 1.0
+      rate: 0.982
+    - name: Griselbrand
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Xenagos, God of Revels
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Boseiju, Who Endures
+      mean_qty: 0.9
+      rate: 0.927
+    - name: Ureni, the Song Unending
+      mean_qty: 0.9
+      rate: 0.927
+    flex:
+    - name: Forest
+      mean_qty: 1.2
+      rate: 0.764
+    - name: Nature's Claim
+      mean_qty: 1.0
+      rate: 0.509
+    - name: Island
+      mean_qty: 0.7
+      rate: 0.745
+    - name: Wistfulness
+      mean_qty: 0.7
+      rate: 0.509
+    - name: Windswept Heath
+      mean_qty: 0.5
+      rate: 0.473
+    - name: Preordain
+      mean_qty: 0.4
+      rate: 0.382
+    - name: Wooded Foothills
+      mean_qty: 0.4
+      rate: 0.4
+    - name: Nourishing Shoal
+      mean_qty: 0.3
+      rate: 0.345
+    - name: Polluted Delta
+      mean_qty: 0.3
+      rate: 0.327
+    - name: Snow-Covered Forest
+      mean_qty: 0.3
+      rate: 0.236
+    - name: Snow-Covered Island
+      mean_qty: 0.2
+      rate: 0.236
+    medoid: bananadisaster
+  Song of Creation:
+    sample_size: 10
+    core:
+    - name: Mishra's Bauble
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Mox Amber
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Mox Opal
+      mean_qty: 4.0
+      rate: 1.0
+    - name: Song of Creation
+      mean_qty: 3.7
+      rate: 1.0
+    - name: Tamiyo, Inquisitive Student
+      mean_qty: 3.7
+      rate: 1.0
+    - name: Emry, Lurker of the Loch
+      mean_qty: 3.6
+      rate: 1.0
+    - name: Malevolent Rumble
+      mean_qty: 2.8
+      rate: 0.8
+    - name: Boomerang Basics
+      mean_qty: 2.7
+      rate: 1.0
+    - name: Urza's Saga
+      mean_qty: 2.5
+      rate: 1.0
+    - name: Island
+      mean_qty: 1.7
+      rate: 1.0
+    - name: Steam Vents
+      mean_qty: 1.7
+      rate: 1.0
+    - name: Engineered Explosives
+      mean_qty: 1.6
+      rate: 0.9
+    - name: Breeding Pool
+      mean_qty: 1.5
+      rate: 1.0
+    - name: Shifting Woodland
+      mean_qty: 1.4
+      rate: 1.0
+    - name: Tormod's Crypt
+      mean_qty: 1.1
+      rate: 1.0
+    - name: Endurance
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Hedge Maze
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Six
+      mean_qty: 1.0
+      rate: 1.0
+    - name: Otawara, Soaring City
+      mean_qty: 0.9
+      rate: 0.9
+    - name: Haywire Mite
+      mean_qty: 0.8
+      rate: 0.8
+    flex:
+    - name: Misty Rainforest
+      mean_qty: 2.5
+      rate: 0.7
+    - name: Scalding Tarn
+      mean_qty: 2.4
+      rate: 0.7
+    - name: Repeal
+      mean_qty: 1.4
+      rate: 0.6
+    - name: Grinding Station
+      mean_qty: 1.2
+      rate: 0.4
+    - name: Polluted Delta
+      mean_qty: 1.2
+      rate: 0.3
+    - name: Sewer-veillance Cam
+      mean_qty: 1.2
+      rate: 0.4
+    - name: Flooded Strand
+      mean_qty: 0.9
+      rate: 0.3
+    - name: Jace, Wielder of Mysteries
+      mean_qty: 0.6
+      rate: 0.6
+    - name: Preordain
+      mean_qty: 0.6
+      rate: 0.3
+    - name: Wrenn and Six
+      mean_qty: 0.6
+      rate: 0.6
+    - name: Stomping Ground
+      mean_qty: 0.5
+      rate: 0.5
+    - name: Forest
+      mean_qty: 0.4
+      rate: 0.4
+    - name: Mountain
+      mean_qty: 0.4
+      rate: 0.4
+    - name: Boseiju, Who Endures
+      mean_qty: 0.3
+      rate: 0.3
+    - name: Skateboard
+      mean_qty: 0.3
+      rate: 0.3
+    - name: Thassa's Oracle
+      mean_qty: 0.3
+      rate: 0.3
+    - name: Bruce Banner
+      mean_qty: 0.2
+      rate: 0.2
+    medoid: levunga21
+week_status: provisional
+provisional_through: '2026-08-16'
+seal_on: '2026-08-17'
+source_event_ids:
+- '12849488'
+- '12849492'
+- '12849507'
+- '12849509'
+- '12850696'
+- '12850813'
+- '12850822'
+- '12850868'
+- '12851104'
+- '12851108'
+- '12851142'
