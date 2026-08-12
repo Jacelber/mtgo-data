@@ -81,7 +81,7 @@ current_task:
   branch: "codex/production-baseline-drift-hotfix"
   base_commit: "c785b2a8e7da6ab41ac4da97975ee219c32ca16a"
   task_type: "local_production_workflow_reliability_remediation"
-  artifact_impact: "workflow"
+  artifact_impact: "internal_diagnostics"
   objective: "Replace a volatile hard-coded Modern matchup row count with structural consumer invariants, validate generated consumer contracts before publication, and distinguish clean-baseline failures from input-fetch failures without changing data, statistics, or production state."
   authorization:
     local_implementation: true
