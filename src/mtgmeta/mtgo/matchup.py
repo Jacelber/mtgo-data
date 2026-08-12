@@ -420,6 +420,9 @@ def build_matchup_hierarchy(rule_set: RuleSet) -> dict[str, Any]:
                         "display_name": identity_display_name(
                             archetype.name,
                             subtype.name,
+                            maintained_subtype_names=(
+                                item.name for item in archetype.subtypes
+                            ),
                         ),
                         "parent_id": archetype.id,
                         "subtype_id": subtype.id,

@@ -2981,6 +2981,16 @@ public entry points.
    records. The accepted frozen-corpus identities remain unchanged, and the
    already indexed W32 Top 8 files are reclassified without changing either
    Top 8 index or any Pickup candidate.
+
+   R5 was published through pull request #201 and merge commit
+   `a2b254298508d10431e76531b6a4e029802c9165`; complete pull-request and
+   post-merge validation, automatic Pages deployment, byte-level public JSON
+   verification, and Owner live acceptance succeeded. On 2026-08-13 the Owner
+   separately authorized a local-only compatibility fix for nine subtype
+   `display_name` values that repeat a parent color prefix. The fix must derive
+   the replaceable prefix from the parent's own subtype definitions, preserve
+   all stable identities and statistics, leave the other 72 subtype labels
+   unchanged, and stop for Owner review before commit or publication.
 4. `P12-04` — Visual direction and durable design-system contract
    - publish the durable repository authority at
      `docs/FRONTEND_DESIGN_SYSTEM.md`, covering product personality,
