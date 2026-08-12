@@ -38,6 +38,7 @@ from tools.build_classifier_r4_standard_shadow_rules import (
     SULTAI_CONTROL_FAMILY,
     SULTAI_MIDRANGE_FAMILY,
     TEMUR_HULK_RAMP_FAMILY,
+    SINGLETON_DECISIONS,
     build_standard_shadow_rules,
     render_standard_shadow_rules,
 )
@@ -119,6 +120,52 @@ CONTROL_PARTITION = {
     "esper-control-consult": {"135cf04f37022ed110b4"},
 }
 
+SINGLETON_RULES = {
+    "standard-unknown-0857720282a4": "selesnya-ramp-primary",
+    "standard-unknown-0cbae9644068": "boros-burn-boltwave",
+    "standard-unknown-115a1eb783c9": "azorius-cage-primary",
+    "standard-unknown-115bb2d40b87": "white-weenie-primary",
+    "standard-unknown-14e962276abd": "boros-token-primary",
+    "standard-unknown-18e903160e16": "golgari-sacrifice-primary",
+    "standard-unknown-242b3816824a": "mono-blue-namor-primary",
+    "standard-unknown-42ba8896c962": "boros-token-primary",
+    "standard-unknown-465ced1c0787": "dimir-oculus-primary",
+    "standard-unknown-546deaf24038": "sultai-oculus-primary",
+    "standard-unknown-5488cd49501c": "temur-otters-vitality-floodcaller",
+    "standard-unknown-54989a313da5": "azorius-token-control-primary",
+    "standard-unknown-568d48ce3fef": None,
+    "standard-unknown-5cb23228136a": "mono-black-aggro-corpses-banner",
+    "standard-unknown-6b0bfc1c3537": "izzet-lessons-primary",
+    "standard-unknown-71c89735d78a": "mono-black-demons-primary",
+    "standard-unknown-79d9648ddef1": "gruul-monsters-primary",
+    "standard-unknown-7aed5a7501d9": "izzet-iron-man-primary",
+    "standard-unknown-7e295c544d07": "rakdos-ponza-primary",
+    "standard-unknown-7f6bed1d356c": "golgari-midrange-badgermole-sentinel",
+    "standard-unknown-830e01106c19": "orzhov-control-day-of-judgment",
+    "standard-unknown-8524a65d8f73": "mono-black-demons-primary",
+    "standard-unknown-867164f5dbc4": "sultai-midrange-hauntwoods-value",
+    "standard-unknown-8784b67a44bd": "dimir-flash-primary",
+    "standard-unknown-8d24e522f051": "orzhov-control-deadly-cover-up",
+    "standard-unknown-9505d82a2ea3": "gruul-ramp-tablet",
+    "standard-unknown-96321e1721cb": "dimir-oculus-primary",
+    "standard-unknown-9c3d83efcf2a": "azorius-momo-primary",
+    "standard-unknown-9efdb7d63014": "orzhov-demon-primary",
+    "standard-unknown-ae068aea323a": "boros-token-primary",
+    "standard-unknown-b05defd59bf9": "gruul-dinosaur-primary",
+    "standard-unknown-b2752e143f9b": "temur-elementals-primary",
+    "standard-unknown-b322d579e883": "golgari-crime-primary",
+    "standard-unknown-b4dd6c01de05": "mono-white-auras-primary",
+    "standard-unknown-be4503b245f3": "jeskai-equipment-primary",
+    "standard-unknown-cb47b3fd754a": "white-sultai-control-hauntwoods",
+    "standard-unknown-ce41fdb9a299": "orzhov-momo-primary",
+    "standard-unknown-d35bb31f0714": "rakdos-discard-primary",
+    "standard-unknown-dae51c5571ba": "golgari-crime-primary",
+    "standard-unknown-ddce99be6026": "gruul-ramp-weather-maker",
+    "standard-unknown-f283503ba493": "break-out-aggro-primary",
+    "standard-unknown-f68bfee8c56f": "jeskai-control-consult-helix",
+    "standard-unknown-fa7d763a076f": "mono-red-burn-primary",
+}
+
 
 def _load_shadow_rules():
     rules = parse_rule_text(SHADOW_PATH.read_text(encoding="utf-8"))
@@ -145,8 +192,8 @@ def test_standard_accepted_decisions_and_shadow_are_deterministic() -> None:
     dispositions = yaml.safe_load(DISPOSITIONS_PATH.read_text(encoding="utf-8"))
     assert dispositions["review"] == {
         "candidate_families": 59,
-        "owner_accepted_families": 16,
-        "pending_families": 43,
+        "owner_accepted_families": 59,
+        "pending_families": 0,
     }
     observed = {
         item["family_id"]: (item["disposition"], item["target_identity"])
@@ -181,6 +228,7 @@ def test_standard_accepted_decisions_and_shadow_are_deterministic() -> None:
         TEMUR_HULK_RAMP_FAMILY: ("new_identity", "temur-hulk-ramp"),
         AZORIUS_AURAS_FAMILY: ("new_identity", "azorius-auras"),
         BANT_AIRBENDING_FAMILY: ("map_existing", "bant-airbending"),
+        **SINGLETON_DECISIONS,
     }
     assert all(item["owner_accepted"] is True for item in dispositions["families"])
     control = next(
@@ -204,9 +252,9 @@ def test_standard_accepted_decisions_and_shadow_are_deterministic() -> None:
         build_standard_shadow_rules(ROOT)
     )
     inventory = rule_inventory(_load_shadow_rules())
-    assert inventory["parent_count"] == 83
+    assert inventory["parent_count"] == 102
     assert inventory["subtype_count"] == 11
-    assert inventory["rule_count"] == 97
+    assert inventory["rule_count"] == 126
     assert inventory["rule_ids_unique"] is True
     assert inventory["numeric_priorities_globally_unique"] is True
     assert inventory["priority_collisions"] == []
@@ -575,10 +623,59 @@ def test_standard_control_partition_captures_only_accepted_records() -> None:
     } == CONTROL_PARTITION
 
 
+def test_standard_singleton_owner_decisions_capture_each_reviewed_record() -> None:
+    queue = json.loads(QUEUE_PATH.read_text(encoding="utf-8"))
+    family_records = {
+        family["family_id"]: {member["record_id"] for member in family["members"]}
+        for family in queue["families"]
+        if family["family_id"] in SINGLETON_RULES
+    }
+    assert set(family_records) == set(SINGLETON_RULES)
+    assert all(len(record_ids) == 1 for record_ids in family_records.values())
+
+    records = {record.record_id: record for record in load_unknown_records(ROOT)}
+    shadow = _load_shadow_rules()
+    for family_id, rule_id in SINGLETON_RULES.items():
+        record_id = next(iter(family_records[family_id]))
+        record = records[record_id]
+        result = classify_counts(shadow, record.main_counts(), record.side_counts())
+        disposition, target_identity = SINGLETON_DECISIONS[family_id]
+        if disposition == "intentional_unknown":
+            assert result.status == "unknown"
+            assert result.selected_rule_id is None
+        else:
+            assert result.status == "classified"
+            assert result.archetype_id == target_identity
+            assert result.selected_rule_id == rule_id
+
+
 def test_standard_accepted_current_and_frozen_replays_are_stable() -> None:
     production = load_rule_set(PRODUCTION_PATH)
     shadow = _load_shadow_rules()
     reordered = reordered_rule_set(shadow)
+    accepted_singleton_rule_ids = {
+        rule_id for rule_id in SINGLETON_RULES.values() if rule_id is not None
+    }
+    accepted_classified_migrations = {
+        (
+            "classified",
+            "simic-rhythm",
+            "mono-green-squirrel-combo",
+            "mono-green-squirrel-combo-primary",
+        ),
+        (
+            "classified",
+            "mono-white-momo",
+            "orzhov-momo",
+            "orzhov-momo-primary",
+        ),
+        (
+            "classified",
+            "mono-blue-spellementals",
+            "mono-blue-namor",
+            "mono-blue-namor-primary",
+        ),
+    }
     current_transitions: Counter[tuple[str, str | None, str | None, str | None]] = (
         Counter()
     )
@@ -604,12 +701,7 @@ def test_standard_accepted_current_and_frozen_replays_are_stable() -> None:
                         baseline.archetype_id,
                         result.archetype_id,
                         result.selected_rule_id,
-                    ) == (
-                        "classified",
-                        "simic-rhythm",
-                        "mono-green-squirrel-combo",
-                        "mono-green-squirrel-combo-primary",
-                    )
+                    ) in accepted_classified_migrations
                 current_transitions[
                     (
                         baseline.status,
@@ -618,8 +710,8 @@ def test_standard_accepted_current_and_frozen_replays_are_stable() -> None:
                         result.selected_rule_id,
                     )
                 ] += 1
-    assert current_statuses == Counter(classified=4690, unknown=43)
-    assert current_transitions == Counter(
+    assert current_statuses == Counter(classified=4732, unknown=1)
+    expected_current_transitions = Counter(
         {
             ("unknown", None, "orzhov-lifegain", "orzhov-lifegain-primary"): 19,
             ("unknown", None, "five-color-humans", "five-color-humans-primary"): 13,
@@ -676,6 +768,31 @@ def test_standard_accepted_current_and_frozen_replays_are_stable() -> None:
             ): 2,
         }
     )
+    expected_current_transitions.update(
+        {
+            transition: count
+            for transition, count in current_transitions.items()
+            if transition[0] == "unknown"
+            and transition[3] in accepted_singleton_rule_ids
+        }
+    )
+    expected_current_transitions.update(
+        {
+            (
+                "classified",
+                "mono-white-momo",
+                "orzhov-momo",
+                "orzhov-momo-primary",
+            ): 7,
+            (
+                "classified",
+                "mono-blue-spellementals",
+                "mono-blue-namor",
+                "mono-blue-namor-primary",
+            ): 1,
+        }
+    )
+    assert current_transitions == expected_current_transitions
 
     frozen_statuses: Counter[str] = Counter()
     frozen_transitions: Counter[tuple[str, str | None, str | None, str | None]] = (
@@ -696,12 +813,7 @@ def test_standard_accepted_current_and_frozen_replays_are_stable() -> None:
                     baseline.archetype_id,
                     result.archetype_id,
                     result.selected_rule_id,
-                ) == (
-                    "classified",
-                    "simic-rhythm",
-                    "mono-green-squirrel-combo",
-                    "mono-green-squirrel-combo-primary",
-                )
+                ) in accepted_classified_migrations
             frozen_transitions[
                 (
                     baseline.status,
@@ -710,8 +822,8 @@ def test_standard_accepted_current_and_frozen_replays_are_stable() -> None:
                     result.selected_rule_id,
                 )
             ] += 1
-    assert frozen_statuses == Counter(classified=3896, unknown=40)
-    assert frozen_transitions == Counter(
+    assert frozen_statuses == Counter(classified=3928, unknown=8)
+    expected_frozen_transitions = Counter(
         {
             ("unknown", None, "sultai-control", "sultai-control-consult"): 4,
             ("unknown", None, "orzhov-lifegain", "orzhov-lifegain-primary"): 1,
@@ -754,3 +866,28 @@ def test_standard_accepted_current_and_frozen_replays_are_stable() -> None:
             ): 2,
         }
     )
+    expected_frozen_transitions.update(
+        {
+            transition: count
+            for transition, count in frozen_transitions.items()
+            if transition[0] == "unknown"
+            and transition[3] in accepted_singleton_rule_ids
+        }
+    )
+    expected_frozen_transitions.update(
+        {
+            (
+                "classified",
+                "mono-white-momo",
+                "orzhov-momo",
+                "orzhov-momo-primary",
+            ): 7,
+            (
+                "classified",
+                "mono-blue-spellementals",
+                "mono-blue-namor",
+                "mono-blue-namor-primary",
+            ): 1,
+        }
+    )
+    assert frozen_transitions == expected_frozen_transitions

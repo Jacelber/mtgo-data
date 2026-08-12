@@ -54,15 +54,15 @@ def test_live_status_is_small_current_state_and_points_to_history():
     assert status["next_approved_task"]["local_execution_authorized"] is False
     assert status["current_task"]["id"] == "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
     assert status["current_task"]["status"] == (
-        "owner_authorized_local_review_in_progress"
+        "owner_accepted_and_locally_committed"
     )
-    assert status["current_task"]["completed_on"] is None
+    assert status["current_task"]["completed_on"] == "2026-08-12"
     assert status["current_task"]["base_commit"] == (
         "7bf804684ac22dcf71560bacae4d3bc49c56f08f"
     )
     assert status["current_task"]["authorization"] == {
-        "local_implementation": True,
-        "commit": True,
+        "local_implementation": False,
+        "commit": False,
         "remote_publication": False,
         "merge": False,
     }
@@ -83,8 +83,10 @@ def test_live_status_is_small_current_state_and_points_to_history():
             "docs/audits/classifier-r4/modern_closeout.yaml"
         ),
         "modern_closeout_commit_authorization": ("owner_authorized_once_on_2026-08-12"),
-        "standard_review_status": "owner_review_in_progress_singletons_only",
-        "standard_owner_batches_implemented": 3,
+        "standard_review_status": (
+            "all_59_families_owner_accepted_local_shadow_closed"
+        ),
+        "standard_owner_batches_implemented": 4,
         "standard_batch_1_status": "owner_accepted",
         "standard_batch_1_dispositions": 4,
         "standard_batch_1_new_parents": 3,
@@ -102,16 +104,24 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "standard_batch_3_commit_authorization": (
             "owner_authorized_once_on_2026-08-12"
         ),
-        "standard_owner_accepted_families": 16,
-        "standard_pending_families": 43,
-        "current_standard_shadow": "4690 classified; 43 Unknown",
-        "frozen_standard_shadow": "3896 classified; 40 Unknown",
+        "standard_singleton_status": "owner_accepted_local_closeout",
+        "standard_singleton_dispositions": 43,
+        "standard_singleton_new_parents": 20,
+        "standard_singleton_retired_parents": 1,
+        "standard_singleton_intentional_unknown": 1,
+        "standard_singleton_classified_migrations": 8,
+        "standard_singleton_commit_authorization": (
+            "owner_authorized_once_on_2026-08-12"
+        ),
+        "standard_owner_accepted_families": 59,
+        "standard_pending_families": 0,
+        "current_standard_shadow": "4732 classified; 1 intentional Unknown",
+        "frozen_standard_shadow": "3928 classified; 8 Unknown",
         "standard_production_rules_changed": False,
         "next_stop": (
-            "After the one-time Standard batch 3 local closeout commit, stop "
-            "with 43 singleton families pending; do not start singleton review, "
-            "promote production rules, create another commit, publish, rerun "
-            "the Landing shadow, or begin P12-10."
+            "After the one-time Owner-authorized R4 local closeout commit, stop; "
+            "production promotion, publication, Landing shadow, P12-10, another "
+            "commit, and another task remain prohibited."
         ),
     }
     assert status["recent_completion_handoff"] == {
@@ -126,7 +136,7 @@ def test_live_status_is_small_current_state_and_points_to_history():
     }
     assert status["next_approved_task"]["id"] == "P12-10"
     assert status["next_approved_task"]["status"] == (
-        "blocked_pending_r4_and_separate_authorization"
+        "blocked_pending_classifier_production_promotion_and_separate_authorization"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False

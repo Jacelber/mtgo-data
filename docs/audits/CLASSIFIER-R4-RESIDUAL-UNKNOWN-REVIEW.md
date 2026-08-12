@@ -1720,3 +1720,60 @@ The Owner separately authorized one local commit after the complete
 recurring-family closeout. That one-time authority does not authorize review of
 the remaining 43 singleton families, production promotion, another commit,
 publication, the Landing shadow, P12-10, or another task.
+
+## Standard singleton owner-review implementation
+
+The Owner completed the supplied 43-row singleton workbook, reviewed every
+flagged overlap and rule-repair question, and authorized one local shadow-only
+implementation. All 59 Standard candidate families now have an explicit final
+disposition: 58 map to an accepted identity and the intentionally random S013
+record remains Unknown. Production `my_archetypes/standard.yaml` remains
+byte-identical.
+
+The singleton implementation adds 20 shadow-only parents: Selesnya Ramp,
+Azorius Cage, White Weenie, Golgari Sacrifice, Mono-Blue Namor, Dimir Oculus,
+Sultai Oculus, Azorius Token Control, Gruul Monsters, Izzet Iron Man, Rakdos
+Ponza, Dimir Flash, Orzhov Demon, Gruul Dinosaur, Mono-White Auras, Jeskai
+Equipment, Orzhov Momo, Gruul Ramp, Break Out Aggro, and Mono-Red Burn. It
+adds supplemental paths to Boros Burn, Temur Otters, Mono-Black Aggro, Golgari
+Midrange, Orzhov Control, Sultai Midrange, White Sultai Control, and Jeskai
+Control. It repairs Boros Token, Izzet Lessons, Mono-Black Demons, Azorius
+Momo, Golgari Crime, and Rakdos Discard.
+
+The former `temur-elementals` identity is displayed as Ramp Elementals and now
+uses one Flamebraider ramp path without color or Spider-Man conditions. The
+unused Grixis Elementals parent is retired from the shadow. The stable
+`temur-elementals` parent and `temur-elementals-primary` rule IDs are retained.
+
+Full current replay classifies 4,732 of 4,733 Standard records. The only
+Unknown is the Owner-designated random S013 record. In addition to converting
+all other singleton Unknown records, the accepted color and identity repairs
+move seven prior Mono-White Momo records to Orzhov Momo and one prior
+Mono-Blue Spellementals record to Mono-Blue Namor. The five previously
+accepted Simic Rhythm to Mono-Green Squirrel Combo migrations remain. The
+Selesnya Ramp path explicitly excludes main-deck blue, red, and black mana
+sources after conflict replay showed that the unbounded two-card form could
+override an existing Jeskai Tablet record.
+
+The frozen 3,936-record corpus ends at 3,928 classified and eight Unknown. It
+contains the same seven Orzhov Momo and one Mono-Blue Namor corrections and no
+unapproved classified migration. Reordered-rule evaluation is stable. The
+Standard shadow now has 102 parents, 11 subtypes, and 126 rules with globally
+unique rule IDs and numeric priorities.
+
+Focused Standard/R4/documentation validation passes 71 tests. Complete pytest
+validation passes all 918 ordinary tests and all eight committed-baseline
+tests. The ordinary shard's first run passed 917 tests before its final
+repository-validator smoke test correctly found intentionally malformed test
+fixtures under the chosen workspace-local pytest directory; after removing
+that temporary directory, the independent repository validator and the one
+affected smoke test passed. The committed-baseline shard's first attempt was
+blocked during setup by the known unreadable system pytest directory; rerunning
+with a clean workspace-local temporary directory executed and passed all eight
+tests. Repository validation also passes all Python, JavaScript, JSON, YAML,
+reference, and hygiene checks, and production rule validation passes.
+
+The Owner accepted the complete Standard singleton shadow and separately
+authorized one local R4 closeout commit on 2026-08-12. That one-time authority
+does not authorize another commit, production promotion, push, pull request,
+merge, Landing shadow, P12-10, or another task.
