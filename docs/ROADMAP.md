@@ -2924,6 +2924,29 @@ public entry points.
    The Owner accepted the validated local R3 implementation and authorized its
    local commit on 2026-08-11. Publication, R4, and P12-10 remain separately
    unauthorized.
+
+   The Owner separately authorized the non-production
+   `CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW` on 2026-08-11. R4 freezes the R3
+   Unknown inputs, groups all residual Standard and Modern records into
+   transparent de-identified candidate families, and records one explicit
+   Owner disposition for each family. Candidate similarity and nearest-rule
+   evidence do not assign an archetype. Production-rule promotion, statistics,
+   Pickup state, the Landing shadow, commit, publication, and P12-10 remain
+   separate gates.
+
+   Modern owner preclassification batches 1 through 4 are implemented and
+   Owner-accepted in the non-production R4 shadow. Batch 4 records nine accepted singleton
+   dispositions as eight parents, moves the nine remaining current MTGO Modern
+   Unknown records to reviewed identities, and moves seven structurally matching
+   Dimir Tempo records to Dimir Unearth. All 6,784 current and all 5,792 frozen
+   Modern records are classified in this shadow, while all 362 registered
+   Tabletop decklists retain their pre-batch identity. On 2026-08-12 the Owner
+   accepted the final Modern batch and authorized a one-time local Modern
+   closeout commit. The machine-readable closeout freezes all 88 accepted
+   Modern dispositions and the exact shadow, generator, queue, workbook,
+   production-rule, and protected-event hashes before Standard begins. This is
+   review evidence, not production promotion; Standard review and any later
+   commit, publication, the Landing shadow, and P12-10 remain separate gates.
 4. `P12-04` — Visual direction and durable design-system contract
    - publish the durable repository authority at
      `docs/FRONTEND_DESIGN_SYSTEM.md`, covering product personality,

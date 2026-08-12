@@ -52,35 +52,60 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "CLASSIFIER-R3-PRODUCTION-MIGRATION"
+    assert status["current_task"]["id"] == "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
     assert status["current_task"]["status"] == (
-        "owner_accepted_and_locally_committed"
+        "owner_authorized_local_review_in_progress"
     )
-    assert status["current_task"]["completed_on"] == "2026-08-11"
+    assert status["current_task"]["completed_on"] is None
     assert status["current_task"]["base_commit"] == (
-        "f586bff875c46c9f4cedcb3b84dc74427700f30c"
+        "7bf804684ac22dcf71560bacae4d3bc49c56f08f"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
-        "commit": True,
+        "commit": False,
         "remote_publication": False,
         "merge": False,
     }
-    assert status["recent_completion_handoff"] == {
-        "id": "CLASSIFIER-R2-SHADOW-AUDIT",
-        "name": "Accepted classifier shadow implementation and full-corpus audit",
-        "status": "owner_accepted_and_locally_committed",
-        "local_commit": "f586bff875c46c9f4cedcb3b84dc74427700f30c",
-        "note": (
-            "R3 starts from the local R1/R2 commit chain; neither commit has been "
-            "remotely published by this task."
+    assert status["current_task"]["review_progress"] == {
+        "modern_owner_bulk_batches_implemented": 4,
+        "modern_batch_4_status": "owner_accepted",
+        "modern_batch_4_dispositions": 9,
+        "modern_batch_4_parents": 8,
+        "modern_review_status": "owner_accepted_local_shadow_closed",
+        "modern_families_total": 88,
+        "modern_owner_accepted_families": 88,
+        "modern_pending_families": 0,
+        "current_modern_shadow": "6784 classified; 0 Unknown",
+        "frozen_modern_shadow": "5792 classified; 0 Unknown",
+        "tabletop_batch_4_identity_changes": 0,
+        "production_rules_changed": False,
+        "modern_closeout_checkpoint": (
+            "docs/audits/classifier-r4/modern_closeout.yaml"
+        ),
+        "modern_closeout_commit_authorization": (
+            "owner_authorized_once_on_2026-08-12"
+        ),
+        "standard_review_status": "not_started",
+        "standard_pending_families": 59,
+        "next_stop": (
+            "After the one-time Owner-authorized Modern closeout local commit, "
+            "stop; do not start Standard review, production promotion, Landing "
+            "shadow, publication, or P12-10."
         ),
     }
-    assert status["next_approved_task"]["id"] == (
-        "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
-    )
+    assert status["recent_completion_handoff"] == {
+        "id": "CLASSIFIER-R3-PRODUCTION-MIGRATION",
+        "name": "Accepted classifier production and Pickup migration",
+        "status": "owner_accepted_and_locally_committed",
+        "local_commit": "7bf804684ac22dcf71560bacae4d3bc49c56f08f",
+        "note": (
+            "R4 starts from the Owner-accepted local R3 commit. R3 has not been "
+            "remotely published."
+        ),
+    }
+    assert status["next_approved_task"]["id"] == "P12-10"
     assert status["next_approved_task"]["status"] == (
-        "blocked_pending_separate_authorization"
+        "blocked_pending_r4_and_separate_authorization"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
@@ -93,18 +118,22 @@ def test_live_status_is_small_current_state_and_points_to_history():
 
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
     audit = (
-        ROOT / "docs" / "audits" / "CLASSIFIER-R3-PRODUCTION-MIGRATION.md"
+        ROOT / "docs" / "audits" / "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW.md"
     ).read_text(encoding="utf-8")
     decisions = (ROOT / "docs" / "DECISIONS.md").read_text(encoding="utf-8")
     for document in (roadmap, audit, decisions):
-        assert "R3" in document
-        assert "fail-closed" in document
+        assert "R4" in document
         assert "P12-10" in document
+    assert "internal_diagnostics" in audit
+    assert "pending_owner_review" in audit
+    assert "map_existing" in audit
+    assert "new_identity" in audit
+    assert "intentional_unknown" in audit
+    assert "defer_insufficient_evidence" in audit
     assert "commit" in audit
-    assert "publish" in audit
     assert "R4" in audit
     assert "production" in audit
-    assert "dispatch" in audit
+    assert "P12-10" in audit
 
     historical_paths = {
         item["path"] for item in status["authoritative_documents"]["historical_documents"]
