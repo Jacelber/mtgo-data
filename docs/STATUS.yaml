@@ -76,13 +76,13 @@ current_task:
   name: "Dynamic production baseline and candidate consumer validation hotfix"
   status: "owner_accepted_commit_publication_merge_and_postmerge_dispatch_authorized"
   authorized_on: "2026-08-12"
-  completed_on: "2026-08-12"
+  completed_on: null
   workspace: "D:/dl/crawlerpj/.codex-workspaces/prod-baseline-hotfix-20260812-01"
   branch: "codex/production-baseline-drift-hotfix"
   base_commit: "c785b2a8e7da6ab41ac4da97975ee219c32ca16a"
   task_type: "local_production_workflow_reliability_remediation"
   artifact_impact: "internal_diagnostics"
-  objective: "Replace a volatile hard-coded Modern matchup row count with structural consumer invariants, validate generated consumer contracts before publication, and distinguish clean-baseline failures from input-fetch failures without changing data, statistics, or production state."
+  objective: "Replace volatile rolling-data assertions with structural and data-derived consumer invariants, validate freshly generated consumers in Python and Chromium before publication, and distinguish clean-baseline failures from input-fetch failures without changing data, statistics, or production state."
   authorization:
     local_implementation: true
     commit: true
@@ -90,6 +90,8 @@ current_task:
     merge: true
   target_paths:
     - ".github/workflows/update.yml"
+    - "tests/browser/production-pages.spec.js"
+    - "tests/test_generated_consumer_contracts.py"
     - "tests/test_phase8_real_data_review.py"
     - "tests/test_production_workflow.py"
     - "tests/test_documentation_history.py"
@@ -99,7 +101,7 @@ current_task:
     - "docs/STATUS.yaml"
   protected_scope:
     code_changed: "none"
-    workflow_changed: "production candidate consumer validation and controlled failure-stage reporting only"
+    workflow_changed: "production candidate consumer validation, focused generated-page Chromium smoke, and controlled failure-stage reporting only"
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
@@ -107,10 +109,12 @@ current_task:
     public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
-    remote_write_performed: "none"
+    remote_write_performed: "ready_pull_request_200_open"
   allowed_actions:
     - "Replace the volatile exact Modern matchup row-count assertion with full ordered parent-row identity comparison and dynamic expandable-parent checks."
-    - "Run the existing real-data consumer contract after candidate generation and validation but before packaging."
+    - "Replace rolling MTGO identities, counts, percentages, and dates in the production-page browser baseline with expectations derived from the current generated documents."
+    - "Run a dedicated dynamic generated-consumer contract after candidate generation and validation but before packaging."
+    - "Render the generated production pages through the focused Playwright production-page baseline before packaging."
     - "Report fetch-job clean-baseline failures as baseline while retaining fetch, build, and publish stages."
     - "Update focused workflow tests and the directly governing production-validation and notification contracts."
   prohibited_changes:

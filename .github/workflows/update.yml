@@ -367,7 +367,22 @@ jobs:
         run: python -B validate_schemas.py
 
       - name: Validate generated consumer contracts
-        run: python -B -m pytest tests/test_phase8_real_data_review.py
+        run: python -B -m pytest tests/test_generated_consumer_contracts.py
+
+      - name: Set up Node.js 24 for generated-page smoke
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install pinned browser-test package
+        run: npm ci
+
+      - name: Install Chromium with runner dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: Render generated production pages in Chromium
+        run: npx playwright test tests/browser/production-pages.spec.js
 
       - name: Package validated output for the publish job
         shell: bash
@@ -399,7 +414,7 @@ jobs:
             echo "- Candidate transfer: verified \`mtgo-fetch-candidate\` input and immutable \`mtgo-build-candidate\` output"
             echo "- Product formats: ${MTGO_PRODUCT_FORMATS}"
             echo "- Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}"
-            echo "- Validation layers: production candidate acceptance, repository, rule, Schema, and generated consumer-contract validation."
+            echo "- Validation layers: production candidate acceptance, repository, rule, Schema, generated consumer contracts, and focused Chromium rendering."
             echo "- No repository write permission is available to this job."
           } >> "$GITHUB_STEP_SUMMARY"
 

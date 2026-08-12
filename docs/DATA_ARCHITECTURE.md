@@ -1965,6 +1965,10 @@ matchup statistics, completeness, Top 8, Pickup preparation, hierarchy,
 metadata, the global consumer catalog, and diagnostics. Candidate validation
 admits only the reviewed completeness documents, Top 8 week/base names, and
 `stats/catalog.json`; arbitrary generated paths remain blocked.
+Before packaging, dedicated consumer-contract tests verify relationships among
+the current generated documents, and a focused Chromium baseline renders those
+documents through the production pages. Both derive rolling identities, counts,
+percentages, and dates from the candidate rather than from an earlier snapshot.
 
 ### 12.2 Melee output
 

@@ -185,7 +185,11 @@ def test_build_verifies_and_consumes_fetch_artifact_before_generation_and_valida
         "validate_repository.py",
         "validate_rules.py",
         "validate_schemas.py",
-        "-m pytest tests/test_phase8_real_data_review.py",
+        "-m pytest tests/test_generated_consumer_contracts.py",
+        "actions/setup-node@v6",
+        "npm ci",
+        "playwright install --with-deps chromium",
+        "playwright test tests/browser/production-pages.spec.js",
         "tar -cf",
         "sha256sum",
     ]
@@ -201,6 +205,15 @@ def test_build_verifies_and_consumes_fetch_artifact_before_generation_and_valida
     assert indexes == sorted(indexes)
     assert "mtgo-build-candidate" in flattened
     assert "actions/upload-artifact@v4.6.2" in flattened
+
+
+def test_generated_browser_smoke_is_pinned_and_runs_after_candidate_validation():
+    build_steps = steps("build")
+    node = next(step for step in build_steps if step.get("uses") == "actions/setup-node@v6")
+    assert node["with"] == {"node-version": "24", "cache": "npm"}
+    assert command_index("build", "validate_production_candidate.py validate") < command_index(
+        "build", "playwright test tests/browser/production-pages.spec.js"
+    )
 
 
 def test_publish_verifies_the_validated_output_and_is_the_only_commit_writer():

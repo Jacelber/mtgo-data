@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-import subprocess
 
 import pytest
 
@@ -17,17 +16,6 @@ APP_FILES = ("app-core.js", "app-freshness.js", "app-mtgo.js", "app-tabletop.js"
 
 def _json(path: str) -> dict:
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
-
-
-def _node(script: str, *args: str) -> dict:
-    result = subprocess.run(
-        ["node", "-e", script, *args],
-        cwd=ROOT,
-        check=True,
-        text=True,
-        capture_output=True,
-    )
-    return json.loads(result.stdout)
 
 
 def test_review_entry_point_is_chinese_first_and_uses_candidate_assets() -> None:
@@ -114,53 +102,6 @@ def test_top8_review_uses_immutable_bases_and_explicit_unavailable_states() -> N
             for event in top8["events"]
             for placement in event["placements"]
         )
-
-
-def test_review_matrix_follows_parent_order_and_uses_literal_wins_over_matches() -> None:
-    source = _json("stats/modern/mtgo/matchup_4w.json")
-    script = r"""
-const fs = require("fs");
-const review = require("./assets/js/phase8/matchup-model.js");
-const source = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
-const document = review.activeMatchupDocument(source, 20);
-const collapsed = review.buildView(document, [], []);
-const expandedParent = document.hierarchy.parents.find(parent =>
-  parent.expandable && document.parent_order.includes(parent.id)
-);
-if (!expandedParent) throw new Error("Real matchup data has no expandable parent");
-const expanded = review.buildView(
-  document,
-  [expandedParent.id],
-  [expandedParent.id]
-);
-const subtypeId = expandedParent.subtype_ids[0];
-const drawRecord = review.literalRecord({wins: 1, losses: 1, draws: 1});
-process.stdout.write(JSON.stringify({
-  collapsedRowIds: collapsed.rows.map(row => row.id),
-  parentRetained: expanded.rows.some(row => row.id === expandedParent.id),
-  subtypeIds: expanded.rows
-    .filter(row => row.parentId === expandedParent.id && row.kind === "subtype")
-    .map(row => row.id),
-  activeSubtypeIds: expandedParent.subtype_ids,
-  crossLevel: expanded.matrix[expandedParent.id][subtypeId],
-  minSampleHint: document.min_sample_hint,
-  drawRecord,
-}));
-"""
-    result = _node(
-        script,
-        "stats/modern/mtgo/matchup_4w.json",
-    )
-
-    assert result["collapsedRowIds"] == source["parent_order"]
-    assert result["parentRetained"] is True
-    assert result["subtypeIds"] == result["activeSubtypeIds"]
-    assert result["minSampleHint"] == 20
-    cross_level = result["crossLevel"]
-    assert cross_level["matches"] == (
-        cross_level["wins"] + cross_level["losses"] + cross_level["draws"]
-    )
-    assert result["drawRecord"]["win_rate"] == 1 / 3
 
 
 def test_tabletop_review_reads_literal_records_and_real_diagonal() -> None:

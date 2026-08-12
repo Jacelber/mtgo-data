@@ -1179,9 +1179,10 @@ Use three explicit validation layers:
 - the production workflow runs the same clean-checkout suite before any fetch as defense in depth, then captures a dynamic production baseline;
 - after fetching and generation, a dedicated candidate validator checks permitted publication paths, rejects deletions and source-boundary violations, parses changed documents, verifies event and match shape, checks ledger uniqueness, and prevents event, match, or ledger count regression;
 - strict classification diagnostics and repository, rule, and Schema validators continue to run on the generated candidate;
+- dedicated consumer-contract tests verify relationships among the current generated documents, then a focused Chromium baseline renders those documents through the production pages before packaging;
 - after publication, the workflow confirms a clean workspace and equality between the local published commit and remote `master`.
 
-Fixed-reference tests do not run against a checkout after production mutation. Dynamic candidate acceptance does not use historical hard-coded event, deck, or matchup counts.
+Fixed-reference tests do not run against a checkout after production mutation. Dynamic candidate acceptance and generated-page tests derive rolling identities, counts, percentages, and dates from the current candidate rather than historical hard-coded values.
 
 ## Consequences
 
