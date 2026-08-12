@@ -1516,9 +1516,8 @@ unchanged.
 
 ### 11.12 Reference-event compatibility manifest
 
-The Selesnya Eldrazi Ramp subtype hotfix updates the version `1.1.0`
-compatibility boundary for mixed Melee
-event `434455` in
+The subtype display-name de-duplication fix updates the version `1.4.0`
+compatibility boundary for mixed Melee event `434455` in
 `tests/fixtures/melee/434455_compatibility_manifest.json`. Its exact-byte set
 contains the raw snapshot manifest, normalized event, classification overlay,
 opportunity ledger, and five event-specific public documents. The raw manifest
@@ -2328,6 +2327,16 @@ A subtype must have a stable self-contained public display label, such as
 Presentation code must not rename classifier identities or guess a label from
 color words. The exact catalog field and compatibility behavior are frozen
 before generator implementation.
+
+The shared producer composes this label from maintained taxonomy names rather
+than a color-name dictionary. If a parent name begins with the exact name of
+one of its maintained subtypes, that subtype name is the replaceable base
+prefix: the selected subtype name is joined to the remaining parent suffix.
+For example, `Rakdos Hollow One` plus subtype `Mardu` becomes
+`Mardu Hollow One`, and `Dimir Tempo` plus subtype `Dimir Red Splash` becomes
+`Dimir Red Splash Tempo`. Otherwise the producer retains the existing
+`<subtype> <parent>` composition. Stable parent IDs, subtype IDs, maintained
+taxonomy names, and classification results do not change.
 
 Deck-construction details use the most specific maintained identity:
 

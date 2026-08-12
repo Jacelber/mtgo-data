@@ -146,6 +146,9 @@ def _hierarchy_from_overview(
                     "display_name": identity_display_name(
                         parent_name,
                         subtype_name,
+                        maintained_subtype_names=(
+                            item["subtype_name"] for item in subtypes
+                        ),
                     ),
                     "parent_id": parent_id,
                     "subtype_id": subtype_id,

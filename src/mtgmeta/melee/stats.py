@@ -636,6 +636,9 @@ def _scope_documents(
                         "display_name": identity_display_name(
                             parent.name,
                             subtype.name,
+                            maintained_subtype_names=(
+                                item.name for item in parent.subtypes
+                            ),
                         ),
                         **_group_metrics(
                             participant_ids=participant_ids_by_leaf.get(

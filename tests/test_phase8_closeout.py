@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from mtgmeta import consumer
+
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_FORMATS = ("standard", "modern")
@@ -104,10 +106,23 @@ def test_hierarchy_and_literal_matchup_contracts_hold_for_both_sources() -> None
         parent_names = {
             parent["id"]: parent["name"] for parent in hierarchy["parents"]
         }
+        subtype_names_by_parent = {
+            parent_id: tuple(
+                leaf["name"]
+                for leaf in hierarchy["leaves"]
+                if leaf["kind"] == "subtype" and leaf["parent_id"] == parent_id
+            )
+            for parent_id in parent_names
+        }
         assert all(
-            parent_names[leaf["parent_id"]].casefold()
-            in leaf["display_name"].casefold()
+            leaf["display_name"]
+            == consumer.identity_display_name(
+                parent_names[leaf["parent_id"]],
+                leaf["name"],
+                maintained_subtype_names=subtype_names_by_parent[leaf["parent_id"]],
+            )
             for leaf in hierarchy["leaves"]
+            if leaf["kind"] == "subtype"
         )
 
         matchup = load_json(root / "matchup_4w.json")

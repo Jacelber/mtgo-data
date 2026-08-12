@@ -2,19 +2,36 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from typing import Any
 
 
 WILSON_Z = 1.96
 
 
-def identity_display_name(parent_name: str, subtype_name: str | None = None) -> str:
-    """Return a self-contained label without repeating an existing parent name."""
+def identity_display_name(
+    parent_name: str,
+    subtype_name: str | None = None,
+    *,
+    maintained_subtype_names: Iterable[str] = (),
+) -> str:
+    """Return a self-contained label without repeating a maintained prefix."""
 
     if subtype_name is None:
         return parent_name
     if parent_name.casefold() in subtype_name.casefold():
         return subtype_name
+    parent_folded = parent_name.casefold()
+    leading_subtypes = [
+        name
+        for name in maintained_subtype_names
+        if parent_folded == name.casefold()
+        or parent_folded.startswith(f"{name.casefold()} ")
+    ]
+    if leading_subtypes:
+        base_name = max(leading_subtypes, key=len)
+        parent_suffix = parent_name[len(base_name) :].strip()
+        return f"{subtype_name} {parent_suffix}".strip()
     return f"{subtype_name} {parent_name}"
 
 

@@ -362,6 +362,9 @@ def aggregate(
                         "display_name": identity_display_name(
                             s["name"],
                             definition["name"],
+                            maintained_subtype_names=(
+                                item["name"] for item in definitions
+                            ),
                         ),
                     },
                     values,
@@ -857,7 +860,13 @@ def attach_subtype_decks(
                 "id": subtype.id,
                 "parent_id": parent.id,
                 "name": subtype.name,
-                "display_name": identity_display_name(parent.name, subtype.name),
+                "display_name": identity_display_name(
+                    parent.name,
+                    subtype.name,
+                    maintained_subtype_names=(
+                        item.name for item in parent.subtypes
+                    ),
+                ),
                 **_deck_entry(
                     records_by_identity.get(identity_key, []),
                     subtype_base_pack.get(identity_key),

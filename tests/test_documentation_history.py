@@ -52,12 +52,12 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "CLASSIFIER-R5-PRODUCTION-PROMOTION"
+    assert status["current_task"]["id"] == "CLASSIFIER-DISPLAY-NAME-DEDUPE"
     assert status["current_task"]["status"] == (
-        "owner_accepted_publication_in_progress"
+        "owner_accepted_publication_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "f8a4714c07861b104193721524ac5669cef69084"
+        "a2b254298508d10431e76531b6a4e029802c9165"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -65,32 +65,15 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "remote_publication": True,
         "merge": True,
     }
-    assert status["current_task"]["accepted_inputs"] == {
-        "modern_shadow_sha256": (
-            "5bff0207af7e43d3b59807c102ab323a0e51109e7543e27e59f293bade632b31"
-        ),
-        "standard_shadow_sha256": (
-            "b72aa3fcb0202eb9bc5d9c1f6f88abbe76d8d8ca29923662e3a75f8e54d3da74"
-        ),
-        "semantic_manifest_sha256": (
-            "0cd94ee3a4d6974f88446a660e661943d1cc2c4d8a25891dd6d214931a6aa999"
-        ),
-        "modern_expected_inventory": "127 parents; 70 subtypes; 205 rules",
-        "standard_expected_inventory": "102 parents; 11 subtypes; 126 rules",
-        "current_modern_expected": "6784 classified; 0 Unknown",
-        "frozen_modern_expected": "5792 classified; 0 Unknown",
-        "current_standard_expected": "4732 classified; 1 intentional Unknown",
-        "frozen_standard_expected": "3928 classified; 8 Unknown",
-    }
     assert status["recent_completion_handoff"]["id"] == (
-        "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
+        "CLASSIFIER-R5-PRODUCTION-PROMOTION"
     )
-    assert status["recent_completion_handoff"]["local_commit"] == (
-        "b3f379a95284ecbe5da21124a4be651bb346e602"
+    assert status["recent_completion_handoff"]["merge_commit"] == (
+        "a2b254298508d10431e76531b6a4e029802c9165"
     )
     assert status["next_approved_task"]["id"] == "P12-10"
     assert status["next_approved_task"]["status"] == (
-        "blocked_pending_r5_publication_landing_shadow_and_separate_authorization"
+        "blocked_pending_display_name_fix_acceptance_landing_shadow_and_separate_authorization"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False

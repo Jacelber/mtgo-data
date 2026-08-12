@@ -3836,3 +3836,51 @@ Tabletop separation, public paths, workflows, front-end behavior, and the event
 434455 normalized source remain unchanged. R5 acceptance and commit,
 publication, the Landing shadow, threshold confirmation, representative-card
 approval, P12-10, merge, and production dispatch remain separate gates.
+
+---
+
+# DEC-090 - De-duplicate self-contained subtype display labels
+
+Status: `Accepted`
+
+## Context
+
+The accepted classifier taxonomy contains nine subtype names that already
+carry the color-qualified base name of their parent. The shared consumer label
+composer nevertheless prepended the complete parent name, producing repeated
+reader-facing labels such as `Dimir Red Splash Dimir Tempo` and
+`Mardu Rakdos Hollow One`. Stable parent and subtype IDs, maintained taxonomy
+names, classifications, and statistics are correct and must not change.
+
+The same generated display labels occur in MTGO documents and in derived
+documents for retained mixed Melee event `434455`. Correcting them therefore
+changes three members of that event's exact-byte compatibility closure even
+though its raw snapshot, normalized event, classification overlay,
+opportunity ledger, decks, and quality documents remain byte-identical.
+
+## Decision
+
+Make the shared display-name composer data driven. When a selected subtype
+starts with another maintained subtype name belonging to the same parent,
+replace that base prefix with the selected subtype and append only the
+remaining parent suffix. Otherwise preserve the existing `<subtype> <parent>`
+composition. Do not introduce a color-name dictionary or change classifier
+rules, IDs, taxonomy names, priorities, or classifications.
+
+Regenerate only existing MTGO and Tabletop documents that publish the affected
+labels. Advance the event `434455` exact-byte compatibility contract and its
+dedicated manifest Schema constant from `1.3.0` to `1.4.0`, updating only the
+overview, matchup, and meta exact-file records. Do not regenerate the retained
+snapshot or fetch any source response.
+
+## Consequences
+
+Exactly nine unique subtype labels change and all other maintained subtype
+labels retain their prior composition. Event `434455` keeps byte-identical raw
+and normalized source, classification and opportunity provenance, deck
+records, quality output, and selected catalog projections. Product-document
+Schemas, statistical meaning, public paths, workflows, front-end source, MTGO
+and Tabletop separation, and Weekly Pickup state remain unchanged.
+
+Owner acceptance, commit, publication, merge, deployment, Landing shadow,
+P12-10, and any production dispatch remain separate authorization gates.

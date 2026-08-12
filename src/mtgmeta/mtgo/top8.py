@@ -10,6 +10,7 @@ from typing import Any
 
 from mtgmeta.public_contract import versioned
 from mtgmeta.consumer import identity_display_name
+from mtgmeta.rules import ArchetypeDefinition
 
 from . import load_mtgo_context
 from . import stats
@@ -48,7 +49,9 @@ def event_display_name(name: str, format_id: str) -> str:
     return value
 
 
-def _identity(record: dict[str, Any]) -> dict[str, Any]:
+def _identity(
+    record: dict[str, Any], parent: ArchetypeDefinition
+) -> dict[str, Any]:
     parent_id = record["archetype_id"]
     parent_name = record["archetype"]
     subtype_id = record.get("subtype_id")
@@ -58,7 +61,11 @@ def _identity(record: dict[str, Any]) -> dict[str, Any]:
         display_name = parent_name
     else:
         identity_id = f"{parent_id}/{subtype_id}"
-        display_name = identity_display_name(parent_name, subtype_name)
+        display_name = identity_display_name(
+            parent_name,
+            subtype_name,
+            maintained_subtype_names=(item.name for item in parent.subtypes),
+        )
     return {
         "identity_id": identity_id,
         "parent_id": parent_id,
@@ -85,8 +92,9 @@ def _available_placement(
     base_period_end: date,
     base: dict[str, Any],
     comparison_bases_file: str,
+    parent: ArchetypeDefinition,
 ) -> dict[str, Any]:
-    identity = _identity(record)
+    identity = _identity(record, parent)
     vector = stats.deck_vector(record)
     base_available = base["sample_size"] > 0
     raw_deviation = (
@@ -134,6 +142,7 @@ def _event_document(
     comparison_bases_file: str,
 ) -> dict[str, Any]:
     processed = stats.process_event(event, rules)
+    definitions = {item.id: item for item in rules.archetypes}
     records_by_rank: dict[int, dict[str, Any]] = {}
     for record in processed["records"]:
         rank = record["final_rank"]
@@ -151,7 +160,8 @@ def _event_document(
         if record is None or not record.get("main_deck"):
             placements.append(_missing_placement(rank))
         else:
-            identity_id = _identity(record)["identity_id"]
+            parent = definitions[record["archetype_id"]]
+            identity_id = _identity(record, parent)["identity_id"]
             base = bases.get(identity_id)
             if base is None:
                 raise MTGOTop8Error(
@@ -165,6 +175,7 @@ def _event_document(
                     base_period_end=base_period_end,
                     base=base,
                     comparison_bases_file=comparison_bases_file,
+                    parent=parent,
                 )
             )
 
@@ -246,7 +257,13 @@ def _comparison_bases(
         for subtype in parent.subtypes:
             identity_id = f"{parent.id}/{subtype.id}"
             bases[identity_id] = empty_base(
-                identity_display_name(parent.name, subtype.name)
+                identity_display_name(
+                    parent.name,
+                    subtype.name,
+                    maintained_subtype_names=(
+                        item.name for item in parent.subtypes
+                    ),
+                )
             )
     for parent_id, base in parent_bases.items():
         parent = definitions[parent_id]
@@ -260,7 +277,13 @@ def _comparison_bases(
         identity_id = f"{parent_id}/{subtype_id}"
         bases[identity_id] = {
             **base,
-            "display_name": identity_display_name(parent.name, subtype.name),
+            "display_name": identity_display_name(
+                parent.name,
+                subtype.name,
+                maintained_subtype_names=(
+                    item.name for item in parent.subtypes
+                ),
+            ),
         }
     return bases
 

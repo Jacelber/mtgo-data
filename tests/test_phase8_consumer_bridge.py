@@ -9,6 +9,8 @@ from pathlib import Path
 import pytest
 
 from mtgmeta import catalog
+from mtgmeta.consumer import identity_display_name
+from mtgmeta.config import load_rule_set
 from mtgmeta.mtgo import top8
 import validate_schemas
 
@@ -58,13 +60,134 @@ def test_mtgo_outputs_publish_self_contained_subtype_labels(format_id):
     root = ROOT / "stats" / format_id / "mtgo"
     for range_file in root.glob("range_*w.json"):
         for parent in _json(range_file)["archetypes"]:
+            subtype_names = tuple(
+                subtype["name"] for subtype in parent.get("subtypes", [])
+            )
             for subtype in parent.get("subtypes", []):
-                assert subtype["display_name"]
-                assert parent["name"].casefold() in subtype["display_name"].casefold()
+                assert subtype["display_name"] == identity_display_name(
+                    parent["name"],
+                    subtype["name"],
+                    maintained_subtype_names=subtype_names,
+                )
     hierarchy = _json(root / "archetype_hierarchy.json")
     assert all(leaf["display_name"] for leaf in hierarchy["leaves"])
     matchup = _json(root / "matchup_4w.json")
     assert all(leaf["display_name"] for leaf in matchup["hierarchy"]["leaves"])
+
+
+@pytest.mark.parametrize(
+    ("parent_name", "subtype_name", "maintained_subtype_names", "expected"),
+    [
+        (
+            "Boros Manufacturing",
+            "Jeskai",
+            ("Jeskai", "Mardu", "Boros"),
+            "Jeskai Manufacturing",
+        ),
+        (
+            "Boros Manufacturing",
+            "Mardu",
+            ("Jeskai", "Mardu", "Boros"),
+            "Mardu Manufacturing",
+        ),
+        (
+            "Boros Manufacturing",
+            "Boros",
+            ("Jeskai", "Mardu", "Boros"),
+            "Boros Manufacturing",
+        ),
+        (
+            "Izzet Steel-Cutter",
+            "Izzet",
+            ("Izzet",),
+            "Izzet Steel-Cutter",
+        ),
+        (
+            "Dimir Tempo",
+            "Dimir",
+            ("Dimir", "Dimir Red Splash", "Dimir White Splash"),
+            "Dimir Tempo",
+        ),
+        (
+            "Dimir Tempo",
+            "Dimir Red Splash",
+            ("Dimir", "Dimir Red Splash", "Dimir White Splash"),
+            "Dimir Red Splash Tempo",
+        ),
+        (
+            "Dimir Tempo",
+            "Dimir White Splash",
+            ("Dimir", "Dimir Red Splash", "Dimir White Splash"),
+            "Dimir White Splash Tempo",
+        ),
+        (
+            "Rakdos Hollow One",
+            "Rakdos",
+            ("Rakdos", "Mardu"),
+            "Rakdos Hollow One",
+        ),
+        (
+            "Rakdos Hollow One",
+            "Mardu",
+            ("Rakdos", "Mardu"),
+            "Mardu Hollow One",
+        ),
+        (
+            "Prowess",
+            "Grixis",
+            ("Izzet", "Temur", "Grixis"),
+            "Grixis Prowess",
+        ),
+    ],
+)
+def test_identity_display_name_replaces_only_a_maintained_parent_prefix(
+    parent_name,
+    subtype_name,
+    maintained_subtype_names,
+    expected,
+):
+    assert identity_display_name(
+        parent_name,
+        subtype_name,
+        maintained_subtype_names=maintained_subtype_names,
+    ) == expected
+
+
+def test_current_taxonomies_change_exactly_the_nine_accepted_labels():
+    expected = {
+        ("standard", "boros-manufacturing", "jeskai", "Jeskai Manufacturing"),
+        ("standard", "boros-manufacturing", "mardu", "Mardu Manufacturing"),
+        ("standard", "boros-manufacturing", "boros", "Boros Manufacturing"),
+        ("modern", "steel-cutter", "izzet", "Izzet Steel-Cutter"),
+        ("modern", "dimir-tempo", "dimir", "Dimir Tempo"),
+        ("modern", "dimir-tempo", "grixis", "Dimir Red Splash Tempo"),
+        ("modern", "dimir-tempo", "esper", "Dimir White Splash Tempo"),
+        ("modern", "rakdos-hollow-one", "rakdos", "Rakdos Hollow One"),
+        ("modern", "rakdos-hollow-one", "mardu", "Mardu Hollow One"),
+    }
+    changed = set()
+    total = 0
+    for format_id in ("standard", "modern"):
+        rules = load_rule_set(ROOT / "my_archetypes" / f"{format_id}.yaml")
+        for parent in rules.archetypes:
+            subtype_names = tuple(item.name for item in parent.subtypes)
+            for subtype in parent.subtypes:
+                total += 1
+                legacy = (
+                    subtype.name
+                    if parent.name.casefold() in subtype.name.casefold()
+                    else f"{subtype.name} {parent.name}"
+                )
+                current = identity_display_name(
+                    parent.name,
+                    subtype.name,
+                    maintained_subtype_names=subtype_names,
+                )
+                if current != legacy:
+                    changed.add((format_id, parent.id, subtype.id, current))
+    assert total == 81
+    assert changed == expected
+    assert total - len(changed) == 72
 
 
 def test_tabletop_preserves_legacy_rate_and_adds_literal_rate_and_labels():
