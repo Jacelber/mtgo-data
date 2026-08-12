@@ -1556,3 +1556,167 @@ root temporary directory, so its real-validator smoke test correctly failed
 with 917 other tests passing. After removing that task-created directory and
 moving `--basetemp` under the ignored `.venv`, the independent validator and
 the complete 918-test rerun both passed.
+
+## Standard owner-review batch 1
+
+The Owner accepted the first four ranked Standard families for local R4 shadow
+evaluation. Standard work is isolated from the hash-locked Modern closeout:
+the accepted Standard dispositions, builder, tests, and generated shadow rule
+file use separate paths, so no accepted Modern artifact or production rule is
+rewritten.
+
+The batch adds three shadow-only parents and one path under an existing parent:
+
+- `orzhov-lifegain-primary` requires the reviewed Amalia, Case of the Uneaten
+  Feast, Hinterland Sanctifier, Lunar Convocation, and Godless Shrine core;
+- `five-color-humans-primary` requires the reviewed Cavern, Courtyard,
+  Celestial Reunion, Cecil, Spectacular Spider-Man, and Arachne core and remains
+  lower priority than the established Allies rule;
+- `mono-green-mightiest-primary` requires Earth's Mightiest Heroes,
+  Craterhoof Behemoth, Ouroboroid, Spider Manifestation, and a twelve-Forest
+  base while permitting at most one Nature's Rhythm; and
+- `sultai-control-consult` requires Consult the Star Charts, Deadly Cover-Up,
+  Professor Dellian Fel, and the three reviewed Sultai shocklands. It outranks
+  Dimir Control when both rules match. Corpus verification found two Unholy
+  Annex in one accepted list, so this path permits at most two while the
+  existing three-Annex threshold remains Sultai Demon.
+
+A complete replay of all 4,733 current MTGO Standard decks changes exactly the
+45 accepted Unknown records: 19 become Orzhov Lifegain, 13 Five-Color Humans,
+seven Mono-Green Mightiest, and six Sultai Control. The shadow moves from 4,616
+classified and 117 Unknown to 4,661 classified and 72 Unknown. No previously
+classified record changes identity and reordered-rule evaluation produces the
+same result.
+
+The 3,936-record frozen Standard corpus changes exactly five Unknown records:
+four become Sultai Control and one Orzhov Lifegain. It moves from 3,868
+classified and 68 Unknown to 3,873 classified and 63 Unknown. No frozen
+classified record changes identity and reordered-rule evaluation is stable.
+
+Stop for Owner review of Standard batch 1. Do not start batch 2, promote any
+proposal into production, commit, publish, rerun the Landing shadow, or begin
+P12-10.
+
+## Standard owner-review batch 2
+
+The Owner accepted the next four ranked Standard families for local R4 shadow
+evaluation. The control family has a deterministic 4+1 partition because the
+product treats sideboard splashes as part of a deck's color identity:
+
+- four records map to existing Azorius Control through a supplemental Consult,
+  Day of Judgment, Stock Up, No More Lies, and Hallowed Fountain path that
+  excludes Jeskai Revelation, Ancient Vendetta, and Swamp;
+- one record becomes the new `esper-control` parent through the same control
+  core plus a main-deck Swamp and Ancient Vendetta in either deck zone;
+- three records map to existing Golgari Reanimator through a parallel
+  Valgavoth's Faithful, Broodheart Engine, and Broodspinner path;
+- three records become the new `azorius-prowess` parent through the reviewed
+  Elusive Otter, Stormchaser's Talent, Practiced Offense, and Hallowed Fountain
+  core; and
+- two records map to existing Esper Pixie by repairing
+  `esper-pixie-primary`: Kaito is no longer required, while at least three
+  Nurturing Pixie and Stormchaser's Talent plus at least two Hallowed Fountain
+  and Watery Grave define the stable three-color bounce shell.
+
+A complete replay of all 4,733 current MTGO Standard decks changes exactly the
+13 accepted Unknown records: four become Azorius Control, one Esper Control,
+three Golgari Reanimator, three Azorius Prowess, and two Esper Pixie. Together
+with batch 1, the shadow moves from 4,616 classified and 117 Unknown to 4,674
+classified and 59 Unknown. No previously classified record changes identity,
+including the six existing current Esper Pixie records, and reordered-rule
+evaluation produces the same result.
+
+The 3,936-record frozen Standard corpus changes twelve additional Unknown
+records in batch 2: three become Azorius Control, one Esper Control, three
+Golgari Reanimator, three Azorius Prowess, and two Esper Pixie. Together with
+batch 1, it moves from 3,868 classified and 68 Unknown to 3,885 classified and
+51 Unknown. No frozen classified record changes identity and reordered-rule
+evaluation remains stable.
+
+The Standard shadow now has 77 parents and 90 rules with globally unique rule
+IDs and numeric priorities. Production Standard and Modern rules, the
+hash-locked Modern R4 closeout, and protected event 434455 remain unchanged.
+
+Stop for Owner review of Standard batch 2. Do not start batch 3, promote any
+proposal into production, commit, publish, rerun the Landing shadow, or begin
+P12-10.
+
+## Standard owner-review batch 3 recurring-family closeout
+
+The Owner accepted all eight remaining multi-record Standard families for
+local R4 shadow evaluation. This leaves exactly 43 singleton families pending
+and closes the recurring-family portion of Standard review. Production rules
+remain byte-identical; every accepted change exists only in the Standard R4
+shadow.
+
+The batch adds six shadow-only parents, one supplemental path under an
+existing parent, and two repairs to existing primary rules:
+
+- `sultai-midrange-primary` requires the reviewed Badgermole Cub, Icetill
+  Explorer, Overlord of the Balemurk, Esper Origins, Superior Spider-Man, and
+  Breeding Pool creature-value core;
+- `mono-white-triumph-primary` requires Political Triumph, Cosmogrand Zenith,
+  Enduring Innocence, and Invasion Reinforcements;
+- `izzet-burn-primary` requires Death to Our Enemies, Plasma Bolt, Boltwave,
+  and Steam Vents and remains distinct from Izzet Prowess;
+- `simic-rhythm-squirrel` maps the reviewed blue-green Squirrel Girl and
+  Enduring Vitality construction to existing Simic Rhythm while permitting
+  two Nature's Rhythm. The existing `simic-rhythm-primary` now requires at
+  least two Breeding Pool so a mono-green list cannot be labeled Simic;
+- `mono-green-squirrel-combo-primary` requires the Squirrel Girl, Enduring
+  Vitality, Shang-Chi, Badgermole, Nature's Rhythm, and twelve-Forest core and
+  excludes the reviewed green shocklands. Spider Manifestation and Gene
+  Pollinator remain interchangeable construction choices rather than
+  subtypes;
+- `temur-hulk-ramp-primary` requires World War Hulk, Shared Roots, Terror of
+  the Peaks, Stomping Ground, and Island. The main-deck Islands and sideboard
+  Negates establish the blue splash under the product's sideboard-inclusive
+  color policy;
+- `azorius-auras-primary` requires Ethereal Armor, Super Intelligence,
+  Skyward Spider, and Hallowed Fountain; and
+- `bant-airbending-primary` is repaired to require the stable Aang, Swift
+  Savior, Appa, and Doc Aurlock core instead of the declining Aang, at the
+  Crossroads count.
+
+A complete replay of all 4,733 current MTGO Standard decks changes 21
+identities from production. Sixteen accepted Unknown records become the eight
+reviewed identities: two records per family. Five previously classified
+mono-green Squirrel Combo records move from Simic Rhythm to the new explicit
+mono-green parent. No other classified identity changes. Together with the
+first two batches, the shadow moves from 4,616 classified and 117 Unknown to
+4,690 classified and 43 Unknown.
+
+The 3,936-record frozen Standard corpus changes 16 identities. Eleven Unknown
+records become reviewed identities: two each for Sultai Midrange, Mono-White
+Triumph, Izzet Burn, Mono-Green Squirrel Combo, and Bant Airbending, plus one
+Simic Rhythm Squirrel record. Five existing mono-green records move from Simic
+Rhythm to Mono-Green Squirrel Combo. Temur Hulk Ramp and Azorius Auras are
+newer than the frozen corpus and have no frozen hit. The frozen shadow moves
+from 3,868 classified and 68 Unknown to 3,896 classified and 40 Unknown.
+
+Reordered-rule evaluation produces the same selections. The Standard shadow
+now has 83 parents, 11 subtypes, and 97 rules with globally unique IDs and
+numeric priorities. Focused validation covers every accepted family, positive
+and below-threshold boundaries, both Simic Rhythm paths, the five explicit
+mono-green migrations, complete current and frozen transitions, deterministic
+generation, and the hash-locked Modern closeout. The focused R4 and
+documentation suite passes 70 tests.
+
+Complete local validation covers all 925 repository tests through the same
+complementary CI shards: 917 ordinary tests and eight committed-baseline tests
+pass. The first monolithic attempt used a shared virtual-environment temporary
+directory whose parent was removed during the run, so 179 temporary-directory
+fixtures failed after 743 tests passed. A second monolithic invocation crossed
+that failure point but exceeded the local ten-minute command wrapper and was
+not treated as acceptance. The official shard rerun used an ignored
+workspace-local temporary parent. Its only initial failures were three Git
+subprocess checks rejected by Git's dubious-ownership guard because the
+sandbox-created workspace and user process have different Windows owners;
+all other 914 ordinary tests passed. A command-scoped `safe.directory`
+override, without changing global or repository Git configuration, made those
+three tests pass, and all eight committed-baseline tests then passed.
+
+The Owner separately authorized one local commit after the complete
+recurring-family closeout. That one-time authority does not authorize review of
+the remaining 43 singleton families, production promotion, another commit,
+publication, the Landing shadow, P12-10, or another task.

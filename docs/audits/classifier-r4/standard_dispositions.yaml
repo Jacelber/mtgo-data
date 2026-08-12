@@ -1,0 +1,117 @@
+schema_version: 1.0.0
+task_id: CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW
+format: standard
+scope: non_production_shadow
+status: owner_review_in_progress
+base_commit: 7bf804684ac22dcf71560bacae4d3bc49c56f08f
+review:
+  candidate_families: 59
+  owner_accepted_families: 16
+  pending_families: 43
+families:
+- family_id: standard-unknown-f6886bc730fa
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: orzhov-lifegain
+  rationale: Owner identified the recurring Amalia, Case, Sanctifier, and Lunar Convocation shell as Orzhov Lifegain. The accepted main-deck rule requires at least three Amalia Benavides Aguirre, Case of the Uneaten Feast, and Hinterland Sanctifier, at least two Lunar Convocation, and at least two Godless Shrine. Haliya, Moseo, and Starscape Cleric remain construction choices.
+  owner_accepted: true
+- family_id: standard-unknown-c43b77e5471b
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: five-color-humans
+  rationale: Owner identified the recurring Cavern, Courtyard, Celestial Reunion, Cecil, Spider-Man, and Arachne shell as Five-Color Humans. The accepted main-deck rule does not require Aang and remains lower priority than the established Allies identity when both complete cores are present.
+  owner_accepted: true
+- family_id: standard-unknown-d85fc6cf3b8c
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: mono-green-mightiest
+  rationale: Owner named the recurring mono-green Earth's Mightiest Heroes and Craterhoof shell Mono-Green Mightiest because Teamwork costs are rarely paid. The accepted main-deck rule also requires Ouroboroid, Spider Manifestation, and a mono-green Forest base while allowing at most one Nature's Rhythm; support creatures remain construction choices.
+  owner_accepted: true
+- family_id: standard-unknown-e37c34297664
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: sultai-control
+  rationale: Owner mapped the recurring Consult, Deadly Cover-Up, Professor Dellian Fel, and Sultai shockland shell to existing Sultai Control. Corpus verification showed that one accepted list has two Unholy Annex, so the reviewed main-deck path outranks Dimir Control when the green mana core is present and permits at most two Annex; the existing three-Annex threshold remains Sultai Demon. Flow State, Requiting Hex, Ancient Cornucopia, and Great Hall remain construction choices.
+  owner_accepted: true
+- family_id: standard-unknown-1f3d3090fe62
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: azorius-control|esper-control
+  rationale: Owner accepted a deterministic 4+1 split because sideboard splashes count toward product color identity. Four records map to Azorius Control through the reviewed Consult, Day of Judgment, Stock Up, No More Lies, and Hallowed Fountain core while excluding Jeskai Revelation, Ancient Vendetta, and Swamp. The remaining record becomes a new Esper Control parent because its main-deck Swamp and sideboard Ancient Vendetta establish the black splash.
+  owner_accepted: true
+  partition:
+  - target_identity: azorius-control
+    record_ids:
+    - 192350fdc7842115d151
+    - 4013686b0345d707a524
+    - 4c7a6219bd602453c50a
+    - a81d2e98a005c843039a
+  - target_identity: esper-control
+    record_ids:
+    - 135cf04f37022ed110b4
+- family_id: standard-unknown-26e1af626a7c
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: golgari-reanimator
+  rationale: Owner mapped the recurring Valgavoth's Faithful, Broodheart Engine, and Broodspinner shell to existing Golgari Reanimator. The accepted parallel path uses only that reviewed reanimation engine; Vein Ripper, Balemurk Leech, Professor Onyx, and individual reanimation targets remain construction choices.
+  owner_accepted: true
+- family_id: standard-unknown-d2042f54ff9c
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: azorius-prowess
+  rationale: Owner accepted the recurring Elusive Otter, Stormchaser's Talent, Practiced Offense, and Hallowed Fountain shell as a separate Azorius Prowess parent with no subtype.
+  owner_accepted: true
+- family_id: standard-unknown-0b41ac5d43e0
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: esper-pixie
+  rationale: Owner mapped both recurring Nurturing Pixie and Stormchaser's Talent bounce lists to existing Esper Pixie and accepted repair of the existing primary rule. The stable three-color mana core replaces Kaito as the boundary, requiring at least three Pixie and Talent plus at least two Hallowed Fountain and Watery Grave. Kaito, Daydream, Momentum Breaker, Grim Bauble, and other bounce targets remain construction choices.
+  owner_accepted: true
+- family_id: standard-unknown-399088e97304
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: sultai-midrange
+  rationale: Owner identified the recurring Badgermole Cub, Icetill Explorer, Overlord of the Balemurk, Esper Origins, Superior Spider-Man, and Breeding Pool shell as Sultai Midrange. Its creature-value plan is distinct from Sultai Reanimator and Landfall, while individual reanimation spells and support cards remain construction choices.
+  owner_accepted: true
+- family_id: standard-unknown-3e29fa6db392
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: mono-white-triumph
+  rationale: Owner accepted the recurring Political Triumph, Cosmogrand Zenith, Enduring Innocence, and Invasion Reinforcements token-value shell as Mono-White Triumph. Resolute Reinforcements, Elspeth, Novice Inspector, Fountainport, and the exact basic-land count remain construction choices.
+  owner_accepted: true
+- family_id: standard-unknown-41c8778fbc1e
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: izzet-burn
+  rationale: Owner accepted the recurring Death to Our Enemies, Plasma Bolt, Boltwave, and Steam Vents shell as Izzet Burn, separate from Izzet Prowess. Flow State, Vibrant Outburst, Ral, and Tablet of Discovery remain construction choices.
+  owner_accepted: true
+- family_id: standard-unknown-5275c620d655
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: simic-rhythm
+  rationale: Owner mapped both blue-green Squirrel and Enduring Vitality lists to existing Simic Rhythm. A supplemental path permits two Nature's Rhythm when the reviewed Badgermole, Vitality, Squirrel Girl, Shang-Chi, and Breeding Pool core is present; the original Gene Pollinator path is repaired to require blue mana explicitly.
+  owner_accepted: true
+- family_id: standard-unknown-8d99d7fdb83d
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: mono-green-squirrel-combo
+  rationale: Owner separated the mono-green Squirrel Girl, Enduring Vitality, Shang-Chi, Badgermole, and Nature's Rhythm combo from Simic Rhythm. The accepted identity includes both Spider Manifestation and Gene Pollinator constructions without creating subtypes and explicitly migrates five currently misclassified mono-green Simic Rhythm records.
+  owner_accepted: true
+- family_id: standard-unknown-b847e758d50c
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: temur-hulk-ramp
+  rationale: Owner accepted the recurring World War Hulk, Shared Roots, Terror of the Peaks, Stomping Ground, and Island shell as Temur Hulk Ramp. Main-deck Islands and sideboard Negates establish the blue splash under the product's sideboard-inclusive color policy, so the family is not Gruul Ramp.
+  owner_accepted: true
+- family_id: standard-unknown-bd5d86377a0e
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: azorius-auras
+  rationale: Owner accepted the recurring Ethereal Armor, Super Intelligence, Skyward Spider, and Hallowed Fountain shell as Azorius Auras. Shardmage's Rescue, Sheltered by Ghosts, and the exact creature package remain construction choices.
+  owner_accepted: true
+- family_id: standard-unknown-d7f0c982b6a7
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: bant-airbending
+  rationale: Owner mapped both lists to existing Bant Airbending and accepted repair of its primary rule. Aang, Swift Savior, Appa, and Doc Aurlock are stable across all current and frozen examples, while the declining Aang, at the Crossroads count is no longer required.
+  owner_accepted: true

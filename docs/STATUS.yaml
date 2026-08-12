@@ -5,14 +5,14 @@ project:
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
   current_working_branch: "codex/classifier-r4-residual-unknown-review"
-  working_branch_status: "modern_owner_accepted_local_shadow_closed"
+  working_branch_status: "standard_batch_3_recurring_families_owner_accepted_local_closeout"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Small machine-readable record of current project state and authorization."
-  last_updated: "2026-08-11"
+  last_updated: "2026-08-12"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   update_required_after_each_phase: true
@@ -85,14 +85,16 @@ current_task:
   objective: "Build a deterministic, de-identified review queue for every residual Standard and Modern Unknown family, record an explicit four-state disposition, and evaluate owner-accepted proposals in shadow only without changing production rules, statistics, Pickup state, source data, product behavior, or public paths."
   authorization:
     local_implementation: true
-    commit: false
+    commit: true
     remote_publication: false
     merge: false
   target_paths:
     - "tools/build_classifier_r4_unknown_review.py"
     - "tools/build_classifier_r4_shadow_rules.py"
+    - "tools/build_classifier_r4_standard_shadow_rules.py"
     - "tests/test_classifier_r4_unknown_review.py"
     - "tests/test_classifier_r4_shadow.py"
+    - "tests/test_classifier_r4_standard_shadow.py"
     - "docs/audits/classifier-r4/**"
     - "docs/audits/CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW.md"
     - "docs/STATUS.yaml"
@@ -118,9 +120,9 @@ current_task:
   prohibited_changes:
     - "Any edit to production classification rules, the semantic-feature manifest, classification reports, statistics, Pickup state, source events, retained responses, workflows, front ends, Schemas, public paths, or event whitelists."
     - "Any automatic production assignment or catch-all rule whose category boundary has not been explicitly accepted by the Owner."
-    - "Any commit, push, pull request, merge, production dispatch, Landing shadow, P12-10 work, or another task."
+    - "Any additional commit after the one-time Owner-authorized Standard batch 3 local closeout commit, or any push, pull request, merge, production dispatch, Landing shadow, P12-10 work, or another task."
     - "Force-push, direct master development, repository-setting changes, credentials, or protected event 434455 source-byte changes."
-  stop_point: "After deterministic local review artifacts, validation, and the first ranked family queue are ready, stop for family-by-family Owner review without committing, publishing, modifying production rules, starting P12-10, or starting another task."
+  stop_point: "After the one-time Owner-authorized Standard batch 3 local closeout commit, stop with the remaining 43 singleton families pending; do not publish, modify production rules, start singleton review, start P12-10, or start another task."
   review_progress:
     modern_owner_bulk_batches_implemented: 4
     modern_batch_4_status: "owner_accepted"
@@ -136,9 +138,29 @@ current_task:
     production_rules_changed: false
     modern_closeout_checkpoint: "docs/audits/classifier-r4/modern_closeout.yaml"
     modern_closeout_commit_authorization: "owner_authorized_once_on_2026-08-12"
-    standard_review_status: "not_started"
-    standard_pending_families: 59
-    next_stop: "After the one-time Owner-authorized Modern closeout local commit, stop; do not start Standard review, production promotion, Landing shadow, publication, or P12-10."
+    standard_review_status: "owner_review_in_progress_singletons_only"
+    standard_owner_batches_implemented: 3
+    standard_batch_1_status: "owner_accepted"
+    standard_batch_1_dispositions: 4
+    standard_batch_1_new_parents: 3
+    standard_batch_2_status: "owner_accepted"
+    standard_batch_2_dispositions: 4
+    standard_batch_2_new_parents: 2
+    standard_batch_2_existing_parent_paths: 2
+    standard_batch_2_repaired_primary_rules: 1
+    standard_batch_3_status: "owner_accepted_local_closeout"
+    standard_batch_3_dispositions: 8
+    standard_batch_3_new_parents: 6
+    standard_batch_3_existing_parent_paths: 1
+    standard_batch_3_repaired_primary_rules: 2
+    standard_batch_3_classified_migrations: 5
+    standard_batch_3_commit_authorization: "owner_authorized_once_on_2026-08-12"
+    standard_owner_accepted_families: 16
+    standard_pending_families: 43
+    current_standard_shadow: "4690 classified; 43 Unknown"
+    frozen_standard_shadow: "3896 classified; 40 Unknown"
+    standard_production_rules_changed: false
+    next_stop: "After the one-time Standard batch 3 local closeout commit, stop with 43 singleton families pending; do not start singleton review, promote production rules, create another commit, publish, rerun the Landing shadow, or begin P12-10."
 
 recent_completion_handoff:
   id: "CLASSIFIER-R3-PRODUCTION-MIGRATION"

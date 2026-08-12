@@ -1,0 +1,1796 @@
+schema_version: 1.1.0
+format: standard
+semantic_features:
+  manifest_path: configs/classifier_semantic_features.yaml
+  manifest_sha256: 0cd94ee3a4d6974f88446a660e661943d1cc2c4d8a25891dd6d214931a6aa999
+archetypes:
+- id: monument-lessons
+  name: Monument Lessons
+  priority: 76000
+  rules:
+  - id: monument-lessons-primary
+    priority: 76000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Gran-Gran
+        min_count: 3
+      - card: Accumulate Wisdom
+        min_count: 3
+      - card: Monument to Endurance
+        min_count: 3
+- id: jeskai-lessons
+  name: Jeskai Lessons
+  priority: 75000
+  rules:
+  - id: jeskai-lessons-primary
+    priority: 75000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Accumulate Wisdom
+        min_count: 3
+      - card: Jeskai Revelation
+        min_count: 2
+- id: izzet-lessons
+  name: Izzet Lessons
+  priority: 74000
+  rules:
+  - id: izzet-lessons-primary
+    priority: 74000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Firebending Lesson
+        min_count: 4
+      - card: Accumulate Wisdom
+        min_count: 4
+      - card: Monument to Endurance
+        max_count: 1
+      - card: Jeskai Revelation
+        exact_count: 0
+- id: mono-green-landfall
+  name: Mono-Green Landfall
+  priority: 73000
+  rules:
+  - id: mono-green-landfall-primary
+    priority: 73000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Mightform Harmonizer
+        min_count: 1
+      - card: Sazh's Chocobo
+        min_count: 4
+      - card: Fabled Passage
+        min_count: 4
+      - card: Earthbender Ascension
+        min_count: 3
+      - card: Stomping Ground
+        exact_count: 0
+      - card: Temple Garden
+        exact_count: 0
+      - card: Breeding Pool
+        exact_count: 0
+      - card: Overgrown Tomb
+        exact_count: 0
+      - card: Plains
+        exact_count: 0
+- id: gruul-landfall
+  name: Gruul Landfall
+  priority: 72000
+  rules:
+  - id: gruul-landfall-primary
+    priority: 72000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Mightform Harmonizer
+        min_count: 1
+      - card: Sazh's Chocobo
+        min_count: 4
+      - card: Fabled Passage
+        min_count: 4
+      - card: Earthbender Ascension
+        min_count: 3
+      - card: Stomping Ground
+        min_count: 3
+- id: selesnya-landfall
+  name: Selesnya Landfall
+  priority: 71000
+  rules:
+  - id: selesnya-landfall-primary
+    priority: 71000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Mightform Harmonizer
+        min_count: 1
+      - card: Sazh's Chocobo
+        min_count: 4
+      - card: Fabled Passage
+        min_count: 4
+      - card: Earthbender Ascension
+        min_count: 3
+      - card: Plains
+        min_count: 1
+- id: dimir-excruciator
+  name: Dimir Excruciator
+  priority: 70000
+  rules:
+  - id: dimir-excruciator-primary
+    priority: 70000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Doomsday Excruciator
+        min_count: 1
+      - card: Superior Spider-Man
+        min_count: 3
+      - card: Deceit
+        min_count: 3
+- id: bant-rhythm
+  name: Bant Rhythm
+  priority: 69000
+  rules:
+  - id: bant-rhythm-primary
+    priority: 69000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Quantum Riddler
+        min_count: 1
+      - card: Badgermole Cub
+        min_count: 4
+      - card: Nature's Rhythm
+        min_count: 3
+      - card: Llanowar Elves
+        min_count: 4
+      - card: Seam Rip
+        min_count: 1
+- id: simic-rhythm
+  name: Simic Rhythm
+  priority: 68010
+  rules:
+  - id: simic-rhythm-primary
+    priority: 68000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Badgermole Cub
+        min_count: 4
+      - card: Nature's Rhythm
+        min_count: 3
+      - card: Gene Pollinator
+        min_count: 3
+      - card: Llanowar Elves
+        min_count: 4
+      - card: Blooming Marsh
+        exact_count: 0
+      - card: Plains
+        exact_count: 0
+      - card: Temple Garden
+        exact_count: 0
+      - card: Breeding Pool
+        zone: main
+        min_count: 2
+  - id: simic-rhythm-squirrel
+    priority: 68010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Badgermole Cub
+        zone: main
+        min_count: 3
+      - card: Nature's Rhythm
+        zone: main
+        min_count: 2
+      - card: Enduring Vitality
+        zone: main
+        min_count: 3
+      - card: The Unbeatable Squirrel Girl
+        zone: main
+        min_count: 3
+      - card: Shang-Chi, Master of Kung Fu
+        zone: main
+        min_count: 3
+      - card: Breeding Pool
+        zone: main
+        min_count: 2
+- id: selesnya-rhythm
+  name: Selesnya Rhythm
+  priority: 67000
+  rules:
+  - id: selesnya-rhythm-primary
+    priority: 67000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Badgermole Cub
+        min_count: 4
+      - card: Nature's Rhythm
+        min_count: 3
+      - card: Gene Pollinator
+        min_count: 3
+      - card: Llanowar Elves
+        min_count: 4
+      - card: Temple Garden
+        min_count: 1
+      - card: Blooming Marsh
+        exact_count: 0
+      - card: Breeding Pool
+        exact_count: 0
+- id: dimir-midrange
+  name: Dimir Midrange
+  priority: 66000
+  rules:
+  - id: dimir-midrange-primary
+    priority: 66000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Kaito, Bane of Nightmares
+        min_count: 2
+      - card: Enduring Curiosity
+        min_count: 2
+      - card: Watery Grave
+        min_count: 4
+      - card: Soulstone Sanctuary
+        min_count: 1
+- id: izzet-spellementals
+  name: Izzet Spellementals
+  priority: 64000
+  rules:
+  - id: izzet-spellementals-primary
+    priority: 64000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Eddymurk Crab
+        min_count: 4
+      - card: Sunderflock
+        min_count: 2
+      - card: Hearth Elemental
+        min_count: 1
+- id: mono-blue-spellementals
+  name: Mono-Blue Spellementals
+  priority: 63000
+  rules:
+  - id: mono-blue-spellementals-primary
+    priority: 63000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Eddymurk Crab
+        min_count: 4
+      - card: Sunderflock
+        min_count: 2
+      - card: Island
+        min_count: 14
+      - card: Eluge, the Shoreless Sea
+        min_count: 3
+- id: temur-elementals
+  name: Temur Elementals
+  priority: 62000
+  rules:
+  - id: temur-elementals-primary
+    priority: 62000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ashling, Rekindled
+        min_count: 4
+      - card: Sunderflock
+        min_count: 2
+      - card: Vibrance
+        min_count: 4
+      - card: Superior Spider-Man
+        exact_count: 0
+      - card: Restless Reef
+        exact_count: 0
+- id: grixis-elementals
+  name: Grixis Elementals
+  priority: 61000
+  rules:
+  - id: grixis-elementals-primary
+    priority: 61000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Superior Spider-Man
+        min_count: 1
+      - card: Ashling, Rekindled
+        min_count: 4
+      - card: Sunderflock
+        min_count: 2
+      - card: Vibrance
+        min_count: 2
+- id: temur-tablet
+  name: Temur Tablet
+  priority: 60000
+  rules:
+  - id: temur-tablet-primary
+    priority: 60000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Tablet of Discovery
+        min_count: 2
+      - card: Breeding Pool
+        min_count: 2
+      - card: Doppelgang
+        min_count: 1
+- id: 4-color-tablet
+  name: 4-Color Tablet
+  priority: 59000
+  rules:
+  - id: 4-color-tablet-primary
+    priority: 59000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Tablet of Discovery
+        min_count: 2
+      - card: Jeskai Revelation
+        min_count: 2
+      - card: Inevitable Defeat
+        min_count: 2
+- id: jeskai-tablet
+  name: Jeskai Tablet
+  priority: 58000
+  rules:
+  - id: jeskai-tablet-primary
+    priority: 58000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Tablet of Discovery
+        min_count: 3
+      - card: Jeskai Revelation
+        min_count: 2
+      - card: Inevitable Defeat
+        exact_count: 0
+      - card: Gran-Gran
+        exact_count: 0
+      - card: Accumulate Wisdom
+        exact_count: 0
+- id: jeskai-control
+  name: Jeskai Control
+  priority: 57000
+  rules:
+  - id: jeskai-control-primary
+    priority: 57000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Jeskai Revelation
+        min_count: 1
+      - card: No More Lies
+        min_count: 2
+      - card: Stock Up
+        min_count: 2
+- id: boros-dragons
+  name: Boros Dragons
+  priority: 55000
+  rules:
+  - id: boros-dragons-primary
+    priority: 55000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nova Hellkite
+        min_count: 3
+      - card: Sarkhan, Dragon Ascendant
+        min_count: 3
+      - card: Momo, Friendly Flier
+        min_count: 3
+- id: boros-token
+  name: Boros Token
+  priority: 54000
+  rules:
+  - id: boros-token-primary
+    priority: 54000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Warleader's Call
+        min_count: 1
+      - card: Ojer Axonil, Deepest Might
+        min_count: 1
+      - card: Voice of Victory
+        min_count: 2
+- id: izzet-fling
+  name: Izzet Fling
+  priority: 53000
+  rules:
+  - id: izzet-fling-primary
+    priority: 53000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Callous Sell-Sword
+        min_count: 3
+      - card: Stormchaser's Talent
+        min_count: 4
+      - card: Spirebluff Canal
+        min_count: 1
+- id: gruul-fling
+  name: Gruul Fling
+  priority: 52000
+  rules:
+  - id: gruul-fling-primary
+    priority: 52000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Callous Sell-Sword
+        min_count: 3
+      - card: Stomping Ground
+        min_count: 3
+      - card: Thornspire Verge
+        min_count: 3
+- id: izzet-prowess
+  name: Izzet Prowess
+  priority: 51000
+  rules:
+  - id: izzet-prowess-primary
+    priority: 51000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Stormchaser's Talent
+        min_count: 4
+      - card: Boomerang Basics
+        min_count: 3
+      - card: Spirebluff Canal
+        min_count: 1
+      - card: Gran-Gran
+        exact_count: 0
+      - card: Accumulate Wisdom
+        exact_count: 0
+- id: bant-airbending
+  name: Bant Airbending
+  priority: 50000
+  rules:
+  - id: bant-airbending-primary
+    priority: 50000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Aang, Swift Savior
+        zone: main
+        min_count: 3
+      - card: Appa, Steadfast Guardian
+        zone: main
+        min_count: 3
+      - card: Doc Aurlock, Grizzled Genius
+        zone: main
+        min_count: 3
+- id: temur-harmonizer
+  name: Temur Harmonizer
+  priority: 49000
+  rules:
+  - id: temur-harmonizer-primary
+    priority: 49000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Mightform Harmonizer
+        min_count: 3
+      - card: Full Bore
+        min_count: 3
+- id: mono-red-aggro
+  name: Mono-Red Aggro
+  priority: 48000
+  rules:
+  - id: mono-red-aggro-primary
+    priority: 48000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Hired Claw
+        min_count: 3
+      - card: Burst Lightning
+        min_count: 3
+      - card: Mountain
+        min_count: 12
+- id: mardu-discard
+  name: Mardu Discard
+  priority: 47000
+  rules:
+  - id: mardu-discard-primary
+    priority: 47000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Hardened Academic
+        min_count: 3
+      - card: Marauding Mako
+        min_count: 3
+      - card: Moonshadow
+        min_count: 3
+- id: rakdos-discard
+  name: Rakdos Discard
+  priority: 46000
+  rules:
+  - id: rakdos-discard-primary
+    priority: 46000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Moonshadow
+        min_count: 3
+      - card: Marauding Mako
+        min_count: 3
+      - card: Bloodghast
+        min_count: 1
+      - card: Quantum Riddler
+        exact_count: 0
+- id: grixis-discard
+  name: Grixis Discard
+  priority: 45000
+  rules:
+  - id: grixis-discard-primary
+    priority: 45000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Marauding Mako
+        min_count: 3
+      - card: Moonshadow
+        min_count: 3
+      - card: Quantum Riddler
+        min_count: 2
+- id: izzet-blink
+  name: Izzet Blink
+  priority: 44000
+  rules:
+  - id: izzet-blink-primary
+    priority: 44000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Splash Portal
+        min_count: 2
+      - card: Thundertrap Trainer
+        min_count: 4
+      - card: Quantum Riddler
+        min_count: 4
+- id: sultai-reanimator
+  name: Sultai Reanimator
+  priority: 43000
+  rules:
+  - id: sultai-reanimator-primary
+    priority: 43000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Bringer of the Last Gift
+        min_count: 3
+      - card: Superior Spider-Man
+        min_count: 4
+      - card: Ardyn, the Usurper
+        min_count: 2
+- id: esper-pixie
+  name: Esper Pixie
+  priority: 42000
+  rules:
+  - id: esper-pixie-primary
+    priority: 42000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nurturing Pixie
+        zone: main
+        min_count: 3
+      - card: Stormchaser's Talent
+        zone: main
+        min_count: 3
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 2
+      - card: Watery Grave
+        zone: main
+        min_count: 2
+- id: dimir-control
+  name: Dimir Control
+  priority: 40000
+  rules:
+  - id: dimir-control-primary
+    priority: 40000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Deadly Cover-Up
+        min_count: 2
+      - card: Demolition Field
+        min_count: 2
+      - card: Three Steps Ahead
+        min_count: 2
+      - card: Consult the Star Charts
+        min_count: 3
+- id: azorius-control
+  name: Azorius Control
+  priority: 39000
+  rules:
+  - id: azorius-control-primary
+    priority: 39000
+    subtype_id: null
+    conditions:
+      all:
+      - card: No More Lies
+        min_count: 3
+      - card: Seam Rip
+        min_count: 3
+      - card: Get Lost
+        min_count: 3
+      - card: Consult the Star Charts
+        min_count: 3
+      - card: Jeskai Revelation
+        exact_count: 0
+  - id: azorius-control-consult
+    priority: 38990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Consult the Star Charts
+        zone: main
+        min_count: 2
+      - card: Day of Judgment
+        zone: main
+        min_count: 3
+      - card: Stock Up
+        zone: main
+        min_count: 3
+      - card: No More Lies
+        zone: main
+        min_count: 2
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 2
+      - card: Jeskai Revelation
+        zone: any
+        exact_count: 0
+      - card: Ancient Vendetta
+        zone: any
+        exact_count: 0
+      - card: Swamp
+        zone: any
+        exact_count: 0
+- id: mono-white-momo
+  name: Mono-White Momo
+  priority: 38000
+  rules:
+  - id: mono-white-momo-primary
+    priority: 38000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Momo, Friendly Flier
+        min_count: 3
+      - card: Sage of the Skies
+        min_count: 2
+      - card: Springleaf Drum
+        min_count: 3
+      - card: Hallowed Fountain
+        exact_count: 0
+- id: azorius-momo
+  name: Azorius Momo
+  priority: 37000
+  rules:
+  - id: azorius-momo-primary
+    priority: 37000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Momo, Friendly Flier
+        min_count: 3
+      - card: Sage of the Skies
+        min_count: 2
+      - card: Springleaf Drum
+        min_count: 3
+      - card: Hallowed Fountain
+        min_count: 1
+- id: azorius-otters
+  name: Azorius Otters
+  priority: 36000
+  rules:
+  - id: azorius-otters-primary
+    priority: 36000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Valley Floodcaller
+        min_count: 3
+      - card: Firdoch Core
+        min_count: 2
+      - card: Hallowed Fountain
+        min_count: 4
+- id: golgari-rhythm
+  name: Golgari Rhythm
+  priority: 35000
+  rules:
+  - id: golgari-rhythm-primary
+    priority: 35000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Blooming Marsh
+        min_count: 4
+      - card: Badgermole Cub
+        min_count: 4
+      - card: Nature's Rhythm
+        min_count: 2
+- id: golgari-demon
+  name: Golgari Demon
+  priority: 34000
+  rules:
+  - id: golgari-demon-primary
+    priority: 34000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Unholy Annex // Ritual Chamber
+        min_count: 3
+      - card: Overgrown Tomb
+        min_count: 3
+      - card: Nature's Rhythm
+        exact_count: 0
+- id: sultai-demon
+  name: Sultai Demon
+  priority: 33000
+  rules:
+  - id: sultai-demon-primary
+    priority: 33000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Unholy Annex // Ritual Chamber
+        min_count: 3
+      - card: Watery Grave
+        min_count: 1
+      - card: Nature's Rhythm
+        exact_count: 0
+      - card: Overgrown Tomb
+        min_count: 1
+- id: boros-burn
+  name: Boros Burn
+  priority: 32000
+  rules:
+  - id: boros-burn-primary
+    priority: 32000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Boros Charm
+        min_count: 3
+      - card: Lightning Helix
+        min_count: 1
+      - card: Emberheart Challenger
+        min_count: 3
+- id: simic-jackal
+  name: Simic Jackal
+  priority: 31000
+  rules:
+  - id: simic-jackal-primary
+    priority: 31000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Jackal, Genius Geneticist
+        min_count: 3
+      - card: Pawpatch Recruit
+        min_count: 3
+      - card: Llanowar Elves
+        min_count: 4
+- id: temur-battlecrier
+  name: Temur Battlecrier
+  priority: 30000
+  rules:
+  - id: temur-battlecrier-primary
+    priority: 30000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Temur Battlecrier
+        min_count: 4
+      - card: Outcaster Trailblazer
+        min_count: 4
+- id: izzet-looting
+  name: Izzet Looting
+  priority: 29000
+  rules:
+  - id: izzet-looting-primary
+    priority: 29000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Tiger-Seal
+        min_count: 4
+      - card: Duelist of the Mind
+        min_count: 4
+      - card: Fear of Missing Out
+        min_count: 3
+- id: jeskai-artifacts
+  name: Jeskai Artifacts
+  priority: 28000
+  rules:
+  - id: jeskai-artifacts-primary
+    priority: 28000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Simulacrum Synthesizer
+        min_count: 3
+      - card: Repurposing Bay
+        min_count: 3
+      - card: United Battlefront
+        min_count: 3
+      - card: Weapons Manufacturing
+        exact_count: 0
+- id: leyline-aggro
+  name: Leyline Aggro
+  priority: 27040
+  subtypes:
+  - id: izzet
+    name: Izzet
+  - id: gruul
+    name: Gruul
+  - id: boros
+    name: Boros
+  - id: rakdos
+    name: Rakdos
+  - id: mono-red
+    name: Mono-Red
+  rules:
+  - id: leyline-aggro-izzet
+    priority: 27040
+    subtype_id: izzet
+    conditions:
+      all:
+      - &id001
+        card: Leyline of Resonance
+        zone: main
+        min_count: 4
+      - &id002
+        card: Slickshot Show-Off
+        zone: main
+        min_count: 4
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+  - id: leyline-aggro-gruul
+    priority: 27030
+    subtype_id: gruul
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+  - id: leyline-aggro-boros
+    priority: 27020
+    subtype_id: boros
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+  - id: leyline-aggro-rakdos
+    priority: 27010
+    subtype_id: rakdos
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+  - id: leyline-aggro-mono-red
+    priority: 27000
+    subtype_id: mono-red
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+- id: 4-color-allies
+  name: Allies Kindred
+  priority: 26000
+  rules:
+  - id: 4-color-allies-primary
+    priority: 26000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Earth King's Lieutenant
+        min_count: 4
+      - card: Cavern of Souls
+        min_count: 4
+      - card: Jasmine Dragon Tea Shop
+        min_count: 3
+- id: temur-otters
+  name: Temur Otters
+  priority: 25000
+  rules:
+  - id: temur-otters-primary
+    priority: 25000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Enduring Vitality
+        min_count: 4
+      - card: Stormchaser's Talent
+        min_count: 4
+      - card: Breeding Pool
+        min_count: 4
+- id: mono-black-demons
+  name: Mono-Black Demons
+  priority: 24000
+  rules:
+  - id: mono-black-demons-primary
+    priority: 24000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Bloodletter of Aclazotz
+        min_count: 2
+      - card: Unholy Annex
+        min_count: 4
+      - card: Swamp
+        min_count: 10
+- id: selesnya-offense
+  name: Selesnya Offense
+  priority: 23000
+  rules:
+  - id: selesnya-offense-primary
+    priority: 23000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Practiced Offense
+        min_count: 3
+      - card: Temple Garden
+        min_count: 1
+      - card: Nature's Rhythm
+        max_count: 1
+- id: izzet-aggro
+  name: Izzet Aggro
+  priority: 22000
+  rules:
+  - id: izzet-aggro-primary
+    priority: 22000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Scalding Viper
+        zone: main
+        min_count: 3
+      - card: Hired Claw
+        zone: main
+        min_count: 3
+      - card: Spirebluff Canal
+        zone: main
+        min_count: 1
+- id: gruul-delirium
+  name: Gruul Delirium
+  priority: 21000
+  rules:
+  - id: gruul-delirium-primary
+    priority: 21000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Patchwork Beastie
+        min_count: 3
+      - card: Wildfire Wickerfolk
+        min_count: 3
+- id: bant-bounce
+  name: Bant Bounce
+  priority: 20000
+  rules:
+  - id: bant-bounce-primary
+    priority: 20000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Brightglass Gearhulk
+        min_count: 3
+      - card: Stormchaser's Talent
+        min_count: 3
+- id: dimir-deceit
+  name: Dimir Deceit
+  priority: 19000
+  rules:
+  - id: dimir-deceit-primary
+    priority: 19000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Deceit
+        min_count: 3
+      - card: Requiting Hex
+        min_count: 2
+      - card: Superior Spider-Man
+        min_count: 3
+      - card: Doomsday Excruciator
+        exact_count: 0
+- id: izzet-opus
+  name: Izzet Opus
+  priority: 18000
+  rules:
+  - id: izzet-opus-primary
+    priority: 18000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Colorstorm Stallion
+        min_count: 3
+      - card: Ashling's Command
+        min_count: 3
+      - card: Spirebluff Canal
+        min_count: 1
+- id: boros-manufacturing
+  name: Boros Manufacturing
+  priority: 16000
+  subtypes:
+  - id: jeskai
+    name: Jeskai
+  - id: mardu
+    name: Mardu
+  - id: boros
+    name: Boros
+  rules:
+  - id: boros-manufacturing-jeskai
+    priority: 16000
+    subtype_id: jeskai
+    conditions:
+      all:
+      - &id003
+        card: Weapons Manufacturing
+        zone: main
+        min_count: 3
+      - &id004
+        card: United Battlefront
+        zone: main
+        min_count: 3
+      - &id005
+        card: Sacred Foundry
+        zone: main
+        min_count: 1
+      - card: Cryogen Relic
+        zone: main
+        min_count: 2
+  - id: boros-manufacturing-mardu
+    priority: 15950
+    subtype_id: mardu
+    conditions:
+      all:
+      - *id003
+      - *id004
+      - *id005
+      - card: Cryogen Relic
+        zone: main
+        max_count: 1
+      - card: Tithing Blade
+        zone: main
+        min_count: 2
+  - id: boros-manufacturing-boros
+    priority: 15900
+    subtype_id: boros
+    conditions:
+      all:
+      - *id003
+      - *id004
+      - *id005
+      - card: Cryogen Relic
+        zone: main
+        max_count: 1
+      - card: Tithing Blade
+        zone: main
+        max_count: 1
+- id: golgari-reanimator
+  name: Golgari Reanimator
+  priority: 14000
+  rules:
+  - id: golgari-reanimator-primary
+    priority: 14000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Zombify
+        min_count: 3
+      - card: Broodheart Engine
+        min_count: 3
+      - card: Broodspinner
+        min_count: 3
+  - id: golgari-reanimator-faithful
+    priority: 13990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Valgavoth's Faithful
+        zone: main
+        min_count: 3
+      - card: Broodheart Engine
+        zone: main
+        min_count: 3
+      - card: Broodspinner
+        zone: main
+        min_count: 3
+- id: sultai-control
+  name: Sultai Control
+  priority: 40010
+  rules:
+  - id: sultai-control-primary
+    priority: 13000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Undercity Sewers
+        min_count: 1
+      - card: Rakshasa's Bargain
+        min_count: 3
+      - card: Willowrush Verge
+        min_count: 1
+  - id: sultai-control-bargain
+    priority: 12990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Rakshasa's Bargain
+        zone: any
+        min_count: 2
+      - card: Three Steps Ahead
+        zone: any
+        min_count: 2
+      - card: Emeritus of Abundance
+        zone: any
+        min_count: 2
+      - card: Flow State
+        zone: any
+        exact_count: 0
+      - card: Aang, Swift Savior
+        zone: any
+        exact_count: 0
+  - id: sultai-control-consult
+    priority: 40010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Consult the Star Charts
+        zone: main
+        min_count: 3
+      - card: Deadly Cover-Up
+        zone: main
+        min_count: 3
+      - card: Professor Dellian Fel
+        zone: main
+        min_count: 2
+      - card: Breeding Pool
+        zone: main
+        min_count: 2
+      - card: Watery Grave
+        zone: main
+        min_count: 2
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Unholy Annex // Ritual Chamber
+        zone: main
+        max_count: 2
+- id: orzhov-repartee
+  name: Orzhov Repartee
+  priority: 11000
+  rules:
+  - id: orzhov-repartee-primary
+    priority: 11000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Informed Inkwright
+        min_count: 3
+      - card: Lecturing Scornmage
+        min_count: 3
+      - card: Concealed Courtyard
+        min_count: 2
+- id: mono-black-aggro
+  name: Mono-Black Aggro
+  priority: 10000
+  rules:
+  - id: mono-black-aggro-primary
+    priority: 10000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Swamp
+        min_count: 14
+      - card: Timeline Culler
+        min_count: 3
+      - card: Forsaken Miner
+        min_count: 2
+- id: golgari-crime
+  name: Golgari Crime
+  priority: 9000
+  rules:
+  - id: golgari-crime-primary
+    priority: 9000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Freestrider Lookout
+        min_count: 4
+      - card: Ghost Vacuum
+        min_count: 3
+- id: golgari-roots
+  name: Golgari Roots
+  priority: 8000
+  rules:
+  - id: golgari-roots-primary
+    priority: 8000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Insidious Roots
+        min_count: 4
+      - card: Blooming Marsh
+        min_count: 4
+- id: orzhov-control
+  name: Orzhov Control
+  priority: 7000
+  rules:
+  - id: orzhov-control-primary
+    priority: 7000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Godless Shrine
+        min_count: 3
+      - card: Ketramose, the New Dawn
+        min_count: 3
+      - card: Ghost Vacuum
+        min_count: 3
+      - card: Deadly Cover-Up
+        min_count: 2
+- id: simic-ramp
+  name: Simic Ramp
+  priority: 4000
+  rules:
+  - id: simic-ramp-primary
+    priority: 4000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Shared Roots
+        min_count: 4
+      - card: Breeding Pool
+        min_count: 4
+- id: mono-green-aggro
+  name: Mono-Green Aggro
+  priority: 3000
+  rules:
+  - id: mono-green-aggro-primary
+    priority: 3000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Forest
+        min_count: 14
+      - card: Frenzied Baloth
+        min_count: 4
+- id: golgari-midrange
+  name: Golgari Midrange
+  priority: 2000
+  rules:
+  - id: golgari-midrange-primary
+    priority: 2000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Overgrown Tomb
+        min_count: 2
+      - card: Restless Cottage
+        min_count: 1
+      - card: Blooming Marsh
+        min_count: 2
+      - card: Nature's Rhythm
+        exact_count: 0
+      - card: Flow State
+        exact_count: 0
+      - card: Unholy Annex // Ritual Chamber
+        max_count: 1
+- id: selesnya-midrange
+  name: Selesnya Midrange
+  priority: 1000
+  rules:
+  - id: selesnya-midrange-primary
+    priority: 1000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Temple Garden
+        min_count: 2
+      - card: Hushwood Verge
+        min_count: 2
+      - card: Plains
+        min_count: 1
+- id: azorius-prison
+  name: Azorius Prison
+  priority: 65000
+  rules:
+  - id: azorius-prison-primary
+    priority: 65000
+    subtype_id: null
+    conditions:
+      all:
+      - card: High Noon
+        zone: main
+        min_count: 3
+      - card: Aang, Swift Savior
+        zone: main
+        min_count: 2
+      - card: Aven Interrupter
+        zone: main
+        min_count: 3
+- id: kona-omniscience
+  name: Kona Omniscience
+  priority: 41020
+  subtypes:
+  - id: temur
+    name: Temur
+  - id: bant
+    name: Bant
+  - id: simic
+    name: Simic
+  rules:
+  - id: kona-omniscience-temur
+    priority: 41020
+    subtype_id: temur
+    conditions:
+      all:
+      - &id006
+        card: Kona, Rescue Beastie
+        zone: main
+        min_count: 4
+      - &id007
+        card: Omniscience
+        zone: main
+        min_count: 4
+      - &id008
+        card: Uthros, Titanic Godcore
+        zone: main
+        min_count: 3
+      - card: Ashling, Rekindled
+        zone: main
+        min_count: 1
+      - card: Adagia, Windswept Bastion
+        zone: main
+        exact_count: 0
+      - card: Hallowed Fountain
+        zone: main
+        exact_count: 0
+  - id: kona-omniscience-bant-adagia
+    priority: 41010
+    subtype_id: bant
+    conditions:
+      all:
+      - *id006
+      - *id007
+      - *id008
+      - card: Adagia, Windswept Bastion
+        zone: main
+        min_count: 1
+      - card: Ashling, Rekindled
+        zone: main
+        exact_count: 0
+  - id: kona-omniscience-bant-hallowed-fountain
+    priority: 41005
+    subtype_id: bant
+    conditions:
+      all:
+      - *id006
+      - *id007
+      - *id008
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+      - card: Ashling, Rekindled
+        zone: main
+        exact_count: 0
+  - id: kona-omniscience-simic
+    priority: 41000
+    subtype_id: simic
+    conditions:
+      all:
+      - *id006
+      - *id007
+      - *id008
+      - card: Ashling, Rekindled
+        zone: main
+        exact_count: 0
+      - card: Adagia, Windswept Bastion
+        zone: main
+        exact_count: 0
+      - card: Hallowed Fountain
+        zone: main
+        exact_count: 0
+- id: dark-jeskai-control
+  name: Dark Jeskai Control
+  priority: 56000
+  rules:
+  - id: dark-jeskai-control-primary
+    priority: 56000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Inevitable Defeat
+        zone: main
+        min_count: 2
+      - card: Jeskai Revelation
+        zone: main
+        min_count: 1
+      - card: Stock Up
+        zone: main
+        min_count: 1
+      - card: Tablet of Discovery
+        zone: main
+        max_count: 1
+- id: white-sultai-control
+  name: White Sultai Control
+  priority: 13010
+  rules:
+  - id: white-sultai-control-primary
+    priority: 13010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Rakshasa's Bargain
+        zone: any
+        min_count: 2
+      - card: Aang, Swift Savior
+        zone: any
+        min_count: 2
+      - card: Three Steps Ahead
+        zone: any
+        min_count: 2
+      - card: Emeritus of Abundance
+        zone: any
+        min_count: 2
+      - card: Flow State
+        zone: any
+        exact_count: 0
+- id: orzhov-lifegain
+  name: Orzhov Lifegain
+  priority: 77000
+  rules:
+  - id: orzhov-lifegain-primary
+    priority: 77000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Amalia Benavides Aguirre
+        zone: main
+        min_count: 3
+      - card: Case of the Uneaten Feast
+        zone: main
+        min_count: 3
+      - card: Hinterland Sanctifier
+        zone: main
+        min_count: 3
+      - card: Lunar Convocation
+        zone: main
+        min_count: 2
+      - card: Godless Shrine
+        zone: main
+        min_count: 2
+- id: five-color-humans
+  name: Five-Color Humans
+  priority: 25990
+  rules:
+  - id: five-color-humans-primary
+    priority: 25990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Cavern of Souls
+        zone: main
+        min_count: 4
+      - card: Secluded Courtyard
+        zone: main
+        min_count: 4
+      - card: Celestial Reunion
+        zone: main
+        min_count: 3
+      - card: Cecil, Dark Knight
+        zone: main
+        min_count: 3
+      - card: Spectacular Spider-Man
+        zone: main
+        min_count: 2
+      - card: Arachne, Psionic Weaver
+        zone: main
+        min_count: 2
+- id: mono-green-mightiest
+  name: Mono-Green Mightiest
+  priority: 76900
+  rules:
+  - id: mono-green-mightiest-primary
+    priority: 76900
+    subtype_id: null
+    conditions:
+      all:
+      - card: Earth's Mightiest Heroes
+        zone: main
+        min_count: 3
+      - card: Craterhoof Behemoth
+        zone: main
+        min_count: 3
+      - card: Ouroboroid
+        zone: main
+        min_count: 3
+      - card: Spider Manifestation
+        zone: main
+        min_count: 3
+      - card: Forest
+        zone: main
+        min_count: 12
+      - card: Nature's Rhythm
+        zone: main
+        max_count: 1
+- id: esper-control
+  name: Esper Control
+  priority: 39010
+  rules:
+  - id: esper-control-consult
+    priority: 39010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Consult the Star Charts
+        zone: main
+        min_count: 2
+      - card: Day of Judgment
+        zone: main
+        min_count: 3
+      - card: Stock Up
+        zone: main
+        min_count: 3
+      - card: No More Lies
+        zone: main
+        min_count: 2
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 2
+      - card: Ancient Vendetta
+        zone: any
+        min_count: 1
+      - card: Swamp
+        zone: main
+        min_count: 1
+      - card: Jeskai Revelation
+        zone: any
+        exact_count: 0
+- id: azorius-prowess
+  name: Azorius Prowess
+  priority: 50990
+  rules:
+  - id: azorius-prowess-primary
+    priority: 50990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Elusive Otter
+        zone: main
+        min_count: 3
+      - card: Stormchaser's Talent
+        zone: main
+        min_count: 3
+      - card: Practiced Offense
+        zone: main
+        min_count: 3
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 2
+- id: sultai-midrange
+  name: Sultai Midrange
+  priority: 65990
+  rules:
+  - id: sultai-midrange-primary
+    priority: 65990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Badgermole Cub
+        zone: main
+        min_count: 3
+      - card: Icetill Explorer
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+      - card: Esper Origins
+        zone: main
+        min_count: 2
+      - card: Superior Spider-Man
+        zone: main
+        min_count: 2
+      - card: Breeding Pool
+        zone: main
+        min_count: 2
+- id: mono-white-triumph
+  name: Mono-White Triumph
+  priority: 76920
+  rules:
+  - id: mono-white-triumph-primary
+    priority: 76920
+    subtype_id: null
+    conditions:
+      all:
+      - card: Political Triumph
+        zone: main
+        min_count: 3
+      - card: Cosmogrand Zenith
+        zone: main
+        min_count: 3
+      - card: Enduring Innocence
+        zone: main
+        min_count: 3
+      - card: Invasion Reinforcements
+        zone: main
+        min_count: 3
+- id: izzet-burn
+  name: Izzet Burn
+  priority: 63990
+  rules:
+  - id: izzet-burn-primary
+    priority: 63990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Death to Our Enemies
+        zone: main
+        min_count: 3
+      - card: Plasma Bolt
+        zone: main
+        min_count: 3
+      - card: Boltwave
+        zone: main
+        min_count: 3
+      - card: Steam Vents
+        zone: main
+        min_count: 2
+- id: mono-green-squirrel-combo
+  name: Mono-Green Squirrel Combo
+  priority: 68020
+  rules:
+  - id: mono-green-squirrel-combo-primary
+    priority: 68020
+    subtype_id: null
+    conditions:
+      all:
+      - card: Badgermole Cub
+        zone: main
+        min_count: 3
+      - card: Nature's Rhythm
+        zone: main
+        min_count: 3
+      - card: Enduring Vitality
+        zone: main
+        min_count: 3
+      - card: The Unbeatable Squirrel Girl
+        zone: main
+        min_count: 3
+      - card: Shang-Chi, Master of Kung Fu
+        zone: main
+        min_count: 3
+      - card: Forest
+        zone: main
+        min_count: 12
+      - card: Breeding Pool
+        zone: main
+        exact_count: 0
+      - card: Stomping Ground
+        zone: main
+        exact_count: 0
+      - card: Temple Garden
+        zone: main
+        exact_count: 0
+      - card: Overgrown Tomb
+        zone: main
+        exact_count: 0
+- id: temur-hulk-ramp
+  name: Temur Hulk Ramp
+  priority: 67990
+  rules:
+  - id: temur-hulk-ramp-primary
+    priority: 67990
+    subtype_id: null
+    conditions:
+      all:
+      - card: World War Hulk
+        zone: main
+        min_count: 3
+      - card: Shared Roots
+        zone: main
+        min_count: 3
+      - card: Terror of the Peaks
+        zone: main
+        min_count: 3
+      - card: Stomping Ground
+        zone: main
+        min_count: 3
+      - card: Island
+        zone: main
+        min_count: 1
+- id: azorius-auras
+  name: Azorius Auras
+  priority: 67980
+  rules:
+  - id: azorius-auras-primary
+    priority: 67980
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ethereal Armor
+        zone: main
+        min_count: 3
+      - card: Super Intelligence
+        zone: main
+        min_count: 3
+      - card: Skyward Spider
+        zone: main
+        min_count: 3
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 2
