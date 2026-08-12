@@ -82,7 +82,7 @@ def test_catalog_and_real_review_payloads_have_expected_density() -> None:
 def test_top8_review_uses_immutable_bases_and_explicit_unavailable_states() -> None:
     for format_id, expected_available, expected_unavailable in (
         ("standard", 61, 3),
-        ("modern", 100, 4),
+        ("modern", 99, 5),
     ):
         top8 = _json(f"stats/{format_id}/mtgo/top8/2026-W30.json")
         bases = _json(f"stats/{format_id}/mtgo/top8/2026-W30-bases.json")

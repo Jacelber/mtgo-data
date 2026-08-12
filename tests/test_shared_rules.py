@@ -17,7 +17,7 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from mtgmeta.config import RuleConfigError, load_rule_set, parse_rule_text
-from mtgmeta.rules import RULE_SCHEMA_VERSION, validate_rule_data
+from mtgmeta.rules import validate_rule_data
 
 
 FIXTURES = ROOT / "tests" / "fixtures" / "rules"
@@ -35,7 +35,7 @@ def failure_paths(data):
 
 def test_valid_fixture_builds_immutable_models_and_preserves_equal_priorities():
     rule_set = load_rule_set(VALID_PATH)
-    assert rule_set.schema_version == RULE_SCHEMA_VERSION
+    assert rule_set.schema_version == "1.0.0"
     assert rule_set.format == "standard"
     assert [item.id for item in rule_set.archetypes] == ["example-control", "example-aggro"]
     control = rule_set.archetypes[0]

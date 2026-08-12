@@ -3304,11 +3304,11 @@
           "rank": 1,
           "deck_status": "available",
           "identity": {
-            "identity_id": "boros-manufacturing",
+            "identity_id": "boros-manufacturing/mardu",
             "parent_id": "boros-manufacturing",
-            "subtype_id": null,
-            "display_name": "Boros Manufacturing",
-            "detail_id": "boros-manufacturing"
+            "subtype_id": "mardu",
+            "display_name": "Mardu Boros Manufacturing",
+            "detail_id": "boros-manufacturing/mardu"
           },
           "exact_deck": {
             "player": "CuteChandra19",
@@ -3440,11 +3440,11 @@
             "deviation_diff": null
           },
           "comparison": {
-            "identity_id": "boros-manufacturing",
+            "identity_id": "boros-manufacturing/mardu",
             "base_period": "4w",
             "base_period_end": "2026-08-09",
             "base_status": "unavailable",
-            "average_deck_ref": "2026-W32-bases.json#identity/boros-manufacturing"
+            "average_deck_ref": "2026-W32-bases.json#identity/boros-manufacturing/mardu"
           }
         },
         {
@@ -5435,11 +5435,11 @@
           "rank": 3,
           "deck_status": "available",
           "identity": {
-            "identity_id": "azorius-tempo",
-            "parent_id": "azorius-tempo",
+            "identity_id": "azorius-prison",
+            "parent_id": "azorius-prison",
             "subtype_id": null,
-            "display_name": "Azorius Tempo",
-            "detail_id": "azorius-tempo"
+            "display_name": "Azorius Prison",
+            "detail_id": "azorius-prison"
           },
           "exact_deck": {
             "player": "Seizurema",
@@ -5568,6 +5568,11 @@
                   "typical_qty": 0.5
                 },
                 {
+                  "name": "Airbender Ascension",
+                  "deck_qty": 0,
+                  "typical_qty": 0.2
+                },
+                {
                   "name": "Quantum Riddler",
                   "deck_qty": 0,
                   "typical_qty": 0.2
@@ -5576,11 +5581,6 @@
                   "name": "Island",
                   "deck_qty": 2,
                   "typical_qty": 2.1
-                },
-                {
-                  "name": "Floodpits Drowner",
-                  "deck_qty": 3,
-                  "typical_qty": 3.0
                 },
                 {
                   "name": "Jennifer Walters",
@@ -5592,7 +5592,7 @@
                 {
                   "name": "Spell Pierce",
                   "deck_qty": 1,
-                  "typical_qty": 0.5
+                  "typical_qty": 0.4
                 },
                 {
                   "name": "Avatar's Wrath",
@@ -5612,6 +5612,11 @@
                 {
                   "name": "Restless Anchorage",
                   "deck_qty": 4,
+                  "typical_qty": 3.8
+                },
+                {
+                  "name": "Aang, Swift Savior",
+                  "deck_qty": 4,
                   "typical_qty": 3.9
                 },
                 {
@@ -5623,21 +5628,16 @@
                   "name": "King T'Challa",
                   "deck_qty": 1,
                   "typical_qty": 0.9
-                },
-                {
-                  "name": "Enduring Curiosity",
-                  "deck_qty": 2,
-                  "typical_qty": 1.9
                 }
               ]
             }
           },
           "comparison": {
-            "identity_id": "azorius-tempo",
+            "identity_id": "azorius-prison",
             "base_period": "4w",
             "base_period_end": "2026-08-09",
             "base_status": "available",
-            "average_deck_ref": "2026-W32-bases.json#identity/azorius-tempo"
+            "average_deck_ref": "2026-W32-bases.json#identity/azorius-prison"
           }
         },
         {
@@ -6754,11 +6754,11 @@
           "rank": 1,
           "deck_status": "available",
           "identity": {
-            "identity_id": "unknown",
-            "parent_id": "unknown",
+            "identity_id": "orzhov-lifegain",
+            "parent_id": "orzhov-lifegain",
             "subtype_id": null,
-            "display_name": "Unknown",
-            "detail_id": "unknown"
+            "display_name": "Orzhov Lifegain",
+            "detail_id": "orzhov-lifegain"
           },
           "exact_deck": {
             "player": "Gxs3v3n",
@@ -6894,15 +6894,100 @@
                 "qty": 1
               }
             ],
-            "deviation": null,
-            "deviation_diff": null
+            "deviation": 5,
+            "deviation_diff": {
+              "fewer": [
+                {
+                  "name": "Seam Rip",
+                  "deck_qty": 0,
+                  "typical_qty": 0.4
+                },
+                {
+                  "name": "Zora, Spider Fancier",
+                  "deck_qty": 0,
+                  "typical_qty": 0.4
+                },
+                {
+                  "name": "Starscape Cleric",
+                  "deck_qty": 2,
+                  "typical_qty": 2.4
+                },
+                {
+                  "name": "Bitter Triumph",
+                  "deck_qty": 0,
+                  "typical_qty": 0.1
+                },
+                {
+                  "name": "Delney, Streetwise Lookout",
+                  "deck_qty": 0,
+                  "typical_qty": 0.1
+                },
+                {
+                  "name": "Concealed Courtyard",
+                  "deck_qty": 3,
+                  "typical_qty": 3.1
+                },
+                {
+                  "name": "Plains",
+                  "deck_qty": 3,
+                  "typical_qty": 3.1
+                },
+                {
+                  "name": "Zoraline, Cosmos Caller",
+                  "deck_qty": 1,
+                  "typical_qty": 1.1
+                }
+              ],
+              "more": [
+                {
+                  "name": "Clarion Conqueror",
+                  "deck_qty": 1,
+                  "typical_qty": 0.5
+                },
+                {
+                  "name": "Aunt May",
+                  "deck_qty": 1,
+                  "typical_qty": 0.6
+                },
+                {
+                  "name": "Strategic Betrayal",
+                  "deck_qty": 1,
+                  "typical_qty": 0.7
+                },
+                {
+                  "name": "Erode",
+                  "deck_qty": 3,
+                  "typical_qty": 2.8
+                },
+                {
+                  "name": "Starting Town",
+                  "deck_qty": 3,
+                  "typical_qty": 2.8
+                },
+                {
+                  "name": "Multiversal Passage",
+                  "deck_qty": 2,
+                  "typical_qty": 1.9
+                },
+                {
+                  "name": "Deep-Cavern Bat",
+                  "deck_qty": 3,
+                  "typical_qty": 2.9
+                },
+                {
+                  "name": "Emptiness",
+                  "deck_qty": 2,
+                  "typical_qty": 1.9
+                }
+              ]
+            }
           },
           "comparison": {
-            "identity_id": "unknown",
+            "identity_id": "orzhov-lifegain",
             "base_period": "4w",
             "base_period_end": "2026-08-09",
-            "base_status": "unavailable",
-            "average_deck_ref": "2026-W32-bases.json#identity/unknown"
+            "base_status": "available",
+            "average_deck_ref": "2026-W32-bases.json#identity/orzhov-lifegain"
           }
         },
         {
@@ -9898,11 +9983,11 @@
           "rank": 7,
           "deck_status": "available",
           "identity": {
-            "identity_id": "azorius-tempo",
-            "parent_id": "azorius-tempo",
+            "identity_id": "azorius-prison",
+            "parent_id": "azorius-prison",
             "subtype_id": null,
-            "display_name": "Azorius Tempo",
-            "detail_id": "azorius-tempo"
+            "display_name": "Azorius Prison",
+            "detail_id": "azorius-prison"
           },
           "exact_deck": {
             "player": "_Batutinha_",
@@ -10031,6 +10116,11 @@
                   "typical_qty": 0.5
                 },
                 {
+                  "name": "Airbender Ascension",
+                  "deck_qty": 0,
+                  "typical_qty": 0.2
+                },
+                {
                   "name": "Quantum Riddler",
                   "deck_qty": 0,
                   "typical_qty": 0.2
@@ -10039,11 +10129,6 @@
                   "name": "Island",
                   "deck_qty": 2,
                   "typical_qty": 2.1
-                },
-                {
-                  "name": "Floodpits Drowner",
-                  "deck_qty": 3,
-                  "typical_qty": 3.0
                 },
                 {
                   "name": "Jennifer Walters",
@@ -10055,7 +10140,7 @@
                 {
                   "name": "Spell Pierce",
                   "deck_qty": 1,
-                  "typical_qty": 0.5
+                  "typical_qty": 0.4
                 },
                 {
                   "name": "Avatar's Wrath",
@@ -10075,6 +10160,11 @@
                 {
                   "name": "Restless Anchorage",
                   "deck_qty": 4,
+                  "typical_qty": 3.8
+                },
+                {
+                  "name": "Aang, Swift Savior",
+                  "deck_qty": 4,
                   "typical_qty": 3.9
                 },
                 {
@@ -10086,32 +10176,27 @@
                   "name": "King T'Challa",
                   "deck_qty": 1,
                   "typical_qty": 0.9
-                },
-                {
-                  "name": "Enduring Curiosity",
-                  "deck_qty": 2,
-                  "typical_qty": 1.9
                 }
               ]
             }
           },
           "comparison": {
-            "identity_id": "azorius-tempo",
+            "identity_id": "azorius-prison",
             "base_period": "4w",
             "base_period_end": "2026-08-09",
             "base_status": "available",
-            "average_deck_ref": "2026-W32-bases.json#identity/azorius-tempo"
+            "average_deck_ref": "2026-W32-bases.json#identity/azorius-prison"
           }
         },
         {
           "rank": 8,
           "deck_status": "available",
           "identity": {
-            "identity_id": "unknown",
-            "parent_id": "unknown",
+            "identity_id": "orzhov-lifegain",
+            "parent_id": "orzhov-lifegain",
             "subtype_id": null,
-            "display_name": "Unknown",
-            "detail_id": "unknown"
+            "display_name": "Orzhov Lifegain",
+            "detail_id": "orzhov-lifegain"
           },
           "exact_deck": {
             "player": "DuduDeNunu",
@@ -10247,15 +10332,100 @@
                 "qty": 1
               }
             ],
-            "deviation": null,
-            "deviation_diff": null
+            "deviation": 5,
+            "deviation_diff": {
+              "fewer": [
+                {
+                  "name": "Seam Rip",
+                  "deck_qty": 0,
+                  "typical_qty": 0.4
+                },
+                {
+                  "name": "Zora, Spider Fancier",
+                  "deck_qty": 0,
+                  "typical_qty": 0.4
+                },
+                {
+                  "name": "Starscape Cleric",
+                  "deck_qty": 2,
+                  "typical_qty": 2.4
+                },
+                {
+                  "name": "Bitter Triumph",
+                  "deck_qty": 0,
+                  "typical_qty": 0.1
+                },
+                {
+                  "name": "Delney, Streetwise Lookout",
+                  "deck_qty": 0,
+                  "typical_qty": 0.1
+                },
+                {
+                  "name": "Concealed Courtyard",
+                  "deck_qty": 3,
+                  "typical_qty": 3.1
+                },
+                {
+                  "name": "Plains",
+                  "deck_qty": 3,
+                  "typical_qty": 3.1
+                },
+                {
+                  "name": "Zoraline, Cosmos Caller",
+                  "deck_qty": 1,
+                  "typical_qty": 1.1
+                }
+              ],
+              "more": [
+                {
+                  "name": "Clarion Conqueror",
+                  "deck_qty": 1,
+                  "typical_qty": 0.5
+                },
+                {
+                  "name": "Aunt May",
+                  "deck_qty": 1,
+                  "typical_qty": 0.6
+                },
+                {
+                  "name": "Strategic Betrayal",
+                  "deck_qty": 1,
+                  "typical_qty": 0.7
+                },
+                {
+                  "name": "Erode",
+                  "deck_qty": 3,
+                  "typical_qty": 2.8
+                },
+                {
+                  "name": "Starting Town",
+                  "deck_qty": 3,
+                  "typical_qty": 2.8
+                },
+                {
+                  "name": "Multiversal Passage",
+                  "deck_qty": 2,
+                  "typical_qty": 1.9
+                },
+                {
+                  "name": "Deep-Cavern Bat",
+                  "deck_qty": 3,
+                  "typical_qty": 2.9
+                },
+                {
+                  "name": "Emptiness",
+                  "deck_qty": 2,
+                  "typical_qty": 1.9
+                }
+              ]
+            }
           },
           "comparison": {
-            "identity_id": "unknown",
+            "identity_id": "orzhov-lifegain",
             "base_period": "4w",
             "base_period_end": "2026-08-09",
-            "base_status": "unavailable",
-            "average_deck_ref": "2026-W32-bases.json#identity/unknown"
+            "base_status": "available",
+            "average_deck_ref": "2026-W32-bases.json#identity/orzhov-lifegain"
           }
         }
       ]
@@ -11297,11 +11467,11 @@
           "rank": 6,
           "deck_status": "available",
           "identity": {
-            "identity_id": "unknown",
-            "parent_id": "unknown",
+            "identity_id": "orzhov-lifegain",
+            "parent_id": "orzhov-lifegain",
             "subtype_id": null,
-            "display_name": "Unknown",
-            "detail_id": "unknown"
+            "display_name": "Orzhov Lifegain",
+            "detail_id": "orzhov-lifegain"
           },
           "exact_deck": {
             "player": "Gxs3v3n",
@@ -11429,15 +11599,100 @@
                 "qty": 1
               }
             ],
-            "deviation": null,
-            "deviation_diff": null
+            "deviation": 6,
+            "deviation_diff": {
+              "fewer": [
+                {
+                  "name": "Clarion Conqueror",
+                  "deck_qty": 0,
+                  "typical_qty": 0.5
+                },
+                {
+                  "name": "Seam Rip",
+                  "deck_qty": 0,
+                  "typical_qty": 0.4
+                },
+                {
+                  "name": "Zora, Spider Fancier",
+                  "deck_qty": 0,
+                  "typical_qty": 0.4
+                },
+                {
+                  "name": "Starscape Cleric",
+                  "deck_qty": 2,
+                  "typical_qty": 2.4
+                },
+                {
+                  "name": "Bitter Triumph",
+                  "deck_qty": 0,
+                  "typical_qty": 0.1
+                },
+                {
+                  "name": "Delney, Streetwise Lookout",
+                  "deck_qty": 0,
+                  "typical_qty": 0.1
+                },
+                {
+                  "name": "Concealed Courtyard",
+                  "deck_qty": 3,
+                  "typical_qty": 3.1
+                },
+                {
+                  "name": "Plains",
+                  "deck_qty": 3,
+                  "typical_qty": 3.1
+                }
+              ],
+              "more": [
+                {
+                  "name": "Voice of Victory",
+                  "deck_qty": 3,
+                  "typical_qty": 2.0
+                },
+                {
+                  "name": "Aunt May",
+                  "deck_qty": 1,
+                  "typical_qty": 0.6
+                },
+                {
+                  "name": "Strategic Betrayal",
+                  "deck_qty": 1,
+                  "typical_qty": 0.7
+                },
+                {
+                  "name": "Erode",
+                  "deck_qty": 3,
+                  "typical_qty": 2.8
+                },
+                {
+                  "name": "Starting Town",
+                  "deck_qty": 3,
+                  "typical_qty": 2.8
+                },
+                {
+                  "name": "Multiversal Passage",
+                  "deck_qty": 2,
+                  "typical_qty": 1.9
+                },
+                {
+                  "name": "Deep-Cavern Bat",
+                  "deck_qty": 3,
+                  "typical_qty": 2.9
+                },
+                {
+                  "name": "Emptiness",
+                  "deck_qty": 2,
+                  "typical_qty": 1.9
+                }
+              ]
+            }
           },
           "comparison": {
-            "identity_id": "unknown",
+            "identity_id": "orzhov-lifegain",
             "base_period": "4w",
             "base_period_end": "2026-08-09",
-            "base_status": "unavailable",
-            "average_deck_ref": "2026-W32-bases.json#identity/unknown"
+            "base_status": "available",
+            "average_deck_ref": "2026-W32-bases.json#identity/orzhov-lifegain"
           }
         },
         {

@@ -851,6 +851,11 @@ def test_modern_event_collection_and_classification_use_their_own_paths(tmp_path
     rule_path = tmp_path / "my_archetypes" / "modern.yaml"
     rule_path.parent.mkdir(parents=True)
     rule_path.write_bytes((ROOT / "my_archetypes" / "modern.yaml").read_bytes())
+    features_path = tmp_path / "configs" / "classifier_semantic_features.yaml"
+    features_path.parent.mkdir(parents=True, exist_ok=True)
+    features_path.write_bytes(
+        (ROOT / "configs" / "classifier_semantic_features.yaml").read_bytes()
+    )
     assert (
         load_rules_for_format(tmp_path, "modern", registry_path=REGISTRY).format
         == "modern"

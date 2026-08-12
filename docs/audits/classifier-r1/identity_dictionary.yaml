@@ -1,0 +1,679 @@
+schema_version: "1.0.0"
+task_id: CLASSIFIER-R1-STABLE-IDENTITY-CONTRACT
+status: owner_reviewed_target_contract_not_production
+artifact_impact: internal_diagnostics
+
+base:
+  repository_commit: a99ca08a294f173c9a17fe6fd70c5e52d36cec98
+  r0_checkpoint_sha256: 83B8685099A130CC95BB78679C72D113DD4F2FE62E4802ABB17D15A7978F84B3
+  owner_submission_sha256: D4A8817627BCBAF8DD63C1C3A0531DDF36A9B411D3D18CEF3DC17558BCF6DAF6
+  rule_sources:
+    modern:
+      path: my_archetypes/modern.yaml
+      frozen_path: docs/audits/classifier-r2/baseline_rules/modern.yaml
+      sha256: 3DF393EF3CBEBD655D6BE68BFAC8012E488673D52CBF663706906297378FE411
+      parent_count: 55
+      subtype_count: 55
+      rule_count: 102
+    standard:
+      path: my_archetypes/standard.yaml
+      frozen_path: docs/audits/classifier-r2/baseline_rules/standard.yaml
+      sha256: DCEE23F09920290E16532C01A8AF5B7CA7106C73F5ED3F9626DE03200C6C063C
+      parent_count: 74
+      subtype_count: 4
+      rule_count: 76
+
+review_inventory:
+  total_parent_rows: 129
+  submitted_status_counts:
+    accepted_current: 104
+    needs_modification: 24
+    previously_unreviewed_resolved: 1
+  unresolved_owner_decisions: 0
+  accepted_current:
+    modern:
+      - mardu-energy
+      - boros-energy
+      - jeskai-energy
+      - azorius-energy
+      - selesnya-energy
+      - esper-energy
+      - affinity
+      - prowess
+      - amulet-titan
+      - domain-zoo
+      - mono-blue-belcher
+      - boros-belcher
+      - oculus-ritual
+      - five-color-ritual
+      - sam-combo
+      - golgari-yawgmoth
+      - eldrazi-tron
+      - mono-black-eldrazi
+      - fight-rigging
+      - eldrazi-aggro
+      - ruby-storm
+      - dimir-mill
+      - simic-neoform
+      - dredge
+      - izzet-phoenix
+      - burn
+      - jeskai-control
+      - necrodominance
+      - fling-goyf
+      - five-color-creativity
+      - hammer-time
+      - devoted-druid-combo
+      - rhinos
+      - lantern-control
+      - izzet-wizards
+      - soultrader
+      - song-of-creation
+      - pensive-combo
+      - esper-control
+      - mono-blue-merfolk
+      - jund-sagavan
+    standard:
+      - monument-lessons
+      - jeskai-lessons
+      - izzet-lessons
+      - mono-green-landfall
+      - gruul-landfall
+      - selesnya-landfall
+      - dimir-excruciator
+      - bant-rhythm
+      - simic-rhythm
+      - selesnya-rhythm
+      - dimir-midrange
+      - izzet-spellementals
+      - mono-blue-spellementals
+      - temur-elementals
+      - grixis-elementals
+      - temur-tablet
+      - 4-color-tablet
+      - jeskai-tablet
+      - jeskai-control
+      - boros-dragons
+      - boros-token
+      - izzet-fling
+      - gruul-fling
+      - izzet-prowess
+      - bant-airbending
+      - temur-harmonizer
+      - mono-red-aggro
+      - mardu-discard
+      - rakdos-discard
+      - grixis-discard
+      - izzet-blink
+      - sultai-reanimator
+      - esper-pixie
+      - dimir-control
+      - azorius-control
+      - mono-white-momo
+      - azorius-momo
+      - azorius-otters
+      - golgari-rhythm
+      - golgari-demon
+      - sultai-demon
+      - boros-burn
+      - simic-jackal
+      - temur-battlecrier
+      - izzet-looting
+      - jeskai-artifacts
+      - temur-otters
+      - mono-black-demons
+      - selesnya-offense
+      - gruul-delirium
+      - bant-bounce
+      - izzet-opus
+      - golgari-reanimator
+      - sultai-control
+      - orzhov-repartee
+      - mono-black-aggro
+      - golgari-crime
+      - golgari-roots
+      - orzhov-control
+      - simic-ramp
+      - mono-green-aggro
+      - golgari-midrange
+      - selesnya-midrange
+  needs_modification:
+    modern:
+      - persist-reanimator
+      - goryos-reanimator
+      - blue-black-tempo
+      - blink
+      - broodscale-combo
+      - boros-land-destruction
+      - eldrazi-ramp
+      - azorius-control
+      - chant-control
+      - hollow-one
+      - living-end
+      - steel-cutter
+      - deaths-shadow
+      - blue-eldrazi
+    standard:
+      - izzet-aggro
+      - azorius-tempo
+      - boros-manufacturing
+      - jeskai-manufacturing
+      - simic-kona
+      - 4-color-control
+      - 4-color-allies
+      - boros-leyline
+      - leyline-aggro
+      - mono-red-leyline
+  previously_unreviewed_resolved:
+    standard:
+      - dimir-deceit
+  dependent_amendments_to_accepted_current:
+    modern:
+      - parent_id: prowess
+        reason: Add Boros, Mono-Red, and Mardu subtypes and correct land-only color routes accepted during the Steel-Cutter review.
+      - parent_id: jeskai-control
+        reason: Exclude Orim's Chant and Isochron Scepter so traditional Jeskai Control remains distinct from Chant Control.
+    standard:
+      - parent_id: jeskai-control
+        reason: Reclassify the accepted Inevitable Defeat shell to Dark Jeskai Control while retaining ordinary Jeskai Control.
+      - parent_id: sultai-control
+        reason: Add or verify the accepted three-color Bargain-shell fallback below White Sultai Control.
+
+inheritance_policy:
+  rule: Every reviewed parent inherits its exact baseline identity unless it appears under target_overlays or dependent_amendments_to_accepted_current.
+  display_names_may_change_only_when_explicitly_listed: true
+  parent_and_subtype_ids_may_change_only_with_transition_map_entry: true
+  numeric_priority_status: deferred_to_r2_complete_shadow
+  fallback_policy: No new generic fallback; unsupported or ambiguous constructions remain Unknown.
+  source_policy: The same format taxonomy applies to MTGO and Tabletop; their data and statistics remain separate.
+
+target_summary:
+  modern:
+    parent_count: 70
+    subtype_count: 54
+  standard:
+    parent_count: 72
+    subtype_count: 11
+
+target_overlays:
+  modern:
+    - family: persist
+      retire_parent_ids: [persist-reanimator]
+      targets:
+        - id: grixis-persist
+          name: Grixis Persist
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Persist: {min_count: 3}
+                Archon of Cruelty: {min_count: 3}
+                Faithless Looting: {min_count: 3}
+                Abhorrent Oculus: {min_count: 3}
+        - id: agadeem-persist
+          name: Agadeem Persist
+          subtypes: []
+          color_restriction: none
+          rule_paths:
+            - required_main:
+                Persist: {min_count: 3}
+                Crypt of Agadeem: {min_count: 3}
+        - id: esper-persist
+          name: Esper Persist
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Persist: {min_count: 3}
+                Archon of Cruelty: {min_count: 3}
+                Faithful Mending: {min_count: 2}
+      precedence: Grixis Persist outranks Dimir Tempo; Esper Persist outranks Blink.
+
+    - family: goryos
+      retire_parent_ids: [goryos-reanimator]
+      targets:
+        - id: cremator-goryos
+          name: Cremator Goryo's
+          subtypes: []
+          color_restriction: none
+          rule_paths:
+            - required_main:
+                Goryo's Vengeance: {min_count: 3}
+                Cragganwick Cremator: {min_count: 3}
+                Emrakul, the Aeons Torn: {min_count: 3}
+        - id: esper-goryos
+          name: Esper Goryo's
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Goryo's Vengeance: {min_count: 3}
+                Atraxa, Grand Unifier: {min_count: 3}
+                Psychic Frog: {min_count: 3}
+                Ephemerate: {min_count: 3}
+        - id: grixis-goryos
+          name: Grixis Goryo's
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Goryo's Vengeance: {min_count: 3}
+                Faithless Looting: {min_count: 3}
+                Psychic Frog: {min_count: 3}
+              excluded_main:
+                Ephemerate: {exact_count: 0}
+      precedence: Cremator Goryo's outranks both other Goryo's parents; Esper Goryo's outranks Blink.
+      fail_closed: A four-color Goryo's list with Ephemerate that matches no complete target remains Unknown.
+
+    - family: dimir-tempo
+      retire_parent_ids: [blue-black-tempo]
+      targets:
+        - id: dimir-tempo
+          name: Dimir Tempo
+          subtypes: [dimir, grixis, esper]
+          retained_subtype_rules: [grixis, esper]
+          dimir_rule_paths:
+            - id_hint: frog
+              required_main:
+                Fatal Push: {min_count: 3}
+                Psychic Frog: {min_count: 3}
+                Watery Grave: {min_count: 1}
+                Goryo's Vengeance: {exact_count: 0}
+                Persist: {exact_count: 0}
+            - id_hint: low-or-no-frog-bowmasters
+              required_main:
+                Psychic Frog: {max_count: 2}
+                Fatal Push: {min_count: 3}
+                Orcish Bowmasters: {min_count: 2}
+                Watery Grave: {min_count: 1}
+                Goryo's Vengeance: {exact_count: 0}
+                Persist: {exact_count: 0}
+          dimir_color_policy: Exclude every usable main-deck red, white, or green splash source derived from card metadata and the reviewed corpus.
+      precedence: Specific reanimation, combo, Blink, Death's Shadow, and other defining engines outrank Dimir Tempo; Dimir Tempo is a tiered fallback, not the absolute last rule.
+
+    - family: blink
+      retire_parent_ids: [blink]
+      targets:
+        - id: esper-ketramose
+          name: Esper Ketramose
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Relic of Progenitus: {min_count: 3}
+                Ketramose, the New Dawn: {min_count: 3}
+                Psychic Frog: {min_count: 3}
+                Solitude: {min_count: 3}
+          color_policy: No usable main-deck red or green source.
+        - id: esper-blink
+          name: Esper Blink
+          subtypes: []
+          rule_paths:
+            - id_hint: overlord
+              required_main:
+                Phelia, Exuberant Shepherd: {min_count: 3}
+                Overlord of the Balemurk: {min_count: 3}
+                Quantum Riddler: {min_count: 3}
+            - id_hint: psychic-frog
+              required_main:
+                Phelia, Exuberant Shepherd: {min_count: 3}
+                Quantum Riddler: {min_count: 3}
+                Solitude: {min_count: 3}
+                Psychic Frog: {min_count: 3}
+                Overlord of the Balemurk: {max_count: 2}
+          color_policy: No usable main-deck red or green source.
+        - id: azorius-blink
+          name: Azorius Blink
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Phelia, Exuberant Shepherd: {min_count: 3}
+                Quantum Riddler: {min_count: 3}
+                Solitude: {min_count: 3}
+                Ephemerate: {min_count: 2}
+                Hallowed Fountain: {min_count: 1}
+          color_policy: No usable main-deck black, red, or green source.
+        - id: jeskai-stoneforge
+          name: Jeskai Stoneforge
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Phelia, Exuberant Shepherd: {min_count: 3}
+                Quantum Riddler: {min_count: 3}
+                Solitude: {min_count: 3}
+                Stoneforge Mystic: {min_count: 3}
+              metadata_requirement: At least one main-deck Equipment.
+          color_policy: Require a usable main-deck red source; exclude usable black or green sources.
+        - id: jeskai-blink
+          name: Jeskai Blink
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Phelia, Exuberant Shepherd: {min_count: 3}
+                Quantum Riddler: {min_count: 3}
+                Solitude: {min_count: 3}
+                Stoneforge Mystic: {max_count: 2}
+          color_policy: Require a usable main-deck red source; exclude usable black or green sources.
+        - id: mardu-blink
+          name: Mardu Blink
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Phelia, Exuberant Shepherd: {min_count: 3}
+                Overlord of the Balemurk: {min_count: 3}
+                Detective's Phoenix: {min_count: 2}
+                Solitude: {min_count: 3}
+          color_policy: No usable main-deck blue or green source.
+        - id: orzhov-blink
+          name: Orzhov Blink
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Phelia, Exuberant Shepherd: {min_count: 3}
+                Overlord of the Balemurk: {min_count: 3}
+                Ephemerate: {min_count: 2}
+          color_policy: Only white and black main-deck mana sources are allowed.
+      common_exclusions:
+        energy: Guide of Souls >= 3 and Ocelot Pride >= 3 routes to the applicable Energy parent.
+        goryos: Goryo's Vengeance >= 3 routes to the applicable Goryo's parent.
+      precedence: Energy and Goryo's outrank the Blink family; Esper Ketramose and Jeskai Stoneforge outrank the corresponding general Blink parents; Mardu Blink outranks Orzhov Blink.
+
+    - family: broodscale-combo
+      retire_parent_ids: []
+      targets:
+        - id: broodscale-combo
+          name: Broodscale Combo
+          subtypes: [gruul, mono-green, golgari, simic]
+          added_rule_paths:
+            - subtype_id: simic
+              required_main:
+                Basking Broodscale: {min_count: 3}
+                Blade of the Bloodchief: {min_count: 2}
+                Breeding Pool: {min_count: 1}
+                Talisman of Curiosity: {min_count: 2}
+      precedence: Simic outranks the existing Mono-Green fallback.
+
+    - family: boros-ponza
+      retire_parent_ids: []
+      targets:
+        - id: boros-land-destruction
+          name: Boros Ponza
+          subtypes: []
+          rule_definition: inherit_exactly
+
+    - family: eldrazi-ramp-chant
+      retire_parent_ids: []
+      targets:
+        - id: eldrazi-ramp
+          name: Eldrazi Ramp
+          subtypes: [gruul, temur, sultai, simic, golgari]
+          rule_definition: inherit_other_five_subtypes_and_retire_selesnya
+        - id: eldrazi-ramp-chant
+          name: Eldrazi Ramp Chant
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Sowing Mycospawn: {min_count: 3}
+                Ugin's Labyrinth: {min_count: 3}
+                Eldrazi Temple: {min_count: 3}
+                Orim's Chant: {min_count: 3}
+      precedence: Eldrazi Ramp Chant outranks Eldrazi Ramp, Chant Control, and Azorius Control.
+
+    - family: chant-and-traditional-control
+      retire_parent_ids: []
+      targets:
+        - id: omnath-midrange
+          name: Omnath Midrange
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Omnath, Locus of Creation: {min_count: 2}
+                Wrenn and Six: {min_count: 2}
+                Teferi, Time Raveler: {min_count: 2}
+        - id: chant-control
+          name: Chant Control
+          subtypes: [azorius, jeskai]
+          parent_core:
+            Orim's Chant: {min_count: 3}
+          subtype_policy:
+            azorius: No defining main-deck red spell.
+            jeskai: Require one accepted actual-red-spell marker path; a splash land alone is insufficient.
+        - id: azorius-control
+          name: Azorius Control
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Meticulous Archive: {min_count: 1}
+                Wrath of the Skies: {min_count: 2}
+                Hallowed Fountain: {min_count: 1}
+                Counterspell: {min_count: 2}
+              excluded_main:
+                Orim's Chant: {exact_count: 0}
+                Isochron Scepter: {exact_count: 0}
+                Galvanic Discharge: {exact_count: 0}
+        - id: jeskai-control
+          name: Jeskai Control
+          subtypes: []
+          rule_definition: inherit_with_exclusions
+          excluded_main:
+            Orim's Chant: {exact_count: 0}
+            Isochron Scepter: {exact_count: 0}
+      precedence: Complete specific combo parents, then Omnath Midrange, then Chant Control, then traditional Azorius or Jeskai Control.
+
+    - family: hollow-one
+      retire_parent_ids: [hollow-one]
+      targets:
+        - id: hollowvine
+          name: Hollowvine
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Hollow One: {min_count: 3}
+                Vengevine: {min_count: 3}
+                Blazing Rootwalla: {min_count: 3}
+        - id: rakdos-hollow-one
+          name: Rakdos Hollow One
+          subtypes: [rakdos, mardu]
+          parent_core:
+            Hollow One: {min_count: 3}
+            Burning Inquiry: {min_count: 3}
+            Detective's Phoenix: {min_count: 3}
+            Vengevine: {exact_count: 0}
+          subtype_policy:
+            mardu: Separate mutually exclusive paths for Practiced Offense main >= 1, Hardened Academic main >= 1, or Wear/Tear any-zone >= 1.
+            rakdos: Exclude all three Mardu markers; white-producing lands alone are insufficient.
+
+    - family: living-end
+      retire_parent_ids: []
+      targets:
+        - id: living-end
+          name: Living End
+          subtypes: [four-color, temur, sultai, bant, rakdos]
+          subtype_policy:
+            four-color: Living End 3, Shardless Agent 3, Violent Outburst 3, and Overlord of the Balemurk 3 in the main deck.
+            temur: Living End 3, Shardless Agent 3, Violent Outburst 3, and Overlord 0 in the main deck.
+            sultai: Living End 3, Shardless Agent 3, Overlord of the Balemurk 3, and Violent Outburst 0 in the main deck.
+            bant: Living End 3, Shardless Agent 3, Ardent Plea 3, Violent Outburst 0, and Overlord 0 in the main deck.
+            rakdos: Living End 3, Electrodominance 3, Shardless Agent 0, Violent Outburst 0, and Overlord 0 in the main deck.
+          generic_fallback: false
+
+    - family: steel-cutter-and-prowess
+      retire_parent_ids: []
+      targets:
+        - id: steel-cutter
+          name: Izzet Steel-Cutter
+          subtypes: [izzet]
+          rule_definition: retain_current_izzet_only
+        - id: rakdos-steel-cutter
+          name: Rakdos Steel-Cutter
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Cori-Steel Cutter: {min_count: 3}
+                Dragon's Rage Channeler: {min_count: 3}
+                Lava Dart: {min_count: 3}
+                Nethergoyf: {min_count: 3}
+                Blood Crypt: {min_count: 1}
+        - id: mono-red-artifact
+          name: Mono-Red Artifact
+          subtypes: []
+          rule_intent_status: exact signature deferred to R2 shadow from the two reviewed Steel-Cutter transitions.
+        - id: prowess
+          name: Prowess
+          subtypes: [izzet, temur, grixis, jeskai, lessons, boros, mono-red, mardu]
+          boundary_policy:
+            actual_spell_color: Izzet, Temur, Grixis, Jeskai, Boros, and Mono-Red generally use actual colored-spell evidence rather than splash lands alone.
+            mardu: Blood Crypt >= 1 plus Sacred Foundry >= 1; a specific black or white spell is optional.
+            phyrexian_mana: Apostle's Blessing and Mutagenic Growth are color-neutral identity markers.
+            lessons: The Academic Dispute plus Boomerang Basics package outranks incidental splash lands.
+      fail_closed: Non-Cutter Rakdos Delirium candidates without an accepted Death's Shadow path remain Unknown.
+
+    - family: deaths-shadow
+      retire_parent_ids: []
+      targets:
+        - id: deaths-shadow
+          name: Death's Shadow
+          subtypes: [grixis, dimir, rakdos]
+          subtype_policy:
+            grixis: Death's Shadow 3, Thoughtseize 3, Stubborn Denial 2, Blood Crypt 1, and Watery Grave 1 in the main deck.
+            dimir: Death's Shadow 3, Thoughtseize 3, Stubborn Denial 2, Watery Grave 1, Blood Crypt 0, and Steam Vents 0 in the main deck.
+            rakdos: Death's Shadow 3, Thoughtseize 3, Nethergoyf 3, Moonshadow 3, Street Wraith 3, Blood Crypt 1, Stubborn Denial 0, Watery Grave 0, and Steam Vents 0 in the main deck.
+          generic_fallback: false
+
+    - family: mono-blue-tron
+      retire_parent_ids: [blue-eldrazi]
+      targets:
+        - id: mono-blue-tron
+          name: Mono-Blue Tron
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Urza's Mine: {min_count: 4}
+                Urza's Power Plant: {min_count: 4}
+                Urza's Tower: {min_count: 4}
+                Expedition Map: {min_count: 3}
+                Island: {min_count: 3}
+          color_policy: No explicit nonblue splash identity; exact exclusions require R2 shadow proof.
+
+  standard:
+    - family: izzet-aggro
+      retire_parent_ids: []
+      targets:
+        - id: izzet-aggro
+          name: Izzet Aggro
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Scalding Viper: {min_count: 3}
+                Hired Claw: {min_count: 3}
+                Spirebluff Canal: {min_count: 1}
+
+    - family: azorius-prison
+      retire_parent_ids: [azorius-tempo]
+      targets:
+        - id: azorius-prison
+          name: Azorius Prison
+          subtypes: []
+          rule_paths:
+            - required_main:
+                High Noon: {min_count: 3}
+                Aang, Swift Savior: {min_count: 2}
+                Aven Interrupter: {min_count: 3}
+
+    - family: boros-manufacturing
+      retire_parent_ids: [jeskai-manufacturing]
+      targets:
+        - id: boros-manufacturing
+          name: Boros Manufacturing
+          subtypes: [jeskai, mardu, boros]
+          parent_core:
+            Weapons Manufacturing: {min_count: 3}
+            United Battlefront: {min_count: 3}
+            Sacred Foundry: {min_count: 1}
+          subtype_policy:
+            jeskai: Cryogen Relic >= 2.
+            mardu: Cryogen Relic <= 1 and Tithing Blade >= 2.
+            boros: Cryogen Relic <= 1 and Tithing Blade <= 1.
+
+    - family: kona-omniscience
+      retire_parent_ids: [simic-kona]
+      targets:
+        - id: kona-omniscience
+          name: Kona Omniscience
+          subtypes: [temur, bant, simic]
+          parent_core:
+            Kona, Rescue Beastie: {min_count: 4}
+            Omniscience: {min_count: 4}
+            Uthros, Titanic Godcore: {min_count: 3}
+          subtype_policy:
+            temur: Ashling, Rekindled >= 1 and no Bant marker.
+            bant: Separate paths for Adagia, Windswept Bastion >= 1 or Hallowed Fountain >= 1, with Ashling = 0.
+            simic: Ashling, Adagia, and Hallowed Fountain all 0.
+          fail_closed: A list with both Temur and Bant markers remains Unknown.
+
+    - family: four-color-control-split
+      retire_parent_ids: [4-color-control]
+      targets:
+        - id: dark-jeskai-control
+          name: Dark Jeskai Control
+          subtypes: []
+          rule_paths:
+            - required_main:
+                Inevitable Defeat: {min_count: 2}
+                Jeskai Revelation: {min_count: 1}
+                Stock Up: {min_count: 1}
+                Tablet of Discovery: {max_count: 1}
+        - id: white-sultai-control
+          name: White Sultai Control
+          subtypes: []
+          rule_paths:
+            - required_any:
+                Rakshasa's Bargain: {min_count: 2}
+                Aang, Swift Savior: {min_count: 2}
+                Three Steps Ahead: {min_count: 2}
+                Emeritus of Abundance: {min_count: 2}
+                Flow State: {exact_count: 0}
+        - id: jeskai-control
+          name: Jeskai Control
+          subtypes: []
+          rule_definition: inherit_except_dark_jeskai_transition
+        - id: sultai-control
+          name: Sultai Control
+          subtypes: []
+          rule_definition: inherit_plus_three_color_bargain_fallback
+      precedence: Tablet identities outrank Dark Jeskai Control; Dark Jeskai Control outranks Jeskai Control; White Sultai Control outranks the three-color Sultai fallback.
+      fail_closed: A future white-marked Bargain shell below the approved Aang threshold remains Unknown instead of Sultai.
+
+    - family: allies-kindred
+      retire_parent_ids: []
+      targets:
+        - id: 4-color-allies
+          name: Allies Kindred
+          subtypes: []
+          rule_definition: inherit_exactly
+
+    - family: leyline-aggro
+      retire_parent_ids: [boros-leyline, mono-red-leyline]
+      targets:
+        - id: leyline-aggro
+          name: Leyline Aggro
+          subtypes: [izzet, gruul, boros, rakdos, mono-red]
+          parent_core:
+            Leyline of Resonance: {min_count: 4}
+            Slickshot Show-Off: {min_count: 4}
+          color_policy:
+            izzet: Exactly one supported nonred color, blue.
+            gruul: Exactly one supported nonred color, green.
+            boros: Exactly one supported nonred color, white.
+            rakdos: Exactly one supported nonred color, black.
+            mono-red: No usable blue, green, white, or black main-deck source.
+          fail_closed: More than one nonred color without an approved subtype remains Unknown.
+      precedence: The complete Leyline core outranks Izzet Fling, Gruul Fling, and Izzet Prowess; one-copy Leyline lists remain in their non-Leyline parents.
+
+    - family: dimir-deceit
+      retire_parent_ids: []
+      targets:
+        - id: dimir-deceit
+          name: Dimir Deceit
+          subtypes: []
+          retained_rule_id: dimir-deceit-primary
+          required_any:
+            Deceit: {min_count: 3}
+            Requiting Hex: {min_count: 2}
+            Superior Spider-Man: {min_count: 3}
+            Doomsday Excruciator: {exact_count: 0}

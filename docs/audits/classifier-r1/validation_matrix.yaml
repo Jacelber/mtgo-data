@@ -1,0 +1,266 @@
+schema_version: "1.0.0"
+task_id: CLASSIFIER-R1-STABLE-IDENTITY-CONTRACT
+status: specified_for_r2_not_executed
+
+global_gates:
+  - id: G01
+    requirement: Target parent, subtype, and rule IDs are lowercase ASCII, unique in scope, and independent of display language.
+  - id: G02
+    requirement: Every parent with maintained subtypes selects exactly one subtype for every classified deck; no residual subtype is allowed.
+  - id: G03
+    requirement: Equal-priority cross-parent matches fail as conflicts; YAML order never silently breaks a tie.
+  - id: G04
+    requirement: Unsupported and explicitly ambiguous constructions remain Unknown rather than entering a generic fallback.
+  - id: G05
+    requirement: Standard and Modern are evaluated independently; one format cannot consume the other format's rule file.
+  - id: G06
+    requirement: MTGO and Tabletop use the same taxonomy for the same format while retaining separate source data and statistics.
+  - id: G07
+    requirement: The Standard frozen regression baseline remains unchanged until the owner accepts the explicit migration delta.
+  - id: G08
+    requirement: Modern P6-01 frozen compatibility tests remain intact and active alongside the new taxonomy shadow.
+  - id: G09
+    requirement: Weekly Pickup known-state migration creates no false new archetype and preserves reviewed candidate comments.
+  - id: G10
+    requirement: R1 changes no production rule, generated statistic, Pickup state, Schema, workflow, public path, or front end.
+
+family_matrix:
+  modern:
+    - family: persist
+      target_parents: [grixis-persist, agadeem-persist, esper-persist]
+      corpus_oracles: [all current Persist matches, all former Persist subtype selections, relevant Unknowns]
+      boundaries: [dimir-tempo, blink, other reanimation]
+      required_cases:
+        - Abhorrent Oculus is mandatory for Grixis Persist.
+        - Crypt of Agadeem identifies Agadeem Persist without a Golgari color restriction.
+        - Esper Persist does not require Ephemerate.
+      pickup: split_known_parent
+      tabletop: same_format_shadow_required
+
+    - family: goryos
+      target_parents: [cremator-goryos, esper-goryos, grixis-goryos]
+      corpus_oracles: [277 twelve-week submitted samples, all current complete signatures]
+      boundaries: [blink, dimir-tempo, persist, cremator_precedence]
+      required_cases:
+        - Cremator and Emrakul package outranks other Goryo's identities.
+        - Esper accepts variable discard support but requires Psychic Frog and Ephemerate.
+        - Grixis excludes Ephemerate; unmatched four-color versions are Unknown.
+      pickup: split_known_parent
+      tabletop: same_format_shadow_required
+
+    - family: dimir-tempo
+      target_parents: [dimir-tempo]
+      corpus_oracles: [175 current candidates, 164 joined current selected records]
+      boundaries: [goryos, persist, necrodominance, pensive-combo, oculus-ritual, blink, deaths-shadow, izzet-wizards]
+      required_cases:
+        - Counterspell and Orcish Bowmasters remain optional.
+        - The two Dimir implementation paths select the same parent and subtype.
+        - A low-Frog list without Bowmasters remains Unknown.
+        - The tiered fallback does not become the absolute globally lowest priority.
+      pickup: parent_id_rename
+      tabletop: same_format_shadow_required
+
+    - family: blink
+      target_parents: [esper-ketramose, esper-blink, azorius-blink, jeskai-stoneforge, jeskai-blink, mardu-blink, orzhov-blink]
+      corpus_oracles:
+        - 337 current legacy Blink selections
+        - 22 current Esper Ketramose candidates
+        - 158 strict Jeskai candidates
+        - 19 frozen Mardu candidates
+        - 5 strict current Orzhov candidates
+      boundaries: [energy, goryos, dimir-tempo, domain-zoo, color_source_policy]
+      required_cases:
+        - Esper Blink has mutually exclusive Overlord and Psychic Frog paths.
+        - Esper Ketramose outranks both general Esper Blink paths.
+        - Azorius may remain empty and must reject every usable off-color source.
+        - Jeskai Stoneforge requires a metadata-verified Equipment and outranks Jeskai Blink.
+        - Mardu outranks Orzhov; off-color unsupported lists remain Unknown.
+      pickup: split_known_parent
+      tabletop: same_format_shadow_required
+
+    - family: broodscale-combo
+      target_parents: [broodscale-combo]
+      corpus_oracles: [4 cross-source Simic candidates, 313 reviewed MTGO core occurrences, event 434455 Broodscale decks]
+      boundaries: [mono-green_subtype]
+      required_cases:
+        - Simic candidates move from Mono-Green without a same-parent subtype tie.
+      pickup: retain_parent
+      tabletop: event_434455_required
+
+    - family: boros-ponza
+      target_parents: [boros-land-destruction]
+      corpus_oracles: [all current Boros Land Destruction selections]
+      boundaries: []
+      required_cases:
+        - Only the display name changes; IDs, rules, priorities, and membership remain exact.
+      pickup: retain_parent_update_display_surfaces
+      tabletop: label_projection_check
+
+    - family: eldrazi-ramp-chant
+      target_parents: [eldrazi-ramp, eldrazi-ramp-chant]
+      corpus_oracles: [3 current Chant transitions, full Eldrazi Ramp corpus]
+      boundaries: [chant-control, azorius-control, generic_eldrazi_ramp]
+      required_cases:
+        - Orim's Chant is mandatory and Isochron Scepter is optional.
+        - The former Selesnya subtype is retired into the independent parent; the other five Eldrazi Ramp subtypes and fallback behavior remain stable.
+      pickup: add_known_child_parent
+      tabletop: event_434455_required
+
+    - family: chant-and-traditional-control
+      target_parents: [omnath-midrange, chant-control, azorius-control, jeskai-control]
+      corpus_oracles: [all current Chant transitions, 6 no-Scepter Chant lists, 4 observed Omnath/Wrenn matches]
+      boundaries: [boros-ponza, creativity, ritual, domain, blink, dimir-tempo]
+      required_cases:
+        - Azorius and Jeskai Chant require Orim's Chant but not Scepter.
+        - A red-producing land alone does not create the Jeskai subtype.
+        - Omnath plus Wrenn outranks Chant whether or not Chant or Scepter is present.
+        - Traditional control parents exclude both Chant and Scepter.
+      pickup: retain_and_add_known_parent
+      tabletop: same_format_shadow_required
+
+    - family: hollow-one
+      target_parents: [hollowvine, rakdos-hollow-one]
+      corpus_oracles: [74 current transitions, all historical Vengevine variants]
+      boundaries: [deaths-shadow, prowess, rakdos-steel-cutter]
+      required_cases:
+        - Hollowvine requires the complete Hollow One, Vengevine, and Rootwalla core.
+        - Rakdos Hollow One excludes Vengevine.
+        - Each Mardu marker path is mutually exclusive; white lands alone do not select Mardu.
+      pickup: split_known_parent
+      tabletop: same_format_shadow_required
+
+    - family: living-end
+      target_parents: [living-end]
+      corpus_oracles: [200 current transitions, 3 complete higher-parent overrides]
+      boundaries: [four-color_marker_intersection, other_cascade_parents]
+      required_cases:
+        - Five subtypes partition all accepted Living End structures with no generic fallback.
+        - Simultaneous Violent Outburst and Overlord markers select Four-Color only.
+      pickup: retain_parent
+      tabletop: same_format_shadow_required
+
+    - family: steel-cutter-and-prowess
+      target_parents: [steel-cutter, rakdos-steel-cutter, mono-red-artifact, prowess]
+      corpus_oracles:
+        - 42 retained Izzet Steel-Cutter records
+        - 13 moved current Steel-Cutter records
+        - 1 recovered Boros Prowess Unknown
+        - 46 retained Temur Prowess records
+        - 4 land-only Temur-to-Izzet transitions
+        - 2 land-only Temur-to-Lessons transitions
+        - 4 Izzet-to-Jeskai transitions
+        - 1 accepted Mardu Prowess transition
+      boundaries: [affinity, izzet-phoenix, hollow-one, deaths-shadow, future_rakdos_delirium]
+      required_cases:
+        - Steel-Cutter retains only Izzet; Rakdos Cutter and Mono-Red Artifact are independent parents.
+        - Prowess color routes use accepted real-spell or explicit Mardu land-pair evidence.
+        - Phyrexian-mana spells do not establish a splash color.
+        - Non-Cutter unresolved Delirium candidates remain Unknown.
+      pickup: retain_and_add_known_parents
+      tabletop: same_format_shadow_required
+
+    - family: deaths-shadow
+      target_parents: [deaths-shadow]
+      corpus_oracles: [14 complete current historical Shadow lists]
+      boundaries: [goryos, hollow-one, rakdos-steel-cutter, prowess, future_rakdos_delirium]
+      required_cases:
+        - Proposed paths partition exactly 9 Grixis, 1 Dimir, and 4 Rakdos or report the exact refreshed delta.
+        - No generic fallback is introduced.
+      pickup: retain_parent
+      tabletop: same_format_shadow_required
+
+    - family: mono-blue-tron
+      target_parents: [mono-blue-tron]
+      corpus_oracles: [7 retained Blue Eldrazi selections, 1 recovered DietMountainDew Unknown]
+      boundaries: [eldrazi-tron, eldrazi-ramp, colored_tron]
+      required_cases:
+        - Complete Tron plus Map and Island base selects Mono-Blue Tron without requiring Portent or Labyrinth.
+      pickup: parent_id_rename
+      tabletop: same_format_shadow_required
+
+  standard:
+    - family: izzet-aggro
+      target_parents: [izzet-aggro]
+      corpus_oracles: [49 selected historical lists]
+      boundaries: []
+      required_cases:
+        - All 49 remain Izzet Aggro and both artificial subtype IDs disappear.
+      pickup: retain_display_name
+
+    - family: azorius-prison
+      target_parents: [azorius-prison]
+      corpus_oracles: [65 retained selections, 1 recovered Mindartis Unknown]
+      boundaries: [azorius-control, azorius-artifacts, broader_flash]
+      required_cases:
+        - High Noon, Aang, and Aven core selects Azorius Prison.
+      pickup: display_name_and_identity_migration
+
+    - family: boros-manufacturing
+      target_parents: [boros-manufacturing]
+      corpus_oracles: [30 shared-core lists]
+      boundaries: [jeskai_first, mardu_second, boros_fallback]
+      required_cases:
+        - Exact refreshed partition is reported against the reviewed 16 Boros, 8 Jeskai, and 6 Mardu oracle.
+        - No shared-core record is left with a residual subtype.
+      pickup: merge_known_display_names
+
+    - family: kona-omniscience
+      target_parents: [kona-omniscience]
+      corpus_oracles: [37 retained core lists, synthetic Bant positive, synthetic Temur-plus-Bant conflict]
+      boundaries: [color_marker_intersection]
+      required_cases:
+        - Simic and Temur preserve the reviewed 11/26 partition unless refreshed evidence explains a delta.
+        - Bant positive classifies; simultaneous Temur/Bant markers remain Unknown.
+      pickup: display_name_and_identity_migration
+
+    - family: four-color-control-split
+      target_parents: [dark-jeskai-control, white-sultai-control, jeskai-control, sultai-control]
+      corpus_oracles:
+        - 11 Dark Jeskai identities
+        - 27 retained Jeskai Control identities
+        - 263 Tablet exclusions
+        - 4 White Sultai identities
+        - 13 retained Sultai Control identities
+      boundaries: [4-color-tablet, jeskai-tablet, white_gate, three_color_sultai]
+      required_cases:
+        - Tablet identities outrank Dark Jeskai.
+        - Aang across the complete 75 is the approved White Sultai gate.
+        - A three-color Bargain fixture selects Sultai.
+        - A white-marked subthreshold fixture remains Unknown.
+      pickup: split_and_targeted_known_migration
+
+    - family: allies-kindred
+      target_parents: [4-color-allies]
+      corpus_oracles: [2 historical selected lists]
+      boundaries: []
+      required_cases:
+        - Only the display name and display-name-based Pickup key change.
+      pickup: replace_display_name
+
+    - family: leyline-aggro
+      target_parents: [leyline-aggro]
+      corpus_oracles: [13 four-copy Leyline core lists, 2 one-copy Izzet Fling lists]
+      boundaries: [izzet-fling, gruul-fling, izzet-prowess, multi_color_fail_closed]
+      required_cases:
+        - All 13 complete-core lists enter one of five subtypes.
+        - Both one-copy Leyline lists stay outside the parent.
+        - Unsupported multi-color combinations remain Unknown.
+      pickup: merge_three_known_display_names
+
+    - family: dimir-deceit
+      target_parents: [dimir-deceit]
+      corpus_oracles: [27 retained selections, 3 recovered two-Hex Unknowns]
+      boundaries: [dimir-excruciator, sultai-reanimator]
+      required_cases:
+        - Lower only Requiting Hex from 3 to 2; stable parent and rule IDs remain unchanged.
+      pickup: retain_display_name
+
+r2_required_reports:
+  - Exact before/after parent and subtype counts for the complete committed Standard and Modern corpora.
+  - Every deck-level identity transition, grouped by source identity and target identity, without participant identifiers.
+  - New and resolved Unknowns with normalized deck evidence.
+  - All multiple-match, same-parent subtype-match, and conflict deltas.
+  - Rule-order independence and globally unique numeric priority proof.
+  - MTGO versus Tabletop same-format taxonomy comparison, including protected event 434455 without changing its bytes.
+  - Pickup known-state dry-run showing added, removed, retained, and false-new prevention.
+  - Frozen Standard and P6-01 Modern compatibility comparison without accepting or refreshing a baseline.

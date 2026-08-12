@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, timedelta
 import json
 from pathlib import Path
 
 import pytest
 
 from mtgmeta.classification_reports_cli import generate_reports
+from mtgmeta.config import load_rule_set
 from mtgmeta.mtgo import __main__ as cli
 from mtgmeta.mtgo import matchup, pickup, stats
 
@@ -22,7 +23,7 @@ def assert_byte_identical(generated: Path, committed: Path) -> None:
 
 
 @pytest.mark.committed_baseline
-def test_fixed_reference_standard_product_is_byte_identical(tmp_path):
+def test_fixed_reference_standard_product_is_byte_identical(tmp_path, monkeypatch):
     generated_stats = tmp_path / "stats"
     generated_pickup = tmp_path / "pickup"
     generated_reports = tmp_path / "reports"
@@ -37,6 +38,25 @@ def test_fixed_reference_standard_product_is_byte_identical(tmp_path):
         (committed_stats / "meta.json").read_text(encoding="utf-8")
     )
     reference_date = date.fromisoformat(statistics_index["generated"][:10])
+    latest_candidate = sorted(committed_pickup.glob("candidates_*.yaml"))[-1]
+    candidate_week = latest_candidate.stem.removeprefix("candidates_")
+    candidate_year, candidate_week_number = candidate_week.split("-W")
+    candidate_reference_date = date.fromisocalendar(
+        int(candidate_year), int(candidate_week_number), 1
+    ) + timedelta(days=7)
+    baseline_rules = load_rule_set(
+        ROOT
+        / "docs"
+        / "audits"
+        / "classifier-r2"
+        / "baseline_rules"
+        / "standard.yaml"
+    )
+    monkeypatch.setattr(
+        pickup,
+        "load_rules_for_format",
+        lambda *_args, **_kwargs: baseline_rules,
+    )
 
     statistics = stats.build_all_stats(
         ROOT,
@@ -55,9 +75,16 @@ def test_fixed_reference_standard_product_is_byte_identical(tmp_path):
     candidates = pickup.generate_candidates(
         ROOT,
         "standard",
-        today=reference_date,
+        today=candidate_reference_date,
         output_directory=generated_pickup,
-        known_file=committed_pickup / "known_archetypes.json",
+        known_file=(
+            ROOT
+            / "docs"
+            / "audits"
+            / "classifier-r2"
+            / "baseline_pickup"
+            / "standard_known_archetypes.json"
+        ),
     )
     metadata = pickup.generate_metadata(
         ROOT,
@@ -90,8 +117,7 @@ def test_fixed_reference_standard_product_is_byte_identical(tmp_path):
         item["weeks"]: item["counted_matches"] for item in matchup_index["ranges"]
     }
     assert candidates is not None
-    latest_week = date.fromisoformat(statistics_index["latest_complete_week"])
-    assert candidates["week"] == f"{latest_week.isocalendar().year}-W{latest_week.isocalendar().week:02d}"
+    assert candidates["week"] == candidate_week
     committed_report_index = json.loads(
         (committed_reports / "index.json").read_text(encoding="utf-8")
     )

@@ -1,0 +1,936 @@
+schema_version: 1.0.0
+task_id: CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW
+base_commit: 7bf804684ac22dcf71560bacae4d3bc49c56f08f
+status: pending_owner_review
+allowed_dispositions:
+- map_existing
+- new_identity
+- intentional_unknown
+- defer_insufficient_evidence
+families:
+- family_id: modern-unknown-d0ef54702fd3
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: rakdos-persist
+  rationale: Owner accepted a separate Rakdos Persist parent for the recurring Archon/Bloodghast sacrifice-reanimation family; Abhorrent Oculus remains required for Grixis Persist, and lists with three or more main-deck Living End remain Living End.
+  owner_accepted: true
+- family_id: modern-unknown-c925796c2322
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: broodscale-combo/gruul
+  rationale: Owner accepted the recurring Eldrazi-heavy Broodscale family as Gruul Broodscale Combo by lowering only the main-deck Blade of the Bloodchief threshold from three to two; Basking Broodscale and Stomping Ground requirements remain unchanged.
+  owner_accepted: true
+- family_id: modern-unknown-4d4eaac6eb6a
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: esper-ketramose|esper-blink
+  rationale: Owner accepted a deterministic split of this transitive candidate family; low-count Relic/Ketramose lists with at most two Phelia map to Esper Ketramose, while the remaining Ephemerate/Frog/Solitude lists map to Esper Blink with a sweeper-heavy control exclusion.
+  owner_accepted: true
+  partition:
+  - target_identity: esper-ketramose
+    record_ids:
+    - 154989c4ea5400776303
+    - 2a91848de862a805e5bf
+    - 38ea22f638a19f3946ed
+    - ed40c4fe85260354a346
+  - target_identity: esper-blink
+    record_ids:
+    - 1c47530b320c2abb88b0
+    - 626720cad88d9b967b5e
+    - 96477803963b8d74298d
+- family_id: modern-unknown-8a9473ba2af0
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: scapeshift/naya|scapeshift/four-color
+  rationale: Owner accepted Scapeshift as a new parent with Naya and Four-Color subtypes; Bring to Light and reviewed mana sources distinguish the Four-Color record, while Amulet of Vigor is excluded.
+  owner_accepted: true
+  partition:
+  - target_identity: scapeshift/naya
+    record_ids:
+    - 54b72fc579d904e66b0c
+    - 8c2d5ce7408bf07f4ac9
+    - b52fb8112fbbbfe12cca
+    - c50cf6faf9a08ccbd515
+    - d61a34363d9282c91c8d
+    - f6ae34fac2f7ac134d6b
+  - target_identity: scapeshift/four-color
+    record_ids:
+    - 1226de5394fb836abbe4
+- family_id: modern-unknown-9ad9a23fe35b
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: izzet-through-the-breach
+  rationale: Owner accepted Izzet Through the Breach as a separate parent with no subtype; the reviewed Through the Breach, Emrakul, Ugin's Labyrinth, Eldrazi Temple, Devourer, Kozilek's Command, and Talisman of Creativity core distinguishes it from Rakdos and historical Gruul builds.
+  owner_accepted: true
+- family_id: modern-unknown-f427d58c5e09
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: necrodominance/cosmogoyf
+  rationale: Owner accepted Cosmogoyf Necrodominance as a subtype of the existing Necrodominance parent because Necrodominance, Soul Spike, and black interaction define the deck while Cosmogoyf is its finisher; Thud and Fling remain explicit exclusions so the subtype cannot absorb Fling Goyf.
+  owner_accepted: true
+- family_id: modern-unknown-5dc6814edc94
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: badgermole-combo/golgari|badgermole-combo/mono-green
+  rationale: Owner accepted Badgermole Combo as a separate parent with Golgari and Mono-Green subtypes. Devoted Combo requires both Devoted Druid and Vizier of Remedies; the mono-green Druid/Quillspike record has no Vizier or white source and remains Badgermole. Existing Devoted Combo gains Abzan and Selesnya subtypes; blue sideboard or main-deck splash does not disqualify an otherwise Abzan build.
+  owner_accepted: true
+  partition:
+  - target_identity: badgermole-combo/golgari
+    record_ids:
+    - 03dfaac2fac24535b3de
+    - 5fe2ea0a481a3fae9fc0
+    - c911c95f1984590a3537
+  - target_identity: badgermole-combo/mono-green
+    record_ids:
+    - 59770edbd1b9ac5b1213
+    - f30d57c6bc480152cf4f
+- family_id: modern-unknown-7cdba8c5c977
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: dark-maestro|coffers/umori
+  rationale: Owner accepted Dark Maestro as a separate parent for the three Molten-Core Maestro Coffers spell-chain lists. The two remaining all-sorcery tutor lists map to the Umori subtype of a new Coffers parent; the mainboard-only classifier uses their reviewed Petition, Tutor, Scrying, and sorcery-removal signature rather than the sideboard companion card.
+  owner_accepted: true
+  partition:
+  - target_identity: dark-maestro
+    record_ids:
+    - 41d266c0941adad60d76
+    - 4a2d4c2fc7485aaf48c5
+    - 4d3826e2a4d851b4e968
+  - target_identity: coffers/umori
+    record_ids:
+    - 377839bc726f18cdc258
+    - d7eae7ab1911770dd0fa
+- family_id: modern-unknown-d8a3a621999d
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: eight-rack
+  rationale: Owner accepted the recurring mono-black Rack discard family as a separate 8-Rack parent. The reviewed mainboard rule requires at least three The Rack and two Raven's Crime; Smallpox, Bandit's Talent, Dauthi Voidwalker, and Urza's Saga remain construction choices rather than identity requirements, and no subtype is added.
+  owner_accepted: true
+- family_id: modern-unknown-f20f8e8714d9
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: gruul-valakut
+  rationale: Owner accepted the recurring white-free Valakut/Dryad/Icetill family as a separate Gruul Valakut parent because its Vibrance and Wrenn engine contains no Scapeshift.
+  owner_accepted: true
+- family_id: modern-unknown-c810dd70e4c7
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: leyline-fling
+  rationale: Owner accepted the recurring Leyline of Resonance and Callous Sell-Sword pump-and-sacrifice family as a separate Leyline Fling parent rather than a Prowess subtype. The reviewed mainboard signature requires at least three each of Leyline of Resonance, Heartfire Hero, Callous Sell-Sword, and Monastery Swiftspear; color sources and individual pump spells are not identity requirements, and no subtype is added.
+  owner_accepted: true
+- family_id: modern-unknown-ee53a8117d33
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: orzhov-blink
+  rationale: Owner accepted all four recurring utility-splash lists as Orzhov Blink because they retain the reviewed Phelia, Balemurk, Ephemerate, Emperor, Flickerwisp, Solitude, and Thoughtseize engine. A separate splash rule keeps the strict primary path unchanged, excludes reviewed Esper, Mardu, and Goryo engines, and treats off-color utility lands without those engines as construction choices rather than new identities.
+  owner_accepted: true
+- family_id: modern-unknown-3e688b954ff0
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: eldrazi-aggro
+  rationale: Owner confirmed that Eldrazi Linebreaker is the only required Eldrazi Aggro core and that the existing It That Heralds the End requirement is incorrect. The accepted shadow repair keeps the existing primary rule ID, requires at least three Linebreaker, excludes Basking Broodscale to preserve the combo boundary, leaves Glaring Fleshraker and Thought-Knot Seer as common construction choices, and adds no rule path or subtype.
+  owner_accepted: true
+- family_id: modern-unknown-5efeda24e2e7
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: mono-green-stompy
+  rationale: Owner accepted the recurring Aspect of Hydra and Old-Growth Troll family as a new Mono-Green Stompy parent with no subtype. The rule uses only those two stable aggressive devotion payoffs, while Steel Leaf Champion, Frenzied Baloth, Green Sun's Zenith, mana creatures, and minor black utility lands remain construction choices. The same rule intentionally includes the separately reviewed Badgermole and Endurance singleton family.
+  owner_accepted: true
+- family_id: modern-unknown-65dd853f8982
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: dredge
+  rationale: Owner accepted the three recurring Phoenix and dredge-engine lists as Dredge and confirmed that Burning Inquiry is a construction choice rather than a required core. The existing primary rule keeps Arclight Phoenix, Creeping Chill, and Life from the Loam as its three positive requirements, removes the Burning Inquiry threshold, and adds no rule path, parent, or subtype.
+  owner_accepted: true
+- family_id: modern-unknown-6cdec22cea94
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: hardened-scales
+  rationale: Owner accepted the three recurring counter-artifact lists as a separate Hardened Scales parent rather than Affinity or Broodscale Combo. Hardened Scales itself is the only required core; Arcbound Ravager, Walking Ballista, Zabaz, Agatha's Soul Cauldron, Mox Opal, and Urza's Saga remain construction choices, and no subtype is added.
+  owner_accepted: true
+- family_id: modern-unknown-94aa91fd1ab6
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: izzet-wizards
+  rationale: Owner accepted repairing the existing Izzet Wizards primary rather than adding an identity. The rule keeps Snapcaster Mage and Flame of Anor as the core, removes the Lightning Bolt threshold, and directly excludes the reviewed white spells in either mainboard or sideboard. White-producing lands alone do not make the deck Jeskai, Apostle's Blessing remains color-neutral because of Phyrexian mana, and a future unlisted white spell may temporarily fall to Izzet until the inline exclusions are updated.
+  owner_accepted: true
+- family_id: modern-unknown-becb8c1f6ef5
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: golgari-yawgmoth
+  rationale: Owner mapped the three recurring Birthing Ritual lists to existing Golgari Yawgmoth. The original Yawgmoth plus Grist path remains intact, and a supplemental path requires at least three Yawgmoth and at least two Young Wolf in the mainboard. Young Wolf is treated as the long-standing sacrifice core; Badgermole Cub, Birthing Ritual, Chord of Calling, Marionette Apprentice, and Grist remain construction choices for this path. A future Yawgmoth build that abandons Young Wolf requires explicit rule review.
+  owner_accepted: true
+- family_id: modern-unknown-cb589e90e894
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: asmo-persist
+  rationale: Owner accepted Asmo Persist as a separate parent rather than a Rakdos Persist subtype because its Asmoranomardicadaistinaculdacar, Underworld Cookbook, and Ovalchase Daredevil engine is materially different from the traditional Bloodghast build. Ovalchase Daredevil is an absolute required core; Monument to Endurance, Mox Opal, Emperor of Bones, and Urza's Saga remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-f6c2df4d63d4
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: izzet-storm
+  rationale: Owner accepted Izzet Storm as a separate parent rather than a Ruby Storm subtype or supplemental path. The reviewed rule uses Ral, Stormcatch Mentor, and Past in Flames as the stable Izzet engine and excludes Ruby Medallion; Flow State, the ritual mix, Manamorphose, Grapeshot, and blue card selection remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-08e0d37d950d
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: eldrazi-ouroboroid
+  rationale: Owner accepted Eldrazi Ouroboroid as a separate parent rather than an Eldrazi Aggro path, an Eldrazi Ramp subtype, or Badgermole Combo. The reviewed mainboard rule requires at least three each of Ouroboroid, Badgermole Cub, Eldrazi Temple, and Sowing Mycospawn. Existing Eldrazi, Broodscale Combo, and Badgermole Combo rules retain precedence when a future list satisfies both identities; Thought-Knot Seer, Green Sun's Zenith, Springheart Nantuko, Kozilek's Command, and the tutor package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-0fc20ed0d1a8
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: sultai-persist
+  rationale: Owner accepted Sultai Persist as a separate parent rather than a Grixis, Agadeem, Esper, Rakdos, or Asmo Persist path. The reviewed mainboard rule requires at least three each of Persist, Archon of Cruelty, Psychic Frog, and Malevolent Rumble. Existing Persist identities retain precedence if a future list satisfies both rules; Eyetwitch, Stitcher's Supplier, Witherbloom Charm, Flare of Malice, Abhorrent Oculus, Emperor of Bones, and the remaining sacrifice/self-mill package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-1309d5fb5ce4
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: golgari-delirium
+  rationale: Owner accepted Golgari Delirium as a separate parent with no subtype because the reviewed Saga and Moonshadow builds share 53 of 60 main-deck cards and the complete sideboard; Urza's Saga and its toolbox artifacts plus Moonshadow and Street Wraith remain construction choices. The reviewed mainboard rule requires at least three each of Nethergoyf, Omnivorous Flytrap, and Mishra's Bauble, at least two Witherbloom Command, reviewed black and green mana sources, and no reviewed white, blue, or red main-deck mana source. Existing explicit identities retain precedence.
+  owner_accepted: true
+- family_id: modern-unknown-17c806aab0e8
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: bogles
+  rationale: Owner accepted Bogles as a separate color-agnostic parent with no subtype. The reviewed mainboard rule requires at least three each of Slippery Bogle, Gladecover Scout, and Ethereal Armor; these two hexproof creatures and the defining Aura payoff are sufficient to identify the archetype. Daybreak Coronet, Kor Spiritdancer, Light-Paws, Rancor, the Umbra mix, Sheltered by Ghosts, Spirit Mantle, Reprieve, and the remaining Aura package are construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-1dc1d7391989
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: temur-reclamation|bant-reclamation
+  rationale: Owner accepted two separate color-bounded parents with no subtypes, Temur Reclamation and Bant Reclamation. Each reviewed rule requires at least three main-deck Wilderness Reclamation, reviewed main-deck mana sources for all three named colors, no reviewed main-deck off-color source, and no reviewed actual off-color spell in either main deck or sideboard. Growth Spiral, Galvanic Discharge, Traumatic Critique, Counterspell, Consult the Star Charts, Orim's Chant, Planar Genesis, Teferi, sweepers, and other interaction or payoff packages remain construction choices. The Reclamation parents outrank Izzet Wizards, Chant Control, and generic control; complete combo identities and Omnath Midrange retain precedence. Unsupported four-color or other color groups remain Unknown unless an existing explicit identity applies.
+  owner_accepted: true
+- family_id: modern-unknown-26c7d5185a8c
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: badgermole-combo/landfall
+  rationale: Owner accepted this recurring landfall construction as the Landfall subtype of Badgermole Combo because it retains the reviewed Badgermole Cub, Green Sun's Zenith, Quirion Ranger, Springheart Nantuko, and Ashaya combo core while replacing the Leyline support package with Icetill Explorer and landfall support. The reviewed mainboard rule requires at least three Badgermole Cub, three Green Sun's Zenith, two Quirion Ranger, three Springheart Nantuko, one Ashaya, and three Icetill Explorer, and excludes Leyline of Abundance and Vizier of Remedies. Earthbender Ascension, Nature's Rhythm, color splash, and other toolbox cards remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-3effd912c863
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: jeskai-blink
+  rationale: Owner mapped the two recurring low-Phelia records to existing Jeskai Blink and accepted repairing the existing jeskai-blink-primary rule rather than adding a construction-specific rule. The Phelia, Exuberant Shepherd mainboard threshold changes from three to two while Quantum Riddler and Solitude remain at three, the existing red-source, Stoneforge Mystic, black-source, green-source, and Goryo's Vengeance boundaries remain unchanged, and Fable of the Mirror-Breaker, Ephemerate, Phlage, Ragavan, Galvanic Discharge, Counterspell, and other value or interaction packages remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-6e45259d4cbc
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: mardu-vial
+  rationale: Owner accepted the recurring Aether Vial and Imperial Recruiter toolbox as a separate Mardu Vial parent rather than Mardu Energy because the reviewed lists omit Ocelot Pride and do not use Energy as a shared resource engine. The reviewed mainboard rule requires at least three Aether Vial, three Imperial Recruiter, two Chthonian Nightmare, and three Solitude. Guide of Souls, Ajani, Galvanic Discharge, Emperor of Bones, Phyrexian Tower, Seasoned Pyromancer, and other toolbox cards remain construction choices, and no subtype is added. Both existing Mardu Energy rules retain higher priority for a future hybrid that satisfies their complete Energy signatures.
+  owner_accepted: true
+- family_id: modern-unknown-7098cf8e171a
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: agadeem-persist
+  rationale: Owner mapped the two recurring reduced-Crypt records to existing Agadeem Persist rather than creating a BG Persist or Black Lessons parent because they retain the Eyetwitch, Stitcher's Supplier, Phyrexian Tower, Persist, and Archon of Cruelty game plan of existing Agadeem lists. The existing agadeem-persist-primary rule continues to require at least three main-deck Crypt of Agadeem. A mutually exclusive supplemental path requires at least three main-deck Persist, Archon of Cruelty, Eyetwitch, Stitcher's Supplier, and Phyrexian Tower plus one or two Crypt of Agadeem. Emperor of Bones, Overlord of the Balemurk, Street Wraith, interaction, and the green splash remain construction choices. Existing Grixis, Esper, Asmo, Rakdos, and Sultai Persist rules retain higher priority over the supplemental path for future hybrids.
+  owner_accepted: true
+- family_id: modern-unknown-724659bc0555
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: jeskai-energy
+  rationale: Owner mapped the two recurring low-Riddler records to existing Jeskai Energy rather than Boros Energy, Jeskai Blink, or a new identity. The existing jeskai-energy-primary rule ID and priority remain unchanged. Its mainboard requirements retain at least three Ajani, Nacatl Pariah and three Guide of Souls, add at least three Ocelot Pride and one reviewed red mana source, and reduce Quantum Riddler from three copies to one. Ocelot Pride preserves the accepted Guide-plus-Ocelot Energy identity, while the red source and main-deck Quantum Riddler establish Jeskai rather than Azorius or Boros. Galvanic Discharge, Ragavan, Goblin Bombardment, Phlage, Fable, Mockingbird, Ranger-Captain, Solitude, Phelia, and other value or interaction cards remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-77bb2b4214a3
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: gruul-midrange
+  rationale: Owner accepted the recurring Karn/Blood Moon/Utopia Sprawl lists as a separate Gruul Midrange parent rather than Mono-Green Stompy or Gruul Ponza. The reviewed mainboard rule requires at least three each of Karn, the Great Creator, Blood Moon, and Utopia Sprawl. Fanatic of Rhonas, Malevolent Rumble, Endurance, Arbor Elf, Vibrance, Fable of the Mirror-Breaker, Pillage, removal, and the Karn wishboard remain construction choices; no subtype is added.
+  owner_accepted: true
+- family_id: modern-unknown-8f8d03c40bec
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: mono-blue-namor
+  rationale: Owner accepted the recurring Namor and Archmage's Charm counterspell shells as a separate Mono-Blue Namor parent rather than traditional Mono-Blue Merfolk or a generic Mono-Blue Control parent. The reviewed rule requires at least three main-deck Namor and Archmage's Charm, excludes Lord of Atlantis, Goblin Charbelcher, reviewed off-color main-deck mana sources, and reviewed off-color spells in either zone. Disrupting Shoal, Force of Negation, Vodalian Hexcatcher, Svyelun, Spreading Seas, and Harbinger of the Seas remain construction choices; Phyrexian-neutral cards do not create a color splash, and no subtype is added.
+  owner_accepted: true
+- family_id: modern-unknown-c64dc8e87f67
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: golgari-goryos
+  rationale: Owner accepted the recurring Dina's Guidance and Formidable Speaker lists as a separate Golgari Goryo's parent rather than Esper Persist, Golgari Persist, or a generic Golgari Reanimator identity. The reviewed rule requires at least three main-deck Goryo's Vengeance, Dina's Guidance, and Formidable Speaker, requires reviewed black and green main-deck mana sources, and excludes reviewed white, blue, and red main-deck mana sources. Persist, Unmarked Grave, Shifting Woodland, Archon of Cruelty, and individual legendary reanimation targets remain construction choices; no subtype is added.
+  owner_accepted: true
+- family_id: modern-unknown-cdcb142b2233
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: prowess/izzet
+  rationale: Owner mapped the two recurring cross-source Cutter and Lava Dart records to existing Prowess/Izzet and accepted repairing the existing prowess-izzet rule rather than adding an identity. The rule keeps its stable ID and priority, continues to require at least three main-deck Cori-Steel Cutter and Lava Dart plus two Preordain, reduces Monastery Swiftspear from three to two, removes the Dragon's Rage Channeler requirement, and retains the reviewed white, black, and green spell exclusions in either zone. Dragon's Rage Channeler, Soul-Scar Mage, Slickshot Show-Off, Stormchaser's Talent, Boomerang Basics, Expressive Iteration, and Experimental Synthesizer remain construction choices. Prowess/Lessons retains higher priority, and the separate Emry-based Izzet Steel-Cutter rule remains unchanged.
+  owner_accepted: true
+- family_id: modern-unknown-d000dbc93b85
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: solemnity-prison
+  rationale: Owner accepted the recurring Solemnity lock lists as a separate Solemnity Prison parent with no subtype. Two mutually exclusive mainboard paths require at least three Solemnity plus either three Nine Lives, or three Phyrexian Unlife with at most two Nine Lives. United Battlefront, Greater Auramancy, Sterling Grove, Solitary Confinement, and color sources remain construction choices; no speculative Broodmoth or Enduring Ideal exclusion is added.
+  owner_accepted: true
+- family_id: modern-unknown-d8545120ffef
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: mono-green-trudge
+  rationale: Owner accepted the recurring Trudge and Henge lists as a separate Mono-Green Trudge parent with no subtype rather than Fight Rigging or Badgermole Combo. The reviewed mainboard rule requires at least three Slumbering Trudge and The Great Henge, permits at most two Fight Rigging, and excludes reviewed white, blue, black, and red main-deck mana sources. Badgermole Cub, Fanatic of Rhonas, Life's Legacy, Ouroboroid, Green Sun's Zenith, Ashaya, Quirion Ranger, Springheart Nantuko, Summoner's Pact, and Craterhoof Behemoth remain construction choices. Existing Fight Rigging retains builds with at least three Fight Rigging, and future true splashes remain Unknown pending review.
+  owner_accepted: true
+- family_id: modern-unknown-e8a1b553a175
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: grixis-tempo
+  rationale: Owner accepted a separate Grixis Tempo parent for the Ragavan-based proactive tempo shell rather than retaining it under Dimir Tempo's red-splash subtype. The reviewed rule requires at least three main-deck Fatal Push, Psychic Frog, and Ragavan, at least one Watery Grave and Steam Vents, excludes Goryo's Vengeance, Persist, Death's Shadow, and reviewed white and green main-deck mana sources, and does not constrain Counterspell. The stable dimir-tempo-grixis rule and internal subtype IDs remain, its visible subtype names become Dimir Red Splash and Dimir White Splash, and its red-splash path permits at most two Ragavan so the identities remain mutually exclusive.
+  owner_accepted: true
+- family_id: modern-unknown-014e15a41666
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: soultrader/orzhov
+  rationale: Owner mapped the established Orzhov Soultrader combo shell to existing Soultrader with a new Orzhov subtype rather than Mardu Energy or a new parent. The reviewed rule requires at least three main-deck Warren Soultrader, Gravecrawler, and Marionette Apprentice plus one Godless Shrine; it excludes reviewed blue, green, and red main-deck mana sources and reviewed off-color spells in either zone. The Orzhov rule has higher priority than Mardu Energy so the complete combo core wins even when Ajani or other Energy cards are present. Guide of Souls, Ocelot Pride, Ajani, Knight-Errant of Eos, Chthonian Nightmare, Orcish Bowmasters, Sephiroth, and Overlord remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-0b995bbade03
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: grixis-dress-down
+  rationale: Owner accepted Grixis Dress Down as a separate parent rather than broad Grixis Control or Dimir Tempo's red-splash subtype. The reviewed mainboard rule requires at least three Dress Down, Nulldrifter, and Kroxa, Titan of Death's Hunger plus one Steam Vents and Watery Grave; it excludes Goryo's Vengeance, Persist, Death's Shadow, reviewed white and green main-deck mana sources, and reviewed white and green spells in either zone. The priority sits below Grixis Tempo and above Dimir Tempo's red splash. Fatal Push, Consign to Memory, Traumatic Critique, Force of Negation, and Consult the Star Charts remain construction choices. Four-color Dress Down remains Unknown pending separate evidence.
+  owner_accepted: true
+- family_id: modern-unknown-157abe8132a0
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: grixis-goryos
+  rationale: Owner mapped the singleton low-Goryo's Emperor build to existing Grixis Goryo's rather than adding a parent or subtype. The supplemental mainboard path requires one or two Goryo's Vengeance, at least three each of Emperor of Bones, Atraxa, Grand Unifier, Faithless Looting, and Psychic Frog, and excludes Ephemerate and Persist. The original Grixis Goryo's primary remains unchanged and mutually exclusive. Griselbrand, Sin, Spira's Punishment, Thoughtseize, Force of Negation, Consign to Memory, and discard outlets remain construction choices; zero-Goryo's Emperor builds remain Unknown pending separate evidence.
+  owner_accepted: true
+- family_id: modern-unknown-174b94f4f2e0
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: mono-white-humans
+  rationale: Owner accepted the singleton as a new Mono-White Humans parent with no subtype, explicitly separate from the later Five-Color Humans family. The reviewed mainboard rule requires at least three Aether Vial, Champion of the Parish, Thalia's Lieutenant, and Coppercoat Vanguard plus at least five Plains; it excludes Ocelot Pride, reviewed blue, black, red, and green main-deck mana sources, and reviewed off-color spells in either zone. Adeline, Resplendent Cathar, Guide of Souls, Esper Sentinel, Ranger-Captain of Eos, Voice of Victory, and Witch Enchanter remain construction choices. The observed Five-Color Humans list has no Coppercoat Vanguard and only two Plains, remains Unknown, and will receive separate parent-level review at its own queue position.
+  owner_accepted: true
+- family_id: modern-unknown-1926eb946776
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: gruul-cragganwick
+  rationale: Owner accepted the singleton as a new Gruul Cragganwick parent with no subtype, separate from Cremator Goryo's and Gruul Midrange. The reviewed mainboard rule requires at least three Cragganwick Cremator, Yargle and Multani, Badgermole Cub, and Blood Moon plus reviewed red and green mana sources; it excludes reviewed white, blue, and black main-deck mana sources, Goryo's Vengeance, and Emrakul, the Aeons Torn. Formidable Speaker, Monstrous Emergence, Screaming Nemesis, The Underworld Cookbook, and Urza's Saga remain construction choices. No generic black-spell exclusion is added because Yargle is the combo payload despite its black mana symbol.
+  owner_accepted: true
+- family_id: modern-unknown-251a8dc88b65
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: hammer-time/jeskai
+  rationale: Owner expanded the Kellan singleton review into an immediate full Hammer Time shadow refactor. The existing parent retains Azorius and Mono-White and gains Boros and Jeskai subtypes. Traditional paths require at least three main-deck Colossus Hammer and Puresteel Paladin, while the mutually exclusive Kellan path requires at least three Kellan, two Super-Soldier Serum, and at most two Puresteel Paladin. Reviewed main-deck mana sources and any-zone colored spells determine the subtype. Metallic Rebuke, Stoneforge Mystic, Sigarda's Aid, Leyline Axe, and Battlefield Improvisation remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-2726cf0be0bf
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: izzet-twin
+  rationale: Owner accepted the singleton as a new Izzet Twin parent with no subtype. The reviewed rule requires at least two main-deck Splinter Twin and three Fear of Missing Out, plus reviewed blue and red main-deck mana sources; it excludes reviewed white, black, and green main-deck mana sources and any-zone spells. Flow State, Mishra's Bauble, Tamiyo, Inquisitive Student, Expressive Iteration, Force of Negation, and the remaining interaction package are construction choices. Traditional Deceiver Exarch and Pestermite paths remain unimplemented pending real samples.
+  owner_accepted: true
+- family_id: modern-unknown-28864e4b6383
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: izzet-extra-turns
+  rationale: Owner identified the singleton as Izzet Extra Turns. The reviewed mainboard rule requires at least three Tablet of Discovery, Time Warp, and Temporal Mastery plus reviewed blue and red mana sources; reviewed white, black, and green main-deck sources and any-zone spells are excluded so future off-color builds return to Unknown for explicit review.
+  owner_accepted: true
+- family_id: modern-unknown-3ab0e49c176d
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: jund-goblins
+  rationale: Owner identified the singleton as Jund Goblins. The reviewed mainboard rule requires at least three Birthing Ritual, Ignoble Hierarch, and Conspicuous Snoop plus Blood Crypt and Stomping Ground; the remaining Goblin combo, tutor, and interaction package remains a construction choice.
+  owner_accepted: true
+- family_id: modern-unknown-40c81d1ba673
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: amulet-titan
+  rationale: Owner accepted the singleton Scapeshift list as Amulet Titan due to four Amulet of Vigor, the bounce-land/Saga engine, Cultivator Colossus, and Primeval Titan; it must not map to Scapeshift.
+  owner_accepted: true
+- family_id: modern-unknown-4639ca7147ab
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: thopter-sword/bant
+  rationale: Owner identified the singleton as Bant Thopter Sword. The new Thopter Sword parent has a Bant subtype whose reviewed mainboard rule requires at least three Thopter Foundry and Malevolent Rumble, two Sword of the Meek, and one Breeding Pool and Hallowed Fountain; Urza, Emry, Mox Opal, Whir of Invention, and the remaining artifact package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-465f32dfb900
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: rakdos-aggro
+  rationale: Owner identified the singleton as Rakdos Aggro rather than Death's Shadow or Rakdos Delirium. The reviewed mainboard rule requires at least three Super Shredder, Moonshadow, and Ragavan, Nimble Pilferer plus Blood Crypt; Dragon's Rage Channeler, Street Wraith, Stalactite Stalker, and the interaction package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-46baf67c1642
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: primal-prayers-combo
+  rationale: Owner identified the singleton as Primal Prayers Combo. The shared reviewed mainboard rule requires at least three Primal Prayers, Guide of Souls, and Ocelot Pride, giving the combo identity priority over Energy; Acererak, Greenbelt Rampager, Formidable Speaker, tutor packages, and the remaining payoff cards remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-47921f86891e
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: dimir-persist
+  rationale: Owner identified the singleton as Dimir Persist and accepted a color-bounded parent separate from Grixis, Esper, Rakdos, Sultai, Agadeem, and Domain Persist. The reviewed mainboard rule requires at least three Persist, Archon of Cruelty, and Psychic Frog plus Watery Grave, while reviewed white, red, and green main-deck sources and any-zone spells are excluded.
+  owner_accepted: true
+- family_id: modern-unknown-4a8e9a81cd25
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: dimir-unearth
+  rationale: Owner identified both reviewed singletons and the structurally matching Dimir Tempo records as Dimir Unearth. The shared reviewed mainboard rule requires at least three Abhorrent Oculus, Unearth, Thought Scour, and Psychic Frog plus Watery Grave; Birthing Ritual, Goryo's Vengeance, and Persist are excluded. White splash cards remain permitted because the reanimation engine defines the parent.
+  owner_accepted: true
+- family_id: modern-unknown-4de73a0d7f6e
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: deaths-shadow/grixis
+  rationale: Owner mapped the reviewed tabletop singleton to existing Grixis Death's Shadow. The supplemental path requires at least three main-deck Death's Shadow, Thoughtseize, Street Wraith, and Psychic Frog plus Blood Crypt, Watery Grave, and Steam Vents; it permits at most one Stubborn Denial and excludes Goryo's Vengeance and Persist so the established Stubborn Denial path and reanimation identities remain separate.
+  owner_accepted: true
+- family_id: modern-unknown-4f48c58e17cb
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: domain-persist
+  rationale: Owner identified the singleton and two structurally equivalent lists previously selected as Domain Zoo as Domain Persist. The reviewed mainboard rule requires at least three Persist, Archon of Cruelty, Leyline of the Guildpact, and Scion of Draco and has priority over Domain Zoo; the reanimation identity therefore wins when both rules match.
+  owner_accepted: true
+- family_id: modern-unknown-5e167b22ccb6
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: naya-midrange
+  rationale: Owner identified the singleton as Naya Midrange. The reviewed mainboard rule requires at least three Ragavan, Nimble Pilferer and Phlage, Titan of Fire's Fury, at least two Wrenn and Six, and reviewed white, red, and green mana sources; Solitude, Malevolent Rumble, The Legend of Roku, and the interaction package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-6255c07f9176
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: five-color-ritual
+  rationale: Owner mapped the reviewed Four-Color Ritual value build to the existing Five-Color Ritual parent rather than creating a color-count identity. The supplemental path requires at least three main-deck Birthing Ritual, Shardless Agent, and Omnath, Locus of Creation plus one Elesh Norn, Mother of Machines, while permitting at most two Magmatic Hellkite so it remains mutually exclusive with the established Hellkite path.
+  owner_accepted: true
+- family_id: modern-unknown-64ca17c0a88d
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: boros-land-destruction
+  rationale: Owner mapped the reviewed Boom/Bust Wildfire singleton to existing Boros Ponza. The supplemental path requires at least three main-deck Boom/Bust, Flagstones of Trokair, Cleansing Wildfire, and Price of Freedom; Field of Ruin, Erode, Wrath of the Skies, and the remaining land-destruction package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-6e1c14f7b030
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: five-color-elementals
+  rationale: Owner identified the singleton as Five-Color Elementals rather than Five-Color Ritual. The reviewed mainboard rule requires at least three Birthing Ritual, Omnath, Locus of Creation, and Risen Reef and excludes Shardless Agent; Voice of Resurgence, Solitude, Psychic Frog, Ephemerate, and the remaining Elemental package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-6e6a2cffda6b
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: coffers/dimir
+  rationale: Owner accepted the singleton blue-black Coffers control list as the Dimir subtype of the new Coffers parent. Its reviewed Coffers, Watery Grave, and Consult the Star Charts core distinguishes it from Golgari, Umori, Dark Maestro, and Necrodominance builds.
+  owner_accepted: true
+- family_id: modern-unknown-7194c067c7e5
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: cheerios
+  rationale: Owner identified the singleton as Cheerios. The reviewed mainboard rule requires at least three Sram, Senior Edificer, Bone Saw, and Kite Shield; Puresteel Paladin, Retract, Mox Opal, the remaining zero-cost equipment, and the single Colossus Hammer remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-73dd687413c6
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: mono-green-stompy
+  rationale: Owner jointly accepted this singleton Badgermole and Endurance construction as Mono-Green Stompy because it shares the reviewed Aspect of Hydra and Old-Growth Troll core with the recurring family. Its creature package is a construction variation, not a separate identity or subtype.
+  owner_accepted: true
+- family_id: modern-unknown-745246ddeb2a
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: hammer-time/jeskai
+  rationale: Owner jointly accepted this later traditional Hammer singleton during the immediate full-parent refactor. Its Colossus Hammer and Puresteel Paladin core maps to Hammer Time, while Hallowed Fountain plus sideboard Wear/Tear makes it Jeskai under the existing main-and-sideboard splash policy. The mutually exclusive red-source and red-spell Jeskai paths avoid requiring Metallic Rebuke and preserve one Hammer subtype match per reviewed list.
+  owner_accepted: true
+- family_id: modern-unknown-782af94428f3
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: grixis-persist
+  rationale: Owner mapped the reviewed high-deviation Wizards reanimation singleton to existing Grixis Persist. The supplemental path requires at least three main-deck Persist, Thundertrap Trainer, Traumatic Critique, and Tamiyo, Inquisitive Student plus Watery Grave and Steam Vents, and excludes Goryo's Vengeance; Archon of Cruelty, Faithless Looting, and Abhorrent Oculus remain construction choices on this path.
+  owner_accepted: true
+- family_id: modern-unknown-7ca40990f449
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: grixis-tempo
+  rationale: Owner mapped the reviewed Bowmasters and Expressive Iteration singleton to existing Grixis Tempo. The supplemental path requires at least three main-deck Dragon's Rage Channeler, Expressive Iteration, and Thoughtseize, at least two Orcish Bowmasters, Watery Grave, and Steam Vents, permits at most two Psychic Frog, and excludes Goryo's Vengeance, Persist, Death's Shadow, and reviewed white and green main-deck mana sources.
+  owner_accepted: true
+- family_id: modern-unknown-85c03cc18342
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: coffers/golgari
+  rationale: Owner accepted the singleton Karn-based list as the traditional Golgari subtype of the new Coffers parent. Its reviewed Coffers, Karn, and Underground Mortuary core distinguishes it from Dimir, Umori, Dark Maestro, and Necrodominance builds; no empty Mono-Black subtype is added without a current sample.
+  owner_accepted: true
+- family_id: modern-unknown-86014f893ae1
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: izzet-tempo
+  rationale: Owner identified the singleton as Izzet Tempo, separate from the existing Grixis Tempo parent. The reviewed mainboard rule requires at least three Ragavan, Nimble Pilferer, Counterspell, and Tamiyo, Inquisitive Student plus Steam Vents, excludes Psychic Frog, and excludes reviewed white, black, and green main-deck sources and any-zone spells. Murktide Regent, Fable of the Mirror-Breaker, Flow State, Quantum Riddler, and the remaining interaction package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-87d0e54d5345
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: prowess/rakdos
+  rationale: Owner mapped the reviewed Rakdos Cutter singleton to existing Prowess with a new Rakdos subtype rather than Rakdos Steel-Cutter. The rule requires at least three main-deck Cori-Steel Cutter, Lava Dart, Dragon's Rage Channeler, and Monastery Swiftspear plus Blood Crypt and a black spell in either zone; it excludes white, blue, and green spells in either zone and Nethergoyf so Mardu, Grixis, and Rakdos Steel-Cutter remain separate.
+  owner_accepted: true
+- family_id: modern-unknown-8b9d88b4d4c6
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: dimir-goryos
+  rationale: Owner identified the singleton as Dimir Goryo's, separate from Esper, Grixis, Golgari, and Cremator Goryo's. The reviewed mainboard rule requires at least three Goryo's Vengeance, Atraxa, Grand Unifier, and Psychic Frog plus Watery Grave and no reviewed white, red, or green main-deck mana source. Atraxa prevents a general off-color spell exclusion; Griselbrand, Tainted Indulgence, Quantum Riddler, and the remaining interaction package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-8e1de8a754a2
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: boros-land-destruction
+  rationale: Owner mapped the reviewed classic Boom/Bust singleton to existing Boros Ponza. The supplemental path requires at least three main-deck Boom/Bust, Flagstones of Trokair, Pillage, and Stone Rain; Molten Rain and the remaining land-destruction package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-92354c51b659
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: shape-anew
+  rationale: Owner directed all reviewed Shape Anew builds into one parent for now. The minimal mainboard rule therefore requires at least three Shape Anew and does not constrain the artifact payoff, color combination, or surrounding control and value shell.
+  owner_accepted: true
+- family_id: modern-unknown-99f4f6946fe2
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: sultai-flicker
+  rationale: Owner identified the singleton as Sultai Flicker. The reviewed mainboard rule requires at least three Ghostly Flicker, Drowner of Truth, and Psychic Frog plus Breeding Pool and Watery Grave; reviewed white and red main-deck sources and any-zone spells are excluded so future off-color builds return to Unknown for explicit review.
+  owner_accepted: true
+- family_id: modern-unknown-9e72ce2f6c78
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: rakdos-midrange
+  rationale: Owner identified the singleton as Rakdos Midrange, separate from Rakdos Aggro, Rakdos Delirium, and Death's Shadow. The reviewed mainboard rule requires at least three Ragavan, Nimble Pilferer, Dauthi Voidwalker, Orcish Bowmasters, Seasoned Pyromancer, and Thoughtseize plus Blood Crypt. Fable of the Mirror-Breaker, Kroxa, The Legend of Roku, and the removal mix remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-9e8a95a158d5
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: rakdos-through-the-breach
+  rationale: Owner accepted the classic Rakdos Through the Breach list as a separate parent with no subtype; its reviewed Goryo's Vengeance, Faithless Looting, and Talisman of Indulgence engine distinguishes the graveyard-oriented build from Izzet Through the Breach.
+  owner_accepted: true
+- family_id: modern-unknown-a570ab7c1ee0
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: azorius-miracles
+  rationale: Owner identified Brainsurge and Terminus as the higher-priority identity even when a list also carries the Orim's Chant and Isochron Scepter package. The reviewed mainboard rule requires at least three Brainsurge and Terminus plus Hallowed Fountain and therefore moves seven structurally matching Chant Control lists into Azorius Miracles along with the reviewed Unknown.
+  owner_accepted: true
+- family_id: modern-unknown-a987668fb382
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: domain-blink
+  rationale: Owner identified the singleton as Domain Blink. The reviewed mainboard rule requires at least three Phelia, Exuberant Shepherd, Leyline Binding, and Overlord of the Balemurk; Phlage, Quantum Riddler, Ragavan, Emperor of Bones, and the surrounding removal and value package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-b35428553e0c
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: glimpse-of-tomorrow
+  rationale: Owner identified the singleton as Glimpse of Tomorrow. The minimal mainboard rule requires at least three Glimpse of Tomorrow and does not constrain the cascade enablers, colors, Elemental package, or payoff configuration.
+  owner_accepted: true
+- family_id: modern-unknown-b5243e1c56bb
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: yawgmoth-energy
+  rationale: Owner identified the singleton as Yawgmoth Energy, separate from traditional Golgari Yawgmoth and Selesnya Energy. The reviewed mainboard rule requires at least two Yawgmoth, Thran Physician and at least three Guide of Souls, Ocelot Pride, Young Wolf, and Birthing Ritual. Chord of Calling, Badgermole Cub, the tutor targets, and the remaining Energy package remain construction choices; the existing three-Yawgmoth rules remain unchanged.
+  owner_accepted: true
+- family_id: modern-unknown-b58b3b755e16
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: sultai-tempo
+  rationale: Owner identified the singleton as Sultai Tempo. The reviewed mainboard rule requires at least three Ice-Fang Coatl, Counterspell, and Fatal Push plus Breeding Pool and Watery Grave, excludes Abhorrent Oculus and Birthing Ritual, and excludes reviewed white and red main-deck sources and any-zone spells. Orcish Bowmasters, Grist, Witherbloom Charm, Psychic Frog, and the remaining interaction package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-bade2031fce6
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: rakdos-delirium
+  rationale: Owner identified both reviewed singletons as Rakdos Delirium rather than Hollow One, Rakdos Steel-Cutter, or Death's Shadow. The shared reviewed mainboard rule requires at least three Nethergoyf, Dragon's Rage Channeler, Fear of Missing Out, Moonshadow, and Mishra's Bauble, at least two Detective's Phoenix, and Blood Crypt; Hollow One, Cori-Steel Cutter, and Death's Shadow are excluded to preserve those established identities.
+  owner_accepted: true
+- family_id: modern-unknown-bb82db02b4ee
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: grixis-tempo
+  rationale: Owner mapped the reviewed Counterspell and Ragavan singleton to existing Grixis Tempo. The supplemental path requires at least three main-deck Psychic Frog, Ragavan, Nimble Pilferer, and Counterspell plus Watery Grave and Steam Vents, permits at most two Fatal Push, and excludes Goryo's Vengeance, Persist, Death's Shadow, and reviewed white and green main-deck mana sources.
+  owner_accepted: true
+- family_id: modern-unknown-bcc1db022ac3
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: solemnity-blink
+  rationale: Owner identified the singleton as Solemnity Blink, separate from Solemnity Prison and Mardu Blink. The reviewed mainboard rule requires at least three Solemnity, Overlord of the Balemurk, and Solitude plus at least two Phelia, Exuberant Shepherd, and excludes Nine Lives and Phyrexian Unlife. Luminous Broodmoth, Persist, Emperor of Bones, Ketramose, and the remaining Mardu value package remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-c588af306ed2
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: five-color-humans
+  rationale: Owner identified the singleton as Five-Color Humans, separate from Mono-White Humans. The reviewed mainboard rule requires at least three Aether Vial, Champion of the Parish, Thalia's Lieutenant, Cavern of Souls, Secluded Courtyard, and Meddling Mage; the remaining multicolor Human package remains a construction choice.
+  owner_accepted: true
+- family_id: modern-unknown-ca0967fb3ab9
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: rakdos-delirium
+  rationale: Owner identified both reviewed singletons as Rakdos Delirium rather than Hollow One, Rakdos Steel-Cutter, or Death's Shadow. The shared reviewed mainboard rule requires at least three Nethergoyf, Dragon's Rage Channeler, Fear of Missing Out, Moonshadow, and Mishra's Bauble, at least two Detective's Phoenix, and Blood Crypt; Hollow One, Cori-Steel Cutter, and Death's Shadow are excluded to preserve those established identities.
+  owner_accepted: true
+- family_id: modern-unknown-d3e8d417dbf5
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: primal-prayers-combo
+  rationale: Owner identified the singleton as Primal Prayers Combo. The shared reviewed mainboard rule requires at least three Primal Prayers, Guide of Souls, and Ocelot Pride, giving the combo identity priority over Energy; Acererak, Greenbelt Rampager, Formidable Speaker, tutor packages, and the remaining payoff cards remain construction choices.
+  owner_accepted: true
+- family_id: modern-unknown-d49bd3453662
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: dimir-unearth
+  rationale: Owner identified both reviewed singletons and the structurally matching Dimir Tempo records as Dimir Unearth. The shared reviewed mainboard rule requires at least three Abhorrent Oculus, Unearth, Thought Scour, and Psychic Frog plus Watery Grave; Birthing Ritual, Goryo's Vengeance, and Persist are excluded. White splash cards remain permitted because the reanimation engine defines the parent.
+  owner_accepted: true
+- family_id: modern-unknown-d6c7e03a49ef
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: mono-black-saga
+  rationale: Owner identified the singleton as Mono-Black Saga and accepted a lowest-priority fallback parent. The reviewed mainboard rule requires at least three Urza's Saga, Nethergoyf, Mishra's Bauble, and Thoughtseize plus at least four Swamp; Death's Shadow, Dragon's Rage Channeler, Fear of Missing Out, Moonshadow, Cori-Steel Cutter, Necrodominance, and reviewed nonblack spells are excluded. Black-producing fetch targets remain permitted, and every established identity retains precedence.
+  owner_accepted: true
+- family_id: modern-unknown-e03b46d95002
+  review_status: owner_accepted
+  disposition: map_existing
+  target_identity: grixis-tempo
+  rationale: Owner mapped the reviewed Dragon's Rage Channeler and Psychic Frog singleton to existing Grixis Tempo. The supplemental path requires at least three main-deck Psychic Frog, Dragon's Rage Channeler, and Fatal Push plus Watery Grave and Steam Vents, permits at most two Ragavan, and excludes Goryo's Vengeance, Persist, Death's Shadow, and reviewed white and green main-deck mana sources.
+  owner_accepted: true
+- family_id: modern-unknown-f9b8736e59a5
+  review_status: owner_accepted
+  disposition: new_identity
+  target_identity: izzet-cauldron
+  rationale: Owner identified the singleton as Izzet Cauldron. The reviewed mainboard rule requires at least three Vivi Ornitier and Agatha's Soul Cauldron; Fear of Missing Out, Marauding Mako, Walking Ballista, Proft's Eidetic Memory, and the remaining Izzet shell remain construction choices.
+  owner_accepted: true
+- family_id: standard-unknown-f6886bc730fa
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-c43b77e5471b
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-d85fc6cf3b8c
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-e37c34297664
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-1f3d3090fe62
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-26e1af626a7c
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-d2042f54ff9c
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-0b41ac5d43e0
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-399088e97304
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-3e29fa6db392
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-41c8778fbc1e
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-5275c620d655
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-8d99d7fdb83d
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-b847e758d50c
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-bd5d86377a0e
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-d7f0c982b6a7
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-0857720282a4
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-0cbae9644068
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-115a1eb783c9
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-115bb2d40b87
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-14e962276abd
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-18e903160e16
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-242b3816824a
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-42ba8896c962
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-465ced1c0787
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-546deaf24038
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-5488cd49501c
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-54989a313da5
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-568d48ce3fef
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-5cb23228136a
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-6b0bfc1c3537
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-71c89735d78a
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-79d9648ddef1
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-7aed5a7501d9
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-7e295c544d07
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-7f6bed1d356c
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-830e01106c19
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-8524a65d8f73
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-867164f5dbc4
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-8784b67a44bd
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-8d24e522f051
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-9505d82a2ea3
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-96321e1721cb
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-9c3d83efcf2a
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-9efdb7d63014
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-ae068aea323a
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-b05defd59bf9
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-b2752e143f9b
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-b322d579e883
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-b4dd6c01de05
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-be4503b245f3
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-cb47b3fd754a
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-ce41fdb9a299
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-d35bb31f0714
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-dae51c5571ba
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-ddce99be6026
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-f283503ba493
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-f68bfee8c56f
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false
+- family_id: standard-unknown-fa7d763a076f
+  review_status: pending_owner_review
+  disposition: null
+  target_identity: null
+  rationale: null
+  owner_accepted: false

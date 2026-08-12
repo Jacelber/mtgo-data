@@ -11,7 +11,7 @@
   "total_decks": 1021,
   "total_high_score": 469,
   "total_top8": 256,
-  "unknown_count": 64,
+  "unknown_count": 0,
   "archetypes": [
     {
       "id": "izzet-prowess",
@@ -98,18 +98,6 @@
       "avg_deviation": 35
     },
     {
-      "id": "unknown",
-      "name": "Unknown",
-      "count": 64,
-      "high_score_count": 19,
-      "high_score_share": 0.0405,
-      "top8_count": 9,
-      "top8_share": 0.0352,
-      "conversion": 0.4737,
-      "avg_points_per_round": 1.47,
-      "avg_deviation": null
-    },
-    {
       "id": "izzet-fling",
       "name": "Izzet Fling",
       "count": 30,
@@ -124,14 +112,14 @@
     {
       "id": "izzet-lessons",
       "name": "Izzet Lessons",
-      "count": 23,
+      "count": 24,
       "high_score_count": 7,
       "high_score_share": 0.0149,
       "top8_count": 4,
       "top8_share": 0.0156,
       "conversion": 0.5714,
       "avg_points_per_round": 1.52,
-      "avg_deviation": 10
+      "avg_deviation": 12
     },
     {
       "id": "sultai-reanimator",
@@ -146,16 +134,40 @@
       "avg_deviation": 15
     },
     {
-      "id": "azorius-tempo",
-      "name": "Azorius Tempo",
-      "count": 20,
+      "id": "azorius-prison",
+      "name": "Azorius Prison",
+      "count": 21,
       "high_score_count": 10,
       "high_score_share": 0.0213,
       "top8_count": 4,
       "top8_share": 0.0156,
       "conversion": 0.4,
-      "avg_points_per_round": 1.63,
+      "avg_points_per_round": 1.62,
       "avg_deviation": 5
+    },
+    {
+      "id": "orzhov-lifegain",
+      "name": "Orzhov Lifegain",
+      "count": 20,
+      "high_score_count": 9,
+      "high_score_share": 0.0192,
+      "top8_count": 4,
+      "top8_share": 0.0156,
+      "conversion": 0.4444,
+      "avg_points_per_round": 1.54,
+      "avg_deviation": 7
+    },
+    {
+      "id": "five-color-humans",
+      "name": "Five-Color Humans",
+      "count": 12,
+      "high_score_count": 4,
+      "high_score_share": 0.0085,
+      "top8_count": 3,
+      "top8_share": 0.0117,
+      "conversion": 0.75,
+      "avg_points_per_round": 1.62,
+      "avg_deviation": 7
     },
     {
       "id": "monument-lessons",
@@ -191,38 +203,6 @@
       "top8_share": 0.0039,
       "conversion": 0.1667,
       "avg_points_per_round": 1.73,
-      "subtypes": [
-        {
-          "id": "razorkin-needlehead",
-          "name": "Razorkin Needlehead",
-          "parent_id": "izzet-aggro",
-          "display_name": "Razorkin Needlehead Izzet Aggro",
-          "count": 5,
-          "high_score_count": 3,
-          "high_score_share": 0.0064,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": 0.0,
-          "avg_points_per_round": 1.7,
-          "parent_share": 0.5,
-          "avg_deviation": null
-        },
-        {
-          "id": "hired-claw",
-          "name": "Hired Claw",
-          "parent_id": "izzet-aggro",
-          "display_name": "Hired Claw Izzet Aggro",
-          "count": 5,
-          "high_score_count": 3,
-          "high_score_share": 0.0064,
-          "top8_count": 1,
-          "top8_share": 0.0039,
-          "conversion": 0.3333,
-          "avg_points_per_round": 1.76,
-          "parent_share": 0.5,
-          "avg_deviation": null
-        }
-      ],
       "avg_deviation": 20
     },
     {
@@ -252,13 +232,72 @@
     {
       "id": "boros-manufacturing",
       "name": "Boros Manufacturing",
-      "count": 6,
+      "count": 7,
       "high_score_count": 3,
       "high_score_share": 0.0064,
       "top8_count": 2,
       "top8_share": 0.0078,
       "conversion": 0.6667,
-      "avg_points_per_round": 1.83,
+      "avg_points_per_round": 1.64,
+      "subtypes": [
+        {
+          "id": "jeskai",
+          "name": "Jeskai",
+          "parent_id": "boros-manufacturing",
+          "display_name": "Jeskai Boros Manufacturing",
+          "count": 1,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": 0.5,
+          "parent_share": 0.1429,
+          "avg_deviation": null
+        },
+        {
+          "id": "mardu",
+          "name": "Mardu",
+          "parent_id": "boros-manufacturing",
+          "display_name": "Mardu Boros Manufacturing",
+          "count": 6,
+          "high_score_count": 3,
+          "high_score_share": 0.0064,
+          "top8_count": 2,
+          "top8_share": 0.0078,
+          "conversion": 0.6667,
+          "avg_points_per_round": 1.83,
+          "parent_share": 0.8571,
+          "avg_deviation": null
+        },
+        {
+          "id": "boros",
+          "name": "Boros",
+          "parent_id": "boros-manufacturing",
+          "display_name": "Boros Boros Manufacturing",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        }
+      ],
+      "avg_deviation": null
+    },
+    {
+      "id": "mono-green-mightiest",
+      "name": "Mono-Green Mightiest",
+      "count": 7,
+      "high_score_count": 4,
+      "high_score_share": 0.0085,
+      "top8_count": 1,
+      "top8_share": 0.0039,
+      "conversion": 0.25,
+      "avg_points_per_round": 1.86,
       "avg_deviation": null
     },
     {
@@ -322,8 +361,8 @@
       "avg_deviation": null
     },
     {
-      "id": "simic-kona",
-      "name": "Simic Kona",
+      "id": "kona-omniscience",
+      "name": "Kona Omniscience",
       "count": 3,
       "high_score_count": 2,
       "high_score_share": 0.0043,
@@ -331,6 +370,89 @@
       "top8_share": 0.0039,
       "conversion": 0.5,
       "avg_points_per_round": 1.94,
+      "subtypes": [
+        {
+          "id": "temur",
+          "name": "Temur",
+          "parent_id": "kona-omniscience",
+          "display_name": "Temur Kona Omniscience",
+          "count": 3,
+          "high_score_count": 2,
+          "high_score_share": 0.0043,
+          "top8_count": 1,
+          "top8_share": 0.0039,
+          "conversion": 0.5,
+          "avg_points_per_round": 1.94,
+          "parent_share": 1.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "bant",
+          "name": "Bant",
+          "parent_id": "kona-omniscience",
+          "display_name": "Bant Kona Omniscience",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "simic",
+          "name": "Simic",
+          "parent_id": "kona-omniscience",
+          "display_name": "Simic Kona Omniscience",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        }
+      ],
+      "avg_deviation": null
+    },
+    {
+      "id": "sultai-control",
+      "name": "Sultai Control",
+      "count": 3,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 1.17,
+      "avg_deviation": null
+    },
+    {
+      "id": "mono-black-aggro",
+      "name": "Mono-Black Aggro",
+      "count": 3,
+      "high_score_count": 1,
+      "high_score_share": 0.0021,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.17,
+      "avg_deviation": null
+    },
+    {
+      "id": "izzet-burn",
+      "name": "Izzet Burn",
+      "count": 2,
+      "high_score_count": 1,
+      "high_score_share": 0.0021,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.5,
       "avg_deviation": null
     },
     {
@@ -346,39 +468,99 @@
       "avg_deviation": null
     },
     {
-      "id": "mono-black-aggro",
-      "name": "Mono-Black Aggro",
+      "id": "simic-rhythm",
+      "name": "Simic Rhythm",
+      "count": 2,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 0.75,
+      "avg_deviation": null
+    },
+    {
+      "id": "mono-white-triumph",
+      "name": "Mono-White Triumph",
+      "count": 2,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 1.5,
+      "avg_deviation": null
+    },
+    {
+      "id": "azorius-auras",
+      "name": "Azorius Auras",
+      "count": 2,
+      "high_score_count": 1,
+      "high_score_share": 0.0021,
+      "top8_count": 1,
+      "top8_share": 0.0039,
+      "conversion": 1.0,
+      "avg_points_per_round": 1.64,
+      "avg_deviation": null
+    },
+    {
+      "id": "boros-token",
+      "name": "Boros Token",
+      "count": 2,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 1.25,
+      "avg_deviation": null
+    },
+    {
+      "id": "dimir-deceit",
+      "name": "Dimir Deceit",
       "count": 2,
       "high_score_count": 1,
       "high_score_share": 0.0021,
       "top8_count": 0,
       "top8_share": 0.0,
       "conversion": 0.0,
-      "avg_points_per_round": 1.25,
+      "avg_points_per_round": 1.5,
       "avg_deviation": null
     },
     {
-      "id": "jeskai-manufacturing",
-      "name": "Jeskai Manufacturing",
+      "id": "temur-hulk-ramp",
+      "name": "Temur Hulk Ramp",
+      "count": 2,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 0.82,
+      "avg_deviation": null
+    },
+    {
+      "id": "boros-burn",
+      "name": "Boros Burn",
       "count": 1,
       "high_score_count": 0,
       "high_score_share": 0.0,
       "top8_count": 0,
       "top8_share": 0.0,
       "conversion": null,
-      "avg_points_per_round": 0.5,
+      "avg_points_per_round": 1.0,
       "avg_deviation": null
     },
     {
-      "id": "sultai-control",
-      "name": "Sultai Control",
+      "id": "azorius-control",
+      "name": "Azorius Control",
       "count": 1,
       "high_score_count": 0,
       "high_score_share": 0.0,
       "top8_count": 0,
       "top8_share": 0.0,
       "conversion": null,
-      "avg_points_per_round": 0.5,
+      "avg_points_per_round": 1.0,
       "avg_deviation": null
     },
     {
@@ -391,6 +573,18 @@
       "top8_share": 0.0,
       "conversion": null,
       "avg_points_per_round": 1.5,
+      "avg_deviation": null
+    },
+    {
+      "id": "mono-blue-namor",
+      "name": "Mono-Blue Namor",
+      "count": 1,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 1.0,
       "avg_deviation": null
     },
     {
@@ -418,15 +612,51 @@
       "avg_deviation": null
     },
     {
-      "id": "dimir-deceit",
-      "name": "Dimir Deceit",
+      "id": "rakdos-ponza",
+      "name": "Rakdos Ponza",
       "count": 1,
-      "high_score_count": 1,
-      "high_score_share": 0.0021,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
       "top8_count": 0,
       "top8_share": 0.0,
-      "conversion": 0.0,
-      "avg_points_per_round": 2.0,
+      "conversion": null,
+      "avg_points_per_round": 1.0,
+      "avg_deviation": null
+    },
+    {
+      "id": "izzet-iron-man",
+      "name": "Izzet Iron Man",
+      "count": 1,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 1.5,
+      "avg_deviation": null
+    },
+    {
+      "id": "mono-black-demons",
+      "name": "Mono-Black Demons",
+      "count": 1,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 1.0,
+      "avg_deviation": null
+    },
+    {
+      "id": "gruul-ramp",
+      "name": "Gruul Ramp",
+      "count": 1,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 1.5,
       "avg_deviation": null
     },
     {

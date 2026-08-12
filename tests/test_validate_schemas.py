@@ -45,7 +45,8 @@ def test_every_public_output_embeds_the_manifest_version():
 
 def test_all_declared_schemas_are_valid_and_versioned():
     loaded, _ = schemas.load_schemas(ROOT / "schemas")
-    assert len(loaded) == 38
+    assert len(loaded) == 39
+    assert "classifier-semantic-features.schema.json" in loaded
     assert "mtgo-event-discovery.schema.json" in loaded
     assert "melee-compatibility-manifest.schema.json" in loaded
     assert "melee-pure-constructed-contract.schema.json" in loaded
@@ -78,8 +79,9 @@ def test_all_declared_schemas_are_valid_and_versioned():
     assert loaded["melee-raw-archive.schema.json"]["x-schema-version"] == "3.0.0"
     assert (
         loaded["melee-compatibility-manifest.schema.json"]["x-schema-version"]
-        == "1.1.0"
+        == "1.3.0"
     )
+    assert loaded["classification-rules.schema.json"]["x-schema-version"] == "1.1.0"
     assert all(
         schema["x-schema-version"] == "1.0.0"
         for name, schema in loaded.items()
@@ -90,6 +92,7 @@ def test_all_declared_schemas_are_valid_and_versioned():
             "melee-event.schema.json",
             "melee-raw-archive.schema.json",
             "melee-compatibility-manifest.schema.json",
+            "classification-rules.schema.json",
         }
     )
 

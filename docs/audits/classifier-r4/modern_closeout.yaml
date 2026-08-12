@@ -1,0 +1,63 @@
+schema_version: 1.0.0
+task_id: CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW
+format: modern
+status: owner_accepted_local_shadow_closed
+owner_accepted_on: 2026-08-12
+base_commit: 7bf804684ac22dcf71560bacae4d3bc49c56f08f
+scope: non_production_shadow
+review:
+  candidate_families: 88
+  owner_accepted_families: 88
+  pending_families: 0
+  disposition_counts:
+    map_existing: 27
+    new_identity: 61
+    intentional_unknown: 0
+    defer_insufficient_evidence: 0
+  current_corpus:
+    records: 6784
+    classified: 6784
+    unknown: 0
+  frozen_corpus:
+    records: 5792
+    classified: 5792
+    unknown: 0
+  tabletop_event_434455:
+    records: 362
+    batch_4_identity_changes: 0
+source_evidence:
+  owner_workbook:
+    path: D:/dl/R4_Modern_38_singleton_owner_preclassification.xlsx
+    sha256: 7fd96f9bb9f14386128397395e4d18598b4d7d2602ee0bdeddfcf367d55b3452
+  frozen_review_queue:
+    path: docs/audits/classifier-r4/unknown_family_queue.json
+    sha256: cd94cbf4b2a6e369e19334e56612069d1945f211525ee698200217bd3ecf2c2b
+accepted_artifacts:
+  dispositions:
+    path: docs/audits/classifier-r4/dispositions.yaml
+    sha256: e9f15d67a2ef06845bede1849bf447110a37efc7042454c773bbfdb44245629e
+  shadow_rules:
+    path: docs/audits/classifier-r4/shadow_rules/modern.yaml
+    sha256: 5bff0207af7e43d3b59807c102ab323a0e51109e7543e27e59f293bade632b31
+  shadow_generator:
+    path: tools/build_classifier_r4_shadow_rules.py
+    sha256: 38f68bc8dd353d6b2233aba7baab701f442e1daf4ae47064c84f0de3563d7f1e
+protected_evidence:
+  production_modern_rules:
+    path: my_archetypes/modern.yaml
+    sha256: df9c55e78e8fd8ed9e6cb18b0117a4d2947f207a302fe7148b3da00deee74045
+  event_434455_source:
+    path: data/modern/melee/events/434455.json
+    sha256: 0b4296a9573a4facf4cfde1ce98569156f78fde6f5d2a1d3d662b54e2889e710
+next_format_boundary:
+  standard_review_started: false
+  standard_candidate_families: 59
+  standard_pending_families: 59
+authorization:
+  modern_closeout_local_commit: owner_authorized_once_on_2026-08-12
+  standard_development: false
+  standard_commit: false
+  production_promotion: false
+  remote_publication: false
+  landing_shadow: false
+  p12_10: false

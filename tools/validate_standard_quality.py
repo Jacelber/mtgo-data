@@ -22,7 +22,7 @@ from mtgmeta.rules import RuleSet
 
 CORPUS = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
 BASELINE = ROOT / "tests" / "fixtures" / "standard" / "quality_baseline.json"
-RULES = ROOT / "my_archetypes" / "standard.yaml"
+RULES = ROOT / "docs" / "audits" / "classifier-r2" / "baseline_rules" / "standard.yaml"
 
 
 def load_json(path: Path) -> Any:

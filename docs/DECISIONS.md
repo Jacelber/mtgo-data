@@ -3724,3 +3724,115 @@ This decision changes product and Phase 12 contracts only. It authorizes no
 production UI, producer, Schema, generated data, workflow, publication, commit,
 or remote operation, and it does not start P12-05, classifier remediation, or
 P12-10.
+
+---
+
+# DEC-088 - Promote the accepted classifier through a fail-closed manifest
+
+Status: `Accepted`
+
+## Context
+
+The Owner completed the row-by-row R0 review, accepted the R1 stable parent and
+subtype identity contract, and accepted R2's de-identified full-corpus shadow.
+R2 proved exact rule inventories, global priorities, order independence,
+explicit Unknown behavior, same-format MTGO and Tabletop behavior, and the
+complete Pickup known-state migration sets without changing production.
+
+Several accepted rules need semantic facts that are not safely expressible as
+literal card-count conditions: reviewed mana sources, actual colored spells,
+Equipment, and Phyrexian-mana cards that do not imply a splash color. Guessing
+those facts from names or an incomplete external database would make production
+classification non-reproducible.
+
+## Decision
+
+Promote the exact accepted R2 Standard and Modern rule inventories into the
+shared production classifier. Rule Schema version 1.1 binds each production
+rule file to `configs/classifier_semantic_features.yaml` by repository-relative
+path and SHA-256. The manifest contains only Owner-reviewed semantic facts. An
+unlisted card contributes no semantic marker; a missing, unreadable, escaping,
+or digest-mismatched manifest, or an input deck that supplies a reserved marker,
+fails closed.
+
+Apply the exact R2 parent-keyed Weekly Pickup known-state migration in the same
+R3 change. New parents derived from already known families start known, retired
+keys are removed, subtype changes do not create Pickup identities, and existing
+candidates, reviewer comments, approvals, published weeks, and indexes are not
+rewritten.
+
+Refresh the existing Standard and Modern MTGO classification reports,
+statistics, matchup, completeness, hierarchy, metadata, catalog, and already
+indexed Top 8 week contents, plus the existing event 434455 Tabletop
+classification overlay, opportunity ledger, statistics, matchup, publication
+metadata, and compatibility manifest. MTGO and Tabletop continue to use the
+same Modern taxonomy but retain separate sources and statistics. Freeze the
+pre-R3 production rules and Pickup states under the R2 audit so R1/R2 remain
+reproducible after promotion.
+
+## Consequences
+
+Production classifications now use the accepted stable identities and explicit
+priorities. Unknown remains a valid fail-closed result; R3 does not infer a
+catch-all subtype or promise Unknown equals zero. Existing classification-
+derived JSON changes atomically with the taxonomy, while statistical formulas,
+windows, match treatment, rounding, source events, retained responses, product
+separation, public paths, workflows, front-end behavior, and the event 434455
+normalized source bytes remain unchanged.
+
+The event 434455 exact derived-artifact closure moves to compatibility contract
+1.2; its raw snapshot and normalized event entries remain byte-identical. R4 is
+the separately authorized review of residual Unknown families. The Landing
+shadow rerun, threshold confirmation, representative-card approval, P12-10,
+commit, publication, merge, and production dispatch are not authorized by this
+decision.
+
+---
+
+# DEC-089 - Promote the accepted R4 residual review atomically
+
+Status: `Accepted`
+
+## Context
+
+R4 completed explicit Owner review of every residual Standard and Modern
+Unknown family. Its accepted shadows are hash-locked, deterministic, order
+stable, conflict free, and shared with the registered Modern Tabletop event.
+They remain non-production until every existing classifier consumer can change
+atomically and the parent-keyed Weekly Pickup known state is migrated.
+
+## Decision
+
+Promote the exact accepted R4 shadows without adding, removing, or reinterpreting
+any rule. Freeze the preceding R3 production rules and Pickup state beneath the
+R4 audit so the complete R3/R4 evidence chain remains reproducible.
+
+Add every newly accepted parent identity to the applicable Pickup known state.
+For Standard, migrate the maintained `temur-elementals` display identity from
+`Temur Elementals` to `Ramp Elementals` and remove retired `Grixis Elementals`.
+Do not rewrite candidates, reviewer comments, approvals, published weeks,
+indexes, or subtype-keyed editorial history.
+
+Refresh the existing Standard and Modern MTGO classification reports,
+statistics, matchup, completeness, hierarchy, metadata, catalog, and only the
+already indexed Top 8 week contents. Refresh event 434455's classification
+overlay, opportunity ledger, statistics, matchup, publication metadata, and
+exact derived-artifact compatibility closure. Advance that closure from
+contract 1.2 to 1.3 while preserving the raw snapshot and normalized event
+bytes.
+
+## Consequences
+
+Production Modern contains 127 parents, 70 subtypes, and 205 rules. Production
+Standard contains 102 parents, 11 subtypes, and 126 rules. Modern current,
+frozen, and event 434455 inputs have zero Unknown results; Standard retains one
+explicit current intentional Unknown and eight frozen historical Unknown
+records. Unknown remains a valid fail-closed result rather than a required-zero
+policy.
+
+Classification-derived JSON changes atomically with the taxonomy. Formulas,
+windows, match treatment, rounding, source events, retained responses, MTGO and
+Tabletop separation, public paths, workflows, front-end behavior, and the event
+434455 normalized source remain unchanged. R5 acceptance and commit,
+publication, the Landing shadow, threshold confirmation, representative-card
+approval, P12-10, merge, and production dispatch remain separate gates.

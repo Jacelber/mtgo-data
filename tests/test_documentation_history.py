@@ -52,12 +52,12 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "OPS-PRODUCTION-BASELINE-DRIFT-20260812"
+    assert status["current_task"]["id"] == "CLASSIFIER-R5-PRODUCTION-PROMOTION"
     assert status["current_task"]["status"] == (
-        "owner_accepted_commit_publication_merge_and_postmerge_dispatch_authorized"
+        "owner_accepted_publication_in_progress"
     )
     assert status["current_task"]["base_commit"] == (
-        "c785b2a8e7da6ab41ac4da97975ee219c32ca16a"
+        "f8a4714c07861b104193721524ac5669cef69084"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -65,45 +65,59 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "remote_publication": True,
         "merge": True,
     }
-    assert status["recent_completion_handoff"] == {
-        "id": "P12-09",
-        "name": "Loading, failure, retry, and composition-detail navigation remediation",
-        "status": "completed_and_merged",
-        "pull_request": 198,
-        "merge_commit": "a99ca08a294f173c9a17fe6fd70c5e52d36cec98",
-        "note": (
-            "GitHub and Git history retain the detailed P12-09 validation, "
-            "publication, merge, and Pages evidence."
+    assert status["current_task"]["accepted_inputs"] == {
+        "modern_shadow_sha256": (
+            "5bff0207af7e43d3b59807c102ab323a0e51109e7543e27e59f293bade632b31"
         ),
+        "standard_shadow_sha256": (
+            "b72aa3fcb0202eb9bc5d9c1f6f88abbe76d8d8ca29923662e3a75f8e54d3da74"
+        ),
+        "semantic_manifest_sha256": (
+            "0cd94ee3a4d6974f88446a660e661943d1cc2c4d8a25891dd6d214931a6aa999"
+        ),
+        "modern_expected_inventory": "127 parents; 70 subtypes; 205 rules",
+        "standard_expected_inventory": "102 parents; 11 subtypes; 126 rules",
+        "current_modern_expected": "6784 classified; 0 Unknown",
+        "frozen_modern_expected": "5792 classified; 0 Unknown",
+        "current_standard_expected": "4732 classified; 1 intentional Unknown",
+        "frozen_standard_expected": "3928 classified; 8 Unknown",
     }
+    assert status["recent_completion_handoff"]["id"] == (
+        "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
+    )
+    assert status["recent_completion_handoff"]["local_commit"] == (
+        "b3f379a95284ecbe5da21124a4be651bb346e602"
+    )
     assert status["next_approved_task"]["id"] == "P12-10"
     assert status["next_approved_task"]["status"] == (
-        "blocked_pending_separate_authorization_and_evidence"
+        "blocked_pending_r5_publication_landing_shadow_and_separate_authorization"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
-    future_task_gates = {
-        gate["task"]: gate for gate in status["future_task_gates"]
-    }
+    future_task_gates = {gate["task"]: gate for gate in status["future_task_gates"]}
     assert future_task_gates["P12-10"]["status"] == (
         "blocked_pending_separate_authorization_and_evidence"
     )
 
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
-    audit = (ROOT / "docs" / "audits" / "P12-09.md").read_text(encoding="utf-8")
-    design_system = (
-        ROOT / "docs" / "FRONTEND_DESIGN_SYSTEM.md"
-    ).read_text(encoding="utf-8")
-    for document in (roadmap, design_system):
-        assert "P12-09" in document
-        assert "retry" in document.lower()
-        assert "successful" in document.lower()
-    assert "successful JSON" in audit
-    assert "Ready pull request" in audit
-    assert "production dispatch" in audit
+    audit = (ROOT / "docs" / "audits" / "CLASSIFIER-R5-PRODUCTION-PROMOTION.md").read_text(
+        encoding="utf-8"
+    )
+    decisions = (ROOT / "docs" / "DECISIONS.md").read_text(encoding="utf-8")
+    for document in (roadmap, audit, decisions):
+        assert "R5" in document
+        assert "P12-10" in document
+    assert "statistical_json_structure" in audit
+    assert "Pickup" in audit
+    assert "434455" in audit
+    assert "commit" in audit
+    assert "R5" in audit
+    assert "production" in audit
+    assert "P12-10" in audit
 
     historical_paths = {
-        item["path"] for item in status["authoritative_documents"]["historical_documents"]
+        item["path"]
+        for item in status["authoritative_documents"]["historical_documents"]
     }
     assert "docs/history/README.md" in historical_paths
     assert "docs/history/STATUS-2026-08-04-pre-P11-13.yaml" in historical_paths
@@ -151,9 +165,7 @@ def test_pre_split_status_history_is_complete_and_non_authoritative():
 def test_agent_adapters_are_thin_and_have_no_phase_snapshot():
     agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
     claude = (ROOT / "CLAUDE.md").read_text(encoding="utf-8")
-    copilot = (ROOT / ".github" / "copilot-instructions.md").read_text(
-        encoding="utf-8"
-    )
+    copilot = (ROOT / ".github" / "copilot-instructions.md").read_text(encoding="utf-8")
 
     assert len(agents.encode("utf-8")) <= 8 * 1024
     assert len(claude.encode("utf-8")) <= 2 * 1024
@@ -181,36 +193,30 @@ def test_readme_keeps_supported_operations_without_phase_narrative():
 
 def test_pr_maturity_and_validation_class_policy_is_consistent():
     agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
-    workflow = (ROOT / "docs" / "DEVELOPMENT_WORKFLOW.md").read_text(
-        encoding="utf-8"
-    )
+    workflow = (ROOT / "docs" / "DEVELOPMENT_WORKFLOW.md").read_text(encoding="utf-8")
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
     decisions = (ROOT / "docs" / "DECISIONS.md").read_text(encoding="utf-8")
-    admission = (
-        ROOT / "docs" / "audits" / "CI-MASTER-ADMISSION.md"
-    ).read_text(encoding="utf-8")
+    admission = (ROOT / "docs" / "audits" / "CI-MASTER-ADMISSION.md").read_text(
+        encoding="utf-8"
+    )
 
     assert "Pull-request maturity and validation scope are separate" in agents
     assert "Pull-request maturity is not an input to validation strength" in workflow
     assert "pull-request maturity and validation class are separated" in roadmap
-    assert "# DEC-085 - Separate pull-request maturity from validation class" in decisions
+    assert (
+        "# DEC-085 - Separate pull-request maturity from validation class" in decisions
+    )
     assert "Draft and Ready\npull requests use the same" in admission
     assert "every Ready pull request retains the complete" not in roadmap
 
 
 def test_p12_03_landing_contract_is_consistent():
     scope = (ROOT / "docs" / "PROJECT_SCOPE.md").read_text(encoding="utf-8")
-    statistics = (ROOT / "docs" / "STATISTICS_SPEC.md").read_text(
-        encoding="utf-8"
-    )
-    architecture = (ROOT / "docs" / "DATA_ARCHITECTURE.md").read_text(
-        encoding="utf-8"
-    )
+    statistics = (ROOT / "docs" / "STATISTICS_SPEC.md").read_text(encoding="utf-8")
+    architecture = (ROOT / "docs" / "DATA_ARCHITECTURE.md").read_text(encoding="utf-8")
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
     decisions = (ROOT / "docs" / "DECISIONS.md").read_text(encoding="utf-8")
-    audit = (ROOT / "docs" / "audits" / "P12-03.md").read_text(
-        encoding="utf-8"
-    )
+    audit = (ROOT / "docs" / "audits" / "P12-03.md").read_text(encoding="utf-8")
 
     for document in (statistics, roadmap, decisions, audit):
         assert "five percentage points" in document
@@ -232,21 +238,15 @@ def test_p12_03_landing_contract_is_consistent():
 
 
 def test_p12_04b_design_and_pickup_integration_contract_is_consistent():
-    design_system = (
-        ROOT / "docs" / "FRONTEND_DESIGN_SYSTEM.md"
-    ).read_text(encoding="utf-8")
+    design_system = (ROOT / "docs" / "FRONTEND_DESIGN_SYSTEM.md").read_text(
+        encoding="utf-8"
+    )
     scope = (ROOT / "docs" / "PROJECT_SCOPE.md").read_text(encoding="utf-8")
-    statistics = (ROOT / "docs" / "STATISTICS_SPEC.md").read_text(
-        encoding="utf-8"
-    )
-    architecture = (ROOT / "docs" / "DATA_ARCHITECTURE.md").read_text(
-        encoding="utf-8"
-    )
+    statistics = (ROOT / "docs" / "STATISTICS_SPEC.md").read_text(encoding="utf-8")
+    architecture = (ROOT / "docs" / "DATA_ARCHITECTURE.md").read_text(encoding="utf-8")
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
     decisions = (ROOT / "docs" / "DECISIONS.md").read_text(encoding="utf-8")
-    audit = (ROOT / "docs" / "audits" / "P12-04.md").read_text(
-        encoding="utf-8"
-    )
+    audit = (ROOT / "docs" / "audits" / "P12-04.md").read_text(encoding="utf-8")
 
     for term in (
         "Editorial Analysis Console (A3)",
@@ -286,46 +286,39 @@ def test_p12_04b_design_and_pickup_integration_contract_is_consistent():
     assert "remove `weekly-pickup` from the product navigation" in roadmap
     assert "bounded archive view" in roadmap
 
-    assert "# DEC-087 - Integrate Weekly Pickup into the accepted Landing design" in decisions
-    assert "supersede DEC-086's maximum of two items and eight-card display" in decisions
+    assert (
+        "# DEC-087 - Integrate Weekly Pickup into the accepted Landing design"
+        in decisions
+    )
+    assert (
+        "supersede DEC-086's maximum of two items and eight-card display" in decisions
+    )
     assert "## P12-04B contract freeze" in audit
     assert "P12-04B changes no production HTML" in audit
 
 
 def test_p12_04a_visual_comparison_is_local_and_self_contained():
-    comparison = (
-        ROOT / "docs" / "design" / "p12-04a-comparison.html"
-    ).read_text(encoding="utf-8")
-    audit = (ROOT / "docs" / "audits" / "P12-04.md").read_text(
+    comparison = (ROOT / "docs" / "design" / "p12-04a-comparison.html").read_text(
         encoding="utf-8"
     )
-    selected = (
-        ROOT / "docs" / "design" / "p12-04a-selected-desktop.html"
-    ).read_text(encoding="utf-8")
+    audit = (ROOT / "docs" / "audits" / "P12-04.md").read_text(encoding="utf-8")
+    selected = (ROOT / "docs" / "design" / "p12-04a-selected-desktop.html").read_text(
+        encoding="utf-8"
+    )
     cat_comparison = (
         ROOT / "docs" / "design" / "p12-04a-cat-brand-comparison.html"
     ).read_text(encoding="utf-8")
     talent_image = (
-        ROOT
-        / "docs"
-        / "design"
-        / "assets"
-        / "p12-04a"
-        / "stormchasers-talent.jpg"
+        ROOT / "docs" / "design" / "assets" / "p12-04a" / "stormchasers-talent.jpg"
     ).read_bytes()
     basics_image = (
-        ROOT
-        / "docs"
-        / "design"
-        / "assets"
-        / "p12-04a"
-        / "boomerang-basics.jpg"
+        ROOT / "docs" / "design" / "assets" / "p12-04a" / "boomerang-basics.jpg"
     ).read_bytes()
 
     assert "方向 A · 编辑观察站" in comparison
     assert "方向 B · 分析控制台" in comparison
     assert "所有数值与文案均为布局示意" in comparison
-    assert "data-direction=\"a\"" in comparison
+    assert 'data-direction="a"' in comparison
     assert "<link " not in comparison
     assert "<script src=" not in comparison
     assert "http://" not in comparison
@@ -349,7 +342,7 @@ def test_p12_04a_visual_comparison_is_local_and_self_contained():
     assert "color-pips" in selected
     assert selected.count('class="mana-pip"') == 10
     for symbol in ("w", "u", "r", "g"):
-        assert f'assets/p12-04a/mana-{symbol}.svg' in selected
+        assert f"assets/p12-04a/mana-{symbol}.svg" in selected
     assert "brief-type" not in selected
     assert 'id="inline-detail-row"' in selected
     assert "查看完整环境占比统计" in selected
@@ -364,12 +357,7 @@ def test_p12_04a_visual_comparison_is_local_and_self_contained():
     assert basics_image.startswith(b"\xff\xd8") and len(basics_image) > 50_000
     for symbol in ("w", "u", "b", "r", "g"):
         symbol_image = (
-            ROOT
-            / "docs"
-            / "design"
-            / "assets"
-            / "p12-04a"
-            / f"mana-{symbol}.svg"
+            ROOT / "docs" / "design" / "assets" / "p12-04a" / f"mana-{symbol}.svg"
         ).read_bytes()
         assert symbol_image.startswith(b"<svg")
         assert b"<script" not in symbol_image.lower()
@@ -425,22 +413,12 @@ def test_p12_04a_visual_comparison_is_local_and_self_contained():
     assert "http://" not in cat_comparison
     assert "https://" not in cat_comparison
     cat_line_art = (
-        ROOT
-        / "docs"
-        / "design"
-        / "assets"
-        / "p12-04a"
-        / "cat-line-art-prototype.png"
+        ROOT / "docs" / "design" / "assets" / "p12-04a" / "cat-line-art-prototype.png"
     ).read_bytes()
     assert cat_line_art.startswith(b"\x89PNG\r\n\x1a\n")
     assert len(cat_line_art) > 100_000
     cat_watermark = (
-        ROOT
-        / "docs"
-        / "design"
-        / "assets"
-        / "p12-04a"
-        / "cat-line-art-watermark.png"
+        ROOT / "docs" / "design" / "assets" / "p12-04a" / "cat-line-art-watermark.png"
     ).read_bytes()
     assert cat_watermark.startswith(b"\x89PNG\r\n\x1a\n")
     assert cat_watermark[25] in (4, 6)
@@ -449,6 +427,4 @@ def test_p12_04a_visual_comparison_is_local_and_self_contained():
     assert "grid-template-columns: repeat(3, minmax(0, 1fr)) 116px" in selected
     assert "--rep-width: 70px" in selected
     assert "--rep-height: 98px" in selected
-    assert not (
-        ROOT / "docs" / "design" / "p12-04a-selected-mobile.html"
-    ).exists()
+    assert not (ROOT / "docs" / "design" / "p12-04a-selected-mobile.html").exists()

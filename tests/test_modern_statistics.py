@@ -68,8 +68,8 @@ def test_committed_modern_ranges_reconcile_parent_aggregates():
             document["archetypes"]
         )
         assert sum(item["count"] for item in document["archetypes"]) == document["total_decks"]
-        unknown = next(item for item in document["archetypes"] if item["id"] == "unknown")
-        assert document["unknown_count"] == unknown["count"]
+        unknown = [item for item in document["archetypes"] if item["id"] == "unknown"]
+        assert document["unknown_count"] == sum(item["count"] for item in unknown)
         assert sum(item["high_score_count"] for item in document["archetypes"]) == document["total_high_score"]
         assert sum(item["top8_count"] for item in document["archetypes"]) == document["total_top8"]
         decks = json.loads(
@@ -124,6 +124,9 @@ def test_cross_format_input_is_rejected_before_output(tmp_path):
     event_directory.mkdir(parents=True)
     (config_directory / "formats.yaml").write_bytes(
         (ROOT / "configs" / "formats.yaml").read_bytes()
+    )
+    (config_directory / "classifier_semantic_features.yaml").write_bytes(
+        (ROOT / "configs" / "classifier_semantic_features.yaml").read_bytes()
     )
     (rules_directory / "modern.yaml").write_bytes(
         (ROOT / "my_archetypes" / "modern.yaml").read_bytes()

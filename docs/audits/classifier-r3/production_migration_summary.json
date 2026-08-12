@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "CLASSIFIER-R3-PRODUCTION-MIGRATION",
+  "status": "owner_accepted_and_locally_committed",
+  "base_commit": "f586bff875c46c9f4cedcb3b84dc74427700f30c",
+  "production_rules": {
+    "modern": {
+      "parents": 70,
+      "subtypes": 54,
+      "rules": 119,
+      "sha256": "df9c55e78e8fd8ed9e6cb18b0117a4d2947f207a302fe7148b3da00deee74045"
+    },
+    "standard": {
+      "parents": 72,
+      "subtypes": 11,
+      "rules": 82,
+      "sha256": "d88c3342826343f07442c37d4652b4caac5be7f690d21122fc31884b63eb37f5"
+    },
+    "semantic_manifest_sha256": "0cd94ee3a4d6974f88446a660e661943d1cc2c4d8a25891dd6d214931a6aa999"
+  },
+  "accepted_shadow_equivalence": {
+    "records": 9728,
+    "mismatches": 0,
+    "order_mismatches": 0,
+    "conflicts": 0,
+    "invalid_decks": 0,
+    "residual_subtypes": 0
+  },
+  "pickup": {
+    "modern": {
+      "before": 54,
+      "after": 69,
+      "removed": 6,
+      "added": 21,
+      "sha256": "9bdec0902255774386f7222d52a38d09e84ac194c97bb65db4640fecf87ff5fd"
+    },
+    "standard": {
+      "before": 62,
+      "after": 60,
+      "removed": 7,
+      "added": 5,
+      "sha256": "a77116cdec4173b86b7eb37b50beccd9a440e77d3eecb3e31297a56d20a1244c"
+    },
+    "modern_false_new_archetypes": 0
+  },
+  "event_434455": {
+    "records": 362,
+    "classified": 351,
+    "unknown": 11,
+    "multiple_matches": 64,
+    "conflicts": 0,
+    "invalid_decks": 0,
+    "eligible_constructed_matches": 1394,
+    "source_sha256": "0b4296a9573a4facf4cfde1ce98569156f78fde6f5d2a1d3d662b54e2889e710",
+    "source_bytes_changed": false
+  },
+  "validation": {
+    "ordinary_pytest_passed": 851,
+    "committed_baseline_pytest_passed": 8,
+    "ruff": "pass",
+    "mypy": "pass",
+    "repository": "pass",
+    "rules": "pass",
+    "schemas": "pass",
+    "strict_classification_reports": "pass",
+    "diff_check": "pass"
+  },
+  "authorization": {
+    "local_implementation": true,
+    "commit": true,
+    "remote_publication": false,
+    "merge": false,
+    "production_dispatch": false,
+    "r4": false,
+    "p12_10": false
+  }
+}

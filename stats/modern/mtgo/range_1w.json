@@ -11,7 +11,7 @@
   "total_decks": 352,
   "total_high_score": 312,
   "total_top8": 88,
-  "unknown_count": 20,
+  "unknown_count": 0,
   "archetypes": [
     {
       "id": "devoted-druid-combo",
@@ -23,39 +23,27 @@
       "top8_share": 0.0909,
       "conversion": 0.2857,
       "avg_points_per_round": 2.0,
-      "avg_deviation": 10
-    },
-    {
-      "id": "goryos-reanimator",
-      "name": "Goryo's Reanimator",
-      "count": 34,
-      "high_score_count": 32,
-      "high_score_share": 0.1026,
-      "top8_count": 9,
-      "top8_share": 0.1023,
-      "conversion": 0.2812,
-      "avg_points_per_round": 1.97,
       "subtypes": [
         {
-          "id": "esper",
-          "name": "Esper",
-          "parent_id": "goryos-reanimator",
-          "display_name": "Esper Goryo's Reanimator",
+          "id": "abzan",
+          "name": "Abzan",
+          "parent_id": "devoted-druid-combo",
+          "display_name": "Abzan Devoted Druid Combo",
           "count": 34,
-          "high_score_count": 32,
-          "high_score_share": 0.1026,
-          "top8_count": 9,
-          "top8_share": 0.1023,
-          "conversion": 0.2812,
-          "avg_points_per_round": 1.97,
+          "high_score_count": 28,
+          "high_score_share": 0.0897,
+          "top8_count": 8,
+          "top8_share": 0.0909,
+          "conversion": 0.2857,
+          "avg_points_per_round": 2.0,
           "parent_share": 1.0,
-          "avg_deviation": 13
+          "avg_deviation": 10
         },
         {
-          "id": "grixis",
-          "name": "Grixis",
-          "parent_id": "goryos-reanimator",
-          "display_name": "Grixis Goryo's Reanimator",
+          "id": "selesnya",
+          "name": "Selesnya",
+          "parent_id": "devoted-druid-combo",
+          "display_name": "Selesnya Devoted Druid Combo",
           "count": 0,
           "high_score_count": 0,
           "high_score_share": 0.0,
@@ -67,17 +55,29 @@
           "avg_deviation": null
         }
       ],
-      "avg_deviation": 14
+      "avg_deviation": 10
+    },
+    {
+      "id": "esper-goryos",
+      "name": "Esper Goryo's",
+      "count": 34,
+      "high_score_count": 32,
+      "high_score_share": 0.1026,
+      "top8_count": 9,
+      "top8_share": 0.1023,
+      "conversion": 0.2812,
+      "avg_points_per_round": 1.97,
+      "avg_deviation": 13
     },
     {
       "id": "broodscale-combo",
       "name": "Broodscale Combo",
-      "count": 27,
-      "high_score_count": 25,
-      "high_score_share": 0.0801,
+      "count": 29,
+      "high_score_count": 27,
+      "high_score_share": 0.0865,
       "top8_count": 5,
       "top8_share": 0.0568,
-      "conversion": 0.2,
+      "conversion": 0.1852,
       "avg_points_per_round": 2.01,
       "subtypes": [
         {
@@ -85,15 +85,15 @@
           "name": "Gruul",
           "parent_id": "broodscale-combo",
           "display_name": "Gruul Broodscale Combo",
-          "count": 13,
-          "high_score_count": 11,
-          "high_score_share": 0.0353,
+          "count": 15,
+          "high_score_count": 13,
+          "high_score_share": 0.0417,
           "top8_count": 0,
           "top8_share": 0.0,
           "conversion": 0.0,
-          "avg_points_per_round": 1.79,
-          "parent_share": 0.4815,
-          "avg_deviation": 13
+          "avg_points_per_round": 1.82,
+          "parent_share": 0.5172,
+          "avg_deviation": 14
         },
         {
           "id": "mono-green",
@@ -107,7 +107,7 @@
           "top8_share": 0.0568,
           "conversion": 0.3571,
           "avg_points_per_round": 2.2,
-          "parent_share": 0.5185,
+          "parent_share": 0.4828,
           "avg_deviation": 20
         },
         {
@@ -124,9 +124,24 @@
           "avg_points_per_round": null,
           "parent_share": 0.0,
           "avg_deviation": null
+        },
+        {
+          "id": "simic",
+          "name": "Simic",
+          "parent_id": "broodscale-combo",
+          "display_name": "Simic Broodscale Combo",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
         }
       ],
-      "avg_deviation": 19
+      "avg_deviation": 20
     },
     {
       "id": "prowess",
@@ -167,7 +182,7 @@
           "conversion": 0.4286,
           "avg_points_per_round": 1.97,
           "parent_share": 0.3913,
-          "avg_deviation": 8
+          "avg_deviation": 6
         },
         {
           "id": "grixis",
@@ -213,13 +228,73 @@
           "avg_points_per_round": null,
           "parent_share": 0.0,
           "avg_deviation": null
+        },
+        {
+          "id": "boros",
+          "name": "Boros",
+          "parent_id": "prowess",
+          "display_name": "Boros Prowess",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "mono-red",
+          "name": "Mono-Red",
+          "parent_id": "prowess",
+          "display_name": "Mono-Red Prowess",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "mardu",
+          "name": "Mardu",
+          "parent_id": "prowess",
+          "display_name": "Mardu Prowess",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "rakdos",
+          "name": "Rakdos",
+          "parent_id": "prowess",
+          "display_name": "Rakdos Prowess",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
         }
       ],
       "avg_deviation": 15
     },
     {
-      "id": "blue-black-tempo",
-      "name": "Blue-Black Tempo",
+      "id": "dimir-tempo",
+      "name": "Dimir Tempo",
       "count": 23,
       "high_score_count": 21,
       "high_score_share": 0.0673,
@@ -231,8 +306,8 @@
         {
           "id": "dimir",
           "name": "Dimir",
-          "parent_id": "blue-black-tempo",
-          "display_name": "Dimir Blue-Black Tempo",
+          "parent_id": "dimir-tempo",
+          "display_name": "Dimir Dimir Tempo",
           "count": 22,
           "high_score_count": 20,
           "high_score_share": 0.0641,
@@ -241,13 +316,13 @@
           "conversion": 0.4,
           "avg_points_per_round": 2.19,
           "parent_share": 0.9565,
-          "avg_deviation": 29
+          "avg_deviation": 28
         },
         {
           "id": "grixis",
-          "name": "Grixis",
-          "parent_id": "blue-black-tempo",
-          "display_name": "Grixis Blue-Black Tempo",
+          "name": "Dimir Red Splash",
+          "parent_id": "dimir-tempo",
+          "display_name": "Dimir Red Splash Dimir Tempo",
           "count": 0,
           "high_score_count": 0,
           "high_score_share": 0.0,
@@ -260,9 +335,9 @@
         },
         {
           "id": "esper",
-          "name": "Esper",
-          "parent_id": "blue-black-tempo",
-          "display_name": "Esper Blue-Black Tempo",
+          "name": "Dimir White Splash",
+          "parent_id": "dimir-tempo",
+          "display_name": "Dimir White Splash Dimir Tempo",
           "count": 1,
           "high_score_count": 1,
           "high_score_share": 0.0032,
@@ -274,19 +349,7 @@
           "avg_deviation": null
         }
       ],
-      "avg_deviation": 32
-    },
-    {
-      "id": "unknown",
-      "name": "Unknown",
-      "count": 20,
-      "high_score_count": 15,
-      "high_score_share": 0.0481,
-      "top8_count": 3,
-      "top8_share": 0.0341,
-      "conversion": 0.2,
-      "avg_points_per_round": 1.92,
-      "avg_deviation": null
+      "avg_deviation": 31
     },
     {
       "id": "affinity",
@@ -301,93 +364,16 @@
       "avg_deviation": 26
     },
     {
-      "id": "blink",
-      "name": "Blink",
+      "id": "esper-blink",
+      "name": "Esper Blink",
       "count": 17,
-      "high_score_count": 16,
-      "high_score_share": 0.0513,
-      "top8_count": 3,
-      "top8_share": 0.0341,
-      "conversion": 0.1875,
-      "avg_points_per_round": 1.98,
-      "subtypes": [
-        {
-          "id": "esper",
-          "name": "Esper",
-          "parent_id": "blink",
-          "display_name": "Esper Blink",
-          "count": 10,
-          "high_score_count": 9,
-          "high_score_share": 0.0288,
-          "top8_count": 2,
-          "top8_share": 0.0227,
-          "conversion": 0.2222,
-          "avg_points_per_round": 2.1,
-          "parent_share": 0.5882,
-          "avg_deviation": 12
-        },
-        {
-          "id": "azorius",
-          "name": "Azorius",
-          "parent_id": "blink",
-          "display_name": "Azorius Blink",
-          "count": 7,
-          "high_score_count": 7,
-          "high_score_share": 0.0224,
-          "top8_count": 1,
-          "top8_share": 0.0114,
-          "conversion": 0.1429,
-          "avg_points_per_round": 1.81,
-          "parent_share": 0.4118,
-          "avg_deviation": 25
-        },
-        {
-          "id": "jeskai",
-          "name": "Jeskai",
-          "parent_id": "blink",
-          "display_name": "Jeskai Blink",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "mardu",
-          "name": "Mardu",
-          "parent_id": "blink",
-          "display_name": "Mardu Blink",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "orzhov",
-          "name": "Orzhov",
-          "parent_id": "blink",
-          "display_name": "Orzhov Blink",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        }
-      ],
-      "avg_deviation": 38
+      "high_score_count": 15,
+      "high_score_share": 0.0481,
+      "top8_count": 4,
+      "top8_share": 0.0455,
+      "conversion": 0.2667,
+      "avg_points_per_round": 2.07,
+      "avg_deviation": 27
     },
     {
       "id": "boros-energy",
@@ -411,7 +397,84 @@
       "top8_share": 0.0341,
       "conversion": 0.2143,
       "avg_points_per_round": 2.02,
-      "avg_deviation": 20
+      "subtypes": [
+        {
+          "id": "four-color",
+          "name": "Four-Color",
+          "parent_id": "living-end",
+          "display_name": "Four-Color Living End",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "temur",
+          "name": "Temur",
+          "parent_id": "living-end",
+          "display_name": "Temur Living End",
+          "count": 12,
+          "high_score_count": 11,
+          "high_score_share": 0.0353,
+          "top8_count": 1,
+          "top8_share": 0.0114,
+          "conversion": 0.0909,
+          "avg_points_per_round": 1.95,
+          "parent_share": 0.8,
+          "avg_deviation": 9
+        },
+        {
+          "id": "sultai",
+          "name": "Sultai",
+          "parent_id": "living-end",
+          "display_name": "Sultai Living End",
+          "count": 3,
+          "high_score_count": 3,
+          "high_score_share": 0.0096,
+          "top8_count": 2,
+          "top8_share": 0.0227,
+          "conversion": 0.6667,
+          "avg_points_per_round": 2.29,
+          "parent_share": 0.2,
+          "avg_deviation": 7
+        },
+        {
+          "id": "bant",
+          "name": "Bant",
+          "parent_id": "living-end",
+          "display_name": "Bant Living End",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "rakdos",
+          "name": "Rakdos",
+          "parent_id": "living-end",
+          "display_name": "Rakdos Living End",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        }
+      ],
+      "avg_deviation": 22
     },
     {
       "id": "domain-zoo",
@@ -436,6 +499,62 @@
       "conversion": 0.1538,
       "avg_points_per_round": 1.97,
       "avg_deviation": 4
+    },
+    {
+      "id": "chant-control",
+      "name": "Chant Control",
+      "count": 13,
+      "high_score_count": 12,
+      "high_score_share": 0.0385,
+      "top8_count": 4,
+      "top8_share": 0.0455,
+      "conversion": 0.3333,
+      "avg_points_per_round": 2.09,
+      "subtypes": [
+        {
+          "id": "azorius",
+          "name": "Azorius",
+          "parent_id": "chant-control",
+          "display_name": "Azorius Chant Control",
+          "count": 7,
+          "high_score_count": 6,
+          "high_score_share": 0.0192,
+          "top8_count": 3,
+          "top8_share": 0.0341,
+          "conversion": 0.5,
+          "avg_points_per_round": 2.06,
+          "parent_share": 0.5385,
+          "avg_deviation": 24
+        },
+        {
+          "id": "jeskai",
+          "name": "Jeskai",
+          "parent_id": "chant-control",
+          "display_name": "Jeskai Chant Control",
+          "count": 6,
+          "high_score_count": 6,
+          "high_score_share": 0.0192,
+          "top8_count": 1,
+          "top8_share": 0.0114,
+          "conversion": 0.1667,
+          "avg_points_per_round": 2.11,
+          "parent_share": 0.4615,
+          "avg_deviation": 24
+        }
+      ],
+      "avg_deviation": 26
+    },
+    {
+      "id": "esper-ketramose",
+      "name": "Esper Ketramose",
+      "count": 10,
+      "high_score_count": 10,
+      "high_score_share": 0.0321,
+      "top8_count": 2,
+      "top8_share": 0.0227,
+      "conversion": 0.2,
+      "avg_points_per_round": 1.99,
+      "avg_deviation": 9
     },
     {
       "id": "eldrazi-tron",
@@ -521,75 +640,16 @@
       "avg_deviation": 11
     },
     {
-      "id": "persist-reanimator",
-      "name": "Persist Reanimator",
-      "count": 9,
-      "high_score_count": 9,
-      "high_score_share": 0.0288,
-      "top8_count": 3,
-      "top8_share": 0.0341,
-      "conversion": 0.3333,
-      "avg_points_per_round": 2.18,
-      "subtypes": [
-        {
-          "id": "grixis",
-          "name": "Grixis",
-          "parent_id": "persist-reanimator",
-          "display_name": "Grixis Persist Reanimator",
-          "count": 8,
-          "high_score_count": 8,
-          "high_score_share": 0.0256,
-          "top8_count": 3,
-          "top8_share": 0.0341,
-          "conversion": 0.375,
-          "avg_points_per_round": 2.22,
-          "parent_share": 0.8889,
-          "avg_deviation": 12
-        },
-        {
-          "id": "golgari",
-          "name": "Golgari",
-          "parent_id": "persist-reanimator",
-          "display_name": "Golgari Persist Reanimator",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "esper",
-          "name": "Esper",
-          "parent_id": "persist-reanimator",
-          "display_name": "Esper Persist Reanimator",
-          "count": 1,
-          "high_score_count": 1,
-          "high_score_share": 0.0032,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": 0.0,
-          "avg_points_per_round": 1.88,
-          "parent_share": 0.1111,
-          "avg_deviation": null
-        }
-      ],
-      "avg_deviation": 30
-    },
-    {
-      "id": "azorius-control",
-      "name": "Azorius Control",
+      "id": "grixis-persist",
+      "name": "Grixis Persist",
       "count": 8,
-      "high_score_count": 7,
-      "high_score_share": 0.0224,
+      "high_score_count": 8,
+      "high_score_share": 0.0256,
       "top8_count": 3,
       "top8_share": 0.0341,
-      "conversion": 0.4286,
-      "avg_points_per_round": 2.14,
-      "avg_deviation": 25
+      "conversion": 0.375,
+      "avg_points_per_round": 2.22,
+      "avg_deviation": 12
     },
     {
       "id": "mono-blue-belcher",
@@ -602,154 +662,6 @@
       "conversion": 0.5,
       "avg_points_per_round": 2.15,
       "avg_deviation": 10
-    },
-    {
-      "id": "hollow-one",
-      "name": "Hollow One",
-      "count": 6,
-      "high_score_count": 5,
-      "high_score_share": 0.016,
-      "top8_count": 3,
-      "top8_share": 0.0341,
-      "conversion": 0.6,
-      "avg_points_per_round": 2.14,
-      "subtypes": [
-        {
-          "id": "rakdos",
-          "name": "Rakdos",
-          "parent_id": "hollow-one",
-          "display_name": "Rakdos Hollow One",
-          "count": 4,
-          "high_score_count": 4,
-          "high_score_share": 0.0128,
-          "top8_count": 2,
-          "top8_share": 0.0227,
-          "conversion": 0.5,
-          "avg_points_per_round": 2.25,
-          "parent_share": 0.6667,
-          "avg_deviation": 28
-        },
-        {
-          "id": "vengevine",
-          "name": "Vengevine",
-          "parent_id": "hollow-one",
-          "display_name": "Vengevine Hollow One",
-          "count": 2,
-          "high_score_count": 1,
-          "high_score_share": 0.0032,
-          "top8_count": 1,
-          "top8_share": 0.0114,
-          "conversion": 1.0,
-          "avg_points_per_round": 1.93,
-          "parent_share": 0.3333,
-          "avg_deviation": 14
-        }
-      ],
-      "avg_deviation": 34
-    },
-    {
-      "id": "eldrazi-ramp",
-      "name": "Eldrazi Ramp",
-      "count": 6,
-      "high_score_count": 6,
-      "high_score_share": 0.0192,
-      "top8_count": 2,
-      "top8_share": 0.0227,
-      "conversion": 0.3333,
-      "avg_points_per_round": 2.14,
-      "subtypes": [
-        {
-          "id": "gruul",
-          "name": "Gruul",
-          "parent_id": "eldrazi-ramp",
-          "display_name": "Gruul Eldrazi Ramp",
-          "count": 4,
-          "high_score_count": 4,
-          "high_score_share": 0.0128,
-          "top8_count": 1,
-          "top8_share": 0.0114,
-          "conversion": 0.25,
-          "avg_points_per_round": 2.04,
-          "parent_share": 0.6667,
-          "avg_deviation": 14
-        },
-        {
-          "id": "temur",
-          "name": "Temur",
-          "parent_id": "eldrazi-ramp",
-          "display_name": "Temur Eldrazi Ramp",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "sultai",
-          "name": "Sultai",
-          "parent_id": "eldrazi-ramp",
-          "display_name": "Sultai Eldrazi Ramp",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "simic",
-          "name": "Simic",
-          "parent_id": "eldrazi-ramp",
-          "display_name": "Simic Eldrazi Ramp",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "golgari",
-          "name": "Golgari",
-          "parent_id": "eldrazi-ramp",
-          "display_name": "Golgari Eldrazi Ramp",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "selesnya",
-          "name": "Selesnya",
-          "parent_id": "eldrazi-ramp",
-          "display_name": "Selesnya Eldrazi Ramp",
-          "count": 2,
-          "high_score_count": 2,
-          "high_score_share": 0.0064,
-          "top8_count": 1,
-          "top8_share": 0.0114,
-          "conversion": 0.5,
-          "avg_points_per_round": 2.36,
-          "parent_share": 0.3333,
-          "avg_deviation": null
-        }
-      ],
-      "avg_deviation": 29
     },
     {
       "id": "burn",
@@ -823,48 +735,81 @@
       "avg_deviation": 13
     },
     {
-      "id": "boros-land-destruction",
-      "name": "Boros Land Destruction",
-      "count": 4,
-      "high_score_count": 2,
-      "high_score_share": 0.0064,
-      "top8_count": 0,
-      "top8_share": 0.0,
-      "conversion": 0.0,
-      "avg_points_per_round": 1.62,
-      "avg_deviation": 11
-    },
-    {
-      "id": "chant-control",
-      "name": "Chant Control",
+      "id": "eldrazi-ramp",
+      "name": "Eldrazi Ramp",
       "count": 4,
       "high_score_count": 4,
       "high_score_share": 0.0128,
       "top8_count": 1,
       "top8_share": 0.0114,
       "conversion": 0.25,
-      "avg_points_per_round": 2.07,
+      "avg_points_per_round": 2.04,
       "subtypes": [
         {
-          "id": "jeskai",
-          "name": "Jeskai",
-          "parent_id": "chant-control",
-          "display_name": "Jeskai Chant Control",
+          "id": "gruul",
+          "name": "Gruul",
+          "parent_id": "eldrazi-ramp",
+          "display_name": "Gruul Eldrazi Ramp",
           "count": 4,
           "high_score_count": 4,
           "high_score_share": 0.0128,
           "top8_count": 1,
           "top8_share": 0.0114,
           "conversion": 0.25,
-          "avg_points_per_round": 2.07,
+          "avg_points_per_round": 2.04,
           "parent_share": 1.0,
-          "avg_deviation": 12
+          "avg_deviation": 14
         },
         {
-          "id": "four-color",
-          "name": "Four-Color",
-          "parent_id": "chant-control",
-          "display_name": "Four-Color Chant Control",
+          "id": "temur",
+          "name": "Temur",
+          "parent_id": "eldrazi-ramp",
+          "display_name": "Temur Eldrazi Ramp",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "sultai",
+          "name": "Sultai",
+          "parent_id": "eldrazi-ramp",
+          "display_name": "Sultai Eldrazi Ramp",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "simic",
+          "name": "Simic",
+          "parent_id": "eldrazi-ramp",
+          "display_name": "Simic Eldrazi Ramp",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "golgari",
+          "name": "Golgari",
+          "parent_id": "eldrazi-ramp",
+          "display_name": "Golgari Eldrazi Ramp",
           "count": 0,
           "high_score_count": 0,
           "high_score_share": 0.0,
@@ -876,7 +821,19 @@
           "avg_deviation": null
         }
       ],
-      "avg_deviation": 12
+      "avg_deviation": 18
+    },
+    {
+      "id": "boros-land-destruction",
+      "name": "Boros Ponza",
+      "count": 4,
+      "high_score_count": 2,
+      "high_score_share": 0.0064,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.62,
+      "avg_deviation": 11
     },
     {
       "id": "song-of-creation",
@@ -889,6 +846,50 @@
       "conversion": 0.0,
       "avg_points_per_round": 1.86,
       "avg_deviation": 30
+    },
+    {
+      "id": "rakdos-hollow-one",
+      "name": "Rakdos Hollow One",
+      "count": 4,
+      "high_score_count": 4,
+      "high_score_share": 0.0128,
+      "top8_count": 2,
+      "top8_share": 0.0227,
+      "conversion": 0.5,
+      "avg_points_per_round": 2.25,
+      "subtypes": [
+        {
+          "id": "rakdos",
+          "name": "Rakdos",
+          "parent_id": "rakdos-hollow-one",
+          "display_name": "Rakdos Rakdos Hollow One",
+          "count": 3,
+          "high_score_count": 3,
+          "high_score_share": 0.0096,
+          "top8_count": 1,
+          "top8_share": 0.0114,
+          "conversion": 0.3333,
+          "avg_points_per_round": 2.29,
+          "parent_share": 0.75,
+          "avg_deviation": 25
+        },
+        {
+          "id": "mardu",
+          "name": "Mardu",
+          "parent_id": "rakdos-hollow-one",
+          "display_name": "Mardu Rakdos Hollow One",
+          "count": 1,
+          "high_score_count": 1,
+          "high_score_share": 0.0032,
+          "top8_count": 1,
+          "top8_share": 0.0114,
+          "conversion": 1.0,
+          "avg_points_per_round": 2.14,
+          "parent_share": 0.25,
+          "avg_deviation": null
+        }
+      ],
+      "avg_deviation": 28
     },
     {
       "id": "sam-combo",
@@ -974,6 +975,54 @@
       "avg_deviation": null
     },
     {
+      "id": "hollowvine",
+      "name": "Hollowvine",
+      "count": 2,
+      "high_score_count": 1,
+      "high_score_share": 0.0032,
+      "top8_count": 1,
+      "top8_share": 0.0114,
+      "conversion": 1.0,
+      "avg_points_per_round": 1.93,
+      "avg_deviation": 14
+    },
+    {
+      "id": "izzet-wizards",
+      "name": "Izzet Wizards",
+      "count": 2,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 1.25,
+      "avg_deviation": null
+    },
+    {
+      "id": "eldrazi-ramp-chant",
+      "name": "Eldrazi Ramp Chant",
+      "count": 2,
+      "high_score_count": 2,
+      "high_score_share": 0.0064,
+      "top8_count": 1,
+      "top8_share": 0.0114,
+      "conversion": 0.5,
+      "avg_points_per_round": 2.36,
+      "avg_deviation": null
+    },
+    {
+      "id": "solemnity-blink",
+      "name": "Solemnity Blink",
+      "count": 1,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 1.5,
+      "avg_deviation": null
+    },
+    {
       "id": "azorius-energy",
       "name": "Azorius Energy",
       "count": 1,
@@ -998,6 +1047,42 @@
       "avg_deviation": 0
     },
     {
+      "id": "grixis-tempo",
+      "name": "Grixis Tempo",
+      "count": 1,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 1.5,
+      "avg_deviation": null
+    },
+    {
+      "id": "shape-anew",
+      "name": "Shape Anew",
+      "count": 1,
+      "high_score_count": 1,
+      "high_score_share": 0.0032,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.71,
+      "avg_deviation": null
+    },
+    {
+      "id": "bant-reclamation",
+      "name": "Bant Reclamation",
+      "count": 1,
+      "high_score_count": 1,
+      "high_score_share": 0.0032,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 2.14,
+      "avg_deviation": null
+    },
+    {
       "id": "mardu-energy",
       "name": "Mardu Energy",
       "count": 1,
@@ -1008,6 +1093,18 @@
       "conversion": 1.0,
       "avg_points_per_round": 2.14,
       "avg_deviation": 20
+    },
+    {
+      "id": "five-color-elementals",
+      "name": "Five-Color Elementals",
+      "count": 1,
+      "high_score_count": 1,
+      "high_score_share": 0.0032,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.71,
+      "avg_deviation": null
     },
     {
       "id": "izzet-phoenix",
@@ -1032,6 +1129,18 @@
       "conversion": 0.0,
       "avg_points_per_round": 1.71,
       "avg_deviation": 8
+    },
+    {
+      "id": "esper-persist",
+      "name": "Esper Persist",
+      "count": 1,
+      "high_score_count": 1,
+      "high_score_share": 0.0032,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.88,
+      "avg_deviation": null
     }
   ]
 }

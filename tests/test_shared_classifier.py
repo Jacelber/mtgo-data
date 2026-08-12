@@ -19,7 +19,14 @@ from mtgmeta.config import load_rule_set
 
 
 RULE_FIXTURE = ROOT / "tests" / "fixtures" / "rules" / "valid_shared_rules.yaml"
-STANDARD_RULES = ROOT / "my_archetypes" / "standard.yaml"
+STANDARD_RULES = (
+    ROOT
+    / "docs"
+    / "audits"
+    / "classifier-r2"
+    / "baseline_rules"
+    / "standard.yaml"
+)
 CORPUS = ROOT / "tests" / "fixtures" / "standard" / "frozen_legacy_corpus.json"
 
 

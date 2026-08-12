@@ -2,31 +2,34 @@
   "schema_version": "1.0.0",
   "format": "standard",
   "source": "mtgo",
-  "rules_updated": "2026-07-20T05:34:31+09:00",
+  "rules_updated": "2026-08-12T23:16:42+09:00",
   "summary": {
-    "parents": 74,
-    "leaves": 76,
-    "expandable_parents": 2
+    "parents": 102,
+    "leaves": 110,
+    "expandable_parents": 3
   },
   "parents": [
     {
       "id": "4-color-allies",
-      "name": "4-Color Allies",
+      "name": "Allies Kindred",
       "expandable": false,
       "subtype_ids": []
     },
     {
-      "id": "4-color-control",
-      "name": "4-Color Control",
-      "expandable": true,
-      "subtype_ids": [
-        "4-color-control/inevitable-defeat",
-        "4-color-control/rakshasas-bargain"
-      ]
-    },
-    {
       "id": "4-color-tablet",
       "name": "4-Color Tablet",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "azorius-auras",
+      "name": "Azorius Auras",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "azorius-cage",
+      "name": "Azorius Cage",
       "expandable": false,
       "subtype_ids": []
     },
@@ -49,8 +52,20 @@
       "subtype_ids": []
     },
     {
-      "id": "azorius-tempo",
-      "name": "Azorius Tempo",
+      "id": "azorius-prison",
+      "name": "Azorius Prison",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "azorius-prowess",
+      "name": "Azorius Prowess",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "azorius-token-control",
+      "name": "Azorius Token Control",
       "expandable": false,
       "subtype_ids": []
     },
@@ -85,20 +100,30 @@
       "subtype_ids": []
     },
     {
-      "id": "boros-leyline",
-      "name": "Boros Leyline",
-      "expandable": false,
-      "subtype_ids": []
-    },
-    {
       "id": "boros-manufacturing",
       "name": "Boros Manufacturing",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "boros-manufacturing/boros",
+        "boros-manufacturing/jeskai",
+        "boros-manufacturing/mardu"
+      ]
     },
     {
       "id": "boros-token",
       "name": "Boros Token",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "break-out-aggro",
+      "name": "Break Out Aggro",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "dark-jeskai-control",
+      "name": "Dark Jeskai Control",
       "expandable": false,
       "subtype_ids": []
     },
@@ -121,14 +146,38 @@
       "subtype_ids": []
     },
     {
+      "id": "dimir-flash",
+      "name": "Dimir Flash",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "dimir-midrange",
       "name": "Dimir Midrange",
       "expandable": false,
       "subtype_ids": []
     },
     {
+      "id": "dimir-oculus",
+      "name": "Dimir Oculus",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "esper-control",
+      "name": "Esper Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "esper-pixie",
       "name": "Esper Pixie",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "five-color-humans",
+      "name": "Five-Color Humans",
       "expandable": false,
       "subtype_ids": []
     },
@@ -169,20 +218,26 @@
       "subtype_ids": []
     },
     {
+      "id": "golgari-sacrifice",
+      "name": "Golgari Sacrifice",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "grixis-discard",
       "name": "Grixis Discard",
       "expandable": false,
       "subtype_ids": []
     },
     {
-      "id": "grixis-elementals",
-      "name": "Grixis Elementals",
+      "id": "gruul-delirium",
+      "name": "Gruul Delirium",
       "expandable": false,
       "subtype_ids": []
     },
     {
-      "id": "gruul-delirium",
-      "name": "Gruul Delirium",
+      "id": "gruul-dinosaur",
+      "name": "Gruul Dinosaur",
       "expandable": false,
       "subtype_ids": []
     },
@@ -199,13 +254,22 @@
       "subtype_ids": []
     },
     {
+      "id": "gruul-monsters",
+      "name": "Gruul Monsters",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "gruul-ramp",
+      "name": "Gruul Ramp",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "izzet-aggro",
       "name": "Izzet Aggro",
-      "expandable": true,
-      "subtype_ids": [
-        "izzet-aggro/hired-claw",
-        "izzet-aggro/razorkin-needlehead"
-      ]
+      "expandable": false,
+      "subtype_ids": []
     },
     {
       "id": "izzet-blink",
@@ -214,8 +278,20 @@
       "subtype_ids": []
     },
     {
+      "id": "izzet-burn",
+      "name": "Izzet Burn",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "izzet-fling",
       "name": "Izzet Fling",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "izzet-iron-man",
+      "name": "Izzet Iron Man",
       "expandable": false,
       "subtype_ids": []
     },
@@ -262,14 +338,14 @@
       "subtype_ids": []
     },
     {
-      "id": "jeskai-lessons",
-      "name": "Jeskai Lessons",
+      "id": "jeskai-equipment",
+      "name": "Jeskai Equipment",
       "expandable": false,
       "subtype_ids": []
     },
     {
-      "id": "jeskai-manufacturing",
-      "name": "Jeskai Manufacturing",
+      "id": "jeskai-lessons",
+      "name": "Jeskai Lessons",
       "expandable": false,
       "subtype_ids": []
     },
@@ -280,10 +356,26 @@
       "subtype_ids": []
     },
     {
+      "id": "kona-omniscience",
+      "name": "Kona Omniscience",
+      "expandable": true,
+      "subtype_ids": [
+        "kona-omniscience/bant",
+        "kona-omniscience/simic",
+        "kona-omniscience/temur"
+      ]
+    },
+    {
       "id": "leyline-aggro",
       "name": "Leyline Aggro",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "leyline-aggro/boros",
+        "leyline-aggro/gruul",
+        "leyline-aggro/izzet",
+        "leyline-aggro/mono-red",
+        "leyline-aggro/rakdos"
+      ]
     },
     {
       "id": "mardu-discard",
@@ -300,6 +392,12 @@
     {
       "id": "mono-black-demons",
       "name": "Mono-Black Demons",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-blue-namor",
+      "name": "Mono-Blue Namor",
       "expandable": false,
       "subtype_ids": []
     },
@@ -322,20 +420,44 @@
       "subtype_ids": []
     },
     {
+      "id": "mono-green-mightiest",
+      "name": "Mono-Green Mightiest",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-green-squirrel-combo",
+      "name": "Mono-Green Squirrel Combo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "mono-red-aggro",
       "name": "Mono-Red Aggro",
       "expandable": false,
       "subtype_ids": []
     },
     {
-      "id": "mono-red-leyline",
-      "name": "Mono-Red Leyline",
+      "id": "mono-red-burn",
+      "name": "Mono-Red Burn",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-white-auras",
+      "name": "Mono-White Auras",
       "expandable": false,
       "subtype_ids": []
     },
     {
       "id": "mono-white-momo",
       "name": "Mono-White Momo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-white-triumph",
+      "name": "Mono-White Triumph",
       "expandable": false,
       "subtype_ids": []
     },
@@ -352,6 +474,24 @@
       "subtype_ids": []
     },
     {
+      "id": "orzhov-demon",
+      "name": "Orzhov Demon",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "orzhov-lifegain",
+      "name": "Orzhov Lifegain",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "orzhov-momo",
+      "name": "Orzhov Momo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "orzhov-repartee",
       "name": "Orzhov Repartee",
       "expandable": false,
@@ -360,6 +500,12 @@
     {
       "id": "rakdos-discard",
       "name": "Rakdos Discard",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "rakdos-ponza",
+      "name": "Rakdos Ponza",
       "expandable": false,
       "subtype_ids": []
     },
@@ -382,6 +528,12 @@
       "subtype_ids": []
     },
     {
+      "id": "selesnya-ramp",
+      "name": "Selesnya Ramp",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "selesnya-rhythm",
       "name": "Selesnya Rhythm",
       "expandable": false,
@@ -390,12 +542,6 @@
     {
       "id": "simic-jackal",
       "name": "Simic Jackal",
-      "expandable": false,
-      "subtype_ids": []
-    },
-    {
-      "id": "simic-kona",
-      "name": "Simic Kona",
       "expandable": false,
       "subtype_ids": []
     },
@@ -424,6 +570,18 @@
       "subtype_ids": []
     },
     {
+      "id": "sultai-midrange",
+      "name": "Sultai Midrange",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "sultai-oculus",
+      "name": "Sultai Oculus",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "sultai-reanimator",
       "name": "Sultai Reanimator",
       "expandable": false,
@@ -437,13 +595,19 @@
     },
     {
       "id": "temur-elementals",
-      "name": "Temur Elementals",
+      "name": "Ramp Elementals",
       "expandable": false,
       "subtype_ids": []
     },
     {
       "id": "temur-harmonizer",
       "name": "Temur Harmonizer",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "temur-hulk-ramp",
+      "name": "Temur Hulk Ramp",
       "expandable": false,
       "subtype_ids": []
     },
@@ -458,32 +622,28 @@
       "name": "Temur Tablet",
       "expandable": false,
       "subtype_ids": []
+    },
+    {
+      "id": "white-sultai-control",
+      "name": "White Sultai Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "white-weenie",
+      "name": "White Weenie",
+      "expandable": false,
+      "subtype_ids": []
     }
   ],
   "leaves": [
     {
       "id": "4-color-allies",
       "kind": "archetype",
-      "name": "4-Color Allies",
-      "display_name": "4-Color Allies",
+      "name": "Allies Kindred",
+      "display_name": "Allies Kindred",
       "parent_id": "4-color-allies",
       "subtype_id": null
-    },
-    {
-      "id": "4-color-control/inevitable-defeat",
-      "kind": "subtype",
-      "name": "Inevitable Defeat",
-      "display_name": "Inevitable Defeat 4-Color Control",
-      "parent_id": "4-color-control",
-      "subtype_id": "inevitable-defeat"
-    },
-    {
-      "id": "4-color-control/rakshasas-bargain",
-      "kind": "subtype",
-      "name": "Rakshasa's Bargain",
-      "display_name": "Rakshasa's Bargain 4-Color Control",
-      "parent_id": "4-color-control",
-      "subtype_id": "rakshasas-bargain"
     },
     {
       "id": "4-color-tablet",
@@ -491,6 +651,22 @@
       "name": "4-Color Tablet",
       "display_name": "4-Color Tablet",
       "parent_id": "4-color-tablet",
+      "subtype_id": null
+    },
+    {
+      "id": "azorius-auras",
+      "kind": "archetype",
+      "name": "Azorius Auras",
+      "display_name": "Azorius Auras",
+      "parent_id": "azorius-auras",
+      "subtype_id": null
+    },
+    {
+      "id": "azorius-cage",
+      "kind": "archetype",
+      "name": "Azorius Cage",
+      "display_name": "Azorius Cage",
+      "parent_id": "azorius-cage",
       "subtype_id": null
     },
     {
@@ -518,11 +694,27 @@
       "subtype_id": null
     },
     {
-      "id": "azorius-tempo",
+      "id": "azorius-prison",
       "kind": "archetype",
-      "name": "Azorius Tempo",
-      "display_name": "Azorius Tempo",
-      "parent_id": "azorius-tempo",
+      "name": "Azorius Prison",
+      "display_name": "Azorius Prison",
+      "parent_id": "azorius-prison",
+      "subtype_id": null
+    },
+    {
+      "id": "azorius-prowess",
+      "kind": "archetype",
+      "name": "Azorius Prowess",
+      "display_name": "Azorius Prowess",
+      "parent_id": "azorius-prowess",
+      "subtype_id": null
+    },
+    {
+      "id": "azorius-token-control",
+      "kind": "archetype",
+      "name": "Azorius Token Control",
+      "display_name": "Azorius Token Control",
+      "parent_id": "azorius-token-control",
       "subtype_id": null
     },
     {
@@ -566,20 +758,28 @@
       "subtype_id": null
     },
     {
-      "id": "boros-leyline",
-      "kind": "archetype",
-      "name": "Boros Leyline",
-      "display_name": "Boros Leyline",
-      "parent_id": "boros-leyline",
-      "subtype_id": null
+      "id": "boros-manufacturing/boros",
+      "kind": "subtype",
+      "name": "Boros",
+      "display_name": "Boros Boros Manufacturing",
+      "parent_id": "boros-manufacturing",
+      "subtype_id": "boros"
     },
     {
-      "id": "boros-manufacturing",
-      "kind": "archetype",
-      "name": "Boros Manufacturing",
-      "display_name": "Boros Manufacturing",
+      "id": "boros-manufacturing/jeskai",
+      "kind": "subtype",
+      "name": "Jeskai",
+      "display_name": "Jeskai Boros Manufacturing",
       "parent_id": "boros-manufacturing",
-      "subtype_id": null
+      "subtype_id": "jeskai"
+    },
+    {
+      "id": "boros-manufacturing/mardu",
+      "kind": "subtype",
+      "name": "Mardu",
+      "display_name": "Mardu Boros Manufacturing",
+      "parent_id": "boros-manufacturing",
+      "subtype_id": "mardu"
     },
     {
       "id": "boros-token",
@@ -587,6 +787,22 @@
       "name": "Boros Token",
       "display_name": "Boros Token",
       "parent_id": "boros-token",
+      "subtype_id": null
+    },
+    {
+      "id": "break-out-aggro",
+      "kind": "archetype",
+      "name": "Break Out Aggro",
+      "display_name": "Break Out Aggro",
+      "parent_id": "break-out-aggro",
+      "subtype_id": null
+    },
+    {
+      "id": "dark-jeskai-control",
+      "kind": "archetype",
+      "name": "Dark Jeskai Control",
+      "display_name": "Dark Jeskai Control",
+      "parent_id": "dark-jeskai-control",
       "subtype_id": null
     },
     {
@@ -614,6 +830,14 @@
       "subtype_id": null
     },
     {
+      "id": "dimir-flash",
+      "kind": "archetype",
+      "name": "Dimir Flash",
+      "display_name": "Dimir Flash",
+      "parent_id": "dimir-flash",
+      "subtype_id": null
+    },
+    {
       "id": "dimir-midrange",
       "kind": "archetype",
       "name": "Dimir Midrange",
@@ -622,11 +846,35 @@
       "subtype_id": null
     },
     {
+      "id": "dimir-oculus",
+      "kind": "archetype",
+      "name": "Dimir Oculus",
+      "display_name": "Dimir Oculus",
+      "parent_id": "dimir-oculus",
+      "subtype_id": null
+    },
+    {
+      "id": "esper-control",
+      "kind": "archetype",
+      "name": "Esper Control",
+      "display_name": "Esper Control",
+      "parent_id": "esper-control",
+      "subtype_id": null
+    },
+    {
       "id": "esper-pixie",
       "kind": "archetype",
       "name": "Esper Pixie",
       "display_name": "Esper Pixie",
       "parent_id": "esper-pixie",
+      "subtype_id": null
+    },
+    {
+      "id": "five-color-humans",
+      "kind": "archetype",
+      "name": "Five-Color Humans",
+      "display_name": "Five-Color Humans",
+      "parent_id": "five-color-humans",
       "subtype_id": null
     },
     {
@@ -678,6 +926,14 @@
       "subtype_id": null
     },
     {
+      "id": "golgari-sacrifice",
+      "kind": "archetype",
+      "name": "Golgari Sacrifice",
+      "display_name": "Golgari Sacrifice",
+      "parent_id": "golgari-sacrifice",
+      "subtype_id": null
+    },
+    {
       "id": "grixis-discard",
       "kind": "archetype",
       "name": "Grixis Discard",
@@ -686,19 +942,19 @@
       "subtype_id": null
     },
     {
-      "id": "grixis-elementals",
-      "kind": "archetype",
-      "name": "Grixis Elementals",
-      "display_name": "Grixis Elementals",
-      "parent_id": "grixis-elementals",
-      "subtype_id": null
-    },
-    {
       "id": "gruul-delirium",
       "kind": "archetype",
       "name": "Gruul Delirium",
       "display_name": "Gruul Delirium",
       "parent_id": "gruul-delirium",
+      "subtype_id": null
+    },
+    {
+      "id": "gruul-dinosaur",
+      "kind": "archetype",
+      "name": "Gruul Dinosaur",
+      "display_name": "Gruul Dinosaur",
+      "parent_id": "gruul-dinosaur",
       "subtype_id": null
     },
     {
@@ -718,20 +974,28 @@
       "subtype_id": null
     },
     {
-      "id": "izzet-aggro/hired-claw",
-      "kind": "subtype",
-      "name": "Hired Claw",
-      "display_name": "Hired Claw Izzet Aggro",
-      "parent_id": "izzet-aggro",
-      "subtype_id": "hired-claw"
+      "id": "gruul-monsters",
+      "kind": "archetype",
+      "name": "Gruul Monsters",
+      "display_name": "Gruul Monsters",
+      "parent_id": "gruul-monsters",
+      "subtype_id": null
     },
     {
-      "id": "izzet-aggro/razorkin-needlehead",
-      "kind": "subtype",
-      "name": "Razorkin Needlehead",
-      "display_name": "Razorkin Needlehead Izzet Aggro",
+      "id": "gruul-ramp",
+      "kind": "archetype",
+      "name": "Gruul Ramp",
+      "display_name": "Gruul Ramp",
+      "parent_id": "gruul-ramp",
+      "subtype_id": null
+    },
+    {
+      "id": "izzet-aggro",
+      "kind": "archetype",
+      "name": "Izzet Aggro",
+      "display_name": "Izzet Aggro",
       "parent_id": "izzet-aggro",
-      "subtype_id": "razorkin-needlehead"
+      "subtype_id": null
     },
     {
       "id": "izzet-blink",
@@ -742,11 +1006,27 @@
       "subtype_id": null
     },
     {
+      "id": "izzet-burn",
+      "kind": "archetype",
+      "name": "Izzet Burn",
+      "display_name": "Izzet Burn",
+      "parent_id": "izzet-burn",
+      "subtype_id": null
+    },
+    {
       "id": "izzet-fling",
       "kind": "archetype",
       "name": "Izzet Fling",
       "display_name": "Izzet Fling",
       "parent_id": "izzet-fling",
+      "subtype_id": null
+    },
+    {
+      "id": "izzet-iron-man",
+      "kind": "archetype",
+      "name": "Izzet Iron Man",
+      "display_name": "Izzet Iron Man",
+      "parent_id": "izzet-iron-man",
       "subtype_id": null
     },
     {
@@ -806,19 +1086,19 @@
       "subtype_id": null
     },
     {
+      "id": "jeskai-equipment",
+      "kind": "archetype",
+      "name": "Jeskai Equipment",
+      "display_name": "Jeskai Equipment",
+      "parent_id": "jeskai-equipment",
+      "subtype_id": null
+    },
+    {
       "id": "jeskai-lessons",
       "kind": "archetype",
       "name": "Jeskai Lessons",
       "display_name": "Jeskai Lessons",
       "parent_id": "jeskai-lessons",
-      "subtype_id": null
-    },
-    {
-      "id": "jeskai-manufacturing",
-      "kind": "archetype",
-      "name": "Jeskai Manufacturing",
-      "display_name": "Jeskai Manufacturing",
-      "parent_id": "jeskai-manufacturing",
       "subtype_id": null
     },
     {
@@ -830,12 +1110,68 @@
       "subtype_id": null
     },
     {
-      "id": "leyline-aggro",
-      "kind": "archetype",
-      "name": "Leyline Aggro",
-      "display_name": "Leyline Aggro",
+      "id": "kona-omniscience/bant",
+      "kind": "subtype",
+      "name": "Bant",
+      "display_name": "Bant Kona Omniscience",
+      "parent_id": "kona-omniscience",
+      "subtype_id": "bant"
+    },
+    {
+      "id": "kona-omniscience/simic",
+      "kind": "subtype",
+      "name": "Simic",
+      "display_name": "Simic Kona Omniscience",
+      "parent_id": "kona-omniscience",
+      "subtype_id": "simic"
+    },
+    {
+      "id": "kona-omniscience/temur",
+      "kind": "subtype",
+      "name": "Temur",
+      "display_name": "Temur Kona Omniscience",
+      "parent_id": "kona-omniscience",
+      "subtype_id": "temur"
+    },
+    {
+      "id": "leyline-aggro/boros",
+      "kind": "subtype",
+      "name": "Boros",
+      "display_name": "Boros Leyline Aggro",
       "parent_id": "leyline-aggro",
-      "subtype_id": null
+      "subtype_id": "boros"
+    },
+    {
+      "id": "leyline-aggro/gruul",
+      "kind": "subtype",
+      "name": "Gruul",
+      "display_name": "Gruul Leyline Aggro",
+      "parent_id": "leyline-aggro",
+      "subtype_id": "gruul"
+    },
+    {
+      "id": "leyline-aggro/izzet",
+      "kind": "subtype",
+      "name": "Izzet",
+      "display_name": "Izzet Leyline Aggro",
+      "parent_id": "leyline-aggro",
+      "subtype_id": "izzet"
+    },
+    {
+      "id": "leyline-aggro/mono-red",
+      "kind": "subtype",
+      "name": "Mono-Red",
+      "display_name": "Mono-Red Leyline Aggro",
+      "parent_id": "leyline-aggro",
+      "subtype_id": "mono-red"
+    },
+    {
+      "id": "leyline-aggro/rakdos",
+      "kind": "subtype",
+      "name": "Rakdos",
+      "display_name": "Rakdos Leyline Aggro",
+      "parent_id": "leyline-aggro",
+      "subtype_id": "rakdos"
     },
     {
       "id": "mardu-discard",
@@ -859,6 +1195,14 @@
       "name": "Mono-Black Demons",
       "display_name": "Mono-Black Demons",
       "parent_id": "mono-black-demons",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-blue-namor",
+      "kind": "archetype",
+      "name": "Mono-Blue Namor",
+      "display_name": "Mono-Blue Namor",
+      "parent_id": "mono-blue-namor",
       "subtype_id": null
     },
     {
@@ -886,6 +1230,22 @@
       "subtype_id": null
     },
     {
+      "id": "mono-green-mightiest",
+      "kind": "archetype",
+      "name": "Mono-Green Mightiest",
+      "display_name": "Mono-Green Mightiest",
+      "parent_id": "mono-green-mightiest",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-green-squirrel-combo",
+      "kind": "archetype",
+      "name": "Mono-Green Squirrel Combo",
+      "display_name": "Mono-Green Squirrel Combo",
+      "parent_id": "mono-green-squirrel-combo",
+      "subtype_id": null
+    },
+    {
       "id": "mono-red-aggro",
       "kind": "archetype",
       "name": "Mono-Red Aggro",
@@ -894,11 +1254,19 @@
       "subtype_id": null
     },
     {
-      "id": "mono-red-leyline",
+      "id": "mono-red-burn",
       "kind": "archetype",
-      "name": "Mono-Red Leyline",
-      "display_name": "Mono-Red Leyline",
-      "parent_id": "mono-red-leyline",
+      "name": "Mono-Red Burn",
+      "display_name": "Mono-Red Burn",
+      "parent_id": "mono-red-burn",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-white-auras",
+      "kind": "archetype",
+      "name": "Mono-White Auras",
+      "display_name": "Mono-White Auras",
+      "parent_id": "mono-white-auras",
       "subtype_id": null
     },
     {
@@ -907,6 +1275,14 @@
       "name": "Mono-White Momo",
       "display_name": "Mono-White Momo",
       "parent_id": "mono-white-momo",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-white-triumph",
+      "kind": "archetype",
+      "name": "Mono-White Triumph",
+      "display_name": "Mono-White Triumph",
+      "parent_id": "mono-white-triumph",
       "subtype_id": null
     },
     {
@@ -926,6 +1302,30 @@
       "subtype_id": null
     },
     {
+      "id": "orzhov-demon",
+      "kind": "archetype",
+      "name": "Orzhov Demon",
+      "display_name": "Orzhov Demon",
+      "parent_id": "orzhov-demon",
+      "subtype_id": null
+    },
+    {
+      "id": "orzhov-lifegain",
+      "kind": "archetype",
+      "name": "Orzhov Lifegain",
+      "display_name": "Orzhov Lifegain",
+      "parent_id": "orzhov-lifegain",
+      "subtype_id": null
+    },
+    {
+      "id": "orzhov-momo",
+      "kind": "archetype",
+      "name": "Orzhov Momo",
+      "display_name": "Orzhov Momo",
+      "parent_id": "orzhov-momo",
+      "subtype_id": null
+    },
+    {
       "id": "orzhov-repartee",
       "kind": "archetype",
       "name": "Orzhov Repartee",
@@ -939,6 +1339,14 @@
       "name": "Rakdos Discard",
       "display_name": "Rakdos Discard",
       "parent_id": "rakdos-discard",
+      "subtype_id": null
+    },
+    {
+      "id": "rakdos-ponza",
+      "kind": "archetype",
+      "name": "Rakdos Ponza",
+      "display_name": "Rakdos Ponza",
+      "parent_id": "rakdos-ponza",
       "subtype_id": null
     },
     {
@@ -966,6 +1374,14 @@
       "subtype_id": null
     },
     {
+      "id": "selesnya-ramp",
+      "kind": "archetype",
+      "name": "Selesnya Ramp",
+      "display_name": "Selesnya Ramp",
+      "parent_id": "selesnya-ramp",
+      "subtype_id": null
+    },
+    {
       "id": "selesnya-rhythm",
       "kind": "archetype",
       "name": "Selesnya Rhythm",
@@ -979,14 +1395,6 @@
       "name": "Simic Jackal",
       "display_name": "Simic Jackal",
       "parent_id": "simic-jackal",
-      "subtype_id": null
-    },
-    {
-      "id": "simic-kona",
-      "kind": "archetype",
-      "name": "Simic Kona",
-      "display_name": "Simic Kona",
-      "parent_id": "simic-kona",
       "subtype_id": null
     },
     {
@@ -1022,6 +1430,22 @@
       "subtype_id": null
     },
     {
+      "id": "sultai-midrange",
+      "kind": "archetype",
+      "name": "Sultai Midrange",
+      "display_name": "Sultai Midrange",
+      "parent_id": "sultai-midrange",
+      "subtype_id": null
+    },
+    {
+      "id": "sultai-oculus",
+      "kind": "archetype",
+      "name": "Sultai Oculus",
+      "display_name": "Sultai Oculus",
+      "parent_id": "sultai-oculus",
+      "subtype_id": null
+    },
+    {
       "id": "sultai-reanimator",
       "kind": "archetype",
       "name": "Sultai Reanimator",
@@ -1040,8 +1464,8 @@
     {
       "id": "temur-elementals",
       "kind": "archetype",
-      "name": "Temur Elementals",
-      "display_name": "Temur Elementals",
+      "name": "Ramp Elementals",
+      "display_name": "Ramp Elementals",
       "parent_id": "temur-elementals",
       "subtype_id": null
     },
@@ -1051,6 +1475,14 @@
       "name": "Temur Harmonizer",
       "display_name": "Temur Harmonizer",
       "parent_id": "temur-harmonizer",
+      "subtype_id": null
+    },
+    {
+      "id": "temur-hulk-ramp",
+      "kind": "archetype",
+      "name": "Temur Hulk Ramp",
+      "display_name": "Temur Hulk Ramp",
+      "parent_id": "temur-hulk-ramp",
       "subtype_id": null
     },
     {
@@ -1067,6 +1499,22 @@
       "name": "Temur Tablet",
       "display_name": "Temur Tablet",
       "parent_id": "temur-tablet",
+      "subtype_id": null
+    },
+    {
+      "id": "white-sultai-control",
+      "kind": "archetype",
+      "name": "White Sultai Control",
+      "display_name": "White Sultai Control",
+      "parent_id": "white-sultai-control",
+      "subtype_id": null
+    },
+    {
+      "id": "white-weenie",
+      "kind": "archetype",
+      "name": "White Weenie",
+      "display_name": "White Weenie",
+      "parent_id": "white-weenie",
       "subtype_id": null
     }
   ]

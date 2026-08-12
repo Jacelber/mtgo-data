@@ -20,7 +20,14 @@ from mtgmeta.classifier import classify_counts
 from mtgmeta.config import load_rule_set
 
 
-RULE_PATH = ROOT / "my_archetypes" / "modern.yaml"
+RULE_PATH = (
+    ROOT
+    / "docs"
+    / "audits"
+    / "classifier-r2"
+    / "baseline_rules"
+    / "modern.yaml"
+)
 CORPUS_PATH = ROOT / "tests" / "fixtures" / "modern" / "frozen_j6e_corpus.json"
 CONTRACT_PATH = ROOT / "tests" / "fixtures" / "modern" / "taxonomy_contract.json"
 

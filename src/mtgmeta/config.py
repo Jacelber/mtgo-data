@@ -2,13 +2,19 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from hashlib import sha256
 from pathlib import Path, PurePosixPath
 import re
 from typing import Any
 
 import yaml
 
+from .classifier_features import (
+    SemanticFeatureError,
+    load_semantic_feature_manifest,
+    semantic_feature_names,
+)
 from .rules import RuleSet, RuleValidationFailure, build_rule_set, validate_rule_data
 
 
@@ -152,7 +158,77 @@ def load_rule_set(path: str | Path) -> RuleSet:
         text = source.read_text(encoding="utf-8")
     except (OSError, UnicodeError) as exc:
         raise RuleConfigError([RuleValidationFailure(str(source), f"cannot read input: {exc}")]) from exc
-    return parse_rule_text(text)
+    rule_set = parse_rule_text(text)
+    if rule_set.semantic_feature_path is None:
+        return rule_set
+    if source.parent.name != "my_archetypes":
+        raise RuleConfigError(
+            [
+                RuleValidationFailure(
+                    "semantic_features.manifest_path",
+                    "versioned semantic rules must be stored under my_archetypes/",
+                )
+            ]
+        )
+    repository_root = source.parent.parent.resolve()
+    manifest_path = (repository_root / rule_set.semantic_feature_path).resolve()
+    try:
+        manifest_path.relative_to(repository_root)
+    except ValueError as exc:
+        raise RuleConfigError(
+            [
+                RuleValidationFailure(
+                    "semantic_features.manifest_path",
+                    "escapes repository root",
+                )
+            ]
+        ) from exc
+    try:
+        manifest_bytes = manifest_path.read_bytes()
+    except OSError as exc:
+        raise RuleConfigError(
+            [
+                RuleValidationFailure(
+                    "semantic_features.manifest_path",
+                    f"cannot read input: {exc}",
+                )
+            ]
+        ) from exc
+    actual_digest = sha256(manifest_bytes).hexdigest()
+    if actual_digest != rule_set.semantic_feature_sha256:
+        raise RuleConfigError(
+            [
+                RuleValidationFailure(
+                    "semantic_features.manifest_sha256",
+                    f"does not match {rule_set.semantic_feature_path}",
+                )
+            ]
+        )
+    try:
+        manifest = load_semantic_feature_manifest(manifest_path)
+    except SemanticFeatureError as exc:
+        raise RuleConfigError(
+            [RuleValidationFailure("semantic_features.manifest_path", str(exc))]
+        ) from exc
+    allowed_markers = semantic_feature_names()
+    used_markers = {
+        condition.card
+        for archetype in rule_set.archetypes
+        for rule in archetype.rules
+        for condition in rule.conditions
+        if condition.card.startswith("__classifier-semantic-")
+    }
+    unknown_markers = sorted(used_markers - allowed_markers)
+    if unknown_markers:
+        raise RuleConfigError(
+            [
+                RuleValidationFailure(
+                    "archetypes",
+                    f"contains unsupported semantic markers: {unknown_markers}",
+                )
+            ]
+        )
+    return replace(rule_set, semantic_features=manifest)
 
 
 def _load_yaml_mapping(text: str, label: str) -> dict[str, Any]:

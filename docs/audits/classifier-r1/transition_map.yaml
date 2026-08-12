@@ -1,0 +1,262 @@
+schema_version: "1.0.0"
+task_id: CLASSIFIER-R1-STABLE-IDENTITY-CONTRACT
+status: migration_plan_not_applied
+
+base:
+  repository_commit: a99ca08a294f173c9a17fe6fd70c5e52d36cec98
+  pickup_known_state:
+    modern:
+      path: stats/modern/mtgo/pickup/known_archetypes.json
+      frozen_path: docs/audits/classifier-r2/baseline_pickup/modern_known_archetypes.json
+      sha256: 6C3868B160E61F61F5FBF509EB6E56AA4E8EFB61AB26D4EA5E0D467A10D2F178
+      key_type: stable_parent_id
+      entry_count: 54
+    standard:
+      path: stats/standard/mtgo/pickup/known_archetypes.json
+      frozen_path: docs/audits/classifier-r2/baseline_pickup/standard_known_archetypes.json
+      sha256: 311E102E971D6E5B12DBBBF8E50D8DF1D34D44EC4AA6E15684C1F6C340156032
+      key_type: legacy_parent_display_name
+      entry_count: 62
+
+migration_rules:
+  - Never rewrite historical or generated artifacts in R1.
+  - R2 proves each rule-routed transition; R3 applies accepted production and Pickup migrations.
+  - Exact aliases are allowed only when membership semantics do not change.
+  - Split and targeted-subset transitions require reclassification by the target rule set.
+  - Parent-based Pickup known state never splits by subtype.
+  - Every target derived from an already-known family is initialized as known to avoid a false new-deck claim.
+  - Unknown-to-known oracle counts are validation evidence, not compatibility aliases.
+
+parent_transitions:
+  modern:
+    - source: persist-reanimator
+      mode: split_reclassify
+      targets: [grixis-persist, agadeem-persist, esper-persist]
+      pickup_action: replace_known_source_with_all_targets
+    - source: goryos-reanimator
+      mode: split_reclassify
+      targets: [cremator-goryos, esper-goryos, grixis-goryos]
+      pickup_action: replace_known_source_with_all_targets
+    - source: blue-black-tempo
+      mode: parent_id_rename_with_rule_amendment
+      targets: [dimir-tempo]
+      subtype_mapping:
+        dimir: dimir
+        grixis: grixis
+        esper: esper
+      pickup_action: replace_known_source_with_target
+    - source: blink
+      mode: split_reclassify
+      targets: [esper-ketramose, esper-blink, azorius-blink, jeskai-stoneforge, jeskai-blink, mardu-blink, orzhov-blink]
+      pickup_action: replace_known_source_with_all_targets
+    - source: broodscale-combo
+      mode: retain_parent_add_subtype
+      targets: [broodscale-combo]
+      subtype_change: Add simic; reclassify matching former mono-green records.
+      pickup_action: retain_parent_known_state
+    - source: boros-land-destruction
+      mode: display_name_only
+      targets: [boros-land-destruction]
+      display_name: Boros Ponza
+      pickup_action: retain_parent_id
+    - source: eldrazi-ramp
+      mode: retire_subtype_to_independent_parent
+      targets: [eldrazi-ramp, eldrazi-ramp-chant]
+      retired_subtypes: [selesnya]
+      selector: Every former eldrazi-ramp/selesnya identity moves to Eldrazi Ramp Chant under the accepted complete rule; the other five subtypes remain.
+      pickup_action: retain_source_and_add_new_target_as_known
+    - source: azorius-control
+      mode: targeted_rule_split
+      targets: [azorius-control, chant-control/azorius]
+      selector: The former Scepter-Chant rule moves to Chant Control; traditional no-Chant/no-Scepter control retains the parent.
+      pickup_action: retain_both_known_parents
+    - source: chant-control
+      mode: subtype_restructure_and_targeted_split
+      targets: [chant-control/azorius, chant-control/jeskai, omnath-midrange]
+      retired_subtypes: [four-color]
+      selector: Omnath plus Wrenn routes to Omnath Midrange; other Breeding Pool-only Chant splashes route to Jeskai.
+      pickup_action: retain_chant_and_add_omnath_as_known
+    - source: hollow-one
+      mode: split_reclassify
+      targets: [hollowvine, rakdos-hollow-one/rakdos, rakdos-hollow-one/mardu]
+      pickup_action: replace_known_source_with_both_target_parents
+    - source: living-end
+      mode: retain_parent_add_exhaustive_subtypes
+      targets: [living-end/four-color, living-end/temur, living-end/sultai, living-end/bant, living-end/rakdos]
+      pickup_action: retain_parent_known_state
+    - source: steel-cutter
+      mode: retain_and_split_reclassify
+      targets: [steel-cutter/izzet, rakdos-steel-cutter, mono-red-artifact, prowess/boros, prowess/mono-red]
+      display_name: Izzet Steel-Cutter
+      selector: Retain only the current Izzet Steel-Cutter path; route other structures through accepted target rules.
+      pickup_action: retain_source_parent_and_add_new_target_parents_as_known
+    - source: prowess
+      mode: retain_parent_amend_subtypes
+      targets: [prowess/izzet, prowess/temur, prowess/grixis, prowess/jeskai, prowess/lessons, prowess/boros, prowess/mono-red, prowess/mardu]
+      selector: Use accepted actual-spell, package-first, Mardu land-pair, and Phyrexian-mana boundaries.
+      pickup_action: retain_parent_known_state
+    - source: deaths-shadow
+      mode: retain_parent_add_exhaustive_subtypes
+      targets: [deaths-shadow/grixis, deaths-shadow/dimir, deaths-shadow/rakdos]
+      pickup_action: retain_parent_known_state
+    - source: blue-eldrazi
+      mode: parent_id_rename_with_rule_amendment
+      targets: [mono-blue-tron]
+      pickup_action: replace_known_source_with_target
+    - source: jeskai-control
+      mode: retain_parent_rule_exclusion
+      targets: [jeskai-control]
+      selector: Exclude Orim's Chant and Isochron Scepter; complete Chant shells move to Chant Control.
+      pickup_action: retain_parent_known_state
+
+  standard:
+    - source: izzet-aggro
+      mode: retain_parent_merge_subtypes
+      targets: [izzet-aggro]
+      retired_subtypes: [razorkin-needlehead, hired-claw]
+      pickup_action: retain_display_name_known_state
+    - source: azorius-tempo
+      mode: parent_id_and_display_name_rename_with_rule_amendment
+      targets: [azorius-prison]
+      pickup_action: replace_display_name_with_Azorius_Prison
+    - source: boros-manufacturing
+      mode: retain_parent_add_subtypes
+      targets: [boros-manufacturing/boros, boros-manufacturing/mardu]
+      pickup_action: retain_parent_display_name_known_state
+    - source: jeskai-manufacturing
+      mode: merge_into_parent_subtype
+      targets: [boros-manufacturing/jeskai]
+      pickup_action: remove_source_display_name_and_retain_Boros_Manufacturing
+    - source: simic-kona
+      mode: parent_id_and_display_name_rename_add_subtypes
+      targets: [kona-omniscience/simic, kona-omniscience/temur, kona-omniscience/bant]
+      pickup_action: replace_display_name_with_Kona_Omniscience
+    - source: 4-color-control
+      mode: split_reclassify
+      targets: [dark-jeskai-control, white-sultai-control]
+      subtype_mapping:
+        inevitable-defeat: dark-jeskai-control
+        rakshasas-bargain: white-sultai-control
+      pickup_action: replace_source_display_name_with_both_target_names
+    - source: jeskai-control
+      mode: targeted_subset_split
+      targets: [dark-jeskai-control, jeskai-control]
+      selector: The complete Inevitable Defeat shell moves to Dark Jeskai Control; ordinary Jeskai Control remains.
+      pickup_action: retain_Jeskai_Control_and_add_Dark_Jeskai_Control_as_known
+    - source: sultai-control
+      mode: retain_parent_add_fallback_path
+      targets: [sultai-control]
+      selector: Three-color Bargain shell with no approved white gate; white-marked subthreshold shells remain Unknown.
+      pickup_action: retain_display_name_known_state
+    - source: 4-color-allies
+      mode: display_name_only
+      targets: [4-color-allies]
+      display_name: Allies Kindred
+      pickup_action: replace_legacy_display_name_with_Allies_Kindred
+    - source: boros-leyline
+      mode: merge_reclassify
+      targets: [leyline-aggro/boros]
+      pickup_action: remove_source_display_name_and_retain_Leyline_Aggro
+    - source: mono-red-leyline
+      mode: merge_reclassify
+      targets: [leyline-aggro/rakdos, leyline-aggro/mono-red]
+      selector: The current apparent Mono-Red record is Rakdos; future strict no-splash records use Mono-Red.
+      pickup_action: remove_source_display_name_and_retain_Leyline_Aggro
+    - source: leyline-aggro
+      mode: retain_parent_add_exhaustive_subtypes
+      targets: [leyline-aggro/izzet, leyline-aggro/gruul, leyline-aggro/boros, leyline-aggro/rakdos, leyline-aggro/mono-red]
+      pickup_action: retain_display_name_known_state
+    - source: dimir-deceit
+      mode: retain_parent_and_rule_id_threshold_change
+      targets: [dimir-deceit]
+      pickup_action: retain_display_name_known_state
+
+unknown_recovery_oracles:
+  modern:
+    - target: esper-blink
+      expected_minimum: 5
+      note: Current Psychic Frog path recoveries after exclusions; exact R2 corpus result must be reported.
+    - target: esper-ketramose
+      expected_minimum: 6
+      note: Current Unknown records in the accepted 22-record family.
+    - target: prowess/boros
+      expected_minimum: 1
+    - target: mono-blue-tron
+      expected_minimum: 1
+  standard:
+    - target: azorius-prison
+      expected_minimum: 1
+    - target: dimir-deceit
+      expected_minimum: 3
+
+pickup_target_plan:
+  modern:
+    known_parent_ids_remove:
+      - persist-reanimator
+      - goryos-reanimator
+      - blue-black-tempo
+      - blink
+      - hollow-one
+      - blue-eldrazi
+    known_parent_ids_add:
+      - grixis-persist
+      - agadeem-persist
+      - esper-persist
+      - cremator-goryos
+      - esper-goryos
+      - grixis-goryos
+      - dimir-tempo
+      - esper-ketramose
+      - esper-blink
+      - azorius-blink
+      - jeskai-stoneforge
+      - jeskai-blink
+      - mardu-blink
+      - orzhov-blink
+      - eldrazi-ramp-chant
+      - omnath-midrange
+      - hollowvine
+      - rakdos-hollow-one
+      - rakdos-steel-cutter
+      - mono-red-artifact
+      - mono-blue-tron
+    retained_known_parent_ids_requiring_validation:
+      - broodscale-combo
+      - boros-land-destruction
+      - eldrazi-ramp
+      - azorius-control
+      - chant-control
+      - living-end
+      - steel-cutter
+      - prowess
+      - deaths-shadow
+      - jeskai-control
+  standard:
+    known_display_names_remove:
+      - 4-Color Allies
+      - 4-Color Control
+      - Azorius Tempo
+      - Boros Leyline
+      - Jeskai Manufacturing
+      - Mono-Red Leyline
+      - Simic Kona
+    known_display_names_add:
+      - Allies Kindred
+      - Azorius Prison
+      - Dark Jeskai Control
+      - White Sultai Control
+      - Kona Omniscience
+    retained_known_display_names_requiring_validation:
+      - Boros Manufacturing
+      - Dimir Deceit
+      - Izzet Aggro
+      - Jeskai Control
+      - Leyline Aggro
+      - Sultai Control
+
+post_migration_invariants:
+  - Removed Pickup keys are absent and every added key is present exactly once.
+  - Modern Pickup remains stable-parent-ID based and Standard migration does not silently change its legacy key type.
+  - No target derived from a known family is emitted as a Weekly Pickup new archetype solely because of the migration.
+  - Existing approved Pickup weeks and reviewer comments remain byte-preserved unless a later task explicitly authorizes migration.
+  - Candidate generation remains manual-state preserving and never overwrites a reviewed candidate.

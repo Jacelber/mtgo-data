@@ -138,14 +138,14 @@ def test_hierarchy_matches_the_overview_and_retains_empty_subtypes():
     parent_rows = overview["scopes"]["all_constructed"]["archetypes"]
 
     assert len(document["hierarchy"]["parents"]) == 32
-    assert len(document["hierarchy"]["leaves"]) == 59
+    assert len(document["hierarchy"]["leaves"]) == 62
     assert document["scopes"]["all_constructed"]["parent_order"] == [
         "unknown" if row["group_id"] == "unknown" else row["archetype_id"]
         for row in parent_rows
     ]
-    assert "unknown" in document["scopes"]["all_constructed"]["leaf_order"]
+    assert "unknown" not in document["scopes"]["all_constructed"]["leaf_order"]
     assert all(
-        len(scope["parent_order"]) == 32 and len(scope["leaf_order"]) == 59
+        len(scope["parent_order"]) == 32 and len(scope["leaf_order"]) == 62
         for scope in document["scopes"].values()
     )
     assert any(

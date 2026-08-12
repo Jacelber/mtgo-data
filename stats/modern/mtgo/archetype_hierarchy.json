@@ -2,11 +2,11 @@
   "schema_version": "1.0.0",
   "format": "modern",
   "source": "mtgo",
-  "rules_updated": "2026-08-03T21:45:05+09:00",
+  "rules_updated": "2026-08-12T23:16:42+09:00",
   "summary": {
-    "parents": 55,
-    "leaves": 93,
-    "expandable_parents": 17
+    "parents": 127,
+    "leaves": 176,
+    "expandable_parents": 19
   },
   "parents": [
     {
@@ -16,8 +16,26 @@
       "subtype_ids": []
     },
     {
+      "id": "agadeem-persist",
+      "name": "Agadeem Persist",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "amulet-titan",
       "name": "Amulet Titan",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "asmo-persist",
+      "name": "Asmo Persist",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "azorius-blink",
+      "name": "Azorius Blink",
       "expandable": false,
       "subtype_ids": []
     },
@@ -34,30 +52,30 @@
       "subtype_ids": []
     },
     {
-      "id": "blink",
-      "name": "Blink",
+      "id": "azorius-miracles",
+      "name": "Azorius Miracles",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "badgermole-combo",
+      "name": "Badgermole Combo",
       "expandable": true,
       "subtype_ids": [
-        "blink/azorius",
-        "blink/esper",
-        "blink/jeskai",
-        "blink/mardu",
-        "blink/orzhov"
+        "badgermole-combo/golgari",
+        "badgermole-combo/landfall",
+        "badgermole-combo/mono-green"
       ]
     },
     {
-      "id": "blue-black-tempo",
-      "name": "Blue-Black Tempo",
-      "expandable": true,
-      "subtype_ids": [
-        "blue-black-tempo/dimir",
-        "blue-black-tempo/esper",
-        "blue-black-tempo/grixis"
-      ]
+      "id": "bant-reclamation",
+      "name": "Bant Reclamation",
+      "expandable": false,
+      "subtype_ids": []
     },
     {
-      "id": "blue-eldrazi",
-      "name": "Blue Eldrazi",
+      "id": "bogles",
+      "name": "Bogles",
       "expandable": false,
       "subtype_ids": []
     },
@@ -75,7 +93,7 @@
     },
     {
       "id": "boros-land-destruction",
-      "name": "Boros Land Destruction",
+      "name": "Boros Ponza",
       "expandable": false,
       "subtype_ids": []
     },
@@ -86,7 +104,8 @@
       "subtype_ids": [
         "broodscale-combo/golgari",
         "broodscale-combo/gruul",
-        "broodscale-combo/mono-green"
+        "broodscale-combo/mono-green",
+        "broodscale-combo/simic"
       ]
     },
     {
@@ -104,25 +123,100 @@
       "name": "Chant Control",
       "expandable": true,
       "subtype_ids": [
-        "chant-control/four-color",
+        "chant-control/azorius",
         "chant-control/jeskai"
       ]
     },
     {
-      "id": "deaths-shadow",
-      "name": "Death's Shadow",
+      "id": "cheerios",
+      "name": "Cheerios",
       "expandable": false,
       "subtype_ids": []
     },
     {
+      "id": "coffers",
+      "name": "Coffers",
+      "expandable": true,
+      "subtype_ids": [
+        "coffers/dimir",
+        "coffers/golgari",
+        "coffers/umori"
+      ]
+    },
+    {
+      "id": "cremator-goryos",
+      "name": "Cremator Goryo's",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "dark-maestro",
+      "name": "Dark Maestro",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "deaths-shadow",
+      "name": "Death's Shadow",
+      "expandable": true,
+      "subtype_ids": [
+        "deaths-shadow/dimir",
+        "deaths-shadow/grixis",
+        "deaths-shadow/rakdos"
+      ]
+    },
+    {
       "id": "devoted-druid-combo",
       "name": "Devoted Druid Combo",
+      "expandable": true,
+      "subtype_ids": [
+        "devoted-druid-combo/abzan",
+        "devoted-druid-combo/selesnya"
+      ]
+    },
+    {
+      "id": "dimir-goryos",
+      "name": "Dimir Goryo's",
       "expandable": false,
       "subtype_ids": []
     },
     {
       "id": "dimir-mill",
       "name": "Dimir Mill",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "dimir-persist",
+      "name": "Dimir Persist",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "dimir-tempo",
+      "name": "Dimir Tempo",
+      "expandable": true,
+      "subtype_ids": [
+        "dimir-tempo/dimir",
+        "dimir-tempo/esper",
+        "dimir-tempo/grixis"
+      ]
+    },
+    {
+      "id": "dimir-unearth",
+      "name": "Dimir Unearth",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "domain-blink",
+      "name": "Domain Blink",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "domain-persist",
+      "name": "Domain Persist",
       "expandable": false,
       "subtype_ids": []
     },
@@ -139,8 +233,20 @@
       "subtype_ids": []
     },
     {
+      "id": "eight-rack",
+      "name": "8-Rack",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "eldrazi-aggro",
       "name": "Eldrazi Aggro",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "eldrazi-ouroboroid",
+      "name": "Eldrazi Ouroboroid",
       "expandable": false,
       "subtype_ids": []
     },
@@ -151,11 +257,16 @@
       "subtype_ids": [
         "eldrazi-ramp/golgari",
         "eldrazi-ramp/gruul",
-        "eldrazi-ramp/selesnya",
         "eldrazi-ramp/simic",
         "eldrazi-ramp/sultai",
         "eldrazi-ramp/temur"
       ]
+    },
+    {
+      "id": "eldrazi-ramp-chant",
+      "name": "Eldrazi Ramp Chant",
+      "expandable": false,
+      "subtype_ids": []
     },
     {
       "id": "eldrazi-tron",
@@ -168,6 +279,12 @@
       ]
     },
     {
+      "id": "esper-blink",
+      "name": "Esper Blink",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "esper-control",
       "name": "Esper Control",
       "expandable": false,
@@ -176,6 +293,24 @@
     {
       "id": "esper-energy",
       "name": "Esper Energy",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "esper-goryos",
+      "name": "Esper Goryo's",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "esper-ketramose",
+      "name": "Esper Ketramose",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "esper-persist",
+      "name": "Esper Persist",
       "expandable": false,
       "subtype_ids": []
     },
@@ -192,6 +327,18 @@
       "subtype_ids": []
     },
     {
+      "id": "five-color-elementals",
+      "name": "Five-Color Elementals",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "five-color-humans",
+      "name": "Five-Color Humans",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "five-color-ritual",
       "name": "Five-Color Ritual",
       "expandable": false,
@@ -204,19 +351,70 @@
       "subtype_ids": []
     },
     {
+      "id": "glimpse-of-tomorrow",
+      "name": "Glimpse of Tomorrow",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "golgari-delirium",
+      "name": "Golgari Delirium",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "golgari-goryos",
+      "name": "Golgari Goryo's",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "golgari-yawgmoth",
       "name": "Golgari Yawgmoth",
       "expandable": false,
       "subtype_ids": []
     },
     {
-      "id": "goryos-reanimator",
-      "name": "Goryo's Reanimator",
-      "expandable": true,
-      "subtype_ids": [
-        "goryos-reanimator/esper",
-        "goryos-reanimator/grixis"
-      ]
+      "id": "grixis-dress-down",
+      "name": "Grixis Dress Down",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "grixis-goryos",
+      "name": "Grixis Goryo's",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "grixis-persist",
+      "name": "Grixis Persist",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "grixis-tempo",
+      "name": "Grixis Tempo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "gruul-cragganwick",
+      "name": "Gruul Cragganwick",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "gruul-midrange",
+      "name": "Gruul Midrange",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "gruul-valakut",
+      "name": "Gruul Valakut",
+      "expandable": false,
+      "subtype_ids": []
     },
     {
       "id": "hammer-time",
@@ -224,17 +422,34 @@
       "expandable": true,
       "subtype_ids": [
         "hammer-time/azorius",
+        "hammer-time/boros",
+        "hammer-time/jeskai",
         "hammer-time/mono-white"
       ]
     },
     {
-      "id": "hollow-one",
-      "name": "Hollow One",
-      "expandable": true,
-      "subtype_ids": [
-        "hollow-one/rakdos",
-        "hollow-one/vengevine"
-      ]
+      "id": "hardened-scales",
+      "name": "Hardened Scales",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "hollowvine",
+      "name": "Hollowvine",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "izzet-cauldron",
+      "name": "Izzet Cauldron",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "izzet-extra-turns",
+      "name": "Izzet Extra Turns",
+      "expandable": false,
+      "subtype_ids": []
     },
     {
       "id": "izzet-phoenix",
@@ -243,8 +458,38 @@
       "subtype_ids": []
     },
     {
+      "id": "izzet-storm",
+      "name": "Izzet Storm",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "izzet-tempo",
+      "name": "Izzet Tempo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "izzet-through-the-breach",
+      "name": "Izzet Through the Breach",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "izzet-twin",
+      "name": "Izzet Twin",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "izzet-wizards",
       "name": "Izzet Wizards",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "jeskai-blink",
+      "name": "Jeskai Blink",
       "expandable": false,
       "subtype_ids": []
     },
@@ -261,6 +506,18 @@
       "subtype_ids": []
     },
     {
+      "id": "jeskai-stoneforge",
+      "name": "Jeskai Stoneforge",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "jund-goblins",
+      "name": "Jund Goblins",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "jund-sagavan",
       "name": "Jund Sagavan",
       "expandable": false,
@@ -273,8 +530,26 @@
       "subtype_ids": []
     },
     {
+      "id": "leyline-fling",
+      "name": "Leyline Fling",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "living-end",
       "name": "Living End",
+      "expandable": true,
+      "subtype_ids": [
+        "living-end/bant",
+        "living-end/four-color",
+        "living-end/rakdos",
+        "living-end/sultai",
+        "living-end/temur"
+      ]
+    },
+    {
+      "id": "mardu-blink",
+      "name": "Mardu Blink",
       "expandable": false,
       "subtype_ids": []
     },
@@ -285,8 +560,20 @@
       "subtype_ids": []
     },
     {
+      "id": "mardu-vial",
+      "name": "Mardu Vial",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "mono-black-eldrazi",
       "name": "Mono-Black Eldrazi",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-black-saga",
+      "name": "Mono-Black Saga",
       "expandable": false,
       "subtype_ids": []
     },
@@ -303,10 +590,53 @@
       "subtype_ids": []
     },
     {
+      "id": "mono-blue-namor",
+      "name": "Mono-Blue Namor",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-blue-tron",
+      "name": "Mono-Blue Tron",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-green-stompy",
+      "name": "Mono-Green Stompy",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-green-trudge",
+      "name": "Mono-Green Trudge",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-red-artifact",
+      "name": "Mono-Red Artifact",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-white-humans",
+      "name": "Mono-White Humans",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "naya-midrange",
+      "name": "Naya Midrange",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "necrodominance",
       "name": "Necrodominance",
       "expandable": true,
       "subtype_ids": [
+        "necrodominance/cosmogoyf",
         "necrodominance/dimir",
         "necrodominance/golgari",
         "necrodominance/mono-black",
@@ -324,32 +654,89 @@
       ]
     },
     {
+      "id": "omnath-midrange",
+      "name": "Omnath Midrange",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "orzhov-blink",
+      "name": "Orzhov Blink",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "pensive-combo",
       "name": "Pensive Combo",
       "expandable": false,
       "subtype_ids": []
     },
     {
-      "id": "persist-reanimator",
-      "name": "Persist Reanimator",
-      "expandable": true,
-      "subtype_ids": [
-        "persist-reanimator/esper",
-        "persist-reanimator/golgari",
-        "persist-reanimator/grixis"
-      ]
+      "id": "primal-prayers-combo",
+      "name": "Primal Prayers Combo",
+      "expandable": false,
+      "subtype_ids": []
     },
     {
       "id": "prowess",
       "name": "Prowess",
       "expandable": true,
       "subtype_ids": [
+        "prowess/boros",
         "prowess/grixis",
         "prowess/izzet",
         "prowess/jeskai",
         "prowess/lessons",
+        "prowess/mardu",
+        "prowess/mono-red",
+        "prowess/rakdos",
         "prowess/temur"
       ]
+    },
+    {
+      "id": "rakdos-aggro",
+      "name": "Rakdos Aggro",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "rakdos-delirium",
+      "name": "Rakdos Delirium",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "rakdos-hollow-one",
+      "name": "Rakdos Hollow One",
+      "expandable": true,
+      "subtype_ids": [
+        "rakdos-hollow-one/mardu",
+        "rakdos-hollow-one/rakdos"
+      ]
+    },
+    {
+      "id": "rakdos-midrange",
+      "name": "Rakdos Midrange",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "rakdos-persist",
+      "name": "Rakdos Persist",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "rakdos-steel-cutter",
+      "name": "Rakdos Steel-Cutter",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "rakdos-through-the-breach",
+      "name": "Rakdos Through the Breach",
+      "expandable": false,
+      "subtype_ids": []
     },
     {
       "id": "rhinos",
@@ -374,14 +761,41 @@
       "subtype_ids": []
     },
     {
+      "id": "scapeshift",
+      "name": "Scapeshift",
+      "expandable": true,
+      "subtype_ids": [
+        "scapeshift/four-color",
+        "scapeshift/naya"
+      ]
+    },
+    {
       "id": "selesnya-energy",
       "name": "Selesnya Energy",
       "expandable": false,
       "subtype_ids": []
     },
     {
+      "id": "shape-anew",
+      "name": "Shape Anew",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "simic-neoform",
       "name": "Simic Neoform",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "solemnity-blink",
+      "name": "Solemnity Blink",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "solemnity-prison",
+      "name": "Solemnity Prison",
       "expandable": false,
       "subtype_ids": []
     },
@@ -398,18 +812,55 @@
       "subtype_ids": [
         "soultrader/dimir",
         "soultrader/golgari",
+        "soultrader/orzhov",
         "soultrader/sultai"
       ]
     },
     {
       "id": "steel-cutter",
-      "name": "Steel-Cutter",
-      "expandable": true,
+      "name": "Izzet Steel-Cutter",
+      "expandable": false,
       "subtype_ids": [
-        "steel-cutter/izzet",
-        "steel-cutter/mono-red",
-        "steel-cutter/rakdos"
+        "steel-cutter/izzet"
       ]
+    },
+    {
+      "id": "sultai-flicker",
+      "name": "Sultai Flicker",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "sultai-persist",
+      "name": "Sultai Persist",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "sultai-tempo",
+      "name": "Sultai Tempo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "temur-reclamation",
+      "name": "Temur Reclamation",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "thopter-sword",
+      "name": "Thopter Sword",
+      "expandable": false,
+      "subtype_ids": [
+        "thopter-sword/bant"
+      ]
+    },
+    {
+      "id": "yawgmoth-energy",
+      "name": "Yawgmoth Energy",
+      "expandable": false,
+      "subtype_ids": []
     }
   ],
   "leaves": [
@@ -422,11 +873,35 @@
       "subtype_id": null
     },
     {
+      "id": "agadeem-persist",
+      "kind": "archetype",
+      "name": "Agadeem Persist",
+      "display_name": "Agadeem Persist",
+      "parent_id": "agadeem-persist",
+      "subtype_id": null
+    },
+    {
       "id": "amulet-titan",
       "kind": "archetype",
       "name": "Amulet Titan",
       "display_name": "Amulet Titan",
       "parent_id": "amulet-titan",
+      "subtype_id": null
+    },
+    {
+      "id": "asmo-persist",
+      "kind": "archetype",
+      "name": "Asmo Persist",
+      "display_name": "Asmo Persist",
+      "parent_id": "asmo-persist",
+      "subtype_id": null
+    },
+    {
+      "id": "azorius-blink",
+      "kind": "archetype",
+      "name": "Azorius Blink",
+      "display_name": "Azorius Blink",
+      "parent_id": "azorius-blink",
       "subtype_id": null
     },
     {
@@ -446,75 +921,51 @@
       "subtype_id": null
     },
     {
-      "id": "blink/azorius",
-      "kind": "subtype",
-      "name": "Azorius",
-      "display_name": "Azorius Blink",
-      "parent_id": "blink",
-      "subtype_id": "azorius"
-    },
-    {
-      "id": "blink/esper",
-      "kind": "subtype",
-      "name": "Esper",
-      "display_name": "Esper Blink",
-      "parent_id": "blink",
-      "subtype_id": "esper"
-    },
-    {
-      "id": "blink/jeskai",
-      "kind": "subtype",
-      "name": "Jeskai",
-      "display_name": "Jeskai Blink",
-      "parent_id": "blink",
-      "subtype_id": "jeskai"
-    },
-    {
-      "id": "blink/mardu",
-      "kind": "subtype",
-      "name": "Mardu",
-      "display_name": "Mardu Blink",
-      "parent_id": "blink",
-      "subtype_id": "mardu"
-    },
-    {
-      "id": "blink/orzhov",
-      "kind": "subtype",
-      "name": "Orzhov",
-      "display_name": "Orzhov Blink",
-      "parent_id": "blink",
-      "subtype_id": "orzhov"
-    },
-    {
-      "id": "blue-black-tempo/dimir",
-      "kind": "subtype",
-      "name": "Dimir",
-      "display_name": "Dimir Blue-Black Tempo",
-      "parent_id": "blue-black-tempo",
-      "subtype_id": "dimir"
-    },
-    {
-      "id": "blue-black-tempo/esper",
-      "kind": "subtype",
-      "name": "Esper",
-      "display_name": "Esper Blue-Black Tempo",
-      "parent_id": "blue-black-tempo",
-      "subtype_id": "esper"
-    },
-    {
-      "id": "blue-black-tempo/grixis",
-      "kind": "subtype",
-      "name": "Grixis",
-      "display_name": "Grixis Blue-Black Tempo",
-      "parent_id": "blue-black-tempo",
-      "subtype_id": "grixis"
-    },
-    {
-      "id": "blue-eldrazi",
+      "id": "azorius-miracles",
       "kind": "archetype",
-      "name": "Blue Eldrazi",
-      "display_name": "Blue Eldrazi",
-      "parent_id": "blue-eldrazi",
+      "name": "Azorius Miracles",
+      "display_name": "Azorius Miracles",
+      "parent_id": "azorius-miracles",
+      "subtype_id": null
+    },
+    {
+      "id": "badgermole-combo/golgari",
+      "kind": "subtype",
+      "name": "Golgari",
+      "display_name": "Golgari Badgermole Combo",
+      "parent_id": "badgermole-combo",
+      "subtype_id": "golgari"
+    },
+    {
+      "id": "badgermole-combo/landfall",
+      "kind": "subtype",
+      "name": "Landfall",
+      "display_name": "Landfall Badgermole Combo",
+      "parent_id": "badgermole-combo",
+      "subtype_id": "landfall"
+    },
+    {
+      "id": "badgermole-combo/mono-green",
+      "kind": "subtype",
+      "name": "Mono-Green",
+      "display_name": "Mono-Green Badgermole Combo",
+      "parent_id": "badgermole-combo",
+      "subtype_id": "mono-green"
+    },
+    {
+      "id": "bant-reclamation",
+      "kind": "archetype",
+      "name": "Bant Reclamation",
+      "display_name": "Bant Reclamation",
+      "parent_id": "bant-reclamation",
+      "subtype_id": null
+    },
+    {
+      "id": "bogles",
+      "kind": "archetype",
+      "name": "Bogles",
+      "display_name": "Bogles",
+      "parent_id": "bogles",
       "subtype_id": null
     },
     {
@@ -536,8 +987,8 @@
     {
       "id": "boros-land-destruction",
       "kind": "archetype",
-      "name": "Boros Land Destruction",
-      "display_name": "Boros Land Destruction",
+      "name": "Boros Ponza",
+      "display_name": "Boros Ponza",
       "parent_id": "boros-land-destruction",
       "subtype_id": null
     },
@@ -566,6 +1017,14 @@
       "subtype_id": "mono-green"
     },
     {
+      "id": "broodscale-combo/simic",
+      "kind": "subtype",
+      "name": "Simic",
+      "display_name": "Simic Broodscale Combo",
+      "parent_id": "broodscale-combo",
+      "subtype_id": "simic"
+    },
+    {
       "id": "burn/boros",
       "kind": "subtype",
       "name": "Boros",
@@ -590,12 +1049,12 @@
       "subtype_id": "rakdos"
     },
     {
-      "id": "chant-control/four-color",
+      "id": "chant-control/azorius",
       "kind": "subtype",
-      "name": "Four-Color",
-      "display_name": "Four-Color Chant Control",
+      "name": "Azorius",
+      "display_name": "Azorius Chant Control",
       "parent_id": "chant-control",
-      "subtype_id": "four-color"
+      "subtype_id": "azorius"
     },
     {
       "id": "chant-control/jeskai",
@@ -606,19 +1065,99 @@
       "subtype_id": "jeskai"
     },
     {
-      "id": "deaths-shadow",
+      "id": "cheerios",
       "kind": "archetype",
-      "name": "Death's Shadow",
-      "display_name": "Death's Shadow",
-      "parent_id": "deaths-shadow",
+      "name": "Cheerios",
+      "display_name": "Cheerios",
+      "parent_id": "cheerios",
       "subtype_id": null
     },
     {
-      "id": "devoted-druid-combo",
+      "id": "coffers/dimir",
+      "kind": "subtype",
+      "name": "Dimir",
+      "display_name": "Dimir Coffers",
+      "parent_id": "coffers",
+      "subtype_id": "dimir"
+    },
+    {
+      "id": "coffers/golgari",
+      "kind": "subtype",
+      "name": "Golgari",
+      "display_name": "Golgari Coffers",
+      "parent_id": "coffers",
+      "subtype_id": "golgari"
+    },
+    {
+      "id": "coffers/umori",
+      "kind": "subtype",
+      "name": "Umori",
+      "display_name": "Umori Coffers",
+      "parent_id": "coffers",
+      "subtype_id": "umori"
+    },
+    {
+      "id": "cremator-goryos",
       "kind": "archetype",
-      "name": "Devoted Druid Combo",
-      "display_name": "Devoted Druid Combo",
+      "name": "Cremator Goryo's",
+      "display_name": "Cremator Goryo's",
+      "parent_id": "cremator-goryos",
+      "subtype_id": null
+    },
+    {
+      "id": "dark-maestro",
+      "kind": "archetype",
+      "name": "Dark Maestro",
+      "display_name": "Dark Maestro",
+      "parent_id": "dark-maestro",
+      "subtype_id": null
+    },
+    {
+      "id": "deaths-shadow/dimir",
+      "kind": "subtype",
+      "name": "Dimir",
+      "display_name": "Dimir Death's Shadow",
+      "parent_id": "deaths-shadow",
+      "subtype_id": "dimir"
+    },
+    {
+      "id": "deaths-shadow/grixis",
+      "kind": "subtype",
+      "name": "Grixis",
+      "display_name": "Grixis Death's Shadow",
+      "parent_id": "deaths-shadow",
+      "subtype_id": "grixis"
+    },
+    {
+      "id": "deaths-shadow/rakdos",
+      "kind": "subtype",
+      "name": "Rakdos",
+      "display_name": "Rakdos Death's Shadow",
+      "parent_id": "deaths-shadow",
+      "subtype_id": "rakdos"
+    },
+    {
+      "id": "devoted-druid-combo/abzan",
+      "kind": "subtype",
+      "name": "Abzan",
+      "display_name": "Abzan Devoted Druid Combo",
       "parent_id": "devoted-druid-combo",
+      "subtype_id": "abzan"
+    },
+    {
+      "id": "devoted-druid-combo/selesnya",
+      "kind": "subtype",
+      "name": "Selesnya",
+      "display_name": "Selesnya Devoted Druid Combo",
+      "parent_id": "devoted-druid-combo",
+      "subtype_id": "selesnya"
+    },
+    {
+      "id": "dimir-goryos",
+      "kind": "archetype",
+      "name": "Dimir Goryo's",
+      "display_name": "Dimir Goryo's",
+      "parent_id": "dimir-goryos",
       "subtype_id": null
     },
     {
@@ -627,6 +1166,62 @@
       "name": "Dimir Mill",
       "display_name": "Dimir Mill",
       "parent_id": "dimir-mill",
+      "subtype_id": null
+    },
+    {
+      "id": "dimir-persist",
+      "kind": "archetype",
+      "name": "Dimir Persist",
+      "display_name": "Dimir Persist",
+      "parent_id": "dimir-persist",
+      "subtype_id": null
+    },
+    {
+      "id": "dimir-tempo/dimir",
+      "kind": "subtype",
+      "name": "Dimir",
+      "display_name": "Dimir Dimir Tempo",
+      "parent_id": "dimir-tempo",
+      "subtype_id": "dimir"
+    },
+    {
+      "id": "dimir-tempo/esper",
+      "kind": "subtype",
+      "name": "Dimir White Splash",
+      "display_name": "Dimir White Splash Dimir Tempo",
+      "parent_id": "dimir-tempo",
+      "subtype_id": "esper"
+    },
+    {
+      "id": "dimir-tempo/grixis",
+      "kind": "subtype",
+      "name": "Dimir Red Splash",
+      "display_name": "Dimir Red Splash Dimir Tempo",
+      "parent_id": "dimir-tempo",
+      "subtype_id": "grixis"
+    },
+    {
+      "id": "dimir-unearth",
+      "kind": "archetype",
+      "name": "Dimir Unearth",
+      "display_name": "Dimir Unearth",
+      "parent_id": "dimir-unearth",
+      "subtype_id": null
+    },
+    {
+      "id": "domain-blink",
+      "kind": "archetype",
+      "name": "Domain Blink",
+      "display_name": "Domain Blink",
+      "parent_id": "domain-blink",
+      "subtype_id": null
+    },
+    {
+      "id": "domain-persist",
+      "kind": "archetype",
+      "name": "Domain Persist",
+      "display_name": "Domain Persist",
+      "parent_id": "domain-persist",
       "subtype_id": null
     },
     {
@@ -646,11 +1241,27 @@
       "subtype_id": null
     },
     {
+      "id": "eight-rack",
+      "kind": "archetype",
+      "name": "8-Rack",
+      "display_name": "8-Rack",
+      "parent_id": "eight-rack",
+      "subtype_id": null
+    },
+    {
       "id": "eldrazi-aggro",
       "kind": "archetype",
       "name": "Eldrazi Aggro",
       "display_name": "Eldrazi Aggro",
       "parent_id": "eldrazi-aggro",
+      "subtype_id": null
+    },
+    {
+      "id": "eldrazi-ouroboroid",
+      "kind": "archetype",
+      "name": "Eldrazi Ouroboroid",
+      "display_name": "Eldrazi Ouroboroid",
+      "parent_id": "eldrazi-ouroboroid",
       "subtype_id": null
     },
     {
@@ -668,14 +1279,6 @@
       "display_name": "Gruul Eldrazi Ramp",
       "parent_id": "eldrazi-ramp",
       "subtype_id": "gruul"
-    },
-    {
-      "id": "eldrazi-ramp/selesnya",
-      "kind": "subtype",
-      "name": "Selesnya",
-      "display_name": "Selesnya Eldrazi Ramp",
-      "parent_id": "eldrazi-ramp",
-      "subtype_id": "selesnya"
     },
     {
       "id": "eldrazi-ramp/simic",
@@ -702,6 +1305,14 @@
       "subtype_id": "temur"
     },
     {
+      "id": "eldrazi-ramp-chant",
+      "kind": "archetype",
+      "name": "Eldrazi Ramp Chant",
+      "display_name": "Eldrazi Ramp Chant",
+      "parent_id": "eldrazi-ramp-chant",
+      "subtype_id": null
+    },
+    {
       "id": "eldrazi-tron/colorless",
       "kind": "subtype",
       "name": "Colorless",
@@ -726,6 +1337,14 @@
       "subtype_id": "mono-green"
     },
     {
+      "id": "esper-blink",
+      "kind": "archetype",
+      "name": "Esper Blink",
+      "display_name": "Esper Blink",
+      "parent_id": "esper-blink",
+      "subtype_id": null
+    },
+    {
       "id": "esper-control",
       "kind": "archetype",
       "name": "Esper Control",
@@ -739,6 +1358,30 @@
       "name": "Esper Energy",
       "display_name": "Esper Energy",
       "parent_id": "esper-energy",
+      "subtype_id": null
+    },
+    {
+      "id": "esper-goryos",
+      "kind": "archetype",
+      "name": "Esper Goryo's",
+      "display_name": "Esper Goryo's",
+      "parent_id": "esper-goryos",
+      "subtype_id": null
+    },
+    {
+      "id": "esper-ketramose",
+      "kind": "archetype",
+      "name": "Esper Ketramose",
+      "display_name": "Esper Ketramose",
+      "parent_id": "esper-ketramose",
+      "subtype_id": null
+    },
+    {
+      "id": "esper-persist",
+      "kind": "archetype",
+      "name": "Esper Persist",
+      "display_name": "Esper Persist",
+      "parent_id": "esper-persist",
       "subtype_id": null
     },
     {
@@ -758,6 +1401,22 @@
       "subtype_id": null
     },
     {
+      "id": "five-color-elementals",
+      "kind": "archetype",
+      "name": "Five-Color Elementals",
+      "display_name": "Five-Color Elementals",
+      "parent_id": "five-color-elementals",
+      "subtype_id": null
+    },
+    {
+      "id": "five-color-humans",
+      "kind": "archetype",
+      "name": "Five-Color Humans",
+      "display_name": "Five-Color Humans",
+      "parent_id": "five-color-humans",
+      "subtype_id": null
+    },
+    {
       "id": "five-color-ritual",
       "kind": "archetype",
       "name": "Five-Color Ritual",
@@ -774,6 +1433,30 @@
       "subtype_id": null
     },
     {
+      "id": "glimpse-of-tomorrow",
+      "kind": "archetype",
+      "name": "Glimpse of Tomorrow",
+      "display_name": "Glimpse of Tomorrow",
+      "parent_id": "glimpse-of-tomorrow",
+      "subtype_id": null
+    },
+    {
+      "id": "golgari-delirium",
+      "kind": "archetype",
+      "name": "Golgari Delirium",
+      "display_name": "Golgari Delirium",
+      "parent_id": "golgari-delirium",
+      "subtype_id": null
+    },
+    {
+      "id": "golgari-goryos",
+      "kind": "archetype",
+      "name": "Golgari Goryo's",
+      "display_name": "Golgari Goryo's",
+      "parent_id": "golgari-goryos",
+      "subtype_id": null
+    },
+    {
       "id": "golgari-yawgmoth",
       "kind": "archetype",
       "name": "Golgari Yawgmoth",
@@ -782,20 +1465,60 @@
       "subtype_id": null
     },
     {
-      "id": "goryos-reanimator/esper",
-      "kind": "subtype",
-      "name": "Esper",
-      "display_name": "Esper Goryo's Reanimator",
-      "parent_id": "goryos-reanimator",
-      "subtype_id": "esper"
+      "id": "grixis-dress-down",
+      "kind": "archetype",
+      "name": "Grixis Dress Down",
+      "display_name": "Grixis Dress Down",
+      "parent_id": "grixis-dress-down",
+      "subtype_id": null
     },
     {
-      "id": "goryos-reanimator/grixis",
-      "kind": "subtype",
-      "name": "Grixis",
-      "display_name": "Grixis Goryo's Reanimator",
-      "parent_id": "goryos-reanimator",
-      "subtype_id": "grixis"
+      "id": "grixis-goryos",
+      "kind": "archetype",
+      "name": "Grixis Goryo's",
+      "display_name": "Grixis Goryo's",
+      "parent_id": "grixis-goryos",
+      "subtype_id": null
+    },
+    {
+      "id": "grixis-persist",
+      "kind": "archetype",
+      "name": "Grixis Persist",
+      "display_name": "Grixis Persist",
+      "parent_id": "grixis-persist",
+      "subtype_id": null
+    },
+    {
+      "id": "grixis-tempo",
+      "kind": "archetype",
+      "name": "Grixis Tempo",
+      "display_name": "Grixis Tempo",
+      "parent_id": "grixis-tempo",
+      "subtype_id": null
+    },
+    {
+      "id": "gruul-cragganwick",
+      "kind": "archetype",
+      "name": "Gruul Cragganwick",
+      "display_name": "Gruul Cragganwick",
+      "parent_id": "gruul-cragganwick",
+      "subtype_id": null
+    },
+    {
+      "id": "gruul-midrange",
+      "kind": "archetype",
+      "name": "Gruul Midrange",
+      "display_name": "Gruul Midrange",
+      "parent_id": "gruul-midrange",
+      "subtype_id": null
+    },
+    {
+      "id": "gruul-valakut",
+      "kind": "archetype",
+      "name": "Gruul Valakut",
+      "display_name": "Gruul Valakut",
+      "parent_id": "gruul-valakut",
+      "subtype_id": null
     },
     {
       "id": "hammer-time/azorius",
@@ -806,6 +1529,22 @@
       "subtype_id": "azorius"
     },
     {
+      "id": "hammer-time/boros",
+      "kind": "subtype",
+      "name": "Boros",
+      "display_name": "Boros Hammer Time",
+      "parent_id": "hammer-time",
+      "subtype_id": "boros"
+    },
+    {
+      "id": "hammer-time/jeskai",
+      "kind": "subtype",
+      "name": "Jeskai",
+      "display_name": "Jeskai Hammer Time",
+      "parent_id": "hammer-time",
+      "subtype_id": "jeskai"
+    },
+    {
       "id": "hammer-time/mono-white",
       "kind": "subtype",
       "name": "Mono-White",
@@ -814,20 +1553,36 @@
       "subtype_id": "mono-white"
     },
     {
-      "id": "hollow-one/rakdos",
-      "kind": "subtype",
-      "name": "Rakdos",
-      "display_name": "Rakdos Hollow One",
-      "parent_id": "hollow-one",
-      "subtype_id": "rakdos"
+      "id": "hardened-scales",
+      "kind": "archetype",
+      "name": "Hardened Scales",
+      "display_name": "Hardened Scales",
+      "parent_id": "hardened-scales",
+      "subtype_id": null
     },
     {
-      "id": "hollow-one/vengevine",
-      "kind": "subtype",
-      "name": "Vengevine",
-      "display_name": "Vengevine Hollow One",
-      "parent_id": "hollow-one",
-      "subtype_id": "vengevine"
+      "id": "hollowvine",
+      "kind": "archetype",
+      "name": "Hollowvine",
+      "display_name": "Hollowvine",
+      "parent_id": "hollowvine",
+      "subtype_id": null
+    },
+    {
+      "id": "izzet-cauldron",
+      "kind": "archetype",
+      "name": "Izzet Cauldron",
+      "display_name": "Izzet Cauldron",
+      "parent_id": "izzet-cauldron",
+      "subtype_id": null
+    },
+    {
+      "id": "izzet-extra-turns",
+      "kind": "archetype",
+      "name": "Izzet Extra Turns",
+      "display_name": "Izzet Extra Turns",
+      "parent_id": "izzet-extra-turns",
+      "subtype_id": null
     },
     {
       "id": "izzet-phoenix",
@@ -838,11 +1593,51 @@
       "subtype_id": null
     },
     {
+      "id": "izzet-storm",
+      "kind": "archetype",
+      "name": "Izzet Storm",
+      "display_name": "Izzet Storm",
+      "parent_id": "izzet-storm",
+      "subtype_id": null
+    },
+    {
+      "id": "izzet-tempo",
+      "kind": "archetype",
+      "name": "Izzet Tempo",
+      "display_name": "Izzet Tempo",
+      "parent_id": "izzet-tempo",
+      "subtype_id": null
+    },
+    {
+      "id": "izzet-through-the-breach",
+      "kind": "archetype",
+      "name": "Izzet Through the Breach",
+      "display_name": "Izzet Through the Breach",
+      "parent_id": "izzet-through-the-breach",
+      "subtype_id": null
+    },
+    {
+      "id": "izzet-twin",
+      "kind": "archetype",
+      "name": "Izzet Twin",
+      "display_name": "Izzet Twin",
+      "parent_id": "izzet-twin",
+      "subtype_id": null
+    },
+    {
       "id": "izzet-wizards",
       "kind": "archetype",
       "name": "Izzet Wizards",
       "display_name": "Izzet Wizards",
       "parent_id": "izzet-wizards",
+      "subtype_id": null
+    },
+    {
+      "id": "jeskai-blink",
+      "kind": "archetype",
+      "name": "Jeskai Blink",
+      "display_name": "Jeskai Blink",
+      "parent_id": "jeskai-blink",
       "subtype_id": null
     },
     {
@@ -862,6 +1657,22 @@
       "subtype_id": null
     },
     {
+      "id": "jeskai-stoneforge",
+      "kind": "archetype",
+      "name": "Jeskai Stoneforge",
+      "display_name": "Jeskai Stoneforge",
+      "parent_id": "jeskai-stoneforge",
+      "subtype_id": null
+    },
+    {
+      "id": "jund-goblins",
+      "kind": "archetype",
+      "name": "Jund Goblins",
+      "display_name": "Jund Goblins",
+      "parent_id": "jund-goblins",
+      "subtype_id": null
+    },
+    {
       "id": "jund-sagavan",
       "kind": "archetype",
       "name": "Jund Sagavan",
@@ -878,11 +1689,59 @@
       "subtype_id": null
     },
     {
-      "id": "living-end",
+      "id": "leyline-fling",
       "kind": "archetype",
-      "name": "Living End",
-      "display_name": "Living End",
+      "name": "Leyline Fling",
+      "display_name": "Leyline Fling",
+      "parent_id": "leyline-fling",
+      "subtype_id": null
+    },
+    {
+      "id": "living-end/bant",
+      "kind": "subtype",
+      "name": "Bant",
+      "display_name": "Bant Living End",
       "parent_id": "living-end",
+      "subtype_id": "bant"
+    },
+    {
+      "id": "living-end/four-color",
+      "kind": "subtype",
+      "name": "Four-Color",
+      "display_name": "Four-Color Living End",
+      "parent_id": "living-end",
+      "subtype_id": "four-color"
+    },
+    {
+      "id": "living-end/rakdos",
+      "kind": "subtype",
+      "name": "Rakdos",
+      "display_name": "Rakdos Living End",
+      "parent_id": "living-end",
+      "subtype_id": "rakdos"
+    },
+    {
+      "id": "living-end/sultai",
+      "kind": "subtype",
+      "name": "Sultai",
+      "display_name": "Sultai Living End",
+      "parent_id": "living-end",
+      "subtype_id": "sultai"
+    },
+    {
+      "id": "living-end/temur",
+      "kind": "subtype",
+      "name": "Temur",
+      "display_name": "Temur Living End",
+      "parent_id": "living-end",
+      "subtype_id": "temur"
+    },
+    {
+      "id": "mardu-blink",
+      "kind": "archetype",
+      "name": "Mardu Blink",
+      "display_name": "Mardu Blink",
+      "parent_id": "mardu-blink",
       "subtype_id": null
     },
     {
@@ -894,11 +1753,27 @@
       "subtype_id": null
     },
     {
+      "id": "mardu-vial",
+      "kind": "archetype",
+      "name": "Mardu Vial",
+      "display_name": "Mardu Vial",
+      "parent_id": "mardu-vial",
+      "subtype_id": null
+    },
+    {
       "id": "mono-black-eldrazi",
       "kind": "archetype",
       "name": "Mono-Black Eldrazi",
       "display_name": "Mono-Black Eldrazi",
       "parent_id": "mono-black-eldrazi",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-black-saga",
+      "kind": "archetype",
+      "name": "Mono-Black Saga",
+      "display_name": "Mono-Black Saga",
+      "parent_id": "mono-black-saga",
       "subtype_id": null
     },
     {
@@ -916,6 +1791,70 @@
       "display_name": "Mono-Blue Merfolk",
       "parent_id": "mono-blue-merfolk",
       "subtype_id": null
+    },
+    {
+      "id": "mono-blue-namor",
+      "kind": "archetype",
+      "name": "Mono-Blue Namor",
+      "display_name": "Mono-Blue Namor",
+      "parent_id": "mono-blue-namor",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-blue-tron",
+      "kind": "archetype",
+      "name": "Mono-Blue Tron",
+      "display_name": "Mono-Blue Tron",
+      "parent_id": "mono-blue-tron",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-green-stompy",
+      "kind": "archetype",
+      "name": "Mono-Green Stompy",
+      "display_name": "Mono-Green Stompy",
+      "parent_id": "mono-green-stompy",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-green-trudge",
+      "kind": "archetype",
+      "name": "Mono-Green Trudge",
+      "display_name": "Mono-Green Trudge",
+      "parent_id": "mono-green-trudge",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-red-artifact",
+      "kind": "archetype",
+      "name": "Mono-Red Artifact",
+      "display_name": "Mono-Red Artifact",
+      "parent_id": "mono-red-artifact",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-white-humans",
+      "kind": "archetype",
+      "name": "Mono-White Humans",
+      "display_name": "Mono-White Humans",
+      "parent_id": "mono-white-humans",
+      "subtype_id": null
+    },
+    {
+      "id": "naya-midrange",
+      "kind": "archetype",
+      "name": "Naya Midrange",
+      "display_name": "Naya Midrange",
+      "parent_id": "naya-midrange",
+      "subtype_id": null
+    },
+    {
+      "id": "necrodominance/cosmogoyf",
+      "kind": "subtype",
+      "name": "Cosmogoyf Necrodominance",
+      "display_name": "Cosmogoyf Necrodominance",
+      "parent_id": "necrodominance",
+      "subtype_id": "cosmogoyf"
     },
     {
       "id": "necrodominance/dimir",
@@ -974,6 +1913,22 @@
       "subtype_id": "temur"
     },
     {
+      "id": "omnath-midrange",
+      "kind": "archetype",
+      "name": "Omnath Midrange",
+      "display_name": "Omnath Midrange",
+      "parent_id": "omnath-midrange",
+      "subtype_id": null
+    },
+    {
+      "id": "orzhov-blink",
+      "kind": "archetype",
+      "name": "Orzhov Blink",
+      "display_name": "Orzhov Blink",
+      "parent_id": "orzhov-blink",
+      "subtype_id": null
+    },
+    {
       "id": "pensive-combo",
       "kind": "archetype",
       "name": "Pensive Combo",
@@ -982,28 +1937,20 @@
       "subtype_id": null
     },
     {
-      "id": "persist-reanimator/esper",
-      "kind": "subtype",
-      "name": "Esper",
-      "display_name": "Esper Persist Reanimator",
-      "parent_id": "persist-reanimator",
-      "subtype_id": "esper"
+      "id": "primal-prayers-combo",
+      "kind": "archetype",
+      "name": "Primal Prayers Combo",
+      "display_name": "Primal Prayers Combo",
+      "parent_id": "primal-prayers-combo",
+      "subtype_id": null
     },
     {
-      "id": "persist-reanimator/golgari",
+      "id": "prowess/boros",
       "kind": "subtype",
-      "name": "Golgari",
-      "display_name": "Golgari Persist Reanimator",
-      "parent_id": "persist-reanimator",
-      "subtype_id": "golgari"
-    },
-    {
-      "id": "persist-reanimator/grixis",
-      "kind": "subtype",
-      "name": "Grixis",
-      "display_name": "Grixis Persist Reanimator",
-      "parent_id": "persist-reanimator",
-      "subtype_id": "grixis"
+      "name": "Boros",
+      "display_name": "Boros Prowess",
+      "parent_id": "prowess",
+      "subtype_id": "boros"
     },
     {
       "id": "prowess/grixis",
@@ -1038,12 +1985,100 @@
       "subtype_id": "lessons"
     },
     {
+      "id": "prowess/mardu",
+      "kind": "subtype",
+      "name": "Mardu",
+      "display_name": "Mardu Prowess",
+      "parent_id": "prowess",
+      "subtype_id": "mardu"
+    },
+    {
+      "id": "prowess/mono-red",
+      "kind": "subtype",
+      "name": "Mono-Red",
+      "display_name": "Mono-Red Prowess",
+      "parent_id": "prowess",
+      "subtype_id": "mono-red"
+    },
+    {
+      "id": "prowess/rakdos",
+      "kind": "subtype",
+      "name": "Rakdos",
+      "display_name": "Rakdos Prowess",
+      "parent_id": "prowess",
+      "subtype_id": "rakdos"
+    },
+    {
       "id": "prowess/temur",
       "kind": "subtype",
       "name": "Temur",
       "display_name": "Temur Prowess",
       "parent_id": "prowess",
       "subtype_id": "temur"
+    },
+    {
+      "id": "rakdos-aggro",
+      "kind": "archetype",
+      "name": "Rakdos Aggro",
+      "display_name": "Rakdos Aggro",
+      "parent_id": "rakdos-aggro",
+      "subtype_id": null
+    },
+    {
+      "id": "rakdos-delirium",
+      "kind": "archetype",
+      "name": "Rakdos Delirium",
+      "display_name": "Rakdos Delirium",
+      "parent_id": "rakdos-delirium",
+      "subtype_id": null
+    },
+    {
+      "id": "rakdos-hollow-one/mardu",
+      "kind": "subtype",
+      "name": "Mardu",
+      "display_name": "Mardu Rakdos Hollow One",
+      "parent_id": "rakdos-hollow-one",
+      "subtype_id": "mardu"
+    },
+    {
+      "id": "rakdos-hollow-one/rakdos",
+      "kind": "subtype",
+      "name": "Rakdos",
+      "display_name": "Rakdos Rakdos Hollow One",
+      "parent_id": "rakdos-hollow-one",
+      "subtype_id": "rakdos"
+    },
+    {
+      "id": "rakdos-midrange",
+      "kind": "archetype",
+      "name": "Rakdos Midrange",
+      "display_name": "Rakdos Midrange",
+      "parent_id": "rakdos-midrange",
+      "subtype_id": null
+    },
+    {
+      "id": "rakdos-persist",
+      "kind": "archetype",
+      "name": "Rakdos Persist",
+      "display_name": "Rakdos Persist",
+      "parent_id": "rakdos-persist",
+      "subtype_id": null
+    },
+    {
+      "id": "rakdos-steel-cutter",
+      "kind": "archetype",
+      "name": "Rakdos Steel-Cutter",
+      "display_name": "Rakdos Steel-Cutter",
+      "parent_id": "rakdos-steel-cutter",
+      "subtype_id": null
+    },
+    {
+      "id": "rakdos-through-the-breach",
+      "kind": "archetype",
+      "name": "Rakdos Through the Breach",
+      "display_name": "Rakdos Through the Breach",
+      "parent_id": "rakdos-through-the-breach",
+      "subtype_id": null
     },
     {
       "id": "rhinos/domain",
@@ -1086,6 +2121,22 @@
       "subtype_id": null
     },
     {
+      "id": "scapeshift/four-color",
+      "kind": "subtype",
+      "name": "Four-Color",
+      "display_name": "Four-Color Scapeshift",
+      "parent_id": "scapeshift",
+      "subtype_id": "four-color"
+    },
+    {
+      "id": "scapeshift/naya",
+      "kind": "subtype",
+      "name": "Naya",
+      "display_name": "Naya Scapeshift",
+      "parent_id": "scapeshift",
+      "subtype_id": "naya"
+    },
+    {
       "id": "selesnya-energy",
       "kind": "archetype",
       "name": "Selesnya Energy",
@@ -1094,11 +2145,35 @@
       "subtype_id": null
     },
     {
+      "id": "shape-anew",
+      "kind": "archetype",
+      "name": "Shape Anew",
+      "display_name": "Shape Anew",
+      "parent_id": "shape-anew",
+      "subtype_id": null
+    },
+    {
       "id": "simic-neoform",
       "kind": "archetype",
       "name": "Simic Neoform",
       "display_name": "Simic Neoform",
       "parent_id": "simic-neoform",
+      "subtype_id": null
+    },
+    {
+      "id": "solemnity-blink",
+      "kind": "archetype",
+      "name": "Solemnity Blink",
+      "display_name": "Solemnity Blink",
+      "parent_id": "solemnity-blink",
+      "subtype_id": null
+    },
+    {
+      "id": "solemnity-prison",
+      "kind": "archetype",
+      "name": "Solemnity Prison",
+      "display_name": "Solemnity Prison",
+      "parent_id": "solemnity-prison",
       "subtype_id": null
     },
     {
@@ -1126,6 +2201,14 @@
       "subtype_id": "golgari"
     },
     {
+      "id": "soultrader/orzhov",
+      "kind": "subtype",
+      "name": "Orzhov",
+      "display_name": "Orzhov Soultrader",
+      "parent_id": "soultrader",
+      "subtype_id": "orzhov"
+    },
+    {
       "id": "soultrader/sultai",
       "kind": "subtype",
       "name": "Sultai",
@@ -1137,25 +2220,57 @@
       "id": "steel-cutter/izzet",
       "kind": "subtype",
       "name": "Izzet",
-      "display_name": "Izzet Steel-Cutter",
+      "display_name": "Izzet Izzet Steel-Cutter",
       "parent_id": "steel-cutter",
       "subtype_id": "izzet"
     },
     {
-      "id": "steel-cutter/mono-red",
-      "kind": "subtype",
-      "name": "Mono-Red",
-      "display_name": "Mono-Red Steel-Cutter",
-      "parent_id": "steel-cutter",
-      "subtype_id": "mono-red"
+      "id": "sultai-flicker",
+      "kind": "archetype",
+      "name": "Sultai Flicker",
+      "display_name": "Sultai Flicker",
+      "parent_id": "sultai-flicker",
+      "subtype_id": null
     },
     {
-      "id": "steel-cutter/rakdos",
+      "id": "sultai-persist",
+      "kind": "archetype",
+      "name": "Sultai Persist",
+      "display_name": "Sultai Persist",
+      "parent_id": "sultai-persist",
+      "subtype_id": null
+    },
+    {
+      "id": "sultai-tempo",
+      "kind": "archetype",
+      "name": "Sultai Tempo",
+      "display_name": "Sultai Tempo",
+      "parent_id": "sultai-tempo",
+      "subtype_id": null
+    },
+    {
+      "id": "temur-reclamation",
+      "kind": "archetype",
+      "name": "Temur Reclamation",
+      "display_name": "Temur Reclamation",
+      "parent_id": "temur-reclamation",
+      "subtype_id": null
+    },
+    {
+      "id": "thopter-sword/bant",
       "kind": "subtype",
-      "name": "Rakdos",
-      "display_name": "Rakdos Steel-Cutter",
-      "parent_id": "steel-cutter",
-      "subtype_id": "rakdos"
+      "name": "Bant",
+      "display_name": "Bant Thopter Sword",
+      "parent_id": "thopter-sword",
+      "subtype_id": "bant"
+    },
+    {
+      "id": "yawgmoth-energy",
+      "kind": "archetype",
+      "name": "Yawgmoth Energy",
+      "display_name": "Yawgmoth Energy",
+      "parent_id": "yawgmoth-energy",
+      "subtype_id": null
     }
   ]
 }

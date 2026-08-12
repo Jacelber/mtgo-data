@@ -2908,6 +2908,79 @@ public entry points.
      accepted, known-archetype state is validated or migrated, the shadow is
      rerun, the three numeric thresholds are rechecked with the owner, and the
      manual representative-card map is then approved.
+
+   The Owner accepted the R1 stable-identity contract and R2 full-corpus shadow
+   audit, then authorized `CLASSIFIER-R3-PRODUCTION-MIGRATION` for local
+   implementation only on 2026-08-11. R3 promotes the exact accepted Standard
+   and Modern rules through a narrow, fail-closed semantic-feature manifest;
+   migrates only the parent-keyed Pickup known state; refreshes the existing
+   MTGO and Tabletop classification-derived closure; and freezes R1/R2 baselines
+   so the pre-migration evidence remains reproducible. It changes no source
+   event, formula, public path, workflow, front end, or product boundary. R3
+   acceptance, commit, publication, R4 residual-Unknown review, the Landing
+   shadow rerun and threshold confirmation, representative-card approval, and
+   P12-10 remain separate gates.
+
+   The Owner accepted the validated local R3 implementation and authorized its
+   local commit on 2026-08-11. Publication, R4, and P12-10 remain separately
+   unauthorized.
+
+   The Owner separately authorized the non-production
+   `CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW` on 2026-08-11. R4 freezes the R3
+   Unknown inputs, groups all residual Standard and Modern records into
+   transparent de-identified candidate families, and records one explicit
+   Owner disposition for each family. Candidate similarity and nearest-rule
+   evidence do not assign an archetype. Production-rule promotion, statistics,
+   Pickup state, the Landing shadow, commit, publication, and P12-10 remain
+   separate gates.
+
+   Modern owner preclassification batches 1 through 4 are implemented and
+   Owner-accepted in the non-production R4 shadow. Batch 4 records nine accepted singleton
+   dispositions as eight parents, moves the nine remaining current MTGO Modern
+   Unknown records to reviewed identities, and moves seven structurally matching
+   Dimir Tempo records to Dimir Unearth. All 6,784 current and all 5,792 frozen
+   Modern records are classified in this shadow, while all 362 registered
+   Tabletop decklists retain their pre-batch identity. On 2026-08-12 the Owner
+   accepted the final Modern batch and authorized a one-time local Modern
+   closeout commit. The machine-readable closeout freezes all 88 accepted
+   Modern dispositions and the exact shadow, generator, queue, workbook,
+   production-rule, and protected-event hashes before Standard begins. This is
+   review evidence, not production promotion; Standard review and any later
+   commit, publication, the Landing shadow, and P12-10 remain separate gates.
+
+   The Owner then completed and accepted all 59 Standard R4 families, including
+   all 43 singleton dispositions, and authorized the final local R4 closeout
+   commit `b3f379a95284ecbe5da21124a4be651bb346e602` on 2026-08-12. The accepted
+   shadows classify all 6,784 current and 5,792 frozen Modern records; classify
+   4,732 of 4,733 current Standard records while preserving one explicit
+   intentional Unknown; and classify 3,928 of 3,936 frozen Standard records.
+   R4 changes no production rule or generated statistic.
+
+   The Owner separately authorized `CLASSIFIER-R5-PRODUCTION-PROMOTION` for
+   local implementation on 2026-08-12. R5 promotes only the hash-locked R4
+   Modern and Standard shadows, migrates parent-keyed Pickup known state, and
+   refreshes the existing MTGO and event 434455 classification-derived closure.
+   It freezes the R3 production inputs beneath the R4 audit and changes no
+   formula, source event, retained response, public path, workflow, front end,
+   or product boundary. R5 acceptance and commit, publication, the Landing
+   shadow, threshold reconfirmation, representative-card approval, and P12-10
+   remain separate gates.
+
+   On 2026-08-12 the Owner accepted the complete R5 local implementation and
+   separately authorized its local commit, reconciliation with the current
+   remote `master`, Ready pull request, complete CI, and merge. Manual
+   production dispatch, the Landing shadow, threshold reconfirmation,
+   representative-card approval, P12-10, and every later task remain separate
+   and unauthorized.
+
+   Publication reconciliation then replayed the complete R1-R5 chain onto
+   remote `master` commit `f8a4714c07861b104193721524ac5669cef69084`
+   without fetching new source data. The refreshed publication baseline has
+   6,944 classified Modern decks and zero Unknown; Standard has 4,821
+   classified decks and eight non-blocking fail-closed Unknown from 4,829
+   records. The accepted frozen-corpus identities remain unchanged, and the
+   already indexed W32 Top 8 files are reclassified without changing either
+   Top 8 index or any Pickup candidate.
 4. `P12-04` — Visual direction and durable design-system contract
    - publish the durable repository authority at
      `docs/FRONTEND_DESIGN_SYSTEM.md`, covering product personality,
