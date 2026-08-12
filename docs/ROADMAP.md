@@ -2972,6 +2972,15 @@ public entry points.
    production dispatch, the Landing shadow, threshold reconfirmation,
    representative-card approval, P12-10, and every later task remain separate
    and unauthorized.
+
+   Publication reconciliation then replayed the complete R1-R5 chain onto
+   remote `master` commit `f8a4714c07861b104193721524ac5669cef69084`
+   without fetching new source data. The refreshed publication baseline has
+   6,944 classified Modern decks and zero Unknown; Standard has 4,821
+   classified decks and eight non-blocking fail-closed Unknown from 4,829
+   records. The accepted frozen-corpus identities remain unchanged, and the
+   already indexed W32 Top 8 files are reclassified without changing either
+   Top 8 index or any Pickup candidate.
 4. `P12-04` — Visual direction and durable design-system contract
    - publish the durable repository authority at
      `docs/FRONTEND_DESIGN_SYSTEM.md`, covering product personality,

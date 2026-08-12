@@ -9,6 +9,14 @@ implementation on 2026-08-12. The artifact-impact declaration is
 `codex/classifier-r5-production-promotion`, and the R4 base is
 `b3f379a95284ecbe5da21124a4be651bb346e602`. Push is disabled.
 
+For publication, the complete R1-R5 chain was replayed in the fresh independent
+workspace
+`D:/dl/crawlerpj/.codex-workspaces/classifier-r5-publication-20260812-01`
+from verified remote `master` commit
+`f8a4714c07861b104193721524ac5669cef69084`. That base includes the two later
+production-data refreshes and the PR 200 dynamic-consumer validation hotfix.
+No source fetch or production workflow dispatch occurred during reconciliation.
+
 The Owner accepted the complete local implementation on 2026-08-12 and
 separately authorized its local commit, reconciliation with the current remote
 `master`, Ready pull request, complete CI, and merge. Manual production
@@ -46,14 +54,16 @@ index is rewritten.
 All generated JSON changes come from maintained production commands or bounded
 R5 tools; no generated report or statistic was hand-edited.
 
-- Current MTGO Modern: 6,784 classified, zero Unknown, conflicts, or invalid
+- Publication-baseline MTGO Modern: 6,944 classified, zero Unknown, conflicts, or invalid
   decks.
-- Current MTGO Standard: 4,732 classified, one explicit intentional Unknown,
-  zero conflicts, and zero invalid decks.
+- Publication-baseline MTGO Standard: 4,821 classified, eight non-blocking
+  fail-closed Unknown, zero conflicts, and zero invalid decks. One is the
+  accepted R4 intentional Unknown and seven come from post-review production
+  events; R5 adds no unreviewed classifier judgment for them.
 - Frozen Modern: all 5,792 classified. Frozen Standard: 3,928 classified and
   eight historical Unknown.
 - Existing 1/4/12/36-week statistics, matchup, completeness, hierarchy,
-  metadata, reports, catalog, and only indexed W30/W31 Top 8 contents are
+  metadata, reports, catalog, and only indexed W30/W31/W32 Top 8 contents are
   refreshed.
 - Event 434455 has 362 classified decklists, zero Unknown, conflicts, invalid
   decks, or residual subtypes. Its 2,910 theoretical rounds, 2,903 effective
@@ -71,26 +81,29 @@ week exists.
 
 ## Validation result
 
-- complete ordinary pytest shard: 926 passed, 8 committed-baseline tests
+- complete ordinary pytest shard: 938 passed, 8 committed-baseline tests
   deselected;
-- independent committed-baseline shard: 8 passed, 926 ordinary tests
+- independent committed-baseline shard: 8 passed, 938 ordinary tests
   deselected;
 - Ruff: passed for all changed Python files;
 - strict mypy baseline: passed, 4 source files checked;
-- repository validation: 158 Python, 17 JavaScript, 1,719 JSON, 47 YAML, 56
-  references, and 2,141 hygiene entries passed;
+- repository validation: 159 Python, 17 JavaScript, 1,747 JSON, 51 YAML, 56
+  references, and 2,174 hygiene entries passed;
 - Standard and Modern production-rule validation: passed;
-- public generated-JSON Schema validation: 73 documents passed;
+- public generated-JSON Schema validation: 77 documents passed;
 - Standard frozen quality baseline: passed with 3,936 records, 71 Unknown, and
-  947 multiple matches; and
-- current strict classification reports: Modern 6,784 decks with zero Unknown,
-  conflicts, or invalid decks; Standard 4,733 decks with one intentional
-  Unknown and zero conflicts or invalid decks.
+  947 multiple matches;
+- current strict classification reports: Modern 6,944 decks with zero Unknown,
+  conflicts, or invalid decks; Standard 4,829 decks with eight non-blocking
+  Unknown and zero conflicts or invalid decks; and
+- Playwright real-browser regression: 77 tests passed.
 
 Final path review finds no source-event, raw snapshot, retained response,
-front-end, workflow, Pickup candidate/week/index, Top 8 index, new calendar
-week, event-whitelist, or public-path change. `git diff --check` passes. The
-local implementation was accepted by the Owner on 2026-08-12.
+front-end, workflow, Pickup candidate/week/index, Top 8 index, newly created
+calendar week, event-whitelist, or public-path change. The existing W32 files
+introduced by the remote production refresh are reclassified in place.
+`git diff --check` passes. The local implementation was accepted by the Owner
+on 2026-08-12.
 
 ## Stop point
 

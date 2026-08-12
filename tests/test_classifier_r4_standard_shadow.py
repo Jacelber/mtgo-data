@@ -65,6 +65,20 @@ QUEUE_PATH = ROOT / "docs" / "audits" / "classifier-r4" / "unknown_family_queue.
 R4_INPUT_ROOT = (
     ROOT / "docs" / "audits" / "classifier-r4" / "baseline_unknown_inputs"
 )
+R4_ACCEPTED_MAX_EVENT_ID = 12850823
+R4_ACCEPTED_LATE_EVENT_IDS = {"12851135"}
+
+
+def _load_r4_accepted_current_events():
+    events = [
+        (day, event)
+        for day, event in stats.load_all_events(ROOT, "standard")
+        if int(event["event_id"]) <= R4_ACCEPTED_MAX_EVENT_ID
+        or str(event["event_id"]) in R4_ACCEPTED_LATE_EVENT_IDS
+    ]
+    assert len(events) == 148
+    assert sum(len(event.get("players", [])) for _day, event in events) == 4733
+    return events
 
 EXPECTED_FAMILIES = {
     ORZHOV_LIFEGAIN_FAMILY: ("orzhov-lifegain", "orzhov-lifegain-primary", 19),
@@ -718,7 +732,7 @@ def test_standard_accepted_current_and_frozen_replays_are_stable() -> None:
         Counter()
     )
     current_statuses: Counter[str] = Counter()
-    for _day, event in stats.load_all_events(ROOT, "standard"):
+    for _day, event in _load_r4_accepted_current_events():
         for player in event.get("players", []):
             main, side = deck_to_counts(
                 {

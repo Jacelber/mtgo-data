@@ -79,9 +79,10 @@ current_task:
   implementation_completed_on: "2026-08-12"
   owner_accepted_on: "2026-08-12"
   publication_authorized_on: "2026-08-12"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/classifier-r5-20260812-01"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/classifier-r5-publication-20260812-01"
   branch: "codex/classifier-r5-production-promotion"
-  base_commit: "b3f379a95284ecbe5da21124a4be651bb346e602"
+  base_commit: "f8a4714c07861b104193721524ac5669cef69084"
+  accepted_r4_base_commit: "b3f379a95284ecbe5da21124a4be651bb346e602"
   task_type: "local_statistical_artifact_migration"
   artifact_impact: "statistical_json_structure"
   objective: "Promote the exact Owner-accepted R4 Standard and Modern shadows into the production classifier, migrate only the affected parent-keyed Pickup known state, and atomically refresh existing classification-derived MTGO and Tabletop artifacts without changing formulas, source data, public paths, front ends, workflows, or product boundaries."
@@ -159,13 +160,14 @@ current_task:
     current_standard_expected: "4732 classified; 1 intentional Unknown"
     frozen_standard_expected: "3928 classified; 8 Unknown"
   validation:
-    ordinary_pytest: "926 passed; 8 committed-baseline tests deselected"
-    committed_baseline_pytest: "8 passed; 926 ordinary tests deselected"
+    ordinary_pytest: "938 passed; 8 committed-baseline tests deselected"
+    committed_baseline_pytest: "8 passed; 938 ordinary tests deselected"
     ruff: "passed"
     mypy: "passed; 4 source files"
-    repository: "158 Python; 17 JavaScript; 1719 JSON; 47 YAML; 56 references; 2141 hygiene entries passed"
-    schemas: "73 public generated JSON documents passed"
-    classification_reports: "Modern 6784/0 Unknown; Standard 4733/1 intentional Unknown; zero conflicts and invalid decks"
+    repository: "159 Python; 17 JavaScript; 1747 JSON; 51 YAML; 56 references; 2174 hygiene entries passed"
+    schemas: "77 public generated JSON documents passed"
+    browser: "77 Playwright tests passed"
+    classification_reports: "Current publication baseline: Modern 6944/0 Unknown; Standard 4829/8 non-blocking Unknown; zero conflicts and invalid decks. Accepted R4 frozen-corpus expectations remain unchanged."
 
 recent_completion_handoff:
   id: "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
@@ -175,8 +177,8 @@ recent_completion_handoff:
   note: "R5 starts from the complete Owner-accepted R4 local commit chain. None of the classifier R1-R4 local commits has been remotely published."
 
 current_repository_state:
-  baseline_commit: "b3f379a95284ecbe5da21124a4be651bb346e602"
-  baseline_note: "Owner-authorized R4 Standard closeout commit; used as the independent isolated R5 production-promotion base with push disabled."
+  baseline_commit: "f8a4714c07861b104193721524ac5669cef69084"
+  baseline_note: "Verified remote master after the 2026-08-12 production refresh; the complete R1-R5 chain was replayed in a fresh independent publication workspace and classification-derived consumers were rebuilt without a source fetch."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"

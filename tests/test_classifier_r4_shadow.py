@@ -131,6 +131,18 @@ CLOSEOUT_PATH = (
 R4_INPUT_ROOT = (
     ROOT / "docs" / "audits" / "classifier-r4" / "baseline_unknown_inputs"
 )
+R4_ACCEPTED_MAX_EVENT_ID = 12850868
+
+
+def _load_r4_accepted_current_events():
+    events = [
+        (day, event)
+        for day, event in stats.load_all_events(ROOT, "modern")
+        if int(event["event_id"]) <= R4_ACCEPTED_MAX_EVENT_ID
+    ]
+    assert len(events) == 212
+    assert sum(len(event.get("players", [])) for _day, event in events) == 6784
+    return events
 
 
 def _load_shadow_rules():
@@ -1615,7 +1627,7 @@ def test_owner_accepted_families_and_no_other_current_unknown_are_captured() -> 
     current_batch4_rule_hits: Counter[str] = Counter()
     current_energy_selected: Counter[str] = Counter()
     current_statuses: Counter[str] = Counter()
-    for _day, event in stats.load_all_events(ROOT, "modern"):
+    for _day, event in _load_r4_accepted_current_events():
         for index, player in enumerate(event.get("players", [])):
             main, side = deck_to_counts(
                 {
@@ -3443,7 +3455,7 @@ def test_owner_bulk_batch3_paths_boundaries_migrations_and_tabletop() -> None:
         )
 
     current_transitions: set[tuple[str, int, str, str | None, str, str, int]] = set()
-    for _day, event in stats.load_all_events(ROOT, "modern"):
+    for _day, event in _load_r4_accepted_current_events():
         for index, player in enumerate(event.get("players", [])):
             main, side = deck_to_counts(
                 {
@@ -3813,7 +3825,7 @@ def test_owner_bulk_batch4_paths_boundaries_migrations_and_tabletop() -> None:
     ] = set()
     before_statuses: Counter[str] = Counter()
     after_statuses: Counter[str] = Counter()
-    for _day, event in stats.load_all_events(ROOT, "modern"):
+    for _day, event in _load_r4_accepted_current_events():
         for index, player in enumerate(event.get("players", [])):
             main, side = deck_to_counts(
                 {

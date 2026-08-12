@@ -57,7 +57,7 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "owner_accepted_publication_in_progress"
     )
     assert status["current_task"]["base_commit"] == (
-        "b3f379a95284ecbe5da21124a4be651bb346e602"
+        "f8a4714c07861b104193721524ac5669cef69084"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
