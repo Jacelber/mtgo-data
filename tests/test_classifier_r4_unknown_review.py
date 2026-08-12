@@ -21,6 +21,7 @@ from tools.build_classifier_r4_unknown_review import (
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_ROOT = ROOT / "docs" / "audits" / "classifier-r4"
+R4_INPUT_ROOT = OUTPUT_ROOT / "baseline_unknown_inputs"
 
 
 def _record(record_id: str, cards: dict[str, int]) -> UnknownRecord:
@@ -62,7 +63,7 @@ def test_clustering_is_deterministic_and_transitive() -> None:
 
 
 def test_frozen_inputs_have_expected_deidentified_record_inventory() -> None:
-    records = load_unknown_records(ROOT)
+    records = load_unknown_records(R4_INPUT_ROOT)
 
     assert len(records) == 305
     assert Counter((item.format_id, item.source) for item in records) == Counter(
@@ -77,7 +78,7 @@ def test_frozen_inputs_have_expected_deidentified_record_inventory() -> None:
 
 
 def test_review_queue_covers_every_record_without_assigning_archetypes() -> None:
-    review = build_review(ROOT)
+    review = build_review(R4_INPUT_ROOT)
 
     assert review["base_commit"] == R3_BASE_COMMIT
     assert review["parameters"]["edge_threshold"] == SIMILARITY_THRESHOLD
@@ -126,11 +127,11 @@ def test_review_queue_covers_every_record_without_assigning_archetypes() -> None
 
 
 def test_review_artifact_does_not_retain_source_identifiers() -> None:
-    review_text = json.dumps(build_review(ROOT), ensure_ascii=False)
+    review_text = json.dumps(build_review(R4_INPUT_ROOT), ensure_ascii=False)
     for format_id in ("modern", "standard"):
         source = json.loads(
             (
-                ROOT
+                R4_INPUT_ROOT
                 / "reports"
                 / format_id
                 / "mtgo"
@@ -140,7 +141,7 @@ def test_review_artifact_does_not_retain_source_identifiers() -> None:
         assert all(item["deck_id"] not in review_text for item in source["records"])
     melee = json.loads(
         (
-            ROOT
+            R4_INPUT_ROOT
             / "data"
             / "modern"
             / "melee"
@@ -156,7 +157,7 @@ def test_review_artifact_does_not_retain_source_identifiers() -> None:
 
 
 def test_write_is_reproducible_and_preserves_owner_dispositions(tmp_path: Path) -> None:
-    review = build_review(ROOT)
+    review = build_review(R4_INPUT_ROOT)
     first_hashes = write_review(review, tmp_path)
     first_bytes = {
         path.name: path.read_bytes() for path in sorted(tmp_path.iterdir())
@@ -194,7 +195,7 @@ def test_write_is_reproducible_and_preserves_owner_dispositions(tmp_path: Path) 
 def test_committed_review_artifacts_are_reproducible(tmp_path: Path) -> None:
     disposition_path = tmp_path / "dispositions.yaml"
     disposition_path.write_bytes((OUTPUT_ROOT / "dispositions.yaml").read_bytes())
-    write_review(build_review(ROOT), tmp_path)
+    write_review(build_review(R4_INPUT_ROOT), tmp_path)
 
     for name in (
         "unknown_family_queue.json",

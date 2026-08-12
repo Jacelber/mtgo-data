@@ -147,10 +147,11 @@ process.stdout.write(JSON.stringify({
         "stats/modern/mtgo/matchup_4w.json",
     )
 
-    assert result["collapsedRows"] == 57
+    assert result["collapsedRows"] == 78
     assert result["parentRetained"] is True
     assert "Gruul Broodscale Combo" in result["subtypeLabels"]
     assert result["necroSubtypeIds"] == [
+        "necrodominance/cosmogoyf",
         "necrodominance/golgari",
         "necrodominance/mono-black",
     ]

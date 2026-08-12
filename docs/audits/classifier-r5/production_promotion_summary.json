@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "CLASSIFIER-R5-PRODUCTION-PROMOTION",
+  "status": "local_validation_passed_pending_owner_acceptance",
+  "base_commit": "b3f379a95284ecbe5da21124a4be651bb346e602",
+  "production_rules": {
+    "modern": {
+      "sha256": "5bff0207af7e43d3b59807c102ab323a0e51109e7543e27e59f293bade632b31",
+      "parents": 127,
+      "subtypes": 70,
+      "rules": 205
+    },
+    "standard": {
+      "sha256": "b72aa3fcb0202eb9bc5d9c1f6f88abbe76d8d8ca29923662e3a75f8e54d3da74",
+      "parents": 102,
+      "subtypes": 11,
+      "rules": 126
+    }
+  },
+  "pickup_known_state": {
+    "modern": {
+      "before": 69,
+      "after": 126,
+      "sha256": "c589e26718fbac12bc164dd04dfc6dcb68c4a901df59ea1bf13242493a711235"
+    },
+    "standard": {
+      "before": 60,
+      "after": 91,
+      "sha256": "8ee830827a1d554dc19b6b7e979ded056d0fb414fbf447fbb44619e917a3d006"
+    }
+  },
+  "event_434455": {
+    "records": 362,
+    "classified": 362,
+    "unknown": 0,
+    "conflicts": 0,
+    "invalid": 0,
+    "normalized_source_sha256": "0b4296a9573a4facf4cfde1ce98569156f78fde6f5d2a1d3d662b54e2889e710",
+    "compatibility_contract": "1.3.0"
+  }
+}

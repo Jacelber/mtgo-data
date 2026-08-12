@@ -2947,6 +2947,31 @@ public entry points.
    production-rule, and protected-event hashes before Standard begins. This is
    review evidence, not production promotion; Standard review and any later
    commit, publication, the Landing shadow, and P12-10 remain separate gates.
+
+   The Owner then completed and accepted all 59 Standard R4 families, including
+   all 43 singleton dispositions, and authorized the final local R4 closeout
+   commit `b3f379a95284ecbe5da21124a4be651bb346e602` on 2026-08-12. The accepted
+   shadows classify all 6,784 current and 5,792 frozen Modern records; classify
+   4,732 of 4,733 current Standard records while preserving one explicit
+   intentional Unknown; and classify 3,928 of 3,936 frozen Standard records.
+   R4 changes no production rule or generated statistic.
+
+   The Owner separately authorized `CLASSIFIER-R5-PRODUCTION-PROMOTION` for
+   local implementation on 2026-08-12. R5 promotes only the hash-locked R4
+   Modern and Standard shadows, migrates parent-keyed Pickup known state, and
+   refreshes the existing MTGO and event 434455 classification-derived closure.
+   It freezes the R3 production inputs beneath the R4 audit and changes no
+   formula, source event, retained response, public path, workflow, front end,
+   or product boundary. R5 acceptance and commit, publication, the Landing
+   shadow, threshold reconfirmation, representative-card approval, and P12-10
+   remain separate gates.
+
+   On 2026-08-12 the Owner accepted the complete R5 local implementation and
+   separately authorized its local commit, reconciliation with the current
+   remote `master`, Ready pull request, complete CI, and merge. Manual
+   production dispatch, the Landing shadow, threshold reconfirmation,
+   representative-card approval, P12-10, and every later task remain separate
+   and unauthorized.
 4. `P12-04` — Visual direction and durable design-system contract
    - publish the durable repository authority at
      `docs/FRONTEND_DESIGN_SYSTEM.md`, covering product personality,

@@ -5,7 +5,6 @@ from pathlib import Path
 
 from tools.migrate_classifier_r3_pickup import (
     KEYS,
-    SOURCE_PATHS,
     build_migrated_document,
     migration_plan,
     sha256_path,
@@ -27,6 +26,20 @@ BASELINES = {
     / "baseline_pickup"
     / "standard_known_archetypes.json",
 }
+R3_PRODUCTION_BASELINES = {
+    "modern": ROOT
+    / "docs"
+    / "audits"
+    / "classifier-r4"
+    / "baseline_pickup"
+    / "modern_known_archetypes.json",
+    "standard": ROOT
+    / "docs"
+    / "audits"
+    / "classifier-r4"
+    / "baseline_pickup"
+    / "standard_known_archetypes.json",
+}
 
 
 def _load(path: Path) -> dict[str, object]:
@@ -41,7 +54,7 @@ def test_production_known_state_is_the_exact_accepted_migration() -> None:
         accepted = plan["formats"][format_id]
         assert sha256_path(BASELINES[format_id]) == accepted["source_sha256_before"]
         migrated = build_migrated_document(format_id, _load(BASELINES[format_id]), plan)
-        production = _load(SOURCE_PATHS[format_id])
+        production = _load(R3_PRODUCTION_BASELINES[format_id])
         assert production == migrated
         identities = production[KEYS[format_id]]
         assert isinstance(identities, list)

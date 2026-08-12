@@ -17,7 +17,7 @@ from mtgmeta.classifier_shadow_audit import (
     reordered_rule_set,
     rule_inventory,
 )
-from mtgmeta.config import load_rule_set, parse_rule_text
+from mtgmeta.config import parse_rule_text
 from mtgmeta.deck import deck_to_counts
 from mtgmeta.mtgo import stats
 from tools.build_classifier_r4_standard_shadow_rules import (
@@ -46,7 +46,14 @@ from tools.build_classifier_r4_unknown_review import load_unknown_records
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PRODUCTION_PATH = ROOT / "my_archetypes" / "standard.yaml"
+PRODUCTION_PATH = (
+    ROOT
+    / "docs"
+    / "audits"
+    / "classifier-r4"
+    / "baseline_rules"
+    / "standard.yaml"
+)
 SHADOW_PATH = (
     ROOT / "docs" / "audits" / "classifier-r4" / "shadow_rules" / "standard.yaml"
 )
@@ -55,6 +62,9 @@ DISPOSITIONS_PATH = (
     ROOT / "docs" / "audits" / "classifier-r4" / "standard_dispositions.yaml"
 )
 QUEUE_PATH = ROOT / "docs" / "audits" / "classifier-r4" / "unknown_family_queue.json"
+R4_INPUT_ROOT = (
+    ROOT / "docs" / "audits" / "classifier-r4" / "baseline_unknown_inputs"
+)
 
 EXPECTED_FAMILIES = {
     ORZHOV_LIFEGAIN_FAMILY: ("orzhov-lifegain", "orzhov-lifegain-primary", 19),
@@ -179,6 +189,27 @@ def _load_shadow_rules():
     )
 
 
+def _load_baseline_rules():
+    rules = parse_rule_text(PRODUCTION_PATH.read_text(encoding="utf-8"))
+    return replace(
+        rules,
+        semantic_features=load_semantic_feature_manifest(
+            ROOT / "configs" / "classifier_semantic_features.yaml"
+        ),
+    )
+
+
+def _reproduction_root(tmp_path: Path) -> Path:
+    root = tmp_path / "r4-standard-reproduction"
+    (root / "my_archetypes").mkdir(parents=True)
+    (root / "docs" / "audits" / "classifier-r4").mkdir(parents=True)
+    (root / "my_archetypes" / "standard.yaml").write_bytes(PRODUCTION_PATH.read_bytes())
+    (root / "docs" / "audits" / "classifier-r4" / "standard_dispositions.yaml").write_bytes(
+        DISPOSITIONS_PATH.read_bytes()
+    )
+    return root
+
+
 def _family_record_ids() -> dict[str, set[str]]:
     queue = json.loads(QUEUE_PATH.read_text(encoding="utf-8"))
     return {
@@ -188,7 +219,9 @@ def _family_record_ids() -> dict[str, set[str]]:
     }
 
 
-def test_standard_accepted_decisions_and_shadow_are_deterministic() -> None:
+def test_standard_accepted_decisions_and_shadow_are_deterministic(
+    tmp_path: Path,
+) -> None:
     dispositions = yaml.safe_load(DISPOSITIONS_PATH.read_text(encoding="utf-8"))
     assert dispositions["review"] == {
         "candidate_families": 59,
@@ -247,9 +280,12 @@ def test_standard_accepted_decisions_and_shadow_are_deterministic() -> None:
     assert (
         sha256(PRODUCTION_PATH.read_bytes()).hexdigest() == PRODUCTION_STANDARD_SHA256
     )
-    assert SHADOW_PATH.read_text(encoding="utf-8") == render_standard_shadow_rules(ROOT)
+    reproduction_root = _reproduction_root(tmp_path)
+    assert SHADOW_PATH.read_text(encoding="utf-8") == render_standard_shadow_rules(
+        reproduction_root
+    )
     assert yaml.safe_load(SHADOW_PATH.read_text(encoding="utf-8")) == (
-        build_standard_shadow_rules(ROOT)
+        build_standard_shadow_rules(reproduction_root)
     )
     inventory = rule_inventory(_load_shadow_rules())
     assert inventory["parent_count"] == 102
@@ -568,7 +604,7 @@ def test_standard_batch_3_synthetic_boundaries() -> None:
 
 
 def test_standard_non_partition_families_capture_only_accepted_records() -> None:
-    production = load_rule_set(PRODUCTION_PATH)
+    production = _load_baseline_rules()
     shadow = _load_shadow_rules()
     expected_ids = _family_record_ids()
     assert {family_id: len(ids) for family_id, ids in expected_ids.items()} == {
@@ -579,7 +615,7 @@ def test_standard_non_partition_families_capture_only_accepted_records() -> None
     selected: dict[str, set[str]] = {
         rule_id: set() for _identity, rule_id, _count in EXPECTED_FAMILIES.values()
     }
-    for record in load_unknown_records(ROOT):
+    for record in load_unknown_records(R4_INPUT_ROOT):
         if record.format_id != "standard":
             continue
         baseline = classify_counts(
@@ -597,17 +633,17 @@ def test_standard_non_partition_families_capture_only_accepted_records() -> None
                 shadow, record.main_counts(), record.side_counts()
             ).archetype_id
             == identity
-            for record in load_unknown_records(ROOT)
+            for record in load_unknown_records(R4_INPUT_ROOT)
             if record.record_id in expected_ids[family_id]
         )
 
 
 def test_standard_control_partition_captures_only_accepted_records() -> None:
-    production = load_rule_set(PRODUCTION_PATH)
+    production = _load_baseline_rules()
     shadow = _load_shadow_rules()
     selected = {rule_id: set() for rule_id in CONTROL_PARTITION}
 
-    for record in load_unknown_records(ROOT):
+    for record in load_unknown_records(R4_INPUT_ROOT):
         if record.format_id != "standard":
             continue
         baseline = classify_counts(
@@ -633,7 +669,9 @@ def test_standard_singleton_owner_decisions_capture_each_reviewed_record() -> No
     assert set(family_records) == set(SINGLETON_RULES)
     assert all(len(record_ids) == 1 for record_ids in family_records.values())
 
-    records = {record.record_id: record for record in load_unknown_records(ROOT)}
+    records = {
+        record.record_id: record for record in load_unknown_records(R4_INPUT_ROOT)
+    }
     shadow = _load_shadow_rules()
     for family_id, rule_id in SINGLETON_RULES.items():
         record_id = next(iter(family_records[family_id]))
@@ -650,7 +688,7 @@ def test_standard_singleton_owner_decisions_capture_each_reviewed_record() -> No
 
 
 def test_standard_accepted_current_and_frozen_replays_are_stable() -> None:
-    production = load_rule_set(PRODUCTION_PATH)
+    production = _load_baseline_rules()
     shadow = _load_shadow_rules()
     reordered = reordered_rule_set(shadow)
     accepted_singleton_rule_ids = {

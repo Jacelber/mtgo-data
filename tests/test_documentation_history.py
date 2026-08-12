@@ -52,91 +52,45 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
+    assert status["current_task"]["id"] == "CLASSIFIER-R5-PRODUCTION-PROMOTION"
     assert status["current_task"]["status"] == (
-        "owner_accepted_and_locally_committed"
+        "owner_accepted_publication_in_progress"
     )
-    assert status["current_task"]["completed_on"] == "2026-08-12"
     assert status["current_task"]["base_commit"] == (
-        "7bf804684ac22dcf71560bacae4d3bc49c56f08f"
+        "b3f379a95284ecbe5da21124a4be651bb346e602"
     )
     assert status["current_task"]["authorization"] == {
-        "local_implementation": False,
-        "commit": False,
-        "remote_publication": False,
-        "merge": False,
+        "local_implementation": True,
+        "commit": True,
+        "remote_publication": True,
+        "merge": True,
     }
-    assert status["current_task"]["review_progress"] == {
-        "modern_owner_bulk_batches_implemented": 4,
-        "modern_batch_4_status": "owner_accepted",
-        "modern_batch_4_dispositions": 9,
-        "modern_batch_4_parents": 8,
-        "modern_review_status": "owner_accepted_local_shadow_closed",
-        "modern_families_total": 88,
-        "modern_owner_accepted_families": 88,
-        "modern_pending_families": 0,
-        "current_modern_shadow": "6784 classified; 0 Unknown",
-        "frozen_modern_shadow": "5792 classified; 0 Unknown",
-        "tabletop_batch_4_identity_changes": 0,
-        "production_rules_changed": False,
-        "modern_closeout_checkpoint": (
-            "docs/audits/classifier-r4/modern_closeout.yaml"
+    assert status["current_task"]["accepted_inputs"] == {
+        "modern_shadow_sha256": (
+            "5bff0207af7e43d3b59807c102ab323a0e51109e7543e27e59f293bade632b31"
         ),
-        "modern_closeout_commit_authorization": ("owner_authorized_once_on_2026-08-12"),
-        "standard_review_status": (
-            "all_59_families_owner_accepted_local_shadow_closed"
+        "standard_shadow_sha256": (
+            "b72aa3fcb0202eb9bc5d9c1f6f88abbe76d8d8ca29923662e3a75f8e54d3da74"
         ),
-        "standard_owner_batches_implemented": 4,
-        "standard_batch_1_status": "owner_accepted",
-        "standard_batch_1_dispositions": 4,
-        "standard_batch_1_new_parents": 3,
-        "standard_batch_2_status": "owner_accepted",
-        "standard_batch_2_dispositions": 4,
-        "standard_batch_2_new_parents": 2,
-        "standard_batch_2_existing_parent_paths": 2,
-        "standard_batch_2_repaired_primary_rules": 1,
-        "standard_batch_3_status": "owner_accepted_local_closeout",
-        "standard_batch_3_dispositions": 8,
-        "standard_batch_3_new_parents": 6,
-        "standard_batch_3_existing_parent_paths": 1,
-        "standard_batch_3_repaired_primary_rules": 2,
-        "standard_batch_3_classified_migrations": 5,
-        "standard_batch_3_commit_authorization": (
-            "owner_authorized_once_on_2026-08-12"
+        "semantic_manifest_sha256": (
+            "0cd94ee3a4d6974f88446a660e661943d1cc2c4d8a25891dd6d214931a6aa999"
         ),
-        "standard_singleton_status": "owner_accepted_local_closeout",
-        "standard_singleton_dispositions": 43,
-        "standard_singleton_new_parents": 20,
-        "standard_singleton_retired_parents": 1,
-        "standard_singleton_intentional_unknown": 1,
-        "standard_singleton_classified_migrations": 8,
-        "standard_singleton_commit_authorization": (
-            "owner_authorized_once_on_2026-08-12"
-        ),
-        "standard_owner_accepted_families": 59,
-        "standard_pending_families": 0,
-        "current_standard_shadow": "4732 classified; 1 intentional Unknown",
-        "frozen_standard_shadow": "3928 classified; 8 Unknown",
-        "standard_production_rules_changed": False,
-        "next_stop": (
-            "After the one-time Owner-authorized R4 local closeout commit, stop; "
-            "production promotion, publication, Landing shadow, P12-10, another "
-            "commit, and another task remain prohibited."
-        ),
+        "modern_expected_inventory": "127 parents; 70 subtypes; 205 rules",
+        "standard_expected_inventory": "102 parents; 11 subtypes; 126 rules",
+        "current_modern_expected": "6784 classified; 0 Unknown",
+        "frozen_modern_expected": "5792 classified; 0 Unknown",
+        "current_standard_expected": "4732 classified; 1 intentional Unknown",
+        "frozen_standard_expected": "3928 classified; 8 Unknown",
     }
-    assert status["recent_completion_handoff"] == {
-        "id": "CLASSIFIER-R3-PRODUCTION-MIGRATION",
-        "name": "Accepted classifier production and Pickup migration",
-        "status": "owner_accepted_and_locally_committed",
-        "local_commit": "7bf804684ac22dcf71560bacae4d3bc49c56f08f",
-        "note": (
-            "R4 starts from the Owner-accepted local R3 commit. R3 has not been "
-            "remotely published."
-        ),
-    }
+    assert status["recent_completion_handoff"]["id"] == (
+        "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
+    )
+    assert status["recent_completion_handoff"]["local_commit"] == (
+        "b3f379a95284ecbe5da21124a4be651bb346e602"
+    )
     assert status["next_approved_task"]["id"] == "P12-10"
     assert status["next_approved_task"]["status"] == (
-        "blocked_pending_classifier_production_promotion_and_separate_authorization"
+        "blocked_pending_r5_publication_landing_shadow_and_separate_authorization"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
@@ -146,21 +100,18 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
 
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
-    audit = (
-        ROOT / "docs" / "audits" / "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW.md"
-    ).read_text(encoding="utf-8")
+    audit = (ROOT / "docs" / "audits" / "CLASSIFIER-R5-PRODUCTION-PROMOTION.md").read_text(
+        encoding="utf-8"
+    )
     decisions = (ROOT / "docs" / "DECISIONS.md").read_text(encoding="utf-8")
     for document in (roadmap, audit, decisions):
-        assert "R4" in document
+        assert "R5" in document
         assert "P12-10" in document
-    assert "internal_diagnostics" in audit
-    assert "pending_owner_review" in audit
-    assert "map_existing" in audit
-    assert "new_identity" in audit
-    assert "intentional_unknown" in audit
-    assert "defer_insufficient_evidence" in audit
+    assert "statistical_json_structure" in audit
+    assert "Pickup" in audit
+    assert "434455" in audit
     assert "commit" in audit
-    assert "R4" in audit
+    assert "R5" in audit
     assert "production" in audit
     assert "P12-10" in audit
 

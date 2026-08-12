@@ -96,8 +96,8 @@ def test_reference_scope_totals_match_the_opportunity_ledger():
     } == {
             "day1": {
                 "participant_count": 362,
-                "known_deck_count": 351,
-                "unknown_deck_count": 11,
+                "known_deck_count": 362,
+                "unknown_deck_count": 0,
             "constructed_points": 2589,
             "theoretical_rounds": 1810,
             "effective_theoretical_rounds": 1810,
@@ -106,8 +106,8 @@ def test_reference_scope_totals_match_the_opportunity_ledger():
         },
             "day2": {
                 "participant_count": 220,
-                "known_deck_count": 210,
-                "unknown_deck_count": 10,
+                "known_deck_count": 220,
+                "unknown_deck_count": 0,
             "constructed_points": 1607,
             "theoretical_rounds": 1100,
             "effective_theoretical_rounds": 1093,
@@ -116,8 +116,8 @@ def test_reference_scope_totals_match_the_opportunity_ledger():
         },
             "all_constructed": {
                 "participant_count": 362,
-                "known_deck_count": 351,
-                "unknown_deck_count": 11,
+                "known_deck_count": 362,
+                "unknown_deck_count": 0,
             "constructed_points": 4196,
             "theoretical_rounds": 2910,
             "effective_theoretical_rounds": 2903,
@@ -156,10 +156,9 @@ def test_parent_rows_and_unknown_bucket_conserve_every_scope():
         assert sum(row["metagame_share"] for row in rows) == pytest.approx(
             1.0, abs=0.00001
         )
-        unknown = next(row for row in rows if row["group_id"] == "unknown")
-        assert unknown["classification_status"] == "unknown"
-        assert unknown["archetype_id"] is None
-        assert unknown["subtypes"] == []
+        unknown = [row for row in rows if row["group_id"] == "unknown"]
+        assert unknown == []
+        assert scope["unknown_deck_count"] == 0
 
 
 def test_subtype_children_conserve_additive_parent_fields():
@@ -250,8 +249,8 @@ def test_quality_reports_required_exclusions_and_no_unresolved_records():
         "standings": 362,
         "submitted_decklists": 362,
         "missing_or_unavailable_decklists": 0,
-        "classified_decks": 351,
-        "unknown_decks": 11,
+        "classified_decks": 362,
+        "unknown_decks": 0,
         "classification_conflicts": 0,
         "invalid_decks": 0,
         "rounds": 19,
@@ -274,7 +273,6 @@ def test_quality_reports_required_exclusions_and_no_unresolved_records():
         "no_show_opportunities": 0,
     }
     assert {issue["code"] for issue in quality["issues"]} == {
-        "unknown_classifications",
         "disqualified_participant_matches_excluded",
         "mixed_event_day2_selection_bias",
     }

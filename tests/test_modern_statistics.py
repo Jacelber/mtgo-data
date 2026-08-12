@@ -68,8 +68,8 @@ def test_committed_modern_ranges_reconcile_parent_aggregates():
             document["archetypes"]
         )
         assert sum(item["count"] for item in document["archetypes"]) == document["total_decks"]
-        unknown = next(item for item in document["archetypes"] if item["id"] == "unknown")
-        assert document["unknown_count"] == unknown["count"]
+        unknown = [item for item in document["archetypes"] if item["id"] == "unknown"]
+        assert document["unknown_count"] == sum(item["count"] for item in unknown)
         assert sum(item["high_score_count"] for item in document["archetypes"]) == document["total_high_score"]
         assert sum(item["top8_count"] for item in document["archetypes"]) == document["total_top8"]
         decks = json.loads(

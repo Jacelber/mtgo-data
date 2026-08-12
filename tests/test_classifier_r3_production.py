@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from dataclasses import replace
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -28,7 +29,7 @@ from mtgmeta.classifier_shadow_audit import (
     load_frozen_records,
     reordered_rule_set,
 )
-from mtgmeta.config import RuleConfigError, load_rule_set
+from mtgmeta.config import RuleConfigError, load_rule_set, parse_rule_text
 from mtgmeta.melee.classification import build_classification_overlay_from_paths
 from tools.build_classifier_r3_production_rules import build_production_rules
 
@@ -60,6 +61,22 @@ EXPECTED = {
 }
 
 
+def _baseline_rule_path(format_id: str) -> Path:
+    return (
+        ROOT
+        / "docs"
+        / "audits"
+        / "classifier-r4"
+        / "baseline_rules"
+        / f"{format_id}.yaml"
+    )
+
+
+def _load_r3_baseline(format_id: str):
+    rules = parse_rule_text(_baseline_rule_path(format_id).read_text(encoding="utf-8"))
+    return replace(rules, semantic_features=PRODUCTION_MANIFEST)
+
+
 def _corpus_path(format_id: str) -> Path:
     if format_id == "modern":
         return ROOT / "tests" / "fixtures" / "modern" / "frozen_j6e_corpus.json"
@@ -68,7 +85,7 @@ def _corpus_path(format_id: str) -> Path:
 
 @pytest.mark.parametrize("format_id", ["modern", "standard"])
 def test_production_rules_are_the_accepted_r2_rules(format_id: str) -> None:
-    rule_path = ROOT / "my_archetypes" / f"{format_id}.yaml"
+    rule_path = _baseline_rule_path(format_id)
     document = yaml.safe_load(rule_path.read_text(encoding="utf-8"))
     assert document == build_production_rules(format_id)
     assert document["schema_version"] == "1.1.0"
@@ -76,7 +93,7 @@ def test_production_rules_are_the_accepted_r2_rules(format_id: str) -> None:
         "manifest_path": "configs/classifier_semantic_features.yaml",
         "manifest_sha256": sha256(PRODUCTION_MANIFEST_PATH.read_bytes()).hexdigest(),
     }
-    rules = load_rule_set(rule_path)
+    rules = _load_r3_baseline(format_id)
     assert rules.semantic_features == PRODUCTION_MANIFEST
     assert (
         len(rules.archetypes),
@@ -91,7 +108,7 @@ def test_production_rules_are_the_accepted_r2_rules(format_id: str) -> None:
 
 @pytest.mark.parametrize("format_id", ["modern", "standard"])
 def test_production_matches_shadow_for_every_frozen_record(format_id: str) -> None:
-    production = load_rule_set(ROOT / "my_archetypes" / f"{format_id}.yaml")
+    production = _load_r3_baseline(format_id)
     reordered = reordered_rule_set(production)
     shadow = load_rule_set(AUDIT_ROOT / "shadow_rules" / f"{format_id}.yaml")
     statuses: Counter[str] = Counter()
@@ -149,19 +166,42 @@ def test_manifest_digest_is_fail_closed(tmp_path: Path) -> None:
     manifest = root / "configs" / "classifier_semantic_features.yaml"
     rules.parent.mkdir(parents=True)
     manifest.parent.mkdir(parents=True)
-    rules.write_bytes((ROOT / "my_archetypes" / "modern.yaml").read_bytes())
+    rules.write_bytes(
+        (
+            ROOT
+            / "docs"
+            / "audits"
+            / "classifier-r4"
+            / "baseline_rules"
+            / "modern.yaml"
+        ).read_bytes()
+    )
     manifest.write_bytes(PRODUCTION_MANIFEST_PATH.read_bytes() + b"\n")
     with pytest.raises(RuleConfigError, match="manifest_sha256"):
         load_rule_set(rules)
 
 
-def test_event_434455_uses_production_rules_without_changing_source() -> None:
+def test_event_434455_uses_production_rules_without_changing_source(
+    tmp_path: Path,
+) -> None:
     event_path = ROOT / "data" / "modern" / "melee" / "events" / "434455.json"
     before = sha256(event_path.read_bytes()).hexdigest()
+    repository_root = tmp_path / "r3-repository"
+    rules_path = repository_root / "my_archetypes" / "modern.yaml"
+    manifest_path = repository_root / "configs" / "classifier_semantic_features.yaml"
+    reproduced_event_path = (
+        repository_root / "data" / "modern" / "melee" / "events" / "434455.json"
+    )
+    rules_path.parent.mkdir(parents=True)
+    manifest_path.parent.mkdir(parents=True)
+    reproduced_event_path.parent.mkdir(parents=True)
+    rules_path.write_bytes(_baseline_rule_path("modern").read_bytes())
+    manifest_path.write_bytes(PRODUCTION_MANIFEST_PATH.read_bytes())
+    reproduced_event_path.write_bytes(event_path.read_bytes())
     overlay = build_classification_overlay_from_paths(
-        event_path,
-        ROOT / "my_archetypes" / "modern.yaml",
-        ROOT,
+        reproduced_event_path,
+        rules_path,
+        repository_root,
     )
     assert overlay["summary"]["total_records"] == 362
     assert overlay["summary"]["classified"] == 351

@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/classifier-r4-residual-unknown-review"
-  working_branch_status: "r4_owner_accepted_local_closeout"
+  current_working_branch: "codex/classifier-r5-production-promotion"
+  working_branch_status: "r5_owner_accepted_publication_in_progress"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -72,113 +72,111 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
-  name: "Residual Unknown review and explicit disposition"
-  status: "owner_accepted_and_locally_committed"
-  authorized_on: "2026-08-11"
-  completed_on: "2026-08-12"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/classifier-r4-20260811-01"
-  branch: "codex/classifier-r4-residual-unknown-review"
-  base_commit: "7bf804684ac22dcf71560bacae4d3bc49c56f08f"
-  task_type: "local_internal_diagnostics_review"
-  artifact_impact: "internal_diagnostics"
-  objective: "Build a deterministic, de-identified review queue for every residual Standard and Modern Unknown family, record an explicit four-state disposition, and evaluate owner-accepted proposals in shadow only without changing production rules, statistics, Pickup state, source data, product behavior, or public paths."
+  id: "CLASSIFIER-R5-PRODUCTION-PROMOTION"
+  name: "Accepted R4 classifier production promotion"
+  status: "owner_accepted_publication_in_progress"
+  authorized_on: "2026-08-12"
+  implementation_completed_on: "2026-08-12"
+  owner_accepted_on: "2026-08-12"
+  publication_authorized_on: "2026-08-12"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/classifier-r5-20260812-01"
+  branch: "codex/classifier-r5-production-promotion"
+  base_commit: "b3f379a95284ecbe5da21124a4be651bb346e602"
+  task_type: "local_statistical_artifact_migration"
+  artifact_impact: "statistical_json_structure"
+  objective: "Promote the exact Owner-accepted R4 Standard and Modern shadows into the production classifier, migrate only the affected parent-keyed Pickup known state, and atomically refresh existing classification-derived MTGO and Tabletop artifacts without changing formulas, source data, public paths, front ends, workflows, or product boundaries."
   authorization:
-    local_implementation: false
-    commit: false
-    remote_publication: false
-    merge: false
+    local_implementation: true
+    commit: true
+    remote_publication: true
+    merge: true
   target_paths:
-    - "tools/build_classifier_r4_unknown_review.py"
-    - "tools/build_classifier_r4_shadow_rules.py"
-    - "tools/build_classifier_r4_standard_shadow_rules.py"
-    - "tests/test_classifier_r4_unknown_review.py"
-    - "tests/test_classifier_r4_shadow.py"
-    - "tests/test_classifier_r4_standard_shadow.py"
-    - "docs/audits/classifier-r4/**"
-    - "docs/audits/CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW.md"
-    - "docs/STATUS.yaml"
+    - "my_archetypes/modern.yaml"
+    - "my_archetypes/standard.yaml"
+    - "stats/modern/mtgo/**"
+    - "stats/standard/mtgo/**"
+    - "reports/modern/mtgo/**"
+    - "reports/standard/mtgo/**"
+    - "data/modern/melee/classifications/434455.json"
+    - "data/modern/melee/opportunities/434455.json"
+    - "stats/modern/melee/events/434455/**"
+    - "stats/catalog.json"
+    - "tests/fixtures/melee/434455_compatibility_manifest.json"
+    - "schemas/melee-compatibility-manifest.schema.json"
+    - "tools/build_classifier_r5_production_rules.py"
+    - "tools/migrate_classifier_r5_pickup.py"
+    - "tools/rebuild_classifier_r5_top8_history.py"
+    - "tests/test_classifier_r5_*.py"
+    - "tests/test_classifier_r3_*.py"
+    - "tests/test_classifier_r4_*.py"
+    - "tests/test_melee_*.py"
+    - "tests/test_modern_*.py"
+    - "tests/test_mtgo_matchup.py"
+    - "tests/test_phase8_real_data_review.py"
+    - "tests/test_standard_classifier_integration.py"
     - "tests/test_documentation_history.py"
+    - "tests/test_validate_schemas.py"
+    - "docs/audits/classifier-r4/baseline_rules/**"
+    - "docs/audits/classifier-r4/baseline_pickup/**"
+    - "docs/audits/classifier-r4/baseline_unknown_inputs/**"
+    - "docs/audits/classifier-r5/**"
+    - "docs/audits/CLASSIFIER-R5-PRODUCTION-PROMOTION.md"
+    - "docs/DECISIONS.md"
+    - "docs/ROADMAP.md"
+    - "docs/STATUS.yaml"
   protected_scope:
-    code_changed: "Offline deterministic review-queue builder and focused tests only"
+    code_changed: "Hash-locked promotion, Pickup migration, bounded Top 8 rebuild, and regression tests only"
     workflow_changed: "none"
-    raw_or_generated_data_changed: "none; committed classification reports are read-only inputs"
-    statistical_behavior_changed: "none"
-    schema_changed: "none"
+    raw_or_generated_data_changed: "classification-derived outputs only; all source events and retained responses remain unchanged"
+    statistical_behavior_changed: "classification identity only; no formula, window, match-treatment, or rounding change"
+    schema_changed: "event 434455 exact derived-artifact compatibility contract only, from 1.2 to 1.3"
     frontend_source_changed: "none"
     public_paths_changed: "none"
-    event_434455_bytes_changed: false
+    event_434455_source_bytes_changed: false
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Read the committed Standard and Modern MTGO Unknown reports and the committed event 434455 classification overlay."
-    - "Cluster residual Unknown records by transparent normalized main-deck similarity while preserving format and source evidence separately."
-    - "Rank every family for review, keep it pending before Owner review, and accept exactly one final disposition: map_existing, new_identity, intentional_unknown, or defer_insufficient_evidence."
-    - "Prepare representative lists, common cores, nearest production identities, and false-positive review evidence without storing personal identities."
-    - "Evaluate only Owner-accepted proposals through non-production shadow rules and synthetic boundaries."
+    - "Freeze the exact R3 production rules and Pickup states as R4 reproducibility baselines."
+    - "Promote only the hash-locked Owner-accepted R4 Standard and Modern shadow rule documents."
+    - "Add every newly reviewed parent to Pickup known state, migrate accepted renamed parents, and remove only retired known parents."
+    - "Regenerate existing MTGO classification reports, statistics, matchup, completeness, hierarchy, metadata, catalog, and already indexed Top 8 contents."
+    - "Regenerate the existing event 434455 Tabletop classification and derived closure while preserving its normalized source bytes and product separation."
     - "Run focused and complete validation and prepare local Owner-review evidence."
   prohibited_changes:
-    - "Any edit to production classification rules, the semantic-feature manifest, classification reports, statistics, Pickup state, source events, retained responses, workflows, front ends, Schemas, public paths, or event whitelists."
-    - "Any automatic production assignment or catch-all rule whose category boundary has not been explicitly accepted by the Owner."
-    - "Any commit without a new explicit Owner authorization, or any push, pull request, merge, production dispatch, Landing shadow, P12-10 work, or another task."
+    - "Any new classifier judgment, unreviewed identity, catch-all rule, semantic-feature expansion, statistical formula, source event, retained response, workflow, front end, Schema, public path, event whitelist, or product-boundary change."
+    - "Any creation of a new Top 8 week, Pickup candidate, approval, published week, or public path."
+    - "Any production dispatch, Landing shadow, threshold decision, representative-card work, P12-10 work, or another task without separate Owner authorization."
     - "Force-push, direct master development, repository-setting changes, credentials, or protected event 434455 source-byte changes."
-  stop_point: "After the one-time Owner-authorized R4 local closeout commit, stop; do not create another commit, publish, promote shadow rules into production, start P12-10, or start another task."
-  review_progress:
-    modern_owner_bulk_batches_implemented: 4
-    modern_batch_4_status: "owner_accepted"
-    modern_batch_4_dispositions: 9
-    modern_batch_4_parents: 8
-    modern_review_status: "owner_accepted_local_shadow_closed"
-    modern_families_total: 88
-    modern_owner_accepted_families: 88
-    modern_pending_families: 0
-    current_modern_shadow: "6784 classified; 0 Unknown"
-    frozen_modern_shadow: "5792 classified; 0 Unknown"
-    tabletop_batch_4_identity_changes: 0
-    production_rules_changed: false
-    modern_closeout_checkpoint: "docs/audits/classifier-r4/modern_closeout.yaml"
-    modern_closeout_commit_authorization: "owner_authorized_once_on_2026-08-12"
-    standard_review_status: "all_59_families_owner_accepted_local_shadow_closed"
-    standard_owner_batches_implemented: 4
-    standard_batch_1_status: "owner_accepted"
-    standard_batch_1_dispositions: 4
-    standard_batch_1_new_parents: 3
-    standard_batch_2_status: "owner_accepted"
-    standard_batch_2_dispositions: 4
-    standard_batch_2_new_parents: 2
-    standard_batch_2_existing_parent_paths: 2
-    standard_batch_2_repaired_primary_rules: 1
-    standard_batch_3_status: "owner_accepted_local_closeout"
-    standard_batch_3_dispositions: 8
-    standard_batch_3_new_parents: 6
-    standard_batch_3_existing_parent_paths: 1
-    standard_batch_3_repaired_primary_rules: 2
-    standard_batch_3_classified_migrations: 5
-    standard_batch_3_commit_authorization: "owner_authorized_once_on_2026-08-12"
-    standard_singleton_status: "owner_accepted_local_closeout"
-    standard_singleton_dispositions: 43
-    standard_singleton_new_parents: 20
-    standard_singleton_retired_parents: 1
-    standard_singleton_intentional_unknown: 1
-    standard_singleton_classified_migrations: 8
-    standard_singleton_commit_authorization: "owner_authorized_once_on_2026-08-12"
-    standard_owner_accepted_families: 59
-    standard_pending_families: 0
-    current_standard_shadow: "4732 classified; 1 intentional Unknown"
-    frozen_standard_shadow: "3928 classified; 8 Unknown"
-    standard_production_rules_changed: false
-    next_stop: "After the one-time Owner-authorized R4 local closeout commit, stop; production promotion, publication, Landing shadow, P12-10, another commit, and another task remain prohibited."
+  stop_point: "Complete the authorized R5 commit, current-master reconciliation, Ready pull request, full CI, merge, and automatic Pages verification; then stop without dispatching production, rerunning the Landing shadow, or starting P12-10."
+  accepted_inputs:
+    modern_shadow_sha256: "5bff0207af7e43d3b59807c102ab323a0e51109e7543e27e59f293bade632b31"
+    standard_shadow_sha256: "b72aa3fcb0202eb9bc5d9c1f6f88abbe76d8d8ca29923662e3a75f8e54d3da74"
+    semantic_manifest_sha256: "0cd94ee3a4d6974f88446a660e661943d1cc2c4d8a25891dd6d214931a6aa999"
+    modern_expected_inventory: "127 parents; 70 subtypes; 205 rules"
+    standard_expected_inventory: "102 parents; 11 subtypes; 126 rules"
+    current_modern_expected: "6784 classified; 0 Unknown"
+    frozen_modern_expected: "5792 classified; 0 Unknown"
+    current_standard_expected: "4732 classified; 1 intentional Unknown"
+    frozen_standard_expected: "3928 classified; 8 Unknown"
+  validation:
+    ordinary_pytest: "926 passed; 8 committed-baseline tests deselected"
+    committed_baseline_pytest: "8 passed; 926 ordinary tests deselected"
+    ruff: "passed"
+    mypy: "passed; 4 source files"
+    repository: "158 Python; 17 JavaScript; 1719 JSON; 47 YAML; 56 references; 2141 hygiene entries passed"
+    schemas: "73 public generated JSON documents passed"
+    classification_reports: "Modern 6784/0 Unknown; Standard 4733/1 intentional Unknown; zero conflicts and invalid decks"
 
 recent_completion_handoff:
-  id: "CLASSIFIER-R3-PRODUCTION-MIGRATION"
-  name: "Accepted classifier production and Pickup migration"
+  id: "CLASSIFIER-R4-RESIDUAL-UNKNOWN-REVIEW"
+  name: "Residual Unknown review and explicit disposition"
   status: "owner_accepted_and_locally_committed"
-  local_commit: "7bf804684ac22dcf71560bacae4d3bc49c56f08f"
-  note: "R4 starts from the Owner-accepted local R3 commit. R3 has not been remotely published."
+  local_commit: "b3f379a95284ecbe5da21124a4be651bb346e602"
+  note: "R5 starts from the complete Owner-accepted R4 local commit chain. None of the classifier R1-R4 local commits has been remotely published."
 
 current_repository_state:
-  baseline_commit: "7bf804684ac22dcf71560bacae4d3bc49c56f08f"
-  baseline_note: "Owner-authorized local R3 commit; used as the independent isolated R4 review base with push disabled."
+  baseline_commit: "b3f379a95284ecbe5da21124a4be651bb346e602"
+  baseline_note: "Owner-authorized R4 Standard closeout commit; used as the independent isolated R5 production-promotion base with push disabled."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -261,13 +259,13 @@ open_decisions:
 next_approved_task:
   id: "P12-10"
   name: "Landing weekly-facts producer and Pickup integration"
-  status: "blocked_pending_classifier_production_promotion_and_separate_authorization"
+  status: "blocked_pending_r5_publication_landing_shadow_and_separate_authorization"
   production_change: true
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "R4 local shadow review is Owner-accepted and closed. Classifier production promotion, the Landing shadow and threshold confirmation, representative-card approval, P12-10, any additional commit, publication, and production dispatch remain separately unauthorized."
+  note: "The Owner accepted R5 and authorized its local commit, current-master reconciliation, Ready pull request, complete CI, and merge on 2026-08-12. The Landing shadow, threshold confirmation, representative-card approval, P12-10, and any manual production dispatch remain separately unauthorized."
 
 governance_baseline:
   status: "active_on_master"
@@ -303,7 +301,7 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not promote R4 proposals into production classification rules, begin P12-10, or begin another task without separate owner authorization."
+  - "Do not rerun the Landing shadow, choose thresholds or representative cards, begin P12-10, or begin another task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."

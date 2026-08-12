@@ -17,22 +17,22 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "df9c55e78e8fd8ed9e6cb18b0117a4d2947f207a302fe7148b3da00deee74045",
+    "rule_sha256": "5bff0207af7e43d3b59807c102ab323a0e51109e7543e27e59f293bade632b31",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 70,
-    "rule_count": 119,
-    "subtype_count": 54
+    "archetype_count": 127,
+    "rule_count": 205,
+    "subtype_count": 70
   },
   "summary": {
     "total_records": 362,
-    "classified": 351,
-    "unknown": 11,
+    "classified": 362,
+    "unknown": 0,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 64,
-    "overridden_matches": 64,
-    "selected_subtypes": 116,
-    "parent_only": 235,
+    "multiple_matches": 69,
+    "overridden_matches": 69,
+    "selected_subtypes": 125,
+    "parent_only": 237,
     "same_parent_multiple_subtype_matches": 2,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
@@ -40,15 +40,17 @@
       "amulet-titan": 25,
       "azorius-control": 2,
       "azorius-energy": 2,
+      "bant-reclamation": 1,
       "boros-energy": 45,
       "boros-land-destruction": 9,
-      "broodscale-combo": 35,
-      "chant-control": 11,
+      "broodscale-combo": 42,
+      "chant-control": 10,
+      "deaths-shadow": 1,
       "devoted-druid-combo": 1,
       "domain-zoo": 8,
       "eldrazi-ramp": 3,
       "eldrazi-tron": 35,
-      "esper-blink": 9,
+      "esper-blink": 11,
       "esper-goryos": 33,
       "fight-rigging": 9,
       "fling-goyf": 3,
@@ -59,7 +61,7 @@
       "mardu-energy": 1,
       "mono-blue-belcher": 1,
       "necrodominance": 1,
-      "prowess": 25,
+      "prowess": 26,
       "rakdos-hollow-one": 2,
       "ruby-storm": 16,
       "sam-combo": 1,
@@ -68,11 +70,13 @@
       "song-of-creation": 1
     },
     "selected_by_subtype": {
-      "broodscale-combo/gruul": 20,
+      "broodscale-combo/gruul": 27,
       "broodscale-combo/mono-green": 14,
       "broodscale-combo/simic": 1,
-      "chant-control/azorius": 5,
+      "chant-control/azorius": 4,
       "chant-control/jeskai": 6,
+      "deaths-shadow/grixis": 1,
+      "devoted-druid-combo/abzan": 1,
       "eldrazi-ramp/gruul": 3,
       "eldrazi-tron/colorless": 34,
       "eldrazi-tron/mono-green": 1,
@@ -80,7 +84,7 @@
       "living-end/temur": 2,
       "necrodominance/golgari": 1,
       "prowess/grixis": 1,
-      "prowess/izzet": 21,
+      "prowess/izzet": 22,
       "prowess/jeskai": 1,
       "prowess/lessons": 1,
       "prowess/mono-red": 1,
@@ -97,177 +101,93 @@
   "records": [
     {
       "participant_id": "participant-001753d130697eb138d035874f5aedfef9ffd06a4a10230ebc7f387134d48c5b",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "broodscale-combo-gruul",
+        "priority": 651000
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Ancient Stirrings",
-            "quantity": 2
-          },
-          {
-            "name": "Basking Broodscale",
-            "quantity": 3
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 2
-          },
-          {
-            "name": "Boseiju, Who Endures",
-            "quantity": 2
-          },
-          {
-            "name": "Commercial District",
-            "quantity": 1
-          },
-          {
-            "name": "Dismember",
-            "quantity": 1
-          },
-          {
-            "name": "Eldrazi Temple",
-            "quantity": 4
-          },
-          {
-            "name": "Emrakul, the Promised End",
-            "quantity": 4
-          },
-          {
-            "name": "Forest",
-            "quantity": 3
-          },
-          {
-            "name": "Glaring Fleshraker",
-            "quantity": 4
-          },
-          {
-            "name": "Grove of the Burnwillows",
-            "quantity": 4
-          },
-          {
-            "name": "Haywire Mite",
-            "quantity": 1
-          },
-          {
-            "name": "Kozilek's Command",
-            "quantity": 4
-          },
-          {
-            "name": "Malevolent Rumble",
-            "quantity": 4
-          },
-          {
-            "name": "Misty Rainforest",
-            "quantity": 1
-          },
-          {
-            "name": "Pithing Needle",
-            "quantity": 1
-          },
-          {
-            "name": "Springleaf Drum",
-            "quantity": 1
-          },
-          {
-            "name": "Stomping Ground",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 2
-          },
-          {
-            "name": "Ugin's Labyrinth",
-            "quantity": 2
-          },
-          {
-            "name": "Unholy Heat",
-            "quantity": 2
-          },
-          {
-            "name": "Urza's Saga",
-            "quantity": 4
-          },
-          {
-            "name": "Verdant Catacombs",
-            "quantity": 1
-          },
-          {
-            "name": "Vexing Bauble",
-            "quantity": 2
-          },
-          {
-            "name": "Windswept Heath",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 2
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Basking Broodscale",
-            "quantity": 1
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 1
-          },
-          {
-            "name": "Cavern of Souls",
-            "quantity": 2
-          },
-          {
-            "name": "Disruptor Flute",
-            "quantity": 1
-          },
-          {
-            "name": "Firespout",
-            "quantity": 2
-          },
-          {
-            "name": "Gemstone Caverns",
-            "quantity": 1
-          },
-          {
-            "name": "Grafdigger's Cage",
-            "quantity": 1
-          },
-          {
-            "name": "Nature's Claim",
-            "quantity": 2
-          },
-          {
-            "name": "Soul-Guide Lantern",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 1
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-00da91b75a62549c3f68ba45247bcf4bf09e1692a1f55130667ac2eb84ac9c16",
@@ -1447,7 +1367,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -1483,7 +1403,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -3224,7 +3144,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -3260,7 +3180,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -3284,153 +3204,189 @@
     },
     {
       "participant_id": "participant-122f6205a4eb366673c6604a23aa3a228b938b8ab113789363bd5768ef600d2a",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "esper-blink",
+        "archetype_name": "Esper Blink",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "esper-blink-ephemerate",
+        "priority": 632650
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-ephemerate",
+          "priority": 632650,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Wrath of the Skies",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": 2,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-ephemerate",
+          "priority": 632650,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Wrath of the Skies",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": 2,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Ephemerate",
-            "quantity": 3
-          },
-          {
-            "name": "Fatal Push",
-            "quantity": 2
-          },
-          {
-            "name": "Flooded Strand",
-            "quantity": 4
-          },
-          {
-            "name": "Force of Negation",
-            "quantity": 2
-          },
-          {
-            "name": "Godless Shrine",
-            "quantity": 1
-          },
-          {
-            "name": "Hallowed Fountain",
-            "quantity": 1
-          },
-          {
-            "name": "Inquisition of Kozilek",
-            "quantity": 2
-          },
-          {
-            "name": "Island",
-            "quantity": 2
-          },
-          {
-            "name": "March of Otherworldly Light",
-            "quantity": 1
-          },
-          {
-            "name": "Marsh Flats",
-            "quantity": 4
-          },
-          {
-            "name": "Meticulous Archive",
-            "quantity": 1
-          },
-          {
-            "name": "Pest Control",
-            "quantity": 2
-          },
-          {
-            "name": "Plains",
-            "quantity": 1
-          },
-          {
-            "name": "Polluted Delta",
-            "quantity": 4
-          },
-          {
-            "name": "Preordain",
-            "quantity": 4
-          },
-          {
-            "name": "Prismatic Ending",
-            "quantity": 2
-          },
-          {
-            "name": "Psychic Frog",
-            "quantity": 4
-          },
-          {
-            "name": "Quantum Riddler",
-            "quantity": 4
-          },
-          {
-            "name": "Shadowy Backstreet",
-            "quantity": 1
-          },
-          {
-            "name": "Solitude",
-            "quantity": 4
-          },
-          {
-            "name": "Spell Snare",
-            "quantity": 2
-          },
-          {
-            "name": "Swamp",
-            "quantity": 1
-          },
-          {
-            "name": "Teferi, Time Raveler",
-            "quantity": 2
-          },
-          {
-            "name": "Thoughtseize",
-            "quantity": 4
-          },
-          {
-            "name": "Undercity Sewers",
-            "quantity": 1
-          },
-          {
-            "name": "Watery Grave",
-            "quantity": 1
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Consign to Memory",
-            "quantity": 3
-          },
-          {
-            "name": "Damping Sphere",
-            "quantity": 2
-          },
-          {
-            "name": "Geist of Saint Traft",
-            "quantity": 2
-          },
-          {
-            "name": "Mystical Dispute",
-            "quantity": 3
-          },
-          {
-            "name": "Rest in Peace",
-            "quantity": 1
-          },
-          {
-            "name": "Surgical Extraction",
-            "quantity": 2
-          },
-          {
-            "name": "Wrath of the Skies",
-            "quantity": 2
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-13c7b4f6f066362f0d14d8819628c8687322ad04b42739486459e2c11b15a452",
@@ -4340,185 +4296,93 @@
     },
     {
       "participant_id": "participant-195f6e28e6df1eeca7e7ebf2dbe99e69eb6eb3de53a965e20644f0f9f1e57a58",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "broodscale-combo-gruul",
+        "priority": 651000
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Ancient Stirrings",
-            "quantity": 4
-          },
-          {
-            "name": "Basking Broodscale",
-            "quantity": 3
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 2
-          },
-          {
-            "name": "Boseiju, Who Endures",
-            "quantity": 2
-          },
-          {
-            "name": "Cavern of Souls",
-            "quantity": 1
-          },
-          {
-            "name": "Commercial District",
-            "quantity": 1
-          },
-          {
-            "name": "Dismember",
-            "quantity": 1
-          },
-          {
-            "name": "Eldrazi Temple",
-            "quantity": 4
-          },
-          {
-            "name": "Emrakul, the Promised End",
-            "quantity": 3
-          },
-          {
-            "name": "Forest",
-            "quantity": 3
-          },
-          {
-            "name": "Glaring Fleshraker",
-            "quantity": 3
-          },
-          {
-            "name": "Grove of the Burnwillows",
-            "quantity": 4
-          },
-          {
-            "name": "Haywire Mite",
-            "quantity": 1
-          },
-          {
-            "name": "Kozilek's Command",
-            "quantity": 4
-          },
-          {
-            "name": "Malevolent Rumble",
-            "quantity": 4
-          },
-          {
-            "name": "Misty Rainforest",
-            "quantity": 1
-          },
-          {
-            "name": "Pithing Needle",
-            "quantity": 1
-          },
-          {
-            "name": "Springleaf Drum",
-            "quantity": 1
-          },
-          {
-            "name": "Stomping Ground",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 2
-          },
-          {
-            "name": "Unholy Heat",
-            "quantity": 2
-          },
-          {
-            "name": "Urza's Saga",
-            "quantity": 4
-          },
-          {
-            "name": "Verdant Catacombs",
-            "quantity": 1
-          },
-          {
-            "name": "Vexing Bauble",
-            "quantity": 2
-          },
-          {
-            "name": "Windswept Heath",
-            "quantity": 1
-          },
-          {
-            "name": "Wooded Foothills",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 2
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Basking Broodscale",
-            "quantity": 1
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 1
-          },
-          {
-            "name": "Cavern of Souls",
-            "quantity": 1
-          },
-          {
-            "name": "Damping Sphere",
-            "quantity": 1
-          },
-          {
-            "name": "Firespout",
-            "quantity": 2
-          },
-          {
-            "name": "Gemstone Caverns",
-            "quantity": 1
-          },
-          {
-            "name": "Grafdigger's Cage",
-            "quantity": 1
-          },
-          {
-            "name": "Nature's Claim",
-            "quantity": 2
-          },
-          {
-            "name": "Soul-Guide Lantern",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 1
-          },
-          {
-            "name": "Vexing Bauble",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 1
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-1a055591d5fcf487970f7c9570ff19489bc952bc2365a9c71eb226b861659a19",
@@ -5237,7 +5101,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -5273,7 +5137,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -5671,7 +5535,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -5707,7 +5571,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -6169,7 +6033,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -6205,7 +6069,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -6259,7 +6123,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -6295,7 +6159,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -6625,18 +6489,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -6701,18 +6557,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -7205,181 +7053,93 @@
     },
     {
       "participant_id": "participant-260de52f4fe35b4e11887722b5e13aa3f1d5bc9e992eb9c4c44e77ace4df833e",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "broodscale-combo-gruul",
+        "priority": 651000
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Ancient Stirrings",
-            "quantity": 3
-          },
-          {
-            "name": "Basking Broodscale",
-            "quantity": 3
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 2
-          },
-          {
-            "name": "Boseiju, Who Endures",
-            "quantity": 2
-          },
-          {
-            "name": "Cavern of Souls",
-            "quantity": 2
-          },
-          {
-            "name": "Commercial District",
-            "quantity": 1
-          },
-          {
-            "name": "Dismember",
-            "quantity": 1
-          },
-          {
-            "name": "Eldrazi Temple",
-            "quantity": 4
-          },
-          {
-            "name": "Emrakul, the Promised End",
-            "quantity": 3
-          },
-          {
-            "name": "Forest",
-            "quantity": 3
-          },
-          {
-            "name": "Glaring Fleshraker",
-            "quantity": 3
-          },
-          {
-            "name": "Grove of the Burnwillows",
-            "quantity": 4
-          },
-          {
-            "name": "Haywire Mite",
-            "quantity": 1
-          },
-          {
-            "name": "Kozilek's Command",
-            "quantity": 4
-          },
-          {
-            "name": "Malevolent Rumble",
-            "quantity": 4
-          },
-          {
-            "name": "Misty Rainforest",
-            "quantity": 1
-          },
-          {
-            "name": "Pithing Needle",
-            "quantity": 1
-          },
-          {
-            "name": "Soul-Guide Lantern",
-            "quantity": 1
-          },
-          {
-            "name": "Springleaf Drum",
-            "quantity": 1
-          },
-          {
-            "name": "Stomping Ground",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 2
-          },
-          {
-            "name": "Unholy Heat",
-            "quantity": 3
-          },
-          {
-            "name": "Urza's Saga",
-            "quantity": 4
-          },
-          {
-            "name": "Verdant Catacombs",
-            "quantity": 1
-          },
-          {
-            "name": "Vexing Bauble",
-            "quantity": 2
-          },
-          {
-            "name": "Wooded Foothills",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 2
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Basking Broodscale",
-            "quantity": 1
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 1
-          },
-          {
-            "name": "Damping Sphere",
-            "quantity": 1
-          },
-          {
-            "name": "Disruptor Flute",
-            "quantity": 1
-          },
-          {
-            "name": "Emrakul, the Promised End",
-            "quantity": 1
-          },
-          {
-            "name": "Firespout",
-            "quantity": 2
-          },
-          {
-            "name": "Gemstone Caverns",
-            "quantity": 1
-          },
-          {
-            "name": "Grafdigger's Cage",
-            "quantity": 1
-          },
-          {
-            "name": "Nature's Claim",
-            "quantity": 2
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 1
-          },
-          {
-            "name": "Vexing Bauble",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 1
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-26a22da025eb4357887a77e975b6a906b5dadf037323d88bd9ba3c703f1b9a8b",
@@ -7991,18 +7751,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -8067,18 +7819,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -8156,7 +7900,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -8192,7 +7936,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -9869,6 +9613,32 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "golgari-yawgmoth",
+          "archetype_name": "Golgari Yawgmoth",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "golgari-yawgmoth-young-wolf",
+          "priority": 220900,
+          "evidence": [
+            {
+              "card": "Yawgmoth, Thran Physician",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Young Wolf",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -9899,7 +9669,34 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "golgari-yawgmoth",
+          "archetype_name": "Golgari Yawgmoth",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "golgari-yawgmoth-young-wolf",
+          "priority": 220900,
+          "evidence": [
+            {
+              "card": "Yawgmoth, Thran Physician",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Young Wolf",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -11248,18 +11045,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -11324,18 +11113,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -12840,129 +12621,157 @@
     },
     {
       "participant_id": "participant-3fffa8fa87a6c710c6a1d7a99775194e1fd221077ff17aadd1079b20468a5246",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "prowess",
+          "archetype_name": "Prowess",
+          "subtype_id": "izzet",
+          "subtype_name": "Izzet",
+          "rule_id": "prowess-izzet",
+          "priority": 672200,
+          "evidence": [
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Dart",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Monastery Swiftspear",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Preordain",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-green-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "prowess",
+          "archetype_name": "Prowess",
+          "subtype_id": "izzet",
+          "subtype_name": "Izzet",
+          "rule_id": "prowess-izzet",
+          "priority": 672200,
+          "evidence": [
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Dart",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Monastery Swiftspear",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Preordain",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-green-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Arid Mesa",
-            "quantity": 1
-          },
-          {
-            "name": "Bloodstained Mire",
-            "quantity": 2
-          },
-          {
-            "name": "Boomerang Basics",
-            "quantity": 4
-          },
-          {
-            "name": "Cori-Steel Cutter",
-            "quantity": 4
-          },
-          {
-            "name": "Dragon's Rage Channeler",
-            "quantity": 4
-          },
-          {
-            "name": "Experimental Synthesizer",
-            "quantity": 4
-          },
-          {
-            "name": "Fiery Islet",
-            "quantity": 1
-          },
-          {
-            "name": "Island",
-            "quantity": 1
-          },
-          {
-            "name": "Lava Dart",
-            "quantity": 4
-          },
-          {
-            "name": "Lightning Bolt",
-            "quantity": 4
-          },
-          {
-            "name": "Mishra's Bauble",
-            "quantity": 4
-          },
-          {
-            "name": "Monastery Swiftspear",
-            "quantity": 2
-          },
-          {
-            "name": "Mountain",
-            "quantity": 3
-          },
-          {
-            "name": "Mutagenic Growth",
-            "quantity": 2
-          },
-          {
-            "name": "Preordain",
-            "quantity": 4
-          },
-          {
-            "name": "Scalding Tarn",
-            "quantity": 4
-          },
-          {
-            "name": "Slickshot Show-Off",
-            "quantity": 2
-          },
-          {
-            "name": "Steam Vents",
-            "quantity": 3
-          },
-          {
-            "name": "Stormchaser's Talent",
-            "quantity": 4
-          },
-          {
-            "name": "Thundering Falls",
-            "quantity": 1
-          },
-          {
-            "name": "Wooded Foothills",
-            "quantity": 2
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Consign to Memory",
-            "quantity": 4
-          },
-          {
-            "name": "Engineered Explosives",
-            "quantity": 2
-          },
-          {
-            "name": "Meltdown",
-            "quantity": 2
-          },
-          {
-            "name": "Spell Pierce",
-            "quantity": 2
-          },
-          {
-            "name": "Tormod's Crypt",
-            "quantity": 2
-          },
-          {
-            "name": "Unholy Heat",
-            "quantity": 3
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-400881ea69d082f33ee5086f589b9ea0a46c33f93a375fcfd35763457a05a26d",
@@ -13234,18 +13043,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -13310,18 +13111,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -14544,7 +14337,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -14580,7 +14373,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -14910,7 +14703,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -14946,7 +14739,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -15095,18 +14888,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -15171,18 +14956,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -15297,6 +15074,88 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-ephemerate",
+          "priority": 632650,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Wrath of the Skies",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": null,
+              "max_count": 2,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -15359,7 +15218,90 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-ephemerate",
+          "priority": 632650,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Wrath of the Skies",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": null,
+              "max_count": 2,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -15882,177 +15824,93 @@
     },
     {
       "participant_id": "participant-50ccaa79dccd4fc9bd2e7be57d4de23ce270e9ff151b2393cb1f34d7fb98ea16",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "broodscale-combo-gruul",
+        "priority": 651000
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Ancient Stirrings",
-            "quantity": 2
-          },
-          {
-            "name": "Basking Broodscale",
-            "quantity": 3
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 2
-          },
-          {
-            "name": "Boseiju, Who Endures",
-            "quantity": 2
-          },
-          {
-            "name": "Commercial District",
-            "quantity": 1
-          },
-          {
-            "name": "Dismember",
-            "quantity": 1
-          },
-          {
-            "name": "Eldrazi Temple",
-            "quantity": 4
-          },
-          {
-            "name": "Emrakul, the Promised End",
-            "quantity": 4
-          },
-          {
-            "name": "Forest",
-            "quantity": 3
-          },
-          {
-            "name": "Glaring Fleshraker",
-            "quantity": 4
-          },
-          {
-            "name": "Grove of the Burnwillows",
-            "quantity": 4
-          },
-          {
-            "name": "Haywire Mite",
-            "quantity": 1
-          },
-          {
-            "name": "Kozilek's Command",
-            "quantity": 4
-          },
-          {
-            "name": "Malevolent Rumble",
-            "quantity": 4
-          },
-          {
-            "name": "Misty Rainforest",
-            "quantity": 1
-          },
-          {
-            "name": "Pithing Needle",
-            "quantity": 1
-          },
-          {
-            "name": "Springleaf Drum",
-            "quantity": 1
-          },
-          {
-            "name": "Stomping Ground",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 2
-          },
-          {
-            "name": "Ugin's Labyrinth",
-            "quantity": 2
-          },
-          {
-            "name": "Unholy Heat",
-            "quantity": 2
-          },
-          {
-            "name": "Urza's Saga",
-            "quantity": 4
-          },
-          {
-            "name": "Verdant Catacombs",
-            "quantity": 1
-          },
-          {
-            "name": "Vexing Bauble",
-            "quantity": 2
-          },
-          {
-            "name": "Windswept Heath",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 2
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Basking Broodscale",
-            "quantity": 1
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 1
-          },
-          {
-            "name": "Cavern of Souls",
-            "quantity": 2
-          },
-          {
-            "name": "Disruptor Flute",
-            "quantity": 1
-          },
-          {
-            "name": "Firespout",
-            "quantity": 2
-          },
-          {
-            "name": "Gemstone Caverns",
-            "quantity": 1
-          },
-          {
-            "name": "Grafdigger's Cage",
-            "quantity": 1
-          },
-          {
-            "name": "Nature's Claim",
-            "quantity": 2
-          },
-          {
-            "name": "Soul-Guide Lantern",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 1
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-51fc4b428b3bbdbb57c3f9d480cd4e8f4fb7fb71f07c27d6fd47c99d0578047d",
@@ -17231,8 +17089,8 @@
       "selected": {
         "archetype_id": "devoted-druid-combo",
         "archetype_name": "Devoted Druid Combo",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
         "rule_id": "devoted-druid-combo-primary",
         "priority": 625000
       },
@@ -17240,8 +17098,8 @@
         {
           "archetype_id": "devoted-druid-combo",
           "archetype_name": "Devoted Druid Combo",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "abzan",
+          "subtype_name": "Abzan",
           "rule_id": "devoted-druid-combo-primary",
           "priority": 625000,
           "evidence": [
@@ -17268,6 +17126,30 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -17276,8 +17158,8 @@
         {
           "archetype_id": "devoted-druid-combo",
           "archetype_name": "Devoted Druid Combo",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "abzan",
+          "subtype_name": "Abzan",
           "rule_id": "devoted-druid-combo-primary",
           "priority": 625000,
           "evidence": [
@@ -17304,6 +17186,30 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -18640,6 +18546,32 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "golgari-yawgmoth",
+          "archetype_name": "Golgari Yawgmoth",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "golgari-yawgmoth-young-wolf",
+          "priority": 220900,
+          "evidence": [
+            {
+              "card": "Yawgmoth, Thran Physician",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Young Wolf",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -18670,7 +18602,34 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "golgari-yawgmoth",
+          "archetype_name": "Golgari Yawgmoth",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "golgari-yawgmoth-young-wolf",
+          "priority": 220900,
+          "evidence": [
+            {
+              "card": "Yawgmoth, Thran Physician",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Young Wolf",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -18820,18 +18779,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -18896,18 +18847,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -19098,177 +19041,93 @@
     },
     {
       "participant_id": "participant-67c53e2c979f27d8d6a11dabc4c926a59c7b4f3c1786e9acd8646e5a1ac81f72",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "broodscale-combo-gruul",
+        "priority": 651000
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Ancient Stirrings",
-            "quantity": 2
-          },
-          {
-            "name": "Basking Broodscale",
-            "quantity": 3
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 2
-          },
-          {
-            "name": "Boseiju, Who Endures",
-            "quantity": 2
-          },
-          {
-            "name": "Commercial District",
-            "quantity": 1
-          },
-          {
-            "name": "Dismember",
-            "quantity": 1
-          },
-          {
-            "name": "Eldrazi Temple",
-            "quantity": 4
-          },
-          {
-            "name": "Emrakul, the Promised End",
-            "quantity": 4
-          },
-          {
-            "name": "Forest",
-            "quantity": 3
-          },
-          {
-            "name": "Glaring Fleshraker",
-            "quantity": 4
-          },
-          {
-            "name": "Grove of the Burnwillows",
-            "quantity": 4
-          },
-          {
-            "name": "Haywire Mite",
-            "quantity": 1
-          },
-          {
-            "name": "Kozilek's Command",
-            "quantity": 4
-          },
-          {
-            "name": "Malevolent Rumble",
-            "quantity": 4
-          },
-          {
-            "name": "Misty Rainforest",
-            "quantity": 1
-          },
-          {
-            "name": "Pithing Needle",
-            "quantity": 1
-          },
-          {
-            "name": "Springleaf Drum",
-            "quantity": 1
-          },
-          {
-            "name": "Stomping Ground",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 2
-          },
-          {
-            "name": "Ugin's Labyrinth",
-            "quantity": 2
-          },
-          {
-            "name": "Unholy Heat",
-            "quantity": 2
-          },
-          {
-            "name": "Urza's Saga",
-            "quantity": 4
-          },
-          {
-            "name": "Verdant Catacombs",
-            "quantity": 1
-          },
-          {
-            "name": "Vexing Bauble",
-            "quantity": 2
-          },
-          {
-            "name": "Windswept Heath",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 2
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Basking Broodscale",
-            "quantity": 1
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 1
-          },
-          {
-            "name": "Cavern of Souls",
-            "quantity": 2
-          },
-          {
-            "name": "Disruptor Flute",
-            "quantity": 1
-          },
-          {
-            "name": "Firespout",
-            "quantity": 2
-          },
-          {
-            "name": "Gemstone Caverns",
-            "quantity": 1
-          },
-          {
-            "name": "Grafdigger's Cage",
-            "quantity": 1
-          },
-          {
-            "name": "Nature's Claim",
-            "quantity": 2
-          },
-          {
-            "name": "Soul-Guide Lantern",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 1
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-69bc1df5e1aacbf88757dddcd5f48c94c29b9470791135f1c313f7ac3a42ce96",
@@ -19450,18 +19309,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -19526,18 +19377,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -20330,18 +20173,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -20406,18 +20241,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -20465,331 +20292,279 @@
     },
     {
       "participant_id": "participant-6cae41dd82bd6655abb9b6279dfea6ecbf6ff00d8fd83fd65931a8c10735ed41",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "broodscale-combo-gruul",
+        "priority": 651000
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Ancient Stirrings",
-            "quantity": 2
-          },
-          {
-            "name": "Basking Broodscale",
-            "quantity": 3
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 2
-          },
-          {
-            "name": "Boseiju, Who Endures",
-            "quantity": 2
-          },
-          {
-            "name": "Commercial District",
-            "quantity": 1
-          },
-          {
-            "name": "Dismember",
-            "quantity": 1
-          },
-          {
-            "name": "Eldrazi Temple",
-            "quantity": 4
-          },
-          {
-            "name": "Emrakul, the Promised End",
-            "quantity": 4
-          },
-          {
-            "name": "Forest",
-            "quantity": 3
-          },
-          {
-            "name": "Glaring Fleshraker",
-            "quantity": 4
-          },
-          {
-            "name": "Grove of the Burnwillows",
-            "quantity": 4
-          },
-          {
-            "name": "Haywire Mite",
-            "quantity": 1
-          },
-          {
-            "name": "Kozilek's Command",
-            "quantity": 4
-          },
-          {
-            "name": "Malevolent Rumble",
-            "quantity": 4
-          },
-          {
-            "name": "Misty Rainforest",
-            "quantity": 1
-          },
-          {
-            "name": "Pithing Needle",
-            "quantity": 1
-          },
-          {
-            "name": "Springleaf Drum",
-            "quantity": 1
-          },
-          {
-            "name": "Stomping Ground",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 2
-          },
-          {
-            "name": "Ugin's Labyrinth",
-            "quantity": 2
-          },
-          {
-            "name": "Unholy Heat",
-            "quantity": 2
-          },
-          {
-            "name": "Urza's Saga",
-            "quantity": 4
-          },
-          {
-            "name": "Verdant Catacombs",
-            "quantity": 1
-          },
-          {
-            "name": "Vexing Bauble",
-            "quantity": 2
-          },
-          {
-            "name": "Windswept Heath",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 2
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Basking Broodscale",
-            "quantity": 1
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 1
-          },
-          {
-            "name": "Cavern of Souls",
-            "quantity": 2
-          },
-          {
-            "name": "Disruptor Flute",
-            "quantity": 1
-          },
-          {
-            "name": "Firespout",
-            "quantity": 2
-          },
-          {
-            "name": "Gemstone Caverns",
-            "quantity": 1
-          },
-          {
-            "name": "Grafdigger's Cage",
-            "quantity": 1
-          },
-          {
-            "name": "Nature's Claim",
-            "quantity": 2
-          },
-          {
-            "name": "Soul-Guide Lantern",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 1
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-6d66656c4bf37f472f728e5a5629261fc4e263d6927a4b6b0ec9490f5b1aab11",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "esper-blink",
+        "archetype_name": "Esper Blink",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "esper-blink-ephemerate",
+        "priority": 632650
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-ephemerate",
+          "priority": 632650,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Wrath of the Skies",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": 2,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-ephemerate",
+          "priority": 632650,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Wrath of the Skies",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": 2,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Ephemerate",
-            "quantity": 3
-          },
-          {
-            "name": "Fatal Push",
-            "quantity": 2
-          },
-          {
-            "name": "Flooded Strand",
-            "quantity": 4
-          },
-          {
-            "name": "Force of Negation",
-            "quantity": 2
-          },
-          {
-            "name": "Godless Shrine",
-            "quantity": 1
-          },
-          {
-            "name": "Hallowed Fountain",
-            "quantity": 1
-          },
-          {
-            "name": "Inquisition of Kozilek",
-            "quantity": 2
-          },
-          {
-            "name": "Island",
-            "quantity": 2
-          },
-          {
-            "name": "March of Otherworldly Light",
-            "quantity": 1
-          },
-          {
-            "name": "Marsh Flats",
-            "quantity": 4
-          },
-          {
-            "name": "Meticulous Archive",
-            "quantity": 1
-          },
-          {
-            "name": "Pest Control",
-            "quantity": 2
-          },
-          {
-            "name": "Plains",
-            "quantity": 1
-          },
-          {
-            "name": "Polluted Delta",
-            "quantity": 4
-          },
-          {
-            "name": "Preordain",
-            "quantity": 4
-          },
-          {
-            "name": "Prismatic Ending",
-            "quantity": 2
-          },
-          {
-            "name": "Psychic Frog",
-            "quantity": 4
-          },
-          {
-            "name": "Quantum Riddler",
-            "quantity": 4
-          },
-          {
-            "name": "Shadowy Backstreet",
-            "quantity": 1
-          },
-          {
-            "name": "Solitude",
-            "quantity": 4
-          },
-          {
-            "name": "Spell Snare",
-            "quantity": 2
-          },
-          {
-            "name": "Swamp",
-            "quantity": 1
-          },
-          {
-            "name": "Teferi, Time Raveler",
-            "quantity": 2
-          },
-          {
-            "name": "Thoughtseize",
-            "quantity": 4
-          },
-          {
-            "name": "Undercity Sewers",
-            "quantity": 1
-          },
-          {
-            "name": "Watery Grave",
-            "quantity": 1
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Consign to Memory",
-            "quantity": 3
-          },
-          {
-            "name": "Damping Sphere",
-            "quantity": 2
-          },
-          {
-            "name": "Fracturing Gust",
-            "quantity": 1
-          },
-          {
-            "name": "Geist of Saint Traft",
-            "quantity": 2
-          },
-          {
-            "name": "Mystical Dispute",
-            "quantity": 3
-          },
-          {
-            "name": "Rest in Peace",
-            "quantity": 1
-          },
-          {
-            "name": "Surgical Extraction",
-            "quantity": 2
-          },
-          {
-            "name": "Wrath of the Skies",
-            "quantity": 1
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-6dce8d8198a406bf08064ce1e5df65b417cd60845a7c77ded020ed3111db99f8",
@@ -22545,7 +22320,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -22581,7 +22356,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -23340,18 +23115,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -23416,18 +23183,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -23505,7 +23264,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -23541,7 +23300,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -23881,7 +23640,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -23917,7 +23676,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -24061,7 +23820,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -24097,7 +23856,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -25249,18 +25008,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -25325,18 +25076,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -25477,18 +25220,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -25553,18 +25288,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -25732,7 +25459,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -25768,7 +25495,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -26092,18 +25819,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -26168,18 +25887,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -27295,7 +27006,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -27331,7 +27042,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -28296,18 +28007,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -28372,18 +28075,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -29174,185 +28869,93 @@
     },
     {
       "participant_id": "participant-997b514d8bc73a7d3d4f6167ebd106194560337022a0196967c37b228d1297a9",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "broodscale-combo-gruul",
+        "priority": 651000
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "broodscale-combo",
+          "archetype_name": "Broodscale Combo",
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul",
+          "priority": 651000,
+          "evidence": [
+            {
+              "card": "Basking Broodscale",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blade of the Bloodchief",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stomping Ground",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Ancient Stirrings",
-            "quantity": 4
-          },
-          {
-            "name": "Basking Broodscale",
-            "quantity": 3
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 2
-          },
-          {
-            "name": "Boseiju, Who Endures",
-            "quantity": 2
-          },
-          {
-            "name": "Cavern of Souls",
-            "quantity": 1
-          },
-          {
-            "name": "Commercial District",
-            "quantity": 1
-          },
-          {
-            "name": "Dismember",
-            "quantity": 1
-          },
-          {
-            "name": "Eldrazi Temple",
-            "quantity": 4
-          },
-          {
-            "name": "Emrakul, the Promised End",
-            "quantity": 3
-          },
-          {
-            "name": "Forest",
-            "quantity": 3
-          },
-          {
-            "name": "Glaring Fleshraker",
-            "quantity": 3
-          },
-          {
-            "name": "Grove of the Burnwillows",
-            "quantity": 4
-          },
-          {
-            "name": "Haywire Mite",
-            "quantity": 1
-          },
-          {
-            "name": "Kozilek's Command",
-            "quantity": 4
-          },
-          {
-            "name": "Malevolent Rumble",
-            "quantity": 4
-          },
-          {
-            "name": "Misty Rainforest",
-            "quantity": 1
-          },
-          {
-            "name": "Pithing Needle",
-            "quantity": 1
-          },
-          {
-            "name": "Springleaf Drum",
-            "quantity": 1
-          },
-          {
-            "name": "Stomping Ground",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 2
-          },
-          {
-            "name": "Unholy Heat",
-            "quantity": 2
-          },
-          {
-            "name": "Urza's Saga",
-            "quantity": 4
-          },
-          {
-            "name": "Verdant Catacombs",
-            "quantity": 1
-          },
-          {
-            "name": "Vexing Bauble",
-            "quantity": 2
-          },
-          {
-            "name": "Windswept Heath",
-            "quantity": 1
-          },
-          {
-            "name": "Wooded Foothills",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 2
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Basking Broodscale",
-            "quantity": 1
-          },
-          {
-            "name": "Blade of the Bloodchief",
-            "quantity": 1
-          },
-          {
-            "name": "Cavern of Souls",
-            "quantity": 1
-          },
-          {
-            "name": "Damping Sphere",
-            "quantity": 1
-          },
-          {
-            "name": "Firespout",
-            "quantity": 2
-          },
-          {
-            "name": "Gemstone Caverns",
-            "quantity": 1
-          },
-          {
-            "name": "Grafdigger's Cage",
-            "quantity": 1
-          },
-          {
-            "name": "Nature's Claim",
-            "quantity": 2
-          },
-          {
-            "name": "Soul-Guide Lantern",
-            "quantity": 1
-          },
-          {
-            "name": "Thief of Existence",
-            "quantity": 1
-          },
-          {
-            "name": "Thought-Knot Seer",
-            "quantity": 1
-          },
-          {
-            "name": "Vexing Bauble",
-            "quantity": 1
-          },
-          {
-            "name": "Writhing Chrysalis",
-            "quantity": 1
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-9a105a9ea9b13915926a9a6f03124d953fe85bf046b717070269dcbfe0756acb",
@@ -29386,7 +28989,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -29422,7 +29025,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -30620,18 +30223,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -30696,18 +30291,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -31076,6 +30663,88 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-ephemerate",
+          "priority": 632650,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Wrath of the Skies",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": null,
+              "max_count": 2,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -31138,7 +30807,90 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-ephemerate",
+          "priority": 632650,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Wrath of the Skies",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": null,
+              "max_count": 2,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -31182,18 +30934,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -31258,18 +31002,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -31702,7 +31438,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -31846,7 +31582,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -31981,14 +31717,88 @@
       "participant_id": "participant-a45b0e23823ef300366dbf0237280b844e09008cd86221ed2a39e4fe8f3e9485",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "chant-control",
-        "archetype_name": "Chant Control",
-        "subtype_id": "azorius",
-        "subtype_name": "Azorius",
-        "rule_id": "chant-control-azorius",
-        "priority": 305900
+        "archetype_id": "bant-reclamation",
+        "archetype_name": "Bant Reclamation",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "bant-reclamation-primary",
+        "priority": 623400
       },
       "matched_rules": [
+        {
+          "archetype_id": "bant-reclamation",
+          "archetype_name": "Bant Reclamation",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "bant-reclamation-primary",
+          "priority": 623400,
+          "evidence": [
+            {
+              "card": "Wilderness Reclamation",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
         {
           "archetype_id": "chant-control",
           "archetype_name": "Chant Control",
@@ -32018,6 +31828,82 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "bant-reclamation",
+          "archetype_name": "Bant Reclamation",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "bant-reclamation-primary",
+          "priority": 623400,
+          "evidence": [
+            {
+              "card": "Wilderness Reclamation",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "chant-control",
           "archetype_name": "Chant Control",
           "subtype_id": "azorius",
@@ -32044,7 +31930,6 @@
           ]
         }
       ],
-      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -32088,18 +31973,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -32164,18 +32041,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -32555,7 +32424,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -32591,7 +32460,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -34781,7 +34650,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -34817,7 +34686,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -34998,18 +34867,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -35074,18 +34935,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -38094,18 +37947,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -38170,18 +38015,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -39064,18 +38901,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -39140,18 +38969,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -39305,145 +39126,205 @@
     },
     {
       "participant_id": "participant-dc8322e23131d011d7a1302031d2b00f79dba35c15945dbcb6b5c7f6e2dc5581",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "deaths-shadow",
+        "archetype_name": "Death's Shadow",
+        "subtype_id": "grixis",
+        "subtype_name": "Grixis",
+        "rule_id": "deaths-shadow-grixis-frog",
+        "priority": 620025
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "deaths-shadow",
+          "archetype_name": "Death's Shadow",
+          "subtype_id": "grixis",
+          "subtype_name": "Grixis",
+          "rule_id": "deaths-shadow-grixis-frog",
+          "priority": 620025,
+          "evidence": [
+            {
+              "card": "Death's Shadow",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Thoughtseize",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Street Wraith",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blood Crypt",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Steam Vents",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stubborn Denial",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": 1,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "deaths-shadow",
+          "archetype_name": "Death's Shadow",
+          "subtype_id": "grixis",
+          "subtype_name": "Grixis",
+          "rule_id": "deaths-shadow-grixis-frog",
+          "priority": 620025,
+          "evidence": [
+            {
+              "card": "Death's Shadow",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Thoughtseize",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Street Wraith",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blood Crypt",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Steam Vents",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stubborn Denial",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": 1,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Academic Dispute",
-            "quantity": 4
-          },
-          {
-            "name": "Blood Crypt",
-            "quantity": 2
-          },
-          {
-            "name": "Bloodstained Mire",
-            "quantity": 4
-          },
-          {
-            "name": "Death's Shadow",
-            "quantity": 4
-          },
-          {
-            "name": "Detective's Phoenix",
-            "quantity": 3
-          },
-          {
-            "name": "Dragon's Rage Channeler",
-            "quantity": 4
-          },
-          {
-            "name": "Faithless Looting",
-            "quantity": 1
-          },
-          {
-            "name": "Fatal Push",
-            "quantity": 1
-          },
-          {
-            "name": "Lightning Bolt",
-            "quantity": 4
-          },
-          {
-            "name": "Mishra's Bauble",
-            "quantity": 4
-          },
-          {
-            "name": "Moonshadow",
-            "quantity": 4
-          },
-          {
-            "name": "Mountain",
-            "quantity": 1
-          },
-          {
-            "name": "Nethergoyf",
-            "quantity": 1
-          },
-          {
-            "name": "Polluted Delta",
-            "quantity": 4
-          },
-          {
-            "name": "Psychic Frog",
-            "quantity": 4
-          },
-          {
-            "name": "Raucous Theater",
-            "quantity": 1
-          },
-          {
-            "name": "Scalding Tarn",
-            "quantity": 3
-          },
-          {
-            "name": "Steam Vents",
-            "quantity": 1
-          },
-          {
-            "name": "Street Wraith",
-            "quantity": 4
-          },
-          {
-            "name": "Swamp",
-            "quantity": 1
-          },
-          {
-            "name": "Thoughtseize",
-            "quantity": 4
-          },
-          {
-            "name": "Watery Grave",
-            "quantity": 1
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Abandon Attachments",
-            "quantity": 1
-          },
-          {
-            "name": "Boomerang Basics",
-            "quantity": 1
-          },
-          {
-            "name": "Consign to Memory",
-            "quantity": 4
-          },
-          {
-            "name": "Firebending Lesson",
-            "quantity": 1
-          },
-          {
-            "name": "It'll Quench Ya!",
-            "quantity": 1
-          },
-          {
-            "name": "Meltdown",
-            "quantity": 4
-          },
-          {
-            "name": "Ozai's Cruelty",
-            "quantity": 1
-          },
-          {
-            "name": "Pyroclasm",
-            "quantity": 1
-          },
-          {
-            "name": "Vexing Bauble",
-            "quantity": 1
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-ddc7d1fe3d39fcc69c0e48682c5756360216d0ed74a1f3a00b66a688a47c4d66",
@@ -39482,18 +39363,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -39558,18 +39431,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -41128,7 +40993,7 @@
               "card": "Phelia, Exuberant Shepherd",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -41248,7 +41113,7 @@
               "card": "Phelia, Exuberant Shepherd",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -42573,18 +42438,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -42693,18 +42550,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -43025,7 +42874,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -43061,7 +42910,7 @@
               "card": "Blade of the Bloodchief",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -44244,18 +44093,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -44320,18 +44161,10 @@
               "exact_count": null
             },
             {
-              "card": "Dragon's Rage Channeler",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Monastery Swiftspear",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },

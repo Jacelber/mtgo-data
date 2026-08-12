@@ -34,9 +34,9 @@ def test_modern_hierarchy_catalog_is_complete_stable_and_matchup_aligned(tmp_pat
     document = json.loads(destination.read_text(encoding="utf-8"))
     assert document["format"] == "modern"
     assert document["summary"] == {
-        "parents": 70,
-        "leaves": 108,
-        "expandable_parents": 15,
+        "parents": 127,
+        "leaves": 176,
+        "expandable_parents": 19,
     }
     assert all(
         parent["expandable"] == (len(parent["subtype_ids"]) >= 2)
@@ -104,8 +104,8 @@ def test_modern_pickup_uses_stable_parent_ids_and_preserves_manual_boundary(tmp_
             encoding="utf-8"
         )
     )["known_ids"]
-    assert len(known_document["known_ids"]) == 67
-    assert len(production_known) == 69
+    assert len(known_document["known_ids"]) == 111
+    assert len(production_known) == 126
     assert set(known_document["known_ids"]) <= set(production_known)
 
     candidates = tmp_path / "candidates"

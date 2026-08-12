@@ -17,7 +17,7 @@ from mtgmeta.classifier_shadow_audit import (
     reordered_rule_set,
     rule_inventory,
 )
-from mtgmeta.config import load_rule_set, parse_rule_text
+from mtgmeta.config import parse_rule_text
 from mtgmeta.deck import deck_to_counts
 from mtgmeta.mtgo import stats
 from tools.build_classifier_r4_shadow_rules import (
@@ -118,13 +118,18 @@ from tools.build_classifier_r4_unknown_review import load_unknown_records
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PRODUCTION_PATH = ROOT / "my_archetypes" / "modern.yaml"
+PRODUCTION_PATH = (
+    ROOT / "docs" / "audits" / "classifier-r4" / "baseline_rules" / "modern.yaml"
+)
 SHADOW_PATH = (
     ROOT / "docs" / "audits" / "classifier-r4" / "shadow_rules" / "modern.yaml"
 )
 FROZEN_PATH = ROOT / "tests" / "fixtures" / "modern" / "frozen_j6e_corpus.json"
 CLOSEOUT_PATH = (
     ROOT / "docs" / "audits" / "classifier-r4" / "modern_closeout.yaml"
+)
+R4_INPUT_ROOT = (
+    ROOT / "docs" / "audits" / "classifier-r4" / "baseline_unknown_inputs"
 )
 
 
@@ -140,6 +145,25 @@ def _load_shadow_rules():
         ).hexdigest()
     )
     return replace(rules, semantic_features=manifest)
+
+
+def _load_baseline_rules():
+    rules = parse_rule_text(PRODUCTION_PATH.read_text(encoding="utf-8"))
+    manifest = load_semantic_feature_manifest(
+        ROOT / "configs" / "classifier_semantic_features.yaml"
+    )
+    return replace(rules, semantic_features=manifest)
+
+
+def _reproduction_root(tmp_path: Path) -> Path:
+    root = tmp_path / "r4-modern-reproduction"
+    (root / "my_archetypes").mkdir(parents=True)
+    (root / "docs" / "audits" / "classifier-r4").mkdir(parents=True)
+    (root / "my_archetypes" / "modern.yaml").write_bytes(PRODUCTION_PATH.read_bytes())
+    (root / "docs" / "audits" / "classifier-r4" / "dispositions.yaml").write_bytes(
+        (ROOT / "docs" / "audits" / "classifier-r4" / "dispositions.yaml").read_bytes()
+    )
+    return root
 
 
 def _load_shadow_without_owner_bulk_batch1():
@@ -335,9 +359,10 @@ def test_modern_owner_closeout_is_complete_and_hash_locked() -> None:
         **closeout["protected_evidence"],
     }
     for artifact in locked.values():
-        assert sha256((ROOT / artifact["path"]).read_bytes()).hexdigest() == artifact[
-            "sha256"
-        ]
+        path = ROOT / artifact["path"]
+        if artifact["path"] == "my_archetypes/modern.yaml":
+            path = PRODUCTION_PATH
+        assert sha256(path.read_bytes()).hexdigest() == artifact["sha256"]
 
     assert closeout["next_format_boundary"] == {
         "standard_review_started": False,
@@ -355,11 +380,14 @@ def test_modern_owner_closeout_is_complete_and_hash_locked() -> None:
     }
 
 
-def test_shadow_is_deterministic_and_production_is_unchanged() -> None:
+def test_shadow_is_deterministic_and_production_is_unchanged(tmp_path: Path) -> None:
     assert sha256(PRODUCTION_PATH.read_bytes()).hexdigest() == PRODUCTION_MODERN_SHA256
-    assert SHADOW_PATH.read_text(encoding="utf-8") == render_shadow_rules(ROOT)
+    reproduction_root = _reproduction_root(tmp_path)
+    assert SHADOW_PATH.read_text(encoding="utf-8") == render_shadow_rules(
+        reproduction_root
+    )
     shadow_document = yaml.safe_load(SHADOW_PATH.read_text(encoding="utf-8"))
-    assert shadow_document == build_shadow_rules(ROOT)
+    assert shadow_document == build_shadow_rules(reproduction_root)
 
     production_document = yaml.safe_load(PRODUCTION_PATH.read_text(encoding="utf-8"))
     added_ids = {
@@ -701,10 +729,12 @@ def test_shadow_is_deterministic_and_production_is_unchanged() -> None:
 
 
 def test_owner_accepted_families_and_no_other_current_unknown_are_captured() -> None:
-    production = load_rule_set(PRODUCTION_PATH)
+    production = _load_baseline_rules()
     shadow = _load_shadow_rules()
     modern_unknown = [
-        item for item in load_unknown_records(ROOT) if item.format_id == "modern"
+        item
+        for item in load_unknown_records(R4_INPUT_ROOT)
+        if item.format_id == "modern"
     ]
     rakdos_ids = _family_record_ids(RAKDOS_PERSIST_FAMILY)
     asmo_persist_ids = _family_record_ids(ASMO_PERSIST_FAMILY)
@@ -2365,7 +2395,7 @@ def test_owner_accepted_families_and_no_other_current_unknown_are_captured() -> 
 def test_frozen_corpus_has_only_expected_unknown_transitions_and_is_order_stable() -> (
     None
 ):
-    production = load_rule_set(PRODUCTION_PATH)
+    production = _load_baseline_rules()
     shadow = _load_shadow_rules()
     reordered = reordered_rule_set(shadow)
     records = load_frozen_records(FROZEN_PATH)
@@ -3914,7 +3944,7 @@ def test_mono_white_humans_boundaries_and_tabletop_regression() -> None:
     five_color_ids = _family_record_ids("modern-unknown-c588af306ed2")
     five_color_records = [
         record
-        for record in load_unknown_records(ROOT)
+        for record in load_unknown_records(R4_INPUT_ROOT)
         if record.record_id in five_color_ids
     ]
     assert len(five_color_records) == 1
@@ -4258,7 +4288,7 @@ def test_izzet_prowess_repaired_boundaries_and_precedence() -> None:
 
 
 def test_izzet_prowess_tabletop_regression() -> None:
-    production = load_rule_set(PRODUCTION_PATH)
+    production = _load_baseline_rules()
     shadow = _load_shadow_rules()
     event = json.loads(
         (ROOT / "data" / "modern" / "melee" / "events" / "434455.json").read_text(

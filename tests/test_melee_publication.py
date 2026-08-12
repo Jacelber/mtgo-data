@@ -79,7 +79,6 @@ def test_meta_descriptors_match_exact_event_output_bytes():
         "status": "warning",
         "blocking": False,
         "issue_codes": [
-            "unknown_classifications",
             "disqualified_participant_matches_excluded",
             "mixed_event_day2_selection_bias",
         ],

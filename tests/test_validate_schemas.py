@@ -79,7 +79,7 @@ def test_all_declared_schemas_are_valid_and_versioned():
     assert loaded["melee-raw-archive.schema.json"]["x-schema-version"] == "3.0.0"
     assert (
         loaded["melee-compatibility-manifest.schema.json"]["x-schema-version"]
-        == "1.2.0"
+        == "1.3.0"
     )
     assert loaded["classification-rules.schema.json"]["x-schema-version"] == "1.1.0"
     assert all(

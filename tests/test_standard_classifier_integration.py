@@ -27,8 +27,8 @@ def monument_player():
 
 def test_loaded_rules_and_full_result_use_package_apis():
     rule_set = load_rule_set(STANDARD_RULES)
-    assert len(rule_set.archetypes) == 72
-    assert sum(len(archetype.rules) for archetype in rule_set.archetypes) == 82
+    assert len(rule_set.archetypes) == 102
+    assert sum(len(archetype.rules) for archetype in rule_set.archetypes) == 126
 
     result = classify_deck(rule_set, monument_player())
     assert result.status == "classified"

@@ -430,9 +430,9 @@ def test_identity_match_records_include_mirrors_without_replacing_non_mirror():
 def test_modern_hierarchy_uses_stable_parent_and_composite_subtype_ids():
     rules = matchup.load_rule_set(ROOT / "my_archetypes" / "modern.yaml")
     hierarchy = build_matchup_hierarchy(rules)
-    assert len(hierarchy["parents"]) == 70
-    assert len(hierarchy["leaves"]) == 108
-    assert sum(item["expandable"] for item in hierarchy["parents"]) == 15
+    assert len(hierarchy["parents"]) == 127
+    assert len(hierarchy["leaves"]) == 176
+    assert sum(item["expandable"] for item in hierarchy["parents"]) == 19
     broodscale = next(
         item for item in hierarchy["parents"] if item["id"] == "broodscale-combo"
     )
