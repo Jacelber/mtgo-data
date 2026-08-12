@@ -1,0 +1,138 @@
+"""Dynamic consumer contracts for freshly generated MTGO candidates."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+import subprocess
+
+import pytest
+
+
+ROOT = Path(__file__).resolve().parents[1]
+RANGES = (1, 4, 12)
+
+
+def _json(path: str) -> dict:
+    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+
+
+def _node(script: str, *args: str) -> dict:
+    result = subprocess.run(
+        ["node", "-e", script, *args],
+        cwd=ROOT,
+        check=True,
+        text=True,
+        capture_output=True,
+    )
+    return json.loads(result.stdout)
+
+
+@pytest.mark.parametrize("format_id", ("standard", "modern"))
+def test_current_matchup_consumer_follows_generated_parent_order(
+    format_id: str,
+) -> None:
+    relative_path = f"stats/{format_id}/mtgo/matchup_4w.json"
+    source = _json(relative_path)
+    script = r"""
+const fs = require("fs");
+const review = require("./assets/js/phase8/matchup-model.js");
+const source = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+const document = review.activeMatchupDocument(source, 20);
+const collapsed = review.buildView(document, [], []);
+const expandedParent = document.hierarchy.parents.find(parent =>
+  parent.expandable && document.parent_order.includes(parent.id)
+);
+const drawRecord = review.literalRecord({wins: 1, losses: 1, draws: 1});
+process.stdout.write(JSON.stringify({
+  collapsedRowIds: collapsed.rows.map(row => row.id),
+  expansion: expandedParent ? (() => {
+    const expanded = review.buildView(
+      document,
+      [expandedParent.id],
+      [expandedParent.id]
+    );
+    const subtypeId = expandedParent.subtype_ids[0];
+    return {
+      parentRetained: expanded.rows.some(row => row.id === expandedParent.id),
+      subtypeIds: expanded.rows
+        .filter(row => row.parentId === expandedParent.id && row.kind === "subtype")
+        .map(row => row.id),
+      activeSubtypeIds: expandedParent.subtype_ids,
+      crossLevel: expanded.matrix[expandedParent.id][subtypeId],
+    };
+  })() : null,
+  minSampleHint: document.min_sample_hint,
+  drawRecord,
+}));
+"""
+    result = _node(script, relative_path)
+
+    assert result["collapsedRowIds"] == source["parent_order"]
+    assert result["minSampleHint"] == 20
+    assert result["drawRecord"]["win_rate"] == 1 / 3
+    if expansion := result["expansion"]:
+        assert expansion["parentRetained"] is True
+        assert expansion["subtypeIds"] == expansion["activeSubtypeIds"]
+        cross_level = expansion["crossLevel"]
+        assert cross_level["matches"] == (
+            cross_level["wins"] + cross_level["losses"] + cross_level["draws"]
+        )
+
+
+@pytest.mark.parametrize("format_id", ("standard", "modern"))
+@pytest.mark.parametrize("weeks", RANGES)
+def test_current_freshness_inputs_are_internally_consistent(
+    format_id: str,
+    weeks: int,
+) -> None:
+    range_document = _json(f"stats/{format_id}/mtgo/range_{weeks}w.json")
+    completeness = _json(f"stats/{format_id}/mtgo/completeness/{weeks}w.json")
+    high_score = completeness["high_score_decklist_completeness"]
+    coverage = completeness["matchup_coverage"]
+
+    assert completeness["period"] == range_document["period"]
+    assert high_score["period"] == {
+        "start": range_document["period"]["start"],
+        "end": range_document["period"]["end"],
+    }
+    assert high_score["observed_decklist_count"] == range_document["total_high_score"]
+    assert coverage["expected_event_count"] == (
+        coverage["available_event_count"]
+        + coverage["deferred_event_count"]
+        + coverage["missing_event_count"]
+    )
+
+
+@pytest.mark.parametrize("format_id", ("standard", "modern"))
+def test_current_top8_freshness_inputs_follow_the_latest_generated_week(
+    format_id: str,
+) -> None:
+    index = _json(f"stats/{format_id}/mtgo/top8/index.json")
+    latest = index["weeks"][0]
+    document = _json(f"stats/{format_id}/mtgo/top8/{latest['file']}")
+    placements = [
+        placement
+        for event in document["events"]
+        for placement in event.get("placements", [])
+    ]
+
+    assert latest["event_count"] == len(document["events"])
+    assert document["week"]["start"] == latest["start"]
+    assert document["week"]["end"] == latest["end"]
+    assert all(
+        placement["deck_status"] in {"available", "unavailable"}
+        for placement in placements
+    )
+
+
+def test_current_pickup_freshness_inputs_follow_the_latest_generated_week() -> None:
+    index = _json("stats/standard/mtgo/pickup/index.json")
+    latest = index["weeks"][0]
+    document = _json(f"stats/standard/mtgo/pickup/{latest['file']}")
+
+    assert document["week"] == latest["week"]
+    assert document["start"] == latest["start"]
+    assert document["end"] == latest["end"]
+    assert latest["existing_count"] == len(document["existing_changes"])
+    assert latest["new_count"] == len(document["new_archetypes"])

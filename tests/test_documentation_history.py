@@ -52,12 +52,12 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "P12-09"
+    assert status["current_task"]["id"] == "OPS-PRODUCTION-BASELINE-DRIFT-20260812"
     assert status["current_task"]["status"] == (
-        "owner_accepted_publication_and_merge_authorized"
+        "owner_accepted_commit_publication_merge_and_postmerge_dispatch_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "20e6115ea9b4a648879addfa8064af4e5e2eb2e7"
+        "c785b2a8e7da6ab41ac4da97975ee219c32ca16a"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -66,14 +66,14 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "merge": True,
     }
     assert status["recent_completion_handoff"] == {
-        "id": "P12-08A",
-        "name": "Existing-product small-screen list remediation",
+        "id": "P12-09",
+        "name": "Loading, failure, retry, and composition-detail navigation remediation",
         "status": "completed_and_merged",
-        "pull_request": 196,
-        "merge_commit": "20e6115ea9b4a648879addfa8064af4e5e2eb2e7",
+        "pull_request": 198,
+        "merge_commit": "a99ca08a294f173c9a17fe6fd70c5e52d36cec98",
         "note": (
-            "P12-09 starts from the verified merge commit for the owner-accepted "
-            "P12-08A mobile list remediation."
+            "GitHub and Git history retain the detailed P12-09 validation, "
+            "publication, merge, and Pages evidence."
         ),
     }
     assert status["next_approved_task"]["id"] == "P12-10"

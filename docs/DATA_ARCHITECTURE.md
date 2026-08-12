@@ -1965,6 +1965,10 @@ matchup statistics, completeness, Top 8, Pickup preparation, hierarchy,
 metadata, the global consumer catalog, and diagnostics. Candidate validation
 admits only the reviewed completeness documents, Top 8 week/base names, and
 `stats/catalog.json`; arbitrary generated paths remain blocked.
+Before packaging, dedicated consumer-contract tests verify relationships among
+the current generated documents, and a focused Chromium baseline renders those
+documents through the production pages. Both derive rolling identities, counts,
+percentages, and dates from the candidate rather than from an earlier snapshot.
 
 ### 12.2 Melee output
 
@@ -2675,9 +2679,11 @@ Production failure reporting uses:
 
 The notification job depends on fetch, build, and publish but has no checkout,
 repository-content permission, source data, or generated candidate. It runs only
-when one of those stages has result `failure`, records the first failed stage in
-pipeline order, and has only `issues: write`. Its stable HTML comment marker
-identifies one open non-pull-request issue for `fetch`, `build`, or `publish`.
+when one of those jobs has result `failure`, records the first failed stage in
+pipeline order, and has only `issues: write`. The fetch job distinguishes its
+clean-checkout `baseline` validation from later `fetch` input collection through
+a controlled job output. Its stable HTML comment marker identifies one open
+non-pull-request issue for `baseline`, `fetch`, `build`, or `publish`.
 It creates that issue when absent and adds a later run link when it already
 exists. The body contains only the controlled stage name, commit SHA, and
 workflow URL; it must not copy source responses, request details, or raw error

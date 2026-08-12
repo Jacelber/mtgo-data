@@ -9,6 +9,16 @@ const viewports = [
   { name: "mobile-412", width: 412, height: 915 },
 ];
 
+async function readJson(page, path) {
+  const response = await page.request.get(path);
+  expect(response.ok(), `expected ${path} to load`).toBe(true);
+  return response.json();
+}
+
+function freshnessRatio(observed, expected, rate) {
+  return `${observed} / ${expected} · ${(Number(rate) * 100).toFixed(1)}%`;
+}
+
 async function expectLoaded(page, { language, format, product, surface }) {
   await expect(page.locator("html")).toHaveAttribute("data-surface", surface);
   await expect(page.locator("html")).toHaveAttribute(
@@ -104,37 +114,51 @@ for (const language of languages) {
 
 test("MTGO subtype rows use explicit mana symbols", async ({ page }) => {
   await page.goto("/index.html?format=modern&product=mtgo-statistics&lang=zh");
-  const esper = page.locator('button[data-detail-identity="goryos-reanimator/esper"]');
-  await expect(esper).toBeVisible();
-  await expect(esper.locator(".mana-identity")).toHaveAttribute(
-    "aria-label",
-    "法术力颜色：白、蓝、黑"
-  );
-  await expect(esper.locator(".mana-identity img")).toHaveCount(3);
+  const subtype = page.locator('button[data-detail-identity*="/"]:has(.mana-identity img)').first();
+  await expect(subtype).toBeVisible();
+  await expect(subtype.locator(".mana-identity")).toHaveAttribute("aria-label", /^法术力颜色：.+/);
+  const symbols = subtype.locator(".mana-identity img");
+  expect(await symbols.count()).toBeGreaterThan(0);
+  for (let index = 0; index < await symbols.count(); index += 1) {
+    await expect(symbols.nth(index)).toHaveAttribute("src", /assets\/images\/mana\/[wubrgc]\.svg$/);
+  }
 });
 
 test("Standard composition uses card art and opens detail from one desktop click", async ({ page }) => {
   await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
-  const segment = page.locator('[data-composition-identity="izzet-prowess"]');
-  await expect(segment).toHaveAttribute("data-tooltip", /Izzet Prowess .* 16\.2%/);
-  await expect(segment).not.toHaveAttribute("data-tooltip", /Boomerang Basics/);
+  const range = await readJson(page, "/stats/standard/mtgo/range_1w.json");
+  const segment = page.locator("button.composition-segment.has-card-art").first();
+  await expect(segment).toBeVisible();
+  const identity = await segment.getAttribute("data-composition-identity");
+  const archetype = range.archetypes.find(item => item.id === identity);
+  expect(archetype, `composition identity ${identity} must exist in the current range`).toBeTruthy();
+  const tooltip = await segment.getAttribute("data-tooltip");
+  expect(tooltip).toContain(archetype.name);
+  expect(tooltip).toContain(`${(archetype.high_score_share * 100).toFixed(1)}%`);
   const backgroundImage = await segment.evaluate(node => getComputedStyle(node).backgroundImage);
-  expect(backgroundImage).toContain("boomerang-basics.jpg");
-  const imageUrl = backgroundImage.match(/url\("([^"]*boomerang-basics\.jpg)"\)/)[1];
+  const imageMatch = backgroundImage.match(/url\(["']?([^"')]+)["']?\)/);
+  expect(imageMatch, `composition identity ${identity} must render configured card art`).toBeTruthy();
+  const imageUrl = imageMatch[1];
   expect((await page.request.get(imageUrl)).ok()).toBe(true);
   await segment.click();
-  await expect(page).toHaveURL(/detail=izzet-prowess/);
-  await expect(page.locator('[data-stats-parent="izzet-prowess"]').locator("xpath=ancestor::tr/following-sibling::tr[1]"))
+  await expect.poll(() => new URL(page.url()).searchParams.get("detail")).toBe(identity);
+  await expect(page.locator(`[data-stats-parent="${identity}"]`).locator("xpath=ancestor::tr/following-sibling::tr[1]"))
     .toHaveClass(/deck-detail-row/);
 });
 
 test("desktop composition reveals an off-screen detail after rendering settles", async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.setViewportSize({ width: 1280, height: 400 });
   await page.goto("/index.html?format=modern&product=mtgo-statistics&range=1&lang=en");
-  const segment = page.locator('[data-composition-identity="ruby-storm"]');
+  const identity = await page.locator("button.composition-segment[data-composition-identity]")
+    .evaluateAll(segments => segments.map(segment => segment.dataset.compositionIdentity).find(candidate => {
+      const detailButton = document.querySelector(`[data-stats-parent="${CSS.escape(candidate)}"]`);
+      return detailButton && detailButton.getBoundingClientRect().top >= window.innerHeight;
+    }));
+  expect(identity, "current composition must include a detail row below the viewport").toBeTruthy();
+  const segment = page.locator(`[data-composition-identity="${identity}"]`);
   await segment.click();
-  await expect(page).toHaveURL(/detail=ruby-storm/);
-  const detailClose = page.locator('[data-responsive-key="stats-detail:ruby-storm:close"]')
+  await expect.poll(() => new URL(page.url()).searchParams.get("detail")).toBe(identity);
+  const detailClose = page.locator(`[data-responsive-key="stats-detail:${identity}:close"]`)
     .filter({ visible: true });
   await expect(detailClose).toBeVisible();
   await expect.poll(() => detailClose.evaluate(node => {
@@ -257,26 +281,54 @@ test("mobile statistics expands rows without rebuilding the view and preserves a
 });
 
 test("each product shows only its own freshness facts", async ({ page }) => {
+  const range = await readJson(page, "/stats/standard/mtgo/range_1w.json");
+  const completeness = await readJson(page, "/stats/standard/mtgo/completeness/1w.json");
+  const highScore = completeness.high_score_decklist_completeness;
+  const coverage = completeness.matchup_coverage;
   await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
   await expect(page.locator('.freshness-strip')).toHaveAttribute("aria-label", "Data status");
-  await expect(page.locator('[data-freshness-key="high-score-completeness"]')).toContainText("136 / 139 · 97.9%");
-  await expect(page.locator('[data-freshness-key="decks"]')).toContainText("285");
+  await expect(page.locator('[data-freshness-key="high-score-completeness"]')).toContainText(freshnessRatio(
+    highScore.observed_decklist_count,
+    highScore.expected_decklist_count_display ?? highScore.expected_decklist_count,
+    highScore.completeness_rate
+  ));
+  await expect(page.locator('[data-freshness-key="decks"]')).toContainText(String(range.total_decks));
   await expect(page.locator('[data-freshness-key="matchup-coverage"]')).toHaveCount(0);
 
   await page.goto("/index.html?format=standard&product=mtgo-matchups&range=1&lang=en");
-  await expect(page.locator('[data-freshness-key="matchup-coverage"]')).toContainText("9 / 9 · 100.0%");
-  await expect(page.locator('[data-freshness-key="missing-events"]')).toContainText("0");
+  await expect(page.locator('[data-freshness-key="matchup-coverage"]')).toContainText(freshnessRatio(
+    coverage.available_event_count,
+    coverage.expected_event_count,
+    coverage.completeness_rate
+  ));
+  await expect(page.locator('[data-freshness-key="missing-events"]')).toContainText(
+    String(coverage.missing_event_count)
+  );
   await expect(page.locator('[data-freshness-key="high-score-completeness"]')).toHaveCount(0);
 
+  const top8Index = await readJson(page, "/stats/standard/mtgo/top8/index.json");
+  const top8Week = top8Index.weeks[0];
+  const top8 = await readJson(page, `/stats/standard/mtgo/top8/${top8Week.file}`);
+  const placements = top8.events.flatMap(event => event.placements || []);
   await page.goto("/index.html?format=standard&product=mtgo-top8&lang=en");
-  await expect(page.locator('[data-freshness-key="events"]')).toContainText("9");
-  await expect(page.locator('[data-freshness-key="placements"]')).toContainText("72");
-  await expect(page.locator('[data-freshness-key="available-decks"]')).toContainText("72");
+  await expect(page.locator('[data-freshness-key="events"]')).toContainText(
+    String(top8Week.event_count ?? top8.events.length)
+  );
+  await expect(page.locator('[data-freshness-key="placements"]')).toContainText(String(placements.length));
+  await expect(page.locator('[data-freshness-key="available-decks"]')).toContainText(String(
+    placements.filter(placement => placement.deck_status === "available").length
+  ));
   await expect(page.locator("#view")).not.toContainText(/provisional|sealed/i);
 
+  const pickupIndex = await readJson(page, "/stats/standard/mtgo/pickup/index.json");
+  const pickupWeek = pickupIndex.weeks[0];
   await page.goto("/index.html?format=standard&product=weekly-pickup&lang=en");
-  await expect(page.locator('[data-freshness-key="week"]')).toContainText("2026-06-29 – 2026-07-05");
-  await expect(page.locator('[data-freshness-key="featured-decks"]')).toContainText("1");
+  await expect(page.locator('[data-freshness-key="week"]')).toContainText(
+    `${pickupWeek.start} – ${pickupWeek.end}`
+  );
+  await expect(page.locator('[data-freshness-key="featured-decks"]')).toContainText(String(
+    Number(pickupWeek.existing_count) + Number(pickupWeek.new_count)
+  ));
   await expect(page.locator('[data-freshness-key="events"]')).toHaveCount(0);
 
   await page.goto("/melee/index.html?format=modern&product=tabletop-major-events&scope=all_constructed&lang=en");
@@ -289,9 +341,11 @@ test("each product shows only its own freshness facts", async ({ page }) => {
 });
 
 test("unavailable freshness values render as Unknown rather than zero", async ({ page }) => {
+  let observedDecklists;
   await page.route("**/stats/standard/mtgo/completeness/1w.json", async route => {
     const response = await route.fetch();
     const body = await response.json();
+    observedDecklists = body.high_score_decklist_completeness.observed_decklist_count;
     body.high_score_decklist_completeness.status = "unavailable";
     body.high_score_decklist_completeness.expected_decklist_count = null;
     body.high_score_decklist_completeness.expected_decklist_count_display = null;
@@ -300,7 +354,8 @@ test("unavailable freshness values render as Unknown rather than zero", async ({
   });
   await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
   const fact = page.locator('[data-freshness-key="high-score-completeness"]');
-  await expect(fact).toContainText("136 / Unknown · Unknown");
+  await expect.poll(() => observedDecklists).not.toBeUndefined();
+  await expect(fact).toContainText(`${observedDecklists} / Unknown · Unknown`);
   await expect(fact).not.toContainText("0 / 0");
 });
 
