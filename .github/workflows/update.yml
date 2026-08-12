@@ -18,6 +18,8 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    outputs:
+      failure-stage: ${{ steps.fetch-stage.outputs.stage || steps.baseline-stage.outputs.stage }}
     permissions:
       actions: read
       contents: read
@@ -41,11 +43,19 @@ jobs:
       - name: Install pinned runtime and validation dependencies
         run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
 
+      - name: Record baseline validation stage
+        id: baseline-stage
+        run: echo "stage=baseline" >> "$GITHUB_OUTPUT"
+
       - name: Verify clean-checkout code and committed baseline
         run: python -B -m pytest
 
       - name: Snapshot production data baseline
         run: python -B validate_production_candidate.py snapshot --output "$RUNNER_TEMP/production-baseline.json"
+
+      - name: Record input collection stage
+        id: fetch-stage
+        run: echo "stage=fetch" >> "$GITHUB_OUTPUT"
 
       - name: Find a compatible incomplete fetch checkpoint
         id: previous-checkpoint
@@ -356,6 +366,9 @@ jobs:
       - name: Validate generated JSON schemas
         run: python -B validate_schemas.py
 
+      - name: Validate generated consumer contracts
+        run: python -B -m pytest tests/test_phase8_real_data_review.py
+
       - name: Package validated output for the publish job
         shell: bash
         run: |
@@ -386,7 +399,7 @@ jobs:
             echo "- Candidate transfer: verified \`mtgo-fetch-candidate\` input and immutable \`mtgo-build-candidate\` output"
             echo "- Product formats: ${MTGO_PRODUCT_FORMATS}"
             echo "- Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}"
-            echo "- Validation layers: production candidate acceptance, repository, rule, and Schema validation."
+            echo "- Validation layers: production candidate acceptance, repository, rule, Schema, and generated consumer-contract validation."
             echo "- No repository write permission is available to this job."
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -514,11 +527,12 @@ jobs:
         shell: bash
         env:
           FETCH_RESULT: ${{ needs.fetch.result }}
+          FETCH_FAILURE_STAGE: ${{ needs.fetch.outputs.failure-stage }}
           BUILD_RESULT: ${{ needs.build.result }}
           PUBLISH_RESULT: ${{ needs.publish.result }}
         run: |
           if [ "$FETCH_RESULT" = "failure" ]; then
-            STAGE="fetch"
+            STAGE="${FETCH_FAILURE_STAGE:-fetch}"
           elif [ "$BUILD_RESULT" = "failure" ]; then
             STAGE="build"
           elif [ "$PUBLISH_RESULT" = "failure" ]; then

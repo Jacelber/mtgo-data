@@ -2675,9 +2675,11 @@ Production failure reporting uses:
 
 The notification job depends on fetch, build, and publish but has no checkout,
 repository-content permission, source data, or generated candidate. It runs only
-when one of those stages has result `failure`, records the first failed stage in
-pipeline order, and has only `issues: write`. Its stable HTML comment marker
-identifies one open non-pull-request issue for `fetch`, `build`, or `publish`.
+when one of those jobs has result `failure`, records the first failed stage in
+pipeline order, and has only `issues: write`. The fetch job distinguishes its
+clean-checkout `baseline` validation from later `fetch` input collection through
+a controlled job output. Its stable HTML comment marker identifies one open
+non-pull-request issue for `baseline`, `fetch`, `build`, or `publish`.
 It creates that issue when absent and adds a later run link when it already
 exists. The body contains only the controlled stage name, commit SHA, and
 workflow URL; it must not copy source responses, request details, or raw error

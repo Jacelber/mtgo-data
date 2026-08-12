@@ -116,28 +116,33 @@ def test_top8_review_uses_immutable_bases_and_explicit_unavailable_states() -> N
         )
 
 
-def test_review_matrix_retains_parents_and_uses_literal_wins_over_matches() -> None:
+def test_review_matrix_follows_parent_order_and_uses_literal_wins_over_matches() -> None:
+    source = _json("stats/modern/mtgo/matchup_4w.json")
     script = r"""
 const fs = require("fs");
 const review = require("./assets/js/phase8/matchup-model.js");
 const source = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
 const document = review.activeMatchupDocument(source, 20);
 const collapsed = review.buildView(document, [], []);
+const expandedParent = document.hierarchy.parents.find(parent =>
+  parent.expandable && document.parent_order.includes(parent.id)
+);
+if (!expandedParent) throw new Error("Real matchup data has no expandable parent");
 const expanded = review.buildView(
   document,
-  ["broodscale-combo"],
-  ["broodscale-combo"]
+  [expandedParent.id],
+  [expandedParent.id]
 );
+const subtypeId = expandedParent.subtype_ids[0];
 const drawRecord = review.literalRecord({wins: 1, losses: 1, draws: 1});
 process.stdout.write(JSON.stringify({
-  collapsedRows: collapsed.rows.length,
-  parentRetained: expanded.rows.some(row => row.id === "broodscale-combo"),
-  subtypeLabels: expanded.rows
-    .filter(row => row.parentId === "broodscale-combo" && row.kind === "subtype")
-    .map(row => row.name),
-  crossLevel: expanded.matrix["broodscale-combo"]["broodscale-combo/gruul"],
-  necroSubtypeIds: document.hierarchy.parents
-    .find(parent => parent.id === "necrodominance").subtype_ids,
+  collapsedRowIds: collapsed.rows.map(row => row.id),
+  parentRetained: expanded.rows.some(row => row.id === expandedParent.id),
+  subtypeIds: expanded.rows
+    .filter(row => row.parentId === expandedParent.id && row.kind === "subtype")
+    .map(row => row.id),
+  activeSubtypeIds: expandedParent.subtype_ids,
+  crossLevel: expanded.matrix[expandedParent.id][subtypeId],
   minSampleHint: document.min_sample_hint,
   drawRecord,
 }));
@@ -147,13 +152,9 @@ process.stdout.write(JSON.stringify({
         "stats/modern/mtgo/matchup_4w.json",
     )
 
-    assert result["collapsedRows"] == 49
+    assert result["collapsedRowIds"] == source["parent_order"]
     assert result["parentRetained"] is True
-    assert "Gruul Broodscale Combo" in result["subtypeLabels"]
-    assert result["necroSubtypeIds"] == [
-        "necrodominance/golgari",
-        "necrodominance/mono-black",
-    ]
+    assert result["subtypeIds"] == result["activeSubtypeIds"]
     assert result["minSampleHint"] == 20
     cross_level = result["crossLevel"]
     assert cross_level["matches"] == (

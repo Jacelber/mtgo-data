@@ -2997,6 +2997,9 @@ Status: `Accepted`
 
 The split production workflow already exposes failed fetch, build, and publish
 jobs in GitHub Actions, and P10-10 retains incomplete input collection safely.
+The fetch job begins with clean-checkout baseline validation, so its controlled
+failure stage must distinguish that pre-collection boundary from a later source
+collection failure.
 However, a recurring production failure had no durable, deduplicated work item.
 Creating a new issue for every failed daily run would create noise, while giving
 the collection, build, or publication jobs broad issue permission would weaken
@@ -3005,9 +3008,14 @@ their least-privilege boundary.
 ## Decision
 
 Add one post-pipeline notification job. It runs only after a real `failure` in
-fetch, build, or publish, selects the first failed stage in pipeline order, and
-has only `issues: write`; it does not check out the repository or receive
+the fetch, build, or publish job, selects the first failed stage in pipeline
+order, and has only `issues: write`; it does not check out the repository or receive
 `contents`, `actions`, Pages, OIDC, storage, or publication permission.
+
+The fetch job emits only the controlled `baseline` or `fetch` failure stage:
+`baseline` covers clean-checkout tests and the production-baseline snapshot,
+while `fetch` begins before checkpoint discovery and input collection. Build
+and publication failures remain `build` and `publish`.
 
 The job uses a stable hidden marker in an ordinary issue body to find an open,
 non-pull-request issue for the selected stage. It creates that issue if absent;
@@ -3023,7 +3031,8 @@ live verification.
 
 ## Consequences
 
-The owner receives one maintained open work item per active failure stage
+The owner receives one maintained open work item per active `baseline`, `fetch`,
+`build`, or `publish` failure stage
 without expanding any collection, build, or publication permission. The
 notification job is itself observable in Actions and may fail visibly if GitHub
 cannot record the notification; it cannot convert a failed production run into

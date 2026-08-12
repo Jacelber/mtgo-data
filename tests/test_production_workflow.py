@@ -118,6 +118,21 @@ def test_fetch_runs_clean_regression_then_snapshots_and_collects_only_inputs():
     assert "if-no-files-found: error" in fetch_text
 
 
+def test_fetch_reports_baseline_failures_separately_from_input_collection():
+    fetch = job("fetch")
+    assert fetch["outputs"] == {
+        "failure-stage": "${{ steps.fetch-stage.outputs.stage || steps.baseline-stage.outputs.stage }}"
+    }
+    baseline = next(step for step in steps("fetch") if step.get("id") == "baseline-stage")
+    collection = next(step for step in steps("fetch") if step.get("id") == "fetch-stage")
+    assert 'echo "stage=baseline" >> "$GITHUB_OUTPUT"' in baseline["run"]
+    assert 'echo "stage=fetch" >> "$GITHUB_OUTPUT"' in collection["run"]
+    assert steps("fetch").index(baseline) < command_index("fetch", "-m pytest")
+    assert command_index("fetch", "validate_production_candidate.py snapshot") < steps("fetch").index(
+        collection
+    )
+
+
 def test_workflow_summary_backticks_are_literal_shell_text():
     workflow = UPDATE.read_text(encoding="utf-8")
     assert "\\\\`" not in workflow
@@ -170,6 +185,7 @@ def test_build_verifies_and_consumes_fetch_artifact_before_generation_and_valida
         "validate_repository.py",
         "validate_rules.py",
         "validate_schemas.py",
+        "-m pytest tests/test_phase8_real_data_review.py",
         "tar -cf",
         "sha256sum",
     ]
@@ -237,9 +253,11 @@ def test_notification_job_creates_or_updates_only_deduplicated_failed_stage_issu
     stage = next(step for step in steps("notify") if step["name"] == "Identify the failed production stage")
     assert stage["env"] == {
         "FETCH_RESULT": "${{ needs.fetch.result }}",
+        "FETCH_FAILURE_STAGE": "${{ needs.fetch.outputs.failure-stage }}",
         "BUILD_RESULT": "${{ needs.build.result }}",
         "PUBLISH_RESULT": "${{ needs.publish.result }}",
     }
+    assert 'STAGE="${FETCH_FAILURE_STAGE:-fetch}"' in stage["run"]
     assert "core.summary.write" in text
     assert "error.message" not in text
     assert "github.token" not in text
