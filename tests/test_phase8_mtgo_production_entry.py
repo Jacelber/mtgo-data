@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 PHASE8_JS = ROOT / "assets" / "js" / "phase8"
 APP_FILES = (
+    "archetype-visuals.js",
     "app-core.js",
     "app-freshness.js",
     "app-mtgo.js",
@@ -105,6 +106,7 @@ def test_root_uses_only_the_mtgo_phase8_module_boundary() -> None:
         "assets/js/phase8/i18n.js",
         "assets/js/phase8/matchup-model.js",
         "assets/js/phase8/mtgo-controller.js",
+        "assets/js/phase8/archetype-visuals.js",
         "assets/js/phase8/app-core.js",
         "assets/js/phase8/app-freshness.js",
         "assets/js/phase8/app-mtgo.js",
