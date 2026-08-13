@@ -115,13 +115,43 @@ def render_summary(report: dict[str, object]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def main() -> None:
+def timing_budget_violations(
+    report: dict[str, object], *, group: str, max_call_seconds: float
+) -> list[dict[str, object]]:
+    return [
+        result
+        for result in report["slowest_tests"]
+        if result["group"] == group
+        and float(result["duration_seconds"]) > max_call_seconds
+    ]
+
+
+def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--summary", type=Path, required=True)
+    parser.add_argument("--max-ordinary-call-seconds", type=float)
     arguments = parser.parse_args()
     report = json.loads(arguments.summary.read_text(encoding="utf-8"))
     print(render_summary(report), end="")
+    if arguments.max_ordinary_call_seconds is None:
+        return 0
+    violations = timing_budget_violations(
+        report,
+        group="ordinary",
+        max_call_seconds=arguments.max_ordinary_call_seconds,
+    )
+    if not violations:
+        print(
+            f"- Ordinary per-call ceiling: {arguments.max_ordinary_call_seconds:.0f}s (passed)"
+        )
+        return 0
+    print(
+        f"- Ordinary per-call ceiling: {arguments.max_ordinary_call_seconds:.0f}s (failed)"
+    )
+    for result in violations:
+        print(f"  - {result['nodeid']}: {float(result['duration_seconds']):.2f}s")
+    return 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

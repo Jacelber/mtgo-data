@@ -1,6 +1,11 @@
 import json
 
-from ci_timing import COMMITTED_BASELINE_MARKER, TimingRecorder, render_summary
+from ci_timing import (
+    COMMITTED_BASELINE_MARKER,
+    TimingRecorder,
+    render_summary,
+    timing_budget_violations,
+)
 
 
 class FakeItem:
@@ -93,3 +98,28 @@ def test_render_summary_contains_group_totals_and_slowest_test():
     assert "Pytest timing observation" in summary
     assert "committed_baseline" in summary
     assert "tests/test_baseline.py::test_baseline" in summary
+
+
+def test_ordinary_timing_budget_ignores_baseline_and_reports_slow_calls():
+    report = {
+        "slowest_tests": [
+            {
+                "nodeid": "tests/test_slow.py::test_slow",
+                "group": "ordinary",
+                "duration_seconds": 121.0,
+            },
+            {
+                "nodeid": "tests/test_baseline.py::test_baseline",
+                "group": COMMITTED_BASELINE_MARKER,
+                "duration_seconds": 500.0,
+            },
+        ]
+    }
+
+    violations = timing_budget_violations(
+        report, group="ordinary", max_call_seconds=120.0
+    )
+
+    assert [item["nodeid"] for item in violations] == [
+        "tests/test_slow.py::test_slow"
+    ]

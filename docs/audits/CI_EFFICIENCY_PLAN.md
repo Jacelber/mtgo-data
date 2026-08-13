@@ -235,6 +235,38 @@ deployment unless its duration becomes material. Do not add broad path filters
 because rule, generated-data, schema, workflow, and front-end dependencies are
 cross-layer. Do not create benchmark-only PRs just to fill the sample ledger.
 
+## 2026-08-13 regression hardening
+
+PR #201 exposed three costs not controlled by the earlier timing prototype.
+Local Playwright repeated one sandbox-denied Chromium launch across the browser
+matrix before the command limit; the 165-file pull request exceeded admission's
+single changed-file page and forced a complete post-merge rerun; and the
+ordinary shard reached 1,567 seconds. Its slowest calls were 479.93 seconds for
+a duplicate full Modern Top 8 rebuild and 178.70 seconds for a Modern Pickup
+test combining production generation, publication, and stable-ID assertions.
+
+The follow-up hardening keeps the existing validation classes and complete
+coverage while changing the failure and test architecture:
+
+- a browser launch-and-close preflight runs before Playwright or its server, so
+  a systemic launch failure exits once;
+- the browser server uses Node.js and no longer depends on a workspace Python
+  command;
+- changed-file evidence is collected across complete 100-item pages up to
+  3,000 files, with incomplete evidence still selecting full validation;
+- the duplicate production Top 8 rebuild is removed because the same mutation
+  contract already has a representative unit test and strict committed Top 8
+  reproduction; and
+- Modern Pickup stable-ID/manual-boundary assertions inspect the protected
+  committed candidate and pure approval transformation instead of repeatedly
+  regenerating the production corpus.
+
+The ordinary timing summary now fails when any ordinary call exceeds 120
+seconds. The threshold is intentionally above the next observed approximately
+49-second calls but below both regressions. It does not apply to the explicit
+`committed_baseline` shard and does not permit test removal or weaker output
+comparison.
+
 ## Operating record
 
 After each qualifying PR, merged `master` run, and production run, append one

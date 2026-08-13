@@ -75,6 +75,8 @@ SAFE_UI_PATHS = frozenset(
     }
 )
 VALIDATING_ACTIONS = frozenset({"opened", "synchronize", "reopened", "edited"})
+FILES_PER_PAGE = 100
+MAX_PULL_REQUEST_FILES = 3000
 
 
 @dataclass(frozen=True)
@@ -114,16 +116,29 @@ def _parse_artifact_impacts(body: object) -> frozenset[str]:
 def _pull_request_files(
     *, repository_api: str, pull_request: int, fetch_json: FetchJson
 ) -> list[dict]:
-    payload = fetch_json(
-        f"{repository_api}/pulls/{pull_request}/files?per_page=100&page=1"
-    )
-    if not isinstance(payload, list) or not payload:
-        raise ValueError("pull_request_files_missing")
-    if len(payload) >= 100:
-        raise ValueError("pull_request_files_require_pagination")
-    if not all(isinstance(item, dict) for item in payload):
-        raise ValueError("pull_request_file_entry_invalid")
-    return payload
+    files: list[dict] = []
+    page = 1
+    while True:
+        payload = fetch_json(
+            f"{repository_api}/pulls/{pull_request}/files"
+            f"?per_page={FILES_PER_PAGE}&page={page}"
+        )
+        if not isinstance(payload, list):
+            raise ValueError("pull_request_files_missing")
+        if len(payload) > FILES_PER_PAGE:
+            raise ValueError("pull_request_files_page_too_large")
+        if not payload:
+            if not files:
+                raise ValueError("pull_request_files_missing")
+            return files
+        if not all(isinstance(item, dict) for item in payload):
+            raise ValueError("pull_request_file_entry_invalid")
+        if len(files) + len(payload) > MAX_PULL_REQUEST_FILES:
+            raise ValueError("pull_request_files_exceed_supported_limit")
+        files.extend(payload)
+        if len(payload) < FILES_PER_PAGE:
+            return files
+        page += 1
 
 
 def _validated_path(item: dict) -> str:

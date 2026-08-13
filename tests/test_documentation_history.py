@@ -52,12 +52,12 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "CLASSIFIER-DISPLAY-NAME-DEDUPE"
+    assert status["current_task"]["id"] == "GOV-04-TEST-EFFICIENCY-HARDENING"
     assert status["current_task"]["status"] == (
         "owner_accepted_publication_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "a2b254298508d10431e76531b6a4e029802c9165"
+        "96a3721e74715f4357dd995bcc510ebda1036eb1"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -66,14 +66,14 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "merge": True,
     }
     assert status["recent_completion_handoff"]["id"] == (
-        "CLASSIFIER-R5-PRODUCTION-PROMOTION"
+        "CLASSIFIER-DISPLAY-NAME-DEDUPE"
     )
     assert status["recent_completion_handoff"]["merge_commit"] == (
-        "a2b254298508d10431e76531b6a4e029802c9165"
+        "ce1ebd7a296e5afe266fd2ec8a6d3c8b0b53d760"
     )
     assert status["next_approved_task"]["id"] == "P12-10"
     assert status["next_approved_task"]["status"] == (
-        "blocked_pending_display_name_fix_acceptance_landing_shadow_and_separate_authorization"
+        "blocked_pending_landing_shadow_and_separate_authorization"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False

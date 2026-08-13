@@ -11,8 +11,13 @@ def test_playwright_dependency_and_command_are_pinned() -> None:
     package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
     assert package["private"] is True
     assert package["devDependencies"] == {"@playwright/test": "1.62.1"}
-    assert package["scripts"] == {"test:browser": "playwright test"}
+    assert package["scripts"] == {
+        "test:browser": "node tests/browser/browser-preflight-cli.js && playwright test"
+    }
     assert (ROOT / "package-lock.json").exists()
+    config = (ROOT / "playwright.config.js").read_text(encoding="utf-8")
+    assert 'command: "node tests/browser/static-server.js"' in config
+    assert "python -m http.server" not in config
 
 
 def test_browser_ci_job_is_parallel_read_only_and_exact() -> None:
@@ -27,6 +32,7 @@ def test_browser_ci_job_is_parallel_read_only_and_exact() -> None:
     assert "npm ci" in commands
     assert "npx playwright install --with-deps chromium" in commands
     assert "npm run test:browser" in commands
+    assert not any("setup-python" in step.get("uses", "") for step in job["steps"])
 
 
 def test_browser_spec_covers_required_production_matrix() -> None:

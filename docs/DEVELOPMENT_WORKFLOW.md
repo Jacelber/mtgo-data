@@ -307,6 +307,20 @@ Use the following ladder and rerun only the layer invalidated by a change:
    fixtures, manifests, workflows, or test discovery. Remote CI may still run
    the complete suite.
 
+Real-browser validation must run a single Chromium launch-and-close preflight
+before Playwright starts its web server or collects the full browser matrix. A
+systemic launch failure such as `spawn EPERM`, a missing browser executable, or
+an unusable browser runtime must stop that command immediately; it must not be
+repeated once per browser test. The maintained local server uses the already
+required Node.js runtime rather than a separately discovered Python command.
+
+The ordinary CI shard enforces a 120-second per-test call ceiling from the
+existing timing report. A slower ordinary call is a test-architecture failure:
+move full committed-snapshot reproduction to the strict complementary baseline
+shard, replace a production-corpus contract test with a representative fixture,
+or share immutable setup without weakening the assertion. Do not raise the
+ceiling merely to accommodate repeated full-corpus generation.
+
 Record the validated commit or tree identity in the task evidence. Do not rerun
 the same expensive command when no relevant input changed, and do not run every
 validator after every small edit.

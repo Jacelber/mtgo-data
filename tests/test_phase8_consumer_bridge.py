@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 import json
 from pathlib import Path
 
@@ -11,7 +10,6 @@ import pytest
 from mtgmeta import catalog
 from mtgmeta.consumer import identity_display_name
 from mtgmeta.config import load_rule_set
-from mtgmeta.mtgo import top8
 import validate_schemas
 
 
@@ -252,31 +250,3 @@ def test_top8_uses_immutable_week_base_and_publishes_deviation(format_id):
         else:
             assert placement["exact_deck"]["deviation"] is None
             assert placement["exact_deck"]["deviation_diff"] is None
-
-
-def test_existing_provisional_event_cannot_be_rewritten(tmp_path):
-    committed = _json(ROOT / "stats" / "modern" / "mtgo" / "top8" / "index.json")
-    generated = datetime.fromisoformat(committed["generated"])
-    output = tmp_path / "top8"
-    top8.build_all_top8(
-        ROOT,
-        "modern",
-        today=generated.date(),
-        generated_at=generated,
-        output_directory=output,
-    )
-    week_path = output / committed["weeks"][0]["file"]
-    week = _json(week_path)
-    week["events"][0]["name"] = "mutated"
-    week_path.write_text(json.dumps(week, indent=2), encoding="utf-8")
-    with pytest.raises(
-        top8.MTGOTop8Error,
-        match="provisional Top 8 existing event changed",
-    ):
-        top8.build_all_top8(
-            ROOT,
-            "modern",
-            today=generated.date(),
-            generated_at=generated,
-            output_directory=output,
-        )

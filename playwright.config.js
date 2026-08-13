@@ -14,7 +14,7 @@ module.exports = defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: "python -m http.server 4173 --bind 127.0.0.1",
+    command: "node tests/browser/static-server.js",
     url: "http://127.0.0.1:4173/stats/catalog.json",
     reuseExistingServer: false,
     timeout: 30_000,
