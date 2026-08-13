@@ -2993,12 +2993,23 @@ public entry points.
    R5 was published through pull request #201 and merge commit
    `a2b254298508d10431e76531b6a4e029802c9165`; complete pull-request and
    post-merge validation, automatic Pages deployment, byte-level public JSON
-   verification, and Owner live acceptance succeeded. On 2026-08-13 the Owner
-   separately authorized a local-only compatibility fix for nine subtype
+   verification, and Owner live acceptance succeeded. The 2026-08-13 subtype
+   display-name compatibility fix for nine subtype
    `display_name` values that repeat a parent color prefix. The fix must derive
    the replaceable prefix from the parent's own subtype definitions, preserve
    all stable identities and statistics, leave the other 72 subtype labels
-   unchanged, and stop for Owner review before commit or publication.
+   unchanged, merged as PR #202 before this classifier repair was rebased.
+
+   On 2026-08-13 the Owner authorized
+   `STANDARD-SPELLEMENTALS-TALENT-BOUNDARY` fix. The Standard Spellementals rule
+   requires an exact mainboard Stormchaser's Talent count of zero while keeping
+   Sunderflock zone-neutral, so mainboard Talent/Slickshot builds select Izzet
+   Prowess and sideboard-only Talent Spellementals remain unchanged. The exact
+   impact is 102 current and 56 frozen transitions from Izzet Spellementals to
+   Izzet Prowess with no status-count or other identity change. The accepted
+   R4/R5 evidence remains frozen. The Owner then accepted commit, publication,
+   and merge; the Landing shadow, P12-10, and production dispatch remain
+   separate gates.
 4. `P12-04` — Visual direction and durable design-system contract
    - publish the durable repository authority at
      `docs/FRONTEND_DESIGN_SYSTEM.md`, covering product personality,

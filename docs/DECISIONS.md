@@ -3886,3 +3886,47 @@ and Tabletop separation, and Weekly Pickup state remain unchanged.
 
 Owner acceptance, commit, publication, merge, deployment, Landing shadow,
 P12-10, and any production dispatch remain separate authorization gates.
+
+---
+
+# DEC-091 - Separate Standard Spellementals from mainboard Talent Prowess
+
+Status: `Accepted`
+
+## Context
+
+The Standard Izzet Spellementals and Izzet Prowess strategies have converged
+around Eddymurk Crab and Hearth Elemental. Prowess lists with four mainboard
+Stormchaser's Talent, four Slickshot Show-Off, and sideboard Sunderflock match
+both production rules. The existing explicit priorities then select Izzet
+Spellementals even though the Owner defines mainboard Talent as the decisive
+Prowess boundary.
+
+Six reviewed Spellementals records instead have zero mainboard Talent and two
+sideboard Talent. A whole-deck Talent exclusion would incorrectly make those
+lists Unknown.
+
+## Decision
+
+Require `Stormchaser's Talent` to have an exact main-deck count of zero in
+`izzet-spellementals-primary`. Keep the existing Sunderflock condition
+zone-neutral. Do not change either parent ID, rule ID, priority, the Izzet
+Prowess rule, or any maintained subtype.
+
+Preserve the accepted R4 shadows and R5 promotion tools as historical evidence.
+Define current Standard production as the exact R5 rule document plus this one
+reviewed condition, while Modern remains byte-identical to R5. Refresh the
+existing Standard classification-derived outputs with maintained offline
+generators and preserve Pickup state, source data, formulas, Schemas, paths,
+workflows, and front-end source.
+
+## Consequences
+
+Exactly 102 of 4,829 current Standard records and 56 of 3,936 frozen Standard
+records move from Izzet Spellementals to Izzet Prowess. Current and frozen
+classified and Unknown totals do not change, and no other identity transition,
+conflict, or invalid-deck result occurs. The six sideboard-only Talent
+Spellementals records retain their existing identity.
+
+Owner acceptance, commit, publication, merge, automatic deployment, the
+Landing shadow, P12-10, and manual production dispatch remain separate gates.
