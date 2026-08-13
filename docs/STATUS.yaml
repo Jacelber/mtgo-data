@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/classifier-display-name-dedupe"
+  current_working_branch: "codex/standard-spellementals-talent-boundary"
   working_branch_status: "owner_accepted_publication_authorized"
   status: "active"
   primary_language: "Python"
@@ -72,49 +72,41 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-04-TEST-EFFICIENCY-HARDENING"
-  name: "Browser fail-fast, admission pagination, and slow-test de-duplication"
+  id: "STANDARD-SPELLEMENTALS-TALENT-BOUNDARY"
+  name: "Standard Spellementals mainboard Talent boundary"
   status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-13"
   implementation_completed_on: "2026-08-13"
+  owner_accepted_on: "2026-08-13"
   publication_authorized_on: "2026-08-13"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-test-efficiency-20260813-01"
-  branch: "codex/gov-test-efficiency-20260813"
-  base_commit: "96a3721e74715f4357dd995bcc510ebda1036eb1"
-  task_type: "local_ci_and_test_efficiency_hardening"
-  artifact_impact: "none"
-  objective: "Eliminate systemic Playwright error waiting, support complete changed-file pagination for exact merge evidence, and remove duplicated full-corpus ordinary tests without weakening complete or committed-baseline validation."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/standard-spellementals-talent-boundary-20260813-01"
+  branch: "codex/standard-spellementals-talent-boundary"
+  base_commit: "b03a162c48cacef40b4201fea381da84d500dc9e"
+  task_type: "local_standard_classifier_boundary_fix"
+  artifact_impact: "statistical_json_structure"
+  objective: "Keep Standard lists with mainboard Stormchaser's Talent and Slickshot Show-Off in Prowess even when their sideboard contains Sunderflock, while preserving genuine Spellementals lists that carry Talent only in the sideboard."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - ".github/workflows/ci.yml"
-    - "ci_master_admission.py"
-    - "ci_timing.py"
-    - "package.json"
-    - "playwright.config.js"
-    - "tests/browser/"
-    - "tests/js/"
-    - "tests/test_ci_master_admission.py"
-    - "tests/test_ci_timing.py"
-    - "tests/test_ci_workflow.py"
+    - "my_archetypes/standard.yaml"
+    - "reports/standard/mtgo/**"
+    - "stats/standard/mtgo/**"
+    - "stats/catalog.json"
+    - "tests/test_classifier_r5_production.py"
     - "tests/test_documentation_history.py"
-    - "tests/test_playwright_baseline.py"
-    - "tests/test_phase8_consumer_bridge.py"
-    - "tests/test_modern_pickup_metadata.py"
-    - "docs/audits/CI-MASTER-ADMISSION.md"
-    - "docs/audits/CI_EFFICIENCY_PLAN.md"
-    - "docs/DEVELOPMENT_WORKFLOW.md"
     - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
+    - "docs/audits/STANDARD-SPELLEMENTALS-TALENT-BOUNDARY.md"
   protected_scope:
-    code_changed: "CI admission, timing enforcement, browser-test bootstrap, and test architecture only"
-    workflow_changed: "CI browser bootstrap and ordinary per-call ceiling only"
-    raw_or_generated_data_changed: "none"
-    statistical_behavior_changed: "none"
+    code_changed: "none"
+    classifier_rule_changed: "One exact mainboard-zero condition added to izzet-spellementals-primary"
+    workflow_changed: "none"
+    raw_or_generated_data_changed: "Only existing Standard classification-derived reports, statistics, matchups, completeness, meta, ranges, catalog, and indexed Top 8 history"
+    statistical_behavior_changed: "Only the accepted Standard Spellementals-to-Prowess identity boundary"
     schema_changed: "none"
     frontend_source_changed: "none"
     public_paths_changed: "none"
@@ -122,26 +114,31 @@ current_task:
     production_dispatched: false
     remote_write_performed: "none"
   validation_evidence:
-    focused_governance_tests: "73 passed"
-    focused_behavior_tests: "89 passed, 2 committed-baseline tests deselected"
-    pytest_ordinary: "953 passed, 8 deselected in 438.16 seconds; slowest call 21.52 seconds"
-    pytest_committed_baseline: "8 passed, 953 deselected in 289.22 seconds"
-    ordinary_timing_ceiling: "120 seconds configured; measured slowest call 21.52 seconds"
-    node_test: "10 passed"
-    playwright_fail_fast: "sandbox spawn EPERM exited after one launch attempt in 0.47 seconds"
-    playwright_chromium: "77 passed in 40.5 seconds outside the process-restricted sandbox"
+    focused_pytest: "30 passed"
+    current_corpus_transition: "102 of 4829 records changed only from izzet-spellementals to izzet-prowess; classified 4821 and Unknown 8 unchanged"
+    frozen_corpus_transition: "56 of 3936 records changed only from izzet-spellementals to izzet-prowess; classified 3928 and Unknown 8 unchanged"
+    protected_sideboard_cases: "Six reviewed genuine Spellementals lists with 0 mainboard and 2 sideboard Talent remain izzet-spellementals"
+    pytest_ordinary: "950 passed, 8 deselected using a repository-external basetemp"
+    pytest_committed_baseline: "8 passed, 950 deselected"
+    node_test: "3 passed"
+    playwright_chromium: "77 passed"
     ruff: "passed"
-    repository_validation: "159 Python, 17 JavaScript, 1752 JSON, 51 YAML, 56 references, and 2183 hygiene checks passed"
+    mypy_strict_narrow_baseline: "passed for 4 configured stable shared modules"
+    repository_validation: "159 Python, 17 JavaScript, 1752 JSON, 51 YAML, 56 references, and 2180 hygiene checks passed"
+    schema_validation: "77 passed"
+    rule_validation: "passed"
+    generated_diff: "Multiple-match and overridden reports each drop exactly the 102 corrected dual matches; no unexpected changed path"
     diff_check: "passed"
   allowed_actions:
-    - "Fail once before Playwright starts its server when Chromium cannot launch."
-    - "Read complete 100-item changed-file pages up to 3,000 files and fail safe on incomplete evidence."
-    - "Replace duplicate full-corpus ordinary tests with existing representative and committed-baseline coverage."
-    - "Fail CI when one ordinary test call exceeds 120 seconds."
+    - "Require exactly zero mainboard Stormchaser's Talent in izzet-spellementals-primary."
+    - "Keep the existing zone-neutral Sunderflock condition unchanged."
+    - "Regenerate only existing Standard classifier-derived artifacts and catalog references."
+    - "Add real-corpus regressions for the two corrected Prowess lists and a protected sideboard-only Talent Spellementals list."
+    - "Run focused, corpus-transition, complete, and repository validation and prepare Owner-review evidence."
   prohibited_changes:
-    - "Any product, statistic, generated data, Schema, public path, classification, event, production, or repository-setting change."
-    - "Any production dispatch, P12-10 work, or another task without separate Owner authorization."
-  stop_point: "Commit the accepted implementation, publish one Ready pull request, wait for complete CI, merge only after every required check succeeds, verify exact remote master, then stop before production dispatch or P12-10."
+    - "Any Modern or Tabletop classifier change, stable ID, priority, source event, formula, Schema, workflow, front-end source, public path, event whitelist, Pickup state, or Top 8 index-shape change."
+    - "Any manual production dispatch, Landing shadow, P12-10 work, release, tag, repository-setting change, force-push, or another task without separate Owner authorization."
+  stop_point: "Commit this accepted result, publish one Ready pull request, wait for complete CI, merge only after every required check succeeds, verify exact remote master and Pages deployment, then stop before production dispatch or P12-10."
 
 recent_completion_handoff:
   id: "CLASSIFIER-DISPLAY-NAME-DEDUPE"
@@ -152,8 +149,8 @@ recent_completion_handoff:
   note: "PR, exact master confirmation, Pages deployment, and live label verification succeeded. GitHub and Git retain detailed publication evidence."
 
 current_repository_state:
-  baseline_commit: "96a3721e74715f4357dd995bcc510ebda1036eb1"
-  baseline_note: "Verified remote master after PR 202 and the 2026-08-12 production update; used as the isolated GOV-04 base."
+  baseline_commit: "b03a162c48cacef40b4201fea381da84d500dc9e"
+  baseline_note: "Verified remote master after merged PRs 202 and 203; used as the publication base for this classifier fix."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -216,7 +213,7 @@ future_task_gates:
   - task: "P12-10"
     status: "blocked_pending_separate_authorization_and_evidence"
     requirements:
-      - "Accept and publish the separately authorized subtype display-name compatibility fix."
+      - "Accept and publish the Standard Spellementals Talent boundary fix."
       - "Freeze corrected stable parent, subtype, and self-contained display identities."
       - "Validate or explicitly migrate Weekly Pickup known-archetype state."
       - "Rerun the 8-12 week Standard and Modern Landing shadow."
@@ -236,13 +233,13 @@ open_decisions:
 next_approved_task:
   id: "P12-10"
   name: "Landing weekly-facts producer and Pickup integration"
-  status: "blocked_pending_landing_shadow_and_separate_authorization"
+  status: "blocked_pending_standard_boundary_publication_landing_shadow_and_separate_authorization"
   production_change: true
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "GOV-04 local test-efficiency hardening is complete pending Owner acceptance and separate publication authorization. Landing shadow, threshold confirmation, representative-card approval, P12-10, and any manual production dispatch remain separate gates."
+  note: "The display-name compatibility fix merged in PR 202. The Standard Talent boundary fix is accepted and publication-authorized; it must merge before the Landing shadow. P12-10 and production remain separate gates."
 
 governance_baseline:
   status: "active_on_master"

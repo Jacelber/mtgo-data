@@ -52,12 +52,14 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "GOV-04-TEST-EFFICIENCY-HARDENING"
+    assert status["current_task"]["id"] == (
+        "STANDARD-SPELLEMENTALS-TALENT-BOUNDARY"
+    )
     assert status["current_task"]["status"] == (
         "owner_accepted_publication_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "96a3721e74715f4357dd995bcc510ebda1036eb1"
+        "b03a162c48cacef40b4201fea381da84d500dc9e"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -73,7 +75,7 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["next_approved_task"]["id"] == "P12-10"
     assert status["next_approved_task"]["status"] == (
-        "blocked_pending_landing_shadow_and_separate_authorization"
+        "blocked_pending_standard_boundary_publication_landing_shadow_and_separate_authorization"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
@@ -83,19 +85,22 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
 
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
-    audit = (ROOT / "docs" / "audits" / "CLASSIFIER-R5-PRODUCTION-PROMOTION.md").read_text(
-        encoding="utf-8"
-    )
+    audit = (
+        ROOT
+        / "docs"
+        / "audits"
+        / "STANDARD-SPELLEMENTALS-TALENT-BOUNDARY.md"
+    ).read_text(encoding="utf-8")
     decisions = (ROOT / "docs" / "DECISIONS.md").read_text(encoding="utf-8")
     for document in (roadmap, audit, decisions):
-        assert "R5" in document
+        assert "Stormchaser's Talent" in document
         assert "P12-10" in document
     assert "statistical_json_structure" in audit
-    assert "Pickup" in audit
-    assert "434455" in audit
+    assert "102" in audit
+    assert "56" in audit
+    assert "Sunderflock" in audit
     assert "commit" in audit
-    assert "R5" in audit
-    assert "production" in audit
+    assert "sideboard" in audit
     assert "P12-10" in audit
 
     historical_paths = {
