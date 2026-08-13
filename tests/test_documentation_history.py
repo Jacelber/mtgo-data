@@ -52,12 +52,12 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "WEEKLY-MAINTENANCE-CONTRACT-R1"
+    assert status["current_task"]["id"] == "GOV-05-TEST-TEMP-ISOLATION"
     assert status["current_task"]["status"] == (
         "owner_accepted_publication_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "d5aba55dc62f1d2ed68d7584aa33524be7803e35"
+        "5b95abc3d6499feb84b5c2134e121f24f00e054e"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -66,10 +66,10 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "merge": True,
     }
     assert status["recent_completion_handoff"]["id"] == (
-        "ARCHETYPE-VISUAL-METADATA-INITIALIZATION"
+        "WEEKLY-MAINTENANCE-CONTRACT-R1"
     )
     assert status["recent_completion_handoff"]["merge_commit"] == (
-        "d5aba55dc62f1d2ed68d7584aa33524be7803e35"
+        "5b95abc3d6499feb84b5c2134e121f24f00e054e"
     )
     assert status["next_approved_task"]["id"] == "P12-10"
     assert status["next_approved_task"]["status"] == (

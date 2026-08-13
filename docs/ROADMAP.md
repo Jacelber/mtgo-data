@@ -2778,6 +2778,15 @@ authorize any readiness task or Phase 12 implementation.
      The Owner accepted the validated local result on 2026-08-13 and separately
      authorized commit, one Ready pull request, complete CI, and merge after all
      required checks succeed. Production dispatch and P12-10 remain unauthorized.
+   - 2026-08-13 GOV-05 follow-up: require repository-external pytest basetemp,
+     preserve valid passed evidence after a controlled local infrastructure
+     exception, prohibit complete local reruns after partial failures, retain
+     one independent complete CI run for the final PR head, and retain exact
+     post-merge evidence confirmation without repeating the validated suites.
+     The Owner accepted the local result and authorized commit, one Ready pull
+     request, one complete CI run for its final head, and merge after all
+     required checks succeed. Manual production dispatch and P12-10 remain
+     unauthorized.
 3. `P12-00-C` — Folded into P12-00-B; no independent prerequisite
    - retain the existing STATUS size and `live_state_only` checks and add the
      missing non-empty `history_policy` assertion in P12-00-B;

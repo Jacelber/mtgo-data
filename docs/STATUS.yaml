@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/next-step-review"
+  current_working_branch: "codex/gov-test-temp-isolation-20260813"
   working_branch_status: "owner_accepted_publication_authorized"
   status: "active"
   primary_language: "Python"
@@ -72,40 +72,39 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-MAINTENANCE-CONTRACT-R1"
-  name: "Tuesday weekly maintenance responsibility and handoff contract"
+  id: "GOV-05-TEST-TEMP-ISOLATION"
+  name: "Repository-external pytest temp and valid-evidence reuse"
   status: "owner_accepted_publication_authorized"
   authorized_on: "2026-08-13"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/next-step-review-20260813-01"
-  branch: "codex/next-step-review"
-  base_commit: "d5aba55dc62f1d2ed68d7584aa33524be7803e35"
-  task_type: "local_weekly_maintenance_contract_design"
-  artifact_impact: "internal_diagnostics"
-  objective: "Design one executable Tuesday contract that separates deterministic code execution, Codex preparation and implementation, and Owner input for classifier review, visual metadata, Weekly Pickup, and future Landing editorial maintenance."
-  owner_decisions_confirmed_on: "2026-08-13"
-  owner_accepted_on: "2026-08-13"
+  implementation_completed_on: "2026-08-13"
   publication_authorized_on: "2026-08-13"
-  trigger_model: "codex_proactive_after_tuesday_production_terminal_then_await_owner_start"
-  trigger_automation:
-    id: "mtgo"
-    kind: "heartbeat"
-    schedule: "Tuesday 09:00 Japan time"
-    status: "active"
-    mutation_scope: "read_only_entry_report"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-test-temp-isolation-20260813-01"
+  branch: "codex/gov-test-temp-isolation-20260813"
+  base_commit: "5b95abc3d6499feb84b5c2134e121f24f00e054e"
+  task_type: "local_ci_and_test_governance_hardening"
+  artifact_impact: "none"
+  objective: "Keep pytest temporary files outside the checkout and prohibit complete local reruns when valid passed evidence can be preserved."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "docs/audits/WEEKLY-MAINTENANCE-CONTRACT-R1.md"
-    - "docs/STATUS.yaml"
+    - ".github/workflows/ci.yml"
+    - "pytest.ini"
+    - "pytest_temp_guard.py"
+    - "tests/test_pytest_temp_guard.py"
+    - "tests/test_ci_workflow.py"
     - "tests/test_documentation_history.py"
-    - "repository-external review workbook and rendered previews"
+    - "docs/audits/CI-TEST-TEMP-ISOLATION.md"
+    - "docs/DEVELOPMENT_WORKFLOW.md"
+    - "docs/DECISIONS.md"
+    - "docs/ROADMAP.md"
+    - "docs/STATUS.yaml"
   protected_scope:
-    code_changed: "none"
+    code_changed: "pytest bootstrap and test contracts only"
     classifier_rule_changed: "none"
-    workflow_changed: "none"
+    workflow_changed: "explicit external pytest basetemp paths only"
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
@@ -115,26 +114,30 @@ current_task:
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Read current remote-master maintenance inputs and authoritative contracts."
-    - "Design responsibilities, handoffs, state transitions, stop conditions, templates, and a no-publication rehearsal."
-    - "Create a repository-external editable workbook and rendered review previews."
-    - "Configure one read-only Codex heartbeat that sends the Tuesday entry report and then waits for the Owner to begin."
+    - "Reject repository-internal pytest basetemp before collection and select a unique external local default."
+    - "Use explicit RUNNER_TEMP shard paths in GitHub Actions."
+    - "Add focused regressions bounded below five seconds and update evidence-reuse governance."
+    - "Run only the authorized focused and static local acceptance sequence."
+  validation_evidence:
+    temp_guard_regressions: "4 contracts passed; one preserved pass plus three selectively rerun setup-error nodes after the only implementation repair"
+    affected_contract_tests: "74 passed in 18.65 seconds"
+    complete_local_suites: "intentionally not run under the accepted evidence-reuse contract"
   prohibited_changes:
-    - "Any classifier, production workflow, statistical formula, generated JSON, Schema, public path, Pickup decision/state, representative-card selection, Landing implementation, or production dispatch."
-    - "Any commit, push, pull request, merge, deployment, release, tag, P12-10 implementation, or another task without separate Owner authorization."
-  stop_point: "Publish and merge the accepted R1 design through one Ready pull request with complete CI, then stop before production mutation, P12-10, or another task."
+    - "Any product, classifier, statistical formula, generated data, Schema, public path, Pickup state, frontend, or production change."
+    - "Any manual production dispatch, P12-10 work, or another task without separate Owner authorization."
+  stop_point: "Commit the accepted implementation, publish one Ready pull request, run one complete CI validation for its final head, merge only after every required check succeeds, confirm exact merge evidence, then stop."
 
 recent_completion_handoff:
-  id: "ARCHETYPE-VISUAL-METADATA-INITIALIZATION"
-  name: "Existing-product mana identity and first representative-card initialization"
+  id: "WEEKLY-MAINTENANCE-CONTRACT-R1"
+  name: "Tuesday weekly maintenance responsibility and handoff contract"
   status: "completed_merged_and_deployed"
-  pull_request: 205
-  merge_commit: "d5aba55dc62f1d2ed68d7584aa33524be7803e35"
-  note: "The first-card and mana metadata initialization is deployed and is the verified base of the weekly-maintenance contract design."
+  pull_request: 206
+  merge_commit: "5b95abc3d6499feb84b5c2134e121f24f00e054e"
+  note: "The accepted weekly maintenance handoff contract is merged; GitHub and Git retain its publication evidence."
 
 current_repository_state:
-  baseline_commit: "d5aba55dc62f1d2ed68d7584aa33524be7803e35"
-  baseline_note: "Verified remote master after merged PR 205; used as the base for the weekly-maintenance contract design."
+  baseline_commit: "5b95abc3d6499feb84b5c2134e121f24f00e054e"
+  baseline_note: "Verified remote master after merged PR 206; used as the isolated GOV-05 base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"

@@ -99,6 +99,7 @@ def test_pytest_shards_are_exact_marker_complements():
     )
     assert '-m "${{ matrix.marker_expression }}"' in combined
     assert "-p ci_timing" in combined
+    assert '--basetemp="${RUNNER_TEMP}/pytest-${{ matrix.shard }}"' in combined
     assert "ci_timing.py --summary" in combined
     assert "--max-ordinary-call-seconds 120" in combined
     assert "GITHUB_STEP_SUMMARY" in combined
@@ -231,6 +232,7 @@ def test_focused_feedback_runs_repository_node_and_applicable_browser_checks():
     assert "actions/setup-node@v6" in focused_uses
     assert "validate_repository.py" in focused_commands
     assert "tests/test_documentation_history.py" in focused_commands
+    assert '--basetemp="${RUNNER_TEMP}/pytest-focused-docs"' in focused_commands
     assert "node --test tests/js/phase8-matchup-model.test.js" in focused_commands
     assert "validate_rules.py" not in focused_commands
     assert "validate_schemas.py" not in focused_commands
