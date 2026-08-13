@@ -1,8 +1,11 @@
 "use strict";
 
-const { chromium } = require("@playwright/test");
+async function launchChromium() {
+  const { chromium } = require("@playwright/test");
+  return chromium.launch();
+}
 
-async function runBrowserPreflight(launch = () => chromium.launch()) {
+async function runBrowserPreflight(launch = launchChromium) {
   let browser;
   try {
     browser = await launch();
