@@ -89,7 +89,10 @@ jobs:
 
       - name: Validate live documentation policy
         if: needs.admission.outputs.mode == 'focused-docs'
-        run: python -B -m pytest tests/test_documentation_history.py
+        run: >-
+          python -B -m pytest
+          --basetemp="${RUNNER_TEMP}/pytest-focused-docs"
+          tests/test_documentation_history.py
 
       - name: Run native Node.js frontend tests
         if: needs.admission.outputs.mode == 'focused-ui'
@@ -199,6 +202,7 @@ jobs:
           PYTEST_TIMING_REPORT: ${{ runner.temp }}/pytest-timing.json
         run: >-
           python -B -m pytest -p ci_timing --durations=25
+          --basetemp="${RUNNER_TEMP}/pytest-${{ matrix.shard }}"
           -m "${{ matrix.marker_expression }}"
 
       - name: Write shard timing summary

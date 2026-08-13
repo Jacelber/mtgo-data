@@ -293,19 +293,38 @@ and owner-visible front-end verification.
 
 ### Validation economy
 
-Use the following ladder and rerun only the layer invalidated by a change:
+Use the following ladder and reuse every result that remains valid for the same
+code tree, environment layer, test node ID, and relevant inputs:
 
 1. Run the smallest focused test while iterating.
 2. Run the impacted subsystem suite after the implementation stabilizes.
-3. Run the complete suite once after final code, rules, schemas, fixtures, and
-   generated outputs are settled.
-4. If the complete suite fails, repair the cause, rerun the failing test and
-   impacted suite, then run one final complete suite.
-5. After a successful complete suite, documentation-only edits require
-   documentation and repository validators locally; they do not require
-   another complete local code suite unless they change executable examples,
-   fixtures, manifests, workflows, or test discovery. Remote CI may still run
-   the complete suite.
+3. Do not rerun a passed test in the same tree and layer because another test
+   failed. An unknown failure permits only the failed node ID and smallest
+   affected set to run again during diagnosis.
+4. Record a known, controlled local infrastructure error as
+   `accepted_infrastructure_exception`; preserve the unaffected passed evidence
+   and do not relabel the exception as a test pass or trigger a complete rerun.
+5. A relevant code, fixture, dependency, bootstrap, or input change invalidates
+   only the evidence it can affect. The resulting tree receives its first
+   applicable validation. Documentation-only edits do not invalidate code
+   tests unless they change executable examples, manifests, workflows, or test
+   discovery.
+6. The final pull-request head receives one independent clean-checkout CI run.
+   Do not rerun the same failed workflow head. Diagnose it and, when a repair is
+   required, validate the new head once. A red required check is never manually
+   described as green.
+
+Every pytest process must use a basetemp outside the repository. The maintained
+pytest bootstrap rejects an internal explicit path before collection and
+selects a process-unique external sibling path for local runs. GitHub Actions
+passes a shard-specific path under `RUNNER_TEMP`. Do not create a repository
+local `.pytest_cache`, `.codex-test-temp`, or other basetemp as a workaround for
+an inaccessible system temporary directory.
+
+After one successful complete PR run, exact two-parent merge admission reuses
+that evidence through `pr-confirmation`; it does not rerun pytest, browser, or
+static validation. Missing, changed, conflicting, or unavailable evidence
+continues to fail closed.
 
 Real-browser validation must run a single Chromium launch-and-close preflight
 before Playwright starts its web server or collects the full browser matrix. A

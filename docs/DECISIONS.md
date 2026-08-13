@@ -3930,3 +3930,45 @@ Spellementals records retain their existing identity.
 
 Owner acceptance, commit, publication, merge, automatic deployment, the
 Landing shadow, P12-10, and manual production dispatch remain separate gates.
+
+---
+
+# DEC-092 - Isolate pytest temporary files and reuse valid test evidence
+
+Status: `Accepted`
+
+## Context
+
+A local classifier task placed pytest basetemp inside its checkout. A test
+artifact with non-UTF-8 bytes was then observed as repository input by a later
+source-oriented smoke check, producing a non-product failure after hundreds of
+tests had already passed. Repeating the complete shard discarded valid evidence
+and imposed avoidable delay. The current repository inventory is already
+Git-aware, but pytest bootstrap does not prevent an internal basetemp.
+
+## Decision
+
+Load a maintained pytest guard for every invocation. Reject an explicit
+basetemp inside the checkout before collection; otherwise select a unique
+external sibling path locally. GitHub Actions uses explicit shard-specific
+paths under `RUNNER_TEMP`.
+
+Within the same code tree and environment layer, preserve passed node results
+after another test fails. A known controlled local infrastructure error is an
+accepted exception, not a test pass, and does not authorize a complete rerun.
+An unknown failure permits only the failed node and smallest affected set to
+run during diagnosis. Relevant changes invalidate only affected evidence.
+
+Retain one independent complete clean-checkout CI run for the final PR head.
+Do not rerun the same failed workflow head; repair with a new head when needed.
+Required red checks are not manually converted to green. Exact post-merge
+admission continues to reuse successful PR evidence and fail closed when that
+evidence is incomplete or ambiguous.
+
+## Consequences
+
+Local GOV-05 acceptance is limited to focused guard, workflow, inventory, lint,
+repository, and diff checks. Ordinary, committed-baseline, Playwright, rules,
+Schemas, and Pages are not duplicated locally. Product behavior, classifier
+rules, statistical meaning, generated data, Schemas, public paths, production,
+and the established PR validation classes remain unchanged.
