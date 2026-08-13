@@ -5,6 +5,11 @@ const Runtime = globalThis.P8Runtime;
 const I18n = globalThis.P8I18n;
 const MtgoController = globalThis.P8MtgoController;
 const TabletopController = globalThis.P8TabletopController;
+const ArchetypeVisuals = globalThis.P8ArchetypeVisuals || Object.freeze({
+  manaIdentities: Object.freeze({}),
+  representativeCards: Object.freeze({}),
+});
+const REPRESENTATIVE_CARDS = ArchetypeVisuals.representativeCards;
 const ENTRY_SURFACE = document.documentElement.dataset.surface || "review";
 const PRODUCT_ORDER = [
   "mtgo-statistics",
@@ -38,16 +43,6 @@ const FORMAT_LABEL_KEYS = {
 const RANGE_OPTIONS = [1, 4, 12];
 const DIFF_MIN = 1;
 const LOW_SAMPLE_THRESHOLD = 20;
-const REPRESENTATIVE_CARD_ART = Object.freeze({
-  standard: Object.freeze({
-    "izzet-prowess": "../images/representative-cards/standard/boomerang-basics.jpg",
-    "izzet-spellementals": "../images/representative-cards/standard/sunderflock.jpg",
-    "mono-green-landfall": "../images/representative-cards/standard/earthbender-ascension.jpg",
-    "selesnya-offense": "../images/representative-cards/standard/practiced-offense.jpg",
-    "jeskai-lessons": "../images/representative-cards/standard/accumulate-wisdom.jpg",
-    "4-color-tablet": "../images/representative-cards/standard/inevitable-defeat.jpg",
-  }),
-});
 const state = {
   catalog: null,
   format: "modern",

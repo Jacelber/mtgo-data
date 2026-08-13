@@ -12,6 +12,7 @@ PHASE8_CSS = REPO_ROOT / "assets" / "css" / "phase8-base.css"
 PHASE8_CANDIDATE_CSS = REPO_ROOT / "assets" / "css" / "phase8-candidate.css"
 PHASE8_JS = REPO_ROOT / "assets" / "js" / "phase8"
 PHASE8_APP_FILES = (
+    "archetype-visuals.js",
     "app-core.js",
     "app-freshness.js",
     "app-mtgo.js",
@@ -40,6 +41,7 @@ def test_frontend_uses_ordered_static_assets_without_inline_blocks():
         "assets/js/phase8/i18n.js",
         "assets/js/phase8/matchup-model.js",
         "assets/js/phase8/mtgo-controller.js",
+        "assets/js/phase8/archetype-visuals.js",
         "assets/js/phase8/app-core.js",
         "assets/js/phase8/app-freshness.js",
         "assets/js/phase8/app-mtgo.js",
@@ -71,6 +73,7 @@ def test_phase8_app_is_split_into_focused_classic_scripts():
     }
 
     assert all((PHASE8_JS / name).stat().st_size < 25_000 for name in sources)
+    assert "globalThis.P8ArchetypeVisuals" in sources["archetype-visuals.js"]
     assert "const state = {" in sources["app-core.js"]
     assert "function freshnessStrip(items)" in sources["app-freshness.js"]
     assert "async function statsView()" in sources["app-mtgo.js"]

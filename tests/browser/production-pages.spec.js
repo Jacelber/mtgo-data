@@ -146,6 +146,41 @@ test("Standard composition uses card art and opens detail from one desktop click
     .toHaveClass(/deck-detail-row/);
 });
 
+test("every 1/4/12-week composition identity has approved first-card art", async ({ page }) => {
+  for (const format of ["standard", "modern"]) {
+    for (const range of [1, 4, 12]) {
+      await page.goto(`/index.html?format=${format}&product=mtgo-statistics&range=${range}&lang=en`);
+      const segments = page.locator("button.composition-segment[data-composition-identity]");
+      expect(await segments.count()).toBeGreaterThan(0);
+      await expect(page.locator(
+        "button.composition-segment[data-composition-identity]:not(.has-card-art)"
+      )).toHaveCount(0);
+      for (let index = 0; index < await segments.count(); index += 1) {
+        const backgroundImage = await segments.nth(index)
+          .evaluate(node => getComputedStyle(node).backgroundImage);
+        const imageMatch = backgroundImage.match(/url\(["']?([^"')]+)["']?\)/);
+        expect(imageMatch).toBeTruthy();
+        expect((await page.request.get(imageMatch[1])).ok()).toBe(true);
+      }
+    }
+  }
+});
+
+test("White Sultai Control renders WUBG in that order", async ({ page }) => {
+  await page.goto("/index.html?format=standard&product=mtgo-statistics&range=12&lang=en");
+  const identity = page.locator('[data-detail-identity="white-sultai-control"]');
+  await expect(identity).toBeVisible();
+  const sources = await identity.locator(".mana-identity img").evaluateAll(images => (
+    images.map(image => image.getAttribute("src"))
+  ));
+  expect(sources).toEqual([
+    "assets/images/mana/w.svg",
+    "assets/images/mana/u.svg",
+    "assets/images/mana/b.svg",
+    "assets/images/mana/g.svg",
+  ]);
+});
+
 test("desktop composition reveals an off-screen detail after rendering settles", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 400 });
   await page.goto("/index.html?format=modern&product=mtgo-statistics&range=1&lang=en");

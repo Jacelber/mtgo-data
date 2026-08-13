@@ -53,13 +53,13 @@ def test_live_status_is_small_current_state_and_points_to_history():
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
     assert status["current_task"]["id"] == (
-        "STANDARD-SPELLEMENTALS-TALENT-BOUNDARY"
+        "ARCHETYPE-VISUAL-METADATA-INITIALIZATION"
     )
     assert status["current_task"]["status"] == (
-        "owner_accepted_publication_authorized"
+        "owner_accepted_publication_and_merge_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "b03a162c48cacef40b4201fea381da84d500dc9e"
+        "50415c7fdbbed8e18f093acda554bd2fce00fd5a"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -68,14 +68,14 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "merge": True,
     }
     assert status["recent_completion_handoff"]["id"] == (
-        "CLASSIFIER-DISPLAY-NAME-DEDUPE"
+        "STANDARD-SPELLEMENTALS-TALENT-BOUNDARY"
     )
     assert status["recent_completion_handoff"]["merge_commit"] == (
-        "ce1ebd7a296e5afe266fd2ec8a6d3c8b0b53d760"
+        "50415c7fdbbed8e18f093acda554bd2fce00fd5a"
     )
     assert status["next_approved_task"]["id"] == "P12-10"
     assert status["next_approved_task"]["status"] == (
-        "blocked_pending_standard_boundary_publication_landing_shadow_and_separate_authorization"
+        "blocked_pending_known_state_validation_landing_shadow_threshold_confirmation_and_separate_authorization"
     )
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
