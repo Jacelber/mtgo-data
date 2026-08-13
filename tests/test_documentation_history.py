@@ -52,14 +52,12 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == (
-        "ARCHETYPE-VISUAL-METADATA-INITIALIZATION"
-    )
+    assert status["current_task"]["id"] == "WEEKLY-MAINTENANCE-CONTRACT-R1"
     assert status["current_task"]["status"] == (
-        "owner_accepted_publication_and_merge_authorized"
+        "owner_accepted_publication_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "50415c7fdbbed8e18f093acda554bd2fce00fd5a"
+        "d5aba55dc62f1d2ed68d7584aa33524be7803e35"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -68,10 +66,10 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "merge": True,
     }
     assert status["recent_completion_handoff"]["id"] == (
-        "STANDARD-SPELLEMENTALS-TALENT-BOUNDARY"
+        "ARCHETYPE-VISUAL-METADATA-INITIALIZATION"
     )
     assert status["recent_completion_handoff"]["merge_commit"] == (
-        "50415c7fdbbed8e18f093acda554bd2fce00fd5a"
+        "d5aba55dc62f1d2ed68d7584aa33524be7803e35"
     )
     assert status["next_approved_task"]["id"] == "P12-10"
     assert status["next_approved_task"]["status"] == (
@@ -83,6 +81,24 @@ def test_live_status_is_small_current_state_and_points_to_history():
     assert future_task_gates["P12-10"]["status"] == (
         "blocked_pending_separate_authorization_and_evidence"
     )
+
+    weekly_contract = (
+        ROOT / "docs" / "audits" / "WEEKLY-MAINTENANCE-CONTRACT-R1.md"
+    ).read_text(encoding="utf-8")
+    for required_text in (
+        "provisional_with_re_review",
+        "sealed-only",
+        "source_event_ids",
+        "keep_unknown",
+        "new_technology",
+        "retain_last_admitted",
+        "P12-10 readiness checklist",
+        "awaiting_owner_start",
+        "unknown_total_all_available",
+        "unknown_new_since_last_review",
+        "Codex proactively sends the entry report",
+    ):
+        assert required_text in weekly_contract
 
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
     audit = (
