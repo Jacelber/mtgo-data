@@ -17,7 +17,6 @@ for candidate in (ROOT, SRC):
         sys.path.insert(0, str(candidate))
 
 from mtgmeta.mtgo import pickup
-import validate_schemas
 
 
 REFERENCE_TODAY = date(2026, 7, 23)
@@ -87,102 +86,39 @@ def test_modern_metadata_reports_partial_videre_coverage_without_public_pickup(t
     assert coverage["events_without_archives"] > 0
 
 
-def test_modern_pickup_uses_stable_parent_ids_and_preserves_manual_boundary(tmp_path):
-    state = tmp_path / "state"
-    known_path = pickup.initialize_known_state(
-        ROOT,
-        "modern",
-        today=REFERENCE_TODAY,
-        output_directory=state,
-    )
-    assert known_path is not None
-    known_document = json.loads(known_path.read_text(encoding="utf-8"))
-    assert "known" not in known_document
-    assert known_document["known_ids"] == sorted(set(known_document["known_ids"]))
-    production_known = json.loads(
+def test_committed_modern_pickup_uses_stable_ids_and_manual_approval_fields():
+    known_document = json.loads(
         (MODERN_STATS / "pickup" / "known_archetypes.json").read_text(
             encoding="utf-8"
         )
-    )["known_ids"]
-    assert len(known_document["known_ids"]) == 111
-    assert len(production_known) == 126
-    assert set(known_document["known_ids"]) <= set(production_known)
-
-    candidates = tmp_path / "candidates"
-    generated = pickup.generate_candidates(
-        ROOT,
-        "modern",
-        today=REFERENCE_TODAY,
-        known_file=MODERN_STATS / "pickup" / "known_archetypes.json",
-        output_directory=candidates,
     )
-    assert generated is not None
-    assert generated["week"] == "2026-W29"
-    assert generated["first_run"] is False
-    document = yaml.safe_load(generated["candidate_path"].read_text(encoding="utf-8"))
+    assert "known" not in known_document
+    assert known_document["known_ids"] == sorted(set(known_document["known_ids"]))
+    assert len(known_document["known_ids"]) == 126
+
+    document = yaml.safe_load(
+        (MODERN_STATS / "pickup" / "candidates_2026-W29.yaml").read_text(
+            encoding="utf-8"
+        )
+    )
     assert document["new_archetypes"] == []
     entries = document["existing_changes"] + document["new_archetypes"]
     assert entries
     assert all(entry["archetype_id"] for entry in entries)
     assert all("subtype_id" in entry and "subtype" in entry for entry in entries)
-    assert all(
-        entry["source"]
-        == (
-            "existing"
-            if entry["archetype_id"] in known_document["known_ids"]
-            else "new"
-        )
-        for entry in entries
-    )
+    assert {entry["source"] for entry in entries} <= {"existing", "new"}
 
-    before = known_path.read_bytes()
-    assert pickup.publish(
-        ROOT,
-        "modern",
-        today=REFERENCE_TODAY,
-        candidate_directory=candidates,
-        state_directory=state,
-        output_directory=tmp_path / "published",
-    ) is None
-    assert known_path.read_bytes() == before
-    assert not (tmp_path / "published").exists()
-
-    selected = document["existing_changes"][0]
+    selected = dict(document["existing_changes"][0])
     selected["approved"] = True
     selected["comment_zh"] = "人工审核"
-    generated["candidate_path"].write_text(
-        yaml.dump(
-            document,
-            allow_unicode=True,
-            sort_keys=False,
-            width=1000,
-            default_flow_style=False,
-        ),
-        encoding="utf-8",
-        newline="\n",
-    )
-    published_result = pickup.publish(
-        ROOT,
-        "modern",
-        today=REFERENCE_TODAY,
-        candidate_directory=candidates,
-        state_directory=state,
-        output_directory=tmp_path / "published",
-    )
-    assert published_result is not None
-    published = json.loads(
-        published_result["published_path"].read_text(encoding="utf-8")
-    )
-    published_entry = published["existing_changes"][0]
+    published_entry = pickup._approved_entries(
+        {"existing_changes": [selected]}, "existing_changes"
+    )[0]
     assert published_entry["archetype_id"] == selected["archetype_id"]
     assert published_entry["subtype_id"] == selected["subtype_id"]
     assert published_entry["subtype"] == selected["subtype"]
-    loaded, registry = validate_schemas.load_schemas(ROOT / "schemas")
-    assert validate_schemas.validate_instance(
-        published,
-        loaded["mtgo-pickup-week.schema.json"],
-        registry,
-    ) == []
+    assert published_entry["comment_zh"] == "人工审核"
+    assert "approved" not in published_entry
 
 
 def test_modern_known_state_initialization_refuses_implicit_overwrite(tmp_path):

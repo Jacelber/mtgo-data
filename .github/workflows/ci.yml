@@ -213,7 +213,11 @@ jobs:
             echo "- Python: 3.12"
           } >> "$GITHUB_STEP_SUMMARY"
           if [ -f "$RUNNER_TEMP/pytest-timing.json" ]; then
-            python -B ci_timing.py --summary "$RUNNER_TEMP/pytest-timing.json" >> "$GITHUB_STEP_SUMMARY"
+            if [ "${{ matrix.shard }}" = "ordinary" ]; then
+              python -B ci_timing.py --summary "$RUNNER_TEMP/pytest-timing.json" --max-ordinary-call-seconds 120 >> "$GITHUB_STEP_SUMMARY"
+            else
+              python -B ci_timing.py --summary "$RUNNER_TEMP/pytest-timing.json" >> "$GITHUB_STEP_SUMMARY"
+            fi
           else
             echo "- Pytest timing report was unavailable because pytest did not reach its session-finish hook." >> "$GITHUB_STEP_SUMMARY"
           fi
@@ -246,11 +250,6 @@ jobs:
         with:
           node-version: "24"
           cache: npm
-
-      - name: Set up Python 3.12 for the static web server
-        uses: actions/setup-python@v6.3.0
-        with:
-          python-version: "3.12"
 
       - name: Install pinned browser-test package
         run: npm ci

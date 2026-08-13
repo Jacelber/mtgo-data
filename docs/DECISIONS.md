@@ -3541,7 +3541,9 @@ a review-maturity signal; it does not describe artifact risk.
 
 Select pull-request validation from the single artifact-impact declaration,
 the complete changed-file list, file statuses, and conservative repository
-allowlists. Apply the same classification to Draft and Ready pull requests.
+allowlists. The changed-file reader follows complete 100-item pages up to the
+GitHub API's 3,000-file limit; missing or over-limit evidence fails safe. Apply
+the same classification to Draft and Ready pull requests.
 Locally completed work is published Ready by default; Draft remains optional
 only when the Owner explicitly requests remote incomplete-work review. Remove
 state-only workflow triggers so an unchanged Draft-to-Ready or Ready-to-Draft

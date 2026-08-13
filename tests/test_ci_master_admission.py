@@ -48,13 +48,20 @@ def pull_request_event(
 
 def decide_pr(files, **event_overrides):
     event = pull_request_event(**event_overrides)
-    files_url = f"{REPOSITORY_API}/pulls/184/files?per_page=100&page=1"
+    pages = None
+    if not isinstance(files, Exception):
+        pages = [files[index : index + 100] for index in range(0, len(files), 100)]
+        if len(files) % 100 == 0:
+            pages.append([])
 
     def fetch(url):
-        assert url == files_url
         if isinstance(files, Exception):
             raise files
-        return files
+        prefix = f"{REPOSITORY_API}/pulls/184/files?per_page=100&page="
+        assert url.startswith(prefix)
+        page = int(url.removeprefix(prefix))
+        assert pages is not None
+        return pages[page - 1]
 
     return decide_pull_request(
         event_payload=event,
@@ -176,6 +183,40 @@ def test_exact_merge_reuses_the_still_required_validation_class(validation_class
         workflow_run=42,
         validation_class=validation_class,
     )
+
+
+@pytest.mark.parametrize("file_count", [100, 101, 165])
+def test_exact_merge_reuses_validation_across_complete_file_pages(file_count):
+    responses = valid_responses("full")
+    files = [
+        {"filename": f"stats/modern/mtgo/generated-{index}.json", "status": "modified"}
+        for index in range(file_count)
+    ]
+    responses[f"{REPOSITORY_API}/pulls/119/files?per_page=100&page=1"] = files[:100]
+    responses[f"{REPOSITORY_API}/pulls/119/files?per_page=100&page=2"] = files[100:200]
+    if file_count == 100:
+        responses[f"{REPOSITORY_API}/pulls/119/files?per_page=100&page=2"] = []
+
+    decision = decide(responses)
+
+    assert decision.mode == "pr-confirmation"
+    assert decision.validation_class == "full"
+
+
+def test_missing_second_changed_file_page_is_fail_safe():
+    responses = valid_responses("full")
+    responses[f"{REPOSITORY_API}/pulls/119/files?per_page=100&page=1"] = [
+        {"filename": f"stats/modern/mtgo/generated-{index}.json", "status": "modified"}
+        for index in range(100)
+    ]
+    responses[f"{REPOSITORY_API}/pulls/119/files?per_page=100&page=2"] = RuntimeError(
+        "missing second page"
+    )
+
+    decision = decide(responses)
+
+    assert decision.mode == "full"
+    assert "missing_second_page" in decision.reason
 
 
 def test_direct_push_without_two_merge_parents_falls_back_to_full():
@@ -388,7 +429,7 @@ def test_missing_invalid_or_conflicting_declaration_is_fail_safe_full():
     assert "artifact_impact_declaration" in conflicting.reason
 
 
-def test_classification_api_failure_and_unsupported_pagination_are_full():
+def test_classification_api_failure_is_full_and_complete_pagination_is_supported():
     failed = decide_pr(RuntimeError("files API unavailable"))
     assert failed.mode == "full"
     assert "files_API_unavailable" in failed.reason
@@ -400,8 +441,8 @@ def test_classification_api_failure_and_unsupported_pagination_are_full():
         ],
         body="<!-- artifact-impact: internal_diagnostics -->",
     )
-    assert paginated.mode == "full"
-    assert "require_pagination" in paginated.reason
+    assert paginated.mode == "focused-docs"
+    assert paginated.validation_class == "focused-docs"
 
 
 def test_title_only_edit_uses_metadata_only_without_file_api():

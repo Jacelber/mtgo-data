@@ -100,6 +100,7 @@ def test_pytest_shards_are_exact_marker_complements():
     assert '-m "${{ matrix.marker_expression }}"' in combined
     assert "-p ci_timing" in combined
     assert "ci_timing.py --summary" in combined
+    assert "--max-ordinary-call-seconds 120" in combined
     assert "GITHUB_STEP_SUMMARY" in combined
 
 

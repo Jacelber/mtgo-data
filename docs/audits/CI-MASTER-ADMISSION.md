@@ -15,9 +15,10 @@ merge still run complete validation.
 
 The read-only `admission` job defaults and fails safe to `full`. It reads the
 single PR-body `artifact-impact` marker and the complete GitHub changed-file
-list. Added and modified files are the only statuses eligible for a focused
-class. Missing, duplicate, malformed, stale, conflicting, incomplete,
-paginated-beyond-support, or unavailable evidence selects `full`.
+list. Changed files are read in 100-item pages up to the GitHub API's 3,000-file
+limit. Added and modified files are the only statuses eligible for a focused
+class. Missing, malformed, stale, conflicting, incomplete, over-limit, or
+unavailable evidence selects `full`.
 
 | Class | Required evidence | Successful execution jobs |
 | --- | --- | --- |
@@ -65,8 +66,9 @@ A `push` to `master` may select `pr-confirmation` only when all predicates hold:
    aggregate job;
 8. the aggregate contains successful steps recording the exact PR number, base
    SHA, head SHA, and validation class; and
-9. workflow-run and job responses are complete within the supported single
-   100-item GitHub API page.
+9. changed-file evidence is complete across all required pages, while workflow
+   run and job responses are complete within their supported single 100-item
+   GitHub API page.
 
 A stale run, wrong PR/base/head/workflow/class, missing or extra successful job,
 changed declaration, changed file classification, post-merge completion,

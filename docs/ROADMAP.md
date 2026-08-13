@@ -2770,6 +2770,14 @@ authorize any readiness task or Phase 12 implementation.
      principal bottleneck; abandon it if measured improvement is below about
      30 percent, test semantics change, ordering dependencies appear, or flaky
      behavior increases.
+   - 2026-08-13 follow-up: real runs showed that the accepted split did not
+     prevent individual ordinary tests from repeating full production-corpus
+     generation, and the exact-merge reader did not support a 165-file PR.
+     GOV-04 hardens browser launch failure, changed-file pagination, and the
+     ordinary per-call timing boundary without changing product validation.
+     The Owner accepted the validated local result on 2026-08-13 and separately
+     authorized commit, one Ready pull request, complete CI, and merge after all
+     required checks succeed. Production dispatch and P12-10 remain unauthorized.
 3. `P12-00-C` — Folded into P12-00-B; no independent prerequisite
    - retain the existing STATUS size and `live_state_only` checks and add the
      missing non-empty `history_policy` assertion in P12-00-B;
