@@ -11,9 +11,9 @@ an unbounded suite.
 
 | File or node | Trigger | Purpose | Minimum subject |
 | --- | --- | --- | --- |
-| `tests/test_cli_smoke.py::test_mtgo_cli_smoke` | MTGO production before live collection | Prove the installed MTGO parser, format gate, and dispatch path can run offline | One enabled format and one stubbed command |
+| `tests/test_cli_smoke.py::test_mtgo_cli_smoke` | A post-fetch MTGO generation subject is new and generation will run | Prove the installed MTGO parser, format gate, and dispatch path can run offline before generating | One enabled format and one stubbed command |
 | `tests/test_cli_smoke.py::test_melee_cli_smoke` | Melee production before live collection | Prove the Melee command accepts one verified event and remains a zero-write dry run | One registry event and one fake response plan |
-| `tests/test_cli_smoke.py::test_catalog_cli_smoke` | Either production workflow before it will generate the catalog | Prove one minimal format can produce a consumer catalog | One temporary format with no available products |
+| `tests/test_cli_smoke.py::test_catalog_cli_smoke` | Either production workflow has a new generation subject and will generate the catalog | Prove one minimal format can produce a consumer catalog | One temporary format with no available products |
 | `tests/test_melee_privacy_validation.py` | Melee production before live collection, or a privacy boundary change | Prove the smallest minimized resource is accepted and a prohibited persisted key is rejected independently of Schema permissiveness | One valid tournament document and one invalid key |
 | `tests/test_generated_consumer_contracts.py` | MTGO candidate generated, before packaging | Prove the newly generated candidate remains internally consumable | Current candidate documents only |
 | `tests/test_documentation_history.py` | A live governance document changes | Enforce only the bounded live-status structure and history pointer | `docs/STATUS.yaml` only |
@@ -34,7 +34,9 @@ are control-plane checks and never run in a production baseline.
 | Owner completes browser review of a user-visible change | Record the `owner-ui-accepted` digest for changed `index.html`, `assets/**`, and `melee/**` blobs | Bind the PR to exactly the visible files the Owner reviewed without rerunning UI automation | Once after acceptance and the unchanged local commit; PR admission only compares the digest |
 | MTGO candidate generated | Candidate boundary, repository, rules, Schema, output-invariant, consumer, and the two `production-pages.spec.js` rendering smokes in `update.yml` | Block publication when either public product cannot render a real number | Once for that immutable candidate before packaging |
 | Melee candidate generated | Candidate boundary, repository, rules, and Schema checks in `fetch_melee.yml` | Block an invalid Melee publishable artifact | Once for that immutable candidate before staging |
-| Generated commit pushed | Exact remote-SHA confirmation | Confirm publication identity without recomputing prior evidence | Once for that commit |
+| Generated commit pushed | Exact remote-SHA confirmation plus production evidence admission | Bind the remote commit to the validated artifact digest, generation subject, producer run and attempt, source commit, successful producer jobs, and exact published bytes without recomputing candidate evidence | Once for that publication commit |
+| Relevant site-input path reaches `master` outside production publication | Allowlisted Pages packaging and deployment | Publish an accepted UI, public-data, compatibility, or publication-boundary change | Once for that `master` commit; governance, test, and excluded-path changes do not trigger Pages |
+| Production Pages deployment completes | Bound publication SHA and HTTP availability of `index.html`, `melee/index.html`, and `stats/catalog.json` | Confirm the exact admitted deployment has its two entry points and public catalog available | One request per resource for that deployment, with bounded transport retry only |
 | GitHub preflight script or authentication-routing rule changes | Run the script once without `-ActualPublicationContext`, then once with it in the actual publication context | Prove an ordinary context cannot issue a credential verdict and the authorized context can return `READY` | Once per final immutable authentication-control tree; never on unrelated tasks |
 
 ## No-trigger cases
@@ -46,6 +48,10 @@ are control-plane checks and never run in a production baseline.
 - Owner acceptance of an unchanged UI subject does not trigger another browser
   run.
 - A successful immutable candidate is not recalculated or retested downstream.
+- An unchanged generation-subject digest runs no CLI baseline, generator,
+  candidate validation, packaging, publication, or Pages job.
+- A governance-only, test-only, or other non-site `master` change does not
+  trigger Pages.
 - Authentication preflight does not run during local development or CI unless
   its script or routing rule changed; operational publication runs it once per
   publication context.

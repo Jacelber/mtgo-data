@@ -276,8 +276,8 @@ Review the complete diff; run applicable tests and validators; verify changed pa
 Repository validation uses three distinct layers. Do not treat them as interchangeable:
 
 1. **Targeted pull-request validation** uses complete changed-file evidence to map known paths and exact predeclared file operations to documentation, UI, code, data, and governance checks. It never runs full pytest, committed byte baselines, or Playwright. Undeclared or mismatched unknown additions, deletions, renames, malformed declarations, or unavailable evidence fails quickly as `unclassified`. The aggregate check remains present. An exact two-parent merge may use confirmation only when admission proves the exact PR number, base SHA, head SHA, workflow identity, validation class, expected successful jobs, and pre-merge completion time.
-2. **Production candidate validation** runs after authorized fetching and generation but before staging or publication. It compares the candidate with a baseline snapshot captured at the start of the run, permits only declared generated-data paths, rejects deletions and cross-product writes, parses changed JSON and YAML, verifies event and match document shape, prevents count regression, and retains strict classification, repository, rule, Schema, value-independent output invariants, generated consumer-contract, and one generated-page browser smoke. Candidate checks derive their expectations from the candidate and specifications rather than historical hard-coded bytes or tournament values.
-3. **Publication confirmation** runs after the generated commit is pushed. It requires a clean production workspace and confirms that the remote `master` commit equals the locally published commit.
+2. **Production candidate validation** runs after authorized fetching and generation but before staging or publication. It compares the candidate with a baseline snapshot captured at the start of the run, permits only declared generated-data paths, rejects deletions and cross-product writes, parses changed JSON and YAML, verifies event and match document shape, prevents count regression, and retains strict classification, repository, rule, Schema, value-independent output invariants, generated consumer-contract, and exactly one MTGO plus one Melee real-number rendering smoke. Candidate checks derive their expectations from the candidate and specifications rather than historical hard-coded bytes or tournament values.
+3. **Publication confirmation** reuses that candidate evidence. The immutable build artifact, its SHA-256, the generation-subject SHA-256, producer run and attempt, source commit, and generated publication commit are bound together. After push, confirmation checks the clean workspace and exact remote `master` SHA; Pages then verifies the same commit ancestry, commit trailers, producer jobs, artifact digest, and published bytes without rerunning candidate tests.
 
 A clean-checkout production smoke proves only that the commands about to run
 still cross their offline entry boundaries. It is not evidence that newly
@@ -286,6 +286,13 @@ increment once at the output gate. Adding a new generated path or allowing an
 automatic deletion requires explicit review of the candidate publication
 boundary.
 
+After fetching, the production workflow hashes the complete generation subject.
+If that digest equals the latest published `Generation-Subject-SHA256` trailer,
+the existing published bytes remain authoritative and the workflow skips the
+CLI baseline, generation, candidate validation, packaging, publication, and
+Pages dispatch. A missing prior trailer or any changed subject requires one new
+candidate build and one validation pass.
+
 ### Allowlisted Pages build and cutover
 
 `build_pages_artifact.py` is the repository-owned Pages packaging boundary. It
@@ -293,19 +300,29 @@ must build into a new directory outside the checkout from
 `configs/pages_publication.json`, preserve source bytes, validate the complete
 event `434455` compatibility closure, reject symbolic links and unsafe paths,
 and report repository, data-tree, artifact, protected-file, and excluded-file
-sizes. Pull requests may build the candidate but must not deploy it. The Pages
-deploy job may run only for `master` pushes or the accepted explicit
-production-publication dispatch on `master`, and has only `pages: write` and
-`id-token: write`; it must not receive repository write access or persisted Git
-credentials.
+sizes. Pull requests may build the candidate but must not deploy it. Automatic
+`master` deployment is path-filtered to the actual site inputs. Governance,
+test, and other excluded-path changes do not start Pages. The deploy job may run
+only for such a relevant `master` push or an accepted explicit dispatch on
+`master`, and has only `pages: write` and `id-token: write`; it must not receive
+repository write access or persisted Git credentials.
 
 When a production data publication changes `master`, its publish job must first
 confirm the remote `master` commit and then explicitly dispatch the allowlisted
 Pages workflow on `master`, as defined by DEC-084. GitHub does not trigger the
 Pages push workflow from a commit made with that production workflow's own
-`GITHUB_TOKEN`. A no-change production publication does not dispatch Pages;
-pull-request builds remain non-deploying, and the Pages deployment job retains
-its existing no-repository-write boundary.
+`GITHUB_TOKEN`. The production dispatch must carry the exact publication commit,
+producer run and attempt, source commit, generation-subject digest, and validated
+output digest. Partial evidence fails closed. An explicitly authorized manual or
+recovery dispatch carries none of those production fields and remains a separate
+path. A no-change production run does not dispatch Pages; pull-request builds
+remain non-deploying, and the Pages deployment job retains its existing
+no-repository-write boundary.
+
+After a production deployment, do not rerun candidate, Schema, invariant,
+consumer, or browser tests. The minimum downstream confirmation is the bound
+publication SHA plus HTTP availability of `index.html`, `melee/index.html`, and
+`stats/catalog.json`, once for that deployment.
 
 The initial cutover is separately gated from local implementation, commit, and
 pull-request review. Before changing the repository setting, capture the active
