@@ -129,7 +129,9 @@ valid retained input; a complete snapshot is promoted atomically under
 `data_raw/melee/<event_id>/<UTC-snapshot>/`.
 
 Privacy contact information and correction or removal handling are documented
-in [`NOTICE.md`](NOTICE.md).
+in [`NOTICE.md`](NOTICE.md). HMAC recovery boundaries and the existing MTGO,
+Pages, and Melee failure paths are summarized in
+[`docs/OPERATIONS_RUNBOOK.md`](docs/OPERATIONS_RUNBOOK.md).
 
 ### Build and validate an event candidate
 

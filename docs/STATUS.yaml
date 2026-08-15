@@ -4,13 +4,13 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/gov-11-live-document-slimming"
+  current_working_branch: "codex/gov-12-operations-privacy-closeout"
   working_branch_status: "owner_accepted_same_task_completion_authorized"
   status: "active"
 
 status_document:
   purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-08-15"
+  last_updated: "2026-08-16"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   authoritative_for:
@@ -31,37 +31,30 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-11-LIVE-DOCUMENT-SLIMMING"
-  name: "Keep live governance documents small"
+  id: "GOV-12-OPERATIONS-AND-PRIVACY-CLOSEOUT"
+  name: "Document Melee HMAC recovery and production failure response"
   status: "owner_accepted_same_task_completion_authorized"
-  authorized_on: "2026-08-15"
-  owner_accepted_on: "2026-08-15"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-11-live-document-slimming-20260815-01"
-  branch: "codex/gov-11-live-document-slimming"
-  base_commit: "bdf40432ab474effcc43e92f93ca17cb86f9aa0c"
+  authorized_on: "2026-08-16"
+  owner_accepted_on: "2026-08-16"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-12-operations-privacy-closeout-20260816-01"
+  branch: "codex/gov-12-operations-privacy-closeout"
+  base_commit: "de6ca64a4d2f34b0f24f983bf11e881bf3a7181a"
   artifact_impact: "none"
-  objective: "Archive completed roadmap detail, retain only current and useful future planning in live documents, and make archival part of every completion."
+  objective: "Close the current documentation gaps for Melee-only HMAC recovery and existing production failure response without changing executable behavior or provisioning a secret."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "AGENTS.md"
+    - "README.md"
     - "docs/STATUS.yaml"
-    - "docs/ROADMAP.md"
-    - "docs/DEVELOPMENT_WORKFLOW.md"
+    - "docs/DATA_ARCHITECTURE.md"
     - "docs/GOVERNANCE_REMEDIATION.yaml"
-    - "docs/history/README.md"
-    - "docs/history/ROADMAP-PHASES-0-11.md"
-    - "docs/history/ROADMAP-PHASE-12-COMPLETED.md"
-    - "tests/test_documentation_history.py"
-    - "validate_repository.py"
+    - "docs/OPERATIONS_RUNBOOK.md"
   planned_file_operations:
     additions:
-      - path: "docs/history/ROADMAP-PHASES-0-11.md"
-        category: "docs"
-      - path: "docs/history/ROADMAP-PHASE-12-COMPLETED.md"
+      - path: "docs/OPERATIONS_RUNBOOK.md"
         category: "docs"
     deletions: []
     renames: []
@@ -76,20 +69,21 @@ current_task:
     production_dispatched: false
     remote_write_performed: "none"
   validation_plan:
-    - "Use exact section boundaries and complete diff review to prove archived text is retained."
-    - "Run tests/test_documentation_history.py once on the final local tree."
-    - "Run repository reference validation once in PR CI for the final repaired subject; do not repeat it locally."
-    - "Do not run full pytest, generators, Node, Playwright, live fetch, production, or Pages."
+    - "Owner review and complete diff review are the local acceptance checks for this documentation-only task."
+    - "Run no local automated test because executable behavior is unchanged."
+    - "The final targeted PR CI owns one repository-reference validation and one existing live-document contract check; do not repeat either locally."
+    - "Do not run privacy, CLI, Schema, rule, full pytest, Ruff, mypy, Node, Playwright, generator, live-fetch, production, or Pages checks."
   prohibited_changes:
-    - "Do not change product scope, statistics, Schemas, data, UI, workflows, public URLs, event selection, or production behavior."
-    - "Do not delete or rename files; add only the two predeclared history files."
-    - "Do not commit, push, create a pull request, merge, dispatch production, or deploy before Owner acceptance."
-    - "Do not begin GOV-12, GOV-13, P12-10, or another task."
-  stop_point: "Complete the accepted task through local commit, one Ready PR, required CI, and merge; stop on failed checks, changed scope, conflict, or permission blocker."
+    - "Do not change code, tests, Schemas, configuration, data, UI, workflows, public URLs, event selection, statistics, or production behavior."
+    - "Do not create, read, provision, rotate, or expose a real HMAC key, credential, GitHub Secret, or private removal-request value."
+    - "Do not add a suppression list or scan data, stats, reports, or Pages artifacts for participant strings."
+    - "Do not delete or rename files; add only the predeclared docs/OPERATIONS_RUNBOOK.md."
+    - "Do not dispatch production, deploy, provision a secret, or begin the Melee v3 preflight as part of accepted-task completion."
+  stop_point: "Complete the unchanged accepted task through local commit, one Ready PR, required CI, and merge; stop on failed checks, changed scope, conflict, or permission blocker."
 
 current_repository_state:
-  baseline_commit: "bdf40432ab474effcc43e92f93ca17cb86f9aa0c"
-  baseline_note: "Remote master after GOV-10 PR 217; GitHub and Git retain its publication evidence."
+  baseline_commit: "de6ca64a4d2f34b0f24f983bf11e881bf3a7181a"
+  baseline_note: "Remote master after GOV-11 PR 218; GitHub and Git retain its publication evidence."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -101,6 +95,13 @@ known_blockers:
     effect: "A later scheduled production run must succeed before the separately authorized no-publication P12-10 rehearsal."
 
 future_task_gates:
+  - task: "MELEE-V3-PRODUCTION-PREFLIGHT"
+    status: "planned_not_authorized"
+    remaining_requirements:
+      - "Select and approve one test event and decide whether its snapshot will be retained."
+      - "Choose a test-only key or production-managed key accordingly, with a unique non-secret key ID."
+      - "Obtain separate authorization for secret provisioning, workflow changes, live collection, and any remote candidate branch."
+      - "Keep the rehearsal non-deploying and review the complete v3 candidate before any public use."
   - task: "P12-10"
     status: "blocked_pending_no_publication_rehearsal_and_separate_authorization"
     remaining_requirements:
@@ -112,10 +113,11 @@ next_approved_task:
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "GOV-11 is Owner-accepted for same-task completion; no follow-up task is authorized."
+  note: "GOV-12 is Owner-accepted for same-task completion; the Melee v3 production preflight and every other follow-up remain unauthorized."
 
 prohibited_next_actions:
-  - "Do not begin GOV-12, GOV-13, P12-10, or product development without separate Owner authorization."
+  - "Do not begin the Melee v3 production preflight, GOV-13, P12-10, or product development without separate Owner authorization."
+  - "Do not create, access, configure, or rotate an HMAC key or GitHub Secret."
   - "Do not dispatch production, change event selection, fetch protected source data, or change public/statistical contracts."
   - "Do not rewrite Git history, force-push, mutate protected branches or tags, or change event 434455 protected bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."
