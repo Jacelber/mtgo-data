@@ -44,7 +44,7 @@ jobs:
         id: baseline-stage
         run: echo "stage=baseline" >> "$GITHUB_OUTPUT"
 
-      - name: Verify clean-checkout code and committed baseline
+      - name: Run retained clean-checkout pytest suite
         run: python -B -m pytest
 
       - name: Write baseline summary
@@ -56,7 +56,7 @@ jobs:
             echo
             echo "- Job result: ${{ job.status }}"
             echo "- Trigger: ${{ github.event_name }}"
-            echo "- Validation: complete clean-checkout pytest suite"
+            echo "- Validation: retained clean-checkout pytest suite"
             echo "- Live input collection starts only after this job succeeds."
             echo "- No repository write permission is available to this job."
           } >> "$GITHUB_STEP_SUMMARY"

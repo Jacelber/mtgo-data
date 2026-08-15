@@ -122,10 +122,9 @@ fast review aid; it does not replace a validator or a complete diff review.
 
 At Gate 4, every automated check must state the risk it answers and use the
 smallest subject that can answer it. Do not repeat successful evidence for the
-same immutable subject. Byte-level committed baselines and the full pytest suite
-are not PR admission requirements. Their retirement is a separate GOV-07/GOV-08
-change; until then they may remain available for a specifically authorized
-diagnosis, but they are not the default proof of correctness.
+same immutable subject. GOV-07 retired rolling-output byte baselines. The full
+ordinary pytest suite is not a PR admission requirement; rebuilding and reducing
+that retained suite remains the separately authorized GOV-08 task.
 
 At Gate 5, present the owner with the original declaration, the actual changed
 artifact list, the relevant source or rendered diff, and verification matched
@@ -346,9 +345,9 @@ review is final for the reviewed immutable subject. Production retains one
 generated-page Chromium smoke before packaging because it checks a different
 subject: the newly generated candidate.
 
-Legacy ordinary and committed-baseline tests remain available only until the
-separately authorized GOV-07/GOV-08 retirement work. They are not PR gates and
-must not be run merely because the changed path is broad or unfamiliar.
+The retained ordinary suite remains available only until the separately
+authorized GOV-08 reconstruction. It is not a PR gate and must not be run merely
+because the changed path is broad or unfamiliar.
 
 Record the validated commit or tree identity in the task evidence. Do not rerun
 the same expensive command when no relevant input changed, and do not run every

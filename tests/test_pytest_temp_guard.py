@@ -64,7 +64,7 @@ def test_internal_basetemp_stops_pytest_before_collection():
             "pytest",
             "--collect-only",
             f"--basetemp={forbidden}",
-            "tests/test_ci_timing.py",
+            "tests/test_pytest_temp_guard.py",
         ],
         cwd=ROOT,
         text=True,

@@ -20,19 +20,6 @@ from mtgmeta.config import DisabledFormatError
 from mtgmeta.mtgo import stats as mtgo_stats
 
 
-EXPECTED_FILES = {
-    "index.json",
-    "range_1w.json",
-    "range_4w.json",
-    "range_12w.json",
-    "range_36w.json",
-    "decks_1w.json",
-    "decks_4w.json",
-    "decks_12w.json",
-    "decks_36w.json",
-}
-
-
 def committed_statistics_reference() -> tuple[date, datetime]:
     index = json.loads(
         (ROOT / "stats" / "standard" / "mtgo" / "index.json").read_text(
@@ -92,22 +79,6 @@ def test_latest_complete_week_is_deterministic_at_the_reference_boundary():
     assert mtgo_stats.latest_complete_week(events, today=date(2026, 7, 20)) == date(
         2026, 7, 13
     )
-
-
-@pytest.mark.committed_baseline
-def test_fixed_reference_regeneration_is_byte_identical(tmp_path):
-    reference_today, reference_generated = committed_statistics_reference()
-    written = mtgo_stats.build_all_stats(
-        ROOT,
-        "standard",
-        today=reference_today,
-        generated_at=reference_generated,
-        output_directory=tmp_path,
-    )
-    assert set(written) == EXPECTED_FILES
-    committed = ROOT / "stats" / "standard" / "mtgo"
-    for filename in sorted(EXPECTED_FILES):
-        assert written[filename].read_bytes() == (committed / filename).read_bytes(), filename
 
 
 def test_disabled_format_fails_before_output_side_effects(tmp_path):

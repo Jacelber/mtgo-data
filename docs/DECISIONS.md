@@ -3983,7 +3983,7 @@ and the established PR validation classes remain unchanged.
 
 # DEC-093 - Protect the output and make PR validation purpose-specific
 
-Status: `Accepted for local GOV-06 implementation; publication not authorized`
+Status: `Accepted and published`
 
 ## Context
 
@@ -4032,6 +4032,9 @@ Same-task completion authority after Owner acceptance is governed by DEC-094.
 Statistical changes, public-path changes, and later governance tasks remain
 outside GOV-06.
 
+GOV-06 was published through pull request #212 and merge commit
+`fa347998696deddd63b54e8bad7d014dad71d8b5`.
+
 ---
 
 # DEC-094 - Owner acceptance authorizes continuous same-task completion
@@ -4064,3 +4067,45 @@ contract.
 
 Owner acceptance becomes the single completion authorization event. Management
 stages remain observable but do not create repeated authorization prompts.
+
+---
+
+# DEC-095 - Retire rolling-output byte snapshots
+
+Status: `Accepted; same-task completion authorized`
+
+## Context
+
+Committed byte snapshots compare a regenerated rolling product with the bytes
+currently stored in the repository. Any legitimate output evolution and any
+defect produce the same failure, so the signal cannot determine whether the
+change is correct. The baseline must then be manually accepted or regenerated.
+
+The reviewed failure evidence was expectation maintenance rather than product
+protection: stale dates and counts failed two production baselines, while a
+later repair changed only final-newline bytes in six JSON documents. Completed
+R4 shadow-review tests also retained approximately 267 KB of inline historical
+examples after R5 had already promoted and independently bound the accepted
+production rules.
+
+## Decision
+
+Remove rolling MTGO output byte comparisons, the `committed_baseline` marker,
+its unused timing-group utility, and the completed R4 Modern and Standard shadow
+test files. Retain the report accounting and subtype contract as an unmarked
+semantic invariant. Retain the R4 audit artifacts and build tools as historical
+evidence rather than executing their inline review corpus on every full suite.
+
+Do not remove dynamic production-candidate comparison, value-independent
+invariants, Schema and consumer checks, temporary-directory determinism, or the
+protected Melee source and event compatibility contracts. Rebuilding the rest
+of the ordinary suite remains GOV-08.
+
+## Consequences
+
+Legitimate rolling output changes no longer require byte-baseline maintenance,
+and active test discovery no longer parses the two oversized R4 review files.
+Publication remains protected by candidate scope, rules, Schemas, consumers,
+generated-page smoke, and value-independent output invariants. The retained
+checks prove self-consistency and explicit contracts, not equality with last
+week's tournament values.

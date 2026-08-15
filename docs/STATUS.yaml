@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/gov-06-output-gated-validation-cutover"
+  current_working_branch: "codex/gov-07-snapshot-retirement"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
   primary_language: "Python"
@@ -72,82 +72,93 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"
-  name: "Output-gated validation cutover"
+  id: "GOV-07-SNAPSHOT-RETIREMENT"
+  name: "Retire byte-level snapshot tax"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-15"
   owner_accepted_on: "2026-08-15"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-06-output-gated-validation-cutover-20260815-01"
-  branch: "codex/gov-06-output-gated-validation-cutover"
-  base_commit: "64ff4113061900e06d3fd69ac93fd81de1aff025"
-  task_type: "local_ci_governance_cutover"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-07-snapshot-retirement-20260815-01"
+  branch: "codex/gov-07-snapshot-retirement"
+  base_commit: "fa347998696deddd63b54e8bad7d014dad71d8b5"
+  task_type: "local_test_governance_retirement"
   artifact_impact: "none"
-  objective: "Remove unrelated full, byte-snapshot, and browser testing from the PR critical path while protecting generated public output with value-independent invariants."
+  objective: "Retire rolling-output byte snapshots and completed oversized R4 shadow-review fixtures while preserving value-independent publication protection."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "AGENTS.md"
-    - ".github/pull_request_template.md"
-    - ".github/workflows/ci.yml"
+    - ".github/workflows/fetch_melee.yml"
     - ".github/workflows/update.yml"
-    - "ci_master_admission.py"
-    - "validate_output_invariants.py"
+    - "ci_timing.py"
+    - "pytest.ini"
     - "docs/GOVERNANCE_REMEDIATION.yaml"
-    - "docs/audits/GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER.md"
-    - "docs/audits/CI-MASTER-ADMISSION.md"
+    - "docs/audits/GOV-07-SNAPSHOT-RETIREMENT.md"
     - "docs/DECISIONS.md"
     - "docs/DEVELOPMENT_WORKFLOW.md"
     - "docs/STATUS.yaml"
-    - "tests/test_ci_master_admission.py"
-    - "tests/test_ci_workflow.py"
+    - "tests/test_ci_timing.py"
+    - "tests/test_classification_reports.py"
+    - "tests/test_classifier_r4_shadow.py"
+    - "tests/test_classifier_r4_standard_shadow.py"
     - "tests/test_documentation_history.py"
-    - "tests/test_output_invariants.py"
+    - "tests/test_modern_statistics.py"
+    - "tests/test_mtgo_completeness.py"
+    - "tests/test_mtgo_matchup.py"
+    - "tests/test_mtgo_pickup.py"
+    - "tests/test_mtgo_statistics.py"
+    - "tests/test_mtgo_top8.py"
+    - "tests/test_phase3_closeout.py"
     - "tests/test_production_workflow.py"
+    - "tests/test_pytest_temp_guard.py"
+  planned_file_operations:
+    - "delete|code|ci_timing.py"
+    - "delete|code|tests/test_ci_timing.py"
+    - "delete|code|tests/test_classifier_r4_shadow.py"
+    - "delete|code|tests/test_classifier_r4_standard_shadow.py"
   protected_scope:
-    code_changed: "CI admission and generated-output invariant validator only"
+    product_code_changed: "none"
     classifier_rule_changed: "none"
-    workflow_changed: "PR CI becomes path-targeted; production build gains output invariants before packaging"
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
     frontend_source_changed: "none"
     public_paths_changed: "none"
+    dynamic_candidate_validation_changed: "none"
+    protected_melee_compatibility_changed: "none"
     event_434455_source_bytes_changed: false
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Create the durable remediation ledger and mark later tasks unauthorized."
-    - "Replace catch-all PR testing with deterministic minimal categories."
-    - "Fail unknown evidence quickly for owner classification."
-    - "Add MTGO output invariants after production generation and before packaging."
-    - "Run each directly relevant local check once and reuse its evidence."
+    - "Classify historical committed-baseline failures without rerunning snapshots."
+    - "Retain unique semantic assertions and remove rolling-output byte comparisons."
+    - "Remove the committed_baseline marker, its unused timing utility, and completed oversized R4 shadow-review tests."
+    - "Update only directly affected workflow wording and governance records."
+    - "Run each directly relevant minimal check once and reuse its evidence."
   validation_evidence:
-    focused_contracts: "58 of 60 selected nodes passed on the first collected run; two stale documentation assertions failed before their later assertions executed."
-    repaired_nodes: "Only the failed documentation nodes were rerun after each directly relevant correction; final affected nodes passed."
-    output_invariants: "Current eight MTGO range and eight MTGO matchup documents passed once."
-    repository: "165 Python, 18 JavaScript, 1770 JSON, 52 YAML, 57 references, and 2268 hygiene checks passed once."
-    ruff: "All directly changed Python implementation and test files passed once."
-    file_operations: "The 37 directly affected admission/documentation nodes passed; after edge hardening, the six conflict/template cases passed. Known additions, exact declared unknown additions/deletions/renames, mismatches, stale declarations, invalid paths, and conflicting categories are covered."
-    intentionally_not_run: "Full pytest, committed_baseline, Playwright, generators, rule validation, Schema validation, live fetch, and production were not run."
+    static_scope: "The active marker configuration and eleven named rolling-output snapshot nodes are absent; the exact four planned file deletions match the diff."
+    ruff: "All eleven modified retained Python test files passed once."
+    collection: "The eleven modified retained test files collected 132 nodes in 1.16 seconds without executing the suite."
+    focused_behavior: "The retained report invariant, MTGO and Melee workflow order, external pytest temp guard, and live status contract passed once: 5 passed in 4.00 seconds."
+    intentionally_not_run: "Full pytest, retired snapshots, R4 shadow tests, generators, live fetch, browser tests, production, and deployment."
   prohibited_changes:
-    - "Do not begin GOV-07, another task, or product development under GOV-06 acceptance."
-    - "Do not fetch live data, delete snapshot tests, change formulas, generated data, Schemas, public paths, or UI behavior."
-  stop_point: "Complete GOV-06 through commit, Ready PR, required targeted CI, merge, and applicable automatic publication; stop on failed checks, changed subject, conflict, permission blocker, or scope expansion."
+    - "Do not begin GOV-08, another governance task, P12-10, or product development."
+    - "Do not change formulas, rules, generated data, Schemas, public paths, UI behavior, or protected Melee compatibility."
+    - "Do not remove dynamic production candidate comparison, publication output invariants, or protected event 434455 contracts."
+  stop_point: "Stop after local minimal validation and Owner review. Owner acceptance authorizes continuous completion of this exact task under DEC-094."
 
 recent_completion_handoff:
-  id: "P12-10-READINESS-PICKUP-CONTRACT"
-  name: "Pickup known-state and review-interface readiness contract"
+  id: "GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"
+  name: "Output-gated validation cutover"
   status: "completed_merged_and_deployed"
-  pull_request: 209
-  merge_commit: "b01ec998f4d9f36728589d26871cb38de4f6f015"
-  note: "The readiness contract is merged and deployed; GitHub and Git retain its publication evidence."
+  pull_request: 212
+  merge_commit: "fa347998696deddd63b54e8bad7d014dad71d8b5"
+  note: "GitHub and Git retain the targeted CI, evidence-reuse, merge, and Pages publication record."
 
 current_repository_state:
-  baseline_commit: "b01ec998f4d9f36728589d26871cb38de4f6f015"
-  baseline_note: "Verified remote master after PR 209; used as the production timeout-repair base."
+  baseline_commit: "fa347998696deddd63b54e8bad7d014dad71d8b5"
+  baseline_note: "Verified remote master after PR 212; used as the GOV-07 retirement base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -156,7 +167,7 @@ current_repository_state:
     tabletop: "melee/index.html"
   public_catalog: "stats/catalog.json"
   pages_policy: "configs/pages_publication.json"
-  active_root_python_tools: 9
+  active_root_python_tools: 8
   legacy_entry_cleanup: "P11-12 completed and merged in PR 173"
   live_and_historical_status: "separated and published by P11-13 in PR 174"
 
@@ -233,13 +244,13 @@ open_decisions:
 next_approved_task:
   id: "NONE"
   name: "No follow-up task is authorized"
-  status: "blocked_pending_GOV-06_owner_review"
+  status: "blocked_pending_GOV-07_completion"
   production_change: false
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "GOV-06 is accepted and may complete continuously. Every later ledger task and all product work require separate authorization."
+  note: "GOV-07 is accepted and may complete continuously. GOV-08 and all product work require separate authorization."
 
 governance_baseline:
   status: "active_on_master"
@@ -276,7 +287,7 @@ publication_workflow_control:
   p8_08_authorized: false
 
 prohibited_next_actions:
-  - "Do not begin GOV-07, GOV-08, GOV-09, GOV-10, GOV-11, GOV-12, GOV-13, P12-10, or other product development without separate owner authorization."
+  - "Do not begin GOV-08, GOV-09, GOV-10, GOV-11, GOV-12, GOV-13, P12-10, or other product development without separate owner authorization."
   - "Do not recalculate the accepted Landing shadow or change the approved 3%, 5pp, or 20 thresholds."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."

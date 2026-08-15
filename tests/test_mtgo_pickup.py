@@ -28,46 +28,6 @@ PUBLIC = ROOT / "stats" / "standard" / "mtgo"
 PICKUP = PUBLIC / "pickup"
 
 
-def test_fixed_reference_candidates_and_base_are_byte_identical(tmp_path, monkeypatch):
-    baseline_rules = load_rule_set(
-        ROOT
-        / "docs"
-        / "audits"
-        / "classifier-r2"
-        / "baseline_rules"
-        / "standard.yaml"
-    )
-    monkeypatch.setattr(
-        pickup,
-        "load_rules_for_format",
-        lambda *_args, **_kwargs: baseline_rules,
-    )
-    result = pickup.generate_candidates(
-        ROOT,
-        "standard",
-        today=REFERENCE_TODAY,
-        output_directory=tmp_path,
-        known_file=(
-            ROOT
-            / "docs"
-            / "audits"
-            / "classifier-r2"
-            / "baseline_pickup"
-            / "standard_known_archetypes.json"
-        ),
-    )
-    assert result is not None
-    assert result["week"] == "2026-W28"
-    assert (
-        result["candidate_path"].read_bytes()
-        == (PICKUP / "candidates_2026-W28.yaml").read_bytes()
-    )
-    assert (
-        result["base_reference_path"].read_bytes()
-        == (PICKUP / "base_reference_2026-W28.yaml").read_bytes()
-    )
-
-
 def test_candidate_preservation_does_not_overwrite_manual_review(tmp_path):
     first = pickup.generate_candidates(
         ROOT,

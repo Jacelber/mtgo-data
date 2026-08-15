@@ -2,10 +2,9 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import date
 import json
 from pathlib import Path
-import shutil
 
 import pytest
 import yaml
@@ -381,30 +380,6 @@ def test_committed_real_week_has_all_events_and_exact_rank_slots(format_id):
             placement["comparison"]["base_period_end"] == week["week"]["end"]
             for placement in item["placements"]
         )
-
-
-@pytest.mark.parametrize("format_id", ["standard", "modern"])
-@pytest.mark.committed_baseline
-def test_committed_latest_week_rebuild_is_byte_identical(format_id, tmp_path):
-    committed = ROOT / "stats" / format_id / "mtgo" / "top8"
-    index = json.loads((committed / "index.json").read_text(encoding="utf-8"))
-    generated = datetime.fromisoformat(index["generated"])
-    output = tmp_path / format_id
-    shutil.copytree(committed, output)
-    written = top8.build_all_top8(
-        ROOT,
-        format_id,
-        today=generated.date(),
-        generated_at=generated,
-        output_directory=output,
-    )
-    assert set(written) == {
-        index["weeks"][0]["file"],
-        index["weeks"][0]["comparison_bases_file"],
-        "index.json",
-    }
-    for name, path in written.items():
-        assert path.read_bytes() == (committed / name).read_bytes()
 
 
 @pytest.mark.parametrize("format_id", ["standard", "modern"])

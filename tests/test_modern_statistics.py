@@ -16,17 +16,8 @@ from mtgmeta.mtgo import stats
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "stats" / "modern" / "mtgo"
-EXPECTED_FILES = {
-    "index.json",
-    "range_1w.json",
-    "range_4w.json",
-    "range_12w.json",
-    "range_36w.json",
-    "decks_1w.json",
-    "decks_4w.json",
-    "decks_12w.json",
-    "decks_36w.json",
-}
+
+
 def committed_reference() -> tuple[datetime, dict]:
     index = json.loads((OUTPUT / "index.json").read_text(encoding="utf-8"))
     return datetime.fromisoformat(index["generated"]), index
@@ -76,21 +67,6 @@ def test_committed_modern_ranges_reconcile_parent_aggregates():
             (OUTPUT / f"decks_{weeks}w.json").read_text(encoding="utf-8")
         )["decks"]
         assert all(entry["archetype_id"] for entry in decks.values())
-
-
-@pytest.mark.committed_baseline
-def test_fixed_reference_modern_regeneration_is_byte_identical(tmp_path):
-    generated, _index = committed_reference()
-    written = stats.build_all_stats(
-        ROOT,
-        "modern",
-        today=generated.date(),
-        generated_at=generated,
-        output_directory=tmp_path,
-    )
-    assert set(written) == EXPECTED_FILES
-    for filename in sorted(EXPECTED_FILES):
-        assert written[filename].read_bytes() == (OUTPUT / filename).read_bytes(), filename
 
 
 def test_statistics_aggregate_the_selected_parent_not_the_subtype():
