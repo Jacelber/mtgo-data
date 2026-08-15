@@ -1563,6 +1563,30 @@ P10-03 does not provision a production key or modify the production workflow.
 Resource Schemas as a primary production gate, supplemental prohibited-field
 scans, and notice/contact/removal updates remain P10-04 work.
 
+A completed v3 snapshot contains the already-derived participant references,
+so downstream retention, parsing, generation, and review do not require the
+HMAC key. An incomplete checkpoint is different: it may resume only with the
+same key material and the same key ID. The system cannot recover secret key
+material from a checkpoint or manifest, and operators must never assign an old
+key ID to different key material.
+
+If the key for an incomplete checkpoint is lost, treat that checkpoint as
+non-resumable. A later collection must start as a clean snapshot with new key
+material and a new key ID; it must not append to, merge with, or claim identity
+continuity with the incomplete snapshot. Rotate only at a snapshot boundary,
+after any resumable collection using the old key has completed or been
+abandoned. Completed snapshots made with an older key remain valid inputs, but
+recollecting the same event under a new key produces different participant
+references.
+
+No production HMAC key is currently provisioned by this repository. Key
+creation, managed storage, recovery-copy selection, workflow injection,
+rotation, and live collection remain separately owner-authorized operations.
+Before the first live v3 rehearsal, the operator must decide whether the test
+snapshot will be retained: use a distinct test key and key ID for a disposable
+snapshot, or the production-managed key from the start for a retained one.
+Operational failure routing is summarized in `docs/OPERATIONS_RUNBOOK.md`.
+
 ### 11.14 Minimized-resource validation and privacy requests
 
 P10-04 promotes `schemas/melee-minimized-resource.schema.json` to the primary

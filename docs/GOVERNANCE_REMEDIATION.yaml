@@ -128,7 +128,7 @@ tasks:
 
   - id: "GOV-11-LIVE-DOCUMENT-SLIMMING"
     name: "Keep live governance documents small"
-    status: "owner_accepted_same_task_completion_authorized"
+    status: "completed_merged"
     depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"]
     problem: "ROADMAP and mandatory reading contain completed history that consumes time and context every task."
     solution: "Move completed detail to docs/history, keep current/future objectives and acceptance only, and require the same archive step at every completion."
@@ -142,14 +142,22 @@ tasks:
       - "Every future completion moves detailed completed roadmap material to history in the same accepted task."
       - "No product, statistics, Schema, data, UI, workflow, public-path, production, or event behavior changes."
       - "Only the focused live-document contract runs locally once; PR CI owns its one independent reference check."
+    completion: "Published through PR 218 and merge commit de6ca64a4d2f34b0f24f983bf11e881bf3a7181a; merge confirmation succeeded and the excluded-path change did not trigger Pages."
 
   - id: "GOV-12-OPERATIONS-AND-PRIVACY-CLOSEOUT"
-    name: "Add the missing low-cost operational guards"
-    status: "planned_not_authorized"
+    name: "Document Melee HMAC recovery and production failure response"
+    status: "owner_accepted_same_task_completion_authorized"
     depends_on: ["GOV-08-MINIMAL-TESTSET-REBUILD"]
-    problem: "HMAC recovery, suppression enforcement, and failure recovery are not one executable contract."
-    solution: "Document key recovery/rotation, add a non-public suppression list enforced at output, and create a short production recovery runbook."
-    effect: "Privacy and recovery promises become executable without adding PR-wide testing."
+    problem: "Melee HMAC recovery rules and the repository's existing production failure controls are scattered, while the original suppression proposal would broaden the task before a real removal or v3-production trigger exists."
+    solution: "Document Melee-only key loss and rotation boundaries, add one short operator runbook for existing MTGO, Pages, and Melee failure paths, and defer secret provisioning and removal suppression to separately triggered work."
+    effect: "Operators receive a usable recovery entry point without changing executable behavior, adding a repository-wide scan, provisioning a secret, or increasing the test set."
+    acceptance:
+      - "A completed Melee v3 snapshot remains usable downstream without the HMAC key; an incomplete checkpoint resumes only with the original key material and key ID."
+      - "Lost-key and rotation instructions prohibit joining snapshots or reusing one key ID for different key material."
+      - "The runbook identifies the observable evidence and safe stop or retry boundary for MTGO baseline, fetch, build, publish, Pages, and Melee candidate failures."
+      - "The documentation states that no production HMAC key is currently provisioned and records the separate Melee v3 preflight required before the first live test event."
+      - "No suppression list, participant-string scan, code, test, Schema, configuration, workflow, data, UI, public-path, statistical, secret, production, or deployment change is made."
+      - "No local automated test runs; the final targeted PR CI owns one existing documentation contract and repository-reference validation."
 
   - id: "GOV-13-BOUNDED-MAINTENANCE-AUTHORITY"
     name: "Avoid a full authorization cycle for routine maintenance"
