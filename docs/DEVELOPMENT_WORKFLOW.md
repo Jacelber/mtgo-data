@@ -410,22 +410,29 @@ task. Before the first remote write:
 1. confirm the final local commit, clean status, current branch, and intended
    base;
 2. inspect the fetch and disabled push URLs;
-3. in the same execution context that will publish, run
-   `gh auth status -h github.com` and
-   `gh api user --jq .login`;
-4. confirm repository write permission without mutating it:
-   `gh api repos/Jacelber/mtgo-data --jq .permissions.push` must return `true`;
-5. if `.github/workflows/**` changed, confirm that the active token includes the
-   required `workflow` scope;
+3. in the same execution context that will publish, run the repository's only
+   credential-verdict entry point:
+   `tools/github_publication_preflight.ps1 -ActualPublicationContext`; Codex
+   must use `require_escalated` for this call;
+4. add `-RequireWorkflowScope` when `.github/workflows/**` changed;
+5. require the script's `READY` state before publication;
 6. keep the workspace's disabled push sentinel and empty local credential
    helper intact; do not restore or persist a real push URL;
 7. use only the repository-specific `gh` publication path below.
 
-Do not use a push as a credential probe and do not rotate through unrelated
-fallback publication mechanisms after a `403`. First distinguish the expected
-local disabled-push sentinel from a real GitHub authorization or token-scope
-failure. If preflight fails, stop once, report the missing permission or
-configuration, and preserve the local commit.
+The preflight states have one handling rule each:
+
+- `READY` continues through the commands below;
+- `RETRY_ACTUAL_CONTEXT` retries the same script once in the actual publication
+  context without an Owner prompt, then reports a context failure if unchanged;
+- `AUTH_REJECTED` stops and permits an Owner login request;
+- `PERMISSION_MISSING` reports the exact identity, push-permission, or workflow-
+  scope mismatch; and
+- `NETWORK_ERROR` reports network or GitHub availability failure.
+
+Do not use a push as a credential probe or interpret raw `gh` output as a
+credential verdict. Preserve the local commit and disabled push sentinel when
+the state is not `READY`.
 
 For this repository, generic GitHub app or connector mutation preferences are
 superseded by this repository-specific path. GitHub app and connector tools may
@@ -454,10 +461,9 @@ The command-scoped `safe.directory` and credential helper do not modify global
 or repository-local configuration. A disabled push sentinel error means the
 explicit approved URL was not used. `/dev/tty`, username-prompt, or credential
 helper errors mean Git did not obtain the already-checked `gh` credential; they
-do not prove token expiration. Describe a token as invalid or expired only
-when both `gh auth status` and `gh api user` fail with an authentication error
-in the actual publication context. Otherwise report a credential-context or
-helper-path failure and retry only the documented path.
+do not override the preflight state. Report authentication rejection only when
+the script returns `AUTH_REJECTED`; otherwise retain its exact failure class and
+retry only the documented path.
 
 A pull request cannot contain its own not-yet-known merge commit. Therefore,
 implementation pull requests should record stable task results and validation,
