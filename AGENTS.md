@@ -82,10 +82,12 @@ acceptance-continuation rule in `docs/DEVELOPMENT_WORKFLOW.md`. Acceptance
 never authorizes a changed subject, another task, another phase, or unrelated
 credentials.
 
-The documented remote-mutation client is `gh`; do not first attempt PR creation
-or merge through an unavailable connector and then misreport that local client
-context as expired credentials. Use only the command-scoped credential method
-defined in the workflow document during accepted-task completion.
+For any authorized GitHub publication, run
+`tools/github_publication_preflight.ps1` in the actual publication context
+(Codex: `require_escalated`) and act only on its state. A bare
+`gh auth status` result is never a credential verdict. Only `AUTH_REJECTED`
+permits an Owner login request; `READY` routes to the command-scoped credential
+method in the workflow document.
 
 Do not create a second pull request solely to record metadata that GitHub or
 Git already records. Carry material status changes into the next already

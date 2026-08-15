@@ -33,6 +33,7 @@ are control-plane checks and never run in a production baseline.
 | MTGO candidate generated | Candidate boundary, repository, rules, Schema, output-invariant, consumer, and `production-pages.spec.js` checks in `update.yml` | Block an invalid publishable artifact | Once for that immutable candidate before packaging |
 | Melee candidate generated | Candidate boundary, repository, rules, and Schema checks in `fetch_melee.yml` | Block an invalid Melee publishable artifact | Once for that immutable candidate before staging |
 | Generated commit pushed | Exact remote-SHA confirmation | Confirm publication identity without recomputing prior evidence | Once for that commit |
+| GitHub preflight script or authentication-routing rule changes | Run the script once without `-ActualPublicationContext`, then once with it in the actual publication context | Prove an ordinary context cannot issue a credential verdict and the authorized context can return `READY` | Once per final immutable authentication-control tree; never on unrelated tasks |
 
 ## No-trigger cases
 
@@ -41,6 +42,9 @@ are control-plane checks and never run in a production baseline.
 - Owner acceptance of an unchanged UI subject does not trigger another browser
   run.
 - A successful immutable candidate is not recalculated or retested downstream.
+- Authentication preflight does not run during local development or CI unless
+  its script or routing rule changed; operational publication runs it once per
+  publication context.
 - No change means no test.
 
 ## UI assets outside GOV-08

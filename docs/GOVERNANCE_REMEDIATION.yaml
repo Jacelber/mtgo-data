@@ -39,7 +39,7 @@ tasks:
 
   - id: "GOV-07-SNAPSHOT-RETIREMENT"
     name: "Retire byte-level snapshot tax"
-    status: "owner_accepted_completion_authorized"
+    status: "completed_merged_and_deployed"
     depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"]
     authorization:
       local_implementation: true
@@ -59,11 +59,11 @@ tasks:
       - "Dynamic production candidate comparison, output invariants, Schemas, consumers, and protected Melee compatibility remain unchanged."
       - "Only the minimal static, collection, workflow-contract, Ruff, and retained semantic checks run locally once."
     evidence: "docs/audits/GOV-07-SNAPSHOT-RETIREMENT.md"
-    next: "Complete the accepted task continuously under DEC-094. GOV-08 remains unauthorized."
+    completion: "Published through PR 213 and merge commit 78af1e59f6e7cb32309420c45d59a60d4b98c2e1."
 
   - id: "GOV-08-MINIMAL-TESTSET-REBUILD"
     name: "Rebuild the retained test set from zero"
-    status: "local_implementation_complete_pending_owner_acceptance"
+    status: "completed_merged_and_deployed"
     depends_on: ["GOV-07-SNAPSHOT-RETIREMENT"]
     problem: "The ordinary suite accumulated tests without a current purpose/trigger inventory."
     solution: "Retain only schema, output/privacy invariants, and one tiny fixture smoke per supported CLI; document each trigger and remove duplicate coverage."
@@ -76,6 +76,21 @@ tasks:
       - "All 91 Python test deletions and three additions were declared by exact path before the file operations."
       - "Fixtures and JavaScript/browser tests remain unchanged for later authorized tasks."
     evidence: "docs/audits/GOV-08-MINIMAL-TESTSET-REBUILD.md"
+    completion: "Published through PR 214 and merge commit eb0eb7eb4226878430581b8968f24a60079a482e."
+
+  - id: "GOV-08A-GITHUB-AUTH-SINGLE-ENTRYPOINT"
+    name: "Make repository preflight the only GitHub credential verdict"
+    status: "owner_accepted_completion_authorized"
+    depends_on: ["GOV-08-MINIMAL-TESTSET-REBUILD"]
+    problem: "A restricted-context bare gh auth result could still be misreported as an invalid token despite the documented publication method."
+    solution: "Route every credential verdict through one repository script with machine-readable states and require the actual publication context before it can inspect gh."
+    effect: "Restricted credential access causes an automatic context retry instead of an unnecessary Owner login request."
+    acceptance:
+      - "AGENTS.md names the preflight script as the only credential-verdict entry point."
+      - "A call without ActualPublicationContext returns RETRY_ACTUAL_CONTEXT without invoking gh."
+      - "The actual publication context returns READY only for Jacelber with repository push permission and any required workflow scope."
+      - "Only AUTH_REJECTED permits an Owner login request; permission and network failures keep their own states."
+      - "No GitHub workflow, product, data, statistical, UI, Schema, or public-path behavior changes."
 
   - id: "GOV-09-UI-ACCEPTANCE-CONTRACT"
     name: "Make owner browser review the UI acceptance record"
