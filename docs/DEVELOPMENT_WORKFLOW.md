@@ -122,9 +122,9 @@ fast review aid; it does not replace a validator or a complete diff review.
 
 At Gate 4, every automated check must state the risk it answers and use the
 smallest subject that can answer it. Do not repeat successful evidence for the
-same immutable subject. GOV-07 retired rolling-output byte baselines. The full
-ordinary pytest suite is not a PR admission requirement; rebuilding and reducing
-that retained suite remains the separately authorized GOV-08 task.
+same immutable subject. GOV-07 retired rolling-output byte baselines. GOV-08
+replaced the accumulated ordinary suite with the trigger-specific inventory in
+`docs/TEST_TRIGGER_MATRIX.md`; no workflow may invoke unbounded pytest.
 
 At Gate 5, present the owner with the original declaration, the actual changed
 artifact list, the relevant source or rendered diff, and verification matched
@@ -266,7 +266,12 @@ Repository validation uses three distinct layers. Do not treat them as interchan
 2. **Production candidate validation** runs after authorized fetching and generation but before staging or publication. It compares the candidate with a baseline snapshot captured at the start of the run, permits only declared generated-data paths, rejects deletions and cross-product writes, parses changed JSON and YAML, verifies event and match document shape, prevents count regression, and retains strict classification, repository, rule, Schema, value-independent output invariants, generated consumer-contract, and one generated-page browser smoke. Candidate checks derive their expectations from the candidate and specifications rather than historical hard-coded bytes or tournament values.
 3. **Publication confirmation** runs after the generated commit is pushed. It requires a clean production workspace and confirms that the remote `master` commit equals the locally published commit.
 
-A clean-checkout baseline test protects reproducibility across code and rule changes; it is not evidence that newly fetched data is acceptable. A production candidate check protects the current data increment; it does not replace fixture-based unit and regression tests. Adding a new generated path or allowing an automatic deletion requires explicit review of the candidate publication boundary.
+A clean-checkout production smoke proves only that the commands about to run
+still cross their offline entry boundaries. It is not evidence that newly
+fetched data is acceptable. The production candidate checks the current data
+increment once at the output gate. Adding a new generated path or allowing an
+automatic deletion requires explicit review of the candidate publication
+boundary.
 
 ### Allowlisted Pages build and cutover
 
@@ -345,9 +350,9 @@ review is final for the reviewed immutable subject. Production retains one
 generated-page Chromium smoke before packaging because it checks a different
 subject: the newly generated candidate.
 
-The retained ordinary suite remains available only until the separately
-authorized GOV-08 reconstruction. It is not a PR gate and must not be run merely
-because the changed path is broad or unfamiliar.
+The retained Python set is the explicit trigger inventory in
+`docs/TEST_TRIGGER_MATRIX.md`. A broad or unfamiliar path is not a reason to run
+every retained test; unknown evidence stops for classification instead.
 
 Record the validated commit or tree identity in the task evidence. Do not rerun
 the same expensive command when no relevant input changed, and do not run every

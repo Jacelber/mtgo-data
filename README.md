@@ -60,12 +60,15 @@ Run the applicable checks from the repository root:
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard classification-reports --strict
 .\.venv\Scripts\python.exe tools\validate_standard_quality.py
 .\.venv\Scripts\python.exe validate_schemas.py
-.\.venv\Scripts\python.exe -m pytest
+.\.venv\Scripts\python.exe -m pytest tests\test_cli_smoke.py
 ```
 
 These commands validate repository content, maintained code, archetype rules,
-classification diagnostics, public JSON Schemas, and regression fixtures. They
-do not fetch tournament data or regenerate production statistics.
+classification diagnostics, public JSON Schemas, and the three offline command
+entry points. The complete trigger-specific list is in
+[`docs/TEST_TRIGGER_MATRIX.md`](docs/TEST_TRIGGER_MATRIX.md). Do not run an
+unbounded test suite when a named smaller command answers the current risk.
+These commands do not fetch tournament data or regenerate production statistics.
 
 The Standard public-contract and frozen classification baselines are documented
 in [`docs/audits/P1-11.md`](docs/audits/P1-11.md) and

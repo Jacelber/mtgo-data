@@ -9,12 +9,19 @@ Use this checklist after changing Standard public JSON, its generators, or the M
 5. Open Matchups; select 1, 4, and 12 weeks and confirm the overall table and matrix render.
 6. Confirm failed optional data requests show the existing fallback state instead of breaking the page.
 
-Automated prerequisite:
+Automated prerequisite for a newly generated public-data candidate:
 
 ```text
-python -m pytest tests/test_standard_public_contract.py
+python validate_schemas.py
+python validate_output_invariants.py
 ```
+
+Run those commands once on that candidate. A UI-only change has no Python
+prerequisite; its acceptance is the Owner browser review after the native UI
+model smoke.
 
 The current page intentionally keeps 36-week statistics and matchup data out of the visible selectors while retaining those generated documents in the public catalogs. The automated contract verifies all four generated ranges, including 36 weeks. Restoring the 36-week buttons is a separately reviewed front-end behavior change.
 
-The automated contract protects public paths, catalog targets, period alignment, aggregate counts, matchup reciprocity, and pickup metadata. It intentionally does not freeze daily values or replace browser inspection.
+The output gate protects public paths, catalog targets, period alignment,
+aggregate counts, matchup reciprocity, and Pickup metadata. It intentionally
+does not freeze daily values or replace browser inspection.

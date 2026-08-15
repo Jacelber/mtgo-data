@@ -4109,3 +4109,38 @@ Publication remains protected by candidate scope, rules, Schemas, consumers,
 generated-page smoke, and value-independent output invariants. The retained
 checks prove self-consistency and explicit contracts, not equality with last
 week's tournament values.
+
+---
+
+# DEC-096 - Rebuild tests from a trigger-specific minimum
+
+Status: `Accepted for local implementation`
+
+## Context
+
+After byte snapshots were retired, the ordinary Python inventory still held 96
+files and at least 697 test functions. Both production workflows ran that whole
+inventory before live collection even though most nodes did not answer a risk
+specific to the command about to run. The measured prior baseline was 966 tests
+in 28 minutes 51 seconds.
+
+## Decision
+
+Rebuild from zero rather than prune incrementally. Retain one offline smoke for
+each installed CLI, the minimum Melee privacy boundary, the generated consumer
+contract, and focused live-document and CI-control contracts. Delete the other
+91 Python test files. Keep frozen fixture evidence and the current JavaScript
+and browser assets unchanged.
+
+Production pre-fetch jobs select only the CLI and privacy nodes required by
+that workflow. Public Schema, candidate-boundary, value-independent output,
+consumer, and generated-page checks remain after generation at the only gate
+that protects the publishable candidate. No workflow runs unbounded pytest.
+
+## Consequences
+
+Routine production no longer pays for historical implementation-detail tests.
+The retained set proves entry-point viability, privacy, candidate structure,
+self-consistency, and consumability; it does not promise that every internal
+function behaves like an earlier implementation. The complete live trigger
+inventory is `docs/TEST_TRIGGER_MATRIX.md`.
