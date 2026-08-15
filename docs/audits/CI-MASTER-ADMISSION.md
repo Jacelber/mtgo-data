@@ -1,5 +1,10 @@
 # Pull-request validation and master-admission design
 
+> Historical GOV-03 design. GOV-06 supersedes its full/focused job matrix with
+> the output-gated contract in
+> `docs/audits/GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER.md`. This file remains
+> evidence for the prior design and does not define current test selection.
+
 ## Purpose
 
 CI separates pull-request maturity from validation strength. Draft and Ready

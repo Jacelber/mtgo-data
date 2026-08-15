@@ -13,6 +13,10 @@ Before analyzing or changing the repository, always read `AGENTS.md`,
 `docs/DEVELOPMENT_WORKFLOW.md`. Then expand the reading set according to the
 approved paths and artifact impact:
 
+For a GOV-06 or later governance-efficiency task, read only the current entry
+and its dependencies in `docs/GOVERNANCE_REMEDIATION.yaml`; future entries
+are planning records and do not authorize work.
+
 - read `docs/PROJECT_SCOPE.md` for product-scope or navigation work;
 - read `docs/STATISTICS_SPEC.md` for statistical code, formulas, semantics, or
   statistical artifacts;
@@ -62,7 +66,8 @@ normalized, generated, and public path boundaries, use
 Before proposing or starting a task, read `docs/STATUS.yaml` and confirm:
 
 - the current phase and task;
-- local, commit, remote-publication, merge, and production authorization;
+- whether local work is authorized and whether Owner acceptance has activated
+  same-task completion authority;
 - active blockers and prohibited actions;
 - the current working branch and protected paths.
 
@@ -71,15 +76,16 @@ another environment is explicitly approved. Do not develop directly on
 `master`. Inspect branch and worktree state before editing, and do not overwrite
 unexplained changes.
 
-Local task authorization does not authorize credentials, push, pull-request
-creation, merge, production dispatch, protected-branch changes, another task,
-or another phase. Follow the exact gates and stop conditions in
-`docs/DEVELOPMENT_WORKFLOW.md`.
+Local task authorization covers implementation only until Owner acceptance.
+After acceptance, complete the same accepted task continuously under the
+acceptance-continuation rule in `docs/DEVELOPMENT_WORKFLOW.md`. Acceptance
+never authorizes a changed subject, another task, another phase, or unrelated
+credentials.
 
 The documented remote-mutation client is `gh`; do not first attempt PR creation
 or merge through an unavailable connector and then misreport that local client
 context as expired credentials. Use only the command-scoped credential method
-defined in the workflow document after separate remote authorization.
+defined in the workflow document during accepted-task completion.
 
 Do not create a second pull request solely to record metadata that GitHub or
 Git already records. Carry material status changes into the next already
@@ -107,10 +113,14 @@ authorized repository change or a separately approved closeout task.
   validation before publication, and useful failure reporting.
 - Pull-request maturity and validation scope are separate. Locally completed
   work is published Ready by default; Draft is optional only for explicitly
-  requested incomplete-work review. CI selects focused documentation, focused
-  UI, or complete validation from the artifact-impact declaration, complete
-  changed-file evidence, and file statuses. Missing, conflicting, ambiguous,
-  or unavailable evidence selects complete validation. Merge remains separately
+  requested incomplete-work review. CI maps complete changed-file evidence to
+  the smallest known documentation, UI, code, data, and governance checks.
+  Known-path additions classify normally. An approved task contract must list
+  every unknown-path addition, deletion, and rename by exact path and category;
+  the PR repeats those machine-readable declarations. Undeclared, mismatched,
+  conflicting, ambiguous, or unavailable evidence stops as unclassified for
+  owner review; it does not trigger a catch-all test suite. A declaration
+  selects checks but never grants permission. Merge remains separately
   owner-authorized.
 
 Any change to statistics must update the applicable specification, decision,
@@ -122,10 +132,11 @@ shared same-format behavior across sources.
 
 ## Verification and documentation
 
-Before committing, run checks proportionate to the changed scope and review the
-complete diff. Preserve the current Standard regression baseline until its
-replacement is explicitly verified. Do not delete a legacy entry point until
-its replacement and live callers are verified.
+Before committing, run the smallest checks that answer a named changed-scope
+risk and review the complete diff. Do not repeat successful evidence for the
+same immutable subject. Preserve the current Standard regression baseline until
+the separately authorized GOV-07 retirement. Do not delete a legacy entry point
+until its replacement and live callers are verified.
 
 At the completion of a development phase:
 

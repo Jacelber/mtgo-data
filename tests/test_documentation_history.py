@@ -53,15 +53,16 @@ def test_live_status_is_small_current_state_and_points_to_history():
     assert status["known_blockers"][0]["id"] == (
         "MTGO-PRODUCTION-RUN-31838657545-CANCELLED"
     )
-    assert status["next_approved_task"]["local_execution_authorized"] is True
-    assert status["current_task"]["id"] == (
-        "OPS-MTGO-PRODUCTION-TIMEOUT-FAILFAST-20260815"
-    )
+    next_task = status["next_approved_task"]
+    assert isinstance(next_task["local_execution_authorized"], bool)
+    if next_task["id"] == "NONE":
+        assert next_task["local_execution_authorized"] is False
+    assert status["current_task"]["id"] == "GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"
     assert status["current_task"]["status"] == (
-        "owner_accepted_conditional_publication_merge_production_and_rehearsal_authorized"
+        "owner_accepted_completion_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "b01ec998f4d9f36728589d26871cb38de4f6f015"
+        "64ff4113061900e06d3fd69ac93fd81de1aff025"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -75,13 +76,11 @@ def test_live_status_is_small_current_state_and_points_to_history():
     assert status["recent_completion_handoff"]["merge_commit"] == (
         "b01ec998f4d9f36728589d26871cb38de4f6f015"
     )
-    assert status["next_approved_task"]["id"] == (
-        "P12-10-NO-PUBLICATION-TUESDAY-REHEARSAL"
-    )
+    assert status["next_approved_task"]["id"] == "NONE"
     assert status["next_approved_task"]["status"] == (
-        "authorized_after_repair_merge_and_successful_authorized_production_run"
+        "blocked_pending_GOV-06_owner_review"
     )
-    assert status["next_approved_task"]["local_execution_authorized"] is True
+    assert status["next_approved_task"]["local_execution_authorized"] is False
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
     future_task_gates = {gate["task"]: gate for gate in status["future_task_gates"]}

@@ -1,0 +1,94 @@
+schema_version: "1.0"
+program_id: "GOVERNANCE-EFFICIENCY-20260815"
+objective: "Reduce development governance and validation time while protecting the published output."
+owner_principles:
+  - "Do not test unless a named risk requires it; use the smallest check that can answer that question."
+  - "Do not repeat evidence already obtained for the same immutable subject."
+  - "Protect the publishable artifact at its single output gate; master is not the product."
+  - "Undeclared or mismatched file operations stop instead of triggering a catch-all test suite."
+  - "Owner browser acceptance is final UI evidence; do not repeat it after acceptance."
+program_rules:
+  one_active_task: true
+  later_tasks_require_separate_authorization: true
+  completion_record: "Move task detail to docs/history; retain one summary line here."
+  owner_acceptance_authorizes_same_task_completion: true
+  publication_gates_separate: false
+
+tasks:
+  - id: "GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"
+    name: "Cut PR waiting and guard generated output"
+    status: "owner_accepted_completion_authorized"
+    authorization:
+      local_implementation: true
+      commit: true
+      push: true
+      pull_request: true
+      merge: true
+      applicable_publication_or_production: true
+    problem: "Nearly every PR pays for full pytest, committed byte baselines, and Playwright even when those checks cannot answer a change-specific question."
+    solution: "Classify known paths and exact predeclared file operations into minimal check categories, stop mismatches immediately, remove full/baseline/Playwright jobs from PR CI, and add value-independent invariants to the production build before packaging."
+    effect: "Known PRs run only relevant minute-scale checks; malformed or unknown evidence fails quickly; inconsistent generated MTGO output cannot reach publish."
+    acceptance:
+      - "No PR path runs committed_baseline, full pytest, or Playwright."
+      - "Known paths map deterministically to docs, ui, code, data, and/or governance."
+      - "Known-path additions classify automatically; exact predeclared unknown additions, deletions, and renames run only their category."
+      - "Undeclared, mismatched, stale, missing, or unavailable evidence produces unclassified and no catch-all tests."
+      - "Production build validates range totals/shares and matchup conservation/symmetry/confidence intervals before consumer smoke and packaging."
+      - "Exact merge confirmation accepts only the exact successful targeted job matrix."
+    next: "Complete the accepted task continuously; stop only on failed checks, changed subject, conflict, permission blocker, or scope expansion."
+
+  - id: "GOV-07-SNAPSHOT-RETIREMENT"
+    name: "Retire byte-level snapshot tax"
+    status: "planned_not_authorized"
+    depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"]
+    problem: "Committed baselines report every legitimate byte change as the same red signal as a defect and require manual regeneration."
+    solution: "Classify recent baseline failures, preserve only unique semantic protection, then remove committed_baseline tests and oversized inline classifier fixtures."
+    effect: "Legitimate output evolution no longer creates baseline maintenance work."
+
+  - id: "GOV-08-MINIMAL-TESTSET-REBUILD"
+    name: "Rebuild the retained test set from zero"
+    status: "planned_not_authorized"
+    depends_on: ["GOV-07-SNAPSHOT-RETIREMENT"]
+    problem: "The ordinary suite accumulated tests without a current purpose/trigger inventory."
+    solution: "Retain only schema, output/privacy invariants, and one tiny fixture smoke per supported CLI; document each trigger and remove duplicate coverage."
+    effect: "Every retained test has one named risk and the smallest fixture that proves it."
+
+  - id: "GOV-09-UI-ACCEPTANCE-CONTRACT"
+    name: "Make owner browser review the UI acceptance record"
+    status: "planned_not_authorized"
+    depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"]
+    problem: "Automated browser reruns duplicate detailed owner review and previously missed real mobile navigation defects."
+    solution: "Use syntax/model smoke before review, record the owner-reviewed immutable commit, and do not rerun Playwright after acceptance; keep one generated-page smoke only at the publish output gate."
+    effect: "UI work is checked where defects are visible without paying for duplicate post-review automation."
+
+  - id: "GOV-10-PRODUCTION-EVIDENCE-REUSE"
+    name: "Stop retesting validated production commits"
+    status: "planned_not_authorized"
+    depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER", "GOV-08-MINIMAL-TESTSET-REBUILD"]
+    problem: "Scheduled build, bot push CI, and Pages can repeat evidence for the same generated subject."
+    solution: "Bind publication and bot admission to immutable build evidence, make unchanged inputs produce unchanged bytes, and verify only SHA, HTTP availability, and required resources after deployment."
+    effect: "One candidate is validated once before publication; downstream stages reuse that evidence."
+
+  - id: "GOV-11-LIVE-DOCUMENT-SLIMMING"
+    name: "Keep live governance documents small"
+    status: "planned_not_authorized"
+    depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"]
+    problem: "ROADMAP and mandatory reading contain completed history that consumes time and context every task."
+    solution: "Move completed detail to docs/history, keep current/future objectives and acceptance only, and require the same archive step at every completion."
+    effect: "Agents read only current state and relevant future work; ROADMAP no longer grows without bound."
+
+  - id: "GOV-12-OPERATIONS-AND-PRIVACY-CLOSEOUT"
+    name: "Add the missing low-cost operational guards"
+    status: "planned_not_authorized"
+    depends_on: ["GOV-08-MINIMAL-TESTSET-REBUILD"]
+    problem: "HMAC recovery, suppression enforcement, and failure recovery are not one executable contract."
+    solution: "Document key recovery/rotation, add a non-public suppression list enforced at output, and create a short production recovery runbook."
+    effect: "Privacy and recovery promises become executable without adding PR-wide testing."
+
+  - id: "GOV-13-BOUNDED-MAINTENANCE-AUTHORITY"
+    name: "Avoid a full authorization cycle for routine maintenance"
+    status: "planned_not_authorized"
+    depends_on: ["GOV-11-LIVE-DOCUMENT-SLIMMING"]
+    problem: "Routine dependency and CI maintenance repeatedly pays the same governance setup cost."
+    solution: "Define a narrow standing local-maintenance contract with prohibited changes, audit requirements, and the same acceptance-continuation stop conditions."
+    effect: "Safe maintenance can start promptly while product, statistics, credentials, and remote actions remain owner-gated."

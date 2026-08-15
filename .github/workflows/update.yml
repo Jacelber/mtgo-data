@@ -412,6 +412,9 @@ jobs:
       - name: Validate generated JSON schemas
         run: python -B validate_schemas.py
 
+      - name: Validate value-independent output invariants
+        run: python -B validate_output_invariants.py
+
       - name: Validate generated consumer contracts
         run: python -B -m pytest tests/test_generated_consumer_contracts.py
 
