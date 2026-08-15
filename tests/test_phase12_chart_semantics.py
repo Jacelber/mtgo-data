@@ -5,6 +5,11 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 
+RETAINED_DORMANT_IDENTITIES = {
+    "standard": {"izzet-fling"},
+    "modern": set(),
+}
+
 
 def _visual_metadata() -> dict:
     script = """
@@ -102,6 +107,7 @@ def test_composition_uses_approved_card_pair_without_rendering_card_names() -> N
             "azorius-prison": ("High Noon", "Avatar's Wrath"),
             "dimir-excruciator": ("Doomsday Excruciator", "Deceit"),
             "izzet-fling": ("Callous Sell-Sword", "Slickshot Show-Off"),
+            "leyline-aggro": ("Leyline of Resonance", "Wild Ride"),
             "izzet-prowess": ("Boomerang Basics", "Stormchaser's Talent"),
             "izzet-spellementals": ("Sunderflock", "Hearth Elemental"),
             "jeskai-lessons": ("Jeskai Revelation", "Accumulate Wisdom"),
@@ -149,7 +155,10 @@ def test_composition_uses_approved_card_pair_without_rendering_card_names() -> N
     }
     for format_name, identities in expected.items():
         assert set(metadata["representativeCards"][format_name]) == set(identities)
-        assert set(identities) == _composition_identities(format_name)
+        assert set(identities) == (
+            _composition_identities(format_name)
+            | RETAINED_DORMANT_IDENTITIES[format_name]
+        )
         for identity, card_names in identities.items():
             slots = metadata["representativeCards"][format_name][identity]
             assert len(slots) == 2
@@ -187,8 +196,9 @@ def test_mana_identity_covers_every_rendered_identity_without_inference() -> Non
     ]
     assert metadata["manaIdentities"]["modern"]["fling-goyf"] == ["r", "g"]
     for format_name in ("standard", "modern"):
-        assert set(metadata["manaIdentities"][format_name]) == _rendered_identities(
-            format_name
+        assert set(metadata["manaIdentities"][format_name]) == (
+            _rendered_identities(format_name)
+            | RETAINED_DORMANT_IDENTITIES[format_name]
         )
     assert "assets/images/mana/${color}.svg" in mtgo
     assert "MANA_IDENTITIES[state.format]?.[identityId]" in mtgo

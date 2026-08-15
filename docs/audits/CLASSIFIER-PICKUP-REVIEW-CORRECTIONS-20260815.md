@@ -96,3 +96,27 @@ hierarchy, metadata, strict reports, catalog, and indexed W30-W32 Top 8 files
 were rebuilt once. Event `434455` classification and derived closure were
 rebuilt once, while its normalized event stayed byte-identical at SHA-256
 `0b4296a9573a4facf4cfde1ce98569156f78fde6f5d2a1d3d662b54e2889e710`.
+
+## PR 211 browser repair
+
+The first complete CI run on head `46809db` started Chromium successfully and
+executed all 79 production-page tests. Seventy-eight passed. The only failure
+was the newly visible `leyline-aggro` composition segment, which crossed the
+fixed 3% display threshold after the accepted reclassification but had no
+owner-approved representative-card mapping. This was not a browser-startup or
+timeout failure.
+
+The Owner selected `Leyline of Resonance` as card 1 and `Wild Ride` as card 2.
+The repaired head adds their local 626 by 457 Scryfall art crops and the exact
+manual metadata entry, plus the already accepted `leyline-aggro/izzet` U/R mana
+identity. It changes no threshold, classification, statistic, interaction, or
+public path. Because this is a new code head, it requires its own first complete
+CI run; the failed `46809db` workflow is not rerun.
+
+The two focused metadata tests on the repaired local tree then identified one
+separate expected lifecycle state: `izzet-fling` is no longer rendered in the
+current 1-, 4-, or 12-week window, but its previously approved manual mana and
+card mapping must not be deleted automatically. The test closure now expresses
+the exact union of currently visible identities and the explicitly retained
+dormant `izzet-fling` identity. The two diagnosed nodes were not rerun locally
+under the Owner's no-rerun rule.

@@ -54,6 +54,7 @@ const manaIdentities = Object.freeze({
     "jeskai-lessons": Object.freeze(["w", "u", "r"]),
     "jeskai-tablet": Object.freeze(["w", "u", "r"]),
     "kona-omniscience/temur": Object.freeze(["u", "r", "g"]),
+    "leyline-aggro/izzet": Object.freeze(["u", "r"]),
     "mardu-discard": Object.freeze(["w", "b", "r"]),
     "mono-black-aggro": Object.freeze(["b"]),
     "mono-black-demons": Object.freeze(["b"]),
@@ -274,6 +275,10 @@ const representativeCards = Object.freeze({
     "izzet-fling": Object.freeze([
       Object.freeze({ name: "Callous Sell-Sword", image: "../images/representative-cards/standard/callous-sell-sword.jpg" }),
       Object.freeze({ name: "Slickshot Show-Off", image: "../images/representative-cards/standard/slickshot-show-off.jpg" }),
+    ]),
+    "leyline-aggro": Object.freeze([
+      Object.freeze({ name: "Leyline of Resonance", image: "../images/representative-cards/standard/leyline-of-resonance.jpg" }),
+      Object.freeze({ name: "Wild Ride", image: "../images/representative-cards/standard/wild-ride.jpg" }),
     ]),
     "izzet-prowess": Object.freeze([
       Object.freeze({ name: "Boomerang Basics", image: "../images/representative-cards/standard/boomerang-basics.jpg" }),
