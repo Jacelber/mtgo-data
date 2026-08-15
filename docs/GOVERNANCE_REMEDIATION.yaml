@@ -95,7 +95,7 @@ tasks:
 
   - id: "GOV-09-UI-ACCEPTANCE-CONTRACT"
     name: "Make owner browser review the UI acceptance record"
-    status: "owner_accepted_completion_authorized"
+    status: "completed_merged_and_deployed"
     depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"]
     problem: "Automated browser reruns duplicate detailed owner review and previously missed real mobile navigation defects."
     solution: "Run only the path-relevant matchup-model or runtime Node check before review, make Owner browser review final, bind the PR to the reviewed user-visible blob digest, retire nine high-maintenance browser/preflight files, and keep exactly two rendering smokes at the publication output gate."
@@ -107,14 +107,23 @@ tasks:
       - "The retained matchup-model and runtime Node checks run only for their named logic changes, once before Owner review."
       - "Exactly nine declared browser/preflight files are removed and no file is added or renamed."
       - "The output gate retains exactly one MTGO and one Melee real-number rendering smoke."
+    completion: "Published through PR 216 and merge commit 3ff9549e8fab9776f7a150ebf0cee6a6db85edd4."
 
   - id: "GOV-10-PRODUCTION-EVIDENCE-REUSE"
     name: "Stop retesting validated production commits"
-    status: "planned_not_authorized"
+    status: "owner_accepted_same_task_completion_authorized"
     depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER", "GOV-08-MINIMAL-TESTSET-REBUILD"]
     problem: "Scheduled build, bot push CI, and Pages can repeat evidence for the same generated subject."
-    solution: "Bind publication and bot admission to immutable build evidence, make unchanged inputs produce unchanged bytes, and verify only SHA, HTTP availability, and required resources after deployment."
+    solution: "Hash the post-fetch generation subject, skip every downstream test and publication stage when it is unchanged, bind a changed subject's validated artifact to its producer run and generated commit, path-filter ordinary Pages pushes, and perform only exact evidence admission plus three availability requests downstream."
     effect: "One candidate is validated once before publication; downstream stages reuse that evidence."
+    acceptance:
+      - "An unchanged generation-subject digest skips baseline smoke, build, candidate validation, packaging, publication, and Pages."
+      - "A changed candidate records one generation-subject digest and one validated-output digest and carries them unchanged through publication."
+      - "The generated commit uniquely records producer run, attempt, source commit, generation subject, and validated output."
+      - "Production Pages admission verifies exact commit ancestry, trailers, producer jobs, artifact digest, and published bytes without rerunning candidate tests."
+      - "Governance, tests, and other non-site master changes do not trigger Pages."
+      - "Post-deploy confirmation requests only index.html, melee/index.html, and stats/catalog.json with bounded retry."
+      - "Manual or recovery dispatch with no production evidence remains distinct; partial evidence fails closed."
 
   - id: "GOV-11-LIVE-DOCUMENT-SLIMMING"
     name: "Keep live governance documents small"

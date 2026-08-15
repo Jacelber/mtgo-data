@@ -4132,8 +4132,9 @@ contract, and focused live-document and CI-control contracts. Delete the other
 91 Python test files. Keep frozen fixture evidence and the current JavaScript
 and browser assets unchanged.
 
-Production pre-fetch jobs select only the CLI and privacy nodes required by
-that workflow. Public Schema, candidate-boundary, value-independent output,
+Production jobs select only the CLI and privacy nodes required by that
+workflow, and the MTGO CLI baseline runs only when the post-fetch generation
+subject requires a build. Public Schema, candidate-boundary, value-independent output,
 consumer, and generated-page checks remain after generation at the only gate
 that protects the publishable candidate. No workflow runs unbounded pytest.
 
@@ -4144,3 +4145,43 @@ The retained set proves entry-point viability, privacy, candidate structure,
 self-consistency, and consumability; it does not promise that every internal
 function behaves like an earlier implementation. The complete live trigger
 inventory is `docs/TEST_TRIGGER_MATRIX.md`.
+
+---
+
+# DEC-097 - Reuse immutable production evidence through publication
+
+Status: `Accepted`
+
+## Context
+
+The production candidate already receives the expensive validation at the only
+gate that can prevent bad public data. Rebuilding or retesting that same subject
+after the generated commit is pushed does not add evidence. Pages also ran for
+every `master` push even when the changed files could not enter the static site.
+
+## Decision
+
+Compute one deterministic SHA-256 over the post-fetch generation subject. When
+it equals the latest published generation-subject trailer, retain the published
+bytes and skip the CLI baseline, generation, validation, packaging, publication,
+and Pages stages. When it changes, build and validate one candidate, package its
+output once, and bind the subject digest, output digest, producer run and attempt,
+source commit, and publication commit through artifact metadata, commit trailers,
+and the explicit Pages dispatch.
+
+Pages admits a production dispatch only after confirming the exact producer
+jobs, commit ancestry and trailers, artifact digest, and equality between the
+validated artifact and published bytes. Those are identity checks, not another
+candidate test. Ordinary `master` pushes trigger Pages only for allowlisted site
+inputs. After deploy, check only the two public entry points and public catalog
+for HTTP availability. Keep an evidence-free, explicitly authorized manual or
+recovery dispatch; reject partially supplied production evidence.
+
+## Consequences
+
+One generation subject pays for candidate validation once. Unchanged scheduled
+runs and non-site merges cannot cause repeated testing or deployment. Pages
+still fails closed if publication evidence is stale, incomplete, ambiguous, or
+byte-inconsistent, while recovery remains possible without pretending to be a
+production publication. Product statistics, Schemas, public URLs, source
+selection, and visible UI are unchanged.

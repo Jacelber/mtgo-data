@@ -5,6 +5,8 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github" / "workflows" / "ci.yml"
+UPDATE_WORKFLOW = ROOT / ".github" / "workflows" / "update.yml"
+PAGES_WORKFLOW = ROOT / ".github" / "workflows" / "pages.yml"
 PRODUCTION_WORKFLOWS = (
     ROOT / ".github" / "workflows" / "update.yml",
     ROOT / ".github" / "workflows" / "fetch_melee.yml",
@@ -145,3 +147,84 @@ def test_production_pytest_commands_are_explicit_and_external_temped():
     assert all("tests/" in command for command in commands)
     assert all("--basetemp=" in command for command in commands)
     assert not any(command.strip() in {"python -m pytest", "python -B -m pytest"} for command in commands)
+
+
+def test_production_candidate_is_built_once_and_published_with_immutable_evidence():
+    workflow = yaml.load(
+        UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
+    )
+    fetch = workflow["jobs"]["fetch"]
+    baseline = workflow["jobs"]["baseline"]
+    build = workflow["jobs"]["build"]
+    publish = workflow["jobs"]["publish"]
+    assert "generation-needed" in fetch["outputs"]
+    assert baseline["needs"] == "fetch"
+    assert "generation-needed" in baseline["if"]
+    assert "generation-needed" in build["if"]
+    assert set(build["outputs"]) == {
+        "generation-subject-sha256",
+        "validated-output-sha256",
+    }
+    commands = "\n".join(
+        step.get("run", "")
+        for job in (fetch, build, publish)
+        for step in job["steps"]
+    )
+    for required in (
+        "Generation-Subject-SHA256",
+        "Validated-Output-SHA256",
+        "Production-Run",
+        "Production-Attempt",
+        "Production-Source",
+        "--allow-empty",
+        "--sort=name",
+        "generation-subject.txt",
+    ):
+        assert required in commands
+    dispatch = next(
+        step
+        for step in publish["steps"]
+        if step["name"] == "Dispatch Pages deployment for published data"
+    )
+    script = dispatch["with"]["script"]
+    for required in (
+        "publication_commit",
+        "producer_run_id",
+        "producer_run_attempt",
+        "source_commit",
+        "generation_subject_sha256",
+        "validated_output_sha256",
+    ):
+        assert required in script
+
+
+def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
+    workflow = yaml.load(
+        PAGES_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
+    )
+    push_paths = set(workflow["on"]["push"]["paths"])
+    assert {"index.html", "melee/**", "stats/**", "data/**"} <= push_paths
+    assert not ({"docs/**", "tests/**", ".github/workflows/ci.yml"} & push_paths)
+    assert set(workflow["on"]["workflow_dispatch"]["inputs"]) == {
+        "publication_commit",
+        "producer_run_id",
+        "producer_run_attempt",
+        "source_commit",
+        "generation_subject_sha256",
+        "validated_output_sha256",
+    }
+    build = workflow["jobs"]["build"]
+    assert build["permissions"] == {"actions": "read", "contents": "read"}
+    commands = "\n".join(step.get("run", "") for step in build["steps"])
+    for required in (
+        "--verify-production-evidence",
+        "published-output.tar",
+        "Validated output contains a path outside the production boundary",
+    ):
+        assert required in commands
+    assert all(token not in commands for token in ("pytest", "playwright", "node --test"))
+    deploy_commands = "\n".join(
+        step.get("run", "") for step in workflow["jobs"]["deploy"]["steps"]
+    )
+    for resource in ("index.html", "melee/index.html", "stats/catalog.json"):
+        assert resource in deploy_commands

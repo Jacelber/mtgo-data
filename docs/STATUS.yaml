@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/gov-09-ui-acceptance-contract"
-  working_branch_status: "owner_accepted_completion_authorized"
+  current_working_branch: "codex/gov-10-production-evidence-reuse"
+  working_branch_status: "owner_accepted_same_task_completion_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -72,57 +72,37 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-09-UI-ACCEPTANCE-CONTRACT"
-  name: "Make Owner browser review the UI acceptance record"
-  status: "owner_accepted_completion_authorized"
+  id: "GOV-10-PRODUCTION-EVIDENCE-REUSE"
+  name: "Stop retesting validated production commits"
+  status: "owner_accepted_same_task_completion_authorized"
   authorized_on: "2026-08-15"
   owner_accepted_on: "2026-08-15"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-09-ui-acceptance-contract-20260815-01"
-  branch: "codex/gov-09-ui-acceptance-contract"
-  base_commit: "ddf10e30d890379a288c52b1ade9837e15bf95c5"
-  task_type: "local_ui_acceptance_governance"
-  artifact_impact: "none"
-  objective: "Make the Owner-reviewed UI subject the final UI evidence and retire duplicate browser reruns while retaining two publication rendering smokes."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-10-production-evidence-reuse-20260815-01"
+  branch: "codex/gov-10-production-evidence-reuse"
+  base_commit: "3ff9549e8fab9776f7a150ebf0cee6a6db85edd4"
+  task_type: "local_production_evidence_governance"
+  artifact_impact: "public_path"
+  objective: "Validate one production candidate once, bind publication and Pages to its immutable evidence, and eliminate unrelated Pages deployments."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - ".github/pull_request_template.md"
-    - ".github/workflows/ci.yml"
+    - ".github/workflows/update.yml"
+    - ".github/workflows/pages.yml"
     - "ci_master_admission.py"
-    - "package.json"
-    - "tests/browser/production-pages.spec.js"
-    - "tests/js/phase8-matchup-model.test.js"
-    - "tests/js/phase8-runtime.test.js"
     - "tests/test_ci_master_admission.py"
     - "tests/test_ci_workflow.py"
     - "docs/DEVELOPMENT_WORKFLOW.md"
+    - "docs/TEST_TRIGGER_MATRIX.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
     - "docs/GOVERNANCE_REMEDIATION.yaml"
     - "docs/STATUS.yaml"
-    - "docs/TEST_TRIGGER_MATRIX.md"
-    - "tests/browser/accessibility.spec.js"
-    - "tests/browser/browser-preflight-cli.js"
-    - "tests/browser/browser-preflight.js"
-    - "tests/browser/card-preview.spec.js"
-    - "tests/browser/loading-retry.spec.js"
-    - "tests/browser/mobile-lists.spec.js"
-    - "tests/browser/url-state.spec.js"
-    - "tests/browser/view-lazy-loading.spec.js"
-    - "tests/js/browser-preflight.test.js"
   planned_file_operations:
     additions: []
-    deletions:
-      - "delete|ui|tests/browser/accessibility.spec.js"
-      - "delete|ui|tests/browser/browser-preflight-cli.js"
-      - "delete|ui|tests/browser/browser-preflight.js"
-      - "delete|ui|tests/browser/card-preview.spec.js"
-      - "delete|ui|tests/browser/loading-retry.spec.js"
-      - "delete|ui|tests/browser/mobile-lists.spec.js"
-      - "delete|ui|tests/browser/url-state.spec.js"
-      - "delete|ui|tests/browser/view-lazy-loading.spec.js"
-      - "delete|ui|tests/js/browser-preflight.test.js"
+    deletions: []
     renames: []
   protected_scope:
     product_code_changed: "none"
@@ -130,45 +110,39 @@ current_task:
     statistical_behavior_changed: "none"
     schema_changed: "none"
     frontend_source_changed: "none"
-    public_paths_changed: "none"
+    public_urls_changed: "none"
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Bind future user-visible UI acceptance to a digest of changed user-visible files."
-    - "Remove the exact nine declared browser/preflight test files."
-    - "Reduce production-pages.spec.js to one MTGO and one Melee rendering smoke."
-    - "Keep matchup-model and runtime Node checks as path-triggered pre-review checks."
+    - "Bind the validated-output digest, production run, source commit, and published commit."
+    - "Skip regeneration and publication when the generation-subject digest is unchanged."
+    - "Require exact production evidence on the publisher's Pages dispatch."
+    - "Limit automatic Pages push runs to site-input paths and add minimal post-deploy availability checks."
   validation_plan:
-    - "Run the two rewritten publication rendering smokes once on the final local tree."
-    - "Run focused UI-acceptance admission/workflow nodes once only in PR CI, not locally."
+    - "During local implementation, use static workflow and diff review only."
+    - "Run production-evidence admission/workflow control nodes once only in PR CI, not locally."
     - "Run the focused live-status structure check once on the final local tree."
-    - "Use static inventory and diff checks for the exact nine deletions."
-    - "Do not run full pytest, retired browser suites, all-viewports/languages/products, generators, live fetch, production, or deployment."
-  validation_evidence:
-    publication_rendering_smokes: "Two passed in 3.3 seconds: one MTGO and one Melee real-number render."
-    live_status_structure: "Four focused nodes passed in 0.10 seconds after recording Owner acceptance."
-    file_operations: "Nine exact deletions, zero additions, and zero renames; git diff --check reported no errors."
-    intentionally_not_run: "Full pytest, retired browser suites, all viewport/language/product combinations, generators, live fetch, production, and deployment."
+    - "Do not run full pytest, generators, Playwright, Node UI tests, live fetch, production, or deployment."
   prohibited_changes:
-    - "Do not change product UI code, behavior, data, statistics, Schema, or public paths."
-    - "Do not add files or rename paths."
-    - "Stop on failed CI, a changed user-visible subject, conflict, permission blocker, or scope expansion."
-    - "Do not begin GOV-10, another governance task, P12-10, or product development."
-  stop_point: "Complete this accepted task continuously under DEC-094; stop before any later task or production action."
+    - "Do not change product UI, statistics, Schema, generated data, public URLs, source selection, or event configuration."
+    - "Do not add, delete, or rename files."
+    - "Do not commit, push, create a pull request, merge, dispatch production, or deploy before Owner acceptance."
+    - "Do not begin GOV-11, another governance task, P12-10, or product development."
+  stop_point: "Complete the accepted task through Ready PR, required CI, merge, and applicable Pages; stop on failed checks, changed scope, conflict, or permission blocker."
 
 
 
 recent_completion_handoff:
-  id: "GOV-08A-GITHUB-AUTH-SINGLE-ENTRYPOINT"
-  name: "Make repository preflight the only GitHub credential verdict"
+  id: "GOV-09-UI-ACCEPTANCE-CONTRACT"
+  name: "Make Owner browser review the UI acceptance record"
   status: "completed_merged_and_deployed"
-  pull_request: 215
-  merge_commit: "ddf10e30d890379a288c52b1ade9837e15bf95c5"
-  note: "The repository preflight is the only GitHub credential-verdict entry point; GitHub and Git retain publication evidence."
+  pull_request: 216
+  merge_commit: "3ff9549e8fab9776f7a150ebf0cee6a6db85edd4"
+  note: "Owner browser review is final UI evidence; GitHub and Git retain publication evidence."
 
 current_repository_state:
-  baseline_commit: "ddf10e30d890379a288c52b1ade9837e15bf95c5"
-  baseline_note: "Verified remote master after PR 215; used as the GOV-09 base."
+  baseline_commit: "3ff9549e8fab9776f7a150ebf0cee6a6db85edd4"
+  baseline_note: "Verified remote master after PR 216; used as the GOV-10 base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -260,7 +234,7 @@ next_approved_task:
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "GOV-09 completion is authorized. No later task is authorized by that acceptance."
+  note: "GOV-10 is Owner-accepted for same-task completion; no follow-up task is authorized."
 
 governance_baseline:
   status: "active_on_master"
@@ -297,7 +271,7 @@ publication_workflow_control:
   p8_08_authorized: false
 
 prohibited_next_actions:
-  - "Do not begin GOV-10, GOV-11, GOV-12, GOV-13, P12-10, or other product development without separate owner authorization."
+  - "Do not begin GOV-11, GOV-12, GOV-13, P12-10, or other product development after GOV-10 completion without separate owner authorization."
   - "Do not recalculate the accepted Landing shadow or change the approved 3%, 5pp, or 20 thresholds."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."

@@ -16,6 +16,7 @@ from ci_master_admission import (
     owner_ui_subject_digest,
     validation_class_step,
     validation_subject_step,
+    verify_production_evidence,
 )
 
 
@@ -23,6 +24,12 @@ REPOSITORY_API = "https://api.github.test/repos/owner/repo"
 BASE_SHA = "a" * 40
 HEAD_SHA = "b" * 40
 MERGE_SHA = "c" * 40
+PRODUCTION_SOURCE_SHA = "d" * 40
+PRODUCTION_COMMIT_SHA = "e" * 40
+GENERATION_SUBJECT_SHA256 = "a" * 64
+VALIDATED_OUTPUT_SHA256 = "b" * 64
+PRODUCTION_RUN_ID = 4321
+PRODUCTION_RUN_ATTEMPT = 2
 
 
 def _event(body="<!-- artifact-impact: none -->", action="synchronize", changes=None):
@@ -399,3 +406,116 @@ def test_workflow_dispatch_stops_for_explicit_classification(monkeypatch):
     monkeypatch.setenv("GITHUB_EVENT_NAME", "workflow_dispatch")
     decision = decide_from_environment()
     assert decision.mode == "unclassified"
+
+
+def _production_responses():
+    repository_api = "https://api.github.test/repos/owner/repo"
+    message = "\n".join(
+        [
+            "chore: update MTGO production data",
+            "",
+            f"Production-Run: {PRODUCTION_RUN_ID}",
+            f"Production-Attempt: {PRODUCTION_RUN_ATTEMPT}",
+            f"Production-Source: {PRODUCTION_SOURCE_SHA}",
+            f"Generation-Subject-SHA256: {GENERATION_SUBJECT_SHA256}",
+            f"Validated-Output-SHA256: {VALIDATED_OUTPUT_SHA256}",
+        ]
+    )
+    jobs = [
+        {"name": "Verify clean MTGO production baseline", "conclusion": "success"},
+        {"name": "Fetch MTGO candidate data", "conclusion": "success"},
+        {"name": "Build and validate MTGO candidate", "conclusion": "success"},
+        {
+            "name": "Publish validated MTGO data",
+            "status": "in_progress",
+            "conclusion": None,
+        },
+    ]
+    return {
+        f"{repository_api}/commits/master": {"sha": PRODUCTION_COMMIT_SHA},
+        f"{repository_api}/commits/{PRODUCTION_COMMIT_SHA}": {
+            "parents": [{"sha": PRODUCTION_SOURCE_SHA}],
+            "commit": {"message": message},
+        },
+        f"{repository_api}/actions/runs/{PRODUCTION_RUN_ID}": {
+            "id": PRODUCTION_RUN_ID,
+            "run_attempt": PRODUCTION_RUN_ATTEMPT,
+            "head_sha": PRODUCTION_SOURCE_SHA,
+            "event": "schedule",
+            "path": ".github/workflows/update.yml",
+            "status": "in_progress",
+            "conclusion": None,
+        },
+        (
+            f"{repository_api}/actions/runs/{PRODUCTION_RUN_ID}/attempts/"
+            f"{PRODUCTION_RUN_ATTEMPT}/jobs?per_page=100"
+        ): {"total_count": len(jobs), "jobs": jobs},
+    }
+
+
+def _verify_production(responses):
+    return verify_production_evidence(
+        repository="owner/repo",
+        publication_commit=PRODUCTION_COMMIT_SHA,
+        producer_run_id=PRODUCTION_RUN_ID,
+        producer_run_attempt=PRODUCTION_RUN_ATTEMPT,
+        source_commit=PRODUCTION_SOURCE_SHA,
+        generation_subject_sha256=GENERATION_SUBJECT_SHA256,
+        validated_output_sha256=VALIDATED_OUTPUT_SHA256,
+        fetch_json=lambda url: responses[url],
+        api_url="https://api.github.test",
+    )
+
+
+def test_exact_in_progress_production_run_admits_its_published_commit():
+    assert _verify_production(_production_responses()) == (
+        f"verified_production_publication:{PRODUCTION_COMMIT_SHA}:"
+        f"run={PRODUCTION_RUN_ID}:attempt={PRODUCTION_RUN_ATTEMPT}"
+    )
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "master",
+        "parent",
+        "trailer",
+        "run",
+        "build-job",
+        "publish-job",
+    ],
+)
+def test_stale_or_incomplete_production_evidence_stops(mutation):
+    responses = _production_responses()
+    repository_api = "https://api.github.test/repos/owner/repo"
+    if mutation == "master":
+        responses[f"{repository_api}/commits/master"]["sha"] = "f" * 40
+    elif mutation == "parent":
+        responses[f"{repository_api}/commits/{PRODUCTION_COMMIT_SHA}"]["parents"] = [
+            {"sha": "f" * 40}
+        ]
+    elif mutation == "trailer":
+        commit = responses[f"{repository_api}/commits/{PRODUCTION_COMMIT_SHA}"]
+        commit["commit"]["message"] = commit["commit"]["message"].replace(
+            VALIDATED_OUTPUT_SHA256, "f" * 64
+        )
+    elif mutation == "run":
+        responses[f"{repository_api}/actions/runs/{PRODUCTION_RUN_ID}"]["head_sha"] = (
+            "f" * 40
+        )
+    else:
+        jobs_url = (
+            f"{repository_api}/actions/runs/{PRODUCTION_RUN_ID}/attempts/"
+            f"{PRODUCTION_RUN_ATTEMPT}/jobs?per_page=100"
+        )
+        job_name = (
+            "Build and validate MTGO candidate"
+            if mutation == "build-job"
+            else "Publish validated MTGO data"
+        )
+        job = next(
+            item for item in responses[jobs_url]["jobs"] if item["name"] == job_name
+        )
+        job.update({"status": "completed", "conclusion": "failure"})
+    with pytest.raises(ValueError):
+        _verify_production(responses)

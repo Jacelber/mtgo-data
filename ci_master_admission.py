@@ -24,6 +24,7 @@ from urllib.request import Request, urlopen
 
 
 WORKFLOW_PATH = ".github/workflows/ci.yml"
+UPDATE_WORKFLOW_PATH = ".github/workflows/update.yml"
 AGGREGATE_JOB = "Repository validation (Python 3.12)"
 ADMISSION_JOB = "Select PR validation class or exact-merge confirmation"
 TARGETED_JOB = "Targeted PR validation"
@@ -51,6 +52,14 @@ OWNER_UI_ACCEPTANCE_PATTERN = re.compile(
 VALIDATING_ACTIONS = frozenset({"opened", "synchronize", "reopened", "edited"})
 FILES_PER_PAGE = 100
 MAX_PULL_REQUEST_FILES = 3000
+PRODUCTION_SUCCESS_JOBS = frozenset(
+    {
+        "Verify clean MTGO production baseline",
+        "Fetch MTGO candidate data",
+        "Build and validate MTGO candidate",
+    }
+)
+PRODUCTION_PUBLISH_JOB = "Publish validated MTGO data"
 
 
 @dataclass(frozen=True)
@@ -78,6 +87,144 @@ def _fail_safe_reason(exc: Exception) -> str:
         r"[^A-Za-z0-9_.:-]+", "_", f"{type(exc).__name__}:{exc}"
     )[:160]
     return f"fail_safe:{detail}"
+
+
+def _validated_sha(value: object, *, label: str) -> str:
+    if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{40}", value):
+        raise ValueError(f"{label}_invalid")
+    return value
+
+
+def _validated_sha256(value: object, *, label: str) -> str:
+    if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value):
+        raise ValueError(f"{label}_invalid")
+    return value
+
+
+def _single_commit_trailer(message: object, key: str) -> str:
+    if not isinstance(message, str):
+        raise ValueError("production_commit_message_missing")
+    pattern = re.compile(rf"^{re.escape(key)}:\s*(\S+)\s*$", re.MULTILINE)
+    values = pattern.findall(message)
+    if len(values) != 1:
+        label = key.lower().replace("-", "_")
+        raise ValueError(f"production_trailer_{label}_invalid")
+    return values[0]
+
+
+def verify_production_evidence(
+    *,
+    repository: str,
+    publication_commit: str,
+    producer_run_id: int,
+    producer_run_attempt: int,
+    source_commit: str,
+    generation_subject_sha256: str,
+    validated_output_sha256: str,
+    fetch_json: FetchJson,
+    api_url: str = "https://api.github.com",
+) -> str:
+    """Verify that one Pages dispatch names one validated production subject."""
+
+    if not repository:
+        raise ValueError("repository_missing")
+    publication_commit = _validated_sha(
+        publication_commit, label="publication_commit"
+    )
+    source_commit = _validated_sha(source_commit, label="source_commit")
+    generation_subject_sha256 = _validated_sha256(
+        generation_subject_sha256, label="generation_subject_sha256"
+    )
+    validated_output_sha256 = _validated_sha256(
+        validated_output_sha256, label="validated_output_sha256"
+    )
+    if producer_run_id <= 0 or producer_run_attempt <= 0:
+        raise ValueError("producer_run_identity_invalid")
+
+    repository_api = f"{api_url.rstrip('/')}/repos/{repository}"
+    master = fetch_json(f"{repository_api}/commits/master")
+    if not isinstance(master, dict) or master.get("sha") != publication_commit:
+        raise ValueError("publication_commit_is_not_master")
+
+    commit = fetch_json(f"{repository_api}/commits/{quote(publication_commit)}")
+    parents = commit.get("parents") if isinstance(commit, dict) else None
+    if (
+        not isinstance(parents, list)
+        or len(parents) != 1
+        or not isinstance(parents[0], dict)
+        or parents[0].get("sha") != source_commit
+    ):
+        raise ValueError("production_commit_parent_mismatch")
+    message = commit.get("commit", {}).get("message")
+    expected_trailers = {
+        "Production-Run": str(producer_run_id),
+        "Production-Attempt": str(producer_run_attempt),
+        "Production-Source": source_commit,
+        "Generation-Subject-SHA256": generation_subject_sha256,
+        "Validated-Output-SHA256": validated_output_sha256,
+    }
+    for key, expected in expected_trailers.items():
+        if _single_commit_trailer(message, key) != expected:
+            label = key.lower().replace("-", "_")
+            raise ValueError(f"production_trailer_{label}_mismatch")
+
+    run = fetch_json(f"{repository_api}/actions/runs/{producer_run_id}")
+    if not isinstance(run, dict):
+        raise ValueError("producer_run_missing")
+    if (
+        run.get("id") != producer_run_id
+        or run.get("run_attempt") != producer_run_attempt
+        or run.get("head_sha") != source_commit
+        or run.get("event") not in {"schedule", "workflow_dispatch"}
+        or str(run.get("path", "")).split("@", 1)[0] != UPDATE_WORKFLOW_PATH
+    ):
+        raise ValueError("producer_run_subject_mismatch")
+    if run.get("status") == "completed":
+        if run.get("conclusion") != "success":
+            raise ValueError("producer_run_not_successful")
+    elif run.get("status") != "in_progress" or run.get("conclusion") is not None:
+        raise ValueError("producer_run_state_invalid")
+
+    jobs_payload = fetch_json(
+        f"{repository_api}/actions/runs/{producer_run_id}/attempts/"
+        f"{producer_run_attempt}/jobs?per_page=100"
+    )
+    jobs = jobs_payload.get("jobs") if isinstance(jobs_payload, dict) else None
+    total_count = (
+        jobs_payload.get("total_count") if isinstance(jobs_payload, dict) else None
+    )
+    if (
+        not isinstance(jobs, list)
+        or not isinstance(total_count, int)
+        or total_count != len(jobs)
+        or total_count >= 100
+    ):
+        raise ValueError("producer_jobs_missing")
+    by_name: dict[str, list[dict]] = {}
+    for job in jobs:
+        if isinstance(job, dict) and isinstance(job.get("name"), str):
+            by_name.setdefault(job["name"], []).append(job)
+    for name in PRODUCTION_SUCCESS_JOBS:
+        matches = by_name.get(name, [])
+        if len(matches) != 1 or matches[0].get("conclusion") != "success":
+            raise ValueError(f"producer_job_not_successful:{name}")
+    publish_matches = by_name.get(PRODUCTION_PUBLISH_JOB, [])
+    if len(publish_matches) != 1:
+        raise ValueError("producer_publish_job_missing")
+    publish = publish_matches[0]
+    if not (
+        (publish.get("status") == "in_progress" and publish.get("conclusion") is None)
+        or (
+            publish.get("status") == "completed"
+            and publish.get("conclusion") == "success"
+        )
+    ):
+        raise ValueError("producer_publish_job_state_invalid")
+
+    return (
+        f"verified_production_publication:{publication_commit}:"
+        f"run={producer_run_id}:attempt={producer_run_attempt}"
+    )
 
 
 def _parse_artifact_impacts(body: object) -> frozenset[str]:
@@ -800,10 +947,39 @@ def main() -> int:
         metavar="BASE",
         help="print the Owner-accepted UI subject marker for BASE...HEAD",
     )
+    parser.add_argument(
+        "--verify-production-evidence",
+        action="store_true",
+        help="verify the exact production run and published commit from environment",
+    )
     args = parser.parse_args()
 
     if args.owner_ui_marker_from:
         print(owner_ui_marker_from_git(args.owner_ui_marker_from))
+        return 0
+    if args.verify_production_evidence:
+        try:
+            result = verify_production_evidence(
+                repository=os.environ.get("GITHUB_REPOSITORY", ""),
+                publication_commit=os.environ.get("PRODUCTION_COMMIT", ""),
+                producer_run_id=int(os.environ.get("PRODUCTION_RUN_ID", "0")),
+                producer_run_attempt=int(
+                    os.environ.get("PRODUCTION_RUN_ATTEMPT", "0")
+                ),
+                source_commit=os.environ.get("PRODUCTION_SOURCE_COMMIT", ""),
+                generation_subject_sha256=os.environ.get(
+                    "GENERATION_SUBJECT_SHA256", ""
+                ),
+                validated_output_sha256=os.environ.get(
+                    "VALIDATED_OUTPUT_SHA256", ""
+                ),
+                fetch_json=github_fetcher(os.environ.get("GITHUB_TOKEN", "")),
+                api_url=os.environ.get("GITHUB_API_URL", "https://api.github.com"),
+            )
+        except Exception as exc:
+            print(_fail_safe_reason(exc))
+            return 1
+        print(result)
         return 0
 
     decision = decide_from_environment()
