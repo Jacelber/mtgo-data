@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/production-timeout-failfast"
-  working_branch_status: "owner_accepted_conditional_publication_merge_production_and_rehearsal_authorized"
+  current_working_branch: "codex/p12-10-classifier-corrections"
+  working_branch_status: "local_complete_pending_owner_acceptance"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -72,75 +72,94 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "OPS-MTGO-PRODUCTION-TIMEOUT-FAILFAST-20260815"
-  name: "MTGO production timeout and repeated-failure repair"
-  status: "owner_accepted_conditional_publication_merge_production_and_rehearsal_authorized"
+  id: "CLASSIFIER-PICKUP-REVIEW-CORRECTIONS-20260815"
+  name: "Pickup review classifier corrections"
+  status: "publication_authorized_pending_commit"
   authorized_on: "2026-08-15"
   implementation_completed_on: "2026-08-15"
   owner_accepted_on: "2026-08-15"
   publication_authorized_on: "2026-08-15"
-  production_dispatch_authorized_on: "2026-08-15"
-  rehearsal_after_success_authorized_on: "2026-08-15"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/production-timeout-failfast-20260815-01"
-  branch: "codex/production-timeout-failfast"
-  base_commit: "b01ec998f4d9f36728589d26871cb38de4f6f015"
-  task_type: "local_production_reliability_hotfix"
-  artifact_impact: "internal_diagnostics"
-  objective: "Prevent the complete clean baseline from consuming the live-fetch timeout budget and stop repeated event-format waits after a known shared MTGO listing failure, without removing validation or dispatching production."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-10-classifier-corrections-20260815-01"
+  branch: "codex/p12-10-classifier-corrections"
+  base_commit: "64ff4113061900e06d3fd69ac93fd81de1aff025"
+  task_type: "local_shared_classifier_correction"
+  artifact_impact: "internal_diagnostics, statistical_json_structure"
+  objective: "Correct the two Owner-identified W32 classifier errors, audit every current and frozen classification impact, and prepare affected-only Pickup review reflow without changing accepted Landing thresholds."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - ".github/workflows/update.yml"
-    - "docs/audits/MTGO-PRODUCTION-TIMEOUT-FAILFAST-20260815.md"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DECISIONS.md"
-    - "docs/ROADMAP.md"
+    - "my_archetypes/standard.yaml"
+    - "my_archetypes/modern.yaml"
+    - "configs/classifier_semantic_features.yaml"
+    - "tests/test_classifier_review_corrections.py"
+    - "tests/test_classifier_r5_production.py"
+    - "tests/test_validate_schemas.py"
+    - "tests/fixtures/melee/434455_compatibility_manifest.json"
+    - "schemas/melee-compatibility-manifest.schema.json"
+    - "tools/build_classifier_r5_production_rules.py"
+    - "docs/audits/CLASSIFIER-PICKUP-REVIEW-CORRECTIONS-20260815.md"
     - "docs/STATUS.yaml"
-    - "tests/test_production_workflow.py"
-    - "tests/test_documentation_history.py"
+    - "docs/ROADMAP.md"
+    - "docs/DECISIONS.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "stats/standard/mtgo"
+    - "stats/modern/mtgo"
+    - "stats/modern/melee"
+    - "stats/catalog.json"
+    - "reports/standard/mtgo"
+    - "reports/modern/mtgo"
+    - "data/modern/melee/classifications/434455.json"
+    - "data/modern/melee/opportunities/434455.json"
   protected_scope:
-    code_changed: "Production workflow orchestration only"
-    classifier_rule_changed: "none"
-    workflow_changed: "Separate clean baseline and fetch jobs; stop repeated same-source event waits after first failure"
-    raw_or_generated_data_changed: "none"
-    statistical_behavior_changed: "none"
-    schema_changed: "none"
+    code_changed: "Shared classifier rules, reviewed semantic features, exact regression and impact audit only"
+    classifier_rule_changed: "Standard Leyline/Izzet overlap and Modern Broodscale Gruul versus Mono-Green boundary only"
+    workflow_changed: "none"
+    raw_or_generated_data_changed: "No raw data; only existing affected classification-derived artifacts may be regenerated"
+    statistical_behavior_changed: "Only identities and derived aggregates caused by the two accepted classifier corrections"
+    schema_changed: "Event 434455 compatibility-manifest Schema constant advanced from 1.4.0 to 1.5.0"
     frontend_source_changed: "none"
     public_paths_changed: "none"
     event_434455_source_bytes_changed: false
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Move the unchanged complete clean-checkout pytest suite to a read-only baseline job that must succeed before live fetch."
-    - "Give fetch an independent timeout budget and stop remaining official event-format operations after the first shared-source failure while retaining independent Videre attempts."
-    - "Preserve least privilege, immutable trigger SHA, checkpoint recovery, build and publish gates, and failure-stage reporting."
-    - "Add focused structural regression tests and authoritative operational documentation."
+    - "Preserve every existing parent, subtype, and rule ID and keep explicit priorities and diagnostics."
+    - "Add one explicit Standard Leyline-style Izzet shell rule and adjust only the priority required to win the accepted overlap."
+    - "Recognize the reviewed Modern deck's exact red-producing lands in the semantic manifest and use the shared main-red-source marker for Broodscale Gruul and Mono-Green."
+    - "Audit all current and frozen Standard and Modern decks plus retained Modern Tabletop event 434455."
+    - "Regenerate only existing affected classifier-derived artifacts without fetching source data."
   validation_evidence:
-    incident: "Run 31838657545 passed 966 tests in 28m51s, then exhausted about 15m43s on five MTGO listing attempts and hit the 45-minute job timeout after Legacy began"
-    prior_success: "Run 31742869239 completed ordinary live collection in about two minutes after its clean baseline"
-    focused_pytest: "All 21 workflow-contract tests passed once; the one documentation node failed only on a known line-break string expectation and passed when that failed node alone was rerun"
-    actionlint: "Not available from the repository-declared local environment; remains a required one-time complete-PR-CI check"
-    ruff: "Both changed Python test files passed once"
-    browser_validation: "Not applicable because no UI or public consumer changed"
+    exact_deck_regression: "Eight new exact-deck and boundary cases passed once."
+    complete_impact: "Current Standard transitions are 84 Izzet Fling and one actual-Leyline Izzet Prowess to Leyline Aggro/Izzet; frozen counts are 56 and one. Current and frozen Modern transition 157 and 117 Mono-Green Broodscale decks to Gruul; event 434455 transitions 12. No other identity, conflict, invalid, or residual-subtype change occurred."
+    known_controlled_exception: "The complete-impact node stopped after its Standard allowlist omitted the one actual-Leyline Prowess transition; the assertion was corrected after diagnosis and was not rerun under Owner policy. The still-unexecuted Modern and event portions completed directly once."
+    affected_pytest: "Five rule rebuild, semantic manifest, prior Spellementals, and rule validation tests passed once; nine event compatibility and public Schema tests passed once."
+    ruff: "All changed Python files passed once."
+    generated_outputs: "Existing Standard and Modern MTGO classifier-derived artifacts and indexed W30-W32 Top 8 files were rebuilt once; event 434455 derived closure was rebuilt once and advanced to compatibility 1.5.0."
+    browser_validation: "Not run because no front-end source or interaction changed."
   prohibited_changes:
-    - "Do not delete, skip, weaken, mark non-blocking, or repeat the complete clean baseline."
-    - "Do not fetch live data locally, dispatch production, change statistical meaning or generated data, retry the rehearsal before a successful scheduled production run, or begin P12-10."
-  stop_point: "Commit and publish one Ready pull request, run one complete CI, merge only after every required check passes, manually dispatch exactly one production run, and repeat the no-publication rehearsal only if that production run succeeds; stop before P12-10."
+    - "Do not change accepted 3%, 5pp, or 20 thresholds, candidate selection formulas, or human-review decisions."
+    - "Do not fetch data, change workflows or front-end source, create a new taxonomy identity, rewrite protected event 434455 source bytes, or begin P12-10."
+    - "Do not rerun any already passed test; do not rerun a full suite after a partial failure."
+    - "Do not dispatch production, reflow Pickup review, begin P12-10, or begin another task without the applicable separate Owner gate."
+  stop_point: "Commit the accepted correction, publish one Ready PR, require one complete CI run, merge the validated exact head, verify remote master, and stop before Pickup review reflow or production."
 
 recent_completion_handoff:
-  id: "P12-10-READINESS-PICKUP-CONTRACT"
-  name: "Pickup known-state and review-interface readiness contract"
-  status: "completed_merged_and_deployed"
-  pull_request: 209
-  merge_commit: "b01ec998f4d9f36728589d26871cb38de4f6f015"
-  note: "The readiness contract is merged and deployed; GitHub and Git retain its publication evidence."
+  id: "P12-10-NO-PUBLICATION-TUESDAY-REHEARSAL"
+  name: "Production recovery and one no-publication weekly-review rehearsal"
+  status: "completed_without_rehearsal_publication"
+  pull_request: 210
+  merge_commit: "c2f645666a9943c4b69445c8ba1210a3698d7d05"
+  production_commit: "64ff4113061900e06d3fd69ac93fd81de1aff025"
+  production_workflow_run: 31862772706
+  note: "The timeout repair merged, the authorized production run succeeded, and the repository-external rehearsal completed without committing or publishing its review files."
 
 current_repository_state:
-  baseline_commit: "b01ec998f4d9f36728589d26871cb38de4f6f015"
-  baseline_note: "Verified remote master after PR 209; used as the production timeout-repair base."
+  baseline_commit: "64ff4113061900e06d3fd69ac93fd81de1aff025"
+  baseline_note: "Verified remote master after the successful authorized production update; used as the classifier-correction base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -197,23 +216,23 @@ engineering_quality:
   production_resource_validation: "P11-10 protects both front ends, maintained JavaScript, and Phase 8 resource references"
   legacy_entry_audit: "P11-11 audited and P11-12 completed the owner-approved cleanup"
 
-known_blockers:
-  - id: "MTGO-PRODUCTION-RUN-31838657545-CANCELLED"
-    scope: "production_and_p12_10_rehearsal"
-    evidence: "The fetch job reached its 45-minute hard timeout after complete baseline validation and repeated MTGO listing failures."
-    effect: "The repair must be published and a later scheduled production run must succeed before the no-publication rehearsal can be repeated."
+known_blockers: []
 
 future_task_gates:
   - task: "P12-10"
-    status: "blocked_pending_no_publication_rehearsal_and_separate_authorization"
+    status: "blocked_pending_classifier_correction_and_new_technology_gate_publication"
     completed_requirements:
       - "Classifier remediation, stable identities, and Spellementals boundary fix accepted and published."
       - "Standard and Modern Pickup known state matches accepted R5 evidence and final parent identities."
       - "Owner accepted the already-computed refreshed Landing shadow and reconfirmed 3%, 5pp, and 20 without another calculation."
       - "Two representative cards are approved for every required identity."
       - "Pickup candidate extension, review manifest, and XLSX write-back boundaries are defined."
+      - "The repaired production run and one repository-external no-publication Tuesday rehearsal completed."
+      - "The bounded New technology gate received local Owner acceptance."
     remaining_requirements:
-      - "Perform and accept one separately authorized no-publication Tuesday rehearsal."
+      - "Accept and publish this focused classifier correction."
+      - "Publish the accepted bounded New technology gate after rebasing it onto the corrected classifier."
+      - "Reflow the affected Standard and Modern current-plus-prior-four-week Pickup review windows."
       - "Obtain separate P12-10 implementation authorization."
 
 open_decisions:
@@ -227,16 +246,16 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-10-NO-PUBLICATION-TUESDAY-REHEARSAL"
-  name: "One no-publication weekly-review rehearsal"
-  status: "authorized_after_repair_merge_and_successful_authorized_production_run"
+  id: "none"
+  name: "No follow-on task authorized"
+  status: "none_authorized"
   production_change: false
   requires_user_confirmation: true
-  local_execution_authorized: true
+  local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  authorized_on: "2026-08-15"
-  note: "The Owner authorized exactly one manual production dispatch after the repair merges and an immediate rehearsal retry only if that run succeeds. Rehearsal commit/publication, P12-10 implementation, and any additional production action remain unauthorized."
+  authorized_on: null
+  note: "Classifier correction publication, Pickup review reflow, P12-10 implementation, and production all require separate Owner authorization."
 
 governance_baseline:
   status: "active_on_master"
@@ -271,8 +290,7 @@ publication_workflow_control:
   p8_08_authorized: false
 
 prohibited_next_actions:
-  - "Do not merge before one complete PR CI succeeds; do not dispatch more than one production run; do not retry the rehearsal unless that authorized run succeeds."
-  - "Do not commit or publish the rehearsal result, begin P12-10, or begin another task without the applicable owner gate."
+  - "Do not commit, publish, merge, reflow Pickup review, begin P12-10, dispatch production, or begin another task without the applicable Owner gate."
   - "Do not recalculate the accepted Landing shadow or change the approved 3%, 5pp, or 20 thresholds."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."

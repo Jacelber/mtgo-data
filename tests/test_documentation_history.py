@@ -50,43 +50,35 @@ def test_live_status_is_small_current_state_and_points_to_history():
         isinstance(value, bool)
         for value in status["current_task"]["authorization"].values()
     )
-    assert status["known_blockers"][0]["id"] == (
-        "MTGO-PRODUCTION-RUN-31838657545-CANCELLED"
-    )
-    assert status["next_approved_task"]["local_execution_authorized"] is True
+    assert status["known_blockers"] == []
+    assert status["next_approved_task"]["local_execution_authorized"] is False
     assert status["current_task"]["id"] == (
-        "OPS-MTGO-PRODUCTION-TIMEOUT-FAILFAST-20260815"
+        "CLASSIFIER-PICKUP-REVIEW-CORRECTIONS-20260815"
     )
-    assert status["current_task"]["status"] == (
-        "owner_accepted_conditional_publication_merge_production_and_rehearsal_authorized"
-    )
+    assert status["current_task"]["status"] == "local_complete_pending_owner_acceptance"
     assert status["current_task"]["base_commit"] == (
-        "b01ec998f4d9f36728589d26871cb38de4f6f015"
+        "64ff4113061900e06d3fd69ac93fd81de1aff025"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
-        "commit": True,
-        "remote_publication": True,
-        "merge": True,
+        "commit": False,
+        "remote_publication": False,
+        "merge": False,
     }
     assert status["recent_completion_handoff"]["id"] == (
-        "P12-10-READINESS-PICKUP-CONTRACT"
-    )
-    assert status["recent_completion_handoff"]["merge_commit"] == (
-        "b01ec998f4d9f36728589d26871cb38de4f6f015"
-    )
-    assert status["next_approved_task"]["id"] == (
         "P12-10-NO-PUBLICATION-TUESDAY-REHEARSAL"
     )
-    assert status["next_approved_task"]["status"] == (
-        "authorized_after_repair_merge_and_successful_authorized_production_run"
+    assert status["recent_completion_handoff"]["merge_commit"] == (
+        "c2f645666a9943c4b69445c8ba1210a3698d7d05"
     )
-    assert status["next_approved_task"]["local_execution_authorized"] is True
+    assert status["next_approved_task"]["id"] == "none"
+    assert status["next_approved_task"]["status"] == "none_authorized"
+    assert status["next_approved_task"]["local_execution_authorized"] is False
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
     future_task_gates = {gate["task"]: gate for gate in status["future_task_gates"]}
     assert future_task_gates["P12-10"]["status"] == (
-        "blocked_pending_no_publication_rehearsal_and_separate_authorization"
+        "blocked_pending_classifier_correction_and_new_technology_gate_publication"
     )
 
     timeout_audit = (

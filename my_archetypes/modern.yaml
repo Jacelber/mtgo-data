@@ -1,12 +1,8 @@
-# Adapted from Joan G.E., j6e/mtg-meta-analyzer, data/archetypes/modern.yaml
-# at commit 0ecd26bd734cedc6c40e7c753115f796613a32ba (CC BY 4.0).
-# Changes: shared schema, stable IDs, explicit priorities and main zones, explicit Unknown,
-# reviewed R1/R2 taxonomy, and omission of the upstream corpus-dependent centroid fallback.
 schema_version: 1.1.0
 format: modern
 semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
-  manifest_sha256: 0cd94ee3a4d6974f88446a660e661943d1cc2c4d8a25891dd6d214931a6aa999
+  manifest_sha256: 528e870c8323d752a55f5ff07e6119aef746b9d0632ec4e3f7c413d1a3a248c2
 archetypes:
 - id: primal-prayers-combo
   name: Primal Prayers Combo
@@ -1697,7 +1693,7 @@ archetypes:
       - card: Blade of the Bloodchief
         zone: main
         min_count: 2
-      - card: Stomping Ground
+      - card: __classifier-semantic-main-red-source__
         zone: main
         min_count: 1
   - id: broodscale-combo-mono-green
@@ -1714,7 +1710,7 @@ archetypes:
       - card: Forest
         zone: main
         min_count: 2
-      - card: Stomping Ground
+      - card: __classifier-semantic-main-red-source__
         zone: main
         exact_count: 0
   - id: broodscale-combo-simic

@@ -3173,6 +3173,15 @@ public entry points.
    The rehearsal must be repeated only after that repair is published and one
    scheduled production run succeeds; neither the blocked attempt nor its
    success-path simulation satisfies the P12-10 gate.
+
+   The repaired production run and one repository-external no-publication
+   rehearsal subsequently completed. Owner review of its bounded shortlist
+   found two classifier boundaries requiring a separate correction: Standard
+   Leyline-style Izzet shells were selected as Izzet Fling, and Modern
+   Broodscale decks with reviewed main-deck red sources were selected as
+   Mono-Green. The Owner authorized the focused local correction on 2026-08-15.
+   Publication, affected-format five-week Pickup reflow, and P12-10 remain
+   separate gates.
 10. `P12-10` — Landing weekly-facts producer and Pickup integration
     - do not start until the P12-03 classifier-remediation gate, refreshed
       shadow, owner threshold confirmation, known-state migration check, and

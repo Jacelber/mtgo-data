@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 from collections import Counter
-from copy import deepcopy
 from hashlib import sha256
 import json
 from pathlib import Path
 
 import pytest
-import yaml
 
 from mtgmeta.classifier import classify_counts
 from mtgmeta.classifier_shadow_audit import (
@@ -28,7 +26,6 @@ from tools.build_classifier_r5_production_rules import (
     MANIFEST_SHA256,
     PRODUCTION_ROOT,
     SHADOW_ROOT,
-    accepted_shadow_document,
     render_production_rules,
     sha256_path,
 )
@@ -54,7 +51,7 @@ def _standard_event_player(event_id: str, player_index: int) -> dict[str, object
 
 
 @pytest.mark.parametrize("format_id", ["modern", "standard"])
-def test_production_preserves_r5_plus_authorized_standard_boundary(
+def test_production_preserves_r5_plus_authorized_classifier_boundaries(
     format_id: str,
 ) -> None:
     production_path = PRODUCTION_ROOT / f"{format_id}.yaml"
@@ -62,31 +59,9 @@ def test_production_preserves_r5_plus_authorized_standard_boundary(
     assert sha256_path(shadow_path) == ACCEPTED_SHADOW_HASHES[format_id]
     assert sha256_path(BASELINE_ROOT / f"{format_id}.yaml") == BASELINE_HASHES[format_id]
     assert sha256_path(MANIFEST_PATH) == MANIFEST_SHA256
-    expected = deepcopy(accepted_shadow_document(format_id))
-    if format_id == "standard":
-        spellementals = next(
-            item
-            for item in expected["archetypes"]
-            if item["id"] == "izzet-spellementals"
-        )
-        rule = next(
-            item
-            for item in spellementals["rules"]
-            if item["id"] == "izzet-spellementals-primary"
-        )
-        rule["conditions"]["all"].append(
-            {
-                "card": "Stormchaser's Talent",
-                "zone": "main",
-                "exact_count": 0,
-            }
-        )
-    else:
-        assert production_path.read_bytes() == shadow_path.read_bytes()
-        assert production_path.read_text(encoding="utf-8") == render_production_rules(
-            format_id
-        )
-    assert yaml.safe_load(production_path.read_text(encoding="utf-8")) == expected
+    assert production_path.read_text(encoding="utf-8") == render_production_rules(
+        format_id
+    )
 
     rules = load_rule_set(production_path)
     assert (

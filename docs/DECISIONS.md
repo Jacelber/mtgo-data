@@ -3978,3 +3978,52 @@ repository, and diff checks. Ordinary, committed-baseline, Playwright, rules,
 Schemas, and Pages are not duplicated locally. Product behavior, classifier
 rules, statistical meaning, generated data, Schemas, public paths, production,
 and the established PR validation classes remain unchanged.
+
+---
+
+# DEC-093 - Correct reviewed Leyline and Broodscale classification boundaries
+
+Status: `Accepted`
+
+## Context
+
+The bounded 2026-W32 Pickup review exposed two systematic classifier errors.
+Standard Talent/Slickshot/Otter/Wild Ride shells, including one build with four
+Leyline of Resonance, were selected as Izzet Fling instead of the maintained
+`leyline-aggro/izzet` identity. Modern Broodscale decks using Copperline Gorge,
+Grove of the Burnwillows, and Karplusan Forest were selected as Mono-Green
+because the Gruul rule recognized only Stomping Ground.
+
+The correction must retain the existing taxonomy, use main-deck rather than
+sideboard color evidence, and make every current, frozen, and registered
+same-format impact explicit.
+
+## Decision
+
+Keep every existing parent, subtype, and rule ID. Add one explicit Standard
+`leyline-aggro-izzet-talent-shell` rule for the reviewed color-pure
+Talent/Slickshot/Otter/Wild Ride construction, and give the existing
+Leyline/Izzet rule only the priority needed to win its accepted overlaps.
+Incomplete Callous Sell-Sword/Talent decks remain Izzet Fling.
+
+Record Copperline Gorge, Grove of the Burnwillows, and Karplusan Forest as
+reviewed red-green mana sources in the fail-closed semantic manifest. Replace
+the Modern Broodscale Gruul and Mono-Green Stomping Ground tests with the shared
+main-deck red-source marker. Sideboard-only red sources do not affect subtype.
+
+Regenerate existing classification-derived MTGO and event `434455` artifacts
+without fetching source data. Advance the event compatibility contract from
+`1.4.0` to `1.5.0`; preserve the raw snapshot and normalized event bytes.
+
+## Consequences
+
+Current Standard moves 84 Izzet Fling records and one actual-Leyline Izzet
+Prowess record to Leyline Aggro / Izzet; the frozen Standard corpus moves 56
+and one respectively. Current and frozen Modern move 157 and 117 Mono-Green
+Broodscale records to Gruul. Event `434455` moves twelve such records. No other
+identity transition, conflict, invalid-deck result, residual subtype, formula,
+window, public path, workflow, front-end source, or Pickup decision changes.
+
+Owner acceptance of the completed local result, commit, publication, merge,
+affected-format Pickup review reflow, P12-10, and production dispatch remain
+separate gates.

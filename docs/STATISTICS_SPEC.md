@@ -135,6 +135,14 @@ A classification result may also contain an optional subtype ID and subtype disp
 
 The Phase 2 compatibility migration may expose subtypes only for distinct legacy rule entries that already resolve to the same legacy archetype. It must not change any deck's parent archetype result. New subtype taxonomy and subtype-level statistical presentation require separate approval after the compatibility classifier is complete.
 
+The reviewed Standard `leyline-aggro/izzet` identity includes both the
+four-copy Leyline/Slickshot core and the color-pure Talent/Slickshot/Otter/Wild
+Ride shell. Those complete constructions take priority over `izzet-fling`;
+the incomplete Callous Sell-Sword/Talent core remains `izzet-fling`. For Modern
+Broodscale, Gruul versus Mono-Green is determined from reviewed main-deck red
+mana-source semantics, not one named land. A red source found only in the
+sideboard does not make the deck Gruul.
+
 ### 3.3 Theoretical round
 
 A theoretical round is a scheduled Constructed Swiss round that a player was expected or eligible to play for the metric’s population.
