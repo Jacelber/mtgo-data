@@ -55,15 +55,15 @@ def test_live_status_is_small_current_state_and_points_to_history():
     assert status["current_task"]["id"] == (
         "CLASSIFIER-PICKUP-REVIEW-CORRECTIONS-20260815"
     )
-    assert status["current_task"]["status"] == "local_complete_pending_owner_acceptance"
+    assert status["current_task"]["status"] == "publication_authorized_pending_commit"
     assert status["current_task"]["base_commit"] == (
         "64ff4113061900e06d3fd69ac93fd81de1aff025"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
-        "commit": False,
-        "remote_publication": False,
-        "merge": False,
+        "commit": True,
+        "remote_publication": True,
+        "merge": True,
     }
     assert status["recent_completion_handoff"]["id"] == (
         "P12-10-NO-PUBLICATION-TUESDAY-REHEARSAL"

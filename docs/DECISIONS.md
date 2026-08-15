@@ -3987,12 +3987,13 @@ Status: `Accepted`
 
 ## Context
 
-The bounded 2026-W32 Pickup review exposed two systematic classifier errors.
-Standard Talent/Slickshot/Otter/Wild Ride shells, including one build with four
-Leyline of Resonance, were selected as Izzet Fling instead of the maintained
-`leyline-aggro/izzet` identity. Modern Broodscale decks using Copperline Gorge,
-Grove of the Burnwillows, and Karplusan Forest were selected as Mono-Green
-because the Gruul rule recognized only Stomping Ground.
+The bounded 2026-W32 Pickup review exposed two classifier boundaries. The
+reviewed Standard build contained four Leyline of Resonance and matched the
+maintained `leyline-aggro/izzet` core as well as Izzet Fling. A separate
+zero-Leyline Talent/Slickshot/Otter/Wild Ride build was incorrectly treated as
+evidence for a new Leyline rule. Modern Broodscale decks using Copperline
+Gorge, Grove of the Burnwillows, and Karplusan Forest were selected as
+Mono-Green because the Gruul rule recognized only Stomping Ground.
 
 The correction must retain the existing taxonomy, use main-deck rather than
 sideboard color evidence, and make every current, frozen, and registered
@@ -4000,11 +4001,12 @@ same-format impact explicit.
 
 ## Decision
 
-Keep every existing parent, subtype, and rule ID. Add one explicit Standard
-`leyline-aggro-izzet-talent-shell` rule for the reviewed color-pure
-Talent/Slickshot/Otter/Wild Ride construction, and give the existing
-Leyline/Izzet rule only the priority needed to win its accepted overlaps.
-Incomplete Callous Sell-Sword/Talent decks remain Izzet Fling.
+Delete the unsubstantiated `leyline-aggro-izzet-talent-shell` rule. Restore the
+Leyline Aggro parent and every subtype rule to their original priorities:
+Izzet 27040, Gruul 27030, Boros 27020, Rakdos 27010, and Mono-Red 27000. Izzet
+Fling remains priority 53000 and adds an at-most-one main-deck Leyline of
+Resonance condition. The maintained four-Leyline Izzet rule therefore handles
+the reviewed Leyline list without moving Leyline Aggro above Izzet Fling.
 
 Record Copperline Gorge, Grove of the Burnwillows, and Karplusan Forest as
 reviewed red-green mana sources in the fail-closed semantic manifest. Replace
@@ -4017,12 +4019,13 @@ without fetching source data. Advance the event compatibility contract from
 
 ## Consequences
 
-Current Standard moves 84 Izzet Fling records and one actual-Leyline Izzet
-Prowess record to Leyline Aggro / Izzet; the frozen Standard corpus moves 56
-and one respectively. Current and frozen Modern move 157 and 117 Mono-Green
-Broodscale records to Gruul. Event `434455` moves twelve such records. No other
-identity transition, conflict, invalid-deck result, residual subtype, formula,
-window, public path, workflow, front-end source, or Pickup decision changes.
+Against the accepted Standard baseline, the current 4,925-deck corpus moves
+three Izzet Fling records to Leyline Aggro / Izzet and two to Izzet Prowess;
+the two reviewed single-Leyline records remain Izzet Fling. The frozen
+3,936-deck corpus moves two Izzet Fling records to Izzet Prowess. Current and
+frozen Modern retain the accepted 157 and 117
+Mono-Green-to-Gruul Broodscale transitions, and event `434455` retains twelve.
+There is no conflict, invalid-deck result, or residual subtype.
 
 Owner acceptance of the completed local result, commit, publication, merge,
 affected-format Pickup review reflow, P12-10, and production dispatch remain

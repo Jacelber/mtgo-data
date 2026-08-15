@@ -3176,10 +3176,13 @@ public entry points.
 
    The repaired production run and one repository-external no-publication
    rehearsal subsequently completed. Owner review of its bounded shortlist
-   found two classifier boundaries requiring a separate correction: Standard
-   Leyline-style Izzet shells were selected as Izzet Fling, and Modern
+   found two classifier boundaries requiring a separate correction: a reviewed
+   four-Leyline Standard Izzet list was selected as Izzet Fling, and Modern
    Broodscale decks with reviewed main-deck red sources were selected as
    Mono-Green. The Owner authorized the focused local correction on 2026-08-15.
+   A proposed non-Leyline Talent-shell rule was subsequently rejected; the
+   accepted local direction instead restores every Leyline Aggro priority and
+   permits at most one main-deck Leyline of Resonance for Izzet Fling.
    Publication, affected-format five-week Pickup reflow, and P12-10 remain
    separate gates.
 10. `P12-10` — Landing weekly-facts producer and Pickup integration

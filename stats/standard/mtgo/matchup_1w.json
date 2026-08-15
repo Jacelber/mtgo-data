@@ -1526,8 +1526,8 @@
   "parent_order": [
     "izzet-prowess",
     "mono-green-landfall",
-    "leyline-aggro",
     "selesnya-offense",
+    "izzet-fling",
     "4-color-tablet",
     "jeskai-lessons",
     "orzhov-lifegain",
@@ -1540,6 +1540,7 @@
     "gruul-delirium",
     "dimir-midrange",
     "izzet-lessons",
+    "leyline-aggro",
     "mardu-discard",
     "boros-manufacturing",
     "mono-black-aggro",
@@ -1598,28 +1599,6 @@
         }
       }
     },
-    "leyline-aggro": {
-      "wins": 57,
-      "losses": 53,
-      "draws": 0,
-      "matches": 110,
-      "win_rate": 0.5182,
-      "ci_half": 0.0918,
-      "low_sample": false,
-      "mirror": false,
-      "literal_record": {
-        "wins": 57,
-        "losses": 53,
-        "draws": 0,
-        "matches": 110,
-        "win_rate": 0.518182,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.425778,
-          "upper": 0.609359
-        }
-      }
-    },
     "selesnya-offense": {
       "wins": 42,
       "losses": 58,
@@ -1639,6 +1618,28 @@
         "confidence_interval_95": {
           "lower": 0.327982,
           "upper": 0.517937
+        }
+      }
+    },
+    "izzet-fling": {
+      "wins": 50,
+      "losses": 47,
+      "draws": 0,
+      "matches": 97,
+      "win_rate": 0.5155,
+      "ci_half": 0.0975,
+      "low_sample": false,
+      "mirror": false,
+      "literal_record": {
+        "wins": 50,
+        "losses": 47,
+        "draws": 0,
+        "matches": 97,
+        "win_rate": 0.515464,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.41733,
+          "upper": 0.61242
         }
       }
     },
@@ -1903,6 +1904,28 @@
         "confidence_interval_95": {
           "lower": 0.163445,
           "upper": 0.61236
+        }
+      }
+    },
+    "leyline-aggro": {
+      "wins": 7,
+      "losses": 6,
+      "draws": 0,
+      "matches": 13,
+      "win_rate": 0.5385,
+      "ci_half": 0.2383,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 7,
+        "losses": 6,
+        "draws": 0,
+        "matches": 13,
+        "win_rate": 0.538462,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.291434,
+          "upper": 0.767942
         }
       }
     },
@@ -2226,33 +2249,6 @@
       },
       "mirror_match_count": 10
     },
-    "leyline-aggro": {
-      "all_matches": {
-        "wins": 61,
-        "losses": 57,
-        "draws": 0,
-        "matches": 118,
-        "win_rate": 0.516949,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.427681,
-          "upper": 0.605148
-        }
-      },
-      "non_mirror": {
-        "wins": 57,
-        "losses": 53,
-        "draws": 0,
-        "matches": 110,
-        "win_rate": 0.518182,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.425778,
-          "upper": 0.609359
-        }
-      },
-      "mirror_match_count": 4
-    },
     "selesnya-offense": {
       "all_matches": {
         "wins": 43,
@@ -2279,6 +2275,33 @@
         }
       },
       "mirror_match_count": 1
+    },
+    "izzet-fling": {
+      "all_matches": {
+        "wins": 54,
+        "losses": 51,
+        "draws": 0,
+        "matches": 105,
+        "win_rate": 0.514286,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.419883,
+          "upper": 0.60768
+        }
+      },
+      "non_mirror": {
+        "wins": 50,
+        "losses": 47,
+        "draws": 0,
+        "matches": 97,
+        "win_rate": 0.515464,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.41733,
+          "upper": 0.61242
+        }
+      },
+      "mirror_match_count": 4
     },
     "4-color-tablet": {
       "all_matches": {
@@ -2600,6 +2623,33 @@
         "confidence_interval_95": {
           "lower": 0.163445,
           "upper": 0.61236
+        }
+      },
+      "mirror_match_count": 0
+    },
+    "leyline-aggro": {
+      "all_matches": {
+        "wins": 7,
+        "losses": 6,
+        "draws": 0,
+        "matches": 13,
+        "win_rate": 0.538462,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.291434,
+          "upper": 0.767942
+        }
+      },
+      "non_mirror": {
+        "wins": 7,
+        "losses": 6,
+        "draws": 0,
+        "matches": 13,
+        "win_rate": 0.538462,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.291434,
+          "upper": 0.767942
         }
       },
       "mirror_match_count": 0
@@ -3129,6 +3179,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 13,
+        "losses": 10,
+        "draws": 0,
+        "matches": 23,
+        "win_rate": 0.5652,
+        "ci_half": 0.1878,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 13,
+          "losses": 10,
+          "draws": 0,
+          "matches": 23,
+          "win_rate": 0.565217,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.36811,
+            "upper": 0.743656
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 4,
         "losses": 0,
@@ -3218,24 +3290,24 @@
         }
       },
       "leyline-aggro": {
-        "wins": 14,
-        "losses": 12,
+        "wins": 1,
+        "losses": 2,
         "draws": 0,
-        "matches": 26,
-        "win_rate": 0.5385,
-        "ci_half": 0.1789,
-        "low_sample": false,
+        "matches": 3,
+        "win_rate": 0.3333,
+        "ci_half": 0.3654,
+        "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 14,
-          "losses": 12,
+          "wins": 1,
+          "losses": 2,
           "draws": 0,
-          "matches": 26,
-          "win_rate": 0.538462,
+          "matches": 3,
+          "win_rate": 0.333333,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.354576,
-            "upper": 0.712444
+            "lower": 0.06149,
+            "upper": 0.792345
           }
         }
       },
@@ -3615,6 +3687,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 5,
+        "losses": 7,
+        "draws": 0,
+        "matches": 12,
+        "win_rate": 0.4167,
+        "ci_half": 0.2436,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 5,
+          "losses": 7,
+          "draws": 0,
+          "matches": 12,
+          "win_rate": 0.416667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.193257,
+            "upper": 0.680493
+          }
+        }
+      },
       "izzet-iron-man": {
         "wins": 1,
         "losses": 2,
@@ -3726,24 +3820,24 @@
         }
       },
       "leyline-aggro": {
-        "wins": 5,
-        "losses": 8,
+        "wins": 0,
+        "losses": 1,
         "draws": 0,
-        "matches": 13,
-        "win_rate": 0.3846,
-        "ci_half": 0.2338,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 5,
-          "losses": 8,
+          "wins": 0,
+          "losses": 1,
           "draws": 0,
-          "matches": 13,
-          "win_rate": 0.384615,
+          "matches": 1,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.177094,
-            "upper": 0.644775
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -3902,492 +3996,6 @@
         }
       }
     },
-    "leyline-aggro": {
-      "4-color-tablet": {
-        "wins": 2,
-        "losses": 2,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 2,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
-          }
-        }
-      },
-      "azorius-prison": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 2,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.657628
-          }
-        }
-      },
-      "boros-manufacturing": {
-        "wins": 1,
-        "losses": 3,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.25,
-        "ci_half": 0.3269,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 3,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.25,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.045586,
-            "upper": 0.699364
-          }
-        }
-      },
-      "boros-token": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "dimir-excruciator": {
-        "wins": 3,
-        "losses": 4,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.4286,
-        "ci_half": 0.2957,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 4,
-          "draws": 0,
-          "matches": 7,
-          "win_rate": 0.428571,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.158217,
-            "upper": 0.749546
-          }
-        }
-      },
-      "dimir-midrange": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "five-color-humans": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "gruul-delirium": {
-        "wins": 2,
-        "losses": 2,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 2,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
-          }
-        }
-      },
-      "izzet-iron-man": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "izzet-lessons": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "izzet-prowess": {
-        "wins": 12,
-        "losses": 14,
-        "draws": 0,
-        "matches": 26,
-        "win_rate": 0.4615,
-        "ci_half": 0.1789,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 12,
-          "losses": 14,
-          "draws": 0,
-          "matches": 26,
-          "win_rate": 0.461538,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.287556,
-            "upper": 0.645424
-          }
-        }
-      },
-      "izzet-spellementals": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
-      "jeskai-lessons": {
-        "wins": 4,
-        "losses": 3,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.5714,
-        "ci_half": 0.2957,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 3,
-          "draws": 0,
-          "matches": 7,
-          "win_rate": 0.571429,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.250454,
-            "upper": 0.841783
-          }
-        }
-      },
-      "leyline-aggro": {
-        "wins": 4,
-        "losses": 4,
-        "draws": 0,
-        "matches": 8,
-        "win_rate": 0.5,
-        "ci_half": 0.2848,
-        "low_sample": true,
-        "mirror": true,
-        "literal_record": {
-          "wins": 4,
-          "losses": 4,
-          "draws": 0,
-          "matches": 8,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.215213,
-            "upper": 0.784787
-          }
-        }
-      },
-      "mono-green-landfall": {
-        "wins": 8,
-        "losses": 5,
-        "draws": 0,
-        "matches": 13,
-        "win_rate": 0.6154,
-        "ci_half": 0.2338,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 8,
-          "losses": 5,
-          "draws": 0,
-          "matches": 13,
-          "win_rate": 0.615385,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.355225,
-            "upper": 0.822906
-          }
-        }
-      },
-      "mono-green-mightiest": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
-      "mono-red-aggro": {
-        "wins": 0,
-        "losses": 3,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.0,
-        "ci_half": 0.2808,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 3,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.561506
-          }
-        }
-      },
-      "orzhov-lifegain": {
-        "wins": 2,
-        "losses": 4,
-        "draws": 0,
-        "matches": 6,
-        "win_rate": 0.3333,
-        "ci_half": 0.3016,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 4,
-          "draws": 0,
-          "matches": 6,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.096769,
-            "upper": 0.700012
-          }
-        }
-      },
-      "selesnya-landfall": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 0,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.342372,
-            "upper": 1.0
-          }
-        }
-      },
-      "selesnya-offense": {
-        "wins": 11,
-        "losses": 7,
-        "draws": 0,
-        "matches": 18,
-        "win_rate": 0.6111,
-        "ci_half": 0.2054,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 11,
-          "losses": 7,
-          "draws": 0,
-          "matches": 18,
-          "win_rate": 0.611111,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.386187,
-            "upper": 0.79695
-          }
-        }
-      },
-      "sultai-reanimator": {
-        "wins": 4,
-        "losses": 0,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 1.0,
-        "ci_half": 0.245,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 0,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.5101,
-            "upper": 1.0
-          }
-        }
-      },
-      "temur-hulk-ramp": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      }
-    },
     "selesnya-offense": {
       "4-color-tablet": {
         "wins": 5,
@@ -4521,6 +4129,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 7,
+        "losses": 11,
+        "draws": 0,
+        "matches": 18,
+        "win_rate": 0.3889,
+        "ci_half": 0.2054,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 7,
+          "losses": 11,
+          "draws": 0,
+          "matches": 18,
+          "win_rate": 0.388889,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.20305,
+            "upper": 0.613813
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 0,
         "losses": 2,
@@ -4606,28 +4236,6 @@
           "confidence_interval_95": {
             "lower": 0.299988,
             "upper": 0.903231
-          }
-        }
-      },
-      "leyline-aggro": {
-        "wins": 7,
-        "losses": 11,
-        "draws": 0,
-        "matches": 18,
-        "win_rate": 0.3889,
-        "ci_half": 0.2054,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 7,
-          "losses": 11,
-          "draws": 0,
-          "matches": 18,
-          "win_rate": 0.388889,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.20305,
-            "upper": 0.613813
           }
         }
       },
@@ -4830,6 +4438,492 @@
         }
       }
     },
+    "izzet-fling": {
+      "4-color-tablet": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "ci_half": 0.35,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 2,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.150036,
+            "upper": 0.849964
+          }
+        }
+      },
+      "azorius-prison": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "boros-manufacturing": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "boros-token": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "dimir-excruciator": {
+        "wins": 3,
+        "losses": 4,
+        "draws": 0,
+        "matches": 7,
+        "win_rate": 0.4286,
+        "ci_half": 0.2957,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 4,
+          "draws": 0,
+          "matches": 7,
+          "win_rate": 0.428571,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.158217,
+            "upper": 0.749546
+          }
+        }
+      },
+      "dimir-midrange": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "five-color-humans": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "gruul-delirium": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "izzet-fling": {
+        "wins": 4,
+        "losses": 4,
+        "draws": 0,
+        "matches": 8,
+        "win_rate": 0.5,
+        "ci_half": 0.2848,
+        "low_sample": true,
+        "mirror": true,
+        "literal_record": {
+          "wins": 4,
+          "losses": 4,
+          "draws": 0,
+          "matches": 8,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.215213,
+            "upper": 0.784787
+          }
+        }
+      },
+      "izzet-iron-man": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "izzet-lessons": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "izzet-prowess": {
+        "wins": 10,
+        "losses": 13,
+        "draws": 0,
+        "matches": 23,
+        "win_rate": 0.4348,
+        "ci_half": 0.1878,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 10,
+          "losses": 13,
+          "draws": 0,
+          "matches": 23,
+          "win_rate": 0.434783,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.256344,
+            "upper": 0.63189
+          }
+        }
+      },
+      "izzet-spellementals": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "jeskai-lessons": {
+        "wins": 2,
+        "losses": 3,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.4,
+        "ci_half": 0.3258,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 3,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.4,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.117618,
+            "upper": 0.76928
+          }
+        }
+      },
+      "mono-green-landfall": {
+        "wins": 7,
+        "losses": 5,
+        "draws": 0,
+        "matches": 12,
+        "win_rate": 0.5833,
+        "ci_half": 0.2436,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 7,
+          "losses": 5,
+          "draws": 0,
+          "matches": 12,
+          "win_rate": 0.583333,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.319507,
+            "upper": 0.806743
+          }
+        }
+      },
+      "mono-green-mightiest": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "mono-red-aggro": {
+        "wins": 0,
+        "losses": 3,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.0,
+        "ci_half": 0.2808,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 3,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.561506
+          }
+        }
+      },
+      "orzhov-lifegain": {
+        "wins": 1,
+        "losses": 4,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.2,
+        "ci_half": 0.2941,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 4,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.2,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.036223,
+            "upper": 0.624472
+          }
+        }
+      },
+      "selesnya-landfall": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "selesnya-offense": {
+        "wins": 11,
+        "losses": 7,
+        "draws": 0,
+        "matches": 18,
+        "win_rate": 0.6111,
+        "ci_half": 0.2054,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 11,
+          "losses": 7,
+          "draws": 0,
+          "matches": 18,
+          "win_rate": 0.611111,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.386187,
+            "upper": 0.79695
+          }
+        }
+      },
+      "sultai-reanimator": {
+        "wins": 4,
+        "losses": 0,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 1.0,
+        "ci_half": 0.245,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 0,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.5101,
+            "upper": 1.0
+          }
+        }
+      },
+      "temur-hulk-ramp": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      }
+    },
     "4-color-tablet": {
       "4-color-tablet": {
         "wins": 3,
@@ -4985,6 +5079,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "ci_half": 0.35,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 2,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.150036,
+            "upper": 0.849964
+          }
+        }
+      },
       "izzet-iron-man": {
         "wins": 0,
         "losses": 1,
@@ -5092,28 +5208,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.434491
-          }
-        }
-      },
-      "leyline-aggro": {
-        "wins": 2,
-        "losses": 2,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 2,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
           }
         }
       },
@@ -5471,6 +5565,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 3,
+        "losses": 2,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.6,
+        "ci_half": 0.3258,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 2,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.6,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.23072,
+            "upper": 0.882382
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 9,
         "losses": 8,
@@ -5538,24 +5654,24 @@
         }
       },
       "leyline-aggro": {
-        "wins": 3,
-        "losses": 4,
+        "wins": 0,
+        "losses": 2,
         "draws": 0,
-        "matches": 7,
-        "win_rate": 0.4286,
-        "ci_half": 0.2957,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 3,
-          "losses": 4,
+          "wins": 0,
+          "losses": 2,
           "draws": 0,
-          "matches": 7,
-          "win_rate": 0.428571,
+          "matches": 2,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.158217,
-            "upper": 0.749546
+            "lower": 0.0,
+            "upper": 0.657628
           }
         }
       },
@@ -5869,6 +5985,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 4,
+        "losses": 1,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.8,
+        "ci_half": 0.2941,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 1,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.8,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.375528,
+            "upper": 0.963777
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 0,
         "losses": 1,
@@ -5958,24 +6096,24 @@
         }
       },
       "leyline-aggro": {
-        "wins": 4,
-        "losses": 2,
+        "wins": 0,
+        "losses": 1,
         "draws": 0,
-        "matches": 6,
-        "win_rate": 0.6667,
-        "ci_half": 0.3016,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 4,
-          "losses": 2,
+          "wins": 0,
+          "losses": 1,
           "draws": 0,
-          "matches": 6,
-          "win_rate": 0.666667,
+          "matches": 1,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.299988,
-            "upper": 0.903231
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -6245,6 +6383,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 4,
+        "losses": 3,
+        "draws": 0,
+        "matches": 7,
+        "win_rate": 0.5714,
+        "ci_half": 0.2957,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 3,
+          "draws": 0,
+          "matches": 7,
+          "win_rate": 0.571429,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.250454,
+            "upper": 0.841783
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 1,
         "losses": 0,
@@ -6308,28 +6468,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.434491
-          }
-        }
-      },
-      "leyline-aggro": {
-        "wins": 4,
-        "losses": 3,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.5714,
-        "ci_half": 0.2957,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 3,
-          "draws": 0,
-          "matches": 7,
-          "win_rate": 0.571429,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.250454,
-            "upper": 0.841783
           }
         }
       },
@@ -6599,6 +6737,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.0,
+        "ci_half": 0.245,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 4,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.4899
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 1,
         "losses": 0,
@@ -6684,28 +6844,6 @@
           "confidence_interval_95": {
             "lower": 0.342372,
             "upper": 1.0
-          }
-        }
-      },
-      "leyline-aggro": {
-        "wins": 0,
-        "losses": 4,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.0,
-        "ci_half": 0.245,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 4,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.4899
           }
         }
       },
@@ -6953,6 +7091,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 5,
         "losses": 10,
@@ -7016,28 +7176,6 @@
           "confidence_interval_95": {
             "lower": 0.06149,
             "upper": 0.792345
-          }
-        }
-      },
-      "leyline-aggro": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 0,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.342372,
-            "upper": 1.0
           }
         }
       },
@@ -7263,6 +7401,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 2,
         "losses": 7,
@@ -7330,24 +7490,24 @@
         }
       },
       "leyline-aggro": {
-        "wins": 1,
+        "wins": 0,
         "losses": 1,
         "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 1,
+          "wins": 0,
           "losses": 1,
           "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
+          "matches": 1,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -7573,6 +7733,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 3,
+        "losses": 0,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 1.0,
+        "ci_half": 0.2808,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 0,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.438494,
+            "upper": 1.0
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 2,
         "losses": 1,
@@ -7614,28 +7796,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.793457
-          }
-        }
-      },
-      "leyline-aggro": {
-        "wins": 3,
-        "losses": 0,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 1.0,
-        "ci_half": 0.2808,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 0,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.438494,
-            "upper": 1.0
           }
         }
       },
@@ -7817,6 +7977,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
       "izzet-iron-man": {
         "wins": 1,
         "losses": 0,
@@ -7902,28 +8084,6 @@
           "confidence_interval_95": {
             "lower": 0.300636,
             "upper": 0.954414
-          }
-        }
-      },
-      "leyline-aggro": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 2,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.657628
           }
         }
       },
@@ -8105,6 +8265,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 1,
         "losses": 0,
@@ -8195,23 +8377,23 @@
       },
       "leyline-aggro": {
         "wins": 2,
-        "losses": 2,
+        "losses": 0,
         "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 2,
-          "losses": 2,
+          "losses": 0,
           "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
+          "matches": 2,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
+            "lower": 0.342372,
+            "upper": 1.0
           }
         }
       },
@@ -8437,6 +8619,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 1,
         "losses": 4,
@@ -8460,28 +8664,6 @@
         }
       },
       "jeskai-lessons": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "leyline-aggro": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -8681,6 +8863,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 0,
         "losses": 4,
@@ -8700,28 +8904,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.4899
-          }
-        }
-      },
-      "leyline-aggro": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
           }
         }
       },
@@ -8810,6 +8992,184 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.793457
+          }
+        }
+      }
+    },
+    "leyline-aggro": {
+      "boros-manufacturing": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "gruul-delirium": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "izzet-prowess": {
+        "wins": 2,
+        "losses": 1,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.6667,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 1,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.666667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.207655,
+            "upper": 0.93851
+          }
+        }
+      },
+      "izzet-spellementals": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "jeskai-lessons": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "mono-green-landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "mono-green-mightiest": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "orzhov-lifegain": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       }
@@ -8971,6 +9331,28 @@
       }
     },
     "boros-manufacturing": {
+      "izzet-fling": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 1,
         "losses": 0,
@@ -9038,24 +9420,24 @@
         }
       },
       "leyline-aggro": {
-        "wins": 3,
-        "losses": 1,
+        "wins": 2,
+        "losses": 0,
         "draws": 0,
-        "matches": 4,
-        "win_rate": 0.75,
-        "ci_half": 0.3269,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 3,
-          "losses": 1,
+          "wins": 2,
+          "losses": 0,
           "draws": 0,
-          "matches": 4,
-          "win_rate": 0.75,
+          "matches": 2,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.300636,
-            "upper": 0.954414
+            "lower": 0.342372,
+            "upper": 1.0
           }
         }
       },
@@ -9329,6 +9711,28 @@
       }
     },
     "boros-token": {
+      "izzet-fling": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 1,
         "losses": 1,
@@ -9370,28 +9774,6 @@
           "confidence_interval_95": {
             "lower": 0.206543,
             "upper": 1.0
-          }
-        }
-      },
-      "leyline-aggro": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
           }
         }
       },
@@ -9463,7 +9845,7 @@
           }
         }
       },
-      "leyline-aggro": {
+      "izzet-fling": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -9575,7 +9957,7 @@
           }
         }
       },
-      "leyline-aggro": {
+      "izzet-fling": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -9889,6 +10271,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 1,
         "losses": 1,
@@ -9908,28 +10312,6 @@
           "confidence_interval_95": {
             "lower": 0.094529,
             "upper": 0.905471
-          }
-        }
-      },
-      "leyline-aggro": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
           }
         }
       }
@@ -10025,25 +10407,47 @@
       }
     },
     "mono-green-mightiest": {
-      "leyline-aggro": {
-        "wins": 1,
+      "izzet-fling": {
+        "wins": 0,
         "losses": 1,
         "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "leyline-aggro": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 1,
-          "losses": 1,
+          "losses": 0,
           "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
+          "matches": 1,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -10096,8 +10500,8 @@
   "leaf_order": [
     "izzet-prowess",
     "mono-green-landfall",
-    "leyline-aggro/izzet",
     "selesnya-offense",
+    "izzet-fling",
     "4-color-tablet",
     "jeskai-lessons",
     "orzhov-lifegain",
@@ -10110,6 +10514,7 @@
     "gruul-delirium",
     "dimir-midrange",
     "izzet-lessons",
+    "leyline-aggro/izzet",
     "mardu-discard",
     "boros-manufacturing/mardu",
     "mono-black-aggro",
@@ -10168,28 +10573,6 @@
         }
       }
     },
-    "leyline-aggro/izzet": {
-      "wins": 57,
-      "losses": 53,
-      "draws": 0,
-      "matches": 110,
-      "win_rate": 0.5182,
-      "ci_half": 0.0918,
-      "low_sample": false,
-      "mirror": false,
-      "literal_record": {
-        "wins": 57,
-        "losses": 53,
-        "draws": 0,
-        "matches": 110,
-        "win_rate": 0.518182,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.425778,
-          "upper": 0.609359
-        }
-      }
-    },
     "selesnya-offense": {
       "wins": 42,
       "losses": 58,
@@ -10209,6 +10592,28 @@
         "confidence_interval_95": {
           "lower": 0.327982,
           "upper": 0.517937
+        }
+      }
+    },
+    "izzet-fling": {
+      "wins": 50,
+      "losses": 47,
+      "draws": 0,
+      "matches": 97,
+      "win_rate": 0.5155,
+      "ci_half": 0.0975,
+      "low_sample": false,
+      "mirror": false,
+      "literal_record": {
+        "wins": 50,
+        "losses": 47,
+        "draws": 0,
+        "matches": 97,
+        "win_rate": 0.515464,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.41733,
+          "upper": 0.61242
         }
       }
     },
@@ -10473,6 +10878,28 @@
         "confidence_interval_95": {
           "lower": 0.163445,
           "upper": 0.61236
+        }
+      }
+    },
+    "leyline-aggro/izzet": {
+      "wins": 7,
+      "losses": 6,
+      "draws": 0,
+      "matches": 13,
+      "win_rate": 0.5385,
+      "ci_half": 0.2383,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 7,
+        "losses": 6,
+        "draws": 0,
+        "matches": 13,
+        "win_rate": 0.538462,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.291434,
+          "upper": 0.767942
         }
       }
     },
@@ -10796,33 +11223,6 @@
       },
       "mirror_match_count": 10
     },
-    "leyline-aggro/izzet": {
-      "all_matches": {
-        "wins": 61,
-        "losses": 57,
-        "draws": 0,
-        "matches": 118,
-        "win_rate": 0.516949,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.427681,
-          "upper": 0.605148
-        }
-      },
-      "non_mirror": {
-        "wins": 57,
-        "losses": 53,
-        "draws": 0,
-        "matches": 110,
-        "win_rate": 0.518182,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.425778,
-          "upper": 0.609359
-        }
-      },
-      "mirror_match_count": 4
-    },
     "selesnya-offense": {
       "all_matches": {
         "wins": 43,
@@ -10849,6 +11249,33 @@
         }
       },
       "mirror_match_count": 1
+    },
+    "izzet-fling": {
+      "all_matches": {
+        "wins": 54,
+        "losses": 51,
+        "draws": 0,
+        "matches": 105,
+        "win_rate": 0.514286,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.419883,
+          "upper": 0.60768
+        }
+      },
+      "non_mirror": {
+        "wins": 50,
+        "losses": 47,
+        "draws": 0,
+        "matches": 97,
+        "win_rate": 0.515464,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.41733,
+          "upper": 0.61242
+        }
+      },
+      "mirror_match_count": 4
     },
     "4-color-tablet": {
       "all_matches": {
@@ -11170,6 +11597,33 @@
         "confidence_interval_95": {
           "lower": 0.163445,
           "upper": 0.61236
+        }
+      },
+      "mirror_match_count": 0
+    },
+    "leyline-aggro/izzet": {
+      "all_matches": {
+        "wins": 7,
+        "losses": 6,
+        "draws": 0,
+        "matches": 13,
+        "win_rate": 0.538462,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.291434,
+          "upper": 0.767942
+        }
+      },
+      "non_mirror": {
+        "wins": 7,
+        "losses": 6,
+        "draws": 0,
+        "matches": 13,
+        "win_rate": 0.538462,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.291434,
+          "upper": 0.767942
         }
       },
       "mirror_match_count": 0
@@ -11699,6 +12153,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 13,
+        "losses": 10,
+        "draws": 0,
+        "matches": 23,
+        "win_rate": 0.5652,
+        "ci_half": 0.1878,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 13,
+          "losses": 10,
+          "draws": 0,
+          "matches": 23,
+          "win_rate": 0.565217,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.36811,
+            "upper": 0.743656
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 4,
         "losses": 0,
@@ -11788,24 +12264,24 @@
         }
       },
       "leyline-aggro/izzet": {
-        "wins": 14,
-        "losses": 12,
+        "wins": 1,
+        "losses": 2,
         "draws": 0,
-        "matches": 26,
-        "win_rate": 0.5385,
-        "ci_half": 0.1789,
-        "low_sample": false,
+        "matches": 3,
+        "win_rate": 0.3333,
+        "ci_half": 0.3654,
+        "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 14,
-          "losses": 12,
+          "wins": 1,
+          "losses": 2,
           "draws": 0,
-          "matches": 26,
-          "win_rate": 0.538462,
+          "matches": 3,
+          "win_rate": 0.333333,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.354576,
-            "upper": 0.712444
+            "lower": 0.06149,
+            "upper": 0.792345
           }
         }
       },
@@ -12185,6 +12661,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 5,
+        "losses": 7,
+        "draws": 0,
+        "matches": 12,
+        "win_rate": 0.4167,
+        "ci_half": 0.2436,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 5,
+          "losses": 7,
+          "draws": 0,
+          "matches": 12,
+          "win_rate": 0.416667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.193257,
+            "upper": 0.680493
+          }
+        }
+      },
       "izzet-iron-man": {
         "wins": 1,
         "losses": 2,
@@ -12296,24 +12794,24 @@
         }
       },
       "leyline-aggro/izzet": {
-        "wins": 5,
-        "losses": 8,
+        "wins": 0,
+        "losses": 1,
         "draws": 0,
-        "matches": 13,
-        "win_rate": 0.3846,
-        "ci_half": 0.2338,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 5,
-          "losses": 8,
+          "wins": 0,
+          "losses": 1,
           "draws": 0,
-          "matches": 13,
-          "win_rate": 0.384615,
+          "matches": 1,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.177094,
-            "upper": 0.644775
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -12472,492 +12970,6 @@
         }
       }
     },
-    "leyline-aggro/izzet": {
-      "4-color-tablet": {
-        "wins": 2,
-        "losses": 2,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 2,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
-          }
-        }
-      },
-      "azorius-prison": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 2,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.657628
-          }
-        }
-      },
-      "boros-manufacturing/mardu": {
-        "wins": 1,
-        "losses": 3,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.25,
-        "ci_half": 0.3269,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 3,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.25,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.045586,
-            "upper": 0.699364
-          }
-        }
-      },
-      "boros-token": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "dimir-excruciator": {
-        "wins": 3,
-        "losses": 4,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.4286,
-        "ci_half": 0.2957,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 4,
-          "draws": 0,
-          "matches": 7,
-          "win_rate": 0.428571,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.158217,
-            "upper": 0.749546
-          }
-        }
-      },
-      "dimir-midrange": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "five-color-humans": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "gruul-delirium": {
-        "wins": 2,
-        "losses": 2,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 2,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
-          }
-        }
-      },
-      "izzet-iron-man": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "izzet-lessons": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "izzet-prowess": {
-        "wins": 12,
-        "losses": 14,
-        "draws": 0,
-        "matches": 26,
-        "win_rate": 0.4615,
-        "ci_half": 0.1789,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 12,
-          "losses": 14,
-          "draws": 0,
-          "matches": 26,
-          "win_rate": 0.461538,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.287556,
-            "upper": 0.645424
-          }
-        }
-      },
-      "izzet-spellementals": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
-      "jeskai-lessons": {
-        "wins": 4,
-        "losses": 3,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.5714,
-        "ci_half": 0.2957,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 3,
-          "draws": 0,
-          "matches": 7,
-          "win_rate": 0.571429,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.250454,
-            "upper": 0.841783
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
-        "wins": 4,
-        "losses": 4,
-        "draws": 0,
-        "matches": 8,
-        "win_rate": 0.5,
-        "ci_half": 0.2848,
-        "low_sample": true,
-        "mirror": true,
-        "literal_record": {
-          "wins": 4,
-          "losses": 4,
-          "draws": 0,
-          "matches": 8,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.215213,
-            "upper": 0.784787
-          }
-        }
-      },
-      "mono-green-landfall": {
-        "wins": 8,
-        "losses": 5,
-        "draws": 0,
-        "matches": 13,
-        "win_rate": 0.6154,
-        "ci_half": 0.2338,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 8,
-          "losses": 5,
-          "draws": 0,
-          "matches": 13,
-          "win_rate": 0.615385,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.355225,
-            "upper": 0.822906
-          }
-        }
-      },
-      "mono-green-mightiest": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
-      "mono-red-aggro": {
-        "wins": 0,
-        "losses": 3,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.0,
-        "ci_half": 0.2808,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 3,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.561506
-          }
-        }
-      },
-      "orzhov-lifegain": {
-        "wins": 2,
-        "losses": 4,
-        "draws": 0,
-        "matches": 6,
-        "win_rate": 0.3333,
-        "ci_half": 0.3016,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 4,
-          "draws": 0,
-          "matches": 6,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.096769,
-            "upper": 0.700012
-          }
-        }
-      },
-      "selesnya-landfall": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 0,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.342372,
-            "upper": 1.0
-          }
-        }
-      },
-      "selesnya-offense": {
-        "wins": 11,
-        "losses": 7,
-        "draws": 0,
-        "matches": 18,
-        "win_rate": 0.6111,
-        "ci_half": 0.2054,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 11,
-          "losses": 7,
-          "draws": 0,
-          "matches": 18,
-          "win_rate": 0.611111,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.386187,
-            "upper": 0.79695
-          }
-        }
-      },
-      "sultai-reanimator": {
-        "wins": 4,
-        "losses": 0,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 1.0,
-        "ci_half": 0.245,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 0,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.5101,
-            "upper": 1.0
-          }
-        }
-      },
-      "temur-hulk-ramp": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      }
-    },
     "selesnya-offense": {
       "4-color-tablet": {
         "wins": 5,
@@ -13091,6 +13103,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 7,
+        "losses": 11,
+        "draws": 0,
+        "matches": 18,
+        "win_rate": 0.3889,
+        "ci_half": 0.2054,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 7,
+          "losses": 11,
+          "draws": 0,
+          "matches": 18,
+          "win_rate": 0.388889,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.20305,
+            "upper": 0.613813
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 0,
         "losses": 2,
@@ -13176,28 +13210,6 @@
           "confidence_interval_95": {
             "lower": 0.299988,
             "upper": 0.903231
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
-        "wins": 7,
-        "losses": 11,
-        "draws": 0,
-        "matches": 18,
-        "win_rate": 0.3889,
-        "ci_half": 0.2054,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 7,
-          "losses": 11,
-          "draws": 0,
-          "matches": 18,
-          "win_rate": 0.388889,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.20305,
-            "upper": 0.613813
           }
         }
       },
@@ -13400,6 +13412,492 @@
         }
       }
     },
+    "izzet-fling": {
+      "4-color-tablet": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "ci_half": 0.35,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 2,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.150036,
+            "upper": 0.849964
+          }
+        }
+      },
+      "azorius-prison": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "boros-manufacturing/mardu": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "boros-token": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "dimir-excruciator": {
+        "wins": 3,
+        "losses": 4,
+        "draws": 0,
+        "matches": 7,
+        "win_rate": 0.4286,
+        "ci_half": 0.2957,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 4,
+          "draws": 0,
+          "matches": 7,
+          "win_rate": 0.428571,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.158217,
+            "upper": 0.749546
+          }
+        }
+      },
+      "dimir-midrange": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "five-color-humans": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "gruul-delirium": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "izzet-fling": {
+        "wins": 4,
+        "losses": 4,
+        "draws": 0,
+        "matches": 8,
+        "win_rate": 0.5,
+        "ci_half": 0.2848,
+        "low_sample": true,
+        "mirror": true,
+        "literal_record": {
+          "wins": 4,
+          "losses": 4,
+          "draws": 0,
+          "matches": 8,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.215213,
+            "upper": 0.784787
+          }
+        }
+      },
+      "izzet-iron-man": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "izzet-lessons": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "izzet-prowess": {
+        "wins": 10,
+        "losses": 13,
+        "draws": 0,
+        "matches": 23,
+        "win_rate": 0.4348,
+        "ci_half": 0.1878,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 10,
+          "losses": 13,
+          "draws": 0,
+          "matches": 23,
+          "win_rate": 0.434783,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.256344,
+            "upper": 0.63189
+          }
+        }
+      },
+      "izzet-spellementals": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "jeskai-lessons": {
+        "wins": 2,
+        "losses": 3,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.4,
+        "ci_half": 0.3258,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 3,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.4,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.117618,
+            "upper": 0.76928
+          }
+        }
+      },
+      "mono-green-landfall": {
+        "wins": 7,
+        "losses": 5,
+        "draws": 0,
+        "matches": 12,
+        "win_rate": 0.5833,
+        "ci_half": 0.2436,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 7,
+          "losses": 5,
+          "draws": 0,
+          "matches": 12,
+          "win_rate": 0.583333,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.319507,
+            "upper": 0.806743
+          }
+        }
+      },
+      "mono-green-mightiest": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "mono-red-aggro": {
+        "wins": 0,
+        "losses": 3,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.0,
+        "ci_half": 0.2808,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 3,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.561506
+          }
+        }
+      },
+      "orzhov-lifegain": {
+        "wins": 1,
+        "losses": 4,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.2,
+        "ci_half": 0.2941,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 4,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.2,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.036223,
+            "upper": 0.624472
+          }
+        }
+      },
+      "selesnya-landfall": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "selesnya-offense": {
+        "wins": 11,
+        "losses": 7,
+        "draws": 0,
+        "matches": 18,
+        "win_rate": 0.6111,
+        "ci_half": 0.2054,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 11,
+          "losses": 7,
+          "draws": 0,
+          "matches": 18,
+          "win_rate": 0.611111,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.386187,
+            "upper": 0.79695
+          }
+        }
+      },
+      "sultai-reanimator": {
+        "wins": 4,
+        "losses": 0,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 1.0,
+        "ci_half": 0.245,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 0,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.5101,
+            "upper": 1.0
+          }
+        }
+      },
+      "temur-hulk-ramp": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      }
+    },
     "4-color-tablet": {
       "4-color-tablet": {
         "wins": 3,
@@ -13555,6 +14053,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "ci_half": 0.35,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 2,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.150036,
+            "upper": 0.849964
+          }
+        }
+      },
       "izzet-iron-man": {
         "wins": 0,
         "losses": 1,
@@ -13662,28 +14182,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.434491
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
-        "wins": 2,
-        "losses": 2,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 2,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
           }
         }
       },
@@ -14041,6 +14539,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 3,
+        "losses": 2,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.6,
+        "ci_half": 0.3258,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 2,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.6,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.23072,
+            "upper": 0.882382
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 9,
         "losses": 8,
@@ -14108,24 +14628,24 @@
         }
       },
       "leyline-aggro/izzet": {
-        "wins": 3,
-        "losses": 4,
+        "wins": 0,
+        "losses": 2,
         "draws": 0,
-        "matches": 7,
-        "win_rate": 0.4286,
-        "ci_half": 0.2957,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 3,
-          "losses": 4,
+          "wins": 0,
+          "losses": 2,
           "draws": 0,
-          "matches": 7,
-          "win_rate": 0.428571,
+          "matches": 2,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.158217,
-            "upper": 0.749546
+            "lower": 0.0,
+            "upper": 0.657628
           }
         }
       },
@@ -14439,6 +14959,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 4,
+        "losses": 1,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.8,
+        "ci_half": 0.2941,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 1,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.8,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.375528,
+            "upper": 0.963777
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 0,
         "losses": 1,
@@ -14528,24 +15070,24 @@
         }
       },
       "leyline-aggro/izzet": {
-        "wins": 4,
-        "losses": 2,
+        "wins": 0,
+        "losses": 1,
         "draws": 0,
-        "matches": 6,
-        "win_rate": 0.6667,
-        "ci_half": 0.3016,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 4,
-          "losses": 2,
+          "wins": 0,
+          "losses": 1,
           "draws": 0,
-          "matches": 6,
-          "win_rate": 0.666667,
+          "matches": 1,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.299988,
-            "upper": 0.903231
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -14815,6 +15357,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 4,
+        "losses": 3,
+        "draws": 0,
+        "matches": 7,
+        "win_rate": 0.5714,
+        "ci_half": 0.2957,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 3,
+          "draws": 0,
+          "matches": 7,
+          "win_rate": 0.571429,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.250454,
+            "upper": 0.841783
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 1,
         "losses": 0,
@@ -14878,28 +15442,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.434491
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
-        "wins": 4,
-        "losses": 3,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.5714,
-        "ci_half": 0.2957,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 3,
-          "draws": 0,
-          "matches": 7,
-          "win_rate": 0.571429,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.250454,
-            "upper": 0.841783
           }
         }
       },
@@ -15169,6 +15711,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.0,
+        "ci_half": 0.245,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 4,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.4899
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 1,
         "losses": 0,
@@ -15254,28 +15818,6 @@
           "confidence_interval_95": {
             "lower": 0.342372,
             "upper": 1.0
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
-        "wins": 0,
-        "losses": 4,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.0,
-        "ci_half": 0.245,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 4,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.4899
           }
         }
       },
@@ -15523,6 +16065,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 5,
         "losses": 10,
@@ -15586,28 +16150,6 @@
           "confidence_interval_95": {
             "lower": 0.06149,
             "upper": 0.792345
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 0,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.342372,
-            "upper": 1.0
           }
         }
       },
@@ -15833,6 +16375,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 2,
         "losses": 7,
@@ -15900,24 +16464,24 @@
         }
       },
       "leyline-aggro/izzet": {
-        "wins": 1,
+        "wins": 0,
         "losses": 1,
         "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 1,
+          "wins": 0,
           "losses": 1,
           "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
+          "matches": 1,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -16143,6 +16707,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 3,
+        "losses": 0,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 1.0,
+        "ci_half": 0.2808,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 0,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.438494,
+            "upper": 1.0
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 2,
         "losses": 1,
@@ -16184,28 +16770,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.793457
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
-        "wins": 3,
-        "losses": 0,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 1.0,
-        "ci_half": 0.2808,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 0,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.438494,
-            "upper": 1.0
           }
         }
       },
@@ -16387,6 +16951,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
       "izzet-iron-man": {
         "wins": 1,
         "losses": 0,
@@ -16472,28 +17058,6 @@
           "confidence_interval_95": {
             "lower": 0.300636,
             "upper": 0.954414
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 2,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.657628
           }
         }
       },
@@ -16675,6 +17239,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 1,
         "losses": 0,
@@ -16765,23 +17351,23 @@
       },
       "leyline-aggro/izzet": {
         "wins": 2,
-        "losses": 2,
+        "losses": 0,
         "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 2,
-          "losses": 2,
+          "losses": 0,
           "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
+          "matches": 2,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
+            "lower": 0.342372,
+            "upper": 1.0
           }
         }
       },
@@ -17007,6 +17593,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 1,
         "losses": 4,
@@ -17030,28 +17638,6 @@
         }
       },
       "jeskai-lessons": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -17251,6 +17837,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 0,
         "losses": 4,
@@ -17270,28 +17878,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.4899
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
           }
         }
       },
@@ -17380,6 +17966,184 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.793457
+          }
+        }
+      }
+    },
+    "leyline-aggro/izzet": {
+      "boros-manufacturing/mardu": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "gruul-delirium": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "izzet-prowess": {
+        "wins": 2,
+        "losses": 1,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.6667,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 1,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.666667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.207655,
+            "upper": 0.93851
+          }
+        }
+      },
+      "izzet-spellementals": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "jeskai-lessons": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "mono-green-landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "mono-green-mightiest": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "orzhov-lifegain": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       }
@@ -17541,6 +18305,28 @@
       }
     },
     "boros-manufacturing/mardu": {
+      "izzet-fling": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
       "izzet-lessons": {
         "wins": 1,
         "losses": 0,
@@ -17608,24 +18394,24 @@
         }
       },
       "leyline-aggro/izzet": {
-        "wins": 3,
-        "losses": 1,
+        "wins": 2,
+        "losses": 0,
         "draws": 0,
-        "matches": 4,
-        "win_rate": 0.75,
-        "ci_half": 0.3269,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 3,
-          "losses": 1,
+          "wins": 2,
+          "losses": 0,
           "draws": 0,
-          "matches": 4,
-          "win_rate": 0.75,
+          "matches": 2,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.300636,
-            "upper": 0.954414
+            "lower": 0.342372,
+            "upper": 1.0
           }
         }
       },
@@ -17899,6 +18685,28 @@
       }
     },
     "boros-token": {
+      "izzet-fling": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 1,
         "losses": 1,
@@ -17940,28 +18748,6 @@
           "confidence_interval_95": {
             "lower": 0.206543,
             "upper": 1.0
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
           }
         }
       },
@@ -18033,7 +18819,7 @@
           }
         }
       },
-      "leyline-aggro/izzet": {
+      "izzet-fling": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -18145,7 +18931,7 @@
           }
         }
       },
-      "leyline-aggro/izzet": {
+      "izzet-fling": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -18459,6 +19245,28 @@
           }
         }
       },
+      "izzet-fling": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
       "izzet-prowess": {
         "wins": 1,
         "losses": 1,
@@ -18478,28 +19286,6 @@
           "confidence_interval_95": {
             "lower": 0.094529,
             "upper": 0.905471
-          }
-        }
-      },
-      "leyline-aggro/izzet": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
           }
         }
       }
@@ -18595,25 +19381,47 @@
       }
     },
     "mono-green-mightiest": {
-      "leyline-aggro/izzet": {
-        "wins": 1,
+      "izzet-fling": {
+        "wins": 0,
         "losses": 1,
         "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "leyline-aggro/izzet": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 1,
-          "losses": 1,
+          "losses": 0,
           "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
+          "matches": 1,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -18666,8 +19474,8 @@
   "archetype_order": [
     "Izzet Prowess",
     "Mono-Green Landfall",
-    "Leyline Aggro",
     "Selesnya Offense",
+    "Izzet Fling",
     "4-Color Tablet",
     "Jeskai Lessons",
     "Orzhov Lifegain",
@@ -18680,6 +19488,7 @@
     "Gruul Delirium",
     "Dimir Midrange",
     "Izzet Lessons",
+    "Leyline Aggro",
     "Mardu Discard",
     "Boros Manufacturing",
     "Mono-Black Aggro",
@@ -18738,28 +19547,6 @@
         }
       }
     },
-    "Leyline Aggro": {
-      "wins": 57,
-      "losses": 53,
-      "draws": 0,
-      "matches": 110,
-      "win_rate": 0.5182,
-      "ci_half": 0.0918,
-      "low_sample": false,
-      "mirror": false,
-      "literal_record": {
-        "wins": 57,
-        "losses": 53,
-        "draws": 0,
-        "matches": 110,
-        "win_rate": 0.518182,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.425778,
-          "upper": 0.609359
-        }
-      }
-    },
     "Selesnya Offense": {
       "wins": 42,
       "losses": 58,
@@ -18779,6 +19566,28 @@
         "confidence_interval_95": {
           "lower": 0.327982,
           "upper": 0.517937
+        }
+      }
+    },
+    "Izzet Fling": {
+      "wins": 50,
+      "losses": 47,
+      "draws": 0,
+      "matches": 97,
+      "win_rate": 0.5155,
+      "ci_half": 0.0975,
+      "low_sample": false,
+      "mirror": false,
+      "literal_record": {
+        "wins": 50,
+        "losses": 47,
+        "draws": 0,
+        "matches": 97,
+        "win_rate": 0.515464,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.41733,
+          "upper": 0.61242
         }
       }
     },
@@ -19043,6 +19852,28 @@
         "confidence_interval_95": {
           "lower": 0.163445,
           "upper": 0.61236
+        }
+      }
+    },
+    "Leyline Aggro": {
+      "wins": 7,
+      "losses": 6,
+      "draws": 0,
+      "matches": 13,
+      "win_rate": 0.5385,
+      "ci_half": 0.2383,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 7,
+        "losses": 6,
+        "draws": 0,
+        "matches": 13,
+        "win_rate": 0.538462,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.291434,
+          "upper": 0.767942
         }
       }
     },
@@ -19511,6 +20342,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 13,
+        "losses": 10,
+        "draws": 0,
+        "matches": 23,
+        "win_rate": 0.5652,
+        "ci_half": 0.1878,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 13,
+          "losses": 10,
+          "draws": 0,
+          "matches": 23,
+          "win_rate": 0.565217,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.36811,
+            "upper": 0.743656
+          }
+        }
+      },
       "Izzet Lessons": {
         "wins": 4,
         "losses": 0,
@@ -19600,24 +20453,24 @@
         }
       },
       "Leyline Aggro": {
-        "wins": 14,
-        "losses": 12,
+        "wins": 1,
+        "losses": 2,
         "draws": 0,
-        "matches": 26,
-        "win_rate": 0.5385,
-        "ci_half": 0.1789,
-        "low_sample": false,
+        "matches": 3,
+        "win_rate": 0.3333,
+        "ci_half": 0.3654,
+        "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 14,
-          "losses": 12,
+          "wins": 1,
+          "losses": 2,
           "draws": 0,
-          "matches": 26,
-          "win_rate": 0.538462,
+          "matches": 3,
+          "win_rate": 0.333333,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.354576,
-            "upper": 0.712444
+            "lower": 0.06149,
+            "upper": 0.792345
           }
         }
       },
@@ -19997,6 +20850,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 5,
+        "losses": 7,
+        "draws": 0,
+        "matches": 12,
+        "win_rate": 0.4167,
+        "ci_half": 0.2436,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 5,
+          "losses": 7,
+          "draws": 0,
+          "matches": 12,
+          "win_rate": 0.416667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.193257,
+            "upper": 0.680493
+          }
+        }
+      },
       "Izzet Iron Man": {
         "wins": 1,
         "losses": 2,
@@ -20108,24 +20983,24 @@
         }
       },
       "Leyline Aggro": {
-        "wins": 5,
-        "losses": 8,
+        "wins": 0,
+        "losses": 1,
         "draws": 0,
-        "matches": 13,
-        "win_rate": 0.3846,
-        "ci_half": 0.2338,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 5,
-          "losses": 8,
+          "wins": 0,
+          "losses": 1,
           "draws": 0,
-          "matches": 13,
-          "win_rate": 0.384615,
+          "matches": 1,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.177094,
-            "upper": 0.644775
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -20284,492 +21159,6 @@
         }
       }
     },
-    "Leyline Aggro": {
-      "4-Color Tablet": {
-        "wins": 2,
-        "losses": 2,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 2,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
-          }
-        }
-      },
-      "Azorius Prison": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 2,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.657628
-          }
-        }
-      },
-      "Boros Manufacturing": {
-        "wins": 1,
-        "losses": 3,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.25,
-        "ci_half": 0.3269,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 3,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.25,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.045586,
-            "upper": 0.699364
-          }
-        }
-      },
-      "Boros Token": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "Dimir Excruciator": {
-        "wins": 3,
-        "losses": 4,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.4286,
-        "ci_half": 0.2957,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 4,
-          "draws": 0,
-          "matches": 7,
-          "win_rate": 0.428571,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.158217,
-            "upper": 0.749546
-          }
-        }
-      },
-      "Dimir Midrange": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "Five-Color Humans": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "Gruul Delirium": {
-        "wins": 2,
-        "losses": 2,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 2,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
-          }
-        }
-      },
-      "Izzet Iron Man": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "Izzet Lessons": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "Izzet Prowess": {
-        "wins": 12,
-        "losses": 14,
-        "draws": 0,
-        "matches": 26,
-        "win_rate": 0.4615,
-        "ci_half": 0.1789,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 12,
-          "losses": 14,
-          "draws": 0,
-          "matches": 26,
-          "win_rate": 0.461538,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.287556,
-            "upper": 0.645424
-          }
-        }
-      },
-      "Izzet Spellementals": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
-      "Jeskai Lessons": {
-        "wins": 4,
-        "losses": 3,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.5714,
-        "ci_half": 0.2957,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 3,
-          "draws": 0,
-          "matches": 7,
-          "win_rate": 0.571429,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.250454,
-            "upper": 0.841783
-          }
-        }
-      },
-      "Leyline Aggro": {
-        "wins": 4,
-        "losses": 4,
-        "draws": 0,
-        "matches": 8,
-        "win_rate": 0.5,
-        "ci_half": 0.2848,
-        "low_sample": true,
-        "mirror": true,
-        "literal_record": {
-          "wins": 4,
-          "losses": 4,
-          "draws": 0,
-          "matches": 8,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.215213,
-            "upper": 0.784787
-          }
-        }
-      },
-      "Mono-Green Landfall": {
-        "wins": 8,
-        "losses": 5,
-        "draws": 0,
-        "matches": 13,
-        "win_rate": 0.6154,
-        "ci_half": 0.2338,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 8,
-          "losses": 5,
-          "draws": 0,
-          "matches": 13,
-          "win_rate": 0.615385,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.355225,
-            "upper": 0.822906
-          }
-        }
-      },
-      "Mono-Green Mightiest": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
-      "Mono-Red Aggro": {
-        "wins": 0,
-        "losses": 3,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.0,
-        "ci_half": 0.2808,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 3,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.561506
-          }
-        }
-      },
-      "Orzhov Lifegain": {
-        "wins": 2,
-        "losses": 4,
-        "draws": 0,
-        "matches": 6,
-        "win_rate": 0.3333,
-        "ci_half": 0.3016,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 4,
-          "draws": 0,
-          "matches": 6,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.096769,
-            "upper": 0.700012
-          }
-        }
-      },
-      "Selesnya Landfall": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 0,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.342372,
-            "upper": 1.0
-          }
-        }
-      },
-      "Selesnya Offense": {
-        "wins": 11,
-        "losses": 7,
-        "draws": 0,
-        "matches": 18,
-        "win_rate": 0.6111,
-        "ci_half": 0.2054,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 11,
-          "losses": 7,
-          "draws": 0,
-          "matches": 18,
-          "win_rate": 0.611111,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.386187,
-            "upper": 0.79695
-          }
-        }
-      },
-      "Sultai Reanimator": {
-        "wins": 4,
-        "losses": 0,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 1.0,
-        "ci_half": 0.245,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 0,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.5101,
-            "upper": 1.0
-          }
-        }
-      },
-      "Temur Hulk Ramp": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      }
-    },
     "Selesnya Offense": {
       "4-Color Tablet": {
         "wins": 5,
@@ -20903,6 +21292,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 7,
+        "losses": 11,
+        "draws": 0,
+        "matches": 18,
+        "win_rate": 0.3889,
+        "ci_half": 0.2054,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 7,
+          "losses": 11,
+          "draws": 0,
+          "matches": 18,
+          "win_rate": 0.388889,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.20305,
+            "upper": 0.613813
+          }
+        }
+      },
       "Izzet Lessons": {
         "wins": 0,
         "losses": 2,
@@ -20988,28 +21399,6 @@
           "confidence_interval_95": {
             "lower": 0.299988,
             "upper": 0.903231
-          }
-        }
-      },
-      "Leyline Aggro": {
-        "wins": 7,
-        "losses": 11,
-        "draws": 0,
-        "matches": 18,
-        "win_rate": 0.3889,
-        "ci_half": 0.2054,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 7,
-          "losses": 11,
-          "draws": 0,
-          "matches": 18,
-          "win_rate": 0.388889,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.20305,
-            "upper": 0.613813
           }
         }
       },
@@ -21212,6 +21601,492 @@
         }
       }
     },
+    "Izzet Fling": {
+      "4-Color Tablet": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "ci_half": 0.35,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 2,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.150036,
+            "upper": 0.849964
+          }
+        }
+      },
+      "Azorius Prison": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "Boros Manufacturing": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "Boros Token": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "Dimir Excruciator": {
+        "wins": 3,
+        "losses": 4,
+        "draws": 0,
+        "matches": 7,
+        "win_rate": 0.4286,
+        "ci_half": 0.2957,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 4,
+          "draws": 0,
+          "matches": 7,
+          "win_rate": 0.428571,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.158217,
+            "upper": 0.749546
+          }
+        }
+      },
+      "Dimir Midrange": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "Five-Color Humans": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "Gruul Delirium": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "Izzet Fling": {
+        "wins": 4,
+        "losses": 4,
+        "draws": 0,
+        "matches": 8,
+        "win_rate": 0.5,
+        "ci_half": 0.2848,
+        "low_sample": true,
+        "mirror": true,
+        "literal_record": {
+          "wins": 4,
+          "losses": 4,
+          "draws": 0,
+          "matches": 8,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.215213,
+            "upper": 0.784787
+          }
+        }
+      },
+      "Izzet Iron Man": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "Izzet Lessons": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "Izzet Prowess": {
+        "wins": 10,
+        "losses": 13,
+        "draws": 0,
+        "matches": 23,
+        "win_rate": 0.4348,
+        "ci_half": 0.1878,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 10,
+          "losses": 13,
+          "draws": 0,
+          "matches": 23,
+          "win_rate": 0.434783,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.256344,
+            "upper": 0.63189
+          }
+        }
+      },
+      "Izzet Spellementals": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "Jeskai Lessons": {
+        "wins": 2,
+        "losses": 3,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.4,
+        "ci_half": 0.3258,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 3,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.4,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.117618,
+            "upper": 0.76928
+          }
+        }
+      },
+      "Mono-Green Landfall": {
+        "wins": 7,
+        "losses": 5,
+        "draws": 0,
+        "matches": 12,
+        "win_rate": 0.5833,
+        "ci_half": 0.2436,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 7,
+          "losses": 5,
+          "draws": 0,
+          "matches": 12,
+          "win_rate": 0.583333,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.319507,
+            "upper": 0.806743
+          }
+        }
+      },
+      "Mono-Green Mightiest": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "Mono-Red Aggro": {
+        "wins": 0,
+        "losses": 3,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.0,
+        "ci_half": 0.2808,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 3,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.561506
+          }
+        }
+      },
+      "Orzhov Lifegain": {
+        "wins": 1,
+        "losses": 4,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.2,
+        "ci_half": 0.2941,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 4,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.2,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.036223,
+            "upper": 0.624472
+          }
+        }
+      },
+      "Selesnya Landfall": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "Selesnya Offense": {
+        "wins": 11,
+        "losses": 7,
+        "draws": 0,
+        "matches": 18,
+        "win_rate": 0.6111,
+        "ci_half": 0.2054,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 11,
+          "losses": 7,
+          "draws": 0,
+          "matches": 18,
+          "win_rate": 0.611111,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.386187,
+            "upper": 0.79695
+          }
+        }
+      },
+      "Sultai Reanimator": {
+        "wins": 4,
+        "losses": 0,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 1.0,
+        "ci_half": 0.245,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 0,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.5101,
+            "upper": 1.0
+          }
+        }
+      },
+      "Temur Hulk Ramp": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      }
+    },
     "4-Color Tablet": {
       "4-Color Tablet": {
         "wins": 3,
@@ -21367,6 +22242,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "ci_half": 0.35,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 2,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.150036,
+            "upper": 0.849964
+          }
+        }
+      },
       "Izzet Iron Man": {
         "wins": 0,
         "losses": 1,
@@ -21474,28 +22371,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.434491
-          }
-        }
-      },
-      "Leyline Aggro": {
-        "wins": 2,
-        "losses": 2,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 2,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
           }
         }
       },
@@ -21853,6 +22728,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 3,
+        "losses": 2,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.6,
+        "ci_half": 0.3258,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 2,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.6,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.23072,
+            "upper": 0.882382
+          }
+        }
+      },
       "Izzet Prowess": {
         "wins": 9,
         "losses": 8,
@@ -21920,24 +22817,24 @@
         }
       },
       "Leyline Aggro": {
-        "wins": 3,
-        "losses": 4,
+        "wins": 0,
+        "losses": 2,
         "draws": 0,
-        "matches": 7,
-        "win_rate": 0.4286,
-        "ci_half": 0.2957,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 3,
-          "losses": 4,
+          "wins": 0,
+          "losses": 2,
           "draws": 0,
-          "matches": 7,
-          "win_rate": 0.428571,
+          "matches": 2,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.158217,
-            "upper": 0.749546
+            "lower": 0.0,
+            "upper": 0.657628
           }
         }
       },
@@ -22251,6 +23148,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 4,
+        "losses": 1,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.8,
+        "ci_half": 0.2941,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 1,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.8,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.375528,
+            "upper": 0.963777
+          }
+        }
+      },
       "Izzet Lessons": {
         "wins": 0,
         "losses": 1,
@@ -22340,24 +23259,24 @@
         }
       },
       "Leyline Aggro": {
-        "wins": 4,
-        "losses": 2,
+        "wins": 0,
+        "losses": 1,
         "draws": 0,
-        "matches": 6,
-        "win_rate": 0.6667,
-        "ci_half": 0.3016,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 4,
-          "losses": 2,
+          "wins": 0,
+          "losses": 1,
           "draws": 0,
-          "matches": 6,
-          "win_rate": 0.666667,
+          "matches": 1,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.299988,
-            "upper": 0.903231
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -22627,6 +23546,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 4,
+        "losses": 3,
+        "draws": 0,
+        "matches": 7,
+        "win_rate": 0.5714,
+        "ci_half": 0.2957,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 3,
+          "draws": 0,
+          "matches": 7,
+          "win_rate": 0.571429,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.250454,
+            "upper": 0.841783
+          }
+        }
+      },
       "Izzet Lessons": {
         "wins": 1,
         "losses": 0,
@@ -22690,28 +23631,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.434491
-          }
-        }
-      },
-      "Leyline Aggro": {
-        "wins": 4,
-        "losses": 3,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.5714,
-        "ci_half": 0.2957,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 3,
-          "draws": 0,
-          "matches": 7,
-          "win_rate": 0.571429,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.250454,
-            "upper": 0.841783
           }
         }
       },
@@ -22981,6 +23900,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 0,
+        "losses": 4,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.0,
+        "ci_half": 0.245,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 4,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.4899
+          }
+        }
+      },
       "Izzet Lessons": {
         "wins": 1,
         "losses": 0,
@@ -23066,28 +24007,6 @@
           "confidence_interval_95": {
             "lower": 0.342372,
             "upper": 1.0
-          }
-        }
-      },
-      "Leyline Aggro": {
-        "wins": 0,
-        "losses": 4,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.0,
-        "ci_half": 0.245,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 4,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.4899
           }
         }
       },
@@ -23335,6 +24254,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
       "Izzet Prowess": {
         "wins": 5,
         "losses": 10,
@@ -23398,28 +24339,6 @@
           "confidence_interval_95": {
             "lower": 0.06149,
             "upper": 0.792345
-          }
-        }
-      },
-      "Leyline Aggro": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 0,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.342372,
-            "upper": 1.0
           }
         }
       },
@@ -23645,6 +24564,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "Izzet Prowess": {
         "wins": 2,
         "losses": 7,
@@ -23712,24 +24653,24 @@
         }
       },
       "Leyline Aggro": {
-        "wins": 1,
+        "wins": 0,
         "losses": 1,
         "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 1,
+          "wins": 0,
           "losses": 1,
           "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
+          "matches": 1,
+          "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -23955,6 +24896,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 3,
+        "losses": 0,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 1.0,
+        "ci_half": 0.2808,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 0,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.438494,
+            "upper": 1.0
+          }
+        }
+      },
       "Izzet Prowess": {
         "wins": 2,
         "losses": 1,
@@ -23996,28 +24959,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.793457
-          }
-        }
-      },
-      "Leyline Aggro": {
-        "wins": 3,
-        "losses": 0,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 1.0,
-        "ci_half": 0.2808,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 0,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.438494,
-            "upper": 1.0
           }
         }
       },
@@ -24199,6 +25140,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
       "Izzet Iron Man": {
         "wins": 1,
         "losses": 0,
@@ -24284,28 +25247,6 @@
           "confidence_interval_95": {
             "lower": 0.300636,
             "upper": 0.954414
-          }
-        }
-      },
-      "Leyline Aggro": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 2,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.657628
           }
         }
       },
@@ -24487,6 +25428,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
       "Izzet Lessons": {
         "wins": 1,
         "losses": 0,
@@ -24577,23 +25540,23 @@
       },
       "Leyline Aggro": {
         "wins": 2,
-        "losses": 2,
+        "losses": 0,
         "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 2,
-          "losses": 2,
+          "losses": 0,
           "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
+          "matches": 2,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
+            "lower": 0.342372,
+            "upper": 1.0
           }
         }
       },
@@ -24819,6 +25782,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "Izzet Prowess": {
         "wins": 1,
         "losses": 4,
@@ -24842,28 +25827,6 @@
         }
       },
       "Jeskai Lessons": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "Leyline Aggro": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -25063,6 +26026,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "Izzet Prowess": {
         "wins": 0,
         "losses": 4,
@@ -25082,28 +26067,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.4899
-          }
-        }
-      },
-      "Leyline Aggro": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
           }
         }
       },
@@ -25192,6 +26155,184 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.793457
+          }
+        }
+      }
+    },
+    "Leyline Aggro": {
+      "Boros Manufacturing": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "Gruul Delirium": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "Izzet Prowess": {
+        "wins": 2,
+        "losses": 1,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.6667,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 1,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.666667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.207655,
+            "upper": 0.93851
+          }
+        }
+      },
+      "Izzet Spellementals": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "Jeskai Lessons": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "Mono-Green Landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "Mono-Green Mightiest": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "Orzhov Lifegain": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       }
@@ -25353,6 +26494,28 @@
       }
     },
     "Boros Manufacturing": {
+      "Izzet Fling": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
       "Izzet Lessons": {
         "wins": 1,
         "losses": 0,
@@ -25420,24 +26583,24 @@
         }
       },
       "Leyline Aggro": {
-        "wins": 3,
-        "losses": 1,
+        "wins": 2,
+        "losses": 0,
         "draws": 0,
-        "matches": 4,
-        "win_rate": 0.75,
-        "ci_half": 0.3269,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 3,
-          "losses": 1,
+          "wins": 2,
+          "losses": 0,
           "draws": 0,
-          "matches": 4,
-          "win_rate": 0.75,
+          "matches": 2,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.300636,
-            "upper": 0.954414
+            "lower": 0.342372,
+            "upper": 1.0
           }
         }
       },
@@ -25711,6 +26874,28 @@
       }
     },
     "Boros Token": {
+      "Izzet Fling": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
       "Izzet Prowess": {
         "wins": 1,
         "losses": 1,
@@ -25752,28 +26937,6 @@
           "confidence_interval_95": {
             "lower": 0.206543,
             "upper": 1.0
-          }
-        }
-      },
-      "Leyline Aggro": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
           }
         }
       },
@@ -25845,7 +27008,7 @@
           }
         }
       },
-      "Leyline Aggro": {
+      "Izzet Fling": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -25957,7 +27120,7 @@
           }
         }
       },
-      "Leyline Aggro": {
+      "Izzet Fling": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -26271,6 +27434,28 @@
           }
         }
       },
+      "Izzet Fling": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
       "Izzet Prowess": {
         "wins": 1,
         "losses": 1,
@@ -26290,28 +27475,6 @@
           "confidence_interval_95": {
             "lower": 0.094529,
             "upper": 0.905471
-          }
-        }
-      },
-      "Leyline Aggro": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
           }
         }
       }
@@ -26407,25 +27570,47 @@
       }
     },
     "Mono-Green Mightiest": {
-      "Leyline Aggro": {
-        "wins": 1,
+      "Izzet Fling": {
+        "wins": 0,
         "losses": 1,
         "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "Leyline Aggro": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 1,
-          "losses": 1,
+          "losses": 0,
           "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
+          "matches": 1,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },

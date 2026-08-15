@@ -38,7 +38,7 @@ EXPECTED_SHADOW_INVENTORIES = {
 }
 EXPECTED_INVENTORIES = {
     "modern": (127, 70, 205),
-    "standard": (102, 11, 127),
+    "standard": (102, 11, 126),
 }
 ACCEPTED_MANIFEST_SHA256 = (
     "0cd94ee3a4d6974f88446a660e661943d1cc2c4d8a25891dd6d214931a6aa999"
@@ -124,61 +124,13 @@ def production_document(format_id: str) -> dict[str, Any]:
             }
         )
 
-        leyline = _archetype(document, "leyline-aggro")
-        leyline["priority"] = 53010
-        _rule(leyline, "leyline-aggro-izzet")["priority"] = 53010
-        leyline["rules"].insert(
-            1,
+        fling = _archetype(document, "izzet-fling")
+        _rule(fling, "izzet-fling-primary")["conditions"]["all"].append(
             {
-                "id": "leyline-aggro-izzet-talent-shell",
-                "priority": 53009,
-                "subtype_id": "izzet",
-                "conditions": {
-                    "all": [
-                        {
-                            "card": "Stormchaser's Talent",
-                            "zone": "main",
-                            "min_count": 4,
-                        },
-                        {
-                            "card": "Slickshot Show-Off",
-                            "zone": "main",
-                            "min_count": 4,
-                        },
-                        {
-                            "card": "Elusive Otter",
-                            "zone": "main",
-                            "min_count": 4,
-                        },
-                        {"card": "Wild Ride", "zone": "main", "min_count": 4},
-                        {
-                            "card": "Leyline of Resonance",
-                            "zone": "main",
-                            "max_count": 3,
-                        },
-                        {
-                            "card": "__classifier-semantic-main-blue-source__",
-                            "zone": "main",
-                            "min_count": 1,
-                        },
-                        {
-                            "card": "__classifier-semantic-main-green-source__",
-                            "zone": "main",
-                            "exact_count": 0,
-                        },
-                        {
-                            "card": "__classifier-semantic-main-white-source__",
-                            "zone": "main",
-                            "exact_count": 0,
-                        },
-                        {
-                            "card": "__classifier-semantic-main-black-source__",
-                            "zone": "main",
-                            "exact_count": 0,
-                        },
-                    ]
-                },
-            },
+                "card": "Leyline of Resonance",
+                "zone": "main",
+                "max_count": 1,
+            }
         )
     else:
         broodscale = _archetype(document, "broodscale-combo")

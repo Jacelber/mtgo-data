@@ -58,9 +58,9 @@ def _top8_deck(format_id: str, event_id: str, player: str) -> dict[str, object]:
             "standard",
             "12850815",
             "itstime",
-            "leyline-aggro",
-            "izzet",
-            "leyline-aggro-izzet-talent-shell",
+            "izzet-fling",
+            None,
+            "izzet-fling-primary",
         ),
         (
             "standard",
@@ -104,7 +104,10 @@ def test_reviewed_w32_exact_decks_select_owner_corrected_identity(
     assert identity_signature(result) == identity_signature(reordered)
 
 
-def test_standard_incomplete_leyline_shell_remains_izzet_fling() -> None:
+@pytest.mark.parametrize("leyline_count", [0, 1])
+def test_standard_at_most_one_leyline_remains_izzet_fling(
+    leyline_count: int,
+) -> None:
     rules = load_rule_set(ROOT / "my_archetypes" / "standard.yaml")
     result = classify_counts(
         rules,
@@ -112,6 +115,7 @@ def test_standard_incomplete_leyline_shell_remains_izzet_fling() -> None:
             "Callous Sell-Sword": 3,
             "Stormchaser's Talent": 4,
             "Spirebluff Canal": 4,
+            "Leyline of Resonance": leyline_count,
         },
         {},
     )
@@ -119,6 +123,53 @@ def test_standard_incomplete_leyline_shell_remains_izzet_fling() -> None:
     assert result.archetype_id == "izzet-fling"
     assert result.subtype_id is None
     assert result.selected_rule_id == "izzet-fling-primary"
+
+
+def test_standard_two_leylines_cannot_select_izzet_fling() -> None:
+    rules = load_rule_set(ROOT / "my_archetypes" / "standard.yaml")
+    result = classify_counts(
+        rules,
+        {
+            "Callous Sell-Sword": 3,
+            "Stormchaser's Talent": 4,
+            "Spirebluff Canal": 4,
+            "Leyline of Resonance": 2,
+        },
+        {},
+    )
+
+    assert result.selected_rule_id != "izzet-fling-primary"
+
+
+@pytest.mark.parametrize("event_id", ["12842468", "12842882"])
+def test_reviewed_single_leyline_lists_remain_izzet_fling(event_id: str) -> None:
+    event_path = next((ROOT / "data" / "standard").glob(f"*_{event_id}.json"))
+    event = json.loads(event_path.read_text(encoding="utf-8"))
+    deck = next(player for player in event["players"] if player["player"] == "Arcbound_Papi")
+    main, side = deck_to_counts(deck)
+    rules = load_rule_set(ROOT / "my_archetypes" / "standard.yaml")
+    result = classify_counts(rules, main, side)
+
+    assert main["Leyline of Resonance"] == 1
+    assert result.archetype_id == "izzet-fling"
+    assert result.selected_rule_id == "izzet-fling-primary"
+
+
+def test_standard_leyline_rules_keep_original_priority_and_no_talent_shell() -> None:
+    rules = load_rule_set(ROOT / "my_archetypes" / "standard.yaml")
+    fling = next(item for item in rules.archetypes if item.id == "izzet-fling")
+    leyline = next(item for item in rules.archetypes if item.id == "leyline-aggro")
+
+    priorities = {rule.id: rule.priority for rule in leyline.rules}
+    assert fling.priority == 53000
+    assert leyline.priority == 27040
+    assert priorities == {
+        "leyline-aggro-izzet": 27040,
+        "leyline-aggro-gruul": 27030,
+        "leyline-aggro-boros": 27020,
+        "leyline-aggro-rakdos": 27010,
+        "leyline-aggro-mono-red": 27000,
+    }
 
 
 @pytest.mark.parametrize(
@@ -269,8 +320,8 @@ def test_complete_classifier_impact_is_limited_to_owner_corrections(
 ) -> None:
     expected_transitions = {
         "standard": {
+            ("izzet-fling", None, "izzet-prowess", None),
             ("izzet-fling", None, "leyline-aggro", "izzet"),
-            ("izzet-prowess", None, "leyline-aggro", "izzet"),
         },
         "modern": {
             (

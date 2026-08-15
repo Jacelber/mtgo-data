@@ -5,8 +5,13 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 
-RETAINED_DORMANT_IDENTITIES = {
-    "standard": {"izzet-fling"},
+RETAINED_DORMANT_COMPOSITION_IDENTITIES = {
+    "standard": {"leyline-aggro"},
+    "modern": set(),
+}
+
+RETAINED_DORMANT_RENDERED_IDENTITIES = {
+    "standard": set(),
     "modern": set(),
 }
 
@@ -157,7 +162,7 @@ def test_composition_uses_approved_card_pair_without_rendering_card_names() -> N
         assert set(metadata["representativeCards"][format_name]) == set(identities)
         assert set(identities) == (
             _composition_identities(format_name)
-            | RETAINED_DORMANT_IDENTITIES[format_name]
+            | RETAINED_DORMANT_COMPOSITION_IDENTITIES[format_name]
         )
         for identity, card_names in identities.items():
             slots = metadata["representativeCards"][format_name][identity]
@@ -198,7 +203,7 @@ def test_mana_identity_covers_every_rendered_identity_without_inference() -> Non
     for format_name in ("standard", "modern"):
         assert set(metadata["manaIdentities"][format_name]) == (
             _rendered_identities(format_name)
-            | RETAINED_DORMANT_IDENTITIES[format_name]
+            | RETAINED_DORMANT_RENDERED_IDENTITIES[format_name]
         )
     assert "assets/images/mana/${color}.svg" in mtgo
     assert "MANA_IDENTITIES[state.format]?.[identityId]" in mtgo

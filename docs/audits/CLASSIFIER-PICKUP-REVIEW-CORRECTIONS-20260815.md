@@ -8,115 +8,85 @@ Correct the two classification errors found during the bounded 2026-W32 Pickup
 review without changing the accepted Landing thresholds or creating new parent
 or subtype identities:
 
-- classify the two reviewed Standard shells as `leyline-aggro/izzet` instead
-  of `izzet-fling`; and
+- classify the reviewed four-Leyline Standard build as
+  `leyline-aggro/izzet`, while keeping zero- and single-Leyline Callous
+  Sell-Sword builds in `izzet-fling`; and
 - classify the reviewed Modern Broodscale shell with main-deck red-producing
   lands as `broodscale-combo/gruul` instead of
   `broodscale-combo/mono-green`.
 
-## Authorized local scope
+## Corrected Standard boundary
 
-The Owner authorized local implementation on 2026-08-15. Commit, remote
-publication, merge, workflow dispatch, production fetch, and production
-publication remain unauthorized.
+The first proposed implementation incorrectly generalized one zero-Leyline
+Talent/Slickshot/Otter/Wild Ride list into a new
+`leyline-aggro-izzet-talent-shell` rule and raised Leyline Aggro above Izzet
+Fling. The reviewed Pickup Leyline list did not justify that rule: the actual
+`MacIsaac` list in Standard event `12850613` has four main-deck Leyline of
+Resonance and already matches the maintained `leyline-aggro-izzet` rule. The
+`itstime` list in event `12850815` has zero main-deck Leyline and three Callous
+Sell-Sword, so it belongs to Izzet Fling.
 
-The repair must preserve all existing parent, subtype, and rule IDs. It may add
-one explicit Standard rule for the reviewed Leyline-style Izzet shell, adjust
-only the priorities needed to resolve the accepted overlap, and extend the
-reviewed semantic-feature manifest only for the exact red-producing lands used
-by the affected Modern deck. The Modern Gruul and Mono-Green Broodscale rules
-must then use the shared main-deck red-source marker instead of one named land.
+The corrected implementation therefore:
 
-## Required validation
+- deletes `leyline-aggro-izzet-talent-shell` completely;
+- restores the Leyline Aggro priorities to Izzet 27040, Gruul 27030, Boros
+  27020, Rakdos 27010, and Mono-Red 27000;
+- leaves Izzet Fling at priority 53000; and
+- adds `Leyline of Resonance`, main deck, maximum count one to the existing
+  `izzet-fling-primary` rule.
 
-- Add exact-deck regression coverage for both reviewed Standard decks and the
-  reviewed Modern deck.
-- Prove deterministic rule-order behavior and preserve conflict, invalid-deck,
-  Unknown, and residual-subtype reporting.
-- Compare every current Standard and Modern MTGO deck, both frozen classifier
-  corpora, and retained Modern Tabletop event `434455` before and after the
-  repair. Record every identity transition; unexplained transitions fail the
-  task.
-- Regenerate only existing classification-derived artifacts whose facts or
-  classifier provenance change. Do not fetch or retain source responses and do
-  not alter protected event `434455` source bytes.
-- For the later Pickup review return path, reclassify only the affected
-  format's current-week candidates and prior four complete reference weeks.
-  Do not repeat unaffected human review.
+The Owner-approved Leyline of Resonance and Wild Ride representative-card pair
+and the Leyline Aggro/Izzet U/R display metadata remain retained. After the
+corrected statistics rebuild, the parent Leyline Aggro identity is below the
+3% composition threshold, while its Izzet subtype remains present in rendered
+statistics.
 
-Existing passed evidence remains valid unless this task changes its code,
-fixture, dependency, bootstrap, or input. A passed test must not be rerun.
-Unknown failures permit only the failed node and smallest affected set; known
-controlled errors are recorded without a complete rerun.
+## Impact audit
 
-## Stop point
+One corrected Standard-only comparison against the accepted R4 plus
+Spellementals boundary produced these transitions:
 
-Stop after local implementation, bounded validation, impact reporting, and
-Owner review. Do not commit or publish without a separate Owner authorization.
-
-## Local result
-
-The exact reviewed W32 decks now select:
-
-- `itstime`, Standard event `12850815`: `leyline-aggro/izzet` through
-  `leyline-aggro-izzet-talent-shell`;
-- `MacIsaac`, Standard event `12850613`: `leyline-aggro/izzet` through
-  `leyline-aggro-izzet`; and
-- `manohito`, Modern event `12851108`: `broodscale-combo/gruul` through
-  `broodscale-combo-gruul`.
-
-Complete de-identified impact comparison found:
-
-| Corpus | Accepted transitions | Count |
+| Corpus | Transition | Count |
 | --- | --- | ---: |
-| Current Standard, 4,925 decks | Izzet Fling -> Leyline Aggro / Izzet | 84 |
-| Current Standard, 4,925 decks | Izzet Prowess -> Leyline Aggro / Izzet | 1 |
-| Frozen Standard, 3,936 decks | Izzet Fling -> Leyline Aggro / Izzet | 56 |
-| Frozen Standard, 3,936 decks | Izzet Prowess -> Leyline Aggro / Izzet | 1 |
-| Current Modern, 7,104 decks | Mono-Green -> Gruul Broodscale | 157 |
-| Frozen Modern, 5,792 decks | Mono-Green -> Gruul Broodscale | 117 |
-| Tabletop event 434455, 362 decks | Mono-Green -> Gruul Broodscale | 12 |
+| Current Standard, 4,925 decks | Izzet Fling -> Leyline Aggro / Izzet | 3 |
+| Current Standard, 4,925 decks | Izzet Fling -> Izzet Prowess | 2 |
+| Frozen Standard, 3,936 decks | Izzet Fling -> Izzet Prowess | 2 |
 
-There are no other identity transitions and no conflict, invalid-deck, or
-residual-subtype result. Strict current reports retain 15 Standard Unknown and
-three Modern Unknown results; all accepted transitions remain classified.
+Every transition is caused by the new at-most-one main-deck Leyline condition.
+There are no Standard conflicts, invalid decks, or residual subtypes. Strict
+current reports contain 15 Standard Unknown records.
 
-Eight new focused regression cases passed. The complete-impact node then
-stopped on a test allowlist that omitted the one actual-Leyline Prowess
-transition. The allowlist was corrected after a read-only diagnosis. Under the
-Owner's no-rerun rule, that known controlled test-definition failure was not
-rerun and is not represented as a pass. The previously unexecuted Modern and
-event `434455` comparisons were completed directly once. Five affected
-rule-rebuild, manifest, Schema, and prior Spellementals tests passed once;
-nine event-compatibility and public-Schema tests passed once. Ruff passed for
-all changed Python files. No Playwright or complete local pytest suite ran.
+The previously accepted Modern correction is unchanged: current and frozen
+Modern move 157 and 117 Mono-Green Broodscale records to Gruul, and retained
+Tabletop event `434455` moves twelve. Those inputs and tests were not rerun for
+the Standard correction.
 
-Existing Standard and Modern MTGO statistics, matchups, completeness,
-hierarchy, metadata, strict reports, catalog, and indexed W30-W32 Top 8 files
-were rebuilt once. Event `434455` classification and derived closure were
-rebuilt once, while its normalized event stayed byte-identical at SHA-256
-`0b4296a9573a4facf4cfde1ce98569156f78fde6f5d2a1d3d662b54e2889e710`.
+## Local validation and generated closure
 
-## PR 211 browser repair
+After the initial six corrected Standard cases passed once, four new
+at-most-one-specific nodes passed once in 0.38 seconds: one-Leyline acceptance,
+two-Leyline rejection, and the two reviewed `Arcbound_Papi` lists. The already
+passed zero-Leyline, Modern, and browser nodes were not rerun.
 
-The first complete CI run on head `46809db` started Chromium successfully and
-executed all 79 production-page tests. Seventy-eight passed. The only failure
-was the newly visible `leyline-aggro` composition segment, which crossed the
-fixed 3% display threshold after the accepted reclassification but had no
-owner-approved representative-card mapping. This was not a browser-startup or
-timeout failure.
+The first read-only Standard audit command failed before repository logic ran
+because a PowerShell string preserved literal newline escape characters. Its
+corrected one-line form then completed once; this was not a test rerun.
 
-The Owner selected `Leyline of Resonance` as card 1 and `Wild Ride` as card 2.
-The repaired head adds their local 626 by 457 Scryfall art crops and the exact
-manual metadata entry, plus the already accepted `leyline-aggro/izzet` U/R mana
-identity. It changes no threshold, classification, statistic, interaction, or
-public path. Because this is a new code head, it requires its own first complete
-CI run; the failed `46809db` workflow is not rerun.
+Standard statistics, matchups, completeness, hierarchy, metadata, strict
+classification reports, and indexed W30-W32 Top 8 documents were regenerated
+once without fetching source data. Modern and event `434455` artifacts were
+not regenerated again.
 
-The two focused metadata tests on the repaired local tree then identified one
-separate expected lifecycle state: `izzet-fling` is no longer rendered in the
-current 1-, 4-, or 12-week window, but its previously approved manual mana and
-card mapping must not be deleted automatically. The test closure now expresses
-the exact union of currently visible identities and the explicitly retained
-dormant `izzet-fling` identity. The two diagnosed nodes were not rerun locally
-under the Owner's no-rerun rule.
+## Publication state
+
+PR 211 already exists. Its head `46809db` previously ran all 79 Playwright
+tests, with 78 passing and one missing-card-art failure. Head `485bd7d` added
+the Owner-approved Leyline art and metadata, but its remote validation is
+superseded by this uncommitted rule correction. No commit, push, PR update,
+workflow rerun, merge, production dispatch, or Pickup reflow was performed
+after the Owner paused publication.
+
+The Owner accepted the corrected local result and authorized commit, PR 211
+update, one complete CI run on the new exact head, and merge after every
+required check succeeds. Production dispatch, Pickup reflow, and P12-10 remain
+outside this authorization.

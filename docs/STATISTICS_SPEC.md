@@ -135,13 +135,14 @@ A classification result may also contain an optional subtype ID and subtype disp
 
 The Phase 2 compatibility migration may expose subtypes only for distinct legacy rule entries that already resolve to the same legacy archetype. It must not change any deck's parent archetype result. New subtype taxonomy and subtype-level statistical presentation require separate approval after the compatibility classifier is complete.
 
-The reviewed Standard `leyline-aggro/izzet` identity includes both the
-four-copy Leyline/Slickshot core and the color-pure Talent/Slickshot/Otter/Wild
-Ride shell. Those complete constructions take priority over `izzet-fling`;
-the incomplete Callous Sell-Sword/Talent core remains `izzet-fling`. For Modern
-Broodscale, Gruul versus Mono-Green is determined from reviewed main-deck red
-mana-source semantics, not one named land. A red source found only in the
-sideboard does not make the deck Gruul.
+The reviewed Standard `leyline-aggro/izzet` identity requires the maintained
+four-copy Leyline of Resonance and Slickshot Show-Off core. There is no
+non-Leyline Talent-shell alternative for that identity. `izzet-fling` retains
+its original higher priority and permits at most one main-deck Leyline of
+Resonance, so a Callous Sell-Sword/Talent deck with two or more main-deck
+Leylines cannot be selected as Izzet Fling. For Modern Broodscale, Gruul versus Mono-Green is
+determined from reviewed main-deck red mana-source semantics, not one named
+land. A red source found only in the sideboard does not make the deck Gruul.
 
 ### 3.3 Theoretical round
 
