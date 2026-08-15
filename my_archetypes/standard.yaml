@@ -2,7 +2,7 @@ schema_version: 1.1.0
 format: standard
 semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
-  manifest_sha256: 0cd94ee3a4d6974f88446a660e661943d1cc2c4d8a25891dd6d214931a6aa999
+  manifest_sha256: 528e870c8323d752a55f5ff07e6119aef746b9d0632ec4e3f7c413d1a3a248c2
 archetypes:
 - id: monument-lessons
   name: Monument Lessons
@@ -422,6 +422,9 @@ archetypes:
         min_count: 4
       - card: Spirebluff Canal
         min_count: 1
+      - card: Leyline of Resonance
+        zone: main
+        max_count: 1
 - id: gruul-fling
   name: Gruul Fling
   priority: 52000

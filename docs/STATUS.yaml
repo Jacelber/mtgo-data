@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/gov-12-operations-privacy-closeout"
-  working_branch_status: "owner_accepted_same_task_completion_authorized"
+  current_working_branch: "codex/p12-10-classifier-corrections"
+  working_branch_status: "local_complete_pending_owner_acceptance"
   status: "active"
 
 status_document:
@@ -31,59 +31,77 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-12-OPERATIONS-AND-PRIVACY-CLOSEOUT"
-  name: "Document Melee HMAC recovery and production failure response"
-  status: "owner_accepted_same_task_completion_authorized"
+  id: "CLASSIFIER-PICKUP-REVIEW-CORRECTIONS-20260815"
+  name: "Migrate the accepted Pickup review classifier corrections"
+  status: "local_complete_pending_owner_acceptance"
   authorized_on: "2026-08-16"
-  owner_accepted_on: "2026-08-16"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-12-operations-privacy-closeout-20260816-01"
-  branch: "codex/gov-12-operations-privacy-closeout"
-  base_commit: "de6ca64a4d2f34b0f24f983bf11e881bf3a7181a"
-  artifact_impact: "none"
-  objective: "Close the current documentation gaps for Melee-only HMAC recovery and existing production failure response without changing executable behavior or provisioning a secret."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/pr211-governance-migration-20260816-01"
+  branch: "codex/p12-10-classifier-corrections"
+  base_commit: "9b80490651d605aad99d1fec41e8b6b5541eaeca"
+  artifact_impact: "internal_diagnostics,user_visible_ui,statistical_json_structure"
+  objective: "Migrate the already accepted Leyline and Broodscale classifier corrections onto current governance without recalculation, retired tests, or repeated heavy validation."
   authorization:
     local_implementation: true
-    commit: true
-    remote_publication: true
-    merge: true
+    commit: false
+    remote_publication: false
+    merge: false
   target_paths:
-    - "README.md"
+    - "my_archetypes/standard.yaml"
+    - "my_archetypes/modern.yaml"
+    - "configs/classifier_semantic_features.yaml"
+    - "tools/build_classifier_r5_production_rules.py"
+    - "assets/js/phase8/archetype-visuals.js"
+    - "assets/images/representative-cards/standard"
+    - "data/modern/melee"
+    - "reports/standard/mtgo"
+    - "reports/modern/mtgo"
+    - "stats/standard/mtgo"
+    - "stats/modern/mtgo"
+    - "stats/modern/melee"
+    - "stats/catalog.json"
+    - "schemas/melee-compatibility-manifest.schema.json"
+    - "tests/fixtures/melee/434455_compatibility_manifest.json"
+    - "docs/audits/CLASSIFIER-PICKUP-REVIEW-CORRECTIONS-20260815.md"
     - "docs/STATUS.yaml"
+    - "docs/DECISIONS.md"
+    - "docs/STATISTICS_SPEC.md"
     - "docs/DATA_ARCHITECTURE.md"
-    - "docs/GOVERNANCE_REMEDIATION.yaml"
-    - "docs/OPERATIONS_RUNBOOK.md"
   planned_file_operations:
     additions:
-      - path: "docs/OPERATIONS_RUNBOOK.md"
+      - path: "assets/images/representative-cards/standard/leyline-of-resonance.jpg"
+        category: "ui"
+      - path: "assets/images/representative-cards/standard/wild-ride.jpg"
+        category: "ui"
+      - path: "docs/audits/CLASSIFIER-PICKUP-REVIEW-CORRECTIONS-20260815.md"
         category: "docs"
     deletions: []
     renames: []
   protected_scope:
-    product_code_changed: "none"
-    raw_or_generated_data_changed: "none"
-    statistical_behavior_changed: "none"
-    schema_changed: "none"
-    frontend_or_ui_changed: "none"
+    product_code_changed: "Only accepted Standard and Modern classifier rules, reviewed semantic features, and their production-rule builder."
+    raw_or_generated_data_changed: "No raw source data; retain only the already generated affected classifier-derived artifacts from PR 211."
+    statistical_behavior_changed: "No formula change; only accepted classification identities and their derived aggregates change."
+    schema_changed: "Only the event 434455 compatibility-manifest constant advances from 1.4.0 to 1.5.0."
+    frontend_or_ui_changed: "Only accepted Leyline Aggro/Izzet mana metadata and Leyline of Resonance/Wild Ride representative-card assets."
     workflow_changed: "none"
     public_paths_changed: "none"
     production_dispatched: false
-    remote_write_performed: "none"
+    remote_write_performed: "none_after_owner_pause"
   validation_plan:
-    - "Owner review and complete diff review are the local acceptance checks for this documentation-only task."
-    - "Run no local automated test because executable behavior is unchanged."
-    - "The final targeted PR CI owns one repository-reference validation and one existing live-document contract check; do not repeat either locally."
-    - "Do not run privacy, CLI, Schema, rule, full pytest, Ruff, mypy, Node, Playwright, generator, live-fetch, production, or Pages checks."
+    - "Reuse the passed exact-deck, full-corpus impact, builder, rule, Schema, and visual evidence because current master changed no relevant classifier, generated-data, or UI input."
+    - "Do not regenerate classification or statistical artifacts and do not rerun the retired R4/R5, ordinary, committed-baseline, full pytest, Node, or Playwright suites."
+    - "Run the new value-independent output invariant validator once on the final migrated local tree."
+    - "After Owner acceptance, the final targeted PR CI owns one repository-reference check, one live-document check, and the applicable rule and Schema validators."
   prohibited_changes:
-    - "Do not change code, tests, Schemas, configuration, data, UI, workflows, public URLs, event selection, statistics, or production behavior."
-    - "Do not create, read, provision, rotate, or expose a real HMAC key, credential, GitHub Secret, or private removal-request value."
-    - "Do not add a suppression list or scan data, stats, reports, or Pages artifacts for participant strings."
-    - "Do not delete or rename files; add only the predeclared docs/OPERATIONS_RUNBOOK.md."
-    - "Do not dispatch production, deploy, provision a secret, or begin the Melee v3 preflight as part of accepted-task completion."
-  stop_point: "Complete the unchanged accepted task through local commit, one Ready PR, required CI, and merge; stop on failed checks, changed scope, conflict, or permission blocker."
+    - "Do not change accepted classifier semantics, stable IDs, priorities, transition counts, thresholds, Pickup decisions, or representative-card selections."
+    - "Do not restore any test removed by GOV-07 or GOV-08, add a replacement classifier regression suite, or repair the old PR 211 CI failures."
+    - "Do not recalculate or regenerate the accepted classifier-derived artifacts unless a relevant input change is discovered."
+    - "Do not change workflows, public paths, statistical formulas, source events, or protected event 434455 normalized bytes."
+    - "Do not dispatch production, reflow Pickup review, begin P12-10, or perform a remote write before Owner acceptance."
+  stop_point: "Finish the local migration, one output-invariant check, and complete diff review; stop for Owner acceptance before commit or remote publication."
 
 current_repository_state:
-  baseline_commit: "de6ca64a4d2f34b0f24f983bf11e881bf3a7181a"
-  baseline_note: "Remote master after GOV-11 PR 218; GitHub and Git retain its publication evidence."
+  baseline_commit: "9b80490651d605aad99d1fec41e8b6b5541eaeca"
+  baseline_note: "Remote master after GOV-12 PR 219; used as the governance-migration base for existing PR 211."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -105,6 +123,7 @@ future_task_gates:
   - task: "P12-10"
     status: "blocked_pending_no_publication_rehearsal_and_separate_authorization"
     remaining_requirements:
+      - "Complete and publish the accepted classifier correction."
       - "Perform and accept one separately authorized no-publication Tuesday rehearsal."
       - "Obtain separate P12-10 implementation authorization."
 
@@ -113,11 +132,11 @@ next_approved_task:
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "GOV-12 is Owner-accepted for same-task completion; the Melee v3 production preflight and every other follow-up remain unauthorized."
+  note: "Only the current PR 211 governance migration is authorized; every follow-up remains unauthorized."
 
 prohibited_next_actions:
-  - "Do not begin the Melee v3 production preflight, GOV-13, P12-10, or product development without separate Owner authorization."
+  - "Do not begin the Melee v3 production preflight, GOV-13, P12-10, Pickup reflow, or another task automatically."
   - "Do not create, access, configure, or rotate an HMAC key or GitHub Secret."
-  - "Do not dispatch production, change event selection, fetch protected source data, or change public/statistical contracts."
+  - "Do not dispatch production, change event selection, fetch protected source data, or change public/statistical contracts beyond the accepted classifier correction."
   - "Do not rewrite Git history, force-push, mutate protected branches or tags, or change event 434455 protected bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."

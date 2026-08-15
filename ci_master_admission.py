@@ -400,7 +400,18 @@ def _path_category(path: str) -> str | None:
         or path in {"index.html", "package.json", "package-lock.json"}
     ):
         return "ui"
-    if path.startswith(("schemas/", "stats/", "configs/", "rules/")):
+    if path.startswith(
+        (
+            "configs/",
+            "data/",
+            "my_archetypes/",
+            "reports/",
+            "rules/",
+            "schemas/",
+            "stats/",
+            "tests/fixtures/",
+        )
+    ):
         return "data"
     if path.startswith("src/") or path.endswith(".py"):
         return "code"
