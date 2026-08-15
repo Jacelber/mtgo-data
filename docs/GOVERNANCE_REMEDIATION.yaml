@@ -80,7 +80,7 @@ tasks:
 
   - id: "GOV-08A-GITHUB-AUTH-SINGLE-ENTRYPOINT"
     name: "Make repository preflight the only GitHub credential verdict"
-    status: "owner_accepted_completion_authorized"
+    status: "completed_merged_and_deployed"
     depends_on: ["GOV-08-MINIMAL-TESTSET-REBUILD"]
     problem: "A restricted-context bare gh auth result could still be misreported as an invalid token despite the documented publication method."
     solution: "Route every credential verdict through one repository script with machine-readable states and require the actual publication context before it can inspect gh."
@@ -91,14 +91,22 @@ tasks:
       - "The actual publication context returns READY only for Jacelber with repository push permission and any required workflow scope."
       - "Only AUTH_REJECTED permits an Owner login request; permission and network failures keep their own states."
       - "No GitHub workflow, product, data, statistical, UI, Schema, or public-path behavior changes."
+    completion: "Published through PR 215 and merge commit ddf10e30d890379a288c52b1ade9837e15bf95c5."
 
   - id: "GOV-09-UI-ACCEPTANCE-CONTRACT"
     name: "Make owner browser review the UI acceptance record"
-    status: "planned_not_authorized"
+    status: "owner_accepted_completion_authorized"
     depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"]
     problem: "Automated browser reruns duplicate detailed owner review and previously missed real mobile navigation defects."
-    solution: "Use syntax/model smoke before review, record the owner-reviewed immutable commit, and do not rerun Playwright after acceptance; keep one generated-page smoke only at the publish output gate."
+    solution: "Run only the path-relevant matchup-model or runtime Node check before review, make Owner browser review final, bind the PR to the reviewed user-visible blob digest, retire nine high-maintenance browser/preflight files, and keep exactly two rendering smokes at the publication output gate."
     effect: "UI work is checked where defects are visible without paying for duplicate post-review automation."
+    acceptance:
+      - "PR CI never runs Node or Playwright UI tests after Owner acceptance; it only verifies the accepted digest and repository references."
+      - "The digest covers changed index.html, assets/**, and melee/** blobs but ignores status, test, package, and governance files."
+      - "Missing, duplicate, stale, or irrelevant UI acceptance markers stop immediately without a fallback suite."
+      - "The retained matchup-model and runtime Node checks run only for their named logic changes, once before Owner review."
+      - "Exactly nine declared browser/preflight files are removed and no file is added or renamed."
+      - "The output gate retains exactly one MTGO and one Melee real-number rendering smoke."
 
   - id: "GOV-10-PRODUCTION-EVIDENCE-REUSE"
     name: "Stop retesting validated production commits"
