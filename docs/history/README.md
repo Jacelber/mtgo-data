@@ -20,3 +20,14 @@ The snapshot retains all earlier phase plans, task results, resolved blockers,
 maintenance records, and superseded state. Those values describe the past and
 must not be used to authorize work. Current authorization is recorded only in
 `docs/STATUS.yaml`.
+
+## Roadmap history
+
+- `ROADMAP-PHASES-0-11.md` preserves completed Phases 0–11, superseded phase
+  specifications, and procedures retired from the live roadmap by GOV-11.
+- `ROADMAP-PHASE-12-COMPLETED.md` preserves the completed P12-01 through
+  P12-09 task specifications and their embedded implementation history.
+
+At task completion, move detailed completed roadmap material into the matching
+phase history file in the same accepted task. Keep only remaining work,
+acceptance criteria, and a compact history pointer in `docs/ROADMAP.md`.

@@ -111,7 +111,7 @@ tasks:
 
   - id: "GOV-10-PRODUCTION-EVIDENCE-REUSE"
     name: "Stop retesting validated production commits"
-    status: "owner_accepted_same_task_completion_authorized"
+    status: "completed_merged_and_deployed"
     depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER", "GOV-08-MINIMAL-TESTSET-REBUILD"]
     problem: "Scheduled build, bot push CI, and Pages can repeat evidence for the same generated subject."
     solution: "Hash the post-fetch generation subject, skip every downstream test and publication stage when it is unchanged, bind a changed subject's validated artifact to its producer run and generated commit, path-filter ordinary Pages pushes, and perform only exact evidence admission plus three availability requests downstream."
@@ -124,14 +124,23 @@ tasks:
       - "Governance, tests, and other non-site master changes do not trigger Pages."
       - "Post-deploy confirmation requests only index.html, melee/index.html, and stats/catalog.json with bounded retry."
       - "Manual or recovery dispatch with no production evidence remains distinct; partial evidence fails closed."
+    completion: "Published through PR 217 and merge commit bdf40432ab474effcc43e92f93ca17cb86f9aa0c; merge confirmation and Pages deployment succeeded."
 
   - id: "GOV-11-LIVE-DOCUMENT-SLIMMING"
     name: "Keep live governance documents small"
-    status: "planned_not_authorized"
+    status: "owner_accepted_same_task_completion_authorized"
     depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"]
     problem: "ROADMAP and mandatory reading contain completed history that consumes time and context every task."
     solution: "Move completed detail to docs/history, keep current/future objectives and acceptance only, and require the same archive step at every completion."
     effect: "Agents read only current state and relevant future work; ROADMAP no longer grows without bound."
+    acceptance:
+      - "The live roadmap contains no completed Phase 0-11 or P12-01 through P12-09 detail."
+      - "Archived roadmap text remains available under docs/history and is explicitly non-authoritative."
+      - "STATUS contains only live state and remains below the enforced size ceiling."
+      - "AGENTS contains every-task steps and conditional pointers without completed-task sediment."
+      - "Every future completion moves detailed completed roadmap material to history in the same accepted task."
+      - "No product, statistics, Schema, data, UI, workflow, public-path, production, or event behavior changes."
+      - "Only the focused live-document contract runs locally once; PR CI owns its one independent reference check."
 
   - id: "GOV-12-OPERATIONS-AND-PRIVACY-CLOSEOUT"
     name: "Add the missing low-cost operational guards"

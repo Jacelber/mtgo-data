@@ -541,6 +541,25 @@ is a signal to narrow the query, not to repeat the same broad read.
 The evidence behind these controls is summarized in
 `docs/audits/DEVELOPMENT_PROCESS_RETROSPECTIVE_2026-07.md`.
 
+### Live-document maintenance
+
+Keep the always-read layer bounded by responsibility:
+
+- `AGENTS.md` contains only stable every-task steps, hard boundaries, and
+  conditional reading pointers;
+- `docs/STATUS.yaml` contains only live phase, task, authorization, blockers,
+  next-gate, and prohibition state;
+- `docs/ROADMAP.md` contains the active phase, useful future phases, and their
+  acceptance criteria; and
+- `docs/history/` preserves completed or superseded detail and never
+  authorizes work.
+
+When a completed task has detailed material in the live roadmap, move that
+material to the corresponding phase history file in the same accepted task,
+update `docs/history/README.md`, and leave only the remaining plan plus one
+compact pointer. GitHub and Git retain ordinary validation, publication, and
+merge identifiers; do not copy them into a growing live narrative.
+
 ## Language
 
 Repository and Git/GitHub content must be English. Codex contracts, criteria, stop conditions, and reports must be English. User-facing orchestration outside the repository may be Chinese. Preserve commands, paths, identifiers, hashes, package names, and raw output. Do not alter existing files solely for language or style consistency. Stop if non-English repository content could be introduced.

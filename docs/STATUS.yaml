@@ -4,104 +4,64 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/gov-10-production-evidence-reuse"
+  current_working_branch: "codex/gov-11-live-document-slimming"
   working_branch_status: "owner_accepted_same_task_completion_authorized"
   status: "active"
-  primary_language: "Python"
-  deployment: "GitHub Pages"
 
 status_document:
-  purpose: "Small machine-readable record of current project state and authorization."
+  purpose: "Small machine-readable record of current state and authorization."
   last_updated: "2026-08-15"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
-  update_required_after_each_phase: true
   authoritative_for:
     - "current phase"
     - "current task and authorization"
     - "known blockers"
     - "next planned task"
     - "prohibited next actions"
-  not_authoritative_for:
-    - "statistical formulas"
-    - "product scope"
-    - "data architecture"
-    - "historical decisions"
-    - "completed-task evidence"
-  history_policy: "Completed-task detail and superseded state belong under docs/history or in the linked audit, decision, roadmap, pull-request, and Git history."
-
-authoritative_documents:
-  reading_order:
-    - path: "AGENTS.md"
-      status: "current"
-    - path: "docs/PROJECT_SCOPE.md"
-      status: "current"
-    - path: "docs/STATISTICS_SPEC.md"
-      status: "current"
-    - path: "docs/DATA_ARCHITECTURE.md"
-      status: "current"
-    - path: "docs/ROADMAP.md"
-      status: "current"
-    - path: "docs/DECISIONS.md"
-      status: "current"
-    - path: "docs/STATUS.yaml"
-      status: "current"
-    - path: "docs/DEVELOPMENT_WORKFLOW.md"
-      status: "current"
-  agent_adapter_documents:
-    - path: "CLAUDE.md"
-      status: "current_thin_adapter"
-    - path: ".github/copilot-instructions.md"
-      status: "current_thin_adapter"
-  historical_documents:
-    - path: "PROJECT_NOTES.md"
-      status: "historical_non_authoritative"
-    - path: "docs/history/README.md"
-      status: "history_index_non_authoritative"
-    - path: "docs/history/STATUS-2026-08-04-pre-P11-13.yaml"
-      status: "byte_preserved_pre_split_snapshot_non_authoritative"
+  history_policy: "Completed detail belongs in docs/history, audits, decisions, pull requests, and Git history; never use it to authorize current work."
 
 current_phase:
   id: 12
   name: "Front-end productization, editorial landing, and visual system"
   status: "active"
-  started_on: "2026-08-06"
-  objective: "Make the existing static MTGO and Tabletop products faster, shareable, accessible, resilient, and usable across desktop and mobile without changing established statistical meaning, product separation, or public entry paths."
+  objective: "Productize the existing MTGO and Tabletop front ends and add the approved MTGO Landing without changing established statistical meaning or product separation."
   production_changes_allowed: false
   next_phase_id: 13
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-10-PRODUCTION-EVIDENCE-REUSE"
-  name: "Stop retesting validated production commits"
+  id: "GOV-11-LIVE-DOCUMENT-SLIMMING"
+  name: "Keep live governance documents small"
   status: "owner_accepted_same_task_completion_authorized"
   authorized_on: "2026-08-15"
   owner_accepted_on: "2026-08-15"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-10-production-evidence-reuse-20260815-01"
-  branch: "codex/gov-10-production-evidence-reuse"
-  base_commit: "3ff9549e8fab9776f7a150ebf0cee6a6db85edd4"
-  task_type: "local_production_evidence_governance"
-  artifact_impact: "public_path"
-  objective: "Validate one production candidate once, bind publication and Pages to its immutable evidence, and eliminate unrelated Pages deployments."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-11-live-document-slimming-20260815-01"
+  branch: "codex/gov-11-live-document-slimming"
+  base_commit: "bdf40432ab474effcc43e92f93ca17cb86f9aa0c"
+  artifact_impact: "none"
+  objective: "Archive completed roadmap detail, retain only current and useful future planning in live documents, and make archival part of every completion."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - ".github/workflows/update.yml"
-    - ".github/workflows/pages.yml"
-    - "ci_master_admission.py"
-    - "tests/test_ci_master_admission.py"
-    - "tests/test_ci_workflow.py"
-    - "docs/DEVELOPMENT_WORKFLOW.md"
-    - "docs/TEST_TRIGGER_MATRIX.md"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DECISIONS.md"
-    - "docs/GOVERNANCE_REMEDIATION.yaml"
+    - "AGENTS.md"
     - "docs/STATUS.yaml"
+    - "docs/ROADMAP.md"
+    - "docs/DEVELOPMENT_WORKFLOW.md"
+    - "docs/GOVERNANCE_REMEDIATION.yaml"
+    - "docs/history/README.md"
+    - "docs/history/ROADMAP-PHASES-0-11.md"
+    - "docs/history/ROADMAP-PHASE-12-COMPLETED.md"
+    - "tests/test_documentation_history.py"
   planned_file_operations:
-    additions: []
+    additions:
+      - path: "docs/history/ROADMAP-PHASES-0-11.md"
+        category: "docs"
+      - path: "docs/history/ROADMAP-PHASE-12-COMPLETED.md"
+        category: "docs"
     deletions: []
     renames: []
   protected_scope:
@@ -109,174 +69,52 @@ current_task:
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
-    frontend_source_changed: "none"
-    public_urls_changed: "none"
+    frontend_or_ui_changed: "none"
+    workflow_changed: "none"
+    public_paths_changed: "none"
     production_dispatched: false
     remote_write_performed: "none"
-  allowed_actions:
-    - "Bind the validated-output digest, production run, source commit, and published commit."
-    - "Skip regeneration and publication when the generation-subject digest is unchanged."
-    - "Require exact production evidence on the publisher's Pages dispatch."
-    - "Limit automatic Pages push runs to site-input paths and add minimal post-deploy availability checks."
   validation_plan:
-    - "During local implementation, use static workflow and diff review only."
-    - "Run production-evidence admission/workflow control nodes once only in PR CI, not locally."
-    - "Run the focused live-status structure check once on the final local tree."
-    - "Do not run full pytest, generators, Playwright, Node UI tests, live fetch, production, or deployment."
+    - "Use exact section boundaries and complete diff review to prove archived text is retained."
+    - "Run tests/test_documentation_history.py once on the final local tree."
+    - "Reserve repository reference validation for the final PR CI; do not repeat it locally."
+    - "Do not run full pytest, generators, Node, Playwright, live fetch, production, or Pages."
   prohibited_changes:
-    - "Do not change product UI, statistics, Schema, generated data, public URLs, source selection, or event configuration."
-    - "Do not add, delete, or rename files."
+    - "Do not change product scope, statistics, Schemas, data, UI, workflows, public URLs, event selection, or production behavior."
+    - "Do not delete or rename files; add only the two predeclared history files."
     - "Do not commit, push, create a pull request, merge, dispatch production, or deploy before Owner acceptance."
-    - "Do not begin GOV-11, another governance task, P12-10, or product development."
-  stop_point: "Complete the accepted task through Ready PR, required CI, merge, and applicable Pages; stop on failed checks, changed scope, conflict, or permission blocker."
-
-
-
-recent_completion_handoff:
-  id: "GOV-09-UI-ACCEPTANCE-CONTRACT"
-  name: "Make Owner browser review the UI acceptance record"
-  status: "completed_merged_and_deployed"
-  pull_request: 216
-  merge_commit: "3ff9549e8fab9776f7a150ebf0cee6a6db85edd4"
-  note: "Owner browser review is final UI evidence; GitHub and Git retain publication evidence."
+    - "Do not begin GOV-12, GOV-13, P12-10, or another task."
+  stop_point: "Complete the accepted task through local commit, one Ready PR, required CI, and merge; stop on failed checks, changed scope, conflict, or permission blocker."
 
 current_repository_state:
-  baseline_commit: "3ff9549e8fab9776f7a150ebf0cee6a6db85edd4"
-  baseline_note: "Verified remote master after PR 216; used as the GOV-10 base."
-  default_branch: "master"
-  package_root: "src/mtgmeta"
-  supported_runtime: "Python 3.12"
-  production_frontends:
-    mtgo: "index.html"
-    tabletop: "melee/index.html"
-  public_catalog: "stats/catalog.json"
-  pages_policy: "configs/pages_publication.json"
-  active_root_python_tools: 8
-  legacy_entry_cleanup: "P11-12 completed and merged in PR 173"
-  live_and_historical_status: "separated and published by P11-13 in PR 174"
-
-product_tracks:
-  mtgo:
-    user_facing_name: "MTGO Environment Trends"
-    public_entry: "/index.html"
-    public_formats:
-      - "standard"
-      - "modern"
-    source_scope: "data/<format>/mtgo"
-    statistics_scope: "stats/<format>/mtgo"
-  tabletop:
-    user_facing_name: "Tabletop Major Events"
-    public_entry: "/melee/index.html"
-    public_events:
-      - event_id: 434455
-        format: "modern"
-        structure: "mixed"
-    whitelist: "configs/melee_events.yaml"
-    source_scope: "data_raw/melee and data/<format>/melee"
-    statistics_scope: "stats/<format>/melee"
-  separation_rule: "MTGO and tabletop source data, normalized data, statistics, catalogs, and front-end behavior remain separate."
-
-approved_event_structures:
-  - "constructed_day2"
-  - "constructed_single_stage"
-  - "mixed"
-
-engineering_quality:
-  package_installed_commands:
-    - "mtgo-data-mtgo"
-    - "mtgo-data-melee"
-    - "mtgo-data-catalog"
-  required_ci_capabilities:
-    - "deterministic changed-path admission with fast unclassified stop"
-    - "targeted documentation, code, data, governance, and UI checks"
-    - "exact merge evidence reuse"
-    - "production candidate, repository, rule, Schema, output-invariant, consumer, and generated-page validation"
-  dependency_updates: "monthly review-only Dependabot pull requests"
-  coverage_baseline: "P11-04 skipped by owner because measured CI time was unacceptable"
-  production_resource_validation: "P11-10 protects both front ends, maintained JavaScript, and Phase 8 resource references"
-  legacy_entry_audit: "P11-11 audited and P11-12 completed the owner-approved cleanup"
+  baseline_commit: "bdf40432ab474effcc43e92f93ca17cb86f9aa0c"
+  baseline_note: "Remote master after GOV-10 PR 217; GitHub and Git retain its publication evidence."
+  public_entries:
+    mtgo: "/index.html"
+    tabletop: "/melee/index.html"
+  public_catalog: "/stats/catalog.json"
 
 known_blockers:
   - id: "MTGO-PRODUCTION-RUN-31838657545-CANCELLED"
     scope: "production_and_p12_10_rehearsal"
-    evidence: "The fetch job reached its 45-minute hard timeout after complete baseline validation and repeated MTGO listing failures."
-    effect: "The repair must be published and a later scheduled production run must succeed before the no-publication rehearsal can be repeated."
+    effect: "A later scheduled production run must succeed before the separately authorized no-publication P12-10 rehearsal."
 
 future_task_gates:
   - task: "P12-10"
     status: "blocked_pending_no_publication_rehearsal_and_separate_authorization"
-    completed_requirements:
-      - "Classifier remediation, stable identities, and Spellementals boundary fix accepted and published."
-      - "Standard and Modern Pickup known state matches accepted R5 evidence and final parent identities."
-      - "Owner accepted the already-computed refreshed Landing shadow and reconfirmed 3%, 5pp, and 20 without another calculation."
-      - "Two representative cards are approved for every required identity."
-      - "Pickup candidate extension, review manifest, and XLSX write-back boundaries are defined."
     remaining_requirements:
       - "Perform and accept one separately authorized no-publication Tuesday rehearsal."
       - "Obtain separate P12-10 implementation authorization."
-
-open_decisions:
-  - id: "OPEN-003"
-    question: "Enable Vintage as a supported format?"
-    status: "deferred"
-    decision_gate: "after Legacy implementation and data-quality review"
-  - id: "OPEN-004"
-    question: "Add automatic Melee event discovery?"
-    status: "deferred"
-    current_rule: "manual whitelist only"
 
 next_approved_task:
   id: "NONE"
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
-  production_change: false
-  requires_user_confirmation: true
   local_execution_authorized: false
-  commit_authorized: false
-  remote_publication_authorized: false
-  note: "GOV-10 is Owner-accepted for same-task completion; no follow-up task is authorized."
-
-governance_baseline:
-  status: "active_on_master"
-  task_id: "GOV-02-DELEGATED-LOCAL-EXECUTION-AUTHORITY-20260718"
-  pull_request: 8
-  merge_commit: "46b3c7883ca124f55bed4f43c9a51c2bae70675e"
-  rule: "Authorization applies only to the approved focused task and does not carry to another task or phase."
-
-delegated_local_execution_governance:
-  isolated_workspace_required: true
-  protected_original_workspace: "D:/dl/crawlerpj"
-  local_execution: "Allowed only after owner approval for the focused task."
-  credentials: "Not included in delegated local authority."
-  remote_publication:
-    standing_authorization: false
-    authorization_source: "owner_acceptance_for_same_task"
-    requires_separate_owner_authorization_after_acceptance: false
-  production_dispatch:
-    standing_authorization: false
-    authorization_source: "owner_acceptance_when_dispatch_is_applicable_to_the_accepted_task"
-    requires_separate_owner_authorization_after_acceptance: false
-  next_task:
-    automatic_start: false
-    requires_separate_owner_authorization: true
-
-publication_workflow_control:
-  id: "P8-PUBLICATION-WORKFLOW-GOVERNANCE"
-  status: "deferred_by_policy"
-  remote_mutation_client: "gh"
-  git_push_auth: "command_scoped_gh_auth_git_credential"
-  github_app_mutations_allowed: false
-  create_status_only_pull_request_after_merge: false
-  post_merge_metadata_source: "GitHub and Git history"
-  p8_08_authorized: false
+  note: "GOV-11 is Owner-accepted for same-task completion; no follow-up task is authorized."
 
 prohibited_next_actions:
-  - "Do not begin GOV-11, GOV-12, GOV-13, P12-10, or other product development after GOV-10 completion without separate owner authorization."
-  - "Do not recalculate the accepted Landing shadow or change the approved 3%, 5pp, or 20 thresholds."
-  - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
-  - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
-  - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."
-  - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."
-  - "Do not obtain cookies, session identifiers, access-control artifacts, or non-public data, and do not bypass access controls."
-  - "Do not transmit repository content to Superdesign or another external design service without separate authorization."
+  - "Do not begin GOV-12, GOV-13, P12-10, or product development without separate Owner authorization."
+  - "Do not dispatch production, change event selection, fetch protected source data, or change public/statistical contracts."
+  - "Do not rewrite Git history, force-push, mutate protected branches or tags, or change event 434455 protected bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."
