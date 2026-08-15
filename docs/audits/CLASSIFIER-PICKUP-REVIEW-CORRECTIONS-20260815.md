@@ -77,16 +77,34 @@ classification reports, and indexed W30-W32 Top 8 documents were regenerated
 once without fetching source data. Modern and event `434455` artifacts were
 not regenerated again.
 
-## Publication state
+## Governance migration and publication state
 
-PR 211 already exists. Its head `46809db` previously ran all 79 Playwright
-tests, with 78 passing and one missing-card-art failure. Head `485bd7d` added
-the Owner-approved Leyline art and metadata, but its remote validation is
-superseded by this uncommitted rule correction. No commit, push, PR update,
-workflow rerun, merge, production dispatch, or Pickup reflow was performed
-after the Owner paused publication.
+PR 211 already exists. Its historical head `46809db` ran all 79 Playwright
+tests, with 78 passing and one missing-card-art failure; historical head
+`485bd7d` then added the Owner-approved Leyline art and metadata. Those results
+remain evidence for the unchanged classifier/UI inputs, not instructions to
+rerun the retired suites.
 
-The Owner accepted the corrected local result and authorized commit, PR 211
-update, one complete CI run on the new exact head, and merge after every
-required check succeeds. Production dispatch, Pickup reflow, and P12-10 remain
-outside this authorization.
+On 2026-08-16 the accepted task tree was merged forward onto current master
+`9b80490651d605aad99d1fec41e8b6b5541eaeca` in a fresh isolated workspace.
+Current master changed no relevant classifier, generated-data, Schema, or UI
+input after the original branch point. The migration therefore retains the
+already generated artifacts and impact counts without recalculation, removes
+the branch's obsolete classifier regression module, and does not restore any
+test retired by GOV-07 or GOV-08.
+
+Under the current trigger matrix, local migration adds only one new check: the
+value-independent output-invariant validator on the final tree. After new
+Owner acceptance, targeted PR CI owns the repository-reference, live-document,
+rule, and Schema checks selected by the final changed paths. Full pytest,
+committed-baseline, R4/R5, Node, and Playwright reruns are not required.
+
+The first command-line attempt did not enter the validator because `python`
+was absent from the PowerShell path. A startup preflight then selected the
+configured Python 3.12.7 interpreter; the validator ran once and reported
+`Generated MTGO output invariants are valid.` No failed or partial test was
+rerun.
+
+No commit, push, PR update, workflow run, merge, production dispatch, Pickup
+reflow, or P12-10 work is authorized before that acceptance. Production,
+Pickup reflow, and P12-10 remain separately gated after publication.

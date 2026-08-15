@@ -15,7 +15,10 @@ concurrency:
 jobs:
   baseline:
     name: Verify clean MTGO production baseline
-    if: github.ref == 'refs/heads/master'
+    if: >-
+      github.ref == 'refs/heads/master' &&
+      needs.fetch.outputs.generation-needed == 'true'
+    needs: fetch
     runs-on: ubuntu-latest
     timeout-minutes: 60
     outputs:
@@ -44,8 +47,12 @@ jobs:
         id: baseline-stage
         run: echo "stage=baseline" >> "$GITHUB_OUTPUT"
 
-      - name: Verify clean-checkout code and committed baseline
-        run: python -B -m pytest
+      - name: Smoke the MTGO and catalog commands used by this workflow
+        run: >-
+          python -B -m pytest
+          --basetemp="${RUNNER_TEMP}/pytest-mtgo-baseline"
+          tests/test_cli_smoke.py::test_mtgo_cli_smoke
+          tests/test_cli_smoke.py::test_catalog_cli_smoke
 
       - name: Write baseline summary
         if: always()
@@ -56,19 +63,20 @@ jobs:
             echo
             echo "- Job result: ${{ job.status }}"
             echo "- Trigger: ${{ github.event_name }}"
-            echo "- Validation: complete clean-checkout pytest suite"
-            echo "- Live input collection starts only after this job succeeds."
+            echo "- Validation: MTGO and catalog offline CLI smoke"
+            echo "- Candidate generation starts only after this job succeeds."
             echo "- No repository write permission is available to this job."
           } >> "$GITHUB_STEP_SUMMARY"
 
   fetch:
     name: Fetch MTGO candidate data
     if: github.ref == 'refs/heads/master'
-    needs: baseline
     runs-on: ubuntu-latest
     timeout-minutes: 45
     outputs:
       failure-stage: ${{ steps.fetch-stage.outputs.stage }}
+      generation-needed: ${{ steps.generation-subject.outputs.needed }}
+      generation-subject-sha256: ${{ steps.generation-subject.outputs.sha256 }}
     permissions:
       actions: read
       contents: read
@@ -218,6 +226,30 @@ jobs:
           done
           exit "$STATUS"
 
+      - name: Identify the immutable generation subject
+        id: generation-subject
+        shell: bash
+        run: |
+          SUBJECT_TAR="$RUNNER_TEMP/mtgo-generation-subject.tar"
+          INPUTS=(src data configs my_archetypes schemas fetched.txt pyproject.toml requirements.txt requirements-dev.txt)
+          if [ -d rules ]; then
+            INPUTS+=(rules)
+          fi
+          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 \
+            --numeric-owner -cf "$SUBJECT_TAR" "${INPUTS[@]}"
+          SUBJECT_SHA="$(sha256sum "$SUBJECT_TAR" | awk '{print $1}')"
+          PREVIOUS_SHA="$(git log --format='%(trailers:key=Generation-Subject-SHA256,valueonly)' \
+            | grep -m1 -E '^[0-9a-f]{64}$' || true)"
+          if [ "$SUBJECT_SHA" = "$PREVIOUS_SHA" ]; then
+            NEEDED=false
+            echo "Generation subject is unchanged; build and publication will be skipped."
+          else
+            NEEDED=true
+            echo "Generation subject requires one validated build."
+          fi
+          echo "sha256=$SUBJECT_SHA" >> "$GITHUB_OUTPUT"
+          echo "needed=$NEEDED" >> "$GITHUB_OUTPUT"
+
       - name: Package resumable fetch checkpoint
         if: failure() && steps.checkpoint.outcome == 'success'
         shell: bash
@@ -242,6 +274,7 @@ jobs:
           retention-days: 7
 
       - name: Package fetched candidate for the build job
+        if: steps.generation-subject.outputs.needed == 'true'
         shell: bash
         run: |
           ARTIFACT_DIR="$RUNNER_TEMP/mtgo-fetch-candidate"
@@ -254,6 +287,7 @@ jobs:
           )
 
       - name: Upload immutable fetched candidate
+        if: steps.generation-subject.outputs.needed == 'true'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: mtgo-fetch-candidate
@@ -271,6 +305,8 @@ jobs:
             echo "- Job result: ${{ job.status }}"
             echo "- Trigger: ${{ github.event_name }}"
             echo "- Candidate transfer: immutable \`mtgo-fetch-candidate\` artifact"
+            echo "- Generation subject: \`${{ steps.generation-subject.outputs.sha256 || 'not-reached' }}\`"
+            echo "- Build required: \`${{ steps.generation-subject.outputs.needed || 'not-reached' }}\`"
             echo "- Restart transfer: a same-commit, seven-day \`mtgo-fetch-checkpoint\` artifact only after incomplete collection"
             echo "- Event formats: ${MTGO_EVENT_FORMATS}"
             echo "- Match formats: ${MTGO_PRODUCT_FORMATS}"
@@ -280,12 +316,17 @@ jobs:
 
   build:
     name: Build and validate MTGO candidate
-    if: github.ref == 'refs/heads/master'
+    if: >-
+      github.ref == 'refs/heads/master' &&
+      needs.fetch.outputs.generation-needed == 'true'
     needs:
       - baseline
       - fetch
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    outputs:
+      generation-subject-sha256: ${{ needs.fetch.outputs.generation-subject-sha256 }}
+      validated-output-sha256: ${{ steps.output-evidence.outputs.sha256 }}
     permissions:
       contents: read
     env:
@@ -412,8 +453,14 @@ jobs:
       - name: Validate generated JSON schemas
         run: python -B validate_schemas.py
 
+      - name: Validate value-independent output invariants
+        run: python -B validate_output_invariants.py
+
       - name: Validate generated consumer contracts
-        run: python -B -m pytest tests/test_generated_consumer_contracts.py
+        run: >-
+          python -B -m pytest
+          --basetemp="${RUNNER_TEMP}/pytest-generated-consumers"
+          tests/test_generated_consumer_contracts.py
 
       - name: Set up Node.js 24 for generated-page smoke
         uses: actions/setup-node@v6
@@ -431,15 +478,22 @@ jobs:
         run: npx playwright test tests/browser/production-pages.spec.js
 
       - name: Package validated output for the publish job
+        id: output-evidence
         shell: bash
         run: |
           ARTIFACT_DIR="$RUNNER_TEMP/mtgo-build-candidate"
           mkdir -p "$ARTIFACT_DIR"
-          tar -cf "$ARTIFACT_DIR/validated-output.tar" data stats reports fetched.txt
+          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 \
+            --numeric-owner -cf "$ARTIFACT_DIR/validated-output.tar" \
+            data stats reports fetched.txt
+          printf '%s\n' '${{ needs.fetch.outputs.generation-subject-sha256 }}' \
+            > "$ARTIFACT_DIR/generation-subject.txt"
           (
             cd "$ARTIFACT_DIR"
-            sha256sum validated-output.tar > SHA256SUMS
+            sha256sum validated-output.tar generation-subject.txt > SHA256SUMS
           )
+          OUTPUT_SHA="$(sha256sum "$ARTIFACT_DIR/validated-output.tar" | awk '{print $1}')"
+          echo "sha256=$OUTPUT_SHA" >> "$GITHUB_OUTPUT"
 
       - name: Upload immutable validated output
         uses: actions/upload-artifact@v4.6.2
@@ -488,6 +542,7 @@ jobs:
           path: ${{ runner.temp }}/mtgo-build-candidate
 
       - name: Verify and restore validated output
+        id: artifact-evidence
         shell: bash
         run: |
           ARTIFACT_DIR="$RUNNER_TEMP/mtgo-build-candidate"
@@ -495,6 +550,13 @@ jobs:
             cd "$ARTIFACT_DIR"
             sha256sum --check SHA256SUMS
           )
+          OUTPUT_SHA="$(sha256sum "$ARTIFACT_DIR/validated-output.tar" | awk '{print $1}')"
+          SUBJECT_SHA="$(tr -d '\r\n' < "$ARTIFACT_DIR/generation-subject.txt")"
+          if [ "$OUTPUT_SHA" != '${{ needs.build.outputs.validated-output-sha256 }}' ] ||
+             [ "$SUBJECT_SHA" != '${{ needs.build.outputs.generation-subject-sha256 }}' ]; then
+            echo "Validated production evidence changed between build and publish." >&2
+            exit 1
+          fi
           if tar -tf "$ARTIFACT_DIR/validated-output.tar" | grep -Ev '^(data/|stats/|reports/|fetched\.txt$)'; then
             echo "Validated output contains a path outside the publication boundary." >&2
             exit 1
@@ -505,8 +567,10 @@ jobs:
             exit 1
           fi
           tar -xf "$ARTIFACT_DIR/validated-output.tar" -C "$GITHUB_WORKSPACE"
+          echo "output-sha256=$OUTPUT_SHA" >> "$GITHUB_OUTPUT"
+          echo "subject-sha256=$SUBJECT_SHA" >> "$GITHUB_OUTPUT"
 
-      - name: Commit and push generated changes
+      - name: Commit and push production evidence
         id: publish
         shell: bash
         run: |
@@ -514,14 +578,20 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -- data/ stats/ reports/ fetched.txt
           if git diff --cached --quiet; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-            echo "No generated changes to publish."
-            exit 0
+            CHANGED=false
+            MESSAGE="chore: record MTGO production evidence $(date -u +'%Y-%m-%d %H:%M UTC')"
+          else
+            CHANGED=true
+            MESSAGE="chore: update MTGO production data $(date -u +'%Y-%m-%d %H:%M UTC')"
           fi
-          git commit -m "chore: update MTGO production data $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git commit --allow-empty -m "$MESSAGE" \
+            -m "Production-Run: $GITHUB_RUN_ID
+          Production-Attempt: $GITHUB_RUN_ATTEMPT
+          Production-Source: $GITHUB_SHA
+          Generation-Subject-SHA256: ${{ steps.artifact-evidence.outputs.subject-sha256 }}
+          Validated-Output-SHA256: ${{ steps.artifact-evidence.outputs.output-sha256 }}"
           git push origin HEAD:master
-          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
           echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Verify published master commit and clean workspace
@@ -552,6 +622,14 @@ jobs:
               repo: context.repo.repo,
               workflow_id: "pages.yml",
               ref: "master",
+              inputs: {
+                publication_commit: "${{ steps.verify.outputs.commit }}",
+                producer_run_id: "${{ github.run_id }}",
+                producer_run_attempt: "${{ github.run_attempt }}",
+                source_commit: "${{ github.sha }}",
+                generation_subject_sha256: "${{ steps.artifact-evidence.outputs.subject-sha256 }}",
+                validated_output_sha256: "${{ steps.artifact-evidence.outputs.output-sha256 }}",
+              },
             });
 
       - name: Write publication summary
@@ -566,6 +644,8 @@ jobs:
             echo "- Generated changes published: ${{ steps.publish.outputs.changed || 'not-reached' }}"
             echo "- Published commit verified: ${{ steps.verify.outputs.commit || 'not-reached' }}"
             echo "- Candidate transfer: verified immutable \`mtgo-build-candidate\` artifact"
+            echo "- Generation subject: \`${{ steps.artifact-evidence.outputs.subject-sha256 || 'not-reached' }}\`"
+            echo "- Validated output: \`${{ steps.artifact-evidence.outputs.output-sha256 || 'not-reached' }}\`"
             echo "- Publication boundary: data/, stats/, reports/, and fetched.txt only."
           } >> "$GITHUB_STEP_SUMMARY"
 

@@ -2,7 +2,7 @@
   "name": "mtgo-data-browser-tests",
   "private": true,
   "scripts": {
-    "test:browser": "node tests/browser/browser-preflight-cli.js && playwright test"
+    "test:production-pages": "playwright test tests/browser/production-pages.spec.js"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1"

@@ -3981,7 +3981,214 @@ and the established PR validation classes remain unchanged.
 
 ---
 
-# DEC-093 - Correct reviewed Leyline and Broodscale classification boundaries
+# DEC-093 - Protect the output and make PR validation purpose-specific
+
+Status: `Accepted and published`
+
+## Context
+
+Recent pull requests overwhelmingly selected the complete path. A typical
+change took seconds to implement and then waited about twenty minutes for full
+pytest, committed byte baselines, and Playwright. Byte snapshots cannot
+distinguish a legitimate expected-output update from a defect, while prior
+browser suites missed owner-visible mobile navigation failures.
+
+The repository has one product exit: the validated artifact assembled by the
+production build before publication. That build already owns candidate-scope,
+repository, rule, Schema, consumer, and generated-page checks.
+
+## Decision
+
+Pull-request CI classifies every known path into the smallest documentation,
+UI, code, data, or governance check category. Known-path additions need no
+extra declaration. At task approval, every unknown-path addition, deletion, and
+rename is declared by exact path and category, then repeated in the PR body.
+The actual diff must match those declarations exactly. Undeclared, stale, or
+mismatched operations, malformed declarations, and incomplete API evidence fail
+immediately as `unclassified`; they do not fall back to a catch-all suite.
+File-operation declarations select checks but do not grant authorization.
+
+The production build adds value-independent MTGO invariants after generation
+and before packaging. They validate count/share conservation, matchup
+conservation and inverse symmetry, literal-record agreement, interval
+containment, and missing-sample semantics without encoding expected tournament
+values. Existing candidate, Schema, consumer, and generated-page gates remain.
+
+Owner browser review is the final UI acceptance for the reviewed immutable
+subject. An exact merge reuses exact successful PR evidence instead of rerunning
+it. Snapshot deletion, ordinary-suite reconstruction, production evidence
+reuse, and document slimming remain separately authorized follow-up tasks in
+`docs/GOVERNANCE_REMEDIATION.yaml`.
+
+## Consequences
+
+Known PRs receive purpose-specific feedback with a five-minute job ceiling and
+an expected seconds-to-minute scale. Bad or unknown governance evidence stops
+quickly. Generated output remains publication-blocking. Master may temporarily
+contain code that cannot produce a valid candidate, but that candidate cannot
+be packaged or published.
+
+Same-task completion authority after Owner acceptance is governed by DEC-094.
+Statistical changes, public-path changes, and later governance tasks remain
+outside GOV-06.
+
+GOV-06 was published through pull request #212 and merge commit
+`fa347998696deddd63b54e8bad7d014dad71d8b5`.
+
+---
+
+# DEC-094 - Owner acceptance authorizes continuous same-task completion
+
+Status: `Accepted`
+
+## Context
+
+After the Owner accepts a completed local subject, repeating separate prompts
+for local commit, push, pull-request creation, merge, and applicable production
+or publication adds no decision information when the accepted diff and task
+scope remain unchanged. The prior sequence converted one decision into several
+administrative confirmations.
+
+## Decision
+
+Local task authorization covers implementation through Owner review. Owner
+acceptance authorizes continuous completion of that exact task: local commit,
+push, one Ready pull request, required-check waiting, merge after success, and
+the publication or production steps already applicable to the accepted task.
+
+Stop and return to the Owner only when required checks fail, the accepted diff
+or scope changes, a merge conflict appears, documented permissions are
+unavailable, or a new product or statistical decision is required. Acceptance
+does not authorize another task or phase, unrelated credentials, force-push,
+repository settings, secrets, or destructive actions outside the accepted
+contract.
+
+## Consequences
+
+Owner acceptance becomes the single completion authorization event. Management
+stages remain observable but do not create repeated authorization prompts.
+
+---
+
+# DEC-095 - Retire rolling-output byte snapshots
+
+Status: `Accepted; same-task completion authorized`
+
+## Context
+
+Committed byte snapshots compare a regenerated rolling product with the bytes
+currently stored in the repository. Any legitimate output evolution and any
+defect produce the same failure, so the signal cannot determine whether the
+change is correct. The baseline must then be manually accepted or regenerated.
+
+The reviewed failure evidence was expectation maintenance rather than product
+protection: stale dates and counts failed two production baselines, while a
+later repair changed only final-newline bytes in six JSON documents. Completed
+R4 shadow-review tests also retained approximately 267 KB of inline historical
+examples after R5 had already promoted and independently bound the accepted
+production rules.
+
+## Decision
+
+Remove rolling MTGO output byte comparisons, the `committed_baseline` marker,
+its unused timing-group utility, and the completed R4 Modern and Standard shadow
+test files. Retain the report accounting and subtype contract as an unmarked
+semantic invariant. Retain the R4 audit artifacts and build tools as historical
+evidence rather than executing their inline review corpus on every full suite.
+
+Do not remove dynamic production-candidate comparison, value-independent
+invariants, Schema and consumer checks, temporary-directory determinism, or the
+protected Melee source and event compatibility contracts. Rebuilding the rest
+of the ordinary suite remains GOV-08.
+
+## Consequences
+
+Legitimate rolling output changes no longer require byte-baseline maintenance,
+and active test discovery no longer parses the two oversized R4 review files.
+Publication remains protected by candidate scope, rules, Schemas, consumers,
+generated-page smoke, and value-independent output invariants. The retained
+checks prove self-consistency and explicit contracts, not equality with last
+week's tournament values.
+
+---
+
+# DEC-096 - Rebuild tests from a trigger-specific minimum
+
+Status: `Accepted for local implementation`
+
+## Context
+
+After byte snapshots were retired, the ordinary Python inventory still held 96
+files and at least 697 test functions. Both production workflows ran that whole
+inventory before live collection even though most nodes did not answer a risk
+specific to the command about to run. The measured prior baseline was 966 tests
+in 28 minutes 51 seconds.
+
+## Decision
+
+Rebuild from zero rather than prune incrementally. Retain one offline smoke for
+each installed CLI, the minimum Melee privacy boundary, the generated consumer
+contract, and focused live-document and CI-control contracts. Delete the other
+91 Python test files. Keep frozen fixture evidence and the current JavaScript
+and browser assets unchanged.
+
+Production jobs select only the CLI and privacy nodes required by that
+workflow, and the MTGO CLI baseline runs only when the post-fetch generation
+subject requires a build. Public Schema, candidate-boundary, value-independent output,
+consumer, and generated-page checks remain after generation at the only gate
+that protects the publishable candidate. No workflow runs unbounded pytest.
+
+## Consequences
+
+Routine production no longer pays for historical implementation-detail tests.
+The retained set proves entry-point viability, privacy, candidate structure,
+self-consistency, and consumability; it does not promise that every internal
+function behaves like an earlier implementation. The complete live trigger
+inventory is `docs/TEST_TRIGGER_MATRIX.md`.
+
+---
+
+# DEC-097 - Reuse immutable production evidence through publication
+
+Status: `Accepted`
+
+## Context
+
+The production candidate already receives the expensive validation at the only
+gate that can prevent bad public data. Rebuilding or retesting that same subject
+after the generated commit is pushed does not add evidence. Pages also ran for
+every `master` push even when the changed files could not enter the static site.
+
+## Decision
+
+Compute one deterministic SHA-256 over the post-fetch generation subject. When
+it equals the latest published generation-subject trailer, retain the published
+bytes and skip the CLI baseline, generation, validation, packaging, publication,
+and Pages stages. When it changes, build and validate one candidate, package its
+output once, and bind the subject digest, output digest, producer run and attempt,
+source commit, and publication commit through artifact metadata, commit trailers,
+and the explicit Pages dispatch.
+
+Pages admits a production dispatch only after confirming the exact producer
+jobs, commit ancestry and trailers, artifact digest, and equality between the
+validated artifact and published bytes. Those are identity checks, not another
+candidate test. Ordinary `master` pushes trigger Pages only for allowlisted site
+inputs. After deploy, check only the two public entry points and public catalog
+for HTTP availability. Keep an evidence-free, explicitly authorized manual or
+recovery dispatch; reject partially supplied production evidence.
+
+## Consequences
+
+One generation subject pays for candidate validation once. Unchanged scheduled
+runs and non-site merges cannot cause repeated testing or deployment. Pages
+still fails closed if publication evidence is stale, incomplete, ambiguous, or
+byte-inconsistent, while recovery remains possible without pretending to be a
+production publication. Product statistics, Schemas, public URLs, source
+selection, and visible UI are unchanged.
+
+---
+
+# DEC-098 - Correct reviewed Leyline and Broodscale classification boundaries
 
 Status: `Accepted`
 
@@ -4013,9 +4220,10 @@ reviewed red-green mana sources in the fail-closed semantic manifest. Replace
 the Modern Broodscale Gruul and Mono-Green Stomping Ground tests with the shared
 main-deck red-source marker. Sideboard-only red sources do not affect subtype.
 
-Regenerate existing classification-derived MTGO and event `434455` artifacts
-without fetching source data. Advance the event compatibility contract from
-`1.4.0` to `1.5.0`; preserve the raw snapshot and normalized event bytes.
+Retain the already generated classification-derived MTGO and event `434455`
+artifacts without fetching source data or repeating the accepted corpus audit.
+Advance the event compatibility contract from `1.4.0` to `1.5.0`; preserve the
+raw snapshot and normalized event bytes.
 
 ## Consequences
 
@@ -4027,6 +4235,6 @@ frozen Modern retain the accepted 157 and 117
 Mono-Green-to-Gruul Broodscale transitions, and event `434455` retains twelve.
 There is no conflict, invalid-deck result, or residual subtype.
 
-Owner acceptance of the completed local result, commit, publication, merge,
-affected-format Pickup review reflow, P12-10, and production dispatch remain
+The migrated final diff requires Owner acceptance before same-task completion.
+Affected-format Pickup review reflow, P12-10, and production dispatch remain
 separate gates.

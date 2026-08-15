@@ -5,281 +5,226 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github" / "workflows" / "ci.yml"
+UPDATE_WORKFLOW = ROOT / ".github" / "workflows" / "update.yml"
+PAGES_WORKFLOW = ROOT / ".github" / "workflows" / "pages.yml"
+PRODUCTION_WORKFLOWS = (
+    ROOT / ".github" / "workflows" / "update.yml",
+    ROOT / ".github" / "workflows" / "fetch_melee.yml",
+)
 
 
-def load_workflow():
+def _workflow():
     return yaml.load(WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
 
 
-def all_strings(value):
+def _strings(value):
     if isinstance(value, dict):
         for key, item in value.items():
             yield str(key)
-            yield from all_strings(item)
+            yield from _strings(item)
     elif isinstance(value, list):
         for item in value:
-            yield from all_strings(item)
+            yield from _strings(item)
     elif value is not None:
         yield str(value)
 
 
-def test_triggers_are_review_and_validation_only():
-    workflow = load_workflow()
-    triggers = workflow["on"]
-    assert set(triggers) == {"pull_request", "push", "workflow_dispatch"}
-    assert triggers["push"] == {"branches": ["master"]}
-    assert triggers["pull_request"] == {
-        "types": [
-            "opened",
-            "synchronize",
-            "reopened",
-            "edited",
-        ]
+def test_triggers_permissions_and_concurrency_remain_bounded():
+    workflow = _workflow()
+    assert workflow["on"] == {
+        "pull_request": {"types": ["opened", "synchronize", "reopened", "edited"]},
+        "push": {"branches": ["master"]},
+        "workflow_dispatch": {},
     }
-    assert triggers["workflow_dispatch"] == {}
-
-
-def test_permissions_and_concurrency_are_least_privilege():
-    workflow = load_workflow()
     assert workflow["permissions"] == {
         "actions": "read",
         "contents": "read",
         "pull-requests": "read",
     }
-    assert workflow["concurrency"] == {
-        "group": "ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}",
-        "cancel-in-progress": "true",
-    }
+    assert workflow["concurrency"]["cancel-in-progress"] == "true"
 
 
-def test_execution_jobs_are_bounded_and_use_current_official_actions():
-    jobs = load_workflow()["jobs"]
-    assert jobs["admission"]["timeout-minutes"] == "5"
-    assert jobs["focused-validation"]["timeout-minutes"] == "10"
-    assert jobs["static-validation"]["timeout-minutes"] == "10"
-    assert jobs["pytest"]["timeout-minutes"] == "30"
-    assert jobs["browser-validation"]["timeout-minutes"] == "10"
-    assert jobs["post-merge-confirmation"]["timeout-minutes"] == "5"
-    assert jobs["validate"]["timeout-minutes"] == "5"
-
-    for job_name in ("admission", "static-validation", "pytest"):
-        job = jobs[job_name]
-        assert job["runs-on"] == "ubuntu-latest"
-        steps = job["steps"]
-        assert steps[0]["uses"] == "actions/checkout@v7.0.0"
-        assert steps[0]["with"]["persist-credentials"] == "false"
-        assert steps[1]["uses"] == "actions/setup-python@v6.3.0"
-        assert steps[1]["with"]["python-version"] == "3.12"
-
-    for job_name in ("static-validation", "pytest"):
-        subject_step = jobs[job_name]["steps"][2]
-        assert subject_step["name"] == "Verify checked-out PR merge subject"
-        assert subject_step["if"] == "github.event_name == 'pull_request'"
-        assert "git cat-file -p HEAD" in subject_step["run"]
-        assert "github.event.pull_request.base.sha" in subject_step["run"]
-        assert "github.event.pull_request.head.sha" in subject_step["run"]
-        assert "exit 1" in subject_step["run"]
-
-
-def test_pytest_shards_are_exact_marker_complements():
-    pytest_job = load_workflow()["jobs"]["pytest"]
-    assert pytest_job["strategy"]["fail-fast"] == "false"
-    assert pytest_job["strategy"]["matrix"]["include"] == [
-        {
-            "shard": "ordinary",
-            "marker_expression": "not committed_baseline",
-        },
-        {
-            "shard": "committed-baseline",
-            "marker_expression": "committed_baseline",
-        },
-    ]
-    combined = "\n".join(
-        step.get("run", "") for step in pytest_job["steps"]
-    )
-    assert '-m "${{ matrix.marker_expression }}"' in combined
-    assert "-p ci_timing" in combined
-    assert '--basetemp="${RUNNER_TEMP}/pytest-${{ matrix.shard }}"' in combined
-    assert "ci_timing.py --summary" in combined
-    assert "--max-ordinary-call-seconds 120" in combined
-    assert "GITHUB_STEP_SUMMARY" in combined
-
-
-def test_static_validation_and_aggregate_check_are_complete():
-    jobs = load_workflow()["jobs"]
-    actionlint_step = next(
-        step
-        for step in jobs["static-validation"]["steps"]
-        if step.get("name") == "Lint GitHub Actions workflows"
-    )
-    assert actionlint_step == {
-        "name": "Lint GitHub Actions workflows",
-        "uses": "docker://rhysd/actionlint:1.7.12",
-        "with": {"args": "-ignore=SC(1009|1072|1073|2129)"},
-    }
-    node_step = next(
-        step
-        for step in jobs["static-validation"]["steps"]
-        if step.get("name") == "Set up Node.js 24 for JavaScript syntax validation"
-    )
-    assert node_step == {
-        "name": "Set up Node.js 24 for JavaScript syntax validation",
-        "uses": "actions/setup-node@v6",
-        "with": {"node-version": "24"},
-    }
-    static_commands = "\n".join(
-        step.get("run", "") for step in jobs["static-validation"]["steps"]
-    )
-    for expected in (
-        "-r requirements-dev.txt",
-        "python -B -m ruff check src",
-        "python -B -m mypy",
-        "validate_repository.py",
-        "validate_rules.py",
-        "validate_schemas.py",
-    ):
-        assert expected in static_commands
-
-    aggregate = jobs["validate"]
-    assert aggregate["name"] == "Repository validation (Python 3.12)"
-    assert aggregate["if"] == "always()"
-    assert aggregate["needs"] == [
+def test_pr_path_contains_only_admission_targeted_and_aggregate_jobs():
+    jobs = _workflow()["jobs"]
+    assert set(jobs) == {
         "admission",
-        "focused-validation",
-        "static-validation",
-        "pytest",
-        "browser-validation",
+        "targeted-validation",
+        "post-merge-confirmation",
+        "validate",
+    }
+    assert jobs["targeted-validation"]["name"] == "Targeted PR validation"
+    assert jobs["targeted-validation"]["if"] == (
+        "needs.admission.outputs.mode == 'targeted'"
+    )
+    assert jobs["targeted-validation"]["timeout-minutes"] == "5"
+    assert jobs["validate"]["needs"] == [
+        "admission",
+        "targeted-validation",
         "post-merge-confirmation",
     ]
-    assert aggregate["steps"][0]["if"] == "github.event_name == 'pull_request'"
-    assert "Validated merge subject:" in aggregate["steps"][0]["name"]
-    assert aggregate["steps"][1]["if"] == "github.event_name == 'pull_request'"
-    assert "Validated PR class:" in aggregate["steps"][1]["name"]
-    command = aggregate["steps"][2]["run"]
-    assert "needs.admission.result" in command
-    assert "needs.admission.outputs.mode" in command
-    assert "needs.focused-validation.result" in command
-    assert "needs.static-validation.result" in command
-    assert "needs.pytest.result" in command
-    assert "needs.browser-validation.result" in command
-    assert "needs.post-merge-confirmation.result" in command
+
+
+def test_targeted_commands_map_directly_to_changed_artifact_categories():
+    steps = _workflow()["jobs"]["targeted-validation"]["steps"]
+    by_name = {step["name"]: step for step in steps}
+    assert "docs" in by_name["Validate live documentation policy"]["if"]
+    assert "code" in by_name["Check maintained Python package"]["if"]
+    assert "data" in by_name["Validate rules and public JSON schemas"]["if"]
+    assert "governance" in by_name["Validate CI control contracts"]["if"]
+    commands = "\n".join(step.get("run", "") for step in steps)
+    for required in (
+        "validate_repository.py",
+        "test_documentation_history.py",
+        "ruff check src",
+        "-m mypy",
+        "validate_rules.py",
+        "validate_schemas.py",
+        "test_ci_master_admission.py",
+        "test_ci_workflow.py",
+    ):
+        assert required in commands
+    assert "node --test" not in commands
+
+
+def test_pr_workflow_contains_no_long_or_repeated_validation():
+    text = "\n".join(_strings(_workflow())).lower()
+    for retired in (
+        "committed_baseline",
+        "npm run test:browser",
+        "playwright install",
+        "pytest shard",
+        "complete validation",
+        "batch_mtgo.py",
+        "git push",
+        "git commit",
+        "contents: write",
+    ):
+        assert retired not in text
+
+
+def test_unknown_paths_fail_fast_in_aggregate_without_running_targeted_job():
+    jobs = _workflow()["jobs"]
+    command = jobs["validate"]["steps"][2]["run"]
+    assert '= "unclassified"' in command
+    assert "owner classification" in command
+    assert "catch-all tests were run" in command
     assert "exit 1" in command
 
 
-def test_master_admission_is_fail_safe_and_full_suite_is_default():
-    jobs = load_workflow()["jobs"]
-    admission = jobs["admission"]
-    assert admission["outputs"]["mode"] == "${{ steps.classify.outputs.mode }}"
-    assert admission["outputs"]["validation_class"] == (
-        "${{ steps.classify.outputs.validation_class }}"
-    )
-    classify = admission["steps"][2]
-    assert classify["run"] == "python -B ci_master_admission.py"
-    assert classify["env"] == {"GITHUB_TOKEN": "${{ github.token }}"}
-
-    assert jobs["static-validation"]["needs"] == "admission"
-    assert jobs["focused-validation"]["needs"] == "admission"
-    assert jobs["pytest"]["needs"] == "admission"
-    assert jobs["browser-validation"]["needs"] == "admission"
-    assert jobs["static-validation"]["if"] == (
-        "needs.admission.outputs.mode == 'full'"
-    )
-    assert jobs["pytest"]["if"] == "needs.admission.outputs.mode == 'full'"
-    assert jobs["focused-validation"]["if"] == (
-        "needs.admission.outputs.mode == 'focused-docs' || "
-        "needs.admission.outputs.mode == 'focused-ui'"
-    )
-    assert jobs["browser-validation"]["if"] == (
-        "needs.admission.outputs.mode == 'full' || "
-        "needs.admission.outputs.mode == 'focused-ui'"
-    )
-    assert jobs["post-merge-confirmation"]["if"] == (
-        "needs.admission.outputs.mode == 'pr-confirmation'"
-    )
+def test_exact_merge_confirmation_remains_evidence_bound():
+    job = _workflow()["jobs"]["post-merge-confirmation"]
+    assert job["if"] == "needs.admission.outputs.mode == 'pr-confirmation'"
+    command = job["steps"][0]["run"]
+    for required in (
+        "github.event_name",
+        "refs/heads/master",
+        "pull_request",
+        "workflow_run",
+        "validation_class",
+        "exact_validated_merge:",
+    ):
+        assert required in command
 
 
-def test_ci_cannot_fetch_production_data_or_write_repository():
-    text = "\n".join(all_strings(load_workflow())).lower()
-    forbidden = (
-        "contents: write",
-        "batch_mtgo.py",
-        "fetch_videre_matches.py",
-        "stats_standard.py",
-        "stats_matchup.py",
-        "weekly_pickup.py",
-        "git push",
-        "git commit",
-        "pull_request_target",
-        "schedule",
-    )
-    assert all(value not in text for value in forbidden)
-
-
-def test_workflow_contains_no_secret_or_token_expression():
+def test_workflow_contains_no_secret_expression():
     text = WORKFLOW.read_text(encoding="utf-8").lower()
     assert "secrets." not in text
     assert text.count("github.token") == 1
 
 
-def test_focused_feedback_runs_repository_node_and_applicable_browser_checks():
-    jobs = load_workflow()["jobs"]
-    focused_steps = jobs["focused-validation"]["steps"]
-    focused_commands = "\n".join(step.get("run", "") for step in focused_steps)
-    focused_uses = {step.get("uses") for step in focused_steps}
+def test_production_pytest_commands_are_explicit_and_external_temped():
+    commands = []
+    for path in PRODUCTION_WORKFLOWS:
+        workflow = yaml.load(path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+        commands.extend(
+            step["run"]
+            for job in workflow["jobs"].values()
+            for step in job.get("steps", [])
+            if "-m pytest" in step.get("run", "")
+        )
 
-    assert "actions/checkout@v7.0.0" in focused_uses
-    assert "actions/setup-python@v6.3.0" in focused_uses
-    assert "actions/setup-node@v6" in focused_uses
-    assert "validate_repository.py" in focused_commands
-    assert "tests/test_documentation_history.py" in focused_commands
-    assert '--basetemp="${RUNNER_TEMP}/pytest-focused-docs"' in focused_commands
-    assert "node --test tests/js/phase8-matchup-model.test.js" in focused_commands
-    assert "validate_rules.py" not in focused_commands
-    assert "validate_schemas.py" not in focused_commands
-    assert "-m committed_baseline" not in focused_commands
+    assert commands
+    assert all("tests/" in command for command in commands)
+    assert all("--basetemp=" in command for command in commands)
+    assert not any(command.strip() in {"python -m pytest", "python -B -m pytest"} for command in commands)
 
-    full_commands = "\n".join(
-        step.get("run", "")
-        for job_name in ("static-validation", "pytest", "browser-validation")
-        for step in jobs[job_name]["steps"]
+
+def test_production_candidate_is_built_once_and_published_with_immutable_evidence():
+    workflow = yaml.load(
+        UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
     )
-    for expected in (
-        "python -B -m pytest",
-        "validate_rules.py",
-        "validate_schemas.py",
-        "python -B -m ruff check src",
-        "python -B -m mypy",
-        "validate_repository.py",
-        "npm run test:browser",
-    ):
-        assert expected in full_commands
-    marker_expressions = {
-        item["marker_expression"]
-        for item in jobs["pytest"]["strategy"]["matrix"]["include"]
+    fetch = workflow["jobs"]["fetch"]
+    baseline = workflow["jobs"]["baseline"]
+    build = workflow["jobs"]["build"]
+    publish = workflow["jobs"]["publish"]
+    assert "generation-needed" in fetch["outputs"]
+    assert baseline["needs"] == "fetch"
+    assert "generation-needed" in baseline["if"]
+    assert "generation-needed" in build["if"]
+    assert set(build["outputs"]) == {
+        "generation-subject-sha256",
+        "validated-output-sha256",
     }
-    assert marker_expressions == {"not committed_baseline", "committed_baseline"}
-
-
-def test_aggregate_accepts_only_the_five_explicit_execution_paths():
-    command = load_workflow()["jobs"]["validate"]["steps"][2]["run"]
-    for mode in (
-        "full",
-        "focused-docs",
-        "focused-ui",
-        "metadata-only",
-        "pr-confirmation",
+    commands = "\n".join(
+        step.get("run", "")
+        for job in (fetch, build, publish)
+        for step in job["steps"]
+    )
+    for required in (
+        "Generation-Subject-SHA256",
+        "Validated-Output-SHA256",
+        "Production-Run",
+        "Production-Attempt",
+        "Production-Source",
+        "--allow-empty",
+        "--sort=name",
+        "generation-subject.txt",
     ):
-        assert f'= "{mode}"' in command
-    assert "Unexpected or incomplete validation path." in command
-
-
-def test_pr_maturity_state_triggers_and_draft_job_names_are_absent():
-    text = WORKFLOW.read_text(encoding="utf-8")
-    for retired in (
-        "ready_for_review",
-        "converted_to_draft",
-        "draft-feedback",
-        "draft-docs",
-        "draft-ui",
+        assert required in commands
+    dispatch = next(
+        step
+        for step in publish["steps"]
+        if step["name"] == "Dispatch Pages deployment for published data"
+    )
+    script = dispatch["with"]["script"]
+    for required in (
+        "publication_commit",
+        "producer_run_id",
+        "producer_run_attempt",
+        "source_commit",
+        "generation_subject_sha256",
+        "validated_output_sha256",
     ):
-        assert retired not in text
+        assert required in script
+
+
+def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
+    workflow = yaml.load(
+        PAGES_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
+    )
+    push_paths = set(workflow["on"]["push"]["paths"])
+    assert {"index.html", "melee/**", "stats/**", "data/**"} <= push_paths
+    assert not ({"docs/**", "tests/**", ".github/workflows/ci.yml"} & push_paths)
+    assert set(workflow["on"]["workflow_dispatch"]["inputs"]) == {
+        "publication_commit",
+        "producer_run_id",
+        "producer_run_attempt",
+        "source_commit",
+        "generation_subject_sha256",
+        "validated_output_sha256",
+    }
+    build = workflow["jobs"]["build"]
+    assert build["permissions"] == {"actions": "read", "contents": "read"}
+    commands = "\n".join(step.get("run", "") for step in build["steps"])
+    for required in (
+        "--verify-production-evidence",
+        "published-output.tar",
+        "Validated output contains a path outside the production boundary",
+    ):
+        assert required in commands
+    assert all(token not in commands for token in ("pytest", "playwright", "node --test"))
+    deploy_commands = "\n".join(
+        step.get("run", "") for step in workflow["jobs"]["deploy"]["steps"]
+    )
+    for resource in ("index.html", "melee/index.html", "stats/catalog.json"):
+        assert resource in deploy_commands

@@ -7,301 +7,136 @@ project:
   current_working_branch: "codex/p12-10-classifier-corrections"
   working_branch_status: "local_complete_pending_owner_acceptance"
   status: "active"
-  primary_language: "Python"
-  deployment: "GitHub Pages"
 
 status_document:
-  purpose: "Small machine-readable record of current project state and authorization."
-  last_updated: "2026-08-15"
+  purpose: "Small machine-readable record of current state and authorization."
+  last_updated: "2026-08-16"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
-  update_required_after_each_phase: true
   authoritative_for:
     - "current phase"
     - "current task and authorization"
     - "known blockers"
     - "next planned task"
     - "prohibited next actions"
-  not_authoritative_for:
-    - "statistical formulas"
-    - "product scope"
-    - "data architecture"
-    - "historical decisions"
-    - "completed-task evidence"
-  history_policy: "Completed-task detail and superseded state belong under docs/history or in the linked audit, decision, roadmap, pull-request, and Git history."
-
-authoritative_documents:
-  reading_order:
-    - path: "AGENTS.md"
-      status: "current"
-    - path: "docs/PROJECT_SCOPE.md"
-      status: "current"
-    - path: "docs/STATISTICS_SPEC.md"
-      status: "current"
-    - path: "docs/DATA_ARCHITECTURE.md"
-      status: "current"
-    - path: "docs/ROADMAP.md"
-      status: "current"
-    - path: "docs/DECISIONS.md"
-      status: "current"
-    - path: "docs/STATUS.yaml"
-      status: "current"
-    - path: "docs/DEVELOPMENT_WORKFLOW.md"
-      status: "current"
-  agent_adapter_documents:
-    - path: "CLAUDE.md"
-      status: "current_thin_adapter"
-    - path: ".github/copilot-instructions.md"
-      status: "current_thin_adapter"
-  historical_documents:
-    - path: "PROJECT_NOTES.md"
-      status: "historical_non_authoritative"
-    - path: "docs/history/README.md"
-      status: "history_index_non_authoritative"
-    - path: "docs/history/STATUS-2026-08-04-pre-P11-13.yaml"
-      status: "byte_preserved_pre_split_snapshot_non_authoritative"
+  history_policy: "Completed detail belongs in docs/history, audits, decisions, pull requests, and Git history; never use it to authorize current work."
 
 current_phase:
   id: 12
   name: "Front-end productization, editorial landing, and visual system"
   status: "active"
-  started_on: "2026-08-06"
-  objective: "Make the existing static MTGO and Tabletop products faster, shareable, accessible, resilient, and usable across desktop and mobile without changing established statistical meaning, product separation, or public entry paths."
+  objective: "Productize the existing MTGO and Tabletop front ends and add the approved MTGO Landing without changing established statistical meaning or product separation."
   production_changes_allowed: false
   next_phase_id: 13
   next_phase_authorized: false
 
 current_task:
   id: "CLASSIFIER-PICKUP-REVIEW-CORRECTIONS-20260815"
-  name: "Pickup review classifier corrections"
-  status: "publication_authorized_pending_commit"
-  authorized_on: "2026-08-15"
-  implementation_completed_on: "2026-08-15"
-  owner_accepted_on: "2026-08-15"
-  publication_authorized_on: "2026-08-15"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-10-classifier-corrections-20260815-01"
+  name: "Migrate the accepted Pickup review classifier corrections"
+  status: "local_complete_pending_owner_acceptance"
+  authorized_on: "2026-08-16"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/pr211-governance-migration-20260816-01"
   branch: "codex/p12-10-classifier-corrections"
-  base_commit: "64ff4113061900e06d3fd69ac93fd81de1aff025"
-  task_type: "local_shared_classifier_correction"
-  artifact_impact: "internal_diagnostics, user_visible_ui, statistical_json_structure"
-  objective: "Correct the two Owner-identified W32 classifier errors, audit every current and frozen classification impact, and prepare affected-only Pickup review reflow without changing accepted Landing thresholds."
+  base_commit: "9b80490651d605aad99d1fec41e8b6b5541eaeca"
+  artifact_impact: "internal_diagnostics,user_visible_ui,statistical_json_structure"
+  objective: "Migrate the already accepted Leyline and Broodscale classifier corrections onto current governance without recalculation, retired tests, or repeated heavy validation."
   authorization:
     local_implementation: true
-    commit: true
-    remote_publication: true
-    merge: true
+    commit: false
+    remote_publication: false
+    merge: false
   target_paths:
     - "my_archetypes/standard.yaml"
     - "my_archetypes/modern.yaml"
     - "configs/classifier_semantic_features.yaml"
-    - "tests/test_classifier_review_corrections.py"
-    - "tests/test_classifier_r5_production.py"
-    - "tests/test_validate_schemas.py"
-    - "tests/fixtures/melee/434455_compatibility_manifest.json"
-    - "schemas/melee-compatibility-manifest.schema.json"
     - "tools/build_classifier_r5_production_rules.py"
-    - "docs/audits/CLASSIFIER-PICKUP-REVIEW-CORRECTIONS-20260815.md"
-    - "docs/STATUS.yaml"
-    - "docs/ROADMAP.md"
-    - "docs/DECISIONS.md"
-    - "docs/STATISTICS_SPEC.md"
-    - "docs/DATA_ARCHITECTURE.md"
+    - "assets/js/phase8/archetype-visuals.js"
+    - "assets/images/representative-cards/standard"
+    - "data/modern/melee"
+    - "reports/standard/mtgo"
+    - "reports/modern/mtgo"
     - "stats/standard/mtgo"
     - "stats/modern/mtgo"
     - "stats/modern/melee"
     - "stats/catalog.json"
-    - "reports/standard/mtgo"
-    - "reports/modern/mtgo"
-    - "data/modern/melee/classifications/434455.json"
-    - "data/modern/melee/opportunities/434455.json"
-    - "assets/js/phase8/archetype-visuals.js"
-    - "assets/images/representative-cards/standard/leyline-of-resonance.jpg"
-    - "assets/images/representative-cards/standard/wild-ride.jpg"
-    - "tests/test_phase12_chart_semantics.py"
+    - "schemas/melee-compatibility-manifest.schema.json"
+    - "tests/fixtures/melee/434455_compatibility_manifest.json"
+    - "docs/audits/CLASSIFIER-PICKUP-REVIEW-CORRECTIONS-20260815.md"
+    - "docs/STATUS.yaml"
+    - "docs/DECISIONS.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+  planned_file_operations:
+    additions:
+      - path: "assets/images/representative-cards/standard/leyline-of-resonance.jpg"
+        category: "ui"
+      - path: "assets/images/representative-cards/standard/wild-ride.jpg"
+        category: "ui"
+      - path: "docs/audits/CLASSIFIER-PICKUP-REVIEW-CORRECTIONS-20260815.md"
+        category: "docs"
+    deletions: []
+    renames: []
   protected_scope:
-    code_changed: "Shared classifier rules, reviewed semantic features, exact regression and impact audit, plus the Owner-approved Leyline Aggro visual metadata retained from the existing PR"
-    classifier_rule_changed: "Standard Izzet Fling at-most-one-main-Leyline boundary with original Leyline Aggro priorities, plus Modern Broodscale Gruul versus Mono-Green boundary"
+    product_code_changed: "Only accepted Standard and Modern classifier rules, reviewed semantic features, and their production-rule builder."
+    raw_or_generated_data_changed: "No raw source data; retain only the already generated affected classifier-derived artifacts from PR 211."
+    statistical_behavior_changed: "No formula change; only accepted classification identities and their derived aggregates change."
+    schema_changed: "Only the event 434455 compatibility-manifest constant advances from 1.4.0 to 1.5.0."
+    frontend_or_ui_changed: "Only accepted Leyline Aggro/Izzet mana metadata and Leyline of Resonance/Wild Ride representative-card assets."
     workflow_changed: "none"
-    raw_or_generated_data_changed: "No raw data; only existing affected classification-derived artifacts may be regenerated"
-    statistical_behavior_changed: "Only identities and derived aggregates caused by the corrected Standard at-most-one-Leyline boundary and the accepted Modern subtype correction"
-    schema_changed: "Event 434455 compatibility-manifest Schema constant advanced from 1.4.0 to 1.5.0"
-    frontend_source_changed: "Add only Leyline Aggro/Izzet U/R mana metadata and the Owner-approved Leyline of Resonance / Wild Ride local representative-card pair"
     public_paths_changed: "none"
-    event_434455_source_bytes_changed: false
     production_dispatched: false
-    remote_write_performed: "PR 211 already exists at head 485bd7d; no remote write was performed after the Owner paused publication"
-  allowed_actions:
-    - "Preserve every existing parent, subtype, and rule ID and keep explicit priorities and diagnostics."
-    - "Delete the unsubstantiated Standard Talent-shell rule, restore every Leyline Aggro priority, and permit at most one main-deck Leyline of Resonance for Izzet Fling."
-    - "Recognize the reviewed Modern deck's exact red-producing lands in the semantic manifest and use the shared main-red-source marker for Broodscale Gruul and Mono-Green."
-    - "Audit all current and frozen Standard and Modern decks plus retained Modern Tabletop event 434455."
-    - "Regenerate only existing affected classifier-derived artifacts without fetching source data."
-    - "Resolve PR 211's exact missing-card-art failure with Owner-approved local Leyline of Resonance and Wild Ride art plus explicit Leyline Aggro/Izzet U/R metadata."
-  validation_evidence:
-    exact_deck_regression: "After the initial six corrected Standard cases passed once, four new at-most-one-specific nodes passed once in 0.38 seconds: one-Leyline acceptance, two-Leyline rejection, and both reviewed Arcbound_Papi lists. The previously passed zero-Leyline and Modern nodes were not rerun."
-    complete_impact: "One at-most-one Standard-only audit found current transitions of three Izzet Fling to Leyline Aggro/Izzet and two to Izzet Prowess; frozen transitions are two to Izzet Prowess. No record moves to Unknown. Diagnostics have zero conflicts, invalid decks, and residual subtypes. Previously accepted Modern and event 434455 evidence remains unchanged and was not rerun."
-    known_controlled_exception: "The first read-only audit command had a PowerShell newline quoting syntax error before repository logic ran; the corrected one-line audit then completed once. No test was rerun."
-    visual_metadata_exception: "After corrected Standard regeneration, Izzet Fling is visible again, Leyline Aggro is below the 3% composition threshold, and Leyline Aggro/Izzet remains rendered. The approved Leyline representative-card mapping is retained as dormant composition metadata; the previously executed metadata test nodes were not rerun."
-    affected_pytest: "Five rule rebuild, semantic manifest, prior Spellementals, and rule validation tests passed once; nine event compatibility and public Schema tests passed once."
-    ruff: "All changed Python files passed once."
-    generated_outputs: "Corrected Standard statistics, matchups, completeness, hierarchy, metadata, strict reports, and indexed W30-W32 Top 8 files were rebuilt once without fetching. Previously rebuilt Modern and event 434455 artifacts were not rerun."
-    browser_validation: "No browser test was rerun for the local correction. PR 211 head 46809db previously completed 78 of 79 browser tests; the later 485bd7d head is superseded by this uncommitted correction and is not publication evidence for the corrected tree."
+    remote_write_performed: "none_after_owner_pause"
+  validation_plan:
+    - "Reuse the passed exact-deck, full-corpus impact, builder, rule, Schema, and visual evidence because current master changed no relevant classifier, generated-data, or UI input."
+    - "Do not regenerate classification or statistical artifacts and do not rerun the retired R4/R5, ordinary, committed-baseline, full pytest, Node, or Playwright suites."
+    - "Run the new value-independent output invariant validator once on the final migrated local tree."
+    - "After Owner acceptance, the final targeted PR CI owns one repository-reference check, one live-document check, and the applicable rule and Schema validators."
   prohibited_changes:
-    - "Do not change accepted 3%, 5pp, or 20 thresholds, candidate selection formulas, or human-review decisions."
-    - "Do not fetch production data, change workflows or any other front-end source, create a new taxonomy identity, rewrite protected event 434455 source bytes, or begin P12-10."
-    - "Do not rerun any already passed test; do not rerun a full suite after a partial failure."
-    - "Do not dispatch production, reflow Pickup review, begin P12-10, or begin another task without the applicable separate Owner gate."
-  stop_point: "Commit the accepted correction, update Ready PR 211, require one complete CI run on the new exact head, merge only after success, verify remote master, and stop before Pickup review reflow or production."
-
-recent_completion_handoff:
-  id: "P12-10-NO-PUBLICATION-TUESDAY-REHEARSAL"
-  name: "Production recovery and one no-publication weekly-review rehearsal"
-  status: "completed_without_rehearsal_publication"
-  pull_request: 210
-  merge_commit: "c2f645666a9943c4b69445c8ba1210a3698d7d05"
-  production_commit: "64ff4113061900e06d3fd69ac93fd81de1aff025"
-  production_workflow_run: 31862772706
-  note: "The timeout repair merged, the authorized production run succeeded, and the repository-external rehearsal completed without committing or publishing its review files."
+    - "Do not change accepted classifier semantics, stable IDs, priorities, transition counts, thresholds, Pickup decisions, or representative-card selections."
+    - "Do not restore any test removed by GOV-07 or GOV-08, add a replacement classifier regression suite, or repair the old PR 211 CI failures."
+    - "Do not recalculate or regenerate the accepted classifier-derived artifacts unless a relevant input change is discovered."
+    - "Do not change workflows, public paths, statistical formulas, source events, or protected event 434455 normalized bytes."
+    - "Do not dispatch production, reflow Pickup review, begin P12-10, or perform a remote write before Owner acceptance."
+  stop_point: "Finish the local migration, one output-invariant check, and complete diff review; stop for Owner acceptance before commit or remote publication."
 
 current_repository_state:
-  baseline_commit: "64ff4113061900e06d3fd69ac93fd81de1aff025"
-  baseline_note: "Verified remote master after the successful authorized production update; used as the classifier-correction base."
-  default_branch: "master"
-  package_root: "src/mtgmeta"
-  supported_runtime: "Python 3.12"
-  production_frontends:
-    mtgo: "index.html"
-    tabletop: "melee/index.html"
-  public_catalog: "stats/catalog.json"
-  pages_policy: "configs/pages_publication.json"
-  active_root_python_tools: 9
-  legacy_entry_cleanup: "P11-12 completed and merged in PR 173"
-  live_and_historical_status: "separated and published by P11-13 in PR 174"
+  baseline_commit: "9b80490651d605aad99d1fec41e8b6b5541eaeca"
+  baseline_note: "Remote master after GOV-12 PR 219; used as the governance-migration base for existing PR 211."
+  public_entries:
+    mtgo: "/index.html"
+    tabletop: "/melee/index.html"
+  public_catalog: "/stats/catalog.json"
 
-product_tracks:
-  mtgo:
-    user_facing_name: "MTGO Environment Trends"
-    public_entry: "/index.html"
-    public_formats:
-      - "standard"
-      - "modern"
-    source_scope: "data/<format>/mtgo"
-    statistics_scope: "stats/<format>/mtgo"
-  tabletop:
-    user_facing_name: "Tabletop Major Events"
-    public_entry: "/melee/index.html"
-    public_events:
-      - event_id: 434455
-        format: "modern"
-        structure: "mixed"
-    whitelist: "configs/melee_events.yaml"
-    source_scope: "data_raw/melee and data/<format>/melee"
-    statistics_scope: "stats/<format>/melee"
-  separation_rule: "MTGO and tabletop source data, normalized data, statistics, catalogs, and front-end behavior remain separate."
-
-approved_event_structures:
-  - "constructed_day2"
-  - "constructed_single_stage"
-  - "mixed"
-
-engineering_quality:
-  package_installed_commands:
-    - "mtgo-data-mtgo"
-    - "mtgo-data-melee"
-    - "mtgo-data-catalog"
-  required_ci_capabilities:
-    - "pytest ordinary and committed-baseline shards"
-    - "Ruff"
-    - "strict narrow mypy baseline"
-    - "node:test"
-    - "actionlint"
-    - "Playwright real-browser smoke"
-    - "repository, rule, Schema, and production-candidate validation"
-  dependency_updates: "monthly review-only Dependabot pull requests"
-  coverage_baseline: "P11-04 skipped by owner because measured CI time was unacceptable"
-  production_resource_validation: "P11-10 protects both front ends, maintained JavaScript, and Phase 8 resource references"
-  legacy_entry_audit: "P11-11 audited and P11-12 completed the owner-approved cleanup"
-
-known_blockers: []
+known_blockers:
+  - id: "MTGO-PRODUCTION-RUN-31838657545-CANCELLED"
+    scope: "production_and_p12_10_rehearsal"
+    effect: "A later scheduled production run must succeed before the separately authorized no-publication P12-10 rehearsal."
 
 future_task_gates:
-  - task: "P12-10"
-    status: "blocked_pending_classifier_correction_and_new_technology_gate_publication"
-    completed_requirements:
-      - "Classifier remediation, stable identities, and Spellementals boundary fix accepted and published."
-      - "Standard and Modern Pickup known state matches accepted R5 evidence and final parent identities."
-      - "Owner accepted the already-computed refreshed Landing shadow and reconfirmed 3%, 5pp, and 20 without another calculation."
-      - "Two representative cards are approved for every required identity."
-      - "Pickup candidate extension, review manifest, and XLSX write-back boundaries are defined."
-      - "The repaired production run and one repository-external no-publication Tuesday rehearsal completed."
-      - "The bounded New technology gate received local Owner acceptance."
+  - task: "MELEE-V3-PRODUCTION-PREFLIGHT"
+    status: "planned_not_authorized"
     remaining_requirements:
-      - "Accept and publish this focused classifier correction."
-      - "Publish the accepted bounded New technology gate after rebasing it onto the corrected classifier."
-      - "Reflow the affected Standard and Modern current-plus-prior-four-week Pickup review windows."
+      - "Select and approve one test event and decide whether its snapshot will be retained."
+      - "Choose a test-only key or production-managed key accordingly, with a unique non-secret key ID."
+      - "Obtain separate authorization for secret provisioning, workflow changes, live collection, and any remote candidate branch."
+      - "Keep the rehearsal non-deploying and review the complete v3 candidate before any public use."
+  - task: "P12-10"
+    status: "blocked_pending_no_publication_rehearsal_and_separate_authorization"
+    remaining_requirements:
+      - "Complete and publish the accepted classifier correction."
+      - "Perform and accept one separately authorized no-publication Tuesday rehearsal."
       - "Obtain separate P12-10 implementation authorization."
 
-open_decisions:
-  - id: "OPEN-003"
-    question: "Enable Vintage as a supported format?"
-    status: "deferred"
-    decision_gate: "after Legacy implementation and data-quality review"
-  - id: "OPEN-004"
-    question: "Add automatic Melee event discovery?"
-    status: "deferred"
-    current_rule: "manual whitelist only"
-
 next_approved_task:
-  id: "none"
-  name: "No follow-on task authorized"
-  status: "none_authorized"
-  production_change: false
-  requires_user_confirmation: true
+  id: "NONE"
+  name: "No follow-up task is authorized"
+  status: "no_follow_up_authorized"
   local_execution_authorized: false
-  commit_authorized: false
-  remote_publication_authorized: false
-  authorized_on: null
-  note: "Classifier correction publication, Pickup review reflow, P12-10 implementation, and production all require separate Owner authorization."
-
-governance_baseline:
-  status: "active_on_master"
-  task_id: "GOV-02-DELEGATED-LOCAL-EXECUTION-AUTHORITY-20260718"
-  pull_request: 8
-  merge_commit: "46b3c7883ca124f55bed4f43c9a51c2bae70675e"
-  rule: "Authorization applies only to the approved focused task and does not carry to another task or phase."
-
-delegated_local_execution_governance:
-  isolated_workspace_required: true
-  protected_original_workspace: "D:/dl/crawlerpj"
-  local_execution: "Allowed only after owner approval for the focused task."
-  credentials: "Not included in delegated local authority."
-  remote_publication:
-    standing_authorization: false
-    requires_separate_owner_authorization: true
-  production_dispatch:
-    standing_authorization: false
-    requires_separate_owner_authorization: true
-  next_task:
-    automatic_start: false
-    requires_separate_owner_authorization: true
-
-publication_workflow_control:
-  id: "P8-PUBLICATION-WORKFLOW-GOVERNANCE"
-  status: "deferred_by_policy"
-  remote_mutation_client: "gh"
-  git_push_auth: "command_scoped_gh_auth_git_credential"
-  github_app_mutations_allowed: false
-  create_status_only_pull_request_after_merge: false
-  post_merge_metadata_source: "GitHub and Git history"
-  p8_08_authorized: false
+  note: "Only the current PR 211 governance migration is authorized; every follow-up remains unauthorized."
 
 prohibited_next_actions:
-  - "Do not commit, publish, merge, reflow Pickup review, begin P12-10, dispatch production, or begin another task without the applicable Owner gate."
-  - "Do not recalculate the accepted Landing shadow or change the approved 3%, 5pp, or 20 thresholds."
-  - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
-  - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
-  - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."
-  - "Do not provision or rotate a real participant HMAC secret or configure workflow access to it without separate owner authorization."
-  - "Do not obtain cookies, session identifiers, access-control artifacts, or non-public data, and do not bypass access controls."
-  - "Do not transmit repository content to Superdesign or another external design service without separate authorization."
+  - "Do not begin the Melee v3 production preflight, GOV-13, P12-10, Pickup reflow, or another task automatically."
+  - "Do not create, access, configure, or rotate an HMAC key or GitHub Secret."
+  - "Do not dispatch production, change event selection, fetch protected source data, or change public/statistical contracts beyond the accepted classifier correction."
+  - "Do not rewrite Git history, force-push, mutate protected branches or tags, or change event 434455 protected bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."

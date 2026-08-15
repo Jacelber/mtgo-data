@@ -15,14 +15,51 @@ on:
       - "reports/**"
       - "stats/**"
       - "tests/fixtures/melee/434455_compatibility_manifest.json"
-      - "tests/test_pages_artifact.py"
-      - "tests/test_pages_workflow.py"
   push:
     branches:
       - master
-  workflow_dispatch: {}
+    paths:
+      - ".github/workflows/pages.yml"
+      - "assets/**"
+      - "build_pages_artifact.py"
+      - "configs/pages_publication.json"
+      - "data/**"
+      - "data_raw/**"
+      - "fetched.txt"
+      - "index.html"
+      - "melee/**"
+      - "reports/**"
+      - "stats/**"
+      - "tests/fixtures/melee/434455_compatibility_manifest.json"
+  workflow_dispatch:
+    inputs:
+      publication_commit:
+        description: "Published production commit; leave empty for an authorized manual deployment"
+        required: false
+        type: string
+      producer_run_id:
+        description: "MTGO production workflow run ID"
+        required: false
+        type: string
+      producer_run_attempt:
+        description: "MTGO production workflow attempt"
+        required: false
+        type: string
+      source_commit:
+        description: "Master commit used to build the production candidate"
+        required: false
+        type: string
+      generation_subject_sha256:
+        description: "Generation subject SHA-256"
+        required: false
+        type: string
+      validated_output_sha256:
+        description: "Validated output artifact SHA-256"
+        required: false
+        type: string
 
 permissions:
+  actions: read
   contents: read
 
 concurrency:
@@ -35,11 +72,43 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
+      actions: read
       contents: read
     steps:
+      - name: Classify optional production evidence
+        id: dispatch-evidence
+        shell: bash
+        env:
+          PUBLICATION_COMMIT: ${{ inputs.publication_commit }}
+          PRODUCER_RUN_ID: ${{ inputs.producer_run_id }}
+          PRODUCER_RUN_ATTEMPT: ${{ inputs.producer_run_attempt }}
+          SOURCE_COMMIT: ${{ inputs.source_commit }}
+          GENERATION_SUBJECT_SHA256: ${{ inputs.generation_subject_sha256 }}
+          VALIDATED_OUTPUT_SHA256: ${{ inputs.validated_output_sha256 }}
+        run: |
+          VALUES=(
+            "$PUBLICATION_COMMIT" "$PRODUCER_RUN_ID" "$PRODUCER_RUN_ATTEMPT"
+            "$SOURCE_COMMIT" "$GENERATION_SUBJECT_SHA256" "$VALIDATED_OUTPUT_SHA256"
+          )
+          PROVIDED=0
+          for VALUE in "${VALUES[@]}"; do
+            if [ -n "$VALUE" ]; then
+              PROVIDED=$((PROVIDED + 1))
+            fi
+          done
+          if [ "$PROVIDED" -eq 0 ]; then
+            echo "production=false" >> "$GITHUB_OUTPUT"
+          elif [ "$PROVIDED" -eq "${#VALUES[@]}" ]; then
+            echo "production=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Production dispatch evidence is incomplete." >&2
+            exit 1
+          fi
+
       - name: Check out full history without persisted credentials
         uses: actions/checkout@v7.0.0
         with:
+          ref: ${{ inputs.publication_commit || github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -47,6 +116,54 @@ jobs:
         uses: actions/setup-python@v6.3.0
         with:
           python-version: "3.12"
+
+      - name: Download exact validated production output
+        if: steps.dispatch-evidence.outputs.production == 'true'
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: mtgo-build-candidate
+          path: ${{ runner.temp }}/mtgo-build-candidate
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.producer_run_id }}
+
+      - name: Admit exact production publication evidence
+        if: steps.dispatch-evidence.outputs.production == 'true'
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PRODUCTION_COMMIT: ${{ inputs.publication_commit }}
+          PRODUCTION_RUN_ID: ${{ inputs.producer_run_id }}
+          PRODUCTION_RUN_ATTEMPT: ${{ inputs.producer_run_attempt }}
+          PRODUCTION_SOURCE_COMMIT: ${{ inputs.source_commit }}
+          GENERATION_SUBJECT_SHA256: ${{ inputs.generation_subject_sha256 }}
+          VALIDATED_OUTPUT_SHA256: ${{ inputs.validated_output_sha256 }}
+        run: |
+          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-build-candidate"
+          (
+            cd "$ARTIFACT_DIR"
+            sha256sum --check SHA256SUMS
+          )
+          if tar -tf "$ARTIFACT_DIR/validated-output.tar" | grep -Ev '^(data/|stats/|reports/|fetched\.txt$)'; then
+            echo "Validated output contains a path outside the production boundary." >&2
+            exit 1
+          fi
+          ARTIFACT_SHA="$(sha256sum "$ARTIFACT_DIR/validated-output.tar" | awk '{print $1}')"
+          SUBJECT_SHA="$(tr -d '\r\n' < "$ARTIFACT_DIR/generation-subject.txt")"
+          if [ "$ARTIFACT_SHA" != "$VALIDATED_OUTPUT_SHA256" ] ||
+             [ "$SUBJECT_SHA" != "$GENERATION_SUBJECT_SHA256" ]; then
+            echo "Downloaded production evidence does not match the dispatch." >&2
+            exit 1
+          fi
+          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 \
+            --numeric-owner -cf "$RUNNER_TEMP/published-output.tar" \
+            data stats reports fetched.txt
+          PUBLISHED_SHA="$(sha256sum "$RUNNER_TEMP/published-output.tar" | awk '{print $1}')"
+          if [ "$PUBLISHED_SHA" != "$VALIDATED_OUTPUT_SHA256" ]; then
+            echo "Published commit bytes do not match the validated output." >&2
+            exit 1
+          fi
+          python -B ci_master_admission.py --verify-production-evidence
 
       - name: Build fresh allowlisted Pages artifact
         run: >-
@@ -81,3 +198,12 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Confirm the three public resources are available
+        shell: bash
+        run: |
+          BASE_URL="${{ steps.deployment.outputs.page_url }}"
+          for PATHNAME in index.html melee/index.html stats/catalog.json; do
+            curl --fail --silent --show-error --retry 5 --retry-delay 2 \
+              --retry-all-errors "${BASE_URL%/}/${PATHNAME}" > /dev/null
+          done

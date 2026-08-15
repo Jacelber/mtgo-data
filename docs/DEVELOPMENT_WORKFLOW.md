@@ -44,8 +44,8 @@ A workspace created during the current authorized task may continue after a comp
 | 2: Disposable workspace bootstrap | Establish an isolated workspace. | Verified topology and runtime. | Stop if isolation or preflight fails. |
 | 3: Autonomous isolated implementation | Perform permitted in-scope work. | Focused local change. | Stop on an unauthorized operation. |
 | 4: Automated technical acceptance | Validate the change. | Passing validation evidence. | Stop on unresolved validation failure. |
-| 5: Owner product acceptance | Obtain owner review of the completed task. | Owner decision. | Stop pending owner confirmation. |
-| 6: Separately authorized remote publication | Publish only when separately authorized. | Explicitly authorized remote result. | Stop without publication authorization. |
+| 5: Owner acceptance and completion authority | Obtain owner review of the completed task. Acceptance authorizes continuous completion of that exact task. | Owner decision and accepted subject. | Stop pending owner confirmation. |
+| 6: Accepted-task completion | Commit, publish a Ready PR, merge after required checks pass, and perform the task's applicable publication or production steps. | Completed accepted task. | Stop on failed checks, changed subject, conflict, permission blocker, or scope expansion. |
 
 Never start the next task automatically.
 
@@ -74,55 +74,58 @@ Multiple applicable values use one comma-separated marker. Do not repeat the
 task declaration in `docs/STATUS.yaml` or another machine-maintained field.
 `docs/DEVELOPMENT_WORKFLOW.md` remains the authority for the closed value set.
 Missing, unreadable, duplicate, empty, conflicting, or unknown declarations
-select complete validation.
+stop the PR admission path for owner classification. They do not trigger an
+unrelated catch-all test suite.
+
+At Gate 1, list every planned unknown-path addition, deletion, and rename by
+exact path and validation category. Do not use globs. The PR body repeats each
+approved operation in one machine-readable marker:
+
+`<!-- file-operation: add|docs|review-output/owner-review.md -->`
+
+`<!-- file-operation: delete|docs|docs/obsolete.md -->`
+
+`<!-- file-operation: rename|docs|docs/old.md|docs/history/old.md -->`
+
+Known-path additions need no operation marker. Every declaration must match one
+actual diff operation exactly, and every operation that requires a declaration
+must be present. A known path cannot be assigned a different category.
+Declarations select the minimal checks only; they do not authorize deletion,
+public-path or statistical changes, credentials, production, or remote actions.
 
 The declaration is a contract, not a prediction to revise after a test fails.
 If a task declared `none` but Gate 3 or Gate 4 finds an artifact change, stop
 and treat it as a contract mismatch. Do not describe the mismatch merely as a
 baseline-test failure or accept it by updating a snapshot.
 
-The effective validation path is the strictest result required by the declared
-impact, actual changed paths and file statuses, any low-cost observable DOM,
-JSON, snapshot, or committed-artifact difference, and the mandatory-full
-conditions below. The declaration may never lower the result implied by the
-other evidence. Pull-request maturity is not an input to validation strength.
-Both Draft and Ready pull requests use the same conservative changed-path
-allowlists, and locally completed work is published Ready by default. Draft is
-optional only when the Owner explicitly requests remote incomplete-work review.
-Unknown paths or classification failures select complete validation.
+The PR admission script mechanically maps every added or modified known path to
+one or more categories: documentation, UI, maintained Python, rules/data, and
+governance. The targeted job runs only the checks assigned to those categories.
+Pull-request maturity is not an input to validation strength. A title-only edit uses admission only;
+a body or base edit reclassifies the subject.
 
-Focused documentation validation requires the single declaration
-`internal_diagnostics`, added or modified Markdown files only under the approved
-`docs/audits/` or `docs/history/` paths, and no CI-admission authority document.
-Focused UI validation requires the single declaration `user_visible_ui` and
-added or modified files only from the repository-maintained explicit CSS and
-browser-test allowlist in `ci_master_admission.py`. Application state, runtime,
-controller, data-model, i18n, legacy asset, HTML, public-path, workflow,
-authoritative-document, backend, Schema, statistical, baseline, generated-data,
-deletion, and rename changes require complete validation.
-
-Complete validation and the applicable separate Owner authorization are
-mandatory for statistical definitions, formulas, or semantics; Schema or
-compatibility changes; public paths; production fetch, dispatch, or real-data
-writes; workflow write-permission changes; secrets, HMAC, or credentials;
-privacy or retention boundaries; deletion, rename, or destructive migration;
-baseline refreshes or expected statistical-artifact changes; unknown paths;
-or incomplete GitHub evidence.
+Undeclared unknown-path additions, deletions, renames, malformed or stale
+operation declarations, and incomplete GitHub evidence are not test questions.
+They select `unclassified`: the aggregate check fails immediately with the
+reason. Exact declared operations run only their declared minimal category.
+Statistical meaning, public paths, production,
+privacy, credentials, destructive migration, and remote writes still require
+their separate Owner gates; a green targeted PR check never grants authority.
 
 During Gate 3, run the smallest focused generator, renderer, or browser check
-that can expose the declared impact. Before the full suite, inspect a
+that can expose the declared impact. Before automated acceptance, inspect a
 human-readable comparison: `git diff --stat`, the relevant `git diff`, and,
 where useful, `git diff --numstat` or a bounded rendered screenshot or JSON
 comparison. Record which files changed, whether they are within the declared
 impact, and the relevant field, DOM, or runtime-request difference. This is a
 fast review aid; it does not replace a validator or a complete diff review.
 
-Gate 4 retains the strict committed-baseline behavior. Do not add a non-failing
-review mode, an automatic baseline-acceptance command, or a test bypass.
-Committed-baseline tests continue to require byte-identical outputs against the
-committed snapshot. A declared and owner-accepted artifact-contract change may
-require an explicit, separately reviewed snapshot edit followed by the same
-strict validation; it is never accepted by a review-mode test or automation.
+At Gate 4, every automated check must state the risk it answers and use the
+smallest subject that can answer it. Do not repeat successful evidence for the
+same immutable subject. GOV-07 retired rolling-output byte baselines. GOV-08
+replaced the accumulated ordinary suite with the trigger-specific inventory in
+`docs/TEST_TRIGGER_MATRIX.md`; GOV-09 removed post-acceptance UI automation.
+No workflow may invoke unbounded pytest.
 
 At Gate 5, present the owner with the original declaration, the actual changed
 artifact list, the relevant source or rendered diff, and verification matched
@@ -130,9 +133,22 @@ to the impact: browser behavior for `user_visible_ui`, field and consumer
 evidence for `statistical_json_structure`, and compatibility plus Pages
 evidence for `public_path`. A Phase 12 UI task, for example, declares
 `user_visible_ui`, runs its focused renderer and browser check during Gate 3,
-shows the owner the changed state and screenshot or URL before acceptance, and
-then runs the unchanged strict Gate 4 suite. The owner accepts the disclosed
-change, not an opaque statement that refreshed baselines pass.
+and shows the owner the final changed state and URL before acceptance. That
+Owner review is the final UI acceptance evidence. Do not rerun automated UI or
+browser tests afterward unless a user-visible file changes.
+
+After acceptance, commit the unchanged reviewed UI tree and print its subject
+marker with:
+
+`python -B ci_master_admission.py --owner-ui-marker-from origin/master`
+
+Put the printed `owner-ui-accepted` marker in the PR body. The digest contains
+only changed `index.html`, `assets/**`, and `melee/**` paths and their Git blob
+identities. Status, test, package, and governance edits therefore do not
+invalidate a UI review. PR admission recalculates the digest from the complete
+GitHub file list and stops immediately if the marker is absent, duplicated, or
+stale; it never substitutes another UI test. An active marker or
+`user_visible_ui` declaration without a changed user-visible path also stops.
 
 ## Mandatory Gate 2 bootstrap
 
@@ -172,9 +188,20 @@ Task-contract paths normally identify expected final deliverables, not absolute 
 
 Anonymous read-only clone and fetch of the approved public repository, and necessary public-documentation access, are allowed unless a task is explicitly fully offline. They do not authorize credentials, uploads, remote API writes, transmission to unrelated services, unapproved third-party execution, unrelated services or repositories, or system-level installation.
 
-Separate Owner authorization is required for credentials or sensitive-resource access; product or statistical decisions; task or phase expansion; protected-environment changes; unexplained production-behavior changes; push, remote branch creation or deletion, pull-request operations, merge, tags, releases, workflow dispatch, deployments, repository-setting changes, secrets or variables, remote API mutations, protected-branch changes, and force-push. Local completion stops before remote publication unless separately authorized.
+Before Owner acceptance, separate authorization is required for remote writes.
+Owner acceptance then authorizes local commit, push, one Ready pull request,
+required-check waiting, merge, and the accepted task's applicable publication
+or production completion without repeated prompts. The accepted subject must
+remain byte-identical except for publication metadata that GitHub creates.
+Stop and return to the Owner when a required check fails, the diff or scope
+changes, a merge conflict appears, permissions block the documented path, or a
+new product/statistical decision is required. Acceptance never carries to
+another task or phase, unrelated credentials, force-push, repository settings,
+secrets, or destructive action outside the accepted contract.
 
-Prohibited operations are Full access, direct development on `master`, automatic push, PR, or merge, reading or copying credentials, protected-source modification, cross-project access, and automatic next-task startup.
+Prohibited operations are Full access, direct development on `master`, reading
+or copying credentials, protected-source modification, cross-project access,
+force-push, and automatic next-task startup.
 
 ## Validation-failure handling
 
@@ -182,7 +209,7 @@ A validation failure does not itself require new Owner authorization. Codex may 
 
 ## Codex task contracts
 
-Every contract requires a unique task ID, exact workspace, objective, authoritative reading list, initial checks, expected deliverable paths, explicitly protected or prohibited paths, delegated local authority, separate remote-publication authority, validation, product or phase stop conditions, report title, and controlled conclusions.
+Every contract requires a unique task ID, exact workspace, objective, authoritative reading list, initial checks, expected deliverable paths, explicitly protected or prohibited paths, delegated local authority, validation, acceptance-continuation applicability, product or phase stop conditions, report title, and controlled conclusions.
 
 A bounded batch contract may group small, non-production tasks only when they
 share one area and artifact impact. It must state:
@@ -227,7 +254,7 @@ assets, and workflows. Create a short invalidation map:
 
 Module-local tests are not sufficient evidence that a repository-wide contract
 was updated. A missed old-state assertion should be found by impact discovery,
-not left for the final full suite.
+not delegated to an unrelated catch-all suite.
 
 ## Python and dependencies
 
@@ -248,11 +275,23 @@ Review the complete diff; run applicable tests and validators; verify changed pa
 
 Repository validation uses three distinct layers. Do not treat them as interchangeable:
 
-1. **Clean-checkout code and committed-baseline validation** runs in read-only CI according to artifact impact, actual changed paths, and complete GitHub evidence rather than Draft or Ready state. Strictly allowlisted documentation runs repository and live-document-policy checks. Strictly allowlisted UI runs repository and native Node validation plus the complete applicable Playwright production-page suite. Every other pull request, every manual validation dispatch, every direct `master` push, and any `master` push whose prior validation cannot be proved exactly runs complete validation. The complete path includes the pytest suite partitioned into exact complementary `ordinary` and `committed_baseline` shards on independent runners. State-only Draft-to-Ready and Ready-to-Draft transitions do not trigger the workflow; relevant body or base edits reclassify the subject, while title-only edits use an admission-only metadata path. The aggregate check remains present for every triggered path. An exact two-parent PR merge may use the lighter post-merge confirmation only when the read-only admission job reclassifies the current declaration and complete file set, proves the successful PR run covered the final merge's exact PR number, base SHA, head SHA, workflow identity, validation class, expected successful jobs, and pre-merge completion time. Missing, stale, changed, ambiguous, paginated beyond support, or unavailable evidence fails safe to the complete suite. Tests marked `committed_baseline` intentionally reproduce generators, diagnostics, and public outputs from the current committed production snapshot and require byte-identical results. Volatile dates, timestamps, and aggregate counts come from the committed snapshot metadata rather than a previous run's hard-coded values. These tests must run before any production fetch mutates the checkout. The exact admission predicates, allowlists, job matrix, production boundary, failure visibility, remote acceptance, and rollback are defined in `docs/audits/CI-MASTER-ADMISSION.md`.
-2. **Production candidate validation** runs after authorized fetching and generation but before staging or publication. It compares the candidate with a baseline snapshot captured at the start of the run, permits only declared generated-data paths, rejects deletions and cross-product writes, parses changed JSON and YAML, verifies event and match document shape, prevents event, match, or fetched-ledger count regression, and retains strict classification, repository, rule, Schema, generated consumer-contract, and focused generated-page browser validation. Candidate acceptance and generated consumer tests must use structural invariants and values derived from the current candidate rather than historical hard-coded deck, event, archetype, matrix-row, percentage, or date expectations.
-3. **Publication confirmation** runs after the generated commit is pushed. It requires a clean production workspace and confirms that the remote `master` commit equals the locally published commit.
+1. **Targeted pull-request validation** uses complete changed-file evidence to map known paths and exact predeclared file operations to documentation, UI, code, data, and governance checks. It never runs full pytest, committed byte baselines, or Playwright. Undeclared or mismatched unknown additions, deletions, renames, malformed declarations, or unavailable evidence fails quickly as `unclassified`. The aggregate check remains present. An exact two-parent merge may use confirmation only when admission proves the exact PR number, base SHA, head SHA, workflow identity, validation class, expected successful jobs, and pre-merge completion time.
+2. **Production candidate validation** runs after authorized fetching and generation but before staging or publication. It compares the candidate with a baseline snapshot captured at the start of the run, permits only declared generated-data paths, rejects deletions and cross-product writes, parses changed JSON and YAML, verifies event and match document shape, prevents count regression, and retains strict classification, repository, rule, Schema, value-independent output invariants, generated consumer-contract, and exactly one MTGO plus one Melee real-number rendering smoke. Candidate checks derive their expectations from the candidate and specifications rather than historical hard-coded bytes or tournament values.
+3. **Publication confirmation** reuses that candidate evidence. The immutable build artifact, its SHA-256, the generation-subject SHA-256, producer run and attempt, source commit, and generated publication commit are bound together. After push, confirmation checks the clean workspace and exact remote `master` SHA; Pages then verifies the same commit ancestry, commit trailers, producer jobs, artifact digest, and published bytes without rerunning candidate tests.
 
-A clean-checkout baseline test protects reproducibility across code and rule changes; it is not evidence that newly fetched data is acceptable. A production candidate check protects the current data increment; it does not replace fixture-based unit and regression tests. Adding a new generated path or allowing an automatic deletion requires explicit review of the candidate publication boundary.
+A clean-checkout production smoke proves only that the commands about to run
+still cross their offline entry boundaries. It is not evidence that newly
+fetched data is acceptable. The production candidate checks the current data
+increment once at the output gate. Adding a new generated path or allowing an
+automatic deletion requires explicit review of the candidate publication
+boundary.
+
+After fetching, the production workflow hashes the complete generation subject.
+If that digest equals the latest published `Generation-Subject-SHA256` trailer,
+the existing published bytes remain authoritative and the workflow skips the
+CLI baseline, generation, candidate validation, packaging, publication, and
+Pages dispatch. A missing prior trailer or any changed subject requires one new
+candidate build and one validation pass.
 
 ### Allowlisted Pages build and cutover
 
@@ -261,19 +300,29 @@ must build into a new directory outside the checkout from
 `configs/pages_publication.json`, preserve source bytes, validate the complete
 event `434455` compatibility closure, reject symbolic links and unsafe paths,
 and report repository, data-tree, artifact, protected-file, and excluded-file
-sizes. Pull requests may build the candidate but must not deploy it. The Pages
-deploy job may run only for `master` pushes or the accepted explicit
-production-publication dispatch on `master`, and has only `pages: write` and
-`id-token: write`; it must not receive repository write access or persisted Git
-credentials.
+sizes. Pull requests may build the candidate but must not deploy it. Automatic
+`master` deployment is path-filtered to the actual site inputs. Governance,
+test, and other excluded-path changes do not start Pages. The deploy job may run
+only for such a relevant `master` push or an accepted explicit dispatch on
+`master`, and has only `pages: write` and `id-token: write`; it must not receive
+repository write access or persisted Git credentials.
 
 When a production data publication changes `master`, its publish job must first
 confirm the remote `master` commit and then explicitly dispatch the allowlisted
 Pages workflow on `master`, as defined by DEC-084. GitHub does not trigger the
 Pages push workflow from a commit made with that production workflow's own
-`GITHUB_TOKEN`. A no-change production publication does not dispatch Pages;
-pull-request builds remain non-deploying, and the Pages deployment job retains
-its existing no-repository-write boundary.
+`GITHUB_TOKEN`. The production dispatch must carry the exact publication commit,
+producer run and attempt, source commit, generation-subject digest, and validated
+output digest. Partial evidence fails closed. An explicitly authorized manual or
+recovery dispatch carries none of those production fields and remains a separate
+path. A no-change production run does not dispatch Pages; pull-request builds
+remain non-deploying, and the Pages deployment job retains its existing
+no-repository-write boundary.
+
+After a production deployment, do not rerun candidate, Schema, invariant,
+consumer, or browser tests. The minimum downstream confirmation is the bound
+publication SHA plus HTTP availability of `index.html`, `melee/index.html`, and
+`stats/catalog.json`, once for that deployment.
 
 The initial cutover is separately gated from local implementation, commit, and
 pull-request review. Before changing the repository setting, capture the active
@@ -309,7 +358,7 @@ code tree, environment layer, test node ID, and relevant inputs:
    applicable validation. Documentation-only edits do not invalidate code
    tests unless they change executable examples, manifests, workflows, or test
    discovery.
-6. The final pull-request head receives one independent clean-checkout CI run.
+6. The final pull-request head receives one independent targeted CI run.
    Do not rerun the same failed workflow head. Diagnose it and, when a repair is
    required, validate the new head once. A red required check is never manually
    described as green.
@@ -321,24 +370,19 @@ passes a shard-specific path under `RUNNER_TEMP`. Do not create a repository
 local `.pytest_cache`, `.codex-test-temp`, or other basetemp as a workaround for
 an inaccessible system temporary directory.
 
-After one successful complete PR run, exact two-parent merge admission reuses
+After one successful targeted PR run, exact two-parent merge admission reuses
 that evidence through `pr-confirmation`; it does not rerun pytest, browser, or
 static validation. Missing, changed, conflicting, or unavailable evidence
-continues to fail closed.
+fails closed as `unclassified` without starting a catch-all suite.
 
-Real-browser validation must run a single Chromium launch-and-close preflight
-before Playwright starts its web server or collects the full browser matrix. A
-systemic launch failure such as `spawn EPERM`, a missing browser executable, or
-an unusable browser runtime must stop that command immediately; it must not be
-repeated once per browser test. The maintained local server uses the already
-required Node.js runtime rather than a separately discovered Python command.
+UI work receives one local owner browser review after syntax/model smoke. That
+review is final for the reviewed immutable subject. Production retains one
+generated-page Chromium smoke before packaging because it checks a different
+subject: the newly generated candidate.
 
-The ordinary CI shard enforces a 120-second per-test call ceiling from the
-existing timing report. A slower ordinary call is a test-architecture failure:
-move full committed-snapshot reproduction to the strict complementary baseline
-shard, replace a production-corpus contract test with a representative fixture,
-or share immutable setup without weakening the assertion. Do not raise the
-ceiling merely to accommodate repeated full-corpus generation.
+The retained Python set is the explicit trigger inventory in
+`docs/TEST_TRIGGER_MATRIX.md`. A broad or unfamiliar path is not a reason to run
+every retained test; unknown evidence stops for classification instead.
 
 Record the validated commit or tree identity in the task evidence. Do not rerun
 the same expensive command when no relevant input changed, and do not run every
@@ -346,22 +390,11 @@ validator after every small edit.
 
 ### CI timing observation
 
-The read-only validation workflow records timing from each complementary
-pytest shard. Each GitHub summary reports the selected and completed test
-counts, call-time totals, and the 25 slowest completed calls for that shard.
-The aggregate check retains the established `Repository validation (Python
-3.12)` name and passes only after static validation and both shards pass.
-Timing reports are observation aids only: they must not suppress failures or
-replace the complete-suite requirement. Use representative successful PR,
-`master`, and production runs before proposing trigger changes or test
-removal.
-
-The validation job has a 30-minute safety ceiling. This is a failure-reporting
-boundary, not a duration target: the 2026-07-28 Gate 1 review found that the
-former 15-minute ceiling could cancel an otherwise progressing complete suite
-before pytest printed its failure details. Raising the ceiling does not change
-test selection, triggers, permissions, or the requirement to investigate
-duration growth.
+The PR workflow has a five-minute job ceiling, not a target. Measure admission
+and category runtimes from representative successful runs. If a category
+regularly exceeds one minute, identify the exact slow item and remove duplicate
+coverage or replace its subject with the smallest fixture; do not restore a
+catch-all suite.
 
 The evidence counts, decision gates, stop conditions, and model guidance for
 any CI-efficiency work are maintained in
@@ -401,28 +434,35 @@ application defect.
 
 ## Publication preflight and records
 
-Remote publication remains a separate Gate 6 authorization. After that
-authorization and before the first remote write:
+Owner acceptance supplies Gate 6 completion authority for the exact accepted
+task. Before the first remote write:
 
 1. confirm the final local commit, clean status, current branch, and intended
    base;
 2. inspect the fetch and disabled push URLs;
-3. in the same execution context that will publish, run
-   `gh auth status -h github.com` and
-   `gh api user --jq .login`;
-4. confirm repository write permission without mutating it:
-   `gh api repos/Jacelber/mtgo-data --jq .permissions.push` must return `true`;
-5. if `.github/workflows/**` changed, confirm that the active token includes the
-   required `workflow` scope;
+3. in the same execution context that will publish, run the repository's only
+   credential-verdict entry point:
+   `tools/github_publication_preflight.ps1 -ActualPublicationContext`; Codex
+   must use `require_escalated` for this call;
+4. add `-RequireWorkflowScope` when `.github/workflows/**` changed;
+5. require the script's `READY` state before publication;
 6. keep the workspace's disabled push sentinel and empty local credential
    helper intact; do not restore or persist a real push URL;
 7. use only the repository-specific `gh` publication path below.
 
-Do not use a push as a credential probe and do not rotate through unrelated
-fallback publication mechanisms after a `403`. First distinguish the expected
-local disabled-push sentinel from a real GitHub authorization or token-scope
-failure. If preflight fails, stop once, report the missing permission or
-configuration, and preserve the local commit.
+The preflight states have one handling rule each:
+
+- `READY` continues through the commands below;
+- `RETRY_ACTUAL_CONTEXT` retries the same script once in the actual publication
+  context without an Owner prompt, then reports a context failure if unchanged;
+- `AUTH_REJECTED` stops and permits an Owner login request;
+- `PERMISSION_MISSING` reports the exact identity, push-permission, or workflow-
+  scope mismatch; and
+- `NETWORK_ERROR` reports network or GitHub availability failure.
+
+Do not use a push as a credential probe or interpret raw `gh` output as a
+credential verdict. Preserve the local commit and disabled push sentinel when
+the state is not `READY`.
 
 For this repository, generic GitHub app or connector mutation preferences are
 superseded by this repository-specific path. GitHub app and connector tools may
@@ -451,10 +491,9 @@ The command-scoped `safe.directory` and credential helper do not modify global
 or repository-local configuration. A disabled push sentinel error means the
 explicit approved URL was not used. `/dev/tty`, username-prompt, or credential
 helper errors mean Git did not obtain the already-checked `gh` credential; they
-do not prove token expiration. Describe a token as invalid or expired only
-when both `gh auth status` and `gh api user` fail with an authentication error
-in the actual publication context. Otherwise report a credential-context or
-helper-path failure and retry only the documented path.
+do not override the preflight state. Report authentication rejection only when
+the script returns `AUTH_REJECTED`; otherwise retain its exact failure class and
+retry only the documented path.
 
 A pull request cannot contain its own not-yet-known merge commit. Therefore,
 implementation pull requests should record stable task results and validation,
@@ -501,6 +540,25 @@ is a signal to narrow the query, not to repeat the same broad read.
 
 The evidence behind these controls is summarized in
 `docs/audits/DEVELOPMENT_PROCESS_RETROSPECTIVE_2026-07.md`.
+
+### Live-document maintenance
+
+Keep the always-read layer bounded by responsibility:
+
+- `AGENTS.md` contains only stable every-task steps, hard boundaries, and
+  conditional reading pointers;
+- `docs/STATUS.yaml` contains only live phase, task, authorization, blockers,
+  next-gate, and prohibition state;
+- `docs/ROADMAP.md` contains the active phase, useful future phases, and their
+  acceptance criteria; and
+- `docs/history/` preserves completed or superseded detail and never
+  authorizes work.
+
+When a completed task has detailed material in the live roadmap, move that
+material to the corresponding phase history file in the same accepted task,
+update `docs/history/README.md`, and leave only the remaining plan plus one
+compact pointer. GitHub and Git retain ordinary validation, publication, and
+merge identifiers; do not copy them into a growing live narrative.
 
 ## Language
 

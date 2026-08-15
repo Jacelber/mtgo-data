@@ -1,17 +1,20 @@
-"""Fail-safe admission decisions for pull requests and master validation.
+"""Output-gated admission decisions for pull requests and master validation.
 
 Pull-request maturity is not a validation input. Artifact declarations, changed
-paths, file statuses, and complete GitHub evidence select focused or complete
-validation. A push to master may use the lighter confirmation path only when
-the exact two-parent merge was already validated in its still-required class.
+paths, file statuses, and complete GitHub evidence select the smallest targeted
+validation. Unknown evidence stops immediately for owner classification instead
+of spending minutes on an unrelated catch-all suite. A push to master may use
+the confirmation path only when the exact two-parent merge was already checked.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
+import subprocess
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -21,29 +24,11 @@ from urllib.request import Request, urlopen
 
 
 WORKFLOW_PATH = ".github/workflows/ci.yml"
+UPDATE_WORKFLOW_PATH = ".github/workflows/update.yml"
 AGGREGATE_JOB = "Repository validation (Python 3.12)"
 ADMISSION_JOB = "Select PR validation class or exact-merge confirmation"
-FOCUSED_JOB = "Focused PR validation"
-STATIC_JOB = "Repository files, rules, and schemas"
-ORDINARY_JOB = "Pytest shard (ordinary)"
-COMMITTED_BASELINE_JOB = "Pytest shard (committed-baseline)"
-BROWSER_JOB = "Playwright production pages"
-EXPECTED_SUCCESSFUL_JOBS = {
-    "focused-docs": frozenset({ADMISSION_JOB, FOCUSED_JOB, AGGREGATE_JOB}),
-    "focused-ui": frozenset(
-        {ADMISSION_JOB, FOCUSED_JOB, BROWSER_JOB, AGGREGATE_JOB}
-    ),
-    "full": frozenset(
-        {
-            ADMISSION_JOB,
-            STATIC_JOB,
-            ORDINARY_JOB,
-            COMMITTED_BASELINE_JOB,
-            BROWSER_JOB,
-            AGGREGATE_JOB,
-        }
-    ),
-}
+TARGETED_JOB = "Targeted PR validation"
+TARGETED_CATEGORIES = frozenset({"code", "data", "docs", "governance", "ui"})
 SUBJECT_PREFIX = "Validated merge subject:"
 CLASS_PREFIX = "Validated PR class:"
 ARTIFACT_IMPACTS = frozenset(
@@ -58,25 +43,23 @@ ARTIFACT_IMPACTS = frozenset(
 ARTIFACT_IMPACT_PATTERN = re.compile(
     r"<!--\s*artifact-impact:\s*([^<>]+?)\s*-->", re.IGNORECASE
 )
-SAFE_DOC_PREFIXES = ("docs/audits/", "docs/history/")
-FULL_VALIDATION_DOCS = frozenset(
-    {
-        "docs/audits/CI-MASTER-ADMISSION.md",
-        "docs/audits/CI_EFFICIENCY_PLAN.md",
-    }
+FILE_OPERATION_PATTERN = re.compile(
+    r"<!--\s*file-operation:\s*([^<>]+?)\s*-->", re.IGNORECASE
 )
-SAFE_UI_PATHS = frozenset(
-    {
-        "assets/css/phase8-base.css",
-        "assets/css/phase8-candidate.css",
-        "tests/browser/production-pages.spec.js",
-        "tests/browser/url-state.spec.js",
-        "tests/browser/view-lazy-loading.spec.js",
-    }
+OWNER_UI_ACCEPTANCE_PATTERN = re.compile(
+    r"<!--\s*owner-ui-accepted:\s*([^<>]+?)\s*-->", re.IGNORECASE
 )
 VALIDATING_ACTIONS = frozenset({"opened", "synchronize", "reopened", "edited"})
 FILES_PER_PAGE = 100
 MAX_PULL_REQUEST_FILES = 3000
+PRODUCTION_SUCCESS_JOBS = frozenset(
+    {
+        "Verify clean MTGO production baseline",
+        "Fetch MTGO candidate data",
+        "Build and validate MTGO candidate",
+    }
+)
+PRODUCTION_PUBLISH_JOB = "Publish validated MTGO data"
 
 
 @dataclass(frozen=True)
@@ -88,6 +71,14 @@ class AdmissionDecision:
     validation_class: str | None = None
 
 
+@dataclass(frozen=True)
+class FileOperation:
+    kind: str
+    category: str
+    path: str
+    previous_path: str | None = None
+
+
 FetchJson = Callable[[str], object]
 
 
@@ -96,6 +87,144 @@ def _fail_safe_reason(exc: Exception) -> str:
         r"[^A-Za-z0-9_.:-]+", "_", f"{type(exc).__name__}:{exc}"
     )[:160]
     return f"fail_safe:{detail}"
+
+
+def _validated_sha(value: object, *, label: str) -> str:
+    if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{40}", value):
+        raise ValueError(f"{label}_invalid")
+    return value
+
+
+def _validated_sha256(value: object, *, label: str) -> str:
+    if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value):
+        raise ValueError(f"{label}_invalid")
+    return value
+
+
+def _single_commit_trailer(message: object, key: str) -> str:
+    if not isinstance(message, str):
+        raise ValueError("production_commit_message_missing")
+    pattern = re.compile(rf"^{re.escape(key)}:\s*(\S+)\s*$", re.MULTILINE)
+    values = pattern.findall(message)
+    if len(values) != 1:
+        label = key.lower().replace("-", "_")
+        raise ValueError(f"production_trailer_{label}_invalid")
+    return values[0]
+
+
+def verify_production_evidence(
+    *,
+    repository: str,
+    publication_commit: str,
+    producer_run_id: int,
+    producer_run_attempt: int,
+    source_commit: str,
+    generation_subject_sha256: str,
+    validated_output_sha256: str,
+    fetch_json: FetchJson,
+    api_url: str = "https://api.github.com",
+) -> str:
+    """Verify that one Pages dispatch names one validated production subject."""
+
+    if not repository:
+        raise ValueError("repository_missing")
+    publication_commit = _validated_sha(
+        publication_commit, label="publication_commit"
+    )
+    source_commit = _validated_sha(source_commit, label="source_commit")
+    generation_subject_sha256 = _validated_sha256(
+        generation_subject_sha256, label="generation_subject_sha256"
+    )
+    validated_output_sha256 = _validated_sha256(
+        validated_output_sha256, label="validated_output_sha256"
+    )
+    if producer_run_id <= 0 or producer_run_attempt <= 0:
+        raise ValueError("producer_run_identity_invalid")
+
+    repository_api = f"{api_url.rstrip('/')}/repos/{repository}"
+    master = fetch_json(f"{repository_api}/commits/master")
+    if not isinstance(master, dict) or master.get("sha") != publication_commit:
+        raise ValueError("publication_commit_is_not_master")
+
+    commit = fetch_json(f"{repository_api}/commits/{quote(publication_commit)}")
+    parents = commit.get("parents") if isinstance(commit, dict) else None
+    if (
+        not isinstance(parents, list)
+        or len(parents) != 1
+        or not isinstance(parents[0], dict)
+        or parents[0].get("sha") != source_commit
+    ):
+        raise ValueError("production_commit_parent_mismatch")
+    message = commit.get("commit", {}).get("message")
+    expected_trailers = {
+        "Production-Run": str(producer_run_id),
+        "Production-Attempt": str(producer_run_attempt),
+        "Production-Source": source_commit,
+        "Generation-Subject-SHA256": generation_subject_sha256,
+        "Validated-Output-SHA256": validated_output_sha256,
+    }
+    for key, expected in expected_trailers.items():
+        if _single_commit_trailer(message, key) != expected:
+            label = key.lower().replace("-", "_")
+            raise ValueError(f"production_trailer_{label}_mismatch")
+
+    run = fetch_json(f"{repository_api}/actions/runs/{producer_run_id}")
+    if not isinstance(run, dict):
+        raise ValueError("producer_run_missing")
+    if (
+        run.get("id") != producer_run_id
+        or run.get("run_attempt") != producer_run_attempt
+        or run.get("head_sha") != source_commit
+        or run.get("event") not in {"schedule", "workflow_dispatch"}
+        or str(run.get("path", "")).split("@", 1)[0] != UPDATE_WORKFLOW_PATH
+    ):
+        raise ValueError("producer_run_subject_mismatch")
+    if run.get("status") == "completed":
+        if run.get("conclusion") != "success":
+            raise ValueError("producer_run_not_successful")
+    elif run.get("status") != "in_progress" or run.get("conclusion") is not None:
+        raise ValueError("producer_run_state_invalid")
+
+    jobs_payload = fetch_json(
+        f"{repository_api}/actions/runs/{producer_run_id}/attempts/"
+        f"{producer_run_attempt}/jobs?per_page=100"
+    )
+    jobs = jobs_payload.get("jobs") if isinstance(jobs_payload, dict) else None
+    total_count = (
+        jobs_payload.get("total_count") if isinstance(jobs_payload, dict) else None
+    )
+    if (
+        not isinstance(jobs, list)
+        or not isinstance(total_count, int)
+        or total_count != len(jobs)
+        or total_count >= 100
+    ):
+        raise ValueError("producer_jobs_missing")
+    by_name: dict[str, list[dict]] = {}
+    for job in jobs:
+        if isinstance(job, dict) and isinstance(job.get("name"), str):
+            by_name.setdefault(job["name"], []).append(job)
+    for name in PRODUCTION_SUCCESS_JOBS:
+        matches = by_name.get(name, [])
+        if len(matches) != 1 or matches[0].get("conclusion") != "success":
+            raise ValueError(f"producer_job_not_successful:{name}")
+    publish_matches = by_name.get(PRODUCTION_PUBLISH_JOB, [])
+    if len(publish_matches) != 1:
+        raise ValueError("producer_publish_job_missing")
+    publish = publish_matches[0]
+    if not (
+        (publish.get("status") == "in_progress" and publish.get("conclusion") is None)
+        or (
+            publish.get("status") == "completed"
+            and publish.get("conclusion") == "success"
+        )
+    ):
+        raise ValueError("producer_publish_job_state_invalid")
+
+    return (
+        f"verified_production_publication:{publication_commit}:"
+        f"run={producer_run_id}:attempt={producer_run_attempt}"
+    )
 
 
 def _parse_artifact_impacts(body: object) -> frozenset[str]:
@@ -111,6 +240,61 @@ def _parse_artifact_impacts(body: object) -> frozenset[str]:
     if unknown:
         raise ValueError(f"unknown_artifact_impact:{','.join(unknown)}")
     return frozenset(values)
+
+
+def _declared_path(value: str) -> str:
+    path = value.strip()
+    if (
+        not path
+        or "\\" in path
+        or path.startswith("/")
+        or "|" in path
+        or ".." in path.split("/")
+    ):
+        raise ValueError("file_operation_path_invalid")
+    return path
+
+
+def _parse_file_operations(body: object) -> frozenset[FileOperation]:
+    if not isinstance(body, str):
+        raise ValueError("missing_artifact_impact_declaration")
+    operations: list[FileOperation] = []
+    for declaration in FILE_OPERATION_PATTERN.findall(body):
+        fields = [field.strip() for field in declaration.split("|")]
+        kind = fields[0].lower() if fields else ""
+        expected_fields = 4 if kind == "rename" else 3
+        if kind not in {"add", "delete", "rename"} or len(fields) != expected_fields:
+            raise ValueError("file_operation_declaration_invalid")
+        category = fields[1].lower()
+        if category not in TARGETED_CATEGORIES:
+            raise ValueError(f"file_operation_category_invalid:{category}")
+        operations.append(
+            FileOperation(
+                kind=kind,
+                category=category,
+                path=_declared_path(fields[-1]),
+                previous_path=(
+                    _declared_path(fields[2]) if kind == "rename" else None
+                ),
+            )
+        )
+    if len(operations) != len(set(operations)):
+        raise ValueError("duplicate_file_operation_declaration")
+    return frozenset(operations)
+
+
+def _owner_ui_acceptance(body: object) -> str | None:
+    if not isinstance(body, str):
+        return None
+    declarations = OWNER_UI_ACCEPTANCE_PATTERN.findall(body)
+    if len(declarations) > 1:
+        raise ValueError("expected_at_most_one_owner_ui_acceptance")
+    if not declarations:
+        return None
+    value = declarations[0].strip().lower()
+    if not re.fullmatch(r"sha256:[0-9a-f]{64}", value):
+        raise ValueError("owner_ui_acceptance_invalid")
+    return value.removeprefix("sha256:")
 
 
 def _pull_request_files(
@@ -141,56 +325,187 @@ def _pull_request_files(
         page += 1
 
 
-def _validated_path(item: dict) -> str:
-    path = item.get("filename")
-    status = item.get("status")
+def _validated_path(path: object) -> str:
     if not isinstance(path, str) or not path or "\\" in path or path.startswith("/"):
         raise ValueError("pull_request_path_invalid")
     if ".." in path.split("/"):
         raise ValueError("pull_request_path_invalid")
-    if item.get("previous_filename") or status not in {"added", "modified"}:
-        raise ValueError(f"pull_request_file_status:{status or 'missing'}")
     return path
 
 
-def _is_safe_doc_path(path: str) -> bool:
-    return (
-        path.endswith(".md")
-        and path.startswith(SAFE_DOC_PREFIXES)
-        and path not in FULL_VALIDATION_DOCS
-    )
+def _operation_for(
+    declarations: frozenset[FileOperation],
+    *,
+    kind: str,
+    path: str,
+    previous_path: str | None = None,
+) -> FileOperation | None:
+    matches = [
+        operation
+        for operation in declarations
+        if operation.kind == kind
+        and operation.path == path
+        and operation.previous_path == previous_path
+    ]
+    if len(matches) > 1:
+        raise ValueError("conflicting_file_operation_declaration")
+    return matches[0] if matches else None
 
 
-def _is_safe_ui_path(path: str) -> bool:
-    return path in SAFE_UI_PATHS
+def _validated_change(
+    item: dict,
+    declarations: frozenset[FileOperation],
+) -> tuple[str, FileOperation | None]:
+    path = _validated_path(item.get("filename"))
+    status = item.get("status")
+    if status == "modified" and not item.get("previous_filename"):
+        return path, None
+    if status == "added" and not item.get("previous_filename"):
+        return path, _operation_for(declarations, kind="add", path=path)
+    if status == "removed" and not item.get("previous_filename"):
+        operation = _operation_for(declarations, kind="delete", path=path)
+        if operation is None:
+            raise ValueError(f"undeclared_file_operation:delete:{path}")
+        return path, operation
+    if status == "renamed":
+        previous_path = _validated_path(item.get("previous_filename"))
+        operation = _operation_for(
+            declarations,
+            kind="rename",
+            path=path,
+            previous_path=previous_path,
+        )
+        if operation is None:
+            raise ValueError(
+                f"undeclared_file_operation:rename:{previous_path}:{path}"
+            )
+        return path, operation
+    raise ValueError(f"pull_request_file_status:{status or 'missing'}")
+
+
+def _path_category(path: str) -> str | None:
+    """Return the one minimal check category for a known repository path."""
+
+    if path.startswith("docs/") or path in {
+        "AGENTS.md",
+        "CLAUDE.md",
+        "NOTICE.md",
+        "README.md",
+        "PROJECT_NOTES.md",
+        ".github/copilot-instructions.md",
+    }:
+        return "docs"
+    if (
+        path.startswith(("assets/", "melee/", "tests/browser/", "tests/js/"))
+        or path in {"index.html", "package.json", "package-lock.json"}
+    ):
+        return "ui"
+    if path.startswith(("schemas/", "stats/", "configs/", "rules/")):
+        return "data"
+    if path.startswith("src/") or path.endswith(".py"):
+        return "code"
+    if path.startswith(".github/") or path in {
+        ".gitignore",
+        "mypy.ini",
+        "pyproject.toml",
+        "pytest.ini",
+        "requirements.txt",
+        "requirements-dev.txt",
+    }:
+        return "governance"
+    return None
+
+
+def _is_user_visible_path(path: str) -> bool:
+    return path == "index.html" or path.startswith(("assets/", "melee/"))
+
+
+def owner_ui_subject_digest(files: list[dict]) -> str | None:
+    """Hash only changed files that can alter the published browser UI."""
+
+    records: list[str] = []
+    for item in files:
+        path = _validated_path(item.get("filename"))
+        status = item.get("status")
+        previous = item.get("previous_filename")
+        previous_path = _validated_path(previous) if previous is not None else None
+        if not (
+            _is_user_visible_path(path)
+            or (previous_path is not None and _is_user_visible_path(previous_path))
+        ):
+            continue
+        if status not in {"added", "modified", "removed", "renamed"}:
+            raise ValueError(f"pull_request_file_status:{status or 'missing'}")
+        blob_sha = item.get("sha")
+        if not isinstance(blob_sha, str) or not re.fullmatch(
+            r"[0-9a-fA-F]{40}|[0-9a-fA-F]{64}", blob_sha
+        ):
+            raise ValueError(f"owner_ui_blob_sha_missing:{path}")
+        records.append(
+            json.dumps(
+                [status, previous_path or "", path, blob_sha.lower()],
+                ensure_ascii=True,
+                separators=(",", ":"),
+            )
+        )
+    if not records:
+        return None
+    canonical = "\n".join(sorted(records)).encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
 
 
 def _classify_pull_request_evidence(
     *, pull_request: dict, files: list[dict]
 ) -> AdmissionDecision:
-    impacts = _parse_artifact_impacts(pull_request.get("body"))
-    paths = [_validated_path(item) for item in files]
-
-    if impacts == {"internal_diagnostics"} and all(
-        _is_safe_doc_path(path) for path in paths
-    ):
-        return AdmissionDecision(
-            mode="focused-docs",
-            reason="safe_internal_documentation",
-            validation_class="focused-docs",
-        )
-    if impacts == {"user_visible_ui"} and all(
-        _is_safe_ui_path(path) for path in paths
-    ):
-        return AdmissionDecision(
-            mode="focused-ui",
-            reason="safe_user_visible_ui",
-            validation_class="focused-ui",
-        )
+    body = pull_request.get("body")
+    impacts = _parse_artifact_impacts(body)
+    declarations = _parse_file_operations(body)
+    used_declarations: set[FileOperation] = set()
+    categories: set[str] = set()
+    for item in files:
+        path, operation = _validated_change(item, declarations)
+        inferred = _path_category(path)
+        if operation is not None:
+            if inferred is not None and inferred != operation.category:
+                raise ValueError(
+                    f"file_operation_category_mismatch:{path}:"
+                    f"{operation.category}:{inferred}"
+                )
+            if operation.previous_path:
+                previous_category = _path_category(operation.previous_path)
+                if previous_category is not None and previous_category != operation.category:
+                    raise ValueError(
+                        f"file_operation_category_mismatch:{operation.previous_path}:"
+                        f"{operation.category}:{previous_category}"
+                    )
+            used_declarations.add(operation)
+            categories.add(operation.category)
+        elif inferred is not None:
+            categories.add(inferred)
+        else:
+            raise ValueError(f"undeclared_file_operation:add:{path}")
+    if declarations != used_declarations:
+        raise ValueError("file_operation_declaration_does_not_match_diff")
+    expected_ui_digest = owner_ui_subject_digest(files)
+    accepted_ui_digest = _owner_ui_acceptance(body)
+    if expected_ui_digest is None:
+        if "user_visible_ui" in impacts or accepted_ui_digest is not None:
+            raise ValueError("owner_ui_acceptance_without_user_visible_change")
+    else:
+        if "user_visible_ui" not in impacts:
+            raise ValueError("user_visible_ui_impact_missing")
+        if accepted_ui_digest is None:
+            raise ValueError("owner_ui_acceptance_missing")
+        if accepted_ui_digest != expected_ui_digest:
+            raise ValueError("owner_ui_acceptance_stale")
+    ordered = "+".join(sorted(categories))
     return AdmissionDecision(
-        mode="full",
-        reason="complete_validation_required:path_or_impact_not_focused",
-        validation_class="full",
+        mode="targeted",
+        reason=(
+            f"known_paths:{ordered};declared:{'+'.join(sorted(impacts))};"
+            f"file_operations:{len(used_declarations)}"
+        ),
+        validation_class=f"targeted:{ordered}",
     )
 
 
@@ -239,7 +554,7 @@ def decide_pull_request(
         decision = _classify_pull_request_evidence(
             pull_request=pull_request, files=files
         )
-        if decision.mode == "full":
+        if decision.mode == "unclassified":
             return AdmissionDecision(
                 mode=decision.mode,
                 reason=f"{decision.reason}:{action}",
@@ -248,7 +563,9 @@ def decide_pull_request(
         return decision
     except Exception as exc:
         return AdmissionDecision(
-            mode="full", reason=_fail_safe_reason(exc), validation_class="full"
+            mode="unclassified",
+            reason=_fail_safe_reason(exc),
+            validation_class="unclassified",
         )
 
 
@@ -262,6 +579,14 @@ def validation_subject_step(
 
 def validation_class_step(validation_class: str) -> str:
     return f"{CLASS_PREFIX} {validation_class}"
+
+
+def expected_successful_jobs(validation_class: str) -> frozenset[str] | None:
+    if validation_class.startswith("targeted:"):
+        categories = frozenset(validation_class.removeprefix("targeted:").split("+"))
+        if categories and categories <= TARGETED_CATEGORIES:
+            return frozenset({ADMISSION_JOB, TARGETED_JOB, AGGREGATE_JOB})
+    return None
 
 
 def _parse_time(value: object) -> datetime:
@@ -347,7 +672,7 @@ def _run_matches_subject(
         for job in jobs
         if isinstance(job, dict) and job.get("conclusion") == "success"
     ]
-    expected_successful = EXPECTED_SUCCESSFUL_JOBS.get(validation_class)
+    expected_successful = expected_successful_jobs(validation_class)
     if (
         expected_successful is None
         or len(successful_names) != len(set(successful_names))
@@ -429,7 +754,7 @@ def decide_master_push(
             pull_request=current_pull_request, files=files
         )
         validation_class = required.validation_class
-        if validation_class not in EXPECTED_SUCCESSFUL_JOBS:
+        if expected_successful_jobs(validation_class) is None:
             raise ValueError("merged pull request validation class is unsupported")
         query = urlencode(
             {
@@ -484,9 +809,9 @@ def decide_master_push(
         )
     except Exception as exc:
         return AdmissionDecision(
-            mode="full",
+            mode="unclassified",
             reason=_fail_safe_reason(exc),
-            validation_class="full",
+            validation_class="unclassified",
         )
 
 
@@ -515,16 +840,18 @@ def decide_from_environment() -> AdmissionDecision:
         event_path = os.environ.get("GITHUB_EVENT_PATH", "")
         if not repository or not token or not event_path:
             return AdmissionDecision(
-                mode="full",
+                mode="unclassified",
                 reason="missing_pull_request_context",
-                validation_class="full",
+                validation_class="unclassified",
             )
         try:
             with Path(event_path).open(encoding="utf-8") as handle:
                 event_payload = json.load(handle)
         except Exception as exc:
             return AdmissionDecision(
-                mode="full", reason=_fail_safe_reason(exc), validation_class="full"
+                mode="unclassified",
+                reason=_fail_safe_reason(exc),
+                validation_class="unclassified",
             )
         return decide_pull_request(
             event_payload=event_payload,
@@ -534,16 +861,18 @@ def decide_from_environment() -> AdmissionDecision:
         )
     if event_name != "push":
         return AdmissionDecision(
-            mode="full",
+            mode="unclassified",
             reason=f"event:{event_name or 'unknown'}",
-            validation_class="full",
+            validation_class="unclassified",
         )
     repository = os.environ.get("GITHUB_REPOSITORY", "")
     merge_sha = os.environ.get("GITHUB_SHA", "")
     token = os.environ.get("GITHUB_TOKEN", "")
     if not repository or not merge_sha or not token:
         return AdmissionDecision(
-            mode="full", reason="missing_github_context", validation_class="full"
+            mode="unclassified",
+            reason="missing_github_context",
+            validation_class="unclassified",
         )
     return decide_master_push(
         repository=repository,
@@ -560,11 +889,98 @@ def _append_lines(path: str | None, lines: list[str]) -> None:
         handle.write("\n".join(lines) + "\n")
 
 
+def _git(*args: str) -> str:
+    completed = subprocess.run(
+        ["git", *args],
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+    )
+    return completed.stdout.strip()
+
+
+def owner_ui_marker_from_git(base: str) -> str:
+    """Build the PR marker after Owner review and the local commit exist."""
+
+    files: list[dict] = []
+    for line in _git("diff", "--name-status", "--find-renames", f"{base}...HEAD").splitlines():
+        fields = line.split("\t")
+        code = fields[0]
+        if code.startswith("R") and len(fields) == 3:
+            previous, path = fields[1:]
+            status = "renamed"
+        elif code in {"A", "M", "D"} and len(fields) == 2:
+            path = fields[1]
+            previous = None
+            status = {"A": "added", "M": "modified", "D": "removed"}[code]
+        else:
+            raise ValueError(f"unsupported_git_change:{line}")
+        if not (
+            _is_user_visible_path(path)
+            or (previous is not None and _is_user_visible_path(previous))
+        ):
+            continue
+        revision = base if status == "removed" else "HEAD"
+        blob_path = previous if status == "removed" else path
+        item = {
+            "filename": path,
+            "status": status,
+            "sha": _git("rev-parse", f"{revision}:{blob_path}"),
+        }
+        if previous is not None:
+            item["previous_filename"] = previous
+        files.append(item)
+    digest = owner_ui_subject_digest(files)
+    if digest is None:
+        raise ValueError("no_user_visible_change")
+    return f"<!-- owner-ui-accepted: sha256:{digest} -->"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default=os.environ.get("GITHUB_OUTPUT"))
     parser.add_argument("--summary", default=os.environ.get("GITHUB_STEP_SUMMARY"))
+    parser.add_argument(
+        "--owner-ui-marker-from",
+        metavar="BASE",
+        help="print the Owner-accepted UI subject marker for BASE...HEAD",
+    )
+    parser.add_argument(
+        "--verify-production-evidence",
+        action="store_true",
+        help="verify the exact production run and published commit from environment",
+    )
     args = parser.parse_args()
+
+    if args.owner_ui_marker_from:
+        print(owner_ui_marker_from_git(args.owner_ui_marker_from))
+        return 0
+    if args.verify_production_evidence:
+        try:
+            result = verify_production_evidence(
+                repository=os.environ.get("GITHUB_REPOSITORY", ""),
+                publication_commit=os.environ.get("PRODUCTION_COMMIT", ""),
+                producer_run_id=int(os.environ.get("PRODUCTION_RUN_ID", "0")),
+                producer_run_attempt=int(
+                    os.environ.get("PRODUCTION_RUN_ATTEMPT", "0")
+                ),
+                source_commit=os.environ.get("PRODUCTION_SOURCE_COMMIT", ""),
+                generation_subject_sha256=os.environ.get(
+                    "GENERATION_SUBJECT_SHA256", ""
+                ),
+                validated_output_sha256=os.environ.get(
+                    "VALIDATED_OUTPUT_SHA256", ""
+                ),
+                fetch_json=github_fetcher(os.environ.get("GITHUB_TOKEN", "")),
+                api_url=os.environ.get("GITHUB_API_URL", "https://api.github.com"),
+            )
+        except Exception as exc:
+            print(_fail_safe_reason(exc))
+            return 1
+        print(result)
+        return 0
 
     decision = decide_from_environment()
     _append_lines(
@@ -587,7 +1003,7 @@ def main() -> int:
             f"- Pull request: `{decision.pull_request or 'not-applicable'}`",
             f"- Validation class: `{decision.validation_class or 'not-applicable'}`",
             f"- Prior validation run: `{decision.workflow_run or 'not-applicable'}`",
-            "- Ambiguous, missing, or unavailable evidence always selects full validation.",
+            "- Ambiguous, missing, unavailable, or undeclared file-operation evidence stops for owner classification without running a catch-all suite.",
         ],
     )
     return 0

@@ -1570,6 +1570,30 @@ P10-03 does not provision a production key or modify the production workflow.
 Resource Schemas as a primary production gate, supplemental prohibited-field
 scans, and notice/contact/removal updates remain P10-04 work.
 
+A completed v3 snapshot contains the already-derived participant references,
+so downstream retention, parsing, generation, and review do not require the
+HMAC key. An incomplete checkpoint is different: it may resume only with the
+same key material and the same key ID. The system cannot recover secret key
+material from a checkpoint or manifest, and operators must never assign an old
+key ID to different key material.
+
+If the key for an incomplete checkpoint is lost, treat that checkpoint as
+non-resumable. A later collection must start as a clean snapshot with new key
+material and a new key ID; it must not append to, merge with, or claim identity
+continuity with the incomplete snapshot. Rotate only at a snapshot boundary,
+after any resumable collection using the old key has completed or been
+abandoned. Completed snapshots made with an older key remain valid inputs, but
+recollecting the same event under a new key produces different participant
+references.
+
+No production HMAC key is currently provisioned by this repository. Key
+creation, managed storage, recovery-copy selection, workflow injection,
+rotation, and live collection remain separately owner-authorized operations.
+Before the first live v3 rehearsal, the operator must decide whether the test
+snapshot will be retained: use a distinct test key and key ID for a disposable
+snapshot, or the production-managed key from the start for a retained one.
+Operational failure routing is summarized in `docs/OPERATIONS_RUNBOOK.md`.
+
 ### 11.14 Minimized-resource validation and privacy requests
 
 P10-04 promotes `schemas/melee-minimized-resource.schema.json` to the primary
@@ -1688,15 +1712,35 @@ candidate and Schema gates; a new repository path outside those trees cannot
 become a Pages path merely because it was committed.
 
 `.github/workflows/pages.yml` builds the candidate for relevant pull requests,
-every `master` push, and an explicit `master` dispatch from the production
-publisher. Pull requests cannot upload or deploy the Pages artifact. A master
-push or production dispatch may upload the verified artifact, and a separate
-job with only `pages: write` and `id-token: write` may deploy it through the
-protected `github-pages` environment. The production publish job dispatches
-this workflow only after generated changes are committed and the remote master
-commit is verified; this is required because a push made with `GITHUB_TOKEN`
-does not recursively trigger the push workflow. The Pages workflow does not
+site-input `master` pushes, and an explicit `master` dispatch from the
+production publisher. Governance, tests, and paths excluded from the site do
+not trigger Pages. Pull requests cannot upload or deploy the Pages artifact. A
+relevant master push or accepted dispatch may upload the verified artifact, and
+a separate job with only `pages: write` and `id-token: write` may deploy it
+through the protected `github-pages` environment. The Pages workflow does not
 fetch tournament data or modify the repository.
+
+After fetch, `.github/workflows/update.yml` hashes the generation inputs. The
+latest generated commit records that digest, the validated output digest, the
+producer run and attempt, and the source commit in unique commit trailers. If a
+later fetch produces the same generation-subject digest, the existing bytes are
+reused and no baseline smoke, build, validation, artifact, generated commit, or
+Pages dispatch is created. A changed subject is generated and validated once,
+then transferred as the immutable `mtgo-build-candidate` artifact.
+
+The production publish job explicitly dispatches Pages only after the generated
+commit is pushed and remote `master` is verified; a push made with
+`GITHUB_TOKEN` does not recursively trigger the push workflow. That dispatch
+names the exact publication commit, producer run and attempt, source commit,
+generation-subject SHA-256, and validated-output SHA-256. Pages accepts the
+production path only when all six values are present, the producer jobs prove
+the candidate succeeded, the commit ancestry and trailers match, and a
+deterministic tar of the published bytes has the validated digest. It then
+packages the normal allowlist without rerunning candidate tests. A dispatch
+with no production fields remains available only as the separately authorized
+manual or recovery path; partial production evidence fails closed. After
+deployment, availability is checked only for `index.html`, `melee/index.html`,
+and `stats/catalog.json`.
 
 The initial legacy baseline is Pages run `30699810612`, built from merge commit
 `82a28d954546cb6112ad0655223fd609035b0b40`. Its retained artifact contains
@@ -1915,9 +1959,10 @@ real retained data before P8-08 through P8-10 implement production pages.
 
 `schemas/phase8-public-contract.schema.json` is the executable `1.0.0` target
 contract for the P8-03 consumers. Its representative document is
-`tests/fixtures/phase8_public_contract.json`, and
-`tests/test_phase8_public_contract.py` enforces the cross-field semantics that
-JSON Schema cannot express.
+`tests/fixtures/phase8_public_contract.json`. GOV-08 retained that document as
+frozen migration evidence but retired its routine Python regression module.
+Current public files are protected by the production Schema manifest, candidate
+boundary, value-independent output invariants, and generated consumer contract.
 
 The contract covers:
 
@@ -2414,72 +2459,44 @@ serialized.
 
 ## 16. Test architecture
 
-Tests belong under:
+Executable tests belong under `tests/`. Historical fixtures may remain under
+`tests/fixtures/` as review or compatibility evidence, but their presence does
+not create a test trigger. `docs/TEST_TRIGGER_MATRIX.md` is the complete live
+inventory of retained triggers, purposes, minimum subjects, and commands.
 
-```text
-tests/
-```
+### 16.1 Default and retained checks
 
-Reusable test data belongs under:
+The default is no test. A check runs only for its named risk and smallest
+subject, and successful evidence is not repeated for an unchanged tree or
+generated candidate. Do not invoke unbounded pytest from a production or pull-
+request workflow.
 
-```text
-tests/fixtures/
-```
+The retained data/output set consists of:
 
-### 16.1 Unit tests
+- one offline smoke for each installed command entry point;
+- the minimum Melee pre-persistence privacy boundary;
+- direct public Schema and value-independent output validators;
+- the generated consumer contract; and
+- one generated-page browser smoke at the MTGO candidate output gate.
 
-Unit tests should cover:
+The targeted control plane separately retains only the live-status contract,
+CI admission/workflow contract, maintained-code lint/type checks, rule/Schema
+validators, and one UI model smoke. These checks run only when their associated
+paths change; they are not part of a production baseline.
 
-- card-name normalization;
-- rule loading;
-- rule validation;
-- deterministic classification;
-- conflicts;
-- Unknown results;
-- statistical formulas;
-- result-type handling;
-- matchup aggregation;
-- schema validation.
+### 16.2 Production boundary
 
-### 16.2 Regression tests
+Before live collection, each workflow runs only the offline command and privacy
+checks for the commands it is about to use. After generation, validation binds
+to the new candidate: candidate-path allowlists, repository/rule/Schema checks,
+output invariants, consumer contracts, and the one generated-page smoke. The
+candidate is validated once before packaging.
 
-Regression tests must protect the current Standard implementation before major refactoring.
+### 16.3 Frozen fixtures
 
-Regression fixtures should be small enough for routine CI while still representing important behavior.
-
-Large production datasets should not be required for every unit-test run.
-
-### 16.3 Melee fixture tests
-
-Melee tests should use stored, reduced fixtures representing:
-
-- standings;
-- pagination;
-- decklists;
-- normal match results;
-- normal draws;
-- `0-0-3`;
-- byes;
-- drops;
-- Day 1 and Day 2;
-- Draft rounds;
-- playoffs;
-- Top 8 lock awarded wins;
-- malformed or missing records.
-
-Tests must not depend on live Melee availability for routine CI.
-
-### 16.4 Schema tests
-
-Schema tests should validate:
-
-- representative valid files;
-- required-field failures;
-- invalid source IDs;
-- invalid format IDs;
-- invalid rate ranges;
-- missing schema versions;
-- incompatible result-type values.
+Frozen corpora and compatibility manifests remain available for audit, manual
+review, and explicit future migrations. They are not discovered or executed in
+routine CI, and they must not be expanded into rolling byte snapshots.
 
 ---
 
@@ -2606,8 +2623,8 @@ It should use:
 
 The production workflow uses three validation layers:
 
-1. a dedicated clean-checkout regression job that must succeed before any live
-   fetch job starts;
+1. a dedicated clean-checkout job that runs only the offline CLI and privacy
+   checks needed by the production path before any live fetch starts;
 2. a dynamic, registry-aware candidate snapshot comparison after fetch and generation but before staging;
 3. confirmation that the published remote `master` commit equals the locally created generated-data commit.
 
@@ -2703,12 +2720,14 @@ Production failure reporting uses:
 - uploaded diagnostic artifacts when useful.
 - one deduplicated open GitHub issue for each failed MTGO production stage.
 
-The notification job depends on fetch, build, and publish but has no checkout,
-repository-content permission, source data, or generated candidate. It runs only
-when one of those jobs has result `failure`, records the first failed stage in
-pipeline order, and has only `issues: write`. The fetch job distinguishes its
-clean-checkout `baseline` validation from later `fetch` input collection through
-a controlled job output. Its stable HTML comment marker identifies one open
+The notification job depends on baseline, fetch, build, and publish but has no
+checkout, repository-content permission, source data, or generated candidate.
+It runs only when one of those jobs has result `failure`, records the first
+failed stage in pipeline order, and has only `issues: write`. Fetch owns the
+dynamic baseline snapshot and input collection. The separate clean-checkout
+`baseline` CLI smoke runs afterward only when the post-fetch generation subject
+requires a candidate build. Each stage exposes a controlled failure identity.
+The stable HTML comment marker identifies one open
 non-pull-request issue for `baseline`, `fetch`, `build`, or `publish`.
 It creates that issue when absent and adds a later run link when it already
 exists. The body contains only the controlled stage name, commit SHA, and
