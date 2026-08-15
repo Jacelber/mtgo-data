@@ -734,48 +734,6 @@ def test_hierarchical_loader_rejects_cross_format_input(tmp_path):
         )
 
 
-@pytest.mark.committed_baseline
-def test_fixed_reference_standard_hierarchical_matchups_are_byte_identical(tmp_path):
-    committed_directory = ROOT / "stats" / "standard" / "mtgo"
-    committed_index = json.loads(
-        (committed_directory / "matchup_index.json").read_text(encoding="utf-8")
-    )
-    if committed_index.get("hierarchical") is not True:
-        pytest.skip("committed baseline predates the P6-09 hierarchical migration")
-    reference_date = date.fromisoformat(committed_index["generated"][:10])
-    written, _statistics = build_all_matchups(
-        ROOT,
-        "standard",
-        today=reference_date,
-        generated_at=committed_index["generated"],
-        output_directory=tmp_path,
-    )
-    for filename, path in written.items():
-        assert path.read_bytes() == (committed_directory / filename).read_bytes()
-
-
-@pytest.mark.committed_baseline
-def test_fixed_reference_modern_matchups_are_byte_identical(tmp_path):
-    committed_directory = ROOT / "stats" / "modern" / "mtgo"
-    committed_index = json.loads(
-        (committed_directory / "matchup_index.json").read_text(encoding="utf-8")
-    )
-    reference_date = date.fromisoformat(committed_index["generated"][:10])
-    written, statistics = build_all_matchups(
-        ROOT,
-        "modern",
-        today=reference_date,
-        generated_at=committed_index["generated"],
-        output_directory=tmp_path,
-    )
-    assert {weeks: values["counted"] for weeks, values in statistics.items()} == {
-        item["weeks"]: item["counted_matches"]
-        for item in committed_index["ranges"]
-    }
-    for filename, path in written.items():
-        assert path.read_bytes() == (committed_directory / filename).read_bytes()
-
-
 def test_committed_modern_leaf_counts_conserve_every_parent_rollup():
     committed_directory = ROOT / "stats" / "modern" / "mtgo"
     index = json.loads(

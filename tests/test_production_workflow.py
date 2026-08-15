@@ -97,7 +97,7 @@ def test_all_project_workflows_use_only_python_3_12():
                     assert step["with"]["python-version"] == "3.12", path
 
 
-def test_baseline_runs_complete_regression_before_fetch_collects_only_inputs():
+def test_baseline_runs_retained_suite_before_fetch_collects_only_inputs():
     assert job("fetch")["needs"] == "baseline"
     assert command_index("baseline", "-r requirements-dev.txt") < command_index(
         "baseline", "-m pytest"

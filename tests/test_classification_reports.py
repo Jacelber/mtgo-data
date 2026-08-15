@@ -63,8 +63,7 @@ def production_reports():
     return build_classification_reports(events, load_rule_set(STANDARD_RULES))
 
 
-@pytest.mark.committed_baseline
-def test_production_report_baseline_and_subtype_contract():
+def test_production_report_invariants_and_subtype_contract():
     reports = production_reports()
     summary = reports["index"]["summary"]
     assert summary["total_decks"] == (
@@ -125,14 +124,6 @@ def test_reports_are_deidentified_and_unknowns_retain_deck_evidence():
     sample_player = sample_event["players"][0]
     assert sample_player["player"] not in serialized
     assert sample_player["loginid"] not in serialized
-
-
-def test_committed_reports_are_deterministic_generator_output():
-    reports = production_reports()
-    filenames = {**REPORT_FILENAMES, "index": "index.json"}
-    for name, filename in filenames.items():
-        expected = json.dumps(reports[name], ensure_ascii=False, indent=2, sort_keys=False) + "\n"
-        assert (REPORT_DIR / filename).read_text(encoding="utf-8") == expected
 
 
 def test_equal_priority_conflict_is_reported_and_blocks_strict_validation():

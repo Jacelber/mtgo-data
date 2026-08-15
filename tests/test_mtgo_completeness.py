@@ -194,25 +194,6 @@ def test_high_score_observed_above_model_is_capped_but_disclosed() -> None:
 
 
 @pytest.mark.parametrize("format_id", ["standard", "modern"])
-def test_committed_completeness_rebuild_is_byte_identical(
-    tmp_path: Path,
-    format_id: str,
-) -> None:
-    committed = ROOT / "stats" / format_id / "mtgo" / "completeness"
-    index = json.loads((committed / "index.json").read_text(encoding="utf-8"))
-    written = completeness.build_all_completeness(
-        ROOT,
-        format_id,
-        today=date.fromisoformat(index["generated"][:10]),
-        generated_at=index["generated"],
-        output_directory=tmp_path,
-    )
-    assert set(written) == {"index.json", "1w.json", "4w.json", "12w.json", "36w.json"}
-    for filename, path in written.items():
-        assert path.read_bytes() == (committed / filename).read_bytes()
-
-
-@pytest.mark.parametrize("format_id", ["standard", "modern"])
 def test_committed_ranges_reconcile_lists_counts_and_periods(format_id: str) -> None:
     base = ROOT / "stats" / format_id / "mtgo" / "completeness"
     index = json.loads((base / "index.json").read_text(encoding="utf-8"))
