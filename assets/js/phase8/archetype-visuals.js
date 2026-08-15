@@ -261,125 +261,125 @@ const representativeCards = Object.freeze({
   standard: Object.freeze({
     "4-color-tablet": Object.freeze([
       Object.freeze({ name: "Inevitable Defeat", image: "../images/representative-cards/standard/inevitable-defeat.jpg" }),
-      null,
+      Object.freeze({ name: "Tablet of Discovery", image: "../images/representative-cards/standard/tablet-of-discovery.jpg" }),
     ]),
     "azorius-prison": Object.freeze([
       Object.freeze({ name: "High Noon", image: "../images/representative-cards/standard/high-noon.jpg" }),
-      null,
+      Object.freeze({ name: "Avatar's Wrath", image: "../images/representative-cards/standard/avatars-wrath.jpg" }),
     ]),
     "dimir-excruciator": Object.freeze([
       Object.freeze({ name: "Doomsday Excruciator", image: "../images/representative-cards/standard/doomsday-excruciator.jpg" }),
-      null,
+      Object.freeze({ name: "Deceit", image: "../images/representative-cards/standard/deceit.jpg" }),
     ]),
     "izzet-fling": Object.freeze([
       Object.freeze({ name: "Callous Sell-Sword", image: "../images/representative-cards/standard/callous-sell-sword.jpg" }),
-      null,
+      Object.freeze({ name: "Slickshot Show-Off", image: "../images/representative-cards/standard/slickshot-show-off.jpg" }),
     ]),
     "izzet-prowess": Object.freeze([
       Object.freeze({ name: "Boomerang Basics", image: "../images/representative-cards/standard/boomerang-basics.jpg" }),
-      null,
+      Object.freeze({ name: "Stormchaser's Talent", image: "../images/representative-cards/standard/stormchasers-talent.jpg" }),
     ]),
     "izzet-spellementals": Object.freeze([
       Object.freeze({ name: "Sunderflock", image: "../images/representative-cards/standard/sunderflock.jpg" }),
-      null,
+      Object.freeze({ name: "Hearth Elemental", image: "../images/representative-cards/standard/hearth-elemental.jpg" }),
     ]),
     "jeskai-lessons": Object.freeze([
       Object.freeze({ name: "Jeskai Revelation", image: "../images/representative-cards/standard/jeskai-revelation.jpg" }),
-      null,
+      Object.freeze({ name: "Accumulate Wisdom", image: "../images/representative-cards/standard/accumulate-wisdom.jpg" }),
     ]),
     "mono-green-landfall": Object.freeze([
       Object.freeze({ name: "Earthbender Ascension", image: "../images/representative-cards/standard/earthbender-ascension.jpg" }),
-      null,
+      Object.freeze({ name: "Icetill Explorer", image: "../images/representative-cards/standard/icetill-explorer.jpg" }),
     ]),
     "orzhov-lifegain": Object.freeze([
       Object.freeze({ name: "Amalia Benavides Aguirre", image: "../images/representative-cards/standard/amalia-benavides-aguirre.jpg" }),
-      null,
+      Object.freeze({ name: "Case of the Uneaten Feast", image: "../images/representative-cards/standard/case-of-the-uneaten-feast.jpg" }),
     ]),
     "selesnya-landfall": Object.freeze([
       Object.freeze({ name: "Erode", image: "../images/representative-cards/standard/erode.jpg" }),
-      null,
+      Object.freeze({ name: "Earthbender Ascension", image: "../images/representative-cards/standard/earthbender-ascension.jpg" }),
     ]),
     "selesnya-offense": Object.freeze([
       Object.freeze({ name: "Practiced Offense", image: "../images/representative-cards/standard/practiced-offense.jpg" }),
-      null,
+      Object.freeze({ name: "Leatherhead, Swamp Stalker", image: "../images/representative-cards/standard/leatherhead-swamp-stalker.jpg" }),
     ]),
     "sultai-reanimator": Object.freeze([
       Object.freeze({ name: "Bringer of the Last Gift", image: "../images/representative-cards/standard/bringer-of-the-last-gift.jpg" }),
-      null,
+      Object.freeze({ name: "Superior Spider-Man", image: "../images/representative-cards/standard/superior-spider-man.jpg" }),
     ]),
   }),
   modern: Object.freeze({
     "affinity": Object.freeze([
       Object.freeze({ name: "Mox Opal", image: "../images/representative-cards/modern/mox-opal.jpg" }),
-      null,
+      Object.freeze({ name: "Kappa Cannoneer", image: "../images/representative-cards/modern/kappa-cannoneer.jpg" }),
     ]),
     "boros-energy": Object.freeze([
       Object.freeze({ name: "Guide of Souls", image: "../images/representative-cards/modern/guide-of-souls.jpg" }),
-      null,
+      Object.freeze({ name: "Ocelot Pride", image: "../images/representative-cards/modern/ocelot-pride.jpg" }),
     ]),
     "boros-land-destruction": Object.freeze([
       Object.freeze({ name: "Cleansing Wildfire", image: "../images/representative-cards/modern/cleansing-wildfire.jpg" }),
-      null,
+      Object.freeze({ name: "Price of Freedom", image: "../images/representative-cards/modern/price-of-freedom.jpg" }),
     ]),
     "broodscale-combo": Object.freeze([
       Object.freeze({ name: "Basking Broodscale", image: "../images/representative-cards/modern/basking-broodscale.jpg" }),
-      null,
+      Object.freeze({ name: "Blade of the Bloodchief", image: "../images/representative-cards/modern/blade-of-the-bloodchief.jpg" }),
     ]),
     "chant-control": Object.freeze([
       Object.freeze({ name: "Orim's Chant", image: "../images/representative-cards/modern/orims-chant.jpg" }),
-      null,
+      Object.freeze({ name: "Isochron Scepter", image: "../images/representative-cards/modern/isochron-scepter.jpg" }),
     ]),
     "devoted-druid-combo": Object.freeze([
       Object.freeze({ name: "Devoted Druid", image: "../images/representative-cards/modern/devoted-druid.jpg" }),
-      null,
+      Object.freeze({ name: "Vizier of Remedies", image: "../images/representative-cards/modern/vizier-of-remedies.jpg" }),
     ]),
     "dimir-tempo": Object.freeze([
       Object.freeze({ name: "Psychic Frog", image: "../images/representative-cards/modern/psychic-frog.jpg" }),
-      null,
+      Object.freeze({ name: "Counterspell", image: "../images/representative-cards/modern/counterspell.jpg" }),
     ]),
     "domain-zoo": Object.freeze([
       Object.freeze({ name: "Scion of Draco", image: "../images/representative-cards/modern/scion-of-draco.jpg" }),
-      null,
+      Object.freeze({ name: "Leyline of the Guildpact", image: "../images/representative-cards/modern/leyline-of-the-guildpact.jpg" }),
     ]),
     "eldrazi-tron": Object.freeze([
       Object.freeze({ name: "Urza's Tower", image: "../images/representative-cards/modern/urzas-tower.jpg" }),
-      null,
+      Object.freeze({ name: "Karn, the Great Creator", image: "../images/representative-cards/modern/karn-the-great-creator.jpg" }),
     ]),
     "esper-blink": Object.freeze([
       Object.freeze({ name: "Phelia, Exuberant Shepherd", image: "../images/representative-cards/modern/phelia-exuberant-shepherd.jpg" }),
-      null,
+      Object.freeze({ name: "Quantum Riddler", image: "../images/representative-cards/modern/quantum-riddler.jpg" }),
     ]),
     "esper-goryos": Object.freeze([
       Object.freeze({ name: "Goryo's Vengeance", image: "../images/representative-cards/modern/goryos-vengeance.jpg" }),
-      null,
+      Object.freeze({ name: "Atraxa, Grand Unifier", image: "../images/representative-cards/modern/atraxa-grand-unifier.jpg" }),
     ]),
     "esper-ketramose": Object.freeze([
       Object.freeze({ name: "Ketramose, the New Dawn", image: "../images/representative-cards/modern/ketramose-the-new-dawn.jpg" }),
-      null,
+      Object.freeze({ name: "Relic of Progenitus", image: "../images/representative-cards/modern/relic-of-progenitus.jpg" }),
     ]),
     "fight-rigging": Object.freeze([
       Object.freeze({ name: "Fight Rigging", image: "../images/representative-cards/modern/fight-rigging.jpg" }),
-      null,
+      Object.freeze({ name: "Slumbering Trudge", image: "../images/representative-cards/modern/slumbering-trudge.jpg" }),
     ]),
     "grixis-persist": Object.freeze([
       Object.freeze({ name: "Persist", image: "../images/representative-cards/modern/persist.jpg" }),
-      null,
+      Object.freeze({ name: "Archon of Cruelty", image: "../images/representative-cards/modern/archon-of-cruelty.jpg" }),
     ]),
     "living-end": Object.freeze([
       Object.freeze({ name: "Living End", image: "../images/representative-cards/modern/living-end.jpg" }),
-      null,
+      Object.freeze({ name: "Shardless Agent", image: "../images/representative-cards/modern/shardless-agent.jpg" }),
     ]),
     "prowess": Object.freeze([
       Object.freeze({ name: "Cori-Steel Cutter", image: "../images/representative-cards/modern/cori-steel-cutter.jpg" }),
-      null,
+      Object.freeze({ name: "Dragon's Rage Channeler", image: "../images/representative-cards/modern/dragons-rage-channeler.jpg" }),
     ]),
     "ruby-storm": Object.freeze([
       Object.freeze({ name: "Ruby Medallion", image: "../images/representative-cards/modern/ruby-medallion.jpg" }),
-      null,
+      Object.freeze({ name: "Ral, Monsoon Mage", image: "../images/representative-cards/modern/ral-monsoon-mage.jpg" }),
     ]),
     "simic-neoform": Object.freeze([
       Object.freeze({ name: "Neoform", image: "../images/representative-cards/modern/neoform.jpg" }),
-      null,
+      Object.freeze({ name: "Allosaurus Rider", image: "../images/representative-cards/modern/allosaurus-rider.jpg" }),
     ]),
   }),
 });
