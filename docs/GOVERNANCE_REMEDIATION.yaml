@@ -63,11 +63,19 @@ tasks:
 
   - id: "GOV-08-MINIMAL-TESTSET-REBUILD"
     name: "Rebuild the retained test set from zero"
-    status: "planned_not_authorized"
+    status: "local_implementation_complete_pending_owner_acceptance"
     depends_on: ["GOV-07-SNAPSHOT-RETIREMENT"]
     problem: "The ordinary suite accumulated tests without a current purpose/trigger inventory."
     solution: "Retain only schema, output/privacy invariants, and one tiny fixture smoke per supported CLI; document each trigger and remove duplicate coverage."
     effect: "Every retained test has one named risk and the smallest fixture that proves it."
+    acceptance:
+      - "No workflow invokes unbounded pytest."
+      - "The retained Python inventory contains only six files: three CLI smoke nodes, output/privacy contracts, and focused docs/governance controls."
+      - "MTGO and Melee pre-fetch jobs run only their own explicit minimum nodes and finish test execution within 60 seconds, excluding dependency installation."
+      - "Schema, candidate-boundary, output-invariant, consumer, and generated-page checks remain at the publication output gate."
+      - "All 91 Python test deletions and three additions were declared by exact path before the file operations."
+      - "Fixtures and JavaScript/browser tests remain unchanged for later authorized tasks."
+    evidence: "docs/audits/GOV-08-MINIMAL-TESTSET-REBUILD.md"
 
   - id: "GOV-09-UI-ACCEPTANCE-CONTRACT"
     name: "Make owner browser review the UI acceptance record"

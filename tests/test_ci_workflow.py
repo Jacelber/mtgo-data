@@ -5,6 +5,10 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github" / "workflows" / "ci.yml"
+PRODUCTION_WORKFLOWS = (
+    ROOT / ".github" / "workflows" / "update.yml",
+    ROOT / ".github" / "workflows" / "fetch_melee.yml",
+)
 
 
 def _workflow():
@@ -125,3 +129,20 @@ def test_workflow_contains_no_secret_expression():
     text = WORKFLOW.read_text(encoding="utf-8").lower()
     assert "secrets." not in text
     assert text.count("github.token") == 1
+
+
+def test_production_pytest_commands_are_explicit_and_external_temped():
+    commands = []
+    for path in PRODUCTION_WORKFLOWS:
+        workflow = yaml.load(path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+        commands.extend(
+            step["run"]
+            for job in workflow["jobs"].values()
+            for step in job.get("steps", [])
+            if "-m pytest" in step.get("run", "")
+        )
+
+    assert commands
+    assert all("tests/" in command for command in commands)
+    assert all("--basetemp=" in command for command in commands)
+    assert not any(command.strip() in {"python -m pytest", "python -B -m pytest"} for command in commands)

@@ -72,51 +72,45 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-07-SNAPSHOT-RETIREMENT"
-  name: "Retire byte-level snapshot tax"
-  status: "owner_accepted_completion_authorized"
+  id: "GOV-08-MINIMAL-TESTSET-REBUILD"
+  name: "Rebuild the retained test set from zero"
+  status: "local_implementation_complete_pending_owner_acceptance"
   authorized_on: "2026-08-15"
-  owner_accepted_on: "2026-08-15"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-07-snapshot-retirement-20260815-01"
-  branch: "codex/gov-07-snapshot-retirement"
-  base_commit: "fa347998696deddd63b54e8bad7d014dad71d8b5"
-  task_type: "local_test_governance_retirement"
+  owner_accepted_on: null
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-08-minimal-testset-20260815-01"
+  branch: "codex/gov-08-minimal-testset-rebuild"
+  base_commit: "78af1e59f6e7cb32309420c45d59a60d4b98c2e1"
+  task_type: "local_minimal_testset_rebuild"
   artifact_impact: "none"
-  objective: "Retire rolling-output byte snapshots and completed oversized R4 shadow-review fixtures while preserving value-independent publication protection."
+  objective: "Replace the accumulated ordinary suite with named, trigger-specific minimum checks while preserving publication output protection."
   authorization:
     local_implementation: true
-    commit: true
-    remote_publication: true
-    merge: true
+    commit: false
+    remote_publication: false
+    merge: false
   target_paths:
+    - ".github/workflows/ci.yml"
     - ".github/workflows/fetch_melee.yml"
+    - ".github/workflows/pages.yml"
     - ".github/workflows/update.yml"
-    - "ci_timing.py"
-    - "pytest.ini"
+    - "README.md"
+    - "docs/DATA_ARCHITECTURE.md"
     - "docs/GOVERNANCE_REMEDIATION.yaml"
-    - "docs/audits/GOV-07-SNAPSHOT-RETIREMENT.md"
+    - "docs/TEST_TRIGGER_MATRIX.md"
+    - "docs/audits/GOV-08-MINIMAL-TESTSET-REBUILD.md"
+    - "docs/checklists/STANDARD_FRONTEND_SMOKE.md"
     - "docs/DECISIONS.md"
     - "docs/DEVELOPMENT_WORKFLOW.md"
     - "docs/STATUS.yaml"
-    - "tests/test_ci_timing.py"
-    - "tests/test_classification_reports.py"
-    - "tests/test_classifier_r4_shadow.py"
-    - "tests/test_classifier_r4_standard_shadow.py"
+    - "tests/test_cli_smoke.py"
     - "tests/test_documentation_history.py"
-    - "tests/test_modern_statistics.py"
-    - "tests/test_mtgo_completeness.py"
-    - "tests/test_mtgo_matchup.py"
-    - "tests/test_mtgo_pickup.py"
-    - "tests/test_mtgo_statistics.py"
-    - "tests/test_mtgo_top8.py"
-    - "tests/test_phase3_closeout.py"
-    - "tests/test_production_workflow.py"
-    - "tests/test_pytest_temp_guard.py"
+    - "tests/test_melee_privacy_validation.py"
+    - "tests/test_*.py deletions enumerated in the GOV-08 audit"
   planned_file_operations:
-    - "delete|code|ci_timing.py"
-    - "delete|code|tests/test_ci_timing.py"
-    - "delete|code|tests/test_classifier_r4_shadow.py"
-    - "delete|code|tests/test_classifier_r4_standard_shadow.py"
+    manifest: "docs/audits/GOV-08-MINIMAL-TESTSET-REBUILD.md"
+    additions: 3
+    deletions: 91
+    renames: 0
   protected_scope:
     product_code_changed: "none"
     classifier_rule_changed: "none"
@@ -127,38 +121,47 @@ current_task:
     public_paths_changed: "none"
     dynamic_candidate_validation_changed: "none"
     protected_melee_compatibility_changed: "none"
+    frozen_fixture_bytes_changed: "none"
+    javascript_or_browser_tests_changed: "none"
     event_434455_source_bytes_changed: false
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Classify historical committed-baseline failures without rerunning snapshots."
-    - "Retain unique semantic assertions and remove rolling-output byte comparisons."
-    - "Remove the committed_baseline marker, its unused timing utility, and completed oversized R4 shadow-review tests."
-    - "Update only directly affected workflow wording and governance records."
-    - "Run each directly relevant minimal check once and reuse its evidence."
+    - "Delete only the exact 91 Python test files declared before implementation in the GOV-08 audit."
+    - "Retain only named output/privacy contracts, focused governance/docs contracts, and one tiny fixture smoke per supported CLI."
+    - "Replace unconditional production pytest with workflow-specific explicit minimum commands."
+    - "Document every retained trigger, purpose, subject, and command."
+    - "Run each directly relevant final check once and reuse its evidence."
+  validation_plan:
+    - "Do not run the retired full pytest suite."
+    - "Run the three CLI smoke nodes once on the final tree."
+    - "Run the changed privacy, workflow, and live-status contract nodes once."
+    - "Use static inventory and diff checks for the exact file-operation manifest."
+    - "Do not run generators, live fetch, browser tests, production, or deployment."
   validation_evidence:
-    static_scope: "The active marker configuration and eleven named rolling-output snapshot nodes are absent; the exact four planned file deletions match the diff."
-    ruff: "All eleven modified retained Python test files passed once."
-    collection: "The eleven modified retained test files collected 132 nodes in 1.16 seconds without executing the suite."
-    focused_behavior: "The retained report invariant, MTGO and Melee workflow order, external pytest temp guard, and live status contract passed once: 5 passed in 4.00 seconds."
-    intentionally_not_run: "Full pytest, retired snapshots, R4 shadow tests, generators, live fetch, browser tests, production, and deployment."
+    file_operations: "Exactly 91 declared Python test deletions, three declared additions, and zero renames; no mismatch."
+    retained_inventory: "Six Python test files and 34 test functions remain; workflows contain no unbounded pytest command."
+    changed_behavior: "Three CLI smoke nodes, two privacy nodes, four live-status nodes, and one production-selection node passed once: 10 passed in 0.37 seconds."
+    repository_references: "Repository validation passed once: Python 71, JavaScript 18, JSON 1770, YAML 52, references 57, hygiene 2178."
+    intentionally_not_run: "Full pytest, unchanged generated-consumer tests, Schemas, rules, output generators, live fetch, browser tests, production, and deployment."
   prohibited_changes:
-    - "Do not begin GOV-08, another governance task, P12-10, or product development."
-    - "Do not change formulas, rules, generated data, Schemas, public paths, UI behavior, or protected Melee compatibility."
-    - "Do not remove dynamic production candidate comparison, publication output invariants, or protected event 434455 contracts."
+    - "Do not begin GOV-09, GOV-10, GOV-11, another governance task, P12-10, or product development."
+    - "Do not change product code, formulas, rules, generated data, Schemas, public paths, UI behavior, fixtures, or protected Melee compatibility."
+    - "Do not remove dynamic candidate comparison, Schema validation, publication invariants, consumer contracts, or the generated-page smoke."
+    - "Do not commit, push, create a pull request, merge, fetch live tournament data, or dispatch production before Owner acceptance."
   stop_point: "Stop after local minimal validation and Owner review. Owner acceptance authorizes continuous completion of this exact task under DEC-094."
 
 recent_completion_handoff:
-  id: "GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"
-  name: "Output-gated validation cutover"
+  id: "GOV-07-SNAPSHOT-RETIREMENT"
+  name: "Retire byte-level snapshot tax"
   status: "completed_merged_and_deployed"
-  pull_request: 212
-  merge_commit: "fa347998696deddd63b54e8bad7d014dad71d8b5"
-  note: "GitHub and Git retain the targeted CI, evidence-reuse, merge, and Pages publication record."
+  pull_request: 213
+  merge_commit: "78af1e59f6e7cb32309420c45d59a60d4b98c2e1"
+  note: "GitHub and Git retain the targeted CI, merge, and Pages publication record."
 
 current_repository_state:
-  baseline_commit: "fa347998696deddd63b54e8bad7d014dad71d8b5"
-  baseline_note: "Verified remote master after PR 212; used as the GOV-07 retirement base."
+  baseline_commit: "78af1e59f6e7cb32309420c45d59a60d4b98c2e1"
+  baseline_note: "Verified remote master after PR 213; used as the GOV-08 rebuild base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -244,13 +247,13 @@ open_decisions:
 next_approved_task:
   id: "NONE"
   name: "No follow-up task is authorized"
-  status: "blocked_pending_GOV-07_completion"
+  status: "blocked_pending_GOV-08_owner_acceptance"
   production_change: false
   requires_user_confirmation: true
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "GOV-07 is accepted and may complete continuously. GOV-08 and all product work require separate authorization."
+  note: "GOV-08 local implementation is authorized. No later task or remote action is authorized before Owner acceptance."
 
 governance_baseline:
   status: "active_on_master"
@@ -287,7 +290,8 @@ publication_workflow_control:
   p8_08_authorized: false
 
 prohibited_next_actions:
-  - "Do not begin GOV-08, GOV-09, GOV-10, GOV-11, GOV-12, GOV-13, P12-10, or other product development without separate owner authorization."
+  - "Do not begin GOV-09, GOV-10, GOV-11, GOV-12, GOV-13, P12-10, or other product development without separate owner authorization."
+  - "Do not commit, push, create a pull request, merge, or dispatch production before GOV-08 Owner acceptance."
   - "Do not recalculate the accepted Landing shadow or change the approved 3%, 5pp, or 20 thresholds."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."

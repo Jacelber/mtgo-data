@@ -44,8 +44,12 @@ jobs:
         id: baseline-stage
         run: echo "stage=baseline" >> "$GITHUB_OUTPUT"
 
-      - name: Run retained clean-checkout pytest suite
-        run: python -B -m pytest
+      - name: Smoke the MTGO and catalog commands used by this workflow
+        run: >-
+          python -B -m pytest
+          --basetemp="${RUNNER_TEMP}/pytest-mtgo-baseline"
+          tests/test_cli_smoke.py::test_mtgo_cli_smoke
+          tests/test_cli_smoke.py::test_catalog_cli_smoke
 
       - name: Write baseline summary
         if: always()
@@ -56,7 +60,7 @@ jobs:
             echo
             echo "- Job result: ${{ job.status }}"
             echo "- Trigger: ${{ github.event_name }}"
-            echo "- Validation: retained clean-checkout pytest suite"
+            echo "- Validation: MTGO and catalog offline CLI smoke"
             echo "- Live input collection starts only after this job succeeds."
             echo "- No repository write permission is available to this job."
           } >> "$GITHUB_STEP_SUMMARY"
@@ -416,7 +420,10 @@ jobs:
         run: python -B validate_output_invariants.py
 
       - name: Validate generated consumer contracts
-        run: python -B -m pytest tests/test_generated_consumer_contracts.py
+        run: >-
+          python -B -m pytest
+          --basetemp="${RUNNER_TEMP}/pytest-generated-consumers"
+          tests/test_generated_consumer_contracts.py
 
       - name: Set up Node.js 24 for generated-page smoke
         uses: actions/setup-node@v6

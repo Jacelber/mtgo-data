@@ -1908,9 +1908,10 @@ real retained data before P8-08 through P8-10 implement production pages.
 
 `schemas/phase8-public-contract.schema.json` is the executable `1.0.0` target
 contract for the P8-03 consumers. Its representative document is
-`tests/fixtures/phase8_public_contract.json`, and
-`tests/test_phase8_public_contract.py` enforces the cross-field semantics that
-JSON Schema cannot express.
+`tests/fixtures/phase8_public_contract.json`. GOV-08 retained that document as
+frozen migration evidence but retired its routine Python regression module.
+Current public files are protected by the production Schema manifest, candidate
+boundary, value-independent output invariants, and generated consumer contract.
 
 The contract covers:
 
@@ -2407,72 +2408,44 @@ serialized.
 
 ## 16. Test architecture
 
-Tests belong under:
+Executable tests belong under `tests/`. Historical fixtures may remain under
+`tests/fixtures/` as review or compatibility evidence, but their presence does
+not create a test trigger. `docs/TEST_TRIGGER_MATRIX.md` is the complete live
+inventory of retained triggers, purposes, minimum subjects, and commands.
 
-```text
-tests/
-```
+### 16.1 Default and retained checks
 
-Reusable test data belongs under:
+The default is no test. A check runs only for its named risk and smallest
+subject, and successful evidence is not repeated for an unchanged tree or
+generated candidate. Do not invoke unbounded pytest from a production or pull-
+request workflow.
 
-```text
-tests/fixtures/
-```
+The retained data/output set consists of:
 
-### 16.1 Unit tests
+- one offline smoke for each installed command entry point;
+- the minimum Melee pre-persistence privacy boundary;
+- direct public Schema and value-independent output validators;
+- the generated consumer contract; and
+- one generated-page browser smoke at the MTGO candidate output gate.
 
-Unit tests should cover:
+The targeted control plane separately retains only the live-status contract,
+CI admission/workflow contract, maintained-code lint/type checks, rule/Schema
+validators, and one UI model smoke. These checks run only when their associated
+paths change; they are not part of a production baseline.
 
-- card-name normalization;
-- rule loading;
-- rule validation;
-- deterministic classification;
-- conflicts;
-- Unknown results;
-- statistical formulas;
-- result-type handling;
-- matchup aggregation;
-- schema validation.
+### 16.2 Production boundary
 
-### 16.2 Regression tests
+Before live collection, each workflow runs only the offline command and privacy
+checks for the commands it is about to use. After generation, validation binds
+to the new candidate: candidate-path allowlists, repository/rule/Schema checks,
+output invariants, consumer contracts, and the one generated-page smoke. The
+candidate is validated once before packaging.
 
-Regression tests must protect the current Standard implementation before major refactoring.
+### 16.3 Frozen fixtures
 
-Regression fixtures should be small enough for routine CI while still representing important behavior.
-
-Large production datasets should not be required for every unit-test run.
-
-### 16.3 Melee fixture tests
-
-Melee tests should use stored, reduced fixtures representing:
-
-- standings;
-- pagination;
-- decklists;
-- normal match results;
-- normal draws;
-- `0-0-3`;
-- byes;
-- drops;
-- Day 1 and Day 2;
-- Draft rounds;
-- playoffs;
-- Top 8 lock awarded wins;
-- malformed or missing records.
-
-Tests must not depend on live Melee availability for routine CI.
-
-### 16.4 Schema tests
-
-Schema tests should validate:
-
-- representative valid files;
-- required-field failures;
-- invalid source IDs;
-- invalid format IDs;
-- invalid rate ranges;
-- missing schema versions;
-- incompatible result-type values.
+Frozen corpora and compatibility manifests remain available for audit, manual
+review, and explicit future migrations. They are not discovered or executed in
+routine CI, and they must not be expanded into rolling byte snapshots.
 
 ---
 
@@ -2599,8 +2572,8 @@ It should use:
 
 The production workflow uses three validation layers:
 
-1. a dedicated clean-checkout regression job that must succeed before any live
-   fetch job starts;
+1. a dedicated clean-checkout job that runs only the offline CLI and privacy
+   checks needed by the production path before any live fetch starts;
 2. a dynamic, registry-aware candidate snapshot comparison after fetch and generation but before staging;
 3. confirmation that the published remote `master` commit equals the locally created generated-data commit.
 
