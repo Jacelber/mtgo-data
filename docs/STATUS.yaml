@@ -4,15 +4,15 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/gov-test-temp-isolation-20260813"
-  working_branch_status: "owner_accepted_publication_authorized"
+  current_working_branch: "codex/representative-card-2-init-20260815"
+  working_branch_status: "owner_accepted_publication_and_merge_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
 
 status_document:
   purpose: "Small machine-readable record of current project state and authorization."
-  last_updated: "2026-08-13"
+  last_updated: "2026-08-15"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   update_required_after_each_phase: true
@@ -72,72 +72,73 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-05-TEST-TEMP-ISOLATION"
-  name: "Repository-external pytest temp and valid-evidence reuse"
-  status: "owner_accepted_publication_authorized"
-  authorized_on: "2026-08-13"
-  implementation_completed_on: "2026-08-13"
-  publication_authorized_on: "2026-08-13"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-test-temp-isolation-20260813-01"
-  branch: "codex/gov-test-temp-isolation-20260813"
-  base_commit: "5b95abc3d6499feb84b5c2134e121f24f00e054e"
-  task_type: "local_ci_and_test_governance_hardening"
-  artifact_impact: "none"
-  objective: "Keep pytest temporary files outside the checkout and prohibit complete local reruns when valid passed evidence can be preserved."
+  id: "ARCHETYPE-REPRESENTATIVE-CARD-2-INITIALIZATION"
+  name: "Owner-approved second representative-card initialization"
+  status: "owner_accepted_publication_and_merge_authorized"
+  authorized_on: "2026-08-15"
+  implementation_completed_on: "2026-08-15"
+  owner_accepted_on: "2026-08-15"
+  publication_authorized_on: "2026-08-15"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/representative-card-2-init-20260815-01"
+  branch: "codex/representative-card-2-init-20260815"
+  base_commit: "952fd5704c0e40cfab82dccf89ae2cf7212a3ac3"
+  task_type: "local_manual_visual_metadata_initialization"
+  artifact_impact: "user_visible_ui"
+  objective: "Populate the reserved second representative-card slot for all 30 threshold identities from the Owner-edited workbook column L while preserving the approved first-card map and every current consumer."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - ".github/workflows/ci.yml"
-    - "pytest.ini"
-    - "pytest_temp_guard.py"
-    - "tests/test_pytest_temp_guard.py"
-    - "tests/test_ci_workflow.py"
-    - "tests/test_documentation_history.py"
-    - "docs/audits/CI-TEST-TEMP-ISOLATION.md"
-    - "docs/DEVELOPMENT_WORKFLOW.md"
-    - "docs/DECISIONS.md"
-    - "docs/ROADMAP.md"
+    - "assets/js/phase8/archetype-visuals.js"
+    - "assets/images/representative-cards/**"
+    - "tests/test_phase12_chart_semantics.py"
     - "docs/STATUS.yaml"
   protected_scope:
-    code_changed: "pytest bootstrap and test contracts only"
+    code_changed: "Explicit second-slot visual metadata only; no current consumer change"
     classifier_rule_changed: "none"
-    workflow_changed: "explicit external pytest basetemp paths only"
+    workflow_changed: "none"
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
-    frontend_source_changed: "none"
+    frontend_source_changed: "Owner-approved second-card metadata and local art crops only; the existing composition chart continues to consume slot 1"
     public_paths_changed: "none"
     event_434455_source_bytes_changed: false
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Reject repository-internal pytest basetemp before collection and select a unique external local default."
-    - "Use explicit RUNNER_TEMP shard paths in GitHub Actions."
-    - "Add focused regressions bounded below five seconds and update evidence-reuse governance."
-    - "Run only the authorized focused and static local acceptance sequence."
+    - "Treat workbook column L as the complete Owner decision and ignore unchanged column M."
+    - "Normalize only official card-name spelling and capitalization required by exact image resolution."
+    - "Populate exactly two explicit cards for each existing threshold identity and add matching local Scryfall art crops."
+    - "Strengthen the focused metadata regression without adding a Landing consumer."
+    - "Commit the accepted local result, publish one Ready pull request, wait for one complete CI run on its final head, and merge only after every required check succeeds."
   validation_evidence:
-    temp_guard_regressions: "4 contracts passed; one preserved pass plus three selectively rerun setup-error nodes after the only implementation repair"
-    affected_contract_tests: "74 passed in 18.65 seconds"
-    complete_local_suites: "intentionally not run under the accepted evidence-reuse contract"
+    workbook_input: "All 30 column-L selections imported; unchanged column M intentionally ignored"
+    official_name_normalization: "Slickshot Show-Off, Leatherhead, Swamp Stalker, and Superior Spider-Man normalized to current exact card names"
+    focused_pytest: "33 nodes passed; the sole status-contract failure was repaired and its exact node then passed"
+    accepted_infrastructure_exception: "34 test_validate_repository nodes were not executed because the sandbox denied the first AppData basetemp; they were not rerun, and the independent top-level repository validator passed"
+    image_assets: "29 new local Scryfall art crops plus one reused existing crop; all 59 maintained images are 626 by 457 pixels"
+    node_syntax: "assets/js/phase8/archetype-visuals.js passed node --check"
+    ruff: "Changed Python tests passed"
+    repository_validation: "161 Python, 18 JavaScript, 1759 JSON, 51 YAML, 57 references, and 2249 hygiene checks passed"
+    browser_validation: "Not run locally because the existing chart remains hard-bound to slot 1; complete clean-checkout CI remains a later publication gate"
   prohibited_changes:
-    - "Any product, classifier, statistical formula, generated data, Schema, public path, Pickup state, frontend, or production change."
-    - "Any manual production dispatch, P12-10 work, or another task without separate Owner authorization."
-  stop_point: "Commit the accepted implementation, publish one Ready pull request, run one complete CI validation for its final head, merge only after every required check succeeds, confirm exact merge evidence, then stop."
+    - "Any first-card change, identity-set change, classifier, statistical formula, generated data, Schema, workflow, public path, Pickup state, current UI consumer, Landing producer, or production change."
+    - "Any production dispatch, P12-10 implementation, release, tag, repository-setting change, force-push, or another task without separate Owner authorization."
+  stop_point: "Commit the accepted result, align it with current remote master, publish one Ready pull request, wait for one complete CI run on the final head, merge only after every required check succeeds, confirm the exact merge, and stop before production dispatch or P12-10."
 
 recent_completion_handoff:
-  id: "WEEKLY-MAINTENANCE-CONTRACT-R1"
-  name: "Tuesday weekly maintenance responsibility and handoff contract"
+  id: "GOV-05-TEST-TEMP-ISOLATION"
+  name: "Repository-external pytest temp and valid-evidence reuse"
   status: "completed_merged_and_deployed"
-  pull_request: 206
-  merge_commit: "5b95abc3d6499feb84b5c2134e121f24f00e054e"
-  note: "The accepted weekly maintenance handoff contract is merged; GitHub and Git retain its publication evidence."
+  pull_request: 207
+  merge_commit: "290daaa84ea61d9294196b323d219abd492d3f7d"
+  note: "The accepted pytest temp-isolation and evidence-reuse governance is merged; GitHub and Git retain its publication evidence."
 
 current_repository_state:
-  baseline_commit: "5b95abc3d6499feb84b5c2134e121f24f00e054e"
-  baseline_note: "Verified remote master after merged PR 206; used as the isolated GOV-05 base."
+  baseline_commit: "952fd5704c0e40cfab82dccf89ae2cf7212a3ac3"
+  baseline_note: "Verified remote master after PR 207 and the 2026-08-13 production data update; used as the second-card initialization base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -226,7 +227,7 @@ next_approved_task:
   local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  note: "The classifier boundary fixes are on master and the existing-product first-card map is locally initialized. Pickup known-state validation, the Landing shadow, threshold confirmation, second-card selection, P12-10, and production remain separate gates."
+  note: "The classifier boundary fixes and first-card map are on master. The second-card map is Owner-accepted and publication-authorized; Pickup known-state validation, P12-10, and production remain separate gates."
 
 governance_baseline:
   status: "active_on_master"
@@ -262,7 +263,7 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not rerun the Landing shadow, choose thresholds or representative cards, begin P12-10, or begin another task without separate owner authorization."
+  - "Do not change the approved representative-card selections beyond official name normalization, rerun the Landing shadow, choose thresholds, begin P12-10, or begin another task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."

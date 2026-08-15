@@ -52,12 +52,14 @@ def test_live_status_is_small_current_state_and_points_to_history():
     )
     assert status["known_blockers"] == []
     assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == "GOV-05-TEST-TEMP-ISOLATION"
+    assert status["current_task"]["id"] == (
+        "ARCHETYPE-REPRESENTATIVE-CARD-2-INITIALIZATION"
+    )
     assert status["current_task"]["status"] == (
-        "owner_accepted_publication_authorized"
+        "owner_accepted_publication_and_merge_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "5b95abc3d6499feb84b5c2134e121f24f00e054e"
+        "952fd5704c0e40cfab82dccf89ae2cf7212a3ac3"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -65,11 +67,9 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "remote_publication": True,
         "merge": True,
     }
-    assert status["recent_completion_handoff"]["id"] == (
-        "WEEKLY-MAINTENANCE-CONTRACT-R1"
-    )
+    assert status["recent_completion_handoff"]["id"] == "GOV-05-TEST-TEMP-ISOLATION"
     assert status["recent_completion_handoff"]["merge_commit"] == (
-        "5b95abc3d6499feb84b5c2134e121f24f00e054e"
+        "290daaa84ea61d9294196b323d219abd492d3f7d"
     )
     assert status["next_approved_task"]["id"] == "P12-10"
     assert status["next_approved_task"]["status"] == (

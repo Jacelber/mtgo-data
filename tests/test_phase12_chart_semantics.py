@@ -91,57 +91,72 @@ def test_statistics_uses_one_high_score_composition_bar() -> None:
     assert ".pie-" not in styles
 
 
-def test_composition_uses_approved_first_card_without_rendering_card_names() -> None:
+def test_composition_uses_approved_card_pair_without_rendering_card_names() -> None:
     metadata = _visual_metadata()
     mtgo = (ROOT / "assets/js/phase8/app-mtgo.js").read_text(encoding="utf-8")
     interaction = (ROOT / "assets/js/phase8/app.js").read_text(encoding="utf-8")
 
     expected = {
         "standard": {
-            "4-color-tablet": "Inevitable Defeat",
-            "azorius-prison": "High Noon",
-            "dimir-excruciator": "Doomsday Excruciator",
-            "izzet-fling": "Callous Sell-Sword",
-            "izzet-prowess": "Boomerang Basics",
-            "izzet-spellementals": "Sunderflock",
-            "jeskai-lessons": "Jeskai Revelation",
-            "mono-green-landfall": "Earthbender Ascension",
-            "orzhov-lifegain": "Amalia Benavides Aguirre",
-            "selesnya-landfall": "Erode",
-            "selesnya-offense": "Practiced Offense",
-            "sultai-reanimator": "Bringer of the Last Gift",
+            "4-color-tablet": ("Inevitable Defeat", "Tablet of Discovery"),
+            "azorius-prison": ("High Noon", "Avatar's Wrath"),
+            "dimir-excruciator": ("Doomsday Excruciator", "Deceit"),
+            "izzet-fling": ("Callous Sell-Sword", "Slickshot Show-Off"),
+            "izzet-prowess": ("Boomerang Basics", "Stormchaser's Talent"),
+            "izzet-spellementals": ("Sunderflock", "Hearth Elemental"),
+            "jeskai-lessons": ("Jeskai Revelation", "Accumulate Wisdom"),
+            "mono-green-landfall": ("Earthbender Ascension", "Icetill Explorer"),
+            "orzhov-lifegain": (
+                "Amalia Benavides Aguirre",
+                "Case of the Uneaten Feast",
+            ),
+            "selesnya-landfall": ("Erode", "Earthbender Ascension"),
+            "selesnya-offense": (
+                "Practiced Offense",
+                "Leatherhead, Swamp Stalker",
+            ),
+            "sultai-reanimator": (
+                "Bringer of the Last Gift",
+                "Superior Spider-Man",
+            ),
         },
         "modern": {
-            "affinity": "Mox Opal",
-            "boros-energy": "Guide of Souls",
-            "boros-land-destruction": "Cleansing Wildfire",
-            "broodscale-combo": "Basking Broodscale",
-            "chant-control": "Orim's Chant",
-            "devoted-druid-combo": "Devoted Druid",
-            "dimir-tempo": "Psychic Frog",
-            "domain-zoo": "Scion of Draco",
-            "eldrazi-tron": "Urza's Tower",
-            "esper-blink": "Phelia, Exuberant Shepherd",
-            "esper-goryos": "Goryo's Vengeance",
-            "esper-ketramose": "Ketramose, the New Dawn",
-            "fight-rigging": "Fight Rigging",
-            "grixis-persist": "Persist",
-            "living-end": "Living End",
-            "prowess": "Cori-Steel Cutter",
-            "ruby-storm": "Ruby Medallion",
-            "simic-neoform": "Neoform",
+            "affinity": ("Mox Opal", "Kappa Cannoneer"),
+            "boros-energy": ("Guide of Souls", "Ocelot Pride"),
+            "boros-land-destruction": ("Cleansing Wildfire", "Price of Freedom"),
+            "broodscale-combo": (
+                "Basking Broodscale",
+                "Blade of the Bloodchief",
+            ),
+            "chant-control": ("Orim's Chant", "Isochron Scepter"),
+            "devoted-druid-combo": ("Devoted Druid", "Vizier of Remedies"),
+            "dimir-tempo": ("Psychic Frog", "Counterspell"),
+            "domain-zoo": ("Scion of Draco", "Leyline of the Guildpact"),
+            "eldrazi-tron": ("Urza's Tower", "Karn, the Great Creator"),
+            "esper-blink": ("Phelia, Exuberant Shepherd", "Quantum Riddler"),
+            "esper-goryos": ("Goryo's Vengeance", "Atraxa, Grand Unifier"),
+            "esper-ketramose": (
+                "Ketramose, the New Dawn",
+                "Relic of Progenitus",
+            ),
+            "fight-rigging": ("Fight Rigging", "Slumbering Trudge"),
+            "grixis-persist": ("Persist", "Archon of Cruelty"),
+            "living-end": ("Living End", "Shardless Agent"),
+            "prowess": ("Cori-Steel Cutter", "Dragon's Rage Channeler"),
+            "ruby-storm": ("Ruby Medallion", "Ral, Monsoon Mage"),
+            "simic-neoform": ("Neoform", "Allosaurus Rider"),
         },
     }
     for format_name, identities in expected.items():
         assert set(metadata["representativeCards"][format_name]) == set(identities)
         assert set(identities) == _composition_identities(format_name)
-        for identity, card_name in identities.items():
+        for identity, card_names in identities.items():
             slots = metadata["representativeCards"][format_name][identity]
             assert len(slots) == 2
-            assert slots[0]["name"] == card_name
-            assert slots[1] is None
-            image = slots[0]["image"].removeprefix("../")
-            assert (ROOT / "assets" / image).is_file()
+            assert tuple(slot["name"] for slot in slots) == card_names
+            for slot in slots:
+                image = slot["image"].removeprefix("../")
+                assert (ROOT / "assets" / image).is_file()
 
     chart = mtgo[mtgo.index("function chartHtml"):mtgo.index("function sortedArchetypes")]
     assert "item.name" in chart
