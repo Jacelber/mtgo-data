@@ -56,6 +56,7 @@ current_task:
     - "docs/history/ROADMAP-PHASES-0-11.md"
     - "docs/history/ROADMAP-PHASE-12-COMPLETED.md"
     - "tests/test_documentation_history.py"
+    - "validate_repository.py"
   planned_file_operations:
     additions:
       - path: "docs/history/ROADMAP-PHASES-0-11.md"
@@ -77,7 +78,7 @@ current_task:
   validation_plan:
     - "Use exact section boundaries and complete diff review to prove archived text is retained."
     - "Run tests/test_documentation_history.py once on the final local tree."
-    - "Reserve repository reference validation for the final PR CI; do not repeat it locally."
+    - "Run repository reference validation once in PR CI for the final repaired subject; do not repeat it locally."
     - "Do not run full pytest, generators, Node, Playwright, live fetch, production, or Pages."
   prohibited_changes:
     - "Do not change product scope, statistics, Schemas, data, UI, workflows, public URLs, event selection, or production behavior."
