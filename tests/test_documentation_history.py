@@ -50,14 +50,18 @@ def test_live_status_is_small_current_state_and_points_to_history():
         isinstance(value, bool)
         for value in status["current_task"]["authorization"].values()
     )
-    assert status["known_blockers"] == []
+    assert status["known_blockers"][0]["id"] == (
+        "MTGO-PRODUCTION-RUN-31838657545-CANCELLED"
+    )
     assert status["next_approved_task"]["local_execution_authorized"] is True
-    assert status["current_task"]["id"] == "P12-10-READINESS-PICKUP-CONTRACT"
+    assert status["current_task"]["id"] == (
+        "OPS-MTGO-PRODUCTION-TIMEOUT-FAILFAST-20260815"
+    )
     assert status["current_task"]["status"] == (
-        "owner_accepted_publication_and_merge_authorized"
+        "owner_accepted_conditional_publication_merge_production_and_rehearsal_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "9ec4047762263e690b7163e4859efa21749b5019"
+        "b01ec998f4d9f36728589d26871cb38de4f6f015"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -66,16 +70,16 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "merge": True,
     }
     assert status["recent_completion_handoff"]["id"] == (
-        "ARCHETYPE-REPRESENTATIVE-CARD-2-INITIALIZATION"
+        "P12-10-READINESS-PICKUP-CONTRACT"
     )
     assert status["recent_completion_handoff"]["merge_commit"] == (
-        "9ec4047762263e690b7163e4859efa21749b5019"
+        "b01ec998f4d9f36728589d26871cb38de4f6f015"
     )
     assert status["next_approved_task"]["id"] == (
         "P12-10-NO-PUBLICATION-TUESDAY-REHEARSAL"
     )
     assert status["next_approved_task"]["status"] == (
-        "authorized_to_start_after_current_task_merge"
+        "authorized_after_repair_merge_and_successful_authorized_production_run"
     )
     assert status["next_approved_task"]["local_execution_authorized"] is True
     assert status["next_approved_task"]["requires_user_confirmation"] is True
@@ -84,6 +88,17 @@ def test_live_status_is_small_current_state_and_points_to_history():
     assert future_task_gates["P12-10"]["status"] == (
         "blocked_pending_no_publication_rehearsal_and_separate_authorization"
     )
+
+    timeout_audit = (
+        ROOT / "docs" / "audits" / "MTGO-PRODUCTION-TIMEOUT-FAILFAST-20260815.md"
+    ).read_text(encoding="utf-8")
+    for required_text in (
+        "31838657545",
+        "966 tests in 28 minutes 51 seconds",
+        "Independent Videre match operations still",
+        "does not fetch live data",
+    ):
+        assert required_text in timeout_audit
 
     weekly_contract = (
         ROOT / "docs" / "audits" / "WEEKLY-MAINTENANCE-CONTRACT-R1.md"

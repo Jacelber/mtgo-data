@@ -3164,6 +3164,15 @@ public entry points.
    state and freezes the existing-candidate extension, immutable review
    manifest, and repository-external workbook write-back boundaries. It does
    not run the no-publication Tuesday rehearsal or implement P12-10.
+
+   The first no-publication rehearsal attempt on 2026-08-15 correctly stopped
+   because scheduled production run `31838657545` was cancelled at the fetch
+   job's 45-minute timeout. The authorized operational repair separates the
+   complete clean baseline from live fetch timeout accounting and stops
+   repeated event-format attempts after a known shared MTGO listing failure.
+   The rehearsal must be repeated only after that repair is published and one
+   scheduled production run succeeds; neither the blocked attempt nor its
+   success-path simulation satisfies the P12-10 gate.
 10. `P12-10` — Landing weekly-facts producer and Pickup integration
     - do not start until the P12-03 classifier-remediation gate, refreshed
       shadow, owner threshold confirmation, known-state migration check, and

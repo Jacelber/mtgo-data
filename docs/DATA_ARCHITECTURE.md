@@ -2599,7 +2599,8 @@ It should use:
 
 The production workflow uses three validation layers:
 
-1. a clean-checkout regression suite before any live fetch;
+1. a dedicated clean-checkout regression job that must succeed before any live
+   fetch job starts;
 2. a dynamic, registry-aware candidate snapshot comparison after fetch and generation but before staging;
 3. confirmation that the published remote `master` commit equals the locally created generated-data commit.
 
@@ -2643,6 +2644,15 @@ statistics, validate a candidate, stage a commit, or alter public output. It is
 bounded recovery state, not a durable data archive. P10-11 separately reports
 an actual failed pipeline stage through its dedicated issue-only notification
 job.
+
+The clean regression and live fetch use separate bounded jobs so a complete
+regression run cannot consume the fetch job's timeout budget. After one
+official MTGO event-format collection fails, the fetch job stops the remaining
+official event-format operations because they depend on the same upstream
+monthly-listing service. It still attempts the independent pending Videre match
+operations, then fails and uploads the verified resumable checkpoint. This
+prevents a known shared-source outage from being retried once per event format
+and preserves useful independently collectable progress.
 
 ### 19.3 `fetch_melee.yml`
 

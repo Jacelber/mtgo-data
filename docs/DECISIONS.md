@@ -2906,13 +2906,14 @@ Keep one scheduled and manually dispatchable MTGO workflow, its master-only
 guard, non-cancelling concurrency group, Python 3.12 runtime, registry-derived
 format loops, and three validation layers. Split its responsibilities into:
 
-1. a read-only `fetch` job that runs clean-checkout regression before live
-   collection, snapshots the candidate baseline, and transfers the fetched
-   inputs plus baseline through `mtgo-fetch-candidate`;
-2. a read-only `build` job that verifies that immutable transfer, generates all
+1. a read-only `baseline` job that runs the complete clean-checkout regression
+   suite and must succeed before live collection starts;
+2. a read-only `fetch` job that snapshots the candidate baseline and transfers
+   the fetched inputs plus baseline through `mtgo-fetch-candidate`;
+3. a read-only `build` job that verifies that immutable transfer, generates all
    existing products, runs candidate, repository, rule, and Schema validation,
    then transfers the validated allowed output through `mtgo-build-candidate`;
-3. a `contents: write` `publish` job that verifies the validated-output digest,
+4. a `contents: write` `publish` job that verifies the validated-output digest,
    rejects paths outside `data/`, `stats/`, `reports/`, and `fetched.txt`, then
    performs the existing no-op, commit, push, and remote-master confirmation.
 
@@ -2923,12 +2924,14 @@ OIDC, secret, storage-provider, or other unrelated permission.
 
 ## Consequences
 
-The workflow exposes fetch, build, and publication as separately observable
-steps and confines repository write access to the only step that can publish a
-fully validated candidate. A transfer or validation failure prevents the
-publish job from starting. DEC-072 subsequently adds the separately authorized
-P10-11 issue-only notification boundary; normal Actions status and per-job
-summaries remain the primary diagnostic record.
+The workflow exposes baseline, fetch, build, and publication as separately
+observable steps and confines repository write access to the only step that can
+publish a fully validated candidate. Giving baseline validation and live fetch
+independent bounded timeout budgets does not remove or weaken either gate. A
+transfer or validation failure prevents the publish job from starting. DEC-072
+subsequently adds the separately authorized P10-11 issue-only notification
+boundary; normal Actions status and per-job summaries remain the primary
+diagnostic record.
 
 ---
 
@@ -2951,11 +2954,14 @@ store, a repository write, or P10-11 failure issues.
 The read-only fetch job records a versioned progress manifest after its clean
 baseline is available. It defines every event-format and match-format operation
 as `pending` or `complete`. An operation becomes complete only after its
-existing collection command succeeds. If any planned operation fails, the job
-finishes every remaining pending operation it can, fails overall, and uploads a
-separate immutable `mtgo-fetch-checkpoint` artifact for seven days. That
-artifact contains only the collected inputs, the clean baseline, the progress
-manifest, and SHA-256 sums.
+existing collection command succeeds. If an official MTGO event-format
+operation fails, the job stops the remaining official event-format operations
+because they depend on the same upstream monthly-listing service, but still
+finishes independent pending Videre match operations it can. A match-operation
+failure does not suppress the other match operation. The job then fails overall
+and uploads a separate immutable `mtgo-fetch-checkpoint` artifact for seven
+days. That artifact contains only the collected inputs, the clean baseline, the
+progress manifest, and SHA-256 sums.
 
 At the start of a later fetch run, `actions: read` may locate the newest
 unexpired checkpoint only for the same `master` head SHA. The job then verifies
@@ -2996,11 +3002,11 @@ Status: `Accepted`
 
 ## Context
 
-The split production workflow already exposes failed fetch, build, and publish
-jobs in GitHub Actions, and P10-10 retains incomplete input collection safely.
-The fetch job begins with clean-checkout baseline validation, so its controlled
-failure stage must distinguish that pre-collection boundary from a later source
-collection failure.
+The split production workflow exposes failed baseline, fetch, build, and
+publish jobs in GitHub Actions, and P10-10 retains incomplete input collection
+safely. The dedicated baseline job owns clean-checkout validation, while the
+fetch stage begins with the dynamic production snapshot before source
+collection.
 However, a recurring production failure had no durable, deduplicated work item.
 Creating a new issue for every failed daily run would create noise, while giving
 the collection, build, or publication jobs broad issue permission would weaken
@@ -3009,14 +3015,14 @@ their least-privilege boundary.
 ## Decision
 
 Add one post-pipeline notification job. It runs only after a real `failure` in
-the fetch, build, or publish job, selects the first failed stage in pipeline
-order, and has only `issues: write`; it does not check out the repository or receive
+the baseline, fetch, build, or publish job, selects the first failed stage in
+pipeline order, and has only `issues: write`; it does not check out the repository or receive
 `contents`, `actions`, Pages, OIDC, storage, or publication permission.
 
-The fetch job emits only the controlled `baseline` or `fetch` failure stage:
-`baseline` covers clean-checkout tests and the production-baseline snapshot,
-while `fetch` begins before checkpoint discovery and input collection. Build
-and publication failures remain `build` and `publish`.
+The baseline job emits the controlled `baseline` failure stage for
+clean-checkout tests. The fetch job emits `fetch` beginning with the production
+snapshot, checkpoint discovery, and input collection. Build and publication
+failures remain `build` and `publish`.
 
 The job uses a stable hidden marker in an ordinary issue body to find an open,
 non-pull-request issue for the selected stage. It creates that issue if absent;

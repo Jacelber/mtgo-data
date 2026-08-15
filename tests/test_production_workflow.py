@@ -51,22 +51,27 @@ def test_update_keeps_its_schedule_master_boundary_and_concurrency():
         "group": "production-data-update",
         "cancel-in-progress": "false",
     }
-    assert set(workflow["jobs"]) == {"fetch", "build", "publish", "notify"}
-    assert all(job(name)["if"] == "github.ref == 'refs/heads/master'" for name in ("fetch", "build", "publish"))
+    assert set(workflow["jobs"]) == {"baseline", "fetch", "build", "publish", "notify"}
+    assert all(
+        job(name)["if"] == "github.ref == 'refs/heads/master'"
+        for name in ("baseline", "fetch", "build", "publish")
+    )
 
 
 def test_fetch_build_and_publish_have_separate_minimum_permissions():
+    assert job("baseline")["permissions"] == {"contents": "read"}
     assert job("fetch")["permissions"] == {"actions": "read", "contents": "read"}
     assert job("build")["permissions"] == {"contents": "read"}
     assert job("publish")["permissions"] == {"actions": "write", "contents": "write"}
     assert job("notify")["permissions"] == {"issues": "write"}
-    assert job("build")["needs"] == "fetch"
+    assert job("fetch")["needs"] == "baseline"
+    assert job("build")["needs"] == ["baseline", "fetch"]
     assert job("publish")["needs"] == "build"
-    assert job("notify")["needs"] == ["fetch", "build", "publish"]
+    assert job("notify")["needs"] == ["baseline", "fetch", "build", "publish"]
 
 
 def test_every_job_is_bounded_and_uses_the_same_immutable_trigger_commit():
-    for name in ("fetch", "build", "publish"):
+    for name in ("baseline", "fetch", "build", "publish"):
         assert job(name)["runs-on"] == "ubuntu-latest"
         assert int(job(name)["timeout-minutes"]) > 0
         checkout = next(step for step in steps(name) if step.get("uses") == "actions/checkout@v7.0.0")
@@ -92,17 +97,14 @@ def test_all_project_workflows_use_only_python_3_12():
                     assert step["with"]["python-version"] == "3.12", path
 
 
-def test_fetch_runs_clean_regression_then_snapshots_and_collects_only_inputs():
-    ordered = [
-        "-r requirements-dev.txt",
-        "-m pytest",
-        "validate_production_candidate.py snapshot",
-        "fetch-events",
-        "fetch-matches",
-    ]
+def test_baseline_runs_complete_regression_before_fetch_collects_only_inputs():
+    assert job("fetch")["needs"] == "baseline"
+    assert command_index("baseline", "-r requirements-dev.txt") < command_index(
+        "baseline", "-m pytest"
+    )
+    ordered = ["-r requirements.txt", "validate_production_candidate.py snapshot", "fetch-events", "fetch-matches"]
     indexes = [command_index("fetch", fragment) for fragment in ordered]
     assert indexes == sorted(indexes)
-    assert command_index("fetch", "-m pytest") < command_index("fetch", "fetch-events")
     assert command_index("fetch", "validate_production_candidate.py snapshot") < command_index(
         "fetch", "fetch-events"
     )
@@ -119,18 +121,31 @@ def test_fetch_runs_clean_regression_then_snapshots_and_collects_only_inputs():
 
 
 def test_fetch_reports_baseline_failures_separately_from_input_collection():
+    baseline_job = job("baseline")
     fetch = job("fetch")
-    assert fetch["outputs"] == {
-        "failure-stage": "${{ steps.fetch-stage.outputs.stage || steps.baseline-stage.outputs.stage }}"
+    assert baseline_job["outputs"] == {
+        "failure-stage": "${{ steps.baseline-stage.outputs.stage }}"
     }
-    baseline = next(step for step in steps("fetch") if step.get("id") == "baseline-stage")
+    assert fetch["outputs"] == {"failure-stage": "${{ steps.fetch-stage.outputs.stage }}"}
+    baseline = next(step for step in steps("baseline") if step.get("id") == "baseline-stage")
     collection = next(step for step in steps("fetch") if step.get("id") == "fetch-stage")
     assert 'echo "stage=baseline" >> "$GITHUB_OUTPUT"' in baseline["run"]
     assert 'echo "stage=fetch" >> "$GITHUB_OUTPUT"' in collection["run"]
-    assert steps("fetch").index(baseline) < command_index("fetch", "-m pytest")
+    assert steps("baseline").index(baseline) < command_index("baseline", "-m pytest")
     assert command_index("fetch", "validate_production_candidate.py snapshot") < steps("fetch").index(
         collection
     )
+
+
+def test_event_collection_stops_after_first_shared_source_failure_but_matches_continue():
+    collection = next(
+        step for step in steps("fetch") if step["name"] == "Fetch every pending MTGO input operation"
+    )["run"]
+    failure = collection.index("Stopping remaining MTGO event collection")
+    event_break = collection.index("break", failure)
+    match_loop = collection.index("for FORMAT in $MTGO_PRODUCT_FORMATS")
+    assert failure < event_break < match_loop
+    assert 'exit "$STATUS"' in collection
 
 
 def test_workflow_summary_backticks_are_literal_shell_text():
@@ -252,7 +267,8 @@ def test_notification_job_creates_or_updates_only_deduplicated_failed_stage_issu
     )
     assert notify["if"] == (
         "always() && github.ref == 'refs/heads/master' && "
-        "(needs.fetch.result == 'failure' || needs.build.result == 'failure' || needs.publish.result == 'failure')"
+        "(needs.baseline.result == 'failure' || needs.fetch.result == 'failure' || "
+        "needs.build.result == 'failure' || needs.publish.result == 'failure')"
     )
     assert notify["runs-on"] == "ubuntu-latest"
     assert notify["timeout-minutes"] == "5"
@@ -265,12 +281,14 @@ def test_notification_job_creates_or_updates_only_deduplicated_failed_stage_issu
     assert "github.rest.issues.createComment" in text
     stage = next(step for step in steps("notify") if step["name"] == "Identify the failed production stage")
     assert stage["env"] == {
+        "BASELINE_RESULT": "${{ needs.baseline.result }}",
         "FETCH_RESULT": "${{ needs.fetch.result }}",
-        "FETCH_FAILURE_STAGE": "${{ needs.fetch.outputs.failure-stage }}",
         "BUILD_RESULT": "${{ needs.build.result }}",
         "PUBLISH_RESULT": "${{ needs.publish.result }}",
     }
-    assert 'STAGE="${FETCH_FAILURE_STAGE:-fetch}"' in stage["run"]
+    assert 'if [ "$BASELINE_RESULT" = "failure" ]' in stage["run"]
+    assert 'STAGE="baseline"' in stage["run"]
+    assert 'STAGE="fetch"' in stage["run"]
     assert "core.summary.write" in text
     assert "error.message" not in text
     assert "github.token" not in text
@@ -282,14 +300,14 @@ def test_only_the_dedicated_notification_job_may_write_issues():
     assert {name for name, value in workflow["jobs"].items() if "issues" in value.get("permissions", {})} == {
         "notify"
     }
-    for name in ("fetch", "build", "publish"):
+    for name in ("baseline", "fetch", "build", "publish"):
         assert "issues" not in job(name)["permissions"]
 
 
 def test_clean_baseline_and_dynamic_candidate_checks_are_not_conflated():
-    assert command_index("fetch", "-m pytest") < command_index(
-        "fetch", "validate_production_candidate.py snapshot"
-    )
+    assert job("fetch")["needs"] == "baseline"
+    assert "-m pytest" not in "\n".join(run_commands("fetch"))
+    assert "validate_production_candidate.py snapshot" in "\n".join(run_commands("fetch"))
     assert command_index("build", "classification-reports --strict") < command_index(
         "build", "validate_production_candidate.py validate"
     )
