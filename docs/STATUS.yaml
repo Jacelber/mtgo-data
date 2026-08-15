@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/representative-card-2-init-20260815"
+  current_working_branch: "codex/p12-10-readiness-pickup-contract"
   working_branch_status: "owner_accepted_publication_and_merge_authorized"
   status: "active"
   primary_language: "Python"
@@ -72,73 +72,72 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "ARCHETYPE-REPRESENTATIVE-CARD-2-INITIALIZATION"
-  name: "Owner-approved second representative-card initialization"
+  id: "P12-10-READINESS-PICKUP-CONTRACT"
+  name: "Pickup known-state and review-interface readiness contract"
   status: "owner_accepted_publication_and_merge_authorized"
   authorized_on: "2026-08-15"
   implementation_completed_on: "2026-08-15"
   owner_accepted_on: "2026-08-15"
   publication_authorized_on: "2026-08-15"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/representative-card-2-init-20260815-01"
-  branch: "codex/representative-card-2-init-20260815"
-  base_commit: "952fd5704c0e40cfab82dccf89ae2cf7212a3ac3"
-  task_type: "local_manual_visual_metadata_initialization"
-  artifact_impact: "user_visible_ui"
-  objective: "Populate the reserved second representative-card slot for all 30 threshold identities from the Owner-edited workbook column L while preserving the approved first-card map and every current consumer."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-10-readiness-pickup-contract-20260815-01"
+  branch: "codex/p12-10-readiness-pickup-contract"
+  base_commit: "9ec4047762263e690b7163e4859efa21749b5019"
+  task_type: "local_internal_readiness_contract"
+  artifact_impact: "internal_diagnostics"
+  objective: "Record the already-approved refreshed Landing thresholds, validate the unchanged R5 Pickup known state, and freeze the candidate, review-manifest, and XLSX write-back contract without recalculating the Landing shadow or implementing P12-10."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "assets/js/phase8/archetype-visuals.js"
-    - "assets/images/representative-cards/**"
-    - "tests/test_phase12_chart_semantics.py"
+    - "docs/audits/P12-10-READINESS-PICKUP-CONTRACT.md"
+    - "docs/audits/p12-10-readiness/pickup_review_contract.json"
+    - "docs/audits/WEEKLY-MAINTENANCE-CONTRACT-R1.md"
+    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
+    - "tools/validate_p12_10_readiness.py"
+    - "tests/test_p12_10_readiness_contract.py"
+    - "tests/test_documentation_history.py"
   protected_scope:
-    code_changed: "Explicit second-slot visual metadata only; no current consumer change"
+    code_changed: "Read-only internal readiness validator only"
     classifier_rule_changed: "none"
     workflow_changed: "none"
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
-    frontend_source_changed: "Owner-approved second-card metadata and local art crops only; the existing composition chart continues to consume slot 1"
+    frontend_source_changed: "none"
     public_paths_changed: "none"
     event_434455_source_bytes_changed: false
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Treat workbook column L as the complete Owner decision and ignore unchanged column M."
-    - "Normalize only official card-name spelling and capitalization required by exact image resolution."
-    - "Populate exactly two explicit cards for each existing threshold identity and add matching local Scryfall art crops."
-    - "Strengthen the focused metadata regression without adding a Landing consumer."
-    - "Commit the accepted local result, publish one Ready pull request, wait for one complete CI run on its final head, and merge only after every required check succeeds."
+    - "Record the Owner-provided refreshed shadow summary and accepted 3%, 5pp, and 20 thresholds without recalculation."
+    - "Validate current Standard and Modern Pickup known state against accepted R5 digests, counts, and final parent identities without writing state."
+    - "Freeze the existing-candidate extension, immutable review manifest, and repository-external workbook write-back boundaries."
+    - "Add only focused tests and internal audit evidence."
   validation_evidence:
-    workbook_input: "All 30 column-L selections imported; unchanged column M intentionally ignored"
-    official_name_normalization: "Slickshot Show-Off, Leatherhead, Swamp Stalker, and Superior Spider-Man normalized to current exact card names"
-    focused_pytest: "33 nodes passed; the sole status-contract failure was repaired and its exact node then passed"
-    accepted_infrastructure_exception: "34 test_validate_repository nodes were not executed because the sandbox denied the first AppData basetemp; they were not rerun, and the independent top-level repository validator passed"
-    image_assets: "29 new local Scryfall art crops plus one reused existing crop; all 59 maintained images are 626 by 457 pixels"
-    node_syntax: "assets/js/phase8/archetype-visuals.js passed node --check"
-    ruff: "Changed Python tests passed"
-    repository_validation: "161 Python, 18 JavaScript, 1759 JSON, 51 YAML, 57 references, and 2249 hygiene checks passed"
-    browser_validation: "Not run locally because the existing chart remains hard-bound to slot 1; complete clean-checkout CI remains a later publication gate"
+    threshold_recalculation: "Not performed; the Owner-provided refreshed evidence is recorded verbatim with recomputed_by_task false"
+    pickup_known_state: "Standard 91 names and Modern 126 stable IDs match accepted R5 SHA-256 bindings and all resolve to final parent identities"
+    focused_pytest: "6 targeted nodes passed once using a repository-external basetemp"
+    ruff: "The three changed Python files passed once; two earlier launcher attempts did not start Ruff"
+    browser_validation: "Not applicable because no UI or public consumer changed"
   prohibited_changes:
-    - "Any first-card change, identity-set change, classifier, statistical formula, generated data, Schema, workflow, public path, Pickup state, current UI consumer, Landing producer, or production change."
-    - "Any production dispatch, P12-10 implementation, release, tag, repository-setting change, force-push, or another task without separate Owner authorization."
-  stop_point: "Commit the accepted result, align it with current remote master, publish one Ready pull request, wait for one complete CI run on the final head, merge only after every required check succeeds, confirm the exact merge, and stop before production dispatch or P12-10."
+    - "Do not recalculate the Landing shadow, change any approved threshold, migrate or rewrite Pickup state, candidate, approved week, or index files, or create Landing production output."
+    - "Do not run the no-publication Tuesday rehearsal before this task merges; do not begin P12-10, dispatch production, or begin another task without separate Owner authorization."
+  stop_point: "Commit and publish one Ready pull request, wait for one complete CI run, merge only after every required check passes, verify the exact merge, then begin the separately authorized no-publication Tuesday rehearsal in a fresh workspace."
 
 recent_completion_handoff:
-  id: "GOV-05-TEST-TEMP-ISOLATION"
-  name: "Repository-external pytest temp and valid-evidence reuse"
+  id: "ARCHETYPE-REPRESENTATIVE-CARD-2-INITIALIZATION"
+  name: "Owner-approved second representative-card initialization"
   status: "completed_merged_and_deployed"
-  pull_request: 207
-  merge_commit: "290daaa84ea61d9294196b323d219abd492d3f7d"
-  note: "The accepted pytest temp-isolation and evidence-reuse governance is merged; GitHub and Git retain its publication evidence."
+  pull_request: 208
+  merge_commit: "9ec4047762263e690b7163e4859efa21749b5019"
+  note: "The approved second representative-card metadata is merged and deployed; GitHub and Git retain its publication evidence."
 
 current_repository_state:
-  baseline_commit: "952fd5704c0e40cfab82dccf89ae2cf7212a3ac3"
-  baseline_note: "Verified remote master after PR 207 and the 2026-08-13 production data update; used as the second-card initialization base."
+  baseline_commit: "9ec4047762263e690b7163e4859efa21749b5019"
+  baseline_note: "Verified remote master after PR 208; used as the Pickup readiness-contract base."
   default_branch: "master"
   package_root: "src/mtgmeta"
   supported_runtime: "Python 3.12"
@@ -199,14 +198,16 @@ known_blockers: []
 
 future_task_gates:
   - task: "P12-10"
-    status: "blocked_pending_separate_authorization_and_evidence"
-    requirements:
-      - "Accept and publish the Standard Spellementals Talent boundary fix."
-      - "Freeze corrected stable parent, subtype, and self-contained display identities."
-      - "Validate or explicitly migrate Weekly Pickup known-archetype state."
-      - "Rerun the 8-12 week Standard and Modern Landing shadow."
-      - "Reconfirm the 3% environment, 5 percentage-point share movement, and 20-point subtype build-shift thresholds with the owner."
-      - "Approve the manual representative-card map after identity freeze."
+    status: "blocked_pending_no_publication_rehearsal_and_separate_authorization"
+    completed_requirements:
+      - "Classifier remediation, stable identities, and Spellementals boundary fix accepted and published."
+      - "Standard and Modern Pickup known state matches accepted R5 evidence and final parent identities."
+      - "Owner accepted the already-computed refreshed Landing shadow and reconfirmed 3%, 5pp, and 20 without another calculation."
+      - "Two representative cards are approved for every required identity."
+      - "Pickup candidate extension, review manifest, and XLSX write-back boundaries are defined."
+    remaining_requirements:
+      - "Perform and accept one separately authorized no-publication Tuesday rehearsal."
+      - "Obtain separate P12-10 implementation authorization."
 
 open_decisions:
   - id: "OPEN-003"
@@ -219,15 +220,16 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-10"
-  name: "Landing weekly-facts producer and Pickup integration"
-  status: "blocked_pending_known_state_validation_landing_shadow_threshold_confirmation_and_separate_authorization"
-  production_change: true
+  id: "P12-10-NO-PUBLICATION-TUESDAY-REHEARSAL"
+  name: "One no-publication weekly-review rehearsal"
+  status: "authorized_to_start_after_current_task_merge"
+  production_change: false
   requires_user_confirmation: true
-  local_execution_authorized: false
+  local_execution_authorized: true
   commit_authorized: false
   remote_publication_authorized: false
-  note: "The classifier boundary fixes and first-card map are on master. The second-card map is Owner-accepted and publication-authorized; Pickup known-state validation, P12-10, and production remain separate gates."
+  authorized_on: "2026-08-15"
+  note: "Local rehearsal development may begin only after the readiness-contract PR merges without errors; rehearsal commit, publication, P12-10 implementation, and production remain unauthorized."
 
 governance_baseline:
   status: "active_on_master"
@@ -263,7 +265,7 @@ publication_workflow_control:
 
 prohibited_next_actions:
   - "Do not dispatch production without separate owner authorization."
-  - "Do not change the approved representative-card selections beyond official name normalization, rerun the Landing shadow, choose thresholds, begin P12-10, or begin another task without separate owner authorization."
+  - "Do not recalculate the accepted Landing shadow, change the approved 3%, 5pp, or 20 thresholds, run the Tuesday rehearsal before the current task merges, begin P12-10, or begin another task without separate owner authorization."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."
   - "Do not change the Melee whitelist, activate an event, retain new source responses, generate or publish new event data, or dispatch production without separate owner authorization."

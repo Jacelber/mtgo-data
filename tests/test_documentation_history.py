@@ -51,15 +51,13 @@ def test_live_status_is_small_current_state_and_points_to_history():
         for value in status["current_task"]["authorization"].values()
     )
     assert status["known_blockers"] == []
-    assert status["next_approved_task"]["local_execution_authorized"] is False
-    assert status["current_task"]["id"] == (
-        "ARCHETYPE-REPRESENTATIVE-CARD-2-INITIALIZATION"
-    )
+    assert status["next_approved_task"]["local_execution_authorized"] is True
+    assert status["current_task"]["id"] == "P12-10-READINESS-PICKUP-CONTRACT"
     assert status["current_task"]["status"] == (
         "owner_accepted_publication_and_merge_authorized"
     )
     assert status["current_task"]["base_commit"] == (
-        "952fd5704c0e40cfab82dccf89ae2cf7212a3ac3"
+        "9ec4047762263e690b7163e4859efa21749b5019"
     )
     assert status["current_task"]["authorization"] == {
         "local_implementation": True,
@@ -67,19 +65,24 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "remote_publication": True,
         "merge": True,
     }
-    assert status["recent_completion_handoff"]["id"] == "GOV-05-TEST-TEMP-ISOLATION"
+    assert status["recent_completion_handoff"]["id"] == (
+        "ARCHETYPE-REPRESENTATIVE-CARD-2-INITIALIZATION"
+    )
     assert status["recent_completion_handoff"]["merge_commit"] == (
-        "290daaa84ea61d9294196b323d219abd492d3f7d"
+        "9ec4047762263e690b7163e4859efa21749b5019"
     )
-    assert status["next_approved_task"]["id"] == "P12-10"
+    assert status["next_approved_task"]["id"] == (
+        "P12-10-NO-PUBLICATION-TUESDAY-REHEARSAL"
+    )
     assert status["next_approved_task"]["status"] == (
-        "blocked_pending_known_state_validation_landing_shadow_threshold_confirmation_and_separate_authorization"
+        "authorized_to_start_after_current_task_merge"
     )
+    assert status["next_approved_task"]["local_execution_authorized"] is True
     assert status["next_approved_task"]["requires_user_confirmation"] is True
     assert status["next_approved_task"]["remote_publication_authorized"] is False
     future_task_gates = {gate["task"]: gate for gate in status["future_task_gates"]}
     assert future_task_gates["P12-10"]["status"] == (
-        "blocked_pending_separate_authorization_and_evidence"
+        "blocked_pending_no_publication_rehearsal_and_separate_authorization"
     )
 
     weekly_contract = (
@@ -97,8 +100,30 @@ def test_live_status_is_small_current_state_and_points_to_history():
         "unknown_total_all_available",
         "unknown_new_since_last_review",
         "Codex proactively sends the entry report",
+        "already-computed refreshed 8-12-week Landing shadow evidence",
     ):
         assert required_text in weekly_contract
+
+    readiness_audit = (
+        ROOT / "docs" / "audits" / "P12-10-READINESS-PICKUP-CONTRACT.md"
+    ).read_text(encoding="utf-8")
+    readiness_contract = (
+        ROOT
+        / "docs"
+        / "audits"
+        / "p12-10-readiness"
+        / "pickup_review_contract.json"
+    ).read_text(encoding="utf-8")
+    for required_text in (
+        "does not execute a shadow generator",
+        "88.04%",
+        "66.99%",
+        "repository-external review artifact",
+        "no-publication Tuesday rehearsal",
+    ):
+        assert required_text in readiness_audit
+    assert '"recomputed_by_task": false' in readiness_contract
+    assert '"stop_without_migration"' in readiness_contract
 
     roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
     audit = (

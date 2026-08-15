@@ -3155,6 +3155,15 @@ public entry points.
    without adding Landing data or UI. The owner accepted the local result and
    authorized commit, Ready publication, and normal merge on 2026-08-09.
    Production dispatch and P12-10 remain separate gates.
+
+   On 2026-08-15 the Owner accepted the already-computed refreshed Landing
+   shadow evidence and reconfirmed the 3% environment, five-percentage-point
+   share-movement, and 20-point build-shift thresholds, explicitly prohibiting
+   another shadow calculation. The separately authorized
+   `P12-10-READINESS-PICKUP-CONTRACT` validates the unchanged R5 Pickup known
+   state and freezes the existing-candidate extension, immutable review
+   manifest, and repository-external workbook write-back boundaries. It does
+   not run the no-publication Tuesday rehearsal or implement P12-10.
 10. `P12-10` — Landing weekly-facts producer and Pickup integration
     - do not start until the P12-03 classifier-remediation gate, refreshed
       shadow, owner threshold confirmation, known-state migration check, and
