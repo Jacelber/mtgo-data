@@ -200,6 +200,7 @@ def test_build_verifies_and_consumes_fetch_artifact_before_generation_and_valida
         "validate_repository.py",
         "validate_rules.py",
         "validate_schemas.py",
+        "validate_output_invariants.py",
         "-m pytest tests/test_generated_consumer_contracts.py",
         "actions/setup-node@v6",
         "npm ci",
@@ -389,3 +390,9 @@ def test_every_product_rule_file_is_validated_before_schema_validation():
     schemas = command_index("build", "validate_schemas.py")
     assert rules < schemas
     assert "for FORMAT in $MTGO_PRODUCT_FORMATS" in run_commands("build")[rules]
+
+
+def test_value_independent_invariants_guard_the_candidate_before_consumer_smoke():
+    invariants = command_index("build", "validate_output_invariants.py")
+    consumers = command_index("build", "tests/test_generated_consumer_contracts.py")
+    assert command_index("build", "validate_schemas.py") < invariants < consumers

@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/production-timeout-failfast"
-  working_branch_status: "owner_accepted_conditional_publication_merge_production_and_rehearsal_authorized"
+  current_working_branch: "codex/gov-06-output-gated-validation-cutover"
+  working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
   primary_language: "Python"
   deployment: "GitHub Pages"
@@ -72,39 +72,44 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "OPS-MTGO-PRODUCTION-TIMEOUT-FAILFAST-20260815"
-  name: "MTGO production timeout and repeated-failure repair"
-  status: "owner_accepted_conditional_publication_merge_production_and_rehearsal_authorized"
+  id: "GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER"
+  name: "Output-gated validation cutover"
+  status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-15"
-  implementation_completed_on: "2026-08-15"
   owner_accepted_on: "2026-08-15"
-  publication_authorized_on: "2026-08-15"
-  production_dispatch_authorized_on: "2026-08-15"
-  rehearsal_after_success_authorized_on: "2026-08-15"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/production-timeout-failfast-20260815-01"
-  branch: "codex/production-timeout-failfast"
-  base_commit: "b01ec998f4d9f36728589d26871cb38de4f6f015"
-  task_type: "local_production_reliability_hotfix"
-  artifact_impact: "internal_diagnostics"
-  objective: "Prevent the complete clean baseline from consuming the live-fetch timeout budget and stop repeated event-format waits after a known shared MTGO listing failure, without removing validation or dispatching production."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-06-output-gated-validation-cutover-20260815-01"
+  branch: "codex/gov-06-output-gated-validation-cutover"
+  base_commit: "64ff4113061900e06d3fd69ac93fd81de1aff025"
+  task_type: "local_ci_governance_cutover"
+  artifact_impact: "none"
+  objective: "Remove unrelated full, byte-snapshot, and browser testing from the PR critical path while protecting generated public output with value-independent invariants."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
+    - "AGENTS.md"
+    - ".github/pull_request_template.md"
+    - ".github/workflows/ci.yml"
     - ".github/workflows/update.yml"
-    - "docs/audits/MTGO-PRODUCTION-TIMEOUT-FAILFAST-20260815.md"
-    - "docs/DATA_ARCHITECTURE.md"
+    - "ci_master_admission.py"
+    - "validate_output_invariants.py"
+    - "docs/GOVERNANCE_REMEDIATION.yaml"
+    - "docs/audits/GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER.md"
+    - "docs/audits/CI-MASTER-ADMISSION.md"
     - "docs/DECISIONS.md"
-    - "docs/ROADMAP.md"
+    - "docs/DEVELOPMENT_WORKFLOW.md"
     - "docs/STATUS.yaml"
-    - "tests/test_production_workflow.py"
+    - "tests/test_ci_master_admission.py"
+    - "tests/test_ci_workflow.py"
     - "tests/test_documentation_history.py"
+    - "tests/test_output_invariants.py"
+    - "tests/test_production_workflow.py"
   protected_scope:
-    code_changed: "Production workflow orchestration only"
+    code_changed: "CI admission and generated-output invariant validator only"
     classifier_rule_changed: "none"
-    workflow_changed: "Separate clean baseline and fetch jobs; stop repeated same-source event waits after first failure"
+    workflow_changed: "PR CI becomes path-targeted; production build gains output invariants before packaging"
     raw_or_generated_data_changed: "none"
     statistical_behavior_changed: "none"
     schema_changed: "none"
@@ -114,21 +119,23 @@ current_task:
     production_dispatched: false
     remote_write_performed: "none"
   allowed_actions:
-    - "Move the unchanged complete clean-checkout pytest suite to a read-only baseline job that must succeed before live fetch."
-    - "Give fetch an independent timeout budget and stop remaining official event-format operations after the first shared-source failure while retaining independent Videre attempts."
-    - "Preserve least privilege, immutable trigger SHA, checkpoint recovery, build and publish gates, and failure-stage reporting."
-    - "Add focused structural regression tests and authoritative operational documentation."
+    - "Create the durable remediation ledger and mark later tasks unauthorized."
+    - "Replace catch-all PR testing with deterministic minimal categories."
+    - "Fail unknown evidence quickly for owner classification."
+    - "Add MTGO output invariants after production generation and before packaging."
+    - "Run each directly relevant local check once and reuse its evidence."
   validation_evidence:
-    incident: "Run 31838657545 passed 966 tests in 28m51s, then exhausted about 15m43s on five MTGO listing attempts and hit the 45-minute job timeout after Legacy began"
-    prior_success: "Run 31742869239 completed ordinary live collection in about two minutes after its clean baseline"
-    focused_pytest: "All 21 workflow-contract tests passed once; the one documentation node failed only on a known line-break string expectation and passed when that failed node alone was rerun"
-    actionlint: "Not available from the repository-declared local environment; remains a required one-time complete-PR-CI check"
-    ruff: "Both changed Python test files passed once"
-    browser_validation: "Not applicable because no UI or public consumer changed"
+    focused_contracts: "58 of 60 selected nodes passed on the first collected run; two stale documentation assertions failed before their later assertions executed."
+    repaired_nodes: "Only the failed documentation nodes were rerun after each directly relevant correction; final affected nodes passed."
+    output_invariants: "Current eight MTGO range and eight MTGO matchup documents passed once."
+    repository: "165 Python, 18 JavaScript, 1770 JSON, 52 YAML, 57 references, and 2268 hygiene checks passed once."
+    ruff: "All directly changed Python implementation and test files passed once."
+    file_operations: "The 37 directly affected admission/documentation nodes passed; after edge hardening, the six conflict/template cases passed. Known additions, exact declared unknown additions/deletions/renames, mismatches, stale declarations, invalid paths, and conflicting categories are covered."
+    intentionally_not_run: "Full pytest, committed_baseline, Playwright, generators, rule validation, Schema validation, live fetch, and production were not run."
   prohibited_changes:
-    - "Do not delete, skip, weaken, mark non-blocking, or repeat the complete clean baseline."
-    - "Do not fetch live data locally, dispatch production, change statistical meaning or generated data, retry the rehearsal before a successful scheduled production run, or begin P12-10."
-  stop_point: "Commit and publish one Ready pull request, run one complete CI, merge only after every required check passes, manually dispatch exactly one production run, and repeat the no-publication rehearsal only if that production run succeeds; stop before P12-10."
+    - "Do not begin GOV-07, another task, or product development under GOV-06 acceptance."
+    - "Do not fetch live data, delete snapshot tests, change formulas, generated data, Schemas, public paths, or UI behavior."
+  stop_point: "Complete GOV-06 through commit, Ready PR, required targeted CI, merge, and applicable automatic publication; stop on failed checks, changed subject, conflict, permission blocker, or scope expansion."
 
 recent_completion_handoff:
   id: "P12-10-READINESS-PICKUP-CONTRACT"
@@ -185,13 +192,10 @@ engineering_quality:
     - "mtgo-data-melee"
     - "mtgo-data-catalog"
   required_ci_capabilities:
-    - "pytest ordinary and committed-baseline shards"
-    - "Ruff"
-    - "strict narrow mypy baseline"
-    - "node:test"
-    - "actionlint"
-    - "Playwright real-browser smoke"
-    - "repository, rule, Schema, and production-candidate validation"
+    - "deterministic changed-path admission with fast unclassified stop"
+    - "targeted documentation, code, data, governance, and UI checks"
+    - "exact merge evidence reuse"
+    - "production candidate, repository, rule, Schema, output-invariant, consumer, and generated-page validation"
   dependency_updates: "monthly review-only Dependabot pull requests"
   coverage_baseline: "P11-04 skipped by owner because measured CI time was unacceptable"
   production_resource_validation: "P11-10 protects both front ends, maintained JavaScript, and Phase 8 resource references"
@@ -227,16 +231,15 @@ open_decisions:
     current_rule: "manual whitelist only"
 
 next_approved_task:
-  id: "P12-10-NO-PUBLICATION-TUESDAY-REHEARSAL"
-  name: "One no-publication weekly-review rehearsal"
-  status: "authorized_after_repair_merge_and_successful_authorized_production_run"
+  id: "NONE"
+  name: "No follow-up task is authorized"
+  status: "blocked_pending_GOV-06_owner_review"
   production_change: false
   requires_user_confirmation: true
-  local_execution_authorized: true
+  local_execution_authorized: false
   commit_authorized: false
   remote_publication_authorized: false
-  authorized_on: "2026-08-15"
-  note: "The Owner authorized exactly one manual production dispatch after the repair merges and an immediate rehearsal retry only if that run succeeds. Rehearsal commit/publication, P12-10 implementation, and any additional production action remain unauthorized."
+  note: "GOV-06 is accepted and may complete continuously. Every later ledger task and all product work require separate authorization."
 
 governance_baseline:
   status: "active_on_master"
@@ -252,10 +255,12 @@ delegated_local_execution_governance:
   credentials: "Not included in delegated local authority."
   remote_publication:
     standing_authorization: false
-    requires_separate_owner_authorization: true
+    authorization_source: "owner_acceptance_for_same_task"
+    requires_separate_owner_authorization_after_acceptance: false
   production_dispatch:
     standing_authorization: false
-    requires_separate_owner_authorization: true
+    authorization_source: "owner_acceptance_when_dispatch_is_applicable_to_the_accepted_task"
+    requires_separate_owner_authorization_after_acceptance: false
   next_task:
     automatic_start: false
     requires_separate_owner_authorization: true
@@ -271,8 +276,7 @@ publication_workflow_control:
   p8_08_authorized: false
 
 prohibited_next_actions:
-  - "Do not merge before one complete PR CI succeeds; do not dispatch more than one production run; do not retry the rehearsal unless that authorized run succeeds."
-  - "Do not commit or publish the rehearsal result, begin P12-10, or begin another task without the applicable owner gate."
+  - "Do not begin GOV-07, GOV-08, GOV-09, GOV-10, GOV-11, GOV-12, GOV-13, P12-10, or other product development without separate owner authorization."
   - "Do not recalculate the accepted Landing shadow or change the approved 3%, 5pp, or 20 thresholds."
   - "Do not implement the DEC-078 draw-adjusted metric retirement before the separately authorized first Phase 19 compatibility migration."
   - "Do not rewrite Git history, delete public paths, force-push, mutate branches or tags, migrate storage, or change protected event 434455 bytes without the applicable owner gate."

@@ -3978,3 +3978,89 @@ repository, and diff checks. Ordinary, committed-baseline, Playwright, rules,
 Schemas, and Pages are not duplicated locally. Product behavior, classifier
 rules, statistical meaning, generated data, Schemas, public paths, production,
 and the established PR validation classes remain unchanged.
+
+---
+
+# DEC-093 - Protect the output and make PR validation purpose-specific
+
+Status: `Accepted for local GOV-06 implementation; publication not authorized`
+
+## Context
+
+Recent pull requests overwhelmingly selected the complete path. A typical
+change took seconds to implement and then waited about twenty minutes for full
+pytest, committed byte baselines, and Playwright. Byte snapshots cannot
+distinguish a legitimate expected-output update from a defect, while prior
+browser suites missed owner-visible mobile navigation failures.
+
+The repository has one product exit: the validated artifact assembled by the
+production build before publication. That build already owns candidate-scope,
+repository, rule, Schema, consumer, and generated-page checks.
+
+## Decision
+
+Pull-request CI classifies every known path into the smallest documentation,
+UI, code, data, or governance check category. Known-path additions need no
+extra declaration. At task approval, every unknown-path addition, deletion, and
+rename is declared by exact path and category, then repeated in the PR body.
+The actual diff must match those declarations exactly. Undeclared, stale, or
+mismatched operations, malformed declarations, and incomplete API evidence fail
+immediately as `unclassified`; they do not fall back to a catch-all suite.
+File-operation declarations select checks but do not grant authorization.
+
+The production build adds value-independent MTGO invariants after generation
+and before packaging. They validate count/share conservation, matchup
+conservation and inverse symmetry, literal-record agreement, interval
+containment, and missing-sample semantics without encoding expected tournament
+values. Existing candidate, Schema, consumer, and generated-page gates remain.
+
+Owner browser review is the final UI acceptance for the reviewed immutable
+subject. An exact merge reuses exact successful PR evidence instead of rerunning
+it. Snapshot deletion, ordinary-suite reconstruction, production evidence
+reuse, and document slimming remain separately authorized follow-up tasks in
+`docs/GOVERNANCE_REMEDIATION.yaml`.
+
+## Consequences
+
+Known PRs receive purpose-specific feedback with a five-minute job ceiling and
+an expected seconds-to-minute scale. Bad or unknown governance evidence stops
+quickly. Generated output remains publication-blocking. Master may temporarily
+contain code that cannot produce a valid candidate, but that candidate cannot
+be packaged or published.
+
+Same-task completion authority after Owner acceptance is governed by DEC-094.
+Statistical changes, public-path changes, and later governance tasks remain
+outside GOV-06.
+
+---
+
+# DEC-094 - Owner acceptance authorizes continuous same-task completion
+
+Status: `Accepted`
+
+## Context
+
+After the Owner accepts a completed local subject, repeating separate prompts
+for local commit, push, pull-request creation, merge, and applicable production
+or publication adds no decision information when the accepted diff and task
+scope remain unchanged. The prior sequence converted one decision into several
+administrative confirmations.
+
+## Decision
+
+Local task authorization covers implementation through Owner review. Owner
+acceptance authorizes continuous completion of that exact task: local commit,
+push, one Ready pull request, required-check waiting, merge after success, and
+the publication or production steps already applicable to the accepted task.
+
+Stop and return to the Owner only when required checks fail, the accepted diff
+or scope changes, a merge conflict appears, documented permissions are
+unavailable, or a new product or statistical decision is required. Acceptance
+does not authorize another task or phase, unrelated credentials, force-push,
+repository settings, secrets, or destructive actions outside the accepted
+contract.
+
+## Consequences
+
+Owner acceptance becomes the single completion authorization event. Management
+stages remain observable but do not create repeated authorization prompts.
