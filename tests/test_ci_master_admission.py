@@ -66,6 +66,13 @@ def _decide_pr(files, **event_overrides):
         (["assets/js/app.js"], "targeted:ui"),
         (["src/mtgmeta/deck.py"], "targeted:code"),
         (["schemas/range.schema.json"], "targeted:data"),
+        (["data/modern/melee/classifications/434455.json"], "targeted:data"),
+        (["my_archetypes/standard.yaml"], "targeted:data"),
+        (["reports/standard/mtgo/index.json"], "targeted:data"),
+        (
+            ["tests/fixtures/melee/434455_compatibility_manifest.json"],
+            "targeted:data",
+        ),
         ([".github/workflows/ci.yml"], "targeted:governance"),
         (
             ["docs/STATUS.yaml", "src/mtgmeta/deck.py", "stats/catalog.json"],
