@@ -425,13 +425,15 @@ P12-10 remains blocked until all items below are separately completed and
 accepted:
 
 - [x] accept provisional-with-re-review cadence;
-- [ ] validate or explicitly migrate Standard and Modern Pickup known state;
-- [ ] rerun the 8-12-week Landing shadow from the corrected classifier;
-- [ ] reconfirm the 3%, five-percentage-point and 20-point thresholds;
-- [ ] initialize and approve representative card 2 for every required identity;
-- [ ] define the Pickup candidate extensions for Landing editorial fields and
+- [x] validate Standard and Modern Pickup known state against the accepted R5
+      migration and final parent identities;
+- [x] accept the already-computed refreshed 8-12-week Landing shadow evidence
+      without recalculating it in the readiness-contract task;
+- [x] reconfirm the 3%, five-percentage-point and 20-point thresholds;
+- [x] initialize and approve representative card 2 for every required identity;
+- [x] define the Pickup candidate extensions for Landing editorial fields and
       four feature cards;
-- [ ] define and validate the review manifest and workbook write-back path;
+- [x] define and validate the review manifest and workbook write-back path;
 - [ ] perform one no-publication Tuesday rehearsal; and
 - [ ] obtain separate P12-10 implementation authorization.
 

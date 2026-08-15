@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "P12-10-READINESS-PICKUP-CONTRACT",
+  "artifact_impact": "internal_diagnostics",
+  "threshold_approval": {
+    "source": "owner_provided_refreshed_shadow_summary",
+    "accepted_on": "2026-08-15",
+    "recomputed_by_task": false,
+    "environment": {
+      "threshold": 0.03,
+      "standard": {
+        "median_rows": 8,
+        "coverage_percent": 88.04
+      },
+      "modern": {
+        "median_rows": 11.5,
+        "coverage_percent": 66.99
+      }
+    },
+    "share_move": {
+      "threshold_percentage_points": 5,
+      "standard": {
+        "weekly_min": 1,
+        "weekly_max": 6
+      },
+      "modern": {
+        "weekly_max": 2,
+        "empty_weeks": 8
+      }
+    },
+    "build_shift": {
+      "threshold": 20,
+      "standard": {
+        "window_weeks": 12,
+        "items": 1
+      },
+      "modern": {
+        "weekly_min": 2,
+        "weekly_max": 7,
+        "median": 4.5
+      },
+      "comparison_at_15": {
+        "modern_weekly_min": 3,
+        "modern_weekly_max": 10
+      }
+    }
+  },
+  "known_state": {
+    "mismatch_action": "stop_without_migration",
+    "formats": {
+      "standard": {
+        "path": "stats/standard/mtgo/pickup/known_archetypes.json",
+        "rules_path": "my_archetypes/standard.yaml",
+        "identity_key": "known",
+        "identity_representation": "parent_display_name",
+        "expected_count": 91,
+        "sha256": "8ee830827a1d554dc19b6b7e979ded056d0fb414fbf447fbb44619e917a3d006"
+      },
+      "modern": {
+        "path": "stats/modern/mtgo/pickup/known_archetypes.json",
+        "rules_path": "my_archetypes/modern.yaml",
+        "identity_key": "known_ids",
+        "identity_representation": "parent_id",
+        "expected_count": 126,
+        "sha256": "c589e26718fbac12bc164dd04dfc6dcb68c4a901df59ea1bf13242493a711235"
+      }
+    }
+  },
+  "pickup_candidate_extension": {
+    "parallel_root_candidate_configuration": false,
+    "preserved_collections": [
+      "existing_changes",
+      "new_archetypes"
+    ],
+    "category_by_collection": {
+      "existing_changes": "new_technology",
+      "new_archetypes": "new_deck"
+    },
+    "landing_object": {
+      "required_when_approved_for_landing": [
+        "order",
+        "headline_zh",
+        "headline_en",
+        "positioning_zh",
+        "positioning_en",
+        "featured_cards"
+      ],
+      "featured_card_count": 4,
+      "featured_cards_unique": true,
+      "featured_card_source": "exact_featured_deck_main_or_side"
+    },
+    "publication_rule": "publish_only_manually_approved_entries_with_complete_landing_object",
+    "public_exclusions": [
+      "approved",
+      "comment_zh",
+      "comment_en",
+      "reviewer_notes",
+      "candidate_digest",
+      "workbook_metadata"
+    ]
+  },
+  "review_manifest": {
+    "required_fields": [
+      "schema_version",
+      "review_id",
+      "format",
+      "week",
+      "master_sha",
+      "production_workflow_run_id",
+      "source_event_ids",
+      "classifier_digest",
+      "pickup_candidate_digest",
+      "known_state_digest",
+      "visual_metadata_digest",
+      "machine_fact_digest",
+      "workbook_baseline_digest"
+    ],
+    "same_week_required_across_formats": true,
+    "binding_change_action": "stop_and_regenerate_for_review",
+    "public_artifact": false
+  },
+  "workbook_writeback": {
+    "repository_committed": false,
+    "row_identity_columns": [
+      "review_id",
+      "format",
+      "week",
+      "candidate_collection",
+      "candidate_index",
+      "deck_fingerprint"
+    ],
+    "machine_bound_columns": [
+      "review_id",
+      "format",
+      "week",
+      "candidate_collection",
+      "candidate_index",
+      "archetype_id",
+      "subtype_id",
+      "deck_fingerprint",
+      "source_event_ids",
+      "classifier_digest",
+      "pickup_candidate_digest",
+      "known_state_digest",
+      "visual_metadata_digest",
+      "machine_fact_digest"
+    ],
+    "owner_editable_columns": [
+      "approved",
+      "comment_zh",
+      "comment_en",
+      "landing_order",
+      "headline_zh",
+      "headline_en",
+      "positioning_zh",
+      "positioning_en",
+      "featured_card_1",
+      "featured_card_2",
+      "featured_card_3",
+      "featured_card_4"
+    ],
+    "writeback_target": "existing_format_scoped_pickup_candidate_document",
+    "structural_edit_action": "reject_without_write",
+    "binding_mismatch_action": "reject_without_write"
+  },
+  "remaining_gates": [
+    "one_no_publication_tuesday_rehearsal",
+    "separate_p12_10_implementation_authorization"
+  ]
+}
