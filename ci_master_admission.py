@@ -10,9 +10,11 @@ the confirmation path only when the exact two-parent merge was already checked.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
+import subprocess
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -42,6 +44,9 @@ ARTIFACT_IMPACT_PATTERN = re.compile(
 )
 FILE_OPERATION_PATTERN = re.compile(
     r"<!--\s*file-operation:\s*([^<>]+?)\s*-->", re.IGNORECASE
+)
+OWNER_UI_ACCEPTANCE_PATTERN = re.compile(
+    r"<!--\s*owner-ui-accepted:\s*([^<>]+?)\s*-->", re.IGNORECASE
 )
 VALIDATING_ACTIONS = frozenset({"opened", "synchronize", "reopened", "edited"})
 FILES_PER_PAGE = 100
@@ -129,6 +134,20 @@ def _parse_file_operations(body: object) -> frozenset[FileOperation]:
     if len(operations) != len(set(operations)):
         raise ValueError("duplicate_file_operation_declaration")
     return frozenset(operations)
+
+
+def _owner_ui_acceptance(body: object) -> str | None:
+    if not isinstance(body, str):
+        return None
+    declarations = OWNER_UI_ACCEPTANCE_PATTERN.findall(body)
+    if len(declarations) > 1:
+        raise ValueError("expected_at_most_one_owner_ui_acceptance")
+    if not declarations:
+        return None
+    value = declarations[0].strip().lower()
+    if not re.fullmatch(r"sha256:[0-9a-f]{64}", value):
+        raise ValueError("owner_ui_acceptance_invalid")
+    return value.removeprefix("sha256:")
 
 
 def _pull_request_files(
@@ -250,6 +269,44 @@ def _path_category(path: str) -> str | None:
     return None
 
 
+def _is_user_visible_path(path: str) -> bool:
+    return path == "index.html" or path.startswith(("assets/", "melee/"))
+
+
+def owner_ui_subject_digest(files: list[dict]) -> str | None:
+    """Hash only changed files that can alter the published browser UI."""
+
+    records: list[str] = []
+    for item in files:
+        path = _validated_path(item.get("filename"))
+        status = item.get("status")
+        previous = item.get("previous_filename")
+        previous_path = _validated_path(previous) if previous is not None else None
+        if not (
+            _is_user_visible_path(path)
+            or (previous_path is not None and _is_user_visible_path(previous_path))
+        ):
+            continue
+        if status not in {"added", "modified", "removed", "renamed"}:
+            raise ValueError(f"pull_request_file_status:{status or 'missing'}")
+        blob_sha = item.get("sha")
+        if not isinstance(blob_sha, str) or not re.fullmatch(
+            r"[0-9a-fA-F]{40}|[0-9a-fA-F]{64}", blob_sha
+        ):
+            raise ValueError(f"owner_ui_blob_sha_missing:{path}")
+        records.append(
+            json.dumps(
+                [status, previous_path or "", path, blob_sha.lower()],
+                ensure_ascii=True,
+                separators=(",", ":"),
+            )
+        )
+    if not records:
+        return None
+    canonical = "\n".join(sorted(records)).encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
+
+
 def _classify_pull_request_evidence(
     *, pull_request: dict, files: list[dict]
 ) -> AdmissionDecision:
@@ -282,6 +339,18 @@ def _classify_pull_request_evidence(
             raise ValueError(f"undeclared_file_operation:add:{path}")
     if declarations != used_declarations:
         raise ValueError("file_operation_declaration_does_not_match_diff")
+    expected_ui_digest = owner_ui_subject_digest(files)
+    accepted_ui_digest = _owner_ui_acceptance(body)
+    if expected_ui_digest is None:
+        if "user_visible_ui" in impacts or accepted_ui_digest is not None:
+            raise ValueError("owner_ui_acceptance_without_user_visible_change")
+    else:
+        if "user_visible_ui" not in impacts:
+            raise ValueError("user_visible_ui_impact_missing")
+        if accepted_ui_digest is None:
+            raise ValueError("owner_ui_acceptance_missing")
+        if accepted_ui_digest != expected_ui_digest:
+            raise ValueError("owner_ui_acceptance_stale")
     ordered = "+".join(sorted(categories))
     return AdmissionDecision(
         mode="targeted",
@@ -673,11 +742,69 @@ def _append_lines(path: str | None, lines: list[str]) -> None:
         handle.write("\n".join(lines) + "\n")
 
 
+def _git(*args: str) -> str:
+    completed = subprocess.run(
+        ["git", *args],
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+    )
+    return completed.stdout.strip()
+
+
+def owner_ui_marker_from_git(base: str) -> str:
+    """Build the PR marker after Owner review and the local commit exist."""
+
+    files: list[dict] = []
+    for line in _git("diff", "--name-status", "--find-renames", f"{base}...HEAD").splitlines():
+        fields = line.split("\t")
+        code = fields[0]
+        if code.startswith("R") and len(fields) == 3:
+            previous, path = fields[1:]
+            status = "renamed"
+        elif code in {"A", "M", "D"} and len(fields) == 2:
+            path = fields[1]
+            previous = None
+            status = {"A": "added", "M": "modified", "D": "removed"}[code]
+        else:
+            raise ValueError(f"unsupported_git_change:{line}")
+        if not (
+            _is_user_visible_path(path)
+            or (previous is not None and _is_user_visible_path(previous))
+        ):
+            continue
+        revision = base if status == "removed" else "HEAD"
+        blob_path = previous if status == "removed" else path
+        item = {
+            "filename": path,
+            "status": status,
+            "sha": _git("rev-parse", f"{revision}:{blob_path}"),
+        }
+        if previous is not None:
+            item["previous_filename"] = previous
+        files.append(item)
+    digest = owner_ui_subject_digest(files)
+    if digest is None:
+        raise ValueError("no_user_visible_change")
+    return f"<!-- owner-ui-accepted: sha256:{digest} -->"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default=os.environ.get("GITHUB_OUTPUT"))
     parser.add_argument("--summary", default=os.environ.get("GITHUB_STEP_SUMMARY"))
+    parser.add_argument(
+        "--owner-ui-marker-from",
+        metavar="BASE",
+        help="print the Owner-accepted UI subject marker for BASE...HEAD",
+    )
     args = parser.parse_args()
+
+    if args.owner_ui_marker_from:
+        print(owner_ui_marker_from_git(args.owner_ui_marker_from))
+        return 0
 
     decision = decide_from_environment()
     _append_lines(
@@ -700,7 +827,7 @@ def main() -> int:
             f"- Pull request: `{decision.pull_request or 'not-applicable'}`",
             f"- Validation class: `{decision.validation_class or 'not-applicable'}`",
             f"- Prior validation run: `{decision.workflow_run or 'not-applicable'}`",
-            "- Ambiguous, missing, unavailable, deleted, renamed, or unknown paths stop for owner classification without running a catch-all suite.",
+            "- Ambiguous, missing, unavailable, or undeclared file-operation evidence stops for owner classification without running a catch-all suite.",
         ],
     )
     return 0

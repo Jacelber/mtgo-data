@@ -69,7 +69,6 @@ def test_targeted_commands_map_directly_to_changed_artifact_categories():
     assert "code" in by_name["Check maintained Python package"]["if"]
     assert "data" in by_name["Validate rules and public JSON schemas"]["if"]
     assert "governance" in by_name["Validate CI control contracts"]["if"]
-    assert "ui" in by_name["Run native UI model smoke test"]["if"]
     commands = "\n".join(step.get("run", "") for step in steps)
     for required in (
         "validate_repository.py",
@@ -80,9 +79,9 @@ def test_targeted_commands_map_directly_to_changed_artifact_categories():
         "validate_schemas.py",
         "test_ci_master_admission.py",
         "test_ci_workflow.py",
-        "node --test tests/js/phase8-matchup-model.test.js",
     ):
         assert required in commands
+    assert "node --test" not in commands
 
 
 def test_pr_workflow_contains_no_long_or_repeated_validation():

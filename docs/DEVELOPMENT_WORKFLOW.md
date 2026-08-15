@@ -124,7 +124,8 @@ At Gate 4, every automated check must state the risk it answers and use the
 smallest subject that can answer it. Do not repeat successful evidence for the
 same immutable subject. GOV-07 retired rolling-output byte baselines. GOV-08
 replaced the accumulated ordinary suite with the trigger-specific inventory in
-`docs/TEST_TRIGGER_MATRIX.md`; no workflow may invoke unbounded pytest.
+`docs/TEST_TRIGGER_MATRIX.md`; GOV-09 removed post-acceptance UI automation.
+No workflow may invoke unbounded pytest.
 
 At Gate 5, present the owner with the original declaration, the actual changed
 artifact list, the relevant source or rendered diff, and verification matched
@@ -132,10 +133,22 @@ to the impact: browser behavior for `user_visible_ui`, field and consumer
 evidence for `statistical_json_structure`, and compatibility plus Pages
 evidence for `public_path`. A Phase 12 UI task, for example, declares
 `user_visible_ui`, runs its focused renderer and browser check during Gate 3,
-shows the owner the changed state and screenshot or URL before acceptance, and
-and shows the owner the changed state and screenshot or URL before acceptance.
-That owner review is the final UI acceptance evidence for the reviewed commit;
-do not rerun automated browser tests afterward unless the UI subject changes.
+and shows the owner the final changed state and URL before acceptance. That
+Owner review is the final UI acceptance evidence. Do not rerun automated UI or
+browser tests afterward unless a user-visible file changes.
+
+After acceptance, commit the unchanged reviewed UI tree and print its subject
+marker with:
+
+`python -B ci_master_admission.py --owner-ui-marker-from origin/master`
+
+Put the printed `owner-ui-accepted` marker in the PR body. The digest contains
+only changed `index.html`, `assets/**`, and `melee/**` paths and their Git blob
+identities. Status, test, package, and governance edits therefore do not
+invalidate a UI review. PR admission recalculates the digest from the complete
+GitHub file list and stops immediately if the marker is absent, duplicated, or
+stale; it never substitutes another UI test. An active marker or
+`user_visible_ui` declaration without a changed user-visible path also stops.
 
 ## Mandatory Gate 2 bootstrap
 

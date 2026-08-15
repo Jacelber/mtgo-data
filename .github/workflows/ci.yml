@@ -104,10 +104,6 @@ jobs:
           --basetemp="${RUNNER_TEMP}/pytest-targeted-governance"
           tests/test_ci_master_admission.py
           tests/test_ci_workflow.py
-      - name: Run native UI model smoke test
-        if: contains(needs.admission.outputs.validation_class, 'ui')
-        run: node --test tests/js/phase8-matchup-model.test.js
-
   post-merge-confirmation:
     name: Confirm previously validated merge
     needs: admission

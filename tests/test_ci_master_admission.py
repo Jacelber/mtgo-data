@@ -13,6 +13,7 @@ from ci_master_admission import (
     decide_master_push,
     decide_pull_request,
     expected_successful_jobs,
+    owner_ui_subject_digest,
     validation_class_step,
     validation_subject_step,
 )
@@ -66,8 +67,22 @@ def _decide_pr(files, **event_overrides):
     ],
 )
 def test_known_paths_select_only_their_targeted_categories(paths, expected):
-    files = [{"filename": path, "status": "modified"} for path in paths]
-    decision = _decide_pr(files)
+    files = [
+        {
+            "filename": path,
+            "status": "modified",
+            **({"sha": "d" * 40} if path.startswith("assets/") else {}),
+        }
+        for path in paths
+    ]
+    digest = owner_ui_subject_digest(files)
+    body = "<!-- artifact-impact: none -->"
+    if digest:
+        body = (
+            "<!-- artifact-impact: user_visible_ui -->\n"
+            f"<!-- owner-ui-accepted: sha256:{digest} -->"
+        )
+    decision = _decide_pr(files, body=body)
     assert decision.mode == "targeted"
     assert decision.validation_class == expected
 
@@ -188,6 +203,74 @@ def test_pull_request_template_examples_are_not_active_declarations():
     ).read_text(encoding="utf-8")
     assert "<!-- file-operation:" not in template
     assert template.count("<!-- EXAMPLE-file-operation:") == 3
+    assert "<!-- owner-ui-accepted:" not in template
+    assert template.count("<!-- EXAMPLE-owner-ui-accepted:") == 1
+
+
+def test_exact_owner_accepted_ui_subject_needs_no_repeat_ui_test():
+    files = [
+        {"filename": "assets/js/app.js", "status": "modified", "sha": "d" * 40},
+        {"filename": "docs/STATUS.yaml", "status": "modified"},
+    ]
+    digest = owner_ui_subject_digest(files)
+    decision = _decide_pr(
+        files,
+        body=(
+            "<!-- artifact-impact: user_visible_ui -->\n"
+            f"<!-- owner-ui-accepted: sha256:{digest} -->"
+        ),
+    )
+    assert decision.mode == "targeted"
+    assert decision.validation_class == "targeted:docs+ui"
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        "<!-- artifact-impact: user_visible_ui -->",
+        (
+            "<!-- artifact-impact: user_visible_ui -->\n"
+            f"<!-- owner-ui-accepted: sha256:{'e' * 64} -->"
+        ),
+        (
+            "<!-- artifact-impact: user_visible_ui -->\n"
+            f"<!-- owner-ui-accepted: sha256:{'e' * 64} -->\n"
+            f"<!-- owner-ui-accepted: sha256:{'f' * 64} -->"
+        ),
+        "<!-- artifact-impact: none -->",
+        (
+            "<!-- artifact-impact: user_visible_ui -->\n"
+            "<!-- owner-ui-accepted: sha256:not-a-digest -->"
+        ),
+    ],
+)
+def test_missing_stale_duplicate_or_undeclared_ui_acceptance_stops(body):
+    decision = _decide_pr(
+        [{"filename": "index.html", "status": "modified", "sha": "d" * 40}],
+        body=body,
+    )
+    assert decision.mode == "unclassified"
+
+
+def test_internal_ui_harness_change_does_not_need_owner_ui_acceptance():
+    decision = _decide_pr(
+        [{"filename": "tests/js/phase8-runtime.test.js", "status": "modified"}]
+    )
+    assert decision.mode == "targeted"
+    assert decision.validation_class == "targeted:ui"
+
+
+def test_stale_ui_impact_or_marker_without_visible_change_stops():
+    for body in (
+        "<!-- artifact-impact: user_visible_ui -->",
+        (
+            "<!-- artifact-impact: none -->\n"
+            f"<!-- owner-ui-accepted: sha256:{'e' * 64} -->"
+        ),
+    ):
+        assert _decide_pr(
+            [{"filename": "package.json", "status": "modified"}], body=body
+        ).mode == "unclassified"
 
 
 def test_missing_or_invalid_impact_declaration_stops_without_tests():
