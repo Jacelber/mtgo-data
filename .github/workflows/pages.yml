@@ -79,6 +79,8 @@ jobs:
         id: dispatch-evidence
         shell: bash
         env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_REF: ${{ github.ref }}
           PUBLICATION_COMMIT: ${{ inputs.publication_commit }}
           PRODUCER_RUN_ID: ${{ inputs.producer_run_id }}
           PRODUCER_RUN_ATTEMPT: ${{ inputs.producer_run_attempt }}
@@ -99,6 +101,11 @@ jobs:
           if [ "$PROVIDED" -eq 0 ]; then
             echo "production=false" >> "$GITHUB_OUTPUT"
           elif [ "$PROVIDED" -eq "${#VALUES[@]}" ]; then
+            if [ "$EVENT_NAME" != "workflow_dispatch" ] ||
+               [ "$EVENT_REF" != "refs/heads/master" ]; then
+              echo "Production evidence is accepted only for a master workflow dispatch." >&2
+              exit 1
+            fi
             echo "production=true" >> "$GITHUB_OUTPUT"
           else
             echo "Production dispatch evidence is incomplete." >&2
@@ -108,7 +115,7 @@ jobs:
       - name: Check out full history without persisted credentials
         uses: actions/checkout@v7.0.0
         with:
-          ref: ${{ inputs.publication_commit || github.sha }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -133,6 +140,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PRODUCTION_COMMIT: ${{ inputs.publication_commit }}
+          PAGES_SUBJECT_COMMIT: ${{ github.sha }}
           PRODUCTION_RUN_ID: ${{ inputs.producer_run_id }}
           PRODUCTION_RUN_ATTEMPT: ${{ inputs.producer_run_attempt }}
           PRODUCTION_SOURCE_COMMIT: ${{ inputs.source_commit }}

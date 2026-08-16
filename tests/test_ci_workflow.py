@@ -215,14 +215,27 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
     }
     build = workflow["jobs"]["build"]
     assert build["permissions"] == {"actions": "read", "contents": "read"}
+    checkout = next(
+        step
+        for step in build["steps"]
+        if step["name"] == "Check out full history without persisted credentials"
+    )
+    assert checkout["with"]["ref"] == "${{ github.sha }}"
     commands = "\n".join(step.get("run", "") for step in build["steps"])
     for required in (
         "--verify-production-evidence",
         "diff --recursive --brief --no-dereference",
         "Published commit content does not match the validated output",
         "Validated output contains a path outside the production boundary",
+        "Production evidence is accepted only for a master workflow dispatch",
     ):
         assert required in commands
+    evidence = next(
+        step
+        for step in build["steps"]
+        if step["name"] == "Admit exact production publication evidence"
+    )
+    assert evidence["env"]["PAGES_SUBJECT_COMMIT"] == "${{ github.sha }}"
     assert "published-output.tar" not in commands
     assert all(token not in commands for token in ("pytest", "playwright", "node --test"))
     deploy_commands = "\n".join(

@@ -314,10 +314,11 @@ Pages push workflow from a commit made with that production workflow's own
 `GITHUB_TOKEN`. The production dispatch must carry the exact publication commit,
 producer run and attempt, source commit, generation-subject digest, and validated
 output digest. Partial evidence fails closed. An explicitly authorized manual or
-recovery dispatch carries none of those production fields and remains a separate
-path. A no-change production run does not dispatch Pages; pull-request builds
-remain non-deploying, and the Pages deployment job retains its existing
-no-repository-write boundary.
+dispatch carries none of those production fields and remains a separate path.
+An exact-evidence recovery carries all six fields and binds them to the immutable
+master dispatch subject. A no-change production run does not dispatch Pages;
+pull-request builds remain non-deploying, and the Pages deployment job retains
+its existing no-repository-write boundary.
 
 After a production deployment, do not rerun candidate, Schema, invariant,
 consumer, or browser tests. The minimum downstream confirmation is the bound

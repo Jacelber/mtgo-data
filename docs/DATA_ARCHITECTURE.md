@@ -1734,11 +1734,14 @@ commit is pushed and remote `master` is verified; a push made with
 names the exact publication commit, producer run and attempt, source commit,
 generation-subject SHA-256, and validated-output SHA-256. Pages accepts the
 production path only when all six values are present, the producer jobs prove
-the candidate succeeded, the commit ancestry and trailers match, and a
-deterministic tar of the published bytes has the validated digest. It then
-packages the normal allowlist without rerunning candidate tests. A dispatch
-with no production fields remains available only as the separately authorized
-manual or recovery path; partial production evidence fails closed. After
+the candidate succeeded, the publication commit is an ancestor of the
+immutable master dispatch subject, and the commit trailers and validated
+artifact digests match. Pages compares the extracted artifact paths and file
+contents with that dispatch subject, ignoring ordinary permissions that Git
+does not preserve, then packages the normal allowlist without rerunning
+candidate tests. A dispatch with no production fields remains the separately
+authorized ordinary manual path; an exact-evidence recovery supplies all six
+fields, and partial production evidence fails closed. After
 deployment, availability is checked only for `index.html`, `melee/index.html`,
 and `stats/catalog.json`.
 

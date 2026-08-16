@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/gov-10a-pages-content-evidence"
+  current_working_branch: "codex/gov-10b-pages-recovery-subject"
   working_branch_status: "owner_accepted_same_task_completion_authorized"
   status: "active"
 
@@ -31,16 +31,16 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-10A-PAGES-CONTENT-EVIDENCE-CANONICALIZATION"
-  name: "Repair Pages publication content evidence"
+  id: "GOV-10B-PAGES-RECOVERY-SUBJECT-BINDING"
+  name: "Bind production recovery to the immutable Pages subject"
   status: "owner_accepted_same_task_completion_authorized"
   authorized_on: "2026-08-16"
   owner_accepted_on: "2026-08-16"
   workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-10a-pages-content-evidence-20260816-01"
-  branch: "codex/gov-10a-pages-content-evidence"
-  base_commit: "77508f1b450373ca471a6f0b03ecd9724937476f"
-  artifact_impact: "none"
-  objective: "Repair the Pages comparison of a validated MTGO output and its published commit without changing generated content, statistics, public paths, or production data."
+  branch: "codex/gov-10b-pages-recovery-subject"
+  base_commit: "b6f572f9da6e78dfe4a6d956b61cd95c6dd4b93a"
+  artifact_impact: "public_path"
+  objective: "Run recovery admission and packaging from the immutable master dispatch subject while accepting only a proven ancestor production commit whose generated output still matches that subject."
   authorization:
     local_implementation: true
     commit: true
@@ -48,7 +48,12 @@ current_task:
     merge: true
   target_paths:
     - ".github/workflows/pages.yml"
+    - "ci_master_admission.py"
+    - "tests/test_ci_master_admission.py"
     - "tests/test_ci_workflow.py"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DEVELOPMENT_WORKFLOW.md"
+    - "docs/TEST_TRIGGER_MATRIX.md"
     - "docs/STATUS.yaml"
     - "docs/GOVERNANCE_REMEDIATION.yaml"
   planned_file_operations:
@@ -61,32 +66,32 @@ current_task:
     statistical_behavior_changed: "none"
     schema_changed: "none"
     frontend_or_ui_changed: "none"
-    workflow_changed: "Only the Pages production-evidence comparison."
-    public_paths_changed: "none"
+    workflow_changed: "Only production-evidence dispatch admission and the immutable Pages checkout subject."
+    public_paths_changed: "No URL changes; the Pages publication boundary changes."
     production_dispatched: false
     remote_write_performed: "none"
   validation_plan:
-    - "Run only tests/test_ci_workflow.py and tests/test_documentation_history.py once on the final local tree."
+    - "Run only the changed production-evidence nodes, the one Pages workflow-contract node, and the live-document contract once on the final local tree."
     - "Do not run CLI, generator, candidate, Schema, rule, Node, Playwright, full pytest, or production checks locally."
-    - "After Owner acceptance, targeted PR CI owns one repository-reference validation and the two changed control-plane tests."
+    - "After Owner acceptance, targeted PR CI owns one independent control-plane validation; one recovery dispatch reuses run 31906796791 without regenerating or retesting its candidate."
   prohibited_changes:
-    - "Do not alter the immutable artifact SHA, generation-subject SHA, production-run provenance, commit-ancestry check, output boundary, or existing failure-closed behavior."
+    - "Do not weaken the immutable artifact SHA, generation-subject SHA, production-run provenance, ancestor requirement, output boundary, or failure-closed behavior."
     - "Do not add a test file, restore retired suites, regenerate data, modify public paths, or change statistics."
     - "Do not dispatch production or recovery Pages before Owner acceptance."
-  stop_point: "Finish the focused workflow repair, the two named control-plane tests, and complete diff review; stop for Owner acceptance before commit or remote publication."
+  stop_point: "Complete the accepted task continuously through commit, one Ready PR, required CI, merge, and one exact-evidence recovery dispatch; stop on failure or before any later task."
 
 current_repository_state:
-  baseline_commit: "77508f1b450373ca471a6f0b03ecd9724937476f"
-  baseline_note: "Remote master after the first post-GOV-10 scheduled production publication; its Pages evidence false negative is the GOV-10A repair subject."
+  baseline_commit: "b6f572f9da6e78dfe4a6d956b61cd95c6dd4b93a"
+  baseline_note: "Remote master after GOV-10A merged through PR 220; recovery run 31923585217 exposed the stale-verifier and current-master-equality defects addressed by GOV-10B."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
 known_blockers:
-  - id: "MTGO-PAGES-RUN-31907814499-EVIDENCE-FALSE-NEGATIVE"
+  - id: "MTGO-PAGES-RUN-31923585217-STALE-SUBJECT-VERIFIER"
     scope: "governance_closeout_and_production_pages"
-    effect: "The validated and published files are content-identical, but Pages compares tar bytes that include non-Git-preserved file permissions and therefore rejects the publication."
+    effect: "Recovery checks out the historical publication commit before executing admission, so it runs the old verifier and rejects a valid ancestor publication after master advances."
 
 future_task_gates:
   - task: "MELEE-V3-PRODUCTION-PREFLIGHT"
@@ -99,16 +104,16 @@ future_task_gates:
   - task: "P12-10"
     status: "blocked_pending_no_publication_rehearsal_and_separate_authorization"
     remaining_requirements:
-      - "Resolve the GOV-10A Pages evidence blocker."
+      - "Resolve the GOV-10B Pages recovery-subject blocker."
       - "Perform and accept one separately authorized no-publication Tuesday rehearsal."
       - "Obtain separate P12-10 implementation authorization."
 
 next_approved_task:
-  id: "NONE"
-  name: "No follow-up task is authorized"
-  status: "no_follow_up_authorized"
-  local_execution_authorized: false
-  note: "Only GOV-10A local implementation is authorized; every follow-up remains unauthorized."
+  id: "GOV-10B-PAGES-RECOVERY-SUBJECT-BINDING"
+  name: "Bind production recovery to the immutable Pages subject"
+  status: "owner_accepted_same_task_completion_authorized"
+  local_execution_authorized: true
+  note: "GOV-10B same-task completion is authorized; every later task remains unauthorized."
 
 prohibited_next_actions:
   - "Do not begin the Melee v3 production preflight, P12-10, Pickup reflow, or another task automatically."
