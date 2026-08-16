@@ -11,7 +11,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 
 - Phases 0–11 and superseded specifications:
   `docs/history/ROADMAP-PHASES-0-11.md`;
-- completed Phase 12 tasks P12-01 through P12-09:
+- completed Phase 12 tasks P12-01 through P12-09 and P12-13A:
   `docs/history/ROADMAP-PHASE-12-COMPLETED.md`.
 
 ## Phase index
@@ -31,7 +31,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 
 # Phase 12 — Front-end productization, editorial landing, and visual system
 
-Completed P12-01 through P12-09 detail is archived in
+Completed P12-01 through P12-09 and P12-13A detail is archived in
 `docs/history/ROADMAP-PHASE-12-COMPLETED.md`.
 
 ## Objective
@@ -101,10 +101,58 @@ separation, and established public entry points.
       stable-environment empty state when no item was approved, never expose a
       pending-review state or internal approval vocabulary, and introduce no
       standalone Weekly Pickup front-end state.
-13. `P12-13` — Large-matrix interaction
-    - add search, focused archetype, Top-N, and minimum-match filters;
-    - retain the established 20-match warning and use roving tabindex plus
-      directional-key navigation.
+13. `P12-13` — Large-matrix interaction, delivered as separately accepted
+    sequential subtasks
+    - `P12-13A` — completed matrix search and shared visible-projection
+      foundation; its detailed contract is archived in
+      `docs/history/ROADMAP-PHASE-12-COMPLETED.md`;
+    - `P12-13B` — focused archetype: select one stable parent or available
+      subtype identity, emphasize its row and column, reduce unrelated visual
+      weight, reveal the target without losing expansion state, and clear an
+      identity that is unavailable after a format, event, or scope change. It
+      retains the two-dimensional matrix; the mobile vertical opponent view
+      remains P12-14;
+    - `P12-13C` — Top-N opponents: offer all, 5, 10, and 20. Rank by total
+      literal match count rather than win rate, use the focused identity's
+      opponent counts when focus is active and overall identity counts
+      otherwise, and resolve ties with the existing stable parent order. The
+      filter changes only the visible projection and never the source counts;
+    - `P12-13D` — minimum-match filter: offer no minimum, 5, 10, and 20;
+      distinguish filtered cells from absent data, retain the established
+      20-match low-sample warning and its meaning, and provide a truthful empty
+      state when no opponent remains. Apply the controls in the deterministic
+      order search, focus, minimum matches, then Top-N;
+    - `P12-13E` — shareable matrix state: restore search, stable focused
+      identity, Top-N, and minimum-match state across direct links, reload,
+      back, and forward navigation after the existing format, range, event, and
+      scope state is resolved. Do not serialize hover, active keyboard cell, or
+      pixel scroll position, and ignore invalid retired identities safely;
+    - `P12-13F` — keyboard grid navigation: expose one roving `tabindex=0`
+      matrix cell, use directional keys without wrapping to move among visible
+      inspectable cells, keep row and column context plus literal record and
+      warning semantics available to assistive technology, and restore the
+      nearest valid focus after every filter, expansion, or URL-driven render;
+    - `P12-13Z` — read-only integrated acceptance after A through F: verify the
+      complete control combinations across Standard and Modern MTGO, the
+      protected Tabletop product, Chinese and English, desktop and 390-pixel
+      layouts, mouse, touch, keyboard, URL restoration, sticky identity and
+      opponent headers, and zero application console errors. If this check
+      finds a defect, repair and accept it as a separate focused follow-up
+      before declaring P12-13 complete;
+    - authorize, implement, review, accept, publish, and verify A through F one
+      at a time in dependency order. Each subtask starts from the latest
+      verified `master`, changes one user-visible capability, preserves MTGO
+      and Tabletop source and statistic separation, and stops after its own
+      Pages verification without beginning the next subtask automatically;
+    - Gate 5 for every A-through-F subtask and the Z review requires Owner
+      hands-on acceptance in a locally served browser against the final
+      unchanged UI tree. Codex first completes automated and developer-browser
+      checks, then supplies the exact local URL and interaction checklist; a
+      screenshot, automated browser result, or Codex-only walkthrough cannot
+      substitute for the Owner's direct interaction and explicit decision;
+    - every subtask preserves the existing matchup formulas, literal W-L-D
+      counts, confidence intervals, 20-match warning, public JSON, Schemas,
+      workflows, public paths, and protected event `434455` bytes.
 14. `P12-14` — Mobile matrix and card-image interaction
     - provide a single-archetype vertical opponent view;
     - add a touch-friendly card image layer and failure placeholder;

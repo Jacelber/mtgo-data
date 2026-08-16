@@ -1,9 +1,9 @@
 # Phase 12 completed roadmap detail
 
-This file preserves the completed P12-01 through P12-09 task specifications and
-their embedded implementation history as of GOV-11. It is historical and
-non-authoritative. Current Phase 12 work begins at P12-10 in
-`docs/ROADMAP.md`; authorization remains solely in `docs/STATUS.yaml`.
+This file preserves the completed P12-01 through P12-09 and P12-13A task
+specifications and their embedded implementation history. It is historical and
+non-authoritative. Remaining Phase 12 work is defined in `docs/ROADMAP.md`;
+authorization remains solely in `docs/STATUS.yaml`.
 
 1. `P12-01` — View-level lazy loading
    - record the current clean-browser request count, transferred bytes, and
@@ -330,3 +330,24 @@ non-authoritative. Current Phase 12 work begins at P12-10 in
    The rehearsal must be repeated only after that repair is published and one
    scheduled production run succeeds; neither the blocked attempt nor its
    success-path simulation satisfies the P12-10 gate.
+
+13A. `P12-13A` — Matrix search and shared visible projection
+   - filter the row axis by localized parent and subtype names without another
+     data request;
+   - preserve the complete column axis and both axes' existing expansion state;
+   - retain the required parent context for subtype matches;
+   - provide a truthful no-result state and a clear action;
+   - introduce no column search, focus, Top-N, minimum-match, URL-persistence,
+     or keyboard-grid behavior;
+   - preserve the existing matchup formulas, literal W-L-D counts, confidence
+     intervals, 20-match warning, public JSON, Schemas, workflows, public paths,
+     product separation, and protected event `434455` bytes;
+   - require Owner hands-on acceptance in a locally served browser against the
+     final unchanged UI tree before same-task completion.
+
+   The Owner accepted the final local MTGO and Tabletop browser result on
+   2026-08-16. The accepted search narrows only the row axis, retains all
+   opponent columns and expansion state, uses the shared in-memory projection,
+   and requires no additional matchup-data request. Owner acceptance authorized
+   completion of this unchanged task through one commit, one Ready pull request,
+   required CI, merge, and Pages verification. P12-13B remains a separate gate.

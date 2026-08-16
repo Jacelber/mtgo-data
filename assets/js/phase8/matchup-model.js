@@ -113,12 +113,32 @@
     return { parentById, leafById, leavesByParent };
   }
 
-  function axisNodes(document, expandedParents, indexes) {
+  function normalizeSearch(value) {
+    return String(value || "")
+      .normalize("NFKC")
+      .trim()
+      .replace(/\s+/gu, " ")
+      .toLocaleLowerCase();
+  }
+
+  function matchesSearch(value, query) {
+    return normalizeSearch(value).includes(query);
+  }
+
+  function axisNodes(document, expandedParents, indexes, searchQuery = "") {
     const expanded = new Set(expandedParents || []);
+    const query = normalizeSearch(searchQuery);
     const nodes = [];
     (document.parent_order || []).forEach(parentId => {
       const parent = indexes.parentById.get(parentId);
       if (!parent) throw new Error(`排序中存在未知类型：${parentId}`);
+      const parentMatch = !query || matchesSearch(parent.display_name || parent.name, query);
+      const matchingSubtypeIds = (parent.subtype_ids || []).filter(leafId => {
+        const leaf = indexes.leafById.get(leafId);
+        if (!leaf) throw new Error(`未知子类型：${leafId}`);
+        return matchesSearch(leaf.display_name || leaf.name, query);
+      });
+      if (!parentMatch && matchingSubtypeIds.length === 0) return;
       nodes.push({
         id: parent.id,
         kind: "archetype",
@@ -128,8 +148,12 @@
         expandable: Boolean(parent.expandable),
         showAxisToggle: Boolean(parent.expandable),
       });
-      if (parent.expandable && expanded.has(parentId)) {
-        parent.subtype_ids.forEach(leafId => {
+      const visibleSubtypeIds = query && !parentMatch
+        ? matchingSubtypeIds
+        : parent.expandable && expanded.has(parentId)
+          ? parent.subtype_ids
+          : [];
+      visibleSubtypeIds.forEach(leafId => {
           const leaf = indexes.leafById.get(leafId);
           if (!leaf) throw new Error(`未知子类型：${leafId}`);
           nodes.push({
@@ -141,8 +165,7 @@
             expandable: false,
             showAxisToggle: false,
           });
-        });
-      }
+      });
     });
     return nodes;
   }
@@ -181,9 +204,9 @@
     );
   }
 
-  function buildView(document, expandedRows, expandedColumns) {
+  function buildVisibleView(document, expandedRows, expandedColumns, searchQuery = "") {
     const indexes = buildIndexes(document);
-    const rows = axisNodes(document, expandedRows, indexes);
+    const rows = axisNodes(document, expandedRows, indexes, searchQuery);
     const columns = axisNodes(document, expandedColumns, indexes);
     const matrix = {};
     const overall = {};
@@ -200,6 +223,10 @@
     return { rows, columns, matrix, overall, expandableParentIds };
   }
 
+  function buildView(document, expandedRows, expandedColumns) {
+    return buildVisibleView(document, expandedRows, expandedColumns);
+  }
+
   function publicPath(path) {
     if (typeof path !== "string" || !path.startsWith("stats/")) {
       throw new Error(`目录中存在不受支持的公开路径：${path}`);
@@ -207,5 +234,12 @@
     return `../../../${path}`;
   }
 
-  return { activeMatchupDocument, buildView, literalRecord, publicPath };
+  return {
+    activeMatchupDocument,
+    buildView,
+    buildVisibleView,
+    literalRecord,
+    normalizeSearch,
+    publicPath,
+  };
 });

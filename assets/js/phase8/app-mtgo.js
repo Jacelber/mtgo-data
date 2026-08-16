@@ -259,8 +259,31 @@ function matrixCell(record) {
     <strong>${(record.win_rate * 100).toFixed(1)}</strong><small>${half === null ? "—" : `±${(half * 100).toFixed(1)}`}</small></td>`;
 }
 
+function matchupSearchControls() {
+  const hasQuery = Boolean(ReviewData.normalizeSearch(state.matchupSearch));
+  return `<div class="matchup-search-control">
+    <label for="matchup-search">${t("matchup.search_label")}</label>
+    <div class="matchup-search-input">
+      <input id="matchup-search" type="search" value="${escapeHtml(state.matchupSearch)}"
+        placeholder="${t("matchup.search_placeholder")}" autocomplete="off" spellcheck="false">
+      <button class="secondary-button" type="button" data-matchup-search-clear${hasQuery ? "" : " disabled"}>${t("matchup.search_clear")}</button>
+    </div>
+  </div>`;
+}
+
 function matrixHtml(document) {
-  const view = ReviewData.buildView(document, state.matchupRows, state.matchupColumns);
+  const view = ReviewData.buildVisibleView(
+    document,
+    state.matchupRows,
+    state.matchupColumns,
+    state.matchupSearch
+  );
+  if (!view.rows.length) {
+    return `<div class="empty-state matchup-search-empty" role="status">
+      <p>${escapeHtml(t("matchup.search_no_results", { query: state.matchupSearch.trim() }))}</p>
+      <button class="secondary-button" type="button" data-matchup-search-clear>${t("matchup.search_clear")}</button>
+    </div>`;
+  }
   const table = `<table class="matchup-table">
     <thead><tr><th class="corner"></th><th class="column-head overall">${t("matchup.overall")}</th>
       ${view.columns.map(column => {
@@ -288,6 +311,22 @@ function matrixHtml(document) {
     <div id="matrix-hover-pop" class="matrix-hover-pop" role="tooltip" hidden></div>`;
 }
 
+function matchupProjection(document) {
+  return `<div id="matchup-projection">${matrixHtml(document)}</div>`;
+}
+
+function updateMatchupProjection(searchQuery) {
+  const source = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
+  const projection = document.querySelector("#matchup-projection");
+  if (!source || !projection) return false;
+  state.matchupSearch = searchQuery;
+  projection.innerHTML = matrixHtml(source);
+  const clearButton = document.querySelector(".matchup-search-input [data-matchup-search-clear]");
+  if (clearButton) clearButton.disabled = !ReviewData.normalizeSearch(searchQuery);
+  updateMatrixPresentation();
+  return true;
+}
+
 async function matchupView() {
   const { document, completeness } = await MtgoController
     .loadMatchup(state.format, state.matchupRange);
@@ -301,7 +340,7 @@ async function matchupView() {
     <section class="panel"><div class="panel-toolbar"><div><h2>${t("matchup.title")}</h2>
       <p class="matrix-toolbar-note">${t("matchup.note")}</p></div>
       <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
-    </div>${matchupLegend(displayDocument.min_sample_hint)}${matrixHtml(displayDocument)}</section>`;
+    </div>${matchupSearchControls()}${matchupLegend(displayDocument.min_sample_hint)}${matchupProjection(displayDocument)}</section>`;
 }
 
 function top8PlacementDetail() {
