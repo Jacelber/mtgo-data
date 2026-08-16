@@ -77,14 +77,26 @@ function renderStatsExpansion(trigger) {
   return true;
 }
 
-function revealExpandedContent(root, selector) {
+function revealExpandedContent(root, selector, alignment = "end") {
   if (!selector) return;
   const target = renderTarget(root, selector);
   if (!target) return;
   const rect = target.getBoundingClientRect();
-  if (rect.top >= 0 && rect.top <= window.innerHeight - 24) return;
+  const viewportMargin = 24;
+  const viewportBottom = window.innerHeight - viewportMargin;
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  target.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+  if (alignment === "start") {
+    const offset = rect.top - viewportMargin;
+    if (Math.abs(offset) <= 1) return;
+    window.scrollBy({ top: offset, behavior: reduceMotion ? "auto" : "smooth" });
+    return;
+  }
+  if (rect.top >= viewportMargin && rect.bottom <= viewportBottom) return;
+  const targetFitsViewport = rect.height <= window.innerHeight - (viewportMargin * 2);
+  const offset = targetFitsViewport && rect.top < viewportMargin
+    ? rect.top - viewportMargin
+    : rect.bottom - viewportBottom;
+  window.scrollBy({ top: offset, behavior: reduceMotion ? "auto" : "smooth" });
 }
 
 function announceMobileSort(kind) {
@@ -102,15 +114,17 @@ async function handleMobileListClick(button) {
     const parentId = button.dataset.mobileStatsToggle;
     const opening = !state.statsExpanded.has(parentId);
     toggleSet(state.statsExpanded, parentId);
+    if (opening) setCompositionSelection(parentId);
+    else if (state.compositionIdentity === parentId) setCompositionSelection(null);
     if (state.detailIdentity) queueUrlWrite();
     state.detailIdentity = null;
     const revealSelector = opening
-      ? `[data-mobile-expanded-content="stats-subtypes:${CSS.escape(parentId)}"]`
+      ? `[data-mobile-card-identity="${CSS.escape(parentId)}"]`
       : null;
     if (renderStatsExpansion(button)) {
-      revealExpandedContent(document.querySelector("#view"), revealSelector);
+      revealExpandedContent(document.querySelector("#view"), revealSelector, "start");
     } else {
-      await renderViewWithFocus(null, revealSelector);
+      await renderViewWithFocus(null, revealSelector, { revealAlignment: "start" });
     }
     return true;
   }
@@ -118,16 +132,24 @@ async function handleMobileListClick(button) {
     const identity = button.dataset.mobileStatsDetail;
     const opening = state.detailIdentity !== identity;
     state.detailIdentity = opening ? identity : null;
+    const parentId = identity.split("/", 1)[0];
+    if (opening) setCompositionSelection(parentId);
+    else if (state.compositionIdentity === parentId) setCompositionSelection(null);
     state.detailMode = "average";
     queueUrlWrite();
-    await renderViewWithFocus(null, opening
-      ? `[data-mobile-expanded-content="stats:${CSS.escape(identity)}"]`
-      : null);
+    await renderViewWithFocus(
+      null,
+      opening ? `[data-mobile-expanded-content="stats:${CSS.escape(identity)}"]` : null,
+      { revealAlignment: "start" }
+    );
     return true;
   }
   if (button.hasAttribute("data-close-mobile-stats-detail")) {
     const identity = state.detailIdentity;
     state.detailIdentity = null;
+    if (state.compositionIdentity === identity?.split("/", 1)[0]) {
+      setCompositionSelection(null);
+    }
     queueUrlWrite();
     await renderViewWithFocus(`[data-mobile-stats-detail="${CSS.escape(identity || "")}"]`);
     return true;

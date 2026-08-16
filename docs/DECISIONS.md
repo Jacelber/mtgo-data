@@ -4238,3 +4238,84 @@ There is no conflict, invalid-deck result, or residual subtype.
 The migrated final diff requires Owner acceptance before same-task completion.
 Affected-format Pickup review reflow, P12-10, and production dispatch remain
 separate gates.
+
+---
+
+# DEC-099 - Refine Broodscale red commitment and composition navigation
+
+Status: `Accepted`
+
+## Context
+
+DEC-098 treated Grove of the Burnwillows as sufficient main-deck red evidence
+for Broodscale Combo. Review of the current, frozen, and registered-event decks
+showed that Grove alone is commonly a low-cost utility inclusion rather than a
+Gruul commitment. The same review also confirmed that Copperline Gorge and
+Karplusan Forest continue to distinguish real red builds, and that red spells
+in the sideboard are intentional color commitment under the product-wide deck
+classification policy.
+
+The MTGO composition bar separately opened the parent average for every chart
+segment. That behavior is ambiguous when a parent has maintained subtype data,
+and on mobile it made a visually single-label Broodscale segment fail to reach
+the intended subtype content.
+
+## Decision
+
+Keep Copperline Gorge and Karplusan Forest as reviewed red-green sources. Treat
+Grove of the Burnwillows as a reviewed utility-land exception that contributes
+green mana semantics but does not establish Broodscale Gruul by itself. Select
+Broodscale Gruul when either a qualifying non-Grove red source is present in the
+main deck or a reviewed red spell is present anywhere in the submitted main
+deck and sideboard. Select Mono-Green only when both signals are absent. Keep
+the existing source-driven Gruul rule authoritative; use the new red-spell rule
+only when the main-deck red-source count is zero so diagnostics do not duplicate
+ordinary Gruul matches.
+
+Resolve each MTGO composition segment from the active subtype counts in the
+selected range. With no active subtype, open the parent detail. With exactly one
+active subtype, open that subtype detail directly. With two or more active
+subtypes, expand and reveal the subtype choices without opening a cross-subtype
+parent average. Desktop performs the action on one click. Touch layouts retain
+the existing first-tap tooltip and perform the same resolved action on the
+second tap. Maintain one dedicated composition selection so exactly one
+actionable segment can remain pressed; table-level expansion may retain
+multiple subtype groups without turning those groups into additional pressed
+composition segments. On desktop, reveal a multi-subtype action through the
+final subtype in its complete expanded block. At or below the existing
+780-pixel mobile breakpoint, align the parent card to the top content margin so
+the parent metrics and the beginning of the first subtype remain visible;
+do not force the final subtype into view. At that mobile breakpoint, a zero- or
+one-subtype composition action keeps its resolved deck detail open but aligns
+the corresponding archetype metrics card to the top content margin. Only an
+explicit `view deck` action on a closed mobile card aligns the opened
+deck-detail region itself to the top content margin. Preserve the existing
+desktop deck-detail reveal and leave other product detail paths unchanged.
+P12-13A matchup search behavior is unchanged.
+
+Regenerate affected rolling MTGO and event `434455` artifacts only from
+retained inputs. Do not reclassify an already recorded weekly Top 8 placement:
+the section 16.8 provisional-addition and sealed-history contract remains
+authoritative. Advance the event compatibility contract from `1.5.0` to
+`1.6.0`; preserve the raw snapshot and normalized event bytes.
+
+## Consequences
+
+In the current 7,168-deck Modern corpus, 146 Broodscale records move from Gruul
+to Mono-Green and four Grove-only records remain Gruul through reviewed red
+sideboard spells. In the frozen 5,792-deck Modern corpus, 110 move to Mono-Green
+and four remain Gruul through reviewed red sideboard spells. Event `434455`
+moves ten Broodscale records from Gruul to Mono-Green. Copperline Gorge and
+Karplusan Forest records do not change. All three subjects retain their prior
+classified, Unknown, conflict, and invalid-deck totals, and no unrelated parent,
+subtype, or selected rule changes.
+
+The visible composition interaction changes, but statistical formulas, public
+paths, JSON shapes, raw source bytes, and the P12-13A search projection do not.
+The existing 2026-W32 Top 8 week remains unchanged; the next newly admitted
+complete week will use the corrected classifier without rewriting prior
+placements.
+The Owner accepted the final unchanged local-browser tree on 2026-08-16,
+authorizing same-task completion through one commit, one Ready pull request,
+required CI, normal merge, and Pages verification. Pickup reflow, P12-13B,
+production dispatch, and P12-10 remain separate gates.

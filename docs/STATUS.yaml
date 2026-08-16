@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-13a-matrix-search"
+  current_working_branch: "codex/broodscale-subtype-navigation-hotfix"
   working_branch_status: "active_isolated_task"
   status: "active"
 
@@ -31,20 +31,20 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-13A"
-  name: "Matrix search and shared visible projection"
-  status: "owner_accepted_same_task_completion_authorized"
-  artifact_impact: "user_visible_ui"
+  id: "BROODSCALE-SUBTYPE-AND-COMPOSITION-NAVIGATION-HOTFIX"
+  name: "Broodscale subtype boundary and composition navigation hotfix"
+  status: "owner_accepted_completion_authorized"
+  artifact_impact: "classification_rules,generated_data,internal_diagnostics,user_visible_ui,documentation"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
-  stop_point: "Complete the accepted unchanged P12-13A UI tree through one local commit, one Ready pull request, required CI, merge, and Pages verification; then stop without beginning P12-13B."
+  stop_point: "Complete the accepted unchanged hotfix through one local commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification; then stop without beginning P12-13B or dispatching production."
 
 current_repository_state:
-  baseline_commit: "2524dc67ca559fbd5565bb382f84d3b0d05962bf"
-  baseline_note: "Governance closeout baseline after PR 222. P12-13A starts from this verified remote master commit in a disposable isolated workspace."
+  baseline_commit: "4e243137fe74211dbd3a445da34200b2eab6f913"
+  baseline_note: "Verified remote master after P12-13A publication and Pages acceptance. The focused hotfix starts from this commit in a fresh disposable isolated clone."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -71,12 +71,13 @@ next_approved_task:
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "P12-13B remains unauthorized until P12-13A same-task completion finishes and P12-13B is separately briefed and authorized."
+  note: "P12-13B remains unauthorized until this focused hotfix is accepted and completed, then separately briefed and authorized."
 
 prohibited_next_actions:
   - "Do not begin P12-13B, the Melee v3 production preflight, P12-10, Pickup reflow, or another task automatically."
-  - "Do not change the Owner-accepted P12-13A visible UI tree; any visible change requires renewed Owner hands-on local-browser acceptance."
+  - "Do not change the Owner-accepted user-visible hotfix tree; any user-visible change returns the task to Owner hands-on local-browser acceptance."
+  - "Do not change P12-13A search projection, matchup formulas, public paths or data shapes, or unrelated classification identities."
   - "Do not create, access, configure, or rotate an HMAC key or GitHub Secret."
-  - "Do not dispatch production, change event selection, fetch protected source data, or change public/statistical contracts."
-  - "Do not rewrite Git history, force-push, mutate protected branches or tags, or change event 434455 protected bytes."
+  - "Do not dispatch production, change event selection, fetch protected source data, or expand beyond the approved classification and composition-navigation contract."
+  - "Do not rewrite Git history, force-push, mutate protected branches or tags, or change event 434455 raw snapshot or normalized-event bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."

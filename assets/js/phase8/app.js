@@ -34,6 +34,15 @@ function clearTouchedComposition() {
   touchedCompositionIdentity = null;
 }
 
+function setCompositionSelection(parentId) {
+  state.compositionIdentity = parentId || null;
+  document.querySelectorAll("button[data-composition-identity]").forEach(button => {
+    const selected = button.dataset.compositionIdentity === state.compositionIdentity;
+    button.classList.toggle("selected", selected);
+    button.setAttribute("aria-expanded", String(selected));
+  });
+}
+
 function resetUrlBackedState() {
   state.format = "modern";
   state.product = "mtgo-statistics";
@@ -97,6 +106,7 @@ function applyUrlState(parameters) {
     if (direction === "asc" || direction === "desc") state.statsDirection = direction;
     if (detail) {
       state.detailIdentity = detail;
+      state.compositionIdentity = detail.split("/", 1)[0];
       if (detail.includes("/")) state.statsExpanded.add(detail.split("/", 1)[0]);
     }
   } else if (state.product === "mtgo-matchups") {
@@ -189,7 +199,7 @@ async function renderView() {
 async function renderViewWithFocus(
   focusOverride = null,
   revealSelector = null,
-  { focusTitle = false } = {}
+  { focusTitle = false, revealAlignment = "end" } = {}
 ) {
   const root = document.querySelector("#view");
   clearTouchedComposition();
@@ -232,7 +242,7 @@ async function renderViewWithFocus(
         restoreRenderPosition(root, focusSelector, position);
         if (focusTitle) focusViewTitle(root);
         else restoreRenderFocus(root, focusSelector);
-        revealExpandedContent(root, revealSelector);
+        revealExpandedContent(root, revealSelector, revealAlignment);
         updateMatrixPresentation();
       });
     });
@@ -265,6 +275,7 @@ async function renderViewWithFocus(
 
 function resetInteractions() {
   clearTouchedComposition();
+  setCompositionSelection(null);
   state.statsExpanded.clear();
   state.matchupRows.clear();
   state.matchupColumns.clear();
@@ -350,26 +361,43 @@ document.addEventListener("click", async event => {
     queueUrlWrite();
     await renderView();
   } else if (button.dataset.compositionIdentity) {
-    const identity = button.dataset.compositionIdentity;
+    const parentId = button.dataset.compositionIdentity;
     const touchContract = matchMedia("(hover: none)").matches || matchMedia("(max-width: 780px)").matches;
-    if (touchContract && touchedCompositionIdentity !== identity) {
+    if (touchContract && touchedCompositionIdentity !== parentId) {
       clearTouchedComposition();
       button.classList.add("touch-active");
-      touchedCompositionIdentity = identity;
+      touchedCompositionIdentity = parentId;
       return;
     }
     clearTouchedComposition();
-    state.detailIdentity = identity;
+    const action = currentCompositionAction(parentId);
+    setCompositionSelection(parentId);
+    if (action.kind === "subtypes") {
+      state.statsExpanded.add(action.parentId);
+      if (state.detailIdentity) queueUrlWrite();
+      state.detailIdentity = null;
+      const revealSelector = matchMedia("(max-width: 780px)").matches
+        ? `[data-mobile-card-identity="${CSS.escape(action.parentId)}"]`
+        : `[data-stats-subtype-end="${CSS.escape(action.parentId)}"]`;
+      await renderViewWithFocus(null, revealSelector, {
+        revealAlignment: matchMedia("(max-width: 780px)").matches ? "start" : "end",
+      });
+      return;
+    }
+    state.detailIdentity = action.identity;
     state.detailMode = "average";
     queueUrlWrite();
     const revealSelector = matchMedia("(max-width: 780px)").matches
-      ? `[data-mobile-expanded-content="stats:${CSS.escape(identity)}"]`
+      ? `[data-mobile-card-identity="${CSS.escape(action.identity)}"]`
       : ".deck-detail-row";
-    await renderViewWithFocus(null, revealSelector);
+    await renderViewWithFocus(null, revealSelector, {
+      revealAlignment: matchMedia("(max-width: 780px)").matches ? "start" : "end",
+    });
   } else if (button.dataset.statsRange) {
     discardPendingRefresh();
     state.statsRange = Number(button.dataset.statsRange);
     state.detailIdentity = null;
+    setCompositionSelection(null);
     queueUrlWrite();
     await renderView();
   } else if (button.dataset.matchupRange) {
@@ -378,7 +406,11 @@ document.addEventListener("click", async event => {
     queueUrlWrite();
     await renderView();
   } else if (button.dataset.statsToggle) {
-    toggleSet(state.statsExpanded, button.dataset.statsToggle);
+    const parentId = button.dataset.statsToggle;
+    const opening = !state.statsExpanded.has(parentId);
+    toggleSet(state.statsExpanded, parentId);
+    if (opening) setCompositionSelection(parentId);
+    else if (state.compositionIdentity === parentId) setCompositionSelection(null);
     if (state.detailIdentity) queueUrlWrite();
     state.detailIdentity = null;
     if (!renderStatsExpansion(button)) await renderView();
@@ -394,19 +426,26 @@ document.addEventListener("click", async event => {
     const expandable = currentContext.range.archetypes.filter(item => activeStatisticsSubtypes(item).length >= 2);
     if (state.statsExpanded.size) state.statsExpanded.clear();
     else expandable.forEach(item => state.statsExpanded.add(item.id));
+    setCompositionSelection(null);
     if (state.detailIdentity) queueUrlWrite();
     state.detailIdentity = null;
     if (!renderStatsExpansion(button)) await renderView();
   } else if (button.dataset.detailIdentity) {
-    state.detailIdentity = state.detailIdentity === button.dataset.detailIdentity
-      ? null
-      : button.dataset.detailIdentity;
+    const identity = button.dataset.detailIdentity;
+    const opening = state.detailIdentity !== identity;
+    state.detailIdentity = opening ? identity : null;
+    const parentId = identity.split("/", 1)[0];
+    if (opening) setCompositionSelection(parentId);
+    else if (state.compositionIdentity === parentId) setCompositionSelection(null);
     state.detailMode = "average";
     queueUrlWrite();
     await renderView();
   } else if (button.hasAttribute("data-close-detail")) {
     const identity = state.detailIdentity;
     state.detailIdentity = null;
+    if (state.compositionIdentity === identity?.split("/", 1)[0]) {
+      setCompositionSelection(null);
+    }
     queueUrlWrite();
     await renderViewWithFocus(`[data-detail-identity="${CSS.escape(identity || "")}"]`);
   } else if (button.dataset.deckMode) {

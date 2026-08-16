@@ -17,10 +17,10 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "ae4841f8bc7e5cb78846c0daddb5b054efbc267c042aee0f5450059b1abdb126",
+    "rule_sha256": "dbb77e51b1ab2366cd6a6da7a81dfb3c9bb1ebb287de3836c9f11b6ad09cff6f",
     "rule_schema_version": "1.1.0",
     "archetype_count": 127,
-    "rule_count": 205,
+    "rule_count": 206,
     "subtype_count": 70
   },
   "summary": {
@@ -70,8 +70,8 @@
       "song-of-creation": 1
     },
     "selected_by_subtype": {
-      "broodscale-combo/gruul": 39,
-      "broodscale-combo/mono-green": 2,
+      "broodscale-combo/gruul": 29,
+      "broodscale-combo/mono-green": 12,
       "broodscale-combo/simic": 1,
       "chant-control/azorius": 4,
       "chant-control/jeskai": 6,
@@ -138,7 +138,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -174,7 +174,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -1374,7 +1374,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -1410,7 +1410,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -2285,19 +2285,19 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "gruul",
-        "subtype_name": "Gruul",
-        "rule_id": "broodscale-combo-gruul",
-        "priority": 651000
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
       },
       "matched_rules": [
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -2316,12 +2316,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -2330,10 +2346,10 @@
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -2352,12 +2368,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -3135,7 +3167,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -3171,7 +3203,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -4317,7 +4349,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -4353,7 +4385,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -5092,7 +5124,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 5,
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -5128,7 +5160,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 5,
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -5526,7 +5558,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -5562,7 +5594,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -6024,7 +6056,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -6060,7 +6092,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -6114,7 +6146,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -6150,7 +6182,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -7074,7 +7106,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -7110,7 +7142,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -7891,7 +7923,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -7927,7 +7959,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -7948,19 +7980,19 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "gruul",
-        "subtype_name": "Gruul",
-        "rule_id": "broodscale-combo-gruul",
-        "priority": 651000
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
       },
       "matched_rules": [
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -7979,12 +8011,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -7993,10 +8041,10 @@
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -8015,12 +8063,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -9264,19 +9328,19 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "gruul",
-        "subtype_name": "Gruul",
-        "rule_id": "broodscale-combo-gruul",
-        "priority": 651000
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
       },
       "matched_rules": [
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -9295,12 +9359,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -9309,10 +9389,10 @@
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -9331,12 +9411,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -13818,19 +13914,19 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "gruul",
-        "subtype_name": "Gruul",
-        "rule_id": "broodscale-combo-gruul",
-        "priority": 651000
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
       },
       "matched_rules": [
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -13849,12 +13945,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -13863,10 +13975,10 @@
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -13885,12 +13997,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -14280,7 +14408,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -14316,7 +14444,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -14646,7 +14774,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -14682,7 +14810,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -15797,7 +15925,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -15833,7 +15961,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -17253,19 +17381,19 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "gruul",
-        "subtype_name": "Gruul",
-        "rule_id": "broodscale-combo-gruul",
-        "priority": 651000
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
       },
       "matched_rules": [
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -17284,12 +17412,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 5,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -17298,10 +17442,10 @@
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -17320,12 +17464,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 5,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -18562,19 +18722,19 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "gruul",
-        "subtype_name": "Gruul",
-        "rule_id": "broodscale-combo-gruul",
-        "priority": 651000
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
       },
       "matched_rules": [
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -18593,12 +18753,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -18607,10 +18783,10 @@
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -18629,12 +18805,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -18982,7 +19174,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -19018,7 +19210,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -20233,7 +20425,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -20269,7 +20461,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -21860,7 +22052,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 8,
+              "actual_count": 4,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -21896,7 +22088,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 8,
+              "actual_count": 4,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -22215,7 +22407,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -22251,7 +22443,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -23159,7 +23351,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 5,
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -23195,7 +23387,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 5,
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -23535,7 +23727,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -23571,7 +23763,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -23715,7 +23907,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 5,
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -23751,7 +23943,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 5,
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -25354,7 +25546,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -25390,7 +25582,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -26489,6 +26681,14 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -26529,6 +26729,14 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
@@ -26901,7 +27109,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 5,
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -26937,7 +27145,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 5,
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -28794,7 +29002,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -28830,7 +29038,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -28884,7 +29092,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -28920,7 +29128,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -29599,7 +29807,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 8,
+              "actual_count": 4,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -29635,7 +29843,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 8,
+              "actual_count": 4,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -30366,19 +30574,19 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "gruul",
-        "subtype_name": "Gruul",
-        "rule_id": "broodscale-combo-gruul",
-        "priority": 651000
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
       },
       "matched_rules": [
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -30397,12 +30605,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 2,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -30411,10 +30635,10 @@
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -30433,12 +30657,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 2,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -31117,6 +31357,14 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -31157,6 +31405,14 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
@@ -31301,7 +31557,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 5,
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -31445,7 +31701,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 5,
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -32287,7 +32543,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -32323,7 +32579,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -34513,7 +34769,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -34549,7 +34805,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -36757,6 +37013,14 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         },
@@ -36891,6 +37155,14 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
@@ -40322,19 +40594,19 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "gruul",
-        "subtype_name": "Gruul",
-        "rule_id": "broodscale-combo-gruul",
-        "priority": 651000
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
       },
       "matched_rules": [
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -40353,12 +40625,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 2,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -40367,10 +40655,10 @@
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -40389,12 +40677,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 2,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -42721,7 +43025,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -42757,7 +43061,7 @@
             {
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
-              "actual_count": 6,
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -44321,19 +44625,19 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "gruul",
-        "subtype_name": "Gruul",
-        "rule_id": "broodscale-combo-gruul",
-        "priority": 651000
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
       },
       "matched_rules": [
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -44352,12 +44656,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -44366,10 +44686,10 @@
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -44388,12 +44708,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -44846,19 +45182,19 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "gruul",
-        "subtype_name": "Gruul",
-        "rule_id": "broodscale-combo-gruul",
-        "priority": 651000
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
       },
       "matched_rules": [
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -44877,12 +45213,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -44891,10 +45243,10 @@
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "gruul",
-          "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "broodscale-combo-mono-green",
+          "priority": 650000,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -44913,12 +45265,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Forest",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 6,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }

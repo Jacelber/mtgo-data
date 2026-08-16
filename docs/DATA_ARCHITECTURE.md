@@ -1516,7 +1516,7 @@ unchanged.
 
 ### 11.12 Reference-event compatibility manifest
 
-The Pickup-review classifier correction updates the version `1.5.0`
+The Broodscale red-commitment correction updates the version `1.6.0`
 compatibility boundary for mixed Melee event `434455` in
 `tests/fixtures/melee/434455_compatibility_manifest.json`. Its exact-byte set
 contains the raw snapshot manifest, normalized event, classification overlay,
@@ -1525,12 +1525,13 @@ is a closure root: validation also verifies the unique path, byte count, and
 SHA-256 of every one of its 483 declared responses and rejects any undeclared
 file in the retained snapshot directory.
 
-Version `1.5.0` keeps the raw snapshot manifest and normalized event
+Version `1.6.0` keeps the raw snapshot manifest and normalized event
 byte-identical. It advances the classification overlay, opportunity ledger,
-and five event documents only because twelve reviewed Broodscale decks move
-from the stable `mono-green` subtype to the stable `gruul` subtype under the
-shared main-deck red-source boundary. No source response is fetched or
-rewritten.
+and five event documents only because ten Grove-only Broodscale decks move
+from the stable `gruul` subtype back to the stable `mono-green` subtype under
+the reviewed red-commitment boundary. Copperline Gorge and Karplusan Forest
+remain qualifying red sources, while reviewed red spells in either deck zone
+remain Gruul evidence. No source response is fetched or rewritten.
 
 The format event catalog and global consumer catalog are expandable indexes,
 not immutable event payloads. Their complete bytes are excluded from the

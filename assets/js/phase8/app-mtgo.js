@@ -33,6 +33,29 @@ function activeStatisticsSubtypes(parent) {
   ));
 }
 
+function compositionAction(parent) {
+  const subtypes = activeStatisticsSubtypes(parent);
+  if (subtypes.length === 1) {
+    return {
+      kind: "detail",
+      identity: `${parent.id}/${subtypes[0].id}`,
+    };
+  }
+  if (subtypes.length >= 2) {
+    return {
+      kind: "subtypes",
+      parentId: parent.id,
+    };
+  }
+  return { kind: "detail", identity: parent.id };
+}
+
+function currentCompositionAction(parentId) {
+  const parent = currentContext?.range?.archetypes
+    ?.find(item => item.id === parentId);
+  return parent ? compositionAction(parent) : { kind: "detail", identity: parentId };
+}
+
 function statisticsGroups(archetypes) {
   return archetypes.map(parent => {
     const subtypes = activeStatisticsSubtypes(parent);
@@ -61,14 +84,17 @@ function statsRows(groups) {
     if (state.detailIdentity === parent.id) rows.push(statsDetailRow(parent.id));
     else if (!expandable && state.detailIdentity === directId) rows.push(statsDetailRow(directId));
     if (open) {
-      subtypes.forEach(subtype => {
+      subtypes.forEach((subtype, index) => {
         const identityId = `${parent.id}/${subtype.id}`;
         rows.push(statsRow(
           subtype,
           `<button class="name-button" type="button" data-detail-identity="${escapeHtml(identityId)}"
             data-responsive-key="stats-action:${escapeHtml(identityId)}" aria-expanded="${state.detailIdentity === identityId}">
             ${manaIdentityHtml(identityId)}<span class="identity-label">${escapeHtml(subtype.display_name)}</span></button>`,
-          "subtype-row"
+          "subtype-row",
+          index === subtypes.length - 1
+            ? ` data-stats-subtype-end="${escapeHtml(parent.id)}"`
+            : ""
         ));
         if (state.detailIdentity === identityId) rows.push(statsDetailRow(identityId));
       });
@@ -77,8 +103,8 @@ function statsRows(groups) {
   }).join("");
 }
 
-function statsRow(record, nameHtml, rowClass) {
-  return `<tr class="${rowClass}">
+function statsRow(record, nameHtml, rowClass, rowAttributes = "") {
+  return `<tr class="${rowClass}"${rowAttributes}>
     <td class="identity-cell">${nameHtml}</td>
     <td class="number">${number(record.avg_points_per_round)}</td>
     <td class="number">${record.high_score_count ?? 0}</td>
@@ -103,6 +129,7 @@ function chartHtml(archetypes) {
     share: Number(item.high_score_share) || 0,
     color: `composition-color-${index % 6 + 1}`,
     image: REPRESENTATIVE_CARDS[state.format]?.[item.id]?.[0]?.image,
+    action: compositionAction(item),
   }));
   if (remainder > 0) {
     segments.push({ name: t("chart.other"), share: remainder, color: "other" });
@@ -121,14 +148,15 @@ function chartHtml(archetypes) {
   const bar = segments.map(item => {
     const value = pct(item.share);
     const detail = `${item.name} · ${value}`;
-    const className = `composition-segment ${item.color}${item.image ? " has-card-art" : ""}${state.detailIdentity === item.id ? " selected" : ""}`;
+    const expanded = item.id === state.compositionIdentity;
+    const className = `composition-segment ${item.color}${item.image ? " has-card-art" : ""}${expanded ? " selected" : ""}`;
     const style = `--composition-share:${(item.share * 100).toFixed(6)}%${item.image ? `;--composition-image:url(${item.image})` : ""}`;
     return accessibleCompositionSegment({
       className,
       style,
       label: detail,
       identity: item.id,
-      expanded: state.detailIdentity === item.id,
+      expanded,
     });
   }).join("");
   return `<section class="panel composition-panel" aria-label="${t("chart.aria")}">

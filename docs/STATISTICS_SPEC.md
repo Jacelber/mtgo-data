@@ -140,9 +140,13 @@ four-copy Leyline of Resonance and Slickshot Show-Off core. There is no
 non-Leyline Talent-shell alternative for that identity. `izzet-fling` retains
 its original higher priority and permits at most one main-deck Leyline of
 Resonance, so a Callous Sell-Sword/Talent deck with two or more main-deck
-Leylines cannot be selected as Izzet Fling. For Modern Broodscale, Gruul versus Mono-Green is
-determined from reviewed main-deck red mana-source semantics, not one named
-land. A red source found only in the sideboard does not make the deck Gruul.
+Leylines cannot be selected as Izzet Fling. For Modern Broodscale, Gruul versus
+Mono-Green is determined from reviewed red-commitment semantics. Copperline
+Gorge and Karplusan Forest are qualifying main-deck red sources. Grove of the
+Burnwillows is a reviewed utility-land exception and does not establish Gruul
+by itself. A reviewed red spell in either the main deck or sideboard does
+establish Gruul; Mono-Green therefore requires neither a qualifying main-deck
+red source nor a reviewed red spell anywhere in the submitted 75.
 
 ### 3.3 Theoretical round
 
