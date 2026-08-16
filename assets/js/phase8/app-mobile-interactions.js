@@ -261,6 +261,21 @@ document.addEventListener("scroll", event => {
   scroller.closest(".horizontal-scroll-frame")?.classList.add("hint-dismissed");
 }, true);
 
+document.addEventListener("keydown", event => {
+  if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+  if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  const scroller = event.target.closest?.(".matrix-scroll[data-scroll-hint-key]");
+  if (!scroller) return;
+  const matchupColumn = scroller.querySelector(".matchup-table .matrix-cell");
+  const columnWidth = matchupColumn?.getBoundingClientRect().width || 0;
+  if (!columnWidth) return;
+  event.preventDefault();
+  scroller.scrollBy({
+    left: event.key === "ArrowLeft" ? -columnWidth : columnWidth,
+    behavior: "auto",
+  });
+});
+
 const mobileMetricQuery = matchMedia("(max-width: 780px)");
 function transferResponsiveFocus() {
   const active = document.activeElement;
