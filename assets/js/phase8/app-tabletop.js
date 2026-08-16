@@ -296,13 +296,14 @@ function tabletopMatchup(matchupDocument, scopeId, eventFormat) {
     leaf_matrix: scope.leaf_matrix,
   }, LOW_SAMPLE_THRESHOLD);
   currentContext.matchupDisplayDocument = viewDocument;
+  synchronizeMatchupFilter(viewDocument);
   return `<div class="panel-toolbar"><div><h2>${t("tabletop.matchup_title")}</h2>
       <p class="matrix-toolbar-note">${t("tabletop.matchup_note", {
         scope: scopeLabel(scopeId, eventFormat),
         count: scope.included_match_count,
       })}</p></div>
       <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
-    </div>${matchupSearchControls()}${matchupLegend(viewDocument.min_sample_hint)}${matchupProjection(viewDocument)}`;
+    </div>${matchupFilterControls(viewDocument)}${matchupLegend(viewDocument.min_sample_hint)}${matchupProjection(viewDocument)}`;
 }
 
 async function tabletopView() {

@@ -9,6 +9,13 @@ async function expectPublishedNumber(page, metric) {
   await expect(page.locator(`[data-freshness-key="${metric}"]`)).toContainText(/\d/);
 }
 
+async function expectInViewport(locator) {
+  await expect.poll(async () => locator.evaluate(element => {
+    const rect = element.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  })).toBe(true);
+}
+
 test("MTGO page renders a published number", async ({ page }) => {
   await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
   await expectPublishedNumber(page, "decks");
@@ -21,66 +28,259 @@ test("Tabletop page renders a published number", async ({ page }) => {
   await expectPublishedNumber(page, "scope-decks");
 });
 
-test("MTGO matchup search filters the loaded projection without another data request", async ({ page }) => {
+test("MTGO matchup filter searches its tree and applies an exact multi-row subset", async ({ page }) => {
   let matchupRequests = 0;
   page.on("request", request => {
     if (request.url().includes("/stats/modern/mtgo/matchup_4w.json")) matchupRequests += 1;
   });
   await page.goto("/index.html?format=modern&product=mtgo-matchups&range=4&lang=en");
-  await expect(page.locator("#matchup-search")).toBeVisible();
+  await expect(page.locator("[data-matchup-filter-toggle]")).toBeVisible();
   await expect(page.locator(".matchup-table .row-head").first()).toBeVisible();
-  await page.locator('[data-matchup-row="prowess"]').click();
   await page.locator('[data-matchup-column="prowess"]').click();
-  await expect(page.locator(".matchup-table .row-head", { hasText: "Izzet Prowess" })).toBeVisible();
   const initialColumnCount = await page.locator(".matchup-table .column-head:not(.overall)").count();
+  const initialRowCount = await page.locator(".matchup-table .row-head").count();
   const initialRequests = matchupRequests;
 
-  await page.locator("#matchup-search").fill("  MONO-RED   prowess  ");
+  await page.locator("[data-matchup-filter-toggle]").click();
+  await expect(page.locator("[data-matchup-filter-menu]")).toBeVisible();
+  await expect(page.locator('[data-matchup-filter-parent="prowess"]')).toHaveAttribute("aria-expanded", "false");
+  await page.locator('[data-matchup-filter-parent="prowess"]').click();
+  await expect(page.locator('[data-matchup-filter-option="prowess/mono-red"]')).toBeVisible();
+  await page.locator('[data-matchup-filter-parent="prowess"]').click();
+  await expect(page.locator('[data-matchup-filter-option="prowess/mono-red"]')).toBeHidden();
+
+  await page.locator("[data-matchup-filter-select-all]").uncheck();
+  await page.locator("#matchup-filter-search").fill("  MONO-RED   prowess  ");
+  await expect(page.locator('[data-matchup-filter-option="prowess/mono-red"]')).toBeVisible();
+  await page.locator('[data-matchup-filter-option="prowess/mono-red"]').check();
+  await page.locator("#matchup-filter-search").fill("boros energy");
+  await page.locator('[data-matchup-filter-option="boros-energy"]').check();
+
+  const scroller = page.locator(".matrix-scroll");
+  await scroller.evaluate(element => element.scrollLeft = 180);
+  await page.evaluate(() => window.scrollTo({ top: 200, behavior: "auto" }));
+  const beforeApply = await page.evaluate(() => ({
+    y: window.scrollY,
+    left: document.querySelector(".matrix-scroll").scrollLeft,
+  }));
+  await page.locator("[data-matchup-filter-apply]").click();
 
   await expect(page.locator(".matchup-table .row-head")).toHaveCount(2);
-  await expect(page.locator(".matchup-table .row-head").first()).toContainText("Prowess");
+  await expect(page.locator(".matchup-table .row-head").first()).toContainText("Boros Energy");
   await expect(page.locator(".matchup-table .row-head").nth(1)).toContainText("Mono-Red Prowess");
+  await expect(page.locator("[data-matchup-focus]")).toHaveCount(0);
   await expect(page.locator(".matchup-table .column-head:not(.overall)"))
     .toHaveCount(initialColumnCount);
-  await expect(page.locator(".matchup-table .column-head", { hasText: "Boros Energy" }))
-    .toBeVisible();
   expect(matchupRequests).toBe(initialRequests);
+  await expect.poll(async () => page.evaluate(() => ({
+    y: window.scrollY,
+    left: document.querySelector(".matrix-scroll").scrollLeft,
+  }))).toEqual(beforeApply);
 
-  await page.locator("#matchup-search").fill("not a published deck");
-  await expect(page.locator(".matchup-search-empty")).toContainText(
-    "No decks match “not a published deck”."
-  );
-  expect(matchupRequests).toBe(initialRequests);
-
-  await page.locator(".matchup-search-input [data-matchup-search-clear]").click();
-  await expect(page.locator("#matchup-search")).toHaveValue("");
-  await expect(page.locator(".matchup-table .row-head", { hasText: "Izzet Prowess" })).toBeVisible();
-  expect(matchupRequests).toBe(initialRequests);
-
-  await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.locator("#matchup-search")).toBeVisible();
-  const mobileLayout = await page.locator("html").evaluate(element => ({
-    clientWidth: element.clientWidth,
-    scrollWidth: element.scrollWidth,
-    searchDirection: getComputedStyle(
-      element.querySelector(".matchup-search-input")
-    ).flexDirection,
-  }));
-  expect(mobileLayout.scrollWidth).toBe(mobileLayout.clientWidth);
-  expect(mobileLayout.searchDirection).toBe("column");
+  await page.locator("[data-matchup-filter-reset]").click();
+  await expect(page.locator(".matchup-table .row-head")).toHaveCount(initialRowCount);
 });
 
-test("Tabletop matchup search uses the same visible projection", async ({ page }) => {
+test("closing the matchup filter without Apply preserves the current rows", async ({ page }) => {
+  await page.goto("/index.html?format=modern&product=mtgo-matchups&range=4&lang=en");
+  await expect(page.locator(".matchup-table .row-head").first()).toBeVisible();
+  const initialRows = await page.locator(".matchup-table .row-head").allTextContents();
+
+  await page.locator("[data-matchup-filter-toggle]").click();
+  await page.locator("[data-matchup-filter-select-all]").uncheck();
+  await page.locator("#matchup-filter-search").fill("mono-red prowess");
+  await page.locator('[data-matchup-filter-option="prowess/mono-red"]').check();
+  await page.locator("[data-matchup-filter-cancel]").click();
+
+  await expect(page.locator("[data-matchup-filter-menu]")).toBeHidden();
+  expect(await page.locator(".matchup-table .row-head").allTextContents()).toEqual(initialRows);
+});
+
+test("matrix names disclose parents and row leaves open a visible MTGO detail", async ({ page }) => {
+  await page.goto("/index.html?format=modern&product=mtgo-matchups&range=4&lang=en");
+  const expandable = page.locator('tr[data-matchup-row-identity="prowess"] [data-matchup-row="prowess"]');
+  const expandableName = expandable.locator(".row-axis-name");
+  const plainName = page.locator('tr[data-matchup-row-identity="boros-energy"] .row-axis-name');
+  const alignment = await Promise.all([
+    expandableName.evaluate(element => element.getBoundingClientRect().left),
+    plainName.evaluate(element => element.getBoundingClientRect().left),
+    expandable.evaluate(element => element.getBoundingClientRect().height),
+  ]);
+  expect(Math.abs(alignment[0] - alignment[1])).toBeLessThanOrEqual(1);
+  expect(alignment[2]).toBeGreaterThanOrEqual(44);
+  const desktopDetailLayout = await page.locator(
+    'tr[data-matchup-row-identity="boros-energy"] .row-axis-detail-link'
+  ).evaluate(link => {
+    const name = link.querySelector(".row-axis-name").getBoundingClientRect();
+    const icon = link.querySelector(".axis-detail-external").getBoundingClientRect();
+    return { gap: icon.left - name.right };
+  });
+  expect(desktopDetailLayout.gap).toBeGreaterThanOrEqual(3);
+  expect(desktopDetailLayout.gap).toBeLessThanOrEqual(5);
+
+  await page.evaluate(() => {
+    const row = document.querySelector('[data-matchup-row-identity="prowess"]');
+    window.scrollTo({ top: window.scrollY + row.getBoundingClientRect().top - 320, behavior: "auto" });
+  });
+  const beforeDisclosure = await page.evaluate(() => ({
+    y: window.scrollY,
+    top: document.querySelector('[data-matchup-row="prowess"]').getBoundingClientRect().top,
+  }));
+  await expect(page.locator("[data-matrix-sticky]")).toHaveClass(/active/);
+  await page.evaluate(() => {
+    const view = document.querySelector("#view");
+    const previousSticky = document.querySelector("[data-matrix-sticky]");
+    window.__matrixStickyReplacement = null;
+    const observer = new MutationObserver(() => {
+      const replacement = document.querySelector("[data-matrix-sticky]");
+      if (!replacement || replacement === previousSticky) return;
+      window.__matrixStickyReplacement = {
+        active: replacement.classList.contains("active"),
+        visibility: getComputedStyle(replacement).visibility,
+      };
+      observer.disconnect();
+    });
+    observer.observe(view, { childList: true, subtree: true });
+  });
+  const disclosureBox = await expandable.boundingBox();
+  await page.mouse.click(
+    disclosureBox.x + (disclosureBox.width / 2),
+    disclosureBox.y + (disclosureBox.height / 2)
+  );
+  await expect(page.locator('tr[data-matchup-row-identity="prowess/mono-red"]')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__matrixStickyReplacement)).toEqual({
+    active: true,
+    visibility: "visible",
+  });
+  await expect.poll(async () => page.evaluate(() => ({
+    y: window.scrollY,
+    top: document.querySelector('[data-matchup-row="prowess"]').getBoundingClientRect().top,
+  }))).toEqual(beforeDisclosure);
+
+  const detailLink = page.locator('tr[data-matchup-row-identity="steel-cutter"] .row-axis-detail-link');
+  const target = new URL(await detailLink.getAttribute("href"));
+  expect(target.searchParams.get("product")).toBe("mtgo-statistics");
+  expect(target.searchParams.get("range")).toBe("4");
+  expect(target.searchParams.get("detail")).toBe("steel-cutter/izzet");
+  await expect(detailLink).toHaveAttribute("target", "_blank");
+
+  const popupPromise = page.waitForEvent("popup");
+  await detailLink.click();
+  const detailPage = await popupPromise;
+  await expect(detailPage.locator(".deck-detail-row")).toBeVisible();
+  await expectInViewport(detailPage.locator(".deck-detail-row"));
+});
+
+test("mobile matchup filter fits the viewport and does not move the page when applied", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 844 });
+  await page.goto("/index.html?format=modern&product=mtgo-matchups&range=4&lang=zh");
+  await expect(page.locator('[data-matchup-row-identity="prowess"]')).toBeVisible();
+  await expect(page.locator('[data-matchup-row-identity="boros-energy"]')).toBeVisible();
+  await expect(page.locator('[data-matchup-row-identity="mono-blue-belcher"] .row-axis-name'))
+    .not.toHaveClass(/is-clipped/);
+  await expect(page.locator('[data-matchup-row-identity="golgari-yawgmoth"] .row-axis-name'))
+    .not.toHaveClass(/is-clipped/);
+  const compactLayout = await page.evaluate(() => {
+    const parentRow = document.querySelector('[data-matchup-row-identity="prowess"]');
+    const plainRow = document.querySelector('[data-matchup-row-identity="boros-energy"]');
+    const parentName = parentRow.querySelector(".row-axis-name").getBoundingClientRect();
+    const plainName = plainRow.querySelector(".row-axis-name").getBoundingClientRect();
+    const rowHead = parentRow.querySelector(".row-head").getBoundingClientRect();
+    const scroller = document.querySelector(".matrix-scroll").getBoundingClientRect();
+    const matrixCell = parentRow.querySelector(".matrix-cell").getBoundingClientRect();
+    return {
+      parentPlainDelta: Math.abs(parentName.left - plainName.left),
+      parentInset: parentName.left - rowHead.left,
+      rowHeadWidth: rowHead.width,
+      visibleResultColumns: (scroller.right - rowHead.right) / matrixCell.width,
+    };
+  });
+  expect(compactLayout.parentPlainDelta).toBeLessThanOrEqual(1);
+  expect(compactLayout.parentInset).toBeLessThanOrEqual(25);
+  expect(compactLayout.rowHeadWidth).toBeGreaterThanOrEqual(140);
+  expect(compactLayout.visibleResultColumns).toBeGreaterThanOrEqual(3.25);
+  expect(compactLayout.visibleResultColumns).toBeLessThanOrEqual(3.75);
+
+  await page.locator('[data-matchup-row="prowess"]').click();
+  await expect(page.locator('tr[data-matchup-row-identity="prowess/mono-red"]')).toBeVisible();
+  const subtypeIndent = await page.evaluate(() => {
+    const parent = document.querySelector('[data-matchup-row-identity="prowess"] .row-axis-name')
+      .getBoundingClientRect();
+    const subtype = document.querySelector('[data-matchup-row-identity="prowess/mono-red"] .row-axis-name')
+      .getBoundingClientRect();
+    return subtype.left - parent.left;
+  });
+  expect(subtypeIndent).toBeGreaterThanOrEqual(0);
+  expect(subtypeIndent).toBeLessThanOrEqual(10);
+
+  const compactDetailLayout = await page.locator(
+    '[data-matchup-row-identity="golgari-yawgmoth"] .row-axis-detail-link'
+  ).evaluate(link => {
+    const name = link.querySelector(".row-axis-name").getBoundingClientRect();
+    const icon = link.querySelector(".axis-detail-external").getBoundingClientRect();
+    return { gap: icon.left - name.right };
+  });
+  expect(compactDetailLayout.gap).toBeGreaterThanOrEqual(3);
+  expect(compactDetailLayout.gap).toBeLessThanOrEqual(5);
+
+  await page.locator("[data-matchup-filter-toggle]").click();
+  await expect(page.locator("[data-matchup-filter-menu]")).toBeVisible();
+  const menuLayout = await page.locator("[data-matchup-filter-menu]").evaluate(menu => ({
+    left: menu.getBoundingClientRect().left,
+    right: menu.getBoundingClientRect().right,
+    viewport: window.innerWidth,
+    pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  }));
+  expect(menuLayout.left).toBeGreaterThanOrEqual(0);
+  expect(menuLayout.right).toBeLessThanOrEqual(menuLayout.viewport);
+  expect(menuLayout.pageOverflow).toBe(0);
+
+  await page.locator("[data-matchup-filter-select-all]").uncheck();
+  await page.locator("#matchup-filter-search").fill("mono-red prowess");
+  await page.locator('[data-matchup-filter-option="prowess/mono-red"]').check();
+  await page.evaluate(() => window.scrollTo({ top: 200, behavior: "auto" }));
+  const beforeY = await page.evaluate(() => window.scrollY);
+  await page.locator("[data-matchup-filter-apply]").click();
+  await expect(page.locator(".matchup-table .row-head")).toHaveCount(1);
+  await expect(page.locator(".matchup-table .row-head").first()).toContainText("Mono-Red Prowess");
+  await expect.poll(async () => page.evaluate(() => window.scrollY)).toBe(beforeY);
+  expect(await page.locator("html").evaluate(element => element.scrollWidth - element.clientWidth)).toBe(0);
+
+  const detailLink = page.locator(".matchup-table .row-axis-detail-link");
+  const popupPromise = page.waitForEvent("popup");
+  await detailLink.click();
+  const detailPage = await popupPromise;
+  await detailPage.setViewportSize({ width: 375, height: 844 });
+  await detailPage.reload();
+  const mobileDetail = detailPage.locator('[data-mobile-expanded-content="stats:prowess/mono-red"]');
+  await expect(mobileDetail).toBeVisible();
+  await expectInViewport(mobileDetail);
+});
+
+test("Tabletop matchup uses the same hierarchical exact-row filter", async ({ page }) => {
   await page.goto(
     "/melee/index.html?format=modern&product=tabletop-major-events&event=434455&view=matchup&scope=all_constructed&lang=zh"
   );
-  await expect(page.locator("#matchup-search")).toBeVisible();
+  await page.locator("[data-matchup-filter-toggle]").click();
+  await page.locator("[data-matchup-filter-select-all]").uncheck();
+  await page.locator("#matchup-filter-search").fill("mono-green broodscale");
+  await page.locator('[data-matchup-filter-option="broodscale-combo/mono-green"]').check();
+  await page.locator("[data-matchup-filter-apply]").click();
 
-  await page.locator("#matchup-search").fill("mono-green broodscale");
-
-  await expect(page.locator(".matchup-table .row-head")).toHaveCount(2);
-  await expect(page.locator(".matchup-table .row-head").first()).toContainText("Broodscale Combo");
-  await expect(page.locator(".matchup-table .row-head").nth(1)).toContainText(
+  await expect(page.locator(".matchup-table .row-head")).toHaveCount(1);
+  await expect(page.locator(".matchup-table .row-head").first()).toContainText(
     "Mono-Green Broodscale Combo"
   );
+  const detailLink = page.locator(".matchup-table .row-axis-detail-link");
+  const target = new URL(await detailLink.getAttribute("href"));
+  expect(target.searchParams.get("view")).toBe("overview");
+  expect(target.searchParams.get("event")).toBe("434455");
+  expect(target.searchParams.get("scope")).toBe("all_constructed");
+  expect(target.searchParams.get("detail")).toBe("broodscale-combo/mono-green");
+
+  const popupPromise = page.waitForEvent("popup");
+  await detailLink.click();
+  const detailPage = await popupPromise;
+  await expect(detailPage.locator(".deck-detail-row")).toBeVisible();
+  await expectInViewport(detailPage.locator(".deck-detail-row"));
 });

@@ -109,27 +109,27 @@ separation, and established public entry points.
     - `BROODSCALE-SUBTYPE-AND-COMPOSITION-NAVIGATION-HOTFIX` — completed;
       its classifier and responsive composition-navigation contract is
       archived in `docs/history/ROADMAP-PHASE-12-COMPLETED.md`;
-    - `P12-13B` — focused archetype: select one stable parent or available
-      subtype identity, emphasize its row and column, reduce unrelated visual
-      weight, reveal the target without losing expansion state, and clear an
-      identity that is unavailable after a format, event, or scope change. It
-      retains the two-dimensional matrix; the mobile vertical opponent view
-      remains P12-14;
-    - `P12-13C` — Top-N opponents: offer all, 5, 10, and 20. Rank by total
-      literal match count rather than win rate, use the focused identity's
-      opponent counts when focus is active and overall identity counts
-      otherwise, and resolve ties with the existing stable parent order. The
-      filter changes only the visible projection and never the source counts;
+    - `P12-13B` — completed exact row filter, hierarchical disclosure, row
+      detail navigation, responsive identity-column, and stable sticky-header
+      behavior; its detailed contract is archived in
+      `docs/history/ROADMAP-PHASE-12-COMPLETED.md`;
+    - `P12-13C` — planned Top-N opponents. Before implementation, reconfirm its
+      ranking contract against P12-13B's exact multi-row filter; the former
+      single-focused-identity ranking rule is superseded and is not authorized
+      for implementation. Any accepted replacement must continue to rank by
+      literal match count rather than win rate, resolve ties with the existing
+      stable order, and change only the visible projection, never source counts;
     - `P12-13D` — minimum-match filter: offer no minimum, 5, 10, and 20;
       distinguish filtered cells from absent data, retain the established
       20-match low-sample warning and its meaning, and provide a truthful empty
       state when no opponent remains. Apply the controls in the deterministic
-      order search, focus, minimum matches, then Top-N;
-    - `P12-13E` — shareable matrix state: restore search, stable focused
-      identity, Top-N, and minimum-match state across direct links, reload,
+      order exact row subset, minimum matches, then Top-N;
+    - `P12-13E` — shareable matrix state: restore the exact selected row
+      identities, Top-N, and minimum-match state across direct links, reload,
       back, and forward navigation after the existing format, range, event, and
-      scope state is resolved. Do not serialize hover, active keyboard cell, or
-      pixel scroll position, and ignore invalid retired identities safely;
+      scope state is resolved. Do not serialize filter-menu candidate search,
+      disclosure state, hover, active keyboard cell, or pixel scroll position,
+      and ignore invalid retired identities safely;
     - `P12-13F` — keyboard grid navigation: expose one roving `tabindex=0`
       matrix cell, use directional keys without wrapping to move among visible
       inspectable cells, keep row and column context plus literal record and
