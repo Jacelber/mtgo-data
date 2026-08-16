@@ -287,7 +287,7 @@ function tabletopOverview(scope, presentation) {
     </div>`;
 }
 
-function tabletopMatchup(matchupDocument, scopeId, eventFormat) {
+function tabletopMatchup(matchupDocument, scopeId, eventFormat, overviewScope) {
   const scope = matchupDocument.scopes[scopeId];
   const viewDocument = ReviewData.activeMatchupDocument({
     hierarchical: true,
@@ -295,7 +295,18 @@ function tabletopMatchup(matchupDocument, scopeId, eventFormat) {
     parent_order: scope.parent_order,
     leaf_matrix: scope.leaf_matrix,
   }, LOW_SAMPLE_THRESHOLD);
+  const mainstreamParentIds = state.matchupMainstreamOnly
+    ? ReviewData.mainstreamParentIds(
+      overviewScope?.archetypes,
+      "archetype_id",
+      "metagame_share"
+    )
+    : null;
+  const mainstreamUnavailable = state.matchupMainstreamOnly
+    && mainstreamParentIds === null;
   currentContext.matchupDisplayDocument = viewDocument;
+  currentContext.matchupMainstreamParentIds = mainstreamParentIds;
+  currentContext.matchupMainstreamUnavailable = mainstreamUnavailable;
   synchronizeMatchupFilter(viewDocument);
   return `<div class="panel-toolbar"><div><h2>${t("tabletop.matchup_title")}</h2>
       <p class="matrix-toolbar-note">${t("tabletop.matchup_note", {
@@ -303,7 +314,7 @@ function tabletopMatchup(matchupDocument, scopeId, eventFormat) {
         count: scope.included_match_count,
       })}</p></div>
       <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
-    </div>${matchupFilterControls(viewDocument)}${matchupLegend(viewDocument.min_sample_hint)}${matchupProjection(viewDocument)}`;
+    </div>${matchupViewControls(viewDocument, "tabletop", mainstreamUnavailable)}${matchupLegend(viewDocument.min_sample_hint)}${matchupProjection(viewDocument)}`;
 }
 
 async function tabletopView() {
@@ -437,7 +448,7 @@ async function tabletopView() {
       })}</div>`
     : state.tabletopView === "overview"
       ? tabletopOverview(scope, presentation)
-      : tabletopMatchup(matchup, state.tabletopScope, eventFormat);
+      : tabletopMatchup(matchup, state.tabletopScope, eventFormat, scope);
   return `${viewTabs}${selector}${scopes}${scopeLock}${freshness}${eventSummary}
     <section class="panel">${content}</section>`;
 }

@@ -121,6 +121,23 @@
       .toLocaleLowerCase();
   }
 
+  function mainstreamParentIds(records, identityKey, shareKey, threshold = 0.02) {
+    if (!Array.isArray(records)) return null;
+    const eligible = new Set();
+    let hasComparableShare = false;
+    records.forEach(record => {
+      const identity = String(record?.[identityKey] || "").trim();
+      if (!identity || identity.toLocaleLowerCase() === "unknown") return;
+      const rawShare = record?.[shareKey];
+      if (rawShare === null || rawShare === undefined || rawShare === "") return;
+      const share = Number(rawShare);
+      if (!Number.isFinite(share)) return;
+      hasComparableShare = true;
+      if (share >= threshold) eligible.add(identity);
+    });
+    return hasComparableShare ? eligible : null;
+  }
+
   function parentNode(parent, parentId) {
     return {
       id: parent.id,
@@ -182,10 +199,14 @@
     return filterCandidatesFromIndexes(document, buildIndexes(document));
   }
 
-  function axisNodes(document, expandedParents, indexes) {
+  function axisNodes(document, expandedParents, indexes, visibleParentIds = null) {
     const expanded = new Set(expandedParents || []);
+    const visibleParents = visibleParentIds === null
+      ? null
+      : new Set(visibleParentIds || []);
     const nodes = [];
     (document.parent_order || []).forEach(parentId => {
+      if (visibleParents !== null && !visibleParents.has(parentId)) return;
       const parent = indexes.parentById.get(parentId);
       if (!parent) throw new Error(`排序中存在未知类型：${parentId}`);
       nodes.push(parentNode(parent, parentId));
@@ -239,14 +260,20 @@
     document,
     expandedRows,
     expandedColumns,
-    filterIdentities = null
+    filterIdentities = null,
+    visibleParentIds = null
   ) {
     const indexes = buildIndexes(document);
     const selected = filterIdentities === null ? null : new Set(filterIdentities || []);
+    const visibleParents = visibleParentIds === null
+      ? null
+      : new Set(visibleParentIds || []);
     const rowExpansion = new Set(expandedRows || []);
     const rows = selected === null
-      ? axisNodes(document, expandedRows, indexes)
-      : filterCandidatesFromIndexes(document, indexes).flatMap(parent => {
+      ? axisNodes(document, expandedRows, indexes, visibleParents)
+      : filterCandidatesFromIndexes(document, indexes).filter(parent => (
+        visibleParents === null || visibleParents.has(parent.id)
+      )).flatMap(parent => {
         const parentSelected = selected.has(parent.id);
         return [
           ...(parentSelected ? [parentNode(parent, parent.id)] : []),
@@ -256,7 +283,7 @@
           )),
         ];
       });
-    const columns = axisNodes(document, expandedColumns, indexes);
+    const columns = axisNodes(document, expandedColumns, indexes, visibleParents);
     const matrix = {};
     const overall = {};
     rows.forEach(row => {
@@ -295,6 +322,7 @@
     buildVisibleView,
     filterCandidates,
     literalRecord,
+    mainstreamParentIds,
     normalizeSearch,
     publicPath,
     resolveFilterIdentity,

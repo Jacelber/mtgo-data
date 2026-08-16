@@ -16,6 +16,16 @@ async function expectInViewport(locator) {
   })).toBe(true);
 }
 
+async function expectedMainstreamParents(request, path, records, idKey, shareKey) {
+  const response = await request.get(path);
+  expect(response.ok()).toBe(true);
+  const document = await response.json();
+  return new Set(records(document)
+    .filter(record => Number(record[shareKey]) >= 0.02)
+    .map(record => record[idKey])
+    .filter(id => id && id !== "unknown"));
+}
+
 test("MTGO page renders a published number", async ({ page }) => {
   await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
   await expectPublishedNumber(page, "decks");
@@ -94,6 +104,71 @@ test("closing the matchup filter without Apply preserves the current rows", asyn
 
   await expect(page.locator("[data-matchup-filter-menu]")).toBeHidden();
   expect(await page.locator(".matchup-table .row-head").allTextContents()).toEqual(initialRows);
+});
+
+test("MTGO mainstream matchups load share lazily and preserve hidden row selection", async ({ page, request }) => {
+  const expectedParents = await expectedMainstreamParents(
+    request,
+    "/stats/modern/mtgo/range_4w.json",
+    document => document.archetypes,
+    "id",
+    "high_score_share"
+  );
+  let rangeRequests = 0;
+  let failRange = true;
+  await page.route("**/stats/modern/mtgo/range_4w.json", async route => {
+    rangeRequests += 1;
+    if (failRange) await route.fulfill({ status: 503, body: "unavailable" });
+    else await route.continue();
+  });
+
+  await page.goto("/index.html?format=modern&product=mtgo-matchups&range=4&lang=en");
+  await expect(page.locator("[data-matchup-row-identity]").first()).toBeVisible();
+  const initialRowIds = await page.locator("[data-matchup-row-identity]").evaluateAll(rows => (
+    rows.map(row => row.dataset.matchupRowIdentity)
+  ));
+  const initialColumnCount = await page.locator(".matchup-table .column-head:not(.overall)").count();
+  expect(rangeRequests).toBe(0);
+
+  await page.locator("[data-matchup-mainstream]").check();
+  await expect(page.locator(".matchup-mainstream-status")).toBeVisible();
+  await expect(page.locator("[data-matchup-row-identity]")).toHaveCount(initialRowIds.length);
+  await expect(page.locator(".matchup-table .column-head:not(.overall)"))
+    .toHaveCount(initialColumnCount);
+  expect(rangeRequests).toBe(1);
+
+  failRange = false;
+  await page.locator("[data-matchup-mainstream-retry]").click();
+  await expect(page.locator(".matchup-mainstream-status")).toHaveCount(0);
+  const expectedVisibleIds = initialRowIds.filter(id => expectedParents.has(id));
+  await expect(page.locator("[data-matchup-row-identity]"))
+    .toHaveCount(expectedVisibleIds.length);
+  expect(await page.locator("[data-matchup-row-identity]").evaluateAll(rows => (
+    rows.map(row => row.dataset.matchupRowIdentity)
+  ))).toEqual(expectedVisibleIds);
+  await expect(page.locator(".matchup-table .column-head:not(.overall)"))
+    .toHaveCount(expectedVisibleIds.length);
+  await expect(page.locator('[data-matchup-row-identity="mono-blue-belcher"]')).toBeVisible();
+  await expect(page.locator('[data-matchup-row-identity="hollowvine"]')).toHaveCount(0);
+  expect(rangeRequests).toBe(2);
+
+  await page.locator("[data-matchup-mainstream]").uncheck();
+  await expect(page.locator("[data-matchup-row-identity]")).toHaveCount(initialRowIds.length);
+  await page.locator("[data-matchup-filter-toggle]").click();
+  await page.locator("[data-matchup-filter-select-all]").uncheck();
+  await page.locator("#matchup-filter-search").fill("hollowvine");
+  await page.locator('[data-matchup-filter-option="hollowvine"]').check();
+  await page.locator("[data-matchup-filter-apply]").click();
+  await expect(page.locator('[data-matchup-row-identity="hollowvine"]')).toBeVisible();
+
+  await page.locator("[data-matchup-mainstream]").check();
+  await expect(page.locator(".matchup-filter-empty")).toContainText(
+    "contains no mainstream archetype"
+  );
+  expect(rangeRequests).toBe(2);
+  await page.locator("[data-matchup-mainstream]").uncheck();
+  await expect(page.locator('[data-matchup-row-identity="hollowvine"]')).toBeVisible();
+  expect(rangeRequests).toBe(2);
 });
 
 test("matrix names disclose parents and row leaves open a visible MTGO detail", async ({ page }) => {
@@ -180,6 +255,7 @@ test("mobile matchup filter fits the viewport and does not move the page when ap
     .not.toHaveClass(/is-clipped/);
   await expect(page.locator('[data-matchup-row-identity="golgari-yawgmoth"] .row-axis-name'))
     .not.toHaveClass(/is-clipped/);
+  await expect(page.locator("[data-matchup-mainstream]")).toBeVisible();
   const compactLayout = await page.evaluate(() => {
     const parentRow = document.querySelector('[data-matchup-row-identity="prowess"]');
     const plainRow = document.querySelector('[data-matchup-row-identity="boros-energy"]');
@@ -283,4 +359,43 @@ test("Tabletop matchup uses the same hierarchical exact-row filter", async ({ pa
   const detailPage = await popupPromise;
   await expect(detailPage.locator(".deck-detail-row")).toBeVisible();
   await expectInViewport(detailPage.locator(".deck-detail-row"));
+});
+
+test("Tabletop mainstream matchups reuse the active-scope Overview", async ({ page, request }) => {
+  const expectedParents = await expectedMainstreamParents(
+    request,
+    "/stats/modern/melee/events/434455/overview.json",
+    document => document.scopes.all_constructed.archetypes,
+    "archetype_id",
+    "metagame_share"
+  );
+  let overviewRequests = 0;
+  page.on("request", requestEvent => {
+    if (requestEvent.url().includes("/stats/modern/melee/events/434455/overview.json")) {
+      overviewRequests += 1;
+    }
+  });
+  await page.goto(
+    "/melee/index.html?format=modern&product=tabletop-major-events&event=434455&view=matchup&scope=all_constructed&lang=en"
+  );
+  await expect(page.locator("[data-matchup-row-identity]").first()).toBeVisible();
+  const initialRowIds = await page.locator("[data-matchup-row-identity]").evaluateAll(rows => (
+    rows.map(row => row.dataset.matchupRowIdentity)
+  ));
+  const requestsAfterLoad = overviewRequests;
+  const expectedVisibleIds = initialRowIds.filter(id => expectedParents.has(id));
+
+  await page.locator("[data-matchup-mainstream]").check();
+  await expect(page.locator("[data-matchup-row-identity]"))
+    .toHaveCount(expectedVisibleIds.length);
+  expect(await page.locator("[data-matchup-row-identity]").evaluateAll(rows => (
+    rows.map(row => row.dataset.matchupRowIdentity)
+  ))).toEqual(expectedVisibleIds);
+  await expect(page.locator(".matchup-table .column-head:not(.overall)"))
+    .toHaveCount(expectedVisibleIds.length);
+  expect(overviewRequests).toBe(requestsAfterLoad);
+
+  await page.locator("[data-matchup-mainstream]").uncheck();
+  await expect(page.locator("[data-matchup-row-identity]")).toHaveCount(initialRowIds.length);
+  expect(overviewRequests).toBe(requestsAfterLoad);
 });

@@ -1442,6 +1442,39 @@ bye, intentional draw, no-show, verified Top 8 lock award, administrative
 result, disqualified participant, or unknown. Draft, playoffs, and ordinary
 unplayed scheduled opportunities never become source matchup matches.
 
+### 11.10 Optional mainstream matchup projection
+
+The front end may apply one default-off mainstream projection to both matchup
+axes. Eligibility is determined only at parent-archetype level from an existing
+source-appropriate share record:
+
+- MTGO uses the parent `high_score_share` from the range-statistics document
+  whose interval matches the active matchup interval;
+- Tabletop uses the parent `metagame_share` from the active event and scope
+  Overview; and
+- a known parent qualifies when its stored share is greater than or equal to
+  `0.02`.
+
+High-score share retains the section 8.4 meaning and must not be labeled as an
+overall MTGO metagame share. Tabletop metagame share retains the applicable
+section 13 scope denominator. The source products must not contribute to or
+fall back to one another. Match volume is not a substitute eligibility field.
+
+`Unknown` is excluded from the mainstream projection even when its share meets
+the numeric threshold; it remains available in the complete matrix and quality
+accounting. When a known parent qualifies, all maintained subtype identities
+under that parent remain eligible for ordinary disclosure without applying a
+second subtype threshold. The projection intersects the existing exact row
+selection on the row axis and independently applies the same qualifying family
+set to the column axis. Hidden selections and disclosure state remain intact.
+
+This is a presentation projection only. It does not recalculate or rank
+matchups, change any W-L-D count, alter the 20-match warning, create a new
+statistic, or change a generated field, Schema, or public path. If the required
+share record is unavailable, the consumer must retain the complete matrix and
+report a retryable unavailable state rather than infer eligibility from matchup
+counts.
+
 ---
 
 ## 12. Confidence intervals and sample size
