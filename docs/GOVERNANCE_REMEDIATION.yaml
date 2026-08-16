@@ -1,6 +1,8 @@
 schema_version: "1.0"
 program_id: "GOVERNANCE-EFFICIENCY-20260815"
 objective: "Reduce development governance and validation time while protecting the published output."
+program_status: "blocked_pending_gov10a_pages_content_evidence_fix"
+closure_condition: "Repair the Pages comparison so it proves the allowed output paths and file contents without treating non-Git-preserved permissions as product bytes, then complete one authorized recovery deployment with existing production evidence."
 owner_principles:
   - "Do not test unless a named risk requires it; use the smallest check that can answer that question."
   - "Do not repeat evidence already obtained for the same immutable subject."
@@ -111,7 +113,7 @@ tasks:
 
   - id: "GOV-10-PRODUCTION-EVIDENCE-REUSE"
     name: "Stop retesting validated production commits"
-    status: "completed_merged_and_deployed"
+    status: "completed_merged_operational_followup_required"
     depends_on: ["GOV-06-OUTPUT-GATED-VALIDATION-CUTOVER", "GOV-08-MINIMAL-TESTSET-REBUILD"]
     problem: "Scheduled build, bot push CI, and Pages can repeat evidence for the same generated subject."
     solution: "Hash the post-fetch generation subject, skip every downstream test and publication stage when it is unchanged, bind a changed subject's validated artifact to its producer run and generated commit, path-filter ordinary Pages pushes, and perform only exact evidence admission plus three availability requests downstream."
@@ -125,6 +127,20 @@ tasks:
       - "Post-deploy confirmation requests only index.html, melee/index.html, and stats/catalog.json with bounded retry."
       - "Manual or recovery dispatch with no production evidence remains distinct; partial evidence fails closed."
     completion: "Published through PR 217 and merge commit bdf40432ab474effcc43e92f93ca17cb86f9aa0c; merge confirmation and Pages deployment succeeded."
+    operational_followup: "Scheduled run 31906796791 validated and published candidate 77508f1b450373ca471a6f0b03ecd9724937476f once, but Pages run 31907814499 falsely rejected identical file contents because the tar digest included six discovery.json permission changes from 0600 to Git-checkout 0644."
+
+  - id: "GOV-10A-PAGES-CONTENT-EVIDENCE-CANONICALIZATION"
+    name: "Compare published output content without Git-irrelevant permissions"
+    status: "local_implementation_authorized"
+    depends_on: ["GOV-10-PRODUCTION-EVIDENCE-REUSE"]
+    problem: "Pages recompresses the published tree and compares the resulting tar bytes to the validated artifact, so ordinary permissions not preserved by Git cause a false rejection."
+    solution: "Keep immutable artifact, path-boundary, provenance, and exact-production-evidence checks; extract the validated artifact and compare only the allowed paths and file contents against the checked-out publication commit."
+    effect: "Identical published content deploys despite ordinary permission normalization, while a missing, extra, or changed output file still blocks Pages without rerunning candidate validation."
+    acceptance:
+      - "The immutable validated-output artifact SHA and generation-subject SHA remain checked before content comparison."
+      - "Pages compares data/, stats/, reports/, and fetched.txt with recursive path-and-content comparison and never regenerates published-output.tar."
+      - "The existing workflow-contract test states the new content comparison and rejects the retired tar-byte comparison."
+      - "A separately authorized recovery dispatch may reuse producer run 31906796791 and its immutable artifact; it must not regenerate or revalidate the candidate."
 
   - id: "GOV-11-LIVE-DOCUMENT-SLIMMING"
     name: "Keep live governance documents small"
@@ -146,7 +162,7 @@ tasks:
 
   - id: "GOV-12-OPERATIONS-AND-PRIVACY-CLOSEOUT"
     name: "Document Melee HMAC recovery and production failure response"
-    status: "owner_accepted_same_task_completion_authorized"
+    status: "completed_merged"
     depends_on: ["GOV-08-MINIMAL-TESTSET-REBUILD"]
     problem: "Melee HMAC recovery rules and the repository's existing production failure controls are scattered, while the original suppression proposal would broaden the task before a real removal or v3-production trigger exists."
     solution: "Document Melee-only key loss and rotation boundaries, add one short operator runbook for existing MTGO, Pages, and Melee failure paths, and defer secret provisioning and removal suppression to separately triggered work."
@@ -158,11 +174,13 @@ tasks:
       - "The documentation states that no production HMAC key is currently provisioned and records the separate Melee v3 preflight required before the first live test event."
       - "No suppression list, participant-string scan, code, test, Schema, configuration, workflow, data, UI, public-path, statistical, secret, production, or deployment change is made."
       - "No local automated test runs; the final targeted PR CI owns one existing documentation contract and repository-reference validation."
+    completion: "Published through PR 219 and merge commit 9b80490651d605aad99d1fec41e8b6b5541eaeca; exact master confirmation succeeded and Pages did not run."
 
   - id: "GOV-13-BOUNDED-MAINTENANCE-AUTHORITY"
     name: "Avoid a full authorization cycle for routine maintenance"
-    status: "planned_not_authorized"
+    status: "cancelled_not_needed"
     depends_on: ["GOV-11-LIVE-DOCUMENT-SLIMMING"]
     problem: "Routine dependency and CI maintenance repeatedly pays the same governance setup cost."
-    solution: "Define a narrow standing local-maintenance contract with prohibited changes, audit requirements, and the same acceptance-continuation stop conditions."
-    effect: "Safe maintenance can start promptly while product, statistics, credentials, and remote actions remain owner-gated."
+    solution: "Do not add standing local authority; retain per-task local authorization and use the existing Owner-acceptance continuation rule for commit, Ready PR, CI, merge, and applicable same-task completion."
+    effect: "The duplicate authorization cycle is avoided without creating an open-ended maintenance permission."
+    closure: "Cancelled by the Owner on 2026-08-16 as unnecessary after the acceptance-continuation rule was adopted."
