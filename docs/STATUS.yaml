@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/gov-10b-pages-recovery-subject"
-  working_branch_status: "owner_accepted_same_task_completion_authorized"
+  current_working_branch: "master"
+  working_branch_status: "no_active_task"
   status: "active"
 
 status_document:
@@ -31,67 +31,26 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-10B-PAGES-RECOVERY-SUBJECT-BINDING"
-  name: "Bind production recovery to the immutable Pages subject"
-  status: "owner_accepted_same_task_completion_authorized"
-  authorized_on: "2026-08-16"
-  owner_accepted_on: "2026-08-16"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-10a-pages-content-evidence-20260816-01"
-  branch: "codex/gov-10b-pages-recovery-subject"
-  base_commit: "b6f572f9da6e78dfe4a6d956b61cd95c6dd4b93a"
-  artifact_impact: "public_path"
-  objective: "Run recovery admission and packaging from the immutable master dispatch subject while accepting only a proven ancestor production commit whose generated output still matches that subject."
+  id: "NONE"
+  name: "No active authorized task"
+  status: "idle_pending_owner_direction"
+  artifact_impact: "none"
   authorization:
-    local_implementation: true
-    commit: true
-    remote_publication: true
-    merge: true
-  target_paths:
-    - ".github/workflows/pages.yml"
-    - "ci_master_admission.py"
-    - "tests/test_ci_master_admission.py"
-    - "tests/test_ci_workflow.py"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DEVELOPMENT_WORKFLOW.md"
-    - "docs/TEST_TRIGGER_MATRIX.md"
-    - "docs/STATUS.yaml"
-    - "docs/GOVERNANCE_REMEDIATION.yaml"
-  planned_file_operations:
-    additions: []
-    deletions: []
-    renames: []
-  protected_scope:
-    product_code_changed: "none"
-    raw_or_generated_data_changed: "none"
-    statistical_behavior_changed: "none"
-    schema_changed: "none"
-    frontend_or_ui_changed: "none"
-    workflow_changed: "Only production-evidence dispatch admission and the immutable Pages checkout subject."
-    public_paths_changed: "No URL changes; the Pages publication boundary changes."
-    production_dispatched: false
-    remote_write_performed: "none"
-  validation_plan:
-    - "Run only the changed production-evidence nodes, the one Pages workflow-contract node, and the live-document contract once on the final local tree."
-    - "Do not run CLI, generator, candidate, Schema, rule, Node, Playwright, full pytest, or production checks locally."
-    - "After Owner acceptance, targeted PR CI owns one independent control-plane validation; one recovery dispatch reuses run 31906796791 without regenerating or retesting its candidate."
-  prohibited_changes:
-    - "Do not weaken the immutable artifact SHA, generation-subject SHA, production-run provenance, ancestor requirement, output boundary, or failure-closed behavior."
-    - "Do not add a test file, restore retired suites, regenerate data, modify public paths, or change statistics."
-    - "Do not dispatch production or recovery Pages before Owner acceptance."
-  stop_point: "Complete the accepted task continuously through commit, one Ready PR, required CI, merge, and one exact-evidence recovery dispatch; stop on failure or before any later task."
+    local_implementation: false
+    commit: false
+    remote_publication: false
+    merge: false
+  stop_point: "Await a new task brief and separate Owner authorization; do not infer authority from the completed governance program."
 
 current_repository_state:
-  baseline_commit: "b6f572f9da6e78dfe4a6d956b61cd95c6dd4b93a"
-  baseline_note: "Remote master after GOV-10A merged through PR 220; recovery run 31923585217 exposed the stale-verifier and current-master-equality defects addressed by GOV-10B."
+  baseline_commit: "7c5d0b88186dda4a26ede25e6a5ef3eeaf9f2270"
+  baseline_note: "Functional governance closeout baseline after PR 221; exact-evidence Pages recovery run 31925549924 succeeded. The intentional documentation closeout merge remains recorded by GitHub and Git."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
-known_blockers:
-  - id: "MTGO-PAGES-RUN-31923585217-STALE-SUBJECT-VERIFIER"
-    scope: "governance_closeout_and_production_pages"
-    effect: "Recovery checks out the historical publication commit before executing admission, so it runs the old verifier and rejects a valid ancestor publication after master advances."
+known_blockers: []
 
 future_task_gates:
   - task: "MELEE-V3-PRODUCTION-PREFLIGHT"
@@ -104,16 +63,15 @@ future_task_gates:
   - task: "P12-10"
     status: "blocked_pending_no_publication_rehearsal_and_separate_authorization"
     remaining_requirements:
-      - "Resolve the GOV-10B Pages recovery-subject blocker."
       - "Perform and accept one separately authorized no-publication Tuesday rehearsal."
       - "Obtain separate P12-10 implementation authorization."
 
 next_approved_task:
-  id: "GOV-10B-PAGES-RECOVERY-SUBJECT-BINDING"
-  name: "Bind production recovery to the immutable Pages subject"
-  status: "owner_accepted_same_task_completion_authorized"
-  local_execution_authorized: true
-  note: "GOV-10B same-task completion is authorized; every later task remains unauthorized."
+  id: "NONE"
+  name: "No follow-up task is authorized"
+  status: "no_follow_up_authorized"
+  local_execution_authorized: false
+  note: "The governance-efficiency program is complete and authorizes no later task."
 
 prohibited_next_actions:
   - "Do not begin the Melee v3 production preflight, P12-10, Pickup reflow, or another task automatically."

@@ -31,3 +31,11 @@ must not be used to authorize work. Current authorization is recorded only in
 At task completion, move detailed completed roadmap material into the matching
 phase history file in the same accepted task. Keep only remaining work,
 acceptance criteria, and a compact history pointer in `docs/ROADMAP.md`.
+
+## Governance history
+
+- `GOVERNANCE-EFFICIENCY-20260815.yaml` preserves the complete GOV-06 through
+  GOV-13 efficiency-remediation ledger, including the GOV-10A/GOV-10B recovery
+  sequence. The program closed on 2026-08-16 after exact-evidence Pages run
+  `31925549924` succeeded. The file is historical and non-authoritative; the
+  compact live result remains in `docs/GOVERNANCE_REMEDIATION.yaml`.
