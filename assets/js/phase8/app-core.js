@@ -52,6 +52,7 @@ const state = {
   statsSort: "high_score_share",
   statsDirection: "desc",
   statsExpanded: new Set(),
+  compositionIdentity: null,
   matchupRows: new Set(),
   matchupColumns: new Set(),
   matchupSearch: "",

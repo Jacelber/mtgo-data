@@ -106,6 +106,9 @@ separation, and established public entry points.
     - `P12-13A` — completed matrix search and shared visible-projection
       foundation; its detailed contract is archived in
       `docs/history/ROADMAP-PHASE-12-COMPLETED.md`;
+    - `BROODSCALE-SUBTYPE-AND-COMPOSITION-NAVIGATION-HOTFIX` — completed;
+      its classifier and responsive composition-navigation contract is
+      archived in `docs/history/ROADMAP-PHASE-12-COMPLETED.md`;
     - `P12-13B` — focused archetype: select one stable parent or available
       subtype identity, emphasize its row and column, reduce unrelated visual
       weight, reveal the target without losing expansion state, and clear an

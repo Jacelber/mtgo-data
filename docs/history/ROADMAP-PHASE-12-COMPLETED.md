@@ -351,3 +351,34 @@ authorization remains solely in `docs/STATUS.yaml`.
    and requires no additional matchup-data request. Owner acceptance authorized
    completion of this unchanged task through one commit, one Ready pull request,
    required CI, merge, and Pages verification. P12-13B remains a separate gate.
+
+13A-HOTFIX. `BROODSCALE-SUBTYPE-AND-COMPOSITION-NAVIGATION-HOTFIX` — Broodscale
+   subtype boundary and composition navigation
+   - treat Grove of the Burnwillows alone as insufficient red subtype evidence
+     for Broodscale Combo, while a reviewed non-Grove main-deck red source or a
+     reviewed red spell anywhere in the full 75 selects Gruul;
+   - preserve Copperline Gorge and Karplusan Forest as red-source evidence and
+     retain the existing parent, subtype, priority, conflict, Unknown, and
+     same-format boundaries;
+   - resolve zero active subtype choices to parent detail, one active subtype
+     to that subtype detail, and multiple active subtypes to the subtype-choice
+     expansion rather than an arbitrary or averaged subtype;
+   - keep exactly one composition segment selected independently of how many
+     subtype groups remain expanded below;
+   - on desktop, reveal a multi-subtype action through the final subtype and
+     preserve the existing deck-detail end reveal;
+   - at or below the 780-pixel mobile breakpoint, reveal a multi-subtype action
+     from the parent metrics card, keep a zero- or one-subtype composition
+     detail open while revealing its metrics card, and reveal deck content only
+     when the user explicitly opens a closed deck detail;
+   - preserve P12-13A row-only search, matchup formulas, public paths and data
+     shapes, protected event source bytes, and existing Top 8 history;
+   - regenerate only affected retained-input classifier documents and require
+     focused classifier and UI checks plus Owner hands-on local-browser
+     acceptance before completion.
+
+   The Owner accepted the final desktop and mobile result on 2026-08-16.
+   Acceptance authorized completion of the unchanged task through one commit,
+   one Ready pull request, required CI, merge, and Pages verification.
+   P12-13B, production dispatch, Pickup reflow, and P12-10 remain separate
+   authorization gates.
