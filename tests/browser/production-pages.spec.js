@@ -26,6 +26,82 @@ async function expectedMainstreamParents(request, path, records, idKey, shareKey
     .filter(id => id && id !== "unknown"));
 }
 
+async function expectKeyboardMatrixScrolling(page, path, viewport) {
+  await page.setViewportSize(viewport);
+  await page.goto(path);
+  const scroller = page.locator(".matrix-scroll");
+  const cell = page.locator(".matchup-table .matrix-cell[tabindex='0']").first();
+  await expect(cell).toBeVisible();
+  const before = await page.evaluate(() => {
+    const matrix = document.querySelector(".matrix-scroll");
+    const target = document.querySelector(".matchup-table .matrix-cell[tabindex='0']");
+    matrix.scrollLeft = 0;
+    target.focus({ preventScroll: true });
+    return {
+      columnWidth: target.getBoundingClientRect().width,
+      rows: [...document.querySelectorAll("[data-matchup-row-identity]")]
+        .map(row => row.dataset.matchupRowIdentity),
+      columns: [...document.querySelectorAll("[data-matchup-column]")]
+        .map(column => column.dataset.matchupColumn),
+      expandedRows: document.querySelectorAll('[data-matchup-row-identity*="/"]').length,
+      mainstream: document.querySelector("[data-matchup-mainstream]")?.checked ?? false,
+      url: location.href,
+    };
+  });
+
+  await cell.press("ArrowRight");
+  await expect.poll(() => scroller.evaluate(element => element.scrollLeft))
+    .toBeCloseTo(before.columnWidth, 0);
+  await expect.poll(() => page.locator(".matrix-sticky-viewport").evaluate(
+    element => element.scrollLeft
+  )).toBeCloseTo(before.columnWidth, 0);
+  expect(await cell.evaluate(element => document.activeElement === element)).toBe(true);
+
+  await cell.press("ArrowLeft");
+  await expect.poll(() => scroller.evaluate(element => element.scrollLeft)).toBe(0);
+  expect(await cell.evaluate(element => document.activeElement === element)).toBe(true);
+
+  const ignoredKeys = await cell.evaluate(element => {
+    const dispatch = (key, modifiers = {}) => element.dispatchEvent(new KeyboardEvent(
+      "keydown",
+      { key, ...modifiers, bubbles: true, cancelable: true }
+    ));
+    return {
+      up: dispatch("ArrowUp"),
+      down: dispatch("ArrowDown"),
+      altRight: dispatch("ArrowRight", { altKey: true }),
+      ctrlRight: dispatch("ArrowRight", { ctrlKey: true }),
+      metaRight: dispatch("ArrowRight", { metaKey: true }),
+      shiftedRight: dispatch("ArrowRight", { shiftKey: true }),
+    };
+  });
+  expect(ignoredKeys).toEqual({
+    up: true,
+    down: true,
+    altRight: true,
+    ctrlRight: true,
+    metaRight: true,
+    shiftedRight: true,
+  });
+  expect(await scroller.evaluate(element => element.scrollLeft)).toBe(0);
+
+  expect(await page.evaluate(() => ({
+    rows: [...document.querySelectorAll("[data-matchup-row-identity]")]
+      .map(row => row.dataset.matchupRowIdentity),
+    columns: [...document.querySelectorAll("[data-matchup-column]")]
+      .map(column => column.dataset.matchupColumn),
+    expandedRows: document.querySelectorAll('[data-matchup-row-identity*="/"]').length,
+    mainstream: document.querySelector("[data-matchup-mainstream]")?.checked ?? false,
+    url: location.href,
+  }))).toEqual({
+    rows: before.rows,
+    columns: before.columns,
+    expandedRows: before.expandedRows,
+    mainstream: before.mainstream,
+    url: before.url,
+  });
+}
+
 test("MTGO page renders a published number", async ({ page }) => {
   await page.goto("/index.html?format=standard&product=mtgo-statistics&range=1&lang=en");
   await expectPublishedNumber(page, "decks");
@@ -36,6 +112,19 @@ test("Tabletop page renders a published number", async ({ page }) => {
     "/melee/index.html?format=modern&product=tabletop-major-events&scope=all_constructed&lang=en"
   );
   await expectPublishedNumber(page, "scope-decks");
+});
+
+test("matchup matrices use Left and Right for one-column viewport movement", async ({ page }) => {
+  await expectKeyboardMatrixScrolling(
+    page,
+    "/index.html?format=modern&product=mtgo-matchups&range=4&lang=en",
+    { width: 800, height: 720 }
+  );
+  await expectKeyboardMatrixScrolling(
+    page,
+    "/melee/index.html?format=modern&product=tabletop-major-events&event=434455&view=matchup&scope=all_constructed&lang=en",
+    { width: 375, height: 844 }
+  );
 });
 
 test("MTGO matchup filter searches its tree and applies an exact multi-row subset", async ({ page }) => {

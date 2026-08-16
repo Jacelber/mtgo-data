@@ -117,42 +117,18 @@ separation, and established public entry points.
       both products, with source-specific 2% parent eligibility, preserved
       subtype/filter state, lazy MTGO share loading, and no statistical or
       public-data change; the decision contract is recorded in `DEC-100`;
-    - `P12-13D` — minimum-match filter: offer no minimum, 5, 10, and 20;
-      distinguish filtered cells from absent data, retain the established
-      20-match low-sample warning and its meaning, and provide a truthful empty
-      state when no opponent remains. This remains a separate product decision
-      after P12-13C rather than an automatic follow-up;
-    - `P12-13E` — shareable matrix state: restore the exact selected row
-      identities, mainstream switch, and any separately accepted minimum-match
-      state across direct links, reload,
-      back, and forward navigation after the existing format, range, event, and
-      scope state is resolved. Do not serialize filter-menu candidate search,
-      disclosure state, hover, active keyboard cell, or pixel scroll position,
-      and ignore invalid retired identities safely;
-    - `P12-13F` — keyboard grid navigation: expose one roving `tabindex=0`
-      matrix cell, use directional keys without wrapping to move among visible
-      inspectable cells, keep row and column context plus literal record and
-      warning semantics available to assistive technology, and restore the
-      nearest valid focus after every filter, expansion, or URL-driven render;
-    - `P12-13Z` — read-only integrated acceptance after A through F: verify the
-      complete control combinations across Standard and Modern MTGO, the
-      protected Tabletop product, Chinese and English, desktop and 390-pixel
-      layouts, mouse, touch, keyboard, URL restoration, sticky identity and
-      opponent headers, and zero application console errors. If this check
-      finds a defect, repair and accept it as a separate focused follow-up
-      before declaring P12-13 complete;
-    - authorize, implement, review, accept, publish, and verify A through F one
-      at a time in dependency order. Each subtask starts from the latest
-      verified `master`, changes one user-visible capability, preserves MTGO
-      and Tabletop source and statistic separation, and stops after its own
-      Pages verification without beginning the next subtask automatically;
-    - Gate 5 for every A-through-F subtask and the Z review requires Owner
-      hands-on acceptance in a locally served browser against the final
-      unchanged UI tree. Codex first completes automated and developer-browser
-      checks, then supplies the exact local URL and interaction checklist; a
-      screenshot, automated browser result, or Codex-only walkthrough cannot
-      substitute for the Owner's direct interaction and explicit decision;
-    - every subtask preserves the existing matchup formulas, literal W-L-D
+    - `P12-13F` — bounded keyboard-horizontal movement: when keyboard
+      focus is within a matchup matrix, let Left and Right move the horizontal
+      matrix viewport while preserving the existing native Up and Down vertical
+      behavior. Do not add URL state, wrapping, filter or disclosure mutation,
+      four-direction cell-focus navigation, or a second matrix presentation;
+    - P12-13F requires separate implementation authorization and Owner hands-on
+      acceptance in a locally served browser against the final unchanged UI
+      tree. Codex first completes focused automated and developer-browser checks,
+      then supplies the exact local URL and keyboard checklist; a screenshot,
+      automated result, or Codex-only walkthrough cannot substitute for the
+      Owner's direct interaction and explicit decision;
+    - P12-13F preserves the existing matchup formulas, literal W-L-D
       counts, confidence intervals, 20-match warning, public JSON, Schemas,
       workflows, public paths, and protected event `434455` bytes.
 14. `P12-14` — Mobile matrix and card-image interaction

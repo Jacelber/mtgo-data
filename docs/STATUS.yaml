@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-13c-mainstream-matchups"
+  current_working_branch: "codex/p12-13f-horizontal-scroll"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,15 +31,17 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-13C"
-  name: "Mainstream matchup projection"
+  id: "P12-13F"
+  name: "Keyboard horizontal matrix scrolling"
   status: "owner_accepted_completion_authorized"
-  authorized_on: "2026-08-16"
+  planning_authorized_on: "2026-08-17"
+  implementation_authorized_on: "2026-08-17"
+  developer_validation_completed_on: "2026-08-17"
   owner_accepted_on: "2026-08-17"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-13c-mainstream-matchups-20260816-01"
-  branch: "codex/p12-13c-mainstream-matchups"
-  base_commit: "0090f17563e2c3b3f7000ebfdbd69b2a786ac2bf"
-  objective: "Replace the superseded Top-N opponent plan with one optional parent-level mainstream matchup projection that uses each source product's existing share statistic and constrains both matrix axes."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-13f-horizontal-scroll-20260817-01"
+  branch: "codex/p12-13f-horizontal-scroll"
+  base_commit: "11e0ea3ef7c1ea84329e408d85c3140fbc2228a2"
+  objective: "Retire excess P12-13 controls, correct DEC-096 and DEC-100 status metadata, and implement bounded left/right keyboard scrolling by one displayed matchup column without changing matrix state."
   artifact_impact: "user_visible_ui,documentation"
   authorization:
     local_implementation: true
@@ -47,21 +49,10 @@ current_task:
     remote_publication: true
     merge: true
   target_paths:
-    - "assets/css/phase8-candidate.css"
-    - "assets/js/phase8/app-core.js"
-    - "assets/js/phase8/app-mtgo.js"
-    - "assets/js/phase8/app-tabletop.js"
-    - "assets/js/phase8/app.js"
-    - "assets/js/phase8/i18n.js"
-    - "assets/js/phase8/matchup-model.js"
-    - "assets/js/phase8/mtgo-controller.js"
-    - "docs/PROJECT_SCOPE.md"
-    - "docs/STATISTICS_SPEC.md"
-    - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-    - "tests/js/phase8-matchup-model.test.js"
+    - "assets/js/phase8/app-mobile-interactions.js"
     - "tests/browser/production-pages.spec.js"
   protected_scope:
     statistical_formulas_changed: "none"
@@ -72,19 +63,23 @@ current_task:
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Add one default-off mainstream-matchup switch that constrains both parent axes at the same two-percent threshold."
-    - "Use current-range MTGO parent high-score share and current-scope Tabletop parent metagame share without mixing source products."
-    - "Keep qualifying parent subtype disclosure available, preserve the exact row-filter selection while hidden, and lazy-load only the existing MTGO range summary on first activation."
-    - "Add focused model and browser regressions and obtain Owner hands-on local-browser acceptance."
+    - "Remove P12-13D, P12-13E, and P12-13Z from the active roadmap as Owner-cancelled excess functionality."
+    - "Replace the former four-direction grid-navigation plan with a separately gated left/right keyboard-scroll candidate."
+    - "Restore the DEC-096 status and mark the completed DEC-100 decision Owner-verified."
+    - "When keyboard focus is within the matrix viewport, let unmodified Left and Right move that viewport by one currently rendered matchup-result column without moving focus."
+    - "Preserve native Up and Down behavior, browser-modified arrow shortcuts, matrix filters, disclosures, URL state, row and column membership, and sticky-header synchronization."
+    - "Cover the shared MTGO and Tabletop implementation with one focused permanent browser regression and perform developer browser review before Owner hands-on local acceptance."
   prohibited_changes:
-    - "Do not implement Top-N, minimum-match filtering, URL-persisted matrix state, directional-key grid navigation, or the P12-14 mobile vertical opponent view."
-    - "Do not change matchup formulas, share formulas, public JSON, Schemas, workflows, public paths, generated data, classification identities, or protected event 434455 bytes."
-    - "Do not commit, push, create a pull request, merge, or dispatch production before Owner acceptance."
-  stop_point: "Complete the accepted unchanged P12-13C tree through one local commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification; then stop without beginning P12-13D or another task."
+    - "Do not add four-direction cell-focus navigation, wraparound, smooth queued movement, new controls, copy, settings, URL persistence, filter or disclosure mutation, or a second matrix presentation."
+    - "Do not capture Left or Right outside the matchup matrix or any arrow key carrying Alt, Control, Meta, or Shift."
+    - "Do not edit CSS, localization, public data, Schemas, workflows, generated data, classifications, or protected event 434455 bytes."
+    - "Do not start or redesign P12-14 or any later task."
+    - "Do not dispatch production or carry this completion authority into another task or phase."
+  stop_point: "Complete the unchanged Owner-accepted P12-13F tree through one local commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification; then stop without beginning another task."
 
 current_repository_state:
-  baseline_commit: "0090f17563e2c3b3f7000ebfdbd69b2a786ac2bf"
-  baseline_note: "Verified remote master after accepted P12-13B merged in PR 225 and its merge-triggered Pages deployment succeeded. P12-13C starts from this commit in a fresh disposable isolated clone."
+  baseline_commit: "11e0ea3ef7c1ea84329e408d85c3140fbc2228a2"
+  baseline_note: "Verified remote master after accepted P12-13C merged in PR 226 and its merge-triggered Pages deployment succeeded. This documentation/F workspace starts from that exact commit."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -111,14 +106,15 @@ next_approved_task:
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "P12-13C is the active authorized local task. P12-13D and every other follow-up remain separate gates."
+  note: "The unchanged P12-13F implementation and documentation correction are Owner-accepted and authorized for continuous same-task completion. Every follow-up task remains a separate gate."
 
 prohibited_next_actions:
-  - "Do not begin P12-13D, the Melee v3 production preflight, P12-10, Pickup reflow, or another task automatically after accepted-task completion."
+  - "Do not begin the Melee v3 production preflight, P12-10, Pickup reflow, or another task automatically after accepted P12-13F completion."
   - "Do not retain a second standalone P12-13A search state; P12-13B replaces row search and label focus with one exact multi-select row filter whose internal search only narrows filter candidates."
-  - "Do not implement the superseded Top-N plan, minimum-match filtering, URL-persisted matrix state, directional-key grid navigation, or the P12-14 mobile vertical opponent view."
+  - "Do not restore the superseded Top-N, P12-13D minimum-match filter, P12-13E URL-persisted matrix state, P12-13Z dedicated combination review, or the former four-direction focus-grid plan."
+  - "Do not begin or redesign P12-14 or any later task until its own pre-implementation review."
   - "Do not change matchup formulas, public JSON, Schemas, workflows, public paths, generated data, or classification identities."
   - "Do not create, access, configure, or rotate an HMAC key or GitHub Secret."
-  - "Do not dispatch production, change event selection, fetch protected source data, or expand beyond the approved mainstream-matchup interaction contract."
+  - "Do not dispatch production, change event selection, fetch protected source data, or expand beyond the approved P12-13F horizontal keyboard-scroll contract."
   - "Do not rewrite Git history, force-push, mutate protected branches or tags, or change event 434455 raw snapshot or normalized-event bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."

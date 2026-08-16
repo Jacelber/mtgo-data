@@ -4114,7 +4114,7 @@ week's tournament values.
 
 # DEC-096 - Rebuild tests from a trigger-specific minimum
 
-Status: `Accepted and owner-verified`
+Status: `Accepted for local implementation`
 
 ## Context
 
@@ -4324,7 +4324,7 @@ production dispatch, and P12-10 remain separate gates.
 
 # DEC-100 - Replace matchup Top-N with one mainstream projection
 
-Status: `Accepted for local implementation`
+Status: `Accepted and owner-verified`
 
 ## Context
 
@@ -4364,6 +4364,14 @@ show a retryable unavailable state. Never infer mainstream eligibility from
 match volume. Do not add Top-N, a subtype-level threshold, a generated field, a
 Schema, a public path, or a URL state in this task.
 
+The 2026-08-17 follow-up product review cancels the planned P12-13D minimum-match
+filter, P12-13E URL-persisted matrix state, and P12-13Z dedicated combination
+review as excess functionality. Retain only a separately gated P12-13F candidate
+for Left and Right keyboard movement of the horizontal matrix viewport. Preserve
+the current native Up and Down vertical behavior; do not revive the former
+four-direction cell-focus grid. P12-14 and later tasks remain unchanged until
+their own pre-implementation reviews.
+
 ## Consequences
 
 The large matrix gains one compact global preset rather than another multi-value
@@ -4372,10 +4380,9 @@ The visible matrix can shrink on both axes without changing W-L-D counts,
 literal win-rate meaning, confidence intervals, low-sample warnings, taxonomy,
 source separation, or event `434455` bytes.
 
-P12-13D minimum-match filtering is no longer an automatic follow-up and requires
-a fresh product-value decision. P12-13E must refer to the mainstream switch
-rather than Top-N if it is later authorized. Owner hands-on local-browser
-acceptance was completed on 2026-08-17 for the unchanged local UI subject,
+Owner hands-on local-browser acceptance was completed on 2026-08-17 for the
+unchanged local UI subject,
 authorizing same-task commit, Ready pull request, required CI, normal merge,
-and merge-triggered Pages verification. P12-13D and every other follow-up remain
-separate authorization gates.
+and merge-triggered Pages verification. The cancelled D, E, and Z tasks are not
+follow-up gates; P12-13F implementation and every later task remain separately
+authorized.
