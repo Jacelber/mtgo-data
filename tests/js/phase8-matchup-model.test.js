@@ -118,64 +118,92 @@ test("active matchup documents omit leaves with no played matches", () => {
     active.hierarchy.parents.find(parent => parent.id === "bravo").expandable,
     false
   );
+  assert.equal(matchup.resolveFilterIdentity(active, "bravo/two"), null);
+  assert.equal(matchup.resolveFilterIdentity(active, "bravo").id, "bravo");
 });
 
-test("visible matchup projection searches parents and subtypes without changing expansion state", () => {
+test("exact matchup row filters preserve stable order and column expansion", () => {
   const document = documentFor(3);
-  const alphaOne = document.hierarchy.leaves.find(leaf => leaf.id === "alpha/one");
-  const alphaTwo = document.hierarchy.leaves.find(leaf => leaf.id === "alpha/two");
-  alphaOne.display_name = "First Alpha Variant";
-  alphaTwo.display_name = "Second Alpha Variant";
-  const expandedRows = new Set(["bravo"]);
+  const expandedRows = new Set();
   const expandedColumns = new Set(["alpha"]);
 
-  const subtypeMatch = matchup.buildVisibleView(
+  const filtered = matchup.buildVisibleView(
     document,
     expandedRows,
     expandedColumns,
-    "  SECOND   alpha  "
+    new Set(["bravo", "alpha/two"])
   );
 
-  assert.deepEqual(subtypeMatch.rows.map(node => node.id), ["alpha", "alpha/two"]);
-  assert.deepEqual(subtypeMatch.columns.map(node => node.id), [
+  assert.deepEqual(filtered.rows.map(node => node.id), ["alpha/two", "bravo"]);
+  assert.deepEqual(filtered.columns.map(node => node.id), [
     "alpha",
     "alpha/one",
     "alpha/two",
     "bravo",
   ]);
-  assert.deepEqual([...expandedRows], ["bravo"]);
+  assert.deepEqual([...expandedRows], []);
   assert.deepEqual([...expandedColumns], ["alpha"]);
   assertRecord(
-    subtypeMatch.matrix["alpha/two"]["bravo"],
+    filtered.matrix["alpha/two"]["bravo"],
     sumRecords([
       document.leaf_matrix["alpha/two"]["bravo/one"],
       document.leaf_matrix["alpha/two"]["bravo/two"],
     ])
   );
 
-  const parentMatch = matchup.buildVisibleView(
+  expandedRows.add("bravo");
+  const disclosedFiltered = matchup.buildVisibleView(
     document,
     expandedRows,
     expandedColumns,
-    "bravo"
+    new Set(["bravo", "alpha/two"])
   );
-  assert.deepEqual(parentMatch.rows.map(node => node.id), [
-    "bravo",
-    "bravo/one",
-    "bravo/two",
-  ]);
-  assert.deepEqual(parentMatch.columns.map(node => node.id), [
-    "alpha",
-    "alpha/one",
-    "alpha/two",
-    "bravo",
+  assert.deepEqual(disclosedFiltered.rows.map(node => node.id), [
+    "alpha/two", "bravo", "bravo/one", "bravo/two",
   ]);
 
-  const noMatch = matchup.buildVisibleView(document, [], [], "not a deck");
-  assert.deepEqual(noMatch.rows, []);
-  assert.deepEqual(noMatch.columns.map(node => node.id), ["alpha", "bravo"]);
-  assert.deepEqual(noMatch.matrix, {});
-  assert.deepEqual(noMatch.overall, {});
+  const unfiltered = matchup.buildVisibleView(document, expandedRows, expandedColumns, null);
+  assert.deepEqual(unfiltered.rows.map(node => node.id), [
+    "alpha", "bravo", "bravo/one", "bravo/two",
+  ]);
+});
+
+test("matchup filter candidates expose parent-subtype hierarchy without duplicate rows", () => {
+  const document = documentFor(5);
+  const candidates = matchup.filterCandidates(document);
+  assert.deepEqual(candidates.map(parent => parent.id), ["alpha", "bravo"]);
+  assert.deepEqual(candidates[0].children.map(child => child.id), ["alpha/one", "alpha/two"]);
+  assert.deepEqual(candidates[1].children.map(child => child.id), ["bravo/one", "bravo/two"]);
+
+  const active = matchup.activeMatchupDocument(document, 20);
+  const singleLeafBravo = active.hierarchy.parents.find(parent => parent.id === "bravo");
+  singleLeafBravo.subtype_ids = ["bravo/one"];
+  singleLeafBravo.expandable = false;
+  active.hierarchy.leaves = active.hierarchy.leaves.filter(leaf => leaf.id !== "bravo/two");
+  delete active.leaf_matrix["bravo/two"];
+  Object.values(active.leaf_matrix).forEach(columns => delete columns["bravo/two"]);
+  const noDuplicate = matchup.buildVisibleView(active, [], [], new Set(["bravo"]));
+  assert.equal(noDuplicate.rows.filter(node => node.id === "bravo").length, 1);
+});
+
+test("matchup filter identity resolution rejects unavailable identities", () => {
+  const document = documentFor(7);
+
+  assert.deepEqual(matchup.resolveFilterIdentity(document, "alpha"), {
+    id: "alpha",
+    kind: "archetype",
+    name: "Alpha",
+    parentId: "alpha",
+    parentName: "Alpha",
+    expandable: true,
+    showAxisToggle: true,
+  });
+  assert.equal(matchup.resolveFilterIdentity(document, "alpha/two").parentId, "alpha");
+  assert.equal(matchup.resolveFilterIdentity(document, "missing"), null);
+
+  document.parent_order = ["bravo"];
+  assert.equal(matchup.resolveFilterIdentity(document, "alpha"), null);
+  assert.equal(matchup.resolveFilterIdentity(document, "alpha/two"), null);
 });
 
 test("Chinese and English translation keys match exactly", () => {

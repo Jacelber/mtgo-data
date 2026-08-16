@@ -287,16 +287,203 @@ function matrixCell(record) {
     <strong>${(record.win_rate * 100).toFixed(1)}</strong><small>${half === null ? "—" : `±${(half * 100).toFixed(1)}`}</small></td>`;
 }
 
-function matchupSearchControls() {
-  const hasQuery = Boolean(ReviewData.normalizeSearch(state.matchupSearch));
-  return `<div class="matchup-search-control">
-    <label for="matchup-search">${t("matchup.search_label")}</label>
-    <div class="matchup-search-input">
-      <input id="matchup-search" type="search" value="${escapeHtml(state.matchupSearch)}"
-        placeholder="${t("matchup.search_placeholder")}" autocomplete="off" spellcheck="false">
-      <button class="secondary-button" type="button" data-matchup-search-clear${hasQuery ? "" : " disabled"}>${t("matchup.search_clear")}</button>
+function matchupFilterCandidates(document) {
+  return ReviewData.filterCandidates(document);
+}
+
+function matchupFilterCandidateIds(document) {
+  return matchupFilterCandidates(document).flatMap(parent => [
+    parent.id,
+    ...parent.children.map(child => child.id),
+  ]);
+}
+
+function synchronizeMatchupFilter(document) {
+  if (state.matchupFilterIdentities === null) return;
+  const available = new Set(matchupFilterCandidateIds(document));
+  state.matchupFilterIdentities = new Set(
+    [...state.matchupFilterIdentities].filter(identity => available.has(identity))
+  );
+  if (!state.matchupFilterIdentities.size) {
+    state.matchupFilterIdentities = null;
+    state.matchupRows.clear();
+  }
+}
+
+function matchupFilterControls(document) {
+  const candidates = matchupFilterCandidates(document);
+  const allIds = matchupFilterCandidateIds(document);
+  const committed = state.matchupFilterIdentities;
+  const selection = state.matchupFilterOpen
+    ? state.matchupFilterDraft
+    : committed === null ? new Set(allIds) : committed;
+  const allSelected = selection.size === allIds.length;
+  const summary = committed === null
+    ? t("matchup.filter_all")
+    : t("matchup.filter_selected", { count: committed.size });
+  const groups = candidates.map(parent => {
+    const childrenId = `matchup-filter-children-${parent.id}`;
+    const expanded = state.matchupFilterExpanded.has(parent.id);
+    const disclosure = parent.children.length
+      ? `<button type="button" class="matchup-filter-disclosure" data-matchup-filter-parent="${escapeHtml(parent.id)}"
+          aria-expanded="${expanded}" aria-controls="${escapeHtml(childrenId)}" aria-label="${escapeHtml(`${expanded ? t("matchup.collapse") : t("matchup.expand")}${parent.name}`)}">
+          <span aria-hidden="true">${expanded ? "−" : "+"}</span></button>`
+      : `<span class="matchup-filter-disclosure-spacer" aria-hidden="true"></span>`;
+    const children = parent.children.map(child => `<label class="matchup-filter-option matchup-filter-child"
+        data-matchup-filter-name="${escapeHtml(ReviewData.normalizeSearch(child.name))}">
+        <input type="checkbox" data-matchup-filter-option="${escapeHtml(child.id)}"${selection.has(child.id) ? " checked" : ""}>
+        <span>${escapeHtml(child.name)}</span></label>`).join("");
+    return `<div class="matchup-filter-parent-group" data-matchup-filter-group
+        data-matchup-filter-parent-name="${escapeHtml(ReviewData.normalizeSearch(parent.name))}">
+      <div class="matchup-filter-parent-row">${disclosure}<label class="matchup-filter-option">
+        <input type="checkbox" data-matchup-filter-option="${escapeHtml(parent.id)}"${selection.has(parent.id) ? " checked" : ""}>
+        <span>${escapeHtml(parent.name)}</span></label></div>
+      ${parent.children.length ? `<div id="${escapeHtml(childrenId)}" class="matchup-filter-children"${expanded ? "" : " hidden"}>${children}</div>` : ""}
+    </div>`;
+  }).join("");
+  return `<div id="matchup-filter-control" class="matchup-filter-control">
+    <label id="matchup-filter-label">${t("matchup.filter_label")}</label>
+    <div class="matchup-filter-trigger-row">
+      <button type="button" class="matchup-filter-toggle" data-matchup-filter-toggle
+        aria-expanded="${state.matchupFilterOpen}" aria-controls="matchup-filter-menu">
+        <span>${escapeHtml(summary)}</span><span aria-hidden="true">▾</span></button>
+      <button type="button" class="secondary-button" data-matchup-filter-reset${committed === null ? " disabled" : ""}>${t("matchup.filter_reset")}</button>
+    </div>
+    <div id="matchup-filter-menu" class="matchup-filter-menu" data-matchup-filter-menu${state.matchupFilterOpen ? "" : " hidden"}
+      role="dialog" aria-labelledby="matchup-filter-label">
+      <input id="matchup-filter-search" type="search" placeholder="${t("matchup.filter_search_placeholder")}"
+        autocomplete="off" spellcheck="false">
+      <label class="matchup-filter-select-all"><input type="checkbox" data-matchup-filter-select-all${allSelected ? " checked" : ""}>
+        <span>${t("matchup.filter_select_all")}</span></label>
+      <div class="matchup-filter-tree">${groups}</div>
+      <p class="matchup-filter-count" data-matchup-filter-count>${t("matchup.filter_count", { count: selection.size })}</p>
+      <div class="matchup-filter-actions">
+        <button type="button" class="primary-button" data-matchup-filter-apply${selection.size ? "" : " disabled"}>${t("matchup.filter_apply")}</button>
+        <button type="button" class="secondary-button" data-matchup-filter-cancel>${t("matchup.filter_cancel")}</button>
+      </div>
     </div>
   </div>`;
+}
+
+function prepareMatchupFilterDraft(document) {
+  const allIds = matchupFilterCandidateIds(document);
+  state.matchupFilterDraft = state.matchupFilterIdentities === null
+    ? new Set(allIds)
+    : new Set(state.matchupFilterIdentities);
+}
+
+function updateMatchupFilterCandidateVisibility(searchQuery) {
+  const query = ReviewData.normalizeSearch(searchQuery);
+  document.querySelectorAll("[data-matchup-filter-group]").forEach(group => {
+    const parentMatch = group.dataset.matchupFilterParentName.includes(query);
+    const children = [...group.querySelectorAll("[data-matchup-filter-name]")];
+    const matchingChildren = children.filter(child => child.dataset.matchupFilterName.includes(query));
+    group.hidden = Boolean(query && !parentMatch && !matchingChildren.length);
+    children.forEach(child => child.hidden = Boolean(query && !child.dataset.matchupFilterName.includes(query)));
+    const childList = group.querySelector(".matchup-filter-children");
+    if (!childList) return;
+    const parentId = group.querySelector("[data-matchup-filter-parent]")?.dataset.matchupFilterParent;
+    childList.hidden = query
+      ? !matchingChildren.length
+      : !state.matchupFilterExpanded.has(parentId);
+  });
+}
+
+function updateMatchupFilterDraftControls(document) {
+  const allIds = matchupFilterCandidateIds(document);
+  globalThis.document.querySelectorAll("[data-matchup-filter-option]").forEach(option => {
+    option.checked = state.matchupFilterDraft.has(option.dataset.matchupFilterOption);
+  });
+  const selectAll = globalThis.document.querySelector("[data-matchup-filter-select-all]");
+  if (selectAll) {
+    selectAll.checked = state.matchupFilterDraft.size === allIds.length;
+    selectAll.indeterminate = state.matchupFilterDraft.size > 0
+      && state.matchupFilterDraft.size < allIds.length;
+  }
+  const count = globalThis.document.querySelector("[data-matchup-filter-count]");
+  if (count) count.textContent = t("matchup.filter_count", { count: state.matchupFilterDraft.size });
+  const apply = globalThis.document.querySelector("[data-matchup-filter-apply]");
+  if (apply) apply.disabled = !state.matchupFilterDraft.size;
+}
+
+function setMatchupFilterMenuOpen(open, document) {
+  state.matchupFilterOpen = open;
+  const toggle = globalThis.document.querySelector("[data-matchup-filter-toggle]");
+  const menu = globalThis.document.querySelector("[data-matchup-filter-menu]");
+  if (!toggle || !menu) return;
+  toggle.setAttribute("aria-expanded", String(open));
+  menu.hidden = !open;
+  if (!open) {
+    toggle.focus({ preventScroll: true });
+    return;
+  }
+  prepareMatchupFilterDraft(document);
+  const search = globalThis.document.querySelector("#matchup-filter-search");
+  if (search) search.value = "";
+  updateMatchupFilterCandidateVisibility("");
+  updateMatchupFilterDraftControls(document);
+  positionMatchupFilterMenu();
+  search?.focus({ preventScroll: true });
+}
+
+function positionMatchupFilterMenu() {
+  const control = document.querySelector("#matchup-filter-control");
+  const menu = document.querySelector("[data-matchup-filter-menu]:not([hidden])");
+  if (!control || !menu) return;
+  const margin = 12;
+  const gap = 6;
+  const rect = control.getBoundingClientRect();
+  const availableBelow = window.innerHeight - rect.bottom - gap - margin;
+  const availableAbove = rect.top - gap - margin;
+  const openAbove = availableBelow < 280 && availableAbove > availableBelow;
+  const availableHeight = Math.min(
+    window.innerHeight - (margin * 2),
+    Math.max(180, openAbove ? availableAbove : availableBelow)
+  );
+  const width = Math.min(rect.width, window.innerWidth - (margin * 2));
+  const left = Math.max(margin, Math.min(rect.left, window.innerWidth - width - margin));
+  menu.style.position = "fixed";
+  menu.style.left = `${left}px`;
+  menu.style.width = `${width}px`;
+  menu.style.maxHeight = `${availableHeight}px`;
+  if (openAbove) {
+    menu.style.top = "auto";
+    menu.style.bottom = `${window.innerHeight - rect.top + gap}px`;
+  } else {
+    menu.style.top = `${rect.bottom + gap}px`;
+    menu.style.bottom = "auto";
+  }
+}
+
+function matchupDetailIdentity(document, row) {
+  if (row.kind === "subtype") return row.id;
+  const parent = document.hierarchy.parents.find(item => item.id === row.parentId);
+  return parent?.subtype_ids?.length === 1 ? parent.subtype_ids[0] : row.id;
+}
+
+function matchupDetailUrl(identityId) {
+  const tabletop = state.product === "tabletop-major-events";
+  const entryKey = tabletop ? "tabletopEntry" : "mtgoEntry";
+  const entry = globalThis.document.documentElement.dataset[entryKey];
+  if (!entry) throw new Error(`Missing ${tabletop ? "tabletop" : "mtgo"} entry path`);
+  const target = new URL(entry, window.location.href);
+  target.search = "";
+  target.searchParams.set("format", state.format);
+  target.searchParams.set("product", tabletop ? "tabletop-major-events" : "mtgo-statistics");
+  if (tabletop) {
+    target.searchParams.set("view", "overview");
+    if (state.tabletopEventId) target.searchParams.set("event", state.tabletopEventId);
+    target.searchParams.set("scope", state.tabletopScope);
+    target.searchParams.set("sort", state.tabletopSort);
+    target.searchParams.set("dir", state.tabletopDirection);
+  } else {
+    target.searchParams.set("range", String(state.matchupRange));
+    target.searchParams.set("sort", state.statsSort);
+    target.searchParams.set("dir", state.statsDirection);
+  }
+  target.searchParams.set("detail", identityId);
+  target.searchParams.set("lang", I18n.language());
+  return target.href;
 }
 
 function matrixHtml(document) {
@@ -304,12 +491,12 @@ function matrixHtml(document) {
     document,
     state.matchupRows,
     state.matchupColumns,
-    state.matchupSearch
+    state.matchupFilterIdentities
   );
   if (!view.rows.length) {
-    return `<div class="empty-state matchup-search-empty" role="status">
-      <p>${escapeHtml(t("matchup.search_no_results", { query: state.matchupSearch.trim() }))}</p>
-      <button class="secondary-button" type="button" data-matchup-search-clear>${t("matchup.search_clear")}</button>
+    return `<div class="empty-state matchup-filter-empty" role="status">
+      <p>${t("matchup.filter_empty")}</p>
+      <button class="secondary-button" type="button" data-matchup-filter-reset>${t("matchup.filter_reset")}</button>
     </div>`;
   }
   const table = `<table class="matchup-table">
@@ -317,21 +504,30 @@ function matrixHtml(document) {
       ${view.columns.map(column => {
         const open = state.matchupColumns.has(column.parentId);
         const content = column.kind === "archetype" && column.expandable
-          ? `<button type="button" class="axis-label-button column-axis-label" data-matchup-column="${escapeHtml(column.parentId)}"
-              aria-label="${open ? t("matchup.collapse") : t("matchup.expand")}${escapeHtml(column.name)}" title="${escapeHtml(column.name)}">
-              <span class="axis-toggle">${open ? "−" : "+"}</span><span class="axis-name">${escapeHtml(column.name)}</span></button>`
-          : `<span>${escapeHtml(column.name)}</span>`;
-        return `<th class="column-head ${column.kind === "subtype" ? "subtype-head" : ""}"><div>${content}</div></th>`;
+          ? `<button type="button" class="axis-disclosure-button column-axis-controls" data-matchup-column="${escapeHtml(column.parentId)}"
+              aria-label="${escapeHtml(`${open ? t("matchup.collapse") : t("matchup.expand")}${column.name}`)}">
+              <span class="column-axis-toggle" aria-hidden="true">${open ? "−" : "+"}</span>
+              <span class="axis-name">${escapeHtml(column.name)}</span></button>`
+          : `<div class="column-axis-controls"><span class="axis-name">${escapeHtml(column.name)}</span></div>`;
+        return `<th class="column-head ${column.kind === "subtype" ? "subtype-head" : ""}">
+          ${content}</th>`;
       }).join("")}
     </tr></thead><tbody>
       ${view.rows.map(row => {
         const open = state.matchupRows.has(row.parentId);
         const content = row.kind === "archetype" && row.expandable
-          ? `<button type="button" class="axis-label-button row-axis-label" data-matchup-row="${escapeHtml(row.parentId)}"
-              aria-label="${open ? t("matchup.collapse") : t("matchup.expand")}${escapeHtml(row.name)}">
-              <span class="axis-toggle">${open ? "−" : "+"}</span><span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</span></button>`
-          : `<span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</span>`;
-        return `<tr><th class="row-head ${row.kind === "subtype" ? "subtype-head" : ""}">${content}</th>
+          ? `<button type="button" class="axis-disclosure-button row-axis-controls" data-matchup-row="${escapeHtml(row.parentId)}"
+              aria-label="${escapeHtml(`${open ? t("matchup.collapse") : t("matchup.expand")}${row.name}`)}">
+              <span class="row-axis-toggle" aria-hidden="true">${open ? "−" : "+"}</span>
+              <span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</span></button>`
+          : `<div class="row-axis-controls"><a class="row-axis-detail-link"
+              href="${escapeHtml(matchupDetailUrl(matchupDetailIdentity(document, row)))}" target="_blank" rel="noopener"
+              aria-label="${escapeHtml(t("matchup.open_detail", { name: row.name }))}">
+              <span class="row-axis-detail-content"><span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</span>
+              <svg class="axis-detail-external" viewBox="0 0 16 16" aria-hidden="true"><path d="M9 2h5v5M14 2 8 8M12 9v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h4" /></svg></span></a></div>`;
+        return `<tr data-matchup-row-identity="${escapeHtml(row.id)}">
+          <th class="row-head ${row.kind === "subtype" ? "subtype-head" : ""}">
+            ${content}</th>
           ${matrixCell(view.overall[row.id])}${view.columns.map(column => matrixCell(view.matrix[row.id][column.id])).join("")}</tr>`;
       }).join("")}
     </tbody></table>`;
@@ -343,23 +539,12 @@ function matchupProjection(document) {
   return `<div id="matchup-projection">${matrixHtml(document)}</div>`;
 }
 
-function updateMatchupProjection(searchQuery) {
-  const source = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
-  const projection = document.querySelector("#matchup-projection");
-  if (!source || !projection) return false;
-  state.matchupSearch = searchQuery;
-  projection.innerHTML = matrixHtml(source);
-  const clearButton = document.querySelector(".matchup-search-input [data-matchup-search-clear]");
-  if (clearButton) clearButton.disabled = !ReviewData.normalizeSearch(searchQuery);
-  updateMatrixPresentation();
-  return true;
-}
-
 async function matchupView() {
   const { document, completeness } = await MtgoController
     .loadMatchup(state.format, state.matchupRange);
   const displayDocument = ReviewData.activeMatchupDocument(document, LOW_SAMPLE_THRESHOLD);
   currentContext = { matchupDocument: displayDocument, completeness };
+  synchronizeMatchupFilter(displayDocument);
   return `${rangeButtons(state.matchupRange, "data-matchup-range")}
     <aside class="source-note" aria-label="${t("source.label")}">
       <p>${t("source.matchups")}</p>
@@ -368,7 +553,7 @@ async function matchupView() {
     <section class="panel"><div class="panel-toolbar"><div><h2>${t("matchup.title")}</h2>
       <p class="matrix-toolbar-note">${t("matchup.note")}</p></div>
       <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
-    </div>${matchupSearchControls()}${matchupLegend(displayDocument.min_sample_hint)}${matchupProjection(displayDocument)}</section>`;
+    </div>${matchupFilterControls(displayDocument)}${matchupLegend(displayDocument.min_sample_hint)}${matchupProjection(displayDocument)}</section>`;
 }
 
 function top8PlacementDetail() {

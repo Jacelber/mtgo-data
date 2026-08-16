@@ -192,6 +192,31 @@ function hasExtendedUrlState(parameters) {
   return EXTENDED_URL_KEYS.some(key => parameters.has(key));
 }
 
+function currentDetailReveal() {
+  const mobile = matchMedia("(max-width: 780px)").matches;
+  if (state.product === "mtgo-statistics" && state.detailIdentity) {
+    return {
+      selector: mobile
+        ? `[data-mobile-expanded-content="stats:${CSS.escape(state.detailIdentity)}"]`
+        : ".deck-detail-row",
+      alignment: mobile ? "start" : "end",
+    };
+  }
+  if (
+    state.product === "tabletop-major-events"
+    && state.tabletopView === "overview"
+    && state.tabletopDetailIdentity
+  ) {
+    return {
+      selector: mobile
+        ? `[data-mobile-expanded-content="tabletop:${CSS.escape(state.tabletopDetailIdentity)}"]`
+        : ".deck-detail-row",
+      alignment: mobile ? "start" : "end",
+    };
+  }
+  return { selector: null, alignment: "end" };
+}
+
 async function renderView() {
   return renderViewWithFocus();
 }
@@ -234,6 +259,7 @@ async function renderViewWithFocus(
     updateFreshnessLayouts(root);
     globalThis.P8CardImages?.observe(root);
     restoreRenderPosition(root, focusSelector, position);
+    updateMatrixStickyHeader();
     requestAnimationFrame(() => {
       updateFreshnessLayouts(root);
       restoreRenderPosition(root, focusSelector, position);
@@ -279,7 +305,10 @@ function resetInteractions() {
   state.statsExpanded.clear();
   state.matchupRows.clear();
   state.matchupColumns.clear();
-  state.matchupSearch = "";
+  state.matchupFilterIdentities = null;
+  state.matchupFilterDraft.clear();
+  state.matchupFilterExpanded.clear();
+  state.matchupFilterOpen = false;
   state.tabletopExpanded.clear();
   state.detailIdentity = null;
   state.top8Detail = null;
@@ -318,13 +347,6 @@ document.addEventListener("click", async event => {
   if (button.hasAttribute("data-apply-refresh")) {
     commitPendingRefresh();
     await renderViewWithFocus(null, null, { focusTitle: true });
-    return;
-  }
-  if (button.hasAttribute("data-matchup-search-clear")) {
-    const input = document.querySelector("#matchup-search");
-    if (input) input.value = "";
-    updateMatchupProjection("");
-    input?.focus();
     return;
   }
   if (await handleMobileListClick(button)) return;
@@ -451,11 +473,42 @@ document.addEventListener("click", async event => {
   } else if (button.dataset.deckMode) {
     state.detailMode = button.dataset.deckMode;
     await renderView();
+  } else if (button.hasAttribute("data-matchup-filter-toggle")) {
+    const matchupDocument = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
+    if (matchupDocument) setMatchupFilterMenuOpen(!state.matchupFilterOpen, matchupDocument);
+  } else if (button.dataset.matchupFilterParent) {
+    const parentId = button.dataset.matchupFilterParent;
+    toggleSet(state.matchupFilterExpanded, parentId);
+    const expanded = state.matchupFilterExpanded.has(parentId);
+    button.setAttribute("aria-expanded", String(expanded));
+    button.querySelector("span").textContent = expanded ? "−" : "+";
+    const childList = document.querySelector(`#matchup-filter-children-${CSS.escape(parentId)}`);
+    if (childList) childList.hidden = !expanded;
+  } else if (button.hasAttribute("data-matchup-filter-apply")) {
+    const matchupDocument = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
+    if (!matchupDocument || !state.matchupFilterDraft.size) return;
+    const allIds = matchupFilterCandidateIds(matchupDocument);
+    state.matchupFilterIdentities = state.matchupFilterDraft.size === allIds.length
+      ? null
+      : new Set(state.matchupFilterDraft);
+    if (state.matchupFilterIdentities === null) state.matchupRows.clear();
+    state.matchupFilterOpen = false;
+    await renderViewWithFocus("[data-matchup-filter-toggle]");
+  } else if (button.hasAttribute("data-matchup-filter-cancel")) {
+    const matchupDocument = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
+    if (matchupDocument) setMatchupFilterMenuOpen(false, matchupDocument);
+  } else if (button.hasAttribute("data-matchup-filter-reset")) {
+    state.matchupFilterIdentities = null;
+    state.matchupRows.clear();
+    state.matchupFilterOpen = false;
+    await renderViewWithFocus("[data-matchup-filter-toggle]");
   } else if (button.dataset.matchupRow) {
-    toggleSet(state.matchupRows, button.dataset.matchupRow);
+    const parentId = button.dataset.matchupRow;
+    toggleSet(state.matchupRows, parentId);
     await renderView();
   } else if (button.dataset.matchupColumn) {
-    toggleSet(state.matchupColumns, button.dataset.matchupColumn);
+    const parentId = button.dataset.matchupColumn;
+    toggleSet(state.matchupColumns, parentId);
     await renderView();
   } else if (button.id === "matchup-expand-all") {
     const document = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
@@ -550,14 +603,30 @@ document.addEventListener("click", async event => {
 });
 
 document.addEventListener("input", event => {
-  if (event.target.id === "matchup-search") {
-    updateMatchupProjection(event.target.value);
+  if (event.target.id === "matchup-filter-search") {
+    updateMatchupFilterCandidateVisibility(event.target.value);
   }
 });
 
 document.addEventListener("change", async event => {
   if (await handleMobileListChange(event.target)) return;
-  if (event.target.id === "top8-week") {
+  if (event.target.hasAttribute("data-matchup-filter-select-all")) {
+    const matchupDocument = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
+    if (!matchupDocument) return;
+    state.matchupFilterDraft = event.target.checked
+      ? new Set(matchupFilterCandidateIds(matchupDocument))
+      : new Set();
+    document.querySelectorAll("[data-matchup-filter-option]").forEach(option => {
+      option.checked = event.target.checked;
+    });
+    updateMatchupFilterDraftControls(matchupDocument);
+  } else if (event.target.dataset.matchupFilterOption) {
+    const matchupDocument = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
+    if (!matchupDocument) return;
+    if (event.target.checked) state.matchupFilterDraft.add(event.target.dataset.matchupFilterOption);
+    else state.matchupFilterDraft.delete(event.target.dataset.matchupFilterOption);
+    updateMatchupFilterDraftControls(matchupDocument);
+  } else if (event.target.id === "top8-week") {
     discardPendingRefresh();
     state.top8WeekFile = event.target.value;
     state.top8Detail = null;
@@ -684,7 +753,10 @@ async function initialize({ retry = false } = {}) {
     if (navigateToProductEntry(state.product, state.format)) return;
     if (hasExtendedUrlState(parameters)) queueUrlWrite("replace");
     renderNavigation();
-    await renderView();
+    const reveal = currentDetailReveal();
+    await renderViewWithFocus(null, reveal.selector, {
+      revealAlignment: reveal.alignment,
+    });
   } catch (error) {
     state.failedRender = { error, preserveExistingContent: false };
     view.removeAttribute("aria-busy");
@@ -707,7 +779,10 @@ window.addEventListener("popstate", async () => {
   if (navigateToProductEntry(state.product, state.format)) return;
   setMessage("");
   renderNavigation();
-  await renderView();
+  const reveal = currentDetailReveal();
+  await renderViewWithFocus(null, reveal.selector, {
+    revealAlignment: reveal.alignment,
+  });
 });
 
 initialize();

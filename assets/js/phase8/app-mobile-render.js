@@ -45,7 +45,7 @@ function matrixStickyHeader(columns) {
       <table class="matrix-sticky-table" aria-hidden="true"><thead><tr>
         <th class="corner"></th><th class="column-head overall">${t("matchup.overall")}</th>
         ${columns.map(column => `<th class="column-head ${column.kind === "subtype" ? "subtype-head" : ""}">
-          <div><span>${escapeHtml(column.name)}</span></div></th>`).join("")}
+          <div class="column-axis-controls"><span class="axis-name">${escapeHtml(column.name)}</span></div></th>`).join("")}
       </tr></thead></table>
     </div>
   </div>`;

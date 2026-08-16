@@ -382,3 +382,37 @@ authorization remains solely in `docs/STATUS.yaml`.
    one Ready pull request, required CI, merge, and Pages verification.
    P12-13B, production dispatch, Pickup reflow, and P12-10 remain separate
    authorization gates.
+
+13B. `P12-13B` — Exact matchup row filter and row-detail navigation
+   - replace standalone row search and axis-label focus with one Excel-style
+     checkbox-tree filter whose internal search narrows candidates only;
+   - stage multi-selection until Apply, render exactly the chosen stable parent
+     and subtype identities in document order, preserve the complete column
+     axis, and restore the parent view with Select All or Reset;
+   - use one borderless hanging disclosure action for each expandable matrix
+     parent, and keep the row and column expansion states independent;
+   - open subtype and non-expandable-parent row names in the corresponding MTGO
+     Statistics or same-event Tabletop Overview detail, preserving applicable
+     format, range, event, scope, sort, direction, and language state;
+   - reveal the rendered destination detail after it settles and map a
+     single-subtype parent to that maintained subtype identity;
+   - keep parent names aligned, compress the mobile disclosure gutter and
+     subtype indent, attach the external-detail indicator to the rendered or
+     truncated label, and at 375 CSS pixels show `Mono-Blue Belcher` in full
+     while retaining roughly three and a half result columns;
+   - keep an already-sticky matrix header continuously visible while row or
+     column disclosure replaces the rendered matrix;
+   - retain a valid applied subset across language and source-selection changes,
+     reset safely if none remain, and introduce no Top-N, minimum-match,
+     URL-persisted matrix state, keyboard grid, or mobile vertical-opponent view;
+   - preserve matchup formulas, source counts, public JSON and paths, Schemas,
+     workflows, classification identities, product separation, and protected
+     event `434455` bytes.
+
+   The Owner accepted the final desktop and 375-pixel mobile result on
+   2026-08-16 after iterative local-browser review. Acceptance covered the exact
+   multi-row filter, disclosure and detail-navigation actions, responsive label
+   layout, final detail visibility, scroll stability, and non-flickering sticky
+   header. It authorized completion of the unchanged task through one commit,
+   one Ready pull request, required CI, merge, and Pages verification. P12-13C
+   and every other follow-up remain separate authorization gates.
