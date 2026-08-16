@@ -26,6 +26,7 @@ HEAD_SHA = "b" * 40
 MERGE_SHA = "c" * 40
 PRODUCTION_SOURCE_SHA = "d" * 40
 PRODUCTION_COMMIT_SHA = "e" * 40
+PAGES_SUBJECT_SHA = "f" * 40
 GENERATION_SUBJECT_SHA256 = "a" * 64
 VALIDATED_OUTPUT_SHA256 = "b" * 64
 PRODUCTION_RUN_ID = 4321
@@ -415,7 +416,7 @@ def test_workflow_dispatch_stops_for_explicit_classification(monkeypatch):
     assert decision.mode == "unclassified"
 
 
-def _production_responses():
+def _production_responses(pages_subject_sha=PAGES_SUBJECT_SHA):
     repository_api = "https://api.github.test/repos/owner/repo"
     message = "\n".join(
         [
@@ -439,7 +440,14 @@ def _production_responses():
         },
     ]
     return {
-        f"{repository_api}/commits/master": {"sha": PRODUCTION_COMMIT_SHA},
+        f"{repository_api}/compare/{PRODUCTION_COMMIT_SHA}...{pages_subject_sha}": {
+            "status": (
+                "identical"
+                if pages_subject_sha == PRODUCTION_COMMIT_SHA
+                else "ahead"
+            ),
+            "merge_base_commit": {"sha": PRODUCTION_COMMIT_SHA},
+        },
         f"{repository_api}/commits/{PRODUCTION_COMMIT_SHA}": {
             "parents": [{"sha": PRODUCTION_SOURCE_SHA}],
             "commit": {"message": message},
@@ -460,10 +468,11 @@ def _production_responses():
     }
 
 
-def _verify_production(responses):
+def _verify_production(responses, pages_subject_sha=PAGES_SUBJECT_SHA):
     return verify_production_evidence(
         repository="owner/repo",
         publication_commit=PRODUCTION_COMMIT_SHA,
+        pages_subject_commit=pages_subject_sha,
         producer_run_id=PRODUCTION_RUN_ID,
         producer_run_attempt=PRODUCTION_RUN_ATTEMPT,
         source_commit=PRODUCTION_SOURCE_SHA,
@@ -474,17 +483,24 @@ def _verify_production(responses):
     )
 
 
-def test_exact_in_progress_production_run_admits_its_published_commit():
+def test_ancestor_production_commit_is_admitted_for_the_pages_subject():
     assert _verify_production(_production_responses()) == (
         f"verified_production_publication:{PRODUCTION_COMMIT_SHA}:"
         f"run={PRODUCTION_RUN_ID}:attempt={PRODUCTION_RUN_ATTEMPT}"
     )
 
 
+def test_exact_production_commit_remains_an_admitted_pages_subject():
+    responses = _production_responses(PRODUCTION_COMMIT_SHA)
+    assert _verify_production(responses, PRODUCTION_COMMIT_SHA).startswith(
+        f"verified_production_publication:{PRODUCTION_COMMIT_SHA}:"
+    )
+
+
 @pytest.mark.parametrize(
     "mutation",
     [
-        "master",
+        "ancestry",
         "parent",
         "trailer",
         "run",
@@ -495,8 +511,16 @@ def test_exact_in_progress_production_run_admits_its_published_commit():
 def test_stale_or_incomplete_production_evidence_stops(mutation):
     responses = _production_responses()
     repository_api = "https://api.github.test/repos/owner/repo"
-    if mutation == "master":
-        responses[f"{repository_api}/commits/master"]["sha"] = "f" * 40
+    if mutation == "ancestry":
+        comparison = responses[
+            f"{repository_api}/compare/{PRODUCTION_COMMIT_SHA}...{PAGES_SUBJECT_SHA}"
+        ]
+        comparison.update(
+            {
+                "status": "diverged",
+                "merge_base_commit": {"sha": PRODUCTION_SOURCE_SHA},
+            }
+        )
     elif mutation == "parent":
         responses[f"{repository_api}/commits/{PRODUCTION_COMMIT_SHA}"]["parents"] = [
             {"sha": "f" * 40}

@@ -1,8 +1,8 @@
 schema_version: "1.0"
 program_id: "GOVERNANCE-EFFICIENCY-20260815"
 objective: "Reduce development governance and validation time while protecting the published output."
-program_status: "blocked_pending_gov10a_pages_content_evidence_fix"
-closure_condition: "Repair the Pages comparison so it proves the allowed output paths and file contents without treating non-Git-preserved permissions as product bytes, then complete one authorized recovery deployment with existing production evidence."
+program_status: "blocked_pending_gov10b_pages_recovery_subject_fix"
+closure_condition: "Bind recovery to its immutable master dispatch subject, accept only an ancestor production commit whose generated output still matches that subject, then complete one authorized recovery deployment with existing production evidence."
 owner_principles:
   - "Do not test unless a named risk requires it; use the smallest check that can answer that question."
   - "Do not repeat evidence already obtained for the same immutable subject."
@@ -131,7 +131,7 @@ tasks:
 
   - id: "GOV-10A-PAGES-CONTENT-EVIDENCE-CANONICALIZATION"
     name: "Compare published output content without Git-irrelevant permissions"
-    status: "local_implementation_authorized"
+    status: "completed_merged_operational_followup_failed"
     depends_on: ["GOV-10-PRODUCTION-EVIDENCE-REUSE"]
     problem: "Pages recompresses the published tree and compares the resulting tar bytes to the validated artifact, so ordinary permissions not preserved by Git cause a false rejection."
     solution: "Keep immutable artifact, path-boundary, provenance, and exact-production-evidence checks; extract the validated artifact and compare only the allowed paths and file contents against the checked-out publication commit."
@@ -141,6 +141,23 @@ tasks:
       - "Pages compares data/, stats/, reports/, and fetched.txt with recursive path-and-content comparison and never regenerates published-output.tar."
       - "The existing workflow-contract test states the new content comparison and rejects the retired tar-byte comparison."
       - "A separately authorized recovery dispatch may reuse producer run 31906796791 and its immutable artifact; it must not regenerate or revalidate the candidate."
+    completion: "Published through PR 220 and merge commit b6f572f9da6e78dfe4a6d956b61cd95c6dd4b93a; targeted and exact-merge CI passed."
+    operational_followup: "Recovery run 31923585217 proved the content comparison but executed the historical publication commit's old verifier, which still required that publication commit to equal the live master head."
+
+  - id: "GOV-10B-PAGES-RECOVERY-SUBJECT-BINDING"
+    name: "Bind production recovery to the immutable Pages subject"
+    status: "owner_accepted_same_task_completion_authorized"
+    depends_on: ["GOV-10A-PAGES-CONTENT-EVIDENCE-CANONICALIZATION"]
+    problem: "A recovery dispatch checks out the historical publication commit before admission, so it executes stale control-plane code; the old verifier also rejects valid history whenever master advances."
+    solution: "Check out the immutable master dispatch SHA, require complete production evidence only on a master workflow dispatch, prove the publication commit is an ancestor of that SHA, and compare the validated generated output with that current subject."
+    effect: "Recovery uses current trusted controls and site code without retesting the candidate or rolling back later UI, while diverged commits or changed generated output still fail closed."
+    acceptance:
+      - "A complete production-evidence dispatch is accepted only for workflow_dispatch on refs/heads/master."
+      - "Pages checks out github.sha rather than the historical publication commit, and admission receives that same immutable Pages subject SHA."
+      - "The publication commit must be identical to or an ancestor of the Pages subject; a diverged history fails."
+      - "The validated artifact must still match data/, stats/, reports/, and fetched.txt in the Pages subject before packaging."
+      - "No candidate, Schema, invariant, browser, generator, or production-data test is repeated."
+      - "One accepted recovery dispatch reuses producer run 31906796791 and requests only the three post-deploy availability resources."
 
   - id: "GOV-11-LIVE-DOCUMENT-SLIMMING"
     name: "Keep live governance documents small"

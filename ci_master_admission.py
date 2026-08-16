@@ -116,6 +116,7 @@ def verify_production_evidence(
     *,
     repository: str,
     publication_commit: str,
+    pages_subject_commit: str,
     producer_run_id: int,
     producer_run_attempt: int,
     source_commit: str,
@@ -131,6 +132,9 @@ def verify_production_evidence(
     publication_commit = _validated_sha(
         publication_commit, label="publication_commit"
     )
+    pages_subject_commit = _validated_sha(
+        pages_subject_commit, label="pages_subject_commit"
+    )
     source_commit = _validated_sha(source_commit, label="source_commit")
     generation_subject_sha256 = _validated_sha256(
         generation_subject_sha256, label="generation_subject_sha256"
@@ -142,9 +146,21 @@ def verify_production_evidence(
         raise ValueError("producer_run_identity_invalid")
 
     repository_api = f"{api_url.rstrip('/')}/repos/{repository}"
-    master = fetch_json(f"{repository_api}/commits/master")
-    if not isinstance(master, dict) or master.get("sha") != publication_commit:
-        raise ValueError("publication_commit_is_not_master")
+    comparison = fetch_json(
+        f"{repository_api}/compare/{quote(publication_commit)}..."
+        f"{quote(pages_subject_commit)}"
+    )
+    merge_base = (
+        comparison.get("merge_base_commit")
+        if isinstance(comparison, dict)
+        else None
+    )
+    if (
+        not isinstance(merge_base, dict)
+        or merge_base.get("sha") != publication_commit
+        or comparison.get("status") not in {"ahead", "identical"}
+    ):
+        raise ValueError("publication_commit_not_in_pages_subject_history")
 
     commit = fetch_json(f"{repository_api}/commits/{quote(publication_commit)}")
     parents = commit.get("parents") if isinstance(commit, dict) else None
@@ -973,6 +989,7 @@ def main() -> int:
             result = verify_production_evidence(
                 repository=os.environ.get("GITHUB_REPOSITORY", ""),
                 publication_commit=os.environ.get("PRODUCTION_COMMIT", ""),
+                pages_subject_commit=os.environ.get("PAGES_SUBJECT_COMMIT", ""),
                 producer_run_id=int(os.environ.get("PRODUCTION_RUN_ID", "0")),
                 producer_run_attempt=int(
                     os.environ.get("PRODUCTION_RUN_ATTEMPT", "0")
