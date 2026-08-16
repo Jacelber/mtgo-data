@@ -120,6 +120,64 @@ test("active matchup documents omit leaves with no played matches", () => {
   );
 });
 
+test("visible matchup projection searches parents and subtypes without changing expansion state", () => {
+  const document = documentFor(3);
+  const alphaOne = document.hierarchy.leaves.find(leaf => leaf.id === "alpha/one");
+  const alphaTwo = document.hierarchy.leaves.find(leaf => leaf.id === "alpha/two");
+  alphaOne.display_name = "First Alpha Variant";
+  alphaTwo.display_name = "Second Alpha Variant";
+  const expandedRows = new Set(["bravo"]);
+  const expandedColumns = new Set(["alpha"]);
+
+  const subtypeMatch = matchup.buildVisibleView(
+    document,
+    expandedRows,
+    expandedColumns,
+    "  SECOND   alpha  "
+  );
+
+  assert.deepEqual(subtypeMatch.rows.map(node => node.id), ["alpha", "alpha/two"]);
+  assert.deepEqual(subtypeMatch.columns.map(node => node.id), [
+    "alpha",
+    "alpha/one",
+    "alpha/two",
+    "bravo",
+  ]);
+  assert.deepEqual([...expandedRows], ["bravo"]);
+  assert.deepEqual([...expandedColumns], ["alpha"]);
+  assertRecord(
+    subtypeMatch.matrix["alpha/two"]["bravo"],
+    sumRecords([
+      document.leaf_matrix["alpha/two"]["bravo/one"],
+      document.leaf_matrix["alpha/two"]["bravo/two"],
+    ])
+  );
+
+  const parentMatch = matchup.buildVisibleView(
+    document,
+    expandedRows,
+    expandedColumns,
+    "bravo"
+  );
+  assert.deepEqual(parentMatch.rows.map(node => node.id), [
+    "bravo",
+    "bravo/one",
+    "bravo/two",
+  ]);
+  assert.deepEqual(parentMatch.columns.map(node => node.id), [
+    "alpha",
+    "alpha/one",
+    "alpha/two",
+    "bravo",
+  ]);
+
+  const noMatch = matchup.buildVisibleView(document, [], [], "not a deck");
+  assert.deepEqual(noMatch.rows, []);
+  assert.deepEqual(noMatch.columns.map(node => node.id), ["alpha", "bravo"]);
+  assert.deepEqual(noMatch.matrix, {});
+  assert.deepEqual(noMatch.overall, {});
+});
+
 test("Chinese and English translation keys match exactly", () => {
   const zh = globalThis.P8I18n.translationKeys("zh").sort();
   const en = globalThis.P8I18n.translationKeys("en").sort();

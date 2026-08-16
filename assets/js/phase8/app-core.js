@@ -54,6 +54,7 @@ const state = {
   statsExpanded: new Set(),
   matchupRows: new Set(),
   matchupColumns: new Set(),
+  matchupSearch: "",
   detailIdentity: null,
   detailMode: "average",
   top8WeekFile: null,

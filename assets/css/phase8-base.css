@@ -73,7 +73,7 @@ h1, h2, h3, h4, p { margin-top: 0; }
 button, select, a { font: inherit; }
 button { cursor: pointer; }
 a { color: var(--brand-2); text-underline-offset: 2px; }
-:where(button, a, select, [tabindex]):focus-visible { outline: 2px solid var(--focus-on-light); outline-offset: 2px; box-shadow: var(--focus-ring); }
+:where(button, a, input, select, [tabindex]):focus-visible { outline: 2px solid var(--focus-on-light); outline-offset: 2px; box-shadow: var(--focus-ring); }
 .app-header :where(button, a, select, [tabindex]):focus-visible { outline-color: var(--focus-on-dark); box-shadow: 0 0 0 3px rgba(215, 255, 248, .32); }
 .app-header {
   position: relative;

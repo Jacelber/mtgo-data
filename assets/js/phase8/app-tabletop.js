@@ -302,7 +302,7 @@ function tabletopMatchup(matchupDocument, scopeId, eventFormat) {
         count: scope.included_match_count,
       })}</p></div>
       <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
-    </div>${matchupLegend(viewDocument.min_sample_hint)}${matrixHtml(viewDocument)}`;
+    </div>${matchupSearchControls()}${matchupLegend(viewDocument.min_sample_hint)}${matchupProjection(viewDocument)}`;
 }
 
 async function tabletopView() {

@@ -268,6 +268,7 @@ function resetInteractions() {
   state.statsExpanded.clear();
   state.matchupRows.clear();
   state.matchupColumns.clear();
+  state.matchupSearch = "";
   state.tabletopExpanded.clear();
   state.detailIdentity = null;
   state.top8Detail = null;
@@ -306,6 +307,13 @@ document.addEventListener("click", async event => {
   if (button.hasAttribute("data-apply-refresh")) {
     commitPendingRefresh();
     await renderViewWithFocus(null, null, { focusTitle: true });
+    return;
+  }
+  if (button.hasAttribute("data-matchup-search-clear")) {
+    const input = document.querySelector("#matchup-search");
+    if (input) input.value = "";
+    updateMatchupProjection("");
+    input?.focus();
     return;
   }
   if (await handleMobileListClick(button)) return;
@@ -499,6 +507,12 @@ document.addEventListener("click", async event => {
   } else if (button.dataset.pickupToggle) {
     toggleSet(state.pickupOpen, button.dataset.pickupToggle);
     await renderView();
+  }
+});
+
+document.addEventListener("input", event => {
+  if (event.target.id === "matchup-search") {
+    updateMatchupProjection(event.target.value);
   }
 });
 
