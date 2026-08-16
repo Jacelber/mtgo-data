@@ -218,10 +218,12 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
     commands = "\n".join(step.get("run", "") for step in build["steps"])
     for required in (
         "--verify-production-evidence",
-        "published-output.tar",
+        "diff --recursive --brief --no-dereference",
+        "Published commit content does not match the validated output",
         "Validated output contains a path outside the production boundary",
     ):
         assert required in commands
+    assert "published-output.tar" not in commands
     assert all(token not in commands for token in ("pytest", "playwright", "node --test"))
     deploy_commands = "\n".join(
         step.get("run", "") for step in workflow["jobs"]["deploy"]["steps"]

@@ -155,12 +155,19 @@ jobs:
             echo "Downloaded production evidence does not match the dispatch." >&2
             exit 1
           fi
-          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 \
-            --numeric-owner -cf "$RUNNER_TEMP/published-output.tar" \
-            data stats reports fetched.txt
-          PUBLISHED_SHA="$(sha256sum "$RUNNER_TEMP/published-output.tar" | awk '{print $1}')"
-          if [ "$PUBLISHED_SHA" != "$VALIDATED_OUTPUT_SHA256" ]; then
-            echo "Published commit bytes do not match the validated output." >&2
+          VALIDATED_TREE="$RUNNER_TEMP/validated-output"
+          mkdir -p "$VALIDATED_TREE"
+          tar -xf "$ARTIFACT_DIR/validated-output.tar" -C "$VALIDATED_TREE"
+          for DIRECTORY in data stats reports; do
+            if ! diff --recursive --brief --no-dereference \
+              "$VALIDATED_TREE/$DIRECTORY" "$DIRECTORY"; then
+              echo "Published commit content does not match the validated output." >&2
+              exit 1
+            fi
+          done
+          if ! diff --brief --no-dereference \
+            "$VALIDATED_TREE/fetched.txt" fetched.txt; then
+            echo "Published commit content does not match the validated output." >&2
             exit 1
           fi
           python -B ci_master_admission.py --verify-production-evidence
