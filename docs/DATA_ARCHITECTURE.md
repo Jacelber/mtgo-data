@@ -2355,6 +2355,23 @@ Responsibilities may include:
 
 Shared rendering code may be reused, but MTGO and tabletop data must not be combined.
 
+The optional mainstream matchup projection uses one shared parent-ID
+eligibility interface with separate source adapters. The MTGO adapter does not
+add a document or an initial-page request: on first activation it reads and
+caches the existing range-statistics document for the active matchup interval,
+then supplies parent `high_score_share` values. The Tabletop adapter supplies
+parent `metagame_share` values from the already loaded active-scope Overview.
+Neither adapter may substitute matchup volume, consume the other source, or
+persist a derived public document.
+
+The projection passes qualifying parent IDs to shared matchup rendering. It
+filters both visible axes by parent family after preserving the exact row
+selection and disclosure state, and a qualifying parent's maintained subtype
+nodes remain available through the existing hierarchy. Missing or failed share
+loading leaves the complete matrix active and exposes a retryable UI state. No
+Schema, catalog, public path, generated artifact, or source cache boundary is
+added.
+
 ### 15.7 No statistical formulas only in UI
 
 Primary statistical values must be generated or calculated through tested statistical code.

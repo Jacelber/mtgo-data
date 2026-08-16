@@ -4,13 +4,13 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-13b-focused-archetype"
-  working_branch_status: "active_isolated_task"
+  current_working_branch: "codex/p12-13c-mainstream-matchups"
+  working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
   purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-08-16"
+  last_updated: "2026-08-17"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   authoritative_for:
@@ -31,20 +31,60 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-13B"
-  name: "Exact matchup row filter"
+  id: "P12-13C"
+  name: "Mainstream matchup projection"
   status: "owner_accepted_completion_authorized"
+  authorized_on: "2026-08-16"
+  owner_accepted_on: "2026-08-17"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-13c-mainstream-matchups-20260816-01"
+  branch: "codex/p12-13c-mainstream-matchups"
+  base_commit: "0090f17563e2c3b3f7000ebfdbd69b2a786ac2bf"
+  objective: "Replace the superseded Top-N opponent plan with one optional parent-level mainstream matchup projection that uses each source product's existing share statistic and constrains both matrix axes."
   artifact_impact: "user_visible_ui,documentation"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
-  stop_point: "Complete the accepted unchanged P12-13B tree through one local commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification; then stop without beginning P12-13C or another task."
+  target_paths:
+    - "assets/css/phase8-candidate.css"
+    - "assets/js/phase8/app-core.js"
+    - "assets/js/phase8/app-mtgo.js"
+    - "assets/js/phase8/app-tabletop.js"
+    - "assets/js/phase8/app.js"
+    - "assets/js/phase8/i18n.js"
+    - "assets/js/phase8/matchup-model.js"
+    - "assets/js/phase8/mtgo-controller.js"
+    - "docs/PROJECT_SCOPE.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/ROADMAP.md"
+    - "docs/DECISIONS.md"
+    - "docs/STATUS.yaml"
+    - "tests/js/phase8-matchup-model.test.js"
+    - "tests/browser/production-pages.spec.js"
+  protected_scope:
+    statistical_formulas_changed: "none"
+    public_json_or_schema_changed: "none"
+    generated_or_source_data_changed: "none"
+    classification_identities_changed: "none"
+    workflows_or_public_paths_changed: "none"
+    event_434455_bytes_changed: false
+    production_dispatched: false
+  allowed_actions:
+    - "Add one default-off mainstream-matchup switch that constrains both parent axes at the same two-percent threshold."
+    - "Use current-range MTGO parent high-score share and current-scope Tabletop parent metagame share without mixing source products."
+    - "Keep qualifying parent subtype disclosure available, preserve the exact row-filter selection while hidden, and lazy-load only the existing MTGO range summary on first activation."
+    - "Add focused model and browser regressions and obtain Owner hands-on local-browser acceptance."
+  prohibited_changes:
+    - "Do not implement Top-N, minimum-match filtering, URL-persisted matrix state, directional-key grid navigation, or the P12-14 mobile vertical opponent view."
+    - "Do not change matchup formulas, share formulas, public JSON, Schemas, workflows, public paths, generated data, classification identities, or protected event 434455 bytes."
+    - "Do not commit, push, create a pull request, merge, or dispatch production before Owner acceptance."
+  stop_point: "Complete the accepted unchanged P12-13C tree through one local commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification; then stop without beginning P12-13D or another task."
 
 current_repository_state:
-  baseline_commit: "725705d5fba3126974d10528c1cabccc3f636f1a"
-  baseline_note: "Verified remote master after the accepted Broodscale and composition-navigation hotfix merged and its merge-triggered Pages deployment succeeded. P12-13B starts from this commit in a fresh disposable isolated clone."
+  baseline_commit: "0090f17563e2c3b3f7000ebfdbd69b2a786ac2bf"
+  baseline_note: "Verified remote master after accepted P12-13B merged in PR 225 and its merge-triggered Pages deployment succeeded. P12-13C starts from this commit in a fresh disposable isolated clone."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -71,14 +111,14 @@ next_approved_task:
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "P12-13B is the active authorized local task. P12-13C and every other follow-up remain separate gates."
+  note: "P12-13C is the active authorized local task. P12-13D and every other follow-up remain separate gates."
 
 prohibited_next_actions:
-  - "Do not begin P12-13C, the Melee v3 production preflight, P12-10, Pickup reflow, or another task automatically after accepted-task completion."
+  - "Do not begin P12-13D, the Melee v3 production preflight, P12-10, Pickup reflow, or another task automatically after accepted-task completion."
   - "Do not retain a second standalone P12-13A search state; P12-13B replaces row search and label focus with one exact multi-select row filter whose internal search only narrows filter candidates."
-  - "Do not implement Top-N, minimum-match filtering, URL-persisted matrix state, directional-key grid navigation, or the P12-14 mobile vertical opponent view."
+  - "Do not implement the superseded Top-N plan, minimum-match filtering, URL-persisted matrix state, directional-key grid navigation, or the P12-14 mobile vertical opponent view."
   - "Do not change matchup formulas, public JSON, Schemas, workflows, public paths, generated data, or classification identities."
   - "Do not create, access, configure, or rotate an HMAC key or GitHub Secret."
-  - "Do not dispatch production, change event selection, fetch protected source data, or expand beyond the approved focused-archetype interaction contract."
+  - "Do not dispatch production, change event selection, fetch protected source data, or expand beyond the approved mainstream-matchup interaction contract."
   - "Do not rewrite Git history, force-push, mutate protected branches or tags, or change event 434455 raw snapshot or normalized-event bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."

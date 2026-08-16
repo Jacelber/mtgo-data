@@ -473,6 +473,8 @@ document.addEventListener("click", async event => {
   } else if (button.dataset.deckMode) {
     state.detailMode = button.dataset.deckMode;
     await renderView();
+  } else if (button.hasAttribute("data-matchup-mainstream-retry")) {
+    await renderViewWithFocus("[data-matchup-mainstream]");
   } else if (button.hasAttribute("data-matchup-filter-toggle")) {
     const matchupDocument = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
     if (matchupDocument) setMatchupFilterMenuOpen(!state.matchupFilterOpen, matchupDocument);
@@ -610,7 +612,11 @@ document.addEventListener("input", event => {
 
 document.addEventListener("change", async event => {
   if (await handleMobileListChange(event.target)) return;
-  if (event.target.hasAttribute("data-matchup-filter-select-all")) {
+  if (event.target.hasAttribute("data-matchup-mainstream")) {
+    state.matchupMainstreamOnly = event.target.checked;
+    state.matchupFilterOpen = false;
+    await renderViewWithFocus("[data-matchup-mainstream]");
+  } else if (event.target.hasAttribute("data-matchup-filter-select-all")) {
     const matchupDocument = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
     if (!matchupDocument) return;
     state.matchupFilterDraft = event.target.checked

@@ -59,6 +59,7 @@ const state = {
   matchupFilterDraft: new Set(),
   matchupFilterExpanded: new Set(),
   matchupFilterOpen: false,
+  matchupMainstreamOnly: false,
   detailIdentity: null,
   detailMode: "average",
   top8WeekFile: null,

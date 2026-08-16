@@ -113,19 +113,18 @@ separation, and established public entry points.
       detail navigation, responsive identity-column, and stable sticky-header
       behavior; its detailed contract is archived in
       `docs/history/ROADMAP-PHASE-12-COMPLETED.md`;
-    - `P12-13C` — planned Top-N opponents. Before implementation, reconfirm its
-      ranking contract against P12-13B's exact multi-row filter; the former
-      single-focused-identity ranking rule is superseded and is not authorized
-      for implementation. Any accepted replacement must continue to rank by
-      literal match count rather than win rate, resolve ties with the existing
-      stable order, and change only the visible projection, never source counts;
+    - `P12-13C` — completed Owner-accepted mainstream matchup projection for
+      both products, with source-specific 2% parent eligibility, preserved
+      subtype/filter state, lazy MTGO share loading, and no statistical or
+      public-data change; the decision contract is recorded in `DEC-100`;
     - `P12-13D` — minimum-match filter: offer no minimum, 5, 10, and 20;
       distinguish filtered cells from absent data, retain the established
       20-match low-sample warning and its meaning, and provide a truthful empty
-      state when no opponent remains. Apply the controls in the deterministic
-      order exact row subset, minimum matches, then Top-N;
+      state when no opponent remains. This remains a separate product decision
+      after P12-13C rather than an automatic follow-up;
     - `P12-13E` — shareable matrix state: restore the exact selected row
-      identities, Top-N, and minimum-match state across direct links, reload,
+      identities, mainstream switch, and any separately accepted minimum-match
+      state across direct links, reload,
       back, and forward navigation after the existing format, range, event, and
       scope state is resolved. Do not serialize filter-menu candidate search,
       disclosure state, hover, active keyboard cell, or pixel scroll position,

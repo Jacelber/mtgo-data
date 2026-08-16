@@ -447,6 +447,16 @@ or through one global control. Parents with zero or one maintained subtype must
 not expose a redundant expansion control. Visible subtype labels must remain
 self-contained when the parent row is replaced.
 
+Both matchup products may offer one default-off mainstream projection that
+applies the same qualifying parent-family set to the row and column axes. A
+parent qualifies at a stored share of at least 2%: current-range parent
+high-score share for MTGO and current-scope parent metagame share for Tabletop.
+These source-specific statistics must remain separately named and loaded;
+neither may be presented as a cross-product or universal metagame share.
+`Unknown` is not a mainstream archetype. A qualifying parent retains its full
+maintained subtype disclosure, and disabling the projection restores the
+complete matrix without changing source counts or a user's exact row selection.
+
 The MTGO page should also provide a complete-week Top 8 decklist view. Selecting
 a listed deck should use the same detail structure as MTGO statistics while
 showing the exact event deck, its subtype-based deviation, and its subtype

@@ -22,6 +22,10 @@
     return { meta, range, decks, completeness };
   }
 
+  function loadRangeStatistics(format, weeks) {
+    return client.fetchJson(`${rootPath(format)}/range_${weeks}w.json`);
+  }
+
   async function loadMatchup(format, weeks) {
     const base = rootPath(format);
     const [document, completeness] = await Promise.all([
@@ -148,6 +152,7 @@
     loadPickup,
     loadPickupDocument,
     loadPickupIndex,
+    loadRangeStatistics,
     loadStatistics,
     loadTop8,
     stageComparisonDecks,

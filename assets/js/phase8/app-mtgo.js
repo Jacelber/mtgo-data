@@ -365,6 +365,30 @@ function matchupFilterControls(document) {
   </div>`;
 }
 
+function matchupMainstreamControl(source, unavailable = false) {
+  const helpKey = source === "mtgo"
+    ? "matchup.mainstream_mtgo_help"
+    : "matchup.mainstream_tabletop_help";
+  const status = state.matchupMainstreamOnly && unavailable
+    ? `<div class="matchup-mainstream-status" role="status">
+        <span>${t("matchup.mainstream_unavailable")}</span>
+        <button type="button" class="secondary-button" data-matchup-mainstream-retry>${t("matchup.mainstream_retry")}</button>
+      </div>`
+    : "";
+  return `<div class="matchup-mainstream-control">
+    <label><input type="checkbox" data-matchup-mainstream${state.matchupMainstreamOnly ? " checked" : ""}>
+      <span>${t("matchup.mainstream_label")}</span>${infoTip(t(helpKey))}</label>
+    ${status}
+  </div>`;
+}
+
+function matchupViewControls(document, source, unavailable = false) {
+  return `<div class="matchup-view-controls">
+    ${matchupFilterControls(document)}
+    ${matchupMainstreamControl(source, unavailable)}
+  </div>`;
+}
+
 function prepareMatchupFilterDraft(document) {
   const allIds = matchupFilterCandidateIds(document);
   state.matchupFilterDraft = state.matchupFilterIdentities === null
@@ -487,15 +511,20 @@ function matchupDetailUrl(identityId) {
 }
 
 function matrixHtml(document) {
+  const mainstreamParentIds = state.matchupMainstreamOnly
+    && !currentContext.matchupMainstreamUnavailable
+    ? currentContext.matchupMainstreamParentIds
+    : null;
   const view = ReviewData.buildVisibleView(
     document,
     state.matchupRows,
     state.matchupColumns,
-    state.matchupFilterIdentities
+    state.matchupFilterIdentities,
+    mainstreamParentIds
   );
   if (!view.rows.length) {
     return `<div class="empty-state matchup-filter-empty" role="status">
-      <p>${t("matchup.filter_empty")}</p>
+      <p>${t(mainstreamParentIds === null ? "matchup.filter_empty" : "matchup.mainstream_filter_empty")}</p>
       <button class="secondary-button" type="button" data-matchup-filter-reset>${t("matchup.filter_reset")}</button>
     </div>`;
   }
@@ -539,11 +568,40 @@ function matchupProjection(document) {
   return `<div id="matchup-projection">${matrixHtml(document)}</div>`;
 }
 
+async function mtgoMainstreamProjection() {
+  if (!state.matchupMainstreamOnly) {
+    return { parentIds: null, unavailable: false };
+  }
+  try {
+    const range = await MtgoController.loadRangeStatistics(
+      state.format,
+      state.matchupRange
+    );
+    const parentIds = ReviewData.mainstreamParentIds(
+      range.archetypes,
+      "id",
+      "high_score_share"
+    );
+    return parentIds === null
+      ? { parentIds: null, unavailable: true }
+      : { parentIds, unavailable: false };
+  } catch {
+    return { parentIds: null, unavailable: true };
+  }
+}
+
 async function matchupView() {
-  const { document, completeness } = await MtgoController
-    .loadMatchup(state.format, state.matchupRange);
+  const [{ document, completeness }, mainstream] = await Promise.all([
+    MtgoController.loadMatchup(state.format, state.matchupRange),
+    mtgoMainstreamProjection(),
+  ]);
   const displayDocument = ReviewData.activeMatchupDocument(document, LOW_SAMPLE_THRESHOLD);
-  currentContext = { matchupDocument: displayDocument, completeness };
+  currentContext = {
+    matchupDocument: displayDocument,
+    completeness,
+    matchupMainstreamParentIds: mainstream.parentIds,
+    matchupMainstreamUnavailable: mainstream.unavailable,
+  };
   synchronizeMatchupFilter(displayDocument);
   return `${rangeButtons(state.matchupRange, "data-matchup-range")}
     <aside class="source-note" aria-label="${t("source.label")}">
@@ -553,7 +611,7 @@ async function matchupView() {
     <section class="panel"><div class="panel-toolbar"><div><h2>${t("matchup.title")}</h2>
       <p class="matrix-toolbar-note">${t("matchup.note")}</p></div>
       <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
-    </div>${matchupFilterControls(displayDocument)}${matchupLegend(displayDocument.min_sample_hint)}${matchupProjection(displayDocument)}</section>`;
+    </div>${matchupViewControls(displayDocument, "mtgo", mainstream.unavailable)}${matchupLegend(displayDocument.min_sample_hint)}${matchupProjection(displayDocument)}</section>`;
 }
 
 function top8PlacementDetail() {

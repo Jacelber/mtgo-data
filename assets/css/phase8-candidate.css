@@ -303,11 +303,20 @@
   font-size: 12px;
 }
 
+.matchup-view-controls {
+  display: flex;
+  gap: 10px 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+}
+
 .matchup-filter-control {
   position: relative;
   z-index: 14;
+  flex: 1 1 300px;
   max-width: 480px;
-  margin: 0 0 12px;
+  margin: 0;
 }
 
 .matchup-filter-control > label {
@@ -439,6 +448,46 @@
   gap: 8px;
   justify-content: flex-end;
   margin-top: 8px;
+}
+
+.matchup-mainstream-control {
+  flex: 0 1 auto;
+}
+
+.matchup-mainstream-control > label {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  min-height: var(--control-height);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.matchup-mainstream-control input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+.matchup-mainstream-control .tip {
+  flex: 0 0 auto;
+}
+
+.matchup-mainstream-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  max-width: 420px;
+  color: #9f2f2f;
+  font-size: var(--text-xs);
+}
+
+.matchup-mainstream-status .secondary-button {
+  min-height: 30px;
+  padding: 3px 8px;
+  white-space: nowrap;
 }
 
 .matchup-table .row-head {
@@ -739,8 +788,13 @@
 }
 
 @media (max-width: 780px) {
+  .matchup-view-controls {
+    display: block;
+  }
+
   .matchup-filter-control {
     max-width: none;
+    margin-bottom: 8px;
   }
 
   .matchup-filter-menu {

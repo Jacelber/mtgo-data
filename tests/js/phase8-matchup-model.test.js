@@ -168,6 +168,69 @@ test("exact matchup row filters preserve stable order and column expansion", () 
   ]);
 });
 
+test("mainstream eligibility uses the stored parent share and excludes Unknown", () => {
+  const mtgo = matchup.mainstreamParentIds([
+    { id: "alpha", high_score_share: 0.02 },
+    { id: "bravo", high_score_share: 0.0199 },
+    { id: "unknown", high_score_share: 0.75 },
+    { id: "missing", high_score_share: null },
+  ], "id", "high_score_share");
+  const tabletop = matchup.mainstreamParentIds([
+    { archetype_id: "alpha", metagame_share: 0.2 },
+    { archetype_id: "bravo", metagame_share: 0.01 },
+  ], "archetype_id", "metagame_share");
+
+  assert.deepEqual([...mtgo], ["alpha"]);
+  assert.deepEqual([...tabletop], ["alpha"]);
+  assert.equal(
+    matchup.mainstreamParentIds(
+      [{ id: "alpha", high_score_share: null }],
+      "id",
+      "high_score_share"
+    ),
+    null
+  );
+});
+
+test("mainstream projection constrains both parent axes without changing saved state", () => {
+  const document = documentFor(9);
+  const before = JSON.stringify(document);
+  const expandedRows = new Set(["alpha", "bravo"]);
+  const expandedColumns = new Set(["alpha", "bravo"]);
+  const selectedRows = new Set(["alpha/two", "bravo"]);
+  const mainstreamParents = new Set(["alpha"]);
+
+  const mainstream = matchup.buildVisibleView(
+    document,
+    expandedRows,
+    expandedColumns,
+    selectedRows,
+    mainstreamParents
+  );
+
+  assert.deepEqual(mainstream.rows.map(node => node.id), ["alpha/two"]);
+  assert.deepEqual(mainstream.columns.map(node => node.id), [
+    "alpha", "alpha/one", "alpha/two",
+  ]);
+  assert.deepEqual([...selectedRows], ["alpha/two", "bravo"]);
+  assert.deepEqual([...expandedRows], ["alpha", "bravo"]);
+  assert.deepEqual([...expandedColumns], ["alpha", "bravo"]);
+  assert.equal(JSON.stringify(document), before);
+
+  const restored = matchup.buildVisibleView(
+    document,
+    expandedRows,
+    expandedColumns,
+    selectedRows
+  );
+  assert.deepEqual(restored.rows.map(node => node.id), [
+    "alpha/two", "bravo", "bravo/one", "bravo/two",
+  ]);
+  assert.deepEqual(restored.columns.map(node => node.id), [
+    "alpha", "alpha/one", "alpha/two", "bravo", "bravo/one", "bravo/two",
+  ]);
+});
+
 test("matchup filter candidates expose parent-subtype hierarchy without duplicate rows", () => {
   const document = documentFor(5);
   const candidates = matchup.filterCandidates(document);

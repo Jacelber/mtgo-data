@@ -4114,7 +4114,7 @@ week's tournament values.
 
 # DEC-096 - Rebuild tests from a trigger-specific minimum
 
-Status: `Accepted for local implementation`
+Status: `Accepted and owner-verified`
 
 ## Context
 
@@ -4319,3 +4319,63 @@ The Owner accepted the final unchanged local-browser tree on 2026-08-16,
 authorizing same-task completion through one commit, one Ready pull request,
 required CI, normal merge, and Pages verification. Pickup reflow, P12-13B,
 production dispatch, and P12-10 remain separate gates.
+
+---
+
+# DEC-100 - Replace matchup Top-N with one mainstream projection
+
+Status: `Accepted for local implementation`
+
+## Context
+
+P12-13B added an exact hierarchical row filter while deliberately retaining the
+complete opponent axis. The planned P12-13C Top-N opponent control would add a
+second ranking and filter model, require ambiguous aggregation across multiple
+selected parent and subtype rows, and add disproportionate control density on
+small screens. The Owner determined that this complexity exceeds the expected
+product value.
+
+The simpler user goal is to switch between the complete environment and matches
+among established archetypes. Existing source products already expose reviewed
+share statistics, but their meanings differ: MTGO publishes high-score share
+rather than a complete metagame share, while Tabletop Overview publishes a
+scope-specific metagame share.
+
+## Decision
+
+Replace the Top-N plan with one default-off `mainstream matchups` switch. A
+known parent archetype qualifies when its stored source-appropriate share is at
+least `0.02`. MTGO uses parent `high_score_share` from the range-statistics
+document matching the active matchup interval and loads that existing document
+only when the switch is first activated. Tabletop uses parent
+`metagame_share` from the already loaded active-scope Overview. Do not merge,
+rename, or substitute those statistics.
+
+Apply the qualifying parent-family set to both matrix axes without reordering.
+Intersect it with the existing exact row selection on the row axis; do not make
+the column axis follow that exact selection. A qualifying parent retains every
+maintained subtype through the existing disclosure controls. Preserve hidden
+row selections and row and column disclosure state so disabling the switch
+restores the complete projection. Exclude `Unknown` from mainstream eligibility
+while retaining it in the complete matrix and quality accounting.
+
+If the required share document is unavailable, retain the complete matrix and
+show a retryable unavailable state. Never infer mainstream eligibility from
+match volume. Do not add Top-N, a subtype-level threshold, a generated field, a
+Schema, a public path, or a URL state in this task.
+
+## Consequences
+
+The large matrix gains one compact global preset rather than another multi-value
+filter. Default loading remains unchanged for MTGO, and Tabletop adds no request.
+The visible matrix can shrink on both axes without changing W-L-D counts,
+literal win-rate meaning, confidence intervals, low-sample warnings, taxonomy,
+source separation, or event `434455` bytes.
+
+P12-13D minimum-match filtering is no longer an automatic follow-up and requires
+a fresh product-value decision. P12-13E must refer to the mainstream switch
+rather than Top-N if it is later authorized. Owner hands-on local-browser
+acceptance was completed on 2026-08-17 for the unchanged local UI subject,
+authorizing same-task commit, Ready pull request, required CI, normal merge,
+and merge-triggered Pages verification. P12-13D and every other follow-up remain
+separate authorization gates.
