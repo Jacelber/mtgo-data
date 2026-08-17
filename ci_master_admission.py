@@ -438,6 +438,7 @@ def _path_category(path: str) -> str | None:
         "pytest.ini",
         "requirements.txt",
         "requirements-dev.txt",
+        "tools/github_publication_preflight.ps1",
     }:
         return "governance"
     return None

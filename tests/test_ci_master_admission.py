@@ -75,6 +75,7 @@ def _decide_pr(files, **event_overrides):
             "targeted:data",
         ),
         ([".github/workflows/ci.yml"], "targeted:governance"),
+        (["tools/github_publication_preflight.ps1"], "targeted:governance"),
         (
             ["docs/STATUS.yaml", "src/mtgmeta/deck.py", "stats/catalog.json"],
             "targeted:code+data+docs",
