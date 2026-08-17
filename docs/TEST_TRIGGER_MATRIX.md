@@ -16,10 +16,11 @@ an unbounded suite.
 | `tests/test_cli_smoke.py::test_catalog_cli_smoke` | Either production workflow has a new generation subject and will generate the catalog | Prove one minimal format can produce a consumer catalog | One temporary format with no available products |
 | `tests/test_melee_privacy_validation.py` | Melee production before live collection, or a privacy boundary change | Prove the smallest minimized resource is accepted and a prohibited persisted key is rejected independently of Schema permissiveness | One valid tournament document and one invalid key |
 | `tests/test_generated_consumer_contracts.py` | MTGO candidate generated, before packaging | Prove the newly generated candidate remains internally consumable | Current candidate documents only |
+| `tests/test_mtgo_top8_restatement.py` | Top 8 generator, classifier digest, lifecycle contract, or Top 8 Schema changes | Prove retained source facts stay fixed while current-classifier identities restate deterministically, including explicit Unknown | Three synthetic source/classifier cases |
 | `tests/test_documentation_history.py` | A live governance document changes | Enforce only the bounded live-status structure and history pointer | `docs/STATUS.yaml` only |
 | `tests/test_ci_master_admission.py` and `tests/test_ci_workflow.py` | CI admission or workflow control changes | Prove known paths route minimally, unknown evidence stops, and PR CI contains no heavy fallback | Admission logic and workflow text only |
 
-The first five rows are the retained data/output test set. The final two rows
+The first six rows are the retained data/output test set. The final two rows
 are control-plane checks and never run in a production baseline.
 
 ## Non-pytest validators and UI checks

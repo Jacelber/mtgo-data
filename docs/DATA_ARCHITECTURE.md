@@ -1916,10 +1916,25 @@ Each weekly document includes:
 
 P8-07 establishes 2026-W30 as the first historical baseline. A newly complete
 Monday-through-Sunday week remains provisional for seven days. Within that
-window, the producer may add late-discovered events while proving that no prior
-event, placement identity, or exact source deck changed. The next Monday seals
-the week and its companion base; subsequent rebuilding must be byte-identical.
-The index records `status`, `provisional_through`, and `seal_on` for every week.
+window, the producer may add late-discovered events; the next Monday seals event
+membership. At every lifecycle state, prior event IDs, dates, ranks, players,
+player counts, exact main decks, exact sideboards, and missing-deck states are
+immutable source facts.
+
+Top 8 identities, comparison bases, average decks, deviation values, and card
+differences are derived artifacts. The producer rebuilds every indexed week
+and companion base under the current classifier, stores one common
+`classifier_digest` in every week, base, and index, and rejects a mixed-digest
+closure. The digest covers the explicit classifier engine version, normalized
+rule values, and the bound semantic-feature manifest. An Unknown result is a
+valid explicit derived identity; conflicts and invalid decks remain blocking.
+Same source facts plus the same digest rebuild week and base bytes
+deterministically. A digest change may alter derived values but never relaxes
+source-fact or sealed-membership checks. The de-identified
+`classification_impact` section in the existing index records identity and
+comparison-base changes for review and is not a pass condition; it introduces
+no new public path. The index records `status`, `provisional_through`, and
+`seal_on` for every week.
 
 Phase 8 may also extend MTGO metadata or range documents with approved
 completeness payloads. Matchup completeness must retain the expected/admitted,

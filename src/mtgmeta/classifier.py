@@ -14,6 +14,10 @@ from .rules import CardCondition, ClassificationRule, RuleSet
 ClassificationStatus = Literal["classified", "unknown", "conflict", "invalid_deck"]
 ConflictKind = Literal["parent_archetype", "subtype"]
 
+# Bump this only when classifier evaluation semantics change.  Rule and
+# semantic-feature changes are independently included in each rule digest.
+CLASSIFIER_ENGINE_VERSION = "1.0.0"
+
 
 @dataclass(frozen=True)
 class ConditionEvidence:

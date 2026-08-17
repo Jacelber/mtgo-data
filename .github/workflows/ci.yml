@@ -97,6 +97,9 @@ jobs:
           python -B validate_rules.py my_archetypes/standard.yaml
           python -B validate_rules.py my_archetypes/modern.yaml
           python -B validate_schemas.py
+          python -B -m pytest \
+            --basetemp="${RUNNER_TEMP}/pytest-top8-restatement" \
+            tests/test_mtgo_top8_restatement.py
       - name: Validate CI control contracts
         if: contains(needs.admission.outputs.validation_class, 'governance')
         run: >-

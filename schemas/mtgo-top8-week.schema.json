@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-top8-week.schema.json",
   "title": "MTGO complete-week Top 8 decklists",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -10,14 +10,16 @@
     "document_type",
     "source",
     "format",
+    "classifier_digest",
     "week",
     "events"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"const": "1.1.0"},
     "document_type": {"const": "top8_week"},
     "source": {"const": "mtgo"},
     "format": {"enum": ["standard", "modern"]},
+    "classifier_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "week": {"$ref": "#/$defs/week"},
     "events": {
       "type": "array",
