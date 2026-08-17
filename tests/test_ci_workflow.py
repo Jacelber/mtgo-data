@@ -81,6 +81,7 @@ def test_targeted_commands_map_directly_to_changed_artifact_categories():
         "validate_schemas.py",
         "test_ci_master_admission.py",
         "test_ci_workflow.py",
+        "test_github_publication_preflight.py",
     ):
         assert required in commands
     assert "node --test" not in commands

@@ -461,6 +461,13 @@ The preflight states have one handling rule each:
   scope mismatch; and
 - `NETWORK_ERROR` reports network or GitHub availability failure.
 
+The preflight reads the active account, authentication state, and scopes from
+`gh auth status --json hosts`; JSON mode requires inspecting the structured
+account state rather than treating exit code zero as authentication success.
+It does not depend on a second authenticated-user API request. The repository
+permission endpoint remains authoritative for push permission, and GitHub HTTP
+5xx responses are `NETWORK_ERROR`, not missing credential context.
+
 Do not use a push as a credential probe or interpret raw `gh` output as a
 credential verdict. Preserve the local commit and disabled push sentinel when
 the state is not `READY`.

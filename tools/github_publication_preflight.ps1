@@ -52,70 +52,18 @@ if (-not $ActualPublicationContext) {
         -NextAction "Rerun once in the actual publication context; do not ask the Owner to log in."
 }
 
-$auth = Invoke-GhText -Arguments @("auth", "status", "-h", "github.com")
-$user = Invoke-GhText -Arguments @("api", "user", "--jq", ".login")
-$permission = Invoke-GhText -Arguments @(
-    "api",
-    "repos/Jacelber/mtgo-data",
-    "--jq",
-    ".permissions.push"
+$auth = Invoke-GhText -Arguments @(
+    "auth",
+    "status",
+    "--hostname",
+    "github.com",
+    "--json",
+    "hosts"
 )
+$authenticationFailure = $auth.Text -match "(?i)(bad credentials|invalid token|token.*invalid|HTTP 401|authentication failed)"
+$networkFailure = $auth.Text -match "(?i)(HTTP 5\d\d|could not resolve|connection.*(failed|reset|timed out)|network is unreachable|TLS|timeout|deadline exceeded)"
 
-$login = if ($user.ExitCode -eq 0) { $user.Text.Trim() } else { "" }
-$pushPermission = if ($permission.ExitCode -eq 0) {
-    $permission.Text.Trim() -eq "true"
-} else {
-    $null
-}
-$workflowScope = if ($RequireWorkflowScope -and $auth.ExitCode -eq 0) {
-    $auth.Text -match '(?im)Token scopes:.*\bworkflow\b'
-} elseif ($RequireWorkflowScope) {
-    $null
-} else {
-    $false
-}
-
-if ($user.ExitCode -eq 0 -and $permission.ExitCode -eq 0) {
-    if ($login -ne "Jacelber" -or -not $pushPermission) {
-        Write-PreflightResult `
-            -State "PERMISSION_MISSING" `
-            -ExitCode 4 `
-            -Login $login `
-            -PushPermission $pushPermission `
-            -WorkflowScope $workflowScope `
-            -NextAction "Stop and report the identity or repository permission mismatch; do not request login as a generic fix."
-    }
-
-    if ($RequireWorkflowScope -and $workflowScope -ne $true) {
-        $state = if ($auth.ExitCode -eq 0) {
-            "PERMISSION_MISSING"
-        } else {
-            "RETRY_ACTUAL_CONTEXT"
-        }
-        $exitCode = if ($state -eq "PERMISSION_MISSING") { 4 } else { 2 }
-        Write-PreflightResult `
-            -State $state `
-            -ExitCode $exitCode `
-            -Login $login `
-            -PushPermission $pushPermission `
-            -WorkflowScope $workflowScope `
-            -NextAction "Stop without a login request unless an actual-context authentication rejection is confirmed."
-    }
-
-    Write-PreflightResult `
-        -State "READY" `
-        -ExitCode 0 `
-        -Login $login `
-        -PushPermission $pushPermission `
-        -WorkflowScope $workflowScope `
-        -NextAction "Continue with the repository-specific command-scoped publication path."
-}
-
-$combinedError = "$($auth.Text)`n$($user.Text)`n$($permission.Text)"
-$authenticationFailure = $combinedError -match "(?i)(bad credentials|invalid token|token.*invalid|HTTP 401|authentication failed)"
-$networkFailure = $combinedError -match "(?i)(could not resolve|connection.*(failed|reset|timed out)|network is unreachable|TLS|timeout)"
-
-if ($auth.ExitCode -ne 0 -and $user.ExitCode -ne 0 -and $authenticationFailure) {
+if ($authenticationFailure) {
     Write-PreflightResult `
         -State "AUTH_REJECTED" `
         -ExitCode 3 `
@@ -129,7 +77,106 @@ if ($networkFailure) {
         -NextAction "Stop and report a network or GitHub availability failure; do not ask the Owner to log in."
 }
 
+if ($auth.ExitCode -ne 0) {
+    Write-PreflightResult `
+        -State "RETRY_ACTUAL_CONTEXT" `
+        -ExitCode 2 `
+        -NextAction "The credential context was unavailable; retry the actual publication context once, then report a context failure without requesting login."
+}
+
+try {
+    $authDocument = $auth.Text | ConvertFrom-Json -ErrorAction Stop
+    $hostProperty = $authDocument.hosts.PSObject.Properties["github.com"]
+    if ($null -eq $hostProperty) {
+        throw "github.com authentication state is missing"
+    }
+    $activeAccounts = @($hostProperty.Value | Where-Object { $_.active -eq $true })
+} catch {
+    Write-PreflightResult `
+        -State "RETRY_ACTUAL_CONTEXT" `
+        -ExitCode 2 `
+        -NextAction "The structured credential state was unavailable; retry the actual publication context once, then report a context failure without requesting login."
+}
+
+if ($activeAccounts.Count -ne 1) {
+    Write-PreflightResult `
+        -State "RETRY_ACTUAL_CONTEXT" `
+        -ExitCode 2 `
+        -NextAction "Exactly one active GitHub account was not available; retry the actual publication context once, then report a context failure without requesting login."
+}
+
+$activeAccount = $activeAccounts[0]
+$login = [string]$activeAccount.login
+$scopeNames = @(([string]$activeAccount.scopes).Split(",") | ForEach-Object { $_.Trim() })
+$workflowScope = if ($RequireWorkflowScope) {
+    $scopeNames -contains "workflow"
+} else {
+    $false
+}
+
+if ([string]$activeAccount.state -ne "success") {
+    Write-PreflightResult `
+        -State "AUTH_REJECTED" `
+        -ExitCode 3 `
+        -Login $login `
+        -WorkflowScope $workflowScope `
+        -NextAction "Stop and ask the Owner to restore GitHub authentication; include only this state, not raw credential output."
+}
+
+if ($login -ne "Jacelber" -or ($RequireWorkflowScope -and -not $workflowScope)) {
+    Write-PreflightResult `
+        -State "PERMISSION_MISSING" `
+        -ExitCode 4 `
+        -Login $login `
+        -WorkflowScope $workflowScope `
+        -NextAction "Stop and report the identity or workflow-scope mismatch; do not request login as a generic fix."
+}
+
+$permission = Invoke-GhText -Arguments @(
+    "api",
+    "repos/Jacelber/mtgo-data",
+    "--jq",
+    ".permissions.push"
+)
+$authenticationFailure = $permission.Text -match "(?i)(bad credentials|invalid token|token.*invalid|HTTP 401|authentication failed)"
+$networkFailure = $permission.Text -match "(?i)(HTTP 5\d\d|could not resolve|connection.*(failed|reset|timed out)|network is unreachable|TLS|timeout|deadline exceeded)"
+
+if ($authenticationFailure) {
+    Write-PreflightResult `
+        -State "AUTH_REJECTED" `
+        -ExitCode 3 `
+        -NextAction "Stop and ask the Owner to restore GitHub authentication; include only this state, not raw credential output."
+}
+
+if ($networkFailure) {
+    Write-PreflightResult `
+        -State "NETWORK_ERROR" `
+        -ExitCode 5 `
+        -NextAction "Stop and report a network or GitHub availability failure; do not ask the Owner to log in."
+}
+
+if ($permission.ExitCode -ne 0) {
+    Write-PreflightResult `
+        -State "RETRY_ACTUAL_CONTEXT" `
+        -ExitCode 2 `
+        -NextAction "The repository permission context was unavailable; retry the actual publication context once, then report a context failure without requesting login."
+}
+
+$pushPermission = $permission.Text.Trim() -eq "true"
+if (-not $pushPermission) {
+    Write-PreflightResult `
+        -State "PERMISSION_MISSING" `
+        -ExitCode 4 `
+        -Login $login `
+        -PushPermission $pushPermission `
+        -WorkflowScope $workflowScope `
+        -NextAction "Stop and report the repository push-permission mismatch; do not request login as a generic fix."
+}
+
 Write-PreflightResult `
-    -State "RETRY_ACTUAL_CONTEXT" `
-    -ExitCode 2 `
-    -NextAction "The credential context was unavailable; retry the actual publication context once, then report a context failure without requesting login."
+    -State "READY" `
+    -ExitCode 0 `
+    -Login $login `
+    -PushPermission $pushPermission `
+    -WorkflowScope $workflowScope `
+    -NextAction "Continue with the repository-specific command-scoped publication path."

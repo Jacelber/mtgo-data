@@ -104,6 +104,7 @@ jobs:
           --basetemp="${RUNNER_TEMP}/pytest-targeted-governance"
           tests/test_ci_master_admission.py
           tests/test_ci_workflow.py
+          tests/test_github_publication_preflight.py
   post-merge-confirmation:
     name: Confirm previously validated merge
     needs: admission

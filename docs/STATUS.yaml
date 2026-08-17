@@ -4,13 +4,13 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-13f-horizontal-scroll"
+  current_working_branch: "codex/github-preflight-context-01"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
   purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-08-17"
+  last_updated: "2026-08-18"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   authoritative_for:
@@ -31,55 +31,56 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-13F"
-  name: "Keyboard horizontal matrix scrolling"
+  id: "GITHUB-PREFLIGHT-01"
+  name: "Structured GitHub publication preflight"
   status: "owner_accepted_completion_authorized"
-  planning_authorized_on: "2026-08-17"
   implementation_authorized_on: "2026-08-17"
   developer_validation_completed_on: "2026-08-17"
-  owner_accepted_on: "2026-08-17"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-13f-horizontal-scroll-20260817-01"
-  branch: "codex/p12-13f-horizontal-scroll"
-  base_commit: "11e0ea3ef7c1ea84329e408d85c3140fbc2228a2"
-  objective: "Retire excess P12-13 controls, correct DEC-096 and DEC-100 status metadata, and implement bounded left/right keyboard scrolling by one displayed matchup column without changing matrix state."
-  artifact_impact: "user_visible_ui,documentation"
+  owner_accepted_on: "2026-08-18"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/github-preflight-20260817-01"
+  branch: "codex/github-preflight-context-01"
+  base_commit: "adc341f469aa83b26cc81ba6ecd50a230a06aa90"
+  objective: "Replace ambiguous text-based GitHub authentication detection with structured active-account state, remove the redundant authenticated-user API dependency, and classify GitHub HTTP 5xx failures as NETWORK_ERROR without weakening publication authorization checks."
+  artifact_impact: "internal_diagnostics,governance"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "docs/ROADMAP.md"
-    - "docs/DECISIONS.md"
+    - "tools/github_publication_preflight.ps1"
+    - "tests/test_github_publication_preflight.py"
+    - "ci_master_admission.py"
+    - "tests/test_ci_master_admission.py"
+    - ".github/workflows/ci.yml"
+    - "docs/DEVELOPMENT_WORKFLOW.md"
     - "docs/STATUS.yaml"
-    - "assets/js/phase8/app-mobile-interactions.js"
-    - "tests/browser/production-pages.spec.js"
+    - "docs/TEST_TRIGGER_MATRIX.md"
   protected_scope:
     statistical_formulas_changed: "none"
     public_json_or_schema_changed: "none"
     generated_or_source_data_changed: "none"
     classification_identities_changed: "none"
-    workflows_or_public_paths_changed: "none"
+    workflows_or_public_paths_changed: "PR validation routing only; public paths unchanged"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Remove P12-13D, P12-13E, and P12-13Z from the active roadmap as Owner-cancelled excess functionality."
-    - "Replace the former four-direction grid-navigation plan with a separately gated left/right keyboard-scroll candidate."
-    - "Restore the DEC-096 status and mark the completed DEC-100 decision Owner-verified."
-    - "When keyboard focus is within the matrix viewport, let unmodified Left and Right move that viewport by one currently rendered matchup-result column without moving focus."
-    - "Preserve native Up and Down behavior, browser-modified arrow shortcuts, matrix filters, disclosures, URL state, row and column membership, and sticky-header synchronization."
-    - "Cover the shared MTGO and Tabletop implementation with one focused permanent browser regression and perform developer browser review before Owner hands-on local acceptance."
+    - "Read the active GitHub account, authentication state, and scopes from gh auth status structured JSON without exposing a token."
+    - "Verify repository push permission through the existing repository permissions API call."
+    - "Classify HTTP 5xx and equivalent GitHub availability failures as NETWORK_ERROR."
+    - "Add focused cross-platform tests and route the preflight script as governance validation."
+    - "Run the final script once without actual-context authority and once read-only in the actual publication context."
   prohibited_changes:
-    - "Do not add four-direction cell-focus navigation, wraparound, smooth queued movement, new controls, copy, settings, URL persistence, filter or disclosure mutation, or a second matrix presentation."
-    - "Do not capture Left or Right outside the matchup matrix or any arrow key carrying Alt, Control, Meta, or Shift."
-    - "Do not edit CSS, localization, public data, Schemas, workflows, generated data, classifications, or protected event 434455 bytes."
-    - "Do not start or redesign P12-14 or any later task."
-    - "Do not dispatch production or carry this completion authority into another task or phase."
-  stop_point: "Complete the unchanged Owner-accepted P12-13F tree through one local commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification; then stop without beginning another task."
+    - "Do not display, read, copy, persist, provision, refresh, or rotate any credential or token."
+    - "Do not weaken the required Jacelber identity, repository push permission, workflow scope, actual-context, or fail-closed checks."
+    - "Do not edit product code, classifier code, data, generated output, Schemas, public paths, or production workflows."
+    - "Do not change or rewrite the accepted CLASSIFIER-RESTATEMENT-01 commit."
+    - "Do not dispatch production, close Issue 228, or begin an unrelated task under this completion authority."
+  stop_point: "Complete the accepted unchanged GITHUB-PREFLIGHT-01 tree through one local commit, one Ready pull request, required CI, and normal merge; then resume the separately accepted CLASSIFIER-RESTATEMENT-01 publication without beginning another task."
 
 current_repository_state:
-  baseline_commit: "11e0ea3ef7c1ea84329e408d85c3140fbc2228a2"
-  baseline_note: "Verified remote master after accepted P12-13C merged in PR 226 and its merge-triggered Pages deployment succeeded. This documentation/F workspace starts from that exact commit."
+  baseline_commit: "adc341f469aa83b26cc81ba6ecd50a230a06aa90"
+  baseline_note: "Verified remote master used for the isolated GITHUB-PREFLIGHT-01 workspace; the accepted classifier-restatement commit remains separate and unchanged."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -106,10 +107,12 @@ next_approved_task:
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "The unchanged P12-13F implementation and documentation correction are Owner-accepted and authorized for continuous same-task completion. Every follow-up task remains a separate gate."
+  note: "The unchanged GITHUB-PREFLIGHT-01 repair is Owner-accepted for continuous completion, followed only by resumption of the separately accepted CLASSIFIER-RESTATEMENT-01 publication."
 
 prohibited_next_actions:
-  - "Do not begin the Melee v3 production preflight, P12-10, Pickup reflow, or another task automatically after accepted P12-13F completion."
+  - "Do not bypass the repaired preflight while publishing either accepted task."
+  - "Do not resume CLASSIFIER-RESTATEMENT-01 publication until the repaired preflight is merged."
+  - "Do not begin the Melee v3 production preflight, P12-10, Pickup reflow, or another task automatically."
   - "Do not retain a second standalone P12-13A search state; P12-13B replaces row search and label focus with one exact multi-select row filter whose internal search only narrows filter candidates."
   - "Do not restore the superseded Top-N, P12-13D minimum-match filter, P12-13E URL-persisted matrix state, P12-13Z dedicated combination review, or the former four-direction focus-grid plan."
   - "Do not begin or redesign P12-14 or any later task until its own pre-implementation review."
