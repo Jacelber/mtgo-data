@@ -52,7 +52,10 @@ def build_parser() -> argparse.ArgumentParser:
     match_parser.add_argument("--force", action="store_true", help="replace existing event files")
 
     commands.add_parser("build-statistics", help="build rolling MTGO statistics")
-    commands.add_parser("build-top8", help="build latest complete-week MTGO Top 8 data")
+    commands.add_parser(
+        "build-top8",
+        help="build retained complete-week MTGO Top 8 data",
+    )
     commands.add_parser("build-matchups", help="build Videre matchup statistics")
     commands.add_parser(
         "build-completeness",

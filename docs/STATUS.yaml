@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/github-preflight-context-01"
+  current_working_branch: "codex/classifier-restatement-02"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,56 +31,62 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GITHUB-PREFLIGHT-01"
-  name: "Structured GitHub publication preflight"
+  id: "CLASSIFIER-RESTATEMENT-01"
+  name: "Current-classifier restatement with immutable source facts"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-17"
   developer_validation_completed_on: "2026-08-17"
-  owner_accepted_on: "2026-08-18"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/github-preflight-20260817-01"
-  branch: "codex/github-preflight-context-01"
-  base_commit: "adc341f469aa83b26cc81ba6ecd50a230a06aa90"
-  objective: "Replace ambiguous text-based GitHub authentication detection with structured active-account state, remove the redundant authenticated-user API dependency, and classify GitHub HTTP 5xx failures as NETWORK_ERROR without weakening publication authorization checks."
-  artifact_impact: "internal_diagnostics,governance"
+  owner_accepted_on: "2026-08-17"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/classifier-restatement-rebased-20260818-01"
+  branch: "codex/classifier-restatement-02"
+  base_commit: "0965702d71ef8d88dcbabce561e89741dfec3a8b"
+  objective: "Make retained source facts authoritative, rebuild all retained Top 8 classifications and bases under the current classifier, and replace historical equality with deterministic digest and impact contracts."
+  artifact_impact: "statistical_json_structure,generated_public_data,internal_diagnostics,governance"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "tools/github_publication_preflight.ps1"
-    - "tests/test_github_publication_preflight.py"
-    - "ci_master_admission.py"
-    - "tests/test_ci_master_admission.py"
+    - "src/mtgmeta/classifier.py"
+    - "src/mtgmeta/mtgo/stats.py"
+    - "src/mtgmeta/mtgo/top8.py"
+    - "src/mtgmeta/mtgo/__main__.py"
+    - "tests/test_mtgo_top8_restatement.py"
+    - "tests/test_generated_consumer_contracts.py"
+    - "schemas/mtgo-top8-*.schema.json"
+    - "schemas/manifest.json"
+    - "stats/{standard,modern}/mtgo/top8/*.json"
     - ".github/workflows/ci.yml"
-    - "docs/DEVELOPMENT_WORKFLOW.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/ROADMAP.md"
+    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
     - "docs/TEST_TRIGGER_MATRIX.md"
   protected_scope:
     statistical_formulas_changed: "none"
-    public_json_or_schema_changed: "none"
-    generated_or_source_data_changed: "none"
-    classification_identities_changed: "none"
-    workflows_or_public_paths_changed: "PR validation routing only; public paths unchanged"
+    public_json_or_schema_changed: "Top 8 additive classifier digest and Schema version 1.1.0"
+    generated_or_source_data_changed: "derived Top 8 history only; source data unchanged"
+    classification_identities_changed: "derived outputs restated under unchanged current rules"
+    workflows_or_public_paths_changed: "focused PR validation only; public paths unchanged"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Read the active GitHub account, authentication state, and scopes from gh auth status structured JSON without exposing a token."
-    - "Verify repository push permission through the existing repository permissions API call."
-    - "Classify HTTP 5xx and equivalent GitHub availability failures as NETWORK_ERROR."
-    - "Add focused cross-platform tests and route the preflight script as governance validation."
-    - "Run the final script once without actual-context authority and once read-only in the actual publication context."
+    - "Separate immutable event and placement source facts from derived classification and comparison values."
+    - "Rebuild every indexed Top 8 week and comparison base with the current classifier."
+    - "Require one common classifier digest and deterministic same-subject output."
+    - "Treat Unknown as explicit derived output while keeping conflict and invalid-deck failures closed."
+    - "Generate a de-identified classification impact report that is informative rather than a zero-difference gate."
+    - "Update the applicable specifications, architecture, decision, Schemas, focused tests, and CI trigger matrix."
   prohibited_changes:
-    - "Do not display, read, copy, persist, provision, refresh, or rotate any credential or token."
-    - "Do not weaken the required Jacelber identity, repository push permission, workflow scope, actual-context, or fail-closed checks."
-    - "Do not edit product code, classifier code, data, generated output, Schemas, public paths, or production workflows."
-    - "Do not change or rewrite the accepted CLASSIFIER-RESTATEMENT-01 commit."
-    - "Do not dispatch production, close Issue 228, or begin an unrelated task under this completion authority."
-  stop_point: "Complete the accepted unchanged GITHUB-PREFLIGHT-01 tree through one local commit, one Ready pull request, required CI, and normal merge; then resume the separately accepted CLASSIFIER-RESTATEMENT-01 publication without beginning another task."
+    - "Do not change classifier rules, taxonomy, formulas, raw events, match input, event 434455 source bytes, UI source, or public paths."
+    - "Do not fetch data, dispatch production, close Issue 228, start P12-10, or begin another task."
+  stop_point: "Complete the accepted unchanged task through one local commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification; then stop without production dispatch, Issue closure, or another task."
 
 current_repository_state:
-  baseline_commit: "adc341f469aa83b26cc81ba6ecd50a230a06aa90"
-  baseline_note: "Verified remote master used for the isolated GITHUB-PREFLIGHT-01 workspace; the accepted classifier-restatement commit remains separate and unchanged."
+  baseline_commit: "0965702d71ef8d88dcbabce561e89741dfec3a8b"
+  baseline_note: "Verified remote master after GITHUB-PREFLIGHT-01 merged in PR 229; the accepted classifier implementation and generated outputs were replayed unchanged on that governance base."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -107,17 +113,16 @@ next_approved_task:
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "The unchanged GITHUB-PREFLIGHT-01 repair is Owner-accepted for continuous completion, followed only by resumption of the separately accepted CLASSIFIER-RESTATEMENT-01 publication."
+  note: "Owner acceptance authorizes continuous completion of the unchanged CLASSIFIER-RESTATEMENT-01 task through commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification; no follow-up task is authorized."
 
 prohibited_next_actions:
-  - "Do not bypass the repaired preflight while publishing either accepted task."
-  - "Do not resume CLASSIFIER-RESTATEMENT-01 publication until the repaired preflight is merged."
+  - "Do not dispatch production, fetch protected source data, close Issue 228, or begin a follow-up task under the accepted-task completion authority."
   - "Do not begin the Melee v3 production preflight, P12-10, Pickup reflow, or another task automatically."
   - "Do not retain a second standalone P12-13A search state; P12-13B replaces row search and label focus with one exact multi-select row filter whose internal search only narrows filter candidates."
   - "Do not restore the superseded Top-N, P12-13D minimum-match filter, P12-13E URL-persisted matrix state, P12-13Z dedicated combination review, or the former four-direction focus-grid plan."
   - "Do not begin or redesign P12-14 or any later task until its own pre-implementation review."
-  - "Do not change matchup formulas, public JSON, Schemas, workflows, public paths, generated data, or classification identities."
+  - "Do not change classifier rules, taxonomy, formulas, raw source data, UI source, or public paths."
   - "Do not create, access, configure, or rotate an HMAC key or GitHub Secret."
-  - "Do not dispatch production, change event selection, fetch protected source data, or expand beyond the approved P12-13F horizontal keyboard-scroll contract."
+  - "Do not dispatch production, change event selection, fetch protected source data, or expand beyond the approved classifier-restatement contract."
   - "Do not rewrite Git history, force-push, mutate protected branches or tags, or change event 434455 raw snapshot or normalized-event bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."

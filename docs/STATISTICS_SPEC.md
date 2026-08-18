@@ -2009,14 +2009,24 @@ are null rather than inferred.
 The catalog accumulates complete weeks from the first safely established
 historical baseline, 2026-W30. A complete week is `provisional` for the next
 seven calendar days and becomes `sealed` on the following Monday. During that
-window, regeneration may only add newly discovered event IDs: it must preserve
-every previously recorded event and the exact source identity and decklist of
-each prior placement. Removal, count regression, duplicate identity, or a
-change without an added event fails closed. Once sealed, regeneration must
-produce byte-identical week and base documents. The catalog exposes the status,
-`provisional_through`, and `seal_on` dates. Earlier weeks are not backfilled
-unless a separate task can reproduce and validate their original same-period
-construction inputs.
+window, regeneration may add newly discovered event IDs. After sealing, event
+membership is fixed. In both states, every retained event ID, date, rank,
+player, player count, exact main deck, exact sideboard, and explicit missing-
+deck state is immutable source evidence; a removal or source-fact change fails
+closed.
+
+Classification identity, subtype display, comparison-base membership,
+average deck, deviation, and card differences are derived values. Every Top 8
+generation rebuilds all indexed weeks and their companion bases with the
+current classifier rather than treating an older derived result as authority.
+Each week, base, and index records the same classifier digest, which binds the
+classifier engine contract, normalized rules, and semantic-feature manifest.
+Identical source facts and classifier digest must produce identical week and
+base bytes. A different digest permits and requires derived restatement while
+source facts remain unchanged. The old-to-new classification and base diff is
+an impact report for review, not a zero-difference acceptance gate. The catalog
+exposes `status`, `provisional_through`, and `seal_on`; those fields govern only
+event membership and source-fact retention.
 
 ---
 

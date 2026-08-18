@@ -41,6 +41,12 @@ accessible, resilient, and usable across desktop and mobile. Add a curated
 MTGO weekly landing view while preserving statistical meaning, product
 separation, and established public entry points.
 
+The separately authorized `CLASSIFIER-RESTATEMENT-01` maintenance repair must
+replace historical-classification equality with immutable source-fact checks,
+restate every retained Top 8 week and base under one current classifier digest,
+and stop for Owner acceptance before any remote or production action. It does
+not authorize a classifier rule change or begin P12-10.
+
 ## Remaining task sequence
 
 10. `P12-10` — Landing weekly-facts producer and Pickup integration
@@ -209,8 +215,9 @@ Phase 12 is complete when:
   matrices without traversing thousands of tab stops;
 - failure states can retry safely and progressive images do not block readable
   content or shift established layout;
-- weekly comparisons use one recorded classifier rule version, and unavailable
-  comparability produces no false environment-change claim;
+- every retained classification-derived Top 8 artifact uses one current
+  classifier digest, while immutable source facts and unavailable comparisons
+  produce no false environment-change claim;
 - real-browser acceptance passes across the required products, formats,
   languages, and viewport sizes, with exactly one selected language rendered at
   a time;

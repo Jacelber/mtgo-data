@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-top8-comparison-bases.schema.json",
-  "title": "Immutable MTGO weekly Top 8 construction comparison bases",
-  "x-schema-version": "1.0.0",
+  "title": "Restated MTGO weekly Top 8 construction comparison bases",
+  "x-schema-version": "1.1.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -10,16 +10,18 @@
     "document_type",
     "source",
     "format",
+    "classifier_digest",
     "week",
     "base_period",
     "base_period_end",
     "identities"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"const": "1.1.0"},
     "document_type": {"const": "top8_comparison_bases"},
     "source": {"const": "mtgo"},
     "format": {"enum": ["standard", "modern"]},
+    "classifier_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "week": {
       "type": "object",
       "additionalProperties": false,

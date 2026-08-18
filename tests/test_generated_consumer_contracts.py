@@ -109,6 +109,7 @@ def test_current_top8_freshness_inputs_follow_the_latest_generated_week(
     format_id: str,
 ) -> None:
     index = _json(f"stats/{format_id}/mtgo/top8/index.json")
+    impact = index["classification_impact"]
     latest = index["weeks"][0]
     document = _json(f"stats/{format_id}/mtgo/top8/{latest['file']}")
     placements = [
@@ -120,6 +121,14 @@ def test_current_top8_freshness_inputs_follow_the_latest_generated_week(
     assert latest["event_count"] == len(document["events"])
     assert document["week"]["start"] == latest["start"]
     assert document["week"]["end"] == latest["end"]
+    assert impact["summary"]["retained_week_count"] == len(index["weeks"])
+    for entry in index["weeks"]:
+        week = _json(f"stats/{format_id}/mtgo/top8/{entry['file']}")
+        bases = _json(
+            f"stats/{format_id}/mtgo/top8/{entry['comparison_bases_file']}"
+        )
+        assert week["classifier_digest"] == index["classifier_digest"]
+        assert bases["classifier_digest"] == index["classifier_digest"]
     assert all(
         placement["deck_status"] in {"available", "unavailable"}
         for placement in placements

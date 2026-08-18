@@ -214,6 +214,19 @@ def process_event(
         "records": records,
     }
 
+
+def _processed_event(
+    event: dict[str, Any],
+    rules: RuleSet | LegacyArchetypeRules,
+    cache: dict[int, dict[str, Any]] | None,
+) -> dict[str, Any]:
+    if cache is None:
+        return process_event(event, rules)
+    key = id(event)
+    if key not in cache:
+        cache[key] = process_event(event, rules)
+    return cache[key]
+
 def parse_event_date(starttime):
     """从 starttime 取日期部分（前 10 字符 YYYY-MM-DD）。失败返回 None。"""
     if not starttime:
@@ -616,6 +629,7 @@ def _recent_change_for_identity(
     d99,
     *,
     identity_level: str,
+    processed_events: dict[int, dict[str, Any]] | None = None,
 ):
     """计算某套牌的近期变化度：
        近端 = 最近 1 完整周(end_monday 那周) 该套牌主牌平均向量
@@ -632,12 +646,13 @@ def _recent_change_for_identity(
 
     recent_recs, prior_recs = [], []
     for d, ev in events:
+        processed = _processed_event(ev, archetypes, processed_events)
         if recent_start <= d <= recent_end_sunday:
-            for r in process_event(ev, archetypes)["records"]:
+            for r in processed["records"]:
                 if _record_identity_key(r, identity_level) == identity_key:
                     recent_recs.append(r)
         elif prior_start <= d <= prior_end_sunday:
-            for r in process_event(ev, archetypes)["records"]:
+            for r in processed["records"]:
                 if _record_identity_key(r, identity_level) == identity_key:
                     prior_recs.append(r)
 
@@ -674,6 +689,7 @@ def _build_base_pack(
     end_monday,
     *,
     identity_level: str,
+    processed_events: dict[int, dict[str, Any]] | None = None,
 ):
     """构建固定 4 周 base 包 + 全局 D99 + 每套牌近期变化度。
     base_pack = { arch: {mean, weights, core, flex, medoid_display,
@@ -686,7 +702,8 @@ def _build_base_pack(
     by_arch = defaultdict(list)
     for d, ev in events:
         if start_monday <= d <= end_sunday:
-            for r in process_event(ev, archetypes)["records"]:
+            processed = _processed_event(ev, archetypes, processed_events)
+            for r in processed["records"]:
                 identity_key = _record_identity_key(r, identity_level)
                 if identity_key is not None:
                     by_arch[identity_key].append(r)
@@ -734,6 +751,7 @@ def _build_base_pack(
             identity_key,
             d99,
             identity_level=identity_level,
+            processed_events=processed_events,
         )
         base_pack[identity_key]["recent_change"] = val
         base_pack[identity_key]["recent_change_reason"] = reason
@@ -741,21 +759,37 @@ def _build_base_pack(
     return base_pack, d99
 
 
-def build_base_pack(events, archetypes, end_monday, today=None):
+def build_base_pack(
+    events,
+    archetypes,
+    end_monday,
+    today=None,
+    *,
+    processed_events: dict[int, dict[str, Any]] | None = None,
+):
     return _build_base_pack(
         events,
         archetypes,
         end_monday,
         identity_level="parent",
+        processed_events=processed_events,
     )
 
 
-def build_subtype_base_pack(events, archetypes, end_monday, today=None):
+def build_subtype_base_pack(
+    events,
+    archetypes,
+    end_monday,
+    today=None,
+    *,
+    processed_events: dict[int, dict[str, Any]] | None = None,
+):
     return _build_base_pack(
         events,
         archetypes,
         end_monday,
         identity_level="subtype",
+        processed_events=processed_events,
     )
 
 

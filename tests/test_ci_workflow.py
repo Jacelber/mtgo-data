@@ -71,9 +71,13 @@ def test_targeted_commands_map_directly_to_changed_artifact_categories():
     assert "code" in by_name["Check maintained Python package"]["if"]
     assert "data" in by_name["Validate rules and public JSON schemas"]["if"]
     assert "governance" in by_name["Validate CI control contracts"]["if"]
+    package_install = by_name["Install maintained package for code and data checks"]
+    assert "code" in package_install["if"]
+    assert "data" in package_install["if"]
     commands = "\n".join(step.get("run", "") for step in steps)
     for required in (
         "validate_repository.py",
+        "pip install --disable-pip-version-check --no-deps .",
         "test_documentation_history.py",
         "ruff check src",
         "-m mypy",

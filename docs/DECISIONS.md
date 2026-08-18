@@ -4386,3 +4386,57 @@ authorizing same-task commit, Ready pull request, required CI, normal merge,
 and merge-triggered Pages verification. The cancelled D, E, and Z tasks are not
 follow-up gates; P12-13F implementation and every later task remain separately
 authorized.
+
+---
+
+# DEC-101 - Make source facts authoritative and restate retained classifications
+
+Status: `Accepted for local implementation`
+
+## Context
+
+The 2026-08-16 production workflow failed while rebuilding Modern Top 8 after
+the accepted Broodscale classifier correction. DEC-083 and DEC-099 had made an
+older Top 8 identity and sealed comparison base authoritative, so a correct
+current classification was rejected because it differed from the known-buggy
+historical result. The latest retained input also demonstrated that an explicit
+Unknown Top 8 result crashed the generator before lifecycle validation.
+
+Classifier rules may change regularly. Equality with the previous derived
+classification therefore proves neither source integrity nor current
+correctness and cannot remain an acceptance gate.
+
+## Decision
+
+Treat event ID, event date, event name, player count, finishing rank, player,
+exact main deck, exact sideboard, and explicit missing-deck state as immutable
+Top 8 source facts. The provisional lifecycle may add event IDs until sealing;
+after sealing, event membership is also immutable. Any retained source change,
+removal, duplicate, or sealed addition fails closed.
+
+Treat parent/subtype identity, display identity, comparison-base membership,
+average deck, construction deviation, and card differences as derived values.
+Every run rebuilds every indexed week and base with the current classifier.
+The week, base, and index Schemas advance to `1.1.0` and require one common
+classifier digest covering the explicit engine contract, normalized rule
+values, and semantic-feature manifest. Unknown remains explicit and valid;
+conflict and invalid-deck results remain blocking. Same source plus the same
+digest must rebuild week and base bytes deterministically.
+
+Write a de-identified old-to-new impact report listing changed event/rank
+identities and changed comparison-base identities. The report explains impact;
+zero differences are not required. This decision supersedes only DEC-083 and
+DEC-099 clauses that froze derived Top 8 identities or bytes. Their source
+retention, event lifecycle, classifier rule meaning, and UI decisions remain.
+
+## Consequences
+
+Known-bad historical identities no longer block production or remain embedded
+as authority. All retained Top 8 history presents the current classifier's
+meaning with an auditable digest, while the source record stays fail-closed.
+Rolling statistics, matchups, reports, and other regenerated current products
+continue to derive from the same current rules; Git retains the reviewable
+history of prior derivations. This task changes no classifier rule, formula,
+public path, raw input, or event `434455` source bytes. Commit, remote
+publication, merge, production dispatch, and Issue closure require later
+authorization after local Owner acceptance.
