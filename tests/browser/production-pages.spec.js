@@ -230,6 +230,16 @@ test("MTGO mainstream matchups load share lazily and preserve hidden row selecti
   await page.locator("[data-matchup-mainstream-retry]").click();
   await expect(page.locator(".matchup-mainstream-status")).toHaveCount(0);
   const expectedVisibleIds = initialRowIds.filter(id => expectedParents.has(id));
+  const expectedHiddenIds = initialRowIds.filter(id => !expectedParents.has(id));
+  expect(expectedVisibleIds.length).toBeGreaterThan(0);
+  expect(expectedHiddenIds.length).toBeGreaterThan(0);
+  const visibleRow = page.locator(
+    `[data-matchup-row-identity=${JSON.stringify(expectedVisibleIds[0])}]`
+  );
+  const hiddenId = expectedHiddenIds[0];
+  const hiddenRow = page.locator(
+    `[data-matchup-row-identity=${JSON.stringify(hiddenId)}]`
+  );
   await expect(page.locator("[data-matchup-row-identity]"))
     .toHaveCount(expectedVisibleIds.length);
   expect(await page.locator("[data-matchup-row-identity]").evaluateAll(rows => (
@@ -237,18 +247,24 @@ test("MTGO mainstream matchups load share lazily and preserve hidden row selecti
   ))).toEqual(expectedVisibleIds);
   await expect(page.locator(".matchup-table .column-head:not(.overall)"))
     .toHaveCount(expectedVisibleIds.length);
-  await expect(page.locator('[data-matchup-row-identity="mono-blue-belcher"]')).toBeVisible();
-  await expect(page.locator('[data-matchup-row-identity="hollowvine"]')).toHaveCount(0);
+  await expect(visibleRow).toBeVisible();
+  await expect(hiddenRow).toHaveCount(0);
   expect(rangeRequests).toBe(2);
 
   await page.locator("[data-matchup-mainstream]").uncheck();
   await expect(page.locator("[data-matchup-row-identity]")).toHaveCount(initialRowIds.length);
   await page.locator("[data-matchup-filter-toggle]").click();
   await page.locator("[data-matchup-filter-select-all]").uncheck();
-  await page.locator("#matchup-filter-search").fill("hollowvine");
-  await page.locator('[data-matchup-filter-option="hollowvine"]').check();
+  const hiddenOption = page.locator(
+    `[data-matchup-filter-option=${JSON.stringify(hiddenId)}]`
+  );
+  await expect(hiddenOption).toHaveCount(1);
+  const hiddenName = await hiddenOption.evaluate(option => option.parentElement.textContent.trim());
+  await page.locator("#matchup-filter-search").fill(hiddenName);
+  await expect(hiddenOption).toBeVisible();
+  await hiddenOption.check();
   await page.locator("[data-matchup-filter-apply]").click();
-  await expect(page.locator('[data-matchup-row-identity="hollowvine"]')).toBeVisible();
+  await expect(hiddenRow).toBeVisible();
 
   await page.locator("[data-matchup-mainstream]").check();
   await expect(page.locator(".matchup-filter-empty")).toContainText(
@@ -256,7 +272,7 @@ test("MTGO mainstream matchups load share lazily and preserve hidden row selecti
   );
   expect(rangeRequests).toBe(2);
   await page.locator("[data-matchup-mainstream]").uncheck();
-  await expect(page.locator('[data-matchup-row-identity="hollowvine"]')).toBeVisible();
+  await expect(hiddenRow).toBeVisible();
   expect(rangeRequests).toBe(2);
 });
 
