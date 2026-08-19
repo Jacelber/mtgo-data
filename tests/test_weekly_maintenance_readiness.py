@@ -16,6 +16,44 @@ def _write_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value), encoding="utf-8")
 
 
+def _unknown_record(format_name: str, label: str, event_id: str) -> dict:
+    return {
+        "deck_id": f"{format_name}-{label}",
+        "event_id": event_id,
+        "event_name": f"{label.title()} event",
+        "event_start": "2026-08-16 20:00:00.0",
+        "source_file": f"data/{format_name}/{label}.json",
+        "main_deck": [{"name": f"{label.title()} Card", "quantity": 4}],
+        "sideboard": [{"name": "Sideboard Card", "quantity": 2}],
+    }
+
+
+def _write_intentional_unknowns(root: Path, *, reason_code: str = "random_card_pile") -> None:
+    path = root / "configs" / "mtgo_intentional_unknowns.yaml"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": "1.0.0",
+                "records": [
+                    {
+                        "format": "standard",
+                        "event_id": "98",
+                        "deck_id": "standard-random",
+                        "source_file": "data/standard/random.json",
+                        "disposition": "intentional_unknown",
+                        "reason_code": reason_code,
+                        "owner_accepted_on": "2026-08-12",
+                        "evidence": "docs/audits/example.md#random",
+                    }
+                ],
+            },
+            sort_keys=False,
+        ),
+        encoding="utf-8",
+    )
+
+
 def _write_format(root: Path, format_name: str, *, candidate: bool = True) -> None:
     digest = "a" * 64 if format_name == "standard" else "b" * 64
     top8 = root / "stats" / format_name / "mtgo" / "top8"
@@ -44,12 +82,18 @@ def _write_format(root: Path, format_name: str, *, candidate: bool = True) -> No
         },
     )
     reports = root / "reports" / format_name / "mtgo"
+    unknown_records = [
+        _unknown_record(format_name, "current", "101"),
+        _unknown_record(format_name, "old", "99"),
+    ]
+    if format_name == "standard":
+        unknown_records.append(_unknown_record(format_name, "random", "98"))
     _write_json(
         reports / "index.json",
         {
             "scope": "all_available_events",
             "summary": {
-                "unknown": 2,
+                "unknown": len(unknown_records),
                 "conflicts": 0,
                 "invalid_decks": 0,
                 "strict_validation": "pass",
@@ -58,24 +102,7 @@ def _write_format(root: Path, format_name: str, *, candidate: bool = True) -> No
     )
     _write_json(
         reports / "unknown_decks.json",
-        {
-            "records": [
-                {
-                    "deck_id": f"{format_name}-current",
-                    "event_id": "101",
-                    "event_name": "Current event",
-                    "event_start": "2026-08-16 20:00:00.0",
-                    "source_file": f"data/{format_name}/current.json",
-                },
-                {
-                    "deck_id": f"{format_name}-old",
-                    "event_id": "99",
-                    "event_name": "Old event",
-                    "event_start": "2026-08-09 20:00:00.0",
-                    "source_file": f"data/{format_name}/old.json",
-                },
-            ]
-        },
+        {"records": unknown_records},
     )
     if candidate:
         pickup = root / "stats" / format_name / "mtgo" / "pickup"
@@ -109,9 +136,10 @@ def _build(root: Path, generated_at: str = "2026-08-19T09:00:00Z") -> dict:
     )
 
 
-def test_readiness_is_schema_valid_and_filters_unknowns_to_the_review_week(tmp_path):
+def test_readiness_is_schema_valid_and_includes_every_unresolved_unknown(tmp_path):
     for format_name in ("standard", "modern"):
         _write_format(tmp_path, format_name)
+    _write_intentional_unknowns(tmp_path)
 
     document = _build(tmp_path)
 
@@ -126,15 +154,25 @@ def test_readiness_is_schema_valid_and_filters_unknowns_to_the_review_week(tmp_p
     assert document["status"] == "awaiting_owner_start"
     assert document["workflow"]["codex_automation_required"] is False
     for item in document["formats"]:
-        assert item["classification"]["review_week_unknown_count"] == 1
-        assert item["classification"]["review_week_unknown_records"][0]["event_id"] == "101"
+        classification = item["classification"]
+        assert classification["unresolved_unknown_count"] == 2
+        assert {record["event_id"] for record in classification["unresolved_unknown_records"]} == {
+            "99",
+            "101",
+        }
+        assert classification["unresolved_unknown_records"][0]["main_deck"]
         assert item["pickup"]["total_candidate_count"] == 3
         assert item["visual_metadata"]["deck_colors"]["exception_count"] is None
+    standard = document["formats"][0]["classification"]
+    assert standard["accepted_intentional_unknown_count"] == 1
+    assert standard["accepted_intentional_unknown_records"][0]["reason_code"] == "random_card_pile"
+    assert document["formats"][1]["classification"]["accepted_intentional_unknown_count"] == 0
 
 
 def test_readiness_digest_ignores_run_time_but_binds_review_inputs(tmp_path):
     for format_name in ("standard", "modern"):
         _write_format(tmp_path, format_name)
+    _write_intentional_unknowns(tmp_path)
 
     first = _build(tmp_path, "2026-08-19T09:00:00Z")
     second = _build(tmp_path, "2026-08-20T09:00:00Z")
@@ -153,6 +191,7 @@ def test_readiness_digest_ignores_run_time_but_binds_review_inputs(tmp_path):
 def test_missing_pickup_candidate_is_reported_as_a_blocker(tmp_path):
     _write_format(tmp_path, "standard")
     _write_format(tmp_path, "modern", candidate=False)
+    _write_intentional_unknowns(tmp_path)
 
     document = _build(tmp_path)
 
@@ -164,6 +203,7 @@ def test_missing_pickup_candidate_is_reported_as_a_blocker(tmp_path):
 def test_mismatched_format_week_fails_closed(tmp_path):
     for format_name in ("standard", "modern"):
         _write_format(tmp_path, format_name)
+    _write_intentional_unknowns(tmp_path)
     modern_index = tmp_path / "stats" / "modern" / "mtgo" / "top8" / "index.json"
     value = json.loads(modern_index.read_text(encoding="utf-8"))
     value["weeks"][0]["seal_on"] = "2026-08-25"
@@ -176,4 +216,13 @@ def test_mismatched_format_week_fails_closed(tmp_path):
     candidate_path.write_text(yaml.safe_dump(candidate), encoding="utf-8")
 
     with pytest.raises(ValueError, match="same weekly review window"):
+        _build(tmp_path)
+
+
+def test_only_random_card_piles_may_be_registered_as_intentional_unknown(tmp_path):
+    for format_name in ("standard", "modern"):
+        _write_format(tmp_path, format_name)
+    _write_intentional_unknowns(tmp_path, reason_code="singleton")
+
+    with pytest.raises(ValueError, match="Only Owner-accepted random card piles"):
         _build(tmp_path)

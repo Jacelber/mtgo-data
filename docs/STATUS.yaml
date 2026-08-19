@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-maintenance-workflow-01"
+  current_working_branch: "codex/weekly-review-outstanding-xlsx"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,16 +31,16 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-MAINTENANCE-WORKFLOW-01"
-  name: "Cloud-triggered weekly MTGO maintenance handoff"
+  id: "WEEKLY-MAINTENANCE-REVIEW-CORRECTION-01"
+  name: "Complete unresolved-Unknown queue and XLSX review carrier"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-19"
-  developer_validation_completed_on: "2026-08-19"
-  owner_accepted_on: "2026-08-19"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-maintenance-workflow-independent-20260819-01"
-  branch: "codex/weekly-maintenance-workflow-01"
-  base_commit: "120c4431457870657eccd04754a8724b195757e3"
-  objective: "Move daily MTGO production to 18:00 JST and create a private, deduplicated cloud handoff for the Owner-started weekly maintenance review without depending on Codex scheduling."
+  developer_validation_completed_on: "2026-08-20"
+  owner_accepted_on: "2026-08-20"
+  workspace: "C:/tmp/mtgo-weekly-review-outstanding-xlsx-20260819-02"
+  branch: "codex/weekly-review-outstanding-xlsx"
+  base_commit: "81c7cb3e4e2ca3e544245bc12e51dc33243f9253"
+  objective: "Correct the weekly rehearsal so every unresolved historical/current Unknown remains reviewable, only Owner-confirmed random card piles may remain intentional Unknown, and Unknown decisions use a complete-decklist XLSX with free-text Owner opinion, a Codex-owned exact proposal, and simple final Owner confirmation."
   artifact_impact: "internal_diagnostics"
   authorization:
     local_implementation: true
@@ -51,40 +51,42 @@ current_task:
     - ".github/workflows/update.yml"
     - "tools/generate_weekly_maintenance_readiness.py"
     - "schemas/weekly-maintenance-readiness.schema.json"
+    - "configs/mtgo_intentional_unknowns.yaml"
     - "tests/test_weekly_maintenance_readiness.py"
     - "tests/test_ci_workflow.py"
     - "docs/WEEKLY_MAINTENANCE.md"
-    - "docs/PROJECT_SCOPE.md"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
     - "docs/TEST_TRIGGER_MATRIX.md"
+    - "docs/audits/WEEKLY-MAINTENANCE-CONTRACT-R1.md"
   protected_scope:
     statistical_formulas_changed: "none"
     public_json_or_schema_changed: "none; the new Schema validates a private Actions artifact only"
     generated_or_source_data_changed: "none"
     classification_identities_changed: "none"
-    workflows_or_public_paths_changed: "daily schedule moves to 09:00 UTC; one private readiness artifact and deduplicated Issue are added; public paths unchanged"
+    workflows_or_public_paths_changed: "the private readiness Issue explains the complete XLSX requirement; public paths unchanged"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Change the existing daily MTGO production cron from 20:00 UTC to 09:00 UTC."
-    - "Generate one private weekly readiness artifact after a successful production outcome."
-    - "Create or update one deduplicated weekly readiness Issue with no checkout or repository write permission."
-    - "Record current-week Unknown review inputs, classification blockers, Pickup candidate counts, and explicit unavailable manual inputs."
-    - "Document the Owner-started weekly sequence and human-final editorial authority."
-    - "Run only the focused generator, Schema, workflow, and live-document checks required by the changed paths."
+    - "Replace current-week Unknown filtering with the complete retained unresolved queue."
+    - "Include complete main decks and sideboards in the private readiness artifact and Owner XLSX."
+    - "Record the sole intentional-Unknown exception as an exact Owner-accepted random card pile."
+    - "Correct live documentation and visibly supersede conflicting historical-contract clauses."
+    - "Generate and visually verify the six-sheet XLSX against the exact cloud rehearsal baseline."
+    - "Remove Owner-entered classifier names and IDs, replace the first decision dropdown with free text, and require Codex to return an exact proposal before simple Owner confirmation."
+    - "Run only the focused readiness, Schema, workflow, workbook, and live-document checks required by the changed paths."
   prohibited_changes:
     - "Do not change classifier rules, taxonomy, visual metadata, Pickup approval or known state, statistics, generated production data, source data, UI, or public paths."
     - "Do not implement the P12-10 Landing producer, generate Landing content, or publish a Landing."
-    - "Do not dispatch production or create the live weekly Issue during local development."
-    - "Do not commit, push, open a pull request, merge, deploy, or begin the rehearsal without later Owner authorization."
-  stop_point: "Complete the accepted unchanged task through one local commit, one Ready pull request, required CI, normal merge, and post-merge verification; then stop without production dispatch, weekly rehearsal, or P12-10."
+    - "Do not dispatch production or mutate the live weekly Issue during local correction."
+    - "Do not dispatch production or deploy public data as part of this correction."
+  stop_point: "Complete the accepted unchanged correction through commit, one Ready pull request, required CI, normal merge, and post-merge verification; then stop without production dispatch, classifier-rule implementation, or P12-10."
 
 current_repository_state:
-  baseline_commit: "120c4431457870657eccd04754a8724b195757e3"
-  baseline_note: "Verified remote master after the classifier-restatement merge and subsequent successful MTGO production publication. The prior live STATUS entry was stale and is superseded by the Owner's explicit 2026-08-19 task authorization."
+  baseline_commit: "81c7cb3e4e2ca3e544245bc12e51dc33243f9253"
+  baseline_note: "Exact cloud production publication rehearsed on 2026-08-19. The rehearsal exposed 29 unresolved Unknown decks plus one previously Owner-accepted random card pile and revealed that the current-week filter and missing XLSX violated the accepted review process."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -94,11 +96,11 @@ known_blockers: []
 
 future_task_gates:
   - task: "WEEKLY-MAINTENANCE-REHEARSAL-01"
-    status: "planned_not_authorized"
+    status: "in_progress_awaiting_owner_final_classification_confirmation"
     remaining_requirements:
-      - "Accept and publish WEEKLY-MAINTENANCE-WORKFLOW-01 through its separate gates."
-      - "Run one no-publication rehearsal against the current weekly cloud artifact under separate authorization."
-      - "Record Owner dispositions for Unknown, visual metadata, and Weekly Pickup without starting Landing implementation."
+      - "Publish WEEKLY-MAINTENANCE-REVIEW-CORRECTION-01 through its accepted completion authority."
+      - "Review the 29 Codex revised recommendations generated from the complete Owner U-column opinions and record simple final confirmations in the v2 XLSX."
+      - "Continue visual-metadata and Weekly Pickup review without starting Landing implementation."
   - task: "P12-10"
     status: "blocked_pending_weekly_maintenance_rehearsal_and_separate_authorization"
     remaining_requirements:
@@ -118,10 +120,10 @@ next_approved_task:
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "Owner acceptance authorizes continuous completion of the unchanged WEEKLY-MAINTENANCE-WORKFLOW-01 task through commit, one Ready pull request, required CI, normal merge, and post-merge verification; no follow-up task is authorized."
+  note: "Owner acceptance on 2026-08-20 authorizes continuous completion of the unchanged WEEKLY-MAINTENANCE-REVIEW-CORRECTION-01 task through commit, one Ready pull request, required CI, normal merge, and post-merge verification; it does not authorize classifier-rule implementation, production dispatch, or P12-10."
 
 prohibited_next_actions:
-  - "Do not dispatch production, create a live weekly Issue, fetch protected source data, or begin the weekly rehearsal automatically."
+  - "Do not dispatch production, mutate the live weekly Issue, or fetch new protected source data."
   - "Do not begin P12-10, generate Landing content, or treat the readiness artifact as Landing output."
   - "Do not change classifier rules, taxonomy, visual metadata, Pickup approval, formulas, raw source data, UI source, public paths, or event 434455 bytes."
   - "Do not force-push, mutate protected branches or tags directly, dispatch production, or begin another task under this accepted-task completion authority."

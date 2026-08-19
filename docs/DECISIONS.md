@@ -4497,3 +4497,104 @@ change classifier rules, visual metadata, Pickup approval, Landing public data,
 UI, statistics, formulas, public paths, source data, or event `434455`. One
 accepted rehearsal on current weekly data is still required before the Owner
 decides whether to authorize P12-10.
+
+---
+
+# DEC-103 - Review every unresolved Unknown through the complete XLSX carrier
+
+Status: `Accepted`
+
+## Context
+
+The first W33/W34 rehearsal exposed only Unknown records from the review week
+and summarized lists outside the agreed workbook. That hid older unresolved
+decks and did not give the Owner enough evidence to confirm classification
+decisions. The older R1 design also allowed `keep_unknown` without narrowly
+defining when that result was legitimate.
+
+## Decision
+
+The weekly readiness classification input is the complete retained Unknown
+diagnostic corpus, not a current-week slice. It partitions every record into:
+
+- unresolved Unknown, which remains in every later workbook until regenerated
+  classification resolves it; and
+- intentional Unknown, which requires an exact Owner-accepted registry match
+  and the sole reason code `random_card_pile`.
+
+Event age, singleton status, sparse evidence, or the absence of a current rule
+never justifies intentional Unknown. Every coherent deck receives a proposed
+existing identity or classifier change even when only one example exists.
+
+Before requesting decisions, Codex supplies the six-sheet XLSX review carrier
+defined in `docs/WEEKLY_MAINTENANCE.md`. `Unknown Review` has one row per
+unresolved deck and includes its complete main deck and sideboard, machine-bound
+identity fields, Codex recommendation, and separate editable Owner fields.
+Accepted decisions are validated and written back to maintained repository
+sources; the workbook is not a second database.
+
+The Owner's human-final Landing content remains unrestricted. Machine facts and
+drafts establish provenance for machine outputs only; the Owner may completely
+rewrite, delete, replace, ignore, or write unrelated editorial content.
+
+This decision supersedes DEC-102's `current-week Unknown records` boundary and
+the corresponding `unknown_in_review_week`, general `keep_unknown`, partial-list
+evidence, and machine-constrained editorial clauses in the historical R1 weekly
+maintenance contract. The R1 sheet layout and color/ownership conventions
+remain adopted.
+
+## Consequences
+
+Previously overlooked Unknown records re-enter review automatically. One
+historically accepted Standard random-card pile remains separately visible and
+does not need repeated weekly confirmation. Readiness artifacts become larger
+because full decklists are private review evidence, but no public JSON, source
+data, statistical formula, classifier rule, visual metadata, Pickup decision,
+Landing content, UI, public path, or protected event `434455` bytes change in
+this correction.
+
+---
+
+# DEC-104 - Use two-stage Owner confirmation for Unknown classification
+
+Status: `Accepted`
+
+## Context
+
+The first complete-decklist workbook asked the Owner to choose implementation
+actions such as `map_existing` and to enter parent IDs, parent names and subtype
+IDs. Those fields required classifier-internal knowledge before the Owner and
+Codex had resolved rule and naming questions. They also made a blank technical
+action look like a missing review even when the Owner had supplied a complete
+classification opinion in free text.
+
+## Decision
+
+Unknown review becomes a two-stage exchange inside the same workbook lineage:
+
+1. Codex provides a preliminary action, target and rationale with the complete
+   decklist.
+2. The Owner writes unrestricted classification understanding, naming
+   preference or questions. The Owner is not asked for an action code, parent
+   ID, parent name or subtype ID.
+3. Codex inspects the maintained rules and converts the Owner opinion into one
+   exact revised recommendation containing the implementation action, stable
+   names and IDs, subtype, and candidate rule conditions.
+4. The Owner selects only `确认按 Codex 修订建议实施`, `需要再次修订`, or
+   `暂缓` as the final response.
+
+The former Owner parent-ID, parent-name and subtype columns are removed. The
+first-round Owner field has no validation list. `map_existing`, `modify_rule`,
+`new_rule`, and other implementation vocabulary remains Codex-owned. An
+intentional Unknown still requires an explicit `random_card_pile` conclusion;
+it is not inferred from a blank or deferred response.
+
+## Consequences
+
+The Owner supplies product meaning while Codex supplies classifier mechanics.
+Ambiguous rule questions can be discussed without forcing a premature technical
+choice, and the final confirmation binds one visible Codex proposal. This
+changes only the private review carrier and operating documentation; it does not
+itself authorize or modify classifier rules, taxonomy, public data, statistics,
+visual metadata, Pickup decisions, Landing content, UI, public paths, source
+data, or protected event `434455` bytes.

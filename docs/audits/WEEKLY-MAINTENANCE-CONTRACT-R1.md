@@ -6,6 +6,16 @@ Date: 2026-08-13 (Japan time)
 
 Artifact impact: `internal_diagnostics`
 
+> Historical scope notice (2026-08-19): DEC-103 and
+> `docs/WEEKLY_MAINTENANCE.md` supersede this R1 audit's Tuesday/Codex-heartbeat
+> trigger, current-week-only Unknown scope, general `keep_unknown` option,
+> partial deck-evidence wording, and machine-constrained Landing copy. The R1
+> six-sheet XLSX layout and cell-ownership convention remain adopted. Do not use
+> the superseded clauses below as current authorization or operating policy.
+> DEC-104 further supersedes the R1 Owner action/ID/name/subtype inputs: current
+> workbooks use free-text Owner opinion, a later Codex-owned exact proposal, and
+> a simple second-round Owner confirmation.
+
 ## 1. Objective
 
 Define one Tuesday operating contract for the four recurring owner activities:

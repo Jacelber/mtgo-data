@@ -493,13 +493,24 @@ week is published.
 
 The daily MTGO production workflow may generate one private weekly-maintenance
 readiness artifact after a successful production result. That artifact binds
-the exact publication commit, review week, format-specific event IDs,
-classifier digests, current-week Unknown records, classification blockers, and
-Pickup candidate counts. It may also report manual inputs or later producers as
-explicitly unavailable. It is an Actions artifact and Issue handoff only: it is
-not generated public data, does not enter `stats/catalog.json` or Pages, and
-does not authorize a review or repository mutation. Its current operating
-contract is `docs/WEEKLY_MAINTENANCE.md`.
+the exact publication commit, review week, format-specific event IDs and
+classifier digests. Its classification section contains the complete retained
+Unknown diagnostic corpus, partitioned into unresolved records and exact
+Owner-accepted intentional Unknown records, and includes each deck's complete
+main deck and sideboard. It also carries classification blockers and Pickup
+candidate counts, and may report manual inputs or later producers as explicitly
+unavailable. It is an Actions artifact and Issue handoff only: it is not
+generated public data, does not enter `stats/catalog.json` or Pages, and does
+not authorize a review or repository mutation. Its current operating contract
+is `docs/WEEKLY_MAINTENANCE.md`.
+
+`configs/mtgo_intentional_unknowns.yaml` is the maintained non-public registry
+for the only permitted unresolved-classification exception. Each record binds
+format, event ID, stable deck ID and source file to an Owner acceptance date and
+evidence pointer. The sole allowed reason code is `random_card_pile`; event age,
+singleton status, sparse evidence, or a missing rule are invalid reasons. A
+registry match is reported separately and never deleted from the underlying
+diagnostic report.
 
 ---
 

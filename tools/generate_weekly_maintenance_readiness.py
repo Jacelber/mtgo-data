@@ -14,7 +14,8 @@ import yaml
 
 
 FORMATS = ("standard", "modern")
-SCHEMA_VERSION = "1.0.0"
+SCHEMA_VERSION = "1.1.0"
+INTENTIONAL_UNKNOWN_CONFIG = Path("configs/mtgo_intentional_unknowns.yaml")
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -40,6 +41,77 @@ def _sorted_event_ids(values: list[Any]) -> list[str]:
     return sorted(event_ids, key=int)
 
 
+def _card_list(value: Any, *, field: str, format_name: str) -> list[dict[str, Any]]:
+    if not isinstance(value, list):
+        raise ValueError(f"{format_name} Unknown record has no {field} list")
+    cards = []
+    for item in value:
+        if not isinstance(item, dict):
+            raise ValueError(f"{format_name} Unknown {field} contains a non-object")
+        name = item.get("name")
+        quantity = item.get("quantity")
+        if not isinstance(name, str) or not name or not isinstance(quantity, int) or quantity < 1:
+            raise ValueError(f"{format_name} Unknown {field} contains an invalid card")
+        cards.append({"name": name, "quantity": quantity})
+    return cards
+
+
+def _unknown_record(record: Any, *, format_name: str) -> dict[str, Any]:
+    if not isinstance(record, dict):
+        raise ValueError(f"{format_name} Unknown report contains a non-object")
+    normalized = {
+        "deck_id": str(record.get("deck_id", "")),
+        "event_id": str(record.get("event_id", "")),
+        "event_name": str(record.get("event_name", "")),
+        "event_start": str(record.get("event_start", "")),
+        "source_file": str(record.get("source_file", "")),
+        "main_deck": _card_list(record.get("main_deck"), field="main_deck", format_name=format_name),
+        "sideboard": _card_list(record.get("sideboard"), field="sideboard", format_name=format_name),
+    }
+    if not normalized["deck_id"] or not normalized["event_id"].isdigit() or not normalized["source_file"]:
+        raise ValueError(f"{format_name} Unknown record identity is invalid")
+    return normalized
+
+
+def _intentional_unknowns(root: Path) -> dict[str, dict[tuple[str, str, str], dict[str, str]]]:
+    config = _read_yaml(root / INTENTIONAL_UNKNOWN_CONFIG)
+    if config.get("schema_version") != "1.0.0":
+        raise ValueError("Intentional Unknown registry has an unsupported schema version")
+    records = config.get("records")
+    if not isinstance(records, list):
+        raise ValueError("Intentional Unknown registry has no records list")
+    result: dict[str, dict[tuple[str, str, str], dict[str, str]]] = {
+        format_name: {} for format_name in FORMATS
+    }
+    for item in records:
+        if not isinstance(item, dict):
+            raise ValueError("Intentional Unknown registry contains a non-object")
+        format_name = item.get("format")
+        event_id = str(item.get("event_id", ""))
+        deck_id = str(item.get("deck_id", ""))
+        source_file = str(item.get("source_file", ""))
+        disposition = item.get("disposition")
+        reason_code = item.get("reason_code")
+        owner_accepted_on = str(item.get("owner_accepted_on", ""))
+        evidence = str(item.get("evidence", ""))
+        if format_name not in FORMATS or not event_id.isdigit() or not deck_id or not source_file:
+            raise ValueError("Intentional Unknown registry contains an invalid identity")
+        if disposition != "intentional_unknown" or reason_code != "random_card_pile":
+            raise ValueError("Only Owner-accepted random card piles may remain intentional Unknown")
+        if not owner_accepted_on or not evidence:
+            raise ValueError("Intentional Unknown registry entry lacks acceptance evidence")
+        key = (event_id, deck_id, source_file)
+        if key in result[format_name]:
+            raise ValueError("Intentional Unknown registry contains a duplicate identity")
+        result[format_name][key] = {
+            "disposition": disposition,
+            "reason_code": reason_code,
+            "owner_accepted_on": owner_accepted_on,
+            "evidence": evidence,
+        }
+    return result
+
+
 def _latest_week(root: Path, format_name: str) -> tuple[dict[str, Any], dict[str, Any]]:
     directory = root / "stats" / format_name / "mtgo" / "top8"
     index = _read_json(directory / "index.json")
@@ -61,7 +133,11 @@ def _latest_week(root: Path, format_name: str) -> tuple[dict[str, Any], dict[str
     return index, week
 
 
-def _format_readiness(root: Path, format_name: str) -> dict[str, Any]:
+def _format_readiness(
+    root: Path,
+    format_name: str,
+    intentional_unknowns: dict[tuple[str, str, str], dict[str, str]],
+) -> dict[str, Any]:
     index, week = _latest_week(root, format_name)
     week_entry = index["weeks"][0]
     week_id = Path(week_entry["file"]).stem
@@ -84,21 +160,24 @@ def _format_readiness(root: Path, format_name: str) -> dict[str, Any]:
     unknown_records = unknown_report.get("records")
     if not isinstance(unknown_records, list):
         raise ValueError(f"{format_name} Unknown report records are missing")
-    event_id_set = set(top8_event_ids)
-    weekly_unknown = []
-    for record in unknown_records:
-        if not isinstance(record, dict) or str(record.get("event_id")) not in event_id_set:
-            continue
-        weekly_unknown.append(
-            {
-                "deck_id": str(record.get("deck_id", "")),
-                "event_id": str(record.get("event_id", "")),
-                "event_name": str(record.get("event_name", "")),
-                "event_start": str(record.get("event_start", "")),
-                "source_file": str(record.get("source_file", "")),
-            }
-        )
-    weekly_unknown.sort(key=lambda item: (int(item["event_id"]), item["deck_id"]))
+    normalized_unknowns = [
+        _unknown_record(record, format_name=format_name) for record in unknown_records
+    ]
+    total_unknown_count = int(report_summary.get("unknown", -1))
+    if total_unknown_count != len(normalized_unknowns):
+        raise ValueError(f"{format_name} Unknown report count does not match its summary")
+    unresolved_unknowns = []
+    accepted_intentional_unknowns = []
+    for record in normalized_unknowns:
+        key = (record["event_id"], record["deck_id"], record["source_file"])
+        accepted = intentional_unknowns.get(key)
+        if accepted is None:
+            unresolved_unknowns.append(record)
+        else:
+            accepted_intentional_unknowns.append({**record, **accepted})
+    record_sort = lambda item: (int(item["event_id"]), item["deck_id"])
+    unresolved_unknowns.sort(key=record_sort)
+    accepted_intentional_unknowns.sort(key=record_sort)
 
     candidate_path = (
         root
@@ -162,16 +241,14 @@ def _format_readiness(root: Path, format_name: str) -> dict[str, Any]:
         "classification": {
             "status": classification_status,
             "scope": str(report_index.get("scope", "")),
-            "total_unknown_count": int(report_summary.get("unknown", -1)),
-            "review_week_unknown_count": len(weekly_unknown),
-            "review_week_unknown_records": weekly_unknown,
+            "total_unknown_count": total_unknown_count,
+            "unresolved_unknown_count": len(unresolved_unknowns),
+            "unresolved_unknown_records": unresolved_unknowns,
+            "accepted_intentional_unknown_count": len(accepted_intentional_unknowns),
+            "accepted_intentional_unknown_records": accepted_intentional_unknowns,
             "conflict_count": conflicts,
             "invalid_deck_count": invalid_decks,
             "strict_validation": strict_validation,
-            "since_last_review": {
-                "status": "not_available",
-                "reason": "No accepted prior weekly review manifest exists yet.",
-            },
         },
         "visual_metadata": {
             "representative_cards": {
@@ -198,7 +275,11 @@ def build_readiness(
     source_sha: str,
     generated_at: str,
 ) -> dict[str, Any]:
-    formats = [_format_readiness(root, format_name) for format_name in FORMATS]
+    intentional_unknowns = _intentional_unknowns(root)
+    formats = [
+        _format_readiness(root, format_name, intentional_unknowns[format_name])
+        for format_name in FORMATS
+    ]
     standard_entry = _read_json(root / "stats" / "standard" / "mtgo" / "top8" / "index.json")["weeks"][0]
     modern_entry = _read_json(root / "stats" / "modern" / "mtgo" / "top8" / "index.json")["weeks"][0]
     lifecycle_fields = ("file", "start", "end", "status", "provisional_through", "seal_on")

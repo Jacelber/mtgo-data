@@ -805,7 +805,8 @@ jobs:
             const marker = `<!-- weekly-maintenance:${week} -->`;
             const digestMarker = `<!-- readiness-digest:${readiness.readiness_digest} -->`;
             const formatLines = readiness.formats.map((item) =>
-              `- ${item.format}: ${item.classification.review_week_unknown_count} weekly Unknown; ` +
+              `- ${item.format}: ${item.classification.unresolved_unknown_count} unresolved Unknown; ` +
+              `${item.classification.accepted_intentional_unknown_count} accepted intentional Unknown; ` +
               `${item.pickup.total_candidate_count ?? "unavailable"} Pickup candidates; ` +
               `representative cards and deck colors require manual review.`,
             );
@@ -823,6 +824,7 @@ jobs:
               ...formatLines,
               "",
               "Open Codex manually and authorize the review of this exact handoff. The artifact does not authorize classifier edits, Pickup publication, Landing generation, or any repository mutation.",
+              "Codex must provide an editable XLSX with every unresolved deck's complete main deck and sideboard before requesting classification decisions. Singleton status is not a reason to remain Unknown; intentional Unknown is limited to Owner-confirmed random card piles.",
               "",
               "Landing remains a later gate. Its machine draft is optional, and the human final copy may be edited, replaced, omitted, or written independently of machine conclusions.",
             ].join("\n");

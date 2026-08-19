@@ -255,6 +255,10 @@ def test_weekly_readiness_uses_the_verified_publication_and_private_handoff():
         "readiness-digest:",
         "existing.body?.includes(digestMarker)",
         'state: "open"',
+        "unresolved_unknown_count",
+        "accepted_intentional_unknown_count",
+        "editable XLSX",
+        "random card piles",
         "human final copy may be edited, replaced, omitted",
     ):
         assert required in script

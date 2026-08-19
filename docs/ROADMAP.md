@@ -60,9 +60,11 @@ begin under separate authorization.
 
 10. `P12-10` — Landing weekly-facts producer and Pickup integration
     - do not start until the accepted weekly-maintenance no-publication
-      rehearsal, the P12-03 classifier-remediation gate, refreshed
-      shadow, owner threshold confirmation, known-state migration check, and
-      representative-card approval are complete;
+      rehearsal has reviewed every unresolved historical/current Unknown
+      through the complete-decklist XLSX carrier, the P12-03
+      classifier-remediation gate, refreshed shadow, owner threshold
+      confirmation, known-state migration check, and representative-card
+      approval are complete;
     - add the Schema-validated latest-only
       `stats/<format>/mtgo/landing/current.json` document under the reviewed
       manifest, catalog, workflow, production-candidate, and Pages-allowlist
