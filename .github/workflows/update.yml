@@ -266,7 +266,7 @@ jobs:
 
       - name: Upload immutable resumable fetch checkpoint
         if: failure() && steps.checkpoint.outcome == 'success'
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: mtgo-fetch-checkpoint
           path: ${{ runner.temp }}/mtgo-fetch-checkpoint
@@ -288,7 +288,7 @@ jobs:
 
       - name: Upload immutable fetched candidate
         if: steps.generation-subject.outputs.needed == 'true'
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: mtgo-fetch-candidate
           path: ${{ runner.temp }}/mtgo-fetch-candidate
@@ -496,7 +496,7 @@ jobs:
           echo "sha256=$OUTPUT_SHA" >> "$GITHUB_OUTPUT"
 
       - name: Upload immutable validated output
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: mtgo-build-candidate
           path: ${{ runner.temp }}/mtgo-build-candidate
@@ -707,7 +707,7 @@ jobs:
           echo "artifact-name=weekly-maintenance-readiness-${WEEK}" >> "$GITHUB_OUTPUT"
 
       - name: Upload the private weekly handoff
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: ${{ steps.generate.outputs.artifact-name }}
           path: ${{ runner.temp }}/weekly-maintenance-readiness/readiness.json
