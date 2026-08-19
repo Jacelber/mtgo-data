@@ -47,10 +47,20 @@ restate every retained Top 8 week and base under one current classifier digest,
 and stop for Owner acceptance before any remote or production action. It does
 not authorize a classifier rule change or begin P12-10.
 
+`WEEKLY-MAINTENANCE-WORKFLOW-01` establishes the non-Codex scheduler and
+private handoff used before Landing work. The MTGO production workflow runs at
+18:00 JST, emits a Schema-validated internal readiness artifact, and maintains
+one deduplicated weekly Issue. The Owner then starts one exact review manually.
+This infrastructure changes no public data or page and does not itself perform
+classifier, visual-metadata, Pickup, or Landing decisions. After one accepted
+no-publication rehearsal on current data, the Owner decides whether P12-10 may
+begin under separate authorization.
+
 ## Remaining task sequence
 
 10. `P12-10` — Landing weekly-facts producer and Pickup integration
-    - do not start until the P12-03 classifier-remediation gate, refreshed
+    - do not start until the accepted weekly-maintenance no-publication
+      rehearsal, the P12-03 classifier-remediation gate, refreshed
       shadow, owner threshold confirmation, known-state migration check, and
       representative-card approval are complete;
     - add the Schema-validated latest-only

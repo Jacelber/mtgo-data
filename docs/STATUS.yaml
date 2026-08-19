@@ -4,13 +4,13 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/classifier-restatement-02"
+  current_working_branch: "codex/weekly-maintenance-workflow-01"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
   purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-08-18"
+  last_updated: "2026-08-19"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   authoritative_for:
@@ -31,34 +31,30 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "CLASSIFIER-RESTATEMENT-01"
-  name: "Current-classifier restatement with immutable source facts"
+  id: "WEEKLY-MAINTENANCE-WORKFLOW-01"
+  name: "Cloud-triggered weekly MTGO maintenance handoff"
   status: "owner_accepted_completion_authorized"
-  implementation_authorized_on: "2026-08-17"
-  developer_validation_completed_on: "2026-08-17"
-  owner_accepted_on: "2026-08-17"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/classifier-restatement-rebased-20260818-01"
-  branch: "codex/classifier-restatement-02"
-  base_commit: "0965702d71ef8d88dcbabce561e89741dfec3a8b"
-  objective: "Make retained source facts authoritative, rebuild all retained Top 8 classifications and bases under the current classifier, and replace historical equality with deterministic digest and impact contracts."
-  artifact_impact: "statistical_json_structure,generated_public_data,internal_diagnostics,governance"
+  implementation_authorized_on: "2026-08-19"
+  developer_validation_completed_on: "2026-08-19"
+  owner_accepted_on: "2026-08-19"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-maintenance-workflow-independent-20260819-01"
+  branch: "codex/weekly-maintenance-workflow-01"
+  base_commit: "120c4431457870657eccd04754a8724b195757e3"
+  objective: "Move daily MTGO production to 18:00 JST and create a private, deduplicated cloud handoff for the Owner-started weekly maintenance review without depending on Codex scheduling."
+  artifact_impact: "internal_diagnostics"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "src/mtgmeta/classifier.py"
-    - "src/mtgmeta/mtgo/stats.py"
-    - "src/mtgmeta/mtgo/top8.py"
-    - "src/mtgmeta/mtgo/__main__.py"
-    - "tests/test_mtgo_top8_restatement.py"
-    - "tests/test_generated_consumer_contracts.py"
-    - "schemas/mtgo-top8-*.schema.json"
-    - "schemas/manifest.json"
-    - "stats/{standard,modern}/mtgo/top8/*.json"
-    - ".github/workflows/ci.yml"
-    - "docs/STATISTICS_SPEC.md"
+    - ".github/workflows/update.yml"
+    - "tools/generate_weekly_maintenance_readiness.py"
+    - "schemas/weekly-maintenance-readiness.schema.json"
+    - "tests/test_weekly_maintenance_readiness.py"
+    - "tests/test_ci_workflow.py"
+    - "docs/WEEKLY_MAINTENANCE.md"
+    - "docs/PROJECT_SCOPE.md"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
@@ -66,27 +62,29 @@ current_task:
     - "docs/TEST_TRIGGER_MATRIX.md"
   protected_scope:
     statistical_formulas_changed: "none"
-    public_json_or_schema_changed: "Top 8 additive classifier digest and Schema version 1.1.0"
-    generated_or_source_data_changed: "derived Top 8 history only; source data unchanged"
-    classification_identities_changed: "derived outputs restated under unchanged current rules"
-    workflows_or_public_paths_changed: "focused PR validation only; public paths unchanged"
+    public_json_or_schema_changed: "none; the new Schema validates a private Actions artifact only"
+    generated_or_source_data_changed: "none"
+    classification_identities_changed: "none"
+    workflows_or_public_paths_changed: "daily schedule moves to 09:00 UTC; one private readiness artifact and deduplicated Issue are added; public paths unchanged"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Separate immutable event and placement source facts from derived classification and comparison values."
-    - "Rebuild every indexed Top 8 week and comparison base with the current classifier."
-    - "Require one common classifier digest and deterministic same-subject output."
-    - "Treat Unknown as explicit derived output while keeping conflict and invalid-deck failures closed."
-    - "Generate a de-identified classification impact report that is informative rather than a zero-difference gate."
-    - "Update the applicable specifications, architecture, decision, Schemas, focused tests, and CI trigger matrix."
+    - "Change the existing daily MTGO production cron from 20:00 UTC to 09:00 UTC."
+    - "Generate one private weekly readiness artifact after a successful production outcome."
+    - "Create or update one deduplicated weekly readiness Issue with no checkout or repository write permission."
+    - "Record current-week Unknown review inputs, classification blockers, Pickup candidate counts, and explicit unavailable manual inputs."
+    - "Document the Owner-started weekly sequence and human-final editorial authority."
+    - "Run only the focused generator, Schema, workflow, and live-document checks required by the changed paths."
   prohibited_changes:
-    - "Do not change classifier rules, taxonomy, formulas, raw events, match input, event 434455 source bytes, UI source, or public paths."
-    - "Do not fetch data, dispatch production, close Issue 228, start P12-10, or begin another task."
-  stop_point: "Complete the accepted unchanged task through one local commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification; then stop without production dispatch, Issue closure, or another task."
+    - "Do not change classifier rules, taxonomy, visual metadata, Pickup approval or known state, statistics, generated production data, source data, UI, or public paths."
+    - "Do not implement the P12-10 Landing producer, generate Landing content, or publish a Landing."
+    - "Do not dispatch production or create the live weekly Issue during local development."
+    - "Do not commit, push, open a pull request, merge, deploy, or begin the rehearsal without later Owner authorization."
+  stop_point: "Complete the accepted unchanged task through one local commit, one Ready pull request, required CI, normal merge, and post-merge verification; then stop without production dispatch, weekly rehearsal, or P12-10."
 
 current_repository_state:
-  baseline_commit: "0965702d71ef8d88dcbabce561e89741dfec3a8b"
-  baseline_note: "Verified remote master after GITHUB-PREFLIGHT-01 merged in PR 229; the accepted classifier implementation and generated outputs were replayed unchanged on that governance base."
+  baseline_commit: "120c4431457870657eccd04754a8724b195757e3"
+  baseline_note: "Verified remote master after the classifier-restatement merge and subsequent successful MTGO production publication. The prior live STATUS entry was stale and is superseded by the Owner's explicit 2026-08-19 task authorization."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -95,6 +93,18 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
+  - task: "WEEKLY-MAINTENANCE-REHEARSAL-01"
+    status: "planned_not_authorized"
+    remaining_requirements:
+      - "Accept and publish WEEKLY-MAINTENANCE-WORKFLOW-01 through its separate gates."
+      - "Run one no-publication rehearsal against the current weekly cloud artifact under separate authorization."
+      - "Record Owner dispositions for Unknown, visual metadata, and Weekly Pickup without starting Landing implementation."
+  - task: "P12-10"
+    status: "blocked_pending_weekly_maintenance_rehearsal_and_separate_authorization"
+    remaining_requirements:
+      - "Complete and accept one no-publication weekly maintenance rehearsal."
+      - "Confirm the classifier, known-state, threshold, and representative-card prerequisites recorded in the authoritative Phase 12 contracts."
+      - "Obtain separate P12-10 implementation authorization."
   - task: "MELEE-V3-PRODUCTION-PREFLIGHT"
     status: "planned_not_authorized"
     remaining_requirements:
@@ -102,27 +112,17 @@ future_task_gates:
       - "Choose a test-only key or production-managed key accordingly, with a unique non-secret key ID."
       - "Obtain separate authorization for secret provisioning, workflow changes, live collection, and any remote candidate branch."
       - "Keep the rehearsal non-deploying and review the complete v3 candidate before any public use."
-  - task: "P12-10"
-    status: "blocked_pending_no_publication_rehearsal_and_separate_authorization"
-    remaining_requirements:
-      - "Perform and accept one separately authorized no-publication Tuesday rehearsal."
-      - "Obtain separate P12-10 implementation authorization."
 
 next_approved_task:
   id: "NONE"
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "Owner acceptance authorizes continuous completion of the unchanged CLASSIFIER-RESTATEMENT-01 task through commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification; no follow-up task is authorized."
+  note: "Owner acceptance authorizes continuous completion of the unchanged WEEKLY-MAINTENANCE-WORKFLOW-01 task through commit, one Ready pull request, required CI, normal merge, and post-merge verification; no follow-up task is authorized."
 
 prohibited_next_actions:
-  - "Do not dispatch production, fetch protected source data, close Issue 228, or begin a follow-up task under the accepted-task completion authority."
-  - "Do not begin the Melee v3 production preflight, P12-10, Pickup reflow, or another task automatically."
-  - "Do not retain a second standalone P12-13A search state; P12-13B replaces row search and label focus with one exact multi-select row filter whose internal search only narrows filter candidates."
-  - "Do not restore the superseded Top-N, P12-13D minimum-match filter, P12-13E URL-persisted matrix state, P12-13Z dedicated combination review, or the former four-direction focus-grid plan."
-  - "Do not begin or redesign P12-14 or any later task until its own pre-implementation review."
-  - "Do not change classifier rules, taxonomy, formulas, raw source data, UI source, or public paths."
-  - "Do not create, access, configure, or rotate an HMAC key or GitHub Secret."
-  - "Do not dispatch production, change event selection, fetch protected source data, or expand beyond the approved classifier-restatement contract."
-  - "Do not rewrite Git history, force-push, mutate protected branches or tags, or change event 434455 raw snapshot or normalized-event bytes."
+  - "Do not dispatch production, create a live weekly Issue, fetch protected source data, or begin the weekly rehearsal automatically."
+  - "Do not begin P12-10, generate Landing content, or treat the readiness artifact as Landing output."
+  - "Do not change classifier rules, taxonomy, visual metadata, Pickup approval, formulas, raw source data, UI source, public paths, or event 434455 bytes."
+  - "Do not force-push, mutate protected branches or tags directly, dispatch production, or begin another task under this accepted-task completion authority."
   - "Do not develop directly on master or overwrite unexplained local changes."

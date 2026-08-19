@@ -3,7 +3,7 @@ name: MTGO production data update
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: "0 20 * * *"
+    - cron: "0 9 * * *"
 
 permissions:
   contents: read
@@ -524,6 +524,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      published-commit: ${{ steps.verify.outputs.commit }}
     permissions:
       actions: write
       contents: write
@@ -648,6 +650,213 @@ jobs:
             echo "- Validated output: \`${{ steps.artifact-evidence.outputs.output-sha256 || 'not-reached' }}\`"
             echo "- Publication boundary: data/, stats/, reports/, and fetched.txt only."
           } >> "$GITHUB_STEP_SUMMARY"
+
+  weekly-readiness:
+    name: Build private weekly maintenance readiness
+    if: >-
+      always() && github.ref == 'refs/heads/master' &&
+      needs.fetch.result == 'success' &&
+      ((needs.fetch.outputs.generation-needed == 'true' && needs.publish.result == 'success') ||
+      (needs.fetch.outputs.generation-needed == 'false' && needs.publish.result == 'skipped'))
+    needs:
+      - fetch
+      - publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      artifact-name: ${{ steps.generate.outputs.artifact-name }}
+      readiness-digest: ${{ steps.generate.outputs.readiness-digest }}
+      review-id: ${{ steps.generate.outputs.review-id }}
+      status: ${{ steps.generate.outputs.status }}
+      week: ${{ steps.generate.outputs.week }}
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the verified production publication
+        uses: actions/checkout@v7.0.0
+        with:
+          ref: ${{ needs.publish.outputs.published-commit || github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6.3.0
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned runtime dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Generate the private weekly handoff
+        id: generate
+        shell: bash
+        env:
+          PUBLICATION_SHA: ${{ needs.publish.outputs.published-commit || github.sha }}
+        run: |
+          OUTPUT_DIR="$RUNNER_TEMP/weekly-maintenance-readiness"
+          mkdir -p "$OUTPUT_DIR"
+          python -B tools/generate_weekly_maintenance_readiness.py \
+            --repository-root . \
+            --output "$OUTPUT_DIR/readiness.json" \
+            --publication-sha "$PUBLICATION_SHA" \
+            --production-run-id "$GITHUB_RUN_ID" \
+            --production-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --source-sha "$GITHUB_SHA" \
+            --github-output "$GITHUB_OUTPUT"
+          WEEK="$(python -c 'import json,os; print(json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "weekly-maintenance-readiness", "readiness.json"), encoding="utf-8"))["week"]["id"])')"
+          echo "artifact-name=weekly-maintenance-readiness-${WEEK}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload the private weekly handoff
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: ${{ steps.generate.outputs.artifact-name }}
+          path: ${{ runner.temp }}/weekly-maintenance-readiness/readiness.json
+          if-no-files-found: error
+          retention-days: 21
+
+      - name: Write weekly readiness summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Weekly MTGO maintenance readiness"
+            echo
+            echo "- Job result: ${{ job.status }}"
+            echo "- Review week: ${{ steps.generate.outputs.week || 'not-reached' }}"
+            echo "- Readiness status: ${{ steps.generate.outputs.status || 'not-reached' }}"
+            echo "- Readiness digest: \`${{ steps.generate.outputs.readiness-digest || 'not-reached' }}\`"
+            echo "- Handoff artifact: \`${{ steps.generate.outputs.artifact-name || 'not-reached' }}\`"
+            echo "- The artifact is private workflow output and is not part of Pages."
+            echo "- No Codex scheduled task or repository mutation is authorized by this handoff."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  weekly-readiness-notify:
+    name: Create or update the weekly maintenance issue
+    if: >-
+      always() && github.ref == 'refs/heads/master' &&
+      needs.weekly-readiness.result != 'skipped'
+    needs: weekly-readiness
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      issues: write
+    steps:
+      - name: Download the private weekly handoff
+        if: needs.weekly-readiness.result == 'success'
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: ${{ needs.weekly-readiness.outputs.artifact-name }}
+          path: ${{ runner.temp }}/weekly-maintenance-readiness
+
+      - name: Create or update the deduplicated readiness issue
+        uses: actions/github-script@v7.0.1
+        env:
+          READINESS_PATH: ${{ runner.temp }}/weekly-maintenance-readiness/readiness.json
+          READINESS_RESULT: ${{ needs.weekly-readiness.result }}
+        with:
+          script: |
+            const fs = require("fs");
+            const result = process.env.READINESS_RESULT;
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "all",
+              per_page: 100,
+            });
+            if (result !== "success") {
+              const marker = "<!-- weekly-maintenance-readiness-failure -->";
+              const details = [
+                marker,
+                "## Weekly maintenance readiness failed",
+                "",
+                `- Production workflow run: [${context.runId}](${runUrl})`,
+                `- Source commit: \`${context.sha}\``,
+                "",
+                "The production failure notifier remains authoritative for an upstream production failure. This issue records only a failure to build the private weekly handoff.",
+              ].join("\n");
+              const existing = issues.find(
+                (issue) => !issue.pull_request && issue.body?.includes(marker) && issue.state === "open",
+              );
+              if (existing) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: existing.number,
+                  body: details,
+                });
+                core.summary.addRaw(`Updated readiness failure issue #${existing.number}.`).addEOL();
+              } else {
+                const created = await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: "Weekly maintenance readiness failure",
+                  body: details,
+                });
+                core.summary.addRaw(`Created readiness failure issue #${created.data.number}.`).addEOL();
+              }
+              await core.summary.write({ overwrite: false });
+              return;
+            }
+
+            const readiness = JSON.parse(fs.readFileSync(process.env.READINESS_PATH, "utf8"));
+            const week = readiness.week.id;
+            const marker = `<!-- weekly-maintenance:${week} -->`;
+            const digestMarker = `<!-- readiness-digest:${readiness.readiness_digest} -->`;
+            const formatLines = readiness.formats.map((item) =>
+              `- ${item.format}: ${item.classification.review_week_unknown_count} weekly Unknown; ` +
+              `${item.pickup.total_candidate_count ?? "unavailable"} Pickup candidates; ` +
+              `representative cards and deck colors require manual review.`,
+            );
+            const details = [
+              marker,
+              digestMarker,
+              "## Weekly MTGO maintenance is ready",
+              "",
+              `- Review week: \`${week}\` (${readiness.week.start} through ${readiness.week.end})`,
+              `- Lifecycle: \`${readiness.week.status}\`; seals on \`${readiness.week.seal_on}\``,
+              `- Status: \`${readiness.status}\``,
+              `- Production publication: \`${readiness.production.publication_sha}\``,
+              `- Workflow run: [${context.runId}](${runUrl})`,
+              "",
+              ...formatLines,
+              "",
+              "Open Codex manually and authorize the review of this exact handoff. The artifact does not authorize classifier edits, Pickup publication, Landing generation, or any repository mutation.",
+              "",
+              "Landing remains a later gate. Its machine draft is optional, and the human final copy may be edited, replaced, omitted, or written independently of machine conclusions.",
+            ].join("\n");
+            const existing = issues.find(
+              (issue) => !issue.pull_request && issue.body?.includes(marker),
+            );
+            if (!existing) {
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `Weekly MTGO maintenance — ${week}`,
+                body: details,
+              });
+              core.summary.addRaw(`Created weekly maintenance issue #${created.data.number}.`).addEOL();
+            } else if (existing.body?.includes(digestMarker)) {
+              core.summary.addRaw(`Weekly maintenance issue #${existing.number} is already current.`).addEOL();
+            } else {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                title: `Weekly MTGO maintenance — ${week}`,
+                body: details,
+                state: "open",
+              });
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body: `The weekly baseline changed. Review the updated handoff from [run ${context.runId}](${runUrl}) before continuing.`,
+              });
+              core.summary.addRaw(`Updated weekly maintenance issue #${existing.number}.`).addEOL();
+            }
+            await core.summary.write({ overwrite: false });
 
   notify:
     name: Record deduplicated MTGO production failure

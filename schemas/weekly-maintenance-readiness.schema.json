@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/weekly-maintenance-readiness.schema.json",
+  "title": "Private weekly MTGO maintenance readiness handoff",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "review_id",
+    "readiness_digest",
+    "generated_at",
+    "status",
+    "production",
+    "week",
+    "formats",
+    "landing",
+    "workflow"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "weekly_maintenance_readiness"},
+    "review_id": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}@[a-f0-9]{12}$"},
+    "readiness_digest": {"$ref": "#/$defs/sha256"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["awaiting_owner_start", "blocked"]},
+    "production": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["publication_sha", "source_sha", "run_id", "run_attempt"],
+      "properties": {
+        "publication_sha": {"$ref": "#/$defs/gitSha"},
+        "source_sha": {"$ref": "#/$defs/gitSha"},
+        "run_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "run_attempt": {"type": "string", "pattern": "^[0-9]+$"}
+      }
+    },
+    "week": {"$ref": "#/$defs/week"},
+    "formats": {
+      "type": "array",
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/formatReadiness"}, {"properties": {"format": {"const": "standard"}}}]},
+        {"allOf": [{"$ref": "#/$defs/formatReadiness"}, {"properties": {"format": {"const": "modern"}}}]}
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "landing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["machine_draft_status", "human_final_status", "development_gate", "reason"],
+      "properties": {
+        "machine_draft_status": {"const": "not_available"},
+        "human_final_status": {"const": "not_started"},
+        "development_gate": {"const": "evaluate_after_maintenance_rehearsal"},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["next_action", "codex_automation_required", "repository_mutation_authorized"],
+      "properties": {
+        "next_action": {"enum": ["owner_start_required", "resolve_blocker"]},
+        "codex_automation_required": {"const": false},
+        "repository_mutation_authorized": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "gitSha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "week": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "start", "end", "status", "provisional_through", "seal_on"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
+        "start": {"type": "string", "format": "date"},
+        "end": {"type": "string", "format": "date"},
+        "status": {"enum": ["provisional", "sealed"]},
+        "provisional_through": {"type": "string", "format": "date"},
+        "seal_on": {"type": "string", "format": "date"}
+      }
+    },
+    "unknownRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deck_id", "event_id", "event_name", "event_start", "source_file"],
+      "properties": {
+        "deck_id": {"type": "string", "minLength": 1},
+        "event_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "event_name": {"type": "string"},
+        "event_start": {"type": "string"},
+        "source_file": {"type": "string", "minLength": 1}
+      }
+    },
+    "manualReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "exception_count", "reason"],
+      "properties": {
+        "status": {"const": "manual_review_required"},
+        "exception_count": {"type": "null"},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "formatReadiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "classifier_digest",
+        "source_event_ids",
+        "source_event_count",
+        "classification",
+        "visual_metadata",
+        "pickup"
+      ],
+      "properties": {
+        "format": {"enum": ["standard", "modern"]},
+        "classifier_digest": {"$ref": "#/$defs/sha256"},
+        "source_event_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9]+$"}
+        },
+        "source_event_count": {"type": "integer", "minimum": 1},
+        "classification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "scope",
+            "total_unknown_count",
+            "review_week_unknown_count",
+            "review_week_unknown_records",
+            "conflict_count",
+            "invalid_deck_count",
+            "strict_validation",
+            "since_last_review"
+          ],
+          "properties": {
+            "status": {"enum": ["review_required", "blocked"]},
+            "scope": {"const": "all_available_events"},
+            "total_unknown_count": {"type": "integer", "minimum": 0},
+            "review_week_unknown_count": {"type": "integer", "minimum": 0},
+            "review_week_unknown_records": {"type": "array", "items": {"$ref": "#/$defs/unknownRecord"}},
+            "conflict_count": {"type": "integer", "minimum": 0},
+            "invalid_deck_count": {"type": "integer", "minimum": 0},
+            "strict_validation": {"type": "string", "minLength": 1},
+            "since_last_review": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["status", "reason"],
+              "properties": {
+                "status": {"const": "not_available"},
+                "reason": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        },
+        "visual_metadata": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["representative_cards", "deck_colors"],
+          "properties": {
+            "representative_cards": {"$ref": "#/$defs/manualReview"},
+            "deck_colors": {"$ref": "#/$defs/manualReview"}
+          }
+        },
+        "pickup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "candidate_file",
+            "existing_change_count",
+            "new_archetype_count",
+            "total_candidate_count"
+          ],
+          "properties": {
+            "status": {"enum": ["candidate_review_required", "unavailable"]},
+            "candidate_file": {"type": "string", "pattern": "^stats/(standard|modern)/mtgo/pickup/candidates_[0-9]{4}-W[0-9]{2}\\.yaml$"},
+            "existing_change_count": {"type": ["integer", "null"], "minimum": 0},
+            "new_archetype_count": {"type": ["integer", "null"], "minimum": 0},
+            "total_candidate_count": {"type": ["integer", "null"], "minimum": 0}
+          }
+        }
+      }
+    }
+  }
+}

@@ -162,6 +162,9 @@ def test_production_candidate_is_built_once_and_published_with_immutable_evidenc
     baseline = workflow["jobs"]["baseline"]
     build = workflow["jobs"]["build"]
     publish = workflow["jobs"]["publish"]
+    assert publish["outputs"] == {
+        "published-commit": "${{ steps.verify.outputs.commit }}"
+    }
     assert "generation-needed" in fetch["outputs"]
     assert baseline["needs"] == "fetch"
     assert "generation-needed" in baseline["if"]
@@ -199,6 +202,60 @@ def test_production_candidate_is_built_once_and_published_with_immutable_evidenc
         "source_commit",
         "generation_subject_sha256",
         "validated_output_sha256",
+    ):
+        assert required in script
+
+
+def test_weekly_readiness_uses_the_verified_publication_and_private_handoff():
+    workflow = yaml.load(
+        UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
+    )
+    assert workflow["on"]["schedule"] == [{"cron": "0 9 * * *"}]
+    readiness = workflow["jobs"]["weekly-readiness"]
+    assert readiness["permissions"] == {"contents": "read"}
+    assert readiness["needs"] == ["fetch", "publish"]
+    assert "generation-needed == 'true'" in readiness["if"]
+    assert "generation-needed == 'false'" in readiness["if"]
+    checkout = next(
+        step
+        for step in readiness["steps"]
+        if step["name"] == "Check out the verified production publication"
+    )
+    assert checkout["with"]["ref"] == (
+        "${{ needs.publish.outputs.published-commit || github.sha }}"
+    )
+    commands = "\n".join(step.get("run", "") for step in readiness["steps"])
+    for required in (
+        "generate_weekly_maintenance_readiness.py",
+        "--publication-sha",
+        "--production-run-id",
+        "--github-output",
+        "No Codex scheduled task",
+    ):
+        assert required in commands
+    upload = next(
+        step
+        for step in readiness["steps"]
+        if step["name"] == "Upload the private weekly handoff"
+    )
+    assert upload["with"]["retention-days"] == "21"
+    assert upload["with"]["name"] == "${{ steps.generate.outputs.artifact-name }}"
+    assert "weekly-maintenance-readiness-${WEEK}" in commands
+
+    notify = workflow["jobs"]["weekly-readiness-notify"]
+    assert notify["permissions"] == {"actions": "read", "issues": "write"}
+    assert not any("checkout" in step.get("uses", "") for step in notify["steps"])
+    script = next(
+        step["with"]["script"]
+        for step in notify["steps"]
+        if step["name"] == "Create or update the deduplicated readiness issue"
+    )
+    for required in (
+        "weekly-maintenance:${week}",
+        "readiness-digest:",
+        "existing.body?.includes(digestMarker)",
+        'state: "open"',
+        "human final copy may be edited, replaced, omitted",
     ):
         assert required in script
 

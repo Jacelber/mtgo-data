@@ -126,6 +126,12 @@ products predate Landing; they must satisfy the same complete-product rule at
 Phase 12 closeout without taking their current products offline during the
 migration.
 
+The weekly maintenance process may use deterministic facts or machine-written
+copy as a draft, but the human final Landing content is authoritative. The
+Owner may rewrite, replace, omit, or independently author that content; machine
+evidence does not define the permitted editorial conclusion. Publication and
+all repository mutations remain separately gated.
+
 ---
 
 ## 4. Product B: Tabletop Major Events
