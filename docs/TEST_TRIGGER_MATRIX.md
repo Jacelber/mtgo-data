@@ -19,7 +19,7 @@ an unbounded suite.
 | `tests/test_mtgo_top8_restatement.py` | Top 8 generator, classifier digest, lifecycle contract, or Top 8 Schema changes | Prove retained source facts stay fixed while current-classifier identities restate deterministically, including explicit Unknown | Three synthetic source/classifier cases |
 | `tests/test_documentation_history.py` | A live governance document changes | Enforce only the bounded live-status structure and history pointer | `docs/STATUS.yaml` only |
 | `tests/test_ci_master_admission.py` and `tests/test_ci_workflow.py` | CI admission or workflow control changes | Prove known paths route minimally, unknown evidence stops, and PR CI contains no heavy fallback | Admission logic and workflow text only |
-| `tests/test_weekly_maintenance_readiness.py` | Weekly readiness generator or private readiness Schema changes | Prove exact-week binding, current-week Unknown filtering, Pickup availability, deterministic digesting, and fail-closed cross-format lifecycle | Synthetic Standard and Modern handoff only |
+| `tests/test_weekly_maintenance_readiness.py` | Weekly readiness generator or private readiness Schema changes | Prove exact-week binding, complete unresolved-Unknown retention and decklists, strict intentional-random separation, Pickup availability, deterministic digesting, and fail-closed cross-format lifecycle | Synthetic Standard and Modern handoff only |
 
 The first six rows are the retained public data/output test set. The
 documentation and CI rows are control-plane checks. The weekly-readiness row is

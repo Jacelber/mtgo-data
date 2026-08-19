@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/weekly-maintenance-readiness.schema.json",
   "title": "Private weekly MTGO maintenance readiness handoff",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -19,7 +19,7 @@
     "workflow"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"const": "1.1.0"},
     "document_type": {"const": "weekly_maintenance_readiness"},
     "review_id": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}@[a-f0-9]{12}$"},
     "readiness_digest": {"$ref": "#/$defs/sha256"},
@@ -88,13 +88,62 @@
     "unknownRecord": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["deck_id", "event_id", "event_name", "event_start", "source_file"],
+      "required": [
+        "deck_id",
+        "event_id",
+        "event_name",
+        "event_start",
+        "source_file",
+        "main_deck",
+        "sideboard"
+      ],
       "properties": {
         "deck_id": {"type": "string", "minLength": 1},
         "event_id": {"type": "string", "pattern": "^[0-9]+$"},
         "event_name": {"type": "string"},
         "event_start": {"type": "string"},
-        "source_file": {"type": "string", "minLength": 1}
+        "source_file": {"type": "string", "minLength": 1},
+        "main_deck": {"type": "array", "items": {"$ref": "#/$defs/cardRecord"}},
+        "sideboard": {"type": "array", "items": {"$ref": "#/$defs/cardRecord"}}
+      }
+    },
+    "cardRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "quantity"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "quantity": {"type": "integer", "minimum": 1}
+      }
+    },
+    "acceptedIntentionalUnknownRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deck_id",
+        "event_id",
+        "event_name",
+        "event_start",
+        "source_file",
+        "main_deck",
+        "sideboard",
+        "disposition",
+        "reason_code",
+        "owner_accepted_on",
+        "evidence"
+      ],
+      "properties": {
+        "deck_id": {"type": "string", "minLength": 1},
+        "event_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "event_name": {"type": "string"},
+        "event_start": {"type": "string"},
+        "source_file": {"type": "string", "minLength": 1},
+        "main_deck": {"type": "array", "items": {"$ref": "#/$defs/cardRecord"}},
+        "sideboard": {"type": "array", "items": {"$ref": "#/$defs/cardRecord"}},
+        "disposition": {"const": "intentional_unknown"},
+        "reason_code": {"const": "random_card_pile"},
+        "owner_accepted_on": {"type": "string", "format": "date"},
+        "evidence": {"type": "string", "minLength": 1}
       }
     },
     "manualReview": {
@@ -135,31 +184,28 @@
             "status",
             "scope",
             "total_unknown_count",
-            "review_week_unknown_count",
-            "review_week_unknown_records",
+            "unresolved_unknown_count",
+            "unresolved_unknown_records",
+            "accepted_intentional_unknown_count",
+            "accepted_intentional_unknown_records",
             "conflict_count",
             "invalid_deck_count",
-            "strict_validation",
-            "since_last_review"
+            "strict_validation"
           ],
           "properties": {
             "status": {"enum": ["review_required", "blocked"]},
             "scope": {"const": "all_available_events"},
             "total_unknown_count": {"type": "integer", "minimum": 0},
-            "review_week_unknown_count": {"type": "integer", "minimum": 0},
-            "review_week_unknown_records": {"type": "array", "items": {"$ref": "#/$defs/unknownRecord"}},
+            "unresolved_unknown_count": {"type": "integer", "minimum": 0},
+            "unresolved_unknown_records": {"type": "array", "items": {"$ref": "#/$defs/unknownRecord"}},
+            "accepted_intentional_unknown_count": {"type": "integer", "minimum": 0},
+            "accepted_intentional_unknown_records": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/acceptedIntentionalUnknownRecord"}
+            },
             "conflict_count": {"type": "integer", "minimum": 0},
             "invalid_deck_count": {"type": "integer", "minimum": 0},
-            "strict_validation": {"type": "string", "minLength": 1},
-            "since_last_review": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": ["status", "reason"],
-              "properties": {
-                "status": {"const": "not_available"},
-                "reason": {"type": "string", "minLength": 1}
-              }
-            }
+            "strict_validation": {"type": "string", "minLength": 1}
           }
         },
         "visual_metadata": {
