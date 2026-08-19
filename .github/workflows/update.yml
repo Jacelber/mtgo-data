@@ -134,7 +134,7 @@ jobs:
 
       - name: Download compatible incomplete fetch checkpoint
         if: steps.previous-checkpoint.outputs.found == 'true'
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v8.0.1
         with:
           name: mtgo-fetch-checkpoint
           path: ${{ runner.temp }}/mtgo-fetch-resume
@@ -350,7 +350,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
 
       - name: Download immutable fetched candidate
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v8.0.1
         with:
           name: mtgo-fetch-candidate
           path: ${{ runner.temp }}/mtgo-fetch-candidate
@@ -538,7 +538,7 @@ jobs:
           persist-credentials: true
 
       - name: Download immutable validated output
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v8.0.1
         with:
           name: mtgo-build-candidate
           path: ${{ runner.temp }}/mtgo-build-candidate
@@ -744,7 +744,7 @@ jobs:
     steps:
       - name: Download the private weekly handoff
         if: needs.weekly-readiness.result == 'success'
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v8.0.1
         with:
           name: ${{ needs.weekly-readiness.outputs.artifact-name }}
           path: ${{ runner.temp }}/weekly-maintenance-readiness
