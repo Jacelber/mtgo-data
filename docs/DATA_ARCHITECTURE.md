@@ -491,6 +491,16 @@ format migration may initialize known state explicitly from the approved
 historical window; subsequent state changes occur only when an approved Pickup
 week is published.
 
+The daily MTGO production workflow may generate one private weekly-maintenance
+readiness artifact after a successful production result. That artifact binds
+the exact publication commit, review week, format-specific event IDs,
+classifier digests, current-week Unknown records, classification blockers, and
+Pickup candidate counts. It may also report manual inputs or later producers as
+explicitly unavailable. It is an Actions artifact and Issue handoff only: it is
+not generated public data, does not enter `stats/catalog.json` or Pages, and
+does not authorize a review or repository mutation. Its current operating
+contract is `docs/WEEKLY_MAINTENANCE.md`.
+
 ---
 
 ## 6. Melee-specific package
@@ -3064,6 +3074,12 @@ authority:
 - approved editorial fields originate in the existing format-scoped Weekly
   Pickup review path and remain human-authored localized alternatives.
 
+Machine facts and machine drafts are aids, not editorial authority. The Owner
+may accept, edit, delete, replace, or ignore them; may write content unrelated
+to a machine conclusion; and may choose to publish no editorial copy. A source
+or digest binding detects a stale review baseline but does not claim that human
+copy is logically derived from, limited by, or endorsed by the machine facts.
+
 Only one active language is rendered. Pending candidates, reviewer notes,
 design files, and non-public configuration do not enter the Pages artifact.
 
@@ -3118,7 +3134,8 @@ may suggest exact-deck cards newly present or increased against the four-week
 reference, but the reviewer owns the final category, localized editorial copy,
 featured deck, ordering, and four-card display. Approval binds those fields to
 exact source event IDs, classifier digest, machine-fact digest, and deck
-identity.
+identity for provenance and stale-review detection only. It does not constrain
+the Owner's category, selection, ordering, cards, or editorial copy.
 
 After the P12-16 cutover, Weekly Pickup is an internal producer, review,
 known-state, and history capability rather than a standalone product identity.

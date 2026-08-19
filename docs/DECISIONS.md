@@ -4440,3 +4440,60 @@ history of prior derivations. This task changes no classifier rule, formula,
 public path, raw input, or event `434455` source bytes. Commit, remote
 publication, merge, production dispatch, and Issue closure require later
 authorization after local Owner acceptance.
+
+---
+
+# DEC-102 - Use GitHub production as the weekly maintenance handoff
+
+Status: `Accepted for local implementation`
+
+## Context
+
+The weekly review was previously expected to start from a Codex scheduled task.
+That task did not run reliably, and a Tuesday-morning start left too little time
+after the final Japanese Monday event publication. The review also lacked one
+cloud evidence bundle covering the current Unknown population, visual-metadata
+work, and Weekly Pickup candidates.
+
+Landing editorial authority also needed correction. Machine facts and prose are
+useful drafts, but they do not define what a human editor may conclude or write.
+
+## Decision
+
+Move the existing daily MTGO production schedule to `09:00 UTC` (`18:00 JST`).
+After every successful production outcome, generate a private Schema-validated
+weekly readiness artifact from the exact verified production publication. Bind
+it to the review week, lifecycle, format-specific event IDs and classifier
+digests, current-week Unknown records, classification gate results, and Pickup
+candidate availability. Report unavailable representative-card, deck-color,
+or Landing producers explicitly rather than guessing their results.
+
+Maintain one deduplicated GitHub Issue per review week. An unchanged readiness
+digest creates no additional notification; a changed baseline updates and
+reopens the same Issue. The Owner must still open Codex and explicitly start the
+review. The Issue and artifact authorize no repository mutation.
+
+Use the sequence in `docs/WEEKLY_MAINTENANCE.md`: freeze the cloud baseline;
+review Unknown decks; conditionally repair and reproduce classification under a
+separate gate; review representative cards and deck colors; select Weekly
+Pickup content; optionally prepare a Landing machine draft; create the human
+final; then preview, accept, and publish through separate gates.
+
+The human final is authoritative. The Owner may accept, edit, delete, replace,
+or ignore machine output, write unrelated content, or publish no editorial
+copy. Source and digest bindings detect staleness only; they do not restrict
+human editorial conclusions.
+
+## Consequences
+
+The weekly timer and evidence handoff no longer depend on Codex automation.
+GitHub schedule delay remains possible, so the production workflow stays daily
+and later successful runs can refresh the same provisional-week Issue. The
+readiness JSON is retained as an internal Actions artifact and is excluded from
+`stats/catalog.json` and Pages.
+
+This task changes workflow timing and private diagnostics only. It does not
+change classifier rules, visual metadata, Pickup approval, Landing public data,
+UI, statistics, formulas, public paths, source data, or event `434455`. One
+accepted rehearsal on current weekly data is still required before the Owner
+decides whether to authorize P12-10.
