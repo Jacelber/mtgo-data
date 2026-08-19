@@ -4598,3 +4598,51 @@ changes only the private review carrier and operating documentation; it does not
 itself authorize or modify classifier rules, taxonomy, public data, statistics,
 visual metadata, Pickup decisions, Landing content, UI, public paths, source
 data, or protected event `434455` bytes.
+
+---
+
+# DEC-105 - Apply W33 classifier maintenance with bounded rule growth
+
+Status: `Accepted`
+
+## Context
+
+The complete W33 review contained 29 coherent unresolved Unknown records across
+Standard and Modern. The first recommendations overused four-copy thresholds
+and proposed new rules before proving whether an existing rule could absorb the
+construction. Full-corpus implementation also showed that the reviewed
+Five-Color Humans threshold would demote one retained deck and that the new
+Azorius Oculus identity would supersede Azorius Momo for two retained decks.
+
+## Decision
+
+Apply every final Owner-confirmed W33 disposition. Add the new parents
+`izzet-monument`, `dimir-bounce`, `azorius-oculus`, `temur-stormsplitter`,
+`grixis-tablet`, `dwarves`, `mono-blue-selective-memory`, `bant-company`, and
+`grixis-legends`. Modify the existing `izzet-fling`, `five-color-humans`,
+`five-color-ritual`, and `dimir-tempo` rules, and add only the confirmed
+same-parent construction rules under `mono-black-aggro`, `rakdos-delirium`,
+`five-color-elementals`, and `grixis-tempo`.
+
+Five-Color Humans uses `Cavern of Souls >= 3`, `Secluded Courtyard >= 3`,
+`Aang, Swift Savior >= 2`, and `Jennifer Walters >= 1`. The final one-copy
+Jennifer boundary preserves the retained Five-Color Humans population while
+admitting the reviewed construction. The more specific Azorius Oculus rule
+uses four main-deck copies each of `Abhorrent Oculus`, `Helping Hand`, and
+`Hallowed Fountain`; the Owner explicitly accepts that it reclassifies the two
+retained matching Azorius Momo decks.
+
+Future weekly proposals first modify an existing rule when the full retained
+corpus permits it. They test lower card-count thresholds before requiring four
+and disclose any resulting migration, conflict, or identity loss before Owner
+confirmation.
+
+## Consequences
+
+Across the retained corpus, 19 Standard and 10 Modern Unknown records become
+classified. Two retained Standard Azorius Momo records become Azorius Oculus.
+No retained classified record becomes Unknown, and Modern has no other identity
+migration. The sole Owner-accepted `random_card_pile` remains intentional
+Unknown. This source change does not regenerate or publish statistics, dispatch
+production, change formulas or Schemas, modify source event data, change public
+paths, or alter protected event `434455` bytes.

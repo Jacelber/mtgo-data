@@ -41,6 +41,17 @@ noise. A changed weekly baseline updates and reopens the same Issue.
 | 10. Create the human final Landing content | Owner, with optional Codex assistance | Accept, edit, delete, replace, or ignore any machine output. The Owner may write unrelated content or publish no editorial copy. | Human-final content and explicit approval state. |
 | 11. Preview, accept, and publish | Codex implements and validates; Owner separately authorizes each gate | Render the exact final subject, perform proportionate checks, obtain Owner acceptance, then separately commit, open a Ready PR, merge, and deploy only when each gate is authorized. | Accepted public Landing and publication evidence, or a stopped unpublished review. |
 
+Classifier recommendations in step 5 follow two additional controls. Codex first
+tests whether an existing rule can be modified across the complete retained
+same-format corpus; it adds a parent or alternative rule only when the identity
+does not exist or one existing rule cannot represent both the retained and new
+construction. Card-count thresholds start with the least restrictive viable
+value, normally testing two and three before four. A recommendation may require
+four only when the lower value causes a demonstrated identity migration,
+conflict, or identity loss, and the workbook records that evidence. If final
+implementation exposes an impact not disclosed in the reviewed workbook, the
+changed subject returns to Owner confirmation before commit or publication.
+
 ## Authority boundaries
 
 - Machine output is a draft or evidence aid. It never limits the Owner's final
