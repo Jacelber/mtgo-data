@@ -4,6 +4,63 @@ semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
   manifest_sha256: 87120f979a4bd00e4a2aa601e3001862ce2575d12de355c3a42548b535b40b36
 archetypes:
+- id: mono-blue-selective-memory
+  name: Mono-Blue Selective Memory
+  priority: 688400
+  rules:
+  - id: mono-blue-selective-memory-primary
+    priority: 688400
+    subtype_id: null
+    conditions:
+      all:
+      - card: Selective Memory
+        zone: main
+        min_count: 4
+      - card: Sapphire Medallion
+        zone: main
+        min_count: 4
+      - card: Stock Up
+        zone: main
+        min_count: 4
+- id: bant-company
+  name: Bant Company
+  priority: 688300
+  rules:
+  - id: bant-company-primary
+    priority: 688300
+    subtype_id: null
+    conditions:
+      all:
+      - card: Collected Company
+        zone: main
+        min_count: 4
+      - card: Knight of the Reliquary
+        zone: main
+        min_count: 4
+      - card: Noble Hierarch
+        zone: main
+        min_count: 4
+- id: grixis-legends
+  name: Grixis Legends
+  priority: 688200
+  rules:
+  - id: grixis-legends-primary
+    priority: 688200
+    subtype_id: null
+    conditions:
+      all:
+      - card: Mox Amber
+        zone: main
+        min_count: 3
+      - card: Basim Ibn Ishaq
+        zone: main
+        min_count: 3
+      - card: Ragavan, Nimble Pilferer
+        zone: main
+        min_count: 3
+      - card: Tamiyo, Inquisitive Student
+        zone: main
+        min_count: 3
 - id: primal-prayers-combo
   name: Primal Prayers Combo
   priority: 688500
@@ -657,6 +714,29 @@ archetypes:
       - card: Death's Shadow
         zone: main
         exact_count: 0
+  - id: rakdos-delirium-graveyard-aggro
+    priority: 620069
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nethergoyf
+        zone: main
+        min_count: 4
+      - card: Dragon's Rage Channeler
+        zone: main
+        min_count: 4
+      - card: Bloodghast
+        zone: main
+        min_count: 4
+      - card: Faithless Looting
+        zone: main
+        min_count: 4
+      - card: Mishra's Bauble
+        zone: main
+        min_count: 4
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
 - id: rakdos-midrange
   name: Rakdos Midrange
   priority: 620060
@@ -1467,6 +1547,23 @@ archetypes:
       - card: Shardless Agent
         zone: main
         exact_count: 0
+  - id: five-color-elementals-zenith
+    priority: 324190
+    subtype_id: null
+    conditions:
+      all:
+      - card: Risen Reef
+        zone: main
+        min_count: 3
+      - card: Omnath, Locus of Creation
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 4
+      - card: Green Sun's Zenith
+        zone: main
+        min_count: 4
 - id: mono-blue-belcher
   name: Mono-Blue Belcher
   priority: 306300
@@ -1609,9 +1706,6 @@ archetypes:
         zone: main
         min_count: 3
       - card: Shardless Agent
-        zone: main
-        min_count: 1
-      - card: Elesh Norn, Mother of Machines
         zone: main
         min_count: 1
 - id: sam-combo
@@ -4331,6 +4425,35 @@ archetypes:
       - card: __classifier-semantic-main-green-source__
         zone: main
         exact_count: 0
+  - id: grixis-tempo-unholy-heat
+    priority: 638060
+    subtype_id: null
+    conditions:
+      all:
+      - card: Psychic Frog
+        zone: main
+        min_count: 4
+      - card: Quantum Riddler
+        zone: main
+        min_count: 4
+      - card: Unholy Heat
+        zone: main
+        min_count: 4
+      - card: Steam Vents
+        zone: main
+        min_count: 1
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Goryo's Vengeance
+        zone: main
+        exact_count: 0
+      - card: Persist
+        zone: main
+        exact_count: 0
+      - card: Death's Shadow
+        zone: main
+        exact_count: 0
 - id: dimir-tempo
   name: Dimir Tempo
   priority: 638000
@@ -4352,7 +4475,7 @@ archetypes:
         min_count: 3
       - card: Counterspell
         zone: main
-        min_count: 3
+        min_count: 2
       - card: Watery Grave
         zone: main
         min_count: 1

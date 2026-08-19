@@ -4,6 +4,148 @@ semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
   manifest_sha256: 87120f979a4bd00e4a2aa601e3001862ce2575d12de355c3a42548b535b40b36
 archetypes:
+- id: izzet-monument
+  name: Izzet Monument
+  priority: 76750
+  rules:
+  - id: izzet-monument-primary
+    priority: 76750
+    subtype_id: null
+    conditions:
+      all:
+      - card: Artist's Talent
+        zone: main
+        min_count: 3
+      - card: Monument to Endurance
+        zone: main
+        min_count: 3
+      - card: Gran-Gran
+        zone: main
+        exact_count: 0
+      - card: Accumulate Wisdom
+        zone: main
+        exact_count: 0
+- id: dimir-bounce
+  name: Dimir Bounce
+  priority: 76740
+  rules:
+  - id: dimir-bounce-primary
+    priority: 76740
+    subtype_id: null
+    conditions:
+      all:
+      - card: Boomerang Basics
+        zone: main
+        min_count: 3
+      - card: Tinybones Joins Up
+        zone: main
+        min_count: 3
+      - card: Nowhere to Run
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 3
+      - card: Hallowed Fountain
+        zone: main
+        exact_count: 0
+- id: azorius-oculus
+  name: Azorius Oculus
+  priority: 76730
+  rules:
+  - id: azorius-oculus-primary
+    priority: 76730
+    subtype_id: null
+    conditions:
+      all:
+      - card: Abhorrent Oculus
+        zone: main
+        min_count: 4
+      - card: Helping Hand
+        zone: main
+        min_count: 4
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 4
+- id: temur-stormsplitter
+  name: Temur Stormsplitter
+  priority: 76720
+  rules:
+  - id: temur-stormsplitter-primary
+    priority: 76720
+    subtype_id: null
+    conditions:
+      all:
+      - card: Stormsplitter
+        zone: main
+        min_count: 2
+      - card: Enduring Vitality
+        zone: main
+        min_count: 2
+      - card: Analyze the Pollen
+        zone: main
+        min_count: 2
+- id: grixis-tablet
+  name: Grixis Tablet
+  priority: 76710
+  rules:
+  - id: grixis-tablet-primary
+    priority: 76710
+    subtype_id: null
+    conditions:
+      all:
+      - card: Tablet of Discovery
+        zone: main
+        min_count: 2
+      - card: Stock Up
+        zone: main
+        min_count: 2
+      - card: Requiting Hex
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+- id: dwarves
+  name: Dwarves
+  priority: 76700
+  subtypes:
+  - id: izzet
+    name: Izzet
+  - id: boros
+    name: Boros
+  rules:
+  - id: dwarves-izzet
+    priority: 76700
+    subtype_id: izzet
+    conditions:
+      all:
+      - card: Dwarven Mauler
+        zone: main
+        min_count: 4
+      - card: Dwalin, Weaponmaster
+        zone: main
+        min_count: 4
+      - card: Steam Vents
+        zone: main
+        min_count: 1
+  - id: dwarves-boros
+    priority: 76690
+    subtype_id: boros
+    conditions:
+      all:
+      - card: Dwarven Mauler
+        zone: main
+        min_count: 4
+      - card: Dáin's Company
+        zone: main
+        min_count: 4
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
 - id: monument-lessons
   name: Monument Lessons
   priority: 76000
@@ -417,10 +559,16 @@ archetypes:
     conditions:
       all:
       - card: Callous Sell-Sword
+        zone: main
         min_count: 3
-      - card: Stormchaser's Talent
+      - card: Slickshot Show-Off
+        zone: main
         min_count: 4
+      - card: Wild Ride
+        zone: main
+        min_count: 3
       - card: Spirebluff Canal
+        zone: main
         min_count: 1
       - card: Leyline of Resonance
         zone: main
@@ -1313,6 +1461,23 @@ archetypes:
       - card: Heraldic Banner
         zone: main
         min_count: 3
+  - id: mono-black-aggro-corpses-pursuer
+    priority: 9980
+    subtype_id: null
+    conditions:
+      all:
+      - card: Swamp
+        zone: main
+        min_count: 14
+      - card: Forsaken Miner
+        zone: main
+        min_count: 4
+      - card: Corpses of the Lost
+        zone: main
+        min_count: 4
+      - card: Nighthowl Pursuer
+        zone: main
+        min_count: 4
 - id: golgari-crime
   name: Golgari Crime
   priority: 9000
@@ -1678,22 +1843,16 @@ archetypes:
       all:
       - card: Cavern of Souls
         zone: main
-        min_count: 4
+        min_count: 3
       - card: Secluded Courtyard
         zone: main
-        min_count: 4
-      - card: Celestial Reunion
-        zone: main
         min_count: 3
-      - card: Cecil, Dark Knight
-        zone: main
-        min_count: 3
-      - card: Spectacular Spider-Man
+      - card: Aang, Swift Savior
         zone: main
         min_count: 2
-      - card: Arachne, Psionic Weaver
+      - card: Jennifer Walters
         zone: main
-        min_count: 2
+        min_count: 1
 - id: mono-green-mightiest
   name: Mono-Green Mightiest
   priority: 76900
