@@ -117,6 +117,7 @@ def _write_format(root: Path, format_name: str, *, candidate: bool = True) -> No
                     "provisional_through": "2026-08-23",
                     "seal_on": "2026-08-24",
                     "source_event_ids": ["101", "100"],
+                    "classifier_digest": digest,
                     "existing_changes": [{"candidate": 1}],
                     "new_archetypes": [{"candidate": 2}, {"candidate": 3}],
                 }
@@ -198,6 +199,27 @@ def test_missing_pickup_candidate_is_reported_as_a_blocker(tmp_path):
     assert document["status"] == "blocked"
     assert document["workflow"]["next_action"] == "resolve_blocker"
     assert document["formats"][1]["pickup"]["status"] == "unavailable"
+
+
+def test_stale_pickup_classifier_digest_is_reported_as_a_blocker(tmp_path):
+    for format_name in ("standard", "modern"):
+        _write_format(tmp_path, format_name)
+    _write_intentional_unknowns(tmp_path)
+    candidate_path = (
+        tmp_path / "stats" / "standard" / "mtgo" / "pickup" / "candidates_2026-W33.yaml"
+    )
+    candidate = yaml.safe_load(candidate_path.read_text(encoding="utf-8"))
+    candidate["classifier_digest"] = "c" * 64
+    candidate_path.write_text(yaml.safe_dump(candidate), encoding="utf-8")
+
+    document = _build(tmp_path)
+
+    pickup = document["formats"][0]["pickup"]
+    assert document["status"] == "blocked"
+    assert pickup["status"] == "stale_review_required"
+    assert pickup["candidate_classifier_digest"] == "c" * 64
+    assert pickup["expected_classifier_digest"] == "a" * 64
+    assert "classifier_digest" in pickup["reason"]
 
 
 def test_mismatched_format_week_fails_closed(tmp_path):

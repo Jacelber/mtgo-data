@@ -14,7 +14,7 @@ import yaml
 
 
 FORMATS = ("standard", "modern")
-SCHEMA_VERSION = "1.1.0"
+SCHEMA_VERSION = "1.2.0"
 INTENTIONAL_UNKNOWN_CONFIG = Path("configs/mtgo_intentional_unknowns.yaml")
 
 
@@ -189,6 +189,10 @@ def _format_readiness(
     )
     if candidate_path.exists():
         candidate = _read_yaml(candidate_path)
+        expected_classifier_digest = str(index.get("classifier_digest", ""))
+        candidate_classifier_digest = candidate.get("classifier_digest")
+        if not isinstance(candidate_classifier_digest, str):
+            candidate_classifier_digest = None
         expected = {
             "week": week_id,
             "start": week_entry.get("start"),
@@ -198,20 +202,33 @@ def _format_readiness(
             "seal_on": week_entry.get("seal_on"),
         }
         mismatches = [key for key, value in expected.items() if candidate.get(key) != value]
+        stale_reasons = []
         if mismatches:
-            raise ValueError(
-                f"{format_name} Pickup candidate mismatches: {', '.join(mismatches)}"
-            )
+            stale_reasons.append(f"lifecycle fields: {', '.join(mismatches)}")
         candidate_event_ids = _sorted_event_ids(candidate.get("source_event_ids", []))
         if candidate_event_ids != top8_event_ids:
-            raise ValueError(f"{format_name} Pickup candidate event IDs do not match Top 8")
+            stale_reasons.append("source_event_ids")
+        if candidate_classifier_digest != expected_classifier_digest:
+            stale_reasons.append("classifier_digest")
         existing_changes = candidate.get("existing_changes")
         new_archetypes = candidate.get("new_archetypes")
         if not isinstance(existing_changes, list) or not isinstance(new_archetypes, list):
             raise ValueError(f"{format_name} Pickup candidate lists are missing")
         pickup = {
-            "status": "candidate_review_required",
+            "status": (
+                "stale_review_required"
+                if stale_reasons
+                else "candidate_review_required"
+            ),
             "candidate_file": candidate_path.relative_to(root).as_posix(),
+            "candidate_classifier_digest": candidate_classifier_digest,
+            "expected_classifier_digest": expected_classifier_digest,
+            "reason": (
+                "Pickup candidate provenance does not match current Top 8: "
+                + ", ".join(stale_reasons)
+                if stale_reasons
+                else None
+            ),
             "existing_change_count": len(existing_changes),
             "new_archetype_count": len(new_archetypes),
             "total_candidate_count": len(existing_changes) + len(new_archetypes),
@@ -220,6 +237,9 @@ def _format_readiness(
         pickup = {
             "status": "unavailable",
             "candidate_file": candidate_path.relative_to(root).as_posix(),
+            "candidate_classifier_digest": None,
+            "expected_classifier_digest": str(index.get("classifier_digest", "")),
+            "reason": "Pickup candidate file is missing.",
             "existing_change_count": None,
             "new_archetype_count": None,
             "total_candidate_count": None,
@@ -288,7 +308,7 @@ def build_readiness(
     week_id = Path(standard_entry["file"]).stem
     blocked = any(
         item["classification"]["status"] == "blocked"
-        or item["pickup"]["status"] == "unavailable"
+        or item["pickup"]["status"] != "candidate_review_required"
         for item in formats
     )
     digest_subject = {

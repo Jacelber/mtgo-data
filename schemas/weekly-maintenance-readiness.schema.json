@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/weekly-maintenance-readiness.schema.json",
   "title": "Private weekly MTGO maintenance readiness handoff",
-  "x-schema-version": "1.1.0",
+  "x-schema-version": "1.2.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -19,7 +19,7 @@
     "workflow"
   ],
   "properties": {
-    "schema_version": {"const": "1.1.0"},
+    "schema_version": {"const": "1.2.0"},
     "document_type": {"const": "weekly_maintenance_readiness"},
     "review_id": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}@[a-f0-9]{12}$"},
     "readiness_digest": {"$ref": "#/$defs/sha256"},
@@ -223,13 +223,24 @@
           "required": [
             "status",
             "candidate_file",
+            "candidate_classifier_digest",
+            "expected_classifier_digest",
+            "reason",
             "existing_change_count",
             "new_archetype_count",
             "total_candidate_count"
           ],
           "properties": {
-            "status": {"enum": ["candidate_review_required", "unavailable"]},
+            "status": {"enum": ["candidate_review_required", "stale_review_required", "unavailable"]},
             "candidate_file": {"type": "string", "pattern": "^stats/(standard|modern)/mtgo/pickup/candidates_[0-9]{4}-W[0-9]{2}\\.yaml$"},
+            "candidate_classifier_digest": {
+              "oneOf": [
+                {"$ref": "#/$defs/sha256"},
+                {"type": "null"}
+              ]
+            },
+            "expected_classifier_digest": {"$ref": "#/$defs/sha256"},
+            "reason": {"type": ["string", "null"], "minLength": 1},
             "existing_change_count": {"type": ["integer", "null"], "minimum": 0},
             "new_archetype_count": {"type": ["integer", "null"], "minimum": 0},
             "total_candidate_count": {"type": ["integer", "null"], "minimum": 0}
