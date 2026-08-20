@@ -8,6 +8,7 @@ const manaIdentities = Object.freeze({
     "azorius-cage": Object.freeze(["w", "u"]),
     "azorius-control": Object.freeze(["w", "u"]),
     "azorius-momo": Object.freeze(["w", "u"]),
+    "azorius-oculus": Object.freeze(["w", "u"]),
     "azorius-prison": Object.freeze(["w", "u"]),
     "azorius-prowess": Object.freeze(["w", "u"]),
     "azorius-token-control": Object.freeze(["w", "u"]),
@@ -15,6 +16,7 @@ const manaIdentities = Object.freeze({
     "bant-bounce": Object.freeze(["w", "u", "g"]),
     "bant-rhythm": Object.freeze(["w", "u", "g"]),
     "boros-burn": Object.freeze(["w", "r"]),
+    "boros-dragons": Object.freeze(["w", "r"]),
     "boros-manufacturing": Object.freeze(["w", "r"]),
     "boros-manufacturing/boros": Object.freeze(["w", "r"]),
     "boros-manufacturing/jeskai": Object.freeze(["w", "u", "r"]),
@@ -35,6 +37,7 @@ const manaIdentities = Object.freeze({
     "golgari-reanimator": Object.freeze(["b", "g"]),
     "golgari-rhythm": Object.freeze(["b", "g"]),
     "golgari-roots": Object.freeze(["b", "g"]),
+    "grixis-tablet": Object.freeze(["u", "b", "r"]),
     "gruul-delirium": Object.freeze(["r", "g"]),
     "gruul-dinosaur": Object.freeze(["r", "g"]),
     "gruul-fling": Object.freeze(["r", "g"]),
@@ -52,6 +55,7 @@ const manaIdentities = Object.freeze({
     "jeskai-control": Object.freeze(["w", "u", "r"]),
     "jeskai-equipment": Object.freeze(["w", "u", "r"]),
     "jeskai-lessons": Object.freeze(["w", "u", "r"]),
+    "jeskai-momo": Object.freeze(["w", "u", "r"]),
     "jeskai-tablet": Object.freeze(["w", "u", "r"]),
     "kona-omniscience/temur": Object.freeze(["u", "r", "g"]),
     "leyline-aggro/izzet": Object.freeze(["u", "r"]),
@@ -65,6 +69,7 @@ const manaIdentities = Object.freeze({
     "mono-green-squirrel-combo": Object.freeze(["g"]),
     "mono-red-aggro": Object.freeze(["r"]),
     "mono-red-burn": Object.freeze(["r"]),
+    "mono-red-dragons": Object.freeze(["r"]),
     "mono-white-auras": Object.freeze(["w"]),
     "mono-white-triumph": Object.freeze(["w"]),
     "monument-lessons": Object.freeze(["u", "r"]),
@@ -268,9 +273,21 @@ const representativeCards = Object.freeze({
       Object.freeze({ name: "High Noon", image: "../images/representative-cards/standard/high-noon.jpg" }),
       Object.freeze({ name: "Avatar's Wrath", image: "../images/representative-cards/standard/avatars-wrath.jpg" }),
     ]),
+    "boros-dragons": Object.freeze([
+      Object.freeze({ name: "Sarkhan, Dragon Ascendant", image: "../images/representative-cards/standard/sarkhan-dragon-ascendant.jpg" }),
+      Object.freeze({ name: "Nova Hellkite", image: "../images/representative-cards/standard/nova-hellkite.jpg" }),
+    ]),
     "dimir-excruciator": Object.freeze([
       Object.freeze({ name: "Doomsday Excruciator", image: "../images/representative-cards/standard/doomsday-excruciator.jpg" }),
       Object.freeze({ name: "Deceit", image: "../images/representative-cards/standard/deceit.jpg" }),
+    ]),
+    "dimir-midrange": Object.freeze([
+      Object.freeze({ name: "Kaito, Bane of Nightmares", image: "../images/representative-cards/standard/kaito-bane-of-nightmares.jpg" }),
+      Object.freeze({ name: "Enduring Curiosity", image: "../images/representative-cards/standard/enduring-curiosity.jpg" }),
+    ]),
+    "izzet-aggro": Object.freeze([
+      Object.freeze({ name: "Scalding Viper", image: "../images/representative-cards/standard/scalding-viper.jpg" }),
+      Object.freeze({ name: "Hired Claw", image: "../images/representative-cards/standard/hired-claw.jpg" }),
     ]),
     "izzet-fling": Object.freeze([
       Object.freeze({ name: "Callous Sell-Sword", image: "../images/representative-cards/standard/callous-sell-sword.jpg" }),
@@ -291,6 +308,10 @@ const representativeCards = Object.freeze({
     "jeskai-lessons": Object.freeze([
       Object.freeze({ name: "Jeskai Revelation", image: "../images/representative-cards/standard/jeskai-revelation.jpg" }),
       Object.freeze({ name: "Accumulate Wisdom", image: "../images/representative-cards/standard/accumulate-wisdom.jpg" }),
+    ]),
+    "mardu-discard": Object.freeze([
+      Object.freeze({ name: "Hardened Academic", image: "../images/representative-cards/standard/hardened-academic.jpg" }),
+      Object.freeze({ name: "Marauding Mako", image: "../images/representative-cards/standard/marauding-mako.jpg" }),
     ]),
     "mono-green-landfall": Object.freeze([
       Object.freeze({ name: "Earthbender Ascension", image: "../images/representative-cards/standard/earthbender-ascension.jpg" }),
