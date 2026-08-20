@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 from datetime import date, datetime, timedelta, timezone
@@ -17,6 +18,7 @@ from . import load_mtgo_context
 from . import matchup
 from . import stats
 from .normalize import load_rules_for_format
+from .top8 import classifier_digest
 from .week_lifecycle import is_sealed, provisional_through, seal_on
 
 
@@ -38,7 +40,23 @@ def week_records(events, rules, end_monday: date) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
     for event_date, event in events:
         if end_monday <= event_date <= end_sunday:
-            records.extend(stats.process_event(event, rules)["records"])
+            event_id = str(event.get("event_id", "")).strip()
+            if not event_id.isdigit():
+                raise MTGOPickupError("Pickup source event has no numeric event_id")
+            for record_index, record in enumerate(
+                stats.process_event(event, rules)["records"]
+            ):
+                records.append(
+                    {
+                        **record,
+                        "event_id": event_id,
+                        "deck_id": _candidate_deck_id(
+                            event_id,
+                            record_index,
+                            record,
+                        ),
+                    }
+                )
     return records
 
 
@@ -106,6 +124,35 @@ def deck_fingerprint(
     return main, side
 
 
+def _deck_fingerprint_sha256(record: Mapping[str, Any]) -> str:
+    material = json.dumps(
+        deck_fingerprint(record),
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+
+
+def _candidate_deck_id(
+    event_id: str,
+    record_index: int,
+    record: Mapping[str, Any],
+) -> str:
+    """Build a stable pseudonymous candidate identity without player data."""
+
+    material = json.dumps(
+        {
+            "event_id": event_id,
+            "record_index": record_index,
+            "deck_fingerprint_sha256": _deck_fingerprint_sha256(record),
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256(material.encode("utf-8")).hexdigest()[:20]
+
+
 def better_record(first, second):
     first_key = (first["final_rank"], -first["player_count"], first["starttime"])
     second_key = (second["final_rank"], -second["player_count"], second["starttime"])
@@ -145,7 +192,13 @@ def _record_identity(record: Mapping[str, Any], rules) -> dict[str, Any]:
         raise MTGOPickupError(
             f"Pickup record could not reproduce its classified identity: {result.status}"
         )
+    identity_id = (
+        result.archetype_id
+        if result.subtype_id is None
+        else f"{result.archetype_id}/{result.subtype_id}"
+    )
     return {
+        "identity_id": identity_id,
         "archetype_id": result.archetype_id,
         "subtype_id": result.subtype_id,
         "subtype": result.subtype_name,
@@ -186,6 +239,10 @@ def _candidate_documents(
         identity_key = record["archetype_id"] if stable_ids else archetype
         cards = record_deck_cards(record)
         entry = {
+            **_record_identity(record, rules),
+            "event_id": record["event_id"],
+            "deck_id": record["deck_id"],
+            "deck_fingerprint_sha256": _deck_fingerprint_sha256(record),
             "archetype": archetype,
             "player": record["player"],
             "final_rank": record["final_rank"]
@@ -206,8 +263,6 @@ def _candidate_documents(
             "main_deck": cards["main_deck"],
             "side_deck": cards["side_deck"],
         }
-        if stable_ids:
-            entry = {**_record_identity(record, rules), **entry}
         (new_picks if identity_key not in known else existing_picks).append(entry)
 
     existing_picks.sort(
@@ -301,6 +356,7 @@ def generate_candidates(
         stable_ids=stable_ids,
     )
     source_event_ids = _source_event_ids(events, end_monday)
+    current_classifier_digest = classifier_digest(rules)
     week_status = (
         "sealed" if is_sealed(end_monday, today=reference_today) else "provisional"
     )
@@ -309,6 +365,7 @@ def generate_candidates(
         "provisional_through": provisional_through(end_monday).isoformat(),
         "seal_on": seal_on(end_monday).isoformat(),
         "source_event_ids": source_event_ids,
+        "classifier_digest": current_classifier_digest,
     }
     candidates.update(lifecycle)
     base_reference.update(lifecycle)
@@ -325,11 +382,12 @@ def generate_candidates(
                 existing_document = loaded
         except (OSError, UnicodeError, yaml.YAMLError):
             existing_document = None
-    same_source = (
+    same_provenance = (
         existing_document is not None
         and existing_document.get("source_event_ids") == source_event_ids
+        and existing_document.get("classifier_digest") == current_classifier_digest
     )
-    if preserve_existing and same_source:
+    if preserve_existing and same_provenance:
         return {
             "week": week,
             "candidate_path": candidate_path,
@@ -509,6 +567,10 @@ def publish(
     if document.get("source_event_ids") != _source_event_ids(events, end_monday):
         raise MTGOPickupError(
             f"{candidate_path}: Pickup candidate source events changed; regenerate and re-review"
+        )
+    if document.get("classifier_digest") != classifier_digest(rules):
+        raise MTGOPickupError(
+            f"{candidate_path}: Pickup candidate classifier changed; regenerate and re-review"
         )
     existing = _approved_entries(document, "existing_changes")
     new_archetypes = _approved_entries(document, "new_archetypes")

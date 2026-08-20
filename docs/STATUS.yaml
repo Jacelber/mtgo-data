@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-visual-metadata-review-20260820-01"
+  current_working_branch: "codex/weekly-pickup-candidate-provenance-20260820-01"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,55 +31,53 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-VISUAL-METADATA-MAINTENANCE-2026-W33"
-  name: "Apply Owner-approved W33 deck-color and representative-card maintenance"
+  id: "WEEKLY-PICKUP-CANDIDATE-PROVENANCE-2026-W33"
+  name: "Bind Weekly Pickup candidates to the current classifier subject"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-20"
   developer_validation_completed_on: "2026-08-20"
   owner_accepted_on: "2026-08-20"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-visual-metadata-review-20260820-01"
-  branch: "codex/weekly-visual-metadata-review-20260820-01"
-  base_commit: "968a187db3edd653aacda5ed576b3de11f7e6791"
-  objective: "Add the Owner-approved five Standard mana identities and four representative-card pairs for the accepted W33 deck identities, then stop for Owner acceptance before publication."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-pickup-candidate-provenance-20260820-01"
+  branch: "codex/weekly-pickup-candidate-provenance-20260820-01"
+  base_commit: "efdf5e7c34fd867b9679dcb9491a857c7d17a196"
+  objective: "Prevent Weekly Pickup candidates generated under an older classifier from being silently reused or published, while preserving reviewed stale files for explicit re-review."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "assets/js/phase8/archetype-visuals.js"
-    - "assets/images/representative-cards/standard/kaito-bane-of-nightmares.jpg"
-    - "assets/images/representative-cards/standard/enduring-curiosity.jpg"
-    - "assets/images/representative-cards/standard/hardened-academic.jpg"
-    - "assets/images/representative-cards/standard/marauding-mako.jpg"
-    - "assets/images/representative-cards/standard/sarkhan-dragon-ascendant.jpg"
-    - "assets/images/representative-cards/standard/nova-hellkite.jpg"
-    - "assets/images/representative-cards/standard/scalding-viper.jpg"
-    - "assets/images/representative-cards/standard/hired-claw.jpg"
+    - "src/mtgmeta/mtgo/pickup.py"
+    - "tools/generate_weekly_maintenance_readiness.py"
+    - "schemas/weekly-maintenance-readiness.schema.json"
+    - "tests/test_mtgo_pickup_provenance.py"
+    - "tests/test_weekly_maintenance_readiness.py"
+    - "docs/WEEKLY_MAINTENANCE.md"
     - "docs/STATUS.yaml"
   protected_scope:
     statistical_formulas_changed: "none"
-    public_json_or_schema_changed: "none"
+    public_json_or_schema_changed: "private readiness Schema only; version 1.2.0"
     generated_or_source_data_changed: "none"
     classification_identities_changed: "none"
-    workflows_or_public_paths_changed: "none; existing Standard UI gains five mana-color badges and four representative-card images"
+    workflows_or_public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Add only the five Owner-approved Standard mana identities: Azorius Oculus, Boros Dragons, Grixis Tablet, Jeskai Momo, and Mono-Red Dragons."
-    - "Add only the four Owner-approved representative-card pairs for Dimir Midrange, Mardu Discard, Boros Dragons, and Izzet Aggro."
-    - "Acquire and verify the eight exact representative-card image assets required by those approved pairs."
-    - "Run only focused visual-metadata, asset, repository, and diff checks required by the changed paths."
+    - "Bind candidate preservation to both source event IDs and the current classifier digest."
+    - "Regenerate an unreviewed stale candidate; preserve but block a stale candidate containing human approval or copy."
+    - "Add source event, pseudonymous deck, deck fingerprint, and stable classifier identity provenance to generated candidate rows."
+    - "Make readiness and Pickup publication fail closed on stale classifier provenance."
+    - "Run only focused Pickup provenance, readiness Schema, repository, and diff checks required by the changed paths."
   prohibited_changes:
-    - "Do not change classifier rules, generated classifications, reports, statistics, Pickup state, Landing content, or visual behavior outside the approved metadata entries."
-    - "Do not change Modern metadata, formulas, Schemas, workflows, public paths, event whitelists, or protected event 434455 bytes."
+    - "Do not change classifier rules, raw or generated production data, current Pickup approvals, Landing content, or visual metadata."
+    - "Do not change formulas, public paths, event whitelists, production workflow timing, or protected event 434455 bytes."
     - "Do not dispatch production or mutate the live weekly Issue."
-    - "Do not mix in the separately reviewed weekly-process documentation correction, resume Weekly Pickup review, or begin P12-10."
-  stop_point: "Complete the unchanged accepted task through commit, one Ready pull request, required CI, normal merge, and applicable Pages verification; then stop without production dispatch or another weekly stage."
+    - "Do not regenerate W33 production candidates, resume Pickup selection, or begin P12-10 under this implementation authorization."
+  stop_point: "Complete the unchanged accepted task through commit, one Ready pull request, required CI, and normal merge; then stop without production dispatch, candidate regeneration, Pickup review, or another task."
 
 current_repository_state:
-  baseline_commit: "968a187db3edd653aacda5ed576b3de11f7e6791"
-  baseline_note: "Cloud master after merged PR 237 and its successful post-merge CI. The Owner authorized the next rehearsal stage: W33 visual-metadata maintenance only."
+  baseline_commit: "efdf5e7c34fd867b9679dcb9491a857c7d17a196"
+  baseline_note: "Cloud production publication after the accepted W33 classifier and visual-metadata changes. The current Pickup candidate files predate that classifier subject, which exposed this provenance repair."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -89,10 +87,11 @@ known_blockers: []
 
 future_task_gates:
   - task: "WEEKLY-MAINTENANCE-REHEARSAL-01"
-    status: "visual_metadata_publication_in_progress"
+    status: "pickup_candidate_provenance_publication_in_progress"
     remaining_requirements:
-      - "Complete and accept the authorized W33 visual-metadata maintenance."
-      - "Resume Weekly Pickup review only after the visual-metadata task is accepted and completed."
+      - "Accept and publish the authorized Pickup provenance repair."
+      - "Under separate production authorization, regenerate W33 candidates from the accepted classifier subject."
+      - "Resume Weekly Pickup review only after readiness confirms current candidate provenance."
       - "Keep the rehearsal non-production and do not begin P12-10 automatically."
   - task: "P12-10"
     status: "blocked_pending_weekly_maintenance_rehearsal_and_separate_authorization"
@@ -109,15 +108,15 @@ future_task_gates:
       - "Keep the rehearsal non-deploying and review the complete v3 candidate before any public use."
 
 next_approved_task:
-  id: "WEEKLY-VISUAL-METADATA-MAINTENANCE-2026-W33"
-  name: "Apply Owner-approved W33 deck-color and representative-card maintenance"
+  id: "WEEKLY-PICKUP-CANDIDATE-PROVENANCE-2026-W33"
+  name: "Bind Weekly Pickup candidates to the current classifier subject"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: false
-  note: "Owner acceptance on 2026-08-20 authorizes continuous completion of the unchanged visual-metadata task through commit, one Ready pull request, required CI, normal merge, and applicable Pages verification; it does not authorize production dispatch or the next weekly stage."
+  note: "Owner acceptance authorizes continuous completion of this unchanged repair through commit, one Ready pull request, required CI, and normal merge. Production regeneration, Pickup review, P12-10, and any next task remain outside this authority."
 
 prohibited_next_actions:
   - "Do not dispatch production, mutate the live weekly Issue, fetch protected source data, or regenerate derived production outputs."
-  - "Do not mix in or publish the separately reviewed trial-run workflow correction, resume Weekly Pickup review, begin P12-10, or start Landing work automatically."
+  - "Do not regenerate or review W33 Pickup candidates, begin P12-10, or start Landing work automatically."
   - "Do not change formulas, raw source data, classifier rules, public paths, event whitelists, or event 434455 bytes."
   - "Do not force-push, mutate protected branches or tags directly, dispatch production, or begin another task under this accepted-task completion authority."
   - "Do not develop directly on master or overwrite unexplained local changes."

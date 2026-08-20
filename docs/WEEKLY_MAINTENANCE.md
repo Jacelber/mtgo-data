@@ -30,13 +30,13 @@ noise. A changed weekly baseline updates and reopens the same Issue.
 | Step | Who | Work | Output for the next step |
 | --- | --- | --- | --- |
 | 1. Collect and publish production data | Automatic GitHub workflow | Fetch the allowlisted MTGO inputs, validate one candidate, publish the verified generated data when changed, and keep production failures fail-closed. | Exact publication SHA, run evidence, current Standard and Modern outputs. |
-| 2. Build weekly readiness | Automatic GitHub workflow | Bind the current review week to Top 8 event IDs and classifier digests, and include every unresolved Unknown from the complete retained diagnostic corpus plus complete main decks and sideboards. Separately list Owner-accepted intentional Unknown records, classification blockers, Pickup candidate counts, and unavailable review inputs. | Private Schema-valid readiness JSON plus one deduplicated weekly Issue. |
+| 2. Build weekly readiness | Automatic GitHub workflow | Bind the current review week to Top 8 event IDs and classifier digests, and require each Pickup candidate file to carry the same classifier digest. Include every unresolved Unknown from the complete retained diagnostic corpus plus complete main decks and sideboards. Separately list Owner-accepted intentional Unknown records, classification blockers, Pickup candidate counts, stale candidates, and unavailable review inputs. | Private Schema-valid readiness JSON plus one deduplicated weekly Issue. |
 | 3. Start the review | Owner | Read the Issue and explicitly ask Codex to begin with the named week and readiness artifact. Closing or ignoring the Issue means no review starts. | Authorization for one exact weekly review baseline. |
 | 4. Freeze and verify the baseline | Codex | Confirm the cloud workflow run, publication SHA, week lifecycle, event IDs, classifier digests, and readiness digest. Create the six-sheet XLSX review carrier defined below from that exact baseline. Stop on drift or missing evidence. | Frozen review manifest, plain-language scope summary, and editable XLSX. |
 | 5. Review Unknown decks | Codex and Owner alternate; Owner confirms | Put every unresolved historical and current Unknown in `Unknown Review`, one row per deck, with its complete main deck and sideboard. Codex supplies a preliminary technical proposal. The Owner writes only free-text classification understanding, naming preference, or questions; no action code, parent ID, parent name, or subtype is required. Codex then supplies an exact revised proposal, and the Owner finally confirms, requests another revision, or defers it. | One final Owner confirmation per unresolved deck or group. Only an incoherent random card pile may be explicitly accepted as intentional Unknown. |
 | 6. Repair and reproduce classification when needed | Codex implements after separate authorization; Owner accepts | Make only accepted classifier changes, rerun the affected classification and derived weekly outputs, and re-freeze the changed baseline. Skip this step when no rule change is accepted. | Accepted classifier subject and refreshed weekly evidence, or an explicit no-change record. |
 | 7. Review visual metadata | Codex proposes; Owner decides | Review representative-card choices and deck-color identities against the accepted deck identities. Missing deterministic diagnostics are reported as unavailable, never guessed. | Owner-approved metadata changes or an explicit no-change/defer record. |
-| 8. Review Weekly Pickup | Codex prepares; Owner selects and writes | Present the generated candidates and exact deck evidence. The Owner may select any number, change category/order/cards/copy, add a different item, or select none. | Human-approved Pickup selection and editorial inputs bound to the reviewed week. |
+| 8. Review Weekly Pickup | Codex prepares; Owner selects and writes | Present the generated candidates and exact deck evidence. Each candidate file carries its classifier digest; every row carries its source event ID, pseudonymous deck ID, deck fingerprint, and stable classifier identity IDs. The Owner may select any number, change category/order/cards/copy, add a different item, or select none. | Human-approved Pickup selection and editorial inputs bound to the reviewed week and classifier subject. |
 | 9. Prepare optional Landing draft | Automatic producer or Codex, only after P12-10 is separately authorized | Generate structured facts and, if requested, an optional editorial draft from the accepted weekly inputs. The absence of a machine draft is valid. | Optional machine facts/draft presented as suggestions, never editorial authority. |
 | 10. Create the human final Landing content | Owner, with optional Codex assistance | Accept, edit, delete, replace, or ignore any machine output. The Owner may write unrelated content or publish no editorial copy. | Human-final content and explicit approval state. |
 | 11. Preview, accept, and publish | Codex implements and validates; Owner separately authorizes each gate | Render the exact final subject, perform proportionate checks, obtain Owner acceptance, then separately commit, open a Ready PR, merge, and deploy only when each gate is authorized. | Accepted public Landing and publication evidence, or a stopped unpublished review. |
@@ -109,9 +109,13 @@ input vocabulary.
 and both format-scoped Pickup candidate files exist. It does not mean the
 manual work is complete.
 
-`blocked` means the weekly handoff found a classification failure or a missing
-Pickup candidate. The blocker is resolved before the Owner starts the normal
-review sequence.
+`blocked` means the weekly handoff found a classification failure, a missing
+Pickup candidate, or a Pickup candidate whose event/lifecycle/classifier
+provenance is stale. An unreviewed stale candidate is regenerated automatically.
+A stale candidate containing human approval or copy is preserved, marked
+`stale_review_required`, and must be regenerated and reviewed again instead of
+being silently overwritten or published. The blocker is resolved before the
+Owner starts the normal review sequence.
 
 Representative-card and deck-color exception counts are currently
 `not available`; their manual-review status is intentional. Landing draft
@@ -124,8 +128,10 @@ implemented, and accepted.
   Issue. No readiness artifact is treated as current.
 - Readiness generation failure: use the deduplicated readiness-failure Issue
   and inspect the linked run. Do not infer readiness from partial output.
-- Late event or changed classifier digest: use the updated artifact and reopen
-  review from baseline freezing; do not silently reuse prior decisions.
+- Late event or changed classifier digest: regenerate unreviewed Pickup
+  candidates. Preserve reviewed stale candidates as evidence, block readiness
+  and publication, then use the updated artifact and reopen review from baseline
+  freezing; do not silently reuse prior decisions.
 - Missed nominal start time: wait for the bounded delayed run or manually
   dispatch the production workflow under separate production authorization.
   Codex scheduling is not a fallback.
