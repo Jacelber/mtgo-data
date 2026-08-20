@@ -24,10 +24,73 @@ from .week_lifecycle import is_sealed, provisional_through, seal_on
 
 SOURCE_ID = "mtgo"
 INITIAL_KNOWN_WEEKS = 12
+DEFAULT_POLICY_PATH = Path("configs/mtgo_pickup_policy.yaml")
 
 
 class MTGOPickupError(RuntimeError):
     """Raised when Pickup or publication metadata cannot be produced safely."""
+
+
+def load_pickup_policy(
+    repository_root: str | Path,
+    policy_file: str | Path | None = None,
+) -> dict[str, Any]:
+    """Load the maintained private candidate-screening policy."""
+
+    path = (
+        Path(policy_file)
+        if policy_file is not None
+        else Path(repository_root) / DEFAULT_POLICY_PATH
+    )
+    try:
+        document = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, yaml.YAMLError) as exc:
+        raise MTGOPickupError(f"{path}: Pickup policy could not be loaded") from exc
+    if not isinstance(document, dict) or document.get("schema_version") != "1.0":
+        raise MTGOPickupError(f"{path}: unsupported Pickup policy")
+
+    thresholds = document.get("thresholds")
+    required_thresholds = {
+        "share_increase_pp",
+        "return_share",
+        "build_shift",
+        "build_reference_minimum",
+        "new_card_review_weeks",
+    }
+    if not isinstance(thresholds, dict) or not required_thresholds <= thresholds.keys():
+        raise MTGOPickupError(f"{path}: incomplete Pickup thresholds")
+    if thresholds["share_increase_pp"] != 5:
+        raise MTGOPickupError(f"{path}: share increase must remain five points")
+    if thresholds["return_share"] != 0.03:
+        raise MTGOPickupError(f"{path}: return share must remain three percent")
+    if thresholds["build_shift"] != 20:
+        raise MTGOPickupError(f"{path}: build shift must remain twenty points")
+    if thresholds["build_reference_minimum"] != stats.MIN_SAMPLE:
+        raise MTGOPickupError(f"{path}: build reference minimum is incompatible")
+    if thresholds["new_card_review_weeks"] != 2:
+        raise MTGOPickupError(f"{path}: new-card review window must remain two weeks")
+
+    continuity = document.get("identity_continuity")
+    if not isinstance(continuity, dict):
+        raise MTGOPickupError(f"{path}: identity_continuity must be a mapping")
+    release_sets = document.get("release_sets")
+    if not isinstance(release_sets, list):
+        raise MTGOPickupError(f"{path}: release_sets must be a list")
+    for item in release_sets:
+        if not isinstance(item, dict):
+            raise MTGOPickupError(f"{path}: release set must be a mapping")
+        try:
+            date.fromisoformat(str(item["arena_release_date"]))
+        except (KeyError, TypeError, ValueError) as exc:
+            raise MTGOPickupError(f"{path}: invalid Arena release date") from exc
+        cards = item.get("cards")
+        if not isinstance(cards, list) or any(
+            not isinstance(card, str) or not card.strip() for card in cards
+        ):
+            raise MTGOPickupError(f"{path}: release card manifest must be strings")
+        if len(cards) != len(set(cards)):
+            raise MTGOPickupError(f"{path}: release card manifest contains duplicates")
+    return document
 
 
 def iso_week_label(monday: date) -> str:
@@ -35,7 +98,13 @@ def iso_week_label(monday: date) -> str:
     return f"{year}-W{week:02d}"
 
 
-def week_records(events, rules, end_monday: date) -> list[dict[str, Any]]:
+def week_records(
+    events,
+    rules,
+    end_monday: date,
+    *,
+    processed_events: Mapping[int, Mapping[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
     end_sunday = end_monday + timedelta(days=6)
     records: list[dict[str, Any]] = []
     for event_date, event in events:
@@ -43,9 +112,12 @@ def week_records(events, rules, end_monday: date) -> list[dict[str, Any]]:
             event_id = str(event.get("event_id", "")).strip()
             if not event_id.isdigit():
                 raise MTGOPickupError("Pickup source event has no numeric event_id")
-            for record_index, record in enumerate(
-                stats.process_event(event, rules)["records"]
-            ):
+            processed = (
+                processed_events[id(event)]
+                if processed_events is not None
+                else stats.process_event(event, rules)
+            )
+            for record_index, record in enumerate(processed["records"]):
                 records.append(
                     {
                         **record,
@@ -154,9 +226,131 @@ def _candidate_deck_id(
 
 
 def better_record(first, second):
-    first_key = (first["final_rank"], -first["player_count"], first["starttime"])
-    second_key = (second["final_rank"], -second["player_count"], second["starttime"])
-    return first if first_key <= second_key else second
+    first_rank = first["final_rank"] if first["final_rank"] != 9999 else 9999
+    second_rank = second["final_rank"] if second["final_rank"] != 9999 else 9999
+    if first_rank != second_rank:
+        return first if first_rank < second_rank else second
+    if first["player_count"] != second["player_count"]:
+        return first if first["player_count"] > second["player_count"] else second
+    return first if first["starttime"] >= second["starttime"] else second
+
+
+def _best_record(records: list[dict[str, Any]]) -> dict[str, Any]:
+    if not records:
+        raise MTGOPickupError("cannot select a representative from no records")
+    best = records[0]
+    for record in records[1:]:
+        best = better_record(best, record)
+    return best
+
+
+def _active_release_sets(
+    policy: Mapping[str, Any],
+    monday: date,
+) -> list[Mapping[str, Any]]:
+    review_weeks = int(policy["thresholds"]["new_card_review_weeks"])
+    active: list[Mapping[str, Any]] = []
+    for item in policy["release_sets"]:
+        release_date = date.fromisoformat(str(item["arena_release_date"]))
+        release_monday = release_date - timedelta(days=release_date.weekday())
+        if release_monday <= monday < release_monday + timedelta(weeks=review_weeks):
+            if item.get("manifest_status") != "frozen" or not item.get("cards"):
+                raise MTGOPickupError(
+                    f"{item.get('code', '?')}: active release has no frozen card manifest"
+                )
+            active.append(item)
+    return active
+
+
+def _continuity_aliases(
+    policy: Mapping[str, Any],
+    format_id: str,
+    archetype_id: str,
+) -> set[str]:
+    format_map = policy.get("identity_continuity", {}).get(format_id, {})
+    item = format_map.get(archetype_id, {}) if isinstance(format_map, dict) else {}
+    aliases = item.get("known_as", []) if isinstance(item, dict) else []
+    if not isinstance(aliases, list) or any(not isinstance(value, str) for value in aliases):
+        raise MTGOPickupError(
+            f"identity continuity for {format_id}/{archetype_id} is invalid"
+        )
+    return set(aliases)
+
+
+def _is_known_record(
+    record: Mapping[str, Any],
+    known: set[str],
+    policy: Mapping[str, Any],
+    format_id: str,
+) -> bool:
+    keys = {
+        str(record["archetype_id"]),
+        str(record["archetype"]),
+        *_continuity_aliases(policy, format_id, str(record["archetype_id"])),
+    }
+    return bool(keys & known)
+
+
+def _records_in_period(
+    events,
+    rules,
+    start: date,
+    end: date,
+    *,
+    processed_events: Mapping[int, Mapping[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+    for event_date, event in events:
+        if start <= event_date <= end:
+            processed = (
+                processed_events[id(event)]
+                if processed_events is not None
+                else stats.process_event(event, rules)
+            )
+            records.extend(processed["records"])
+    return records
+
+
+def _parent_high_score_counts(
+    records: list[dict[str, Any]],
+) -> tuple[dict[str, int], int]:
+    counts: dict[str, int] = {}
+    denominator = 0
+    for record in records:
+        if not record["is_high_score"]:
+            continue
+        denominator += 1
+        archetype_id = str(record["archetype_id"])
+        counts[archetype_id] = counts.get(archetype_id, 0) + 1
+    return counts, denominator
+
+
+def _manifest_card_names(item: Mapping[str, Any]) -> set[str]:
+    names: set[str] = set()
+    for value in item["cards"]:
+        name = stats.normalize_legacy_card_name(str(value))
+        names.add(name)
+        names.add(name.split(" // ", 1)[0])
+    return names
+
+
+def _new_card_evidence(
+    record: Mapping[str, Any],
+    release_set: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    manifest = _manifest_card_names(release_set)
+    quantities: dict[str, dict[str, int]] = {}
+    for zone, output_field in (("main_deck", "main_qty"), ("side_deck", "side_qty")):
+        for card in stats.merge_cards(record.get(zone, [])):
+            name = stats.normalize_legacy_card_name(card["name"])
+            if name not in manifest:
+                continue
+            item = quantities.setdefault(name, {"main_qty": 0, "side_qty": 0})
+            item[output_field] += int(card["qty"])
+    return [
+        {"name": name, **quantities[name]}
+        for name in sorted(quantities)
+    ]
 
 
 def _pickup_directories(
@@ -205,91 +399,359 @@ def _record_identity(record: Mapping[str, Any], rules) -> dict[str, Any]:
     }
 
 
+def _entry_for_record(
+    record: Mapping[str, Any],
+    rules,
+    *,
+    known: bool,
+    parent_base: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    cards = record_deck_cards(record)
+    return {
+        **_record_identity(record, rules),
+        "event_id": record["event_id"],
+        "deck_id": record["deck_id"],
+        "deck_fingerprint_sha256": _deck_fingerprint_sha256(record),
+        "archetype": record["archetype"],
+        "player": record["player"],
+        "final_rank": (
+            record["final_rank"] if record["final_rank"] != 9999 else None
+        ),
+        "swiss_score": record["swiss_score"],
+        "player_count": record["player_count"],
+        "starttime": record["starttime"],
+        "deviation": deck_deviation(record, parent_base),
+        "source": "existing" if known else "new",
+        "candidate_reasons": [],
+        "approved": False,
+        "comment_zh": "",
+        "comment_en": "",
+        "main_deck": cards["main_deck"],
+        "side_deck": cards["side_deck"],
+    }
+
+
+def _prefer_new_card_record(
+    first: tuple[dict[str, Any], list[dict[str, Any]]],
+    second: tuple[dict[str, Any], list[dict[str, Any]]],
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    first_record, _first_cards = first
+    second_record, _second_cards = second
+    result_fields = ("final_rank", "player_count", "starttime")
+    if all(first_record.get(field) == second_record.get(field) for field in result_fields):
+        return min(
+            (first, second),
+            key=lambda item: (
+                str(item[0].get("event_id", "")),
+                str(item[0].get("deck_id", "")),
+            ),
+        )
+    return first if better_record(first_record, second_record) is first_record else second
+
+
+def _prefer_build_shift_record(
+    first: tuple[dict[str, Any], dict[str, Any]],
+    second: tuple[dict[str, Any], dict[str, Any]],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    first_record, first_reason = first
+    second_record, second_reason = second
+    if first_reason["score"] != second_reason["score"]:
+        return first if first_reason["score"] > second_reason["score"] else second
+    return first if better_record(first_record, second_record) is first_record else second
+
+
 def _candidate_documents(
     events,
     rules,
     end_monday: date,
     known: set[str],
+    policy: Mapping[str, Any],
+    format_id: str,
     *,
     stable_ids: bool = False,
 ):
     week_label = iso_week_label(end_monday)
     end_sunday = end_monday + timedelta(days=6)
-    base_pack, d99 = stats.build_base_pack(events, rules, end_monday)
+    reference_monday = end_monday - timedelta(weeks=1)
+    reference_start = end_monday - timedelta(weeks=4)
+    reference_end = end_monday - timedelta(days=1)
+    processed_events = {
+        id(event): stats.process_event(event, rules)
+        for _event_date, event in events
+    }
+    current_records = week_records(
+        events,
+        rules,
+        end_monday,
+        processed_events=processed_events,
+    )
+    all_top8_records = [record for record in current_records if record["is_top8"]]
     top8_records = [
         record
-        for record in week_records(events, rules, end_monday)
-        if record["is_top8"]
+        for record in all_top8_records
+        if record["archetype"] != "Unknown"
     ]
+    reference_records = _records_in_period(
+        events,
+        rules,
+        reference_start,
+        reference_end,
+        processed_events=processed_events,
+    )
+    historical_records = _records_in_period(
+        events,
+        rules,
+        date.min,
+        reference_start - timedelta(days=1),
+        processed_events=processed_events,
+    )
+    parent_bases, d99 = stats.build_base_pack(
+        events,
+        rules,
+        reference_monday,
+        processed_events=processed_events,
+    )
+    subtype_bases, _subtype_d99 = stats.build_subtype_base_pack(
+        events,
+        rules,
+        reference_monday,
+        processed_events=processed_events,
+    )
+    thresholds = policy["thresholds"]
+    active_sets = _active_release_sets(policy, end_monday)
+    parent_definitions = {item.id: item for item in rules.archetypes}
 
-    deduplicated: dict[tuple[str, object], dict[str, Any]] = {}
+    by_parent: dict[str, list[dict[str, Any]]] = {}
     for record in top8_records:
-        if record["archetype"] == "Unknown":
+        by_parent.setdefault(str(record["archetype_id"]), []).append(record)
+
+    selections: list[tuple[dict[str, Any], dict[str, Any]]] = []
+
+    current_counts, current_denominator = _parent_high_score_counts(current_records)
+    reference_counts, reference_denominator = _parent_high_score_counts(reference_records)
+    historical_parent_ids = {
+        str(record["archetype_id"])
+        for record in historical_records
+        if record["archetype"] != "Unknown"
+    }
+    for parent_id, records in by_parent.items():
+        representative = _best_record(records)
+        if not _is_known_record(representative, known, policy, format_id):
             continue
-        key = (record["archetype_id"], deck_fingerprint(record))
-        if key not in deduplicated:
-            deduplicated[key] = record
-        else:
-            deduplicated[key] = better_record(deduplicated[key], record)
+        current_count = current_counts.get(parent_id, 0)
+        reference_count = reference_counts.get(parent_id, 0)
+        current_share = (
+            current_count / current_denominator if current_denominator else 0.0
+        )
+        reference_share = (
+            reference_count / reference_denominator if reference_denominator else 0.0
+        )
+        delta_pp = (current_share - reference_share) * 100
+        if reference_count > 0 and delta_pp >= thresholds["share_increase_pp"]:
+            selections.append(
+                (
+                    representative,
+                    {
+                        "type": "share_increase",
+                        "current_high_score_count": current_count,
+                        "current_high_score_denominator": current_denominator,
+                        "current_share": round(current_share, 4),
+                        "reference_high_score_count": reference_count,
+                        "reference_high_score_denominator": reference_denominator,
+                        "reference_share": round(reference_share, 4),
+                        "delta_pp": round(delta_pp, 2),
+                    },
+                )
+            )
+        elif (
+            reference_count == 0
+            and parent_id in historical_parent_ids
+            and current_share >= thresholds["return_share"]
+        ):
+            selections.append(
+                (
+                    representative,
+                    {
+                        "type": "return",
+                        "current_high_score_count": current_count,
+                        "current_high_score_denominator": current_denominator,
+                        "current_share": round(current_share, 4),
+                        "reference_high_score_count": 0,
+                        "reference_high_score_denominator": reference_denominator,
+                        "reference_share": 0.0,
+                    },
+                )
+            )
 
-    existing_picks: list[dict[str, Any]] = []
-    new_picks: list[dict[str, Any]] = []
-    for record in deduplicated.values():
-        archetype = record["archetype"]
-        identity_key = record["archetype_id"] if stable_ids else archetype
-        cards = record_deck_cards(record)
-        entry = {
-            **_record_identity(record, rules),
-            "event_id": record["event_id"],
-            "deck_id": record["deck_id"],
-            "deck_fingerprint_sha256": _deck_fingerprint_sha256(record),
-            "archetype": archetype,
-            "player": record["player"],
-            "final_rank": record["final_rank"]
-            if record["final_rank"] != 9999
-            else None,
-            "swiss_score": record["swiss_score"],
-            "player_count": record["player_count"],
-            "starttime": record["starttime"],
-            "deviation": deck_deviation(
+    new_card_groups: dict[
+        tuple[str, str, tuple[str, ...]],
+        tuple[dict[str, Any], list[dict[str, Any]]],
+    ] = {}
+    for record in top8_records:
+        for release_set in active_sets:
+            evidence = _new_card_evidence(record, release_set)
+            if not evidence:
+                continue
+            key = (
+                str(record["archetype_id"]),
+                str(release_set["code"]),
+                tuple(item["name"] for item in evidence),
+            )
+            candidate = (record, evidence)
+            if key in new_card_groups:
+                candidate = _prefer_new_card_record(new_card_groups[key], candidate)
+            new_card_groups[key] = candidate
+    release_by_code = {str(item["code"]): item for item in active_sets}
+    for (_parent_id, set_code, _package), (record, evidence) in new_card_groups.items():
+        release_set = release_by_code[set_code]
+        selections.append(
+            (
                 record,
-                base_pack.get(record["archetype_id"]),
-                d99,
-            ),
-            "source": "new" if identity_key not in known else "existing",
-            "approved": False,
-            "comment_zh": "",
-            "comment_en": "",
-            "main_deck": cards["main_deck"],
-            "side_deck": cards["side_deck"],
-        }
-        (new_picks if identity_key not in known else existing_picks).append(entry)
+                {
+                    "type": "new_card",
+                    "set_code": set_code,
+                    "arena_release_date": str(release_set["arena_release_date"]),
+                    "release_source_url": release_set["release_source_url"],
+                    "distinct_card_count": len(evidence),
+                    "main_card_count": sum(item["main_qty"] for item in evidence),
+                    "side_card_count": sum(item["side_qty"] for item in evidence),
+                    "cards": evidence,
+                },
+            )
+        )
 
-    existing_picks.sort(
-        key=lambda entry: (entry["deviation"] is None, -(entry["deviation"] or 0))
+    for parent_id, records in by_parent.items():
+        representative = _best_record(records)
+        if _is_known_record(representative, known, policy, format_id):
+            continue
+        prior_record_count = sum(
+            1
+            for record in reference_records + historical_records
+            if str(record["archetype_id"]) == parent_id
+        )
+        selections.append(
+            (
+                representative,
+                {
+                    "type": "new_archetype",
+                    "known_state_match": False,
+                    "continuity_alias_match": False,
+                    "prior_record_count_under_current_classifier": prior_record_count,
+                },
+            )
+        )
+
+    build_groups: dict[
+        str,
+        tuple[dict[str, Any], dict[str, Any]],
+    ] = {}
+    for record in top8_records:
+        if not _is_known_record(record, known, policy, format_id):
+            continue
+        parent_id = str(record["archetype_id"])
+        parent = parent_definitions[parent_id]
+        subtype_id = record.get("subtype_id")
+        if subtype_id is not None:
+            identity_level = "subtype"
+            identity_id = f"{parent_id}/{subtype_id}"
+            base = subtype_bases.get((parent_id, subtype_id))
+        elif not parent.subtypes:
+            identity_level = "parent"
+            identity_id = parent_id
+            base = parent_bases.get(parent_id)
+        else:
+            continue
+        if not base or base["sample_size"] < thresholds["build_reference_minimum"]:
+            continue
+        score = deck_deviation(record, base)
+        if score is None or score < thresholds["build_shift"]:
+            continue
+        reason = {
+            "type": "build_shift",
+            "identity_level": identity_level,
+            "identity_id": identity_id,
+            "reference_sample_size": base["sample_size"],
+            "score": score,
+            "difference": stats.deck_diff(stats.deck_vector(record), base["mean"]),
+        }
+        build_candidate = (record, reason)
+        if identity_id in build_groups:
+            build_candidate = _prefer_build_shift_record(
+                build_groups[identity_id], build_candidate
+            )
+        build_groups[identity_id] = build_candidate
+    selections.extend(build_groups.values())
+
+    entries: dict[tuple[str, str], dict[str, Any]] = {}
+    for record, reason in selections:
+        entry_key = (str(record["event_id"]), str(record["deck_id"]))
+        known_record = _is_known_record(record, known, policy, format_id)
+        entry = entries.setdefault(
+            entry_key,
+            _entry_for_record(
+                record,
+                rules,
+                known=known_record,
+                parent_base=parent_bases.get(str(record["archetype_id"])),
+            ),
+        )
+        reason_key = json.dumps(reason, ensure_ascii=False, sort_keys=True)
+        existing_reason_keys = {
+            json.dumps(item, ensure_ascii=False, sort_keys=True)
+            for item in entry["candidate_reasons"]
+        }
+        if reason_key not in existing_reason_keys:
+            entry["candidate_reasons"].append(reason)
+
+    reason_order = {
+        "share_increase": 2,
+        "return": 2,
+        "new_card": 3,
+        "new_archetype": 4,
+        "build_shift": 5,
+    }
+    for entry in entries.values():
+        entry["candidate_reasons"].sort(
+            key=lambda reason: (reason_order[reason["type"]], reason["type"])
+        )
+    existing_picks = [entry for entry in entries.values() if entry["source"] == "existing"]
+    new_picks = [entry for entry in entries.values() if entry["source"] == "new"]
+    sort_key = lambda entry: (
+        min(reason_order[item["type"]] for item in entry["candidate_reasons"]),
+        entry["final_rank"] is None,
+        entry["final_rank"] or 9999,
+        -entry["player_count"],
+        entry["archetype"],
     )
-    new_picks.sort(
-        key=lambda entry: (entry["final_rank"] is None, entry["final_rank"] or 9999)
-    )
+    existing_picks.sort(key=sort_key)
+    new_picks.sort(key=sort_key)
     candidates = {
         "week": week_label,
         "start": end_monday.isoformat(),
         "end": end_sunday.isoformat(),
-        "note": "编辑说明：删掉不想 pickup 的条目；保留的把 approved 改为 true 并填 comment_zh；"
-        "existing 类已按偏离度从高到低排列，从上往下筛即可。"
-        "偏离度可疑时对照同目录 base_reference_*.yaml 逐卡核对。",
+        "selection_policy": {
+            "schema_version": policy["schema_version"],
+            "share_increase_pp": thresholds["share_increase_pp"],
+            "return_share": thresholds["return_share"],
+            "build_shift": thresholds["build_shift"],
+            "build_reference_minimum": thresholds["build_reference_minimum"],
+            "active_release_sets": [item["code"] for item in active_sets],
+        },
+        "note": "Machine candidates are evidence aids. The reviewer may select none, replace a candidate, and freely rewrite or remove all editorial copy.",
         "existing_changes": existing_picks,
         "new_archetypes": new_picks,
     }
     base_reference = {
         "week": week_label,
         "base_weeks": 4,
+        "base_start": reference_start.isoformat(),
+        "base_end": reference_end.isoformat(),
         "global_d99": round(d99, 4),
-        "note": "每套牌最近 4 周架空平均构筑（Core=常备/Flex=自选），"
-        "mean_qty 为均值张数，rate 为出现率（权重）。用于人工核对某副牌偏离度是否合理。",
+        "note": "The comparison base uses the four complete weeks before the review week. Parent identities without maintained subtypes use a parent base; maintained subtypes use their own base.",
         "archetypes": {},
+        "subtypes": {},
     }
-    for base in sorted(base_pack.values(), key=lambda item: item["name"]):
+    for base in sorted(parent_bases.values(), key=lambda item: item["name"]):
         archetype = base["name"]
         base_reference["archetypes"][archetype] = {
             "sample_size": base["sample_size"],
@@ -299,7 +761,16 @@ def _candidate_documents(
             if base["medoid_display"]
             else None,
         }
-    return candidates, base_reference, len(top8_records), len(deduplicated)
+    for (parent_id, subtype_id), base in sorted(subtype_bases.items()):
+        base_reference["subtypes"][f"{parent_id}/{subtype_id}"] = {
+            "sample_size": base["sample_size"],
+            "core": base["core"],
+            "flex": base["flex"],
+            "medoid": (base["medoid_display"] or {}).get("player")
+            if base["medoid_display"]
+            else None,
+        }
+    return candidates, base_reference, len(all_top8_records), len(entries)
 
 
 def generate_candidates(
@@ -310,6 +781,7 @@ def generate_candidates(
     registry_path: str | Path | None = None,
     output_directory: str | Path | None = None,
     known_file: str | Path | None = None,
+    policy_file: str | Path | None = None,
     preserve_existing: bool = False,
 ) -> dict[str, Any] | None:
     """Generate human-reviewed Pickup candidates for one explicit MTGO format."""
@@ -324,6 +796,7 @@ def generate_candidates(
     rules = load_rules_for_format(
         repository_root, format_id, registry_path=registry_path
     )
+    policy = load_pickup_policy(repository_root, policy_file)
     events = stats.load_all_events(
         repository_root, format_id, registry_path=registry_path
     )
@@ -353,6 +826,8 @@ def generate_candidates(
         rules,
         end_monday,
         known,
+        policy,
+        format_id,
         stable_ids=stable_ids,
     )
     source_event_ids = _source_event_ids(events, end_monday)
@@ -921,6 +1396,7 @@ __all__ = [
     "initialize_known_state",
     "iso_week_label",
     "load_known",
+    "load_pickup_policy",
     "publish",
     "record_deck_cards",
     "rules_last_commit_iso",

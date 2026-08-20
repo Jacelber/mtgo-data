@@ -32,11 +32,11 @@ noise. A changed weekly baseline updates and reopens the same Issue.
 | 1. Collect and publish production data | Automatic GitHub workflow | Fetch the allowlisted MTGO inputs, validate one candidate, publish the verified generated data when changed, and keep production failures fail-closed. | Exact publication SHA, run evidence, current Standard and Modern outputs. |
 | 2. Build weekly readiness | Automatic GitHub workflow | Bind the current review week to Top 8 event IDs and classifier digests, and require each Pickup candidate file to carry the same classifier digest. Include every unresolved Unknown from the complete retained diagnostic corpus plus complete main decks and sideboards. Separately list Owner-accepted intentional Unknown records, classification blockers, Pickup candidate counts, stale candidates, and unavailable review inputs. | Private Schema-valid readiness JSON plus one deduplicated weekly Issue. |
 | 3. Start the review | Owner | Read the Issue and explicitly ask Codex to begin with the named week and readiness artifact. Closing or ignoring the Issue means no review starts. | Authorization for one exact weekly review baseline. |
-| 4. Freeze and verify the baseline | Codex | Confirm the cloud workflow run, publication SHA, week lifecycle, event IDs, classifier digests, and readiness digest. Create the six-sheet XLSX review carrier defined below from that exact baseline. Stop on drift or missing evidence. | Frozen review manifest, plain-language scope summary, and editable XLSX. |
+| 4. Freeze and verify the baseline | Codex | Confirm the cloud workflow run, publication SHA, week lifecycle, event IDs, classifier digests, and readiness digest. Create the seven-sheet XLSX review carrier defined below from that exact baseline. Stop on drift or missing evidence. | Frozen review manifest, plain-language scope summary, and editable XLSX. |
 | 5. Review Unknown decks | Codex and Owner alternate; Owner confirms | Put every unresolved historical and current Unknown in `Unknown Review`, one row per deck, with its complete main deck and sideboard. Codex supplies a preliminary technical proposal. The Owner writes only free-text classification understanding, naming preference, or questions; no action code, parent ID, parent name, or subtype is required. Codex then supplies an exact revised proposal, and the Owner finally confirms, requests another revision, or defers it. | One final Owner confirmation per unresolved deck or group. Only an incoherent random card pile may be explicitly accepted as intentional Unknown. |
 | 6. Repair and reproduce classification when needed | Codex implements after separate authorization; Owner accepts | Make only accepted classifier changes, rerun the affected classification and derived weekly outputs, and re-freeze the changed baseline. Skip this step when no rule change is accepted. | Accepted classifier subject and refreshed weekly evidence, or an explicit no-change record. |
 | 7. Review visual metadata | Codex proposes; Owner decides | Review representative-card choices and deck-color identities against the accepted deck identities. Missing deterministic diagnostics are reported as unavailable, never guessed. | Owner-approved metadata changes or an explicit no-change/defer record. |
-| 8. Review Weekly Pickup | Codex prepares; Owner selects and writes | Present the generated candidates and exact deck evidence. Each candidate file carries its classifier digest; every row carries its source event ID, pseudonymous deck ID, deck fingerprint, and stable classifier identity IDs. The Owner may select any number, change category/order/cards/copy, add a different item, or select none. | Human-approved Pickup selection and editorial inputs bound to the reviewed week and classifier subject. |
+| 8. Review Weekly Pickup | Codex prepares; Owner selects and writes | Export the filtered candidates and complete ordered Top 8 pool to XLSX. Each candidate carries structured reasons plus exact event, rank, deck and classifier provenance. There is no machine primary pick. The Owner may select any number, replace a representative, add any other exact Top 8 deck, change category/order/cards/copy, or select none. | Human-approved Pickup selection and unrestricted editorial inputs bound to the reviewed week and classifier subject. |
 | 9. Prepare optional Landing draft | Automatic producer or Codex, only after P12-10 is separately authorized | Generate structured facts and, if requested, an optional editorial draft from the accepted weekly inputs. The absence of a machine draft is valid. | Optional machine facts/draft presented as suggestions, never editorial authority. |
 | 10. Create the human final Landing content | Owner, with optional Codex assistance | Accept, edit, delete, replace, or ignore any machine output. The Owner may write unrelated content or publish no editorial copy. | Human-final content and explicit approval state. |
 | 11. Preview, accept, and publish | Codex implements and validates; Owner separately authorizes each gate | Render the exact final subject, perform proportionate checks, obtain Owner acceptance, then separately commit, open a Ready PR, merge, and deploy only when each gate is authorized. | Accepted public Landing and publication evidence, or a stopped unpublished review. |
@@ -51,6 +51,50 @@ four only when the lower value causes a demonstrated identity migration,
 conflict, or identity loss, and the workbook records that evidence. If final
 implementation exposes an impact not disclosed in the reviewed workbook, the
 changed subject returns to Owner confirmation before commit or publication.
+
+### Weekly Pickup screening
+
+The machine candidate list starts from exact ranks 1 through 8 in every admitted
+event. It does not use a rank-beyond-8 fallback and does not deduplicate the
+complete review pool. `Unknown` records remain visible in the complete Top 8
+evidence but cannot become automatic Pickup candidates until classification is
+resolved.
+
+Candidate generation applies these five reviewed routes:
+
+1. Ban-aftermath continuation is Owner-only. The machine makes no ban-policy
+   inference. The Owner may select any exact Top 8 row from `All Top 8`, including
+   multiple decks from one archetype or date.
+2. A known parent is eligible for share increase when current-week high-score
+   share exceeds the aggregated raw-count share from the four preceding complete
+   weeks by at least five percentage points. A return requires no high-score
+   record in that reference, prior historical presence, at least 3% current
+   share, and one current Top 8. One representative is chosen by better rank,
+   larger event, then later result date and time.
+3. A release-set card is eligible only in the release week containing the
+   official `MTG Arena Release Date` and the immediately following week. The
+   maintained manifest contains new-to-Magic names only, excluding reprints,
+   basic lands and alternate treatments. One main- or sideboard copy is enough.
+   Candidates group by parent and exact new-card package. Within one package,
+   representative order is rank, event size and later result; new-card counts
+   and copy quantities remain evidence only and never outrank tournament result.
+4. A new archetype is a new strategic parent identity, not merely a new display
+   name, stable ID, color correction or classifier migration. Explicit identity
+   continuity prevents old strategies from reappearing as new. One current Top
+   8 is sufficient; representative order is rank, event size and later result.
+5. A construction shift compares the exact current Top 8 main deck with the
+   preceding four-week mean for its maintained subtype, or with its parent when
+   that parent defines no subtypes. The reference requires eight decks and the
+   existing weighted-L1 score must be at least 20. The highest score represents
+   one identity; rank, event size and later result break ties. Sideboards remain
+   editorial evidence and do not trigger the route.
+
+If one exact event deck satisfies multiple routes, its reasons merge into one
+row. Different event decks selected for different routes remain separate even
+when they share one parent, except that the new-card route first reduces one
+parent and exact new-card package to its tournament-result representative.
+Machine fields are evidence, not editorial limits:
+the Owner may delete, rewrite or replace every conclusion and every copy field.
 
 ## Authority boundaries
 
@@ -76,17 +120,22 @@ changed subject returns to Owner confirmation before commit or publication.
 ## XLSX review carrier
 
 Codex must supply the workbook before requesting any weekly classification,
-visual-metadata, Pickup, or Landing decision. It contains the R1 six-sheet
-layout:
+visual-metadata, Pickup, or Landing decision. Pickup screening extends the R1
+carrier to this seven-sheet layout:
 
 1. `Run Control` - frozen cloud bindings, counts, stage state, and stop reason;
 2. `Unknown Review` - one row per unresolved deck, complete main deck and
    sideboard, Codex preliminary proposal, free-text Owner opinion, Codex revised
    exact proposal, and a simple Owner final-confirmation field;
 3. `Visual Metadata` - changed or missing representative-card and color items;
-4. `Pickup Review` - generated candidates and editable Owner selection fields;
-5. `Landing Copy` - optional machine draft plus unrestricted human-final fields;
-6. `Field Guide` - field ownership, purpose, allowed values, and write target.
+4. `Pickup Review` - filtered candidates, complete decklists, structured machine
+   reasons, a simple `select` or `skip` review result, and unrestricted Owner
+   content fields;
+5. `All Top 8` - every event rank 1 through 8 in event-date and rank order, with
+   exact deck and classification evidence; this is not an automatic candidate
+   list and exists for Owner-only additions such as ban aftermath;
+6. `Landing Copy` - optional machine draft plus unrestricted human-final fields;
+7. `Field Guide` - field ownership, purpose, allowed values, and write target.
 
 Machine-bound cells are blue, Codex recommendations are green, and Owner input
 cells are yellow with validation lists where categorical. Machine-bound fields

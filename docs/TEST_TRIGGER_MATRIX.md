@@ -17,14 +17,15 @@ an unbounded suite.
 | `tests/test_melee_privacy_validation.py` | Melee production before live collection, or a privacy boundary change | Prove the smallest minimized resource is accepted and a prohibited persisted key is rejected independently of Schema permissiveness | One valid tournament document and one invalid key |
 | `tests/test_generated_consumer_contracts.py` | MTGO candidate generated, before packaging | Prove the newly generated candidate remains internally consumable | Current candidate documents only |
 | `tests/test_mtgo_top8_restatement.py` | Top 8 generator, classifier digest, lifecycle contract, or Top 8 Schema changes | Prove retained source facts stay fixed while current-classifier identities restate deterministically, including explicit Unknown | Three synthetic source/classifier cases |
+| `tests/test_mtgo_pickup_selection.py` and `tests/test_mtgo_pickup_provenance.py` | Weekly Pickup screening policy, representative selection, or candidate provenance changes | Prove exact Top 8 gating, route thresholds, continuity, reason merging, subtype-or-parent build comparison, later-date ties, and fail-closed provenance | Synthetic selection and provenance subjects only |
 | `tests/test_documentation_history.py` | A live governance document changes | Enforce only the bounded live-status structure and history pointer | `docs/STATUS.yaml` only |
 | `tests/test_ci_master_admission.py` and `tests/test_ci_workflow.py` | CI admission or workflow control changes | Prove known paths route minimally, unknown evidence stops, and PR CI contains no heavy fallback | Admission logic and workflow text only |
 | `tests/test_weekly_maintenance_readiness.py` | Weekly readiness generator or private readiness Schema changes | Prove exact-week binding, complete unresolved-Unknown retention and decklists, strict intentional-random separation, Pickup availability, deterministic digesting, and fail-closed cross-format lifecycle | Synthetic Standard and Modern handoff only |
 
-The first six rows are the retained public data/output test set. The
-documentation and CI rows are control-plane checks. The weekly-readiness row is
-a private handoff contract. None of the final three rows runs in a production
-baseline.
+The public data/output rows remain bounded to their named subjects. The
+documentation and CI rows are control-plane checks. The Pickup and weekly-
+readiness rows are private review and handoff contracts; neither runs in a
+production baseline.
 
 ## Non-pytest validators and UI checks
 
