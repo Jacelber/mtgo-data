@@ -11,7 +11,7 @@
   "total_decks": 416,
   "total_high_score": 364,
   "total_top8": 104,
-  "unknown_count": 6,
+  "unknown_count": 0,
   "archetypes": [
     {
       "id": "esper-goryos",
@@ -243,6 +243,65 @@
       "avg_deviation": 16
     },
     {
+      "id": "dimir-tempo",
+      "name": "Dimir Tempo",
+      "count": 24,
+      "high_score_count": 21,
+      "high_score_share": 0.0577,
+      "top8_count": 5,
+      "top8_share": 0.0481,
+      "conversion": 0.2381,
+      "avg_points_per_round": 2.02,
+      "subtypes": [
+        {
+          "id": "dimir",
+          "name": "Dimir",
+          "parent_id": "dimir-tempo",
+          "display_name": "Dimir Tempo",
+          "count": 19,
+          "high_score_count": 16,
+          "high_score_share": 0.044,
+          "top8_count": 4,
+          "top8_share": 0.0385,
+          "conversion": 0.25,
+          "avg_points_per_round": 2.01,
+          "parent_share": 0.7917,
+          "avg_deviation": 24
+        },
+        {
+          "id": "grixis",
+          "name": "Dimir Red Splash",
+          "parent_id": "dimir-tempo",
+          "display_name": "Dimir Red Splash Tempo",
+          "count": 4,
+          "high_score_count": 4,
+          "high_score_share": 0.011,
+          "top8_count": 1,
+          "top8_share": 0.0096,
+          "conversion": 0.25,
+          "avg_points_per_round": 2.07,
+          "parent_share": 0.1667,
+          "avg_deviation": null
+        },
+        {
+          "id": "esper",
+          "name": "Dimir White Splash",
+          "parent_id": "dimir-tempo",
+          "display_name": "Dimir White Splash Tempo",
+          "count": 1,
+          "high_score_count": 1,
+          "high_score_share": 0.0027,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": 0.0,
+          "avg_points_per_round": 1.88,
+          "parent_share": 0.0417,
+          "avg_deviation": null
+        }
+      ],
+      "avg_deviation": 30
+    },
+    {
       "id": "broodscale-combo",
       "name": "Broodscale Combo",
       "count": 23,
@@ -315,65 +374,6 @@
         }
       ],
       "avg_deviation": 20
-    },
-    {
-      "id": "dimir-tempo",
-      "name": "Dimir Tempo",
-      "count": 23,
-      "high_score_count": 20,
-      "high_score_share": 0.0549,
-      "top8_count": 4,
-      "top8_share": 0.0385,
-      "conversion": 0.2,
-      "avg_points_per_round": 1.99,
-      "subtypes": [
-        {
-          "id": "dimir",
-          "name": "Dimir",
-          "parent_id": "dimir-tempo",
-          "display_name": "Dimir Tempo",
-          "count": 19,
-          "high_score_count": 16,
-          "high_score_share": 0.044,
-          "top8_count": 4,
-          "top8_share": 0.0385,
-          "conversion": 0.25,
-          "avg_points_per_round": 2.01,
-          "parent_share": 0.8261,
-          "avg_deviation": 24
-        },
-        {
-          "id": "grixis",
-          "name": "Dimir Red Splash",
-          "parent_id": "dimir-tempo",
-          "display_name": "Dimir Red Splash Tempo",
-          "count": 3,
-          "high_score_count": 3,
-          "high_score_share": 0.0082,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": 0.0,
-          "avg_points_per_round": 1.91,
-          "parent_share": 0.1304,
-          "avg_deviation": null
-        },
-        {
-          "id": "esper",
-          "name": "Dimir White Splash",
-          "parent_id": "dimir-tempo",
-          "display_name": "Dimir White Splash Tempo",
-          "count": 1,
-          "high_score_count": 1,
-          "high_score_share": 0.0027,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": 0.0,
-          "avg_points_per_round": 1.88,
-          "parent_share": 0.0435,
-          "avg_deviation": null
-        }
-      ],
-      "avg_deviation": 30
     },
     {
       "id": "affinity",
@@ -693,18 +693,6 @@
       "avg_deviation": 3
     },
     {
-      "id": "unknown",
-      "name": "Unknown",
-      "count": 6,
-      "high_score_count": 5,
-      "high_score_share": 0.0137,
-      "top8_count": 1,
-      "top8_share": 0.0096,
-      "conversion": 0.2,
-      "avg_points_per_round": 1.83,
-      "avg_deviation": null
-    },
-    {
       "id": "necrodominance",
       "name": "Necrodominance",
       "count": 6,
@@ -1011,6 +999,18 @@
       "avg_deviation": null
     },
     {
+      "id": "five-color-elementals",
+      "name": "Five-Color Elementals",
+      "count": 3,
+      "high_score_count": 3,
+      "high_score_share": 0.0082,
+      "top8_count": 1,
+      "top8_share": 0.0096,
+      "conversion": 0.3333,
+      "avg_points_per_round": 1.86,
+      "avg_deviation": null
+    },
+    {
       "id": "esper-persist",
       "name": "Esper Persist",
       "count": 3,
@@ -1035,14 +1035,14 @@
       "avg_deviation": 27
     },
     {
-      "id": "five-color-elementals",
-      "name": "Five-Color Elementals",
+      "id": "mono-blue-selective-memory",
+      "name": "Mono-Blue Selective Memory",
       "count": 2,
       "high_score_count": 2,
       "high_score_share": 0.0055,
-      "top8_count": 1,
-      "top8_share": 0.0096,
-      "conversion": 0.5,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
       "avg_points_per_round": 1.93,
       "avg_deviation": null
     },
@@ -1201,6 +1201,18 @@
       "avg_deviation": 27
     },
     {
+      "id": "bant-company",
+      "name": "Bant Company",
+      "count": 1,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 0.5,
+      "avg_deviation": null
+    },
+    {
       "id": "lantern-control",
       "name": "Lantern Control",
       "count": 1,
@@ -1308,6 +1320,18 @@
           "avg_deviation": null
         }
       ],
+      "avg_deviation": null
+    },
+    {
+      "id": "five-color-ritual",
+      "name": "Five-Color Ritual",
+      "count": 1,
+      "high_score_count": 1,
+      "high_score_share": 0.0027,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 2.14,
       "avg_deviation": null
     },
     {
