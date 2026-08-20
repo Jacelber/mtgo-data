@@ -534,6 +534,24 @@ archetypes:
         min_count: 3
       - card: Momo, Friendly Flier
         min_count: 3
+- id: mono-red-dragons
+  name: Mono-Red Dragons
+  priority: 54990
+  rules:
+  - id: mono-red-dragons-primary
+    priority: 54990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Sarkhan, Dragon Ascendant
+        zone: main
+        min_count: 2
+      - card: Nova Hellkite
+        zone: main
+        min_count: 2
+      - card: Mountain
+        zone: main
+        min_count: 12
 - id: boros-token
   name: Boros Token
   priority: 54000
@@ -834,6 +852,27 @@ archetypes:
         min_count: 3
       - card: Hallowed Fountain
         exact_count: 0
+- id: jeskai-momo
+  name: Jeskai Momo
+  priority: 38005
+  rules:
+  - id: jeskai-momo-primary
+    priority: 38005
+    subtype_id: null
+    conditions:
+      all:
+      - card: Momo, Friendly Flier
+        zone: main
+        min_count: 3
+      - card: Sage of the Skies
+        zone: main
+        min_count: 2
+      - card: Springleaf Drum
+        zone: main
+        min_count: 2
+      - card: Frostcliff Siege
+        zone: main
+        min_count: 1
 - id: azorius-momo
   name: Azorius Momo
   priority: 37000
