@@ -206,6 +206,34 @@ def test_production_candidate_is_built_once_and_published_with_immutable_evidenc
         assert required in script
 
 
+def test_mtgo_fetch_retries_only_explicit_transient_source_failures():
+    workflow = yaml.load(
+        UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
+    )
+    fetch = workflow["jobs"]["fetch"]
+    assert fetch["timeout-minutes"] == "45"
+    assert fetch["permissions"] == {"actions": "read", "contents": "read"}
+    assert fetch["env"]["MTGO_TRANSIENT_EXIT_CODE"] == "75"
+
+    step = next(
+        step
+        for step in fetch["steps"]
+        if step["name"] == "Fetch every pending MTGO input operation"
+    )
+    command = step["run"]
+    for required in (
+        "RECOVERY_DELAYS=(120 300)",
+        "fetch_events_with_recovery",
+        "for attempt in 1 2 3",
+        'if [ "$attempt" -eq 3 ]',
+        '"$MTGO_TRANSIENT_EXIT_CODE"',
+        'return "$status"',
+        'sleep "$delay"',
+        "mtgo_fetch_checkpoint.py complete",
+    ):
+        assert required in command
+
+
 def test_weekly_readiness_uses_the_verified_publication_and_private_handoff():
     workflow = yaml.load(
         UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader

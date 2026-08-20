@@ -39,6 +39,10 @@ class MTGOParseError(RuntimeError):
     """Raised when an MTGO page does not contain one complete event payload."""
 
 
+class MTGOPageUnavailableError(MTGOParseError):
+    """Raised when an event page lacks the expected embedded payload."""
+
+
 class MTGOIncompleteEventError(MTGOParseError):
     """Raised when MTGO lists an event before publishing all required records."""
 
@@ -86,10 +90,10 @@ def download_page(
 def extract_event_data(html: str) -> dict[str, Any]:
     start = html.find(DECKLIST_MARKER)
     if start == -1:
-        raise MTGOParseError("MTGO decklist marker was not found")
+        raise MTGOPageUnavailableError("MTGO decklist marker was not found")
     brace_start = html.find("{", start + len(DECKLIST_MARKER))
     if brace_start == -1:
-        raise MTGOParseError("MTGO event JSON did not start")
+        raise MTGOPageUnavailableError("MTGO event JSON did not start")
     depth = 0
     in_string = False
     escaped = False
@@ -113,13 +117,13 @@ def extract_event_data(html: str) -> dict[str, Any]:
                     try:
                         value = json.loads(html[brace_start : index + 1])
                     except json.JSONDecodeError as exc:
-                        raise MTGOParseError(
+                        raise MTGOPageUnavailableError(
                             f"MTGO event JSON is invalid: {exc.msg}"
                         ) from exc
                     if not isinstance(value, dict):
                         raise MTGOParseError("MTGO event JSON must be an object")
                     return value
-    raise MTGOParseError("MTGO event JSON did not end")
+    raise MTGOPageUnavailableError("MTGO event JSON did not end")
 
 
 def _is_int_at_least(value: Any, minimum: int) -> bool:
@@ -454,13 +458,22 @@ def _observe_listing(
     format_id: str,
     expected_links: set[str],
     *,
+    year: int,
+    month: int,
     request_get: Callable[..., Any] | None,
     wait: Callable[[float], None],
 ) -> list[str]:
     observed: set[str] = set()
     for attempt in range(1, LISTING_OBSERVATION_ATTEMPTS + 1):
         listing = download_page(url, request_get=request_get, sleep=wait)
-        observed.update(discover_event_links(listing, (format_id,)))
+        observed.update(
+            _links_for_month(
+                discover_event_links(listing, (format_id,)),
+                format_id,
+                year,
+                month,
+            )
+        )
         if attempt < LISTING_OBSERVATION_ATTEMPTS:
             wait(2)
     return sorted(observed | expected_links)
@@ -528,6 +541,7 @@ def fetch_event_months(
         "excluded_no_playoff": 0,
         "deferred_incomplete": 0,
         "failed": 0,
+        "transient_failed": 0,
         "written": [],
         "warnings": [],
         "errors": [],
@@ -542,13 +556,16 @@ def fetch_event_months(
                 list_url,
                 format_id,
                 expected,
+                year=year,
+                month=month,
                 request_get=request_get,
                 wait=wait,
             )
         except MTGOFetchError as exc:
             summary["failed"] += 1
+            summary["transient_failed"] += 1
             summary["errors"].append((list_url, str(exc)))
-            continue
+            break
         summary["candidates"] += len(candidates)
         for link in candidates:
             _format, event_date_value = parse_event_link(link, (format_id,))
@@ -600,7 +617,11 @@ def fetch_event_months(
                             f"{INCOMPLETE_EVENT_GRACE_DAYS}-day publication grace period",
                         )
                     )
-            except (MTGOFetchError, MTGOParseError, MTGOStorageError, OSError) as exc:
+            except (MTGOFetchError, MTGOPageUnavailableError) as exc:
+                summary["failed"] += 1
+                summary["transient_failed"] += 1
+                summary["errors"].append((event_url, str(exc)))
+            except (MTGOParseError, MTGOStorageError, OSError) as exc:
                 summary["failed"] += 1
                 summary["errors"].append((event_url, str(exc)))
             if inter_event_delay:
@@ -753,6 +774,7 @@ __all__ = [
     "DECKLIST_MARKER",
     "MTGOFetchError",
     "MTGOIncompleteEventError",
+    "MTGOPageUnavailableError",
     "MTGOParseError",
     "MTGOStorageError",
     "discover_event_links",

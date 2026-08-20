@@ -13,6 +13,7 @@ from . import completeness, fetch, matchup, pickup, stats, top8
 
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3]
+TRANSIENT_FAILURE_EXIT_CODE = 75
 
 
 def _month(value: str) -> tuple[int, int]:
@@ -112,13 +113,17 @@ def _run_fetch_events(args: argparse.Namespace, root: Path, registry: Path) -> i
         f"format={args.format_id} candidates={summary['candidates']} fetched={summary['fetched']} "
         f"skipped={summary['skipped']} excluded={summary['excluded_no_playoff']} "
         f"deferred={summary['deferred_incomplete']} "
-        f"failed={summary['failed']}"
+        f"failed={summary['failed']} transient={summary['transient_failed']}"
     )
     for source, message in summary["warnings"]:
         print(f"DEFERRED {source}: {message}", file=sys.stderr)
     for source, message in summary["errors"]:
         print(f"ERROR {source}: {message}", file=sys.stderr)
-    return 1 if summary["failed"] else 0
+    if not summary["failed"]:
+        return 0
+    if summary["failed"] == summary["transient_failed"]:
+        return TRANSIENT_FAILURE_EXIT_CODE
+    return 1
 
 
 def _run_refresh_event(args: argparse.Namespace, root: Path, registry: Path) -> int:
