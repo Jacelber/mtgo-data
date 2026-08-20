@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-classifier-v3-20260820-01"
+  current_working_branch: "codex/weekly-classification-audit-corrections-20260820-01"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,16 +31,16 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-CLASSIFIER-MAINTENANCE-2026-W33"
-  name: "Apply Owner-confirmed W33 classifier maintenance"
+  id: "WEEKLY-CLASSIFICATION-AUDIT-CORRECTIONS-2026-W33"
+  name: "Apply Owner-approved weekly audit classification corrections"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-20"
   developer_validation_completed_on: "2026-08-20"
   owner_accepted_on: "2026-08-20"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-classifier-v3-20260820-01"
-  branch: "codex/weekly-classifier-v3-20260820-01"
-  base_commit: "dcab1f02e79448426fcd034fab71594625b93916"
-  objective: "Apply the complete Owner-confirmed W33 Standard and Modern classifier dispositions, including the final Five-Color Humans threshold and the accepted two-deck Azorius Oculus migration, without generating or publishing derived production data."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-classification-audit-corrections-20260820-01"
+  branch: "codex/weekly-classification-audit-corrections-20260820-01"
+  base_commit: "336dccfc1b7892e95ba31ba0297272d41828ccdd"
+  objective: "Add the Owner-approved Mono-Red Dragons and Jeskai Momo Standard parent identities, prove the exact retained-corpus migrations, and stop before commit or publication."
   authorization:
     local_implementation: true
     commit: true
@@ -48,34 +48,32 @@ current_task:
     merge: true
   target_paths:
     - "my_archetypes/standard.yaml"
-    - "my_archetypes/modern.yaml"
-    - "docs/WEEKLY_MAINTENANCE.md"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
   protected_scope:
     statistical_formulas_changed: "none"
     public_json_or_schema_changed: "none"
     generated_or_source_data_changed: "none"
-    classification_identities_changed: "29 Unknown records become classified; two retained Azorius Momo records become Azorius Oculus; no classified record becomes Unknown"
+    classification_identities_changed: "Seven retained Mono-Red Aggro records become Mono-Red Dragons and two retained Azorius Momo records become Jeskai Momo; no classification status changes"
     workflows_or_public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Apply the exact Owner-confirmed Standard and Modern classifier rules and stable identities recorded in DEC-105."
-    - "Preserve the sole registered intentional random-card-pile Unknown."
-    - "Record the accepted proposal discipline and final retained-corpus classification impact."
+    - "Add only the Mono-Red Dragons and Jeskai Momo parents and exact rules recorded in DEC-106."
+    - "Compare every retained Standard deck before and after the rule change and disclose every selected-identity or status transition."
+    - "Record the approved rule semantics, the corrected retained-corpus impact, and the accepted completion state."
     - "Run only rule, Schema, repository, documentation, retained-corpus impact, and diff checks required by the changed paths."
     - "Complete the unchanged accepted task through one Ready pull request, required CI, normal merge, and applicable Pages verification."
   prohibited_changes:
-    - "Do not regenerate or modify source data, classifications, reports, statistics, Pickup state, visual metadata, or Landing content in this task."
-    - "Do not change formulas, Schemas, workflows, UI, public paths, event whitelists, or protected event 434455 bytes."
+    - "Do not regenerate or modify source data, generated classifications, reports, statistics, Pickup state, visual metadata, or Landing content in this task."
+    - "Do not change Modern rules, formulas, Schemas, workflows, UI, public paths, event whitelists, or protected event 434455 bytes."
     - "Do not dispatch production or mutate the live weekly Issue."
-    - "Do not begin weekly-process correction work or P12-10."
-  stop_point: "Complete the accepted unchanged classifier source task through commit, one Ready pull request, required CI, normal merge, and applicable Pages verification; then stop without production dispatch or another task."
+    - "Do not mix in the separately reviewed weekly-process documentation correction, resume visual-metadata or Pickup review, or begin P12-10."
+  stop_point: "Complete the unchanged accepted classifier source task through commit, one Ready pull request, required CI, normal merge, and applicable Pages verification; then stop without production dispatch or another task."
 
 current_repository_state:
-  baseline_commit: "dcab1f02e79448426fcd034fab71594625b93916"
-  baseline_note: "Cloud master after PR 235. The complete W33 workbook and final follow-up confirmed 29 formerly unresolved classifications, one intentional random-card-pile Unknown, and two retained Azorius Momo to Azorius Oculus migrations."
+  baseline_commit: "336dccfc1b7892e95ba31ba0297272d41828ccdd"
+  baseline_note: "Cloud master after merged PR 236. The W33 classifier source maintenance is published; the later full-week audit exposed one mono-red Dragon family and one Jeskai Momo family requiring source correction."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -85,10 +83,11 @@ known_blockers: []
 
 future_task_gates:
   - task: "WEEKLY-MAINTENANCE-REHEARSAL-01"
-    status: "classifier_source_publication_in_progress"
+    status: "classification_audit_correction_publication_in_progress"
     remaining_requirements:
-      - "Publish WEEKLY-CLASSIFIER-MAINTENANCE-2026-W33 through its accepted completion authority."
-      - "Await the Owner's separate trial-run correction instructions before resuming visual-metadata or Weekly Pickup review."
+      - "Publish WEEKLY-CLASSIFICATION-AUDIT-CORRECTIONS-2026-W33 through its accepted completion authority."
+      - "Resume the rehearsal only after this classifier correction and the separately reviewed process correction are accepted."
+      - "Complete the temporary full-week classification audit before visual-metadata or Weekly Pickup review."
   - task: "P12-10"
     status: "blocked_pending_weekly_maintenance_rehearsal_and_separate_authorization"
     remaining_requirements:
@@ -108,11 +107,11 @@ next_approved_task:
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "Owner acceptance on 2026-08-20 authorizes continuous completion of the unchanged WEEKLY-CLASSIFIER-MAINTENANCE-2026-W33 task through commit, one Ready pull request, required CI, normal merge, and applicable Pages verification; it does not authorize production dispatch, trial-run workflow correction, or P12-10."
+  note: "Owner acceptance on 2026-08-20 authorizes continuous completion of the unchanged WEEKLY-CLASSIFICATION-AUDIT-CORRECTIONS-2026-W33 task through commit, one Ready pull request, required CI, normal merge, and applicable Pages verification; it does not authorize production dispatch, rehearsal resumption, or P12-10."
 
 prohibited_next_actions:
   - "Do not dispatch production, mutate the live weekly Issue, fetch protected source data, or regenerate derived production outputs."
-  - "Do not begin trial-run workflow correction, visual-metadata review, Pickup review, P12-10, or Landing work automatically."
+  - "Do not mix in or publish the separately reviewed trial-run workflow correction, resume visual-metadata or Pickup review, begin P12-10, or start Landing work automatically."
   - "Do not change formulas, raw source data, UI source, public paths, event whitelists, or event 434455 bytes."
   - "Do not force-push, mutate protected branches or tags directly, dispatch production, or begin another task under this accepted-task completion authority."
   - "Do not develop directly on master or overwrite unexplained local changes."

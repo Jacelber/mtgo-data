@@ -4646,3 +4646,58 @@ migration. The sole Owner-accepted `random_card_pile` remains intentional
 Unknown. This source change does not regenerate or publish statistics, dispatch
 production, change formulas or Schemas, modify source event data, change public
 paths, or alter protected event `434455` bytes.
+
+---
+
+# DEC-106 - Separate Mono-Red Dragons and Jeskai Momo after the weekly audit
+
+Status: `Accepted`
+
+## Context
+
+The temporary full-week classification audit exposed two coherent Standard
+families whose selected parent names did not match their submitted decklists.
+The reviewed SpockVidaLoka list used a substantial mono-red Dragon package but
+was selected as Mono-Red Aggro. The reviewed olbeda list used Frostcliff Siege
+and red mana from Sacred Foundry but was selected as Azorius Momo.
+
+The existing `boros-dragons` parent cannot represent a mono-red identity, and
+changing `mono-red-aggro` would continue to merge the Dragon shell with
+traditional red aggression. Likewise, changing the existing `azorius-momo`
+parent cannot produce a distinct Jeskai identity. Both corrections therefore
+require new parent identities rather than another alternative under an
+incorrect color-specific parent.
+
+## Decision
+
+Add the `mono-red-dragons` parent and its `mono-red-dragons-primary` rule at
+priority 54990. Require at least two main-deck copies each of
+`Sarkhan, Dragon Ascendant` and `Nova Hellkite` plus at least twelve main-deck
+`Mountain`. This priority remains below `boros-dragons` and above
+`mono-red-aggro`. Testing two, three, and four copies against the complete
+retained Standard corpus selects the same current seven Dragon-shell records,
+so the least restrictive viable two-copy boundary is maintained without
+enumerating Smaug or other supporting Dragons.
+
+Add the `jeskai-momo` parent and its `jeskai-momo-primary` rule at priority
+38005. Require the existing Momo core of `Momo, Friendly Flier >= 3`,
+`Sage of the Skies >= 2`, and `Springleaf Drum >= 2`, plus
+`Frostcliff Siege >= 1`, all in the main deck. Frostcliff Siege is the direct
+red spell discriminator. Do not bind the identity to Sacred Foundry because a
+future equivalent red source may differ, and Sacred Foundry alone also selects
+an unrelated retained Momo/Dragons hybrid. This priority remains below
+`orzhov-momo` and above both `mono-white-momo` and `azorius-momo`.
+
+## Consequences
+
+Across 5,085 retained Standard deck records, seven records move from
+Mono-Red Aggro to Mono-Red Dragons and two olbeda records move from Azorius
+Momo to Jeskai Momo. All nine remain classified, the sole intentional Unknown
+remains Unknown, and no other identity or classification status changes. The
+proposal-stage diagnostic initially undercounted the mono-red migration as
+four records; the authoritative classifier comparison corrected that count
+before Owner acceptance, commit, or publication.
+
+This source change does not regenerate or publish statistics, dispatch
+production, change formulas or Schemas, modify source event data, change public
+paths, or alter protected event `434455` bytes.
