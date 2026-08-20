@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-classification-audit-corrections-20260820-01"
+  current_working_branch: "codex/weekly-visual-metadata-review-20260820-01"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,49 +31,55 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-CLASSIFICATION-AUDIT-CORRECTIONS-2026-W33"
-  name: "Apply Owner-approved weekly audit classification corrections"
+  id: "WEEKLY-VISUAL-METADATA-MAINTENANCE-2026-W33"
+  name: "Apply Owner-approved W33 deck-color and representative-card maintenance"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-20"
   developer_validation_completed_on: "2026-08-20"
   owner_accepted_on: "2026-08-20"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-classification-audit-corrections-20260820-01"
-  branch: "codex/weekly-classification-audit-corrections-20260820-01"
-  base_commit: "336dccfc1b7892e95ba31ba0297272d41828ccdd"
-  objective: "Add the Owner-approved Mono-Red Dragons and Jeskai Momo Standard parent identities, prove the exact retained-corpus migrations, and stop before commit or publication."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-visual-metadata-review-20260820-01"
+  branch: "codex/weekly-visual-metadata-review-20260820-01"
+  base_commit: "968a187db3edd653aacda5ed576b3de11f7e6791"
+  objective: "Add the Owner-approved five Standard mana identities and four representative-card pairs for the accepted W33 deck identities, then stop for Owner acceptance before publication."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "my_archetypes/standard.yaml"
-    - "docs/DECISIONS.md"
+    - "assets/js/phase8/archetype-visuals.js"
+    - "assets/images/representative-cards/standard/kaito-bane-of-nightmares.jpg"
+    - "assets/images/representative-cards/standard/enduring-curiosity.jpg"
+    - "assets/images/representative-cards/standard/hardened-academic.jpg"
+    - "assets/images/representative-cards/standard/marauding-mako.jpg"
+    - "assets/images/representative-cards/standard/sarkhan-dragon-ascendant.jpg"
+    - "assets/images/representative-cards/standard/nova-hellkite.jpg"
+    - "assets/images/representative-cards/standard/scalding-viper.jpg"
+    - "assets/images/representative-cards/standard/hired-claw.jpg"
     - "docs/STATUS.yaml"
   protected_scope:
     statistical_formulas_changed: "none"
     public_json_or_schema_changed: "none"
     generated_or_source_data_changed: "none"
-    classification_identities_changed: "Seven retained Mono-Red Aggro records become Mono-Red Dragons and two retained Azorius Momo records become Jeskai Momo; no classification status changes"
-    workflows_or_public_paths_changed: "none"
+    classification_identities_changed: "none"
+    workflows_or_public_paths_changed: "none; existing Standard UI gains five mana-color badges and four representative-card images"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Add only the Mono-Red Dragons and Jeskai Momo parents and exact rules recorded in DEC-106."
-    - "Compare every retained Standard deck before and after the rule change and disclose every selected-identity or status transition."
-    - "Record the approved rule semantics, the corrected retained-corpus impact, and the accepted completion state."
-    - "Run only rule, Schema, repository, documentation, retained-corpus impact, and diff checks required by the changed paths."
-    - "Complete the unchanged accepted task through one Ready pull request, required CI, normal merge, and applicable Pages verification."
+    - "Add only the five Owner-approved Standard mana identities: Azorius Oculus, Boros Dragons, Grixis Tablet, Jeskai Momo, and Mono-Red Dragons."
+    - "Add only the four Owner-approved representative-card pairs for Dimir Midrange, Mardu Discard, Boros Dragons, and Izzet Aggro."
+    - "Acquire and verify the eight exact representative-card image assets required by those approved pairs."
+    - "Run only focused visual-metadata, asset, repository, and diff checks required by the changed paths."
   prohibited_changes:
-    - "Do not regenerate or modify source data, generated classifications, reports, statistics, Pickup state, visual metadata, or Landing content in this task."
-    - "Do not change Modern rules, formulas, Schemas, workflows, UI, public paths, event whitelists, or protected event 434455 bytes."
+    - "Do not change classifier rules, generated classifications, reports, statistics, Pickup state, Landing content, or visual behavior outside the approved metadata entries."
+    - "Do not change Modern metadata, formulas, Schemas, workflows, public paths, event whitelists, or protected event 434455 bytes."
     - "Do not dispatch production or mutate the live weekly Issue."
-    - "Do not mix in the separately reviewed weekly-process documentation correction, resume visual-metadata or Pickup review, or begin P12-10."
-  stop_point: "Complete the unchanged accepted classifier source task through commit, one Ready pull request, required CI, normal merge, and applicable Pages verification; then stop without production dispatch or another task."
+    - "Do not mix in the separately reviewed weekly-process documentation correction, resume Weekly Pickup review, or begin P12-10."
+  stop_point: "Complete the unchanged accepted task through commit, one Ready pull request, required CI, normal merge, and applicable Pages verification; then stop without production dispatch or another weekly stage."
 
 current_repository_state:
-  baseline_commit: "336dccfc1b7892e95ba31ba0297272d41828ccdd"
-  baseline_note: "Cloud master after merged PR 236. The W33 classifier source maintenance is published; the later full-week audit exposed one mono-red Dragon family and one Jeskai Momo family requiring source correction."
+  baseline_commit: "968a187db3edd653aacda5ed576b3de11f7e6791"
+  baseline_note: "Cloud master after merged PR 237 and its successful post-merge CI. The Owner authorized the next rehearsal stage: W33 visual-metadata maintenance only."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -83,11 +89,11 @@ known_blockers: []
 
 future_task_gates:
   - task: "WEEKLY-MAINTENANCE-REHEARSAL-01"
-    status: "classification_audit_correction_publication_in_progress"
+    status: "visual_metadata_publication_in_progress"
     remaining_requirements:
-      - "Publish WEEKLY-CLASSIFICATION-AUDIT-CORRECTIONS-2026-W33 through its accepted completion authority."
-      - "Resume the rehearsal only after this classifier correction and the separately reviewed process correction are accepted."
-      - "Complete the temporary full-week classification audit before visual-metadata or Weekly Pickup review."
+      - "Complete and accept the authorized W33 visual-metadata maintenance."
+      - "Resume Weekly Pickup review only after the visual-metadata task is accepted and completed."
+      - "Keep the rehearsal non-production and do not begin P12-10 automatically."
   - task: "P12-10"
     status: "blocked_pending_weekly_maintenance_rehearsal_and_separate_authorization"
     remaining_requirements:
@@ -103,15 +109,15 @@ future_task_gates:
       - "Keep the rehearsal non-deploying and review the complete v3 candidate before any public use."
 
 next_approved_task:
-  id: "NONE"
-  name: "No follow-up task is authorized"
-  status: "no_follow_up_authorized"
+  id: "WEEKLY-VISUAL-METADATA-MAINTENANCE-2026-W33"
+  name: "Apply Owner-approved W33 deck-color and representative-card maintenance"
+  status: "owner_accepted_completion_authorized"
   local_execution_authorized: false
-  note: "Owner acceptance on 2026-08-20 authorizes continuous completion of the unchanged WEEKLY-CLASSIFICATION-AUDIT-CORRECTIONS-2026-W33 task through commit, one Ready pull request, required CI, normal merge, and applicable Pages verification; it does not authorize production dispatch, rehearsal resumption, or P12-10."
+  note: "Owner acceptance on 2026-08-20 authorizes continuous completion of the unchanged visual-metadata task through commit, one Ready pull request, required CI, normal merge, and applicable Pages verification; it does not authorize production dispatch or the next weekly stage."
 
 prohibited_next_actions:
   - "Do not dispatch production, mutate the live weekly Issue, fetch protected source data, or regenerate derived production outputs."
-  - "Do not mix in or publish the separately reviewed trial-run workflow correction, resume visual-metadata or Pickup review, begin P12-10, or start Landing work automatically."
-  - "Do not change formulas, raw source data, UI source, public paths, event whitelists, or event 434455 bytes."
+  - "Do not mix in or publish the separately reviewed trial-run workflow correction, resume Weekly Pickup review, begin P12-10, or start Landing work automatically."
+  - "Do not change formulas, raw source data, classifier rules, public paths, event whitelists, or event 434455 bytes."
   - "Do not force-push, mutate protected branches or tags directly, dispatch production, or begin another task under this accepted-task completion authority."
   - "Do not develop directly on master or overwrite unexplained local changes."
