@@ -84,6 +84,7 @@ jobs:
       PYTHONPATH: src
       MTGO_EVENT_FORMATS: "standard legacy pioneer pauper vintage modern"
       MTGO_PRODUCT_FORMATS: "standard modern"
+      MTGO_TRANSIENT_EXIT_CODE: "75"
     steps:
       - name: Check out full history without persisted credentials
         uses: actions/checkout@v7.0.0
@@ -184,6 +185,29 @@ jobs:
         run: |
           CHECKPOINT="$RUNNER_TEMP/mtgo-fetch-checkpoint.json"
           STATUS=0
+          RECOVERY_DELAYS=(120 300)
+          fetch_events_with_recovery() {
+            local format="$1"
+            local attempt status delay
+            for attempt in 1 2 3; do
+              echo "Collecting MTGO event raw data for ${format} (recovery round ${attempt}/3)."
+              if python -B -m mtgmeta.mtgo --format "$format" fetch-events; then
+                return 0
+              else
+                status=$?
+              fi
+              if [ "$status" -ne "$MTGO_TRANSIENT_EXIT_CODE" ]; then
+                return "$status"
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                echo "MTGO transient source failure exhausted 3 recovery rounds for ${format}." >&2
+                return "$status"
+              fi
+              delay="${RECOVERY_DELAYS[$((attempt - 1))]}"
+              echo "MTGO source is temporarily unavailable; retrying ${format} in ${delay} seconds." >&2
+              sleep "$delay"
+            done
+          }
           for FORMAT in $MTGO_EVENT_FORMATS; do
             OPERATION="events/${FORMAT}"
             if python -B mtgo_fetch_checkpoint.py is-complete \
@@ -193,8 +217,7 @@ jobs:
               echo "Reusing completed MTGO event collection for ${FORMAT}."
               continue
             fi
-            echo "Collecting MTGO event raw data for ${FORMAT}."
-            if python -B -m mtgmeta.mtgo --format "$FORMAT" fetch-events; then
+            if fetch_events_with_recovery "$FORMAT"; then
               python -B mtgo_fetch_checkpoint.py complete \
                 --checkpoint "$CHECKPOINT" --repository "$GITHUB_REPOSITORY" \
                 --commit "$GITHUB_SHA" --event-formats "$MTGO_EVENT_FORMATS" \
@@ -308,6 +331,7 @@ jobs:
             echo "- Generation subject: \`${{ steps.generation-subject.outputs.sha256 || 'not-reached' }}\`"
             echo "- Build required: \`${{ steps.generation-subject.outputs.needed || 'not-reached' }}\`"
             echo "- Restart transfer: a same-commit, seven-day \`mtgo-fetch-checkpoint\` artifact only after incomplete collection"
+            echo "- Transient MTGO event recovery: three rounds with 120-second and 300-second cooldowns"
             echo "- Event formats: ${MTGO_EVENT_FORMATS}"
             echo "- Match formats: ${MTGO_PRODUCT_FORMATS}"
             echo "- The checkpoint is verified before reuse and is never sent to build or publish."

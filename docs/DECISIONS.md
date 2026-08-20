@@ -4701,3 +4701,58 @@ before Owner acceptance, commit, or publication.
 This source change does not regenerate or publish statistics, dispatch
 production, change formulas or Schemas, modify source event data, change public
 paths, or alter protected event `434455` bytes.
+
+---
+
+# DEC-107 - Recover bounded transient MTGO source failures inside one fetch job
+
+Status: `Accepted`
+
+## Context
+
+Three recent scheduled production runs stopped during official MTGO event
+collection and required a later manual rerun. Runs `32127810627` and
+`32328276312` exhausted the existing request retries while the monthly listing
+service timed out. Run `32354507054` later received HTTP 200 for a Pioneer event
+page whose temporary body did not contain the embedded decklist marker. The
+same page subsequently returned the expected marker without a code or data
+change.
+
+The request-level retry policy therefore detects the incident but cannot keep
+the automation alive across a longer service interruption. Treating every
+parser or storage failure as retryable would be unsafe because a changed event
+contract, incomplete official result, or local persistence defect requires
+inspection rather than repeated network work.
+
+## Decision
+
+Classify exhausted downloads and event-page framing failures before validated
+JSON is available as transient source failures. Keep invalid event contracts,
+incomplete-event policy failures, unsafe storage, and local I/O failures
+non-transient. The event-fetch CLI returns exit code `75` only when every
+failure in that invocation is transient; any mixed or permanent failure keeps
+the ordinary failure exit code.
+
+The read-only fetch job retries an event-format operation for at most three
+rounds in the same runner and working tree, with 120-second and 300-second
+cooldowns. A successful round completes the existing checkpoint operation and
+the workflow proceeds without human intervention. A non-transient failure
+stops immediately. Exhausted recovery still fails normally, preserves the
+same-commit resumable checkpoint, blocks build and publication, and activates
+the existing deduplicated failure issue.
+
+Monthly listing observations accept only event links whose encoded date belongs
+to the month being processed. If a monthly listing remains unavailable after
+its request retries, collection stops scanning older months so the bounded
+outer recovery can start promptly instead of repeating the same shared-service
+failure.
+
+## Consequences
+
+A temporary MTGO interruption can recover inside one scheduled run without a
+workflow dispatch or Owner action. Recovery remains bounded by the existing
+45-minute fetch timeout and does not broaden job permissions, checkpoint
+compatibility, source scope, or publication authority. Permanent or ambiguous
+data failures remain fail-closed. This change does not fetch or regenerate
+production data, alter statistics or Schemas, change public paths, dispatch a
+workflow, or modify protected event `434455` bytes.
