@@ -2380,44 +2380,72 @@ from its previous-four-week aggregated share by at least `0.05`, meaning five
 percentage points rather than five percent relative change. The fact records
 both raw populations, both shares, signed `delta_pp`, and direction.
 
-A maintained known archetype with no previous-four-week high-score record and
-a current share of at least `0.05` is an upward `share_move` with a return
-state; it is not a new deck. A maintained known archetype with a previous-four-
-week share of at least `0.05` and no current high-score record is an `exit` and
-must be described as not observed in the current week rather than proven to
-have left the environment.
+A maintained known archetype that existed before the comparison period, has no
+previous-four-week high-score record, has a current Top 8 result, and reaches a
+current share of at least `0.03` is an upward `share_move` with a return state;
+it is not a new deck. A maintained known archetype with a previous-four-week
+share of at least `0.05` and no current high-score record is an `exit` and must
+be described as not observed in the current week rather than proven to have
+left the environment.
 
 There is no separate public `notable` flag or two-percentage-point threshold.
 No Landing movement is described as statistically significant.
 
-### 24.4 New decks and Weekly Pickup
+### 24.4 Weekly Pickup screening
 
-Landing does not derive a statistical `new_entry` fact from weekly share.
-A public new deck exists only when the format-scoped Weekly Pickup process
-classifies it as new against the maintained known-archetype state and a human
+Weekly Pickup starts from every exact rank-one-through-eight deck in the target
+week. It has no fallback for events that publish fewer than eight ranks, and it
+does not deduplicate the complete review population before applying a route.
+The machine may nominate a deck through five independent routes:
+
+1. post-ban continuation, which is Owner-only and is reviewed from the complete
+   Top 8 pool without machine inference;
+2. the five-percentage-point share increase or three-percent return defined in
+   section 24.3;
+3. use of at least one frozen new-to-Magic card in the main deck or sideboard
+   during the release week containing its official Arena release date or the
+   immediately following week;
+4. a strategic parent identity absent from known state and all explicit
+   continuity aliases, for which one Top 8 result is sufficient; or
+5. the construction shift defined in section 24.5.
+
+A release manifest excludes reprints, basic lands, and alternate treatments.
+New-card candidates are grouped by stable parent and exact new-card package;
+different packages may retain different representatives. Within one package,
+the representative is chosen by better rank, larger event, then later result;
+new-card count and copy quantity remain evidence only. A new-archetype route
+means a new strategic parent, not a display-name, stable-ID, color-label, or
+classification migration. Each route keeps its own representative before exact
+event-deck candidates are merged, so one deck may carry several reasons while
+different decks for different reasons remain separate.
+
+Landing does not derive a statistical `new_entry` fact from weekly share. A
+public new deck exists only when the format-scoped Weekly Pickup process
+classifies it as new against maintained known-archetype state and a human
 reviewer approves it. Without an approved new-deck Pickup item, Landing has no
 new-deck item. A returning known archetype remains a `share_move` as defined in
-section 24.3.
-
-The existing one-Top-8 minimum, stable parent identity, source-event evidence,
-manual approval, reviewer comment, and provisional-week re-review rules remain
-authoritative for new-deck publication.
+section 24.3. Machine screening and evidence are drafts: the Owner may select
+any exact Top 8 deck, reject every candidate, and replace, delete, or completely
+rewrite the proposed category, conclusion, ordering, cards, and copy.
 
 ### 24.5 Subtype construction shift
 
-`build_shift` is subtype-specific. It does not fall back to a parent identity.
-For one maintained `(parent_id, subtype_id)`, compare a concrete current-week
-Top 8 main deck against the mean main-deck vector from the previous four
-complete weeks for the same subtype. The reference requires at least eight
-classified decks. The existing weighted-L1 absolute construction-deviation
-formula and 0-100 scale remain unchanged.
+`build_shift` uses a maintained `(parent_id, subtype_id)` comparison when that
+parent has maintained subtypes. A parent with no maintained subtypes instead
+uses its parent identity as the comparison unit. A deck missing an identity
+required by its parent does not silently fall back. Compare a concrete current-
+week Top 8 main deck against the mean main-deck vector from the previous four
+complete weeks for that comparison identity. The reference requires at least
+eight classified decks. The existing weighted-L1 absolute construction-
+deviation formula and 0-100 scale remain unchanged.
 
-A subtype is eligible when at least one current-week Top 8 deck has a
-construction-deviation score of at least `20`. One Top 8 result is sufficient.
-If multiple decks qualify for the same subtype and week, the highest-deviation
-deck is the representative candidate and all supporting Top 8 evidence is
-retained. Missing subtype identity, insufficient history, or an incomparable
-rule version makes the fact unavailable rather than zero.
+A comparison identity is eligible when at least one current-week Top 8 deck has
+a construction-deviation score of at least `20`. One Top 8 result is
+sufficient. If multiple decks qualify for the same identity and week, the
+highest-deviation deck is the representative candidate and all supporting Top
+8 evidence is retained. Missing required subtype identity, insufficient
+history, or an incomparable rule version makes the fact unavailable rather
+than zero.
 
 This fact may supply a structured weekly observation. Publication as a curated
 new-technology feature remains separately human-approved through Weekly

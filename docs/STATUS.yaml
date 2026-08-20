@@ -4,13 +4,13 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-pickup-candidate-provenance-20260820-01"
+  current_working_branch: "codex/weekly-pickup-selection-rules-20260820-01"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
   purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-08-20"
+  last_updated: "2026-08-21"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   authoritative_for:
@@ -31,53 +31,68 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-PICKUP-CANDIDATE-PROVENANCE-2026-W33"
-  name: "Bind Weekly Pickup candidates to the current classifier subject"
+  id: "WEEKLY-PICKUP-SELECTION-RULES-2026-W33"
+  name: "Implement the Owner-approved Weekly Pickup screening rules"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-20"
-  developer_validation_completed_on: "2026-08-20"
-  owner_accepted_on: "2026-08-20"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-pickup-candidate-provenance-20260820-01"
-  branch: "codex/weekly-pickup-candidate-provenance-20260820-01"
-  base_commit: "efdf5e7c34fd867b9679dcb9491a857c7d17a196"
-  objective: "Prevent Weekly Pickup candidates generated under an older classifier from being silently reused or published, while preserving reviewed stale files for explicit re-review."
+  developer_validation_completed_on: "2026-08-21"
+  owner_accepted_on: "2026-08-21"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-pickup-selection-rules-20260820-01"
+  branch: "codex/weekly-pickup-selection-rules-20260820-01"
+  base_commit: "f307c1a285a6f955308ddcd8c745f30c51670c3e"
+  objective: "Replace the near-complete Top 8 Pickup list with the five Owner-approved screening rules, retain unrestricted human editorial authority, and prove the result through one non-production W33 workbook rehearsal."
   authorization:
-    local_implementation: true
+    local_implementation: false
     commit: true
     remote_publication: true
     merge: true
   target_paths:
     - "src/mtgmeta/mtgo/pickup.py"
-    - "tools/generate_weekly_maintenance_readiness.py"
-    - "schemas/weekly-maintenance-readiness.schema.json"
+    - "configs/mtgo_pickup_policy.yaml"
+    - "tests/test_mtgo_pickup_selection.py"
     - "tests/test_mtgo_pickup_provenance.py"
-    - "tests/test_weekly_maintenance_readiness.py"
     - "docs/WEEKLY_MAINTENANCE.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
+    - "docs/TEST_TRIGGER_MATRIX.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    statistical_formulas_changed: "none"
-    public_json_or_schema_changed: "private readiness Schema only; version 1.2.0"
+    statistical_formulas_changed: "private Pickup screening plus the accepted future Landing return and build-shift semantics only"
+    public_json_or_schema_changed: "none"
     generated_or_source_data_changed: "none"
     classification_identities_changed: "none"
     workflows_or_public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
+    artifact_impact: "internal_diagnostics"
   allowed_actions:
-    - "Bind candidate preservation to both source event IDs and the current classifier digest."
-    - "Regenerate an unreviewed stale candidate; preserve but block a stale candidate containing human approval or copy."
-    - "Add source event, pseudonymous deck, deck fingerprint, and stable classifier identity provenance to generated candidate rows."
-    - "Make readiness and Pickup publication fail closed on stale classifier provenance."
-    - "Run only focused Pickup provenance, readiness Schema, repository, and diff checks required by the changed paths."
+    - "Implement exact Top 8 gating, five-percentage-point share increases, three-percent returns, two-week new-card windows, strategic-identity new archetypes, and twenty-point build shifts."
+    - "Freeze HOB new-card names and official HOB, FRA, and TRK Arena release dates in a maintained private policy."
+    - "Merge multiple reasons on one exact candidate and retain different representative decks when different reasons select them."
+    - "For one archetype and exact new-card package, choose the best tournament result before new-card copy quantity, then merge every reason selected for that exact deck."
+    - "Create one private W33 XLSX with filtered candidates, complete Top 8 evidence, unrestricted Owner copy, and final review fields."
+    - "Run only focused Pickup selection, provenance, documentation-status, repository, rule, Schema, and diff checks required by the final paths."
+    - "Complete the accepted unchanged task through local commit, one Ready PR, required CI, merge, and applicable publication confirmation."
   prohibited_changes:
-    - "Do not change classifier rules, raw or generated production data, current Pickup approvals, Landing content, or visual metadata."
-    - "Do not change formulas, public paths, event whitelists, production workflow timing, or protected event 434455 bytes."
-    - "Do not dispatch production or mutate the live weekly Issue."
-    - "Do not regenerate W33 production candidates, resume Pickup selection, or begin P12-10 under this implementation authorization."
-  stop_point: "Complete the unchanged accepted task through commit, one Ready pull request, required CI, and normal merge; then stop without production dispatch, candidate regeneration, Pickup review, or another task."
+    - "Do not change classifier rules, raw or generated production data, current Pickup approvals, Landing content, visual metadata, or the public Pickup Schema."
+    - "Do not change public paths, event whitelists, production workflow timing, or protected event 434455 bytes."
+    - "Do not dispatch production, mutate the live weekly Issue, or overwrite repository W33 candidates during rehearsal."
+    - "Do not begin P12-10 or another task automatically."
+  stop_point: "Complete this accepted unchanged task, then stop. Do not begin P12-10, Landing work, or another weekly-maintenance stage automatically."
+  validation_evidence:
+    - "Nine focused Pickup selection and provenance tests plus five bounded live-status tests passed."
+    - "Focused Ruff passed for the changed Pickup module and tests."
+    - "Repository validation passed: 78 Python, 18 JavaScript, 1812 JSON, 59 YAML, 54 references, and 2242 hygiene checks."
+    - "Previously passed maintained-package mypy, Standard and Modern rule, and 81 public Schema checks remain applicable because this revision did not change their configured subjects."
+    - "The frozen private policy still loads HOB with 186 cards and keeps FRA and TRK manifests pending."
+    - "The revised seven-sheet W33 workbook contains 27 candidates (16 Standard and 11 Modern) and all 168 exact rank-one-through-eight records."
+    - "The rank-three IronBeagle Boros Dragons row carries return and new_card, preserves its confirmed review and human copy, and the rank-five duplicate remains only in All Top 8."
+    - "Workbook import, formula-error scan, and visual review of all seven sheets passed."
 
 current_repository_state:
-  baseline_commit: "efdf5e7c34fd867b9679dcb9491a857c7d17a196"
-  baseline_note: "Cloud production publication after the accepted W33 classifier and visual-metadata changes. The current Pickup candidate files predate that classifier subject, which exposed this provenance repair."
+  baseline_commit: "f307c1a285a6f955308ddcd8c745f30c51670c3e"
+  baseline_note: "Cloud production publication after the accepted W33 classifier, visual metadata, Pickup provenance repair, and bounded MTGO source recovery."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -87,11 +102,10 @@ known_blockers: []
 
 future_task_gates:
   - task: "WEEKLY-MAINTENANCE-REHEARSAL-01"
-    status: "pickup_candidate_provenance_publication_in_progress"
+    status: "pickup_selection_rule_accepted_completion_in_progress"
     remaining_requirements:
-      - "Accept and publish the authorized Pickup provenance repair."
-      - "Under separate production authorization, regenerate W33 candidates from the accepted classifier subject."
-      - "Resume Weekly Pickup review only after readiness confirms current candidate provenance."
+      - "Complete the accepted filtered Pickup selection policy and generator through the authorized Ready PR and merge."
+      - "Under separate production authorization, regenerate W33 candidates only if publication requires repository output replacement."
       - "Keep the rehearsal non-production and do not begin P12-10 automatically."
   - task: "P12-10"
     status: "blocked_pending_weekly_maintenance_rehearsal_and_separate_authorization"
@@ -108,15 +122,15 @@ future_task_gates:
       - "Keep the rehearsal non-deploying and review the complete v3 candidate before any public use."
 
 next_approved_task:
-  id: "WEEKLY-PICKUP-CANDIDATE-PROVENANCE-2026-W33"
-  name: "Bind Weekly Pickup candidates to the current classifier subject"
+  id: "WEEKLY-PICKUP-SELECTION-RULES-2026-W33"
+  name: "Implement the Owner-approved Weekly Pickup screening rules"
   status: "owner_accepted_completion_authorized"
-  local_execution_authorized: false
-  note: "Owner acceptance authorizes continuous completion of this unchanged repair through commit, one Ready pull request, required CI, and normal merge. Production regeneration, Pickup review, P12-10, and any next task remain outside this authority."
+  local_execution_authorized: true
+  note: "Owner accepted the unchanged revised subject on 2026-08-21. Complete commit, one Ready PR, required CI, merge, and applicable publication confirmation without another authorization prompt, then stop."
 
 prohibited_next_actions:
-  - "Do not dispatch production, mutate the live weekly Issue, fetch protected source data, or regenerate derived production outputs."
-  - "Do not regenerate or review W33 Pickup candidates, begin P12-10, or start Landing work automatically."
-  - "Do not change formulas, raw source data, classifier rules, public paths, event whitelists, or event 434455 bytes."
-  - "Do not force-push, mutate protected branches or tags directly, dispatch production, or begin another task under this accepted-task completion authority."
+  - "Do not dispatch production, mutate the live weekly Issue, fetch protected source data, or overwrite generated production outputs."
+  - "Do not publish W33 Pickup selections, begin P12-10, or start Landing work automatically."
+  - "Do not change raw source data, classifier rules, public paths, event whitelists, or event 434455 bytes."
+  - "Do not force-push, mutate protected branches or tags directly, or begin another task."
   - "Do not develop directly on master or overwrite unexplained local changes."

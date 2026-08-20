@@ -3141,12 +3141,28 @@ P12-03B repository artifact.
 
 Landing extends the existing format-scoped Pickup candidate and approval
 boundary. It must not create a parallel root candidate workflow. The generator
-may suggest exact-deck cards newly present or increased against the four-week
-reference, but the reviewer owns the final category, localized editorial copy,
-featured deck, ordering, and four-card display. Approval binds those fields to
-exact source event IDs, classifier digest, machine-fact digest, and deck
-identity for provenance and stale-review detection only. It does not constrain
-the Owner's category, selection, ordering, cards, or editorial copy.
+screens only exact ranks one through eight and preserves the complete Top 8
+population for review before any route-specific representative selection. Its
+private maintained policy is `configs/mtgo_pickup_policy.yaml`; that policy owns
+the screening thresholds, strategic-identity continuity aliases, official
+release dates, and frozen new-to-Magic card manifests. Pending future manifests
+must fail closed for the new-card route rather than infer cards from a set code.
+
+Candidate evidence records every route that selected the exact event-deck. It
+may include share populations, active release and card-package facts, known-
+state continuity evidence, or the comparable four-week construction base. The
+weekly XLSX carries both the filtered candidates and the complete ordered Top 8
+pool, including full main decks and sideboards, so the Owner can perform the
+manual post-ban route or add any otherwise unselected Top 8 deck. These private
+review artifacts and pending decisions do not enter public Pages output.
+
+The generator may suggest exact-deck cards newly present or increased against
+the four-week reference, but the reviewer owns the final selection, category,
+localized editorial copy, featured deck, ordering, and four-card display.
+Approval binds those fields to exact source event IDs, classifier digest,
+machine-fact digest, and deck identity for provenance and stale-review
+detection only. It does not constrain the Owner's category, selection,
+ordering, cards, or editorial copy.
 
 After the P12-16 cutover, Weekly Pickup is an internal producer, review,
 known-state, and history capability rather than a standalone product identity.
@@ -3206,8 +3222,8 @@ After that remediation and before P12-10 begins, the project must:
 1. freeze the corrected stable parent and subtype identities;
 2. validate or explicitly migrate Weekly Pickup known-archetype state;
 3. rerun the eight-to-twelve-week Standard and Modern Landing shadow;
-4. recheck the 3% environment, five-percentage-point movement, and 20-point
-   subtype construction thresholds;
+4. recheck the 3% environment and return, five-percentage-point movement, and
+   20-point subtype-or-parent construction thresholds;
 5. obtain owner confirmation of the refreshed results; and
 6. only then populate the manual representative-card configuration.
 

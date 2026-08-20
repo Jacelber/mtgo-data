@@ -4756,3 +4756,80 @@ compatibility, source scope, or publication authority. Permanent or ambiguous
 data failures remain fail-closed. This change does not fetch or regenerate
 production data, alter statistics or Schemas, change public paths, dispatch a
 workflow, or modify protected event `434455` bytes.
+
+---
+
+# DEC-108 - Screen Weekly Pickup through five Owner-reviewed routes
+
+Status: `Accepted`
+
+## Context
+
+The first W33 Pickup rehearsal nominated 148 of 178 exact Top 8 decklists. That
+near-complete list did not perform useful screening and made the Owner review
+more difficult than reviewing the complete Top 8 pool directly. The Owner's
+actual weekly editorial choices instead followed five distinct reasons: a
+post-ban continuation, a material share increase or return, new cards during a
+release window, a new strategic archetype, or a material construction shift.
+
+The existing candidate process also deduplicated too early, treated later
+equal results as less representative, had no maintained card-release manifest,
+and did not preserve a complete Top 8 workbook alongside filtered candidates.
+
+## Decision
+
+Use every exact rank-one-through-eight result as the complete weekly review
+population, with no rank fallback or pre-screening deduplication. Apply five
+independent routes:
+
+1. leave post-ban continuation entirely to the Owner from the complete Top 8
+   sheet;
+2. nominate a parent whose current high-score share rises by at least five
+   percentage points over the aggregated preceding four complete weeks, or a
+   historically known parent that had zero high-score results in those weeks,
+   returns to the current Top 8, and reaches at least three percent;
+3. for the release week containing an official Arena release date and the next
+   week, nominate decks using a frozen new-to-Magic card manifest in either the
+   main deck or sideboard, grouped by parent and exact new-card package;
+4. nominate a strategic parent identity absent from known state and explicit
+   continuity aliases, with one Top 8 sufficient; and
+5. nominate a main-deck weighted-L1 construction deviation of at least 20
+   against at least eight decks from the preceding four complete weeks, using
+   subtype identity when the parent maintains subtypes and parent identity only
+   when it does not.
+
+Each route selects its representative independently. Ordinary ties prefer the
+better rank, larger event, and later result. New-card selection applies that
+same order within one parent and exact new-card package; card count and copy
+quantity remain evidence only. Construction selection first prefers greater
+deviation. Merge multiple reasons that select the same exact
+event-deck, but retain different decks selected for different reasons. Treat
+`Azorius Momo` as an explicit continuity alias of `jeskai-momo`, so its color
+correction is not a new strategic archetype.
+
+Maintain the private policy in `configs/mtgo_pickup_policy.yaml`. Freeze HOB's
+new-to-Magic manifest and the official HOB, FRA, and TRK release dates there;
+future release manifests remain pending until reviewed. Weekly review uses one
+XLSX containing the filtered candidates and the complete ordered Top 8 pool,
+with full decklists and Owner-editable decision and copy fields.
+
+## Consequences
+
+The revised W33 non-production rehearsal produces 27 machine candidates instead
+of 148 while retaining all 168 records whose recorded final rank is exactly one
+through eight for unrestricted Owner selection. This strict result supersedes
+the earlier 178-row review-pool description rather than admitting ten
+additional or fallback ranks.
+It includes every Owner-identified editorial example, keeps the rank-five
+SpockVidaLoka Mono-Red Dragons list, merges `return` and `new_card` on the
+rank-three IronBeagle Boros Dragons list, and does not call Jeskai Momo a new
+archetype. The machine remains a draft: the Owner may reject all suggestions,
+add any exact Top 8 deck, and delete, replace, or completely rewrite any
+category, conclusion, ordering, card choice, or copy.
+
+For Weekly Pickup and future Landing preparation, this decision supersedes the
+five-percent return boundary and subtype-only construction fallback in
+DEC-086. It does not change the five-percent exit boundary, the public Landing
+Schema, classifier rules, source or generated production data, public paths,
+workflow timing, or protected event `434455` bytes, and it does not authorize
+Landing implementation or production publication.

@@ -1,4 +1,5 @@
 from datetime import date
+from types import SimpleNamespace
 
 import pytest
 import yaml
@@ -8,6 +9,20 @@ from mtgmeta.mtgo import pickup
 
 WEEK_START = date(2026, 8, 10)
 EVENTS = [(WEEK_START, {"event_id": "100"})]
+
+
+POLICY = {
+    "schema_version": "1.0",
+    "thresholds": {
+        "share_increase_pp": 5,
+        "return_share": 0.03,
+        "build_shift": 20,
+        "build_reference_minimum": 8,
+        "new_card_review_weeks": 2,
+    },
+    "identity_continuity": {"standard": {}, "modern": {}},
+    "release_sets": [],
+}
 
 
 def _candidate_document(*, approved: bool = False) -> dict:
@@ -35,6 +50,7 @@ def _prepare_candidate_generation(monkeypatch, tmp_path, *, digest: str) -> None
         lambda *args, **kwargs: (tmp_path, tmp_path),
     )
     monkeypatch.setattr(pickup, "load_rules_for_format", lambda *args, **kwargs: rules)
+    monkeypatch.setattr(pickup, "load_pickup_policy", lambda *args, **kwargs: POLICY)
     monkeypatch.setattr(pickup.stats, "load_all_events", lambda *args, **kwargs: EVENTS)
     monkeypatch.setattr(
         pickup.stats,
@@ -85,11 +101,21 @@ def test_standard_candidate_rows_include_exact_source_and_classifier_identity(
         "player_count": 32,
         "starttime": "2026-08-10 00:00:00.0",
         "is_top8": True,
+        "is_high_score": True,
         "main_deck": [{"name": "Example Card", "qty": 4}],
         "side_deck": [{"name": "Sideboard Card", "qty": 2}],
     }
-    monkeypatch.setattr(pickup.stats, "build_base_pack", lambda *args: ({}, 0.0))
-    monkeypatch.setattr(pickup, "week_records", lambda *args: [record])
+    monkeypatch.setattr(
+        pickup.stats,
+        "build_base_pack",
+        lambda *args, **kwargs: ({}, 0.0),
+    )
+    monkeypatch.setattr(
+        pickup.stats,
+        "build_subtype_base_pack",
+        lambda *args, **kwargs: ({}, 0.0),
+    )
+    monkeypatch.setattr(pickup, "week_records", lambda *args, **kwargs: [record])
     monkeypatch.setattr(
         pickup,
         "_record_identity",
@@ -103,9 +129,11 @@ def test_standard_candidate_rows_include_exact_source_and_classifier_identity(
 
     candidates, _base, _top8_count, _deduplicated_count = pickup._candidate_documents(
         [],
-        object(),
+        SimpleNamespace(archetypes=()),
         WEEK_START,
         set(),
+        POLICY,
+        "standard",
     )
 
     entry = candidates["new_archetypes"][0]
