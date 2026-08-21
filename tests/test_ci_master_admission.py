@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -10,6 +11,7 @@ from ci_master_admission import (
     TARGETED_JOB,
     AdmissionDecision,
     decide_from_environment,
+    decide_local_pull_request,
     decide_master_push,
     decide_pull_request,
     expected_successful_jobs,
@@ -221,6 +223,69 @@ def test_pull_request_template_examples_are_not_active_declarations():
     assert template.count("<!-- EXAMPLE-file-operation:") == 3
     assert "<!-- owner-ui-accepted:" not in template
     assert template.count("<!-- EXAMPLE-owner-ui-accepted:") == 1
+    assert template.count("<!-- artifact-impact:") == 1
+    assert "<!-- artifact-impact: REPLACE_ME -->" in template
+
+
+def _commit_test_repository(repository: Path) -> tuple[str, str]:
+    repository.mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=repository, check=True)
+    subprocess.run(
+        ["git", "config", "user.name", "Admission Test"],
+        cwd=repository,
+        check=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.email", "admission@example.invalid"],
+        cwd=repository,
+        check=True,
+    )
+    readme = repository / "README.md"
+    readme.write_text("base\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=repository, check=True)
+    subprocess.run(["git", "commit", "-qm", "base"], cwd=repository, check=True)
+    base = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=repository,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    readme.write_text("head\n", encoding="utf-8")
+    subprocess.run(["git", "commit", "-qam", "head"], cwd=repository, check=True)
+    head = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=repository,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    return base, head
+
+
+def test_local_pr_contract_reuses_remote_admission_rules(tmp_path: Path):
+    repository = tmp_path / "repository"
+    base, head = _commit_test_repository(repository)
+
+    ready, resolved_base, resolved_head = decide_local_pull_request(
+        repository_root=repository,
+        base=base,
+        head=head,
+        body="<!-- artifact-impact: none -->",
+    )
+    invalid, _, _ = decide_local_pull_request(
+        repository_root=repository,
+        base=base,
+        head=head,
+        body="<!-- artifact-impact: REPLACE_ME -->",
+    )
+
+    assert ready.mode == "targeted"
+    assert ready.validation_class == "targeted:docs"
+    assert resolved_base == base
+    assert resolved_head == head
+    assert invalid.mode == "unclassified"
+    assert "unknown_artifact_impact:replace_me" in invalid.reason
 
 
 def test_exact_owner_accepted_ui_subject_needs_no_repeat_ui_test():

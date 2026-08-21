@@ -929,6 +929,88 @@ def _git(*args: str) -> str:
     return completed.stdout.strip()
 
 
+def _git_in(repository_root: Path, *args: str) -> str:
+    completed = subprocess.run(
+        ["git", *args],
+        cwd=repository_root,
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+    )
+    return completed.stdout.strip()
+
+
+def local_pull_request_files(
+    repository_root: Path, base: str, head: str
+) -> tuple[str, str, list[dict]]:
+    """Build GitHub-compatible changed-file evidence from an exact local diff."""
+
+    root = repository_root.resolve()
+    base_sha = _git_in(root, "rev-parse", "--verify", f"{base}^{{commit}}")
+    head_sha = _git_in(root, "rev-parse", "--verify", f"{head}^{{commit}}")
+    files: list[dict] = []
+    diff = _git_in(
+        root,
+        "diff",
+        "--name-status",
+        "--find-renames",
+        f"{base_sha}...{head_sha}",
+        "--",
+    )
+    for line in diff.splitlines():
+        fields = line.split("\t")
+        code = fields[0]
+        if code.startswith("R") and len(fields) == 3:
+            previous, path = fields[1:]
+            status = "renamed"
+        elif code in {"A", "M", "D"} and len(fields) == 2:
+            path = fields[1]
+            previous = None
+            status = {"A": "added", "M": "modified", "D": "removed"}[code]
+        else:
+            raise ValueError(f"unsupported_git_change:{line}")
+        item = {"filename": path, "status": status}
+        if previous is not None:
+            item["previous_filename"] = previous
+        if _is_user_visible_path(path) or (
+            previous is not None and _is_user_visible_path(previous)
+        ):
+            revision = base_sha if status == "removed" else head_sha
+            blob_path = previous if status == "removed" else path
+            item["sha"] = _git_in(root, "rev-parse", f"{revision}:{blob_path}")
+        files.append(item)
+    if not files:
+        raise ValueError("local_pull_request_files_missing")
+    return base_sha, head_sha, files
+
+
+def decide_local_pull_request(
+    *, repository_root: Path, base: str, head: str, body: str
+) -> tuple[AdmissionDecision, str, str]:
+    """Apply remote PR admission rules to an exact local base, head, and body."""
+
+    try:
+        base_sha, head_sha, files = local_pull_request_files(
+            repository_root, base, head
+        )
+        decision = _classify_pull_request_evidence(
+            pull_request={"body": body}, files=files
+        )
+        return decision, base_sha, head_sha
+    except Exception as exc:
+        return (
+            AdmissionDecision(
+                mode="unclassified",
+                reason=_fail_safe_reason(exc),
+                validation_class="unclassified",
+            ),
+            "",
+            "",
+        )
+
+
 def owner_ui_marker_from_git(base: str) -> str:
     """Build the PR marker after Owner review and the local commit exist."""
 
@@ -976,6 +1058,15 @@ def main() -> int:
         help="print the Owner-accepted UI subject marker for BASE...HEAD",
     )
     parser.add_argument(
+        "--validate-pr-body",
+        type=Path,
+        metavar="PATH",
+        help="validate one prepared PR body against an exact local diff",
+    )
+    parser.add_argument("--base-commit", metavar="COMMIT")
+    parser.add_argument("--head-commit", metavar="COMMIT")
+    parser.add_argument("--repository-root", type=Path, default=Path.cwd())
+    parser.add_argument(
         "--verify-production-evidence",
         action="store_true",
         help="verify the exact production run and published commit from environment",
@@ -985,6 +1076,42 @@ def main() -> int:
     if args.owner_ui_marker_from:
         print(owner_ui_marker_from_git(args.owner_ui_marker_from))
         return 0
+    if args.validate_pr_body:
+        if not args.base_commit or not args.head_commit:
+            parser.error(
+                "--validate-pr-body requires --base-commit and --head-commit"
+            )
+        try:
+            body = args.validate_pr_body.read_text(encoding="utf-8")
+        except Exception as exc:
+            decision = AdmissionDecision(
+                mode="unclassified",
+                reason=_fail_safe_reason(exc),
+                validation_class="unclassified",
+            )
+            base_sha = ""
+            head_sha = ""
+        else:
+            decision, base_sha, head_sha = decide_local_pull_request(
+                repository_root=args.repository_root,
+                base=args.base_commit,
+                head=args.head_commit,
+                body=body,
+            )
+        state = "READY" if decision.mode == "targeted" else "PR_CONTRACT_INVALID"
+        print(
+            json.dumps(
+                {
+                    "state": state,
+                    "base_sha": base_sha,
+                    "head_sha": head_sha,
+                    "validation_class": decision.validation_class,
+                    "reason": decision.reason,
+                },
+                separators=(",", ":"),
+            )
+        )
+        return 0 if state == "READY" else 6
     if args.verify_production_evidence:
         try:
             result = verify_production_evidence(

@@ -18,7 +18,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 
 | Phase | Objective | Status |
 | --- | --- | --- |
-| 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Active; P12-10 accepted-task completion authorized as recorded in STATUS |
+| 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Active; P12-10 completed, P12-11 planned but not authorized; current out-of-sequence governance repair is recorded in STATUS |
 | 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |

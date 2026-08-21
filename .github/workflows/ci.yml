@@ -192,5 +192,6 @@ jobs:
           fi
           if [ "${{ needs.admission.outputs.mode }}" = "unclassified" ]; then
             echo "Unknown or incomplete evidence requires owner classification; no catch-all tests were run." >&2
+            echo "Admission reason: ${{ needs.admission.outputs.reason }}" >&2
           fi
           exit 1

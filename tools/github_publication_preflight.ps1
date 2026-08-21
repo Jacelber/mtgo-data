@@ -1,7 +1,12 @@
 [CmdletBinding()]
 param(
     [switch]$ActualPublicationContext,
-    [switch]$RequireWorkflowScope
+    [switch]$RequireWorkflowScope,
+    [string]$PrBodyFile = "",
+    [string]$BaseCommit = "",
+    [string]$HeadCommit = "",
+    [string]$RepositoryRoot = (Get-Location).Path,
+    [string]$PythonExecutable = ""
 )
 
 Set-StrictMode -Version Latest
@@ -18,17 +23,22 @@ function Write-PreflightResult {
         [Nullable[bool]]$PushPermission = $null,
         [AllowNull()]
         [Nullable[bool]]$WorkflowScope = $null,
+        [string]$Reason = "",
         [Parameter(Mandatory = $true)]
         [string]$NextAction
     )
 
-    [ordered]@{
+    $result = [ordered]@{
         state = $State
         login = $Login
         push_permission = $PushPermission
         workflow_scope = $WorkflowScope
         next_action = $NextAction
-    } | ConvertTo-Json -Compress
+    }
+    if ($Reason) {
+        $result.reason = $Reason
+    }
+    $result | ConvertTo-Json -Compress
     exit $ExitCode
 }
 
@@ -50,6 +60,64 @@ if (-not $ActualPublicationContext) {
         -State "RETRY_ACTUAL_CONTEXT" `
         -ExitCode 2 `
         -NextAction "Rerun once in the actual publication context; do not ask the Owner to log in."
+}
+
+if (-not $PrBodyFile -or -not $BaseCommit -or -not $HeadCommit) {
+    Write-PreflightResult `
+        -State "PR_CONTRACT_INVALID" `
+        -ExitCode 6 `
+        -Reason "missing_pr_contract_input" `
+        -NextAction "Prepare the exact PR body and supply its path plus the exact base and head commits; no GitHub call was made."
+}
+
+if (-not $PythonExecutable) {
+    $PythonExecutable = Join-Path $RepositoryRoot ".venv\Scripts\python.exe"
+}
+if (-not (Test-Path -LiteralPath $PythonExecutable -PathType Leaf)) {
+    Write-PreflightResult `
+        -State "LOCAL_VALIDATION_ERROR" `
+        -ExitCode 7 `
+        -Reason "python_executable_missing" `
+        -NextAction "Supply the repository Python executable and rerun locally; no GitHub call was made."
+}
+
+$admissionScript = Join-Path $PSScriptRoot "..\ci_master_admission.py"
+try {
+    $contractOutput = @(& $PythonExecutable -B $admissionScript `
+        --validate-pr-body $PrBodyFile `
+        --base-commit $BaseCommit `
+        --head-commit $HeadCommit `
+        --repository-root $RepositoryRoot 2>&1)
+    $contractExitCode = $LASTEXITCODE
+} catch {
+    Write-PreflightResult `
+        -State "LOCAL_VALIDATION_ERROR" `
+        -ExitCode 7 `
+        -Reason "pr_contract_validator_invocation_failed" `
+        -NextAction "Stop and repair the local validator invocation; no GitHub call was made."
+}
+$contractText = $contractOutput -join "`n"
+try {
+    $contract = $contractText | ConvertFrom-Json -ErrorAction Stop
+} catch {
+    Write-PreflightResult `
+        -State "LOCAL_VALIDATION_ERROR" `
+        -ExitCode 7 `
+        -Reason "pr_contract_validator_output_invalid" `
+        -NextAction "Stop and repair the local validator invocation; no GitHub call was made."
+}
+
+if ($contractExitCode -ne 0 -or [string]$contract.state -ne "READY") {
+    $contractReason = if ($contract.PSObject.Properties["reason"]) {
+        [string]$contract.reason
+    } else {
+        "pr_contract_validation_failed"
+    }
+    Write-PreflightResult `
+        -State "PR_CONTRACT_INVALID" `
+        -ExitCode 6 `
+        -Reason $contractReason `
+        -NextAction "Correct the prepared PR body or exact diff evidence and rerun locally; no GitHub call was made."
 }
 
 $auth = Invoke-GhText -Arguments @(
