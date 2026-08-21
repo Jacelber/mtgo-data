@@ -6,6 +6,7 @@ import argparse
 from pathlib import Path
 import sys
 
+from mtgmeta import catalog
 from mtgmeta.config import DisabledFormatError, FormatConfigError, load_format_registry
 
 from . import DEFAULT_REGISTRY_PATH
@@ -263,7 +264,15 @@ def _run_pickup(args: argparse.Namespace, root: Path, registry: Path) -> int:
     if result is None:
         print("No manually approved Weekly Pickup candidates are available.")
     else:
+        metadata_path = pickup.generate_metadata(
+            root,
+            args.format_id,
+            registry_path=registry,
+        )
+        catalog_path = catalog.write_catalog(root, registry_path=registry)
         print(f"Weekly Pickup published: {result['published_path']}")
+        print(f"MTGO metadata refreshed: {metadata_path}")
+        print(f"Consumer catalog refreshed: {catalog_path}")
     return 0
 
 

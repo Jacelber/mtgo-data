@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/ci-pr-body-preflight-20260821-01"
+  current_working_branch: "codex/w33-pickup-publication-recovery"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,61 +31,79 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "CI-PR-BODY-PREFLIGHT-01"
-  name: "Local PR contract preflight and actionable admission failure"
+  id: "W33-PICKUP-PUBLICATION-RECOVERY"
+  name: "Publish the accepted W33 Pickup before Landing review"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-21"
   implementation_completed_on: "2026-08-21"
   owner_accepted_on: "2026-08-21"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/ci-pr-body-preflight-20260821-01"
-  branch: "codex/ci-pr-body-preflight-20260821-01"
-  base_commit: "8c7d88d8ffba37853439b5d268ed6cc9fcca0f74"
-  objective: "Prevent repeated remote CI failures caused by omitted or stale machine-readable PR-body evidence by validating the exact body against the exact local base-to-head diff before the first remote write, while preserving fail-closed CI admission."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/w33-pickup-publication-recovery-20260821-01"
+  branch: "codex/w33-pickup-publication-recovery"
+  base_commit: "1837a01964c2cf2d7b4851a5eda2fdbf544d823c"
+  objective: "Restore the Owner-confirmed 2026-W33 Pickup selection and Chinese copy to the repository, publish Standard and Modern Pickup week documents through the existing reader page, and make that verified cloud output the mandatory input before P12-11A Landing review resumes."
   authorization:
     local_implementation: false
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "ci_master_admission.py"
-    - "tools/github_publication_preflight.ps1"
-    - ".github/pull_request_template.md"
-    - ".github/workflows/ci.yml"
-    - "tests/test_ci_master_admission.py"
-    - "tests/test_github_publication_preflight.py"
-    - "tests/test_ci_workflow.py"
-    - "AGENTS.md"
-    - "docs/DEVELOPMENT_WORKFLOW.md"
-    - "docs/ROADMAP.md"
+    - "stats/standard/mtgo/pickup/candidates_2026-W33.yaml"
+    - "stats/standard/mtgo/pickup/base_reference_2026-W33.yaml"
+    - "stats/standard/mtgo/pickup/2026-W33.json"
+    - "stats/standard/mtgo/pickup/index.json"
+    - "stats/standard/mtgo/pickup/known_archetypes.json"
+    - "stats/standard/mtgo/meta.json"
+    - "stats/modern/mtgo/pickup/candidates_2026-W33.yaml"
+    - "stats/modern/mtgo/pickup/base_reference_2026-W33.yaml"
+    - "stats/modern/mtgo/pickup/2026-W33.json"
+    - "stats/modern/mtgo/pickup/index.json"
+    - "stats/modern/mtgo/pickup/known_archetypes.json"
+    - "stats/modern/mtgo/meta.json"
+    - "stats/catalog.json"
+    - "src/mtgmeta/public_contract.py"
+    - "src/mtgmeta/mtgo/__main__.py"
+    - "src/mtgmeta/mtgo/pickup.py"
+    - "assets/js/phase8/app-mtgo.js"
+    - "schemas/mtgo-pickup-week.schema.json"
+    - "schemas/manifest.json"
+    - "tests/test_mtgo_pickup_provenance.py"
+    - "tests/browser/production-pages.spec.js"
+    - "tests/js/phase8-pickup.test.js"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
+    - "docs/WEEKLY_MAINTENANCE.md"
+    - "README.md"
     - "docs/STATUS.yaml"
   protected_scope:
     statistical_formulas_changed: "none"
-    public_json_or_schema_changed: "none"
-    generated_or_source_data_changed: "none"
+    public_json_or_schema_changed: "add reviewed 2026-W33 documents as Pickup 1.1.0 with stable provenance; preserve schema compatibility for historical Pickup 1.0.0; make the existing Modern Pickup catalog available"
+    generated_or_source_data_changed: "regenerate the private W33 candidate and comparison base under the already accepted current classifier and selection policy, then apply only the twelve Owner-confirmed selections and exact Chinese copy"
     classification_identities_changed: "none"
-    workflows_or_public_paths_changed: "change only PR admission feedback and the required pre-publication contract check; no production or Pages workflow change"
+    workflows_or_public_paths_changed: "make pickup publish automatically refresh format metadata and the global catalog; add the W33 week files and activate the already supported Modern Pickup catalog path; render a missing Pickup deviation as a dash instead of null text"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Reuse the existing fail-closed admission classifier to validate one prepared PR body against the exact local base-to-head diff."
-    - "Require that validation in the repository publication preflight before any GitHub authentication or permission check."
-    - "Make the PR template invalid until its artifact-impact placeholder is deliberately replaced."
-    - "Surface the exact admission reason in the aggregate CI failure."
-    - "Add focused governance tests and update the authoritative publication instructions."
+    - "Recover the exact twelve accepted W33 Pickup rows and Chinese comments from the completed v2 review workbook."
+    - "Publish Standard and Modern W33 Pickup documents, indexes, known-state updates, format metadata, and the global catalog."
+    - "Make verified cloud Pickup publication an explicit step before Landing review in the weekly runbook."
+    - "Commit, publish one Ready PR, merge after required checks, and verify the exact Pages publication and existing Pickup pages."
   prohibited_changes:
-    - "Do not alter validation categories, validation strength, product code, statistical semantics, generated data, public paths, classifier rules, production timing, or Pages publication."
-    - "Do not dispatch production or begin another task."
-  stop_point: "Complete the accepted unchanged task through commit, one Ready PR, required CI, merge, and any applicable publication confirmation; then stop before another task."
+    - "Do not change classifier rules, selection thresholds, source events, deck identities, user-authored copy, frontend behavior beyond the missing-deviation compatibility display, workflow timing, Landing output, or protected event 434455 bytes."
+    - "Do not start Landing generation until the exact Pickup publication is verified in the cloud."
+  stop_point: "Complete the accepted Pickup publication through one Ready PR, required CI, merge, Pages verification, and live Pickup-page verification; then resume the already authorized P12-11A correction from that exact cloud baseline."
   validation:
     evidence:
-      - "70 focused admission, publication-preflight, and CI-workflow tests passed."
-      - "Ruff passed for the changed Python admission and focused governance test files."
-      - "Repository validation passed: Python 80/80, JavaScript 18/18, JSON 1823/1823, YAML 60/60, references 54/54, hygiene 2256/2256."
-      - "Complete diff review and git diff --check passed with no product, data, statistical, classifier, production, or public-path change."
+      - "21 focused Pickup provenance, publication-refresh, and generated-consumer tests passed."
+      - "Pickup week and index Schema validation passed across 86 public generated JSON documents, including Pickup 1.0.0 history and new 1.1.0 W33 documents."
+      - "Ruff passed for all changed Python implementation and focused test files."
+      - "Exact-content verification passed for twelve unique accepted decks: Standard 8 existing plus 3 new, Modern 1 existing; all Chinese copy matched the completed review workbook, and Boros Dragon carried one row with both return and new_card reasons."
+      - "Two focused Node tests passed for missing and numeric Pickup deviation rendering; changed browser JavaScript files passed syntax checks."
+      - "Local browser review passed on the final visible files: Standard showed eleven unique W33 cards with one Boros Dragons row and no null-points text; Modern showed one W33 card and the accepted Belladonna Took Chinese copy."
 
 current_repository_state:
-  baseline_commit: "8c7d88d8ffba37853439b5d268ed6cc9fcca0f74"
-  baseline_note: "Cloud master after P12-10 merged and its applicable Pages publication completed."
+  baseline_commit: "1837a01964c2cf2d7b4851a5eda2fdbf544d823c"
+  baseline_note: "Verified cloud master after the PR-body preflight repair merged and its exact post-merge CI completed."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -94,15 +112,15 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - task: "CI-PR-BODY-PREFLIGHT-01"
+  - task: "W33-PICKUP-PUBLICATION-RECOVERY"
     status: "owner_accepted_completion_authorized"
     remaining_requirements:
-      - "Complete commit, one Ready PR, required CI, merge, and any applicable publication confirmation."
-  - task: "P12-11"
-    status: "planned_not_authorized"
+      - "Complete commit, one Ready PR, required CI, merge, Pages verification, and live Pickup-page verification."
+  - task: "P12-11A"
+    status: "authorized_after_exact_pickup_publication"
     remaining_requirements:
-      - "Complete and close the current governance repair first."
-      - "Obtain a separate task contract and implementation authorization."
+      - "Consume the verified public W33 Pickup week document rather than the private candidate YAML or workbook."
+      - "Regenerate the Landing review carrier from that exact cloud baseline and obtain explicit human-final review."
   - task: "MELEE-V3-PRODUCTION-PREFLIGHT"
     status: "planned_not_authorized"
     remaining_requirements:
@@ -112,15 +130,16 @@ future_task_gates:
       - "Keep the rehearsal non-deploying and review the complete v3 candidate before any public use."
 
 next_approved_task:
-  id: "CI-PR-BODY-PREFLIGHT-01"
-  name: "Local PR contract preflight and actionable admission failure"
+  id: "W33-PICKUP-PUBLICATION-RECOVERY"
+  name: "Publish the accepted W33 Pickup before Landing review"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
-  note: "Owner accepted the unchanged repair on 2026-08-21. Complete commit, one Ready PR, required CI, merge, and any applicable publication confirmation without another authorization prompt, then stop."
+  note: "Owner explicitly required the accepted W33 Pickup to reach the cloud and existing Pickup pages before Landing continues. Complete this unchanged publication without another authorization prompt."
 
 prohibited_next_actions:
   - "Do not dispatch production."
-  - "Do not begin P12-11, P12-12, Landing UI, default-entry cutover, or another task."
-  - "Do not change product code, statistical semantics, generated data, public paths, classifier rules, validation strength, workflow timing, or event 434455 bytes."
+  - "Do not generate or review Landing from a private Pickup candidate or workbook before cloud Pickup verification."
+  - "Do not begin P12-11B, P12-12, Landing UI, default-entry cutover, or another task."
+  - "Do not change product code, statistical semantics, classifier rules, thresholds, workflow timing, or event 434455 bytes."
   - "Do not force-push, mutate protected branches or tags directly, or create a second status-only pull request."
   - "Do not develop directly on master or overwrite unexplained local changes."

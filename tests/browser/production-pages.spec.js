@@ -107,6 +107,15 @@ test("MTGO page renders a published number", async ({ page }) => {
   await expectPublishedNumber(page, "decks");
 });
 
+test("Weekly Pickup renders an unavailable construction deviation as a dash", async ({ page }) => {
+  await page.goto("/index.html?format=standard&product=weekly-pickup&lang=zh");
+  await expect(page.locator(".pickup-card")).toHaveCount(11);
+  const borosDragons = page.locator(".pickup-card", { hasText: "Boros Dragons" });
+  await expect(borosDragons).toHaveCount(1);
+  await expect(borosDragons.locator(".pickup-head")).toContainText("偏离度： —");
+  await expect(page.locator(".pickup-content")).not.toContainText("null 分");
+});
+
 test("Tabletop page renders a published number", async ({ page }) => {
   await page.goto(
     "/melee/index.html?format=modern&product=tabletop-major-events&scope=all_constructed&lang=en"

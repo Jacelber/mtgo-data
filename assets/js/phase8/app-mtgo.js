@@ -679,10 +679,13 @@ function pickupDeck(item, key) {
   const comment = I18n.language() === "en"
     ? (item.comment_en || item.comment_zh || "")
     : (item.comment_zh || "");
+  const deviation = item.deviation === null || item.deviation === undefined
+    ? "—"
+    : t("deck.points", { count: item.deviation });
   return `<article class="pickup-card ${open ? "open" : ""}">
     <button type="button" class="pickup-head" data-pickup-toggle="${escapeHtml(id)}" aria-expanded="${open}">
       <span><strong>${escapeHtml(item.archetype)}</strong><small>${escapeHtml(item.player)} · ${t("deck.rank")} ${item.final_rank}
-      · ${t("deck.points", { count: item.swiss_score })} · ${dateText(item.starttime)}</small></span><b>${title} · ${t("deck.deviation")} ${t("deck.points", { count: item.deviation })}</b>
+      · ${t("deck.points", { count: item.swiss_score })} · ${dateText(item.starttime)}</small></span><b>${title} · ${t("deck.deviation")} ${deviation}</b>
     </button>${open ? `<div class="pickup-body"><p>${escapeHtml(comment)}</p>
       <div class="deck-columns"><div class="deck-column"><h4>${t("deck.main")}</h4>${cardList(item.main_deck)}</div>
       <div class="deck-column"><h4>${t("deck.side")}</h4>${cardList(item.side_deck)}</div></div></div>` : ""}</article>`;

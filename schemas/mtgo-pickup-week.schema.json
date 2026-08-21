@@ -2,68 +2,123 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-pickup-week.schema.json",
   "title": "MTGO Weekly Pickup",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "type": "object",
   "required": ["schema_version", "format", "source", "week", "start", "end", "existing_changes", "new_archetypes"],
   "properties": {
-    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
-    "format": {"enum": ["standard", "modern"]}, "source": {"const": "mtgo"}, "week": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
-    "start": {"type": "string", "format": "date"}, "end": {"type": "string", "format": "date"},
+    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
+    "format": {"enum": ["standard", "modern"]},
+    "source": {"const": "mtgo"},
+    "week": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
+    "start": {"type": "string", "format": "date"},
+    "end": {"type": "string", "format": "date"},
+    "source_event_ids": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^[0-9]+$"},
+      "uniqueItems": true
+    },
+    "classifier_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "selection_policy_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "existing_changes": {"type": "array", "items": {"$ref": "#/$defs/pickupDeck"}},
     "new_archetypes": {"type": "array", "items": {"$ref": "#/$defs/pickupDeck"}}
   },
-  "$defs": {"pickupDeck": {"type": "object", "required": ["archetype", "player", "final_rank", "swiss_score", "player_count", "starttime", "deviation", "source", "comment_zh", "comment_en", "main_deck", "side_deck"], "properties": {
-    "archetype_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
-    "subtype_id": {
-      "oneOf": [
-        {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
-        {"type": "null"}
-      ]
-    },
-    "subtype": {
-      "oneOf": [
-        {"type": "string", "minLength": 1},
-        {"type": "null"}
-      ]
-    },
-    "archetype": {"type": "string", "minLength": 1}, "player": {"type": "string"}, "final_rank": {"type": "integer", "minimum": 1},
-    "swiss_score": {"type": "integer", "minimum": 0}, "player_count": {"type": "integer", "minimum": 1}, "starttime": {"type": "string", "minLength": 1},
-    "deviation": {"type": "number", "minimum": 0}, "source": {"enum": ["existing", "new"]}, "comment_zh": {"type": "string"}, "comment_en": {"type": "string"},
-    "main_deck": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/cardQuantity"}},
-    "side_deck": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/cardQuantity"}}
-  }, "allOf": [
-    {
-      "if": {
-        "properties": {"archetype_id": {"type": "string"}},
-        "required": ["archetype_id"]
+  "$defs": {
+    "pickupDeck": {
+      "type": "object",
+      "required": ["archetype", "player", "final_rank", "swiss_score", "player_count", "starttime", "deviation", "source", "comment_zh", "comment_en", "main_deck", "side_deck"],
+      "properties": {
+        "archetype_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "subtype_id": {
+          "oneOf": [
+            {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+            {"type": "null"}
+          ]
+        },
+        "subtype": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {"type": "null"}
+          ]
+        },
+        "event_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "deck_id": {"type": "string", "pattern": "^[0-9a-f]{20}$"},
+        "deck_fingerprint_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "archetype": {"type": "string", "minLength": 1},
+        "player": {"type": "string"},
+        "final_rank": {"type": "integer", "minimum": 1},
+        "swiss_score": {"type": "integer", "minimum": 0},
+        "player_count": {"type": "integer", "minimum": 1},
+        "starttime": {"type": "string", "minLength": 1},
+        "deviation": {
+          "oneOf": [
+            {"type": "number", "minimum": 0},
+            {"type": "null"}
+          ]
+        },
+        "source": {"enum": ["existing", "new"]},
+        "comment_zh": {"type": "string"},
+        "comment_en": {"type": "string"},
+        "reason_types": {
+          "type": "array",
+          "items": {"enum": ["share_increase", "return", "new_card", "new_archetype", "build_shift"]},
+          "uniqueItems": true
+        },
+        "main_deck": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/cardQuantity"}},
+        "side_deck": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/cardQuantity"}}
       },
-      "then": {"required": ["subtype_id", "subtype"]}
+      "allOf": [
+        {
+          "if": {
+            "properties": {"archetype_id": {"type": "string"}},
+            "required": ["archetype_id"]
+          },
+          "then": {"required": ["subtype_id", "subtype"]}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "reviewedPickupDeck": {
+      "allOf": [
+        {"$ref": "#/$defs/pickupDeck"},
+        {"required": ["archetype_id", "subtype_id", "subtype", "event_id", "deck_id", "deck_fingerprint_sha256", "reason_types"]}
+      ]
     }
-  ], "additionalProperties": false}},
+  },
   "allOf": [
     {
-      "if": {"properties": {"format": {"const": "modern"}}},
+      "if": {
+        "properties": {"schema_version": {"const": "1.0.0"}, "format": {"const": "modern"}},
+        "required": ["schema_version", "format"]
+      },
       "then": {
         "properties": {
-          "existing_changes": {
-            "items": {"allOf": [{"$ref": "#/$defs/pickupDeck"}, {"required": ["archetype_id", "subtype_id", "subtype"]}]}
-          },
-          "new_archetypes": {
-            "items": {"allOf": [{"$ref": "#/$defs/pickupDeck"}, {"required": ["archetype_id", "subtype_id", "subtype"]}]}
-          }
+          "existing_changes": {"items": {"allOf": [{"$ref": "#/$defs/pickupDeck"}, {"required": ["archetype_id", "subtype_id", "subtype"]}]}},
+          "new_archetypes": {"items": {"allOf": [{"$ref": "#/$defs/pickupDeck"}, {"required": ["archetype_id", "subtype_id", "subtype"]}]}}
         }
       }
     },
     {
-      "if": {"properties": {"format": {"const": "standard"}}},
+      "if": {
+        "properties": {"schema_version": {"const": "1.0.0"}, "format": {"const": "standard"}},
+        "required": ["schema_version", "format"]
+      },
       "then": {
         "properties": {
-          "existing_changes": {
-            "items": {"allOf": [{"$ref": "#/$defs/pickupDeck"}, {"not": {"required": ["archetype_id"]}}]}
-          },
-          "new_archetypes": {
-            "items": {"allOf": [{"$ref": "#/$defs/pickupDeck"}, {"not": {"required": ["archetype_id"]}}]}
-          }
+          "existing_changes": {"items": {"allOf": [{"$ref": "#/$defs/pickupDeck"}, {"not": {"required": ["archetype_id"]}}]}},
+          "new_archetypes": {"items": {"allOf": [{"$ref": "#/$defs/pickupDeck"}, {"not": {"required": ["archetype_id"]}}]}}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"schema_version": {"const": "1.1.0"}},
+        "required": ["schema_version"]
+      },
+      "then": {
+        "required": ["source_event_ids", "classifier_digest", "selection_policy_digest"],
+        "properties": {
+          "existing_changes": {"items": {"$ref": "#/$defs/reviewedPickupDeck"}},
+          "new_archetypes": {"items": {"$ref": "#/$defs/reviewedPickupDeck"}}
         }
       }
     }

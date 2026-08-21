@@ -257,6 +257,10 @@ window. After review and approval, publish with:
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format <standard-or-modern> pickup publish
 ```
 
+The publish command also refreshes that format's metadata and the global
+consumer catalog. A reviewed Pickup is therefore available to the existing
+Pickup page before any Landing draft reads it.
+
 For a new Modern known-state bootstrap, run only under the applicable approval:
 
 ```powershell

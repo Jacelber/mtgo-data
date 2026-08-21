@@ -1,9 +1,11 @@
+import json
 from datetime import date
 from types import SimpleNamespace
 
 import pytest
 import yaml
 
+from mtgmeta.mtgo import __main__ as mtgo_cli
 from mtgmeta.mtgo import pickup
 
 
@@ -248,3 +250,123 @@ def test_publish_rejects_candidate_from_an_old_classifier(monkeypatch, tmp_path)
             today=date(2026, 8, 18),
             candidate_directory=tmp_path,
         )
+
+
+def test_publish_writes_reviewed_cloud_input_with_exact_provenance(monkeypatch, tmp_path):
+    rules = object()
+    output = tmp_path / "published"
+    monkeypatch.setattr(
+        pickup,
+        "_pickup_directories",
+        lambda *args, **kwargs: (tmp_path, output),
+    )
+    monkeypatch.setattr(pickup, "load_mtgo_context", lambda *args, **kwargs: object())
+    monkeypatch.setattr(pickup, "load_rules_for_format", lambda *args, **kwargs: rules)
+    monkeypatch.setattr(pickup, "load_pickup_policy", lambda *args, **kwargs: POLICY)
+    monkeypatch.setattr(pickup.stats, "load_all_events", lambda *args, **kwargs: EVENTS)
+    monkeypatch.setattr(
+        pickup.stats,
+        "latest_complete_week",
+        lambda *args, **kwargs: WEEK_START,
+    )
+    monkeypatch.setattr(pickup, "classifier_digest", lambda value: "b" * 64)
+    monkeypatch.setattr(pickup, "archetypes_in_window", lambda *args, **kwargs: set())
+    candidate = {
+        **_candidate_document(approved=True),
+        "source_event_ids": ["100"],
+        "classifier_digest": "b" * 64,
+        "selection_policy_digest": pickup.document_digest(POLICY),
+    }
+    candidate["existing_changes"][0].update(
+        {
+            "archetype_id": "current-identity",
+            "subtype_id": None,
+            "subtype": None,
+            "event_id": "100",
+            "deck_id": "a" * 20,
+            "deck_fingerprint_sha256": "c" * 64,
+            "player": "Player",
+            "final_rank": 2,
+            "swiss_score": 12,
+            "player_count": 32,
+            "starttime": "2026-08-10 00:00:00.0",
+            "deviation": None,
+            "source": "existing",
+            "comment_zh": "人工内容",
+            "candidate_reasons": [{"type": "new_card"}, {"type": "build_shift"}],
+            "main_deck": [{"name": "Example Card", "qty": 4}],
+            "side_deck": [],
+        }
+    )
+    (tmp_path / "candidates_2026-W33.yaml").write_text(
+        yaml.safe_dump(candidate, allow_unicode=True),
+        encoding="utf-8",
+    )
+
+    result = pickup.publish(
+        tmp_path,
+        "standard",
+        today=date(2026, 8, 18),
+        candidate_directory=tmp_path,
+    )
+
+    assert result is not None
+    document = json.loads(result["published_path"].read_text(encoding="utf-8"))
+    assert document["schema_version"] == "1.1.0"
+    assert document["source_event_ids"] == ["100"]
+    assert document["classifier_digest"] == "b" * 64
+    assert document["selection_policy_digest"] == pickup.document_digest(POLICY)
+    assert document["existing_changes"][0] == {
+        "archetype_id": "current-identity",
+        "subtype_id": None,
+        "subtype": None,
+        "event_id": "100",
+        "deck_id": "a" * 20,
+        "deck_fingerprint_sha256": "c" * 64,
+        "archetype": "Current Identity",
+        "player": "Player",
+        "final_rank": 2,
+        "swiss_score": 12,
+        "player_count": 32,
+        "starttime": "2026-08-10 00:00:00.0",
+        "deviation": None,
+        "source": "existing",
+        "comment_zh": "人工内容",
+        "comment_en": "",
+        "reason_types": ["new_card", "build_shift"],
+        "main_deck": [{"name": "Example Card", "qty": 4}],
+        "side_deck": [],
+    }
+
+
+def test_pickup_publish_refreshes_page_discovery_outputs(monkeypatch, tmp_path, capsys):
+    published = tmp_path / "stats" / "standard" / "mtgo" / "pickup" / "2026-W33.json"
+    metadata = tmp_path / "stats" / "standard" / "mtgo" / "meta.json"
+    catalog = tmp_path / "stats" / "catalog.json"
+    monkeypatch.setattr(
+        mtgo_cli.pickup,
+        "publish",
+        lambda *args, **kwargs: {"published_path": published},
+    )
+    monkeypatch.setattr(
+        mtgo_cli.pickup,
+        "generate_metadata",
+        lambda *args, **kwargs: metadata,
+    )
+    monkeypatch.setattr(
+        mtgo_cli.catalog,
+        "write_catalog",
+        lambda *args, **kwargs: catalog,
+    )
+
+    result = mtgo_cli._run_pickup(
+        SimpleNamespace(format_id="standard", pickup_command="publish"),
+        tmp_path,
+        tmp_path / "configs" / "formats.yaml",
+    )
+
+    assert result == 0
+    output = capsys.readouterr().out
+    assert f"Weekly Pickup published: {published}" in output
+    assert f"MTGO metadata refreshed: {metadata}" in output
+    assert f"Consumer catalog refreshed: {catalog}" in output

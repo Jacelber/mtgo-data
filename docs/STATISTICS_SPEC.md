@@ -1780,6 +1780,19 @@ and history capability. After the Phase 12 cutover it supplies the curated
 new-deck and new-technology section inside Landing and is not a standalone
 user-facing product.
 
+The weekly sequence has one mandatory publication boundary. Owner-approved
+rows and localized Pickup copy first enter the versioned public week document
+and existing Pickup page. Only that verified public week document may supply
+reviewed Pickup content to the later Landing draft and feature process. A
+private candidate YAML or review workbook cannot substitute for this step.
+
+Pickup week Schema `1.1.0` binds the reviewed document to sorted source event
+IDs, the classifier digest, and the selection-policy digest. Every selected row
+retains its stable parent/subtype identity, exact event and deck identity,
+deck-fingerprint digest, reason types, decklists, and localized copy. A missing
+construction deviation is represented as null rather than zero. Existing
+Schema `1.0.0` history remains valid.
+
 It must not be applied automatically to isolated tabletop events.
 
 ### 16.6 MTGO matchup source
