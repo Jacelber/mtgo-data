@@ -24,6 +24,7 @@ from .week_lifecycle import is_sealed, provisional_through, seal_on
 
 SOURCE_ID = "mtgo"
 INITIAL_KNOWN_WEEKS = 12
+PICKUP_WEEK_SCHEMA_VERSION = "1.1.0"
 DEFAULT_POLICY_PATH = Path("configs/mtgo_pickup_policy.yaml")
 
 
@@ -1017,7 +1018,20 @@ def _approved_entries(document: Mapping[str, Any], key: str) -> list[dict[str, A
             raise MTGOPickupError(f"{key} entries must be mappings")
         if not entry.get("approved"):
             continue
+        reason_types = list(
+            dict.fromkeys(
+                str(reason["type"])
+                for reason in entry.get("candidate_reasons", [])
+                if isinstance(reason, Mapping) and isinstance(reason.get("type"), str)
+            )
+        )
         published_entry = {
+            "archetype_id": entry["archetype_id"],
+            "subtype_id": entry.get("subtype_id"),
+            "subtype": entry.get("subtype"),
+            "event_id": str(entry["event_id"]),
+            "deck_id": str(entry["deck_id"]),
+            "deck_fingerprint_sha256": str(entry["deck_fingerprint_sha256"]),
             "archetype": entry["archetype"],
             "player": entry.get("player"),
             "final_rank": entry.get("final_rank"),
@@ -1028,16 +1042,10 @@ def _approved_entries(document: Mapping[str, Any], key: str) -> list[dict[str, A
             "source": entry.get("source"),
             "comment_zh": (entry.get("comment_zh") or "").strip(),
             "comment_en": (entry.get("comment_en") or "").strip(),
+            "reason_types": reason_types,
             "main_deck": entry.get("main_deck", []),
             "side_deck": entry.get("side_deck", []),
         }
-        if "archetype_id" in entry:
-            published_entry = {
-                "archetype_id": entry["archetype_id"],
-                "subtype_id": entry.get("subtype_id"),
-                "subtype": entry.get("subtype"),
-                **published_entry,
-            }
         approved.append(published_entry)
     return approved
 
@@ -1096,6 +1104,11 @@ def publish(
         raise MTGOPickupError(
             f"{candidate_path}: Pickup candidate classifier changed; regenerate and re-review"
         )
+    policy_digest = document_digest(load_pickup_policy(repository_root))
+    if document.get("selection_policy_digest") != policy_digest:
+        raise MTGOPickupError(
+            f"{candidate_path}: Pickup selection policy changed; regenerate and re-review"
+        )
     existing = _approved_entries(document, "existing_changes")
     new_archetypes = _approved_entries(document, "new_archetypes")
     if not existing and not new_archetypes:
@@ -1109,9 +1122,13 @@ def publish(
             "week": week,
             "start": document.get("start"),
             "end": document.get("end"),
+            "source_event_ids": document["source_event_ids"],
+            "classifier_digest": document["classifier_digest"],
+            "selection_policy_digest": document["selection_policy_digest"],
             "existing_changes": existing,
             "new_archetypes": new_archetypes,
-        }
+        },
+        schema_version=PICKUP_WEEK_SCHEMA_VERSION,
     )
     published_path = output / f"{week}.json"
     published_path.write_text(

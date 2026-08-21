@@ -3181,6 +3181,21 @@ pool, including full main decks and sideboards, so the Owner can perform the
 manual post-ban route or add any otherwise unselected Top 8 deck. These private
 review artifacts and pending decisions do not enter public Pages output.
 
+After Owner approval, Pickup publication is a separate required write and
+verification step before Landing preparation. It writes the reviewed content
+to the existing public history paths, refreshes format metadata and the global
+catalog, and verifies the reader-facing Pickup page. Landing must read reviewed
+Pickup content from that published week document; it must not bypass the cloud
+boundary by reading approval or copy directly from candidate YAML or XLSX.
+
+Pickup week Schema `1.1.0` adds the exact source event IDs, classifier digest,
+selection-policy digest, stable identities, exact event/deck identity,
+deck-fingerprint digest, and reason-type tags needed to bind the later Landing
+input. It preserves localized copy and complete decklists. Schema `1.0.0`
+history remains accepted for compatibility, but a newly published reviewed
+week uses `1.1.0`. Both Standard and Modern index and week paths are covered by
+the public Schema manifest.
+
 The generator may suggest exact-deck cards newly present or increased against
 the four-week reference, but the reviewer owns the final selection, category,
 localized editorial copy, featured deck, ordering, and four-card display.

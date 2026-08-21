@@ -4889,3 +4889,61 @@ not authorize commit, remote publication, merge, production dispatch, P12-11,
 P12-12, Landing UI, a default-entry change, historical Landing documents,
 classifier changes, source fetch, workflow timing changes, or protected event
 `434455` byte changes.
+
+---
+
+# DEC-110 - Publish reviewed Pickup before Landing consumes it
+
+Status: `Accepted`
+
+## Context
+
+The completed W33 workbook already contained twelve Owner-confirmed Pickup
+selections and Chinese comments, while its control sheet explicitly recorded
+that Landing had not started. The first P12-11A rehearsal nevertheless read
+the private candidate YAML and generated a new Landing review carrier before
+the accepted Pickup rows had reached the public week documents and existing
+Pickup pages. That skipped an observable weekly-maintenance stage and made the
+workbook, rather than the cloud Pickup result, the effective handoff.
+
+The old Pickup week contract also could not validate the current Standard
+stable IDs or null construction deviations, and the Schema manifest did not
+cover Modern Pickup history. Publishing the recovered review without repairing
+those boundaries would either fail validation or leave Landing without a
+stable cloud provenance binding.
+
+## Decision
+
+Weekly maintenance publishes and verifies accepted Pickup before starting
+Landing preparation. Publication writes the exact approved rows and localized
+copy to `stats/<format>/mtgo/pickup/<week>.json`, updates the format index,
+metadata and global catalog, deploys through the normal reviewed Pages path,
+and verifies the existing reader-facing Pickup page. Landing reads reviewed
+Pickup content only from that published week document. Private candidate YAML
+continues to own machine screening evidence and later Landing review state, but
+its approvals or copy cannot bypass the public Pickup handoff.
+
+Version newly published Pickup weeks as `1.1.0`. Bind them to source event IDs,
+classifier and selection-policy digests, and retain stable archetype/subtype,
+event, deck, deck-fingerprint, reason-type, decklist and localized-copy fields.
+Allow a genuinely unavailable construction deviation as null. Continue to
+accept existing `1.0.0` history, and validate both Standard and Modern public
+Pickup paths.
+
+Private candidate YAML continues to own machine screening and approval
+evidence. A separate Landing review artifact owns Landing machine facts and
+human-final review state; neither artifact may silently replace the published
+Pickup week as the source of reviewed Pickup content.
+
+This decision supersedes DEC-109 only where it made the private candidate the
+direct reviewed-content input to Landing. It does not change screening
+thresholds, classifier identities, source events, the Owner's copy, workflow
+timing, Landing editorial authority, or protected event `434455` bytes.
+
+## Consequences
+
+The W33 trial now has an auditable order: reviewed Pickup, verified cloud
+Pickup page, then Landing draft and human final. A missing, stale, invalid, or
+unpublished Pickup week blocks Landing from using that content instead of
+silently falling back to XLSX or private YAML. Standard and Modern can use the
+same supported public contract while all older Pickup links remain compatible.
