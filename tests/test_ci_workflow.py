@@ -113,6 +113,7 @@ def test_unknown_paths_fail_fast_in_aggregate_without_running_targeted_job():
     assert '= "unclassified"' in command
     assert "owner classification" in command
     assert "catch-all tests were run" in command
+    assert "Admission reason: ${{ needs.admission.outputs.reason }}" in command
     assert "exit 1" in command
 
 

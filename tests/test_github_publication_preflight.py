@@ -32,6 +32,8 @@ import sys
 
 scenario = os.environ["FAKE_GH_SCENARIO"]
 arguments = sys.argv[1:]
+with open(os.environ["FAKE_GH_LOG"], "a", encoding="utf-8") as log:
+    log.write(json.dumps(arguments) + "\\n")
 
 if arguments[:2] == ["auth", "status"]:
     state = "failure" if scenario == "auth_rejected" else "success"
@@ -88,6 +90,7 @@ def _run_preflight(
     _write_fake_gh(tmp_path)
     environment = os.environ.copy()
     environment["FAKE_GH_SCENARIO"] = scenario
+    environment["FAKE_GH_LOG"] = str(tmp_path / "gh-calls.log")
     environment["PATH"] = f"{tmp_path}{os.pathsep}{environment['PATH']}"
     result = subprocess.run(
         [
@@ -109,6 +112,56 @@ def _run_preflight(
     return result, payload
 
 
+def _contract_arguments(tmp_path: Path) -> tuple[str, ...]:
+    repository = tmp_path / "repository"
+    repository.mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=repository, check=True)
+    subprocess.run(
+        ["git", "config", "user.name", "Preflight Test"],
+        cwd=repository,
+        check=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.email", "preflight@example.invalid"],
+        cwd=repository,
+        check=True,
+    )
+    readme = repository / "README.md"
+    readme.write_text("base\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=repository, check=True)
+    subprocess.run(["git", "commit", "-qm", "base"], cwd=repository, check=True)
+    base = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=repository,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    readme.write_text("head\n", encoding="utf-8")
+    subprocess.run(["git", "commit", "-qam", "head"], cwd=repository, check=True)
+    head = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=repository,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    body = tmp_path / "pr-body.md"
+    body.write_text("<!-- artifact-impact: none -->\n", encoding="utf-8")
+    return (
+        "-PrBodyFile",
+        str(body),
+        "-BaseCommit",
+        base,
+        "-HeadCommit",
+        head,
+        "-RepositoryRoot",
+        str(repository),
+        "-PythonExecutable",
+        sys.executable,
+    )
+
+
 def test_ordinary_context_cannot_issue_credential_verdict(tmp_path: Path) -> None:
     result, payload = _run_preflight(tmp_path, "ready")
 
@@ -117,11 +170,13 @@ def test_ordinary_context_cannot_issue_credential_verdict(tmp_path: Path) -> Non
 
 
 def test_structured_active_account_can_return_ready(tmp_path: Path) -> None:
+    contract = _contract_arguments(tmp_path)
     result, payload = _run_preflight(
         tmp_path,
         "ready",
         "-ActualPublicationContext",
         "-RequireWorkflowScope",
+        *contract,
     )
 
     assert result.returncode == 0
@@ -137,10 +192,12 @@ def test_structured_active_account_can_return_ready(tmp_path: Path) -> None:
 
 
 def test_structured_authentication_failure_is_rejected(tmp_path: Path) -> None:
+    contract = _contract_arguments(tmp_path)
     result, payload = _run_preflight(
         tmp_path,
         "auth_rejected",
         "-ActualPublicationContext",
+        *contract,
     )
 
     assert result.returncode == 3
@@ -148,11 +205,13 @@ def test_structured_authentication_failure_is_rejected(tmp_path: Path) -> None:
 
 
 def test_missing_workflow_scope_is_permission_failure(tmp_path: Path) -> None:
+    contract = _contract_arguments(tmp_path)
     result, payload = _run_preflight(
         tmp_path,
         "workflow_missing",
         "-ActualPublicationContext",
         "-RequireWorkflowScope",
+        *contract,
     )
 
     assert result.returncode == 4
@@ -163,10 +222,12 @@ def test_missing_workflow_scope_is_permission_failure(tmp_path: Path) -> None:
 def test_missing_repository_push_permission_is_permission_failure(
     tmp_path: Path,
 ) -> None:
+    contract = _contract_arguments(tmp_path)
     result, payload = _run_preflight(
         tmp_path,
         "push_missing",
         "-ActualPublicationContext",
+        *contract,
     )
 
     assert result.returncode == 4
@@ -175,11 +236,32 @@ def test_missing_repository_push_permission_is_permission_failure(
 
 
 def test_github_http_5xx_is_network_error(tmp_path: Path) -> None:
+    contract = _contract_arguments(tmp_path)
     result, payload = _run_preflight(
         tmp_path,
         "http_503",
         "-ActualPublicationContext",
+        *contract,
     )
 
     assert result.returncode == 5
     assert payload["state"] == "NETWORK_ERROR"
+
+
+def test_invalid_pr_contract_stops_before_any_github_call(tmp_path: Path) -> None:
+    contract = list(_contract_arguments(tmp_path))
+    body = Path(contract[1])
+    body.write_text("<!-- artifact-impact: REPLACE_ME -->\n", encoding="utf-8")
+
+    result, payload = _run_preflight(
+        tmp_path,
+        "ready",
+        "-ActualPublicationContext",
+        *contract,
+    )
+
+    assert result.returncode == 6
+    assert payload["state"] == "PR_CONTRACT_INVALID"
+    assert "unknown_artifact_impact:replace_me" in payload["reason"]
+    assert "no GitHub call was made" in payload["next_action"]
+    assert not (tmp_path / "gh-calls.log").exists()

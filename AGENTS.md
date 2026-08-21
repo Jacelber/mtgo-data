@@ -63,11 +63,15 @@ checks, changed subject or scope, conflict, permission blocker, or a new product
 or statistical decision. Never carry authorization into another task or phase.
 
 Before an authorized GitHub write, run
-`tools/github_publication_preflight.ps1 -ActualPublicationContext` using the
-actual publication context; add `-RequireWorkflowScope` when workflows changed.
-Only `READY` continues. A bare `gh auth status` is never a credential verdict.
-Use the command-scoped `gh` credential path in the workflow document and keep
-the local push URL disabled.
+`tools/github_publication_preflight.ps1 -ActualPublicationContext -PrBodyFile
+<path> -BaseCommit <sha> -HeadCommit <sha>` using the actual publication
+context and the exact prepared PR body and final local commits; add
+`-PythonExecutable <approved-python-executable>` and add
+`-RequireWorkflowScope` when workflows changed. Only `READY` continues. The
+preflight validates the body against the local diff before it contacts GitHub.
+A bare `gh auth status` is never a credential verdict. Use the command-scoped
+`gh` credential path in the workflow document and keep the local push URL
+disabled.
 
 Artifact-impact and file-operation declarations are task contracts, not test
 inputs. List every planned unknown-path addition, deletion, and rename by exact

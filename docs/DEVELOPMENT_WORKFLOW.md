@@ -77,6 +77,13 @@ Missing, unreadable, duplicate, empty, conflicting, or unknown declarations
 stop the PR admission path for owner classification. They do not trigger an
 unrelated catch-all test suite.
 
+The repository PR template intentionally uses `REPLACE_ME`, which is not a
+valid value. Before the first remote write, prepare the final body file and run
+the publication preflight against the exact final base and head commits. The
+preflight applies this same admission classifier locally; editing the remote PR
+body to repair a preventable omission is not part of the normal publication
+path.
+
 At Gate 1, list every planned unknown-path addition, deletion, and rename by
 exact path and validation category. Do not use globs. The PR body repeats each
 approved operation in one machine-readable marker:
@@ -140,7 +147,8 @@ browser tests afterward unless a user-visible file changes.
 After acceptance, commit the unchanged reviewed UI tree and print its subject
 marker with:
 
-`python -B ci_master_admission.py --owner-ui-marker-from origin/master`
+`.\.venv\Scripts\python.exe -B ci_master_admission.py
+--owner-ui-marker-from origin/master`
 
 Put the printed `owner-ui-accepted` marker in the PR body. The digest contains
 only changed `index.html`, `assets/**`, and `melee/**` paths and their Git blob
@@ -440,20 +448,31 @@ task. Before the first remote write:
 
 1. confirm the final local commit, clean status, current branch, and intended
    base;
-2. inspect the fetch and disabled push URLs;
-3. in the same execution context that will publish, run the repository's only
-   credential-verdict entry point:
-   `tools/github_publication_preflight.ps1 -ActualPublicationContext`; Codex
-   must use `require_escalated` for this call;
-4. add `-RequireWorkflowScope` when `.github/workflows/**` changed;
-5. require the script's `READY` state before publication;
-6. keep the workspace's disabled push sentinel and empty local credential
+2. prepare the exact PR body file that will be supplied to `gh pr create`,
+   replacing the template's invalid artifact-impact placeholder and adding any
+   required file-operation or Owner UI evidence;
+3. inspect the fetch and disabled push URLs;
+4. in the same execution context that will publish, run the repository's only
+   credential-verdict and PR-contract entry point against the final commits:
+   `tools/github_publication_preflight.ps1 -ActualPublicationContext
+   -PrBodyFile <body-file> -BaseCommit <base-sha> -HeadCommit <head-sha>
+   -PythonExecutable <approved-python-executable>`; use the same interpreter
+   used for local checks. Codex must use
+   `require_escalated` for this call;
+5. add `-RequireWorkflowScope` when `.github/workflows/**` changed;
+6. require the script's `READY` state before publication;
+7. keep the workspace's disabled push sentinel and empty local credential
    helper intact; do not restore or persist a real push URL;
-7. use only the repository-specific `gh` publication path below.
+8. use only the repository-specific `gh` publication path below, with the same
+   unchanged head commit and body file validated above.
 
 The preflight states have one handling rule each:
 
 - `READY` continues through the commands below;
+- `PR_CONTRACT_INVALID` reports the exact missing, invalid, stale, or mismatched
+  local evidence and stops before any GitHub call;
+- `LOCAL_VALIDATION_ERROR` reports a broken local validator invocation and
+  stops before any GitHub call;
 - `RETRY_ACTUAL_CONTEXT` retries the same script once in the actual publication
   context without an Owner prompt, then reports a context failure if unchanged;
 - `AUTH_REJECTED` stops and permits an Owner login request;
@@ -461,12 +480,15 @@ The preflight states have one handling rule each:
   scope mismatch; and
 - `NETWORK_ERROR` reports network or GitHub availability failure.
 
-The preflight reads the active account, authentication state, and scopes from
-`gh auth status --json hosts`; JSON mode requires inspecting the structured
-account state rather than treating exit code zero as authentication success.
-It does not depend on a second authenticated-user API request. The repository
-permission endpoint remains authoritative for push permission, and GitHub HTTP
-5xx responses are `NETWORK_ERROR`, not missing credential context.
+The preflight first uses `ci_master_admission.py` to derive GitHub-compatible
+file evidence from the exact local base-to-head diff and applies the same PR
+body classifier used by CI. It then reads the active account, authentication
+state, and scopes from `gh auth status --json hosts`; JSON mode requires
+inspecting the structured account state rather than treating exit code zero as
+authentication success. It does not depend on a second authenticated-user API
+request. The repository permission endpoint remains authoritative for push
+permission, and GitHub HTTP 5xx responses are `NETWORK_ERROR`, not missing
+credential context.
 
 Do not use a push as a credential probe or interpret raw `gh` output as a
 credential verdict. Preserve the local commit and disabled push sentinel when

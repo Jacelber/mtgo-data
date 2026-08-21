@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-10-landing-weekly-facts-20260821-01"
+  current_working_branch: "codex/ci-pr-body-preflight-20260821-01"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,102 +31,61 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-10"
-  name: "Landing weekly-facts producer and Pickup integration"
+  id: "CI-PR-BODY-PREFLIGHT-01"
+  name: "Local PR contract preflight and actionable admission failure"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-21"
   implementation_completed_on: "2026-08-21"
   owner_accepted_on: "2026-08-21"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-10-landing-weekly-facts-20260821-01"
-  branch: "codex/p12-10-landing-weekly-facts-20260821-01"
-  base_commit: "4a505f6bcbf263c709f4cdc204799c13ad02a40b"
-  objective: "Implement deterministic latest-only MTGO Landing facts, integrate human-approved Landing fields into the existing format-scoped Pickup review path, and admit only the reviewed public current document."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/ci-pr-body-preflight-20260821-01"
+  branch: "codex/ci-pr-body-preflight-20260821-01"
+  base_commit: "8c7d88d8ffba37853439b5d268ed6cc9fcca0f74"
+  objective: "Prevent repeated remote CI failures caused by omitted or stale machine-readable PR-body evidence by validating the exact body against the exact local base-to-head diff before the first remote write, while preserving fail-closed CI admission."
   authorization:
     local_implementation: false
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "src/mtgmeta/mtgo/landing.py"
-    - "src/mtgmeta/mtgo/pickup.py"
-    - "src/mtgmeta/mtgo/__main__.py"
-    - "src/mtgmeta/catalog.py"
-    - "src/mtgmeta/config.py"
-    - "configs/formats.yaml"
-    - "configs/mtgo_landing_visuals.yaml"
-    - "configs/pages_publication.json"
-    - "schemas/mtgo-landing.schema.json"
-    - "schemas/manifest.json"
-    - "schemas/formats.schema.json"
-    - "schemas/consumer-catalog.schema.json"
-    - "schemas/mtgo-meta.schema.json"
-    - "stats/standard/mtgo/landing/current.json"
-    - "stats/modern/mtgo/landing/current.json"
-    - "validate_production_candidate.py"
-    - "validate_output_invariants.py"
-    - "build_pages_artifact.py"
-    - ".github/workflows/update.yml"
-    - "README.md"
-    - "assets/js/phase8/app-core.js"
-    - "tests/test_mtgo_landing.py"
-    - "tests/test_mtgo_pickup_provenance.py"
-    - "tests/test_generated_consumer_contracts.py"
-    - "tests/test_ci_workflow.py"
+    - "ci_master_admission.py"
+    - "tools/github_publication_preflight.ps1"
+    - ".github/pull_request_template.md"
+    - ".github/workflows/ci.yml"
     - "tests/test_ci_master_admission.py"
+    - "tests/test_github_publication_preflight.py"
+    - "tests/test_ci_workflow.py"
+    - "AGENTS.md"
+    - "docs/DEVELOPMENT_WORKFLOW.md"
     - "docs/ROADMAP.md"
-    - "docs/WEEKLY_MAINTENANCE.md"
-    - "docs/STATISTICS_SPEC.md"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DECISIONS.md"
-    - "docs/TEST_TRIGGER_MATRIX.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    statistical_formulas_changed: "none; implement only the already accepted section 24 Landing semantics"
-    public_json_or_schema_changed: "add latest-only stats/<format>/mtgo/landing/current.json and its strict Schema"
-    generated_or_source_data_changed: "locally generate only the new Standard and Modern Landing current documents; do not fetch or alter retained source data"
+    statistical_formulas_changed: "none"
+    public_json_or_schema_changed: "none"
+    generated_or_source_data_changed: "none"
     classification_identities_changed: "none"
-    workflows_or_public_paths_changed: "add the P12-10 producer, catalog, production-candidate, and Pages-admission boundary without changing workflow timing"
+    workflows_or_public_paths_changed: "change only PR admission feedback and the required pre-publication contract check; no production or Pages workflow change"
     event_434455_bytes_changed: false
     production_dispatched: false
-    artifact_impact: "statistical_json_structure, public_path"
   allowed_actions:
-    - "Implement byte-deterministic current-week, comparison-population, environment, share-move, exit, build-shift, and no-events facts under the accepted thresholds."
-    - "Add manually maintained representative-card metadata outside classifier rules and degrade missing mappings to text-only rows."
-    - "Extend existing Pickup candidate rows with unrestricted human Landing category, order, localized headline, positioning, and four-card fields."
-    - "Preserve reviewed stale content for explicit re-review and exclude candidates, review bindings, notes, and non-public configuration from Pages."
-    - "Add the new current document to the format catalog, production candidate allowlist, generated-consumer checks, and production workflow."
-    - "Generate local Standard and Modern current documents only through the new producer and run the smallest checks triggered by changed paths."
+    - "Reuse the existing fail-closed admission classifier to validate one prepared PR body against the exact local base-to-head diff."
+    - "Require that validation in the repository publication preflight before any GitHub authentication or permission check."
+    - "Make the PR template invalid until its artifact-impact placeholder is deliberately replaced."
+    - "Surface the exact admission reason in the aggregate CI failure."
+    - "Add focused governance tests and update the authoritative publication instructions."
   prohibited_changes:
-    - "Do not change classifier rules or stable identities, Pickup screening thresholds, raw source data, event whitelists, workflow timing, or protected event 434455 bytes."
-    - "Do not generate Chinese or English prose, constrain human conclusions to machine facts, or publish unreviewed Pickup items."
-    - "Do not implement P12-11, P12-12, Landing UI, default-entry cutover, historical Landing browsing, or removal of the existing Pickup product."
-    - "Do not dispatch the MTGO production-data workflow, mutate the live weekly Issue, or begin another task."
-  stop_point: "Complete this accepted unchanged task through local commit, one Ready PR, required CI, merge, and applicable Pages confirmation; then stop before P12-11 or any other task."
+    - "Do not alter validation categories, validation strength, product code, statistical semantics, generated data, public paths, classifier rules, production timing, or Pages publication."
+    - "Do not dispatch production or begin another task."
+  stop_point: "Complete the accepted unchanged task through commit, one Ready PR, required CI, merge, and any applicable publication confirmation; then stop before another task."
   validation:
-    generated_subject:
-      week: "2026-W33"
-      standard:
-        source_event_count: 8
-        high_score_deck_count: 129
-        environment_row_count: 11
-        observation_count: 5
-        approved_feature_count: 0
-      modern:
-        source_event_count: 13
-        high_score_deck_count: 364
-        environment_row_count: 12
-        observation_count: 5
-        approved_feature_count: 0
     evidence:
-      - "13 focused Landing and generated-consumer tests passed on the final implementation tree."
-      - "Ruff passed for every changed Python source and test file."
-      - "Repository validation passed: Python 80/80, JavaScript 18/18, JSON 1815/1815, YAML 60/60, references 54/54, hygiene 2248/2248."
-      - "Schema validation passed for 83 mapped documents and output-invariant validation passed for the generated Landing documents."
-      - "Complete diff review found no raw source, classifier-rule, workflow-timing, event-whitelist, or protected 434455-byte change."
+      - "70 focused admission, publication-preflight, and CI-workflow tests passed."
+      - "Ruff passed for the changed Python admission and focused governance test files."
+      - "Repository validation passed: Python 80/80, JavaScript 18/18, JSON 1823/1823, YAML 60/60, references 54/54, hygiene 2256/2256."
+      - "Complete diff review and git diff --check passed with no product, data, statistical, classifier, production, or public-path change."
 
 current_repository_state:
-  baseline_commit: "4a505f6bcbf263c709f4cdc204799c13ad02a40b"
-  baseline_note: "Cloud master after the accepted Weekly Pickup screening rules and the 2026-08-21 09:56 UTC production-data update."
+  baseline_commit: "8c7d88d8ffba37853439b5d268ed6cc9fcca0f74"
+  baseline_note: "Cloud master after P12-10 merged and its applicable Pages publication completed."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -135,10 +94,15 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - task: "P12-10"
+  - task: "CI-PR-BODY-PREFLIGHT-01"
     status: "owner_accepted_completion_authorized"
     remaining_requirements:
-      - "Complete the accepted unchanged task through commit, one Ready PR, required CI, merge, and applicable Pages confirmation."
+      - "Complete commit, one Ready PR, required CI, merge, and any applicable publication confirmation."
+  - task: "P12-11"
+    status: "planned_not_authorized"
+    remaining_requirements:
+      - "Complete and close the current governance repair first."
+      - "Obtain a separate task contract and implementation authorization."
   - task: "MELEE-V3-PRODUCTION-PREFLIGHT"
     status: "planned_not_authorized"
     remaining_requirements:
@@ -148,15 +112,15 @@ future_task_gates:
       - "Keep the rehearsal non-deploying and review the complete v3 candidate before any public use."
 
 next_approved_task:
-  id: "P12-10"
-  name: "Landing weekly-facts producer and Pickup integration"
+  id: "CI-PR-BODY-PREFLIGHT-01"
+  name: "Local PR contract preflight and actionable admission failure"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
-  note: "Owner accepted the unchanged P12-10 subject on 2026-08-21. Complete commit, one Ready PR, required CI, merge, and applicable Pages confirmation without another authorization prompt, then stop."
+  note: "Owner accepted the unchanged repair on 2026-08-21. Complete commit, one Ready PR, required CI, merge, and any applicable publication confirmation without another authorization prompt, then stop."
 
 prohibited_next_actions:
-  - "Do not dispatch production, mutate the live weekly Issue, fetch protected source data, or publish unreviewed Landing or Pickup content."
+  - "Do not dispatch production."
   - "Do not begin P12-11, P12-12, Landing UI, default-entry cutover, or another task."
-  - "Do not change raw source data, classifier rules, Pickup screening thresholds, event whitelists, workflow timing, or event 434455 bytes."
+  - "Do not change product code, statistical semantics, generated data, public paths, classifier rules, validation strength, workflow timing, or event 434455 bytes."
   - "Do not force-push, mutate protected branches or tags directly, or create a second status-only pull request."
   - "Do not develop directly on master or overwrite unexplained local changes."
