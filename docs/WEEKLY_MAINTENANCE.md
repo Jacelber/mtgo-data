@@ -166,10 +166,10 @@ A stale candidate containing human approval or copy is preserved, marked
 being silently overwritten or published. The blocker is resolved before the
 Owner starts the normal review sequence.
 
-Representative-card and deck-color exception counts are currently
-`not available`; their manual-review status is intentional. Landing draft
-status is also `not available` until P12-10 is separately designed,
-implemented, and accepted.
+Representative-card and deck-color exception counts remain manual review
+inputs. After P12-10 acceptance, the automatic producer reports deterministic
+Landing machine facts and machine-fact bindings; optional draft prose remains
+an explicitly requested aid, not a required output or editorial constraint.
 
 ## Recovery
 

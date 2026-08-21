@@ -30,6 +30,12 @@
         {"type": "null"}
       ]
     },
+    "landing_document": {
+      "oneOf": [
+        {"const": "landing/current.json"},
+        {"type": "null"}
+      ]
+    },
     "matchup_source": {"const": "Videre"},
     "matchup_coverage": {
       "type": "object",
@@ -59,6 +65,7 @@
         "top8_catalog",
         "completeness_catalog",
         "pickup_catalog",
+        "landing_document",
         "matchup_source",
         "matchup_coverage"
       ]

@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-pickup-selection-rules-20260820-01"
+  current_working_branch: "codex/p12-10-landing-weekly-facts-20260821-01"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,26 +31,49 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-PICKUP-SELECTION-RULES-2026-W33"
-  name: "Implement the Owner-approved Weekly Pickup screening rules"
+  id: "P12-10"
+  name: "Landing weekly-facts producer and Pickup integration"
   status: "owner_accepted_completion_authorized"
-  implementation_authorized_on: "2026-08-20"
-  developer_validation_completed_on: "2026-08-21"
+  implementation_authorized_on: "2026-08-21"
+  implementation_completed_on: "2026-08-21"
   owner_accepted_on: "2026-08-21"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-pickup-selection-rules-20260820-01"
-  branch: "codex/weekly-pickup-selection-rules-20260820-01"
-  base_commit: "f307c1a285a6f955308ddcd8c745f30c51670c3e"
-  objective: "Replace the near-complete Top 8 Pickup list with the five Owner-approved screening rules, retain unrestricted human editorial authority, and prove the result through one non-production W33 workbook rehearsal."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-10-landing-weekly-facts-20260821-01"
+  branch: "codex/p12-10-landing-weekly-facts-20260821-01"
+  base_commit: "4a505f6bcbf263c709f4cdc204799c13ad02a40b"
+  objective: "Implement deterministic latest-only MTGO Landing facts, integrate human-approved Landing fields into the existing format-scoped Pickup review path, and admit only the reviewed public current document."
   authorization:
     local_implementation: false
     commit: true
     remote_publication: true
     merge: true
   target_paths:
+    - "src/mtgmeta/mtgo/landing.py"
     - "src/mtgmeta/mtgo/pickup.py"
-    - "configs/mtgo_pickup_policy.yaml"
-    - "tests/test_mtgo_pickup_selection.py"
+    - "src/mtgmeta/mtgo/__main__.py"
+    - "src/mtgmeta/catalog.py"
+    - "src/mtgmeta/config.py"
+    - "configs/formats.yaml"
+    - "configs/mtgo_landing_visuals.yaml"
+    - "configs/pages_publication.json"
+    - "schemas/mtgo-landing.schema.json"
+    - "schemas/manifest.json"
+    - "schemas/formats.schema.json"
+    - "schemas/consumer-catalog.schema.json"
+    - "schemas/mtgo-meta.schema.json"
+    - "stats/standard/mtgo/landing/current.json"
+    - "stats/modern/mtgo/landing/current.json"
+    - "validate_production_candidate.py"
+    - "validate_output_invariants.py"
+    - "build_pages_artifact.py"
+    - ".github/workflows/update.yml"
+    - "README.md"
+    - "assets/js/phase8/app-core.js"
+    - "tests/test_mtgo_landing.py"
     - "tests/test_mtgo_pickup_provenance.py"
+    - "tests/test_generated_consumer_contracts.py"
+    - "tests/test_ci_workflow.py"
+    - "tests/test_ci_master_admission.py"
+    - "docs/ROADMAP.md"
     - "docs/WEEKLY_MAINTENANCE.md"
     - "docs/STATISTICS_SPEC.md"
     - "docs/DATA_ARCHITECTURE.md"
@@ -58,41 +81,52 @@ current_task:
     - "docs/TEST_TRIGGER_MATRIX.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    statistical_formulas_changed: "private Pickup screening plus the accepted future Landing return and build-shift semantics only"
-    public_json_or_schema_changed: "none"
-    generated_or_source_data_changed: "none"
+    statistical_formulas_changed: "none; implement only the already accepted section 24 Landing semantics"
+    public_json_or_schema_changed: "add latest-only stats/<format>/mtgo/landing/current.json and its strict Schema"
+    generated_or_source_data_changed: "locally generate only the new Standard and Modern Landing current documents; do not fetch or alter retained source data"
     classification_identities_changed: "none"
-    workflows_or_public_paths_changed: "none"
+    workflows_or_public_paths_changed: "add the P12-10 producer, catalog, production-candidate, and Pages-admission boundary without changing workflow timing"
     event_434455_bytes_changed: false
     production_dispatched: false
-    artifact_impact: "internal_diagnostics"
+    artifact_impact: "statistical_json_structure, public_path"
   allowed_actions:
-    - "Implement exact Top 8 gating, five-percentage-point share increases, three-percent returns, two-week new-card windows, strategic-identity new archetypes, and twenty-point build shifts."
-    - "Freeze HOB new-card names and official HOB, FRA, and TRK Arena release dates in a maintained private policy."
-    - "Merge multiple reasons on one exact candidate and retain different representative decks when different reasons select them."
-    - "For one archetype and exact new-card package, choose the best tournament result before new-card copy quantity, then merge every reason selected for that exact deck."
-    - "Create one private W33 XLSX with filtered candidates, complete Top 8 evidence, unrestricted Owner copy, and final review fields."
-    - "Run only focused Pickup selection, provenance, documentation-status, repository, rule, Schema, and diff checks required by the final paths."
-    - "Complete the accepted unchanged task through local commit, one Ready PR, required CI, merge, and applicable publication confirmation."
+    - "Implement byte-deterministic current-week, comparison-population, environment, share-move, exit, build-shift, and no-events facts under the accepted thresholds."
+    - "Add manually maintained representative-card metadata outside classifier rules and degrade missing mappings to text-only rows."
+    - "Extend existing Pickup candidate rows with unrestricted human Landing category, order, localized headline, positioning, and four-card fields."
+    - "Preserve reviewed stale content for explicit re-review and exclude candidates, review bindings, notes, and non-public configuration from Pages."
+    - "Add the new current document to the format catalog, production candidate allowlist, generated-consumer checks, and production workflow."
+    - "Generate local Standard and Modern current documents only through the new producer and run the smallest checks triggered by changed paths."
   prohibited_changes:
-    - "Do not change classifier rules, raw or generated production data, current Pickup approvals, Landing content, visual metadata, or the public Pickup Schema."
-    - "Do not change public paths, event whitelists, production workflow timing, or protected event 434455 bytes."
-    - "Do not dispatch production, mutate the live weekly Issue, or overwrite repository W33 candidates during rehearsal."
-    - "Do not begin P12-10 or another task automatically."
-  stop_point: "Complete this accepted unchanged task, then stop. Do not begin P12-10, Landing work, or another weekly-maintenance stage automatically."
-  validation_evidence:
-    - "Nine focused Pickup selection and provenance tests plus five bounded live-status tests passed."
-    - "Focused Ruff passed for the changed Pickup module and tests."
-    - "Repository validation passed: 78 Python, 18 JavaScript, 1812 JSON, 59 YAML, 54 references, and 2242 hygiene checks."
-    - "Previously passed maintained-package mypy, Standard and Modern rule, and 81 public Schema checks remain applicable because this revision did not change their configured subjects."
-    - "The frozen private policy still loads HOB with 186 cards and keeps FRA and TRK manifests pending."
-    - "The revised seven-sheet W33 workbook contains 27 candidates (16 Standard and 11 Modern) and all 168 exact rank-one-through-eight records."
-    - "The rank-three IronBeagle Boros Dragons row carries return and new_card, preserves its confirmed review and human copy, and the rank-five duplicate remains only in All Top 8."
-    - "Workbook import, formula-error scan, and visual review of all seven sheets passed."
+    - "Do not change classifier rules or stable identities, Pickup screening thresholds, raw source data, event whitelists, workflow timing, or protected event 434455 bytes."
+    - "Do not generate Chinese or English prose, constrain human conclusions to machine facts, or publish unreviewed Pickup items."
+    - "Do not implement P12-11, P12-12, Landing UI, default-entry cutover, historical Landing browsing, or removal of the existing Pickup product."
+    - "Do not dispatch the MTGO production-data workflow, mutate the live weekly Issue, or begin another task."
+  stop_point: "Complete this accepted unchanged task through local commit, one Ready PR, required CI, merge, and applicable Pages confirmation; then stop before P12-11 or any other task."
+  validation:
+    generated_subject:
+      week: "2026-W33"
+      standard:
+        source_event_count: 8
+        high_score_deck_count: 129
+        environment_row_count: 11
+        observation_count: 5
+        approved_feature_count: 0
+      modern:
+        source_event_count: 13
+        high_score_deck_count: 364
+        environment_row_count: 12
+        observation_count: 5
+        approved_feature_count: 0
+    evidence:
+      - "13 focused Landing and generated-consumer tests passed on the final implementation tree."
+      - "Ruff passed for every changed Python source and test file."
+      - "Repository validation passed: Python 80/80, JavaScript 18/18, JSON 1815/1815, YAML 60/60, references 54/54, hygiene 2248/2248."
+      - "Schema validation passed for 83 mapped documents and output-invariant validation passed for the generated Landing documents."
+      - "Complete diff review found no raw source, classifier-rule, workflow-timing, event-whitelist, or protected 434455-byte change."
 
 current_repository_state:
-  baseline_commit: "f307c1a285a6f955308ddcd8c745f30c51670c3e"
-  baseline_note: "Cloud production publication after the accepted W33 classifier, visual metadata, Pickup provenance repair, and bounded MTGO source recovery."
+  baseline_commit: "4a505f6bcbf263c709f4cdc204799c13ad02a40b"
+  baseline_note: "Cloud master after the accepted Weekly Pickup screening rules and the 2026-08-21 09:56 UTC production-data update."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -101,18 +135,10 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - task: "WEEKLY-MAINTENANCE-REHEARSAL-01"
-    status: "pickup_selection_rule_accepted_completion_in_progress"
-    remaining_requirements:
-      - "Complete the accepted filtered Pickup selection policy and generator through the authorized Ready PR and merge."
-      - "Under separate production authorization, regenerate W33 candidates only if publication requires repository output replacement."
-      - "Keep the rehearsal non-production and do not begin P12-10 automatically."
   - task: "P12-10"
-    status: "blocked_pending_weekly_maintenance_rehearsal_and_separate_authorization"
+    status: "owner_accepted_completion_authorized"
     remaining_requirements:
-      - "Complete and accept one no-publication weekly maintenance rehearsal."
-      - "Confirm the classifier, known-state, threshold, and representative-card prerequisites recorded in the authoritative Phase 12 contracts."
-      - "Obtain separate P12-10 implementation authorization."
+      - "Complete the accepted unchanged task through commit, one Ready PR, required CI, merge, and applicable Pages confirmation."
   - task: "MELEE-V3-PRODUCTION-PREFLIGHT"
     status: "planned_not_authorized"
     remaining_requirements:
@@ -122,15 +148,15 @@ future_task_gates:
       - "Keep the rehearsal non-deploying and review the complete v3 candidate before any public use."
 
 next_approved_task:
-  id: "WEEKLY-PICKUP-SELECTION-RULES-2026-W33"
-  name: "Implement the Owner-approved Weekly Pickup screening rules"
+  id: "P12-10"
+  name: "Landing weekly-facts producer and Pickup integration"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
-  note: "Owner accepted the unchanged revised subject on 2026-08-21. Complete commit, one Ready PR, required CI, merge, and applicable publication confirmation without another authorization prompt, then stop."
+  note: "Owner accepted the unchanged P12-10 subject on 2026-08-21. Complete commit, one Ready PR, required CI, merge, and applicable Pages confirmation without another authorization prompt, then stop."
 
 prohibited_next_actions:
-  - "Do not dispatch production, mutate the live weekly Issue, fetch protected source data, or overwrite generated production outputs."
-  - "Do not publish W33 Pickup selections, begin P12-10, or start Landing work automatically."
-  - "Do not change raw source data, classifier rules, public paths, event whitelists, or event 434455 bytes."
-  - "Do not force-push, mutate protected branches or tags directly, or begin another task."
+  - "Do not dispatch production, mutate the live weekly Issue, fetch protected source data, or publish unreviewed Landing or Pickup content."
+  - "Do not begin P12-11, P12-12, Landing UI, default-entry cutover, or another task."
+  - "Do not change raw source data, classifier rules, Pickup screening thresholds, event whitelists, workflow timing, or event 434455 bytes."
+  - "Do not force-push, mutate protected branches or tags directly, or create a second status-only pull request."
   - "Do not develop directly on master or overwrite unexplained local changes."

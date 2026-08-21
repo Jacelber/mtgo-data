@@ -145,3 +145,31 @@ def test_current_pickup_freshness_inputs_follow_the_latest_generated_week() -> N
     assert document["end"] == latest["end"]
     assert latest["existing_count"] == len(document["existing_changes"])
     assert latest["new_count"] == len(document["new_archetypes"])
+
+
+@pytest.mark.parametrize("format_id", ("standard", "modern"))
+def test_current_landing_follows_one_classifier_and_population_subject(
+    format_id: str,
+) -> None:
+    document = _json(f"stats/{format_id}/mtgo/landing/current.json")
+    environment = document["environment"]
+    current = document["populations"]["current"]
+
+    assert document["product"] == "mtgo-landing"
+    assert document["source_event_ids"] == sorted(set(document["source_event_ids"]))
+    assert document["source_event_ids"] == current["event_ids"]
+    assert document["review_binding"]["source_event_ids"] == document["source_event_ids"]
+    assert document["review_binding"]["classifier_digest"] == document["classifier"]["digest"]
+    assert len(document["review_binding"]["visual_metadata_digest"]) == 64
+    assert len(document["review_binding"]["machine_fact_digest"]) == 64
+    assert len(document["observations"]) <= 5
+    assert all(
+        row["current"]["share"] >= environment["threshold"]
+        for row in environment["rows"]
+    )
+    assert all(len(row["key_cards"]) in {0, 2} for row in environment["rows"])
+    assert all(
+        item["category"] in {"new_deck", "new_technology"}
+        and len(item["featured_cards"]) == 4
+        for item in document["features"]["items"]
+    )

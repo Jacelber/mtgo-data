@@ -9,7 +9,7 @@ import sys
 from mtgmeta.config import DisabledFormatError, FormatConfigError, load_format_registry
 
 from . import DEFAULT_REGISTRY_PATH
-from . import completeness, fetch, matchup, pickup, stats, top8
+from . import completeness, fetch, landing, matchup, pickup, stats, top8
 
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3]
@@ -61,6 +61,10 @@ def build_parser() -> argparse.ArgumentParser:
     commands.add_parser(
         "build-completeness",
         help="build range-specific MTGO source-completeness data",
+    )
+    commands.add_parser(
+        "build-landing",
+        help="build the latest-only MTGO Landing document",
     )
 
     pickup_parser = commands.add_parser("pickup", help="manage Weekly Pickup")
@@ -207,6 +211,23 @@ def _run_completeness(
     return 0
 
 
+def _run_landing(args: argparse.Namespace, root: Path, registry: Path) -> int:
+    result = landing.generate(root, args.format_id, registry_path=registry)
+    if result["status"] == "stale_review_required":
+        print(
+            "MTGO Landing preserved for explicit re-review: "
+            f"format={args.format_id} output={result['path']}"
+        )
+    else:
+        print(
+            "MTGO Landing: "
+            f"format={args.format_id} week={result['week']} "
+            f"features={result['feature_count']} observations={result['observation_count']} "
+            f"output={result['path']}"
+        )
+    return 0
+
+
 def _run_pickup(args: argparse.Namespace, root: Path, registry: Path) -> int:
     if args.pickup_command == "candidates":
         result = pickup.generate_candidates(
@@ -292,6 +313,7 @@ RUNNERS = {
     "build-statistics": _run_statistics,
     "build-top8": _run_top8,
     "build-completeness": _run_completeness,
+    "build-landing": _run_landing,
     "build-matchups": _run_matchups,
     "pickup": _run_pickup,
     "generate-metadata": _run_metadata,
@@ -304,6 +326,7 @@ COMMAND_CAPABILITIES = {
     "build-statistics": "event_statistics",
     "build-top8": "weekly_top8",
     "build-completeness": "completeness_reporting",
+    "build-landing": "landing_generation",
     "build-matchups": "matchup_statistics",
     "pickup": "weekly_pickup",
     "generate-metadata": "metadata_generation",
@@ -336,6 +359,7 @@ def main(argv: list[str] | None = None) -> int:
         fetch.MTGOParseError,
         fetch.MTGOStorageError,
         completeness.MTGOCompletenessError,
+        landing.MTGOLandingError,
         matchup.MTGOMatchupError,
         pickup.MTGOPickupError,
         stats.MTGOStatisticsError,

@@ -4833,3 +4833,59 @@ DEC-086. It does not change the five-percent exit boundary, the public Landing
 Schema, classifier rules, source or generated production data, public paths,
 workflow timing, or protected event `434455` bytes, and it does not authorize
 Landing implementation or production publication.
+
+---
+
+# DEC-109 - Produce latest Landing facts through the reviewed Pickup boundary
+
+Status: `Accepted for local implementation`
+
+## Context
+
+The accepted weekly rehearsal completed the classifier, known-state, threshold,
+representative-card, and Pickup prerequisites for P12-10. The existing Pages
+policy copied the whole `stats/` tree, which also exposed private Pickup
+candidate, comparison-base, and known-state files. Existing Pickup provenance
+bound source events and classifier rules but did not detect a changed screening
+policy or changed Landing machine facts.
+
+## Decision
+
+Add one `landing_generation` capability and one deterministic producer at
+`src/mtgmeta/mtgo/landing.py`. It selects the latest closed calendar week,
+classifies the current, previous, and aggregated previous-four-week populations
+under one rule digest, and writes only
+`stats/<format>/mtgo/landing/current.json`. The public document carries raw
+populations, parent environment rows, separate classified residual and Unknown,
+up to five accepted movement, exit, or construction observations, manual zero-
+or-two-card identities, and zero or more reviewed features. It generates no
+Chinese or English prose.
+
+Keep the format-scoped Pickup candidate as the sole review source. Bind an
+unreviewed candidate to the maintained screening-policy digest and Landing
+machine-fact digest. An unreviewed stale candidate regenerates; any candidate
+with approval, comments, or Landing fields is preserved and requires explicit
+re-review. An approved public feature requires a positive category-local order,
+human-owned category and localized fields, and four unique cards from its exact
+deck. Internal approval, comments, candidate digests, and workbook metadata do
+not enter the public document.
+
+Add the current document to Schema, catalog, metadata, production-candidate,
+workflow, and Pages admission. Exclude private Pickup candidate YAML,
+comparison-base YAML, and known-state JSON from the Pages artifact while
+retaining existing approved Pickup history. Standard and Modern remain migration
+exceptions until the later P12-16 complete-product cutover.
+
+## Consequences
+
+A truthful no-event document and an empty approved-feature list remain valid.
+Missing or inconsistent required input fails closed. Additive late-event or
+machine-fact changes never combine stale human content with refreshed facts;
+the last admitted current document is preserved until re-review. Human copy may
+still be unrelated to, replace, or omit every machine conclusion.
+
+This decision authorizes only the current P12-10 local implementation. It does
+not authorize commit, remote publication, merge, production dispatch, P12-11,
+P12-12, Landing UI, a default-entry change, historical Landing documents,
+classifier changes, source fetch, workflow timing changes, or protected event
+`434455` byte changes.

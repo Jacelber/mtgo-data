@@ -31,6 +31,19 @@ class MTGOPickupError(RuntimeError):
     """Raised when Pickup or publication metadata cannot be produced safely."""
 
 
+def document_digest(value: Any) -> str:
+    """Return the canonical digest used to bind private review inputs."""
+
+    material = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        default=str,
+    )
+    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+
+
 def load_pickup_policy(
     repository_root: str | Path,
     policy_file: str | Path | None = None,
@@ -407,6 +420,7 @@ def _entry_for_record(
     parent_base: Mapping[str, Any] | None,
 ) -> dict[str, Any]:
     cards = record_deck_cards(record)
+    landing_category = "new_technology" if known else "new_deck"
     return {
         **_record_identity(record, rules),
         "event_id": record["event_id"],
@@ -426,6 +440,15 @@ def _entry_for_record(
         "approved": False,
         "comment_zh": "",
         "comment_en": "",
+        "landing": {
+            "category": landing_category,
+            "order": None,
+            "headline_zh": "",
+            "headline_en": "",
+            "positioning_zh": "",
+            "positioning_en": "",
+            "featured_cards": [],
+        },
         "main_deck": cards["main_deck"],
         "side_deck": cards["side_deck"],
     }
@@ -737,6 +760,7 @@ def _candidate_documents(
             "build_reference_minimum": thresholds["build_reference_minimum"],
             "active_release_sets": [item["code"] for item in active_sets],
         },
+        "machine_fact_digest": None,
         "note": "Machine candidates are evidence aids. The reviewer may select none, replace a candidate, and freely rewrite or remove all editorial copy.",
         "existing_changes": existing_picks,
         "new_archetypes": new_picks,
@@ -797,6 +821,7 @@ def generate_candidates(
         repository_root, format_id, registry_path=registry_path
     )
     policy = load_pickup_policy(repository_root, policy_file)
+    policy_digest = document_digest(policy)
     events = stats.load_all_events(
         repository_root, format_id, registry_path=registry_path
     )
@@ -844,6 +869,8 @@ def generate_candidates(
     }
     candidates.update(lifecycle)
     base_reference.update(lifecycle)
+    candidates["selection_policy_digest"] = policy_digest
+    base_reference["selection_policy_digest"] = policy_digest
 
     output.mkdir(parents=True, exist_ok=True)
     week = candidates["week"]
@@ -861,6 +888,7 @@ def generate_candidates(
         existing_document is not None
         and existing_document.get("source_event_ids") == source_event_ids
         and existing_document.get("classifier_digest") == current_classifier_digest
+        and existing_document.get("selection_policy_digest") == policy_digest
     )
     if preserve_existing and same_provenance:
         return {
@@ -944,6 +972,27 @@ def _has_manual_review(document: Mapping[str, Any]) -> bool:
                 return True
             if str(entry.get("comment_en") or "").strip():
                 return True
+            landing = entry.get("landing")
+            if landing is not None:
+                if not isinstance(landing, Mapping):
+                    return True
+                default_category = (
+                    "new_technology" if key == "existing_changes" else "new_deck"
+                )
+                if landing.get("category", default_category) != default_category:
+                    return True
+                if landing.get("order") is not None:
+                    return True
+                for field in (
+                    "headline_zh",
+                    "headline_en",
+                    "positioning_zh",
+                    "positioning_en",
+                ):
+                    if str(landing.get(field) or "").strip():
+                        return True
+                if landing.get("featured_cards"):
+                    return True
     return False
 
 
@@ -1361,6 +1410,13 @@ def generate_metadata(
                 if (context.paths["statistics"] / "pickup" / "index.json").is_file()
                 else None
             ),
+            "landing_document": (
+                "landing/current.json"
+                if (
+                    context.paths["statistics"] / "landing" / "current.json"
+                ).is_file()
+                else None
+            ),
             "matchup_source": "Videre",
             "matchup_coverage": _matchup_coverage(
                 context,
@@ -1390,6 +1446,7 @@ __all__ = [
     "better_record",
     "deck_deviation",
     "deck_fingerprint",
+    "document_digest",
     "generate_candidates",
     "generate_hierarchy_catalog",
     "generate_metadata",
