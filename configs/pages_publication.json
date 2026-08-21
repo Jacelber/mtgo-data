@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "site_files": [
     "index.html",
     "fetched.txt"
@@ -11,6 +11,11 @@
     "melee",
     "reports",
     "stats"
+  ],
+  "excluded_patterns": [
+    "stats/*/mtgo/pickup/base_reference_*.yaml",
+    "stats/*/mtgo/pickup/candidates_*.yaml",
+    "stats/*/mtgo/pickup/known_archetypes.json"
   ],
   "compatibility_manifests": [
     "tests/fixtures/melee/434455_compatibility_manifest.json"

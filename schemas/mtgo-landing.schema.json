@@ -1,0 +1,355 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-landing.schema.json",
+  "title": "Latest-only MTGO weekly Landing",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "product", "format", "source", "week", "state",
+    "source_event_ids", "classifier", "comparison", "thresholds",
+    "populations", "environment", "observations", "features", "review_binding"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "product": {"const": "mtgo-landing"},
+    "format": {"enum": ["standard", "modern"]},
+    "source": {"const": "mtgo"},
+    "week": {"$ref": "#/$defs/week"},
+    "state": {"enum": ["ready", "no_events"]},
+    "source_event_ids": {"$ref": "#/$defs/eventIds"},
+    "classifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["digest"],
+      "properties": {"digest": {"$ref": "#/$defs/sha256"}}
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["available", "unavailable_reason"],
+      "properties": {
+        "available": {"type": "boolean"},
+        "unavailable_reason": {
+          "type": ["string", "null"],
+          "enum": [null, "no_current_events", "no_previous_week_events", "no_previous_four_week_events"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"available": {"const": true}}},
+          "then": {"properties": {"unavailable_reason": {"type": "null"}}},
+          "else": {"properties": {"unavailable_reason": {"type": "string"}}}
+        }
+      ]
+    },
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["environment_share", "share_move_pp", "exit_reference_share", "build_shift", "build_reference_minimum"],
+      "properties": {
+        "environment_share": {"const": 0.03},
+        "share_move_pp": {"const": 5.0},
+        "exit_reference_share": {"const": 0.05},
+        "build_shift": {"const": 20},
+        "build_reference_minimum": {"const": 8}
+      }
+    },
+    "populations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current", "previous_week", "previous_four_weeks"],
+      "properties": {
+        "current": {"$ref": "#/$defs/population"},
+        "previous_week": {"$ref": "#/$defs/population"},
+        "previous_four_weeks": {"$ref": "#/$defs/population"}
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["threshold", "rows", "other_classified", "unknown"],
+      "properties": {
+        "threshold": {"const": 0.03},
+        "rows": {"type": "array", "items": {"$ref": "#/$defs/environmentRow"}},
+        "other_classified": {"$ref": "#/$defs/aggregate"},
+        "unknown": {"$ref": "#/$defs/aggregate"}
+      }
+    },
+    "observations": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {"oneOf": [
+        {"$ref": "#/$defs/shareMove"},
+        {"$ref": "#/$defs/exit"},
+        {"$ref": "#/$defs/buildShift"}
+      ]}
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["week", "items"],
+      "properties": {
+        "week": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
+        "items": {"type": "array", "items": {"$ref": "#/$defs/feature"}}
+      }
+    },
+    "review_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_event_ids", "classifier_digest", "visual_metadata_digest", "machine_fact_digest"],
+      "properties": {
+        "source_event_ids": {"$ref": "#/$defs/eventIds"},
+        "classifier_digest": {"$ref": "#/$defs/sha256"},
+        "visual_metadata_digest": {"$ref": "#/$defs/sha256"},
+        "machine_fact_digest": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"state": {"const": "ready"}}},
+      "then": {"properties": {"source_event_ids": {"minItems": 1}}},
+      "else": {
+        "properties": {
+          "source_event_ids": {"maxItems": 0},
+          "observations": {"maxItems": 0},
+          "features": {"properties": {"items": {"maxItems": 0}}},
+          "environment": {"properties": {"rows": {"maxItems": 0}}}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "stableId": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "eventIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[0-9]+$"}
+    },
+    "week": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "start", "end"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
+        "start": {"type": "string", "format": "date"},
+        "end": {"type": "string", "format": "date"}
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "event_ids", "event_count", "high_score_count", "top8_count"],
+      "properties": {
+        "start": {"type": "string", "format": "date"},
+        "end": {"type": "string", "format": "date"},
+        "event_ids": {"$ref": "#/$defs/eventIds"},
+        "event_count": {"type": "integer", "minimum": 0},
+        "high_score_count": {"type": "integer", "minimum": 0},
+        "top8_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["count", "denominator", "share"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0},
+        "denominator": {"type": "integer", "minimum": 0},
+        "share": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+      }
+    },
+    "cardIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {"name": {"type": "string", "minLength": 1}}
+    },
+    "environmentRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["archetype_id", "display_name", "key_cards", "current", "previous_week", "previous_four_weeks", "current_top8"],
+      "properties": {
+        "archetype_id": {"$ref": "#/$defs/stableId"},
+        "display_name": {"type": "string", "minLength": 1},
+        "key_cards": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/cardIdentity"},
+          "oneOf": [{"maxItems": 0}, {"minItems": 2, "maxItems": 2}]
+        },
+        "current": {"$ref": "#/$defs/metric"},
+        "previous_week": {"$ref": "#/$defs/metric"},
+        "previous_four_weeks": {"$ref": "#/$defs/metric"},
+        "current_top8": {"$ref": "#/$defs/metric"}
+      }
+    },
+    "aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current", "previous_week", "previous_four_weeks", "current_top8"],
+      "properties": {
+        "current": {"$ref": "#/$defs/metric"},
+        "previous_week": {"$ref": "#/$defs/metric"},
+        "previous_four_weeks": {"$ref": "#/$defs/metric"},
+        "current_top8": {"$ref": "#/$defs/metric"}
+      }
+    },
+    "movementBase": {
+      "type": "object",
+      "required": ["archetype_id", "display_name", "current", "previous_four_weeks", "direction", "delta_pp"],
+      "properties": {
+        "archetype_id": {"$ref": "#/$defs/stableId"},
+        "display_name": {"type": "string", "minLength": 1},
+        "current": {"$ref": "#/$defs/metric"},
+        "previous_four_weeks": {"$ref": "#/$defs/metric"},
+        "direction": {"enum": ["up", "down"]},
+        "delta_pp": {"type": "number", "minimum": -100, "maximum": 100}
+      }
+    },
+    "shareMove": {
+      "unevaluatedProperties": false,
+      "allOf": [
+        {"$ref": "#/$defs/movementBase"},
+        {
+          "type": "object",
+          "required": ["type", "state"],
+          "properties": {
+            "type": {"const": "share_move"},
+            "state": {"enum": ["increase", "decrease", "return"]}
+          }
+        }
+      ]
+    },
+    "exit": {
+      "unevaluatedProperties": false,
+      "allOf": [
+        {"$ref": "#/$defs/movementBase"},
+        {
+          "type": "object",
+          "required": ["type"],
+          "properties": {"type": {"const": "exit"}}
+        }
+      ]
+    },
+    "deckIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "deck_id", "deck_fingerprint_sha256", "player", "final_rank", "player_count", "starttime"],
+      "properties": {
+        "event_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "deck_id": {"type": "string", "minLength": 1},
+        "deck_fingerprint_sha256": {"$ref": "#/$defs/sha256"},
+        "player": {"type": "string"},
+        "final_rank": {"type": "integer", "minimum": 1, "maximum": 8},
+        "player_count": {"type": "integer", "minimum": 1},
+        "starttime": {"type": "string", "minLength": 1}
+      }
+    },
+    "differenceCard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "deck_qty", "typical_qty"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "deck_qty": {"type": "integer", "minimum": 0},
+        "typical_qty": {"type": "number", "minimum": 0}
+      }
+    },
+    "difference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fewer", "more"],
+      "properties": {
+        "fewer": {"type": "array", "items": {"$ref": "#/$defs/differenceCard"}},
+        "more": {"type": "array", "items": {"$ref": "#/$defs/differenceCard"}}
+      }
+    },
+    "buildShift": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "archetype_id", "display_name", "identity_level", "identity_id", "subtype_id", "score", "reference_sample_size", "deck", "difference"],
+      "properties": {
+        "type": {"const": "build_shift"},
+        "archetype_id": {"$ref": "#/$defs/stableId"},
+        "display_name": {"type": "string", "minLength": 1},
+        "identity_level": {"enum": ["parent", "subtype"]},
+        "identity_id": {"type": "string", "pattern": "^[a-z0-9-]+(?:/[a-z0-9-]+)?$"},
+        "subtype_id": {"type": ["string", "null"], "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "score": {"type": "number", "minimum": 20, "maximum": 100},
+        "reference_sample_size": {"type": "integer", "minimum": 8},
+        "deck": {"$ref": "#/$defs/deckIdentity"},
+        "difference": {"$ref": "#/$defs/difference"}
+      }
+    },
+    "localized": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["zh", "en"],
+      "properties": {"zh": {"type": "string"}, "en": {"type": "string"}}
+    },
+    "supportingFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "values"],
+      "properties": {
+        "type": {"enum": ["share_increase", "return", "new_card", "new_archetype", "build_shift"]},
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "current_high_score_count": {"type": "integer", "minimum": 0},
+            "current_high_score_denominator": {"type": "integer", "minimum": 0},
+            "current_share": {"type": "number", "minimum": 0, "maximum": 1},
+            "reference_high_score_count": {"type": "integer", "minimum": 0},
+            "reference_high_score_denominator": {"type": "integer", "minimum": 0},
+            "reference_share": {"type": "number", "minimum": 0, "maximum": 1},
+            "delta_pp": {"type": "number", "minimum": -100, "maximum": 100},
+            "set_code": {"type": ["string", "null"]},
+            "cards": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+            "prior_record_count_under_current_classifier": {"type": ["integer", "null"], "minimum": 0},
+            "identity_level": {"type": ["string", "null"], "enum": [null, "parent", "subtype"]},
+            "identity_id": {"type": ["string", "null"]},
+            "reference_sample_size": {"type": ["integer", "null"], "minimum": 0},
+            "score": {"type": ["number", "null"], "minimum": 0, "maximum": 100}
+          }
+        }
+      }
+    },
+    "featureDeck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "deck_id", "deck_fingerprint_sha256", "player", "final_rank", "player_count", "starttime", "main_deck", "side_deck"],
+      "properties": {
+        "event_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "deck_id": {"type": "string", "minLength": 1},
+        "deck_fingerprint_sha256": {"$ref": "#/$defs/sha256"},
+        "player": {"type": "string"},
+        "final_rank": {"type": "integer", "minimum": 1, "maximum": 8},
+        "player_count": {"type": "integer", "minimum": 1},
+        "starttime": {"type": "string", "minLength": 1},
+        "main_deck": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/cardQuantity"}},
+        "side_deck": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/cardQuantity"}}
+      }
+    },
+    "feature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "order", "archetype_id", "subtype_id", "display_name", "deck", "headline", "positioning", "featured_cards", "supporting_facts"],
+      "properties": {
+        "category": {"enum": ["new_deck", "new_technology"]},
+        "order": {"type": "integer", "minimum": 1},
+        "archetype_id": {"$ref": "#/$defs/stableId"},
+        "subtype_id": {"type": ["string", "null"], "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "display_name": {"type": "string", "minLength": 1},
+        "deck": {"$ref": "#/$defs/featureDeck"},
+        "headline": {"$ref": "#/$defs/localized"},
+        "positioning": {"$ref": "#/$defs/localized"},
+        "featured_cards": {"type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": {"$ref": "#/$defs/cardIdentity"}},
+        "supporting_facts": {"type": "array", "items": {"$ref": "#/$defs/supportingFact"}}
+      }
+    }
+  }
+}

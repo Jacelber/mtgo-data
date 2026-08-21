@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+from fnmatch import fnmatchcase
 import shutil
 import subprocess
 from pathlib import Path
@@ -15,6 +16,7 @@ CONFIG_KEYS = {
     "schema_version",
     "site_files",
     "site_directories",
+    "excluded_patterns",
     "compatibility_manifests",
     "maximum_artifact_bytes",
 }
@@ -50,9 +52,14 @@ def load_config(root: Path, config_path: Path) -> dict[str, Any]:
         raise PublicationError(
             "publication config keys must be exactly " + ", ".join(sorted(CONFIG_KEYS))
         )
-    if config["schema_version"] != "1.0.0":
+    if config["schema_version"] != "1.1.0":
         raise PublicationError("unsupported publication config schema_version")
-    for key in ("site_files", "site_directories", "compatibility_manifests"):
+    for key in (
+        "site_files",
+        "site_directories",
+        "excluded_patterns",
+        "compatibility_manifests",
+    ):
         values = config[key]
         if not isinstance(values, list) or not values:
             raise PublicationError(f"{key} must be a non-empty list")
@@ -95,7 +102,12 @@ def publication_paths(root: Path, config: dict[str, Any]) -> set[str]:
                 )
             if path.is_file():
                 found = True
-                selected.add(path.relative_to(root).as_posix())
+                candidate = path.relative_to(root).as_posix()
+                if not any(
+                    fnmatchcase(candidate, pattern)
+                    for pattern in config["excluded_patterns"]
+                ):
+                    selected.add(candidate)
         if not found:
             raise PublicationError(f"approved directory is empty: {relative}")
     if ".nojekyll" in selected:

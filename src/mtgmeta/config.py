@@ -32,6 +32,7 @@ MTGO_CAPABILITIES = frozenset(
         "weekly_top8",
         "completeness_reporting",
         "weekly_pickup",
+        "landing_generation",
         "metadata_generation",
         "catalog_generation",
     }

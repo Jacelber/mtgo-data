@@ -27,6 +27,7 @@ PRODUCTION_CAPABILITIES = frozenset(
         "weekly_top8",
         "completeness_reporting",
         "weekly_pickup",
+        "landing_generation",
         "metadata_generation",
         "catalog_generation",
     }
@@ -191,6 +192,13 @@ def _allowed_path(
         return parts[2].endswith(".json")
     if (
         len(parts) == 5
+        and parts[0] == "stats"
+        and parts[1] in product_formats
+        and parts[2:4] == ("mtgo", "landing")
+    ):
+        return parts[4] == "current.json"
+    if (
+        len(parts) == 5
         and parts[0] == "data"
         and parts[1] in product_formats
         and parts[2:4] == ("mtgo", "matches")
@@ -251,6 +259,13 @@ def _allowed_new_path(
         and parts[2:4] == ("mtgo", "matches")
     ):
         return parts[4].endswith(".json")
+    if (
+        len(parts) == 5
+        and parts[0] == "stats"
+        and parts[1] in product_formats
+        and parts[2:4] == ("mtgo", "landing")
+    ):
+        return parts[4] == "current.json"
     if (
         len(parts) == 5
         and parts[0] == "stats"

@@ -234,7 +234,8 @@ mtgo-data/
 │       │   ├── normalize.py
 │       │   ├── stats.py
 │       │   ├── matchup.py
-│       │   └── pickup.py
+│       │   ├── pickup.py
+│       │   └── landing.py
 │       └── melee/
 │           ├── __init__.py
 │           ├── client.py
@@ -511,6 +512,27 @@ evidence pointer. The sole allowed reason code is `random_card_pile`; event age,
 singleton status, sparse evidence, or a missing rule are invalid reasons. A
 registry match is reported separately and never deleted from the underlying
 diagnostic report.
+
+### 5.6 `landing.py`
+
+Responsibilities:
+
+- select the latest closed Monday-through-Sunday week independently of whether
+  that week contains an event;
+- classify the current, previous, and aggregated previous-four-week
+  populations once under one classifier digest;
+- generate the accepted parent environment, movement, exit, and construction-
+  shift facts without generated prose;
+- read manually approved feature fields only from the existing format-scoped
+  Pickup candidate path;
+- bind reviewed features to source events, classifier rules, and deterministic
+  machine facts, preserving the last admitted document when re-review is
+  required; and
+- write only `stats/<format>/mtgo/landing/current.json` as public Landing data.
+
+`configs/mtgo_landing_visuals.yaml` is manual product metadata. Its two-card
+parent or explicit subtype selections are not classifier evidence. Missing
+metadata yields a text-only environment row rather than a guessed card.
 
 ---
 
@@ -1720,7 +1742,9 @@ and owner selection are recorded in `docs/audits/P10-06.md`.
 P10-07 implements the selected A+ publication boundary without changing the
 public Git archive. `configs/pages_publication.json` admits the two static entry
 points, the fetched ledger, and the `assets/`, `data/`, `data_raw/`, `melee/`,
-`reports/`, and `stats/` product trees. `build_pages_artifact.py` copies those
+`reports/`, and `stats/` product trees. It excludes private Pickup candidate,
+comparison-base, and known-state files while retaining approved Pickup history
+and `landing/current.json`. `build_pages_artifact.py` copies those
 paths into a new external directory, generates an empty `.nojekyll`, rejects
 unsafe paths and symbolic links, verifies every copied byte, enforces the
 one-gibibyte site ceiling, and validates the complete event `434455`
@@ -2052,10 +2076,11 @@ matchup, and Tabletop overview/matchup subtype nodes expose `display_name`, so
 browser code never reconstructs a full subtype label.
 
 The scheduled producer order is event and match collection, range statistics,
-matchup statistics, completeness, Top 8, Pickup preparation, hierarchy,
-metadata, the global consumer catalog, and diagnostics. Candidate validation
-admits only the reviewed completeness documents, Top 8 week/base names, and
-`stats/catalog.json`; arbitrary generated paths remain blocked.
+matchup statistics, completeness, Top 8, Pickup preparation, latest Landing,
+hierarchy, metadata, the global consumer catalog, and diagnostics. Candidate
+validation admits only the reviewed completeness documents, Top 8 week/base
+names, latest-only Landing document, and `stats/catalog.json`; arbitrary
+generated paths remain blocked.
 Before packaging, dedicated consumer-contract tests verify relationships among
 the current generated documents, and a focused Chromium baseline renders those
 documents through the production pages. Both derive rolling identities, counts,

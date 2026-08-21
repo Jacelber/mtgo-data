@@ -432,6 +432,14 @@ jobs:
           done
           exit "$STATUS"
 
+      - name: Build latest MTGO Landing documents
+        shell: bash
+        run: |
+          for FORMAT in $MTGO_PRODUCT_FORMATS; do
+            echo "Building latest MTGO Landing for ${FORMAT}."
+            python -B -m mtgmeta.mtgo --format "$FORMAT" build-landing
+          done
+
       - name: Generate maintained hierarchy catalogs
         shell: bash
         run: |

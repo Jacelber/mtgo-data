@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from mtgmeta.mtgo.landing import MTGOLandingError, validate_document as validate_landing
+
 
 def _rounded_share(count: int, total: int) -> float:
     return round(count / total, 4) if total else 0.0
@@ -119,6 +121,12 @@ def validate_repository_output(root: Path) -> list[str]:
     for path in sorted(root.glob("stats/*/mtgo/matchup_*w.json")):
         document = json.loads(path.read_text(encoding="utf-8"))
         failures.extend(validate_matchup_document(document, path.as_posix()))
+    for path in sorted(root.glob("stats/*/mtgo/landing/current.json")):
+        document = json.loads(path.read_text(encoding="utf-8"))
+        try:
+            validate_landing(document)
+        except (KeyError, TypeError, MTGOLandingError) as exc:
+            failures.append(f"{path.as_posix()}: {exc}")
     return failures
 
 

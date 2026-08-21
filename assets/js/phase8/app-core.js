@@ -153,7 +153,7 @@ function productEntry(productId = state.product) {
 function availableProductIds(formatId) {
   return state.catalog.formats
     .find(item => item.id === formatId)
-    ?.products.filter(item => item.available)
+    ?.products.filter(item => item.available && PRODUCT_ORDER.includes(item.id))
     .map(item => item.id) || [];
 }
 

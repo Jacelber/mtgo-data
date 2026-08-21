@@ -226,6 +226,7 @@ The format argument is mandatory. The installed command works without setting
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-completeness
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-top8
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard pickup candidates --if-absent
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-landing
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard generate-hierarchy
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard generate-metadata
 .\.venv\Scripts\mtgo-data-catalog.exe --root .
@@ -235,14 +236,16 @@ The format argument is mandatory. The installed command works without setting
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-matchups
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-completeness
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-top8
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-landing
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern classification-reports --strict
 ```
 
 Standard and Modern are complete public MTGO products. The format registry also
 keeps official-event archive collection separate for incomplete formats. The
 scheduled pipeline builds statistics, matchups, completeness, provisional then
-sealed weekly Top 8 data and bases, metadata, the product catalog, hierarchy catalogs, strict
-classification diagnostics, and Weekly Pickup candidates for enabled products.
+sealed weekly Top 8 data and bases, Weekly Pickup candidates, latest Landing
+facts, metadata, the product catalog, hierarchy catalogs, and strict
+classification diagnostics for enabled products.
 
 Weekly Pickup publication is manual. Candidate generation never approves a
 row, publishes a week, or changes known-archetype state. Candidates are

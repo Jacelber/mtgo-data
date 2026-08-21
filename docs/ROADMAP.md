@@ -18,7 +18,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 
 | Phase | Objective | Status |
 | --- | --- | --- |
-| 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Active; P12-10 blocked as recorded in STATUS |
+| 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Active; P12-10 accepted-task completion authorized as recorded in STATUS |
 | 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
@@ -59,12 +59,14 @@ begin under separate authorization.
 ## Remaining task sequence
 
 10. `P12-10` — Landing weekly-facts producer and Pickup integration
-    - do not start until the accepted weekly-maintenance no-publication
-      rehearsal has reviewed every unresolved historical/current Unknown
-      through the complete-decklist XLSX carrier, the P12-03
-      classifier-remediation gate, refreshed shadow, owner threshold
-      confirmation, known-state migration check, and representative-card
-      approval are complete;
+    - the accepted weekly-maintenance no-publication rehearsal and separate
+      2026-08-21 Owner authorization satisfied the start gate; local
+      implementation and proportionate validation are complete, and the Owner
+      accepted the unchanged subject for Gate 6 completion on 2026-08-21;
+    - the completed gate covered every unresolved historical/current Unknown
+      through the complete-decklist review carrier; the P12-03 classifier
+      remediation, refreshed shadow, Owner threshold confirmation, known-state
+      migration check, and representative-card approval are complete;
     - add the Schema-validated latest-only
       `stats/<format>/mtgo/landing/current.json` document under the reviewed
       manifest, catalog, workflow, production-candidate, and Pages-allowlist
