@@ -93,9 +93,8 @@ The MTGO product should retain or develop the following capabilities:
 - average points per theoretical round;
 - representative or average decklists;
 - deck-construction deviation;
-- a repository-managed Weekly Pickup candidate, approval, known-state, and
-  history capability that supplies the Landing feature section but is not a
-  standalone user-facing product after Phase 12;
+- a repository-managed Landing editorial screening, approval, known-state, and
+  feature-history capability that is not a standalone user-facing product;
 - matchup and win-rate statistics based on the appropriate MTGO match source;
 - Unknown deck reporting;
 - classification conflict reporting;
@@ -118,7 +117,7 @@ After Phase 12 closeout, a complete public MTGO format includes an admitted
 Landing product together with official statistics, matchup win rates, weekly
 Top 8 decklists, and every other format-applicable required product. Its
 Landing includes the approved new-deck and new-technology feature section fed
-by the internal Weekly Pickup capability; a separate Pickup product is not
+by the internal Landing editorial capability; a separate Pickup product is not
 required. A future format
 must not become public through a partial launch that omits Landing. Standard
 and Modern are the explicit migration exceptions because their existing
@@ -424,10 +423,12 @@ available for that format:
 - MTGO weekly Top 8 decklists;
 - Tabletop Major Events.
 
-The Landing feature section may select the current or a prior approved Pickup
-week. That section-level control does not make Weekly Pickup a separate product
-and does not change the week used by the Landing brief, environment, or
-construction-change facts.
+The Landing feature section may select the current or a prior approved feature
+week from the Landing-owned feature archive. That section-level control does
+not create a separate product and does not change the week used by the Landing
+brief, environment, or construction-change facts. Existing Pickup week files
+are migration and rollback inputs, not the continuing source of new Landing
+content.
 
 Availability must come from generated catalogs rather than a hard-coded
 assumption that every format supports every product.

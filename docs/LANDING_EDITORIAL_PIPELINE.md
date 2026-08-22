@@ -1,0 +1,318 @@
+# Landing editorial pipeline
+
+## Purpose
+
+This document is the implementation route map for replacing the obsolete
+standalone Weekly Pickup handoff with one Landing-owned editorial pipeline. It
+defines the target responsibilities, data boundaries, ordered migration tasks,
+review gates, stop points, rollback conditions, and the steady weekly run after
+cutover.
+
+The route is intentionally staged. No stage may use a later stage's authority,
+and no old Pickup producer, public document, or reader path may be removed until
+its replacement has been generated, reviewed, switched, and verified in the
+cloud.
+
+## Problem being corrected
+
+The current Landing has three incompatible content paths:
+
+1. machine screening and Landing feature review fields live in private Pickup
+   candidate YAML;
+2. Landing summary preparation requires a separately published Pickup week;
+   and
+3. current features read private candidate state while historical features
+   expect a `features` collection in Pickup week documents that existing
+   published documents do not contain.
+
+The standalone Pickup page is no longer a reader-facing product, so retaining a
+public Pickup publication solely as an intermediate Landing handoff adds a
+second publication gate without providing a complete Landing feature archive.
+This is a structural source-of-truth problem, not a missing-card rendering
+fallback.
+
+## Approved target state
+
+Landing is the only reader-facing weekly editorial product. The useful parts of
+the existing Pickup implementation are retained as Landing-owned internal
+capabilities; the obsolete public product boundary is retired only after
+migration.
+
+| Current responsibility | Target treatment | Target owner |
+| --- | --- | --- |
+| Exact Top 8 screening through the five reviewed routes | Retain and rename as Landing editorial screening | Internal Landing producer |
+| Candidate deduplication and merged reason tags | Retain unchanged unless separately reviewed | Internal Landing producer |
+| Known-archetype continuity state | Retain, but update independently of whether any feature is selected | Internal Landing review state |
+| Candidate provenance and complete decklists | Retain in the private Landing review source | Internal Landing review state |
+| Human selection, order, localized copy, and four featured cards | Move into one Landing review contract | Owner through the XLSX carrier |
+| Public `pickup/<week>.json` handoff | Stop producing after cutover | Replaced by Landing current and feature-history documents |
+| Standalone Pickup page, renderer, navigation identity, and styles | Remove only after verified cutover and no-caller proof | Front-end cleanup task |
+| Existing Pickup W27 and W33 documents | Freeze as migration and rollback inputs | Compatibility evidence |
+| Legacy `product=weekly-pickup` URLs | Preserve as redirects to the requested Landing feature week | Compatibility layer |
+
+Machine candidates and machine-written copy remain aids. The Owner may select
+none, add any exact Top 8 deck, merge items, change categories and order, remove
+or completely rewrite every conclusion, or write unrelated content. Provenance
+bindings detect stale inputs; they do not restrict editorial meaning.
+
+## Target data flow
+
+```text
+verified production and classification
+                 |
+                 v
+Landing editorial screening + complete Top 8 catalog
+                 |
+                 v
+private Landing review source <-> XLSX review carrier
+                 |
+        explicit bilingual review
+                 |
+                 v
+      local Landing preview
+                 |
+          Owner acceptance
+                 |
+        +--------+--------+
+        |                 |
+        v                 v
+landing/current.json   landing/features/<week>.json
+                          + features/index.json
+        |                 |
+        +--------+--------+
+                 v
+             Landing UI
+```
+
+The target repository boundaries are:
+
+```text
+# Private, excluded from Pages
+stats/<format>/mtgo/landing/review/<week>.yaml
+stats/<format>/mtgo/landing/review/known_archetypes.json
+
+# Public
+stats/<format>/mtgo/landing/current.json
+stats/<format>/mtgo/landing/features/index.json
+stats/<format>/mtgo/landing/features/<week>.json
+```
+
+The exact private review Schema is introduced in the backend task. It must bind
+the review week, format, source event IDs, classifier digest, screening-policy
+digest, machine-fact digest, complete Top 8 link catalog, selected features,
+localized final text, and explicit review states. Pages admission must use an
+allowlist; placing private review state beneath `stats/` does not authorize its
+publication.
+
+`landing/current.json` remains the only latest complete Landing document. The
+feature archive is a bounded archive of the bottom new-deck and new-technology
+section only. Selecting an archived feature week never changes the current
+weekly brief, environment, composition, or construction facts and does not
+create historical Landing browsing.
+
+## Ordered migration program
+
+### P12-15A - Route-map documentation
+
+**Scope:** documentation only.
+
+1. Record this target contract in the authoritative scope, architecture,
+   roadmap, decision, status, and weekly-maintenance documents.
+2. Mark the completed P12-15 metadata and legacy-URL work accurately.
+3. Register every later task, prerequisite, output, stop point, and deletion
+   condition.
+
+**Output:** an accepted implementation route map.
+
+**Stop point:** do not create the workbook, change code, change public data, or
+change the page before Owner acceptance of this task.
+
+### P12-15B - Landing review workbook
+
+**Scope:** review artifact only; no page or public-data change.
+
+1. Inspect the accepted prior workbook and preserve all Owner-authored content,
+   including the corrected Modern order.
+2. Create one five-sheet workbook: `Review Control`, `Landing Copy`, `Featured
+   Decks`, `All Top 8`, and `Field Guide`.
+3. Put each selected deck's format, event, date, rank, archetype, player, and
+   `deck:<ID>` token directly in `Landing Copy` as a reference block.
+4. Put exact deck identity, decklist, machine reasons, editable selection,
+   category, order, Chinese and English fields, and four card fields in
+   `Featured Decks`.
+5. Include every exact current-week rank-one-through-eight deck in `All Top 8`
+   for unrestricted additions.
+6. Preload Standard W27, Standard W33, and Modern W33 recovery inputs without
+   overwriting existing Owner content.
+
+**Output:** a visually verified XLSX review carrier.
+
+**Stop point:** wait for the Owner to complete missing Chinese content,
+selection, order, cards, and explicit review states.
+
+### P12-15C - Content completion and bilingual review
+
+**Scope:** review state only; no page or public-data change.
+
+1. Validate workbook deck tokens, event and rank identities, and selected cards.
+2. Preserve the Owner's Chinese text exactly and add Codex English drafts.
+3. Return the same workbook lineage for Owner correction and final English
+   approval.
+4. Require separate explicit reviewed states for top copy and bottom features;
+   an explicitly reviewed zero-item result is valid.
+
+**Output:** complete bilingual Owner-reviewed content for the exact frozen
+baseline.
+
+**Stop point:** do not implement or publish the page from incomplete or stale
+content.
+
+### P12-15D - Internal Landing editorial backend
+
+**Scope:** internal producer, state, importer, Schema, and focused tests; no
+front-end switch.
+
+1. Extract the useful candidate algorithms from `pickup.py` into a
+   Landing-owned editorial module while keeping a temporary compatibility
+   wrapper.
+2. Introduce the private Landing review source and deterministic XLSX
+   import/export boundary.
+3. Move known-archetype continuity state into the Landing review boundary and
+   update it after an accepted classified weekly baseline, even when no feature
+   is selected.
+4. Remove the Landing generator's dependency on a separately published Pickup
+   week. Both top copy and current features must consume the same reviewed
+   Landing source.
+5. Add fail-closed validation for stale event IDs, classifier or policy
+   digests, unknown deck tokens, invalid card choices, duplicate orders, and
+   missing explicit review.
+
+**Output:** a complete internal Landing editorial pipeline that can generate
+new files without changing the live reader path.
+
+**Stop point:** keep the existing front end and public Pickup files unchanged.
+
+### P12-15E - Public feature archive and recovery preview
+
+**Scope:** new Landing public-data contract, historical migration, and local
+preview; no production publication before Owner acceptance.
+
+1. Add the Landing feature index and week-document Schemas, catalog references,
+   production-candidate admission, and Pages allowlist.
+2. Generate Standard W27, Standard W33, and Modern W33 feature documents from
+   the reviewed recovery content.
+3. Generate the latest complete Landing documents from the same reviewed
+   source.
+4. Switch a local preview to the Landing feature archive while leaving the
+   accepted UI structure and visual design unchanged.
+5. Verify Chinese and English, Standard and Modern, W27 and W33 selection,
+   exact deck links, four-card display, desktop, mobile, and explicit empty
+   weeks.
+
+**Output:** one Owner-reviewable local page backed entirely by the new Landing
+contracts.
+
+**Stop point:** wait for hands-on Owner acceptance. Do not publish or remove old
+Pickup resources.
+
+### P12-15F - Cloud cutover
+
+**Scope:** accepted data and reader-path publication.
+
+1. Publish the reviewed latest Landing and feature archive atomically through
+   the normal Ready-PR and Pages path.
+2. Change the feature selector to request only Landing feature-history paths.
+3. Verify the merge-triggered Pages deployment, current content, W27 and W33
+   history, both languages and formats, deck links, and legacy Pickup redirects.
+4. Prove that no live Landing request depends on public Pickup week documents.
+
+**Output:** a verified cloud Landing with current and historical feature
+content.
+
+**Stop point:** freeze the verified release and retain the legacy Pickup files
+and compatibility wrapper for rollback until a separate cleanup is accepted.
+
+### P12-15G - Pickup retirement cleanup
+
+**Scope:** dead-code and obsolete-contract removal only after P12-15F evidence.
+
+1. Prove there are no production, metadata, catalog, front-end, test, or Pages
+   callers of the standalone Pickup product or publisher.
+2. Remove the standalone renderer, navigation identity, unused styles, public
+   publisher, obsolete public Schemas, and metadata capability.
+3. Keep the legacy URL redirect. Delete or relocate frozen legacy documents only
+   under a separately declared file-operation and rollback plan.
+4. Update the final architecture and complete Phase 12 closeout prerequisites.
+
+**Output:** no standalone Pickup product and no hidden public-public handoff;
+only Landing-owned screening, review, current publication, and feature history
+remain.
+
+**Stop point:** proceed to P12-16 only after this cleanup or an explicit Owner
+decision to defer a named compatibility artifact.
+
+## Steady weekly operating contract after cutover
+
+| Step | Who | Work | Output for the next step |
+| --- | --- | --- | --- |
+| 1. Production | Automatic workflow | Fetch allowlisted events, generate and validate statistics, Top 8, Unknown diagnostics, and machine editorial candidates. | Verified cloud baseline and readiness artifact. |
+| 2. Start review | Owner | Explicitly start the named week from the readiness Issue. | Authority for the exact baseline. |
+| 3. Freeze baseline | Codex | Verify the cloud run, publication SHA, event IDs, lifecycle, and classifier digests. | Frozen review manifest. |
+| 4. Review Unknown | Codex and Owner | Handle coherent clustered Unknown groups in chat; use XLSX only for singleton batch review. Preserve prior unresolved Unknown unless already classified or explicitly accepted as a random card pile. | Final classification decisions. |
+| 5. Repair classifier | Codex implements; Owner accepts | Apply only accepted rule changes and regenerate affected outputs. | Accepted classifier subject or explicit no-change result. |
+| 6. Audit all Top 8 classifications | Codex prepares; Owner checks | Export every current-week Top 8 classification ordered by event date and rank. | Owner-checked weekly classification baseline. |
+| 7. Review visual metadata | Codex proposes; Owner decides | Confirm representative cards and deck colors. | Accepted visual metadata or explicit no change. |
+| 8. Screen Landing features | Automatic producer | Apply the five reviewed routes and retain the complete Top 8 pool. Merge reason tags only for the same exact deck. | Private candidates and evidence. |
+| 9. Prepare Landing workbook | Codex | Populate top-copy drafts, feature candidates, all Top 8 decks, exact deck tokens, and simple review controls. | Editable Landing review carrier. |
+| 10. Complete Chinese review | Owner | Select, add, delete, merge, reorder, or rewrite without a machine-imposed item limit; confirm cards and Chinese final copy. | Chinese final content. |
+| 11. Draft English | Codex | Translate the Owner-final Chinese content without changing it. | English draft in the same workbook lineage. |
+| 12. Complete final review | Owner | Correct or approve English and explicitly complete top-copy and feature review, including an intentional zero result. | Complete bilingual review state. |
+| 13. Build preview | Codex | Import and validate the workbook, generate current and feature-history documents, and render the accepted Landing UI. | Exact local preview. |
+| 14. Accept and publish | Owner accepts; Codex completes | After hands-on acceptance, complete the unchanged task through commit, Ready PR, required checks, merge, and Pages publication. | Cloud Landing and immutable publication subject. |
+| 15. Verify cloud | Codex | Verify current copy, feature weeks, language, format, deck links, card display, redirects, and no legacy Pickup data request. | Completed weekly maintenance evidence. |
+
+The automatic workflow never approves editorial content and never publishes a
+new Landing review on its own. A later daily production run may refresh only an
+unreviewed review source. Once either top copy or feature review contains human
+work, changed source events or digests mark it stale and require explicit
+re-review rather than silent overwrite.
+
+## Workbook ownership contract
+
+The Landing workbook is separate from Unknown and visual-metadata maintenance.
+Its sheets and user-facing fields are limited to the Landing editorial task:
+
+1. `Review Control` - immutable baseline plus explicit top-copy, Chinese,
+   English, and feature-review states;
+2. `Landing Copy` - ordered final text, Codex English draft, Owner English final,
+   and an in-sheet reference block for every selected deck and `deck:<ID>`;
+3. `Featured Decks` - candidate evidence and complete decklists plus editable
+   selection, category, order, localized title and positioning, and four cards;
+4. `All Top 8` - every exact rank-one-through-eight deck available for manual
+   addition; and
+5. `Field Guide` - only fields the Owner needs to enter or review.
+
+There is no separate `Landing Links` sheet. Displays and URLs are generated
+from validated deck IDs. Internal input IDs, digests, action codes, parent IDs,
+and implementation vocabulary are omitted from Owner input columns. The XLSX
+is a review carrier; accepted content is imported into the private Landing
+review source before preview or publication.
+
+## Migration and deletion controls
+
+- Standard W27, Standard W33, and Modern W33 are the required initial recovery
+  set. A format/week missing complete feature content remains blocked rather
+  than silently appearing empty.
+- Existing Owner-authored text and order are preserved byte-for-byte when the
+  recovery workbook is created. Codex fills only newly identified fields or
+  clearly marked draft columns.
+- The front end does not switch until the new feature index and every required
+  week document validate and render locally.
+- Legacy Pickup documents are not deleted during backend implementation,
+  migration, preview, or initial cloud cutover.
+- Cleanup requires a no-caller search, cloud verification of the replacement,
+  an explicit path-by-path deletion or relocation declaration, and a tested
+  rollback that does not depend on rebuilding lost Owner content.
+- The accepted Landing UI design remains authoritative. Data-source migration
+  does not authorize layout, interaction, sizing, or visual changes.
+

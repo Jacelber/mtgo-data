@@ -112,10 +112,12 @@ weight, color, underline, and programmatic state. It must not resemble a format
 button.
 
 Top-level product navigation and in-page Landing section navigation are
-different concepts and must be visually distinguishable. After P12-16,
-Weekly Pickup is not a top-level product: its current and historical approved
-content appears in the Landing feature section. The section may have a week
-selector, but selecting a week changes only feature content.
+different concepts and must be visually distinguishable. Weekly Pickup is not
+a top-level product: current and historical approved content comes from the
+Landing-owned feature archive and appears in the Landing feature section. The
+section may have a week selector, but selecting a week changes only feature
+content. Legacy Pickup URLs remain compatibility redirects, not a product or
+data-source identity.
 
 Controls use semantic `button`, `a`, `select`, or appropriate form elements,
 visible focus, meaningful accessible names, and touch-friendly targets. Normal
@@ -141,7 +143,7 @@ scrolling. The composition strip and environment list use the same current-week
 3% inclusion set. Names and percentages are available on hover and keyboard;
 touch uses first tap for disclosure and second tap for navigation. A selected
 deck detail opens directly beneath its row or card and reuses the established
-statistics/Weekly Pickup deck-detail component.
+statistics/Landing-feature deck-detail component.
 
 When an owner-maintained first representative card is available, its art crop
 is the composition segment fill. This changes only the fill: segment order,
@@ -167,8 +169,8 @@ from its data column.
 P12-08A applies that semantic-card rule to the retained MTGO statistics and
 Tabletop overview lists. Deck identity, core and secondary metrics, and the
 existing expansion action remain available, with detail inserted directly
-beneath the originating card. Weekly Pickup already uses semantic cards and
-only needs narrow-screen heading and metric wrapping. The Top 8 cross-event
+beneath the originating card. Landing feature items already use semantic cards
+and retain their narrow-screen heading and metric wrapping. The Top 8 cross-event
 comparison and matchup matrices remain bounded horizontal scrollers with a
 sticky identity column and a dismissible first-use scroll cue. Responsive
 adaptation must not discard data.

@@ -5069,3 +5069,110 @@ links retain a useful destination, while the accepted page composition and the
 later default-route/navigation decision remain intact. This changes no
 statistics, classifiers, reviewed content, public JSON, Schemas, source data,
 workflows, event whitelist, Pages entry path, or protected event `434455`.
+
+---
+
+# DEC-113 - Replace the public Pickup handoff with one Landing editorial pipeline
+
+Status: `Accepted for staged implementation`
+
+## Context
+
+The standalone Weekly Pickup reader surface has been removed from the accepted
+product direction, but the implemented content path still requires a public
+Pickup week before Landing summary preparation. Current Landing features read
+private candidate review fields, while historical features expect a `features`
+collection that the published Pickup week contract does not contain. The result
+is a split source of truth: an apparently successful Landing can have current
+facts while its curated feature section is empty, and the obsolete public
+Pickup publication remains a mandatory intermediate gate without supplying a
+complete feature archive.
+
+The Owner rejected keeping that complete backend solely so Landing could read
+it. The useful screening, evidence, exact-deck binding, known-archetype
+continuity, human editorial authority, and historical feature selection must be
+preserved, but they belong to one Landing-owned process.
+
+## Decision
+
+Adopt `docs/LANDING_EDITORIAL_PIPELINE.md` as the ordered implementation route
+map. Landing becomes the only reader-facing weekly editorial product and owns
+one format-scoped private review source, latest public document, and bounded
+feature-history archive.
+
+Retain the five-route exact-Top-8 screening rules, complete Top 8 review pool,
+same-deck reason merging, continuity state, deterministic deck tokens, stale-
+review detection, four reviewer-selected feature cards, and unrestricted human
+editorial authority. Move those capabilities out of the public Pickup handoff
+and into the private Landing review boundary. Update continuity state after an
+accepted classified weekly baseline even when the Owner selects zero features.
+
+Use these target private paths, excluded from Pages:
+
+```text
+stats/<format>/mtgo/landing/review/<week>.yaml
+stats/<format>/mtgo/landing/review/known_archetypes.json
+```
+
+Use these target public paths:
+
+```text
+stats/<format>/mtgo/landing/current.json
+stats/<format>/mtgo/landing/features/index.json
+stats/<format>/mtgo/landing/features/<week>.json
+```
+
+The feature archive stores only the bottom new-deck and new-technology section.
+It does not create historical complete-Landing browsing. Publication writes the
+reviewed latest Landing and selected feature week from the same review subject;
+there is no intermediate `pickup publish` gate.
+
+Separate the review carriers. Coherent clustered Unknown decks are reviewed in
+chat, singleton Unknown batch decisions use XLSX, the temporary complete Top 8
+classification audit uses its own XLSX, and Landing uses one five-sheet workbook
+with `Review Control`, `Landing Copy`, `Featured Decks`, `All Top 8`, and `Field
+Guide`. The Landing copy sheet itself exposes selected-deck date, rank,
+archetype, player, and `deck:<ID>` references. Generated displays and URLs do not
+require a separate link sheet. Codex drafts English only after the Owner's
+Chinese final is complete; the Owner explicitly approves both top copy and
+features, including an intentional zero result.
+
+Migrate Standard W27, Standard W33, and Modern W33 before the reader switch.
+Freeze existing public Pickup index and week documents as migration and rollback
+inputs. Do not create new Pickup weeks after the accepted cloud cutover. Remove
+the standalone renderer, navigation identity, styles, publisher, capability,
+Schemas, or frozen documents only in the later cleanup task after replacement
+cloud verification, no-caller proof, exact file-operation declarations, and a
+tested rollback. Preserve the legacy URL redirect to the requested Landing
+feature week.
+
+Execute the decision through P12-15A to P12-15G. Each task has its own scope,
+output, acceptance, and stop point. Documentation precedes the workbook; content
+completion precedes backend work; backend work precedes public-data migration;
+validated data precedes local reader switching; Owner preview acceptance
+precedes cloud cutover; cloud verification precedes deletion.
+
+## Supersession
+
+This decision supersedes DEC-087 where it retained Weekly Pickup as the ongoing
+internal history capability, DEC-110's required public Pickup-before-Landing
+handoff, and DEC-111's published-Pickup digest dependency. It supersedes DEC-109
+only where that decision stores Landing review state inside Pickup candidates.
+
+It preserves DEC-108's five screening routes, DEC-111's unrestricted human
+final copy and exact inline deck-token behavior, DEC-112's legacy URL mapping,
+the accepted Landing UI structure, statistical formulas, classifier identities,
+source-event policy, and protected event `434455` bytes.
+
+## Consequences
+
+The weekly chain has one editorial source of truth and one public product. A
+reviewed feature can no longer disappear because current and historical panels
+expect different Pickup shapes. Empty weeks remain explicit human decisions,
+not missing fields. Existing content and rollback material survive until the
+replacement is proven in production.
+
+This decision authorizes only the staged tasks and boundaries recorded in the
+route map. P12-15A is documentation-only. It does not itself authorize the
+workbook, code, Schema, workflow, generated data, public-path, UI, publication,
+production, or cleanup work assigned to later tasks.
