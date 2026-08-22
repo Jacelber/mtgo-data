@@ -23,7 +23,7 @@ const TABLETOP_SORT_KEYS = new Set([
 const TABLETOP_VIEWS = new Set(["overview", "matchup"]);
 const TABLETOP_SCOPES = new Set(["day1", "day2", "all_constructed"]);
 const EXTENDED_URL_KEYS = [
-  "range", "sort", "dir", "week", "event", "events", "view", "scope", "detail",
+  "range", "sort", "dir", "week", "event", "events", "view", "scope", "detail", "section",
 ];
 let pendingUrlWrite = null;
 let touchedCompositionIdentity = null;
@@ -53,6 +53,7 @@ function resetUrlBackedState() {
   state.detailMode = "average";
   state.top8WeekFile = null;
   state.pickupWeekFile = null;
+  state.landingSection = null;
   state.pickupOpen.clear();
   state.tabletopView = "overview";
   state.tabletopEventId = null;
@@ -73,8 +74,8 @@ function requestedWeekFile(parameters) {
 }
 
 function applyUrlState(parameters) {
-  const language = parameters.get("lang");
-  updateLanguageChrome(language === "en" ? "en" : "zh");
+  const language = P8Metadata.resolveLanguage(parameters.get("lang"), window.localStorage);
+  updateLanguageChrome(language);
 
   const requestedFormat = parameters.get("format");
   if (
@@ -102,6 +103,7 @@ function applyUrlState(parameters) {
   const detail = parameters.get("detail");
   if (state.product === "mtgo-landing") {
     state.pickupWeekFile = requestedWeekFile(parameters);
+    state.landingSection = parameters.get("section") === "features" ? "features" : null;
     if (detail) {
       state.detailIdentity = detail;
       state.compositionIdentity = detail;
@@ -151,6 +153,7 @@ function urlStateParameters() {
   parameters.set("format", state.format);
   parameters.set("product", state.product);
   if (state.product === "mtgo-landing") {
+    if (state.landingSection === "features") parameters.set("section", "features");
     if (weekId(state.pickupWeekFile)) parameters.set("week", weekId(state.pickupWeekFile));
     if (state.detailIdentity) parameters.set("detail", state.detailIdentity);
   } else if (state.product === "mtgo-statistics") {
@@ -195,6 +198,59 @@ function flushUrlWrite() {
   const next = `${target.pathname}${target.search}${target.hash}`;
   const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   if (next !== current) window.history[`${mode}State`]({}, "", next);
+  updateDocumentMetadata();
+}
+
+function canonicalUrl() {
+  const target = new URL(window.location.href);
+  target.search = P8Metadata.canonicalParameters(urlStateParameters()).toString();
+  target.hash = "";
+  return target.href;
+}
+
+function updateDocumentMetadata() {
+  const metadata = P8Metadata.metadataFor(I18n.language());
+  const canonical = canonicalUrl();
+  document.title = metadata.title;
+  const values = {
+    "#meta-description": metadata.description,
+    "#og-title": metadata.title,
+    "#og-description": metadata.description,
+    "#og-url": canonical,
+    "#og-locale": metadata.locale,
+    "#twitter-title": metadata.title,
+    "#twitter-description": metadata.description,
+  };
+  Object.entries(values).forEach(([selector, value]) => {
+    const node = document.querySelector(selector);
+    if (node) node.setAttribute("content", value);
+  });
+  const canonicalNode = document.querySelector("#canonical-url");
+  if (canonicalNode) canonicalNode.href = canonical;
+}
+
+function renderSiteAttribution() {
+  const node = document.querySelector("#site-attribution");
+  if (!node) return;
+  const footer = P8Metadata.metadataFor(I18n.language()).footer;
+  node.replaceChildren();
+  const scryfall = document.createElement("a");
+  scryfall.href = "https://scryfall.com/";
+  scryfall.target = "_blank";
+  scryfall.rel = "noopener";
+  scryfall.textContent = "Scryfall";
+  const policy = document.createElement("a");
+  policy.href = "https://company.wizards.com/en/legal/fancontentpolicy";
+  policy.target = "_blank";
+  policy.rel = "noopener";
+  policy.textContent = footer.policyLabel;
+  node.append(
+    document.createTextNode(`${footer.source} `),
+    scryfall,
+    document.createTextNode(` · ${footer.policyLead} `),
+    policy,
+    document.createTextNode(footer.policyTail)
+  );
 }
 
 function hasExtendedUrlState(parameters) {
@@ -203,6 +259,9 @@ function hasExtendedUrlState(parameters) {
 
 function currentDetailReveal() {
   const mobile = matchMedia("(max-width: 780px)").matches;
+  if (state.product === "mtgo-landing" && state.landingSection === "features") {
+    return { selector: "#features", alignment: "start" };
+  }
   if (state.product === "mtgo-landing" && state.detailIdentity) {
     return {
       selector: `[data-landing-detail="${CSS.escape(state.detailIdentity)}"]`,
@@ -382,7 +441,10 @@ document.addEventListener("click", async event => {
     setMessage("");
     renderNavigation();
     queueUrlWrite();
-    await renderView();
+    const reveal = currentDetailReveal();
+    await renderViewWithFocus(null, reveal.selector, {
+      revealAlignment: reveal.alignment,
+    });
   } else if (button.dataset.product) {
     discardPendingRefresh();
     if (!productEntry(button.dataset.product)?.available) {
@@ -392,13 +454,19 @@ document.addEventListener("click", async event => {
       }));
       return;
     }
-    state.product = button.dataset.product;
+    state.product = button.dataset.product === "weekly-pickup"
+      ? "mtgo-landing"
+      : button.dataset.product;
+    state.landingSection = button.dataset.product === "weekly-pickup" ? "features" : null;
     if (navigateToProductEntry(state.product, state.format)) return;
     resetInteractions();
     setMessage("");
     renderNavigation();
     queueUrlWrite();
-    await renderView();
+    const reveal = currentDetailReveal();
+    await renderViewWithFocus(null, reveal.selector, {
+      revealAlignment: reveal.alignment,
+    });
   } else if (button.dataset.compositionIdentity) {
     const parentId = button.dataset.compositionIdentity;
     const touchContract = matchMedia("(hover: none)").matches || matchMedia("(max-width: 780px)").matches;
@@ -735,7 +803,7 @@ document.addEventListener("click", event => {
 function updateLanguageChrome(language) {
   I18n.setLanguage(language);
   document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
-  document.title = t("site.title");
+  document.title = P8Metadata.metadataFor(language).title;
   const siteTitle = document.querySelector("#site-title");
   if (siteTitle) siteTitle.textContent = t("site.title");
   const zhButton = document.querySelector("#lang-zh");
@@ -744,10 +812,13 @@ function updateLanguageChrome(language) {
   enButton.classList.toggle("active", language === "en");
   zhButton.setAttribute("aria-pressed", String(language === "zh"));
   enButton.setAttribute("aria-pressed", String(language === "en"));
+  renderSiteAttribution();
+  updateDocumentMetadata();
 }
 
 async function changeLanguage(language) {
   discardPendingRefresh();
+  P8Metadata.rememberLanguage(language, window.localStorage);
   updateLanguageChrome(language);
   setMessage("");
   renderNavigation();
@@ -776,11 +847,13 @@ async function initialize({ retry = false } = {}) {
   }
   try {
     state.catalog = await Runtime.catalog.fetchJson("stats/catalog.json");
-    const parameters = new URLSearchParams(window.location.search);
+    const parameters = P8Metadata.normalizedRoute(new URLSearchParams(window.location.search));
     resetUrlBackedState();
     applyUrlState(parameters);
     if (navigateToProductEntry(state.product, state.format)) return;
-    if (hasExtendedUrlState(parameters)) queueUrlWrite("replace");
+    if (hasExtendedUrlState(parameters) || window.location.search !== `?${parameters}`) {
+      queueUrlWrite("replace");
+    }
     renderNavigation();
     const reveal = currentDetailReveal();
     await renderViewWithFocus(null, reveal.selector, {
@@ -803,9 +876,12 @@ async function initialize({ retry = false } = {}) {
 window.addEventListener("popstate", async () => {
   if (!state.catalog) return;
   discardPendingRefresh();
+  const rawParameters = new URLSearchParams(window.location.search);
+  const parameters = P8Metadata.normalizedRoute(rawParameters);
   resetUrlBackedState();
-  applyUrlState(new URLSearchParams(window.location.search));
+  applyUrlState(parameters);
   if (navigateToProductEntry(state.product, state.format)) return;
+  if (rawParameters.toString() !== parameters.toString()) queueUrlWrite("replace");
   setMessage("");
   renderNavigation();
   const reveal = currentDetailReveal();

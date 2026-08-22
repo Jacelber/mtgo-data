@@ -58,6 +58,7 @@ PHASE8_PRODUCTION_RESOURCES = (
     "assets/js/phase8/app-mobile-interactions.js",
     "assets/js/phase8/app-loading.js",
     "assets/js/phase8/app-card-preview.js",
+    "assets/js/phase8/app-metadata.js",
     "assets/js/phase8/app-tabletop.js",
     "assets/js/phase8/app.js",
 )
@@ -78,6 +79,7 @@ MAINTAINED_JAVASCRIPT = (
     "assets/js/phase8/app-mobile-interactions.js",
     "assets/js/phase8/app-loading.js",
     "assets/js/phase8/app-card-preview.js",
+    "assets/js/phase8/app-metadata.js",
     "assets/js/phase8/app-tabletop.js",
     "assets/js/phase8/app.js",
 )
@@ -115,6 +117,7 @@ PHASE8_FRONTEND_ENTRIES = {
             "assets/js/phase8/app-mobile-interactions.js",
             "assets/js/phase8/app-loading.js",
             "assets/js/phase8/app-card-preview.js",
+            "assets/js/phase8/app-metadata.js",
             "assets/js/phase8/app.js",
         ),
     },
