@@ -2,16 +2,16 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-landing.schema.json",
   "title": "Latest-only MTGO weekly Landing",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema_version", "product", "format", "source", "week", "state",
     "source_event_ids", "classifier", "comparison", "thresholds",
-    "populations", "environment", "observations", "features", "review_binding"
+    "populations", "environment", "features", "review_binding"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
     "product": {"const": "mtgo-landing"},
     "format": {"enum": ["standard", "modern"]},
     "source": {"const": "mtgo"},
@@ -85,6 +85,15 @@
         {"$ref": "#/$defs/buildShift"}
       ]}
     },
+    "weekly_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["week", "items"],
+      "properties": {
+        "week": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
+        "items": {"type": "array", "items": {"$ref": "#/$defs/summaryItem"}}
+      }
+    },
     "features": {
       "type": "object",
       "additionalProperties": false,
@@ -102,11 +111,29 @@
         "source_event_ids": {"$ref": "#/$defs/eventIds"},
         "classifier_digest": {"$ref": "#/$defs/sha256"},
         "visual_metadata_digest": {"$ref": "#/$defs/sha256"},
-        "machine_fact_digest": {"$ref": "#/$defs/sha256"}
+        "machine_fact_digest": {"$ref": "#/$defs/sha256"},
+        "pickup_document_digest": {"$ref": "#/$defs/sha256"},
+        "summary_fact_digest": {"$ref": "#/$defs/sha256"}
       }
     }
   },
   "allOf": [
+    {
+      "if": {"properties": {"schema_version": {"const": "1.0.0"}}},
+      "then": {
+        "required": ["observations"],
+        "not": {"required": ["weekly_summary"]}
+      },
+      "else": {
+        "required": ["weekly_summary"],
+        "not": {"required": ["observations"]},
+        "properties": {
+          "review_binding": {
+            "required": ["pickup_document_digest", "summary_fact_digest"]
+          }
+        }
+      }
+    },
     {
       "if": {"properties": {"state": {"const": "ready"}}},
       "then": {"properties": {"source_event_ids": {"minItems": 1}}},
@@ -114,6 +141,7 @@
         "properties": {
           "source_event_ids": {"maxItems": 0},
           "observations": {"maxItems": 0},
+          "weekly_summary": {"properties": {"items": {"maxItems": 0}}},
           "features": {"properties": {"items": {"maxItems": 0}}},
           "environment": {"properties": {"rows": {"maxItems": 0}}}
         }
@@ -289,6 +317,42 @@
       "additionalProperties": false,
       "required": ["zh", "en"],
       "properties": {"zh": {"type": "string"}, "en": {"type": "string"}}
+    },
+    "summaryItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "text", "deck_links"],
+      "properties": {
+        "order": {"type": "integer", "minimum": 1},
+        "text": {"$ref": "#/$defs/localized"},
+        "deck_links": {"type": "array", "items": {"$ref": "#/$defs/summaryDeckLink"}}
+      }
+    },
+    "summaryDeck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["archetype_id", "display_name", "event_id", "deck_id", "deck_fingerprint_sha256", "player", "final_rank", "starttime"],
+      "properties": {
+        "archetype_id": {"$ref": "#/$defs/stableId"},
+        "display_name": {"type": "string", "minLength": 1},
+        "event_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "deck_id": {"type": "string", "minLength": 1},
+        "deck_fingerprint_sha256": {"$ref": "#/$defs/sha256"},
+        "player": {"type": "string"},
+        "final_rank": {"type": "integer", "minimum": 1, "maximum": 8},
+        "starttime": {"type": "string", "minLength": 1}
+      }
+    },
+    "summaryDeckLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "token", "label", "deck"],
+      "properties": {
+        "order": {"type": "integer", "minimum": 1},
+        "token": {"type": "string", "pattern": "^deck:[0-9a-f]{20}$"},
+        "label": {"$ref": "#/$defs/localized"},
+        "deck": {"$ref": "#/$defs/summaryDeck"}
+      }
     },
     "supportingFact": {
       "type": "object",

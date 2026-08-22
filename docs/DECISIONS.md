@@ -4947,3 +4947,76 @@ Pickup page, then Landing draft and human final. A missing, stale, invalid, or
 unpublished Pickup week blocks Landing from using that content instead of
 silently falling back to XLSX or private YAML. Standard and Modern can use the
 same supported public contract while all older Pickup links remain compatible.
+
+---
+
+# DEC-111 - Separate complete Landing review inputs from the human final
+
+Status: `Accepted for local implementation`
+
+## Context
+
+The P12-10 producer exposed at most five machine observations as if that
+presentation limit also defined the weekly editorial result. The Owner clarified
+that machine output is only draft evidence: the final may combine several facts,
+delete or rewrite every conclusion, contain unrelated content, or contain no
+rows. Missing content cannot, however, be interpreted as an explicit zero-row
+decision.
+
+The first P12-11A rehearsal also tried to derive Pickup-related summary inputs
+from private candidate YAML before the Owner-confirmed Pickup content was
+published. DEC-110 now requires Landing to consume the verified public Pickup
+week instead.
+
+## Decision
+
+Split P12-11 into P12-11A for the data/editorial boundary and P12-11B for UI.
+P12-11A keeps all eligible share movement, return, exit, and construction-shift
+machine facts without a five-item truncation. It then reads every reviewed deck
+and exact localized copy from the matching published Pickup `1.1.0` week. A
+published deck is one review input with all reason tags, so overlapping routes
+do not duplicate it. Post-ban continuation remains Owner-only.
+
+Require the Pickup week, source-event IDs, classifier digest, and
+selection-policy digest to match the Landing subject, and bind the complete
+Pickup document digest into the Landing review. Store deterministic private
+review-input IDs, an explicit `reviewed` state, and zero or more ordered
+human-final rows in the existing format-scoped candidate YAML. A row may link
+to zero, one, or several review-input IDs, but those links are provenance aids
+rather than editorial constraints.
+
+Only localized final text and explicitly selected structured deck links enter
+public Landing JSON; review inputs, source-input IDs, machine drafts, and review
+vocabulary remain private. The deterministic private link catalog covers every
+exact current-week Top 8 deck independently of machine or Pickup selection, so
+unrelated human-authored content may still link a relevant deck. Each reviewed
+row selects decks by placing the exact `deck:<20-hex deck ID>` token at the
+desired position in every non-empty localized text. The producer derives order
+from token occurrence, generates localized archetype-player-rank displays, and
+resolves each token to validated event, rank, deck, fingerprint, player,
+archetype, and start-time identity; arbitrary URLs are not accepted. The token
+intentionally remains in public localized text as P12-11B's exact inline-
+replacement anchor and does not turn the whole row into a link. An explicitly
+reviewed empty list is valid. Missing review, changed inputs or link catalog, a mismatched or
+unpublished Pickup week, or an unknown link preserves the last admitted current
+document.
+
+Advance Landing Schema to `1.1.0` for `weekly_summary` and its
+`pickup_document_digest` binding while continuing to validate admitted `1.0.0`
+documents until explicit review replaces them. Keep XLSX as a review carrier
+only. This decision supersedes DEC-109 only where that decision made the top-five
+machine observation set public editorial content; DEC-110 remains authoritative
+for the cloud Pickup handoff.
+
+## Consequences
+
+There is no machine or five-item ceiling on the final summary. The separate
+Top 8 link catalog and row-to-link mapping let a single editorial item cite any
+number of exact decks without conflating those links with machine provenance.
+Previously
+written Chinese Pickup copy is visible from its correct published source, but
+the Owner may merge, delete, replace, or completely rewrite it, or publish
+unrelated content, without a false machine-support requirement. P12-11B UI,
+commit, remote publication, production dispatch, historical Landing,
+classifier rules, thresholds, source data, workflow timing, Pages paths, and
+protected event `434455` bytes remain separately gated and unchanged.
