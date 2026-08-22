@@ -12,6 +12,7 @@ const ArchetypeVisuals = globalThis.P8ArchetypeVisuals || Object.freeze({
 const REPRESENTATIVE_CARDS = ArchetypeVisuals.representativeCards;
 const ENTRY_SURFACE = document.documentElement.dataset.surface || "review";
 const PRODUCT_ORDER = [
+  "mtgo-landing",
   "mtgo-statistics",
   "mtgo-matchups",
   "mtgo-top8",
@@ -19,6 +20,7 @@ const PRODUCT_ORDER = [
   "weekly-pickup",
 ];
 const PRODUCT_LABEL_KEYS = {
+  "mtgo-landing": "product.landing",
   "mtgo-statistics": "product.stats",
   "mtgo-matchups": "product.matchups",
   "mtgo-top8": "product.top8",
@@ -26,6 +28,7 @@ const PRODUCT_LABEL_KEYS = {
   "weekly-pickup": "product.pickup",
 };
 const PRODUCT_SURFACES = {
+  "mtgo-landing": "mtgo",
   "mtgo-statistics": "mtgo",
   "mtgo-matchups": "mtgo",
   "mtgo-top8": "mtgo",
@@ -140,6 +143,13 @@ function number(value, digits = 2) {
 function dateText(value) {
   if (!value) return "—";
   return String(value).replace("T", " ").replace(/(\.\d+)?([+-]\d\d:\d\d|Z)$/, "");
+}
+
+function localizedValue(value) {
+  if (!value || typeof value !== "object") return "";
+  return I18n.language() === "en"
+    ? (value.en || value.zh || "")
+    : (value.zh || value.en || "");
 }
 
 function formatEntry() {

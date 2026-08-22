@@ -51,9 +51,264 @@ function compositionAction(parent) {
 }
 
 function currentCompositionAction(parentId) {
+  if (state.product === "mtgo-landing") {
+    return { kind: "detail", identity: parentId };
+  }
   const parent = currentContext?.range?.archetypes
     ?.find(item => item.id === parentId);
   return parent ? compositionAction(parent) : { kind: "detail", identity: parentId };
+}
+
+function landingTargetUrl(parameters) {
+  const target = new URL(window.location.href);
+  target.search = "";
+  Object.entries(parameters).forEach(([key, value]) => target.searchParams.set(key, value));
+  target.searchParams.set("lang", I18n.language());
+  return `${target.pathname}${target.search}`;
+}
+
+function landingDeckUrl(deck, weekId) {
+  return landingTargetUrl({
+    format: state.format,
+    product: "mtgo-top8",
+    week: weekId,
+    detail: `${deck.event_id}:${deck.final_rank}`,
+  });
+}
+
+function landingSummaryText(item, weekId) {
+  const text = localizedValue(item.text);
+  const links = new Map((item.deck_links || []).map(link => [link.token, link]));
+  const tokens = [...links.keys()].sort((left, right) => right.length - left.length);
+  if (!tokens.length) return escapeHtml(text);
+  const pattern = new RegExp(`(${tokens.map(token => (
+    token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  )).join("|")})`, "g");
+  return text.split(pattern).map(part => {
+    const link = links.get(part);
+    if (!link) return escapeHtml(part);
+    return `<a class="landing-deck-link" href="${escapeHtml(landingDeckUrl(link.deck, weekId))}">${escapeHtml(localizedValue(link.label))}</a>`;
+  }).join("");
+}
+
+function landingSummaryHtml(landing) {
+  const items = [...(landing.weekly_summary?.items || [])]
+    .sort((left, right) => Number(left.order) - Number(right.order));
+  if (!items.length) {
+    return `<p class="landing-empty">${t("landing.summary_empty")}</p>`;
+  }
+  return `<div class="landing-brief-lines">${items.map(item => (
+    `<article class="landing-brief-line"><span class="landing-brief-icon" aria-hidden="true">◇</span><p>${landingSummaryText(item, landing.week.id)}</p></article>`
+  )).join("")}</div>`;
+}
+
+function landingCompositionHtml(landing) {
+  const rows = landing.environment?.rows || [];
+  const segments = rows.map((row, index) => {
+    const representative = REPRESENTATIVE_CARDS[state.format]?.[row.archetype_id]?.[0];
+    return {
+      id: row.archetype_id,
+      name: row.display_name,
+      share: Number(row.current?.share) || 0,
+      color: `composition-color-${index % 6 + 1}`,
+      image: representative?.image,
+    };
+  });
+  const other = landing.environment?.other_classified?.current?.share;
+  const unknown = landing.environment?.unknown?.current?.share;
+  if (Number(other) > 0) {
+    segments.push({ name: t("chart.other"), share: Number(other), color: "other" });
+  }
+  if (Number(unknown) > 0) {
+    segments.push({ name: t("chart.unknown"), share: Number(unknown), color: "unknown" });
+  }
+  const assigned = segments.reduce((sum, segment) => sum + segment.share, 0);
+  if (assigned < 0.99999) {
+    segments.push({
+      name: t("chart.unassigned"),
+      share: Math.max(0, 1 - assigned),
+      color: "unassigned",
+    });
+  }
+  return `<div class="landing-composition-wrap"><div class="composition-bar landing-composition-bar" role="group" aria-label="${t("landing.composition_aria")}">${segments.map(segment => {
+    const label = `${segment.name} · ${pct(segment.share)}`;
+    const selected = segment.id === state.compositionIdentity;
+    return accessibleCompositionSegment({
+      className: `composition-segment ${segment.color}${segment.image ? " has-card-art" : ""}${selected ? " selected" : ""}`,
+      style: `--composition-share:${(segment.share * 100).toFixed(6)}%${segment.image ? `;--composition-image:url(${segment.image})` : ""}`,
+      label,
+      identity: segment.id,
+      expanded: selected,
+    });
+  }).join("")}</div><p class="composition-note">${t("landing.composition_note")}</p></div>`;
+}
+
+function landingDirection(row, comparisonAvailable) {
+  if (!comparisonAvailable || row.previous_four_weeks?.share === null) {
+    return { className: "unavailable", symbol: "—", label: t("landing.direction_unavailable") };
+  }
+  const delta = Number(row.current?.share) - Number(row.previous_four_weeks?.share);
+  if (delta >= 0.05) return { className: "up", symbol: "↑", label: t("landing.direction_up") };
+  if (delta <= -0.05) return { className: "down", symbol: "↓", label: t("landing.direction_down") };
+  return { className: "steady", symbol: "—", label: t("landing.direction_steady") };
+}
+
+function representativeImagePath(path) {
+  return path?.replace(/^\.\.\/images\//, "assets/images/") || "";
+}
+
+function landingRepresentatives(row) {
+  const configured = REPRESENTATIVE_CARDS[state.format]?.[row.archetype_id] || [];
+  const cards = (row.key_cards || []).map(card => (
+    configured.find(candidate => candidate.name === card.name) || card
+  ));
+  if (!cards.length) return `<span class="landing-cards-empty">${t("landing.cards_unavailable")}</span>`;
+  return `<div class="landing-representatives" aria-label="${t("landing.representative_cards")}">${cards.map(card => {
+    const search = `https://scryfall.com/search?q=${encodeURIComponent(`!"${card.name}"`)}`;
+    const image = `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(card.name)}&format=image&version=normal`;
+    const source = representativeImagePath(card.image);
+    return source
+      ? `<a class="landing-representative card-link" href="${escapeHtml(search)}" target="_blank" rel="noopener" data-card-image="${escapeHtml(image)}" data-card-name="${escapeHtml(card.name)}" data-scryfall-url="${escapeHtml(search)}"><span class="card-image-frame is-loading"><img alt="${escapeHtml(card.name)}" data-progressive-image="${escapeHtml(source)}" data-image-owner="landing-representative"><span class="card-image-placeholder">${escapeHtml(card.name)}</span></span></a>`
+      : `<span class="landing-representative landing-card-placeholder">${escapeHtml(card.name)}</span>`;
+  }).join("")}</div>`;
+}
+
+function landingEnvironmentDetail(row) {
+  if (state.detailIdentity !== row.archetype_id || !currentContext.environmentDecks) return "";
+  const deck = locateDeck(currentContext.environmentDecks, row.archetype_id);
+  if (!deck) return "";
+  return deckDetailHtml({
+    title: row.display_name,
+    bestDeck: deck.best_deck,
+    averageDeck: deck.average_deck,
+    comparison: { rank: deck.best_deck?.final_rank },
+    closeAction: "data-close-detail",
+    className: "deck-detail landing-inline-detail",
+    responsiveKey: `landing:${row.archetype_id}`,
+  });
+}
+
+function landingEnvironmentRows(landing) {
+  return (landing.environment?.rows || []).map(row => {
+    const direction = landingDirection(row, landing.comparison?.available);
+    const open = state.detailIdentity === row.archetype_id;
+    return `<tbody class="landing-environment-group"><tr class="landing-environment-row" data-landing-row="${escapeHtml(row.archetype_id)}">
+      <td class="landing-deck-cell"><button class="landing-deck-button" type="button" data-detail-identity="${escapeHtml(row.archetype_id)}" aria-expanded="${open}">${manaIdentityHtml(row.archetype_id)}<span>${escapeHtml(row.display_name)}</span></button></td>
+      <td class="landing-cards-cell">${landingRepresentatives(row)}</td>
+      <td class="landing-share-cell" data-label="${t("landing.current_short")}">${pct(row.current?.share)}</td>
+      <td class="landing-share-cell" data-label="${t("landing.previous_short")}">${pct(row.previous_week?.share)}</td>
+      <td class="landing-share-cell" data-label="${t("landing.four_weeks_short")}">${pct(row.previous_four_weeks?.share)}</td>
+      <td class="landing-trend-cell" data-label="${t("landing.trend")}"><span class="landing-trend ${direction.className}" title="${escapeHtml(direction.label)}" aria-label="${escapeHtml(direction.label)}">${direction.symbol}</span></td>
+    </tr>${open ? `<tr class="landing-detail-row" data-landing-detail="${escapeHtml(row.archetype_id)}"><td colspan="6">${landingEnvironmentDetail(row)}</td></tr>` : ""}</tbody>`;
+  }).join("");
+}
+
+function landingEnvironmentHtml(landing) {
+  const statisticsUrl = landingTargetUrl({
+    format: state.format,
+    product: "mtgo-statistics",
+    range: "1",
+  });
+  return `<section class="panel landing-environment" id="environment"><div class="landing-panel-head"><div><h2>${t("landing.environment_title")}</h2><p>${t("landing.environment_subtitle")}</p></div><p class="landing-interaction-note"><span class="desktop-instruction">${t("chart.desktop_instruction")}</span><span class="mobile-instruction">${t("chart.mobile_instruction")}</span></p></div>
+    ${landingCompositionHtml(landing)}
+    <div class="landing-environment-table-wrap"><table class="landing-environment-table"><thead><tr><th>${t("stats.deck")}</th><th>${t("landing.representative_cards")}</th><th>${t("landing.current")}</th><th>${t("landing.previous")}</th><th>${t("landing.four_weeks")}</th><th>${t("landing.trend")}</th></tr></thead>${landingEnvironmentRows(landing)}</table></div>
+    <div class="landing-full-statistics"><a href="${escapeHtml(statisticsUrl)}">${t("landing.full_statistics")} →</a></div></section>`;
+}
+
+function landingFeatureItems(context) {
+  const currentFile = `${context.landing.week.id}.json`;
+  if (context.featureFile === currentFile) return context.landing.features?.items || [];
+  return context.pickupDocument?.features?.items || [];
+}
+
+function landingFeatureCard(card, index) {
+  const name = card.name;
+  const search = `https://scryfall.com/search?q=${encodeURIComponent(`!"${name}"`)}`;
+  const image = `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}&format=image&version=normal`;
+  return `<a class="landing-feature-card card-link" href="${escapeHtml(search)}" target="_blank" rel="noopener" data-card-image="${escapeHtml(image)}" data-card-name="${escapeHtml(name)}" data-scryfall-url="${escapeHtml(search)}"><span class="card-image-frame is-loading"><img alt="${escapeHtml(name)}" data-progressive-image="${escapeHtml(image)}" data-image-owner="landing-feature-${index}"><span class="card-image-placeholder">${escapeHtml(name)}</span></span></a>`;
+}
+
+function landingFeatureDetail(item) {
+  const identity = item.subtype_id
+    ? `${item.archetype_id}/${item.subtype_id}`
+    : item.archetype_id;
+  const reference = currentContext.featureDecks
+    ? locateDeck(currentContext.featureDecks, identity)
+    : null;
+  return deckDetailHtml({
+    title: item.display_name,
+    exactDeck: item.deck,
+    averageDeck: reference?.average_deck,
+    comparison: { rank: item.deck.final_rank },
+    closeAction: `data-pickup-toggle="${escapeHtml(`landing:${item.category}:${item.order}`)}"`,
+    showDeviation: false,
+    className: "deck-detail landing-feature-detail",
+    responsiveKey: `landing-feature:${item.category}:${item.order}`,
+  });
+}
+
+function landingFeatureHtml(item) {
+  const id = `landing:${item.category}:${item.order}`;
+  const open = state.pickupOpen.has(id);
+  const category = item.category === "new_deck"
+    ? t("landing.feature_new_deck")
+    : t("landing.feature_new_technology");
+  return `<article class="landing-feature-item ${open ? "open" : ""}"><div class="landing-feature-summary"><button type="button" class="landing-feature-toggle" data-pickup-toggle="${escapeHtml(id)}" aria-expanded="${open}"><span class="landing-feature-copy"><span class="landing-feature-category">${category}</span><strong>${escapeHtml(localizedValue(item.headline) || item.display_name)}</strong><span>${escapeHtml(localizedValue(item.positioning))}</span></span><span class="landing-feature-sign" aria-hidden="true">${open ? "−" : "+"}</span></button><span class="landing-feature-cards" aria-label="${t("landing.four_cards")}">${item.featured_cards.map(landingFeatureCard).join("")}</span></div>${open ? landingFeatureDetail(item) : ""}</article>`;
+}
+
+function landingFeaturesHtml(context) {
+  const items = [...landingFeatureItems(context)].sort((left, right) => {
+    const category = { new_deck: 0, new_technology: 1 };
+    return category[left.category] - category[right.category]
+      || Number(left.order) - Number(right.order);
+  });
+  const groups = ["new_deck", "new_technology"].map(category => {
+    const categoryItems = items.filter(item => item.category === category);
+    if (!categoryItems.length) return "";
+    const label = category === "new_deck"
+      ? t("landing.feature_new_deck")
+      : t("landing.feature_new_technology");
+    return `<div class="landing-feature-group"><h3>${label}</h3>${categoryItems.map(landingFeatureHtml).join("")}</div>`;
+  }).join("");
+  return `<section class="panel landing-features" id="features"><div class="landing-panel-head"><div><h2>${t("landing.features_title")}</h2><p>${t("landing.features_subtitle")}</p></div></div><div class="landing-feature-week"><label for="landing-feature-week">${t("landing.feature_week")}</label><select id="landing-feature-week">${context.pickupIndex.weeks.map(entry => (
+    `<option value="${escapeHtml(entry.file)}" ${entry.file === context.featureFile ? "selected" : ""}>${entry.start} ～ ${entry.end}${entry.file === `${context.landing.week.id}.json` ? `（${t("landing.feature_current")}）` : ""}</option>`
+  )).join("")}</select><span>${t("landing.feature_week_note")}</span></div><div class="landing-feature-content">${groups || `<p class="landing-empty">${t("landing.feature_empty")}</p>`}</div></section>`;
+}
+
+async function landingView() {
+  const context = await MtgoController.loadLanding(
+    state.format,
+    productEntry().path,
+    state.pickupWeekFile,
+    {
+      includeEnvironmentDecks: Boolean(state.detailIdentity),
+      includeFeatureDecks: Boolean(state.pickupOpen.size),
+    }
+  );
+  state.pickupWeekFile = context.featureFile;
+  const validEnvironmentIds = new Set((context.landing.environment?.rows || []).map(row => row.archetype_id));
+  if (state.detailIdentity && !validEnvironmentIds.has(state.detailIdentity)) {
+    state.detailIdentity = null;
+    setCompositionSelection(null);
+  }
+  const featureIds = new Set(landingFeatureItems(context).map(item => (
+    `landing:${item.category}:${item.order}`
+  )));
+  [...state.pickupOpen].forEach(id => {
+    if (id.startsWith("landing:") && !featureIds.has(id)) state.pickupOpen.delete(id);
+  });
+  currentContext = {
+    ...context,
+    environmentDecks: context.environmentDecks,
+    featureDecks: context.featureDecks,
+  };
+  if (context.landing.state === "no_events") {
+    return `<section class="panel landing-no-events"><h2>${t("landing.summary_title")}</h2><p>${t("landing.no_events")}</p></section>`;
+  }
+  return `<section class="panel landing-brief" id="weekly-brief"><div class="landing-panel-head"><div><h2>${t("landing.summary_title")}</h2><p>${context.landing.week.start} ～ ${context.landing.week.end} · ${formatLabel(state.format)}</p></div></div>${landingSummaryHtml(context.landing)}</section>
+    ${landingFreshness(context.landing, context.range, context.completeness)}
+    ${landingEnvironmentHtml(context.landing)}
+    ${landingFeaturesHtml(context)}`;
 }
 
 function statisticsGroups(archetypes) {

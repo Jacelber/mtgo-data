@@ -78,6 +78,24 @@ function statisticsFreshness(meta, range, completeness) {
   ]);
 }
 
+function landingFreshness(landing, range, completeness) {
+  const highScore = completeness.high_score_decklist_completeness || {};
+  return freshnessStrip([
+    ["period", "period", freshnessPeriod(landing.week)],
+    ["events", "event_count", freshnessNumber(landing.populations?.current?.event_count)],
+    ["decks", "deck_count", freshnessNumber(range.total_decks)],
+    ["high-score", "high_score_count", freshnessNumber(
+      landing.populations?.current?.high_score_count
+    )],
+    ["top8", "top8_count", freshnessNumber(landing.populations?.current?.top8_count)],
+    ["high-score-completeness", "high_score_completeness", freshnessRatio(
+      highScore.observed_decklist_count,
+      highScore.expected_decklist_count_display ?? highScore.expected_decklist_count,
+      highScore.completeness_rate
+    )],
+  ]);
+}
+
 function matchupFreshness(completeness) {
   const coverage = completeness.matchup_coverage || {};
   return freshnessStrip([
