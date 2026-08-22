@@ -172,17 +172,22 @@ item without a discoverable way to reach it.
 ## 8. Card images and mana identity
 
 Each Landing environment row may show two manually selected representative
-cards in a fixed column. The accepted pre-overlap size is 84 by 117 CSS pixels
-on desktop and 70 by 98 pixels on mobile. Each approved feature shows exactly
-four reviewer-selected display cards; all approved items are present, with new
-decks before new technology.
+cards in a fixed column. These representative images are landscape art crops:
+the Owner-refined pre-overlap size is 118 by 82 CSS pixels on desktop and 90 by
+63 pixels on mobile. The representative-card column must keep the visible gap
+to the current-share column compact after overlap, and the first approved
+representative must sit above the second in the overlap. Each approved feature
+shows exactly four reviewer-selected full-card images at the physical-card
+ratio; all approved items are present, with new decks before new technology.
 
 Card and mana-color identity is metadata maintained outside classifier rules.
 Reserve image dimensions before loading, lazy-load below-the-fold images, bound
 third-party concurrency, and use a stable placeholder on failure. The readable
 card or deck name and navigation must remain available without the image.
 
-Card frames use the physical-card ratio of 63:88 before a request starts.
+Feature card frames use the physical-card ratio of 63:88 before a request
+starts; the environment representative art crops use the landscape dimensions
+defined above.
 Third-party images begin loading within 400 CSS pixels of the viewport, with at
 most four requests in flight. A failed image remains a labelled placeholder and
 offers one explicit retry; it never blocks the surrounding deck or feature.

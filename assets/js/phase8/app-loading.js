@@ -4,7 +4,8 @@ const BACKGROUND_REFRESH_AGE_MS = 5 * 60 * 1000;
 
 function currentViewKey() {
   const parts = [state.format, state.product];
-  if (state.product === "mtgo-statistics") parts.push(state.statsRange);
+  if (state.product === "mtgo-landing") parts.push(state.pickupWeekFile || "latest");
+  else if (state.product === "mtgo-statistics") parts.push(state.statsRange);
   else if (state.product === "mtgo-matchups") parts.push(state.matchupRange);
   else if (state.product === "mtgo-top8") parts.push(state.top8WeekFile || "latest");
   else if (state.product === "weekly-pickup") parts.push(state.pickupWeekFile || "latest");
@@ -102,6 +103,17 @@ function clearRefreshStatus() {
 }
 
 async function stageCurrentRefresh() {
+  if (state.product === "mtgo-landing") {
+    return MtgoController.stageLanding(
+      state.format,
+      productEntry().path,
+      state.pickupWeekFile,
+      {
+        includeEnvironmentDecks: Boolean(state.detailIdentity),
+        includeFeatureDecks: Boolean(state.pickupOpen.size),
+      }
+    );
+  }
   if (state.product === "mtgo-statistics") {
     return MtgoController.stageStatistics(state.format, state.statsRange, {
       includeDecks: Boolean(state.detailIdentity),

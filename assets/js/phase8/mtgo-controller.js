@@ -26,6 +26,74 @@
     return client.fetchJson(`${rootPath(format)}/range_${weeks}w.json`);
   }
 
+  function landingPaths(format, landingPath, selectedFeatureFile, {
+    includeEnvironmentDecks = false,
+    includeFeatureDecks = false,
+  } = {}) {
+    const base = rootPath(format);
+    const paths = [
+      landingPath,
+      `${base}/meta.json`,
+      `${base}/range_1w.json`,
+      `${base}/completeness/1w.json`,
+      `${base}/pickup/index.json`,
+    ];
+    if (selectedFeatureFile) {
+      paths.push(`${base}/pickup/${selectedFeatureFile}`);
+    }
+    if (includeEnvironmentDecks) paths.push(`${base}/decks_1w.json`);
+    if (includeFeatureDecks) paths.push(`${base}/decks_4w.json`);
+    return paths;
+  }
+
+  function validateLandingGroup(format, documents) {
+    const { landing, range, completeness, pickupIndex, pickupDocument } = documents;
+    const periodMatches = landing.week?.start === range.period?.start
+      && landing.week?.end === range.period?.end
+      && landing.week?.start === completeness.period?.start
+      && landing.week?.end === completeness.period?.end;
+    const formatsMatch = [landing, range, completeness, pickupIndex, pickupDocument]
+      .filter(Boolean)
+      .every(document => !document.format || document.format === format);
+    if (!periodMatches || !formatsMatch) {
+      throw new Runtime.ResourceError("invalid", `${rootPath(format)}/landing/current.json`);
+    }
+    return documents;
+  }
+
+  async function loadLanding(format, landingPath, selectedFeatureFile, options = {}) {
+    const base = rootPath(format);
+    const landing = await client.fetchJson(landingPath);
+    const pickupIndex = await client.fetchJson(`${base}/pickup/index.json`);
+    const currentFeatureFile = `${landing.week?.id}.json`;
+    const selectedEntry = pickupIndex.weeks.find(item => item.file === selectedFeatureFile)
+      || pickupIndex.weeks.find(item => item.file === currentFeatureFile)
+      || pickupIndex.weeks[0]
+      || null;
+    const featureFile = selectedEntry?.file || null;
+    const featureDocumentNeeded = featureFile && featureFile !== currentFeatureFile;
+    const [meta, range, completeness, pickupDocument, environmentDecks, featureDecks] = await Promise.all([
+      client.fetchJson(`${base}/meta.json`),
+      client.fetchJson(`${base}/range_1w.json`),
+      client.fetchJson(`${base}/completeness/1w.json`),
+      featureDocumentNeeded ? client.fetchJson(`${base}/pickup/${featureFile}`) : null,
+      options.includeEnvironmentDecks ? client.fetchJson(`${base}/decks_1w.json`) : null,
+      options.includeFeatureDecks ? client.fetchJson(`${base}/decks_4w.json`) : null,
+    ]);
+    return validateLandingGroup(format, {
+      landing,
+      meta,
+      range,
+      completeness,
+      pickupIndex,
+      pickupEntry: selectedEntry,
+      pickupDocument,
+      featureFile,
+      environmentDecks,
+      featureDecks,
+    });
+  }
+
   async function loadMatchup(format, weeks) {
     const base = rootPath(format);
     const [document, completeness] = await Promise.all([
@@ -94,6 +162,11 @@
     return requireFormat(await client.stage(paths), paths, format);
   }
 
+  async function stageLanding(format, landingPath, selectedFeatureFile, options = {}) {
+    const paths = landingPaths(format, landingPath, selectedFeatureFile, options);
+    return requireFormat(await client.stage(paths), paths, format);
+  }
+
   async function stageComparisonDecks(format) {
     const path = `${rootPath(format)}/decks_4w.json`;
     return requireFormat(await client.stage([path]), [path], format);
@@ -149,6 +222,7 @@
   root.P8MtgoController = Object.freeze({
     loadComparisonDecks,
     loadMatchup,
+    loadLanding,
     loadPickup,
     loadPickupDocument,
     loadPickupIndex,
@@ -157,6 +231,7 @@
     loadTop8,
     stageComparisonDecks,
     stageMatchup,
+    stageLanding,
     stagePickup,
     stageStatistics,
     stageTop8,

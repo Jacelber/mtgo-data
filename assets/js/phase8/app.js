@@ -100,7 +100,13 @@ function applyUrlState(parameters) {
   const sort = parameters.get("sort");
   const direction = parameters.get("dir");
   const detail = parameters.get("detail");
-  if (state.product === "mtgo-statistics") {
+  if (state.product === "mtgo-landing") {
+    state.pickupWeekFile = requestedWeekFile(parameters);
+    if (detail) {
+      state.detailIdentity = detail;
+      state.compositionIdentity = detail;
+    }
+  } else if (state.product === "mtgo-statistics") {
     if (RANGE_OPTIONS.includes(range)) state.statsRange = range;
     if (STATS_SORT_KEYS.has(sort)) state.statsSort = sort;
     if (direction === "asc" || direction === "desc") state.statsDirection = direction;
@@ -144,7 +150,10 @@ function urlStateParameters() {
   const parameters = new URLSearchParams();
   parameters.set("format", state.format);
   parameters.set("product", state.product);
-  if (state.product === "mtgo-statistics") {
+  if (state.product === "mtgo-landing") {
+    if (weekId(state.pickupWeekFile)) parameters.set("week", weekId(state.pickupWeekFile));
+    if (state.detailIdentity) parameters.set("detail", state.detailIdentity);
+  } else if (state.product === "mtgo-statistics") {
     parameters.set("range", String(state.statsRange));
     parameters.set("sort", state.statsSort);
     parameters.set("dir", state.statsDirection);
@@ -194,6 +203,12 @@ function hasExtendedUrlState(parameters) {
 
 function currentDetailReveal() {
   const mobile = matchMedia("(max-width: 780px)").matches;
+  if (state.product === "mtgo-landing" && state.detailIdentity) {
+    return {
+      selector: `[data-landing-detail="${CSS.escape(state.detailIdentity)}"]`,
+      alignment: "start",
+    };
+  }
   if (state.product === "mtgo-statistics" && state.detailIdentity) {
     return {
       selector: mobile
@@ -243,7 +258,8 @@ async function renderViewWithFocus(
   }
   try {
     let html;
-    if (state.product === "mtgo-statistics") html = await statsView();
+    if (state.product === "mtgo-landing") html = await landingView();
+    else if (state.product === "mtgo-statistics") html = await statsView();
     else if (state.product === "mtgo-matchups") html = await matchupView();
     else if (state.product === "mtgo-top8") html = await top8View();
     else if (state.product === "tabletop-major-events") html = await tabletopView();
@@ -312,6 +328,7 @@ function resetInteractions() {
   state.tabletopExpanded.clear();
   state.detailIdentity = null;
   state.top8Detail = null;
+  state.pickupOpen.clear();
   state.tabletopDetailIdentity = null;
   state.scrollHintsSeen.clear();
 }
@@ -632,6 +649,12 @@ document.addEventListener("change", async event => {
     if (event.target.checked) state.matchupFilterDraft.add(event.target.dataset.matchupFilterOption);
     else state.matchupFilterDraft.delete(event.target.dataset.matchupFilterOption);
     updateMatchupFilterDraftControls(matchupDocument);
+  } else if (event.target.id === "landing-feature-week") {
+    discardPendingRefresh();
+    state.pickupWeekFile = event.target.value;
+    state.pickupOpen.clear();
+    queueUrlWrite();
+    await renderViewWithFocus("#landing-feature-week");
   } else if (event.target.id === "top8-week") {
     discardPendingRefresh();
     state.top8WeekFile = event.target.value;

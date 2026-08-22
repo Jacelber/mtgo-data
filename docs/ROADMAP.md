@@ -18,7 +18,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 
 | Phase | Objective | Status |
 | --- | --- | --- |
-| 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Active; P12-10 completed, P12-11A locally authorized, P12-11B planned but not authorized |
+| 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Active; combined P12-11B/P12-12 Owner-accepted for Gate 6 completion; later tasks not authorized |
 | 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
@@ -109,13 +109,18 @@ begin under separate authorization.
       Landing review-state store, and use XLSX only as a visually verified
       review carrier.
 11B. `P12-11B` — Landing weekly summary and environment UI
+    - the Owner accepted the final combined P12-11B/P12-12 browser subject on
+      2026-08-22, authorizing same-task completion through one commit, one Ready
+      pull request, required CI, normal merge, and merge-triggered Pages
+      verification; P12-15, P12-16, and every other task remain separate gates;
     - render every reviewed human-final weekly-summary row without forcing a
       minimum or maximum, plus the environment composition strip and high-score-
       share structure list from the same P12-11A document;
-    - show every archetype above the owner-approved high-score-share threshold,
-      show current, previous-week, and aggregated previous-four-week raw counts
-      and high-score shares, display current Top 8 share only as supporting
-      information, and do not apply a 20-deck exclusion;
+    - show every archetype above the owner-approved high-score-share threshold;
+      render current, previous-week, and aggregated previous-four-week high-score
+      shares plus direction in the accepted A3 UI, while retaining their raw
+      counts and denominators in the public data document; keep current Top 8
+      values as supporting data only and do not apply a 20-deck exclusion;
     - make the composition segments and list rows use the same archetype set and
       the P12-02 shareable detail URL;
     - render text before progressively loaded key-card images and provide a
@@ -123,6 +128,8 @@ begin under separate authorization.
     - keep this view non-default and reachable through its explicit P12-02 URL
       until the complete Landing is accepted in P12-16.
 12. `P12-12` — Landing curated new-deck and new-technology panel
+    - completion authority is shared with the accepted combined P12-11B/P12-12
+      subject recorded above;
     - show every approved item for the selected feature week, with all
       `new_deck` items before all `new_technology` items, category, archetype,
       editorial positioning, four reviewer-selected cards, supporting facts,
