@@ -3,8 +3,9 @@
 ## Purpose and trigger
 
 This runbook fixes the recurring handoff between production data, Codex-assisted
-review, Owner decisions, and the later Landing editorial process. It does not
-depend on Codex scheduled tasks.
+review, Owner decisions, and the Landing editorial process. It does not depend
+on Codex scheduled tasks. The staged migration and implementation stop points
+are authoritative in `docs/LANDING_EDITORIAL_PIPELINE.md`.
 
 The GitHub `MTGO production data update` workflow is the only timer. It is
 scheduled every day at `09:00 UTC`, which is `18:00 Japan Standard Time`.
@@ -18,8 +19,8 @@ After a successful production run, the workflow:
    source commit when generation was correctly skipped;
 2. builds one private `weekly-maintenance-readiness-<week>` Actions artifact;
 3. creates or updates one GitHub Issue identified by the review week; and
-4. stops without changing classifier rules, review metadata, Pickup approval,
-   Landing content, or repository files.
+4. stops without changing classifier rules, review metadata, Landing editorial
+   approval, Landing content, or repository files.
 
 The readiness artifact is retained for 21 days and is not included in the
 Pages artifact. Repeated runs with the same readiness digest do not add Issue
@@ -30,17 +31,20 @@ noise. A changed weekly baseline updates and reopens the same Issue.
 | Step | Who | Work | Output for the next step |
 | --- | --- | --- | --- |
 | 1. Collect and publish production data | Automatic GitHub workflow | Fetch the allowlisted MTGO inputs, validate one candidate, publish the verified generated data when changed, and keep production failures fail-closed. | Exact publication SHA, run evidence, current Standard and Modern outputs. |
-| 2. Build weekly readiness | Automatic GitHub workflow | Bind the current review week to Top 8 event IDs and classifier digests, and require each Pickup candidate file to carry the same classifier digest. Include every unresolved Unknown from the complete retained diagnostic corpus plus complete main decks and sideboards. Separately list Owner-accepted intentional Unknown records, classification blockers, Pickup candidate counts, stale candidates, and unavailable review inputs. | Private Schema-valid readiness JSON plus one deduplicated weekly Issue. |
+| 2. Build weekly readiness | Automatic GitHub workflow | Bind the current review week to Top 8 event IDs and classifier digests, and require each Landing editorial candidate source to carry the same classifier digest. Include every unresolved Unknown from the complete retained diagnostic corpus plus complete main decks and sideboards. Separately list Owner-accepted intentional Unknown records, classification blockers, editorial candidate counts, stale candidates, and unavailable review inputs. | Private Schema-valid readiness JSON plus one deduplicated weekly Issue. |
 | 3. Start the review | Owner | Read the Issue and explicitly ask Codex to begin with the named week and readiness artifact. Closing or ignoring the Issue means no review starts. | Authorization for one exact weekly review baseline. |
-| 4. Freeze and verify the baseline | Codex | Confirm the cloud workflow run, publication SHA, week lifecycle, event IDs, classifier digests, and readiness digest. Create the seven-sheet XLSX review carrier defined below from that exact baseline. Stop on drift or missing evidence. | Frozen review manifest, plain-language scope summary, and editable XLSX. |
-| 5. Review Unknown decks | Codex and Owner alternate; Owner confirms | Put every unresolved historical and current Unknown in `Unknown Review`, one row per deck, with its complete main deck and sideboard. Codex supplies a preliminary technical proposal. The Owner writes only free-text classification understanding, naming preference, or questions; no action code, parent ID, parent name, or subtype is required. Codex then supplies an exact revised proposal, and the Owner finally confirms, requests another revision, or defers it. | One final Owner confirmation per unresolved deck or group. Only an incoherent random card pile may be explicitly accepted as intentional Unknown. |
+| 4. Freeze and verify the baseline | Codex | Confirm the cloud workflow run, publication SHA, week lifecycle, event IDs, classifier digests, and readiness digest. Stop on drift or missing evidence. | Frozen review manifest and plain-language scope summary. |
+| 5. Review Unknown decks | Codex and Owner alternate; Owner confirms | Include every unresolved historical and current Unknown unless it was already reclassified or explicitly accepted as intentional Unknown. Handle coherent clusters in chat with complete representative decklists; use XLSX only for singleton batch review. Codex supplies a preliminary technical proposal, reads unrestricted Owner feedback, then supplies an exact revised proposal. | One final Owner confirmation per unresolved deck or group. Only an incoherent random card pile may be explicitly accepted as intentional Unknown. |
 | 6. Repair and reproduce classification when needed | Codex implements after separate authorization; Owner accepts | Make only accepted classifier changes, rerun the affected classification and derived weekly outputs, and re-freeze the changed baseline. Skip this step when no rule change is accepted. | Accepted classifier subject and refreshed weekly evidence, or an explicit no-change record. |
-| 7. Review visual metadata | Codex proposes; Owner decides | Review representative-card choices and deck-color identities against the accepted deck identities. Missing deterministic diagnostics are reported as unavailable, never guessed. | Owner-approved metadata changes or an explicit no-change/defer record. |
-| 8. Review Weekly Pickup | Codex prepares; Owner selects and writes | Export the filtered candidates and complete ordered Top 8 pool to XLSX. Each candidate carries structured reasons plus exact event, rank, deck and classifier provenance. There is no machine primary pick. The Owner may select any number, replace a representative, add any other exact Top 8 deck, change category/order/cards/copy, or select none. | Human-approved Pickup selection and unrestricted editorial inputs bound to the reviewed week and classifier subject. |
-| 9. Publish and verify Weekly Pickup | Codex implements after the applicable Owner approval | Run `pickup publish` once for Standard and once for Modern. Each command writes the accepted rows and Chinese copy to the format-scoped Pickup week document and index, and automatically refreshes format metadata and the global catalog. Publish them through the normal reviewed PR and Pages path, then verify both the JSON and the existing Pickup page in the cloud. Landing work must not start from a private candidate file or an unpublished workbook. | Verified cloud Pickup week documents, catalog availability, Pages commit, and reader-visible Pickup pages for Standard and Modern. |
-| 10. Prepare Landing summary review | Automatic producer or Codex | Read the approved Pickup week from its published format-scoped week document, then combine that reviewed input with every eligible share movement, return, exit, and construction-shift fact in the private Landing review source and XLSX. Do not infer post-ban continuation or impose a presentation count. | Complete Landing draft evidence that identifies the exact published Pickup input and machine-fact digest. |
-| 11. Create and explicitly review the human final Landing content | Owner, with optional Codex assistance | Accept, merge, edit, delete, replace, or ignore any machine output; write unrelated content; and choose zero or more final rows. Link each row to zero, one, or multiple fact IDs when useful. Explicitly mark the review complete even when zero rows are chosen. | Ordered human-final rows and explicit reviewed state. |
-| 12. Preview, accept, and publish Landing | Codex implements and validates; Owner separately authorizes each gate | Render the exact final Landing subject, perform proportionate checks, obtain Owner acceptance, then separately commit, open a Ready PR, merge, and deploy only when each gate is authorized. | Accepted public Landing and publication evidence, or a stopped unpublished review. |
+| 7. Audit every Top 8 classification | Codex prepares; Owner checks | Export every current-week Top 8 deck in event-date and rank order with its final classification. This temporary human audit remains required until the Owner explicitly retires it. | Owner-checked weekly classification baseline. |
+| 8. Review visual metadata | Codex proposes; Owner decides | Review representative-card choices and deck-color identities against the accepted deck identities. Missing deterministic diagnostics are reported as unavailable, never guessed. | Owner-approved metadata changes or an explicit no-change/defer record. |
+| 9. Screen Landing features | Automatic producer | Apply the five reviewed routes to exact Top 8 results and keep the complete ordered Top 8 pool. Merge reason tags only when they select the same exact deck. There is no machine primary pick. | Private Landing candidates, structured evidence, and complete Top 8 link catalog. |
+| 10. Prepare the Landing workbook | Codex | Create the five-sheet Landing carrier defined below. Preserve prior Owner content, expose exact deck tokens in the copy sheet, and omit internal implementation fields from Owner input. | Editable Landing review carrier bound to the frozen baseline. |
+| 11. Complete Chinese review | Owner | Select any number of candidates, add any other exact Top 8 deck, merge or split presentation items, change category/order/cards, delete or completely rewrite machine copy, write unrelated content, or select none. Explicitly complete both top-copy and feature review. | Chinese final content and selected featured decks. |
+| 12. Draft and review English | Codex drafts; Owner decides | Codex translates the Owner-final Chinese content without changing it. The Owner edits or approves the English and explicitly completes bilingual review. | Complete bilingual Landing review state. |
+| 13. Build and validate the preview | Codex | Import the workbook into the private Landing review source; validate week, source events, classifier and policy digests, deck tokens, rank, order, and featured cards; generate the current and feature-history documents; and render the accepted UI. | Exact local Landing preview or a fail-closed review blocker. |
+| 14. Accept and publish Landing | Owner accepts; Codex completes | After hands-on acceptance, complete the unchanged task through commit, one Ready PR, required checks, merge, and Pages publication. Publish the latest Landing and selected feature-history week together; there is no intermediate public Pickup publication. | Accepted public Landing and immutable publication subject. |
+| 15. Verify cloud | Codex | Verify current copy, historical feature selection, both formats and languages, exact deck links, card display, legacy Pickup redirects, and absence of live Pickup data requests. | Completed weekly-maintenance evidence. |
 
 Classifier recommendations in step 5 follow two additional controls. Codex first
 tests whether an existing rule can be modified across the complete retained
@@ -53,12 +57,12 @@ conflict, or identity loss, and the workbook records that evidence. If final
 implementation exposes an impact not disclosed in the reviewed workbook, the
 changed subject returns to Owner confirmation before commit or publication.
 
-### Weekly Pickup screening
+### Landing feature screening
 
 The machine candidate list starts from exact ranks 1 through 8 in every admitted
 event. It does not use a rank-beyond-8 fallback and does not deduplicate the
 complete review pool. `Unknown` records remain visible in the complete Top 8
-evidence but cannot become automatic Pickup candidates until classification is
+evidence but cannot become automatic Landing candidates until classification is
 resolved.
 
 Candidate generation applies these five reviewed routes:
@@ -103,14 +107,15 @@ the Owner may delete, rewrite or replace every conclusion and every copy field.
   editorial conclusions.
 - A readiness Issue is a notification, not authorization for repository or
   production mutation.
-- Classifier changes, visual metadata changes, Pickup publication, Landing
-  implementation, commit, push, pull request, merge, and deployment remain
-  separately authorized gates.
+- Classifier changes, visual metadata changes, Landing review import, preview,
+  commit, push, pull request, merge, and deployment remain governed task and
+  acceptance gates. There is no standalone Pickup publication gate after the
+  P12-15F cutover.
 - A provisional week may gain late events through its seal date. If its
   readiness digest changes, the same Issue is updated and the frozen review
   baseline must be refreshed before downstream work continues.
 - Standard and Modern share the same review week but retain separate source
-  event IDs, classifier digests, classifications, and Pickup candidates.
+  event IDs, classifier digests, classifications, and Landing candidates.
 - Event age, singleton status, or low sample size never removes a coherent deck
   from the unresolved queue and is never by itself a reason to retain Unknown.
 - An Unknown disappears from the unresolved queue only after a classifier result
@@ -118,42 +123,49 @@ the Owner may delete, rewrite or replace every conclusion and every copy field.
   incoherent `random_card_pile`. The latter decision is recorded in
   `configs/mtgo_intentional_unknowns.yaml` with immutable evidence.
 
-## XLSX review carrier
+## Review carriers
 
-Codex must supply the workbook before requesting any weekly classification,
-visual-metadata, Pickup, or Landing decision. Pickup screening extends the R1
-carrier to this seven-sheet layout:
+Unknown, visual-metadata, and Landing review are separate jobs. Do not rebuild
+one seven-sheet workbook that forces the Owner to navigate unrelated stages.
+Coherent Unknown clusters are reviewed in chat with complete representative
+decklists. Only singleton Unknown batch review uses an XLSX. The temporary
+complete Top 8 classification audit uses its own XLSX.
 
-1. `Run Control` - frozen cloud bindings, counts, stage state, and stop reason;
-2. `Unknown Review` - one row per unresolved deck, complete main deck and
-   sideboard, Codex preliminary proposal, free-text Owner opinion, Codex revised
-   exact proposal, and a simple Owner final-confirmation field;
-3. `Visual Metadata` - changed or missing representative-card and color items;
-4. `Pickup Review` - filtered candidates, complete decklists, structured machine
-   reasons, a simple `select` or `skip` review result, and unrestricted Owner
-   content fields;
-5. `All Top 8` - every event rank 1 through 8 in event-date and rank order, with
-   exact deck and classification evidence; this is not an automatic candidate
-   list and exists for Owner-only additions such as ban aftermath;
-6. `Landing Copy` - optional machine draft plus unrestricted human-final fields;
-7. `Field Guide` - field ownership, purpose, allowed values, and write target.
+After those upstream stages are accepted, Codex supplies one Landing-only
+five-sheet carrier:
+
+1. `Review Control` - frozen baseline and explicit Chinese, English, top-copy,
+   and feature-review states;
+2. `Landing Copy` - unrestricted ordered final copy, Codex English draft,
+   Owner English final, and an in-sheet reference block containing each
+   selected deck's format, event, date, rank, archetype, player, and
+   `deck:<20-hex deck ID>` token;
+3. `Featured Decks` - filtered candidates with complete decklists and machine
+   reasons plus simple selection, category, order, localized title and
+   positioning, and four-card Owner fields;
+4. `All Top 8` - every exact event rank 1 through 8 for unrestricted manual
+   additions; and
+5. `Field Guide` - only fields the Owner must enter or review.
 
 Machine-bound cells are blue, Codex recommendations are green, and Owner input
 cells are yellow with validation lists where categorical. Machine-bound fields
 must not be edited, but they constrain only provenance and numeric source facts;
 they do not limit, endorse, or police the Owner's editorial conclusions. The
 workbook is a review carrier, not an authoritative database. Codex validates and
-writes accepted decisions back to the maintained repository sources.
+writes accepted decisions into the private Landing review source before any
+preview or publication.
 
-For Landing final copy, the Owner writes unrestricted Chinese and English text
-and places an exact `deck:<20-hex deck ID>` token wherever a reviewed Top 8 deck
-link should appear. Both localized texts must reference the same token set, but
-their prose and token positions may differ. Codex derives the link order from
-each text, validates every token against the current-week Top 8 catalog, and
-generates the localized `<archetype> · <player> · <rank>` display automatically.
+For Landing final copy, the Owner writes unrestricted Chinese text and may
+write or later review English text. Codex supplies an English draft only after
+the Chinese final is complete. The final localized text places an exact
+`deck:<20-hex deck ID>` token wherever a reviewed Top 8 deck link should appear.
+Both localized texts must reference the same token set, but their prose and
+token positions may differ. Codex derives the link order from each text,
+validates every token against the current-week Top 8 catalog, and generates the
+localized `<archetype> · <player> · <rank>` display automatically.
 The token is the later UI replacement anchor; only its generated display becomes
-the hyperlink, never the entire summary row. Columns that do not support Owner
-input or review are omitted from the next carrier version.
+the hyperlink, never the entire summary row. There is no separate `Landing
+Links` sheet. Columns that do not support Owner input or review are omitted.
 
 The Owner is never asked to invent or type classifier action codes, parent IDs,
 parent names, or subtype IDs. The first Owner field is unrestricted free text.
@@ -166,11 +178,11 @@ input vocabulary.
 ## Readiness meanings
 
 `awaiting_owner_start` means the production and classification gates passed
-and both format-scoped Pickup candidate files exist. It does not mean the
+and both format-scoped Landing candidate sources exist. It does not mean the
 manual work is complete.
 
 `blocked` means the weekly handoff found a classification failure, a missing
-Pickup candidate, or a Pickup candidate whose event/lifecycle/classifier
+Landing candidate, or a Landing candidate whose event/lifecycle/classifier
 provenance is stale. An unreviewed stale candidate is regenerated automatically.
 A stale candidate containing human approval or copy is preserved, marked
 `stale_review_required`, and must be regenerated and reviewed again instead of
@@ -188,7 +200,7 @@ an explicitly requested aid, not a required output or editorial constraint.
   Issue. No readiness artifact is treated as current.
 - Readiness generation failure: use the deduplicated readiness-failure Issue
   and inspect the linked run. Do not infer readiness from partial output.
-- Late event or changed classifier digest: regenerate unreviewed Pickup
+- Late event or changed classifier digest: regenerate unreviewed Landing
   candidates. Preserve reviewed stale candidates as evidence, block readiness
   and publication, then use the updated artifact and reopen review from baseline
   freezing; do not silently reuse prior decisions.

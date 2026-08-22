@@ -146,6 +146,9 @@ begin under separate authorization.
       stable-environment empty state when no item was approved, never expose a
       pending-review state or internal approval vocabulary, and introduce no
       standalone Weekly Pickup front-end state.
+    - P12-15A through P12-15G supersede only the delivered Pickup handoff and
+      history source. They preserve this accepted panel structure, ordering,
+      cards, disclosure, language, empty-state, and deck-detail behavior.
 13. `P12-13` — Large-matrix interaction, delivered as separately accepted
     sequential subtasks
     - `P12-13A` — completed matrix search and shared visible-projection
@@ -185,6 +188,9 @@ begin under separate authorization.
     - this cancellation does not remove P12-16's complete cross-device
       verification requirement.
 15. `P12-15` — Metadata and sharing
+    - completed and published through the accepted metadata, attribution,
+      language-memory, favicon, share-image, and legacy-URL compatibility
+      subject;
     - add description, Open Graph, favicon, canonical URL, language memory, and
       required Scryfall and Wizards attribution;
     - provide appropriate Landing metadata without presenting machine facts as
@@ -193,7 +199,69 @@ begin under separate authorization.
       `product=weekly-pickup&week=<week>` state to
       `product=mtgo-landing&section=features&week=<week>`, with the week scoped
       only to the feature panel.
+15A. `P12-15A` — Landing editorial-pipeline route map
+    - document the approved replacement of the obsolete public Pickup handoff
+      before any workbook, producer, public-data, front-end, or cleanup change;
+    - define the Landing-owned private review source, latest document, bounded
+      feature archive, W27/W33 recovery set, ordered task gates, rollback, and
+      deletion conditions in `docs/LANDING_EDITORIAL_PIPELINE.md`;
+    - update the current weekly-maintenance, product-scope, architecture,
+      decision, roadmap, and status authorities consistently;
+    - stop for Owner acceptance with no page, workbook, code, workflow,
+      generated data, public path, or Schema change.
+15B. `P12-15B` — Landing-only review workbook
+    - preserve existing Owner text and the corrected Modern order while
+      replacing the mixed seven-sheet carrier with `Review Control`, `Landing
+      Copy`, `Featured Decks`, `All Top 8`, and `Field Guide`;
+    - put selected-deck identity and exact `deck:<ID>` tokens directly in the
+      copy sheet and omit internal input IDs, generated labels, and unknown
+      implementation columns from Owner input;
+    - preload Standard W27, Standard W33, and Modern W33 recovery rows, render
+      every sheet, and stop for Owner completion without changing the page.
+15C. `P12-15C` — Content completion and bilingual review
+    - validate the Owner-completed Chinese content, selections, order, tokens,
+      and four-card choices against the frozen deck subjects;
+    - add Codex English drafts without modifying Chinese, return the same
+      workbook lineage, and require final Owner review for top copy and
+      features, including an explicitly reviewed zero result;
+    - stop before producer or public-data work until the content is complete.
+15D. `P12-15D` — Internal Landing editorial backend
+    - extract retained screening, deduplication, evidence, and continuity-state
+      behavior from Pickup into a Landing-owned internal module and private
+      review contract, retaining a temporary compatibility wrapper;
+    - make top copy and current features consume the same reviewed source;
+      remove their dependency on a separately published Pickup week;
+    - update known-archetype state after an accepted classified baseline even
+      when no feature is selected, and add fail-closed stale-review validation;
+    - write no public feature path and perform no front-end switch in this task.
+15E. `P12-15E` — Landing feature archive and recovery preview
+    - add versioned `landing/features/index.json` and
+      `landing/features/<week>.json` contracts, consumers, catalogs, Pages
+      admission, and focused tests;
+    - generate Standard W27, Standard W33, and Modern W33 from the completed
+      review source and build one local preview without changing the accepted
+      Landing UI design;
+    - verify both languages, both formats, historical selection, deck links,
+      card display, responsive behavior, and explicit empty weeks, then stop
+      for hands-on Owner acceptance.
+15F. `P12-15F` — Cloud cutover
+    - publish the accepted latest Landing and feature archive together, switch
+      the feature selector from Pickup history to Landing feature history, and
+      verify the merge-triggered Pages deployment;
+    - prove that live Landing requests no Pickup week document while preserving
+      the tested legacy URL redirect and retaining old files for rollback;
+    - stop after verified cutover; cleanup remains a separate task.
+15G. `P12-15G` — Pickup retirement cleanup
+    - prove no production, catalog, metadata, Pages, test, or front-end caller
+      needs the standalone Pickup product or publisher;
+    - remove only proven-dead page, navigation, style, publisher, capability,
+      and Schema code; retain the legacy URL redirect;
+    - delete or relocate frozen Pickup documents only with exact path
+      declarations, replacement verification, rollback evidence, and separate
+      Owner acceptance.
 16. `P12-16` — Cross-device and visual-system closeout
+    - begin only after P12-15A through P12-15G are complete or a named legacy
+      compatibility artifact is explicitly deferred by the Owner;
     - verify the Landing plus the four retained top-level product views in
       Chinese and English independently, both public MTGO formats, the protected
       Tabletop product, desktop, 390px width, language switching, URL
@@ -202,11 +270,10 @@ begin under separate authorization.
       and Pages artifact are accepted, make it the bare `/index.html` MTGO
       default while retaining every explicit existing product URL through a
       compatible destination;
-    - remove `weekly-pickup` from the product navigation, product order, and
-      standalone product identity only after its old URLs have been verified to
-      open the Landing feature section at the requested week. Preserve its
-      generated history, internal candidate/review capability, known state, and
-      rollback path;
+    - verify that `weekly-pickup` is absent from product navigation, product
+      order, and standalone identity after P12-15G while old URLs still open the
+      requested Landing feature week. Preserve only explicitly deferred
+      rollback artifacts;
     - verify that no future format can be catalog-public without an admitted
       Landing and all required MTGO products, while the Standard and Modern
       migration exceptions both satisfy this invariant at closeout;
@@ -226,12 +293,12 @@ migrating the Tabletop null threshold into generated data, merging MTGO and
 Tabletop statistics, claiming statistical significance from interval overlap,
 automatically publishing editorial candidates, presenting the DEC-083 internal
 week lifecycle as a user warning, or changing an established generated path.
-The only new public-data boundary is the format-scoped Landing product after
-separate P12-03 contract acceptance and P12-10 implementation authorization.
-Phase 12 publishes only the latest Landing document; it does not authorize
-historical Landing browsing or cross-classification-version trend analysis.
-Selecting an approved historical Pickup week inside the feature section is a
-bounded archive view and does not change that rule.
+The new public-data boundary is the format-scoped Landing product after separate
+P12-03 contract acceptance and P12-10 implementation authorization. Phase 12
+publishes only the latest complete Landing document plus the P12-15E bounded
+feature archive; it does not authorize historical complete-Landing browsing or
+cross-classification-version trend analysis. Selecting an approved historical
+feature week inside the feature section does not change that rule.
 
 ## Acceptance criteria
 

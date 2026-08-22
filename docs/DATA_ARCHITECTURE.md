@@ -1742,9 +1742,11 @@ and owner selection are recorded in `docs/audits/P10-06.md`.
 P10-07 implements the selected A+ publication boundary without changing the
 public Git archive. `configs/pages_publication.json` admits the two static entry
 points, the fetched ledger, and the `assets/`, `data/`, `data_raw/`, `melee/`,
-`reports/`, and `stats/` product trees. It excludes private Pickup candidate,
-comparison-base, and known-state files while retaining approved Pickup history
-and `landing/current.json`. `build_pages_artifact.py` copies those
+`reports/`, and `stats/` product trees. Before P12-15F it excludes private
+Pickup candidate, comparison-base, and known-state files while retaining
+approved Pickup history and `landing/current.json`. The P12-15F boundary also
+excludes `landing/review/` while admitting `landing/features/`.
+`build_pages_artifact.py` copies those
 paths into a new external directory, generates an empty `.nojekyll`, rejects
 unsafe paths and symbolic links, verifies every copied byte, enforces the
 one-gibibyte site ceiling, and validates the complete event `434455`
@@ -1898,9 +1900,11 @@ the same shared hierarchy function and reconcile exactly.
 MTGO format metadata references the statistics, matchup, and hierarchy
 catalogs. It records the approved matchup source and exact event/archive
 coverage counts, including official events without stored archives and stored
-archives outside the admitted official-event set. A missing Pickup publication
-is represented as a null catalog reference rather than by creating an empty
-public catalog.
+archives outside the admitted official-event set. Before P12-15F, a missing
+Pickup publication is represented as a null compatibility-catalog reference.
+After cutover, feature-history availability comes from the Landing feature
+index; an explicitly reviewed empty week is represented in that index rather
+than by inventing or omitting a review result.
 
 Beginning with P6-09, Standard and Modern matchup documents use this same
 hierarchical contract. The front end reads canonical leaf W-L-D counts and
@@ -2332,9 +2336,9 @@ selected format while routing to the products available for that format:
 - MTGO weekly Top 8 decklists;
 - Tabletop Major Events.
 
-After the P12-16 cutover, approved Weekly Pickup content is an in-page Landing
-feature source and archive, not a separately routed product. Legacy Pickup URLs
-remain compatibility inputs as defined in section 25.5.
+After the P12-15F cutover, approved feature content comes from the Landing-owned
+feature archive, not a separately routed product or a public Pickup handoff.
+Legacy Pickup URLs remain compatibility inputs as defined in section 25.5.
 
 The shell must obtain product availability and public paths from generated
 catalogs. Routing between entry points must not combine MTGO and tabletop
@@ -3075,18 +3079,20 @@ Do not implement a new architecture only through undocumented directory creation
 ### 25.1 Public product and history boundary
 
 Landing is a format-scoped MTGO product with product ID `mtgo-landing`. Its
-only public data document is:
+public editorial documents are:
 
 ```text
 stats/<format>/mtgo/landing/current.json
+stats/<format>/mtgo/landing/features/index.json
+stats/<format>/mtgo/landing/features/<week>.json
 ```
 
-The document is versioned and discovered through `stats/catalog.json`. Phase
-12 does not create a public Landing archive, weekly index, or historical
-browsing contract. Git history and Weekly Pickup history do not substitute for
-such a contract. The Landing feature section may reuse approved Pickup history,
-but selecting a prior feature week does not replace or reinterpret the current
-Landing brief, environment, composition, or construction-change facts.
+The documents are versioned and discovered through `stats/catalog.json`.
+`current.json` remains the only complete latest Landing document. The feature
+index and week documents are a bounded archive of the bottom new-deck and
+new-technology section, not a public historical Landing contract. Selecting a
+prior feature week does not replace or reinterpret the current Landing brief,
+environment, composition, or construction-change facts.
 
 The explicit pre-closeout URL is:
 
@@ -3107,8 +3113,8 @@ authority:
   classifier rule digest;
 - fixed Chinese and English interface templates remain front-end i18n assets
   and are not generated prose;
-- approved editorial fields originate in the existing format-scoped Weekly
-  Pickup review path and remain human-authored localized alternatives.
+- approved editorial fields originate in the format-scoped private Landing
+  review path and remain human-authored localized alternatives.
 
 Machine facts and machine drafts are aids, not editorial authority. The Owner
 may accept, edit, delete, replace, or ignore them; may write content unrelated
@@ -3143,7 +3149,8 @@ The P12-10 Schema must require, at minimum:
   silently reusing stale editorial content.
 
 `new_entry` and `notable` are not public fields. New decks come only from
-approved Weekly Pickup items. A known-archetype return is a `share_move` state.
+approved Landing feature items. A known-archetype return is a `share_move`
+state.
 
 ### 25.4 Manual representative cards
 
@@ -3162,95 +3169,98 @@ uses a dimensionally stable placeholder while retaining the card name.
 The complete representative-card map is an owner-reviewed P12-10 input, not a
 P12-03B repository artifact.
 
-### 25.5 Weekly Pickup integration
+### 25.5 Landing editorial screening and feature history
 
-Landing extends the existing format-scoped Pickup candidate and approval
-boundary. It must not create a parallel root candidate workflow. The generator
-screens only exact ranks one through eight and preserves the complete Top 8
-population for review before any route-specific representative selection. Its
-private maintained policy is `configs/mtgo_pickup_policy.yaml`; that policy owns
-the screening thresholds, strategic-identity continuity aliases, official
-release dates, and frozen new-to-Magic card manifests. Pending future manifests
-must fail closed for the new-card route rather than infer cards from a set code.
+Landing owns one format-scoped screening, review, and publication boundary. The
+useful candidate logic previously grouped under Weekly Pickup is migrated into
+that boundary; a public Pickup publication is not an intermediate source for
+Landing.
 
-Candidate evidence records every route that selected the exact event-deck. It
-may include share populations, active release and card-package facts, known-
-state continuity evidence, or the comparable four-week construction base. The
-weekly XLSX carries both the filtered candidates and the complete ordered Top 8
-pool, including full main decks and sideboards, so the Owner can perform the
-manual post-ban route or add any otherwise unselected Top 8 deck. These private
-review artifacts and pending decisions do not enter public Pages output.
+The screening producer examines only exact ranks one through eight and
+preserves the complete Top 8 population before route-specific representative
+selection. During the staged migration, `configs/mtgo_pickup_policy.yaml`
+remains the maintained compatibility path for screening thresholds,
+strategic-identity continuity aliases, official release dates, and frozen
+new-to-Magic manifests. P12-15D may rename that path only with a complete caller
+and rollback migration. Pending future manifests fail closed for the new-card
+route rather than being inferred from a set code.
 
-After Owner approval, Pickup publication is a separate required write and
-verification step before Landing preparation. It writes the reviewed content
-to the existing public history paths, refreshes format metadata and the global
-catalog, and verifies the reader-facing Pickup page. Landing must read reviewed
-Pickup content from that published week document; it must not bypass the cloud
-boundary by reading approval or copy directly from candidate YAML or XLSX.
+Candidate evidence records every route that selected one exact event-deck. It
+may include share populations, active release and card-package facts,
+known-state continuity evidence, or the comparable four-week construction
+base. Reason tags merge only when the same exact deck satisfies several routes.
+Different exact decks remain separate. The Owner may reject all machine
+candidates or add any other exact Top 8 deck.
 
-Pickup week Schema `1.1.0` adds the exact source event IDs, classifier digest,
-selection-policy digest, stable identities, exact event/deck identity,
-deck-fingerprint digest, and reason-type tags needed to bind the later Landing
-input. It preserves localized copy and complete decklists. Schema `1.0.0`
-history remains accepted for compatibility, but a newly published reviewed
-week uses `1.1.0`. Both Standard and Modern index and week paths are covered by
-the public Schema manifest.
+The private review source is:
 
-The private format-scoped candidate YAML may store one `landing_summary`
-review section, but it is not a content source for approved Pickup copy. The
-Landing producer reads the exact published Pickup `1.1.0` week document,
-requires its week, source-event IDs, classifier digest, and selection-policy
-digest to match the current Landing subject, and binds its complete document
-digest into the Landing review. It combines every published Pickup row and its
-localized copy with all eligible share-movement, return, exit, and
-construction-shift machine facts as private `review_inputs`. One approved
-Pickup deck remains one review input even when it has multiple reason tags.
+```text
+stats/<format>/mtgo/landing/review/<week>.yaml
+stats/<format>/mtgo/landing/review/known_archetypes.json
+```
 
-The candidate YAML stores the resulting input digest, the published-Pickup
-document digest, a deterministic catalog of every exact current-week Top 8
-deck, an explicit `reviewed` boolean, and zero or more ordered human-final rows.
-Each row may link to zero, one, or multiple review-input IDs for provenance and
-may embed zero, one, or multiple exact `deck:<20-hex deck ID>` tokens at the
-desired positions in its localized final text. The token sets must match across
-non-empty languages. The producer derives token order, localized displays, and
-resolved structured identities from the catalog; the reviewer does not supply
-names, ranks, labels, or URLs. The XLSX is only a review carrier; accepted
-decisions are written back to the candidate YAML. Ordered localized human-final
-text, its exact public inline-replacement tokens, generated displays, and
-selected structured deck identities enter `current.json`; review inputs,
-source-input IDs, machine drafts, arbitrary URLs, and review vocabulary stay
-private. Missing review, changed inputs or link catalog after review, an
-unpublished or mismatched Pickup week, or an unknown input or deck link
-preserves the last admitted current document and blocks replacement.
+Pages admission explicitly excludes `landing/review/`. The week document binds
+the format, review week, source event IDs, classifier digest,
+screening-policy digest, machine-fact digest, complete Top 8 link catalog,
+candidate evidence, selected features, final localized copy, and explicit
+review states. Machine evidence and provenance constrain freshness only; they
+do not constrain the Owner's editorial conclusions.
 
-The generator may suggest exact-deck cards newly present or increased against
-the four-week reference, but the reviewer owns the final selection, category,
-localized editorial copy, featured deck, ordering, and four-card display.
-Approval binds those fields to exact source event IDs, classifier digest,
-machine-fact digest, and deck identity for provenance and stale-review
-detection only. It does not constrain the Owner's category, selection,
-ordering, cards, or editorial copy.
+Known-archetype continuity state advances after the classified weekly baseline
+is accepted, independently of whether the Owner selects any feature. An
+explicitly reviewed empty feature list is valid and must not prevent state
+maintenance. A changed event set, classifier digest, policy digest, fact digest,
+or link catalog after human work marks the review stale and preserves the last
+admitted public Landing until explicit re-review.
 
-After the P12-16 cutover, Weekly Pickup is an internal producer, review,
-known-state, and history capability rather than a standalone product identity.
-Landing renders every approved item for the selected feature week, with
-`new_deck` before `new_technology`, through one disclosure action and the shared
-deck-detail presentation. Internal approval state and reviewer terminology are
-never rendered to readers.
+The Landing-only XLSX review carrier contains `Review Control`, `Landing Copy`,
+`Featured Decks`, `All Top 8`, and `Field Guide`. It is not a database. Accepted
+content is validated and imported into the private week document before preview
+or publication. The Owner is not asked to provide internal input IDs, stable
+classifier IDs, generated link labels, or arbitrary URLs.
 
-Existing public history remains the migration and compatibility source:
+Top copy may embed zero or more exact `deck:<20-hex deck ID>` tokens at any
+desired positions. Non-empty localized versions use the same token set, but
+their prose and token positions may differ. The producer derives localized
+archetype-player-rank displays, URL, order, and exact event/deck identity from
+the complete Top 8 catalog. Only the generated display becomes a hyperlink;
+the surrounding sentence remains ordinary text.
+
+Each approved feature carries category, positive category-local order,
+localized headline and positioning, exact deck identity and decklist,
+supporting facts, and four unique reviewer-selected cards from that deck. There
+is no item-count limit. Landing renders `new_deck` before `new_technology` and
+uses one disclosure action with the shared deck-detail presentation. Review
+state and reviewer terminology never enter public output.
+
+Publication writes the reviewed latest Landing and the selected feature week
+together:
+
+```text
+stats/<format>/mtgo/landing/current.json
+stats/<format>/mtgo/landing/features/index.json
+stats/<format>/mtgo/landing/features/<week>.json
+```
+
+The current document and feature-week document share the exact reviewed
+feature subject. A missing or invalid required feature document blocks the
+cutover rather than silently appearing as an empty week. A deliberately empty
+week requires an explicit reviewed-empty state.
+
+Existing Pickup history remains frozen migration and rollback input:
 
 ```text
 stats/<format>/mtgo/pickup/index.json
 stats/<format>/mtgo/pickup/<week>.json
 ```
 
-Those documents are not deleted, rewritten, or converted into Landing history
-during P12-04B. P12-09 and P12-12 may load them lazily for the feature section.
-At P12-16, an old URL using `product=weekly-pickup&week=<week>` must resolve to
-Landing with its feature section and selected week, equivalent to
-`product=mtgo-landing&section=features&week=<week>`. The `week` parameter affects
-only that section; it does not select a historical Landing document.
+No new Pickup week is published after P12-15F. The legacy files are not deleted
+during backend extraction, recovery generation, local preview, or initial cloud
+cutover. P12-15G may delete or relocate them only after a no-caller proof,
+replacement cloud verification, exact file-operation declaration, and tested
+rollback. A legacy URL using `product=weekly-pickup&week=<week>` continues to
+resolve to `product=mtgo-landing&section=features&week=<week>`. The `week`
+parameter affects only the feature section.
 
 ### 25.6 Availability and failure states
 
