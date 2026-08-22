@@ -214,16 +214,21 @@ def _run_completeness(
 
 def _run_landing(args: argparse.Namespace, root: Path, registry: Path) -> int:
     result = landing.generate(root, args.format_id, registry_path=registry)
-    if result["status"] == "stale_review_required":
+    if result["status"] in {"stale_review_required", "summary_review_required"}:
+        reason = (
+            "explicit summary review"
+            if result["status"] == "summary_review_required"
+            else "explicit re-review"
+        )
         print(
-            "MTGO Landing preserved for explicit re-review: "
+            f"MTGO Landing preserved for {reason}: "
             f"format={args.format_id} output={result['path']}"
         )
     else:
         print(
             "MTGO Landing: "
             f"format={args.format_id} week={result['week']} "
-            f"features={result['feature_count']} observations={result['observation_count']} "
+            f"features={result['feature_count']} summary={result['summary_count']} "
             f"output={result['path']}"
         )
     return 0

@@ -18,7 +18,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 
 | Phase | Objective | Status |
 | --- | --- | --- |
-| 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Active; P12-10 completed, P12-11 planned but not authorized; current out-of-sequence governance repair is recorded in STATUS |
+| 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Active; P12-10 completed, P12-11A locally authorized, P12-11B planned but not authorized |
 | 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
@@ -90,10 +90,28 @@ begin under separate authorization.
       index, rule, comparison base, and protected `434455` byte. The P12-04B
       product-contract migration authorizes using Pickup as Landing's internal
       feature source, not deleting or rewriting those documents.
-11. `P12-11` — Landing weekly summary and environment structure
-    - render up to five truthful structured weekly observations without forcing
-      a minimum, plus the environment composition strip and high-score-share
-      structure list from the same P12-10 document;
+11. `P12-11A` — Landing summary editorial boundary
+    - retain every eligible machine summary candidate privately without a five-
+      item truncation, and read every approved row plus exact localized copy
+      from the already published Pickup `1.1.0` week; keep post-ban Owner-only;
+    - require an explicit reviewed state and allow zero or more ordered human-
+      final rows, each optionally linked to zero, one or multiple review-input
+      IDs; allow complete human rewrite or unrelated content;
+    - maintain a separate catalog of every current-week Top 8 deck, let each
+      human-final row place any number of exact `deck:<deck ID>` tokens at the
+      desired positions, derive localized displays and link order rather than
+      asking the reviewer for names or URLs, and publish each token with its
+      resolved structured deck identity; never publish machine candidates,
+      review-input IDs, drafts, or review vocabulary; preserve the last admitted
+      document when review is missing or stale;
+    - use the published Pickup week as the sole source of reviewed Pickup
+      content, keep the existing format-scoped candidate YAML as the sole
+      Landing review-state store, and use XLSX only as a visually verified
+      review carrier.
+11B. `P12-11B` — Landing weekly summary and environment UI
+    - render every reviewed human-final weekly-summary row without forcing a
+      minimum or maximum, plus the environment composition strip and high-score-
+      share structure list from the same P12-11A document;
     - show every archetype above the owner-approved high-score-share threshold,
       show current, previous-week, and aggregated previous-four-week raw counts
       and high-score shares, display current Top 8 share only as supporting

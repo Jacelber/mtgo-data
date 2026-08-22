@@ -162,7 +162,15 @@ def test_current_landing_follows_one_classifier_and_population_subject(
     assert document["review_binding"]["classifier_digest"] == document["classifier"]["digest"]
     assert len(document["review_binding"]["visual_metadata_digest"]) == 64
     assert len(document["review_binding"]["machine_fact_digest"]) == 64
-    assert len(document["observations"]) <= 5
+    if document["schema_version"] == "1.0.0":
+        assert len(document["observations"]) <= 5
+        assert "weekly_summary" not in document
+    else:
+        assert document["schema_version"] == "1.1.0"
+        assert "observations" not in document
+        assert len(document["review_binding"]["pickup_document_digest"]) == 64
+        assert len(document["review_binding"]["summary_fact_digest"]) == 64
+        assert document["weekly_summary"]["week"] == document["week"]["id"]
     assert all(
         row["current"]["share"] >= environment["threshold"]
         for row in environment["rows"]

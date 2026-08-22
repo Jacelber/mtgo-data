@@ -145,6 +145,16 @@ they do not limit, endorse, or police the Owner's editorial conclusions. The
 workbook is a review carrier, not an authoritative database. Codex validates and
 writes accepted decisions back to the maintained repository sources.
 
+For Landing final copy, the Owner writes unrestricted Chinese and English text
+and places an exact `deck:<20-hex deck ID>` token wherever a reviewed Top 8 deck
+link should appear. Both localized texts must reference the same token set, but
+their prose and token positions may differ. Codex derives the link order from
+each text, validates every token against the current-week Top 8 catalog, and
+generates the localized `<archetype> · <player> · <rank>` display automatically.
+The token is the later UI replacement anchor; only its generated display becomes
+the hyperlink, never the entire summary row. Columns that do not support Owner
+input or review are omitted from the next carrier version.
+
 The Owner is never asked to invent or type classifier action codes, parent IDs,
 parent names, or subtype IDs. The first Owner field is unrestricted free text.
 After reading it, Codex owns the exact technical recommendation. The only

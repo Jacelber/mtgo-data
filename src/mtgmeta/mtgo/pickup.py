@@ -960,6 +960,16 @@ def generate_candidates(
 def _has_manual_review(document: Mapping[str, Any]) -> bool:
     """Return whether a candidate contains decisions that must not be overwritten."""
 
+    summary = document.get("landing_summary")
+    if summary is not None:
+        if not isinstance(summary, Mapping):
+            return True
+        if summary.get("reviewed") is True:
+            return True
+        items = summary.get("items", [])
+        if not isinstance(items, list) or items:
+            return True
+
     for key in ("existing_changes", "new_archetypes"):
         entries = document.get(key, [])
         if not isinstance(entries, list):

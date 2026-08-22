@@ -2387,7 +2387,7 @@ list must use the same current-week archetype set.
 
 ### 24.3 High-score-share movement
 
-`share_move` is the only ordinary public high-score-share movement fact. It is
+`share_move` is the ordinary machine high-score-share movement fact. It is
 eligible when a maintained known parent archetype's current-week share differs
 from its previous-four-week aggregated share by at least `0.05`, meaning five
 percentage points rather than five percent relative change. The fact records
@@ -2460,17 +2460,38 @@ highest-deviation deck is the representative candidate and all supporting Top
 history, or an incomparable rule version makes the fact unavailable rather
 than zero.
 
-This fact may supply a structured weekly observation. Publication as a curated
+This fact may supply a private weekly summary candidate. Publication as a curated
 new-technology feature remains separately human-approved through Weekly
 Pickup.
 
-### 24.6 Observation and feature limits
+### 24.6 Summary candidates, human final, and feature limits
 
-Landing may render up to five truthful structured weekly observations. It
-normally aims for three to five but may show fewer; it must not relax a
-threshold, manufacture a claim, or expose an unreviewed Pickup item to fill the
-layout. Eligible share and exit facts rank by absolute share movement, and
-eligible construction shifts rank by deviation score.
+The Landing producer retains every threshold-eligible `share_move`, `exit`, and
+`build_shift` machine fact; it does not truncate them to a presentation count.
+It separately reads every reviewed row and exact localized copy from the
+published Pickup `1.1.0` week document. A published deck is one review input
+with all of its reason tags, so a deck tagged for both `return` and `new_card`
+is not duplicated. Post-ban continuation remains Owner-only and is not
+machine-inferred. Every private review input has a deterministic ID and stays
+outside Pages.
+
+The public weekly summary contains only zero or more explicitly reviewed human-
+final rows. There is no machine or five-item publication ceiling. A human row
+may reference zero, one, or multiple private review-input IDs for provenance,
+but the Owner may merge, delete, replace, completely rewrite, or add content
+unrelated to every machine or published-Pickup input. Separately, the producer
+builds a deterministic link catalog from every exact current-week Top 8 deck.
+A human row selects zero, one, or multiple catalog entries by placing the exact
+`deck:<20-hex deck ID>` token at the desired position in each non-empty
+localized final text. The selected token set must match across Chinese and
+English. The producer derives link order from token occurrence, generates the
+localized `<archetype> · <player> · <rank>` displays, and resolves every token
+to its validated event, rank, deck, fingerprint, player, archetype, and start-
+time identity. Review-input IDs, review inputs, machine drafts, and arbitrary
+URLs do not enter the public summary. The exact deck token intentionally remains
+in the public localized text as the P12-11B inline-replacement anchor; no whole-
+row link is implied. `reviewed: true` is required even when the final row count
+is zero; a missing review is not an empty decision.
 
 The curated feature panel contains every approved Weekly Pickup item for its
 selected week, categorized as `new_deck` or `new_technology`. `new_deck` items
@@ -2485,15 +2506,17 @@ do not trigger `build_shift`.
 The feature panel defaults to the current week and may load a prior approved
 Pickup week from the existing history. This section-level selection changes
 only the curated feature content. The Landing weekly brief, environment shares,
-composition, and construction-change observations continue to describe the
+composition, and reviewed weekly summary continue to describe the
 current Landing document. Pickup history is therefore not a historical Landing
 statistics contract.
 
 ### 24.7 Empty and refresh states
 
-No admitted event is a valid `no_events` state. Events with no approved feature
-are a valid empty-feature state and retain the current environment and any
-truthful machine facts. Missing comparison data is unavailable, not zero.
+No admitted event is a valid `no_events` state and has an automatically empty
+summary because there is no current editorial subject. Events with no approved
+feature are a valid empty-feature state. For a ready week, an empty human-final
+summary is valid only after explicit review. Missing comparison data is
+unavailable, not zero.
 Malformed, internally inconsistent, or missing required Landing data blocks
 publication.
 

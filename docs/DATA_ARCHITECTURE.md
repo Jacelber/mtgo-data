@@ -3196,6 +3196,33 @@ history remains accepted for compatibility, but a newly published reviewed
 week uses `1.1.0`. Both Standard and Modern index and week paths are covered by
 the public Schema manifest.
 
+The private format-scoped candidate YAML may store one `landing_summary`
+review section, but it is not a content source for approved Pickup copy. The
+Landing producer reads the exact published Pickup `1.1.0` week document,
+requires its week, source-event IDs, classifier digest, and selection-policy
+digest to match the current Landing subject, and binds its complete document
+digest into the Landing review. It combines every published Pickup row and its
+localized copy with all eligible share-movement, return, exit, and
+construction-shift machine facts as private `review_inputs`. One approved
+Pickup deck remains one review input even when it has multiple reason tags.
+
+The candidate YAML stores the resulting input digest, the published-Pickup
+document digest, a deterministic catalog of every exact current-week Top 8
+deck, an explicit `reviewed` boolean, and zero or more ordered human-final rows.
+Each row may link to zero, one, or multiple review-input IDs for provenance and
+may embed zero, one, or multiple exact `deck:<20-hex deck ID>` tokens at the
+desired positions in its localized final text. The token sets must match across
+non-empty languages. The producer derives token order, localized displays, and
+resolved structured identities from the catalog; the reviewer does not supply
+names, ranks, labels, or URLs. The XLSX is only a review carrier; accepted
+decisions are written back to the candidate YAML. Ordered localized human-final
+text, its exact public inline-replacement tokens, generated displays, and
+selected structured deck identities enter `current.json`; review inputs,
+source-input IDs, machine drafts, arbitrary URLs, and review vocabulary stay
+private. Missing review, changed inputs or link catalog after review, an
+unpublished or mismatched Pickup week, or an unknown input or deck link
+preserves the last admitted current document and blocks replacement.
+
 The generator may suggest exact-deck cards newly present or increased against
 the four-week reference, but the reviewer owns the final selection, category,
 localized editorial copy, featured deck, ordering, and four-card display.
