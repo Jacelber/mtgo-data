@@ -31,6 +31,14 @@ Do not use the Magic or Wizards logo as the site brand. Repository-owned brand
 assets must record their source and transformation; production assets must be
 local and must not depend on a third-party runtime request.
 
+P12-15 adds only durable shell additions around the accepted A3 composition: a
+warm cream and brown cat-line-art favicon, a fixed 1200 by 630 bilingual share
+image with no card art or changing weekly claims, and a narrow footer after all
+page content. The footer supplies the Scryfall source link and the required
+Wizards Fan Content notice in the active language; it is not a Landing panel.
+These additions must preserve the existing Landing structure, image treatment,
+and responsive behavior.
+
 ## 3. Color
 
 Use these semantic tokens as the shared starting palette:

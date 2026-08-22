@@ -176,12 +176,14 @@ begin under separate authorization.
     - P12-13F preserves the existing matchup formulas, literal W-L-D
       counts, confidence intervals, 20-match warning, public JSON, Schemas,
       workflows, public paths, and protected event `434455` bytes.
-14. `P12-14` — Mobile matrix and card-image interaction
-    - provide a single-archetype vertical opponent view;
-    - add a touch-friendly card image layer and failure placeholder;
-    - verify the selected Landing list-image treatment, feature week selector,
-      multiple approved items, and shared inline deck detail at 390px without
-      hiding required names, values, trends, or navigation.
+14. `P12-14` — Cancelled by Owner
+    - the accepted mobile matrix is retained as implemented; no separate
+      single-archetype vertical opponent view will be added;
+    - the shared card-image preview and its failure behavior were already
+      delivered and accepted in P12-09 and subsequent Landing validation, so
+      they will not be redeveloped as a second task;
+    - this cancellation does not remove P12-16's complete cross-device
+      verification requirement.
 15. `P12-15` — Metadata and sharing
     - add description, Open Graph, favicon, canonical URL, language memory, and
       required Scryfall and Wizards attribution;

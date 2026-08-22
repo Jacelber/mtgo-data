@@ -5020,3 +5020,52 @@ unrelated content, without a false machine-support requirement. P12-11B UI,
 commit, remote publication, production dispatch, historical Landing,
 classifier rules, thresholds, source data, workflow timing, Pages paths, and
 protected event `434455` bytes remain separately gated and unchanged.
+
+---
+
+# DEC-112 - Retain the accepted mobile matrix and add durable Landing sharing
+
+Status: `Accepted for local implementation`
+
+## Context
+
+The Owner confirmed that the current mobile matrix presentation is already
+usable and that the common card-image preview is already delivered. Repeating
+P12-14's proposed vertical matrix and card-preview work would duplicate an
+accepted subject. The same review approved a narrowly scoped P12-15 addition:
+stable bilingual metadata and sharing assets, remembered language, a compact
+source-and-policy footer, and old Weekly Pickup links opening the corresponding
+Landing features week.
+
+## Decision
+
+Cancel P12-14. Preserve the current mobile matrix and existing card preview;
+P12-16 remains responsible for complete cross-device verification.
+
+For P12-15, use stable text only: Chinese title `猫猫万智周报｜MTGO 环境与精选套牌`,
+Chinese description `每周整理 MTGO 标准与摩登的环境变化、套牌数据与精选套牌。`, English title
+`MTG Meta Analytics | MTGO Metagame & Featured Decks`, and English description
+`Weekly MTGO Standard and Modern metagame trends, deck data, and featured decks.`
+Do not place current-week machine data or editorial conclusions in metadata.
+
+Use the local cat line-art visual direction in a warm cream and brown favicon
+and one fixed bilingual 1200 by 630 share image. Neither may contain card art,
+Wizards logos, Magic trademarks, or weekly claims. Place Scryfall attribution
+and the official Fan Content Policy notice in a narrow localized footer after
+all content.
+
+An explicit valid `lang` URL parameter has priority. Otherwise, reuse the
+visitor's last selected language when browser storage is available. Replace a
+legacy `product=weekly-pickup&week=<week>` URL with
+`product=mtgo-landing&section=features&week=<week>`, preserving format and
+language. The week scopes only the Landing features panel. Keep Landing
+non-default and retain the Weekly Pickup navigation label until P12-16.
+
+## Consequences
+
+The site gains a stable public identity and legal/source context without
+presenting changing machine output as editorial fact. Existing shared Pickup
+links retain a useful destination, while the accepted page composition and the
+later default-route/navigation decision remain intact. This changes no
+statistics, classifiers, reviewed content, public JSON, Schemas, source data,
+workflows, event whitelist, Pages entry path, or protected event `434455`.

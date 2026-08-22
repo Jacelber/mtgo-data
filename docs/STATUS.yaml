@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-landing-ui-20260822-01"
+  current_working_branch: "codex/p12-15-metadata-sharing-20260822-01"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,75 +31,71 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-11B-12"
-  name: "Landing real-data UI"
+  id: "P12-15"
+  name: "Metadata, sharing, and Pickup compatibility"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-22"
-  implementation_completed_on: "2026-08-22"
-  owner_ui_refinement_authorized_on: "2026-08-22"
-  owner_accepted_on: "2026-08-22"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-landing-ui-20260822-01"
-  branch: "codex/p12-landing-ui-20260822-01"
-  base_commit: "cdebd765069b93491145916481d3065a4300671e"
-  objective: "Fill the already accepted A3 Landing UI with the reviewed weekly summary, completeness, current environment, and curated feature data, and implement their display and interaction logic without redesigning the page."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-15-metadata-sharing-20260822-01"
+  branch: "codex/p12-15-metadata-sharing-20260822-01"
+  base_commit: "44964f2a638a72700649c2aa94953d38f4963455"
+  objective: "Add stable bilingual metadata, sharing assets, language memory, required Scryfall and Wizards attribution, and compatibility from old Weekly Pickup URLs to the Landing features section without changing the accepted Landing content structure."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
-  completion_authority: "Owner accepted the final unchanged browser subject on 2026-08-22; DEC-094 authorizes applicable Pages publication as part of continuous same-task completion."
-  artifact_impact:
-    - "user_visible_ui"
   target_paths:
-    - "assets/css/phase8-candidate.css"
-    - "assets/js/phase8/app-core.js"
-    - "assets/js/phase8/app-freshness.js"
-    - "assets/js/phase8/app-loading.js"
-    - "assets/js/phase8/app-mtgo.js"
+    - "index.html"
+    - "assets/css/phase8-base.css"
+    - "assets/images/"
+    - "assets/js/phase8/app-metadata.js"
     - "assets/js/phase8/app.js"
+    - "assets/js/phase8/app-core.js"
     - "assets/js/phase8/i18n.js"
-    - "assets/js/phase8/mtgo-controller.js"
-    - "tests/js/phase8-landing.test.js"
+    - "tests/js/phase8-metadata-sharing.test.js"
+    - "validate_repository.py"
+    - "docs/DECISIONS.md"
+    - "docs/FRONTEND_DESIGN_SYSTEM.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    accepted_ui_authority: "docs/FRONTEND_DESIGN_SYSTEM.md and docs/design/p12-04a-selected-desktop.html; no visual, layout, or interaction deviation without prior Owner confirmation"
+    accepted_ui_authority: "docs/FRONTEND_DESIGN_SYSTEM.md and docs/design/p12-04a-selected-desktop.html; footer and approved cat-based sharing assets are the only newly authorized visible additions."
     statistical_formulas_changed: "none"
-    public_json_or_schema_changed: "none; consume the admitted Landing 1.1 document and existing Pickup history"
+    public_json_or_schema_changed: "none"
     generated_or_source_data_changed: "none"
     classification_identities_changed: "none"
-    workflows_or_public_paths_changed: "none; keep Landing non-default on its explicit URL"
+    workflows_changed: "none"
+    landing_default_changed: false
+    weekly_pickup_navigation_removed: false
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Render every reviewed weekly-summary row in Owner order and replace only exact deck tokens with their localized labels and validated deck-detail links."
-    - "Render the accepted completeness strip, current-week composition, and environment list using the admitted Landing subject and the matching one-week statistics/completeness documents."
-    - "Show only current, previous-week, and previous-four-week shares plus direction in the A3 environment UI; retain raw counts and denominators in data only."
-    - "Reuse maintained mana and representative-card metadata, the common card-preview behavior, and the common inline deck-detail presentation."
-    - "Render every available reviewed feature in category order, one in-panel week selector, four selected cards, and one disclosure action; provide truthful empty states when no feature is present."
-    - "Implement the accepted desktop and 390/412 responsive presentation using one markup contract."
-    - "Preserve the accepted UI subject and complete Gate 6 through one commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification."
+    - "Add the Owner-approved stable Chinese and English title and description, canonical and Open Graph metadata, and a fixed bilingual cat-based sharing image without weekly data claims, card art, Wizards logos, or Magic trademarks."
+    - "Add a compact responsive footer with the Owner-approved Scryfall source line and official Fan Content Policy attribution in the selected language."
+    - "Remember an explicitly chosen language locally while giving a valid lang URL parameter priority."
+    - "Replace legacy product=weekly-pickup URL state with product=mtgo-landing&section=features while preserving format, week, and language; scope week selection to Landing features only."
+    - "Keep the existing Weekly Pickup navigation label and Landing non-default until the separately authorized P12-16 closeout."
+    - "Record the Owner-cancelled P12-14 scope so the already accepted mobile matrix and card-preview behavior are not redeveloped."
   prohibited_changes:
-    - "Do not change the accepted A3 page structure, visual language, sizing, responsive behavior, or interaction design without prior Owner confirmation."
-    - "Do not change Landing or Pickup generators, review content, public JSON, Schemas, classifier rules, thresholds, source data, event whitelists, workflow timing, Pages paths, or protected event 434455 bytes."
-    - "Do not make Landing the default entry, remove Weekly Pickup navigation, or implement metadata and legacy-URL migration reserved for P12-15 and P12-16."
-    - "Do not change the Owner-accepted user-visible subject during Gate 6 completion."
+    - "Do not change the accepted A3 Landing page structure, existing content placement, visual language, sizing, responsive behavior, or interaction design outside the authorized footer and sharing additions."
+    - "Do not change Landing or Pickup generators, review content, public JSON, Schemas, classifier rules, thresholds, source data, event whitelists, workflow timing, Pages entry paths, or protected event 434455 bytes."
+    - "Do not make Landing the default entry, remove Weekly Pickup navigation, or implement P12-16 closeout behavior."
+    - "Do not commit, publish, merge, dispatch, or alter the reviewed subject after Owner acceptance without the applicable Gate 6 evidence."
   validation:
-    focused_node_tests: "tests/js/phase8-landing.test.js: 5 passed"
-    unchanged_runtime_evidence: "tests/js/phase8-runtime.test.js: 5 passed before the final Landing-only markup, translation, image-loading, CSS, and test adjustments"
-    javascript_syntax: "node --check passed for all changed Phase 8 JavaScript files"
+    focused_metadata_tests: "tests/js/phase8-metadata-sharing.test.js: 4 passed"
+    javascript_syntax: "node --check passed for app-metadata.js, app-core.js, and app.js"
     documentation_history: "tests/test_documentation_history.py: 5 passed"
+    repository_validation: "validate_repository.py: PASS (80 Python, 19 JavaScript, 1,833 JSON, 60 YAML, 56 references, 2,277 hygiene checks)"
+    maintained_python_static: "ruff check validate_repository.py passed; mypy reported three pre-existing errors at unchanged lines 16, 165, and 682"
     diff_check: "git diff --check passed"
-    browser_desktop: "Standard Chinese and English Landing verified at desktop width with accepted A3 section order, Owner-refined 118x82 landscape representative art, the first representative above the second, a 13px visible gap to current share, token-only deck links, inline deck detail, and no console errors or horizontal overflow"
-    browser_mobile_390: "Standard Landing verified at 390px with Owner-refined 90x63 landscape representative art, no horizontal overflow, progressive images, and the accepted two-touch composition-detail interaction"
-    browser_mobile_412: "Modern Landing verified at 412px with 90x63 landscape representative art, no horizontal overflow, responsive environment cards, and no browser errors"
-    feature_selector: "Historical week selection changes only the feature panel while the current W33 brief and environment remain unchanged"
-    feature_data_boundary: "Current cloud W33 feature items are empty, so the UI renders the accepted truthful empty state and invents no feature cards"
-  stop_point: "Complete the unchanged accepted task through required CI, normal merge, and merge-triggered Pages verification; then stop without starting P12-15 or another task."
+    browser_desktop: "Chinese and English Landing verified with exact stable metadata, two localized footer links, no horizontal overflow, language memory, and no console warnings or errors"
+    browser_legacy_pickup: "Legacy weekly-pickup Standard W33 URL rewrites to the Landing features canonical URL, preserves English, and scrolls the features section into view after render"
+    browser_mobile: "Landing verified at 390px and 412px viewport overrides with the localized footer, favicon link, two attribution links, and no horizontal overflow"
+  stop_point: "Complete Gate 6 for the owner-accepted subject: commit, publish one Ready pull request, pass required checks, merge, and verify the merge-triggered Pages publication."
 
 current_repository_state:
-  baseline_commit: "cdebd765069b93491145916481d3065a4300671e"
-  baseline_note: "Fresh isolated workspace created from verified cloud master after the accepted P12-11A change was merged and published."
+  baseline_commit: "44964f2a638a72700649c2aa94953d38f4963455"
+  baseline_note: "Fresh isolated workspace created from verified cloud master after the accepted P12-11B/P12-12 Landing real-data UI change was merged and Pages-published."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -108,33 +104,29 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - task: "P12-11B-12"
-    status: "owner_accepted_completion_authorized"
-    remaining_requirements:
-      - "Commit the unchanged accepted subject and publish one Ready pull request."
-      - "Require successful admission and applicable CI before normal merge."
-      - "Verify the merge-triggered Pages deployment and exact merged subject."
+  - task: "P12-14"
+    status: "cancelled_by_owner"
+    note: "The existing mobile matrix presentation and card-image preview were accepted; do not create a separate vertical opponent view or redevelop the already delivered preview behavior."
   - task: "P12-15"
-    status: "planned_not_authorized"
+    status: "in_progress"
     remaining_requirements:
-      - "Complete and publish the Landing real-data UI task."
-      - "Obtain separate implementation authorization for metadata and sharing behavior."
+      - "Complete the authorized local implementation and focused validation."
+      - "Complete Gate 6 for the Owner-accepted browser subject."
   - task: "P12-16"
     status: "planned_not_authorized"
     remaining_requirements:
       - "Complete the remaining Phase 12 tasks and obtain separate closeout authorization."
 
 next_approved_task:
-  id: "P12-11B-12"
-  name: "Landing real-data UI"
+  id: "P12-15"
+  name: "Metadata, sharing, and Pickup compatibility"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
-  note: "Owner accepted the final browser subject on 2026-08-22; complete this exact task continuously through Gate 6, then stop."
+  note: "Owner accepted the final P12-15 browser subject on 2026-08-23; complete the unchanged task through Gate 6, then stop."
 
 prohibited_next_actions:
-  - "Do not change the accepted A3 UI before presenting the proposed deviation and obtaining Owner confirmation."
-  - "Do not make Landing the default, remove Weekly Pickup from navigation, or implement P12-15/P12-16 behavior."
+  - "Do not change the accepted A3 UI beyond the Owner-approved footer and sharing additions."
+  - "Do not make Landing the default, remove Weekly Pickup from navigation, or implement P12-16 behavior."
   - "Do not change generated data, public contracts, classifiers, statistics, workflows, source data, public paths, or event 434455 bytes."
-  - "Do not alter the Owner-accepted UI subject during commit, PR, CI, merge, or Pages completion."
-  - "Do not start P12-15 or any other task after completing this task."
+  - "Do not start P12-16 or any other task after completing this task."
   - "Do not develop directly on master or overwrite unexplained local changes."

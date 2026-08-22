@@ -68,6 +68,7 @@ const state = {
   top8WeekFile: null,
   top8Detail: null,
   pickupWeekFile: null,
+  landingSection: null,
   pickupOpen: new Set(),
   tabletopView: "overview",
   tabletopEventId: null,
