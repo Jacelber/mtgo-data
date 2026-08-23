@@ -234,6 +234,10 @@ begin under separate authorization.
     - completed detail and accepted results are archived in
       `docs/history/ROADMAP-PHASE-12-COMPLETED.md`; P12-15E remains a separate
       authorization gate.
+15-HF. `P12-15-HF` — Emergency Melee entry recovery and static home link
+    - completed detail and accepted results are archived in
+      `docs/history/ROADMAP-PHASE-12-COMPLETED.md`; P12-15E remains a separate
+      authorization gate.
 15E. `P12-15E` — Landing feature archive and recovery preview
     - add versioned `landing/features/index.json` and
       `landing/features/<week>.json` contracts, consumers, catalogs, Pages

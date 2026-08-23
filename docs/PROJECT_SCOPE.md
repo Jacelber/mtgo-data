@@ -464,6 +464,11 @@ their data loading or statistics. The source name “Melee” may appear in even
 metadata but should not be the only user-facing description of the tabletop
 product.
 
+The visible site title on both production entries is also the script-independent
+home control. It links to the bare `/index.html` MTGO entry rather than a
+specific product query, so it remains usable during initialization failure and
+automatically follows the currently configured default MTGO product.
+
 ### 9.2 MTGO page
 
 The existing root page remains the MTGO entry point:
