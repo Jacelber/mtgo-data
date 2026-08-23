@@ -15,6 +15,7 @@ import yaml
 from mtgmeta.public_contract import versioned
 
 from . import load_mtgo_context
+from . import landing_editorial as editorial
 from . import pickup, stats
 from .normalize import load_rules_for_format
 from .top8 import classifier_digest
@@ -169,6 +170,19 @@ def _key_cards(
 
 
 def _known_parent_ids(repository_root: Path, format_id: str, rules, statistics: Path) -> set[str]:
+    path = statistics / "landing" / "review" / "known_archetypes.json"
+    if path.is_file():
+        try:
+            document = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+            raise MTGOLandingError(f"{path}: Landing known state could not be loaded") from exc
+        known_ids = document.get("known_ids") if isinstance(document, Mapping) else None
+        if not isinstance(known_ids, list) or any(
+            not isinstance(value, str) for value in known_ids
+        ):
+            raise MTGOLandingError(f"{path}: Landing known state is invalid")
+        return set(known_ids)
+
     path = statistics / "pickup" / "known_archetypes.json"
     stable_ids = format_id == "modern"
     known = pickup.load_known(path, stable_ids=stable_ids)
@@ -1128,7 +1142,8 @@ def build_document(
     *,
     today: date | None = None,
     registry_path: str | Path | None = None,
-    candidate_directory: str | Path | None = None,
+    review_directory: str | Path | None = None,
+    name_catalog_path: str | Path | None = None,
     visuals_path: str | Path | None = None,
 ) -> tuple[str, dict[str, Any]]:
     root = Path(repository_root).resolve()
@@ -1185,9 +1200,6 @@ def build_document(
         display_names,
         visual_metadata,
         format_id,
-    )
-    visual_diagnostics = _visual_review_diagnostics(
-        environment, current["records"]
     )
     observations: list[dict[str, Any]] = []
     current_top8: list[dict[str, Any]] = []
@@ -1276,59 +1288,72 @@ def build_document(
     )
     review_status = "not_applicable"
     if current["event_ids"]:
-        candidate_root = (
-            Path(candidate_directory)
-            if candidate_directory is not None
-            else context.paths["statistics"] / "pickup"
+        review_root = (
+            Path(review_directory)
+            if review_directory is not None
+            else context.paths["statistics"] / "landing" / "review"
         )
-        candidate_path = candidate_root / f"candidates_{week}.yaml"
-        if not candidate_path.is_file():
-            raise MTGOLandingError(f"{candidate_path}: current Pickup candidate is missing")
-        published_pickup_path = (
-            context.paths["statistics"] / "pickup" / f"{week}.json"
-        )
-        published_pickup, pickup_document_digest = _load_published_pickup(
-            published_pickup_path,
-            format_id=format_id,
-            week=week,
-            source_event_ids=current["event_ids"],
-            rules_digest=rules_digest,
-            selection_policy_digest=selection_policy_digest,
-        )
-        review_inputs = _summary_review_inputs(observations, published_pickup)
-        feature_status, features = _feature_document(
-            candidate_path,
-            week,
-            current["event_ids"],
-            rules_digest,
-            selection_policy_digest,
-            visual_metadata_digest,
-            visual_diagnostics,
-            machine_fact_digest,
-        )
-        summary_fact_digest = _summary_digest(
-            week,
-            current["event_ids"],
-            rules_digest,
-            selection_policy_digest,
-            pickup_document_digest,
-            review_inputs,
-            deck_link_catalog,
-        )
-        if feature_status == "stale_review_required":
-            review_status = feature_status
+        review_path = review_root / f"{week}.yaml"
+        if not review_path.is_file():
+            review_status = "stale_review_required"
         else:
-            summary_status, summary_items, summary_fact_digest = _summary_document(
-                candidate_path,
-                week,
-                current["event_ids"],
-                rules_digest,
-                selection_policy_digest,
-                pickup_document_digest,
-                review_inputs,
-                deck_link_catalog,
+            catalog_path = (
+                Path(name_catalog_path)
+                if name_catalog_path is not None
+                else root / editorial.DEFAULT_NAME_CATALOG
             )
-            review_status = summary_status
+            editorial.validate_name_catalog(root, catalog_path)
+            name_document = editorial.load_name_catalog_document(catalog_path)
+            names = editorial.load_name_catalog(catalog_path)
+            review = editorial.load_review_document(
+                review_path,
+                root / editorial.DEFAULT_REVIEW_SCHEMA,
+            )
+            current_catalog = editorial.build_top8_catalog(current_top8)
+            current_binding = {
+                "workbook_sha256": review["bindings"]["workbook_sha256"],
+                "source_event_ids": current["event_ids"],
+                "classifier_digest": rules_digest,
+                "selection_policy_digest": selection_policy_digest,
+                "machine_fact_digest": machine_fact_digest,
+                "link_catalog_digest": editorial.document_digest(current_catalog),
+                "bilingual_catalog_digest": editorial.document_digest(name_document),
+            }
+            try:
+                editorial.validate_review_binding(review, current_binding)
+            except editorial.MTGOLandingEditorialError:
+                review_status = "stale_review_required"
+            else:
+                materialized = editorial.materialize_review(review, names)
+                summary_items = materialized["weekly_summary"]
+                features = []
+                for item in materialized["features"]:
+                    features.append(
+                        {
+                            "category": item["category"],
+                            "order": item["order"],
+                            "archetype_id": item["archetype_id"],
+                            "subtype_id": item["subtype_id"],
+                            "display_name": item["display_name"],
+                            "deck": item["deck"],
+                            "headline": item["title"],
+                            "positioning": item["positioning"],
+                            "featured_cards": item["featured_cards"],
+                            "supporting_facts": [
+                                _public_supporting_fact(reason)
+                                for reason in item["supporting_facts"]
+                            ],
+                        }
+                    )
+                pickup_document_digest = editorial.document_digest(review)
+                summary_fact_digest = editorial.document_digest(
+                    {
+                        "week": week,
+                        "bindings": review["bindings"],
+                        "top_copy": review["review"]["top_copy"],
+                    }
+                )
+                review_status = "current"
 
     document = versioned(
         {
@@ -1425,7 +1450,13 @@ def validate_document(document: Mapping[str, Any]) -> None:
                     "Landing weekly summary deck-link token mapping is invalid"
                 )
             if any(
-                link["label"] != _summary_deck_labels(link["deck"])
+                not isinstance(link.get("label"), Mapping)
+                or link["label"].get("en")
+                != _summary_deck_labels(link["deck"])["en"]
+                or not isinstance(link["label"].get("zh"), str)
+                or not link["label"]["zh"].endswith(
+                    f" · {link['deck']['player']} · 第{link['deck']['final_rank']}名"
+                )
                 for link in links
             ):
                 raise MTGOLandingError("Landing weekly summary deck-link label is invalid")
@@ -1472,7 +1503,8 @@ def generate(
     *,
     today: date | None = None,
     registry_path: str | Path | None = None,
-    candidate_directory: str | Path | None = None,
+    review_directory: str | Path | None = None,
+    name_catalog_path: str | Path | None = None,
     output_directory: str | Path | None = None,
     visuals_path: str | Path | None = None,
 ) -> dict[str, Any]:
@@ -1488,7 +1520,8 @@ def generate(
         format_id,
         today=today,
         registry_path=registry_path,
-        candidate_directory=candidate_directory,
+        review_directory=review_directory,
+        name_catalog_path=name_catalog_path,
         visuals_path=visuals_path,
     )
     output = (

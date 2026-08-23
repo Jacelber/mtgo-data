@@ -231,26 +231,9 @@ begin under separate authorization.
       `docs/history/ROADMAP-PHASE-12-COMPLETED.md`; P12-15D remains a separate
       authorization gate.
 15D. `P12-15D` — Internal Landing editorial backend
-    - extract retained screening, deduplication, evidence, and continuity-state
-      behavior from Pickup into a Landing-owned internal module and private
-      review contract, retaining a temporary compatibility wrapper;
-    - make top copy and current features consume the same reviewed source;
-      remove their dependency on a separately published Pickup week;
-    - retain one stable exact-deck destination identity for every reviewed
-      feature so the later reader can distinguish a selected feature deck from
-      an ordinary Top 8-only deck without matching display text;
-    - add the format-scoped bilingual classifier-name catalog and coverage
-      validator; derive the feature title from that catalog rather than a
-      weekly free-text field;
-    - derive feature order per format by rendering `new_deck` before
-      `new_technology`, then following the exact deck-token appearance order in
-      final top copy, with same-row tokens read left to right and features not
-      mentioned in top copy appended to their category deterministically;
-    - reject any newly reviewed top-copy token without an exact selected
-      feature record;
-    - update known-archetype state after an accepted classified baseline even
-      when no feature is selected, and add fail-closed stale-review validation;
-    - write no public feature path and perform no front-end switch in this task.
+    - completed detail and accepted results are archived in
+      `docs/history/ROADMAP-PHASE-12-COMPLETED.md`; P12-15E remains a separate
+      authorization gate.
 15E. `P12-15E` — Landing feature archive and recovery preview
     - add versioned `landing/features/index.json` and
       `landing/features/<week>.json` contracts, consumers, catalogs, Pages
@@ -266,10 +249,27 @@ begin under separate authorization.
     - verify both languages, both formats, historical selection, deck links,
       card display, responsive behavior, and explicit empty weeks, then stop
       for hands-on Owner acceptance.
+15E-I18N. `P12-15E-I18N` — Classifier-name localization across retained views
+    - begin only after hands-on acceptance of the P12-15E data-backed local
+      preview; keep this separate from classifier rules, statistical meaning,
+      and the accepted UI structure;
+    - generate and admit one format-scoped public bilingual name contract from
+      the P12-15D repository-managed catalog, preserving the classifier
+      taxonomy as the English authority and the Owner-approved Chinese values;
+    - make Landing, every retained MTGO view, and classifier-backed Tabletop
+      views resolve parent and subtype labels by stable IDs and selected
+      language instead of matching or reusing English display text;
+    - keep English pages unchanged, require approved Chinese coverage for known
+      identities, and handle Unknown or other non-classifier UI vocabulary
+      through the existing interface localization boundary;
+    - verify Chinese and English independently across Standard, Modern, every
+      retained MTGO view, applicable Tabletop views, direct URLs, language
+      switching, desktop, and 390px width, then stop for hands-on Owner
+      acceptance.
 15E-UX. `P12-15E-UX` — Feature-release interaction corrections
-    - begin only after the P12-15E data-backed preview exists and before the
-      cloud cutover; keep this focused on the three Owner-approved interaction
-      corrections discovered during recovery review;
+    - begin only after hands-on acceptance of P12-15E and P12-15E-I18N and
+      before the cloud cutover; keep this focused on the three Owner-approved
+      interaction corrections discovered during recovery review;
     - after a desktop or mobile composition-segment activation expands a deck,
       scroll the newly revealed detail into a perceptible viewport position and
       preserve keyboard focus and reduced-motion behavior;
@@ -284,11 +284,13 @@ begin under separate authorization.
     - verify all three corrections in the same local release candidate and
       stop for hands-on Owner acceptance.
 15F. `P12-15F` — Cloud cutover
-    - begin only after hands-on acceptance of both P12-15E and P12-15E-UX;
+    - begin only after hands-on acceptance of P12-15E, P12-15E-I18N, and
+      P12-15E-UX;
     - publish the accepted latest Landing, feature archive, feature-aware deck
-      destinations, and interaction corrections together; switch the feature
-      selector from Pickup history to Landing feature history, and verify the
-      merge-triggered Pages deployment;
+      destinations, public bilingual classifier-name contract, localized
+      retained-view consumers, and interaction corrections together; switch
+      the feature selector from Pickup history to Landing feature history, and
+      verify the merge-triggered Pages deployment;
     - prove that live Landing requests no Pickup week document while preserving
       the tested legacy URL redirect and retaining old files for rollback;
     - stop after verified cutover; cleanup remains a separate task.
@@ -301,9 +303,9 @@ begin under separate authorization.
       declarations, replacement verification, rollback evidence, and separate
       Owner acceptance.
 16. `P12-16` — Cross-device and visual-system closeout
-    - begin only after P12-15A through P12-15G, including P12-15E-UX, are
-      complete or a named legacy compatibility artifact is explicitly deferred
-      by the Owner;
+    - begin only after P12-15A through P12-15G, including P12-15E-I18N and
+      P12-15E-UX, are complete or a named legacy compatibility artifact is
+      explicitly deferred by the Owner;
     - verify the Landing plus the four retained top-level product views in
       Chinese and English independently, both public MTGO formats, the protected
       Tabletop product, desktop, 390px width, language switching, URL
@@ -318,6 +320,9 @@ begin under separate authorization.
       rollback artifacts;
     - reverify the P12-15E-UX composition reveal, mobile representative-card
       alignment, and shared return-to-top control across every retained view;
+    - reverify that every classifier-backed parent and subtype label follows
+      the selected language across all retained views without changing stable
+      classifier identity or statistical meaning;
     - verify that no future format can be catalog-public without an admitted
       Landing and all required MTGO products, while the Standard and Modern
       migration exceptions both satisfy this invariant at closeout;

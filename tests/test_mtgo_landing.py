@@ -172,6 +172,28 @@ def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_
     assert list(Draft202012Validator(schema).iter_errors(document)) == []
 
 
+def test_current_landing_uses_one_private_review_without_published_pickup(monkeypatch):
+    monkeypatch.setattr(
+        landing,
+        "_load_published_pickup",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("Landing must not read a separately published Pickup week")
+        ),
+    )
+
+    review_status, document = landing.build_document(
+        ROOT,
+        "standard",
+        today=date(2026, 8, 18),
+    )
+
+    assert review_status == "current"
+    assert len(document["weekly_summary"]["items"]) == 9
+    assert len(document["features"]["items"]) == 14
+    assert all(item["headline"]["zh"] for item in document["features"]["items"])
+    assert all(item["headline"]["en"] for item in document["features"]["items"])
+
+
 def test_cross_field_population_mismatch_fails_closed():
     document = json.loads(
         (ROOT / "stats" / "standard" / "mtgo" / "landing" / "current.json").read_text(
@@ -191,7 +213,7 @@ def test_weekly_summary_duplicate_order_fails_closed():
         )
     )
     document["schema_version"] = "1.1.0"
-    document.pop("observations")
+    document.pop("observations", None)
     document["weekly_summary"] = {
         "week": document["week"]["id"],
         "items": [
@@ -681,6 +703,8 @@ def test_pages_selection_excludes_private_pickup_review_files(tmp_path):
         "stats/standard/mtgo/pickup/candidates_2026-W33.yaml",
         "stats/standard/mtgo/pickup/base_reference_2026-W33.yaml",
         "stats/standard/mtgo/pickup/known_archetypes.json",
+        "stats/standard/mtgo/landing/review/2026-W33.yaml",
+        "stats/standard/mtgo/landing/review/known_archetypes.json",
     ):
         path = tmp_path / relative
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -690,10 +714,11 @@ def test_pages_selection_excludes_private_pickup_review_files(tmp_path):
         "site_files": ["index.html"],
         "site_directories": ["stats"],
         "excluded_patterns": [
-            "stats/*/mtgo/pickup/base_reference_*.yaml",
-            "stats/*/mtgo/pickup/candidates_*.yaml",
-            "stats/*/mtgo/pickup/known_archetypes.json",
-        ],
+                "stats/*/mtgo/pickup/base_reference_*.yaml",
+                "stats/*/mtgo/pickup/candidates_*.yaml",
+                "stats/*/mtgo/pickup/known_archetypes.json",
+                "stats/*/mtgo/landing/review/*",
+            ],
     }
 
     selected = publication_paths(tmp_path, config)
@@ -703,6 +728,7 @@ def test_pages_selection_excludes_private_pickup_review_files(tmp_path):
     assert not any("candidates_" in path for path in selected)
     assert not any("base_reference_" in path for path in selected)
     assert not any(path.endswith("known_archetypes.json") for path in selected)
+    assert not any("/landing/review/" in path for path in selected)
 
 
 def test_production_candidate_admits_only_latest_landing_document():
@@ -718,6 +744,9 @@ def test_production_candidate_admits_only_latest_landing_document():
     assert not _allowed_new_path(
         "stats/standard/mtgo/landing/candidates_2026-W33.yaml", formats, formats
     )
+    assert not _allowed_new_path(
+        "stats/standard/mtgo/landing/review/2026-W33.yaml", formats, formats
+    )
 
 
 def test_repository_pages_policy_admits_landing_but_excludes_private_pickup():
@@ -732,6 +761,7 @@ def test_repository_pages_policy_admits_landing_but_excludes_private_pickup():
     assert not any("/pickup/candidates_" in path for path in selected)
     assert not any("/pickup/base_reference_" in path for path in selected)
     assert not any(path.endswith("/pickup/known_archetypes.json") for path in selected)
+    assert not any("/landing/review/" in path for path in selected)
 
 
 def test_landing_cli_requires_the_explicit_format_capability(monkeypatch, tmp_path):
@@ -792,11 +822,11 @@ def test_landing_cli_reports_pending_summary_review_without_count_lookup(
     assert "preserved for explicit summary review" in capsys.readouterr().out
 
 
-def test_existing_frontend_ignores_landing_until_its_view_is_implemented():
+def test_existing_frontend_keeps_landing_in_the_accepted_product_order():
     source = (ROOT / "assets" / "js" / "phase8" / "app-core.js").read_text(
         encoding="utf-8"
     )
 
     assert "item.available && PRODUCT_ORDER.includes(item.id)" in source
     product_order = source.split("const PRODUCT_ORDER = [", 1)[1].split("];", 1)[0]
-    assert '"mtgo-landing"' not in product_order
+    assert '"mtgo-landing"' in product_order

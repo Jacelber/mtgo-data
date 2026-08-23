@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-15c-content-bilingual-review"
+  current_working_branch: "codex/p12-15d-landing-editorial-backend"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,15 +31,15 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-15C"
-  name: "Content completion and bilingual review"
+  id: "P12-15D"
+  name: "Internal Landing editorial backend"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-23"
   owner_accepted_on: "2026-08-23"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-15c-content-bilingual-review-20260823-01"
-  branch: "codex/p12-15c-content-bilingual-review"
-  base_commit: "65282660a28209ee72571eeb0de98d1643884d47"
-  objective: "Preserve the Owner-updated v5 workbook, explain the Mono-Green Trudge and Fight Rigging classifier boundary, and add every omitted parent display identity so the bilingual bootstrap covers both parent and subtype labels without implementing the Landing backend or page."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-15d-landing-editorial-backend-20260823-01"
+  branch: "codex/p12-15d-landing-editorial-backend"
+  base_commit: "206074f38cf82f26fff83146bcfd7a6aa2d43e6f"
+  objective: "Import the accepted P12-15C v6 workbook into a private Landing-owned review contract, move retained candidate and continuity behavior behind a Landing editorial module with a Pickup compatibility wrapper, add the complete bilingual classifier-name catalog and fail-closed coverage checks, make Landing consume one reviewed source without changing any live reader or public feature path, and record the separately gated P12-15E-I18N cross-view localization route accepted before completion."
   authorization:
     local_implementation: true
     commit: true
@@ -48,66 +48,80 @@ current_task:
   target_paths:
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/PROJECT_SCOPE.md"
+    - "docs/DECISIONS.md"
+    - "docs/LANDING_EDITORIAL_PIPELINE.md"
+    - "docs/WEEKLY_MAINTENANCE.md"
     - "docs/history/README.md"
     - "docs/history/ROADMAP-PHASE-12-COMPLETED.md"
-    - "outputs/p12-15c-20260823-01/P12-15C_Landing_Bilingual_Review_v5.xlsx"
-    - "outputs/p12-15c-20260823-02/P12-15C_Landing_Bilingual_Review_v6.xlsx"
+    - "README.md"
+    - "configs/mtgo_archetype_names.yaml"
+    - "configs/pages_publication.json"
+    - "schemas/mtgo-archetype-names.schema.json"
+    - "schemas/mtgo-landing-review.schema.json"
+    - "src/mtgmeta/mtgo/__main__.py"
+    - "src/mtgmeta/mtgo/landing.py"
+    - "src/mtgmeta/mtgo/landing_editorial.py"
+    - "src/mtgmeta/mtgo/pickup.py"
+    - "stats/standard/mtgo/landing/review/2026-W27.yaml"
+    - "stats/standard/mtgo/landing/review/2026-W33.yaml"
+    - "stats/standard/mtgo/landing/review/known_archetypes.json"
+    - "stats/modern/mtgo/landing/review/2026-W33.yaml"
+    - "stats/modern/mtgo/landing/review/known_archetypes.json"
+    - "tests/test_mtgo_landing.py"
+    - "tests/test_mtgo_landing_editorial.py"
+    - "tests/test_mtgo_pickup_selection.py"
+    - "tests/test_mtgo_pickup_provenance.py"
   protected_scope:
-    artifact_impact: "internal_diagnostics"
-    review_artifact_only: true
+    artifact_impact: "internal_data_contract"
+    review_artifact_only: false
     accepted_ui_changed: false
-    downstream_ui_plan_changed: false
+    downstream_ui_plan_changed: true
     public_json_or_schema_changed: "none"
-    generated_or_source_data_changed: "none"
+    generated_or_source_data_changed: "private Landing review source only"
     classification_identities_changed: "none"
     workflows_changed: "none"
     public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Use the cloud-master P12-15B v4 workbook as the immutable input and preserve every Owner-authored Chinese field, English Final, selection, category, positioning, token, and card choice."
-    - "Resolve shared strings from raw OOXML before semantic interpretation and fail closed on importer disagreement or identity drift."
-    - "Validate event, date, rank, exact deck token, KEEP membership, and four-card membership against the frozen repository subjects."
-    - "Add one Bilingual Names sheet keyed by format, parent ID, and optional subtype ID; keep IDs and classifier English names read-only, propose Chinese names, and leave final confirmation to the Owner."
-    - "Fill only missing English Draft cells for kept features; preserve existing English Final and flag any remaining review work explicitly."
-    - "Render and inspect all six sheets and export exactly one current XLSX for Owner review."
-    - "Preserve all 299 Owner-entered Chinese Final values and review results from v5, add the 24 omitted parent display identities, and update only dependent formulas and review guidance in v6."
+    - "Treat outputs/p12-15c-20260823-02/P12-15C_Landing_Bilingual_Review_v6.xlsx and its accepted SHA-256 as the immutable Owner-reviewed import subject."
+    - "Resolve XLSX cells from raw OOXML with correct blank and shared-string semantics; reject any required sheet, header, identity, approval, or frozen-subject mismatch."
+    - "Add private format-scoped Landing review documents, known-archetype state, two internal Schemas, and one format-scoped bilingual classifier-name catalog with complete Standard and Modern coverage."
+    - "Move the retained screening/deduplication/evidence orchestration behind a Landing-owned editorial module while preserving Pickup command behavior through a temporary compatibility wrapper."
+    - "Make Landing top copy and features read the same private reviewed week, derive localized feature titles and category-local order, and reject unmatched top-copy tokens, stale bindings, missing names, or invalid representative cards."
+    - "Advance Landing known-archetype state from an explicitly accepted classified baseline even when the reviewed feature list is empty."
+    - "Add only focused internal-contract, importer, ordering, continuity, compatibility, and Pages-exclusion tests."
+    - "Record DEC-117 and the separately authorized P12-15E-I18N route after P12-15E and before P12-15E-UX/P12-15F without implementing or publishing that future task."
   prohibited_changes:
-    - "Do not change Python, JavaScript, CSS, HTML, workflow, configuration, classifier taxonomy, Schema, generated data, public path, catalog, metadata, source data, statistics, or Pages code."
-    - "Do not overwrite Owner-authored content, infer Owner approval, or treat English fallback as an approved Chinese name."
-    - "Do not import workbook content into repository review YAML, implement the P12-15D catalog/backend, build a page preview, commit, publish, merge, or dispatch production before Owner acceptance."
+    - "Do not change HTML, CSS, JavaScript, accepted Landing UI structure, classifier taxonomy, statistics, source events, workflows, public Landing or Pickup JSON, catalogs, metadata, or public feature paths."
+    - "Do not overwrite or reinterpret Owner-authored v6 content, infer approval beyond explicit workbook states, or allow an English fallback where approved Chinese catalog coverage is required."
+    - "Do not delete, rename, republish, or switch any Pickup path; do not build the P12-15E preview or start P12-15E/P12-15E-I18N/P12-15E-UX."
   validation:
     status: "passed"
-    workbook: "outputs/p12-15c-20260823-02/P12-15C_Landing_Bilingual_Review_v6.xlsx"
-    sha256: "f871c769450da13a1fa25783b8f6094fede3229b38eee69667d40980ddef5a2f"
+    immutable_workbook: "outputs/p12-15c-20260823-02/P12-15C_Landing_Bilingual_Review_v6.xlsx"
+    immutable_workbook_sha256: "f871c769450da13a1fa25783b8f6094fede3229b38eee69667d40980ddef5a2f"
     completed_on: "2026-08-23"
     results:
-      owner_v4_content_preserved: true
-      keep_features_validated_against_frozen_sources: 16
-      feature_english_drafts_added: 16
-      owner_v5_bilingual_rows_preserved: 299
+      private_review_weeks: 3
       bilingual_display_identities: 323
       parent_identities: 240
       subtype_identities: 83
-      added_parent_identities_approved: 24
-      owner_approved_chinese_names: 323
-      feature_english_finals_approved: 16
-      stable_feature_identity_key_lookups: 51
-      formula_cells: 736
-      formula_errors: 0
-      raw_ooxml_empty_shared_string_cells: 0
-      pending_or_revise_bilingual_names: 0
-    required_evidence:
-      - "raw OOXML blank semantics and imported values agree"
-      - "Owner v4 content is unchanged outside approved draft/status additions"
-      - "tokens, identities, ranks, KEEP membership, and selected cards validate"
-      - "bilingual-name keys are unique and cover the current Standard/Modern taxonomy"
-      - "all six sheets render legibly and formulas contain no error tokens"
-  stop_point: "Complete this unchanged accepted task through commit, one Ready PR, required CI, and merge; do not import the workbook or start P12-15D."
+      kept_top_copy_rows: 11
+      kept_features: 16
+      standard_w27_explicit_empty_features: true
+      standard_w33_materialized_top_copy: 9
+      standard_w33_materialized_features: 14
+      modern_w33_materialized_top_copy: 2
+      modern_w33_materialized_features: 2
+      directly_relevant_tests_passed: 47
+      ruff_errors: 0
+  stop_point: "Complete this unchanged accepted task through commit, one Ready PR, required CI, merge, and applicable Pages verification; do not start P12-15E or P12-15E-I18N."
 
 current_repository_state:
-  baseline_commit: "65282660a28209ee72571eeb0de98d1643884d47"
-  baseline_note: "Fresh isolated clone from verified cloud master after P12-15B merged through PR 250 and merge validation succeeded."
+  baseline_commit: "206074f38cf82f26fff83146bcfd7a6aa2d43e6f"
+  baseline_note: "Fresh isolated clone from verified cloud master after P12-15C merged through PR 251 and merge validation succeeded."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -116,39 +130,26 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - task: "P12-14"
-    status: "cancelled_by_owner"
-    note: "The existing mobile matrix presentation and card-image preview were accepted; do not create a separate vertical opponent view or redevelop the already delivered preview behavior."
-  - task: "P12-15"
-    status: "completed"
-    note: "Merged to cloud master as 3c43f5c606284f1d64e0db334be6a4c85818c3c0; metadata, sharing, attribution, language memory, favicon, and legacy Pickup URL compatibility are delivered."
-  - task: "P12-15A"
-    status: "completed"
-    note: "Merged through PR 249 as 44f01dc464b3b0081b54f5b93d74a94cea56938e; the authoritative route map is published."
-  - task: "P12-15B"
-    status: "completed"
-    prerequisite: "satisfied"
-    note: "Merged through PR 250 as 65282660a28209ee72571eeb0de98d1643884d47; v4 is the frozen P12-15C input."
-  - task: "P12-15C"
-    status: "owner_accepted_completion_authorized"
-    prerequisite: "satisfied"
-    note: "Owner accepted the final v6 workbook on 2026-08-23: all 323 bilingual display names and 16 kept Feature English finals are complete, and stable identity-key lookups remain valid; complete Gate 6 without import or page work."
   - task: "P12-15D"
-    status: "planned_not_authorized"
+    status: "owner_accepted_completion_authorized"
     prerequisite: "P12-15C content is complete"
-    note: "Build the internal Landing editorial backend, bilingual classifier-name catalog, and derived feature ordering without a front-end switch."
+    note: "Owner accepted the local backend, v6 import, bilingual catalog, continuity state, compatibility wrapper, focused validation, and separately gated downstream localization route; complete Gate 6 without starting a later task."
   - task: "P12-15E"
     status: "planned_not_authorized"
     prerequisite: "P12-15D accepted and completed"
     note: "Generate the Landing feature archive and W27/W33 recovery preview."
-  - task: "P12-15E-UX"
+  - task: "P12-15E-I18N"
     status: "planned_not_authorized"
     prerequisite: "Owner hands-on acceptance of the P12-15E data-backed local preview"
+    note: "Publish and consume the approved format-scoped bilingual classifier names across Landing, every retained MTGO view, and applicable Tabletop views by stable identity."
+  - task: "P12-15E-UX"
+    status: "planned_not_authorized"
+    prerequisite: "Owner hands-on acceptance of both P12-15E and P12-15E-I18N local previews"
     note: "Correct composition reveal, mobile representative-card spacing, and the shared return-to-top control before cloud cutover."
   - task: "P12-15F"
     status: "planned_not_authorized"
-    prerequisite: "Owner hands-on acceptance of both P12-15E and P12-15E-UX local previews"
-    note: "Publish the accepted feature recovery and interaction corrections together and verify the cloud cutover while retaining rollback files."
+    prerequisite: "Owner hands-on acceptance of P12-15E, P12-15E-I18N, and P12-15E-UX local previews"
+    note: "Publish the accepted feature recovery, cross-view classifier-name localization, and interaction corrections together and verify the cloud cutover while retaining rollback files."
   - task: "P12-15G"
     status: "planned_not_authorized"
     prerequisite: "P12-15F cloud verification and no-caller proof"
@@ -156,20 +157,21 @@ future_task_gates:
   - task: "P12-16"
     status: "planned_not_authorized"
     remaining_requirements:
-      - "Complete P12-15A through P12-15G or explicitly defer named compatibility artifacts."
+      - "Complete P12-15A through P12-15G, including P12-15E-I18N, or explicitly defer named compatibility artifacts."
+      - "Reverify classifier-backed Chinese and English labels across all retained views."
       - "Reverify the accepted P12-15E-UX behaviors across retained views."
       - "Obtain separate closeout authorization."
 
 next_approved_task:
-  id: "P12-15C"
-  name: "Content completion and bilingual review"
+  id: "P12-15D"
+  name: "Internal Landing editorial backend"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
-  note: "Complete the unchanged accepted v6 workbook and closeout documents through Gate 6; P12-15D remains unauthorized."
+  note: "Complete the unchanged accepted P12-15D subject and route-map addition through Gate 6; P12-15E and P12-15E-I18N remain unauthorized."
 
 prohibited_next_actions:
-  - "Do not import v6 or start P12-15D during P12-15C accepted-task completion."
-  - "Do not change Landing UI, public content, generated data, public contracts, classifier taxonomy, statistics, workflows, source data, public paths, or event 434455 bytes."
-  - "Do not publish, migrate, switch, or delete Pickup or Landing data in P12-15C."
-  - "Do not start P12-15D, P12-16, or another task after producing v6."
+  - "Do not change Landing UI, public content, public contracts, classifier taxonomy, statistics, workflows, source data, public paths, or event 434455 bytes."
+  - "Do not publish, migrate, switch, rename, or delete Pickup or public Landing data in P12-15D."
+  - "Do not implement the public bilingual name contract or change any current front-end label in P12-15D."
+  - "Do not start P12-15E, P12-15E-I18N, P12-15E-UX, P12-16, or another task after local P12-15D completion."
   - "Do not develop directly on master or overwrite unexplained local changes."

@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-landing-review.schema.json",
+  "title": "Private reviewed MTGO Landing week",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "format", "source", "week", "bindings",
+    "candidate_evidence", "all_top8", "review", "known_archetype_ids"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "format": {"enum": ["standard", "modern"]},
+    "source": {"const": "mtgo"},
+    "week": {"$ref": "#/$defs/week"},
+    "bindings": {"$ref": "#/$defs/bindings"},
+    "candidate_evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/candidateEvidence"}
+    },
+    "all_top8": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/top8Deck"}
+    },
+    "review": {"$ref": "#/$defs/review"},
+    "known_archetype_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/stableId"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "stableId": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "deckToken": {"type": "string", "pattern": "^deck:[0-9a-f]{20}$"},
+    "week": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "start", "end"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
+        "start": {"type": "string", "format": "date"},
+        "end": {"type": "string", "format": "date"}
+      }
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workbook_sha256", "source_event_ids", "classifier_digest",
+        "selection_policy_digest", "machine_fact_digest",
+        "link_catalog_digest", "bilingual_catalog_digest"
+      ],
+      "properties": {
+        "workbook_sha256": {"$ref": "#/$defs/sha256"},
+        "source_event_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9]+$"}
+        },
+        "classifier_digest": {"$ref": "#/$defs/sha256"},
+        "selection_policy_digest": {"$ref": "#/$defs/sha256"},
+        "machine_fact_digest": {"$ref": "#/$defs/sha256"},
+        "link_catalog_digest": {"$ref": "#/$defs/sha256"},
+        "bilingual_catalog_digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "qty"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "qty": {"type": "integer", "minimum": 1}
+      }
+    },
+    "top8Deck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "token", "event_id", "deck_id", "deck_fingerprint_sha256", "date",
+        "starttime", "final_rank", "player_count", "player", "parent_id",
+        "subtype_id", "display_name", "main_deck", "side_deck"
+      ],
+      "properties": {
+        "token": {"$ref": "#/$defs/deckToken"},
+        "event_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "deck_id": {"type": "string", "pattern": "^[0-9a-f]{20}$"},
+        "deck_fingerprint_sha256": {"$ref": "#/$defs/sha256"},
+        "date": {"type": "string", "format": "date"},
+        "starttime": {"type": "string", "minLength": 1},
+        "final_rank": {"type": "integer", "minimum": 1, "maximum": 8},
+        "player_count": {"type": "integer", "minimum": 1},
+        "player": {"type": "string", "minLength": 1},
+        "parent_id": {"$ref": "#/$defs/stableId"},
+        "subtype_id": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/stableId"}]
+        },
+        "display_name": {"type": "string", "minLength": 1},
+        "main_deck": {"type": "array", "items": {"$ref": "#/$defs/card"}},
+        "side_deck": {"type": "array", "items": {"$ref": "#/$defs/card"}}
+      }
+    },
+    "candidateEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["token", "source_order", "reasons"],
+      "properties": {
+        "token": {"$ref": "#/$defs/deckToken"},
+        "source_order": {"type": "integer", "minimum": 1},
+        "reasons": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "copyItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "text"],
+      "properties": {
+        "order": {"type": "integer", "minimum": 1},
+        "text": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["zh", "en"],
+          "properties": {
+            "zh": {"type": "string", "minLength": 1},
+            "en": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "feature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_order", "category", "destination_id", "parent_id", "subtype_id",
+        "positioning", "featured_cards", "supporting_facts"
+      ],
+      "properties": {
+        "source_order": {"type": "integer", "minimum": 1},
+        "category": {"enum": ["new_deck", "new_technology"]},
+        "destination_id": {"$ref": "#/$defs/deckToken"},
+        "parent_id": {"$ref": "#/$defs/stableId"},
+        "subtype_id": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/stableId"}]
+        },
+        "positioning": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["zh", "en"],
+          "properties": {
+            "zh": {"type": "string", "minLength": 1},
+            "en": {"type": "string", "minLength": 1}
+          }
+        },
+        "featured_cards": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "supporting_facts": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["top_copy", "features"],
+      "properties": {
+        "top_copy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reviewed", "items"],
+          "properties": {
+            "reviewed": {"const": true},
+            "items": {"type": "array", "items": {"$ref": "#/$defs/copyItem"}}
+          }
+        },
+        "features": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reviewed", "explicit_empty", "items"],
+          "properties": {
+            "reviewed": {"const": true},
+            "explicit_empty": {"type": "boolean"},
+            "items": {"type": "array", "items": {"$ref": "#/$defs/feature"}}
+          },
+          "allOf": [
+            {
+              "if": {"properties": {"explicit_empty": {"const": true}}},
+              "then": {"properties": {"items": {"maxItems": 0}}},
+              "else": {"properties": {"items": {"minItems": 1}}}
+            }
+          ]
+        }
+      }
+    }
+  }
+}

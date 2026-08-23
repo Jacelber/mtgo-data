@@ -440,3 +440,30 @@ authorization remains solely in `docs/STATUS.yaml`.
    empty shared-string cells. Its SHA-256 is
    `f871c769450da13a1fa25783b8f6094fede3229b38eee69667d40980ddef5a2f`.
    P12-15D remains a separate authorization gate.
+
+15D. `P12-15D` — Internal Landing editorial backend
+   - imported the accepted P12-15C v6 workbook through raw-OOXML cell semantics
+     into private format-scoped Landing review documents without modifying the
+     Owner-authored content;
+   - moved retained screening, deduplication, evidence, and known-archetype
+     continuity behavior behind a Landing-owned internal module while keeping
+     temporary Pickup candidate-command compatibility;
+   - made Landing top copy and current features consume one reviewed source and
+     reject stale bindings, unmatched deck tokens, missing explicit review,
+     invalid representative cards, and incomplete bilingual-name coverage;
+   - added 323 approved bilingual classifier display identities covering 240
+     parents and 83 subtypes, with fail-closed classifier-maintenance coverage;
+   - derived Feature titles from stable classifier identity and Feature order
+     from category plus final top-copy token order;
+   - advanced known-archetype state from an accepted classified baseline even
+     for W27's explicitly reviewed empty Feature result;
+   - changed no HTML, CSS, JavaScript, live reader, public Landing or Pickup
+     JSON, public feature path, classifier rule, statistic, workflow, or source
+     event.
+
+   The Owner accepted the final local backend on 2026-08-23, including three
+   imported review weeks, 11 retained top-copy rows, 16 retained Features, all
+   323 bilingual identities, and the focused 47-test plus Ruff evidence. Before
+   completion the Owner also accepted DEC-117's separate downstream route for
+   cross-view classifier-name localization; that route does not expand the
+   implemented P12-15D subject.

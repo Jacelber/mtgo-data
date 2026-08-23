@@ -445,6 +445,15 @@ and left to right; features not mentioned in top copy appear last in their
 category. The Owner continues to control category, positioning, representative
 cards, and all top-copy prose.
 
+The approved bilingual classifier-name catalog is also the display authority
+for classifier-backed parent and subtype labels across the Chinese variants of
+the Landing, every retained MTGO view, and applicable Tabletop views. English
+variants continue to use the classifier taxonomy's English names. Consumers
+must resolve these labels from stable format, parent, and subtype identities;
+they must not infer identity by matching display text. This cross-view consumer
+change is implemented and accepted separately from the internal catalog and
+from classifier maintenance.
+
 Availability must come from generated catalogs rather than a hard-coded
 assumption that every format supports every product.
 
