@@ -416,3 +416,27 @@ authorization remains solely in `docs/STATUS.yaml`.
    header. It authorized completion of the unchanged task through one commit,
    one Ready pull request, required CI, merge, and Pages verification. P12-13C
    and every other follow-up remain separate authorization gates.
+
+15C. `P12-15C` — Content completion and bilingual review
+   - resolved XLSX shared-string references from raw OOXML before semantic
+     interpretation, preserving real blanks instead of treating shared-string
+     indexes as Owner content;
+   - validated the Owner-completed Chinese content, selections, categories,
+     exact deck tokens, and four-card choices against the frozen subjects;
+   - proved every kept top-copy deck token belongs to an exact `KEEP` Feature;
+   - added English drafts without modifying Owner Chinese and recorded the 16
+     accepted kept-Feature drafts as final English content;
+   - bootstrapped 323 format-scoped bilingual classifier display identities,
+     comprising 240 parents and 83 subtypes keyed by stable identity;
+   - preserved the Owner-updated workbook lineage, added the 24 omitted parent
+     identities, and replaced fragile row-position title formulas with 51
+     stable identity-key lookups;
+   - left W27 as an explicitly accepted zero-Feature result and stopped before
+     any producer, public-data, catalog, page, or workflow implementation.
+
+   The Owner accepted the final v6 workbook on 2026-08-23. All 323 Chinese
+   names are `APPROVED`; the 16 retained W33 Features have final English text;
+   the workbook has no pending or revise bilingual names, formula errors, or
+   empty shared-string cells. Its SHA-256 is
+   `f871c769450da13a1fa25783b8f6094fede3229b38eee69667d40980ddef5a2f`.
+   P12-15D remains a separate authorization gate.

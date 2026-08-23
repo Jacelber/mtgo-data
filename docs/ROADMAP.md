@@ -11,7 +11,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 
 - Phases 0–11 and superseded specifications:
   `docs/history/ROADMAP-PHASES-0-11.md`;
-- completed Phase 12 tasks P12-01 through P12-09 and P12-13A:
+- completed Phase 12 tasks P12-01 through P12-09, P12-13A, and P12-15C:
   `docs/history/ROADMAP-PHASE-12-COMPLETED.md`.
 
 ## Phase index
@@ -31,7 +31,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 
 # Phase 12 — Front-end productization, editorial landing, and visual system
 
-Completed P12-01 through P12-09 and P12-13A detail is archived in
+Completed P12-01 through P12-09, P12-13A, and P12-15C detail is archived in
 `docs/history/ROADMAP-PHASE-12-COMPLETED.md`.
 
 ## Objective
@@ -227,23 +227,9 @@ begin under separate authorization.
     - preload Standard W27, Standard W33, and Modern W33 recovery rows, render
       every sheet, and stop for Owner completion without changing the page.
 15C. `P12-15C` — Content completion and bilingual review
-    - before semantic validation, resolve XLSX shared-string references from
-      raw OOXML and normalize a referenced empty string to a true blank; never
-      treat the numeric shared-string index exposed by one importer as Owner
-      content;
-    - validate the Owner-completed Chinese content, selections, categories,
-      tokens, and four-card choices against the frozen deck subjects;
-    - require the kept top-copy token set to be a subset of the exact `KEEP`
-      feature token set; return the workbook for correction on any mismatch;
-    - add Codex English drafts without modifying Chinese, return the same
-      workbook lineage, and require final Owner review for top copy and
-      features; an explicitly reviewed zero-feature result is valid only when
-      final top copy contains no deck token;
-    - bootstrap the format-scoped bilingual classifier-name review keyed by
-      stable parent/subtype identity, preserving classifier English names and
-      obtaining Owner confirmation for every Chinese name; the workbook may
-      show the English fallback until this review is complete;
-    - stop before producer or public-data work until the content is complete.
+    - completed detail is archived in
+      `docs/history/ROADMAP-PHASE-12-COMPLETED.md`; P12-15D remains a separate
+      authorization gate.
 15D. `P12-15D` — Internal Landing editorial backend
     - extract retained screening, deduplication, evidence, and continuity-state
       behavior from Pickup into a Landing-owned internal module and private
