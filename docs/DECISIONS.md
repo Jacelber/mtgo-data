@@ -5325,3 +5325,47 @@ Chinese interface. Until the P12-15C bootstrap is complete, the recovery
 workbook may visibly use English fallback while marking localization pending.
 This decision does not constrain Owner prose or positioning and does not change
 the accepted Landing UI structure.
+
+---
+
+# DEC-117 - Localize classifier-backed names across retained views by stable ID
+
+Status: `Accepted for staged implementation`
+
+## Context
+
+P12-15C and P12-15D establish complete Owner-approved Chinese names for every
+maintained Standard and Modern parent and subtype identity. The initial route
+uses that catalog to derive Landing Feature titles, while existing Chinese
+Statistics, Matchups, Top 8, and applicable Tabletop views still render English
+classifier display names. P12-16 is a closeout verification task and is too late
+to introduce this missing consumer behavior.
+
+## Decision
+
+Add P12-15E-I18N after the accepted P12-15E data-backed preview and before
+P12-15E-UX and P12-15F. It generates one format-scoped public bilingual name
+contract from the repository-managed P12-15D catalog and makes Landing, every
+retained MTGO view, and applicable classifier-backed Tabletop views resolve
+parent and subtype labels by stable identity and selected language.
+
+The classifier taxonomy remains the English authority. Owner-approved catalog
+values are the Chinese authority. English pages remain unchanged; known
+identities on Chinese pages require approved Chinese coverage. Consumers must
+not infer identity by matching English or localized display text. Unknown and
+other non-classifier interface vocabulary remain under the existing interface
+translation boundary.
+
+P12-15E-I18N has its own implementation authorization and hands-on acceptance
+gate. P12-15F becomes the combined publication gate for the accepted P12-15E
+feature recovery, P12-15E-I18N localization, and P12-15E-UX interactions.
+P12-16 reverifies the delivered behavior instead of developing it for the first
+time.
+
+## Consequences
+
+Completing the bilingual catalog no longer leaves the rest of the Chinese site
+English-only. Parent and subtype identities remain stable, statistics and
+classifier rules do not change, and the localization migration cannot silently
+depend on display-text equality. No P12-15E-I18N implementation or public path
+change is authorized by this route-map decision alone.

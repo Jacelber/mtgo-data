@@ -226,6 +226,7 @@ The format argument is mandatory. The installed command works without setting
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-completeness
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-top8
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard pickup candidates --if-absent
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard landing-review import-xlsx <accepted-workbook.xlsx> --expected-sha256 <accepted-sha256>
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-landing
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard generate-hierarchy
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard generate-metadata
@@ -236,6 +237,7 @@ The format argument is mandatory. The installed command works without setting
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-matchups
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-completeness
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-top8
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern landing-review import-xlsx <accepted-workbook.xlsx> --expected-sha256 <accepted-sha256>
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-landing
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern classification-reports --strict
 ```
@@ -247,19 +249,30 @@ sealed weekly Top 8 data and bases, Weekly Pickup candidates, latest Landing
 facts, metadata, the product catalog, hierarchy catalogs, and strict
 classification diagnostics for enabled products.
 
-Weekly Pickup publication is manual. Candidate generation never approves a
-row, publishes a week, or changes known-archetype state. Candidates are
-available immediately after a natural week ends and unreviewed candidates may
-refresh when late events arrive during that week's seven-day provisional
-window. After review and approval, publish with:
+The Landing editorial producer owns weekly candidate screening. During the
+staged migration, `pickup candidates` remains a compatibility command that
+delegates to that producer. Candidate generation never approves a row,
+publishes a week, or changes accepted Landing state. Candidates are available
+immediately after a natural week ends and unreviewed candidates may refresh
+when late events arrive during that week's seven-day provisional window.
+
+After both languages and Feature decisions are explicitly approved, import the
+same closed workbook once per included format with its accepted SHA-256. The
+importer writes only `configs/mtgo_archetype_names.yaml` and private
+`stats/<format>/mtgo/landing/review/` files. `build-landing` then reads top copy
+and features from that one reviewed source; it does not read a separately
+published Pickup week.
+
+Legacy Pickup publication remains manual for staged compatibility and rollback
+until the approved P12-15F cutover. When that separate legacy action is
+authorized, publish with:
 
 ```powershell
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format <standard-or-modern> pickup publish
 ```
 
 The publish command also refreshes that format's metadata and the global
-consumer catalog. A reviewed Pickup is therefore available to the existing
-Pickup page before any Landing draft reads it.
+consumer catalog. It is not an input to Landing generation.
 
 For a new Modern known-state bootstrap, run only under the applicable approval:
 

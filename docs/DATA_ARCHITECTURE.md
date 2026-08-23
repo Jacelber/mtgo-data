@@ -3200,6 +3200,28 @@ stats/<format>/mtgo/landing/review/<week>.yaml
 stats/<format>/mtgo/landing/review/known_archetypes.json
 ```
 
+The format-scoped bilingual classifier-name catalog and private validators are:
+
+```text
+configs/mtgo_archetype_names.yaml
+schemas/mtgo-archetype-names.schema.json
+schemas/mtgo-landing-review.schema.json
+```
+
+The catalog is repository-managed but not a public Pages path. Its English
+display is derived from the current parent/subtype taxonomy and its Chinese
+display is the Owner-approved value imported from the review carrier. The
+catalog and every `landing/review/` path are excluded from the Pages artifact.
+
+P12-15E may serialize catalog-derived localized titles inside Landing feature
+documents, but that does not localize the other retained views. After the
+P12-15E preview is accepted, P12-15E-I18N introduces a separately versioned,
+format-scoped public bilingual name contract generated from this private
+catalog. Retained MTGO and applicable Tabletop consumers resolve parent and
+subtype labels from stable IDs through that contract. They do not use display
+text as identity, and the public contract does not change classifier rules or
+statistical meaning.
+
 Pages admission explicitly excludes `landing/review/`. The week document binds
 the format, review week, source event IDs, classifier digest,
 screening-policy digest, machine-fact digest, complete Top 8 link catalog,
@@ -3219,6 +3241,13 @@ The Landing-only XLSX review carrier contains `Review Control`, `Landing Copy`,
 content is validated and imported into the private week document before preview
 or publication. The Owner is not asked to provide internal input IDs, stable
 classifier IDs, generated link labels, or arbitrary URLs.
+
+The importer reads XLSX cells from raw OOXML, including explicit shared-string,
+inline-string, cached-formula, numeric, boolean, and true-blank semantics. It
+binds the accepted workbook SHA-256 before writing any private review file.
+Repeated import of the same immutable workbook and repository subject is
+deterministic; a workbook byte change, missing approval, or source identity
+change fails before admission.
 
 Top copy may embed zero or more exact `deck:<20-hex deck ID>` tokens at any
 desired positions. Non-empty localized versions use the same token set, but

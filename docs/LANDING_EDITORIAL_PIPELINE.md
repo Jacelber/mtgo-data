@@ -226,6 +226,16 @@ front-end switch.
 **Output:** a complete internal Landing editorial pipeline that can generate
 new files without changing the live reader path.
 
+The implemented private boundary uses
+`src/mtgmeta/mtgo/landing_editorial.py`,
+`configs/mtgo_archetype_names.yaml`, and
+`stats/<format>/mtgo/landing/review/`. The existing `pickup candidates`
+entrypoint remains a temporary compatibility wrapper for candidate screening;
+Landing generation does not read a published Pickup week. Import is exposed as
+`landing-review import-xlsx` and requires the exact accepted workbook SHA-256.
+The P12-15C v6 recovery subject imports Standard W27/W33 and Modern W33, but no
+public feature archive or reader switch is created in this task.
+
 **Stop point:** keep the existing front end and public Pickup files unchanged.
 
 ### P12-15E - Public feature archive and recovery preview
@@ -257,10 +267,40 @@ contracts.
 **Stop point:** wait for hands-on Owner acceptance. Do not publish or remove old
 Pickup resources.
 
+### P12-15E-I18N - Classifier-name localization across retained views
+
+**Scope:** publish and consume the approved classifier-name translations across
+retained views; do not change classifier rules, statistics, or accepted layout.
+
+1. Begin only after hands-on acceptance of the P12-15E data-backed local
+   preview.
+2. Generate a format-scoped public bilingual name contract from
+   `configs/mtgo_archetype_names.yaml`, with the classifier taxonomy remaining
+   the English authority and the approved catalog remaining the Chinese
+   authority.
+3. Audit every retained MTGO and applicable Tabletop consumer for stable parent
+   and subtype IDs. Add missing stable identity fields at producer boundaries
+   rather than matching localized or English display text.
+4. Resolve classifier-backed labels by selected language in Landing,
+   Statistics, Matchups, Top 8, and applicable Tabletop views. Keep Unknown and
+   non-classifier interface vocabulary in the existing UI translation layer.
+5. Fail closed when a known published classifier identity lacks approved
+   Chinese coverage. Do not mutate the classifier taxonomy or duplicate weekly
+   free-text names.
+6. Verify Chinese and English independently across Standard, Modern, every
+   retained view, direct URLs, language switching, desktop, and 390 pixels.
+
+**Output:** one Owner-reviewable local release candidate in which every
+classifier-backed parent and subtype label follows the selected language.
+
+**Stop point:** wait for hands-on Owner acceptance. Do not publish independently
+of the P12-15F combined cutover.
+
 ### P12-15E-UX - Feature-release interaction corrections
 
 **Scope:** three bounded Owner-approved interaction corrections against the
-accepted P12-15E local release candidate; no production publication.
+accepted P12-15E and P12-15E-I18N local release candidate; no production
+publication.
 
 1. Make composition-segment activation on desktop and mobile move the newly
    expanded deck detail into a perceptible viewport position while preserving
@@ -284,12 +324,15 @@ of the P12-15F feature cutover.
 
 ### P12-15F - Cloud cutover
 
-**Scope:** accepted data, reader path, and P12-15E-UX interaction publication.
+**Scope:** accepted data, reader path, cross-view classifier-name localization,
+and P12-15E-UX interaction publication.
 
-1. Begin only after hands-on acceptance of both P12-15E and P12-15E-UX.
+1. Begin only after hands-on acceptance of P12-15E, P12-15E-I18N, and
+   P12-15E-UX.
 2. Publish the reviewed latest Landing, feature archive, feature-aware inline
-   links, and accepted interaction corrections atomically through the normal
-   Ready-PR and Pages path.
+   links, public bilingual classifier-name contract, localized retained-view
+   consumers, and accepted interaction corrections atomically through the
+   normal Ready-PR and Pages path.
 3. Change the feature selector to request only Landing feature-history paths.
 4. Verify the merge-triggered Pages deployment, current content, W27 and W33
    history, both languages and formats, deck links, and legacy Pickup redirects.

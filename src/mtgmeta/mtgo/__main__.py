@@ -10,7 +10,7 @@ from mtgmeta import catalog
 from mtgmeta.config import DisabledFormatError, FormatConfigError, load_format_registry
 
 from . import DEFAULT_REGISTRY_PATH
-from . import completeness, fetch, landing, matchup, pickup, stats, top8
+from . import completeness, fetch, landing, landing_editorial, matchup, pickup, stats, top8
 
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3]
@@ -66,6 +66,22 @@ def build_parser() -> argparse.ArgumentParser:
     commands.add_parser(
         "build-landing",
         help="build the latest-only MTGO Landing document",
+    )
+    review_parser = commands.add_parser(
+        "landing-review",
+        help="manage the private Landing editorial review source",
+    )
+    review_commands = review_parser.add_subparsers(
+        dest="landing_review_command", required=True
+    )
+    import_parser = review_commands.add_parser(
+        "import-xlsx", help="import an explicitly approved Landing workbook"
+    )
+    import_parser.add_argument("workbook", type=Path, help="accepted XLSX carrier")
+    import_parser.add_argument(
+        "--expected-sha256",
+        required=True,
+        help="accepted immutable workbook SHA-256",
     )
 
     pickup_parser = commands.add_parser("pickup", help="manage Weekly Pickup")
@@ -234,6 +250,27 @@ def _run_landing(args: argparse.Namespace, root: Path, registry: Path) -> int:
     return 0
 
 
+def _run_landing_review(args: argparse.Namespace, root: Path, registry: Path) -> int:
+    workbook = (
+        args.workbook.resolve()
+        if args.workbook.is_absolute()
+        else (root / args.workbook).resolve()
+    )
+    result = landing_editorial.import_review_workbook(
+        root,
+        workbook,
+        expected_sha256=args.expected_sha256,
+        formats={args.format_id},
+    )
+    print(
+        "MTGO Landing review imported: "
+        f"format={args.format_id} reviews={result['review_count']} "
+        f"features={result['feature_count']} copy={result['copy_count']} "
+        f"names={result['name_count']}"
+    )
+    return 0
+
+
 def _run_pickup(args: argparse.Namespace, root: Path, registry: Path) -> int:
     if args.pickup_command == "candidates":
         result = pickup.generate_candidates(
@@ -328,6 +365,7 @@ RUNNERS = {
     "build-top8": _run_top8,
     "build-completeness": _run_completeness,
     "build-landing": _run_landing,
+    "landing-review": _run_landing_review,
     "build-matchups": _run_matchups,
     "pickup": _run_pickup,
     "generate-metadata": _run_metadata,
@@ -341,6 +379,7 @@ COMMAND_CAPABILITIES = {
     "build-top8": "weekly_top8",
     "build-completeness": "completeness_reporting",
     "build-landing": "landing_generation",
+    "landing-review": "landing_generation",
     "build-matchups": "matchup_statistics",
     "pickup": "weekly_pickup",
     "generate-metadata": "metadata_generation",
@@ -374,6 +413,7 @@ def main(argv: list[str] | None = None) -> int:
         fetch.MTGOStorageError,
         completeness.MTGOCompletenessError,
         landing.MTGOLandingError,
+        landing_editorial.MTGOLandingEditorialError,
         matchup.MTGOMatchupError,
         pickup.MTGOPickupError,
         stats.MTGOStatisticsError,

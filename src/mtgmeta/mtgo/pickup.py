@@ -484,7 +484,7 @@ def _prefer_build_shift_record(
     return first if better_record(first_record, second_record) is first_record else second
 
 
-def _candidate_documents(
+def _pickup_candidate_documents_rollback(
     events,
     rules,
     end_monday: date,
@@ -796,6 +796,31 @@ def _candidate_documents(
             else None,
         }
     return candidates, base_reference, len(all_top8_records), len(entries)
+
+
+def _candidate_documents(
+    events,
+    rules,
+    end_monday: date,
+    known: set[str],
+    policy: Mapping[str, Any],
+    format_id: str,
+    *,
+    stable_ids: bool = False,
+):
+    """Compatibility wrapper for the Landing-owned screening producer."""
+
+    from .landing_editorial import build_candidate_documents
+
+    return build_candidate_documents(
+        events,
+        rules,
+        end_monday,
+        known,
+        policy,
+        format_id,
+        stable_ids=stable_ids,
+    )
 
 
 def generate_candidates(
