@@ -430,6 +430,21 @@ brief, environment, or construction-change facts. Existing Pickup week files
 are migration and rollback inputs, not the continuing source of new Landing
 content.
 
+Every exact deck retained in current reviewed weekly-brief copy must also be a
+selected item in the applicable Landing feature week. Its link selects that
+week, expands the exact item, and moves it into view. A newly reviewed
+top-copy-only deck is invalid and must be corrected before generation. The
+exact MTGO Top 8 destination remains only as a defensive compatibility route
+for legacy documents and for Top 8 links outside reviewed Landing copy.
+
+Feature titles are not weekly editorial inputs. They are the localized deck
+name derived from the selected deck's stable format/classifier identity.
+Feature order is likewise derived: each format displays new decks before new
+technology, then follows exact deck links in the final top copy from row order
+and left to right; features not mentioned in top copy appear last in their
+category. The Owner continues to control category, positioning, representative
+cards, and all top-copy prose.
+
 Availability must come from generated catalogs rather than a hard-coded
 assumption that every format supports every product.
 

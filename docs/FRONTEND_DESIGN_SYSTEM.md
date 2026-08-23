@@ -119,6 +119,13 @@ section may have a week selector, but selecting a week changes only feature
 content. Legacy Pickup URLs remain compatibility redirects, not a product or
 data-source identity.
 
+Within newly reviewed Landing copy, every exact deck link belongs to the
+applicable selected feature week. The link selects that week, expands the exact
+item, moves it into view, and exposes stable URL and focus state. A top-copy
+token without a selected feature is rejected before rendering. The established
+Top 8 detail destination remains for Top 8 links outside Landing copy and as a
+legacy defensive fallback.
+
 Controls use semantic `button`, `a`, `select`, or appropriate form elements,
 visible focus, meaningful accessible names, and touch-friendly targets. Normal
 text meets 4.5:1 contrast; large text, controls, and focus indicators meet
@@ -144,6 +151,12 @@ scrolling. The composition strip and environment list use the same current-week
 touch uses first tap for disclosure and second tap for navigation. A selected
 deck detail opens directly beneath its row or card and reuses the established
 statistics/Landing-feature deck-detail component.
+
+Activating a composition segment on desktop or mobile must make the newly
+expanded deck detail perceptible by moving it into the viewport after rendering;
+the interaction must not leave the user at the composition strip with the
+result hidden below. Preserve keyboard focus, browser state, and reduced-motion
+behavior.
 
 When an owner-maintained first representative card is available, its art crop
 is the composition segment fill. This changes only the fill: segment order,
@@ -190,10 +203,22 @@ representative must sit above the second in the overlap. Each approved feature
 shows exactly four reviewer-selected full-card images at the physical-card
 ratio; all approved items are present, with new decks before new technology.
 
+At mobile widths, place the representative stack lower relative to the deck
+heading and remove excessive whitespace beneath it. Preserve the accepted 90 by
+63 dimensions, overlap amount and first-card stacking priority, and leave the
+desktop placement unchanged.
+
 Card and mana-color identity is metadata maintained outside classifier rules.
 Reserve image dimensions before loading, lazy-load below-the-fold images, bound
 third-party concurrency, and use a stable placeholder on failure. The readable
 card or deck name and navigation must remain available without the image.
+
+The Feature heading is the bilingual deck name derived from the stable
+format/classifier identity, not weekly free text. Within each format, render all
+new-deck items before new-technology items. Inside a category, follow the exact
+deck-link order in final Landing top copy, reading multiple links left to right;
+append items absent from top copy afterward. This content-order rule does not
+change the accepted card layout or visual hierarchy.
 
 Feature card frames use the physical-card ratio of 63:88 before a request
 starts; the environment representative art crops use the landscape dimensions
@@ -225,6 +250,12 @@ One action expands a deck or feature detail; do not require a second nested
 expansion. Hover interactions must have focus and touch equivalents. No required
 information may depend on animation. Motion is brief, functional, and disabled
 or reduced under `prefers-reduced-motion`.
+
+The shared shell provides one fixed bottom-right return-to-top control on the
+Landing, every retained MTGO view, and Tabletop. It remains clear of safe-area
+insets and page controls, does not obscure content at 390 pixels, has a localized
+accessible name and visible focus, works by keyboard, and uses immediate rather
+than smooth movement when reduced motion is requested.
 
 ## 11. Accessibility and failure states
 

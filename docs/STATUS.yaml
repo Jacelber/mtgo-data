@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-15a-landing-pickup-review"
+  current_working_branch: "codex/p12-15b-landing-review-workbook"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,33 +31,35 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-15A"
-  name: "Landing editorial-pipeline route map"
+  id: "P12-15B"
+  name: "Landing-only review workbook"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-23"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-15a-landing-pickup-review-20260823-01"
-  branch: "codex/p12-15a-landing-pickup-review"
-  base_commit: "3c43f5c606284f1d64e0db334be6a4c85818c3c0"
-  objective: "Document the approved staged replacement of the obsolete public Pickup handoff with one Landing-owned editorial screening, review, publication, and bounded feature-history pipeline before any workbook or implementation work begins."
+  owner_accepted_on: "2026-08-23"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-15b-landing-review-workbook-20260823-01"
+  branch: "codex/p12-15b-landing-review-workbook"
+  base_commit: "44f01dc464b3b0081b54f5b93d74a94cea56938e"
+  objective: "Create the five-sheet Landing-only XLSX review carrier from the accepted prior workbook and W27/W33 recovery subjects, require every exact deck referenced in Landing top copy to be a selected feature, derive feature title/order instead of asking for duplicate weekly inputs, and record the Owner-approved downstream feature recovery and interaction route without changing the page or public data."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
+    - "docs/STATUS.yaml"
+    - "docs/ROADMAP.md"
     - "docs/LANDING_EDITORIAL_PIPELINE.md"
     - "docs/WEEKLY_MAINTENANCE.md"
-    - "docs/PROJECT_SCOPE.md"
     - "docs/DATA_ARCHITECTURE.md"
+    - "docs/PROJECT_SCOPE.md"
     - "docs/FRONTEND_DESIGN_SYSTEM.md"
-    - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
-    - "docs/STATUS.yaml"
-    - "docs/checklists/STANDARD_FRONTEND_SMOKE.md"
+    - "outputs/p12-15b-20260823-01/P12-15B_Landing_Review_v4.xlsx"
   protected_scope:
-    artifact_impact: "none"
-    documentation_only: true
+    artifact_impact: "internal_diagnostics"
+    review_artifact_only: true
     accepted_ui_changed: false
+    downstream_ui_plan_changed: true
     public_json_or_schema_changed: "none"
     generated_or_source_data_changed: "none"
     classification_identities_changed: "none"
@@ -66,25 +68,38 @@ current_task:
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Record the ordered P12-15A through P12-15G route, responsibilities, outputs, review gates, stop points, migration set, rollback conditions, and deletion conditions."
-    - "Replace the obsolete public Pickup-before-Landing process in current authority documents with the approved Landing-owned target contract."
-    - "Record P12-15 as completed on verified cloud master merge commit 3c43f5c606284f1d64e0db334be6a4c85818c3c0."
+    - "Preserve Owner text, deck tokens, category, positioning, cards, and corrected Modern copy order in the five-sheet W27/W33 carrier."
+    - "Require every top-copy deck to be a KEEP feature and keep every current-week Top 8 available for additions."
+    - "Derive feature title/order, expose read-only name status, and remove their weekly input columns."
+    - "Record P12-15C bilingual bootstrap, P12-15D catalog/order work, the weekly classifier-name gate, and the accepted downstream route without implementation."
+    - "Render and verify all five sheets, then export one XLSX."
   prohibited_changes:
-    - "Do not create or edit the Landing review workbook in P12-15A."
     - "Do not change Python, JavaScript, CSS, HTML, workflow, configuration, Schema, generated data, public path, catalog, metadata, or Pages code."
-    - "Do not change the accepted Landing UI design, current public content, classifier rules, statistics, source events, or protected event 434455 bytes."
-    - "Do not commit, publish, merge, dispatch production, start P12-15B, or start P12-16 before Owner acceptance and applicable same-task completion."
+    - "Do not modify existing Owner-authored workbook content or infer missing editorial decisions."
+    - "Do not implement the accepted downstream Landing interaction amendments, change current public content, classifier rules, statistics, source events, or protected event 434455 bytes."
+    - "Do not import workbook content into repository review YAML, build a page preview, commit, publish, merge, dispatch production, or start P12-15C before Owner acceptance."
   validation:
-    repository_validation: "validate_repository.py: PASS (80 Python, 19 JavaScript, 1,833 JSON, 60 YAML, 56 references, 2,277 hygiene checks)"
-    documentation_history: "tests/test_documentation_history.py: 5 passed"
-    documentation_consistency: "Current scope, architecture, roadmap, decision, status, runbook, design-system, and smoke-checklist authorities name one Landing-owned target and the P12-15A through P12-15G order."
-    diff_check: "git diff --check passed"
-    owner_acceptance: "Accepted by the Owner on 2026-08-23."
-  stop_point: "Complete Gate 6 for the unchanged accepted documentation subject, then stop without starting P12-15B."
+    status: "passed"
+    completed_on: "2026-08-23"
+    workbook: "outputs/p12-15b-20260823-01/P12-15B_Landing_Review_v4.xlsx"
+    evidence:
+      - "five sheets; 11 Landing Copy rows and all 17 v3 feature identities/Owner fields preserved by exact Deck Link ID"
+      - "15 top-copy tokens resolve to KEEP features; 16 KEEP features; no COPY LINK ONLY role"
+      - "manual feature title/order removed; read-only bilingual name status added"
+      - "Standard and Modern category/link order derived exactly; unmentioned Selesnya Landfall appended last"
+      - "168 current-week Top 8 rows, 38 formulas, zero formula errors; no empty shared-string references"
+      - "all KEEP card choices remain unique and exact-deck-valid; Shared Roots retained"
+      - "route, architecture, weekly name gate, DEC-115, and DEC-116 synchronized without implementation"
+      - "all five sheets rendered and visually inspected"
+      - "validate_repository.py: PASS (80 Python, 19 JavaScript, 1,833 JSON, 60 YAML, 56 references, 2,282 hygiene checks)"
+      - "tests/test_documentation_history.py: 5 passed"
+      - "git diff --check: passed"
+      - "workbook SHA-256: 746F12F32294F668822677863CDF8887A4666559578748F6E9EE5972A8A15654"
+  stop_point: "Complete this unchanged accepted task through commit, one Ready PR, required CI, merge, and applicable cloud verification; do not start P12-15C."
 
 current_repository_state:
-  baseline_commit: "3c43f5c606284f1d64e0db334be6a4c85818c3c0"
-  baseline_note: "Fresh isolated workspace created from verified cloud master after P12-15 merged; the committed live-status record still named that completed task and is reconciled by P12-15A."
+  baseline_commit: "44f01dc464b3b0081b54f5b93d74a94cea56938e"
+  baseline_note: "Fresh isolated clone created from verified cloud master after P12-15A merged and its merge-triggered validation succeeded."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -100,29 +115,32 @@ future_task_gates:
     status: "completed"
     note: "Merged to cloud master as 3c43f5c606284f1d64e0db334be6a4c85818c3c0; metadata, sharing, attribution, language memory, favicon, and legacy Pickup URL compatibility are delivered."
   - task: "P12-15A"
-    status: "owner_accepted_completion_authorized"
-    remaining_requirements:
-      - "Complete Gate 6 for the unchanged accepted documentation subject."
+    status: "completed"
+    note: "Merged through PR 249 as 44f01dc464b3b0081b54f5b93d74a94cea56938e; the authoritative route map is published."
   - task: "P12-15B"
-    status: "planned_not_authorized"
-    prerequisite: "P12-15A accepted and completed"
-    note: "Create the five-sheet Landing-only review workbook; do not change the page."
+    status: "owner_accepted_completion_authorized"
+    prerequisite: "satisfied"
+    note: "Owner accepted the verified v4 workbook and unchanged documentation subject on 2026-08-23; complete Gate 6 without changing the page."
   - task: "P12-15C"
     status: "planned_not_authorized"
     prerequisite: "Owner completes the P12-15B Chinese inputs"
-    note: "Validate content, draft English, and obtain final bilingual review."
+    note: "Validate content, bootstrap and obtain Owner confirmation for the format-scoped bilingual classifier-name map, draft English positioning/copy, and obtain final bilingual review."
   - task: "P12-15D"
     status: "planned_not_authorized"
     prerequisite: "P12-15C content is complete"
-    note: "Build the internal Landing editorial backend without a front-end switch."
+    note: "Build the internal Landing editorial backend, bilingual classifier-name catalog, and derived feature ordering without a front-end switch."
   - task: "P12-15E"
     status: "planned_not_authorized"
     prerequisite: "P12-15D accepted and completed"
     note: "Generate the Landing feature archive and W27/W33 recovery preview."
+  - task: "P12-15E-UX"
+    status: "planned_not_authorized"
+    prerequisite: "Owner hands-on acceptance of the P12-15E data-backed local preview"
+    note: "Correct composition reveal, mobile representative-card spacing, and the shared return-to-top control before cloud cutover."
   - task: "P12-15F"
     status: "planned_not_authorized"
-    prerequisite: "Owner hands-on acceptance of the P12-15E local preview"
-    note: "Publish and verify the cloud cutover while retaining rollback files."
+    prerequisite: "Owner hands-on acceptance of both P12-15E and P12-15E-UX local previews"
+    note: "Publish the accepted feature recovery and interaction corrections together and verify the cloud cutover while retaining rollback files."
   - task: "P12-15G"
     status: "planned_not_authorized"
     prerequisite: "P12-15F cloud verification and no-caller proof"
@@ -131,18 +149,19 @@ future_task_gates:
     status: "planned_not_authorized"
     remaining_requirements:
       - "Complete P12-15A through P12-15G or explicitly defer named compatibility artifacts."
+      - "Reverify the accepted P12-15E-UX behaviors across retained views."
       - "Obtain separate closeout authorization."
 
 next_approved_task:
-  id: "P12-15A"
-  name: "Landing editorial-pipeline route map"
+  id: "P12-15B"
+  name: "Landing-only review workbook"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
-  note: "Owner accepted the complete documentation subject on 2026-08-23; complete Gate 6, then stop without starting P12-15B."
+  note: "Complete the accepted v4 workbook and documentation through Gate 6; do not start P12-15C."
 
 prohibited_next_actions:
-  - "Do not start the P12-15B workbook before P12-15A Owner acceptance and completion."
+  - "Do not import workbook content or start P12-15C during P12-15B completion."
   - "Do not change the accepted Landing UI, public content, generated data, public contracts, classifiers, statistics, workflows, source data, public paths, or event 434455 bytes."
-  - "Do not publish, migrate, switch, or delete Pickup or Landing data in P12-15A."
-  - "Do not start P12-16 or another task after completing P12-15A."
+  - "Do not publish, migrate, switch, or delete Pickup or Landing data in P12-15B."
+  - "Do not start P12-16 or another task after completing P12-15B."
   - "Do not develop directly on master or overwrite unexplained local changes."

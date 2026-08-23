@@ -3143,7 +3143,8 @@ The P12-10 Schema must require, at minimum:
 - zero to five structured `share_move`, `exit`, or `build_shift`
   observations with the evidence required by `STATISTICS_SPEC.md` section 24;
 - zero or more approved `new_deck` or `new_technology` feature items with exact
-  deck identity, localized headline and positioning fields, supporting facts,
+  deck identity, a format-scoped classifier identity, a catalog-derived
+  localized title, Owner-reviewed localized positioning, supporting facts,
   and four reviewer-selected cards; and
 - enough source and review binding to detect a late-event fact change without
   silently reusing stale editorial content.
@@ -3226,12 +3227,23 @@ archetype-player-rank displays, URL, order, and exact event/deck identity from
 the complete Top 8 catalog. Only the generated display becomes a hyperlink;
 the surrounding sentence remains ordinary text.
 
-Each approved feature carries category, positive category-local order,
-localized headline and positioning, exact deck identity and decklist,
-supporting facts, and four unique reviewer-selected cards from that deck. There
-is no item-count limit. Landing renders `new_deck` before `new_technology` and
-uses one disclosure action with the shared deck-detail presentation. Review
-state and reviewer terminology never enter public output.
+Each approved feature carries category, derived category-local order, a stable
+format/classifier identity, a catalog-derived localized title,
+Owner-reviewed localized positioning, exact deck identity and decklist,
+supporting facts, and four unique reviewer-selected cards from that deck. The
+bilingual catalog is keyed by `(format, parent_id, subtype_id-or-none)`; English
+comes from the classifier taxonomy and Chinese requires Owner confirmation.
+Classifier maintenance fails closed when a new or renamed public identity lacks
+catalog coverage.
+
+There is no item-count limit. Landing renders `new_deck` before
+`new_technology`. Inside a category, order follows exact deck-token appearance
+in final top copy, reading kept copy rows in order and multiple tokens left to
+right. Features absent from top copy are appended deterministically by retained
+source order and exact deck ID. This derived order may be serialized for the
+reader but is not an Owner input. Landing uses one disclosure action with the
+shared deck-detail presentation. Review state and reviewer terminology never
+enter public output.
 
 Publication writes the reviewed latest Landing and the selected feature week
 together:
