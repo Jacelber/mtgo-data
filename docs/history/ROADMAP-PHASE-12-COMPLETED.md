@@ -467,3 +467,25 @@ authorization remains solely in `docs/STATUS.yaml`.
    completion the Owner also accepted DEC-117's separate downstream route for
    cross-view classifier-name localization; that route does not expand the
    implemented P12-15D subject.
+
+15-HF. `P12-15-HF` — Emergency Melee entry recovery and static home link
+   - restored the Tabletop entry by loading `app-metadata.js` before the shared
+     application and made the maintained entry inventory reject a repeated
+     MTGO/Tabletop bootstrap mismatch;
+   - preserved source-page state until cross-entry navigation commits, retained
+     the weekly-feature destination across that navigation, and distinguished
+     catalog-request failures from later page-initialization failures;
+   - made the visible title on both entries a script-independent link to the
+     bare MTGO root and restored the approved 16-pixel, 32-pixel, and
+     180-pixel cat icons on the Tabletop entry;
+   - verified direct Tabletop startup, MTGO-to-Tabletop navigation, browser
+     back, another MTGO product, title recovery, and Tabletop-to-Landing feature
+     navigation without changing Landing content, public data, statistics,
+     classifiers, workflows, or source events.
+
+   The Owner accepted the final local result on 2026-08-23 after checking the
+   repaired Tabletop entry, static title-home route, restored tab icon, and
+   cross-entry weekly-feature destination. Acceptance authorized completion of
+   the unchanged task through one commit, one Ready pull request, required CI,
+   merge, and Pages verification. P12-15E remains a separate authorization
+   gate.

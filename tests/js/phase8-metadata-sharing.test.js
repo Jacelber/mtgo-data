@@ -10,6 +10,16 @@ const source = fs.readFileSync(
   path.join(__dirname, "../../assets/js/phase8/app-metadata.js"),
   "utf8"
 );
+const rootEntry = fs.readFileSync(path.join(__dirname, "../../index.html"), "utf8");
+const tabletopEntry = fs.readFileSync(
+  path.join(__dirname, "../../melee/index.html"),
+  "utf8"
+);
+
+function scriptSources(html) {
+  return [...html.matchAll(/<script src="([^"]+)"><\/script>/g)]
+    .map(match => match[1]);
+}
 
 function metadataFunctions() {
   const context = { URLSearchParams };
@@ -63,4 +73,37 @@ test("Landing feature canonical URL keeps only the compatible feature week", () 
     "format=standard&product=mtgo-landing&section=features&week=2026-W33&detail=ignore&lang=zh"
   ));
   assert.equal(canonical.toString(), "format=standard&product=mtgo-landing&section=features&week=2026-W33&lang=zh");
+});
+
+test("both production entries load metadata before the shared application", () => {
+  for (const [entry, metadataPath, appPath] of [
+    [rootEntry, "assets/js/phase8/app-metadata.js", "assets/js/phase8/app.js"],
+    [tabletopEntry, "../assets/js/phase8/app-metadata.js", "../assets/js/phase8/app.js"],
+  ]) {
+    const scripts = scriptSources(entry);
+    assert.notEqual(scripts.indexOf(metadataPath), -1);
+    assert.ok(scripts.indexOf(metadataPath) < scripts.indexOf(appPath));
+  }
+});
+
+test("both production titles provide a script-independent root link", () => {
+  assert.match(
+    rootEntry,
+    /<h1><a id="site-title" class="brand-home" href="\.\/index\.html">/
+  );
+  assert.match(
+    tabletopEntry,
+    /<h1><a id="site-title" class="brand-home" href="\.\.\/index\.html">/
+  );
+});
+
+test("both production entries declare the approved tab and touch icons", () => {
+  for (const [entry, prefix] of [
+    [rootEntry, "assets/images/"],
+    [tabletopEntry, "../assets/images/"],
+  ]) {
+    assert.match(entry, new RegExp(`<link rel="icon" href="${prefix}favicon-32\\.png" sizes="32x32"`));
+    assert.match(entry, new RegExp(`<link rel="icon" href="${prefix}favicon-16\\.png" sizes="16x16"`));
+    assert.match(entry, new RegExp(`<link rel="apple-touch-icon" href="${prefix}apple-touch-icon\\.png" sizes="180x180"`));
+  }
 });

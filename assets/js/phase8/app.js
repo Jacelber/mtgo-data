@@ -428,15 +428,16 @@ document.addEventListener("click", async event => {
   if (await handleMobileListClick(button)) return;
   if (button.dataset.format) {
     discardPendingRefresh();
-    const next = button.dataset.format;
-    const available = availableProductIds(next);
+    const nextFormat = button.dataset.format;
+    const available = availableProductIds(nextFormat);
     if (!available.length) {
-      setMessage(t("availability.format", { format: formatLabel(next) }));
+      setMessage(t("availability.format", { format: formatLabel(nextFormat) }));
       return;
     }
-    state.format = next;
-    if (!available.includes(state.product)) state.product = available[0];
-    if (navigateToProductEntry(state.product, state.format)) return;
+    const nextProduct = available.includes(state.product) ? state.product : available[0];
+    if (navigateToProductEntry(nextProduct, nextFormat)) return;
+    state.format = nextFormat;
+    state.product = nextProduct;
     resetInteractions();
     setMessage("");
     renderNavigation();
@@ -454,11 +455,12 @@ document.addEventListener("click", async event => {
       }));
       return;
     }
-    state.product = button.dataset.product === "weekly-pickup"
+    const nextProduct = button.dataset.product === "weekly-pickup"
       ? "mtgo-landing"
       : button.dataset.product;
+    if (navigateToProductEntry(button.dataset.product, state.format)) return;
+    state.product = nextProduct;
     state.landingSection = button.dataset.product === "weekly-pickup" ? "features" : null;
-    if (navigateToProductEntry(state.product, state.format)) return;
     resetInteractions();
     setMessage("");
     renderNavigation();
@@ -862,10 +864,16 @@ async function initialize({ retry = false } = {}) {
   } catch (error) {
     state.failedRender = { error, preserveExistingContent: false };
     view.removeAttribute("aria-busy");
+    const catalogFailure = !state.catalog;
+    const errorMessage = typeof resourceErrorMessage === "function"
+      ? resourceErrorMessage(error)
+      : t("loading.unknown");
     view.innerHTML = `<section class="error-state" role="alert">
-      <strong>${t("loading.catalog_error")}</strong>
-      <p class="resource-error-message">${resourceErrorMessage(error)}</p>
-      <button class="secondary-button" type="button" data-retry-catalog>${t("loading.catalog_retry")}</button>
+      <strong>${t(catalogFailure ? "loading.catalog_error" : "loading.initialization_error")}</strong>
+      <p class="resource-error-message">${errorMessage}</p>
+      <button class="secondary-button" type="button" data-retry-catalog>${t(catalogFailure
+        ? "loading.catalog_retry"
+        : "loading.initialization_retry")}</button>
     </section>`;
     view.querySelector("button")?.focus({ preventScroll: true });
     document.querySelector("#payload-status").textContent = t("loading.failed");

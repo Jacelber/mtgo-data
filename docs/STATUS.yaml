@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-15d-landing-editorial-backend"
+  current_working_branch: "codex/p0-melee-entry-recovery"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,15 +31,15 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-15D"
-  name: "Internal Landing editorial backend"
+  id: "P12-15-HF"
+  name: "Emergency Melee entry recovery and static home link"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-23"
   owner_accepted_on: "2026-08-23"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-15d-landing-editorial-backend-20260823-01"
-  branch: "codex/p12-15d-landing-editorial-backend"
-  base_commit: "206074f38cf82f26fff83146bcfd7a6aa2d43e6f"
-  objective: "Import the accepted P12-15C v6 workbook into a private Landing-owned review contract, move retained candidate and continuity behavior behind a Landing editorial module with a Pickup compatibility wrapper, add the complete bilingual classifier-name catalog and fail-closed coverage checks, make Landing consume one reviewed source without changing any live reader or public feature path, and record the separately gated P12-15E-I18N cross-view localization route accepted before completion."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p0-melee-entry-recovery-20260823-01"
+  branch: "codex/p0-melee-entry-recovery"
+  base_commit: "7acff8dd1f1870889d5cf10f934fd763360eadab"
+  objective: "Restore the live Tabletop entry, keep cross-entry failure state from poisoning the source page, expose truthful initialization errors, and make the site title a script-independent link to the default root entry."
   authorization:
     local_implementation: true
     commit: true
@@ -48,80 +48,61 @@ current_task:
   target_paths:
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
-    - "docs/DATA_ARCHITECTURE.md"
     - "docs/PROJECT_SCOPE.md"
-    - "docs/DECISIONS.md"
-    - "docs/LANDING_EDITORIAL_PIPELINE.md"
-    - "docs/WEEKLY_MAINTENANCE.md"
-    - "docs/history/README.md"
+    - "docs/TEST_TRIGGER_MATRIX.md"
+    - "index.html"
+    - "melee/index.html"
+    - "assets/css/phase8-base.css"
+    - "assets/js/phase8/app.js"
+    - "assets/js/phase8/i18n.js"
+    - "validate_repository.py"
+    - "tests/js/phase8-metadata-sharing.test.js"
     - "docs/history/ROADMAP-PHASE-12-COMPLETED.md"
-    - "README.md"
-    - "configs/mtgo_archetype_names.yaml"
-    - "configs/pages_publication.json"
-    - "schemas/mtgo-archetype-names.schema.json"
-    - "schemas/mtgo-landing-review.schema.json"
-    - "src/mtgmeta/mtgo/__main__.py"
-    - "src/mtgmeta/mtgo/landing.py"
-    - "src/mtgmeta/mtgo/landing_editorial.py"
-    - "src/mtgmeta/mtgo/pickup.py"
-    - "stats/standard/mtgo/landing/review/2026-W27.yaml"
-    - "stats/standard/mtgo/landing/review/2026-W33.yaml"
-    - "stats/standard/mtgo/landing/review/known_archetypes.json"
-    - "stats/modern/mtgo/landing/review/2026-W33.yaml"
-    - "stats/modern/mtgo/landing/review/known_archetypes.json"
-    - "tests/test_mtgo_landing.py"
-    - "tests/test_mtgo_landing_editorial.py"
-    - "tests/test_mtgo_pickup_selection.py"
-    - "tests/test_mtgo_pickup_provenance.py"
+    - "docs/history/README.md"
   protected_scope:
-    artifact_impact: "internal_data_contract"
-    review_artifact_only: false
-    accepted_ui_changed: false
-    downstream_ui_plan_changed: true
+    artifact_impact: "user_visible_ui"
     public_json_or_schema_changed: "none"
-    generated_or_source_data_changed: "private Landing review source only"
+    generated_or_source_data_changed: "none"
     classification_identities_changed: "none"
     workflows_changed: "none"
     public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Treat outputs/p12-15c-20260823-02/P12-15C_Landing_Bilingual_Review_v6.xlsx and its accepted SHA-256 as the immutable Owner-reviewed import subject."
-    - "Resolve XLSX cells from raw OOXML with correct blank and shared-string semantics; reject any required sheet, header, identity, approval, or frozen-subject mismatch."
-    - "Add private format-scoped Landing review documents, known-archetype state, two internal Schemas, and one format-scoped bilingual classifier-name catalog with complete Standard and Modern coverage."
-    - "Move the retained screening/deduplication/evidence orchestration behind a Landing-owned editorial module while preserving Pickup command behavior through a temporary compatibility wrapper."
-    - "Make Landing top copy and features read the same private reviewed week, derive localized feature titles and category-local order, and reject unmatched top-copy tokens, stale bindings, missing names, or invalid representative cards."
-    - "Advance Landing known-archetype state from an explicitly accepted classified baseline even when the reviewed feature list is empty."
-    - "Add only focused internal-contract, importer, ordering, continuity, compatibility, and Pages-exclusion tests."
-    - "Record DEC-117 and the separately authorized P12-15E-I18N route after P12-15E and before P12-15E-UX/P12-15F without implementing or publishing that future task."
+    - "Load app-metadata.js before app.js on both production entries and make the exact entry dependency inventory agree."
+    - "Do not mutate the source-page format or product state before a cross-entry navigation commits."
+    - "Distinguish catalog-request failure from later page-initialization failure and retain a usable retry state."
+    - "Make the shared title a static link to the bare MTGO root so it works even when scripts fail and follows the current or future default product."
+    - "Keep the approved favicon and touch-icon declarations consistent across both production entries."
+    - "Preserve the weekly-pickup navigation intent across entry surfaces so the MTGO entry normalizes it to the Landing feature section."
+    - "Add focused static-contract checks plus one hands-on browser path covering direct Tabletop, cross-entry back, and title recovery."
   prohibited_changes:
-    - "Do not change HTML, CSS, JavaScript, accepted Landing UI structure, classifier taxonomy, statistics, source events, workflows, public Landing or Pickup JSON, catalogs, metadata, or public feature paths."
-    - "Do not overwrite or reinterpret Owner-authored v6 content, infer approval beyond explicit workbook states, or allow an English fallback where approved Chinese catalog coverage is required."
-    - "Do not delete, rename, republish, or switch any Pickup path; do not build the P12-15E preview or start P12-15E/P12-15E-I18N/P12-15E-UX."
+    - "No Landing content, visual redesign, statistic, classifier, generated-data, Schema, workflow, source-event, or protected event 434455 byte change."
+    - "No P12-15E, P12-15E-I18N, P12-15E-UX, P12-15F, or other task implementation."
+    - "No commit, PR, merge, deployment, or production dispatch before Owner hands-on acceptance."
   validation:
-    status: "passed"
-    immutable_workbook: "outputs/p12-15c-20260823-02/P12-15C_Landing_Bilingual_Review_v6.xlsx"
-    immutable_workbook_sha256: "f871c769450da13a1fa25783b8f6094fede3229b38eee69667d40980ddef5a2f"
+    status: "passed_owner_accepted"
     completed_on: "2026-08-23"
     results:
-      private_review_weeks: 3
-      bilingual_display_identities: 323
-      parent_identities: 240
-      subtype_identities: 83
-      kept_top_copy_rows: 11
-      kept_features: 16
-      standard_w27_explicit_empty_features: true
-      standard_w33_materialized_top_copy: 9
-      standard_w33_materialized_features: 14
-      modern_w33_materialized_top_copy: 2
-      modern_w33_materialized_features: 2
-      directly_relevant_tests_passed: 47
-      ruff_errors: 0
-  stop_point: "Complete this unchanged accepted task through commit, one Ready PR, required CI, merge, and applicable Pages verification; do not start P12-15E or P12-15E-I18N."
+      metadata_contract_tests_passed: 7
+      runtime_request_tests_passed: 5
+      documentation_history_tests_passed: 5
+      repository_python_checks: "82/82"
+      repository_javascript_checks: "19/19"
+      repository_json_checks: "1837/1837"
+      repository_yaml_checks: "64/64"
+      repository_reference_checks: "56/56"
+      repository_hygiene_checks: "2290/2290"
+      direct_tabletop_browser_errors: 0
+      cross_entry_back_browser_errors: 0
+      tabletop_icon_declarations: 3
+      tabletop_to_weekly_features_browser_errors: 0
+    owner_ui_accepted: true
+  stop_point: "Complete this unchanged accepted task through one commit, one Ready PR, required CI, merge, and Pages verification; do not start P12-15E."
 
 current_repository_state:
-  baseline_commit: "206074f38cf82f26fff83146bcfd7a6aa2d43e6f"
-  baseline_note: "Fresh isolated clone from verified cloud master after P12-15C merged through PR 251 and merge validation succeeded."
+  baseline_commit: "7acff8dd1f1870889d5cf10f934fd763360eadab"
+  baseline_note: "Fresh isolated worktree from the exact failing cloud master and Pages subject; push remains disabled."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -130,6 +111,10 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
+  - task: "P12-15-HF"
+    status: "owner_accepted_completion_authorized"
+    prerequisite: "Live Tabletop initialization incident reproduced and repair plan approved"
+    note: "Restore both production entries and the script-independent home route before resuming the staged Landing cutover sequence."
   - task: "P12-15D"
     status: "owner_accepted_completion_authorized"
     prerequisite: "P12-15C content is complete"
@@ -163,15 +148,13 @@ future_task_gates:
       - "Obtain separate closeout authorization."
 
 next_approved_task:
-  id: "P12-15D"
-  name: "Internal Landing editorial backend"
+  id: "P12-15-HF"
+  name: "Emergency Melee entry recovery and static home link"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
-  note: "Complete the unchanged accepted P12-15D subject and route-map addition through Gate 6; P12-15E and P12-15E-I18N remain unauthorized."
+  note: "Complete the unchanged accepted recovery through Gate 6; P12-15E remains unauthorized."
 
 prohibited_next_actions:
-  - "Do not change Landing UI, public content, public contracts, classifier taxonomy, statistics, workflows, source data, public paths, or event 434455 bytes."
-  - "Do not publish, migrate, switch, rename, or delete Pickup or public Landing data in P12-15D."
-  - "Do not implement the public bilingual name contract or change any current front-end label in P12-15D."
-  - "Do not start P12-15E, P12-15E-I18N, P12-15E-UX, P12-16, or another task after local P12-15D completion."
+  - "Do not change Landing content, public data, classifiers, statistics, workflows, source data, public paths, or event 434455 bytes."
+  - "Do not start P12-15E, P12-15E-I18N, P12-15E-UX, P12-15F, P12-16, or another task."
   - "Do not develop directly on master or overwrite unexplained local changes."
