@@ -44,16 +44,19 @@ migration.
 | Candidate deduplication and merged reason tags | Retain unchanged unless separately reviewed | Internal Landing producer |
 | Known-archetype continuity state | Retain, but update independently of whether any feature is selected | Internal Landing review state |
 | Candidate provenance and complete decklists | Retain in the private Landing review source | Internal Landing review state |
-| Human selection, order, localized copy, and four featured cards | Move into one Landing review contract | Owner through the XLSX carrier |
+| Human selection, category, localized positioning/copy, and four featured cards | Move into one Landing review contract | Owner through the XLSX carrier |
 | Public `pickup/<week>.json` handoff | Stop producing after cutover | Replaced by Landing current and feature-history documents |
 | Standalone Pickup page, renderer, navigation identity, and styles | Remove only after verified cutover and no-caller proof | Front-end cleanup task |
 | Existing Pickup W27 and W33 documents | Freeze as migration and rollback inputs | Compatibility evidence |
 | Legacy `product=weekly-pickup` URLs | Preserve as redirects to the requested Landing feature week | Compatibility layer |
 
-Machine candidates and machine-written copy remain aids. The Owner may select
-none, add any exact Top 8 deck, merge items, change categories and order, remove
-or completely rewrite every conclusion, or write unrelated content. Provenance
-bindings detect stale inputs; they do not restrict editorial meaning.
+Machine candidates and machine-written copy remain aids. The Owner may add any
+exact Top 8 deck, merge items, change categories, remove or completely
+rewrite every conclusion, or write unrelated content. A zero-feature result is
+valid only when final top copy contains no deck token: every exact deck that
+remains in top copy must also remain a selected feature. Provenance bindings
+and this cross-sheet membership rule protect navigation integrity; neither
+restricts editorial meaning.
 
 ## Target data flow
 
@@ -138,28 +141,46 @@ change the page before Owner acceptance of this task.
 3. Put each selected deck's format, event, date, rank, archetype, player, and
    `deck:<ID>` token directly in `Landing Copy` as a reference block.
 4. Put exact deck identity, decklist, machine reasons, editable selection,
-   category, order, Chinese and English fields, and four card fields in
-   `Featured Decks`.
-5. Include every exact current-week rank-one-through-eight deck in `All Top 8`
+   category, positioning, English-review fields, and four card fields in
+   `Featured Decks`. Show the derived English and Chinese deck names plus their
+   localization status as read-only fields; do not ask for a weekly feature
+   title or feature order.
+5. Parse every exact token already present in retained or draft top copy and
+   add the matching deck to `Featured Decks` as mandatory `KEEP` before the
+   workbook reaches the Owner. Merge by exact deck ID; there is no
+   top-copy-only role.
+6. Include every exact current-week rank-one-through-eight deck in `All Top 8`
    for unrestricted additions.
-6. Preload Standard W27, Standard W33, and Modern W33 recovery inputs without
+7. Preload Standard W27, Standard W33, and Modern W33 recovery inputs without
    overwriting existing Owner content.
 
 **Output:** a visually verified XLSX review carrier.
 
 **Stop point:** wait for the Owner to complete missing Chinese content,
-selection, order, cards, and explicit review states.
+selection, category, cards, and explicit review states.
 
 ### P12-15C - Content completion and bilingual review
 
 **Scope:** review state only; no page or public-data change.
 
-1. Validate workbook deck tokens, event and rank identities, and selected cards.
-2. Preserve the Owner's Chinese text exactly and add Codex English drafts.
-3. Return the same workbook lineage for Owner correction and final English
+1. Resolve XLSX shared-string references from raw OOXML before interpreting any
+   editable cell. Normalize a referenced empty string to a true blank and fail
+   closed when the workbook importer disagrees; the numeric index itself is
+   never Owner content.
+2. Validate workbook deck tokens, event and rank identities, and selected cards.
+   The exact token set in kept top copy must be a subset of the exact `KEEP`
+   feature token set. A missing or dropped matching row blocks completion.
+3. Preserve the Owner's Chinese text exactly and add Codex English drafts.
+4. Build the initial format-scoped bilingual classifier-name review keyed by
+   `(format, parent_id, subtype_id-or-none)`. Preserve the classifier's English
+   name, propose Chinese names, and obtain the Owner's final confirmation. The
+   recovery workbook may show English as the Chinese fallback until this
+   review is complete; the fallback is not an approved Chinese name.
+5. Return the same workbook lineage for Owner correction and final English
    approval.
-4. Require separate explicit reviewed states for top copy and bottom features;
-   an explicitly reviewed zero-item result is valid.
+6. Require separate explicit reviewed states for top copy and bottom features;
+   an explicitly reviewed zero-item feature result is valid only when final top
+   copy contains no deck token.
 
 **Output:** complete bilingual Owner-reviewed content for the exact frozen
 baseline.
@@ -183,9 +204,24 @@ front-end switch.
 4. Remove the Landing generator's dependency on a separately published Pickup
    week. Both top copy and current features must consume the same reviewed
    Landing source.
-5. Add fail-closed validation for stale event IDs, classifier or policy
-   digests, unknown deck tokens, invalid card choices, duplicate orders, and
-   missing explicit review.
+5. Retain one stable exact-deck destination identity for every selected feature
+   so the reader can resolve feature membership without using localized display
+   text.
+6. Add one format-scoped bilingual classifier-name catalog keyed by stable
+   parent/subtype identity. Derive the public feature title from this catalog;
+   do not store or import a weekly free-text title.
+7. Derive feature order per format: `new_deck` first, then `new_technology`;
+   inside each category follow exact deck-token appearance in final top copy,
+   reading multiple tokens in one row from left to right. Append features not
+   mentioned in top copy to the end of their category using a deterministic
+   source-order and exact-deck-ID tie-break. The producer may serialize this
+   derived order, but the workbook never asks the Owner to enter it.
+8. Add fail-closed validation for stale event IDs, classifier or policy
+   digests, unknown deck tokens, missing bilingual name coverage, invalid card
+   choices, and
+   missing explicit review. Also fail closed when any kept localized top-copy
+   token lacks an exact selected feature record; do not generate a
+   top-copy-only destination for newly reviewed content.
 
 **Output:** a complete internal Landing editorial pipeline that can generate
 new files without changing the live reader path.
@@ -203,11 +239,17 @@ preview; no production publication before Owner acceptance.
    the reviewed recovery content.
 3. Generate the latest complete Landing documents from the same reviewed
    source.
-4. Switch a local preview to the Landing feature archive while leaving the
-   accepted UI structure and visual design unchanged.
-5. Verify Chinese and English, Standard and Modern, W27 and W33 selection,
-   exact deck links, four-card display, desktop, mobile, and explicit empty
-   weeks.
+4. Switch a local preview to the Landing feature archive while preserving the
+   accepted structure and every design element not explicitly amended by the
+   route below.
+5. Make every admitted inline Landing-copy deck token select its exact feature
+   in the applicable format and week, expand the item, move it into view, and
+   expose stable URL/focus state. Retain the exact Top 8 fallback only as a
+   defensive compatibility route for legacy documents; a newly reviewed
+   unmatched token is invalid and cannot be generated.
+6. Verify Chinese and English, Standard and Modern, W27 and W33 selection,
+   exact deck links, derived titles, derived category/link order, four-card
+   display, desktop, mobile, and explicit empty weeks.
 
 **Output:** one Owner-reviewable local page backed entirely by the new Landing
 contracts.
@@ -215,16 +257,43 @@ contracts.
 **Stop point:** wait for hands-on Owner acceptance. Do not publish or remove old
 Pickup resources.
 
+### P12-15E-UX - Feature-release interaction corrections
+
+**Scope:** three bounded Owner-approved interaction corrections against the
+accepted P12-15E local release candidate; no production publication.
+
+1. Make composition-segment activation on desktop and mobile move the newly
+   expanded deck detail into a perceptible viewport position while preserving
+   keyboard focus and reduced-motion behavior.
+2. At mobile widths, move the accepted representative-card stack lower and
+   remove the excessive whitespace below it without changing its 90 by 63 size,
+   first-card overlap priority, or desktop placement.
+3. Add one shared fixed bottom-right return-to-top control to the Landing, every
+   retained MTGO view, and Tabletop. It must respect safe-area insets, avoid
+   covering content at 390 pixels, expose localized accessible naming, work by
+   keyboard, and disable smooth motion when requested.
+4. Verify both languages, both MTGO formats, every retained top-level view,
+   Tabletop, desktop, 390 pixels, browser history, focus restoration, and zero
+   console errors.
+
+**Output:** one hands-on Owner-reviewable interaction-corrected release
+candidate that remains backed by the P12-15E Landing contracts.
+
+**Stop point:** wait for hands-on Owner acceptance. Do not publish independently
+of the P12-15F feature cutover.
+
 ### P12-15F - Cloud cutover
 
-**Scope:** accepted data and reader-path publication.
+**Scope:** accepted data, reader path, and P12-15E-UX interaction publication.
 
-1. Publish the reviewed latest Landing and feature archive atomically through
-   the normal Ready-PR and Pages path.
-2. Change the feature selector to request only Landing feature-history paths.
-3. Verify the merge-triggered Pages deployment, current content, W27 and W33
+1. Begin only after hands-on acceptance of both P12-15E and P12-15E-UX.
+2. Publish the reviewed latest Landing, feature archive, feature-aware inline
+   links, and accepted interaction corrections atomically through the normal
+   Ready-PR and Pages path.
+3. Change the feature selector to request only Landing feature-history paths.
+4. Verify the merge-triggered Pages deployment, current content, W27 and W33
    history, both languages and formats, deck links, and legacy Pickup redirects.
-4. Prove that no live Landing request depends on public Pickup week documents.
+5. Prove that no live Landing request depends on public Pickup week documents.
 
 **Output:** a verified cloud Landing with current and historical feature
 content.
@@ -263,10 +332,10 @@ decision to defer a named compatibility artifact.
 | 6. Audit all Top 8 classifications | Codex prepares; Owner checks | Export every current-week Top 8 classification ordered by event date and rank. | Owner-checked weekly classification baseline. |
 | 7. Review visual metadata | Codex proposes; Owner decides | Confirm representative cards and deck colors. | Accepted visual metadata or explicit no change. |
 | 8. Screen Landing features | Automatic producer | Apply the five reviewed routes and retain the complete Top 8 pool. Merge reason tags only for the same exact deck. | Private candidates and evidence. |
-| 9. Prepare Landing workbook | Codex | Populate top-copy drafts, feature candidates, all Top 8 decks, exact deck tokens, and simple review controls. | Editable Landing review carrier. |
-| 10. Complete Chinese review | Owner | Select, add, delete, merge, reorder, or rewrite without a machine-imposed item limit; confirm cards and Chinese final copy. | Chinese final content. |
+| 9. Prepare Landing workbook | Codex | Populate top-copy drafts, ordinary feature candidates, all Top 8 decks, exact deck tokens, and simple review controls. Before delivery, union every exact deck already referenced by top copy into `Featured Decks` as mandatory `KEEP`. | Editable Landing review carrier with no top-copy-only deck. |
+| 10. Complete Chinese review | Owner | Select, add, delete, merge, reorder, or rewrite without a machine-imposed item limit; confirm cards and Chinese final copy. Any exact deck added to kept top copy must receive a matching feature row and cannot be dropped while referenced. | Chinese final content whose top-copy token set is contained in the selected feature set. |
 | 11. Draft English | Codex | Translate the Owner-final Chinese content without changing it. | English draft in the same workbook lineage. |
-| 12. Complete final review | Owner | Correct or approve English and explicitly complete top-copy and feature review, including an intentional zero result. | Complete bilingual review state. |
+| 12. Complete final review | Owner | Correct or approve English and explicitly complete top-copy and feature review. An intentional zero-feature result is valid only when final top copy contains no deck token. | Complete bilingual review state. |
 | 13. Build preview | Codex | Import and validate the workbook, generate current and feature-history documents, and render the accepted Landing UI. | Exact local preview. |
 | 14. Accept and publish | Owner accepts; Codex completes | After hands-on acceptance, complete the unchanged task through commit, Ready PR, required checks, merge, and Pages publication. | Cloud Landing and immutable publication subject. |
 | 15. Verify cloud | Codex | Verify current copy, feature weeks, language, format, deck links, card display, redirects, and no legacy Pickup data request. | Completed weekly maintenance evidence. |
@@ -287,7 +356,9 @@ Its sheets and user-facing fields are limited to the Landing editorial task:
 2. `Landing Copy` - ordered final text, Codex English draft, Owner English final,
    and an in-sheet reference block for every selected deck and `deck:<ID>`;
 3. `Featured Decks` - candidate evidence and complete decklists plus editable
-   selection, category, order, localized title and positioning, and four cards;
+   selection, category, positioning, and four cards; derived bilingual deck
+   names and localization status are read-only, and feature order comes from
+   final top-copy token order rather than an input column;
 4. `All Top 8` - every exact rank-one-through-eight deck available for manual
    addition; and
 5. `Field Guide` - only fields the Owner needs to enter or review.
@@ -297,6 +368,23 @@ from validated deck IDs. Internal input IDs, digests, action codes, parent IDs,
 and implementation vocabulary are omitted from Owner input columns. The XLSX
 is a review carrier; accepted content is imported into the private Landing
 review source before preview or publication.
+
+The reference block has no `COPY LINK ONLY` state. Every exact token appearing
+in a kept top-copy row must resolve to a `KEEP` row in `Featured Decks`. The
+workbook generator performs this union before the Owner starts each week; the
+content-completion importer repeats the same set check after Owner edits.
+Category, order, localized editorial fields, and representative cards remain
+Owner-reviewed even when membership is mandatory.
+
+An Excel save may serialize a visually empty editable cell as a shared-string
+reference whose resolved text is empty. Before every workbook read or rewrite,
+the importer must independently resolve `xl/sharedStrings.xml` against the
+worksheet cell references. A resolved empty string is normalized to blank even
+if a higher-level library exposes the numeric shared-string index such as `15`
+or `46`. A repeated numeric value across unrelated optional text fields is an
+anomaly that requires this preflight; a render produced by the same importer is
+not independent confirmation. After any rewrite, re-open the exported XLSX and
+verify both the raw OOXML blank semantics and the user-visible render.
 
 ## Migration and deletion controls
 
@@ -313,6 +401,7 @@ review source before preview or publication.
 - Cleanup requires a no-caller search, cloud verification of the replacement,
   an explicit path-by-path deletion or relocation declaration, and a tested
   rollback that does not depend on rebuilding lost Owner content.
-- The accepted Landing UI design remains authoritative. Data-source migration
-  does not authorize layout, interaction, sizing, or visual changes.
-
+- The accepted Landing UI design remains authoritative except for the bounded
+  DEC-114 amendments assigned to P12-15E and P12-15E-UX. Data-source migration
+  by itself does not authorize any other layout, interaction, sizing, or visual
+  change.

@@ -5176,3 +5176,152 @@ This decision authorizes only the staged tasks and boundaries recorded in the
 route map. P12-15A is documentation-only. It does not itself authorize the
 workbook, code, Schema, workflow, generated data, public-path, UI, publication,
 production, or cleanup work assigned to later tasks.
+
+---
+
+# DEC-114 - Ship feature-aware links and interaction corrections with Landing recovery
+
+Status: `Accepted for staged implementation`
+
+## Context
+
+The recovery review exposed four user-visible gaps in the otherwise accepted
+Landing implementation. Inline weekly-copy deck links always route to the Top 8
+product even when the exact deck is also a selected Landing feature. Activating
+a composition segment can expand a deck below the viewport without making that
+result perceptible. Mobile representative-card placement leaves the stack too
+close to the archetype heading and excessive whitespace below it. Repeated
+in-page navigation also lacks a shared return-to-top action.
+
+The Owner requires the feature-aware link to ship with the Landing feature
+recovery and accepted the other three corrections for the same release. The
+underlying Landing structure, representative-card dimensions and overlap order,
+statistical meaning, products, and data separation remain accepted and must not
+be redesigned.
+
+## Decision
+
+Extend the staged P12-15 route without adding any implementation to the P12-15B
+workbook task.
+
+P12-15D retains a stable exact-deck destination identity for each selected
+feature. P12-15E uses that identity so an inline Landing-copy deck link selects
+the applicable feature week, expands and reveals the exact feature, and exposes
+stable URL and focus state. A deck that is not selected as a feature retains
+its exact Top 8 destination.
+
+Add `P12-15E-UX` after the data-backed P12-15E preview and before cloud cutover.
+It contains exactly three interaction corrections: reveal the expanded deck
+after desktop or mobile composition activation; lower the existing mobile
+representative-card stack and remove excess lower whitespace; and add one
+shared fixed bottom-right return-to-top control to every retained MTGO view and
+Tabletop. Preserve reduced-motion, keyboard, focus, safe-area, and 390-pixel
+behavior.
+
+P12-15F publishes the accepted P12-15E data/reader change and accepted
+P12-15E-UX corrections together. P12-16 reverifies these behaviors during
+cross-device closeout rather than developing them for the first time.
+
+## Consequences
+
+Feature decks mentioned in the weekly brief lead to their editorial context,
+while unrelated links keep the direct decklist route. Expansion results become
+perceptible on both input contracts, mobile card spacing reflects the reviewed
+layout, and every retained page has a consistent way back to the top. The work
+adds no statistic, classifier decision, source event, public product, or
+historical complete-Landing view.
+
+This decision changes the downstream route map only. Each implementation task
+retains its own authorization and hands-on acceptance gate; P12-15F is the one
+combined publication gate.
+
+---
+
+# DEC-115 - Make every reviewed Landing top-copy deck a feature deck
+
+Status: `Accepted for staged implementation`
+
+## Context
+
+The P12-15B recovery workbook exposed a distinction between selected feature
+decks and `COPY LINK ONLY` decks referenced only by the Landing weekly brief.
+That distinction conflicts with the intended page behavior: a deck important
+enough to appear in the top editorial copy must also have its complete context
+in the bottom feature section, and its inline link should reveal that exact
+feature rather than leave the page.
+
+## Decision
+
+For every newly reviewed Landing week and format, the exact deck-token set in
+kept top copy must be a subset of the exact selected-feature token set. This is
+a hard membership invariant with no top-copy-only exception.
+
+Before each weekly workbook is delivered, the workbook producer parses all
+exact tokens in retained and machine-draft top copy and unions those decks into
+`Featured Decks` as mandatory `KEEP` rows. If the Owner later adds a token, its
+matching feature row must be added in the same workbook lineage. A feature may
+be dropped only after that token is removed or replaced in every kept localized
+top-copy row.
+
+Mandatory membership does not determine category, positioning, or four
+representative cards. Those remain Owner-reviewed inputs; title and order are
+derived under DEC-116. P12-15C and
+P12-15D validate the set relationship fail-closed. P12-15E therefore routes
+every admitted top-copy deck link to the matching feature item. The Top 8
+destination described in DEC-114 remains only for Top 8 links outside reviewed
+Landing copy and as a defensive legacy fallback; DEC-115 supersedes DEC-114's
+allowance for newly reviewed unmatched top-copy tokens.
+
+## Consequences
+
+The weekly carrier contains no `COPY LINK ONLY` role, feature recovery cannot
+silently omit a deck used by the weekly brief, and link behavior is
+deterministic without matching localized display text. A reviewed zero-feature
+week remains valid only when its final top copy contains no deck token. This
+decision changes neither the machine's editorial authority nor the accepted
+Landing layout; the Owner may still completely rewrite or replace all copy.
+
+---
+
+# DEC-116 - Derive Landing feature titles and order
+
+Status: `Accepted for staged implementation`
+
+## Context
+
+The P12-15B workbook asked the Owner to enter both a localized feature title
+and a category-local numeric order. The title duplicates the stable
+classifier-backed deck name, while a separate number can drift from the order
+in which the Landing brief actually introduces the linked decks. Both inputs
+create recurring work without adding editorial freedom: the Owner's actual
+editorial fields are category, positioning, representative cards, and prose.
+
+## Decision
+
+Feature title is the localized deck name keyed by
+`(format, parent_id, subtype_id-or-none)`. The classifier taxonomy remains the
+English authority. P12-15C bootstraps and Owner-reviews Chinese names; P12-15D
+adds the catalog and fail-closed coverage validation. The workbook shows these
+names and their status read-only and has no weekly title field.
+
+Feature order is also derived. Within each format, render `new_deck` before
+`new_technology`. Within a category, follow the first appearance of each exact
+feature deck token in final kept Landing copy, reading copy rows in their
+approved order and multiple tokens in one row from left to right. Append
+features not mentioned in top copy to the end of that category using stable
+source order and exact deck ID. The workbook has no feature-order field.
+
+Every classifier-maintenance change must validate bilingual-name coverage. A
+new or renamed parent/subtype identity includes its English name and an
+Owner-confirmed Chinese name in the same accepted maintenance subject; missing
+coverage blocks the refreshed baseline and weekly Landing handoff.
+
+## Consequences
+
+The bottom Feature section follows the narrative order without duplicate
+manual numbering, the same deck identity has one consistent title in every
+week, and later classifier updates cannot silently create an English-only
+Chinese interface. Until the P12-15C bootstrap is complete, the recovery
+workbook may visibly use English fallback while marking localization pending.
+This decision does not constrain Owner prose or positioning and does not change
+the accepted Landing UI structure.

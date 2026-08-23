@@ -146,9 +146,11 @@ begin under separate authorization.
       stable-environment empty state when no item was approved, never expose a
       pending-review state or internal approval vocabulary, and introduce no
       standalone Weekly Pickup front-end state.
-    - P12-15A through P12-15G supersede only the delivered Pickup handoff and
-      history source. They preserve this accepted panel structure, ordering,
-      cards, disclosure, language, empty-state, and deck-detail behavior.
+    - P12-15A through P12-15G, including P12-15E-UX, supersede the delivered
+      Pickup handoff and history source. They preserve this accepted panel
+      structure, ordering, cards, disclosure, language, empty-state, and
+      deck-detail behavior except for the bounded DEC-114 navigation and
+      interaction corrections.
 13. `P12-13` — Large-matrix interaction, delivered as separately accepted
     sequential subtasks
     - `P12-13A` — completed matrix search and shared visible-projection
@@ -216,14 +218,31 @@ begin under separate authorization.
     - put selected-deck identity and exact `deck:<ID>` tokens directly in the
       copy sheet and omit internal input IDs, generated labels, and unknown
       implementation columns from Owner input;
+    - make every exact deck referenced in retained or draft top copy a
+      mandatory `KEEP` row in `Featured Decks`, with no top-copy-only role;
+    - remove the manual feature-order and localized-title inputs: feature order
+      is derived from category plus exact deck-token appearance in final top
+      copy, and the title is derived from the format/classifier identity's
+      bilingual name;
     - preload Standard W27, Standard W33, and Modern W33 recovery rows, render
       every sheet, and stop for Owner completion without changing the page.
 15C. `P12-15C` — Content completion and bilingual review
-    - validate the Owner-completed Chinese content, selections, order, tokens,
-      and four-card choices against the frozen deck subjects;
+    - before semantic validation, resolve XLSX shared-string references from
+      raw OOXML and normalize a referenced empty string to a true blank; never
+      treat the numeric shared-string index exposed by one importer as Owner
+      content;
+    - validate the Owner-completed Chinese content, selections, categories,
+      tokens, and four-card choices against the frozen deck subjects;
+    - require the kept top-copy token set to be a subset of the exact `KEEP`
+      feature token set; return the workbook for correction on any mismatch;
     - add Codex English drafts without modifying Chinese, return the same
       workbook lineage, and require final Owner review for top copy and
-      features, including an explicitly reviewed zero result;
+      features; an explicitly reviewed zero-feature result is valid only when
+      final top copy contains no deck token;
+    - bootstrap the format-scoped bilingual classifier-name review keyed by
+      stable parent/subtype identity, preserving classifier English names and
+      obtaining Owner confirmation for every Chinese name; the workbook may
+      show the English fallback until this review is complete;
     - stop before producer or public-data work until the content is complete.
 15D. `P12-15D` — Internal Landing editorial backend
     - extract retained screening, deduplication, evidence, and continuity-state
@@ -231,6 +250,18 @@ begin under separate authorization.
       review contract, retaining a temporary compatibility wrapper;
     - make top copy and current features consume the same reviewed source;
       remove their dependency on a separately published Pickup week;
+    - retain one stable exact-deck destination identity for every reviewed
+      feature so the later reader can distinguish a selected feature deck from
+      an ordinary Top 8-only deck without matching display text;
+    - add the format-scoped bilingual classifier-name catalog and coverage
+      validator; derive the feature title from that catalog rather than a
+      weekly free-text field;
+    - derive feature order per format by rendering `new_deck` before
+      `new_technology`, then following the exact deck-token appearance order in
+      final top copy, with same-row tokens read left to right and features not
+      mentioned in top copy appended to their category deterministically;
+    - reject any newly reviewed top-copy token without an exact selected
+      feature record;
     - update known-archetype state after an accepted classified baseline even
       when no feature is selected, and add fail-closed stale-review validation;
     - write no public feature path and perform no front-end switch in this task.
@@ -239,15 +270,39 @@ begin under separate authorization.
       `landing/features/<week>.json` contracts, consumers, catalogs, Pages
       admission, and focused tests;
     - generate Standard W27, Standard W33, and Modern W33 from the completed
-      review source and build one local preview without changing the accepted
-      Landing UI design;
+      review source and build one local preview while preserving the accepted
+      Landing structure and all design elements not explicitly amended below;
+    - resolve every admitted inline Landing-copy deck token to its exact
+      selected feature in the applicable format and feature week: select that
+      week, expand the item, move it into view, and expose a stable URL/focus
+      destination. Keep the exact Top 8 route only as a legacy defensive
+      fallback; new unmatched reviewed content is invalid;
     - verify both languages, both formats, historical selection, deck links,
       card display, responsive behavior, and explicit empty weeks, then stop
       for hands-on Owner acceptance.
+15E-UX. `P12-15E-UX` — Feature-release interaction corrections
+    - begin only after the P12-15E data-backed preview exists and before the
+      cloud cutover; keep this focused on the three Owner-approved interaction
+      corrections discovered during recovery review;
+    - after a desktop or mobile composition-segment activation expands a deck,
+      scroll the newly revealed detail into a perceptible viewport position and
+      preserve keyboard focus and reduced-motion behavior;
+    - at mobile widths, move the accepted 90 by 63 representative-card stack
+      lower relative to the archetype heading and remove the excessive lower
+      whitespace without changing image size, overlap direction, or desktop
+      placement;
+    - add one shared fixed bottom-right return-to-top control to the Landing,
+      all retained MTGO views, and Tabletop, with safe-area spacing, keyboard
+      access, localized accessible naming, reduced-motion behavior, and no
+      content obstruction at 390 pixels;
+    - verify all three corrections in the same local release candidate and
+      stop for hands-on Owner acceptance.
 15F. `P12-15F` — Cloud cutover
-    - publish the accepted latest Landing and feature archive together, switch
-      the feature selector from Pickup history to Landing feature history, and
-      verify the merge-triggered Pages deployment;
+    - begin only after hands-on acceptance of both P12-15E and P12-15E-UX;
+    - publish the accepted latest Landing, feature archive, feature-aware deck
+      destinations, and interaction corrections together; switch the feature
+      selector from Pickup history to Landing feature history, and verify the
+      merge-triggered Pages deployment;
     - prove that live Landing requests no Pickup week document while preserving
       the tested legacy URL redirect and retaining old files for rollback;
     - stop after verified cutover; cleanup remains a separate task.
@@ -260,8 +315,9 @@ begin under separate authorization.
       declarations, replacement verification, rollback evidence, and separate
       Owner acceptance.
 16. `P12-16` — Cross-device and visual-system closeout
-    - begin only after P12-15A through P12-15G are complete or a named legacy
-      compatibility artifact is explicitly deferred by the Owner;
+    - begin only after P12-15A through P12-15G, including P12-15E-UX, are
+      complete or a named legacy compatibility artifact is explicitly deferred
+      by the Owner;
     - verify the Landing plus the four retained top-level product views in
       Chinese and English independently, both public MTGO formats, the protected
       Tabletop product, desktop, 390px width, language switching, URL
@@ -274,6 +330,8 @@ begin under separate authorization.
       order, and standalone identity after P12-15G while old URLs still open the
       requested Landing feature week. Preserve only explicitly deferred
       rollback artifacts;
+    - reverify the P12-15E-UX composition reveal, mobile representative-card
+      alignment, and shared return-to-top control across every retained view;
     - verify that no future format can be catalog-public without an admitted
       Landing and all required MTGO products, while the Standard and Modern
       migration exceptions both satisfy this invariant at closeout;

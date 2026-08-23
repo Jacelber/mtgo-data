@@ -35,14 +35,14 @@ noise. A changed weekly baseline updates and reopens the same Issue.
 | 3. Start the review | Owner | Read the Issue and explicitly ask Codex to begin with the named week and readiness artifact. Closing or ignoring the Issue means no review starts. | Authorization for one exact weekly review baseline. |
 | 4. Freeze and verify the baseline | Codex | Confirm the cloud workflow run, publication SHA, week lifecycle, event IDs, classifier digests, and readiness digest. Stop on drift or missing evidence. | Frozen review manifest and plain-language scope summary. |
 | 5. Review Unknown decks | Codex and Owner alternate; Owner confirms | Include every unresolved historical and current Unknown unless it was already reclassified or explicitly accepted as intentional Unknown. Handle coherent clusters in chat with complete representative decklists; use XLSX only for singleton batch review. Codex supplies a preliminary technical proposal, reads unrestricted Owner feedback, then supplies an exact revised proposal. | One final Owner confirmation per unresolved deck or group. Only an incoherent random card pile may be explicitly accepted as intentional Unknown. |
-| 6. Repair and reproduce classification when needed | Codex implements after separate authorization; Owner accepts | Make only accepted classifier changes, rerun the affected classification and derived weekly outputs, and re-freeze the changed baseline. Skip this step when no rule change is accepted. | Accepted classifier subject and refreshed weekly evidence, or an explicit no-change record. |
+| 6. Repair and reproduce classification when needed | Codex implements after separate authorization; Owner accepts | Make only accepted classifier changes. When a parent/subtype identity is added or renamed, include its format-scoped English/Chinese name maintenance in the same review and require Owner confirmation of the Chinese name; always run bilingual-name coverage before accepting the refreshed baseline. Then rerun the affected classification and derived weekly outputs and re-freeze the changed baseline. Skip rule edits when no rule change is accepted, but never skip the coverage check. | Accepted classifier subject, complete bilingual identity coverage, and refreshed weekly evidence, or an explicit no-rule-change record with passing coverage. |
 | 7. Audit every Top 8 classification | Codex prepares; Owner checks | Export every current-week Top 8 deck in event-date and rank order with its final classification. This temporary human audit remains required until the Owner explicitly retires it. | Owner-checked weekly classification baseline. |
 | 8. Review visual metadata | Codex proposes; Owner decides | Review representative-card choices and deck-color identities against the accepted deck identities. Missing deterministic diagnostics are reported as unavailable, never guessed. | Owner-approved metadata changes or an explicit no-change/defer record. |
 | 9. Screen Landing features | Automatic producer | Apply the five reviewed routes to exact Top 8 results and keep the complete ordered Top 8 pool. Merge reason tags only when they select the same exact deck. There is no machine primary pick. | Private Landing candidates, structured evidence, and complete Top 8 link catalog. |
-| 10. Prepare the Landing workbook | Codex | Create the five-sheet Landing carrier defined below. Preserve prior Owner content, expose exact deck tokens in the copy sheet, and omit internal implementation fields from Owner input. | Editable Landing review carrier bound to the frozen baseline. |
-| 11. Complete Chinese review | Owner | Select any number of candidates, add any other exact Top 8 deck, merge or split presentation items, change category/order/cards, delete or completely rewrite machine copy, write unrelated content, or select none. Explicitly complete both top-copy and feature review. | Chinese final content and selected featured decks. |
+| 10. Prepare the Landing workbook | Codex | Create the five-sheet Landing carrier defined below. Preserve prior Owner content, expose exact deck tokens in the copy sheet, and, before presenting the workbook, add every exact deck already referenced by retained or draft top copy to `Featured Decks` as a mandatory `KEEP` row. Merge these rows with ordinary machine candidates by exact deck ID. Derive bilingual deck titles from the classifier-name catalog and derive feature order from category plus final top-copy token order; omit both as Owner input fields. | Editable Landing review carrier bound to the frozen baseline, with no top-copy-only deck and no manual feature-title/order work. |
+| 11. Complete Chinese review | Owner | Select any number of other candidates, add any other exact Top 8 deck, merge or split presentation items, change category/cards/positioning, delete or completely rewrite machine copy, write unrelated content, or select none only when the final top copy contains no deck token. Every exact deck added to kept top copy must also be added to `Featured Decks`; it cannot be dropped while that token remains. Explicitly complete both top-copy and feature review. | Chinese final content and a feature selection containing every top-copy deck. |
 | 12. Draft and review English | Codex drafts; Owner decides | Codex translates the Owner-final Chinese content without changing it. The Owner edits or approves the English and explicitly completes bilingual review. | Complete bilingual Landing review state. |
-| 13. Build and validate the preview | Codex | Import the workbook into the private Landing review source; validate week, source events, classifier and policy digests, deck tokens, rank, order, and featured cards; generate the current and feature-history documents; and render the accepted UI. | Exact local Landing preview or a fail-closed review blocker. |
+| 13. Build and validate the preview | Codex | Import the workbook into the private Landing review source; validate week, source events, classifier and policy digests, deck tokens, rank, bilingual-name coverage, derived order, and featured cards; generate the current and feature-history documents; and render the accepted UI. | Exact local Landing preview or a fail-closed review blocker. |
 | 14. Accept and publish Landing | Owner accepts; Codex completes | After hands-on acceptance, complete the unchanged task through commit, one Ready PR, required checks, merge, and Pages publication. Publish the latest Landing and selected feature-history week together; there is no intermediate public Pickup publication. | Accepted public Landing and immutable publication subject. |
 | 15. Verify cloud | Codex | Verify current copy, historical feature selection, both formats and languages, exact deck links, card display, legacy Pickup redirects, and absence of live Pickup data requests. | Completed weekly-maintenance evidence. |
 
@@ -141,8 +141,9 @@ five-sheet carrier:
    selected deck's format, event, date, rank, archetype, player, and
    `deck:<20-hex deck ID>` token;
 3. `Featured Decks` - filtered candidates with complete decklists and machine
-   reasons plus simple selection, category, order, localized title and
-   positioning, and four-card Owner fields;
+   reasons plus simple selection, category, positioning, and four-card Owner
+   fields; bilingual deck names and localization status are read-only, and
+   feature order is derived rather than entered;
 4. `All Top 8` - every exact event rank 1 through 8 for unrestricted manual
    additions; and
 5. `Field Guide` - only fields the Owner must enter or review.
@@ -166,6 +167,28 @@ localized `<archetype> · <player> · <rank>` display automatically.
 The token is the later UI replacement anchor; only its generated display becomes
 the hyperlink, never the entire summary row. There is no separate `Landing
 Links` sheet. Columns that do not support Owner input or review are omitted.
+
+Top-copy membership implies feature membership. Before each weekly workbook is
+shown to the Owner, Codex parses every exact deck token in the retained and
+machine-draft top copy and unions those exact decks into `Featured Decks` as
+`KEEP`, even when the ordinary five-route screen did not select them. If the
+Owner later adds a token, the matching feature row must be added in the same
+workbook lineage. Removing that feature is valid only after the token is removed
+or replaced in every kept localized top-copy row. Category, positioning, and
+four cards remain editable Owner decisions. Feature title comes from the
+format-scoped bilingual classifier-name catalog. Feature order is derived per
+format by placing `new_deck` before `new_technology`, then following exact deck
+tokens in kept top copy (row order, then left to right); features absent from
+top copy are appended to their category deterministically. Mandatory
+membership does not invent editorial positioning.
+
+Classifier-name maintenance is part of weekly classifier maintenance, not a
+later editorial repair. The catalog key is `(format, parent_id,
+subtype_id-or-none)`. A new or renamed classifier identity must carry its
+classifier-owned English name and an Owner-confirmed Chinese name in the same
+accepted change. A coverage failure blocks the refreshed weekly baseline and
+therefore blocks Landing workbook preparation; it is never silently repaired
+by asking the Owner to type a weekly feature title.
 
 The Owner is never asked to invent or type classifier action codes, parent IDs,
 parent names, or subtype IDs. The first Owner field is unrestricted free text.
