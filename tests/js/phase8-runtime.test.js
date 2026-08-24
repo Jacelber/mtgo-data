@@ -64,9 +64,14 @@ function landingDocuments({ companionWeek = "2026-W33", rangeFormat = "standard"
     ["./stats/standard/mtgo/meta.json", { format: "standard" }],
     ["./stats/standard/mtgo/range_1w.json", { format: rangeFormat, period, total_decks: 70 }],
     ["./stats/standard/mtgo/completeness/1w.json", { format: "standard", period }],
-    ["./stats/standard/mtgo/pickup/index.json", {
+    ["./stats/standard/mtgo/landing/features/index.json", {
       format: "standard",
-      weeks: [{ file: "2026-W33.json" }],
+      weeks: [{ week: "2026-W33", file: "2026-W33.json", feature_count: 1 }],
+    }],
+    ["./stats/standard/mtgo/landing/features/2026-W33.json", {
+      format: "standard",
+      week: { id: "2026-W33" },
+      features: { items: [] },
     }],
     ["./stats/standard/mtgo/decks_1w.json", { format: "standard", decks: [] }],
     ["./stats/standard/mtgo/decks_4w.json", { format: "standard", decks: [] }],

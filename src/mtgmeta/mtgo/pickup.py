@@ -1469,6 +1469,13 @@ def generate_metadata(
                 ).is_file()
                 else None
             ),
+            "landing_feature_catalog": (
+                "landing/features/index.json"
+                if (
+                    context.paths["statistics"] / "landing" / "features" / "index.json"
+                ).is_file()
+                else None
+            ),
             "matchup_source": "Videre",
             "matchup_coverage": _matchup_coverage(
                 context,

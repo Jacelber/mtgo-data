@@ -36,10 +36,10 @@
       `${base}/meta.json`,
       `${base}/range_1w.json`,
       `${base}/completeness/1w.json`,
-      `${base}/pickup/index.json`,
+      `${base}/landing/features/index.json`,
     ];
     if (selectedFeatureFile) {
-      paths.push(`${base}/pickup/${selectedFeatureFile}`);
+      paths.push(`${base}/landing/features/${selectedFeatureFile}`);
     }
     if (includeEnvironmentDecks) paths.push(`${base}/decks_1w.json`);
     if (includeFeatureDecks) paths.push(`${base}/decks_4w.json`);
@@ -48,16 +48,18 @@
 
   function validateLandingGroup(format, documents) {
     const {
-      landing, range, completeness, pickupIndex, pickupDocument,
+      landing, range, completeness, featureIndex, featureDocument,
     } = documents;
     const periodMatches = landing.week?.start === range.period?.start
       && landing.week?.end === range.period?.end
       && landing.week?.start === completeness.period?.start
       && landing.week?.end === completeness.period?.end;
-    const formatsMatch = [landing, range, completeness, pickupIndex, pickupDocument]
+    const formatsMatch = [landing, range, completeness, featureIndex, featureDocument]
       .filter(Boolean)
       .every(document => !document.format || document.format === format);
-    if (!formatsMatch) {
+    const selectedWeekMatches = !featureDocument
+      || featureDocument.week?.id === documents.featureFile?.replace(/\.json$/, "");
+    if (!formatsMatch || !selectedWeekMatches) {
       throw new Runtime.ResourceError("invalid", `${rootPath(format)}/landing/current.json`);
     }
     if (periodMatches) return documents;
@@ -73,19 +75,20 @@
   async function loadLanding(format, landingPath, selectedFeatureFile, options = {}) {
     const base = rootPath(format);
     const landing = await client.fetchJson(landingPath);
-    const pickupIndex = await client.fetchJson(`${base}/pickup/index.json`);
+    const featureIndex = await client.fetchJson(`${base}/landing/features/index.json`);
+    const selectableWeeks = featureIndex.weeks.filter(item => item.feature_count > 0);
+    const selectableFeatureIndex = { ...featureIndex, weeks: selectableWeeks };
     const currentFeatureFile = `${landing.week?.id}.json`;
-    const selectedEntry = pickupIndex.weeks.find(item => item.file === selectedFeatureFile)
-      || pickupIndex.weeks.find(item => item.file === currentFeatureFile)
-      || pickupIndex.weeks[0]
+    const selectedEntry = selectableWeeks.find(item => item.file === selectedFeatureFile)
+      || selectableWeeks.find(item => item.file === currentFeatureFile)
+      || selectableWeeks[0]
       || null;
     const featureFile = selectedEntry?.file || null;
-    const featureDocumentNeeded = featureFile && featureFile !== currentFeatureFile;
-    const [meta, range, completeness, pickupDocument, environmentDecks, featureDecks] = await Promise.all([
+    const [meta, range, completeness, featureDocument, environmentDecks, featureDecks] = await Promise.all([
       client.fetchJson(`${base}/meta.json`),
       client.fetchJson(`${base}/range_1w.json`),
       client.fetchJson(`${base}/completeness/1w.json`),
-      featureDocumentNeeded ? client.fetchJson(`${base}/pickup/${featureFile}`) : null,
+      featureFile ? client.fetchJson(`${base}/landing/features/${featureFile}`) : null,
       options.includeEnvironmentDecks ? client.fetchJson(`${base}/decks_1w.json`) : null,
       options.includeFeatureDecks ? client.fetchJson(`${base}/decks_4w.json`) : null,
     ]);
@@ -94,9 +97,9 @@
       meta,
       range,
       completeness,
-      pickupIndex,
-      pickupEntry: selectedEntry,
-      pickupDocument,
+      featureIndex: selectableFeatureIndex,
+      featureEntry: selectedEntry,
+      featureDocument,
       featureFile,
       environmentDecks,
       featureDecks,

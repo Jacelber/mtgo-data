@@ -198,6 +198,15 @@ def _allowed_path(
     ):
         return parts[4] == "current.json"
     if (
+        len(parts) == 6
+        and parts[0] == "stats"
+        and parts[1] in product_formats
+        and parts[2:5] == ("mtgo", "landing", "features")
+    ):
+        return parts[5] == "index.json" or bool(
+            re.fullmatch(r"\d{4}-W\d{2}\.json", parts[5])
+        )
+    if (
         len(parts) == 5
         and parts[0] == "data"
         and parts[1] in product_formats
@@ -266,6 +275,15 @@ def _allowed_new_path(
         and parts[2:4] == ("mtgo", "landing")
     ):
         return parts[4] == "current.json"
+    if (
+        len(parts) == 6
+        and parts[0] == "stats"
+        and parts[1] in product_formats
+        and parts[2:5] == ("mtgo", "landing", "features")
+    ):
+        return parts[5] == "index.json" or bool(
+            re.fullmatch(r"\d{4}-W\d{2}\.json", parts[5])
+        )
     if (
         len(parts) == 5
         and parts[0] == "stats"

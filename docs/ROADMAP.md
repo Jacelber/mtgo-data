@@ -285,8 +285,9 @@ begin under separate authorization.
       acceptance.
 15E-UX. `P12-15E-UX` — Feature-release interaction corrections
     - begin only after hands-on acceptance of P12-15E and P12-15E-I18N and
-      before the cloud cutover; keep this focused on the three Owner-approved
-      interaction corrections discovered during recovery review;
+      before the cloud cutover; keep this focused on the five Owner-approved
+      interaction and deck-context corrections discovered during recovery
+      review;
     - after a desktop or mobile composition-segment activation expands a deck,
       scroll the newly revealed detail into a perceptible viewport position and
       preserve keyboard focus and reduced-motion behavior;
@@ -298,11 +299,29 @@ begin under separate authorization.
       all retained MTGO views, and Tabletop, with safe-area spacing, keyboard
       access, localized accessible naming, reduced-motion behavior, and no
       content obstruction at 390 pixels;
-    - verify all three corrections in the same local release candidate and
-      stop for hands-on Owner acceptance.
+    - carry the official source event identity and name into current rolling
+      MTGO best and representative deck records without changing event bytes or
+      statistical values; display date only plus event name and player count in
+      Landing Environment and MTGO Statistics details;
+    - in Top 8, keep event context in the table rather than duplicating it in
+      the deck detail, and highlight both the current placement cell and its
+      event header across direct-link and close behavior;
+    - verify all five corrections in the same local release candidate and
+      stop for hands-on Owner acceptance;
+    - the Owner accepted the complete cumulative recovery candidate, including
+      the final mobile Landing row interaction corrections, on 2026-08-24;
+      cloud publication remains the separately gated P12-15F task.
 15F. `P12-15F` — Cloud cutover
     - begin only after hands-on acceptance of P12-15E, P12-15E-I18N, and
       P12-15E-UX;
+    - authorized on 2026-08-24 to reuse and publish the exact accepted
+      cumulative workspace; no accepted UI, content, data, or interaction may
+      change during cutover;
+    - after the production-recovery insertion advanced cloud master to
+      `f4ae158`, preserve its W34 production data and retained-Landing runtime,
+      regenerate only the accepted representative-deck event context, and stop
+      for renewed Owner acceptance of the final integrated UI bytes before the
+      first remote write;
     - publish the accepted latest Landing, feature archive, feature-aware deck
       destinations, public bilingual classifier-name contract, localized
       retained-view consumers, and interaction corrections together; switch
@@ -336,7 +355,8 @@ begin under separate authorization.
       requested Landing feature week. Preserve only explicitly deferred
       rollback artifacts;
     - reverify the P12-15E-UX composition reveal, mobile representative-card
-      alignment, and shared return-to-top control across every retained view;
+      alignment, shared return-to-top control, source-backed event context, and
+      current Top 8 placement highlight across the applicable retained views;
     - reverify that every classifier-backed parent and subtype label follows
       the selected language across all retained views without changing stable
       classifier identity or statistical meaning;

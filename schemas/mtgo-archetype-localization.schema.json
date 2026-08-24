@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-archetype-localization.schema.json",
+  "title": "Public format-scoped bilingual classifier names",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "format", "names"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "format": {"enum": ["standard", "modern"]},
+    "names": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/name"}
+    }
+  },
+  "$defs": {
+    "stableId": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "identityId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)?$"
+    },
+    "display": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en", "zh"],
+      "properties": {
+        "en": {"type": "string", "minLength": 1},
+        "zh": {"type": "string", "minLength": 1}
+      }
+    },
+    "name": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity_id", "parent_id", "subtype_id", "display"],
+      "properties": {
+        "identity_id": {"$ref": "#/$defs/identityId"},
+        "parent_id": {"$ref": "#/$defs/stableId"},
+        "subtype_id": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/stableId"}
+          ]
+        },
+        "display": {"$ref": "#/$defs/display"}
+      }
+    }
+  }
+}

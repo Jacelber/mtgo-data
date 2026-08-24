@@ -23,7 +23,7 @@ const TABLETOP_SORT_KEYS = new Set([
 const TABLETOP_VIEWS = new Set(["overview", "matchup"]);
 const TABLETOP_SCOPES = new Set(["day1", "day2", "all_constructed"]);
 const EXTENDED_URL_KEYS = [
-  "range", "sort", "dir", "week", "event", "events", "view", "scope", "detail", "section",
+  "range", "sort", "dir", "week", "event", "events", "view", "scope", "detail", "section", "feature",
 ];
 let pendingUrlWrite = null;
 let touchedCompositionIdentity = null;
@@ -53,8 +53,11 @@ function resetUrlBackedState() {
   state.detailMode = "average";
   state.top8WeekFile = null;
   state.pickupWeekFile = null;
+  state.landingFeatureWeekFile = null;
+  state.landingFeatureDestination = null;
   state.landingSection = null;
   state.pickupOpen.clear();
+  state.landingFeatureOpen.clear();
   state.tabletopView = "overview";
   state.tabletopEventId = null;
   state.tabletopSelectedEvents.clear();
@@ -102,8 +105,13 @@ function applyUrlState(parameters) {
   const direction = parameters.get("dir");
   const detail = parameters.get("detail");
   if (state.product === "mtgo-landing") {
-    state.pickupWeekFile = requestedWeekFile(parameters);
+    state.landingFeatureWeekFile = requestedWeekFile(parameters);
     state.landingSection = parameters.get("section") === "features" ? "features" : null;
+    const feature = parameters.get("feature");
+    if (/^deck:[0-9a-f]{20}$/.test(feature || "")) {
+      state.landingFeatureDestination = feature;
+      state.landingSection = "features";
+    }
     if (detail) {
       state.detailIdentity = detail;
       state.compositionIdentity = detail;
@@ -154,7 +162,8 @@ function urlStateParameters() {
   parameters.set("product", state.product);
   if (state.product === "mtgo-landing") {
     if (state.landingSection === "features") parameters.set("section", "features");
-    if (weekId(state.pickupWeekFile)) parameters.set("week", weekId(state.pickupWeekFile));
+    if (weekId(state.landingFeatureWeekFile)) parameters.set("week", weekId(state.landingFeatureWeekFile));
+    if (state.landingFeatureDestination) parameters.set("feature", state.landingFeatureDestination);
     if (state.detailIdentity) parameters.set("detail", state.detailIdentity);
   } else if (state.product === "mtgo-statistics") {
     parameters.set("range", String(state.statsRange));
@@ -259,8 +268,16 @@ function hasExtendedUrlState(parameters) {
 
 function currentDetailReveal() {
   const mobile = matchMedia("(max-width: 780px)").matches;
+  if (state.product === "mtgo-landing" && state.landingFeatureDestination) {
+    const destination = CSS.escape(state.landingFeatureDestination);
+    return {
+      selector: `[data-feature-destination="${destination}"]`,
+      focusSelector: `[data-landing-feature-toggle="${destination}"]`,
+      alignment: "start",
+    };
+  }
   if (state.product === "mtgo-landing" && state.landingSection === "features") {
-    return { selector: "#features", alignment: "start" };
+    return { selector: "#features", focusSelector: null, alignment: "start" };
   }
   if (state.product === "mtgo-landing" && state.detailIdentity) {
     return {
@@ -316,6 +333,7 @@ async function renderViewWithFocus(
     root.innerHTML = loadingSkeleton();
   }
   try {
+    await ensureClassifierNames(state.format);
     let html;
     if (state.product === "mtgo-landing") html = await landingView();
     else if (state.product === "mtgo-statistics") html = await statsView();
@@ -388,15 +406,42 @@ function resetInteractions() {
   state.detailIdentity = null;
   state.top8Detail = null;
   state.pickupOpen.clear();
+  state.landingFeatureOpen.clear();
+  state.landingFeatureDestination = null;
   state.tabletopDetailIdentity = null;
   state.scrollHintsSeen.clear();
+}
+
+async function toggleDetailIdentity(identity) {
+  const opening = state.detailIdentity !== identity;
+  state.detailIdentity = opening ? identity : null;
+  const parentId = identity.split("/", 1)[0];
+  if (opening) setCompositionSelection(parentId);
+  else if (state.compositionIdentity === parentId) setCompositionSelection(null);
+  state.detailMode = "average";
+  queueUrlWrite();
+  await renderView();
 }
 
 document.addEventListener("click", async event => {
   const compositionButton = event.target.closest("button[data-composition-identity]");
   if (!compositionButton) clearTouchedComposition();
   const button = event.target.closest("button");
-  if (!button) return;
+  if (!button) {
+    const landingRow = event.target.closest(".landing-environment-row[data-landing-row]");
+    const cardLink = event.target.closest("a[data-card-image]");
+    if (landingRow && !cardLink && matchMedia("(max-width: 780px)").matches) {
+      await toggleDetailIdentity(landingRow.dataset.landingRow);
+    }
+    return;
+  }
+  if (button.hasAttribute("data-return-to-top")) {
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    document.querySelector("#site-title")?.focus({ preventScroll: true });
+    document.querySelector("#payload-status").textContent = t("navigation.returned_top");
+    return;
+  }
   if (button.hasAttribute("data-retry-view")) {
     const failed = state.failedRender;
     button.disabled = true;
@@ -496,11 +541,14 @@ document.addEventListener("click", async event => {
     state.detailIdentity = action.identity;
     state.detailMode = "average";
     queueUrlWrite();
-    const revealSelector = matchMedia("(max-width: 780px)").matches
-      ? `[data-mobile-card-identity="${CSS.escape(action.identity)}"]`
-      : ".deck-detail-row";
+    const mobile = matchMedia("(max-width: 780px)").matches;
+    const revealSelector = state.product === "mtgo-landing"
+      ? `[data-landing-detail="${CSS.escape(action.identity)}"]`
+      : mobile
+        ? `[data-mobile-card-identity="${CSS.escape(action.identity)}"]`
+        : ".deck-detail-row";
     await renderViewWithFocus(null, revealSelector, {
-      revealAlignment: matchMedia("(max-width: 780px)").matches ? "start" : "end",
+      revealAlignment: state.product === "mtgo-landing" || mobile ? "start" : "end",
     });
   } else if (button.dataset.statsRange) {
     discardPendingRefresh();
@@ -540,15 +588,7 @@ document.addEventListener("click", async event => {
     state.detailIdentity = null;
     if (!renderStatsExpansion(button)) await renderView();
   } else if (button.dataset.detailIdentity) {
-    const identity = button.dataset.detailIdentity;
-    const opening = state.detailIdentity !== identity;
-    state.detailIdentity = opening ? identity : null;
-    const parentId = identity.split("/", 1)[0];
-    if (opening) setCompositionSelection(parentId);
-    else if (state.compositionIdentity === parentId) setCompositionSelection(null);
-    state.detailMode = "average";
-    queueUrlWrite();
-    await renderView();
+    await toggleDetailIdentity(button.dataset.detailIdentity);
   } else if (button.hasAttribute("data-close-detail")) {
     const identity = state.detailIdentity;
     state.detailIdentity = null;
@@ -688,6 +728,25 @@ document.addEventListener("click", async event => {
   } else if (button.dataset.pickupToggle) {
     toggleSet(state.pickupOpen, button.dataset.pickupToggle);
     await renderView();
+  } else if (button.dataset.landingFeatureToggle) {
+    const destination = button.dataset.landingFeatureToggle;
+    const opening = !state.landingFeatureOpen.has(destination);
+    if (opening) {
+      state.landingFeatureOpen.add(destination);
+      state.landingFeatureDestination = destination;
+      state.landingSection = "features";
+    } else {
+      state.landingFeatureOpen.delete(destination);
+      if (state.landingFeatureDestination === destination) {
+        state.landingFeatureDestination = null;
+      }
+    }
+    queueUrlWrite();
+    await renderViewWithFocus(
+      `[data-landing-feature-toggle="${CSS.escape(destination)}"]`,
+      opening ? `[data-feature-destination="${CSS.escape(destination)}"]` : null,
+      { revealAlignment: "start" }
+    );
   }
 });
 
@@ -721,8 +780,9 @@ document.addEventListener("change", async event => {
     updateMatchupFilterDraftControls(matchupDocument);
   } else if (event.target.id === "landing-feature-week") {
     discardPendingRefresh();
-    state.pickupWeekFile = event.target.value;
-    state.pickupOpen.clear();
+    state.landingFeatureWeekFile = event.target.value;
+    state.landingFeatureOpen.clear();
+    state.landingFeatureDestination = null;
     queueUrlWrite();
     await renderViewWithFocus("#landing-feature-week");
   } else if (event.target.id === "top8-week") {
@@ -814,6 +874,12 @@ function updateLanguageChrome(language) {
   enButton.classList.toggle("active", language === "en");
   zhButton.setAttribute("aria-pressed", String(language === "zh"));
   enButton.setAttribute("aria-pressed", String(language === "en"));
+  const returnToTop = document.querySelector("[data-return-to-top]");
+  if (returnToTop) {
+    const label = t("navigation.return_top");
+    returnToTop.setAttribute("aria-label", label);
+    returnToTop.setAttribute("title", label);
+  }
   renderSiteAttribution();
   updateDocumentMetadata();
 }
@@ -858,7 +924,7 @@ async function initialize({ retry = false } = {}) {
     }
     renderNavigation();
     const reveal = currentDetailReveal();
-    await renderViewWithFocus(null, reveal.selector, {
+    await renderViewWithFocus(reveal.focusSelector || null, reveal.selector, {
       revealAlignment: reveal.alignment,
     });
   } catch (error) {
@@ -893,7 +959,7 @@ window.addEventListener("popstate", async () => {
   setMessage("");
   renderNavigation();
   const reveal = currentDetailReveal();
-  await renderViewWithFocus(null, reveal.selector, {
+  await renderViewWithFocus(reveal.focusSelector || null, reveal.selector, {
     revealAlignment: reveal.alignment,
   });
 });

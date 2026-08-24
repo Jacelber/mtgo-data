@@ -92,9 +92,7 @@ function tabletopDeckDetail(identityId, options = {}) {
   const mtgoBase = locateDeck(currentContext.mtgoDecks, identityId);
   const performance = source?.scopes?.[state.tabletopScope];
   const record = performance?.played_record;
-  const title = source?.classification?.subtype_name
-    ? `${source.classification.subtype_name} ${source.classification.archetype_name}`
-    : (source?.classification?.archetype_name || currentContext.tabletopIdentityNames.get(identityId) || identityId);
+  const title = classifierIdentityName(identityId);
   const performanceHtml = performance ? `<div class="event-deck-performance">
     <strong>${t("tabletop.scope_performance", {
       scope: scopeLabel(state.tabletopScope, currentContext.eventFormat),
@@ -162,7 +160,9 @@ function tabletopRow(record, className = "", advancementMetric = "high_score") {
 }
 
 function tabletopSortValue(record, key) {
-  if (key === "name") return (record.archetype_name || record.display_name || "").toLowerCase();
+  if (key === "name") {
+    return classifierName(record.archetype_id, record.subtype_id).toLowerCase();
+  }
   if (key === "win_rate") return overviewRecord(record.match_record?.all_matches)?.win_rate ?? -1;
   if (key === "matches") return overviewRecord(record.match_record?.all_matches)?.matches ?? -1;
   if (key === "day2_conversion") return record.day2_conversion ?? -1;
@@ -200,9 +200,14 @@ function tabletopOverview(scope, presentation) {
   const overall = tabletopOverall(scope, advancementMetric);
   const identityNames = new Map();
   scope.archetypes.forEach(parent => {
-    if (parent.archetype_id) identityNames.set(parent.archetype_id, parent.archetype_name);
+    if (parent.archetype_id) {
+      identityNames.set(parent.archetype_id, classifierName(parent.archetype_id));
+    }
     activeTabletopSubtypes(parent).forEach(subtype => {
-      identityNames.set(`${parent.archetype_id}/${subtype.subtype_id}`, subtype.display_name);
+      identityNames.set(
+        `${parent.archetype_id}/${subtype.subtype_id}`,
+        classifierName(parent.archetype_id, subtype.subtype_id)
+      );
     });
   });
   currentContext.tabletopIdentityNames = identityNames;
@@ -211,13 +216,13 @@ function tabletopOverview(scope, presentation) {
     const nameHtml = expandable
       ? `<button class="name-button hierarchy-toggle" type="button" data-tabletop-toggle="${escapeHtml(parent.archetype_id)}"
           data-responsive-key="tabletop-action:${escapeHtml(parent.archetype_id)}" aria-expanded="${open}">
-          <span class="round-toggle">${open ? "−" : "+"}</span><span class="identity-label">${escapeHtml(parent.archetype_name)}</span></button>`
+          <span class="round-toggle">${open ? "−" : "+"}</span><span class="identity-label">${escapeHtml(classifierName(parent.archetype_id))}</span></button>`
       : directIdentity
         ? `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(directIdentity)}"
             data-responsive-key="tabletop-action:${escapeHtml(directIdentity)}"
             aria-expanded="${state.tabletopDetailIdentity === directIdentity}">
-            <span class="identity-label">${escapeHtml(parent.archetype_name)}</span></button>`
-        : `<span class="identity-label">${escapeHtml(parent.archetype_name)}</span>`;
+            <span class="identity-label">${escapeHtml(classifierName(parent.archetype_id))}</span></button>`
+        : `<span class="identity-label">${escapeHtml(classifierName(parent.archetype_id))}</span>`;
     const output = [tabletopRow({ ...parent, nameHtml }, "", advancementMetric)];
     if (!expandable && directIdentity && state.tabletopDetailIdentity === directIdentity) {
       output.push(tabletopDetailRow(directIdentity));
@@ -231,7 +236,10 @@ function tabletopOverview(scope, presentation) {
           nameHtml: `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(identityId)}"
             data-responsive-key="tabletop-action:${escapeHtml(identityId)}"
             aria-expanded="${state.tabletopDetailIdentity === identityId}">
-            <span class="identity-label">${escapeHtml(subtype.display_name)}</span></button>`,
+            <span class="identity-label">${escapeHtml(classifierName(
+              parent.archetype_id,
+              subtype.subtype_id
+            ))}</span></button>`,
         }, "subtype-row", advancementMetric));
         if (state.tabletopDetailIdentity === identityId) output.push(tabletopDetailRow(identityId));
       });
@@ -289,12 +297,12 @@ function tabletopOverview(scope, presentation) {
 
 function tabletopMatchup(matchupDocument, scopeId, eventFormat, overviewScope) {
   const scope = matchupDocument.scopes[scopeId];
-  const viewDocument = ReviewData.activeMatchupDocument({
+  const viewDocument = localizedMatchupDocument(ReviewData.activeMatchupDocument({
     hierarchical: true,
     hierarchy: matchupDocument.hierarchy,
     parent_order: scope.parent_order,
     leaf_matrix: scope.leaf_matrix,
-  }, LOW_SAMPLE_THRESHOLD);
+  }, LOW_SAMPLE_THRESHOLD));
   const mainstreamParentIds = state.matchupMainstreamOnly
     ? ReviewData.mainstreamParentIds(
       overviewScope?.archetypes,

@@ -73,6 +73,8 @@
       canonical.set("section", "features");
       const week = parameters.get("week");
       if (/^\d{4}-W\d{2}$/.test(week || "")) canonical.set("week", week);
+      const feature = parameters.get("feature");
+      if (/^deck:[0-9a-f]{20}$/.test(feature || "")) canonical.set("feature", feature);
     }
     if (language) canonical.set("lang", language);
     return canonical;

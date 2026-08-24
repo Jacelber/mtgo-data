@@ -59,12 +59,14 @@ function statsDetailRow(identityId) {
 
 function statsDeckDetail(identityId, options = {}) {
   const record = locateDeck(currentContext.decks, identityId);
-  const title = record?.display_name || record?.name || currentContext.identityNames?.get(identityId) || identityId;
+  const title = currentContext.identityNames?.get(identityId)
+    || classifierIdentityName(identityId);
   return deckDetailHtml({
     title,
     bestDeck: record?.best_deck,
     averageDeck: record?.average_deck,
     closeAction: "data-close-detail",
+    showEventContext: true,
     ...options,
   });
 }
@@ -125,7 +127,7 @@ function statsCards(groups) {
     const parentCard = statsMobileCard(group.parent, {
       identityId: group.directId,
       parentId: group.parent.id,
-      displayName: group.parent.name,
+      displayName: classifierName(group.parent.id),
       expandable: group.expandable,
       open: group.open,
     });
@@ -136,7 +138,7 @@ function statsCards(groups) {
           return statsMobileCard(subtype, {
             identityId,
             parentId: group.parent.id,
-            displayName: subtype.display_name,
+            displayName: classifierName(group.parent.id, subtype.id),
             subtype: true,
           });
         }).join("")}</div>`
@@ -219,7 +221,7 @@ function tabletopCards(groups, overall, advancementMetric) {
     const parentCard = tabletopMobileCard(group.parent, {
       identityId: group.directIdentity,
       parentId: group.parent.archetype_id,
-      displayName: group.parent.archetype_name,
+      displayName: classifierName(group.parent.archetype_id),
       advancementMetric,
       expandable: group.expandable,
       open: group.open,
@@ -234,7 +236,10 @@ function tabletopCards(groups, overall, advancementMetric) {
           }, {
             identityId,
             parentId: group.parent.archetype_id,
-            displayName: subtype.display_name,
+            displayName: classifierName(
+              group.parent.archetype_id,
+              subtype.subtype_id
+            ),
             advancementMetric,
             subtype: true,
           });

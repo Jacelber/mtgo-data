@@ -447,10 +447,21 @@ Responsibilities:
 - Top 8 statistics;
 - average decklists;
 - representative decklists;
+- source-backed event identity and official event name on rolling best and
+  representative deck displays;
 - construction deviation;
 - recent change where applicable.
 
 The generalized module must preserve existing Standard behavior unless a documented statistical change is approved.
+
+The `stats/<format>/mtgo/decks_*w.json` representative-deck contract uses the
+retained event's numeric `event_id` and official `description` as `event_name`.
+These fields are display provenance, not statistics. Consumers may combine
+them with the existing `player_count` and date-only projection of `starttime`;
+they must not infer an event by matching date, player count, rank, or player.
+The additive deck contract is version `1.1.0`. Existing Top 8 week and
+comparison-base documents retain their own compatibility versions and do not
+need event-context duplication in the expanded deck detail.
 
 ### 5.4 `matchup.py`
 
@@ -472,8 +483,8 @@ Responsibilities:
 
 Responsibilities:
 
-- Weekly Pickup;
-- MTGO-specific weekly comparison;
+- temporary standalone Weekly Pickup compatibility and publication;
+- MTGO-specific weekly comparison delegated to the Landing editorial producer;
 - stable parent-ID tracking for formats migrated beyond the legacy
   name-keyed Standard contract;
 - explicit one-time known-state initialization, separate from candidate
@@ -486,11 +497,12 @@ Responsibilities:
 
 Weekly Pickup does not belong in the Melee package.
 
-Candidate generation is a review artifact, not a publication action. It must
-not change known-archetype state or create a published weekly index. A first
-format migration may initialize known state explicitly from the approved
-historical window; subsequent state changes occur only when an approved Pickup
-week is published.
+Candidate generation is a review artifact, not a publication action. The
+Landing-owned implementation lives in `landing_editorial.py`; the Pickup
+command remains only a staged compatibility entrypoint. Landing generation
+does not read a published Pickup week. Standalone Pickup files remain frozen
+compatibility and rollback resources until the separately approved retirement
+task proves they have no live caller.
 
 The daily MTGO production workflow may generate one private weekly-maintenance
 readiness artifact after a successful production result. That artifact binds
@@ -523,12 +535,29 @@ Responsibilities:
   populations once under one classifier digest;
 - generate the accepted parent environment, movement, exit, and construction-
   shift facts without generated prose;
-- read manually approved feature fields only from the existing format-scoped
-  Pickup candidate path;
-- bind reviewed features to source events, classifier rules, and deterministic
-  machine facts, preserving the last admitted document when re-review is
-  required; and
-- write only `stats/<format>/mtgo/landing/current.json` as public Landing data.
+- read top copy and selected features from the same private format-scoped
+  Landing review document;
+- bind reviewed content to source events, classifier rules, exact deck
+  destinations, and deterministic machine facts, preserving the last admitted
+  document when re-review is required;
+- reject every current inline `deck:<ID>` token that has no exact selected
+  feature; and
+- generate `stats/<format>/mtgo/landing/current.json` plus the bounded
+  `landing/features/index.json` and `landing/features/<week>.json` archive from
+  that one reviewed source.
+
+The feature archive contains only the bottom new-deck and new-technology
+section. Its index records admitted weeks and explicit feature counts, including
+zero. Zero-feature weeks remain machine-readable archive records but are not
+selectable in the Landing UI. A selected non-empty historical feature week does
+not change the current Landing brief, environment, composition, or construction
+facts. Every feature carries one stable exact-deck `destination_id`; localized
+names and prose are display content, not navigation identities.
+
+Private review documents and continuity state remain under
+`stats/<format>/mtgo/landing/review/` and are excluded from Pages. Public feature
+documents contain only materialized reviewed output and the minimum source,
+week, classifier, and content bindings needed to validate the archive.
 
 `configs/mtgo_landing_visuals.yaml` is manual product metadata. Its two-card
 parent or explicit subtype selections are not classifier evidence. Missing
@@ -3221,6 +3250,19 @@ catalog. Retained MTGO and applicable Tabletop consumers resolve parent and
 subtype labels from stable IDs through that contract. They do not use display
 text as identity, and the public contract does not change classifier rules or
 statistical meaning.
+
+The public contract path is shared by the separate MTGO and Tabletop consumers
+for the same Constructed format:
+
+```text
+stats/<format>/archetype_names.json
+```
+
+It contains only stable parent/subtype identity and approved English/Chinese
+display values. `Unknown` remains interface vocabulary rather than a maintained
+classifier identity. The normal `generate-hierarchy` production step validates
+the complete private catalog and regenerates this contract for each maintained
+format; missing, stale, unapproved, or duplicate coverage blocks generation.
 
 Pages admission explicitly excludes `landing/review/`. The week document binds
 the format, review week, source event IDs, classifier digest,

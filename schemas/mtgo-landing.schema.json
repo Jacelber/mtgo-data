@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-landing.schema.json",
   "title": "Latest-only MTGO weekly Landing",
-  "x-schema-version": "1.1.0",
+  "x-schema-version": "1.2.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -11,7 +11,7 @@
     "populations", "environment", "features", "review_binding"
   ],
   "properties": {
-    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
+    "schema_version": {"enum": ["1.0.0", "1.1.0", "1.2.0"]},
     "product": {"const": "mtgo-landing"},
     "format": {"enum": ["standard", "modern"]},
     "source": {"const": "mtgo"},
@@ -130,6 +130,25 @@
         "properties": {
           "review_binding": {
             "required": ["pickup_document_digest", "summary_fact_digest"]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"schema_version": {"const": "1.2.0"}}},
+      "then": {
+        "properties": {
+          "features": {
+            "properties": {
+              "items": {
+                "items": {
+                  "allOf": [
+                    {"$ref": "#/$defs/feature"},
+                    {"required": ["destination_id"]}
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -405,6 +424,7 @@
       "properties": {
         "category": {"enum": ["new_deck", "new_technology"]},
         "order": {"type": "integer", "minimum": 1},
+        "destination_id": {"type": "string", "pattern": "^deck:[0-9a-f]{20}$"},
         "archetype_id": {"$ref": "#/$defs/stableId"},
         "subtype_id": {"type": ["string", "null"], "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
         "display_name": {"type": "string", "minLength": 1},

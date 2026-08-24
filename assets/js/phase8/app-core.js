@@ -3,6 +3,7 @@
 const ReviewData = globalThis.P8ReviewData;
 const Runtime = globalThis.P8Runtime;
 const I18n = globalThis.P8I18n;
+const ArchetypeNames = globalThis.P8ArchetypeNames;
 const MtgoController = globalThis.P8MtgoController;
 const TabletopController = globalThis.P8TabletopController;
 const ArchetypeVisuals = globalThis.P8ArchetypeVisuals || Object.freeze({
@@ -10,6 +11,10 @@ const ArchetypeVisuals = globalThis.P8ArchetypeVisuals || Object.freeze({
   representativeCards: Object.freeze({}),
 });
 const REPRESENTATIVE_CARDS = ArchetypeVisuals.representativeCards;
+const classifierNameClient = Runtime.createJsonClient(
+  "Classifier names",
+  path => /^stats\/[a-z0-9_-]+\/archetype_names\.json$/.test(path)
+);
 const ENTRY_SURFACE = document.documentElement.dataset.surface || "review";
 const PRODUCT_ORDER = [
   "mtgo-landing",
@@ -48,6 +53,8 @@ const DIFF_MIN = 1;
 const LOW_SAMPLE_THRESHOLD = 20;
 const state = {
   catalog: null,
+  classifierNameContract: null,
+  classifierNameContracts: new Map(),
   format: "modern",
   product: "mtgo-statistics",
   statsRange: 1,
@@ -68,8 +75,11 @@ const state = {
   top8WeekFile: null,
   top8Detail: null,
   pickupWeekFile: null,
+  landingFeatureWeekFile: null,
+  landingFeatureDestination: null,
   landingSection: null,
   pickupOpen: new Set(),
+  landingFeatureOpen: new Set(),
   tabletopView: "overview",
   tabletopEventId: null,
   tabletopSelectedEvents: new Set(),
@@ -143,7 +153,10 @@ function number(value, digits = 2) {
 
 function dateText(value) {
   if (!value) return "—";
-  return String(value).replace("T", " ").replace(/(\.\d+)?([+-]\d\d:\d\d|Z)$/, "");
+  const text = String(value);
+  const timestamp = text.match(/^(\d{4}-\d{2}-\d{2})(?:T| )\d{2}:\d{2}/);
+  if (timestamp) return timestamp[1];
+  return text.replace("T", " ").replace(/(\.\d+)?([+-]\d\d:\d\d|Z)$/, "");
 }
 
 function localizedValue(value) {
@@ -151,6 +164,50 @@ function localizedValue(value) {
   return I18n.language() === "en"
     ? (value.en || value.zh || "")
     : (value.zh || value.en || "");
+}
+
+async function ensureClassifierNames(formatId) {
+  let contract = state.classifierNameContracts.get(formatId);
+  if (!contract) {
+    const document = await classifierNameClient.fetchJson(
+      `stats/${formatId}/archetype_names.json`
+    );
+    contract = ArchetypeNames.normalize(document, formatId);
+    state.classifierNameContracts.set(formatId, contract);
+  }
+  state.classifierNameContract = contract;
+  return contract;
+}
+
+function classifierName(parentId, subtypeId = null) {
+  return ArchetypeNames.resolve(
+    state.classifierNameContract,
+    parentId,
+    subtypeId,
+    I18n.language(),
+    t("chart.unknown")
+  );
+}
+
+function classifierIdentityName(identityId) {
+  return ArchetypeNames.resolveIdentity(
+    state.classifierNameContract,
+    identityId,
+    I18n.language(),
+    t("chart.unknown")
+  );
+}
+
+function localizedMatchupDocument(document) {
+  return {
+    ...document,
+    hierarchy: ArchetypeNames.localizeHierarchy(
+      state.classifierNameContract,
+      document.hierarchy,
+      I18n.language(),
+      t("chart.unknown")
+    ),
+  };
 }
 
 function formatEntry() {
@@ -267,13 +324,29 @@ function differenceList(items) {
   )).join("");
 }
 
-function averageDeckHtml(average) {
+function deckMetaHtml(deck, comparison = null, showEventContext = false) {
+  const parts = [
+    escapeHtml(deck.player),
+    `${t("deck.rank")} ${escapeHtml(deck.final_rank ?? comparison?.rank ?? "—")}`,
+    dateText(deck.starttime || comparison?.date),
+  ];
+  if (showEventContext && deck.event_name) {
+    parts.push(escapeHtml(deck.event_name));
+  }
+  if (showEventContext && Number(deck.player_count) > 0) {
+    parts.push(t("top8.players", { count: deck.player_count }));
+  }
+  return `<p class="deck-meta">${parts.map(part => (
+    `<span class="deck-meta-item">${part}</span>`
+  )).join("")}</p>`;
+}
+
+function averageDeckHtml(average, showEventContext = false) {
   if (!average) return `<p class="empty-state">${t("deck.no_average")}</p>`;
   if (state.detailMode === "typical") {
     const medoid = average.medoid;
     if (!medoid) return `<p class="empty-state">${t("deck.no_typical")}</p>`;
-    return `<p class="deck-meta">${escapeHtml(medoid.player)} · ${t("deck.rank")} ${escapeHtml(medoid.final_rank)}
-      · ${dateText(medoid.starttime)}</p><h4>${t("deck.main")}</h4>${cardList(medoid.main_deck)}
+    return `${deckMetaHtml(medoid, null, showEventContext)}<h4>${t("deck.main")}</h4>${cardList(medoid.main_deck)}
       <h4>${t("deck.side")}</h4>${cardList(medoid.side_deck || medoid.sideboard)}`;
   }
   const reasonText = {
@@ -306,6 +379,7 @@ function deckDetailHtml({
   referenceNote = "",
   performanceHtml = "",
   showDeviation = true,
+  showEventContext = false,
   className = "deck-detail",
   responsiveKey = "",
 }) {
@@ -324,8 +398,7 @@ function deckDetailHtml({
     <div class="deck-columns">
       <div class="deck-column">
         <h4>${deckTitle}</h4>
-        ${deck ? `<p class="deck-meta">${escapeHtml(deck.player)} · ${t("deck.rank")} ${escapeHtml(deck.final_rank ?? comparison?.rank ?? "—")}
-          · ${dateText(deck.starttime || comparison?.date)}</p>
+        ${deck ? `${deckMetaHtml(deck, comparison, showEventContext)}
           ${performanceHtml}
           ${showDeviation ? `<div class="deviation-box"><span>${t("deck.deviation")}</span><strong>${t("deck.points", { count: deviation ?? "—" })}</strong>
             <p>${t("deck.deviation_help", { count: DIFF_MIN })}</p>
@@ -341,7 +414,7 @@ function deckDetailHtml({
           <button type="button" data-deck-mode="typical"${responsiveAttribute("mode-typical")} class="${state.detailMode === "typical" ? "active" : ""}">${t("deck.representative")}</button>
           <span>（${t("deck.sample", { count: averageDeck?.sample_size ?? "—" })}）</span>
         </div>
-        ${averageDeckHtml(averageDeck)}
+        ${averageDeckHtml(averageDeck, showEventContext)}
       </div>
     </div>
   </section>`;

@@ -143,6 +143,7 @@
   const backgroundNodes = [
     document.querySelector(".app-header"),
     document.querySelector(".page-shell"),
+    document.querySelector("[data-return-to-top]"),
     document.querySelector(".site-footer"),
   ].filter(Boolean);
   const priorInert = new Map();

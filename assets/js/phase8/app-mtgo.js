@@ -67,12 +67,21 @@ function landingTargetUrl(parameters) {
   return `${target.pathname}${target.search}`;
 }
 
-function landingDeckUrl(deck, weekId) {
+function landingDeckUrl(link, weekId) {
+  if (/^deck:[0-9a-f]{20}$/.test(link.token || "")) {
+    return landingTargetUrl({
+      format: state.format,
+      product: "mtgo-landing",
+      section: "features",
+      week: weekId,
+      feature: link.token,
+    });
+  }
   return landingTargetUrl({
     format: state.format,
     product: "mtgo-top8",
     week: weekId,
-    detail: `${deck.event_id}:${deck.final_rank}`,
+    detail: `${link.deck.event_id}:${link.deck.final_rank}`,
   });
 }
 
@@ -87,7 +96,7 @@ function landingSummaryText(item, weekId) {
   return text.split(pattern).map(part => {
     const link = links.get(part);
     if (!link) return escapeHtml(part);
-    return `<a class="landing-deck-link" href="${escapeHtml(landingDeckUrl(link.deck, weekId))}">${escapeHtml(localizedValue(link.label))}</a>`;
+    return `<a class="landing-deck-link" href="${escapeHtml(landingDeckUrl(link, weekId))}">${escapeHtml(localizedValue(link.label))}</a>`;
   }).join("");
 }
 
@@ -108,7 +117,7 @@ function landingCompositionHtml(landing) {
     const representative = REPRESENTATIVE_CARDS[state.format]?.[row.archetype_id]?.[0];
     return {
       id: row.archetype_id,
-      name: row.display_name,
+      name: classifierName(row.archetype_id),
       share: Number(row.current?.share) || 0,
       color: `composition-color-${index % 6 + 1}`,
       image: representative?.image,
@@ -178,11 +187,12 @@ function landingEnvironmentDetail(row) {
   const deck = locateDeck(currentContext.environmentDecks, row.archetype_id);
   if (!deck) return "";
   return deckDetailHtml({
-    title: row.display_name,
+    title: classifierName(row.archetype_id),
     bestDeck: deck.best_deck,
     averageDeck: deck.average_deck,
     comparison: { rank: deck.best_deck?.final_rank },
     closeAction: "data-close-detail",
+    showEventContext: true,
     className: "deck-detail landing-inline-detail",
     responsiveKey: `landing:${row.archetype_id}`,
   });
@@ -193,7 +203,7 @@ function landingEnvironmentRows(landing) {
     const direction = landingDirection(row, landing.comparison?.available);
     const open = state.detailIdentity === row.archetype_id;
     return `<tbody class="landing-environment-group"><tr class="landing-environment-row" data-landing-row="${escapeHtml(row.archetype_id)}">
-      <td class="landing-deck-cell"><button class="landing-deck-button" type="button" data-detail-identity="${escapeHtml(row.archetype_id)}" aria-expanded="${open}">${manaIdentityHtml(row.archetype_id)}<span>${escapeHtml(row.display_name)}</span></button></td>
+      <td class="landing-deck-cell"><button class="landing-deck-button" type="button" data-detail-identity="${escapeHtml(row.archetype_id)}" aria-expanded="${open}">${manaIdentityHtml(row.archetype_id)}<span>${escapeHtml(classifierName(row.archetype_id))}</span></button></td>
       <td class="landing-cards-cell">${landingRepresentatives(row)}</td>
       <td class="landing-share-cell" data-label="${t("landing.current_short")}">${pct(row.current?.share)}</td>
       <td class="landing-share-cell" data-label="${t("landing.previous_short")}">${pct(row.previous_week?.share)}</td>
@@ -216,9 +226,7 @@ function landingEnvironmentHtml(landing) {
 }
 
 function landingFeatureItems(context) {
-  const currentFile = `${context.landing.week.id}.json`;
-  if (context.featureFile === currentFile) return context.landing.features?.items || [];
-  return context.pickupDocument?.features?.items || [];
+  return context.featureDocument?.features?.items || [];
 }
 
 function landingFeatureCard(card, index) {
@@ -236,11 +244,11 @@ function landingFeatureDetail(item) {
     ? locateDeck(currentContext.featureDecks, identity)
     : null;
   return deckDetailHtml({
-    title: item.display_name,
+    title: classifierName(item.archetype_id, item.subtype_id),
     exactDeck: item.deck,
     averageDeck: reference?.average_deck,
     comparison: { rank: item.deck.final_rank },
-    closeAction: `data-pickup-toggle="${escapeHtml(`landing:${item.category}:${item.order}`)}"`,
+    closeAction: `data-landing-feature-toggle="${escapeHtml(item.destination_id)}"`,
     showDeviation: false,
     className: "deck-detail landing-feature-detail",
     responsiveKey: `landing-feature:${item.category}:${item.order}`,
@@ -248,12 +256,12 @@ function landingFeatureDetail(item) {
 }
 
 function landingFeatureHtml(item) {
-  const id = `landing:${item.category}:${item.order}`;
-  const open = state.pickupOpen.has(id);
+  const id = item.destination_id;
+  const open = state.landingFeatureOpen.has(id);
   const category = item.category === "new_deck"
     ? t("landing.feature_new_deck")
     : t("landing.feature_new_technology");
-  return `<article class="landing-feature-item ${open ? "open" : ""}"><div class="landing-feature-summary"><button type="button" class="landing-feature-toggle" data-pickup-toggle="${escapeHtml(id)}" aria-expanded="${open}"><span class="landing-feature-copy"><span class="landing-feature-category">${category}</span><strong>${escapeHtml(localizedValue(item.headline) || item.display_name)}</strong><span>${escapeHtml(localizedValue(item.positioning))}</span></span><span class="landing-feature-sign" aria-hidden="true">${open ? "−" : "+"}</span></button><span class="landing-feature-cards" aria-label="${t("landing.four_cards")}">${item.featured_cards.map(landingFeatureCard).join("")}</span></div>${open ? landingFeatureDetail(item) : ""}</article>`;
+  return `<article class="landing-feature-item ${open ? "open" : ""}" data-feature-destination="${escapeHtml(id)}"><div class="landing-feature-summary"><button type="button" class="landing-feature-toggle" data-landing-feature-toggle="${escapeHtml(id)}" aria-expanded="${open}"><span class="landing-feature-copy"><span class="landing-feature-category">${category}</span><strong>${escapeHtml(classifierName(item.archetype_id, item.subtype_id))}</strong><span>${escapeHtml(localizedValue(item.positioning))}</span></span><span class="landing-feature-sign" aria-hidden="true">${open ? "−" : "+"}</span></button><span class="landing-feature-cards" aria-label="${t("landing.four_cards")}">${item.featured_cards.map(landingFeatureCard).join("")}</span></div>${open ? landingFeatureDetail(item) : ""}</article>`;
 }
 
 function landingFeaturesHtml(context) {
@@ -270,33 +278,43 @@ function landingFeaturesHtml(context) {
       : t("landing.feature_new_technology");
     return `<div class="landing-feature-group"><h3>${label}</h3>${categoryItems.map(landingFeatureHtml).join("")}</div>`;
   }).join("");
-  return `<section class="panel landing-features" id="features"><div class="landing-panel-head"><div><h2>${t("landing.features_title")}</h2><p>${t("landing.features_subtitle")}</p></div></div><div class="landing-feature-week"><label for="landing-feature-week">${t("landing.feature_week")}</label><select id="landing-feature-week">${context.pickupIndex.weeks.map(entry => (
+  return `<section class="panel landing-features" id="features"><div class="landing-panel-head"><div><h2>${t("landing.features_title")}</h2><p>${t("landing.features_subtitle")}</p></div></div><div class="landing-feature-week"><label for="landing-feature-week">${t("landing.feature_week")}</label><select id="landing-feature-week">${context.featureIndex.weeks.map(entry => (
     `<option value="${escapeHtml(entry.file)}" ${entry.file === context.featureFile ? "selected" : ""}>${entry.start} ～ ${entry.end}${entry.file === `${context.landing.week.id}.json` ? `（${t("landing.feature_current")}）` : ""}</option>`
   )).join("")}</select><span>${t("landing.feature_week_note")}</span></div><div class="landing-feature-content">${groups || `<p class="landing-empty">${t("landing.feature_empty")}</p>`}</div></section>`;
 }
 
 async function landingView() {
+  const requestedFeatureFile = state.landingFeatureWeekFile;
   const context = await MtgoController.loadLanding(
     state.format,
     productEntry().path,
-    state.pickupWeekFile,
+    state.landingFeatureWeekFile,
     {
       includeEnvironmentDecks: Boolean(state.detailIdentity),
-      includeFeatureDecks: Boolean(state.pickupOpen.size),
+      includeFeatureDecks: Boolean(state.landingFeatureOpen.size || state.landingFeatureDestination),
     }
   );
-  state.pickupWeekFile = context.featureFile;
+  state.landingFeatureWeekFile = context.featureFile;
+  if (requestedFeatureFile && requestedFeatureFile !== context.featureFile) {
+    queueUrlWrite("replace");
+  }
   const validEnvironmentIds = new Set((context.landing.environment?.rows || []).map(row => row.archetype_id));
   if (state.detailIdentity && !validEnvironmentIds.has(state.detailIdentity)) {
     state.detailIdentity = null;
     setCompositionSelection(null);
   }
-  const featureIds = new Set(landingFeatureItems(context).map(item => (
-    `landing:${item.category}:${item.order}`
-  )));
-  [...state.pickupOpen].forEach(id => {
-    if (id.startsWith("landing:") && !featureIds.has(id)) state.pickupOpen.delete(id);
+  const featureIds = new Set(landingFeatureItems(context).map(item => item.destination_id));
+  [...state.landingFeatureOpen].forEach(id => {
+    if (!featureIds.has(id)) state.landingFeatureOpen.delete(id);
   });
+  if (state.landingFeatureDestination) {
+    if (featureIds.has(state.landingFeatureDestination)) {
+      state.landingFeatureOpen.add(state.landingFeatureDestination);
+    } else {
+      state.landingFeatureDestination = null;
+      queueUrlWrite("replace");
+    }
+  }
   currentContext = {
     ...context,
     environmentDecks: context.environmentDecks,
@@ -325,7 +343,7 @@ function statisticsGroups(archetypes) {
 
 function statsRows(groups) {
   return groups.map(({ parent, subtypes, expandable, open, directId }) => {
-    const parentIdentity = `${manaIdentityHtml(directId)}<span class="identity-label">${escapeHtml(parent.name)}</span>`;
+    const parentIdentity = `${manaIdentityHtml(directId)}<span class="identity-label">${escapeHtml(classifierName(parent.id))}</span>`;
     const parentName = expandable
       ? `<button class="name-button hierarchy-toggle" type="button" data-stats-parent="${escapeHtml(parent.id)}"
           data-stats-toggle="${escapeHtml(parent.id)}" data-responsive-key="stats-action:${escapeHtml(parent.id)}"
@@ -345,7 +363,7 @@ function statsRows(groups) {
           subtype,
           `<button class="name-button" type="button" data-detail-identity="${escapeHtml(identityId)}"
             data-responsive-key="stats-action:${escapeHtml(identityId)}" aria-expanded="${state.detailIdentity === identityId}">
-            ${manaIdentityHtml(identityId)}<span class="identity-label">${escapeHtml(subtype.display_name)}</span></button>`,
+            ${manaIdentityHtml(identityId)}<span class="identity-label">${escapeHtml(classifierName(parent.id, subtype.id))}</span></button>`,
           "subtype-row",
           index === subtypes.length - 1
             ? ` data-stats-subtype-end="${escapeHtml(parent.id)}"`
@@ -380,7 +398,7 @@ function chartHtml(archetypes) {
     .reduce((sum, item) => sum + (Number(item.high_score_share) || 0), 0);
   const segments = visible.map((item, index) => ({
     id: item.id,
-    name: item.name,
+    name: classifierName(item.id),
     share: Number(item.high_score_share) || 0,
     color: `composition-color-${index % 6 + 1}`,
     image: REPRESENTATIVE_CARDS[state.format]?.[item.id]?.[0]?.image,
@@ -425,8 +443,8 @@ function chartHtml(archetypes) {
 function sortedArchetypes(archetypes) {
   const direction = state.statsDirection === "asc" ? 1 : -1;
   return [...archetypes].sort((left, right) => {
-    const a = state.statsSort === "name" ? left.name.toLowerCase() : (left[state.statsSort] ?? -1);
-    const b = state.statsSort === "name" ? right.name.toLowerCase() : (right[state.statsSort] ?? -1);
+    const a = state.statsSort === "name" ? classifierName(left.id).toLowerCase() : (left[state.statsSort] ?? -1);
+    const b = state.statsSort === "name" ? classifierName(right.id).toLowerCase() : (right[state.statsSort] ?? -1);
     return a < b ? -direction : a > b ? direction : 0;
   });
 }
@@ -440,9 +458,12 @@ async function statsView() {
   const identityNames = new Map();
   const detailIdentities = new Set();
   range.archetypes.forEach(parent => {
-    identityNames.set(parent.id, parent.name);
+    identityNames.set(parent.id, classifierName(parent.id));
     const subtypes = activeStatisticsSubtypes(parent);
-    subtypes.forEach(subtype => identityNames.set(`${parent.id}/${subtype.id}`, subtype.display_name));
+    subtypes.forEach(subtype => identityNames.set(
+      `${parent.id}/${subtype.id}`,
+      classifierName(parent.id, subtype.id)
+    ));
     detailIdentities.add(parent.id);
     if (subtypes.length === 1) detailIdentities.add(`${parent.id}/${subtypes[0].id}`);
     else if (subtypes.length >= 2) {
@@ -850,7 +871,9 @@ async function matchupView() {
     MtgoController.loadMatchup(state.format, state.matchupRange),
     mtgoMainstreamProjection(),
   ]);
-  const displayDocument = ReviewData.activeMatchupDocument(document, LOW_SAMPLE_THRESHOLD);
+  const displayDocument = localizedMatchupDocument(
+    ReviewData.activeMatchupDocument(document, LOW_SAMPLE_THRESHOLD)
+  );
   currentContext = {
     matchupDocument: displayDocument,
     completeness,
@@ -878,7 +901,10 @@ function top8PlacementDetail() {
   const identityId = placement.identity?.identity_id;
   const base = currentContext.bases.identities?.[identityId];
   return deckDetailHtml({
-    title: placement.identity?.display_name || t("top8.unknown"),
+    title: classifierName(
+      placement.identity?.parent_id || "unknown",
+      placement.identity?.subtype_id || null
+    ),
     exactDeck: placement.exact_deck,
     averageDeck: base?.average_deck,
     comparison: { ...placement.comparison, rank: placement.rank, date: event.date },
@@ -902,6 +928,7 @@ async function top8View() {
     state.top8Detail = null;
   }
   currentContext = { top8Index: index, top8, bases };
+  const selectedEventId = state.top8Detail?.split(":")[0] || null;
   return `<aside class="source-note" aria-label="${t("source.label")}"><p>${t("source.top8")}</p></aside>
     <div class="select-row"><label for="top8-week">${t("top8.week")}</label>
       <select id="top8-week">${index.weeks.map(item => (
@@ -911,7 +938,7 @@ async function top8View() {
     ${top8Freshness(top8, weekEntry)}
     <section class="panel"><h2 class="sr-only">${t("top8.title")}</h2>
       ${horizontalScrollFrame("top8", "table-scroll", `<table class="top8-table top8-week-table"><thead><tr><th>${t("top8.rank")}</th>
-        ${top8.events.map(event => `<th title="${escapeHtml(event.name)}"><strong>${escapeHtml(event.display_name)}</strong>
+        ${top8.events.map(event => `<th class="${selectedEventId === event.event_id ? "is-current-event" : ""}" title="${escapeHtml(event.name)}"><strong>${escapeHtml(event.display_name)}</strong>
           <small>${event.date} · ${t("top8.players", { count: event.player_count })}</small></th>`).join("")}
       </tr></thead><tbody>${Array.from({ length: 8 }, (_, offset) => {
         const rank = offset + 1;
@@ -919,8 +946,12 @@ async function top8View() {
           const placement = event.placements.find(item => item.rank === rank);
           if (!placement || placement.deck_status !== "available") return `<td class="missing-deck">${t("top8.unavailable")}</td>`;
           const detailId = `${event.event_id}:${rank}`;
-          return `<td><button class="name-button" type="button" data-top8-detail="${escapeHtml(detailId)}"
-            aria-expanded="${state.top8Detail === detailId}">${escapeHtml(placement.identity.display_name)}</button></td>`;
+          const current = state.top8Detail === detailId;
+          return `<td class="${current ? "is-current-placement" : ""}"><button class="name-button" type="button" data-top8-detail="${escapeHtml(detailId)}"
+            aria-expanded="${current}"${current ? " aria-current=\"true\"" : ""}>${escapeHtml(classifierName(
+              placement.identity.parent_id,
+              placement.identity.subtype_id
+            ))}</button></td>`;
         }).join("")}</tr>`;
       }).join("")}</tbody></table>`)}${top8PlacementDetail()}</section>`;
 }
@@ -929,7 +960,10 @@ function pickupDeck(item, key) {
   const title = key === "existing_changes"
     ? t("pickup.new_tech")
     : t("pickup.new_decks");
-  const id = `${key}:${item.archetype}:${item.player}`;
+  const identityId = item.subtype_id
+    ? `${item.archetype_id}/${item.subtype_id}`
+    : item.archetype_id;
+  const id = `${key}:${identityId}:${item.player}`;
   const open = state.pickupOpen.has(id);
   const comment = I18n.language() === "en"
     ? (item.comment_en || item.comment_zh || "")
@@ -939,7 +973,7 @@ function pickupDeck(item, key) {
     : t("deck.points", { count: item.deviation });
   return `<article class="pickup-card ${open ? "open" : ""}">
     <button type="button" class="pickup-head" data-pickup-toggle="${escapeHtml(id)}" aria-expanded="${open}">
-      <span><strong>${escapeHtml(item.archetype)}</strong><small>${escapeHtml(item.player)} · ${t("deck.rank")} ${item.final_rank}
+      <span><strong>${escapeHtml(classifierName(item.archetype_id, item.subtype_id))}</strong><small>${escapeHtml(item.player)} · ${t("deck.rank")} ${item.final_rank}
       · ${t("deck.points", { count: item.swiss_score })} · ${dateText(item.starttime)}</small></span><b>${title} · ${t("deck.deviation")} ${deviation}</b>
     </button>${open ? `<div class="pickup-body"><p>${escapeHtml(comment)}</p>
       <div class="deck-columns"><div class="deck-column"><h4>${t("deck.main")}</h4>${cardList(item.main_deck)}</div>

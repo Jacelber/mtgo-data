@@ -160,6 +160,12 @@
   text-underline-offset: 3px;
 }
 
+.landing-deck-button[aria-expanded="true"] {
+  border-radius: 4px;
+  background: #faf3ea;
+  box-shadow: 0 0 0 4px #faf3ea;
+}
+
 .landing-share-cell,
 .landing-trend-cell {
   font-variant-numeric: tabular-nums;
@@ -479,6 +485,7 @@
     min-height: 132px;
     padding: 13px;
     background: var(--surface-strong);
+    cursor: pointer;
   }
 
   .landing-environment-row td {
@@ -504,8 +511,8 @@
 
   .landing-cards-cell {
     grid-column: 4;
-    grid-row: 1 / 4;
-    align-self: center;
+    grid-row: 2 / 4;
+    align-self: end;
   }
 
   .landing-representatives {
@@ -1281,7 +1288,7 @@
   overflow: visible;
   max-height: none;
   writing-mode: vertical-rl;
-  transform: translateX(-50%) rotate(180deg);
+  transform: translateX(-50%);
   text-overflow: clip;
   white-space: nowrap;
 }
@@ -1350,6 +1357,22 @@
 
 .top8-week-table .missing-deck {
   color: #7b8188;
+}
+
+.top8-week-table th.is-current-event {
+  background: #f6e6d2;
+  box-shadow: inset 0 -3px 0 var(--brand);
+}
+
+.top8-week-table td.is-current-placement {
+  background: #fff2dc;
+  box-shadow: inset 0 0 0 2px var(--brand);
+}
+
+.top8-week-table td.is-current-placement .name-button {
+  color: var(--brand);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
 
 .event-selector-pane {

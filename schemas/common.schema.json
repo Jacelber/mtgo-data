@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/common.schema.json",
   "title": "MTGO legacy compatibility common definitions",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "$defs": {
     "schemaVersion": {"const": "1.0.0"},
     "period": {
@@ -30,6 +30,8 @@
       "required": ["player", "final_rank", "swiss_score", "player_count", "starttime", "main_deck", "side_deck"],
       "properties": {
         "player": {"type": "string"},
+        "event_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "event_name": {"type": "string", "minLength": 1},
         "final_rank": {"type": "integer", "minimum": 1},
         "swiss_score": {"type": "integer", "minimum": 0},
         "player_count": {"type": "integer", "minimum": 1},

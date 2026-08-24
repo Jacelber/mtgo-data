@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-landing-feature-index.schema.json",
+  "title": "MTGO Landing feature-week catalog",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "product", "format", "source", "weeks"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "product": {"const": "mtgo-landing-features"},
+    "format": {"enum": ["standard", "modern"]},
+    "source": {"const": "mtgo"},
+    "weeks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["week", "file", "start", "end", "feature_count"],
+        "properties": {
+          "week": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
+          "file": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}\\.json$"},
+          "start": {"type": "string", "format": "date"},
+          "end": {"type": "string", "format": "date"},
+          "feature_count": {"type": "integer", "minimum": 0}
+        }
+      }
+    }
+  }
+}
