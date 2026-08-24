@@ -253,6 +253,36 @@ def test_production_candidate_admits_latest_and_bounded_feature_archive_only():
     )
 
 
+def test_production_candidate_admits_only_public_bilingual_name_contract():
+    from validate_production_candidate import _allowed_new_path, _allowed_path
+
+    collection_formats = ("legacy", "standard", "modern")
+    product_formats = ("standard", "modern")
+    for predicate in (_allowed_path, _allowed_new_path):
+        assert predicate(
+            "stats/standard/archetype_names.json",
+            collection_formats,
+            product_formats,
+        )
+        assert predicate(
+            "stats/modern/archetype_names.json",
+            collection_formats,
+            product_formats,
+        )
+        for rejected_path in (
+            "stats/legacy/archetype_names.json",
+            "stats/standard/archetype_name.json",
+            "stats/standard/archetype_names.yaml",
+            "stats/standard/archetype_names/extra.json",
+            "reports/standard/archetype_names.json",
+        ):
+            assert not predicate(
+                rejected_path,
+                collection_formats,
+                product_formats,
+            )
+
+
 def test_repository_pages_policy_admits_landing_and_excludes_private_review_state():
     from build_pages_artifact import load_config, publication_paths
 

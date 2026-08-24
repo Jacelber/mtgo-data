@@ -170,6 +170,17 @@ def _discovery_entry_count(root: Path, format_id: str) -> int:
     return len(events) if isinstance(events, list) else -1
 
 
+def _is_public_archetype_names_path(
+    parts: tuple[str, ...], product_formats: tuple[str, ...]
+) -> bool:
+    return (
+        len(parts) == 3
+        and parts[0] == "stats"
+        and parts[1] in product_formats
+        and parts[2] == "archetype_names.json"
+    )
+
+
 def _allowed_path(
     path: str,
     collection_formats: tuple[str, ...],
@@ -179,6 +190,8 @@ def _allowed_path(
     if path == "fetched.txt":
         return True
     if path == "stats/catalog.json":
+        return True
+    if _is_public_archetype_names_path(parts, product_formats):
         return True
     if (
         len(parts) == 4
@@ -250,6 +263,8 @@ def _allowed_new_path(
 ) -> bool:
     parts = PurePosixPath(path).parts
     if path == "stats/catalog.json":
+        return True
+    if _is_public_archetype_names_path(parts, product_formats):
         return True
     if (
         len(parts) == 4

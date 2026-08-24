@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/production-chromium-language-fix-20260824"
+  current_working_branch: "codex/production-public-name-scope-fix-20260824"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,26 +31,27 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "PRODUCTION-CHROMIUM-SMOKE-LANGUAGE-FIX-2026-08-24"
-  name: "Repair the English-page Chromium smoke language mismatch"
+  id: "PRODUCTION-PUBLIC-NAME-SCOPE-FIX-2026-08-24"
+  name: "Admit the public bilingual name contract to the production candidate scope"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-24"
   developer_validation_completed_on: "2026-08-24"
   owner_accepted_on: "2026-08-24"
   production_recovery_after_merge_authorized_on: "2026-08-24"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/production-chromium-language-fix-20260824-01"
-  branch: "codex/production-chromium-language-fix-20260824"
-  base_commit: "c091676a60d9e7456a0bbc4805794844129db022"
-  task_type: "focused_production_validation_repair"
-  artifact_impact: "internal_diagnostics"
-  objective: "Restore the production Chromium smoke contract by using the English Mono-Red Prowess label on its English matchup page, without changing product behavior, data, workflow control, or validation strength."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/production-public-name-scope-fix-20260824-01"
+  branch: "codex/production-public-name-scope-fix-20260824"
+  base_commit: "9bebe6aa4e9520c10daebc9f60db32efc25c8c3c"
+  task_type: "focused_production_candidate_boundary_repair"
+  artifact_impact: "public_path"
+  objective: "Allow the already approved stats/<format>/archetype_names.json bilingual contract to be updated or first-created for maintained product formats during production candidate validation, without admitting any broader root statistics path."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "tests/browser/production-pages.spec.js"
+    - "validate_production_candidate.py"
+    - "tests/test_mtgo_landing.py"
     - "docs/STATUS.yaml"
   planned_file_operations:
     additions: []
@@ -58,45 +59,48 @@ current_task:
     renames: []
   protected_scope:
     user_visible_ui_changed: "none"
-    public_json_or_schema_changed: "none"
+    public_json_or_schema_changed: "none; the existing bilingual contract and shape remain unchanged"
     generated_or_source_data_changed: "none"
-    workflows_or_public_paths_changed: "none"
+    workflows_changed: "none"
+    public_path_boundary_changed: "only stats/<maintained-product-format>/archetype_names.json is admitted for existing changes and approved first creation"
     statistical_or_classifier_behavior_changed: "none"
-    browser_contract_changed: "only the search label is aligned with the existing lang=en page; cancel-preserves-rows semantics and assertions remain unchanged"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Replace the Chinese matchup search label in the one failing English-page cancel test with the existing English display label Mono-Red Prowess."
-    - "Reuse the exact production failure from run 32713334827 instead of repeating the known failing pre-fix browser subject."
-    - "Run only the repaired Playwright test and the smallest documentation and diff checks required by the changed paths."
-    - "Record that the prior W34 Top 8 workbook is suspended pending a fresh successful production publication and refreshed review baseline."
-    - "After the unchanged repair merges successfully, dispatch one fresh MTGO production run from the resulting master and monitor its publication, Pages, failure-Issue, and readiness evidence."
+    - "Extend both existing-change and approved-new-path candidate predicates for the exact public bilingual name contract in maintained product formats."
+    - "Add focused positive and negative regression assertions that reject unsupported formats, sibling files, extensions, and nested paths."
+    - "Reuse the exact production failure from run 32725466051 instead of rebuilding the known failing candidate locally."
+    - "Run only the focused candidate-boundary tests, live-status test, maintained-Python checks selected by the trigger matrix, repository validation, and diff checks."
+    - "After the unchanged repair merges successfully, dispatch exactly one fresh MTGO production run from the resulting master and monitor publication, Pages, failure-Issue, and readiness evidence."
   prohibited_changes:
-    - "Do not change product JavaScript, HTML, CSS, data, classifiers, workflows, Schemas, public paths, event whitelists, timeout values, or assertion strength."
-    - "Do not dispatch production before the unchanged repair is merged, mutate Issues manually, or resume W34 Top 8, visual-metadata, or Landing review."
+    - "Do not change workflow YAML, public contract contents or Schema, generators, classifiers, statistics, source or generated data, UI, event whitelists, timeout values, or broader production paths."
+    - "Do not mutate Issues manually, dispatch production before the unchanged repair merges, or resume W34 review before a fresh publication and refreshed baseline."
   validation:
-    failure_evidence: "Production run 32713334827 passed fetch, generation, candidate, repository, rules, Schema, consumer, and ten of eleven Chromium checks; only the English-page test timed out after searching for the Chinese label 纯红灵技."
-    focused_browser: "pass; the repaired production-pages.spec.js cancel test passed 1/1 in 3.6 seconds with Playwright 1.62.1 and Chromium 1234"
-    documentation: "pass; tests/test_documentation_history.py passed 5/5"
-    diff_check: "pass; only docs/STATUS.yaml and tests/browser/production-pages.spec.js changed, with no whitespace errors"
-  stop_point: "Complete the unchanged repair through commit, one Ready pull request, required CI, and merge; then dispatch and verify one fresh production recovery run before stopping without resuming weekly review."
+    failure_evidence: "Production run 32725466051 passed fetching and all generation stages, then failed candidate scope validation because stats/standard/archetype_names.json was outside the publication allowlist; publication and downstream readiness were skipped."
+    focused_candidate_boundary: "pass; the existing Landing boundary and exact bilingual-name existing/new-path predicates passed 2/2 focused tests, including negative sibling, extension, nesting, and unsupported-format cases"
+    maintained_python: "pass; Ruff passed for the changed validator and test plus src, and mypy passed all four configured source files"
+    documentation: "pass; tests/test_documentation_history.py passed 5/5 on the final live status"
+    repository: "pass; validate_repository.py passed 84 Python, 20 JavaScript, 1854 JSON, 68 YAML, 55 reference, and 2316 hygiene checks"
+    diff_check: "pass; only the three declared target paths changed, with no file operations or whitespace errors"
+  stop_point: "Complete the unchanged repair through commit, one Ready pull request, required CI, and merge; then dispatch and verify exactly one fresh production recovery run before stopping without resuming weekly review."
 
 current_repository_state:
-  baseline_commit: "c091676a60d9e7456a0bbc4805794844129db022"
-  baseline_note: "Verified cloud master after PR #260 merged the accepted W34 classifier source changes; production run 32713334827 started from the preceding head and did not publish its newer fetched candidate."
+  baseline_commit: "9bebe6aa4e9520c10daebc9f60db32efc25c8c3c"
+  baseline_note: "Verified cloud master after PR #262 merged the Chromium language repair; production run 32725466051 generated but did not publish its candidate because the existing public bilingual name path was absent from candidate scope."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
 known_blockers:
-  - "Issue #261 records the single build-stage failure in production run 32713334827."
-  - "The prior W34 audit workbook is stale because the failed fetched candidate contains four additional W34 Modern events and 32 additional Top 8 placements."
+  - "Issue #261 contains the current build-stage failure comment for production run 32725466051."
+  - "Production publication is blocked until the exact bilingual-name candidate boundary is accepted, merged, and a separately authorized retry succeeds."
+  - "The prior W34 audit workbook remains stale because the unpublished candidate contains four additional W34 Modern events and 32 additional Top 8 placements."
 
 future_task_gates:
   - task: "PRODUCTION-RECOVERY-2026-08-24"
     status: "authorized_after_successful_repair_merge"
-    note: "After the accepted repair merges, dispatch exactly one fresh production workflow from the resulting master and monitor it through publication, Pages, failure-Issue, and readiness evidence."
+    note: "After this accepted repair merges, dispatch exactly one fresh production workflow from the resulting master and monitor publication, Pages, failure-Issue, and readiness evidence."
   - task: "WEEKLY-TOP8-AUDIT-2026-W34"
     status: "suspended_pending_production_recovery_and_refreshed_baseline"
     note: "Preserve the prior workbook as superseded evidence; regenerate it only after a fresh successful production publication binds Standard 6 events and Modern 12 W34 events to a new readiness digest."
@@ -112,7 +116,7 @@ next_approved_task:
   name: "Recover the failed W34 production publication"
   status: "authorized_after_successful_repair_merge"
   local_execution_authorized: false
-  note: "This conditional follow-up was explicitly authorized with Owner acceptance; it begins automatically only after the unchanged repair merges successfully."
+  note: "This conditional follow-up was explicitly authorized with Owner acceptance and begins automatically only after the unchanged repair merges successfully."
 
 prohibited_next_actions:
   - "Do not dispatch production before the accepted repair merges, manually mutate Issues, or bypass production candidate validation."
