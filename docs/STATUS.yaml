@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-15e-cumulative-recovery"
-  working_branch_status: "owner_accepted_completion_authorized"
+  current_working_branch: "codex/p12-15g-no-caller-audit"
+  working_branch_status: "owner_acceptance_pending"
   status: "active"
 
 status_document:
@@ -25,145 +25,63 @@ current_phase:
   id: 12
   name: "Front-end productization, editorial landing, and visual system"
   status: "active"
-  objective: "Productize the existing MTGO and Tabletop front ends and add the approved MTGO Landing without changing established statistical meaning or product separation."
+  objective: "Productize the MTGO and Tabletop front ends and complete the approved Landing migration without changing statistical meaning or product separation."
   production_changes_allowed: false
   next_phase_id: 13
   next_phase_authorized: false
 
 current_task:
-  id: "P12-15F"
-  name: "Cloud cutover"
-  status: "owner_accepted_completion_authorized"
+  id: "P12-15G"
+  stage: "P12-15G-1"
+  name: "Pickup retirement no-caller audit"
+  status: "owner_acceptance_pending"
   implementation_authorized_on: "2026-08-24"
-  workspace_reuse_authorized_on: "2026-08-24"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-15e-cumulative-recovery-20260823-01"
-  branch: "codex/p12-15e-cumulative-recovery"
-  base_commit: "f4ae1580c49a99231cf8e73c622aa361e0c82bad"
-  objective: "Publish the exact Owner-accepted cumulative Landing, bilingual-name, interaction, and Melee-recovery candidate atomically, then verify the corresponding merge-triggered Pages cutover."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-15g-no-caller-audit-20260824-01"
+  branch: "codex/p12-15g-no-caller-audit"
+  base_commit: "408f761fdfd1c0c8f7a7c6391c5b0e178db67ff6"
+  objective: "Prove which standalone Pickup callers and artifacts are dead, classify every candidate path as delete, migrate, retain, or separately gated, and stop before code removal."
   authorization:
     local_implementation: true
     commit: true
-    remote_publication: true
-    merge: true
+    remote_publication: false
+    merge: false
   target_paths:
     - "docs/STATUS.yaml"
-    - "docs/ROADMAP.md"
-    - "docs/DECISIONS.md"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/LANDING_EDITORIAL_PIPELINE.md"
-    - "assets/css/phase8-base.css"
-    - "assets/css/phase8-candidate.css"
-    - "assets/js/phase8/app-card-preview.js"
-    - "assets/js/phase8/app-core.js"
-    - "assets/js/phase8/app-metadata.js"
-    - "assets/js/phase8/app-mobile-interactions.js"
-    - "assets/js/phase8/app-mobile-render.js"
-    - "assets/js/phase8/app-mtgo.js"
-    - "assets/js/phase8/app-tabletop.js"
-    - "assets/js/phase8/app.js"
-    - "assets/js/phase8/archetype-names.js"
-    - "assets/js/phase8/i18n.js"
-    - "assets/js/phase8/mtgo-controller.js"
-    - "index.html"
-    - "melee/index.html"
-    - "src/mtgmeta/mtgo/__main__.py"
-    - "src/mtgmeta/mtgo/landing.py"
-    - "src/mtgmeta/mtgo/landing_editorial.py"
-    - "src/mtgmeta/mtgo/pickup.py"
-    - "src/mtgmeta/mtgo/stats.py"
-    - "schemas/common.schema.json"
-    - "schemas/manifest.json"
-    - "schemas/mtgo-archetype-localization.schema.json"
-    - "schemas/mtgo-decks.schema.json"
-    - "schemas/mtgo-landing-feature-index.schema.json"
-    - "schemas/mtgo-landing-feature-week.schema.json"
-    - "schemas/mtgo-landing.schema.json"
-    - "schemas/mtgo-meta.schema.json"
-    - "stats/standard/archetype_names.json"
-    - "stats/modern/archetype_names.json"
-    - "stats/standard/mtgo/landing/**"
-    - "stats/modern/mtgo/landing/**"
-    - "stats/standard/mtgo/meta.json"
-    - "stats/modern/mtgo/meta.json"
-    - "stats/standard/mtgo/decks_1w.json"
-    - "stats/standard/mtgo/decks_4w.json"
-    - "stats/standard/mtgo/decks_12w.json"
-    - "stats/standard/mtgo/decks_36w.json"
-    - "stats/standard/mtgo/index.json"
-    - "stats/modern/mtgo/decks_1w.json"
-    - "stats/modern/mtgo/decks_4w.json"
-    - "stats/modern/mtgo/decks_12w.json"
-    - "stats/modern/mtgo/decks_36w.json"
-    - "stats/modern/mtgo/index.json"
-    - "tests/fixtures/standard/public_contract/contract.json"
-    - "tests/js/phase8-archetype-names.test.js"
-    - "tests/js/phase8-landing-controller.test.js"
-    - "tests/js/phase8-landing.test.js"
-    - "tests/js/phase8-runtime.test.js"
-    - "tests/js/phase8-metadata-sharing.test.js"
-    - "tests/browser/production-pages.spec.js"
-    - "tests/test_generated_consumer_contracts.py"
-    - "tests/test_mtgo_landing.py"
-    - "tests/test_mtgo_landing_editorial.py"
-    - "validate_production_candidate.py"
-    - "validate_repository.py"
+    - "docs/audits/P12-15G-NO-CALLER-AUDIT.md"
   planned_file_operations:
     additions:
-      - "assets/js/phase8/archetype-names.js"
-      - "schemas/mtgo-archetype-localization.schema.json"
-      - "schemas/mtgo-landing-feature-index.schema.json"
-      - "schemas/mtgo-landing-feature-week.schema.json"
-      - "stats/standard/archetype_names.json"
-      - "stats/modern/archetype_names.json"
-      - "stats/standard/mtgo/landing/features/index.json"
-      - "stats/standard/mtgo/landing/features/2026-W27.json"
-      - "stats/standard/mtgo/landing/features/2026-W33.json"
-      - "stats/modern/mtgo/landing/features/index.json"
-      - "stats/modern/mtgo/landing/features/2026-W33.json"
-      - "tests/js/phase8-archetype-names.test.js"
-      - "tests/js/phase8-landing-controller.test.js"
+      - "docs/audits/P12-15G-NO-CALLER-AUDIT.md"
     deletions: []
     renames: []
   protected_scope:
-    artifact_impact: "combined_public_contract_generated_data_and_accepted_ui_behavior"
-    public_json_or_schema_changed: "accepted Landing archive, bilingual names, and additive representative-deck event context"
-    generated_or_source_data_changed: "accepted generated Landing, name, metadata, and representative-deck documents only"
-    classification_identities_changed: "none"
-    workflows_changed: "none"
-    public_paths_changed: "add Landing feature archive and bilingual name contracts"
+    artifact_impact: "internal_diagnostics"
+    public_json_or_schema_changed: false
+    generated_or_source_data_changed: false
+    workflows_changed: false
+    public_paths_changed: false
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Reuse the exact Owner-accepted cumulative workspace and verified cloud base without rebuilding a partial candidate."
-    - "Remove the confirmed 180-degree transform from MTGO and Tabletop matchup column labels so the shared main and sticky matrix headers render upright."
-    - "Freeze the accepted bytes in one local commit, publish one Ready pull request, wait for required CI, merge, and verify the matching Pages deployment."
-    - "Verify live Standard and Modern Landing features, bilingual names, accepted UI behavior, Tabletop recovery, and the legacy Weekly Pickup redirect."
-    - "Prove that live Landing requests no Pickup week document while retaining old Pickup files for rollback."
+    - "Inspect the exact cloud-cutover baseline and record Pickup callers, mixed responsibilities, public paths, rollback artifacts, and candidate cleanup operations."
+    - "Add one internal audit with exact delete, migrate, retain, and separately gated path lists."
+    - "Commit the completed local audit for Owner review."
   prohibited_changes:
-    - "Do not change accepted UI beyond the exact Owner-requested matchup column-label orientation repair, or change copy, classifier rules, statistics, source events, workflows, public contracts, or protected event 434455 bytes except for P12-15F publication metadata."
-    - "Do not dispatch production, delete Pickup files or code, begin P12-15G, or publish only part of the accepted candidate."
-    - "Stop on changed candidate bytes, failed or ambiguous required checks, conflict, permission blocker, or cloud evidence that does not match the merged commit."
+    - "Do not delete, rename, relocate, or modify Pickup runtime, publisher, Schema, generated, workflow, Pages, catalog, metadata, test, or front-end code in P12-15G-1."
+    - "Do not change the legacy weekly-pickup URL redirect, Landing behavior, UI, classifiers, statistics, source data, protected event 434455, or production behavior."
+    - "Do not publish remotely, merge, deploy, dispatch production, or begin P12-15G-2 before Owner acceptance of the no-caller proof and exact cleanup inventory."
   validation:
-    status: "passed_integrated_candidate_owner_accepted"
-    automated:
-      python_focused: "63 passed"
-      javascript_integration: "26 passed"
-      schemas: "97 checked; pass"
-      repository: "pass; 82 Python, 20 JavaScript, 1854 JSON, 68 YAML, 57 references, 2314 hygiene"
-      diff_check: "pass"
-    browser:
-      landing: "Standard and Modern feature archive, bilingual labels, navigation, and recovery: pass"
-      mobile: "375px Landing interaction and representative-card modal separation: pass"
-      matchup: "Standard and Tabletop main and sticky column labels upright: pass"
-      console: "no warnings or errors"
-  owner_accepted_on: "2026-08-24"
-  integrated_candidate_owner_accepted_on: "2026-08-24"
-  integration_base: "f4ae1580c49a99231cf8e73c622aa361e0c82bad"
-  stop_point: "Complete the unchanged accepted P12-15F task through one Ready PR, required CI, merge, and matching Pages verification; do not dispatch production or begin P12-15G."
+    status: "passed"
+    scope: "Documentation-only: live-status structure, YAML parsing, exact inventory completeness, and diff hygiene. No runtime, UI, Schema, production, or browser test was triggered."
+    checks:
+      - "python -m pytest tests/test_documentation_history.py -q"
+      - "YAML parse and 10 KiB live-status size guard"
+      - "tracked Pickup inventory and active-reference coverage checks"
+      - "git diff --check"
+  stop_point: "Stop after the local no-caller audit and exact cleanup inventory are committed and presented for Owner acceptance; do not perform any cleanup operation."
 
 current_repository_state:
-  baseline_commit: "f4ae1580c49a99231cf8e73c622aa361e0c82bad"
-  baseline_note: "Verified cloud master after the accepted HF2/HF2B recovery and 2026-08-24 production update; the exact accepted cumulative candidate is rebased without replacing current W34 production data."
+  baseline_commit: "408f761fdfd1c0c8f7a7c6391c5b0e178db67ff6"
+  baseline_note: "Verified P12-15F merge commit and Pages cutover; Landing is the reader-facing editorial product and no production dispatch is part of P12-15G-1."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -172,27 +90,27 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - task: "P12-15E-CUMULATIVE-RECOVERY"
-    status: "owner_accepted"
-    prerequisite: "satisfied on 2026-08-24"
-    note: "The Owner accepted the complete cumulative candidate, including the final mobile Landing row interaction and expanded-name highlight corrections."
-  - task: "P12-15F"
-    status: "owner_accepted_completion_authorized"
-    prerequisite: "satisfied on 2026-08-24"
-    note: "The Owner accepted the f4ae158-integrated candidate, including the corrected upright matchup matrix column labels; publish it atomically and verify the matching cloud cutover."
-  - task: "P12-15G"
+  - task: "P12-15G-1"
+    status: "owner_acceptance_pending"
+    prerequisite: "P12-15F cloud verification"
+    note: "Produce no-caller proof and an exact cleanup inventory only."
+  - task: "P12-15G-2"
+    status: "overall_authorized_waiting_owner_acceptance"
+    prerequisite: "Owner acceptance of P12-15G-1"
+    note: "Overall P12-15G development is authorized, but current execution is explicitly limited to P12-15G-1. Implement only the accepted code and capability cleanup after the audit gate; frozen-document deletion remains separately gated."
+  - task: "P12-16"
     status: "planned_not_authorized"
-    prerequisite: "P12-15F cloud verification and no-caller proof"
-    note: "Remove only proven-dead Pickup product code and approved legacy files."
+    prerequisite: "P12-15G completion or an explicit legacy-artifact deferral"
+    note: "Perform cross-device and visual-system closeout only after Pickup retirement reaches its approved stop."
 
 next_approved_task:
-  id: "P12-15G"
-  name: "Pickup retirement cleanup"
-  status: "planned_not_authorized"
+  id: "P12-15G-2"
+  name: "Pickup retirement implementation"
+  status: "authorized_waiting_owner_acceptance"
   local_execution_authorized: false
-  note: "Remain stopped after P12-15F cloud verification; cleanup requires a separate development brief and authorization."
+  note: "The Owner authorized P12-15G overall but limited current execution to P12-15G-1. Remain stopped until the Owner accepts the exact delete, migrate, retain, and separately gated inventory."
 
 prohibited_next_actions:
-  - "Do not publish a partial Landing, I18N, UX, or recovery layer."
-  - "Do not change the accepted P12-15F subject, dispatch production, retire Pickup, or begin P12-15G."
-  - "Do not develop directly on master or modify the accepted recovery-source workspaces."
+  - "Do not perform any Pickup deletion, relocation, public-path retirement, or compatibility change during P12-15G-1."
+  - "Do not publish, merge, deploy, dispatch production, or begin P12-15G-2 or P12-16."
+  - "Do not develop directly on master or modify prior accepted workspaces."
