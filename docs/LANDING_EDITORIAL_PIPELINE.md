@@ -267,6 +267,25 @@ contracts.
 **Stop point:** wait for hands-on Owner acceptance. Do not publish or remove old
 Pickup resources.
 
+The local implementation uses `destination_id: deck:<20-hex-id>` as the exact
+feature destination. The Landing reader requests only
+`landing/features/index.json` and its selected week document; it does not use a
+Pickup week for current or historical features. A summary link writes
+`section=features`, the selected `week`, and the exact `feature` destination to
+the URL. Loading that URL selects the week, opens the matching feature, moves it
+into view, and focuses its disclosure control. A legacy link without an admitted
+destination may still use its exact Top 8 event/rank route, but newly generated
+reviewed summary content cannot take that fallback.
+
+Standard W27 is represented as an explicit zero-feature week rather than a
+missing document, but zero-feature archive weeks are not offered in the public
+week selector. An old direct URL for a zero-feature week falls back to the latest
+selectable week and replaces the stale week parameter. Standard W33 and Modern
+W33 carry the complete materialized reviewed feature sets. The current W33
+feature collection is byte-equivalent at the structured-data level to the
+corresponding archive collection because both are built in one generation
+operation from the same private review source.
+
 ### P12-15E-I18N - Classifier-name localization across retained views
 
 **Scope:** publish and consume the approved classifier-name translations across
@@ -275,9 +294,10 @@ retained views; do not change classifier rules, statistics, or accepted layout.
 1. Begin only after hands-on acceptance of the P12-15E data-backed local
    preview.
 2. Generate a format-scoped public bilingual name contract from
-   `configs/mtgo_archetype_names.yaml`, with the classifier taxonomy remaining
-   the English authority and the approved catalog remaining the Chinese
-   authority.
+   `configs/mtgo_archetype_names.yaml` at
+   `stats/<format>/archetype_names.json`, with the classifier taxonomy
+   remaining the English authority and the approved catalog remaining the
+   Chinese authority.
 3. Audit every retained MTGO and applicable Tabletop consumer for stable parent
    and subtype IDs. Add missing stable identity fields at producer boundaries
    rather than matching localized or English display text.

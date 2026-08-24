@@ -5369,3 +5369,45 @@ English-only. Parent and subtype identities remain stable, statistics and
 classifier rules do not change, and the localization migration cannot silently
 depend on display-text equality. No P12-15E-I18N implementation or public path
 change is authorized by this route-map decision alone.
+
+---
+
+# DEC-118 - Keep MTGO event context visible at the deck-selection boundary
+
+Status: `Accepted for local implementation`
+
+## Context
+
+The accepted P12-15E-UX candidate still exposes time-of-day down to seconds on
+Landing Environment and MTGO Statistics deck details even though that time has
+no reader value. Those non-Top-8 details also omit the official event name and
+field size. The Top 8 table already owns event name, date, and player count,
+but opening a deck does not leave a visible marker connecting the expanded
+detail to its source cell and event column.
+
+## Decision
+
+Expand the still-uncommitted P12-15E-UX task from three to five bounded
+corrections. Carry each retained event's numeric `event_id` and official
+`description` into current rolling MTGO best and representative deck output as
+`event_name`; advance only the `mtgo-decks` public contract to `1.1.0` and
+regenerate the Standard and Modern rolling deck documents. The fields are
+display provenance and change no statistic, source event, classifier result,
+or selection rule.
+
+Render MTGO timestamps as date only. Landing Environment and MTGO Statistics
+deck details show player, rank, date, official event name, and player count for
+both best and representative decks. Top 8 keeps event name and player count in
+its table header: selecting an available placement highlights the exact cell
+and corresponding event header, exposes current-item semantics, restores from
+the stable detail URL, and clears on close. Do not repeat event name or player
+count in the expanded Top 8 detail.
+
+## Consequences
+
+Readers can identify the source event and field size without meaningless clock
+precision, while the Top 8 matrix remains the single event-context source for
+its detail. The implementation adds no public path, navigation item, workflow,
+source fetch, statistic, classifier change, or modification to protected event
+`434455`. P12-15F remains the combined publication gate after renewed hands-on
+acceptance of the five-correction P12-15E-UX candidate.

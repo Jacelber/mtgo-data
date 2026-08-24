@@ -231,7 +231,7 @@ test("closing the matchup filter without Apply preserves the current rows", asyn
 
   await page.locator("[data-matchup-filter-toggle]").click();
   await page.locator("[data-matchup-filter-select-all]").uncheck();
-  await page.locator("#matchup-filter-search").fill("mono-red prowess");
+  await page.locator("#matchup-filter-search").fill("纯红灵技");
   await page.locator('[data-matchup-filter-option="prowess/mono-red"]').check();
   await page.locator("[data-matchup-filter-cancel]").click();
 
@@ -467,13 +467,13 @@ test("mobile matchup filter fits the viewport and does not move the page when ap
   expect(menuLayout.pageOverflow).toBe(0);
 
   await page.locator("[data-matchup-filter-select-all]").uncheck();
-  await page.locator("#matchup-filter-search").fill("mono-red prowess");
+  await page.locator("#matchup-filter-search").fill("纯红灵技");
   await page.locator('[data-matchup-filter-option="prowess/mono-red"]').check();
   await page.evaluate(() => window.scrollTo({ top: 200, behavior: "auto" }));
   const beforeY = await page.evaluate(() => window.scrollY);
   await page.locator("[data-matchup-filter-apply]").click();
   await expect(page.locator(".matchup-table .row-head")).toHaveCount(1);
-  await expect(page.locator(".matchup-table .row-head").first()).toContainText("Mono-Red Prowess");
+  await expect(page.locator(".matchup-table .row-head").first()).toContainText("纯红灵技");
   await expect.poll(async () => page.evaluate(() => window.scrollY)).toBe(beforeY);
   expect(await page.locator("html").evaluate(element => element.scrollWidth - element.clientWidth)).toBe(0);
 
@@ -494,13 +494,13 @@ test("Tabletop matchup uses the same hierarchical exact-row filter", async ({ pa
   );
   await page.locator("[data-matchup-filter-toggle]").click();
   await page.locator("[data-matchup-filter-select-all]").uncheck();
-  await page.locator("#matchup-filter-search").fill("mono-green broodscale");
+  await page.locator("#matchup-filter-search").fill("纯绿孳巢蜥");
   await page.locator('[data-matchup-filter-option="broodscale-combo/mono-green"]').check();
   await page.locator("[data-matchup-filter-apply]").click();
 
   await expect(page.locator(".matchup-table .row-head")).toHaveCount(1);
   await expect(page.locator(".matchup-table .row-head").first()).toContainText(
-    "Mono-Green Broodscale Combo"
+    "纯绿孳巢蜥"
   );
   const detailLink = page.locator(".matchup-table .row-axis-detail-link");
   const target = new URL(await detailLink.getAttribute("href"));

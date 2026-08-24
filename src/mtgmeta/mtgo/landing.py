@@ -1,4 +1,4 @@
-"""Deterministic latest-only MTGO Landing facts and reviewed Pickup features."""
+"""Deterministic latest MTGO Landing facts and reviewed feature archive."""
 
 from __future__ import annotations
 
@@ -27,7 +27,9 @@ ENVIRONMENT_THRESHOLD = 0.03
 SHARE_MOVE_THRESHOLD = 0.05
 EXIT_THRESHOLD = 0.05
 BUILD_SHIFT_THRESHOLD = 20
-LANDING_SCHEMA_VERSION = "1.1.0"
+LANDING_SCHEMA_VERSION = "1.2.0"
+FEATURE_ARCHIVE_SCHEMA_VERSION = "1.0.0"
+FEATURE_ARCHIVE_PRODUCT_ID = "mtgo-landing-features"
 DEFAULT_VISUALS_PATH = Path("configs/mtgo_landing_visuals.yaml")
 DECK_LINK_TOKEN_PATTERN = re.compile(r"deck:[0-9a-f]{20}")
 
@@ -943,6 +945,88 @@ def _public_supporting_fact(reason: Mapping[str, Any]) -> dict[str, Any]:
     raise MTGOLandingError(f"unsupported Pickup supporting fact: {reason_type!r}")
 
 
+def _public_feature(item: Mapping[str, Any]) -> dict[str, Any]:
+    return {
+        "category": item["category"],
+        "order": item["order"],
+        "destination_id": item["destination_id"],
+        "archetype_id": item["archetype_id"],
+        "subtype_id": item["subtype_id"],
+        "display_name": item["display_name"],
+        "deck": item["deck"],
+        "headline": item["title"],
+        "positioning": item["positioning"],
+        "featured_cards": item["featured_cards"],
+        "supporting_facts": [
+            _public_supporting_fact(reason) for reason in item["supporting_facts"]
+        ],
+    }
+
+
+def _feature_archive_documents(
+    root: Path,
+    format_id: str,
+    review_root: Path,
+    name_catalog_path: Path,
+) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
+    editorial.validate_name_catalog(root, name_catalog_path)
+    names = editorial.load_name_catalog(name_catalog_path)
+    week_documents: dict[str, dict[str, Any]] = {}
+    index_entries: list[dict[str, Any]] = []
+    for review_path in sorted(review_root.glob("????-W??.yaml")):
+        review = editorial.load_review_document(
+            review_path,
+            root / editorial.DEFAULT_REVIEW_SCHEMA,
+        )
+        if review["format"] != format_id or review["source"] != SOURCE_ID:
+            raise MTGOLandingError(
+                f"{review_path}: Landing review format/source does not match archive"
+            )
+        week = review["week"]
+        if review_path.stem != week["id"]:
+            raise MTGOLandingError(
+                f"{review_path}: Landing review filename does not match week"
+            )
+        materialized = editorial.materialize_review(review, names)
+        items = [_public_feature(item) for item in materialized["features"]]
+        destinations = [item["destination_id"] for item in items]
+        if len(destinations) != len(set(destinations)):
+            raise MTGOLandingError(
+                f"{review_path}: Landing feature destinations must be unique"
+            )
+        document = {
+            "schema_version": FEATURE_ARCHIVE_SCHEMA_VERSION,
+            "product": FEATURE_ARCHIVE_PRODUCT_ID,
+            "format": format_id,
+            "source": SOURCE_ID,
+            "week": week,
+            "source_event_ids": review["bindings"]["source_event_ids"],
+            "classifier_digest": review["bindings"]["classifier_digest"],
+            "content_digest": editorial.document_digest(items),
+            "features": {"items": items},
+        }
+        week_documents[week["id"]] = document
+        index_entries.append(
+            {
+                "week": week["id"],
+                "file": f"{week['id']}.json",
+                "start": week["start"],
+                "end": week["end"],
+                "feature_count": len(items),
+            }
+        )
+    if not week_documents:
+        raise MTGOLandingError(f"{review_root}: no Landing review weeks found")
+    index = {
+        "schema_version": FEATURE_ARCHIVE_SCHEMA_VERSION,
+        "product": FEATURE_ARCHIVE_PRODUCT_ID,
+        "format": format_id,
+        "source": SOURCE_ID,
+        "weeks": sorted(index_entries, key=lambda item: item["week"], reverse=True),
+    }
+    return index, week_documents
+
+
 def _write_candidate(path: Path, document: Mapping[str, Any]) -> None:
     path.write_text(
         yaml.dump(
@@ -1326,25 +1410,7 @@ def build_document(
             else:
                 materialized = editorial.materialize_review(review, names)
                 summary_items = materialized["weekly_summary"]
-                features = []
-                for item in materialized["features"]:
-                    features.append(
-                        {
-                            "category": item["category"],
-                            "order": item["order"],
-                            "archetype_id": item["archetype_id"],
-                            "subtype_id": item["subtype_id"],
-                            "display_name": item["display_name"],
-                            "deck": item["deck"],
-                            "headline": item["title"],
-                            "positioning": item["positioning"],
-                            "featured_cards": item["featured_cards"],
-                            "supporting_facts": [
-                                _public_supporting_fact(reason)
-                                for reason in item["supporting_facts"]
-                            ],
-                        }
-                    )
+                features = [_public_feature(item) for item in materialized["features"]]
                 pickup_document_digest = editorial.document_digest(review)
                 summary_fact_digest = editorial.document_digest(
                     {
@@ -1398,7 +1464,7 @@ def validate_document(document: Mapping[str, Any]) -> None:
         or binding["classifier_digest"] != document["classifier"]["digest"]
         or not isinstance(binding["visual_metadata_digest"], str)
         or (
-            document["schema_version"] == LANDING_SCHEMA_VERSION
+            document["schema_version"] != "1.0.0"
             and (
                 not isinstance(binding.get("pickup_document_digest"), str)
                 or not isinstance(binding.get("summary_fact_digest"), str)
@@ -1407,7 +1473,7 @@ def validate_document(document: Mapping[str, Any]) -> None:
     ):
         raise MTGOLandingError("Landing review binding is inconsistent")
 
-    if document["schema_version"] == LANDING_SCHEMA_VERSION:
+    if document["schema_version"] != "1.0.0":
         summary = document["weekly_summary"]
         if summary["week"] != document["week"]["id"]:
             raise MTGOLandingError("Landing weekly summary week is inconsistent")
@@ -1460,6 +1526,25 @@ def validate_document(document: Mapping[str, Any]) -> None:
                 for link in links
             ):
                 raise MTGOLandingError("Landing weekly summary deck-link label is invalid")
+        if document["schema_version"] == LANDING_SCHEMA_VERSION:
+            feature_destinations = {
+                item.get("destination_id") for item in document["features"]["items"]
+            }
+            if None in feature_destinations or len(feature_destinations) != len(
+                document["features"]["items"]
+            ):
+                raise MTGOLandingError(
+                    "Landing feature destinations are missing or duplicated"
+                )
+            linked_destinations = {
+                link["token"]
+                for item in summary["items"]
+                for link in item["deck_links"]
+            }
+            if not linked_destinations <= feature_destinations:
+                raise MTGOLandingError(
+                    "Landing weekly summary deck link has no exact reviewed feature"
+                )
 
     rows = document["environment"]["rows"]
     other = document["environment"]["other_classified"]
@@ -1488,7 +1573,7 @@ def validate_document(document: Mapping[str, Any]) -> None:
     if document["state"] == "no_events":
         editorial_items = (
             document["weekly_summary"]["items"]
-            if document["schema_version"] == LANDING_SCHEMA_VERSION
+            if document["schema_version"] != "1.0.0"
             else document["observations"]
         )
         if source_event_ids or rows or editorial_items or document["features"]["items"]:
@@ -1542,24 +1627,60 @@ def generate(
             "feature_count": len(document["features"]["items"]),
             "summary_count": len(document["weekly_summary"]["items"]),
         }
+    review_root = (
+        Path(review_directory).resolve()
+        if review_directory is not None
+        else context.paths["statistics"] / "landing" / "review"
+    )
+    catalog_path = (
+        Path(name_catalog_path).resolve()
+        if name_catalog_path is not None
+        else root / editorial.DEFAULT_NAME_CATALOG
+    )
+    feature_index, feature_weeks = _feature_archive_documents(
+        root,
+        format_id,
+        review_root,
+        catalog_path,
+    )
+    current_feature = feature_weeks.get(document["week"]["id"])
+    if current_feature is None or current_feature["features"]["items"] != document["features"]["items"]:
+        raise MTGOLandingError(
+            "Landing latest document and feature archive do not share one reviewed source"
+        )
     output.mkdir(parents=True, exist_ok=True)
+    feature_output = output / "features"
+    feature_output.mkdir(parents=True, exist_ok=True)
     destination.write_text(
         json.dumps(document, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
         newline="\n",
     )
+    (feature_output / "index.json").write_text(
+        json.dumps(feature_index, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    for week_id, week_document in feature_weeks.items():
+        (feature_output / f"{week_id}.json").write_text(
+            json.dumps(week_document, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
     return {
         "status": "written",
         "path": destination,
         "week": document["week"]["id"],
         "feature_count": len(document["features"]["items"]),
         "summary_count": len(document["weekly_summary"]["items"]),
+        "archive_week_count": len(feature_weeks),
     }
 
 
 __all__ = [
     "MTGOLandingError",
     "build_document",
+    "_feature_archive_documents",
     "generate",
     "load_visual_metadata",
     "validate_document",

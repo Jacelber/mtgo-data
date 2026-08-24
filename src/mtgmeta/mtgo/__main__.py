@@ -330,7 +330,12 @@ def _run_hierarchy(args: argparse.Namespace, root: Path, registry: Path) -> int:
         args.format_id,
         registry_path=registry,
     )
+    names_destination = landing_editorial.generate_public_name_contract(
+        root,
+        args.format_id,
+    )
     print(f"MTGO hierarchy: format={args.format_id} output={destination}")
+    print(f"Classifier names: format={args.format_id} output={names_destination}")
     return 0
 
 

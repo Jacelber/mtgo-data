@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-landing-feature-week.schema.json",
+  "title": "MTGO Landing reviewed feature week",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "product", "format", "source", "week",
+    "source_event_ids", "classifier_digest", "content_digest", "features"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "product": {"const": "mtgo-landing-features"},
+    "format": {"enum": ["standard", "modern"]},
+    "source": {"const": "mtgo"},
+    "week": {"$ref": "mtgo-landing.schema.json#/$defs/week"},
+    "source_event_ids": {"$ref": "mtgo-landing.schema.json#/$defs/eventIds"},
+    "classifier_digest": {"$ref": "mtgo-landing.schema.json#/$defs/sha256"},
+    "content_digest": {"$ref": "mtgo-landing.schema.json#/$defs/sha256"},
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["items"],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {"$ref": "mtgo-landing.schema.json#/$defs/feature"},
+              {"required": ["destination_id"]}
+            ]
+          }
+        }
+      }
+    }
+  }
+}

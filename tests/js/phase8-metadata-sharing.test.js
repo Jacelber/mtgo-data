@@ -67,12 +67,12 @@ test("legacy Pickup state maps to Landing features without losing its review wee
   assert.equal(route.toString(), "format=standard&product=mtgo-landing&week=2026-W33&lang=en&section=features");
 });
 
-test("Landing feature canonical URL keeps only the compatible feature week", () => {
+test("Landing feature canonical URL keeps its week and exact feature destination", () => {
   const metadata = metadataFunctions();
   const canonical = metadata.canonicalParameters(new URLSearchParams(
-    "format=standard&product=mtgo-landing&section=features&week=2026-W33&detail=ignore&lang=zh"
+    "format=standard&product=mtgo-landing&section=features&week=2026-W33&feature=deck:aaaaaaaaaaaaaaaaaaaa&detail=ignore&lang=zh"
   ));
-  assert.equal(canonical.toString(), "format=standard&product=mtgo-landing&section=features&week=2026-W33&lang=zh");
+  assert.equal(canonical.toString(), "format=standard&product=mtgo-landing&section=features&week=2026-W33&feature=deck%3Aaaaaaaaaaaaaaaaaaaaa&lang=zh");
 });
 
 test("both production entries load metadata before the shared application", () => {
@@ -86,14 +86,14 @@ test("both production entries load metadata before the shared application", () =
   }
 });
 
-test("both production titles provide a script-independent root link", () => {
+test("both production titles provide a script-independent default Landing link", () => {
   assert.match(
     rootEntry,
-    /<h1><a id="site-title" class="brand-home" href="\.\/index\.html">/
+    /<h1><a id="site-title" class="brand-home" href="\.\/index\.html\?format=standard&amp;product=mtgo-landing">/
   );
   assert.match(
     tabletopEntry,
-    /<h1><a id="site-title" class="brand-home" href="\.\.\/index\.html">/
+    /<h1><a id="site-title" class="brand-home" href="\.\.\/index\.html\?format=standard&amp;product=mtgo-landing">/
   );
 });
 

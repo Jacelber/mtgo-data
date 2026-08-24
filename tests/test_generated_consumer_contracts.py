@@ -11,6 +11,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 RANGES = (1, 4, 12)
+DECK_RANGES = (*RANGES, 36)
 
 
 def _json(path: str) -> dict:
@@ -26,6 +27,32 @@ def _node(script: str, *args: str) -> dict:
         capture_output=True,
     )
     return json.loads(result.stdout)
+
+
+def _deck_records(document: dict):
+    for parent in document["decks"].values():
+        yield parent["best_deck"]
+        if parent["average_deck"]["medoid"] is not None:
+            yield parent["average_deck"]["medoid"]
+        for subtype in parent.get("subtypes", []):
+            if subtype["best_deck"] is not None:
+                yield subtype["best_deck"]
+            if subtype["average_deck"]["medoid"] is not None:
+                yield subtype["average_deck"]["medoid"]
+
+
+@pytest.mark.parametrize("format_id", ("standard", "modern"))
+@pytest.mark.parametrize("weeks", DECK_RANGES)
+def test_current_representative_decks_keep_source_event_context(
+    format_id: str,
+    weeks: int,
+) -> None:
+    document = _json(f"stats/{format_id}/mtgo/decks_{weeks}w.json")
+
+    assert document["schema_version"] == "1.1.0"
+    for deck in _deck_records(document):
+        assert deck["event_id"].isdigit()
+        assert deck["event_name"].strip()
 
 
 @pytest.mark.parametrize("format_id", ("standard", "modern"))
@@ -166,7 +193,7 @@ def test_current_landing_follows_one_classifier_and_population_subject(
         assert len(document["observations"]) <= 5
         assert "weekly_summary" not in document
     else:
-        assert document["schema_version"] == "1.1.0"
+        assert document["schema_version"] in {"1.1.0", "1.2.0"}
         assert "observations" not in document
         assert len(document["review_binding"]["pickup_document_digest"]) == 64
         assert len(document["review_binding"]["summary_fact_digest"]) == 64
@@ -181,3 +208,39 @@ def test_current_landing_follows_one_classifier_and_population_subject(
         and len(item["featured_cards"]) == 4
         for item in document["features"]["items"]
     )
+
+
+@pytest.mark.parametrize("format_id", ("standard", "modern"))
+def test_landing_feature_archive_matches_the_reviewed_latest_document(
+    format_id: str,
+) -> None:
+    landing = _json(f"stats/{format_id}/mtgo/landing/current.json")
+    index = _json(f"stats/{format_id}/mtgo/landing/features/index.json")
+    current_entry = next(
+        item for item in index["weeks"] if item["week"] == landing["week"]["id"]
+    )
+    archived = _json(
+        f"stats/{format_id}/mtgo/landing/features/{current_entry['file']}"
+    )
+
+    assert index["product"] == "mtgo-landing-features"
+    assert archived["features"]["items"] == landing["features"]["items"]
+    assert current_entry["feature_count"] == len(archived["features"]["items"])
+    destinations = {
+        item["destination_id"] for item in archived["features"]["items"]
+    }
+    linked = {
+        link["token"]
+        for item in landing["weekly_summary"]["items"]
+        for link in item["deck_links"]
+    }
+    assert linked <= destinations
+
+
+def test_standard_w27_is_an_explicit_empty_landing_feature_week() -> None:
+    index = _json("stats/standard/mtgo/landing/features/index.json")
+    entry = next(item for item in index["weeks"] if item["week"] == "2026-W27")
+    document = _json(f"stats/standard/mtgo/landing/features/{entry['file']}")
+
+    assert entry["feature_count"] == 0
+    assert document["features"]["items"] == []

@@ -2,11 +2,11 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-decks.schema.json",
   "title": "MTGO representative decks",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "type": "object",
   "required": ["schema_version", "format", "source", "period", "decks"],
   "properties": {
-    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
+    "schema_version": {"const": "1.1.0"},
     "format": {"enum": ["standard", "modern"]}, "source": {"const": "mtgo"}, "period": {"$ref": "common.schema.json#/$defs/period"},
     "decks": {
       "type": "object",
@@ -22,9 +22,11 @@
     }, "additionalProperties": false},
     "bestDeck": {
       "type": "object",
-      "required": ["player", "final_rank", "swiss_score", "player_count", "starttime", "main_deck", "side_deck"],
+      "required": ["player", "event_id", "event_name", "final_rank", "swiss_score", "player_count", "starttime", "main_deck", "side_deck"],
       "properties": {
         "player": {"type": "string"},
+        "event_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "event_name": {"type": "string", "minLength": 1},
         "final_rank": {"type": ["integer", "null"], "minimum": 1},
         "swiss_score": {"type": "integer", "minimum": 0},
         "player_count": {"type": "integer", "minimum": 1},

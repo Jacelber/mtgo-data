@@ -174,6 +174,32 @@ def test_bilingual_catalog_coverage_fails_closed(imported, tmp_path):
         editorial.validate_name_catalog(ROOT, path)
 
 
+@pytest.mark.parametrize("format_id", ["standard", "modern"])
+def test_public_name_contract_matches_approved_format_catalog(format_id, tmp_path):
+    destination = editorial.generate_public_name_contract(
+        ROOT,
+        format_id,
+        output_directory=tmp_path / format_id,
+    )
+    document = json.loads(destination.read_text(encoding="utf-8"))
+    schema = json.loads(
+        (ROOT / "schemas/mtgo-archetype-localization.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    jsonschema.Draft202012Validator(schema).validate(document)
+
+    approved = editorial.load_name_catalog(ROOT / "configs/mtgo_archetype_names.yaml")
+    expected = {
+        f"{parent_id}/{subtype_id}" if subtype_id is not None else parent_id: names
+        for (item_format, parent_id, subtype_id), names in approved.items()
+        if item_format == format_id
+    }
+    actual = {item["identity_id"]: item["display"] for item in document["names"]}
+    assert document["format"] == format_id
+    assert actual == expected
+
+
 def test_explicit_empty_review_advances_landing_known_state(imported):
     output_root, _result = imported
     review = editorial.load_review_document(

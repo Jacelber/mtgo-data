@@ -22,6 +22,7 @@ from .normalize import load_rules_for_format
 
 DEFAULT_RANGES = (1, 4, 12, 36)
 SOURCE_ID = "mtgo"
+MTGO_DECKS_SCHEMA_VERSION = "1.1.0"
 
 # Preserve the narrower legacy public-output aliases. The broader shared OM1/SPM
 # mapping is intentionally not used for deck construction metrics in P3-04.
@@ -155,6 +156,10 @@ def process_event(
     classifier: Callable[[dict[str, Any], RuleSet | LegacyArchetypeRules], str | None]
     | None = None,
 ):
+    event_id = str(event.get("event_id", "")).strip()
+    event_name = str(event.get("description", "")).strip()
+    if not event_id.isdigit() or not event_name:
+        raise MTGOStatisticsError("event_id and description are required")
     player_count = to_int(event.get("player_count"))
     rounds = rounds_from_player_count(player_count)
     threshold = high_score_threshold(rounds)
@@ -199,6 +204,8 @@ def process_event(
             "swiss_score": swiss_score,
             "final_rank": final_rank,
             "player": player.get("player", player.get("name", "?")),
+            "event_id": event_id,
+            "event_name": event_name,
             "player_count": player_count,
             "starttime": starttime,
             "main_deck": player.get("main_deck", []),
@@ -206,6 +213,8 @@ def process_event(
             "rounds": rounds,
         })
     return {
+        "event_id": event_id,
+        "event_name": event_name,
         "description": description,
         "player_count": player_count,
         "rounds": rounds,
@@ -601,6 +610,8 @@ def record_to_deck_display(record):
         return None
     return {
         "player": record.get("player", "?"),
+        "event_id": record.get("event_id", ""),
+        "event_name": record.get("event_name", ""),
         "final_rank": record["final_rank"] if record.get("final_rank", 9999) != 9999 else None,
         "swiss_score": record.get("swiss_score"),
         "player_count": record.get("player_count"),
@@ -1012,17 +1023,20 @@ def build_range(
         d99,
         include_archetype_ids=include_archetype_ids,
     )
-    decks_data = versioned({
-        "format": format_id,
-        "source": SOURCE_ID,
-        "period": period,
-        "decks": attach_subtype_decks(
-            parent_decks,
-            records,
-            subtype_base_pack,
-            rules,
-        ),
-    })
+    decks_data = versioned(
+        {
+            "format": format_id,
+            "source": SOURCE_ID,
+            "period": period,
+            "decks": attach_subtype_decks(
+                parent_decks,
+                records,
+                subtype_base_pack,
+                rules,
+            ),
+        },
+        schema_version=MTGO_DECKS_SCHEMA_VERSION,
+    )
     return stats_data, decks_data
 
 
@@ -1159,6 +1173,8 @@ def pick_best_deck(archetype_records):
     )
     return {
         "player": best["player"],
+        "event_id": best["event_id"],
+        "event_name": best["event_name"],
         "final_rank": best["final_rank"] if best["final_rank"] != 9999 else None,
         "swiss_score": best["swiss_score"],
         "player_count": best["player_count"],

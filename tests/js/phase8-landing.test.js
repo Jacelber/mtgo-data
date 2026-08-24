@@ -19,6 +19,7 @@ function landingFunctions(language = "zh") {
   const context = {
     ArchetypeVisuals: { manaIdentities: {} },
     I18n: { language: () => language },
+    classifierName: (parentId, subtypeId = null) => subtypeId || parentId,
     REPRESENTATIVE_CARDS: {},
     URL,
     currentContext: {},
@@ -37,6 +38,7 @@ function landingFunctions(language = "zh") {
       detailIdentity: null,
       format: "standard",
       pickupOpen: new Set(),
+      landingFeatureOpen: new Set(),
       product: "mtgo-landing",
     },
     t: key => key,
@@ -61,9 +63,9 @@ function landingFunctions(language = "zh") {
 test("weekly summary replaces only the exact deck token with its localized link", () => {
   const { landingSummaryText } = landingFunctions("zh");
   const html = landingSummaryText({
-    text: { zh: "前文 deck:abc123 后文", en: "Before deck:abc123 after" },
+    text: { zh: "前文 deck:aaaaaaaaaaaaaaaaaaaa 后文", en: "Before deck:aaaaaaaaaaaaaaaaaaaa after" },
     deck_links: [{
-      token: "deck:abc123",
+      token: "deck:aaaaaaaaaaaaaaaaaaaa",
       label: { zh: "套牌 · 牌手 · 第1名", en: "Deck · Player · Rank 1" },
       deck: { event_id: "42", final_rank: 1 },
     }],
@@ -71,9 +73,25 @@ test("weekly summary replaces only the exact deck token with its localized link"
 
   assert.match(html, /^前文 <a /);
   assert.match(html, />套牌 · 牌手 · 第1名<\/a> 后文$/);
-  assert.match(html, /product=mtgo-top8/);
-  assert.match(html, /detail=42%3A1/);
+  assert.match(html, /product=mtgo-landing/);
+  assert.match(html, /section=features/);
+  assert.match(html, /feature=deck%3Aaaaaaaaaaaaaaaaaaaaa/);
   assert.doesNotMatch(html, />前文/);
+});
+
+test("a legacy noncanonical token retains the exact Top 8 fallback", () => {
+  const { landingSummaryText } = landingFunctions("en");
+  const html = landingSummaryText({
+    text: { zh: "", en: "Legacy deck:old" },
+    deck_links: [{
+      token: "deck:old",
+      label: { zh: "", en: "Legacy Deck" },
+      deck: { event_id: "42", final_rank: 3 },
+    }],
+  }, "2026-W27");
+
+  assert.match(html, /product=mtgo-top8/);
+  assert.match(html, /detail=42%3A3/);
 });
 
 test("environment direction uses the accepted five-point movement boundary", () => {
@@ -114,21 +132,17 @@ test("environment rows render three shares and never expose raw counts", () => {
   assert.doesNotMatch(html, />469</);
 });
 
-test("feature history does not invent cards or copy from legacy Pickup rows", () => {
+test("feature history reads only the Landing-owned week document", () => {
   const { landingFeatureItems } = landingFunctions();
   const current = {
-    landing: { week: { id: "2026-W33" }, features: { items: [{ order: 1 }] } },
-    featureFile: "2026-W33.json",
-    pickupDocument: null,
+    featureDocument: { features: { items: [{ order: 1 }] } },
   };
-  const legacy = {
-    landing: current.landing,
-    featureFile: "2026-W27.json",
-    pickupDocument: { existing_changes: [{ comment_zh: "draft only" }] },
+  const empty = {
+    featureDocument: { features: { items: [] } },
   };
 
   assert.equal(landingFeatureItems(current).length, 1);
-  assert.equal(landingFeatureItems(legacy).length, 0);
+  assert.equal(landingFeatureItems(empty).length, 0);
 });
 
 test("a reviewed feature keeps one disclosure action and four separate card links", () => {
@@ -136,6 +150,7 @@ test("a reviewed feature keeps one disclosure action and four separate card link
   const html = landingFeatureHtml({
     category: "new_deck",
     order: 1,
+    destination_id: "deck:aaaaaaaaaaaaaaaaaaaa",
     archetype_id: "new-deck",
     subtype_id: null,
     display_name: "New Deck",
@@ -145,7 +160,7 @@ test("a reviewed feature keeps one disclosure action and four separate card link
     deck: {},
   });
 
-  assert.equal((html.match(/data-pickup-toggle=/g) || []).length, 1);
+  assert.equal((html.match(/data-landing-feature-toggle=/g) || []).length, 1);
   assert.equal((html.match(/data-progressive-image=/g) || []).length, 4);
   assert.match(html, /<\/button><span class="landing-feature-cards"/);
 });

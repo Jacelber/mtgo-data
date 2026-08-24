@@ -161,7 +161,7 @@ def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_
         "unavailable_reason": "no_current_events",
     }
     assert document["environment"]["rows"] == []
-    assert document["schema_version"] == "1.1.0"
+    assert document["schema_version"] == "1.2.0"
     assert document["weekly_summary"] == {"week": WEEK, "items": []}
     assert "observations" not in document
     assert document["features"]["items"] == []
@@ -226,6 +226,36 @@ def test_weekly_summary_duplicate_order_fails_closed():
 
     with pytest.raises(landing.MTGOLandingError, match="summary order"):
         landing.validate_document(document)
+
+
+def test_weekly_summary_link_without_exact_feature_fails_closed():
+    document = json.loads(
+        (ROOT / "stats" / "standard" / "mtgo" / "landing" / "current.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    linked = document["weekly_summary"]["items"][2]["deck_links"][0]["token"]
+    document["features"]["items"] = [
+        item
+        for item in document["features"]["items"]
+        if item["destination_id"] != linked
+    ]
+
+    with pytest.raises(landing.MTGOLandingError, match="no exact reviewed feature"):
+        landing.validate_document(document)
+
+
+def test_legacy_1_1_landing_remains_valid_without_feature_destinations():
+    document = json.loads(
+        (ROOT / "stats" / "standard" / "mtgo" / "landing" / "current.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    document["schema_version"] = "1.1.0"
+    for item in document["features"]["items"]:
+        item.pop("destination_id")
+
+    landing.validate_document(document)
 
 
 def test_unreviewed_candidate_receives_fact_binding_and_default_landing_fields(
@@ -699,6 +729,8 @@ def test_pages_selection_excludes_private_pickup_review_files(tmp_path):
 
     for relative in (
         "stats/standard/mtgo/landing/current.json",
+        "stats/standard/mtgo/landing/features/index.json",
+        "stats/standard/mtgo/landing/features/2026-W33.json",
         "stats/standard/mtgo/pickup/2026-W33.json",
         "stats/standard/mtgo/pickup/candidates_2026-W33.yaml",
         "stats/standard/mtgo/pickup/base_reference_2026-W33.yaml",
@@ -724,6 +756,8 @@ def test_pages_selection_excludes_private_pickup_review_files(tmp_path):
     selected = publication_paths(tmp_path, config)
 
     assert "stats/standard/mtgo/landing/current.json" in selected
+    assert "stats/standard/mtgo/landing/features/index.json" in selected
+    assert "stats/standard/mtgo/landing/features/2026-W33.json" in selected
     assert "stats/standard/mtgo/pickup/2026-W33.json" in selected
     assert not any("candidates_" in path for path in selected)
     assert not any("base_reference_" in path for path in selected)
@@ -731,12 +765,18 @@ def test_pages_selection_excludes_private_pickup_review_files(tmp_path):
     assert not any("/landing/review/" in path for path in selected)
 
 
-def test_production_candidate_admits_only_latest_landing_document():
+def test_production_candidate_admits_latest_and_bounded_feature_archive_only():
     from validate_production_candidate import _allowed_new_path
 
     formats = ("standard", "modern")
     assert _allowed_new_path(
         "stats/standard/mtgo/landing/current.json", formats, formats
+    )
+    assert _allowed_new_path(
+        "stats/standard/mtgo/landing/features/index.json", formats, formats
+    )
+    assert _allowed_new_path(
+        "stats/standard/mtgo/landing/features/2026-W33.json", formats, formats
     )
     assert not _allowed_new_path(
         "stats/standard/mtgo/landing/2026-W33.json", formats, formats
@@ -746,6 +786,11 @@ def test_production_candidate_admits_only_latest_landing_document():
     )
     assert not _allowed_new_path(
         "stats/standard/mtgo/landing/review/2026-W33.yaml", formats, formats
+    )
+    assert not _allowed_new_path(
+        "stats/standard/mtgo/landing/features/candidates_2026-W33.yaml",
+        formats,
+        formats,
     )
 
 
@@ -757,6 +802,9 @@ def test_repository_pages_policy_admits_landing_but_excludes_private_pickup():
 
     assert "stats/standard/mtgo/landing/current.json" in selected
     assert "stats/modern/mtgo/landing/current.json" in selected
+    assert "stats/standard/mtgo/landing/features/2026-W27.json" in selected
+    assert "stats/standard/mtgo/landing/features/2026-W33.json" in selected
+    assert "stats/modern/mtgo/landing/features/2026-W33.json" in selected
     assert "stats/standard/mtgo/pickup/2026-W27.json" in selected
     assert not any("/pickup/candidates_" in path for path in selected)
     assert not any("/pickup/base_reference_" in path for path in selected)

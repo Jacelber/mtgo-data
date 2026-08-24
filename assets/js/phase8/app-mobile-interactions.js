@@ -88,7 +88,9 @@ function revealExpandedContent(root, selector, alignment = "end") {
   if (alignment === "start") {
     const offset = rect.top - viewportMargin;
     if (Math.abs(offset) <= 1) return;
-    window.scrollBy({ top: offset, behavior: reduceMotion ? "auto" : "smooth" });
+    // Start-aligned destinations are exact navigation targets.  Keep the jump
+    // deterministic while nearby progressive images are still settling.
+    window.scrollBy({ top: offset, behavior: "auto" });
     return;
   }
   if (rect.top >= viewportMargin && rect.bottom <= viewportBottom) return;

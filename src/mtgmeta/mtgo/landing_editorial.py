@@ -15,6 +15,8 @@ from xml.etree import ElementTree
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
+from mtgmeta.public_contract import versioned
+
 from . import load_mtgo_context, pickup, stats
 from .normalize import load_rules_for_format
 from .top8 import classifier_digest
@@ -26,6 +28,7 @@ NAME_SCHEMA_VERSION = "1.0.0"
 DEFAULT_NAME_CATALOG = Path("configs/mtgo_archetype_names.yaml")
 DEFAULT_REVIEW_SCHEMA = Path("schemas/mtgo-landing-review.schema.json")
 DEFAULT_NAME_SCHEMA = Path("schemas/mtgo-archetype-names.schema.json")
+PUBLIC_NAME_CONTRACT = "archetype_names.json"
 DECK_TOKEN_PATTERN = re.compile(r"deck:[0-9a-f]{20}")
 WORKBOOK_SHEETS = (
     "Review Control",
@@ -693,6 +696,76 @@ def validate_name_catalog(
         "parent_count": sum(item["subtype_id"] is None for item in actual.values()),
         "subtype_count": sum(item["subtype_id"] is not None for item in actual.values()),
     }
+
+
+def build_public_name_contract(
+    repository_root: str | Path,
+    format_id: str,
+    *,
+    catalog_path: str | Path | None = None,
+) -> dict[str, Any]:
+    """Build one public bilingual name contract from the approved private catalog."""
+
+    root = Path(repository_root).resolve()
+    path = Path(catalog_path) if catalog_path is not None else root / DEFAULT_NAME_CATALOG
+    validate_name_catalog(root, path)
+    catalog = load_name_catalog_document(path)
+    names = []
+    for item in catalog["names"]:
+        if item["format"] != format_id:
+            continue
+        subtype_id = item["subtype_id"]
+        identity_id = (
+            f"{item['parent_id']}/{subtype_id}"
+            if subtype_id is not None
+            else item["parent_id"]
+        )
+        names.append(
+            {
+                "identity_id": identity_id,
+                "parent_id": item["parent_id"],
+                "subtype_id": subtype_id,
+                "display": {
+                    "en": item["english"],
+                    "zh": item["chinese"],
+                },
+            }
+        )
+    if not names:
+        raise MTGOLandingEditorialError(
+            f"bilingual name catalog has no approved identities for {format_id}"
+        )
+    names.sort(key=lambda item: item["identity_id"])
+    return versioned({"format": format_id, "names": names})
+
+
+def generate_public_name_contract(
+    repository_root: str | Path,
+    format_id: str,
+    *,
+    catalog_path: str | Path | None = None,
+    output_directory: str | Path | None = None,
+) -> Path:
+    """Write the format-scoped public bilingual name contract."""
+
+    root = Path(repository_root).resolve()
+    output = (
+        Path(output_directory).resolve()
+        if output_directory is not None
+        else root / "stats" / format_id
+    )
+    output.mkdir(parents=True, exist_ok=True)
+    destination = output / PUBLIC_NAME_CONTRACT
+    destination.write_text(
+        json.dumps(
+            build_public_name_contract(root, format_id, catalog_path=catalog_path),
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+        newline="\n",
+    )
+    return destination
 
 
 def _week_monday(week: str) -> date:
@@ -1438,11 +1511,13 @@ def import_review_workbook(
 
 __all__ = [
     "MTGOLandingEditorialError",
+    "build_public_name_contract",
     "build_top8_catalog",
     "build_top8_subject",
     "copy_deck_tokens",
     "document_digest",
     "file_sha256",
+    "generate_public_name_contract",
     "import_review_workbook",
     "load_name_catalog",
     "load_name_catalog_document",

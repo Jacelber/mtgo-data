@@ -403,7 +403,23 @@ tbody tr:hover { background: #fbf7f0; }
 .deck-close { position: absolute; top: 12px; right: 12px; border: 0; border-radius: 4px; background: #e8eaed; color: #666; padding: 3px 9px; }
 .deck-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .deck-column h4 { margin: 10px 0 4px; font-size: 13px; color: var(--brand-2); }
-.deck-meta { margin-bottom: 6px; color: #888; font-size: 12px; }
+.deck-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 6px;
+  color: #888;
+  font-size: 12px;
+}
+.deck-meta-item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.deck-meta-item + .deck-meta-item::before {
+  content: "·";
+  margin: 0 5px;
+}
 .card-list { list-style: none; padding: 0; margin: 0; columns: 2; font-size: 13px; }
 .card-list li { padding: 1px 0; break-inside: avoid; }
 .card-list .qty { display: inline-block; width: 32px; margin-right: 6px; color: #999; text-align: right; }
@@ -414,7 +430,14 @@ tbody tr:hover { background: #fbf7f0; }
 .change-box { background: #f7f4ef; }
 .deviation-box strong { color: var(--brand); font-size: 15px; }
 .change-box strong { color: #9a6a00; font-size: 14px; }
-.deviation-box p, .change-box p { margin: 2px 0; color: #888; }
+.deviation-box p, .change-box p {
+  min-width: 0;
+  max-width: 100%;
+  margin: 2px 0;
+  overflow-wrap: anywhere;
+  color: #888;
+  white-space: normal;
+}
 .difference-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 7px; }
 .difference-grid b { font-size: 12px; color: #555; }
 .difference-grid p { margin: 2px 0; }
@@ -569,7 +592,7 @@ body.card-modal-open { position: fixed; width: 100%; overflow: hidden; }
 .matrix-sticky-table .corner { width: 230px; min-width: 230px; max-width: 230px; }
 .column-head { position: relative; height: 150px; vertical-align: bottom; font-weight: 400; }
 .column-head > div { position: relative; height: 136px; }
-.column-head > div > span { position: absolute; bottom: 0; left: 50%; writing-mode: vertical-rl; transform: translateX(-50%) rotate(180deg); }
+.column-head > div > span { position: absolute; bottom: 0; left: 50%; writing-mode: vertical-rl; transform: translateX(-50%); }
 .column-head.overall { height: auto; vertical-align: bottom; font-weight: 700; }
 .row-head { position: sticky; left: 0; z-index: 1; padding-left: 34px; background: #f0f2f5; font-weight: 400; }
 .row-head.subtype-head { padding-left: 46px; }
@@ -649,6 +672,30 @@ select { min-height: var(--control-height); border: 1px solid #bfb8ad; border-ra
 .site-footer .site-authorship { margin-top: 7px; }
 .site-footer a { display: inline-flex; align-items: center; min-height: var(--target-min); color: var(--brand-2); text-decoration: none; }
 .site-footer a:hover { text-decoration: underline; }
+.return-to-top {
+  position: fixed;
+  z-index: 28;
+  right: calc(16px + env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 50%;
+  background: var(--brand);
+  box-shadow: 0 4px 14px rgba(30, 24, 20, .28);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+}
+.return-to-top:hover { background: var(--brand-2); }
+.return-to-top:focus-visible {
+  outline-color: var(--focus-on-dark);
+  box-shadow: 0 0 0 3px rgba(215, 255, 248, .42), 0 4px 14px rgba(30, 24, 20, .28);
+}
+.return-to-top:active { transform: translateY(1px); }
 
 @media (max-width: 780px) {
   .header-main {
@@ -676,7 +723,16 @@ select { min-height: var(--control-height); border: 1px solid #bfb8ad; border-ra
   .product-tabs { gap: 22px; padding: 0 13px; }
   .product-tabs button { padding: 10px 0 9px; font-size: 13px; }
   .page-shell { padding: 12px 10px 42px; }
-  .site-footer { padding-right: 13px; padding-left: 13px; }
+  .site-footer {
+    padding-right: calc(72px + env(safe-area-inset-right, 0px));
+    padding-left: 13px;
+  }
+  .return-to-top {
+    right: calc(10px + env(safe-area-inset-right, 0px));
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    width: 44px;
+    height: 44px;
+  }
   .freshness-strip { gap: 7px 14px; padding: 11px 13px; }
   .freshness-strip.freshness-stacked .freshness-facts { gap: 7px 14px; }
   .freshness-strip.freshness-stacked .freshness-fact {
