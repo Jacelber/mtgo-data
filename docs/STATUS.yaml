@@ -45,8 +45,6 @@ current_task:
     commit: true
     remote_publication: true
     merge: true
-    pages_deployment: true
-    production_dispatch: false
   target_paths:
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
@@ -154,14 +152,10 @@ current_task:
       repository: "pass; 82 Python, 20 JavaScript, 1854 JSON, 68 YAML, 57 references, 2314 hygiene"
       diff_check: "pass"
     browser:
-      standard_landing: "W33 Chinese and English; 14 features; bilingual classifier names"
-      modern_landing: "W33 Chinese; 2 features"
-      empty_week: "W27 omitted and stale URL replaced with W33"
-      accepted_ui: "composition reveal, mobile representative-card spacing, return-to-top, date-only event context, Top 8 current-cell highlight, and atomic 375px event-detail wrapping verified"
-      mobile_landing_row: "375px pass; deck name, share cells, trend cell, and row background open deck detail; the expanded deck-name area stays highlighted and clears on collapse; representative-card images open only the card modal"
-      navigation: "exact feature destination, default title-home target, Tabletop recovery, favicon, and Tabletop-to-feature routing verified"
+      landing: "Standard and Modern feature archive, bilingual labels, navigation, and recovery: pass"
+      mobile: "375px Landing interaction and representative-card modal separation: pass"
+      matchup: "Standard and Tabletop main and sticky column labels upright: pass"
       console: "no warnings or errors"
-      post_rebase_browser: "fresh-origin Standard matchup pass; main and sticky column labels retain vertical-rl layout with an identity rotation matrix instead of the inverted 180-degree matrix"
   owner_accepted_on: "2026-08-24"
   integrated_candidate_owner_accepted_on: "2026-08-24"
   integration_base: "f4ae1580c49a99231cf8e73c622aa361e0c82bad"
