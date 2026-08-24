@@ -162,18 +162,6 @@ def test_current_top8_freshness_inputs_follow_the_latest_generated_week(
     )
 
 
-def test_current_pickup_freshness_inputs_follow_the_latest_generated_week() -> None:
-    index = _json("stats/standard/mtgo/pickup/index.json")
-    latest = index["weeks"][0]
-    document = _json(f"stats/standard/mtgo/pickup/{latest['file']}")
-
-    assert document["week"] == latest["week"]
-    assert document["start"] == latest["start"]
-    assert document["end"] == latest["end"]
-    assert latest["existing_count"] == len(document["existing_changes"])
-    assert latest["new_count"] == len(document["new_archetypes"])
-
-
 @pytest.mark.parametrize("format_id", ("standard", "modern"))
 def test_current_landing_follows_one_classifier_and_population_subject(
     format_id: str,

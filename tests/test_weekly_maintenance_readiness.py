@@ -105,9 +105,9 @@ def _write_format(root: Path, format_name: str, *, candidate: bool = True) -> No
         {"records": unknown_records},
     )
     if candidate:
-        pickup = root / "stats" / format_name / "mtgo" / "pickup"
-        pickup.mkdir(parents=True, exist_ok=True)
-        (pickup / "candidates_2026-W33.yaml").write_text(
+        landing_screening = root / "stats" / format_name / "mtgo" / "landing" / "review"
+        landing_screening.mkdir(parents=True, exist_ok=True)
+        (landing_screening / "candidates_2026-W33.yaml").write_text(
             yaml.safe_dump(
                 {
                     "week": "2026-W33",
@@ -162,7 +162,7 @@ def test_readiness_is_schema_valid_and_includes_every_unresolved_unknown(tmp_pat
             "101",
         }
         assert classification["unresolved_unknown_records"][0]["main_deck"]
-        assert item["pickup"]["total_candidate_count"] == 3
+        assert item["landing_screening"]["total_candidate_count"] == 3
         assert item["visual_metadata"]["deck_colors"]["exception_count"] is None
     standard = document["formats"][0]["classification"]
     assert standard["accepted_intentional_unknown_count"] == 1
@@ -180,7 +180,7 @@ def test_readiness_digest_ignores_run_time_but_binds_review_inputs(tmp_path):
     assert first["readiness_digest"] == second["readiness_digest"]
 
     candidate_path = (
-        tmp_path / "stats" / "modern" / "mtgo" / "pickup" / "candidates_2026-W33.yaml"
+        tmp_path / "stats" / "modern" / "mtgo" / "landing" / "review" / "candidates_2026-W33.yaml"
     )
     candidate = yaml.safe_load(candidate_path.read_text(encoding="utf-8"))
     candidate["new_archetypes"].append({"candidate": 4})
@@ -189,7 +189,7 @@ def test_readiness_digest_ignores_run_time_but_binds_review_inputs(tmp_path):
     assert changed["readiness_digest"] != first["readiness_digest"]
 
 
-def test_missing_pickup_candidate_is_reported_as_a_blocker(tmp_path):
+def test_missing_landing_screening_candidate_is_reported_as_a_blocker(tmp_path):
     _write_format(tmp_path, "standard")
     _write_format(tmp_path, "modern", candidate=False)
     _write_intentional_unknowns(tmp_path)
@@ -198,15 +198,15 @@ def test_missing_pickup_candidate_is_reported_as_a_blocker(tmp_path):
 
     assert document["status"] == "blocked"
     assert document["workflow"]["next_action"] == "resolve_blocker"
-    assert document["formats"][1]["pickup"]["status"] == "unavailable"
+    assert document["formats"][1]["landing_screening"]["status"] == "unavailable"
 
 
-def test_stale_pickup_classifier_digest_is_reported_as_a_blocker(tmp_path):
+def test_stale_landing_screening_classifier_digest_is_reported_as_a_blocker(tmp_path):
     for format_name in ("standard", "modern"):
         _write_format(tmp_path, format_name)
     _write_intentional_unknowns(tmp_path)
     candidate_path = (
-        tmp_path / "stats" / "standard" / "mtgo" / "pickup" / "candidates_2026-W33.yaml"
+        tmp_path / "stats" / "standard" / "mtgo" / "landing" / "review" / "candidates_2026-W33.yaml"
     )
     candidate = yaml.safe_load(candidate_path.read_text(encoding="utf-8"))
     candidate["classifier_digest"] = "c" * 64
@@ -214,12 +214,12 @@ def test_stale_pickup_classifier_digest_is_reported_as_a_blocker(tmp_path):
 
     document = _build(tmp_path)
 
-    pickup = document["formats"][0]["pickup"]
+    landing_screening = document["formats"][0]["landing_screening"]
     assert document["status"] == "blocked"
-    assert pickup["status"] == "stale_review_required"
-    assert pickup["candidate_classifier_digest"] == "c" * 64
-    assert pickup["expected_classifier_digest"] == "a" * 64
-    assert "classifier_digest" in pickup["reason"]
+    assert landing_screening["status"] == "stale_review_required"
+    assert landing_screening["candidate_classifier_digest"] == "c" * 64
+    assert landing_screening["expected_classifier_digest"] == "a" * 64
+    assert "classifier_digest" in landing_screening["reason"]
 
 
 def test_mismatched_format_week_fails_closed(tmp_path):
@@ -231,7 +231,7 @@ def test_mismatched_format_week_fails_closed(tmp_path):
     value["weeks"][0]["seal_on"] = "2026-08-25"
     _write_json(modern_index, value)
     candidate_path = (
-        tmp_path / "stats" / "modern" / "mtgo" / "pickup" / "candidates_2026-W33.yaml"
+        tmp_path / "stats" / "modern" / "mtgo" / "landing" / "review" / "candidates_2026-W33.yaml"
     )
     candidate = yaml.safe_load(candidate_path.read_text(encoding="utf-8"))
     candidate["seal_on"] = "2026-08-25"

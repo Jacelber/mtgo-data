@@ -52,11 +52,9 @@ function resetUrlBackedState() {
   state.statsDirection = "desc";
   state.detailMode = "average";
   state.top8WeekFile = null;
-  state.pickupWeekFile = null;
   state.landingFeatureWeekFile = null;
   state.landingFeatureDestination = null;
   state.landingSection = null;
-  state.pickupOpen.clear();
   state.landingFeatureOpen.clear();
   state.tabletopView = "overview";
   state.tabletopEventId = null;
@@ -130,8 +128,6 @@ function applyUrlState(parameters) {
   } else if (state.product === "mtgo-top8") {
     state.top8WeekFile = requestedWeekFile(parameters);
     if (detail) state.top8Detail = detail;
-  } else if (state.product === "weekly-pickup") {
-    state.pickupWeekFile = requestedWeekFile(parameters);
   } else if (state.product === "tabletop-major-events") {
     const view = parameters.get("view");
     const eventId = parameters.get("event");
@@ -175,8 +171,6 @@ function urlStateParameters() {
   } else if (state.product === "mtgo-top8") {
     if (weekId(state.top8WeekFile)) parameters.set("week", weekId(state.top8WeekFile));
     if (state.top8Detail) parameters.set("detail", state.top8Detail);
-  } else if (state.product === "weekly-pickup") {
-    if (weekId(state.pickupWeekFile)) parameters.set("week", weekId(state.pickupWeekFile));
   } else if (state.product === "tabletop-major-events") {
     parameters.set("view", state.tabletopView);
     if (state.tabletopEventId) parameters.set("event", state.tabletopEventId);
@@ -340,7 +334,7 @@ async function renderViewWithFocus(
     else if (state.product === "mtgo-matchups") html = await matchupView();
     else if (state.product === "mtgo-top8") html = await top8View();
     else if (state.product === "tabletop-major-events") html = await tabletopView();
-    else html = await pickupView();
+    else throw new Error(`Unsupported product: ${state.product}`);
     if (token !== state.renderToken) return;
     root.innerHTML = html;
     root.removeAttribute("aria-busy");
@@ -405,7 +399,6 @@ function resetInteractions() {
   state.tabletopExpanded.clear();
   state.detailIdentity = null;
   state.top8Detail = null;
-  state.pickupOpen.clear();
   state.landingFeatureOpen.clear();
   state.landingFeatureDestination = null;
   state.tabletopDetailIdentity = null;
@@ -500,12 +493,9 @@ document.addEventListener("click", async event => {
       }));
       return;
     }
-    const nextProduct = button.dataset.product === "weekly-pickup"
-      ? "mtgo-landing"
-      : button.dataset.product;
     if (navigateToProductEntry(button.dataset.product, state.format)) return;
-    state.product = nextProduct;
-    state.landingSection = button.dataset.product === "weekly-pickup" ? "features" : null;
+    state.product = button.dataset.product;
+    state.landingSection = null;
     resetInteractions();
     setMessage("");
     renderNavigation();
@@ -718,15 +708,6 @@ document.addEventListener("click", async event => {
     if (state.tabletopExpanded.size) state.tabletopExpanded.clear();
     else parents.forEach(item => state.tabletopExpanded.add(item.archetype_id));
     state.tabletopDetailIdentity = null;
-    await renderView();
-  } else if (button.dataset.pickupWeek) {
-    discardPendingRefresh();
-    state.pickupWeekFile = button.dataset.pickupWeek;
-    state.pickupOpen.clear();
-    queueUrlWrite();
-    await renderView();
-  } else if (button.dataset.pickupToggle) {
-    toggleSet(state.pickupOpen, button.dataset.pickupToggle);
     await renderView();
   } else if (button.dataset.landingFeatureToggle) {
     const destination = button.dataset.landingFeatureToggle;

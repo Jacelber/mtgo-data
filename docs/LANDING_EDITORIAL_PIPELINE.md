@@ -228,10 +228,11 @@ new files without changing the live reader path.
 
 The implemented private boundary uses
 `src/mtgmeta/mtgo/landing_editorial.py`,
+`src/mtgmeta/mtgo/landing_screening.py`,
 `configs/mtgo_archetype_names.yaml`, and
-`stats/<format>/mtgo/landing/review/`. The existing `pickup candidates`
-entrypoint remains a temporary compatibility wrapper for candidate screening;
-Landing generation does not read a published Pickup week. Import is exposed as
+`stats/<format>/mtgo/landing/review/`. Candidate screening is exposed as
+`landing-review prepare`; the standalone Pickup command and capability are
+retired. Landing generation does not read a published Pickup week. Import is exposed as
 `landing-review import-xlsx` and requires the exact accepted workbook SHA-256.
 The P12-15C v6 recovery subject imports Standard W27/W33 and Modern W33, but no
 public feature archive or reader switch is created in this task.

@@ -1773,25 +1773,21 @@ publish its best observed deck, but its average-deck sample is zero and its
 base-dependent values remain unavailable. A zero-observation subtype publishes
 no best deck and an empty average-deck state.
 
-### 16.5 Weekly Pickup
+### 16.5 Landing screening and frozen Pickup history
 
-Weekly Pickup remains an MTGO-specific candidate, approval, known-archetype,
-and history capability. After the Phase 12 cutover it supplies the curated
-new-deck and new-technology section inside Landing and is not a standalone
-user-facing product.
+Landing screening is an MTGO-specific private candidate and known-archetype
+capability. It supplies the reviewed new-deck and new-technology section inside
+Landing and has no standalone user-facing product, command, capability, or
+public catalog.
 
-The weekly sequence has one mandatory publication boundary. Owner-approved
-rows and localized Pickup copy first enter the versioned public week document
-and existing Pickup page. Only that verified public week document may supply
-reviewed Pickup content to the later Landing draft and feature process. A
-private candidate YAML or review workbook cannot substitute for this step.
+Owner-approved rows and localized copy enter the private versioned Landing
+review source. The current Landing and selected feature-history week are then
+generated together from that source. A machine candidate cannot substitute for
+explicit human review.
 
-Pickup week Schema `1.1.0` binds the reviewed document to sorted source event
-IDs, the classifier digest, and the selection-policy digest. Every selected row
-retains its stable parent/subtype identity, exact event and deck identity,
-deck-fingerprint digest, reason types, decklists, and localized copy. A missing
-construction deviation is represented as null rather than zero. Existing
-Schema `1.0.0` history remains valid.
+Existing Pickup week Schema `1.0.0` and `1.1.0` documents remain valid frozen
+history and rollback evidence. They are not generated, modified, or read by
+the active Landing producer.
 
 It must not be applied automatically to isolated tabletop events.
 
@@ -1813,13 +1809,13 @@ For a format with hierarchical matchup data, metadata must report:
   statistics event.
 
 These are coverage diagnostics, not estimates of unobserved match results. A
-format without a manually published Weekly Pickup index must use a null Pickup
-catalog reference; candidate files are not public statistics.
+format metadata document must use a null Pickup catalog reference. Candidate
+files are private review inputs, not public statistics.
 
-Weekly Pickup remains parent-archetype based. Stable parent IDs determine
+Landing known-state and screening remain parent-archetype based. Stable parent IDs determine
 whether an archetype is already known, while subtype ID and display name may be
 retained as informational review fields. Subtypes do not split the base pack,
-the existing/new decision, or the Pickup population.
+the existing/new decision, or the screening population.
 
 Candidate generation remains timely: it runs as soon as a Monday-through-
 Sunday week has ended and does not wait for that week to become sealed. Each
@@ -1827,7 +1823,7 @@ candidate records the source event IDs used to generate it. During the
 following seven-day provisional window, an additive late-event arrival
 regenerates an unreviewed candidate. A candidate containing an approval or a
 non-empty reviewer comment is not overwritten; it is retained and reported for
-human re-review. Publication and known-archetype changes remain manual.
+human re-review. Landing admission and known-archetype changes remain human-gated.
 
 ### 16.7 Phase 8 MTGO source-completeness contracts
 
@@ -1975,7 +1971,7 @@ archive, remains in the admitted population, and is therefore reported as
 `missing` by the generated completeness document. Matchup statistics use only
 usable retained archives and must not synthesize zero-match records for the
 missing event. The remaining official-event, metagame, high-score, Top 8,
-Weekly Pickup, metadata, catalog, and completeness outputs may continue through
+Landing screening, metadata, catalog, and completeness outputs may continue through
 candidate validation and publication.
 
 This degradation rule is narrow. A non-retryable HTTP response, malformed JSON
@@ -2404,9 +2400,9 @@ left the environment.
 There is no separate public `notable` flag or two-percentage-point threshold.
 No Landing movement is described as statistically significant.
 
-### 24.4 Weekly Pickup screening
+### 24.4 Landing feature screening
 
-Weekly Pickup starts from every exact rank-one-through-eight deck in the target
+Landing screening starts from every exact rank-one-through-eight deck in the target
 week. It has no fallback for events that publish fewer than eight ranks, and it
 does not deduplicate the complete review population before applying a route.
 The machine may nominate a deck through five independent routes:
@@ -2433,9 +2429,9 @@ event-deck candidates are merged, so one deck may carry several reasons while
 different decks for different reasons remain separate.
 
 Landing does not derive a statistical `new_entry` fact from weekly share. A
-public new deck exists only when the format-scoped Weekly Pickup process
+public new deck exists only when the format-scoped Landing review process
 classifies it as new against maintained known-archetype state and a human
-reviewer approves it. Without an approved new-deck Pickup item, Landing has no
+reviewer approves it. Without an approved new-deck feature item, Landing has no
 new-deck item. A returning known archetype remains a `share_move` as defined in
 section 24.3. Machine screening and evidence are drafts: the Owner may select
 any exact Top 8 deck, reject every candidate, and replace, delete, or completely
@@ -2461,15 +2457,15 @@ history, or an incomparable rule version makes the fact unavailable rather
 than zero.
 
 This fact may supply a private weekly summary candidate. Publication as a curated
-new-technology feature remains separately human-approved through Weekly
-Pickup.
+new-technology feature remains separately human-approved through the Landing
+review boundary.
 
 ### 24.6 Summary candidates, human final, and feature limits
 
 The Landing producer retains every threshold-eligible `share_move`, `exit`, and
 `build_shift` machine fact; it does not truncate them to a presentation count.
 It separately reads every reviewed row and exact localized copy from the
-published Pickup `1.1.0` week document. A published deck is one review input
+private Landing review week. A reviewed deck is one review input
 with all of its reason tags, so a deck tagged for both `return` and `new_card`
 is not duplicated. Post-ban continuation remains Owner-only and is not
 machine-inferred. Every private review input has a deterministic ID and stays
@@ -2479,7 +2475,7 @@ The public weekly summary contains only zero or more explicitly reviewed human-
 final rows. There is no machine or five-item publication ceiling. A human row
 may reference zero, one, or multiple private review-input IDs for provenance,
 but the Owner may merge, delete, replace, completely rewrite, or add content
-unrelated to every machine or published-Pickup input. Separately, the producer
+unrelated to every machine or screening input. Separately, the producer
 builds a deterministic link catalog from every exact current-week Top 8 deck.
 A human row selects zero, one, or multiple catalog entries by placing the exact
 `deck:<20-hex deck ID>` token at the desired position in each non-empty
@@ -2493,7 +2489,7 @@ in the public localized text as the P12-11B inline-replacement anchor; no whole-
 row link is implied. `reviewed: true` is required even when the final row count
 is zero; a missing review is not an empty decision.
 
-The curated feature panel contains every approved Weekly Pickup item for its
+The curated feature panel contains every approved Landing feature item for its
 selected week, categorized as `new_deck` or `new_technology`. `new_deck` items
 sort before `new_technology` items; ordering within a category is maintained by
 the reviewed source. Difference-card suggestions prioritize cards newly
@@ -2503,11 +2499,11 @@ cards from the exact featured deck. Main-deck construction deviation remains
 the eligibility formula, while sideboard cards may be chosen editorially but
 do not trigger `build_shift`.
 
-The feature panel defaults to the current week and may load a prior approved
-Pickup week from the existing history. This section-level selection changes
+The feature panel defaults to the current week and may load a prior admitted
+Landing feature week from the feature-history index. This section-level selection changes
 only the curated feature content. The Landing weekly brief, environment shares,
 composition, and reviewed weekly summary continue to describe the
-current Landing document. Pickup history is therefore not a historical Landing
+current Landing document. Feature history is therefore not a historical Landing
 statistics contract.
 
 ### 24.7 Empty and refresh states

@@ -166,7 +166,7 @@
         "source_event_count",
         "classification",
         "visual_metadata",
-        "pickup"
+        "landing_screening"
       ],
       "properties": {
         "format": {"enum": ["standard", "modern"]},
@@ -217,7 +217,7 @@
             "deck_colors": {"$ref": "#/$defs/manualReview"}
           }
         },
-        "pickup": {
+        "landing_screening": {
           "type": "object",
           "additionalProperties": false,
           "required": [
@@ -232,7 +232,7 @@
           ],
           "properties": {
             "status": {"enum": ["candidate_review_required", "stale_review_required", "unavailable"]},
-            "candidate_file": {"type": "string", "pattern": "^stats/(standard|modern)/mtgo/pickup/candidates_[0-9]{4}-W[0-9]{2}\\.yaml$"},
+            "candidate_file": {"type": "string", "pattern": "^stats/(standard|modern)/mtgo/landing/review/candidates_[0-9]{4}-W[0-9]{2}\\.yaml$"},
             "candidate_classifier_digest": {
               "oneOf": [
                 {"$ref": "#/$defs/sha256"},

@@ -1,7 +1,8 @@
 from datetime import date
 from types import SimpleNamespace
 
-from mtgmeta.mtgo import pickup
+from mtgmeta.mtgo import landing_editorial as editorial
+from mtgmeta.mtgo import landing_screening as screening
 
 
 WEEK_START = date(2026, 8, 10)
@@ -93,25 +94,25 @@ def _base(name):
 
 
 def _prepare(monkeypatch, current, reference, historical, parent_bases=None):
-    monkeypatch.setattr(pickup, "week_records", lambda *args, **kwargs: current)
+    monkeypatch.setattr(screening, "week_records", lambda *args, **kwargs: current)
     periods = iter((reference, historical))
     monkeypatch.setattr(
-        pickup,
+        screening,
         "_records_in_period",
         lambda *args, **kwargs: next(periods),
     )
     monkeypatch.setattr(
-        pickup.stats,
+        screening.stats,
         "build_base_pack",
         lambda *args, **kwargs: (parent_bases or {}, 0.0),
     )
     monkeypatch.setattr(
-        pickup.stats,
+        screening.stats,
         "build_subtype_base_pack",
         lambda *args, **kwargs: ({}, 0.0),
     )
     monkeypatch.setattr(
-        pickup,
+        screening,
         "_record_identity",
         lambda record, _rules: {
             "identity_id": record["archetype_id"],
@@ -194,16 +195,18 @@ def test_screening_merges_reasons_and_keeps_later_rank_five_dragons(monkeypatch)
         )
     )
 
-    candidates, _base, top8_count, candidate_count = pickup._candidate_documents(
-        [],
-        rules,
-        WEEK_START,
-        {"Dimir Midrange", "Boros Dragons", "Azorius Momo"},
-        _policy(
-            cards=("Smaug the Magnificent", "The Eagles Are Coming!"),
-            continuity={"jeskai-momo": {"known_as": ["Azorius Momo"]}},
-        ),
-        "standard",
+    candidates, _base, top8_count, candidate_count = (
+        editorial.build_candidate_documents(
+            [],
+            rules,
+            WEEK_START,
+            {"Dimir Midrange", "Boros Dragons", "Azorius Momo"},
+            _policy(
+                cards=("Smaug the Magnificent", "The Eagles Are Coming!"),
+                continuity={"jeskai-momo": {"known_as": ["Azorius Momo"]}},
+            ),
+            "standard",
+        )
     )
 
     rows = candidates["existing_changes"] + candidates["new_archetypes"]
@@ -248,7 +251,7 @@ def test_build_shift_uses_parent_base_when_no_subtype_is_maintained(monkeypatch)
         {"orzhov-lifegain": _base("Orzhov Lifegain")},
     )
     monkeypatch.setattr(
-        pickup,
+        screening,
         "deck_deviation",
         lambda record, _base, _d99=None: {"Traft": 45, "YourDoom25": 11}.get(
             record["player"], 0
@@ -259,7 +262,7 @@ def test_build_shift_uses_parent_base_when_no_subtype_is_maintained(monkeypatch)
     )
 
     candidates, _base_reference, _top8_count, candidate_count = (
-        pickup._candidate_documents(
+        editorial.build_candidate_documents(
             [],
             rules,
             WEEK_START,
@@ -315,7 +318,7 @@ def test_same_new_card_package_prefers_result_and_merges_return(monkeypatch):
     )
 
     candidates, _base_reference, _top8_count, candidate_count = (
-        pickup._candidate_documents(
+        editorial.build_candidate_documents(
             [],
             rules,
             WEEK_START,
@@ -359,4 +362,4 @@ def test_better_record_uses_later_result_after_rank_and_event_size_tie():
         starttime="2026-08-16 18:00:00.0",
     )
 
-    assert pickup.better_record(earlier, later) is later
+    assert screening.better_record(earlier, later) is later

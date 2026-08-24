@@ -421,14 +421,14 @@ jobs:
             python -B -m mtgmeta.mtgo --format "$FORMAT" build-top8
           done
 
-      - name: Generate Weekly Pickup candidates when absent
+      - name: Prepare Landing screening candidates when absent
         continue-on-error: true
         shell: bash
         run: |
           STATUS=0
           for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            echo "Preparing Weekly Pickup candidates for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" pickup candidates --if-absent || STATUS=$?
+            echo "Preparing Landing screening candidates for ${FORMAT}."
+            python -B -m mtgmeta.mtgo --format "$FORMAT" landing-review prepare --if-absent || STATUS=$?
           done
           exit "$STATUS"
 
@@ -839,7 +839,7 @@ jobs:
             const formatLines = readiness.formats.map((item) =>
               `- ${item.format}: ${item.classification.unresolved_unknown_count} unresolved Unknown; ` +
               `${item.classification.accepted_intentional_unknown_count} accepted intentional Unknown; ` +
-              `${item.pickup.total_candidate_count ?? "unavailable"} Pickup candidates; ` +
+              `${item.landing_screening.total_candidate_count ?? "unavailable"} Landing screening candidates; ` +
               `representative cards and deck colors require manual review.`,
             );
             const details = [
@@ -855,7 +855,7 @@ jobs:
               "",
               ...formatLines,
               "",
-              "Open Codex manually and authorize the review of this exact handoff. The artifact does not authorize classifier edits, Pickup publication, Landing generation, or any repository mutation.",
+              "Open Codex manually and authorize the review of this exact handoff. The artifact does not authorize classifier edits, Landing review import, Landing generation, or any repository mutation.",
               "Codex must provide an editable XLSX with every unresolved deck's complete main deck and sideboard before requesting classification decisions. Singleton status is not a reason to remain Unknown; intentional Unknown is limited to Owner-confirmed random card piles.",
               "",
               "Landing remains a later gate. Its machine draft is optional, and the human final copy may be edited, replaced, omitted, or written independently of machine conclusions.",

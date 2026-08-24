@@ -6,7 +6,6 @@ import pytest
 import yaml
 
 from mtgmeta.mtgo import landing_editorial as editorial
-from mtgmeta.mtgo import pickup
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -248,26 +247,6 @@ def test_import_rejects_a_different_workbook_hash(tmp_path):
             output_root=tmp_path,
             expected_sha256="0" * 64,
         )
-
-
-def test_pickup_candidate_entrypoint_is_only_a_landing_compatibility_wrapper(monkeypatch):
-    sentinel = ({"week": "2026-W33"}, {"week": "2026-W33"}, 8, 1)
-    monkeypatch.setattr(
-        editorial,
-        "build_candidate_documents",
-        lambda *args, **kwargs: sentinel,
-    )
-
-    result = pickup._candidate_documents(
-        [],
-        object(),
-        editorial._week_monday("2026-W33"),
-        set(),
-        {},
-        "standard",
-    )
-
-    assert result is sentinel
 
 
 def result_paths(root: Path) -> list[Path]:

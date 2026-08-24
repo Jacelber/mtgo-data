@@ -47,14 +47,13 @@
             "mtgo-matchups",
             "mtgo-top8",
             "mtgo-landing",
-            "tabletop-major-events",
-            "weekly-pickup"
+            "tabletop-major-events"
           ]
         },
         "products": {
           "type": "array",
-          "minItems": 6,
-          "maxItems": 6,
+          "minItems": 5,
+          "maxItems": 5,
           "items": {"$ref": "#/$defs/product"}
         }
       }
@@ -70,8 +69,7 @@
             "mtgo-matchups",
             "mtgo-top8",
             "mtgo-landing",
-            "tabletop-major-events",
-            "weekly-pickup"
+            "tabletop-major-events"
           ]
         },
         "available": {"type": "boolean"},

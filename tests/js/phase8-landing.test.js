@@ -37,7 +37,6 @@ function landingFunctions(language = "zh") {
       compositionIdentity: null,
       detailIdentity: null,
       format: "standard",
-      pickupOpen: new Set(),
       landingFeatureOpen: new Set(),
       product: "mtgo-landing",
     },

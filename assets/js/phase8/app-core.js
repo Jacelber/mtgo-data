@@ -22,7 +22,6 @@ const PRODUCT_ORDER = [
   "mtgo-matchups",
   "mtgo-top8",
   "tabletop-major-events",
-  "weekly-pickup",
 ];
 const PRODUCT_LABEL_KEYS = {
   "mtgo-landing": "product.landing",
@@ -30,7 +29,6 @@ const PRODUCT_LABEL_KEYS = {
   "mtgo-matchups": "product.matchups",
   "mtgo-top8": "product.top8",
   "tabletop-major-events": "product.tabletop",
-  "weekly-pickup": "product.pickup",
 };
 const PRODUCT_SURFACES = {
   "mtgo-landing": "mtgo",
@@ -38,7 +36,6 @@ const PRODUCT_SURFACES = {
   "mtgo-matchups": "mtgo",
   "mtgo-top8": "mtgo",
   "tabletop-major-events": "tabletop",
-  "weekly-pickup": "mtgo",
 };
 const FORMAT_LABEL_KEYS = {
   standard: "format.standard",
@@ -74,11 +71,9 @@ const state = {
   detailMode: "average",
   top8WeekFile: null,
   top8Detail: null,
-  pickupWeekFile: null,
   landingFeatureWeekFile: null,
   landingFeatureDestination: null,
   landingSection: null,
-  pickupOpen: new Set(),
   landingFeatureOpen: new Set(),
   tabletopView: "overview",
   tabletopEventId: null,

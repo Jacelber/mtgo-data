@@ -26,7 +26,6 @@ PRODUCTION_CAPABILITIES = frozenset(
         "matchup_statistics",
         "weekly_top8",
         "completeness_reporting",
-        "weekly_pickup",
         "landing_generation",
         "metadata_generation",
         "catalog_generation",
@@ -285,13 +284,13 @@ def _allowed_new_path(
             re.fullmatch(r"\d{4}-W\d{2}\.json", parts[5])
         )
     if (
-        len(parts) == 5
+        len(parts) == 6
         and parts[0] == "stats"
         and parts[1] in product_formats
-        and parts[2:4] == ("mtgo", "pickup")
+        and parts[2:5] == ("mtgo", "landing", "review")
     ):
         return bool(
-            re.fullmatch(r"(?:candidates|base_reference)_\d{4}-W\d{2}\.yaml", parts[4])
+            re.fullmatch(r"(?:candidates|base_reference)_\d{4}-W\d{2}\.yaml", parts[5])
         )
     if (
         len(parts) == 5
