@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/production-public-name-scope-fix-20260824"
+  current_working_branch: "codex/weekly-top8-audit-2026-w34-refresh-20260824"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,95 +31,90 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "PRODUCTION-PUBLIC-NAME-SCOPE-FIX-2026-08-24"
-  name: "Admit the public bilingual name contract to the production candidate scope"
+  id: "WEEKLY-CLASSIFIER-REFRESH-2026-W34"
+  name: "Classify the refreshed W34 Modern Frog-Goyf singleton"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-24"
-  developer_validation_completed_on: "2026-08-24"
   owner_accepted_on: "2026-08-24"
-  production_recovery_after_merge_authorized_on: "2026-08-24"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/production-public-name-scope-fix-20260824-01"
-  branch: "codex/production-public-name-scope-fix-20260824"
-  base_commit: "9bebe6aa4e9520c10daebc9f60db32efc25c8c3c"
-  task_type: "focused_production_candidate_boundary_repair"
-  artifact_impact: "public_path"
-  objective: "Allow the already approved stats/<format>/archetype_names.json bilingual contract to be updated or first-created for maintained product formats during production candidate validation, without admitting any broader root statistics path."
+  developer_validation_completed_on: "2026-08-24"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-top8-audit-2026-w34-refresh-20260824-01"
+  branch: "codex/weekly-top8-audit-2026-w34-refresh-20260824"
+  base_commit: "88741f9a97ca0f0983f513aea14a05512a36dcce"
+  task_type: "focused_weekly_classifier_source_maintenance"
+  artifact_impact: "classifier_source_and_governance"
+  objective: "Map the single refreshed W34 Modern Unknown to the existing dimir-tempo/grixis identity through the Owner-accepted Frog-Goyf alternative path."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "validate_production_candidate.py"
-    - "tests/test_mtgo_landing.py"
+    - "my_archetypes/modern.yaml"
+    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
   planned_file_operations:
     additions: []
     deletions: []
     renames: []
   protected_scope:
-    user_visible_ui_changed: "none"
-    public_json_or_schema_changed: "none; the existing bilingual contract and shape remain unchanged"
+    public_json_or_schema_changed: "none"
     generated_or_source_data_changed: "none"
-    workflows_changed: "none"
-    public_path_boundary_changed: "only stats/<maintained-product-format>/archetype_names.json is admitted for existing changes and approved first creation"
-    statistical_or_classifier_behavior_changed: "none"
+    classification_identities_changed: "one refreshed W34 Modern Unknown becomes existing dimir-tempo/grixis"
+    bilingual_identity_changed: "none; reuse Dimir Red Splash Tempo / 蓝黑节奏混红"
+    workflows_or_public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Extend both existing-change and approved-new-path candidate predicates for the exact public bilingual name contract in maintained product formats."
-    - "Add focused positive and negative regression assertions that reject unsupported formats, sibling files, extensions, and nested paths."
-    - "Reuse the exact production failure from run 32725466051 instead of rebuilding the known failing candidate locally."
-    - "Run only the focused candidate-boundary tests, live-status test, maintained-Python checks selected by the trigger matrix, repository validation, and diff checks."
-    - "After the unchanged repair merges successfully, dispatch exactly one fresh MTGO production run from the resulting master and monitor publication, Pages, failure-Issue, and readiness evidence."
+    - "Add only the accepted dimir-tempo-grixis-frog-goyf alternative rule with the reviewed thresholds and exclusions."
+    - "Record the accepted classifier decision and repair live task status in the same material change."
+    - "Run only focused rule parsing, target classification, retained-corpus impact, documentation, repository, and diff checks required by the changed paths."
+    - "Complete the unchanged accepted classifier source task through one commit, one Ready pull request, required CI, merge, and applicable publication verification."
   prohibited_changes:
-    - "Do not change workflow YAML, public contract contents or Schema, generators, classifiers, statistics, source or generated data, UI, event whitelists, timeout values, or broader production paths."
-    - "Do not mutate Issues manually, dispatch production before the unchanged repair merges, or resume W34 review before a fresh publication and refreshed baseline."
+    - "Do not change existing classifier rules, taxonomy IDs, bilingual names, Landing content, visual metadata, generated statistics, source data, workflows, Schemas, UI, public paths, or event whitelists."
+    - "Do not dispatch production, mutate the live weekly Issue, begin complete Top 8 or Landing content review, or broaden this task."
   validation:
-    failure_evidence: "Production run 32725466051 passed fetching and all generation stages, then failed candidate scope validation because stats/standard/archetype_names.json was outside the publication allowlist; publication and downstream readiness were skipped."
-    focused_candidate_boundary: "pass; the existing Landing boundary and exact bilingual-name existing/new-path predicates passed 2/2 focused tests, including negative sibling, extension, nesting, and unsupported-format cases"
-    maintained_python: "pass; Ruff passed for the changed validator and test plus src, and mypy passed all four configured source files"
-    documentation: "pass; tests/test_documentation_history.py passed 5/5 on the final live status"
-    repository: "pass; validate_repository.py passed 84 Python, 20 JavaScript, 1854 JSON, 68 YAML, 55 reference, and 2316 hygiene checks"
+    review_input: "Owner agreed with the workbook evidence and explicitly authorized implementation without a second review round."
+    retained_corpus: "241 Modern events and 7,712 decks: only target dde360f86f00a6b8c789 changes; existing identity migration 0; conflicts 0; invalid 0; multiple matches 1,475; same-parent multiple-subtype matches 47."
+    focused_rule: "pass; exact rule shape loaded; 241-event and 7,712-deck Modern audit classified only the target under dimir-tempo/grixis with strict validation pass"
+    documentation: "pass; tests/test_documentation_history.py passed 5/5"
+    repository: "pass; 86 Python, 20 JavaScript, 1,874 JSON, 72 YAML, 55 reference, and 2,351 hygiene checks"
     diff_check: "pass; only the three declared target paths changed, with no file operations or whitespace errors"
-  stop_point: "Complete the unchanged repair through commit, one Ready pull request, required CI, and merge; then dispatch and verify exactly one fresh production recovery run before stopping without resuming weekly review."
+  stop_point: "Complete the unchanged accepted classifier source task through commit, one Ready pull request, required CI, and merge; stop before production dispatch or another weekly stage."
 
 current_repository_state:
-  baseline_commit: "9bebe6aa4e9520c10daebc9f60db32efc25c8c3c"
-  baseline_note: "Verified cloud master after PR #262 merged the Chromium language repair; production run 32725466051 generated but did not publish its candidate because the existing public bilingual name path was absent from candidate scope."
+  baseline_commit: "88741f9a97ca0f0983f513aea14a05512a36dcce"
+  baseline_note: "Verified cloud master and successful production publication from run 32729508736; refreshed W34 readiness binds Standard 6 events and Modern 12 events."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
 known_blockers:
-  - "Issue #261 contains the current build-stage failure comment for production run 32725466051."
-  - "Production publication is blocked until the exact bilingual-name candidate boundary is accepted, merged, and a separately authorized retry succeeds."
-  - "The prior W34 audit workbook remains stale because the unpublished candidate contains four additional W34 Modern events and 32 additional Top 8 placements."
+  - "The refreshed readiness still reports landing.machine_draft_status=not_available even though Landing is live; repair or re-prove that contract before Landing content review."
 
 future_task_gates:
-  - task: "PRODUCTION-RECOVERY-2026-08-24"
-    status: "authorized_after_successful_repair_merge"
-    note: "After this accepted repair merges, dispatch exactly one fresh production workflow from the resulting master and monitor publication, Pages, failure-Issue, and readiness evidence."
   - task: "WEEKLY-TOP8-AUDIT-2026-W34"
-    status: "suspended_pending_production_recovery_and_refreshed_baseline"
-    note: "Preserve the prior workbook as superseded evidence; regenerate it only after a fresh successful production publication binds Standard 6 events and Modern 12 W34 events to a new readiness digest."
+    status: "blocked_pending_classifier_source_merge_and_refreshed_baseline"
+    note: "Regenerate the complete Top 8 carrier only after this accepted classifier source is merged and a later production publication provides a refreshed digest."
   - task: "WEEKLY-VISUAL-METADATA-2026-W34"
     status: "planned_not_authorized"
     note: "Review representative cards and colors only after the Top 8 classification audit."
+  - task: "WEEKLY-LANDING-READINESS-2026-W34"
+    status: "blocked_pending_contract_repair_or_reproof"
+    note: "Landing content review cannot start while the new readiness artifact still reports machine_draft_status=not_available."
   - task: "P12-16"
     status: "planned_not_authorized"
     note: "Cross-device and visual-system closeout remains a separate task after the W34 maintenance gate."
 
 next_approved_task:
-  id: "PRODUCTION-RECOVERY-2026-08-24"
-  name: "Recover the failed W34 production publication"
-  status: "authorized_after_successful_repair_merge"
+  id: "NONE"
+  name: "No follow-up task is authorized"
+  status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "This conditional follow-up was explicitly authorized with Owner acceptance and begins automatically only after the unchanged repair merges successfully."
+  note: "Owner acceptance authorizes continuous completion only for the unchanged classifier source task; production and later weekly stages remain separate."
 
 prohibited_next_actions:
-  - "Do not dispatch production before the accepted repair merges, manually mutate Issues, or bypass production candidate validation."
-  - "Do not resume the stale Top 8 workbook or begin visual-metadata, Landing review, or P12-16 automatically."
-  - "Do not add the deferred pure-green Tifa path or modify product UI, visual metadata, classifiers, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
+  - "Do not dispatch production, mutate the weekly Issue, or regenerate derived production outputs."
+  - "Do not begin the complete Top 8 audit, visual-metadata review, Landing review, or another development task automatically."
+  - "Do not modify classifier scope beyond the accepted Frog-Goyf path or change bilingual names, UI, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."
