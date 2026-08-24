@@ -11,7 +11,7 @@
   "total_decks": 4640,
   "total_high_score": 4144,
   "total_top8": 1160,
-  "unknown_count": 1,
+  "unknown_count": 0,
   "archetypes": [
     {
       "id": "boros-energy",
@@ -344,6 +344,65 @@
       "avg_deviation": 11
     },
     {
+      "id": "dimir-tempo",
+      "name": "Dimir Tempo",
+      "count": 171,
+      "high_score_count": 151,
+      "high_score_share": 0.0364,
+      "top8_count": 46,
+      "top8_share": 0.0397,
+      "conversion": 0.3046,
+      "avg_points_per_round": 2.04,
+      "subtypes": [
+        {
+          "id": "dimir",
+          "name": "Dimir",
+          "parent_id": "dimir-tempo",
+          "display_name": "Dimir Tempo",
+          "count": 137,
+          "high_score_count": 120,
+          "high_score_share": 0.029,
+          "top8_count": 37,
+          "top8_share": 0.0319,
+          "conversion": 0.3083,
+          "avg_points_per_round": 2.04,
+          "parent_share": 0.8012,
+          "avg_deviation": 28
+        },
+        {
+          "id": "grixis",
+          "name": "Dimir Red Splash",
+          "parent_id": "dimir-tempo",
+          "display_name": "Dimir Red Splash Tempo",
+          "count": 24,
+          "high_score_count": 22,
+          "high_score_share": 0.0053,
+          "top8_count": 8,
+          "top8_share": 0.0069,
+          "conversion": 0.3636,
+          "avg_points_per_round": 2.05,
+          "parent_share": 0.1404,
+          "avg_deviation": 45
+        },
+        {
+          "id": "esper",
+          "name": "Dimir White Splash",
+          "parent_id": "dimir-tempo",
+          "display_name": "Dimir White Splash Tempo",
+          "count": 10,
+          "high_score_count": 9,
+          "high_score_share": 0.0022,
+          "top8_count": 1,
+          "top8_share": 0.0009,
+          "conversion": 0.1111,
+          "avg_points_per_round": 1.94,
+          "parent_share": 0.0585,
+          "avg_deviation": null
+        }
+      ],
+      "avg_deviation": 33
+    },
+    {
       "id": "chant-control",
       "name": "Chant Control",
       "count": 171,
@@ -386,65 +445,6 @@
         }
       ],
       "avg_deviation": 30
-    },
-    {
-      "id": "dimir-tempo",
-      "name": "Dimir Tempo",
-      "count": 170,
-      "high_score_count": 150,
-      "high_score_share": 0.0362,
-      "top8_count": 46,
-      "top8_share": 0.0397,
-      "conversion": 0.3067,
-      "avg_points_per_round": 2.04,
-      "subtypes": [
-        {
-          "id": "dimir",
-          "name": "Dimir",
-          "parent_id": "dimir-tempo",
-          "display_name": "Dimir Tempo",
-          "count": 137,
-          "high_score_count": 120,
-          "high_score_share": 0.029,
-          "top8_count": 37,
-          "top8_share": 0.0319,
-          "conversion": 0.3083,
-          "avg_points_per_round": 2.04,
-          "parent_share": 0.8059,
-          "avg_deviation": 28
-        },
-        {
-          "id": "grixis",
-          "name": "Dimir Red Splash",
-          "parent_id": "dimir-tempo",
-          "display_name": "Dimir Red Splash Tempo",
-          "count": 23,
-          "high_score_count": 21,
-          "high_score_share": 0.0051,
-          "top8_count": 8,
-          "top8_share": 0.0069,
-          "conversion": 0.381,
-          "avg_points_per_round": 2.07,
-          "parent_share": 0.1353,
-          "avg_deviation": null
-        },
-        {
-          "id": "esper",
-          "name": "Dimir White Splash",
-          "parent_id": "dimir-tempo",
-          "display_name": "Dimir White Splash Tempo",
-          "count": 10,
-          "high_score_count": 9,
-          "high_score_share": 0.0022,
-          "top8_count": 1,
-          "top8_share": 0.0009,
-          "conversion": 0.1111,
-          "avg_points_per_round": 1.94,
-          "parent_share": 0.0588,
-          "avg_deviation": null
-        }
-      ],
-      "avg_deviation": 33
     },
     {
       "id": "grixis-persist",
@@ -2332,18 +2332,6 @@
     {
       "id": "izzet-phoenix",
       "name": "Izzet Phoenix",
-      "count": 1,
-      "high_score_count": 1,
-      "high_score_share": 0.0002,
-      "top8_count": 0,
-      "top8_share": 0.0,
-      "conversion": 0.0,
-      "avg_points_per_round": 1.71,
-      "avg_deviation": null
-    },
-    {
-      "id": "unknown",
-      "name": "Unknown",
       "count": 1,
       "high_score_count": 1,
       "high_score_share": 0.0002,
