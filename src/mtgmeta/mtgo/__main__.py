@@ -6,11 +6,20 @@ import argparse
 from pathlib import Path
 import sys
 
-from mtgmeta import catalog
 from mtgmeta.config import DisabledFormatError, FormatConfigError, load_format_registry
 
 from . import DEFAULT_REGISTRY_PATH
-from . import completeness, fetch, landing, landing_editorial, matchup, pickup, stats, top8
+from . import (
+    completeness,
+    fetch,
+    landing,
+    landing_editorial,
+    landing_screening,
+    matchup,
+    metadata,
+    stats,
+    top8,
+)
 
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3]
@@ -74,6 +83,14 @@ def build_parser() -> argparse.ArgumentParser:
     review_commands = review_parser.add_subparsers(
         dest="landing_review_command", required=True
     )
+    prepare_parser = review_commands.add_parser(
+        "prepare", help="prepare private Landing screening candidates"
+    )
+    prepare_parser.add_argument(
+        "--if-absent",
+        action="store_true",
+        help="preserve an existing candidate for the latest complete week",
+    )
     import_parser = review_commands.add_parser(
         "import-xlsx", help="import an explicitly approved Landing workbook"
     )
@@ -83,20 +100,6 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         help="accepted immutable workbook SHA-256",
     )
-
-    pickup_parser = commands.add_parser("pickup", help="manage Weekly Pickup")
-    pickup_commands = pickup_parser.add_subparsers(dest="pickup_command", required=True)
-    candidate_parser = pickup_commands.add_parser("candidates", help="generate review candidates")
-    candidate_parser.add_argument(
-        "--if-absent",
-        action="store_true",
-        help="preserve an existing candidate file for the latest complete week",
-    )
-    pickup_commands.add_parser(
-        "initialize-known",
-        help="bootstrap known-archetype state before the first candidate review",
-    )
-    pickup_commands.add_parser("publish", help="publish manually approved candidates")
 
     commands.add_parser("generate-metadata", help="generate MTGO metadata")
     commands.add_parser(
@@ -251,6 +254,26 @@ def _run_landing(args: argparse.Namespace, root: Path, registry: Path) -> int:
 
 
 def _run_landing_review(args: argparse.Namespace, root: Path, registry: Path) -> int:
+    if args.landing_review_command == "prepare":
+        result = landing_screening.prepare_candidates(
+            root,
+            args.format_id,
+            registry_path=registry,
+            preserve_existing=args.if_absent,
+        )
+        if result is None:
+            print(f"No complete MTGO event week is available for {args.format_id}.")
+        elif result.get("review_required"):
+            print(
+                "Landing screening candidates need review after source events changed: "
+                f"{result['candidate_path']}"
+            )
+        elif result["skipped_existing"]:
+            print(f"Landing screening candidates preserved: {result['candidate_path']}")
+        else:
+            print(f"Landing screening candidates written: {result['candidate_path']}")
+        return 0
+
     workbook = (
         args.workbook.resolve()
         if args.workbook.is_absolute()
@@ -271,61 +294,14 @@ def _run_landing_review(args: argparse.Namespace, root: Path, registry: Path) ->
     return 0
 
 
-def _run_pickup(args: argparse.Namespace, root: Path, registry: Path) -> int:
-    if args.pickup_command == "candidates":
-        result = pickup.generate_candidates(
-            root,
-            args.format_id,
-            registry_path=registry,
-            preserve_existing=args.if_absent,
-        )
-        if result is None:
-            print(f"No complete MTGO event week is available for {args.format_id}.")
-        elif result.get("review_required"):
-            print(
-                "Weekly Pickup candidates need review after source events changed: "
-                f"{result['candidate_path']}"
-            )
-        elif result["skipped_existing"]:
-            print(f"Weekly Pickup candidates preserved: {result['candidate_path']}")
-        else:
-            print(f"Weekly Pickup candidates written: {result['candidate_path']}")
-        return 0
-    if args.pickup_command == "initialize-known":
-        destination = pickup.initialize_known_state(
-            root,
-            args.format_id,
-            registry_path=registry,
-        )
-        if destination is None:
-            print(f"No complete MTGO event week is available for {args.format_id}.")
-        else:
-            print(f"Weekly Pickup known state initialized: {destination}")
-        return 0
-    result = pickup.publish(root, args.format_id, registry_path=registry)
-    if result is None:
-        print("No manually approved Weekly Pickup candidates are available.")
-    else:
-        metadata_path = pickup.generate_metadata(
-            root,
-            args.format_id,
-            registry_path=registry,
-        )
-        catalog_path = catalog.write_catalog(root, registry_path=registry)
-        print(f"Weekly Pickup published: {result['published_path']}")
-        print(f"MTGO metadata refreshed: {metadata_path}")
-        print(f"Consumer catalog refreshed: {catalog_path}")
-    return 0
-
-
 def _run_metadata(args: argparse.Namespace, root: Path, registry: Path) -> int:
-    destination = pickup.generate_metadata(root, args.format_id, registry_path=registry)
+    destination = metadata.generate_metadata(root, args.format_id, registry_path=registry)
     print(f"MTGO metadata: format={args.format_id} output={destination}")
     return 0
 
 
 def _run_hierarchy(args: argparse.Namespace, root: Path, registry: Path) -> int:
-    destination = pickup.generate_hierarchy_catalog(
+    destination = metadata.generate_hierarchy_catalog(
         root,
         args.format_id,
         registry_path=registry,
@@ -372,7 +348,6 @@ RUNNERS = {
     "build-landing": _run_landing,
     "landing-review": _run_landing_review,
     "build-matchups": _run_matchups,
-    "pickup": _run_pickup,
     "generate-metadata": _run_metadata,
     "generate-hierarchy": _run_hierarchy,
     "classification-reports": _run_reports,
@@ -386,7 +361,6 @@ COMMAND_CAPABILITIES = {
     "build-landing": "landing_generation",
     "landing-review": "landing_generation",
     "build-matchups": "matchup_statistics",
-    "pickup": "weekly_pickup",
     "generate-metadata": "metadata_generation",
     "generate-hierarchy": "catalog_generation",
     "classification-reports": "classification",
@@ -420,7 +394,7 @@ def main(argv: list[str] | None = None) -> int:
         landing.MTGOLandingError,
         landing_editorial.MTGOLandingEditorialError,
         matchup.MTGOMatchupError,
-        pickup.MTGOPickupError,
+        landing_screening.MTGOLandingScreeningError,
         stats.MTGOStatisticsError,
         top8.MTGOTop8Error,
         OSError,

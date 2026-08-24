@@ -225,7 +225,7 @@ The format argument is mandatory. The installed command works without setting
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-matchups
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-completeness
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-top8
-.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard pickup candidates --if-absent
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard landing-review prepare --if-absent
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard landing-review import-xlsx <accepted-workbook.xlsx> --expected-sha256 <accepted-sha256>
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-landing
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard generate-hierarchy
@@ -237,6 +237,7 @@ The format argument is mandatory. The installed command works without setting
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-matchups
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-completeness
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-top8
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern landing-review prepare --if-absent
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern landing-review import-xlsx <accepted-workbook.xlsx> --expected-sha256 <accepted-sha256>
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-landing
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern classification-reports --strict
@@ -245,13 +246,12 @@ The format argument is mandatory. The installed command works without setting
 Standard and Modern are complete public MTGO products. The format registry also
 keeps official-event archive collection separate for incomplete formats. The
 scheduled pipeline builds statistics, matchups, completeness, provisional then
-sealed weekly Top 8 data and bases, Weekly Pickup candidates, latest Landing
-facts, metadata, the product catalog, hierarchy catalogs, and strict
+sealed weekly Top 8 data and bases, private Landing screening candidates,
+latest Landing facts, metadata, the product catalog, hierarchy catalogs, and strict
 classification diagnostics for enabled products.
 
-The Landing editorial producer owns weekly candidate screening. During the
-staged migration, `pickup candidates` remains a compatibility command that
-delegates to that producer. Candidate generation never approves a row,
+The Landing editorial producer owns weekly candidate screening through
+`landing-review prepare`. Candidate generation never approves a row,
 publishes a week, or changes accepted Landing state. Candidates are available
 immediately after a natural week ends and unreviewed candidates may refresh
 when late events arrive during that week's seven-day provisional window.
@@ -261,30 +261,12 @@ same closed workbook once per included format with its accepted SHA-256. The
 importer writes only `configs/mtgo_archetype_names.yaml` and private
 `stats/<format>/mtgo/landing/review/` files. `build-landing` then reads top copy
 and features from that one reviewed source; it does not read a separately
-published Pickup week.
+published Pickup week. Frozen Pickup documents remain compatibility and rollback
+evidence only; no supported command generates, initializes, or publishes them.
+Known-state maintenance belongs to the private Landing review source.
 
-Legacy Pickup publication remains manual for staged compatibility and rollback
-until the approved P12-15F cutover. When that separate legacy action is
-authorized, publish with:
-
-```powershell
-.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format <standard-or-modern> pickup publish
-```
-
-The publish command also refreshes that format's metadata and the global
-consumer catalog. It is not an input to Landing generation.
-
-For a new Modern known-state bootstrap, run only under the applicable approval:
-
-```powershell
-.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern generate-hierarchy
-.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern generate-metadata
-.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern pickup initialize-known
-.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern pickup candidates --if-absent
-```
-
-`initialize-known` refuses to overwrite existing state. Classification reports
-omit player names, login IDs, and raw player records; `--strict` fails on an
+Classification reports omit player names, login IDs, and raw player records;
+`--strict` fails on an
 unresolved conflict or invalid deck input.
 
 ## Repository layout

@@ -5414,7 +5414,54 @@ acceptance of the five-correction P12-15E-UX candidate.
 
 ---
 
-# DEC-119 - Apply W34 classifier maintenance with one new Temur parent
+# DEC-119 - Retire the standalone Pickup identity without deleting frozen history
+
+Status: `Accepted for local implementation`
+
+## Context
+
+P12-15F made Landing the only reader-facing weekly editorial product and proved
+that current Landing and feature history no longer load a public Pickup week.
+The repository nevertheless retained an active Pickup command, capability,
+catalog entry, metadata generator ownership, production candidate paths,
+readiness vocabulary, and Phase 8 renderer. This duplicated the accepted
+Landing boundary and made future callers appear to have two supported paths.
+
+The P12-15G-1 audit initially searched selected directories and omitted the
+tracked root validator `validate_production_candidate.py`. A complete tracked
+file search found that additional active caller. The corrected audit therefore
+uses all tracked text as its caller universe rather than a hand-written path
+list.
+
+## Decision
+
+Move candidate screening and known-state reads to
+`stats/<format>/mtgo/landing/review/` and expose preparation only through
+`landing-review prepare`. Move hierarchy and metadata generation into a neutral
+MTGO metadata module. Remove the standalone Pickup command, capability, catalog
+identity, Phase 8 state, loader, renderer, styles, and dedicated renderer test.
+Metadata keeps the existing nullable `pickup_catalog` field and always emits
+null; the Landing feature index is the active weekly archive catalog.
+
+Preserve URL normalization from
+`product=weekly-pickup&week=<week>` to
+`product=mtgo-landing&section=features&week=<week>` with unit and browser
+coverage. Preserve every tracked Pickup document, Pickup document Schema,
+Schema-manifest entry, Pages exclusion, historical audit, migration tool, and
+legacy bundle byte-for-byte. Their deletion or relocation remains a separate
+Owner gate.
+
+## Consequences
+
+Weekly screening has one supported producer and one private review boundary;
+the reader has one product identity and one feature-history source. Candidate
+selection thresholds, classifiers, statistics, Landing content, layout, and
+frozen historical bytes do not change. Future no-caller audits must search all
+tracked files before classifying an apparent reference as dead or retained.
+
+---
+
+# DEC-120 - Apply W34 classifier maintenance with one new Temur parent
 
 Status: `Accepted`
 

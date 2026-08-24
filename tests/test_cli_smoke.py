@@ -47,6 +47,17 @@ def test_mtgo_cli_smoke(monkeypatch, tmp_path):
     ]
 
 
+def test_landing_screening_uses_the_landing_review_command():
+    args = mtgo_cli.build_parser().parse_args(
+        ["--format", "standard", "landing-review", "prepare", "--if-absent"]
+    )
+
+    assert args.command == "landing-review"
+    assert args.landing_review_command == "prepare"
+    assert args.if_absent is True
+    assert mtgo_cli.COMMAND_CAPABILITIES[args.command] == "landing_generation"
+
+
 def test_melee_cli_smoke(tmp_path, capsys):
     def fetch(event_id, _registry, raw_root, *, dry_run):
         assert raw_root == tmp_path / "raw"

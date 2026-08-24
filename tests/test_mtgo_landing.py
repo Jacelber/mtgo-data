@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-import yaml
 import pytest
 from jsonschema import Draft202012Validator
 
@@ -13,112 +12,8 @@ from mtgmeta.mtgo import landing
 WEEK = "2026-W33"
 DIGEST = "a" * 64
 FACT_DIGEST = "b" * 64
-POLICY_DIGEST = "e" * 64
-VISUAL_DIGEST = "f" * 64
 PICKUP_DIGEST = "d" * 64
 ROOT = Path(__file__).resolve().parents[1]
-
-
-def _candidate(*, approved: bool = False) -> dict:
-    entry = {
-        "archetype_id": "example-parent",
-        "subtype_id": None,
-        "archetype": "Example Parent",
-        "event_id": "100",
-        "deck_id": "deck-100",
-        "deck_fingerprint_sha256": "c" * 64,
-        "player": "Example",
-        "final_rank": 1,
-        "player_count": 32,
-        "starttime": "2026-08-10 00:00:00.0",
-        "approved": approved,
-        "comment_zh": "",
-        "comment_en": "",
-        "candidate_reasons": [
-            {
-                "type": "new_archetype",
-                "prior_record_count_under_current_classifier": 0,
-            }
-        ],
-        "main_deck": [
-            {"name": "Card One", "qty": 4},
-            {"name": "Card Two", "qty": 4},
-            {"name": "Card Three", "qty": 4},
-            {"name": "Card Four", "qty": 4},
-        ],
-        "side_deck": [],
-    }
-    if approved:
-        entry["landing"] = {
-            "approved": True,
-            "category": "new_deck",
-            "order": 1,
-            "headline_zh": "人工标题",
-            "headline_en": "Human headline",
-            "positioning_zh": "人工可独立改写。",
-            "positioning_en": "Human copy may be independent.",
-            "featured_cards": ["Card One", "Card Two", "Card Three", "Card Four"],
-        }
-    return {
-        "week": WEEK,
-        "source_event_ids": ["100"],
-        "classifier_digest": DIGEST,
-        "selection_policy_digest": POLICY_DIGEST,
-        "visual_metadata_digest": VISUAL_DIGEST if approved else None,
-        "landing_visual_diagnostics": [],
-        "machine_fact_digest": FACT_DIGEST if approved else None,
-        "existing_changes": [],
-        "new_archetypes": [entry],
-    }
-
-
-def _published_pickup() -> dict:
-    return {
-        "schema_version": "1.1.0",
-        "format": "standard",
-        "source": "mtgo",
-        "week": WEEK,
-        "start": "2026-08-10",
-        "end": "2026-08-16",
-        "source_event_ids": ["100"],
-        "classifier_digest": DIGEST,
-        "selection_policy_digest": POLICY_DIGEST,
-        "existing_changes": [
-            {
-                "archetype_id": "example-parent",
-                "subtype_id": None,
-                "subtype": None,
-                "archetype": "Example Parent",
-                "event_id": "100",
-                "deck_id": "a" * 20,
-                "deck_fingerprint_sha256": "c" * 64,
-                "player": "Example",
-                "final_rank": 1,
-                "player_count": 32,
-                "starttime": "2026-08-10 00:00:00.0",
-                "reason_types": ["return", "new_card"],
-                "comment_zh": "已经审核的中文 Pickup 内容",
-                "comment_en": "Reviewed Pickup copy",
-            }
-        ],
-        "new_archetypes": [],
-    }
-
-
-def _link_catalog() -> list[dict]:
-    return [
-        {
-            "link_id": f"deck:{'a' * 20}",
-            "archetype_id": "example-parent",
-            "display_name": "Example Parent",
-            "event_id": "100",
-            "deck_id": "a" * 20,
-            "deck_fingerprint_sha256": "c" * 64,
-            "player": "Example",
-            "final_rank": 1,
-            "starttime": "2026-08-10 00:00:00.0",
-        }
-    ]
 
 
 def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_path):
@@ -129,8 +24,8 @@ def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_
     monkeypatch.setattr(landing.stats, "load_all_events", lambda *args, **kwargs: [])
     monkeypatch.setattr(landing, "classifier_digest", lambda value: DIGEST)
     monkeypatch.setattr(
-        landing.pickup,
-        "load_pickup_policy",
+        landing.screening,
+        "load_screening_policy",
         lambda *args, **kwargs: {"schema_version": "1.0"},
     )
     monkeypatch.setattr(
@@ -172,15 +67,8 @@ def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_
     assert list(Draft202012Validator(schema).iter_errors(document)) == []
 
 
-def test_current_landing_uses_one_private_review_without_published_pickup(monkeypatch):
-    monkeypatch.setattr(
-        landing,
-        "_load_published_pickup",
-        lambda *args, **kwargs: (_ for _ in ()).throw(
-            AssertionError("Landing must not read a separately published Pickup week")
-        ),
-    )
-
+def test_current_landing_uses_one_private_review_without_standalone_pickup_reader():
+    assert not hasattr(landing, "_load_published_pickup")
     review_status, document = landing.build_document(
         ROOT,
         "standard",
@@ -258,140 +146,6 @@ def test_legacy_1_1_landing_remains_valid_without_feature_destinations():
     landing.validate_document(document)
 
 
-def test_unreviewed_candidate_receives_fact_binding_and_default_landing_fields(
-    tmp_path,
-):
-    path = tmp_path / f"candidates_{WEEK}.yaml"
-    path.write_text(yaml.safe_dump(_candidate()), encoding="utf-8")
-
-    status, features = landing._feature_document(
-        path,
-        WEEK,
-        ["100"],
-        DIGEST,
-        POLICY_DIGEST,
-        VISUAL_DIGEST,
-        [],
-        FACT_DIGEST,
-    )
-
-    updated = yaml.safe_load(path.read_text(encoding="utf-8"))
-    assert status == "current"
-    assert features == []
-    assert updated["machine_fact_digest"] == FACT_DIGEST
-    assert updated["new_archetypes"][0]["landing"] == {
-        "approved": False,
-        "category": "new_deck",
-        "order": None,
-        "headline_zh": "",
-        "headline_en": "",
-        "positioning_zh": "",
-        "positioning_en": "",
-        "featured_cards": [],
-    }
-
-
-def test_reviewed_feature_is_public_without_internal_approval_or_comments(tmp_path):
-    path = tmp_path / f"candidates_{WEEK}.yaml"
-    path.write_text(yaml.safe_dump(_candidate(approved=True)), encoding="utf-8")
-
-    status, features = landing._feature_document(
-        path,
-        WEEK,
-        ["100"],
-        DIGEST,
-        POLICY_DIGEST,
-        VISUAL_DIGEST,
-        [],
-        FACT_DIGEST,
-    )
-
-    assert status == "current"
-    assert len(features) == 1
-    feature = features[0]
-    assert feature["category"] == "new_deck"
-    assert feature["headline"]["zh"] == "人工标题"
-    assert [card["name"] for card in feature["featured_cards"]] == [
-        "Card One",
-        "Card Two",
-        "Card Three",
-        "Card Four",
-    ]
-    serialized = json.dumps(feature, ensure_ascii=False)
-    assert "approved" not in serialized
-    assert "comment_zh" not in serialized
-    assert "machine_fact_digest" not in serialized
-
-
-def test_reviewed_candidate_is_preserved_when_machine_facts_change(tmp_path):
-    path = tmp_path / f"candidates_{WEEK}.yaml"
-    original = yaml.safe_dump(_candidate(approved=True))
-    path.write_text(original, encoding="utf-8")
-
-    status, features = landing._feature_document(
-        path,
-        WEEK,
-        ["100"],
-        DIGEST,
-        POLICY_DIGEST,
-        VISUAL_DIGEST,
-        [],
-        "d" * 64,
-    )
-
-    assert status == "stale_review_required"
-    assert features == []
-    assert path.read_text(encoding="utf-8") == original
-
-
-def test_reviewed_candidate_is_preserved_when_selection_policy_changes(tmp_path):
-    path = tmp_path / f"candidates_{WEEK}.yaml"
-    original = yaml.safe_dump(_candidate(approved=True))
-    path.write_text(original, encoding="utf-8")
-
-    status, features = landing._feature_document(
-        path,
-        WEEK,
-        ["100"],
-        DIGEST,
-        "0" * 64,
-        VISUAL_DIGEST,
-        [],
-        FACT_DIGEST,
-    )
-
-    assert status == "stale_review_required"
-    assert features == []
-    assert path.read_text(encoding="utf-8") == original
-
-
-def test_summary_review_inputs_keep_all_machine_facts_and_one_published_pickup_row():
-    observations = [
-        {
-            "type": "share_move",
-            "archetype_id": f"deck-{index}",
-            "display_name": f"Deck {index}",
-            "current": {"count": 2, "denominator": 10, "share": 0.2},
-            "previous_four_weeks": {"count": 1, "denominator": 10, "share": 0.1},
-            "state": "increase",
-            "direction": "up",
-            "delta_pp": 10.0,
-        }
-        for index in range(6)
-    ]
-    inputs = landing._summary_review_inputs(observations, _published_pickup())
-
-    assert len(inputs) == 7
-    assert [item["type"] for item in inputs].count("share_move") == 6
-    published = [
-        item for item in inputs if item["input_source"] == "published_pickup"
-    ]
-    assert len(published) == 1
-    assert published[0]["reason_types"] == ["return", "new_card"]
-    assert published[0]["text_zh"] == "已经审核的中文 Pickup 内容"
-    assert len({item["input_id"] for item in inputs}) == len(inputs)
-
-
 def test_deck_link_catalog_keeps_every_top8_deck_independent_of_review_inputs():
     records = []
     for rank in range(1, 9):
@@ -417,314 +171,7 @@ def test_deck_link_catalog_keeps_every_top8_deck_independent_of_review_inputs():
     assert catalog[0]["link_id"] == "deck:deck-1"
 
 
-def test_published_pickup_must_match_the_current_landing_subject(tmp_path):
-    path = tmp_path / f"{WEEK}.json"
-    document = _published_pickup()
-    document["classifier_digest"] = "0" * 64
-    path.write_text(json.dumps(document), encoding="utf-8")
-
-    with pytest.raises(landing.MTGOLandingError, match="current Landing subject"):
-        landing._load_published_pickup(
-            path,
-            format_id="standard",
-            week=WEEK,
-            source_event_ids=["100"],
-            rules_digest=DIGEST,
-            selection_policy_digest=POLICY_DIGEST,
-        )
-
-
-def test_missing_summary_review_is_written_as_pending_not_inferred_as_zero(tmp_path):
-    path = tmp_path / f"candidates_{WEEK}.yaml"
-    path.write_text(yaml.safe_dump(_candidate()), encoding="utf-8")
-    inputs = landing._summary_review_inputs([], _published_pickup())
-
-    status, items, digest = landing._summary_document(
-        path,
-        WEEK,
-        ["100"],
-        DIGEST,
-        POLICY_DIGEST,
-        PICKUP_DIGEST,
-        inputs,
-        _link_catalog(),
-    )
-
-    updated = yaml.safe_load(path.read_text(encoding="utf-8"))
-    assert status == "summary_review_required"
-    assert items == []
-    assert updated["landing_summary"] == {
-        "summary_fact_digest": digest,
-        "pickup_document_digest": PICKUP_DIGEST,
-        "review_inputs": inputs,
-        "deck_link_catalog": _link_catalog(),
-        "reviewed": False,
-        "items": [],
-    }
-
-
-def test_explicitly_reviewed_zero_item_summary_is_current(tmp_path):
-    candidate = _candidate()
-    inputs = landing._summary_review_inputs([], _published_pickup())
-    digest = landing._summary_digest(
-        WEEK,
-        ["100"],
-        DIGEST,
-        POLICY_DIGEST,
-        PICKUP_DIGEST,
-        inputs,
-        _link_catalog(),
-    )
-    candidate["landing_summary"] = {
-        "summary_fact_digest": digest,
-        "pickup_document_digest": PICKUP_DIGEST,
-        "review_inputs": inputs,
-        "deck_link_catalog": _link_catalog(),
-        "reviewed": True,
-        "items": [],
-    }
-    path = tmp_path / f"candidates_{WEEK}.yaml"
-    path.write_text(yaml.safe_dump(candidate), encoding="utf-8")
-
-    status, items, actual_digest = landing._summary_document(
-        path,
-        WEEK,
-        ["100"],
-        DIGEST,
-        POLICY_DIGEST,
-        PICKUP_DIGEST,
-        inputs,
-        _link_catalog(),
-    )
-
-    assert status == "current"
-    assert items == []
-    assert actual_digest == digest
-    assert landing.pickup._has_manual_review(candidate) is True
-
-
-def test_unreviewed_empty_summary_is_not_mistaken_for_manual_content():
-    candidate = _candidate()
-    candidate["landing_summary"] = {
-        "summary_fact_digest": FACT_DIGEST,
-        "pickup_document_digest": PICKUP_DIGEST,
-        "review_inputs": [],
-        "deck_link_catalog": [],
-        "reviewed": False,
-        "items": [],
-    }
-
-    assert landing.pickup._has_manual_review(candidate) is False
-
-
-def test_human_summary_can_merge_many_inputs_or_ignore_review_inputs(tmp_path):
-    candidate = _candidate()
-    inputs = landing._summary_review_inputs(
-        [
-            {"type": "exit", "archetype_id": "first", "value": 1},
-            {"type": "exit", "archetype_id": "second", "value": 2},
-        ],
-        _published_pickup(),
-    )
-    digest = landing._summary_digest(
-        WEEK,
-        ["100"],
-        DIGEST,
-        POLICY_DIGEST,
-        PICKUP_DIGEST,
-        inputs,
-        _link_catalog(),
-    )
-    candidate["landing_summary"] = {
-        "summary_fact_digest": digest,
-        "pickup_document_digest": PICKUP_DIGEST,
-        "review_inputs": inputs,
-        "deck_link_catalog": _link_catalog(),
-        "reviewed": True,
-        "items": [
-            {
-                "order": 2,
-                "text_zh": "与机器候选无关的人工结论。",
-                "text_en": "Independent human conclusion.",
-                "source_input_ids": [],
-            },
-            {
-                "order": 1,
-                "text_zh": f"合并两项事实：deck:{'a' * 20}",
-                "text_en": f"Two facts merged: deck:{'a' * 20}",
-                "source_input_ids": [inputs[0]["input_id"], inputs[1]["input_id"]],
-            },
-        ],
-    }
-    path = tmp_path / f"candidates_{WEEK}.yaml"
-    path.write_text(yaml.safe_dump(candidate), encoding="utf-8")
-
-    status, items, _digest = landing._summary_document(
-        path,
-        WEEK,
-        ["100"],
-        DIGEST,
-        POLICY_DIGEST,
-        PICKUP_DIGEST,
-        inputs,
-        _link_catalog(),
-    )
-
-    assert status == "current"
-    assert [item["order"] for item in items] == [1, 2]
-    assert "source_input_ids" not in json.dumps(items, ensure_ascii=False)
-    assert "review_inputs" not in json.dumps(items, ensure_ascii=False)
-    assert items[0]["deck_links"] == [
-        {
-            "order": 1,
-            "token": f"deck:{'a' * 20}",
-            "label": {
-                "zh": "Example Parent · Example · 第1名",
-                "en": "Example Parent · Example · Rank 1",
-            },
-            "deck": {
-                key: _link_catalog()[0][key]
-                for key in (
-                    "archetype_id",
-                    "display_name",
-                    "event_id",
-                    "deck_id",
-                    "deck_fingerprint_sha256",
-                    "player",
-                    "final_rank",
-                    "starttime",
-                )
-            },
-        }
-    ]
-
-
-def test_summary_rejects_unknown_review_input_link(tmp_path):
-    candidate = _candidate()
-    inputs = landing._summary_review_inputs([], _published_pickup())
-    candidate["landing_summary"] = {
-        "summary_fact_digest": landing._summary_digest(
-            WEEK,
-            ["100"],
-            DIGEST,
-            POLICY_DIGEST,
-            PICKUP_DIGEST,
-            inputs,
-            _link_catalog(),
-        ),
-        "pickup_document_digest": PICKUP_DIGEST,
-        "review_inputs": inputs,
-        "deck_link_catalog": _link_catalog(),
-        "reviewed": True,
-        "items": [
-            {
-                "order": 1,
-                "text_zh": "人工结论",
-                "text_en": "",
-                "source_input_ids": ["unknown:0000000000000000"],
-            }
-        ],
-    }
-    path = tmp_path / f"candidates_{WEEK}.yaml"
-    path.write_text(yaml.safe_dump(candidate), encoding="utf-8")
-
-    with pytest.raises(landing.MTGOLandingError, match="unknown review inputs"):
-        landing._summary_document(
-            path,
-            WEEK,
-            ["100"],
-            DIGEST,
-            POLICY_DIGEST,
-            PICKUP_DIGEST,
-            inputs,
-            _link_catalog(),
-        )
-
-
-def test_summary_rejects_unknown_deck_link_token(tmp_path):
-    candidate = _candidate()
-    inputs = landing._summary_review_inputs([], _published_pickup())
-    candidate["landing_summary"] = {
-        "summary_fact_digest": landing._summary_digest(
-            WEEK,
-            ["100"],
-            DIGEST,
-            POLICY_DIGEST,
-            PICKUP_DIGEST,
-            inputs,
-            _link_catalog(),
-        ),
-        "pickup_document_digest": PICKUP_DIGEST,
-        "review_inputs": inputs,
-        "deck_link_catalog": _link_catalog(),
-        "reviewed": True,
-        "items": [
-            {
-                "order": 1,
-                "text_zh": f"人工结论：deck:{'b' * 20}",
-                "text_en": f"Human conclusion: deck:{'b' * 20}",
-                "source_input_ids": [],
-            }
-        ],
-    }
-    path = tmp_path / f"candidates_{WEEK}.yaml"
-    path.write_text(yaml.safe_dump(candidate), encoding="utf-8")
-
-    with pytest.raises(landing.MTGOLandingError, match="unknown deck-link tokens"):
-        landing._summary_document(
-            path,
-            WEEK,
-            ["100"],
-            DIGEST,
-            POLICY_DIGEST,
-            PICKUP_DIGEST,
-            inputs,
-            _link_catalog(),
-        )
-
-
-def test_summary_rejects_localized_deck_link_token_mismatch(tmp_path):
-    candidate = _candidate()
-    inputs = landing._summary_review_inputs([], _published_pickup())
-    candidate["landing_summary"] = {
-        "summary_fact_digest": landing._summary_digest(
-            WEEK,
-            ["100"],
-            DIGEST,
-            POLICY_DIGEST,
-            PICKUP_DIGEST,
-            inputs,
-            _link_catalog(),
-        ),
-        "pickup_document_digest": PICKUP_DIGEST,
-        "review_inputs": inputs,
-        "deck_link_catalog": _link_catalog(),
-        "reviewed": True,
-        "items": [
-            {
-                "order": 1,
-                "text_zh": f"人工结论：deck:{'a' * 20}",
-                "text_en": "Human conclusion without the selected deck.",
-            }
-        ],
-    }
-    path = tmp_path / f"candidates_{WEEK}.yaml"
-    path.write_text(yaml.safe_dump(candidate), encoding="utf-8")
-
-    with pytest.raises(landing.MTGOLandingError, match="localized deck-link tokens"):
-        landing._summary_document(
-            path,
-            WEEK,
-            ["100"],
-            DIGEST,
-            POLICY_DIGEST,
-            PICKUP_DIGEST,
-            inputs,
-            _link_catalog(),
-        )
-
-
-def test_pages_selection_excludes_private_pickup_review_files(tmp_path):
+def test_pages_selection_excludes_all_private_landing_review_files(tmp_path):
     from build_pages_artifact import publication_paths
 
     for relative in (
@@ -735,6 +182,8 @@ def test_pages_selection_excludes_private_pickup_review_files(tmp_path):
         "stats/standard/mtgo/pickup/candidates_2026-W33.yaml",
         "stats/standard/mtgo/pickup/base_reference_2026-W33.yaml",
         "stats/standard/mtgo/pickup/known_archetypes.json",
+        "stats/standard/mtgo/landing/review/candidates_2026-W33.yaml",
+        "stats/standard/mtgo/landing/review/base_reference_2026-W33.yaml",
         "stats/standard/mtgo/landing/review/2026-W33.yaml",
         "stats/standard/mtgo/landing/review/known_archetypes.json",
     ):
@@ -784,6 +233,16 @@ def test_production_candidate_admits_latest_and_bounded_feature_archive_only():
     assert not _allowed_new_path(
         "stats/standard/mtgo/landing/candidates_2026-W33.yaml", formats, formats
     )
+    assert _allowed_new_path(
+        "stats/standard/mtgo/landing/review/candidates_2026-W33.yaml",
+        formats,
+        formats,
+    )
+    assert _allowed_new_path(
+        "stats/standard/mtgo/landing/review/base_reference_2026-W33.yaml",
+        formats,
+        formats,
+    )
     assert not _allowed_new_path(
         "stats/standard/mtgo/landing/review/2026-W33.yaml", formats, formats
     )
@@ -794,7 +253,7 @@ def test_production_candidate_admits_latest_and_bounded_feature_archive_only():
     )
 
 
-def test_repository_pages_policy_admits_landing_but_excludes_private_pickup():
+def test_repository_pages_policy_admits_landing_and_excludes_private_review_state():
     from build_pages_artifact import load_config, publication_paths
 
     config_path = ROOT / "configs" / "pages_publication.json"

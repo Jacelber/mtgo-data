@@ -19,7 +19,6 @@ PRODUCTS = (
     ("mtgo-top8", "mtgo", "top8/index.json"),
     ("mtgo-landing", "mtgo", "landing/current.json"),
     ("tabletop-major-events", "melee", "index.json"),
-    ("weekly-pickup", "mtgo", "pickup/index.json"),
 )
 
 

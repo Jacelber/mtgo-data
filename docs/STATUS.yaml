@@ -25,7 +25,7 @@ current_phase:
   id: 12
   name: "Front-end productization, editorial landing, and visual system"
   status: "active"
-  objective: "Productize the existing MTGO and Tabletop front ends and add the approved MTGO Landing without changing established statistical meaning or product separation."
+  objective: "Productize the MTGO and Tabletop front ends and complete the approved Landing migration without changing statistical meaning or product separation."
   production_changes_allowed: false
   next_phase_id: 13
   next_phase_authorized: false
@@ -40,7 +40,7 @@ current_task:
   owner_accepted_on: "2026-08-24"
   workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-maintenance-2026-w34-20260824-01"
   branch: "codex/weekly-maintenance-2026-w34-review"
-  base_commit: "408f761fdfd1c0c8f7a7c6391c5b0e178db67ff6"
+  base_commit: "169a7d0425121bc90bf7c8a2b8b17835b633c844"
   objective: "Apply the four Owner-confirmed W34 classifier dispositions and the approved Temur Spellementals bilingual identity without generating or publishing derived production data."
   authorization:
     local_implementation: true
@@ -73,15 +73,15 @@ current_task:
     - "Do not add a pure-green Tifa path, visual card or color metadata, Landing content, generated statistics, source data, workflows, Schemas, UI, public paths, or event whitelist changes."
     - "Do not dispatch production, mutate the live weekly Issue, force-push, change the accepted subject, or begin the Top 8 audit."
   validation:
-    retained_corpus: "Standard 163 events and 5,212 decks: only three reviewed Unknown changes, conflicts 0, multiple matches 1,042; Modern 236 events and 7,552 decks: only one reviewed Unknown changes, conflicts 0, multiple matches 1,457"
+    retained_corpus: "Revalidated against master 169a7d0425121bc90bf7c8a2b8b17835b633c844: Standard 163 events and 5,212 decks, only three reviewed Unknown changes, conflicts 0, multiple matches 1,042; Modern 236 events and 7,552 decks, only one reviewed Unknown changes, conflicts 0, multiple matches 1,457"
     bilingual_names: "pass; 324 names, 241 parents, 83 subtypes"
-    repository: "pass; 85 Python, 20 JavaScript, 1,885 JSON, 68 YAML, 57 references, 2,365 hygiene"
+    repository: "pass; 84 Python, 20 JavaScript, 1,854 JSON, 68 YAML, 55 references, 2,316 hygiene"
     diff_check: "pass"
   stop_point: "Complete the unchanged accepted classifier source task through commit, one Ready pull request, required CI, merge, and applicable Pages verification; then stop without production dispatch or another weekly stage."
 
 current_repository_state:
-  baseline_commit: "408f761fdfd1c0c8f7a7c6391c5b0e178db67ff6"
-  baseline_note: "Verified cloud master after the P12-15F Landing cutover; W34 readiness remains bound to the frozen production publication and classifier digests recorded in the review workbook."
+  baseline_commit: "169a7d0425121bc90bf7c8a2b8b17835b633c844"
+  baseline_note: "Verified cloud master after the completed P12-15G Pickup retirement; W34 review remains bound to the frozen production publication and classifier digests recorded in the review workbook."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -96,9 +96,9 @@ future_task_gates:
   - task: "WEEKLY-VISUAL-METADATA-2026-W34"
     status: "planned_not_authorized"
     note: "Review representative cards and colors only after the Top 8 classification audit."
-  - task: "P12-15G"
+  - task: "P12-16"
     status: "planned_not_authorized"
-    note: "Pickup retirement cleanup remains a separate task."
+    note: "Cross-device and visual-system closeout remains a separate task after the W34 maintenance gate."
 
 next_approved_task:
   id: "NONE"
@@ -109,6 +109,6 @@ next_approved_task:
 
 prohibited_next_actions:
   - "Do not dispatch production, mutate the weekly Issue, or regenerate derived production outputs."
-  - "Do not begin the Top 8 audit, visual-metadata review, Landing review, or P12-15G automatically."
+  - "Do not begin the Top 8 audit, visual-metadata review, Landing review, or P12-16 automatically."
   - "Do not add the deferred pure-green Tifa path or modify visual metadata, UI, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."

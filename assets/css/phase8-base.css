@@ -222,7 +222,7 @@ html[lang="en"] .brand h1 { font-size: 1.375rem; }
 .density-compact, [data-density="compact"] { --density-block: var(--space-2); --density-inline: var(--space-3); }
 .page-shell { max-width: var(--content-max); min-height: 54vh; margin: 0 auto; padding: 20px 24px 60px; }
 .availability-message { padding: 9px 12px; margin: 0 0 12px; border: 1px solid #d7b66f; border-radius: var(--radius-md); background: var(--warning-bg); color: var(--warning); font-size: var(--text-sm); box-shadow: var(--shadow); }
-.source-note, .panel, .event-summary, .pickup-weeks, .pickup-card {
+.source-note, .panel, .event-summary {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
@@ -650,23 +650,6 @@ select { min-height: var(--control-height); border: 1px solid #bfb8ad; border-ra
 .record-cell strong, .record-cell small { display: block; }
 .record-cell small { color: var(--muted); font-weight: 400; }
 .panel-subtitle { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
-.pickup-layout { display: grid; grid-template-columns: 165px 1fr; gap: 16px; align-items: start; }
-.pickup-weeks { padding: 8px; }
-.pickup-weeks h2 { margin: 4px 7px 7px; color: #777; font-size: 13px; }
-.pickup-weeks button { display: block; width: 100%; border: 0; border-radius: 5px; background: none; padding: 7px 10px; text-align: left; color: #333; }
-.pickup-weeks button span { display: block; color: inherit; opacity: .7; font-size: 11px; }
-.pickup-weeks button.active { background: var(--brand); color: #fff; }
-.pickup-group { margin-bottom: 18px; }
-.pickup-group > h2 { margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid var(--line); color: var(--brand-2); font: 700 var(--text-base)/var(--leading-tight) var(--font-editorial); }
-.pickup-empty { color: #999; font-size: 13px; }
-.pickup-card { margin-bottom: 8px; overflow: hidden; }
-.pickup-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; border: 0; background: #fff; padding: 10px 14px; text-align: left; }
-.pickup-head:hover { background: #f9fafb; }
-.pickup-head strong, .pickup-head small { display: block; }
-.pickup-head small { margin-top: 2px; color: #888; font-size: 12px; }
-.pickup-head b { color: var(--brand-2); font-size: 12px; white-space: nowrap; }
-.pickup-body { padding: 0 14px 14px; border-top: 1px solid #eee; }
-.pickup-body > p { white-space: pre-wrap; margin: 12px 0; padding: 10px 12px; border-radius: 6px; background: #f7f9fb; color: #333; font-size: 13px; }
 .site-footer { max-width: var(--content-max); margin: 22px auto 0; padding: 18px 24px 16px; border-top: 1px solid var(--line); color: var(--muted); text-align: center; font-size: var(--text-xs); line-height: 1.55; }
 .site-footer p { margin: 0; }
 .site-footer .site-authorship { margin-top: 7px; }
@@ -748,10 +731,7 @@ select { min-height: var(--control-height); border: 1px solid #bfb8ad; border-ra
   .freshness-strip.freshness-stacked .freshness-fact[data-freshness-key="event-date"] { flex-basis: 100%; }
   .freshness-strip.freshness-stacked .freshness-fact small,
   .freshness-strip.freshness-stacked .freshness-fact b { display: block; }
-  .deck-columns, .pickup-layout { grid-template-columns: 1fr; }
-  .pickup-weeks { display: flex; flex-wrap: wrap; gap: 5px; }
-  .pickup-weeks h2 { width: 100%; }
-  .pickup-weeks button { width: auto; }
+  .deck-columns { grid-template-columns: 1fr; }
   .summary-grid { grid-template-columns: repeat(2, 1fr); }
 }
 

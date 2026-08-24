@@ -333,8 +333,13 @@ begin under separate authorization.
 15G. `P12-15G` — Pickup retirement cleanup
     - prove no production, catalog, metadata, Pages, test, or front-end caller
       needs the standalone Pickup product or publisher;
+    - migrate candidate preparation, known-state reads, readiness, hierarchy,
+      and metadata to Landing-owned or neutral modules and paths;
     - remove only proven-dead page, navigation, style, publisher, capability,
-      and Schema code; retain the legacy URL redirect;
+      catalog identity, and dedicated test code; retain the legacy URL redirect
+      and nullable metadata compatibility field;
+    - require candidate-path output equivalence and a full tracked-file
+      no-caller search before acceptance;
     - delete or relocate frozen Pickup documents only with exact path
       declarations, replacement verification, rollback evidence, and separate
       Owner acceptance.

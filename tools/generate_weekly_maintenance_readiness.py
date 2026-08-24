@@ -184,7 +184,8 @@ def _format_readiness(
         / "stats"
         / format_name
         / "mtgo"
-        / "pickup"
+        / "landing"
+        / "review"
         / f"candidates_{week_id}.yaml"
     )
     if candidate_path.exists():
@@ -213,8 +214,8 @@ def _format_readiness(
         existing_changes = candidate.get("existing_changes")
         new_archetypes = candidate.get("new_archetypes")
         if not isinstance(existing_changes, list) or not isinstance(new_archetypes, list):
-            raise ValueError(f"{format_name} Pickup candidate lists are missing")
-        pickup = {
+            raise ValueError(f"{format_name} Landing screening candidate lists are missing")
+        landing_screening = {
             "status": (
                 "stale_review_required"
                 if stale_reasons
@@ -224,7 +225,7 @@ def _format_readiness(
             "candidate_classifier_digest": candidate_classifier_digest,
             "expected_classifier_digest": expected_classifier_digest,
             "reason": (
-                "Pickup candidate provenance does not match current Top 8: "
+                "Landing screening candidate provenance does not match current Top 8: "
                 + ", ".join(stale_reasons)
                 if stale_reasons
                 else None
@@ -234,12 +235,12 @@ def _format_readiness(
             "total_candidate_count": len(existing_changes) + len(new_archetypes),
         }
     else:
-        pickup = {
+        landing_screening = {
             "status": "unavailable",
             "candidate_file": candidate_path.relative_to(root).as_posix(),
             "candidate_classifier_digest": None,
             "expected_classifier_digest": str(index.get("classifier_digest", "")),
-            "reason": "Pickup candidate file is missing.",
+            "reason": "Landing screening candidate file is missing.",
             "existing_change_count": None,
             "new_archetype_count": None,
             "total_candidate_count": None,
@@ -282,7 +283,7 @@ def _format_readiness(
                 "reason": "No deterministic deck-color exception report exists.",
             },
         },
-        "pickup": pickup,
+        "landing_screening": landing_screening,
     }
 
 
@@ -308,7 +309,7 @@ def build_readiness(
     week_id = Path(standard_entry["file"]).stem
     blocked = any(
         item["classification"]["status"] == "blocked"
-        or item["pickup"]["status"] != "candidate_review_required"
+        or item["landing_screening"]["status"] != "candidate_review_required"
         for item in formats
     )
     digest_subject = {
