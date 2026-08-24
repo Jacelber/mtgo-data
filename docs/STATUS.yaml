@@ -4,13 +4,13 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-top8-audit-2026-w34-refresh-20260824"
+  current_working_branch: "codex/weekly-modern-two-corrections-w34-20260825"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
   purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-08-24"
+  last_updated: "2026-08-25"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   authoritative_for:
@@ -31,18 +31,18 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-CLASSIFIER-REFRESH-2026-W34"
-  name: "Classify the refreshed W34 Modern Frog-Goyf singleton"
+  id: "WEEKLY-MODERN-TOP8-CORRECTIONS-2026-W34"
+  name: "Apply the two Owner-reviewed W34 Modern Top 8 corrections"
   status: "owner_accepted_completion_authorized"
-  implementation_authorized_on: "2026-08-24"
-  owner_accepted_on: "2026-08-24"
-  developer_validation_completed_on: "2026-08-24"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-top8-audit-2026-w34-refresh-20260824-01"
-  branch: "codex/weekly-top8-audit-2026-w34-refresh-20260824"
-  base_commit: "88741f9a97ca0f0983f513aea14a05512a36dcce"
+  implementation_authorized_on: "2026-08-25"
+  owner_accepted_on: "2026-08-25"
+  developer_validation_completed_on: "2026-08-25"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-modern-two-corrections-w34-20260825-01"
+  branch: "codex/weekly-modern-two-corrections-w34-20260825"
+  base_commit: "e1b0b3a0f05bfc57fe1cfe5d2693765e2dcbd679"
   task_type: "focused_weekly_classifier_source_maintenance"
-  artifact_impact: "classifier_source_and_governance"
-  objective: "Map the single refreshed W34 Modern Unknown to the existing dimir-tempo/grixis identity through the Owner-accepted Frog-Goyf alternative path."
+  artifact_impact: "classifier_source_bilingual_catalog_and_governance"
+  objective: "Add the Owner-reviewed Jeskai Ponza, Erayo, and Mono-Blue Erayo parents so the two incorrect W34 Modern Top 8 identities and their exact retained-corpus equivalents classify correctly."
   authorization:
     local_implementation: true
     commit: true
@@ -50,6 +50,7 @@ current_task:
     merge: true
   target_paths:
     - "my_archetypes/modern.yaml"
+    - "configs/mtgo_archetype_names.yaml"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
   planned_file_operations:
@@ -59,31 +60,33 @@ current_task:
   protected_scope:
     public_json_or_schema_changed: "none"
     generated_or_source_data_changed: "none"
-    classification_identities_changed: "one refreshed W34 Modern Unknown becomes existing dimir-tempo/grixis"
-    bilingual_identity_changed: "none; reuse Dimir Red Splash Tempo / 蓝黑节奏混红"
+    classification_identities_changed: "five retained Modern decks migrate into three new parents: two Jeskai Ponza, one Erayo, and two Mono-Blue Erayo"
+    bilingual_identity_changed: "add Jeskai Ponza / 洁斯凯炸地, Erayo / 蓝黑伟代, and Mono-Blue Erayo / 纯蓝伟代"
     workflows_or_public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Add only the accepted dimir-tempo-grixis-frog-goyf alternative rule with the reviewed thresholds and exclusions."
-    - "Record the accepted classifier decision and repair live task status in the same material change."
-    - "Run only focused rule parsing, target classification, retained-corpus impact, documentation, repository, and diff checks required by the changed paths."
-    - "Complete the unchanged accepted classifier source task through one commit, one Ready pull request, required CI, merge, and applicable publication verification."
+    - "Add only the accepted Jeskai Ponza, Erayo, and Mono-Blue Erayo parents and their reviewed main-deck rule boundaries."
+    - "Register the three Owner-confirmed English and Chinese identity names."
+    - "Record the accepted classifier decision and replace the stale completed-task status with this live task contract."
+    - "Run only focused rule parsing, exact-target classification, retained-corpus impact, bilingual coverage, documentation, repository, and diff checks required by the changed paths."
   prohibited_changes:
-    - "Do not change existing classifier rules, taxonomy IDs, bilingual names, Landing content, visual metadata, generated statistics, source data, workflows, Schemas, UI, public paths, or event whitelists."
-    - "Do not dispatch production, mutate the live weekly Issue, begin complete Top 8 or Landing content review, or broaden this task."
+    - "Do not modify other classifier rules, identities, semantic-feature facts, visual metadata, Landing content, generated statistics, source data, workflows, Schemas, UI, public paths, event whitelists, or protected event 434455 bytes."
+    - "Do not dispatch production, mutate the weekly Issue, or begin visual-metadata or Landing review as part of this accepted classifier-source task."
   validation:
-    review_input: "Owner agreed with the workbook evidence and explicitly authorized implementation without a second review round."
-    retained_corpus: "241 Modern events and 7,712 decks: only target dde360f86f00a6b8c789 changes; existing identity migration 0; conflicts 0; invalid 0; multiple matches 1,475; same-parent multiple-subtype matches 47."
-    focused_rule: "pass; exact rule shape loaded; 241-event and 7,712-deck Modern audit classified only the target under dimir-tempo/grixis with strict validation pass"
-    documentation: "pass; tests/test_documentation_history.py passed 5/5"
-    repository: "pass; 86 Python, 20 JavaScript, 1,874 JSON, 72 YAML, 55 reference, and 2,351 hygiene checks"
-    diff_check: "pass; only the three declared target paths changed, with no file operations or whitespace errors"
-  stop_point: "Complete the unchanged accepted classifier source task through commit, one Ready pull request, required CI, and merge; stop before production dispatch or another weekly stage."
+    review_input: "The Owner confirmed the Jeskai Ponza and two Erayo boundaries, authorized this independent task, and fixed the Chinese name as 洁斯凯炸地."
+    retained_corpus: "pass; 241 Modern events and 7,712 decks; exactly five selected identities migrate: two Boros Ponza to Jeskai Ponza, one Affinity to Erayo, and two Affinity to Mono-Blue Erayo; both Cutter hybrids remain steel-cutter/izzet; conflicts 0; invalid 0; multiple matches 1,478; same-parent multiple-subtype matches 47"
+    focused_rule: "pass; my_archetypes/modern.yaml loaded under strict rule validation and the exact five expected retained records selected the three new rules"
+    bilingual_catalog: "pass; exact coverage validated for 327 approved Standard and Modern identities, including Jeskai Ponza / 洁斯凯炸地, Erayo / 蓝黑伟代, and Mono-Blue Erayo / 纯蓝伟代"
+    schemas: "pass; 97 declared public generated JSON documents validated against their Schemas without changing generated bytes"
+    documentation: "pass; focused documentation-history validation completed"
+    repository: "pass; deterministic read-only repository validation completed"
+    diff_check: "pass; only the four declared target paths changed, with no file operations or whitespace errors"
+  stop_point: "Complete the unchanged accepted task through one commit, one Ready pull request, required CI, and merge; stop before production dispatch or another weekly stage."
 
 current_repository_state:
-  baseline_commit: "88741f9a97ca0f0983f513aea14a05512a36dcce"
-  baseline_note: "Verified cloud master and successful production publication from run 32729508736; refreshed W34 readiness binds Standard 6 events and Modern 12 events."
+  baseline_commit: "e1b0b3a0f05bfc57fe1cfe5d2693765e2dcbd679"
+  baseline_note: "Verified cloud master and the final successful W34 production publication; the reviewed Top 8 carrier binds Standard 6 events and Modern 12 events."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -94,11 +97,11 @@ known_blockers:
 
 future_task_gates:
   - task: "WEEKLY-TOP8-AUDIT-2026-W34"
-    status: "blocked_pending_classifier_source_merge_and_refreshed_baseline"
-    note: "Regenerate the complete Top 8 carrier only after this accepted classifier source is merged and a later production publication provides a refreshed digest."
+    status: "blocked_pending_classifier_acceptance_publication_and_refreshed_baseline"
+    note: "The Owner accepted all Standard rows and all but two Modern rows; the two local corrections now await acceptance, publication, and a refreshed classifier baseline before the audit can close."
   - task: "WEEKLY-VISUAL-METADATA-2026-W34"
-    status: "planned_not_authorized"
-    note: "Review representative cards and colors only after the Top 8 classification audit."
+    status: "blocked_pending_corrected_classifier_source_and_refreshed_baseline"
+    note: "Review representative cards and colors only after the corrected classifier source is accepted, published, and reproduced in a refreshed production baseline."
   - task: "WEEKLY-LANDING-READINESS-2026-W34"
     status: "blocked_pending_contract_repair_or_reproof"
     note: "Landing content review cannot start while the new readiness artifact still reports machine_draft_status=not_available."
@@ -111,10 +114,10 @@ next_approved_task:
   name: "No follow-up task is authorized"
   status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "Owner acceptance authorizes continuous completion only for the unchanged classifier source task; production and later weekly stages remain separate."
+  note: "Owner acceptance authorizes continuous completion only for the unchanged two-correction classifier-source task; production and later weekly stages remain separate gates."
 
 prohibited_next_actions:
   - "Do not dispatch production, mutate the weekly Issue, or regenerate derived production outputs."
-  - "Do not begin the complete Top 8 audit, visual-metadata review, Landing review, or another development task automatically."
-  - "Do not modify classifier scope beyond the accepted Frog-Goyf path or change bilingual names, UI, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
+  - "Do not begin visual-metadata review, Landing review, or another development task automatically."
+  - "Do not modify classifier scope beyond the three accepted new parents or change other bilingual names, UI, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."
