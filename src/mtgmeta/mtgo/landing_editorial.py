@@ -17,7 +17,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 from mtgmeta.public_contract import versioned
 
-from . import load_mtgo_context, pickup, stats
+from . import landing_screening as screening, load_mtgo_context, stats
 from .normalize import load_rules_for_format
 from .top8 import classifier_digest
 
@@ -79,7 +79,7 @@ def build_candidate_documents(
 ):
     """Screen and deduplicate Landing candidates while preserving machine evidence."""
 
-    week_label = pickup.iso_week_label(end_monday)
+    week_label = screening.iso_week_label(end_monday)
     end_sunday = end_monday + timedelta(days=6)
     reference_monday = end_monday - timedelta(weeks=1)
     reference_start = end_monday - timedelta(weeks=4)
@@ -88,7 +88,7 @@ def build_candidate_documents(
         id(event): stats.process_event(event, rules)
         for _event_date, event in events
     }
-    current_records = pickup.week_records(
+    current_records = screening.week_records(
         events,
         rules,
         end_monday,
@@ -98,14 +98,14 @@ def build_candidate_documents(
     top8_records = [
         record for record in all_top8_records if record["archetype"] != "Unknown"
     ]
-    reference_records = pickup._records_in_period(
+    reference_records = screening._records_in_period(
         events,
         rules,
         reference_start,
         reference_end,
         processed_events=processed_events,
     )
-    historical_records = pickup._records_in_period(
+    historical_records = screening._records_in_period(
         events,
         rules,
         date.min,
@@ -125,17 +125,17 @@ def build_candidate_documents(
         processed_events=processed_events,
     )
     thresholds = policy["thresholds"]
-    active_sets = pickup._active_release_sets(policy, end_monday)
+    active_sets = screening._active_release_sets(policy, end_monday)
     parent_definitions = {item.id: item for item in rules.archetypes}
     by_parent: dict[str, list[dict[str, Any]]] = {}
     for record in top8_records:
         by_parent.setdefault(str(record["archetype_id"]), []).append(record)
 
     selections: list[tuple[dict[str, Any], dict[str, Any]]] = []
-    current_counts, current_denominator = pickup._parent_high_score_counts(
+    current_counts, current_denominator = screening._parent_high_score_counts(
         current_records
     )
-    reference_counts, reference_denominator = pickup._parent_high_score_counts(
+    reference_counts, reference_denominator = screening._parent_high_score_counts(
         reference_records
     )
     historical_parent_ids = {
@@ -144,8 +144,8 @@ def build_candidate_documents(
         if record["archetype"] != "Unknown"
     }
     for parent_id, records in by_parent.items():
-        representative = pickup._best_record(records)
-        if not pickup._is_known_record(
+        representative = screening._best_record(records)
+        if not screening._is_known_record(
             representative, known, policy, format_id
         ):
             continue
@@ -200,7 +200,7 @@ def build_candidate_documents(
     ] = {}
     for record in top8_records:
         for release_set in active_sets:
-            evidence = pickup._new_card_evidence(record, release_set)
+            evidence = screening._new_card_evidence(record, release_set)
             if not evidence:
                 continue
             key = (
@@ -210,7 +210,7 @@ def build_candidate_documents(
             )
             candidate = (record, evidence)
             if key in new_card_groups:
-                candidate = pickup._prefer_new_card_record(
+                candidate = screening._prefer_new_card_record(
                     new_card_groups[key], candidate
                 )
             new_card_groups[key] = candidate
@@ -237,8 +237,8 @@ def build_candidate_documents(
         )
 
     for parent_id, records in by_parent.items():
-        representative = pickup._best_record(records)
-        if pickup._is_known_record(representative, known, policy, format_id):
+        representative = screening._best_record(records)
+        if screening._is_known_record(representative, known, policy, format_id):
             continue
         prior_record_count = sum(
             1
@@ -259,7 +259,7 @@ def build_candidate_documents(
 
     build_groups: dict[str, tuple[dict[str, Any], dict[str, Any]]] = {}
     for record in top8_records:
-        if not pickup._is_known_record(record, known, policy, format_id):
+        if not screening._is_known_record(record, known, policy, format_id):
             continue
         parent_id = str(record["archetype_id"])
         parent = parent_definitions[parent_id]
@@ -276,7 +276,7 @@ def build_candidate_documents(
             continue
         if not base or base["sample_size"] < thresholds["build_reference_minimum"]:
             continue
-        score = pickup.deck_deviation(record, base)
+        score = screening.deck_deviation(record, base)
         if score is None or score < thresholds["build_shift"]:
             continue
         reason = {
@@ -289,7 +289,7 @@ def build_candidate_documents(
         }
         build_candidate = (record, reason)
         if identity_id in build_groups:
-            build_candidate = pickup._prefer_build_shift_record(
+            build_candidate = screening._prefer_build_shift_record(
                 build_groups[identity_id], build_candidate
             )
         build_groups[identity_id] = build_candidate
@@ -298,10 +298,10 @@ def build_candidate_documents(
     entries: dict[tuple[str, str], dict[str, Any]] = {}
     for record, reason in selections:
         entry_key = (str(record["event_id"]), str(record["deck_id"]))
-        known_record = pickup._is_known_record(record, known, policy, format_id)
+        known_record = screening._is_known_record(record, known, policy, format_id)
         entry = entries.setdefault(
             entry_key,
-            pickup._entry_for_record(
+            screening._entry_for_record(
                 record,
                 rules,
                 known=known_record,
@@ -789,7 +789,7 @@ def build_top8_subject(
     monday = _week_monday(week)
     records = [
         record
-        for record in pickup.week_records(events, rules, monday)
+        for record in screening.week_records(events, rules, monday)
         if record.get("is_top8")
     ]
     catalog = build_top8_catalog(records)
@@ -804,7 +804,12 @@ def build_top8_subject(
     known_archetype_ids = sorted(
         {str(record["archetype_id"]) for record in week_records}
     )
-    candidate_path = context.paths["statistics"] / "pickup" / f"candidates_{week}.yaml"
+    candidate_path = (
+        context.paths["statistics"]
+        / "landing"
+        / "review"
+        / f"candidates_{week}.yaml"
+    )
     candidate: Mapping[str, Any] | None = None
     if candidate_path.is_file():
         loaded = yaml.safe_load(candidate_path.read_text(encoding="utf-8"))
@@ -853,7 +858,7 @@ def build_top8_subject(
         },
         "source_event_ids": source_event_ids,
         "classifier_digest": classifier_digest(rules),
-        "selection_policy_digest": document_digest(pickup.load_pickup_policy(root)),
+        "selection_policy_digest": document_digest(screening.load_screening_policy(root)),
         "machine_fact_digest": machine_fact_digest,
         "link_catalog_digest": document_digest(catalog),
         "candidate_evidence": candidate_evidence,
@@ -876,7 +881,7 @@ def build_top8_catalog(records: list[Mapping[str, Any]]) -> list[dict[str, Any]]
             raise MTGOLandingEditorialError("classified Top 8 record has an invalid rank")
         fingerprint = hashlib.sha256(
             json.dumps(
-                pickup.deck_fingerprint(record),
+                screening.deck_fingerprint(record),
                 ensure_ascii=False,
                 separators=(",", ":"),
             ).encode("utf-8")
@@ -895,8 +900,8 @@ def build_top8_catalog(records: list[Mapping[str, Any]]) -> list[dict[str, Any]]
                 "parent_id": str(record.get("archetype_id") or ""),
                 "subtype_id": record.get("subtype_id"),
                 "display_name": str(record.get("archetype") or ""),
-                "main_deck": pickup.record_deck_cards(record)["main_deck"],
-                "side_deck": pickup.record_deck_cards(record)["side_deck"],
+                "main_deck": screening.record_deck_cards(record)["main_deck"],
+                "side_deck": screening.record_deck_cards(record)["side_deck"],
             }
         )
     catalog.sort(
@@ -1360,20 +1365,17 @@ def _write_yaml(path: Path, document: Mapping[str, Any]) -> None:
     )
 
 
-def _known_ids_from_legacy(repository_root: Path, format_id: str) -> set[str]:
-    path = repository_root / f"stats/{format_id}/mtgo/pickup/known_archetypes.json"
+def _known_ids(repository_root: Path, format_id: str) -> set[str]:
+    path = repository_root / f"stats/{format_id}/mtgo/landing/review/known_archetypes.json"
     if not path.is_file():
         return set()
     document = json.loads(path.read_text(encoding="utf-8"))
-    if isinstance(document.get("known_ids"), list):
-        return {str(value) for value in document["known_ids"]}
-    rules = load_rules_for_format(repository_root, format_id)
-    ids_by_name = {parent.name: parent.id for parent in rules.archetypes}
-    return {
-        ids_by_name[name]
-        for name in document.get("known", [])
-        if name in ids_by_name
-    }
+    known_ids = document.get("known_ids")
+    if not isinstance(known_ids, list) or any(
+        not isinstance(value, str) for value in known_ids
+    ):
+        raise MTGOLandingEditorialError(f"{path}: Landing known state is invalid")
+    return set(known_ids)
 
 
 def import_review_workbook(
@@ -1470,7 +1472,7 @@ def import_review_workbook(
 
     known_paths: list[Path] = []
     for format_id in sorted({scope[0] for scope in scopes}):
-        known = _known_ids_from_legacy(root, format_id)
+        known = _known_ids(root, format_id)
         accepted_weeks = sorted(week for current_format, week in scopes if current_format == format_id)
         for week in accepted_weeks:
             known.update(reviews[(format_id, week)]["known_archetype_ids"])

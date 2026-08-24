@@ -130,25 +130,6 @@
     return { index, weekEntry, top8, bases };
   }
 
-  function loadPickupIndex(indexPath) {
-    return client.fetchJson(indexPath);
-  }
-
-  function loadPickupDocument(indexPath, selectedFile) {
-    return client.fetchJson(
-      Runtime.joinPath(Runtime.dirname(indexPath), selectedFile)
-    );
-  }
-
-  async function loadPickup(indexPath, selectedFile) {
-    const index = await loadPickupIndex(indexPath);
-    const week = index.weeks.find(item => item.file === selectedFile)
-      || index.weeks[0];
-    if (!week) throw new Error("每周精选目录中没有可用周。");
-    const document = await loadPickupDocument(indexPath, week.file);
-    return { index, week, document };
-  }
-
   function loadComparisonDecks(format) {
     return client.fetchJson(`${rootPath(format)}/decks_4w.json`);
   }
@@ -217,34 +198,16 @@
     return staged;
   }
 
-  async function stagePickup(indexPath, selectedFile) {
-    const base = Runtime.dirname(indexPath);
-    const documentPath = Runtime.joinPath(base, selectedFile);
-    const staged = await client.stage([indexPath, documentPath]);
-    const index = staged.get(indexPath);
-    if (
-      (index.format && index.format !== staged.get(documentPath)?.format)
-      || !index.weeks.some(item => item.file === selectedFile)
-    ) {
-      throw new Runtime.ResourceError("invalid", indexPath);
-    }
-    return staged;
-  }
-
   root.P8MtgoController = Object.freeze({
     loadComparisonDecks,
     loadMatchup,
     loadLanding,
-    loadPickup,
-    loadPickupDocument,
-    loadPickupIndex,
     loadRangeStatistics,
     loadStatistics,
     loadTop8,
     stageComparisonDecks,
     stageMatchup,
     stageLanding,
-    stagePickup,
     stageStatistics,
     stageTop8,
   });

@@ -591,7 +591,7 @@ def validate_public_product_facts(
 def validate_references(root: Path, names: list[str]) -> tuple[int, list[Failure], dict[str, int]]:
     failures: list[Failure] = []
     tracked = set(names)
-    breakdown = {"authoritative-document paths": 0, "requirement includes": 0, "front-end templates": 0, "Phase 8 production resources": 0, "required Standard files": 0, "pickup week entries": 0}
+    breakdown = {"authoritative-document paths": 0, "requirement includes": 0, "front-end templates": 0, "Phase 8 production resources": 0, "required Standard files": 0, "frozen Pickup week entries": 0}
     for value in REQUIRED_GOVERNANCE_DOCUMENTS:
         breakdown["authoritative-document paths"] += 1
         reference_check(
@@ -630,8 +630,6 @@ def validate_references(root: Path, names: list[str]) -> tuple[int, list[Failure
         "stats/${currentFormat}/mtgo/meta.json",
         "stats/${currentFormat}/mtgo/range_${currentRange}w.json",
         "stats/${currentFormat}/mtgo/decks_${currentRange}w.json",
-        "stats/${currentFormat}/mtgo/pickup/index.json",
-        "stats/${currentFormat}/mtgo/pickup/${week}.json",
         "stats/${currentFormat}/mtgo/matchup_${mxRange}w.json",
     ]
     frontend_paths = [
@@ -666,27 +664,28 @@ def validate_references(root: Path, names: list[str]) -> tuple[int, list[Failure
         "stats/standard/mtgo/decks_1w.json", "stats/standard/mtgo/decks_4w.json",
         "stats/standard/mtgo/decks_12w.json", "stats/standard/mtgo/matchup_1w.json",
         "stats/standard/mtgo/matchup_4w.json", "stats/standard/mtgo/matchup_12w.json",
-        "stats/standard/mtgo/pickup/index.json",
     ]
     for path in required:
         breakdown["required Standard files"] += 1
         reference_check(failures, path, None if tracked_regular(root, tracked, path, ".json") else "missing tracked regular JSON file")
-    pickup = "stats/standard/mtgo/pickup/index.json"
-    if tracked_regular(root, tracked, pickup, ".json"):
+    for format_id in ("standard", "modern"):
+        pickup = f"stats/{format_id}/mtgo/pickup/index.json"
+        if not tracked_regular(root, tracked, pickup, ".json"):
+            continue
         try:
             data = json.loads(read_bytes(root, pickup).decode("utf-8"))
         except (json.JSONDecodeError, UnicodeDecodeError) as exc:
-            reference_check(failures, pickup, f"invalid pickup index: {type(exc).__name__}: {exc}")
-        else:
-            weeks = data.get("weeks") if isinstance(data, dict) else None
-            if not isinstance(weeks, list):
-                reference_check(failures, pickup, "weeks must be a list")
-            else:
-                for index, entry in enumerate(weeks):
-                    breakdown["pickup week entries"] += 1
-                    value = entry.get("file") if isinstance(entry, dict) else None
-                    valid = isinstance(value, str) and bool(value) and value.endswith(".json") and Path(value).name == value and value not in (".", "..") and not Path(value).is_absolute() and "/" not in value and "\\" not in value and tracked_regular(root, tracked, f"stats/standard/mtgo/pickup/{value}", ".json")
-                    reference_check(failures, f"{pickup}:weeks[{index}]", None if valid else f"invalid pickup week file {value!r}")
+            reference_check(failures, pickup, f"invalid frozen Pickup index: {type(exc).__name__}: {exc}")
+            continue
+        weeks = data.get("weeks") if isinstance(data, dict) else None
+        if not isinstance(weeks, list):
+            reference_check(failures, pickup, "weeks must be a list")
+            continue
+        for index, entry in enumerate(weeks):
+            breakdown["frozen Pickup week entries"] += 1
+            value = entry.get("file") if isinstance(entry, dict) else None
+            valid = isinstance(value, str) and bool(value) and value.endswith(".json") and Path(value).name == value and value not in (".", "..") and not Path(value).is_absolute() and "/" not in value and "\\" not in value and tracked_regular(root, tracked, f"stats/{format_id}/mtgo/pickup/{value}", ".json")
+            reference_check(failures, f"{pickup}:weeks[{index}]", None if valid else f"invalid frozen Pickup week file {value!r}")
     phase8_checked, phase8_failures = validate_phase8_frontend_references(root, names)
     breakdown["Phase 8 production resources"] = phase8_checked
     failures.extend(phase8_failures)

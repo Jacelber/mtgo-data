@@ -234,8 +234,10 @@ mtgo-data/
 │       │   ├── normalize.py
 │       │   ├── stats.py
 │       │   ├── matchup.py
-│       │   ├── pickup.py
-│       │   └── landing.py
+│       │   ├── landing.py
+│       │   ├── landing_editorial.py
+│       │   ├── landing_screening.py
+│       │   └── metadata.py
 │       └── melee/
 │           ├── __init__.py
 │           ├── client.py
@@ -479,30 +481,26 @@ Responsibilities:
 - use shared W-L-D utilities;
 - avoid implying full event coverage when coverage is partial.
 
-### 5.5 `pickup.py`
+### 5.5 Landing screening and metadata
 
 Responsibilities:
 
-- temporary standalone Weekly Pickup compatibility and publication;
-- MTGO-specific weekly comparison delegated to the Landing editorial producer;
-- stable parent-ID tracking for formats migrated beyond the legacy
-  name-keyed Standard contract;
-- explicit one-time known-state initialization, separate from candidate
-  generation and publication;
+- `landing_screening.py` owns private MTGO weekly candidate screening and
+  reusable deck-selection helpers;
+- `landing_editorial.py` owns the reviewed Landing source and workbook import;
+- stable parent-ID tracking for every maintained format;
+- known-state maintenance inside the private Landing review boundary;
 - format metadata that identifies matchup source and measured archive
-  coverage;
+  coverage in `metadata.py`;
 - a taxonomy-derived parent/subtype hierarchy catalog whose expandability is
-  based on maintained subtype count;
+  based on maintained subtype count in `metadata.py`;
 - output generation for the MTGO front end.
 
-Weekly Pickup does not belong in the Melee package.
-
 Candidate generation is a review artifact, not a publication action. The
-Landing-owned implementation lives in `landing_editorial.py`; the Pickup
-command remains only a staged compatibility entrypoint. Landing generation
+supported command is `landing-review prepare`; no standalone Pickup command,
+capability, metadata catalog, or product renderer remains. Landing generation
 does not read a published Pickup week. Standalone Pickup files remain frozen
-compatibility and rollback resources until the separately approved retirement
-task proves they have no live caller.
+compatibility and rollback resources and are not modified by this boundary.
 
 The daily MTGO production workflow may generate one private weekly-maintenance
 readiness artifact after a successful production result. That artifact binds
@@ -510,8 +508,8 @@ the exact publication commit, review week, format-specific event IDs and
 classifier digests. Its classification section contains the complete retained
 Unknown diagnostic corpus, partitioned into unresolved records and exact
 Owner-accepted intentional Unknown records, and includes each deck's complete
-main deck and sideboard. It also carries classification blockers and Pickup
-candidate counts, and may report manual inputs or later producers as explicitly
+main deck and sideboard. It also carries classification blockers and Landing
+screening candidate counts, and may report manual inputs or later producers as explicitly
 unavailable. It is an Actions artifact and Issue handoff only: it is not
 generated public data, does not enter `stats/catalog.json` or Pages, and does
 not authorize a review or repository mutation. Its current operating contract
@@ -802,7 +800,7 @@ The format registry should identify:
 
 The registry should eventually allow the front end and command-line tools to discover supported formats without hard-coding only Standard.
 
-MTGO raw-event collection and product execution are separate states. `event_collection_enabled` authorizes only official event download, normalized archival storage, and fetched-ledger maintenance for that format. It does not authorize Videre fetching, classification, statistics, Pickup, catalogs, public output, or front-end exposure. Those operations continue to require the executable MTGO state and their declared capabilities.
+MTGO raw-event collection and product execution are separate states. `event_collection_enabled` authorizes only official event download, normalized archival storage, and fetched-ledger maintenance for that format. It does not authorize Videre fetching, classification, statistics, Landing screening or generation, catalogs, public output, or front-end exposure. Those operations continue to require the executable MTGO state and their declared capabilities.
 
 During Phase 3, Standard, Pauper, Modern, Pioneer, Legacy, and Vintage retain their pre-migration official-event archive, while Standard remains the only executable MTGO product format. Non-Standard Videre collection is not implied by event archival.
 
@@ -811,7 +809,7 @@ Beginning with P6-04, executable state is capability-scoped rather than equivale
 Beginning with P6-08, the single production workflow distinguishes two registry-derived sets:
 
 - **event-collection formats** have `event_collection_enabled: true` and receive only official MTGO event archives plus fetched-ledger maintenance unless they also qualify as a complete product;
-- **complete product formats** have MTGO execution enabled and declare every production capability: classification, event and range statistics, matchup statistics, weekly Top 8 generation, Weekly Pickup, metadata generation, and catalog generation.
+- **complete product formats** have MTGO execution enabled and declare every production capability: classification, event and range statistics, matchup statistics, weekly Top 8 generation, Landing generation, metadata generation, and catalog generation.
 
 Standard and Modern are the complete products during P6-08. Standard, Legacy, Pioneer, Pauper, Vintage, and Modern remain event-collection formats. The production workflow may express these sets as explicit environment lists for readable command dispatch, but workflow tests must prove that those lists match the registry. The dynamic production-candidate validator independently derives the same sets from the registry, records per-format event and match counts, and restricts statistics and reports to complete products. A planned or raw-archive-only format cannot gain generated product output merely by being added to the event loop.
 
@@ -825,14 +823,15 @@ only usable retained archives. Non-retryable responses, malformed response
 contracts, invalid identities, and storage failures remain fatal and prevent
 candidate publication.
 
-Weekly Pickup remains candidate-only in scheduled automation. It generates as
+Landing screening is candidate-only in scheduled automation. It generates as
 soon as a natural week ends, including while that week is provisional. The
 candidate and base reference record their source event IDs. If an additive
 late event changes those IDs, an unreviewed candidate is refreshed; an approved
 or commented candidate is retained and reported for human re-review. Candidate
 generation may continue on error so that review preparation cannot suppress
 unrelated generated data, but every product format must still be attempted.
-Approval, publication, and known-state changes remain manual.
+Approval and admitted Landing publication remain human-gated. Known state is
+maintained through the private Landing review boundary.
 
 P6-08 initially regenerated the maintained hierarchy catalog only for Modern.
 P6-09 moves Standard to the same shared hierarchical calculation, adds its
@@ -1929,9 +1928,9 @@ the same shared hierarchy function and reconcile exactly.
 MTGO format metadata references the statistics, matchup, and hierarchy
 catalogs. It records the approved matchup source and exact event/archive
 coverage counts, including official events without stored archives and stored
-archives outside the admitted official-event set. Before P12-15F, a missing
-Pickup publication is represented as a null compatibility-catalog reference.
-After cutover, feature-history availability comes from the Landing feature
+archives outside the admitted official-event set. Pickup publication is always
+represented as a null compatibility-catalog reference. Feature-history
+availability comes from the Landing feature
 index; an explicitly reviewed empty week is represented in that index rather
 than by inventing or omitting a review result.
 
@@ -2109,7 +2108,7 @@ matchup, and Tabletop overview/matchup subtype nodes expose `display_name`, so
 browser code never reconstructs a full subtype label.
 
 The scheduled producer order is event and match collection, range statistics,
-matchup statistics, completeness, Top 8, Pickup preparation, latest Landing,
+matchup statistics, completeness, Top 8, Landing screening, latest Landing,
 hierarchy, metadata, the global consumer catalog, and diagnostics. Candidate
 validation admits only the reviewed completeness documents, Top 8 week/base
 names, latest-only Landing document, and `stats/catalog.json`; arbitrary
@@ -2565,7 +2564,7 @@ state without changing statistical meaning or combining product caches.
 
 The parameter `events` is reserved for Phase 13 as sorted, unique event IDs
 joined by commas. P12-02 does not read or write that parameter. Transient
-expanded row or column sets, hover state, chart pins, and Pickup card expansion
+expanded row or column sets, hover state, chart pins, and Landing feature expansion
 remain outside the URL. A stable subtype `detail` may derive the minimum parent
 expansion needed to reveal that detail; the derived expansion itself is not
 serialized.
@@ -2756,7 +2755,9 @@ per-product match counts. The discovery-ledger addition uses version `3.0.0`.
 Each `data/<format>/mtgo/discovery.json` records observed event links and their
 processed, retained, excluded, or deferred state. New arbitrary generated JSON
 paths remain blocked even for complete products; only expected event archives,
-match archives, discovery ledgers, and dated Pickup review YAML may be newly
+match archives, discovery ledgers, and machine-produced
+`landing/review/candidates_<week>.yaml` and
+`landing/review/base_reference_<week>.yaml` may be newly
 created automatically.
 
 Each requested monthly listing is observed three times and the observations
@@ -3337,11 +3338,10 @@ stats/<format>/mtgo/pickup/index.json
 stats/<format>/mtgo/pickup/<week>.json
 ```
 
-No new Pickup week is published after P12-15F. The legacy files are not deleted
-during backend extraction, recovery generation, local preview, or initial cloud
-cutover. P12-15G may delete or relocate them only after a no-caller proof,
-replacement cloud verification, exact file-operation declaration, and tested
-rollback. A legacy URL using `product=weekly-pickup&week=<week>` continues to
+No new Pickup week is published after P12-15F. The legacy files are not deleted,
+renamed, relocated, or modified by P12-15G-2; they remain separately gated
+frozen compatibility and rollback evidence. A legacy URL using
+`product=weekly-pickup&week=<week>` continues to
 resolve to `product=mtgo-landing&section=features&week=<week>`. The `week`
 parameter affects only the feature section.
 
@@ -3380,7 +3380,7 @@ remediation is implemented and accepted.
 After that remediation and before P12-10 begins, the project must:
 
 1. freeze the corrected stable parent and subtype identities;
-2. validate or explicitly migrate Weekly Pickup known-archetype state;
+2. validate or explicitly migrate Landing known-archetype state;
 3. rerun the eight-to-twelve-week Standard and Modern Landing shadow;
 4. recheck the 3% environment and return, five-percentage-point movement, and
    20-point subtype-or-parent construction thresholds;

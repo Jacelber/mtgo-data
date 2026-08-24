@@ -4,11 +4,10 @@ const BACKGROUND_REFRESH_AGE_MS = 5 * 60 * 1000;
 
 function currentViewKey() {
   const parts = [state.format, state.product];
-  if (state.product === "mtgo-landing") parts.push(state.pickupWeekFile || "latest");
+  if (state.product === "mtgo-landing") parts.push(state.landingFeatureWeekFile || "latest");
   else if (state.product === "mtgo-statistics") parts.push(state.statsRange);
   else if (state.product === "mtgo-matchups") parts.push(state.matchupRange);
   else if (state.product === "mtgo-top8") parts.push(state.top8WeekFile || "latest");
-  else if (state.product === "weekly-pickup") parts.push(state.pickupWeekFile || "latest");
   else if (state.product === "tabletop-major-events") {
     parts.push(state.tabletopEventId || "default", state.tabletopView);
   }
@@ -61,7 +60,7 @@ function placeScopedError(root, focusSelector) {
     errorRow.querySelector("button")?.focus({ preventScroll: true });
     return;
   }
-  const anchor = target?.closest(".mobile-metric-card, .pickup-card, .panel") || target;
+  const anchor = target?.closest(".mobile-metric-card, .landing-feature-item, .panel") || target;
   const error = document.createElement("div");
   error.className = "inline-error-state";
   error.setAttribute("role", "alert");
@@ -107,10 +106,12 @@ async function stageCurrentRefresh() {
     return MtgoController.stageLanding(
       state.format,
       productEntry().path,
-      state.pickupWeekFile,
+      state.landingFeatureWeekFile,
       {
         includeEnvironmentDecks: Boolean(state.detailIdentity),
-        includeFeatureDecks: Boolean(state.pickupOpen.size),
+        includeFeatureDecks: Boolean(
+          state.landingFeatureOpen.size || state.landingFeatureDestination
+        ),
       }
     );
   }
@@ -131,9 +132,6 @@ async function stageCurrentRefresh() {
         ? week?.comparison_bases_file
         : null,
     });
-  }
-  if (state.product === "weekly-pickup" && state.pickupWeekFile) {
-    return MtgoController.stagePickup(productEntry().path, state.pickupWeekFile);
   }
   if (state.product === "tabletop-major-events" && currentContext.eventEntry) {
     return TabletopController.stageEvent(

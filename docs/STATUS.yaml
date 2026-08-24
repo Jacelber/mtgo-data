@@ -5,7 +5,7 @@ project:
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
   current_working_branch: "codex/p12-15g-no-caller-audit"
-  working_branch_status: "owner_acceptance_pending"
+  working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
@@ -32,52 +32,100 @@ current_phase:
 
 current_task:
   id: "P12-15G"
-  stage: "P12-15G-1"
-  name: "Pickup retirement no-caller audit"
-  status: "owner_acceptance_pending"
+  stage: "P12-15G-2"
+  name: "Pickup retirement implementation"
+  status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-24"
+  owner_accepted_on: "2026-08-24"
   workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-15g-no-caller-audit-20260824-01"
   branch: "codex/p12-15g-no-caller-audit"
   base_commit: "408f761fdfd1c0c8f7a7c6391c5b0e178db67ff6"
-  objective: "Prove which standalone Pickup callers and artifacts are dead, classify every candidate path as delete, migrate, retain, or separately gated, and stop before code removal."
+  objective: "Migrate active weekly screening, readiness, metadata, and hierarchy responsibilities to Landing-owned or neutral modules; retire the standalone Pickup product shell while preserving the legacy URL redirect and every separately gated frozen document."
   authorization:
     local_implementation: true
-    commit: true
+    commit: false
     remote_publication: false
     merge: false
   target_paths:
+    - ".github/workflows/update.yml"
+    - "assets/css/phase8-base.css"
+    - "assets/css/phase8-candidate.css"
+    - "assets/js/phase8/**"
+    - "configs/formats.yaml"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
+    - "docs/LANDING_EDITORIAL_PIPELINE.md"
+    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
+    - "docs/WEEKLY_MAINTENANCE.md"
     - "docs/audits/P12-15G-NO-CALLER-AUDIT.md"
+    - "schemas/consumer-catalog.schema.json"
+    - "schemas/formats.schema.json"
+    - "schemas/weekly-maintenance-readiness.schema.json"
+    - "README.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/TEST_TRIGGER_MATRIX.md"
+    - "src/mtgmeta/catalog.py"
+    - "src/mtgmeta/config.py"
+    - "src/mtgmeta/mtgo/**"
+    - "stats/catalog.json"
+    - "stats/standard/mtgo/meta.json"
+    - "stats/modern/mtgo/meta.json"
+    - "tests/browser/production-pages.spec.js"
+    - "tests/fixtures/standard/public_contract/contract.json"
+    - "tests/js/**"
+    - "tests/test_generated_consumer_contracts.py"
+    - "tests/test_ci_workflow.py"
+    - "tests/test_cli_smoke.py"
+    - "tests/test_mtgo_landing.py"
+    - "tests/test_mtgo_landing_editorial.py"
+    - "tests/test_weekly_maintenance_readiness.py"
+    - "tools/generate_weekly_maintenance_readiness.py"
+    - "validate_production_candidate.py"
+    - "validate_repository.py"
   planned_file_operations:
     additions:
-      - "docs/audits/P12-15G-NO-CALLER-AUDIT.md"
-    deletions: []
-    renames: []
+      - "src/mtgmeta/mtgo/landing_screening.py"
+      - "src/mtgmeta/mtgo/metadata.py"
+      - "tests/test_mtgo_landing_screening_provenance.py"
+      - "tests/test_mtgo_metadata.py"
+    deletions:
+      - "src/mtgmeta/mtgo/pickup.py"
+      - "tests/js/phase8-pickup.test.js"
+      - "tests/test_mtgo_pickup_provenance.py"
+    renames:
+      - from: "tests/test_mtgo_pickup_selection.py"
+        to: "tests/test_mtgo_landing_screening.py"
   protected_scope:
-    artifact_impact: "internal_diagnostics"
-    public_json_or_schema_changed: false
-    generated_or_source_data_changed: false
-    workflows_changed: false
+    artifact_impact:
+      - "user_visible_ui"
+      - "statistical_json_structure"
+    public_json_or_schema_changed: "consumer catalog removes weekly-pickup; MTGO metadata retains nullable pickup_catalog with null values"
+    generated_or_source_data_changed: "stats/catalog.json and Standard/Modern meta.json only; source events and statistical values unchanged"
+    workflows_changed: true
     public_paths_changed: false
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Inspect the exact cloud-cutover baseline and record Pickup callers, mixed responsibilities, public paths, rollback artifacts, and candidate cleanup operations."
-    - "Add one internal audit with exact delete, migrate, retain, and separately gated path lists."
-    - "Commit the completed local audit for Owner review."
+    - "Migrate weekly candidate preparation and readiness to private stats/<format>/mtgo/landing/review candidate, base-reference, and known-state paths."
+    - "Move retained screening helpers, hierarchy generation, and metadata generation out of the obsolete Pickup module without changing selection or statistical meaning."
+    - "Remove the standalone Pickup CLI, capability, catalog identity, Phase 8 renderer, loader, state, style, and dedicated tests only after their callers migrate."
+    - "Retain the legacy weekly-pickup URL normalization and its unit/browser coverage."
+    - "Regenerate only stats/catalog.json and the two MTGO meta.json documents with preserved generation timestamps."
   prohibited_changes:
-    - "Do not delete, rename, relocate, or modify Pickup runtime, publisher, Schema, generated, workflow, Pages, catalog, metadata, test, or front-end code in P12-15G-1."
-    - "Do not change the legacy weekly-pickup URL redirect, Landing behavior, UI, classifiers, statistics, source data, protected event 434455, or production behavior."
-    - "Do not publish remotely, merge, deploy, dispatch production, or begin P12-15G-2 before Owner acceptance of the no-caller proof and exact cleanup inventory."
+    - "Do not delete, rename, relocate, or modify any tracked stats/<format>/mtgo/pickup document, Pickup document Schema, matching Schema manifest entry, Pages exclusion, historical audit, migration tool, or legacy bundle."
+    - "Do not change screening thresholds, candidate selection, Landing layout/content, classifiers, statistics, source data, protected event 434455, or the legacy weekly-pickup URL redirect."
+    - "Do not commit, publish remotely, merge, deploy, dispatch production, or begin P12-16 before Owner acceptance of the completed P12-15G-2 subject."
   validation:
     status: "passed"
-    scope: "Documentation-only: live-status structure, YAML parsing, exact inventory completeness, and diff hygiene. No runtime, UI, Schema, production, or browser test was triggered."
-    checks:
-      - "python -m pytest tests/test_documentation_history.py -q"
-      - "YAML parse and 10 KiB live-status size guard"
-      - "tracked Pickup inventory and active-reference coverage checks"
-      - "git diff --check"
-  stop_point: "Stop after the local no-caller audit and exact cleanup inventory are committed and presented for Owner acceptance; do not perform any cleanup operation."
+    candidate_equivalence: "Standard and Modern W34 candidate/base YAML equal across old and Landing-owned paths"
+    ruff: "passed"
+    focused_python_tests: "82 passed"
+    phase8_javascript_tests: "34 passed"
+    repository_validation: "Python 84/84; JavaScript 20/20; JSON 1854/1854; YAML 68/68; references 55/55; hygiene 2316/2316"
+    browser_preview: "legacy Standard W33 URL canonicalized to Landing features; five supported products; no console errors or /mtgo/pickup/ request"
+    no_caller_proof: "no standalone symbols, old candidate runtime paths, or Pickup module imports; only the three declared legacy-route references remain"
+  stop_point: "Complete the exact accepted P12-15G-2 task through commit, one Ready PR, required CI, merge, and applicable Pages verification; stop on changed subject, failed checks, conflict, permission block, or scope expansion. Do not begin P12-16."
 
 current_repository_state:
   baseline_commit: "408f761fdfd1c0c8f7a7c6391c5b0e178db67ff6"
@@ -91,26 +139,26 @@ known_blockers: []
 
 future_task_gates:
   - task: "P12-15G-1"
-    status: "owner_acceptance_pending"
+    status: "owner_accepted"
     prerequisite: "P12-15F cloud verification"
     note: "Produce no-caller proof and an exact cleanup inventory only."
   - task: "P12-15G-2"
-    status: "overall_authorized_waiting_owner_acceptance"
+    status: "owner_accepted_completion_authorized"
     prerequisite: "Owner acceptance of P12-15G-1"
-    note: "Overall P12-15G development is authorized, but current execution is explicitly limited to P12-15G-1. Implement only the accepted code and capability cleanup after the audit gate; frozen-document deletion remains separately gated."
+    note: "Implement the accepted code, workflow, capability, catalog, metadata, and front-end cleanup; frozen-document deletion remains separately gated."
   - task: "P12-16"
     status: "planned_not_authorized"
     prerequisite: "P12-15G completion or an explicit legacy-artifact deferral"
     note: "Perform cross-device and visual-system closeout only after Pickup retirement reaches its approved stop."
 
 next_approved_task:
-  id: "P12-15G-2"
-  name: "Pickup retirement implementation"
-  status: "authorized_waiting_owner_acceptance"
+  id: "P12-16"
+  name: "Cross-device and visual-system closeout"
+  status: "planned_not_authorized"
   local_execution_authorized: false
-  note: "The Owner authorized P12-15G overall but limited current execution to P12-15G-1. Remain stopped until the Owner accepts the exact delete, migrate, retain, and separately gated inventory."
+  note: "Remain stopped after P12-15G-2 until the Owner accepts and completes the retirement implementation or explicitly defers a named legacy artifact."
 
 prohibited_next_actions:
-  - "Do not perform any Pickup deletion, relocation, public-path retirement, or compatibility change during P12-15G-1."
-  - "Do not publish, merge, deploy, dispatch production, or begin P12-15G-2 or P12-16."
+  - "Do not touch separately gated frozen/private Pickup documents or their document Schemas and Pages exclusions."
+  - "Do not dispatch production or begin P12-16 as part of P12-15G completion."
   - "Do not develop directly on master or modify prior accepted workspaces."

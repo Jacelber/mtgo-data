@@ -123,20 +123,6 @@ function top8Freshness(top8, weekEntry) {
   ]);
 }
 
-function pickupFreshness(week, document) {
-  const existingCount = week.existing_count
-    ?? (Array.isArray(document.existing_changes) ? document.existing_changes.length : null);
-  const newCount = week.new_count
-    ?? (Array.isArray(document.new_archetypes) ? document.new_archetypes.length : null);
-  const featuredDeckCount = existingCount === null || newCount === null
-    ? null
-    : Number(existingCount) + Number(newCount);
-  return freshnessStrip([
-    ["week", "week", freshnessPeriod(week)],
-    ["featured-decks", "featured_decks", freshnessNumber(featuredDeckCount)],
-  ]);
-}
-
 function tabletopFreshness(scopeState, selectedEventIds, overview, scope, quality) {
   if (scopeState.multi_event) {
     return freshnessStrip([

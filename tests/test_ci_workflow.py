@@ -207,19 +207,20 @@ def test_production_candidate_is_built_once_and_published_with_immutable_evidenc
         assert required in script
 
 
-def test_production_build_orders_pickup_before_latest_landing_and_catalog():
+def test_production_build_orders_landing_screening_before_landing_and_catalog():
     workflow = yaml.load(
         UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
     )
     steps = workflow["jobs"]["build"]["steps"]
     names = [step["name"] for step in steps]
 
-    pickup_index = names.index("Generate Weekly Pickup candidates when absent")
+    screening_index = names.index("Prepare Landing screening candidates when absent")
     landing_index = names.index("Build latest MTGO Landing documents")
     metadata_index = names.index("Generate product metadata")
     catalog_index = names.index("Generate format-first consumer catalog")
 
-    assert pickup_index < landing_index < metadata_index < catalog_index
+    assert screening_index < landing_index < metadata_index < catalog_index
+    assert "landing-review prepare --if-absent" in steps[screening_index]["run"]
     assert "build-landing" in steps[landing_index]["run"]
 
 

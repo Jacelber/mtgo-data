@@ -23,6 +23,13 @@ deletion, relocation, or modification by P12-15G-1.
 - Method: exact tracked-file inventory plus repository-wide symbol, command,
   path, product-ID, and Schema-reference searches. A definition or tracked file
   was not treated as a caller by itself.
+- P12-15G-2 pre-implementation correction: the initial active-reference command
+  enumerated named directories plus `validate_repository.py` and therefore
+  missed root-level `validate_production_candidate.py`. A full tracked-text
+  `git grep` found that it requires `weekly_pickup` and admits new candidate
+  YAML only below the old Pickup path. The implementation inventory below now
+  includes it, and the final no-caller proof must search all tracked text rather
+  than a hand-written directory list.
 - Limit: this is a static repository and generated-contract audit. It does not
   dispatch production or mutate cloud state.
 
@@ -32,6 +39,7 @@ deletion, relocation, or modification by P12-15G-1.
 | --- | --- | --- | --- |
 | Production | `.github/workflows/update.yml` (`pickup candidates --if-absent`) | Active caller for both MTGO formats | Migrate to a Landing-owned candidate-preparation command before removing `pickup candidates`. |
 | Weekly readiness | `tools/generate_weekly_maintenance_readiness.py`, `schemas/weekly-maintenance-readiness.schema.json`, `tests/test_weekly_maintenance_readiness.py`, and the readiness issue text in `.github/workflows/update.yml` | Actively reads `stats/<format>/mtgo/pickup/candidates_<week>.yaml`; absence or stale classifier digest blocks readiness | Migrate the path and vocabulary together; preserve fail-closed readiness semantics. |
+| Production candidate admission | `validate_production_candidate.py` and its focused assertions in `tests/test_mtgo_landing.py` | Requires `weekly_pickup` for complete product formats and admits dated candidate/base YAML only under `stats/<format>/mtgo/pickup/` | Replace the capability requirement and admit only Landing-owned `landing/review/candidates_<week>.yaml` and `base_reference_<week>.yaml`; continue rejecting reviewed week YAML as an automatic addition. |
 | Landing review import | `src/mtgmeta/mtgo/landing_editorial.py` | `build_top8_subject` reads Pickup candidate evidence; `_known_ids_from_legacy` imports Pickup known state | Migrate to Landing-owned candidate and known-state sources before private Pickup paths can retire. |
 | Landing generation | `src/mtgmeta/mtgo/landing.py` | Current generation reads Landing review files, but still imports many shared selection/deck helpers from `pickup.py`; obsolete published-Pickup helper code also remains | Move shared helpers to a neutral/Landing module, update callers, then delete the obsolete compatibility helpers. |
 | CLI and capability | `src/mtgmeta/mtgo/__main__.py`, `src/mtgmeta/config.py`, `configs/formats.yaml`, `schemas/formats.schema.json` | `pickup` remains a command and `weekly_pickup` remains an enabled capability | Remove only after the production caller and required helper ownership have migrated. |
@@ -76,6 +84,7 @@ by this audit.
 | `stats/standard/mtgo/meta.json` | Regenerate with `pickup_catalog: null`. | Standard metadata stops pointing at the frozen Pickup index. |
 | `stats/modern/mtgo/meta.json` | Regenerate with `pickup_catalog: null`. | Modern metadata stops pointing at the frozen Pickup index. |
 | `validate_repository.py` | Stop requiring Pickup as a live Standard/front-end product; keep exact frozen-document checks only while those documents remain declared. | Validation distinguishes retired product identity from retained rollback artifacts. |
+| `validate_production_candidate.py` | Remove the `weekly_pickup` capability requirement and migrate the exact new-path allowlist to Landing review candidate/base-reference filenames. | Scheduled generation can add only the new private machine artifacts and cannot add human-reviewed week documents. |
 | `tests/fixtures/standard/public_contract/contract.json` | Remove Pickup from active front-end templates/catalogs when the live contract migrates. | Fixture describes Landing feature paths as the reader-facing contract. |
 | `tests/test_generated_consumer_contracts.py` | Replace live Pickup-product assertions with Landing candidate/catalog retirement assertions; retain any frozen-document check explicitly required by the separate gate. | Regression coverage follows the new contract. |
 | `tests/test_weekly_maintenance_readiness.py` | Migrate fixtures and assertions to the Landing-owned candidate artifact. | Readiness behavior remains covered. |
@@ -254,3 +263,63 @@ Owner has authorized P12-15G as a whole, but explicitly limited current
 execution to P12-15G-1. P12-15G-2 may begin only after acceptance of this audit;
 no public-path change, document deletion, publication, merge, deployment, or
 production dispatch is authorized by this audit.
+
+## P12-15G-2 local implementation evidence
+
+The Owner accepted P12-15G-1 and authorized P12-15G-2 on 2026-08-24. The local
+candidate implements the accepted inventory without deleting, renaming,
+relocating, or modifying any frozen Pickup document or Pickup document Schema.
+
+### Replacement equivalence
+
+The new `landing-review prepare` producer generated Standard and Modern W34
+candidate and four-week base-reference documents into a disposable directory.
+Parsed YAML equality against the corresponding old Pickup-path W34 documents
+was exact:
+
+| Format | Candidate equal | Base reference equal |
+| --- | --- | --- |
+| Standard | yes | yes |
+| Modern | yes | yes |
+
+Both formats now read stable parent IDs from their Landing-owned known-state
+files. This corrects the migration boundary without changing the candidate
+selection result.
+
+### Final no-caller proof
+
+A full working-tree search, supplemented by the repository validator's tracked
+file inventory, found:
+
+- no active `weekly_pickup` capability, Pickup renderer/state/freshness symbol,
+  Pickup controller load/stage function, Pickup data attribute, or Pickup i18n
+  product/source key;
+- no runtime read or write of old Pickup candidate, base-reference, or
+  known-state paths;
+- no import of `src/mtgmeta/mtgo/pickup.py`;
+- exactly three active `weekly-pickup` references: route normalization in
+  `app-metadata.js`, its unit test, and its browser test; and
+- no standalone Pickup entry in `stats/catalog.json`, while both MTGO metadata
+  documents emit `pickup_catalog: null`.
+
+The frozen index/week documents, their Schemas and manifest entries, Pages
+private-path exclusions, historical tools, and public
+`pickup_document_digest` compatibility field remain intentionally retained and
+are not active product callers.
+
+### Validation
+
+- Ruff changed-file check: pass.
+- Focused Python tests: 82 passed.
+- Phase 8 JavaScript tests: 34 passed.
+- Repository validation: Python 84/84, JavaScript 20/20, JSON 1854/1854,
+  YAML 68/68, references 55/55, hygiene 2316/2316.
+- Local browser: the legacy Standard W33 URL canonicalized to
+  `product=mtgo-landing&section=features&week=2026-W33`; the feature section and
+  W33 selector rendered, product navigation contained only the five supported
+  products, no console error appeared, and the local request log contained no
+  `/mtgo/pickup/` request.
+
+The Owner accepted this exact P12-15G-2 local candidate on 2026-08-24. That
+acceptance authorizes normal completion of the unchanged task; production
+dispatch, P12-16, and any frozen-document removal remain outside this evidence.
