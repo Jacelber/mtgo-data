@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-maintenance-2026-w34-review"
+  current_working_branch: "codex/production-chromium-language-fix-20260824"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,68 +31,75 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-CLASSIFIER-MAINTENANCE-2026-W34"
-  name: "Apply Owner-confirmed W34 classifier maintenance"
+  id: "PRODUCTION-CHROMIUM-SMOKE-LANGUAGE-FIX-2026-08-24"
+  name: "Repair the English-page Chromium smoke language mismatch"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-24"
-  owner_name_confirmed_on: "2026-08-24"
   developer_validation_completed_on: "2026-08-24"
   owner_accepted_on: "2026-08-24"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-maintenance-2026-w34-20260824-01"
-  branch: "codex/weekly-maintenance-2026-w34-review"
-  base_commit: "169a7d0425121bc90bf7c8a2b8b17835b633c844"
-  objective: "Apply the four Owner-confirmed W34 classifier dispositions and the approved Temur Spellementals bilingual identity without generating or publishing derived production data."
+  production_recovery_after_merge_authorized_on: "2026-08-24"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/production-chromium-language-fix-20260824-01"
+  branch: "codex/production-chromium-language-fix-20260824"
+  base_commit: "c091676a60d9e7456a0bbc4805794844129db022"
+  task_type: "focused_production_validation_repair"
+  artifact_impact: "internal_diagnostics"
+  objective: "Restore the production Chromium smoke contract by using the English Mono-Red Prowess label on its English matchup page, without changing product behavior, data, workflow control, or validation strength."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
-    - "my_archetypes/standard.yaml"
-    - "my_archetypes/modern.yaml"
-    - "configs/mtgo_archetype_names.yaml"
-    - "docs/DECISIONS.md"
+    - "tests/browser/production-pages.spec.js"
     - "docs/STATUS.yaml"
   planned_file_operations:
     additions: []
     deletions: []
     renames: []
   protected_scope:
+    user_visible_ui_changed: "none"
     public_json_or_schema_changed: "none"
     generated_or_source_data_changed: "none"
-    classification_identities_changed: "three Standard and one Modern W34 Unknown records become classified; add the Standard temur-spellementals parent"
     workflows_or_public_paths_changed: "none"
+    statistical_or_classifier_behavior_changed: "none"
+    browser_contract_changed: "only the search label is aligned with the existing lang=en page; cancel-preserves-rows semantics and assertions remain unchanged"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Apply only the four exact second-round classifier proposals confirmed by the Owner."
-    - "Register Temur Spellementals with the Owner-confirmed Chinese name 铁木尔元素."
-    - "Run only focused rule, bilingual-name, retained-corpus impact, documentation, repository, and diff checks required by the changed paths."
-    - "Complete the unchanged accepted classifier source task through one commit, one Ready pull request, required CI, merge, and applicable Pages verification."
+    - "Replace the Chinese matchup search label in the one failing English-page cancel test with the existing English display label Mono-Red Prowess."
+    - "Reuse the exact production failure from run 32713334827 instead of repeating the known failing pre-fix browser subject."
+    - "Run only the repaired Playwright test and the smallest documentation and diff checks required by the changed paths."
+    - "Record that the prior W34 Top 8 workbook is suspended pending a fresh successful production publication and refreshed review baseline."
+    - "After the unchanged repair merges successfully, dispatch one fresh MTGO production run from the resulting master and monitor its publication, Pages, failure-Issue, and readiness evidence."
   prohibited_changes:
-    - "Do not add a pure-green Tifa path, visual card or color metadata, Landing content, generated statistics, source data, workflows, Schemas, UI, public paths, or event whitelist changes."
-    - "Do not dispatch production, mutate the live weekly Issue, force-push, change the accepted subject, or begin the Top 8 audit."
+    - "Do not change product JavaScript, HTML, CSS, data, classifiers, workflows, Schemas, public paths, event whitelists, timeout values, or assertion strength."
+    - "Do not dispatch production before the unchanged repair is merged, mutate Issues manually, or resume W34 Top 8, visual-metadata, or Landing review."
   validation:
-    retained_corpus: "Revalidated against master 169a7d0425121bc90bf7c8a2b8b17835b633c844: Standard 163 events and 5,212 decks, only three reviewed Unknown changes, conflicts 0, multiple matches 1,042; Modern 236 events and 7,552 decks, only one reviewed Unknown changes, conflicts 0, multiple matches 1,457"
-    bilingual_names: "pass; 324 names, 241 parents, 83 subtypes"
-    repository: "pass; 84 Python, 20 JavaScript, 1,854 JSON, 68 YAML, 55 references, 2,316 hygiene"
-    diff_check: "pass"
-  stop_point: "Complete the unchanged accepted classifier source task through commit, one Ready pull request, required CI, merge, and applicable Pages verification; then stop without production dispatch or another weekly stage."
+    failure_evidence: "Production run 32713334827 passed fetch, generation, candidate, repository, rules, Schema, consumer, and ten of eleven Chromium checks; only the English-page test timed out after searching for the Chinese label 纯红灵技."
+    focused_browser: "pass; the repaired production-pages.spec.js cancel test passed 1/1 in 3.6 seconds with Playwright 1.62.1 and Chromium 1234"
+    documentation: "pass; tests/test_documentation_history.py passed 5/5"
+    diff_check: "pass; only docs/STATUS.yaml and tests/browser/production-pages.spec.js changed, with no whitespace errors"
+  stop_point: "Complete the unchanged repair through commit, one Ready pull request, required CI, and merge; then dispatch and verify one fresh production recovery run before stopping without resuming weekly review."
 
 current_repository_state:
-  baseline_commit: "169a7d0425121bc90bf7c8a2b8b17835b633c844"
-  baseline_note: "Verified cloud master after the completed P12-15G Pickup retirement; W34 review remains bound to the frozen production publication and classifier digests recorded in the review workbook."
+  baseline_commit: "c091676a60d9e7456a0bbc4805794844129db022"
+  baseline_note: "Verified cloud master after PR #260 merged the accepted W34 classifier source changes; production run 32713334827 started from the preceding head and did not publish its newer fetched candidate."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
-known_blockers: []
+known_blockers:
+  - "Issue #261 records the single build-stage failure in production run 32713334827."
+  - "The prior W34 audit workbook is stale because the failed fetched candidate contains four additional W34 Modern events and 32 additional Top 8 placements."
 
 future_task_gates:
+  - task: "PRODUCTION-RECOVERY-2026-08-24"
+    status: "authorized_after_successful_repair_merge"
+    note: "After the accepted repair merges, dispatch exactly one fresh production workflow from the resulting master and monitor it through publication, Pages, failure-Issue, and readiness evidence."
   - task: "WEEKLY-TOP8-AUDIT-2026-W34"
-    status: "blocked_pending_classifier_source_acceptance_and_refreshed_baseline"
-    note: "Audit every current-week Top 8 classification only after the accepted classifier source is published and the W34 baseline is refreshed."
+    status: "suspended_pending_production_recovery_and_refreshed_baseline"
+    note: "Preserve the prior workbook as superseded evidence; regenerate it only after a fresh successful production publication binds Standard 6 events and Modern 12 W34 events to a new readiness digest."
   - task: "WEEKLY-VISUAL-METADATA-2026-W34"
     status: "planned_not_authorized"
     note: "Review representative cards and colors only after the Top 8 classification audit."
@@ -101,14 +108,14 @@ future_task_gates:
     note: "Cross-device and visual-system closeout remains a separate task after the W34 maintenance gate."
 
 next_approved_task:
-  id: "NONE"
-  name: "No follow-up task is authorized"
-  status: "no_follow_up_authorized"
+  id: "PRODUCTION-RECOVERY-2026-08-24"
+  name: "Recover the failed W34 production publication"
+  status: "authorized_after_successful_repair_merge"
   local_execution_authorized: false
-  note: "Owner acceptance authorizes only continuous completion of the unchanged W34 classifier source task; no downstream weekly stage is authorized."
+  note: "This conditional follow-up was explicitly authorized with Owner acceptance; it begins automatically only after the unchanged repair merges successfully."
 
 prohibited_next_actions:
-  - "Do not dispatch production, mutate the weekly Issue, or regenerate derived production outputs."
-  - "Do not begin the Top 8 audit, visual-metadata review, Landing review, or P12-16 automatically."
-  - "Do not add the deferred pure-green Tifa path or modify visual metadata, UI, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
+  - "Do not dispatch production before the accepted repair merges, manually mutate Issues, or bypass production candidate validation."
+  - "Do not resume the stale Top 8 workbook or begin visual-metadata, Landing review, or P12-16 automatically."
+  - "Do not add the deferred pure-green Tifa path or modify product UI, visual metadata, classifiers, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."

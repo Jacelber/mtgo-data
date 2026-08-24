@@ -231,7 +231,7 @@ test("closing the matchup filter without Apply preserves the current rows", asyn
 
   await page.locator("[data-matchup-filter-toggle]").click();
   await page.locator("[data-matchup-filter-select-all]").uncheck();
-  await page.locator("#matchup-filter-search").fill("纯红灵技");
+  await page.locator("#matchup-filter-search").fill("Mono-Red Prowess");
   await page.locator('[data-matchup-filter-option="prowess/mono-red"]').check();
   await page.locator("[data-matchup-filter-cancel]").click();
 
