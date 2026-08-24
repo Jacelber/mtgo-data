@@ -971,6 +971,54 @@ archetypes:
       - card: Mishra's Bauble
         zone: main
         min_count: 3
+- id: erayo
+  name: Erayo
+  priority: 674990
+  rules:
+  - id: erayo-basim
+    priority: 674990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Tamiyo, Inquisitive Student
+        zone: main
+        min_count: 3
+      - card: Emry, Lurker of the Loch
+        zone: main
+        min_count: 3
+      - card: Erayo, Soratami Ascendant
+        zone: main
+        min_count: 3
+      - card: Cori-Steel Cutter
+        zone: main
+        exact_count: 0
+      - card: Basim Ibn Ishaq
+        zone: main
+        min_count: 1
+- id: mono-blue-erayo
+  name: Mono-Blue Erayo
+  priority: 674980
+  rules:
+  - id: mono-blue-erayo-primary
+    priority: 674980
+    subtype_id: null
+    conditions:
+      all:
+      - card: Tamiyo, Inquisitive Student
+        zone: main
+        min_count: 3
+      - card: Emry, Lurker of the Loch
+        zone: main
+        min_count: 3
+      - card: Erayo, Soratami Ascendant
+        zone: main
+        min_count: 3
+      - card: Cori-Steel Cutter
+        zone: main
+        exact_count: 0
+      - card: Basim Ibn Ishaq
+        zone: main
+        exact_count: 0
 - id: steel-cutter
   name: Izzet Steel-Cutter
   priority: 675000
@@ -1424,6 +1472,27 @@ archetypes:
       - card: __classifier-semantic-main-black-source__
         zone: main
         exact_count: 0
+- id: jeskai-ponza
+  name: Jeskai Ponza
+  priority: 661010
+  rules:
+  - id: jeskai-ponza-primary
+    priority: 661010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Cleansing Wildfire
+        zone: main
+        min_count: 3
+      - card: Price of Freedom
+        zone: main
+        min_count: 3
+      - card: Erode
+        zone: main
+        min_count: 3
+      - card: Mana Leak
+        zone: main
+        min_count: 3
 - id: boros-land-destruction
   name: Boros Ponza
   priority: 661000

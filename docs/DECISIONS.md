@@ -5552,3 +5552,55 @@ and invalid decks remain zero, multiple matches remain `1,475`, and
 same-parent multiple-subtype matches remain `47`. The Modern classifier digest
 changes, so complete Top 8 and Landing maintenance must use a refreshed
 post-publication baseline.
+
+---
+
+# DEC-122 - Split W34 Jeskai Ponza and Erayo constructions from broad parents
+
+Status: `Accepted`
+
+## Context
+
+The Owner accepted every Standard row and 94 of 96 Modern rows in the
+`2026-W34` Top 8 review. The two Modern corrections are one land-destruction
+deck currently selected as Boros Ponza and one Basim Erayo deck currently
+selected as Affinity. The Owner also identified a retained rank-17 Erayo deck
+without Basim as the pure-blue construction and clarified that a singleton
+`Haywire Mite` plus a green mana source does not by itself make that construction
+multicolor.
+
+The retained corpus shows the land-destruction signature twice and the accepted
+non-Cutter Erayo core three times. Two other decks share the Erayo core but play
+four `Cori-Steel Cutter`; those are intentionally still Izzet Steel-Cutter.
+
+## Decision
+
+Add three stable Modern parents and their approved bilingual identities:
+
+- `jeskai-ponza`, English `Jeskai Ponza`, Chinese `洁斯凯炸地`, requires at
+  least three main-deck copies each of `Cleansing Wildfire`, `Price of Freedom`,
+  `Erode`, and `Mana Leak`, at priority `661010` above Boros Ponza;
+- `erayo`, English `Erayo`, Chinese `蓝黑伟代`, requires at least three
+  main-deck copies each of `Tamiyo, Inquisitive Student`,
+  `Emry, Lurker of the Loch`, and `Erayo, Soratami Ascendant`, zero
+  `Cori-Steel Cutter`, and at least one `Basim Ibn Ishaq`, at priority `674990`;
+  and
+- `mono-blue-erayo`, English `Mono-Blue Erayo`, Chinese `纯蓝伟代`, uses the
+  same three-card core and zero-Cutter boundary but requires zero Basim, at
+  priority `674980`.
+
+Do not require `Key to the Side-Door`, `Boomerang Basics`, Moxes, or the absence
+of `Haywire Mite` or green mana sources. Do not add speculative parents for
+future Erayo color combinations. Existing Affinity, Boros Ponza, and Izzet
+Steel-Cutter rules remain unchanged.
+
+## Consequences
+
+Across the retained Modern corpus of 241 events and 7,712 decks, exactly five
+selected identities migrate: two Boros Ponza decks become Jeskai Ponza, one
+Affinity deck becomes Erayo, and two Affinity decks become Mono-Blue Erayo.
+Both reviewed Cutter hybrids remain Izzet Steel-Cutter. All 7,712 decks remain
+classified, conflicts and invalid decks remain zero, multiple matches become
+`1,478`, and same-parent multiple-subtype matches remain `47`. The Modern
+classifier digest changes, so the W34 Top 8 audit must be closed against a
+refreshed post-publication baseline before visual-metadata or Landing review.
