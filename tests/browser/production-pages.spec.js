@@ -107,13 +107,26 @@ test("MTGO page renders a published number", async ({ page }) => {
   await expectPublishedNumber(page, "decks");
 });
 
-test("Weekly Pickup renders an unavailable construction deviation as a dash", async ({ page }) => {
+test("legacy Weekly Pickup state renders the current Landing feature contract", async ({ page, request }) => {
+  const response = await request.get("/stats/standard/mtgo/landing/current.json");
+  expect(response.ok()).toBe(true);
+  const landing = await response.json();
+  expect(Array.isArray(landing.features?.items)).toBe(true);
+  const expectedFeatureCount = landing.features.items.length;
+
   await page.goto("/index.html?format=standard&product=weekly-pickup&lang=zh");
-  await expect(page.locator(".pickup-card")).toHaveCount(11);
-  const borosDragons = page.locator(".pickup-card", { hasText: "Boros Dragons" });
-  await expect(borosDragons).toHaveCount(1);
-  await expect(borosDragons.locator(".pickup-head")).toContainText("偏离度： —");
-  await expect(page.locator(".pickup-content")).not.toContainText("null 分");
+  await expect(page).toHaveURL(/product=mtgo-landing/);
+  const normalizedUrl = new URL(page.url());
+  expect(normalizedUrl.searchParams.get("format")).toBe("standard");
+  expect(normalizedUrl.searchParams.get("product")).toBe("mtgo-landing");
+  expect(normalizedUrl.searchParams.get("section")).toBe("features");
+  expect(normalizedUrl.searchParams.get("lang")).toBe("zh");
+  await expect(page.locator("#view .error-state")).toHaveCount(0);
+  await expect(page.locator(".landing-features")).toBeVisible();
+  await expect(page.locator(".landing-feature-item")).toHaveCount(expectedFeatureCount);
+  const emptyState = page.locator(".landing-feature-content .landing-empty");
+  if (expectedFeatureCount === 0) await expect(emptyState).toBeVisible();
+  else await expect(emptyState).toHaveCount(0);
 });
 
 test("Tabletop page renders a published number", async ({ page }) => {

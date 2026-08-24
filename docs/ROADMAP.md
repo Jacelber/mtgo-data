@@ -238,6 +238,13 @@ begin under separate authorization.
     - completed detail and accepted results are archived in
       `docs/history/ROADMAP-PHASE-12-COMPLETED.md`; P12-15E remains a separate
       authorization gate.
+15-HF2. `P12-15-HF2` — Production smoke compatibility recovery
+    - replace the obsolete fixed Pickup count and archetype assertion with a
+      candidate-derived check of the accepted legacy URL to Landing Features
+      contract, without changing runtime code, public data, or workflow behavior;
+    - verify governance and JavaScript syntax locally, then validate the browser
+      contract once on the newly generated production candidate after Owner
+      acceptance and accepted-task completion.
 15E. `P12-15E` — Landing feature archive and recovery preview
     - add versioned `landing/features/index.json` and
       `landing/features/<week>.json` contracts, consumers, catalogs, Pages

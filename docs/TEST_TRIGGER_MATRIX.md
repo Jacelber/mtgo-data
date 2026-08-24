@@ -39,7 +39,7 @@ production baseline.
 | Browser request, cache, retry, refresh, or runtime-loading logic changes | `node --test tests/js/phase8-runtime.test.js` | Catch a broken request lifecycle before Owner browser review | Once on the final visible tree before Owner review |
 | Production entry HTML, shared bootstrap dependencies, cross-entry navigation, or title-home behavior changes | `node --test tests/js/phase8-metadata-sharing.test.js`, focused direct-Tabletop and MTGO → Tabletop → Back → title-home browser path, and `validate_repository.py` entry inventory | Reject missing or misordered shared dependencies and prove that entry failure does not remove the static home recovery path | Once on the final visible tree before Owner review |
 | Owner completes browser review of a user-visible change | Record the `owner-ui-accepted` digest for changed `index.html`, `assets/**`, and `melee/**` blobs | Bind the PR to exactly the visible files the Owner reviewed without rerunning UI automation | Once after acceptance and the unchanged local commit; PR admission only compares the digest |
-| MTGO candidate generated | Candidate boundary, repository, rules, Schema, output-invariant, consumer, and the two `production-pages.spec.js` rendering smokes in `update.yml` | Block publication when either public product cannot render a real number | Once for that immutable candidate before packaging |
+| MTGO candidate generated | Candidate boundary, repository, rules, Schema, output-invariant, consumer, and the candidate-derived `production-pages.spec.js` rendering smoke in `update.yml` | Block publication when the legacy Pickup route diverges from the current Landing feature document or either public product cannot render its current generated data | Once for that immutable candidate before packaging |
 | Melee candidate generated | Candidate boundary, repository, rules, and Schema checks in `fetch_melee.yml` | Block an invalid Melee publishable artifact | Once for that immutable candidate before staging |
 | Generated commit pushed or exact-evidence recovery authorized | Exact remote-SHA confirmation plus production evidence admission | Bind an ancestor publication commit and its validated artifact digest, generation subject, producer run and attempt, source commit, and successful producer jobs to the immutable master Pages subject whose generated output still matches | Once for that immutable Pages subject; never recompute candidate evidence |
 | Relevant site-input path reaches `master` outside production publication | Allowlisted Pages packaging and deployment | Publish an accepted UI, public-data, compatibility, or publication-boundary change | Once for that `master` commit; governance, test, and excluded-path changes do not trigger Pages |
@@ -68,5 +68,6 @@ production baseline.
 
 GOV-09 retired the generic browser preflight and the accessibility, card
 preview, loading/retry, mobile-list, URL-state, and lazy-loading browser suites.
-They have no trigger. `production-pages.spec.js` contains only the two output
-gate rendering smokes; it is not a PR or ordinary local-development suite.
+They have no trigger. `production-pages.spec.js` contains only output-gate
+rendering contracts derived from the current candidate; it is not a PR or
+ordinary local-development suite.
