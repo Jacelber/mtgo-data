@@ -10,6 +10,10 @@ const runtimeSource = fs.readFileSync(
   path.join(__dirname, "../../assets/js/phase8/runtime.js"),
   "utf8"
 );
+const mtgoControllerSource = fs.readFileSync(
+  path.join(__dirname, "../../assets/js/phase8/mtgo-controller.js"),
+  "utf8"
+);
 
 function runtimeWith(fetchImpl) {
   const context = {
@@ -34,6 +38,39 @@ function response(value, { status = 200 } = {}) {
       return JSON.stringify(value);
     },
   };
+}
+
+function mtgoControllerWith(documents) {
+  const runtime = runtimeWith(async url => (
+    documents.has(url)
+      ? response(documents.get(url))
+      : response({ missing: url }, { status: 404 })
+  ));
+  const context = { P8Runtime: runtime };
+  context.globalThis = context;
+  vm.runInNewContext(mtgoControllerSource, context);
+  return context.P8MtgoController;
+}
+
+function landingDocuments({ companionWeek = "2026-W33", rangeFormat = "standard" } = {}) {
+  const period = companionWeek === "2026-W33"
+    ? { start: "2026-08-10", end: "2026-08-16" }
+    : { start: "2026-08-17", end: "2026-08-23" };
+  return new Map([
+    ["./stats/standard/mtgo/landing/current.json", {
+      format: "standard",
+      week: { id: "2026-W33", start: "2026-08-10", end: "2026-08-16" },
+    }],
+    ["./stats/standard/mtgo/meta.json", { format: "standard" }],
+    ["./stats/standard/mtgo/range_1w.json", { format: rangeFormat, period, total_decks: 70 }],
+    ["./stats/standard/mtgo/completeness/1w.json", { format: "standard", period }],
+    ["./stats/standard/mtgo/pickup/index.json", {
+      format: "standard",
+      weeks: [{ file: "2026-W33.json" }],
+    }],
+    ["./stats/standard/mtgo/decks_1w.json", { format: "standard", decks: [] }],
+    ["./stats/standard/mtgo/decks_4w.json", { format: "standard", decks: [] }],
+  ]);
 }
 
 test("failed requests are evicted and a manual retry starts a new fetch", async () => {
@@ -138,4 +175,50 @@ test("foreground timeouts release the in-flight request", async () => {
   );
   await assert.rejects(client.fetchJson("stats/test/slow.json"));
   assert.equal(calls, 2);
+});
+
+test("Landing keeps same-period companion documents", async () => {
+  const controller = mtgoControllerWith(landingDocuments());
+
+  const context = await controller.loadLanding(
+    "standard",
+    "stats/standard/mtgo/landing/current.json",
+    null,
+    { includeEnvironmentDecks: true, includeFeatureDecks: true }
+  );
+
+  assert.equal(context.range.total_decks, 70);
+  assert.ok(context.completeness);
+  assert.ok(context.environmentDecks);
+  assert.ok(context.featureDecks);
+});
+
+test("retained Landing drops newer companion facts instead of failing", async () => {
+  const controller = mtgoControllerWith(landingDocuments({ companionWeek: "2026-W34" }));
+
+  const context = await controller.loadLanding(
+    "standard",
+    "stats/standard/mtgo/landing/current.json",
+    null,
+    { includeEnvironmentDecks: true, includeFeatureDecks: true }
+  );
+
+  assert.equal(context.landing.week.id, "2026-W33");
+  assert.equal(context.range, null);
+  assert.equal(context.completeness, null);
+  assert.equal(context.environmentDecks, null);
+  assert.equal(context.featureDecks, null);
+});
+
+test("Landing still rejects a companion document from another format", async () => {
+  const controller = mtgoControllerWith(landingDocuments({ rangeFormat: "modern" }));
+
+  await assert.rejects(
+    controller.loadLanding(
+      "standard",
+      "stats/standard/mtgo/landing/current.json",
+      null
+    ),
+    error => error.code === "invalid"
+  );
 });

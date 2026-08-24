@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-15-hf2-production-smoke"
+  current_working_branch: "codex/p12-15-hf2b-retained-landing"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,61 +31,68 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-15-HF2"
-  name: "Production smoke compatibility recovery"
+  id: "P12-15-HF2B"
+  name: "Retained Landing production compatibility recovery"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-24"
   owner_accepted_on: "2026-08-24"
   workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-15-hf2-production-smoke-20260824-01"
-  branch: "codex/p12-15-hf2-production-smoke"
-  base_commit: "f998b2af2dc2c3180fd5194f77891137bee0f8bb"
-  objective: "Replace the obsolete fixed Weekly Pickup production-browser assertion with the accepted dynamic legacy-route-to-Landing contract, document its exact trigger, and recover production only after Owner acceptance without changing product behavior."
+  branch: "codex/p12-15-hf2b-retained-landing"
+  base_commit: "ec3399c373a2cf3df57c94983253b05c1b31de8b"
+  objective: "Keep the last admitted Landing readable when current generated statistics advance to a later review week, without mixing periods, and remove the remaining fixed-order and fixed-position assumptions from the production browser gate."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   target_paths:
+    - "assets/js/phase8/app-freshness.js"
+    - "assets/js/phase8/mtgo-controller.js"
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
     - "docs/TEST_TRIGGER_MATRIX.md"
     - "tests/browser/production-pages.spec.js"
+    - "tests/js/phase8-landing.test.js"
+    - "tests/js/phase8-runtime.test.js"
   protected_scope:
-    rendered_or_public_artifacts_changed: "none"
+    rendered_or_public_artifacts_changed: "assets/js/phase8/app-freshness.js and assets/js/phase8/mtgo-controller.js runtime sources only"
     public_json_or_schema_changed: "none"
     generated_or_source_data_changed: "none"
     classification_identities_changed: "none"
     workflows_changed: "none"
     public_paths_changed: "none"
-    runtime_behavior_changed: "none"
+    runtime_behavior_changed: "Retained admitted Landing remains readable when newer unreviewed statistics exist; unmatched companion freshness values degrade to unknown."
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Derive the expected Landing feature count from the current generated candidate instead of a fixed Pickup card count or archetype name."
-    - "Assert that the legacy weekly-pickup URL normalizes to the Landing feature section and renders either its current items or its truthful empty state."
-    - "Update the exact production-candidate trigger documentation and reconcile the live task state."
-    - "After Owner acceptance, complete one Ready PR, required CI, merge, one production recovery run, exact Pages verification, and Issue 252 closure for the unchanged task."
+    - "Allow a valid last-admitted Landing to render when current range and completeness documents belong to a later period, while preserving format validation."
+    - "Use companion range and completeness values only when both match the admitted Landing period; otherwise render their freshness facts as unknown."
+    - "Make the MTGO multi-row filter assertion order-independent and trigger the sticky header from table geometry instead of a fixed archetype row position."
+    - "Add focused JavaScript regressions and update the exact production-candidate trigger documentation."
+    - "After Owner acceptance, create one focused commit and Ready pull request, require the unique applicable CI evidence, merge, dispatch exactly one production recovery, verify its exact Pages publication, and close Issue 252 only after success."
   prohibited_changes:
-    - "No HTML, CSS, runtime JavaScript, workflow, Landing content, statistic, classifier, generated-data, Schema, source-event, public-path, or protected event 434455 byte change."
+    - "No HTML, CSS, workflow, Landing content, statistic, classifier, generated-data, Schema, source-event, public-path, or protected event 434455 byte change."
+    - "Do not treat newer unreviewed statistics as facts belonging to the retained Landing or auto-admit W34 editorial content."
     - "Do not run production-pages.spec.js against the committed baseline; it runs once against the newly generated production candidate at its output gate."
-    - "No commit, PR, merge, deployment, production dispatch, or Issue 252 mutation before Owner acceptance."
+    - "No second production dispatch; stop on CI, merge, production, publication, scope, conflict, or permission failure."
     - "No P12-15E, P12-15E-I18N, P12-15E-UX, P12-15F, P12-16, or other task implementation."
   validation:
     status: "passed_owner_accepted"
     completed_on: "2026-08-24"
     results:
+      targeted_javascript_tests: "14 passed"
       production_pages_javascript_syntax_errors: 0
       documentation_history_tests: "5 passed"
       repository_validation: "PASS"
-      changed_paths_reviewed: 4
-      runtime_or_public_artifact_changes: 0
-    production_browser_gate: "Run once on the newly generated candidate after accepted merge."
-  stop_point: "Complete the unchanged accepted task through one commit, one Ready PR, required CI, merge, one production recovery run, exact Pages verification, and Issue 252 closure; then stop without starting P12-15E."
+      changed_paths_reviewed: 8
+      public_runtime_sources_changed: 2
+    production_browser_gate: "Do not run locally; run once on a newly generated candidate only after new Owner acceptance and accepted-task merge."
+  stop_point: "Complete the unchanged Owner-accepted HF2B path through one commit, Ready PR, required CI, merge, exactly one production recovery, exact Pages verification, and Issue 252 closure; then stop without starting P12-15E."
 
 current_repository_state:
-  baseline_commit: "f998b2af2dc2c3180fd5194f77891137bee0f8bb"
-  baseline_note: "Fresh independent clone from the verified remote master after PR 254 merged and Pages deployment succeeded; push remains disabled."
-  failed_production_run: 32631016159
+  baseline_commit: "ec3399c373a2cf3df57c94983253b05c1b31de8b"
+  baseline_note: "Fresh isolated branch from verified remote master after PR 255 merged; the accepted HF2 production recovery failed closed and push remains disabled."
+  failed_production_run: 32687591802
   open_failure_issue: 252
   public_entries:
     mtgo: "/index.html"
@@ -97,7 +104,7 @@ known_blockers: []
 future_task_gates:
   - task: "P12-15E"
     status: "planned_not_authorized"
-    prerequisite: "P12-15-HF2 production recovery is accepted and completed"
+    prerequisite: "P12-15-HF2B production recovery is accepted and completed"
     note: "Generate the Landing feature archive and W27/W33 recovery preview."
   - task: "P12-15E-I18N"
     status: "planned_not_authorized"
@@ -128,9 +135,9 @@ next_approved_task:
   name: "Landing feature archive and recovery preview"
   status: "planned_not_authorized"
   local_execution_authorized: false
-  note: "Stop after P12-15-HF2 production recovery; P12-15E requires separate implementation authorization."
+  note: "Stop after P12-15-HF2B production recovery; P12-15E requires separate implementation authorization."
 
 prohibited_next_actions:
-  - "Do not change runtime product behavior, public data, classifiers, statistics, workflows, source data, public paths, or event 434455 bytes."
+  - "Do not change runtime behavior beyond retained-Landing period compatibility, or change public data, classifiers, statistics, workflows, source data, public paths, or event 434455 bytes."
   - "Do not start P12-15E, P12-15E-I18N, P12-15E-UX, P12-15F, P12-16, or another task."
   - "Do not develop directly on master or overwrite unexplained changes."

@@ -47,7 +47,9 @@
   }
 
   function validateLandingGroup(format, documents) {
-    const { landing, range, completeness, pickupIndex, pickupDocument } = documents;
+    const {
+      landing, range, completeness, pickupIndex, pickupDocument,
+    } = documents;
     const periodMatches = landing.week?.start === range.period?.start
       && landing.week?.end === range.period?.end
       && landing.week?.start === completeness.period?.start
@@ -55,10 +57,17 @@
     const formatsMatch = [landing, range, completeness, pickupIndex, pickupDocument]
       .filter(Boolean)
       .every(document => !document.format || document.format === format);
-    if (!periodMatches || !formatsMatch) {
+    if (!formatsMatch) {
       throw new Runtime.ResourceError("invalid", `${rootPath(format)}/landing/current.json`);
     }
-    return documents;
+    if (periodMatches) return documents;
+    return {
+      ...documents,
+      range: null,
+      completeness: null,
+      environmentDecks: null,
+      featureDecks: null,
+    };
   }
 
   async function loadLanding(format, landingPath, selectedFeatureFile, options = {}) {

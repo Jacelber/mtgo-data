@@ -10,6 +10,10 @@ const source = fs.readFileSync(
   path.join(__dirname, "../../assets/js/phase8/app-mtgo.js"),
   "utf8"
 );
+const freshnessSource = fs.readFileSync(
+  path.join(__dirname, "../../assets/js/phase8/app-freshness.js"),
+  "utf8"
+);
 
 function landingFunctions(language = "zh") {
   const context = {
@@ -36,11 +40,15 @@ function landingFunctions(language = "zh") {
       product: "mtgo-landing",
     },
     t: key => key,
-    window: { location: { href: "http://localhost/index.html" } },
+    window: {
+      addEventListener: () => {},
+      location: { href: "http://localhost/index.html" },
+    },
   };
   context.globalThis = context;
-  vm.runInNewContext(`${source}
+  vm.runInNewContext(`${freshnessSource}\n${source}
     globalThis.__landing = {
+      landingFreshness,
       landingDirection,
       landingEnvironmentRows,
       landingFeatureHtml,
@@ -140,4 +148,19 @@ test("a reviewed feature keeps one disclosure action and four separate card link
   assert.equal((html.match(/data-pickup-toggle=/g) || []).length, 1);
   assert.equal((html.match(/data-progressive-image=/g) || []).length, 4);
   assert.match(html, /<\/button><span class="landing-feature-cards"/);
+});
+
+test("retained Landing freshness does not mix newer companion facts", () => {
+  const { landingFreshness } = landingFunctions();
+  const html = landingFreshness({
+    week: { start: "2026-08-10", end: "2026-08-16" },
+    populations: { current: { event_count: 8, high_score_count: 129, top8_count: 64 } },
+  }, null, null);
+
+  assert.match(html, /2026-08-10 – 2026-08-16/);
+  assert.match(html, /data-freshness-key="events"[\s\S]*?<b>8<\/b>/);
+  assert.match(html, /data-freshness-key="decks"[\s\S]*?<b>freshness\.unknown<\/b>/);
+  assert.match(html, /data-freshness-key="high-score"[\s\S]*?<b>129<\/b>/);
+  assert.match(html, /data-freshness-key="top8"[\s\S]*?<b>64<\/b>/);
+  assert.match(html, /data-freshness-key="high-score-completeness"[\s\S]*?freshness\.unknown/);
 });
