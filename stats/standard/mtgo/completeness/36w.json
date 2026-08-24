@@ -5,19 +5,19 @@
   "source": "mtgo",
   "period": {
     "type": "36w",
-    "start": "2025-12-08",
-    "end": "2026-08-16",
+    "start": "2025-12-15",
+    "end": "2026-08-23",
     "weeks": 36
   },
   "matchup_coverage": {
     "formula_version": "videre-range-coverage-v1",
     "status": "available",
     "period": {
-      "start": "2025-12-08",
-      "end": "2026-08-16"
+      "start": "2025-12-15",
+      "end": "2026-08-23"
     },
-    "expected_event_count": 157,
-    "available_event_count": 140,
+    "expected_event_count": 163,
+    "available_event_count": 146,
     "deferred_event_count": 0,
     "missing_event_count": 17,
     "excluded_event_count": 0,
@@ -161,7 +161,13 @@
       "12851135",
       "12851611",
       "12851628",
-      "12851641"
+      "12851641",
+      "12851694",
+      "12851725",
+      "12852720",
+      "12852728",
+      "12852733",
+      "12852807"
     ],
     "deferred_event_ids": [],
     "missing_event_ids": [
@@ -184,17 +190,17 @@
       "12851684"
     ],
     "excluded_events": [],
-    "completeness_rate": 0.89172,
+    "completeness_rate": 0.895706,
     "unavailable_reason": null
   },
   "high_score_decklist_completeness": {
     "formula_version": "mtgo-high-score-binomial-v1",
     "status": "available",
     "period": {
-      "start": "2025-12-08",
-      "end": "2026-08-16"
+      "start": "2025-12-15",
+      "end": "2026-08-23"
     },
-    "eligible_event_count": 157,
+    "eligible_event_count": 163,
     "unsupported_event_count": 0,
     "events": [
       {
@@ -1609,13 +1615,67 @@
         "minimum_decisive_wins": 4,
         "observed_decklist_count": 21,
         "expected_decklist_count": 22.0
+      },
+      {
+        "event_id": "12851694",
+        "player_count": 57,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 18,
+        "expected_decklist_count": 19.59375
+      },
+      {
+        "event_id": "12851725",
+        "player_count": 66,
+        "round_count": 7,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 28,
+        "expected_decklist_count": 33.0
+      },
+      {
+        "event_id": "12852720",
+        "player_count": 31,
+        "round_count": 5,
+        "high_score_threshold": 9,
+        "minimum_decisive_wins": 3,
+        "observed_decklist_count": 15,
+        "expected_decklist_count": 15.5
+      },
+      {
+        "event_id": "12852728",
+        "player_count": 60,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 19,
+        "expected_decklist_count": 20.625
+      },
+      {
+        "event_id": "12852733",
+        "player_count": 69,
+        "round_count": 7,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 28,
+        "expected_decklist_count": 34.5
+      },
+      {
+        "event_id": "12852807",
+        "player_count": 179,
+        "round_count": 8,
+        "high_score_threshold": 15,
+        "minimum_decisive_wins": 5,
+        "observed_decklist_count": 32,
+        "expected_decklist_count": 65.02734375
       }
     ],
     "unsupported_events": [],
-    "observed_decklist_count": 2667,
-    "expected_decklist_count": 3125.23828125,
-    "expected_decklist_count_display": 3125,
-    "completeness_rate": 0.853375,
+    "observed_decklist_count": 2807,
+    "expected_decklist_count": 3313.484375,
+    "expected_decklist_count_display": 3313,
+    "completeness_rate": 0.847144,
     "exceeds_model": false,
     "unavailable_reason": null
   }
