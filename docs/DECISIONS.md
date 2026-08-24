@@ -5411,3 +5411,53 @@ its detail. The implementation adds no public path, navigation item, workflow,
 source fetch, statistic, classifier change, or modification to protected event
 `434455`. P12-15F remains the combined publication gate after renewed hands-on
 acceptance of the five-correction P12-15E-UX candidate.
+
+---
+
+# DEC-119 - Apply W34 classifier maintenance with one new Temur parent
+
+Status: `Accepted`
+
+## Context
+
+The frozen `2026-W34` readiness baseline contains three coherent Standard
+Unknown decks and one coherent Modern Unknown deck. The Owner confirmed the
+second-round technical proposals after reviewing complete decklists and full
+retained-corpus impact. The Owner separately confirmed `铁木尔元素` as the
+Chinese name for the new `Temur Spellementals` parent. A possible future
+pure-green Tifa construction was mentioned but explicitly excluded from this
+week's implementation.
+
+## Decision
+
+Apply exactly four classifier dispositions:
+
+- modify `dimir-midrange-primary` by removing only the
+  `Soulstone Sanctuary >= 1` condition;
+- modify `selesnya-landfall-primary` by removing only the
+  `Mightform Harmonizer >= 1` condition while retaining `Plains >= 1`;
+- add the Standard parent `temur-spellementals` and rule
+  `temur-spellementals-analyze-the-pollen` at priority `64500`, requiring four
+  main-deck `Eddymurk Crab`, two `Sunderflock`, two `Analyze the Pollen`, one
+  semantic main-deck green source, one semantic main-deck red source, and zero
+  main-deck `Stormchaser's Talent`; and
+- add `azorius-control-loki-land-denial` under the existing Modern
+  `azorius-control` parent at priority `303900`, requiring two Loki, two each
+  of `Demolition Field`, `Field of Ruin`, and `Wrath of the Skies`, three
+  `Solitude`, one `Hallowed Fountain`, and the retained Chant, Scepter, and
+  Galvanic exclusions.
+
+Register the new identity as English `Temur Spellementals` and Chinese
+`铁木尔元素`. Do not change the existing Izzet or Mono-Blue Spellementals
+rules, add a pure-green Tifa path, or add unreviewed visual metadata.
+
+## Consequences
+
+Across the retained Standard corpus of 163 events and 5,212 decks, only the
+three reviewed Standard Unknown records become classified; existing identities
+do not migrate, conflicts remain zero, and multiple matches remain `1,042`.
+Across the retained Modern corpus of 236 events and 7,552 decks, only the
+reviewed Modern Unknown becomes classified; existing identities do not migrate,
+conflicts remain zero, and multiple matches remain `1,457`. The classifier
+digest changes, so downstream Top 8, visual-metadata, and Landing work must wait
+for accepted classifier source publication and a refreshed weekly baseline.
