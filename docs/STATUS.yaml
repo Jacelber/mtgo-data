@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-15g-no-caller-audit"
+  current_working_branch: "codex/weekly-maintenance-2026-w34-review"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,105 +31,57 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P12-15G"
-  stage: "P12-15G-2"
-  name: "Pickup retirement implementation"
+  id: "WEEKLY-CLASSIFIER-MAINTENANCE-2026-W34"
+  name: "Apply Owner-confirmed W34 classifier maintenance"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-24"
+  owner_name_confirmed_on: "2026-08-24"
+  developer_validation_completed_on: "2026-08-24"
   owner_accepted_on: "2026-08-24"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-15g-no-caller-audit-20260824-01"
-  branch: "codex/p12-15g-no-caller-audit"
-  base_commit: "408f761fdfd1c0c8f7a7c6391c5b0e178db67ff6"
-  objective: "Migrate active weekly screening, readiness, metadata, and hierarchy responsibilities to Landing-owned or neutral modules; retire the standalone Pickup product shell while preserving the legacy URL redirect and every separately gated frozen document."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-maintenance-2026-w34-20260824-01"
+  branch: "codex/weekly-maintenance-2026-w34-review"
+  base_commit: "169a7d0425121bc90bf7c8a2b8b17835b633c844"
+  objective: "Apply the four Owner-confirmed W34 classifier dispositions and the approved Temur Spellementals bilingual identity without generating or publishing derived production data."
   authorization:
     local_implementation: true
-    commit: false
-    remote_publication: false
-    merge: false
+    commit: true
+    remote_publication: true
+    merge: true
   target_paths:
-    - ".github/workflows/update.yml"
-    - "assets/css/phase8-base.css"
-    - "assets/css/phase8-candidate.css"
-    - "assets/js/phase8/**"
-    - "configs/formats.yaml"
-    - "docs/DATA_ARCHITECTURE.md"
+    - "my_archetypes/standard.yaml"
+    - "my_archetypes/modern.yaml"
+    - "configs/mtgo_archetype_names.yaml"
     - "docs/DECISIONS.md"
-    - "docs/LANDING_EDITORIAL_PIPELINE.md"
-    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "docs/WEEKLY_MAINTENANCE.md"
-    - "docs/audits/P12-15G-NO-CALLER-AUDIT.md"
-    - "schemas/consumer-catalog.schema.json"
-    - "schemas/formats.schema.json"
-    - "schemas/weekly-maintenance-readiness.schema.json"
-    - "README.md"
-    - "docs/STATISTICS_SPEC.md"
-    - "docs/TEST_TRIGGER_MATRIX.md"
-    - "src/mtgmeta/catalog.py"
-    - "src/mtgmeta/config.py"
-    - "src/mtgmeta/mtgo/**"
-    - "stats/catalog.json"
-    - "stats/standard/mtgo/meta.json"
-    - "stats/modern/mtgo/meta.json"
-    - "tests/browser/production-pages.spec.js"
-    - "tests/fixtures/standard/public_contract/contract.json"
-    - "tests/js/**"
-    - "tests/test_generated_consumer_contracts.py"
-    - "tests/test_ci_workflow.py"
-    - "tests/test_cli_smoke.py"
-    - "tests/test_mtgo_landing.py"
-    - "tests/test_mtgo_landing_editorial.py"
-    - "tests/test_weekly_maintenance_readiness.py"
-    - "tools/generate_weekly_maintenance_readiness.py"
-    - "validate_production_candidate.py"
-    - "validate_repository.py"
   planned_file_operations:
-    additions:
-      - "src/mtgmeta/mtgo/landing_screening.py"
-      - "src/mtgmeta/mtgo/metadata.py"
-      - "tests/test_mtgo_landing_screening_provenance.py"
-      - "tests/test_mtgo_metadata.py"
-    deletions:
-      - "src/mtgmeta/mtgo/pickup.py"
-      - "tests/js/phase8-pickup.test.js"
-      - "tests/test_mtgo_pickup_provenance.py"
-    renames:
-      - from: "tests/test_mtgo_pickup_selection.py"
-        to: "tests/test_mtgo_landing_screening.py"
+    additions: []
+    deletions: []
+    renames: []
   protected_scope:
-    artifact_impact:
-      - "user_visible_ui"
-      - "statistical_json_structure"
-    public_json_or_schema_changed: "consumer catalog removes weekly-pickup; MTGO metadata retains nullable pickup_catalog with null values"
-    generated_or_source_data_changed: "stats/catalog.json and Standard/Modern meta.json only; source events and statistical values unchanged"
-    workflows_changed: true
-    public_paths_changed: false
+    public_json_or_schema_changed: "none"
+    generated_or_source_data_changed: "none"
+    classification_identities_changed: "three Standard and one Modern W34 Unknown records become classified; add the Standard temur-spellementals parent"
+    workflows_or_public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Migrate weekly candidate preparation and readiness to private stats/<format>/mtgo/landing/review candidate, base-reference, and known-state paths."
-    - "Move retained screening helpers, hierarchy generation, and metadata generation out of the obsolete Pickup module without changing selection or statistical meaning."
-    - "Remove the standalone Pickup CLI, capability, catalog identity, Phase 8 renderer, loader, state, style, and dedicated tests only after their callers migrate."
-    - "Retain the legacy weekly-pickup URL normalization and its unit/browser coverage."
-    - "Regenerate only stats/catalog.json and the two MTGO meta.json documents with preserved generation timestamps."
+    - "Apply only the four exact second-round classifier proposals confirmed by the Owner."
+    - "Register Temur Spellementals with the Owner-confirmed Chinese name 铁木尔元素."
+    - "Run only focused rule, bilingual-name, retained-corpus impact, documentation, repository, and diff checks required by the changed paths."
+    - "Complete the unchanged accepted classifier source task through one commit, one Ready pull request, required CI, merge, and applicable Pages verification."
   prohibited_changes:
-    - "Do not delete, rename, relocate, or modify any tracked stats/<format>/mtgo/pickup document, Pickup document Schema, matching Schema manifest entry, Pages exclusion, historical audit, migration tool, or legacy bundle."
-    - "Do not change screening thresholds, candidate selection, Landing layout/content, classifiers, statistics, source data, protected event 434455, or the legacy weekly-pickup URL redirect."
-    - "Do not commit, publish remotely, merge, deploy, dispatch production, or begin P12-16 before Owner acceptance of the completed P12-15G-2 subject."
+    - "Do not add a pure-green Tifa path, visual card or color metadata, Landing content, generated statistics, source data, workflows, Schemas, UI, public paths, or event whitelist changes."
+    - "Do not dispatch production, mutate the live weekly Issue, force-push, change the accepted subject, or begin the Top 8 audit."
   validation:
-    status: "passed"
-    candidate_equivalence: "Standard and Modern W34 candidate/base YAML equal across old and Landing-owned paths"
-    ruff: "passed"
-    focused_python_tests: "82 passed"
-    phase8_javascript_tests: "34 passed"
-    repository_validation: "Python 84/84; JavaScript 20/20; JSON 1854/1854; YAML 68/68; references 55/55; hygiene 2316/2316"
-    browser_preview: "legacy Standard W33 URL canonicalized to Landing features; five supported products; no console errors or /mtgo/pickup/ request"
-    no_caller_proof: "no standalone symbols, old candidate runtime paths, or Pickup module imports; only the three declared legacy-route references remain"
-  stop_point: "Complete the exact accepted P12-15G-2 task through commit, one Ready PR, required CI, merge, and applicable Pages verification; stop on changed subject, failed checks, conflict, permission block, or scope expansion. Do not begin P12-16."
+    retained_corpus: "Revalidated against master 169a7d0425121bc90bf7c8a2b8b17835b633c844: Standard 163 events and 5,212 decks, only three reviewed Unknown changes, conflicts 0, multiple matches 1,042; Modern 236 events and 7,552 decks, only one reviewed Unknown changes, conflicts 0, multiple matches 1,457"
+    bilingual_names: "pass; 324 names, 241 parents, 83 subtypes"
+    repository: "pass; 84 Python, 20 JavaScript, 1,854 JSON, 68 YAML, 55 references, 2,316 hygiene"
+    diff_check: "pass"
+  stop_point: "Complete the unchanged accepted classifier source task through commit, one Ready pull request, required CI, merge, and applicable Pages verification; then stop without production dispatch or another weekly stage."
 
 current_repository_state:
-  baseline_commit: "408f761fdfd1c0c8f7a7c6391c5b0e178db67ff6"
-  baseline_note: "Verified P12-15F merge commit and Pages cutover; Landing is the reader-facing editorial product and no production dispatch is part of P12-15G-1."
+  baseline_commit: "169a7d0425121bc90bf7c8a2b8b17835b633c844"
+  baseline_note: "Verified cloud master after the completed P12-15G Pickup retirement; W34 review remains bound to the frozen production publication and classifier digests recorded in the review workbook."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -138,27 +90,25 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - task: "P12-15G-1"
-    status: "owner_accepted"
-    prerequisite: "P12-15F cloud verification"
-    note: "Produce no-caller proof and an exact cleanup inventory only."
-  - task: "P12-15G-2"
-    status: "owner_accepted_completion_authorized"
-    prerequisite: "Owner acceptance of P12-15G-1"
-    note: "Implement the accepted code, workflow, capability, catalog, metadata, and front-end cleanup; frozen-document deletion remains separately gated."
+  - task: "WEEKLY-TOP8-AUDIT-2026-W34"
+    status: "blocked_pending_classifier_source_acceptance_and_refreshed_baseline"
+    note: "Audit every current-week Top 8 classification only after the accepted classifier source is published and the W34 baseline is refreshed."
+  - task: "WEEKLY-VISUAL-METADATA-2026-W34"
+    status: "planned_not_authorized"
+    note: "Review representative cards and colors only after the Top 8 classification audit."
   - task: "P12-16"
     status: "planned_not_authorized"
-    prerequisite: "P12-15G completion or an explicit legacy-artifact deferral"
-    note: "Perform cross-device and visual-system closeout only after Pickup retirement reaches its approved stop."
+    note: "Cross-device and visual-system closeout remains a separate task after the W34 maintenance gate."
 
 next_approved_task:
-  id: "P12-16"
-  name: "Cross-device and visual-system closeout"
-  status: "planned_not_authorized"
+  id: "NONE"
+  name: "No follow-up task is authorized"
+  status: "no_follow_up_authorized"
   local_execution_authorized: false
-  note: "Remain stopped after P12-15G-2 until the Owner accepts and completes the retirement implementation or explicitly defers a named legacy artifact."
+  note: "Owner acceptance authorizes only continuous completion of the unchanged W34 classifier source task; no downstream weekly stage is authorized."
 
 prohibited_next_actions:
-  - "Do not touch separately gated frozen/private Pickup documents or their document Schemas and Pages exclusions."
-  - "Do not dispatch production or begin P12-16 as part of P12-15G completion."
-  - "Do not develop directly on master or modify prior accepted workspaces."
+  - "Do not dispatch production, mutate the weekly Issue, or regenerate derived production outputs."
+  - "Do not begin the Top 8 audit, visual-metadata review, Landing review, or P12-16 automatically."
+  - "Do not add the deferred pure-green Tifa path or modify visual metadata, UI, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
+  - "Do not develop directly on master or overwrite unexplained local changes."

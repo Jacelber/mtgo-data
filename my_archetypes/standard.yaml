@@ -246,8 +246,6 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: Mightform Harmonizer
-        min_count: 1
       - card: Sazh's Chocobo
         min_count: 4
       - card: Fabled Passage
@@ -377,8 +375,33 @@ archetypes:
         min_count: 2
       - card: Watery Grave
         min_count: 4
-      - card: Soulstone Sanctuary
+- id: temur-spellementals
+  name: Temur Spellementals
+  priority: 64500
+  rules:
+  - id: temur-spellementals-analyze-the-pollen
+    priority: 64500
+    subtype_id: null
+    conditions:
+      all:
+      - card: Eddymurk Crab
+        zone: main
+        min_count: 4
+      - card: Sunderflock
+        zone: main
+        min_count: 2
+      - card: Analyze the Pollen
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-green-source__
+        zone: main
         min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
+      - card: Stormchaser's Talent
+        zone: main
+        exact_count: 0
 - id: izzet-spellementals
   name: Izzet Spellementals
   priority: 64000
