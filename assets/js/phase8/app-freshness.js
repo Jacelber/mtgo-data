@@ -79,11 +79,11 @@ function statisticsFreshness(meta, range, completeness) {
 }
 
 function landingFreshness(landing, range, completeness) {
-  const highScore = completeness.high_score_decklist_completeness || {};
+  const highScore = completeness?.high_score_decklist_completeness || {};
   return freshnessStrip([
     ["period", "period", freshnessPeriod(landing.week)],
     ["events", "event_count", freshnessNumber(landing.populations?.current?.event_count)],
-    ["decks", "deck_count", freshnessNumber(range.total_decks)],
+    ["decks", "deck_count", freshnessNumber(range?.total_decks)],
     ["high-score", "high_score_count", freshnessNumber(
       landing.populations?.current?.high_score_count
     )],

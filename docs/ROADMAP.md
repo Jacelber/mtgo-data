@@ -245,6 +245,12 @@ begin under separate authorization.
     - verify governance and JavaScript syntax locally, then validate the browser
       contract once on the newly generated production candidate after Owner
       acceptance and accepted-task completion.
+15-HF2B. `P12-15-HF2B` — Retained Landing production compatibility recovery
+    - keep the last admitted Landing readable when newer unreviewed statistics
+      exist, without combining periods or weakening format validation;
+    - make the remaining production matchup smoke checks independent of rolling
+      archetype order and row position, then stop for new Owner acceptance before
+      any commit or production recovery.
 15E. `P12-15E` — Landing feature archive and recovery preview
     - add versioned `landing/features/index.json` and
       `landing/features/<week>.json` contracts, consumers, catalogs, Pages
