@@ -4517,6 +4517,35 @@ archetypes:
       - card: Ragavan, Nimble Pilferer
         zone: main
         max_count: 2
+  - id: dimir-tempo-grixis-frog-goyf
+    priority: 212005
+    subtype_id: grixis
+    conditions:
+      all:
+      - card: Fatal Push
+        zone: main
+        min_count: 2
+      - card: Psychic Frog
+        zone: main
+        min_count: 2
+      - card: Nethergoyf
+        zone: main
+        min_count: 2
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        min_count: 1
+      - card: Death's Shadow
+        zone: main
+        max_count: 2
+      - card: Goryo's Vengeance
+        zone: main
+        exact_count: 0
+      - card: Persist
+        zone: main
+        exact_count: 0
   - id: dimir-tempo-esper
     priority: 637000
     subtype_id: esper

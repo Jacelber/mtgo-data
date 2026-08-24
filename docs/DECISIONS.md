@@ -5508,3 +5508,47 @@ reviewed Modern Unknown becomes classified; existing identities do not migrate,
 conflicts remain zero, and multiple matches remain `1,457`. The classifier
 digest changes, so downstream Top 8, visual-metadata, and Landing work must wait
 for accepted classifier source publication and a refreshed weekly baseline.
+
+---
+
+# DEC-121 - Classify the refreshed W34 Frog-Goyf red-splash tempo singleton
+
+Status: `Accepted`
+
+## Context
+
+The successful refreshed `2026-W34` production baseline added four Modern
+events after DEC-120 and contains one new coherent Modern Unknown deck. Its
+main deck has four each of `Psychic Frog`, `Nethergoyf`, `Fatal Push`,
+`Tamiyo, Inquisitive Student`, `Thoughtseize`, and `Street Wraith`, plus one
+`Steam Vents` and one `Death's Shadow`. The existing pure Dimir Frog path
+excludes a red main-deck source, while the existing red-splash path requires
+two `Counterspell`. Existing Death's Shadow paths require at least three
+copies of that card.
+
+The Owner reviewed the complete decklist and retained-corpus evidence, agreed
+with the proposed `Dimir Red Splash Tempo` / `蓝黑节奏混红` identity, and
+explicitly authorized implementation without another review round.
+
+## Decision
+
+Keep the existing `dimir-tempo` parent, `grixis` subtype, and bilingual display
+name. Add `dimir-tempo-grixis-frog-goyf` at priority `212005`, requiring at
+least two main-deck copies each of `Fatal Push`, `Psychic Frog`, and
+`Nethergoyf`, at least one `Watery Grave` and `Steam Vents`, at most two
+`Death's Shadow`, and zero `Goryo's Vengeance` and `Persist`.
+
+Do not modify either existing Dimir Tempo rule, create another parent or
+subtype, or change the bilingual identity catalog. The thresholds follow the
+least restrictive retained-corpus-safe candidate among the reviewed values
+two, three, and four.
+
+## Consequences
+
+Across the current retained Modern corpus of 241 events and 7,712 decks, only
+the reviewed deck `dde360f86f00a6b8c789` changes, from Unknown to
+`dimir-tempo/grixis`. Existing selected identities do not migrate, conflicts
+and invalid decks remain zero, multiple matches remain `1,475`, and
+same-parent multiple-subtype matches remain `47`. The Modern classifier digest
+changes, so complete Top 8 and Landing maintenance must use a refreshed
+post-publication baseline.
