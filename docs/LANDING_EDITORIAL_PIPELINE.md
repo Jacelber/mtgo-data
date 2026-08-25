@@ -103,9 +103,10 @@ stats/<format>/mtgo/landing/features/<week>.json
 The exact private review Schema is introduced in the backend task. It must bind
 the review week, format, source event IDs, classifier digest, screening-policy
 digest, machine-fact digest, complete Top 8 link catalog, selected features,
-localized final text, and explicit review states. Pages admission must use an
-allowlist; placing private review state beneath `stats/` does not authorize its
-publication.
+localized final text, and chat-gated reviewed state materialized only by the
+authorized importer. That internal state is not a duplicate workbook approval
+cell. Pages admission must use an allowlist; placing private review state
+beneath `stats/` does not authorize its publication.
 
 `landing/current.json` remains the only latest complete Landing document. The
 feature archive is a bounded archive of the bottom new-deck and new-technology
@@ -157,7 +158,8 @@ change the page before Owner acceptance of this task.
 **Output:** a visually verified XLSX review carrier.
 
 **Stop point:** wait for the Owner to complete missing Chinese content,
-selection, category, cards, and explicit review states.
+selection, category, and cards, then submit that authored workbook once in
+chat. Do not require duplicate approval cells.
 
 ### P12-15C - Content completion and bilingual review
 
@@ -176,11 +178,13 @@ selection, category, cards, and explicit review states.
    name, propose Chinese names, and obtain the Owner's final confirmation. The
    recovery workbook may show English as the Chinese fallback until this
    review is complete; the fallback is not an approved Chinese name.
-5. Return the same workbook lineage for Owner correction and final English
-   approval.
-6. Require separate explicit reviewed states for top copy and bottom features;
-   an explicitly reviewed zero-item feature result is valid only when final top
-   copy contains no deck token.
+5. Return the same workbook lineage for Owner correction or one final English
+   acceptance in chat.
+6. Validate Chinese and bilingual stages from actual content, exact tokens,
+   cards, identities, and the submitted workbook hash. Do not use duplicate
+   top-copy, feature, Chinese, or English approval cells as admission facts. An
+   intentional zero-feature result is valid only when final top copy contains
+   no deck token.
 
 **Output:** complete bilingual Owner-reviewed content for the exact frozen
 baseline.
@@ -218,8 +222,8 @@ front-end switch.
    derived order, but the workbook never asks the Owner to enter it.
 8. Add fail-closed validation for stale event IDs, classifier or policy
    digests, unknown deck tokens, missing bilingual name coverage, invalid card
-   choices, and
-   missing explicit review. Also fail closed when any kept localized top-copy
+   choices, and missing stage acceptance or content. Also fail closed when any
+   kept localized top-copy
    token lacks an exact selected feature record; do not generate a
    top-copy-only destination for newly reviewed content.
 
@@ -397,10 +401,10 @@ decision to defer a named compatibility artifact.
 | 7. Review visual metadata | Codex proposes; Owner decides | Confirm representative cards and deck colors. | Accepted visual metadata or explicit no change. |
 | 8. Screen Landing features | Automatic producer | Apply the five reviewed routes and retain the complete Top 8 pool. Merge reason tags only for the same exact deck. | Private candidates and evidence. |
 | 9. Prepare Landing workbook | Codex | Populate top-copy drafts, ordinary feature candidates, all Top 8 decks, exact deck tokens, and simple review controls. Before delivery, union every exact deck already referenced by top copy into `Featured Decks` as mandatory `KEEP`. | Editable Landing review carrier with no top-copy-only deck. |
-| 10. Complete Chinese review | Owner | Select, add, delete, merge, reorder, or rewrite without a machine-imposed item limit; confirm cards and Chinese final copy. Any exact deck added to kept top copy must receive a matching feature row and cannot be dropped while referenced. | Chinese final content whose top-copy token set is contained in the selected feature set. |
+| 10. Complete Chinese review | Owner submits once; Codex validates | Select, add, delete, merge, reorder, or rewrite without a machine-imposed item limit; confirm cards and Chinese final copy. Any exact deck added to kept top copy must receive a matching feature row and cannot be dropped while referenced. One chat submission closes this authored stage; Codex runs the read-only Chinese-stage validator. | Machine-valid Chinese final content whose top-copy token set is contained in the selected feature set. |
 | 11. Draft English | Codex | Translate the Owner-final Chinese content without changing it. | English draft in the same workbook lineage. |
-| 12. Complete final review | Owner | Correct or approve English and explicitly complete top-copy and feature review. An intentional zero-feature result is valid only when final top copy contains no deck token. | Complete bilingual review state. |
-| 13. Build preview | Codex | Import and validate the workbook, generate current and feature-history documents, and render the accepted Landing UI. | Exact local preview. |
+| 12. Complete final review | Owner accepts once; Codex validates | Correct English or accept the supplied draft once in chat. No duplicate top-copy, feature, or English approval cells are required. An intentional zero-feature result is valid only when final top copy contains no deck token. | Machine-valid bilingual review state. |
+| 13. Build preview | Codex | After separate import authorization, import the exact accepted workbook hash; import repeats complete bilingual validation before writing private review state, then generates current and feature-history documents and renders the accepted Landing UI. | Exact local preview. |
 | 14. Accept and publish | Owner accepts; Codex completes | After hands-on acceptance, complete the unchanged task through commit, Ready PR, required checks, merge, and Pages publication. | Cloud Landing and immutable publication subject. |
 | 15. Verify cloud | Codex | Verify current copy, feature weeks, language, format, deck links, card display, redirects, and no legacy Pickup data request. | Completed weekly maintenance evidence. |
 
@@ -415,8 +419,9 @@ re-review rather than silent overwrite.
 The Landing workbook is separate from Unknown and visual-metadata maintenance.
 Its sheets and user-facing fields are limited to the Landing editorial task:
 
-1. `Review Control` - immutable baseline plus explicit top-copy, Chinese,
-   English, and feature-review states;
+1. `Review Control` - immutable baseline, calculated completeness counts, and
+   read-only instructions for the two chat-gated stages; no duplicate Owner
+   approval fields;
 2. `Landing Copy` - ordered final text, Codex English draft, Owner English final,
    and an in-sheet reference block for every selected deck and `deck:<ID>`;
 3. `Featured Decks` - candidate evidence and complete decklists plus editable
@@ -432,6 +437,14 @@ from validated deck IDs. Internal input IDs, digests, action codes, parent IDs,
 and implementation vocabulary are omitted from Owner input columns. The XLSX
 is a review carrier; accepted content is imported into the private Landing
 review source before preview or publication.
+
+The Owner's submitted content is the review decision. One Chinese-stage chat
+submission and one later bilingual acceptance are sufficient; the same authored
+content is not approved again through workbook status dropdowns. The read-only
+`landing-review validate-xlsx --stage chinese|bilingual --expected-sha256`
+command checks actual content and provenance without writing repository state.
+`import-xlsx` remains separately authorized and accepts only the exact
+bilingual-validated hash.
 
 The reference block has no `COPY LINK ONLY` state. Every exact token appearing
 in a kept top-copy row must resolve to a `KEEP` row in `Featured Decks`. The

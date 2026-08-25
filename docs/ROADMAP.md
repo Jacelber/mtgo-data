@@ -224,6 +224,10 @@ begin under separate authorization.
       is derived from category plus exact deck-token appearance in final top
       copy, and the title is derived from the format/classifier identity's
       bilingual name;
+    - keep `Review Control` read-only and treat one chat submission of authored
+      Chinese plus one later chat acceptance of English as the two human gates;
+      validate actual content at each stage instead of requiring duplicate
+      workbook approval fields;
     - preload Standard W27, Standard W33, and Modern W33 recovery rows, render
       every sheet, and stop for Owner completion without changing the page.
 15C. `P12-15C` — Content completion and bilingual review

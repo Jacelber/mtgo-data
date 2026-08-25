@@ -37,6 +37,7 @@ WORKBOOK_SHEETS = (
     "All Top 8",
     "Bilingual Names",
 )
+WORKBOOK_REVIEW_STAGES = {"chinese", "bilingual"}
 _OOXML_MAIN = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 _OOXML_REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 _PACKAGE_REL = "http://schemas.openxmlformats.org/package/2006/relationships"
@@ -654,6 +655,16 @@ def validate_name_catalog(
     root = Path(repository_root).resolve()
     path = Path(catalog_path) if catalog_path is not None else root / DEFAULT_NAME_CATALOG
     document = load_name_catalog_document(path)
+    return _validate_name_catalog_document(root, document)
+
+
+def _validate_name_catalog_document(
+    repository_root: Path,
+    document: Mapping[str, Any],
+) -> dict[str, int]:
+    """Validate one in-memory bilingual catalog against the current taxonomy."""
+
+    root = repository_root.resolve()
     _validate_schema(document, root / DEFAULT_NAME_SCHEMA, "bilingual name catalog")
     expected = {
         row["identity_key"]: row
@@ -960,13 +971,34 @@ def _catalog_from_workbook(
                 "identity_key": identity_key,
             }
         )
+    workbook_keys = {item["identity_key"] for item in names}
+    if workbook_keys != set(taxonomy):
+        current_path = repository_root / DEFAULT_NAME_CATALOG
+        current_document = load_name_catalog_document(current_path)
+        _validate_name_catalog_document(repository_root, current_document)
+        names.extend(
+            dict(item)
+            for item in current_document["names"]
+            if item["identity_key"] not in workbook_keys
+        )
     document = {"schema_version": NAME_SCHEMA_VERSION, "names": names}
     _validate_schema(
         document,
         repository_root / DEFAULT_NAME_SCHEMA,
         "imported bilingual name catalog",
     )
+    _validate_name_catalog_document(repository_root, document)
     return document
+
+
+def _name_lookup_from_document(
+    document: Mapping[str, Any],
+) -> dict[tuple[str, str, str | None], dict[str, str]]:
+    names: dict[tuple[str, str, str | None], dict[str, str]] = {}
+    for item in document["names"]:
+        key = (item["format"], item["parent_id"], item["subtype_id"])
+        names[key] = {"en": item["english"], "zh": item["chinese"]}
+    return names
 
 
 def _control_scopes(rows: list[dict[str, Any]]) -> dict[tuple[str, str], dict[str, Any]]:
@@ -981,38 +1013,46 @@ def _control_scopes(rows: list[dict[str, Any]]) -> dict[tuple[str, str], dict[st
         key = (format_id, week)
         if key in scopes:
             raise MTGOLandingEditorialError(f"review control scope is duplicated: {format_id} {week}")
-        if row.get("Feature Review") != "APPROVED":
-            raise MTGOLandingEditorialError(f"{format_id} {week} feature review is not approved")
-        if row.get("Top Copy Review") not in {"APPROVED", "NOT APPLICABLE"}:
-            raise MTGOLandingEditorialError(f"{format_id} {week} top-copy review is incomplete")
         scopes[key] = row
     if not scopes:
-        raise MTGOLandingEditorialError("review workbook contains no approved scopes")
+        raise MTGOLandingEditorialError("review workbook contains no valid scopes")
     return scopes
 
 
 def _copy_rows_by_scope(
     scopes: Mapping[tuple[str, str], Mapping[str, Any]],
     rows: list[dict[str, Any]],
+    *,
+    stage: str = "bilingual",
 ) -> dict[tuple[str, str], list[dict[str, Any]]]:
+    if stage not in WORKBOOK_REVIEW_STAGES:
+        raise ValueError(f"unsupported workbook review stage: {stage}")
     result = {key: [] for key in scopes}
     copy_scope_by_format: dict[str, tuple[str, str]] = {}
-    for key, control in scopes.items():
-        if control.get("Top Copy Review") != "APPROVED":
+    for format_id in sorted({key[0] for key in scopes}):
+        format_scopes = [key for key in scopes if key[0] == format_id]
+        if len(format_scopes) == 1:
+            copy_scope_by_format[format_id] = format_scopes[0]
             continue
-        format_id = key[0]
-        if format_id in copy_scope_by_format:
+        legacy_scopes = [
+            key
+            for key in format_scopes
+            if scopes[key].get("Top Copy Review") == "APPROVED"
+        ]
+        if len(legacy_scopes) != 1:
             raise MTGOLandingEditorialError(
                 f"review workbook has ambiguous top-copy weeks for {format_id}"
             )
-        copy_scope_by_format[format_id] = key
+        copy_scope_by_format[format_id] = legacy_scopes[0]
     orders: dict[tuple[str, str], set[int]] = {key: set() for key in scopes}
     for row in rows:
         if row.get("Review Result") != "KEEP":
             continue
         format_id = str(row.get("Format") or "")
         if format_id not in copy_scope_by_format:
-            raise MTGOLandingEditorialError(f"kept top copy has no approved scope: {format_id}")
+            if format_id in {"standard", "modern"}:
+                continue
+            raise MTGOLandingEditorialError(f"kept top copy has no valid scope: {format_id}")
         key = copy_scope_by_format[format_id]
         order = row.get("Order")
         if not isinstance(order, int) or isinstance(order, bool) or order < 1:
@@ -1021,9 +1061,13 @@ def _copy_rows_by_scope(
             raise MTGOLandingEditorialError(f"top-copy order is duplicated for {format_id}")
         orders[key].add(order)
         zh = str(row.get("Chinese Copy") or "").strip()
+        if not zh:
+            raise MTGOLandingEditorialError("kept top copy requires Chinese final text")
         en = str(row.get("English Final") or "").strip()
-        if not zh or not en:
-            raise MTGOLandingEditorialError("kept top copy requires both final languages")
+        if stage == "bilingual" and not en:
+            raise MTGOLandingEditorialError("kept top copy requires English final text")
+        if stage == "chinese":
+            en = zh
         result[key].append({"order": order, "text": {"zh": zh, "en": en}})
     for items in result.values():
         items.sort(key=lambda item: item["order"])
@@ -1073,7 +1117,11 @@ def _feature_rows_by_scope(
     rows: list[dict[str, Any]],
     subjects: Mapping[tuple[str, str], Mapping[str, Any]],
     names: Mapping[tuple[str, str, str | None], Mapping[str, str]],
+    *,
+    stage: str = "bilingual",
 ) -> dict[tuple[str, str], list[dict[str, Any]]]:
+    if stage not in WORKBOOK_REVIEW_STAGES:
+        raise ValueError(f"unsupported workbook review stage: {stage}")
     result = {key: [] for key in scopes}
     evidence = {
         key: {item["token"]: item["reasons"] for item in subject["candidate_evidence"]}
@@ -1084,7 +1132,11 @@ def _feature_rows_by_scope(
             continue
         key = (str(row.get("Format") or ""), str(row.get("Feature Week") or ""))
         if key not in scopes:
-            raise MTGOLandingEditorialError(f"kept feature has no approved scope: {key}")
+            if key[0] in {"standard", "modern"} and key[0] not in {
+                scope[0] for scope in scopes
+            }:
+                continue
+            raise MTGOLandingEditorialError(f"kept feature has no valid scope: {key}")
         subject = subjects[key]
         by_token = {item["token"]: item for item in subject["all_top8"]}
         token = str(row.get("Deck Link ID") or "")
@@ -1121,12 +1173,20 @@ def _feature_rows_by_scope(
         category = str(row.get("Category") or "")
         if category not in {"new_deck", "new_technology"}:
             raise MTGOLandingEditorialError(f"kept feature category is invalid: {token}")
+        positioning_zh = str(row.get("Chinese Positioning") or "").strip()
+        positioning_en = str(row.get("English Final") or "").strip()
+        if not positioning_zh:
+            raise MTGOLandingEditorialError(
+                f"kept feature Chinese positioning is incomplete: {token}"
+            )
+        if stage == "bilingual" and not positioning_en:
+            raise MTGOLandingEditorialError(
+                f"kept feature English positioning is incomplete: {token}"
+            )
         positioning = {
-            "zh": str(row.get("Chinese Positioning") or "").strip(),
-            "en": str(row.get("English Final") or "").strip(),
+            "zh": positioning_zh,
+            "en": positioning_en if stage == "bilingual" else positioning_zh,
         }
-        if not all(positioning.values()):
-            raise MTGOLandingEditorialError(f"kept feature positioning is incomplete: {token}")
         featured_cards = [
             str(row.get(f"Featured Card {index}") or "").strip()
             for index in range(1, 5)
@@ -1378,18 +1438,18 @@ def _known_ids(repository_root: Path, format_id: str) -> set[str]:
     return set(known_ids)
 
 
-def import_review_workbook(
+def _validated_workbook_subject(
     repository_root: str | Path,
     workbook_path: str | Path,
     *,
-    output_root: str | Path | None = None,
     expected_sha256: str | None = None,
     formats: set[str] | None = None,
+    stage: str = "bilingual",
 ) -> dict[str, Any]:
-    """Validate and import one accepted Landing workbook into private review files."""
+    if stage not in WORKBOOK_REVIEW_STAGES:
+        raise ValueError(f"unsupported workbook review stage: {stage}")
 
     root = Path(repository_root).resolve()
-    output = Path(output_root).resolve() if output_root is not None else root
     workbook = Path(workbook_path).resolve()
     workbook_digest = file_sha256(workbook)
     if expected_sha256 is not None and workbook_digest != expected_sha256:
@@ -1402,28 +1462,26 @@ def import_review_workbook(
         scopes = {scope: row for scope, row in scopes.items() if scope[0] in formats}
         if not scopes:
             raise MTGOLandingEditorialError(
-                "accepted workbook has no approved review scope for the requested format"
+                "review workbook has no valid scope for the requested format"
             )
     catalog_document = _catalog_from_workbook(root, sheets["Bilingual Names"])
-    catalog_path = output / DEFAULT_NAME_CATALOG
-    _write_yaml(catalog_path, catalog_document)
-    validate_name_catalog(root, catalog_path)
-    names = load_name_catalog(catalog_path)
+    names = _name_lookup_from_document(catalog_document)
     catalog_digest = document_digest(catalog_document)
-    subjects = {
-        scope: build_top8_subject(root, *scope)
-        for scope in scopes
-    }
+    subjects = {scope: build_top8_subject(root, *scope) for scope in scopes}
     for scope, subject in subjects.items():
         _verify_workbook_top8(scope, subject, sheets["All Top 8"])
-    copy_rows = _copy_rows_by_scope(scopes, sheets["Landing Copy"])
+    copy_rows = _copy_rows_by_scope(
+        scopes,
+        sheets["Landing Copy"],
+        stage=stage,
+    )
     feature_rows = _feature_rows_by_scope(
         scopes,
         sheets["Featured Decks"],
         subjects,
         names,
+        stage=stage,
     )
-    review_paths: list[Path] = []
     reviews: dict[tuple[str, str], dict[str, Any]] = {}
     for scope in sorted(scopes):
         format_id, week = scope
@@ -1465,15 +1523,88 @@ def import_review_workbook(
             "known_archetype_ids": subject["known_archetype_ids"],
         }
         validate_review_document(document, root / DEFAULT_REVIEW_SCHEMA)
+        reviews[scope] = document
+    return {
+        "workbook_sha256": workbook_digest,
+        "catalog_document": catalog_document,
+        "reviews": reviews,
+        "name_count": len(catalog_document["names"]),
+        "review_count": len(reviews),
+        "feature_count": sum(
+            len(document["review"]["features"]["items"])
+            for document in reviews.values()
+        ),
+        "copy_count": sum(
+            len(document["review"]["top_copy"]["items"])
+            for document in reviews.values()
+        ),
+    }
+
+
+def validate_review_workbook(
+    repository_root: str | Path,
+    workbook_path: str | Path,
+    *,
+    stage: str,
+    expected_sha256: str | None = None,
+    formats: set[str] | None = None,
+) -> dict[str, Any]:
+    """Validate one review stage without writing repository review state."""
+
+    result = _validated_workbook_subject(
+        repository_root,
+        workbook_path,
+        expected_sha256=expected_sha256,
+        formats=formats,
+        stage=stage,
+    )
+    return {
+        key: result[key]
+        for key in (
+            "workbook_sha256",
+            "name_count",
+            "review_count",
+            "feature_count",
+            "copy_count",
+        )
+    } | {"stage": stage}
+
+
+def import_review_workbook(
+    repository_root: str | Path,
+    workbook_path: str | Path,
+    *,
+    output_root: str | Path | None = None,
+    expected_sha256: str | None = None,
+    formats: set[str] | None = None,
+) -> dict[str, Any]:
+    """Validate and import one accepted bilingual workbook into private review files."""
+
+    root = Path(repository_root).resolve()
+    output = Path(output_root).resolve() if output_root is not None else root
+    validated = _validated_workbook_subject(
+        root,
+        workbook_path,
+        expected_sha256=expected_sha256,
+        formats=formats,
+        stage="bilingual",
+    )
+    catalog_document = validated["catalog_document"]
+    reviews = validated["reviews"]
+    catalog_path = output / DEFAULT_NAME_CATALOG
+    _write_yaml(catalog_path, catalog_document)
+    review_paths: list[Path] = []
+    for (format_id, week), document in sorted(reviews.items()):
         review_path = output / f"stats/{format_id}/mtgo/landing/review/{week}.yaml"
         _write_yaml(review_path, document)
         review_paths.append(review_path)
-        reviews[scope] = document
 
     known_paths: list[Path] = []
-    for format_id in sorted({scope[0] for scope in scopes}):
+    for format_id in sorted({scope[0] for scope in reviews}):
         known = _known_ids(root, format_id)
-        accepted_weeks = sorted(week for current_format, week in scopes if current_format == format_id)
+        accepted_weeks = sorted(
+            week for current_format, week in reviews if current_format == format_id
+        )
         for week in accepted_weeks:
             known.update(reviews[(format_id, week)]["known_archetype_ids"])
         known_path = output / f"stats/{format_id}/mtgo/landing/review/known_archetypes.json"
@@ -1494,20 +1625,14 @@ def import_review_workbook(
         )
         known_paths.append(known_path)
     return {
-        "workbook_sha256": workbook_digest,
+        "workbook_sha256": validated["workbook_sha256"],
         "catalog_path": catalog_path,
         "review_paths": review_paths,
         "known_paths": known_paths,
-        "name_count": len(catalog_document["names"]),
-        "review_count": len(review_paths),
-        "feature_count": sum(
-            len(document["review"]["features"]["items"])
-            for document in reviews.values()
-        ),
-        "copy_count": sum(
-            len(document["review"]["top_copy"]["items"])
-            for document in reviews.values()
-        ),
+        "name_count": validated["name_count"],
+        "review_count": validated["review_count"],
+        "feature_count": validated["feature_count"],
+        "copy_count": validated["copy_count"],
     }
 
 
@@ -1529,4 +1654,5 @@ __all__ = [
     "validate_name_catalog",
     "validate_review_binding",
     "validate_review_document",
+    "validate_review_workbook",
 ]

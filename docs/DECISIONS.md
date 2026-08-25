@@ -5708,3 +5708,55 @@ unimplemented. This changes no public Landing document, editorial copy,
 classifier, statistic, source data, visual identity, UI, public path, or
 production schedule. Publication and a production run remain separately
 authorized actions after local Owner acceptance.
+
+---
+
+# DEC-126 - Treat authored Landing content as one-stage Owner confirmation
+
+Status: `Accepted for local implementation`
+
+## Context
+
+The Landing workbook already records the Owner's substantive choices in
+`Landing Copy` and `Featured Decks`, but `Review Control` separately required
+top-copy, feature, Chinese, and English approval dropdowns. The importer treated
+some of those repeated cells as admission facts. This made the Owner approve
+their own authored content twice without improving provenance, completeness, or
+publication safety. The same W34 carrier also wrote subtype-localized names into
+the machine-bound `All Top 8.Deck` column even though the importer binds that
+column to the authoritative classified `display_name`.
+
+## Decision
+
+Make `Review Control` a read-only baseline and calculated-completeness sheet.
+One submitted Chinese workbook in chat is the Chinese-stage Owner decision; one
+later edit or acceptance of English in chat is the bilingual-stage decision.
+Do not require duplicate top-copy, feature, Chinese, or English approval cells.
+
+Add read-only `chinese` and `bilingual` workbook validators. Both bind the exact
+workbook SHA-256 and verify scope, classifier-backed names, current Top 8
+identity, kept copy, feature membership, categories, cards, and provenance. The
+bilingual stage additionally requires final English and matching localized
+deck-token sets. `import-xlsx` remains separately authorized, repeats the full
+bilingual validation before writing any private review file, and preserves its
+exact-hash fail-closed boundary.
+
+For a carrier with one week per format, route copy directly from format to that
+scope and ignore obsolete approval cells. Retain the prior `Top Copy Review`
+value only as a compatibility discriminator when an old workbook contains more
+than one week for the same format. When an older carrier predates identities
+already approved in the current repository catalog, preserve its reviewed rows
+and fill only those missing identities from that validated current catalog;
+never let an old workbook delete newer approved names. Write `All Top 8.Deck`
+from the authoritative subject `display_name`; subtype-aware bilingual text
+remains in the two display columns.
+
+## Consequences
+
+The Owner no longer repeats approval of content they just authored, while
+machine completeness and exact-subject checks become explicit, read-only stage
+contracts. Existing recovery workbooks remain importable, and newly generated
+workbooks no longer depend on approval dropdowns. No public Landing document,
+classifier, statistic, source data, visual identity, UI, public path, or
+production behavior changes. Import, English drafting, publication, and MTGO
+production remain separately authorized actions.
