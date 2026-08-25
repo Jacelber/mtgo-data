@@ -3285,12 +3285,19 @@ content is validated and imported into the private week document before preview
 or publication. The Owner is not asked to provide internal input IDs, stable
 classifier IDs, generated link labels, or arbitrary URLs.
 
+`Review Control` carries immutable scope and calculated completeness only. The
+Owner submits authored Chinese content once in chat and later edits or accepts
+English once; duplicate approval cells are not machine facts. Read-only
+`chinese` and `bilingual` validation stages bind the submitted workbook hash and
+validate actual content. Import is a separate mutation gate and repeats the
+complete bilingual contract before writing any private review file.
+
 The importer reads XLSX cells from raw OOXML, including explicit shared-string,
 inline-string, cached-formula, numeric, boolean, and true-blank semantics. It
 binds the accepted workbook SHA-256 before writing any private review file.
 Repeated import of the same immutable workbook and repository subject is
-deterministic; a workbook byte change, missing approval, or source identity
-change fails before admission.
+deterministic; a workbook byte change, incomplete stage content, or source
+identity change fails before admission.
 
 Top copy may embed zero or more exact `deck:<20-hex deck ID>` tokens at any
 desired positions. Non-empty localized versions use the same token set, but

@@ -91,6 +91,22 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="preserve an existing candidate for the latest complete week",
     )
+    validate_parser = review_commands.add_parser(
+        "validate-xlsx",
+        help="validate a Landing workbook stage without importing it",
+    )
+    validate_parser.add_argument("workbook", type=Path, help="XLSX review carrier")
+    validate_parser.add_argument(
+        "--stage",
+        required=True,
+        choices=("chinese", "bilingual"),
+        help="content stage whose machine contract must be complete",
+    )
+    validate_parser.add_argument(
+        "--expected-sha256",
+        required=True,
+        help="immutable workbook SHA-256 submitted for this stage",
+    )
     import_parser = review_commands.add_parser(
         "import-xlsx", help="import an explicitly approved Landing workbook"
     )
@@ -279,6 +295,21 @@ def _run_landing_review(args: argparse.Namespace, root: Path, registry: Path) ->
         if args.workbook.is_absolute()
         else (root / args.workbook).resolve()
     )
+    if args.landing_review_command == "validate-xlsx":
+        result = landing_editorial.validate_review_workbook(
+            root,
+            workbook,
+            stage=args.stage,
+            expected_sha256=args.expected_sha256,
+            formats={args.format_id},
+        )
+        print(
+            "MTGO Landing review validated: "
+            f"format={args.format_id} stage={result['stage']} "
+            f"reviews={result['review_count']} features={result['feature_count']} "
+            f"copy={result['copy_count']} names={result['name_count']}"
+        )
+        return 0
     result = landing_editorial.import_review_workbook(
         root,
         workbook,

@@ -40,9 +40,9 @@ noise. A changed weekly baseline updates and reopens the same Issue.
 | 8. Review visual metadata | Codex proposes; Owner decides | Review representative-card choices and deck-color identities against the accepted deck identities. Missing deterministic diagnostics are reported as unavailable, never guessed. | Owner-approved metadata changes or an explicit no-change/defer record. |
 | 9. Screen Landing features | Automatic Landing editorial producer | Run `landing-review prepare --if-absent`, apply the five reviewed routes to exact Top 8 results, and keep the complete ordered Top 8 pool. Merge reason tags only when they select the same exact deck. There is no machine primary pick. | Private Landing candidates, structured evidence, and complete Top 8 link catalog. |
 | 10. Prepare the Landing workbook | Codex | Create the five-sheet Landing carrier defined below. Preserve prior Owner content, expose exact deck tokens in the copy sheet, and, before presenting the workbook, add every exact deck already referenced by retained or draft top copy to `Featured Decks` as a mandatory `KEEP` row. Merge these rows with ordinary machine candidates by exact deck ID. Derive bilingual deck titles from the classifier-name catalog and derive feature order from category plus final top-copy token order; omit both as Owner input fields. | Editable Landing review carrier bound to the frozen baseline, with no top-copy-only deck and no manual feature-title/order work. |
-| 11. Complete Chinese review | Owner | Select any number of other candidates, add any other exact Top 8 deck, merge or split presentation items, change category/cards/positioning, delete or completely rewrite machine copy, write unrelated content, or select none only when the final top copy contains no deck token. Every exact deck added to kept top copy must also be added to `Featured Decks`; it cannot be dropped while that token remains. Explicitly complete both top-copy and feature review. | Chinese final content and a feature selection containing every top-copy deck. |
-| 12. Draft and review English | Codex drafts; Owner decides | Codex translates the Owner-final Chinese content without changing it. The Owner edits or approves the English and explicitly completes bilingual review. | Complete bilingual Landing review state. |
-| 13. Build and validate the preview | Codex | Hash the closed workbook, import it with `landing-review import-xlsx --expected-sha256`, and validate week, source events, classifier and policy digests, deck tokens, rank, bilingual-name coverage, derived order, and featured cards. Build the current and feature-history documents from that same private review source, then render the accepted UI. | Exact local Landing preview or a fail-closed review blocker. |
+| 11. Complete Chinese review | Owner submits once; Codex validates | Select any number of other candidates, add any other exact Top 8 deck, merge or split presentation items, change category/cards/positioning, delete or completely rewrite machine copy, write unrelated content, or select none only when the final top copy contains no deck token. Every exact deck added to kept top copy must also be added to `Featured Decks`; it cannot be dropped while that token remains. The Owner's one chat submission closes the Chinese authoring stage; no duplicate approval cell is required. Codex hashes the submitted workbook and runs `landing-review validate-xlsx --stage chinese --expected-sha256`. | Machine-valid Chinese final content and a feature selection containing every top-copy deck. |
+| 12. Draft and review English | Codex drafts; Owner accepts once | Codex translates the Owner-final Chinese content without changing it. The Owner edits the English or accepts the supplied draft once in chat; no duplicate workbook approval state is required. Codex then hashes that workbook and runs the bilingual validation stage. | Machine-valid bilingual Landing review state. |
+| 13. Build and validate the preview | Codex | After separately authorized import, bind the exact bilingual-accepted workbook hash with `landing-review import-xlsx --expected-sha256`; import repeats the complete bilingual validation before any private review file is written. Validate week, source events, classifier and policy digests, deck tokens, rank, bilingual-name coverage, derived order, and featured cards. Build the current and feature-history documents from that same private review source, then render the accepted UI. | Exact local Landing preview or a fail-closed review blocker. |
 | 14. Accept and publish Landing | Owner accepts; Codex completes | After hands-on acceptance, complete the unchanged task through commit, one Ready PR, required checks, merge, and Pages publication. Publish the latest Landing and selected feature-history week together; there is no intermediate public Pickup publication. | Accepted public Landing and immutable publication subject. |
 | 15. Verify cloud | Codex | Verify current copy, historical feature selection, both formats and languages, exact deck links, card display, legacy Pickup redirects, and absence of live Pickup data requests. | Completed weekly-maintenance evidence. |
 
@@ -134,8 +134,9 @@ complete Top 8 classification audit uses its own XLSX.
 After those upstream stages are accepted, Codex supplies one Landing-only
 five-sheet carrier:
 
-1. `Review Control` - frozen baseline and explicit Chinese, English, top-copy,
-   and feature-review states;
+1. `Review Control` - frozen baseline, calculated completeness counts, and
+   read-only instructions for the chat-gated Chinese and English stages; it has
+   no duplicate Owner approval dropdowns;
 2. `Landing Copy` - unrestricted ordered final copy, Codex English draft,
    Owner English final, and an in-sheet reference block containing each
    selected deck's format, event, date, rank, archetype, player, and
@@ -163,6 +164,14 @@ Owner cell from inheriting an unrelated shared-string index or number. The
 accepted workbook SHA-256, complete Top 8 catalog, classifier/policy/fact
 digests, and bilingual catalog digest are stored together in the private week
 document; any later mismatch requires explicit re-review.
+
+Owner intent is recorded once per authored stage. Saving and submitting the
+Chinese workbook in chat is the Chinese-stage decision; editing or accepting
+the later English draft once in chat is the bilingual-stage decision. The
+workbook stores the actual decisions, while `Review Control` only explains the
+scope and reports machine completeness. `landing-review validate-xlsx` is
+read-only and supports `chinese` and `bilingual`; only the separately authorized
+`import-xlsx` command may write private Landing review state.
 
 For Landing final copy, the Owner writes unrestricted Chinese text and may
 write or later review English text. Codex supplies an English draft only after

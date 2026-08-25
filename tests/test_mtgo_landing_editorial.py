@@ -40,11 +40,81 @@ def test_raw_xlsx_reader_preserves_true_blank_cells():
     assert first_top8["Add to Featured?"] != first_top8["Rank"]
 
 
+def test_single_week_copy_uses_content_instead_of_repeated_control_approval():
+    scopes = editorial._control_scopes(
+        [
+            {
+                "Format": "standard",
+                "Week": "2026-W34",
+                "Top Copy Review": "PENDING",
+                "Feature Review": "PENDING",
+            }
+        ]
+    )
+    rows = [
+        {
+            "Review Result": "KEEP",
+            "Order": 1,
+            "Format": "standard",
+            "Chinese Copy": "已完成的中文内容",
+            "English Final": None,
+        }
+    ]
+
+    assert editorial._copy_rows_by_scope(scopes, rows, stage="chinese") == {
+        ("standard", "2026-W34"): [
+            {
+                "order": 1,
+                "text": {
+                    "zh": "已完成的中文内容",
+                    "en": "已完成的中文内容",
+                },
+            }
+        ]
+    }
+    with pytest.raises(editorial.MTGOLandingEditorialError, match="English final"):
+        editorial._copy_rows_by_scope(scopes, rows, stage="bilingual")
+
+
+def test_legacy_multiweek_control_still_routes_copy_without_being_an_approval_gate():
+    scopes = editorial._control_scopes(
+        [
+            {
+                "Format": "standard",
+                "Week": "2026-W27",
+                "Top Copy Review": "NOT APPLICABLE",
+            },
+            {
+                "Format": "standard",
+                "Week": "2026-W33",
+                "Top Copy Review": "APPROVED",
+            },
+        ]
+    )
+    rows = [
+        {
+            "Review Result": "KEEP",
+            "Order": 1,
+            "Format": "standard",
+            "Chinese Copy": "中文",
+            "English Final": "English",
+        }
+    ]
+
+    result = editorial._copy_rows_by_scope(scopes, rows, stage="bilingual")
+
+    assert result[("standard", "2026-W27")] == []
+    assert result[("standard", "2026-W33")][0]["text"] == {
+        "zh": "中文",
+        "en": "English",
+    }
+
+
 def test_accepted_v6_imports_complete_private_subject(imported):
     output_root, result = imported
 
     assert result["workbook_sha256"] == WORKBOOK_SHA256
-    assert result["name_count"] == 323
+    assert result["name_count"] == 327
     assert result["review_count"] == 3
     assert result["feature_count"] == 16
     assert result["copy_count"] == 11

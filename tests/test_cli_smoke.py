@@ -58,6 +58,26 @@ def test_landing_screening_uses_the_landing_review_command():
     assert mtgo_cli.COMMAND_CAPABILITIES[args.command] == "landing_generation"
 
 
+def test_landing_workbook_validation_stage_is_explicit_and_read_only():
+    args = mtgo_cli.build_parser().parse_args(
+        [
+            "--format",
+            "modern",
+            "landing-review",
+            "validate-xlsx",
+            "review.xlsx",
+            "--stage",
+            "chinese",
+            "--expected-sha256",
+            "0" * 64,
+        ]
+    )
+
+    assert args.landing_review_command == "validate-xlsx"
+    assert args.stage == "chinese"
+    assert args.expected_sha256 == "0" * 64
+
+
 def test_melee_cli_smoke(tmp_path, capsys):
     def fetch(event_id, _registry, raw_root, *, dry_run):
         assert raw_root == tmp_path / "raw"
