@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-landing-machine-fact-binding-w34-20260825"
+  current_working_branch: "codex/weekly-landing-import-preview-w34-20260825"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,94 +31,113 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-LANDING-MACHINE-FACT-BINDING-2026-W34"
-  batch_id: "WEEKLY-LANDING-MACHINE-FACT-BINDING-2026-W34"
-  name: "Repair the Landing import-to-preview machine-fact binding contract"
+  id: "WEEKLY-LANDING-CONTENT-2026-W34"
+  batch_id: "WEEKLY-LANDING-CONTENT-2026-W34"
+  name: "Import the accepted W34 Landing workbook and complete the Azorius Momo and Hollowvine local visual preview"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-25"
   owner_accepted_on: "2026-08-25"
   developer_validation_completed_on: "2026-08-25"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-landing-machine-fact-binding-w34-20260825-01"
-  branch: "codex/weekly-landing-machine-fact-binding-w34-20260825"
-  base_commit: "1f6267f8c6a7f4025f1397e98ee72bb2806162e3"
-  task_type: "bounded_private_landing_binding_contract_repair"
-  artifact_impact: "internal_diagnostics"
-  objective: "Use one exact Landing machine-fact digest across readiness, workbook import, and preview admission so an unchanged accepted W34 workbook can produce a local preview while real fact drift still fails closed."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-landing-import-preview-w34-20260825-01"
+  branch: "codex/weekly-landing-import-preview-w34-20260825"
+  base_commit: "62b6c681a5885e983784d74c2b51f91babb9162a"
+  task_type: "bounded_generated_landing_preview"
+  artifact_impact: "user_visible_ui"
+  objective: "Preserve the exact accepted bilingual W34 workbook import, add the Owner-selected Azorius Momo and Hollowvine visual metadata, and present the resulting local UI for Owner acceptance without production publication."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   production_follow_up:
-    authorized: false
-    condition: "Do not dispatch MTGO production during or after this task."
+    authorized: true
+    condition: "After this accepted branch merges and Pages succeeds, dispatch one new MTGO production workflow from the merged master; do not rerun failed run 32832640536 or its old attempt."
   target_paths:
-    - "src/mtgmeta/mtgo/landing.py"
-    - "src/mtgmeta/mtgo/landing_editorial.py"
-    - "tests/test_mtgo_landing.py"
-    - "tests/test_mtgo_landing_editorial.py"
-    - "docs/WEEKLY_MAINTENANCE.md"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DECISIONS.md"
+    - "configs/mtgo_landing_visuals.yaml"
+    - "assets/js/phase8/archetype-visuals.js"
+    - "assets/images/representative-cards/standard/momo-friendly-flier.webp"
+    - "assets/images/representative-cards/modern/vengevine.jpg"
+    - "assets/images/representative-cards/modern/hollow-one.jpg"
+    - "stats/standard/mtgo/landing/review/2026-W34.yaml"
+    - "stats/standard/mtgo/landing/review/known_archetypes.json"
+    - "stats/standard/mtgo/landing/current.json"
+    - "stats/standard/mtgo/landing/features/index.json"
+    - "stats/standard/mtgo/landing/features/2026-W34.json"
+    - "stats/modern/mtgo/landing/review/2026-W34.yaml"
+    - "stats/modern/mtgo/landing/review/known_archetypes.json"
+    - "stats/modern/mtgo/landing/current.json"
+    - "stats/modern/mtgo/landing/features/index.json"
+    - "stats/modern/mtgo/landing/features/2026-W34.json"
     - "docs/STATUS.yaml"
   planned_file_operations:
-    additions: []
+    additions:
+      - "assets/images/representative-cards/standard/momo-friendly-flier.webp"
+      - "assets/images/representative-cards/modern/vengevine.jpg"
+      - "assets/images/representative-cards/modern/hollow-one.jpg"
+      - "stats/standard/mtgo/landing/review/2026-W34.yaml"
+      - "stats/standard/mtgo/landing/features/2026-W34.json"
+      - "stats/modern/mtgo/landing/review/2026-W34.yaml"
+      - "stats/modern/mtgo/landing/features/2026-W34.json"
     deletions: []
     renames: []
   protected_scope:
-    public_json_or_schema_changed: "none"
-    generated_or_source_data_changed: "none"
+    public_json_or_schema_changed: "Schema-compatible W34 Landing current and feature-history content only"
+    generated_or_source_data_changed: "generated Landing documents and private imported review state only"
     classification_identities_changed: "none"
-    visual_identity_changed: "none"
+    visual_identity_changed: "Standard azorius-momo uses Momo, Friendly Flier and Quantum Riddler; Modern hollowvine uses white-red and Vengevine plus Hollow One"
     workflows_or_public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Add one exact-week Landing machine-fact digest accessor that excludes human review admission."
-    - "Make the shared Top 8 subject use that digest and reject a different non-null candidate digest as stale."
-    - "Add focused regression coverage and document the single-source machine contract."
-    - "Validate the accepted W34 workbook through temporary Standard and Modern import-to-preview outputs."
+    - "Add Momo, Friendly Flier and Quantum Riddler as the two representative cards for Standard azorius-momo and expose their card images in the local preview."
+    - "Change Modern hollowvine from red to white-red and add Vengevine plus Hollow One as its representative cards in the local preview."
+    - "Import exact workbook SHA-256 b4ba2e64f99f8f03b67be16ef2860a57db9f41d316ff21ab7412676b927fa719 for Standard and Modern."
+    - "Generate the matching W34 Landing current and feature-history documents from that private review source."
+    - "Validate machine-fact, archive, deck-link, bilingual-content, and local-browser rendering contracts."
   prohibited_changes:
-    - "Do not change the accepted W34 workbook or import it into repository review state."
-    - "Do not change classifier rules, bilingual identities, statistics, source data, generated public data, Landing UI, public paths, or workflow scheduling."
-    - "Do not import repository review state before this repair merges; after merge resume only the authorized W34 local import and preview."
-    - "Do not deploy or dispatch MTGO production."
+    - "Do not change the accepted workbook, reviewed bilingual copy, feature choices, classifier rules, bilingual identities, statistics, source data, other visual identities, Landing UI behavior, public paths, or workflow scheduling."
+    - "Do not delete or weaken required tests, force-push, or dispatch MTGO production before this accepted branch merges."
   validation:
-    regression: "pass; the Top 8 subject uses the authoritative exact-week Landing machine-fact digest, that digest equals the Landing review binding for W34, and changed machine-fact bindings still fail closed"
-    w34_round_trip: "pass; exact workbook b4ba2e64... imported in a temporary root and generated Standard W34 with 4 summary and 5 feature items plus Modern W34 with 4 summary and 3 feature items"
-    focused_suite: "pass; 34 related Landing, editorial, and live-documentation tests pass; one W33 current-review assertion was deselected after the same failure was reproduced on the untouched 1f6267 baseline"
-    lint: "pass; Ruff accepts all four changed Python and test files"
-    documentation: "pass; the focused live-status contract is included in the 34 passing tests"
-    diff_check: "pass; exactly the eight declared files are modified, no workbook, private review state, generated public data, source data, or workflow file changed, and git diff --check is clean"
-  stop_point: "Commit the unchanged accepted repair, publish one Ready pull request, wait for required CI, and merge normally; after merge resume the authorized W34 repository import and local preview without dispatching MTGO production."
+    azorius_momo: "pass; the generated Standard Landing row contains exactly Momo, Friendly Flier and Quantum Riddler, Momo uses a local high-resolution art-crop without a card frame, the focused generated-consumer contract passed 1/1, JavaScript syntax and diff checks pass, and the uncached local browser renders two linked card images"
+    modern_hollowvine: "pass; the generated Modern Landing row contains exactly Vengevine and Hollow One, the visual map exposes white-red mana identity and two local 626x457 art-crops, the focused generated-consumer contract passed 1/1, JavaScript syntax and diff checks pass, and the uncached browser reports no page error"
+    import: "pass; Standard imported 1 review, 5 features, 4 copy rows and Modern imported 1 review, 3 features, 4 copy rows from the exact accepted workbook"
+    generation: "pass; both formats generated 2026-W34 current and archive documents with review machine-fact digests matching the exact Landing facts"
+    browser: "pass_owner_accepted_subject; Standard and Modern Chinese and English local Landing views render the expected 4 summaries and 5/3 features with no browser warning or error; the separate failed production candidate will be recovered only after this accepted branch merges"
+    binding: "pass; current and feature-history items match, all summary deck links resolve to admitted features, and both current documents pass cross-field validation"
+    diff_check: "pass; exactly the 16 declared visual, generated, private-review, and live-STATUS paths are modified or added, and git diff --check is clean"
+  stop_point: "Commit the unchanged accepted subject, push one Ready PR, merge after required CI, verify Pages, then dispatch one fresh production run from merged master and verify its publication before stopping."
 
 current_repository_state:
-  baseline_commit: "1f6267f8c6a7f4025f1397e98ee72bb2806162e3"
-  baseline_note: "Remote master remains the exact verified task base; Owner acceptance authorizes commit, one Ready pull request, required CI, and normal merge, followed only by the authorized W34 local import and preview without production."
+  baseline_commit: "62b6c681a5885e983784d74c2b51f91babb9162a"
+  baseline_note: "Remote master remains the exact task base 62b6c681. The Owner accepted this W34 Landing and visual subject; scheduled production run 32832640536 remains an unpublished candidate that will be replaced by one fresh run only after this accepted branch merges."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
-known_blockers: []
+known_blockers:
+  - id: "MTGO-PRODUCTION-PUBLISH-NON-FAST-FORWARD-32832640536"
+    status: "recovery_authorized_after_accepted_merge"
+    reason: "Scheduled production run 32832640536 built validated commit b359f8c from source 1f6267f, including Standard event 12852766 and Modern event 12852769, but publish was rejected non-fast-forward after PR #271 advanced master to 62b6c681; Pages and readiness were skipped."
+    recovery: "Do not rerun failed jobs or the old workflow attempt. After the accepted Landing branch merges, start one new production workflow from that merged master so publication cannot race this PR."
 
 future_task_gates:
-  - task: "WEEKLY-LANDING-CONTENT-2026-W34"
-    status: "import_preview_authorized_after_machine_fact_repair_merge"
-    note: "After this accepted repair merges, resume the accepted W34 workbook repository import and local preview; public Landing publication and MTGO production remain separately gated."
+  - task: "WEEKLY-LANDING-CONTENT-2026-W34-PUBLICATION"
+    status: "owner_accepted_completion_authorized"
+    note: "Publish the accepted W34 Landing and visual subject through one Ready PR, then recover production from the merged master and verify the resulting readiness subject."
   - task: "P12-16"
     status: "planned_not_authorized"
     note: "Cross-device and visual-system closeout remains a separate task after the W34 maintenance gate."
 
 next_approved_task:
-  id: "WEEKLY-LANDING-MACHINE-FACT-BINDING-2026-W34"
-  name: "Complete and publish the accepted Landing machine-fact binding repair"
+  id: "WEEKLY-LANDING-CONTENT-2026-W34"
+  name: "Publish the accepted W34 Landing and visual subject, then recover production"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
-  note: "Commit, publish one Ready PR, wait for required CI, and merge the unchanged accepted subject; after merge resume only the authorized W34 repository import and local preview."
+  note: "Commit, push one Ready PR, merge after required CI, verify Pages, then dispatch one new production run from merged master and verify readiness."
 
 prohibited_next_actions:
-  - "Do not import W34 repository review state before this repair merges."
-  - "Do not deploy or dispatch MTGO production."
-  - "Do not change classifier conditions, bilingual identities, statistics, generated public outputs, visual identities, UI behavior, source data, public paths, workflow scheduling, or protected event 434455 bytes."
+  - "Do not dispatch MTGO production before the accepted branch merges, and do not rerun failed run 32832640536 or its old attempt."
+  - "Do not delete, weaken, or bypass required tests; only reuse immutable evidence or skip non-required duplicate checks."
+  - "Do not alter accepted W34 bilingual content, classifier conditions, identities, statistics, other visual identities, UI behavior, source data, public paths, workflow scheduling, or protected event 434455 bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."
