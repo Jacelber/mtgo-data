@@ -259,6 +259,7 @@ def test_weekly_readiness_uses_the_verified_publication_and_private_handoff():
     assert workflow["on"]["schedule"] == [{"cron": "0 9 * * *"}]
     readiness = workflow["jobs"]["weekly-readiness"]
     assert readiness["permissions"] == {"contents": "read"}
+    assert readiness["env"] == {"PYTHONPATH": "src"}
     assert readiness["needs"] == ["fetch", "publish"]
     assert "generation-needed == 'true'" in readiness["if"]
     assert "generation-needed == 'false'" in readiness["if"]
@@ -299,12 +300,16 @@ def test_weekly_readiness_uses_the_verified_publication_and_private_handoff():
     for required in (
         "weekly-maintenance:${week}",
         "readiness-digest:",
+        'readiness.status === "blocked"',
+        "Weekly MTGO maintenance is blocked",
         "existing.body?.includes(digestMarker)",
         'state: "open"',
         "unresolved_unknown_count",
         "accepted_intentional_unknown_count",
         "editable XLSX",
         "random card piles",
+        "readiness.landing.status",
+        "optional_draft_status",
         "human final copy may be edited, replaced, omitted",
     ):
         assert required in script
