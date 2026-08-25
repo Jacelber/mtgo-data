@@ -3272,6 +3272,13 @@ candidate evidence, selected features, final localized copy, and explicit
 review states. Machine evidence and provenance constrain freshness only; they
 do not constrain the Owner's editorial conclusions.
 
+Readiness, workbook validation/import, and Landing generation obtain that
+machine-fact digest from the same exact-week Landing fact builder. The digest
+covers the complete Landing fact payload and the admitted observation slice;
+a separate digest of Top 8 rows, event IDs, or known archetype IDs is not an
+equivalent binding. A candidate that already carries a different machine-fact
+digest is stale and fails closed.
+
 Known-archetype continuity state advances after the classified weekly baseline
 is accepted, independently of whether the Owner selects any feature. An
 explicitly reviewed empty feature list is valid and must not prevent state

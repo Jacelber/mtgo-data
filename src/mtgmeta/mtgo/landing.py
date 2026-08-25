@@ -670,6 +670,7 @@ def build_document(
     review_directory: str | Path | None = None,
     name_catalog_path: str | Path | None = None,
     visuals_path: str | Path | None = None,
+    _admit_review: bool = True,
 ) -> tuple[str, dict[str, Any]]:
     root = Path(repository_root).resolve()
     context = load_mtgo_context(
@@ -810,7 +811,7 @@ def build_document(
         }
     )
     review_status = "not_applicable"
-    if current["event_ids"]:
+    if current["event_ids"] and _admit_review:
         review_root = (
             Path(review_directory)
             if review_directory is not None
@@ -887,6 +888,31 @@ def build_document(
     )
     validate_document(document)
     return review_status, document
+
+
+def machine_fact_digest_for_week(
+    repository_root: str | Path,
+    format_id: str,
+    week: str,
+) -> str:
+    """Return the exact Landing fact digest used to admit one review week."""
+
+    try:
+        monday = datetime.strptime(f"{week}-1", "%G-W%V-%u").date()
+    except ValueError as exc:
+        raise MTGOLandingError(f"invalid ISO Landing week: {week}") from exc
+    _review_status, document = build_document(
+        repository_root,
+        format_id,
+        today=monday + timedelta(days=7),
+        _admit_review=False,
+    )
+    if document["week"]["id"] != week:
+        raise MTGOLandingError(
+            f"Landing machine fact week mismatch: expected {week}, "
+            f"got {document['week']['id']}"
+        )
+    return str(document["review_binding"]["machine_fact_digest"])
 
 
 def validate_document(document: Mapping[str, Any]) -> None:
@@ -1122,5 +1148,6 @@ __all__ = [
     "_feature_archive_documents",
     "generate",
     "load_visual_metadata",
+    "machine_fact_digest_for_week",
     "validate_document",
 ]

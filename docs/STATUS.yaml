@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-landing-workbook-single-confirmation-w34-20260825"
+  current_working_branch: "codex/weekly-landing-machine-fact-binding-w34-20260825"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,19 +31,19 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-LANDING-WORKBOOK-SINGLE-CONFIRMATION-2026-W34"
-  batch_id: "WEEKLY-LANDING-WORKBOOK-SINGLE-CONFIRMATION-2026-W34"
-  name: "Repair the W34 Landing review-workbook machine contract and single-confirmation flow"
+  id: "WEEKLY-LANDING-MACHINE-FACT-BINDING-2026-W34"
+  batch_id: "WEEKLY-LANDING-MACHINE-FACT-BINDING-2026-W34"
+  name: "Repair the Landing import-to-preview machine-fact binding contract"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-25"
   owner_accepted_on: "2026-08-25"
   developer_validation_completed_on: "2026-08-25"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-landing-workbook-single-confirmation-w34-20260825-01"
-  branch: "codex/weekly-landing-workbook-single-confirmation-w34-20260825"
-  base_commit: "35ba13bbede2ffac41cb44761ff545538d398e2d"
-  task_type: "bounded_private_review_workbook_contract_repair"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-landing-machine-fact-binding-w34-20260825-01"
+  branch: "codex/weekly-landing-machine-fact-binding-w34-20260825"
+  base_commit: "1f6267f8c6a7f4025f1397e98ee72bb2806162e3"
+  task_type: "bounded_private_landing_binding_contract_repair"
   artifact_impact: "internal_diagnostics"
-  objective: "Preserve the accepted W34 Chinese Landing content while making actual workbook content and one chat submission the Chinese-stage contract, retaining one later English acceptance, repairing the All Top 8 machine-name binding, and preserving exact-hash fail-closed import."
+  objective: "Use one exact Landing machine-fact digest across readiness, workbook import, and preview admission so an unchanged accepted W34 workbook can produce a local preview while real fact drift still fails closed."
   authorization:
     local_implementation: true
     commit: true
@@ -53,14 +53,12 @@ current_task:
     authorized: false
     condition: "Do not dispatch MTGO production during or after this task."
   target_paths:
+    - "src/mtgmeta/mtgo/landing.py"
     - "src/mtgmeta/mtgo/landing_editorial.py"
-    - "src/mtgmeta/mtgo/__main__.py"
+    - "tests/test_mtgo_landing.py"
     - "tests/test_mtgo_landing_editorial.py"
-    - "tests/test_cli_smoke.py"
     - "docs/WEEKLY_MAINTENANCE.md"
-    - "docs/LANDING_EDITORIAL_PIPELINE.md"
     - "docs/DATA_ARCHITECTURE.md"
-    - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
   planned_file_operations:
@@ -76,31 +74,27 @@ current_task:
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Replace duplicate Review Control approval gates with read-only scope and completeness information."
-    - "Add read-only Chinese and bilingual workbook validation stages that bind the exact workbook SHA-256."
-    - "Keep legacy multiweek workbook routing compatible without treating its status cells as new approval evidence."
-    - "Repair All Top 8 Deck values to use the authoritative classified display_name."
-    - "Generate one local W34 workbook that preserves all current Owner-authored Chinese content and keeps English blank."
-    - "Update focused tests and the governing workflow, architecture, roadmap, decision, and live-status documents."
+    - "Add one exact-week Landing machine-fact digest accessor that excludes human review admission."
+    - "Make the shared Top 8 subject use that digest and reject a different non-null candidate digest as stale."
+    - "Add focused regression coverage and document the single-source machine contract."
+    - "Validate the accepted W34 workbook through temporary Standard and Modern import-to-preview outputs."
   prohibited_changes:
-    - "Do not import the workbook or write private Landing review state."
-    - "Do not draft or review English content before this accepted repair merges; after merge, start only the separately authorized W34 English review."
-    - "Do not change classifier rules, bilingual identities, statistics, source data, generated public data, Landing UI, public paths, or production behavior."
-    - "Do not manually deploy or dispatch MTGO production."
-    - "Do not start any follow-up other than the explicitly authorized W34 English review after merge."
+    - "Do not change the accepted W34 workbook or import it into repository review state."
+    - "Do not change classifier rules, bilingual identities, statistics, source data, generated public data, Landing UI, public paths, or workflow scheduling."
+    - "Do not import repository review state before this repair merges; after merge resume only the authorized W34 local import and preview."
+    - "Do not deploy or dispatch MTGO production."
   validation:
-    focused_editorial: "pass; 19 focused Landing editorial and CLI tests cover legacy import, single-scope content routing, Chinese versus bilingual requirements, exact hash, deterministic import, token membership, and parser registration"
-    focused_cli: "pass; read-only Chinese validation accepts Standard with 4 copy and 5 features and Modern with 4 copy and 3 features on exact workbook SHA-256 016c1f465524783a5f42e03023d28b7e2dcf59f54a2847c013347efd9e9de5f3"
-    lint: "pass; Ruff accepts the four changed Python and test files"
-    documentation: "pass; 5 focused live-status and roadmap-history contract tests accept the final task record"
-    workbook_contract: "pass; all 8 accepted Chinese copy rows and 8 accepted feature rows are unchanged, English is blank, obsolete Review Control fields are absent, all 144 Top 8 rows bind authoritative display_name, and formula scan has no errors"
-    visual_workbook: "pass; all six exported sheets were reopened, rendered, and visually inspected without shared-string number artifacts, clipping in the review controls, or formula errors"
-    diff_check: "pass; exactly the ten declared repository files are modified, the task-local output directory is untracked, no source/generated public data changed, and git diff --check is clean"
-  stop_point: "Commit the unchanged accepted subject, publish one Ready pull request, wait for required CI, and merge normally; after merge start the separately authorized W34 English review without importing the workbook or dispatching production."
+    regression: "pass; the Top 8 subject uses the authoritative exact-week Landing machine-fact digest, that digest equals the Landing review binding for W34, and changed machine-fact bindings still fail closed"
+    w34_round_trip: "pass; exact workbook b4ba2e64... imported in a temporary root and generated Standard W34 with 4 summary and 5 feature items plus Modern W34 with 4 summary and 3 feature items"
+    focused_suite: "pass; 34 related Landing, editorial, and live-documentation tests pass; one W33 current-review assertion was deselected after the same failure was reproduced on the untouched 1f6267 baseline"
+    lint: "pass; Ruff accepts all four changed Python and test files"
+    documentation: "pass; the focused live-status contract is included in the 34 passing tests"
+    diff_check: "pass; exactly the eight declared files are modified, no workbook, private review state, generated public data, source data, or workflow file changed, and git diff --check is clean"
+  stop_point: "Commit the unchanged accepted repair, publish one Ready pull request, wait for required CI, and merge normally; after merge resume the authorized W34 repository import and local preview without dispatching MTGO production."
 
 current_repository_state:
-  baseline_commit: "35ba13bbede2ffac41cb44761ff545538d398e2d"
-  baseline_note: "Remote master remains the exact verified task base; Owner acceptance now authorizes commit, one Ready pull request, required CI, and normal merge, but no MTGO production."
+  baseline_commit: "1f6267f8c6a7f4025f1397e98ee72bb2806162e3"
+  baseline_note: "Remote master remains the exact verified task base; Owner acceptance authorizes commit, one Ready pull request, required CI, and normal merge, followed only by the authorized W34 local import and preview without production."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -110,22 +104,21 @@ known_blockers: []
 
 future_task_gates:
   - task: "WEEKLY-LANDING-CONTENT-2026-W34"
-    status: "english_review_authorized_after_contract_repair_merge"
-    note: "After this accepted repair merges, begin the W34 English review from the preserved Chinese workbook; bilingual acceptance, import, preview, publication, and MTGO production remain separately gated."
+    status: "import_preview_authorized_after_machine_fact_repair_merge"
+    note: "After this accepted repair merges, resume the accepted W34 workbook repository import and local preview; public Landing publication and MTGO production remain separately gated."
   - task: "P12-16"
     status: "planned_not_authorized"
     note: "Cross-device and visual-system closeout remains a separate task after the W34 maintenance gate."
 
 next_approved_task:
-  id: "WEEKLY-LANDING-WORKBOOK-SINGLE-CONFIRMATION-2026-W34"
-  name: "Complete and publish the accepted W34 Landing workbook contract repair"
+  id: "WEEKLY-LANDING-MACHINE-FACT-BINDING-2026-W34"
+  name: "Complete and publish the accepted Landing machine-fact binding repair"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
-  note: "Commit, publish one Ready PR, wait for required CI, and merge the unchanged accepted subject; after merge start the separately authorized W34 English review."
+  note: "Commit, publish one Ready PR, wait for required CI, and merge the unchanged accepted subject; after merge resume only the authorized W34 repository import and local preview."
 
 prohibited_next_actions:
-  - "Do not import the W34 workbook, and do not begin English review before this accepted repair merges."
-  - "Do not manually deploy or dispatch MTGO production."
-  - "After merge, do not begin any follow-up other than the explicitly authorized W34 English review."
-  - "Do not change classifier conditions, bilingual identities, statistics, generated public outputs, visual identities, UI behavior, source data, public paths, or protected event 434455 bytes."
+  - "Do not import W34 repository review state before this repair merges."
+  - "Do not deploy or dispatch MTGO production."
+  - "Do not change classifier conditions, bilingual identities, statistics, generated public outputs, visual identities, UI behavior, source data, public paths, workflow scheduling, or protected event 434455 bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."

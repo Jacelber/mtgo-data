@@ -5760,3 +5760,39 @@ workbooks no longer depend on approval dropdowns. No public Landing document,
 classifier, statistic, source data, visual identity, UI, public path, or
 production behavior changes. Import, English drafting, publication, and MTGO
 production remain separately authorized actions.
+
+---
+
+# DEC-127 - Use one exact Landing machine-fact digest across readiness and admission
+
+Status: `Accepted for local implementation`
+
+## Context
+
+The W34 bilingual workbook passed import validation, but the resulting private
+review was rejected as stale when Landing generation began. The importer used
+`landing_editorial.build_top8_subject`, whose null-candidate fallback hashed
+the week, event IDs, complete Top 8 catalog, and known archetype IDs. Landing
+admission instead hashes the complete machine-fact payload plus its admitted
+observation slice. Both values were internally deterministic, but they did not
+describe the same subject, so import could succeed while preview generation
+always failed.
+
+## Decision
+
+Make the exact-week Landing fact builder the sole source of the
+`machine_fact_digest` used by readiness, workbook validation/import, and
+Landing review admission. Machine-fact calculation must not read or admit human
+review content. `build_top8_subject` continues to own the complete Top 8 link
+catalog and candidate evidence, but it may not synthesize a substitute
+machine-fact digest from those fields. If a candidate already records a
+different non-null digest, treat it as stale and fail closed.
+
+## Consequences
+
+One accepted immutable workbook can now pass import and produce its exact local
+preview when the underlying Landing facts are unchanged. A changed event set,
+classifier, policy, fact payload, observation slice, link catalog, bilingual
+catalog, or workbook hash still prevents stale content from being admitted.
+The repair changes no classifier, statistic, public Schema, generated public
+data, UI, public path, workflow schedule, or production authorization.

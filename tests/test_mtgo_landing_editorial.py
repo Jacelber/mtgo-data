@@ -5,6 +5,7 @@ import jsonschema
 import pytest
 import yaml
 
+from mtgmeta.mtgo import landing
 from mtgmeta.mtgo import landing_editorial as editorial
 
 
@@ -210,6 +211,24 @@ def test_review_binding_changes_fail_closed(imported):
 
     with pytest.raises(editorial.MTGOLandingEditorialError, match="classifier"):
         editorial.validate_review_binding(review, stale)
+
+    stale = dict(current)
+    stale["machine_fact_digest"] = "0" * 64
+    with pytest.raises(editorial.MTGOLandingEditorialError, match="machine fact"):
+        editorial.validate_review_binding(review, stale)
+
+
+def test_top8_subject_uses_authoritative_landing_machine_fact(monkeypatch):
+    expected = "9" * 64
+    monkeypatch.setattr(
+        landing,
+        "machine_fact_digest_for_week",
+        lambda repository_root, format_id, week: expected,
+    )
+
+    subject = editorial.build_top8_subject(ROOT, "standard", "2026-W34")
+
+    assert subject["machine_fact_digest"] == expected
 
 
 def test_top_copy_token_without_feature_fails_closed(imported):

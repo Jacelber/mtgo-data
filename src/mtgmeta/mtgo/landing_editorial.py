@@ -848,18 +848,21 @@ def build_top8_subject(
                         ],
                     }
                 )
-    machine_fact_digest = (
+    from . import landing
+
+    machine_fact_digest = landing.machine_fact_digest_for_week(root, format_id, week)
+    candidate_machine_fact_digest = (
         str(candidate.get("machine_fact_digest"))
         if candidate is not None and isinstance(candidate.get("machine_fact_digest"), str)
-        else document_digest(
-            {
-                "week": week,
-                "source_event_ids": source_event_ids,
-                "all_top8": catalog,
-                "known_archetype_ids": known_archetype_ids,
-            }
-        )
+        else None
     )
+    if (
+        candidate_machine_fact_digest is not None
+        and candidate_machine_fact_digest != machine_fact_digest
+    ):
+        raise MTGOLandingEditorialError(
+            f"{candidate_path}: machine_fact_digest is stale"
+        )
     return {
         "format": format_id,
         "week": {

@@ -82,6 +82,21 @@ def test_current_landing_uses_one_private_review_without_standalone_pickup_reade
     assert all(item["headline"]["en"] for item in document["features"]["items"])
 
 
+def test_week_machine_fact_digest_matches_landing_review_binding():
+    _review_status, document = landing.build_document(
+        ROOT,
+        "standard",
+        today=date(2026, 8, 25),
+    )
+
+    assert document["week"]["id"] == "2026-W34"
+    assert landing.machine_fact_digest_for_week(
+        ROOT,
+        "standard",
+        "2026-W34",
+    ) == document["review_binding"]["machine_fact_digest"]
+
+
 def test_cross_field_population_mismatch_fails_closed():
     document = json.loads(
         (ROOT / "stats" / "standard" / "mtgo" / "landing" / "current.json").read_text(
