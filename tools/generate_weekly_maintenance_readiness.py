@@ -15,7 +15,7 @@ import yaml
 
 
 FORMATS = ("standard", "modern")
-SCHEMA_VERSION = "1.3.0"
+SCHEMA_VERSION = "1.4.0"
 INTENTIONAL_UNKNOWN_CONFIG = Path("configs/mtgo_intentional_unknowns.yaml")
 
 
@@ -265,6 +265,18 @@ def _format_readiness(
     record_sort = lambda item: (int(item["event_id"]), item["deck_id"])
     unresolved_unknowns.sort(key=record_sort)
     accepted_intentional_unknowns.sort(key=record_sort)
+    review_event_ids = set(top8_event_ids)
+    review_week_unresolved_unknowns = [
+        record for record in unresolved_unknowns if record["event_id"] in review_event_ids
+    ]
+    review_week_intentional_unknowns = [
+        record
+        for record in accepted_intentional_unknowns
+        if record["event_id"] in review_event_ids
+    ]
+    outside_review_week_unresolved_unknowns = [
+        record for record in unresolved_unknowns if record["event_id"] not in review_event_ids
+    ]
 
     candidate_path = (
         root
@@ -358,15 +370,31 @@ def _format_readiness(
         "source_event_count": len(top8_event_ids),
         "classification": {
             "status": classification_status,
+            "scope": "review_week_source_events",
+            "validation_scope": str(report_index.get("scope", "")),
+            "total_unknown_count": len(review_week_unresolved_unknowns)
+            + len(review_week_intentional_unknowns),
+            "unresolved_unknown_count": len(review_week_unresolved_unknowns),
+            "unresolved_unknown_records": review_week_unresolved_unknowns,
+            "accepted_intentional_unknown_count": len(review_week_intentional_unknowns),
+            "accepted_intentional_unknown_records": review_week_intentional_unknowns,
+            "conflict_count": conflicts,
+            "invalid_deck_count": invalid_decks,
+            "strict_validation": strict_validation,
+        },
+        "retained_corpus_unknown_queue": {
             "scope": str(report_index.get("scope", "")),
             "total_unknown_count": total_unknown_count,
             "unresolved_unknown_count": len(unresolved_unknowns),
             "unresolved_unknown_records": unresolved_unknowns,
             "accepted_intentional_unknown_count": len(accepted_intentional_unknowns),
             "accepted_intentional_unknown_records": accepted_intentional_unknowns,
-            "conflict_count": conflicts,
-            "invalid_deck_count": invalid_decks,
-            "strict_validation": strict_validation,
+            "outside_review_week_unresolved_unknown_count": len(
+                outside_review_week_unresolved_unknowns
+            ),
+            "outside_review_week_unresolved_unknown_records": (
+                outside_review_week_unresolved_unknowns
+            ),
         },
         "visual_metadata": {
             "representative_cards": {

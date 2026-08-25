@@ -21,7 +21,7 @@ an unbounded suite.
 | `tests/test_mtgo_landing.py` | Landing facts, reviewed-feature binding, latest-only production admission, or Pages private-file exclusions change | Prove valid no-event output, unrestricted human fields, stale-review preservation, exact four-card binding, and public/private path separation | Synthetic Landing and publication-boundary subjects only |
 | `tests/test_documentation_history.py` | A live governance document changes | Enforce only the bounded live-status structure and history pointer | `docs/STATUS.yaml` only |
 | `tests/test_ci_master_admission.py` and `tests/test_ci_workflow.py` | CI admission or workflow control changes | Prove known paths route minimally, unknown evidence stops, and PR CI contains no heavy fallback | Admission logic and workflow text only |
-| `tests/test_weekly_maintenance_readiness.py` | Weekly readiness generator or private readiness Schema changes | Prove exact-week binding, complete unresolved-Unknown retention and decklists, strict intentional-random separation, Landing-screening availability, deterministic digesting, and fail-closed cross-format lifecycle | Synthetic Standard and Modern handoff only |
+| `tests/test_weekly_maintenance_readiness.py` | Weekly readiness generator or private readiness Schema changes | Prove exact-week Unknown binding, separately retained full-corpus Unknown evidence and decklists, strict intentional-random separation, Landing-screening availability, deterministic digesting, and fail-closed cross-format lifecycle | Synthetic Standard and Modern handoff only |
 
 The public data/output rows remain bounded to their named subjects. The
 documentation and CI rows are control-plane checks. The Landing-screening and weekly-

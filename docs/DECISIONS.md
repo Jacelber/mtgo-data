@@ -5796,3 +5796,51 @@ classifier, policy, fact payload, observation slice, link catalog, bilingual
 catalog, or workbook hash still prevents stale content from being admitted.
 The repair changes no classifier, statistic, public Schema, generated public
 data, UI, public path, workflow schedule, or production authorization.
+
+---
+
+# DEC-128 - Separate the review-week Unknown gate from the retained-corpus queue
+
+Status: `Accepted for local implementation`
+
+## Context
+
+The successful W34 production recovery published Standard event `12852766`
+from 2026-08-24 and Modern event `12852769` from 2026-08-25. Those events are
+outside W34, whose exact review window is 2026-08-17 through 2026-08-23, but
+the W34 readiness Issue reported their three Standard and two Modern Unknown
+records as if they belonged to W34. The generator copied the
+`all_available_events` diagnostic directly into the weekly classification
+object, so the Issue combined an exact-week Landing subject with a global
+Unknown count.
+
+## Decision
+
+Make the weekly `classification` object the exact intersection of the retained
+Unknown report with the format's review-week `source_event_ids`. Its scope is
+`review_week_source_events`; the retained diagnostic's strict-validation,
+conflict, and invalid-deck gate remains explicitly labelled
+`all_available_events`.
+
+Preserve the complete unresolved and Owner-accepted intentional Unknown
+evidence in a separate `retained_corpus_unknown_queue` object. It also exposes
+the complete unresolved subset outside the review week. The weekly Issue must
+label both counts, and an outside-week record cannot change the review-week
+Unknown count or readiness status. Such records remain available for a
+separately started backlog or future-week review with their complete main deck
+and sideboard.
+
+This decision narrows DEC-103 only where the complete retained corpus was
+presented as the current weekly task. It preserves DEC-103's full-corpus
+visibility, exact intentional-Unknown registry, and complete private decklist
+evidence while restoring DEC-102's exact-week primary boundary.
+
+## Consequences
+
+The private readiness Schema advances from `1.3.0` to `1.4.0`. W34 truthfully
+reports zero new review-week unresolved Unknown while separately showing the
+three Standard and two Modern records already ingested for later dates. This
+changes no classifier rule, classification output, source data, statistic,
+public Landing document, UI, public path, production schedule, or event
+`434455` bytes. Commit, remote publication, merge, and production remain
+separate gates after local Owner acceptance.
