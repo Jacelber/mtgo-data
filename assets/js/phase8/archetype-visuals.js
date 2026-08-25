@@ -135,6 +135,7 @@ const manaIdentities = Object.freeze({
     "deaths-shadow/dimir": Object.freeze(["u", "b"]),
     "deaths-shadow/grixis": Object.freeze(["u", "b", "r"]),
     "deaths-shadow/rakdos": Object.freeze(["b", "r"]),
+    "devoted-druid-combo": Object.freeze(["w", "b", "g"]),
     "devoted-druid-combo/abzan": Object.freeze(["w", "b", "g"]),
     "dimir-goryos": Object.freeze(["u", "b"]),
     "dimir-mill": Object.freeze(["u", "b"]),

@@ -182,12 +182,27 @@ function landingRepresentatives(row) {
   }).join("")}</div>`;
 }
 
+function landingEnvironmentDetailTitle(row, deck) {
+  if (deck.parent_id === row.archetype_id && deck.id) {
+    return classifierName(row.archetype_id, deck.id);
+  }
+  const bestDeck = deck.best_deck;
+  const subtype = (deck.subtypes || []).find(item => (
+    item.best_deck?.player === bestDeck?.player
+    && item.best_deck?.event_id === bestDeck?.event_id
+    && item.best_deck?.final_rank === bestDeck?.final_rank
+  ));
+  return subtype
+    ? classifierName(row.archetype_id, subtype.id)
+    : classifierName(row.archetype_id);
+}
+
 function landingEnvironmentDetail(row) {
   if (state.detailIdentity !== row.archetype_id || !currentContext.environmentDecks) return "";
   const deck = locateDeck(currentContext.environmentDecks, row.archetype_id);
   if (!deck) return "";
   return deckDetailHtml({
-    title: classifierName(row.archetype_id),
+    title: landingEnvironmentDetailTitle(row, deck),
     bestDeck: deck.best_deck,
     averageDeck: deck.average_deck,
     comparison: { rank: deck.best_deck?.final_rank },

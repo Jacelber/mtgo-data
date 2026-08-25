@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
 import yaml
 
 from mtgmeta import catalog
@@ -127,7 +128,7 @@ def test_catalog_cli_smoke(tmp_path):
                         "id": "fixture",
                         "display_name": "Fixture",
                         "state": "executable",
-                        "public": True,
+                        "public": False,
                         "mtgo": {
                             "enabled": True,
                             "event_collection_enabled": False,
@@ -158,3 +159,26 @@ def test_catalog_cli_smoke(tmp_path):
         item["available"] is False
         for item in document["formats"][0]["products"]
     )
+
+
+def test_catalog_requires_complete_mtgo_products_and_defaults_to_landing(tmp_path):
+    document = catalog.build_catalog(ROOT, generated_at="2026-08-25T00:00:00+00:00")
+    by_format = {item["id"]: item for item in document["formats"]}
+
+    for format_id in ("standard", "modern"):
+        assert by_format[format_id]["default_product_id"] == "mtgo-landing"
+        assert {
+            item["id"]
+            for item in by_format[format_id]["products"]
+            if item["available"] and item["id"].startswith("mtgo-")
+        } == catalog.REQUIRED_MTGO_PRODUCT_IDS
+
+    with pytest.raises(
+        ValueError,
+        match=r"public format 'standard' is missing required MTGO products:.*mtgo-landing",
+    ):
+        catalog.build_catalog(
+            tmp_path,
+            generated_at="2026-08-25T00:00:00+00:00",
+            registry_path=ROOT / "configs" / "formats.yaml",
+        )

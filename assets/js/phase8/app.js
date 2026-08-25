@@ -45,7 +45,8 @@ function setCompositionSelection(parentId) {
 
 function resetUrlBackedState() {
   state.format = "modern";
-  state.product = "mtgo-statistics";
+  state.product = state.catalog?.formats
+    .find(item => item.id === state.format)?.default_product_id || "mtgo-statistics";
   state.statsRange = 1;
   state.matchupRange = 4;
   state.statsSort = "high_score_share";

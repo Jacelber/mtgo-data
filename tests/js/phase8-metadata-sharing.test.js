@@ -86,14 +86,14 @@ test("both production entries load metadata before the shared application", () =
   }
 });
 
-test("both production titles provide a script-independent default Landing link", () => {
+test("both production titles use the script-independent bare MTGO home", () => {
   assert.match(
     rootEntry,
-    /<h1><a id="site-title" class="brand-home" href="\.\/index\.html\?format=standard&amp;product=mtgo-landing">/
+    /<h1><a id="site-title" class="brand-home" href="\.\/index\.html">/
   );
   assert.match(
     tabletopEntry,
-    /<h1><a id="site-title" class="brand-home" href="\.\.\/index\.html\?format=standard&amp;product=mtgo-landing">/
+    /<h1><a id="site-title" class="brand-home" href="\.\.\/index\.html">/
   );
 });
 
