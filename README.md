@@ -52,7 +52,7 @@ jobs, or production-data changes.
 Run the applicable checks from the repository root:
 
 ```powershell
-.\.venv\Scripts\python.exe validate_repository.py
+.\.venv\Scripts\python.exe validate_repository.py --full
 .\.venv\Scripts\python.exe -m ruff check src
 .\.venv\Scripts\python.exe -m mypy
 .\.venv\Scripts\python.exe validate_rules.py

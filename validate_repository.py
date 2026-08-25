@@ -1,4 +1,4 @@
-"""Run deterministic, read-only validation of repository content."""
+"""Run deterministic changed-scope or full validation of repository content."""
 
 from __future__ import annotations
 
@@ -151,6 +151,58 @@ PHASE8_FRONTEND_ENTRIES = {
     },
 }
 
+REFERENCE_GROUPS = frozenset(
+    {
+        "governance",
+        "requirements",
+        "frontend-templates",
+        "phase8-entries",
+        "required-standard-files",
+        "pickup-indexes",
+    }
+)
+REQUIREMENT_MANIFESTS = ("requirements.txt", "requirements-dev.txt")
+LEGACY_FRONTEND_FILES = (
+    "index.html",
+    "assets/js/common.js",
+    "assets/js/matchup.js",
+    "assets/js/mtgo.js",
+)
+REQUIRED_STANDARD_FILES = (
+    "stats/standard/mtgo/meta.json",
+    "stats/standard/mtgo/range_1w.json",
+    "stats/standard/mtgo/range_4w.json",
+    "stats/standard/mtgo/range_12w.json",
+    "stats/standard/mtgo/decks_1w.json",
+    "stats/standard/mtgo/decks_4w.json",
+    "stats/standard/mtgo/decks_12w.json",
+    "stats/standard/mtgo/matchup_1w.json",
+    "stats/standard/mtgo/matchup_4w.json",
+    "stats/standard/mtgo/matchup_12w.json",
+)
+PUBLIC_PRODUCT_FACT_SOURCES = frozenset(
+    {
+        "README.md",
+        "stats/catalog.json",
+        "configs/melee_events.yaml",
+        "docs/STATUS.yaml",
+    }
+)
+FRONTEND_REFERENCE_TRIGGERS = frozenset(
+    set(PHASE8_PRODUCTION_RESOURCES)
+    | set(PHASE8_FRONTEND_ENTRIES)
+    | set(LEGACY_FRONTEND_FILES)
+)
+
+
+@dataclass(frozen=True)
+class ValidationPlan:
+    candidates: tuple[str, ...]
+    javascript: tuple[str, ...]
+    reference_groups: frozenset[str]
+    public_product_facts: bool
+    hygiene: tuple[str, ...]
+
 
 class FrontendAssetParser(HTMLParser):
     """Collect local stylesheet and script references from an HTML entry."""
@@ -203,6 +255,84 @@ def tracked_files(root: Path) -> list[str]:
         return sorted(names - deleted)
     except UnicodeDecodeError as exc:
         raise InfrastructureError(f"tracked-file inventory is not UTF-8: {exc}") from exc
+
+
+def changed_files(root: Path, base: str) -> list[str]:
+    """Return committed, staged, working-tree, and untracked paths changed from base."""
+
+    try:
+        resolved = subprocess.run(
+            ["git", "rev-parse", "--verify", f"{base}^{{commit}}"],
+            cwd=root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        ).stdout.strip()
+        diff = subprocess.run(
+            ["git", "diff", "--name-only", "-z", "--no-renames", resolved, "--"],
+            cwd=root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).stdout
+        untracked = subprocess.run(
+            ["git", "ls-files", "-z", "--others", "--exclude-standard"],
+            cwd=root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).stdout
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise InfrastructureError(
+            f"cannot obtain changed-file inventory from {base!r}: {exc}"
+        ) from exc
+    try:
+        return sorted(
+            {
+                name
+                for name in (diff + untracked).decode("utf-8").split("\0")
+                if name
+            }
+        )
+    except UnicodeDecodeError as exc:
+        raise InfrastructureError(f"changed-file inventory is not UTF-8: {exc}") from exc
+
+
+def reference_groups_for_paths(paths: set[str]) -> frozenset[str]:
+    groups: set[str] = set()
+    if paths.intersection(REQUIRED_GOVERNANCE_DOCUMENTS):
+        groups.add("governance")
+    if paths.intersection(REQUIREMENT_MANIFESTS):
+        groups.add("requirements")
+    if paths.intersection(FRONTEND_REFERENCE_TRIGGERS):
+        groups.update(("frontend-templates", "phase8-entries"))
+    if paths.intersection(REQUIRED_STANDARD_FILES):
+        groups.add("required-standard-files")
+    if any(
+        path.startswith(f"stats/{format_id}/mtgo/pickup/")
+        for path in paths
+        for format_id in ("standard", "modern")
+    ):
+        groups.add("pickup-indexes")
+    return frozenset(groups)
+
+
+def changed_validation_plan(changed: list[str], tracked: list[str]) -> ValidationPlan:
+    changed_set = set(changed)
+    tracked_set = set(tracked)
+    existing = changed_set.intersection(tracked_set)
+    public_product_facts = bool(changed_set.intersection(PUBLIC_PRODUCT_FACT_SOURCES))
+    candidates = set(existing)
+    if public_product_facts and "docs/STATUS.yaml" in tracked_set:
+        candidates.add("docs/STATUS.yaml")
+    return ValidationPlan(
+        candidates=tuple(sorted(candidates)),
+        javascript=tuple(sorted(name for name in existing if name.endswith(".js"))),
+        reference_groups=reference_groups_for_paths(changed_set),
+        public_product_facts=public_product_facts,
+        hygiene=tuple(sorted(existing)),
+    )
 
 
 def safe_path(root: Path, name: str) -> Path:
@@ -356,12 +486,16 @@ def validate_javascript_syntax(root: Path, names: list[str]) -> list[Failure]:
     return failures
 
 
-def validate_files(root: Path, names: list[str]) -> tuple[dict[str, int], list[Failure], dict[str, Any]]:
+def validate_files(
+    root: Path,
+    names: list[str],
+    javascript_names: tuple[str, ...] = MAINTAINED_JAVASCRIPT,
+) -> tuple[dict[str, int], list[Failure], dict[str, Any]]:
     failures: list[Failure] = []
     parsed_status: dict[str, Any] = {}
     groups = {
         "Python": [n for n in names if n.lower().endswith(".py")],
-        "JavaScript": [n for n in MAINTAINED_JAVASCRIPT if n in names],
+        "JavaScript": [n for n in javascript_names if n in names],
         "JSON": [n for n in names if n.lower().endswith(".json")],
         "YAML": [n for n in names if n.lower().endswith((".yaml", ".yml"))],
     }
@@ -588,107 +722,157 @@ def validate_public_product_facts(
     return checked, failures
 
 
-def validate_references(root: Path, names: list[str]) -> tuple[int, list[Failure], dict[str, int]]:
+def validate_references(
+    root: Path,
+    names: list[str],
+    enabled_groups: frozenset[str] = REFERENCE_GROUPS,
+) -> tuple[int, list[Failure], dict[str, int]]:
     failures: list[Failure] = []
     tracked = set(names)
-    breakdown = {"authoritative-document paths": 0, "requirement includes": 0, "front-end templates": 0, "Phase 8 production resources": 0, "required Standard files": 0, "frozen Pickup week entries": 0}
-    for value in REQUIRED_GOVERNANCE_DOCUMENTS:
-        breakdown["authoritative-document paths"] += 1
-        reference_check(
-            failures,
-            value,
-            None if tracked_regular(root, tracked, value) else "missing tracked governance document",
-        )
-    for manifest in ("requirements.txt", "requirements-dev.txt"):
-        if manifest not in tracked:
-            continue
-        for line_number, raw in enumerate(read_bytes(root, manifest).decode("utf-8").splitlines(), 1):
-            text = raw.strip()
-            target = None
-            if text.startswith("-r="):
-                target = text[3:]
-            elif text.startswith("-r") and len(text) > 2 and not text[2].isspace():
-                target = text[2:]
-            elif text.startswith("-r "):
-                target = text.split(None, 1)[1].strip()
-            elif text.startswith("--requirement="):
-                target = text.split("=", 1)[1].strip()
-            elif text.startswith("--requirement "):
-                target = text.split(None, 1)[1].strip()
-            if target is None:
-                continue
-            breakdown["requirement includes"] += 1
-            message = None
-            if not target or "\\" in target or Path(target).is_absolute() or ".." in Path(target).parts:
-                message = f"invalid requirement include {target!r}"
-            else:
-                resolved = (Path(manifest).parent / target).as_posix()
-                if not tracked_regular(root, tracked, resolved):
-                    message = f"missing tracked requirement include {target}"
-            reference_check(failures, f"{manifest}:{line_number}", message)
-    templates = [
-        "stats/${currentFormat}/mtgo/meta.json",
-        "stats/${currentFormat}/mtgo/range_${currentRange}w.json",
-        "stats/${currentFormat}/mtgo/decks_${currentRange}w.json",
-        "stats/${currentFormat}/mtgo/matchup_${mxRange}w.json",
-    ]
-    frontend_paths = [
-        "index.html",
-        "assets/js/common.js",
-        "assets/js/matchup.js",
-        "assets/js/mtgo.js",
-    ]
-    if "index.html" not in tracked:
-        reference_check(failures, "index.html", "missing tracked index.html")
-    else:
-        missing_assets = [
-            path for path in frontend_paths[1:] if not safe_path(root, path).is_file()
-        ]
-        for path in missing_assets:
-            reference_check(failures, path, "missing front-end asset")
-        frontend_source = "\n".join(
-            read_bytes(root, path).decode("utf-8")
-            for path in frontend_paths
-            if safe_path(root, path).is_file()
-        )
-        for template in templates:
-            breakdown["front-end templates"] += 1
+    breakdown = {
+        "authoritative-document paths": 0,
+        "requirement includes": 0,
+        "front-end templates": 0,
+        "Phase 8 production resources": 0,
+        "required Standard files": 0,
+        "frozen Pickup week entries": 0,
+    }
+    if "governance" in enabled_groups:
+        for value in REQUIRED_GOVERNANCE_DOCUMENTS:
+            breakdown["authoritative-document paths"] += 1
             reference_check(
                 failures,
-                "front-end assets",
-                f"missing template {template}" if template not in frontend_source else None,
+                value,
+                None
+                if tracked_regular(root, tracked, value)
+                else "missing tracked governance document",
             )
-    required = [
-        "stats/standard/mtgo/meta.json", "stats/standard/mtgo/range_1w.json",
-        "stats/standard/mtgo/range_4w.json", "stats/standard/mtgo/range_12w.json",
-        "stats/standard/mtgo/decks_1w.json", "stats/standard/mtgo/decks_4w.json",
-        "stats/standard/mtgo/decks_12w.json", "stats/standard/mtgo/matchup_1w.json",
-        "stats/standard/mtgo/matchup_4w.json", "stats/standard/mtgo/matchup_12w.json",
-    ]
-    for path in required:
-        breakdown["required Standard files"] += 1
-        reference_check(failures, path, None if tracked_regular(root, tracked, path, ".json") else "missing tracked regular JSON file")
-    for format_id in ("standard", "modern"):
-        pickup = f"stats/{format_id}/mtgo/pickup/index.json"
-        if not tracked_regular(root, tracked, pickup, ".json"):
-            continue
-        try:
-            data = json.loads(read_bytes(root, pickup).decode("utf-8"))
-        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
-            reference_check(failures, pickup, f"invalid frozen Pickup index: {type(exc).__name__}: {exc}")
-            continue
-        weeks = data.get("weeks") if isinstance(data, dict) else None
-        if not isinstance(weeks, list):
-            reference_check(failures, pickup, "weeks must be a list")
-            continue
-        for index, entry in enumerate(weeks):
-            breakdown["frozen Pickup week entries"] += 1
-            value = entry.get("file") if isinstance(entry, dict) else None
-            valid = isinstance(value, str) and bool(value) and value.endswith(".json") and Path(value).name == value and value not in (".", "..") and not Path(value).is_absolute() and "/" not in value and "\\" not in value and tracked_regular(root, tracked, f"stats/{format_id}/mtgo/pickup/{value}", ".json")
-            reference_check(failures, f"{pickup}:weeks[{index}]", None if valid else f"invalid frozen Pickup week file {value!r}")
-    phase8_checked, phase8_failures = validate_phase8_frontend_references(root, names)
-    breakdown["Phase 8 production resources"] = phase8_checked
-    failures.extend(phase8_failures)
+    if "requirements" in enabled_groups:
+        for manifest in REQUIREMENT_MANIFESTS:
+            if manifest not in tracked:
+                reference_check(failures, manifest, "missing tracked requirement manifest")
+                continue
+            for line_number, raw in enumerate(
+                read_bytes(root, manifest).decode("utf-8").splitlines(), 1
+            ):
+                text = raw.strip()
+                target = None
+                if text.startswith("-r="):
+                    target = text[3:]
+                elif text.startswith("-r") and len(text) > 2 and not text[2].isspace():
+                    target = text[2:]
+                elif text.startswith("-r "):
+                    target = text.split(None, 1)[1].strip()
+                elif text.startswith("--requirement="):
+                    target = text.split("=", 1)[1].strip()
+                elif text.startswith("--requirement "):
+                    target = text.split(None, 1)[1].strip()
+                if target is None:
+                    continue
+                breakdown["requirement includes"] += 1
+                message = None
+                if (
+                    not target
+                    or "\\" in target
+                    or Path(target).is_absolute()
+                    or ".." in Path(target).parts
+                ):
+                    message = f"invalid requirement include {target!r}"
+                else:
+                    resolved = (Path(manifest).parent / target).as_posix()
+                    if not tracked_regular(root, tracked, resolved):
+                        message = f"missing tracked requirement include {target}"
+                reference_check(failures, f"{manifest}:{line_number}", message)
+    if "frontend-templates" in enabled_groups:
+        templates = (
+            "stats/${currentFormat}/mtgo/meta.json",
+            "stats/${currentFormat}/mtgo/range_${currentRange}w.json",
+            "stats/${currentFormat}/mtgo/decks_${currentRange}w.json",
+            "stats/${currentFormat}/mtgo/matchup_${mxRange}w.json",
+        )
+        if "index.html" not in tracked:
+            reference_check(failures, "index.html", "missing tracked index.html")
+        else:
+            missing_assets = [
+                path
+                for path in LEGACY_FRONTEND_FILES[1:]
+                if not safe_path(root, path).is_file()
+            ]
+            for path in missing_assets:
+                reference_check(failures, path, "missing front-end asset")
+            frontend_source = "\n".join(
+                read_bytes(root, path).decode("utf-8")
+                for path in LEGACY_FRONTEND_FILES
+                if safe_path(root, path).is_file()
+            )
+            for template in templates:
+                breakdown["front-end templates"] += 1
+                reference_check(
+                    failures,
+                    "front-end assets",
+                    f"missing template {template}"
+                    if template not in frontend_source
+                    else None,
+                )
+    if "required-standard-files" in enabled_groups:
+        for path in REQUIRED_STANDARD_FILES:
+            breakdown["required Standard files"] += 1
+            reference_check(
+                failures,
+                path,
+                None
+                if tracked_regular(root, tracked, path, ".json")
+                else "missing tracked regular JSON file",
+            )
+    if "pickup-indexes" in enabled_groups:
+        for format_id in ("standard", "modern"):
+            pickup = f"stats/{format_id}/mtgo/pickup/index.json"
+            if not tracked_regular(root, tracked, pickup, ".json"):
+                reference_check(failures, pickup, "missing frozen Pickup index")
+                continue
+            try:
+                data = json.loads(read_bytes(root, pickup).decode("utf-8"))
+            except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+                reference_check(
+                    failures,
+                    pickup,
+                    f"invalid frozen Pickup index: {type(exc).__name__}: {exc}",
+                )
+                continue
+            weeks = data.get("weeks") if isinstance(data, dict) else None
+            if not isinstance(weeks, list):
+                reference_check(failures, pickup, "weeks must be a list")
+                continue
+            for index, entry in enumerate(weeks):
+                breakdown["frozen Pickup week entries"] += 1
+                value = entry.get("file") if isinstance(entry, dict) else None
+                valid = (
+                    isinstance(value, str)
+                    and bool(value)
+                    and value.endswith(".json")
+                    and Path(value).name == value
+                    and value not in (".", "..")
+                    and not Path(value).is_absolute()
+                    and "/" not in value
+                    and "\\" not in value
+                    and tracked_regular(
+                        root,
+                        tracked,
+                        f"stats/{format_id}/mtgo/pickup/{value}",
+                        ".json",
+                    )
+                )
+                reference_check(
+                    failures,
+                    f"{pickup}:weeks[{index}]",
+                    None if valid else f"invalid frozen Pickup week file {value!r}",
+                )
+    if "phase8-entries" in enabled_groups:
+        phase8_checked, phase8_failures = validate_phase8_frontend_references(
+            root, names
+        )
+        breakdown["Phase 8 production resources"] = phase8_checked
+        failures.extend(phase8_failures)
     checked = sum(breakdown.values())
     return checked, failures, breakdown
 
@@ -712,33 +896,76 @@ def validate_hygiene(names: list[str]) -> tuple[int, list[Failure]]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate tracked repository content read-only.")
-    parser.parse_args()
+    parser = argparse.ArgumentParser(
+        description="Validate changed repository scope or the full repository read-only."
+    )
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument(
+        "--changed-from",
+        metavar="REF",
+        help="validate paths changed from REF and directly coupled contracts",
+    )
+    mode.add_argument(
+        "--full",
+        action="store_true",
+        help="validate the complete repository and all global contracts",
+    )
+    args = parser.parse_args()
     try:
         root = repository_root()
         tracked = tracked_files(root)
-        candidates = sorted(
-            set(tracked) | {"validate_repository.py"} | set(MAINTAINED_JAVASCRIPT)
+        changed: list[str] = []
+        if args.full:
+            validation_mode = "full"
+            candidates = sorted(
+                set(tracked) | {"validate_repository.py"} | set(MAINTAINED_JAVASCRIPT)
+            )
+            javascript = MAINTAINED_JAVASCRIPT
+            reference_groups = REFERENCE_GROUPS
+            validate_facts = True
+            hygiene_names = tracked
+        else:
+            validation_mode = f"changed-from {args.changed_from}"
+            changed = changed_files(root, args.changed_from)
+            plan = changed_validation_plan(changed, tracked)
+            candidates = list(plan.candidates)
+            javascript = plan.javascript
+            reference_groups = plan.reference_groups
+            validate_facts = plan.public_product_facts
+            hygiene_names = list(plan.hygiene)
+        counts, failures, parsed = validate_files(root, candidates, javascript)
+        reference_count, reference_failures, breakdown = validate_references(
+            root, tracked, reference_groups
         )
-        counts, failures, parsed = validate_files(root, candidates)
-        reference_count, reference_failures, breakdown = validate_references(root, tracked)
         failures.extend(reference_failures)
-        fact_count, fact_failures = validate_public_product_facts(
-            root, tracked, parsed.get("docs/STATUS.yaml", {})
-        )
+        fact_count = 0
+        fact_failures: list[Failure] = []
+        if validate_facts:
+            fact_count, fact_failures = validate_public_product_facts(
+                root, tracked, parsed.get("docs/STATUS.yaml", {})
+            )
         reference_count += fact_count
         failures.extend(fact_failures)
-        hygiene_count, hygiene_failures = validate_hygiene(tracked)
+        all_reference_failures = reference_failures + fact_failures
+        hygiene_count, hygiene_failures = validate_hygiene(hygiene_names)
         failures.extend(hygiene_failures)
         failures.sort(key=lambda f: (CATEGORY_ORDER[f.category], f.path, f.line or 0, f.column or 0, f.message))
         failed_paths = {category: {f.path for f in failures if f.category == category} for category in CATEGORY_ORDER}
         print("Repository validation")
         print(f"Repository root: {root}")
+        print(f"Mode: {validation_mode}")
+        if changed:
+            print(f"Changed paths: {len(changed)}")
+            print(
+                "Coupled reference groups: "
+                + (", ".join(sorted(reference_groups)) or "none")
+            )
         for category in ("Python", "JavaScript", "JSON", "YAML"):
             checked = counts[category]
             failed = len(failed_paths[category])
             print(f"{category}: checked={checked} passed={checked - failed} failed={failed}")
-        print(f"References: checked={reference_count} passed={reference_count - len({f.path for f in reference_failures})} failed={len({f.path for f in reference_failures})}")
+        failed_reference_paths = {failure.path for failure in all_reference_failures}
+        print(f"References: checked={reference_count} passed={reference_count - len(failed_reference_paths)} failed={len(failed_reference_paths)}")
         print(f"Hygiene: checked={hygiene_count} passed={hygiene_count - len(hygiene_failures)} failed={len(hygiene_failures)}")
         for item in failures:
             location = f" line {item.line}, column {item.column}" if item.line is not None else ""
