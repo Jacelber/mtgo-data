@@ -5667,3 +5667,44 @@ No deck classification or stable identity changes. The generated Modern public
 bilingual name contract will use `艾斯波黑白神` after the next authorized
 production refresh. This catalog-only correction is completed in the same
 focused display-name task as DEC-123; generated files are not edited manually.
+
+---
+
+# DEC-125 - Bind weekly readiness to Landing machine facts, not optional prose
+
+Status: `Accepted for local implementation`
+
+## Context
+
+The W34 production workflow successfully built Landing documents, screening
+candidates, and the private weekly handoff, but the handoff still forced the
+pre-P12-10 placeholder `machine_draft_status=not_available` and claimed that
+Landing production was not implemented. The matching private Schema permitted
+no other value. `docs/WEEKLY_MAINTENANCE.md` and DEC-109 instead require
+deterministic machine facts and freshness bindings while keeping generated
+prose optional and non-authoritative.
+
+## Decision
+
+Replace the obsolete machine-draft, human-final, and development-gate
+placeholders with a private `landing` readiness object. It reports whether the
+exact Standard and Modern Landing subjects are ready for human review, records
+their event IDs plus classifier, screening-policy, machine-fact, and complete
+Top 8 link-catalog digests, and records optional machine prose as
+`not_requested`. Reuse `landing_editorial.build_top8_subject`; do not introduce
+a second fact algorithm.
+
+Missing or stale screening input and mismatched format, week, event, or
+classifier provenance remain fail-closed. Human-final progress and task
+authorization remain exclusively in `docs/STATUS.yaml`. The weekly Issue shows
+the machine-fact and optional-prose states but still authorizes no mutation.
+
+## Consequences
+
+The private readiness Schema advances from `1.2.0` to `1.3.0`, and its digest
+now binds the Landing machine-fact subject. The handoff no longer treats an
+unrequested prose draft as a Landing blocker or falsely reports P12-10 as
+unimplemented. This changes no public Landing document, editorial copy,
+classifier, statistic, source data, visual identity, UI, public path, or
+production schedule. Publication and a production run remain separately
+authorized actions after local Owner acceptance.

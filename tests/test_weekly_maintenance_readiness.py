@@ -118,6 +118,7 @@ def _write_format(root: Path, format_name: str, *, candidate: bool = True) -> No
                     "seal_on": "2026-08-24",
                     "source_event_ids": ["101", "100"],
                     "classifier_digest": digest,
+                    "selection_policy_digest": "c" * 64,
                     "existing_changes": [{"candidate": 1}],
                     "new_archetypes": [{"candidate": 2}, {"candidate": 3}],
                 }
@@ -126,7 +127,32 @@ def _write_format(root: Path, format_name: str, *, candidate: bool = True) -> No
         )
 
 
-def _build(root: Path, generated_at: str = "2026-08-19T09:00:00Z") -> dict:
+def _landing_subject(root: Path, format_name: str, week: str) -> dict:
+    del root
+    classifier_digest = "a" * 64 if format_name == "standard" else "b" * 64
+    machine_fact_digest = "d" * 64 if format_name == "standard" else "e" * 64
+    link_catalog_digest = "f" * 64 if format_name == "standard" else "0" * 64
+    return {
+        "format": format_name,
+        "week": {
+            "id": week,
+            "start": "2026-08-10",
+            "end": "2026-08-16",
+        },
+        "source_event_ids": ["100", "101"],
+        "classifier_digest": classifier_digest,
+        "selection_policy_digest": "c" * 64,
+        "machine_fact_digest": machine_fact_digest,
+        "link_catalog_digest": link_catalog_digest,
+    }
+
+
+def _build(
+    root: Path,
+    generated_at: str = "2026-08-19T09:00:00Z",
+    *,
+    landing_subject_builder=_landing_subject,
+) -> dict:
     return build_readiness(
         root,
         publication_sha="1" * 40,
@@ -134,6 +160,7 @@ def _build(root: Path, generated_at: str = "2026-08-19T09:00:00Z") -> dict:
         production_run_attempt="1",
         source_sha="2" * 40,
         generated_at=generated_at,
+        landing_subject_builder=landing_subject_builder,
     )
 
 
@@ -154,6 +181,33 @@ def test_readiness_is_schema_valid_and_includes_every_unresolved_unknown(tmp_pat
     )
     assert document["status"] == "awaiting_owner_start"
     assert document["workflow"]["codex_automation_required"] is False
+    assert document["landing"] == {
+        "status": "ready_for_human_review",
+        "optional_draft_status": "not_requested",
+        "bindings": [
+            {
+                "format": "standard",
+                "status": "available",
+                "source_event_ids": ["100", "101"],
+                "classifier_digest": "a" * 64,
+                "selection_policy_digest": "c" * 64,
+                "machine_fact_digest": "d" * 64,
+                "link_catalog_digest": "f" * 64,
+                "reason": None,
+            },
+            {
+                "format": "modern",
+                "status": "available",
+                "source_event_ids": ["100", "101"],
+                "classifier_digest": "b" * 64,
+                "selection_policy_digest": "c" * 64,
+                "machine_fact_digest": "e" * 64,
+                "link_catalog_digest": "0" * 64,
+                "reason": None,
+            },
+        ],
+        "reason": None,
+    }
     for item in document["formats"]:
         classification = item["classification"]
         assert classification["unresolved_unknown_count"] == 2
@@ -188,6 +242,19 @@ def test_readiness_digest_ignores_run_time_but_binds_review_inputs(tmp_path):
     changed = _build(tmp_path, "2026-08-20T09:00:00Z")
     assert changed["readiness_digest"] != first["readiness_digest"]
 
+    def changed_machine_facts(root: Path, format_name: str, week: str) -> dict:
+        subject = _landing_subject(root, format_name, week)
+        if format_name == "modern":
+            subject["machine_fact_digest"] = "9" * 64
+        return subject
+
+    fact_changed = _build(
+        tmp_path,
+        "2026-08-20T09:00:00Z",
+        landing_subject_builder=changed_machine_facts,
+    )
+    assert fact_changed["readiness_digest"] != changed["readiness_digest"]
+
 
 def test_missing_landing_screening_candidate_is_reported_as_a_blocker(tmp_path):
     _write_format(tmp_path, "standard")
@@ -199,6 +266,8 @@ def test_missing_landing_screening_candidate_is_reported_as_a_blocker(tmp_path):
     assert document["status"] == "blocked"
     assert document["workflow"]["next_action"] == "resolve_blocker"
     assert document["formats"][1]["landing_screening"]["status"] == "unavailable"
+    assert document["landing"]["status"] == "blocked"
+    assert "modern Landing screening" in document["landing"]["reason"]
 
 
 def test_stale_landing_screening_classifier_digest_is_reported_as_a_blocker(tmp_path):
@@ -220,6 +289,44 @@ def test_stale_landing_screening_classifier_digest_is_reported_as_a_blocker(tmp_
     assert landing_screening["candidate_classifier_digest"] == "c" * 64
     assert landing_screening["expected_classifier_digest"] == "a" * 64
     assert "classifier_digest" in landing_screening["reason"]
+
+
+def test_stale_landing_screening_policy_digest_is_reported_as_a_blocker(tmp_path):
+    for format_name in ("standard", "modern"):
+        _write_format(tmp_path, format_name)
+    _write_intentional_unknowns(tmp_path)
+    candidate_path = (
+        tmp_path / "stats" / "modern" / "mtgo" / "landing" / "review" / "candidates_2026-W33.yaml"
+    )
+    candidate = yaml.safe_load(candidate_path.read_text(encoding="utf-8"))
+    candidate["selection_policy_digest"] = "8" * 64
+    candidate_path.write_text(yaml.safe_dump(candidate), encoding="utf-8")
+
+    document = _build(tmp_path)
+
+    landing_screening = document["formats"][1]["landing_screening"]
+    assert document["status"] == "blocked"
+    assert landing_screening["status"] == "stale_review_required"
+    assert "selection_policy_digest" in landing_screening["reason"]
+
+
+def test_landing_machine_fact_binding_mismatch_fails_closed(tmp_path):
+    for format_name in ("standard", "modern"):
+        _write_format(tmp_path, format_name)
+    _write_intentional_unknowns(tmp_path)
+
+    def stale_subject(root: Path, format_name: str, week: str) -> dict:
+        subject = _landing_subject(root, format_name, week)
+        if format_name == "standard":
+            subject["source_event_ids"] = ["100"]
+        return subject
+
+    document = _build(tmp_path, landing_subject_builder=stale_subject)
+
+    binding = document["landing"]["bindings"][0]
+    assert document["status"] == "blocked"
+    assert binding["status"] == "stale"
+    assert "source_event_ids" in binding["reason"]
 
 
 def test_mismatched_format_week_fails_closed(tmp_path):

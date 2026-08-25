@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -14,7 +15,7 @@ import yaml
 
 
 FORMATS = ("standard", "modern")
-SCHEMA_VERSION = "1.2.0"
+SCHEMA_VERSION = "1.3.0"
 INTENTIONAL_UNKNOWN_CONFIG = Path("configs/mtgo_intentional_unknowns.yaml")
 
 
@@ -39,6 +40,82 @@ def _sorted_event_ids(values: list[Any]) -> list[str]:
     if any(not value.isdigit() for value in event_ids):
         raise ValueError("Weekly source event IDs must contain digits only")
     return sorted(event_ids, key=int)
+
+
+def _is_sha256(value: Any) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(character in "0123456789abcdef" for character in value)
+    )
+
+
+def _default_landing_subject_builder(
+    root: str | Path,
+    format_name: str,
+    week_id: str,
+) -> dict[str, Any]:
+    from mtgmeta.mtgo.landing_editorial import build_top8_subject
+
+    return build_top8_subject(root, format_name, week_id)
+
+
+def _landing_binding(
+    subject: Any,
+    *,
+    format_name: str,
+    week_id: str,
+    week_entry: dict[str, Any],
+    source_event_ids: list[str],
+    classifier_digest: str,
+) -> dict[str, Any]:
+    if not isinstance(subject, dict):
+        raise ValueError(f"{format_name} Landing machine-fact subject is not an object")
+    subject_week = subject.get("week")
+    if not isinstance(subject_week, dict):
+        raise ValueError(f"{format_name} Landing machine-fact subject has no week")
+    subject_event_ids = _sorted_event_ids(subject.get("source_event_ids", []))
+    digests = {
+        field: subject.get(field)
+        for field in (
+            "classifier_digest",
+            "selection_policy_digest",
+            "machine_fact_digest",
+            "link_catalog_digest",
+        )
+    }
+    invalid_digests = [field for field, value in digests.items() if not _is_sha256(value)]
+    if invalid_digests:
+        raise ValueError(
+            f"{format_name} Landing machine-fact subject has invalid digests: "
+            + ", ".join(invalid_digests)
+        )
+    expected_week = {
+        "id": week_id,
+        "start": week_entry.get("start"),
+        "end": week_entry.get("end"),
+    }
+    mismatches = []
+    if subject.get("format") != format_name:
+        mismatches.append("format")
+    if any(subject_week.get(key) != value for key, value in expected_week.items()):
+        mismatches.append("week")
+    if subject_event_ids != source_event_ids:
+        mismatches.append("source_event_ids")
+    if digests["classifier_digest"] != classifier_digest:
+        mismatches.append("classifier_digest")
+    return {
+        "format": format_name,
+        "status": "stale" if mismatches else "available",
+        "source_event_ids": subject_event_ids,
+        **digests,
+        "reason": (
+            "Landing machine-fact provenance does not match current Top 8: "
+            + ", ".join(mismatches)
+            if mismatches
+            else None
+        ),
+    }
 
 
 def _card_list(value: Any, *, field: str, format_name: str) -> list[dict[str, Any]]:
@@ -137,7 +214,8 @@ def _format_readiness(
     root: Path,
     format_name: str,
     intentional_unknowns: dict[tuple[str, str, str], dict[str, str]],
-) -> dict[str, Any]:
+    landing_subject: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any]]:
     index, week = _latest_week(root, format_name)
     week_entry = index["weeks"][0]
     week_id = Path(week_entry["file"]).stem
@@ -149,6 +227,15 @@ def _format_readiness(
     )
     if len(top8_event_ids) != len(events):
         raise ValueError(f"{format_name} Top 8 events have duplicate or missing IDs")
+    classifier_digest = str(index.get("classifier_digest", ""))
+    landing_binding = _landing_binding(
+        landing_subject,
+        format_name=format_name,
+        week_id=week_id,
+        week_entry=week_entry,
+        source_event_ids=top8_event_ids,
+        classifier_digest=classifier_digest,
+    )
 
     report_index = _read_json(root / "reports" / format_name / "mtgo" / "index.json")
     report_summary = report_index.get("summary")
@@ -190,10 +277,14 @@ def _format_readiness(
     )
     if candidate_path.exists():
         candidate = _read_yaml(candidate_path)
-        expected_classifier_digest = str(index.get("classifier_digest", ""))
+        expected_classifier_digest = classifier_digest
         candidate_classifier_digest = candidate.get("classifier_digest")
         if not isinstance(candidate_classifier_digest, str):
             candidate_classifier_digest = None
+        expected_selection_policy_digest = landing_binding["selection_policy_digest"]
+        candidate_selection_policy_digest = candidate.get("selection_policy_digest")
+        if not isinstance(candidate_selection_policy_digest, str):
+            candidate_selection_policy_digest = None
         expected = {
             "week": week_id,
             "start": week_entry.get("start"),
@@ -211,6 +302,8 @@ def _format_readiness(
             stale_reasons.append("source_event_ids")
         if candidate_classifier_digest != expected_classifier_digest:
             stale_reasons.append("classifier_digest")
+        if candidate_selection_policy_digest != expected_selection_policy_digest:
+            stale_reasons.append("selection_policy_digest")
         existing_changes = candidate.get("existing_changes")
         new_archetypes = candidate.get("new_archetypes")
         if not isinstance(existing_changes, list) or not isinstance(new_archetypes, list):
@@ -224,6 +317,8 @@ def _format_readiness(
             "candidate_file": candidate_path.relative_to(root).as_posix(),
             "candidate_classifier_digest": candidate_classifier_digest,
             "expected_classifier_digest": expected_classifier_digest,
+            "candidate_selection_policy_digest": candidate_selection_policy_digest,
+            "expected_selection_policy_digest": expected_selection_policy_digest,
             "reason": (
                 "Landing screening candidate provenance does not match current Top 8: "
                 + ", ".join(stale_reasons)
@@ -239,7 +334,9 @@ def _format_readiness(
             "status": "unavailable",
             "candidate_file": candidate_path.relative_to(root).as_posix(),
             "candidate_classifier_digest": None,
-            "expected_classifier_digest": str(index.get("classifier_digest", "")),
+            "expected_classifier_digest": classifier_digest,
+            "candidate_selection_policy_digest": None,
+            "expected_selection_policy_digest": landing_binding["selection_policy_digest"],
             "reason": "Landing screening candidate file is missing.",
             "existing_change_count": None,
             "new_archetype_count": None,
@@ -256,7 +353,7 @@ def _format_readiness(
     )
     return {
         "format": format_name,
-        "classifier_digest": str(index.get("classifier_digest", "")),
+        "classifier_digest": classifier_digest,
         "source_event_ids": top8_event_ids,
         "source_event_count": len(top8_event_ids),
         "classification": {
@@ -275,7 +372,7 @@ def _format_readiness(
             "representative_cards": {
                 "status": "manual_review_required",
                 "exception_count": None,
-                "reason": "The approved representative-card configuration is not implemented.",
+                "reason": "No deterministic representative-card exception report exists; the maintained configuration remains a manual review input.",
             },
             "deck_colors": {
                 "status": "manual_review_required",
@@ -284,7 +381,7 @@ def _format_readiness(
             },
         },
         "landing_screening": landing_screening,
-    }
+    }, landing_binding
 
 
 def build_readiness(
@@ -295,23 +392,47 @@ def build_readiness(
     production_run_attempt: str,
     source_sha: str,
     generated_at: str,
+    landing_subject_builder: Callable[[str | Path, str, str], dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     intentional_unknowns = _intentional_unknowns(root)
-    formats = [
-        _format_readiness(root, format_name, intentional_unknowns[format_name])
-        for format_name in FORMATS
-    ]
     standard_entry = _read_json(root / "stats" / "standard" / "mtgo" / "top8" / "index.json")["weeks"][0]
     modern_entry = _read_json(root / "stats" / "modern" / "mtgo" / "top8" / "index.json")["weeks"][0]
     lifecycle_fields = ("file", "start", "end", "status", "provisional_through", "seal_on")
     if any(standard_entry.get(key) != modern_entry.get(key) for key in lifecycle_fields):
         raise ValueError("Standard and Modern do not expose the same weekly review window")
     week_id = Path(standard_entry["file"]).stem
-    blocked = any(
-        item["classification"]["status"] == "blocked"
-        or item["landing_screening"]["status"] != "candidate_review_required"
-        for item in formats
-    )
+    subject_builder = landing_subject_builder or _default_landing_subject_builder
+    results = [
+        _format_readiness(
+            root,
+            format_name,
+            intentional_unknowns[format_name],
+            subject_builder(root, format_name, week_id),
+        )
+        for format_name in FORMATS
+    ]
+    formats = [item for item, _binding in results]
+    bindings = [binding for _item, binding in results]
+    blockers = []
+    for item, binding in zip(formats, bindings, strict=True):
+        format_name = item["format"]
+        if item["classification"]["status"] == "blocked":
+            blockers.append(f"{format_name} classification")
+        if item["landing_screening"]["status"] != "candidate_review_required":
+            blockers.append(f"{format_name} Landing screening")
+        if binding["status"] != "available":
+            blockers.append(f"{format_name} Landing machine-fact binding")
+    blocked = bool(blockers)
+    landing = {
+        "status": "blocked" if blocked else "ready_for_human_review",
+        "optional_draft_status": "not_requested",
+        "bindings": bindings,
+        "reason": (
+            "; ".join(blockers) + " must be resolved before Landing human review."
+            if blockers
+            else None
+        ),
+    }
     digest_subject = {
         "schema_version": SCHEMA_VERSION,
         "publication_sha": publication_sha,
@@ -324,6 +445,7 @@ def build_readiness(
             "seal_on": standard_entry["seal_on"],
         },
         "formats": formats,
+        "landing": landing,
     }
     digest = hashlib.sha256(
         json.dumps(digest_subject, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -343,12 +465,7 @@ def build_readiness(
         },
         "week": digest_subject["week"],
         "formats": formats,
-        "landing": {
-            "machine_draft_status": "not_available",
-            "human_final_status": "not_started",
-            "development_gate": "evaluate_after_maintenance_rehearsal",
-            "reason": "P12-10 Landing production is not implemented or authorized by this workflow.",
-        },
+        "landing": landing,
         "workflow": {
             "next_action": "resolve_blocker" if blocked else "owner_start_required",
             "codex_automation_required": False,

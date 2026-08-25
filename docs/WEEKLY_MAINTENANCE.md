@@ -31,7 +31,7 @@ noise. A changed weekly baseline updates and reopens the same Issue.
 | Step | Who | Work | Output for the next step |
 | --- | --- | --- | --- |
 | 1. Collect and publish production data | Automatic GitHub workflow | Fetch the allowlisted MTGO inputs, validate one candidate, publish the verified generated data when changed, and keep production failures fail-closed. | Exact publication SHA, run evidence, current Standard and Modern outputs. |
-| 2. Build weekly readiness | Automatic GitHub workflow | Bind the current review week to Top 8 event IDs and classifier digests, and require each Landing editorial candidate source to carry the same classifier digest. Include every unresolved Unknown from the complete retained diagnostic corpus plus complete main decks and sideboards. Separately list Owner-accepted intentional Unknown records, classification blockers, editorial candidate counts, stale candidates, and unavailable review inputs. | Private Schema-valid readiness JSON plus one deduplicated weekly Issue. |
+| 2. Build weekly readiness | Automatic GitHub workflow | Bind the current review week to Top 8 event IDs and classifier digests, require each Landing editorial candidate source to carry the same classifier and screening-policy digests, and reuse the authoritative Landing Top 8 subject to report machine-fact and complete-link-catalog bindings. Include every unresolved Unknown from the complete retained diagnostic corpus plus complete main decks and sideboards. Separately list Owner-accepted intentional Unknown records, classification blockers, editorial candidate counts, stale candidates, unavailable review inputs, and the non-blocking status of optional machine prose. | Private Schema-valid readiness JSON plus one deduplicated weekly Issue. |
 | 3. Start the review | Owner | Read the Issue and explicitly ask Codex to begin with the named week and readiness artifact. Closing or ignoring the Issue means no review starts. | Authorization for one exact weekly review baseline. |
 | 4. Freeze and verify the baseline | Codex | Confirm the cloud workflow run, publication SHA, week lifecycle, event IDs, classifier digests, and readiness digest. Stop on drift or missing evidence. | Frozen review manifest and plain-language scope summary. |
 | 5. Review Unknown decks | Codex and Owner alternate; Owner confirms | Include every unresolved historical and current Unknown unless it was already reclassified or explicitly accepted as intentional Unknown. Handle coherent clusters in chat with complete representative decklists; use XLSX only for singleton batch review. Codex supplies a preliminary technical proposal, reads unrestricted Owner feedback, then supplies an exact revised proposal. | One final Owner confirmation per unresolved deck or group. Only an incoherent random card pile may be explicitly accepted as intentional Unknown. |
@@ -214,7 +214,8 @@ manual work is complete.
 
 `blocked` means the weekly handoff found a classification failure, a missing
 Landing candidate, or a Landing candidate whose event/lifecycle/classifier
-provenance is stale. An unreviewed stale candidate is regenerated automatically.
+or screening-policy provenance is stale, or a Landing machine-fact binding that
+does not match the exact format, week, events, or classifier. An unreviewed stale candidate is regenerated automatically.
 A stale candidate containing human approval or copy is preserved, marked
 `stale_review_required`, and must be regenerated and reviewed again instead of
 being silently overwritten or published. The blocker is resolved before the
@@ -224,6 +225,11 @@ Representative-card and deck-color exception counts remain manual review
 inputs. After P12-10 acceptance, the automatic producer reports deterministic
 Landing machine facts and machine-fact bindings; optional draft prose remains
 an explicitly requested aid, not a required output or editorial constraint.
+`landing.status=ready_for_human_review` therefore means both format bindings
+are current and the screening inputs are reviewable. `optional_draft_status`
+remains `not_requested` unless a separately requested aid is introduced; it
+never blocks readiness. Human-final progress and authorization remain in
+`docs/STATUS.yaml`, not in the production handoff.
 
 ## Recovery
 

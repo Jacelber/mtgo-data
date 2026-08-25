@@ -703,6 +703,8 @@ jobs:
       week: ${{ steps.generate.outputs.week }}
     permissions:
       contents: read
+    env:
+      PYTHONPATH: src
     steps:
       - name: Check out the verified production publication
         uses: actions/checkout@v7.0.0
@@ -836,6 +838,9 @@ jobs:
             const week = readiness.week.id;
             const marker = `<!-- weekly-maintenance:${week} -->`;
             const digestMarker = `<!-- readiness-digest:${readiness.readiness_digest} -->`;
+            const heading = readiness.status === "blocked"
+              ? "## Weekly MTGO maintenance is blocked"
+              : "## Weekly MTGO maintenance is ready";
             const formatLines = readiness.formats.map((item) =>
               `- ${item.format}: ${item.classification.unresolved_unknown_count} unresolved Unknown; ` +
               `${item.classification.accepted_intentional_unknown_count} accepted intentional Unknown; ` +
@@ -845,7 +850,7 @@ jobs:
             const details = [
               marker,
               digestMarker,
-              "## Weekly MTGO maintenance is ready",
+              heading,
               "",
               `- Review week: \`${week}\` (${readiness.week.start} through ${readiness.week.end})`,
               `- Lifecycle: \`${readiness.week.status}\`; seals on \`${readiness.week.seal_on}\``,
@@ -854,11 +859,12 @@ jobs:
               `- Workflow run: [${context.runId}](${runUrl})`,
               "",
               ...formatLines,
+              `- Landing machine facts: \`${readiness.landing.status}\`; optional machine draft: \`${readiness.landing.optional_draft_status}\`.`,
               "",
               "Open Codex manually and authorize the review of this exact handoff. The artifact does not authorize classifier edits, Landing review import, Landing generation, or any repository mutation.",
               "Codex must provide an editable XLSX with every unresolved deck's complete main deck and sideboard before requesting classification decisions. Singleton status is not a reason to remain Unknown; intentional Unknown is limited to Owner-confirmed random card piles.",
               "",
-              "Landing remains a later gate. Its machine draft is optional, and the human final copy may be edited, replaced, omitted, or written independently of machine conclusions.",
+              "Landing remains a separately authorized human-review gate. Machine facts are provenance-bound, optional machine prose is not required, and the human final copy may be edited, replaced, omitted, or written independently of machine conclusions.",
             ].join("\n");
             const existing = issues.find(
               (issue) => !issue.pull_request && issue.body?.includes(marker),
