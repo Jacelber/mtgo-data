@@ -1,9 +1,9 @@
 # Phase 12 completed roadmap detail
 
-This file preserves the completed P12-01 through P12-09 and P12-13A task
-specifications and their embedded implementation history. It is historical and
-non-authoritative. Remaining Phase 12 work is defined in `docs/ROADMAP.md`;
-authorization remains solely in `docs/STATUS.yaml`.
+This file preserves the complete Phase 12 task sequence, acceptance criteria,
+and embedded implementation history. It is historical and non-authoritative.
+Phase 12 closed on 2026-08-25; current authorization remains solely in
+`docs/STATUS.yaml`.
 
 1. `P12-01` — View-level lazy loading
    - record the current clean-browser request count, transferred bytes, and
@@ -489,3 +489,455 @@ authorization remains solely in `docs/STATUS.yaml`.
    the unchanged task through one commit, one Ready pull request, required CI,
    merge, and Pages verification. P12-15E remains a separate authorization
    gate.
+
+## Final active Phase 12 sequence archived at closeout
+
+At closeout, the following material was moved verbatim from the live roadmap.
+It preserves the final active task order and acceptance contract; repeated
+references to tasks already archived above are historical context, not new
+authorization.
+
+Completed P12-01 through P12-09, P12-13A, and P12-15C detail is archived in
+`docs/history/ROADMAP-PHASE-12-COMPLETED.md`.
+
+## Objective
+
+Make the existing static MTGO and Tabletop products faster, shareable,
+accessible, resilient, and usable across desktop and mobile. Add a curated
+MTGO weekly landing view while preserving statistical meaning, product
+separation, and established public entry points.
+
+The separately authorized `CLASSIFIER-RESTATEMENT-01` maintenance repair must
+replace historical-classification equality with immutable source-fact checks,
+restate every retained Top 8 week and base under one current classifier digest,
+and stop for Owner acceptance before any remote or production action. It does
+not authorize a classifier rule change or begin P12-10.
+
+`WEEKLY-MAINTENANCE-WORKFLOW-01` establishes the non-Codex scheduler and
+private handoff used before Landing work. The MTGO production workflow runs at
+18:00 JST, emits a Schema-validated internal readiness artifact, and maintains
+one deduplicated weekly Issue. The Owner then starts one exact review manually.
+This infrastructure changes no public data or page and does not itself perform
+classifier, visual-metadata, Pickup, or Landing decisions. After one accepted
+no-publication rehearsal on current data, the Owner decides whether P12-10 may
+begin under separate authorization.
+
+## Remaining task sequence
+
+10. `P12-10` — Landing weekly-facts producer and Pickup integration
+    - the accepted weekly-maintenance no-publication rehearsal and separate
+      2026-08-21 Owner authorization satisfied the start gate; local
+      implementation and proportionate validation are complete, and the Owner
+      accepted the unchanged subject for Gate 6 completion on 2026-08-21;
+    - the completed gate covered every unresolved historical/current Unknown
+      through the complete-decklist review carrier; the P12-03 classifier
+      remediation, refreshed shadow, Owner threshold confirmation, known-state
+      migration check, and representative-card approval are complete;
+    - add the Schema-validated latest-only
+      `stats/<format>/mtgo/landing/current.json` document under the reviewed
+      manifest, catalog, workflow, production-candidate, and Pages-allowlist
+      boundaries;
+    - generate byte-deterministic structured changes, trends, raw counts,
+      selected key-card identities, source event IDs, and the common classifier
+      rule version or digest without generated Chinese or English prose;
+    - extend the existing format-scoped Weekly Pickup candidates and manual
+      publication fields for Landing headlines, positioning copy, and approved
+      featured items; do not add parallel root-level candidate configuration;
+    - refresh unreviewed provisional-week facts after additive late events,
+      preserve reviewed content for explicit re-review, and never auto-publish
+      an unreviewed candidate;
+    - produce a Schema-valid no-event document and a Schema-valid empty-feature
+      list when those are the truthful states; fail publication for malformed,
+      internally inconsistent, or missing required Landing output;
+    - exclude candidate, review-note, design, and other non-public working files
+      from the Pages artifact, and prove that only the admitted current document
+      is deployable;
+    - preserve every pre-existing statistic, Pickup public document and history
+      index, rule, comparison base, and protected `434455` byte. The P12-04B
+      product-contract migration authorizes using Pickup as Landing's internal
+      feature source, not deleting or rewriting those documents.
+11. `P12-11A` — Landing summary editorial boundary
+    - retain every eligible machine summary candidate privately without a five-
+      item truncation, and read every approved row plus exact localized copy
+      from the already published Pickup `1.1.0` week; keep post-ban Owner-only;
+    - require an explicit reviewed state and allow zero or more ordered human-
+      final rows, each optionally linked to zero, one or multiple review-input
+      IDs; allow complete human rewrite or unrelated content;
+    - maintain a separate catalog of every current-week Top 8 deck, let each
+      human-final row place any number of exact `deck:<deck ID>` tokens at the
+      desired positions, derive localized displays and link order rather than
+      asking the reviewer for names or URLs, and publish each token with its
+      resolved structured deck identity; never publish machine candidates,
+      review-input IDs, drafts, or review vocabulary; preserve the last admitted
+      document when review is missing or stale;
+    - use the published Pickup week as the sole source of reviewed Pickup
+      content, keep the existing format-scoped candidate YAML as the sole
+      Landing review-state store, and use XLSX only as a visually verified
+      review carrier.
+11B. `P12-11B` — Landing weekly summary and environment UI
+    - the Owner accepted the final combined P12-11B/P12-12 browser subject on
+      2026-08-22, authorizing same-task completion through one commit, one Ready
+      pull request, required CI, normal merge, and merge-triggered Pages
+      verification; P12-15, P12-16, and every other task remain separate gates;
+    - render every reviewed human-final weekly-summary row without forcing a
+      minimum or maximum, plus the environment composition strip and high-score-
+      share structure list from the same P12-11A document;
+    - show every archetype above the owner-approved high-score-share threshold;
+      render current, previous-week, and aggregated previous-four-week high-score
+      shares plus direction in the accepted A3 UI, while retaining their raw
+      counts and denominators in the public data document; keep current Top 8
+      values as supporting data only and do not apply a 20-deck exclusion;
+    - make the composition segments and list rows use the same archetype set and
+      the P12-02 shareable detail URL;
+    - render text before progressively loaded key-card images and provide a
+      useful no-event state;
+    - keep this view non-default and reachable through its explicit P12-02 URL
+      until the complete Landing is accepted in P12-16.
+12. `P12-12` — Landing curated new-deck and new-technology panel
+    - completion authority is shared with the accepted combined P12-11B/P12-12
+      subject recorded above;
+    - show every approved item for the selected feature week, with all
+      `new_deck` items before all `new_technology` items, category, archetype,
+      editorial positioning, four reviewer-selected cards, supporting facts,
+      and a shareable full-deck link;
+    - place one week selector inside the Landing feature panel, default it to
+      the current week, and reuse the existing Pickup index and week documents;
+      selecting history changes only this panel and never the current Landing
+      brief, environment, composition, or construction-change facts;
+    - render only the currently selected language, rerender the same item when
+      the existing Chinese or English control changes, and do not introduce a
+      side-by-side bilingual Landing mode;
+    - reuse the common card-image preview, placeholder, and failure behavior;
+    - use one disclosure action per item and the shared deck-detail view; show a
+      stable-environment empty state when no item was approved, never expose a
+      pending-review state or internal approval vocabulary, and introduce no
+      standalone Weekly Pickup front-end state.
+    - P12-15A through P12-15G, including P12-15E-UX, supersede the delivered
+      Pickup handoff and history source. They preserve this accepted panel
+      structure, ordering, cards, disclosure, language, empty-state, and
+      deck-detail behavior except for the bounded DEC-114 navigation and
+      interaction corrections.
+13. `P12-13` — Large-matrix interaction, delivered as separately accepted
+    sequential subtasks
+    - `P12-13A` — completed matrix search and shared visible-projection
+      foundation; its detailed contract is archived in
+      `docs/history/ROADMAP-PHASE-12-COMPLETED.md`;
+    - `BROODSCALE-SUBTYPE-AND-COMPOSITION-NAVIGATION-HOTFIX` — completed;
+      its classifier and responsive composition-navigation contract is
+      archived in `docs/history/ROADMAP-PHASE-12-COMPLETED.md`;
+    - `P12-13B` — completed exact row filter, hierarchical disclosure, row
+      detail navigation, responsive identity-column, and stable sticky-header
+      behavior; its detailed contract is archived in
+      `docs/history/ROADMAP-PHASE-12-COMPLETED.md`;
+    - `P12-13C` — completed Owner-accepted mainstream matchup projection for
+      both products, with source-specific 2% parent eligibility, preserved
+      subtype/filter state, lazy MTGO share loading, and no statistical or
+      public-data change; the decision contract is recorded in `DEC-100`;
+    - `P12-13F` — bounded keyboard-horizontal movement: when keyboard
+      focus is within a matchup matrix, let Left and Right move the horizontal
+      matrix viewport while preserving the existing native Up and Down vertical
+      behavior. Do not add URL state, wrapping, filter or disclosure mutation,
+      four-direction cell-focus navigation, or a second matrix presentation;
+    - P12-13F requires separate implementation authorization and Owner hands-on
+      acceptance in a locally served browser against the final unchanged UI
+      tree. Codex first completes focused automated and developer-browser checks,
+      then supplies the exact local URL and keyboard checklist; a screenshot,
+      automated result, or Codex-only walkthrough cannot substitute for the
+      Owner's direct interaction and explicit decision;
+    - P12-13F preserves the existing matchup formulas, literal W-L-D
+      counts, confidence intervals, 20-match warning, public JSON, Schemas,
+      workflows, public paths, and protected event `434455` bytes.
+14. `P12-14` — Cancelled by Owner
+    - the accepted mobile matrix is retained as implemented; no separate
+      single-archetype vertical opponent view will be added;
+    - the shared card-image preview and its failure behavior were already
+      delivered and accepted in P12-09 and subsequent Landing validation, so
+      they will not be redeveloped as a second task;
+    - this cancellation does not remove P12-16's complete cross-device
+      verification requirement.
+15. `P12-15` — Metadata and sharing
+    - completed and published through the accepted metadata, attribution,
+      language-memory, favicon, share-image, and legacy-URL compatibility
+      subject;
+    - add description, Open Graph, favicon, canonical URL, language memory, and
+      required Scryfall and Wizards attribution;
+    - provide appropriate Landing metadata without presenting machine facts as
+      human editorial claims;
+    - define a canonical Landing feature URL and map legacy
+      `product=weekly-pickup&week=<week>` state to
+      `product=mtgo-landing&section=features&week=<week>`, with the week scoped
+      only to the feature panel.
+15A. `P12-15A` — Landing editorial-pipeline route map
+    - document the approved replacement of the obsolete public Pickup handoff
+      before any workbook, producer, public-data, front-end, or cleanup change;
+    - define the Landing-owned private review source, latest document, bounded
+      feature archive, W27/W33 recovery set, ordered task gates, rollback, and
+      deletion conditions in `docs/LANDING_EDITORIAL_PIPELINE.md`;
+    - update the current weekly-maintenance, product-scope, architecture,
+      decision, roadmap, and status authorities consistently;
+    - stop for Owner acceptance with no page, workbook, code, workflow,
+      generated data, public path, or Schema change.
+15B. `P12-15B` — Landing-only review workbook
+    - preserve existing Owner text and the corrected Modern order while
+      replacing the mixed seven-sheet carrier with `Review Control`, `Landing
+      Copy`, `Featured Decks`, `All Top 8`, and `Field Guide`;
+    - put selected-deck identity and exact `deck:<ID>` tokens directly in the
+      copy sheet and omit internal input IDs, generated labels, and unknown
+      implementation columns from Owner input;
+    - make every exact deck referenced in retained or draft top copy a
+      mandatory `KEEP` row in `Featured Decks`, with no top-copy-only role;
+    - remove the manual feature-order and localized-title inputs: feature order
+      is derived from category plus exact deck-token appearance in final top
+      copy, and the title is derived from the format/classifier identity's
+      bilingual name;
+    - keep `Review Control` read-only and treat one chat submission of authored
+      Chinese plus one later chat acceptance of English as the two human gates;
+      validate actual content at each stage instead of requiring duplicate
+      workbook approval fields;
+    - preload Standard W27, Standard W33, and Modern W33 recovery rows, render
+      every sheet, and stop for Owner completion without changing the page.
+15C. `P12-15C` — Content completion and bilingual review
+    - completed detail is archived in
+      `docs/history/ROADMAP-PHASE-12-COMPLETED.md`; P12-15D remains a separate
+      authorization gate.
+15D. `P12-15D` — Internal Landing editorial backend
+    - completed detail and accepted results are archived in
+      `docs/history/ROADMAP-PHASE-12-COMPLETED.md`; P12-15E remains a separate
+      authorization gate.
+15-HF. `P12-15-HF` — Emergency Melee entry recovery and static home link
+    - completed detail and accepted results are archived in
+      `docs/history/ROADMAP-PHASE-12-COMPLETED.md`; P12-15E remains a separate
+      authorization gate.
+15-HF2. `P12-15-HF2` — Production smoke compatibility recovery
+    - replace the obsolete fixed Pickup count and archetype assertion with a
+      candidate-derived check of the accepted legacy URL to Landing Features
+      contract, without changing runtime code, public data, or workflow behavior;
+    - verify governance and JavaScript syntax locally, then validate the browser
+      contract once on the newly generated production candidate after Owner
+      acceptance and accepted-task completion.
+15-HF2B. `P12-15-HF2B` — Retained Landing production compatibility recovery
+    - keep the last admitted Landing readable when newer unreviewed statistics
+      exist, without combining periods or weakening format validation;
+    - make the remaining production matchup smoke checks independent of rolling
+      archetype order and row position, then stop for new Owner acceptance before
+      any commit or production recovery.
+15E. `P12-15E` — Landing feature archive and recovery preview
+    - add versioned `landing/features/index.json` and
+      `landing/features/<week>.json` contracts, consumers, catalogs, Pages
+      admission, and focused tests;
+    - generate Standard W27, Standard W33, and Modern W33 from the completed
+      review source and build one local preview while preserving the accepted
+      Landing structure and all design elements not explicitly amended below;
+    - resolve every admitted inline Landing-copy deck token to its exact
+      selected feature in the applicable format and feature week: select that
+      week, expand the item, move it into view, and expose a stable URL/focus
+      destination. Keep the exact Top 8 route only as a legacy defensive
+      fallback; new unmatched reviewed content is invalid;
+    - verify both languages, both formats, historical selection, deck links,
+      card display, responsive behavior, and explicit empty weeks, then stop
+      for hands-on Owner acceptance.
+15E-I18N. `P12-15E-I18N` — Classifier-name localization across retained views
+    - begin only after hands-on acceptance of the P12-15E data-backed local
+      preview; keep this separate from classifier rules, statistical meaning,
+      and the accepted UI structure;
+    - generate and admit one format-scoped public bilingual name contract from
+      the P12-15D repository-managed catalog, preserving the classifier
+      taxonomy as the English authority and the Owner-approved Chinese values;
+    - make Landing, every retained MTGO view, and classifier-backed Tabletop
+      views resolve parent and subtype labels by stable IDs and selected
+      language instead of matching or reusing English display text;
+    - keep English pages unchanged, require approved Chinese coverage for known
+      identities, and handle Unknown or other non-classifier UI vocabulary
+      through the existing interface localization boundary;
+    - verify Chinese and English independently across Standard, Modern, every
+      retained MTGO view, applicable Tabletop views, direct URLs, language
+      switching, desktop, and 390px width, then stop for hands-on Owner
+      acceptance.
+15E-UX. `P12-15E-UX` — Feature-release interaction corrections
+    - begin only after hands-on acceptance of P12-15E and P12-15E-I18N and
+      before the cloud cutover; keep this focused on the five Owner-approved
+      interaction and deck-context corrections discovered during recovery
+      review;
+    - after a desktop or mobile composition-segment activation expands a deck,
+      scroll the newly revealed detail into a perceptible viewport position and
+      preserve keyboard focus and reduced-motion behavior;
+    - at mobile widths, move the accepted 90 by 63 representative-card stack
+      lower relative to the archetype heading and remove the excessive lower
+      whitespace without changing image size, overlap direction, or desktop
+      placement;
+    - add one shared fixed bottom-right return-to-top control to the Landing,
+      all retained MTGO views, and Tabletop, with safe-area spacing, keyboard
+      access, localized accessible naming, reduced-motion behavior, and no
+      content obstruction at 390 pixels;
+    - carry the official source event identity and name into current rolling
+      MTGO best and representative deck records without changing event bytes or
+      statistical values; display date only plus event name and player count in
+      Landing Environment and MTGO Statistics details;
+    - in Top 8, keep event context in the table rather than duplicating it in
+      the deck detail, and highlight both the current placement cell and its
+      event header across direct-link and close behavior;
+    - verify all five corrections in the same local release candidate and
+      stop for hands-on Owner acceptance;
+    - the Owner accepted the complete cumulative recovery candidate, including
+      the final mobile Landing row interaction corrections, on 2026-08-24;
+      cloud publication remains the separately gated P12-15F task.
+15F. `P12-15F` — Cloud cutover
+    - begin only after hands-on acceptance of P12-15E, P12-15E-I18N, and
+      P12-15E-UX;
+    - authorized on 2026-08-24 to reuse and publish the exact accepted
+      cumulative workspace; no accepted UI, content, data, or interaction may
+      change during cutover;
+    - after the production-recovery insertion advanced cloud master to
+      `f4ae158`, preserve its W34 production data and retained-Landing runtime,
+      regenerate only the accepted representative-deck event context, and stop
+      for renewed Owner acceptance of the final integrated UI bytes before the
+      first remote write;
+    - publish the accepted latest Landing, feature archive, feature-aware deck
+      destinations, public bilingual classifier-name contract, localized
+      retained-view consumers, and interaction corrections together; switch
+      the feature selector from Pickup history to Landing feature history, and
+      verify the merge-triggered Pages deployment;
+    - prove that live Landing requests no Pickup week document while preserving
+      the tested legacy URL redirect and retaining old files for rollback;
+    - stop after verified cutover; cleanup remains a separate task.
+15G. `P12-15G` — Pickup retirement cleanup
+    - prove no production, catalog, metadata, Pages, test, or front-end caller
+      needs the standalone Pickup product or publisher;
+    - migrate candidate preparation, known-state reads, readiness, hierarchy,
+      and metadata to Landing-owned or neutral modules and paths;
+    - remove only proven-dead page, navigation, style, publisher, capability,
+      catalog identity, and dedicated test code; retain the legacy URL redirect
+      and nullable metadata compatibility field;
+    - require candidate-path output equivalence and a full tracked-file
+      no-caller search before acceptance;
+    - delete or relocate frozen Pickup documents only with exact path
+      declarations, replacement verification, rollback evidence, and separate
+      Owner acceptance.
+16. `P12-16` — Cross-device and visual-system closeout
+    - begin only after P12-15A through P12-15G, including P12-15E-I18N and
+      P12-15E-UX, are complete or a named legacy compatibility artifact is
+      explicitly deferred by the Owner;
+    - verify the Landing plus the four retained top-level product views in
+      Chinese and English independently, both public MTGO formats, the protected
+      Tabletop product, desktop, 390px width, language switching, URL
+      restoration, and zero application console errors;
+    - after the complete Landing, empty states, failure fallback, direct links,
+      and Pages artifact are accepted, make it the bare `/index.html` MTGO
+      default while retaining every explicit existing product URL through a
+      compatible destination;
+    - verify that `weekly-pickup` is absent from product navigation, product
+      order, and standalone identity after P12-15G while old URLs still open the
+      requested Landing feature week. Preserve only explicitly deferred
+      rollback artifacts;
+    - reverify the P12-15E-UX composition reveal, mobile representative-card
+      alignment, shared return-to-top control, source-backed event context, and
+      current Top 8 placement highlight across the applicable retained views;
+    - reverify that every classifier-backed parent and subtype label follows
+      the selected language across all retained views without changing stable
+      classifier identity or statistical meaning;
+    - verify that no future format can be catalog-public without an admitted
+      Landing and all required MTGO products, while the Standard and Modern
+      migration exceptions both satisfy this invariant at closeout;
+    - compare request count, transferred bytes, readable-content timing, image
+      request behavior, and layout stability with the P12-01 baseline; stop for
+      review on an unexplained material regression rather than inventing an
+      arbitrary pre-measurement limit;
+    - keep the default-product selection independently reversible and exercise
+      a local rollback that restores the prior statistics default without
+      deleting the Landing document or changing any explicit public URL;
+    - audit every migrated view against the accepted visual-system contract and
+      record any intentionally deferred component rather than silently leaving
+      a second visual language.
+
+This phase does not authorize changing the existing 20-match warning,
+migrating the Tabletop null threshold into generated data, merging MTGO and
+Tabletop statistics, claiming statistical significance from interval overlap,
+automatically publishing editorial candidates, presenting the DEC-083 internal
+week lifecycle as a user warning, or changing an established generated path.
+The new public-data boundary is the format-scoped Landing product after separate
+P12-03 contract acceptance and P12-10 implementation authorization. Phase 12
+publishes only the latest complete Landing document plus the P12-15E bounded
+feature archive; it does not authorize historical complete-Landing browsing or
+cross-classification-version trend analysis. Selecting an approved historical
+feature week inside the feature section does not change that rule.
+
+## Acceptance criteria
+
+Phase 12 is complete when:
+
+- overview views avoid unnecessary large-document requests;
+- supported state survives sharing, reload, back, and forward navigation;
+- the selected visual system governs the Landing, shared shell, and every
+  migrated existing view without a required framework or build step;
+- the Landing answers what changed, what the current environment looks like,
+  and what new decks or technology were manually selected, using one
+  format-scoped structured source;
+- the bare MTGO entry changes to the Landing only in P12-16 after complete
+  acceptance, while existing explicit product links remain compatible and old
+  Weekly Pickup links resolve to the corresponding Landing feature week;
+- machine facts, fixed translations, and human editorial copy remain separate,
+  and no unreviewed candidate reaches the public product;
+- no 20-deck filter or unsupported statistical-significance claim is introduced;
+- chart names, order, and colors do not imply false equivalence or changing
+  identity;
+- keyboard and mobile users can operate Landing links and inspect large
+  matrices without traversing thousands of tab stops;
+- failure states can retry safely and progressive images do not block readable
+  content or shift established layout;
+- every retained classification-derived Top 8 artifact uses one current
+  classifier digest, while immutable source facts and unavailable comparisons
+  produce no false environment-change claim;
+- real-browser acceptance passes across the required products, formats,
+  languages, and viewport sizes, with exactly one selected language rendered at
+  a time;
+- the Pages artifact contains the admitted latest Landing document but no
+  candidate, review, design, or other working file;
+- measured loading behavior has no unexplained material regression, and the
+  bare-entry Landing cutover has a verified reversible default-state rollback;
+- all pre-existing public JSON paths, statistical formulas, and protected
+  `434455` bytes remain unchanged, while the new Landing documents pass their
+  versioned Schema and production-publication boundaries.
+
+---
+
+## Phase 12 completion record
+
+The Owner authorized the Phase 12 documentation closeout on 2026-08-25. The
+review found no unfinished Phase 12 implementation task. In particular, the
+live roadmap still described P12-13F as awaiting authorization even though its
+keyboard-horizontal matrix movement had already merged through PR #227 at
+`adc341f469aa83b26cc81ba6ecd50a230a06aa90`. The stale wording was a history
+maintenance omission, not a missing product feature.
+
+The final active sequence is backed by these cloud merge records:
+
+| Task | Merge evidence |
+| --- | --- |
+| P12-13C | PR #226, `11e0ea3ef7c1ea84329e408d85c3140fbc2228a2` |
+| P12-13F | PR #227, `adc341f469aa83b26cc81ba6ecd50a230a06aa90` |
+| P12-10 | PR #243, `8c7d88d8ffba37853439b5d268ed6cc9fcca0f74` |
+| P12-11A | PR #246, `cdebd765069b93491145916481d3065a4300671e` |
+| P12-11B / P12-12 | PR #247, `44964f2a638a72700649c2aa94953d38f4963455` |
+| P12-15 | PR #248, `3c43f5c606284f1d64e0db334be6a4c85818c3c0` |
+| P12-15A | PR #249, `44f01dc464b3b0081b54f5b93d74a94cea56938e` |
+| P12-15B | PR #250, `65282660a28209ee72571eeb0de98d1643884d47` |
+| P12-15C | PR #251, `206074f38cf82f26fff83146bcfd7a6aa2d43e6f` |
+| P12-15D | PR #253, `7acff8dd1f1870889d5cf10f934fd763360eadab` |
+| P12-15-HF | PR #254, `f998b2af2dc2c3180fd5194f77891137bee0f8bb` |
+| P12-15-HF2 | PR #255, `ec3399c373a2cf3df57c94983253b05c1b31de8b` |
+| P12-15-HF2B | PR #256, `2e8e5de57956817e6a4ce298bb8a5a40d7f240f4` |
+| P12-15E / I18N / UX / F | PR #258, `408f761fdfd1c0c8f7a7c6391c5b0e178db67ff6` |
+| P12-15G | PR #259, `169a7d0425121bc90bf7c8a2b8b17835b633c844` |
+| P12-16 | PR #276, `0d70257f86c36630b167cf541e9d7d966fac2f72` |
+
+P12-16 received hands-on Owner acceptance on 2026-08-25. Pull-request
+validation run `32855125110`, merge validation run `32855373950`, and
+merge-triggered Pages run `32855373976` succeeded. The live bare MTGO entry
+resolved to Landing, explicit retained-product and legacy Pickup routes
+remained compatible, the generated complete-product invariant held, and the
+local default-state rollback succeeded.
+
+The accumulated accepted task evidence and the final P12-16 audit satisfy the
+Phase 12 acceptance criteria archived above. No required component remains
+deferred, no additional product or browser retest was triggered for this
+documentation-only closeout, and Phase 13 remains planned but unauthorized.

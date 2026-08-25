@@ -25,10 +25,9 @@ must not be used to authorize work. Current authorization is recorded only in
 
 - `ROADMAP-PHASES-0-11.md` preserves completed Phases 0–11, superseded phase
   specifications, and procedures retired from the live roadmap by GOV-11.
-- `ROADMAP-PHASE-12-COMPLETED.md` preserves the completed P12-01 through
-  P12-09, P12-13A, P12-13B, P12-15C, P12-15D, P12-15-HF, and the Broodscale
-  subtype and composition-navigation hotfix specifications and their embedded
-  implementation history.
+- `ROADMAP-PHASE-12-COMPLETED.md` preserves the complete Phase 12 task
+  sequence, acceptance criteria, closeout evidence, and the embedded
+  implementation history accumulated before the phase closed on 2026-08-25.
 
 At task completion, move detailed completed roadmap material into the matching
 phase history file in the same accepted task. Keep only remaining work,
