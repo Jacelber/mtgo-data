@@ -186,7 +186,7 @@ const manaIdentities = Object.freeze({
     "hammer-time/jeskai": Object.freeze(["w", "u", "r"]),
     "hammer-time/mono-white": Object.freeze(["w"]),
     "hardened-scales": Object.freeze(["g"]),
-    "hollowvine": Object.freeze(["r"]),
+    "hollowvine": Object.freeze(["w", "r"]),
     "izzet-cauldron": Object.freeze(["u", "r"]),
     "izzet-extra-turns": Object.freeze(["u", "r"]),
     "izzet-phoenix": Object.freeze(["u", "r"]),
@@ -280,6 +280,10 @@ const representativeCards = Object.freeze({
     "4-color-tablet": Object.freeze([
       Object.freeze({ name: "Inevitable Defeat", image: "../images/representative-cards/standard/inevitable-defeat.jpg" }),
       Object.freeze({ name: "Tablet of Discovery", image: "../images/representative-cards/standard/tablet-of-discovery.jpg" }),
+    ]),
+    "azorius-momo": Object.freeze([
+      Object.freeze({ name: "Momo, Friendly Flier", image: "../images/representative-cards/standard/momo-friendly-flier.webp" }),
+      Object.freeze({ name: "Quantum Riddler", image: "../images/representative-cards/modern/quantum-riddler.jpg" }),
     ]),
     "azorius-prison": Object.freeze([
       Object.freeze({ name: "High Noon", image: "../images/representative-cards/standard/high-noon.jpg" }),
@@ -410,6 +414,10 @@ const representativeCards = Object.freeze({
     "grixis-persist": Object.freeze([
       Object.freeze({ name: "Persist", image: "../images/representative-cards/modern/persist.jpg" }),
       Object.freeze({ name: "Archon of Cruelty", image: "../images/representative-cards/modern/archon-of-cruelty.jpg" }),
+    ]),
+    "hollowvine": Object.freeze([
+      Object.freeze({ name: "Vengevine", image: "../images/representative-cards/modern/vengevine.jpg" }),
+      Object.freeze({ name: "Hollow One", image: "../images/representative-cards/modern/hollow-one.jpg" }),
     ]),
     "jeskai-ponza": Object.freeze([
       Object.freeze({ name: "Cleansing Wildfire", image: "../images/representative-cards/modern/cleansing-wildfire.jpg" }),

@@ -1,0 +1,2109 @@
+schema_version: 1.0.0
+format: modern
+source: mtgo
+week:
+  id: 2026-W34
+  start: '2026-08-17'
+  end: '2026-08-23'
+bindings:
+  workbook_sha256: b4ba2e64f99f8f03b67be16ef2860a57db9f41d316ff21ab7412676b927fa719
+  source_event_ids:
+  - '12851686'
+  - '12851690'
+  - '12851705'
+  - '12851707'
+  - '12851716'
+  - '12852721'
+  - '12852731'
+  - '12852736'
+  - '12852737'
+  - '12852742'
+  - '12852747'
+  - '12852752'
+  classifier_digest: 46b7a49e077863f05ff8d82237af5b0aadda4964d9508185c2d4c1a2c7aa76ba
+  selection_policy_digest: 3541185e634bcab559bb3118ee3f29ece113552473d1f314bcde2a1e2f697a42
+  machine_fact_digest: 281026de16e426f072ff74659d06c0bbf5f4580f1d8ccfed3df52f0a62a579bc
+  link_catalog_digest: 24d7cbee8bba3869b1a1f649a48d4e3830110eb83e3aa768115a124a42f723e8
+  bilingual_catalog_digest: bd651c35935927344a7df85c92fe8aecd04f858fa4ae4fe2b0c49e2e6bfe6b61
+candidate_evidence:
+- token: deck:acc94e69d84da4b303d1
+  source_order: 1
+  reasons: &id001
+  - type: new_card
+    set_code: HOB
+    arena_release_date: '2026-08-11'
+    release_source_url: https://magic.wizards.com/en/news/feature/collecting-the-hobbit
+    distinct_card_count: 2
+    main_card_count: 6
+    side_card_count: 0
+    cards:
+    - name: Bilbo, Thief in the Night
+      main_qty: 3
+      side_qty: 0
+    - name: Key to the Side-Door
+      main_qty: 3
+      side_qty: 0
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 0
+- token: deck:78a27b72522b16549da7
+  source_order: 2
+  reasons: &id002
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 0
+- token: deck:b2abf5fdb96d22201849
+  source_order: 3
+  reasons:
+  - type: share_increase
+    current_high_score_count: 32
+    current_high_score_denominator: 353
+    current_share: 0.0907
+    reference_high_score_count: 55
+    reference_high_score_denominator: 1407
+    reference_share: 0.0391
+    delta_pp: 5.16
+- token: deck:29ffa26abbc811f769a1
+  source_order: 4
+  reasons: &id003
+  - type: new_card
+    set_code: HOB
+    arena_release_date: '2026-08-11'
+    release_source_url: https://magic.wizards.com/en/news/feature/collecting-the-hobbit
+    distinct_card_count: 2
+    main_card_count: 5
+    side_card_count: 0
+    cards:
+    - name: Bilbo, Thief in the Night
+      main_qty: 4
+      side_qty: 0
+    - name: Key to the Side-Door
+      main_qty: 1
+      side_qty: 0
+- token: deck:f24e8600bc98c2797c98
+  source_order: 5
+  reasons:
+  - type: new_card
+    set_code: HOB
+    arena_release_date: '2026-08-11'
+    release_source_url: https://magic.wizards.com/en/news/feature/collecting-the-hobbit
+    distinct_card_count: 1
+    main_card_count: 1
+    side_card_count: 0
+    cards:
+    - name: Belladonna Took
+      main_qty: 1
+      side_qty: 0
+- token: deck:a1cbed47f9a85433f8aa
+  source_order: 6
+  reasons:
+  - type: new_card
+    set_code: HOB
+    arena_release_date: '2026-08-11'
+    release_source_url: https://magic.wizards.com/en/news/feature/collecting-the-hobbit
+    distinct_card_count: 1
+    main_card_count: 4
+    side_card_count: 0
+    cards:
+    - name: Key to the Side-Door
+      main_qty: 4
+      side_qty: 0
+  - type: build_shift
+    identity_level: subtype
+    identity_id: steel-cutter/izzet
+    reference_sample_size: 12
+    score: 35
+    difference:
+      fewer:
+      - name: Unholy Heat
+        deck_qty: 0
+        typical_qty: 3.5
+      - name: Quantum Riddler
+        deck_qty: 0
+        typical_qty: 2.1
+      - name: Flame of Anor
+        deck_qty: 0
+        typical_qty: 1.6
+      - name: Preordain
+        deck_qty: 0
+        typical_qty: 1.1
+      - name: Breeding Pool
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Misty Rainforest
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Thundering Falls
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Spirebluff Canal
+        deck_qty: 0
+        typical_qty: 0.8
+      more:
+      - name: Key to the Side-Door
+        deck_qty: 4
+        typical_qty: 0.0
+      - name: Loki, God of Mischief
+        deck_qty: 4
+        typical_qty: 0.3
+      - name: Galvanic Blast
+        deck_qty: 2
+        typical_qty: 0.0
+      - name: Sink into Stupor
+        deck_qty: 2
+        typical_qty: 0.5
+      - name: Fiery Islet
+        deck_qty: 2
+        typical_qty: 0.7
+      - name: Phenomena Recorder
+        deck_qty: 1
+        typical_qty: 0.0
+      - name: Steam Vents
+        deck_qty: 3
+        typical_qty: 2.0
+      - name: Mox Amber
+        deck_qty: 4
+        typical_qty: 3.2
+- token: deck:908dca7abe8735c5dc46
+  source_order: 7
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: domain-zoo
+    reference_sample_size: 57
+    score: 27
+    difference:
+      fewer:
+      - name: Fatal Push
+        deck_qty: 0
+        typical_qty: 1.6
+      - name: Polluted Delta
+        deck_qty: 0
+        typical_qty: 1.6
+      - name: Psychic Frog
+        deck_qty: 0
+        typical_qty: 1.5
+      - name: Doorkeeper Thrull
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Blood Crypt
+        deck_qty: 0
+        typical_qty: 0.8
+      - name: Nishoba Brawler
+        deck_qty: 0
+        typical_qty: 0.8
+      - name: Kroxa, Titan of Death's Hunger
+        deck_qty: 0
+        typical_qty: 0.6
+      - name: Practiced Offense
+        deck_qty: 0
+        typical_qty: 0.6
+      more:
+      - name: Lightning Bolt
+        deck_qty: 4
+        typical_qty: 2.1
+      - name: Quantum Riddler
+        deck_qty: 4
+        typical_qty: 2.3
+      - name: Tribal Flames
+        deck_qty: 2
+        typical_qty: 0.4
+      - name: Wooded Foothills
+        deck_qty: 4
+        typical_qty: 2.4
+      - name: Arena of Glory
+        deck_qty: 2
+        typical_qty: 0.9
+      - name: Strix Serenade
+        deck_qty: 1
+        typical_qty: 0.0
+      - name: Spell Snare
+        deck_qty: 1
+        typical_qty: 0.2
+      - name: Lush Portico
+        deck_qty: 1
+        typical_qty: 0.3
+- token: deck:6ffd78ae860bdd800f9e
+  source_order: 8
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: affinity
+    reference_sample_size: 70
+    score: 39
+    difference:
+      fewer:
+      - name: Metallic Rebuke
+        deck_qty: 0
+        typical_qty: 2.7
+      - name: Emry, Lurker of the Loch
+        deck_qty: 0
+        typical_qty: 2.4
+      - name: Preordain
+        deck_qty: 0
+        typical_qty: 1.1
+      - name: Tamiyo, Inquisitive Student
+        deck_qty: 0
+        typical_qty: 0.9
+      - name: Island
+        deck_qty: 1
+        typical_qty: 1.8
+      - name: Mox Amber
+        deck_qty: 0
+        typical_qty: 0.7
+      - name: Loki, God of Mischief
+        deck_qty: 0
+        typical_qty: 0.6
+      - name: Scalding Tarn
+        deck_qty: 0
+        typical_qty: 0.5
+      more:
+      - name: Thoughtcast
+        deck_qty: 4
+        typical_qty: 0.4
+      - name: Welding Jar
+        deck_qty: 4
+        typical_qty: 1.2
+      - name: Fiery Islet
+        deck_qty: 4
+        typical_qty: 2.8
+      - name: Weapons Manufacturing
+        deck_qty: 4
+        typical_qty: 2.9
+      - name: Steam Vents
+        deck_qty: 2
+        typical_qty: 0.9
+      - name: Sink into Stupor
+        deck_qty: 2
+        typical_qty: 1.0
+      - name: Spirebluff Canal
+        deck_qty: 4
+        typical_qty: 3.0
+      - name: Claws of Gix
+        deck_qty: 3
+        typical_qty: 2.1
+- token: deck:54254733525d99c28c83
+  source_order: 9
+  reasons:
+  - type: build_shift
+    identity_level: subtype
+    identity_id: prowess/izzet
+    reference_sample_size: 48
+    score: 29
+    difference:
+      fewer:
+      - name: Slickshot Show-Off
+        deck_qty: 0
+        typical_qty: 3.8
+      - name: Expressive Iteration
+        deck_qty: 0
+        typical_qty: 2.7
+      - name: Mutagenic Growth
+        deck_qty: 2
+        typical_qty: 3.7
+      - name: Wooded Foothills
+        deck_qty: 1
+        typical_qty: 2.1
+      - name: Violent Urge
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Arid Mesa
+        deck_qty: 1
+        typical_qty: 1.9
+      - name: Mountain
+        deck_qty: 2
+        typical_qty: 2.8
+      - name: Fiery Islet
+        deck_qty: 1
+        typical_qty: 1.8
+      more:
+      - name: Experimental Synthesizer
+        deck_qty: 4
+        typical_qty: 0.0
+      - name: Boomerang Basics
+        deck_qty: 4
+        typical_qty: 0.3
+      - name: Stormchaser's Talent
+        deck_qty: 4
+        typical_qty: 0.6
+      - name: Scalding Tarn
+        deck_qty: 4
+        typical_qty: 2.8
+      - name: Island
+        deck_qty: 1
+        typical_qty: 0.0
+      - name: Polluted Delta
+        deck_qty: 1
+        typical_qty: 0.0
+      - name: Steam Vents
+        deck_qty: 4
+        typical_qty: 3.1
+- token: deck:b4331cb8a699af739a8e
+  source_order: 10
+  reasons:
+  - type: build_shift
+    identity_level: subtype
+    identity_id: broodscale-combo/gruul
+    reference_sample_size: 66
+    score: 20
+    difference:
+      fewer:
+      - name: Ancient Stirrings
+        deck_qty: 2
+        typical_qty: 3.8
+      - name: Sowing Mycospawn
+        deck_qty: 0
+        typical_qty: 1.6
+      - name: Cavern of Souls
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Wooded Foothills
+        deck_qty: 0
+        typical_qty: 0.8
+      - name: Delighted Halfling
+        deck_qty: 0
+        typical_qty: 0.7
+      - name: Walking Ballista
+        deck_qty: 0
+        typical_qty: 0.5
+      - name: Gemstone Caverns
+        deck_qty: 0
+        typical_qty: 0.5
+      - name: Talisman of Impulse
+        deck_qty: 0
+        typical_qty: 0.3
+      more:
+      - name: Ugin's Labyrinth
+        deck_qty: 2
+        typical_qty: 0.2
+      - name: Emrakul, the Promised End
+        deck_qty: 4
+        typical_qty: 2.8
+      - name: Glaring Fleshraker
+        deck_qty: 4
+        typical_qty: 2.9
+      - name: Writhing Chrysalis
+        deck_qty: 3
+        typical_qty: 1.9
+      - name: Boseiju, Who Endures
+        deck_qty: 2
+        typical_qty: 1.3
+      - name: Pithing Needle
+        deck_qty: 1
+        typical_qty: 0.5
+      - name: Forest
+        deck_qty: 3
+        typical_qty: 2.5
+      - name: Windswept Heath
+        deck_qty: 1
+        typical_qty: 0.7
+- token: deck:abe2d125ef7868d8da39
+  source_order: 11
+  reasons:
+  - type: build_shift
+    identity_level: subtype
+    identity_id: dimir-tempo/dimir
+    reference_sample_size: 75
+    score: 29
+    difference:
+      fewer:
+      - name: Flooded Strand
+        deck_qty: 0
+        typical_qty: 1.6
+      - name: Marsh Flats
+        deck_qty: 0
+        typical_qty: 1.2
+      - name: Preordain
+        deck_qty: 0
+        typical_qty: 1.1
+      - name: Darkslick Shores
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Counterspell
+        deck_qty: 2
+        typical_qty: 2.9
+      - name: Consign to Memory
+        deck_qty: 0
+        typical_qty: 0.9
+      - name: Fatal Push
+        deck_qty: 3
+        typical_qty: 3.9
+      - name: Orcish Bowmasters
+        deck_qty: 2
+        typical_qty: 2.8
+      more:
+      - name: Bloodstained Mire
+        deck_qty: 4
+        typical_qty: 1.1
+      - name: Drown in the Loch
+        deck_qty: 2
+        typical_qty: 0.4
+      - name: Spell Snare
+        deck_qty: 4
+        typical_qty: 2.6
+      - name: Kaito, Bane of Nightmares
+        deck_qty: 2
+        typical_qty: 1.0
+      - name: Force of Negation
+        deck_qty: 4
+        typical_qty: 3.0
+      - name: Tamiyo, Inquisitive Student
+        deck_qty: 2
+        typical_qty: 1.3
+      - name: Quantum Riddler
+        deck_qty: 4
+        typical_qty: 3.4
+      - name: Wan Shi Tong, Librarian
+        deck_qty: 1
+        typical_qty: 0.4
+all_top8:
+- token: deck:3a1557ede1cf29078d41
+  event_id: '12851686'
+  deck_id: 3a1557ede1cf29078d41
+  deck_fingerprint_sha256: 258bff8d469237e6d83877159a37a831b8b40343e1319ff831781d09f92a378c
+  date: '2026-08-17'
+  starttime: '2026-08-17 01:00:00.0'
+  final_rank: 1
+  player_count: 72
+  player: Dioferreira
+  parent_id: esper-blink
+  subtype_id: null
+  display_name: Esper Blink
+  main_deck: []
+  side_deck: []
+- token: deck:e209e22a0adf31e8e9ec
+  event_id: '12851686'
+  deck_id: e209e22a0adf31e8e9ec
+  deck_fingerprint_sha256: ed6359761e517caca1a2aada255793e522de394ad7d9e22b0053419df6a1358d
+  date: '2026-08-17'
+  starttime: '2026-08-17 01:00:00.0'
+  final_rank: 2
+  player_count: 72
+  player: ScreenwriterNY
+  parent_id: shape-anew
+  subtype_id: null
+  display_name: Shape Anew
+  main_deck: []
+  side_deck: []
+- token: deck:a747378bfcf4a104f834
+  event_id: '12851686'
+  deck_id: a747378bfcf4a104f834
+  deck_fingerprint_sha256: efb8c509fc4b84c9a7e4c02f1709f7cadef0dda289d504c447653a745d021aea
+  date: '2026-08-17'
+  starttime: '2026-08-17 01:00:00.0'
+  final_rank: 3
+  player_count: 72
+  player: Selfeisek
+  parent_id: mono-black-eldrazi
+  subtype_id: null
+  display_name: Mono-Black Eldrazi
+  main_deck: []
+  side_deck: []
+- token: deck:cf63d69ce049ada08d8f
+  event_id: '12851686'
+  deck_id: cf63d69ce049ada08d8f
+  deck_fingerprint_sha256: 9373a37870052aeb227fceb092b1b6d2f835a5a8513e589a0e7f0fab9bdf831a
+  date: '2026-08-17'
+  starttime: '2026-08-17 01:00:00.0'
+  final_rank: 4
+  player_count: 72
+  player: Ivan_Draw_Go
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:a1cbed47f9a85433f8aa
+  event_id: '12851686'
+  deck_id: a1cbed47f9a85433f8aa
+  deck_fingerprint_sha256: cc299992d6e27cae0eb72d04183479e788fab4ab8cfee4c197cebfd4fcc202ce
+  date: '2026-08-17'
+  starttime: '2026-08-17 01:00:00.0'
+  final_rank: 5
+  player_count: 72
+  player: YungDingo
+  parent_id: steel-cutter
+  subtype_id: izzet
+  display_name: Izzet Steel-Cutter
+  main_deck: []
+  side_deck: []
+- token: deck:ae9fcdccfadc4ce1f0f1
+  event_id: '12851686'
+  deck_id: ae9fcdccfadc4ce1f0f1
+  deck_fingerprint_sha256: 0d7466a0bc0793106ff20e39ad96ca5ecdd83f8865ffe785c7b789c8dcf4acbf
+  date: '2026-08-17'
+  starttime: '2026-08-17 01:00:00.0'
+  final_rank: 6
+  player_count: 72
+  player: LucasG1ggs
+  parent_id: hollowvine
+  subtype_id: null
+  display_name: Hollowvine
+  main_deck: []
+  side_deck: []
+- token: deck:6e81ecc421782d4a3827
+  event_id: '12851686'
+  deck_id: 6e81ecc421782d4a3827
+  deck_fingerprint_sha256: 03922ab5fec1ba89509d10688be3b7f0c4867e86afe47f6df3a4d24836e17d8a
+  date: '2026-08-17'
+  starttime: '2026-08-17 01:00:00.0'
+  final_rank: 7
+  player_count: 72
+  player: ShadowTitan1
+  parent_id: jeskai-energy
+  subtype_id: null
+  display_name: Jeskai Energy
+  main_deck: []
+  side_deck: []
+- token: deck:b2c8efd1981d7ef4b4c4
+  event_id: '12851686'
+  deck_id: b2c8efd1981d7ef4b4c4
+  deck_fingerprint_sha256: 226da40e1ce57d580b66a50fb590e08d76c58cafb57f5476fadba94c3e7de0a1
+  date: '2026-08-17'
+  starttime: '2026-08-17 01:00:00.0'
+  final_rank: 8
+  player_count: 72
+  player: littesir095
+  parent_id: dimir-tempo
+  subtype_id: dimir
+  display_name: Dimir Tempo
+  main_deck: []
+  side_deck: []
+- token: deck:73e0fc7293a91472f778
+  event_id: '12851690'
+  deck_id: 73e0fc7293a91472f778
+  deck_fingerprint_sha256: af8622abbbb37e9650ee49bb4c59f6db5d85519d03660c0a9d342345a9408240
+  date: '2026-08-17'
+  starttime: '2026-08-17 14:00:00.0'
+  final_rank: 1
+  player_count: 99
+  player: Rvng
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:14c0b846a58835c86c31
+  event_id: '12851690'
+  deck_id: 14c0b846a58835c86c31
+  deck_fingerprint_sha256: 821bc3e383cf52f435dc6bde11ed5b59f642cfb968f146294b14c026f78a0889
+  date: '2026-08-17'
+  starttime: '2026-08-17 14:00:00.0'
+  final_rank: 2
+  player_count: 99
+  player: Nowayh
+  parent_id: devoted-druid-combo
+  subtype_id: abzan
+  display_name: Devoted Druid Combo
+  main_deck: []
+  side_deck: []
+- token: deck:dbfd695012fb0907aadf
+  event_id: '12851690'
+  deck_id: dbfd695012fb0907aadf
+  deck_fingerprint_sha256: 36e208fb734623fc055a3cea93caba947ccdf982d86961125cf03a21f8f044ec
+  date: '2026-08-17'
+  starttime: '2026-08-17 14:00:00.0'
+  final_rank: 3
+  player_count: 99
+  player: ShadowTitan1
+  parent_id: jeskai-energy
+  subtype_id: null
+  display_name: Jeskai Energy
+  main_deck: []
+  side_deck: []
+- token: deck:28ad9d0baf82c5e81379
+  event_id: '12851690'
+  deck_id: 28ad9d0baf82c5e81379
+  deck_fingerprint_sha256: 1fd402e751a367d344c2186da67195e17cf1e4854aa2641756e922f3484ae3ae
+  date: '2026-08-17'
+  starttime: '2026-08-17 14:00:00.0'
+  final_rank: 4
+  player_count: 99
+  player: bcs8995
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:31048ad030896d5bab03
+  event_id: '12851690'
+  deck_id: 31048ad030896d5bab03
+  deck_fingerprint_sha256: a7f4316b3151da734a2659a1f3a814010b88c657e22a09415abc10f629e2ce64
+  date: '2026-08-17'
+  starttime: '2026-08-17 14:00:00.0'
+  final_rank: 5
+  player_count: 99
+  player: kthanakit26
+  parent_id: boros-land-destruction
+  subtype_id: null
+  display_name: Boros Ponza
+  main_deck: []
+  side_deck: []
+- token: deck:5237a4cebe2a21a966ac
+  event_id: '12851690'
+  deck_id: 5237a4cebe2a21a966ac
+  deck_fingerprint_sha256: 32d8e7f6b797b2f2154854d4c6885a18a47ad412bfeead85c8309e7d961e8a06
+  date: '2026-08-17'
+  starttime: '2026-08-17 14:00:00.0'
+  final_rank: 6
+  player_count: 99
+  player: arturcosta
+  parent_id: prowess
+  subtype_id: izzet
+  display_name: Prowess
+  main_deck: []
+  side_deck: []
+- token: deck:ea9ef395afb86565d72f
+  event_id: '12851690'
+  deck_id: ea9ef395afb86565d72f
+  deck_fingerprint_sha256: f0ddcb6c396c319d2af739fd7c21ec692f7739d1fcbb1b798f404ca6998e7ce1
+  date: '2026-08-17'
+  starttime: '2026-08-17 14:00:00.0'
+  final_rank: 7
+  player_count: 99
+  player: Thunus
+  parent_id: devoted-druid-combo
+  subtype_id: abzan
+  display_name: Devoted Druid Combo
+  main_deck: []
+  side_deck: []
+- token: deck:4e2efa7745a7af4add30
+  event_id: '12851690'
+  deck_id: 4e2efa7745a7af4add30
+  deck_fingerprint_sha256: 8db5f6ba019dc81ccd0df159b990defced4465d82665001341535c53844363f0
+  date: '2026-08-17'
+  starttime: '2026-08-17 14:00:00.0'
+  final_rank: 8
+  player_count: 99
+  player: EpicWalrus
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:27b5d47beebc5b8df75d
+  event_id: '12851705'
+  deck_id: 27b5d47beebc5b8df75d
+  deck_fingerprint_sha256: f165146062525e197b2ba2c675772b1b60f706ba32e97dab9056b61824c07521
+  date: '2026-08-18'
+  starttime: '2026-08-18 20:00:00.0'
+  final_rank: 1
+  player_count: 77
+  player: HouseOfManaMTG
+  parent_id: fight-rigging
+  subtype_id: null
+  display_name: Fight Rigging
+  main_deck: []
+  side_deck: []
+- token: deck:5065b795c192956b8ce5
+  event_id: '12851705'
+  deck_id: 5065b795c192956b8ce5
+  deck_fingerprint_sha256: 9f04f24a010fedfaf7061db46316da55bd7c76837cea9e64747c1c8e79b2a08c
+  date: '2026-08-18'
+  starttime: '2026-08-18 20:00:00.0'
+  final_rank: 2
+  player_count: 77
+  player: ipadkid
+  parent_id: dimir-tempo
+  subtype_id: dimir
+  display_name: Dimir Tempo
+  main_deck: []
+  side_deck: []
+- token: deck:1105d22b3bdd4a03e3bc
+  event_id: '12851705'
+  deck_id: 1105d22b3bdd4a03e3bc
+  deck_fingerprint_sha256: b5ce6741fb856cfb0ee6c0976c67b1c6a91fe96b0f6435b1786bd19580a42cdb
+  date: '2026-08-18'
+  starttime: '2026-08-18 20:00:00.0'
+  final_rank: 3
+  player_count: 77
+  player: NathanOfTheGiltLeaf
+  parent_id: devoted-druid-combo
+  subtype_id: abzan
+  display_name: Devoted Druid Combo
+  main_deck: []
+  side_deck: []
+- token: deck:bc752db62c3b6f0a13d2
+  event_id: '12851705'
+  deck_id: bc752db62c3b6f0a13d2
+  deck_fingerprint_sha256: e7843be2740ac7b2750d7a502b0c2c27414d087c9aa5207ea850a35b4e3ea944
+  date: '2026-08-18'
+  starttime: '2026-08-18 20:00:00.0'
+  final_rank: 4
+  player_count: 77
+  player: Marxelo
+  parent_id: devoted-druid-combo
+  subtype_id: abzan
+  display_name: Devoted Druid Combo
+  main_deck: []
+  side_deck: []
+- token: deck:450cd021c363bf62f2ac
+  event_id: '12851705'
+  deck_id: 450cd021c363bf62f2ac
+  deck_fingerprint_sha256: e441a6a50b78e6c27ff078dbfa3e891ff6fc2736016da71fd567b100374a9809
+  date: '2026-08-18'
+  starttime: '2026-08-18 20:00:00.0'
+  final_rank: 5
+  player_count: 77
+  player: KajuRoers
+  parent_id: broodscale-combo
+  subtype_id: mono-green
+  display_name: Broodscale Combo
+  main_deck: []
+  side_deck: []
+- token: deck:8729b1f5039a6670d91e
+  event_id: '12851705'
+  deck_id: 8729b1f5039a6670d91e
+  deck_fingerprint_sha256: 7680038b6ab9aee5dd3a09c11b31a944220573849966a8ebdc6c202409237187
+  date: '2026-08-18'
+  starttime: '2026-08-18 20:00:00.0'
+  final_rank: 6
+  player_count: 77
+  player: Martin_Dominguez
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:1f925d6d4f01c6ab6ec4
+  event_id: '12851705'
+  deck_id: 1f925d6d4f01c6ab6ec4
+  deck_fingerprint_sha256: 517b6c8dedc601c17924919869a1b2876f145e8307e80ce80981c5779d4cf9dc
+  date: '2026-08-18'
+  starttime: '2026-08-18 20:00:00.0'
+  final_rank: 7
+  player_count: 77
+  player: Nowayh
+  parent_id: devoted-druid-combo
+  subtype_id: abzan
+  display_name: Devoted Druid Combo
+  main_deck: []
+  side_deck: []
+- token: deck:195e5f7496c06203810d
+  event_id: '12851705'
+  deck_id: 195e5f7496c06203810d
+  deck_fingerprint_sha256: 8d87e7fed72002958f3d3a879337f6945acbe31658c662aac9b229f26c8b68ad
+  date: '2026-08-18'
+  starttime: '2026-08-18 20:00:00.0'
+  final_rank: 8
+  player_count: 77
+  player: nahuel10
+  parent_id: prowess
+  subtype_id: temur
+  display_name: Prowess
+  main_deck: []
+  side_deck: []
+- token: deck:29ffa26abbc811f769a1
+  event_id: '12851707'
+  deck_id: 29ffa26abbc811f769a1
+  deck_fingerprint_sha256: c8a8a7c5d28d0b6277e0bf8ccad67d64d0ed9ac3bc32e155ec84c3d6b1ec102f
+  date: '2026-08-19'
+  starttime: '2026-08-19 00:00:00.0'
+  final_rank: 1
+  player_count: 69
+  player: mechrataal
+  parent_id: steel-cutter
+  subtype_id: izzet
+  display_name: Izzet Steel-Cutter
+  main_deck:
+  - name: Aether Spellbomb
+    qty: 1
+  - name: Bilbo, Thief in the Night
+    qty: 4
+  - name: Breeding Pool
+    qty: 1
+  - name: Cori-Steel Cutter
+    qty: 4
+  - name: Emry, Lurker of the Loch
+    qty: 4
+  - name: Island
+    qty: 1
+  - name: Key to the Side-Door
+    qty: 1
+  - name: Loki, God of Mischief
+    qty: 4
+  - name: Metallic Rebuke
+    qty: 2
+  - name: Minamo, School at Water's Edge
+    qty: 1
+  - name: Mishra's Bauble
+    qty: 4
+  - name: Mountain
+    qty: 1
+  - name: Mox Amber
+    qty: 3
+  - name: Mox Opal
+    qty: 4
+  - name: Otawara, Soaring City
+    qty: 1
+  - name: Pyrite Spellbomb
+    qty: 1
+  - name: Scalding Tarn
+    qty: 4
+  - name: Sink into Stupor
+    qty: 2
+  - name: Skateboard
+    qty: 1
+  - name: Soul-Guide Lantern
+    qty: 1
+  - name: Steam Vents
+    qty: 3
+  - name: Tamiyo, Inquisitive Student
+    qty: 4
+  - name: Unholy Heat
+    qty: 4
+  - name: Urza's Saga
+    qty: 4
+  side_deck:
+  - name: Consign to Memory
+    qty: 2
+  - name: Flame of Anor
+    qty: 2
+  - name: Force of Negation
+    qty: 2
+  - name: Harbinger of the Seas
+    qty: 2
+  - name: Haywire Mite
+    qty: 2
+  - name: Metallic Rebuke
+    qty: 2
+  - name: Pithing Needle
+    qty: 1
+  - name: Soul-Guide Lantern
+    qty: 1
+  - name: Vexing Bauble
+    qty: 1
+- token: deck:8f1a58c66ab6d78b8087
+  event_id: '12851707'
+  deck_id: 8f1a58c66ab6d78b8087
+  deck_fingerprint_sha256: d9648e19c35c8fbdf91a47d5a1ae8d0f557be40357154d1b8218bf07899dca28
+  date: '2026-08-19'
+  starttime: '2026-08-19 00:00:00.0'
+  final_rank: 2
+  player_count: 69
+  player: musasabi
+  parent_id: devoted-druid-combo
+  subtype_id: abzan
+  display_name: Devoted Druid Combo
+  main_deck: []
+  side_deck: []
+- token: deck:343e4207cef87f33fb15
+  event_id: '12851707'
+  deck_id: 343e4207cef87f33fb15
+  deck_fingerprint_sha256: 6f8b9abdd7fa902aca8c29c90373ceaf6995c2c37e3e490e58d37448bd2c5b26
+  date: '2026-08-19'
+  starttime: '2026-08-19 00:00:00.0'
+  final_rank: 3
+  player_count: 69
+  player: xl_snapcaster
+  parent_id: chant-control
+  subtype_id: jeskai
+  display_name: Chant Control
+  main_deck: []
+  side_deck: []
+- token: deck:ef224a6c5b11b60b1548
+  event_id: '12851707'
+  deck_id: ef224a6c5b11b60b1548
+  deck_fingerprint_sha256: af8622abbbb37e9650ee49bb4c59f6db5d85519d03660c0a9d342345a9408240
+  date: '2026-08-19'
+  starttime: '2026-08-19 00:00:00.0'
+  final_rank: 4
+  player_count: 69
+  player: nedyahiske
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:48d81069e42a19260295
+  event_id: '12851707'
+  deck_id: 48d81069e42a19260295
+  deck_fingerprint_sha256: af8622abbbb37e9650ee49bb4c59f6db5d85519d03660c0a9d342345a9408240
+  date: '2026-08-19'
+  starttime: '2026-08-19 00:00:00.0'
+  final_rank: 5
+  player_count: 69
+  player: Sorathrix
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:a3e8eac30faf733b4251
+  event_id: '12851707'
+  deck_id: a3e8eac30faf733b4251
+  deck_fingerprint_sha256: fdb71a61918482d9a2ce51e1af6eea38337983ffa6b7404844a7c0896cf9bd26
+  date: '2026-08-19'
+  starttime: '2026-08-19 00:00:00.0'
+  final_rank: 6
+  player_count: 69
+  player: TuckerMTG
+  parent_id: esper-blink
+  subtype_id: null
+  display_name: Esper Blink
+  main_deck: []
+  side_deck: []
+- token: deck:abe2d125ef7868d8da39
+  event_id: '12851707'
+  deck_id: abe2d125ef7868d8da39
+  deck_fingerprint_sha256: 896b831b3fd168968e5346c019243a86ec448dc7db6f93fdbf1999e9143f4bb7
+  date: '2026-08-19'
+  starttime: '2026-08-19 00:00:00.0'
+  final_rank: 7
+  player_count: 69
+  player: bless_von
+  parent_id: dimir-tempo
+  subtype_id: dimir
+  display_name: Dimir Tempo
+  main_deck: []
+  side_deck: []
+- token: deck:06075085a0617cfcd4d4
+  event_id: '12851707'
+  deck_id: 06075085a0617cfcd4d4
+  deck_fingerprint_sha256: 844ecb0e73d05135f7c8b9ca835b930d37a26a3daf611632e51897c0b882b7e1
+  date: '2026-08-19'
+  starttime: '2026-08-19 00:00:00.0'
+  final_rank: 8
+  player_count: 69
+  player: _Grogu_
+  parent_id: esper-blink
+  subtype_id: null
+  display_name: Esper Blink
+  main_deck: []
+  side_deck: []
+- token: deck:bacaaf2c10607643ea6d
+  event_id: '12851716'
+  deck_id: bacaaf2c10607643ea6d
+  deck_fingerprint_sha256: c75a0b6fe394df392d020850bd3b2ce17c5254ddd03163aa4d101627e5eb8247
+  date: '2026-08-19'
+  starttime: '2026-08-19 16:00:00.0'
+  final_rank: 1
+  player_count: 109
+  player: MeninoNey
+  parent_id: living-end
+  subtype_id: temur
+  display_name: Living End
+  main_deck: []
+  side_deck: []
+- token: deck:84b35f458fd8a4e4d19a
+  event_id: '12851716'
+  deck_id: 84b35f458fd8a4e4d19a
+  deck_fingerprint_sha256: f165146062525e197b2ba2c675772b1b60f706ba32e97dab9056b61824c07521
+  date: '2026-08-19'
+  starttime: '2026-08-19 16:00:00.0'
+  final_rank: 2
+  player_count: 109
+  player: HouseOfManaMTG
+  parent_id: fight-rigging
+  subtype_id: null
+  display_name: Fight Rigging
+  main_deck: []
+  side_deck: []
+- token: deck:78a27b72522b16549da7
+  event_id: '12851716'
+  deck_id: 78a27b72522b16549da7
+  deck_fingerprint_sha256: 6432af5d310236bfcf2a5d8f5ccd67eb2c8072d5114a75d6e8a8e4e19236636d
+  date: '2026-08-19'
+  starttime: '2026-08-19 16:00:00.0'
+  final_rank: 3
+  player_count: 109
+  player: stefansson30952
+  parent_id: jeskai-ponza
+  subtype_id: null
+  display_name: Jeskai Ponza
+  main_deck:
+  - name: Avengers Disassembled
+    qty: 2
+  - name: Castle Ardenvale
+    qty: 1
+  - name: Cleansing Wildfire
+    qty: 3
+  - name: Cori Mountain Monastery
+    qty: 3
+  - name: Demolition Field
+    qty: 4
+  - name: Erode
+    qty: 4
+  - name: Field of Ruin
+    qty: 4
+  - name: Flooded Strand
+    qty: 3
+  - name: Galvanic Discharge
+    qty: 4
+  - name: Hallowed Fountain
+    qty: 1
+  - name: Island
+    qty: 1
+  - name: Mana Leak
+    qty: 4
+  - name: Mountain
+    qty: 1
+  - name: Path to Exile
+    qty: 4
+  - name: Plains
+    qty: 4
+  - name: Price of Freedom
+    qty: 4
+  - name: Quantum Riddler
+    qty: 3
+  - name: Raugrin Triome
+    qty: 1
+  - name: Sacred Foundry
+    qty: 1
+  - name: Solitude
+    qty: 4
+  - name: Steam Vents
+    qty: 1
+  - name: Wrath of the Skies
+    qty: 3
+  side_deck:
+  - name: Avengers Disassembled
+    qty: 2
+  - name: Dovin's Veto
+    qty: 1
+  - name: Faerie Macabre
+    qty: 1
+  - name: High Noon
+    qty: 4
+  - name: Rest in Peace
+    qty: 1
+  - name: Surgical Extraction
+    qty: 1
+  - name: Vexing Bauble
+    qty: 1
+  - name: Wear/Tear
+    qty: 2
+  - name: Wrath of God
+    qty: 1
+  - name: Wrath of the Skies
+    qty: 1
+- token: deck:c309ef93c91aa7ed1b4b
+  event_id: '12851716'
+  deck_id: c309ef93c91aa7ed1b4b
+  deck_fingerprint_sha256: 32d8e7f6b797b2f2154854d4c6885a18a47ad412bfeead85c8309e7d961e8a06
+  date: '2026-08-19'
+  starttime: '2026-08-19 16:00:00.0'
+  final_rank: 4
+  player_count: 109
+  player: _Abijhavs_
+  parent_id: prowess
+  subtype_id: izzet
+  display_name: Prowess
+  main_deck: []
+  side_deck: []
+- token: deck:8ad553bf5705256f5d62
+  event_id: '12851716'
+  deck_id: 8ad553bf5705256f5d62
+  deck_fingerprint_sha256: a5641a4bd04eb1b328210eff180442ad45942f1a5a5681dc5eb2e299a2ae958d
+  date: '2026-08-19'
+  starttime: '2026-08-19 16:00:00.0'
+  final_rank: 5
+  player_count: 109
+  player: Rvng
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:7e792d867d202e68dde6
+  event_id: '12851716'
+  deck_id: 7e792d867d202e68dde6
+  deck_fingerprint_sha256: 6a320de5f958a7f2ee2fc9392142b3733d8c5ff8e7d98cf005b16994ef08d368
+  date: '2026-08-19'
+  starttime: '2026-08-19 16:00:00.0'
+  final_rank: 6
+  player_count: 109
+  player: CMack_
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:af2bc9a1045fc80aace0
+  event_id: '12851716'
+  deck_id: af2bc9a1045fc80aace0
+  deck_fingerprint_sha256: 5dfe35fb9a001cbd0d128026c81fdf55e27aa73e9332069f39ae2d6ebd41a282
+  date: '2026-08-19'
+  starttime: '2026-08-19 16:00:00.0'
+  final_rank: 7
+  player_count: 109
+  player: frenzyofexultations
+  parent_id: devoted-druid-combo
+  subtype_id: abzan
+  display_name: Devoted Druid Combo
+  main_deck: []
+  side_deck: []
+- token: deck:bb784901f0ce01d721ab
+  event_id: '12851716'
+  deck_id: bb784901f0ce01d721ab
+  deck_fingerprint_sha256: 8d87e7fed72002958f3d3a879337f6945acbe31658c662aac9b229f26c8b68ad
+  date: '2026-08-19'
+  starttime: '2026-08-19 16:00:00.0'
+  final_rank: 8
+  player_count: 109
+  player: nahuel10
+  parent_id: prowess
+  subtype_id: temur
+  display_name: Prowess
+  main_deck: []
+  side_deck: []
+- token: deck:d559c0222815a16a3022
+  event_id: '12852721'
+  deck_id: d559c0222815a16a3022
+  deck_fingerprint_sha256: 871966c2fdffbac44282e0aa470316a1bbfed0b2b421c97b11b0c17d76017c63
+  date: '2026-08-20'
+  starttime: '2026-08-20 13:00:00.0'
+  final_rank: 1
+  player_count: 94
+  player: bananadisaster
+  parent_id: prowess
+  subtype_id: izzet
+  display_name: Prowess
+  main_deck: []
+  side_deck: []
+- token: deck:f24e8600bc98c2797c98
+  event_id: '12852721'
+  deck_id: f24e8600bc98c2797c98
+  deck_fingerprint_sha256: f1303b5fab58591344f118524935e28388b031b29db0a3ed3ec754d08a1f7501
+  date: '2026-08-20'
+  starttime: '2026-08-20 13:00:00.0'
+  final_rank: 2
+  player_count: 94
+  player: Rashek
+  parent_id: boros-energy
+  subtype_id: null
+  display_name: Boros Energy
+  main_deck: []
+  side_deck: []
+- token: deck:d42badf4d4db78ce7885
+  event_id: '12852721'
+  deck_id: d42badf4d4db78ce7885
+  deck_fingerprint_sha256: 68d22fe9bcd1e803a4c027e05a1e498777a7123cb7b54fa6cbf39910509e15cc
+  date: '2026-08-20'
+  starttime: '2026-08-20 13:00:00.0'
+  final_rank: 3
+  player_count: 94
+  player: thodoris17
+  parent_id: esper-blink
+  subtype_id: null
+  display_name: Esper Blink
+  main_deck: []
+  side_deck: []
+- token: deck:83ade6373f0ab3413277
+  event_id: '12852721'
+  deck_id: 83ade6373f0ab3413277
+  deck_fingerprint_sha256: d9b8a87f6d908318e6a9e75af27446a8c2ff4062fcef70b931fff9fc92e5364a
+  date: '2026-08-20'
+  starttime: '2026-08-20 13:00:00.0'
+  final_rank: 4
+  player_count: 94
+  player: Lightspirit
+  parent_id: eldrazi-ramp
+  subtype_id: gruul
+  display_name: Eldrazi Ramp
+  main_deck: []
+  side_deck: []
+- token: deck:0f802c794912d9af4c0e
+  event_id: '12852721'
+  deck_id: 0f802c794912d9af4c0e
+  deck_fingerprint_sha256: 587bd904a4dc9a16954b54d4ff7d5f47a049cfc1b9a31c6dbbb27a2598644fc2
+  date: '2026-08-20'
+  starttime: '2026-08-20 13:00:00.0'
+  final_rank: 5
+  player_count: 94
+  player: lunaloveee
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:409b40d8775f99ff7abf
+  event_id: '12852721'
+  deck_id: 409b40d8775f99ff7abf
+  deck_fingerprint_sha256: c5982cbc1ae48ecce1bb03f6e64b787b843d7fb21bc586f19078c0d1d3dc2e51
+  date: '2026-08-20'
+  starttime: '2026-08-20 13:00:00.0'
+  final_rank: 6
+  player_count: 94
+  player: selesneal
+  parent_id: devoted-druid-combo
+  subtype_id: abzan
+  display_name: Devoted Druid Combo
+  main_deck: []
+  side_deck: []
+- token: deck:b66787e6a11d64f1c083
+  event_id: '12852721'
+  deck_id: b66787e6a11d64f1c083
+  deck_fingerprint_sha256: 28f093696dbb9c55456e708cf0f378f8aa3b84e00c19d6b02848cbf1f390cd19
+  date: '2026-08-20'
+  starttime: '2026-08-20 13:00:00.0'
+  final_rank: 7
+  player_count: 94
+  player: ShowTime_
+  parent_id: domain-zoo
+  subtype_id: null
+  display_name: Domain Zoo
+  main_deck: []
+  side_deck: []
+- token: deck:fa45f24e0f67637cc693
+  event_id: '12852721'
+  deck_id: fa45f24e0f67637cc693
+  deck_fingerprint_sha256: 4c086ac6c6984725c0d94c85542df0a1599405d48d74301e114f4c6920849e16
+  date: '2026-08-20'
+  starttime: '2026-08-20 13:00:00.0'
+  final_rank: 8
+  player_count: 94
+  player: X_Why_Z
+  parent_id: ruby-storm
+  subtype_id: null
+  display_name: Ruby Storm
+  main_deck: []
+  side_deck: []
+- token: deck:b9cd27695c178d254556
+  event_id: '12852731'
+  deck_id: b9cd27695c178d254556
+  deck_fingerprint_sha256: 627bdf71a26a06b967663cffd177136b7aa516d94c690013729d5a4a525a2923
+  date: '2026-08-21'
+  starttime: '2026-08-21 15:00:00.0'
+  final_rank: 1
+  player_count: 101
+  player: Haunter56
+  parent_id: affinity
+  subtype_id: null
+  display_name: Affinity
+  main_deck: []
+  side_deck: []
+- token: deck:36f47136c471cb5f31e2
+  event_id: '12852731'
+  deck_id: 36f47136c471cb5f31e2
+  deck_fingerprint_sha256: d9b8a87f6d908318e6a9e75af27446a8c2ff4062fcef70b931fff9fc92e5364a
+  date: '2026-08-21'
+  starttime: '2026-08-21 15:00:00.0'
+  final_rank: 2
+  player_count: 101
+  player: Lightspirit
+  parent_id: eldrazi-ramp
+  subtype_id: gruul
+  display_name: Eldrazi Ramp
+  main_deck: []
+  side_deck: []
+- token: deck:3fcc09ff5810a521b010
+  event_id: '12852731'
+  deck_id: 3fcc09ff5810a521b010
+  deck_fingerprint_sha256: f165146062525e197b2ba2c675772b1b60f706ba32e97dab9056b61824c07521
+  date: '2026-08-21'
+  starttime: '2026-08-21 15:00:00.0'
+  final_rank: 3
+  player_count: 101
+  player: haveaboavida
+  parent_id: fight-rigging
+  subtype_id: null
+  display_name: Fight Rigging
+  main_deck: []
+  side_deck: []
+- token: deck:d3b68548487240afd213
+  event_id: '12852731'
+  deck_id: d3b68548487240afd213
+  deck_fingerprint_sha256: 871966c2fdffbac44282e0aa470316a1bbfed0b2b421c97b11b0c17d76017c63
+  date: '2026-08-21'
+  starttime: '2026-08-21 15:00:00.0'
+  final_rank: 4
+  player_count: 101
+  player: ArthurMorgan
+  parent_id: prowess
+  subtype_id: izzet
+  display_name: Prowess
+  main_deck: []
+  side_deck: []
+- token: deck:b2ea237bb7e2667988f0
+  event_id: '12852731'
+  deck_id: b2ea237bb7e2667988f0
+  deck_fingerprint_sha256: c2917e1972829de5c2cc04f9525f4ae8c2aabc4b40d4abc8ad05503c11231546
+  date: '2026-08-21'
+  starttime: '2026-08-21 15:00:00.0'
+  final_rank: 5
+  player_count: 101
+  player: DskBayWolf
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:856108b75158306f6394
+  event_id: '12852731'
+  deck_id: 856108b75158306f6394
+  deck_fingerprint_sha256: 3a2baab384b4fe15c3772e3605332fd14dc47d8446c56049a592cd4e91501280
+  date: '2026-08-21'
+  starttime: '2026-08-21 15:00:00.0'
+  final_rank: 6
+  player_count: 101
+  player: TrueHero
+  parent_id: affinity
+  subtype_id: null
+  display_name: Affinity
+  main_deck: []
+  side_deck: []
+- token: deck:b4331cb8a699af739a8e
+  event_id: '12852731'
+  deck_id: b4331cb8a699af739a8e
+  deck_fingerprint_sha256: 51c9e2f38871083b1ac92fe187d34abf5fa65efbba6fe2667a90d0bc3888caeb
+  date: '2026-08-21'
+  starttime: '2026-08-21 15:00:00.0'
+  final_rank: 7
+  player_count: 101
+  player: ziofrancone
+  parent_id: broodscale-combo
+  subtype_id: gruul
+  display_name: Broodscale Combo
+  main_deck: []
+  side_deck: []
+- token: deck:9f149681b29b2b9f946e
+  event_id: '12852731'
+  deck_id: 9f149681b29b2b9f946e
+  deck_fingerprint_sha256: 6d496589af09ab4ddda9c09cc40b2dd5961248dd9a2de75c1e77ec233ed3ae4f
+  date: '2026-08-21'
+  starttime: '2026-08-21 15:00:00.0'
+  final_rank: 8
+  player_count: 101
+  player: McWinSauce
+  parent_id: esper-blink
+  subtype_id: null
+  display_name: Esper Blink
+  main_deck: []
+  side_deck: []
+- token: deck:b2abf5fdb96d22201849
+  event_id: '12852736'
+  deck_id: b2abf5fdb96d22201849
+  deck_fingerprint_sha256: e532c3e0a47201e1d10d586060de652204ee3cb58b888be432268122d37fdc04
+  date: '2026-08-22'
+  starttime: '2026-08-22 01:00:00.0'
+  final_rank: 1
+  player_count: 94
+  player: Willthepill
+  parent_id: esper-blink
+  subtype_id: null
+  display_name: Esper Blink
+  main_deck: []
+  side_deck: []
+- token: deck:56ec273351ba95967744
+  event_id: '12852736'
+  deck_id: 56ec273351ba95967744
+  deck_fingerprint_sha256: d20ec57428bb2bc419e78febd2990242e2ffc7caead3f1167aa4cdf0178113f2
+  date: '2026-08-22'
+  starttime: '2026-08-22 01:00:00.0'
+  final_rank: 2
+  player_count: 94
+  player: Kalipapas
+  parent_id: fight-rigging
+  subtype_id: null
+  display_name: Fight Rigging
+  main_deck: []
+  side_deck: []
+- token: deck:c71c3b211f7dbc10d55e
+  event_id: '12852736'
+  deck_id: c71c3b211f7dbc10d55e
+  deck_fingerprint_sha256: c0465eea5c45d603b99da19148d0b09926f90269347a7f0f06f53cf1e9542258
+  date: '2026-08-22'
+  starttime: '2026-08-22 01:00:00.0'
+  final_rank: 3
+  player_count: 94
+  player: ipadkid
+  parent_id: dimir-tempo
+  subtype_id: grixis
+  display_name: Dimir Tempo
+  main_deck: []
+  side_deck: []
+- token: deck:908dca7abe8735c5dc46
+  event_id: '12852736'
+  deck_id: 908dca7abe8735c5dc46
+  deck_fingerprint_sha256: 9e3a71b1952dc41fcac55e1ffd3954943b0ae51e5442716d3322990ebe81d7d7
+  date: '2026-08-22'
+  starttime: '2026-08-22 01:00:00.0'
+  final_rank: 4
+  player_count: 94
+  player: MercurialChemister
+  parent_id: domain-zoo
+  subtype_id: null
+  display_name: Domain Zoo
+  main_deck: []
+  side_deck: []
+- token: deck:cf60d6e0cc98168de34a
+  event_id: '12852736'
+  deck_id: cf60d6e0cc98168de34a
+  deck_fingerprint_sha256: 627bdf71a26a06b967663cffd177136b7aa516d94c690013729d5a4a525a2923
+  date: '2026-08-22'
+  starttime: '2026-08-22 01:00:00.0'
+  final_rank: 5
+  player_count: 94
+  player: LucasG1ggs
+  parent_id: affinity
+  subtype_id: null
+  display_name: Affinity
+  main_deck: []
+  side_deck: []
+- token: deck:c894b51e2c0a07516f42
+  event_id: '12852736'
+  deck_id: c894b51e2c0a07516f42
+  deck_fingerprint_sha256: ab689d7e2d56e3d9be77a550cda2b0aeb1a75dd9e6a3c6e0185f3a95c45d142c
+  date: '2026-08-22'
+  starttime: '2026-08-22 01:00:00.0'
+  final_rank: 6
+  player_count: 94
+  player: KingHairy
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:e7341e1ef9d06333de0d
+  event_id: '12852736'
+  deck_id: e7341e1ef9d06333de0d
+  deck_fingerprint_sha256: 8178ee77c4f8b810792cd98fb3bde3af727e3949361cd35c18fe15c713b148c1
+  date: '2026-08-22'
+  starttime: '2026-08-22 01:00:00.0'
+  final_rank: 7
+  player_count: 94
+  player: Tinker_deck
+  parent_id: eldrazi-tron
+  subtype_id: mono-green
+  display_name: Eldrazi Tron
+  main_deck: []
+  side_deck: []
+- token: deck:cf7fc8c994fecbc4a7c2
+  event_id: '12852736'
+  deck_id: cf7fc8c994fecbc4a7c2
+  deck_fingerprint_sha256: 78e482e07238d198cf7aea5980590bcfbe7175ca7b4f21790fb0f6a4eb13beae
+  date: '2026-08-22'
+  starttime: '2026-08-22 01:00:00.0'
+  final_rank: 8
+  player_count: 94
+  player: DrewEldon
+  parent_id: dimir-tempo
+  subtype_id: dimir
+  display_name: Dimir Tempo
+  main_deck: []
+  side_deck: []
+- token: deck:2c4151103e765bc9f839
+  event_id: '12852737'
+  deck_id: 2c4151103e765bc9f839
+  deck_fingerprint_sha256: 6a419ceabd7da8e9f87b6fd650b5bde982118ac890c3d38cdab3b3fd1557d1cb
+  date: '2026-08-22'
+  starttime: '2026-08-22 06:00:00.0'
+  final_rank: 1
+  player_count: 33
+  player: yriel
+  parent_id: esper-ketramose
+  subtype_id: null
+  display_name: Esper Ketramose
+  main_deck: []
+  side_deck: []
+- token: deck:fda990a41cd1915a8449
+  event_id: '12852737'
+  deck_id: fda990a41cd1915a8449
+  deck_fingerprint_sha256: a0d726dd10192768f21de88c3c2e773f2b6602654498853ec3696c23dea91419
+  date: '2026-08-22'
+  starttime: '2026-08-22 06:00:00.0'
+  final_rank: 2
+  player_count: 33
+  player: NotJim
+  parent_id: prowess
+  subtype_id: izzet
+  display_name: Prowess
+  main_deck: []
+  side_deck: []
+- token: deck:a362c5460d0c8674716f
+  event_id: '12852737'
+  deck_id: a362c5460d0c8674716f
+  deck_fingerprint_sha256: 26695c2121017a2d9feba09f8b54b33c61c3449aeabeb5f7ed730463785dd119
+  date: '2026-08-22'
+  starttime: '2026-08-22 06:00:00.0'
+  final_rank: 3
+  player_count: 33
+  player: soggymeatball
+  parent_id: grixis-persist
+  subtype_id: null
+  display_name: Grixis Persist
+  main_deck: []
+  side_deck: []
+- token: deck:d77c2628229e7c6b816c
+  event_id: '12852737'
+  deck_id: d77c2628229e7c6b816c
+  deck_fingerprint_sha256: b5ce6741fb856cfb0ee6c0976c67b1c6a91fe96b0f6435b1786bd19580a42cdb
+  date: '2026-08-22'
+  starttime: '2026-08-22 06:00:00.0'
+  final_rank: 4
+  player_count: 33
+  player: meanfannypack
+  parent_id: devoted-druid-combo
+  subtype_id: abzan
+  display_name: Devoted Druid Combo
+  main_deck: []
+  side_deck: []
+- token: deck:a144df866570787e0ac5
+  event_id: '12852737'
+  deck_id: a144df866570787e0ac5
+  deck_fingerprint_sha256: e72bacd9f197cd89e8565343ace81ad6c638223f4961a93ff838d9287e1ffab8
+  date: '2026-08-22'
+  starttime: '2026-08-22 06:00:00.0'
+  final_rank: 5
+  player_count: 33
+  player: Junkmener
+  parent_id: prowess
+  subtype_id: temur
+  display_name: Prowess
+  main_deck: []
+  side_deck: []
+- token: deck:52a9634220fd64bf3ddd
+  event_id: '12852737'
+  deck_id: 52a9634220fd64bf3ddd
+  deck_fingerprint_sha256: 7ce0bde420a62e38dc5e78eeef4bfb8d2b60529dc73a0bf7413f9d51b30bea56
+  date: '2026-08-22'
+  starttime: '2026-08-22 06:00:00.0'
+  final_rank: 6
+  player_count: 33
+  player: ejk
+  parent_id: esper-blink
+  subtype_id: null
+  display_name: Esper Blink
+  main_deck: []
+  side_deck: []
+- token: deck:4a6d1a371d51b9e6103a
+  event_id: '12852737'
+  deck_id: 4a6d1a371d51b9e6103a
+  deck_fingerprint_sha256: d9648e19c35c8fbdf91a47d5a1ae8d0f557be40357154d1b8218bf07899dca28
+  date: '2026-08-22'
+  starttime: '2026-08-22 06:00:00.0'
+  final_rank: 7
+  player_count: 33
+  player: musasabi
+  parent_id: devoted-druid-combo
+  subtype_id: abzan
+  display_name: Devoted Druid Combo
+  main_deck: []
+  side_deck: []
+- token: deck:82a14e7b20dd64c93d09
+  event_id: '12852737'
+  deck_id: 82a14e7b20dd64c93d09
+  deck_fingerprint_sha256: a5641a4bd04eb1b328210eff180442ad45942f1a5a5681dc5eb2e299a2ae958d
+  date: '2026-08-22'
+  starttime: '2026-08-22 06:00:00.0'
+  final_rank: 8
+  player_count: 33
+  player: PesE
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:9715f2e4fcbac19c9826
+  event_id: '12852742'
+  deck_id: 9715f2e4fcbac19c9826
+  deck_fingerprint_sha256: 3450ffea6308010fbf006e5e2d14440fd8934e03a4f195c4913c6679378e329e
+  date: '2026-08-22'
+  starttime: '2026-08-22 15:30:00.0'
+  final_rank: 1
+  player_count: 125
+  player: Phryziel
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:733519c0035b2609acd9
+  event_id: '12852742'
+  deck_id: 733519c0035b2609acd9
+  deck_fingerprint_sha256: a6df2f594f8eb88f9d5129777647c1a776a54f27b0f55577b6c25e9072df4ea2
+  date: '2026-08-22'
+  starttime: '2026-08-22 15:30:00.0'
+  final_rank: 2
+  player_count: 125
+  player: Nuserdog
+  parent_id: eldrazi-tron
+  subtype_id: colorless
+  display_name: Eldrazi Tron
+  main_deck: []
+  side_deck: []
+- token: deck:e387a2933dc4086eae68
+  event_id: '12852742'
+  deck_id: e387a2933dc4086eae68
+  deck_fingerprint_sha256: adef54f921969957c2b72bbd254b4196518bd3929a06e44d60827e5bd5afe075
+  date: '2026-08-22'
+  starttime: '2026-08-22 15:30:00.0'
+  final_rank: 3
+  player_count: 125
+  player: MikeEgan
+  parent_id: jeskai-energy
+  subtype_id: null
+  display_name: Jeskai Energy
+  main_deck: []
+  side_deck: []
+- token: deck:e4b9e2c05bc787b0829a
+  event_id: '12852742'
+  deck_id: e4b9e2c05bc787b0829a
+  deck_fingerprint_sha256: fa6027aa350b29d4045d915028a6bfa4ff52c06acd31f2aad2131ca200cd8884
+  date: '2026-08-22'
+  starttime: '2026-08-22 15:30:00.0'
+  final_rank: 4
+  player_count: 125
+  player: pokerswizard
+  parent_id: necrodominance
+  subtype_id: golgari
+  display_name: Necrodominance
+  main_deck: []
+  side_deck: []
+- token: deck:54254733525d99c28c83
+  event_id: '12852742'
+  deck_id: 54254733525d99c28c83
+  deck_fingerprint_sha256: 1cc165fc0f58fc0b3777ff70e3f09a5298530cfe023f282ab6d05e8a2e6347c8
+  date: '2026-08-22'
+  starttime: '2026-08-22 15:30:00.0'
+  final_rank: 5
+  player_count: 125
+  player: toto_2295
+  parent_id: prowess
+  subtype_id: izzet
+  display_name: Prowess
+  main_deck: []
+  side_deck: []
+- token: deck:fec4003e84900f1d4865
+  event_id: '12852742'
+  deck_id: fec4003e84900f1d4865
+  deck_fingerprint_sha256: eb10c1ab4bb8a6ffa794ead18c4556a73e482621bf42d51c419c0291fd458df6
+  date: '2026-08-22'
+  starttime: '2026-08-22 15:30:00.0'
+  final_rank: 6
+  player_count: 125
+  player: Bugsy69
+  parent_id: grixis-persist
+  subtype_id: null
+  display_name: Grixis Persist
+  main_deck: []
+  side_deck: []
+- token: deck:3592e3d1fb29bbfcb473
+  event_id: '12852742'
+  deck_id: 3592e3d1fb29bbfcb473
+  deck_fingerprint_sha256: ab689d7e2d56e3d9be77a550cda2b0aeb1a75dd9e6a3c6e0185f3a95c45d142c
+  date: '2026-08-22'
+  starttime: '2026-08-22 15:30:00.0'
+  final_rank: 7
+  player_count: 125
+  player: Takayama
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:7ffbedfbd8ba7ded3842
+  event_id: '12852742'
+  deck_id: 7ffbedfbd8ba7ded3842
+  deck_fingerprint_sha256: c75a0b6fe394df392d020850bd3b2ce17c5254ddd03163aa4d101627e5eb8247
+  date: '2026-08-22'
+  starttime: '2026-08-22 15:30:00.0'
+  final_rank: 8
+  player_count: 125
+  player: MeninooNey
+  parent_id: living-end
+  subtype_id: temur
+  display_name: Living End
+  main_deck: []
+  side_deck: []
+- token: deck:fe7d2d01c3cfabcb69bb
+  event_id: '12852747'
+  deck_id: fe7d2d01c3cfabcb69bb
+  deck_fingerprint_sha256: c0c6137b57fcf8cd06d763527de9740348d4c621b2f7da966811c6b832652036
+  date: '2026-08-23'
+  starttime: '2026-08-23 01:00:00.0'
+  final_rank: 1
+  player_count: 88
+  player: ETBJezus
+  parent_id: dimir-tempo
+  subtype_id: dimir
+  display_name: Dimir Tempo
+  main_deck: []
+  side_deck: []
+- token: deck:84a491cb2a0c7b80e44b
+  event_id: '12852747'
+  deck_id: 84a491cb2a0c7b80e44b
+  deck_fingerprint_sha256: c75a0b6fe394df392d020850bd3b2ce17c5254ddd03163aa4d101627e5eb8247
+  date: '2026-08-23'
+  starttime: '2026-08-23 01:00:00.0'
+  final_rank: 2
+  player_count: 88
+  player: MeninooNey
+  parent_id: living-end
+  subtype_id: temur
+  display_name: Living End
+  main_deck: []
+  side_deck: []
+- token: deck:4355abb183e174637e60
+  event_id: '12852747'
+  deck_id: 4355abb183e174637e60
+  deck_fingerprint_sha256: e72bacd9f197cd89e8565343ace81ad6c638223f4961a93ff838d9287e1ffab8
+  date: '2026-08-23'
+  starttime: '2026-08-23 01:00:00.0'
+  final_rank: 3
+  player_count: 88
+  player: Junkmener
+  parent_id: prowess
+  subtype_id: temur
+  display_name: Prowess
+  main_deck: []
+  side_deck: []
+- token: deck:6ffd78ae860bdd800f9e
+  event_id: '12852747'
+  deck_id: 6ffd78ae860bdd800f9e
+  deck_fingerprint_sha256: cdc75c029759be2119d1ddc635c9d10541a87161e06e40d78628959632956420
+  date: '2026-08-23'
+  starttime: '2026-08-23 01:00:00.0'
+  final_rank: 4
+  player_count: 88
+  player: Skeptic2304
+  parent_id: affinity
+  subtype_id: null
+  display_name: Affinity
+  main_deck: []
+  side_deck: []
+- token: deck:cb6a04949abaa1d9f68f
+  event_id: '12852747'
+  deck_id: cb6a04949abaa1d9f68f
+  deck_fingerprint_sha256: 243d563a675509f1b8a8492474e3349ef6672aa62d3ba49690d03238fee50509
+  date: '2026-08-23'
+  starttime: '2026-08-23 01:00:00.0'
+  final_rank: 5
+  player_count: 88
+  player: sidisi
+  parent_id: affinity
+  subtype_id: null
+  display_name: Affinity
+  main_deck: []
+  side_deck: []
+- token: deck:1a3974827db1b5caf52f
+  event_id: '12852747'
+  deck_id: 1a3974827db1b5caf52f
+  deck_fingerprint_sha256: a6df2f594f8eb88f9d5129777647c1a776a54f27b0f55577b6c25e9072df4ea2
+  date: '2026-08-23'
+  starttime: '2026-08-23 01:00:00.0'
+  final_rank: 6
+  player_count: 88
+  player: gazmon48
+  parent_id: eldrazi-tron
+  subtype_id: colorless
+  display_name: Eldrazi Tron
+  main_deck: []
+  side_deck: []
+- token: deck:1eccacf3b4a3c6aa6c04
+  event_id: '12852747'
+  deck_id: 1eccacf3b4a3c6aa6c04
+  deck_fingerprint_sha256: ab689d7e2d56e3d9be77a550cda2b0aeb1a75dd9e6a3c6e0185f3a95c45d142c
+  date: '2026-08-23'
+  starttime: '2026-08-23 01:00:00.0'
+  final_rank: 7
+  player_count: 88
+  player: Fransadness
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:acc94e69d84da4b303d1
+  event_id: '12852747'
+  deck_id: acc94e69d84da4b303d1
+  deck_fingerprint_sha256: a4de721ecf5e60a4203fe8083e944490996b837426d658d557a964bba86d217b
+  date: '2026-08-23'
+  starttime: '2026-08-23 01:00:00.0'
+  final_rank: 8
+  player_count: 88
+  player: WaffleWiz
+  parent_id: erayo
+  subtype_id: null
+  display_name: Dimir Erayo
+  main_deck:
+  - name: Aether Spellbomb
+    qty: 1
+  - name: Basim Ibn Ishaq
+    qty: 3
+  - name: Bilbo, Thief in the Night
+    qty: 3
+  - name: Emry, Lurker of the Loch
+    qty: 4
+  - name: Erayo, Soratami Ascendant
+    qty: 3
+  - name: Fatal Push
+    qty: 4
+  - name: Island
+    qty: 2
+  - name: Key to the Side-Door
+    qty: 3
+  - name: Metallic Rebuke
+    qty: 3
+  - name: Mishra's Bauble
+    qty: 4
+  - name: Mox Amber
+    qty: 4
+  - name: Mox Opal
+    qty: 4
+  - name: Nihil Spellbomb
+    qty: 1
+  - name: Otawara, Soaring City
+    qty: 2
+  - name: Polluted Delta
+    qty: 3
+  - name: Sink into Stupor
+    qty: 1
+  - name: Skateboard
+    qty: 1
+  - name: Tamiyo, Inquisitive Student
+    qty: 4
+  - name: Thoughtseize
+    qty: 1
+  - name: Undercity Sewers
+    qty: 1
+  - name: Urza's Saga
+    qty: 4
+  - name: Watery Grave
+    qty: 4
+  side_deck:
+  - name: Consign to Memory
+    qty: 3
+  - name: Force of Negation
+    qty: 2
+  - name: Harbinger of the Seas
+    qty: 2
+  - name: Kaito, Bane of Nightmares
+    qty: 2
+  - name: Pithing Needle
+    qty: 1
+  - name: Thoughtseize
+    qty: 2
+  - name: Toxic Deluge
+    qty: 2
+  - name: Vexing Bauble
+    qty: 1
+- token: deck:d3a0d47c14697d8888fa
+  event_id: '12852752'
+  deck_id: d3a0d47c14697d8888fa
+  deck_fingerprint_sha256: 60562ced12dc906d2288e2587b43d26baeb0411a412ada13e607fa0a8a511c04
+  date: '2026-08-23'
+  starttime: '2026-08-23 11:00:00.0'
+  final_rank: 1
+  player_count: 84
+  player: thodoris17
+  parent_id: esper-blink
+  subtype_id: null
+  display_name: Esper Blink
+  main_deck: []
+  side_deck: []
+- token: deck:55841b4990961c589051
+  event_id: '12852752'
+  deck_id: 55841b4990961c589051
+  deck_fingerprint_sha256: 1f7a26a0fedffeef7652fee4f951dfedc5ea19c86fee177637eba8f48e672c70
+  date: '2026-08-23'
+  starttime: '2026-08-23 11:00:00.0'
+  final_rank: 2
+  player_count: 84
+  player: wallofspikes
+  parent_id: devoted-druid-combo
+  subtype_id: abzan
+  display_name: Devoted Druid Combo
+  main_deck: []
+  side_deck: []
+- token: deck:7efeb3aa28d1067d9a1b
+  event_id: '12852752'
+  deck_id: 7efeb3aa28d1067d9a1b
+  deck_fingerprint_sha256: 46b5e5091494943431e660c5ca698581804658dbb1319f77910e3601312e1950
+  date: '2026-08-23'
+  starttime: '2026-08-23 11:00:00.0'
+  final_rank: 3
+  player_count: 84
+  player: hugofreitas1
+  parent_id: ruby-storm
+  subtype_id: null
+  display_name: Ruby Storm
+  main_deck: []
+  side_deck: []
+- token: deck:ec8132020d3c733ae488
+  event_id: '12852752'
+  deck_id: ec8132020d3c733ae488
+  deck_fingerprint_sha256: 6d496589af09ab4ddda9c09cc40b2dd5961248dd9a2de75c1e77ec233ed3ae4f
+  date: '2026-08-23'
+  starttime: '2026-08-23 11:00:00.0'
+  final_rank: 4
+  player_count: 84
+  player: jev_
+  parent_id: esper-blink
+  subtype_id: null
+  display_name: Esper Blink
+  main_deck: []
+  side_deck: []
+- token: deck:013f6f3fc75960dff35b
+  event_id: '12852752'
+  deck_id: 013f6f3fc75960dff35b
+  deck_fingerprint_sha256: b4a438751c45d89522fdbd0c9b9b5f76f68d42554e6c4c69479a202f23c4c563
+  date: '2026-08-23'
+  starttime: '2026-08-23 11:00:00.0'
+  final_rank: 5
+  player_count: 84
+  player: DskBayWolf
+  parent_id: esper-goryos
+  subtype_id: null
+  display_name: Esper Goryo's
+  main_deck: []
+  side_deck: []
+- token: deck:7a066a360840f04d55ae
+  event_id: '12852752'
+  deck_id: 7a066a360840f04d55ae
+  deck_fingerprint_sha256: 310c2ed08dc7691e6c1664736819d91bafd310845671250df151523b9072b27c
+  date: '2026-08-23'
+  starttime: '2026-08-23 11:00:00.0'
+  final_rank: 6
+  player_count: 84
+  player: Omegauo
+  parent_id: esper-blink
+  subtype_id: null
+  display_name: Esper Blink
+  main_deck: []
+  side_deck: []
+- token: deck:7ae28c947cd05286aaa7
+  event_id: '12852752'
+  deck_id: 7ae28c947cd05286aaa7
+  deck_fingerprint_sha256: f7fc52673963c77213a8143d362482bdb3aaa22558cc9dafefaef2646ba2bff3
+  date: '2026-08-23'
+  starttime: '2026-08-23 11:00:00.0'
+  final_rank: 7
+  player_count: 84
+  player: JRomero
+  parent_id: hollowvine
+  subtype_id: null
+  display_name: Hollowvine
+  main_deck: []
+  side_deck: []
+- token: deck:c7393caf66a81e51cb35
+  event_id: '12852752'
+  deck_id: c7393caf66a81e51cb35
+  deck_fingerprint_sha256: 0bb927a4165c999f47b8c327ed56ca9581ae2078b824dd57e0c2a103c4197c1f
+  date: '2026-08-23'
+  starttime: '2026-08-23 11:00:00.0'
+  final_rank: 8
+  player_count: 84
+  player: The_Lion91
+  parent_id: eldrazi-tron
+  subtype_id: colorless
+  display_name: Eldrazi Tron
+  main_deck: []
+  side_deck: []
+review:
+  top_copy:
+    reviewed: true
+    items:
+    - order: 1
+      text:
+        zh: 本周MO的比赛结构虽然调整，但摩登魅力不减，和上周开起来的普通挑战赛数量持平。不过混战在本周开始有一些慢慢清晰的趋势。艾斯波怨灵的领先优势开始明朗，本周优势明显。另外两套牌阿布赞缓伤和艾斯波云移的八强占比也都能超过10%。传统豪强红白能量则已经开始彻底掉队。
+        en: MTGO's event structure changed this week, but Modern remained as popular as ever, with the same number of regular Challenges firing as last week. The crowded field is nevertheless beginning to show some clearer trends. Esper Goryo's pulled ahead decisively this week. Abzan Devoted Druid Combo and Esper Blink each also exceeded a 10% share of Top 8s, while former powerhouse Boros Energy has begun to fall well off the pace.
+    - order: 2
+      text:
+        zh: 不过依旧还有新套牌进入环境，一套使用了HOB的Bilbo和Key to the Side-Door，并加入黑色的Basim的蓝黑伟代本周拿下一个八强：deck:acc94e69d84da4b303d1
+        en: 'New decks are still entering the metagame. A Dimir Erayo list using HOB''s Bilbo and Key to the Side-Door, plus black for Basim, made a Top 8 this week: deck:acc94e69d84da4b303d1'
+    - order: 3
+      text:
+        zh: 混蓝加入Quantum Riddler续航，还有Mana Leak作为许可咒语的洁斯凯炸地套牌本周也有多个高分、八强成绩：deck:78a27b72522b16549da7。蓝色确实让套牌可以应对的局面更丰富，但法术力基础也变得更差。
+        en: 'A Jeskai Ponza build that splashes blue for Quantum Riddler as card advantage and Mana Leak as permission posted multiple high-score finishes, including a Top 8, this week: deck:78a27b72522b16549da7. Blue gives the deck answers to a wider range of situations, but also makes its mana base worse.'
+    - order: 4
+      text:
+        zh: 传统介刀套牌中，也开始有加入Bilbo的版本出成绩，本周一套满编并带了一张Key to the Side-Door的版本拿下一个八强：deck:29ffa26abbc811f769a1
+        en: 'Traditional Steel-Cutter shells are also starting to post results with Bilbo. This week, a list with the full four copies plus one Key to the Side-Door made a Top 8: deck:29ffa26abbc811f769a1'
+  features:
+    reviewed: true
+    explicit_empty: false
+    items:
+    - source_order: 18
+      category: new_deck
+      destination_id: deck:acc94e69d84da4b303d1
+      parent_id: erayo
+      subtype_id: null
+      positioning:
+        zh: HOB带来Bilbo和Key to the Side-Door之后，aspiringspike率先尝试了纯蓝版本的伟代套牌，不过本周没有八强成绩，只有两个高分。而这个版本是加入了Basim和更多黑色互动，本周取得一个八强。包括MSH补的Loki在内，新组件确实都非常适合这个思路。
+        en: After HOB introduced Bilbo and Key to the Side-Door, aspiringspike was first to try a mono-blue Erayo build. It missed the Top 8 this week but posted two high-score finishes. This version added Basim and more black interaction and did reach a Top 8. The new pieces—including Loki from MSH—are all excellent fits for the strategy.
+      featured_cards:
+      - Bilbo, Thief in the Night
+      - Key to the Side-Door
+      - Basim Ibn Ishaq
+      - Erayo, Soratami Ascendant
+      supporting_facts: *id001
+    - source_order: 19
+      category: new_deck
+      destination_id: deck:78a27b72522b16549da7
+      parent_id: jeskai-ponza
+      subtype_id: null
+      positioning:
+        zh: 红白炸地的基底，混入蓝色加入Quantum Riddler续航，还有Mana Leak作为许可咒语，让套牌可以应对的局面更丰富。不过个人对这个法术力基础是否能支持三色还是有一定疑虑。
+        en: Built on the Boros Ponza shell, this version splashes blue for Quantum Riddler as card advantage and Mana Leak as permission, expanding the range of situations it can answer. I still have some doubts about whether the mana base can reliably support all three colors.
+      featured_cards:
+      - Mana Leak
+      - Quantum Riddler
+      - Price of Freedom
+      - Field of Ruin
+      supporting_facts: *id002
+    - source_order: 21
+      category: new_technology
+      destination_id: deck:29ffa26abbc811f769a1
+      parent_id: steel-cutter
+      subtype_id: izzet
+      positioning:
+        zh: 传统介刀套牌中，也开始有加入Bilbo的版本出成绩，本周一套满编并带了一张Key to the Side-Door的版本拿下一个八强。
+        en: Traditional Steel-Cutter shells are also starting to post results with Bilbo. This week, a list with the full four copies and one Key to the Side-Door made a Top 8.
+      featured_cards:
+      - Bilbo, Thief in the Night
+      - Key to the Side-Door
+      - Loki, God of Mischief
+      - Cori-Steel Cutter
+      supporting_facts: *id003
+known_archetype_ids:
+- affinity
+- agadeem-persist
+- amulet-titan
+- azorius-control
+- azorius-miracles
+- boros-energy
+- boros-land-destruction
+- broodscale-combo
+- burn
+- chant-control
+- devoted-druid-combo
+- dimir-mill
+- dimir-tempo
+- domain-zoo
+- eldrazi-ramp
+- eldrazi-tron
+- erayo
+- esper-blink
+- esper-goryos
+- esper-ketramose
+- fight-rigging
+- fling-goyf
+- golgari-yawgmoth
+- grixis-legends
+- grixis-persist
+- grixis-tempo
+- hammer-time
+- hollowvine
+- izzet-through-the-breach
+- jeskai-control
+- jeskai-energy
+- jeskai-ponza
+- living-end
+- mono-black-eldrazi
+- mono-blue-belcher
+- mono-blue-erayo
+- necrodominance
+- oculus-ritual
+- orzhov-blink
+- prowess
+- rakdos-delirium
+- rakdos-hollow-one
+- ruby-storm
+- sam-combo
+- shape-anew
+- simic-neoform
+- steel-cutter
