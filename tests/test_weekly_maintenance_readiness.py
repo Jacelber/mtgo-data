@@ -164,7 +164,7 @@ def _build(
     )
 
 
-def test_readiness_is_schema_valid_and_includes_every_unresolved_unknown(tmp_path):
+def test_readiness_separates_review_week_unknowns_from_retained_queue(tmp_path):
     for format_name in ("standard", "modern"):
         _write_format(tmp_path, format_name)
     _write_intentional_unknowns(tmp_path)
@@ -210,18 +210,42 @@ def test_readiness_is_schema_valid_and_includes_every_unresolved_unknown(tmp_pat
     }
     for item in document["formats"]:
         classification = item["classification"]
-        assert classification["unresolved_unknown_count"] == 2
-        assert {record["event_id"] for record in classification["unresolved_unknown_records"]} == {
+        assert classification["scope"] == "review_week_source_events"
+        assert classification["validation_scope"] == "all_available_events"
+        assert classification["unresolved_unknown_count"] == 1
+        assert [
+            record["event_id"] for record in classification["unresolved_unknown_records"]
+        ] == ["101"]
+        assert classification["unresolved_unknown_records"][0]["main_deck"]
+        queue = item["retained_corpus_unknown_queue"]
+        assert queue["scope"] == "all_available_events"
+        assert queue["unresolved_unknown_count"] == 2
+        assert {record["event_id"] for record in queue["unresolved_unknown_records"]} == {
             "99",
             "101",
         }
-        assert classification["unresolved_unknown_records"][0]["main_deck"]
+        assert queue["outside_review_week_unresolved_unknown_count"] == 1
+        assert [
+            record["event_id"]
+            for record in queue["outside_review_week_unresolved_unknown_records"]
+        ] == ["99"]
         assert item["landing_screening"]["total_candidate_count"] == 3
         assert item["visual_metadata"]["deck_colors"]["exception_count"] is None
-    standard = document["formats"][0]["classification"]
-    assert standard["accepted_intentional_unknown_count"] == 1
-    assert standard["accepted_intentional_unknown_records"][0]["reason_code"] == "random_card_pile"
-    assert document["formats"][1]["classification"]["accepted_intentional_unknown_count"] == 0
+    standard = document["formats"][0]
+    assert standard["classification"]["accepted_intentional_unknown_count"] == 0
+    assert standard["retained_corpus_unknown_queue"]["accepted_intentional_unknown_count"] == 1
+    assert (
+        standard["retained_corpus_unknown_queue"]["accepted_intentional_unknown_records"][0][
+            "reason_code"
+        ]
+        == "random_card_pile"
+    )
+    assert (
+        document["formats"][1]["retained_corpus_unknown_queue"][
+            "accepted_intentional_unknown_count"
+        ]
+        == 0
+    )
 
 
 def test_readiness_digest_ignores_run_time_but_binds_review_inputs(tmp_path):

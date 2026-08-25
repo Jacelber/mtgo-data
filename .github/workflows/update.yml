@@ -841,12 +841,14 @@ jobs:
             const heading = readiness.status === "blocked"
               ? "## Weekly MTGO maintenance is blocked"
               : "## Weekly MTGO maintenance is ready";
-            const formatLines = readiness.formats.map((item) =>
-              `- ${item.format}: ${item.classification.unresolved_unknown_count} unresolved Unknown; ` +
-              `${item.classification.accepted_intentional_unknown_count} accepted intentional Unknown; ` +
-              `${item.landing_screening.total_candidate_count ?? "unavailable"} Landing screening candidates; ` +
-              `representative cards and deck colors require manual review.`,
-            );
+            const formatLines = readiness.formats.map((item) => {
+              const queue = item.retained_corpus_unknown_queue;
+              return `- ${item.format}: ${item.classification.unresolved_unknown_count} unresolved Unknown in ${week}; ` +
+                `${queue.outside_review_week_unresolved_unknown_count} unresolved Unknown outside the review week in the retained-corpus queue; ` +
+                `${item.classification.accepted_intentional_unknown_count} accepted intentional Unknown in ${week}; ` +
+                `${item.landing_screening.total_candidate_count ?? "unavailable"} Landing screening candidates; ` +
+                `representative cards and deck colors require manual review.`;
+            });
             const details = [
               marker,
               digestMarker,
@@ -862,7 +864,7 @@ jobs:
               `- Landing machine facts: \`${readiness.landing.status}\`; optional machine draft: \`${readiness.landing.optional_draft_status}\`.`,
               "",
               "Open Codex manually and authorize the review of this exact handoff. The artifact does not authorize classifier edits, Landing review import, Landing generation, or any repository mutation.",
-              "Codex must provide an editable XLSX with every unresolved deck's complete main deck and sideboard before requesting classification decisions. Singleton status is not a reason to remain Unknown; intentional Unknown is limited to Owner-confirmed random card piles.",
+              "Codex must provide every review-week unresolved deck's complete main deck and sideboard before requesting classification decisions. Unknown records outside the review week remain visible in a separate retained-corpus queue and do not change this week's review count or readiness status. Singleton status is not a reason to remain Unknown; intentional Unknown is limited to Owner-confirmed random card piles.",
               "",
               "Landing remains a separately authorized human-review gate. Machine facts are provenance-bound, optional machine prose is not required, and the human final copy may be edited, replaced, omitted, or written independently of machine conclusions.",
             ].join("\n");

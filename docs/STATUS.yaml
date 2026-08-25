@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-landing-import-preview-w34-20260825"
-  working_branch_status: "owner_accepted_completion_authorized"
+  current_working_branch: "codex/w34-readiness-week-scope-20260825"
+  working_branch_status: "implementation_authorized"
   status: "active"
 
 status_document:
@@ -31,113 +31,91 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-LANDING-CONTENT-2026-W34"
-  batch_id: "WEEKLY-LANDING-CONTENT-2026-W34"
-  name: "Import the accepted W34 Landing workbook and complete the Azorius Momo and Hollowvine local visual preview"
+  id: "WEEKLY-READINESS-WEEK-SCOPE-2026-W34"
+  batch_id: "WEEKLY-READINESS-WEEK-SCOPE-2026-W34"
+  name: "Separate W34 Unknown facts from the retained-corpus queue"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-25"
   owner_accepted_on: "2026-08-25"
-  developer_validation_completed_on: "2026-08-25"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-landing-import-preview-w34-20260825-01"
-  branch: "codex/weekly-landing-import-preview-w34-20260825"
-  base_commit: "62b6c681a5885e983784d74c2b51f91babb9162a"
-  task_type: "bounded_generated_landing_preview"
-  artifact_impact: "user_visible_ui"
-  objective: "Preserve the exact accepted bilingual W34 workbook import, add the Owner-selected Azorius Momo and Hollowvine visual metadata, and present the resulting local UI for Owner acceptance without production publication."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-readiness-week-scope-w34-20260825-01"
+  branch: "codex/w34-readiness-week-scope-20260825"
+  base_commit: "5d6f90bbdf5532a0af9365380dd53e7195626eed"
+  task_type: "private_readiness_contract_repair"
+  artifact_impact: "code+schema+workflow+docs"
+  objective: "Restrict the weekly Unknown facts to the exact review-week source events while preserving all retained-corpus Unknown evidence in a separately labelled non-blocking queue."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   production_follow_up:
-    authorized: true
-    condition: "After this accepted branch merges and Pages succeeds, dispatch one new MTGO production workflow from the merged master; do not rerun failed run 32832640536 or its old attempt."
+    authorized: false
+    condition: "No production run is authorized in this local implementation task."
   target_paths:
-    - "configs/mtgo_landing_visuals.yaml"
-    - "assets/js/phase8/archetype-visuals.js"
-    - "assets/images/representative-cards/standard/momo-friendly-flier.webp"
-    - "assets/images/representative-cards/modern/vengevine.jpg"
-    - "assets/images/representative-cards/modern/hollow-one.jpg"
-    - "stats/standard/mtgo/landing/review/2026-W34.yaml"
-    - "stats/standard/mtgo/landing/review/known_archetypes.json"
-    - "stats/standard/mtgo/landing/current.json"
-    - "stats/standard/mtgo/landing/features/index.json"
-    - "stats/standard/mtgo/landing/features/2026-W34.json"
-    - "stats/modern/mtgo/landing/review/2026-W34.yaml"
-    - "stats/modern/mtgo/landing/review/known_archetypes.json"
-    - "stats/modern/mtgo/landing/current.json"
-    - "stats/modern/mtgo/landing/features/index.json"
-    - "stats/modern/mtgo/landing/features/2026-W34.json"
+    - "tools/generate_weekly_maintenance_readiness.py"
+    - "schemas/weekly-maintenance-readiness.schema.json"
+    - ".github/workflows/update.yml"
+    - "tests/test_weekly_maintenance_readiness.py"
+    - "tests/test_ci_workflow.py"
+    - "docs/WEEKLY_MAINTENANCE.md"
+    - "docs/TEST_TRIGGER_MATRIX.md"
+    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
   planned_file_operations:
-    additions:
-      - "assets/images/representative-cards/standard/momo-friendly-flier.webp"
-      - "assets/images/representative-cards/modern/vengevine.jpg"
-      - "assets/images/representative-cards/modern/hollow-one.jpg"
-      - "stats/standard/mtgo/landing/review/2026-W34.yaml"
-      - "stats/standard/mtgo/landing/features/2026-W34.json"
-      - "stats/modern/mtgo/landing/review/2026-W34.yaml"
-      - "stats/modern/mtgo/landing/features/2026-W34.json"
+    additions: []
     deletions: []
     renames: []
   protected_scope:
-    public_json_or_schema_changed: "Schema-compatible W34 Landing current and feature-history content only"
-    generated_or_source_data_changed: "generated Landing documents and private imported review state only"
+    public_json_or_schema_changed: "none; only the private weekly readiness Schema advances to 1.4.0"
+    generated_or_source_data_changed: "none"
     classification_identities_changed: "none"
-    visual_identity_changed: "Standard azorius-momo uses Momo, Friendly Flier and Quantum Riddler; Modern hollowvine uses white-red and Vengevine plus Hollow One"
-    workflows_or_public_paths_changed: "none"
+    visual_identity_changed: "none"
+    workflows_or_public_paths_changed: "private readiness generation and Issue wording only; no public path change"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Add Momo, Friendly Flier and Quantum Riddler as the two representative cards for Standard azorius-momo and expose their card images in the local preview."
-    - "Change Modern hollowvine from red to white-red and add Vengevine plus Hollow One as its representative cards in the local preview."
-    - "Import exact workbook SHA-256 b4ba2e64f99f8f03b67be16ef2860a57db9f41d316ff21ab7412676b927fa719 for Standard and Modern."
-    - "Generate the matching W34 Landing current and feature-history documents from that private review source."
-    - "Validate machine-fact, archive, deck-link, bilingual-content, and local-browser rendering contracts."
+    - "Make review-week Unknown counts and records the exact intersection with the format's review-week source event IDs."
+    - "Preserve every retained-corpus unresolved and intentional Unknown in a separately labelled queue with a complete outside-review-week unresolved subset."
+    - "Update the private Schema, Issue consumer, focused tests, and governing documentation for the same contract."
+    - "Generate a local W34 readiness sample proving 0/0 weekly unresolved Unknown and 3/2 outside-week unresolved records."
   prohibited_changes:
-    - "Do not change the accepted workbook, reviewed bilingual copy, feature choices, classifier rules, bilingual identities, statistics, source data, other visual identities, Landing UI behavior, public paths, or workflow scheduling."
-    - "Do not delete or weaken required tests, force-push, or dispatch MTGO production before this accepted branch merges."
+    - "Do not change classifier rules, classifications, source data, statistics, Landing content, visual identities, UI, public paths, or workflow scheduling."
+    - "Do not commit, push, create a pull request, merge, or dispatch production before local Owner acceptance."
   validation:
-    azorius_momo: "pass; the generated Standard Landing row contains exactly Momo, Friendly Flier and Quantum Riddler, Momo uses a local high-resolution art-crop without a card frame, the focused generated-consumer contract passed 1/1, JavaScript syntax and diff checks pass, and the uncached local browser renders two linked card images"
-    modern_hollowvine: "pass; the generated Modern Landing row contains exactly Vengevine and Hollow One, the visual map exposes white-red mana identity and two local 626x457 art-crops, the focused generated-consumer contract passed 1/1, JavaScript syntax and diff checks pass, and the uncached browser reports no page error"
-    import: "pass; Standard imported 1 review, 5 features, 4 copy rows and Modern imported 1 review, 3 features, 4 copy rows from the exact accepted workbook"
-    generation: "pass; both formats generated 2026-W34 current and archive documents with review machine-fact digests matching the exact Landing facts"
-    browser: "pass_owner_accepted_subject; Standard and Modern Chinese and English local Landing views render the expected 4 summaries and 5/3 features with no browser warning or error; the separate failed production candidate will be recovered only after this accepted branch merges"
-    binding: "pass; current and feature-history items match, all summary deck links resolve to admitted features, and both current documents pass cross-field validation"
-    diff_check: "pass; exactly the 16 declared visual, generated, private-review, and live-STATUS paths are modified or added, and git diff --check is clean"
-  stop_point: "Commit the unchanged accepted subject, push one Ready PR, merge after required CI, verify Pages, then dispatch one fresh production run from merged master and verify its publication before stopping."
+    focused_contract: "pass; 9 focused readiness and workflow tests verify private Schema 1.4.0, exact review-week Unknown slicing, retained-corpus evidence, Issue wording, digest behavior, and fail-closed Landing bindings"
+    current_w34_sample: "pass; the current production tree generates W34 with Standard 0 weekly / 3 outside-week unresolved Unknowns from event 12852766 and Modern 0 weekly / 2 outside-week unresolved Unknowns from event 12852769"
+    documentation: "pass; Ruff passes and 5 live-document structure tests pass"
+    diff_check: "pass; exactly the 9 declared private readiness code, Schema, workflow, test, and governance paths are modified; git diff --check is clean"
+  stop_point: "Complete the accepted task through commit, one Ready pull request, required CI, and merge; stop on failed checks, changed subject, conflict, or permission blocker; do not dispatch production."
 
 current_repository_state:
-  baseline_commit: "62b6c681a5885e983784d74c2b51f91babb9162a"
-  baseline_note: "Remote master remains the exact task base 62b6c681. The Owner accepted this W34 Landing and visual subject; scheduled production run 32832640536 remains an unpublished candidate that will be replaced by one fresh run only after this accepted branch merges."
+  baseline_commit: "5d6f90bbdf5532a0af9365380dd53e7195626eed"
+  baseline_note: "Remote master is the successful production publication from run 32838770633. Its W34 readiness artifact exposes W35 events 12852766 and 12852769 as W34 Unknowns because the weekly classification object copies the all-available-events report."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
 known_blockers:
-  - id: "MTGO-PRODUCTION-PUBLISH-NON-FAST-FORWARD-32832640536"
-    status: "recovery_authorized_after_accepted_merge"
-    reason: "Scheduled production run 32832640536 built validated commit b359f8c from source 1f6267f, including Standard event 12852766 and Modern event 12852769, but publish was rejected non-fast-forward after PR #271 advanced master to 62b6c681; Pages and readiness were skipped."
-    recovery: "Do not rerun failed jobs or the old workflow attempt. After the accepted Landing branch merges, start one new production workflow from that merged master so publication cannot race this PR."
+  - id: "W34-READINESS-UNKNOWN-SCOPE-MISMATCH"
+    status: "local_repair_verified_owner_accepted"
+    reason: "The W34 private readiness artifact reports three Standard and two Modern unresolved Unknown records from events dated 2026-08-24 and 2026-08-25, outside the W34 source-event set."
+    recovery: "Bind the weekly classification slice to review-week source event IDs and retain outside-week Unknowns in a separate non-blocking full-corpus queue."
 
 future_task_gates:
-  - task: "WEEKLY-LANDING-CONTENT-2026-W34-PUBLICATION"
-    status: "owner_accepted_completion_authorized"
-    note: "Publish the accepted W34 Landing and visual subject through one Ready PR, then recover production from the merged master and verify the resulting readiness subject."
   - task: "P12-16"
     status: "planned_not_authorized"
     note: "Cross-device and visual-system closeout remains a separate task after the W34 maintenance gate."
 
 next_approved_task:
-  id: "WEEKLY-LANDING-CONTENT-2026-W34"
-  name: "Publish the accepted W34 Landing and visual subject, then recover production"
+  id: "WEEKLY-READINESS-WEEK-SCOPE-2026-W34"
+  name: "Separate W34 Unknown facts from the retained-corpus queue"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
-  note: "Commit, push one Ready PR, merge after required CI, verify Pages, then dispatch one new production run from merged master and verify readiness."
+  note: "Publish the byte-identical accepted subject as one Ready pull request, merge after required CI passes, and do not dispatch production."
 
 prohibited_next_actions:
-  - "Do not dispatch MTGO production before the accepted branch merges, and do not rerun failed run 32832640536 or its old attempt."
-  - "Do not delete, weaken, or bypass required tests; only reuse immutable evidence or skip non-required duplicate checks."
-  - "Do not alter accepted W34 bilingual content, classifier conditions, identities, statistics, other visual identities, UI behavior, source data, public paths, workflow scheduling, or protected event 434455 bytes."
+  - "Do not dispatch MTGO production for this private readiness-contract repair."
+  - "Do not delete, weaken, or bypass required tests."
+  - "Do not alter W34 Landing content, classifier conditions, identities, statistics, visual identities, UI behavior, source data, public paths, workflow scheduling, or protected event 434455 bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."
