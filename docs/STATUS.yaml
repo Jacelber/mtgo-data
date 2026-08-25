@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p12-16-cross-device-closeout"
-  working_branch_status: "owner_accepted_completion_authorized"
+  current_working_branch: null
+  working_branch_status: "no_active_authorized_branch"
   status: "active"
 
 status_document:
@@ -24,84 +24,27 @@ status_document:
 current_phase:
   id: 12
   name: "Front-end productization, editorial landing, and visual system"
-  status: "active"
+  status: "completed"
+  completed_on: "2026-08-25"
   objective: "Productize the MTGO and Tabletop front ends and complete the approved Landing migration without changing statistical meaning or product separation."
   production_changes_allowed: false
   next_phase_id: 13
   next_phase_authorized: false
 
 current_task:
-  id: "P12-16"
-  name: "Cross-device and visual-system closeout"
-  status: "owner_accepted_completion_authorized"
-  implementation_authorized_on: "2026-08-25"
-  owner_accepted_on: "2026-08-25"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p12-16-cross-device-closeout-20260824-01"
-  branch: "codex/p12-16-cross-device-closeout"
-  base_commit: "c2ff4f47f7c95719cab9821d78db4b74e8184544"
-  task_type: "public_entry_cutover_and_cross_device_closeout"
-  objective: "Make the admitted Landing the reversible bare MTGO default, preserve every explicit product and legacy Pickup route, enforce complete MTGO product catalog admission, and verify the accepted visual system across retained views without redesigning it."
+  id: null
+  name: "No active task"
+  status: "not_authorized"
   authorization:
-    local_implementation: true
-    commit: true
-    remote_publication: true
-    merge: true
-  target_paths:
-    - "src/mtgmeta/catalog.py"
-    - "assets/js/phase8/app.js"
-    - "assets/js/phase8/app-mtgo.js"
-    - "assets/js/phase8/archetype-visuals.js"
-    - "index.html"
-    - "melee/index.html"
-    - "stats/catalog.json"
-    - "tests/test_cli_smoke.py"
-    - "tests/js/phase8-metadata-sharing.test.js"
-    - "tests/js/phase8-landing.test.js"
-    - "docs/audits/P12-16.md"
-    - "docs/STATUS.yaml"
-  planned_file_operations:
-    additions:
-      - "docs/audits/P12-16.md"
-    deletions: []
-    renames: []
-  protected_scope:
-    user_visible_ui_changed: "the bare MTGO default, script-independent home destination, the Owner-directed white-black-green mana indicator for the Modern devoted-druid-combo parent, and Landing expanded-detail titles that name the displayed deck's subtype; accepted view structure and other visual design remain unchanged"
-    public_json_or_schema_changed: "stats/catalog.json default_product_id changes to mtgo-landing for complete public MTGO formats; no Schema shape changes"
-    generated_or_source_data_changed: "only generator-produced stats/catalog.json; preserve the published W34 Landing, feature, classifier, visual, and tournament data unchanged"
-    workflows_changed: "none"
-    public_path_boundary_changed: "the existing bare /index.html route defaults to Landing; every explicit product path and legacy Pickup route remains compatible"
-    statistical_or_classifier_behavior_changed: "none"
-    event_434455_bytes_changed: false
-    production_dispatched: false
-  allowed_actions:
-    - "Drive the bare MTGO product from the generated catalog default and make that default independently reversible."
-    - "Require an admitted public MTGO format with any MTGO product to expose the complete required MTGO product set, including Landing."
-    - "Make both visible site-title home controls target the bare MTGO entry."
-    - "Add focused unit coverage for catalog completeness and use Owner-facing local browser evidence for default routing, explicit routes, legacy Pickup normalization, and local rollback."
-    - "Reverify the already accepted P12-15E-I18N and P12-15E-UX behavior across Standard, Modern, Chinese, English, desktop, and 390px without redeveloping it."
-    - "Measure the final candidate against the recorded P12-01 loading dimensions and stop for Owner review on an unexplained material regression."
-    - "Add the Owner-directed white-black-green mana identity to the devoted-druid-combo parent without introducing renderer fallback logic."
-    - "Keep Landing list rows at the parent level while naming the subtype that owns the displayed best deck in the expanded detail title; do not change deck selection or comparison data."
-  prohibited_changes:
-    - "Do not redesign the accepted UI, add a product or page, change a statistical formula or classifier identity, or alter source, Landing editorial, feature, Top 8, matchup, or event data."
-    - "Do not change Schemas, workflows, production timing, event whitelists, frozen Pickup documents, or protected event 434455 bytes."
-    - "Do not commit, publish remotely, merge, deploy, or dispatch production before the final combined candidate receives hands-on Owner acceptance."
-    - "Do not reintroduce feature-level cases into the production publication smoke retired by GOV-10."
-  validation:
-    gate_2: "pass; fresh independent clone at exact cloud master 88741f9a97ca0f0983f513aea14a05512a36dcce, clean status, core.autocrlf=false, empty credential helper, disabled push URL, Python 3.12.7 and Node 24.12.0 available"
-    final_master_sync: "pass; fast-forwarded to cloud master c2ff4f47f7c95719cab9821d78db4b74e8184544, preserving the published W34 Landing and visuals, the corrected readiness scope, and the minimal test firewall"
-    implementation: "pass; the c2ff4f4-based candidate changes only the twelve authorized paths, uses the generated catalog default for the bare entry, preserves explicit and legacy routes, adds the Owner-directed devoted-druid-combo parent mana identity, and limits the expanded Landing title change to the displayed deck's subtype"
-    focused_automated_checks: "pass; the focused Landing rendering suite passed 8 tests including direct-child and parent-best-deck subtype titles; catalog and live-governance pytest nodes 7 passed, JavaScript metadata-sharing tests 7 passed, the visual-metadata parent/child values both equal white-black-green, Ruff passed, and mypy reported no issues"
-    developer_browser_review: "pass; expanded W34 Landing titles resolved to 纯绿孳巢蜥, 阿布赞缓伤, 红蓝灵技, 蓝黑节奏, and 纯绿地落 as appropriate, the devoted-druid-combo parent mana indicator remained white-black-green, and there were zero console warnings or errors"
-    rollback: "pass; a non-writing in-memory catalog override restored the bare Statistics default while an explicit W34 Landing URL remained Landing; the temporary server was stopped"
-    loading_comparison: "pass; local and live explicit Modern W34 Landing each loaded 51 resources, rendered 64 images with 34 loaded, had 2971px document height at 1440px, and had no horizontal overflow; the final five changed MTGO resources total only +645 uncompressed bytes"
-    repository_validation: "pass; changed-scope validation checked all 12 changed paths and passed 2 Python, 5 JavaScript, 1 JSON, 1 YAML, 41 reference, and 12 hygiene checks"
-    owner_browser_review: "pass; Owner accepted the final 12-path candidate on 2026-08-25 after reviewing the bare Landing default, retained views, devoted-druid-combo parent mana identity, and subtype-specific expanded Landing titles"
-  stop_point: "Complete the exact accepted task through one unchanged commit, one Ready pull request, required CI, normal merge, and merge-triggered Pages verification. Stop on changed subject, failed required checks, conflict, permission blocker, or Pages binding mismatch; do not start another task."
+    local_implementation: false
+    commit: false
+    remote_publication: false
+    merge: false
+  stop_point: "Phase 12 is complete. Wait for an explicit Owner-approved Phase 13 task contract; do not infer authorization from the completed phase."
 
 current_repository_state:
-  baseline_commit: "c2ff4f47f7c95719cab9821d78db4b74e8184544"
-  baseline_note: "Cloud master includes the published W34 bilingual Landing and visuals, production run 32838770633, Pages run 32840154622, readiness-scope repair PR #274, and minimal test firewall PR #275."
+  phase_12_product_completion_commit: "0d70257f86c36630b167cf541e9d7d966fac2f72"
+  phase_12_completion_note: "P12-16 merged through PR #276; merge validation run 32855373950 and Pages run 32855373976 succeeded."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -109,17 +52,19 @@ current_repository_state:
 
 known_blockers: []
 
-future_task_gates: []
+future_task_gates:
+  - id: "PHASE-13-DESIGN"
+    status: "planned_not_authorized"
+    note: "Define the first bounded Phase 13 raw-count matchup aggregation task before implementation."
 
 next_approved_task:
-  id: "P12-16-COMPLETION"
-  name: "Publish the accepted cross-device closeout candidate"
-  status: "owner_accepted_completion_authorized"
-  local_execution_authorized: true
-  note: "Commit the unchanged accepted subject, publish one Ready pull request, merge after required CI passes, and verify the merge-triggered Pages deployment. Do not dispatch MTGO production or begin another task."
+  id: null
+  name: null
+  status: "not_authorized"
+  local_execution_authorized: false
+  note: "No Phase 13 task is authorized. The Owner must first approve a concrete task contract."
 
 prohibited_next_actions:
-  - "Do not change the accepted P12-16 subject while completing commit, Ready pull request, required CI, merge, and Pages verification."
-  - "Do not dispatch MTGO production or begin another task or phase."
-  - "Do not redesign accepted UI components, change Landing deck selection or comparison data, or modify classifiers, visual metadata beyond the Owner-directed devoted-druid-combo parent mana identity, Landing editorial content, Schemas, workflows, source data, frozen Pickup documents, or protected event 434455 bytes."
+  - "Do not begin Phase 13 or another task without separate explicit Owner authorization recorded in the live status."
+  - "Do not dispatch production, change statistical meaning, merge MTGO and Tabletop results, or alter product scope under this completed-phase state."
   - "Do not develop directly on master or overwrite unexplained local changes."

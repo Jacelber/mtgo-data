@@ -67,7 +67,9 @@ def test_live_roadmap_and_history_contract():
 
     assert len(roadmap.encode("utf-8")) <= 64 * 1024
     assert "# Phase 12 —" in roadmap
-    assert "10. `P12-10`" in roadmap
+    assert "Phase 12 completed on 2026-08-25" in roadmap
+    assert "10. `P12-10`" not in roadmap
+    assert "16. `P12-16`" not in roadmap
     assert "# Phase 19 —" in roadmap
     assert "# Phase 0 —" not in roadmap
     assert "1. `P12-01`" not in roadmap
@@ -78,6 +80,8 @@ def test_live_roadmap_and_history_contract():
     assert "ROADMAP-PHASE-12-COMPLETED.md" in history_index
     assert "# Phase 0 —" in phases_0_11 and "# Phase 11 —" in phases_0_11
     assert "1. `P12-01`" in phase_12 and "9. `P12-09`" in phase_12
+    assert "10. `P12-10`" in phase_12 and "16. `P12-16`" in phase_12
+    assert "Phase 12 completion record" in phase_12
     assert "non-authoritative" in phases_0_11 and "non-authoritative" in phase_12
 
 
