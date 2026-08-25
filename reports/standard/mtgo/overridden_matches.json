@@ -4,10 +4,10 @@
   "format": "standard",
   "source": "mtgo",
   "scope": "all_available_events",
-  "event_count": 163,
-  "data_through": "2026-08-22 13:00:00.0",
+  "event_count": 164,
+  "data_through": "2026-08-24 20:00:00.0",
   "summary": {
-    "record_count": 1042,
+    "record_count": 1043,
     "blocking": false
   },
   "records": [
@@ -50557,6 +50557,58 @@
       "event_name": "Standard Challenge 32",
       "event_start": "2026-08-21 18:00:00.0",
       "source_file": "data/standard/Standard_Challenge_32_12852733.json",
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "mardu-discard",
+        "archetype_name": "Mardu Discard",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "mardu-discard-primary",
+        "priority": 47000
+      },
+      "overridden_matches": [
+        {
+          "archetype_id": "rakdos-discard",
+          "archetype_name": "Rakdos Discard",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "rakdos-discard-primary",
+          "priority": 46000,
+          "evidence": [
+            {
+              "card": "Moonshadow",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Marauding Mako",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "deck_id": "ab1dd4560e86052d7439",
+      "event_id": "12852766",
+      "event_name": "Standard Challenge 32",
+      "event_start": "2026-08-24 20:00:00.0",
+      "source_file": "data/standard/Standard_Challenge_32_12852766.json",
       "classification_status": "classified",
       "selected": {
         "archetype_id": "mardu-discard",
