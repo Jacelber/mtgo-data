@@ -5557,7 +5557,7 @@ post-publication baseline.
 
 # DEC-122 - Split W34 Jeskai Ponza and Erayo constructions from broad parents
 
-Status: `Accepted`
+Status: `Accepted`; English display naming amended by DEC-123
 
 ## Context
 
@@ -5604,3 +5604,66 @@ classified, conflicts and invalid decks remain zero, multiple matches become
 `1,478`, and same-parent multiple-subtype matches remain `47`. The Modern
 classifier digest changes, so the W34 Top 8 audit must be closed against a
 refreshed post-publication baseline before visual-metadata or Landing review.
+
+---
+
+# DEC-123 - Name the Basim Erayo parent Dimir Erayo without changing its stable ID
+
+Status: `Accepted`
+
+## Context
+
+DEC-122 used the generic English display `Erayo` for the parent whose classifier
+rule requires `Basim Ibn Ishaq`, while its approved Chinese display `蓝黑伟代`
+and its reviewed color identity are explicitly blue-black. The separately
+maintained pure-blue parent already uses the qualified English display
+`Mono-Blue Erayo`. The asymmetric English names conceal the accepted color
+boundary and would become ambiguous if another non-Cutter Erayo construction is
+maintained later.
+
+## Decision
+
+Keep the stable parent ID `erayo`, its `erayo-basim` rule, priority, card-count
+conditions, and approved Chinese display unchanged. Change only the classifier
+and bilingual-catalog English display from `Erayo` to `Dimir Erayo`.
+
+Do not rename the stable ID to `dimir-erayo`, convert the two Erayo parents into
+subtypes, add speculative color variants, or change the separate
+`mono-blue-erayo` identity.
+
+## Consequences
+
+No retained deck changes parent or subtype identity. Generated Modern names and
+classification-derived display fields will use `Dimir Erayo` after the next
+authorized production refresh. Because the classifier source digest changes,
+the W34 handoff must bind a refreshed digest before visual-metadata review
+resumes; the accepted Top 8 decisions may be reused only after exact event,
+decklist, and stable-identity reconciliation.
+
+---
+
+# DEC-124 - Correct the Esper Ketramose Chinese display without changing identity
+
+Status: `Accepted`
+
+## Context
+
+The approved bilingual catalog rendered `esper-ketramose` as `艾斯波还拜神`.
+The Owner identified that value as a naming error and confirmed
+`艾斯波黑白神` as the intended Chinese display for English `Esper Ketramose`.
+The classifier rule, stable parent ID, color identity, and representative cards
+are already correct.
+
+## Decision
+
+Keep stable parent ID `esper-ketramose`, English `Esper Ketramose`, every
+classifier condition and priority, the Esper color identity, and existing
+representative-card metadata unchanged. Change only the approved Chinese catalog
+display from `艾斯波还拜神` to `艾斯波黑白神`.
+
+## Consequences
+
+No deck classification or stable identity changes. The generated Modern public
+bilingual name contract will use `艾斯波黑白神` after the next authorized
+production refresh. This catalog-only correction is completed in the same
+focused display-name task as DEC-123; generated files are not edited manually.

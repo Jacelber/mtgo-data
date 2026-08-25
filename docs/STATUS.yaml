@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-modern-two-corrections-w34-20260825"
+  current_working_branch: "codex/weekly-modern-display-names-w34-20260825"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,23 +31,27 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-MODERN-TOP8-CORRECTIONS-2026-W34"
-  name: "Apply the two Owner-reviewed W34 Modern Top 8 corrections"
+  id: "WEEKLY-MODERN-DISPLAY-NAMES-2026-W34"
+  batch_id: "WEEKLY-MODERN-DISPLAY-NAMES-2026-W34"
+  name: "Correct two Modern bilingual display names"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-25"
   owner_accepted_on: "2026-08-25"
   developer_validation_completed_on: "2026-08-25"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-modern-two-corrections-w34-20260825-01"
-  branch: "codex/weekly-modern-two-corrections-w34-20260825"
-  base_commit: "e1b0b3a0f05bfc57fe1cfe5d2693765e2dcbd679"
-  task_type: "focused_weekly_classifier_source_maintenance"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-dimir-erayo-name-w34-20260825-01"
+  branch: "codex/weekly-modern-display-names-w34-20260825"
+  base_commit: "1270564035321db8f5765b99ae8affb847e4d8b3"
+  task_type: "bounded_weekly_classifier_display_name_maintenance"
   artifact_impact: "classifier_source_bilingual_catalog_and_governance"
-  objective: "Add the Owner-reviewed Jeskai Ponza, Erayo, and Mono-Blue Erayo parents so the two incorrect W34 Modern Top 8 identities and their exact retained-corpus equivalents classify correctly."
+  objective: "Rename the blue-black Erayo English display to Dimir Erayo and correct Esper Ketramose Chinese to 艾斯波黑白神 while preserving stable IDs, classifier boundaries, and retained-deck identities."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
+  production_follow_up:
+    authorized: true
+    condition: "Only after this exact accepted fix is merged; refresh production, reconcile the stable-identity baseline, then resume the accepted visual-metadata work."
   target_paths:
     - "my_archetypes/modern.yaml"
     - "configs/mtgo_archetype_names.yaml"
@@ -58,35 +62,36 @@ current_task:
     deletions: []
     renames: []
   protected_scope:
-    public_json_or_schema_changed: "none"
+    public_json_or_schema_changed: "none in this source task; production will regenerate public display fields only after the accepted fix is merged"
     generated_or_source_data_changed: "none"
-    classification_identities_changed: "five retained Modern decks migrate into three new parents: two Jeskai Ponza, one Erayo, and two Mono-Blue Erayo"
-    bilingual_identity_changed: "add Jeskai Ponza / 洁斯凯炸地, Erayo / 蓝黑伟代, and Mono-Blue Erayo / 纯蓝伟代"
+    classification_identities_changed: "none; parent_id erayo and every selected parent/subtype result remain unchanged"
+    bilingual_identity_changed: "English Erayo becomes Dimir Erayo with Chinese 蓝黑伟代 unchanged; Esper Ketramose Chinese 艾斯波还拜神 becomes 艾斯波黑白神"
     workflows_or_public_paths_changed: "none"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Add only the accepted Jeskai Ponza, Erayo, and Mono-Blue Erayo parents and their reviewed main-deck rule boundaries."
-    - "Register the three Owner-confirmed English and Chinese identity names."
-    - "Record the accepted classifier decision and replace the stale completed-task status with this live task contract."
-    - "Run only focused rule parsing, exact-target classification, retained-corpus impact, bilingual coverage, documentation, repository, and diff checks required by the changed paths."
+    - "Change only the erayo classifier English display and its approved bilingual-catalog English value to Dimir Erayo."
+    - "Change only the approved esper-ketramose Chinese catalog display from 艾斯波还拜神 to 艾斯波黑白神."
+    - "Record both accepted naming corrections and replace the stale prior-task status with this live task contract."
+    - "Prove strict rule validity, exact bilingual coverage, and unchanged stable identities across the retained Modern corpus."
   prohibited_changes:
-    - "Do not modify other classifier rules, identities, semantic-feature facts, visual metadata, Landing content, generated statistics, source data, workflows, Schemas, UI, public paths, event whitelists, or protected event 434455 bytes."
-    - "Do not dispatch production, mutate the weekly Issue, or begin visual-metadata or Landing review as part of this accepted classifier-source task."
+    - "Do not rename parent_id erayo, change its rules or priority, change 蓝黑伟代, modify mono-blue-erayo, or add speculative Erayo variants."
+    - "Do not rename parent_id esper-ketramose, change its English name, rules, colors, or representative cards."
+    - "Do not edit visual metadata, Landing content, generated statistics, source data, workflows, Schemas, UI, public paths, event whitelists, or protected event 434455 bytes."
+    - "Do not dispatch production before the exact accepted fix is merged, and do not resume visual-metadata review before the refreshed baseline is reconciled."
   validation:
-    review_input: "The Owner confirmed the Jeskai Ponza and two Erayo boundaries, authorized this independent task, and fixed the Chinese name as 洁斯凯炸地."
-    retained_corpus: "pass; 241 Modern events and 7,712 decks; exactly five selected identities migrate: two Boros Ponza to Jeskai Ponza, one Affinity to Erayo, and two Affinity to Mono-Blue Erayo; both Cutter hybrids remain steel-cutter/izzet; conflicts 0; invalid 0; multiple matches 1,478; same-parent multiple-subtype matches 47"
-    focused_rule: "pass; my_archetypes/modern.yaml loaded under strict rule validation and the exact five expected retained records selected the three new rules"
-    bilingual_catalog: "pass; exact coverage validated for 327 approved Standard and Modern identities, including Jeskai Ponza / 洁斯凯炸地, Erayo / 蓝黑伟代, and Mono-Blue Erayo / 纯蓝伟代"
-    schemas: "pass; 97 declared public generated JSON documents validated against their Schemas without changing generated bytes"
-    documentation: "pass; focused documentation-history validation completed"
-    repository: "pass; deterministic read-only repository validation completed"
-    diff_check: "pass; only the four declared target paths changed, with no file operations or whitespace errors"
-  stop_point: "Complete the unchanged accepted task through one commit, one Ready pull request, required CI, and merge; stop before production dispatch or another weekly stage."
+    review_input: "The Owner authorized Dimir Erayo while retaining parent_id erayo, Chinese 蓝黑伟代, the Basim boundary, and Mono-Blue Erayo; the Owner also corrected Esper Ketramose Chinese from 艾斯波还拜神 to 艾斯波黑白神."
+    retained_corpus: "pass; after reversing only the approved erayo name scalar, the parsed Modern classifier source is exactly equal to baseline 127056403532, proving all stable IDs, conditions, priorities, and retained-deck selections unchanged"
+    focused_rule: "pass; my_archetypes/modern.yaml passed strict rule validation"
+    bilingual_catalog: "pass; exact approved coverage for 327 Standard and Modern identities; only erayo English and esper-ketramose Chinese differ from baseline"
+    documentation: "pass; live STATUS contract contains the required four-boolean authorization boundary and remains below 10 KiB"
+    repository: "pass; deterministic read-only validation passed 85 Python, 20 JavaScript, 1,876 JSON, 72 YAML, 55 reference, and 2,343 hygiene checks"
+    diff_check: "pass; final tree changes exactly four declared target paths, with no file operations, untracked files, or whitespace errors"
+  stop_point: "Complete this exact accepted subject through one commit, one Ready pull request, required CI, merge, the already-authorized production refresh, and stable-identity reconciliation; then resume the accepted W34 visual-metadata review without expanding either subject."
 
 current_repository_state:
-  baseline_commit: "e1b0b3a0f05bfc57fe1cfe5d2693765e2dcbd679"
-  baseline_note: "Verified cloud master and the final successful W34 production publication; the reviewed Top 8 carrier binds Standard 6 events and Modern 12 events."
+  baseline_commit: "1270564035321db8f5765b99ae8affb847e4d8b3"
+  baseline_note: "Verified cloud master after the refreshed W34 production publication and accepted complete Top 8 audit."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -97,11 +102,11 @@ known_blockers:
 
 future_task_gates:
   - task: "WEEKLY-TOP8-AUDIT-2026-W34"
-    status: "blocked_pending_classifier_acceptance_publication_and_refreshed_baseline"
-    note: "The Owner accepted all Standard rows and all but two Modern rows; the two local corrections now await acceptance, publication, and a refreshed classifier baseline before the audit can close."
+    status: "accepted_pending_display_name_refresh_reconciliation"
+    note: "The complete audit passed against publication 127056403532; reuse requires exact event, decklist, and stable-identity reconciliation after the authorized Modern display-name refresh."
   - task: "WEEKLY-VISUAL-METADATA-2026-W34"
-    status: "blocked_pending_corrected_classifier_source_and_refreshed_baseline"
-    note: "Review representative cards and colors only after the corrected classifier source is accepted, published, and reproduced in a refreshed production baseline."
+    status: "paused_pending_modern_display_name_refresh"
+    note: "The Owner accepted the four proposed color and representative-card choices; implementation resumes only after both Modern display-name fixes are published and the refreshed baseline is reconciled."
   - task: "WEEKLY-LANDING-READINESS-2026-W34"
     status: "blocked_pending_contract_repair_or_reproof"
     note: "Landing content review cannot start while the new readiness artifact still reports machine_draft_status=not_available."
@@ -110,14 +115,14 @@ future_task_gates:
     note: "Cross-device and visual-system closeout remains a separate task after the W34 maintenance gate."
 
 next_approved_task:
-  id: "NONE"
-  name: "No follow-up task is authorized"
-  status: "no_follow_up_authorized"
-  local_execution_authorized: false
-  note: "Owner acceptance authorizes continuous completion only for the unchanged two-correction classifier-source task; production and later weekly stages remain separate gates."
+  id: "WEEKLY-VISUAL-METADATA-2026-W34"
+  name: "Resume accepted W34 visual-metadata review"
+  status: "authorized_after_name_refresh_reconciliation"
+  local_execution_authorized: true
+  note: "Start only after the accepted two-name fix is merged, production is refreshed, and the stable-identity baseline is reconciled."
 
 prohibited_next_actions:
-  - "Do not dispatch production, mutate the weekly Issue, or regenerate derived production outputs."
-  - "Do not begin visual-metadata review, Landing review, or another development task automatically."
-  - "Do not modify classifier scope beyond the three accepted new parents or change other bilingual names, UI, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
+  - "Do not dispatch production before the accepted fix is merged or resume visual-metadata review before the refreshed baseline is reconciled."
+  - "Do not begin Landing review or another development task automatically."
+  - "Do not rename stable IDs, change classifier conditions, edit generated outputs, modify other bilingual names, UI, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."
