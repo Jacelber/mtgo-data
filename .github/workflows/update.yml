@@ -473,7 +473,7 @@ jobs:
           --baseline "$RUNNER_TEMP/mtgo-fetch-candidate/production-baseline.json"
 
       - name: Validate repository files and references
-        run: python -B validate_repository.py
+        run: python -B validate_repository.py --full
 
       - name: Validate product archetype rules
         shell: bash
