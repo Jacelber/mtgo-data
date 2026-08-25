@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-modern-display-names-w34-20260825"
+  current_working_branch: "codex/weekly-visual-metadata-w34-20260825"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -31,67 +31,78 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-MODERN-DISPLAY-NAMES-2026-W34"
-  batch_id: "WEEKLY-MODERN-DISPLAY-NAMES-2026-W34"
-  name: "Correct two Modern bilingual display names"
+  id: "WEEKLY-VISUAL-METADATA-2026-W34"
+  batch_id: "WEEKLY-VISUAL-METADATA-2026-W34"
+  name: "Apply twelve Owner-approved W34 visual identities"
   status: "owner_accepted_completion_authorized"
   implementation_authorized_on: "2026-08-25"
   owner_accepted_on: "2026-08-25"
   developer_validation_completed_on: "2026-08-25"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-dimir-erayo-name-w34-20260825-01"
-  branch: "codex/weekly-modern-display-names-w34-20260825"
-  base_commit: "1270564035321db8f5765b99ae8affb847e4d8b3"
-  task_type: "bounded_weekly_classifier_display_name_maintenance"
-  artifact_impact: "classifier_source_bilingual_catalog_and_governance"
-  objective: "Rename the blue-black Erayo English display to Dimir Erayo and correct Esper Ketramose Chinese to 艾斯波黑白神 while preserving stable IDs, classifier boundaries, and retained-deck identities."
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-visual-metadata-w34-20260825-01"
+  branch: "codex/weekly-visual-metadata-w34-20260825"
+  base_commit: "bd637ae7a115b27e9b190bec2448eeff7861dc9e"
+  task_type: "bounded_weekly_visual_metadata_maintenance"
+  artifact_impact: "user_visible_ui"
+  objective: "Add four Owner-approved W34 mana identities with representative-card pairs plus eight additional Owner-approved color-only identities without changing classifier, statistical, naming, representative-card, or editorial contracts."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   production_follow_up:
-    authorized: true
-    condition: "Only after this exact accepted fix is merged; refresh production, reconcile the stable-identity baseline, then resume the accepted visual-metadata work."
+    authorized: false
+    condition: "Do not dispatch MTGO production for this visual-metadata task."
   target_paths:
-    - "my_archetypes/modern.yaml"
-    - "configs/mtgo_archetype_names.yaml"
-    - "docs/DECISIONS.md"
+    - "assets/js/phase8/archetype-visuals.js"
+    - "configs/mtgo_landing_visuals.yaml"
+    - "assets/images/representative-cards/standard/analyze-the-pollen.jpg"
+    - "assets/images/representative-cards/modern/mana-leak.jpg"
+    - "assets/images/representative-cards/modern/erayo-soratami-ascendant.jpg"
+    - "assets/images/representative-cards/modern/basim-ibn-ishaq.jpg"
+    - "assets/images/representative-cards/modern/emry-lurker-of-the-loch.jpg"
     - "docs/STATUS.yaml"
   planned_file_operations:
-    additions: []
+    additions:
+      - "assets/images/representative-cards/standard/analyze-the-pollen.jpg"
+      - "assets/images/representative-cards/modern/mana-leak.jpg"
+      - "assets/images/representative-cards/modern/erayo-soratami-ascendant.jpg"
+      - "assets/images/representative-cards/modern/basim-ibn-ishaq.jpg"
+      - "assets/images/representative-cards/modern/emry-lurker-of-the-loch.jpg"
     deletions: []
     renames: []
   protected_scope:
-    public_json_or_schema_changed: "none in this source task; production will regenerate public display fields only after the accepted fix is merged"
+    public_json_or_schema_changed: "none in this local source task"
     generated_or_source_data_changed: "none"
-    classification_identities_changed: "none; parent_id erayo and every selected parent/subtype result remain unchanged"
-    bilingual_identity_changed: "English Erayo becomes Dimir Erayo with Chinese 蓝黑伟代 unchanged; Esper Ketramose Chinese 艾斯波还拜神 becomes 艾斯波黑白神"
-    workflows_or_public_paths_changed: "none"
+    classification_identities_changed: "none"
+    visual_identity_changed: "add four accepted mana-color and representative-card entries plus eight accepted color-only entries for Dwarves and its two subtypes, Izzet Monument, Mono-Blue Selective Memory, Grixis Legends, Dimir Persist, and Bant Company"
+    workflows_or_public_paths_changed: "none; existing front-end paths gain five card-art assets"
     event_434455_bytes_changed: false
     production_dispatched: false
   allowed_actions:
-    - "Change only the erayo classifier English display and its approved bilingual-catalog English value to Dimir Erayo."
-    - "Change only the approved esper-ketramose Chinese catalog display from 艾斯波还拜神 to 艾斯波黑白神."
-    - "Record both accepted naming corrections and replace the stale prior-task status with this live task contract."
-    - "Prove strict rule validity, exact bilingual coverage, and unchanged stable identities across the retained Modern corpus."
+    - "Add Temur Spellementals as U/R/G with Sunderflock and Analyze the Pollen."
+    - "Add Jeskai Ponza as W/U/R with Cleansing Wildfire and Mana Leak."
+    - "Add Dimir Erayo stable identity erayo as U/B with Erayo, Soratami Ascendant and Basim Ibn Ishaq."
+    - "Add Mono-Blue Erayo as U with Erayo, Soratami Ascendant and Emry, Lurker of the Loch."
+    - "Add color-only identities: Dwarves W/R, Izzet Dwarves U/R, Boros Dwarves W/R, Izzet Monument U/R, Mono-Blue Selective Memory U, Grixis Legends U/B/R, Dimir Persist U/B, and Bant Company W/U/G."
+    - "Acquire only the five missing exact Scryfall art-crop assets and validate the two synchronized metadata consumers."
   prohibited_changes:
-    - "Do not rename parent_id erayo, change its rules or priority, change 蓝黑伟代, modify mono-blue-erayo, or add speculative Erayo variants."
-    - "Do not rename parent_id esper-ketramose, change its English name, rules, colors, or representative cards."
-    - "Do not edit visual metadata, Landing content, generated statistics, source data, workflows, Schemas, UI, public paths, event whitelists, or protected event 434455 bytes."
-    - "Do not dispatch production before the exact accepted fix is merged, and do not resume visual-metadata review before the refreshed baseline is reconciled."
+    - "Do not change any visual identity beyond the twelve approved identities, classifier rule, bilingual name, statistical formula, Landing prose, generated output, source data, workflow, Schema, UI behavior, or public path."
+    - "Do not add a green color to mono-blue-erayo solely for an optional Haywire Mite splash."
+    - "Do not dispatch MTGO production, mutate Issue #257, begin Landing review, or start another task as part of this accepted visual-metadata completion."
   validation:
-    review_input: "The Owner authorized Dimir Erayo while retaining parent_id erayo, Chinese 蓝黑伟代, the Basim boundary, and Mono-Blue Erayo; the Owner also corrected Esper Ketramose Chinese from 艾斯波还拜神 to 艾斯波黑白神."
-    retained_corpus: "pass; after reversing only the approved erayo name scalar, the parsed Modern classifier source is exactly equal to baseline 127056403532, proving all stable IDs, conditions, priorities, and retained-deck selections unchanged"
-    focused_rule: "pass; my_archetypes/modern.yaml passed strict rule validation"
-    bilingual_catalog: "pass; exact approved coverage for 327 Standard and Modern identities; only erayo English and esper-ketramose Chinese differ from baseline"
-    documentation: "pass; live STATUS contract contains the required four-boolean authorization boundary and remains below 10 KiB"
-    repository: "pass; deterministic read-only validation passed 85 Python, 20 JavaScript, 1,876 JSON, 72 YAML, 55 reference, and 2,343 hygiene checks"
-    diff_check: "pass; final tree changes exactly four declared target paths, with no file operations, untracked files, or whitespace errors"
-  stop_point: "Complete this exact accepted subject through one commit, one Ready pull request, required CI, merge, the already-authorized production refresh, and stable-identity reconciliation; then resume the accepted W34 visual-metadata review without expanding either subject."
+    review_input: "The Owner accepted the four proposed color and representative-card pairs after the complete W34 Top 8 audit, then explicitly added eight color-only identity mappings; publication bd637ae was reconciled with no event, decklist, or stable-identity change."
+    card_identity: "pass; every selected card appears in the corresponding accepted W34 one-week best or average deck, and the five newly acquired exact card identities were verified against the local MTG card database"
+    image_assets: "pass; five exact Scryfall art-crop JPEGs are readable, visually inspected, and served from their declared stable paths"
+    synchronized_metadata: "pass; the front-end visual map and private Landing visual config contain exactly the same four approved identity/card pairs"
+    focused_ui: "pass; local browser review rendered all twelve approved identities, including Dwarves W/R, Izzet Dwarves U/R, Boros Dwarves W/R, Izzet Monument U/R, Mono-Blue Selective Memory U, Grixis Legends U/B/R, Dimir Persist U/B, and Bant Company W/U/G"
+    documentation: "pass; the final expanded-subject STATUS structure and local-only four-boolean authorization boundary passed the focused documentation test"
+    repository: "pass; deterministic read-only repository validation passed on the final expanded subject"
+    diff_check: "pass; final tree contains exactly the eight declared target paths (three modified files and five new JPEGs), no deletion or rename, no undeclared file, and no whitespace error"
+  stop_point: "Complete the unchanged accepted subject through one commit, one Ready pull request, required CI, and normal merge; allow only the ordinary merge-triggered Pages path and do not dispatch MTGO production or start another task."
 
 current_repository_state:
-  baseline_commit: "1270564035321db8f5765b99ae8affb847e4d8b3"
-  baseline_note: "Verified cloud master after the refreshed W34 production publication and accepted complete Top 8 audit."
+  baseline_commit: "bd637ae7a115b27e9b190bec2448eeff7861dc9e"
+  baseline_note: "Verified production publication from run 32801953597 after both display-name fixes; W34 Standard is byte-identical and Modern differs only by classifier digest and Erayo display text, with events, exact decks, and stable identities unchanged."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -102,11 +113,11 @@ known_blockers:
 
 future_task_gates:
   - task: "WEEKLY-TOP8-AUDIT-2026-W34"
-    status: "accepted_pending_display_name_refresh_reconciliation"
-    note: "The complete audit passed against publication 127056403532; reuse requires exact event, decklist, and stable-identity reconciliation after the authorized Modern display-name refresh."
+    status: "accepted_and_reconciled"
+    note: "The complete audit passed against publication 127056403532 and was exactly reconciled against publication bd637ae with no event, decklist, or stable-identity change."
   - task: "WEEKLY-VISUAL-METADATA-2026-W34"
-    status: "paused_pending_modern_display_name_refresh"
-    note: "The Owner accepted the four proposed color and representative-card choices; implementation resumes only after both Modern display-name fixes are published and the refreshed baseline is reconciled."
+    status: "owner_accepted_completion_authorized"
+    note: "The exact validated twelve-identity visual subject is Owner-accepted for one commit, one Ready pull request, required CI, and normal merge; MTGO production is not authorized."
   - task: "WEEKLY-LANDING-READINESS-2026-W34"
     status: "blocked_pending_contract_repair_or_reproof"
     note: "Landing content review cannot start while the new readiness artifact still reports machine_draft_status=not_available."
@@ -115,14 +126,14 @@ future_task_gates:
     note: "Cross-device and visual-system closeout remains a separate task after the W34 maintenance gate."
 
 next_approved_task:
-  id: "WEEKLY-VISUAL-METADATA-2026-W34"
-  name: "Resume accepted W34 visual-metadata review"
-  status: "authorized_after_name_refresh_reconciliation"
-  local_execution_authorized: true
-  note: "Start only after the accepted two-name fix is merged, production is refreshed, and the stable-identity baseline is reconciled."
+  id: "NONE"
+  name: "No follow-up task is authorized"
+  status: "no_follow_up_authorized"
+  local_execution_authorized: false
+  note: "Stop after local visual-metadata validation and Owner review; Landing readiness remains a later blocked gate."
 
 prohibited_next_actions:
-  - "Do not dispatch production before the accepted fix is merged or resume visual-metadata review before the refreshed baseline is reconciled."
+  - "Do not dispatch MTGO production or mutate Issue #257 as part of this visual-metadata completion."
   - "Do not begin Landing review or another development task automatically."
-  - "Do not rename stable IDs, change classifier conditions, edit generated outputs, modify other bilingual names, UI, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
+  - "Do not change classifier conditions, stable IDs, bilingual names, generated outputs, unrelated visual metadata, UI behavior, workflows, Schemas, source data, public paths, or protected event 434455 bytes."
   - "Do not develop directly on master or overwrite unexplained local changes."
