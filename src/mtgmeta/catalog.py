@@ -20,6 +20,10 @@ PRODUCTS = (
     ("mtgo-landing", "mtgo", "landing/current.json"),
     ("tabletop-major-events", "melee", "index.json"),
 )
+DEFAULT_MTGO_PRODUCT_ID = "mtgo-landing"
+REQUIRED_MTGO_PRODUCT_IDS = frozenset(
+    product_id for product_id, source, _suffix in PRODUCTS if source == "mtgo"
+)
 
 
 def build_catalog(
@@ -52,12 +56,28 @@ def build_catalog(
                 }
             )
         available_ids = [item["id"] for item in products if item["available"]]
+        available_mtgo_ids = {
+            item["id"]
+            for item in products
+            if item["available"] and item["id"] in REQUIRED_MTGO_PRODUCT_IDS
+        }
+        if definition.public and available_mtgo_ids != REQUIRED_MTGO_PRODUCT_IDS:
+            missing = sorted(REQUIRED_MTGO_PRODUCT_IDS - available_mtgo_ids)
+            raise ValueError(
+                f"public format {definition.id!r} is missing required MTGO products: "
+                + ", ".join(missing)
+            )
+        default_product_id = (
+            DEFAULT_MTGO_PRODUCT_ID
+            if DEFAULT_MTGO_PRODUCT_ID in available_ids
+            else (available_ids[0] if available_ids else None)
+        )
         formats.append(
             {
                 "id": definition.id,
                 "display_name": definition.display_name,
                 "state": definition.state,
-                "default_product_id": available_ids[0] if available_ids else None,
+                "default_product_id": default_product_id,
                 "products": products,
             }
         )

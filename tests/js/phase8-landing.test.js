@@ -51,6 +51,7 @@ function landingFunctions(language = "zh") {
     globalThis.__landing = {
       landingFreshness,
       landingDirection,
+      landingEnvironmentDetailTitle,
       landingEnvironmentRows,
       landingFeatureHtml,
       landingFeatureItems,
@@ -129,6 +130,24 @@ test("environment rows render three shares and never expose raw counts", () => {
   assert.doesNotMatch(html, />17</);
   assert.doesNotMatch(html, />129</);
   assert.doesNotMatch(html, />469</);
+});
+
+test("Landing detail titles use the subtype that owns the displayed best deck", () => {
+  const { landingEnvironmentDetailTitle } = landingFunctions();
+  const row = { archetype_id: "combo" };
+
+  assert.equal(landingEnvironmentDetailTitle(row, {
+    parent_id: "combo",
+    id: "direct-child",
+  }), "direct-child");
+
+  assert.equal(landingEnvironmentDetailTitle(row, {
+    best_deck: { player: "Player", event_id: "42", final_rank: 5 },
+    subtypes: [
+      { id: "first", best_deck: { player: "Other", event_id: "41", final_rank: 1 } },
+      { id: "matching-child", best_deck: { player: "Player", event_id: "42", final_rank: 5 } },
+    ],
+  }), "matching-child");
 });
 
 test("feature history reads only the Landing-owned week document", () => {
