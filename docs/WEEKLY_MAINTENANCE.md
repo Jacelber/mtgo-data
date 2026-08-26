@@ -24,14 +24,16 @@ After a successful production run, the workflow:
 
 The readiness artifact is retained for 21 days and is not included in the
 Pages artifact. Repeated runs with the same readiness digest do not add Issue
-noise. A changed weekly baseline updates and reopens the same Issue.
+noise. A changed diagnostic baseline updates the same Issue, but its open or
+closed state follows the generated review lifecycle instead of being forced
+open by every digest change.
 
 ## End-to-end operating contract
 
 | Step | Who | Work | Output for the next step |
 | --- | --- | --- | --- |
 | 1. Collect and publish production data | Automatic GitHub workflow | Fetch the allowlisted MTGO inputs, validate one candidate, publish the verified generated data when changed, and keep production failures fail-closed. | Exact publication SHA, run evidence, current Standard and Modern outputs. |
-| 2. Build weekly readiness | Automatic GitHub workflow | Bind the current review week to Top 8 event IDs and classifier digests, require each Landing editorial candidate source to carry the same classifier and screening-policy digests, and reuse the authoritative Landing Top 8 subject to report the exact machine-fact digest later used by Landing admission plus the complete-link-catalog binding. Never substitute a Top 8 summary digest for the Landing machine-fact digest. The primary Unknown count and complete decklists are the exact intersection with the review week's source event IDs. Preserve every retained-corpus unresolved and intentional Unknown in a separately labelled queue, including an explicit outside-review-week subset that cannot change the weekly count or readiness status. Separately list classification blockers, editorial candidate counts, stale candidates, unavailable review inputs, and the non-blocking status of optional machine prose. | Private Schema-valid readiness JSON plus one deduplicated weekly Issue. |
+| 2. Build weekly readiness | Automatic GitHub workflow | Bind the current review week to Top 8 event IDs and classifier digests, require each Landing editorial candidate source to carry the same classifier and screening-policy digests, and reuse the authoritative Landing Top 8 subject to report the exact machine-fact digest later used by Landing admission plus the complete-link-catalog binding. Never substitute a Top 8 summary digest for the Landing machine-fact digest. The primary Unknown count and complete decklists are the exact intersection with the review week's source event IDs. Preserve every retained-corpus unresolved and intentional Unknown in a separately labelled queue, including an explicit outside-review-week subset that cannot change the weekly count or readiness status. Separately list classification blockers, editorial candidate counts, stale candidates, unavailable review inputs, and the non-blocking status of optional machine prose. Finally compare a recorded completed week with its exact Top 8 review subject and published Landing content; a global classifier digest change alone is not a material review change. | Private Schema-valid readiness JSON plus one deduplicated weekly Issue whose state reflects `awaiting_owner_start`, `blocked`, `completed`, or `revalidation_required`. |
 | 3. Start the review | Owner | Read the Issue and explicitly ask Codex to begin with the named week and readiness artifact. Closing or ignoring the Issue means no review starts. | Authorization for one exact weekly review baseline. |
 | 4. Freeze and verify the baseline | Codex | Confirm the cloud workflow run, publication SHA, week lifecycle, event IDs, classifier digests, and readiness digest. Stop on drift or missing evidence. | Frozen review manifest and plain-language scope summary. |
 | 5. Review Unknown decks | Codex and Owner alternate; Owner confirms | Review every unresolved Unknown whose event belongs to the frozen review week unless it was already reclassified or explicitly accepted as intentional Unknown. Keep older and future-week unresolved records visible in the separate retained-corpus queue for their own explicitly started review; they do not silently expand the current weekly task. Handle coherent clusters in chat with complete representative decklists; use XLSX only for singleton batch review. Codex supplies a preliminary technical proposal, reads unrestricted Owner feedback, then supplies an exact revised proposal. | One final Owner confirmation per review-week unresolved deck or group. Only an incoherent random card pile may be explicitly accepted as intentional Unknown. |
@@ -111,9 +113,11 @@ the Owner may delete, rewrite or replace every conclusion and every copy field.
   commit, push, pull request, merge, and deployment remain governed task and
   acceptance gates. There is no standalone Pickup publication gate after the
   P12-15F cutover.
-- A provisional week may gain late events through its seal date. If its
-  readiness digest changes, the same Issue is updated and the frozen review
-  baseline must be refreshed before downstream work continues.
+- A provisional week may gain late events through its seal date. Before review
+  completion, a changed readiness digest refreshes the frozen review baseline.
+  After completion, a changed exact Top 8 review subject or published Landing
+  content produces `revalidation_required`; diagnostic-only or global
+  classifier-digest changes preserve `completed`.
 - Standard and Modern share the same review week but retain separate source
   event IDs, classifier digests, classifications, and Landing candidates.
 - The review-week Unknown count is restricted to those source event IDs. The
@@ -233,6 +237,17 @@ A stale candidate containing human approval or copy is preserved, marked
 being silently overwritten or published. The blocker is resolved before the
 Owner starts the normal review sequence.
 
+`completed` means the week has an Owner-accepted completion record in
+`configs/mtgo_weekly_review_completions.yaml`, and the current exact Top 8
+review subject plus published Landing content still match that record. The
+Issue is closed. A later production refresh may update diagnostics without
+resetting the completed human workflow.
+
+`revalidation_required` means a recorded completed week's exact Top 8 review
+subject or published Landing content no longer matches its accepted digest.
+The same Issue is opened with the mismatched subject listed; this is a bounded
+revalidation gate, not a reset to an unstarted review.
+
 Representative-card and deck-color exception counts remain manual review
 inputs. After P12-10 acceptance, the automatic producer reports deterministic
 Landing machine facts and machine-fact bindings; optional draft prose remains
@@ -249,10 +264,12 @@ never blocks readiness. Human-final progress and authorization remain in
   Issue. No readiness artifact is treated as current.
 - Readiness generation failure: use the deduplicated readiness-failure Issue
   and inspect the linked run. Do not infer readiness from partial output.
-- Late event or changed classifier digest: regenerate unreviewed Landing
-  candidates. Preserve reviewed stale candidates as evidence, block readiness
-  and publication, then use the updated artifact and reopen review from baseline
-  freezing; do not silently reuse prior decisions.
+- Late event or material completed-subject change: regenerate unreviewed
+  Landing candidates. Preserve reviewed stale candidates as evidence, produce
+  `revalidation_required` for a completed week, and revalidate the changed
+  subject; do not silently reuse prior decisions. A classifier digest change
+  that leaves the exact reviewed Top 8 and published Landing content unchanged
+  does not invalidate completion.
 - Missed nominal start time: wait for the bounded delayed run or manually
   dispatch the production workflow under separate production authorization.
   Codex scheduling is not a fallback.

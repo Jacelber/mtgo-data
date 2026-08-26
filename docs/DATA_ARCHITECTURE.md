@@ -515,6 +515,16 @@ generated public data, does not enter `stats/catalog.json` or Pages, and does
 not authorize a review or repository mutation. Its current operating contract
 is `docs/WEEKLY_MAINTENANCE.md`.
 
+`configs/mtgo_weekly_review_completions.yaml` is the maintained non-public
+completion ledger. Each accepted week binds a material Top 8 review digest and
+the published Landing content digest for both formats. The Top 8 digest covers
+event identity, placement, selected classification identity, player, and exact
+deck content, but intentionally excludes the global classifier digest and
+comparison-only fields. This lets production diagnostics and unrelated
+classifier rules advance without erasing completed human workflow state. A
+material mismatch produces `revalidation_required`; an unchanged accepted
+subject produces `completed`, and the deduplicated weekly Issue remains closed.
+
 `configs/mtgo_intentional_unknowns.yaml` is the maintained non-public registry
 for the only permitted unresolved-classification exception. Each record binds
 format, event ID, stable deck ID and source file to an Owner acceptance date and
@@ -3282,9 +3292,13 @@ digest is stale and fails closed.
 Known-archetype continuity state advances after the classified weekly baseline
 is accepted, independently of whether the Owner selects any feature. An
 explicitly reviewed empty feature list is valid and must not prevent state
-maintenance. A changed event set, classifier digest, policy digest, fact digest,
-or link catalog after human work marks the review stale and preserves the last
-admitted public Landing until explicit re-review.
+maintenance. During active Landing authoring, a changed event set, classifier
+digest, policy digest, fact digest, or link catalog marks that private review
+source stale and preserves the last admitted public Landing until explicit
+re-review. After the whole weekly workflow is recorded complete, lifecycle
+revalidation instead compares the material Top 8 review subject and admitted
+Landing content; a global classifier digest change with no reviewed-content
+change does not reset the week to an unstarted state.
 
 The Landing-only XLSX review carrier contains `Review Control`, `Landing Copy`,
 `Featured Decks`, `All Top 8`, and `Field Guide`. It is not a database. Accepted

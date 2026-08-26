@@ -5912,3 +5912,60 @@ change, but statistical formulas, source events, product separation, workflows,
 public paths, and front-end source do not. Commit, remote publication, merge,
 production generation, refreshed weekly evidence, and Phase 13 remain separate
 gates after local Owner acceptance.
+
+---
+
+# DEC-130 - Persist completed weekly review lifecycle across production refreshes
+
+Status: `Accepted; same-task completion authorized`
+
+## Context
+
+W34 classification audit and bilingual Landing publication were already
+completed. Production run `32970066484` nevertheless rewrote Issue `#257` as
+`awaiting_owner_start` and opened it again. The readiness generator exposed
+only `awaiting_owner_start` and `blocked`, while the Issue updater forced every
+changed readiness digest to `state: open`. The readiness digest also included
+the publication commit, so an otherwise non-material refresh necessarily
+looked new.
+
+The R6 production refresh changed only the root `classifier_digest` in both
+W34 Top 8 documents. Its exact events, placements, identities, players, and
+decklists were unchanged. Requiring the full W34 human process again would
+therefore discard valid completed state rather than protect a changed review
+subject.
+
+## Decision
+
+Maintain completed weekly subjects in
+`configs/mtgo_weekly_review_completions.yaml`. For each format, bind an exact
+Top 8 human-review digest and the admitted Landing `content_digest`. The Top 8
+digest includes week, event metadata, rank, deck availability, classification
+identity, player, and exact main/side deck content. It excludes the global
+classifier digest and comparison-only diagnostics because those values may
+change without changing anything the Owner reviewed.
+
+Extend private readiness Schema `1.5.0` with a completion object and two
+lifecycle results. A matching accepted subject yields `completed`; a changed
+Top 8 review subject or Landing content yields `revalidation_required` with the
+mismatches named. Existing machine blockers remain fail-closed and take
+precedence. Unrecorded weeks retain `awaiting_owner_start`.
+
+Make the weekly Issue state follow that generated lifecycle. Completed weeks
+are closed and explain that no new start is required. Materially changed weeks
+are opened for bounded revalidation. A diagnostic-only digest change may
+refresh the Issue body while preserving completion and its closed state.
+
+## Consequences
+
+W34 remains completed after the R6 refresh because its material Top 8 and
+published Landing subjects match the accepted record. A later event, placement,
+classification identity, exact deck, or admitted Landing-content change will
+open the same Issue as `revalidation_required` rather than silently preserving
+stale acceptance or resetting the week to `awaiting_owner_start`.
+
+This changes private readiness JSON, weekly Issue synchronization, and their
+documentation. It changes no classifier rule, source event, public statistical
+Schema or data, Landing copy, UI, public path, schedule, or production
+authorization. Commit, remote publication, merge, Issue correction, and any
+production run remain separate gates after local Owner acceptance.
