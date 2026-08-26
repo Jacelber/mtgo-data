@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/classifier-r6-outside-top8-corrections"
-  working_branch_status: "owner_accepted_completion_authorized"
+  current_working_branch: "codex/mtgo-production-refresh-r6"
+  working_branch_status: "owner_authorized_completion_in_progress"
   status: "active"
 
 status_document:
@@ -32,17 +32,19 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "CLASSIFIER-R6-OUTSIDE-TOP8-CORRECTIONS"
-  name: "Correct reviewed outside-Top-8 classifier boundaries"
-  status: "accepted_completion_in_progress"
+  id: "MTGO-PRODUCTION-REFRESH-R6"
+  name: "Publish R6 classifier-derived MTGO data and weekly baseline"
+  status: "owner_authorized_completion_in_progress"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
-  stop_point: "Complete the unchanged accepted CLASSIFIER-R6 task through local commit, one Ready PR, required CI, and merge. Do not dispatch production, refresh weekly evidence, begin Phase 13, or start another task."
+  stop_point: "Publish this task contract through one Ready PR, then dispatch one normal MTGO production run from the exact merged master. Follow it through validated data publication, weekly readiness and maintenance-Issue generation, Pages deployment, and bounded public verification. Stop on a non-transient failure, scope expansion, Phase 13, or another task."
 
 current_repository_state:
+  classifier_r6_merge_commit: "92edbccd34970ce173771b4578655eadda417198"
+  classifier_r6_note: "CLASSIFIER-R6 merged through PR #280; master validation run 32969296972 succeeded. Production-derived data has not yet been refreshed with this classifier."
   phase_12_product_completion_commit: "0d70257f86c36630b167cf541e9d7d966fac2f72"
   phase_12_completion_note: "P12-16 merged through PR #276; merge validation run 32855373950 and Pages run 32855373976 succeeded."
   public_entries:
@@ -62,9 +64,9 @@ next_approved_task:
   name: null
   status: "not_authorized"
   local_execution_authorized: false
-  note: "No task after CLASSIFIER-R6 is authorized. Phase 13 remains separately gated."
+  note: "No task after MTGO-PRODUCTION-REFRESH-R6 is authorized. Phase 13 remains separately gated."
 
 prohibited_next_actions:
   - "Do not begin Phase 13 or another task without separate explicit Owner authorization recorded in the live status."
-  - "Do not dispatch production, change statistical meaning, merge MTGO and Tabletop results, or alter product scope under this completed-phase state."
+  - "Do not change statistical meaning, merge MTGO and Tabletop results, alter product scope, or dispatch any workflow other than the one authorized normal MTGO production refresh."
   - "Do not develop directly on master or overwrite unexplained local changes."
