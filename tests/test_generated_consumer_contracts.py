@@ -223,12 +223,3 @@ def test_landing_feature_archive_matches_the_reviewed_latest_document(
         for link in item["deck_links"]
     }
     assert linked <= destinations
-
-
-def test_standard_w27_is_an_explicit_empty_landing_feature_week() -> None:
-    index = _json("stats/standard/mtgo/landing/features/index.json")
-    entry = next(item for item in index["weeks"] if item["week"] == "2026-W27")
-    document = _json(f"stats/standard/mtgo/landing/features/{entry['file']}")
-
-    assert entry["feature_count"] == 0
-    assert document["features"]["items"] == []

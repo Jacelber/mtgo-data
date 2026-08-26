@@ -32,6 +32,7 @@ jobs:
       pull_request: ${{ steps.classify.outputs.pull_request }}
       workflow_run: ${{ steps.classify.outputs.workflow_run }}
       validation_class: ${{ steps.classify.outputs.validation_class }}
+      validation_triggers: ${{ steps.classify.outputs.validation_triggers }}
     steps:
       - name: Check out admission logic without persisted credentials
         uses: actions/checkout@v7.0.0
@@ -89,7 +90,7 @@ jobs:
           python -B validate_repository.py
           --changed-from "${{ github.event.pull_request.base.sha }}"
       - name: Validate live documentation policy
-        if: contains(needs.admission.outputs.validation_class, 'docs')
+        if: contains(needs.admission.outputs.validation_triggers, 'docs-history')
         run: >-
           python -B -m pytest
           --basetemp="${RUNNER_TEMP}/pytest-targeted-docs"
@@ -99,23 +100,65 @@ jobs:
         run: |
           python -B -m ruff check src
           python -B -m mypy
-      - name: Validate rules and public JSON schemas
-        if: contains(needs.admission.outputs.validation_class, 'data')
+      - name: Validate changed archetype rules
+        if: >-
+          contains(needs.admission.outputs.validation_triggers, 'rules-standard') ||
+          contains(needs.admission.outputs.validation_triggers, 'rules-modern')
+        shell: bash
+        env:
+          VALIDATION_TRIGGERS: ${{ needs.admission.outputs.validation_triggers }}
         run: |
-          python -B validate_rules.py my_archetypes/standard.yaml
-          python -B validate_rules.py my_archetypes/modern.yaml
-          python -B validate_schemas.py
-          python -B -m pytest \
-            --basetemp="${RUNNER_TEMP}/pytest-top8-restatement" \
-            tests/test_mtgo_top8_restatement.py
-      - name: Validate CI control contracts
-        if: contains(needs.admission.outputs.validation_class, 'governance')
+          if [[ "$VALIDATION_TRIGGERS" == *rules-standard* ]]; then
+            python -B validate_rules.py my_archetypes/standard.yaml
+          fi
+          if [[ "$VALIDATION_TRIGGERS" == *rules-modern* ]]; then
+            python -B validate_rules.py my_archetypes/modern.yaml
+          fi
+      - name: Validate changed public JSON contracts
+        if: >-
+          contains(needs.admission.outputs.validation_triggers, 'schema-contract') ||
+          contains(needs.admission.outputs.validation_triggers, 'schema-documents')
+        shell: bash
+        env:
+          VALIDATION_TRIGGERS: ${{ needs.admission.outputs.validation_triggers }}
+        run: |
+          if [[ "$VALIDATION_TRIGGERS" == *schema-contract* ]]; then
+            python -B validate_schemas.py
+          else
+            python -B validate_schemas.py --changed-from "${{ github.event.pull_request.base.sha }}"
+          fi
+      - name: Validate Top 8 restatement
+        if: contains(needs.admission.outputs.validation_triggers, 'top8-restatement')
         run: >-
           python -B -m pytest
-          --basetemp="${RUNNER_TEMP}/pytest-targeted-governance"
-          tests/test_ci_master_admission.py
-          tests/test_ci_workflow.py
-          tests/test_github_publication_preflight.py
+          --basetemp="${RUNNER_TEMP}/pytest-top8-restatement"
+          tests/test_mtgo_top8_restatement.py
+      - name: Validate changed governance contracts
+        if: >-
+          contains(needs.admission.outputs.validation_triggers, 'ci-admission') ||
+          contains(needs.admission.outputs.validation_triggers, 'ci-workflow') ||
+          contains(needs.admission.outputs.validation_triggers, 'publication-preflight') ||
+          contains(needs.admission.outputs.validation_triggers, 'repository-modes')
+        shell: bash
+        env:
+          VALIDATION_TRIGGERS: ${{ needs.admission.outputs.validation_triggers }}
+        run: |
+          TESTS=()
+          if [[ "$VALIDATION_TRIGGERS" == *ci-admission* ]]; then
+            TESTS+=(tests/test_ci_master_admission.py)
+          fi
+          if [[ "$VALIDATION_TRIGGERS" == *ci-workflow* ]]; then
+            TESTS+=(tests/test_ci_workflow.py)
+          fi
+          if [[ "$VALIDATION_TRIGGERS" == *publication-preflight* ]]; then
+            TESTS+=(tests/test_github_publication_preflight.py)
+          fi
+          if [[ "$VALIDATION_TRIGGERS" == *repository-modes* ]]; then
+            TESTS+=(tests/test_validate_repository_modes.py)
+          fi
+          python -B -m pytest \
+            --basetemp="${RUNNER_TEMP}/pytest-targeted-governance" \
+            "${TESTS[@]}"
   post-merge-confirmation:
     name: Confirm previously validated merge
     needs: admission

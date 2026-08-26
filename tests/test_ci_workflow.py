@@ -64,13 +64,18 @@ def test_pr_path_contains_only_admission_targeted_and_aggregate_jobs():
     ]
 
 
-def test_targeted_commands_map_directly_to_changed_artifact_categories():
+def test_targeted_commands_map_directly_to_named_changed_contracts():
     steps = _workflow()["jobs"]["targeted-validation"]["steps"]
     by_name = {step["name"]: step for step in steps}
-    assert "docs" in by_name["Validate live documentation policy"]["if"]
+    assert "docs-history" in by_name["Validate live documentation policy"]["if"]
     assert "code" in by_name["Check maintained Python package"]["if"]
-    assert "data" in by_name["Validate rules and public JSON schemas"]["if"]
-    assert "governance" in by_name["Validate CI control contracts"]["if"]
+    assert "rules-standard" in by_name["Validate changed archetype rules"]["if"]
+    assert "rules-modern" in by_name["Validate changed archetype rules"]["if"]
+    assert "schema-contract" in by_name["Validate changed public JSON contracts"]["if"]
+    assert "schema-documents" in by_name["Validate changed public JSON contracts"]["if"]
+    assert "top8-restatement" in by_name["Validate Top 8 restatement"]["if"]
+    assert "ci-admission" in by_name["Validate changed governance contracts"]["if"]
+    assert "ci-workflow" in by_name["Validate changed governance contracts"]["if"]
     package_install = by_name["Install maintained package for code and data checks"]
     assert "code" in package_install["if"]
     assert "data" in package_install["if"]
@@ -83,9 +88,12 @@ def test_targeted_commands_map_directly_to_changed_artifact_categories():
         "-m mypy",
         "validate_rules.py",
         "validate_schemas.py",
+        "--changed-from",
+        "test_mtgo_top8_restatement.py",
         "test_ci_master_admission.py",
         "test_ci_workflow.py",
         "test_github_publication_preflight.py",
+        "test_validate_repository_modes.py",
     ):
         assert required in commands
     assert "node --test" not in commands
@@ -177,16 +185,15 @@ def test_production_candidate_is_built_once_and_published_with_immutable_evidenc
         UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
     )
     fetch = workflow["jobs"]["fetch"]
-    baseline = workflow["jobs"]["baseline"]
     build = workflow["jobs"]["build"]
     publish = workflow["jobs"]["publish"]
+    assert "baseline" not in workflow["jobs"]
     assert publish["outputs"] == {
         "published-commit": "${{ steps.verify.outputs.commit }}"
     }
     assert "generation-needed" in fetch["outputs"]
-    assert baseline["needs"] == "fetch"
-    assert "generation-needed" in baseline["if"]
     assert "generation-needed" in build["if"]
+    assert build["needs"] == "fetch"
     assert set(build["outputs"]) == {
         "generation-subject-sha256",
         "validated-output-sha256",

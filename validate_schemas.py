@@ -11,6 +11,8 @@ from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
 from referencing import Registry, Resource
 
+from validate_repository import InfrastructureError, changed_files
+
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_MANIFEST = ROOT / "schemas" / "manifest.json"
@@ -61,7 +63,11 @@ def validate_instance(
     return [ValidationFailure(path, _location(list(error.absolute_path)), error.message) for error in errors]
 
 
-def validate_manifest(repository_root: Path, manifest_path: Path) -> tuple[int, list[ValidationFailure]]:
+def validate_manifest(
+    repository_root: Path,
+    manifest_path: Path,
+    selected_paths: set[str] | None = None,
+) -> tuple[int, list[ValidationFailure]]:
     manifest = _read_json(manifest_path)
     if manifest.get("schema_version") != "1.0.0":
         raise SchemaError("manifest schema_version must be 1.0.0")
@@ -83,14 +89,16 @@ def validate_manifest(repository_root: Path, manifest_path: Path) -> tuple[int, 
         if schema_name not in schemas:
             raise SchemaError(f"manifest references missing schema {schema_name}")
         matches = sorted(repository_root.glob(pattern))
-        if not matches:
+        if not matches and selected_paths is None:
             raise SchemaError(f"manifest pattern matched no files: {pattern}")
         for path in matches:
+            relative = path.relative_to(repository_root).as_posix()
+            if selected_paths is not None and relative not in selected_paths:
+                continue
             resolved = path.resolve()
             if resolved in seen:
                 raise SchemaError(f"manifest maps a file more than once: {path.relative_to(repository_root)}")
             seen.add(resolved)
-            relative = path.relative_to(repository_root).as_posix()
             try:
                 instance = _read_json(path)
             except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -105,12 +113,25 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Validate declared public JSON files against versioned schemas.")
     parser.add_argument("--root", type=Path, default=ROOT, help="repository root (default: script directory)")
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST, help="schema mapping manifest")
+    parser.add_argument(
+        "--changed-from",
+        metavar="REF",
+        help="validate only mapped public JSON changed from REF",
+    )
     args = parser.parse_args(argv)
     root = args.root.resolve()
     manifest = args.manifest if args.manifest.is_absolute() else (root / args.manifest)
     try:
-        checked, failures = validate_manifest(root, manifest.resolve())
-    except (OSError, UnicodeError, json.JSONDecodeError, SchemaError, ValueError) as exc:
+        selected = set(changed_files(root, args.changed_from)) if args.changed_from else None
+        checked, failures = validate_manifest(root, manifest.resolve(), selected)
+    except (
+        OSError,
+        UnicodeError,
+        json.JSONDecodeError,
+        InfrastructureError,
+        SchemaError,
+        ValueError,
+    ) as exc:
         print(f"Schema validation ERROR: {exc}")
         return 2
     if failures:

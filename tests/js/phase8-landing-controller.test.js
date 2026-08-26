@@ -16,33 +16,33 @@ test("Landing history excludes empty archive weeks and never loads Pickup", asyn
   const documents = {
     "stats/standard/mtgo/landing/current.json": {
       format: "standard",
-      week: { id: "2026-W33", start: "2026-08-10", end: "2026-08-16" },
+      week: { id: "2099-W02", start: "2099-01-05", end: "2099-01-11" },
     },
     "stats/standard/mtgo/landing/features/index.json": {
       format: "standard",
       weeks: [
-        { week: "2026-W33", file: "2026-W33.json", feature_count: 14 },
-        { week: "2026-W27", file: "2026-W27.json", feature_count: 0 },
+        { week: "2099-W02", file: "2099-W02.json", feature_count: 1 },
+        { week: "2099-W01", file: "2099-W01.json", feature_count: 0 },
       ],
     },
-    "stats/standard/mtgo/landing/features/2026-W33.json": {
+    "stats/standard/mtgo/landing/features/2099-W02.json": {
       format: "standard",
-      week: { id: "2026-W33" },
+      week: { id: "2099-W02" },
       features: { items: [{ destination_id: "deck:aaaaaaaaaaaaaaaaaaaa" }] },
     },
-    "stats/standard/mtgo/landing/features/2026-W27.json": {
+    "stats/standard/mtgo/landing/features/2099-W01.json": {
       format: "standard",
-      week: { id: "2026-W27" },
+      week: { id: "2099-W01" },
       features: { items: [] },
     },
     "stats/standard/mtgo/meta.json": { format: "standard" },
     "stats/standard/mtgo/range_1w.json": {
       format: "standard",
-      period: { start: "2026-08-10", end: "2026-08-16" },
+      period: { start: "2099-01-05", end: "2099-01-11" },
     },
     "stats/standard/mtgo/completeness/1w.json": {
       format: "standard",
-      period: { start: "2026-08-10", end: "2026-08-16" },
+      period: { start: "2099-01-05", end: "2099-01-11" },
     },
   };
   const context = {
@@ -64,22 +64,22 @@ test("Landing history excludes empty archive weeks and never loads Pickup", asyn
   const result = await context.P8MtgoController.loadLanding(
     "standard",
     "stats/standard/mtgo/landing/current.json",
-    "2026-W27.json"
+    "2099-W01.json"
   );
 
-  assert.equal(result.featureFile, "2026-W33.json");
-  assert.equal(result.featureDocument.week.id, "2026-W33");
+  assert.equal(result.featureFile, "2099-W02.json");
+  assert.equal(result.featureDocument.week.id, "2099-W02");
   assert.deepEqual(
     Array.from(result.featureIndex.weeks, item => item.file),
-    ["2026-W33.json"]
+    ["2099-W02.json"]
   );
   assert.equal(requested.some(item => item.includes("/pickup/")), false);
   assert.equal(
-    requested.includes("stats/standard/mtgo/landing/features/2026-W27.json"),
+    requested.includes("stats/standard/mtgo/landing/features/2099-W01.json"),
     false
   );
   assert.equal(
-    requested.includes("stats/standard/mtgo/landing/features/2026-W33.json"),
+    requested.includes("stats/standard/mtgo/landing/features/2099-W02.json"),
     true
   );
 });

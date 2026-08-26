@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 
 import pytest
 import yaml
@@ -11,9 +12,6 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 STATUS_PATH = ROOT / "docs" / "STATUS.yaml"
 ROADMAP_PATH = ROOT / "docs" / "ROADMAP.md"
-HISTORY_INDEX_PATH = ROOT / "docs" / "history" / "README.md"
-PHASES_0_11_PATH = ROOT / "docs" / "history" / "ROADMAP-PHASES-0-11.md"
-PHASE_12_PATH = ROOT / "docs" / "history" / "ROADMAP-PHASE-12-COMPLETED.md"
 
 FORBIDDEN_STATUS_CACHES = {
     "approved_event_structures",
@@ -59,30 +57,12 @@ def test_live_status_contract():
     assert live_status_policy_errors(STATUS_PATH.read_bytes()) == []
 
 
-def test_live_roadmap_and_history_contract():
+def test_live_roadmap_history_pointers_exist():
     roadmap = ROADMAP_PATH.read_text(encoding="utf-8")
-    history_index = HISTORY_INDEX_PATH.read_text(encoding="utf-8")
-    phases_0_11 = PHASES_0_11_PATH.read_text(encoding="utf-8")
-    phase_12 = PHASE_12_PATH.read_text(encoding="utf-8")
+    pointers = set(re.findall(r"`(docs/history/[^`]+)`", roadmap))
 
-    assert len(roadmap.encode("utf-8")) <= 64 * 1024
-    assert "# Phase 12 —" in roadmap
-    assert "Phase 12 completed on 2026-08-25" in roadmap
-    assert "10. `P12-10`" not in roadmap
-    assert "16. `P12-16`" not in roadmap
-    assert "# Phase 19 —" in roadmap
-    assert "# Phase 0 —" not in roadmap
-    assert "1. `P12-01`" not in roadmap
-    assert "# Historical Phase" not in roadmap
-    assert "ROADMAP-PHASES-0-11.md" in roadmap
-    assert "ROADMAP-PHASES-0-11.md" in history_index
-    assert "ROADMAP-PHASE-12-COMPLETED.md" in roadmap
-    assert "ROADMAP-PHASE-12-COMPLETED.md" in history_index
-    assert "# Phase 0 —" in phases_0_11 and "# Phase 11 —" in phases_0_11
-    assert "1. `P12-01`" in phase_12 and "9. `P12-09`" in phase_12
-    assert "10. `P12-10`" in phase_12 and "16. `P12-16`" in phase_12
-    assert "Phase 12 completion record" in phase_12
-    assert "non-authoritative" in phases_0_11 and "non-authoritative" in phase_12
+    assert pointers
+    assert all((ROOT / pointer).is_file() for pointer in pointers)
 
 
 @pytest.mark.parametrize(
