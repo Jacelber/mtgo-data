@@ -15,8 +15,11 @@ import yaml
 
 
 FORMATS = ("standard", "modern")
-SCHEMA_VERSION = "1.4.0"
+SCHEMA_VERSION = "1.5.0"
 INTENTIONAL_UNKNOWN_CONFIG = Path("configs/mtgo_intentional_unknowns.yaml")
+WEEKLY_REVIEW_COMPLETIONS_CONFIG = Path(
+    "configs/mtgo_weekly_review_completions.yaml"
+)
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -48,6 +51,124 @@ def _is_sha256(value: Any) -> bool:
         and len(value) == 64
         and all(character in "0123456789abcdef" for character in value)
     )
+
+
+def _sha256_json(value: Any) -> str:
+    return hashlib.sha256(
+        json.dumps(
+            value,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+
+
+def _top8_review_digest(root: Path, format_name: str, week_id: str) -> str:
+    document = _read_json(
+        root / "stats" / format_name / "mtgo" / "top8" / f"{week_id}.json"
+    )
+    events = []
+    for event in document.get("events", []):
+        if not isinstance(event, dict):
+            raise ValueError(f"{format_name} Top 8 event is not an object")
+        placements = []
+        for placement in event.get("placements", []):
+            if not isinstance(placement, dict):
+                raise ValueError(f"{format_name} Top 8 placement is not an object")
+            placements.append(
+                {
+                    field: placement.get(field)
+                    for field in ("rank", "deck_status", "identity", "exact_deck")
+                }
+            )
+        events.append(
+            {
+                field: event.get(field)
+                for field in ("event_id", "name", "display_name", "date", "player_count")
+            }
+            | {"placements": placements}
+        )
+    subject = {
+        "format": document.get("format"),
+        "week": document.get("week"),
+        "events": events,
+    }
+    return _sha256_json(subject)
+
+
+def _landing_content_digest(root: Path, format_name: str, week_id: str) -> str | None:
+    path = (
+        root
+        / "stats"
+        / format_name
+        / "mtgo"
+        / "landing"
+        / "features"
+        / f"{week_id}.json"
+    )
+    if not path.exists():
+        return None
+    digest = _read_json(path).get("content_digest")
+    return digest if _is_sha256(digest) else None
+
+
+def _completion_state(root: Path, week_id: str) -> dict[str, Any]:
+    path = root / WEEKLY_REVIEW_COMPLETIONS_CONFIG
+    if not path.exists():
+        return {
+            "state": "unrecorded",
+            "completed_on": None,
+            "evidence": None,
+            "mismatches": [],
+        }
+    registry = _read_yaml(path)
+    if registry.get("schema_version") != "1.0.0":
+        raise ValueError("Weekly review completion registry schema_version must be 1.0.0")
+    records = registry.get("records")
+    if not isinstance(records, list):
+        raise ValueError("Weekly review completion registry records must be a list")
+    if any(not isinstance(record, dict) for record in records):
+        raise ValueError("Weekly review completion registry records must be mappings")
+    matches = [record for record in records if record.get("week") == week_id]
+    if len(matches) > 1:
+        raise ValueError(f"Weekly review completion registry duplicates {week_id}")
+    if not matches:
+        return {
+            "state": "unrecorded",
+            "completed_on": None,
+            "evidence": None,
+            "mismatches": [],
+        }
+    record = matches[0]
+    completed_on = record.get("completed_on")
+    evidence = record.get("evidence")
+    subjects = record.get("formats")
+    if not isinstance(completed_on, str) or not isinstance(evidence, str):
+        raise ValueError(f"Weekly review completion record for {week_id} is incomplete")
+    if not isinstance(subjects, dict) or set(subjects) != set(FORMATS):
+        raise ValueError(
+            f"Weekly review completion record for {week_id} must bind Standard and Modern"
+        )
+    mismatches = []
+    for format_name in FORMATS:
+        expected = subjects.get(format_name)
+        if not isinstance(expected, dict):
+            raise ValueError(f"{week_id} {format_name} completion subject is invalid")
+        expected_top8 = expected.get("top8_review_digest")
+        expected_landing = expected.get("landing_content_digest")
+        if not _is_sha256(expected_top8) or not _is_sha256(expected_landing):
+            raise ValueError(f"{week_id} {format_name} completion digests are invalid")
+        if _top8_review_digest(root, format_name, week_id) != expected_top8:
+            mismatches.append(f"{format_name} Top 8 review subject")
+        if _landing_content_digest(root, format_name, week_id) != expected_landing:
+            mismatches.append(f"{format_name} Landing content")
+    return {
+        "state": "stale" if mismatches else "verified",
+        "completed_on": completed_on,
+        "evidence": evidence,
+        "mismatches": mismatches,
+    }
 
 
 def _default_landing_subject_builder(
@@ -461,9 +582,21 @@ def build_readiness(
             else None
         ),
     }
+    completion = _completion_state(root, week_id)
+    if blocked:
+        status = "blocked"
+        next_action = "resolve_blocker"
+    elif completion["state"] == "verified":
+        status = "completed"
+        next_action = "none"
+    elif completion["state"] == "stale":
+        status = "revalidation_required"
+        next_action = "owner_revalidation_required"
+    else:
+        status = "awaiting_owner_start"
+        next_action = "owner_start_required"
     digest_subject = {
         "schema_version": SCHEMA_VERSION,
-        "publication_sha": publication_sha,
         "week": {
             "id": week_id,
             "start": standard_entry["start"],
@@ -474,17 +607,16 @@ def build_readiness(
         },
         "formats": formats,
         "landing": landing,
+        "completion": completion,
     }
-    digest = hashlib.sha256(
-        json.dumps(digest_subject, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    ).hexdigest()
+    digest = _sha256_json(digest_subject)
     return {
         "schema_version": SCHEMA_VERSION,
         "document_type": "weekly_maintenance_readiness",
         "review_id": f"{week_id}@{publication_sha[:12]}",
         "readiness_digest": digest,
         "generated_at": generated_at,
-        "status": "blocked" if blocked else "awaiting_owner_start",
+        "status": status,
         "production": {
             "publication_sha": publication_sha,
             "source_sha": source_sha,
@@ -494,8 +626,9 @@ def build_readiness(
         "week": digest_subject["week"],
         "formats": formats,
         "landing": landing,
+        "completion": completion,
         "workflow": {
-            "next_action": "resolve_blocker" if blocked else "owner_start_required",
+            "next_action": next_action,
             "codex_automation_required": False,
             "repository_mutation_authorized": False,
         },

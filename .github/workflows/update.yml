@@ -781,9 +781,33 @@ jobs:
             const week = readiness.week.id;
             const marker = `<!-- weekly-maintenance:${week} -->`;
             const digestMarker = `<!-- readiness-digest:${readiness.readiness_digest} -->`;
-            const heading = readiness.status === "blocked"
-              ? "## Weekly MTGO maintenance is blocked"
-              : "## Weekly MTGO maintenance is ready";
+            const presentations = {
+              blocked: {
+                heading: "## Weekly MTGO maintenance is blocked",
+                state: "open",
+                instruction: "Resolve the reported machine blocker before starting or resuming human review.",
+              },
+              awaiting_owner_start: {
+                heading: "## Weekly MTGO maintenance is ready",
+                state: "open",
+                instruction: "Open Codex manually and authorize the review of this exact handoff.",
+              },
+              completed: {
+                heading: "## Weekly MTGO maintenance is completed",
+                state: "closed",
+                instruction: "The accepted weekly review subject is unchanged. No new start authorization or human re-review is required.",
+              },
+              revalidation_required: {
+                heading: "## Weekly MTGO maintenance requires revalidation",
+                state: "open",
+                instruction: "The accepted Top 8 or published Landing subject changed. Review the listed mismatch before continuing.",
+              },
+            };
+            const presentation = presentations[readiness.status];
+            if (!presentation) {
+              core.setFailed(`Unsupported weekly readiness status: ${readiness.status}`);
+              return;
+            }
             const formatLines = readiness.formats.map((item) => {
               const queue = item.retained_corpus_unknown_queue;
               return `- ${item.format}: ${item.classification.unresolved_unknown_count} unresolved Unknown in ${week}; ` +
@@ -792,21 +816,31 @@ jobs:
                 `${item.landing_screening.total_candidate_count ?? "unavailable"} Landing screening candidates; ` +
                 `representative cards and deck colors require manual review.`;
             });
+            const completionLines = readiness.completion.state === "unrecorded"
+              ? ["- Completion record: `unrecorded`."]
+              : [
+                  `- Completion record: \`${readiness.completion.state}\`; completed on \`${readiness.completion.completed_on}\`.`,
+                  `- Completion evidence: ${readiness.completion.evidence}`,
+                  ...(readiness.completion.mismatches.length > 0
+                    ? [`- Material mismatches: ${readiness.completion.mismatches.join(", ")}`]
+                    : []),
+                ];
             const details = [
               marker,
               digestMarker,
-              heading,
+              presentation.heading,
               "",
               `- Review week: \`${week}\` (${readiness.week.start} through ${readiness.week.end})`,
               `- Lifecycle: \`${readiness.week.status}\`; seals on \`${readiness.week.seal_on}\``,
               `- Status: \`${readiness.status}\``,
               `- Production publication: \`${readiness.production.publication_sha}\``,
               `- Workflow run: [${context.runId}](${runUrl})`,
+              ...completionLines,
               "",
               ...formatLines,
               `- Landing machine facts: \`${readiness.landing.status}\`; optional machine draft: \`${readiness.landing.optional_draft_status}\`.`,
               "",
-              "Open Codex manually and authorize the review of this exact handoff. The artifact does not authorize classifier edits, Landing review import, Landing generation, or any repository mutation.",
+              `${presentation.instruction} The artifact does not authorize classifier edits, Landing review import, Landing generation, or any repository mutation.`,
               "Codex must provide every review-week unresolved deck's complete main deck and sideboard before requesting classification decisions. Unknown records outside the review week remain visible in a separate retained-corpus queue and do not change this week's review count or readiness status. Singleton status is not a reason to remain Unknown; intentional Unknown is limited to Owner-confirmed random card piles.",
               "",
               "Landing remains a separately authorized human-review gate. Machine facts are provenance-bound, optional machine prose is not required, and the human final copy may be edited, replaced, omitted, or written independently of machine conclusions.",
@@ -821,8 +855,16 @@ jobs:
                 title: `Weekly MTGO maintenance — ${week}`,
                 body: details,
               });
+              if (presentation.state === "closed") {
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: created.data.number,
+                  state: "closed",
+                });
+              }
               core.summary.addRaw(`Created weekly maintenance issue #${created.data.number}.`).addEOL();
-            } else if (existing.body?.includes(digestMarker)) {
+            } else if (existing.body?.includes(digestMarker) && existing.state === presentation.state) {
               core.summary.addRaw(`Weekly maintenance issue #${existing.number} is already current.`).addEOL();
             } else {
               await github.rest.issues.update({
@@ -831,14 +873,22 @@ jobs:
                 issue_number: existing.number,
                 title: `Weekly MTGO maintenance — ${week}`,
                 body: details,
-                state: "open",
+                state: presentation.state,
               });
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: existing.number,
-                body: `The weekly baseline changed. Review the updated handoff from [run ${context.runId}](${runUrl}) before continuing.`,
-              });
+              if (!existing.body?.includes(digestMarker)) {
+                const comments = {
+                  blocked: `The weekly diagnostics changed and are blocked. Inspect the updated handoff from [run ${context.runId}](${runUrl}).`,
+                  awaiting_owner_start: `The weekly baseline changed before review completion. Review the updated handoff from [run ${context.runId}](${runUrl}) before continuing.`,
+                  completed: `Machine diagnostics changed, but the accepted weekly review subject is unchanged. Completion remains valid after [run ${context.runId}](${runUrl}).`,
+                  revalidation_required: `The accepted weekly review subject changed materially. Revalidate the updated handoff from [run ${context.runId}](${runUrl}) before continuing.`,
+                };
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: existing.number,
+                  body: comments[readiness.status],
+                });
+              }
               core.summary.addRaw(`Updated weekly maintenance issue #${existing.number}.`).addEOL();
             }
             await core.summary.write({ overwrite: false });

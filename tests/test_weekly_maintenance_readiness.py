@@ -5,7 +5,10 @@ import jsonschema
 import pytest
 import yaml
 
-from tools.generate_weekly_maintenance_readiness import build_readiness
+from tools.generate_weekly_maintenance_readiness import (
+    _top8_review_digest,
+    build_readiness,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -77,8 +80,34 @@ def _write_format(root: Path, format_name: str, *, candidate: bool = True) -> No
         top8 / "2026-W33.json",
         {
             "classifier_digest": digest,
+            "format": format_name,
             "week": {"start": "2026-08-10", "end": "2026-08-16"},
-            "events": [{"event_id": "100"}, {"event_id": "101"}],
+            "events": [
+                {
+                    "event_id": "100",
+                    "name": "First event",
+                    "display_name": "First event",
+                    "date": "2026-08-15",
+                    "player_count": 64,
+                    "placements": [
+                        {
+                            "rank": 1,
+                            "deck_status": "available",
+                            "identity": {"parent_id": "deck-a", "subtype_id": None},
+                            "exact_deck": {"player": "Player A", "main_deck": []},
+                            "comparison": {"non_review_fact": 1},
+                        }
+                    ],
+                },
+                {
+                    "event_id": "101",
+                    "name": "Second event",
+                    "display_name": "Second event",
+                    "date": "2026-08-16",
+                    "player_count": 80,
+                    "placements": [],
+                },
+            ],
         },
     )
     reports = root / "reports" / format_name / "mtgo"
@@ -147,6 +176,50 @@ def _landing_subject(root: Path, format_name: str, week: str) -> dict:
     }
 
 
+def _write_completion(root: Path) -> None:
+    landing_digests = {
+        "standard": "3" * 64,
+        "modern": "4" * 64,
+    }
+    formats = {}
+    for format_name in ("standard", "modern"):
+        _write_json(
+            root
+            / "stats"
+            / format_name
+            / "mtgo"
+            / "landing"
+            / "features"
+            / "2026-W33.json",
+            {"content_digest": landing_digests[format_name]},
+        )
+        formats[format_name] = {
+            "top8_review_digest": _top8_review_digest(
+                root, format_name, "2026-W33"
+            ),
+            "landing_content_digest": landing_digests[format_name],
+        }
+    path = root / "configs" / "mtgo_weekly_review_completions.yaml"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": "1.0.0",
+                "records": [
+                    {
+                        "week": "2026-W33",
+                        "completed_on": "2026-08-18",
+                        "evidence": "https://example.test/issues/1",
+                        "formats": formats,
+                    }
+                ],
+            },
+            sort_keys=False,
+        ),
+        encoding="utf-8",
+    )
+
+
 def _build(
     root: Path,
     generated_at: str = "2026-08-19T09:00:00Z",
@@ -180,6 +253,12 @@ def test_readiness_separates_review_week_unknowns_from_retained_queue(tmp_path):
         document
     )
     assert document["status"] == "awaiting_owner_start"
+    assert document["completion"] == {
+        "state": "unrecorded",
+        "completed_on": None,
+        "evidence": None,
+        "mismatches": [],
+    }
     assert document["workflow"]["codex_automation_required"] is False
     assert document["landing"] == {
         "status": "ready_for_human_review",
@@ -278,6 +357,65 @@ def test_readiness_digest_ignores_run_time_but_binds_review_inputs(tmp_path):
         landing_subject_builder=changed_machine_facts,
     )
     assert fact_changed["readiness_digest"] != changed["readiness_digest"]
+
+
+def test_completed_week_survives_non_material_classifier_digest_refresh(tmp_path):
+    for format_name in ("standard", "modern"):
+        _write_format(tmp_path, format_name)
+    _write_intentional_unknowns(tmp_path)
+    _write_completion(tmp_path)
+
+    refreshed_digests = {"standard": "5" * 64, "modern": "6" * 64}
+    for format_name, digest in refreshed_digests.items():
+        top8_dir = tmp_path / "stats" / format_name / "mtgo" / "top8"
+        index = json.loads((top8_dir / "index.json").read_text(encoding="utf-8"))
+        index["classifier_digest"] = digest
+        _write_json(top8_dir / "index.json", index)
+        week = json.loads((top8_dir / "2026-W33.json").read_text(encoding="utf-8"))
+        week["classifier_digest"] = digest
+        _write_json(top8_dir / "2026-W33.json", week)
+        candidate_path = (
+            tmp_path
+            / "stats"
+            / format_name
+            / "mtgo"
+            / "landing"
+            / "review"
+            / "candidates_2026-W33.yaml"
+        )
+        candidate = yaml.safe_load(candidate_path.read_text(encoding="utf-8"))
+        candidate["classifier_digest"] = digest
+        candidate_path.write_text(yaml.safe_dump(candidate), encoding="utf-8")
+
+    def refreshed_subject(root: Path, format_name: str, week: str) -> dict:
+        subject = _landing_subject(root, format_name, week)
+        subject["classifier_digest"] = refreshed_digests[format_name]
+        return subject
+
+    document = _build(tmp_path, landing_subject_builder=refreshed_subject)
+
+    assert document["status"] == "completed"
+    assert document["completion"]["state"] == "verified"
+    assert document["workflow"]["next_action"] == "none"
+
+
+def test_completed_week_requires_revalidation_after_top8_subject_change(tmp_path):
+    for format_name in ("standard", "modern"):
+        _write_format(tmp_path, format_name)
+    _write_intentional_unknowns(tmp_path)
+    _write_completion(tmp_path)
+
+    path = tmp_path / "stats" / "modern" / "mtgo" / "top8" / "2026-W33.json"
+    week = json.loads(path.read_text(encoding="utf-8"))
+    week["events"][0]["placements"][0]["identity"]["parent_id"] = "deck-b"
+    _write_json(path, week)
+
+    document = _build(tmp_path)
+
+    assert document["status"] == "revalidation_required"
+    assert document["completion"]["state"] == "stale"
+    assert document["completion"]["mismatches"] == ["modern Top 8 review subject"]
+    assert document["workflow"]["next_action"] == "owner_revalidation_required"
 
 
 def test_missing_landing_screening_candidate_is_reported_as_a_blocker(tmp_path):

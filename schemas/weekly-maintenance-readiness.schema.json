@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/weekly-maintenance-readiness.schema.json",
   "title": "Private weekly MTGO maintenance readiness handoff",
-  "x-schema-version": "1.4.0",
+  "x-schema-version": "1.5.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,15 +16,16 @@
     "week",
     "formats",
     "landing",
+    "completion",
     "workflow"
   ],
   "properties": {
-    "schema_version": {"const": "1.4.0"},
+    "schema_version": {"const": "1.5.0"},
     "document_type": {"const": "weekly_maintenance_readiness"},
     "review_id": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}@[a-f0-9]{12}$"},
     "readiness_digest": {"$ref": "#/$defs/sha256"},
     "generated_at": {"type": "string", "format": "date-time"},
-    "status": {"enum": ["awaiting_owner_start", "blocked"]},
+    "status": {"enum": ["awaiting_owner_start", "blocked", "completed", "revalidation_required"]},
     "production": {
       "type": "object",
       "additionalProperties": false,
@@ -74,12 +75,53 @@
         }
       ]
     },
+    "completion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "completed_on", "evidence", "mismatches"],
+      "properties": {
+        "state": {"enum": ["unrecorded", "verified", "stale"]},
+        "completed_on": {"type": ["string", "null"], "format": "date"},
+        "evidence": {"type": ["string", "null"], "minLength": 1},
+        "mismatches": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "unrecorded"}}},
+          "then": {
+            "properties": {
+              "completed_on": {"type": "null"},
+              "evidence": {"type": "null"},
+              "mismatches": {"maxItems": 0}
+            }
+          },
+          "else": {
+            "properties": {
+              "completed_on": {"type": "string", "format": "date"},
+              "evidence": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"state": {"const": "verified"}}},
+          "then": {"properties": {"mismatches": {"maxItems": 0}}}
+        },
+        {
+          "if": {"properties": {"state": {"const": "stale"}}},
+          "then": {"properties": {"mismatches": {"minItems": 1}}}
+        }
+      ]
+    },
     "workflow": {
       "type": "object",
       "additionalProperties": false,
       "required": ["next_action", "codex_automation_required", "repository_mutation_authorized"],
       "properties": {
-        "next_action": {"enum": ["owner_start_required", "resolve_blocker"]},
+        "next_action": {"enum": ["owner_start_required", "owner_revalidation_required", "resolve_blocker", "none"]},
         "codex_automation_required": {"const": false},
         "repository_mutation_authorized": {"const": false}
       }
