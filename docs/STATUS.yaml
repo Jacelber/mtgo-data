@@ -4,13 +4,13 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/landing-mobile-feature-scroll-hotfix"
+  current_working_branch: "codex/phase13-design"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
   purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-08-26"
+  last_updated: "2026-08-27"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   authoritative_for:
@@ -22,39 +22,46 @@ status_document:
   history_policy: "Completed detail belongs in docs/history, audits, decisions, pull requests, and Git history; never use it to authorize current work."
 
 current_phase:
-  id: 12
-  name: "Front-end productization, editorial landing, and visual system"
-  status: "completed"
-  completed_on: "2026-08-25"
-  objective: "Productize the MTGO and Tabletop front ends and complete the approved Landing migration without changing statistical meaning or product separation."
+  id: 13
+  name: "Multi-event raw-count matchup aggregation"
+  status: "design_accepted_implementation_not_authorized"
+  started_on: "2026-08-27"
+  objective: "Design separately gated raw-count aggregation for compatible Tabletop events without merging overview statistics or enabling an unapproved event."
   production_changes_allowed: false
-  next_phase_id: 13
+  implementation_authorized: false
+  next_phase_id: 14
   next_phase_authorized: false
 
 current_task:
-  id: "LANDING-MOBILE-FEATURE-SCROLL-HOTFIX"
-  name: "Repair Landing feature-link navigation and mobile scrolling"
+  id: "PHASE-13-DESIGN"
+  name: "Design the bounded Phase 13 multi-event matchup implementation"
   status: "owner_accepted_completion_authorized"
-  artifact_impact: "user_visible_ui"
-  base_commit: "f1edcabb5663c2021f2310fa77ba47f8debcf224"
-  branch: "codex/landing-mobile-feature-scroll-hotfix"
-  objective: "Keep reviewed Landing feature links inside the current application document so mobile browsers do not race native page scroll restoration against the post-render feature reveal."
+  authorized_on: "2026-08-27"
+  completed_on: "2026-08-27"
+  artifact_impact: "internal_diagnostics"
+  base_commit: "6cda56e23281b60b36e383943ba70d00fdce1e06"
+  branch: "codex/phase13-design"
+  objective: "Freeze the Phase 13 architecture, implementation task sequence, first bounded task contract, and final Owner-link-gated non-public real-event validation."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "assets/js/phase8/app-mtgo.js"
-    - "assets/js/phase8/app.js"
+    - "docs/audits/PHASE-13-DESIGN.md"
+    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-    - "tests/js/phase8-landing.test.js"
+  planned_new_paths:
+    - "docs/audits/PHASE-13-DESIGN.md"
   prohibited_changes:
-    - "Do not change Landing editorial content, classifier rules, public statistical data, Schemas, public paths, workflow behavior, or product scope."
-    - "Do not dispatch production or begin Phase 13 without separate Owner authorization."
-  stop_point: "Update the accepted PR subject with this authorization record, pass required checks, merge PR #283, verify the exact merged master and merge-triggered Pages deployment, and stop without production dispatch or another task."
+    - "Do not change code, tests, fixtures, Schemas, configs, classifier rules, raw or generated data, catalogs, front-end assets, public paths, or workflows."
+    - "Do not fetch a real event, create or use an HMAC key, dispatch production, mutate Issues, or begin P13-01."
+    - "The future Owner-supplied test event must not enter the production whitelist, public catalogs, Pages artifact, or front end."
+  stop_point: "Commit the accepted three-document subject, publish one Ready PR, pass required checks, merge, verify the exact merged master, and stop without fetching a real event, dispatching production, or beginning P13-01."
 
 current_repository_state:
+  landing_mobile_hotfix_merge_commit: "6cda56e23281b60b36e383943ba70d00fdce1e06"
+  landing_mobile_hotfix_note: "LANDING-MOBILE-FEATURE-SCROLL-HOTFIX merged through PR #283; master validation run 32981803451 and Pages run 32981803486 succeeded."
   weekly_readiness_completion_merge_commit: "f1edcabb5663c2021f2310fa77ba47f8debcf224"
   weekly_readiness_note: "WEEKLY-READINESS-COMPLETION-STATE-W34 merged through PR #282; master validation run 32976195638 succeeded and Issue #257 was restored to generated completed state and closed."
   classifier_r6_merge_commit: "92edbccd34970ce173771b4578655eadda417198"
@@ -69,18 +76,23 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "PHASE-13-DESIGN"
+  - id: "P13-01"
     status: "planned_not_authorized"
-    note: "Define the first bounded Phase 13 raw-count matchup aggregation task before implementation."
+    note: "Implement the pure Python raw-count reference aggregator with synthetic tests only; the bounded contract is proposed in docs/audits/PHASE-13-DESIGN.md."
+  - id: "P13-06"
+    status: "planned_not_authorized"
+    note: "After all synthetic implementation tasks, stop for the Owner to supply one exact Melee link for non-public real-event validation."
 
 next_approved_task:
   id: null
   name: null
   status: "not_authorized"
   local_execution_authorized: false
-  note: "No task after LANDING-MOBILE-FEATURE-SCROLL-HOTFIX is authorized. Phase 13 remains separately gated."
+  note: "No implementation or completion action after PHASE-13-DESIGN is authorized. P13-01 requires separate Owner authorization after design acceptance."
 
 prohibited_next_actions:
-  - "Do not begin Phase 13 or another task without separate explicit Owner authorization recorded in the live status."
-  - "Do not change statistical meaning, merge MTGO and Tabletop results, alter product scope, dispatch production, or mutate Issues."
+  - "Do not begin P13-01, another Phase 13 task, or Phase 14 without separate explicit Owner authorization recorded in the live status."
+  - "Do not fetch or retain a real Melee test event before the Owner supplies its exact link and separately authorizes that exact P13-06 test."
+  - "Do not add the future test event to the production whitelist, public catalogs, Pages artifact, or front end."
+  - "Do not change statistical meaning, merge MTGO and Tabletop results, dispatch production, or mutate Issues."
   - "Do not develop directly on master or overwrite unexplained local changes."
