@@ -5844,3 +5844,71 @@ changes no classifier rule, classification output, source data, statistic,
 public Landing document, UI, public path, production schedule, or event
 `434455` bytes. Commit, remote publication, merge, and production remain
 separate gates after local Owner acceptance.
+
+---
+
+# DEC-129 - Correct reviewed outside-Top-8 classifier boundaries
+
+Status: `Accepted; same-task completion authorized`
+
+## Context
+
+The Owner identified four classification issues outside the reviewed Top 8.
+One non-red Chant Control deck with four main-deck `Fatal Push` was selected as
+Azorius. Four full-Tron narca decks without `Eldrazi Temple` were selected as
+Mono-Green Eldrazi Tron, including one white-green `Bilbo's Gambit` build. One
+Standard Jackal deck with `Brightglass Gearhulk` was selected as Selesnya
+Offense. Two reported pure-blue Erayo decks already select the independent
+`mono-blue-erayo` parent correctly.
+
+The retained Modern corpus contains 327 selected Eldrazi Tron decks. Exactly
+323 play four main-deck `Eldrazi Temple` and four copies of each Urza land; the
+other four play no Temple. `Eldrazi Temple`, rather than the mere presence of
+an Eldrazi spell, is therefore the accepted boundary between Eldrazi Tron and
+ordinary Tron.
+
+## Decision
+
+Keep `eldrazi-tron` as an independent parent. Add four main-deck
+`Eldrazi Temple` and four `Urza's Power Plant` requirements to every existing
+Eldrazi Tron rule, preserving their other signatures and subtypes.
+
+Add parent `tron` with two maintained subtypes:
+
+- `mono-green`, English `Mono-Green Tron`, Chinese `纯绿塔脉炉`, requires the
+  complete Urza-land set, zero main-deck Temple, a Forest, at least two
+  `Zimone's Experiment`, and no non-green main-deck mana source;
+- `selesnya`, English `Selesnya Tron`, Chinese `白绿塔脉炉`, requires the
+  complete Urza-land set, zero main-deck Temple, Forest, Plains, and at least
+  three each of `Sowing Mycospawn`, `Bilbo's Gambit`, and
+  `Talisman of Unity`.
+
+Add `chant-control/esper` at priority `305950`, requiring at least three
+main-deck `Orim's Chant`, a black spell, and no red spell. Make the lower
+Azorius rule explicitly exclude black spells. Its approved display is English
+`Esper Chant Control` and Chinese `艾斯波吟颂`.
+
+Add the independent Standard parent `bant-jackal` at priority `31100`, above
+Simic Jackal and Selesnya Offense. Its rule requires at least three main-deck
+`Jackal, Genius Geneticist`, four `Llanowar Elves`, two
+`Brightglass Gearhulk`, and one semantic main-deck white source. Its approved
+display is English `Bant Jackal` and Chinese `班特胡狼`.
+
+Do not modify `erayo`, `mono-blue-erayo`, or `mono-blue-tron`. Do not place
+ordinary Tron beneath Eldrazi Tron, and do not generate production-derived
+statistics or Top 8 documents during local implementation.
+
+## Consequences
+
+Across 13,020 retained Standard and Modern decks, exactly six selected results
+change: one Azorius Chant becomes Esper Chant Control, three no-Temple Eldrazi
+Tron decks become Mono-Green Tron, one no-Temple white-green build becomes
+Selesnya Tron, and one Selesnya Offense deck becomes Bant Jackal. Both reviewed
+pure-blue Erayo decks remain `mono-blue-erayo`; no Unknown, conflict, or invalid
+result is introduced.
+
+The classifier source and later classification-derived public JSON will
+change, but statistical formulas, source events, product separation, workflows,
+public paths, and front-end source do not. Commit, remote publication, merge,
+production generation, refreshed weekly evidence, and Phase 13 remain separate
+gates after local Owner acceptance.

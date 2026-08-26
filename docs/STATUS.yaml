@@ -4,13 +4,13 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: null
-  working_branch_status: "no_active_authorized_branch"
+  current_working_branch: "codex/classifier-r6-outside-top8-corrections"
+  working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
   purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-08-25"
+  last_updated: "2026-08-26"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   authoritative_for:
@@ -32,15 +32,15 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: null
-  name: "No active task"
-  status: "not_authorized"
+  id: "CLASSIFIER-R6-OUTSIDE-TOP8-CORRECTIONS"
+  name: "Correct reviewed outside-Top-8 classifier boundaries"
+  status: "accepted_completion_in_progress"
   authorization:
-    local_implementation: false
-    commit: false
-    remote_publication: false
-    merge: false
-  stop_point: "Phase 12 is complete. Wait for an explicit Owner-approved Phase 13 task contract; do not infer authorization from the completed phase."
+    local_implementation: true
+    commit: true
+    remote_publication: true
+    merge: true
+  stop_point: "Complete the unchanged accepted CLASSIFIER-R6 task through local commit, one Ready PR, required CI, and merge. Do not dispatch production, refresh weekly evidence, begin Phase 13, or start another task."
 
 current_repository_state:
   phase_12_product_completion_commit: "0d70257f86c36630b167cf541e9d7d966fac2f72"
@@ -62,7 +62,7 @@ next_approved_task:
   name: null
   status: "not_authorized"
   local_execution_authorized: false
-  note: "No Phase 13 task is authorized. The Owner must first approve a concrete task contract."
+  note: "No task after CLASSIFIER-R6 is authorized. Phase 13 remains separately gated."
 
 prohibited_next_actions:
   - "Do not begin Phase 13 or another task without separate explicit Owner authorization recorded in the live status."

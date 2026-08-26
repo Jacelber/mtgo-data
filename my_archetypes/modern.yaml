@@ -1932,7 +1932,13 @@ archetypes:
       - card: Urza's Mine
         zone: main
         min_count: 4
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 4
       - card: Urza's Tower
+        zone: main
+        min_count: 4
+      - card: Eldrazi Temple
         zone: main
         min_count: 4
       - card: Tezzeret, Cruel Captain
@@ -1946,7 +1952,13 @@ archetypes:
       - card: Urza's Mine
         zone: main
         min_count: 4
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 4
       - card: Urza's Tower
+        zone: main
+        min_count: 4
+      - card: Eldrazi Temple
         zone: main
         min_count: 4
       - card: Ugin, Eye of the Storms
@@ -1975,7 +1987,13 @@ archetypes:
       - card: Urza's Mine
         zone: main
         min_count: 4
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 4
       - card: Urza's Tower
+        zone: main
+        min_count: 4
+      - card: Eldrazi Temple
         zone: main
         min_count: 4
       - card: Ugin, Eye of the Storms
@@ -1998,7 +2016,13 @@ archetypes:
       - card: Urza's Mine
         zone: main
         min_count: 4
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 4
       - card: Urza's Tower
+        zone: main
+        min_count: 4
+      - card: Eldrazi Temple
         zone: main
         min_count: 4
       - card: Expedition Map
@@ -2013,6 +2037,82 @@ archetypes:
       - card: Tezzeret, Cruel Captain
         zone: main
         exact_count: 0
+- id: tron
+  name: Tron
+  priority: 648100
+  subtypes:
+  - id: mono-green
+    name: Mono-Green
+  - id: selesnya
+    name: Selesnya
+  rules:
+  - id: tron-mono-green-zimone
+    priority: 648100
+    subtype_id: mono-green
+    conditions:
+      all:
+      - card: Urza's Mine
+        zone: main
+        min_count: 4
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 4
+      - card: Urza's Tower
+        zone: main
+        min_count: 4
+      - card: Eldrazi Temple
+        zone: main
+        exact_count: 0
+      - card: Forest
+        zone: main
+        min_count: 1
+      - card: Zimone's Experiment
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+  - id: tron-selesnya-bilbos-gambit
+    priority: 648090
+    subtype_id: selesnya
+    conditions:
+      all:
+      - card: Urza's Mine
+        zone: main
+        min_count: 4
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 4
+      - card: Urza's Tower
+        zone: main
+        min_count: 4
+      - card: Eldrazi Temple
+        zone: main
+        exact_count: 0
+      - card: Forest
+        zone: main
+        min_count: 1
+      - card: Plains
+        zone: main
+        min_count: 1
+      - card: Sowing Mycospawn
+        zone: main
+        min_count: 3
+      - card: Bilbo's Gambit
+        zone: main
+        min_count: 3
+      - card: Talisman of Unity
+        zone: main
+        min_count: 3
 - id: mono-black-eldrazi
   name: Mono-Black Eldrazi
   priority: 317000
@@ -2617,6 +2717,8 @@ archetypes:
   subtypes:
   - id: azorius
     name: Azorius
+  - id: esper
+    name: Esper
   - id: jeskai
     name: Jeskai
   rules:
@@ -2631,6 +2733,20 @@ archetypes:
       - card: __classifier-semantic-any-red-spell__
         zone: any
         min_count: 1
+  - id: chant-control-esper
+    priority: 305950
+    subtype_id: esper
+    conditions:
+      all:
+      - card: Orim's Chant
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-any-black-spell__
+        zone: any
+        min_count: 1
+      - card: __classifier-semantic-any-red-spell__
+        zone: any
+        exact_count: 0
   - id: chant-control-azorius
     priority: 305900
     subtype_id: azorius
@@ -2640,6 +2756,9 @@ archetypes:
         zone: main
         min_count: 3
       - card: __classifier-semantic-any-red-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-black-spell__
         zone: any
         exact_count: 0
 - id: jeskai-control
