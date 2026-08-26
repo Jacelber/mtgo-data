@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-readiness-completion-state-w34-20260826"
-  working_branch_status: "owner_accepted_completion_authorized"
+  current_working_branch: "codex/landing-mobile-feature-scroll-hotfix"
+  working_branch_status: "owner_accepted_remote_publication_authorized"
   status: "active"
 
 status_document:
@@ -32,36 +32,33 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-READINESS-COMPLETION-STATE-W34"
-  name: "Preserve completed weekly review state across non-material production refreshes"
-  status: "owner_accepted_completion_authorized"
+  id: "LANDING-MOBILE-FEATURE-SCROLL-HOTFIX"
+  name: "Repair Landing feature-link navigation and mobile scrolling"
+  status: "owner_accepted_remote_publication_authorized"
+  artifact_impact: "user_visible_ui"
+  base_commit: "f1edcabb5663c2021f2310fa77ba47f8debcf224"
+  branch: "codex/landing-mobile-feature-scroll-hotfix"
+  objective: "Keep reviewed Landing feature links inside the current application document so mobile browsers do not race native page scroll restoration against the post-render feature reveal."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
-    merge: true
+    merge: false
   allowed_paths:
-    - ".github/workflows/update.yml"
-    - "configs/mtgo_weekly_review_completions.yaml"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DECISIONS.md"
+    - "assets/js/phase8/app-mtgo.js"
+    - "assets/js/phase8/app.js"
     - "docs/STATUS.yaml"
-    - "docs/WEEKLY_MAINTENANCE.md"
-    - "schemas/weekly-maintenance-readiness.schema.json"
-    - "tests/test_ci_workflow.py"
-    - "tests/test_weekly_maintenance_readiness.py"
-    - "tools/generate_weekly_maintenance_readiness.py"
-  planned_new_paths:
-    - "configs/mtgo_weekly_review_completions.yaml"
+    - "tests/js/phase8-landing.test.js"
   prohibited_changes:
-    - "Do not change classifier rules, public statistical data, Landing editorial content, UI, public paths, workflow schedule, or production authorization."
-    - "Do not dispatch production or mutate any Issue other than the W34 maintenance Issue #257."
-  stop_point: "Commit the accepted subject, publish one Ready PR, pass required checks, merge, verify the exact merged master, correct Issue #257 to the generated completed state, and stop without dispatching production or beginning another task."
+    - "Do not change Landing editorial content, classifier rules, public statistical data, Schemas, public paths, workflow behavior, or product scope."
+    - "Do not merge, deploy Pages, dispatch production, or begin Phase 13 without separate Owner authorization."
+  stop_point: "Commit the accepted four-file subject, publish one Ready PR, verify its required checks, and stop pending separate merge authorization."
 
 current_repository_state:
+  weekly_readiness_completion_merge_commit: "f1edcabb5663c2021f2310fa77ba47f8debcf224"
+  weekly_readiness_note: "WEEKLY-READINESS-COMPLETION-STATE-W34 merged through PR #282; master validation run 32976195638 succeeded and Issue #257 was restored to generated completed state and closed."
   classifier_r6_merge_commit: "92edbccd34970ce173771b4578655eadda417198"
   classifier_r6_note: "CLASSIFIER-R6 merged through PR #280; master validation run 32969296972 succeeded and production publication 4fa5ae919922c6faa2d0b422dd236a42d79bfdc7 refreshed the derived data."
-  weekly_readiness_note: "W34 human review and Landing publication were already completed, but production run 32970066484 reset Issue #257 to awaiting_owner_start because the readiness generator has no persisted completion state and the Issue updater always reopens a changed digest."
   phase_12_product_completion_commit: "0d70257f86c36630b167cf541e9d7d966fac2f72"
   phase_12_completion_note: "P12-16 merged through PR #276; merge validation run 32855373950 and Pages run 32855373976 succeeded."
   public_entries:
@@ -81,9 +78,10 @@ next_approved_task:
   name: null
   status: "not_authorized"
   local_execution_authorized: false
-  note: "No task after WEEKLY-READINESS-COMPLETION-STATE-W34 is authorized. Phase 13 remains separately gated."
+  note: "No task after LANDING-MOBILE-FEATURE-SCROLL-HOTFIX is authorized. Phase 13 remains separately gated."
 
 prohibited_next_actions:
+  - "Do not merge or deploy LANDING-MOBILE-FEATURE-SCROLL-HOTFIX without separate explicit Owner authorization."
   - "Do not begin Phase 13 or another task without separate explicit Owner authorization recorded in the live status."
-  - "Do not change statistical meaning, merge MTGO and Tabletop results, alter product scope, dispatch production, or mutate any Issue other than the authorized W34 correction on Issue #257."
+  - "Do not change statistical meaning, merge MTGO and Tabletop results, alter product scope, dispatch production, or mutate Issues."
   - "Do not develop directly on master or overwrite unexplained local changes."
