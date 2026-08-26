@@ -67,8 +67,12 @@ function landingTargetUrl(parameters) {
   return `${target.pathname}${target.search}`;
 }
 
+function isLandingFeatureDestination(value) {
+  return /^deck:[0-9a-f]{20}$/.test(value || "");
+}
+
 function landingDeckUrl(link, weekId) {
-  if (/^deck:[0-9a-f]{20}$/.test(link.token || "")) {
+  if (isLandingFeatureDestination(link.token)) {
     return landingTargetUrl({
       format: state.format,
       product: "mtgo-landing",
@@ -96,7 +100,10 @@ function landingSummaryText(item, weekId) {
   return text.split(pattern).map(part => {
     const link = links.get(part);
     if (!link) return escapeHtml(part);
-    return `<a class="landing-deck-link" href="${escapeHtml(landingDeckUrl(link, weekId))}">${escapeHtml(localizedValue(link.label))}</a>`;
+    const featureAttributes = isLandingFeatureDestination(link.token)
+      ? ` data-landing-feature-destination="${escapeHtml(link.token)}" data-landing-feature-week="${escapeHtml(`${weekId}.json`)}"`
+      : "";
+    return `<a class="landing-deck-link" href="${escapeHtml(landingDeckUrl(link, weekId))}"${featureAttributes}>${escapeHtml(localizedValue(link.label))}</a>`;
   }).join("");
 }
 

@@ -420,6 +420,32 @@ async function toggleDetailIdentity(identity) {
 document.addEventListener("click", async event => {
   const compositionButton = event.target.closest("button[data-composition-identity]");
   if (!compositionButton) clearTouchedComposition();
+  const landingFeatureLink = event.target.closest("a[data-landing-feature-destination]");
+  if (
+    landingFeatureLink
+    && !event.defaultPrevented
+    && event.button === 0
+    && !event.metaKey
+    && !event.ctrlKey
+    && !event.shiftKey
+    && !event.altKey
+  ) {
+    event.preventDefault();
+    discardPendingRefresh();
+    const destination = landingFeatureLink.dataset.landingFeatureDestination;
+    state.landingFeatureWeekFile = landingFeatureLink.dataset.landingFeatureWeek;
+    state.landingFeatureOpen.clear();
+    state.landingFeatureOpen.add(destination);
+    state.landingFeatureDestination = destination;
+    state.landingSection = "features";
+    queueUrlWrite();
+    await renderViewWithFocus(
+      `[data-landing-feature-toggle="${CSS.escape(destination)}"]`,
+      `[data-feature-destination="${CSS.escape(destination)}"]`,
+      { revealAlignment: "start" }
+    );
+    return;
+  }
   const button = event.target.closest("button");
   if (!button) {
     const landingRow = event.target.closest(".landing-environment-row[data-landing-row]");

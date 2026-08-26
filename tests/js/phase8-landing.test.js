@@ -76,6 +76,8 @@ test("weekly summary replaces only the exact deck token with its localized link"
   assert.match(html, /product=mtgo-landing/);
   assert.match(html, /section=features/);
   assert.match(html, /feature=deck%3Aaaaaaaaaaaaaaaaaaaaa/);
+  assert.match(html, /data-landing-feature-destination="deck:aaaaaaaaaaaaaaaaaaaa"/);
+  assert.match(html, /data-landing-feature-week="2026-W33\.json"/);
   assert.doesNotMatch(html, />前文/);
 });
 
@@ -92,6 +94,7 @@ test("a legacy noncanonical token retains the exact Top 8 fallback", () => {
 
   assert.match(html, /product=mtgo-top8/);
   assert.match(html, /detail=42%3A3/);
+  assert.doesNotMatch(html, /data-landing-feature-destination/);
 });
 
 test("environment direction uses the accepted five-point movement boundary", () => {
