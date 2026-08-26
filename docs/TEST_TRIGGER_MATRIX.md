@@ -11,22 +11,27 @@ an unbounded suite.
 
 | File or node | Trigger | Purpose | Minimum subject |
 | --- | --- | --- | --- |
-| `tests/test_cli_smoke.py::test_mtgo_cli_smoke` | A post-fetch MTGO generation subject is new and generation will run | Prove the installed MTGO parser, format gate, and dispatch path can run offline before generating | One enabled format and one stubbed command |
-| `tests/test_cli_smoke.py::test_melee_cli_smoke` | Melee production before live collection | Prove the Melee command accepts one verified event and remains a zero-write dry run | One registry event and one fake response plan |
-| `tests/test_cli_smoke.py::test_catalog_cli_smoke` | Either production workflow has a new generation subject and will generate the catalog | Prove one minimal format can produce a consumer catalog | One temporary format with no available products |
+| `tests/test_ci_master_admission.py` | `ci_master_admission.py`, PR admission wiring, production-evidence admission, or this test changes | Prove exact changed paths select named checks, unknown evidence stops, exact merges remain bound, and production evidence fails closed | Exact admission nodes for the changed decision |
+| `tests/test_ci_workflow.py` | A workflow file or this workflow-contract test changes | Prove permissions, dependencies, trigger routing, and publication gates remain bounded | Exact workflow nodes for the changed job chain |
+| `tests/test_cli_smoke.py` | MTGO, Melee, Landing-review, or catalog CLI dispatch/package wiring changes; the Melee smoke also runs immediately before live collection | Prove only the changed command parser and dispatch path can run offline | The named CLI node, never the whole file by default |
+| `tests/test_documentation_history.py` | `docs/STATUS.yaml`, live `docs/ROADMAP.md` history pointers, their currently named targets, or this test changes | Enforce bounded live-status fields and require live history pointers to resolve, without asserting completed-phase prose | The status node or pointer node |
+| `tests/test_generated_consumer_contracts.py` | An MTGO candidate is generated, before packaging, or the cross-file consumer contract changes | Prove the current candidate is internally consumable without fixed historical-week facts | Current candidate documents only |
+| `tests/test_github_publication_preflight.py` | `tools/github_publication_preflight.ps1` or its focused mocked contract changes | Prove authentication, permission, scope, PR declaration, and transport failures remain fail closed | Changed preflight states only |
 | `tests/test_melee_privacy_validation.py` | Melee production before live collection, or a privacy boundary change | Prove the smallest minimized resource is accepted and a prohibited persisted key is rejected independently of Schema permissiveness | One valid tournament document and one invalid key |
-| `tests/test_generated_consumer_contracts.py` | MTGO candidate generated, before packaging | Prove the newly generated candidate remains internally consumable | Current candidate documents only |
+| `tests/test_mtgo_fetch_recovery.py` | MTGO fetch retry classification, month traversal, transient exit code, or the matching recovery steps in `update.yml` change | Prove only explicitly transient source failures retry and stop subsequent collection safely | Synthetic response and command nodes only |
+| `tests/test_mtgo_landing_editorial.py` | Landing workbook parsing/import, bilingual stages, review binding, or editorial schemas change | Prove blank-cell parsing, bilingual completeness, stale-binding rejection, deterministic import, and hash pinning with a generated minimal workbook | Generated one-scope OOXML carrier |
+| `tests/test_mtgo_landing_screening.py` | Landing screening policy or representative selection changes | Prove exact Top 8 gating, thresholds, continuity, reason merging, build comparison, and later-date ties | Synthetic selection subjects only |
+| `tests/test_mtgo_landing_screening_provenance.py` | Landing candidate provenance, classifier/selection digest binding, or review-preservation behavior changes | Prove stale candidates regenerate and reviewed subjects remain fail closed | Synthetic provenance subjects only |
+| `tests/test_mtgo_landing.py` | Landing facts, reviewed-feature binding, latest-only production admission, or Pages private-file exclusions change | Prove generic no-event output, review binding, exact deck links, and public/private path separation | Synthetic Landing boundaries plus current-candidate cross-file binding |
+| `tests/test_mtgo_metadata.py` | MTGO metadata generation, hierarchy ownership, Landing/Pickup metadata routing, or this test changes | Prove metadata points to Landing and keeps hierarchy counts owned by the generated hierarchy | One synthetic metadata subject |
 | `tests/test_mtgo_top8_restatement.py` | Top 8 generator, classifier digest, lifecycle contract, or Top 8 Schema changes | Prove retained source facts stay fixed while current-classifier identities restate deterministically, including explicit Unknown | Three synthetic source/classifier cases |
-| `tests/test_mtgo_landing_screening.py` and `tests/test_mtgo_landing_screening_provenance.py` | Landing screening policy, representative selection, or candidate provenance changes | Prove exact Top 8 gating, route thresholds, continuity, reason merging, subtype-or-parent build comparison, later-date ties, and fail-closed provenance | Synthetic selection and provenance subjects only |
-| `tests/test_mtgo_landing.py` | Landing facts, reviewed-feature binding, latest-only production admission, or Pages private-file exclusions change | Prove valid no-event output, unrestricted human fields, stale-review preservation, exact four-card binding, and public/private path separation | Synthetic Landing and publication-boundary subjects only |
-| `tests/test_documentation_history.py` | A live governance document changes | Enforce only the bounded live-status structure and history pointer | `docs/STATUS.yaml` only |
-| `tests/test_ci_master_admission.py` and `tests/test_ci_workflow.py` | CI admission or workflow control changes | Prove known paths route minimally, unknown evidence stops, and PR CI contains no heavy fallback | Admission logic and workflow text only |
+| `tests/test_validate_repository_modes.py` | `validate_repository.py`, changed-scope Schema selection, `validate_schemas.py`, or this test changes | Prove changed-mode parsing and Schema validation exclude unrelated documents while full Schema validation retains the complete manifest | Synthetic changed and unrelated files |
 | `tests/test_weekly_maintenance_readiness.py` | Weekly readiness generator or private readiness Schema changes | Prove exact-week Unknown binding, separately retained full-corpus Unknown evidence and decklists, strict intentional-random separation, Landing-screening availability, deterministic digesting, and fail-closed cross-format lifecycle | Synthetic Standard and Modern handoff only |
 
 The public data/output rows remain bounded to their named subjects. The
 documentation and CI rows are control-plane checks. The Landing-screening and weekly-
-readiness rows are private review and handoff contracts; neither runs in a
-production baseline.
+readiness rows are private review and handoff contracts; neither runs in
+production candidate validation.
 
 ## Non-pytest validators and UI checks
 
@@ -34,7 +39,11 @@ production baseline.
 | --- | --- | --- | --- |
 | Any targeted PR | `python -B validate_repository.py --changed-from <base-sha>` | Parse changed maintained files and run only directly coupled repository-reference contracts | Once on the final PR head |
 | Maintained Python changes | Ruff and mypy commands in `ci.yml` | Catch syntax/import and maintained type-contract failures | Once on the final PR head |
-| Rules or public-data contract changes | `validate_rules.py` and `validate_schemas.py` | Reject invalid rules or public JSON structure | Once on the final PR head |
+| One format's rule file, shared rule validator, or direct rule contract changes | `validate_rules.py` for only the affected format, or both formats for a shared validator change | Reject invalid classifier rules without validating the unrelated format | Once on the final PR head |
+| A mapped ordinary public JSON document changes | `python -B validate_schemas.py --changed-from <base-sha>` | Validate only changed documents covered by the current manifest | Once on the final PR head |
+| A Schema, Schema manifest, or Schema validator changes | `python -B validate_schemas.py` | Prove the complete declared public contract migration | Once on the final PR head |
+| Archetype localization/name resolver or its public contract changes | `node --test tests/js/phase8-archetype-names.test.js` | Preserve stable-ID bilingual lookup and malformed-catalog rejection | Once on the final visible tree before Owner review |
+| Landing controller archive selection or Pickup-retirement routing changes | `node --test tests/js/phase8-landing-controller.test.js` | Exclude empty feature weeks and avoid retired Pickup loading using synthetic weeks | Once on the final visible tree before Owner review |
 | Matchup model, matchup labels, or matchup i18n logic changes | `node --test tests/js/phase8-matchup-model.test.js` | Catch a broken matchup calculation or label contract before Owner browser review | Once on the final visible tree before Owner review |
 | Browser request, cache, retry, refresh, runtime-loading, or retained-Landing companion-period logic changes | `node --test tests/js/phase8-runtime.test.js` | Catch a broken request lifecycle and prove that a last-admitted Landing drops newer companion facts without weakening format validation | Once on the final visible tree before Owner review |
 | Landing rendering or freshness presentation changes | `node --test tests/js/phase8-landing.test.js` | Preserve reviewed Landing copy and environment facts while unmatched companion deck-count and completeness values degrade to unknown | Once on the final visible tree before Owner review |
@@ -56,8 +65,11 @@ production baseline.
 - Owner acceptance of an unchanged UI subject does not trigger another browser
   run.
 - A successful immutable candidate is not recalculated or retested downstream.
-- An unchanged generation-subject digest runs no CLI baseline, generator,
+- An unchanged generation-subject digest runs no generator,
   candidate validation, packaging, publication, or Pages job.
+- MTGO production has no pre-build CLI baseline. CLI smoke runs only for CLI
+  dispatch/package wiring changes; actual fetch, build, candidate, and
+  publication gates own production safety.
 - A governance-only, test-only, or other non-site `master` change does not
   trigger Pages.
 - Authentication preflight does not run during local development or CI unless

@@ -54,7 +54,6 @@ FILES_PER_PAGE = 100
 MAX_PULL_REQUEST_FILES = 3000
 PRODUCTION_SUCCESS_JOBS = frozenset(
     {
-        "Verify clean MTGO production baseline",
         "Fetch MTGO candidate data",
         "Build and validate MTGO candidate",
     }
@@ -69,6 +68,7 @@ class AdmissionDecision:
     pull_request: int | None = None
     workflow_run: int | None = None
     validation_class: str | None = None
+    validation_triggers: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -444,6 +444,74 @@ def _path_category(path: str) -> str | None:
     return None
 
 
+def _validation_triggers(paths: set[str]) -> tuple[str, ...]:
+    """Return narrow checks owned by the changed contracts."""
+
+    triggers: set[str] = set()
+    if paths & {
+        "docs/STATUS.yaml",
+        "docs/ROADMAP.md",
+        "docs/history/README.md",
+        "docs/history/ROADMAP-PHASES-0-11.md",
+        "docs/history/ROADMAP-PHASE-12-COMPLETED.md",
+        "tests/test_documentation_history.py",
+    }:
+        triggers.add("docs-history")
+
+    shared_rule_paths = {
+        "src/mtgmeta/rules.py",
+        "validate_rules.py",
+        "schemas/classification-rules.schema.json",
+    }
+    if paths & (shared_rule_paths | {"my_archetypes/standard.yaml", "src/mtgmeta/legacy_rules.py"}):
+        triggers.add("rules-standard")
+    if paths & (shared_rule_paths | {"my_archetypes/modern.yaml"}):
+        triggers.add("rules-modern")
+
+    if any(path.startswith("schemas/") for path in paths) or "validate_schemas.py" in paths:
+        triggers.add("schema-contract")
+    elif any(
+        path.endswith(".json") and path.startswith(("reports/", "stats/"))
+        for path in paths
+    ):
+        triggers.add("schema-documents")
+
+    if paths & {
+        "my_archetypes/standard.yaml",
+        "my_archetypes/modern.yaml",
+        "schemas/mtgo-top8-comparison-bases.schema.json",
+        "schemas/mtgo-top8-index.schema.json",
+        "schemas/mtgo-top8-week.schema.json",
+        "src/mtgmeta/mtgo/top8.py",
+        "src/mtgmeta/rules.py",
+        "tests/test_mtgo_top8_restatement.py",
+    }:
+        triggers.add("top8-restatement")
+
+    if paths & {
+        ".github/workflows/ci.yml",
+        ".github/workflows/pages.yml",
+        ".github/workflows/update.yml",
+        "ci_master_admission.py",
+        "tests/test_ci_master_admission.py",
+    }:
+        triggers.add("ci-admission")
+    if any(path.startswith(".github/workflows/") for path in paths) or "tests/test_ci_workflow.py" in paths:
+        triggers.add("ci-workflow")
+    if paths & {
+        "tests/test_github_publication_preflight.py",
+        "tools/github_publication_preflight.ps1",
+    }:
+        triggers.add("publication-preflight")
+    if paths & {
+        "tests/test_validate_repository_modes.py",
+        "validate_repository.py",
+        "validate_schemas.py",
+    }:
+        triggers.add("repository-modes")
+    return tuple(sorted(triggers))
+
+
 def _is_user_visible_path(path: str) -> bool:
     return path == "index.html" or path.startswith(("assets/", "melee/"))
 
@@ -490,8 +558,12 @@ def _classify_pull_request_evidence(
     declarations = _parse_file_operations(body)
     used_declarations: set[FileOperation] = set()
     categories: set[str] = set()
+    changed_paths: set[str] = set()
     for item in files:
         path, operation = _validated_change(item, declarations)
+        changed_paths.add(path)
+        if operation is not None and operation.previous_path is not None:
+            changed_paths.add(operation.previous_path)
         inferred = _path_category(path)
         if operation is not None:
             if inferred is not None and inferred != operation.category:
@@ -534,6 +606,7 @@ def _classify_pull_request_evidence(
             f"file_operations:{len(used_declarations)}"
         ),
         validation_class=f"targeted:{ordered}",
+        validation_triggers=_validation_triggers(changed_paths),
     )
 
 
@@ -1106,6 +1179,7 @@ def main() -> int:
                     "base_sha": base_sha,
                     "head_sha": head_sha,
                     "validation_class": decision.validation_class,
+                    "validation_triggers": list(decision.validation_triggers),
                     "reason": decision.reason,
                 },
                 separators=(",", ":"),
@@ -1147,6 +1221,7 @@ def main() -> int:
             f"pull_request={decision.pull_request or ''}",
             f"workflow_run={decision.workflow_run or ''}",
             f"validation_class={decision.validation_class or ''}",
+            f"validation_triggers={'+'.join(decision.validation_triggers)}",
         ],
     )
     _append_lines(
@@ -1158,6 +1233,7 @@ def main() -> int:
             f"- Reason: `{decision.reason}`",
             f"- Pull request: `{decision.pull_request or 'not-applicable'}`",
             f"- Validation class: `{decision.validation_class or 'not-applicable'}`",
+            f"- Validation triggers: `{'+'.join(decision.validation_triggers) or 'none'}`",
             f"- Prior validation run: `{decision.workflow_run or 'not-applicable'}`",
             "- Ambiguous, missing, unavailable, or undeclared file-operation evidence stops for owner classification without running a catch-all suite.",
         ],

@@ -105,6 +105,36 @@ def test_known_paths_select_only_their_targeted_categories(paths, expected):
     assert decision.validation_class == expected
 
 
+@pytest.mark.parametrize(
+    ("paths", "expected"),
+    [
+        (["docs/reviews/Owner-Review.md"], ()),
+        (["docs/STATUS.yaml"], ("docs-history",)),
+        (["docs/ROADMAP.md"], ("docs-history",)),
+        (["configs/mtgo_formats.yaml"], ()),
+        (["stats/standard/mtgo/landing/review/candidates_2099-W02.yaml"], ()),
+        (["stats/standard/mtgo/meta.json"], ("schema-documents",)),
+        (["schemas/mtgo-meta.schema.json"], ("schema-contract",)),
+        (["validate_schemas.py"], ("repository-modes", "schema-contract")),
+        (
+            ["my_archetypes/standard.yaml"],
+            ("rules-standard", "top8-restatement"),
+        ),
+        (
+            ["my_archetypes/modern.yaml"],
+            ("rules-modern", "top8-restatement"),
+        ),
+        (["src/mtgmeta/mtgo/top8.py"], ("top8-restatement",)),
+    ],
+)
+def test_named_triggers_select_only_the_changed_contract(paths, expected):
+    decision = _decide_pr(
+        [{"filename": path, "status": "modified"} for path in paths]
+    )
+
+    assert decision.validation_triggers == expected
+
+
 def test_known_added_path_needs_no_operation_declaration():
     decision = _decide_pr(
         [{"filename": "docs/reviews/Owner-Review.md", "status": "added"}]
@@ -496,7 +526,6 @@ def _production_responses(pages_subject_sha=PAGES_SUBJECT_SHA):
         ]
     )
     jobs = [
-        {"name": "Verify clean MTGO production baseline", "conclusion": "success"},
         {"name": "Fetch MTGO candidate data", "conclusion": "success"},
         {"name": "Build and validate MTGO candidate", "conclusion": "success"},
         {
@@ -570,6 +599,7 @@ def test_exact_production_commit_remains_an_admitted_pages_subject():
         "parent",
         "trailer",
         "run",
+        "fetch-job",
         "build-job",
         "publish-job",
     ],
@@ -606,9 +636,11 @@ def test_stale_or_incomplete_production_evidence_stops(mutation):
             f"{PRODUCTION_RUN_ATTEMPT}/jobs?per_page=100"
         )
         job_name = (
-            "Build and validate MTGO candidate"
-            if mutation == "build-job"
-            else "Publish validated MTGO data"
+            {
+                "fetch-job": "Fetch MTGO candidate data",
+                "build-job": "Build and validate MTGO candidate",
+                "publish-job": "Publish validated MTGO data",
+            }[mutation]
         )
         job = next(
             item for item in responses[jobs_url]["jobs"] if item["name"] == job_name

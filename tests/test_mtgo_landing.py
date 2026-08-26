@@ -9,7 +9,8 @@ from jsonschema import Draft202012Validator
 from mtgmeta.mtgo import landing
 
 
-WEEK = "2026-W33"
+SYNTHETIC_WEEK = "2099-W02"
+SYNTHETIC_TODAY = date.fromisocalendar(2099, 3, 2)
 DIGEST = "a" * 64
 FACT_DIGEST = "b" * 64
 PICKUP_DIGEST = "d" * 64
@@ -40,14 +41,14 @@ def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_
     review_status, document = landing.build_document(
         tmp_path,
         "standard",
-        today=date(2026, 8, 18),
+        today=SYNTHETIC_TODAY,
     )
 
     assert review_status == "not_applicable"
     assert document["week"] == {
-        "id": WEEK,
-        "start": "2026-08-10",
-        "end": "2026-08-16",
+        "id": SYNTHETIC_WEEK,
+        "start": date.fromisocalendar(2099, 2, 1).isoformat(),
+        "end": date.fromisocalendar(2099, 2, 7).isoformat(),
     }
     assert document["state"] == "no_events"
     assert document["source_event_ids"] == []
@@ -57,7 +58,7 @@ def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_
     }
     assert document["environment"]["rows"] == []
     assert document["schema_version"] == "1.2.0"
-    assert document["weekly_summary"] == {"week": WEEK, "items": []}
+    assert document["weekly_summary"] == {"week": SYNTHETIC_WEEK, "items": []}
     assert "observations" not in document
     assert document["features"]["items"] == []
     schema = json.loads(
@@ -65,38 +66,6 @@ def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_
     )
     Draft202012Validator.check_schema(schema)
     assert list(Draft202012Validator(schema).iter_errors(document)) == []
-
-
-def test_current_landing_uses_one_private_review_without_standalone_pickup_reader():
-    assert not hasattr(landing, "_load_published_pickup")
-    review_status, document = landing.build_document(
-        ROOT,
-        "standard",
-        today=date(2026, 8, 18),
-    )
-
-    assert review_status == "current"
-    assert len(document["weekly_summary"]["items"]) == 9
-    assert len(document["features"]["items"]) == 14
-    assert all(item["headline"]["zh"] for item in document["features"]["items"])
-    assert all(item["headline"]["en"] for item in document["features"]["items"])
-
-
-def test_week_machine_fact_digest_matches_landing_review_binding():
-    _review_status, document = landing.build_document(
-        ROOT,
-        "standard",
-        today=date(2026, 8, 25),
-    )
-
-    assert document["week"]["id"] == "2026-W34"
-    assert landing.machine_fact_digest_for_week(
-        ROOT,
-        "standard",
-        "2026-W34",
-    ) == document["review_binding"]["machine_fact_digest"]
-
-
 def test_cross_field_population_mismatch_fails_closed():
     document = json.loads(
         (ROOT / "stats" / "standard" / "mtgo" / "landing" / "current.json").read_text(
@@ -192,14 +161,14 @@ def test_pages_selection_excludes_all_private_landing_review_files(tmp_path):
     for relative in (
         "stats/standard/mtgo/landing/current.json",
         "stats/standard/mtgo/landing/features/index.json",
-        "stats/standard/mtgo/landing/features/2026-W33.json",
-        "stats/standard/mtgo/pickup/2026-W33.json",
-        "stats/standard/mtgo/pickup/candidates_2026-W33.yaml",
-        "stats/standard/mtgo/pickup/base_reference_2026-W33.yaml",
+        f"stats/standard/mtgo/landing/features/{SYNTHETIC_WEEK}.json",
+        f"stats/standard/mtgo/pickup/{SYNTHETIC_WEEK}.json",
+        f"stats/standard/mtgo/pickup/candidates_{SYNTHETIC_WEEK}.yaml",
+        f"stats/standard/mtgo/pickup/base_reference_{SYNTHETIC_WEEK}.yaml",
         "stats/standard/mtgo/pickup/known_archetypes.json",
-        "stats/standard/mtgo/landing/review/candidates_2026-W33.yaml",
-        "stats/standard/mtgo/landing/review/base_reference_2026-W33.yaml",
-        "stats/standard/mtgo/landing/review/2026-W33.yaml",
+        f"stats/standard/mtgo/landing/review/candidates_{SYNTHETIC_WEEK}.yaml",
+        f"stats/standard/mtgo/landing/review/base_reference_{SYNTHETIC_WEEK}.yaml",
+        f"stats/standard/mtgo/landing/review/{SYNTHETIC_WEEK}.yaml",
         "stats/standard/mtgo/landing/review/known_archetypes.json",
     ):
         path = tmp_path / relative
@@ -221,8 +190,8 @@ def test_pages_selection_excludes_all_private_landing_review_files(tmp_path):
 
     assert "stats/standard/mtgo/landing/current.json" in selected
     assert "stats/standard/mtgo/landing/features/index.json" in selected
-    assert "stats/standard/mtgo/landing/features/2026-W33.json" in selected
-    assert "stats/standard/mtgo/pickup/2026-W33.json" in selected
+    assert f"stats/standard/mtgo/landing/features/{SYNTHETIC_WEEK}.json" in selected
+    assert f"stats/standard/mtgo/pickup/{SYNTHETIC_WEEK}.json" in selected
     assert not any("candidates_" in path for path in selected)
     assert not any("base_reference_" in path for path in selected)
     assert not any(path.endswith("known_archetypes.json") for path in selected)
@@ -240,29 +209,29 @@ def test_production_candidate_admits_latest_and_bounded_feature_archive_only():
         "stats/standard/mtgo/landing/features/index.json", formats, formats
     )
     assert _allowed_new_path(
-        "stats/standard/mtgo/landing/features/2026-W33.json", formats, formats
+        f"stats/standard/mtgo/landing/features/{SYNTHETIC_WEEK}.json", formats, formats
     )
     assert not _allowed_new_path(
-        "stats/standard/mtgo/landing/2026-W33.json", formats, formats
+        f"stats/standard/mtgo/landing/{SYNTHETIC_WEEK}.json", formats, formats
     )
     assert not _allowed_new_path(
-        "stats/standard/mtgo/landing/candidates_2026-W33.yaml", formats, formats
+        f"stats/standard/mtgo/landing/candidates_{SYNTHETIC_WEEK}.yaml", formats, formats
     )
     assert _allowed_new_path(
-        "stats/standard/mtgo/landing/review/candidates_2026-W33.yaml",
+        f"stats/standard/mtgo/landing/review/candidates_{SYNTHETIC_WEEK}.yaml",
         formats,
         formats,
     )
     assert _allowed_new_path(
-        "stats/standard/mtgo/landing/review/base_reference_2026-W33.yaml",
+        f"stats/standard/mtgo/landing/review/base_reference_{SYNTHETIC_WEEK}.yaml",
         formats,
         formats,
     )
     assert not _allowed_new_path(
-        "stats/standard/mtgo/landing/review/2026-W33.yaml", formats, formats
+        f"stats/standard/mtgo/landing/review/{SYNTHETIC_WEEK}.yaml", formats, formats
     )
     assert not _allowed_new_path(
-        "stats/standard/mtgo/landing/features/candidates_2026-W33.yaml",
+        f"stats/standard/mtgo/landing/features/candidates_{SYNTHETIC_WEEK}.yaml",
         formats,
         formats,
     )
@@ -296,26 +265,6 @@ def test_production_candidate_admits_only_public_bilingual_name_contract():
                 collection_formats,
                 product_formats,
             )
-
-
-def test_repository_pages_policy_admits_landing_and_excludes_private_review_state():
-    from build_pages_artifact import load_config, publication_paths
-
-    config_path = ROOT / "configs" / "pages_publication.json"
-    selected = publication_paths(ROOT, load_config(ROOT, config_path))
-
-    assert "stats/standard/mtgo/landing/current.json" in selected
-    assert "stats/modern/mtgo/landing/current.json" in selected
-    assert "stats/standard/mtgo/landing/features/2026-W27.json" in selected
-    assert "stats/standard/mtgo/landing/features/2026-W33.json" in selected
-    assert "stats/modern/mtgo/landing/features/2026-W33.json" in selected
-    assert "stats/standard/mtgo/pickup/2026-W27.json" in selected
-    assert not any("/pickup/candidates_" in path for path in selected)
-    assert not any("/pickup/base_reference_" in path for path in selected)
-    assert not any(path.endswith("/pickup/known_archetypes.json") for path in selected)
-    assert not any("/landing/review/" in path for path in selected)
-
-
 def test_landing_cli_requires_the_explicit_format_capability(monkeypatch, tmp_path):
     from mtgmeta.mtgo import __main__ as mtgo_cli
 
@@ -360,7 +309,7 @@ def test_landing_cli_reports_pending_summary_review_without_count_lookup(
         lambda *args, **kwargs: {
             "status": "summary_review_required",
             "path": tmp_path / "current.json",
-            "week": WEEK,
+            "week": SYNTHETIC_WEEK,
             "feature_count": 0,
             "summary_count": 0,
         },
