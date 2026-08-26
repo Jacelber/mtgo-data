@@ -5,7 +5,7 @@ project:
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
   current_working_branch: "codex/landing-mobile-feature-scroll-hotfix"
-  working_branch_status: "owner_accepted_remote_publication_authorized"
+  working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
@@ -34,7 +34,7 @@ current_phase:
 current_task:
   id: "LANDING-MOBILE-FEATURE-SCROLL-HOTFIX"
   name: "Repair Landing feature-link navigation and mobile scrolling"
-  status: "owner_accepted_remote_publication_authorized"
+  status: "owner_accepted_completion_authorized"
   artifact_impact: "user_visible_ui"
   base_commit: "f1edcabb5663c2021f2310fa77ba47f8debcf224"
   branch: "codex/landing-mobile-feature-scroll-hotfix"
@@ -43,7 +43,7 @@ current_task:
     local_implementation: true
     commit: true
     remote_publication: true
-    merge: false
+    merge: true
   allowed_paths:
     - "assets/js/phase8/app-mtgo.js"
     - "assets/js/phase8/app.js"
@@ -51,8 +51,8 @@ current_task:
     - "tests/js/phase8-landing.test.js"
   prohibited_changes:
     - "Do not change Landing editorial content, classifier rules, public statistical data, Schemas, public paths, workflow behavior, or product scope."
-    - "Do not merge, deploy Pages, dispatch production, or begin Phase 13 without separate Owner authorization."
-  stop_point: "Commit the accepted four-file subject, publish one Ready PR, verify its required checks, and stop pending separate merge authorization."
+    - "Do not dispatch production or begin Phase 13 without separate Owner authorization."
+  stop_point: "Update the accepted PR subject with this authorization record, pass required checks, merge PR #283, verify the exact merged master and merge-triggered Pages deployment, and stop without production dispatch or another task."
 
 current_repository_state:
   weekly_readiness_completion_merge_commit: "f1edcabb5663c2021f2310fa77ba47f8debcf224"
@@ -81,7 +81,6 @@ next_approved_task:
   note: "No task after LANDING-MOBILE-FEATURE-SCROLL-HOTFIX is authorized. Phase 13 remains separately gated."
 
 prohibited_next_actions:
-  - "Do not merge or deploy LANDING-MOBILE-FEATURE-SCROLL-HOTFIX without separate explicit Owner authorization."
   - "Do not begin Phase 13 or another task without separate explicit Owner authorization recorded in the live status."
   - "Do not change statistical meaning, merge MTGO and Tabletop results, alter product scope, dispatch production, or mutate Issues."
   - "Do not develop directly on master or overwrite unexplained local changes."
