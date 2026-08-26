@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/phase13-design"
+  current_working_branch: "codex/p13-01"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -24,40 +24,44 @@ status_document:
 current_phase:
   id: 13
   name: "Multi-event raw-count matchup aggregation"
-  status: "design_accepted_implementation_not_authorized"
+  status: "implementation_in_progress"
   started_on: "2026-08-27"
-  objective: "Design separately gated raw-count aggregation for compatible Tabletop events without merging overview statistics or enabling an unapproved event."
+  objective: "Implement separately gated raw-count aggregation for compatible Tabletop events without merging overview statistics or enabling an unapproved event."
   production_changes_allowed: false
-  implementation_authorized: false
+  implementation_authorized: true
   next_phase_id: 14
   next_phase_authorized: false
 
 current_task:
-  id: "PHASE-13-DESIGN"
-  name: "Design the bounded Phase 13 multi-event matchup implementation"
+  id: "P13-01"
+  name: "Implement the pure Python raw-count reference aggregator"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-27"
   completed_on: "2026-08-27"
   artifact_impact: "internal_diagnostics"
-  base_commit: "6cda56e23281b60b36e383943ba70d00fdce1e06"
-  branch: "codex/phase13-design"
-  objective: "Freeze the Phase 13 architecture, implementation task sequence, first bounded task contract, and final Owner-link-gated non-public real-event validation."
+  base_commit: "41c2d76e6c18ed5925880ba865b0aceb5d19397c"
+  branch: "codex/p13-01"
+  objective: "Combine two or more compatible synthetic Tabletop matchup documents from raw leaf W-L-D counts through one deterministic side-effect-free Python reference aggregator."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "docs/audits/PHASE-13-DESIGN.md"
-    - "docs/ROADMAP.md"
+    - "src/mtgmeta/melee/multi_event_matchup.py"
+    - "tests/test_melee_multi_event_matchup.py"
+    - "docs/TEST_TRIGGER_MATRIX.md"
+    - "docs/audits/P13-01.md"
     - "docs/STATUS.yaml"
   planned_new_paths:
-    - "docs/audits/PHASE-13-DESIGN.md"
+    - "src/mtgmeta/melee/multi_event_matchup.py"
+    - "tests/test_melee_multi_event_matchup.py"
+    - "docs/audits/P13-01.md"
   prohibited_changes:
-    - "Do not change code, tests, fixtures, Schemas, configs, classifier rules, raw or generated data, catalogs, front-end assets, public paths, or workflows."
-    - "Do not fetch a real event, create or use an HMAC key, dispatch production, mutate Issues, or begin P13-01."
-    - "The future Owner-supplied test event must not enter the production whitelist, public catalogs, Pages artifact, or front end."
-  stop_point: "Commit the accepted three-document subject, publish one Ready PR, pass required checks, merge, verify the exact merged master, and stop without fetching a real event, dispatching production, or beginning P13-01."
+    - "Do not change existing statistical meanings, Schemas, manifests, generated data, catalogs, front-end assets, workflows, public paths, whitelists, or classifier rules."
+    - "Do not use MTGO data, fetch or retain a real event, create or use an HMAC key, dispatch production, mutate Issues, or begin P13-02."
+    - "Do not expand the accepted P13-01 subject during completion or begin P13-02."
+  stop_point: "Commit the accepted P13-01 subject, publish one Ready PR, pass required checks, merge, verify the exact merged master, and stop without beginning P13-02 or accessing a real event."
 
 current_repository_state:
   landing_mobile_hotfix_merge_commit: "6cda56e23281b60b36e383943ba70d00fdce1e06"
@@ -76,9 +80,9 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "P13-01"
+  - id: "P13-02"
     status: "planned_not_authorized"
-    note: "Implement the pure Python raw-count reference aggregator with synthetic tests only; the bounded contract is proposed in docs/audits/PHASE-13-DESIGN.md."
+    note: "Define the versioned in-memory multi-event result and catalog compatibility contracts only after P13-01 is accepted and completed."
   - id: "P13-06"
     status: "planned_not_authorized"
     note: "After all synthetic implementation tasks, stop for the Owner to supply one exact Melee link for non-public real-event validation."
@@ -88,10 +92,10 @@ next_approved_task:
   name: null
   status: "not_authorized"
   local_execution_authorized: false
-  note: "No implementation or completion action after PHASE-13-DESIGN is authorized. P13-01 requires separate Owner authorization after design acceptance."
+  note: "P13-01 is Owner accepted for same-task completion. No follow-up implementation is authorized; P13-02 remains separately gated."
 
 prohibited_next_actions:
-  - "Do not begin P13-01, another Phase 13 task, or Phase 14 without separate explicit Owner authorization recorded in the live status."
+  - "Do not begin P13-02, another Phase 13 task, or Phase 14 without separate explicit Owner authorization."
   - "Do not fetch or retain a real Melee test event before the Owner supplies its exact link and separately authorizes that exact P13-06 test."
   - "Do not add the future test event to the production whitelist, public catalogs, Pages artifact, or front end."
   - "Do not change statistical meaning, merge MTGO and Tabletop results, dispatch production, or mutate Issues."
