@@ -1016,6 +1016,27 @@ archetypes:
         min_count: 3
       - card: Llanowar Elves
         min_count: 4
+- id: bant-jackal
+  name: Bant Jackal
+  priority: 31100
+  rules:
+  - id: bant-jackal-brightglass
+    priority: 31100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Jackal, Genius Geneticist
+        zone: main
+        min_count: 3
+      - card: Llanowar Elves
+        zone: main
+        min_count: 4
+      - card: Brightglass Gearhulk
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
 - id: temur-battlecrier
   name: Temur Battlecrier
   priority: 30000
