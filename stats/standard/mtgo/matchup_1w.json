@@ -92,6 +92,12 @@
         "subtype_ids": []
       },
       {
+        "id": "bant-jackal",
+        "name": "Bant Jackal",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "bant-rhythm",
         "name": "Bant Rhythm",
         "expandable": false,
@@ -800,6 +806,14 @@
         "name": "Bant Bounce",
         "display_name": "Bant Bounce",
         "parent_id": "bant-bounce",
+        "subtype_id": null
+      },
+      {
+        "id": "bant-jackal",
+        "kind": "archetype",
+        "name": "Bant Jackal",
+        "display_name": "Bant Jackal",
+        "parent_id": "bant-jackal",
         "subtype_id": null
       },
       {
@@ -1684,11 +1698,12 @@
     "sultai-control",
     "kona-omniscience",
     "mono-red-dragons",
-    "selesnya-offense",
     "temur-elementals",
     "temur-spellementals",
+    "bant-jackal",
     "gruul-delirium",
     "izzet-monument",
+    "selesnya-offense",
     "azorius-prison",
     "boros-dragons",
     "jeskai-momo",
@@ -2201,28 +2216,6 @@
         }
       }
     },
-    "selesnya-offense": {
-      "wins": 2,
-      "losses": 4,
-      "draws": 0,
-      "matches": 6,
-      "win_rate": 0.3333,
-      "ci_half": 0.3016,
-      "low_sample": true,
-      "mirror": false,
-      "literal_record": {
-        "wins": 2,
-        "losses": 4,
-        "draws": 0,
-        "matches": 6,
-        "win_rate": 0.333333,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.096769,
-          "upper": 0.700012
-        }
-      }
-    },
     "temur-elementals": {
       "wins": 3,
       "losses": 2,
@@ -2267,6 +2260,28 @@
         }
       }
     },
+    "bant-jackal": {
+      "wins": 2,
+      "losses": 2,
+      "draws": 0,
+      "matches": 4,
+      "win_rate": 0.5,
+      "ci_half": 0.35,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.150036,
+          "upper": 0.849964
+        }
+      }
+    },
     "gruul-delirium": {
       "wins": 1,
       "losses": 3,
@@ -2290,6 +2305,28 @@
       }
     },
     "izzet-monument": {
+      "wins": 1,
+      "losses": 3,
+      "draws": 0,
+      "matches": 4,
+      "win_rate": 0.25,
+      "ci_half": 0.3269,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.045586,
+          "upper": 0.699364
+        }
+      }
+    },
+    "selesnya-offense": {
       "wins": 1,
       "losses": 3,
       "draws": 0,
@@ -3022,33 +3059,6 @@
       },
       "mirror_match_count": 0
     },
-    "selesnya-offense": {
-      "all_matches": {
-        "wins": 3,
-        "losses": 5,
-        "draws": 0,
-        "matches": 8,
-        "win_rate": 0.375,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.136842,
-          "upper": 0.694262
-        }
-      },
-      "non_mirror": {
-        "wins": 2,
-        "losses": 4,
-        "draws": 0,
-        "matches": 6,
-        "win_rate": 0.333333,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.096769,
-          "upper": 0.700012
-        }
-      },
-      "mirror_match_count": 1
-    },
     "temur-elementals": {
       "all_matches": {
         "wins": 3,
@@ -3103,6 +3113,33 @@
       },
       "mirror_match_count": 0
     },
+    "bant-jackal": {
+      "all_matches": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.150036,
+          "upper": 0.849964
+        }
+      },
+      "non_mirror": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.150036,
+          "upper": 0.849964
+        }
+      },
+      "mirror_match_count": 0
+    },
     "gruul-delirium": {
       "all_matches": {
         "wins": 1,
@@ -3131,6 +3168,33 @@
       "mirror_match_count": 0
     },
     "izzet-monument": {
+      "all_matches": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.045586,
+          "upper": 0.699364
+        }
+      },
+      "non_mirror": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.045586,
+          "upper": 0.699364
+        }
+      },
+      "mirror_match_count": 0
+    },
+    "selesnya-offense": {
       "all_matches": {
         "wins": 1,
         "losses": 3,
@@ -3331,6 +3395,28 @@
           "confidence_interval_95": {
             "lower": 0.187613,
             "upper": 0.812387
+          }
+        }
+      },
+      "bant-jackal": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
           }
         }
       },
@@ -3753,24 +3839,24 @@
         }
       },
       "selesnya-offense": {
-        "wins": 2,
-        "losses": 1,
+        "wins": 1,
+        "losses": 0,
         "draws": 0,
-        "matches": 3,
-        "win_rate": 0.6667,
-        "ci_half": 0.3654,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 2,
-          "losses": 1,
+          "wins": 1,
+          "losses": 0,
           "draws": 0,
-          "matches": 3,
-          "win_rate": 0.666667,
+          "matches": 1,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.207655,
-            "upper": 0.93851
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -4482,6 +4568,28 @@
           }
         }
       },
+      "bant-jackal": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "boros-token": {
         "wins": 2,
         "losses": 1,
@@ -4831,28 +4939,6 @@
           "confidence_interval_95": {
             "lower": 0.094529,
             "upper": 0.905471
-          }
-        }
-      },
-      "selesnya-offense": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
           }
         }
       },
@@ -9121,118 +9207,6 @@
         }
       }
     },
-    "selesnya-offense": {
-      "izzet-spellementals": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "mono-green-landfall": {
-        "wins": 1,
-        "losses": 2,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.3333,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 2,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.06149,
-            "upper": 0.792345
-          }
-        }
-      },
-      "mono-red-aggro": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "orzhov-lifegain": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "selesnya-offense": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": true,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      }
-    },
     "temur-elementals": {
       "4-color-tablet": {
         "wins": 1,
@@ -9435,6 +9409,74 @@
         }
       }
     },
+    "bant-jackal": {
+      "izzet-spellementals": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "mono-green-landfall": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "selesnya-offense": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      }
+    },
     "gruul-delirium": {
       "azorius-momo": {
         "wins": 0,
@@ -9589,6 +9631,96 @@
           "confidence_interval_95": {
             "lower": 0.094529,
             "upper": 0.905471
+          }
+        }
+      }
+    },
+    "selesnya-offense": {
+      "bant-jackal": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "mono-green-landfall": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "mono-red-aggro": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "orzhov-lifegain": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       }
@@ -9802,11 +9934,12 @@
     "sultai-control",
     "kona-omniscience/temur",
     "mono-red-dragons",
-    "selesnya-offense",
     "temur-elementals",
     "temur-spellementals",
+    "bant-jackal",
     "gruul-delirium",
     "izzet-monument",
+    "selesnya-offense",
     "azorius-prison",
     "boros-dragons",
     "jeskai-momo",
@@ -10319,28 +10452,6 @@
         }
       }
     },
-    "selesnya-offense": {
-      "wins": 2,
-      "losses": 4,
-      "draws": 0,
-      "matches": 6,
-      "win_rate": 0.3333,
-      "ci_half": 0.3016,
-      "low_sample": true,
-      "mirror": false,
-      "literal_record": {
-        "wins": 2,
-        "losses": 4,
-        "draws": 0,
-        "matches": 6,
-        "win_rate": 0.333333,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.096769,
-          "upper": 0.700012
-        }
-      }
-    },
     "temur-elementals": {
       "wins": 3,
       "losses": 2,
@@ -10385,6 +10496,28 @@
         }
       }
     },
+    "bant-jackal": {
+      "wins": 2,
+      "losses": 2,
+      "draws": 0,
+      "matches": 4,
+      "win_rate": 0.5,
+      "ci_half": 0.35,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.150036,
+          "upper": 0.849964
+        }
+      }
+    },
     "gruul-delirium": {
       "wins": 1,
       "losses": 3,
@@ -10408,6 +10541,28 @@
       }
     },
     "izzet-monument": {
+      "wins": 1,
+      "losses": 3,
+      "draws": 0,
+      "matches": 4,
+      "win_rate": 0.25,
+      "ci_half": 0.3269,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.045586,
+          "upper": 0.699364
+        }
+      }
+    },
+    "selesnya-offense": {
       "wins": 1,
       "losses": 3,
       "draws": 0,
@@ -11140,33 +11295,6 @@
       },
       "mirror_match_count": 0
     },
-    "selesnya-offense": {
-      "all_matches": {
-        "wins": 3,
-        "losses": 5,
-        "draws": 0,
-        "matches": 8,
-        "win_rate": 0.375,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.136842,
-          "upper": 0.694262
-        }
-      },
-      "non_mirror": {
-        "wins": 2,
-        "losses": 4,
-        "draws": 0,
-        "matches": 6,
-        "win_rate": 0.333333,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.096769,
-          "upper": 0.700012
-        }
-      },
-      "mirror_match_count": 1
-    },
     "temur-elementals": {
       "all_matches": {
         "wins": 3,
@@ -11221,6 +11349,33 @@
       },
       "mirror_match_count": 0
     },
+    "bant-jackal": {
+      "all_matches": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.150036,
+          "upper": 0.849964
+        }
+      },
+      "non_mirror": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.150036,
+          "upper": 0.849964
+        }
+      },
+      "mirror_match_count": 0
+    },
     "gruul-delirium": {
       "all_matches": {
         "wins": 1,
@@ -11249,6 +11404,33 @@
       "mirror_match_count": 0
     },
     "izzet-monument": {
+      "all_matches": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.045586,
+          "upper": 0.699364
+        }
+      },
+      "non_mirror": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.045586,
+          "upper": 0.699364
+        }
+      },
+      "mirror_match_count": 0
+    },
+    "selesnya-offense": {
       "all_matches": {
         "wins": 1,
         "losses": 3,
@@ -11449,6 +11631,28 @@
           "confidence_interval_95": {
             "lower": 0.187613,
             "upper": 0.812387
+          }
+        }
+      },
+      "bant-jackal": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
           }
         }
       },
@@ -11871,24 +12075,24 @@
         }
       },
       "selesnya-offense": {
-        "wins": 2,
-        "losses": 1,
+        "wins": 1,
+        "losses": 0,
         "draws": 0,
-        "matches": 3,
-        "win_rate": 0.6667,
-        "ci_half": 0.3654,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 2,
-          "losses": 1,
+          "wins": 1,
+          "losses": 0,
           "draws": 0,
-          "matches": 3,
-          "win_rate": 0.666667,
+          "matches": 1,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.207655,
-            "upper": 0.93851
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -12600,6 +12804,28 @@
           }
         }
       },
+      "bant-jackal": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "boros-token": {
         "wins": 2,
         "losses": 1,
@@ -12949,28 +13175,6 @@
           "confidence_interval_95": {
             "lower": 0.094529,
             "upper": 0.905471
-          }
-        }
-      },
-      "selesnya-offense": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
           }
         }
       },
@@ -17239,118 +17443,6 @@
         }
       }
     },
-    "selesnya-offense": {
-      "izzet-spellementals": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "mono-green-landfall": {
-        "wins": 1,
-        "losses": 2,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.3333,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 2,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.06149,
-            "upper": 0.792345
-          }
-        }
-      },
-      "mono-red-aggro": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "orzhov-lifegain": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "selesnya-offense": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": true,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      }
-    },
     "temur-elementals": {
       "4-color-tablet": {
         "wins": 1,
@@ -17553,6 +17645,74 @@
         }
       }
     },
+    "bant-jackal": {
+      "izzet-spellementals": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "mono-green-landfall": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "selesnya-offense": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      }
+    },
     "gruul-delirium": {
       "azorius-momo": {
         "wins": 0,
@@ -17707,6 +17867,96 @@
           "confidence_interval_95": {
             "lower": 0.094529,
             "upper": 0.905471
+          }
+        }
+      }
+    },
+    "selesnya-offense": {
+      "bant-jackal": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "mono-green-landfall": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "mono-red-aggro": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "orzhov-lifegain": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       }
@@ -17920,11 +18170,12 @@
     "Sultai Control",
     "Kona Omniscience",
     "Mono-Red Dragons",
-    "Selesnya Offense",
     "Ramp Elementals",
     "Temur Spellementals",
+    "Bant Jackal",
     "Gruul Delirium",
     "Izzet Monument",
+    "Selesnya Offense",
     "Azorius Prison",
     "Boros Dragons",
     "Jeskai Momo",
@@ -18437,28 +18688,6 @@
         }
       }
     },
-    "Selesnya Offense": {
-      "wins": 2,
-      "losses": 4,
-      "draws": 0,
-      "matches": 6,
-      "win_rate": 0.3333,
-      "ci_half": 0.3016,
-      "low_sample": true,
-      "mirror": false,
-      "literal_record": {
-        "wins": 2,
-        "losses": 4,
-        "draws": 0,
-        "matches": 6,
-        "win_rate": 0.333333,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.096769,
-          "upper": 0.700012
-        }
-      }
-    },
     "Ramp Elementals": {
       "wins": 3,
       "losses": 2,
@@ -18503,6 +18732,28 @@
         }
       }
     },
+    "Bant Jackal": {
+      "wins": 2,
+      "losses": 2,
+      "draws": 0,
+      "matches": 4,
+      "win_rate": 0.5,
+      "ci_half": 0.35,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.150036,
+          "upper": 0.849964
+        }
+      }
+    },
     "Gruul Delirium": {
       "wins": 1,
       "losses": 3,
@@ -18526,6 +18777,28 @@
       }
     },
     "Izzet Monument": {
+      "wins": 1,
+      "losses": 3,
+      "draws": 0,
+      "matches": 4,
+      "win_rate": 0.25,
+      "ci_half": 0.3269,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.045586,
+          "upper": 0.699364
+        }
+      }
+    },
+    "Selesnya Offense": {
       "wins": 1,
       "losses": 3,
       "draws": 0,
@@ -18701,6 +18974,28 @@
           "confidence_interval_95": {
             "lower": 0.187613,
             "upper": 0.812387
+          }
+        }
+      },
+      "Bant Jackal": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
           }
         }
       },
@@ -19123,24 +19418,24 @@
         }
       },
       "Selesnya Offense": {
-        "wins": 2,
-        "losses": 1,
+        "wins": 1,
+        "losses": 0,
         "draws": 0,
-        "matches": 3,
-        "win_rate": 0.6667,
-        "ci_half": 0.3654,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 2,
-          "losses": 1,
+          "wins": 1,
+          "losses": 0,
           "draws": 0,
-          "matches": 3,
-          "win_rate": 0.666667,
+          "matches": 1,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.207655,
-            "upper": 0.93851
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -19852,6 +20147,28 @@
           }
         }
       },
+      "Bant Jackal": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "Boros Token": {
         "wins": 2,
         "losses": 1,
@@ -20201,28 +20518,6 @@
           "confidence_interval_95": {
             "lower": 0.094529,
             "upper": 0.905471
-          }
-        }
-      },
-      "Selesnya Offense": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
           }
         }
       },
@@ -24491,118 +24786,6 @@
         }
       }
     },
-    "Selesnya Offense": {
-      "Izzet Spellementals": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "Mono-Green Landfall": {
-        "wins": 1,
-        "losses": 2,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.3333,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 2,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.06149,
-            "upper": 0.792345
-          }
-        }
-      },
-      "Mono-Red Aggro": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "Orzhov Lifegain": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "Selesnya Offense": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": true,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      }
-    },
     "Ramp Elementals": {
       "4-Color Tablet": {
         "wins": 1,
@@ -24805,6 +24988,74 @@
         }
       }
     },
+    "Bant Jackal": {
+      "Izzet Spellementals": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "Mono-Green Landfall": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "Selesnya Offense": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      }
+    },
     "Gruul Delirium": {
       "Azorius Momo": {
         "wins": 0,
@@ -24959,6 +25210,96 @@
           "confidence_interval_95": {
             "lower": 0.094529,
             "upper": 0.905471
+          }
+        }
+      }
+    },
+    "Selesnya Offense": {
+      "Bant Jackal": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "Mono-Green Landfall": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "Mono-Red Aggro": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "Orzhov Lifegain": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       }

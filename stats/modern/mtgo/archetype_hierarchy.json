@@ -2,11 +2,11 @@
   "schema_version": "1.0.0",
   "format": "modern",
   "source": "mtgo",
-  "rules_updated": "2026-08-25T11:30:56+09:00",
+  "rules_updated": "2026-08-26T21:31:33+09:00",
   "summary": {
-    "parents": 133,
-    "leaves": 182,
-    "expandable_parents": 19
+    "parents": 134,
+    "leaves": 185,
+    "expandable_parents": 20
   },
   "parents": [
     {
@@ -130,6 +130,7 @@
       "expandable": true,
       "subtype_ids": [
         "chant-control/azorius",
+        "chant-control/esper",
         "chant-control/jeskai"
       ]
     },
@@ -893,6 +894,15 @@
       ]
     },
     {
+      "id": "tron",
+      "name": "Tron",
+      "expandable": true,
+      "subtype_ids": [
+        "tron/mono-green",
+        "tron/selesnya"
+      ]
+    },
+    {
       "id": "yawgmoth-energy",
       "name": "Yawgmoth Energy",
       "expandable": false,
@@ -1099,6 +1109,14 @@
       "display_name": "Azorius Chant Control",
       "parent_id": "chant-control",
       "subtype_id": "azorius"
+    },
+    {
+      "id": "chant-control/esper",
+      "kind": "subtype",
+      "name": "Esper",
+      "display_name": "Esper Chant Control",
+      "parent_id": "chant-control",
+      "subtype_id": "esper"
     },
     {
       "id": "chant-control/jeskai",
@@ -2347,6 +2365,22 @@
       "display_name": "Bant Thopter Sword",
       "parent_id": "thopter-sword",
       "subtype_id": "bant"
+    },
+    {
+      "id": "tron/mono-green",
+      "kind": "subtype",
+      "name": "Mono-Green",
+      "display_name": "Mono-Green Tron",
+      "parent_id": "tron",
+      "subtype_id": "mono-green"
+    },
+    {
+      "id": "tron/selesnya",
+      "kind": "subtype",
+      "name": "Selesnya",
+      "display_name": "Selesnya Tron",
+      "parent_id": "tron",
+      "subtype_id": "selesnya"
     },
     {
       "id": "yawgmoth-energy",
