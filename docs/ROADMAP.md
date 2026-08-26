@@ -19,7 +19,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 | Phase | Objective | Status |
 | --- | --- | --- |
 | 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Complete on 2026-08-25 |
-| 13 | Aggregate compatible multi-event matchups from raw counts. | Planned; not authorized |
+| 13 | Aggregate compatible multi-event matchups from raw counts. | Design authorized; implementation not authorized |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
 | 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
@@ -48,6 +48,18 @@ requires separate Owner approval.
 ---
 
 # Phase 13 — Multi-event raw-count matchup aggregation
+
+## Design gate
+
+The Owner authorized `PHASE-13-DESIGN` on 2026-08-27. The design must split
+implementation into separately authorized tasks and finish with a real-event
+test using an exact Melee link supplied by the Owner at that later gate. That
+event remains a non-public test input: it is not admitted to the production
+whitelist, catalogs, Pages artifact, or front end.
+
+The current design and proposed first bounded implementation contract are in
+`docs/audits/PHASE-13-DESIGN.md`. Design authorization does not authorize Phase
+13 implementation, live collection, public enablement, or production.
 
 ## Objective
 
@@ -125,6 +137,12 @@ requires a separate compatibility decision.
 7. Keep the production multi-event entry disabled until at least two compatible
    real events are approved. Synthetic contracts may prove the engineering
    capability but do not constitute real production acceptance.
+8. After synthetic backend and browser acceptance, stop for the Owner to supply
+   one exact Melee event link. Validate that event only in a disposable,
+   non-public test: do not commit its registration or data, add it to a public
+   catalog, render it in the production front end, dispatch a workflow, or
+   publish it. An incompatible event proves rejection behavior but does not
+   provide positive real aggregation acceptance.
 
 ## Acceptance criteria
 
