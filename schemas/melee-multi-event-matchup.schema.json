@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-multi-event-matchup.schema.json",
+  "x-schema-version": "1.0.0",
+  "title": "In-memory multi-event Melee matchup result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "document_type",
+    "source",
+    "product",
+    "format",
+    "scope",
+    "event_ids",
+    "event_names",
+    "inputs",
+    "compatibility",
+    "rate_method",
+    "hierarchy",
+    "source_match_count",
+    "included_match_count",
+    "excluded_match_count",
+    "directed_observation_count",
+    "excluded_match_counts",
+    "parent_order",
+    "parent_overall",
+    "parent_matrix",
+    "leaf_order",
+    "leaf_overall",
+    "leaf_matrix"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document_type": {"const": "multi_event_matchup"},
+    "source": {"const": "melee"},
+    "product": {"const": "tabletop-major-events"},
+    "format": {"$ref": "melee-event-statistics-common.schema.json#/$defs/id"},
+    "scope": {"const": "all_constructed"},
+    "event_ids": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[1-9][0-9]*$"}
+    },
+    "event_names": {
+      "type": "array",
+      "minItems": 2,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 2,
+      "items": {"$ref": "#/$defs/input"}
+    },
+    "compatibility": {"$ref": "#/$defs/compatibility"},
+    "rate_method": {"$ref": "#/$defs/rate_method"},
+    "hierarchy": {"$ref": "melee-event-matchup.schema.json#/$defs/hierarchy"},
+    "source_match_count": {"type": "integer", "minimum": 0},
+    "included_match_count": {"type": "integer", "minimum": 0},
+    "excluded_match_count": {"type": "integer", "minimum": 0},
+    "directed_observation_count": {"type": "integer", "minimum": 0},
+    "excluded_match_counts": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"type": "string", "minLength": 1},
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "parent_order": {"$ref": "melee-event-matchup.schema.json#/$defs/identity_order"},
+    "parent_overall": {"$ref": "#/$defs/record_map"},
+    "parent_matrix": {"$ref": "#/$defs/record_matrix"},
+    "leaf_order": {"$ref": "melee-event-matchup.schema.json#/$defs/identity_order"},
+    "leaf_overall": {"$ref": "#/$defs/record_map"},
+    "leaf_matrix": {"$ref": "#/$defs/record_matrix"}
+  },
+  "$defs": {
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "event_name",
+        "meta_path",
+        "matchup_path",
+        "matchup_schema_version",
+        "matchup_sha256",
+        "taxonomy_schema_version",
+        "taxonomy_sha256"
+      ],
+      "properties": {
+        "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "event_name": {"type": "string", "minLength": 1},
+        "meta_path": {"type": "string", "pattern": "^events/[1-9][0-9]*/meta\\.json$"},
+        "matchup_path": {"type": "string", "pattern": "^events/[1-9][0-9]*/matchup\\.json$"},
+        "matchup_schema_version": {"type": "string", "minLength": 1},
+        "matchup_sha256": {"$ref": "melee-event-statistics-common.schema.json#/$defs/sha256"},
+        "taxonomy_schema_version": {"type": "string", "minLength": 1},
+        "taxonomy_sha256": {"$ref": "melee-event-statistics-common.schema.json#/$defs/sha256"}
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalog_schema_version",
+        "catalog_compatibility_schema_version",
+        "matchup_schema_version",
+        "taxonomy_schema_version",
+        "taxonomy_sha256"
+      ],
+      "properties": {
+        "catalog_schema_version": {"const": "1.1.0"},
+        "catalog_compatibility_schema_version": {"const": "1.0.0"},
+        "matchup_schema_version": {"type": "string", "minLength": 1},
+        "taxonomy_schema_version": {"type": "string", "minLength": 1},
+        "taxonomy_sha256": {"$ref": "melee-event-statistics-common.schema.json#/$defs/sha256"}
+      }
+    },
+    "rate_method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "literal_win_rate_method",
+        "confidence_interval",
+        "low_sample_threshold"
+      ],
+      "properties": {
+        "literal_win_rate_method": {"const": "wins_over_valid_matches"},
+        "confidence_interval": {"const": "wilson_95"},
+        "low_sample_threshold": {"const": 20}
+      }
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wins",
+        "losses",
+        "draws",
+        "matches",
+        "win_rate",
+        "win_rate_method",
+        "confidence_interval_95",
+        "mirror",
+        "low_sample",
+        "contributing_event_ids"
+      ],
+      "properties": {
+        "wins": {"type": "integer", "minimum": 0},
+        "losses": {"type": "integer", "minimum": 0},
+        "draws": {"type": "integer", "minimum": 0},
+        "matches": {"type": "integer", "minimum": 0},
+        "win_rate": {"$ref": "melee-event-statistics-common.schema.json#/$defs/rate"},
+        "win_rate_method": {"const": "wins_over_valid_matches"},
+        "confidence_interval_95": {"$ref": "melee-event-statistics-common.schema.json#/$defs/confidence_interval"},
+        "mirror": {"type": "boolean"},
+        "low_sample": {"type": "boolean"},
+        "contributing_event_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[1-9][0-9]*$"}
+        }
+      }
+    },
+    "record_map": {
+      "type": "object",
+      "propertyNames": {"$ref": "melee-event-matchup.schema.json#/$defs/identity"},
+      "additionalProperties": {"$ref": "#/$defs/record"}
+    },
+    "record_matrix": {
+      "type": "object",
+      "propertyNames": {"$ref": "melee-event-matchup.schema.json#/$defs/identity"},
+      "additionalProperties": {
+        "type": "object",
+        "propertyNames": {"$ref": "melee-event-matchup.schema.json#/$defs/identity"},
+        "additionalProperties": {"$ref": "#/$defs/record"}
+      }
+    }
+  }
+}

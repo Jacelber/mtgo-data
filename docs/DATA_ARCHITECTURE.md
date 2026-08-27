@@ -1569,6 +1569,16 @@ without changing any retained mixed-event bytes. The compatible meta and
 catalog Schemas accept all three structures and require only
 `all_constructed` for a single-stage event.
 
+P13-02 advances future format catalogs to Schema `1.1.0`. Every `1.1.0`
+event entry contains a versioned `matchup_compatibility` block binding the
+Melee/Tabletop identity, Constructed format, `all_constructed` scope, matchup
+Schema and SHA-256, taxonomy Schema and SHA-256, and non-blocking quality.
+Catalog Schema `1.0.0` remains valid for existing single-event discovery, so
+the current production catalog need not be regenerated in this task. It is
+deliberately ineligible for multi-event admission because it lacks the new
+evidence. A later authorized event publication writes `1.1.0` through the
+maintained producer rather than manually editing generated JSON.
+
 The overview, decks, matchup, quality, meta, and catalog documents are all
 declared in `schemas/manifest.json`. The source-specific candidate validator
 allows only the selected event's immutable new raw snapshot, normalized
@@ -2176,19 +2186,26 @@ boundary.
 
 ### 12.3 Multi-event matchup output
 
-A multi-event matrix may be generated dynamically or written as a generated artifact.
+A Phase 13 multi-event matrix is generated dynamically in memory under
+`schemas/melee-multi-event-matchup.schema.json` version `1.0.0`. Its inputs
+are validated per-event matchup and metadata documents plus the active
+version `1.1.0` format catalog. The result retains:
 
-If written, it must retain:
+- Melee source, Tabletop product, Constructed format, and
+  `all_constructed` scope;
+- sorted included event IDs and aligned names;
+- each input's catalog-relative metadata and matchup paths, matchup Schema and
+  SHA-256, and taxonomy Schema and SHA-256;
+- catalog and compatibility-block Schema versions;
+- the stable hierarchy, raw W-L-D counts, parent roll-up, rates, intervals,
+  low-sample state, and contributing event IDs; and
+- source, included, excluded, and directed-observation reconciliation.
 
-- format;
-- source;
-- selected scope;
-- included event IDs;
-- included event names;
-- W-L-D counts;
-- generation time;
-- schema version;
-- compatibility checks.
+The result is not a declared generated public output in P13-02, so it has no
+manifest mapping, generated path, or generation timestamp. If a later task
+writes it as an artifact, that task must separately define its path, manifest
+mapping, deterministic identity, timestamp policy, producer, consumer, and
+migration behavior.
 
 Do not identify a multi-event output only by an unstable display name.
 
@@ -3074,15 +3091,21 @@ configs/melee_events.yaml
 
 ```text
 compatible normalized Melee events
-  → select same-format event IDs
-  → select compatible Constructed scope
+  → validate per-event meta and matchup Schemas
+  → admit same-format event IDs through catalog 1.1 compatibility evidence
+  → reconcile matchup and taxonomy versions and SHA-256 values
+  → select all_constructed
   → aggregate raw W-L-D counts
   → calculate rates and intervals
-  → validate included event list
+  → validate the versioned in-memory result
   → render consolidated matrix
 ```
 
 MTGO records do not enter this flow.
+Catalog `1.0.0` remains a valid single-event discovery input but stops at the
+multi-event admission boundary. A missing event, missing compatibility block,
+digest mismatch, blocking quality state, unsupported Schema, or identity
+mismatch fails closed before the result is exposed to a consumer.
 
 ---
 

@@ -5969,3 +5969,60 @@ documentation. It changes no classifier rule, source event, public statistical
 Schema or data, Landing copy, UI, public path, schedule, or production
 authorization. Commit, remote publication, merge, Issue correction, and any
 production run remain separate gates after local Owner acceptance.
+
+---
+
+# DEC-131 - Version multi-event results and catalog admission evidence
+
+Status: `Accepted; same-task completion authorized`
+
+## Context
+
+P13-01 provides a deterministic, side-effect-free raw-count aggregator, but
+its result is deliberately unversioned and it accepts no active-catalog
+evidence. The production Tabletop event catalog is Schema `1.0.0` and has
+enough metadata for single-event discovery, not enough to prove that a
+selected matchup document, taxonomy, scope, and quality state are the exact
+subjects approved for multi-event aggregation.
+
+Silently treating every legacy catalog entry as compatible would make catalog
+membership alone stand in for missing Schema and digest evidence. Requiring a
+breaking migration of the current one-event production file would instead
+regenerate public data before any second event or browser consumer exists.
+
+## Decision
+
+Define `melee-multi-event-matchup.schema.json` version `1.0.0` for the
+in-memory consumer result. It wraps the accepted P13-01 calculation with
+sorted per-input metadata and matchup paths, matchup and taxonomy Schema
+versions and SHA-256 values, and admitted catalog contract versions. It does
+not create a generated path or manifest mapping.
+
+Advance future format catalogs to Schema `1.1.0`. Each `1.1.0` event must
+contain `matchup_compatibility` version `1.0.0` with exact Melee/Tabletop
+identity, Constructed format, `all_constructed` scope, matchup Schema and
+digest, taxonomy Schema and digest, and `quality_blocking: false`. The
+maintained publisher derives this block from validated event metadata and the
+byte-verified matchup descriptor.
+
+Catalog Schema `1.0.0` remains valid for existing single-event discovery, but
+the multi-event wrapper supports only catalog `1.1.0`. For every selected
+event it reconciles the catalog entry and compatibility block against the
+validated metadata and matchup input. Missing membership, missing evidence,
+unsupported versions, mismatched paths, identity, Schema, digest, scope, or
+quality fail closed.
+
+## Consequences
+
+The current production catalog remains byte-identical and usable for the
+existing one-event product, while no current event becomes multi-event
+eligible by implication. A later authorized publication through the producer
+will emit catalog `1.1.0`; manually editing current generated JSON is not an
+approved migration path.
+
+This records compatibility provenance, not a new statistical meaning. P13-01
+continues to own raw-count aggregation and literal rates. No front-end asset,
+workflow, whitelist, real event, generated statistic, public path, or
+production resource changes in P13-02. Commit, remote publication, merge,
+P13-03, and the future real-event test remain separate gates after local Owner
+acceptance.
