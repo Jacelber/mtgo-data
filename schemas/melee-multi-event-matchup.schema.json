@@ -104,13 +104,15 @@
       "required": [
         "catalog_schema_version",
         "catalog_compatibility_schema_version",
+        "active_taxonomy_schema_version",
         "matchup_schema_version",
         "taxonomy_schema_version",
         "taxonomy_sha256"
       ],
       "properties": {
-        "catalog_schema_version": {"const": "1.1.0"},
+        "catalog_schema_version": {"const": "1.2.0"},
         "catalog_compatibility_schema_version": {"const": "1.0.0"},
+        "active_taxonomy_schema_version": {"const": "1.0.0"},
         "matchup_schema_version": {"type": "string", "minLength": 1},
         "taxonomy_schema_version": {"type": "string", "minLength": 1},
         "taxonomy_sha256": {"$ref": "melee-event-statistics-common.schema.json#/$defs/sha256"}

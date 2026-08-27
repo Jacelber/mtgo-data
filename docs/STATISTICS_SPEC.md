@@ -1331,12 +1331,24 @@ The output must list every included event ID.
 MTGO data must never be included in a tabletop multi-event matrix.
 
 The version `1.0.0` in-memory multi-event result contract admits inputs only
-through a version `1.1.0` Tabletop event catalog. Each admitted catalog entry
+through a version `1.2.0` Tabletop event catalog. Each admitted catalog entry
 binds the `all_constructed` matchup Schema and SHA-256, taxonomy Schema and
-SHA-256, same source, product, format, and non-blocking quality state. These
-fields are compatibility evidence, not new statistics. A legacy catalog
-without that evidence remains valid for single-event discovery but is not
-eligible for multi-event aggregation.
+SHA-256, same source, product, format, and non-blocking quality state. The
+catalog also declares one versioned `active_taxonomy` identity, and every
+selected event's taxonomy Schema and SHA-256 must equal that active identity.
+Pairwise equality between selected events is necessary but is not sufficient:
+an equal cohort of stale taxonomy digests fails closed. These fields are
+compatibility evidence, not new statistics. Catalog `1.0.0` remains valid for
+single-event discovery; catalog `1.1.0` remains valid historical evidence;
+neither is eligible for multi-event aggregation.
+
+The maintained publisher derives `active_taxonomy` from the same current
+format taxonomy used to rebuild event outputs. After a classifier change,
+multi-event eligibility therefore requires regenerated derived classification,
+opportunity, statistics, metadata, matchup, and catalog evidence under the new
+taxonomy identity. Raw and normalized source facts remain immutable. The
+consumer must not downgrade the active taxonomy, silently omit a stale selected
+event, or fall back to an older classifier.
 
 The combined result lists each input's catalog-relative metadata and matchup
 paths plus the bound Schema versions and digests. It remains an in-memory

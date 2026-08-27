@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-catalog.schema.json",
-  "x-schema-version": "1.1.0",
+  "x-schema-version": "1.2.0",
   "title": "Tabletop Major Events format catalog",
   "type": "object",
   "additionalProperties": false,
@@ -15,11 +15,12 @@
     "events"
   ],
   "properties": {
-    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
+    "schema_version": {"enum": ["1.0.0", "1.1.0", "1.2.0"]},
     "document_type": {"const": "event_catalog"},
     "source": {"const": "melee"},
     "product": {"const": "tabletop-major-events"},
     "format": {"$ref": "melee-event-statistics-common.schema.json#/$defs/id"},
+    "active_taxonomy": {"$ref": "#/$defs/active_taxonomy"},
     "default_event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
     "events": {
       "type": "array",
@@ -28,6 +29,20 @@
     }
   },
   "$defs": {
+    "active_taxonomy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "taxonomy_schema_version",
+        "taxonomy_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "taxonomy_schema_version": {"type": "string", "minLength": 1},
+        "taxonomy_sha256": {"$ref": "melee-event-statistics-common.schema.json#/$defs/sha256"}
+      }
+    },
     "event": {
       "type": "object",
       "additionalProperties": false,
@@ -136,6 +151,20 @@
         "required": ["schema_version"]
       },
       "then": {
+        "properties": {
+          "events": {
+            "items": {"required": ["matchup_compatibility"]}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"schema_version": {"const": "1.2.0"}},
+        "required": ["schema_version"]
+      },
+      "then": {
+        "required": ["active_taxonomy"],
         "properties": {
           "events": {
             "items": {"required": ["matchup_compatibility"]}

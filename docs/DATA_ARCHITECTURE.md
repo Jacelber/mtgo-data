@@ -1579,6 +1579,22 @@ deliberately ineligible for multi-event admission because it lacks the new
 evidence. A later authorized event publication writes `1.1.0` through the
 maintained producer rather than manually editing generated JSON.
 
+P13-07 advances future multi-event-eligible catalogs to Schema `1.2.0` and
+adds a required top-level `active_taxonomy` block containing its own Schema
+version plus the current format taxonomy Schema and SHA-256. The maintained
+publisher derives the block from the same taxonomy input used for the
+deterministic event rebuild. Every selected event's `matchup_compatibility`
+taxonomy identity must equal the catalog active identity. Catalog `1.1.0`
+remains Schema-valid historical evidence but is no longer multi-event
+eligible; this prevents two mutually equal stale event projections from
+authorizing one another.
+
+When the maintained classifier changes, a later authorized event publication
+must regenerate the derived event cohort before those events regain multi-
+event eligibility. Raw and normalized inputs remain immutable. A stale event
+is rejected as selected rather than silently omitted, and no consumer may
+downgrade the active taxonomy to recover compatibility.
+
 The overview, decks, matchup, quality, meta, and catalog documents are all
 declared in `schemas/manifest.json`. The source-specific candidate validator
 allows only the selected event's immutable new raw snapshot, normalized
@@ -2189,14 +2205,14 @@ boundary.
 A Phase 13 multi-event matrix is generated dynamically in memory under
 `schemas/melee-multi-event-matchup.schema.json` version `1.0.0`. Its inputs
 are validated per-event matchup and metadata documents plus the active
-version `1.1.0` format catalog. The result retains:
+version `1.2.0` format catalog. The result retains:
 
 - Melee source, Tabletop product, Constructed format, and
   `all_constructed` scope;
 - sorted included event IDs and aligned names;
 - each input's catalog-relative metadata and matchup paths, matchup Schema and
   SHA-256, and taxonomy Schema and SHA-256;
-- catalog and compatibility-block Schema versions;
+- catalog, compatibility-block, and active-taxonomy Schema versions;
 - the stable hierarchy, raw W-L-D counts, parent roll-up, rates, intervals,
   low-sample state, and contributing event IDs; and
 - source, included, excluded, and directed-observation reconciliation.

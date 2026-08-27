@@ -4,13 +4,13 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p13-06-real-event-437444"
-  working_branch_status: "p13_06r_corrected_validation_complete_pending_owner_acceptance"
+  current_working_branch: "codex/p13-07-active-taxonomy-admission"
+  working_branch_status: "p13_07_local_implementation_complete_pending_owner_acceptance"
   status: "active"
 
 status_document:
   purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-08-27"
+  last_updated: "2026-08-28"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   authoritative_for:
@@ -24,7 +24,7 @@ status_document:
 current_phase:
   id: 13
   name: "Multi-event raw-count matchup aggregation"
-  status: "local_implementation_complete_pending_owner_acceptance"
+  status: "p13_07_local_implementation_complete_pending_owner_acceptance"
   started_on: "2026-08-27"
   objective: "Implement separately gated raw-count aggregation for compatible Tabletop events without merging overview statistics or enabling an unapproved event."
   production_changes_allowed: false
@@ -33,35 +33,49 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P13-06R"
-  name: "Current-classifier corrective real-event validation"
-  status: "corrected_validation_complete_pending_owner_acceptance"
+  id: "P13-07"
+  name: "Current-taxonomy multi-event admission"
+  status: "local_implementation_complete_pending_owner_acceptance"
   authorized_on: "2026-08-27"
-  completed_on: "2026-08-27"
-  artifact_impact: "internal_diagnostics"
-  base_commit: "3a571a0780c7861d3f0cd4422368513ca45d8c22"
-  branch: "codex/p13-06-real-event-437444"
-  objective: "Correct P13-06 by rebuilding disposable derived projections of events 434455 and 437444 under the current approved Modern classifier, then validate one positive compatible aggregation or fail closed without falling back to an older classifier."
+  completed_on: "2026-08-28"
+  artifact_impact: "user_visible_ui,statistical_json_structure"
+  base_commit: "f9aa032edce29e49c68d08282b7bdc3309d07fdb"
+  branch: "codex/p13-07-active-taxonomy-admission"
+  objective: "Require every multi-event input to use the active format taxonomy declared by the maintained catalog, so an equal cohort of stale event digests fails closed without changing classification rules or enabling a public second event."
   authorization:
     local_implementation: true
     commit: false
     remote_publication: false
     merge: false
   allowed_paths:
-    - "docs/audits/P13-06.md"
+    - "src/mtgmeta/melee/publish.py"
+    - "src/mtgmeta/melee/multi_event_contract.py"
+    - "assets/js/phase8/matchup-model.js"
+    - "schemas/melee-event-catalog.schema.json"
+    - "schemas/melee-multi-event-matchup.schema.json"
+    - "tests/test_melee_multi_event_contract.py"
+    - "tests/test_melee_multi_event_parity.py"
+    - "tests/fixtures/melee/multi_event_matchup_parity.json"
+    - "tests/js/phase8-matchup-model.test.js"
+    - "docs/audits/P13-07.md"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
   planned_new_paths:
-    - "docs/audits/P13-06.md"
+    - "docs/audits/P13-07.md"
   prohibited_changes:
-    - "Do not relabel NRG Series event 437444 as an approved production series; its Owner-approved exception is exact-event and test-only."
-    - "Do not use the test-only category exception for another event or persist it in the production parser, Schema, or whitelist."
-    - "Do not commit the test registration or any raw, normalized, classified, ledger, generated, participant, HMAC, catalog, public, or front-end material."
-    - "Do not make an older event taxonomy authoritative, downgrade event 437444 to a historical classifier, or modify protected event 434455 bytes."
-    - "Do not dispatch production, mutate Issues, use MTGO data, enable public multi-event selection, or begin Phase 14."
-  stop_point: "Present the corrected documentation-only P13-06R result to the Owner for acceptance. Do not commit, publish, merge, enable event 437444, dispatch production, implement the permanent active-taxonomy admission rule, or begin Phase 14 before the applicable Owner decision."
+    - "Do not change Modern classification rules, stable identities, priorities, or statistical formulas."
+    - "Do not register event 437444, retain its test data, or add it to a public catalog, Pages artifact, or front end."
+    - "Do not regenerate or edit current public event data, including protected event 434455 bytes."
+    - "Do not change event controls, URL state, rendering, workflows, whitelists, production publication, or MTGO data."
+    - "Do not dispatch production, mutate Issues, enable public multi-event selection, or begin Phase 14."
+  stop_point: "Present the focused P13-07 diff and proportional validation to the Owner for acceptance. Do not commit, push, create a pull request, merge, publish, enable event 437444, dispatch production, or begin Phase 14 before Owner acceptance."
 
 current_repository_state:
+  phase_13_p13_06r_merge_commit: "f9aa032edce29e49c68d08282b7bdc3309d07fdb"
+  phase_13_p13_06r_note: "P13-06R merged through PR #290; PR run 33080735242 and master run 33080876733 succeeded, with test-only event 437444 excluded from production."
   phase_13_p13_05_merge_commit: "3a571a0780c7861d3f0cd4422368513ca45d8c22"
   phase_13_p13_05_note: "P13-05 merged through PR #289; the accepted fixture-backed renderer is the immutable base for P13-06."
   phase_13_p13_04_merge_commit: "6f4dfaeb2288b235eddcd5dcc3282a5acedcaa74"
@@ -88,19 +102,19 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "P13-06R"
-    status: "corrected_validation_complete_pending_owner_acceptance"
-    note: "Events 434455 and 437444 passed the disposable positive aggregation under current Modern taxonomy digest 65fe8be8356aac826bbadfe01d7ae603a63aa44c9880a232c6ac8e9b7cfeaf58; the prior historical-taxonomy result is superseded."
+  - id: "P13-07"
+    status: "local_implementation_complete_pending_owner_acceptance"
+    note: "Require selected event taxonomy digests to equal the active taxonomy declared by future catalog Schema 1.2.0; preserve current production single-event discovery and keep public multi-event selection disabled."
 
 next_approved_task:
   id: null
   name: null
   status: "pending_owner_acceptance"
   local_execution_authorized: false
-  note: "P13-06R corrected local validation is complete. Owner acceptance is required before same-task completion; permanent active-taxonomy admission and Phase 14 remain separately gated."
+  note: "P13-07 local implementation and proportional validation are complete. Owner acceptance is required before same-task commit and publication completion; public enablement and Phase 14 remain separately gated."
 
 prohibited_next_actions:
-  - "Do not alter the accepted P13-01 through P13-05 calculation, admission, loading, URL, history, refresh, cache, or rendering subjects."
+  - "Do not alter the accepted P13-01 raw-count calculation, P13-04 URL/history/cache behavior, or P13-05 rendering subject."
   - "Do not expose a second production event or enable a public multi-event selection."
   - "Do not apply the exact-event test-only NRG Series exception to another event or retain it in production code, Schema, or whitelist."
   - "Do not add event 437444 to the production whitelist, public catalogs, Pages artifact, or front end."

@@ -317,6 +317,7 @@ test("multi-event aggregation matches the Python contract fixture exactly", () =
 
   assert.deepEqual(result, multiEventParityFixture.expected);
   assert.deepEqual(matchup.MULTI_EVENT_ERROR_CODES, [
+    "active_taxonomy_mismatch",
     "blocking_quality",
     "catalog_compatibility_mismatch",
     "catalog_event_missing",
@@ -329,6 +330,7 @@ test("multi-event aggregation matches the Python contract fixture exactly", () =
     "invalid_contract_input",
     "invalid_event_input",
     "matrix_invariant_failed",
+    "missing_active_taxonomy",
     "missing_all_constructed_scope",
     "missing_catalog_compatibility",
     "product_mismatch",

@@ -19,7 +19,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 | Phase | Objective | Status |
 | --- | --- | --- |
 | 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Complete on 2026-08-25 |
-| 13 | Aggregate compatible multi-event matchups from raw counts. | P13-06R corrected validation complete; pending Owner acceptance |
+| 13 | Aggregate compatible multi-event matchups from raw counts. | P13-07 current-taxonomy admission implemented locally; pending Owner acceptance |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
 | 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
@@ -52,8 +52,12 @@ to event `434455`'s historical classifier. The Owner authorized P13-06R to
 replace that diagnostic-only result with disposable projections of both events
 under the current approved Modern classifier. That correction passed with both
 events bound to taxonomy digest `65fe8be8356aac826bbadfe01d7ae603a63aa44c9880a232c6ac8e9b7cfeaf58`.
-The production event-inclusion policy and public admission remain unchanged,
-and Phase 13 awaits Owner acceptance.
+P13-06R was accepted and merged through PR #290. The production event-
+inclusion policy and public admission remain unchanged. P13-07 is authorized
+to close the remaining permanent admission gap by binding every selected event
+to the active catalog taxonomy. Its focused synthetic and real-event checks
+passed; Owner acceptance remains pending. It does not authorize classifier
+changes, public enablement, or production.
 
 ---
 
@@ -72,8 +76,9 @@ The accepted design and bounded task sequence are in
 through P13-06 and authorized the bounded P13-06R correction. P13-06R keeps the
 same exact non-public test event and requires both selected events to use the
 current approved Modern classifier; it does not authorize changing event-
-inclusion scope, implementing the permanent active-taxonomy admission rule,
-public enablement, or production.
+inclusion scope or public enablement. The Owner separately authorized P13-07
+to implement the permanent active-taxonomy admission rule without changing
+classification meaning or production availability.
 
 ## Objective
 
@@ -157,6 +162,11 @@ requires a separate compatibility decision.
    catalog, render it in the production front end, dispatch a workflow, or
    publish it. An incompatible event proves rejection behavior but does not
    provide positive real aggregation acceptance.
+9. Bind every multi-event-eligible catalog to the active format taxonomy and
+   require each selected event's taxonomy version and digest to equal that
+   active identity. Equal stale event digests must fail closed; classifier
+   changes require regenerated derived event outputs rather than taxonomy
+   downgrade or silent event omission.
 
 ## Acceptance criteria
 
@@ -170,6 +180,8 @@ Phase 13 is complete when:
 - confidence intervals are generated where specified;
 - scope selection is visible;
 - overview metrics remain per-event rather than merged.
+- every admitted event uses the catalog-declared active taxonomy, including
+  when all selected stale events otherwise agree with one another.
 
 ---
 
