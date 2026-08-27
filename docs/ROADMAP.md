@@ -19,7 +19,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 | Phase | Objective | Status |
 | --- | --- | --- |
 | 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Complete on 2026-08-25 |
-| 13 | Aggregate compatible multi-event matchups from raw counts. | Implementation in progress; P13-05 Owner accepted |
+| 13 | Aggregate compatible multi-event matchups from raw counts. | P13-06R corrected validation complete; pending Owner acceptance |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
 | 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
@@ -42,9 +42,18 @@ The complete task sequence, embedded implementation history, final acceptance
 criteria, and closeout evidence are preserved in
 `docs/history/ROADMAP-PHASE-12-COMPLETED.md`.
 
-Phase 13 implementation began on 2026-08-27. P13-01 through P13-04 are
-complete; P13-05 is Owner accepted for unchanged same-task completion. Every
-later task remains a separate authorization gate.
+Phase 13 implementation began on 2026-08-27. P13-01 through P13-05 are
+complete. The Owner authorized P13-06 with exact Melee event `437444`. After
+its truthful NRG Series category failed the production-series whitelist, the
+Owner explicitly admitted that exact event to the disposable test scope only.
+The first real-source chain exposed an incomplete taxonomy-cohort rule: equal
+event digests were enforced, but the test incorrectly downgraded event `437444`
+to event `434455`'s historical classifier. The Owner authorized P13-06R to
+replace that diagnostic-only result with disposable projections of both events
+under the current approved Modern classifier. That correction passed with both
+events bound to taxonomy digest `65fe8be8356aac826bbadfe01d7ae603a63aa44c9880a232c6ac8e9b7cfeaf58`.
+The production event-inclusion policy and public admission remain unchanged,
+and Phase 13 awaits Owner acceptance.
 
 ---
 
@@ -60,7 +69,10 @@ whitelist, catalogs, Pages artifact, or front end.
 
 The accepted design and bounded task sequence are in
 `docs/audits/PHASE-13-DESIGN.md`. The Owner separately authorized P13-01
-through P13-05. Those authorizations do not carry to real-event collection,
+through P13-06 and authorized the bounded P13-06R correction. P13-06R keeps the
+same exact non-public test event and requires both selected events to use the
+current approved Modern classifier; it does not authorize changing event-
+inclusion scope, implementing the permanent active-taxonomy admission rule,
 public enablement, or production.
 
 ## Objective
