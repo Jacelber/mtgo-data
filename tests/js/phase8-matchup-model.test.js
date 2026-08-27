@@ -1,10 +1,41 @@
 "use strict";
 
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 const test = require("node:test");
 
 const matchup = require("../../assets/js/phase8/matchup-model.js");
 require("../../assets/js/phase8/i18n.js");
+
+const multiEventParityFixture = JSON.parse(fs.readFileSync(
+  path.join(__dirname, "../fixtures/melee/multi_event_matchup_parity.json"),
+  "utf8"
+));
+
+function deepClone(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function applyFixtureOperation(target, operation) {
+  const parent = operation.path.slice(0, -1).reduce((current, segment) => (
+    current[segment]
+  ), target);
+  const key = operation.path.at(-1);
+  if (operation.op === "set") {
+    parent[key] = deepClone(operation.value);
+    return;
+  }
+  if (operation.op === "delete") {
+    delete parent[key];
+    return;
+  }
+  if (operation.op === "truncate") {
+    parent[key].length = operation.length;
+    return;
+  }
+  throw new Error(`unsupported fixture operation: ${operation.op}`);
+}
 
 function record(seed, rowIndex, columnIndex) {
   return {
@@ -275,4 +306,61 @@ test("Chinese and English translation keys match exactly", () => {
 
   assert.deepEqual(zh, en);
   assert.ok(zh.length > 0);
+});
+
+test("multi-event aggregation matches the Python contract fixture exactly", () => {
+  const result = matchup.buildMultiEventMatchupContract(
+    deepClone(multiEventParityFixture.event_inputs),
+    deepClone(multiEventParityFixture.canonical_hierarchy),
+    deepClone(multiEventParityFixture.catalog)
+  );
+
+  assert.deepEqual(result, multiEventParityFixture.expected);
+  assert.deepEqual(matchup.MULTI_EVENT_ERROR_CODES, [
+    "blocking_quality",
+    "catalog_compatibility_mismatch",
+    "catalog_event_missing",
+    "catalog_identity_mismatch",
+    "duplicate_catalog_event",
+    "duplicate_event_conflict",
+    "event_identity_mismatch",
+    "format_mismatch",
+    "identity_metadata_mismatch",
+    "invalid_contract_input",
+    "invalid_event_input",
+    "matrix_invariant_failed",
+    "missing_all_constructed_scope",
+    "missing_catalog_compatibility",
+    "product_mismatch",
+    "provenance_mismatch",
+    "source_mismatch",
+    "taxonomy_digest_mismatch",
+    "taxonomy_version_mismatch",
+    "too_few_events",
+    "unsupported_catalog_schema",
+    "unsupported_matchup_schema",
+  ]);
+});
+
+test("multi-event admission rejects the same incompatible fixture mutations as Python", () => {
+  multiEventParityFixture.rejections.forEach(rejection => {
+    const candidate = deepClone({
+      event_inputs: multiEventParityFixture.event_inputs,
+      catalog: multiEventParityFixture.catalog,
+    });
+    rejection.operations.forEach(operation => applyFixtureOperation(candidate, operation));
+
+    assert.throws(
+      () => matchup.buildMultiEventMatchupContract(
+        candidate.event_inputs,
+        deepClone(multiEventParityFixture.canonical_hierarchy),
+        candidate.catalog
+      ),
+      error => (
+        error instanceof matchup.MultiEventMatchupError
+        && error.code === rejection.error_code
+      ),
+      rejection.name
+    );
+  });
 });
