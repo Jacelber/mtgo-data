@@ -325,6 +325,40 @@ function tabletopMatchup(matchupDocument, scopeId, eventFormat, overviewScope) {
     </div>${matchupViewControls(viewDocument, "tabletop", mainstreamUnavailable)}${matchupLegend(viewDocument.min_sample_hint)}${matchupProjection(viewDocument)}`;
 }
 
+function tabletopMultiEventMatchup(matchupDocument, eventFormat) {
+  const viewDocument = localizedMatchupDocument(ReviewData.activeMatchupDocument({
+    hierarchical: true,
+    hierarchy: matchupDocument.hierarchy,
+    parent_order: matchupDocument.parent_order,
+    leaf_matrix: matchupDocument.leaf_matrix,
+  }, matchupDocument.rate_method.low_sample_threshold));
+  currentContext.matchupDisplayDocument = viewDocument;
+  currentContext.matchupMainstreamParentIds = null;
+  currentContext.matchupMainstreamUnavailable = true;
+  synchronizeMatchupFilter(viewDocument);
+  const includedEvents = matchupDocument.event_ids.map((eventId, index) => (
+    `<li>${t("tabletop.multi_event_identity", {
+      name: escapeHtml(matchupDocument.event_names[index]),
+      id: escapeHtml(eventId),
+    })}</li>`
+  )).join("");
+  return `<div class="panel-toolbar"><div><h2>${t("tabletop.matchup_title")}</h2>
+      <p class="matrix-toolbar-note">${t("tabletop.multi_matchup_note", {
+        scope: scopeLabel(matchupDocument.scope, eventFormat),
+        events: matchupDocument.event_ids.length,
+        count: matchupDocument.included_match_count,
+      })}</p></div>
+      <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
+    </div>
+    <div class="multi-event-summary" aria-label="${escapeHtml(t("tabletop.multi_included_events"))}">
+      <strong>${t("tabletop.multi_included_events")}</strong>
+      <ul class="quality-list">${includedEvents}</ul>
+      <p>${t("tabletop.multi_overview_separate")}</p>
+    </div>
+    <div class="matchup-view-controls">${matchupFilterControls(viewDocument)}</div>
+    ${matchupLegend(viewDocument.min_sample_hint)}${matchupProjection(viewDocument)}`;
+}
+
 async function tabletopView() {
   const indexPath = productEntry().path;
   const requestedEventIds = state.tabletopView === "matchup"
@@ -487,9 +521,7 @@ async function tabletopView() {
         <ul class="quality-list">${issueList}</ul></div>
     </section>`;
   const content = scopeState.multi_event
-    ? `<div class="empty-state">${t("tabletop.multi_event_pending", {
-        count: selectedEventIds.length,
-      })}</div>`
+    ? tabletopMultiEventMatchup(multiEventMatchup, eventFormat)
     : state.tabletopView === "overview"
       ? tabletopOverview(scope, presentation)
       : tabletopMatchup(matchup, state.tabletopScope, eventFormat, scope);
