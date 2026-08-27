@@ -132,12 +132,26 @@ function applyUrlState(parameters) {
   } else if (state.product === "tabletop-major-events") {
     const view = parameters.get("view");
     const eventId = parameters.get("event");
+    const rawEventIds = parameters.get("events");
     const scope = parameters.get("scope");
     if (TABLETOP_VIEWS.has(view)) state.tabletopView = view;
     if (eventId) {
       state.tabletopEventId = eventId;
-      state.tabletopSelectedEvents.add(eventId);
       state.tabletopLastSelectedEventId = eventId;
+    }
+    const selectedEventIds = state.tabletopView === "matchup"
+      ? TabletopController.parseSelectedEventIds(rawEventIds)
+      : null;
+    if (selectedEventIds) {
+      state.tabletopSelectedEvents = new Set(selectedEventIds);
+    } else if (eventId) {
+      state.tabletopSelectedEvents.add(eventId);
+    }
+    if (
+      state.tabletopView === "matchup"
+      && (selectedEventIds === null || rawEventIds !== selectedEventIds.join(","))
+    ) {
+      queueUrlWrite("replace");
     }
     if (TABLETOP_SCOPES.has(scope)) state.tabletopScope = scope;
     if (TABLETOP_SORT_KEYS.has(sort)) state.tabletopSort = sort;
@@ -175,6 +189,12 @@ function urlStateParameters() {
   } else if (state.product === "tabletop-major-events") {
     parameters.set("view", state.tabletopView);
     if (state.tabletopEventId) parameters.set("event", state.tabletopEventId);
+    if (state.tabletopView === "matchup" && state.tabletopSelectedEvents.size) {
+      const eventIds = TabletopController.parseSelectedEventIds(
+        [...state.tabletopSelectedEvents].join(",")
+      );
+      if (eventIds) parameters.set("events", eventIds.join(","));
+    }
     parameters.set("scope", state.tabletopScope);
     if (state.tabletopView === "overview") {
       parameters.set("sort", state.tabletopSort);
@@ -184,7 +204,6 @@ function urlStateParameters() {
       }
     }
   }
-  // Phase 13 owns `events=<sorted,unique,event,ids>`; P12-02 reserves but omits it.
   parameters.set("lang", I18n.language());
   return parameters;
 }
@@ -828,6 +847,7 @@ document.addEventListener("change", async event => {
     state.tabletopDetailIdentity = null;
     state.matchupRows.clear();
     state.matchupColumns.clear();
+    queueUrlWrite();
     await renderView();
   }
 });
