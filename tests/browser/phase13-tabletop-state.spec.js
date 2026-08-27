@@ -1,0 +1,123 @@
+"use strict";
+
+const fs = require("node:fs");
+const path = require("node:path");
+const { expect, test } = require("@playwright/test");
+
+const fixture = JSON.parse(fs.readFileSync(
+  path.join(__dirname, "../fixtures/melee/multi_event_matchup_parity.json"),
+  "utf8"
+));
+
+function overview(eventId) {
+  return {
+    format: "modern",
+    event_id: eventId,
+    event_structure: "constructed_single_stage",
+    event: {
+      name: `Synthetic ${eventId}`,
+      date: { start: "2026-08-01", end: "2026-08-02" },
+      source_url: `https://melee.gg/Tournament/View/${eventId}`,
+    },
+    scopes: {
+      all_constructed: {
+        archetypes: [],
+        average_points_per_effective_round: null,
+        day2_conversion: null,
+        high_score_deck_count: 0,
+        participant_count: 0,
+        result_counts: {},
+        theoretical_rounds: 0,
+      },
+    },
+  };
+}
+
+function quality() {
+  return {
+    format: "modern",
+    issues: [],
+    counts: {
+      submitted_decklists: 0,
+      missing_or_unavailable_decklists: 0,
+    },
+  };
+}
+
+async function routeSyntheticEvents(page) {
+  const documents = new Map([
+    ["/stats/modern/melee/index.json", fixture.catalog],
+    ["/stats/modern/archetype_names.json", {
+      schema_version: "1.0.0",
+      format: "modern",
+      names: [
+        { identity_id: "alpha", parent_id: "alpha", subtype_id: null, display: { en: "Alpha", zh: "阿尔法" } },
+        { identity_id: "beta", parent_id: "beta", subtype_id: null, display: { en: "Beta", zh: "贝塔" } },
+        { identity_id: "beta/one", parent_id: "beta", subtype_id: "one", display: { en: "One Beta", zh: "贝塔一" } },
+        { identity_id: "beta/two", parent_id: "beta", subtype_id: "two", display: { en: "Two Beta", zh: "贝塔二" } },
+      ],
+    }],
+  ]);
+  const inputs = new Map();
+  fixture.event_inputs.forEach(input => inputs.set(input.meta.event_id, input));
+  inputs.forEach((input, eventId) => {
+    const base = `/stats/modern/melee/events/${eventId}`;
+    documents.set(`${base}/meta.json`, input.meta);
+    documents.set(`${base}/matchup.json`, input.matchup);
+    documents.set(`${base}/overview.json`, overview(eventId));
+    documents.set(`${base}/quality.json`, quality());
+  });
+  await page.route("**/stats/modern/{archetype_names.json,melee/**}", async route => {
+    const value = documents.get(new URL(route.request().url()).pathname);
+    if (!value) {
+      await route.fulfill({ status: 404, body: "not found" });
+      return;
+    }
+    await route.fulfill({ json: value });
+  });
+}
+
+async function expectSelectedEvents(page, expected) {
+  for (const eventId of ["10", "20"]) {
+    await expect(page.locator(`[data-tabletop-event-check="${eventId}"]`))
+      .toBeChecked({ checked: expected.includes(eventId) });
+  }
+}
+
+test("Tabletop matchup selection survives canonical history, reload, and invalid input", async ({ page }) => {
+  await routeSyntheticEvents(page);
+  await page.goto(
+    "/melee/index.html?format=modern&product=tabletop-major-events&view=matchup&event=20&events=20&scope=all_constructed&lang=en"
+  );
+  await expectSelectedEvents(page, ["20"]);
+
+  await page.locator('[data-tabletop-event-check="10"]').check();
+  await expect.poll(() => new URL(page.url()).searchParams.get("events")).toBe("10,20");
+  await expect.poll(() => new URL(page.url()).searchParams.get("event")).toBe("10");
+  await expectSelectedEvents(page, ["10", "20"]);
+
+  await page.goBack();
+  await expect.poll(() => new URL(page.url()).searchParams.get("events")).toBe("20");
+  await expectSelectedEvents(page, ["20"]);
+
+  await page.goForward();
+  await expect.poll(() => new URL(page.url()).searchParams.get("events")).toBe("10,20");
+  await expectSelectedEvents(page, ["10", "20"]);
+
+  await page.reload();
+  await expectSelectedEvents(page, ["10", "20"]);
+
+  await page.locator('[data-tabletop-view="overview"]').click();
+  await expect.poll(() => new URL(page.url()).searchParams.get("events")).toBe(null);
+  await expect(page.locator("#tabletop-event")).toHaveValue("10");
+  await expect(page.locator(".event-summary")).toContainText("Synthetic 10");
+  await page.locator('[data-tabletop-view="matchup"]').click();
+  await expect.poll(() => new URL(page.url()).searchParams.get("events")).toBe("10,20");
+  await expectSelectedEvents(page, ["10", "20"]);
+
+  await page.goto(
+    "/melee/index.html?format=modern&product=tabletop-major-events&view=matchup&event=20&events=20,stale&scope=all_constructed&lang=en"
+  );
+  await expect.poll(() => new URL(page.url()).searchParams.get("events")).toBe("20");
+  await expectSelectedEvents(page, ["20"]);
+});

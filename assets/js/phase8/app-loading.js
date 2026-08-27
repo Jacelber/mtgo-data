@@ -10,6 +10,11 @@ function currentViewKey() {
   else if (state.product === "mtgo-top8") parts.push(state.top8WeekFile || "latest");
   else if (state.product === "tabletop-major-events") {
     parts.push(state.tabletopEventId || "default", state.tabletopView);
+    if (state.tabletopView === "matchup") {
+      parts.push([...state.tabletopSelectedEvents]
+        .sort((left, right) => left.length - right.length || left.localeCompare(right))
+        .join(","));
+    }
   }
   return parts.join(":");
 }
@@ -143,6 +148,8 @@ async function stageCurrentRefresh() {
         includeMatchup: state.tabletopView === "matchup",
         includeDecks: state.tabletopView === "overview"
           && Boolean(state.tabletopDetailIdentity),
+        selectedEventEntries: currentContext.selectedEventEntries,
+        canonicalIdentityOrder: currentContext.canonicalIdentityOrder,
       }
     );
   }

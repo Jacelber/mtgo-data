@@ -327,6 +327,10 @@ function tabletopMatchup(matchupDocument, scopeId, eventFormat, overviewScope) {
 
 async function tabletopView() {
   const indexPath = productEntry().path;
+  const requestedEventIds = state.tabletopView === "matchup"
+    ? [...state.tabletopSelectedEvents]
+    : [state.tabletopEventId].filter(Boolean);
+  const requestedActiveEventId = state.tabletopEventId;
   const {
     eventFormat,
     eventEntry,
@@ -336,6 +340,7 @@ async function tabletopView() {
     mtgoDecks,
     overview,
     quality,
+    selectedEventEntries,
     tabletopDecks,
   } = await TabletopController.loadEvent(
     indexPath,
@@ -346,21 +351,49 @@ async function tabletopView() {
       includeMatchup: state.tabletopView === "matchup",
       includeDecks: state.tabletopView === "overview"
         && Boolean(state.tabletopDetailIdentity),
+      selectedEventIds: requestedEventIds,
     }
   );
+  const canonicalIdentityOrder = [
+    ...state.classifierNameContract.names.keys(),
+    "unknown",
+  ];
+  const multiEventMatchup = selectedEventEntries.length > 1
+    ? (await TabletopController.loadMultiEventMatchups(
+        indexPath,
+        index,
+        selectedEventEntries,
+        state.format,
+        canonicalIdentityOrder
+      )).multiEventMatchup
+    : null;
   state.tabletopEventId = eventEntry.event_id;
-  const catalogEventIds = new Set(index.events.map(item => item.event_id));
-  state.tabletopSelectedEvents = new Set(
-    [...state.tabletopSelectedEvents].filter(id => catalogEventIds.has(id))
-  );
-  if (!state.tabletopSelectedEvents.size) {
-    state.tabletopSelectedEvents.add(eventEntry.event_id);
+  const admittedSelectedEventIds = selectedEventEntries.map(item => item.event_id);
+  if (state.tabletopView === "matchup") {
+    state.tabletopSelectedEvents = new Set(admittedSelectedEventIds);
+  } else {
+    const catalogEventIds = new Set(index.events.map(item => item.event_id));
+    state.tabletopSelectedEvents = new Set(
+      [...state.tabletopSelectedEvents].filter(eventId => catalogEventIds.has(eventId))
+    );
+    if (!state.tabletopSelectedEvents.size) {
+      state.tabletopSelectedEvents.add(eventEntry.event_id);
+    }
+  }
+  const normalizedRequestedEventIds = [...new Set(requestedEventIds)]
+    .sort((left, right) => left.length - right.length || left.localeCompare(right));
+  if (
+    normalizedRequestedEventIds.join(",")
+      !== admittedSelectedEventIds.join(",")
+    || requestedActiveEventId !== state.tabletopEventId
+  ) {
+    queueUrlWrite("replace");
   }
   if (!state.tabletopLastSelectedEventId) {
     state.tabletopLastSelectedEventId = eventEntry.event_id;
   }
   const selectedEventIds = state.tabletopView === "matchup"
-    ? [...state.tabletopSelectedEvents]
+    ? selectedEventEntries.map(item => item.event_id)
     : [eventEntry.event_id];
   const scopeState = TabletopController.resolveScopeState({
     events: index.events,
@@ -402,6 +435,9 @@ async function tabletopView() {
     overview,
     matchup,
     quality,
+    canonicalIdentityOrder,
+    multiEventMatchup,
+    selectedEventEntries,
     tabletopDecks,
     mtgoDecks,
     scopeState,
