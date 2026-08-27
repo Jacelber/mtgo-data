@@ -21,6 +21,8 @@ from .stats import (
 
 
 PUBLICATION_SCHEMA_VERSION = "1.0.0"
+CATALOG_SCHEMA_VERSION = "1.1.0"
+MATCHUP_COMPATIBILITY_SCHEMA_VERSION = "1.0.0"
 FORMAT_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
 OUTPUT_NAMES = ("overview", "decks", "matchup", "quality")
@@ -28,6 +30,64 @@ OUTPUT_NAMES = ("overview", "decks", "matchup", "quality")
 
 class MeleePublicationError(ValueError):
     """Raised when deterministic event publication cannot be proven."""
+
+
+def build_matchup_compatibility(
+    *,
+    format_id: str,
+    input_document: Mapping[str, Any],
+    quality: Mapping[str, Any],
+    matchup_descriptor: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Build the minimum catalog evidence for multi-event admission."""
+
+    taxonomy_version = input_document.get("taxonomy_schema_version")
+    taxonomy_digest = input_document.get("taxonomy_sha256")
+    matchup_version = matchup_descriptor.get("schema_version")
+    matchup_digest = matchup_descriptor.get("sha256")
+    if not isinstance(format_id, str) or not FORMAT_PATTERN.fullmatch(format_id):
+        raise MeleePublicationError("matchup compatibility has an invalid format")
+    if not isinstance(taxonomy_version, str) or not taxonomy_version:
+        raise MeleePublicationError("matchup compatibility has no taxonomy version")
+    if not isinstance(taxonomy_digest, str) or not re.fullmatch(
+        r"[0-9a-f]{64}", taxonomy_digest
+    ):
+        raise MeleePublicationError(
+            "matchup compatibility has an invalid taxonomy digest"
+        )
+    if (
+        matchup_descriptor.get("path") != "matchup.json"
+        or not isinstance(matchup_version, str)
+        or not matchup_version
+    ):
+        raise MeleePublicationError(
+            "matchup compatibility has an invalid matchup descriptor"
+        )
+    if not isinstance(matchup_digest, str) or not re.fullmatch(
+        r"[0-9a-f]{64}", matchup_digest
+    ):
+        raise MeleePublicationError(
+            "matchup compatibility has an invalid matchup digest"
+        )
+    if (
+        quality.get("status") not in {"pass", "warning"}
+        or quality.get("blocking") is not False
+    ):
+        raise MeleePublicationError(
+            "matchup compatibility requires non-blocking quality"
+        )
+    return {
+        "schema_version": MATCHUP_COMPATIBILITY_SCHEMA_VERSION,
+        "source": "melee",
+        "product": "tabletop-major-events",
+        "format": format_id,
+        "scope": "all_constructed",
+        "matchup_schema_version": matchup_version,
+        "matchup_sha256": matchup_digest,
+        "taxonomy_schema_version": taxonomy_version,
+        "taxonomy_sha256": taxonomy_digest,
+        "quality_blocking": False,
+    }
 
 
 def _read_object(path: Path) -> tuple[dict[str, Any], bytes]:
@@ -182,9 +242,15 @@ def build_event_publication_from_paths(
         "scope_order": list(overview["scope_order"]),
         "default_scope": overview["default_scope"],
         "quality_status": quality["status"],
+        "matchup_compatibility": build_matchup_compatibility(
+            format_id=format_id,
+            input_document=input_document,
+            quality=quality,
+            matchup_descriptor=descriptors["matchup"],
+        ),
     }
     catalog = {
-        "schema_version": PUBLICATION_SCHEMA_VERSION,
+        "schema_version": CATALOG_SCHEMA_VERSION,
         "document_type": "event_catalog",
         "source": "melee",
         "product": "tabletop-major-events",

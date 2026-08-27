@@ -1330,6 +1330,20 @@ The output must list every included event ID.
 
 MTGO data must never be included in a tabletop multi-event matrix.
 
+The version `1.0.0` in-memory multi-event result contract admits inputs only
+through a version `1.1.0` Tabletop event catalog. Each admitted catalog entry
+binds the `all_constructed` matchup Schema and SHA-256, taxonomy Schema and
+SHA-256, same source, product, format, and non-blocking quality state. These
+fields are compatibility evidence, not new statistics. A legacy catalog
+without that evidence remains valid for single-event discovery but is not
+eligible for multi-event aggregation.
+
+The combined result lists each input's catalog-relative metadata and matchup
+paths plus the bound Schema versions and digests. It remains an in-memory
+consumer contract in Phase 13: no generated combination file or generation
+timestamp is required, and `schemas/manifest.json` therefore has no mapping
+for it.
+
 The initial cross-structure presentation policy exposes only
 `all_constructed` when two or more events are selected. This is the common
 scope across `mixed`, `constructed_day2`, and

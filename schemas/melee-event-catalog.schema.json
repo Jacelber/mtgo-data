@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-catalog.schema.json",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "title": "Tabletop Major Events format catalog",
   "type": "object",
   "additionalProperties": false,
@@ -15,7 +15,7 @@
     "events"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
     "document_type": {"const": "event_catalog"},
     "source": {"const": "melee"},
     "product": {"const": "tabletop-major-events"},
@@ -76,7 +76,8 @@
           ]
         },
         "default_scope": {"const": "all_constructed"},
-        "quality_status": {"enum": ["pass", "warning"]}
+        "quality_status": {"enum": ["pass", "warning"]},
+        "matchup_compatibility": {"$ref": "#/$defs/matchup_compatibility"}
       },
       "allOf": [
         {
@@ -98,6 +99,49 @@
           }
         }
       ]
+    },
+    "matchup_compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "source",
+        "product",
+        "format",
+        "scope",
+        "matchup_schema_version",
+        "matchup_sha256",
+        "taxonomy_schema_version",
+        "taxonomy_sha256",
+        "quality_blocking"
+      ],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "source": {"const": "melee"},
+        "product": {"const": "tabletop-major-events"},
+        "format": {"$ref": "melee-event-statistics-common.schema.json#/$defs/id"},
+        "scope": {"const": "all_constructed"},
+        "matchup_schema_version": {"type": "string", "minLength": 1},
+        "matchup_sha256": {"$ref": "melee-event-statistics-common.schema.json#/$defs/sha256"},
+        "taxonomy_schema_version": {"type": "string", "minLength": 1},
+        "taxonomy_sha256": {"$ref": "melee-event-statistics-common.schema.json#/$defs/sha256"},
+        "quality_blocking": {"const": false}
+      }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"schema_version": {"const": "1.1.0"}},
+        "required": ["schema_version"]
+      },
+      "then": {
+        "properties": {
+          "events": {
+            "items": {"required": ["matchup_compatibility"]}
+          }
+        }
+      }
+    }
+  ]
 }

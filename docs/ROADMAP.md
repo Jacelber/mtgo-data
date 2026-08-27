@@ -19,7 +19,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 | Phase | Objective | Status |
 | --- | --- | --- |
 | 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Complete on 2026-08-25 |
-| 13 | Aggregate compatible multi-event matchups from raw counts. | Design authorized; implementation not authorized |
+| 13 | Aggregate compatible multi-event matchups from raw counts. | Implementation in progress; P13-02 Owner accepted |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
 | 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
@@ -42,8 +42,9 @@ The complete task sequence, embedded implementation history, final acceptance
 criteria, and closeout evidence are preserved in
 `docs/history/ROADMAP-PHASE-12-COMPLETED.md`.
 
-Phase 13 remains planned and is not authorized. Its first bounded task contract
-requires separate Owner approval.
+Phase 13 implementation began on 2026-08-27. P13-01 is complete; P13-02 is
+Owner accepted for same-task completion. Every later task remains a separate
+authorization gate.
 
 ---
 
@@ -57,9 +58,10 @@ test using an exact Melee link supplied by the Owner at that later gate. That
 event remains a non-public test input: it is not admitted to the production
 whitelist, catalogs, Pages artifact, or front end.
 
-The current design and proposed first bounded implementation contract are in
-`docs/audits/PHASE-13-DESIGN.md`. Design authorization does not authorize Phase
-13 implementation, live collection, public enablement, or production.
+The accepted design and bounded task sequence are in
+`docs/audits/PHASE-13-DESIGN.md`. The Owner separately authorized P13-01 and
+P13-02. Those authorizations do not carry to browser work, live collection,
+public enablement, or production.
 
 ## Objective
 
