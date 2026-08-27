@@ -1,0 +1,1693 @@
+{
+  "canonical_hierarchy": {
+    "parents": [
+      {
+        "id": "alpha",
+        "name": "Alpha",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "beta",
+        "name": "Beta",
+        "expandable": true,
+        "subtype_ids": [
+          "beta/one",
+          "beta/two"
+        ]
+      },
+      {
+        "id": "unknown",
+        "name": "Unknown",
+        "expandable": false,
+        "subtype_ids": []
+      }
+    ],
+    "leaves": [
+      {
+        "id": "alpha",
+        "kind": "archetype",
+        "name": "Alpha",
+        "display_name": "Alpha",
+        "parent_id": "alpha",
+        "subtype_id": null
+      },
+      {
+        "id": "beta/one",
+        "kind": "subtype",
+        "name": "One",
+        "display_name": "One Beta",
+        "parent_id": "beta",
+        "subtype_id": "one"
+      },
+      {
+        "id": "beta/two",
+        "kind": "subtype",
+        "name": "Two",
+        "display_name": "Two Beta",
+        "parent_id": "beta",
+        "subtype_id": "two"
+      },
+      {
+        "id": "unknown",
+        "kind": "unknown",
+        "name": "Unknown",
+        "display_name": "Unknown",
+        "parent_id": "unknown",
+        "subtype_id": null
+      }
+    ]
+  },
+  "event_inputs": [
+    {
+      "meta": {
+        "schema_version": "1.0.0",
+        "document_type": "meta",
+        "source": "melee",
+        "product": "tabletop-major-events",
+        "event_id": "20",
+        "format": "modern",
+        "event": {
+          "name": "Synthetic 20"
+        },
+        "input": {
+          "taxonomy_schema_version": "1.1.0",
+          "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "scope_order": [
+          "all_constructed"
+        ],
+        "quality": {
+          "status": "pass",
+          "blocking": false
+        },
+        "outputs": {
+          "matchup": {
+            "path": "matchup.json",
+            "schema_version": "1.0.0",
+            "bytes": 100,
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      },
+      "matchup": {
+        "schema_version": "1.0.0",
+        "document_type": "matchup",
+        "source": "melee",
+        "event_id": "20",
+        "format": "modern",
+        "input": {
+          "taxonomy_schema_version": "1.1.0",
+          "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "event": {
+          "name": "Synthetic 20"
+        },
+        "scope_order": [
+          "all_constructed"
+        ],
+        "hierarchy": {
+          "parents": [
+            {
+              "id": "unknown",
+              "name": "Unknown",
+              "expandable": false,
+              "subtype_ids": []
+            },
+            {
+              "id": "alpha",
+              "name": "Alpha",
+              "expandable": false,
+              "subtype_ids": []
+            },
+            {
+              "id": "beta",
+              "name": "Beta",
+              "expandable": true,
+              "subtype_ids": [
+                "beta/one"
+              ]
+            }
+          ],
+          "leaves": [
+            {
+              "id": "unknown",
+              "kind": "unknown",
+              "name": "Unknown",
+              "display_name": "Unknown",
+              "parent_id": "unknown",
+              "subtype_id": null
+            },
+            {
+              "id": "alpha",
+              "kind": "archetype",
+              "name": "Alpha",
+              "display_name": "Alpha",
+              "parent_id": "alpha",
+              "subtype_id": null
+            },
+            {
+              "id": "beta/one",
+              "kind": "subtype",
+              "name": "One",
+              "display_name": "One Beta",
+              "parent_id": "beta",
+              "subtype_id": "one"
+            }
+          ]
+        },
+        "scopes": {
+          "all_constructed": {
+            "source_match_count": 17,
+            "included_match_count": 17,
+            "excluded_match_count": 0,
+            "directed_observation_count": 34,
+            "excluded_match_counts": {
+              "bye": 0,
+              "intentional_draw": 0,
+              "no_show": 0,
+              "awarded_win_top8_lock": 0,
+              "administrative_result": 0,
+              "disqualified_participant": 0,
+              "unknown": 0
+            },
+            "parent_order": [
+              "unknown",
+              "alpha",
+              "beta"
+            ],
+            "leaf_order": [
+              "unknown",
+              "alpha",
+              "beta/one"
+            ],
+            "leaf_matrix": {
+              "alpha": {
+                "alpha": {
+                  "wins": 1,
+                  "losses": 1,
+                  "draws": 0
+                },
+                "beta/one": {
+                  "wins": 8,
+                  "losses": 2,
+                  "draws": 2
+                },
+                "unknown": {
+                  "wins": 3,
+                  "losses": 1,
+                  "draws": 0
+                }
+              },
+              "beta/one": {
+                "alpha": {
+                  "wins": 2,
+                  "losses": 8,
+                  "draws": 2
+                },
+                "beta/one": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0
+                },
+                "unknown": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0
+                }
+              },
+              "unknown": {
+                "alpha": {
+                  "wins": 1,
+                  "losses": 3,
+                  "draws": 0
+                },
+                "beta/one": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0
+                },
+                "unknown": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "meta": {
+        "schema_version": "1.0.0",
+        "document_type": "meta",
+        "source": "melee",
+        "product": "tabletop-major-events",
+        "event_id": "10",
+        "format": "modern",
+        "event": {
+          "name": "Synthetic 10"
+        },
+        "input": {
+          "taxonomy_schema_version": "1.1.0",
+          "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "scope_order": [
+          "all_constructed"
+        ],
+        "quality": {
+          "status": "pass",
+          "blocking": false
+        },
+        "outputs": {
+          "matchup": {
+            "path": "matchup.json",
+            "schema_version": "1.0.0",
+            "bytes": 100,
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        }
+      },
+      "matchup": {
+        "schema_version": "1.0.0",
+        "document_type": "matchup",
+        "source": "melee",
+        "event_id": "10",
+        "format": "modern",
+        "input": {
+          "taxonomy_schema_version": "1.1.0",
+          "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "event": {
+          "name": "Synthetic 10"
+        },
+        "scope_order": [
+          "all_constructed"
+        ],
+        "hierarchy": {
+          "parents": [
+            {
+              "id": "alpha",
+              "name": "Alpha",
+              "expandable": false,
+              "subtype_ids": []
+            },
+            {
+              "id": "beta",
+              "name": "Beta",
+              "expandable": true,
+              "subtype_ids": [
+                "beta/two"
+              ]
+            }
+          ],
+          "leaves": [
+            {
+              "id": "alpha",
+              "kind": "archetype",
+              "name": "Alpha",
+              "display_name": "Alpha",
+              "parent_id": "alpha",
+              "subtype_id": null
+            },
+            {
+              "id": "beta/two",
+              "kind": "subtype",
+              "name": "Two",
+              "display_name": "Two Beta",
+              "parent_id": "beta",
+              "subtype_id": "two"
+            }
+          ]
+        },
+        "scopes": {
+          "all_constructed": {
+            "source_match_count": 11,
+            "included_match_count": 11,
+            "excluded_match_count": 0,
+            "directed_observation_count": 22,
+            "excluded_match_counts": {
+              "bye": 0,
+              "intentional_draw": 0,
+              "no_show": 0,
+              "awarded_win_top8_lock": 0,
+              "administrative_result": 0,
+              "disqualified_participant": 0,
+              "unknown": 0
+            },
+            "parent_order": [
+              "alpha",
+              "beta"
+            ],
+            "leaf_order": [
+              "alpha",
+              "beta/two"
+            ],
+            "leaf_matrix": {
+              "alpha": {
+                "alpha": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0
+                },
+                "beta/two": {
+                  "wins": 1,
+                  "losses": 9,
+                  "draws": 0
+                }
+              },
+              "beta/two": {
+                "alpha": {
+                  "wins": 9,
+                  "losses": 1,
+                  "draws": 0
+                },
+                "beta/two": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 2
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "meta": {
+        "schema_version": "1.0.0",
+        "document_type": "meta",
+        "source": "melee",
+        "product": "tabletop-major-events",
+        "event_id": "20",
+        "format": "modern",
+        "event": {
+          "name": "Synthetic 20"
+        },
+        "input": {
+          "taxonomy_schema_version": "1.1.0",
+          "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "scope_order": [
+          "all_constructed"
+        ],
+        "quality": {
+          "status": "pass",
+          "blocking": false
+        },
+        "outputs": {
+          "matchup": {
+            "path": "matchup.json",
+            "schema_version": "1.0.0",
+            "bytes": 100,
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      },
+      "matchup": {
+        "schema_version": "1.0.0",
+        "document_type": "matchup",
+        "source": "melee",
+        "event_id": "20",
+        "format": "modern",
+        "input": {
+          "taxonomy_schema_version": "1.1.0",
+          "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "event": {
+          "name": "Synthetic 20"
+        },
+        "scope_order": [
+          "all_constructed"
+        ],
+        "hierarchy": {
+          "parents": [
+            {
+              "id": "unknown",
+              "name": "Unknown",
+              "expandable": false,
+              "subtype_ids": []
+            },
+            {
+              "id": "alpha",
+              "name": "Alpha",
+              "expandable": false,
+              "subtype_ids": []
+            },
+            {
+              "id": "beta",
+              "name": "Beta",
+              "expandable": true,
+              "subtype_ids": [
+                "beta/one"
+              ]
+            }
+          ],
+          "leaves": [
+            {
+              "id": "unknown",
+              "kind": "unknown",
+              "name": "Unknown",
+              "display_name": "Unknown",
+              "parent_id": "unknown",
+              "subtype_id": null
+            },
+            {
+              "id": "alpha",
+              "kind": "archetype",
+              "name": "Alpha",
+              "display_name": "Alpha",
+              "parent_id": "alpha",
+              "subtype_id": null
+            },
+            {
+              "id": "beta/one",
+              "kind": "subtype",
+              "name": "One",
+              "display_name": "One Beta",
+              "parent_id": "beta",
+              "subtype_id": "one"
+            }
+          ]
+        },
+        "scopes": {
+          "all_constructed": {
+            "source_match_count": 17,
+            "included_match_count": 17,
+            "excluded_match_count": 0,
+            "directed_observation_count": 34,
+            "excluded_match_counts": {
+              "bye": 0,
+              "intentional_draw": 0,
+              "no_show": 0,
+              "awarded_win_top8_lock": 0,
+              "administrative_result": 0,
+              "disqualified_participant": 0,
+              "unknown": 0
+            },
+            "parent_order": [
+              "unknown",
+              "alpha",
+              "beta"
+            ],
+            "leaf_order": [
+              "unknown",
+              "alpha",
+              "beta/one"
+            ],
+            "leaf_matrix": {
+              "alpha": {
+                "alpha": {
+                  "wins": 1,
+                  "losses": 1,
+                  "draws": 0
+                },
+                "beta/one": {
+                  "wins": 8,
+                  "losses": 2,
+                  "draws": 2
+                },
+                "unknown": {
+                  "wins": 3,
+                  "losses": 1,
+                  "draws": 0
+                }
+              },
+              "beta/one": {
+                "alpha": {
+                  "wins": 2,
+                  "losses": 8,
+                  "draws": 2
+                },
+                "beta/one": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0
+                },
+                "unknown": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0
+                }
+              },
+              "unknown": {
+                "alpha": {
+                  "wins": 1,
+                  "losses": 3,
+                  "draws": 0
+                },
+                "beta/one": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0
+                },
+                "unknown": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "catalog": {
+    "schema_version": "1.1.0",
+    "document_type": "event_catalog",
+    "source": "melee",
+    "product": "tabletop-major-events",
+    "format": "modern",
+    "default_event_id": "20",
+    "events": [
+      {
+        "event_id": "20",
+        "name": "Synthetic 20",
+        "series": "synthetic",
+        "date": {
+          "start": "2026-08-01",
+          "end": "2026-08-02"
+        },
+        "event_structure": "constructed_single_stage",
+        "source_url": "https://melee.gg/Tournament/View/20",
+        "meta": "events/20/meta.json",
+        "overview": "events/20/overview.json",
+        "decks": "events/20/decks.json",
+        "matchup": "events/20/matchup.json",
+        "quality": "events/20/quality.json",
+        "scope_order": [
+          "all_constructed"
+        ],
+        "default_scope": "all_constructed",
+        "quality_status": "pass",
+        "matchup_compatibility": {
+          "schema_version": "1.0.0",
+          "source": "melee",
+          "product": "tabletop-major-events",
+          "format": "modern",
+          "scope": "all_constructed",
+          "matchup_schema_version": "1.0.0",
+          "matchup_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "taxonomy_schema_version": "1.1.0",
+          "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "quality_blocking": false
+        }
+      },
+      {
+        "event_id": "10",
+        "name": "Synthetic 10",
+        "series": "synthetic",
+        "date": {
+          "start": "2026-08-01",
+          "end": "2026-08-02"
+        },
+        "event_structure": "constructed_single_stage",
+        "source_url": "https://melee.gg/Tournament/View/10",
+        "meta": "events/10/meta.json",
+        "overview": "events/10/overview.json",
+        "decks": "events/10/decks.json",
+        "matchup": "events/10/matchup.json",
+        "quality": "events/10/quality.json",
+        "scope_order": [
+          "all_constructed"
+        ],
+        "default_scope": "all_constructed",
+        "quality_status": "pass",
+        "matchup_compatibility": {
+          "schema_version": "1.0.0",
+          "source": "melee",
+          "product": "tabletop-major-events",
+          "format": "modern",
+          "scope": "all_constructed",
+          "matchup_schema_version": "1.0.0",
+          "matchup_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "taxonomy_schema_version": "1.1.0",
+          "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "quality_blocking": false
+        }
+      }
+    ]
+  },
+  "expected": {
+    "schema_version": "1.0.0",
+    "document_type": "multi_event_matchup",
+    "source": "melee",
+    "product": "tabletop-major-events",
+    "format": "modern",
+    "scope": "all_constructed",
+    "event_ids": [
+      "10",
+      "20"
+    ],
+    "event_names": [
+      "Synthetic 10",
+      "Synthetic 20"
+    ],
+    "compatibility": {
+      "catalog_schema_version": "1.1.0",
+      "catalog_compatibility_schema_version": "1.0.0",
+      "matchup_schema_version": "1.0.0",
+      "taxonomy_schema_version": "1.1.0",
+      "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "rate_method": {
+      "literal_win_rate_method": "wins_over_valid_matches",
+      "confidence_interval": "wilson_95",
+      "low_sample_threshold": 20
+    },
+    "hierarchy": {
+      "parents": [
+        {
+          "id": "alpha",
+          "name": "Alpha",
+          "expandable": false,
+          "subtype_ids": []
+        },
+        {
+          "id": "beta",
+          "name": "Beta",
+          "expandable": true,
+          "subtype_ids": [
+            "beta/one",
+            "beta/two"
+          ]
+        },
+        {
+          "id": "unknown",
+          "name": "Unknown",
+          "expandable": false,
+          "subtype_ids": []
+        }
+      ],
+      "leaves": [
+        {
+          "id": "alpha",
+          "kind": "archetype",
+          "name": "Alpha",
+          "display_name": "Alpha",
+          "parent_id": "alpha",
+          "subtype_id": null
+        },
+        {
+          "id": "beta/one",
+          "kind": "subtype",
+          "name": "One",
+          "display_name": "One Beta",
+          "parent_id": "beta",
+          "subtype_id": "one"
+        },
+        {
+          "id": "beta/two",
+          "kind": "subtype",
+          "name": "Two",
+          "display_name": "Two Beta",
+          "parent_id": "beta",
+          "subtype_id": "two"
+        },
+        {
+          "id": "unknown",
+          "kind": "unknown",
+          "name": "Unknown",
+          "display_name": "Unknown",
+          "parent_id": "unknown",
+          "subtype_id": null
+        }
+      ]
+    },
+    "source_match_count": 28,
+    "included_match_count": 28,
+    "excluded_match_count": 0,
+    "directed_observation_count": 56,
+    "excluded_match_counts": {
+      "administrative_result": 0,
+      "awarded_win_top8_lock": 0,
+      "bye": 0,
+      "disqualified_participant": 0,
+      "intentional_draw": 0,
+      "no_show": 0,
+      "unknown": 0
+    },
+    "parent_order": [
+      "alpha",
+      "beta",
+      "unknown"
+    ],
+    "parent_overall": {
+      "alpha": {
+        "wins": 12,
+        "losses": 12,
+        "draws": 2,
+        "matches": 26,
+        "win_rate": 0.461538,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.287556,
+          "upper": 0.645424
+        },
+        "mirror": false,
+        "low_sample": false,
+        "contributing_event_ids": [
+          "10",
+          "20"
+        ]
+      },
+      "beta": {
+        "wins": 11,
+        "losses": 9,
+        "draws": 2,
+        "matches": 22,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.307218,
+          "upper": 0.692782
+        },
+        "mirror": false,
+        "low_sample": false,
+        "contributing_event_ids": [
+          "10",
+          "20"
+        ]
+      },
+      "unknown": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.045586,
+          "upper": 0.699364
+        },
+        "mirror": false,
+        "low_sample": true,
+        "contributing_event_ids": [
+          "20"
+        ]
+      }
+    },
+    "parent_matrix": {
+      "alpha": {
+        "alpha": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          },
+          "mirror": true,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "20"
+          ]
+        },
+        "beta": {
+          "wins": 9,
+          "losses": 11,
+          "draws": 2,
+          "matches": 22,
+          "win_rate": 0.409091,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.232556,
+            "upper": 0.612655
+          },
+          "mirror": false,
+          "low_sample": false,
+          "contributing_event_ids": [
+            "10",
+            "20"
+          ]
+        },
+        "unknown": {
+          "wins": 3,
+          "losses": 1,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.75,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.300636,
+            "upper": 0.954414
+          },
+          "mirror": false,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "20"
+          ]
+        }
+      },
+      "beta": {
+        "alpha": {
+          "wins": 11,
+          "losses": 9,
+          "draws": 2,
+          "matches": 22,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.307218,
+            "upper": 0.692782
+          },
+          "mirror": false,
+          "low_sample": false,
+          "contributing_event_ids": [
+            "10",
+            "20"
+          ]
+        },
+        "beta": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 2,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          },
+          "mirror": true,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "10"
+          ]
+        },
+        "unknown": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "matches": 0,
+          "win_rate": null,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": null,
+          "mirror": false,
+          "low_sample": false,
+          "contributing_event_ids": []
+        }
+      },
+      "unknown": {
+        "alpha": {
+          "wins": 1,
+          "losses": 3,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.25,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.045586,
+            "upper": 0.699364
+          },
+          "mirror": false,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "20"
+          ]
+        },
+        "beta": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "matches": 0,
+          "win_rate": null,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": null,
+          "mirror": false,
+          "low_sample": false,
+          "contributing_event_ids": []
+        },
+        "unknown": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "matches": 0,
+          "win_rate": null,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": null,
+          "mirror": true,
+          "low_sample": false,
+          "contributing_event_ids": []
+        }
+      }
+    },
+    "leaf_order": [
+      "alpha",
+      "beta/one",
+      "beta/two",
+      "unknown"
+    ],
+    "leaf_overall": {
+      "alpha": {
+        "wins": 12,
+        "losses": 12,
+        "draws": 2,
+        "matches": 26,
+        "win_rate": 0.461538,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.287556,
+          "upper": 0.645424
+        },
+        "mirror": false,
+        "low_sample": false,
+        "contributing_event_ids": [
+          "10",
+          "20"
+        ]
+      },
+      "beta/one": {
+        "wins": 2,
+        "losses": 8,
+        "draws": 2,
+        "matches": 12,
+        "win_rate": 0.166667,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.046964,
+          "upper": 0.448036
+        },
+        "mirror": false,
+        "low_sample": true,
+        "contributing_event_ids": [
+          "20"
+        ]
+      },
+      "beta/two": {
+        "wins": 9,
+        "losses": 1,
+        "draws": 0,
+        "matches": 10,
+        "win_rate": 0.9,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.595844,
+          "upper": 0.982124
+        },
+        "mirror": false,
+        "low_sample": true,
+        "contributing_event_ids": [
+          "10"
+        ]
+      },
+      "unknown": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.045586,
+          "upper": 0.699364
+        },
+        "mirror": false,
+        "low_sample": true,
+        "contributing_event_ids": [
+          "20"
+        ]
+      }
+    },
+    "leaf_matrix": {
+      "alpha": {
+        "alpha": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          },
+          "mirror": true,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "20"
+          ]
+        },
+        "beta/one": {
+          "wins": 8,
+          "losses": 2,
+          "draws": 2,
+          "matches": 12,
+          "win_rate": 0.666667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.390618,
+            "upper": 0.861882
+          },
+          "mirror": false,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "20"
+          ]
+        },
+        "beta/two": {
+          "wins": 1,
+          "losses": 9,
+          "draws": 0,
+          "matches": 10,
+          "win_rate": 0.1,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.017876,
+            "upper": 0.404156
+          },
+          "mirror": false,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "10"
+          ]
+        },
+        "unknown": {
+          "wins": 3,
+          "losses": 1,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.75,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.300636,
+            "upper": 0.954414
+          },
+          "mirror": false,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "20"
+          ]
+        }
+      },
+      "beta/one": {
+        "alpha": {
+          "wins": 2,
+          "losses": 8,
+          "draws": 2,
+          "matches": 12,
+          "win_rate": 0.166667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.046964,
+            "upper": 0.448036
+          },
+          "mirror": false,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "20"
+          ]
+        },
+        "beta/one": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "matches": 0,
+          "win_rate": null,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": null,
+          "mirror": true,
+          "low_sample": false,
+          "contributing_event_ids": []
+        },
+        "beta/two": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "matches": 0,
+          "win_rate": null,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": null,
+          "mirror": false,
+          "low_sample": false,
+          "contributing_event_ids": []
+        },
+        "unknown": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "matches": 0,
+          "win_rate": null,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": null,
+          "mirror": false,
+          "low_sample": false,
+          "contributing_event_ids": []
+        }
+      },
+      "beta/two": {
+        "alpha": {
+          "wins": 9,
+          "losses": 1,
+          "draws": 0,
+          "matches": 10,
+          "win_rate": 0.9,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.595844,
+            "upper": 0.982124
+          },
+          "mirror": false,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "10"
+          ]
+        },
+        "beta/one": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "matches": 0,
+          "win_rate": null,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": null,
+          "mirror": false,
+          "low_sample": false,
+          "contributing_event_ids": []
+        },
+        "beta/two": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 2,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          },
+          "mirror": true,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "10"
+          ]
+        },
+        "unknown": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "matches": 0,
+          "win_rate": null,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": null,
+          "mirror": false,
+          "low_sample": false,
+          "contributing_event_ids": []
+        }
+      },
+      "unknown": {
+        "alpha": {
+          "wins": 1,
+          "losses": 3,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.25,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.045586,
+            "upper": 0.699364
+          },
+          "mirror": false,
+          "low_sample": true,
+          "contributing_event_ids": [
+            "20"
+          ]
+        },
+        "beta/one": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "matches": 0,
+          "win_rate": null,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": null,
+          "mirror": false,
+          "low_sample": false,
+          "contributing_event_ids": []
+        },
+        "beta/two": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "matches": 0,
+          "win_rate": null,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": null,
+          "mirror": false,
+          "low_sample": false,
+          "contributing_event_ids": []
+        },
+        "unknown": {
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "matches": 0,
+          "win_rate": null,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": null,
+          "mirror": true,
+          "low_sample": false,
+          "contributing_event_ids": []
+        }
+      }
+    },
+    "inputs": [
+      {
+        "event_id": "10",
+        "event_name": "Synthetic 10",
+        "meta_path": "events/10/meta.json",
+        "matchup_path": "events/10/matchup.json",
+        "matchup_schema_version": "1.0.0",
+        "matchup_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "taxonomy_schema_version": "1.1.0",
+        "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "event_id": "20",
+        "event_name": "Synthetic 20",
+        "meta_path": "events/20/meta.json",
+        "matchup_path": "events/20/matchup.json",
+        "matchup_schema_version": "1.0.0",
+        "matchup_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "taxonomy_schema_version": "1.1.0",
+        "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ]
+  },
+  "rejections": [
+    {
+      "name": "legacy catalog is ineligible",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "catalog",
+            "schema_version"
+          ],
+          "value": "1.0.0"
+        }
+      ],
+      "error_code": "unsupported_catalog_schema"
+    },
+    {
+      "name": "catalog evidence is mandatory",
+      "operations": [
+        {
+          "op": "delete",
+          "path": [
+            "catalog",
+            "events",
+            0,
+            "matchup_compatibility"
+          ]
+        }
+      ],
+      "error_code": "missing_catalog_compatibility"
+    },
+    {
+      "name": "sources must agree",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "matchup",
+            "source"
+          ],
+          "value": "mtgo"
+        }
+      ],
+      "error_code": "source_mismatch"
+    },
+    {
+      "name": "formats must agree",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "meta",
+            "format"
+          ],
+          "value": "standard"
+        },
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "matchup",
+            "format"
+          ],
+          "value": "standard"
+        }
+      ],
+      "error_code": "format_mismatch"
+    },
+    {
+      "name": "taxonomy digests must agree",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "meta",
+            "input",
+            "taxonomy_sha256"
+          ],
+          "value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "matchup",
+            "input",
+            "taxonomy_sha256"
+          ],
+          "value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        }
+      ],
+      "error_code": "taxonomy_digest_mismatch"
+    },
+    {
+      "name": "blocking quality is rejected",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "meta",
+            "quality",
+            "blocking"
+          ],
+          "value": true
+        }
+      ],
+      "error_code": "blocking_quality"
+    },
+    {
+      "name": "stable identity meaning cannot change",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "matchup",
+            "hierarchy",
+            "leaves",
+            0,
+            "display_name"
+          ],
+          "value": "Changed Alpha"
+        }
+      ],
+      "error_code": "identity_metadata_mismatch"
+    },
+    {
+      "name": "matrix conservation is mandatory",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "matchup",
+            "scopes",
+            "all_constructed",
+            "leaf_matrix",
+            "alpha",
+            "beta/two",
+            "wins"
+          ],
+          "value": 2
+        }
+      ],
+      "error_code": "matrix_invariant_failed"
+    },
+    {
+      "name": "all constructed scope is mandatory",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "meta",
+            "scope_order"
+          ],
+          "value": [
+            "day1"
+          ]
+        },
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "matchup",
+            "scope_order"
+          ],
+          "value": [
+            "day1"
+          ]
+        },
+        {
+          "op": "delete",
+          "path": [
+            "event_inputs",
+            1,
+            "matchup",
+            "scopes",
+            "all_constructed"
+          ]
+        }
+      ],
+      "error_code": "missing_all_constructed_scope"
+    },
+    {
+      "name": "catalog evidence must reconcile",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "catalog",
+            "events",
+            0,
+            "matchup_compatibility",
+            "matchup_sha256"
+          ],
+          "value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        }
+      ],
+      "error_code": "catalog_compatibility_mismatch"
+    },
+    {
+      "name": "two distinct events are mandatory",
+      "operations": [
+        {
+          "op": "truncate",
+          "path": [
+            "event_inputs"
+          ],
+          "length": 1
+        }
+      ],
+      "error_code": "too_few_events"
+    },
+    {
+      "name": "conflicting duplicate events are rejected",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            2,
+            "meta",
+            "event",
+            "name"
+          ],
+          "value": "Conflicting Synthetic 20"
+        }
+      ],
+      "error_code": "duplicate_event_conflict"
+    },
+    {
+      "name": "event document IDs must agree",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "matchup",
+            "event_id"
+          ],
+          "value": "11"
+        }
+      ],
+      "error_code": "event_identity_mismatch"
+    },
+    {
+      "name": "only the tabletop product is eligible",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "meta",
+            "product"
+          ],
+          "value": "environment-trends"
+        }
+      ],
+      "error_code": "product_mismatch"
+    },
+    {
+      "name": "taxonomy versions must agree",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "meta",
+            "input",
+            "taxonomy_schema_version"
+          ],
+          "value": "2.0.0"
+        },
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "matchup",
+            "input",
+            "taxonomy_schema_version"
+          ],
+          "value": "2.0.0"
+        }
+      ],
+      "error_code": "taxonomy_version_mismatch"
+    },
+    {
+      "name": "unsupported matchup schemas are rejected",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "matchup",
+            "schema_version"
+          ],
+          "value": "2.0.0"
+        }
+      ],
+      "error_code": "unsupported_matchup_schema"
+    },
+    {
+      "name": "document types are mandatory",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "event_inputs",
+            1,
+            "meta",
+            "document_type"
+          ],
+          "value": "overview"
+        }
+      ],
+      "error_code": "invalid_event_input"
+    },
+    {
+      "name": "selected events must be in the catalog",
+      "operations": [
+        {
+          "op": "delete",
+          "path": [
+            "catalog",
+            "events",
+            1
+          ]
+        }
+      ],
+      "error_code": "catalog_event_missing"
+    },
+    {
+      "name": "catalog identity must match the selection",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "catalog",
+            "format"
+          ],
+          "value": "standard"
+        }
+      ],
+      "error_code": "catalog_identity_mismatch"
+    },
+    {
+      "name": "catalog event IDs must be unique",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "catalog",
+            "events",
+            1,
+            "event_id"
+          ],
+          "value": "20"
+        }
+      ],
+      "error_code": "duplicate_catalog_event"
+    },
+    {
+      "name": "catalog events must be an array",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "catalog",
+            "events"
+          ],
+          "value": null
+        }
+      ],
+      "error_code": "invalid_contract_input"
+    },
+    {
+      "name": "catalog paths must reconcile",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "catalog",
+            "events",
+            0,
+            "meta"
+          ],
+          "value": "events/20/wrong-meta.json"
+        }
+      ],
+      "error_code": "provenance_mismatch"
+    }
+  ]
+}
