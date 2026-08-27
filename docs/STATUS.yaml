@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p13-05"
-  working_branch_status: "owner_accepted_completion_authorized"
+  current_working_branch: "codex/p13-06-real-event-437444"
+  working_branch_status: "p13_06r_corrected_validation_complete_pending_owner_acceptance"
   status: "active"
 
 status_document:
@@ -24,7 +24,7 @@ status_document:
 current_phase:
   id: 13
   name: "Multi-event raw-count matchup aggregation"
-  status: "implementation_in_progress"
+  status: "local_implementation_complete_pending_owner_acceptance"
   started_on: "2026-08-27"
   objective: "Implement separately gated raw-count aggregation for compatible Tabletop events without merging overview statistics or enabling an unapproved event."
   production_changes_allowed: false
@@ -33,38 +33,37 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P13-05"
-  name: "Render the dormant combined Tabletop matchup result"
-  status: "owner_accepted_completion_authorized"
+  id: "P13-06R"
+  name: "Current-classifier corrective real-event validation"
+  status: "corrected_validation_complete_pending_owner_acceptance"
   authorized_on: "2026-08-27"
   completed_on: "2026-08-27"
-  artifact_impact: "user_visible_ui"
-  base_commit: "6f4dfaeb2288b235eddcd5dcc3282a5acedcaa74"
-  branch: "codex/p13-05"
-  objective: "Replace the dormant multi-event placeholder with the existing combined matchup renderer, visible included-event identity, sample size, warnings, and explanatory locked-scope state without merging Overview data or enabling a second production event."
+  artifact_impact: "internal_diagnostics"
+  base_commit: "3a571a0780c7861d3f0cd4422368513ca45d8c22"
+  branch: "codex/p13-06-real-event-437444"
+  objective: "Correct P13-06 by rebuilding disposable derived projections of events 434455 and 437444 under the current approved Modern classifier, then validate one positive compatible aggregation or fail closed without falling back to an older classifier."
   authorization:
     local_implementation: true
-    commit: true
-    remote_publication: true
-    merge: true
+    commit: false
+    remote_publication: false
+    merge: false
   allowed_paths:
-    - "assets/js/phase8/app-tabletop.js"
-    - "assets/js/phase8/i18n.js"
-    - "tests/browser/phase13-tabletop-rendering.spec.js"
-    - "docs/TEST_TRIGGER_MATRIX.md"
-    - "docs/audits/P13-05.md"
+    - "docs/audits/P13-06.md"
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
   planned_new_paths:
-    - "tests/browser/phase13-tabletop-rendering.spec.js"
-    - "docs/audits/P13-05.md"
+    - "docs/audits/P13-06.md"
   prohibited_changes:
-    - "Do not change P13-01 through P13-03 arithmetic or the P13-04 controller, loading, URL, history, refresh, or cache contracts."
-    - "Do not change CSS, Schemas, catalog production, generated public JSON, workflows, public paths, whitelists, classifier rules, or existing single-event statistical meaning."
-    - "Do not use MTGO data, fetch or retain a real event, create or use an HMAC key, dispatch production, mutate Issues, expose a second production event, or begin P13-06."
-  stop_point: "Commit the unchanged accepted P13-05 subject, publish one Ready PR, pass required checks, merge, verify the exact merged master and applicable Pages deployment, and stop without accessing a real event or beginning P13-06."
+    - "Do not relabel NRG Series event 437444 as an approved production series; its Owner-approved exception is exact-event and test-only."
+    - "Do not use the test-only category exception for another event or persist it in the production parser, Schema, or whitelist."
+    - "Do not commit the test registration or any raw, normalized, classified, ledger, generated, participant, HMAC, catalog, public, or front-end material."
+    - "Do not make an older event taxonomy authoritative, downgrade event 437444 to a historical classifier, or modify protected event 434455 bytes."
+    - "Do not dispatch production, mutate Issues, use MTGO data, enable public multi-event selection, or begin Phase 14."
+  stop_point: "Present the corrected documentation-only P13-06R result to the Owner for acceptance. Do not commit, publish, merge, enable event 437444, dispatch production, implement the permanent active-taxonomy admission rule, or begin Phase 14 before the applicable Owner decision."
 
 current_repository_state:
+  phase_13_p13_05_merge_commit: "3a571a0780c7861d3f0cd4422368513ca45d8c22"
+  phase_13_p13_05_note: "P13-05 merged through PR #289; the accepted fixture-backed renderer is the immutable base for P13-06."
   phase_13_p13_04_merge_commit: "6f4dfaeb2288b235eddcd5dcc3282a5acedcaa74"
   phase_13_p13_04_note: "P13-04 merged through PR #288; PR validation run 33071049706, master validation run 33071204878, and merge-triggered Pages run 33071204818 succeeded."
   phase_13_p13_03_merge_commit: "01baad87620de95b29c954d7d6801a94667785f0"
@@ -89,22 +88,22 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "P13-06"
-    status: "planned_not_authorized"
-    note: "After all synthetic implementation tasks, stop for the Owner to supply one exact Melee link for non-public real-event validation."
+  - id: "P13-06R"
+    status: "corrected_validation_complete_pending_owner_acceptance"
+    note: "Events 434455 and 437444 passed the disposable positive aggregation under current Modern taxonomy digest 65fe8be8356aac826bbadfe01d7ae603a63aa44c9880a232c6ac8e9b7cfeaf58; the prior historical-taxonomy result is superseded."
 
 next_approved_task:
   id: null
   name: null
-  status: "not_authorized"
+  status: "pending_owner_acceptance"
   local_execution_authorized: false
-  note: "P13-05 is Owner accepted for unchanged same-task completion. P13-06 remains separately gated and not authorized."
+  note: "P13-06R corrected local validation is complete. Owner acceptance is required before same-task completion; permanent active-taxonomy admission and Phase 14 remain separately gated."
 
 prohibited_next_actions:
-  - "Do not alter the accepted P13-01 through P13-04 calculation, admission, loading, URL, history, refresh, or cache subjects."
+  - "Do not alter the accepted P13-01 through P13-05 calculation, admission, loading, URL, history, refresh, cache, or rendering subjects."
   - "Do not expose a second production event or enable a public multi-event selection."
-  - "Do not fetch or retain a real Melee test event before the Owner supplies its exact link and separately authorizes P13-06."
-  - "Do not add the future test event to the production whitelist, public catalogs, Pages artifact, or front end."
+  - "Do not apply the exact-event test-only NRG Series exception to another event or retain it in production code, Schema, or whitelist."
+  - "Do not add event 437444 to the production whitelist, public catalogs, Pages artifact, or front end."
   - "Do not change statistical meaning, merge MTGO and Tabletop results, dispatch production, or mutate Issues."
-  - "Do not expand the accepted P13-05 subject during completion or begin P13-06."
+  - "Do not begin Phase 14 or another task automatically."
   - "Do not develop directly on master or overwrite unexplained local changes."
