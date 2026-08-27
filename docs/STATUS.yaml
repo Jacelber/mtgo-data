@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p13-04"
+  current_working_branch: "codex/p13-05"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -33,42 +33,40 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P13-04"
-  name: "Add multi-event loading, URL, and state transitions"
+  id: "P13-05"
+  name: "Render the dormant combined Tabletop matchup result"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-27"
   completed_on: "2026-08-27"
   artifact_impact: "user_visible_ui"
-  base_commit: "01baad87620de95b29c954d7d6801a94667785f0"
-  branch: "codex/p13-04"
-  objective: "Load and validate complete selected Tabletop matchup sets, commit staged refreshes atomically, and activate canonical multi-event URL and history state without merging Overview data."
+  base_commit: "6f4dfaeb2288b235eddcd5dcc3282a5acedcaa74"
+  branch: "codex/p13-05"
+  objective: "Replace the dormant multi-event placeholder with the existing combined matchup renderer, visible included-event identity, sample size, warnings, and explanatory locked-scope state without merging Overview data or enabling a second production event."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "assets/js/phase8/tabletop-controller.js"
     - "assets/js/phase8/app-tabletop.js"
-    - "assets/js/phase8/app-loading.js"
-    - "assets/js/phase8/app.js"
-    - "tests/js/phase8-tabletop-controller.test.js"
-    - "tests/browser/phase13-tabletop-state.spec.js"
+    - "assets/js/phase8/i18n.js"
+    - "tests/browser/phase13-tabletop-rendering.spec.js"
     - "docs/TEST_TRIGGER_MATRIX.md"
-    - "docs/audits/P13-04.md"
+    - "docs/audits/P13-05.md"
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
   planned_new_paths:
-    - "tests/js/phase8-tabletop-controller.test.js"
-    - "tests/browser/phase13-tabletop-state.spec.js"
-    - "docs/audits/P13-04.md"
+    - "tests/browser/phase13-tabletop-rendering.spec.js"
+    - "docs/audits/P13-05.md"
   prohibited_changes:
-    - "Do not change P13-01 through P13-03 arithmetic, Schemas, catalog production, generated public JSON, rendering, CSS, i18n, workflows, public paths, whitelists, or classifier rules."
-    - "Do not use MTGO data, fetch or retain a real event, create or use an HMAC key, dispatch production, mutate Issues, or begin P13-05."
-    - "Do not render the combined result or make a second production event available in this task."
-  stop_point: "Commit the unchanged accepted P13-04 subject, publish one Ready PR, pass required checks, merge, verify the exact merged master and applicable Pages deployment, and stop without beginning P13-05 or accessing a real event."
+    - "Do not change P13-01 through P13-03 arithmetic or the P13-04 controller, loading, URL, history, refresh, or cache contracts."
+    - "Do not change CSS, Schemas, catalog production, generated public JSON, workflows, public paths, whitelists, classifier rules, or existing single-event statistical meaning."
+    - "Do not use MTGO data, fetch or retain a real event, create or use an HMAC key, dispatch production, mutate Issues, expose a second production event, or begin P13-06."
+  stop_point: "Commit the unchanged accepted P13-05 subject, publish one Ready PR, pass required checks, merge, verify the exact merged master and applicable Pages deployment, and stop without accessing a real event or beginning P13-06."
 
 current_repository_state:
+  phase_13_p13_04_merge_commit: "6f4dfaeb2288b235eddcd5dcc3282a5acedcaa74"
+  phase_13_p13_04_note: "P13-04 merged through PR #288; PR validation run 33071049706, master validation run 33071204878, and merge-triggered Pages run 33071204818 succeeded."
   phase_13_p13_03_merge_commit: "01baad87620de95b29c954d7d6801a94667785f0"
   phase_13_p13_03_note: "P13-03 merged through PR #287; PR validation run 33066575205, master validation run 33066691429, and merge-triggered Pages run 33066691452 succeeded."
   phase_13_p13_02_merge_commit: "82bf76770a2993e360e49a941ac92c5a37b7733c"
@@ -91,9 +89,6 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "P13-05"
-    status: "planned_not_authorized"
-    note: "Render the dormant combined result only after P13-04 is accepted and separately completed."
   - id: "P13-06"
     status: "planned_not_authorized"
     note: "After all synthetic implementation tasks, stop for the Owner to supply one exact Melee link for non-public real-event validation."
@@ -103,12 +98,13 @@ next_approved_task:
   name: null
   status: "not_authorized"
   local_execution_authorized: false
-  note: "P13-04 is Owner accepted for unchanged same-task completion. P13-05 remains separately gated and not authorized."
+  note: "P13-05 is Owner accepted for unchanged same-task completion. P13-06 remains separately gated and not authorized."
 
 prohibited_next_actions:
-  - "Do not expand or alter the accepted P13-04 subject during completion or begin P13-05."
-  - "Do not replace the multi-event pending placeholder or expose a second production event."
-  - "Do not fetch or retain a real Melee test event before the Owner supplies its exact link and separately authorizes that exact P13-06 test."
+  - "Do not alter the accepted P13-01 through P13-04 calculation, admission, loading, URL, history, refresh, or cache subjects."
+  - "Do not expose a second production event or enable a public multi-event selection."
+  - "Do not fetch or retain a real Melee test event before the Owner supplies its exact link and separately authorizes P13-06."
   - "Do not add the future test event to the production whitelist, public catalogs, Pages artifact, or front end."
   - "Do not change statistical meaning, merge MTGO and Tabletop results, dispatch production, or mutate Issues."
+  - "Do not expand the accepted P13-05 subject during completion or begin P13-06."
   - "Do not develop directly on master or overwrite unexplained local changes."

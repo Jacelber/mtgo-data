@@ -19,7 +19,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 | Phase | Objective | Status |
 | --- | --- | --- |
 | 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Complete on 2026-08-25 |
-| 13 | Aggregate compatible multi-event matchups from raw counts. | Implementation in progress; P13-04 Owner accepted |
+| 13 | Aggregate compatible multi-event matchups from raw counts. | Implementation in progress; P13-05 Owner accepted |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
 | 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
@@ -42,8 +42,8 @@ The complete task sequence, embedded implementation history, final acceptance
 criteria, and closeout evidence are preserved in
 `docs/history/ROADMAP-PHASE-12-COMPLETED.md`.
 
-Phase 13 implementation began on 2026-08-27. P13-01 through P13-03 are
-complete; P13-04 is Owner accepted for unchanged same-task completion. Every
+Phase 13 implementation began on 2026-08-27. P13-01 through P13-04 are
+complete; P13-05 is Owner accepted for unchanged same-task completion. Every
 later task remains a separate authorization gate.
 
 ---
@@ -60,8 +60,8 @@ whitelist, catalogs, Pages artifact, or front end.
 
 The accepted design and bounded task sequence are in
 `docs/audits/PHASE-13-DESIGN.md`. The Owner separately authorized P13-01
-through P13-04. Those authorizations do not carry to renderer work, live
-collection, public enablement, or production.
+through P13-05. Those authorizations do not carry to real-event collection,
+public enablement, or production.
 
 ## Objective
 
