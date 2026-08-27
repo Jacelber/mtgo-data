@@ -555,11 +555,16 @@
     }
   ],
   "catalog": {
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "document_type": "event_catalog",
     "source": "melee",
     "product": "tabletop-major-events",
     "format": "modern",
+    "active_taxonomy": {
+      "schema_version": "1.0.0",
+      "taxonomy_schema_version": "1.1.0",
+      "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
     "default_event_id": "20",
     "events": [
       {
@@ -646,8 +651,9 @@
       "Synthetic 20"
     ],
     "compatibility": {
-      "catalog_schema_version": "1.1.0",
+      "catalog_schema_version": "1.2.0",
       "catalog_compatibility_schema_version": "1.0.0",
+      "active_taxonomy_schema_version": "1.0.0",
       "matchup_schema_version": "1.0.0",
       "taxonomy_schema_version": "1.1.0",
       "taxonomy_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -1308,6 +1314,34 @@
         }
       ],
       "error_code": "missing_catalog_compatibility"
+    },
+    {
+      "name": "active taxonomy is mandatory",
+      "operations": [
+        {
+          "op": "delete",
+          "path": [
+            "catalog",
+            "active_taxonomy"
+          ]
+        }
+      ],
+      "error_code": "missing_active_taxonomy"
+    },
+    {
+      "name": "equal stale event taxonomies are rejected",
+      "operations": [
+        {
+          "op": "set",
+          "path": [
+            "catalog",
+            "active_taxonomy",
+            "taxonomy_sha256"
+          ],
+          "value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        }
+      ],
+      "error_code": "active_taxonomy_mismatch"
     },
     {
       "name": "sources must agree",

@@ -3,26 +3,31 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+import re
 from typing import Any
 
 from .multi_event_matchup import aggregate_multi_event_matchups
 
 
 MULTI_EVENT_SCHEMA_VERSION = "1.0.0"
-SUPPORTED_CATALOG_SCHEMA_VERSIONS = frozenset({"1.1.0"})
+SUPPORTED_CATALOG_SCHEMA_VERSIONS = frozenset({"1.2.0"})
 SUPPORTED_COMPATIBILITY_SCHEMA_VERSIONS = frozenset({"1.0.0"})
+SUPPORTED_ACTIVE_TAXONOMY_SCHEMA_VERSIONS = frozenset({"1.0.0"})
 ERROR_CODES = frozenset(
     {
+        "active_taxonomy_mismatch",
         "catalog_compatibility_mismatch",
         "catalog_event_missing",
         "catalog_identity_mismatch",
         "duplicate_catalog_event",
         "invalid_contract_input",
+        "missing_active_taxonomy",
         "missing_catalog_compatibility",
         "provenance_mismatch",
         "unsupported_catalog_schema",
     }
 )
+DIGEST_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 
 
 class MultiEventContractError(ValueError):
@@ -87,12 +92,37 @@ def _input_index(
     return indexed
 
 
+def _active_taxonomy(catalog: Mapping[str, Any]) -> Mapping[str, Any]:
+    active = catalog.get("active_taxonomy")
+    if not isinstance(active, Mapping):
+        _fail(
+            "missing_active_taxonomy",
+            "catalog has no active taxonomy identity",
+        )
+    taxonomy_version = active.get("taxonomy_schema_version")
+    taxonomy_digest = active.get("taxonomy_sha256")
+    if (
+        active.get("schema_version")
+        not in SUPPORTED_ACTIVE_TAXONOMY_SCHEMA_VERSIONS
+        or not isinstance(taxonomy_version, str)
+        or not taxonomy_version
+        or not isinstance(taxonomy_digest, str)
+        or not DIGEST_PATTERN.fullmatch(taxonomy_digest)
+    ):
+        _fail(
+            "active_taxonomy_mismatch",
+            "catalog active taxonomy identity is invalid or unsupported",
+        )
+    return active
+
+
 def _admit_event(
     *,
     event_id: str,
     event_name: str,
     event_input: Mapping[str, Any],
     catalog_event: Mapping[str, Any],
+    active_taxonomy: Mapping[str, Any],
     format_id: str,
 ) -> dict[str, Any]:
     meta = _mapping(
@@ -159,6 +189,15 @@ def _admit_event(
             "catalog_compatibility_mismatch",
             f"catalog event {event_id} evidence does not match validated inputs",
         )
+    if (
+        compatibility["taxonomy_schema_version"]
+        != active_taxonomy["taxonomy_schema_version"]
+        or compatibility["taxonomy_sha256"] != active_taxonomy["taxonomy_sha256"]
+    ):
+        _fail(
+            "active_taxonomy_mismatch",
+            f"catalog event {event_id} does not use the active taxonomy",
+        )
     expected_meta_path = f"events/{event_id}/meta.json"
     expected_matchup_path = f"events/{event_id}/matchup.json"
     if (
@@ -214,6 +253,7 @@ def build_multi_event_matchup_contract(
             "unsupported_catalog_schema",
             f"catalog Schema {catalog_version!r} is not multi-event eligible",
         )
+    active_taxonomy = _active_taxonomy(catalog)
     result = aggregate_multi_event_matchups(
         event_inputs,
         canonical_hierarchy=canonical_hierarchy,
@@ -246,6 +286,7 @@ def build_multi_event_matchup_contract(
                 event_name=event_name,
                 event_input=event_input,
                 catalog_event=catalog_events[event_id],
+                active_taxonomy=active_taxonomy,
                 format_id=format_id,
             )
         )
@@ -264,6 +305,7 @@ def build_multi_event_matchup_contract(
         "compatibility": {
             "catalog_schema_version": catalog_version,
             "catalog_compatibility_schema_version": "1.0.0",
+            "active_taxonomy_schema_version": active_taxonomy["schema_version"],
             **result["compatibility"],
         },
     }

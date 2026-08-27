@@ -9,9 +9,11 @@
   const MULTI_EVENT_SCHEMA_VERSION = "1.0.0";
   const MULTI_EVENT_LOW_SAMPLE_THRESHOLD = 20;
   const SUPPORTED_MULTI_EVENT_MATCHUP_SCHEMAS = new Set(["1.0.0"]);
-  const SUPPORTED_MULTI_EVENT_CATALOG_SCHEMAS = new Set(["1.1.0"]);
+  const SUPPORTED_MULTI_EVENT_CATALOG_SCHEMAS = new Set(["1.2.0"]);
   const SUPPORTED_MULTI_EVENT_COMPATIBILITY_SCHEMAS = new Set(["1.0.0"]);
+  const SUPPORTED_ACTIVE_TAXONOMY_SCHEMAS = new Set(["1.0.0"]);
   const MULTI_EVENT_ERROR_CODES = Object.freeze([
+    "active_taxonomy_mismatch",
     "blocking_quality",
     "catalog_compatibility_mismatch",
     "catalog_event_missing",
@@ -24,6 +26,7 @@
     "invalid_contract_input",
     "invalid_event_input",
     "matrix_invariant_failed",
+    "missing_active_taxonomy",
     "missing_all_constructed_scope",
     "missing_catalog_compatibility",
     "product_mismatch",
@@ -80,6 +83,26 @@
     const rightKeys = Object.keys(right).sort();
     return sameValue(leftKeys, rightKeys)
       && leftKeys.every(key => sameValue(left[key], right[key]));
+  }
+
+  function activeMultiEventTaxonomy(catalog) {
+    const active = catalog.active_taxonomy;
+    if (!isObject(active)) {
+      multiEventFail("missing_active_taxonomy", "catalog has no active taxonomy identity");
+    }
+    if (
+      !SUPPORTED_ACTIVE_TAXONOMY_SCHEMAS.has(active.schema_version)
+      || typeof active.taxonomy_schema_version !== "string"
+      || !active.taxonomy_schema_version
+      || typeof active.taxonomy_sha256 !== "string"
+      || !/^[0-9a-f]{64}$/.test(active.taxonomy_sha256)
+    ) {
+      multiEventFail(
+        "active_taxonomy_mismatch",
+        "catalog active taxonomy identity is invalid or unsupported"
+      );
+    }
+    return active;
   }
 
   function numericEventOrder(left, right) {
@@ -746,7 +769,14 @@
     return events;
   }
 
-  function admitMultiEventCatalogEntry(eventId, eventName, eventInput, catalogEvent, formatId) {
+  function admitMultiEventCatalogEntry(
+    eventId,
+    eventName,
+    eventInput,
+    catalogEvent,
+    activeTaxonomy,
+    formatId
+  ) {
     const meta = multiEventObject(
       eventInput.meta,
       "invalid_contract_input",
@@ -813,6 +843,15 @@
         `catalog event ${eventId} evidence does not match validated inputs`
       );
     }
+    if (
+      compatibility.taxonomy_schema_version !== activeTaxonomy.taxonomy_schema_version
+      || compatibility.taxonomy_sha256 !== activeTaxonomy.taxonomy_sha256
+    ) {
+      multiEventFail(
+        "active_taxonomy_mismatch",
+        `catalog event ${eventId} does not use the active taxonomy`
+      );
+    }
     const metaPath = `events/${eventId}/meta.json`;
     const matchupPath = `events/${eventId}/matchup.json`;
     const validScopeOrder = sameValue(catalogEvent.scope_order, ["all_constructed"])
@@ -859,6 +898,7 @@
         `catalog Schema ${activeCatalog.schema_version} is not multi-event eligible`
       );
     }
+    const activeTaxonomy = activeMultiEventTaxonomy(activeCatalog);
     const result = aggregateMultiEventMatchups(eventInputs, canonicalHierarchy);
     if (
       activeCatalog.document_type !== "event_catalog"
@@ -892,6 +932,7 @@
         result.event_names[index],
         inputsById.get(eventId),
         catalogEvents.get(eventId),
+        activeTaxonomy,
         result.format
       );
     });
@@ -908,6 +949,7 @@
       compatibility: {
         catalog_schema_version: activeCatalog.schema_version,
         catalog_compatibility_schema_version: "1.0.0",
+        active_taxonomy_schema_version: activeTaxonomy.schema_version,
         ...result.compatibility,
       },
     };

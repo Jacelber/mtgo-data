@@ -13,7 +13,7 @@ from mtgmeta.melee.multi_event_contract import (
     MultiEventContractError,
     build_multi_event_matchup_contract,
 )
-from mtgmeta.melee.publish import build_matchup_compatibility
+from mtgmeta.melee.publish import build_active_taxonomy, build_matchup_compatibility
 from validate_schemas import load_schemas, validate_instance
 
 
@@ -149,11 +149,15 @@ def _catalog_event(event_input: dict[str, Any]) -> dict[str, Any]:
 
 def _catalog(event_inputs: list[dict[str, Any]]) -> dict[str, Any]:
     return {
-        "schema_version": "1.1.0",
+        "schema_version": "1.2.0",
         "document_type": "event_catalog",
         "source": "melee",
         "product": "tabletop-major-events",
         "format": "modern",
+        "active_taxonomy": build_active_taxonomy(
+            format_id="modern",
+            input_document=event_inputs[0]["meta"]["input"],
+        ),
         "default_event_id": event_inputs[0]["meta"]["event_id"],
         "events": [_catalog_event(event_input) for event_input in event_inputs],
     }
@@ -166,11 +170,13 @@ def _schema_failures(document: dict[str, Any], schema_name: str) -> list[Any]:
 
 def test_contract_error_vocabulary_is_frozen() -> None:
     assert ERROR_CODES == {
+        "active_taxonomy_mismatch",
         "catalog_compatibility_mismatch",
         "catalog_event_missing",
         "catalog_identity_mismatch",
         "duplicate_catalog_event",
         "invalid_contract_input",
+        "missing_active_taxonomy",
         "missing_catalog_compatibility",
         "provenance_mismatch",
         "unsupported_catalog_schema",
@@ -191,8 +197,9 @@ def test_builds_versioned_result_from_catalog_admitted_inputs() -> None:
     assert result["event_ids"] == ["10", "20"]
     assert [item["event_id"] for item in result["inputs"]] == ["10", "20"]
     assert result["compatibility"] == {
-        "catalog_schema_version": "1.1.0",
+        "catalog_schema_version": "1.2.0",
         "catalog_compatibility_schema_version": "1.0.0",
+        "active_taxonomy_schema_version": "1.0.0",
         "matchup_schema_version": "1.0.0",
         "taxonomy_schema_version": "1.1.0",
         "taxonomy_sha256": TAXONOMY_SHA256,
@@ -201,18 +208,28 @@ def test_builds_versioned_result_from_catalog_admitted_inputs() -> None:
     assert not _schema_failures(result, "melee-multi-event-matchup.schema.json")
 
 
-def test_catalog_schema_preserves_legacy_but_requires_evidence_for_version_1_1() -> (
+def test_catalog_schema_preserves_legacy_and_requires_versioned_evidence() -> (
     None
 ):
     event_10 = _event_input("10", "a", 5)
     legacy = _catalog([event_10])
     legacy["schema_version"] = "1.0.0"
+    del legacy["active_taxonomy"]
     del legacy["events"][0]["matchup_compatibility"]
     assert not _schema_failures(legacy, "melee-event-catalog.schema.json")
 
-    migrated = deepcopy(legacy)
-    migrated["schema_version"] = "1.1.0"
-    assert _schema_failures(migrated, "melee-event-catalog.schema.json")
+    historical = _catalog([event_10])
+    historical["schema_version"] = "1.1.0"
+    del historical["active_taxonomy"]
+    assert not _schema_failures(historical, "melee-event-catalog.schema.json")
+
+    incomplete = deepcopy(legacy)
+    incomplete["schema_version"] = "1.1.0"
+    assert _schema_failures(incomplete, "melee-event-catalog.schema.json")
+
+    active = _catalog([event_10])
+    del active["active_taxonomy"]
+    assert _schema_failures(active, "melee-event-catalog.schema.json")
 
 
 def test_legacy_or_incomplete_catalog_is_not_multi_event_eligible() -> None:
@@ -227,12 +244,43 @@ def test_legacy_or_incomplete_catalog_is_not_multi_event_eligible() -> None:
         )
 
     catalog = _catalog(inputs)
+    catalog["schema_version"] = "1.1.0"
+    with pytest.raises(MultiEventContractError, match="unsupported_catalog_schema"):
+        build_multi_event_matchup_contract(
+            inputs,
+            canonical_hierarchy=HIERARCHY,
+            catalog=catalog,
+        )
+
+    catalog = _catalog(inputs)
     del catalog["events"][0]["matchup_compatibility"]
     with pytest.raises(MultiEventContractError, match="missing_catalog_compatibility"):
         build_multi_event_matchup_contract(
             inputs,
             canonical_hierarchy=HIERARCHY,
             catalog=catalog,
+        )
+
+
+def test_active_taxonomy_is_required_and_must_match_every_event() -> None:
+    inputs = [_event_input("10", "a", 5), _event_input("20", "b", 5)]
+
+    missing = _catalog(inputs)
+    del missing["active_taxonomy"]
+    with pytest.raises(MultiEventContractError, match="missing_active_taxonomy"):
+        build_multi_event_matchup_contract(
+            inputs,
+            canonical_hierarchy=HIERARCHY,
+            catalog=missing,
+        )
+
+    stale = _catalog(inputs)
+    stale["active_taxonomy"]["taxonomy_sha256"] = "d" * 64
+    with pytest.raises(MultiEventContractError, match="active_taxonomy_mismatch"):
+        build_multi_event_matchup_contract(
+            inputs,
+            canonical_hierarchy=HIERARCHY,
+            catalog=stale,
         )
 
 
@@ -306,6 +354,18 @@ def test_publication_helper_emits_minimum_fail_closed_compatibility_block() -> N
                 "sha256": "a" * 64,
             },
         )
+
+    assert build_active_taxonomy(
+        format_id="modern",
+        input_document={
+            "taxonomy_schema_version": "1.1.0",
+            "taxonomy_sha256": TAXONOMY_SHA256,
+        },
+    ) == {
+        "schema_version": "1.0.0",
+        "taxonomy_schema_version": "1.1.0",
+        "taxonomy_sha256": TAXONOMY_SHA256,
+    }
 
 
 def test_event_publisher_wires_catalog_version_and_compatibility(
@@ -383,7 +443,12 @@ def test_event_publisher_wires_catalog_version_and_compatibility(
     )
 
     assert publication["meta"]["schema_version"] == "1.0.0"
-    assert publication["catalog"]["schema_version"] == "1.1.0"
+    assert publication["catalog"]["schema_version"] == "1.2.0"
+    assert publication["catalog"]["active_taxonomy"] == {
+        "schema_version": "1.0.0",
+        "taxonomy_schema_version": "1.1.0",
+        "taxonomy_sha256": TAXONOMY_SHA256,
+    }
     assert publication["catalog"]["events"][0]["matchup_compatibility"] == {
         "schema_version": "1.0.0",
         "source": "melee",

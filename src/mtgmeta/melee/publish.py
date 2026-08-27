@@ -21,8 +21,9 @@ from .stats import (
 
 
 PUBLICATION_SCHEMA_VERSION = "1.0.0"
-CATALOG_SCHEMA_VERSION = "1.1.0"
+CATALOG_SCHEMA_VERSION = "1.2.0"
 MATCHUP_COMPATIBILITY_SCHEMA_VERSION = "1.0.0"
+ACTIVE_TAXONOMY_SCHEMA_VERSION = "1.0.0"
 FORMAT_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
 OUTPUT_NAMES = ("overview", "decks", "matchup", "quality")
@@ -87,6 +88,28 @@ def build_matchup_compatibility(
         "taxonomy_schema_version": taxonomy_version,
         "taxonomy_sha256": taxonomy_digest,
         "quality_blocking": False,
+    }
+
+
+def build_active_taxonomy(
+    *, format_id: str, input_document: Mapping[str, Any]
+) -> dict[str, Any]:
+    """Bind a future format catalog to the maintained taxonomy used to build it."""
+
+    taxonomy_version = input_document.get("taxonomy_schema_version")
+    taxonomy_digest = input_document.get("taxonomy_sha256")
+    if not isinstance(format_id, str) or not FORMAT_PATTERN.fullmatch(format_id):
+        raise MeleePublicationError("active taxonomy has an invalid format")
+    if not isinstance(taxonomy_version, str) or not taxonomy_version:
+        raise MeleePublicationError("active taxonomy has no taxonomy version")
+    if not isinstance(taxonomy_digest, str) or not re.fullmatch(
+        r"[0-9a-f]{64}", taxonomy_digest
+    ):
+        raise MeleePublicationError("active taxonomy has an invalid taxonomy digest")
+    return {
+        "schema_version": ACTIVE_TAXONOMY_SCHEMA_VERSION,
+        "taxonomy_schema_version": taxonomy_version,
+        "taxonomy_sha256": taxonomy_digest,
     }
 
 
@@ -255,6 +278,10 @@ def build_event_publication_from_paths(
         "source": "melee",
         "product": "tabletop-major-events",
         "format": format_id,
+        "active_taxonomy": build_active_taxonomy(
+            format_id=format_id,
+            input_document=input_document,
+        ),
         "default_event_id": event_id,
         "events": [catalog_event],
     }

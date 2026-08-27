@@ -6026,3 +6026,65 @@ workflow, whitelist, real event, generated statistic, public path, or
 production resource changes in P13-02. Commit, remote publication, merge,
 P13-03, and the future real-event test remain separate gates after local Owner
 acceptance.
+
+---
+
+# DEC-132 - Require the active taxonomy for multi-event admission
+
+Status: `Implemented locally; Owner acceptance pending`
+
+## Context
+
+DEC-131 requires selected events to use identical taxonomy versions and
+digests and reconciles each event against catalog Schema `1.1.0` compatibility
+evidence. That proves the selected cohort is internally equal, but not that it
+uses the current approved format taxonomy. Two event projections made with the
+same stale classifier can therefore satisfy the equality rule.
+
+P13-06R corrected the real-event validation by rebuilding events `434455` and
+test-only `437444` under the current approved Modern taxonomy. The Owner then
+approved a permanent fail-closed rule: current taxonomy remains authoritative,
+and older event projections must be regenerated rather than making the current
+product inherit their classifier.
+
+## Decision
+
+Advance future multi-event-eligible Tabletop format catalogs to Schema
+`1.2.0`. A `1.2.0` catalog requires a top-level `active_taxonomy` version
+`1.0.0` block containing the current taxonomy Schema version and exact SHA-256.
+The maintained publisher derives the block from the same current taxonomy
+input used to rebuild and byte-verify the event outputs.
+
+The Python and browser multi-event wrappers support only catalog `1.2.0`. They
+continue to require pairwise taxonomy equality, then additionally require each
+selected event's reconciled compatibility taxonomy to equal the catalog active
+identity. Missing, malformed, unsupported, or mismatched active identity fails
+closed with stable `missing_active_taxonomy` or
+`active_taxonomy_mismatch` errors. The versioned in-memory result records the
+active-taxonomy contract version while retaining the already accepted
+taxonomy version and digest fields.
+
+Catalog `1.0.0` remains valid for existing single-event discovery. Catalog
+`1.1.0` remains Schema-valid historical compatibility evidence but is no
+longer eligible for multi-event admission. No timestamp or digest ordering is
+used: "current" means exact equality with the active identity produced from
+the maintained taxonomy input.
+
+After a taxonomy change, raw and normalized source facts remain immutable,
+while derived classification, opportunity, statistics, matchup, metadata, and
+catalog evidence must be regenerated before an event can rejoin a selected
+cohort. A stale event is rejected; it is not silently omitted, and the active
+taxonomy is never downgraded to preserve compatibility.
+
+## Consequences
+
+P13-01 raw-count aggregation, literal rates, scopes, URL/state, rendering, and
+event-selection policy remain unchanged. The current production catalog and
+protected event `434455` bytes are not regenerated in P13-07. Event `437444`
+remains a disposable exact-event test input and is not registered, retained,
+published, or exposed in the front end.
+
+P13-07 changes future catalog and in-memory compatibility contracts plus the
+dormant browser admission path. Production enablement, a second approved real
+event, workflow dispatch, commit, publication, merge, and Phase 14 remain
+separately governed by the live task state and Owner acceptance.
