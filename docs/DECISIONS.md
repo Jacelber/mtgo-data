@@ -6254,3 +6254,69 @@ legacy artifact borrowed from the repository. It remains atomic and
 fail-closed; a failed build does not deploy a partial cache. Commit, publication,
 merge, deployment, Phase 14, and unrelated production work remain separately
 governed by the live task and Owner acceptance.
+
+---
+
+# DEC-136 - Localize card display through a provenance-preserving sidecar
+
+Status: `Accepted`
+
+## Context
+
+The Chinese site localizes interface and archetype labels, but card names and
+complete card images still follow the English Scryfall path. MTGCH exposes
+official Simplified Chinese print fields separately from community-translated
+atomic names and community-rendered Chinese images. Treating all Chinese values
+as equivalent would misstate provenance; joining on display text would also be
+unsafe across faces, printings, punctuation, and future translation changes.
+
+Calling MTGCH from the browser would add a runtime dependency and could expose
+the product to availability, rate, and contract drift. Replacing the accepted
+English full-card cache would couple localization to a working fallback. Public
+API readability also does not establish permission to redistribute community-
+rendered image bytes through GitHub Pages or retained workflow artifacts.
+
+## Decision
+
+Keep English card identity and the existing English image path unchanged.
+Implement any future Chinese card display as a separate versioned sidecar keyed
+by `oracle_id`, `scryfall_id`, and `face_index`; never infer identity from an
+English or Chinese display name.
+
+Resolve names and images independently with the same declared priority:
+
+1. official Simplified Chinese;
+2. community Chinese with preserved translation or image provenance, only
+   where its use and redistribution are permitted; and
+3. explicit English fallback.
+
+The manifest records the selected status, source, retrieval snapshot,
+attribution, and content identity. A community value is never labeled official,
+and an English fallback remains visible rather than being guessed or omitted.
+MTGCH access occurs only in a bounded build-time adapter; browsers consume only
+an admitted atomic sidecar and never call MTGCH directly.
+
+Do not place real community-rendered image bytes in Git, workflow retention,
+Pages, or another public bundle until the Owner records the redistribution and
+attribution decision. Synthetic fixtures are the only permitted implementation
+input before that gate. Official Chinese material remains subject to its own
+recorded source and attribution requirements.
+
+Split implementation into separately authorized and accepted `L10N-A` contract
+and builder work, an explicit image-rights gate, `L10N-B` sidecar admission, and
+`L10N-C` front-end consumption. Complete that localization foundation before
+Phase 14 begins. This accepted documentation decision does not authorize any
+of those implementation tasks, publication, or Phase 14.
+
+## Consequences
+
+Chinese pages can later prefer verified Chinese card names and complete images
+without changing normalized deck data, statistics, classifier identities, or
+the accepted English cache. Provenance and fallback remain inspectable, source
+failure cannot silently relabel community content as official, and a missing
+Chinese asset degrades to the current English product.
+
+The additional sidecar needs a Schema, producer, deterministic fixtures,
+admission checks, attribution handling, and focused front-end acceptance in
+their later authorized tasks. Real community image publication remains blocked
+until its rights gate is closed. Phase 14 remains planned and unauthorized.

@@ -22,6 +22,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 | --- | --- | --- |
 | 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Complete on 2026-08-25 |
 | 13 | Aggregate compatible multi-event matchups from raw counts. | Complete on 2026-08-27 |
+| Pre-14 | Establish provenance-safe Chinese card names and complete card images. | Documentation authorized; implementation not authorized |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
 | 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
@@ -56,50 +57,183 @@ evidence are preserved in
 
 ---
 
+# Pre-Phase-14 — Card localization foundation
+
+## Problem
+
+Chinese interface and archetype labels are available, but card names and
+complete card images still use the English Scryfall path. MTGCH distinguishes
+official Simplified Chinese values from community translations and rendered
+images, and the latter cannot be redistributed until permission and
+attribution are recorded. Phase 14 would multiply the unresolved surface by
+adding Pauper cards and another source product.
+
+## Required sequence
+
+| Task | Problem | Operation | Implemented effect | Recommended model |
+| --- | --- | --- | --- | --- |
+| `L10N-00` | Product, identity, provenance, fallback, rights, and rollout boundaries are not authoritative. | Update only scope, architecture, decision, roadmap, status, and validation-trigger documents. | One reviewable contract exists; no code or public behavior changes. | `gpt-5.6-terra`, medium reasoning |
+| `L10N-A` | Card localization has no versioned join, resolver, or manifest contract. | Define the `oracle_id` + `scryfall_id` + `face_index` sidecar, provenance vocabulary, official/community/English priority, source adapter, Schema, and deterministic synthetic fixtures. Do not use real community image bytes. | A bounded build can prove identity, provenance, fallback, and atomic failure without changing the existing English cache. | `gpt-5.6-sol`, high reasoning |
+| `L10N-RIGHTS` | Public API access does not prove image redistribution permission. | Record the Owner's source-rights decision and required attribution for official and community Chinese material. Stop if permission is absent or ambiguous. | The permitted real-image subject and publication boundary are explicit; an unresolved decision keeps real community images blocked. | `gpt-5.6-sol`, high reasoning for evidence review; Owner or qualified rights review remains authoritative |
+| `L10N-B` | The validated contract is not yet available as a stable Pages resource. | Build the bounded real sidecar in an external artifact, validate content identities and digests, and admit it under `assets/card-localization/v1/` without mutating `assets/card-cache/v1/`. | Chinese display assets become reproducible and atomic while English fallback remains independently available. | `gpt-5.6-sol`, high reasoning |
+| `L10N-C` | Chinese views do not consume the admitted sidecar. | Add one shared consumer for Landing, retained MTGO views, and applicable Tabletop views; show provenance/fallback truthfully and preserve English behavior. Validate desktop, 390px, and 412px behavior. | Chinese views prefer verified Chinese names and complete images, and every miss falls back to the existing English product. | `gpt-5.6-sol`, high reasoning |
+
+These tasks are separate authorization and acceptance subjects. `L10N-00`
+does not authorize `L10N-A`; the rights decision does not authorize a build;
+and no accepted local task authorizes commit, publication, merge, Pages, or the
+next task until the applicable workflow gate is satisfied. Phase 14 cannot
+start until the Owner accepts the complete localization foundation or records
+an explicit narrower Phase 14 boundary.
+
+The model recommendations follow the current OpenAI model roles: Sol for
+complex reasoning and coding, Terra for balanced intelligence and cost, and
+Luna only for later high-volume mechanical work after a stronger model has
+frozen the contract. They are operating recommendations, not authorization,
+and should be rechecked against the
+[official OpenAI model catalog](https://developers.openai.com/api/docs/models)
+when a task is opened.
+
+---
+
 # Phase 14 — Pauper MTGO and Paupergeddon
 
 ## Objective
 
-Add Pauper to both product tracks after the Modern reference path and reusable event strategies are stable.
+Add Pauper to both product tracks after the Modern reference path, reusable
+event strategies, and the separately accepted card-localization foundation are
+stable.
 
 ## Required work
 
 Use the shared classifier and stable Pauper archetype identities for both
 sources while keeping MTGO and Tabletop inputs, outputs, statistics, catalogs,
 and product behavior separate. Depend on the engineering and front-end
-baselines established by Phases 10 through 12.
+baselines established by Phases 10 through 13.
 
 Pauper must publish an admitted Landing under the Phase 12 contract in the same
 public launch as its other required MTGO products. Until that complete set is
-ready, the format remains unavailable in the public catalog.
+ready, the format remains unavailable in the public catalog. The Owner supplies
+the Paupergeddon event link only when `P14-05` is authorized. Its trial data
+remains disposable and non-public until a later explicit event-admission task.
 
 ## Task sequence
 
-1. Add Pauper archetype rules.
-2. Add Pauper rule fixtures.
-3. Validate Pauper rule IDs and priorities.
-4. Run Pauper MTGO classification.
-5. Generate Pauper MTGO statistics.
-6. Validate Pauper MTGO output.
-7. Register the approved Paupergeddon main event.
-8. Normalize and validate that event as `constructed_day2`.
-9. Generate event-specific Pauper statistics.
-10. Enable Pauper in both front ends only when its reviewed Landing and every
-    required product are produced and admitted together.
+### P14-00 — Freeze the Phase 14 contract
+
+- **Problem:** the former ten-line sequence did not identify input evidence,
+  exact artifacts, stop conditions, or the boundary between MTGO and Tabletop.
+- **Operation:** inventory existing Pauper archives, rule files, catalogs,
+  Schemas, consumers, Landing requirements, and event-strategy contracts using
+  read-only evidence. Define exact task paths and risk-triggered checks. Do not
+  fetch a real event or change a whitelist.
+- **Effect:** one Owner-reviewable implementation contract exists without data,
+  code, or public behavior changes.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+
+### P14-01 — Establish and accept Pauper classification
+
+- **Problem:** shared Pauper parent/subtype identities and representative rules
+  are not yet an accepted cross-source taxonomy.
+- **Operation:** inspect existing behavior, propose rules before coding, then
+  add stable IDs, explicit priorities, fixtures, conflicts, Unknown reporting,
+  and the smallest Standard/Modern regression evidence that answers the named
+  compatibility risk.
+- **Effect:** one accepted classifier can later classify both MTGO and the
+  approved Tabletop event without copying source-specific archetypes.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+
+### P14-02 — Produce Pauper MTGO data and statistics privately
+
+- **Problem:** archived Pauper collection does not constitute a complete MTGO
+  product or prove the generalized pipeline.
+- **Operation:** run the generalized Pauper classification and generators,
+  update required contracts and quality reports, and validate only the Pauper
+  output plus named cross-format risks. Keep catalogs and Pages unchanged.
+- **Effect:** a versioned, Schema-valid private Pauper MTGO candidate exists
+  with visible Unknown and source-completeness evidence.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+
+### P14-03 — Complete the Pauper Landing review path
+
+- **Problem:** a future MTGO format cannot launch without a reviewed Landing
+  and complete weekly-maintenance inputs.
+- **Operation:** run the established Unknown, representative-card, deck-color,
+  screening, machine-fact, and human bilingual-copy sequence for Pauper. The
+  Owner remains authoritative for final content and card choices.
+- **Effect:** the private Pauper candidate has an admitted-quality Landing and
+  feature subject instead of a statistics-only partial product.
+- **Recommended model:** `gpt-5.6-terra`, medium reasoning for bounded carrier
+  preparation; use `gpt-5.6-sol`, high reasoning for stale-binding or contract
+  failures.
+
+### P14-04 — Accept the complete private Pauper MTGO product
+
+- **Problem:** individually valid outputs can still disagree at the catalog,
+  freshness, localization, or product-completeness boundary.
+- **Operation:** assemble a local non-public complete-product candidate, verify
+  Landing, official statistics, matchup coverage, Top 8 decklists, card
+  localization, routes, and mobile behavior, then stop for Owner acceptance.
+- **Effect:** the exact MTGO Pauper subject is ready for later coordinated
+  admission but remains absent from the public catalog.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+
+### P14-05 — Trial the Owner-supplied Paupergeddon event
+
+- **Problem:** the event's real round labels, decklists, and result completeness
+  cannot be established from assumptions.
+- **Operation:** only after the Owner supplies and authorizes the exact event
+  link, collect it into a disposable test location, classify it with the
+  accepted Pauper taxonomy, and validate the proposed `constructed_day2`
+  strategy. Do not add it to `configs/melee_events.yaml`, the public catalog,
+  Pages, production retention, or a front end.
+- **Effect:** the Owner receives a quality and compatibility report based on the
+  real event while the test event remains non-public and disposable.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+
+### P14-06 — Implement the separately approved Paupergeddon product
+
+- **Problem:** a successful disposable trial is evidence, not authorization to
+  retain or publish the event.
+- **Operation:** after separate Owner approval, register only the exact approved
+  main event, normalize and validate it under the accepted event strategy,
+  generate event-specific overview and matchup statistics, and prove the
+  active-taxonomy and privacy/publication boundaries.
+- **Effect:** a private Tabletop Pauper candidate reuses the same classifier but
+  keeps its source data and statistics separate from MTGO.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+
+### P14-07 — Coordinate admission, publication, and closeout
+
+- **Problem:** enabling one source or one MTGO view early would create a partial
+  public format and inconsistent navigation.
+- **Operation:** after separate acceptance of the unchanged MTGO and Tabletop
+  subjects, admit Pauper through generated catalogs, verify both front ends and
+  retained Standard/Modern behavior, then use the normal commit, Ready PR,
+  merge, exact-SHA Pages, and documentation closeout gates. Stop on any changed
+  subject, failed check, conflict, permission blocker, or new decision.
+- **Effect:** Pauper appears once as a complete catalog-driven format with
+  separate MTGO and Tabletop products, verified Chinese card fallback, and
+  recoverable publication evidence.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
 
 ## Acceptance criteria
 
 Phase 14 is complete when:
 
+- the card-localization foundation is accepted and its unresolved rights gates
+  remain enforced;
 - shared Pauper archetype IDs are used by both sources;
 - MTGO and Melee data remain separate;
 - MTGO and Melee statistics remain separate;
-- Pauper rules pass validation;
-- Standard and Modern regression tests pass;
+- Pauper rules pass their focused validation;
+- Standard and Modern named regressions pass without repeating unrelated tests;
+- the Owner-supplied real-event trial remained non-public until separate event
+  admission;
 - front-end format selection is catalog-driven;
 - Pauper is not public until Landing and every required MTGO product are
   admitted together;
-- quality reports are available.
+- quality, localization-fallback, and publication evidence are available; and
+- Phase 15 remains unauthorized until separately opened.
 
 ---
 
