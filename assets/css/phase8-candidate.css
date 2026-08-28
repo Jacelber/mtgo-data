@@ -370,6 +370,16 @@
   font-size: 13px;
 }
 
+.landing-feature-media {
+  display: grid;
+  gap: 6px;
+  justify-items: end;
+}
+
+.landing-feature-image-retry {
+  min-height: 44px;
+}
+
 .landing-feature-cards {
   display: flex;
   align-items: center;
@@ -621,6 +631,10 @@
 
   .landing-feature-cards {
     justify-content: flex-start;
+  }
+
+  .landing-feature-media {
+    justify-items: start;
   }
 
   .landing-feature-sign {

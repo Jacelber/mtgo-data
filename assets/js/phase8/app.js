@@ -338,6 +338,7 @@ async function renderViewWithFocus(
   const preserveExistingContent = root.childElementCount > 0
     && !root.querySelector(".loading-state, .error-state");
   const token = ++state.renderToken;
+  globalThis.P8CardImages?.cancelQueued("view");
   root.querySelectorAll(".inline-error-state, .load-error-row").forEach(node => node.remove());
   root.setAttribute("aria-busy", "true");
   root.inert = true;
