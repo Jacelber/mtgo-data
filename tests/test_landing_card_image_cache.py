@@ -180,11 +180,12 @@ def test_subject_uses_latest_published_week_and_three_iso_predecessors(tmp_path)
         "Shared Card",
     ]
     assert "Too Old" not in json.dumps(subject)
+    assert subject["cache_schema_version"] == "1.1.0"
     assert len(subject["subject_sha256"]) == 64
     assert subject == cache_subject(root)
 
 
-def test_build_reuses_repository_image_and_resolves_double_faced_card(tmp_path):
+def test_build_ignores_repository_art_and_resolves_every_full_card_image(tmp_path):
     root = _synthetic_subject_root(tmp_path)
     visuals = root / "assets/js/phase8/archetype-visuals.js"
     visuals.parent.mkdir(parents=True, exist_ok=True)
@@ -201,6 +202,7 @@ def test_build_reuses_repository_image_and_resolves_double_faced_card(tmp_path):
         "https://cards.scryfall.io/normal/new-card.jpg": JPEG_A,
         "https://cards.scryfall.io/normal/front.jpg": JPEG_B,
         "https://cards.scryfall.io/normal/modern.jpg": JPEG_A,
+        "https://cards.scryfall.io/normal/shared.jpg": JPEG_B,
     }
     output = tmp_path / "cache"
 
@@ -212,16 +214,21 @@ def test_build_reuses_repository_image_and_resolves_double_faced_card(tmp_path):
     )
 
     entries = {item["name"]: item for item in manifest["cards"]}
-    assert entries["Shared Card"]["cache_source"] == "repository"
-    assert entries["Shared Card"]["local_path"] == (
-        "assets/images/representative-cards/standard/shared-card.jpg"
+    assert manifest["schema_version"] == "1.1.0"
+    assert {entry["cache_source"] for entry in entries.values()} == {"generated"}
+    assert entries["Shared Card"]["source_image_uri"].endswith("/shared.jpg")
+    assert entries["Shared Card"]["local_path"].startswith(
+        "assets/card-cache/v1/images/44444444-4444-4444-8444-444444444444"
     )
     assert entries["Front Face"]["face_index"] == 0
     assert entries["Front Face"]["source_image_uri"].endswith("/front.jpg")
     assert entries["New Card"]["local_path"].startswith(
         "assets/card-cache/v1/images/11111111-1111-4111-8111-111111111111"
     )
-    assert not (output / "images" / "shared-card.jpg").exists()
+    assert reused.read_bytes() == JPEG_A
+    assert (
+        output / "images" / "44444444-4444-4444-8444-444444444444.jpg"
+    ).read_bytes() == JPEG_B
     verified = verify_cache_bundle(root, output)
     assert verified == manifest
 
@@ -371,7 +378,5 @@ def test_manifest_digest_covers_every_cached_byte(tmp_path):
     )
 
     for entry in manifest["cards"]:
-        if entry["cache_source"] != "generated":
-            continue
         local = output / Path(entry["local_path"]).relative_to("assets/card-cache/v1")
         assert hashlib.sha256(local.read_bytes()).hexdigest() == entry["sha256"]

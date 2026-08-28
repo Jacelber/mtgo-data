@@ -13,7 +13,10 @@
   function publicPath(path) {
     if (
       typeof path !== "string"
-      || !path.startsWith("stats/")
+      || (
+        !path.startsWith("stats/")
+        && path !== "assets/card-cache/v1/manifest.json"
+      )
       || path.split("/").includes("..")
     ) {
       throw new Error(`Unsupported public data path: ${path}`);

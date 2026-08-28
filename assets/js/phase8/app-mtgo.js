@@ -254,7 +254,8 @@ function landingFeatureItems(context) {
 function landingFeatureCard(card, index) {
   const name = card.name;
   const search = `https://scryfall.com/search?q=${encodeURIComponent(`!"${name}"`)}`;
-  const image = `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}&format=image&version=normal`;
+  const scryfallImage = `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}&format=image&version=normal`;
+  const image = currentContext.featureImageCache?.[name] || scryfallImage;
   return `<a class="landing-feature-card card-link" href="${escapeHtml(search)}" target="_blank" rel="noopener" data-card-image="${escapeHtml(image)}" data-card-name="${escapeHtml(name)}" data-scryfall-url="${escapeHtml(search)}"><span class="card-image-frame is-loading"><img alt="${escapeHtml(name)}" data-progressive-image="${escapeHtml(image)}" data-image-owner="landing-feature-${index}"><span class="card-image-placeholder">${escapeHtml(name)}</span></span></a>`;
 }
 

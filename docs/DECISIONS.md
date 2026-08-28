@@ -6149,3 +6149,108 @@ available. Cache artifact expiry or a changed rolling subject causes one new
 build. Commit, remote publication, merge, Pages deployment, Cache-B, production
 data generation, Phase 14, and any new event remain separate authorization
 gates.
+
+---
+
+# DEC-134 - Consume the recent Landing card-image overlay with exact fallback
+
+Status: `Accepted`
+
+## Context
+
+DEC-133 publishes a verified recent-week image overlay, but Cache-A
+intentionally leaves the browser on live Scryfall requests. The shared card
+queue already starts images one at a time and gives each attempt its own
+timeout, yet a large Feature archive can still exhaust Scryfall's upstream
+request allowance. The later cards then need a delayed retry even though the
+same recent subject is already present on Pages.
+
+The cache is rolling rather than historical. Treating its mere presence as
+authority for every Feature week would serve images outside the declared
+four-week subject, while making the manifest mandatory would turn a recoverable
+image-source problem into a Landing load failure.
+
+## Decision
+
+Admit the exact Cache-A manifest as a bounded runtime JSON resource. For the
+selected format and Feature week, use its exact-name card mapping only when the
+manifest identity is supported, that week is explicitly present in the
+format's `selected_weeks`, and every applicable local path belongs to the
+declared generated full-card JPEG namespace. Legacy mixed-image manifests,
+repository representative-card paths, ambiguous mappings, and unsafe paths are
+rejected as one cache subject rather than partially consumed.
+
+Use the selected local path for both the inline Feature card and its existing
+preview/modal. Keep the Scryfall search link unchanged. A week outside the
+manifest window, an uncached card, or a missing, unavailable, unsupported, or
+unsafe manifest uses the existing exact-name Scryfall image URL on demand.
+Cache failure therefore cannot block the Landing document.
+
+Do not add another loader or retry controller. Both local and Scryfall images
+continue through the established paced queue, which owns per-attempt timeout,
+bounded automatic retry, placeholders, preview priority, and the existing
+Feature-group manual retry action.
+
+## Consequences
+
+The normal recent four-week Landing path no longer spends Scryfall requests for
+cached Feature cards, including retained prior-week content shown as the
+current Landing. Older history retains its prior on-demand behavior, and a
+stale or unavailable overlay fails open only at the external-image boundary.
+
+Cache-B changes no Landing data, editorial subject, statistics, classifier,
+workflow, or public path. The corrected subject changes cache generation,
+manifest Schema, and generated external bytes only as specified by DEC-135.
+Commit, remote publication, merge, Pages deployment, production data
+generation, Phase 14, and any new event remain governed by the live task and
+Owner acceptance.
+
+---
+
+# DEC-135 - Require complete card images in the Landing Feature cache
+
+Status: `Accepted`
+
+## Context
+
+The first Cache-B acceptance candidate exposed a contract error in DEC-133.
+Cache-A reused tracked representative-card JPEGs when names matched, assuming
+that every JPEG represented the same visual product. Those files are cropped
+card art designed for compact environment representatives, while other cache
+entries are Scryfall `normal` images containing the complete card frame and
+rules text. Cache-B therefore rendered both visual products in one four-card
+group.
+
+Changing only the browser would either retain Scryfall rate-limit exposure for
+the cropped entries or allow the existing exact-subject workflow artifact to
+be reused. The cache subject must itself distinguish the corrected full-card
+contract.
+
+## Decision
+
+Supersede DEC-133 only where it permits repository representative-image reuse.
+Every card in the recent Landing Feature cache is resolved from the same
+Scryfall Oracle Cards Bulk Data snapshot and downloaded from that printing or
+named face's validated `normal` JPEG URI. Repository representative-card art is
+never a cache source and remains unchanged for its existing environment UI.
+
+Advance the cache manifest to Schema `1.1.0`. Every card entry has
+`cache_source: generated`, a cache-local image path, Scryfall and Oracle UUIDs,
+and a non-null validated Scryfall image URI. The Schema version remains inside
+the canonical subject, forcing a new subject SHA-256 and preventing reuse of a
+legacy `1.0.0` mixed-image artifact. Cache-B accepts only `1.1.0` generated
+entries.
+
+## Consequences
+
+All recent Feature groups use one visual product: complete card images. The
+current rolling set still contains the same 71 exact card names and week uses,
+but all 71 external overlay entries are generated full-card JPEGs. The tracked
+representative art, Landing data, statistics, classifier, workflow retention,
+and public prefix remain unchanged.
+
+The first corrected Pages build must resolve and download the entries that the
+legacy artifact borrowed from the repository. It remains atomic and
+fail-closed; a failed build does not deploy a partial cache. Commit, publication,
+merge, deployment, Phase 14, and unrelated production work remain separately
+governed by the live task and Owner acceptance.
