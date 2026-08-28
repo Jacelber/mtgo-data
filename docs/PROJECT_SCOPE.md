@@ -454,6 +454,29 @@ they must not infer identity by matching display text. This cross-view consumer
 change is implemented and accepted separately from the internal catalog and
 from classifier maintenance.
 
+Card names and complete card images have a separate localization contract from
+classifier-backed archetype labels. The English source card name remains the
+stable lookup and compatibility value. A Chinese display resolves by immutable
+card and printing identity in this order:
+
+1. an official Simplified Chinese name or image;
+2. a community translation or community-rendered image with explicit
+   provenance, only where its use and redistribution are permitted; and
+3. the existing English name or complete English card image.
+
+The Chinese product must label fallback state truthfully and must not present a
+community translation or rendered image as official. Missing Chinese coverage
+must degrade to the English fallback rather than hide the card or guess a
+translation. Browser consumers must not call MTGCH at runtime. Localization is
+built and validated ahead of publication as a versioned sidecar so the existing
+English card-image cache, source data, statistics, classifier identities, and
+public product availability remain independent.
+
+The redistribution terms for community-rendered Chinese images are an explicit
+publication gate. Development may later use synthetic fixtures, but no real
+community image bytes may enter Git, a retained workflow artifact, Pages, or
+another public bundle until permission and required attribution are recorded.
+
 Availability must come from generated catalogs rather than a hard-coded
 assumption that every format supports every product.
 
@@ -621,12 +644,14 @@ must proceed in this broad order:
 2. Phase 11 — engineering baseline, test structure, and documentation reduction.
 3. Phase 12 — front-end productization and sharing readiness.
 4. Phase 13 — compatible multi-event raw-count matchup aggregation.
-5. Phase 14 — Pauper MTGO and the approved Paupergeddon event.
-6. Phase 15 — Pioneer.
-7. Phase 16 — Legacy and Eternal Weekend.
-8. Phase 17 — Standard Tabletop events when an approved event is available.
-9. Phase 18 — the Vintage decision gate.
-10. Phase 19 — release and long-term maintenance closeout.
+5. Complete the separately gated card-name and card-image localization
+   foundation required before Phase 14.
+6. Phase 14 — Pauper MTGO and the approved Paupergeddon event.
+7. Phase 15 — Pioneer.
+8. Phase 16 — Legacy and Eternal Weekend.
+9. Phase 17 — Standard Tabletop events when an approved event is available.
+10. Phase 18 — the Vintage decision gate.
+11. Phase 19 — release and long-term maintenance closeout.
 
 Listing a phase does not authorize it. `STATUS.yaml` controls the next allowed
 task and all stop conditions.

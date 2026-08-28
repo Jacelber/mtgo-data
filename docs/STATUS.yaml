@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/landing-card-image-cache-b"
+  current_working_branch: "codex/card-localization-documentation"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -22,64 +22,55 @@ status_document:
   history_policy: "Completed detail belongs in docs/history, audits, decisions, pull requests, and Git history; never use it to authorize current work."
 
 current_phase:
-  id: 13
-  name: "Multi-event raw-count matchup aggregation"
-  status: "complete"
-  started_on: "2026-08-27"
-  completed_on: "2026-08-27"
-  objective: "Implement separately gated raw-count aggregation for compatible Tabletop events without merging overview statistics or enabling an unapproved event."
+  id: "PRE-14"
+  name: "Card localization foundation"
+  status: "documentation_contract_accepted"
+  started_on: "2026-08-28"
+  objective: "Define the provenance-safe Chinese card-name and complete-card-image foundation before any Phase 14 implementation."
   production_changes_allowed: false
   implementation_authorized: false
   next_phase_id: 14
   next_phase_authorized: false
 
 current_task:
-  id: "LANDING-CARD-IMAGE-CACHE-B"
-  name: "Landing Feature full-card image cache and consumer"
+  id: "L10N-00"
+  name: "Card localization and Phase 14 documentation contract"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-28"
-  artifact_impact: "user_visible_ui"
-  base_commit: "b8d03eff1444667c2a275849b9d27e88adee72e1"
-  branch: "codex/landing-card-image-cache-b"
-  objective: "Build and consume only complete Scryfall normal card images for every Landing Feature card in each format's admitted recent-week window, never reuse cropped representative-card art, retain Scryfall on-demand loading for older or unavailable cache subjects, and preserve the card-level and Feature-group manual retry paths."
+  owner_accepted_on: "2026-08-28"
+  artifact_impact: "none"
+  base_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
+  branch: "codex/card-localization-documentation"
+  objective: "Record the card-name and card-image localization source, identity, provenance, fallback, rights, rollout, validation, and Phase 14 step order without beginning implementation."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "assets/js/phase8/runtime.js"
-    - "assets/js/phase8/mtgo-controller.js"
-    - "assets/js/phase8/app-mtgo.js"
-    - "tests/js/phase8-runtime.test.js"
-    - "tests/js/phase8-landing-controller.test.js"
-    - "tests/js/phase8-landing.test.js"
-    - "tools/build_landing_card_image_cache.py"
-    - "tests/test_landing_card_image_cache.py"
-    - "schemas/landing-card-image-cache.schema.json"
-    - "docs/STATUS.yaml"
+    - "docs/PROJECT_SCOPE.md"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/DECISIONS.md"
+    - "docs/ROADMAP.md"
     - "docs/TEST_TRIGGER_MATRIX.md"
+    - "docs/STATUS.yaml"
   planned_new_paths: []
   prohibited_changes:
-    - "Do not modify Pages overlay routing, workflow retention, or commit generated card-image bytes."
-    - "Do not change Landing content, statistics, classifiers, feature-week documents, public data, or the Scryfall attribution link."
-    - "Do not dispatch production, mutate Issues, alter P13-07, expose event 437444, or begin Phase 14."
-    - "Do not contact Scryfall from automated tests or local browser acceptance; use deterministic local failures and keep fallback image requests unstarted."
-  rejected_acceptance_note: "The first Cache-B candidate mixed complete Scryfall normal images with cropped representative-card art because Cache-A reused repository representative JPEGs. Owner rejected that visual subject; all earlier Cache-B browser acceptance evidence is invalid."
+    - "Do not modify code, tests, Schemas, workflows, generated data, public catalogs, or front-end assets."
+    - "Do not download or retain real MTGCH or Scryfall data or image bytes."
+    - "Do not begin L10N-A, the image-rights implementation gate, L10N-B, L10N-C, or Phase 14."
+    - "Do not dispatch production or manually deploy Pages; this documentation-only change is not a site-input change."
   local_verification:
-    cache_subject: "Schema 1.1.0 subject b9d3a668676a4d3e4c50ac84aa6c9470400b273086957471eb243cf4c3185b59 contains the same 71 recent Feature card names; all 71 entries are generated Scryfall normal images and zero paths reference representative-card art."
-    pages_candidate: "The corrected cache and Cache-B tree produced a closed local Pages artifact with 2,000 files and 275,126,912 bytes."
-    browser: "On a clean local origin, W33 mapped all 56 Feature images to generated cache paths and zero to representative-card art; the rejected first group and final group each decoded four 488x680 complete card images; 390px had no horizontal overflow; 412px exposed and completed Feature-group manual retry after one deterministic local 404."
-    acceptance_url: "http://127.0.0.1:4176/index.html?format=standard&product=mtgo-landing&week=2026-W33&lang=zh"
-  stop_point: "Complete this unchanged Owner-accepted subject through one local commit, one Ready pull request, required CI, merge, and the exact merge-triggered Pages verification. Stop on a changed subject or scope, failed check, merge conflict, permission blocker, or new product/statistical decision."
+    changed_scope: "Only the six authorized documentation files changed from cloud master b28445151a5ff64fedde566aa00678241a17f38a."
+    checks: "git diff --check passed; tests/test_documentation_history.py passed 5 tests."
+  stop_point: "Complete this unchanged Owner-accepted documentation subject through one local commit, one Ready pull request, required CI, and merge. Stop on a changed subject, failed check, merge conflict, permission blocker, or scope expansion; do not begin L10N-A or Phase 14."
 
 current_repository_state:
   phase_13_p13_07_merge_commit: "a0c4c9391e3cee096f675441b1a5deb144ec7fdb"
-  phase_13_p13_07_note: "P13-07 merged through PR #291; PR run 33087197220, master validation run 33087428322, and merge-triggered Pages run 33087428346 succeeded. Event 437444 remained non-public."
-  deployed_master_commit: "b8d03eff1444667c2a275849b9d27e88adee72e1"
-  deployed_master_note: "Cache-A PR #293 merged as b8d03eff; master validation 33167267060 and Pages run 33167267038 succeeded. The public manifest contains 71 cards and every declared image passed live byte and SHA-256 verification."
+  phase_13_p13_07_note: "P13-07 merged through PR #291; event 437444 remained non-public."
+  cache_b_merge_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
+  cache_b_note: "Cache-B merged through PR #294. Master validation run 33171550572 and merge-triggered Pages run 33171550626 succeeded."
+  deployed_master_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -88,20 +79,32 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
+  - id: "L10N-A"
+    status: "planned_not_authorized"
+    note: "Define the localization identity, provenance, resolver, Schema, batch adapter, and synthetic contract without real community image bytes."
+  - id: "L10N-RIGHTS"
+    status: "planned_not_authorized"
+    note: "Record the redistribution and attribution decision before retaining or publishing real community-rendered images."
+  - id: "L10N-B"
+    status: "planned_not_authorized"
+    note: "Build and admit a real external localization sidecar only after L10N-A acceptance and the applicable rights gate."
+  - id: "L10N-C"
+    status: "planned_not_authorized"
+    note: "Consume the admitted sidecar in Chinese views while preserving exact English fallback."
   - id: "PHASE-14-DESIGN"
     status: "planned_not_authorized"
-    note: "Pauper MTGO and approved Paupergeddon support remain separately gated after this maintenance hotfix."
+    note: "Pauper MTGO and the Owner-supplied Paupergeddon event remain separately gated after the localization foundation."
 
 next_approved_task:
   id: null
   name: null
   status: "accepted_task_completion_in_progress"
   local_execution_authorized: false
-  note: "Owner acceptance authorizes only completion of the unchanged LANDING-CARD-IMAGE-CACHE-B subject; no follow-up task or phase is authorized."
+  note: "Owner acceptance authorizes only completion of the unchanged L10N-00 documentation subject; no implementation or follow-up task is authorized."
 
 prohibited_next_actions:
-  - "Do not change the Owner-accepted Cache-A/Cache-B implementation or browser-review subject during completion."
-  - "Do not modify generated images, Landing content, statistics, classifiers, or public data outside the accepted cache overlay contract."
-  - "Do not dispatch MTGO production or manually deploy Pages."
-  - "Do not alter P13-07, expose event 437444, enable a second production event, or begin Phase 14."
+  - "Do not interpret this documentation decision as authorization for localization or Phase 14 development."
+  - "Do not fetch the Paupergeddon event before the Owner supplies and authorizes its exact link at P14-05."
+  - "Do not add a test event to the whitelist, public catalog, Pages, front end, or production retention."
+  - "Do not publish community-rendered Chinese images before the rights and attribution gate is closed."
   - "Do not develop directly on master or overwrite unexplained local changes."

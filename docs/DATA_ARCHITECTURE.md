@@ -3454,6 +3454,65 @@ per-attempt timeout, bounded automatic retry, placeholder, card preview, and
 Feature-group manual retry behavior for either source. The Scryfall search
 link and attribution remain unchanged.
 
+#### Planned card-localization sidecar
+
+Card localization is a separately gated pre-Phase-14 layer. It must not mutate
+the English-source names in normalized decks, generated statistics, Landing
+documents, classifier rules, or `assets/card-cache/v1/`. A future implementation
+uses a distinct versioned namespace:
+
+```text
+assets/card-localization/v1/manifest.json
+assets/card-localization/v1/images/<content-addressed-file>
+```
+
+The manifest is a build-time display sidecar. The canonical join key contains
+`oracle_id`, `scryfall_id`, and `face_index`; the original English card or face
+name remains a diagnostic and compatibility value, never the identity join.
+Each localized name or image records its status as `official`, `community`, or
+`english_fallback`, together with source provenance, retrieval snapshot, and
+required attribution. Community records also retain the upstream translation
+provenance instead of collapsing it into an official Chinese field.
+
+The source adapter may read MTGCH's public card and atomic-card data during a
+separately authorized batch build. Official Simplified Chinese values are
+identified by the source's official Chinese name/language and Chinese image
+fields. Community translations and rendered images are identified by the
+separate translated-name, translation-source, and community-image fields. The
+resolver applies one deterministic display order:
+
+1. official Simplified Chinese name or image;
+2. permitted community name or image with provenance; and
+3. existing English name or complete English card image.
+
+The browser never calls MTGCH at runtime. A producer resolves the bounded
+current product subject in batch, validates every identity and manifest path,
+and publishes only an atomic closed sidecar. A missing Chinese value is a
+declared English fallback; an identity collision, false official label, unsafe
+path, digest mismatch, or undeclared file rejects the sidecar.
+
+Real community-rendered image bytes remain outside Git, workflow retention,
+Pages, and any public bundle until the Owner records that redistribution is
+permitted and specifies the required attribution. Before that gate is closed,
+development and tests may use only synthetic fixtures. Official Chinese images
+and names require their own recorded source and attribution terms; an API being
+publicly readable is not by itself redistribution permission.
+
+The localization rollout remains split into independent accepted subjects:
+
+- `L10N-A` defines and proves the identity, provenance, resolver, and manifest
+  contract with synthetic fixtures;
+- the image-rights gate records whether real community-rendered images may be
+  retained and published;
+- `L10N-B` builds and admits the real external sidecar without changing the
+  current English cache; and
+- `L10N-C` makes Chinese views consume the admitted sidecar while preserving
+  English behavior and exact fallback.
+
+Each subject requires separate authorization, local acceptance, and
+publication authority. Completing this documentation contract authorizes none
+of those implementation subjects.
+
 Existing Pickup history remains frozen migration and rollback input:
 
 ```text
