@@ -1,11 +1,17 @@
 "use strict";
 
 (function (root) {
-  const MAX_CONCURRENT_IMAGES = 4;
+  const MAX_CONCURRENT_IMAGES = 1;
   const MAX_IMAGE_ATTEMPTS = 2;
+  const MIN_IMAGE_START_INTERVAL_MS = 150;
+  const IMAGE_ATTEMPT_TIMEOUT_MS = 15_000;
+  const IMAGE_RETRY_DELAY_MS = 1_500;
   const records = new Map();
   const queue = [];
   let active = 0;
+  let lastStartedAt = Number.NEGATIVE_INFINITY;
+  let pumpTimer = null;
+  let pumpDueAt = Number.POSITIVE_INFINITY;
 
   function recordFor(url) {
     if (!records.has(url)) {
@@ -14,51 +20,120 @@
     return records.get(url);
   }
 
-  function pump() {
-    if (document.hidden) return;
-    while (active < MAX_CONCURRENT_IMAGES && queue.length) {
-      const task = queue.shift();
-      const record = recordFor(task.url);
-      if (task.cancelled) {
-        record.status = "idle";
-        task.reject(new Error("cancelled"));
-        continue;
-      }
-      active += 1;
-      record.status = "loading";
-      record.attempts += 1;
-      const probe = new Image();
-      probe.onload = () => {
-        active -= 1;
+  function imageError(code) {
+    const error = new Error(code);
+    error.code = code;
+    return error;
+  }
+
+  function setFrame(frame, status) {
+    frame?.classList.toggle("is-loading", status === "loading");
+    frame?.classList.toggle("is-loaded", status === "loaded");
+    frame?.classList.toggle("is-error", status === "error");
+  }
+
+  function schedulePump(delay) {
+    const dueAt = Date.now() + delay;
+    if (pumpTimer !== null && dueAt >= pumpDueAt) return;
+    if (pumpTimer !== null) clearTimeout(pumpTimer);
+    pumpDueAt = dueAt;
+    pumpTimer = setTimeout(() => {
+      pumpTimer = null;
+      pumpDueAt = Number.POSITIVE_INFINITY;
+      pump();
+    }, delay);
+  }
+
+  function start(task) {
+    const record = recordFor(task.url);
+    active += 1;
+    lastStartedAt = Date.now();
+    record.status = "loading";
+    record.attempts += 1;
+    const probe = new Image();
+    let settled = false;
+    const timeout = setTimeout(() => finish(imageError("timeout")), IMAGE_ATTEMPT_TIMEOUT_MS);
+
+    function finish(error = null) {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      probe.onload = null;
+      probe.onerror = null;
+      if (error?.code === "timeout") probe.src = "";
+      active -= 1;
+      if (!error) {
         record.status = "loaded";
         record.promise = null;
         task.resolve(task.url);
-        pump();
-      };
-      probe.onerror = () => {
-        active -= 1;
+      } else if (task.autoRetry && record.attempts < MAX_IMAGE_ATTEMPTS) {
+        record.status = "queued";
+        task.notBefore = Date.now() + IMAGE_RETRY_DELAY_MS;
+        queue.push(task);
+      } else {
         record.status = "failed";
         record.promise = null;
-        task.reject(new Error("image"));
-        pump();
-      };
-      probe.src = task.url;
+        task.reject(error);
+      }
+      pump();
+    }
+
+    probe.onload = () => finish();
+    probe.onerror = () => finish(imageError("image"));
+    probe.src = task.url;
+  }
+
+  function pump() {
+    if (document.hidden || active >= MAX_CONCURRENT_IMAGES) return;
+    while (queue.length) {
+      const task = queue[0];
+      const record = recordFor(task.url);
+      if (task.cancelled) {
+        queue.shift();
+        record.status = "idle";
+        record.promise = null;
+        task.reject(imageError("cancelled"));
+        continue;
+      }
+      const nextStartAt = Math.max(
+        lastStartedAt + MIN_IMAGE_START_INTERVAL_MS,
+        task.notBefore || Number.NEGATIVE_INFINITY
+      );
+      const delay = nextStartAt - Date.now();
+      if (delay > 0) {
+        schedulePump(delay);
+        return;
+      }
+      queue.shift();
+      start(task);
+      return;
     }
   }
 
-  function load(url, { owner = "default", priority = false, retry = false } = {}) {
+  function load(url, {
+    autoRetry = false,
+    owner = "default",
+    priority = false,
+    reset = false,
+    retry = false,
+  } = {}) {
     const record = recordFor(url);
+    if (reset && record.status === "failed") {
+      record.attempts = 0;
+      record.status = "idle";
+    }
     if (record.status === "loaded") return Promise.resolve(url);
     if (record.status === "loading" || record.status === "queued") {
       return record.promise;
     }
     if (record.status === "failed" && (!retry || record.attempts >= MAX_IMAGE_ATTEMPTS)) {
-      return Promise.reject(new Error("image"));
+      return Promise.reject(imageError("image"));
     }
     let task;
     const promise = new Promise((resolve, reject) => {
-      task = { cancelled: false, owner, reject, resolve, url };
+      task = { autoRetry, cancelled: false, owner, reject, resolve, url };
     });
+    task.promise = promise;
     record.promise = promise;
     record.status = "queued";
     if (priority) queue.unshift(task);
@@ -68,32 +143,90 @@
   }
 
   function cancelQueued(owner) {
-    queue.forEach(task => {
-      if (task.owner === owner) task.cancelled = true;
-    });
+    for (let index = queue.length - 1; index >= 0; index -= 1) {
+      const task = queue[index];
+      if (task.owner !== owner) continue;
+      queue.splice(index, 1);
+      const record = recordFor(task.url);
+      if (record.promise === task.promise) {
+        record.attempts = 0;
+        record.promise = null;
+        record.status = "idle";
+      }
+      task.reject(imageError("cancelled"));
+    }
+    pump();
   }
 
   function attempts(url) {
     return recordFor(url).attempts;
   }
 
+  function featureFor(image) {
+    return image.closest(".landing-feature-item");
+  }
+
+  function updateFeatureRetry(feature) {
+    if (!feature) return;
+    const button = feature.querySelector("[data-retry-feature-images]");
+    if (!button) return;
+    const failed = [...feature.querySelectorAll("img[data-progressive-image]")]
+      .some(image => image.closest(".card-image-frame")?.classList.contains("is-error"));
+    button.hidden = !failed;
+    button.disabled = false;
+    button.textContent = t("card.image_retry_group");
+  }
+
+  function loadProgressive(image, { manageRetry = true, reset = false } = {}) {
+    const frame = image.closest(".card-image-frame");
+    setFrame(frame, "loading");
+    return load(image.dataset.progressiveImage, {
+      autoRetry: true,
+      owner: "view",
+      reset,
+      retry: reset,
+    }).then(url => {
+      image.src = url;
+      setFrame(frame, "loaded");
+      if (manageRetry) updateFeatureRetry(featureFor(image));
+      return url;
+    }).catch(error => {
+      setFrame(frame, "error");
+      if (manageRetry) updateFeatureRetry(featureFor(image));
+      throw error;
+    });
+  }
+
+  async function retryFailedFeature(button) {
+    const feature = button.closest(".landing-feature-item");
+    if (!feature) return;
+    const failed = [...feature.querySelectorAll("img[data-progressive-image]")]
+      .filter(image => image.closest(".card-image-frame")?.classList.contains("is-error"));
+    if (!failed.length) {
+      updateFeatureRetry(feature);
+      return;
+    }
+    button.disabled = true;
+    button.textContent = t("card.image_retrying");
+    await Promise.allSettled(failed.map(image => (
+      loadProgressive(image, { manageRetry: false, reset: true })
+    )));
+    updateFeatureRetry(feature);
+  }
+
   let observer = null;
   function progressiveObserver() {
     if (observer || !("IntersectionObserver" in window)) return observer;
     observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const image = entry.target;
-        observer.unobserve(image);
-        load(image.dataset.progressiveImage, {
-          owner: image.dataset.imageOwner || "view",
-        }).then(url => {
-          image.src = url;
-          image.closest(".card-image-frame")?.classList.replace("is-loading", "is-loaded");
-        }).catch(() => {
-          image.closest(".card-image-frame")?.classList.replace("is-loading", "is-error");
+      entries.filter(entry => entry.isIntersecting)
+        .sort((left, right) => (
+          left.target.getBoundingClientRect().top - right.target.getBoundingClientRect().top
+        ))
+        .forEach(entry => {
+          const image = entry.target;
+          observer.unobserve(image);
+          loadProgressive(image).catch(() => {});
         });
-      });
     }, { rootMargin: "400px 0px" });
     return observer;
   }
@@ -105,11 +238,7 @@
         const progressive = progressiveObserver();
         if (progressive) progressive.observe(image);
         else {
-          load(image.dataset.progressiveImage).then(url => {
-            image.src = url;
-          }).catch(() => {
-            image.closest(".card-image-frame")?.classList.add("is-error");
-          });
+          loadProgressive(image).catch(() => {});
         }
       });
   }
@@ -156,12 +285,6 @@
 
   function touchOnly() {
     return matchMedia("(any-hover: none)").matches;
-  }
-
-  function setFrame(frame, status) {
-    frame.classList.toggle("is-loading", status === "loading");
-    frame.classList.toggle("is-loaded", status === "loaded");
-    frame.classList.toggle("is-error", status === "error");
   }
 
   function loadFloating(link) {
@@ -284,6 +407,12 @@
   }
 
   document.addEventListener("click", event => {
+    const featureRetry = event.target.closest("[data-retry-feature-images]");
+    if (featureRetry) {
+      event.preventDefault();
+      retryFailedFeature(featureRetry);
+      return;
+    }
     const link = event.target.closest("a[data-card-image]");
     if (link && touchOnly()) {
       event.preventDefault();

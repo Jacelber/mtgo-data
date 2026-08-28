@@ -183,7 +183,9 @@ test("a reviewed feature keeps one disclosure action and four separate card link
 
   assert.equal((html.match(/data-landing-feature-toggle=/g) || []).length, 1);
   assert.equal((html.match(/data-progressive-image=/g) || []).length, 4);
-  assert.match(html, /<\/button><span class="landing-feature-cards"/);
+  assert.match(html, /<\/button><span class="landing-feature-media">/);
+  assert.equal((html.match(/data-retry-feature-images/g) || []).length, 1);
+  assert.match(html, /data-retry-feature-images hidden>card\.image_retry_group<\/button>/);
 });
 
 test("retained Landing freshness does not mix newer companion facts", () => {

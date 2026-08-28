@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p13-07-active-taxonomy-admission"
-  working_branch_status: "p13_07_local_implementation_complete_pending_owner_acceptance"
+  current_working_branch: "codex/landing-scryfall-image-queue-hotfix"
+  working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
@@ -24,76 +24,59 @@ status_document:
 current_phase:
   id: 13
   name: "Multi-event raw-count matchup aggregation"
-  status: "p13_07_local_implementation_complete_pending_owner_acceptance"
+  status: "complete"
   started_on: "2026-08-27"
+  completed_on: "2026-08-27"
   objective: "Implement separately gated raw-count aggregation for compatible Tabletop events without merging overview statistics or enabling an unapproved event."
   production_changes_allowed: false
-  implementation_authorized: true
+  implementation_authorized: false
   next_phase_id: 14
   next_phase_authorized: false
 
 current_task:
-  id: "P13-07"
-  name: "Current-taxonomy multi-event admission"
-  status: "local_implementation_complete_pending_owner_acceptance"
-  authorized_on: "2026-08-27"
+  id: "LANDING-SCRYFALL-IMAGE-QUEUE-HOTFIX"
+  name: "Landing Scryfall image queue pacing and recovery"
+  status: "owner_accepted_completion_authorized"
   completed_on: "2026-08-28"
-  artifact_impact: "user_visible_ui,statistical_json_structure"
-  base_commit: "f9aa032edce29e49c68d08282b7bdc3309d07fdb"
-  branch: "codex/p13-07-active-taxonomy-admission"
-  objective: "Require every multi-event input to use the active format taxonomy declared by the maintained catalog, so an equal cohort of stale event digests fails closed without changing classification rules or enabling a public second event."
+  authorized_on: "2026-08-28"
+  owner_accepted_on: "2026-08-28"
+  artifact_impact: "user_visible_ui"
+  base_commit: "960a78d3767229383b2d4fac3ddd8c3a7b1806e1"
+  branch: "codex/landing-scryfall-image-queue-hotfix"
+  objective: "Pace Landing card-image requests sequentially, start timeouts only when a request begins, recover one transient failure automatically, expose a per-feature retry for remaining failures, and cancel stale queued view work without changing Landing data or statistical meaning."
   authorization:
     local_implementation: true
-    commit: false
-    remote_publication: false
-    merge: false
+    commit: true
+    remote_publication: true
+    merge: true
   allowed_paths:
-    - "src/mtgmeta/melee/publish.py"
-    - "src/mtgmeta/melee/multi_event_contract.py"
-    - "assets/js/phase8/matchup-model.js"
-    - "schemas/melee-event-catalog.schema.json"
-    - "schemas/melee-multi-event-matchup.schema.json"
-    - "tests/test_melee_multi_event_contract.py"
-    - "tests/test_melee_multi_event_parity.py"
-    - "tests/fixtures/melee/multi_event_matchup_parity.json"
-    - "tests/js/phase8-matchup-model.test.js"
-    - "docs/audits/P13-07.md"
-    - "docs/STATISTICS_SPEC.md"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DECISIONS.md"
+    - "assets/js/phase8/app-card-preview.js"
+    - "assets/js/phase8/app-mtgo.js"
+    - "assets/js/phase8/app.js"
+    - "assets/js/phase8/i18n.js"
+    - "assets/css/phase8-candidate.css"
+    - "tests/js/phase8-card-preview.test.js"
+    - "tests/js/phase8-landing.test.js"
+    - "tests/browser/production-pages.spec.js"
     - "docs/STATUS.yaml"
     - "docs/ROADMAP.md"
+    - "docs/history/ROADMAP-PHASE-13-COMPLETED.md"
+    - "docs/history/README.md"
+    - "docs/TEST_TRIGGER_MATRIX.md"
   planned_new_paths:
-    - "docs/audits/P13-07.md"
+    - "tests/js/phase8-card-preview.test.js"
+    - "docs/history/ROADMAP-PHASE-13-COMPLETED.md"
   prohibited_changes:
-    - "Do not change Modern classification rules, stable identities, priorities, or statistical formulas."
-    - "Do not register event 437444, retain its test data, or add it to a public catalog, Pages artifact, or front end."
-    - "Do not regenerate or edit current public event data, including protected event 434455 bytes."
-    - "Do not change event controls, URL state, rendering, workflows, whitelists, production publication, or MTGO data."
-    - "Do not dispatch production, mutate Issues, enable public multi-event selection, or begin Phase 14."
-  stop_point: "Present the focused P13-07 diff and proportional validation to the Owner for acceptance. Do not commit, push, create a pull request, merge, publish, enable event 437444, dispatch production, or begin Phase 14 before Owner acceptance."
+    - "Do not change Landing data, editorial content, statistical meaning, classification, public paths, Schemas, workflows, or generated files."
+    - "Do not alter the accepted Phase 13 implementation, enable a second Tabletop event, register or publish event 437444, or begin Phase 14."
+    - "Do not dispatch production, mutate Issues, or request arbitrary Scryfall data during automated tests."
+  stop_point: "Complete the unchanged accepted hotfix through commit, one Ready pull request, required checks, merge, and applicable Pages publication. Stop on failure, conflict, permission block, subject change, or completion; do not begin Phase 14."
 
 current_repository_state:
-  phase_13_p13_06r_merge_commit: "f9aa032edce29e49c68d08282b7bdc3309d07fdb"
-  phase_13_p13_06r_note: "P13-06R merged through PR #290; PR run 33080735242 and master run 33080876733 succeeded, with test-only event 437444 excluded from production."
-  phase_13_p13_05_merge_commit: "3a571a0780c7861d3f0cd4422368513ca45d8c22"
-  phase_13_p13_05_note: "P13-05 merged through PR #289; the accepted fixture-backed renderer is the immutable base for P13-06."
-  phase_13_p13_04_merge_commit: "6f4dfaeb2288b235eddcd5dcc3282a5acedcaa74"
-  phase_13_p13_04_note: "P13-04 merged through PR #288; PR validation run 33071049706, master validation run 33071204878, and merge-triggered Pages run 33071204818 succeeded."
-  phase_13_p13_03_merge_commit: "01baad87620de95b29c954d7d6801a94667785f0"
-  phase_13_p13_03_note: "P13-03 merged through PR #287; PR validation run 33066575205, master validation run 33066691429, and merge-triggered Pages run 33066691452 succeeded."
-  phase_13_p13_02_merge_commit: "82bf76770a2993e360e49a941ac92c5a37b7733c"
-  phase_13_p13_02_note: "P13-02 merged through PR #286; PR run 33045953996 and master run 33046092257 succeeded."
-  phase_13_p13_01_merge_commit: "43310f9345c670f40d7bb900275e9d9a0968fa91"
-  phase_13_p13_01_note: "P13-01 merged through PR #285; the accepted pure raw-count aggregator is the immutable base for P13-02."
-  landing_mobile_hotfix_merge_commit: "6cda56e23281b60b36e383943ba70d00fdce1e06"
-  landing_mobile_hotfix_note: "LANDING-MOBILE-FEATURE-SCROLL-HOTFIX merged through PR #283; master validation run 32981803451 and Pages run 32981803486 succeeded."
-  weekly_readiness_completion_merge_commit: "f1edcabb5663c2021f2310fa77ba47f8debcf224"
-  weekly_readiness_note: "WEEKLY-READINESS-COMPLETION-STATE-W34 merged through PR #282; master validation run 32976195638 succeeded and Issue #257 was restored to generated completed state and closed."
-  classifier_r6_merge_commit: "92edbccd34970ce173771b4578655eadda417198"
-  classifier_r6_note: "CLASSIFIER-R6 merged through PR #280; master validation run 32969296972 succeeded and production publication 4fa5ae919922c6faa2d0b422dd236a42d79bfdc7 refreshed the derived data."
-  phase_12_product_completion_commit: "0d70257f86c36630b167cf541e9d7d966fac2f72"
-  phase_12_completion_note: "P12-16 merged through PR #276; merge validation run 32855373950 and Pages run 32855373976 succeeded."
+  phase_13_p13_07_merge_commit: "a0c4c9391e3cee096f675441b1a5deb144ec7fdb"
+  phase_13_p13_07_note: "P13-07 merged through PR #291; PR run 33087197220, master validation run 33087428322, and merge-triggered Pages run 33087428346 succeeded. Event 437444 remained non-public."
+  deployed_master_commit: "960a78d3767229383b2d4fac3ddd8c3a7b1806e1"
+  deployed_master_note: "Scheduled production run 33108441657 published from P13-07 merge a0c4c939; Pages run 33110315667 succeeded."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -102,22 +85,19 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "P13-07"
-    status: "local_implementation_complete_pending_owner_acceptance"
-    note: "Require selected event taxonomy digests to equal the active taxonomy declared by future catalog Schema 1.2.0; preserve current production single-event discovery and keep public multi-event selection disabled."
+  - id: "PHASE-14-DESIGN"
+    status: "planned_not_authorized"
+    note: "Pauper MTGO and approved Paupergeddon support remain separately gated after this maintenance hotfix."
 
 next_approved_task:
   id: null
   name: null
-  status: "pending_owner_acceptance"
+  status: "current_task_completion_authorized"
   local_execution_authorized: false
-  note: "P13-07 local implementation and proportional validation are complete. Owner acceptance is required before same-task commit and publication completion; public enablement and Phase 14 remain separately gated."
+  note: "Owner accepted the unchanged hotfix on 2026-08-28. Complete this same task continuously; do not start another task or phase."
 
 prohibited_next_actions:
-  - "Do not alter the accepted P13-01 raw-count calculation, P13-04 URL/history/cache behavior, or P13-05 rendering subject."
-  - "Do not expose a second production event or enable a public multi-event selection."
-  - "Do not apply the exact-event test-only NRG Series exception to another event or retain it in production code, Schema, or whitelist."
-  - "Do not add event 437444 to the production whitelist, public catalogs, Pages artifact, or front end."
-  - "Do not change statistical meaning, merge MTGO and Tabletop results, dispatch production, or mutate Issues."
-  - "Do not begin Phase 14 or another task automatically."
+  - "Do not change the accepted hotfix subject while completing commit, Ready pull request, required checks, merge, and applicable Pages publication."
+  - "Do not change Landing content, data, statistics, classification, public paths, Schemas, workflows, or generated files."
+  - "Do not alter or republish P13-07, expose event 437444, enable a second production event, or begin Phase 14."
   - "Do not develop directly on master or overwrite unexplained local changes."

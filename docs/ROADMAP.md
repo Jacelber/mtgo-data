@@ -12,14 +12,16 @@ Completed and superseded roadmap detail is non-authoritative history:
 - Phases 0–11 and superseded specifications:
   `docs/history/ROADMAP-PHASES-0-11.md`;
 - the complete Phase 12 task sequence, acceptance criteria, and closeout record:
-  `docs/history/ROADMAP-PHASE-12-COMPLETED.md`.
+  `docs/history/ROADMAP-PHASE-12-COMPLETED.md`;
+- the complete Phase 13 design, task sequence, acceptance criteria, and closeout
+  record: `docs/history/ROADMAP-PHASE-13-COMPLETED.md`.
 
 ## Phase index
 
 | Phase | Objective | Status |
 | --- | --- | --- |
 | 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Complete on 2026-08-25 |
-| 13 | Aggregate compatible multi-event matchups from raw counts. | P13-07 current-taxonomy admission implemented locally; pending Owner acceptance |
+| 13 | Aggregate compatible multi-event matchups from raw counts. | Complete on 2026-08-27 |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
 | 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
@@ -42,146 +44,15 @@ The complete task sequence, embedded implementation history, final acceptance
 criteria, and closeout evidence are preserved in
 `docs/history/ROADMAP-PHASE-12-COMPLETED.md`.
 
-Phase 13 implementation began on 2026-08-27. P13-01 through P13-05 are
-complete. The Owner authorized P13-06 with exact Melee event `437444`. After
-its truthful NRG Series category failed the production-series whitelist, the
-Owner explicitly admitted that exact event to the disposable test scope only.
-The first real-source chain exposed an incomplete taxonomy-cohort rule: equal
-event digests were enforced, but the test incorrectly downgraded event `437444`
-to event `434455`'s historical classifier. The Owner authorized P13-06R to
-replace that diagnostic-only result with disposable projections of both events
-under the current approved Modern classifier. That correction passed with both
-events bound to taxonomy digest `65fe8be8356aac826bbadfe01d7ae603a63aa44c9880a232c6ac8e9b7cfeaf58`.
-P13-06R was accepted and merged through PR #290. The production event-
-inclusion policy and public admission remain unchanged. P13-07 is authorized
-to close the remaining permanent admission gap by binding every selected event
-to the active catalog taxonomy. Its focused synthetic and real-event checks
-passed; Owner acceptance remains pending. It does not authorize classifier
-changes, public enablement, or production.
+Phase 13 completed on 2026-08-27 after the Owner accepted P13-07 and its
+active-taxonomy admission merged through PR #291. The phase delivered raw-count
+multi-event matchup aggregation, compatible selection and URL state, retained
+per-event overview metrics, current-taxonomy admission, and a disposable
+real-event validation without enabling a second public event.
 
----
-
-# Phase 13 — Multi-event raw-count matchup aggregation
-
-## Design gate
-
-The Owner authorized `PHASE-13-DESIGN` on 2026-08-27. The design must split
-implementation into separately authorized tasks and finish with a real-event
-test using an exact Melee link supplied by the Owner at that later gate. That
-event remains a non-public test input: it is not admitted to the production
-whitelist, catalogs, Pages artifact, or front end.
-
-The accepted design and bounded task sequence are in
-`docs/audits/PHASE-13-DESIGN.md`. The Owner separately authorized P13-01
-through P13-06 and authorized the bounded P13-06R correction. P13-06R keeps the
-same exact non-public test event and requires both selected events to use the
-current approved Modern classifier; it does not authorize changing event-
-inclusion scope or public enablement. The Owner separately authorized P13-07
-to implement the permanent active-taxonomy admission rule without changing
-classification meaning or production availability.
-
-## Objective
-
-Allow matchup matrices to combine selected events without merging unrelated overview statistics.
-
-## Required work
-
-### Aggregation eligibility
-
-Only combine events that:
-
-- use the same Constructed format;
-- use compatible archetype IDs;
-- pass schema validation;
-- pass required quality checks;
-- are explicitly selected;
-- expose the requested matchup scope.
-
-### Aggregation method
-
-Aggregate raw counts:
-
-- wins;
-- losses;
-- played draws;
-- valid matches.
-
-Do not average already calculated percentages.
-
-### Default exclusions
-
-Exclude from primary matchup aggregation:
-
-- mirror matches from overall non-mirror win rate;
-- byes;
-- no-shows;
-- intentional draws;
-- official awarded wins;
-- Draft rounds;
-- unknown rounds;
-- unknown results;
-- playoffs, unless a separate playoff view is explicitly selected.
-
-### Scope behavior
-
-The matrix must identify whether it uses:
-
-- all Constructed Swiss;
-- Day 1 Constructed only;
-- Day 2 Constructed only.
-
-For mixed events, the default may be all Constructed Swiss, but Day 1 and Day 2 scopes must remain available where data permits.
-
-For the initial multi-event product, selecting two or more compatible events
-forces `all_constructed`, the only scope common to all three approved event
-structures. Day 1 and Day 2 remain selectable only for one event that declares
-those scopes. A later expansion of multi-event stage-specific aggregation
-requires a separate compatibility decision.
-
-## Task sequence
-
-1. Freeze compatibility rules for source, Constructed format, schema version,
-   archetype identity, quality status, and supported scope.
-2. Aggregate underlying eligible W-L-D counts and recalculate all rates and
-   intervals from those counts.
-3. Keep event overview documents independent and do not average event rates.
-4. Limit initial multi-event selection to `all_constructed` as required by
-   DEC-061.
-5. When a second event is selected, switch to `all_constructed`; when selection
-   returns to one event, restore its prior scope only if the catalog still
-   declares that scope.
-6. Persist selected event identities through the canonical multi-event URL
-   representation reserved by P12-02; selected events are durable user state,
-   while transient expanded table rows remain outside the URL.
-7. Keep the production multi-event entry disabled until at least two compatible
-   real events are approved. Synthetic contracts may prove the engineering
-   capability but do not constitute real production acceptance.
-8. After synthetic backend and browser acceptance, stop for the Owner to supply
-   one exact Melee event link. Validate that event only in a disposable,
-   non-public test: do not commit its registration or data, add it to a public
-   catalog, render it in the production front end, dispatch a workflow, or
-   publish it. An incompatible event proves rejection behavior but does not
-   provide positive real aggregation acceptance.
-9. Bind every multi-event-eligible catalog to the active format taxonomy and
-   require each selected event's taxonomy version and digest to equal that
-   active identity. Equal stale event digests must fail closed; classifier
-   changes require regenerated derived event outputs rather than taxonomy
-   downgrade or silent event omission.
-
-## Acceptance criteria
-
-Phase 13 is complete when:
-
-- single-event and multi-event matrices reconcile from raw counts;
-- cross-format selection is impossible;
-- incompatible schema versions are rejected or migrated;
-- sample size is displayed;
-- low-sample warnings are displayed;
-- confidence intervals are generated where specified;
-- scope selection is visible;
-- overview metrics remain per-event rather than merged.
-- every admitted event uses the catalog-declared active taxonomy, including
-  when all selected stale events otherwise agree with one another.
+The complete design, task sequence, acceptance criteria, and cloud closeout
+evidence are preserved in
+`docs/history/ROADMAP-PHASE-13-COMPLETED.md`.
 
 ---
 
