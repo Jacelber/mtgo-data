@@ -125,6 +125,18 @@ def test_known_paths_select_only_their_targeted_categories(paths, expected):
             ("rules-modern", "top8-restatement"),
         ),
         (["src/mtgmeta/mtgo/top8.py"], ("top8-restatement",)),
+        (
+            ["tools/build_landing_card_image_cache.py"],
+            ("landing-card-image-cache",),
+        ),
+        (
+            [".github/workflows/pages.yml"],
+            (
+                "ci-admission",
+                "ci-workflow",
+                "landing-card-image-cache",
+            ),
+        ),
     ],
 )
 def test_named_triggers_select_only_the_changed_contract(paths, expected):

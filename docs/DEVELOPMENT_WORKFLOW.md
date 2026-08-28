@@ -315,6 +315,19 @@ only for such a relevant `master` push or an accepted explicit dispatch on
 `master`, and has only `pages: write` and `id-token: write`; it must not receive
 repository write access or persisted Git credentials.
 
+The only generated overlay currently admitted by that boundary is
+`landing_card_images`, published under `assets/card-cache/v1/`. Its source
+directory must be outside the checkout, match the current repository's
+four-week Landing feature subject, contain no symbolic link or undeclared
+file, and pass manifest byte and SHA-256 verification before copying. Pages
+first looks for a non-expired `master` artifact named by that subject digest;
+on a miss it builds from Scryfall Bulk Data and the image CDN. Pull requests
+may build or reuse and verify the overlay but cannot retain it or deploy.
+Only a relevant `master` push or accepted `master` dispatch may retain the
+verified cache for 90 days. This process grants no repository write permission,
+does not commit image binaries, and fails before Pages upload if any current
+card is unresolved or invalid.
+
 When a production data publication changes `master`, its publish job must first
 confirm the remote `master` commit and then explicitly dispatch the allowlisted
 Pages workflow on `master`, as defined by DEC-084. GitHub does not trigger the

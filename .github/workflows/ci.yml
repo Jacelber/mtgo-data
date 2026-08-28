@@ -133,6 +133,12 @@ jobs:
           python -B -m pytest
           --basetemp="${RUNNER_TEMP}/pytest-top8-restatement"
           tests/test_mtgo_top8_restatement.py
+      - name: Validate Landing card-image cache contract
+        if: contains(needs.admission.outputs.validation_triggers, 'landing-card-image-cache')
+        run: >-
+          python -B -m pytest
+          --basetemp="${RUNNER_TEMP}/pytest-landing-card-image-cache"
+          tests/test_landing_card_image_cache.py
       - name: Validate changed governance contracts
         if: >-
           contains(needs.admission.outputs.validation_triggers, 'ci-admission') ||

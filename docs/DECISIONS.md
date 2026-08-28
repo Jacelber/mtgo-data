@@ -6088,3 +6088,64 @@ P13-07 changes future catalog and in-memory compatibility contracts plus the
 dormant browser admission path. Production enablement, a second approved real
 event, workflow dispatch, commit, publication, merge, and Phase 14 remain
 separately governed by the live task state and Owner acceptance.
+
+---
+
+# DEC-133 - Build recent Landing feature images as a verified Pages overlay
+
+Status: `Accepted`
+
+## Context
+
+Feature-card previews are intentionally loaded in a paced browser queue, but
+successful queue ownership cannot remove an upstream availability limit. A
+larger retained feature week can still leave later cards empty when live
+Scryfall image requests are throttled. Retrying later can work, but makes the
+recent Landing archive unreliable even when its public feature data is valid.
+
+Committing rolling image binaries would grow Git history and couple generated
+external media to the durable source tree. Fetching all historical images would
+also expand the retained set without improving the normal recent-week path.
+
+## Decision
+
+Introduce Cache-A as infrastructure only. For each maintained format, anchor
+at its latest published feature week and select that week plus the preceding
+three ISO weeks; missing weeks do not extend the interval backward. Take the
+cross-format union of every selected Feature Deck's four `featured_cards`,
+deduplicated by normalized exact name. Full decklists are outside the subject.
+
+Build an atomic external bundle. Reuse a matching tracked representative JPEG
+when available; resolve every other name from one gzip-compressed Scryfall
+Oracle Cards JSONL Bulk Data snapshot and download its validated normal JPEG
+from `*.scryfall.io`.
+Named double-faced-card faces are resolved explicitly. Any unresolved name,
+invalid URL, non-JPEG byte stream, undeclared file, unsafe path, or digest
+mismatch rejects the whole new bundle.
+
+Publish the bundle only through the allowlisted Pages artifact under
+`assets/card-cache/v1/`. Bind it with a versioned manifest containing the
+rolling-subject SHA-256, exact format/week uses, source identity, paths, byte
+counts, and image digests. Keep generated image bytes out of Git. A trusted
+`master` Pages run may retain an exact-subject workflow artifact for 90 days;
+PR runs may reuse or build and verify but cannot retain or deploy it. Workflow
+and repository permissions remain read-only.
+
+Cache-A does not change the browser consumer. Switching recent weeks to the
+local manifest, defining older-week Scryfall fallback, and exposing manual
+retry belong to separately authorized Cache-B.
+
+## Consequences
+
+The recent four-week Feature image set becomes a reproducible, byte-verified
+Pages resource without altering Landing data, statistics, editorial content,
+classifier behavior, or front-end rendering. After the first successful build
+for a subject, later Pages runs reuse immutable bytes and need no Scryfall API
+lookup or image-CDN request for that subject.
+
+A first build still depends on Scryfall Bulk Data and the image CDN. It fails
+closed before deployment, so the previously deployed Pages version remains
+available. Cache artifact expiry or a changed rolling subject causes one new
+build. Commit, remote publication, merge, Pages deployment, Cache-B, production
+data generation, Phase 14, and any new event remain separate authorization
+gates.

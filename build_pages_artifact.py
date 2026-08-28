@@ -6,10 +6,13 @@ import argparse
 import hashlib
 import json
 from fnmatch import fnmatchcase
+import re
 import shutil
 import subprocess
 from pathlib import Path
 from typing import Any
+
+from tools.build_landing_card_image_cache import verify_cache_bundle
 
 
 CONFIG_KEYS = {
@@ -18,6 +21,7 @@ CONFIG_KEYS = {
     "site_directories",
     "excluded_patterns",
     "compatibility_manifests",
+    "generated_overlays",
     "maximum_artifact_bytes",
 }
 DATA_TREE_DIRECTORIES = ("data", "data_raw", "reports", "stats")
@@ -52,7 +56,7 @@ def load_config(root: Path, config_path: Path) -> dict[str, Any]:
         raise PublicationError(
             "publication config keys must be exactly " + ", ".join(sorted(CONFIG_KEYS))
         )
-    if config["schema_version"] != "1.1.0":
+    if config["schema_version"] != "1.2.0":
         raise PublicationError("unsupported publication config schema_version")
     for key in (
         "site_files",
@@ -67,6 +71,40 @@ def load_config(root: Path, config_path: Path) -> dict[str, Any]:
         if len(normalized) != len(set(normalized)):
             raise PublicationError(f"{key} contains duplicate paths")
         config[key] = normalized
+    overlays = config["generated_overlays"]
+    if not isinstance(overlays, list) or not overlays:
+        raise PublicationError("generated_overlays must be a non-empty list")
+    overlay_ids: set[str] = set()
+    prefixes: set[str] = set()
+    for overlay in overlays:
+        if not isinstance(overlay, dict) or set(overlay) != {
+            "id",
+            "manifest",
+            "maximum_bytes",
+            "public_prefix",
+        }:
+            raise PublicationError("generated overlay keys are invalid")
+        overlay_id = overlay["id"]
+        if not isinstance(overlay_id, str) or not re.fullmatch(r"[a-z][a-z0-9_]*", overlay_id):
+            raise PublicationError(f"invalid generated overlay id: {overlay_id!r}")
+        if overlay_id in overlay_ids:
+            raise PublicationError(f"duplicate generated overlay id: {overlay_id}")
+        overlay_ids.add(overlay_id)
+        prefix = _safe_relative(overlay["public_prefix"], "generated overlay prefix")
+        if prefix in prefixes:
+            raise PublicationError(f"duplicate generated overlay prefix: {prefix}")
+        prefixes.add(prefix)
+        overlay["public_prefix"] = prefix
+        overlay["manifest"] = _safe_relative(
+            overlay["manifest"], "generated overlay manifest"
+        )
+        maximum_overlay = overlay["maximum_bytes"]
+        if (
+            not isinstance(maximum_overlay, int)
+            or isinstance(maximum_overlay, bool)
+            or maximum_overlay <= 0
+        ):
+            raise PublicationError("generated overlay maximum_bytes must be positive")
     maximum = config["maximum_artifact_bytes"]
     if not isinstance(maximum, int) or isinstance(maximum, bool) or maximum <= 0:
         raise PublicationError("maximum_artifact_bytes must be a positive integer")
@@ -255,8 +293,72 @@ def _require_outside(path: Path, base: Path, message: str) -> None:
     raise PublicationError(message)
 
 
+def _copy_generated_overlays(
+    root: Path,
+    output: Path,
+    config: dict[str, Any],
+    overlays: dict[str, Path],
+    occupied: set[str],
+) -> set[str]:
+    configured = {record["id"]: record for record in config["generated_overlays"]}
+    if set(overlays) != set(configured):
+        raise PublicationError(
+            "generated overlays must match configured ids: "
+            + ", ".join(sorted(configured))
+        )
+    copied: set[str] = set()
+    for overlay_id, record in configured.items():
+        source_root = overlays[overlay_id].resolve()
+        _require_outside(
+            source_root,
+            root,
+            f"generated overlay must be outside the repository: {overlay_id}",
+        )
+        if source_root.is_symlink() or not source_root.is_dir():
+            raise PublicationError(f"generated overlay is not a directory: {overlay_id}")
+        manifest = source_root / record["manifest"]
+        if manifest.is_symlink() or not manifest.is_file():
+            raise PublicationError(f"generated overlay manifest is missing: {overlay_id}")
+        if overlay_id != "landing_card_images":
+            raise PublicationError(f"unsupported generated overlay: {overlay_id}")
+        try:
+            verify_cache_bundle(root, source_root)
+        except (ValueError, OSError, UnicodeError, json.JSONDecodeError) as exc:
+            raise PublicationError(f"generated overlay verification failed: {exc}") from exc
+
+        source_files: list[Path] = []
+        for path in source_root.rglob("*"):
+            if path.is_symlink():
+                raise PublicationError(f"symbolic links are prohibited in overlay: {path}")
+            if path.is_file():
+                source_files.append(path)
+        overlay_bytes = sum(path.stat().st_size for path in source_files)
+        if overlay_bytes > record["maximum_bytes"]:
+            raise PublicationError(
+                f"generated overlay exceeds maximum_bytes: {overlay_id}"
+            )
+        for source in sorted(source_files):
+            child = source.relative_to(source_root).as_posix()
+            relative = f"{record['public_prefix']}/{child}"
+            _safe_relative(relative, "generated artifact path")
+            if relative in occupied or relative in copied:
+                raise PublicationError(f"generated overlay path collision: {relative}")
+            destination = output / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, destination)
+            if _sha256(source) != _sha256(destination):
+                raise PublicationError(f"generated overlay byte mismatch: {relative}")
+            copied.add(relative)
+    return copied
+
+
 def build_artifact(
-    root: Path, config_path: Path, output: Path, report_path: Path
+    root: Path,
+    config_path: Path,
+    output: Path,
+    report_path: Path,
+    *,
+    overlays: dict[str, Path] | None = None,
 ) -> dict[str, Any]:
     root = root.resolve()
     output = output.resolve()
@@ -283,7 +385,15 @@ def build_artifact(
         shutil.copyfile(root / relative, destination)
     (output / ".nojekyll").write_bytes(b"")
 
-    artifact_paths = selected | {".nojekyll"}
+    generated = _copy_generated_overlays(
+        root, output, config, overlays or {}, selected | {".nojekyll"}
+    )
+    artifact_paths = selected | generated | {".nojekyll"}
+    artifact_bytes = _tree_bytes(output, artifact_paths)
+    if artifact_bytes > config["maximum_artifact_bytes"]:
+        raise PublicationError(
+            f"artifact would exceed maximum_artifact_bytes: {artifact_bytes}"
+        )
     for relative in selected:
         if _sha256(root / relative) != _sha256(output / relative):
             raise PublicationError(f"copied artifact byte mismatch: {relative}")
@@ -308,7 +418,7 @@ def build_artifact(
         },
         "artifact": {
             "files": len(artifact_paths),
-            "bytes": _tree_bytes(output, artifact_paths),
+            "bytes": artifact_bytes,
             "maximum_bytes": config["maximum_artifact_bytes"],
             "manifest_sha256": _manifest_digest(output, artifact_paths),
         },
@@ -316,6 +426,10 @@ def build_artifact(
             "protected_files": len(protected),
             "excluded_tracked_files": len(tracked_set - selected),
             "excluded_tracked_bytes": _tree_bytes(root, tracked_set - selected),
+        },
+        "generated_overlays": {
+            "files": len(generated),
+            "bytes": _tree_bytes(output, generated),
         },
     }
     report_path.parent.mkdir(parents=True, exist_ok=True)
@@ -337,6 +451,7 @@ def append_summary(path: Path, report: dict[str, Any]) -> None:
         f"- Git object storage: {repository['git_object_bytes']} bytes",
         f"- Data tree: {data_tree['files']} files, {data_tree['bytes']} bytes",
         f"- Pages artifact: {artifact['files']} files, {artifact['bytes']} bytes",
+        f"- Generated overlays: {report['generated_overlays']['files']} files, {report['generated_overlays']['bytes']} bytes",
         f"- Artifact manifest SHA-256: `{artifact['manifest_sha256']}`",
         f"- Protected compatibility files: {boundary['protected_files']}",
         f"- Excluded tracked paths: {boundary['excluded_tracked_files']} files, {boundary['excluded_tracked_bytes']} bytes",
@@ -355,11 +470,30 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
     parser.add_argument("--summary", type=Path)
+    parser.add_argument(
+        "--overlay",
+        action="append",
+        default=[],
+        metavar="ID=PATH",
+        help="verified generated overlay outside the repository",
+    )
     args = parser.parse_args()
     root = args.root.resolve()
     config_path = args.config if args.config.is_absolute() else root / args.config
     try:
-        report = build_artifact(root, config_path, args.output, args.report)
+        overlays: dict[str, Path] = {}
+        for value in args.overlay:
+            overlay_id, separator, path = value.partition("=")
+            if not separator or not overlay_id or not path or overlay_id in overlays:
+                raise PublicationError(f"invalid --overlay value: {value!r}")
+            overlays[overlay_id] = Path(path)
+        report = build_artifact(
+            root,
+            config_path,
+            args.output,
+            args.report,
+            overlays=overlays,
+        )
         if args.summary:
             summary = args.summary.resolve()
             _require_outside(summary, root, "artifact summary must be outside the repository")

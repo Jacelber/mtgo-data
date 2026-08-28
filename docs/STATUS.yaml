@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/landing-scryfall-image-queue-hotfix"
+  current_working_branch: "codex/landing-card-image-cache-a"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -34,49 +34,59 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "LANDING-SCRYFALL-IMAGE-QUEUE-HOTFIX"
-  name: "Landing Scryfall image queue pacing and recovery"
+  id: "LANDING-CARD-IMAGE-CACHE-A"
+  name: "Rolling Landing card-image cache infrastructure"
   status: "owner_accepted_completion_authorized"
-  completed_on: "2026-08-28"
   authorized_on: "2026-08-28"
-  owner_accepted_on: "2026-08-28"
-  artifact_impact: "user_visible_ui"
-  base_commit: "960a78d3767229383b2d4fac3ddd8c3a7b1806e1"
-  branch: "codex/landing-scryfall-image-queue-hotfix"
-  objective: "Pace Landing card-image requests sequentially, start timeouts only when a request begins, recover one transient failure automatically, expose a per-feature retry for remaining failures, and cancel stale queued view work without changing Landing data or statistical meaning."
+  artifact_impact: "public_path"
+  base_commit: "cca6a5af6bd8dd5084e8ec44eb4dfea8358c8ccd"
+  branch: "codex/landing-card-image-cache-a"
+  objective: "Build and validate a fail-closed Pages-only cache bundle for every unique Landing featured card in each format's latest published week and preceding three ISO weeks, without switching the front end to consume it."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "assets/js/phase8/app-card-preview.js"
-    - "assets/js/phase8/app-mtgo.js"
-    - "assets/js/phase8/app.js"
-    - "assets/js/phase8/i18n.js"
-    - "assets/css/phase8-candidate.css"
-    - "tests/js/phase8-card-preview.test.js"
-    - "tests/js/phase8-landing.test.js"
-    - "tests/browser/production-pages.spec.js"
+    - ".github/workflows/ci.yml"
+    - ".github/workflows/pages.yml"
+    - "build_pages_artifact.py"
+    - "ci_master_admission.py"
+    - "configs/pages_publication.json"
+    - "tools/build_landing_card_image_cache.py"
+    - "schemas/landing-card-image-cache.schema.json"
+    - "tests/test_landing_card_image_cache.py"
+    - "tests/test_ci_master_admission.py"
+    - "tests/test_ci_workflow.py"
     - "docs/STATUS.yaml"
-    - "docs/ROADMAP.md"
-    - "docs/history/ROADMAP-PHASE-13-COMPLETED.md"
-    - "docs/history/README.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
+    - "docs/DEVELOPMENT_WORKFLOW.md"
     - "docs/TEST_TRIGGER_MATRIX.md"
   planned_new_paths:
-    - "tests/js/phase8-card-preview.test.js"
-    - "docs/history/ROADMAP-PHASE-13-COMPLETED.md"
+    - "tools/build_landing_card_image_cache.py"
+    - "schemas/landing-card-image-cache.schema.json"
+    - "tests/test_landing_card_image_cache.py"
   prohibited_changes:
-    - "Do not change Landing data, editorial content, statistical meaning, classification, public paths, Schemas, workflows, or generated files."
-    - "Do not alter the accepted Phase 13 implementation, enable a second Tabletop event, register or publish event 437444, or begin Phase 14."
-    - "Do not dispatch production, mutate Issues, or request arbitrary Scryfall data during automated tests."
-  stop_point: "Complete the unchanged accepted hotfix through commit, one Ready pull request, required checks, merge, and applicable Pages publication. Stop on failure, conflict, permission block, subject change, or completion; do not begin Phase 14."
+    - "Do not switch any front-end card-image consumer; that is separately gated Cache-B."
+    - "Do not commit generated card-image binaries, Landing data, statistics, classifier changes, or generated production output."
+    - "Do not expand repository or workflow write permissions, dispatch production, publish Pages, mutate Issues, alter P13-07, expose event 437444, or begin Phase 14."
+    - "Do not contact Scryfall from automated tests; use deterministic local fixtures."
+  stop_point: "Complete the unchanged accepted Cache-A through local commit, one Ready pull request, required CI, merge, and exact merge-triggered Pages verification. Stop on changed subject, failed check, conflict, permission blocker, or scope expansion. Do not begin Cache-B."
+  local_result:
+    subject_sha256: "98ab4a7d2a78131816b19545de06e2ae2d8f1ce5604b21cf42dc6f40b35ecaa3"
+    unique_feature_cards: 71
+    generated_images: 52
+    reused_repository_images: 19
+    cache_bundle_bytes: 4645968
+    pages_artifact_bytes: 273319506
+    validation: "focused contracts, Ruff, full Schema validation, real Scryfall bundle verification, and full local Pages packaging passed"
 
 current_repository_state:
   phase_13_p13_07_merge_commit: "a0c4c9391e3cee096f675441b1a5deb144ec7fdb"
   phase_13_p13_07_note: "P13-07 merged through PR #291; PR run 33087197220, master validation run 33087428322, and merge-triggered Pages run 33087428346 succeeded. Event 437444 remained non-public."
-  deployed_master_commit: "960a78d3767229383b2d4fac3ddd8c3a7b1806e1"
-  deployed_master_note: "Scheduled production run 33108441657 published from P13-07 merge a0c4c939; Pages run 33110315667 succeeded."
+  deployed_master_commit: "cca6a5af6bd8dd5084e8ec44eb4dfea8358c8ccd"
+  deployed_master_note: "Landing card-image queue hotfix PR #292 merged as cca6a5af and Pages run 33160072180 succeeded; Cache-A starts from those deployed bytes."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -92,12 +102,13 @@ future_task_gates:
 next_approved_task:
   id: null
   name: null
-  status: "current_task_completion_authorized"
+  status: "accepted_task_completion_in_progress"
   local_execution_authorized: false
-  note: "Owner accepted the unchanged hotfix on 2026-08-28. Complete this same task continuously; do not start another task or phase."
+  note: "Complete the unchanged accepted Cache-A publication lifecycle; Cache-B remains unauthorized."
 
 prohibited_next_actions:
-  - "Do not change the accepted hotfix subject while completing commit, Ready pull request, required checks, merge, and applicable Pages publication."
-  - "Do not change Landing content, data, statistics, classification, public paths, Schemas, workflows, or generated files."
-  - "Do not alter or republish P13-07, expose event 437444, enable a second production event, or begin Phase 14."
+  - "Do not change the accepted Cache-A subject while completing its commit, Ready PR, CI, merge, and Pages verification."
+  - "Do not dispatch MTGO production or manually deploy an unrelated Pages subject."
+  - "Do not switch the front end to the cache, change Landing content or statistics, commit generated card images, or begin Cache-B."
+  - "Do not alter P13-07, expose event 437444, enable a second production event, or begin Phase 14."
   - "Do not develop directly on master or overwrite unexplained local changes."
