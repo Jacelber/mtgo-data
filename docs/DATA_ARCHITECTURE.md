@@ -3414,7 +3414,7 @@ feature subject. A missing or invalid required feature document blocks the
 cutover rather than silently appearing as an empty week. A deliberately empty
 week requires an explicit reviewed-empty state.
 
-#### Feature-card image cache (Cache-A)
+#### Feature-card image cache (Cache-A and Cache-B)
 
 For each maintained format, Cache-A anchors at the latest week present in that
 format's public feature index and selects that ISO week plus its three immediate
@@ -3424,20 +3424,35 @@ into the window. The cache subject is the normalized union of every
 Standard and Modern; it does not include complete decklists or environment
 representative cards merely because they exist elsewhere.
 
-The builder first reuses an exact-name repository representative image only
-when it is a regular JPEG with a recorded SHA-256. Remaining names are resolved
-from one gzip-compressed Scryfall Oracle Cards JSONL Bulk Data snapshot,
-including a named face of a
-double-faced card, and fetched from validated HTTPS `*.scryfall.io` JPEG URLs.
-All names must resolve and all bytes must validate before the external bundle
-is atomically admitted. The manifest is governed by
+The builder resolves every name from one gzip-compressed Scryfall Oracle Cards
+JSONL Bulk Data snapshot, including a named face of a double-faced card, and
+fetches its complete `normal` card JPEG from a validated HTTPS
+`*.scryfall.io` URL. Repository representative-card images are cropped art for
+a different UI role and are never cache inputs. All names must resolve and all
+bytes must validate before the external bundle is atomically admitted. The
+manifest uses Schema `1.1.0` governed by
 `schemas/landing-card-image-cache.schema.json`; generated files live only in a
-workflow artifact and the Pages payload, not in Git.
+workflow artifact and the Pages payload, not in Git. The Schema version is part
+of the subject digest, so a legacy `1.0.0` mixed-image artifact cannot satisfy
+the full-card subject.
 
-Cache-A creates and publishes the verified path but deliberately does not
-change a browser consumer. The existing Scryfall-on-demand behavior remains
-unchanged until a separately authorized Cache-B binds the front end to this
-manifest and defines older-week fallback and user retry behavior.
+Cache-B is the browser consumer for this verified overlay. The runtime admits
+only the exact manifest path `assets/card-cache/v1/manifest.json`; image paths
+remain ordinary static browser resources and cannot be used as JSON inputs.
+For the selected format and Feature week, the controller accepts the manifest
+only when its identity is supported, that exact week is listed in the format's
+`selected_weeks`, and every used card has one exact-name mapping to an
+allowlisted generated full-card cache path. Inline cards and their
+preview/modal use the same selected image source. Legacy `1.0.0` manifests and
+repository representative-card paths are rejected as cache inputs.
+
+Weeks outside the manifest's admitted rolling window continue to request the
+exact card image from Scryfall on demand. A missing, unavailable, unsupported,
+or path-unsafe manifest also degrades to that same behavior instead of making
+Landing unavailable. The existing paced one-at-a-time image queue retains its
+per-attempt timeout, bounded automatic retry, placeholder, card preview, and
+Feature-group manual retry behavior for either source. The Scryfall search
+link and attribution remain unchanged.
 
 Existing Pickup history remains frozen migration and rollback input:
 

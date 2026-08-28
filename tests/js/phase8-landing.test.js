@@ -15,14 +15,14 @@ const freshnessSource = fs.readFileSync(
   "utf8"
 );
 
-function landingFunctions(language = "zh") {
+function landingFunctions(language = "zh", loadedContext = {}) {
   const context = {
     ArchetypeVisuals: { manaIdentities: {} },
     I18n: { language: () => language },
     classifierName: (parentId, subtypeId = null) => subtypeId || parentId,
     REPRESENTATIVE_CARDS: {},
     URL,
-    currentContext: {},
+    currentContext: loadedContext,
     escapeHtml: value => String(value)
       .replaceAll("&", "&amp;")
       .replaceAll("<", "&lt;")
@@ -54,6 +54,7 @@ function landingFunctions(language = "zh") {
       landingEnvironmentDetailTitle,
       landingEnvironmentRows,
       landingFeatureHtml,
+      landingFeatureCard,
       landingFeatureItems,
       landingSummaryText,
     };`, context);
@@ -186,6 +187,28 @@ test("a reviewed feature keeps one disclosure action and four separate card link
   assert.match(html, /<\/button><span class="landing-feature-media">/);
   assert.equal((html.match(/data-retry-feature-images/g) || []).length, 1);
   assert.match(html, /data-retry-feature-images hidden>card\.image_retry_group<\/button>/);
+});
+
+test("recent Feature cards use one cached source for inline and preview images", () => {
+  const localPath = "assets/card-cache/v1/images/card.jpg";
+  const { landingFeatureCard } = landingFunctions("zh", {
+    featureImageCache: { "Cached Card": localPath },
+  });
+
+  const html = landingFeatureCard({ name: "Cached Card" }, 0);
+
+  assert.match(html, new RegExp(`data-card-image="${localPath}"`));
+  assert.match(html, new RegExp(`data-progressive-image="${localPath}"`));
+  assert.match(html, /href="https:\/\/scryfall\.com\/search/);
+});
+
+test("uncached Feature cards retain the exact Scryfall image request", () => {
+  const { landingFeatureCard } = landingFunctions();
+
+  const html = landingFeatureCard({ name: "Older Card" }, 0);
+
+  assert.match(html, /data-card-image="https:\/\/api\.scryfall\.com\/cards\/named\?exact=Older%20Card&amp;format=image&amp;version=normal"/);
+  assert.match(html, /data-progressive-image="https:\/\/api\.scryfall\.com\/cards\/named\?exact=Older%20Card&amp;format=image&amp;version=normal"/);
 });
 
 test("retained Landing freshness does not mix newer companion facts", () => {

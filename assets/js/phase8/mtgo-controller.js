@@ -6,6 +6,13 @@
     "MTGO",
     path => /^stats\/[a-z0-9_-]+\/mtgo\//.test(path)
   );
+  const cardImageCacheManifestPath = "assets/card-cache/v1/manifest.json";
+  const cardImageCacheClient = Runtime.createJsonClient(
+    "Landing card-image cache",
+    path => path === cardImageCacheManifestPath,
+    { maxBytes: 1024 * 1024, maxEntries: 1, foregroundTimeoutMs: 5_000 }
+  );
+  const generatedCardImagePath = /^assets\/card-cache\/v1\/images\/[0-9a-f-]+(?:-face-[0-9]+)?\.jpg$/;
 
   function rootPath(format) {
     return `stats/${format}/mtgo`;
@@ -72,6 +79,63 @@
     };
   }
 
+  function featureImageCacheFor(manifest, format, week) {
+    if (
+      manifest?.schema_version !== "1.1.0"
+      || manifest.product !== "mtgo-landing-card-image-cache"
+      || manifest.public_prefix !== "assets/card-cache/v1"
+      || manifest.window_size_weeks !== 4
+      || !Array.isArray(manifest.formats)
+      || !Array.isArray(manifest.cards)
+    ) {
+      return null;
+    }
+    const formatWindows = manifest.formats.filter(item => item?.format === format);
+    if (
+      formatWindows.length !== 1
+      || !Array.isArray(formatWindows[0].selected_weeks)
+      || !formatWindows[0].selected_weeks.includes(week)
+    ) {
+      return null;
+    }
+    const images = Object.create(null);
+    for (const card of manifest.cards) {
+      if (
+        !card
+        || typeof card.name !== "string"
+        || !card.name
+        || card.cache_source !== "generated"
+        || typeof card.local_path !== "string"
+        || !Array.isArray(card.uses)
+      ) {
+        return null;
+      }
+      const usedByWeek = card.uses.some(use => (
+        use?.format === format
+        && Array.isArray(use.weeks)
+        && use.weeks.includes(week)
+      ));
+      if (!usedByWeek) continue;
+      if (!generatedCardImagePath.test(card.local_path)) {
+        return null;
+      }
+      if (images[card.name] && images[card.name] !== card.local_path) return null;
+      images[card.name] = card.local_path;
+    }
+    return Object.freeze(images);
+  }
+
+  async function loadFeatureImageCache(format, week) {
+    if (!week) return null;
+    try {
+      const manifest = await cardImageCacheClient.fetchJson(cardImageCacheManifestPath);
+      return featureImageCacheFor(manifest, format, week);
+    } catch (error) {
+      if (error instanceof Runtime.ResourceError) return null;
+      throw error;
+    }
+  }
+
   async function loadLanding(format, landingPath, selectedFeatureFile, options = {}) {
     const base = rootPath(format);
     const landing = await client.fetchJson(landingPath);
@@ -84,13 +148,22 @@
       || selectableWeeks[0]
       || null;
     const featureFile = selectedEntry?.file || null;
-    const [meta, range, completeness, featureDocument, environmentDecks, featureDecks] = await Promise.all([
+    const [
+      meta,
+      range,
+      completeness,
+      featureDocument,
+      environmentDecks,
+      featureDecks,
+      featureImageCache,
+    ] = await Promise.all([
       client.fetchJson(`${base}/meta.json`),
       client.fetchJson(`${base}/range_1w.json`),
       client.fetchJson(`${base}/completeness/1w.json`),
       featureFile ? client.fetchJson(`${base}/landing/features/${featureFile}`) : null,
       options.includeEnvironmentDecks ? client.fetchJson(`${base}/decks_1w.json`) : null,
       options.includeFeatureDecks ? client.fetchJson(`${base}/decks_4w.json`) : null,
+      loadFeatureImageCache(format, selectedEntry?.week),
     ]);
     return validateLandingGroup(format, {
       landing,
@@ -101,6 +174,7 @@
       featureEntry: selectedEntry,
       featureDocument,
       featureFile,
+      featureImageCache,
       environmentDecks,
       featureDecks,
     });

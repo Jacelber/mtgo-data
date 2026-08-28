@@ -32,7 +32,7 @@
     },
     "product": {"const": "mtgo-landing-card-image-cache"},
     "public_prefix": {"const": "assets/card-cache/v1"},
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"const": "1.1.0"},
     "subject_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "window_size_weeks": {"const": 4}
   },
@@ -95,62 +95,32 @@
       ],
       "properties": {
         "bytes": {"type": "integer", "minimum": 8, "maximum": 5242880},
-        "cache_source": {"enum": ["generated", "repository"]},
+        "cache_source": {"const": "generated"},
         "face_index": {
           "oneOf": [
             {"type": "integer", "minimum": 0},
             {"type": "null"}
           ]
         },
-        "local_path": {"type": "string", "minLength": 1},
+        "local_path": {
+          "type": "string",
+          "pattern": "^assets/card-cache/v1/images/[0-9a-f-]+(?:-face-[0-9]+)?\\.jpg$"
+        },
         "name": {"type": "string", "minLength": 1},
-        "oracle_id": {
-          "oneOf": [
-            {"type": "string", "format": "uuid"},
-            {"type": "null"}
-          ]
-        },
-        "scryfall_id": {
-          "oneOf": [
-            {"type": "string", "format": "uuid"},
-            {"type": "null"}
-          ]
-        },
+        "oracle_id": {"type": "string", "format": "uuid"},
+        "scryfall_id": {"type": "string", "format": "uuid"},
         "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "source_image_uri": {
-          "oneOf": [
-            {"type": "string", "format": "uri", "pattern": "^https://[^/]+\\.scryfall\\.io/"},
-            {"type": "null"}
-          ]
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://[^/]+\\.scryfall\\.io/"
         },
         "uses": {
           "type": "array",
           "minItems": 1,
           "items": {"$ref": "#/$defs/use"}
         }
-      },
-      "allOf": [
-        {
-          "if": {"properties": {"cache_source": {"const": "generated"}}},
-          "then": {
-            "properties": {
-              "local_path": {"pattern": "^assets/card-cache/v1/images/[0-9a-f-]+(?:-face-[0-9]+)?\\.jpg$"},
-              "oracle_id": {"type": "string", "format": "uuid"},
-              "scryfall_id": {"type": "string", "format": "uuid"},
-              "source_image_uri": {"type": "string"}
-            }
-          },
-          "else": {
-            "properties": {
-              "face_index": {"type": "null"},
-              "local_path": {"pattern": "^assets/images/representative-cards/.+\\.(?:jpg|jpeg)$"},
-              "oracle_id": {"type": "null"},
-              "scryfall_id": {"type": "null"},
-              "source_image_uri": {"type": "null"}
-            }
-          }
-        }
-      ]
+      }
     }
   }
 }

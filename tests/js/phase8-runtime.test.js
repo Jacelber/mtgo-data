@@ -78,6 +78,22 @@ function landingDocuments({ companionWeek = "2026-W33", rangeFormat = "standard"
   ]);
 }
 
+function cardImageCacheManifest({ selectedWeeks = ["2026-W33"] } = {}) {
+  return {
+    schema_version: "1.1.0",
+    product: "mtgo-landing-card-image-cache",
+    public_prefix: "assets/card-cache/v1",
+    window_size_weeks: 4,
+    formats: [{ format: "standard", selected_weeks: selectedWeeks }],
+    cards: [{
+      cache_source: "generated",
+      name: "Cached Card",
+      local_path: "assets/card-cache/v1/images/11111111-1111-4111-8111-111111111111.jpg",
+      uses: [{ format: "standard", weeks: ["2026-W33"] }],
+    }],
+  };
+}
+
 test("failed requests are evicted and a manual retry starts a new fetch", async () => {
   let calls = 0;
   const runtime = runtimeWith(async () => {
@@ -180,6 +196,102 @@ test("foreground timeouts release the in-flight request", async () => {
   );
   await assert.rejects(client.fetchJson("stats/test/slow.json"));
   assert.equal(calls, 2);
+});
+
+test("the runtime admits only the exact Landing card-image cache manifest asset", () => {
+  const runtime = runtimeWith(async () => response({}));
+
+  assert.equal(
+    runtime.publicPath("assets/card-cache/v1/manifest.json"),
+    "./assets/card-cache/v1/manifest.json"
+  );
+  assert.throws(() => runtime.publicPath("assets/card-cache/v1/images/card.jpg"));
+});
+
+test("a recent admitted Landing week receives exact local card-image paths", async () => {
+  const documents = landingDocuments();
+  documents.set(
+    "./assets/card-cache/v1/manifest.json",
+    cardImageCacheManifest()
+  );
+  const controller = mtgoControllerWith(documents);
+
+  const context = await controller.loadLanding(
+    "standard",
+    "stats/standard/mtgo/landing/current.json",
+    null
+  );
+
+  assert.equal(
+    context.featureImageCache["Cached Card"],
+    "assets/card-cache/v1/images/11111111-1111-4111-8111-111111111111.jpg"
+  );
+});
+
+test("an older Landing week does not consume the recent image cache", async () => {
+  const documents = landingDocuments();
+  documents.set("./stats/standard/mtgo/landing/features/index.json", {
+    format: "standard",
+    weeks: [
+      { week: "2026-W33", file: "2026-W33.json", feature_count: 1 },
+      { week: "2026-W29", file: "2026-W29.json", feature_count: 1 },
+    ],
+  });
+  documents.set("./stats/standard/mtgo/landing/features/2026-W29.json", {
+    format: "standard",
+    week: { id: "2026-W29" },
+    features: { items: [] },
+  });
+  documents.set(
+    "./assets/card-cache/v1/manifest.json",
+    cardImageCacheManifest()
+  );
+  const controller = mtgoControllerWith(documents);
+
+  const context = await controller.loadLanding(
+    "standard",
+    "stats/standard/mtgo/landing/current.json",
+    "2026-W29.json"
+  );
+
+  assert.equal(context.featureFile, "2026-W29.json");
+  assert.equal(context.featureImageCache, null);
+});
+
+test("a missing or unsafe cache manifest preserves the Scryfall fallback", async () => {
+  const missingController = mtgoControllerWith(landingDocuments());
+  const missing = await missingController.loadLanding(
+    "standard",
+    "stats/standard/mtgo/landing/current.json",
+    null
+  );
+  assert.equal(missing.featureImageCache, null);
+
+  const documents = landingDocuments();
+  const unsafe = cardImageCacheManifest();
+  unsafe.cards[0].local_path = "https://example.test/not-the-cache.jpg";
+  documents.set("./assets/card-cache/v1/manifest.json", unsafe);
+  const unsafeController = mtgoControllerWith(documents);
+  const invalid = await unsafeController.loadLanding(
+    "standard",
+    "stats/standard/mtgo/landing/current.json",
+    null
+  );
+  assert.equal(invalid.featureImageCache, null);
+
+  const legacyDocuments = landingDocuments();
+  const legacy = cardImageCacheManifest();
+  legacy.schema_version = "1.0.0";
+  legacy.cards[0].cache_source = "repository";
+  legacy.cards[0].local_path = "assets/images/representative-cards/standard/cached-card.jpg";
+  legacyDocuments.set("./assets/card-cache/v1/manifest.json", legacy);
+  const legacyController = mtgoControllerWith(legacyDocuments);
+  const legacyContext = await legacyController.loadLanding(
+    "standard",
+    "stats/standard/mtgo/landing/current.json",
+    null
+  );
+  assert.equal(legacyContext.featureImageCache, null);
 });
 
 test("Landing keeps same-period companion documents", async () => {

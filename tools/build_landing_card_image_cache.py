@@ -19,7 +19,7 @@ from typing import Any, Callable
 from urllib.parse import urlsplit
 
 
-CACHE_SCHEMA_VERSION = "1.0.0"
+CACHE_SCHEMA_VERSION = "1.1.0"
 CACHE_PRODUCT = "mtgo-landing-card-image-cache"
 CACHE_PUBLIC_PREFIX = "assets/card-cache/v1"
 CACHE_WINDOW_WEEKS = 4
@@ -35,12 +35,6 @@ IMAGE_HEADERS = {
 }
 MAX_IMAGE_BYTES = 5 * 1024 * 1024
 MAX_BULK_BYTES = 1024 * 1024 * 1024
-VISUAL_RECORD = re.compile(
-    r"Object\.freeze\(\{\s*name:\s*(\"(?:\\.|[^\"\\])*\")\s*,\s*"
-    r"image:\s*(\"(?:\\.|[^\"\\])*\")\s*\}\)"
-)
-
-
 class CacheBuildError(ValueError):
     """Indicate that the rolling image cache cannot be built safely."""
 
@@ -124,41 +118,6 @@ def _feature_names(path: Path, format_name: str, week: str) -> list[str]:
     return names
 
 
-def _repository_images(root: Path) -> dict[str, dict[str, Any]]:
-    path = root / "assets/js/phase8/archetype-visuals.js"
-    if not path.is_file():
-        return {}
-    records: dict[str, dict[str, Any]] = {}
-    for match in VISUAL_RECORD.finditer(path.read_text(encoding="utf-8")):
-        name = json.loads(match.group(1))
-        image = json.loads(match.group(2))
-        if not isinstance(name, str) or not isinstance(image, str):
-            continue
-        prefix = "../images/representative-cards/"
-        if not image.startswith(prefix):
-            continue
-        local_path = "assets/images/representative-cards/" + image[len(prefix) :]
-        relative = PurePosixPath(local_path)
-        if relative.is_absolute() or ".." in relative.parts:
-            raise CacheBuildError(f"unsafe representative image path: {local_path}")
-        if relative.suffix.lower() not in {".jpg", ".jpeg"}:
-            continue
-        source = root / Path(*relative.parts)
-        if not source.is_file() or source.is_symlink():
-            raise CacheBuildError(f"representative image is missing: {local_path}")
-        key = _normalized_name(name)
-        record = {
-            "bytes": source.stat().st_size,
-            "local_path": local_path,
-            "sha256": _sha256_file(source),
-        }
-        previous = records.get(key)
-        if previous is not None and previous != record:
-            raise CacheBuildError(f"ambiguous representative image for {name}")
-        records[key] = record
-    return records
-
-
 def cache_subject(
     root: Path,
     *,
@@ -209,19 +168,16 @@ def cache_subject(
             }
         )
 
-    repository_images = _repository_images(root)
     cards: list[dict[str, Any]] = []
     for key in sorted(uses):
         item = uses[key]
-        record: dict[str, Any] = {
+        record = {
             "name": item["name"],
             "uses": [
                 {"format": format_name, "weeks": sorted(weeks, reverse=True)}
                 for format_name, weeks in sorted(item["formats"].items())
             ],
         }
-        if key in repository_images:
-            record["repository_image"] = repository_images[key]
         cards.append(record)
     subject: dict[str, Any] = {
         "cache_schema_version": CACHE_SCHEMA_VERSION,
@@ -432,7 +388,7 @@ def build_cache_bundle(
     temporary = Path(tempfile.mkdtemp(prefix="landing-card-cache-", dir=output.parent))
     try:
         subject = cache_subject(root)
-        unresolved = [card for card in subject["cards"] if "repository_image" not in card]
+        unresolved = subject["cards"]
         bulk_sha256: str | None = None
         lookup: dict[str, dict[str, Any]] = {}
         if unresolved:
@@ -458,22 +414,6 @@ def build_cache_bundle(
         entries: list[dict[str, Any]] = []
         for card in subject["cards"]:
             common = {"name": card["name"], "uses": card["uses"]}
-            repository_image = card.get("repository_image")
-            if isinstance(repository_image, dict):
-                entries.append(
-                    {
-                        **common,
-                        "bytes": repository_image["bytes"],
-                        "cache_source": "repository",
-                        "face_index": None,
-                        "local_path": repository_image["local_path"],
-                        "oracle_id": None,
-                        "scryfall_id": None,
-                        "sha256": repository_image["sha256"],
-                        "source_image_uri": None,
-                    }
-                )
-                continue
             resolved = lookup[_normalized_name(card["name"])]
             suffix = "" if resolved["face_index"] is None else f"-face-{resolved['face_index']}"
             file_name = f"{resolved['scryfall_id']}{suffix}.jpg"
@@ -600,55 +540,33 @@ def verify_cache_bundle(root: Path, cache_root: Path) -> dict[str, Any]:
             r"[0-9a-f]{64}", card["sha256"]
         ):
             raise CacheBuildError(f"invalid cache SHA-256: {local_path}")
-        source = card.get("cache_source")
-        if source == "generated":
-            if "repository_image" in subject_card:
-                raise CacheBuildError(f"repository cache source was not reused: {card['name']}")
-            generated_count += 1
-            prefix = PurePosixPath(CACHE_PUBLIC_PREFIX)
-            try:
-                relative = local_path.relative_to(prefix)
-            except ValueError as exc:
-                raise CacheBuildError(f"generated cache path escapes public prefix: {local_path}") from exc
-            file_path = cache_root / Path(*relative.parts)
-            expected_bundle_files.add(file_path)
-            _valid_scryfall_image_uri(card.get("source_image_uri"))
-            try:
-                scryfall_id = str(uuid.UUID(str(card.get("scryfall_id"))))
-                uuid.UUID(str(card.get("oracle_id")))
-            except (ValueError, AttributeError) as exc:
-                raise CacheBuildError(f"invalid generated card identity: {card['name']}") from exc
-            face_index = card.get("face_index")
-            if face_index is not None and (
-                not isinstance(face_index, int)
-                or isinstance(face_index, bool)
-                or face_index < 0
-            ):
-                raise CacheBuildError(f"invalid face index: {card['name']}")
-            suffix = "" if face_index is None else f"-face-{face_index}"
-            expected_path = f"{CACHE_PUBLIC_PREFIX}/images/{scryfall_id}{suffix}.jpg"
-            if local_path_text != expected_path:
-                raise CacheBuildError(f"generated cache path does not match identity: {local_path}")
-        elif source == "repository":
-            repository_image = subject_card.get("repository_image")
-            if not isinstance(repository_image, dict):
-                raise CacheBuildError(f"unapproved repository cache source: {card['name']}")
-            if not local_path.as_posix().startswith("assets/images/representative-cards/"):
-                raise CacheBuildError(f"unapproved repository cache path: {local_path}")
-            file_path = root / Path(*local_path.parts)
-            if {
-                "bytes": card["bytes"],
-                "local_path": local_path_text,
-                "sha256": card["sha256"],
-            } != repository_image:
-                raise CacheBuildError(f"repository cache evidence mismatch: {card['name']}")
-            if any(
-                card.get(field) is not None
-                for field in ("face_index", "oracle_id", "scryfall_id", "source_image_uri")
-            ):
-                raise CacheBuildError("repository cache entry has external identity fields")
-        else:
-            raise CacheBuildError(f"unsupported cache source: {source!r}")
+        if card.get("cache_source") != "generated":
+            raise CacheBuildError(f"unsupported cache source: {card.get('cache_source')!r}")
+        generated_count += 1
+        prefix = PurePosixPath(CACHE_PUBLIC_PREFIX)
+        try:
+            relative = local_path.relative_to(prefix)
+        except ValueError as exc:
+            raise CacheBuildError(f"generated cache path escapes public prefix: {local_path}") from exc
+        file_path = cache_root / Path(*relative.parts)
+        expected_bundle_files.add(file_path)
+        _valid_scryfall_image_uri(card.get("source_image_uri"))
+        try:
+            scryfall_id = str(uuid.UUID(str(card.get("scryfall_id"))))
+            uuid.UUID(str(card.get("oracle_id")))
+        except (ValueError, AttributeError) as exc:
+            raise CacheBuildError(f"invalid generated card identity: {card['name']}") from exc
+        face_index = card.get("face_index")
+        if face_index is not None and (
+            not isinstance(face_index, int)
+            or isinstance(face_index, bool)
+            or face_index < 0
+        ):
+            raise CacheBuildError(f"invalid face index: {card['name']}")
+        suffix = "" if face_index is None else f"-face-{face_index}"
+        expected_path = f"{CACHE_PUBLIC_PREFIX}/images/{scryfall_id}{suffix}.jpg"
+        if local_path_text != expected_path:
+            raise CacheBuildError(f"generated cache path does not match identity: {local_path}")
         if file_path.is_symlink() or not file_path.is_file():
             raise CacheBuildError(f"declared cache image is missing: {local_path}")
         if file_path.stat().st_size != card.get("bytes"):
