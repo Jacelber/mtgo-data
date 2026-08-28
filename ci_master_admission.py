@@ -505,6 +505,12 @@ def _validation_triggers(paths: set[str]) -> tuple[str, ...]:
         "tools/build_landing_card_image_cache.py",
     }:
         triggers.add("landing-card-image-cache")
+    if paths & {
+        "schemas/card-localization.schema.json",
+        "tests/test_card_localization.py",
+        "tools/build_card_localization.py",
+    }:
+        triggers.add("card-localization")
     if any(path.startswith(".github/workflows/") for path in paths) or "tests/test_ci_workflow.py" in paths:
         triggers.add("ci-workflow")
     if paths & {
