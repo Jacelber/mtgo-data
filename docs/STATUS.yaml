@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/card-localization-documentation"
+  current_working_branch: "codex/card-localization-contract"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -24,53 +24,64 @@ status_document:
 current_phase:
   id: "PRE-14"
   name: "Card localization foundation"
-  status: "documentation_contract_accepted"
+  status: "implementation_owner_accepted"
   started_on: "2026-08-28"
-  objective: "Define the provenance-safe Chinese card-name and complete-card-image foundation before any Phase 14 implementation."
+  objective: "Establish provenance-safe Chinese card-name and complete-card-image support before any Phase 14 implementation."
   production_changes_allowed: false
-  implementation_authorized: false
+  implementation_authorized: true
   next_phase_id: 14
   next_phase_authorized: false
 
 current_task:
-  id: "L10N-00"
-  name: "Card localization and Phase 14 documentation contract"
+  id: "L10N-A"
+  name: "Card localization identity, provenance, and synthetic contract"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-28"
   owner_accepted_on: "2026-08-28"
   artifact_impact: "none"
-  base_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
-  branch: "codex/card-localization-documentation"
-  objective: "Record the card-name and card-image localization source, identity, provenance, fallback, rights, rollout, validation, and Phase 14 step order without beginning implementation."
+  base_commit: "f540faa3af8922c71482a59c7f48c2a94012c4d8"
+  branch: "codex/card-localization-contract"
+  objective: "Define and prove the oracle_id, scryfall_id, and face_index join; official, community, and English-fallback provenance; a versioned manifest Schema; and an offline batch adapter using synthetic fixtures only."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "docs/PROJECT_SCOPE.md"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DECISIONS.md"
-    - "docs/ROADMAP.md"
-    - "docs/TEST_TRIGGER_MATRIX.md"
+    - "tools/build_card_localization.py"
+    - "schemas/card-localization.schema.json"
+    - "tests/test_card_localization.py"
+    - "ci_master_admission.py"
+    - ".github/workflows/ci.yml"
+    - "tests/test_ci_master_admission.py"
+    - "tests/test_ci_workflow.py"
     - "docs/STATUS.yaml"
-  planned_new_paths: []
+  planned_new_paths:
+    - "tools/build_card_localization.py | maintained Python"
+    - "schemas/card-localization.schema.json | schema contract"
+    - "tests/test_card_localization.py | focused Python test"
   prohibited_changes:
-    - "Do not modify code, tests, Schemas, workflows, generated data, public catalogs, or front-end assets."
-    - "Do not download or retain real MTGCH or Scryfall data or image bytes."
-    - "Do not begin L10N-A, the image-rights implementation gate, L10N-B, L10N-C, or Phase 14."
-    - "Do not dispatch production or manually deploy Pages; this documentation-only change is not a site-input change."
+    - "Do not contact MTGCH, Scryfall, or an image CDN; accept only explicit local input files and synthetic test data."
+    - "Do not retain real official or community Chinese image bytes or source responses in the repository."
+    - "Do not modify assets/card-cache/v1, Pages packaging, production workflows, front-end code, generated data, public catalogs, statistics, classifiers, or event configuration."
+    - "The CI change is limited to routing the exact card-localization paths to tests/test_card_localization.py and proving that routing; do not redesign unrelated validation."
+    - "Do not begin L10N-RIGHTS, L10N-B, L10N-C, Phase 14, or fetch the Paupergeddon event."
+    - "Gate 6 completion is limited to the unchanged Owner-accepted L10N-A subject; do not dispatch production or deploy Pages."
+  stop_point: "Commit the unchanged Owner-accepted L10N-A subject, publish one Ready pull request, wait for required checks, and merge. Stop on a changed subject, failed check, merge conflict, permission blocker, or scope expansion; do not begin a follow-up task."
   local_verification:
-    changed_scope: "Only the six authorized documentation files changed from cloud master b28445151a5ff64fedde566aa00678241a17f38a."
-    checks: "git diff --check passed; tests/test_documentation_history.py passed 5 tests."
-  stop_point: "Complete this unchanged Owner-accepted documentation subject through one local commit, one Ready pull request, required CI, and merge. Stop on a changed subject, failed check, merge conflict, permission blocker, or scope expansion; do not begin L10N-A or Phase 14."
+    result: "pass"
+    completed_on: "2026-08-28"
+    checks:
+      - "104 focused tests passed: card-localization contract, exact CI admission and workflow routing, and documentation live-state rules."
+      - "Full Schema validation passed: 99 public generated JSON documents checked."
+      - "Focused Ruff validation passed for the changed Python implementation and CI tests."
+    scope_note: "No network access, real MTGCH or Scryfall response, real image byte, repository cache mutation, front-end change, or public artifact was used."
 
 current_repository_state:
-  phase_13_p13_07_merge_commit: "a0c4c9391e3cee096f675441b1a5deb144ec7fdb"
-  phase_13_p13_07_note: "P13-07 merged through PR #291; event 437444 remained non-public."
-  cache_b_merge_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
-  cache_b_note: "Cache-B merged through PR #294. Master validation run 33171550572 and merge-triggered Pages run 33171550626 succeeded."
+  documentation_merge_commit: "f540faa3af8922c71482a59c7f48c2a94012c4d8"
+  documentation_note: "L10N-00 merged through PR #295; PR validation 33179080681 and master validation 33179190096 succeeded."
   deployed_master_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
+  deployed_master_note: "The documentation-only f540faa3 merge did not change site inputs or trigger Pages; the deployed site remains the accepted Cache-B subject."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -79,12 +90,9 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "L10N-A"
-    status: "planned_not_authorized"
-    note: "Define the localization identity, provenance, resolver, Schema, batch adapter, and synthetic contract without real community image bytes."
   - id: "L10N-RIGHTS"
     status: "planned_not_authorized"
-    note: "Record the redistribution and attribution decision before retaining or publishing real community-rendered images."
+    note: "Record the redistribution and attribution decision before retaining or publishing real Chinese image material."
   - id: "L10N-B"
     status: "planned_not_authorized"
     note: "Build and admit a real external localization sidecar only after L10N-A acceptance and the applicable rights gate."
@@ -100,11 +108,10 @@ next_approved_task:
   name: null
   status: "accepted_task_completion_in_progress"
   local_execution_authorized: false
-  note: "Owner acceptance authorizes only completion of the unchanged L10N-00 documentation subject; no implementation or follow-up task is authorized."
+  note: "Owner acceptance authorizes continuous Gate 6 completion of the unchanged L10N-A subject. Real-source, UI, production, and follow-up work remain unauthorized."
 
 prohibited_next_actions:
-  - "Do not interpret this documentation decision as authorization for localization or Phase 14 development."
-  - "Do not fetch the Paupergeddon event before the Owner supplies and authorizes its exact link at P14-05."
-  - "Do not add a test event to the whitelist, public catalog, Pages, front end, or production retention."
-  - "Do not publish community-rendered Chinese images before the rights and attribution gate is closed."
+  - "Do not interpret L10N-A authorization as permission to access or publish real Chinese card material."
+  - "Do not modify the existing English card-image cache or any public browser path."
+  - "Do not begin the rights gate, sidecar publication, front-end consumption, or Phase 14."
   - "Do not develop directly on master or overwrite unexplained local changes."

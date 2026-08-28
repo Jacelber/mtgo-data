@@ -130,6 +130,14 @@ def test_known_paths_select_only_their_targeted_categories(paths, expected):
             ("landing-card-image-cache",),
         ),
         (
+            ["tools/build_card_localization.py"],
+            ("card-localization",),
+        ),
+        (
+            ["schemas/card-localization.schema.json"],
+            ("card-localization", "schema-contract"),
+        ),
+        (
             [".github/workflows/pages.yml"],
             (
                 "ci-admission",
