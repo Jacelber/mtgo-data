@@ -1816,6 +1816,16 @@ unsafe paths and symbolic links, verifies every copied byte, enforces the
 one-gibibyte site ceiling, and validates the complete event `434455`
 compatibility closure before producing a size and digest report.
 
+Cache-A adds one generated Pages overlay at `assets/card-cache/v1/`. The
+overlay is built outside the repository and is never a Git-tracked input. Its
+Schema-governed manifest binds the exact rolling Landing subject, every
+declared image path, byte count, SHA-256, source, and feature-week use. The
+Pages packager accepts the overlay only after independently recomputing the
+subject and verifying a closed, symlink-free bundle; its bytes count toward
+both the 64-MiB overlay ceiling and the existing one-gibibyte site ceiling.
+Repository representative JPEGs may be referenced by the manifest but are not
+duplicated into the overlay.
+
 The policy is a publication boundary, not a confidentiality claim. Python
 source, tests, internal governance documents, and development configuration
 remain available through public Git but are not site payloads. New approved
@@ -1830,7 +1840,13 @@ not trigger Pages. Pull requests cannot upload or deploy the Pages artifact. A
 relevant master push or accepted dispatch may upload the verified artifact, and
 a separate job with only `pages: write` and `id-token: write` may deploy it
 through the protected `github-pages` environment. The Pages workflow does not
-fetch tournament data or modify the repository.
+fetch tournament data or modify the repository. It may read Scryfall's Oracle
+Cards Bulk Data and `cards.scryfall.io` image CDN only when an exact
+rolling-subject cache artifact is absent. A verified artifact is named by the
+subject SHA-256, retained for 90 days only from a trusted `master` Pages run,
+and reusable across later runs with the same subject. A cache miss, unresolved
+card, invalid image, digest mismatch, or incomplete bundle blocks the new
+Pages candidate and leaves the prior deployment unchanged.
 
 After fetch, `.github/workflows/update.yml` hashes the generation inputs. The
 latest generated commit records that digest, the validated output digest, the
@@ -3397,6 +3413,31 @@ The current document and feature-week document share the exact reviewed
 feature subject. A missing or invalid required feature document blocks the
 cutover rather than silently appearing as an empty week. A deliberately empty
 week requires an explicit reviewed-empty state.
+
+#### Feature-card image cache (Cache-A)
+
+For each maintained format, Cache-A anchors at the latest week present in that
+format's public feature index and selects that ISO week plus its three immediate
+ISO predecessors. Missing weeks inside the interval do not pull older weeks
+into the window. The cache subject is the normalized union of every
+`features.items[].featured_cards[].name` in the selected week documents across
+Standard and Modern; it does not include complete decklists or environment
+representative cards merely because they exist elsewhere.
+
+The builder first reuses an exact-name repository representative image only
+when it is a regular JPEG with a recorded SHA-256. Remaining names are resolved
+from one gzip-compressed Scryfall Oracle Cards JSONL Bulk Data snapshot,
+including a named face of a
+double-faced card, and fetched from validated HTTPS `*.scryfall.io` JPEG URLs.
+All names must resolve and all bytes must validate before the external bundle
+is atomically admitted. The manifest is governed by
+`schemas/landing-card-image-cache.schema.json`; generated files live only in a
+workflow artifact and the Pages payload, not in Git.
+
+Cache-A creates and publishes the verified path but deliberately does not
+change a browser consumer. The existing Scryfall-on-demand behavior remains
+unchanged until a separately authorized Cache-B binds the front end to this
+manifest and defines older-week fallback and user retry behavior.
 
 Existing Pickup history remains frozen migration and rollback input:
 

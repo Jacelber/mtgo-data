@@ -74,6 +74,9 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
     assert "schema-contract" in by_name["Validate changed public JSON contracts"]["if"]
     assert "schema-documents" in by_name["Validate changed public JSON contracts"]["if"]
     assert "top8-restatement" in by_name["Validate Top 8 restatement"]["if"]
+    cache = by_name["Validate Landing card-image cache contract"]
+    assert "landing-card-image-cache" in cache["if"]
+    assert "tests/test_landing_card_image_cache.py" in cache["run"]
     assert "ci-admission" in by_name["Validate changed governance contracts"]["if"]
     assert "ci-workflow" in by_name["Validate changed governance contracts"]["if"]
     package_install = by_name["Install maintained package for code and data checks"]
@@ -351,6 +354,10 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
     )
     push_paths = set(workflow["on"]["push"]["paths"])
     assert {"index.html", "melee/**", "stats/**", "data/**"} <= push_paths
+    assert {
+        "schemas/landing-card-image-cache.schema.json",
+        "tools/build_landing_card_image_cache.py",
+    } <= push_paths
     assert not ({"docs/**", "tests/**", ".github/workflows/ci.yml"} & push_paths)
     assert set(workflow["on"]["workflow_dispatch"]["inputs"]) == {
         "publication_commit",
@@ -385,6 +392,21 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
     assert evidence["env"]["PAGES_SUBJECT_COMMIT"] == "${{ github.sha }}"
     assert "published-output.tar" not in commands
     assert all(token not in commands for token in ("pytest", "playwright", "node --test"))
+    for required in (
+        "tools/build_landing_card_image_cache.py subject",
+        "tools/build_landing_card_image_cache.py build",
+        "tools/build_landing_card_image_cache.py verify",
+        '--overlay "landing_card_images=$RUNNER_TEMP/landing-card-image-cache"',
+    ):
+        assert required in commands
+    cache_upload = next(
+        step
+        for step in build["steps"]
+        if step["name"] == "Retain new Landing card-image cache"
+    )
+    assert cache_upload["uses"] == "actions/upload-artifact@v4.6.2"
+    assert cache_upload["with"]["retention-days"] == "90"
+    assert "refs/heads/master" in cache_upload["if"]
     deploy_commands = "\n".join(
         step.get("run", "") for step in workflow["jobs"]["deploy"]["steps"]
     )

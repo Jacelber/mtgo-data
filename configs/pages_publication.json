@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "site_files": [
     "index.html",
     "fetched.txt"
@@ -20,6 +20,14 @@
   ],
   "compatibility_manifests": [
     "tests/fixtures/melee/434455_compatibility_manifest.json"
+  ],
+  "generated_overlays": [
+    {
+      "id": "landing_card_images",
+      "public_prefix": "assets/card-cache/v1",
+      "manifest": "manifest.json",
+      "maximum_bytes": 67108864
+    }
   ],
   "maximum_artifact_bytes": 1073741824
 }

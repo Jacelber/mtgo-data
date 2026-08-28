@@ -496,6 +496,15 @@ def _validation_triggers(paths: set[str]) -> tuple[str, ...]:
         "tests/test_ci_master_admission.py",
     }:
         triggers.add("ci-admission")
+    if paths & {
+        ".github/workflows/pages.yml",
+        "build_pages_artifact.py",
+        "configs/pages_publication.json",
+        "schemas/landing-card-image-cache.schema.json",
+        "tests/test_landing_card_image_cache.py",
+        "tools/build_landing_card_image_cache.py",
+    }:
+        triggers.add("landing-card-image-cache")
     if any(path.startswith(".github/workflows/") for path in paths) or "tests/test_ci_workflow.py" in paths:
         triggers.add("ci-workflow")
     if paths & {

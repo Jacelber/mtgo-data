@@ -14,7 +14,9 @@ on:
       - "melee/**"
       - "reports/**"
       - "stats/**"
+      - "schemas/landing-card-image-cache.schema.json"
       - "tests/fixtures/melee/434455_compatibility_manifest.json"
+      - "tools/build_landing_card_image_cache.py"
   push:
     branches:
       - master
@@ -30,7 +32,9 @@ on:
       - "melee/**"
       - "reports/**"
       - "stats/**"
+      - "schemas/landing-card-image-cache.schema.json"
       - "tests/fixtures/melee/434455_compatibility_manifest.json"
+      - "tools/build_landing_card_image_cache.py"
   workflow_dispatch:
     inputs:
       publication_commit:
@@ -180,12 +184,74 @@ jobs:
           fi
           python -B ci_master_admission.py --verify-production-evidence
 
+      - name: Compute Landing card-image cache subject
+        id: landing-card-cache-subject
+        shell: bash
+        run: >-
+          python -B tools/build_landing_card_image_cache.py subject
+          --github-output "$GITHUB_OUTPUT"
+          > "$RUNNER_TEMP/landing-card-cache-subject.json"
+
+      - name: Find exact trusted Landing card-image cache
+        id: landing-card-cache-artifact
+        uses: actions/github-script@v7.0.1
+        env:
+          ARTIFACT_NAME: landing-card-image-cache-${{ steps.landing-card-cache-subject.outputs.sha256 }}
+        with:
+          script: |
+            const response = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: process.env.ARTIFACT_NAME,
+              per_page: 100,
+            });
+            const artifact = response.data.artifacts
+              .filter((item) => !item.expired)
+              .filter((item) => item.workflow_run?.head_branch === "master")
+              .sort((left, right) => right.id - left.id)[0];
+            core.setOutput("cache-hit", artifact ? "true" : "false");
+            core.setOutput("run-id", artifact?.workflow_run?.id ?? "");
+
+      - name: Download exact Landing card-image cache
+        if: steps.landing-card-cache-artifact.outputs.cache-hit == 'true'
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: landing-card-image-cache-${{ steps.landing-card-cache-subject.outputs.sha256 }}
+          path: ${{ runner.temp }}/landing-card-image-cache
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.landing-card-cache-artifact.outputs.run-id }}
+
+      - name: Build missing Landing card-image cache
+        if: steps.landing-card-cache-artifact.outputs.cache-hit != 'true'
+        run: >-
+          python -B tools/build_landing_card_image_cache.py build
+          --output "$RUNNER_TEMP/landing-card-image-cache"
+
+      - name: Verify exact Landing card-image cache
+        run: >-
+          python -B tools/build_landing_card_image_cache.py verify
+          --output "$RUNNER_TEMP/landing-card-image-cache"
+
+      - name: Retain new Landing card-image cache
+        if: >-
+          steps.landing-card-cache-artifact.outputs.cache-hit != 'true' &&
+          (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+          github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: landing-card-image-cache-${{ steps.landing-card-cache-subject.outputs.sha256 }}
+          path: ${{ runner.temp }}/landing-card-image-cache
+          if-no-files-found: error
+          retention-days: 90
+
       - name: Build fresh allowlisted Pages artifact
         run: >-
           python -B build_pages_artifact.py
           --output "$RUNNER_TEMP/pages-site"
           --report "$RUNNER_TEMP/pages-report.json"
           --summary "$GITHUB_STEP_SUMMARY"
+          --overlay "landing_card_images=$RUNNER_TEMP/landing-card-image-cache"
 
       - name: Configure GitHub Pages
         if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
