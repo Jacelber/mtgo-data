@@ -80,6 +80,8 @@ by adding Pauper cards and another source product.
 | `L10N-ARCHITECTURE-EVIDENCE-CONTRACT` | The earlier trial stopped during metadata setup before its first image request, so it cannot support a cache size, an image-delivery decision, or a runtime prohibition. | Withdraw the unmeasured DEC-139 proposal; define the exact missing subject, coverage, byte, Pages-headroom, direct-image, cache, interaction, fallback, and grouped-metadata evidence; freeze deterministic sampling, budgets, retention, stop conditions, and result-to-decision rules. Do not contact another card or image endpoint. | One reviewable contract separates setup failure from image evidence and selects no architecture before measurement. | `gpt-5.6-sol`, high reasoning |
 | `L10N-ARCHITECTURE-EVIDENCE-TRIAL` | No real data established Chinese-image coverage/size or exact-image behavior from the Pages origin. | Close the offline current-product inventory and begin the accepted grouped-source setup. The first MTGCH request returns HTTP 200, but the local validator incorrectly demands undocumented full-card/provenance fields and stops before image selection. | One corrected aggregate report preserves the valid subject, Pages, Cache-B, and Scryfall identity measurements, invalidates the false source-failure conclusion, and records image delivery as unmeasured. | `gpt-5.6-sol`, high reasoning |
 | `L10N-ARCHITECTURE-EVIDENCE-CONTRACT-CORRECTION` | The accepted contract confuses project-derived `official`/`community`/`english_fallback` classes with nonexistent mandatory MTGCH source fields. | Correct DEC-137/140, the rights and architecture contracts, the evidence report, roadmap, and live status. Define Scryfall as official-printing proof and MTGCH exact-identity Chinese material as community when official proof is absent. Do not resume source access. | One internally consistent documentation subject identifies the validator design error and provides a reviewable basis for a later bounded rerun. | `gpt-5.6-sol`, high reasoning |
+| `L10N-ARCHITECTURE-EVIDENCE-TRIAL-RERUN` | Corrected source classification still leaves image delivery unmeasured. | Reproduce the immutable offline subject, resolve official material from one Scryfall `all_cards` snapshot, complete no more than 32 grouped MTGCH requests, prepare the deterministic image sample, and start Stage C only through the approved Pages-origin browser capability. | Stage A and B close: 28 of 28 MTGCH requests return HTTP 200 and 100 images cover every eligible stratum. Stage C stops before its first sampled image because the approved browser cannot inject the external exact URLs or expose the declared network metrics; no source failure or architecture is inferred. | `gpt-5.6-sol`, high reasoning |
+| `L10N-STAGE-C-EXECUTION-CONTRACT` | The evidence contract assumes a Pages-origin browser executor capability that the approved in-app browser does not expose. | After separate authorization, define only an auditable execution environment, exact Pages/controller binding, required status/redirect/byte/latency/cache observations, deterministic sample regeneration, budgets, retention, and stop rules. Make no image request while writing the contract. | A later browser run can be authorized without bypassing browser security or changing the tested data flow. | `gpt-5.6-sol`, high reasoning |
 | `L10N-ARCHITECTURE-DECISION` | Architecture cannot be selected from estimates or an incomplete setup result. | After evidence acceptance/publication and separate authorization, apply the predeclared criteria to choose measured local-only storage, controlled direct delivery, a measured eager-cache/on-demand mix, or English-image fallback only. Derive any local ceiling from observed bytes and Pages headroom. | One evidence-backed architecture replaces or rejects the withdrawn proposal and defines later implementation tasks. | `gpt-5.6-sol`, high reasoning |
 | `L10N-B1` | No real production localization candidate exists under an accepted architecture. | Define only after `L10N-ARCHITECTURE-DECISION`; implement the exact accepted source, identity, provenance, and delivery contract in a repository-external candidate without changing Pages. | One real candidate proves the accepted architecture without silently inheriting withdrawn cache constants. | `gpt-5.6-sol`, high reasoning |
 | `L10N-B2` | A validated external candidate is not yet an admitted optional Pages resource. | Define only after B1 acceptance and according to the accepted architecture; prove exact packaging, capacity where applicable, fallback, and atomic failure. Do not add the Chinese browser consumer. | Pages carries only the measured and accepted resource boundary; failure preserves the English product. | `gpt-5.6-sol`, high reasoning |
@@ -101,17 +103,24 @@ later work; the Owner separately authorized the evidence trial to begin only
 after this exact contract is successfully merged and published. The architecture
 decision, `L10N-B1`, `L10N-B2`, and `L10N-C` remain unauthorized.
 
-The authorized replacement trial closed 47 registered documents and measured
-108,651 card-name occurrences, 1,892 distinct English input strings, a
-270,195,353-byte/1,936-file base Pages artifact, and the existing 71-image
-Cache-B subject. One Scryfall Oracle Cards JSONL snapshot resolved 1,869 input
-strings to 1,866 canonical identities. The first MTGCH set-group request then
-returned HTTP 200, but the local validator incorrectly required undocumented
-full-card and provenance fields from the documented card-description response.
-This is `validator_contract_design_error`, not MTGCH contract drift or source
-failure. Stage C was not started, so image delivery remains unmeasured and
-`L10N-ARCHITECTURE-DECISION` remains blocked. The corrected aggregate evidence
-is recorded in
+The first authorized replacement trial closed 47 registered documents and
+measured 108,651 card-name occurrences, 1,892 distinct English input strings,
+a 270,195,353-byte/1,936-file base Pages artifact, and the existing 71-image
+Cache-B subject. It then stopped on `validator_contract_design_error`, not an
+MTGCH failure. After DEC-141 was accepted and merged, the separately authorized
+corrected rerun reproduced that subject, used one Scryfall `all_cards` snapshot,
+and completed all 28 grouped MTGCH requests with HTTP 200. Provider precedence
+assigned Chinese names and images for all 1,866 resolved canonical identities,
+and a deterministic 100-image sample covered the two eligible face-form strata.
+
+Stage C nevertheless stopped before its first sampled image request. The
+approved in-app browser could open the deployed Pages application but could not
+introduce the external exact sample URLs into the existing controller or expose
+the required HTTP/redirect/transfer/cache observations; its security boundary
+also prohibited alternate injection or debugging surfaces. This is an
+execution-environment limitation, not MTGCH image-delivery evidence.
+`L10N-ARCHITECTURE-DECISION` remains blocked. The corrected aggregate result is
+recorded in
 `docs/audits/CARD_LOCALIZATION_ARCHITECTURE_EVIDENCE_TRIAL_20260829.md`.
 
 These tasks are separate authorization and acceptance subjects. `L10N-00`

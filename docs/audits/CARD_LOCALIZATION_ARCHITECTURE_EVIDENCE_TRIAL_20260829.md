@@ -1,33 +1,37 @@
 # Card Localization Architecture Evidence Trial — 2026-08-29
 
-Status: `Corrective report accepted by Owner; publication authorized`
+Status: `Corrected rerun accepted by Owner; completion authorized`
 
 ## Outcome
 
-The trial stopped during Stage B after the first MTGCH set-grouped card
-metadata request. That request returned HTTP 200. The local validator then
-required a synthetic full-card field set—including fields it intended to use
-as upstream provenance—and reported `card_schema_contract_drift` when the
-documented card-description response did not contain that set.
+The corrected rerun closed the offline subject and the bounded identity/source
+inventory. It did not complete the browser image trial and therefore remains
+inconclusive for image architecture selection.
 
-That stop code was wrong. MTGCH has no unified field that must classify every
-Chinese name or image as official or community. The project derives the class:
-Scryfall proves official Simplified Chinese material; absent that proof, an
-exact-identity Chinese value supplied by MTGCH is `community` under the Owner-
-recorded project permission; absent both, use `english_fallback`. The observed
-response is therefore evidence of a validator/contract-design error, not an
-MTGCH response failure.
+The important separation is:
 
-No MTGCH image, Scryfall control image, browser trial, warm-cache repeat, or
-fallback image was requested. The result is an invalid local validation design,
-not a grouped-source or image-delivery failure. It selects no local-only,
-direct, mixed, or English-only architecture.
+- MTGCH grouped metadata access completed successfully: all 28 planned requests
+  returned HTTP 200, with no 403, 429, 5xx, schema drift, unsafe host, identity
+  ambiguity, or retry;
+- the corrected provider-precedence rules produced complete Chinese-name and
+  Chinese-image source assignments for all 1,866 resolved canonical identities;
+- a deterministic 100-image sample covering every eligible
+  host/media/source/face stratum was prepared; but
+- the controlled in-app browser could not introduce those external exact URLs
+  into the already deployed Pages controller or expose the required network
+  observations. Its security boundary also prohibited script-URL injection,
+  raw debugging access, or an alternate browser automation surface.
+
+The browser stop occurred before the first sampled MTGCH image or matched
+Scryfall control request. It is an execution-environment limitation, not an
+MTGCH image-delivery failure. No local-only, controlled-direct, mixed, or
+English-only image architecture is selected.
 
 ## Frozen subject
 
-The trial ran from repository commit
-`89ea7400a60f437b2e2c45cf1c45e837c0ef19e7`, the merge commit that published
-DEC-140 and the accepted evidence contract. The catalog snapshot was
+The corrected rerun used repository commit
+`3c63967b23fa96b004163114e51ef17b3f8a6008`, the merge commit that published
+DEC-141 and the corrected evidence contract. The catalog snapshot was
 `stats/catalog.json` with SHA-256
 `7e10b719368bc9b46158214b9b3f0143144a408989d7aa5d81610fef3b07503f`.
 The closed public-document subject SHA-256 was
@@ -38,8 +42,9 @@ included. Planned formats were not projected.
 
 ## Stage A — offline inventory
 
-Stage A completed with zero network requests and no unresolved registered
-path, unknown available product, or path escape.
+Stage A completed with zero network requests and reproduced the immutable
+subject exactly. There was no unresolved registered path, unknown available
+product, or path escape.
 
 | Measurement | Result |
 | --- | ---: |
@@ -64,133 +69,172 @@ The product/format inventory was:
 | MTGO Top 8 | Standard | 16,536 | 548 | 0 | 16,536 | 12,224 | 12,224 |
 | Tabletop major events | Modern | 11,842 | 592 | 0 | 11,842 | 11,842 | 11,842 |
 
-Use-class counts overlap by design. For example, a card link in expanded deck
-detail is both expanded inline text and a hover/focus plus touch-click image
-entry point.
+Use-class counts overlap by design. A card link in expanded deck detail is also
+a hover/focus and touch-click image entry point.
 
-## Stage B — Scryfall identity preparation
+## Stage B — Scryfall printing evidence
 
-The current Scryfall Oracle Cards JSONL Bulk contract differed from the older
-single-JSON contract: its metadata exposed `jsonl_download_uri` and
-`compressed_size`. Seven small Bulk-metadata reads occurred: three diagnosed
-that contract change, and four were redundant setup retries while the local
-parser was corrected for JSONL, multiple printings, and pure-digital identity
-collisions. One 24,532,450-byte JSONL snapshot was downloaded once, reused
-locally during those parser corrections, streamed, hashed, and deleted.
+The rerun used the official Scryfall `all_cards` Bulk snapshot so canonical
+identity, matched English controls, and official Simplified Chinese printings
+could be proved from one bounded dataset. Four metadata reads and one snapshot
+download occurred. Two local parser boundary corrections were then applied to
+the already downloaded immutable snapshot: an Scryfall error-placeholder URL
+was treated as a missing image for that printing, and a name-colliding derived
+record without `oracle_id` was excluded from canonical identity matching. No
+additional snapshot was downloaded.
 
 | Measurement | Result |
 | --- | ---: |
-| Snapshot ID | `27bf3214-1271-490b-bdfe-c0be6c23d02e` |
-| Snapshot updated | `2026-08-28T21:01:53.804+00:00` |
-| Snapshot SHA-256 | `4abcf05c19926129e10620fe2d7e8e51c786aa051a157a66e82a4679174a0395` |
-| Scryfall metadata requests | 7 |
+| Snapshot type | `all_cards` |
+| Snapshot ID | `922288cb-4bef-45e1-bb30-0c2bd3d3534f` |
+| Snapshot updated | `2026-08-28T21:17:41.873+00:00` |
+| Snapshot bytes | 392,267,935 |
+| Snapshot SHA-256 | `e1d54401a2ac27bff43b318f636699f341e0c3e1e486dcddc426c8847e47d059` |
+| Scryfall metadata requests | 4 |
 | Scryfall Bulk downloads | 1 |
 | Input English strings | 1,892 |
 | Resolved English strings | 1,869 |
 | Resolved canonical `oracle_id + face_index` identities | 1,866 |
-| Unresolved English strings | 23 |
-| Relevant printing set groups | 154 |
+| Unresolved English strings retained only as a count/digest | 23 |
+| Official Chinese-name identities | 1,193 |
+| Official Chinese-image identities | 1,186 |
+| Identities requiring bounded MTGCH grouping | 692 |
 
-The resolver had to distinguish multiple printings of one oracle identity and
-exclude pure-digital identity collisions from the MTGO/Tabletop subject. The
-23 unresolved strings remain aggregate coverage gaps; their exact names were
-not retained in the trial files or report.
+The raw Bulk snapshot and metadata body were deleted after successful local
+processing. The 23 unresolved input strings remain truthful
+`english_fallback` cases; their exact values were not retained in the report.
 
-A deterministic greedy maximum-coverage plan selected 32 set groups, the
-contract ceiling, covering 1,365 canonical identities. The aggregate request
-plan was written before the first MTGCH card-data request. It declared one
-request in flight and at least five seconds between starts.
+## Stage B — corrected MTGCH grouped inventory
 
-## Stage B — invalid local validator stop
-
-The public OpenAPI remained `SBWSZ API` version `1.0.0` and declared
-`GET /api/v1/set/{set_code}/cards/` with a
-`PaginatedCardDescriptionResponse`. The trial made one card-metadata request:
+The OpenAPI remained `SBWSZ API` version `1.0.0`. The corrected validator used
+the documented `GET /api/v1/set/{set_code}/cards/` summary fields and derived
+`official`/`community`/`english_fallback` through provider precedence rather
+than demanding an upstream provenance field.
 
 | Measurement | Result |
-| --- | --- |
-| Request number | 1 of at most 32 |
-| Concurrency | 1 |
-| HTTP result | 200 |
-| Retried | No |
-| Reported stop code | `card_schema_contract_drift` |
-| Correct classification | `validator_contract_design_error` |
-| Raw response retained | No |
-| Full temporary subject/name/identity plan retained | No |
-| Exact eligible image URLs selected | 0 |
+| --- | ---: |
+| OpenAPI documentation reads | 2 |
+| Planned grouped requests | 28 |
+| Completed grouped requests | 28 |
+| Maximum requests in flight | 1 |
+| Minimum interval between starts | 5 seconds |
+| HTTP 200 responses | 28 |
+| HTTP 403 / 429 / 5xx responses | 0 / 0 / 0 |
+| Response items processed | 10,939 |
+| Raw responses retained | 0 |
+| Planned canonical identities | 692 |
+| MTGCH community Chinese-name identities | 673 |
+| Scryfall-official Chinese-name identities in the queried set | 19 |
+| MTGCH community Chinese-image identities | 680 |
+| Scryfall-official Chinese-image identities in the queried set | 12 |
 
-The response was not proven unusable. The validator required every item to
-contain `id`, `oracle_id`, set/collector identity, English and Chinese image
-maps, Chinese-language/name properties, and atomic official/translated-name
-properties. That combined set was a local invention rather than the documented
-contract of the card-description endpoint.
+Across all 1,866 resolved canonical identities, provider precedence therefore
+assigned Chinese names as 1,193 official plus 673 community, and Chinese images
+as 1,186 official plus 680 community. No resolved identity required an English
+fallback for either value. This does not erase the 23 unresolved original input
+strings; those remain aggregate English fallbacks outside the resolved identity
+set.
 
-The validator should instead obtain official Simplified Chinese proof from a
-suitable Scryfall printing dataset, accept only documented MTGCH response
-properties, bind any returned Chinese value to the exact canonical identity,
-and derive the sidecar class by provider precedence. Because the raw response
-was deleted as required, this run cannot retroactively determine whether the
-documented summary already carried enough identity and image information for
-the corrected test. That must be measured only in a separately authorized
-rerun after the corrected contract is accepted and published.
+The deterministic image sample reached the declared 100-image ceiling and
+covered every eligible stratum:
 
-## Stage C — not started
+| Final host | Media type | Source class | Face form | Eligible | Sampled |
+| --- | --- | --- | --- | ---: | ---: |
+| `images.mtgch.com` | `image/webp` | `community` | Single face | 612 | 90 |
+| `images.mtgch.com` | `image/webp` | `community` | Multi face | 68 | 10 |
 
-Stage C required a correctly classified deterministic sample from Stage B.
-Because the invalid validator stopped before selecting any exact image URL, no
-browser session was opened
-and the six-hour separation clock did not start. Consequently, the trial
-contains no evidence about MTGCH image HTTP status, redirects, decode success,
-latency, transfer bytes, browser caching, controller pacing, or English
-fallback completion.
+The grouped-response combined SHA-256 was
+`74ebdfe0b9336040eb903efac43b7a2d2ff5f4584bcb6a3a66fa14abafec9073`.
+
+## Stage C — stopped before the first sampled image request
+
+The deployed Pages application opened successfully in a temporary controlled
+browser, and the repository's bound controller was confirmed to use one active
+image request, a 150-ms minimum start interval, a 15-second attempt timeout,
+at most two attempts, and a 1.5-second retry delay.
+
+The exact sample URLs existed only in the external temporary plan, as required.
+They were not present in the deployed DOM. The controlled browser interface
+could interact with existing elements but could not set an exact external URL
+on the deployed controller, execute arbitrary page-world image code, or expose
+the required HTTP status/redirect/transfer/cache observations. A harmless
+script-URL capability probe was rejected by the browser security boundary,
+which expressly prohibited using a raw debugging protocol or another browser
+surface as a workaround.
+
+Directly navigating the tab to each image URL would have changed the test into
+a top-level image-host navigation. It would not have been a Pages-origin load,
+would not have exercised the actual queue or hover/focus/touch shapes, and
+would not have supplied valid fallback/cache evidence. The trial therefore
+stopped instead of substituting a different data flow.
+
+| Measurement | Result |
+| --- | ---: |
+| Temporary Pages browser tabs opened / closed | 2 / 2 |
+| Sampled MTGCH image attempts | 0 |
+| Matched Scryfall control attempts | 0 |
+| Sampled fallback attempts | 0 |
+| Browser screenshots retained | 0 |
+| Per-card browser request logs retained | 0 |
+| Six-hour session clock started | No |
+
+This result contains no evidence about MTGCH image HTTP status, redirects,
+decode success, latency, transfer bytes, caching, controller pacing under the
+sample, or English-fallback completion. It must not be described as one image
+request failing or as MTGCH being unavailable.
 
 ## Evidence-quality gates
 
 | Gate | Result |
 | --- | --- |
 | Catalog-rooted current consumer closure | Pass |
-| Canonical identity/source inventory | Incomplete: 23 unresolved input strings; MTGCH classification invalidated by local validator design |
-| Every source/host/media/face stratum plus 100 or full smaller sample | Not reached |
-| Two Pages-origin browser sessions at least six hours apart | Not reached |
+| Canonical identity/source inventory | Pass for 1,866 resolved identities; 23 original strings remain explicit English fallbacks |
+| Every eligible source/host/media/face stratum plus 100 or full smaller sample | Pass at sample-planning boundary: 100 selected across both strata |
+| Two Pages-origin browser sessions at least six hours apart | Fail: first session could not start under the approved browser capability |
 | Architecture eligibility criteria | Not evaluable |
 
-The evidence package is therefore incomplete under DEC-140, but not because
-MTGCH was shown to lack fields or fail. The measured
-Pages base size is valid, but it cannot derive a Chinese-image cache ceiling
-without image count, byte distribution, content-digest duplication, and
-eager/on-demand coverage. Direct delivery likewise cannot be accepted or
-rejected without an image trial.
+The evidence package is therefore incomplete under DEC-140. Stage A and Stage
+B are valid measurements for the frozen subject, but neither direct delivery
+nor a local cache ceiling can be accepted or rejected without the required
+image observations.
 
 ## Retention and integrity
 
-Only aggregate external evidence and task-local diagnostic scripts remained at
-trial close. The Scryfall raw snapshot, MTGCH raw response, complete input-name
-list, complete identity plan, image bytes, browser profile, screenshots, and
-per-card request log were absent from the trial directory. No repository
-product, Schema, workflow, Pages path, generated data, classifier, or front-end
-file changed.
+The raw Scryfall snapshot, Scryfall metadata body, MTGCH responses, complete
+input-name list, complete identity plan, exact sample identity/URL plan, image
+bytes, screenshots, browser tab, and per-card request log were deleted or
+closed at trial stop. The exact sample plan had SHA-256
+`eba8d98de1759ef23ef4d4f636ffa9452b78775e17fc877ba86c9e013fd38fec`
+before deletion; only that digest and aggregate stratum counts remain.
 
-The retained aggregate evidence digests are:
+No repository product, Schema, workflow, Pages path, generated data,
+classifier, or front-end file changed. The retained aggregate evidence digests
+are:
 
 - Stage A aggregate:
-  `f0becd016f3f3262f10bb170c49381d3133487e37bff3c14e828bb93d0e5a482`;
+  `08cd8caae7248d397462da17c3a565d4c5170b2b00d7e677dd1478b601cfc758`;
 - Scryfall aggregate:
-  `c77e3fea744b09cd8923992ac5ab31c3074d7590003b5ba1d89ec2fb8c23c52d`;
-- pre-MTGCH aggregate request plan:
-  `dd1704461b75a5f16c808b4ddc3cf3badfd0a623afb3c5d3cb4f46bcf4a47db5`.
+  `1dd782fb88f6c7e734361bae09baf587748bd72b6578571f1865dc7a56f0a1f5`;
+- MTGCH aggregate:
+  `41fa9729c97e6dee4b705a2c927c5938abe84ad7e09b3da9301f62a44729856a`;
+- pre-MTGCH grouped request plan:
+  `9f00fdeb11579cdd79e7049d034c1a5b9e292798c61189454509d9a1a6d9c33f`.
 
 ## Required next gate
 
-Do not open `L10N-ARCHITECTURE-DECISION`. First accept and publish the corrected
-classification and evidence contract. A later separately authorized rerun must
-use Scryfall printing-level evidence for the official class and validate the
-MTGCH grouped endpoint only against its documented response. If that response
-does not contain enough identity or Chinese-value information to build a sample,
-the rerun must stop on that specific measured gap and return for a separately
-reviewed bounded retrieval design; it must not resurrect a nonexistent MTGCH
-provenance-field requirement or silently return to per-name `/result` searches.
+Do not open `L10N-ARCHITECTURE-DECISION`. Owner acceptance authorizes completion
+publication of this exact corrected aggregate report only.
 
-Owner acceptance may authorize publication of this corrected documentation
-subject only. It does not authorize another source request, a rerun, an
-architecture decision, implementation, Pages, production, `L10N-B1`,
-`L10N-B2`, `L10N-C`, or Phase 14.
+After that report is accepted and published, define a separate
+`L10N-STAGE-C-EXECUTION-CONTRACT` before another image request. That contract
+must name an approved execution environment that can consume the frozen exact
+sample from the deployed Pages origin, exercise the actual controller event
+shapes, and collect the declared status/redirect/byte/latency/cache metrics
+without bypassing the in-app browser's security boundary. It must also restore
+or regenerate the sample deterministically, preserve the existing 400-plus-400
+global budgets, and repeat the two sessions at least six hours apart.
+
+The recommended model for that contract is `gpt-5.6-sol` with high reasoning.
+This report does not authorize the new contract, its execution, an architecture
+decision, implementation, Pages, production, `L10N-B1`, `L10N-B2`, `L10N-C`,
+or Phase 14.
