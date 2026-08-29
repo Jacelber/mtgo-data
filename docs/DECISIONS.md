@@ -6320,3 +6320,92 @@ The additional sidecar needs a Schema, producer, deterministic fixtures,
 admission checks, attribution handling, and focused front-end acceptance in
 their later authorized tasks. Real community image publication remains blocked
 until its rights gate is closed. Phase 14 remains planned and unauthorized.
+
+---
+
+# DEC-137 - Admit licensed names and Owner-authorized MTGCH community images
+
+Status: `Accepted`
+
+## Context
+
+`L10N-A` proved that names and images can be resolved independently with
+immutable card, printing, and face identities, but it intentionally used only
+synthetic sources. The next gate must distinguish public accessibility from a
+right to retain and republish real material.
+
+MTGCH's public OpenAPI document separates Chinese names, Chinese image URLs,
+and source metadata. It does not declare a top-level license or terms-of-service
+URL, and the relevant Schemas do not carry a license or attribution field. The
+linked `magic-cards-zhs` project declares CC BY-SA 4.0 for a translation dataset
+that combines official, MTGso, and volunteer text. Scryfall permits card data
+and images for additive Magic software under its published conditions, while
+prohibiting simple repackaging and image alteration. Wizards' Fan Content
+Policy separately requires free, unofficial, correctly noticed fan content and
+does not turn third-party availability into permission.
+
+The evidence and action-by-action matrix are recorded in
+`docs/audits/CARD_LOCALIZATION_RIGHTS_REVIEW_20260829.md`. This is a conservative
+repository policy, not legal advice; the Owner or a qualified rights review may
+narrow it.
+
+On 2026-08-29, the Owner recorded that they know the MTGCH founder and already
+have the founder's permission for this project's planned use of MTGCH community-
+localized names and rendered card images. The repository accepts that
+attestation as project-specific source permission. It is not represented as a
+public MTGCH license or a transferable permission for another project.
+
+## Decision
+
+Permit a later, separately authorized `L10N-B` task to admit only these real
+localization classes:
+
+1. official Simplified Chinese card names whose official provenance is proven;
+2. community Simplified Chinese card names from `magic-cards-zhs` or another
+   source with an equally explicit license, preserving translation provenance
+   and satisfying CC BY-SA 4.0 attribution, change-indication, and ShareAlike
+   requirements; and
+3. original full-card images for official Simplified Chinese printings when
+   Scryfall proves the printing identity and supplies the image; and
+4. identifiable MTGCH community-rendered Chinese full-card images covered by
+   the Owner-recorded founder permission, with `community` provenance and
+   MTGCH and translation-source attribution.
+
+An admitted official image remains byte-for-byte original. Do not convert,
+recompress, crop, filter, recolor, distort, watermark, overlay, or remove its
+artist, copyright, or legal notices. Keep the admitted subject bounded to cards
+used by the product; do not create a Scryfall or MTGCH mirror or proxy.
+
+An admitted MTGCH community-rendered image remains byte-for-byte as supplied by
+MTGCH. Do not relabel it as official or convert, recompress, crop, filter,
+recolor, distort, watermark, overlay, or remove embedded legal or artist
+notices. Missing, generic, unverified, user-submitted, or third-party image
+provenance fails closed unless a separate permission decision covers that exact
+class. The existing English complete-card image remains the fallback.
+
+The browser must not call MTGCH. A separately authorized producer may read one
+bounded source snapshot into external temporary storage, record its digest and
+retrieval time, and publish only validated sidecar fields plus admitted source-
+specific image bytes. Raw upstream card responses remain outside Git, Pages,
+and retained workflow artifacts.
+
+The future manifest and product notice must preserve separate Wizards,
+Scryfall, MTGCH, and community-translation attribution. CC BY-SA applies only
+to the derived community translation material, not to project-authored code or
+Wizards images. MTGCH community-image permission is recorded as project-
+specific Owner attestation, not a public license. Every record remains
+`official`, `community`, or `english_fallback`; availability never upgrades
+provenance.
+
+## Consequences
+
+The rights gate admits the originally planned official-first, community-second,
+English-fallback display order without treating API availability as a general
+license. `L10N-B` may later build a useful sidecar from licensed Chinese names,
+official Simplified Chinese print images, and identifiable MTGCH community-
+rendered images under the Owner-recorded permission. Unknown or unpermitted
+image material still fails closed to English.
+
+This decision authorizes no source fetch, implementation, artifact admission,
+front-end change, Pages deployment, production operation, `L10N-B`, `L10N-C`,
+or Phase 14. Each remains a separate task and authorization subject.

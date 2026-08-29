@@ -3474,15 +3474,26 @@ Each localized name or image records its status as `official`, `community`, or
 required attribution. Community records also retain the upstream translation
 provenance instead of collapsing it into an official Chinese field.
 
-The source adapter may read MTGCH's public card and atomic-card data during a
-separately authorized batch build. Official Simplified Chinese values are
-identified by the source's official Chinese name/language and Chinese image
-fields. Community translations and rendered images are identified by the
-separate translated-name, translation-source, and community-image fields. The
-resolver applies one deterministic display order:
+The source adapter may read one bounded MTGCH card-data snapshot during a
+separately authorized batch build. It records the response digest and retrieval
+time in external temporary storage and never retains the raw response in Git,
+Pages, or a workflow artifact. MTGCH's official-name and translation-source
+fields may classify names, but the presence of a Chinese value or image URL is
+not provenance proof by itself.
 
-1. official Simplified Chinese name or image;
-2. permitted community name or image with provenance; and
+Official Simplified Chinese image admission requires a matching official
+Simplified Chinese printing proven by Scryfall and an original full-card image
+supplied by Scryfall. Community names require an explicit reusable license; the
+accepted `magic-cards-zhs` source is CC BY-SA 4.0 and therefore requires source,
+snapshot, license, translation-provenance, modification, and ShareAlike notices.
+The Owner's recorded project-specific permission from the MTGCH founder admits
+identifiable MTGCH community-rendered Chinese images. User-submitted, third-
+party, and source-unknown images remain inadmissible unless a separate decision
+covers their exact source class. The resolver applies one deterministic display
+order:
+
+1. official Simplified Chinese name or admitted original official image;
+2. permitted community name or MTGCH community-rendered image with provenance;
 3. existing English name or complete English card image.
 
 The browser never calls MTGCH at runtime. A producer resolves the bounded
@@ -3491,19 +3502,23 @@ and publishes only an atomic closed sidecar. A missing Chinese value is a
 declared English fallback; an identity collision, false official label, unsafe
 path, digest mismatch, or undeclared file rejects the sidecar.
 
-Real community-rendered image bytes remain outside Git, workflow retention,
-Pages, and any public bundle until the Owner records that redistribution is
-permitted and specifies the required attribution. Before that gate is closed,
-development and tests may use only synthetic fixtures. Official Chinese images
-and names require their own recorded source and attribution terms; an API being
-publicly readable is not by itself redistribution permission.
+Admitted MTGCH community-rendered image bytes may enter only the bounded closed
+sidecar and remain byte-for-byte as supplied by MTGCH. Their manifest records
+`community` status, MTGCH source, retrieval snapshot, content digest, Owner-
+attested project permission, and required attribution. Official image bytes
+likewise remain byte-for-byte original. Neither class may be converted,
+recompressed, cropped, filtered, recolored, distorted, watermarked, overlaid,
+or stripped of legal or artist notices. Unknown or unpermitted image bytes,
+raw upstream responses, and images outside the admitted subject remain outside
+Git, workflow retention, Pages, and every public bundle. Public API readability
+is never permission.
 
 The localization rollout remains split into independent accepted subjects:
 
 - `L10N-A` defines and proves the identity, provenance, resolver, and manifest
   contract with synthetic fixtures;
-- the image-rights gate records whether real community-rendered images may be
-  retained and published;
+- the rights gate admits licensed names, original official Simplified Chinese
+  images, and Owner-authorized MTGCH community-rendered images;
 - `L10N-B` builds and admits the real external sidecar without changing the
   current English cache; and
 - `L10N-C` makes Chinese views consume the admitted sidecar while preserving

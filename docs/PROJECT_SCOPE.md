@@ -459,9 +459,11 @@ classifier-backed archetype labels. The English source card name remains the
 stable lookup and compatibility value. A Chinese display resolves by immutable
 card and printing identity in this order:
 
-1. an official Simplified Chinese name or image;
-2. a community translation or community-rendered image with explicit
-   provenance, only where its use and redistribution are permitted; and
+1. an official Simplified Chinese name or an original, unmodified full-card
+   image for an official Simplified Chinese printing supplied through Scryfall;
+2. a licensed community name or an identifiable MTGCH community-rendered image
+   covered by the Owner-recorded project permission, with explicit provenance
+   and the required attribution; and
 3. the existing English name or complete English card image.
 
 The Chinese product must label fallback state truthfully and must not present a
@@ -472,10 +474,13 @@ built and validated ahead of publication as a versioned sidecar so the existing
 English card-image cache, source data, statistics, classifier identities, and
 public product availability remain independent.
 
-The redistribution terms for community-rendered Chinese images are an explicit
-publication gate. Development may later use synthetic fixtures, but no real
-community image bytes may enter Git, a retained workflow artifact, Pages, or
-another public bundle until permission and required attribution are recorded.
+Identifiable MTGCH community-rendered Chinese full-card images are inside the
+approved product scope under the Owner's recorded project-specific permission
+from the MTGCH founder. They remain `community`, retain MTGCH and translation-
+source attribution, and must not be presented as official or as generally
+licensed MTGCH material. User-submitted, third-party, and source-unknown images
+remain outside scope unless a separate decision proves that the permission
+covers their exact class.
 
 Availability must come from generated catalogs rather than a hard-coded
 assumption that every format supports every product.
