@@ -6409,3 +6409,65 @@ image material still fails closed to English.
 This decision authorizes no source fetch, implementation, artifact admission,
 front-end change, Pages deployment, production operation, `L10N-B`, `L10N-C`,
 or Phase 14. Each remains a separate task and authorization subject.
+
+---
+
+# DEC-138 - Require a bounded MTGCH direct-image diagnostic before storage selection
+
+Status: `Accepted`
+
+## Context
+
+The completed product is expected to cover six formats. Extrapolating the
+current Standard and Modern 12-week card subjects shows that mirroring every
+English and Chinese complete-card image into the existing Pages artifact would
+approach or exceed the site's sustainable capacity as formats and retained data
+grow. Storage estimates alone do not prove whether direct MTGCH image delivery
+is sufficiently reliable, cacheable, and compatible with the actual Pages
+origin. The earlier product rule therefore remains unchanged until a bounded
+diagnostic supplies direct evidence.
+
+## Decision
+
+Insert two separately gated tasks before `L10N-B`:
+
+1. `L10N-DIRECT-TRIAL-CONTRACT` records the trial boundary without making a
+   real card or image request; and
+2. `L10N-DIRECT-TRIAL`, only after separate authorization, performs one
+   non-product, non-retaining measurement run.
+
+The trial predeclares current Standard and Modern 12-week card candidates before
+the first image request. It may resolve at most 32 candidates to assemble at
+most 24 exact card or face identities that cover every available official,
+community, fallback, and multi-face source class. It then uses an ephemeral
+browser opened on the deployed Pages origin to test sequential,
+paced-concurrent, cold, and warm image loading. The ceiling is 144 image-load
+attempts, four concurrent loads, and two new starts per second. The trial records
+only aggregate HTTP class, successful image decode, timing, final host,
+response-size, and cache behavior.
+
+The diagnostic changes no deployed DOM, public path, source adapter, product
+code, workflow, or repository data. It stores no raw card response, image byte,
+URL corpus, screenshot, browser profile, or per-card output. The ephemeral test
+container and browser state are removed when the run ends. Authentication,
+unknown or unpermitted provenance, 403, 429, 5xx, non-image content, unsafe
+redirect, or a request-budget breach stops the run rather than expanding it.
+
+Direct MTGCH delivery is only eligible for a later architecture proposal when
+every admitted sample image resolves and decodes in each required mode, no
+blocking or transient HTTP status occurs, redirects remain within predeclared
+source hosts, and the warm pass demonstrates usable browser caching. Latency is
+reported with median and p95 but cannot alone prove or reject long-term
+availability. Any failed or incomplete criterion selects hybrid caching as the
+conservative proposal. A successful trial makes direct delivery eligible for
+Owner consideration; it does not select, implement, or authorize that product
+architecture.
+
+## Consequences
+
+The test can distinguish immediate hotlink, referrer, decode, pacing, and cache
+failures without publishing a test page or retaining source material. It cannot
+prove future uptime, policy stability, or six-format capacity. Until a later
+accepted architecture decision says otherwise, product browsers still must not
+call MTGCH, and `L10N-B`, `L10N-C`, Pages changes, production, and Phase 14
+remain separately gated.
