@@ -6830,7 +6830,7 @@ change, production, `L10N-B1`, `L10N-B2`, `L10N-C`, or Phase 14.
 
 # DEC-143 - Execute Stage C through an Owner-controlled repository runner
 
-Status: `Proposed`
+Status: `Accepted`
 
 ## Context
 

@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/l10n-stage-c-execution-contract"
-  working_branch_status: "local_complete_awaiting_owner_review"
+  current_working_branch: "codex/l10n-stage-c-runner"
+  working_branch_status: "local_complete_ready_for_publication"
   status: "active"
 
 status_document:
@@ -24,7 +24,7 @@ status_document:
 current_phase:
   id: "PRE-14"
   name: "Card localization foundation"
-  status: "stage_c_execution_contract_local_complete_awaiting_owner_review"
+  status: "stage_c_runner_local_complete"
   started_on: "2026-08-28"
   objective: "Establish provenance-safe Chinese card-name and complete-card-image support before any Phase 14 implementation."
   production_changes_allowed: false
@@ -33,43 +33,48 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "L10N-STAGE-C-EXECUTION-CONTRACT"
-  name: "Card-localization Stage-C execution contract"
-  status: "local_complete_awaiting_owner_review"
+  id: "L10N-STAGE-C-RUNNER"
+  name: "Card-localization Stage-C synthetic browser runner"
+  status: "local_complete_ready_for_publication"
   authorized_on: "2026-08-29"
-  artifact_impact: "documentation_only"
-  base_commit: "fabf436cca2b2a8adfa5135188730bd9acffcdf5"
-  branch: "codex/l10n-stage-c-execution-contract"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/l10n-stage-c-execution-contract-20260829-01"
-  objective: "Define one auditable Owner-controlled Pages-origin browser executor, exact subject/controller binding, deterministic sample regeneration, interaction and observation rules, budgets, retention, and fail-closed stop conditions without making a source or image request."
+  artifact_impact: "internal_diagnostics"
+  base_commit: "c92c7137fedc19279a35b41ecdfde70c62c85efd"
+  branch: "codex/l10n-stage-c-runner"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/l10n-stage-c-runner-20260829-01"
+  objective: "Implement and validate the repository-owned Playwright/Chromium Stage-C runner entirely against local synthetic fixtures, proving binding, interactions, observations, budgets, redaction, stops, and cleanup before any real trial."
   authorization:
     local_implementation: true
-    commit: false
-    remote_publication: false
-    merge: false
+    commit: true
+    remote_publication: true
+    merge: true
   allowed_paths:
-    - "docs/audits/CARD_LOCALIZATION_STAGE_C_EXECUTION_CONTRACT_20260829.md"
+    - "scripts/run_card_localization_stage_c_trial.mjs"
+    - "tests/browser/card-localization-stage-c-runner.spec.js"
+    - "tests/fixtures/card-localization-stage-c/"
+    - "docs/audits/CARD_LOCALIZATION_STAGE_C_RUNNER_20260829.md"
     - "docs/DECISIONS.md"
-    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
   planned_new_paths:
-    - "docs/audits/CARD_LOCALIZATION_STAGE_C_EXECUTION_CONTRACT_20260829.md"
+    - "scripts/run_card_localization_stage_c_trial.mjs"
+    - "tests/browser/card-localization-stage-c-runner.spec.js"
+    - "tests/fixtures/card-localization-stage-c/"
+    - "docs/audits/CARD_LOCALIZATION_STAGE_C_RUNNER_20260829.md"
   prohibited_changes:
-    - "Do not make any Scryfall, MTGCH, card, image, or live Pages trial request while writing this contract."
-    - "Do not implement the runner or modify code, Schemas, tests, workflows, dependencies, assets, Pages packaging, front-end behavior, generated data, public catalogs, statistics, classifiers, or event configuration."
-    - "Do not create an automation, hosted workflow artifact, browser profile, exact sample plan, or retained card identity/URL list."
-    - "Do not bypass the in-app browser security boundary or select an image architecture."
-    - "Do not begin L10N-STAGE-C-RUNNER, L10N-STAGE-C-TRIAL, L10N-ARCHITECTURE-DECISION, L10N-B1, L10N-B2, L10N-C, Phase 14, production, Pages, or Paupergeddon work."
-  stop_point: "Present the complete execution contract and internally consistent live documentation for Owner review; do not commit or publish without acceptance."
+    - "Do not contact Scryfall, MTGCH, GitHub Pages, or any non-loopback origin during implementation or validation."
+    - "Do not modify the existing browser controller, product pages, dependencies, workflows, Schemas, public paths, generated data, statistics, classifiers, or event configuration."
+    - "Do not place a real card name, identity, or image URL in code, fixtures, reports, logs, screenshots, traces, HAR, video, or browser profiles."
+    - "Do not select an image architecture or begin product localization implementation."
+  stop_point: "Publish the validated synthetic runner under the Owner's continuous authorization, then proceed only to the separately contracted real Stage-C trial; stop on any contract failure."
   local_verification:
     result: "passed"
     completed_on: "2026-08-29"
     checks:
-      - "The 5 focused live-document and history-pointer tests passed."
-      - "Changed-scope repository validation passed for all 4 changed paths: YAML 1/1, references 16/16, and hygiene 4/4."
-      - "Complete diff whitespace validation passed."
-      - "The diff contains only the 4 declared documentation paths and made zero card, source, image, or live Pages trial requests."
-    scope_note: "Documentation-only executor contract; zero card, source, image, or live Pages trial requests."
+      - "The 9-case focused Playwright/Chromium suite passed against loopback synthetic fixtures in one worker."
+      - "The suite proved deterministic sampling, command parsing, controller hover abandonment and queue cancellation, complete desktop/touch sessions, aggregate redaction, cache classification, 5xx fallback, budget stops, drift stops, time-gap stops, and exact-plan cleanup."
+      - "Changed-scope repository validation passed for all 7 changed paths: JavaScript 1/1, JSON 1/1, YAML 1/1, references 16/16, and hygiene 7/7."
+      - "Node syntax checks and complete diff whitespace validation passed."
+      - "No Scryfall, MTGCH, GitHub Pages, card-image, or other non-loopback request occurred."
+    scope_note: "Internal diagnostic runner validated only against loopback synthetic fixtures."
 
 current_repository_state:
   localization_contract_merge_commit: "d36b5bf677383345e064bd58c2589b2a85e5aac1"
@@ -78,6 +83,7 @@ current_repository_state:
   architecture_evidence_contract_merge_commit: "89ea7400a60f437b2e2c45cf1c45e837c0ef19e7"
   architecture_evidence_contract_correction_merge_commit: "3c63967b23fa96b004163114e51ef17b3f8a6008"
   architecture_evidence_trial_rerun_merge_commit: "fabf436cca2b2a8adfa5135188730bd9acffcdf5"
+  stage_c_execution_contract_merge_commit: "c92c7137fedc19279a35b41ecdfde70c62c85efd"
   direct_trial_result: "The separately authorized non-retaining trial predeclared 32 candidates, completed 30 metadata resolutions, and stopped on HTTP 429 at resolution request 31 before any image request; it is evidence about the tested metadata setup only and does not select an image architecture."
   architecture_evidence_trial_result: "The corrected rerun reproduced Stage A, resolved 1,869 strings to 1,866 canonical identities from one Scryfall all_cards snapshot, and completed 28 of 28 grouped MTGCH requests with HTTP 200. Official/community precedence assigned Chinese names and images for every resolved identity, and a deterministic 100-image sample covered both eligible strata. Stage C stopped before its first sampled image because the approved in-app browser could not bind the external exact URLs to deployed Pages or expose the declared network metrics. This is browser_executor_capability_gap, not MTGCH image failure; no architecture is selected."
   deployed_master_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
@@ -103,14 +109,14 @@ future_task_gates:
     status: "merged"
     note: "PR #301 merged the accepted inconclusive report as fabf436cca2b2a8adfa5135188730bd9acffcdf5; the post-merge documentation workflow succeeded."
   - id: "L10N-STAGE-C-EXECUTION-CONTRACT"
-    status: "local_complete_awaiting_owner_review"
-    note: "The Owner-controlled repository runner contract, DEC-143 proposal, roadmap split, and live status are locally complete with focused validation passing; no source or image request occurred."
+    status: "merged"
+    note: "PR #302 merged the accepted execution contract as c92c7137fedc19279a35b41ecdfde70c62c85efd; its exact-merge confirmation succeeded."
   - id: "L10N-STAGE-C-RUNNER"
-    status: "planned_not_authorized"
-    note: "After contract acceptance and publication, separately authorize an implementation proved only against local synthetic fixtures."
+    status: "local_complete_ready_for_publication"
+    note: "The 9-case loopback synthetic suite passed. The Owner's continuous authorization permits commit, Ready PR, required checks, and merge before the real trial."
   - id: "L10N-STAGE-C-TRIAL"
-    status: "planned_not_authorized"
-    note: "After runner acceptance and publication, separately authorize fresh source budgets and two Owner-run real browser sessions at least six hours apart."
+    status: "conditionally_authorized_after_runner_publication"
+    note: "After exact runner publication, the Owner has authorized the contracted fresh source preparation and two real sessions at least six hours apart; no architecture decision follows automatically."
   - id: "L10N-ARCHITECTURE-DECISION"
     status: "blocked_by_inconclusive_evidence"
     note: "No sampled image request has occurred. The execution contract, synthetic runner, two-session real trial, aggregate acceptance, and publication must close before architecture eligibility can be evaluated."
@@ -122,17 +128,16 @@ future_task_gates:
     note: "Pauper MTGO and the Owner-supplied Paupergeddon event remain separately gated after the localization foundation."
 
 next_approved_task:
-  id: null
-  name: null
-  status: "owner_review_required"
-  local_execution_authorized: false
-  note: "Review the locally complete L10N-STAGE-C-EXECUTION-CONTRACT. Acceptance may authorize completion publication of the unchanged subject; no later task is authorized."
+  id: "L10N-STAGE-C-RUNNER"
+  name: "Card-localization Stage-C synthetic browser runner"
+  status: "publication_authorized"
+  local_execution_authorized: true
+  note: "Publish and merge the validated synthetic runner; real-source preparation remains gated until its exact merge succeeds."
 
 prohibited_next_actions:
   - "Do not select an image architecture, modify the existing English card-image cache, create a real localization sidecar, or change a public browser path."
-  - "Do not make a source, card, image, or live Pages trial request while the current contract is under review."
-  - "Do not implement the runner, regenerate the exact sample, retain raw source responses, image bytes, exact URLs, screenshots, browser profiles, or per-card logs."
+  - "Do not make a source, card, image, or live Pages trial request before the runner is validated and published."
+  - "Do not retain raw source responses, image bytes, exact URLs, screenshots, browser profiles, or per-card logs beyond the exact temporary real-trial boundary."
   - "Do not attempt to bypass the in-app browser security boundary with script URLs, raw debugging protocols, another browser surface, or top-level image navigation presented as Pages-origin evidence."
-  - "Do not commit, publish, or merge the current contract before Owner acceptance."
-  - "Do not begin L10N-STAGE-C-RUNNER, L10N-STAGE-C-TRIAL, an architecture decision, L10N-B1, L10N-B2, L10N-C, Phase 14, production, or Pages."
+  - "Do not begin an architecture decision, L10N-B1, L10N-B2, L10N-C, Phase 14, production, or Pages."
   - "Do not develop directly on master or overwrite unexplained local changes."

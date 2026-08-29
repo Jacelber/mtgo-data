@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Stage C synthetic fixture</title>
+</head>
+<body>
+  <header class="app-header"></header>
+  <main class="page-shell"></main>
+  <aside id="card-preview" aria-hidden="true" hidden>
+    <div class="card-image-frame">
+      <img alt="">
+      <span class="card-image-placeholder"></span>
+    </div>
+  </aside>
+  <div id="card-preview-modal" aria-hidden="true" hidden>
+    <div class="card-preview-dialog">
+      <h2 id="card-preview-title"></h2>
+      <div class="card-image-frame"><img alt=""></div>
+      <span data-card-image-status></span>
+      <button type="button" data-card-image-retry hidden></button>
+      <button type="button" data-card-preview-close></button>
+      <a id="card-preview-scryfall" href="#"></a>
+    </div>
+  </div>
+  <footer class="site-footer"></footer>
+  <script>globalThis.t = key => key;</script>
+  <script src="/assets/js/phase8/app-card-preview.js"></script>
+</body>
+</html>
