@@ -262,6 +262,11 @@ function renderSiteAttribution() {
   scryfall.target = "_blank";
   scryfall.rel = "noopener";
   scryfall.textContent = "Scryfall";
+  const mtgch = document.createElement("a");
+  mtgch.href = "https://mtgch.com/";
+  mtgch.target = "_blank";
+  mtgch.rel = "noopener";
+  mtgch.textContent = "MTGCH";
   const policy = document.createElement("a");
   policy.href = "https://company.wizards.com/en/legal/fancontentpolicy";
   policy.target = "_blank";
@@ -270,6 +275,8 @@ function renderSiteAttribution() {
   node.append(
     document.createTextNode(`${footer.source} `),
     scryfall,
+    document.createTextNode(` · ${footer.localizationSource} `),
+    mtgch,
     document.createTextNode(` · ${footer.policyLead} `),
     policy,
     document.createTextNode(footer.policyTail)
@@ -943,7 +950,10 @@ async function initialize({ retry = false } = {}) {
     view.innerHTML = loadingSkeleton();
   }
   try {
-    state.catalog = await Runtime.catalog.fetchJson("stats/catalog.json");
+    [state.catalog, state.cardLocalization] = await Promise.all([
+      Runtime.catalog.fetchJson("stats/catalog.json"),
+      MtgoController.loadCardLocalization(),
+    ]);
     const parameters = P8Metadata.normalizedRoute(new URLSearchParams(window.location.search));
     resetUrlBackedState();
     applyUrlState(parameters);

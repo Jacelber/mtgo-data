@@ -36,6 +36,7 @@ test("metadata copy is stable and contains no current-week claim", () => {
     locale: "zh_CN",
     footer: {
       source: "卡图与卡牌数据：",
+      localizationSource: "中文牌名与牌图：",
       policyLead: "猫猫万智周报为依据",
       policyLabel: "《爱好者内容政策》",
       policyTail: "制作的非官方爱好者内容，未获 Wizards 批准或认可。部分材料归 Wizards of the Coast LLC 所有。© Wizards of the Coast LLC。",
@@ -76,12 +77,14 @@ test("Landing feature canonical URL keeps its week and exact feature destination
 });
 
 test("both production entries load metadata before the shared application", () => {
-  for (const [entry, metadataPath, appPath] of [
-    [rootEntry, "assets/js/phase8/app-metadata.js", "assets/js/phase8/app.js"],
-    [tabletopEntry, "../assets/js/phase8/app-metadata.js", "../assets/js/phase8/app.js"],
+  for (const [entry, metadataPath, localizationPath, controllerPath, appPath] of [
+    [rootEntry, "assets/js/phase8/app-metadata.js", "assets/js/phase8/card-localization.js", "assets/js/phase8/mtgo-controller.js", "assets/js/phase8/app.js"],
+    [tabletopEntry, "../assets/js/phase8/app-metadata.js", "../assets/js/phase8/card-localization.js", "../assets/js/phase8/mtgo-controller.js", "../assets/js/phase8/app.js"],
   ]) {
     const scripts = scriptSources(entry);
     assert.notEqual(scripts.indexOf(metadataPath), -1);
+    assert.notEqual(scripts.indexOf(localizationPath), -1);
+    assert.ok(scripts.indexOf(localizationPath) < scripts.indexOf(controllerPath));
     assert.ok(scripts.indexOf(metadataPath) < scripts.indexOf(appPath));
   }
 });

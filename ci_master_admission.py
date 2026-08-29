@@ -510,6 +510,24 @@ def _validation_triggers(paths: set[str]) -> tuple[str, ...]:
         "tools/build_landing_card_image_cache.py",
     }:
         triggers.add("landing-card-image-cache")
+    if paths & {
+        ".github/workflows/pages.yml",
+        "assets/js/phase8/app-core.js",
+        "assets/js/phase8/app-mtgo.js",
+        "assets/js/phase8/card-localization.js",
+        "assets/js/phase8/mtgo-controller.js",
+        "build_pages_artifact.py",
+        "configs/pages_publication.json",
+        "index.html",
+        "melee/index.html",
+        "src/mtgmeta/card_names.py",
+        "src/mtgmeta/data/om1_spm_aliases.json",
+        "tests/js/phase8-card-localization.test.js",
+        "tests/test_card_names.py",
+        "tests/test_simple_card_localization.py",
+        "tools/build_simple_card_localization.py",
+    }:
+        triggers.add("card-localization")
     if any(path.startswith(".github/workflows/") for path in paths) or "tests/test_ci_workflow.py" in paths:
         triggers.add("ci-workflow")
     if paths & {

@@ -47,6 +47,7 @@ PHASE8_PRODUCTION_RESOURCES = (
     "assets/css/phase8-candidate.css",
     "assets/js/phase8/runtime.js",
     "assets/js/phase8/i18n.js",
+    "assets/js/phase8/card-localization.js",
     "assets/js/phase8/archetype-names.js",
     "assets/js/phase8/matchup-model.js",
     "assets/js/phase8/mtgo-controller.js",
@@ -69,6 +70,7 @@ MAINTAINED_JAVASCRIPT = (
     "assets/js/mtgo.js",
     "assets/js/phase8/runtime.js",
     "assets/js/phase8/i18n.js",
+    "assets/js/phase8/card-localization.js",
     "assets/js/phase8/archetype-names.js",
     "assets/js/phase8/matchup-model.js",
     "assets/js/phase8/mtgo-controller.js",
@@ -109,6 +111,7 @@ PHASE8_FRONTEND_ENTRIES = {
         "scripts": (
             "assets/js/phase8/runtime.js",
             "assets/js/phase8/i18n.js",
+            "assets/js/phase8/card-localization.js",
             "assets/js/phase8/archetype-names.js",
             "assets/js/phase8/matchup-model.js",
             "assets/js/phase8/mtgo-controller.js",
@@ -132,6 +135,7 @@ PHASE8_FRONTEND_ENTRIES = {
         "scripts": (
             "../assets/js/phase8/runtime.js",
             "../assets/js/phase8/i18n.js",
+            "../assets/js/phase8/card-localization.js",
             "../assets/js/phase8/archetype-names.js",
             "../assets/js/phase8/matchup-model.js",
             "../assets/js/phase8/mtgo-controller.js",

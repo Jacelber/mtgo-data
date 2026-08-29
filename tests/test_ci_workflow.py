@@ -79,7 +79,11 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
     assert "tests/test_landing_card_image_cache.py" in cache["run"]
     localization = by_name["Validate card-localization contract"]
     assert "card-localization" in localization["if"]
-    assert "tests/test_card_localization.py" in localization["run"]
+    assert "tests/test_card_names.py" in localization["run"]
+    assert "tests/test_simple_card_localization.py" in localization["run"]
+    browser_localization = by_name["Validate card-localization browser selection"]
+    assert "card-localization" in browser_localization["if"]
+    assert "tests/js/phase8-card-localization.test.js" in browser_localization["run"]
     assert "ci-admission" in by_name["Validate changed governance contracts"]["if"]
     assert "ci-workflow" in by_name["Validate changed governance contracts"]["if"]
     package_install = by_name["Install maintained package for code and data checks"]
@@ -102,7 +106,7 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
         "test_validate_repository_modes.py",
     ):
         assert required in commands
-    assert "node --test" not in commands
+    assert commands.count("node --test") == 1
     checkout = by_name["Check out repository without persisted credentials"]
     assert checkout["with"]["fetch-depth"] == "0"
     repository_validation = by_name["Validate repository files and references"]["run"]
@@ -355,11 +359,15 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
     workflow = yaml.load(
         PAGES_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
     )
+    assert workflow["jobs"]["build"]["timeout-minutes"] == "20"
     push_paths = set(workflow["on"]["push"]["paths"])
     assert {"index.html", "melee/**", "stats/**", "data/**"} <= push_paths
     assert {
         "schemas/landing-card-image-cache.schema.json",
+        "src/mtgmeta/card_names.py",
+        "src/mtgmeta/data/om1_spm_aliases.json",
         "tools/build_landing_card_image_cache.py",
+        "tools/build_simple_card_localization.py",
     } <= push_paths
     assert not ({"docs/**", "tests/**", ".github/workflows/ci.yml"} & push_paths)
     assert set(workflow["on"]["workflow_dispatch"]["inputs"]) == {
@@ -399,7 +407,10 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
         "tools/build_landing_card_image_cache.py subject",
         "tools/build_landing_card_image_cache.py build",
         "tools/build_landing_card_image_cache.py verify",
+        "tools/build_simple_card_localization.py build",
+        "tools/build_simple_card_localization.py verify",
         '--overlay "landing_card_images=$RUNNER_TEMP/landing-card-image-cache"',
+        '--overlay "card_localization=$RUNNER_TEMP/card-localization"',
     ):
         assert required in commands
     cache_upload = next(

@@ -16,6 +16,7 @@
       || (
         !path.startsWith("stats/")
         && path !== "assets/card-cache/v1/manifest.json"
+        && path !== "assets/card-localization/cards.json"
       )
       || path.split("/").includes("..")
     ) {

@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from tools.build_landing_card_image_cache import verify_cache_bundle
+from tools.build_simple_card_localization import verify_bundle as verify_localization_bundle
 
 
 CONFIG_KEYS = {
@@ -56,7 +57,7 @@ def load_config(root: Path, config_path: Path) -> dict[str, Any]:
         raise PublicationError(
             "publication config keys must be exactly " + ", ".join(sorted(CONFIG_KEYS))
         )
-    if config["schema_version"] != "1.2.0":
+    if config["schema_version"] != "1.3.0":
         raise PublicationError("unsupported publication config schema_version")
     for key in (
         "site_files",
@@ -319,10 +320,13 @@ def _copy_generated_overlays(
         manifest = source_root / record["manifest"]
         if manifest.is_symlink() or not manifest.is_file():
             raise PublicationError(f"generated overlay manifest is missing: {overlay_id}")
-        if overlay_id != "landing_card_images":
-            raise PublicationError(f"unsupported generated overlay: {overlay_id}")
         try:
-            verify_cache_bundle(root, source_root)
+            if overlay_id == "landing_card_images":
+                verify_cache_bundle(root, source_root)
+            elif overlay_id == "card_localization":
+                verify_localization_bundle(root, source_root)
+            else:
+                raise PublicationError(f"unsupported generated overlay: {overlay_id}")
         except (ValueError, OSError, UnicodeError, json.JSONDecodeError) as exc:
             raise PublicationError(f"generated overlay verification failed: {exc}") from exc
 

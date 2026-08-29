@@ -1,6 +1,9 @@
 """Shared utilities for constructed Magic tournament data."""
 
-from .card_names import CARD_ALIASES, normalize_card_name
+from .card_names import (
+    CARD_ALIASES, card_name_lookup_candidates, front_face_card_name,
+    normalize_card_name,
+)
 from .classifier import (
     ClassificationResult, ConditionEvidence, RuleMatch, classify_counts,
     classify_deck, condition_matches, evaluate_matches,
@@ -17,7 +20,8 @@ __all__ = [
     "ArchetypeDefinition", "CARD_ALIASES", "CardCondition", "ClassificationResult",
     "ClassificationRule", "ConditionEvidence", "RuleConfigError", "RuleMatch", "RuleSet",
     "SubtypeDefinition", "classify_counts", "classify_deck", "condition_matches", "count_card",
-    "deck_to_counts", "evaluate_matches", "load_rule_set", "normalize_card_name",
+    "card_name_lookup_candidates", "deck_to_counts", "evaluate_matches",
+    "front_face_card_name", "load_rule_set", "normalize_card_name",
     "parse_rule_text",
     "REPORT_SCHEMA_VERSION", "build_classification_reports", "find_identity_fields",
     "has_blocking_diagnostics", "load_events", "write_classification_reports",

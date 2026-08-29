@@ -15,8 +15,11 @@ on:
       - "reports/**"
       - "stats/**"
       - "schemas/landing-card-image-cache.schema.json"
+      - "src/mtgmeta/card_names.py"
+      - "src/mtgmeta/data/om1_spm_aliases.json"
       - "tests/fixtures/melee/434455_compatibility_manifest.json"
       - "tools/build_landing_card_image_cache.py"
+      - "tools/build_simple_card_localization.py"
   push:
     branches:
       - master
@@ -33,8 +36,11 @@ on:
       - "reports/**"
       - "stats/**"
       - "schemas/landing-card-image-cache.schema.json"
+      - "src/mtgmeta/card_names.py"
+      - "src/mtgmeta/data/om1_spm_aliases.json"
       - "tests/fixtures/melee/434455_compatibility_manifest.json"
       - "tools/build_landing_card_image_cache.py"
+      - "tools/build_simple_card_localization.py"
   workflow_dispatch:
     inputs:
       publication_commit:
@@ -74,7 +80,7 @@ jobs:
   build:
     name: Build and verify allowlisted site
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     permissions:
       actions: read
       contents: read
@@ -233,6 +239,16 @@ jobs:
           python -B tools/build_landing_card_image_cache.py verify
           --output "$RUNNER_TEMP/landing-card-image-cache"
 
+      - name: Build simple card localization
+        run: >-
+          python -B tools/build_simple_card_localization.py build
+          --output "$RUNNER_TEMP/card-localization"
+
+      - name: Verify simple card localization
+        run: >-
+          python -B tools/build_simple_card_localization.py verify
+          --output "$RUNNER_TEMP/card-localization"
+
       - name: Retain new Landing card-image cache
         if: >-
           steps.landing-card-cache-artifact.outputs.cache-hit != 'true' &&
@@ -252,6 +268,7 @@ jobs:
           --report "$RUNNER_TEMP/pages-report.json"
           --summary "$GITHUB_STEP_SUMMARY"
           --overlay "landing_card_images=$RUNNER_TEMP/landing-card-image-cache"
+          --overlay "card_localization=$RUNNER_TEMP/card-localization"
 
       - name: Configure GitHub Pages
         if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'

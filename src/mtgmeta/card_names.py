@@ -26,3 +26,25 @@ def normalize_card_name(name: str) -> str:
 
     stripped_name = name.strip()
     return CARD_ALIASES.get(stripped_name, stripped_name)
+
+
+def front_face_card_name(name: str) -> str:
+    """Return the front-face spelling already used by classification consumers."""
+
+    return name.strip().partition(" // ")[0]
+
+
+def card_name_lookup_candidates(name: str) -> tuple[str, ...]:
+    """Return maintained and legacy spellings suitable for external lookup."""
+
+    canonical_name = normalize_card_name(name)
+    candidates = [canonical_name]
+    lookup_name = canonical_name
+    if canonical_name.count("/") == 1:
+        left, right = canonical_name.split("/", 1)
+        if left and right:
+            lookup_name = f"{left.strip()} // {right.strip()}"
+            candidates.append(lookup_name)
+    front_name = front_face_card_name(lookup_name)
+    candidates.append(front_name)
+    return tuple(dict.fromkeys(candidates))

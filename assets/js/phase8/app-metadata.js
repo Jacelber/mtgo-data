@@ -9,6 +9,7 @@
       locale: "zh_CN",
       footer: {
         source: "卡图与卡牌数据：",
+        localizationSource: "中文牌名与牌图：",
         policyLead: "猫猫万智周报为依据",
         policyLabel: "《爱好者内容政策》",
         policyTail: "制作的非官方爱好者内容，未获 Wizards 批准或认可。部分材料归 Wizards of the Coast LLC 所有。© Wizards of the Coast LLC。",
@@ -20,6 +21,7 @@
       locale: "en_US",
       footer: {
         source: "Card images and card data:",
+        localizationSource: "Chinese card names and images:",
         policyLead: "MTG Meta Analytics is unofficial Fan Content permitted under the",
         policyLabel: "Fan Content Policy",
         policyTail: ". Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. © Wizards of the Coast LLC.",

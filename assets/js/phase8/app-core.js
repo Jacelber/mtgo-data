@@ -4,6 +4,7 @@ const ReviewData = globalThis.P8ReviewData;
 const Runtime = globalThis.P8Runtime;
 const I18n = globalThis.P8I18n;
 const ArchetypeNames = globalThis.P8ArchetypeNames;
+const CardLocalization = globalThis.P8CardLocalization;
 const MtgoController = globalThis.P8MtgoController;
 const TabletopController = globalThis.P8TabletopController;
 const ArchetypeVisuals = globalThis.P8ArchetypeVisuals || Object.freeze({
@@ -50,6 +51,7 @@ const DIFF_MIN = 1;
 const LOW_SAMPLE_THRESHOLD = 20;
 const state = {
   catalog: null,
+  cardLocalization: Object.freeze(Object.create(null)),
   classifierNameContract: null,
   classifierNameContracts: new Map(),
   format: "modern",
@@ -286,16 +288,25 @@ function renderNavigation() {
   focusTarget?.focus({ preventScroll: true });
 }
 
+function cardDisplay(englishName, englishLocalImage = null) {
+  return CardLocalization.resolve(
+    englishName,
+    I18n.language(),
+    state.cardLocalization,
+    englishLocalImage
+  );
+}
+
 function cardLink(card) {
-  const name = card.name;
+  const englishName = card.name;
+  const display = cardDisplay(englishName);
   const quantity = card.qty ?? card.mean_qty ?? "";
-  const search = `https://scryfall.com/search?q=${encodeURIComponent(`!"${name}"`)}`;
-  const image = `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}&format=image&version=normal`;
+  const search = `https://scryfall.com/search?q=${encodeURIComponent(`!"${englishName}"`)}`;
   const rate = card.rate === undefined ? "" : ` <small>(${pct(card.rate)})</small>`;
   return `<li><span class="qty">${escapeHtml(quantity)}</span><a class="card-link"
     href="${search}" target="_blank" rel="noopener"
-    data-card-image="${escapeHtml(image)}" data-card-name="${escapeHtml(name)}"
-    data-scryfall-url="${escapeHtml(search)}">${escapeHtml(name)}</a>${rate}</li>`;
+    data-card-image="${escapeHtml(display.image)}" data-card-name="${escapeHtml(display.displayName)}"
+    data-scryfall-url="${escapeHtml(search)}">${escapeHtml(display.displayName)}</a>${rate}</li>`;
 }
 
 function cardList(cards) {
@@ -312,7 +323,7 @@ function differenceList(items) {
   }
   return visible.slice(0, 8).map(item => (
     `<p>${t("deck.difference_row", {
-      name: escapeHtml(item.name),
+      name: escapeHtml(cardDisplay(item.name).displayName),
       deck: escapeHtml(item.deck_qty),
       average: escapeHtml(item.typical_qty),
     })}</p>`

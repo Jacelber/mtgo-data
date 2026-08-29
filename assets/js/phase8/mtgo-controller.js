@@ -2,6 +2,7 @@
   "use strict";
 
   const Runtime = root.P8Runtime;
+  const CardLocalization = root.P8CardLocalization;
   const client = Runtime.createJsonClient(
     "MTGO",
     path => /^stats\/[a-z0-9_-]+\/mtgo\//.test(path)
@@ -13,6 +14,21 @@
     { maxBytes: 1024 * 1024, maxEntries: 1, foregroundTimeoutMs: 5_000 }
   );
   const generatedCardImagePath = /^assets\/card-cache\/v1\/images\/[0-9a-f-]+(?:-face-[0-9]+)?\.jpg$/;
+  const cardLocalizationClient = Runtime.createJsonClient(
+    "Card localization",
+    path => path === CardLocalization.LOOKUP_PATH,
+    { maxBytes: 8 * 1024 * 1024, maxEntries: 1, foregroundTimeoutMs: 5_000 }
+  );
+
+  async function loadCardLocalization() {
+    try {
+      const value = await cardLocalizationClient.fetchJson(CardLocalization.LOOKUP_PATH);
+      return CardLocalization.parseLookup(value);
+    } catch (error) {
+      if (error instanceof Runtime.ResourceError) return Object.freeze(Object.create(null));
+      throw error;
+    }
+  }
 
   function rootPath(format) {
     return `stats/${format}/mtgo`;
@@ -273,6 +289,7 @@
   }
 
   root.P8MtgoController = Object.freeze({
+    loadCardLocalization,
     loadComparisonDecks,
     loadMatchup,
     loadLanding,

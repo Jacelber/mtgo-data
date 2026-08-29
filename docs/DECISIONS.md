@@ -7066,7 +7066,7 @@ admission, front-end change, asset cleanup, production operation, `L10N-B1`,
 
 # DEC-146 - Replace the localization program with one minimal product path
 
-Status: `Accepted for documentation and obsolete-route cleanup`
+Status: `Accepted; L10N-SIMPLE separately authorized`
 
 ## Context
 
@@ -7091,7 +7091,7 @@ trigger, and active B1/B2/C roadmap. Retain DEC-137's Owner-recorded MTGCH
 permission and the DEC-140 through DEC-144 observations as historical evidence,
 not as gates that must be repeated.
 
-A future separately authorized implementation is one product task:
+The separately authorized `L10N-SIMPLE` implementation is one product task:
 
 1. consume the normalized English card names already emitted by the product;
 2. generate one flat lookup from that English name to the MTGCH Chinese display
@@ -7103,7 +7103,10 @@ A future separately authorized implementation is one product task:
 5. use one shared browser selector, with the existing English name and image as
    fallback when a Chinese value is absent.
 
-There is no new localization-specific alias or card-face converter. There is
+The shared `card_names.py` entry owns maintained aliases, the existing
+front-face spelling, and the Owner-authorized legacy single-slash lookup
+candidates. Localization calls that entry and has no localization-specific
+alias or card-face converter. There is
 also no separate localization Schema, immutable printing-identity manifest,
 Bulk-snapshot reproducibility requirement, source-response digest,
 English-image capacity proxy, content-addressed localization overlay, or
@@ -7118,12 +7121,14 @@ cache, image-size, Bulk, or name-conversion trials.
 
 ## Consequences
 
-This reset deletes only unused pre-production localization artifacts. It does
-not change Pages, the browser, generated data, the existing English Landing
-cache, Scryfall behavior, MTGCH traffic, or public output.
+The reset deleted only unused pre-production localization artifacts. The
+separately authorized `L10N-SIMPLE` task may now change Pages and browser
+behavior only through the minimal path above; generated statistics, the
+existing English Landing cache contract, and English Scryfall behavior remain
+unchanged.
 
 Historical localization audits remain evidence and are not rewritten. The
-future `L10N-SIMPLE` implementation requires a separate Owner development
-brief and authorization. This decision authorizes no source request, image
-download, front-end change, Pages change, production operation, commit,
-publication, merge, or Phase 14 work.
+Owner separately authorized local `L10N-SIMPLE` implementation, public MTGCH
+metadata access, current-Landing image downloads, and the shared card-name
+candidate expansion. Commit, publication, merge, Pages deployment, production,
+and Phase 14 remain separately gated by the live task contract.
