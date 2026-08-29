@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/card-localization-rights"
-  working_branch_status: "owner_accepted_completion_authorized"
+  current_working_branch: "codex/l10n-direct-trial-contract"
+  working_branch_status: "implementation_and_remote_publication_authorized"
   status: "active"
 
 status_document:
@@ -24,7 +24,7 @@ status_document:
 current_phase:
   id: "PRE-14"
   name: "Card localization foundation"
-  status: "rights_review_owner_accepted"
+  status: "direct_trial_contract_in_progress"
   started_on: "2026-08-28"
   objective: "Establish provenance-safe Chinese card-name and complete-card-image support before any Phase 14 implementation."
   production_changes_allowed: false
@@ -33,48 +33,44 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "L10N-RIGHTS"
-  name: "Card localization source-rights and attribution decision"
-  status: "owner_accepted_completion_authorized"
+  id: "L10N-DIRECT-TRIAL-CONTRACT"
+  name: "Bounded MTGCH direct-image trial contract"
+  status: "implementation_and_remote_publication_authorized"
   authorized_on: "2026-08-29"
-  owner_accepted_on: "2026-08-29"
   artifact_impact: "none"
-  base_commit: "cb1f5cc889d482c19f6ae049fdb37a3d0d27b456"
-  branch: "codex/card-localization-rights"
-  objective: "Record the evidence-backed retention, redistribution, attribution, and fail-closed boundary for official and community Chinese card names and images before any real-source sidecar build."
+  base_commit: "4ccb77cd2d94bab719b9b2abf501bc1dd387b9b8"
+  branch: "codex/l10n-direct-trial-contract"
+  objective: "Define a separately gated, bounded, non-retaining browser diagnostic that can determine whether MTGCH direct image delivery is eligible for later product consideration before choosing direct-origin or hybrid-cache architecture."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
-    merge: true
+    merge: false
   allowed_paths:
-    - "docs/audits/CARD_LOCALIZATION_RIGHTS_REVIEW_20260829.md"
-    - "docs/PROJECT_SCOPE.md"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
     - "docs/TEST_TRIGGER_MATRIX.md"
     - "docs/STATUS.yaml"
-  planned_new_paths:
-    - "docs/audits/CARD_LOCALIZATION_RIGHTS_REVIEW_20260829.md | documentation"
+  planned_new_paths: []
   prohibited_changes:
-    - "Do not call a real MTGCH or Scryfall card-data endpoint, download a real card image, or retain a real card response or image byte. Public legal pages, API documentation, OpenAPI metadata, and source-license metadata are the only permitted external evidence."
-    - "Do not modify code, Schemas, tests, workflows, dependencies, assets/card-cache/v1, assets/card-localization/v1, Pages packaging, front-end code, generated data, public catalogs, statistics, classifiers, or event configuration."
+    - "Do not execute L10N-DIRECT-TRIAL, call a real card-data endpoint, request a real MTGCH or Scryfall image, or retain any real card response or image byte."
+    - "Do not modify code, Schemas, tests, workflows, dependencies, assets, Pages packaging, front-end behavior, generated data, public catalogs, statistics, classifiers, or event configuration."
+    - "Do not merge before Owner acceptance of this exact documentation subject and successful required checks."
     - "Do not begin L10N-B, L10N-C, Phase 14, fetch Paupergeddon, dispatch production, or deploy Pages."
-    - "Do not treat API availability, a Chinese image URL, source metadata, or third-party reuse as redistribution permission."
-  stop_point: "Commit the Owner-accepted L10N-RIGHTS subject, publish one Ready pull request, wait for required checks, and merge. Stop on a changed substantive subject, failed check, merge conflict, permission blocker, or scope expansion; do not fetch real card material or begin L10N-B."
+  stop_point: "Write and validate the bounded trial contract, commit it, and publish one Ready pull request. Stop for Owner acceptance before merge; do not execute the real-source trial or begin another localization task."
   local_verification:
     result: "pass"
     completed_on: "2026-08-29"
     checks:
       - "5 focused documentation live-state and history tests passed."
-      - "Changed-scope repository validation passed for all 7 documentation paths, including YAML, 16 maintained references, and hygiene."
-      - "YAML parsing and complete staged-diff whitespace validation passed."
-    scope_note: "The evidence review used public legal pages, API documentation, OpenAPI metadata, and license metadata only. No real card endpoint, card image, card response corpus, public artifact, or product behavior is in scope."
+      - "Changed-scope repository validation passed for all 5 documentation paths, including YAML, 16 maintained references, and hygiene."
+      - "YAML parsing and complete diff whitespace validation passed."
+    scope_note: "Documentation-only contract work. The separately gated trial remains unexecuted and real card records and image bytes remain prohibited."
 
 current_repository_state:
   localization_contract_merge_commit: "d36b5bf677383345e064bd58c2589b2a85e5aac1"
-  localization_contract_note: "L10N-A merged through PR #296 after required checks succeeded; current L10N-RIGHTS base is master commit cb1f5cc889d482c19f6ae049fdb37a3d0d27b456."
+  localization_contract_note: "L10N-A merged through PR #296. L10N-RIGHTS merged through PR #297 at 4ccb77cd2d94bab719b9b2abf501bc1dd387b9b8; it admits bounded source classes but does not authorize real-source access."
   deployed_master_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
   deployed_master_note: "The documentation-only f540faa3 merge did not change site inputs or trigger Pages; the deployed site remains the accepted Cache-B subject."
   public_entries:
@@ -85,9 +81,12 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
+  - id: "L10N-DIRECT-TRIAL"
+    status: "planned_not_authorized"
+    note: "After this contract is accepted and merged, a separate authorization may run the bounded non-retaining direct-image diagnostic. It changes no product behavior and cannot itself select or authorize a production architecture."
   - id: "L10N-B"
     status: "planned_not_authorized"
-    note: "After L10N-RIGHTS acceptance and separate authorization, build a bounded sidecar from licensed names, original official Simplified Chinese Scryfall images, and identifiable MTGCH community-rendered images covered by the Owner-recorded permission; unpermitted submitted, third-party, further-modified, source-unknown, and raw-response bytes remain blocked."
+    note: "After the direct-image evidence and a separate architecture decision, build only the bounded localization resource architecture that the Owner accepts; unpermitted submitted, third-party, modified, source-unknown, and raw-response bytes remain blocked."
   - id: "L10N-C"
     status: "planned_not_authorized"
     note: "Consume the admitted sidecar in Chinese views while preserving exact English fallback."
@@ -98,12 +97,13 @@ future_task_gates:
 next_approved_task:
   id: null
   name: null
-  status: "accepted_task_completion_in_progress"
+  status: "current_contract_publication_in_progress"
   local_execution_authorized: false
-  note: "Owner acceptance authorizes continuous Gate 6 completion of the accepted L10N-RIGHTS documentation subject. Real-source, image, sidecar, UI, production, and follow-up work remain unauthorized."
+  note: "Only L10N-DIRECT-TRIAL-CONTRACT documentation and Ready-PR publication are authorized. The real-source trial, merge, product implementation, and follow-up work remain unauthorized."
 
 prohibited_next_actions:
-  - "Do not fetch or retain real MTGCH or Scryfall card records or image bytes under the L10N-RIGHTS authorization."
-  - "Do not modify the existing English card-image cache, create the localization sidecar, or change a public browser path."
+  - "Do not execute L10N-DIRECT-TRIAL until this contract is accepted, merged, and separately authorized."
+  - "Do not fetch or retain real MTGCH or Scryfall card records or image bytes under this documentation authorization."
+  - "Do not modify the existing card-image cache, create the localization sidecar, or change a public browser path."
   - "Do not begin L10N-B, L10N-C, Phase 14, production, or Pages."
   - "Do not develop directly on master or overwrite unexplained local changes."

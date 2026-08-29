@@ -3502,6 +3502,27 @@ and publishes only an atomic closed sidecar. A missing Chinese value is a
 declared English fallback; an identity collision, false official label, unsafe
 path, digest mismatch, or undeclared file rejects the sidecar.
 
+`L10N-DIRECT-TRIAL` is a non-product diagnostic exception, not a runtime
+architecture. Only after its documentation contract is accepted, merged, and
+separately authorized may an ephemeral browser opened on the deployed Pages
+origin inject a temporary test container and request a predeclared sample of
+MTGCH image URLs. The trial may resolve at most 32 current Standard or Modern
+card candidates to assemble at most 24 exact card or face identities, and may
+make at most 144 paced image-load attempts with no more than four concurrent
+loads and no more than two new starts per second. It covers sequential,
+paced-concurrent, cold, and warm behavior and records only aggregate status,
+decode, timing, redirect-host, response-size, and cache observations.
+
+The trial does not modify the deployed page, repository, browser runtime,
+public path, or source adapter. Raw card responses and image bytes remain only
+in transient network and browser memory; they must not enter Git, Pages,
+workflow artifacts, diagnostic files, screenshots, or retained browser state.
+The test context is closed when measurement ends. Any authentication request,
+unknown or unpermitted source class, 403, 429, 5xx response, non-image payload,
+unsafe redirect, or request-budget breach stops the trial. Product browsers
+remain prohibited from calling MTGCH unless a later accepted architecture
+decision explicitly changes this rule.
+
 Admitted MTGCH community-rendered image bytes may enter only the bounded closed
 sidecar and remain byte-for-byte as supplied by MTGCH. Their manifest records
 `community` status, MTGCH source, retrieval snapshot, content digest, Owner-
