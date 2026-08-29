@@ -6325,7 +6325,7 @@ until its rights gate is closed. Phase 14 remains planned and unauthorized.
 
 # DEC-137 - Admit licensed names and Owner-authorized MTGCH community images
 
-Status: `Accepted`
+Status: `Accepted with Owner-approved corrective clarification`
 
 ## Context
 
@@ -6334,11 +6334,12 @@ immutable card, printing, and face identities, but it intentionally used only
 synthetic sources. The next gate must distinguish public accessibility from a
 right to retain and republish real material.
 
-MTGCH's public OpenAPI document separates Chinese names, Chinese image URLs,
-and source metadata. It does not declare a top-level license or terms-of-service
-URL, and the relevant Schemas do not carry a license or attribution field. The
-linked `magic-cards-zhs` project declares CC BY-SA 4.0 for a translation dataset
-that combines official, MTGso, and volunteer text. Scryfall permits card data
+MTGCH's public OpenAPI document exposes Chinese names and Chinese image URLs
+across several Schemas, but it does not define one mandatory per-card field
+that classifies every Chinese value as official or community. It also does not
+declare a top-level license or terms-of-service URL. The linked
+`magic-cards-zhs` project declares CC BY-SA 4.0 for a translation dataset that
+combines official, MTGso, and volunteer text. Scryfall permits card data
 and images for additive Magic software under its published conditions, while
 prohibiting simple repackaging and image alteration. Wizards' Fan Content
 Policy separately requires free, unofficial, correctly noticed fan content and
@@ -6360,16 +6361,24 @@ public MTGCH license or a transferable permission for another project.
 Permit a later, separately authorized `L10N-B` task to admit only these real
 localization classes:
 
-1. official Simplified Chinese card names whose official provenance is proven;
-2. community Simplified Chinese card names from `magic-cards-zhs` or another
-   source with an equally explicit license, preserving translation provenance
-   and satisfying CC BY-SA 4.0 attribution, change-indication, and ShareAlike
-   requirements; and
+1. official Simplified Chinese card names whose official printing is proven by
+   Scryfall;
+2. exact-identity MTGCH Chinese names classified by the project as `community`
+   under the Owner-recorded founder permission when Scryfall does not prove an
+   official Simplified Chinese name, plus community names from
+   `magic-cards-zhs` or another explicitly licensed source under that source's
+   attribution and reuse conditions;
 3. original full-card images for official Simplified Chinese printings when
    Scryfall proves the printing identity and supplies the image; and
-4. identifiable MTGCH community-rendered Chinese full-card images covered by
-   the Owner-recorded founder permission, with `community` provenance and
-   MTGCH and translation-source attribution.
+4. exact-identity MTGCH Chinese full-card images classified by the project as
+   `community` under the Owner-recorded founder permission when Scryfall does
+   not prove and supply an official Simplified Chinese image, with MTGCH
+   attribution and retrieval snapshot.
+
+`official`, `community`, and `english_fallback` are sidecar classifications,
+not fields that MTGCH is required to return. Provider precedence derives them:
+Scryfall proves official; otherwise MTGCH-supplied exact-identity Chinese
+material is community; otherwise the product uses English fallback.
 
 An admitted official image remains byte-for-byte original. Do not convert,
 recompress, crop, filter, recolor, distort, watermark, overlay, or remove its
@@ -6379,23 +6388,27 @@ used by the product; do not create a Scryfall or MTGCH mirror or proxy.
 An admitted MTGCH community-rendered image remains byte-for-byte as supplied by
 MTGCH. Do not relabel it as official or convert, recompress, crop, filter,
 recolor, distort, watermark, overlay, or remove embedded legal or artist
-notices. Missing, generic, unverified, user-submitted, or third-party image
-provenance fails closed unless a separate permission decision covers that exact
-class. The existing English complete-card image remains the fallback.
+notices. Identity-ambiguous, non-MTGCH third-party, or separately unpermitted
+material fails closed unless a separate permission decision covers that exact
+class. The absence of an MTGCH per-record source field is not evidence that an
+MTGCH-supplied image is unknown third-party material. The existing English
+complete-card image remains the fallback.
 
-The browser must not call MTGCH. A separately authorized producer may read one
-bounded source snapshot into external temporary storage, record its digest and
-retrieval time, and publish only validated sidecar fields plus admitted source-
-specific image bytes. Raw upstream card responses remain outside Git, Pages,
-and retained workflow artifacts.
+This rights-only decision does not authorize a browser call to MTGCH. A
+separately authorized producer may read one bounded source snapshot into
+external temporary storage, record its digest and retrieval time, and publish
+only validated sidecar fields plus admitted source-specific image bytes. Raw
+upstream card responses remain outside Git, Pages, and retained workflow
+artifacts. A later evidence-backed architecture decision may separately admit
+bounded direct delivery with English fallback.
 
 The future manifest and product notice must preserve separate Wizards,
 Scryfall, MTGCH, and community-translation attribution. CC BY-SA applies only
 to the derived community translation material, not to project-authored code or
 Wizards images. MTGCH community-image permission is recorded as project-
-specific Owner attestation, not a public license. Every record remains
-`official`, `community`, or `english_fallback`; availability never upgrades
-provenance.
+specific Owner attestation, not a public license. Every record remains project-
+classified as `official`, `community`, or `english_fallback`; availability
+never turns community material into official material.
 
 ## Consequences
 
@@ -6606,7 +6619,7 @@ Phase 14.
 
 # DEC-140 - Require architecture evidence before selecting card-image delivery
 
-Status: `Accepted by Owner; publication in progress`
+Status: `Accepted with Owner-approved corrective clarification`
 
 ## Context
 
@@ -6635,8 +6648,9 @@ separately observable stages:
 
 1. an offline catalog-rooted inventory of current public card-bearing documents,
    consumer interaction classes, and current Pages/Cache-B size;
-2. a separately authorized bounded identity/source inventory using one Scryfall
-   Bulk Data snapshot and no more than 32 set-grouped MTGCH metadata requests,
+2. a separately authorized bounded identity/source inventory using Scryfall
+   data suitable for both canonical identity and official Simplified Chinese
+   printing proof, plus no more than 32 set-grouped MTGCH metadata requests,
    one in flight and at least five seconds apart; and
 3. a separately authorized two-session browser trial, at least six hours apart,
    of up to 100 deterministically stratified exact MTGCH image URLs from the
@@ -6648,10 +6662,16 @@ single-image, actual-controller hover/focus/touch, warm-cache, and English-
 fallback behavior. It retains only aggregate status, decode, redirect, byte,
 latency, cache, and fallback observations.
 
+The trial derives `official`, `community`, and `english_fallback` itself:
+Scryfall proves official; absent that proof, exact-identity Chinese material
+supplied by MTGCH is community under the Owner-recorded permission; absent both,
+English is the fallback. MTGCH is not required to return a unified provenance
+field.
+
 The trial is inconclusive—not evidence for any architecture—if its setup cannot
-close the current public subject, cover every eligible source/host/media/face
-stratum, or complete both sessions. A setup-stage 429 cannot again be described
-as an image-delivery failure.
+close the current public subject, bind Chinese values to exact identities,
+cover every eligible host/media/face stratum, or complete both sessions. A
+setup-stage 429 cannot again be described as an image-delivery failure.
 
 After the evidence report is accepted and published, a separate
 `L10N-ARCHITECTURE-DECISION` must explicitly choose among:
@@ -6682,3 +6702,70 @@ This decision authorizes no live trial, source request, image request,
 implementation, Schema, workflow, sidecar, Pages change, front-end change,
 commit, publication, merge, production, `L10N-B1`, `L10N-B2`, `L10N-C`, or
 Phase 14.
+
+---
+
+# DEC-141 - Correct the grouped-source validator before resuming evidence
+
+Status: `Accepted`
+
+## Context
+
+The Owner accepted and published DEC-140's evidence contract, then separately
+authorized `L10N-ARCHITECTURE-EVIDENCE-TRIAL`. Its offline stage closed 47
+registered current-public documents, 108,651 card-name occurrences, and 1,892
+distinct English input strings. It measured a 270,195,353-byte/1,936-file base
+Pages artifact before generated overlays and confirmed the existing 71-image,
+64-MiB Cache-B subject.
+
+One Scryfall Oracle Cards JSONL snapshot resolved 1,869 input strings to 1,866
+canonical `oracle_id + face_index` identities. A deterministic 32-set plan was
+written before MTGCH access and covered 1,365 of those identities. The first
+request to the public MTGCH set-card endpoint returned HTTP 200. The local
+validator then required a synthetic set of full-card and provenance fields that
+the documented card-description response was not required to provide. It
+reported `card_schema_contract_drift`, but this was a validator and contract-
+design error rather than evidence of MTGCH interface failure.
+
+No MTGCH image, Scryfall control image, browser session, cache repeat, or
+fallback image was attempted. Exact names, identities, URLs, raw responses,
+and the Scryfall Bulk snapshot were removed as required.
+
+## Proposed decision
+
+Accept the completed Stage-A and Scryfall identity measurements, but do not
+accept `card_schema_contract_drift` as a source result. Classify it as
+`validator_contract_design_error`: the trial stopped because our validator
+expected undocumented fields, not because MTGCH failed or returned unusable
+content.
+
+Correct the evidence contract and validator design around provider precedence:
+
+1. use Scryfall printing-level evidence to prove official Simplified Chinese;
+2. when Scryfall does not prove official material, classify exact-identity
+   Chinese names and images supplied by MTGCH as `community` under the Owner-
+   recorded project permission; and
+3. use `english_fallback` only when neither source supplies the value.
+
+The grouped endpoint must supply only its documented response plus enough
+identity and Chinese-value information to bind a card or face. Do not demand a
+nonexistent MTGCH provenance field. If the documented summary lacks identity or
+image information actually needed for the trial, define a separately reviewed,
+bounded retrieval method; do not infer that gap from the discarded validator.
+
+The aggregate measurements and exact stop are recorded in
+`docs/audits/CARD_LOCALIZATION_ARCHITECTURE_EVIDENCE_TRIAL_20260829.md`.
+
+## Proposed consequences
+
+Existing English Cache-B, Scryfall fallback, product behavior, public paths,
+and Pages packaging remain unchanged. DEC-137 and the rights review are
+clarified so their per-record classes are explicitly project-derived rather
+than asserted MTGCH fields. The valid offline measurements may be reused only
+for the immutable bound subject; any changed public catalog or card-bearing
+document requires a refreshed Stage A.
+
+Owner acceptance authorizes only publication of this corrected documentation
+subject. Another source request, trial rerun, architecture choice,
+implementation, Schema, workflow, sidecar, Pages change, production,
+`L10N-B1`, `L10N-B2`, `L10N-C`, and Phase 14 remain separately unauthorized.
