@@ -201,7 +201,14 @@ def validate_rule_data(data: Any) -> list[RuleValidationFailure]:
             if not _is_priority(rule.get("priority")):
                 failures.append(RuleValidationFailure(f"{rp}.priority", "must be a non-negative integer"))
             subtype_id = rule.get("subtype_id")
-            if subtype_id is not None:
+            if subtype_id is None and subtype_ids:
+                failures.append(
+                    RuleValidationFailure(
+                        f"{rp}.subtype_id",
+                        "must select a subtype when the parent defines subtypes",
+                    )
+                )
+            elif subtype_id is not None:
                 if not _is_nonempty_string(subtype_id) or not ID_PATTERN.fullmatch(str(subtype_id or "")):
                     failures.append(RuleValidationFailure(f"{rp}.subtype_id", "must be null or a lowercase hyphenated identifier"))
                 elif subtype_id not in subtype_ids:
