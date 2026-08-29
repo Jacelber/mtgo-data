@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/l10n-architecture-evidence-rerun"
-  working_branch_status: "owner_accepted_completion_authorized"
+  current_working_branch: "codex/l10n-stage-c-execution-contract"
+  working_branch_status: "local_complete_awaiting_owner_review"
   status: "active"
 
 status_document:
@@ -24,7 +24,7 @@ status_document:
 current_phase:
   id: "PRE-14"
   name: "Card localization foundation"
-  status: "architecture_evidence_trial_inconclusive_publication_authorized"
+  status: "stage_c_execution_contract_local_complete_awaiting_owner_review"
   started_on: "2026-08-28"
   objective: "Establish provenance-safe Chinese card-name and complete-card-image support before any Phase 14 implementation."
   production_changes_allowed: false
@@ -33,44 +33,43 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "L10N-ARCHITECTURE-EVIDENCE-TRIAL-RERUN"
-  name: "Corrected card-localization architecture evidence trial"
-  status: "owner_accepted_completion_authorized"
+  id: "L10N-STAGE-C-EXECUTION-CONTRACT"
+  name: "Card-localization Stage-C execution contract"
+  status: "local_complete_awaiting_owner_review"
   authorized_on: "2026-08-29"
-  artifact_impact: "none"
-  base_commit: "3c63967b23fa96b004163114e51ef17b3f8a6008"
-  branch: "codex/l10n-architecture-evidence-rerun"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/l10n-architecture-evidence-rerun-20260829-01"
-  objective: "Rerun the bounded architecture evidence trial using Scryfall printing-level official proof, project-derived MTGCH community classification, documented endpoint fields, and two Pages-origin image sessions if Stage B closes."
+  artifact_impact: "documentation_only"
+  base_commit: "fabf436cca2b2a8adfa5135188730bd9acffcdf5"
+  branch: "codex/l10n-stage-c-execution-contract"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/l10n-stage-c-execution-contract-20260829-01"
+  objective: "Define one auditable Owner-controlled Pages-origin browser executor, exact subject/controller binding, deterministic sample regeneration, interaction and observation rules, budgets, retention, and fail-closed stop conditions without making a source or image request."
   authorization:
     local_implementation: true
-    commit: true
-    remote_publication: true
-    merge: true
+    commit: false
+    remote_publication: false
+    merge: false
   allowed_paths:
-    - "docs/audits/CARD_LOCALIZATION_ARCHITECTURE_EVIDENCE_TRIAL_20260829.md"
-    - "docs/ROADMAP.md"
+    - "docs/audits/CARD_LOCALIZATION_STAGE_C_EXECUTION_CONTRACT_20260829.md"
     - "docs/DECISIONS.md"
+    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  planned_new_paths: []
+  planned_new_paths:
+    - "docs/audits/CARD_LOCALIZATION_STAGE_C_EXECUTION_CONTRACT_20260829.md"
   prohibited_changes:
-    - "Do not exceed one suitable Scryfall Bulk snapshot, 32 set-grouped MTGCH metadata requests, 400 MTGCH image attempts, or 400 matched Scryfall control attempts across the declared trial."
-    - "Do not modify code, Schemas, tests, workflows, dependencies, assets, Pages packaging, front-end behavior, generated data, public catalogs, statistics, classifiers, or event configuration."
-    - "Do not require a nonexistent MTGCH provenance field; validate only documented endpoint fields and derive official/community/English fallback by provider precedence."
-    - "Do not select an image architecture, begin L10N-ARCHITECTURE-DECISION, L10N-B1, L10N-B2, L10N-C, Phase 14, production, Pages, or fetch Paupergeddon."
-  stop_point: "Present the corrected aggregate evidence report for Owner review; stop earlier on any accepted contract condition and make no architecture decision."
+    - "Do not make any Scryfall, MTGCH, card, image, or live Pages trial request while writing this contract."
+    - "Do not implement the runner or modify code, Schemas, tests, workflows, dependencies, assets, Pages packaging, front-end behavior, generated data, public catalogs, statistics, classifiers, or event configuration."
+    - "Do not create an automation, hosted workflow artifact, browser profile, exact sample plan, or retained card identity/URL list."
+    - "Do not bypass the in-app browser security boundary or select an image architecture."
+    - "Do not begin L10N-STAGE-C-RUNNER, L10N-STAGE-C-TRIAL, L10N-ARCHITECTURE-DECISION, L10N-B1, L10N-B2, L10N-C, Phase 14, production, Pages, or Paupergeddon work."
+  stop_point: "Present the complete execution contract and internally consistent live documentation for Owner review; do not commit or publish without acceptance."
   local_verification:
-    result: "contract_stop_verified"
+    result: "passed"
     completed_on: "2026-08-29"
     checks:
-      - "Stage A reproduced the immutable 47-document, 1,892-input subject with zero network requests."
-      - "One Scryfall all_cards snapshot resolved 1,869 inputs to 1,866 canonical identities; the raw snapshot was deleted."
-      - "All 28 grouped MTGCH requests returned HTTP 200 under one-in-flight and five-second pacing; no raw response was retained."
-      - "The deterministic sample reached 100 images across both eligible face-form strata."
-      - "The approved in-app browser opened deployed Pages but could not bind external exact URLs or expose declared network metrics; no sampled image request occurred."
-      - "The temporary exact sample identity/URL plan and browser tab were deleted or closed."
-      - "All 5 focused live-document and history-pointer tests passed; complete diff whitespace validation passed."
-    scope_note: "Non-product, non-retaining evidence trial plus aggregate documentation only."
+      - "The 5 focused live-document and history-pointer tests passed."
+      - "Changed-scope repository validation passed for all 4 changed paths: YAML 1/1, references 16/16, and hygiene 4/4."
+      - "Complete diff whitespace validation passed."
+      - "The diff contains only the 4 declared documentation paths and made zero card, source, image, or live Pages trial requests."
+    scope_note: "Documentation-only executor contract; zero card, source, image, or live Pages trial requests."
 
 current_repository_state:
   localization_contract_merge_commit: "d36b5bf677383345e064bd58c2589b2a85e5aac1"
@@ -78,6 +77,7 @@ current_repository_state:
   direct_trial_contract_merge_commit: "bc49e4dcc0def736599527bd2242c7ef86d363a9"
   architecture_evidence_contract_merge_commit: "89ea7400a60f437b2e2c45cf1c45e837c0ef19e7"
   architecture_evidence_contract_correction_merge_commit: "3c63967b23fa96b004163114e51ef17b3f8a6008"
+  architecture_evidence_trial_rerun_merge_commit: "fabf436cca2b2a8adfa5135188730bd9acffcdf5"
   direct_trial_result: "The separately authorized non-retaining trial predeclared 32 candidates, completed 30 metadata resolutions, and stopped on HTTP 429 at resolution request 31 before any image request; it is evidence about the tested metadata setup only and does not select an image architecture."
   architecture_evidence_trial_result: "The corrected rerun reproduced Stage A, resolved 1,869 strings to 1,866 canonical identities from one Scryfall all_cards snapshot, and completed 28 of 28 grouped MTGCH requests with HTTP 200. Official/community precedence assigned Chinese names and images for every resolved identity, and a deterministic 100-image sample covered both eligible strata. Stage C stopped before its first sampled image because the approved in-app browser could not bind the external exact URLs to deployed Pages or expose the declared network metrics. This is browser_executor_capability_gap, not MTGCH image failure; no architecture is selected."
   deployed_master_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
@@ -90,7 +90,7 @@ current_repository_state:
 known_blockers:
   - id: "browser_executor_capability_gap"
     scope: "L10N Stage C"
-    note: "The approved in-app browser cannot inject the external exact sample into the deployed controller or expose the required status, redirect, byte, latency, and cache observations. Its security boundary prohibits raw debugging or alternate browser-surface workarounds."
+    note: "The approved in-app browser cannot inject the external exact sample into the deployed controller or expose the required network observations. DEC-143 proposes an Owner-controlled repository runner, but the gap remains until the contract is accepted and the separately authorized synthetic runner is implemented and verified."
 
 future_task_gates:
   - id: "L10N-ARCHITECTURE-EVIDENCE-TRIAL"
@@ -100,14 +100,20 @@ future_task_gates:
     status: "merged"
     note: "PR #300 merged as 3c63967b23fa96b004163114e51ef17b3f8a6008 and its exact-merge confirmation succeeded."
   - id: "L10N-ARCHITECTURE-EVIDENCE-TRIAL-RERUN"
-    status: "owner_accepted_completion_authorized"
-    note: "The Owner accepted the unchanged inconclusive report. Complete its local commit, Ready PR, required checks, merge, and documentation publication; do not begin the next contract."
+    status: "merged"
+    note: "PR #301 merged the accepted inconclusive report as fabf436cca2b2a8adfa5135188730bd9acffcdf5; the post-merge documentation workflow succeeded."
   - id: "L10N-STAGE-C-EXECUTION-CONTRACT"
+    status: "local_complete_awaiting_owner_review"
+    note: "The Owner-controlled repository runner contract, DEC-143 proposal, roadmap split, and live status are locally complete with focused validation passing; no source or image request occurred."
+  - id: "L10N-STAGE-C-RUNNER"
     status: "planned_not_authorized"
-    note: "After the inconclusive report is accepted and published, define an approved Pages-origin executor contract without making an image request or bypassing browser security."
+    note: "After contract acceptance and publication, separately authorize an implementation proved only against local synthetic fixtures."
+  - id: "L10N-STAGE-C-TRIAL"
+    status: "planned_not_authorized"
+    note: "After runner acceptance and publication, separately authorize fresh source budgets and two Owner-run real browser sessions at least six hours apart."
   - id: "L10N-ARCHITECTURE-DECISION"
     status: "blocked_by_inconclusive_evidence"
-    note: "A complete exact image sample was planned but no sampled image request occurred, so local-only, controlled direct, mixed, and English-only architecture eligibility cannot be evaluated."
+    note: "No sampled image request has occurred. The execution contract, synthetic runner, two-session real trial, aggregate acceptance, and publication must close before architecture eligibility can be evaluated."
   - id: "L10N-B1"
     status: "planned_not_authorized"
     note: "Define implementation only after the architecture decision is accepted and published."
@@ -118,14 +124,15 @@ future_task_gates:
 next_approved_task:
   id: null
   name: null
-  status: "accepted_task_completion_in_progress"
+  status: "owner_review_required"
   local_execution_authorized: false
-  note: "Complete publication of the exact accepted rerun report. No next task is authorized."
+  note: "Review the locally complete L10N-STAGE-C-EXECUTION-CONTRACT. Acceptance may authorize completion publication of the unchanged subject; no later task is authorized."
 
 prohibited_next_actions:
   - "Do not select an image architecture, modify the existing English card-image cache, create a real localization sidecar, or change a public browser path."
-  - "Do not exceed the accepted trial budgets or retain raw source responses, image bytes, exact URLs, screenshots, browser profiles, or per-card logs after their declared temporary need ends."
-  - "Do not change the accepted rerun-report subject; only its exact accepted bytes may proceed through commit, Ready PR, required checks, and merge."
+  - "Do not make a source, card, image, or live Pages trial request while the current contract is under review."
+  - "Do not implement the runner, regenerate the exact sample, retain raw source responses, image bytes, exact URLs, screenshots, browser profiles, or per-card logs."
   - "Do not attempt to bypass the in-app browser security boundary with script URLs, raw debugging protocols, another browser surface, or top-level image navigation presented as Pages-origin evidence."
-  - "Do not begin an architecture decision, L10N-B1, L10N-B2, L10N-C, Phase 14, production, or Pages."
+  - "Do not commit, publish, or merge the current contract before Owner acceptance."
+  - "Do not begin L10N-STAGE-C-RUNNER, L10N-STAGE-C-TRIAL, an architecture decision, L10N-B1, L10N-B2, L10N-C, Phase 14, production, or Pages."
   - "Do not develop directly on master or overwrite unexplained local changes."

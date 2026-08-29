@@ -6825,3 +6825,87 @@ Owner acceptance authorizes completion publication of this exact documentation
 subject only. It does not authorize the new contract, another image request,
 an architecture decision, implementation, Schema, workflow, sidecar, Pages
 change, production, `L10N-B1`, `L10N-B2`, `L10N-C`, or Phase 14.
+
+---
+
+# DEC-143 - Execute Stage C through an Owner-controlled repository runner
+
+Status: `Proposed`
+
+## Context
+
+DEC-142 established that the approved in-app browser can open deployed Pages
+but cannot bind the external exact sample into the deployed controller or expose
+the required network observations. Its security boundary must not be bypassed.
+The exact plan was correctly deleted, so a later trial must regenerate the
+sample rather than pretend to resume the stopped browser session.
+
+A standard GitHub-hosted runner is also unsuitable for the real subject. Each
+job receives a new virtual machine, while the private exact plan must remain
+identical between two sessions. The standard hosted-job ceiling is six hours,
+but the two session starts must be at least six hours apart. Moving exact URLs
+through a workflow artifact would violate the accepted retention boundary.
+
+The accepted 100-image design also needs two explicit counting units. One cold
+and one warm load in each of two sessions consumes 400 logical MTGCH loads. The
+current controller may make a bounded second physical source start inside a
+logical load, so treating both units as the same “attempt” would make the first
+retry contradict the accepted budget.
+
+## Decision
+
+Use a repository-owned Playwright/Chromium command-line diagnostic operated by
+the Owner on one controlled local Windows machine. Session 1 and session 2 use
+fresh non-persistent browser contexts on that same machine and the same exact
+external sample plan. The Owner invokes the sessions separately at least six
+hours apart; no long-running sleep, hosted workflow, cloud artifact, retained
+browser profile, or automation registration is part of the trial.
+
+Split delivery into two separately accepted and authorized tasks:
+
+1. `L10N-STAGE-C-RUNNER` implements and validates the runner only against local
+   synthetic fixtures, with no Scryfall, MTGCH, Pages, or other public request;
+2. `L10N-STAGE-C-TRIAL` refreshes or proves the catalog-rooted subject,
+   regenerates the deterministic exact sample within the accepted source
+   budgets, and performs the two real sessions.
+
+Before each session, bind the trial to served Pages HTML, catalog, and actual
+card-preview-controller digests and verify the existing controller constants.
+The runner may create only a transient runtime test container carrying the
+current sample item; it does not alter deployed or repository bytes. It must
+exercise deliberate loading plus the real hover, keyboard-focus, touch-click,
+rapid-abandonment, cancellation, warm-repeat, and English-fallback paths.
+
+Use Playwright request/response events, redirect ancestry, request timing and
+size observations together with successful image decode. Do not infer a cache
+hit from cross-origin Resource Timing alone. Unobservable cache behavior makes
+the evidence inconclusive.
+
+Interpret the accepted traffic ceilings as 400 logical MTGCH loads and 400
+logical matched-control loads. Separately enforce at most 800 physical network
+starts for each provider class, the unavoidable upper bound if every existing
+controller invocation uses its already bounded second attempt. This does not
+add a retry or authorize faster probing; it makes logical cases and physical
+network effects auditable instead of conflating them.
+
+Exact identities and URLs remain only in one repository-external, non-synced,
+Owner-readable temporary directory until session 2 closes. Raw responses,
+image bytes, browser profiles, traces, HAR, video, screenshots, and per-card
+logs are never retained. Only redacted aggregate counts, distributions,
+digests, browser/subject binding, and session times may enter a report.
+
+The complete command surface, measurements, budgets, redaction, retention,
+stop rules, and later acceptance criteria are defined in
+`docs/audits/CARD_LOCALIZATION_STAGE_C_EXECUTION_CONTRACT_20260829.md`.
+
+## Consequences
+
+The browser executor gap now has a concrete, reviewable resolution, but it is
+not closed until this proposal is accepted and the separately authorized runner
+passes synthetic validation. No real image behavior has been measured, and no
+delivery architecture or local-cache ceiling is selected.
+
+This proposed decision authorizes no runner implementation, source request,
+image request, browser trial, commit, publication, merge, workflow, Schema,
+sidecar, Pages change, production, architecture decision, `L10N-B1`, `L10N-B2`,
+`L10N-C`, or Phase 14.
