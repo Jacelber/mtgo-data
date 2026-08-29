@@ -413,7 +413,12 @@ def _path_category(path: str) -> str | None:
         return "docs"
     if (
         path.startswith(("assets/", "melee/", "tests/browser/", "tests/js/"))
-        or path in {"index.html", "package.json", "package-lock.json"}
+        or path in {
+            "index.html",
+            "package.json",
+            "package-lock.json",
+            "scripts/run_card_localization_stage_c_trial.mjs",
+        }
     ):
         return "ui"
     if path.startswith(

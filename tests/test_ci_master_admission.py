@@ -162,6 +162,16 @@ def test_known_added_path_needs_no_operation_declaration():
     assert decision.validation_class == "targeted:docs"
 
 
+def test_stage_c_runner_is_a_known_ui_diagnostic_path():
+    decision = _decide_pr(
+        [{
+            "filename": "scripts/run_card_localization_stage_c_trial.mjs",
+            "status": "modified",
+        }]
+    )
+    assert decision.validation_class == "targeted:ui"
+
+
 @pytest.mark.parametrize(
     ("file", "declaration", "expected"),
     [

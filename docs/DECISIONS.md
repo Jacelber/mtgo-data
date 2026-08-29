@@ -6652,10 +6652,10 @@ separately observable stages:
    data suitable for both canonical identity and official Simplified Chinese
    printing proof, plus no more than 32 set-grouped MTGCH metadata requests,
    one in flight and at least five seconds apart; and
-3. a separately authorized two-session browser trial, at least six hours apart,
-   of up to 100 deterministically stratified exact MTGCH image URLs from the
-   deployed Pages origin, paired with matched Scryfall controls and capped at
-   400 MTGCH plus 400 control attempts.
+3. a separately authorized one-session browser trial of up to 100
+   deterministically stratified exact MTGCH image URLs from the deployed Pages
+   origin, paired with matched Scryfall controls and capped at 200 logical
+   MTGCH plus 200 logical control loads.
 
 The browser trial calls no MTGCH search or metadata API. It measures deliberate
 single-image, actual-controller hover/focus/touch, warm-cache, and English-
@@ -6670,7 +6670,7 @@ field.
 
 The trial is inconclusive—not evidence for any architecture—if its setup cannot
 close the current public subject, bind Chinese values to exact identities,
-cover every eligible host/media/face stratum, or complete both sessions. A
+cover every eligible host/media/face stratum, or complete the session. A
 setup-stage 429 cannot again be described as an image-delivery failure.
 
 After the evidence report is accepted and published, a separate
@@ -6840,14 +6840,12 @@ the required network observations. Its security boundary must not be bypassed.
 The exact plan was correctly deleted, so a later trial must regenerate the
 sample rather than pretend to resume the stopped browser session.
 
-A standard GitHub-hosted runner is also unsuitable for the real subject. Each
-job receives a new virtual machine, while the private exact plan must remain
-identical between two sessions. The standard hosted-job ceiling is six hours,
-but the two session starts must be at least six hours apart. Moving exact URLs
-through a workflow artifact would violate the accepted retention boundary.
+A standard GitHub-hosted runner is also unsuitable for the real subject because
+moving the exact plan through a workflow artifact would create an unnecessary
+retained copy outside the local trial boundary.
 
 The accepted 100-image design also needs two explicit counting units. One cold
-and one warm load in each of two sessions consumes 400 logical MTGCH loads. The
+and one warm load in one session consumes 200 logical MTGCH loads. The
 current controller may make a bounded second physical source start inside a
 logical load, so treating both units as the same “attempt” would make the first
 retry contradict the accepted budget.
@@ -6855,11 +6853,16 @@ retry contradict the accepted budget.
 ## Decision
 
 Use a repository-owned Playwright/Chromium command-line diagnostic operated by
-the Owner on one controlled local Windows machine. Session 1 and session 2 use
-fresh non-persistent browser contexts on that same machine and the same exact
-external sample plan. The Owner invokes the sessions separately at least six
-hours apart; no long-running sleep, hosted workflow, cloud artifact, retained
-browser profile, or automation registration is part of the trial.
+the Owner on one controlled local Windows machine. One complete session uses
+fresh non-persistent desktop and touch contexts and one external exact sample
+plan. No hosted workflow, cloud artifact, retained browser profile, or
+automation registration is part of the trial.
+
+The earlier six-hour/two-session rule is withdrawn. It had no measured basis
+for concluding that the source, CDN, or network environment would differ after
+six hours, and an immediate repeat would add no independent evidence. The
+result must instead be described as one observed window and must not be used to
+claim cross-time or long-term availability.
 
 Split delivery into two separately accepted and authorized tasks:
 
@@ -6867,9 +6870,9 @@ Split delivery into two separately accepted and authorized tasks:
    synthetic fixtures, with no Scryfall, MTGCH, Pages, or other public request;
 2. `L10N-STAGE-C-TRIAL` refreshes or proves the catalog-rooted subject,
    regenerates the deterministic exact sample within the accepted source
-   budgets, and performs the two real sessions.
+   budgets, and performs the one complete real session.
 
-Before each session, bind the trial to served Pages HTML, catalog, and actual
+Before the session, bind the trial to served Pages HTML, catalog, and actual
 card-preview-controller digests and verify the existing controller constants.
 The runner may create only a transient runtime test container carrying the
 current sample item; it does not alter deployed or repository bytes. It must
@@ -6881,15 +6884,15 @@ size observations together with successful image decode. Do not infer a cache
 hit from cross-origin Resource Timing alone. Unobservable cache behavior makes
 the evidence inconclusive.
 
-Interpret the accepted traffic ceilings as 400 logical MTGCH loads and 400
-logical matched-control loads. Separately enforce at most 800 physical network
+Interpret the accepted traffic ceilings as 200 logical MTGCH loads and 200
+logical matched-control loads. Separately enforce at most 400 physical network
 starts for each provider class, the unavoidable upper bound if every existing
 controller invocation uses its already bounded second attempt. This does not
 add a retry or authorize faster probing; it makes logical cases and physical
 network effects auditable instead of conflating them.
 
 Exact identities and URLs remain only in one repository-external, non-synced,
-Owner-readable temporary directory until session 2 closes. Raw responses,
+Owner-readable temporary directory until finalization. Raw responses,
 image bytes, browser profiles, traces, HAR, video, screenshots, and per-card
 logs are never retained. Only redacted aggregate counts, distributions,
 digests, browser/subject binding, and session times may enter a report.
@@ -6909,3 +6912,42 @@ This proposed decision authorizes no runner implementation, source request,
 image request, browser trial, commit, publication, merge, workflow, Schema,
 sidecar, Pages change, production, architecture decision, `L10N-B1`, `L10N-B2`,
 `L10N-C`, or Phase 14.
+
+---
+
+# DEC-144 - Accept the Stage-C observed-window image result
+
+Status: `Accepted for publication`
+
+## Context
+
+The Owner rejected DEC-143's two-session/six-hour requirement because no
+evidence established that six hours would produce a different source, CDN, or
+network environment. Repeating immediately would likewise add no independent
+availability evidence. One complete Pages-origin session had already exercised
+100 unique MTGCH images through cold, warm, deliberate, hover, focus, and touch
+paths with matched Scryfall controls.
+
+## Decision
+
+Accept one complete session as evidence for its explicitly bounded observation
+window. Require the report and every later decision to avoid cross-time or
+long-term uptime claims. Reduce the runner ceiling to 200 logical and 400
+physical starts per provider, finalize after one session, and reject a second
+session as outside this contract.
+
+The accepted window produced 200 of 200 successful MTGCH decodes and 200 of 200
+successful Scryfall-control decodes, zero timeout or failed decode, a 693-ms
+MTGCH-over-control p95 difference, and 197 of 200 warm repeats that avoided or
+materially reduced transfer. Controlled direct delivery is therefore eligible
+for consideration under DEC-140 for this optional path with exact English
+fallback.
+
+## Consequences
+
+This decision removes an unsupported waiting rule and closes the Stage-C image
+measurement gap for one observed window. It does not prove long-term
+availability, select an architecture, make MTGCH mandatory, change a public
+path, or authorize `L10N-B1`, `L10N-B2`, `L10N-C`, Phase 14, Pages, or
+production. The separately gated architecture decision must weigh this bounded
+result together with local-storage measurements and fallback requirements.
