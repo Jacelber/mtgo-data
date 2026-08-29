@@ -181,10 +181,11 @@ function landingRepresentatives(row) {
   if (!cards.length) return `<span class="landing-cards-empty">${t("landing.cards_unavailable")}</span>`;
   return `<div class="landing-representatives" aria-label="${t("landing.representative_cards")}">${cards.map(card => {
     const search = `https://scryfall.com/search?q=${encodeURIComponent(`!"${card.name}"`)}`;
-    const image = `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(card.name)}&format=image&version=normal`;
     const source = representativeImagePath(card.image);
-    return source
-      ? `<a class="landing-representative card-link" href="${escapeHtml(search)}" target="_blank" rel="noopener" data-card-image="${escapeHtml(image)}" data-card-name="${escapeHtml(card.name)}" data-scryfall-url="${escapeHtml(search)}"><span class="card-image-frame is-loading"><img alt="${escapeHtml(card.name)}" data-progressive-image="${escapeHtml(source)}" data-image-owner="landing-representative"><span class="card-image-placeholder">${escapeHtml(card.name)}</span></span></a>`
+    const display = cardDisplay(card.name, source || null);
+    const hasDisplayImage = Boolean(source) || display.source.startsWith("chinese-");
+    return hasDisplayImage
+      ? `<a class="landing-representative card-link" href="${escapeHtml(search)}" target="_blank" rel="noopener" data-card-image="${escapeHtml(display.image)}" data-card-name="${escapeHtml(display.displayName)}" data-scryfall-url="${escapeHtml(search)}"><span class="card-image-frame is-loading"><img alt="${escapeHtml(display.displayName)}" data-progressive-image="${escapeHtml(display.image)}" data-image-owner="landing-representative"><span class="card-image-placeholder">${escapeHtml(display.displayName)}</span></span></a>`
       : `<span class="landing-representative landing-card-placeholder">${escapeHtml(card.name)}</span>`;
   }).join("")}</div>`;
 }
@@ -254,9 +255,8 @@ function landingFeatureItems(context) {
 function landingFeatureCard(card, index) {
   const name = card.name;
   const search = `https://scryfall.com/search?q=${encodeURIComponent(`!"${name}"`)}`;
-  const scryfallImage = `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}&format=image&version=normal`;
-  const image = currentContext.featureImageCache?.[name] || scryfallImage;
-  return `<a class="landing-feature-card card-link" href="${escapeHtml(search)}" target="_blank" rel="noopener" data-card-image="${escapeHtml(image)}" data-card-name="${escapeHtml(name)}" data-scryfall-url="${escapeHtml(search)}"><span class="card-image-frame is-loading"><img alt="${escapeHtml(name)}" data-progressive-image="${escapeHtml(image)}" data-image-owner="landing-feature-${index}"><span class="card-image-placeholder">${escapeHtml(name)}</span></span></a>`;
+  const display = cardDisplay(name, currentContext.featureImageCache?.[name] || null);
+  return `<a class="landing-feature-card card-link" href="${escapeHtml(search)}" target="_blank" rel="noopener" data-card-image="${escapeHtml(display.image)}" data-card-name="${escapeHtml(display.displayName)}" data-scryfall-url="${escapeHtml(search)}"><span class="card-image-frame is-loading"><img alt="${escapeHtml(display.displayName)}" data-progressive-image="${escapeHtml(display.image)}" data-image-owner="landing-feature-${index}"><span class="card-image-placeholder">${escapeHtml(display.displayName)}</span></span></a>`;
 }
 
 function landingFeatureDetail(item) {

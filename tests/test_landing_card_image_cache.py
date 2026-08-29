@@ -309,7 +309,7 @@ def test_pages_builder_admits_only_verified_configured_overlay(tmp_path, monkeyp
     _write_json(
         config_path,
         {
-            "schema_version": "1.2.0",
+            "schema_version": "1.3.0",
             "site_files": ["index.html"],
             "site_directories": ["assets"],
             "excluded_patterns": ["assets/private/*"],
@@ -319,6 +319,12 @@ def test_pages_builder_admits_only_verified_configured_overlay(tmp_path, monkeyp
                     "id": "landing_card_images",
                     "public_prefix": "assets/card-cache/v1",
                     "manifest": "manifest.json",
+                    "maximum_bytes": 10_000_000,
+                },
+                {
+                    "id": "card_localization",
+                    "public_prefix": "assets/card-localization",
+                    "manifest": "cards.json",
                     "maximum_bytes": 10_000_000,
                 }
             ],
@@ -334,6 +340,8 @@ def test_pages_builder_admits_only_verified_configured_overlay(tmp_path, monkeyp
         bulk_data_path=bulk_path,
         fetch_image=lambda _url: JPEG_A,
     )
+    localization = tmp_path / "localization"
+    _write_json(localization / "cards.json", {})
     monkeypatch.setattr(build_pages_artifact, "validate_compatibility", lambda *_args: set())
     monkeypatch.setattr(
         build_pages_artifact,
@@ -349,7 +357,10 @@ def test_pages_builder_admits_only_verified_configured_overlay(tmp_path, monkeyp
         config_path,
         output,
         report_path,
-        overlays={"landing_card_images": cache},
+        overlays={
+            "landing_card_images": cache,
+            "card_localization": localization,
+        },
     )
 
     assert (output / "assets/card-cache/v1/manifest.json").is_file()
@@ -358,10 +369,13 @@ def test_pages_builder_admits_only_verified_configured_overlay(tmp_path, monkeyp
         for path in (output / "assets/card-cache/v1/images").glob("*.jpg")
     ]
     assert generated
+    localization_map = output / "assets/card-localization/cards.json"
+    assert localization_map.is_file()
     assert report["generated_overlays"] == {
-        "files": len(generated) + 1,
+        "files": len(generated) + 2,
         "bytes": sum(path.stat().st_size for path in generated)
-        + (output / "assets/card-cache/v1/manifest.json").stat().st_size,
+        + (output / "assets/card-cache/v1/manifest.json").stat().st_size
+        + localization_map.stat().st_size,
     }
 
 

@@ -198,14 +198,19 @@ test("foreground timeouts release the in-flight request", async () => {
   assert.equal(calls, 2);
 });
 
-test("the runtime admits only the exact Landing card-image cache manifest asset", () => {
+test("the runtime admits only the exact generated manifest assets", () => {
   const runtime = runtimeWith(async () => response({}));
 
   assert.equal(
     runtime.publicPath("assets/card-cache/v1/manifest.json"),
     "./assets/card-cache/v1/manifest.json"
   );
+  assert.equal(
+    runtime.publicPath("assets/card-localization/cards.json"),
+    "./assets/card-localization/cards.json"
+  );
   assert.throws(() => runtime.publicPath("assets/card-cache/v1/images/card.jpg"));
+  assert.throws(() => runtime.publicPath("assets/card-localization/images/card.webp"));
 });
 
 test("a recent admitted Landing week receives exact local card-image paths", async () => {

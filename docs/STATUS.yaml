@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/l10n-simplification-reset"
+  current_working_branch: "codex/l10n-simple"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -24,62 +24,92 @@ status_document:
 current_phase:
   id: "PRE-14"
   name: "Simple card localization"
-  status: "obsolete_route_cleanup_owner_accepted"
+  status: "owner_accepted_completion_authorized"
   started_on: "2026-08-28"
   objective: "Replace the abandoned localization program with one future minimal product path while preserving existing English behavior."
   production_changes_allowed: false
-  implementation_authorized: false
+  implementation_authorized: true
   next_phase_id: 14
   next_phase_authorized: false
 
 current_task:
-  id: "L10N-RESET"
-  name: "Remove the obsolete card-localization route"
+  id: "L10N-SIMPLE"
+  name: "Implement simple card-name and card-image localization"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-29"
-  base_commit: "2bfeaaa19ecf3314a37c81f8fa30a3a3dbd37c49"
-  branch: "codex/l10n-simplification-reset"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/l10n-simplification-reset-20260829-02"
-  objective: "Supersede the DEC-136/DEC-145 sidecar and B1/B2/C route, delete only its unused builder/Schema/tests/CI trigger, and record the future minimal boundary without changing product behavior."
+  base_commit: "46de604f2f4f0be40553dc537677c9ad26393ab7"
+  branch: "codex/l10n-simple"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/l10n-simple-20260829-01"
+  objective: "Generate one flat English-name-to-MTGCH Chinese display lookup, put only current default-Landing Chinese images in the Pages artifact, route all other card display through one shared language selector, and centralize the repository's existing front-face and maintained-alias lookup behavior while preserving the existing English path."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
+    - ".github/workflows/ci.yml"
+    - ".github/workflows/pages.yml"
+    - "assets/js/phase8/app-core.js"
+    - "assets/js/phase8/app-metadata.js"
+    - "assets/js/phase8/app-mtgo.js"
+    - "assets/js/phase8/app.js"
+    - "assets/js/phase8/card-localization.js"
+    - "assets/js/phase8/mtgo-controller.js"
+    - "assets/js/phase8/runtime.js"
+    - "build_pages_artifact.py"
     - "ci_master_admission.py"
+    - "configs/pages_publication.json"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/DECISIONS.md"
-    - "docs/PROJECT_SCOPE.md"
+    - "docs/history/README.md"
+    - "docs/history/ROADMAP-PRE-14-COMPLETED.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
     - "docs/TEST_TRIGGER_MATRIX.md"
-    - "schemas/card-localization.schema.json"
-    - "tests/test_card_localization.py"
+    - "index.html"
+    - "melee/index.html"
+    - "src/mtgmeta/__init__.py"
+    - "src/mtgmeta/card_names.py"
+    - "src/mtgmeta/classifier_shadow_audit.py"
+    - "src/mtgmeta/melee/classification.py"
+    - "src/mtgmeta/mtgo/landing_screening.py"
+    - "tests/js/phase8-card-localization.test.js"
+    - "tests/js/phase8-metadata-sharing.test.js"
+    - "tests/js/phase8-runtime.test.js"
+    - "tests/test_card_names.py"
     - "tests/test_ci_master_admission.py"
-    - "tools/build_card_localization.py"
-  planned_deletions:
-    - "schemas/card-localization.schema.json"
-    - "tests/test_card_localization.py"
-    - "tools/build_card_localization.py"
+    - "tests/test_ci_workflow.py"
+    - "tests/test_landing_card_image_cache.py"
+    - "tests/test_simple_card_localization.py"
+    - "tools/build_simple_card_localization.py"
+    - "validate_repository.py"
+  planned_additions:
+    - "assets/js/phase8/card-localization.js"
+    - "tests/js/phase8-card-localization.test.js"
+    - "tests/test_card_names.py"
+    - "tests/test_simple_card_localization.py"
+    - "tools/build_simple_card_localization.py"
+    - "docs/history/ROADMAP-PRE-14-COMPLETED.md"
   prohibited_changes:
-    - "Do not modify Pages, workflows, browser code, generated data, public assets, classifiers, statistics, event configuration, dependencies, or the existing English Landing card-image cache."
-    - "Do not contact Scryfall, MTGCH, an image host, Pages, or production."
-    - "Do not implement the future flat localization map, Chinese image cache, shared browser selector, L10N-SIMPLE, or Phase 14."
-    - "Do not deploy Pages, dispatch production, or begin another task."
-  caller_inventory: "The deleted builder, Schema, and test have no production caller. Their only external references are the dedicated CI trigger and its focused trigger test, which are removed in this task. The existing tools/build_landing_card_image_cache.py and assets/card-cache/v1 production path remain unchanged."
-  stop_point: "Complete this exact accepted task through commit, one Ready pull request, required CI, and merge; stop on failed checks, conflict, permission blocker, or any scope change."
-  local_verification:
-    result: "passed"
-    checks:
-      - "Changed-scope repository validation passed for all 11 changed paths."
-      - "The focused CI admission suite passed 65 tests and Ruff passed for the two maintained Python files."
-      - "Full public Schema validation passed with checked=99 after removal of the unused localization Schema."
-      - "The focused documentation-history suite passed 5 tests; final diff and whitespace checks passed."
-      - "No Pages, workflow, browser, generated data, public asset, source request, image request, or existing Landing cache changed."
+    - "Do not add a localization-specific alias converter, card-face converter, Schema, printing-identity manifest, Bulk snapshot, source digest, provenance class, capacity proxy, or staged B1/B2/C route; the Owner-authorized shared card_names helper is the only name-candidate entry."
+    - "Do not change classifier meaning, statistics, event configuration, dependencies, generated statistical JSON, or the existing English Landing cache contract; replacing duplicated front-face expressions with the shared behavior-preserving helper is authorized."
+    - "Do not retain raw MTGCH responses or download images outside the current default-Landing subject."
+    - "Do not repeat availability, latency, cache, image-size, Bulk, or name-conversion trials."
+    - "Do not manually dispatch Pages, dispatch production, begin Phase 14, or begin another task; Owner acceptance authorizes only continuous completion of this unchanged task through the applicable automatic Pages publication."
+  source_boundary: "Resolve product names through the shared src/mtgmeta/card_names.py maintained-alias and lookup-candidate entries, then use only the public MTGCH result interface. The candidate entry centralizes the repository's existing front-face behavior and the Owner-authorized single-slash legacy spelling; no localization-local converter is permitted. Keep only the flat Chinese name/image fields and exact current default-Landing image bytes; retain no raw response corpus."
+  stop_point: "Complete the accepted unchanged task through one local commit, one Ready pull request, required CI, merge, and the applicable automatic Pages publication; stop on any failed check, conflict, permission blocker, or scope change, then do not begin Phase 14."
+  planned_verification:
+    - "Parse the generated flat lookup."
+    - "Check that every declared current default-Landing local image exists."
+    - "Prove Chinese local, Chinese MTGCH, English local, and English Scryfall selection."
+    - "Run mandatory changed-scope repository validation once on the final local tree."
+  owner_acceptance:
+    status: "accepted"
+    accepted_on: "2026-08-29"
+    subject: "The locally reviewed Chinese and English card-name/image behavior, including Chinese-name-only Scryfall image fallback."
 
 current_repository_state:
-  source_master_commit: "2bfeaaa19ecf3314a37c81f8fa30a3a3dbd37c49"
+  source_master_commit: "46de604f2f4f0be40553dc537677c9ad26393ab7"
   deployed_master_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
   existing_landing_cache: "assets/card-cache/v1"
   existing_landing_cache_status: "unchanged"
@@ -93,27 +123,27 @@ known_blockers: []
 
 future_task_gates:
   - id: "L10N-RESET"
-    status: "owner_accepted_completion_authorized"
-    note: "The Owner accepted the verified local cleanup and authorized its continuous completion through commit, one Ready pull request, required CI, and merge."
+    status: "completed_merged"
+    note: "Merged as PR #306 at cloud master commit 46de604f2f4f0be40553dc537677c9ad26393ab7."
   - id: "L10N-SIMPLE"
-    status: "planned_not_authorized"
-    note: "One future task may add a flat MTGCH name/image lookup, current default-Landing Chinese files, and one language-aware source selector. It must reuse existing name normalization and accepted source/image evidence."
+    status: "owner_accepted_completion_authorized"
+    note: "The Owner accepted the local UI subject and authorized continuous completion through commit, one Ready pull request, required CI, merge, and applicable automatic Pages publication."
   - id: "PHASE-14-DESIGN"
     status: "planned_not_authorized"
     note: "Pauper MTGO and the Owner-supplied Paupergeddon event remain separately gated."
 
 next_approved_task:
-  id: "L10N-RESET"
-  name: "Remove the obsolete card-localization route"
-  status: "continuous_completion_authorized"
+  id: "L10N-SIMPLE"
+  name: "Implement simple card-name and card-image localization"
+  status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Finish only the accepted L10N-RESET subject. L10N-SIMPLE remains planned but unauthorized."
+  note: "Finish only the accepted L10N-SIMPLE subject through its applicable publication; Phase 14 remains unauthorized."
 
 prohibited_next_actions:
-  - "Do not access a card, metadata, image, Pages, or production endpoint."
-  - "Do not modify the existing Landing image-cache generator, manifest, workflow, browser consumer, or local files."
-  - "Do not begin L10N-SIMPLE, Phase 14, production, or Pages publication."
+  - "Do not access Scryfall or an MTGCH endpoint outside the approved flat-map and current default-Landing image build."
+  - "Do not alter the existing English Landing cache contract or add another card-name conversion layer."
+  - "Do not manually dispatch Pages, dispatch production, begin Phase 14, or begin another task."
   - "Do not develop directly on master or overwrite unexplained changes."

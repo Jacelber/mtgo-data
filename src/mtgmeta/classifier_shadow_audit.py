@@ -12,6 +12,7 @@ from typing import Any
 
 import yaml  # type: ignore[import-untyped]
 
+from .card_names import front_face_card_name
 from .classifier import ClassificationResult, classify_counts
 from .classifier_shadow import ShadowFeatureManifest, classify_shadow_counts
 from .rules import ArchetypeDefinition, RuleSet
@@ -293,7 +294,7 @@ def _event_decks(event: Mapping[str, Any]) -> list[tuple[dict[str, int], dict[st
             section = card.get("section")
             if not isinstance(name, str) or not isinstance(quantity, int):
                 raise ValueError("Melee card name and quantity are invalid")
-            normalized_name = name.strip().partition(" // ")[0]
+            normalized_name = front_face_card_name(name)
             if section == "main":
                 main[normalized_name] += quantity
             elif section == "sideboard":

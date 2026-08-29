@@ -144,7 +144,11 @@ jobs:
         run: >-
           python -B -m pytest
           --basetemp="${RUNNER_TEMP}/pytest-card-localization"
-          tests/test_card_localization.py
+          tests/test_card_names.py
+          tests/test_simple_card_localization.py
+      - name: Validate card-localization browser selection
+        if: contains(needs.admission.outputs.validation_triggers, 'card-localization')
+        run: node --test tests/js/phase8-card-localization.test.js
       - name: Validate changed governance contracts
         if: >-
           contains(needs.admission.outputs.validation_triggers, 'ci-admission') ||

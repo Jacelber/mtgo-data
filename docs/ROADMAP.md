@@ -14,7 +14,9 @@ Completed and superseded roadmap detail is non-authoritative history:
 - the complete Phase 12 task sequence, acceptance criteria, and closeout record:
   `docs/history/ROADMAP-PHASE-12-COMPLETED.md`;
 - the complete Phase 13 design, task sequence, acceptance criteria, and closeout
-  record: `docs/history/ROADMAP-PHASE-13-COMPLETED.md`.
+  record: `docs/history/ROADMAP-PHASE-13-COMPLETED.md`;
+- the completed Pre-Phase-14 localization reset and minimal implementation:
+  `docs/history/ROADMAP-PRE-14-COMPLETED.md`.
 
 ## Phase index
 
@@ -22,7 +24,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 | --- | --- | --- |
 | 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Complete on 2026-08-25 |
 | 13 | Aggregate compatible multi-event matchups from raw counts. | Complete on 2026-08-27 |
-| Pre-14 | Establish provenance-safe Chinese card names and complete card images. | Documentation authorized; implementation not authorized |
+| Pre-14 | Establish provenance-safe Chinese card names and complete card images. | Owner accepted on 2026-08-29; completion authorized |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
 | 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
@@ -59,39 +61,15 @@ evidence are preserved in
 
 # Pre-Phase-14 — Simple card localization
 
-## Problem
+The Owner accepted the minimal localization implementation on 2026-08-29. It
+replaces the abandoned staged route with one shared card-name candidate entry,
+one flat MTGCH lookup, local current-Landing images, and language-aware browser
+selection while preserving the English path.
 
-Chinese pages still show English card names and use the English card-image path.
-The superseded localization program added a separate identity manifest, Bulk
-snapshot handling, source digests, capacity proxies, and three implementation
-stages without delivering product behavior. The repository already normalizes
-maintained aliases and card-face names before generated product documents reach
-the browser; localization must reuse those names rather than implement another
-normalizer.
-
-## Current decision
-
-DEC-146 supersedes the DEC-136 sidecar and DEC-145 mixed-delivery implementation
-route. The rights record and completed MTGCH source/direct-image observations
-remain evidence, so no new availability, latency, cache, image-size, or name-
-conversion trial is required.
-
-| Task | Problem | Operation | Expected effect | Recommended model |
-| --- | --- | --- | --- | --- |
-| `L10N-RESET` | The repository still describes and carries an unused B1/B2/C localization route. | Remove the unused localization builder, Schema, tests, dedicated CI trigger, and active B1/B2/C roadmap; record DEC-146 without changing Pages or the browser. | One clean baseline remains: existing English behavior and Landing cache are unchanged, while the abandoned route cannot be mistaken for authorization. | `gpt-5.6-terra`, medium reasoning |
-| `L10N-SIMPLE` | Chinese card names and images are not yet displayed. | After separate authorization, implement one flat English-name-to-MTGCH display map, store only current default-Landing Chinese images in Pages, use MTGCH image URLs elsewhere on Chinese pages, retain the existing Landing cache and Scryfall image URLs on English pages, and use one shared browser selector. | Chinese names and images work through the smallest production path without a separate sidecar Schema or staged B1/B2/C admission. | `gpt-5.6-sol`, high reasoning |
-
-`L10N-SIMPLE` is one future implementation and acceptance subject, not three
-phases. Its only feature-specific checks are that the flat map parses, every
-declared current-Landing local image exists, and the shared selector chooses
-Chinese local, Chinese MTGCH, English local, and English Scryfall sources
-correctly. Mandatory changed-scope repository validation still applies. No
-real-source availability experiment is repeated.
-
-The accepted MTGCH permission record remains authoritative. Historical audits
-and DEC-137 through DEC-144 remain evidence of rights, source coverage, and the
-completed direct-image observation; they do not prescribe a current
-implementation route. Phase 14 remains separately unauthorized.
+The complete problem statement, implementation sequence, acceptance boundary,
+and retained evidence are preserved in
+`docs/history/ROADMAP-PRE-14-COMPLETED.md`. Phase 14 remains separately
+unauthorized.
 
 ---
 

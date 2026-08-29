@@ -130,8 +130,21 @@ def test_known_paths_select_only_their_targeted_categories(paths, expected):
             ("landing-card-image-cache",),
         ),
         (
+            ["tools/build_simple_card_localization.py"],
+            ("card-localization",),
+        ),
+        (
+            ["src/mtgmeta/data/om1_spm_aliases.json"],
+            ("card-localization",),
+        ),
+        (
+            ["tests/test_card_names.py"],
+            ("card-localization",),
+        ),
+        (
             [".github/workflows/pages.yml"],
             (
+                "card-localization",
                 "ci-admission",
                 "ci-workflow",
                 "landing-card-image-cache",

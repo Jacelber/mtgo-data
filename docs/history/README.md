@@ -30,6 +30,8 @@ must not be used to authorize work. Current authorization is recorded only in
   implementation history accumulated before the phase closed on 2026-08-25.
 - `ROADMAP-PHASE-13-COMPLETED.md` preserves the complete Phase 13 design, task
   sequence, acceptance criteria, and cloud closeout evidence through P13-07.
+- `ROADMAP-PRE-14-COMPLETED.md` preserves the localization reset, minimal
+  implementation contract, acceptance boundary, and retained source evidence.
 
 At task completion, move detailed completed roadmap material into the matching
 phase history file in the same accepted task. Keep only remaining work,

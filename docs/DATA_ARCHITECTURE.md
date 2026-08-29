@@ -3462,27 +3462,33 @@ content-addressed overlay, and separate B1/B2/C admission route from the
 current architecture. The deleted localization builder, Schema, and synthetic
 contract are not production dependencies.
 
-Normalized English card names already emitted by the existing product
-generators are the lookup keys. Future localization must reuse that output,
-including the maintained alias and card-face handling already required by the
-English product. It must not add a second localization-specific name
-normalizer.
+English card names already emitted by the existing product generators remain
+the lookup keys. `card_names.py` owns the maintained-alias, front-face, and
+legacy single-slash lookup candidates shared by localization and existing
+classification consumers. The localization builder calls that shared entry
+and does not contain a second name normalizer.
 
-After separate implementation authorization, one small generated map may bind
-each English lookup name to an MTGCH Chinese display name and exact MTGCH image
-URL. The browser delivery rule is intentionally small:
+The Pages build creates `assets/card-localization/cards.json`, one small flat
+map from each resolved English product key to an MTGCH Chinese display name and,
+when available, the exact MTGCH Chinese image URL. It also creates
+`assets/card-localization/images/<sha256-of-English-key>.webp` only for current
+default-Landing keys with a Chinese image. Both are generated outside Git
+history and admitted as one allowlisted Pages overlay. The browser delivery
+rule is intentionally small:
 
 - current default-Landing images are local Pages files for the selected
   language, reusing the existing English Landing cache and adding only the
   corresponding Chinese files;
 - every other Chinese image uses its mapped MTGCH image URL on demand;
 - every other English image keeps the existing Scryfall on-demand URL; and
-- a missing Chinese value falls back to the existing English name and image.
+- a missing Chinese value falls back to the existing English name and image;
+  a present Chinese name without a Chinese image keeps that Chinese name and
+  falls back only the image.
 
 The Owner-recorded MTGCH permission and required attribution still apply.
-Historical source and browser trials already establish the planned source and
+Historical source and browser trials already establish the selected source and
 direct-image feasibility and must not be repeated as implementation gates.
-Future feature verification is limited to the generated map, declared local
+Feature verification is limited to the generated map, declared local
 Landing files, the four source-selection outcomes, and mandatory repository
 checks selected by the actual changed paths. There is no separate localization
 Schema, source-snapshot proof, per-card provenance class, capacity-proxy

@@ -11,6 +11,7 @@ from typing import Any, Mapping
 import yaml
 
 from mtgmeta.classifier import classify_deck
+from mtgmeta.card_names import front_face_card_name
 
 from . import load_mtgo_context
 from . import stats
@@ -348,7 +349,7 @@ def _manifest_card_names(item: Mapping[str, Any]) -> set[str]:
     for value in item["cards"]:
         name = stats.normalize_legacy_card_name(str(value))
         names.add(name)
-        names.add(name.split(" // ", 1)[0])
+        names.add(front_face_card_name(name))
     return names
 
 
