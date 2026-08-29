@@ -454,50 +454,25 @@ they must not infer identity by matching display text. This cross-view consumer
 change is implemented and accepted separately from the internal catalog and
 from classifier maintenance.
 
-Card names and complete card images have a separate localization contract from
+Card names and complete card images remain separate from
 classifier-backed archetype labels. The English source card name remains the
-stable lookup and compatibility value. A Chinese display resolves by immutable
-card and printing identity in this order:
+stable lookup and compatibility value. Existing product generation already
+applies the maintained card-name aliases and card-face normalization used by
+the English image path; card localization must consume those results and must
+not create another conversion layer.
 
-1. an official Simplified Chinese name or an original, unmodified full-card
-   image for an official Simplified Chinese printing supplied through Scryfall;
-2. a licensed community name or an identifiable MTGCH community-rendered image
-   covered by the Owner-recorded project permission, with explicit provenance
-   and the required attribution; and
-3. the existing English name or complete English card image.
+Under DEC-146, a future separately authorized implementation uses one flat
+English-name lookup for the MTGCH Chinese display name and exact MTGCH image
+URL. Current default-Landing images are the only localization images stored in
+Pages. Other Chinese views load the mapped MTGCH image on demand; English views
+retain the existing local Landing images and Scryfall on-demand images.
+Missing Chinese data falls back to the existing English name and image.
 
-The Chinese product must label fallback state truthfully and must not present a
-community translation or rendered image as official. Missing Chinese coverage
-must degrade to the English fallback rather than hide the card or guess a
-translation. Localization identities, names, provenance, attribution, and
-exact image URLs are built and validated ahead of publication as a versioned
-sidecar so the existing English card-image cache, source data, statistics,
-classifier identities, and public product availability remain independent.
-
-Under DEC-145, the default MTGO Landing representative cards and each current
-Feature deck's four displayed cards form one generated local Chinese-image hot
-set. The subject is derived from the current Landing documents and deduplicated
-by immutable card identity; it does not include expanded decklists, statistics,
-Top 8, Tabletop, archived Feature weeks, or a format's complete population.
-Corresponding English complete-card image bytes are the Owner-approved capacity
-proxy, so no additional Chinese sizing trial is required. Verified hot-set
-bytes may enter the generated Pages artifact but not Git history.
-
-For every image outside that hot set, a browser may request only an exact image
-URL admitted by the sidecar: official Simplified Chinese images come from
-Scryfall and permitted community-rendered images come from MTGCH. The browser
-must not call an MTGCH search, card, set, result, or metadata API, construct an
-upstream URL, or prefetch a format's complete card population. The existing
-English complete-card image remains the immediate fallback on any missing,
-rejected, failed, or undecoded Chinese image.
-
-Identifiable MTGCH community-rendered Chinese full-card images are inside the
+MTGCH Chinese names and community-rendered full-card images remain inside the
 approved product scope under the Owner's recorded project-specific permission
-from the MTGCH founder. They remain `community`, retain MTGCH and translation-
-source attribution, and must not be presented as official or as generally
-licensed MTGCH material. User-submitted, third-party, and source-unknown images
-remain outside scope unless a separate decision proves that the permission
-covers their exact class.
+from the MTGCH founder. They must retain the required source attribution and
+must not be presented as a general or transferable MTGCH license. User-
+submitted, third-party, and source-unknown images remain outside scope.
 
 Availability must come from generated catalogs rather than a hard-coded
 assumption that every format supports every product.

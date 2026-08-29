@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/l10n-architecture-decision"
-  working_branch_status: "owner_accepted_completion_in_progress"
+  current_working_branch: "codex/l10n-simplification-reset"
+  working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
@@ -23,70 +23,67 @@ status_document:
 
 current_phase:
   id: "PRE-14"
-  name: "Card localization foundation"
-  status: "architecture_decision_owner_accepted"
+  name: "Simple card localization"
+  status: "obsolete_route_cleanup_owner_accepted"
   started_on: "2026-08-28"
-  objective: "Establish provenance-safe Chinese card-name and complete-card-image support before any Phase 14 implementation."
+  objective: "Replace the abandoned localization program with one future minimal product path while preserving existing English behavior."
   production_changes_allowed: false
   implementation_authorized: false
   next_phase_id: 14
   next_phase_authorized: false
 
 current_task:
-  id: "L10N-ARCHITECTURE-DECISION"
-  name: "Card-localization delivery architecture decision"
+  id: "L10N-RESET"
+  name: "Remove the obsolete card-localization route"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-29"
-  artifact_impact: "documentation"
-  base_commit: "0f75374b1b3b6a6c4ab737ee6689494c3b1d5e01"
-  branch: "codex/l10n-architecture-decision"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/l10n-architecture-decision-20260829-01"
-  objective: "Record the Owner-selected mixed architecture: package only the current Landing representative and Feature-card hot set in Pages using corresponding English image bytes as the capacity proxy, deliver all other Chinese images through controlled exact URLs, preserve English fallback, and define the later implementation tasks without changing the product."
+  base_commit: "2bfeaaa19ecf3314a37c81f8fa30a3a3dbd37c49"
+  branch: "codex/l10n-simplification-reset"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/l10n-simplification-reset-20260829-02"
+  objective: "Supersede the DEC-136/DEC-145 sidecar and B1/B2/C route, delete only its unused builder/Schema/tests/CI trigger, and record the future minimal boundary without changing product behavior."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "docs/audits/CARD_LOCALIZATION_ARCHITECTURE_DECISION_20260829.md"
-    - "docs/PROJECT_SCOPE.md"
+    - "ci_master_admission.py"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/DECISIONS.md"
+    - "docs/PROJECT_SCOPE.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
     - "docs/TEST_TRIGGER_MATRIX.md"
-  planned_new_paths:
-    - "docs/audits/CARD_LOCALIZATION_ARCHITECTURE_DECISION_20260829.md"
+    - "schemas/card-localization.schema.json"
+    - "tests/test_card_localization.py"
+    - "tests/test_ci_master_admission.py"
+    - "tools/build_card_localization.py"
+  planned_deletions:
+    - "schemas/card-localization.schema.json"
+    - "tests/test_card_localization.py"
+    - "tools/build_card_localization.py"
   prohibited_changes:
-    - "Do not request another card, metadata, image, Pages, or production resource while writing the decision."
-    - "Do not modify code, tests, Schemas, workflows, dependencies, generated data, public assets, statistics, classifiers, event configuration, or the existing English Cache-B."
-    - "Do not run another Chinese-image sizing trial; use the corresponding English full-card image bytes and the existing 64-MiB overlay ceiling as the Owner-approved planning proxy."
-    - "Do not begin L10N-B1, L10N-B2, L10N-C, Phase 14, Pages deployment, or production."
-  stop_point: "Complete and verify the local architecture documentation subject, then stop for Owner acceptance before commit or publication."
+    - "Do not modify Pages, workflows, browser code, generated data, public assets, classifiers, statistics, event configuration, dependencies, or the existing English Landing card-image cache."
+    - "Do not contact Scryfall, MTGCH, an image host, Pages, or production."
+    - "Do not implement the future flat localization map, Chinese image cache, shared browser selector, L10N-SIMPLE, or Phase 14."
+    - "Do not deploy Pages, dispatch production, or begin another task."
+  caller_inventory: "The deleted builder, Schema, and test have no production caller. Their only external references are the dedicated CI trigger and its focused trigger test, which are removed in this task. The existing tools/build_landing_card_image_cache.py and assets/card-cache/v1 production path remain unchanged."
+  stop_point: "Complete this exact accepted task through commit, one Ready pull request, required CI, and merge; stop on failed checks, conflict, permission blocker, or any scope change."
   local_verification:
     result: "passed"
-    completed_on: "2026-08-29"
     checks:
-      - "The current default-Landing hot-set extractor inputs contain 29 Standard names, 34 Modern names, and 61 unique names after cross-format union; the architecture requires final identity deduplication rather than freezing that count."
-      - "The Owner-directed capacity rule uses corresponding English normal-image bytes as the proxy, performs no additional Chinese sizing trial, and retains 64-MiB proxy/actual-overlay plus 1-GiB complete-artifact publication checks."
-      - "Scope, data architecture, DEC-145, roadmap, status, validation triggers, and the dedicated audit consistently define local default-Landing images, controlled non-hot-set URLs, and English fallback."
-      - "Changed-scope validation passed all seven paths; the final live STATUS is 9,454 bytes, below its 10-KiB policy limit."
-      - "The complete diff changes documentation only and contains no code, Schema, workflow, generated data, public asset, source request, image request, or product behavior change."
-    scope_note: "Documentation-only Owner revision; no Chinese-image measurement, source request, product implementation, or external request occurred."
+      - "Changed-scope repository validation passed for all 11 changed paths."
+      - "The focused CI admission suite passed 65 tests and Ruff passed for the two maintained Python files."
+      - "Full public Schema validation passed with checked=99 after removal of the unused localization Schema."
+      - "The focused documentation-history suite passed 5 tests; final diff and whitespace checks passed."
+      - "No Pages, workflow, browser, generated data, public asset, source request, image request, or existing Landing cache changed."
 
 current_repository_state:
-  localization_contract_merge_commit: "d36b5bf677383345e064bd58c2589b2a85e5aac1"
-  localization_rights_merge_commit: "4ccb77cd2d94bab719b9b2abf501bc1dd387b9b8"
-  direct_trial_contract_merge_commit: "bc49e4dcc0def736599527bd2242c7ef86d363a9"
-  architecture_evidence_contract_merge_commit: "89ea7400a60f437b2e2c45cf1c45e837c0ef19e7"
-  architecture_evidence_contract_correction_merge_commit: "3c63967b23fa96b004163114e51ef17b3f8a6008"
-  architecture_evidence_trial_rerun_merge_commit: "fabf436cca2b2a8adfa5135188730bd9acffcdf5"
-  stage_c_execution_contract_merge_commit: "c92c7137fedc19279a35b41ecdfde70c62c85efd"
-  stage_c_runner_merge_commit: "7e53fdf80daa9c828285f38b912b03b707b5c933"
-  stage_c_trial_merge_commit: "0f75374b1b3b6a6c4ab737ee6689494c3b1d5e01"
-  stage_c_observed_window_result: "The 100-image Pages-origin session completed 200/200 MTGCH and 200/200 matched-control decodes with zero failure or timeout. MTGCH p95 was 693 ms slower than control and 197/200 warm repeats avoided or materially reduced transfer. This supports optional controlled-direct eligibility for the observed window only; it does not prove long-term availability or select an architecture."
+  source_master_commit: "2bfeaaa19ecf3314a37c81f8fa30a3a3dbd37c49"
   deployed_master_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
-  deployed_master_note: "Localization documentation and diagnostics do not change site inputs; the deployed site remains the accepted Cache-B subject."
+  existing_landing_cache: "assets/card-cache/v1"
+  existing_landing_cache_status: "unchanged"
+  retained_evidence: "The Owner-recorded MTGCH permission and completed grouped-source/direct-image observations remain historical evidence and will not be repeated as implementation gates."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -95,49 +92,28 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "L10N-ARCHITECTURE-EVIDENCE-TRIAL"
-    status: "stopped_on_invalid_local_validator"
-    note: "The first MTGCH set-group request returned HTTP 200. The local validator's card_schema_contract_drift result is invalid because it required undocumented fields. No image or browser stage started."
-  - id: "L10N-ARCHITECTURE-EVIDENCE-CONTRACT-CORRECTION"
-    status: "merged"
-    note: "PR #300 merged as 3c63967b23fa96b004163114e51ef17b3f8a6008 and its exact-merge confirmation succeeded."
-  - id: "L10N-ARCHITECTURE-EVIDENCE-TRIAL-RERUN"
-    status: "merged"
-    note: "PR #301 merged the accepted inconclusive report as fabf436cca2b2a8adfa5135188730bd9acffcdf5; the post-merge documentation workflow succeeded."
-  - id: "L10N-STAGE-C-EXECUTION-CONTRACT"
-    status: "merged"
-    note: "PR #302 merged the accepted execution contract as c92c7137fedc19279a35b41ecdfde70c62c85efd; its exact-merge confirmation succeeded."
-  - id: "L10N-STAGE-C-RUNNER"
-    status: "merged"
-    note: "PR #303 merged the validated runner as 7e53fdf80daa9c828285f38b912b03b707b5c933; exact-merge confirmation succeeded."
-  - id: "L10N-STAGE-C-TRIAL"
-    status: "merged"
-    note: "PR #304 merged the accepted observed-window result as 0f75374b1b3b6a6c4ab737ee6689494c3b1d5e01; its exact-master validation succeeded."
-  - id: "L10N-ARCHITECTURE-DECISION"
-    status: "owner_accepted_completion_in_progress"
-    note: "The bounded Landing-hot-set plus controlled-direct decision and its B1/B2/C sequence are accepted; continuous authority covers only this unchanged documentation subject's commit, Ready PR, required checks, merge, and exact-master confirmation."
-  - id: "L10N-B1"
+  - id: "L10N-RESET"
+    status: "owner_accepted_completion_authorized"
+    note: "The Owner accepted the verified local cleanup and authorized its continuous completion through commit, one Ready pull request, required CI, and merge."
+  - id: "L10N-SIMPLE"
     status: "planned_not_authorized"
-    note: "After architecture acceptance, build and validate only the real repository-external mixed-delivery candidate: deterministic Landing hot set, English byte proxy, original hot-set bytes, exact non-hot-set URLs, and atomic capacity/cleanup checks."
-  - id: "L10N-B2"
-    status: "planned_not_authorized"
-    note: "After B1 acceptance, add subject-addressed optional Pages-overlay admission for the manifest, attribution, and at-most-64-MiB hot set; add no browser consumer."
-  - id: "L10N-C"
-    status: "planned_not_authorized"
-    note: "After B2 acceptance, consume local Chinese files on default Landing and controlled exact URLs elsewhere, preserve English fallback, validate current/archived/legacy routes, and remove only caller-proven redundant image assets and branches."
+    note: "One future task may add a flat MTGCH name/image lookup, current default-Landing Chinese files, and one language-aware source selector. It must reuse existing name normalization and accepted source/image evidence."
   - id: "PHASE-14-DESIGN"
     status: "planned_not_authorized"
-    note: "Pauper MTGO and the Owner-supplied Paupergeddon event remain separately gated after the localization foundation."
+    note: "Pauper MTGO and the Owner-supplied Paupergeddon event remain separately gated."
 
 next_approved_task:
-  id: "L10N-ARCHITECTURE-DECISION"
-  name: "Card-localization delivery architecture decision"
+  id: "L10N-RESET"
+  name: "Remove the obsolete card-localization route"
   status: "continuous_completion_authorized"
   local_execution_authorized: true
-  note: "Publish and merge only the accepted architecture documentation, then confirm exact remote master and stop; do not begin L10N-B1."
+  commit_authorized: true
+  publication_authorized: true
+  merge_authorized: true
+  note: "Finish only the accepted L10N-RESET subject. L10N-SIMPLE remains planned but unauthorized."
 
 prohibited_next_actions:
-  - "Do not create a real localization sidecar, download or package Chinese image bytes, change the existing English card-image cache, or change a public browser path."
-  - "Do not make a source, image, Pages, or production request as part of the documentation decision."
-  - "Do not begin L10N-B1, L10N-B2, L10N-C, Phase 14, production, or Pages."
-  - "Do not develop directly on master or overwrite unexplained local changes."
+  - "Do not access a card, metadata, image, Pages, or production endpoint."
+  - "Do not modify the existing Landing image-cache generator, manifest, workflow, browser consumer, or local files."
+  - "Do not begin L10N-SIMPLE, Phase 14, production, or Pages publication."
+  - "Do not develop directly on master or overwrite unexplained changes."
