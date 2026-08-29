@@ -18,11 +18,11 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "src"
-if str(SRC) not in sys.path:
-    sys.path.insert(0, str(SRC))
+CARD_NAME_SOURCE = ROOT / "src" / "mtgmeta"
+if str(CARD_NAME_SOURCE) not in sys.path:
+    sys.path.insert(0, str(CARD_NAME_SOURCE))
 
-from mtgmeta.card_names import card_name_lookup_candidates  # noqa: E402
+from card_names import card_name_lookup_candidates  # noqa: E402
 
 
 PUBLIC_PREFIX = "assets/card-localization"
