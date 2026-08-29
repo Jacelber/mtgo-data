@@ -61,8 +61,8 @@ The implementation enforces the contract in these layers:
   available. Execution is sequential. Deliberate real-mode starts are at least
   ten seconds apart, while the bound controller retains its one-active,
   150-millisecond, two-attempt, 15-second-timeout, 1.5-second-retry contract.
-  Across two sessions, each provider is capped at 400 logical loads and 800
-  physical starts.
+  In one complete session, each provider is capped at 200 logical loads and
+  400 physical starts.
 - **Browser behavior:** half of the sample uses deliberate Pages-origin image
   loading; half uses the product controller with deterministic hover, keyboard
   focus, or actual touch tap. Desktop and touch run in separate fresh contexts.
@@ -75,7 +75,7 @@ The implementation enforces the contract in these layers:
   is evaluated.
 - **Retention:** exact identity and URLs exist only in the external input/plan.
   The aggregate is checked against every exact identity and URL before writing.
-  Terminal preparation, drift, time-gap, budget, cache-observation, redaction,
+  Terminal preparation, drift, unsupported-session, budget, cache-observation, redaction,
   and finalization stops delete the exact plan. The runner never enables a
   trace, HAR, screenshot, video, browser profile, raw response archive, image-
   byte archive, or per-card request log.
@@ -92,12 +92,12 @@ The synthetic suite passed these nine cases in one worker:
 
 1. deterministic, order-independent, stratum-complete sampling and the 50/50
    deliberate/controller split;
-2. command parsing plus logical and physical two-session budget stops;
+2. command parsing plus logical and physical single-session budget stops;
 3. real controller rapid-hover abandonment and queued-image cancellation;
-4. complete two-session desktop/touch execution, aggregate redaction, cache
+4. complete single-session desktop/touch execution, aggregate redaction, cache
    classification, and final exact-plan deletion;
 5. served-controller byte drift stop and exact-plan deletion;
-6. early second-session stop and exact-plan deletion;
+6. unsupported second-session stop and exact-plan deletion;
 7. source HTTP 5xx counting with successful matched-control fallback decode;
 8. preparation-stop deletion of the external exact input; and
 9. rejection of a trial directory inside the repository.
@@ -105,10 +105,12 @@ The synthetic suite passed these nine cases in one worker:
 The focused command was:
 
 ```text
-npx playwright test --grep="deterministic sampling|command parsing|bound controller|loopback runner|served controller drift|early second session|source HTTP failure|preparation stop|trial directory" --reporter=line
+npx playwright test --grep="deterministic sampling|command parsing|bound controller|loopback runner|served controller drift|second session|source HTTP failure|preparation stop|trial directory" --reporter=line
 ```
 
-Final result: `9 passed (25.8s)`.
+Original two-session result: `9 passed (25.8s)`. After DEC-144 removed the
+unsupported repeat rule, the focused single-session suite passed `9/9` cases
+in one worker (`22.7s`).
 
 Changed-scope repository validation also passed for all seven changed paths:
 JavaScript 1/1, JSON 1/1, YAML 1/1, references 16/16, and hygiene 7/7. Node
@@ -124,6 +126,6 @@ quickly for the current public card population.
 Under the Owner's continuous authorization, the next gate after exact Ready-PR
 publication and merge is `L10N-STAGE-C-TRIAL`: regenerate the current subject
 and exact external plan within the accepted source budgets, run session 1, then
-run session 2 on the same machine no earlier than six hours after session 1
-started. No architecture decision or product implementation follows
-automatically.
+finalize the one complete observed-window session. The result must not be
+presented as cross-time or long-term availability evidence. No architecture
+decision or product implementation follows automatically.

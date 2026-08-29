@@ -189,10 +189,10 @@ Stage C runs from an ephemeral browser opened on the deployed Pages origin. It
 does not modify the deployed DOM, repository, public paths, or product code.
 Each sampled identity has a matched existing Scryfall English-image control.
 
-Run two sessions at least six hours apart so one short availability window is
-not treated as stable behavior. Bind the same sample in both sessions and split
-it deterministically into equal deliberate-mode and current-controller-mode
-halves. Each session performs:
+Run one complete observation session and describe it only as evidence for that
+window; do not infer cross-time or long-term availability. Split the sample
+deterministically into equal deliberate-mode and current-controller-mode
+halves. The session performs:
 
 1. **Deliberate single-image mode:** one cold MTGCH image at a time with ten
    seconds between starts, paired with its Scryfall control.
@@ -206,8 +206,8 @@ halves. Each session performs:
 4. **Fallback mode:** for every real failure, load the matched English image
    through the same queue and record total time until a complete image decodes.
 
-Across both sessions the hard ceiling is 400 MTGCH image-load attempts and 400
-matched Scryfall control attempts. There is one active image request at a time.
+The hard ceiling is 200 MTGCH logical image loads and 200 matched Scryfall
+control loads. There is one active image request at a time.
 No retry beyond the current two-attempt controller behavior is allowed.
 Authentication, identity ambiguity, unsafe redirect, budget breach, or an
 Owner/source request to stop ends the trial immediately. A 403, 429, 5xx,
@@ -223,9 +223,8 @@ Only aggregate metrics may be retained:
 - results by declared stratum and interaction mode.
 
 Raw card responses, image bytes, screenshots, browser profiles, and request
-logs containing per-card identifiers are deleted when each session closes. The
-temporary exact sample identity/URL plan remains only between the two sessions
-and is deleted when the second session closes.
+logs containing per-card identifiers are deleted when the session closes. The
+temporary exact sample identity/URL plan is deleted at finalization.
 
 ## Evidence-quality gates
 
@@ -235,7 +234,7 @@ The trial is conclusive only when:
 - Stage B resolves enough permitted MTGCH image URLs to satisfy every stratum
   and either reaches 100 unique images or explicitly tests the entire smaller
   eligible population;
-- both Stage-C sessions complete their declared cold, controller, warm, and
+- the Stage-C session completes its declared cold, controller, warm, and
   fallback modes without budget, identity, or provider-classification
   ambiguity; and
 - aggregate results can be matched to the frozen subject, source snapshots,
@@ -249,7 +248,7 @@ capacity value.
 
 The later architecture decision must use the measured evidence as follows:
 
-- **Controlled direct delivery is eligible** only if both sessions show no
+- **Controlled direct delivery is eligible** only if the observed session shows no
   authentication, 403, or 429 response; decoded MTGCH success is at least 97%
   in every interaction mode; every real miss reaches decoded English fallback;
   MTGCH p95 decode time is no more than one second slower than the matched

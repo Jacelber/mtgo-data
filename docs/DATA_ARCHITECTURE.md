@@ -3560,11 +3560,12 @@ provenance field is not contract drift because no such unified field exists.
 Only a conclusive source stage may select up to 100 exact permitted MTGCH image
 URLs, deterministically stratified by host, media type, source class, and face
 form. A separately authorized ephemeral browser on the deployed Pages origin
-tests the same sample in two sessions at least six hours apart. Each session
+tests the sample in one complete observation session. The session
 uses deliberate single-image requests, the actual one-active-request preview
 controller behavior, one warm repeat, matched Scryfall controls, and English
-fallback for real failures. Across both sessions the ceilings are 400 MTGCH and
-400 control attempts. The browser calls no MTGCH search or metadata API.
+fallback for real failures. The ceilings are 200 logical MTGCH and 200 logical
+control loads, with at most 400 physical starts for each provider. The browser
+calls no MTGCH search or metadata API.
 
 Only aggregate subject, coverage, status, decode, redirect, byte, latency,
 cache, and fallback observations may be retained. Exact URLs, card names, raw

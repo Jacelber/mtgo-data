@@ -25,10 +25,9 @@ const defaultRepositoryRoot = path.resolve(path.dirname(scriptPath), "..");
 const STATE_FILE = "trial-state.json";
 const PLAN_FILE = "exact-plan.json";
 const SCHEMA_VERSION = "1.0.0";
-const REAL_SESSION_GAP_MS = 6 * 60 * 60 * 1000;
 const MAX_SAMPLE = 100;
-const MAX_LOGICAL = 400;
-const MAX_PHYSICAL = 800;
+const MAX_LOGICAL = 200;
+const MAX_PHYSICAL = 400;
 const CONTROLLER_CONSTANTS = Object.freeze({
   MAX_CONCURRENT_IMAGES: "1",
   MAX_IMAGE_ATTEMPTS: "2",
@@ -118,7 +117,7 @@ export function parseArguments(argv) {
   if (!["prepare", "session", "finalize"].includes(command)) fail("unknown_command");
   const allowed = {
     prepare: new Set(["trial_dir", "pages_url", "plan_input"]),
-    session: new Set(["trial_dir", "number", "minimum_gap_ms"]),
+    session: new Set(["trial_dir", "number"]),
     finalize: new Set(["trial_dir", "aggregate_out"]),
   }[command];
   const values = { command, fixtureMode: false };
@@ -787,7 +786,6 @@ async function runTrialSessionInner({
   number,
   fixtureMode = false,
   repositoryRoot = defaultRepositoryRoot,
-  minimumGapMs = REAL_SESSION_GAP_MS,
   onProgress = () => {},
 } = {}) {
   assertRuntimeSafety({ fixtureMode });
@@ -795,18 +793,11 @@ async function runTrialSessionInner({
   const paths = exactPaths(directory);
   const state = await readJson(paths.state, "trial_state_not_json");
   const plan = await readJson(paths.plan, "exact_plan_not_json");
-  if (![1, 2].includes(Number(number))) fail("invalid_session_number");
+  if (Number(number) !== 1) fail("invalid_session_number");
   const sessionNumber = Number(number);
   if (sessionNumber !== state.sessions.length + 1) fail("session_order_invalid");
   if (state.playwright_version !== playwrightVersion) fail("playwright_version_drift");
   if (sha256(stableJson(plan)) !== state.plan_digest) fail("exact_plan_digest_drift");
-  if (sessionNumber === 2) {
-    const firstStart = Date.parse(state.sessions[0]?.started_at || "");
-    const requiredGap = fixtureMode ? Number(minimumGapMs) : REAL_SESSION_GAP_MS;
-    if (!Number.isFinite(firstStart) || Date.now() - firstStart < requiredGap) {
-      fail("session_gap_too_short");
-    }
-  }
   const startedAt = new Date().toISOString();
   const aggregate = emptySessionAggregate(sessionNumber, startedAt);
   const pace = createPacer(fixtureMode);
@@ -862,7 +853,7 @@ async function runTrialSessionInner({
   assertCumulativeBudget(state.sessions, aggregate);
   aggregate.completed_at = new Date().toISOString();
   state.sessions.push(safeSessionAggregate(aggregate));
-  state.status = sessionNumber === 1 ? "session_1_complete" : "session_2_complete";
+  state.status = "session_complete";
   await replaceJson(paths.state, state);
   return state.sessions.at(-1);
 }
@@ -900,7 +891,8 @@ async function finalizeTrialInner({
   const paths = exactPaths(directory);
   const state = await readJson(paths.state, "trial_state_not_json");
   const plan = await readJson(paths.plan, "exact_plan_not_json");
-  if (state.status !== "session_2_complete" || state.sessions.length !== 2) {
+  if (!["session_complete", "session_1_complete"].includes(state.status)
+      || state.sessions.length !== 1) {
     await cleanupExactPlan(directory);
     fail("trial_not_complete");
   }
@@ -957,9 +949,6 @@ async function main() {
         trialDir: args.trial_dir,
         number: Number(args.number),
         fixtureMode: args.fixtureMode,
-        minimumGapMs: args.minimum_gap_ms === undefined
-          ? REAL_SESSION_GAP_MS
-          : Number(args.minimum_gap_ms),
       });
       process.stdout.write(`${JSON.stringify(result)}\n`);
     } else {

@@ -126,18 +126,18 @@ test("deterministic sampling covers every synthetic stratum without editorial or
   expect(first.items.filter(item => item.mode === "controller")).toHaveLength(8);
 });
 
-test("command parsing and the two-session budget fail closed", async () => {
+test("command parsing and the single-session budget fail closed", async () => {
   const {
     assertCumulativeBudget,
     parseArguments,
     StageCContractError,
   } = await import(runnerUrl);
   expect(parseArguments([
-    "session", "--trial-dir", "C:/temporary", "--number", "2",
+    "session", "--trial-dir", "C:/temporary", "--number", "1",
   ])).toEqual(expect.objectContaining({
     command: "session",
     trial_dir: "C:/temporary",
-    number: "2",
+    number: "1",
   }));
   expect(() => parseArguments(["session", "--number", "1", "--number", "2"]))
     .toThrow(expect.objectContaining({ code: "duplicate_argument" }));
@@ -147,14 +147,14 @@ test("command parsing and the two-session budget fail closed", async () => {
     .toThrow(expect.objectContaining({ code: "invalid_arguments" }));
   const provider = (logical, physical) => ({ logical_loads: logical, physical_starts: physical });
   expect(() => assertCumulativeBudget([], {
-    source: provider(401, 1),
+    source: provider(201, 1),
     control: provider(1, 1),
   })).toThrow(expect.objectContaining({
     name: StageCContractError.name,
     code: "logical_budget_exceeded",
   }));
   expect(() => assertCumulativeBudget([], {
-    source: provider(1, 801),
+    source: provider(1, 401),
     control: provider(1, 1),
   })).toThrow(expect.objectContaining({ code: "physical_budget_exceeded" }));
 });
@@ -195,7 +195,7 @@ test("the bound controller abandons hover UI and cancels a queued image", async 
   }
 });
 
-test("the loopback runner completes two sessions, redacts the aggregate, and deletes the exact plan", async () => {
+test("the loopback runner completes one session, redacts the aggregate, and deletes the exact plan", async () => {
   test.setTimeout(120_000);
   const {
     finalizeTrial,
@@ -221,14 +221,6 @@ test("the loopback runner completes two sessions, redacts the aggregate, and del
       trialDir,
       number: 1,
       fixtureMode: true,
-      minimumGapMs: 0,
-      repositoryRoot: root,
-    });
-    await runTrialSession({
-      trialDir,
-      number: 2,
-      fixtureMode: true,
-      minimumGapMs: 0,
       repositoryRoot: root,
     });
     const aggregate = await finalizeTrial({
@@ -238,7 +230,7 @@ test("the loopback runner completes two sessions, redacts the aggregate, and del
       repositoryRoot: root,
     });
     expect(aggregate.result).toBe("complete");
-    expect(aggregate.sessions).toHaveLength(2);
+    expect(aggregate.sessions).toHaveLength(1);
     expect(aggregate.sessions[0].source.logical_loads).toBe(20);
     expect(aggregate.sessions[0].control.logical_loads).toBe(20);
     expect(aggregate.sessions[0].cache.unavailable).toBe(0);
@@ -296,7 +288,7 @@ test("a served controller drift stops the session and removes the exact plan", a
   }
 });
 
-test("an early second session stops and removes the exact plan", async () => {
+test("a second session is rejected and removes the exact plan", async () => {
   test.setTimeout(60_000);
   const {
     prepareTrial,
@@ -318,16 +310,14 @@ test("an early second session stops and removes the exact plan", async () => {
       trialDir,
       number: 1,
       fixtureMode: true,
-      minimumGapMs: 0,
       repositoryRoot: root,
     });
     await expect(runTrialSession({
       trialDir,
       number: 2,
       fixtureMode: true,
-      minimumGapMs: 60_000,
       repositoryRoot: root,
-    })).rejects.toEqual(expect.objectContaining({ code: "session_gap_too_short" }));
+    })).rejects.toEqual(expect.objectContaining({ code: "invalid_session_number" }));
     await expect(readFile(path.join(trialDir, "exact-plan.json"), "utf8")).rejects.toThrow();
   } finally {
     await server.close();

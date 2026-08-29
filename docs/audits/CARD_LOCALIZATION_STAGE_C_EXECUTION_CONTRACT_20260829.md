@@ -1,12 +1,12 @@
 # Card Localization Stage-C Execution Contract — 2026-08-29
 
-Status: `Draft complete for Owner review; no live trial authorized`
+Status: `Accepted; single-session amendment recorded by DEC-144`
 
 ## Outcome
 
 This contract closes the executor-design gap recorded by DEC-142. It selects a
-repository-owned Playwright/Chromium diagnostic that an Owner operates on the
-same controlled local machine for both browser sessions. It does not select an
+repository-owned Playwright/Chromium diagnostic that an Owner operates on one
+controlled local machine for one complete browser session. It does not select an
 image-delivery architecture and does not make a card, metadata, or image
 request.
 
@@ -15,8 +15,7 @@ The selected structure is:
 1. a later `L10N-STAGE-C-RUNNER` task implements and validates the diagnostic
    only against local synthetic fixtures;
 2. a separately authorized `L10N-STAGE-C-TRIAL` task regenerates the exact
-   deterministic sample, runs session 1, preserves only the external exact
-   plan needed for session 2, and runs session 2 at least six hours later; and
+   deterministic sample and runs one complete session; and
 3. only an accepted and published aggregate result may unblock
    `L10N-ARCHITECTURE-DECISION`.
 
@@ -59,13 +58,10 @@ supports touch-enabled browser contexts. A non-persistent browser context does
 not write browsing data to disk, so cold and warm observations can occur in one
 session without retaining a browser profile after that session closes.
 
-A standard GitHub-hosted runner is rejected for the real trial. Each job receives
-a new virtual machine, while the exact sample must remain private and identical
-between sessions. A standard hosted job also has a six-hour execution ceiling,
-which cannot safely contain two sessions whose starts must be at least six hours
-apart. Passing the plan through a workflow artifact is also prohibited: the
-architecture forbids exact URLs in workflow artifacts, and GitHub artifacts are
-downloadable by repository readers.
+A standard GitHub-hosted runner is rejected for the real trial because passing
+the exact sample through a workflow artifact is unnecessary and would create a
+retained copy outside the local trial boundary. The test needs the Owner's
+controlled local Pages/browser environment, not a cloud runner.
 
 Official capability references:
 
@@ -75,8 +71,6 @@ Official capability references:
   <https://playwright.dev/docs/api/class-request>
 - Playwright TestOptions:
   <https://playwright.dev/docs/api/class-testoptions>
-- GitHub Actions limits:
-  <https://docs.github.com/en/actions/reference/limits>
 - GitHub-hosted runners:
   <https://docs.github.com/en/actions/reference/runners/github-hosted-runners>
 - GitHub workflow artifacts:
@@ -86,16 +80,15 @@ Official capability references:
 
 The real trial must use all of the following:
 
-- one Owner-controlled Windows machine for preparation and both sessions;
+- one Owner-controlled Windows machine for preparation and the browser session;
 - the repository-pinned Node and Playwright dependency plus Playwright-managed
   Chromium, without installing an alternate browser automation stack;
 - a repository-owned command-line runner introduced only by the later runner
   task;
-- fresh non-persistent browser contexts for session 1 and session 2;
-- the same exact external sample plan for both sessions, but no browser profile
-  shared between sessions; and
-- explicit Owner invocation of each session rather than a six-hour sleeping
-  process, background automation, hosted workflow, or retained cloud artifact.
+- fresh non-persistent desktop and touch browser contexts for the session;
+- one exact external sample plan deleted at finalization; and
+- explicit Owner invocation rather than a background automation, hosted
+  workflow, or retained cloud artifact.
 
 The future runner must refuse to start if it is launched inside GitHub Actions,
 if the plan directory resolves inside the repository or any worktree, if trace,
@@ -124,7 +117,6 @@ The later real-trial command surface is fixed conceptually as:
 ```text
 node scripts/run_card_localization_stage_c_trial.mjs prepare --trial-dir <absolute-external-directory> --pages-url <deployed-pages-url>
 node scripts/run_card_localization_stage_c_trial.mjs session --trial-dir <same-directory> --number 1
-node scripts/run_card_localization_stage_c_trial.mjs session --trial-dir <same-directory> --number 2
 node scripts/run_card_localization_stage_c_trial.mjs finalize --trial-dir <same-directory> --aggregate-out <repository-external-aggregate-path>
 ```
 
@@ -134,7 +126,7 @@ contract and documentation are updated before the real trial.
 
 ## Pages and controller binding
 
-Before either session, the runner must open the declared deployed Pages entry
+Before the session, the runner must open the declared deployed Pages entry
 and prove all of the following without changing the deployed files:
 
 1. the final `location.origin` and pathname equal the predeclared public entry;
@@ -208,24 +200,24 @@ The directory may temporarily contain:
   the deterministic sample;
 - the frozen served-byte digests, sample digest, source snapshot digests, and
   aggregate stratum counts;
-- session number and timestamps; and
+- session timestamp; and
 - aggregate counters that contain no exact identity or URL.
 
 It must not contain raw Scryfall or MTGCH responses after preparation, image
 bytes, cookies, credentials, a browser profile, trace, HAR, video, screenshot,
-DOM snapshot, console transcript, or per-card request log. Session 1 closes and
-deletes its browser context while retaining only the exact plan required for
-session 2. `finalize`, any terminal stop, or an Owner/source stop request closes
+DOM snapshot, console transcript, or per-card request log. The session closes
+and deletes its browser contexts. `finalize`, any terminal stop, or an
+Owner/source stop request closes
 the context and deletes the exact plan. A redaction or deletion failure makes
 the result inconclusive and blocks publication of the aggregate until repaired.
 
 ## Browser actions
 
-Both sessions use the same sample, start at least six hours apart, and begin
-with a fresh non-persistent context. The deterministic split is 50% deliberate
+The session begins with fresh non-persistent desktop and touch contexts. The
+deterministic split is 50% deliberate
 mode and 50% controller mode, with odd remainders assigned by sample-hash order.
 
-Each session performs:
+The session performs:
 
 1. **Deliberate mode:** load one cold MTGCH image at a time through the transient
    Pages-origin container, wait ten seconds between logical starts, and pair it
@@ -280,24 +272,24 @@ redacted before display; the unredacted exception is not written to disk.
 
 ## Budget accounting
 
-The accepted 100-image design produces 400 planned logical MTGCH loads and 400
-matched control loads: 100 cold plus 100 warm in each of two sessions. The
+The accepted 100-image design produces 200 planned logical MTGCH loads and 200
+matched control loads: 100 cold plus 100 warm in one session. The
 current controller can make at most two physical source starts inside one
 logical load. To avoid the earlier ambiguity, the runner records and enforces
 both units:
 
-| Budget | Hard ceiling across both sessions |
+| Budget | Hard ceiling for the complete session |
 | --- | ---: |
 | Unique MTGCH sample images | 100 |
-| Logical MTGCH loads | 400 |
-| Logical matched Scryfall control loads | 400 |
-| Physical MTGCH network starts, including bounded controller retry | 800 |
-| Physical matched-control network starts, including bounded retry | 800 |
+| Logical MTGCH loads | 200 |
+| Logical matched Scryfall control loads | 200 |
+| Physical MTGCH network starts, including bounded controller retry | 400 |
+| Physical matched-control network starts, including bounded retry | 400 |
 | Concurrent image requests across all contexts | 1 |
 
 The 800-start ceiling is not permission to add a retry. It is the maximum
 physical consequence of the existing two-attempt controller applied to the
-already accepted 400 logical loads. Deliberate mode does not invent a second
+accepted 200 logical loads. Deliberate mode does not invent a second
 retry policy. No failure permits faster probing, a third source start, or a
 replacement sample item.
 
@@ -306,7 +298,6 @@ replacement sample item.
 Stop before further sampled traffic and classify the result as inconclusive on
 any of the following:
 
-- session 2 begins less than six hours after session 1 began;
 - the machine, dependency, Chromium, Pages bytes, catalog subject, controller
   constants, exact sample digest, source snapshot, or allowed host set drifts;
 - the runner detects GitHub Actions, a persistent browser profile, request
@@ -333,7 +324,7 @@ relabeled as image-delivery evidence.
 The later runner implementation is acceptable only when synthetic tests prove
 every binding, interaction, measurement, redaction, budget, and cleanup rule.
 The later real trial is conclusive only when the current subject closes, every
-stratum is represented, both sessions complete, every declared metric is
+stratum is represented, the complete session finishes, every declared metric is
 observable, and the aggregate can be bound to subject, source, browser, Pages,
 sample, and session-time digests without retaining exact identities.
 
@@ -351,8 +342,8 @@ real result is accepted and published.
 3. Separately authorize `L10N-STAGE-C-RUNNER`; implement and validate it only
    with local synthetic fixtures, then stop for Owner acceptance.
 4. After runner publication, separately authorize `L10N-STAGE-C-TRIAL` and its
-   fresh source/image budgets. The Owner runs the two real sessions on the same
-   controlled local machine at least six hours apart.
+   fresh source/image budgets. The Owner runs one complete real session on the
+   controlled local machine.
 5. Accept and publish only the aggregate result.
 6. Separately authorize `L10N-ARCHITECTURE-DECISION`.
 
