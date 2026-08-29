@@ -2,18 +2,23 @@ from __future__ import annotations
 
 from datetime import date
 import json
+from pathlib import Path
 
 import pytest
 
+from mtgmeta.classifier import classify_counts
+from mtgmeta.config import load_rule_set
 from mtgmeta.mtgo import top8
 from mtgmeta.rules import (
     ArchetypeDefinition,
     CardCondition,
     ClassificationRule,
     RuleSet,
+    validate_rule_data,
 )
 
 
+ROOT = Path(__file__).resolve().parents[1]
 MONDAY = date(2026, 1, 5)
 SEALED_TODAY = date(2026, 1, 20)
 
@@ -174,3 +179,58 @@ def test_unknown_is_an_explicit_restated_top8_identity(tmp_path):
         "detail_id": "unknown",
     }
     assert placement["comparison"]["identity_id"] == "unknown"
+
+
+def test_subtype_parent_rejects_a_rule_without_a_selected_subtype():
+    failures = validate_rule_data(
+        {
+            "schema_version": "1.0.0",
+            "format": "modern",
+            "archetypes": [
+                {
+                    "id": "example-parent",
+                    "name": "Example Parent",
+                    "priority": 100,
+                    "subtypes": [{"id": "example-child", "name": "Example Child"}],
+                    "rules": [
+                        {
+                            "id": "example-child-rule",
+                            "priority": 100,
+                            "subtype_id": "example-child",
+                            "conditions": {"all": [{"card": "Child Signal"}]},
+                        },
+                        {
+                            "id": "example-parent-fallback",
+                            "priority": 10,
+                            "subtype_id": None,
+                            "conditions": {"all": [{"card": "Parent Signal"}]},
+                        },
+                    ],
+                }
+            ],
+        }
+    )
+
+    assert [(failure.path, failure.message) for failure in failures] == [
+        (
+            "archetypes[0].rules[1].subtype_id",
+            "must select a subtype when the parent defines subtypes",
+        )
+    ]
+
+
+def test_unsupported_eldrazi_ramp_shell_is_unknown():
+    rules = load_rule_set(ROOT / "my_archetypes" / "modern.yaml")
+
+    result = classify_counts(
+        rules,
+        {
+            "Sowing Mycospawn": 3,
+            "Ugin's Labyrinth": 3,
+            "Eldrazi Temple": 3,
+        },
+        {},
+    )
+
+    assert result.status == "unknown"
+    assert result.matched_rules == ()
