@@ -3458,13 +3458,22 @@ link and attribution remain unchanged.
 
 Card localization is a separately gated pre-Phase-14 layer. It must not mutate
 the English-source names in normalized decks, generated statistics, Landing
-documents, classifier rules, or `assets/card-cache/v1/`. A future implementation
-uses a distinct versioned namespace:
+documents, classifier rules, or `assets/card-cache/v1/`. The proposed
+production architecture uses a distinct versioned namespace:
 
 ```text
 assets/card-localization/v1/manifest.json
-assets/card-localization/v1/images/<content-addressed-file>
+assets/card-localization/v1/images/<content-addressed-hot-set-file>
 ```
+
+Only the default MTGO Landing hot set may have local image files. It is the
+identity-deduplicated union of current
+`environment.rows[].key_cards[]` representatives and current
+`features.items[].featured_cards[]` four-card groups for executable formats.
+Expanded decklists, statistics, Top 8, Tabletop, archived Feature weeks, and a
+format's complete card population are URL-only consumers. The current offline
+subject contains 29 Standard names, 34 Modern names, and 61 names after cross-
+format deduplication; future builds recompute this dynamic subject.
 
 The manifest is a build-time display sidecar. The canonical join key contains
 `oracle_id`, `scryfall_id`, and `face_index`; the original English card or face
@@ -3499,12 +3508,16 @@ deterministic display order:
 2. permitted MTGCH or separately licensed community name/image;
 3. existing English name or complete English card image.
 
-Until a later accepted architecture decision says otherwise, the browser does
-not call MTGCH at runtime. A producer resolves the bounded current product
-subject in batch, validates every identity and manifest path, and publishes
-only an atomic closed sidecar. A missing Chinese value is a declared English
-fallback; an identity collision, false official label, unsafe path, digest
-mismatch, or undeclared file rejects the sidecar.
+DEC-145 packages the default Landing hot-set image bytes locally and permits
+one narrow browser-time MTGCH operation for every other card: request the exact
+community image URL already admitted by the sidecar. The browser still must not
+call MTGCH search, result, set, card-description, or metadata APIs, construct an
+upstream URL, or enumerate an upstream collection. A producer resolves the
+bounded current product subject in batch, validates every identity, local byte,
+and exact URL, and publishes only an atomic closed sidecar. A missing Chinese
+value is a declared English fallback; an identity collision, false official
+label, unsafe or non-allowlisted URL/path, byte or digest mismatch, or
+undeclared record/file rejects the sidecar.
 
 `L10N-DIRECT-TRIAL` is a non-product diagnostic exception, not a runtime
 architecture. Only after its documentation contract is accepted, merged, and
@@ -3535,10 +3548,10 @@ no evidence about exact-image delivery. DEC-140 therefore supersedes DEC-138
 only where an incomplete setup automatically selected hybrid caching. The
 bounded stop itself remains valid and does not authorize an uncontracted retry.
 
-No Chinese-image delivery architecture or capacity is currently selected.
-DEC-139's proposed 256-MiB/1,024-image cache, admission order, and blanket
-runtime MTGCH prohibition were withdrawn before acceptance because no real
-Chinese image byte or direct-image browser behavior supported them. Those
+At this evidence stage, no Chinese-image delivery architecture or capacity was
+selected. DEC-139's proposed 256-MiB/1,024-image cache, admission order, and
+blanket runtime MTGCH prohibition were withdrawn before acceptance because no
+real Chinese image byte or direct-image browser behavior supported them. Those
 values must not enter a production Schema, producer, workflow, or consumer.
 
 Architecture selection now requires a frozen evidence package. Its offline
@@ -3573,7 +3586,7 @@ responses, image bytes, screenshots, browser profiles, and per-card logs are
 removed. A setup-stage failure is reported as setup failure, never relabeled as
 an image-delivery result.
 
-A later separately accepted decision may choose measured local-only storage,
+A later separately accepted decision could choose measured local-only storage,
 controlled exact-image delivery, a measured eager-cache/on-demand-direct mix,
 or English images only. Any local cache ceiling must be derived from measured
 current-subject count, byte distribution, deduplication, eager/on-demand split,
@@ -3582,17 +3595,80 @@ are recorded in
 `docs/audits/CARD_LOCALIZATION_HYBRID_CACHE_ARCHITECTURE_20260829.md` and
 DEC-140.
 
-If a later evidence-backed architecture admits local MTGCH community-rendered
-image bytes, they may enter only its bounded closed sidecar and remain byte-for-
-byte as supplied by MTGCH. Their manifest records
+DEC-145 applies those criteria and selects a bounded default-Landing hot set
+plus controlled exact-image delivery with immediate English fallback. The
+Owner explicitly accepts corresponding English `normal` complete-card image
+bytes as the planning proxy for this local subject, so no second Chinese-image
+sizing trial is required. This supersedes DEC-140's separate Chinese byte-
+distribution prerequisite only for this exact current-Landing subject; it does
+not support a full-format or future six-format mirror.
+
+For the current default documents, the hot-set extractor observes 14 Standard
+and 26 Modern representative-card occurrences plus 20 Standard and 12 Modern
+Feature-card occurrences. After within-format union there are 29 Standard and
+34 Modern names; cross-format union contains 61 names. Builds resolve and
+deduplicate the final set by immutable identity rather than freezing 61 as a
+file limit.
+
+The capacity proxy uses the corresponding English image selected from the same
+Scryfall bulk-data build input. After identity deduplication, the sum of those
+English bytes is `english_proxy_bytes`. Both that proxy and the actual complete
+Chinese overlay must fit the existing 67,108,864-byte Cache-B-class overlay
+ceiling; each file retains the 5-MiB limit, and the complete Pages artifact must
+remain within 1,073,741,824 bytes. The measured base artifact was 270,195,353
+bytes, leaving 803,546,471 bytes before generated overlays. An actual byte check
+during candidate construction is mandatory packaging validation, not a new
+architecture experiment. The withdrawn 256-MiB/1,024-file limits remain
+rejected.
+
+Controlled direct delivery remains the non-hot-set path because the accepted
+Stage-C window decoded 200/200 MTGCH and 200/200 matched-control images, the
+MTGCH p95 disadvantage was 693 ms, redirects stayed inside the predeclared host
+classes, and 98.5% of warm repeats avoided or materially reduced transfer.
+These observations establish only the tested window, not long-term
+availability.
+
+The admitted manifest records, per card or face, its immutable identity,
+English compatibility name, localized-name value and provenance, delivery
+class, image status, provider, exact HTTPS source/fallback URLs, local path and
+byte digest where applicable, official-printing or project-permission evidence,
+attribution, source snapshot, English proxy total, actual overlay total, and
+manifest digest. Official Chinese images come from Scryfall; community images
+come from the validated MTGCH image host; English fallback uses the existing
+Scryfall source. Exact URLs are intentional public display-sidecar data. Raw
+metadata responses and images outside the hot set remain outside Git, Pages,
+and workflow artifacts.
+
+The browser loads this sidecar as an optional overlay. Default Landing
+representative and current Feature cards use their local Chinese hot-set file;
+a missing or rejected local entry uses the existing local English Cache-B or
+English image path. Every non-hot-set Chinese image is requested only for an
+already visible card or a hover, keyboard-focus, touch, click, or preview
+request and routed through the existing paced one-active-request controller. A
+direct Chinese image replaces English only after successful decode. Failure,
+cancellation, timeout, a missing record, or sidecar rejection leaves or
+restores English. No complete-format prefetch, service worker, persistent
+application image cache, proxy, or full Pages mirror is admitted.
+
+The current `assets/card-cache/v1/` Cache-B remains the local English Landing
+fallback. Normal browser HTTP/image caching is allowed. Direct compatibility
+evidence may be reused only while the exact image hosts and URL contract,
+browser policy, controller pacing, and project permission remain unchanged.
+Each newly available format requires a refreshed build-time identity/source
+inventory and a recomputed English-byte proxy for its default-Landing additions;
+it cannot inherit the frozen Standard/Modern counts.
+
+Hot-set MTGCH community-rendered image bytes may enter only the bounded closed
+sidecar and remain byte-for-byte as supplied by MTGCH. Their manifest records
 `community` status, MTGCH source, retrieval snapshot, content digest, Owner-
 attested project permission, and required attribution. Official image bytes
 likewise remain byte-for-byte original. Neither class may be converted,
 recompressed, cropped, filtered, recolored, distorted, watermarked, overlaid,
 or stripped of legal or artist notices. Unknown or unpermitted image bytes,
-raw upstream responses, and images outside the admitted subject remain outside
-Git, workflow retention, Pages, and every public bundle. Public API readability
-is never permission.
+raw upstream responses, and images outside the admitted hot set remain outside
+Git, workflow retention, Pages, and every public bundle. The verified subject-
+addressed hot set alone may be retained for bounded workflow reuse. Public API
+readability is never permission.
 
 The localization rollout remains split into independent accepted subjects:
 
@@ -3604,14 +3680,21 @@ The localization rollout remains split into independent accepted subjects:
   source coverage, real image bytes, Pages headroom, direct delivery, browser
   caching, actual interaction modes, and English fallback without changing the
   product;
-- `L10N-ARCHITECTURE-DECISION` selects or rejects local, direct, mixed, and
-  English-only behavior only from the accepted evidence;
-- `L10N-B1` builds and validates a real external candidate under that accepted
-  architecture without changing Pages or the current English cache;
-- `L10N-B2` admits only the measured, accepted optional resource through the
-  Pages packaging boundary without adding a Chinese browser consumer; and
-- `L10N-C` makes Chinese views consume the admitted sidecar while preserving
-  English behavior and exact fallback.
+- `L10N-ARCHITECTURE-DECISION` selects the Owner-bounded current-Landing hot
+  set, uses corresponding English complete-card bytes as its capacity proxy,
+  and uses controlled direct delivery for every non-hot-set image;
+- `L10N-B1` changes the synthetic contract into a real external mixed-delivery
+  candidate containing identities, names, provenance, attribution, exact
+  validated URLs, and original hot-set image bytes, without changing Pages or
+  the current English cache;
+- `L10N-B2` admits that atomic manifest, attribution, and at-most-64-MiB hot set
+  through a separate generated Pages overlay without adding a browser consumer;
+  and
+- `L10N-C` makes default Landing cards consume local hot-set files and all
+  other Chinese views consume exact URLs through the shared one-active image
+  controller, preserves immediate English fallback, then removes only caller-
+  proven redundant representative-card or duplicate complete-card branches
+  after current, archived, and legacy routes pass.
 
 Each subject requires separate authorization, local acceptance, and
 publication authority. Completing this documentation contract authorizes none
