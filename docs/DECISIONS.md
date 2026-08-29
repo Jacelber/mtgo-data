@@ -6731,7 +6731,7 @@ No MTGCH image, Scryfall control image, browser session, cache repeat, or
 fallback image was attempted. Exact names, identities, URLs, raw responses,
 and the Scryfall Bulk snapshot were removed as required.
 
-## Proposed decision
+## Decision
 
 Accept the completed Stage-A and Scryfall identity measurements, but do not
 accept `card_schema_contract_drift` as a source result. Classify it as
@@ -6756,7 +6756,7 @@ bounded retrieval method; do not infer that gap from the discarded validator.
 The aggregate measurements and exact stop are recorded in
 `docs/audits/CARD_LOCALIZATION_ARCHITECTURE_EVIDENCE_TRIAL_20260829.md`.
 
-## Proposed consequences
+## Consequences
 
 Existing English Cache-B, Scryfall fallback, product behavior, public paths,
 and Pages packaging remain unchanged. DEC-137 and the rights review are
@@ -6769,3 +6769,59 @@ Owner acceptance authorizes only publication of this corrected documentation
 subject. Another source request, trial rerun, architecture choice,
 implementation, Schema, workflow, sidecar, Pages change, production,
 `L10N-B1`, `L10N-B2`, `L10N-C`, and Phase 14 remain separately unauthorized.
+
+---
+
+# DEC-142 - Treat the approved-browser Stage-C stop as inconclusive evidence
+
+Status: `Accepted`
+
+## Context
+
+After DEC-141 was accepted and merged, the Owner separately authorized the
+corrected evidence rerun. It reproduced the frozen Stage-A subject, resolved
+1,869 of 1,892 English inputs to 1,866 canonical identities through one
+Scryfall `all_cards` snapshot, and assigned official or community Chinese names
+and images for every resolved identity.
+
+The corrected grouped MTGCH stage completed 28 of 28 requests with HTTP 200,
+one request in flight and at least five seconds between starts. It produced a
+deterministic 100-image sample covering all eligible host, media, source, and
+face-form strata.
+
+Stage C then stopped before its first sampled image request. The approved
+in-app browser could open the deployed Pages application and interact with its
+existing elements, but it could not place the external exact sample URLs into
+the deployed image controller or expose the contract's HTTP status, redirect,
+transfer-byte, and cache observations. Its security boundary rejected script-
+URL injection and prohibited raw debugging or alternate browser surfaces as a
+workaround.
+
+## Decision
+
+Accept the Stage-A and Stage-B aggregate measurements for the exact frozen
+subject. Classify the Stage-C stop as `browser_executor_capability_gap`, not an
+MTGCH image error, source rejection, controller failure, or evidence for any
+delivery architecture.
+
+Do not replace the Pages-origin/controller data flow with top-level navigation
+to each image. Such navigation would test a different origin, omit the actual
+hover/focus/touch queue, and provide invalid fallback/cache evidence.
+
+Delete the temporary exact sample identity/URL plan because no first session
+started and no authorized continuation exists. Retain only its digest,
+aggregate strata, and the completed Stage-A/Stage-B aggregates.
+
+## Consequences
+
+`L10N-ARCHITECTURE-DECISION` remains blocked. A separately authorized
+`L10N-STAGE-C-EXECUTION-CONTRACT` must first name an approved execution
+environment that can exercise the exact deployed Pages/controller path and
+collect the already declared network metrics without bypassing the in-app
+browser security boundary. Writing that contract makes no card or image
+request.
+
+Owner acceptance authorizes completion publication of this exact documentation
+subject only. It does not authorize the new contract, another image request,
+an architecture decision, implementation, Schema, workflow, sidecar, Pages
+change, production, `L10N-B1`, `L10N-B2`, `L10N-C`, or Phase 14.
