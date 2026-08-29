@@ -1,11 +1,31 @@
 # Card Localization Architecture Evidence and Retest Contract — 2026-08-29
 
-Status: `Accepted by Owner; publication in progress`
+Status: `Corrective revision accepted by Owner; publication authorized`
 
 This document replaces the unsupported architecture proposal previously drafted
 at this path. It defines the evidence required before choosing local caching,
 controlled direct image delivery, or a combination. It authorizes no source
 request, image request, implementation, public artifact, or product change.
+
+## 2026-08-29 classification correction
+
+The published version incorrectly assumed that MTGCH must return one complete
+per-card provenance field set before the trial could classify a Chinese name or
+image. MTGCH defines no such unified source field. `official`, `community`, and
+`english_fallback` are project-side classifications derived from provider
+precedence:
+
+1. Scryfall proves an official Simplified Chinese printing and supplies the
+   official name or image for the exact card or face;
+2. otherwise, an exact-identity Chinese name or image supplied by MTGCH is
+   classified as MTGCH `community` under the Owner-recorded project permission;
+3. otherwise, use the existing English fallback.
+
+The first HTTP-200 grouped response in the trial therefore did not demonstrate
+MTGCH response-contract drift. The local validator demanded undocumented
+full-card fields from a documented card-description response. That is a test-
+contract design error and requires this correction before any resumed source
+or browser stage.
 
 ## Correction of the earlier diagnostic
 
@@ -103,9 +123,12 @@ subject, not a six-format projection.
 
 ## Stage B — bounded identity and source inventory
 
-After separate authorization, Stage B may obtain one current Scryfall Bulk Data
-snapshot to resolve canonical `oracle_id`, `scryfall_id`, and `face_index` and
-to establish the matched English-image control for every sampled identity.
+After separate authorization, Stage B may obtain a current Scryfall dataset
+suited to resolve canonical `oracle_id`, `scryfall_id`, and `face_index`, prove
+official Simplified Chinese printing/name/image availability, and establish the
+matched English-image control for every sampled identity. An Oracle Cards
+snapshot may resolve identity but must not be treated as complete printing-
+level official-Chinese evidence unless its actual contract supplies that data.
 
 MTGCH metadata access must not repeat one `/result` search per card. Before the
 first MTGCH request, the trial writes an aggregate request plan containing only
@@ -116,8 +139,14 @@ public set-grouped card endpoint with:
 - at least five seconds between new metadata requests;
 - at most 32 MTGCH metadata requests in the entire trial;
 - `Retry-After` compliance; and
-- an immediate stop on authentication, 403, 429, 5xx, unknown source class, or
-  response-contract drift.
+- an immediate stop on authentication, 403, 429, 5xx, identity ambiguity,
+  unsafe image location, or documented response-contract drift.
+
+The grouped MTGCH response needs only the documented identity linkage and
+Chinese name/image information required to bind the value to the canonical
+card or face. It does not need to declare `official` or `community`; the trial
+derives that class by the precedence above. A validator may require only fields
+documented for the endpoint it actually calls.
 
 The 32-request ceiling bounds diagnostic load; it is not a claim that 32 groups
 cover the product. If the cap cannot cover the planned strata, the evidence is
@@ -137,8 +166,8 @@ B; the browser never calls the MTGCH card-search or metadata API.
 
 The sample is selected without editorial choice:
 
-1. partition eligible identities by final image host, media type, official or
-   community source class, and single-/multi-face form;
+1. partition eligible identities by final image host, media type, project-
+   derived official or community class, and single-/multi-face form;
 2. include every stratum;
 3. order identities inside each stratum by SHA-256 of the canonical identity
    plus the bound subject digest; and
@@ -180,7 +209,7 @@ halves. Each session performs:
 Across both sessions the hard ceiling is 400 MTGCH image-load attempts and 400
 matched Scryfall control attempts. There is one active image request at a time.
 No retry beyond the current two-attempt controller behavior is allowed.
-Authentication, unknown provenance, unsafe redirect, budget breach, or an
+Authentication, identity ambiguity, unsafe redirect, budget breach, or an
 Owner/source request to stop ends the trial immediately. A 403, 429, 5xx,
 timeout, or decode failure is recorded and activates English fallback; it does
 not trigger faster or additional probing.
@@ -207,7 +236,8 @@ The trial is conclusive only when:
   and either reaches 100 unique images or explicitly tests the entire smaller
   eligible population;
 - both Stage-C sessions complete their declared cold, controller, warm, and
-  fallback modes without budget or provenance ambiguity; and
+  fallback modes without budget, identity, or provider-classification
+  ambiguity; and
 - aggregate results can be matched to the frozen subject, source snapshots,
   browser version, Pages commit, and session times.
 

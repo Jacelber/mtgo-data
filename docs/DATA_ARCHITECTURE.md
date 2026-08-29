@@ -3469,38 +3469,42 @@ assets/card-localization/v1/images/<content-addressed-file>
 The manifest is a build-time display sidecar. The canonical join key contains
 `oracle_id`, `scryfall_id`, and `face_index`; the original English card or face
 name remains a diagnostic and compatibility value, never the identity join.
-Each localized name or image records its status as `official`, `community`, or
-`english_fallback`, together with source provenance, retrieval snapshot, and
-required attribution. Community records also retain the upstream translation
-provenance instead of collapsing it into an official Chinese field.
+Each localized name or image records a project-derived status as `official`,
+`community`, or `english_fallback`, together with the evidence used for that
+classification, retrieval snapshot, and required attribution. This status is
+not an MTGCH source field. Official records retain Scryfall printing evidence;
+MTGCH community records retain MTGCH as their immediate provider and the
+project-specific permission notice.
 
 The source adapter may read one bounded MTGCH card-data snapshot during a
 separately authorized batch build. It records the response digest and retrieval
 time in external temporary storage and never retains the raw response in Git,
-Pages, or a workflow artifact. MTGCH's official-name and translation-source
-fields may classify names, but the presence of a Chinese value or image URL is
-not provenance proof by itself.
+Pages, or a workflow artifact. Classification is derived by provider
+precedence: Scryfall proves official Simplified Chinese material; when it does
+not, an exact-identity Chinese name or image supplied by MTGCH is classified as
+MTGCH `community`; when neither exists, the record is `english_fallback`.
 
-Official Simplified Chinese image admission requires a matching official
-Simplified Chinese printing proven by Scryfall and an original full-card image
-supplied by Scryfall. Community names require an explicit reusable license; the
-accepted `magic-cards-zhs` source is CC BY-SA 4.0 and therefore requires source,
-snapshot, license, translation-provenance, modification, and ShareAlike notices.
-The Owner's recorded project-specific permission from the MTGCH founder admits
-identifiable MTGCH community-rendered Chinese images. User-submitted, third-
-party, and source-unknown images remain inadmissible unless a separate decision
-covers their exact source class. The resolver applies one deterministic display
-order:
+Official Simplified Chinese name or image admission requires a matching
+official Simplified Chinese printing proven by Scryfall; official images must
+also be supplied by Scryfall. The Owner's recorded project-specific permission
+from the MTGCH founder admits exact-identity MTGCH Chinese names and rendered
+images as community material when Scryfall does not prove the official class.
+If the separately licensed `magic-cards-zhs` dataset is used, its CC BY-SA 4.0
+source, snapshot, modification, and ShareAlike notices apply independently.
+Identity-ambiguous or non-MTGCH third-party material remains inadmissible unless
+a separate decision covers that exact source class. The resolver applies one
+deterministic display order:
 
 1. official Simplified Chinese name or admitted original official image;
-2. permitted community name or MTGCH community-rendered image with provenance;
+2. permitted MTGCH or separately licensed community name/image;
 3. existing English name or complete English card image.
 
-The browser never calls MTGCH at runtime. A producer resolves the bounded
-current product subject in batch, validates every identity and manifest path,
-and publishes only an atomic closed sidecar. A missing Chinese value is a
-declared English fallback; an identity collision, false official label, unsafe
-path, digest mismatch, or undeclared file rejects the sidecar.
+Until a later accepted architecture decision says otherwise, the browser does
+not call MTGCH at runtime. A producer resolves the bounded current product
+subject in batch, validates every identity and manifest path, and publishes
+only an atomic closed sidecar. A missing Chinese value is a declared English
+fallback; an identity collision, false official label, unsafe path, digest
+mismatch, or undeclared file rejects the sidecar.
 
 `L10N-DIRECT-TRIAL` is a non-product diagnostic exception, not a runtime
 architecture. Only after its documentation contract is accepted, merged, and
@@ -3518,9 +3522,9 @@ public path, or source adapter. Raw card responses and image bytes remain only
 in transient network and browser memory; they must not enter Git, Pages,
 workflow artifacts, diagnostic files, screenshots, or retained browser state.
 The test context is closed when measurement ends. Any authentication request,
-unknown or unpermitted source class, 403, 429, 5xx response, non-image payload,
-unsafe redirect, or request-budget breach stops the trial. Product browsers
-remain prohibited from calling MTGCH unless a later accepted architecture
+identity ambiguity, unpermitted provider, 403, 429, 5xx response, non-image
+payload, unsafe redirect, or request-budget breach stops the trial. Product
+browsers remain prohibited from calling MTGCH unless a later accepted architecture
 decision explicitly changes this rule.
 
 The authorized trial stopped when its thirty-first candidate-resolution request
@@ -3544,11 +3548,14 @@ digests and consumer interaction classes, and measures current Pages and
 Cache-B size. Planned formats and arbitrary files are excluded rather than
 extrapolated.
 
-After separate authorization, its source stage may use one Scryfall Bulk Data
-snapshot and at most 32 set-grouped MTGCH metadata requests, one in flight and
+After separate authorization, its source stage may use a Scryfall dataset
+suited to both canonical identity and official Simplified Chinese printing
+proof, plus at most 32 set-grouped MTGCH metadata requests, one in flight and
 at least five seconds apart. It must not repeat one `/result` search per card.
-Authentication, 403, 429, 5xx, unknown provenance, request-budget breach, or
-contract drift stops the source stage and makes the evidence inconclusive.
+Authentication, 403, 429, 5xx, identity ambiguity, unsafe image location,
+request-budget breach, or documented response-contract drift stops the source
+stage and makes the evidence inconclusive. A missing, undocumented MTGCH
+provenance field is not contract drift because no such unified field exists.
 
 Only a conclusive source stage may select up to 100 exact permitted MTGCH image
 URLs, deterministically stratified by host, media type, source class, and face
