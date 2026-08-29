@@ -6471,3 +6471,214 @@ prove future uptime, policy stability, or six-format capacity. Until a later
 accepted architecture decision says otherwise, product browsers still must not
 call MTGCH, and `L10N-B`, `L10N-C`, Pages changes, production, and Phase 14
 remain separately gated.
+
+---
+
+# DEC-139 - Use a capacity-bounded localization cache with exact English fallback
+
+Status: `Withdrawn before acceptance; image evidence insufficient`
+
+## Context
+
+The authorized DEC-138 diagnostic predeclared 32 current Standard and Modern
+candidates. Thirty resolutions completed, but the thirty-first request returned
+HTTP 429. The trial therefore stopped before another resolution and before any
+image request. Sequential, concurrent, cold, warm, decode, latency, redirect,
+and cache criteria remained incomplete. DEC-138 requires any blocking or
+incomplete result to select hybrid caching for the later architecture proposal.
+
+A bounded sample of the current Standard and Modern MTGO 12-week deck documents
+plus the admitted Modern Tabletop event contains a 1,442-name union. It is
+neither the full `display_subject_v1` nor a canonical identity count, but it
+shows that mirroring every Chinese and English image and then extending the
+rule to six formats would be materially different from the accepted 71-entry,
+64-MiB recent Landing cache.
+
+## Withdrawn proposal
+
+The following cache design records the rejected draft only. It is not an
+accepted decision, implementation target, capacity default, or authority for a
+later task.
+
+Keep MTGCH outside every product browser. Build one optional, atomic
+localization overlay under `assets/card-localization/v1/` with two independently
+resolved layers:
+
+1. a complete provenance-bearing name layer for exact `display_subject_v1`;
+   and
+2. a capacity-bounded local image layer containing only selected original
+   official Simplified Chinese Scryfall images and permitted MTGCH community
+   renders.
+
+The exact `display_subject_v1` starts at the candidate build's
+`stats/catalog.json`. It selects only available products of executable formats,
+then follows registered paths rather than scanning directories: every decks
+file named by an MTGO statistics index; every week and comparison base named by
+an MTGO Top 8 index; the current Landing document and Cache-B-selected rolling
+Feature documents; and every event deck document named by an available
+Tabletop index. Matchups currently add no card fields. Raw archives, arbitrary
+events, inactive or planned formats, unindexed Landing history, unrelated
+printings, and files merely present on disk are excluded.
+
+Field-specific extractors bind every card-name occurrence to product, format,
+document digest, period/week/event, deck or Feature, model, and zone, ignoring
+quantity. Every occurrence must resolve unambiguously to exact
+`oracle_id`/`scryfall_id`/`face_index`. Complete name coverage means exactly one
+official Chinese, permitted community, or explicit English-fallback name record
+per unique subject identity, with no unbound occurrence or orphan record. Image
+capacity never removes a name record. Any unresolved identity, face ambiguity,
+catalog mismatch, or missing registered extractor rejects the whole candidate.
+
+The complete overlay is at most 268,435,456 bytes. Metadata and notices have an
+8,388,608-byte ceiling; images have a 260,046,848-byte ceiling, at most 1,024
+unique image files, and a 5,242,880-byte per-image ceiling. The file count
+excludes the manifest and notices but the total-byte count includes every file.
+Metadata overflow rejects the candidate rather than reducing name coverage.
+With Cache-B's existing 64-MiB ceiling, generated card-image overlays remain
+bounded at 320 MiB before the existing one-gibibyte Pages artifact gate.
+
+Select the best permitted Chinese image per exact identity, then assign its
+best visibility tier: Cache-B rolling Features; latest MTGO 1w/latest indexed
+Top 8/default Tabletop event; MTGO 4w/other indexed Tabletop events; MTGO
+12w/remaining indexed Top 8; then other indexed ranges such as 36w. Within each
+tier, assign one catalog-ordered `(format_id, product_id)` bucket, sort by
+distinct tier-use count descending, latest end date descending, then canonical
+identity ascending, and take one candidate per non-empty bucket per round.
+
+Stream candidates in that frozen order into external temporary storage,
+validate their complete bytes and content digest, deduplicate identical files,
+and admit only files that fit both image ceilings. Continue after a non-fitting
+file so a later smaller or duplicate file may fit. Record exact fallback reasons
+including `image_too_large`, `capacity_bytes`, and `capacity_file_count`, and
+delete rejected bytes immediately. Only admitted bytes may be retained or
+published. Rebuild from an empty set on every changed subject—there is no LRU or
+previous-bundle preference—and atomically replace only a fully valid closure.
+The browser reuses the existing English selector for every miss and never calls
+MTGCH or copies an English byte into the localization overlay.
+
+Official Chinese images must be original Scryfall-supplied bytes for a proven
+official Simplified Chinese printing. Community images must be identifiable
+MTGCH community renders covered by the Owner-recorded project permission. Both
+remain unmodified and carry the required source-specific attribution.
+
+The real-source adapter must avoid per-card MTGCH search for the complete
+subject. It uses one Scryfall All Cards Bulk Data snapshot and, where
+separately authorized, groups MTGCH metadata by relevant set through the public
+set-card endpoint,
+with one in-flight request, at most one new request per second, `Retry-After`
+handling, and fail-closed authentication, 403, 429, 5xx, or provenance drift.
+Only candidates in the frozen closed subject may be requested. Capacity and
+content deduplication are decided from verified bytes, so rejected bytes may
+exist only in external temporary storage and are deleted immediately; they are
+never retained or published.
+
+Advance the synthetic localization Schema `1.0.0` to production Schema
+`2.0.0`. It must support independent source snapshots, original JPEG or WebP
+bytes, use bindings, local versus existing-English storage, explicit fallback
+reasons, capacity policy in the subject digest, and the complete attribution
+contract. The public prefix remains `assets/card-localization/v1/` because it
+has not yet been deployed.
+
+Implement the decision only through separately authorized `L10N-B1`
+production-contract/real-source-builder work, then `L10N-B2` optional Pages
+overlay admission, then `L10N-C` browser consumption and caller-proven cleanup.
+Cache-B remains the English recent-Feature fallback. Representative-card art
+remains a separate visual product and is never a localization input.
+
+The complete design and acceptance boundaries are recorded in
+`docs/audits/CARD_LOCALIZATION_HYBRID_CACHE_ARCHITECTURE_20260829.md`.
+
+## Why it was withdrawn
+
+The diagnostic never requested an image, never measured Chinese-image byte
+distribution or Pages headroom, and never exercised low-frequency hover/focus
+or click delivery. It therefore could not justify the 256-MiB/1,024-file
+limits, the ordering algorithm, or the blanket prohibition on runtime MTGCH
+image access. Those values and behaviors must not be copied into a Schema,
+producer, workflow, or browser consumer.
+
+Withdrawal authorizes no implementation, source fetch, image download, Schema
+change, Pages packaging, workflow change, front-end change, commit,
+publication, merge, production operation, `L10N-B1`, `L10N-B2`, `L10N-C`, or
+Phase 14.
+
+---
+
+# DEC-140 - Require architecture evidence before selecting card-image delivery
+
+Status: `Accepted by Owner; publication in progress`
+
+## Context
+
+DEC-138 correctly stopped its bounded diagnostic when metadata-resolution
+request 31 returned HTTP 429. The stop happened before the first image request.
+The result establishes a limitation of the tested per-card metadata setup, not
+the availability, latency, cacheability, or user-rate behavior of exact MTGCH
+image URLs. Treating every incomplete setup as proof for hybrid caching made the
+diagnostic unable to distinguish “image delivery failed” from “image delivery
+was never tested.”
+
+The withdrawn DEC-139 draft then introduced a 256-MiB/1,024-image cache and a
+strict no-MTGCH browser rule without measuring the complete current identity
+subject, Chinese-image coverage, real image byte distribution, Pages headroom,
+or direct-image behavior. Those are architecture inputs, not implementation
+tuning values.
+
+## Decision
+
+Supersede DEC-138 only where it automatically converts this incomplete setup
+result into a hybrid-cache architecture proposal. Preserve its bounded,
+non-product, non-retaining, fail-closed operating rules.
+
+Before selecting an architecture, produce one evidence package with three
+separately observable stages:
+
+1. an offline catalog-rooted inventory of current public card-bearing documents,
+   consumer interaction classes, and current Pages/Cache-B size;
+2. a separately authorized bounded identity/source inventory using one Scryfall
+   Bulk Data snapshot and no more than 32 set-grouped MTGCH metadata requests,
+   one in flight and at least five seconds apart; and
+3. a separately authorized two-session browser trial, at least six hours apart,
+   of up to 100 deterministically stratified exact MTGCH image URLs from the
+   deployed Pages origin, paired with matched Scryfall controls and capped at
+   400 MTGCH plus 400 control attempts.
+
+The browser trial calls no MTGCH search or metadata API. It measures deliberate
+single-image, actual-controller hover/focus/touch, warm-cache, and English-
+fallback behavior. It retains only aggregate status, decode, redirect, byte,
+latency, cache, and fallback observations.
+
+The trial is inconclusive—not evidence for any architecture—if its setup cannot
+close the current public subject, cover every eligible source/host/media/face
+stratum, or complete both sessions. A setup-stage 429 cannot again be described
+as an image-delivery failure.
+
+After the evidence report is accepted and published, a separate
+`L10N-ARCHITECTURE-DECISION` must explicitly choose among:
+
+- measured local-only Chinese image storage;
+- measured controlled exact-image delivery with English fallback;
+- a measured mixed eager-cache/on-demand-direct design; or
+- English images only when none of the Chinese-image paths is supported.
+
+No cache byte/file ceiling may be reused from DEC-139. A local ceiling must be
+derived from observed current-subject counts, byte distribution, deduplication,
+eager/on-demand use, and actual Pages headroom. Planned formats supply no
+capacity evidence; each newly available format requires a refreshed offline
+inventory and capacity model.
+
+The complete measurements, sample formula, criteria, retention boundary, and
+stop conditions are recorded in
+`docs/audits/CARD_LOCALIZATION_HYBRID_CACHE_ARCHITECTURE_20260829.md`.
+
+## Consequences
+
+Architecture work pauses until the missing evidence exists. Existing English
+Cache-B and Scryfall fallback remain unchanged. Chinese-name and provenance
+contracts remain valid, but neither image caching nor MTGCH direct delivery is
+selected.
+
+This decision authorizes no live trial, source request, image request,
+implementation, Schema, workflow, sidecar, Pages change, front-end change,
+commit, publication, merge, production, `L10N-B1`, `L10N-B2`, `L10N-C`, or
+Phase 14.

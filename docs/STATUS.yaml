@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/l10n-direct-trial-contract"
-  working_branch_status: "implementation_and_remote_publication_authorized"
+  current_working_branch: "codex/l10n-hybrid-architecture-design"
+  working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
@@ -24,7 +24,7 @@ status_document:
 current_phase:
   id: "PRE-14"
   name: "Card localization foundation"
-  status: "direct_trial_contract_in_progress"
+  status: "architecture_evidence_contract_in_progress"
   started_on: "2026-08-28"
   objective: "Establish provenance-safe Chinese card-name and complete-card-image support before any Phase 14 implementation."
   production_changes_allowed: false
@@ -33,46 +33,50 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "L10N-DIRECT-TRIAL-CONTRACT"
-  name: "Bounded MTGCH direct-image trial contract"
-  status: "implementation_and_remote_publication_authorized"
+  id: "L10N-ARCHITECTURE-EVIDENCE-CONTRACT"
+  name: "Card-localization architecture evidence and retest contract"
+  status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-29"
   artifact_impact: "none"
-  base_commit: "4ccb77cd2d94bab719b9b2abf501bc1dd387b9b8"
-  branch: "codex/l10n-direct-trial-contract"
-  objective: "Define a separately gated, bounded, non-retaining browser diagnostic that can determine whether MTGCH direct image delivery is eligible for later product consideration before choosing direct-origin or hybrid-cache architecture."
+  base_commit: "bc49e4dcc0def736599527bd2242c7ef86d363a9"
+  branch: "codex/l10n-hybrid-architecture-design"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/l10n-hybrid-architecture-20260829-02"
+  objective: "Withdraw the unsupported DEC-139 architecture proposal and define the exact subject, source, byte, Pages-headroom, direct-image, browser-cache, interaction, fallback, sampling, and result criteria required before selecting card-image delivery."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
-    merge: false
+    merge: true
   allowed_paths:
+    - "docs/audits/CARD_LOCALIZATION_HYBRID_CACHE_ARCHITECTURE_20260829.md"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/ROADMAP.md"
     - "docs/DECISIONS.md"
-    - "docs/TEST_TRIGGER_MATRIX.md"
     - "docs/STATUS.yaml"
-  planned_new_paths: []
+  planned_new_paths:
+    - "docs/audits/CARD_LOCALIZATION_HYBRID_CACHE_ARCHITECTURE_20260829.md"
   prohibited_changes:
-    - "Do not execute L10N-DIRECT-TRIAL, call a real card-data endpoint, request a real MTGCH or Scryfall image, or retain any real card response or image byte."
+    - "Do not call another real card-data endpoint, request a real MTGCH or Scryfall image, execute the replacement evidence trial, or retain any real card response or image byte."
     - "Do not modify code, Schemas, tests, workflows, dependencies, assets, Pages packaging, front-end behavior, generated data, public catalogs, statistics, classifiers, or event configuration."
-    - "Do not merge before Owner acceptance of this exact documentation subject and successful required checks."
-    - "Do not begin L10N-B, L10N-C, Phase 14, fetch Paupergeddon, dispatch production, or deploy Pages."
-  stop_point: "Write and validate the bounded trial contract, commit it, and publish one Ready pull request. Stop for Owner acceptance before merge; do not execute the real-source trial or begin another localization task."
+    - "Publish only this exact accepted documentation subject through one Ready PR and required checks; do not publish a changed subject."
+    - "Do not select local-only, direct, mixed, or English-only image architecture; do not begin the evidence trial, architecture decision, L10N-B1, L10N-B2, L10N-C, Phase 14, or fetch Paupergeddon."
+  stop_point: "Commit and publish this exact accepted contract through one Ready PR, required checks, and merge; contact no real card or image source before the merge succeeds."
   local_verification:
     result: "pass"
     completed_on: "2026-08-29"
     checks:
       - "5 focused documentation live-state and history tests passed."
-      - "Changed-scope repository validation passed for all 5 documentation paths, including YAML, 16 maintained references, and hygiene."
-      - "YAML parsing and complete diff whitespace validation passed."
-    scope_note: "Documentation-only contract work. The separately gated trial remains unexecuted and real card records and image bytes remain prohibited."
+      - "Changed-scope repository validation passed for the five declared documentation paths, including the evidence-contract audit addition."
+      - "YAML parsing, exact-path review, and complete diff whitespace validation passed."
+    scope_note: "Documentation-only evidence-contract work. No source, product, public artifact, browser behavior, or architecture selection is authorized to change."
 
 current_repository_state:
   localization_contract_merge_commit: "d36b5bf677383345e064bd58c2589b2a85e5aac1"
-  localization_contract_note: "L10N-A merged through PR #296. L10N-RIGHTS merged through PR #297 at 4ccb77cd2d94bab719b9b2abf501bc1dd387b9b8; it admits bounded source classes but does not authorize real-source access."
+  localization_rights_merge_commit: "4ccb77cd2d94bab719b9b2abf501bc1dd387b9b8"
+  direct_trial_contract_merge_commit: "bc49e4dcc0def736599527bd2242c7ef86d363a9"
+  direct_trial_result: "The separately authorized non-retaining trial predeclared 32 candidates, completed 30 metadata resolutions, and stopped on HTTP 429 at resolution request 31 before any image request; it is evidence about the tested metadata setup only and does not select an image architecture."
   deployed_master_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
-  deployed_master_note: "The documentation-only f540faa3 merge did not change site inputs or trigger Pages; the deployed site remains the accepted Cache-B subject."
+  deployed_master_note: "Localization documentation and diagnostics do not change site inputs; the deployed site remains the accepted Cache-B subject."
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -81,29 +85,29 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "L10N-DIRECT-TRIAL"
+  - id: "L10N-ARCHITECTURE-EVIDENCE-TRIAL"
+    status: "authorized_after_contract_merge"
+    note: "The Owner authorized the offline inventory, bounded grouped metadata stage, and two-session exact-image Pages-origin trial to start only after this exact contract is successfully merged and published; aggregate evidence only and no product change."
+  - id: "L10N-ARCHITECTURE-DECISION"
     status: "planned_not_authorized"
-    note: "After this contract is accepted and merged, a separate authorization may run the bounded non-retaining direct-image diagnostic. It changes no product behavior and cannot itself select or authorize a production architecture."
-  - id: "L10N-B"
+    note: "After the evidence report is accepted and published, separately authorize an evidence-backed choice among local-only, controlled direct, mixed, or English-only image behavior; derive rather than inherit any capacity."
+  - id: "L10N-B1"
     status: "planned_not_authorized"
-    note: "After the direct-image evidence and a separate architecture decision, build only the bounded localization resource architecture that the Owner accepts; unpermitted submitted, third-party, modified, source-unknown, and raw-response bytes remain blocked."
-  - id: "L10N-C"
-    status: "planned_not_authorized"
-    note: "Consume the admitted sidecar in Chinese views while preserving exact English fallback."
+    note: "Define implementation only after the architecture decision is accepted and published."
   - id: "PHASE-14-DESIGN"
     status: "planned_not_authorized"
     note: "Pauper MTGO and the Owner-supplied Paupergeddon event remain separately gated after the localization foundation."
 
 next_approved_task:
-  id: null
-  name: null
-  status: "current_contract_publication_in_progress"
+  id: "L10N-ARCHITECTURE-EVIDENCE-TRIAL"
+  name: "Card-localization architecture evidence trial"
+  status: "authorized_after_contract_merge"
   local_execution_authorized: false
-  note: "Only L10N-DIRECT-TRIAL-CONTRACT documentation and Ready-PR publication are authorized. The real-source trial, merge, product implementation, and follow-up work remain unauthorized."
+  note: "Successful merge/publication of the exact accepted contract activates local trial execution in a new isolated workspace. Before that condition, only accepted-task publication is authorized."
 
 prohibited_next_actions:
-  - "Do not execute L10N-DIRECT-TRIAL until this contract is accepted, merged, and separately authorized."
-  - "Do not fetch or retain real MTGCH or Scryfall card records or image bytes under this documentation authorization."
-  - "Do not modify the existing card-image cache, create the localization sidecar, or change a public browser path."
-  - "Do not begin L10N-B, L10N-C, Phase 14, production, or Pages."
+  - "Do not contact another real card or image endpoint or execute any stage of the replacement evidence trial before this exact contract is successfully merged and published."
+  - "Do not select an image architecture, modify the existing English card-image cache, create a real localization sidecar, or change a public browser path."
+  - "Do not publish any changed subject; only this exact Owner-accepted documentation diff may proceed through commit, Ready PR, checks, and merge."
+  - "Do not begin the evidence trial, architecture decision, L10N-B1, L10N-B2, L10N-C, Phase 14, production, or Pages."
   - "Do not develop directly on master or overwrite unexplained local changes."

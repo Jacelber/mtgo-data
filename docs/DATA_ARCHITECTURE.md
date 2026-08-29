@@ -3523,8 +3523,60 @@ unsafe redirect, or request-budget breach stops the trial. Product browsers
 remain prohibited from calling MTGCH unless a later accepted architecture
 decision explicitly changes this rule.
 
-Admitted MTGCH community-rendered image bytes may enter only the bounded closed
-sidecar and remain byte-for-byte as supplied by MTGCH. Their manifest records
+The authorized trial stopped when its thirty-first candidate-resolution request
+returned HTTP 429. No image request or sequential, concurrent, cold, warm,
+decode, latency, redirect, cache, or fallback measurement followed. This proves
+that the tested per-card metadata setup encountered a rate limit; it provides
+no evidence about exact-image delivery. DEC-140 therefore supersedes DEC-138
+only where an incomplete setup automatically selected hybrid caching. The
+bounded stop itself remains valid and does not authorize an uncontracted retry.
+
+No Chinese-image delivery architecture or capacity is currently selected.
+DEC-139's proposed 256-MiB/1,024-image cache, admission order, and blanket
+runtime MTGCH prohibition were withdrawn before acceptance because no real
+Chinese image byte or direct-image browser behavior supported them. Those
+values must not enter a production Schema, producer, workflow, or consumer.
+
+Architecture selection now requires a frozen evidence package. Its offline
+stage closes every card-bearing document reachable through available products
+of executable formats in `stats/catalog.json`, records exact public-document
+digests and consumer interaction classes, and measures current Pages and
+Cache-B size. Planned formats and arbitrary files are excluded rather than
+extrapolated.
+
+After separate authorization, its source stage may use one Scryfall Bulk Data
+snapshot and at most 32 set-grouped MTGCH metadata requests, one in flight and
+at least five seconds apart. It must not repeat one `/result` search per card.
+Authentication, 403, 429, 5xx, unknown provenance, request-budget breach, or
+contract drift stops the source stage and makes the evidence inconclusive.
+
+Only a conclusive source stage may select up to 100 exact permitted MTGCH image
+URLs, deterministically stratified by host, media type, source class, and face
+form. A separately authorized ephemeral browser on the deployed Pages origin
+tests the same sample in two sessions at least six hours apart. Each session
+uses deliberate single-image requests, the actual one-active-request preview
+controller behavior, one warm repeat, matched Scryfall controls, and English
+fallback for real failures. Across both sessions the ceilings are 400 MTGCH and
+400 control attempts. The browser calls no MTGCH search or metadata API.
+
+Only aggregate subject, coverage, status, decode, redirect, byte, latency,
+cache, and fallback observations may be retained. Exact URLs, card names, raw
+responses, image bytes, screenshots, browser profiles, and per-card logs are
+removed. A setup-stage failure is reported as setup failure, never relabeled as
+an image-delivery result.
+
+A later separately accepted decision may choose measured local-only storage,
+controlled exact-image delivery, a measured eager-cache/on-demand-direct mix,
+or English images only. Any local cache ceiling must be derived from measured
+current-subject count, byte distribution, deduplication, eager/on-demand split,
+and actual Pages headroom. The detailed evidence contract and decision criteria
+are recorded in
+`docs/audits/CARD_LOCALIZATION_HYBRID_CACHE_ARCHITECTURE_20260829.md` and
+DEC-140.
+
+If a later evidence-backed architecture admits local MTGCH community-rendered
+image bytes, they may enter only its bounded closed sidecar and remain byte-for-
+byte as supplied by MTGCH. Their manifest records
 `community` status, MTGCH source, retrieval snapshot, content digest, Owner-
 attested project permission, and required attribution. Official image bytes
 likewise remain byte-for-byte original. Neither class may be converted,
@@ -3540,8 +3592,16 @@ The localization rollout remains split into independent accepted subjects:
   contract with synthetic fixtures;
 - the rights gate admits licensed names, original official Simplified Chinese
   images, and Owner-authorized MTGCH community-rendered images;
-- `L10N-B` builds and admits the real external sidecar without changing the
-  current English cache; and
+- `L10N-ARCHITECTURE-EVIDENCE-TRIAL` measures the exact current subject,
+  source coverage, real image bytes, Pages headroom, direct delivery, browser
+  caching, actual interaction modes, and English fallback without changing the
+  product;
+- `L10N-ARCHITECTURE-DECISION` selects or rejects local, direct, mixed, and
+  English-only behavior only from the accepted evidence;
+- `L10N-B1` builds and validates a real external candidate under that accepted
+  architecture without changing Pages or the current English cache;
+- `L10N-B2` admits only the measured, accepted optional resource through the
+  Pages packaging boundary without adding a Chinese browser consumer; and
 - `L10N-C` makes Chinese views consume the admitted sidecar while preserving
   English behavior and exact fallback.
 
