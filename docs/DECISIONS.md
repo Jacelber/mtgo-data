@@ -6259,7 +6259,7 @@ governed by the live task and Owner acceptance.
 
 # DEC-136 - Localize card display through a provenance-preserving sidecar
 
-Status: `Accepted`
+Status: `Superseded by DEC-146`
 
 ## Context
 
@@ -6956,7 +6956,7 @@ result together with local-storage measurements and fallback requirements.
 
 # DEC-145 - Select a bounded Landing hot set plus controlled direct delivery
 
-Status: `Accepted`
+Status: `Superseded by DEC-146`
 
 ## Context
 
@@ -7061,3 +7061,69 @@ completion publication of this exact documentation subject. It authorizes no
 source or image request, code, test, Schema, workflow, sidecar build, Pages
 admission, front-end change, asset cleanup, production operation, `L10N-B1`,
 `L10N-B2`, `L10N-C`, or Phase 14.
+
+---
+
+# DEC-146 - Replace the localization program with one minimal product path
+
+Status: `Accepted for documentation and obsolete-route cleanup`
+
+## Context
+
+The DEC-136 and DEC-145 implementation route created a separate immutable
+identity sidecar, Schema, synthetic builder, Scryfall Bulk candidate,
+source-snapshot evidence, English-byte capacity proxy, optional generated
+overlay, and sequential `L10N-B1`, `L10N-B2`, and `L10N-C` gates. It
+produced no public card-name or card-image behavior.
+
+The repository already normalizes maintained aliases and card-face names before
+generated product documents reach the browser. Reimplementing those
+transformations in the localization builder duplicated an existing product
+capability. Completed source and browser trials also already established that
+MTGCH supplies the required Chinese values and that direct MTGCH image loading
+worked in the accepted observation window.
+
+## Decision
+
+Supersede the DEC-136 sidecar and DEC-145 mixed-delivery implementation route.
+Remove the unused localization builder, Schema, synthetic tests, dedicated CI
+trigger, and active B1/B2/C roadmap. Retain DEC-137's Owner-recorded MTGCH
+permission and the DEC-140 through DEC-144 observations as historical evidence,
+not as gates that must be repeated.
+
+A future separately authorized implementation is one product task:
+
+1. consume the normalized English card names already emitted by the product;
+2. generate one flat lookup from that English name to the MTGCH Chinese display
+   name and exact MTGCH image URL;
+3. keep only current default-Landing images in Pages, reusing the existing
+   English Landing cache and adding the corresponding Chinese files;
+4. use MTGCH image URLs on demand elsewhere on Chinese pages and retain the
+   existing Scryfall image URLs elsewhere on English pages; and
+5. use one shared browser selector, with the existing English name and image as
+   fallback when a Chinese value is absent.
+
+There is no new localization-specific alias or card-face converter. There is
+also no separate localization Schema, immutable printing-identity manifest,
+Bulk-snapshot reproducibility requirement, source-response digest,
+English-image capacity proxy, content-addressed localization overlay, or
+three-stage admission sequence.
+
+Feature-specific verification is limited to parsing the flat lookup, checking
+that every declared current-Landing local image exists, and proving the four
+source-selection outcomes: Chinese local, Chinese MTGCH, English local, and
+English Scryfall. Mandatory repository checks selected from the actual changed
+paths remain applicable. Do not repeat MTGCH or Scryfall availability, latency,
+cache, image-size, Bulk, or name-conversion trials.
+
+## Consequences
+
+This reset deletes only unused pre-production localization artifacts. It does
+not change Pages, the browser, generated data, the existing English Landing
+cache, Scryfall behavior, MTGCH traffic, or public output.
+
+Historical localization audits remain evidence and are not rewritten. The
+future `L10N-SIMPLE` implementation requires a separate Owner development
+brief and authorization. This decision authorizes no source request, image
+download, front-end change, Pages change, production operation, commit,
+publication, merge, or Phase 14 work.
