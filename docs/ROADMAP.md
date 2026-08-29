@@ -82,12 +82,12 @@ by adding Pauper cards and another source product.
 | `L10N-ARCHITECTURE-EVIDENCE-CONTRACT-CORRECTION` | The accepted contract confuses project-derived `official`/`community`/`english_fallback` classes with nonexistent mandatory MTGCH source fields. | Correct DEC-137/140, the rights and architecture contracts, the evidence report, roadmap, and live status. Define Scryfall as official-printing proof and MTGCH exact-identity Chinese material as community when official proof is absent. Do not resume source access. | One internally consistent documentation subject identifies the validator design error and provides a reviewable basis for a later bounded rerun. | `gpt-5.6-sol`, high reasoning |
 | `L10N-ARCHITECTURE-EVIDENCE-TRIAL-RERUN` | Corrected source classification still leaves image delivery unmeasured. | Reproduce the immutable offline subject, resolve official material from one Scryfall `all_cards` snapshot, complete no more than 32 grouped MTGCH requests, prepare the deterministic image sample, and start Stage C only through the approved Pages-origin browser capability. | Stage A and B close: 28 of 28 MTGCH requests return HTTP 200 and 100 images cover every eligible stratum. Stage C stops before its first sampled image because the approved browser cannot inject the external exact URLs or expose the declared network metrics; no source failure or architecture is inferred. | `gpt-5.6-sol`, high reasoning |
 | `L10N-STAGE-C-EXECUTION-CONTRACT` | The evidence contract assumes a Pages-origin browser executor capability that the approved in-app browser does not expose. | Select an Owner-controlled, repository-owned Playwright/Chromium runner; bind it to served Pages/controller bytes; define deterministic regeneration, real interaction shapes, observable network/cache metrics, aggregate redaction, external temporary state, logical/physical budgets, and fail-closed cleanup. Make no source or image request while writing the contract. | One reviewable contract resolves the executor design without bypassing in-app-browser security: implementation and real traffic remain separate later gates. | `gpt-5.6-sol`, high reasoning |
-| `L10N-STAGE-C-RUNNER` | The accepted contract will still lack an executable, independently verified diagnostic. | After separate authorization, implement the repository-owned command-line runner and prove every binding, interaction, budget, redaction, retention, and cleanup path only with local synthetic fixtures. Do not contact Scryfall, MTGCH, Pages, or another public origin. | One accepted runner can later execute the exact production data flow without using a new browser stack or exposing exact sample data. | `gpt-5.6-sol`, high reasoning |
-| `L10N-STAGE-C-TRIAL` | Stage C still has no image status, decode, redirect, byte, latency, cache, or fallback evidence. | After runner acceptance/publication and separate source/image authorization, refresh or prove the offline subject, regenerate the deterministic exact sample, and run one complete Pages-origin observation session on the controlled local machine. Retain only the aggregate result and do not infer cross-time or long-term availability. | One conclusive observed-window result can evaluate DEC-140's optional-path criteria; any setup, observability, budget, drift, or retention failure remains inconclusive. | `gpt-5.6-sol`, high reasoning |
-| `L10N-ARCHITECTURE-DECISION` | Architecture cannot be selected from estimates or an incomplete setup result. | After evidence acceptance/publication and separate authorization, apply the predeclared criteria to choose measured local-only storage, controlled direct delivery, a measured eager-cache/on-demand mix, or English-image fallback only. Derive any local ceiling from observed bytes and Pages headroom. | One evidence-backed architecture replaces or rejects the withdrawn proposal and defines later implementation tasks. | `gpt-5.6-sol`, high reasoning |
-| `L10N-B1` | No real production localization candidate exists under an accepted architecture. | Define only after `L10N-ARCHITECTURE-DECISION`; implement the exact accepted source, identity, provenance, and delivery contract in a repository-external candidate without changing Pages. | One real candidate proves the accepted architecture without silently inheriting withdrawn cache constants. | `gpt-5.6-sol`, high reasoning |
-| `L10N-B2` | A validated external candidate is not yet an admitted optional Pages resource. | Define only after B1 acceptance and according to the accepted architecture; prove exact packaging, capacity where applicable, fallback, and atomic failure. Do not add the Chinese browser consumer. | Pages carries only the measured and accepted resource boundary; failure preserves the English product. | `gpt-5.6-sol`, high reasoning |
-| `L10N-C` | Chinese views do not consume an admitted localization resource. | Define only after B2 acceptance; add one shared consumer for applicable MTGO and Tabletop views, preserve exact fallback, and validate desktop, 390px, 412px, and legacy routes. | Chinese views use only the evidence-backed delivery path, with truthful provenance and recoverable English fallback. | `gpt-5.6-sol`, high reasoning |
+| `L10N-STAGE-C-RUNNER` | The accepted contract lacked an executable, independently verified diagnostic. | Implement the repository-owned runner and prove binding, interaction, budget, redaction, retention, and cleanup only with local synthetic fixtures. | The accepted runner passed 9/9 focused cases and can exercise the Pages/controller path without retaining exact sample data. | `gpt-5.6-sol`, high reasoning |
+| `L10N-STAGE-C-TRIAL` | Stage C lacked real exact-image status, decode, redirect, latency, cache, and fallback evidence. | Reproduce the accepted subject, regenerate the deterministic sample, and complete one Pages-origin observation session; retain only its aggregate and make no cross-time claim. | 200/200 MTGCH and 200/200 controls decoded with zero failure or timeout; direct delivery met DEC-140's optional-path thresholds for the observed window. | `gpt-5.6-sol`, high reasoning |
+| `L10N-ARCHITECTURE-DECISION` | Direct delivery qualifies, but the Owner wants initially visible Landing images to be independent of MTGCH. | Select the current default-Landing representative-plus-Feature hot set for local Pages packaging, use corresponding English complete-card bytes as its capacity proxy without another Chinese sizing trial, and use controlled exact URLs plus English fallback for every other image. | One bounded mixed architecture makes the current default Landing local without mirroring decklists or complete formats. | `gpt-5.6-sol`, high reasoning |
+| `L10N-B1` | The synthetic contract lacks a real hot-set definition, English proxy accounting, and mixed local/direct delivery classes. | After architecture acceptance, implement the deterministic current-Landing extractor; evolve Schema, builder, and synthetic fixtures; then build a real repository-external candidate with names, provenance, attribution, exact non-hot-set URLs, original hot-set bytes, English proxy totals, actual totals, and atomic capacity checks. Change no Pages or browser path. | One external candidate proves the complete localization contract and an at-most-64-MiB current Landing hot set without a separate sizing experiment. | `gpt-5.6-sol`, high reasoning |
+| `L10N-B2` | A validated mixed-delivery candidate is not yet an admitted optional Pages resource. | After B1 acceptance, add subject-addressed artifact reuse and a separate generated overlay for the manifest, attribution, and hot-set files; enforce the 64-MiB overlay and 1-GiB Pages ceilings; omit a failed, rejected, missing, or oversized overlay. Add no browser consumer. | Pages carries only current default-Landing Chinese images, while every failure preserves a valid English artifact. | `gpt-5.6-sol`, high reasoning |
+| `L10N-C` | Chinese views do not consume the admitted local/direct resource, and Landing still has separate representative-art and Feature image paths. | After B2 acceptance, add one shared identity-based consumer: local Chinese files for default Landing, controlled exact URLs elsewhere, and English fallback throughout. Validate desktop, 390px, 412px, current/archived/legacy routes and interactions, then remove only caller-proven obsolete representative assets and duplicate selection branches. | Initially visible Landing images are local in Chinese, other images remain bounded on demand, and redundant image code is removed safely. | `gpt-5.6-sol`, high reasoning |
 
 The `L10N-RIGHTS` evidence matrix and operational conditions are recorded in
 `docs/audits/CARD_LOCALIZATION_RIGHTS_REVIEW_20260829.md` and DEC-137. The
@@ -100,10 +100,7 @@ The authorized direct trial then stopped when candidate-resolution request 31
 returned HTTP 429, before any image request. DEC-139's unmeasured hybrid-cache
 proposal was withdrawn before acceptance. DEC-140 and
 `docs/audits/CARD_LOCALIZATION_HYBRID_CACHE_ARCHITECTURE_20260829.md` define the
-replacement evidence contract. Its acceptance/publication alone do not authorize
-later work; the Owner separately authorized the evidence trial to begin only
-after this exact contract is successfully merged and published. The architecture
-decision, `L10N-B1`, `L10N-B2`, and `L10N-C` remain unauthorized.
+replacement evidence contract.
 
 The first authorized replacement trial closed 47 registered documents and
 measured 108,651 card-name occurrences, 1,892 distinct English input strings,
@@ -115,27 +112,23 @@ and completed all 28 grouped MTGCH requests with HTTP 200. Provider precedence
 assigned Chinese names and images for all 1,866 resolved canonical identities,
 and a deterministic 100-image sample covered the two eligible face-form strata.
 
-Stage C nevertheless stopped before its first sampled image request. The
-approved in-app browser could open the deployed Pages application but could not
-introduce the external exact sample URLs into the existing controller or expose
-the required HTTP/redirect/transfer/cache observations; its security boundary
-also prohibited alternate injection or debugging surfaces. This is an
-execution-environment limitation, not MTGCH image-delivery evidence.
-`L10N-ARCHITECTURE-DECISION` remains blocked. The corrected aggregate result is
-recorded in
-`docs/audits/CARD_LOCALIZATION_ARCHITECTURE_EVIDENCE_TRIAL_20260829.md`.
+The first approved browser surface could not introduce the external exact
+sample into the deployed controller, so DEC-142 correctly classified that stop
+as an executor gap rather than an image failure. DEC-143 then selected the
+Owner-controlled repository Playwright/Chromium runner. Its separately accepted
+Stage-C session loaded and decoded 200/200 MTGCH cases and 200/200 matched
+Scryfall controls with zero timeout or failure, a 693-ms p95 disadvantage, and
+98.5% useful warm reuse. DEC-144 limits that result to one observed window.
 
-DEC-143 and
-`docs/audits/CARD_LOCALIZATION_STAGE_C_EXECUTION_CONTRACT_20260829.md` now
-propose the exact executor resolution. The Owner-controlled runner uses the
-repository-pinned Playwright/Chromium path, fresh non-persistent contexts, one
-repository-external private sample plan, served-byte/controller binding, and
-aggregate-only observations. A standard GitHub-hosted runner and workflow
-artifact transfer are excluded. The 400-per-provider logical-load ceilings are
-recorded separately from the at-most-two physical starts already permitted
-inside one controller load. Contract acceptance would authorize only its
-publication; runner implementation and real Stage-C traffic remain distinct
-`L10N-STAGE-C-RUNNER` and `L10N-STAGE-C-TRIAL` gates.
+DEC-145 and
+`docs/audits/CARD_LOCALIZATION_ARCHITECTURE_DECISION_20260829.md` therefore
+propose a bounded mixed design. The local subject is only the default Landing's
+representative and current Feature cards: 29 Standard names, 34 Modern names,
+and 61 after cross-format deduplication in the current documents. The Owner
+accepts corresponding English complete-card bytes as the planning proxy, so no
+second Chinese sizing trial is inserted. Both proxy and actual overlay must fit
+64 MiB; non-hot-set images use controlled exact delivery and English fallback.
+Architecture acceptance does not authorize `L10N-B1`, `L10N-B2`, or `L10N-C`.
 
 These tasks are separate authorization and acceptance subjects. `L10N-00`
 does not authorize `L10N-A`; the rights decision does not authorize a build;

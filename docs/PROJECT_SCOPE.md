@@ -469,10 +469,27 @@ card and printing identity in this order:
 The Chinese product must label fallback state truthfully and must not present a
 community translation or rendered image as official. Missing Chinese coverage
 must degrade to the English fallback rather than hide the card or guess a
-translation. Browser consumers must not call MTGCH at runtime. Localization is
-built and validated ahead of publication as a versioned sidecar so the existing
-English card-image cache, source data, statistics, classifier identities, and
-public product availability remain independent.
+translation. Localization identities, names, provenance, attribution, and
+exact image URLs are built and validated ahead of publication as a versioned
+sidecar so the existing English card-image cache, source data, statistics,
+classifier identities, and public product availability remain independent.
+
+Under DEC-145, the default MTGO Landing representative cards and each current
+Feature deck's four displayed cards form one generated local Chinese-image hot
+set. The subject is derived from the current Landing documents and deduplicated
+by immutable card identity; it does not include expanded decklists, statistics,
+Top 8, Tabletop, archived Feature weeks, or a format's complete population.
+Corresponding English complete-card image bytes are the Owner-approved capacity
+proxy, so no additional Chinese sizing trial is required. Verified hot-set
+bytes may enter the generated Pages artifact but not Git history.
+
+For every image outside that hot set, a browser may request only an exact image
+URL admitted by the sidecar: official Simplified Chinese images come from
+Scryfall and permitted community-rendered images come from MTGCH. The browser
+must not call an MTGCH search, card, set, result, or metadata API, construct an
+upstream URL, or prefetch a format's complete card population. The existing
+English complete-card image remains the immediate fallback on any missing,
+rejected, failed, or undecoded Chinese image.
 
 Identifiable MTGCH community-rendered Chinese full-card images are inside the
 approved product scope under the Owner's recorded project-specific permission

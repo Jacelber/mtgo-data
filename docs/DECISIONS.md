@@ -6917,7 +6917,7 @@ sidecar, Pages change, production, architecture decision, `L10N-B1`, `L10N-B2`,
 
 # DEC-144 - Accept the Stage-C observed-window image result
 
-Status: `Accepted for publication`
+Status: `Accepted`
 
 ## Context
 
@@ -6951,3 +6951,113 @@ availability, select an architecture, make MTGCH mandatory, change a public
 path, or authorize `L10N-B1`, `L10N-B2`, `L10N-C`, Phase 14, Pages, or
 production. The separately gated architecture decision must weigh this bounded
 result together with local-storage measurements and fallback requirements.
+
+---
+
+# DEC-145 - Select a bounded Landing hot set plus controlled direct delivery
+
+Status: `Accepted`
+
+## Context
+
+DEC-140 prohibited choosing a Chinese-image architecture from unsupported
+storage estimates. It made controlled direct delivery eligible only after a
+conclusive Pages-origin session, and required a measured bounded eager subject
+before selecting a mixed design.
+
+The accepted Stage-C window decoded 200 of 200 MTGCH logical cases and 200 of
+200 matched Scryfall controls, with zero failure or timeout in deliberate,
+hover, focus, and touch assignments. MTGCH's p95 was 693 ms slower than the
+control, redirects stayed inside the predeclared host classes, and 197 of 200
+warm repeats avoided or materially reduced transfer. This makes controlled
+direct delivery eligible for the observed window without establishing long-
+term availability.
+
+The Owner then narrowed the local subject to images already visible on the
+default MTGO Landing page and explicitly accepted corresponding English
+complete-card bytes as the Chinese capacity proxy instead of authorizing
+another Chinese-image sizing trial. The current offline subject is the union of
+default `environment.rows[].key_cards[]` representatives and current
+`features.items[].featured_cards[]`: 29 Standard names, 34 Modern names, and 61
+names after cross-format deduplication. This excludes expanded decklists,
+statistics, Top 8, Tabletop, archived Feature weeks, and full-format mirrors.
+
+## Decision
+
+Select a mixed architecture:
+
+1. package the immutable-identity-deduplicated current default-Landing subject
+   as a local Chinese hot set in the generated Pages artifact; and
+2. use controlled exact-image delivery with immediate English fallback for
+   every image outside that hot set.
+
+For capacity planning, resolve the corresponding English Scryfall `normal`
+complete-card image for each hot-set identity and sum its bytes after identity
+deduplication as `english_proxy_bytes`. Require both that proxy and the actual
+complete Chinese localization overlay to fit 67,108,864 bytes, the existing
+Cache-B-class overlay ceiling. Retain the 5-MiB per-image limit and the
+1,073,741,824-byte complete Pages ceiling. Checking actual bytes while building
+the candidate is mandatory packaging validation, not another architecture
+trial. This Owner-directed proxy supersedes DEC-140's separate Chinese byte-
+distribution prerequisite only for this exact bounded Landing subject. The
+withdrawn 256-MiB/1,024-file proposal remains rejected.
+
+At build time, Scryfall printing evidence proves official Simplified Chinese
+names and images. Official hot-set images retain exact original Scryfall bytes.
+When official proof is absent, exact-identity MTGCH material is `community`
+under the Owner-recorded permission, and hot-set images retain exact MTGCH-
+supplied bytes. Neither class may be transformed. Every other resolved image
+retains only its exact validated official Scryfall, community MTGCH, or English-
+fallback URL. Identity ambiguity, false status, unsafe host or path, missing
+attribution, byte or digest mismatch, capacity breach, source-contract drift,
+or an undeclared record/file rejects the complete optional overlay.
+
+At browser time, default Landing representative and current Feature cards use
+their local Chinese hot-set file. A missing or rejected entry uses local English
+Cache-B or the existing English path. Every non-hot-set Chinese image is
+requested only when visible or invoked by hover, keyboard focus, touch, click,
+or preview, through the paced one-active-request, timeout-bounded, retry-bounded
+controller. English remains visible until a direct Chinese image decodes and is
+restored on every cancellation or failure.
+
+This supersedes only DEC-136's blanket prohibition on browser MTGCH access. The
+browser may fetch the exact community image-file URL admitted by the sidecar;
+it must not call MTGCH search, result, set, card-description, or metadata APIs,
+construct a URL, or enumerate an upstream collection. It must not prefetch a
+format's population. No proxy, full Pages mirror, service worker, or persistent
+application image store is admitted. Normal browser HTTP/image caching remains
+allowed.
+
+The complete subject, proxy rule, packaging rules, data flow, fallback, and
+development steps are recorded in
+`docs/audits/CARD_LOCALIZATION_ARCHITECTURE_DECISION_20260829.md`.
+
+## Consequences
+
+`L10N-B1` must evolve the synthetic contract into a real repository-external
+mixed-delivery candidate. It adds the deterministic representative-plus-
+Feature hot-set extractor, delivery classes, English proxy bytes, original
+hot-set image bytes, exact non-hot-set URLs, provenance, attribution, digest,
+capacity, cleanup, and atomic-failure validation. It changes no Pages path or
+consumer.
+
+After separate acceptance, `L10N-B2` may add a subject-addressed optional Pages
+overlay containing the manifest, attribution, and at-most-64-MiB hot set. A
+missing, failed, rejected, or oversized candidate must be omitted so the
+English Pages artifact remains valid. After another acceptance, `L10N-C` may
+add the shared identity-based consumer, prove local Landing and on-demand direct
+fallback behavior on desktop, 390-pixel, 412-pixel, current, archived, and
+legacy routes, then remove only caller-proven redundant representative-card
+assets and duplicate selection branches. English Cache-B remains the fallback.
+
+Direct compatibility evidence may be reused only while the exact image hosts
+and URL contract, browser policy, controller pacing, and project permission
+remain unchanged. Each newly available format requires a refreshed identity/
+source inventory and a recomputed English-byte proxy for its current default-
+Landing additions; it cannot inherit the frozen Standard/Modern counts.
+
+This accepted decision changes documentation only. Owner acceptance authorizes
+completion publication of this exact documentation subject. It authorizes no
+source or image request, code, test, Schema, workflow, sidecar build, Pages
+admission, front-end change, asset cleanup, production operation, `L10N-B1`,
+`L10N-B2`, `L10N-C`, or Phase 14.

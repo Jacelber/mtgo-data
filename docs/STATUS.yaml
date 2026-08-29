@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/l10n-stage-c-trial"
-  working_branch_status: "local_complete_publication_in_progress"
+  current_working_branch: "codex/l10n-architecture-decision"
+  working_branch_status: "owner_accepted_completion_in_progress"
   status: "active"
 
 status_document:
@@ -24,7 +24,7 @@ status_document:
 current_phase:
   id: "PRE-14"
   name: "Card localization foundation"
-  status: "stage_c_trial_local_complete"
+  status: "architecture_decision_owner_accepted"
   started_on: "2026-08-28"
   objective: "Establish provenance-safe Chinese card-name and complete-card-image support before any Phase 14 implementation."
   production_changes_allowed: false
@@ -33,52 +33,46 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "L10N-STAGE-C-TRIAL"
-  name: "Card-localization Stage-C real observed-window trial"
-  status: "local_complete_publication_in_progress"
+  id: "L10N-ARCHITECTURE-DECISION"
+  name: "Card-localization delivery architecture decision"
+  status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-29"
-  artifact_impact: "internal_diagnostics"
-  base_commit: "7e53fdf80daa9c828285f38b912b03b707b5c933"
-  branch: "codex/l10n-stage-c-trial"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/l10n-stage-c-trial-20260829-01"
-  objective: "Regenerate the current catalog-rooted exact sample within the accepted source budgets, complete one real Pages-origin observation session, and publish only the aggregate result without claiming cross-time availability."
+  artifact_impact: "documentation"
+  base_commit: "0f75374b1b3b6a6c4ab737ee6689494c3b1d5e01"
+  branch: "codex/l10n-architecture-decision"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/l10n-architecture-decision-20260829-01"
+  objective: "Record the Owner-selected mixed architecture: package only the current Landing representative and Feature-card hot set in Pages using corresponding English image bytes as the capacity proxy, deliver all other Chinese images through controlled exact URLs, preserve English fallback, and define the later implementation tasks without changing the product."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "ci_master_admission.py"
-    - "scripts/run_card_localization_stage_c_trial.mjs"
-    - "tests/browser/card-localization-stage-c-runner.spec.js"
-    - "tests/test_ci_master_admission.py"
-    - "docs/audits/CARD_LOCALIZATION_STAGE_C_EXECUTION_CONTRACT_20260829.md"
-    - "docs/audits/CARD_LOCALIZATION_STAGE_C_RUNNER_20260829.md"
-    - "docs/audits/CARD_LOCALIZATION_STAGE_C_TRIAL_20260829.md"
-    - "docs/audits/CARD_LOCALIZATION_HYBRID_CACHE_ARCHITECTURE_20260829.md"
+    - "docs/audits/CARD_LOCALIZATION_ARCHITECTURE_DECISION_20260829.md"
+    - "docs/PROJECT_SCOPE.md"
     - "docs/DATA_ARCHITECTURE.md"
     - "docs/DECISIONS.md"
     - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
+    - "docs/TEST_TRIGGER_MATRIX.md"
   planned_new_paths:
-    - "docs/audits/CARD_LOCALIZATION_STAGE_C_TRIAL_20260829.md"
+    - "docs/audits/CARD_LOCALIZATION_ARCHITECTURE_DECISION_20260829.md"
   prohibited_changes:
-    - "Do not exceed one Scryfall all_cards snapshot, 32 set-grouped MTGCH metadata requests at one in flight and five seconds apart, 100 unique sample images, 200 logical or 400 physical starts per provider in the complete session."
-    - "Do not retain raw source responses, snapshot bytes, image bytes, exact identities or URLs after their contracted temporary lifetime, or any screenshot, trace, HAR, video, browser profile, cookie, credential, or per-card log."
-    - "Do not modify the controller, product pages, dependencies, workflows, Schemas, public paths, generated data, statistics, classifiers, or event configuration."
-    - "Do not select an image architecture or begin product localization implementation."
-  stop_point: "Correct the unsupported six-hour/two-session premise, finalize the completed valid observed-window aggregate, and publish it; do not select an architecture."
+    - "Do not request another card, metadata, image, Pages, or production resource while writing the decision."
+    - "Do not modify code, tests, Schemas, workflows, dependencies, generated data, public assets, statistics, classifiers, event configuration, or the existing English Cache-B."
+    - "Do not run another Chinese-image sizing trial; use the corresponding English full-card image bytes and the existing 64-MiB overlay ceiling as the Owner-approved planning proxy."
+    - "Do not begin L10N-B1, L10N-B2, L10N-C, Phase 14, Pages deployment, or production."
+  stop_point: "Complete and verify the local architecture documentation subject, then stop for Owner acceptance before commit or publication."
   local_verification:
     result: "passed"
     completed_on: "2026-08-29"
     checks:
-      - "The final Pages-origin session loaded and decoded 200/200 MTGCH logical cases and 200/200 matched Scryfall controls with zero failed decode or timeout."
-      - "The sample covered 90 single-face and 10 multi-face community images across 50 deliberate, 15 hover, 20 focus, and 15 touch assignments."
-      - "The focused single-session synthetic runner suite passed 9/9 cases in one worker after the unsupported repeat requirement was removed."
-      - "Finalization deleted the external exact identity/URL plan and retained only the redacted aggregate."
-      - "Changed-scope repository validation passed all 12 changed paths: Python 2/2, JavaScript 1/1, YAML 1/1, references 16/16, and hygiene 12/12."
-      - "The publication classifier now recognizes only the existing Stage-C runner path as a UI diagnostic; all 67 focused admission tests passed."
-    scope_note: "The Owner rejected the evidence-free six-hour repeat. The focused correction changes only single-session completion, budgets, directly affected synthetic tests, and authoritative documentation."
+      - "The current default-Landing hot-set extractor inputs contain 29 Standard names, 34 Modern names, and 61 unique names after cross-format union; the architecture requires final identity deduplication rather than freezing that count."
+      - "The Owner-directed capacity rule uses corresponding English normal-image bytes as the proxy, performs no additional Chinese sizing trial, and retains 64-MiB proxy/actual-overlay plus 1-GiB complete-artifact publication checks."
+      - "Scope, data architecture, DEC-145, roadmap, status, validation triggers, and the dedicated audit consistently define local default-Landing images, controlled non-hot-set URLs, and English fallback."
+      - "Changed-scope validation passed all seven paths; the final live STATUS is 9,454 bytes, below its 10-KiB policy limit."
+      - "The complete diff changes documentation only and contains no code, Schema, workflow, generated data, public asset, source request, image request, or product behavior change."
+    scope_note: "Documentation-only Owner revision; no Chinese-image measurement, source request, product implementation, or external request occurred."
 
 current_repository_state:
   localization_contract_merge_commit: "d36b5bf677383345e064bd58c2589b2a85e5aac1"
@@ -89,9 +83,8 @@ current_repository_state:
   architecture_evidence_trial_rerun_merge_commit: "fabf436cca2b2a8adfa5135188730bd9acffcdf5"
   stage_c_execution_contract_merge_commit: "c92c7137fedc19279a35b41ecdfde70c62c85efd"
   stage_c_runner_merge_commit: "7e53fdf80daa9c828285f38b912b03b707b5c933"
+  stage_c_trial_merge_commit: "0f75374b1b3b6a6c4ab737ee6689494c3b1d5e01"
   stage_c_observed_window_result: "The 100-image Pages-origin session completed 200/200 MTGCH and 200/200 matched-control decodes with zero failure or timeout. MTGCH p95 was 693 ms slower than control and 197/200 warm repeats avoided or materially reduced transfer. This supports optional controlled-direct eligibility for the observed window only; it does not prove long-term availability or select an architecture."
-  direct_trial_result: "The separately authorized non-retaining trial predeclared 32 candidates, completed 30 metadata resolutions, and stopped on HTTP 429 at resolution request 31 before any image request; it is evidence about the tested metadata setup only and does not select an image architecture."
-  architecture_evidence_trial_result: "The corrected rerun reproduced Stage A, resolved 1,869 strings to 1,866 canonical identities from one Scryfall all_cards snapshot, and completed 28 of 28 grouped MTGCH requests with HTTP 200. Official/community precedence assigned Chinese names and images for every resolved identity, and a deterministic 100-image sample covered both eligible strata. Stage C stopped before its first sampled image because the approved in-app browser could not bind the external exact URLs to deployed Pages or expose the declared network metrics. This is browser_executor_capability_gap, not MTGCH image failure; no architecture is selected."
   deployed_master_commit: "b28445151a5ff64fedde566aa00678241a17f38a"
   deployed_master_note: "Localization documentation and diagnostics do not change site inputs; the deployed site remains the accepted Cache-B subject."
   public_entries:
@@ -118,28 +111,33 @@ future_task_gates:
     status: "merged"
     note: "PR #303 merged the validated runner as 7e53fdf80daa9c828285f38b912b03b707b5c933; exact-merge confirmation succeeded."
   - id: "L10N-STAGE-C-TRIAL"
-    status: "local_complete_publication_in_progress"
-    note: "The observed-window aggregate is complete, exact-plan cleanup succeeded, and the Owner's continuous authorization covers publication and merge."
+    status: "merged"
+    note: "PR #304 merged the accepted observed-window result as 0f75374b1b3b6a6c4ab737ee6689494c3b1d5e01; its exact-master validation succeeded."
   - id: "L10N-ARCHITECTURE-DECISION"
-    status: "planned_not_authorized"
-    note: "Begin only after the Stage-C aggregate is published and separately authorized; the observed-window result cannot support cross-time availability claims."
+    status: "owner_accepted_completion_in_progress"
+    note: "The bounded Landing-hot-set plus controlled-direct decision and its B1/B2/C sequence are accepted; continuous authority covers only this unchanged documentation subject's commit, Ready PR, required checks, merge, and exact-master confirmation."
   - id: "L10N-B1"
     status: "planned_not_authorized"
-    note: "Define implementation only after the architecture decision is accepted and published."
+    note: "After architecture acceptance, build and validate only the real repository-external mixed-delivery candidate: deterministic Landing hot set, English byte proxy, original hot-set bytes, exact non-hot-set URLs, and atomic capacity/cleanup checks."
+  - id: "L10N-B2"
+    status: "planned_not_authorized"
+    note: "After B1 acceptance, add subject-addressed optional Pages-overlay admission for the manifest, attribution, and at-most-64-MiB hot set; add no browser consumer."
+  - id: "L10N-C"
+    status: "planned_not_authorized"
+    note: "After B2 acceptance, consume local Chinese files on default Landing and controlled exact URLs elsewhere, preserve English fallback, validate current/archived/legacy routes, and remove only caller-proven redundant image assets and branches."
   - id: "PHASE-14-DESIGN"
     status: "planned_not_authorized"
     note: "Pauper MTGO and the Owner-supplied Paupergeddon event remain separately gated after the localization foundation."
 
 next_approved_task:
-  id: "L10N-STAGE-C-TRIAL"
-  name: "Card-localization Stage-C real observed-window trial"
-  status: "continuous_execution_authorized"
+  id: "L10N-ARCHITECTURE-DECISION"
+  name: "Card-localization delivery architecture decision"
+  status: "continuous_completion_authorized"
   local_execution_authorized: true
-  note: "Continue through a valid redacted aggregate result and its publication; do not begin the architecture decision."
+  note: "Publish and merge only the accepted architecture documentation, then confirm exact remote master and stop; do not begin L10N-B1."
 
 prohibited_next_actions:
-  - "Do not select an image architecture, modify the existing English card-image cache, create a real localization sidecar, or change a public browser path."
-  - "Do not retain raw source responses, image bytes, exact URLs, screenshots, browser profiles, or per-card logs beyond the exact temporary real-trial boundary."
-  - "Do not attempt to bypass the in-app browser security boundary with script URLs, raw debugging protocols, another browser surface, or top-level image navigation presented as Pages-origin evidence."
-  - "Do not begin an architecture decision, L10N-B1, L10N-B2, L10N-C, Phase 14, production, or Pages."
+  - "Do not create a real localization sidecar, download or package Chinese image bytes, change the existing English card-image cache, or change a public browser path."
+  - "Do not make a source, image, Pages, or production request as part of the documentation decision."
+  - "Do not begin L10N-B1, L10N-B2, L10N-C, Phase 14, production, or Pages."
   - "Do not develop directly on master or overwrite unexplained local changes."
