@@ -29,6 +29,7 @@ PUBLIC_PREFIX = "assets/card-localization"
 LOOKUP_FILE = "cards.json"
 MTGCH_RESULT_URL = "https://mtgch.com/api/v1/result"
 MTGCH_IMAGE_HOST = "images.mtgch.com"
+MTGCH_CARD_ORIGIN = "https://mtgch.com"
 PAGE_SIZE = 1000
 BATCH_SIZE = 20
 FALLBACK_BATCH_SIZE = 5
@@ -156,6 +157,22 @@ def _trusted_mtgch_image(value: Any) -> str:
     return value
 
 
+def _trusted_mtgch_card(value: Any) -> str:
+    if not isinstance(value, str):
+        raise LocalizationBuildError(f"MTGCH card URL is not a string: {value!r}")
+    absolute = urllib.parse.urljoin(f"{MTGCH_CARD_ORIGIN}/", value)
+    parsed = urllib.parse.urlsplit(absolute)
+    if (
+        parsed.scheme != "https"
+        or parsed.netloc.lower() != "mtgch.com"
+        or parsed.query
+        or parsed.fragment
+        or not re.fullmatch(r"/card/[^/]+/[^/]+/?", parsed.path)
+    ):
+        raise LocalizationBuildError(f"unsupported MTGCH card URL: {value}")
+    return absolute
+
+
 def _download(url: str, headers: dict[str, str], maximum_bytes: int) -> bytes:
     request = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(request, timeout=30) as response:
@@ -214,7 +231,7 @@ def resolve_lookup(
         original: card_name_lookup_candidates(original) for original in original_names
     }
     targets = sorted({candidate for candidates in lookup_names.values() for candidate in candidates})
-    candidates: dict[str, list[tuple[bool, str, str, str | None]]] = {}
+    candidates: dict[str, list[tuple[bool, bool, str, str, str | None, str | None]]] = {}
     target_set = set(targets)
 
     def collect(batch_targets: list[str], batch_size: int) -> None:
@@ -254,9 +271,20 @@ def resolve_lookup(
                             image = _trusted_mtgch_image(record.get("image_url"))
                         except LocalizationBuildError:
                             image = None
+                        try:
+                            card_url = _trusted_mtgch_card(record.get("card_detail_url"))
+                        except LocalizationBuildError:
+                            card_url = None
                         identifier = str(record.get("id") or "")
                         candidates.setdefault(english, []).append(
-                            (image is None, identifier, chinese.strip(), image)
+                            (
+                                image is None,
+                                card_url is None,
+                                identifier,
+                                chinese.strip(),
+                                image,
+                                card_url,
+                            )
                         )
                 page += 1
 
@@ -275,10 +303,14 @@ def resolve_lookup(
 
     normalized_lookup: dict[str, dict[str, str]] = {}
     for normalized in sorted(candidates):
-        _missing_image, _identifier, chinese, image = min(candidates[normalized])
+        _missing_image, _missing_card_url, _identifier, chinese, image, card_url = min(
+            candidates[normalized]
+        )
         entry = {"zh_name": chinese}
         if image is not None:
             entry["image_url"] = image
+        if card_url is not None:
+            entry["mtgch_url"] = card_url
         normalized_lookup[normalized] = entry
     lookup = {}
     for original, candidates_for_name in lookup_names.items():
@@ -377,6 +409,9 @@ def verify_bundle(root: Path, output: Path) -> dict[str, dict[str, str]]:
             {"zh_name"},
             {"image_url", "zh_name"},
             {"image_url", "local_image", "zh_name"},
+            {"mtgch_url", "zh_name"},
+            {"image_url", "mtgch_url", "zh_name"},
+            {"image_url", "local_image", "mtgch_url", "zh_name"},
         ):
             raise LocalizationBuildError(f"invalid lookup entry: {english}")
         chinese = entry.get("zh_name")
@@ -384,6 +419,8 @@ def verify_bundle(root: Path, output: Path) -> dict[str, dict[str, str]]:
             raise LocalizationBuildError(f"invalid Chinese display name: {english}")
         if "image_url" in entry:
             _trusted_mtgch_image(entry["image_url"])
+        if "mtgch_url" in entry:
+            _trusted_mtgch_card(entry["mtgch_url"])
         if "local_image" not in entry:
             continue
         local_path = _safe_local_image(entry["local_image"])

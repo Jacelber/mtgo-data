@@ -8,6 +8,10 @@
     return `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(englishName)}&format=image&version=normal`;
   }
 
+  function scryfallLink(englishName) {
+    return `https://scryfall.com/search?q=${encodeURIComponent(`!"${englishName}"`)}`;
+  }
+
   function trustedMtgchImage(value) {
     if (typeof value !== "string") return false;
     try {
@@ -15,6 +19,23 @@
       return url.protocol === "https:"
         && url.hostname === "images.mtgch.com"
         && url.pathname.startsWith("/zhs/");
+    } catch {
+      return false;
+    }
+  }
+
+  function trustedMtgchCard(value) {
+    if (typeof value !== "string") return false;
+    try {
+      const url = new URL(value);
+      return url.protocol === "https:"
+        && url.hostname === "mtgch.com"
+        && !url.port
+        && !url.username
+        && !url.password
+        && !url.search
+        && !url.hash
+        && /^\/card\/[^/]+\/[^/]+\/?$/.test(url.pathname);
     } catch {
       return false;
     }
@@ -33,6 +54,9 @@
         "zh_name",
         "image_url|zh_name",
         "image_url|local_image|zh_name",
+        "mtgch_url|zh_name",
+        "image_url|mtgch_url|zh_name",
+        "image_url|local_image|mtgch_url|zh_name",
       ];
       if (
         !englishName
@@ -42,6 +66,7 @@
         || !entry.zh_name.trim()
         || (entry.image_url !== undefined && !trustedMtgchImage(entry.image_url))
         || (entry.local_image !== undefined && !LOCAL_IMAGE.test(entry.local_image))
+        || (entry.mtgch_url !== undefined && !trustedMtgchCard(entry.mtgch_url))
       ) {
         throw new Error(`Invalid card-localization entry: ${englishName}`);
       }
@@ -52,11 +77,14 @@
 
   function resolve(englishName, language, lookup, englishLocalImage = null) {
     const fallbackImage = englishLocalImage || scryfallImage(englishName);
+    const fallbackLink = scryfallLink(englishName);
     if (language !== "zh") {
       return Object.freeze({
         displayName: englishName,
         image: fallbackImage,
         source: englishLocalImage ? "english-local" : "english-scryfall",
+        linkUrl: fallbackLink,
+        linkProvider: "scryfall",
       });
     }
     const entry = lookup?.[englishName];
@@ -65,6 +93,8 @@
         displayName: englishName,
         image: fallbackImage,
         source: englishLocalImage ? "english-local" : "english-scryfall",
+        linkUrl: fallbackLink,
+        linkProvider: "scryfall",
       });
     }
     const image = entry.local_image || entry.image_url || fallbackImage;
@@ -79,6 +109,8 @@
       displayName: entry.zh_name,
       image,
       source,
+      linkUrl: entry.mtgch_url || fallbackLink,
+      linkProvider: entry.mtgch_url ? "mtgch" : "scryfall",
     });
   }
 
@@ -87,5 +119,6 @@
     parseLookup,
     resolve,
     scryfallImage,
+    scryfallLink,
   });
 })(globalThis);

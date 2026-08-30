@@ -20,9 +20,30 @@ function landingFunctions(language = "zh", loadedContext = {}) {
     ArchetypeVisuals: { manaIdentities: {} },
     I18n: { language: () => language },
     classifierName: (parentId, subtypeId = null) => subtypeId || parentId,
-    REPRESENTATIVE_CARDS: {},
+    REPRESENTATIVE_CARDS: loadedContext.representativeCards || {},
     URL,
     currentContext: loadedContext,
+    cardDisplay: (name, englishLocalImage = null) => {
+      const chineseImage = loadedContext.localizedImages?.[name];
+      const chineseLink = loadedContext.localizedLinks?.[name];
+      const scryfallLink = `https://scryfall.com/search?q=${encodeURIComponent(`!"${name}"`)}`;
+      if (language === "zh" && chineseImage) {
+        return {
+          displayName: `中-${name}`,
+          image: chineseImage,
+          source: "chinese-mtgch",
+          linkUrl: chineseLink || scryfallLink,
+          linkProvider: chineseLink ? "mtgch" : "scryfall",
+        };
+      }
+      return {
+        displayName: language === "zh" ? `中-${name}` : name,
+        image: englishLocalImage || `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}&format=image&version=normal`,
+        source: englishLocalImage ? "english-local" : "english-scryfall",
+        linkUrl: language === "zh" && chineseLink ? chineseLink : scryfallLink,
+        linkProvider: language === "zh" && chineseLink ? "mtgch" : "scryfall",
+      };
+    },
     escapeHtml: value => String(value)
       .replaceAll("&", "&amp;")
       .replaceAll("<", "&lt;")
@@ -53,6 +74,7 @@ function landingFunctions(language = "zh", loadedContext = {}) {
       landingDirection,
       landingEnvironmentDetailTitle,
       landingEnvironmentRows,
+      landingRepresentatives,
       landingFeatureHtml,
       landingFeatureCard,
       landingFeatureItems,
@@ -134,6 +156,33 @@ test("environment rows render three shares and never expose raw counts", () => {
   assert.doesNotMatch(html, />17</);
   assert.doesNotMatch(html, />129</);
   assert.doesNotMatch(html, />469</);
+});
+
+test("representative cards keep shared inline art but localize preview images and links", () => {
+  const representativeCards = {
+    standard: {
+      "deck-one": [{ name: "Card One", image: "../images/card-one.jpg" }],
+    },
+  };
+  const loadedContext = {
+    representativeCards,
+    localizedImages: { "Card One": "https://images.mtgch.com/zhs/full-card.webp" },
+    localizedLinks: { "Card One": "https://mtgch.com/card/TST/1/" },
+  };
+  const row = { archetype_id: "deck-one", key_cards: [{ name: "Card One" }] };
+  const zh = landingFunctions("zh", loadedContext).landingRepresentatives(row);
+  const en = landingFunctions("en", loadedContext).landingRepresentatives(row);
+
+  for (const html of [zh, en]) {
+    assert.match(html, /data-progressive-image="assets\/images\/card-one\.jpg"/);
+  }
+  assert.match(zh, /data-card-image="https:\/\/images\.mtgch\.com\/zhs\/full-card\.webp"/);
+  assert.match(zh, /href="https:\/\/mtgch\.com\/card\/TST\/1\/"/);
+  assert.match(zh, /data-card-url="https:\/\/mtgch\.com\/card\/TST\/1\/"/);
+  assert.match(zh, /data-card-provider="mtgch"/);
+  assert.match(en, /data-card-image="https:\/\/api\.scryfall\.com\/cards\/named\?exact=Card%20One&amp;format=image&amp;version=normal"/);
+  assert.match(en, /href="https:\/\/scryfall\.com\/search/);
+  assert.match(en, /data-card-provider="scryfall"/);
 });
 
 test("Landing detail titles use the subtype that owns the displayed best deck", () => {
