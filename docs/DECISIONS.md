@@ -2574,7 +2574,7 @@ P10-03 remains separately owner-gated.
 
 # DEC-065 — Minimize future Melee snapshots before persistence
 
-Status: `Accepted`
+Status: `Partially superseded by DEC-147`
 
 ## Context
 
@@ -2639,7 +2639,7 @@ public path, whitelist, workflow, or front end.
 
 # DEC-066 — Validate minimized Melee resources and publish the privacy contact
 
-Status: `Accepted`
+Status: `Partially superseded by DEC-147`
 
 ## Context
 
@@ -7132,3 +7132,97 @@ Owner separately authorized local `L10N-SIMPLE` implementation, public MTGCH
 metadata access, current-Landing image downloads, and the shared card-name
 candidate expansion. Commit, publication, merge, Pages deployment, production,
 and Phase 14 remain separately gated by the live task contract.
+
+---
+
+# DEC-147 - Retain public Melee participant source IDs directly
+
+Status: `Accepted; implementation separately gated`
+
+## Context
+
+DEC-065 selected event-scoped HMAC references for future minimized Melee
+snapshots. That control made a small numeric source ID harder to enumerate and
+prevented direct cross-event joins, but it did not make a participant anonymous:
+the same retained resource deliberately preserves the source-published display
+name and tournament record. No production key lifecycle was subsequently
+approved, and the unresolved key requirement prevents the first new complete
+collection from using the implemented v3 writer.
+
+A read-only review of the retained event `434455` confirmed that Melee
+`Player.ID` is the participant join key shared by its standings, matches, and
+decklist references and is distinct from event-specific team, standing, and
+competitor record IDs. The evidence proves consistency only inside that event;
+it does not prove that Melee will preserve the value forever or never change its
+meaning across events.
+
+The source publishes this ID together with the tournament records without
+authentication. DEC-068 already accepts approved source evidence in durable
+public Git. The Owner therefore selected direct retention rather than adding a
+secret-backed transformation whose privacy effect is limited while public
+display names remain retained.
+
+## Decision
+
+For the next implemented complete-collection contract, copy Melee `Player.ID`
+exactly as the positive-decimal-string field `source_participant_id`. Treat it
+as an opaque Melee source identifier, not as proof of a legal identity or a
+project guarantee of global or permanent stability. Every event and source
+boundary remains explicit, and inconsistent participant relationships fail
+closed instead of being repaired heuristically.
+
+Preserve DEC-065's substantive minimization boundary: parse bounded public
+responses in memory, persist only strict tournament, standings, match, and
+decklist allowlists as canonical JSON, retain approved provenance, and reject
+unused account, profile, preference, duplicate-identity, credential, cookie,
+and private-header fields. Source-published display names remain the separately
+accepted product field.
+
+Implement the direct-ID writer as complete manifest `4.0.0`, minimized resource
+document `2.0.0`, and resumable checkpoint `3.0.0`. Declare participant identity
+scheme `source-participant-id-v1`; it has no secret or key ID. Manifest and
+minimized-resource participant context uses `source_participant_id`, not
+`participant_ref`. A checkpoint may resume only when the exact event and frozen
+request plan match, and it retains only the same allowlisted direct source
+participant context required to reproduce that plan.
+
+Normalized retained input may preserve this direct source ID for provenance and
+joining. Generated product documents continue using the existing event-scoped
+derived `participant_id` unless a separately approved consumer contract needs
+the source ID. This decision adds no source-ID field to a Pages artifact or
+front-end response, but the same value remains publicly accessible in the Git
+repository wherever an approved retained raw or normalized document contains
+it.
+
+Continue reading immutable v1/v2 source-preserving and v3 HMAC snapshots. A
+completed v3 snapshot needs no key for parsing or downstream generation. Do not
+rewrite, migrate, re-HMAC, or otherwise change the protected event `434455`
+snapshot or its derived compatibility bytes. Once the new writer is implemented,
+new retained collections must use v4 and must not create another v2 source-body
+archive or v3 HMAC snapshot.
+
+This decision supersedes only DEC-065's HMAC, key-lifecycle, v3-writer, and
+anti-enumeration requirements and the corresponding future-v3 clauses in
+DEC-066. It does not supersede their field minimization, strict Schema,
+supplemental prohibited-key scan, privacy-contact, immutable-history, or
+correction/removal controls.
+
+## Consequences
+
+Approved source participant IDs can be correlated across retained events when
+Melee reuses the same value. Removing a current file does not remove the ID from
+Git history, forks, clones, caches, releases, or third-party archives. These are
+explicitly accepted properties of direct retention in the public Git archive,
+not anonymity or confidentiality guarantees.
+
+The implementation no longer needs HMAC creation, secret storage, key-ID
+assignment, workflow injection, rotation, or key-loss recovery. Historical v3
+read compatibility remains, but its HMAC writer is not the target for a new
+event.
+
+This documentation-only decision does not change code, Schemas, tests,
+workflows, configuration, retained or generated data, statistics, Pages, or
+production. Until the separately accepted implementation is merged, do not run
+a new live complete collection under either the old HMAC contract or an
+unimplemented v4 contract. Event `441441` whitelist admission, collection,
+retention, candidate generation, and publication remain separate tasks.

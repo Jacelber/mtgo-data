@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/gov-owner-acceptance-invariant"
+  current_working_branch: "codex/gov-melee-public-source-id-decision"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "p14_00_completed_governance_repair_completion_authorized"
+  status: "p14_00_completed_melee_identity_decision_completion_authorized"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: false
@@ -27,15 +27,15 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-OWNER-ACCEPTANCE-INVARIANT"
-  name: "Enforce atomic Owner-acceptance completion authority"
+  id: "GOV-MELEE-PUBLIC-SOURCE-ID-DECISION"
+  name: "Adopt direct retention of public Melee participant IDs"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-30"
-  base_commit: "1b4d03dc5faedc961a49572df660f45de48cfb7b"
-  branch: "codex/gov-owner-acceptance-invariant"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-owner-acceptance-invariant-20260830-01"
-  objective: "Reject live status that splits accepted same-task completion authority or simultaneously authorizes and prohibits commit, remote publication, or merge."
-  artifact_impact: "internal_diagnostics"
+  base_commit: "f5c29bd17e7439e1903c79ffc0bf5e94ad472388"
+  branch: "codex/gov-melee-public-source-id-decision"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-melee-public-source-id-decision-20260830-01"
+  objective: "Record the Owner-selected direct retention of public Melee Player.ID values while preserving field minimization, historical compatibility, public-Git disclosure, and a separate implementation gate."
+  artifact_impact: "governance_documentation"
   authorization:
     local_implementation: false
     commit: true
@@ -43,13 +43,15 @@ current_task:
     merge: true
   allowed_paths:
     - "docs/STATUS.yaml"
-    - "tests/test_documentation_history.py"
+    - "docs/DECISIONS.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "NOTICE.md"
   planned_additions: []
   protected_scope:
     product_code_changed: "none"
     workflow_changed: "none"
-    governance_rule_changed: "none"
-    test_change: "focused live-status semantic invariant only"
+    governance_rule_changed: "Melee participant-persistence identity decision only"
+    test_change: "none"
     configuration_changed: "none"
     classifier_changed: "none"
     raw_or_generated_data_changed: "none"
@@ -59,30 +61,30 @@ current_task:
     production_dispatched: false
     remote_write_performed: "none"
   prohibited_changes:
-    - "Do not change AGENTS.md, Gate definitions, DEVELOPMENT_WORKFLOW, DECISIONS, ROADMAP, product code, workflows, configs, Schemas, data, front-end assets, public paths, dependencies, or production behavior."
-    - "Do not redesign STATUS, add a general authorization parser, or broaden documentation tests beyond the reproduced same-task completion contradiction."
-    - "Do not start P14-01, fetch data, request the Paupergeddon link, generate a product, or dispatch production."
-    - "Do not begin another task or develop directly on master."
+    - "Do not change AGENTS.md, DEVELOPMENT_WORKFLOW, ROADMAP, product code, workflows, configs, Schemas, tests, data, front-end assets, public paths, dependencies, or production behavior."
+    - "Do not implement manifest 4.0.0, minimized-resource 2.0.0, checkpoint 3.0.0, parser, collector, CLI, retention, or HMAC-removal code in this decision task."
+    - "Do not change the Melee whitelist, admit event 441441, fetch an event, modify event 434455, generate data, or dispatch production."
+    - "Do not start P14-01 or another task and do not develop directly on master."
   planned_verification:
-    - "Run only the live-status policy node and its existing invalid-policy and new completion-authority counterexample nodes."
-    - "Run python -B validate_repository.py --changed-from 1b4d03dc5faedc961a49572df660f45de48cfb7b once on the final local tree."
-    - "Review the exact two-path diff and run git diff --check."
+    - "Run only tests/test_documentation_history.py::test_live_status_contract."
+    - "Run python -B validate_repository.py --changed-from f5c29bd17e7439e1903c79ffc0bf5e94ad472388 once on the final local tree."
+    - "Review the exact four-path diff and run git diff --check."
     - "Do not run full pytest, product, data, Schema, CLI, browser, Pages, or production tests."
-  stop_point: "Complete the unchanged accepted governance repair continuously through Gate 6. Stop before P14-01 or another task."
+  stop_point: "Complete the unchanged accepted documentation decision continuously through Gate 6. Stop before implementation, event admission, live collection, P14-01, or another task."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-08-30"
-    subject: "The focused live-status invariants for accepted completion authority, conflicting prohibitions, and duplicate same-task authorization fields."
+    subject: "The exact four-document decision that supersedes only the HMAC identity clauses while preserving minimization and historical compatibility."
 
 current_repository_state:
-  source_master_commit: "1b4d03dc5faedc961a49572df660f45de48cfb7b"
+  source_master_commit: "f5c29bd17e7439e1903c79ffc0bf5e94ad472388"
   deployed_master_commit: "4ad96d17d0991b63d1f4ff579e23603631a86789"
-  previous_task: "P14-00"
+  previous_task: "GOV-OWNER-ACCEPTANCE-INVARIANT"
   previous_task_status: "completed_merged"
-  previous_pull_request: 310
-  previous_pull_request_run: 33300200172
-  previous_merge_commit: "1b4d03dc5faedc961a49572df660f45de48cfb7b"
-  previous_merge_validation_run: 33300253328
+  previous_pull_request: 311
+  previous_pull_request_run: 33300879699
+  previous_merge_commit: "f5c29bd17e7439e1903c79ffc0bf5e94ad472388"
+  previous_merge_validation_run: 33300946749
   pauper_registry_state: "planned_non_public_collection_only"
   pauper_public_products_available: false
   paupergeddon_whitelist_entry_present: false
@@ -94,9 +96,12 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "GOV-OWNER-ACCEPTANCE-INVARIANT"
+  - id: "GOV-MELEE-PUBLIC-SOURCE-ID-DECISION"
     status: "owner_accepted_completion_authorized"
-    note: "Complete only the unchanged focused invariant repair through Gate 6."
+    note: "Complete only the unchanged accepted public-source-ID decision through Gate 6."
+  - id: "GOV-OWNER-ACCEPTANCE-INVARIANT"
+    status: "completed_merged"
+    note: "Merged as PR #311 at master commit f5c29bd17e7439e1903c79ffc0bf5e94ad472388; merge validation run 33300946749 succeeded."
   - id: "P14-00"
     status: "completed_merged"
     note: "Merged as PR #310 at master commit 1b4d03dc5faedc961a49572df660f45de48cfb7b."
@@ -126,17 +131,16 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "GOV-OWNER-ACCEPTANCE-INVARIANT"
-  name: "Enforce atomic Owner-acceptance completion authority"
+  id: "GOV-MELEE-PUBLIC-SOURCE-ID-DECISION"
+  name: "Adopt direct retention of public Melee participant IDs"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: false
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Complete the unchanged accepted governance repair through Gate 6; P14-01 remains unauthorized."
+  note: "Complete the unchanged accepted documentation decision through Gate 6; implementation and event 441441 remain separately gated."
 
 prohibited_next_actions:
-  - "Do not start P14-01, shared-framework implementation, Pauper classification, private generation, Landing review, or another task."
-  - "Do not change the existing acceptance rule or remove Gate quality checks."
-  - "Do not fetch data, change public availability, alter production, or dispatch a workflow."
-  - "Do not develop directly on master or begin another task."
+  - "Do not implement the Melee identity contract, change the whitelist, admit event 441441, fetch data, generate output, or dispatch a workflow."
+  - "Do not change public availability, production behavior, Schemas, code, tests, configs, data, or front-end assets."
+  - "Do not start P14-01 or another task and do not develop directly on master."
