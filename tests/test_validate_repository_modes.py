@@ -1,8 +1,91 @@
 import json
 from pathlib import Path
 
-from validate_repository import changed_validation_plan, validate_files
+from validate_repository import (
+    changed_validation_plan,
+    validate_files,
+    validate_public_product_facts,
+)
 from validate_schemas import validate_manifest
+
+
+def write_public_product_fixture(
+    root: Path,
+    *,
+    whitelist_event_ids: tuple[str, ...],
+    public_event_ids: tuple[str, ...],
+) -> tuple[list[str], dict]:
+    (root / "configs").mkdir()
+    (root / "stats" / "modern" / "melee").mkdir(parents=True)
+    (root / "README.md").write_text(
+        "| MTGO Environment Trends | Modern | `/index.html` |\n"
+        "| Tabletop Major Events | Modern (event `434455`) | `/melee/index.html` |\n",
+        encoding="utf-8",
+    )
+    (root / "stats" / "catalog.json").write_text(
+        json.dumps(
+            {
+                "formats": [
+                    {
+                        "id": "modern",
+                        "display_name": "Modern",
+                        "products": [
+                            {"id": "mtgo-statistics", "available": True},
+                            {
+                                "id": "tabletop-major-events",
+                                "available": True,
+                                "path": "stats/modern/melee/index.json",
+                            },
+                        ],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (root / "configs" / "melee_events.yaml").write_text(
+        json.dumps(
+            {
+                "events": [
+                    {
+                        "id": event_id,
+                        "format": "modern",
+                        "enabled": True,
+                        "review_status": "verified",
+                        "tabletop": True,
+                    }
+                    for event_id in whitelist_event_ids
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (root / "stats" / "modern" / "melee" / "index.json").write_text(
+        json.dumps(
+            {
+                "format": "modern",
+                "events": [
+                    {"event_id": event_id} for event_id in public_event_ids
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    names = [
+        "README.md",
+        "configs/melee_events.yaml",
+        "stats/catalog.json",
+        "stats/modern/melee/index.json",
+    ]
+    status = {
+        "current_repository_state": {
+            "public_entries": {
+                "mtgo": "/index.html",
+                "tabletop": "/melee/index.html",
+            }
+        }
+    }
+    return names, status
 
 
 def test_changed_plan_includes_directly_changed_maintained_files():
@@ -37,6 +120,60 @@ def test_changed_plan_adds_only_the_triggered_coupled_contracts():
     assert entry_plan.reference_groups == frozenset(
         {"frontend-templates", "phase8-entries"}
     )
+
+
+def test_changed_plan_treats_tabletop_event_catalog_as_public_product_facts():
+    catalog_path = "stats/modern/melee/index.json"
+
+    plan = changed_validation_plan([catalog_path], [catalog_path, "docs/STATUS.yaml"])
+
+    assert plan.public_product_facts is True
+    assert plan.candidates == ("docs/STATUS.yaml", catalog_path)
+
+
+def test_enabled_unpublished_event_does_not_change_public_product_facts(tmp_path):
+    names, status = write_public_product_fixture(
+        tmp_path,
+        whitelist_event_ids=("434455", "441441"),
+        public_event_ids=("434455",),
+    )
+
+    _, failures = validate_public_product_facts(tmp_path, names, status)
+
+    assert failures == []
+
+
+def test_public_event_requires_matching_whitelist_entry(tmp_path):
+    names, status = write_public_product_fixture(
+        tmp_path,
+        whitelist_event_ids=("434455",),
+        public_event_ids=("434455", "441441"),
+    )
+    (tmp_path / "README.md").write_text(
+        "| MTGO Environment Trends | Modern | `/index.html` |\n"
+        "| Tabletop Major Events | Modern (events `434455`, `441441`) | `/melee/index.html` |\n",
+        encoding="utf-8",
+    )
+
+    _, failures = validate_public_product_facts(tmp_path, names, status)
+
+    assert [failure.message for failure in failures] == [
+        "public event '441441' requires an enabled, verified Tabletop whitelist entry"
+    ]
+
+
+def test_readme_event_ids_follow_public_catalog(tmp_path):
+    names, status = write_public_product_fixture(
+        tmp_path,
+        whitelist_event_ids=("434455", "441441"),
+        public_event_ids=("434455", "441441"),
+    )
+
+    _, failures = validate_public_product_facts(tmp_path, names, status)
+
+    assert [failure.message for failure in failures] == [
+        "missing or inconsistent row '| Tabletop Major Events | Modern (events `434455`, `441441`) | `/melee/index.html` |'"
+    ]
 
 
 def test_changed_file_validation_does_not_parse_an_unrelated_area(tmp_path: Path):

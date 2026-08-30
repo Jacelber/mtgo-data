@@ -326,7 +326,11 @@ def changed_validation_plan(changed: list[str], tracked: list[str]) -> Validatio
     changed_set = set(changed)
     tracked_set = set(tracked)
     existing = changed_set.intersection(tracked_set)
-    public_product_facts = bool(changed_set.intersection(PUBLIC_PRODUCT_FACT_SOURCES))
+    public_product_facts = any(
+        path in PUBLIC_PRODUCT_FACT_SOURCES
+        or (path.startswith("stats/") and path.endswith("/melee/index.json"))
+        for path in changed_set
+    )
     candidates = set(existing)
     if public_product_facts and "docs/STATUS.yaml" in tracked_set:
         candidates.add("docs/STATUS.yaml")
@@ -593,7 +597,7 @@ def validate_phase8_frontend_references(
 def validate_public_product_facts(
     root: Path, names: list[str], status: dict[str, Any]
 ) -> tuple[int, list[Failure]]:
-    """Require README to match the catalog, enabled event config, and live entries."""
+    """Require README to match public catalogs, event config, and live entries."""
 
     failures: list[Failure] = []
     tracked = set(names)
@@ -648,6 +652,7 @@ def validate_public_product_facts(
 
     labels: dict[str, str] = {}
     catalog_products: dict[str, set[str]] = {}
+    tabletop_catalog_paths: dict[str, str] = {}
     for entry in formats:
         if not isinstance(entry, dict):
             continue
@@ -664,6 +669,21 @@ def validate_public_product_facts(
             and isinstance(product.get("id"), str)
             and product.get("available") is True
         }
+        for product in products:
+            if (
+                isinstance(product, dict)
+                and product.get("id") == "tabletop-major-events"
+                and product.get("available") is True
+            ):
+                path = product.get("path")
+                if isinstance(path, str):
+                    tabletop_catalog_paths[format_id] = path
+                else:
+                    reference_check(
+                        failures,
+                        "stats/catalog.json",
+                        f"available Tabletop format {format_id!r} requires a catalog path",
+                    )
 
     mtgo_catalog_formats = tuple(
         format_id for format_id in labels if "mtgo-statistics" in catalog_products[format_id]
@@ -673,7 +693,9 @@ def validate_public_product_facts(
         for format_id in labels
         if "tabletop-major-events" in catalog_products[format_id]
     )
-    event_ids_by_format: dict[str, list[str]] = {format_id: [] for format_id in tabletop_catalog_formats}
+    event_ids_by_format: dict[str, list[str]] = {
+        format_id: [] for format_id in tabletop_catalog_formats
+    }
     enabled_tabletop_events = [
         event
         for event in configured_events
@@ -681,27 +703,69 @@ def validate_public_product_facts(
         and event.get("enabled") is True
         and event.get("tabletop") is True
     ]
+    configured_event_keys: set[tuple[str, str]] = set()
     for event in enabled_tabletop_events:
         format_id = event.get("format")
         event_id = event.get("id")
         if not isinstance(format_id, str) or not isinstance(event_id, (str, int)):
-            reference_check(failures, "configs/melee_events.yaml", "enabled tabletop event requires format and id")
-            continue
-        if format_id not in event_ids_by_format:
             reference_check(
                 failures,
                 "configs/melee_events.yaml",
-                f"event format {format_id!r} is not available in the product catalog",
+                "enabled tabletop event requires format and id",
             )
             continue
-        event_ids_by_format[format_id].append(str(event_id))
+        if event.get("review_status") == "verified":
+            configured_event_keys.add((format_id, str(event_id)))
 
-    if set(event_ids_by_format) != {event.get("format") for event in enabled_tabletop_events}:
-        reference_check(
-            failures,
-            "configs/melee_events.yaml",
-            "every catalogued Tabletop format requires at least one public event",
+    for format_id in tabletop_catalog_formats:
+        catalog_path = tabletop_catalog_paths.get(format_id)
+        if catalog_path is None:
+            continue
+        checked += 1
+        if not tracked_regular(root, tracked, catalog_path):
+            reference_check(failures, catalog_path, "missing public event catalog")
+            continue
+        try:
+            event_catalog = json.loads(read_bytes(root, catalog_path).decode("utf-8"))
+        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+            reference_check(failures, catalog_path, f"invalid public event catalog: {exc}")
+            continue
+        catalog_format = (
+            event_catalog.get("format") if isinstance(event_catalog, dict) else None
         )
+        public_events = (
+            event_catalog.get("events") if isinstance(event_catalog, dict) else None
+        )
+        if catalog_format != format_id or not isinstance(public_events, list):
+            reference_check(
+                failures,
+                catalog_path,
+                f"must contain format {format_id!r} and an events list",
+            )
+            continue
+        for event in public_events:
+            event_id = event.get("event_id") if isinstance(event, dict) else None
+            if not isinstance(event_id, (str, int)):
+                reference_check(
+                    failures,
+                    catalog_path,
+                    "public event requires an event_id",
+                )
+                continue
+            rendered_event_id = str(event_id)
+            event_ids_by_format[format_id].append(rendered_event_id)
+            if (format_id, rendered_event_id) not in configured_event_keys:
+                reference_check(
+                    failures,
+                    catalog_path,
+                    f"public event {rendered_event_id!r} requires an enabled, verified Tabletop whitelist entry",
+                )
+        if not event_ids_by_format[format_id]:
+            reference_check(
+                failures,
+                catalog_path,
+                "available Tabletop format requires at least one public event",
+            )
 
     def format_label(format_id: str, event_ids: list[str] | None = None) -> str:
         label = labels[format_id]
