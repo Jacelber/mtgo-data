@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/melee-441441-qualification"
+  current_working_branch: "codex/melee-whitelist-public-state-separation"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "p14_01_completed_melee_identity_v4_owner_accepted"
+  status: "p14_01_completed_melee_public_state_validator_repair_owner_accepted"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: false
@@ -27,14 +27,14 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "MELEE-441441-QUALIFICATION"
-  name: "Qualify Melee event 441441 and verify its event structure"
+  id: "MELEE-WHITELIST-PUBLIC-STATE-SEPARATION"
+  name: "Separate Melee whitelist admission from public event facts"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-31"
-  base_commit: "b89302a2975594c8a02cb5f4acf30c19db94dc3c"
-  branch: "codex/melee-441441-qualification"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-qualification-20260831-01"
-  objective: "Use public read-only evidence to determine whether event 441441 qualifies for later admission and to fix its format, day, cut, playoff, result, and decklist boundaries without admitting or collecting the event."
+  base_commit: "31da8117ce1b1207b321f48996e4f8860e17caeb"
+  branch: "codex/melee-whitelist-public-state-separation"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-whitelist-public-state-separation-20260831-01"
+  objective: "Make repository validation derive public Tabletop event facts from each available format catalog while keeping the Melee whitelist as source-access authorization only."
   artifact_impact: "none"
   authorization:
     local_implementation: true
@@ -42,15 +42,15 @@ current_task:
     remote_publication: true
     merge: true
   allowed_paths:
+    - "validate_repository.py"
+    - "tests/test_validate_repository_modes.py"
     - "docs/STATUS.yaml"
-    - "docs/audits/MELEE-441441-QUALIFICATION.md"
-  planned_additions:
-    - "docs/audits/MELEE-441441-QUALIFICATION.md"
+  planned_additions: []
   protected_scope:
-    product_code_changed: "none"
+    product_code_changed: "none; repository validator only"
     workflow_changed: "none"
     governance_rule_changed: "none"
-    test_change: "none"
+    test_change: "focused public-fact source and counterexample coverage only"
     configuration_changed: "none"
     classifier_changed: "none"
     raw_or_generated_data_changed: "none"
@@ -60,28 +60,31 @@ current_task:
     production_dispatched: false
     remote_write_performed: "none"
   prohibited_changes:
-    - "Do not change configs/melee_events.yaml, admit event 441441 or another event, run a collector, fetch or retain source responses, regenerate an event, or dispatch production."
-    - "Do not change code, workflows, Schemas, statistics, classifiers, front-end assets, public paths, dependencies, product availability, or protected event bytes."
-    - "Do not start whitelist admission, start P14-02, begin another task, delete a remote branch, or develop directly on master."
+    - "Do not change configs/melee_events.yaml, README.md, stats/catalog.json, a format event catalog, generated or public data, or product availability."
+    - "Do not run a collector, fetch or retain source responses, generate event data, dispatch production, or resume event 441441 admission."
+    - "Do not change workflows, Schemas, statistics, classifiers, front-end assets, public paths, or dependencies."
+    - "Do not delete a remote branch, start P14-02, begin another task, or develop directly on master."
   planned_verification:
+    - "Run only tests/test_validate_repository_modes.py for the repaired fact-source behavior and its counterexamples."
+    - "Run Ruff only on validate_repository.py and tests/test_validate_repository_modes.py."
     - "Run the focused live-status documentation node."
-    - "Run python -B validate_repository.py --changed-from b89302a2975594c8a02cb5f4acf30c19db94dc3c once on the final local tree."
-    - "Review both changed paths, the complete diff, links, and git diff --check; do not run full pytest, Schema, live-source, candidate, Pages, or production tests."
-  stop_point: "Complete the unchanged accepted qualification task through one commit, one Ready PR, required CI, and merge. Do not edit the whitelist, collect event data, dispatch production, deploy Pages, start P14-02, delete a remote branch, or begin another task."
+    - "Run python -B validate_repository.py --changed-from 31da8117ce1b1207b321f48996e4f8860e17caeb once on the final local tree."
+    - "Review all three allowed paths, the complete diff, and git diff --check; do not run full pytest, full Schema, collector, live-source, candidate, Pages, or production tests."
+  stop_point: "Complete the unchanged accepted repair through one commit, one Ready PR, required CI, and merge. Do not resume event 441441 admission, collect data, dispatch production, deploy Pages, start P14-02, delete a remote branch, or begin another task."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-08-31"
-    subject: "The identity, eligibility, constructed_day2 mapping, 18-point Day 2 cut, playoff boundary, and sampled public result and decklist evidence for event 441441."
+    subject: "The validator fact-source separation, focused counterexamples, and unchanged whitelist, README, public catalog, collector, and production boundaries."
 
 current_repository_state:
-  source_master_commit: "b89302a2975594c8a02cb5f4acf30c19db94dc3c"
+  source_master_commit: "31da8117ce1b1207b321f48996e4f8860e17caeb"
   deployed_master_commit: "4ad96d17d0991b63d1f4ff579e23603631a86789"
-  previous_task: "GOV-MELEE-EVENT-ADMISSION-RUNBOOK"
+  previous_task: "MELEE-441441-QUALIFICATION"
   previous_task_status: "completed_merged"
-  previous_pull_request: 316
-  previous_pull_request_run: 33321734377
-  previous_merge_commit: "b89302a2975594c8a02cb5f4acf30c19db94dc3c"
-  previous_merge_validation_run: 33321804488
+  previous_pull_request: 317
+  previous_pull_request_run: 33322497670
+  previous_merge_commit: "31da8117ce1b1207b321f48996e4f8860e17caeb"
+  previous_merge_validation_run: 33322552407
   pauper_registry_state: "planned_non_public_collection_only"
   pauper_public_products_available: false
   paupergeddon_whitelist_entry_present: false
@@ -93,9 +96,12 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "MELEE-441441-QUALIFICATION"
+  - id: "MELEE-WHITELIST-PUBLIC-STATE-SEPARATION"
     status: "owner_accepted_completion_authorized"
-    note: "Owner acceptance authorizes completion of the unchanged qualification evidence through one Ready PR, required CI, and merge; whitelist admission and event operation remain unauthorized."
+    note: "Owner acceptance authorizes completion of the unchanged validator repair through one Ready PR, required CI, and merge; whitelist changes, collection, production, and follow-up tasks remain unauthorized."
+  - id: "MELEE-441441-QUALIFICATION"
+    status: "completed_merged"
+    note: "Merged as PR #317 at master commit 31da8117ce1b1207b321f48996e4f8860e17caeb; merge validation run 33322552407 succeeded."
   - id: "GOV-MELEE-EVENT-ADMISSION-RUNBOOK"
     status: "completed_merged"
     note: "Merged as PR #316 at master commit b89302a2975594c8a02cb5f4acf30c19db94dc3c; merge validation run 33321804488 succeeded."
@@ -137,16 +143,16 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "MELEE-441441-QUALIFICATION"
-  name: "Qualify Melee event 441441 and verify its event structure"
+  id: "MELEE-WHITELIST-PUBLIC-STATE-SEPARATION"
+  name: "Separate Melee whitelist admission from public event facts"
   status: "owner_accepted_completion_authorized"
-  local_execution_authorized: true
+  local_execution_authorized: false
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Complete only the unchanged accepted qualification evidence; whitelist admission, event collection, production, and P14-02 remain unauthorized."
+  note: "Complete only the unchanged accepted validator repair; whitelist admission, event collection, production, and P14-02 remain unauthorized."
 
 prohibited_next_actions:
-  - "Do not change the Melee whitelist, admit event 441441, run a collector, fetch or retain data, generate output, dispatch a workflow, or delete a remote branch."
-  - "Do not change public availability, production behavior, workflows, normalized or generated public Schemas, statistics, classifiers, or front-end assets."
-  - "Do not start whitelist admission, P14-02, or another task, or develop directly on master."
+  - "Do not change the Melee whitelist, README public event row, public catalogs, generated data, or product availability."
+  - "Do not run a collector, fetch or retain data, generate output, dispatch a workflow, or resume event 441441 admission."
+  - "Do not delete a remote branch, start P14-02 or another task, or develop directly on master."
