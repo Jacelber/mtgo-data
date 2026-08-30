@@ -154,23 +154,53 @@ model; it does not add an intermediate public capability.
 ### P14-01 — Establish and accept Pauper classification
 
 - **Problem:** shared Pauper parent/subtype identities and representative rules
-  are not yet an accepted cross-source taxonomy.
-- **Operation:** inspect existing behavior, propose rules before coding, then
-  add stable IDs, explicit priorities, fixtures, conflicts, Unknown reporting,
-  and approved bilingual identity coverage. Classify by stable primary-engine
-  signals rather than incidental cards. A subtype-defining parent has no
-  implicit Other or parent-only fallback. Use the smallest Standard/Modern
+  are not yet an accepted cross-source taxonomy, and the earlier single-step
+  wording did not identify where retained-corpus review and final rule
+  refinement occur.
+- **Operation A — P14-01A taxonomy proposal:** inspect existing behavior and the
+  current retained recent Pauper corpus, propose parent/subtype boundaries and
+  bilingual identities before coding, and obtain Owner acceptance of the
+  classification logic. This proposal is design evidence, not an executable
+  classifier.
+- **Operation B — P14-01B rule implementation:** encode the accepted taxonomy
+  with stable IDs, explicit priorities, bounded representative fixtures,
+  conflicts, Unknown reporting, and proposed bilingual identity coverage.
+  Classify by stable primary-engine signals rather than incidental cards. A
+  subtype-defining parent has no implicit Other or parent-only fallback.
+- **Operation C — P14-01C retained-corpus refinement:** replay the implemented
+  rules once against the current retained recent corpus; cluster every Unknown
+  and every classified-but-reference-inconsistent record by stable primary
+  engine and deck similarity; present every affected record, representative
+  lists, and an evidence-backed recommendation for Owner confirmation; apply
+  only the confirmed reference corrections, intentional Unknown dispositions,
+  and rule refinements; then rerun the affected focused evidence and freeze the
+  final taxonomy for Owner acceptance. Multiple matches, conflicts, and the
+  accepted boundary cohorts remain visible in the same review. Machine replay
+  metrics or a generated review queue do not complete P14-01C without the
+  clustered Owner review and post-decision rerun. P14-01B and P14-01C are one
+  continuous focused implementation task and do not add an intermediate
+  authorization gate.
+- **Validation:** validate the Pauper rule document and focused fixtures, record
+  the retained-corpus impact report, and use only the smallest Standard/Modern
   regression evidence that answers a named shared-validator risk.
 - **Effect:** one accepted classifier can later classify both MTGO and the
-  approved Tabletop event without copying source-specific archetypes.
+  approved Tabletop event without copying source-specific archetypes; final
+  refinement is complete before private product generation begins.
 - **Expected paths:** `my_archetypes/pauper.yaml`, focused Pauper rule fixtures
   and tests, an Owner-review artifact for the proposed bilingual identities,
   and only directly required rule contract paths. The maintained two-format
   name catalog is not extended until P14-03A generalizes its shared contract.
-- **Stop:** taxonomy and proposed bilingual identity acceptance. Do not activate
-  Pauper execution, generate product output, or import the names into the
-  maintained catalog.
+- **Stop:** final taxonomy, retained-corpus report, and proposed bilingual
+  identity acceptance after P14-01C. If P14-02 later exposes a material
+  classifier defect, stop product generation and return to a separately scoped
+  classifier repair; do not mix rule changes into data generation or Landing
+  review. Do not activate Pauper execution, generate product output, or import
+  the names into the maintained catalog during P14-01.
 - **Recommended model:** `gpt-5.6-sol`, high reasoning.
+- **Current evidence:** P14-01A, all 13 Owner-review batches, and the completed
+  consolidated P14-01B/P14-01C subject are Owner-accepted. Same-task completion
+  through one Ready PR, required CI, and merge is authorized. P14-02 remains
+  unauthorized.
 
 ### P14-02 — Produce Pauper MTGO data and statistics privately
 

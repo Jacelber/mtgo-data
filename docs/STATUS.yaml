@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/gov-owner-acceptance-invariant"
+  current_working_branch: "codex/p14-01b-pauper-classifier"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,40 +18,48 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "p14_00_completed_governance_repair_completion_authorized"
+  status: "p14_01_owner_accepted_completion_authorized"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: false
-  implementation_authorized: false
+  implementation_authorized: true
   next_phase_id: 15
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-OWNER-ACCEPTANCE-INVARIANT"
-  name: "Enforce atomic Owner-acceptance completion authority"
+  id: "P14-01"
+  name: "Establish and accept Pauper classification"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-30"
-  base_commit: "1b4d03dc5faedc961a49572df660f45de48cfb7b"
-  branch: "codex/gov-owner-acceptance-invariant"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-owner-acceptance-invariant-20260830-01"
-  objective: "Reject live status that splits accepted same-task completion authority or simultaneously authorizes and prohibits commit, remote publication, or merge."
+  base_commit: "f5c29bd17e7439e1903c79ffc0bf5e94ad472388"
+  branch: "codex/p14-01b-pauper-classifier"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/p14-01b-pauper-classifier-20260830-01"
+  objective: "Implement the Owner-accepted Pauper taxonomy as one shared deterministic rule set, then continuously complete retained-corpus review and final refinement before taxonomy acceptance."
   artifact_impact: "internal_diagnostics"
   authorization:
-    local_implementation: false
+    local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
     - "docs/STATUS.yaml"
-    - "tests/test_documentation_history.py"
-  planned_additions: []
+    - "docs/ROADMAP.md"
+    - "docs/audits/P14-01.md"
+    - "my_archetypes/pauper.yaml"
+    - "tests/fixtures/pauper/rule_contract.json"
+    - "tests/test_pauper_rules.py"
+  planned_additions:
+    - "docs/audits/P14-01.md"
+    - "my_archetypes/pauper.yaml"
+    - "tests/fixtures/pauper/rule_contract.json"
+    - "tests/test_pauper_rules.py"
   protected_scope:
     product_code_changed: "none"
     workflow_changed: "none"
     governance_rule_changed: "none"
-    test_change: "focused live-status semantic invariant only"
+    test_change: "focused Pauper rule identities, priorities, subtype boundaries, Unknown, conflict visibility, and retained-corpus replay only"
     configuration_changed: "none"
-    classifier_changed: "none"
+    classifier_changed: "new Pauper rule file only; shared classifier engine and Standard/Modern rules remain unchanged"
     raw_or_generated_data_changed: "none"
     schema_changed: "none"
     frontend_changed: "none"
@@ -59,30 +67,29 @@ current_task:
     production_dispatched: false
     remote_write_performed: "none"
   prohibited_changes:
-    - "Do not change AGENTS.md, Gate definitions, DEVELOPMENT_WORKFLOW, DECISIONS, ROADMAP, product code, workflows, configs, Schemas, data, front-end assets, public paths, dependencies, or production behavior."
-    - "Do not redesign STATUS, add a general authorization parser, or broaden documentation tests beyond the reproduced same-task completion contradiction."
-    - "Do not start P14-01, fetch data, request the Paupergeddon link, generate a product, or dispatch production."
-    - "Do not begin another task or develop directly on master."
+    - "Do not change the shared classifier engine, Standard or Modern rules, the maintained bilingual name catalog, Schemas, format registry, workflows, front-end assets, public paths, dependencies, or production behavior."
+    - "Do not activate Pauper execution, generate product statistics, fetch or retain new data, request the Paupergeddon link, change a whitelist, or dispatch production."
+    - "Do not commit the Owner's workbook or the complete retained corpus as a fixture; retain only bounded representative rule fixtures and review evidence."
+    - "Do not start P14-02 or another task, or develop directly on master."
   planned_verification:
-    - "Run only the live-status policy node and its existing invalid-policy and new completion-authority counterexample nodes."
-    - "Run python -B validate_repository.py --changed-from 1b4d03dc5faedc961a49572df660f45de48cfb7b once on the final local tree."
-    - "Review the exact two-path diff and run git diff --check."
-    - "Do not run full pytest, product, data, Schema, CLI, browser, Pages, or production tests."
-  stop_point: "Complete the unchanged accepted governance repair continuously through Gate 6. Stop before P14-01 or another task."
+    - "Validate only my_archetypes/pauper.yaml with validate_rules.py."
+    - "Run the focused Pauper rule test module with an external pytest basetemp."
+    - "Replay the current retained recent Pauper corpus once for P14-01C and record coverage, accuracy against the Owner reference, Unknown, conflicts, and reviewed boundary outcomes."
+    - "Run python -B validate_repository.py --changed-from f5c29bd17e7439e1903c79ffc0bf5e94ad472388 once on the final local tree."
+    - "Review all changed paths, the complete diff, and git diff --check; do not run full pytest, product, Schema, browser, Pages, or production tests."
+  stop_point: "Complete the unchanged Owner-accepted P14-01 subject through local commit, one Ready PR, required CI, and merge. Stop afterward; do not activate Pauper or start P14-02."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-08-30"
-    subject: "The focused live-status invariants for accepted completion authority, conflicting prohibitions, and duplicate same-task authorization fields."
+    subject: "The 64-parent, 71-identity, 89-rule Pauper classifier candidate, bounded fixtures, bilingual review inventory, 1,956-deck retained-corpus result, residual refinement, and focused verification evidence."
 
 current_repository_state:
-  source_master_commit: "1b4d03dc5faedc961a49572df660f45de48cfb7b"
+  source_master_commit: "f5c29bd17e7439e1903c79ffc0bf5e94ad472388"
   deployed_master_commit: "4ad96d17d0991b63d1f4ff579e23603631a86789"
-  previous_task: "P14-00"
+  previous_task: "GOV-OWNER-ACCEPTANCE-INVARIANT"
   previous_task_status: "completed_merged"
-  previous_pull_request: 310
-  previous_pull_request_run: 33300200172
-  previous_merge_commit: "1b4d03dc5faedc961a49572df660f45de48cfb7b"
-  previous_merge_validation_run: 33300253328
+  previous_pull_request: 311
+  previous_merge_commit: "f5c29bd17e7439e1903c79ffc0bf5e94ad472388"
   pauper_registry_state: "planned_non_public_collection_only"
   pauper_public_products_available: false
   paupergeddon_whitelist_entry_present: false
@@ -95,14 +102,14 @@ known_blockers: []
 
 future_task_gates:
   - id: "GOV-OWNER-ACCEPTANCE-INVARIANT"
-    status: "owner_accepted_completion_authorized"
-    note: "Complete only the unchanged focused invariant repair through Gate 6."
+    status: "completed_merged"
+    note: "Merged as PR #311 at master commit f5c29bd17e7439e1903c79ffc0bf5e94ad472388."
   - id: "P14-00"
     status: "completed_merged"
     note: "Merged as PR #310 at master commit 1b4d03dc5faedc961a49572df660f45de48cfb7b."
   - id: "P14-01"
-    status: "planned_not_authorized"
-    note: "Pauper taxonomy proposals, rules, fixtures, and bilingual identities remain separately gated."
+    status: "owner_accepted_completion_authorized"
+    note: "The 64-parent, 71-identity, 89-rule P14-01 subject is Owner-accepted. Complete the unchanged subject through one Ready PR, required CI, and merge, then stop before P14-02."
   - id: "P14-02"
     status: "planned_not_authorized"
     note: "Material shared MTGO repair must be accepted before private Pauper product input enters that layer."
@@ -126,17 +133,16 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "GOV-OWNER-ACCEPTANCE-INVARIANT"
-  name: "Enforce atomic Owner-acceptance completion authority"
+  id: "P14-01"
+  name: "Establish and accept Pauper classification"
   status: "owner_accepted_completion_authorized"
-  local_execution_authorized: false
+  local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Complete the unchanged accepted governance repair through Gate 6; P14-01 remains unauthorized."
+  note: "Complete the unchanged Owner-accepted P14-01 subject through local commit, one Ready PR, required CI, and merge. P14-02 remains unauthorized."
 
 prohibited_next_actions:
-  - "Do not start P14-01, shared-framework implementation, Pauper classification, private generation, Landing review, or another task."
-  - "Do not change the existing acceptance rule or remove Gate quality checks."
+  - "Do not start P14-02, shared-framework implementation, private Pauper generation, Landing review, or another task."
   - "Do not fetch data, change public availability, alter production, or dispatch a workflow."
-  - "Do not develop directly on master or begin another task."
+  - "Do not develop directly on master."
