@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-raw-archive.schema.json",
-  "x-schema-version": "3.0.0",
+  "x-schema-version": "4.0.0",
   "title": "Melee raw-response archive manifest",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "source", "event_id", "event_url", "fetched_at", "responses"],
   "properties": {
-    "schema_version": {"enum": ["1.0.0", "2.0.0", "3.0.0"]},
+    "schema_version": {"enum": ["1.0.0", "2.0.0", "3.0.0", "4.0.0"]},
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
     "event_url": {
@@ -16,13 +16,23 @@
     },
     "fetched_at": {"type": "string", "format": "date-time", "pattern": "Z$"},
     "participant_identity": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["scheme", "key_id"],
-      "properties": {
-        "scheme": {"const": "hmac-sha256-event-v1"},
-        "key_id": {"type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"}
-      }
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scheme", "key_id"],
+          "properties": {
+            "scheme": {"const": "hmac-sha256-event-v1"},
+            "key_id": {"type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scheme"],
+          "properties": {"scheme": {"const": "source-participant-id-v1"}}
+        }
+      ]
     },
     "responses": {
       "type": "array",
@@ -93,6 +103,10 @@
       "then": {
         "required": ["participant_identity"],
         "properties": {
+          "participant_identity": {
+            "properties": {"scheme": {"const": "hmac-sha256-event-v1"}},
+            "required": ["key_id"]
+          },
           "responses": {
             "items": {
               "required": [
@@ -101,6 +115,27 @@
                 "source_sha256", "source_bytes"
               ],
               "not": {"required": ["source_participant_id"]}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"schema_version": {"const": "4.0.0"}}},
+      "then": {
+        "required": ["participant_identity"],
+        "properties": {
+          "participant_identity": {
+            "properties": {"scheme": {"const": "source-participant-id-v1"}}
+          },
+          "responses": {
+            "items": {
+              "required": [
+                "method", "request_body_sha256", "source_round_id",
+                "source_participant_id", "source_decklist_id", "persisted_content_type",
+                "source_sha256", "source_bytes"
+              ],
+              "not": {"required": ["participant_ref"]}
             }
           }
         }

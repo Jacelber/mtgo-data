@@ -116,6 +116,35 @@ def test_melee_cli_smoke(tmp_path, capsys):
     assert not (tmp_path / "raw").exists()
 
 
+def test_melee_complete_cli_does_not_require_hmac_settings(tmp_path, capsys):
+    calls = []
+
+    def complete_fetch(event_id, _registry, raw_root, *, progress):
+        calls.append((event_id, raw_root))
+        progress({"stage": "complete"})
+        return MeleeRawFetchResult(event_id, False, tmp_path / "snapshot", (), ())
+
+    result = melee_main(
+        [
+            "--event-id",
+            "434455",
+            "--registry",
+            str(ROOT / "configs" / "melee_events.yaml"),
+            "--raw-root",
+            str(tmp_path / "raw"),
+            "--execute",
+            "--complete",
+        ],
+        complete_fetch=complete_fetch,
+    )
+
+    captured = capsys.readouterr()
+    assert result == 0
+    assert calls == [("434455", tmp_path / "raw")]
+    assert json.loads(captured.out)["mode"] == "execute"
+    assert '"stage": "complete"' in captured.err
+
+
 def test_catalog_cli_smoke(tmp_path):
     config = tmp_path / "configs" / "formats.yaml"
     config.parent.mkdir(parents=True)

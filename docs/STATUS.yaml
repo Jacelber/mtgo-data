@@ -4,13 +4,13 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p14-01b-pauper-classifier"
+  current_working_branch: "codex/gov-melee-public-source-id-v4"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
   purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-08-30"
+  last_updated: "2026-08-31"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   history_policy: "Completed detail belongs in docs/history, audits, decisions, pull requests, and Git history; never use it to authorize current work."
@@ -18,23 +18,23 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "p14_01_owner_accepted_completion_authorized"
+  status: "p14_01_completed_melee_identity_v4_owner_accepted"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: false
-  implementation_authorized: true
+  implementation_authorized: false
   next_phase_id: 15
   next_phase_authorized: false
 
 current_task:
-  id: "P14-01"
-  name: "Establish and accept Pauper classification"
+  id: "GOV-MELEE-PUBLIC-SOURCE-ID-V4"
+  name: "Implement direct public Melee participant identity persistence"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-30"
-  base_commit: "f5c29bd17e7439e1903c79ffc0bf5e94ad472388"
-  branch: "codex/p14-01b-pauper-classifier"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p14-01b-pauper-classifier-20260830-01"
-  objective: "Implement the Owner-accepted Pauper taxonomy as one shared deterministic rule set, then continuously complete retained-corpus review and final refinement before taxonomy acceptance."
+  base_commit: "41d2abd4be5f924c67d8b78762f31dfda3c103af"
+  branch: "codex/gov-melee-public-source-id-v4"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-melee-public-source-id-v4-20260830-01"
+  objective: "Implement DEC-147 by writing direct public Melee Player.ID values in v4/v2 minimized persistence, removing new-write HMAC requirements, and preserving historical v1/v2/v3 reads and derived public participant IDs."
   artifact_impact: "internal_diagnostics"
   authorization:
     local_implementation: true
@@ -43,53 +43,63 @@ current_task:
     merge: true
   allowed_paths:
     - "docs/STATUS.yaml"
-    - "docs/ROADMAP.md"
-    - "docs/audits/P14-01.md"
-    - "my_archetypes/pauper.yaml"
-    - "tests/fixtures/pauper/rule_contract.json"
-    - "tests/test_pauper_rules.py"
+    - "docs/TEST_TRIGGER_MATRIX.md"
+    - "docs/OPERATIONS_RUNBOOK.md"
+    - "README.md"
+    - "schemas/melee-raw-archive.schema.json"
+    - "schemas/melee-minimized-resource.schema.json"
+    - "src/mtgmeta/melee/__main__.py"
+    - "src/mtgmeta/melee/client.py"
+    - "src/mtgmeta/melee/privacy.py"
+    - "src/mtgmeta/melee/privacy_validation.py"
+    - "src/mtgmeta/melee/parser.py"
+    - "src/mtgmeta/melee/assembler.py"
+    - "src/mtgmeta/melee/retention.py"
+    - "tests/test_cli_smoke.py"
+    - "tests/test_melee_privacy_validation.py"
+    - "tests/test_melee_source_identity.py"
   planned_additions:
-    - "docs/audits/P14-01.md"
-    - "my_archetypes/pauper.yaml"
-    - "tests/fixtures/pauper/rule_contract.json"
-    - "tests/test_pauper_rules.py"
+    - "tests/test_melee_source_identity.py"
   protected_scope:
-    product_code_changed: "none"
+    product_code_changed: "Melee collection, minimization, checkpoint, parsing, assembly, and retention identity path only"
     workflow_changed: "none"
-    governance_rule_changed: "none"
-    test_change: "focused Pauper rule identities, priorities, subtype boundaries, Unknown, conflict visibility, and retained-corpus replay only"
+    governance_rule_changed: "one focused Melee source-identity trigger row only"
+    test_change: "focused v4 direct identity, v3 historical read, checkpoint, CLI, and minimized-field boundary only"
     configuration_changed: "none"
-    classifier_changed: "new Pauper rule file only; shared classifier engine and Standard/Modern rules remain unchanged"
+    classifier_changed: "none"
     raw_or_generated_data_changed: "none"
-    schema_changed: "none"
+    schema_changed: "internal Melee raw manifest 4.0.0 and minimized resource 2.0.0 only"
     frontend_changed: "none"
     public_paths_changed: "none"
     production_dispatched: false
     remote_write_performed: "none"
   prohibited_changes:
-    - "Do not change the shared classifier engine, Standard or Modern rules, the maintained bilingual name catalog, Schemas, format registry, workflows, front-end assets, public paths, dependencies, or production behavior."
-    - "Do not activate Pauper execution, generate product statistics, fetch or retain new data, request the Paupergeddon link, change a whitelist, or dispatch production."
-    - "Do not commit the Owner's workbook or the complete retained corpus as a fixture; retain only bounded representative rule fixtures and review evidence."
+    - "Do not change configs/melee_events.yaml, admit event 441441, fetch or retain source responses, modify event 434455 bytes, generate data, or dispatch production."
+    - "Do not change workflows, normalized or generated public Schemas, statistics, classifiers, front-end assets, public paths, dependencies, or product availability."
+    - "Do not migrate or rewrite historical v1/v2/v3 snapshots or HMAC identifiers; retain only read compatibility."
     - "Do not start P14-02 or another task, or develop directly on master."
   planned_verification:
-    - "Validate only my_archetypes/pauper.yaml with validate_rules.py."
-    - "Run the focused Pauper rule test module with an external pytest basetemp."
-    - "Replay the current retained recent Pauper corpus once for P14-01C and record coverage, accuracy against the Owner reference, Unknown, conflicts, and reviewed boundary outcomes."
-    - "Run python -B validate_repository.py --changed-from f5c29bd17e7439e1903c79ffc0bf5e94ad472388 once on the final local tree."
-    - "Review all changed paths, the complete diff, and git diff --check; do not run full pytest, product, Schema, browser, Pages, or production tests."
-  stop_point: "Complete the unchanged Owner-accepted P14-01 subject through local commit, one Ready PR, required CI, and merge. Stop afterward; do not activate Pauper or start P14-02."
+    - "Run the focused live-status node, Melee CLI nodes, minimized privacy module, and source-identity module with an external pytest basetemp."
+    - "Run one read-only parse of the protected event 434455 snapshot on the final parser."
+    - "Run Ruff and mypy only for changed maintained Python paths."
+    - "Run python -B validate_schemas.py once because authoritative Schemas change."
+    - "Run python -B validate_repository.py --changed-from 41d2abd4be5f924c67d8b78762f31dfda3c103af once on the final local tree."
+    - "Review all changed paths, the complete diff, and git diff --check; do not run full pytest, browser, Pages, live-source, candidate, or production tests."
+  stop_point: "Complete the accepted unchanged task through one commit, one Ready PR, required CI, and merge. Do not admit event 441441, fetch data, dispatch production, start P14-02, or begin another task."
   owner_acceptance:
     status: "accepted"
-    accepted_on: "2026-08-30"
-    subject: "The 64-parent, 71-identity, 89-rule Pauper classifier candidate, bounded fixtures, bilingual review inventory, 1,956-deck retained-corpus result, residual refinement, and focused verification evidence."
+    accepted_on: "2026-08-31"
+    subject: "The exact DEC-147 implementation, historical compatibility, unchanged protected data, and focused validation evidence."
 
 current_repository_state:
-  source_master_commit: "3ad9a286afe080c2e9f470cd30a6aec148d88520"
+  source_master_commit: "41d2abd4be5f924c67d8b78762f31dfda3c103af"
   deployed_master_commit: "4ad96d17d0991b63d1f4ff579e23603631a86789"
-  previous_task: "GOV-MELEE-PUBLIC-SOURCE-ID-DECISION"
+  previous_task: "P14-01"
   previous_task_status: "completed_merged"
-  previous_pull_request: 312
-  previous_merge_commit: "3ad9a286afe080c2e9f470cd30a6aec148d88520"
+  previous_pull_request: 313
+  previous_pull_request_run: 33316649792
+  previous_merge_commit: "41d2abd4be5f924c67d8b78762f31dfda3c103af"
+  previous_merge_validation_run: 33316716648
   pauper_registry_state: "planned_non_public_collection_only"
   pauper_public_products_available: false
   paupergeddon_whitelist_entry_present: false
@@ -101,6 +111,9 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
+  - id: "GOV-MELEE-PUBLIC-SOURCE-ID-V4"
+    status: "owner_accepted_completion_authorized"
+    note: "Owner acceptance authorizes continuous completion of the unchanged DEC-147 implementation through commit, Ready PR, required CI, and merge."
   - id: "GOV-MELEE-PUBLIC-SOURCE-ID-DECISION"
     status: "completed_merged"
     note: "Merged as PR #312 at master commit 3ad9a286afe080c2e9f470cd30a6aec148d88520."
@@ -111,8 +124,8 @@ future_task_gates:
     status: "completed_merged"
     note: "Merged as PR #310 at master commit 1b4d03dc5faedc961a49572df660f45de48cfb7b."
   - id: "P14-01"
-    status: "owner_accepted_completion_authorized"
-    note: "The 64-parent, 71-identity, 89-rule P14-01 subject is Owner-accepted. Complete the unchanged subject through one Ready PR, required CI, and merge, then stop before P14-02."
+    status: "completed_merged"
+    note: "Merged as PR #313 at master commit 41d2abd4be5f924c67d8b78762f31dfda3c103af; merge validation run 33316716648 succeeded."
   - id: "P14-02"
     status: "planned_not_authorized"
     note: "Material shared MTGO repair must be accepted before private Pauper product input enters that layer."
@@ -136,16 +149,16 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "P14-01"
-  name: "Establish and accept Pauper classification"
+  id: "GOV-MELEE-PUBLIC-SOURCE-ID-V4"
+  name: "Complete direct public Melee participant identity persistence"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Complete the unchanged Owner-accepted P14-01 subject through local commit, one Ready PR, required CI, and merge. P14-02 remains unauthorized."
+  note: "Complete only the unchanged accepted task; event 441441, production dispatch, and P14-02 remain unauthorized."
 
 prohibited_next_actions:
-  - "Do not start P14-02, shared-framework implementation, private Pauper generation, Landing review, or another task."
-  - "Do not fetch data, change public availability, alter production, or dispatch a workflow."
-  - "Do not develop directly on master."
+  - "Do not change the Melee whitelist, admit event 441441, fetch or retain data, generate output, or dispatch a workflow."
+  - "Do not change public availability, production behavior, workflows, normalized or generated public Schemas, statistics, classifiers, or front-end assets."
+  - "Do not start P14-02 or another task, or develop directly on master."

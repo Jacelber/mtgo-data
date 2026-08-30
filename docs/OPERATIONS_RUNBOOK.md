@@ -7,9 +7,10 @@ not authorize a workflow dispatch, source fetch, secret operation, candidate
 publication, merge, deployment, rollback, or data change. Read
 `docs/STATUS.yaml` before acting and obtain the authorization recorded there.
 
-No production Melee HMAC key is currently provisioned. The first live v3 test
-event therefore requires a separate preflight for event selection, key
-handling, workflow injection, live collection, and any remote candidate branch.
+New Melee collections use the public upstream participant ID directly and do
+not require an HMAC key. A first live v4 collection still requires a separate
+preflight for event selection, whitelist state, live collection, and any
+remote candidate branch.
 
 ## First response
 
@@ -53,27 +54,28 @@ evidence fails closed. After a successful deployment, confirm only the bound
 SHA and HTTP availability of `index.html`, `melee/index.html`, and
 `stats/catalog.json`, once for that deployment.
 
-## Melee candidate and HMAC
+## Melee candidate and source identity
 
-An event with a retained complete snapshot does not need an HMAC key for
-downstream candidate generation. A new live v3 collection requires an enabled,
-verified whitelist entry, `--complete --execute`, at least 32 bytes of approved
-key material, and a unique non-secret key ID. Missing or invalid settings fail
-before network or filesystem side effects.
+New complete snapshots use raw manifest v4, minimized resource v2, checkpoint
+v3, and identity scheme `source-participant-id-v1`. The collector copies the
+public Melee participant ID into `source_participant_id`; normalized output
+continues to derive its event-scoped `participant_id`. A live collection still
+requires an enabled, verified whitelist entry and separately authorized
+`--complete --execute` operation.
 
 | Situation | Required boundary |
 | --- | --- |
-| Completed v3 snapshot | Continue downstream from its persisted participant references; the key is not needed for parsing or generation. |
-| Interrupted collection, original key available | Resume only the verified frozen plan with the same key material and key ID. |
-| Interrupted collection, key lost | Treat it as non-resumable. Start a clean snapshot with a new key and new key ID; do not join old and new state. |
-| Planned rotation | Finish or abandon old-key checkpoints first, then begin a new snapshot boundary with a new key and key ID. |
-| Disposable rehearsal | Use a distinct test key and key ID, and do not represent the snapshot as production-retained. |
-| Rehearsal that may be retained | Use the production-managed key from the start so later resume and recollection follow one identity contract. |
+| Completed v4 snapshot | Continue downstream from its persisted public source IDs; no key is needed. |
+| Historical v3 snapshot | Continue to parse its persisted HMAC references read-only; do not rewrite or regenerate it. |
+| Historical v2 snapshot | Continue to parse and retain it under the existing compatibility contract. |
+| Interrupted v4 collection | Resume only the verified frozen request plan and direct-identity checkpoint. |
+| Checkpoint identity/version mismatch | Stop. Do not combine v2/v3/v4 partial state or repair the checkpoint by hand. |
+| Disposable rehearsal | Keep it outside retained production input unless retention is separately authorized. |
 
-The manifest and checkpoint contain only the key ID. The secret must not enter
-the repository, workflow YAML, command history, logs, artifacts, documentation,
-or candidate branch. The Melee workflow may create a review branch; it never
-merges into `master` or deploys the site by itself.
+No HMAC secret or key ID is required by the v4 collection path. Historical v3
+key metadata remains readable only for compatibility. The Melee workflow may
+create a review branch; it never merges into `master` or deploys the site by
+itself.
 
 ## Correction and removal requests
 

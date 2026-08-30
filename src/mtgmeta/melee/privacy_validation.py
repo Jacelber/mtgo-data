@@ -1,4 +1,4 @@
-"""Validation boundary for persisted Melee v3 resource documents."""
+"""Validation boundary for persisted minimized Melee resource documents."""
 
 from __future__ import annotations
 
@@ -34,7 +34,6 @@ PROHIBITED_RESOURCE_KEYS = frozenset({
     "TeamId",
     "Treatment",
     "Username",
-    "source_participant_id",
 })
 
 
@@ -62,7 +61,7 @@ def _validator(schema_path: Path) -> Draft202012Validator:
 
 
 def scan_prohibited_resource_keys(document: Any) -> tuple[str, ...]:
-    """Return prohibited JSON-key paths in one already-scoped v3 resource."""
+    """Return prohibited JSON-key paths in one already-scoped resource."""
 
     findings: list[str] = []
 
