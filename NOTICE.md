@@ -26,11 +26,14 @@ Source provenance and data-quality metadata should be preserved where the releva
 
 ## Privacy contact and correction or removal requests
 
-Future Melee snapshot version 3 retains only the resource fields required by
-the reviewed event-data contract. This can include source-published display
-names, standings, match results, decklists, event metadata, and event-scoped
-participant references. The references replace raw numeric participant IDs,
-but retaining a published display name is not an anonymity guarantee.
+The approved next Melee snapshot contract retains only the resource fields
+required by the reviewed event-data contract. This can include source-published
+display names, standings, match results, decklists, event metadata, and the
+public numeric participant ID supplied by Melee. The participant ID is retained
+directly as an opaque source identifier; it is not anonymized and may permit
+correlation across events. Generated Pages documents need not expose that raw
+ID, but approved raw and normalized records remain accessible through this
+public Git repository and history.
 
 To request review, correction, or removal of project-published participant or
 tournament information, email `djacerror@gmail.com`. Include the Melee event
