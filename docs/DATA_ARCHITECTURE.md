@@ -1629,7 +1629,7 @@ unchanged.
 
 ### 11.12 Reference-event compatibility manifest
 
-The Broodscale red-commitment correction updates the version `1.6.0`
+The active-taxonomy compatibility migration updates the version `1.7.0`
 compatibility boundary for mixed Melee event `434455` in
 `tests/fixtures/melee/434455_compatibility_manifest.json`. Its exact-byte set
 contains the raw snapshot manifest, normalized event, classification overlay,
@@ -1638,13 +1638,14 @@ is a closure root: validation also verifies the unique path, byte count, and
 SHA-256 of every one of its 483 declared responses and rejects any undeclared
 file in the retained snapshot directory.
 
-Version `1.6.0` keeps the raw snapshot manifest and normalized event
-byte-identical. It advances the classification overlay, opportunity ledger,
-and five event documents only because ten Grove-only Broodscale decks move
-from the stable `gruul` subtype back to the stable `mono-green` subtype under
-the reviewed red-commitment boundary. Copperline Gorge and Karplusan Forest
-remain qualifying red sources, while reviewed red spells in either deck zone
-remain Gruul evidence. No source response is fetched or rewritten.
+Version `1.7.0` keeps the raw snapshot manifest and normalized event
+byte-identical while rebinding the classification overlay, opportunity ledger,
+and five event documents to the maintained Modern taxonomy. All 362 selected
+parent and subtype classifications remain identical. Six records lose only an
+obsolete fallback candidate match, and the hierarchy adds the maintained
+zero-sample `chant-control/esper` leaf. Opportunity totals, scope populations,
+result totals, and shared matchup cells remain unchanged. No source response is
+fetched or rewritten.
 
 The format event catalog and global consumer catalog are expandable indexes,
 not immutable event payloads. Their complete bytes are excluded from the
@@ -1653,7 +1654,10 @@ compatibility digest set. Validation instead freezes the complete selected
 `tabletop-major-events` product route in `stats/catalog.json`. Unrelated event,
 format, product, default-selection, ordering, and volatile generation metadata
 may change when their own tasks authorize that work, provided the selected
-projection remains unchanged.
+projection remains unchanged. The `1.7.0` selected projection uses catalog
+schema `1.2.0`, binds its root to the active taxonomy, and freezes the event's
+matchup compatibility evidence so later multi-event growth fails closed on a
+taxonomy mismatch.
 
 Shared whitelist and taxonomy files are not exact-byte members of the event
 manifest. Protected `434455` derived bytes and their embedded provenance remain

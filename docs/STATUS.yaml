@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/melee-441441-multi-event-publication-repair"
+  current_working_branch: "codex/melee-434455-active-taxonomy-migration"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_melee_multi_event_publication_repair"
+  status: "active_melee_434455_taxonomy_migration"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: false
@@ -27,87 +27,93 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "MELEE-441441-MULTI-EVENT-PUBLICATION-REPAIR"
-  name: "Preserve existing Melee catalog members during one-event publication"
+  id: "MELEE-434455-ACTIVE-TAXONOMY-MIGRATION"
+  name: "Migrate protected event 434455 derived outputs to the active Modern taxonomy"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-31"
-  base_commit: "3f97ac5707efeb5954c20139fc7b328d95194990"
-  branch: "codex/melee-441441-multi-event-publication-repair"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-multi-event-publication-repair-20260831-01"
-  objective: "Repair the event publisher and candidate validator so adding one event preserves every existing catalog member and the existing default, while legacy catalogs remain fail-closed until separately migrated."
-  artifact_impact: "none"
+  base_commit: "38761b39457394a5e108134553514624d3e4535c"
+  branch: "codex/melee-434455-active-taxonomy-migration"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-434455-active-taxonomy-migration-20260831-01"
+  objective: "Regenerate only protected event 434455 derived artifacts from its unchanged committed normalized input under the current Modern taxonomy, upgrade its compatibility evidence and catalog projection, and make later multi-event growth safe without refetching Melee."
+  artifact_impact: "statistical_json_structure"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "src/mtgmeta/melee/publish.py"
-    - "validate_melee_candidate.py"
-    - "tests/test_melee_multi_event_contract.py"
-    - "tests/test_melee_candidate_validation.py"
     - "docs/STATUS.yaml"
-  planned_additions:
-    - "tests/test_melee_candidate_validation.py"
+    - "docs/DECISIONS.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "schemas/melee-compatibility-manifest.schema.json"
+    - "tests/fixtures/melee/434455_compatibility_manifest.json"
+    - "data/modern/melee/classifications/434455.json"
+    - "data/modern/melee/opportunities/434455.json"
+    - "stats/modern/melee/events/434455/overview.json"
+    - "stats/modern/melee/events/434455/decks.json"
+    - "stats/modern/melee/events/434455/matchup.json"
+    - "stats/modern/melee/events/434455/quality.json"
+    - "stats/modern/melee/events/434455/meta.json"
+    - "stats/modern/melee/index.json"
+  planned_additions: []
   protected_scope:
-    product_code_changed: "one bounded publisher merge helper and candidate catalog guard"
+    product_code_changed: "none"
     workflow_changed: "none"
-    governance_rule_changed: "none"
-    test_change: "focused counterexamples for catalog membership, default identity, and legacy fail-closed behavior"
+    governance_rule_changed: "one successor decision and compatibility version advance"
+    test_change: "compatibility fixture and contract version only"
     configuration_changed: "none"
-    classifier_changed: "none"
-    raw_or_generated_data_changed: "none"
-    schema_changed: "none"
+    classifier_changed: "none; consume the already accepted current Modern taxonomy byte-for-byte"
+    raw_or_generated_data_changed: "derived 434455 classification, opportunity, event outputs, and format catalog only"
+    schema_changed: "non-public compatibility manifest contract version only"
     frontend_changed: "none"
-    public_paths_changed: "none"
+    public_paths_changed: "none; the existing format catalog advances to its already supported 1.2.0 shape"
     production_dispatched: false
     remote_write_performed: "none"
+  invariants:
+    - "The retained raw snapshot manifest and all 483 declared responses remain byte-identical."
+    - "data/modern/melee/events/434455.json remains byte-identical."
+    - "No taxonomy rule, statistical formula, event scope, whitelist entry, workflow, front end, or public path changes."
+    - "The format catalog keeps event 434455 as its only member and default while adding current active-taxonomy and matchup-compatibility evidence."
   prohibited_changes:
-    - "Do not collect event 441441, dispatch fetch_melee.yml, migrate event 434455, refetch retained inputs, or edit normalized, classified, generated, or public data."
-    - "Do not change the whitelist, workflows, Schemas, statistics, classifiers, front end, dependencies, catalog bytes, the current default event, or product availability."
-    - "Do not deploy Pages, start the protected-event migration, dispatch collection, start P14-02, begin another event, or develop directly on master after completing this accepted repair."
+    - "Do not access Melee, refetch or rewrite the retained v2 snapshot, normalize another snapshot, collect event 441441, dispatch fetch_melee.yml, or edit event 441441 data."
+    - "Do not change classifier rules, source configuration, statistical meaning, product code, workflows, front end, public paths, MTGO data, or another event."
+    - "Do not begin collection before the exact accepted migration merges and its required checks pass; afterward run only the separately authorized 441441 production-candidate workflow and stop before candidate PR creation."
   planned_verification:
-    - "Run tests/test_melee_multi_event_contract.py and tests/test_melee_candidate_validation.py only."
-    - "Run Ruff only on changed maintained Python files, the focused live-status contract, and python -B validate_repository.py --changed-from 3f97ac5707efeb5954c20139fc7b328d95194990 once on the final tree."
-    - "Review all changed paths, the complete diff, and git diff --check; do not run full pytest, live-source, workflow, Schema, browser, Pages, or production tests."
-  stop_point: "Complete the byte-identical accepted repair through one commit, one Ready PR, required CI, and merge, then stop. A later separately authorized task must migrate protected event 434455 to the active taxonomy before event 441441 collection can proceed."
+    - "Compare pre/post classification transitions and prove event, opportunity, and match populations reconcile under unchanged statistical semantics."
+    - "Regenerate the exact offline chain twice and require the second run to produce no diff."
+    - "Run the focused classification, opportunity, statistics, matchup, publication, compatibility-manifest, public-Schema, and live-status checks selected by the changed paths."
+    - "Run validate_repository.py --changed-from 38761b39457394a5e108134553514624d3e4535c once on the final tree, review the complete diff, and run git diff --check; do not run full pytest, browser, live-source, workflow, Pages, or production tests."
+  stop_point: "Complete the byte-identical accepted migration through one commit, one Ready PR, required CI, merge, and applicable exact-SHA publication verification. Then automatically resume only the previously authorized 441441 production-candidate workflow and stop at Owner data and classification judgment; do not create or merge the candidate PR or release it publicly."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-08-31"
-    subject: "The bounded multi-event publisher merge and candidate catalog guard, with no data or production change."
+    subject: "The exact no-refetch 434455 derived-data migration, compatibility version, and catalog projection."
 
 current_repository_state:
-  source_master_commit: "3f97ac5707efeb5954c20139fc7b328d95194990"
-  deployed_master_commit: "4ad96d17d0991b63d1f4ff579e23603631a86789"
-  previous_task: "MELEE-441441-WHITELIST-ADMISSION"
+  source_master_commit: "38761b39457394a5e108134553514624d3e4535c"
+  previous_task: "MELEE-441441-MULTI-EVENT-PUBLICATION-REPAIR"
   previous_task_status: "completed_merged"
-  previous_pull_request: 319
-  previous_pull_request_run: 33326512125
-  previous_merge_commit: "3f97ac5707efeb5954c20139fc7b328d95194990"
-  previous_merge_validation_run: 33326565331
+  previous_pull_request: 320
+  previous_pull_request_run: 33328263058
+  previous_merge_commit: "38761b39457394a5e108134553514624d3e4535c"
+  previous_merge_validation_run: 33328323426
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
 known_blockers:
-  - id: "MELEE-441441-PUBLISHER-REPLACES-CATALOG"
-    status: "repair_owner_accepted_completion_authorized"
-    note: "The accepted publisher repair merges the selected event into a compatible catalog while preserving existing members and the current default; focused verification passed."
   - id: "MELEE-434455-ACTIVE-TAXONOMY-MIGRATION"
-    status: "separate_owner_authorization_required_after_repair"
-    note: "Protected event 434455 is bound to an older taxonomy digest; its retained derived outputs require a separate no-refetch compatibility migration before 441441 collection."
+    status: "owner_accepted_completion_authorized"
+    note: "The accepted 1.7.0 migration binds event 434455 to taxonomy digest ae06e549..., changes zero selected classifications, preserves all event samples, and passes deterministic regeneration and compatibility closure checks."
 
 future_task_gates:
-  - id: "MELEE-441441-MULTI-EVENT-PUBLICATION-REPAIR"
-    status: "owner_accepted_completion_authorized"
-    note: "Owner acceptance authorizes the byte-identical repair through one commit, one Ready PR, required CI, and merge."
   - id: "MELEE-434455-ACTIVE-TAXONOMY-MIGRATION"
-    status: "planned_not_authorized"
-    note: "After this repair is accepted and merged, migrate only retained 434455 derived outputs to the current active taxonomy without refetching source data."
+    status: "owner_accepted_completion_authorized"
+    note: "Owner acceptance authorizes the byte-identical migration through one commit, one Ready PR, required CI, merge, and applicable exact-SHA publication verification."
   - id: "MELEE-441441-PRODUCTION-CANDIDATE"
-    status: "blocked_by_repair_and_434455_migration"
-    note: "Collection remains blocked until the repair and protected-event migration are separately accepted and merged."
+    status: "owner_authorized_after_migration_merge"
+    note: "Collection remains blocked until this exact migration is accepted and merged; after that exact merge, the prior Owner authorization resumes one complete 441441 collection and candidate preparation through the data and classification judgment gate, but not candidate PR creation, candidate merge, Pages, or public release."
   - id: "P14-02"
     status: "planned_not_authorized"
     note: "Material shared MTGO repair must be accepted before private Pauper product input enters that layer."
@@ -116,15 +122,15 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "MELEE-441441-MULTI-EVENT-PUBLICATION-REPAIR"
-  name: "Preserve existing Melee catalog members during one-event publication"
+  id: "MELEE-434455-ACTIVE-TAXONOMY-MIGRATION"
+  name: "Migrate protected event 434455 derived outputs to the active Modern taxonomy"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: false
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Complete only the byte-identical accepted repair through one commit, one Ready PR, required CI, and merge; do not begin the protected-event migration or collection."
+  note: "Complete only the byte-identical accepted migration, verify its exact merge/publication result, then resume only the separately authorized 441441 candidate workflow."
 
 prohibited_next_actions:
-  - "Do not dispatch collection, migrate event 434455, edit any event data, or publish event 441441."
-  - "Do not deploy Pages, change the whitelist, start the protected-event migration, dispatch collection, or begin another task after the accepted repair merges."
+  - "Do not access Melee, dispatch collection, edit event 441441 data, or change another product or event."
+  - "Do not alter the accepted migration subject; after its exact merge, do not perform any task other than the previously authorized 441441 production-candidate workflow through the Owner judgment gate."
