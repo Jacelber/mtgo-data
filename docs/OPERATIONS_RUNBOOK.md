@@ -12,6 +12,11 @@ not require an HMAC key. A first live v4 collection still requires a separate
 preflight for event selection, whitelist state, live collection, and any
 remote candidate branch.
 
+Every proposed new whitelist event must follow
+[`MELEE_EVENT_ADMISSION_RUNBOOK.md`](MELEE_EVENT_ADMISSION_RUNBOOK.md). That
+runbook is the fixed staged admission process; it does not grant authority for
+any event-specific stage.
+
 ## First response
 
 For a GitHub Actions failure, inspect these in order:

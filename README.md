@@ -201,6 +201,12 @@ relationships are documented in `docs/DATA_ARCHITECTURE.md`.
 
 ### Operate an approved event
 
+For a new event, follow the complete staged admission process in
+[`docs/MELEE_EVENT_ADMISSION_RUNBOOK.md`](docs/MELEE_EVENT_ADMISSION_RUNBOOK.md)
+before using the commands below. The runbook requires separate qualification,
+whitelist, existing-cohort, collection, candidate, publication, and live
+acceptance gates; completing one gate does not authorize the next.
+
 Adding a whitelist entry is not the same as publishing an event. After an
 owner-approved pull request adds and verifies the complete entry, an authorized
 operator selects **Melee production candidate** in GitHub Actions and enters

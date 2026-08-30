@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/gov-melee-public-source-id-v4"
+  current_working_branch: "codex/melee-event-admission-runbook"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -27,15 +27,15 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-MELEE-PUBLIC-SOURCE-ID-V4"
-  name: "Implement direct public Melee participant identity persistence"
+  id: "GOV-MELEE-EVENT-ADMISSION-RUNBOOK"
+  name: "Archive and reuse the fixed Melee event admission process"
   status: "owner_accepted_completion_authorized"
-  authorized_on: "2026-08-30"
-  base_commit: "41d2abd4be5f924c67d8b78762f31dfda3c103af"
-  branch: "codex/gov-melee-public-source-id-v4"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-melee-public-source-id-v4-20260830-01"
-  objective: "Implement DEC-147 by writing direct public Melee Player.ID values in v4/v2 minimized persistence, removing new-write HMAC requirements, and preserving historical v1/v2/v3 reads and derived public participant IDs."
-  artifact_impact: "internal_diagnostics"
+  authorized_on: "2026-08-31"
+  base_commit: "c28f1dd4a7a21fa87ca233f15363c0a512c9c900"
+  branch: "codex/melee-event-admission-runbook"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-event-admission-runbook-20260831-01"
+  objective: "Archive the complete new-event route as the mandatory reusable process for every future Melee whitelist admission without authorizing an event operation."
+  artifact_impact: "none"
   authorization:
     local_implementation: true
     commit: true
@@ -43,63 +43,48 @@ current_task:
     merge: true
   allowed_paths:
     - "docs/STATUS.yaml"
-    - "docs/TEST_TRIGGER_MATRIX.md"
+    - "docs/MELEE_EVENT_ADMISSION_RUNBOOK.md"
     - "docs/OPERATIONS_RUNBOOK.md"
+    - "docs/DECISIONS.md"
     - "README.md"
-    - "schemas/melee-raw-archive.schema.json"
-    - "schemas/melee-minimized-resource.schema.json"
-    - "src/mtgmeta/melee/__main__.py"
-    - "src/mtgmeta/melee/client.py"
-    - "src/mtgmeta/melee/privacy.py"
-    - "src/mtgmeta/melee/privacy_validation.py"
-    - "src/mtgmeta/melee/parser.py"
-    - "src/mtgmeta/melee/assembler.py"
-    - "src/mtgmeta/melee/retention.py"
-    - "tests/test_cli_smoke.py"
-    - "tests/test_melee_privacy_validation.py"
-    - "tests/test_melee_source_identity.py"
   planned_additions:
-    - "tests/test_melee_source_identity.py"
+    - "docs/MELEE_EVENT_ADMISSION_RUNBOOK.md"
   protected_scope:
-    product_code_changed: "Melee collection, minimization, checkpoint, parsing, assembly, and retention identity path only"
+    product_code_changed: "none"
     workflow_changed: "none"
-    governance_rule_changed: "one focused Melee source-identity trigger row only"
-    test_change: "focused v4 direct identity, v3 historical read, checkpoint, CLI, and minimized-field boundary only"
+    governance_rule_changed: "one reusable staged Melee event-admission procedure and decision"
+    test_change: "none"
     configuration_changed: "none"
     classifier_changed: "none"
     raw_or_generated_data_changed: "none"
-    schema_changed: "internal Melee raw manifest 4.0.0 and minimized resource 2.0.0 only"
+    schema_changed: "none"
     frontend_changed: "none"
     public_paths_changed: "none"
     production_dispatched: false
     remote_write_performed: "none"
   prohibited_changes:
-    - "Do not change configs/melee_events.yaml, admit event 441441, fetch or retain source responses, modify event 434455 bytes, generate data, or dispatch production."
-    - "Do not change workflows, normalized or generated public Schemas, statistics, classifiers, front-end assets, public paths, dependencies, or product availability."
-    - "Do not migrate or rewrite historical v1/v2/v3 snapshots or HMAC identifiers; retain only read compatibility."
+    - "Do not change configs/melee_events.yaml, admit event 441441 or another event, fetch or retain source responses, regenerate an event, or dispatch production."
+    - "Do not change code, workflows, Schemas, statistics, classifiers, front-end assets, public paths, dependencies, product availability, or protected event bytes."
     - "Do not start P14-02 or another task, or develop directly on master."
   planned_verification:
-    - "Run the focused live-status node, Melee CLI nodes, minimized privacy module, and source-identity module with an external pytest basetemp."
-    - "Run one read-only parse of the protected event 434455 snapshot on the final parser."
-    - "Run Ruff and mypy only for changed maintained Python paths."
-    - "Run python -B validate_schemas.py once because authoritative Schemas change."
-    - "Run python -B validate_repository.py --changed-from 41d2abd4be5f924c67d8b78762f31dfda3c103af once on the final local tree."
-    - "Review all changed paths, the complete diff, and git diff --check; do not run full pytest, browser, Pages, live-source, candidate, or production tests."
-  stop_point: "Complete the accepted unchanged task through one commit, one Ready PR, required CI, and merge. Do not admit event 441441, fetch data, dispatch production, start P14-02, or begin another task."
+    - "Run the focused live-status documentation node."
+    - "Run python -B validate_repository.py --changed-from c28f1dd4a7a21fa87ca233f15363c0a512c9c900 once on the final local tree."
+    - "Review all changed paths, the complete diff, links, and git diff --check; do not run full pytest, browser, Schema, live-source, candidate, Pages, or production tests."
+  stop_point: "Complete the accepted unchanged documentation task through one commit, one Ready PR, required CI, and merge. Do not admit an event, collect data, dispatch production, deploy Pages, start P14-02, or begin another task."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-08-31"
-    subject: "The exact DEC-147 implementation, historical compatibility, unchanged protected data, and focused validation evidence."
+    subject: "The fixed reusable Melee event-admission procedure, its entry points, and unchanged event and production boundaries."
 
 current_repository_state:
-  source_master_commit: "41d2abd4be5f924c67d8b78762f31dfda3c103af"
+  source_master_commit: "c28f1dd4a7a21fa87ca233f15363c0a512c9c900"
   deployed_master_commit: "4ad96d17d0991b63d1f4ff579e23603631a86789"
-  previous_task: "P14-01"
+  previous_task: "GOV-MELEE-PUBLIC-SOURCE-ID-V4"
   previous_task_status: "completed_merged"
-  previous_pull_request: 313
-  previous_pull_request_run: 33316649792
-  previous_merge_commit: "41d2abd4be5f924c67d8b78762f31dfda3c103af"
-  previous_merge_validation_run: 33316716648
+  previous_pull_request: 315
+  previous_pull_request_run: 33319439606
+  previous_merge_commit: "c28f1dd4a7a21fa87ca233f15363c0a512c9c900"
+  previous_merge_validation_run: 33319533391
   pauper_registry_state: "planned_non_public_collection_only"
   pauper_public_products_available: false
   paupergeddon_whitelist_entry_present: false
@@ -111,9 +96,12 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "GOV-MELEE-PUBLIC-SOURCE-ID-V4"
+  - id: "GOV-MELEE-EVENT-ADMISSION-RUNBOOK"
     status: "owner_accepted_completion_authorized"
-    note: "Owner acceptance authorizes continuous completion of the unchanged DEC-147 implementation through commit, Ready PR, required CI, and merge."
+    note: "Owner acceptance authorizes completion of the unchanged documentation task through one Ready PR, required CI, and merge; no event operation is authorized."
+  - id: "GOV-MELEE-PUBLIC-SOURCE-ID-V4"
+    status: "completed_merged"
+    note: "Merged as PR #315 at master commit c28f1dd4a7a21fa87ca233f15363c0a512c9c900; merge validation run 33319533391 succeeded."
   - id: "GOV-MELEE-PUBLIC-SOURCE-ID-DECISION"
     status: "completed_merged"
     note: "Merged as PR #312 at master commit 3ad9a286afe080c2e9f470cd30a6aec148d88520."
@@ -149,14 +137,14 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "GOV-MELEE-PUBLIC-SOURCE-ID-V4"
-  name: "Complete direct public Melee participant identity persistence"
+  id: "GOV-MELEE-EVENT-ADMISSION-RUNBOOK"
+  name: "Archive and reuse the fixed Melee event admission process"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Complete only the unchanged accepted task; event 441441, production dispatch, and P14-02 remain unauthorized."
+  note: "Complete only the accepted unchanged documentation task; event 441441, production dispatch, and P14-02 remain unauthorized."
 
 prohibited_next_actions:
   - "Do not change the Melee whitelist, admit event 441441, fetch or retain data, generate output, or dispatch a workflow."

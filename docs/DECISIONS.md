@@ -7226,3 +7226,54 @@ production. Until the separately accepted implementation is merged, do not run
 a new live complete collection under either the old HMAC contract or an
 unimplemented v4 contract. Event `441441` whitelist admission, collection,
 retention, candidate generation, and publication remain separate tasks.
+
+---
+
+# DEC-148 - Use a fixed staged process for every new Melee event
+
+Status: `Accepted; documentation implementation authorized locally`
+
+## Context
+
+The original operating instructions explain how to run an already approved
+event, but the first proposed addition after reference event `434455` exposes
+more than a whitelist edit. A new event must prove its structure and source
+quality, preserve existing catalog entries, reconcile the active taxonomy and
+protected-event compatibility boundary, produce a reviewable candidate, and
+pass exact-SHA public acceptance. Treating those as one implicit operation
+would let evidence or authority from one stage leak into the next.
+
+## Decision
+
+Adopt `docs/MELEE_EVENT_ADMISSION_RUNBOOK.md` as the mandatory process for
+every proposed addition to `configs/melee_events.yaml`. The process separates:
+
+1. exact event intake and qualification;
+2. optional disposable real-source rehearsal;
+3. complete whitelist admission;
+4. existing-cohort and multi-event publication preflight;
+5. event-specific production candidate collection;
+6. data, classification, product, and multi-event acceptance;
+7. Owner-accepted candidate publication; and
+8. exact-SHA Pages and live acceptance.
+
+Each stage retains its own task scope, evidence, authority, and stop condition.
+A supplied event link, successful rehearsal, merged whitelist entry, completed
+collection, passing candidate, or accepted publication does not authorize the
+next event or next stage. When current publisher, catalog, taxonomy, or
+protected-event evidence cannot safely add the proposed event, complete the
+required framework or compatibility migration as a separate task before
+production collection.
+
+## Consequences
+
+Future event work starts from one reusable process rather than reconstructing
+the 441441 discussion. Event-specific facts, decisions, task IDs, and
+authorization still belong in the current task contract and
+`docs/STATUS.yaml`; the runbook is a procedure, not standing production
+authority.
+
+This decision and its documentation implementation do not modify the Melee
+whitelist, collect or retain source responses, regenerate any event, change a
+catalog or public path, dispatch a workflow, publish a candidate, deploy Pages,
+or authorize event `441441` or another event.
