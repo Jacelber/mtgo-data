@@ -7,12 +7,11 @@ from dataclasses import dataclass
 import json
 from pathlib import Path
 import subprocess
-import sys
 from typing import Any, Sequence
 
 
 ROOT = Path(__file__).resolve().parent
-SCHEMA_VERSION = "1.0.0"
+SCHEMA_VERSION = "1.1.0"
 
 
 class MeleeCandidateError(RuntimeError):
@@ -48,12 +47,54 @@ def collect_changes(root: Path) -> list[Change]:
     return changes
 
 
-def snapshot_state(root: Path, event_id: str, format_id: str) -> dict[str, str]:
+def _catalog_snapshot(root: Path, format_id: str) -> dict[str, Any]:
+    path = root / "stats" / format_id / "melee" / "index.json"
+    try:
+        catalog = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise MeleeCandidateError(f"{path}: cannot read event catalog") from exc
+    if not isinstance(catalog, dict):
+        raise MeleeCandidateError(f"{path}: must contain a JSON object")
+    expected_identity = {
+        "document_type": "event_catalog",
+        "source": "melee",
+        "product": "tabletop-major-events",
+        "format": format_id,
+    }
+    for field, expected in expected_identity.items():
+        if catalog.get(field) != expected:
+            raise MeleeCandidateError(f"{path}: invalid catalog {field}")
+    events = catalog.get("events")
+    if not isinstance(events, list) or not events:
+        raise MeleeCandidateError(f"{path}: catalog has no events")
+    event_ids: list[str] = []
+    for event in events:
+        candidate_id = event.get("event_id") if isinstance(event, dict) else None
+        if not isinstance(candidate_id, str) or not candidate_id.isdecimal():
+            raise MeleeCandidateError(f"{path}: catalog has an invalid event")
+        if candidate_id in event_ids:
+            raise MeleeCandidateError(
+                f"{path}: catalog has duplicate event {candidate_id}"
+            )
+        event_ids.append(candidate_id)
+    default_event_id = catalog.get("default_event_id")
+    if default_event_id not in event_ids:
+        raise MeleeCandidateError(f"{path}: catalog has an invalid default event")
+    return {
+        "schema_version": catalog.get("schema_version"),
+        "active_taxonomy": catalog.get("active_taxonomy"),
+        "default_event_id": default_event_id,
+        "events": events,
+    }
+
+
+def snapshot_state(root: Path, event_id: str, format_id: str) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
         "event_id": event_id,
         "format": format_id,
         "head": _git(root, "rev-parse", "HEAD").strip(),
+        "catalog": _catalog_snapshot(root, format_id),
     }
 
 
@@ -100,6 +141,71 @@ def _validate_json_identity(
     return failures
 
 
+def _event_map(catalog: dict[str, Any], *, label: str) -> dict[str, dict[str, Any]]:
+    events = catalog.get("events")
+    if not isinstance(events, list) or not events:
+        raise MeleeCandidateError(f"{label} catalog has no events")
+    result: dict[str, dict[str, Any]] = {}
+    for event in events:
+        event_id = event.get("event_id") if isinstance(event, dict) else None
+        if not isinstance(event_id, str) or not event_id.isdecimal():
+            raise MeleeCandidateError(f"{label} catalog has an invalid event")
+        if event_id in result:
+            raise MeleeCandidateError(
+                f"{label} catalog has duplicate event {event_id}"
+            )
+        result[event_id] = event
+    return result
+
+
+def _validate_catalog_cohort(
+    root: Path,
+    baseline: dict[str, Any],
+    event_id: str,
+    format_id: str,
+) -> list[str]:
+    baseline_catalog = baseline.get("catalog")
+    if not isinstance(baseline_catalog, dict):
+        return ["baseline has no catalog snapshot"]
+    try:
+        current_catalog = _catalog_snapshot(root, format_id)
+        before = _event_map(baseline_catalog, label="baseline")
+        after = _event_map(current_catalog, label="candidate")
+    except MeleeCandidateError as exc:
+        return [str(exc)]
+
+    failures: list[str] = []
+    missing = sorted(set(before) - set(after))
+    if missing:
+        failures.append(f"event catalog removed existing events: {', '.join(missing)}")
+    unexpected = sorted(set(after) - set(before) - {event_id})
+    if unexpected:
+        failures.append(
+            f"event catalog added events outside the candidate: {', '.join(unexpected)}"
+        )
+    if event_id not in after:
+        failures.append(f"event catalog does not contain candidate event {event_id}")
+    if current_catalog.get("default_event_id") != baseline_catalog.get(
+        "default_event_id"
+    ):
+        failures.append("event catalog changed the existing default event")
+    for protected_id in sorted(set(before) - {event_id}):
+        if protected_id in after and after[protected_id] != before[protected_id]:
+            failures.append(
+                f"event catalog rewrote existing event {protected_id}"
+            )
+    if set(before) - {event_id}:
+        if current_catalog.get("schema_version") != baseline_catalog.get(
+            "schema_version"
+        ):
+            failures.append("event catalog changed the existing cohort schema")
+        if current_catalog.get("active_taxonomy") != baseline_catalog.get(
+            "active_taxonomy"
+        ):
+            failures.append("event catalog changed the existing active taxonomy")
+    return failures
+
+
 def validate_candidate(
     root: Path,
     baseline: dict[str, Any],
@@ -128,6 +234,7 @@ def validate_candidate(
             failures.append(f"{change.path}: retained raw evidence is immutable")
             continue
         failures.extend(_validate_json_identity(root, change, event_id, format_id))
+    failures.extend(_validate_catalog_cohort(root, baseline, event_id, format_id))
     return {
         "schema_version": SCHEMA_VERSION,
         "event_id": event_id,
