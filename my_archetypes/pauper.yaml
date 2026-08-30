@@ -1,0 +1,1786 @@
+schema_version: 1.1.0
+format: pauper
+semantic_features:
+  manifest_path: configs/classifier_semantic_features.yaml
+  manifest_sha256: 87120f979a4bd00e4a2aa601e3001862ce2575d12de355c3a42548b535b40b36
+archetypes:
+- id: altar-tron
+  name: "Altar Tron"
+  priority: 10000
+  rules:
+  - id: altar-tron
+    priority: 10000
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Ashnod's Altar"
+        zone: main
+        min_count: 1
+      - card: "Myr Retriever"
+        zone: main
+        min_count: 1
+      - card: "Urza's Mine"
+        zone: main
+        min_count: 1
+- id: eggs-tron
+  name: "Eggs Tron"
+  priority: 9990
+  rules:
+  - id: eggs-tron
+    priority: 9990
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Chromatic Star"
+        zone: main
+        min_count: 3
+      - card: "Candy Trail"
+        zone: main
+        min_count: 1
+      - card: "Urza's Mine"
+        zone: main
+        min_count: 3
+- id: ephemerate-tron
+  name: "Ephemerate Tron"
+  priority: 9980
+  rules:
+  - id: ephemerate-tron-a
+    priority: 9980
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Urza's Tower"
+        zone: main
+        min_count: 1
+      - card: "Mnemonic Wall"
+        zone: main
+        min_count: 1
+      - card: "Ghostly Flicker"
+        zone: main
+        min_count: 1
+  - id: ephemerate-tron-b
+    priority: 9975
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Urza's Tower"
+        zone: main
+        min_count: 1
+      - card: "Mystical Teachings"
+        zone: main
+        min_count: 1
+      - card: "Prohibit"
+        zone: main
+        min_count: 1
+- id: green-tron
+  name: "Monster Tron"
+  priority: 9900
+  rules:
+  - id: green-tron-a
+    priority: 9900
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Urza's Tower"
+        zone: main
+        min_count: 2
+      - card: "Ancient Stirrings"
+        zone: main
+        min_count: 2
+      - card: "Bramble Wurm"
+        zone: main
+        min_count: 3
+  - id: green-tron-b
+    priority: 9890
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Urza's Tower"
+        zone: main
+        min_count: 2
+      - card: "Maelstrom Colossus"
+        zone: main
+        min_count: 2
+      - card: "Boulderbranch Golem"
+        zone: main
+        min_count: 2
+  - id: green-tron-rumble
+    priority: 9880
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Urza's Tower"
+        zone: main
+        min_count: 4
+      - card: "Urza's Mine"
+        zone: main
+        min_count: 4
+      - card: "Urza's Power Plant"
+        zone: main
+        min_count: 4
+      - card: "Expedition Map"
+        zone: main
+        min_count: 4
+      - card: "Bramble Wurm"
+        zone: main
+        min_count: 4
+  - id: green-tron-fangren
+    priority: 9870
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Urza's Mine"
+        zone: main
+        min_count: 4
+      - card: "Urza's Power Plant"
+        zone: main
+        min_count: 4
+      - card: "Urza's Tower"
+        zone: main
+        min_count: 4
+      - card: "Ancient Stirrings"
+        zone: main
+        min_count: 3
+      - card: "Fangren Marauder"
+        zone: main
+        min_count: 3
+      - card: "Maelstrom Colossus"
+        zone: main
+        min_count: 3
+- id: inside-out
+  name: "Inside Out"
+  priority: 9700
+  rules:
+  - id: inside-out
+    priority: 9700
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Tireless Tribe"
+        zone: main
+        min_count: 3
+      - card: "Inside Out"
+        zone: main
+        min_count: 3
+- id: cycle-storm
+  name: "Cycle Storm"
+  priority: 9690
+  rules:
+  - id: cycle-storm
+    priority: 9690
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Songs of the Damned"
+        zone: main
+        min_count: 3
+      - card: "Drannith Stinger"
+        zone: main
+        min_count: 2
+- id: proliferate-storm
+  name: "Proliferate Storm"
+  priority: 9680
+  rules:
+  - id: proliferate-storm
+    priority: 9680
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Contentious Plan"
+        zone: main
+        min_count: 3
+      - card: "Experimental Augury"
+        zone: main
+        min_count: 3
+      - card: "Prologue to Phyresis"
+        zone: main
+        min_count: 2
+- id: ruby-storm
+  name: "Ruby Storm"
+  priority: 9670
+  rules:
+  - id: ruby-storm
+    priority: 9670
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Seething Song"
+        zone: main
+        min_count: 3
+      - card: "Manamorphose"
+        zone: main
+        min_count: 3
+      - card: "Goblin Anarchomancer"
+        zone: main
+        min_count: 3
+- id: walls-combo
+  name: "Walls Combo"
+  priority: 9660
+  rules:
+  - id: walls-combo
+    priority: 9660
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Axebane Guardian"
+        zone: main
+        min_count: 2
+      - card: "Drift of Phantasms"
+        zone: main
+        min_count: 1
+      - card: "Freed from the Real"
+        zone: main
+        min_count: 1
+- id: walls-ramp
+  name: "Walls Ramp"
+  priority: 9655
+  rules:
+  - id: walls-ramp
+    priority: 9655
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Axebane Guardian"
+        zone: main
+        min_count: 3
+      - card: "Overgrown Battlement"
+        zone: main
+        min_count: 3
+      - card: "Annoyed Altisaur"
+        zone: main
+        min_count: 3
+      - card: "Boarding Party"
+        zone: main
+        min_count: 3
+      - card: "Freed from the Real"
+        zone: main
+        exact_count: 0
+- id: spy-combo
+  name: "Spy Combo"
+  priority: 9650
+  rules:
+  - id: spy-combo
+    priority: 9650
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Balustrade Spy"
+        zone: main
+        min_count: 3
+      - card: "Overgrown Battlement"
+        zone: main
+        min_count: 3
+      - card: "Dread Return"
+        zone: main
+        min_count: 1
+- id: turbo-fog
+  name: "Turbo Fog"
+  priority: 9640
+  rules:
+  - id: turbo-fog
+    priority: 9640
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Moment's Peace"
+        zone: main
+        min_count: 3
+      - card: "Stream of Thought"
+        zone: main
+        min_count: 1
+      - card: "Tangle"
+        zone: main
+        min_count: 2
+- id: bogles
+  name: "Bogles"
+  priority: 9630
+  rules:
+  - id: bogles
+    priority: 9630
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Ancestral Mask"
+        zone: main
+        min_count: 3
+      - card: "Ethereal Armor"
+        zone: main
+        min_count: 3
+      - card: "Gladecover Scout"
+        zone: main
+        min_count: 3
+- id: mono-black-sacrifice
+  name: "Mono-Black Sacrifice"
+  priority: 9620
+  rules:
+  - id: mono-black-sacrifice
+    priority: 9620
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Bloodthrone Vampire"
+        zone: main
+        min_count: 2
+      - card: "Nested Shambler"
+        zone: main
+        min_count: 3
+      - card: "Carrion Feeder"
+        zone: main
+        min_count: 3
+- id: mono-black-devotion
+  name: "Mono-Black Devotion"
+  priority: 9615
+  rules:
+  - id: mono-black-devotion
+    priority: 9615
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Gray Merchant of Asphodel"
+        zone: main
+        min_count: 3
+      - card: "Chittering Rats"
+        zone: main
+        min_count: 3
+      - card: "Cuombajj Witches"
+        zone: main
+        min_count: 3
+      - card: "Defile"
+        zone: main
+        min_count: 3
+- id: dredge
+  name: "Dredge"
+  priority: 9610
+  rules:
+  - id: dredge
+    priority: 9610
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Stinkweed Imp"
+        zone: main
+        min_count: 3
+      - card: "Satyr Wayfinder"
+        zone: main
+        min_count: 3
+      - card: "Dread Return"
+        zone: main
+        min_count: 3
+- id: infect
+  name: "Infect"
+  priority: 9600
+  rules:
+  - id: infect
+    priority: 9600
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Glistener Elf"
+        zone: main
+        min_count: 3
+      - card: "Ichorclaw Myr"
+        zone: main
+        min_count: 3
+      - card: "Blight Mamba"
+        zone: main
+        min_count: 3
+- id: goblins
+  name: "Goblins"
+  priority: 9590
+  rules:
+  - id: goblins
+    priority: 9590
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Goblin Matron"
+        zone: main
+        min_count: 3
+      - card: "Putrid Goblin"
+        zone: main
+        min_count: 3
+      - card: "Skirk Prospector"
+        zone: main
+        min_count: 3
+- id: mono-white-heroic
+  name: "Mono-White Heroic"
+  priority: 9580
+  rules:
+  - id: mono-white-heroic
+    priority: 9580
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Akroan Skyguard"
+        zone: main
+        min_count: 3
+      - card: "Lagonna-Band Trailblazer"
+        zone: main
+        min_count: 3
+      - card: "Ethereal Armor"
+        zone: main
+        min_count: 3
+      - card: "Hyena Umbra"
+        zone: main
+        min_count: 3
+      - card: "Guiding Voice"
+        zone: main
+        min_count: 3
+- id: grixis-terror
+  name: "Grixis Terror"
+  priority: 9400
+  rules:
+  - id: grixis-terror
+    priority: 9400
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Skred"
+        zone: main
+        min_count: 3
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Snuff Out"
+        zone: main
+        min_count: 1
+- id: izzet-terror
+  name: "Izzet Terror"
+  priority: 9390
+  rules:
+  - id: izzet-terror
+    priority: 9390
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Skred"
+        zone: main
+        min_count: 3
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Snuff Out"
+        zone: main
+        exact_count: 0
+- id: dimir-terror
+  name: "Dimir Terror"
+  priority: 9380
+  rules:
+  - id: dimir-terror-a
+    priority: 9380
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Thought Scour"
+        zone: main
+        min_count: 3
+      - card: "Sneaky Snacker"
+        zone: main
+        min_count: 3
+      - card: "Contaminated Aquifer"
+        zone: main
+        min_count: 1
+  - id: dimir-terror-b
+    priority: 9375
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Thought Scour"
+        zone: main
+        min_count: 3
+      - card: "Unexpected Fangs"
+        zone: main
+        min_count: 1
+      - card: "Gurmag Angler"
+        zone: main
+        min_count: 2
+      - card: "Contaminated Aquifer"
+        zone: main
+        min_count: 2
+  - id: dimir-terror-aquifer-control
+    priority: 9372
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Thought Scour"
+        zone: main
+        min_count: 3
+      - card: "Snuff Out"
+        zone: main
+        min_count: 3
+      - card: "Contaminated Aquifer"
+        zone: main
+        min_count: 3
+  - id: dimir-terror-control
+    priority: 9370
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Snuff Out"
+        zone: main
+        min_count: 3
+      - card: "Ice Tunnel"
+        zone: main
+        min_count: 3
+- id: mono-blue-terror
+  name: "Mono-Blue Terror"
+  priority: 9300
+  rules:
+  - id: mono-blue-terror
+    priority: 9300
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Cryptic Serpent"
+        zone: main
+        min_count: 3
+      - card: "Thought Scour"
+        zone: main
+        min_count: 3
+      - card: "Sneaky Snacker"
+        zone: main
+        exact_count: 0
+      - card: "Snuff Out"
+        zone: main
+        exact_count: 0
+  - id: mono-blue-terror-snacker
+    priority: 9385
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Thought Scour"
+        zone: main
+        min_count: 3
+      - card: "Cryptic Serpent"
+        zone: main
+        min_count: 3
+      - card: "Sneaky Snacker"
+        zone: main
+        min_count: 3
+      - card: "Snuff Out"
+        zone: main
+        exact_count: 0
+      - card: "Cast Down"
+        zone: main
+        exact_count: 0
+      - card: "Gurmag Angler"
+        zone: main
+        exact_count: 0
+  - id: mono-blue-terror-two-serpent
+    priority: 9290
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Thought Scour"
+        zone: main
+        min_count: 3
+      - card: "Cryptic Serpent"
+        zone: main
+        min_count: 2
+      - card: "Sneaky Snacker"
+        zone: main
+        exact_count: 0
+      - card: "Snuff Out"
+        zone: main
+        exact_count: 0
+- id: azorius-faeries
+  name: "Azorius Faeries"
+  priority: 9200
+  rules:
+  - id: azorius-faeries
+    priority: 9200
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Spellstutter Sprite"
+        zone: main
+        min_count: 3
+      - card: "Faerie Seer"
+        zone: main
+        min_count: 3
+      - card: "Tranquil Cove"
+        zone: main
+        min_count: 1
+- id: izzet-faeries
+  name: "Izzet Faeries"
+  priority: 9190
+  rules:
+  - id: izzet-faeries
+    priority: 9190
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Spellstutter Sprite"
+        zone: main
+        min_count: 3
+      - card: "Faerie Seer"
+        zone: main
+        min_count: 3
+      - card: "Skred"
+        zone: main
+        min_count: 2
+- id: dimir-faeries
+  name: "Dimir Faeries"
+  priority: 9180
+  rules:
+  - id: dimir-faeries
+    priority: 9180
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Spellstutter Sprite"
+        zone: main
+        min_count: 3
+      - card: "Cast Down"
+        zone: main
+        min_count: 1
+      - card: "Swamp"
+        zone: main
+        min_count: 1
+  - id: dimir-faeries-aquifer
+    priority: 9175
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Spellstutter Sprite"
+        zone: main
+        min_count: 3
+      - card: "Cast Down"
+        zone: main
+        min_count: 1
+      - card: "Snuff Out"
+        zone: main
+        min_count: 3
+      - card: "Contaminated Aquifer"
+        zone: main
+        min_count: 1
+  - id: dimir-faeries-ice-tunnel
+    priority: 9172
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Spellstutter Sprite"
+        zone: main
+        min_count: 3
+      - card: "Cast Down"
+        zone: main
+        min_count: 1
+      - card: "Snuff Out"
+        zone: main
+        min_count: 3
+      - card: "Ice Tunnel"
+        zone: main
+        min_count: 3
+  - id: dimir-faeries-snacker-angler
+    priority: 9170
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Sneaky Snacker"
+        zone: main
+        min_count: 3
+      - card: "Gurmag Angler"
+        zone: main
+        min_count: 2
+      - card: "The Modern Age"
+        zone: main
+        min_count: 3
+      - card: "Spellstutter Sprite"
+        zone: main
+        min_count: 2
+      - card: "Snuff Out"
+        zone: main
+        min_count: 3
+- id: mono-blue-faeries
+  name: "Mono-Blue Faeries"
+  priority: 9100
+  rules:
+  - id: mono-blue-faeries-a
+    priority: 9100
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Spellstutter Sprite"
+        zone: main
+        min_count: 3
+      - card: "Faerie Seer"
+        zone: main
+        min_count: 3
+      - card: "Faerie Miscreant"
+        zone: main
+        min_count: 3
+      - card: "Skred"
+        zone: main
+        exact_count: 0
+      - card: "Swamp"
+        zone: main
+        exact_count: 0
+  - id: mono-blue-faeries-b
+    priority: 9090
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Spellstutter Sprite"
+        zone: main
+        min_count: 3
+      - card: "Harrier Strix"
+        zone: main
+        min_count: 2
+      - card: "Of One Mind"
+        zone: main
+        min_count: 3
+      - card: "Skred"
+        zone: main
+        exact_count: 0
+      - card: "Swamp"
+        zone: main
+        exact_count: 0
+- id: naya-hawkeye
+  name: "Naya Hawkeye"
+  priority: 9000
+  rules:
+  - id: naya-hawkeye
+    priority: 9000
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Hawkeye's Bow"
+        zone: main
+        min_count: 3
+      - card: "Seeker of Skybreak"
+        zone: main
+        min_count: 3
+      - card: "Pursue the Past"
+        zone: main
+        min_count: 2
+      - card: "Basilisk Gate"
+        zone: main
+        min_count: 2
+- id: temur-hawkeye
+  name: "Temur Hawkeye"
+  priority: 8995
+  rules:
+  - id: temur-hawkeye
+    priority: 8995
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Hawkeye's Bow"
+        zone: main
+        min_count: 3
+      - card: "Seeker of Skybreak"
+        zone: main
+        min_count: 3
+      - card: "Perilous Research"
+        zone: main
+        min_count: 2
+- id: gruul-hawkeye
+  name: "Gruul Hawkeye"
+  priority: 8990
+  rules:
+  - id: gruul-hawkeye
+    priority: 8990
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Hawkeye's Bow"
+        zone: main
+        min_count: 3
+      - card: "Seeker of Skybreak"
+        zone: main
+        min_count: 3
+      - card: "Tamiyo's Safekeeping"
+        zone: main
+        min_count: 3
+- id: synthesizer-gates
+  name: "Synthesizer Gates"
+  priority: 8940
+  rules:
+  - id: synthesizer-gates
+    priority: 8940
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Basilisk Gate"
+        zone: main
+        min_count: 3
+      - card: "Experimental Synthesizer"
+        zone: main
+        min_count: 3
+      - card: "Glint Hawk"
+        zone: main
+        min_count: 3
+      - card: "Kor Skyfisher"
+        zone: main
+        min_count: 3
+      - card: "Sacred Cat"
+        zone: main
+        min_count: 3
+- id: jeskai-caw-gates
+  name: "Jeskai Caw Gates"
+  priority: 8930
+  rules:
+  - id: jeskai-caw-gates
+    priority: 8930
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Basilisk Gate"
+        zone: main
+        min_count: 2
+      - card: "Squadron Hawk"
+        zone: main
+        min_count: 3
+      - card: "Brainstorm"
+        zone: main
+        min_count: 3
+      - card: "Sea Gate"
+        zone: main
+        min_count: 3
+- id: selesnya-gates
+  name: "Selesnya Gates"
+  priority: 8920
+  rules:
+  - id: selesnya-gates
+    priority: 8920
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Basilisk Gate"
+        zone: main
+        min_count: 2
+      - card: "Gatecreeper Vine"
+        zone: main
+        min_count: 3
+      - card: "Armadillo Cloak"
+        zone: main
+        min_count: 3
+      - card: "Guardian of the Guildpact"
+        zone: main
+        min_count: 2
+- id: snacker-gates
+  name: "Snacker Gates"
+  priority: 8910
+  rules:
+  - id: snacker-gates
+    priority: 8910
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Basilisk Gate"
+        zone: main
+        min_count: 2
+      - card: "Sneaky Snacker"
+        zone: main
+        min_count: 3
+      - card: "Pursue the Past"
+        zone: main
+        min_count: 3
+- id: naya-gates
+  name: "Naya Gates"
+  priority: 8800
+  rules:
+  - id: naya-gates
+    priority: 8800
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Basilisk Gate"
+        zone: main
+        min_count: 2
+      - card: "Sacred Cat"
+        zone: main
+        min_count: 3
+      - card: "Malevolent Rumble"
+        zone: main
+        min_count: 2
+- id: mardu-synthesizer
+  name: "Mardu Synthesizer"
+  priority: 8790
+  rules:
+  - id: mardu-synthesizer
+    priority: 8790
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Experimental Synthesizer"
+        zone: main
+        min_count: 3
+      - card: "Glint Hawk"
+        zone: main
+        min_count: 3
+      - card: "Kor Skyfisher"
+        zone: main
+        min_count: 3
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+- id: esper-affinity
+  name: "Esper Affinity"
+  priority: 8700
+  rules:
+  - id: esper-affinity
+    priority: 8700
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Razortide Bridge"
+        zone: main
+        min_count: 2
+      - card: "Cryogen Relic"
+        zone: main
+        min_count: 2
+      - card: "Glint Hawk"
+        zone: main
+        min_count: 2
+- id: dimir-affinity
+  name: "Dimir Affinity"
+  priority: 8690
+  rules:
+  - id: dimir-affinity
+    priority: 8690
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Mistvault Bridge"
+        zone: main
+        min_count: 3
+      - card: "Thoughtcast"
+        zone: main
+        min_count: 3
+      - card: "Cryogen Relic"
+        zone: main
+        min_count: 2
+      - card: "Silverbluff Bridge"
+        zone: main
+        exact_count: 0
+  - id: dimir-affinity-silverbluff
+    priority: 8695
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Mistvault Bridge"
+        zone: main
+        min_count: 3
+      - card: "Thoughtcast"
+        zone: main
+        min_count: 3
+      - card: "Cryogen Relic"
+        zone: main
+        min_count: 2
+      - card: "Silverbluff Bridge"
+        zone: main
+        min_count: 1
+      - card: "Galvanic Blast"
+        zone: main
+        exact_count: 0
+      - card: "Makeshift Munitions"
+        zone: main
+        exact_count: 0
+      - card: "Krark-Clan Shaman"
+        zone: main
+        exact_count: 0
+- id: four-color-affinity
+  name: "Four-Color Affinity"
+  priority: 8680
+  rules:
+  - id: four-color-affinity
+    priority: 8680
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Myr Enforcer"
+        zone: main
+        min_count: 3
+      - card: "Razortide Bridge"
+        zone: main
+        min_count: 1
+      - card: "Mistvault Bridge"
+        zone: main
+        min_count: 1
+- id: grixis-affinity
+  name: "Grixis Affinity"
+  priority: 8600
+  rules:
+  - id: grixis-affinity
+    priority: 8600
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Myr Enforcer"
+        zone: main
+        min_count: 3
+      - card: "Mistvault Bridge"
+        zone: main
+        min_count: 3
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+  - id: grixis-affinity-wildfire-monitor
+    priority: 8595
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+      - card: "Utrom Monitor"
+        zone: main
+        min_count: 3
+      - card: "Cleansing Wildfire"
+        zone: main
+        min_count: 3
+      - card: "Cryogen Relic"
+        zone: main
+        min_count: 3
+      - card: "Silverbluff Bridge"
+        zone: main
+        min_count: 3
+      - card: "Drossforge Bridge"
+        zone: main
+        min_count: 3
+  - id: grixis-affinity-monitor
+    priority: 8590
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Silverbluff Bridge"
+        zone: main
+        min_count: 2
+      - card: "Drossforge Bridge"
+        zone: main
+        min_count: 2
+      - card: "Thoughtcast"
+        zone: main
+        min_count: 3
+      - card: "Utrom Monitor"
+        zone: main
+        min_count: 2
+  - id: grixis-affinity-ninja-rites
+    priority: 8585
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+      - card: "Utrom Monitor"
+        zone: main
+        min_count: 3
+      - card: "Thoughtcast"
+        zone: main
+        min_count: 3
+      - card: "Moon-Circuit Hacker"
+        zone: main
+        min_count: 3
+      - card: "Network Disruptor"
+        zone: main
+        min_count: 3
+      - card: "Rites of Initiation"
+        zone: main
+        min_count: 2
+- id: esper-midrange
+  name: "Esper Midrange"
+  priority: 8575
+  rules:
+  - id: esper-midrange
+    priority: 8575
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Glint Hawk"
+        zone: main
+        min_count: 3
+      - card: "Kor Skyfisher"
+        zone: main
+        min_count: 3
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+      - card: "Cryogen Relic"
+        zone: main
+        min_count: 3
+      - card: "Cast Down"
+        zone: main
+        min_count: 3
+      - card: "Myr Enforcer"
+        zone: main
+        exact_count: 0
+      - card: "Thoughtcast"
+        zone: main
+        exact_count: 0
+- id: dimir-madness
+  name: "Dimir Madness"
+  priority: 8510
+  rules:
+  - id: dimir-madness
+    priority: 8510
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Careful Study"
+        zone: main
+        min_count: 3
+      - card: "Kitchen Imp"
+        zone: main
+        min_count: 3
+      - card: "Sneaky Snacker"
+        zone: main
+        min_count: 3
+      - card: "The Modern Age"
+        zone: main
+        min_count: 3
+      - card: "Alms of the Vein"
+        zone: main
+        min_count: 3
+- id: rakdos-madness
+  name: "Rakdos Madness"
+  priority: 8500
+  rules:
+  - id: rakdos-madness
+    priority: 8500
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Vampire's Kiss"
+        zone: main
+        min_count: 3
+      - card: "Kitchen Imp"
+        zone: main
+        min_count: 3
+      - card: "Alms of the Vein"
+        zone: main
+        min_count: 3
+- id: boros-madness
+  name: "Boros Madness"
+  priority: 8490
+  rules:
+  - id: boros-madness
+    priority: 8490
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Scrapwork Mutt"
+        zone: main
+        min_count: 3
+      - card: "Thrilling Discovery"
+        zone: main
+        min_count: 3
+      - card: "Spirit Mascot"
+        zone: main
+        min_count: 1
+- id: mono-red-madness
+  name: "Mono-Red Madness"
+  priority: 8400
+  rules:
+  - id: mono-red-madness
+    priority: 8400
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Guttersnipe"
+        zone: main
+        min_count: 2
+      - card: "Grab the Prize"
+        zone: main
+        min_count: 3
+      - card: "Fiery Temper"
+        zone: main
+        min_count: 3
+      - card: "Lava Dart"
+        zone: main
+        min_count: 3
+      - card: "Alms of the Vein"
+        zone: main
+        exact_count: 0
+      - card: "Goblin Bushwhacker"
+        zone: main
+        exact_count: 0
+- id: mono-red-burn
+  name: "Mono-Red Burn"
+  priority: 8350
+  rules:
+  - id: mono-red-burn
+    priority: 8350
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Experimental Synthesizer"
+        zone: main
+        min_count: 3
+      - card: "Kessig Flamebreather"
+        zone: main
+        min_count: 3
+      - card: "Lava Dart"
+        zone: main
+        min_count: 3
+      - card: "Galvanic Blast"
+        zone: main
+        min_count: 3
+      - card: "Rally at the Hornburg"
+        zone: main
+        exact_count: 0
+      - card: "Inventor's Axe"
+        zone: main
+        exact_count: 0
+- id: ephemerate
+  name: "Ephemerate"
+  priority: 8300
+  subtypes:
+  - id: four-color
+    name: "Four-Color"
+  - id: jeskai
+    name: "Jeskai"
+  rules:
+  - id: four-color-ephemerate
+    priority: 8300
+    subtype_id: four-color
+    conditions:
+      all:
+      - card: "Ephemerate"
+        zone: main
+        min_count: 3
+      - card: "Skred"
+        zone: main
+        min_count: 3
+      - card: "Crypt Incursion"
+        zone: main
+        min_count: 1
+  - id: four-color-ephemerate-teachings
+    priority: 8290
+    subtype_id: four-color
+    conditions:
+      all:
+      - card: "Ephemerate"
+        zone: main
+        min_count: 3
+      - card: "Skred"
+        zone: main
+        min_count: 3
+      - card: "Mystical Teachings"
+        zone: main
+        min_count: 1
+      - card: "Pulse of Murasa"
+        zone: main
+        min_count: 1
+  - id: jeskai-ephemerate
+    priority: 8200
+    subtype_id: jeskai
+    conditions:
+      all:
+      - card: "Ephemerate"
+        zone: main
+        min_count: 2
+      - card: "Skred"
+        zone: main
+        min_count: 3
+      - card: "Archaeomancer"
+        zone: main
+        min_count: 1
+      - card: "Glacial Floodplain"
+        zone: main
+        min_count: 1
+- id: battle-screech
+  name: "Battle Screech"
+  priority: 8100
+  subtypes:
+  - id: orzhov
+    name: "Orzhov"
+  - id: boros
+    name: "Boros"
+  - id: mono-white
+    name: "Mono-White"
+  rules:
+  - id: orzhov-battle-screech
+    priority: 8100
+    subtype_id: orzhov
+    conditions:
+      all:
+      - card: "Battle Screech"
+        zone: main
+        min_count: 3
+      - card: "Raffine's Informant"
+        zone: main
+        min_count: 3
+      - card: "Orzhov Basilica"
+        zone: main
+        min_count: 2
+  - id: boros-battle-screech
+    priority: 8090
+    subtype_id: boros
+    conditions:
+      all:
+      - card: "Battle Screech"
+        zone: main
+        min_count: 3
+      - card: "Rally the Peasants"
+        zone: main
+        min_count: 1
+      - card: "Boros Garrison"
+        zone: main
+        min_count: 2
+  - id: mono-white-battle-screech
+    priority: 8000
+    subtype_id: mono-white
+    conditions:
+      all:
+      - card: "Battle Screech"
+        zone: main
+        min_count: 3
+      - card: "Raffine's Informant"
+        zone: main
+        min_count: 3
+      - card: "Thraben Inspector"
+        zone: main
+        min_count: 3
+- id: packbeast-swarm
+  name: "Packbeast Swarm"
+  priority: 8050
+  subtypes:
+  - id: boros
+    name: "Boros Packbeast Swarm"
+  - id: mardu
+    name: "Mardu Packbeast Swarm"
+  - id: mono-white-learn
+    name: "Mono-White Learn Packbeast Swarm"
+  - id: mono-white
+    name: "Mono-White Packbeast Swarm"
+  - id: esper
+    name: "Esper Packbeast Swarm"
+  rules:
+  - id: boros-packbeast-swarm
+    priority: 8050
+    subtype_id: boros
+    conditions:
+      all:
+      - card: "Salt Road Packbeast"
+        zone: main
+        min_count: 3
+      - card: "Leonardo, Big Brother"
+        zone: main
+        min_count: 3
+      - card: "Ardent Recruit"
+        zone: main
+        min_count: 3
+      - card: "Galvanic Blast"
+        zone: main
+        min_count: 3
+      - card: "Lightning Bolt"
+        zone: main
+        min_count: 3
+      - card: "Foul-Tongue Shriek"
+        zone: main
+        exact_count: 0
+      - card: "Guiding Voice"
+        zone: main
+        exact_count: 0
+  - id: mardu-packbeast-swarm
+    priority: 8040
+    subtype_id: mardu
+    conditions:
+      all:
+      - card: "Salt Road Packbeast"
+        zone: main
+        min_count: 3
+      - card: "Leonardo, Big Brother"
+        zone: main
+        min_count: 3
+      - card: "Ardent Recruit"
+        zone: main
+        min_count: 3
+      - card: "Galvanic Blast"
+        zone: main
+        min_count: 3
+      - card: "Foul-Tongue Shriek"
+        zone: main
+        min_count: 2
+      - card: "Lightning Bolt"
+        zone: main
+        exact_count: 0
+      - card: "Guiding Voice"
+        zone: main
+        exact_count: 0
+  - id: mono-white-learn-packbeast-swarm
+    priority: 8030
+    subtype_id: mono-white-learn
+    conditions:
+      all:
+      - card: "Salt Road Packbeast"
+        zone: main
+        min_count: 3
+      - card: "Leonardo, Big Brother"
+        zone: main
+        min_count: 3
+      - card: "Ardent Recruit"
+        zone: main
+        min_count: 3
+      - card: "Guiding Voice"
+        zone: main
+        min_count: 3
+      - card: "Galvanic Blast"
+        zone: main
+        exact_count: 0
+      - card: "Foul-Tongue Shriek"
+        zone: main
+        exact_count: 0
+      - card: "Lightning Bolt"
+        zone: main
+        exact_count: 0
+  - id: mono-white-packbeast-swarm
+    priority: 8020
+    subtype_id: mono-white
+    conditions:
+      all:
+      - card: "Salt Road Packbeast"
+        zone: main
+        min_count: 3
+      - card: "Leonardo, Big Brother"
+        zone: main
+        min_count: 3
+      - card: "Ardent Recruit"
+        zone: main
+        min_count: 3
+      - card: "Elite Interceptor"
+        zone: main
+        min_count: 3
+      - card: "Galvanic Blast"
+        zone: main
+        exact_count: 0
+      - card: "Foul-Tongue Shriek"
+        zone: main
+        exact_count: 0
+      - card: "Guiding Voice"
+        zone: main
+        exact_count: 0
+      - card: "Lightning Bolt"
+        zone: main
+        exact_count: 0
+  - id: esper-packbeast-swarm
+    priority: 8010
+    subtype_id: esper
+    conditions:
+      all:
+      - card: "Salt Road Packbeast"
+        zone: main
+        min_count: 3
+      - card: "Moon-Circuit Hacker"
+        zone: main
+        min_count: 3
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+      - card: "Novice Inspector"
+        zone: main
+        min_count: 3
+      - card: "Thraben Inspector"
+        zone: main
+        min_count: 3
+- id: food-gardens
+  name: "Food Gardens"
+  priority: 7900
+  rules:
+  - id: food-gardens
+    priority: 7900
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Pestilence"
+        zone: main
+        min_count: 2
+      - card: "Cauldron Familiar"
+        zone: main
+        min_count: 2
+      - card: "Khalni Garden"
+        zone: main
+        min_count: 2
+- id: jund-gardens
+  name: "Jund Gardens"
+  priority: 7850
+  rules:
+  - id: jund-gardens
+    priority: 7850
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Writhing Chrysalis"
+        zone: main
+        min_count: 3
+      - card: "Ichor Wellspring"
+        zone: main
+        min_count: 3
+      - card: "Fanatical Offering"
+        zone: main
+        min_count: 3
+      - card: "Eviscerator's Insight"
+        zone: main
+        min_count: 3
+      - card: "Skred"
+        zone: main
+        min_count: 3
+      - card: "Cleansing Wildfire"
+        zone: main
+        exact_count: 0
+      - card: "Hawkeye's Bow"
+        zone: main
+        exact_count: 0
+- id: golgari-gardens
+  name: "Golgari Gardens"
+  priority: 7800
+  rules:
+  - id: golgari-gardens
+    priority: 7800
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Khalni Garden"
+        zone: main
+        min_count: 3
+      - card: "Fanatical Offering"
+        zone: main
+        min_count: 3
+      - card: "Crypt Rats"
+        zone: main
+        min_count: 1
+- id: jund-wildfire
+  name: "Jund Wildfire"
+  priority: 7700
+  rules:
+  - id: jund-wildfire
+    priority: 7700
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Cleansing Wildfire"
+        zone: main
+        min_count: 3
+      - card: "Drossforge Bridge"
+        zone: main
+        min_count: 3
+      - card: "Slagwoods Bridge"
+        zone: main
+        min_count: 3
+- id: naya-ponza
+  name: "Naya Ponza"
+  priority: 7610
+  rules:
+  - id: naya-ponza
+    priority: 7610
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Thermokarst"
+        zone: main
+        min_count: 2
+      - card: "Mwonvuli Acid-Moss"
+        zone: main
+        min_count: 2
+      - card: "Arctic Treeline"
+        zone: main
+        min_count: 1
+- id: gruul-ponza
+  name: "Gruul Ponza"
+  priority: 7600
+  rules:
+  - id: gruul-ponza
+    priority: 7600
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Thermokarst"
+        zone: main
+        min_count: 2
+      - card: "Mwonvuli Acid-Moss"
+        zone: main
+        min_count: 2
+      - card: "Utopia Sprawl"
+        zone: main
+        min_count: 2
+- id: gruul-ramp
+  name: "Gruul Ramp"
+  priority: 7500
+  rules:
+  - id: gruul-ramp
+    priority: 7500
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Writhing Chrysalis"
+        zone: main
+        min_count: 3
+      - card: "Arbor Elf"
+        zone: main
+        min_count: 3
+      - card: "Jewel Thief"
+        zone: main
+        min_count: 3
+- id: elves
+  name: "Elves"
+  priority: 7400
+  rules:
+  - id: elves
+    priority: 7400
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Priest of Titania"
+        zone: main
+        min_count: 3
+      - card: "Lead the Stampede"
+        zone: main
+        min_count: 3
+      - card: "Quirion Ranger"
+        zone: main
+        min_count: 2
+- id: azorius-familiars
+  name: "Azorius Familiars"
+  priority: 7300
+  rules:
+  - id: azorius-familiars
+    priority: 7300
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Sunscape Familiar"
+        zone: main
+        min_count: 3
+      - card: "Snap"
+        zone: main
+        min_count: 3
+      - card: "God-Pharaoh's Faithful"
+        zone: main
+        min_count: 3
+- id: dimir-flicker-control
+  name: "Dimir Flicker Control"
+  priority: 7250
+  rules:
+  - id: dimir-flicker-control
+    priority: 7250
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Ghostly Flicker"
+        zone: main
+        min_count: 2
+      - card: "Archaeomancer"
+        zone: main
+        min_count: 2
+      - card: "Cryogen Relic"
+        zone: main
+        min_count: 3
+      - card: "Tithing Blade"
+        zone: main
+        min_count: 2
+- id: orzhov-midrange
+  name: "Orzhov Midrange"
+  priority: 7200
+  rules:
+  - id: orzhov-midrange
+    priority: 7200
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Glint Hawk"
+        zone: main
+        min_count: 3
+      - card: "Kor Skyfisher"
+        zone: main
+        min_count: 3
+      - card: "Oroku Saki, Shredder Rising"
+        zone: main
+        min_count: 1
+- id: boros-synthesizer
+  name: "Boros Synthesizer"
+  priority: 7100
+  rules:
+  - id: boros-synthesizer
+    priority: 7100
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Glint Hawk"
+        zone: main
+        min_count: 3
+      - card: "Kor Skyfisher"
+        zone: main
+        min_count: 3
+      - card: "Melded Moxite"
+        zone: main
+        min_count: 3
+- id: temur-control
+  name: "Temur Control"
+  priority: 7000
+  rules:
+  - id: temur-control
+    priority: 7000
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Bountiful Landscape"
+        zone: main
+        min_count: 2
+      - card: "Azure Fleet Admiral"
+        zone: main
+        min_count: 1
+      - card: "Breath Weapon"
+        zone: main
+        min_count: 1
+- id: mono-red-rally
+  name: "Mono-Red Rally"
+  priority: 6910
+  rules:
+  - id: mono-red-rally
+    priority: 6910
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Goblin Bushwhacker"
+        zone: main
+        min_count: 3
+      - card: "Rally at the Hornburg"
+        zone: main
+        min_count: 2
+      - card: "Great Furnace"
+        zone: main
+        min_count: 2
+- id: mono-red-axe
+  name: "Mono-Red Axe"
+  priority: 6900
+  rules:
+  - id: mono-red-axe
+    priority: 6900
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Inventor's Axe"
+        zone: main
+        min_count: 3
+      - card: "Goblin Tomb Raider"
+        zone: main
+        min_count: 3
+      - card: "Great Furnace"
+        zone: main
+        min_count: 3
+      - card: "Rally at the Hornburg"
+        zone: main
+        exact_count: 0
