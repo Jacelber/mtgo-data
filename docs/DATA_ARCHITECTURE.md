@@ -1085,14 +1085,16 @@ participant, and decklist identity. Parsers retain read compatibility with
 stored manifest `1.0.0` fixtures. Neither legacy contract is used to regenerate
 the frozen reference event.
 
-Future complete collections use minimized manifest `3.0.0`. Every source
+The approved successor contract uses minimized manifest `4.0.0`. Every source
 response is parsed in bounded memory before persistence. The snapshot contains
 canonical JSON for tournament, standings, matches, and decklists; no unfiltered
 source response body is written. Each response row distinguishes transient
 `source_sha256` / `source_bytes` from the minimized file's `sha256` / `bytes`,
-records `persisted_content_type: json`, and replaces participant source context
-with an event-scoped HMAC reference. The top-level `participant_identity`
-records only the reviewed scheme and non-secret key ID.
+records `persisted_content_type: json`, and copies the public Melee `Player.ID`
+as the positive-decimal-string `source_participant_id`. The top-level
+`participant_identity` records scheme `source-participant-id-v1` and has no key
+ID or secret. The implemented HMAC v3 contract remains read-compatible but is
+not authorized for another live collection.
 
 Complete event collection begins from the exact whitelisted tournament page,
 discovers completed round IDs there, paginates the public standings and match
@@ -1109,13 +1111,13 @@ data_raw/melee/<event_id>/
   .complete-in-progress.json
 ```
 
-The v3 checkpoint records collection identity, the destination snapshot name,
-the HMAC scheme and non-secret key ID, every completed minimized response's
-allowlisted metadata and digest, and the frozen complete-plan count and
-SHA-256. It records neither source participant IDs nor HMAC key material. A
-resume must use the same key ID, verify every existing file's byte count and
-SHA-256, and reproduce the same request-plan hash before fetching a missing
-response. Verified responses are not downloaded again.
+The approved checkpoint `3.0.0` records collection identity, the destination
+snapshot name, scheme `source-participant-id-v1`, every completed minimized
+response's allowlisted metadata and digest, and the frozen complete-plan count
+and SHA-256. It may retain the direct source participant context needed by the
+frozen request plan and contains no HMAC material or key ID. A resume must
+verify the exact event, plan hash, existing file byte count, and SHA-256 before
+fetching a missing response. Verified responses are not downloaded again.
 
 The complete collector has separate reviewed hard ceilings of 5,000 decklists
 and 10,000 responses. The ordinary manually configured raw-request client
@@ -1124,8 +1126,8 @@ total-byte limits.
 
 The staging directory has no `manifest.json` while incomplete and is not a
 valid parser, retention, normalization, statistics, or publication input.
-After every planned response is verified, the future collector writes manifest
-`3.0.0` and atomically renames the staging directory to the immutable snapshot
+After every planned response is verified, the successor collector writes manifest
+`4.0.0` and atomically renames the staging directory to the immutable snapshot
 name. Progress reports expose completed response count, planned response count,
 accumulated persisted bytes, and reused response count.
 
@@ -1141,8 +1143,9 @@ Legacy v1/v2 raw files preserve:
 - pagination information;
 - status or error information.
 
-Do not replace a retained legacy source value in place. Future v3 snapshots are
-new immutable minimized collections, not rewrites of a legacy snapshot.
+Do not replace a retained legacy source value in place. Future v4 snapshots are
+new immutable minimized collections, not rewrites of a legacy snapshot. V3
+HMAC snapshots remain valid historical inputs and are not rewritten.
 
 ### 10.2 Sensitive information
 
@@ -1154,6 +1157,8 @@ Do not store:
 - unnecessary request headers containing credentials.
 
 Only collect data required for approved public tournament analysis.
+The reviewed public Melee participant ID is an approved join and provenance
+field under DEC-147; this does not authorize any other account or profile field.
 
 ### 10.3 Raw-data retention
 
@@ -1183,8 +1188,9 @@ decklists required for the approved product. These third-party records remain
 subject to `NOTICE.md` and are not relicensed as project code. Any later refresh
 must create a separate snapshot, pass the same boundary, and receive an
 explicit repository-size and production-input review before it can replace or
-supplement the reference input. A future approved event must use manifest
-`3.0.0`; it must not create a new source-preserving v2 production snapshot.
+supplement the reference input. After the separately gated writer implementation,
+a future approved event must use manifest `4.0.0`; it must not create a new
+source-preserving v2 production snapshot or a new HMAC v3 snapshot.
 
 Do not silently discard raw data after generating statistics.
 
@@ -1658,64 +1664,48 @@ reference snapshot.
 
 ### 11.13 Future-event participant and field minimization
 
-P10-03 defines minimized resource document `1.0.0` and complete snapshot
-manifest `3.0.0` for future approved events. The exact per-resource allowlists,
-discarded field groups, HMAC input domain, key requirements, and compatibility
-boundary are recorded in `docs/audits/P10-03.md` and DEC-065.
+DEC-147 selects minimized resource document `2.0.0`, complete snapshot manifest
+`4.0.0`, and checkpoint `3.0.0` for the next implemented collection contract.
+Each admitted participant context copies the public Melee `Player.ID` exactly as
+positive-decimal-string `source_participant_id`. The value is an opaque source
+identifier: it may be shared across Melee events, but the project does not
+guarantee global or permanent upstream stability.
 
-Participant references use `hmac-sha256-event-v1` over the source participant
-ID with the event ID in the message domain. They are stable inside one event
-and differ across events. Normalized v3 participant `id` and `source_id` use
-the already-derived reference, so downstream joins require no secret and do
-not restore the raw source ID. The retained `DisplayName` remains an explicit
-public product field; the HMAC contract is therefore a source-ID minimization
-and anti-enumeration control, not a claim that tournament participants are
-anonymous.
+The source ID remains available in approved raw and normalized Git records for
+joins and provenance. Generated products continue using the existing
+event-scoped derived `participant_id`; DEC-147 adds no raw source-ID field to a
+Pages artifact or front-end response. Because public Git is the durable archive,
+the source ID remains publicly accessible and potentially cross-event linkable
+even when the Pages artifact omits it.
 
-The complete collector requires key material and a key ID before network or
-filesystem side effects. Only the key ID may enter a checkpoint or manifest.
-P10-03 does not provision a production key or modify the production workflow.
-Resource Schemas as a primary production gate, supplemental prohibited-field
-scans, and notice/contact/removal updates remain P10-04 work.
+The field-minimization boundary is unchanged. The collector parses each bounded
+response in memory and persists only exact resource allowlists. Source-published
+display name, event, standing, match, and decklist fields remain separately
+approved; unused account, profile, preference, duplicate identity, credential,
+cookie, and private-header fields remain prohibited.
 
-A completed v3 snapshot contains the already-derived participant references,
-so downstream retention, parsing, generation, and review do not require the
-HMAC key. An incomplete checkpoint is different: it may resume only with the
-same key material and the same key ID. The system cannot recover secret key
-material from a checkpoint or manifest, and operators must never assign an old
-key ID to different key material.
-
-If the key for an incomplete checkpoint is lost, treat that checkpoint as
-non-resumable. A later collection must start as a clean snapshot with new key
-material and a new key ID; it must not append to, merge with, or claim identity
-continuity with the incomplete snapshot. Rotate only at a snapshot boundary,
-after any resumable collection using the old key has completed or been
-abandoned. Completed snapshots made with an older key remain valid inputs, but
-recollecting the same event under a new key produces different participant
-references.
-
-No production HMAC key is currently provisioned by this repository. Key
-creation, managed storage, recovery-copy selection, workflow injection,
-rotation, and live collection remain separately owner-authorized operations.
-Before the first live v3 rehearsal, the operator must decide whether the test
-snapshot will be retained: use a distinct test key and key ID for a disposable
-snapshot, or the production-managed key from the start for a retained one.
-Operational failure routing is summarized in `docs/OPERATIONS_RUNBOOK.md`.
+Legacy v1/v2 and completed HMAC v3 snapshots remain read-compatible and need no
+secret for downstream parsing or generation. The protected `434455` v2 bytes
+and derived compatibility result are not migrated. The successor writer has no
+HMAC creation, key storage, key ID, rotation, injection, or recovery lifecycle.
+Until that writer and its validation are separately accepted and merged, no new
+live complete collection may use either the old HMAC writer or the unimplemented
+v4 contract.
 
 ### 11.14 Minimized-resource validation and privacy requests
 
-P10-04 promotes `schemas/melee-minimized-resource.schema.json` to the primary
-contract for every future v3 tournament, standings, matches, and decklist
-resource document. The Schema uses strict resource-specific object shapes,
-rejects additional properties at every persisted level, constrains event,
-round, decklist, URL, and HMAC-reference formats, and is applied both before
-canonical serialization and after a persisted resource is read. Generation,
-resume, parsing, assembly, and retention therefore share the same fail-closed
-resource boundary.
+P10-04 established `schemas/melee-minimized-resource.schema.json` as the primary
+contract for minimized tournament, standings, matches, and decklist documents.
+The successor `2.0.0` Schema must retain strict resource-specific object shapes,
+reject additional properties at every persisted level, constrain event, round,
+decklist, URL, and positive-decimal source-participant formats, and apply both
+before canonical serialization and after a persisted resource is read.
+Generation, resume, parsing, assembly, and retention therefore continue sharing
+the same fail-closed resource boundary.
 
 An exact-key recursive scan supplements the Schema for source identity,
 account, profile, preference, and unused deck metadata keys identified by the
-P10-01/P10-03 audits. The scan is called only for one decoded minimized v3
+P10-01/P10-03 audits. The scan is called only for one decoded minimized
 resource. It does not scan string values, documentation, source responses,
 the repository as a whole, or immutable v1/v2 snapshots. The Schema remains
 the authoritative allowlist; the scan is defense against a future contract
