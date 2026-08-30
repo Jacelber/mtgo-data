@@ -7277,3 +7277,56 @@ This decision and its documentation implementation do not modify the Melee
 whitelist, collect or retain source responses, regenerate any event, change a
 catalog or public path, dispatch a workflow, publish a candidate, deploy Pages,
 or authorize event `441441` or another event.
+
+---
+
+# DEC-149 - Migrate event 434455 to the active Modern taxonomy
+
+Status: `Accepted for local implementation; migration data pending Owner review`
+
+## Context
+
+The protected event `434455` derived chain records Modern taxonomy digest
+`dbb77e51b1ab2366cd6a6da7a81dfb3c9bb1ebb287de3836c9f11b6ad09cff6f`,
+while the maintained taxonomy now has digest
+`ae06e549dec4511bb7476eb5dcf10e1b1f2c8678e67899f3a3b8318baa22a4e4`.
+The accepted multi-event publisher correctly refuses to add event `441441` to
+that legacy catalog because `434455` lacks active-taxonomy and matchup
+compatibility evidence. DEC-064 requires a new compatibility version,
+replacement evidence, a successor decision, and separate Owner approval before
+any protected byte changes.
+
+## Decision
+
+Regenerate only the `434455` classification overlay, opportunity ledger, five
+event-specific outputs, and selected format-catalog projection from the
+committed normalized event under the already accepted current Modern taxonomy.
+Keep the retained v2 raw snapshot, its 483-response closure, and the normalized
+event byte-identical. Do not fetch Melee, change classifier rules, alter a
+statistical formula or scope, collect event `441441`, or dispatch production.
+
+Advance the executable compatibility boundary from `1.6.0` to `1.7.0` and
+reconcile `schemas/melee-compatibility-manifest.schema.json` to the same
+version. Record the replacement deterministic byte counts and digests. Upgrade
+the selected format-catalog projection from `1.0.0` to the already supported
+`1.2.0` shape, retain `434455` as its sole and default event, bind the root to
+the active taxonomy, and freeze the selected event's matchup compatibility.
+
+The migration changes no selected participant classification: all 362 records
+remain classified with zero Unknowns, conflicts, invalid decks, or residual
+subtype violations, and every parent and subtype selection count remains
+identical. Six records cease matching the removed
+`eldrazi-ramp-fallback` candidate rule without changing their selected result,
+so multiple and overridden matches fall from 69 to 66. Opportunity totals,
+scope populations, result totals, and every shared parent and leaf matchup cell
+remain identical. The current taxonomy adds only the maintained zero-sample
+`chant-control/esper` leaf beneath an existing parent.
+
+## Consequences
+
+Event `434455` can become the active-taxonomy-compatible first member of the
+Modern Tabletop catalog without rewriting source evidence or changing its
+observed statistics. After the exact local migration is reviewed, separately
+accepted, and merged, the new-event runbook may resume event `441441` at its
+production-candidate collection gate. This decision does not itself authorize
+commit, publication, merge, collection, Pages, or the next task.
