@@ -58,7 +58,7 @@ function fakeNode() {
   };
 }
 
-function harness() {
+function harness({ touch = false } = {}) {
   let now = 0;
   let timerId = 0;
   const timers = [];
@@ -161,7 +161,7 @@ function harness() {
     clearTimeout: clearTimer,
     console: { error: () => {} },
     document,
-    matchMedia: () => ({ matches: false }),
+    matchMedia: () => ({ matches: touch }),
     setTimeout: setTimer,
     t: key => key,
     window,
@@ -173,6 +173,8 @@ function harness() {
     advance,
     images: context.P8CardImages,
     listeners,
+    modal,
+    scryfallLink,
     starts,
   };
 }
@@ -336,4 +338,26 @@ test("an exhausted Feature image exposes a group retry that restores the inline 
   assert.equal(image.src, "feature");
   assert.equal(frame.classList.contains("is-loaded"), true);
   assert.equal(retryButton.hidden, true);
+});
+
+test("touch preview uses the card link provider selected by the current language", () => {
+  for (const expected of [
+    { provider: "mtgch", url: "https://mtgch.com/card/ACR/276/", label: "card.view_mtgch" },
+    { provider: "scryfall", url: "https://scryfall.com/search?q=test", label: "card.view_scryfall" },
+  ]) {
+    const { listeners, modal, scryfallLink } = harness({ touch: true });
+    const link = fakeNode();
+    link.dataset.cardImage = "card-image";
+    link.dataset.cardName = "Card";
+    link.dataset.cardProvider = expected.provider;
+    link.dataset.cardUrl = expected.url;
+    link.textContent = "Card";
+    link.closest = selector => selector === "a[data-card-image]" ? link : null;
+
+    listeners.get("click")[0]({ preventDefault: () => {}, target: link });
+
+    assert.equal(modal.hidden, false);
+    assert.equal(scryfallLink.href, expected.url);
+    assert.equal(scryfallLink.textContent, expected.label);
+  }
 });

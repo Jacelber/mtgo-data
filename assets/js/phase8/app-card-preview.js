@@ -268,7 +268,7 @@
   const modalStatus = modal.querySelector("[data-card-image-status]");
   const modalRetry = modal.querySelector("[data-card-image-retry]");
   const modalClose = modal.querySelector("[data-card-preview-close]");
-  const scryfallLink = modal.querySelector("#card-preview-scryfall");
+  const cardExternalLink = modal.querySelector("#card-preview-scryfall");
   const backgroundNodes = [
     document.querySelector(".app-header"),
     document.querySelector(".page-shell"),
@@ -381,8 +381,9 @@
     savedScrollY = window.scrollY;
     modalTitle.textContent = t("card.preview_title", { name: modalName });
     modalClose.setAttribute("aria-label", t("card.close_preview"));
-    scryfallLink.textContent = t("card.view_scryfall");
-    scryfallLink.href = link.dataset.scryfallUrl || link.href;
+    const provider = link.dataset.cardProvider === "mtgch" ? "mtgch" : "scryfall";
+    cardExternalLink.textContent = t(`card.view_${provider}`);
+    cardExternalLink.href = link.dataset.cardUrl || link.dataset.scryfallUrl || link.href;
     backgroundNodes.forEach(node => {
       priorInert.set(node, node.inert);
       node.inert = true;

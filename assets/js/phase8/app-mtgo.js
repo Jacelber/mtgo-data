@@ -180,12 +180,11 @@ function landingRepresentatives(row) {
   ));
   if (!cards.length) return `<span class="landing-cards-empty">${t("landing.cards_unavailable")}</span>`;
   return `<div class="landing-representatives" aria-label="${t("landing.representative_cards")}">${cards.map(card => {
-    const search = `https://scryfall.com/search?q=${encodeURIComponent(`!"${card.name}"`)}`;
     const source = representativeImagePath(card.image);
-    const display = cardDisplay(card.name, source || null);
-    const hasDisplayImage = Boolean(source) || display.source.startsWith("chinese-");
+    const display = cardDisplay(card.name);
+    const hasDisplayImage = Boolean(source);
     return hasDisplayImage
-      ? `<a class="landing-representative card-link" href="${escapeHtml(search)}" target="_blank" rel="noopener" data-card-image="${escapeHtml(display.image)}" data-card-name="${escapeHtml(display.displayName)}" data-scryfall-url="${escapeHtml(search)}"><span class="card-image-frame is-loading"><img alt="${escapeHtml(display.displayName)}" data-progressive-image="${escapeHtml(display.image)}" data-image-owner="landing-representative"><span class="card-image-placeholder">${escapeHtml(display.displayName)}</span></span></a>`
+      ? `<a class="landing-representative card-link" href="${escapeHtml(display.linkUrl)}" target="_blank" rel="noopener" data-card-image="${escapeHtml(display.image)}" data-card-name="${escapeHtml(display.displayName)}" data-card-url="${escapeHtml(display.linkUrl)}" data-card-provider="${escapeHtml(display.linkProvider)}"><span class="card-image-frame is-loading"><img alt="${escapeHtml(display.displayName)}" data-progressive-image="${escapeHtml(source)}" data-image-owner="landing-representative"><span class="card-image-placeholder">${escapeHtml(display.displayName)}</span></span></a>`
       : `<span class="landing-representative landing-card-placeholder">${escapeHtml(card.name)}</span>`;
   }).join("")}</div>`;
 }

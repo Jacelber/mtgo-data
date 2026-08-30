@@ -301,12 +301,11 @@ function cardLink(card) {
   const englishName = card.name;
   const display = cardDisplay(englishName);
   const quantity = card.qty ?? card.mean_qty ?? "";
-  const search = `https://scryfall.com/search?q=${encodeURIComponent(`!"${englishName}"`)}`;
   const rate = card.rate === undefined ? "" : ` <small>(${pct(card.rate)})</small>`;
   return `<li><span class="qty">${escapeHtml(quantity)}</span><a class="card-link"
-    href="${search}" target="_blank" rel="noopener"
+    href="${escapeHtml(display.linkUrl)}" target="_blank" rel="noopener"
     data-card-image="${escapeHtml(display.image)}" data-card-name="${escapeHtml(display.displayName)}"
-    data-scryfall-url="${escapeHtml(search)}">${escapeHtml(display.displayName)}</a>${rate}</li>`;
+    data-card-url="${escapeHtml(display.linkUrl)}" data-card-provider="${escapeHtml(display.linkProvider)}">${escapeHtml(display.displayName)}</a>${rate}</li>`;
 }
 
 function cardList(cards) {

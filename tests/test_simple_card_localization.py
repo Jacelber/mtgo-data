@@ -45,6 +45,7 @@ def _page(_names: list[str], _page_number: int) -> dict:
     def card(name: str, chinese: str, marker: str) -> dict:
         return {
             "id": marker,
+            "card_detail_url": f"/card/TST/{marker}/",
             "display_name": name,
             "display_name_zh": chinese,
             "image_url": f"https://images.mtgch.com/zhs/normal/front/{marker}.webp",
@@ -86,6 +87,7 @@ def test_builds_flat_lookup_and_only_current_landing_images(tmp_path: Path):
     assert "local_image" in lookup["Feature Card"]
     assert "local_image" in lookup["Local Card"]
     assert "local_image" not in lookup["Remote Card"]
+    assert lookup["Remote Card"]["mtgch_url"] == "https://mtgch.com/card/TST/c/"
     assert len(list((output / "images").glob("*.webp"))) == 2
     assert localization.verify_bundle(root, output) == lookup
 
@@ -112,12 +114,14 @@ def test_resolve_lookup_uses_existing_name_normalizer_and_keeps_product_keys(
             "items": [
                 {
                     "id": "a",
+                    "card_detail_url": "/card/TST/1/",
                     "display_name": "Canonical Name",
                     "display_name_zh": "规范牌名",
                     "image_url": "https://images.mtgch.com/zhs/a.webp",
                 },
                 {
                     "id": "b",
+                    "card_detail_url": "/card/TST/2/",
                     "display_name": "Front Face // Back Face",
                     "display_name_zh": "正面 // 背面",
                     "image_url": "https://images.mtgch.com/zhs/b.webp",
@@ -146,6 +150,7 @@ def test_resolve_lookup_rechecks_only_missing_names_in_smaller_batches(
             items = [
                 {
                     "id": name,
+                    "card_detail_url": f"/card/TST/{name}/",
                     "display_name": name,
                     "display_name_zh": f"中-{name}",
                     "image_url": f"https://images.mtgch.com/zhs/{name}.webp",
@@ -184,6 +189,7 @@ def test_resolved_product_keys_do_not_share_mutable_entries(
             "items": [
                 {
                     "id": "a",
+                    "card_detail_url": "/card/TST/1/",
                     "display_name": "Shared Card",
                     "display_name_zh": "共享牌",
                     "image_url": "https://images.mtgch.com/zhs/shared.webp",
@@ -205,6 +211,7 @@ def test_keeps_a_chinese_name_when_mtgch_has_no_chinese_image():
             "items": [
                 {
                     "id": "a",
+                    "card_detail_url": "/card/ACR/276/",
                     "display_name": "Name Only Card",
                     "display_name_zh": "只有中文名",
                     "image_url": "https://images.mtgch.com/en/card.webp",
@@ -213,7 +220,10 @@ def test_keeps_a_chinese_name_when_mtgch_has_no_chinese_image():
         }
 
     assert localization.resolve_lookup(["Name Only Card"], page) == {
-        "Name Only Card": {"zh_name": "只有中文名"}
+        "Name Only Card": {
+            "zh_name": "只有中文名",
+            "mtgch_url": "https://mtgch.com/card/ACR/276/",
+        }
     }
 
 

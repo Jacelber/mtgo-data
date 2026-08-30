@@ -3469,8 +3469,9 @@ classification consumers. The localization builder calls that shared entry
 and does not contain a second name normalizer.
 
 The Pages build creates `assets/card-localization/cards.json`, one small flat
-map from each resolved English product key to an MTGCH Chinese display name and,
-when available, the exact MTGCH Chinese image URL. It also creates
+map from each resolved English product key to an MTGCH Chinese display name,
+the selected result record's validated canonical MTGCH card-page URL, and, when
+available, the exact MTGCH Chinese image URL. It also creates
 `assets/card-localization/images/<sha256-of-English-key>.webp` only for current
 default-Landing keys with a Chinese image. Both are generated outside Git
 history and admitted as one allowlisted Pages overlay. The browser delivery
@@ -3480,7 +3481,14 @@ rule is intentionally small:
   language, reusing the existing English Landing cache and adding only the
   corresponding Chinese files;
 - every other Chinese image uses its mapped MTGCH image URL on demand;
-- every other English image keeps the existing Scryfall on-demand URL; and
+- every other English image keeps the existing Scryfall on-demand URL;
+- Chinese decklist links use the mapped canonical MTGCH card page while English
+  and unmapped links retain the existing Scryfall search destination;
+- Landing environment representative cards keep the same configured cropped
+  art as their inline image in both languages; their hover, focus, touch
+  preview, and external link use the same language-aware complete image and
+  provider selected for an ordinary card link, while current Feature cards
+  retain complete card images; and
 - a missing Chinese value falls back to the existing English name and image;
   a present Chinese name without a Chinese image keeps that Chinese name and
   falls back only the image.
