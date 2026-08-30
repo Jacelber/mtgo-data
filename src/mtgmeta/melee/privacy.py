@@ -1,19 +1,15 @@
-"""Privacy boundary for future Melee snapshot persistence.
+"""Minimization boundary for Melee snapshot persistence.
 
 Source responses are parsed in memory and converted to a small, explicit
-resource contract before any response body is written to disk. Participant
-references are event-scoped HMAC values so they remain joinable inside one
-event without exposing enumerable source identifiers or enabling cross-event
-linkage.
+resource contract before any response body is written to disk. Public Melee
+participant IDs are retained verbatim as stable source identifiers; account
+and profile fields outside the approved contract remain prohibited.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
-import hashlib
-import hmac
+from dataclasses import dataclass
 import json
-import re
 from typing import Any, Mapping
 
 from .parser import ParsedSourcePage, SourceArtifact, parse_source_response
@@ -23,44 +19,12 @@ from .privacy_validation import (
 )
 
 
-MINIMIZED_RESOURCE_SCHEMA_VERSION = "1.0.0"
-PARTICIPANT_IDENTITY_SCHEME = "hmac-sha256-event-v1"
-PARTICIPANT_REF_PATTERN = re.compile(r"^melee-v3-[0-9a-f]{64}$")
-KEY_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:[._-][a-z0-9]+)*$")
-MINIMUM_HMAC_KEY_BYTES = 32
+MINIMIZED_RESOURCE_SCHEMA_VERSION = "2.0.0"
+PARTICIPANT_IDENTITY_SCHEME = "source-participant-id-v1"
 
 
 class MeleePrivacyError(ValueError):
     """Raised when source material cannot cross the persistence boundary."""
-
-
-@dataclass(frozen=True)
-class ParticipantPseudonymizer:
-    event_id: str
-    key: bytes
-    key_id: str
-
-    def __post_init__(self) -> None:
-        if not self.event_id.isdigit() or self.event_id.startswith("0"):
-            raise MeleePrivacyError("participant HMAC event ID must be a positive integer string")
-        if not isinstance(self.key, bytes) or len(self.key) < MINIMUM_HMAC_KEY_BYTES:
-            raise MeleePrivacyError(
-                f"participant HMAC key must contain at least {MINIMUM_HMAC_KEY_BYTES} bytes"
-            )
-        if not isinstance(self.key_id, str) or not KEY_ID_PATTERN.fullmatch(self.key_id):
-            raise MeleePrivacyError("participant HMAC key ID has an invalid format")
-
-    def reference(self, source_participant_id: str) -> str:
-        if (
-            not isinstance(source_participant_id, str)
-            or not source_participant_id.isdigit()
-            or source_participant_id.startswith("0")
-        ):
-            raise MeleePrivacyError("source participant ID must be a positive integer string")
-        message = (
-            f"melee\0v3\0{self.event_id}\0participant\0{source_participant_id}"
-        ).encode("utf-8")
-        return "melee-v3-" + hmac.new(self.key, message, hashlib.sha256).hexdigest()
 
 
 @dataclass(frozen=True)
@@ -89,16 +53,14 @@ def _records_total(body: bytes, resource_type: str) -> int | None:
     return value
 
 
-def _participant_ref(
-    pseudonymizer: ParticipantPseudonymizer,
-    source_participant_id: str,
-) -> str:
-    return pseudonymizer.reference(source_participant_id)
+def _source_participant_id(value: str) -> str:
+    if not isinstance(value, str) or not value.isdigit() or value.startswith("0"):
+        raise MeleePrivacyError("source participant ID must be a positive integer string")
+    return value
 
 
 def _document(
     page: ParsedSourcePage,
-    pseudonymizer: ParticipantPseudonymizer,
     records_total: int | None,
 ) -> dict[str, Any]:
     artifact = page.artifact
@@ -131,8 +93,8 @@ def _document(
         base["standings"] = [
             {
                 "source_standing_id": item.source_standing_id,
-                "participant_ref": _participant_ref(
-                    pseudonymizer, item.source_participant_id
+                "source_participant_id": _source_participant_id(
+                    item.source_participant_id
                 ),
                 "display_name": item.display_name,
                 **_optional_fields(
@@ -147,8 +109,8 @@ def _document(
         base["decklist_references"] = [
             {
                 "source_decklist_id": item.source_decklist_id,
-                "participant_ref": _participant_ref(
-                    pseudonymizer, item.source_participant_id
+                "source_participant_id": _source_participant_id(
+                    item.source_participant_id
                 ),
                 "url": item.url,
             }
@@ -161,8 +123,8 @@ def _document(
                 "source_round_id": item.source_round_id,
                 "competitors": [
                     {
-                        "participant_ref": _participant_ref(
-                            pseudonymizer, competitor.source_participant_id
+                        "source_participant_id": _source_participant_id(
+                            competitor.source_participant_id
                         ),
                         **_optional_fields(
                             outcome_text=competitor.outcome_text,
@@ -180,14 +142,13 @@ def _document(
             for item in page.matches
         ]
     elif artifact.resource_type == "decklist":
-        if artifact.participant_ref is None or not PARTICIPANT_REF_PATTERN.fullmatch(
-            artifact.participant_ref
-        ):
-            raise MeleePrivacyError("decklist response lacks a valid participant reference")
+        if artifact.source_participant_id is None:
+            raise MeleePrivacyError("decklist response lacks a source participant ID")
+        source_participant_id = _source_participant_id(artifact.source_participant_id)
         base["decklists"] = [
             {
                 "source_decklist_id": item.source_decklist_id,
-                "participant_ref": artifact.participant_ref,
+                "source_participant_id": source_participant_id,
                 **_optional_fields(format_text=item.format_text),
                 "cards": [
                     {
@@ -208,21 +169,18 @@ def _document(
 def minimize_source_response(
     body: bytes,
     artifact: SourceArtifact,
-    pseudonymizer: ParticipantPseudonymizer,
+    *,
+    event_id: str,
 ) -> MinimizedResponse:
-    """Parse one source response in memory and return only approved v3 fields."""
+    """Parse one source response in memory and return only approved v4 fields."""
 
-    parsing_artifact = artifact
-    if artifact.resource_type == "decklist" and artifact.participant_ref is not None:
-        parsing_artifact = replace(
-            artifact,
-            source_participant_id=artifact.participant_ref,
-        )
-    page = parse_source_response(body, parsing_artifact)
-    if page.tournament is not None and page.tournament.source_event_id != pseudonymizer.event_id:
+    if not isinstance(event_id, str) or not event_id.isdigit() or event_id.startswith("0"):
+        raise MeleePrivacyError("Melee event ID must be a positive integer string")
+    page = parse_source_response(body, artifact)
+    if page.tournament is not None and page.tournament.source_event_id != event_id:
         raise MeleePrivacyError("tournament response event identity changed")
     records_total = _records_total(body, artifact.resource_type)
-    document = _document(page, pseudonymizer, records_total)
+    document = _document(page, records_total)
     try:
         validate_minimized_resource(
             document,
@@ -238,13 +196,9 @@ def minimize_source_response(
 
 
 __all__ = [
-    "KEY_ID_PATTERN",
     "MINIMIZED_RESOURCE_SCHEMA_VERSION",
-    "MINIMUM_HMAC_KEY_BYTES",
     "MeleePrivacyError",
     "MinimizedResponse",
     "PARTICIPANT_IDENTITY_SCHEME",
-    "PARTICIPANT_REF_PATTERN",
-    "ParticipantPseudonymizer",
     "minimize_source_response",
 ]

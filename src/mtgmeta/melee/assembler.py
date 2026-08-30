@@ -193,14 +193,17 @@ def assemble_parsed_snapshot(
     if not standings_by_participant:
         raise MeleeAssemblyError("snapshot does not contain standings participants")
 
-    participant_ids = {
-        source_id: (
-            source_id
-            if snapshot.participant_identity_scheme == "hmac-sha256-event-v1"
-            else stable_record_id("participant", event.id, source_id)
-        )
-        for source_id in standings_by_participant
-    }
+    if snapshot.participant_identity_scheme == "hmac-sha256-event-v1":
+        participant_ids = {
+            source_id: source_id for source_id in standings_by_participant
+        }
+    elif snapshot.participant_identity_scheme in {None, "source-participant-id-v1"}:
+        participant_ids = {
+            source_id: stable_record_id("participant", event.id, source_id)
+            for source_id in standings_by_participant
+        }
+    else:
+        raise MeleeAssemblyError("snapshot uses an unsupported participant identity scheme")
     if len(set(participant_ids.values())) != len(participant_ids):
         raise MeleeAssemblyError("stable participant ID collision")
 

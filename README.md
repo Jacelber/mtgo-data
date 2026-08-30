@@ -109,28 +109,26 @@ production dispatch each require the applicable owner authorization.
 ### Collect a minimized source snapshot
 
 The collection command defaults to a zero-side-effect request-plan dry run.
-Live collection additionally requires `--complete --execute` and an approved
-event-scoped HMAC key:
+Live collection additionally requires `--complete --execute` and separate
+owner authorization for the enabled event:
 
 ```powershell
 .\.venv\Scripts\mtgo-data-melee.exe --event-id 434455
-$env:MELEE_PARTICIPANT_HMAC_KEY_BASE64 = "<approved base64 secret>"
-$env:MELEE_PARTICIPANT_HMAC_KEY_ID = "<approved non-secret key id>"
 .\.venv\Scripts\mtgo-data-melee.exe --event-id 434455 --complete --execute
 ```
 
-The secret must decode to at least 32 bytes and must never appear in the
-repository, command history, workflow YAML, logs, or documentation. The
-collector keeps responses in bounded memory, accepts only reviewed public
-resource fields, replaces source participant IDs with event-scoped HMAC
-references, and persists canonical minimized JSON. Interrupted collection may
+The collector keeps responses in bounded memory, accepts only reviewed public
+resource fields, copies Melee's public participant ID into
+`source_participant_id`, and persists canonical minimized JSON. The raw
+manifest is v4, each minimized resource is v2, and the resumable checkpoint is
+v3; none of them contains an HMAC secret or key ID. Interrupted collection may
 resume only its verified frozen request plan. A partial directory is never a
 valid retained input; a complete snapshot is promoted atomically under
 `data_raw/melee/<event_id>/<UTC-snapshot>/`.
 
 Privacy contact information and correction or removal handling are documented
-in [`NOTICE.md`](NOTICE.md). HMAC recovery boundaries and the existing MTGO,
-Pages, and Melee failure paths are summarized in
+in [`NOTICE.md`](NOTICE.md). Source-identity recovery boundaries and the
+existing MTGO, Pages, and Melee failure paths are summarized in
 [`docs/OPERATIONS_RUNBOOK.md`](docs/OPERATIONS_RUNBOOK.md).
 
 ### Build and validate an event candidate

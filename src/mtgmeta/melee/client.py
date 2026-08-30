@@ -29,14 +29,13 @@ from .parser import SourceArtifact
 from .privacy import (
     PARTICIPANT_IDENTITY_SCHEME,
     MeleePrivacyError,
-    ParticipantPseudonymizer,
     minimize_source_response,
 )
 
 
 RAW_ARCHIVE_SCHEMA_VERSION = "1.0.0"
-COMPLETE_RAW_ARCHIVE_SCHEMA_VERSION = "3.0.0"
-COMPLETE_CHECKPOINT_SCHEMA_VERSION = "2.0.0"
+COMPLETE_RAW_ARCHIVE_SCHEMA_VERSION = "4.0.0"
+COMPLETE_CHECKPOINT_SCHEMA_VERSION = "3.0.0"
 MELEE_HOST = "melee.gg"
 DEFAULT_TIMEOUT_SECONDS = 30
 DEFAULT_ATTEMPTS = 3
@@ -138,7 +137,7 @@ class _CompleteRequest:
     headers: Mapping[str, str]
     body: bytes | None = None
     source_round_id: str | None = None
-    participant_ref: str | None = None
+    source_participant_id: str | None = None
     source_decklist_id: str | None = None
 
 
@@ -652,7 +651,7 @@ def _complete_request_identity(request: _CompleteRequest) -> dict[str, Any]:
             else None
         ),
         "source_round_id": request.source_round_id,
-        "participant_ref": request.participant_ref,
+        "source_participant_id": request.source_participant_id,
         "source_decklist_id": request.source_decklist_id,
     }
 
@@ -690,7 +689,7 @@ def _write_json_atomic(path: Path, payload: dict[str, Any]) -> None:
 
 
 def _complete_record_payload(record: RawResponseRecord) -> dict[str, Any]:
-    """Return the v3 manifest/checkpoint allowlist for one persisted response."""
+    """Return the v4 manifest/checkpoint allowlist for one persisted response."""
 
     return {
         "request_id": record.request_id,
@@ -712,9 +711,18 @@ def _complete_record_payload(record: RawResponseRecord) -> dict[str, Any]:
         "method": record.method,
         "request_body_sha256": record.request_body_sha256,
         "source_round_id": record.source_round_id,
-        "participant_ref": record.participant_ref,
+        "source_participant_id": record.source_participant_id,
         "source_decklist_id": record.source_decklist_id,
     }
+
+
+def _complete_record_from_payload(value: Any) -> RawResponseRecord:
+    if not isinstance(value, dict):
+        raise TypeError("complete response record must be a mapping")
+    record = RawResponseRecord(**value)
+    if set(value) != set(_complete_record_payload(record)):
+        raise ValueError("complete response record is not the v4 allowlist")
+    return record
 
 
 def _checkpoint_payload(
@@ -726,7 +734,6 @@ def _checkpoint_payload(
     records: Mapping[str, RawResponseRecord],
     planned_responses: int | None,
     plan_sha256: str | None,
-    participant_key_id: str,
 ) -> dict[str, Any]:
     return {
         "schema_version": COMPLETE_CHECKPOINT_SCHEMA_VERSION,
@@ -735,10 +742,7 @@ def _checkpoint_payload(
         "event_url": event_url,
         "fetched_at": fetched_at,
         "destination_name": destination_name,
-        "participant_identity": {
-            "scheme": PARTICIPANT_IDENTITY_SCHEME,
-            "key_id": participant_key_id,
-        },
+        "participant_identity": {"scheme": PARTICIPANT_IDENTITY_SCHEME},
         "planned_responses": planned_responses,
         "plan_sha256": plan_sha256,
         "responses": [
@@ -754,7 +758,6 @@ def _load_checkpoint(
     *,
     event_id: str,
     event_url: str,
-    participant_key_id: str,
 ) -> tuple[str, str, dict[str, RawResponseRecord], int | None, str | None]:
     try:
         payload = json.loads(checkpoint_path.read_text(encoding="utf-8"))
@@ -780,10 +783,7 @@ def _load_checkpoint(
             payload.get("destination_name", ""),
         )
         or not isinstance(payload.get("responses"), list)
-        or payload.get("participant_identity") != {
-            "scheme": PARTICIPANT_IDENTITY_SCHEME,
-            "key_id": participant_key_id,
-        }
+        or payload.get("participant_identity") != {"scheme": PARTICIPANT_IDENTITY_SCHEME}
     ):
         raise MeleeArchiveError("complete-event checkpoint identity or shape is invalid")
     planned_responses = payload["planned_responses"]
@@ -808,7 +808,7 @@ def _load_checkpoint(
     records: dict[str, RawResponseRecord] = {}
     try:
         for value in payload["responses"]:
-            record = RawResponseRecord(**value)
+            record = _complete_record_from_payload(value)
             if record.path in records or Path(record.path).name != record.path:
                 raise ValueError
             response_path = partial / record.path
@@ -845,7 +845,6 @@ def _recover_finalized_checkpoint(
     *,
     event_id: str,
     event_url: str,
-    participant_key_id: str,
 ) -> tuple[Path, tuple[RawResponseRecord, ...], int] | None:
     try:
         checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
@@ -864,13 +863,12 @@ def _recover_finalized_checkpoint(
             manifest.get("schema_version") != COMPLETE_RAW_ARCHIVE_SCHEMA_VERSION
             or manifest.get("event_id") != event_id
             or manifest.get("event_url") != event_url
-            or manifest.get("participant_identity") != {
-                "scheme": PARTICIPANT_IDENTITY_SCHEME,
-                "key_id": participant_key_id,
-            }
+            or manifest.get("participant_identity") != {"scheme": PARTICIPANT_IDENTITY_SCHEME}
         ):
             return None
-        records = tuple(RawResponseRecord(**value) for value in manifest["responses"])
+        records = tuple(
+            _complete_record_from_payload(value) for value in manifest["responses"]
+        )
         expected_files = {"manifest.json", *(record.path for record in records)}
         if {path.name for path in destination.iterdir() if path.is_file()} != expected_files:
             return None
@@ -900,21 +898,10 @@ def fetch_complete_event(
     retry_delay: float = DEFAULT_RETRY_DELAY_SECONDS,
     request_delay: float = DEFAULT_COMPLETE_REQUEST_DELAY_SECONDS,
     progress: Callable[[dict[str, Any]], None] | None = None,
-    participant_hmac_key: bytes | None = None,
-    participant_hmac_key_id: str | None = None,
 ) -> MeleeRawFetchResult:
-    """Collect or resume one minimized v3 snapshot through public endpoints.
-
-    Valid HMAC key material and a non-secret key ID are required before any
-    network or filesystem side effect.
-    """
+    """Collect or resume one minimized v4 snapshot through public endpoints."""
 
     event = registry.require_fetchable(event_id)
-    pseudonymizer = ParticipantPseudonymizer(
-        event.id,
-        participant_hmac_key if participant_hmac_key is not None else b"",
-        participant_hmac_key_id if participant_hmac_key_id is not None else "",
-    )
     tournament_requests = [item for item in event.raw_requests if item.resource_type == "tournament"]
     if len(tournament_requests) != 1:
         raise MeleeRequestBoundaryError("complete collection requires exactly one configured tournament request")
@@ -938,7 +925,6 @@ def fetch_complete_event(
             event_root,
             event_id=event.id,
             event_url=event.url,
-            participant_key_id=pseudonymizer.key_id,
         )
         if recovered is None:
             raise MeleeArchiveError("complete-event checkpoint has no recoverable partial or final snapshot")
@@ -970,7 +956,6 @@ def fetch_complete_event(
             partial,
             event_id=event.id,
             event_url=event.url,
-            participant_key_id=pseudonymizer.key_id,
         )
         destination = event_root / destination_name
         resumed_responses = len(records)
@@ -998,7 +983,6 @@ def fetch_complete_event(
                 records=records,
                 planned_responses=None,
                 plan_sha256=None,
-                participant_key_id=pseudonymizer.key_id,
             ),
         )
     if destination.exists():
@@ -1019,7 +1003,6 @@ def fetch_complete_event(
                 records=records,
                 planned_responses=planned_responses,
                 plan_sha256=plan_sha256,
-                participant_key_id=pseudonymizer.key_id,
             ),
         )
 
@@ -1092,11 +1075,11 @@ def fetch_complete_event(
                 else None
             ),
             source_round_id=request.source_round_id,
+            source_participant_id=request.source_participant_id,
             source_decklist_id=request.source_decklist_id,
-            participant_ref=request.participant_ref,
         )
         minimized = minimize_source_response(
-            source_body, source_artifact, pseudonymizer
+            source_body, source_artifact, event_id=event.id
         )
         persisted_body = minimized.body
         if archive_bytes + len(persisted_body) > MAX_ARCHIVE_BYTES:
@@ -1127,8 +1110,8 @@ def fetch_complete_event(
                 else None
             ),
             source_round_id=request.source_round_id,
+            source_participant_id=request.source_participant_id,
             source_decklist_id=request.source_decklist_id,
-            participant_ref=request.participant_ref,
             persisted_content_type="json",
             source_sha256=source_sha256,
             source_bytes=len(source_body),
@@ -1204,14 +1187,17 @@ def fetch_complete_event(
                 if not isinstance(reference, dict):
                     raise MeleeFetchError("decklist reference must be a mapping")
                 decklist_id = str(reference.get("source_decklist_id") or "")
-                participant_ref = str(reference.get("participant_ref") or "")
+                source_participant_id = str(
+                    reference.get("source_participant_id") or ""
+                )
                 if (
                     not re.fullmatch(r"[0-9a-fA-F-]{32,36}", decklist_id)
-                    or not re.fullmatch(r"melee-v3-[0-9a-f]{64}", participant_ref)
+                    or not source_participant_id.isdigit()
+                    or source_participant_id.startswith("0")
                 ):
                     raise MeleeFetchError("standings exposed an invalid decklist identity")
-                previous = decklists.setdefault(decklist_id, participant_ref)
-                if previous != participant_ref:
+                previous = decklists.setdefault(decklist_id, source_participant_id)
+                if previous != source_participant_id:
                     raise MeleeFetchError("decklist identity maps to multiple participants")
             if not rows or start + DATATABLES_PAGE_SIZE >= total:
                 break
@@ -1266,7 +1252,7 @@ def fetch_complete_event(
                 ))
 
         decklist_requests: list[_CompleteRequest] = []
-        for page, (decklist_id, participant_ref) in enumerate(
+        for page, (decklist_id, source_participant_id) in enumerate(
             sorted(decklists.items()), 1
         ):
             url = "https://melee.gg/Decklist/GetDecklistDetails?" + urlencode({"id": decklist_id})
@@ -1278,7 +1264,7 @@ def fetch_complete_event(
                 path=f"decklist-{decklist_id.casefold()}.json",
                 method="GET",
                 headers=API_HEADERS,
-                participant_ref=participant_ref,
+                source_participant_id=source_participant_id,
                 source_decklist_id=decklist_id,
             ))
 
@@ -1320,17 +1306,14 @@ def fetch_complete_event(
             "event_id": event.id,
             "event_url": event.url,
             "fetched_at": fetched_at,
-            "participant_identity": {
-                "scheme": PARTICIPANT_IDENTITY_SCHEME,
-                "key_id": pseudonymizer.key_id,
-            },
+            "participant_identity": {"scheme": PARTICIPANT_IDENTITY_SCHEME},
             "responses": [_complete_record_payload(record) for record in ordered_records],
         })
         partial.replace(destination)
         checkpoint_path.unlink()
     except MeleePrivacyError as exc:
         raise MeleeArchiveError(
-            f"event {event.id!r} source response failed the v3 privacy boundary: {exc}"
+            f"event {event.id!r} source response failed the v4 minimization boundary: {exc}"
         ) from exc
     except Exception as exc:
         if isinstance(exc, MeleeFetchError):
