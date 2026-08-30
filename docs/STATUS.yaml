@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/p14-00-phase-contract"
+  current_working_branch: "codex/gov-owner-acceptance-invariant"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "p14_00_owner_accepted_completion_authorized"
+  status: "p14_00_completed_governance_repair_completion_authorized"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: false
@@ -27,14 +27,14 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "P14-00"
-  name: "Freeze the Phase 14 contract"
+  id: "GOV-OWNER-ACCEPTANCE-INVARIANT"
+  name: "Enforce atomic Owner-acceptance completion authority"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-30"
-  base_commit: "4ad96d17d0991b63d1f4ff579e23603631a86789"
-  branch: "codex/p14-00-phase-contract"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/p14-00-phase-contract-20260830-01"
-  objective: "Inventory the current Pauper archive and every reusable or two-format product boundary, freeze separate shared-repair and Pauper-input gates for P14-01 through P14-07, and change no product behavior."
+  base_commit: "1b4d03dc5faedc961a49572df660f45de48cfb7b"
+  branch: "codex/gov-owner-acceptance-invariant"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/gov-owner-acceptance-invariant-20260830-01"
+  objective: "Reject live status that splits accepted same-task completion authority or simultaneously authorizes and prohibits commit, remote publication, or merge."
   artifact_impact: "internal_diagnostics"
   authorization:
     local_implementation: false
@@ -42,14 +42,14 @@ current_task:
     remote_publication: true
     merge: true
   allowed_paths:
-    - "docs/audits/P14-00.md"
-    - "docs/ROADMAP.md"
     - "docs/STATUS.yaml"
-  planned_additions:
-    - "docs/audits/P14-00.md"
+    - "tests/test_documentation_history.py"
+  planned_additions: []
   protected_scope:
-    code_changed: "none"
+    product_code_changed: "none"
     workflow_changed: "none"
+    governance_rule_changed: "none"
+    test_change: "focused live-status semantic invariant only"
     configuration_changed: "none"
     classifier_changed: "none"
     raw_or_generated_data_changed: "none"
@@ -59,28 +59,30 @@ current_task:
     production_dispatched: false
     remote_write_performed: "none"
   prohibited_changes:
-    - "Do not change code, workflows, configs, classifier rules, Schemas, tests, source data, generated output, catalogs, front-end assets, public paths, dependencies, or production behavior."
-    - "Do not fetch MTGO or Melee data, request the Paupergeddon link, add a whitelist entry, retain a test event, generate a Pauper product, or dispatch production."
-    - "Do not copy a Standard or Modern implementation into a Pauper-specific statistics engine, Landing renderer, page, catalog, workflow, or source-specific taxonomy."
-    - "Do not commit, push, create a pull request, merge, begin P14-01, or begin another task."
+    - "Do not change AGENTS.md, Gate definitions, DEVELOPMENT_WORKFLOW, DECISIONS, ROADMAP, product code, workflows, configs, Schemas, data, front-end assets, public paths, dependencies, or production behavior."
+    - "Do not redesign STATUS, add a general authorization parser, or broaden documentation tests beyond the reproduced same-task completion contradiction."
+    - "Do not start P14-01, fetch data, request the Paupergeddon link, generate a product, or dispatch production."
+    - "Do not begin another task or develop directly on master."
   planned_verification:
-    - "Run only the focused live-status and roadmap-pointer nodes in tests/test_documentation_history.py."
-    - "Run python -B validate_repository.py --changed-from 4ad96d17d0991b63d1f4ff579e23603631a86789 once on the final local tree."
-    - "Review the exact three-path diff and run git diff --check."
-    - "Do not run classifier, data, Schema, CLI, browser, production-candidate, Pages, or production tests."
-  stop_point: "Complete only the unchanged accepted P14-00 subject through Gate 6. Stop before P14-01, manual production dispatch, or another task."
+    - "Run only the live-status policy node and its existing invalid-policy and new completion-authority counterexample nodes."
+    - "Run python -B validate_repository.py --changed-from 1b4d03dc5faedc961a49572df660f45de48cfb7b once on the final local tree."
+    - "Review the exact two-path diff and run git diff --check."
+    - "Do not run full pytest, product, data, Schema, CLI, browser, Pages, or production tests."
+  stop_point: "Complete the unchanged accepted governance repair continuously through Gate 6. Stop before P14-01 or another task."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-08-30"
-    subject: "The P14-00 reuse-first contract, separate shared-repair and Pauper-input gates, private/public state model, proportional validation routing, and real-event boundary."
+    subject: "The focused live-status invariants for accepted completion authority, conflicting prohibitions, and duplicate same-task authorization fields."
 
 current_repository_state:
-  source_master_commit: "4ad96d17d0991b63d1f4ff579e23603631a86789"
+  source_master_commit: "1b4d03dc5faedc961a49572df660f45de48cfb7b"
   deployed_master_commit: "4ad96d17d0991b63d1f4ff579e23603631a86789"
-  previous_task: "L10N-LINKS-REPRESENTATIVE-ART"
-  previous_task_status: "completed_merged_deployed"
-  previous_pull_request: 309
-  previous_pages_run: 33296912644
+  previous_task: "P14-00"
+  previous_task_status: "completed_merged"
+  previous_pull_request: 310
+  previous_pull_request_run: 33300200172
+  previous_merge_commit: "1b4d03dc5faedc961a49572df660f45de48cfb7b"
+  previous_merge_validation_run: 33300253328
   pauper_registry_state: "planned_non_public_collection_only"
   pauper_public_products_available: false
   paupergeddon_whitelist_entry_present: false
@@ -92,9 +94,12 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "P14-00"
+  - id: "GOV-OWNER-ACCEPTANCE-INVARIANT"
     status: "owner_accepted_completion_authorized"
-    note: "The unchanged reuse-first contract may complete through Gate 6; no follow-up task is authorized."
+    note: "Complete only the unchanged focused invariant repair through Gate 6."
+  - id: "P14-00"
+    status: "completed_merged"
+    note: "Merged as PR #310 at master commit 1b4d03dc5faedc961a49572df660f45de48cfb7b."
   - id: "P14-01"
     status: "planned_not_authorized"
     note: "Pauper taxonomy proposals, rules, fixtures, and bilingual identities remain separately gated."
@@ -121,17 +126,17 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "P14-00"
-  name: "Freeze the Phase 14 contract"
+  id: "GOV-OWNER-ACCEPTANCE-INVARIANT"
+  name: "Enforce atomic Owner-acceptance completion authority"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: false
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Complete only unchanged P14-00 through Gate 6. P14-01 remains planned and unauthorized."
+  note: "Complete the unchanged accepted governance repair through Gate 6; P14-01 remains unauthorized."
 
 prohibited_next_actions:
   - "Do not start P14-01, shared-framework implementation, Pauper classification, private generation, Landing review, or another task."
-  - "Do not fetch the Owner-supplied real event, add Paupergeddon to configs/melee_events.yaml, or retain any test-event material."
-  - "Do not change a catalog, Pages artifact, front end, workflow, Schema, production candidate, or public availability."
-  - "Do not commit, push, create a pull request, merge, dispatch production, or develop directly on master."
+  - "Do not change the existing acceptance rule or remove Gate quality checks."
+  - "Do not fetch data, change public availability, alter production, or dispatch a workflow."
+  - "Do not develop directly on master or begin another task."
