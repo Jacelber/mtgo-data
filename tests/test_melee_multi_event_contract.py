@@ -13,7 +13,12 @@ from mtgmeta.melee.multi_event_contract import (
     MultiEventContractError,
     build_multi_event_matchup_contract,
 )
-from mtgmeta.melee.publish import build_active_taxonomy, build_matchup_compatibility
+from mtgmeta.melee.publish import (
+    MeleePublicationError,
+    build_active_taxonomy,
+    build_matchup_compatibility,
+    merge_event_catalog,
+)
 from validate_schemas import load_schemas, validate_instance
 
 
@@ -461,6 +466,86 @@ def test_event_publisher_wires_catalog_version_and_compatibility(
         "taxonomy_sha256": TAXONOMY_SHA256,
         "quality_blocking": False,
     }
+
+
+def test_event_publisher_merges_new_event_without_changing_existing_selection() -> None:
+    existing = _catalog([_event_input("434455", "a", 5)])
+    generated = _catalog([_event_input("441441", "b", 5)])
+    protected_event = deepcopy(existing["events"][0])
+
+    merged = merge_event_catalog(existing, generated)
+
+    assert merged["default_event_id"] == "434455"
+    assert [event["event_id"] for event in merged["events"]] == [
+        "434455",
+        "441441",
+    ]
+    assert merged["events"][0] == protected_event
+
+
+def test_event_publisher_main_writes_the_merged_catalog(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    existing = _catalog([_event_input("434455", "a", 5)])
+    generated = _catalog([_event_input("441441", "b", 5)])
+    catalog_path = tmp_path / "stats" / "modern" / "melee" / "index.json"
+    catalog_path.parent.mkdir(parents=True)
+    catalog_path.write_bytes(publish.statistics_document_bytes(existing))
+    monkeypatch.setattr(
+        publish,
+        "build_event_publication_from_paths",
+        lambda *args: {"meta": {"schema_version": "1.0.0"}, "catalog": generated},
+    )
+
+    result = publish.main(
+        [
+            "--root",
+            str(tmp_path),
+            "--format",
+            "modern",
+            "--event-id",
+            "441441",
+            "--execute",
+        ]
+    )
+
+    assert result == 0
+    merged, _ = publish._read_object(catalog_path)
+    assert merged["default_event_id"] == "434455"
+    assert [event["event_id"] for event in merged["events"]] == [
+        "434455",
+        "441441",
+    ]
+
+
+def test_event_publisher_rejects_multi_event_growth_from_legacy_catalog() -> None:
+    existing = _catalog([_event_input("434455", "a", 5)])
+    existing["schema_version"] = "1.0.0"
+    del existing["active_taxonomy"]
+    del existing["events"][0]["matchup_compatibility"]
+    generated = _catalog([_event_input("441441", "b", 5)])
+
+    with pytest.raises(MeleePublicationError, match="migration"):
+        merge_event_catalog(existing, generated)
+
+
+def test_event_publisher_allows_single_selected_event_legacy_migration() -> None:
+    existing = _catalog([_event_input("434455", "a", 5)])
+    existing["schema_version"] = "1.0.0"
+    del existing["active_taxonomy"]
+    del existing["events"][0]["matchup_compatibility"]
+    generated = _catalog([_event_input("434455", "b", 5)])
+
+    assert merge_event_catalog(existing, generated) == generated
+
+
+def test_event_publisher_rejects_active_taxonomy_change_for_existing_cohort() -> None:
+    existing = _catalog([_event_input("434455", "a", 5)])
+    generated = _catalog([_event_input("441441", "b", 5)])
+    generated["active_taxonomy"]["taxonomy_sha256"] = "d" * 64
+
+    with pytest.raises(MeleePublicationError, match="active taxonomy"):
+        merge_event_catalog(existing, generated)
 
 
 def test_multi_event_schema_rejects_missing_provenance() -> None:

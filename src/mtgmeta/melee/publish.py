@@ -124,6 +124,83 @@ def _read_object(path: Path) -> tuple[dict[str, Any], bytes]:
     return document, payload
 
 
+def _catalog_events(
+    catalog: Mapping[str, Any], *, label: str
+) -> tuple[list[Mapping[str, Any]], list[str]]:
+    events = catalog.get("events")
+    if not isinstance(events, list) or not events:
+        raise MeleePublicationError(f"{label} catalog has no events")
+    event_ids: list[str] = []
+    for event in events:
+        event_id = event.get("event_id") if isinstance(event, Mapping) else None
+        if not isinstance(event_id, str) or not EVENT_ID_PATTERN.fullmatch(event_id):
+            raise MeleePublicationError(f"{label} catalog has an invalid event")
+        if event_id in event_ids:
+            raise MeleePublicationError(
+                f"{label} catalog has duplicate event {event_id}"
+            )
+        event_ids.append(event_id)
+    return events, event_ids
+
+
+def merge_event_catalog(
+    existing_catalog: Mapping[str, Any],
+    generated_catalog: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Merge one generated event without changing the existing cohort selection."""
+
+    identity_fields = ("document_type", "source", "product", "format")
+    for field in identity_fields:
+        if existing_catalog.get(field) != generated_catalog.get(field):
+            raise MeleePublicationError(
+                f"existing catalog {field} does not match generated catalog"
+            )
+    generated_events, generated_ids = _catalog_events(
+        generated_catalog, label="generated"
+    )
+    if len(generated_events) != 1:
+        raise MeleePublicationError("generated catalog must contain exactly one event")
+    selected_id = generated_ids[0]
+    if generated_catalog.get("default_event_id") != selected_id:
+        raise MeleePublicationError("generated catalog has an invalid default event")
+
+    existing_events, existing_ids = _catalog_events(existing_catalog, label="existing")
+    existing_default = existing_catalog.get("default_event_id")
+    if existing_default not in existing_ids:
+        raise MeleePublicationError("existing catalog has an invalid default event")
+
+    if existing_catalog.get("schema_version") != CATALOG_SCHEMA_VERSION:
+        if existing_ids == [selected_id] and existing_default == selected_id:
+            return dict(generated_catalog)
+        raise MeleePublicationError(
+            "existing catalog requires a separate active-taxonomy migration "
+            "before multi-event growth"
+        )
+    if existing_catalog.get("active_taxonomy") != generated_catalog.get(
+        "active_taxonomy"
+    ):
+        raise MeleePublicationError(
+            "generated event does not match the existing catalog active taxonomy"
+        )
+
+    selected_event = generated_events[0]
+    merged_events: list[Mapping[str, Any]] = []
+    replaced = False
+    for event, event_id in zip(existing_events, existing_ids, strict=True):
+        if event_id == selected_id:
+            merged_events.append(selected_event)
+            replaced = True
+        else:
+            merged_events.append(event)
+    if not replaced:
+        merged_events.append(selected_event)
+
+    merged = dict(generated_catalog)
+    merged["default_event_id"] = existing_default
+    merged["events"] = merged_events
+    return merged
+
+
 def _descriptor(name: str, document: Mapping[str, Any], payload: bytes) -> dict[str, Any]:
     version = document.get("schema_version")
     if not isinstance(version, str) or not version:
@@ -329,6 +406,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             "meta": event_directory / "meta.json",
             "catalog": root / "stats" / args.format_id / "melee" / "index.json",
         }
+        if destinations["catalog"].is_file():
+            existing_catalog, _ = _read_object(destinations["catalog"])
+            publication["catalog"] = merge_event_catalog(
+                existing_catalog,
+                publication["catalog"],
+            )
         reused = None
         if args.execute:
             reused = {
