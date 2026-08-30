@@ -72,3 +72,62 @@ events:
       - "Overall standings points combine Draft and Modern performance."
       - "Players may leave later Swiss pairings after officially locking Top 8."
     notes: "Phase 7 reference event; manual collection is enabled, while recurring workflow integration remains separately controlled."
+
+  - id: "441441"
+    url: "https://melee.gg/Tournament/View/441441"
+    name: "Magic Spotlight: The Hobbit™ Main Event"
+    date:
+      start: "2026-08-29"
+      end: "2026-08-30"
+    format: "modern"
+    series: "spotlight_series"
+    structure: "constructed_day2"
+    enabled: true
+    review_status: "verified"
+    tabletop: true
+    team_event: false
+    mixed_format: false
+    raw_requests:
+      - id: "tournament"
+        resource_type: "tournament"
+        url: "https://melee.gg/Tournament/View/441441"
+        content_type: "html"
+    include:
+      swiss: true
+      playoffs: true
+    phases:
+      - id: "day1_modern"
+        stage: "day1"
+        round_phase: "constructed"
+        game_format: "modern"
+        swiss: true
+        rounds: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      - id: "day2_modern"
+        stage: "day2"
+        round_phase: "constructed"
+        game_format: "modern"
+        swiss: true
+        rounds: [10, 11, 12, 13, 14, 15]
+      - id: "top8_modern"
+        stage: "playoff"
+        round_phase: "playoff"
+        game_format: "modern"
+        swiss: false
+        source_labels: ["Quarterfinals", "Semifinals", "Finals"]
+    advancement:
+      day2_after_round: 9
+      day2_minimum_match_points: 18
+    reviewed_overrides: []
+    statistics:
+      default_match_scope: "all_constructed_swiss"
+      constructed_game_format: "modern"
+      include_playoffs: false
+    source_evidence:
+      - "https://melee.gg/Tournament/View/441441"
+      - "https://magic.gg/news/prepare-for-magic-spotlight-the-hobbit-in-brisbane-and-dallas"
+      - "https://www.magic.gg/news/metagame-mentor-modern-with-the-hobbit"
+    special_handling:
+      - "Rounds 1 through 9 are Day 1 Modern Swiss; rounds 10 through 15 are Day 2 Modern Swiss."
+      - "Players with at least 18 match points after round 9 advance to Day 2."
+      - "Quarterfinals, Semifinals, and Finals remain contextual only and are excluded from primary Modern Swiss statistics."
+    notes: "Owner-accepted qualification evidence supports this entry; collection, retention, generation, workflow dispatch, and publication remain separately authorized operations."
