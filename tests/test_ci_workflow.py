@@ -198,9 +198,17 @@ def test_production_candidate_is_built_once_and_published_with_immutable_evidenc
     build = workflow["jobs"]["build"]
     publish = workflow["jobs"]["publish"]
     assert "baseline" not in workflow["jobs"]
-    assert publish["outputs"] == {
-        "published-commit": "${{ steps.verify.outputs.commit }}"
+    assert set(publish["outputs"]) == {
+        "failure-kind",
+        "observed-master",
+        "published-commit",
+        "recovery-dispatched",
+        "source-commit",
     }
+    assert publish["outputs"]["source-commit"] == "${{ github.sha }}"
+    assert "stale-base" in publish["outputs"]["failure-kind"]
+    assert "publication-base" in publish["outputs"]["observed-master"]
+    assert "stale-base-recovery" in publish["outputs"]["recovery-dispatched"]
     assert "generation-needed" in fetch["outputs"]
     assert "generation-needed" in build["if"]
     assert build["needs"] == "fetch"
@@ -239,6 +247,106 @@ def test_production_candidate_is_built_once_and_published_with_immutable_evidenc
         "validated_output_sha256",
     ):
         assert required in script
+
+
+def test_stale_production_base_restarts_once_without_reusing_candidate():
+    workflow = yaml.load(
+        UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
+    )
+    dispatch_inputs = workflow["on"]["workflow_dispatch"]["inputs"]
+    assert set(dispatch_inputs) == {"stale_base_retry_of"}
+    assert dispatch_inputs["stale_base_retry_of"] == {
+        "description": "Internal parent run ID for one bounded stale-base recovery",
+        "required": "false",
+        "default": "",
+        "type": "string",
+    }
+
+    publish = workflow["jobs"]["publish"]
+    assert publish["permissions"] == {"actions": "write", "contents": "write"}
+    by_name = {step["name"]: step for step in publish["steps"]}
+    names = list(by_name)
+    assert names.index("Check publication base is current") < names.index(
+        "Download immutable validated output"
+    )
+
+    base = by_name["Check publication base is current"]
+    assert base["id"] == "publication-base"
+    for required in (
+        "git ls-remote origin refs/heads/master",
+        'if [ "$REMOTE_MASTER" != "$GITHUB_SHA" ]',
+        'echo "stale=true"',
+        'echo "stale=false"',
+        'echo "observed-master=$REMOTE_MASTER"',
+    ):
+        assert required in base["run"]
+
+    current_base = "steps.publication-base.outputs.stale == 'false'"
+    assert current_base in by_name["Download immutable validated output"]["if"]
+    assert current_base in by_name["Verify and restore validated output"]["if"]
+
+    publish_step = by_name["Commit and push production evidence"]
+    assert current_base in publish_step["if"]
+    for required in (
+        "git push origin HEAD:master",
+        'if [ "$PUSH_STATUS" -ne 0 ]',
+        "git ls-remote origin refs/heads/master",
+        'if [ "$REMOTE_MASTER" != "$GITHUB_SHA" ]',
+        'echo "status=stale"',
+        'echo "status=published"',
+    ):
+        assert required in publish_step["run"]
+    for prohibited in ("git pull", "git rebase", "--force", "validated-output-sha256"):
+        assert prohibited not in by_name["Request one stale-base recovery"]["with"][
+            "script"
+        ]
+
+    recovery = by_name["Request one stale-base recovery"]
+    assert recovery["id"] == "stale-base-recovery"
+    assert "always()" in recovery["if"]
+    assert "inputs.stale_base_retry_of == ''" in recovery["if"]
+    script = recovery["with"]["script"]
+    for required in (
+        'workflow_id: "update.yml"',
+        'ref: "master"',
+        "stale_base_retry_of: String(context.runId)",
+        'core.setOutput("dispatched", "true")',
+    ):
+        assert required in script
+
+    stop = by_name["Stop stale publication"]
+    assert "always()" in stop["if"]
+    assert 'exit 1' in stop["run"]
+    assert "stale-base-recovery" in stop["run"]
+
+    verify = by_name["Verify published master commit and clean workspace"]
+    assert "steps.publish.outputs.status == 'published'" in verify["if"]
+    for required in (
+        "git fetch --no-tags origin master",
+        'git merge-base --is-ancestor "$LOCAL_SHA" "$REMOTE_SHA"',
+        "remains an ancestor of current master",
+    ):
+        assert required in verify["run"]
+
+    notify = workflow["jobs"]["notify"]
+    failed_stage = {step["name"]: step for step in notify["steps"]}[
+        "Identify the failed production stage"
+    ]
+    assert failed_stage["env"]["PUBLISH_FAILURE_KIND"] == (
+        "${{ needs.publish.outputs.failure-kind }}"
+    )
+    issue_script = next(
+        step["with"]["script"]
+        for step in notify["steps"]
+        if step["name"] == "Create or update the stage failure issue"
+    )
+    for required in (
+        "Failure kind",
+        "Started from",
+        "Observed master",
+        "Bounded recovery dispatched",
+    ):
+        assert required in issue_script
 
 
 def test_production_build_orders_landing_screening_before_landing_and_catalog():

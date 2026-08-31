@@ -2793,7 +2793,8 @@ The production workflow uses three validation layers:
 1. a dedicated clean-checkout job that runs only the offline CLI and privacy
    checks needed by the production path before any live fetch starts;
 2. a dynamic, registry-aware candidate snapshot comparison after fetch and generation but before staging;
-3. confirmation that the published remote `master` commit equals the locally created generated-data commit.
+3. confirmation that the locally created generated-data commit was published and
+   remains the current remote `master` commit or its ancestor.
 
 The fetch, build, and publish jobs transfer their inputs and validated output as
 short-lived immutable workflow artifacts. The build job verifies the fetched
@@ -2812,6 +2813,27 @@ match archives, discovery ledgers, and machine-produced
 `landing/review/candidates_<week>.yaml` and
 `landing/review/base_reference_<week>.yaml` may be newly
 created automatically.
+
+Publication remains bound to the workflow's immutable source commit. Before
+restoring the validated output, the publish job compares that source with the
+current remote `master`; it repeats the comparison after a rejected push to
+distinguish a branch race from an authentication or transport failure. A stale
+candidate is never rebased, force-pushed, or restored onto newer code.
+
+The first stale run may dispatch one replacement `update.yml` run on current
+`master`, carrying only the parent run ID. The replacement does not reuse the
+old fetched candidate, baseline, generated output, or validation evidence; it
+passes the complete normal pipeline under its own source commit. A stale
+replacement fails closed without another dispatch. The original run remains a
+failed publish stage, so Pages and weekly readiness stay blocked and the
+deduplicated publish Issue records controlled stale-base evidence without raw
+source or log content.
+
+If the generated-data push succeeds and another commit reaches `master` before
+confirmation, publication remains valid only when the generated-data commit is
+an ancestor of the observed tip. Pages still performs its exact production
+evidence and content comparison against that immutable publication commit;
+diverged history fails closed.
 
 Each requested monthly listing is observed three times and the observations
 are unioned with recorded links. A link does not become invalid merely because
