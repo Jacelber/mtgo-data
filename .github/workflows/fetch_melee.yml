@@ -74,12 +74,12 @@ jobs:
             git fetch --no-tags origin "refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}"
             REMOTE_REF="refs/remotes/origin/${BRANCH}"
             MERGE_BASE="$(git merge-base "$GITHUB_SHA" "$REMOTE_REF")"
-            while IFS=$'\t' read -r STATUS PATH REST; do
+            while IFS=$'\t' read -r STATUS CHANGED_PATH REST; do
               if [[ "$STATUS" == D* || "$STATUS" == R* || -n "$REST" ]]; then
-                echo "Resumed review branch contains a deletion or rename: ${STATUS} ${PATH}" >&2
+                echo "Resumed review branch contains a deletion or rename: ${STATUS} ${CHANGED_PATH}" >&2
                 exit 1
               fi
-              case "$PATH" in
+              case "$CHANGED_PATH" in
                 "data_raw/melee/${EVENT_ID}/"* | \
                 "data/${FORMAT}/melee/events/${EVENT_ID}.json" | \
                 "data/${FORMAT}/melee/classifications/${EVENT_ID}.json" | \
@@ -87,7 +87,7 @@ jobs:
                 "stats/${FORMAT}/melee/index.json" | \
                 "stats/${FORMAT}/melee/events/${EVENT_ID}/"* | \
                 "stats/catalog.json") ;;
-                *) echo "Resumed review branch path is outside the event boundary: ${PATH}" >&2; exit 1 ;;
+                *) echo "Resumed review branch path is outside the event boundary: ${CHANGED_PATH}" >&2; exit 1 ;;
               esac
             done < <(git diff --name-status "$MERGE_BASE" "$REMOTE_REF")
             git checkout -B "$BRANCH" "refs/remotes/origin/${BRANCH}"

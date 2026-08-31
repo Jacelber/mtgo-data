@@ -211,6 +211,10 @@ def test_melee_candidate_checkpoints_retained_evidence_before_derived_work() -> 
     ) < names.index("Classify submitted decks strictly")
 
     resume = by_name["Resume retained event review branch when present"]["run"]
+    assert "read -r STATUS CHANGED_PATH REST" in resume
+    assert 'case "$CHANGED_PATH" in' in resume
+    assert "${CHANGED_PATH}" in resume
+    assert "read -r STATUS PATH REST" not in resume
     for required in (
         'git ls-remote --exit-code --heads origin "refs/heads/${BRANCH}"',
         "git fetch --no-tags origin",
