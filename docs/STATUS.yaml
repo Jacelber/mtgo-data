@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/melee-review-branch-path-shadowing-v1"
+  current_working_branch: "codex/melee-441441-candidate-recovery-retry"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_melee_review_branch_path_shadowing_repair"
+  status: "active_melee_441441_candidate_recovery_retry"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: true
@@ -27,59 +27,73 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "MELEE-REVIEW-BRANCH-PATH-SHADOWING-V1"
-  name: "Prevent the Melee review-branch guard from shadowing the shell command path"
+  id: "MELEE-441441-CANDIDATE-RECOVERY-RETRY"
+  name: "Retry event 441441 candidate recovery after the review-branch shell repair"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-31"
-  base_commit: "365bf91e1739aa646b94a43d5455f46525c7dcc9"
-  branch: "codex/melee-review-branch-path-shadowing-v1"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-review-branch-path-shadowing-v1-20260831-01"
-  objective: "Rename the review-branch changed-file loop variable that overwrites Bash PATH, preserve the existing path allowlist, and add a focused contract regression before any event 441441 retry."
-  artifact_impact: "none"
+  base_commit: "71b49b64bb0edc5a3752da74646d0bba66472c9a"
+  branch: "codex/melee-441441-candidate-recovery-retry"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-candidate-recovery-retry-20260831-01"
+  objective: "Persist the exact one-retry authority, then resume event 441441 from retained checkpoint 63dd814e using the repaired workflow without recollection and stop at candidate data and classification acceptance."
+  artifact_impact: "internal_diagnostics"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - ".github/workflows/fetch_melee.yml"
-    - "tests/test_ci_workflow.py"
     - "docs/STATUS.yaml"
   planned_additions: []
+  candidate_operation:
+    workflow: ".github/workflows/fetch_melee.yml"
+    event_id: "441441"
+    dispatch_ref: "master after the retry-activation merge"
+    required_workflow_base: "71b49b64bb0edc5a3752da74646d0bba66472c9a"
+    retained_branch: "data/melee-441441"
+    retained_checkpoint: "63dd814eeb31aeabc58f20397e8441056df18052"
+    required_source_mode: "retained"
+    allowed_remote_write: "data/melee-441441 only"
+    dispatch_count: 1
   protected_scope:
-    source_or_whitelist_change: "none"
-    data_or_candidate_change: "none"
-    collection_or_recovery_dispatch: "prohibited"
-    workflow_behavior_change: "only rename the local changed-file variable; keep the existing review-branch allowlist, failure conditions, permissions, triggers, and push boundary"
-    schema_statistics_taxonomy_or_public_path_change: "none"
+    whitelist_or_source_scope_change: "none"
+    recollection: "prohibited; canonical normalized input must select the retained snapshot"
+    raw_or_normalized_bytes_change: "none expected; the workflow may merge the retry-activation master commit into the review branch but must preserve retained source bytes"
+    classification_or_taxonomy_change: "none"
+    schema_or_output_version_change: "none"
+    workflow_or_permission_change: "none"
+    generated_candidate_change: "event 441441 review branch only"
+    master_or_publication_change: "the activation commit changes only STATUS; the candidate operation never writes master or deploys Pages"
   invariants:
-    - "The resume step must inspect the same git diff and accept or reject exactly the same changed paths as before."
-    - "No loop variable may overwrite Bash PATH before the resume step finishes using git."
-    - "The workflow remains manual-only and may push only the bounded event review branch."
-    - "No event workflow is dispatched and no retained or generated data is touched during this repair."
+    - "Dispatch fetch_melee.yml exactly once for event 441441 from the retry-activation merge commit on master."
+    - "Resume data/melee-441441 at checkpoint 63dd814e and require source_mode retained; stop if the workflow attempts a new fetch."
+    - "Preserve every retained raw response and the canonical normalized event; do not hand-edit generated output."
+    - "The workflow may push only the event review branch and must not create or merge a pull request or deploy Pages."
+    - "Stop on any failed stage, unexpected path, incompatible checkpoint, blocking quality issue, conflict, invalid deck, or unresolved event semantic."
   prohibited_changes:
-    - "Do not change workflow triggers, permissions, schedules, event path allowlists, push targets, source selection, checkpoint behavior, or candidate semantics."
-    - "Do not change configs, source or generated data, Schemas, taxonomy, statistics, front ends, or public paths."
-    - "Do not dispatch or retry event 441441, recollect an event, create a candidate pull request, or deploy Pages."
+    - "Do not change code, tests, configuration, Schemas, documentation other than docs/STATUS.yaml, workflows, permissions, schedules, taxonomy, front ends, or public paths in the activation commit."
+    - "Do not dispatch before the activation merge, dispatch another event, run more than once, recollect event 441441, force-push, or mutate a remote branch outside the bounded workflow."
+    - "Do not create or merge the candidate PR, publish candidate data to master, deploy Pages, begin P14-02, or begin another task."
+    - "Do not perform remote writes outside the accepted completion path."
   planned_verification:
-    - "First make the focused Melee checkpoint workflow-contract node reject the current PATH-shadowing implementation."
-    - "After the repair, rerun only that exact node plus the live STATUS contract node."
-    - "Run changed-scope repository validation from base 365bf91e, git diff --check, and complete changed-path and diff review."
-    - "Do not run collection, candidate generation, full pytest, browser, MTGO, Pages, or deployment checks."
-  stop_point: "Complete the unchanged accepted repair through one Ready PR and merge, then stop; any event 441441 retry remains separately unauthorized."
+    - "Run only the live STATUS contract node, changed-scope repository validation, git diff --check, and complete activation diff review."
+    - "After activation merge, inspect the exact workflow run once, prove source_mode retained, verify review-branch scope and SHA, and review candidate reconciliations without recalculating successful evidence."
+    - "Do not run local collection, candidate generation, full pytest, browser, MTGO, Pages, or deployment checks."
+  stop_point: "After Owner acceptance, complete the status-only activation through one Ready PR and merge, dispatch exactly one retained-snapshot recovery, inspect the resulting candidate, and stop for Owner candidate acceptance."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-08-31"
-    subject: "The exact three-path local repair for MELEE-REVIEW-BRANCH-PATH-SHADOWING-V1."
+    subject: "The exact MELEE-441441-CANDIDATE-RECOVERY-RETRY activation and one retained-snapshot workflow run for event 441441; candidate publication and deployment remain unauthorized."
 
 current_repository_state:
-  source_master_commit: "365bf91e1739aa646b94a43d5455f46525c7dcc9"
-  previous_task: "MELEE-441441-CANDIDATE-RECOVERY"
-  previous_task_status: "activation_merged_recovery_run_failed_before_source_access"
-  activation_pull_request: 329
-  activation_merge_commit: "365bf91e1739aa646b94a43d5455f46525c7dcc9"
+  source_master_commit: "71b49b64bb0edc5a3752da74646d0bba66472c9a"
+  previous_task: "MELEE-REVIEW-BRANCH-PATH-SHADOWING-V1"
+  previous_task_status: "completed_merged_and_exact_merge_validated"
+  previous_pull_request: 330
+  previous_merge_commit: "71b49b64bb0edc5a3752da74646d0bba66472c9a"
+  previous_merge_validation_run: 33402351619
   failed_melee_candidate_run: 33399754510
-  failure_stage: "Resume retained event review branch when present"
+  failed_run_stage: "Resume retained event review branch when present"
+  failed_run_remote_effect: "none; failed before retained snapshot resolution and branch mutation"
   retained_candidate_branch: "data/melee-441441"
   retained_checkpoint_commit: "63dd814eeb31aeabc58f20397e8441056df18052"
   public_entries:
@@ -90,12 +104,9 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "MELEE-REVIEW-BRANCH-PATH-SHADOWING-V1"
-    status: "owner_accepted_completion_authorized"
-    note: "Complete the unchanged accepted repair through one Ready PR and merge, then stop."
   - id: "MELEE-441441-CANDIDATE-RECOVERY-RETRY"
-    status: "not_authorized"
-    note: "A retry is a separate event operation and begins only after this workflow repair is accepted, published, merged, and explicitly authorized."
+    status: "owner_accepted_completion_authorized"
+    note: "Complete the unchanged status activation through one Ready PR and merge, then dispatch exactly one retained-snapshot recovery."
   - id: "MELEE-441441-CANDIDATE-ACCEPTANCE"
     status: "pending_successful_candidate_evidence"
     note: "Owner data, classification, statistics, and quality review begins only after a successful recovered candidate exists."
@@ -104,18 +115,21 @@ future_task_gates:
     note: "Candidate PR creation, merge, Pages deployment, and live publication require later Owner acceptance of the exact candidate."
   - id: "P14-02"
     status: "planned_not_authorized"
-    note: "Pauper product input does not begin implicitly after this repair."
+    note: "Pauper product input does not begin implicitly after this recovery."
+  - id: "PHASE-15"
+    status: "planned_not_authorized"
+    note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "MELEE-REVIEW-BRANCH-PATH-SHADOWING-V1"
-  name: "Complete the accepted PATH-shadowing repair"
+  id: "MELEE-441441-CANDIDATE-RECOVERY-RETRY"
+  name: "Complete the one-time event 441441 retained-snapshot recovery retry"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Continuous completion applies only to the unchanged accepted three-path repair; event retry remains separately gated."
+  note: "Continuous completion covers the unchanged status activation and one bounded workflow dispatch; candidate publication remains gated."
 
 prohibited_next_actions:
-  - "Do not dispatch or retry event 441441 or mutate its remote review branch during this repair completion."
-  - "Do not recollect event 441441, change its whitelist or retained checkpoint, publish candidate data, deploy Pages, begin P14-02, Phase 15, another event admission, or unrelated repository work."
+  - "Do not dispatch another event or a second recovery run, force-push, or mutate a remote branch outside the bounded workflow."
+  - "Do not recollect event 441441, change its whitelist or retained checkpoint, create or merge the candidate PR, publish candidate data, deploy Pages, begin P14-02, Phase 15, another event admission, or unrelated repository work."
