@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/melee-missing-decklist-coverage-v1"
+  current_working_branch: "codex/melee-441441-production-candidate-activation"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,91 +18,70 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_melee_missing_decklist_contract_owner_accepted"
+  status: "active_melee_441441_production_candidate_activation"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
-  production_changes_allowed: false
+  production_changes_allowed: true
   implementation_authorized: false
   next_phase_id: 15
   next_phase_authorized: false
 
 current_task:
-  id: "MELEE-MISSING-DECKLIST-COVERAGE-V1"
-  name: "Represent unavailable Melee decklists without fabricating Unknown classifications"
+  id: "MELEE-441441-PRODUCTION-CANDIDATE-ACTIVATION"
+  name: "Activate event 441441 production candidate recovery"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-31"
-  base_commit: "0cbf0713ac529b501fd102a40ac2063a7f6cdd1a"
-  branch: "codex/melee-missing-decklist-coverage-v1"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-missing-decklist-coverage-v1-20260831-01"
-  objective: "Keep every normalized participant and trustworthy event-level match fact while separating missing or unavailable decklists from Unknown, excluding unavailable identities from deck-share and matchup denominators, checkpointing retained evidence before derived work, and rejecting undefined Owner-acceptance states before publication routing."
-  artifact_impact: "statistical_json_structure"
+  base_commit: "daa3f0925228a31987dd89e9d847a47cd810fb3e"
+  branch: "codex/melee-441441-production-candidate-activation"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-production-candidate-activation-20260831-02"
+  objective: "Persist the Owner's authorization to resume the event 441441 production-candidate stage, repair the same-task authorization regression fixture exposed by the normal next-task transition, then dispatch exactly one candidate run from the activation merge commit and stop at candidate data and classification acceptance."
+  artifact_impact: "none"
   authorization:
     local_implementation: false
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - ".github/workflows/fetch_melee.yml"
-    - "src/mtgmeta/melee/opportunities.py"
-    - "src/mtgmeta/melee/stats.py"
-    - "src/mtgmeta/melee/matchup.py"
-    - "schemas/melee-opportunity-ledger.schema.json"
-    - "schemas/melee-event-overview.schema.json"
-    - "schemas/melee-event-decks.schema.json"
-    - "schemas/melee-event-matchup.schema.json"
-    - "schemas/melee-event-quality.schema.json"
-    - "tests/test_melee_missing_decklist_contract.py"
-    - "tests/test_ci_workflow.py"
-    - "tests/test_documentation_history.py"
-    - "docs/STATISTICS_SPEC.md"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-  planned_additions:
-    - path: "tests/test_melee_missing_decklist_contract.py"
-      category: "maintained Python regression test"
-      purpose: "Lock participant, submitted-deck, Unknown, unavailable-decklist, event-match, and matchup conservation without using live source data."
+    - "tests/test_documentation_history.py"
+  planned_additions: []
   protected_scope:
-    product_or_statistical_change: "Narrow Melee data-contract correction: public participant coverage remains complete, while deck-share and classification matchup denominators contain only submitted classifiable decklists."
-    generated_or_source_data_change: "none; do not generate, edit, or retain event 441441 or any other event data in this task"
-    source_scope_change: "none; the whitelist and eligible event IDs remain unchanged"
-    workflow_change: "Checkpoint raw plus normalized Melee evidence immediately after retention and reuse that review-branch snapshot on a later candidate continuation."
-    governance_change: "Restrict current_task.owner_acceptance.status to the canonical pending and accepted states and reject every undefined value."
-    permission_change: "none; preserve contents: write and existing bounded event concurrency"
+    product_or_statistical_change: "none"
+    generated_or_source_data_change: "The activation commit changes no data; after it merges, the separately identified candidate operation may perform one complete live collection for event 441441 because no reusable retained snapshot exists."
+    source_scope_change: "none; only the already enabled and verified event 441441 is eligible"
+    workflow_change: "none; use the merged fetch_melee.yml checkpoint and candidate path unchanged"
+    governance_change: "Replace the completed repair state with an exact event 441441 candidate-dispatch contract and make the duplicate-authorization regression explicitly construct equal current and next task IDs."
+    permission_change: "none; preserve the workflow's existing contents: write permission and event-bounded concurrency"
     issue_change: "none"
-    production_dispatch_authorized_after_merge: false
-    production_dispatched: false
+    candidate_dispatch_authorized_after_merge: true
+    candidate_dispatched: false
     remote_write_performed: "none"
   invariants:
-    - "A missing or unavailable decklist is not Unknown; Unknown remains a valid submitted deck that matched no maintained archetype rule."
-    - "Every normalized participant remains represented in the opportunity ledger and per-deck document, including their trustworthy event-level points and result facts."
-    - "Metagame shares use submitted classified-or-Unknown decks as their denominator; unavailable decklists are counted separately and never receive a fabricated archetype identity."
-    - "A classification matchup requires identities for both competitors; otherwise the physical match is retained as a source fact and counted as excluded for decklist_unavailable."
-    - "The workflow may reuse only an immutable raw and normalized snapshot already saved on the exact event review branch; it never pushes directly to master and never force-pushes."
-    - "Owner acceptance uses only pending or accepted; accepted atomically requires commit, remote_publication, and merge authority for the unchanged same-task completion path."
+    - "Dispatch exactly one Melee production candidate run from the activation merge commit with event_id 441441."
+    - "No data/melee-441441 branch or canonical normalized event exists before dispatch, so the run performs one new complete collection and checkpoints the immutable raw snapshot plus normalized event before derived work."
+    - "The workflow may push only data/melee-441441; it never pushes master, opens or merges a pull request, deploys Pages, or force-pushes."
+    - "Missing or unavailable decklists remain unavailable rather than Unknown, and the candidate must expose complete participant and denominator reconciliations for review."
   prohibited_changes:
-    - "Do not change configs/melee_events.yaml, collect or recollect Melee source data, dispatch a workflow, or create generated/public event artifacts."
-    - "Do not change classifiers, taxonomy rules, MTGO behavior, front ends, schedules, workflow permissions, or unrelated repository paths."
-    - "Do not dispatch production, collect or recollect event 441441, deploy outside the merge-triggered publication path, or mutate unrelated remote resources."
+    - "Do not change code other than the one-line tests/test_documentation_history.py fixture repair, configuration, Schemas, documentation other than docs/STATUS.yaml, data, statistics, classifiers, taxonomy, front ends, schedules, or workflow permissions in the activation commit."
+    - "Do not dispatch before the activation merge, dispatch another event, repeat a successful collection, hand-edit candidate output, or write outside the event 441441 review branch."
+    - "Do not create or merge the candidate PR, publish the candidate to master, deploy Pages, begin P14-02, or begin another task."
   planned_verification:
-    - "Run only the new synthetic missing-decklist contract nodes, directly affected fetch_melee workflow contract nodes, and live-status canonical acceptance-state nodes with an external pytest base directory."
-    - "Run ruff and mypy only against the three changed maintained Melee Python modules, validate_schemas.py once, validate_repository.py --changed-from 0cbf0713ac529b501fd102a40ac2063a7f6cdd1a once on the final tree, review the complete diff, and run git diff --check."
-    - "Do not run live fetch, candidate generation, browser, Pages, archetype-rule, full pytest, production, or deployment workflows."
-  stop_point: "Complete the accepted unchanged expanded task through one commit, one Ready pull request, required CI, and merge; stop before event collection, production dispatch, or another task."
+    - "Run the complete tests/test_documentation_history.py module once on the expanded final tree, then changed-scope repository validation, complete diff review, and git diff --check."
+    - "After merge, inspect the exact workflow run, checkpoint commit, candidate commit, branch scope, and generated candidate reconciliations once; do not repeat successful validation."
+    - "Do not run local source collection, browser, Pages, archetype-rule, full pytest, MTGO production, or deployment workflows."
+  stop_point: "Complete this accepted status-only activation through one Ready PR and merge, dispatch exactly one event 441441 candidate run from that merge commit, inspect the resulting review branch and candidate evidence, and stop for Owner candidate acceptance."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-08-31"
-    subject: "The expanded MELEE-MISSING-DECKLIST-COVERAGE-V1 implementation, including rejection of undefined Owner-acceptance states."
+    subject: "The exact MELEE-441441-PRODUCTION-CANDIDATE activation plus the one-line same-task authorization regression-fixture repair, followed by one event 441441 workflow dispatch, live collection, retention, and event-bounded review-branch candidate; candidate publication and deployment remain unauthorized."
 
 current_repository_state:
-  source_master_commit: "0cbf0713ac529b501fd102a40ac2063a7f6cdd1a"
-  previous_task: "GOV-MTGO-INCONSISTENT-EVENT-RESPONSE-RECOVERY"
-  previous_task_status: "completed_merged_production_and_pages_verified"
-  previous_pull_request: 324
-  previous_merge_commit: "931f604"
-  previous_merge_validation_run: 33380825643
-  previous_production_commit: "0cbf0713ac529b501fd102a40ac2063a7f6cdd1a"
-  previous_pages_run: 33383790213
+  source_master_commit: "daa3f0925228a31987dd89e9d847a47cd810fb3e"
+  previous_task: "MELEE-MISSING-DECKLIST-COVERAGE-V1"
+  previous_task_status: "completed_merged_and_exact_merge_validated"
+  previous_pull_request: 326
+  previous_merge_commit: "daa3f0925228a31987dd89e9d847a47cd810fb3e"
+  previous_merge_validation_run: 33390489485
   failed_melee_candidate_run: 33331402773
   public_entries:
     mtgo: "/index.html"
@@ -110,17 +89,23 @@ current_repository_state:
   public_catalog: "/stats/catalog.json"
 
 known_blockers:
-  - id: "MELEE-MISSING-DECKLIST-COVERAGE"
-    status: "owner_accepted_completion_authorized"
-    note: "The expanded immutable subject is Owner-accepted for completion through one Ready pull request, required CI, and merge."
+  - id: "MELEE-441441-INITIAL-SNAPSHOT"
+    status: "no_reusable_snapshot_requires_one_new_collection"
+    note: "Run 33331402773 predates checkpoint-first retention and left no data/melee-441441 branch; the authorized replacement run must collect once, checkpoint immediately, and reuse that branch on any later derived-stage recovery."
 
 future_task_gates:
-  - id: "MELEE-MISSING-DECKLIST-COVERAGE-V1"
+  - id: "MELEE-441441-PRODUCTION-CANDIDATE-ACTIVATION"
     status: "owner_accepted_completion_authorized"
-    note: "Complete the accepted unchanged expanded subject through one Ready pull request, required CI, and merge without another authorization prompt."
+    note: "Complete the exact status-only activation through one Ready pull request and merge, then continue to the already authorized candidate dispatch without another prompt."
   - id: "MELEE-441441-PRODUCTION-CANDIDATE"
-    status: "blocked_pending_expanded_repair_completion"
-    note: "Do not recollect or resume event 441441; complete the expanded repair first, while candidate resumption remains a later separately governed operation."
+    status: "owner_authorized_after_activation_merge"
+    note: "Dispatch exactly once from the activation merge commit, retain and validate only event 441441 on data/melee-441441, then stop for candidate acceptance."
+  - id: "MELEE-441441-CANDIDATE-ACCEPTANCE"
+    status: "pending_candidate_evidence"
+    note: "Owner review begins only after a successful event-bounded candidate exists."
+  - id: "MELEE-441441-PUBLICATION"
+    status: "not_authorized"
+    note: "Candidate PR creation, merge, Pages deployment, and live publication require later Owner acceptance of the exact candidate."
   - id: "P14-02"
     status: "planned_not_authorized"
     note: "Pauper product input does not begin implicitly after this repair."
@@ -129,15 +114,15 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "MELEE-MISSING-DECKLIST-COVERAGE-V1"
-  name: "Represent unavailable Melee decklists without fabricating Unknown classifications"
-  status: "owner_accepted_completion_authorized"
-  local_execution_authorized: false
+  id: "MELEE-441441-PRODUCTION-CANDIDATE"
+  name: "Build event 441441 production candidate"
+  status: "owner_authorized_after_activation_merge"
+  local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
-  merge_authorized: true
-  note: "Complete only the accepted unchanged expanded subject through one Ready pull request, required CI, and merge."
+  merge_authorized: false
+  note: "After the activation merge, dispatch fetch_melee.yml exactly once for event 441441; workflow commits and pushes only the checkpoint and completed candidate to data/melee-441441, then stop for Owner review."
 
 prohibited_next_actions:
-  - "Do not dispatch production, collect or recollect event 441441, deploy outside the merge-triggered publication path, or mutate unrelated remote resources."
-  - "Do not begin P14-02, Phase 15, another event admission, or unrelated repository work."
+  - "Do not dispatch event 441441 before the activation merge; after dispatch, do not repeat a successful collection or mutate the event review branch manually."
+  - "Do not create or merge the candidate PR, publish to master, deploy Pages, begin P14-02, Phase 15, another event admission, or unrelated repository work."
