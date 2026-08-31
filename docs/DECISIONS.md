@@ -7395,3 +7395,60 @@ This decision changes production recovery orchestration only. It does not
 change source inclusion, retained data, generated JSON, statistical meaning,
 classification, Schema, public paths, Pages admission, or manual production
 authorization.
+
+---
+
+# DEC-151 - Recover inconsistent MTGO event-page responses within existing bounds
+
+Status: `Accepted`
+
+## Context
+
+Production run `33376404103` on commit
+`2773152912b3b928769b13bd892ef8ef5d0e937f` received two incompatible
+representations of the same approved Standard event. One lacked the embedded
+decklist marker; a later representation contained event metadata but lacked
+decklists, standings, final ranks, and player count. Because the event was
+outside the two-day publication grace period, the second representation was
+classified as a permanent failure and the existing outer recovery rounds did
+not run. The Owner separately confirmed that the public event page is complete.
+Browser evidence also showed that this event route can resolve to `/decklists`
+while an adjacent event resolves to its complete event page. This indicates an
+inconsistent delivery, routing, or cache representation, not permission to
+accept incomplete tournament data.
+
+## Decision
+
+Require a successful event request to finish on the same origin and path as the
+requested approved event before parsing it. A redirect away from that path is a
+transient source-delivery failure. Keep the first request's ordinary cache
+behavior; on attempts two through five, send `Cache-Control: no-cache` and
+`Pragma: no-cache` so an intermediary may revalidate its representation. Do not
+add cookies, browser automation, query variants, new endpoints, or new event
+scope. Accept and retain only the first payload that passes the existing
+complete event contract.
+
+Keep incomplete events inside the publication grace period deferred as before.
+Outside that grace period, the incomplete representation remains a failure for
+the current operation, but classify it as recoverable source delivery so the
+existing exit-code contract can invoke the existing three bounded workflow
+rounds. A persistently incomplete event still fails closed after those rounds.
+Invalid event contracts, unsafe storage, local I/O errors, and unrelated
+failures remain non-transient.
+
+Retain the five request attempts, 90-second request timeout, 120- and
+300-second outer delays, 45-minute workflow bound, same-SHA checkpoint format,
+workflow permissions, schedules, and failure-Issue behavior. Retain no raw
+response body, cookie, or private header, and report only controlled URL paths
+and counts.
+
+## Consequences
+
+An approved event page whose complete upstream representation is temporarily
+hidden by routing or caching variance can recover without accepting or
+publishing partial data. Persistent source inconsistency still blocks build,
+publication, Pages, and readiness within the existing finite bounds. This
+decision changes no source scope, retained data shape, statistics,
+classification, Schema, public path, front end, workflow permission, or
+production authorization, and it does not authorize commit, remote
+publication, merge, production dispatch, Issue closure, or another task.

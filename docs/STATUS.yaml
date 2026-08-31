@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/mtgo-stale-base-auto-recovery"
-  working_branch_status: "owner_accepted_completion_authorized"
+  current_working_branch: "codex/mtgo-inconsistent-event-response-recovery"
+  working_branch_status: "owner_accepted_completion_and_production_authorized"
   status: "active"
 
 status_document:
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_mtgo_production_governance_repair"
+  status: "active_mtgo_event_response_recovery"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: true
@@ -27,14 +27,14 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-MTGO-STALE-BASE-AUTO-RECOVERY"
-  name: "Bound stale MTGO publication recovery to one fresh master run"
-  status: "owner_accepted_completion_authorized"
+  id: "GOV-MTGO-INCONSISTENT-EVENT-RESPONSE-RECOVERY"
+  name: "Recover inconsistent MTGO event-page responses without accepting incomplete data"
+  status: "owner_accepted_completion_and_production_authorized"
   authorized_on: "2026-08-31"
-  base_commit: "a3a537c4386f2c11370973c04dc3f617568385f3"
-  branch: "codex/mtgo-stale-base-auto-recovery"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/mtgo-stale-base-auto-recovery-20260831-01"
-  objective: "Detect a master advance before or during MTGO publication, refuse the stale candidate, and request at most one complete replacement run on current master without reusing old generated output."
+  base_commit: "2773152912b3b928769b13bd892ef8ef5d0e937f"
+  branch: "codex/mtgo-inconsistent-event-response-recovery"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/mtgo-inconsistent-event-response-recovery-20260831-01"
+  objective: "Treat redirected, missing-marker, and overdue incomplete variants of one approved MTGO event page as bounded recoverable source delivery failures while accepting only one complete validated event payload."
   artifact_impact: "none"
   authorization:
     local_implementation: true
@@ -42,66 +42,68 @@ current_task:
     remote_publication: true
     merge: true
   allowed_paths:
-    - ".github/workflows/update.yml"
+    - "src/mtgmeta/mtgo/fetch.py"
+    - "tests/test_mtgo_fetch_recovery.py"
     - "docs/STATUS.yaml"
     - "docs/DECISIONS.md"
     - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DEVELOPMENT_WORKFLOW.md"
-    - "tests/test_ci_workflow.py"
   planned_additions: []
   protected_scope:
     product_or_statistical_change: "none"
     generated_or_source_data_change: "none"
-    workflow_change: "publish-stage stale-base detection and one bounded fresh-run handoff only"
-    permission_change: "none; reuse the publish job's existing actions: write and contents: write permissions"
-    issue_change: "retain publish-stage deduplication and add controlled stale-base evidence"
+    source_scope_change: "none; only already approved event URLs remain eligible"
+    workflow_change: "none; reuse the existing five request attempts, three recovery rounds, 120/300-second delays, 45-minute timeout, and same-SHA checkpoint"
+    permission_change: "none"
+    issue_change: "none; Issue 323 and Issue 314 remain open"
+    production_dispatch_authorized_after_merge: true
     production_dispatched: false
     remote_write_performed: "none"
   invariants:
-    - "A candidate built from an older master commit is never rebased, force-pushed, or published onto newer code."
-    - "The replacement run starts from current master and repeats normal fetch, generation, candidate validation, Chromium smoke, and publication."
-    - "Only the first stale run requests a replacement; a stale replacement fails closed without a third run."
-    - "Existing transient-source recovery, immutable artifacts, Pages evidence, permissions, schedule, and failure-Issue stage markers remain intact."
+    - "Only a complete payload with the existing valid event contract may be retained or marked fetched."
+    - "An overdue incomplete response blocks the current format operation and enters only the existing bounded source-recovery path; exhausted recovery still blocks build and publication."
+    - "A redirect away from the requested event path or a missing embedded marker is a transient source-delivery response, not an empty event."
+    - "Invalid event contracts, unsafe storage, local I/O failures, data scope, schedules, timeouts, permissions, and checkpoint compatibility remain unchanged."
   prohibited_changes:
     - "Do not modify data, statistics, reports, classifiers, Schemas, source configuration, front ends, public paths, or Melee behavior."
-    - "Do not dispatch production or Pages, close Issue 314, resume event 441441, or begin another task."
+    - "Do not change .github/workflows/update.yml, request counts, timeouts, recovery delays, workflow permissions, or checkpoint format."
+    - "Do not dispatch production before merge, manually dispatch Pages, close Issue 323 or Issue 314, repeat a failed production dispatch, resume event 441441, or begin another task."
   planned_verification:
-    - "Run only the exact MTGO stale-base workflow contract node and directly affected existing workflow/status contract nodes."
-    - "Parse the changed YAML, run validate_repository.py --changed-from a3a537c4386f2c11370973c04dc3f617568385f3 once on the final tree, review the complete diff, and run git diff --check."
-    - "Do not run fetch, candidate generation, browser, Pages, data, rule, Schema, full pytest, or production workflows."
-  stop_point: "Complete the accepted unchanged task through one local commit, one Ready pull request, required CI, and merge verification; then stop without production dispatch, Issue closure, or another task."
+    - "Run only synthetic redirected-response, incomplete-response, later-complete-response, invalid-contract, CLI exit-classification, and directly affected live-status contract nodes."
+    - "Run validate_repository.py --changed-from 2773152912b3b928769b13bd892ef8ef5d0e937f once on the final tree, review the complete diff, and run git diff --check."
+    - "Do not run live fetch, candidate generation, browser, Pages, data, rule, Schema, full pytest, or production workflows."
+  stop_point: "Complete the accepted unchanged five-path repair through one commit, one Ready pull request, required CI, and merge; then dispatch exactly one update.yml production run on the merge commit, verify its exact result and any bound Pages deployment, and stop without Issue closure, repeat dispatch, or another task."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-08-31"
-    subject: "The exact six-path stale-base recovery workflow and governance diff presented after focused local validation."
+    subject: "The exact five-path MTGO inconsistent-event-response recovery diff and focused validation presented for review, followed after merge by exactly one production rerun and result verification."
 
 current_repository_state:
-  source_master_commit: "a3a537c4386f2c11370973c04dc3f617568385f3"
-  previous_task: "MELEE-434455-ACTIVE-TAXONOMY-MIGRATION"
+  source_master_commit: "2773152912b3b928769b13bd892ef8ef5d0e937f"
+  previous_task: "GOV-MTGO-STALE-BASE-AUTO-RECOVERY"
   previous_task_status: "completed_merged"
-  previous_pull_request: 321
-  previous_merge_commit: "a3a537c4386f2c11370973c04dc3f617568385f3"
-  previous_merge_validation_run: 33330557156
-  previous_pages_run: 33330557169
-  latest_failed_mtgo_production_run: 33316435621
-  latest_failed_mtgo_production_issue: 314
+  previous_pull_request: 322
+  previous_merge_commit: "2773152912b3b928769b13bd892ef8ef5d0e937f"
+  previous_merge_validation_run: 33376046005
+  latest_failed_mtgo_production_run: 33376404103
+  latest_failed_mtgo_fetch_issue: 323
+  existing_mtgo_publish_issue: 314
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
 known_blockers:
-  - id: "MTGO-PUBLISH-STALE-BASE"
+  - id: "MTGO-INCONSISTENT-EVENT-RESPONSE"
     status: "owner_accepted_repair_awaiting_merge"
-    note: "Runs 32832640536, 32954197203, and 33316435621 lost the final master push race; the bounded local repair is accepted for commit, Ready pull request, required CI, and merge, while Issue 314 remains open."
+    note: "Run 33376404103 observed a missing-marker response and then an overdue incomplete payload for the same manually complete event page; the focused repair is accepted for completion and one post-merge production rerun, while Issue 323 remains open."
 
 future_task_gates:
-  - id: "GOV-MTGO-STALE-BASE-AUTO-RECOVERY"
+  - id: "GOV-MTGO-INCONSISTENT-EVENT-RESPONSE-RECOVERY"
     status: "owner_accepted_completion_authorized"
-    note: "Complete the accepted unchanged repair through one commit, Ready pull request, required CI, and merge, then stop."
+    note: "Complete the accepted unchanged five-path repair through one commit, Ready pull request, required CI, merge, and the separately authorized post-merge production rerun."
   - id: "MTGO-PRODUCTION-RECOVERY"
-    status: "planned_not_authorized"
-    note: "Do not manually dispatch production or close Issue 314 before this repair is accepted, merged, and separately authorized for live recovery."
+    status: "owner_authorized_after_repair_merge"
+    note: "After the accepted repair merges, dispatch update.yml exactly once on that merge commit and verify the exact workflow and any bound Pages result; do not close Issue 323 or Issue 314 automatically."
   - id: "MELEE-441441-PRODUCTION-CANDIDATE"
     status: "paused_while_governance_repair_active"
     note: "Run 33331402773 stopped at the opportunity ledger; diagnosis or retry is outside this focused task."
@@ -113,15 +115,15 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "GOV-MTGO-STALE-BASE-AUTO-RECOVERY"
-  name: "Bound stale MTGO publication recovery to one fresh master run"
-  status: "owner_accepted_completion_authorized"
+  id: "GOV-MTGO-INCONSISTENT-EVENT-RESPONSE-RECOVERY"
+  name: "Recover inconsistent MTGO event-page responses without accepting incomplete data"
+  status: "owner_accepted_completion_and_production_authorized"
   local_execution_authorized: false
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Complete only the accepted unchanged workflow/governance repair through one commit, Ready pull request, required CI, and merge, then stop."
+  note: "Complete only the accepted unchanged five-path repair through merge, then dispatch and verify exactly one update.yml production recovery run."
 
 prohibited_next_actions:
-  - "Do not dispatch production or Pages, close Issue 314, resume event 441441, begin P14-02, or mutate another product, event, or remote resource."
+  - "Do not dispatch production before the repair merge, manually dispatch Pages, repeat production after a failure, close Issue 323 or Issue 314, or mutate another remote resource outside the accepted completion path."
   - "Do not resume event 441441, begin P14-02, or change product data, statistics, classifiers, Schemas, front ends, or public paths."

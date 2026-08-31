@@ -57,6 +57,8 @@ def download_page(
     attempts: int = 5,
     timeout: int = 90,
     retry_delay: float = 5,
+    expected_url: str | None = None,
+    revalidate_cache: bool = False,
     request_get: Callable[..., Any] | None = None,
     sleep: Callable[[float], None] | None = None,
     on_attempt: Callable[[int, int], None] | None = None,
@@ -67,13 +69,15 @@ def download_page(
     request = request_get or requests.get
     wait = sleep or time.sleep
     last_error: Exception | None = None
+    headers = dict(DEFAULT_HEADERS)
+    if revalidate_cache:
+        headers.update({"Cache-Control": "no-cache", "Pragma": "no-cache"})
     for attempt in range(1, attempts + 1):
         if on_attempt is not None:
             on_attempt(attempt, attempts)
         try:
-            response = request(url, headers=DEFAULT_HEADERS, timeout=timeout)
+            response = request(url, headers=headers, timeout=timeout)
             response.raise_for_status()
-            return response.text
         except (
             Exception
         ) as exc:  # Preserve legacy retry behavior across request adapters.
@@ -82,6 +86,21 @@ def download_page(
                 on_error(attempt, attempts, exc)
             if retry_delay and attempt < attempts:
                 wait(retry_delay)
+            continue
+        response_url = str(getattr(response, "url", None) or url)
+        if expected_url is not None:
+            expected = urlparse(expected_url)
+            observed = urlparse(response_url)
+            if (observed.scheme.lower(), observed.netloc.lower(), observed.path) != (
+                expected.scheme.lower(),
+                expected.netloc.lower(),
+                expected.path,
+            ):
+                raise MTGOPageUnavailableError(
+                    "MTGO event request was redirected away from "
+                    f"{expected.path!r} to {observed.path!r}"
+                )
+        return response.text
     raise MTGOFetchError(
         f"failed to download {url!r} after {attempts} attempts"
     ) from last_error
@@ -285,6 +304,8 @@ def download_event_data(
                 attempts=1,
                 timeout=timeout,
                 retry_delay=0,
+                expected_url=url,
+                revalidate_cache=attempt > 1,
                 request_get=request_get,
                 sleep=wait,
             )
@@ -610,6 +631,7 @@ def fetch_event_months(
                     )
                 else:
                     summary["failed"] += 1
+                    summary["transient_failed"] += 1
                     summary["errors"].append(
                         (
                             event_url,
