@@ -2840,6 +2840,19 @@ are unioned with recorded links. A link does not become invalid merely because
 MTGO later removes it from an older listing: completed links remain skipped and
 unfinished links remain directly retryable from the discovery ledger.
 
+An MTGO event-page response is accepted only when its final origin and path
+still identify the requested event and its embedded payload satisfies the
+existing complete event contract. A redirect away from that event path or a
+response without the embedded decklist marker is a transient source-delivery
+failure. The first request keeps the ordinary cache behavior; later attempts in
+the existing five-attempt loop request cache revalidation. A still-incomplete
+event inside the publication grace period remains deferred. Outside that grace
+period it blocks the current operation but enters the existing three-round
+bounded source-recovery path; a persistently incomplete event still blocks
+build and publication. This recovery retains no response body or cookie,
+expands no URL scope, and changes no request count, timeout, recovery delay, or
+checkpoint contract.
+
 When an MTGO input collection fails after the clean baseline and checkpoint
 manifest are prepared, the read-only fetch job may retain a separate
 `mtgo-fetch-checkpoint` artifact for seven days. It contains only `data/`,
