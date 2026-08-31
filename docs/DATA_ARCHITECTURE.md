@@ -1427,7 +1427,12 @@ present, while independently recording:
 
 Ordinary missing rounds for a participant whose source status is `dropped`
 become zero-point `drop_unplayed` opportunities. A missing round for any
-non-terminal status fails closed instead of being guessed. Mixed-event Day 2
+participant whose source status is `no_show` becomes a zero-point `no_show`
+opportunity: Melee defines that status as terminal for later pairing, while the
+ledger preserves it separately from a voluntary or staff-recorded drop. The
+synthesized rows attribute later unplayed opportunities to that terminal cause;
+they do not claim a new no-show incident in every round. A missing round for
+any non-terminal status fails closed instead of being guessed. Mixed-event Day 2
 membership is established from actual Day 2 Swiss participation, including
 Draft evidence. Pure Day 2 membership uses actual Day 2 Constructed Swiss
 participation. A qualified participant who later drops retains the scheduled

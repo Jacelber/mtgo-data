@@ -516,9 +516,18 @@ per-competitor result and points. A missing round may be synthesized only when
 the participant has a reviewed terminal status:
 
 - `dropped` becomes a zero-point `drop_unplayed` opportunity;
+- `no_show` becomes a zero-point `no_show` opportunity because Melee treats
+  that participant status as terminal for later pairing; synthesized later
+  opportunities inherit the terminal cause and do not assert a new absence in
+  every round;
 - `disqualified` remains an administrative unplayed opportunity and must not
   be relabeled as an ordinary drop;
 - any other missing state fails review rather than being silently counted.
+
+Synthesized `no_show` opportunities remain theoretical zero-point rounds but
+are not completed or officially exempt rounds, played matches, win-rate
+records, or matchup records. The source participant status stays `no_show` and
+must not be rewritten as a voluntary or staff-recorded `dropped` status.
 
 Each row must carry independent point, theoretical-round, effective-round,
 win-rate, and matchup inclusion fields. The handling rules in sections
