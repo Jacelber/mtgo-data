@@ -312,6 +312,67 @@ def test_deck_share_and_matchup_use_only_available_classification_identities() -
     assert matchup_scope["excluded_match_counts"]["decklist_unavailable"] == 2
 
 
+def test_no_show_after_played_round_is_a_terminal_status() -> None:
+    event = _event()
+    for participant in event["participants"]:
+        participant["status"] = "no_show"
+    event["matches"] = event["matches"][:1]
+
+    ledger = build_opportunity_ledger(
+        event,
+        _classification(),
+        event_path="data/modern/melee/events/999001.json",
+        event_sha256=EVENT_SHA256,
+        classification_path="data/modern/melee/classifications/999001.json",
+        classification_sha256=CLASSIFICATION_SHA256,
+    )
+
+    missing_round = [
+        item for item in ledger["opportunities"] if item["round_id"] == ROUND_2_ID
+    ]
+    assert len(missing_round) == 2
+    assert all(item["participant_status"] == "no_show" for item in missing_round)
+    assert all(item["result_type"] == "no_show" for item in missing_round)
+    assert all(item["source_played"] is False for item in missing_round)
+    assert all(item["points_included"] is True for item in missing_round)
+    assert all(item["constructed_points"] == 0 for item in missing_round)
+    assert all(item["theoretical_round"] is True for item in missing_round)
+    assert all(item["effective_theoretical_round"] is True for item in missing_round)
+    assert all(item["win_rate_included"] is False for item in missing_round)
+    assert all(item["matchup_included"] is False for item in missing_round)
+    assert all(item["exclusion_reasons"] == ["no_show"] for item in missing_round)
+    assert ledger["scope_summaries"]["all_constructed"]["result_counts"] == {
+        "no_show": 2,
+        "played_loss": 1,
+        "played_win": 1,
+    }
+
+    statistics = build_event_statistics(
+        event,
+        _classification(),
+        ledger,
+        load_rule_set(ROOT / "my_archetypes" / "modern.yaml"),
+        event_path="data/modern/melee/events/999001.json",
+        event_sha256=EVENT_SHA256,
+        classification_path="data/modern/melee/classifications/999001.json",
+        classification_sha256=CLASSIFICATION_SHA256,
+        opportunity_path="data/modern/melee/opportunities/999001.json",
+        opportunity_sha256=OPPORTUNITY_SHA256,
+        taxonomy_path="my_archetypes/modern.yaml",
+        taxonomy_sha256=TAXONOMY_SHA256,
+    )
+    assert statistics["quality"]["counts"]["no_show_opportunities"] == 2
+    assert statistics["quality"]["counts"]["drop_player_count"] == 0
+    assert statistics["quality"]["counts"]["drop_unplayed_rounds"] == 0
+    assert all(
+        deck["scopes"]["all_constructed"][
+            "completed_or_officially_exempt_rounds"
+        ]
+        == 1
+        for deck in statistics["decks"]["decks"]
+    )
+
+
 def test_new_documents_validate_against_public_schemas() -> None:
     ledger, statistics, matchup = _documents()
     schemas, registry = load_schemas(ROOT / "schemas")
