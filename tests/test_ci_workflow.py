@@ -122,15 +122,16 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
 
 
 def test_production_repository_validation_is_explicitly_full():
-    workflow = yaml.load(
-        UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
-    )
-    step = next(
-        step
-        for step in workflow["jobs"]["build"]["steps"]
-        if step["name"] == "Validate repository files and references"
-    )
-    assert step["run"] == "python -B validate_repository.py --full"
+    for path in PRODUCTION_WORKFLOWS:
+        workflow = yaml.load(path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+        commands = [
+            line.strip()
+            for job in workflow["jobs"].values()
+            for step in job.get("steps", [])
+            for line in step.get("run", "").splitlines()
+            if "validate_repository.py" in line
+        ]
+        assert commands == ["python -B validate_repository.py --full"], path
 
 
 def test_pr_workflow_contains_no_long_or_repeated_validation():

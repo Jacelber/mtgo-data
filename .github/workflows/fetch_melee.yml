@@ -186,7 +186,7 @@ jobs:
       - name: Validate repository, rules, and public Schemas
         shell: bash
         run: |
-          python -B validate_repository.py
+          python -B validate_repository.py --full
           python -B validate_rules.py "my_archetypes/${FORMAT}.yaml"
           python -B validate_schemas.py
 
