@@ -1408,6 +1408,14 @@ Mixed and pure Day 2 events record the starting field and an independently
 evidenced Day 2 population. A single-stage event records every starter without
 inventing Day 1, Day 2, or a cut population.
 
+The classification overlay continues to contain only submitted decklists in
+the event's Constructed format. The ledger covers the larger participant set:
+participants whose normalized decklist is explicitly `missing` or
+`unavailable` receive a ledger classification status of `unavailable` with no
+archetype or subtype identity. Any other mismatch between submitted decklists
+and classification records fails closed. This preserves participant and match
+facts without fabricating an Unknown classification.
+
 Each opportunity preserves the source match and official match points when
 present, while independently recording:
 
@@ -1468,6 +1476,14 @@ documents as follows:
 - `constructed_single_stage` emits only `all_constructed` and calculates its
   high-score population and `high_score_conversion` from each participant's
   effective theoretical rounds.
+
+Statistics Schema `1.1.0` keeps the complete participant count in every scope,
+uses only classified plus explicit Unknown submitted decks as the
+metagame-share denominator, and reports unavailable decklists separately.
+Event-level points and result facts remain in the opportunity totals. The
+matchup document retains its compatible `1.0.0` matrix contract, adds the
+optional `decklist_unavailable` exclusion count, and admits a physical match
+only when both competitors have deck identities.
 
 Pure-event documents declare their primary `advancement_metric`. Their deck
 records mark overall standings points as Constructed-only context, while the
@@ -1609,11 +1625,18 @@ deletions, retained-raw mutation, another event, another format, and every
 MTGO path.
 
 The manual Melee workflow is separate from `update.yml`. It starts only through
-`workflow_dispatch`. An event with canonical normalized input reuses the exact
-immutable snapshot recorded by that input; only a new event without canonical
-input performs a complete live fetch. The workflow runs the remaining approved
-event sequence and pushes changed data only to `data/melee-<event_id>` for
-later review. It cannot push
+`workflow_dispatch`. Before source resolution it resumes an existing
+`data/melee-<event_id>` review branch when present and merges the dispatch's
+exact `master` commit without rebasing or force-pushing. An event with canonical
+normalized input on either that branch or `master` reuses the exact immutable
+snapshot recorded by that input; only a new event without canonical input
+performs a complete live fetch. Immediately after successful retention, the
+workflow commits and verifies a branch checkpoint containing only the event's
+raw snapshot and canonical normalized event. Derived classification,
+opportunity, statistics, and catalog work begins after that checkpoint, so a
+later-stage failure cannot discard the source evidence or require recollection.
+The workflow pushes changed data only to `data/melee-<event_id>` for later
+review. It cannot push
 `master`, create a pull request, merge, or run on a schedule. P7-08 owns the
 first authorized real workflow execution.
 

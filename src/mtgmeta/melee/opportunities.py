@@ -14,7 +14,7 @@ import tempfile
 from typing import Any, Mapping, Sequence
 
 
-OPPORTUNITY_LEDGER_SCHEMA_VERSION = "1.0.0"
+OPPORTUNITY_LEDGER_SCHEMA_VERSION = "1.1.0"
 FORMAT_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
 POINT_RESULT_TYPES = frozenset(
@@ -97,6 +97,16 @@ def _classification_summary(record: Mapping[str, Any]) -> dict[str, Any]:
         )
     return {
         "status": "unknown",
+        "archetype_id": None,
+        "archetype_name": None,
+        "subtype_id": None,
+        "subtype_name": None,
+    }
+
+
+def _unavailable_classification_summary() -> dict[str, Any]:
+    return {
+        "status": "unavailable",
         "archetype_id": None,
         "archetype_name": None,
         "subtype_id": None,
@@ -356,6 +366,11 @@ def build_opportunity_ledger(
     participants = _objects_by_id(
         event.get("participants"), field="id", label="event.participants"
     )
+    decklists = _objects_by_id(
+        event.get("decklists"),
+        field="participant_id",
+        label="event.decklists",
+    )
     rounds = _objects_by_id(event.get("rounds"), field="id", label="event.rounds")
     matches = _objects_by_id(event.get("matches"), field="id", label="event.matches")
     classification_records = _objects_by_id(
@@ -363,9 +378,29 @@ def build_opportunity_ledger(
         field="participant_id",
         label="classification.records",
     )
-    if set(classification_records) != set(participants):
+    if set(decklists) != set(participants):
         raise MeleeOpportunityError(
-            "classification records must cover every event participant exactly once"
+            "decklists must cover every event participant exactly once"
+        )
+    classifiable_participants = {
+        participant_id
+        for participant_id, decklist in decklists.items()
+        if decklist.get("status") == "submitted"
+        and decklist.get("game_format") == format_id
+    }
+    unavailable_participants = set(participants) - classifiable_participants
+    invalid_unavailable = {
+        participant_id
+        for participant_id in unavailable_participants
+        if decklists[participant_id].get("status") not in {"missing", "unavailable"}
+    }
+    if invalid_unavailable:
+        raise MeleeOpportunityError(
+            "non-classifiable decklists must be explicitly missing or unavailable"
+        )
+    if set(classification_records) != classifiable_participants:
+        raise MeleeOpportunityError(
+            "classification records must cover every submitted format deck exactly once"
         )
 
     constructed_rounds = sorted(
@@ -488,8 +523,10 @@ def build_opportunity_ledger(
                     event_structure != "constructed_single_stage"
                 ),
                 "day2_participant": participant_id in day2_participants,
-                "classification": _classification_summary(
-                    classification_records[participant_id]
+                "classification": (
+                    _classification_summary(classification_records[participant_id])
+                    if participant_id in classification_records
+                    else _unavailable_classification_summary()
                 ),
             }
         )

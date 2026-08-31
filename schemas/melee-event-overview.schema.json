@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-overview.schema.json",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "title": "Melee per-event overview statistics",
   "type": "object",
   "additionalProperties": false,
@@ -20,7 +20,7 @@
     "warnings"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
     "document_type": {"const": "overview"},
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
@@ -136,6 +136,29 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {"schema_version": {"const": "1.1.0"}},
+        "required": ["schema_version"]
+      },
+      "then": {
+        "properties": {
+          "scopes": {
+            "properties": {
+              "day1": {
+                "required": ["submitted_deck_count", "unavailable_deck_count"]
+              },
+              "day2": {
+                "required": ["submitted_deck_count", "unavailable_deck_count"]
+              },
+              "all_constructed": {
+                "required": ["submitted_deck_count", "unavailable_deck_count"]
+              }
+            }
+          }
+        }
+      }
     }
   ],
   "$defs": {
@@ -170,8 +193,10 @@
         },
         "selection_bias_warning": {"type": "boolean"},
         "participant_count": {"type": "integer", "minimum": 0},
+        "submitted_deck_count": {"type": "integer", "minimum": 0},
         "known_deck_count": {"type": "integer", "minimum": 0},
         "unknown_deck_count": {"type": "integer", "minimum": 0},
+        "unavailable_deck_count": {"type": "integer", "minimum": 0},
         "scheduled_round_count": {"type": "integer", "minimum": 0},
         "theoretical_rounds": {"type": "integer", "minimum": 0},
         "effective_theoretical_rounds": {"type": "integer", "minimum": 0},

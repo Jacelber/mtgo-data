@@ -43,6 +43,7 @@ EXCLUSION_KEYS = (
     "awarded_win_top8_lock",
     "administrative_result",
     "disqualified_participant",
+    "decklist_unavailable",
     "unknown",
 )
 
@@ -111,15 +112,16 @@ def _hierarchy_from_overview(
             leaves.append(leaf)
             continue
 
-        parent_id = row.get("archetype_id")
+        raw_parent_id = row.get("archetype_id")
         parent_name = row.get("archetype_name")
         subtypes = row.get("subtypes")
         if (
-            not isinstance(parent_id, str)
+            not isinstance(raw_parent_id, str)
             or not isinstance(parent_name, str)
             or not isinstance(subtypes, list)
         ):
             raise MeleeMatchupError(f"overview archetype row {index} is invalid")
+        parent_id = raw_parent_id
         subtype_ids: list[str] = []
         for subtype in subtypes:
             if not isinstance(subtype, Mapping):
@@ -211,6 +213,7 @@ def _participant_leaf_ids(
     if not isinstance(participants, list):
         raise MeleeMatchupError("ledger.participants must be a list")
     identities: dict[str, str] = {}
+    seen_participants: set[str] = set()
     for index, participant in enumerate(participants):
         if not isinstance(participant, Mapping):
             raise MeleeMatchupError(f"ledger participant {index} is invalid")
@@ -220,8 +223,15 @@ def _participant_leaf_ids(
             classification, Mapping
         ):
             raise MeleeMatchupError(f"ledger participant {index} is invalid")
+        if participant_id in seen_participants:
+            raise MeleeMatchupError(
+                f"ledger contains duplicate participant {participant_id}"
+            )
+        seen_participants.add(participant_id)
         if classification.get("status") == "unknown":
             leaf_id = "unknown"
+        elif classification.get("status") == "unavailable":
+            continue
         else:
             archetype_id = classification.get("archetype_id")
             subtype_id = classification.get("subtype_id")
@@ -237,10 +247,6 @@ def _participant_leaf_ids(
         if leaf_id not in leaf_to_parent:
             raise MeleeMatchupError(
                 f"ledger participant {participant_id} uses unknown leaf {leaf_id}"
-            )
-        if participant_id in identities:
-            raise MeleeMatchupError(
-                f"ledger contains duplicate participant {participant_id}"
             )
         identities[participant_id] = leaf_id
     return identities
@@ -540,6 +546,8 @@ def _scope_document(
         pair = _eligible_pair(match_id, rows)
         if pair is None:
             exclusions[_exclusion_category(rows)] += 1
+        elif any(str(row["participant_id"]) not in participant_leaf for row in pair):
+            exclusions["decklist_unavailable"] += 1
         else:
             pairs.append(pair)
 
@@ -552,7 +560,8 @@ def _scope_document(
         raise MeleeMatchupError(
             f"{scope_id} source matches do not reconcile with ledger summary"
         )
-    if len(pairs) != summary.get("matchup_match_count"):
+    unavailable_match_count = exclusions["decklist_unavailable"]
+    if len(pairs) + unavailable_match_count != summary.get("matchup_match_count"):
         raise MeleeMatchupError(
             f"{scope_id} included matches do not reconcile with ledger summary"
         )

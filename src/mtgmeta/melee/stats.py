@@ -19,7 +19,7 @@ from ..consumer import identity_display_name, literal_match_record
 from ..rules import RuleSet
 
 
-EVENT_STATISTICS_SCHEMA_VERSION = "1.0.0"
+EVENT_STATISTICS_SCHEMA_VERSION = "1.1.0"
 FORMAT_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
 SCOPE_ORDER = ("day1", "day2", "all_constructed")
@@ -163,6 +163,12 @@ def _identity_keys(
             parents[participant_id] = ("unknown",)
             leaves[participant_id] = ("unknown",)
             continue
+        if classification.get("status") == "unavailable":
+            continue
+        if classification.get("status") != "classified":
+            raise MeleeStatisticsError(
+                f"ledger participant {participant_id} has invalid classification status"
+            )
         archetype_id = classification.get("archetype_id")
         subtype_id = classification.get("subtype_id")
         if not isinstance(archetype_id, str):
@@ -506,13 +512,22 @@ def _validate_inputs(
     for label, values in (
         ("standings", standings),
         ("decklists", decklists),
-        ("classifications", classifications),
         ("ledger participants", ledger_participants),
     ):
         if set(values) != participant_ids:
             raise MeleeStatisticsError(
                 f"{label} must cover every event participant exactly once"
             )
+    classifiable_participants = {
+        participant_id
+        for participant_id, decklist in decklists.items()
+        if decklist.get("status") == "submitted"
+        and decklist.get("game_format") == format_id
+    }
+    if set(classifications) != classifiable_participants:
+        raise MeleeStatisticsError(
+            "classifications must cover every submitted format deck exactly once"
+        )
     if not isinstance(ledger.get("opportunities"), list):
         raise MeleeStatisticsError("ledger.opportunities must be a list")
     if any(
@@ -578,8 +593,8 @@ def _scope_documents(
     parent_definitions = {item.id: item for item in taxonomy.archetypes}
     participant_ids_by_parent: dict[tuple[str, ...], set[str]] = {}
     participant_ids_by_leaf: dict[tuple[str, ...], set[str]] = {}
-    for participant_id in participant_documents:
-        participant_ids_by_parent.setdefault(parents[participant_id], set()).add(
+    for participant_id, parent_identity in parents.items():
+        participant_ids_by_parent.setdefault(parent_identity, set()).add(
             participant_id
         )
         participant_ids_by_leaf.setdefault(leaves[participant_id], set()).add(
@@ -589,6 +604,7 @@ def _scope_documents(
     scopes: dict[str, Any] = {}
     for scope in scope_order:
         population = _scope_population(participant_documents, scope)
+        submitted_population = population & set(parents)
         scope_opportunities = [
             item
             for item in opportunities
@@ -600,7 +616,7 @@ def _scope_documents(
                 for item in scope_opportunities
                 if item["participant_id"] == participant_id
             ]
-            for participant_id in population
+            for participant_id in submitted_population
         }
         total_high_score: int | None = None
         if _high_score_available(event_structure, scope):
@@ -644,7 +660,7 @@ def _scope_documents(
                             participant_ids=participant_ids_by_leaf.get(
                                 leaf_key, set()
                             ),
-                            scope_population=population,
+                            scope_population=submitted_population,
                             scope_opportunities=scope_opportunities,
                             scope=scope,
                             event_structure=event_structure,
@@ -662,7 +678,7 @@ def _scope_documents(
                 "expandable": len(parent.subtypes) >= 2,
                 **_group_metrics(
                     participant_ids=participant_ids_by_parent[parent_key],
-                    scope_population=population,
+                    scope_population=submitted_population,
                     scope_opportunities=scope_opportunities,
                     scope=scope,
                     event_structure=event_structure,
@@ -714,7 +730,7 @@ def _scope_documents(
                     "expandable": False,
                     **_group_metrics(
                         participant_ids=participant_ids_by_parent[unknown_key],
-                        scope_population=population,
+                        scope_population=submitted_population,
                         scope_opportunities=scope_opportunities,
                         scope=scope,
                         event_structure=event_structure,
@@ -725,7 +741,7 @@ def _scope_documents(
                     "subtypes": [],
                 }
             )
-        if sum(row["deck_count"] for row in rows) != len(population):
+        if sum(row["deck_count"] for row in rows) != len(submitted_population):
             raise MeleeStatisticsError(f"{scope} archetype deck counts do not conserve")
 
         scope_summary = ledger["scope_summaries"][scope]
@@ -743,6 +759,7 @@ def _scope_documents(
                 and scope in {"day2", "all_constructed"}
             ),
             "participant_count": len(population),
+            "submitted_deck_count": len(submitted_population),
             "known_deck_count": sum(
                 row["deck_count"]
                 for row in rows
@@ -753,6 +770,7 @@ def _scope_documents(
                 for row in rows
                 if row["classification_status"] == "unknown"
             ),
+            "unavailable_deck_count": len(population - submitted_population),
             "scheduled_round_count": scope_summary["scheduled_round_count"],
             "theoretical_rounds": scope_summary["theoretical_rounds"],
             "effective_theoretical_rounds": scope_summary[
@@ -941,7 +959,12 @@ def _quality_document(
         },
         {
             "id": "classification_coverage",
-            "passed": classification["summary"]["total_records"] == len(participants),
+            "passed": classification["summary"]["total_records"]
+            == sum(
+                item["status"] == "submitted"
+                and item["game_format"] == ledger["format"]
+                for item in decklists.values()
+            ),
         },
     ]
     if event_structure == "constructed_single_stage":
@@ -1012,6 +1035,22 @@ def _quality_document(
                 "severity": "warning",
                 "count": classification["summary"]["unknown"],
                 "message": "Valid submitted decks remain explicitly Unknown.",
+            }
+        )
+    unavailable_decklists = sum(
+        item["status"] in {"missing", "unavailable"}
+        for item in decklists.values()
+    )
+    if unavailable_decklists:
+        issues.append(
+            {
+                "code": "missing_or_unavailable_decklists",
+                "severity": "warning",
+                "count": unavailable_decklists,
+                "message": (
+                    "Participants and event results are retained, but unavailable "
+                    "decklists are excluded from deck-share and matchup identities."
+                ),
             }
         )
     if disqualified_ids:
@@ -1195,7 +1234,7 @@ def build_event_overview_and_decks(
         if event_structure == "mixed"
         else []
     )
-    overview = {
+    overview: dict[str, Any] = {
         "schema_version": EVENT_STATISTICS_SCHEMA_VERSION,
         "document_type": "overview",
         "source": "melee",
