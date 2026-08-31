@@ -123,6 +123,11 @@ A missing or unusable decklist is not automatically the same as an `Unknown` arc
 - invalid decklist;
 - excluded player.
 
+For Melee event statistics, the opportunity ledger and per-deck audit output
+still retain the participant with classification status `unavailable`. This
+status carries no archetype or subtype identity. It is not a classification
+overlay record and must not increase the `Unknown` count.
+
 ### 3.2 Archetype
 
 An archetype is identified by a stable machine-readable archetype ID.
@@ -1437,9 +1442,13 @@ files remain available temporarily as compatibility outputs.
 The event-level Melee matchup document uses the scope IDs `day1`, `day2`, and
 `all_constructed`, with `all_constructed` as the default. Only complete
 physical matches for which both opportunity-ledger rows have
-`matchup_included: true` enter a matrix. Each included physical match produces
-exactly two directed observations. A one-sided inclusion, non-reciprocal
-opponent reference, or non-inverse result is a blocking error.
+`matchup_included: true` and both participants have a classified or explicit
+Unknown deck identity enter a matrix. A source-eligible match with a missing or
+unavailable decklist on either side remains a trustworthy event-level match but
+is excluded from the classification matchup matrix as
+`decklist_unavailable`. Each included physical match produces exactly two
+directed observations. A one-sided inclusion, non-reciprocal opponent
+reference, or non-inverse result is a blocking error.
 
 The canonical matrix level is the complete leaf set derived from the P7-05
 event hierarchy. A leaf is a maintained subtype for a subtype-defining parent,
@@ -1465,8 +1474,9 @@ meaning and source separation.
 
 Excluded physical matches remain counted by reviewed reason for each scope:
 bye, intentional draw, no-show, verified Top 8 lock award, administrative
-result, disqualified participant, or unknown. Draft, playoffs, and ordinary
-unplayed scheduled opportunities never become source matchup matches.
+result, disqualified participant, unavailable decklist, or unknown. Draft,
+playoffs, and ordinary unplayed scheduled opportunities never become source
+matchup matches.
 
 ### 11.10 Optional mainstream matchup projection
 
@@ -1578,6 +1588,20 @@ TotalValidInitialDecks
 The denominator includes valid classified decks and valid `Unknown` decks unless a generated field explicitly states otherwise.
 
 Missing or invalid decklists must be reported separately.
+
+For Melee, each scope therefore publishes the complete `participant_count`,
+the `submitted_deck_count` used as the metagame-share denominator, and the
+separate `unavailable_deck_count`. The following conservation rules apply:
+
+```text
+submitted_deck_count = known_deck_count + unknown_deck_count
+participant_count = submitted_deck_count + unavailable_deck_count
+```
+
+Official points and played-result facts for an unavailable participant remain
+in event-level opportunity totals. A known or Unknown deck may retain its own
+played record against that participant, but the two-sided archetype matchup
+matrix excludes the physical match because the opponent has no deck identity.
 
 ### 13.2 Day 2 metagame share
 

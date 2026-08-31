@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/mtgo-inconsistent-event-response-recovery"
-  working_branch_status: "owner_accepted_completion_and_production_authorized"
+  current_working_branch: "codex/melee-missing-decklist-coverage-v1"
+  working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
@@ -18,112 +18,126 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_mtgo_event_response_recovery"
+  status: "active_melee_missing_decklist_contract_owner_accepted"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
-  production_changes_allowed: true
-  implementation_authorized: true
+  production_changes_allowed: false
+  implementation_authorized: false
   next_phase_id: 15
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-MTGO-INCONSISTENT-EVENT-RESPONSE-RECOVERY"
-  name: "Recover inconsistent MTGO event-page responses without accepting incomplete data"
-  status: "owner_accepted_completion_and_production_authorized"
+  id: "MELEE-MISSING-DECKLIST-COVERAGE-V1"
+  name: "Represent unavailable Melee decklists without fabricating Unknown classifications"
+  status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-31"
-  base_commit: "2773152912b3b928769b13bd892ef8ef5d0e937f"
-  branch: "codex/mtgo-inconsistent-event-response-recovery"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/mtgo-inconsistent-event-response-recovery-20260831-01"
-  objective: "Treat redirected, missing-marker, and overdue incomplete variants of one approved MTGO event page as bounded recoverable source delivery failures while accepting only one complete validated event payload."
-  artifact_impact: "none"
+  base_commit: "0cbf0713ac529b501fd102a40ac2063a7f6cdd1a"
+  branch: "codex/melee-missing-decklist-coverage-v1"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-missing-decklist-coverage-v1-20260831-01"
+  objective: "Keep every normalized participant and trustworthy event-level match fact while separating missing or unavailable decklists from Unknown, excluding unavailable identities from deck-share and matchup denominators, checkpointing retained evidence before derived work, and rejecting undefined Owner-acceptance states before publication routing."
+  artifact_impact: "statistical_json_structure"
   authorization:
-    local_implementation: true
+    local_implementation: false
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "src/mtgmeta/mtgo/fetch.py"
-    - "tests/test_mtgo_fetch_recovery.py"
-    - "docs/STATUS.yaml"
-    - "docs/DECISIONS.md"
+    - ".github/workflows/fetch_melee.yml"
+    - "src/mtgmeta/melee/opportunities.py"
+    - "src/mtgmeta/melee/stats.py"
+    - "src/mtgmeta/melee/matchup.py"
+    - "schemas/melee-opportunity-ledger.schema.json"
+    - "schemas/melee-event-overview.schema.json"
+    - "schemas/melee-event-decks.schema.json"
+    - "schemas/melee-event-matchup.schema.json"
+    - "schemas/melee-event-quality.schema.json"
+    - "tests/test_melee_missing_decklist_contract.py"
+    - "tests/test_ci_workflow.py"
+    - "tests/test_documentation_history.py"
+    - "docs/STATISTICS_SPEC.md"
     - "docs/DATA_ARCHITECTURE.md"
-  planned_additions: []
+    - "docs/DECISIONS.md"
+    - "docs/STATUS.yaml"
+  planned_additions:
+    - path: "tests/test_melee_missing_decklist_contract.py"
+      category: "maintained Python regression test"
+      purpose: "Lock participant, submitted-deck, Unknown, unavailable-decklist, event-match, and matchup conservation without using live source data."
   protected_scope:
-    product_or_statistical_change: "none"
-    generated_or_source_data_change: "none"
-    source_scope_change: "none; only already approved event URLs remain eligible"
-    workflow_change: "none; reuse the existing five request attempts, three recovery rounds, 120/300-second delays, 45-minute timeout, and same-SHA checkpoint"
-    permission_change: "none"
-    issue_change: "none; Issue 323 and Issue 314 remain open"
-    production_dispatch_authorized_after_merge: true
+    product_or_statistical_change: "Narrow Melee data-contract correction: public participant coverage remains complete, while deck-share and classification matchup denominators contain only submitted classifiable decklists."
+    generated_or_source_data_change: "none; do not generate, edit, or retain event 441441 or any other event data in this task"
+    source_scope_change: "none; the whitelist and eligible event IDs remain unchanged"
+    workflow_change: "Checkpoint raw plus normalized Melee evidence immediately after retention and reuse that review-branch snapshot on a later candidate continuation."
+    governance_change: "Restrict current_task.owner_acceptance.status to the canonical pending and accepted states and reject every undefined value."
+    permission_change: "none; preserve contents: write and existing bounded event concurrency"
+    issue_change: "none"
+    production_dispatch_authorized_after_merge: false
     production_dispatched: false
     remote_write_performed: "none"
   invariants:
-    - "Only a complete payload with the existing valid event contract may be retained or marked fetched."
-    - "An overdue incomplete response blocks the current format operation and enters only the existing bounded source-recovery path; exhausted recovery still blocks build and publication."
-    - "A redirect away from the requested event path or a missing embedded marker is a transient source-delivery response, not an empty event."
-    - "Invalid event contracts, unsafe storage, local I/O failures, data scope, schedules, timeouts, permissions, and checkpoint compatibility remain unchanged."
+    - "A missing or unavailable decklist is not Unknown; Unknown remains a valid submitted deck that matched no maintained archetype rule."
+    - "Every normalized participant remains represented in the opportunity ledger and per-deck document, including their trustworthy event-level points and result facts."
+    - "Metagame shares use submitted classified-or-Unknown decks as their denominator; unavailable decklists are counted separately and never receive a fabricated archetype identity."
+    - "A classification matchup requires identities for both competitors; otherwise the physical match is retained as a source fact and counted as excluded for decklist_unavailable."
+    - "The workflow may reuse only an immutable raw and normalized snapshot already saved on the exact event review branch; it never pushes directly to master and never force-pushes."
+    - "Owner acceptance uses only pending or accepted; accepted atomically requires commit, remote_publication, and merge authority for the unchanged same-task completion path."
   prohibited_changes:
-    - "Do not modify data, statistics, reports, classifiers, Schemas, source configuration, front ends, public paths, or Melee behavior."
-    - "Do not change .github/workflows/update.yml, request counts, timeouts, recovery delays, workflow permissions, or checkpoint format."
-    - "Do not dispatch production before merge, manually dispatch Pages, close Issue 323 or Issue 314, repeat a failed production dispatch, resume event 441441, or begin another task."
+    - "Do not change configs/melee_events.yaml, collect or recollect Melee source data, dispatch a workflow, or create generated/public event artifacts."
+    - "Do not change classifiers, taxonomy rules, MTGO behavior, front ends, schedules, workflow permissions, or unrelated repository paths."
+    - "Do not dispatch production, collect or recollect event 441441, deploy outside the merge-triggered publication path, or mutate unrelated remote resources."
   planned_verification:
-    - "Run only synthetic redirected-response, incomplete-response, later-complete-response, invalid-contract, CLI exit-classification, and directly affected live-status contract nodes."
-    - "Run validate_repository.py --changed-from 2773152912b3b928769b13bd892ef8ef5d0e937f once on the final tree, review the complete diff, and run git diff --check."
-    - "Do not run live fetch, candidate generation, browser, Pages, data, rule, Schema, full pytest, or production workflows."
-  stop_point: "Complete the accepted unchanged five-path repair through one commit, one Ready pull request, required CI, and merge; then dispatch exactly one update.yml production run on the merge commit, verify its exact result and any bound Pages deployment, and stop without Issue closure, repeat dispatch, or another task."
+    - "Run only the new synthetic missing-decklist contract nodes, directly affected fetch_melee workflow contract nodes, and live-status canonical acceptance-state nodes with an external pytest base directory."
+    - "Run ruff and mypy only against the three changed maintained Melee Python modules, validate_schemas.py once, validate_repository.py --changed-from 0cbf0713ac529b501fd102a40ac2063a7f6cdd1a once on the final tree, review the complete diff, and run git diff --check."
+    - "Do not run live fetch, candidate generation, browser, Pages, archetype-rule, full pytest, production, or deployment workflows."
+  stop_point: "Complete the accepted unchanged expanded task through one commit, one Ready pull request, required CI, and merge; stop before event collection, production dispatch, or another task."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-08-31"
-    subject: "The exact five-path MTGO inconsistent-event-response recovery diff and focused validation presented for review, followed after merge by exactly one production rerun and result verification."
+    subject: "The expanded MELEE-MISSING-DECKLIST-COVERAGE-V1 implementation, including rejection of undefined Owner-acceptance states."
 
 current_repository_state:
-  source_master_commit: "2773152912b3b928769b13bd892ef8ef5d0e937f"
-  previous_task: "GOV-MTGO-STALE-BASE-AUTO-RECOVERY"
-  previous_task_status: "completed_merged"
-  previous_pull_request: 322
-  previous_merge_commit: "2773152912b3b928769b13bd892ef8ef5d0e937f"
-  previous_merge_validation_run: 33376046005
-  latest_failed_mtgo_production_run: 33376404103
-  latest_failed_mtgo_fetch_issue: 323
-  existing_mtgo_publish_issue: 314
+  source_master_commit: "0cbf0713ac529b501fd102a40ac2063a7f6cdd1a"
+  previous_task: "GOV-MTGO-INCONSISTENT-EVENT-RESPONSE-RECOVERY"
+  previous_task_status: "completed_merged_production_and_pages_verified"
+  previous_pull_request: 324
+  previous_merge_commit: "931f604"
+  previous_merge_validation_run: 33380825643
+  previous_production_commit: "0cbf0713ac529b501fd102a40ac2063a7f6cdd1a"
+  previous_pages_run: 33383790213
+  failed_melee_candidate_run: 33331402773
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
 known_blockers:
-  - id: "MTGO-INCONSISTENT-EVENT-RESPONSE"
-    status: "owner_accepted_repair_awaiting_merge"
-    note: "Run 33376404103 observed a missing-marker response and then an overdue incomplete payload for the same manually complete event page; the focused repair is accepted for completion and one post-merge production rerun, while Issue 323 remains open."
+  - id: "MELEE-MISSING-DECKLIST-COVERAGE"
+    status: "owner_accepted_completion_authorized"
+    note: "The expanded immutable subject is Owner-accepted for completion through one Ready pull request, required CI, and merge."
 
 future_task_gates:
-  - id: "GOV-MTGO-INCONSISTENT-EVENT-RESPONSE-RECOVERY"
+  - id: "MELEE-MISSING-DECKLIST-COVERAGE-V1"
     status: "owner_accepted_completion_authorized"
-    note: "Complete the accepted unchanged five-path repair through one commit, Ready pull request, required CI, merge, and the separately authorized post-merge production rerun."
-  - id: "MTGO-PRODUCTION-RECOVERY"
-    status: "owner_authorized_after_repair_merge"
-    note: "After the accepted repair merges, dispatch update.yml exactly once on that merge commit and verify the exact workflow and any bound Pages result; do not close Issue 323 or Issue 314 automatically."
+    note: "Complete the accepted unchanged expanded subject through one Ready pull request, required CI, and merge without another authorization prompt."
   - id: "MELEE-441441-PRODUCTION-CANDIDATE"
-    status: "paused_while_governance_repair_active"
-    note: "Run 33331402773 stopped at the opportunity ledger; diagnosis or retry is outside this focused task."
+    status: "blocked_pending_expanded_repair_completion"
+    note: "Do not recollect or resume event 441441; complete the expanded repair first, while candidate resumption remains a later separately governed operation."
   - id: "P14-02"
     status: "planned_not_authorized"
-    note: "Material shared MTGO repair must be accepted before private Pauper product input enters that layer."
+    note: "Pauper product input does not begin implicitly after this repair."
   - id: "PHASE-15"
     status: "planned_not_authorized"
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "GOV-MTGO-INCONSISTENT-EVENT-RESPONSE-RECOVERY"
-  name: "Recover inconsistent MTGO event-page responses without accepting incomplete data"
-  status: "owner_accepted_completion_and_production_authorized"
+  id: "MELEE-MISSING-DECKLIST-COVERAGE-V1"
+  name: "Represent unavailable Melee decklists without fabricating Unknown classifications"
+  status: "owner_accepted_completion_authorized"
   local_execution_authorized: false
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Complete only the accepted unchanged five-path repair through merge, then dispatch and verify exactly one update.yml production recovery run."
+  note: "Complete only the accepted unchanged expanded subject through one Ready pull request, required CI, and merge."
 
 prohibited_next_actions:
-  - "Do not dispatch production before the repair merge, manually dispatch Pages, repeat production after a failure, close Issue 323 or Issue 314, or mutate another remote resource outside the accepted completion path."
-  - "Do not resume event 441441, begin P14-02, or change product data, statistics, classifiers, Schemas, front ends, or public paths."
+  - "Do not dispatch production, collect or recollect event 441441, deploy outside the merge-triggered publication path, or mutate unrelated remote resources."
+  - "Do not begin P14-02, Phase 15, another event admission, or unrelated repository work."

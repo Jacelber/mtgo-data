@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-quality.schema.json",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "title": "Melee per-event statistics quality report",
   "type": "object",
   "additionalProperties": false,
@@ -20,7 +20,7 @@
     "issues"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
     "document_type": {"const": "quality"},
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},

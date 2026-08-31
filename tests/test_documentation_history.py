@@ -24,6 +24,8 @@ FORBIDDEN_STATUS_CACHES = {
     "recent_completion_handoff",
 }
 
+OWNER_ACCEPTANCE_STATUSES = {"pending", "accepted"}
+
 COMPLETION_ACTION_COMMANDS = {
     "commit": {"commit", "commit this task", "commit the current task"},
     "remote_publication": {
@@ -90,7 +92,12 @@ def live_status_policy_errors(status_bytes: bytes) -> list[str]:
         errors.append("current_task authorization must contain four booleans")
     completion_actions = ("commit", "remote_publication", "merge")
     owner_acceptance = task.get("owner_acceptance", {})
-    if owner_acceptance.get("status") == "accepted" and not all(
+    owner_acceptance_status = owner_acceptance.get("status")
+    if owner_acceptance_status not in OWNER_ACCEPTANCE_STATUSES:
+        errors.append(
+            "current_task owner_acceptance.status must be pending or accepted"
+        )
+    if owner_acceptance_status == "accepted" and not all(
         authorization.get(action) is True for action in completion_actions
     ):
         errors.append(
@@ -149,6 +156,21 @@ def test_live_status_contract_rejects_invalid_policy(mutation, expected):
         status_bytes += b"#" * (16 * 1024 + 1)
 
     assert expected in live_status_policy_errors(status_bytes)
+
+
+@pytest.mark.parametrize(
+    "undefined_status",
+    [None, "", "accepted_local_only", "owner_accepted_completion_authorized"],
+)
+def test_live_status_contract_rejects_undefined_owner_acceptance_status(
+    undefined_status,
+):
+    status = yaml.safe_load(STATUS_PATH.read_bytes())
+    status["current_task"]["owner_acceptance"]["status"] = undefined_status
+
+    errors = live_status_policy_errors(yaml.safe_dump(status).encode("utf-8"))
+
+    assert "current_task owner_acceptance.status must be pending or accepted" in errors
 
 
 @pytest.mark.parametrize("authorization_key", ["commit", "remote_publication", "merge"])

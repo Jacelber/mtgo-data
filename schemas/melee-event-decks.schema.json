@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-decks.schema.json",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "title": "Melee per-event deck statistics",
   "type": "object",
   "additionalProperties": false,
@@ -18,7 +18,7 @@
     "warnings"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
     "document_type": {"const": "decks"},
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
@@ -148,7 +148,7 @@
         "subtype_name"
       ],
       "properties": {
-        "status": {"enum": ["classified", "unknown"]},
+        "status": {"enum": ["classified", "unknown", "unavailable"]},
         "archetype_id": {
           "oneOf": [
             {
@@ -167,7 +167,20 @@
           ]
         },
         "subtype_name": {"type": ["string", "null"], "minLength": 1}
-      }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "unavailable"}}},
+          "then": {
+            "properties": {
+              "archetype_id": {"type": "null"},
+              "archetype_name": {"type": "null"},
+              "subtype_id": {"type": "null"},
+              "subtype_name": {"type": "null"}
+            }
+          }
+        }
+      ]
     },
     "card": {
       "type": "object",

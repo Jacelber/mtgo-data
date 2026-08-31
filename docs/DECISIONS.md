@@ -7452,3 +7452,68 @@ decision changes no source scope, retained data shape, statistics,
 classification, Schema, public path, front end, workflow permission, or
 production authorization, and it does not authorize commit, remote
 publication, merge, production dispatch, Issue closure, or another task.
+
+---
+
+# DEC-152 - Separate unavailable Melee decklists from Unknown classification
+
+Status: `Accepted`
+
+## Context
+
+Melee candidate run `33331402773` retained 574 participants for event `441441`
+and correctly produced 571 classification records for submitted Modern
+decklists. Three participants had missing or unavailable decklists. The
+opportunity ledger nevertheless required classification records to cover all
+574 participants, so the candidate stopped even though the source matches and
+standings remained usable. Treating the three missing decklists as `Unknown`
+would falsely claim that valid deck contents had been classified but matched no
+maintained rule. The failed run also demonstrated that retaining raw and
+normalized evidence only in the final candidate commit can lose a successful
+collection when a later derived stage fails.
+
+## Decision
+
+Keep the classification overlay limited to submitted decklists in the event's
+Constructed format. Require those submitted decklists, and only those
+decklists, to be covered exactly once by classification records. The
+opportunity ledger still covers every normalized participant; an explicitly
+`missing` or `unavailable` decklist receives classification status
+`unavailable` with null archetype and subtype fields. Do not create an Unknown
+record for that participant.
+
+Retain official participant, standing, point, and played-result facts for the
+complete event population. In each public statistics scope, publish the total
+participant count, the submitted-deck denominator, the known and Unknown deck
+counts, and the unavailable deck count. Calculate metagame share and
+classification high-score populations only from submitted classified or
+Unknown decks. A classified deck's own played record may include a trustworthy
+result against a participant whose decklist is unavailable. The two-sided
+classification matchup matrix excludes that physical match and counts it once
+as `decklist_unavailable` because both deck identities are required.
+
+Advance the opportunity ledger and overview/decks/quality producer contracts to
+`1.1.0` while retaining Schema read compatibility for committed `1.0.0`
+artifacts. Keep the matchup document at compatible version `1.0.0`; its matrix
+meaning and taxonomy compatibility identity are unchanged, and the new
+exclusion count is additive.
+
+After a new event is normalized, commit its immutable raw snapshot and
+canonical normalized event immediately to its event review branch and verify
+the remote branch before classification begins. A later invocation resumes
+that branch, integrates the dispatch's exact master commit without rebase or
+force push, and reuses the retained snapshot. The final derived candidate
+remains a separate later commit.
+
+## Consequences
+
+Events with partial decklist coverage can produce reviewable candidates without
+inventing archetype information or discarding trustworthy event facts. Deck
+shares have an explicit, auditable denominator; matchup matrices remain
+two-sided and taxonomy-compatible; quality output exposes incomplete decklist
+coverage. A failure after normalization no longer requires recollection.
+
+This decision changes no whitelist, source eligibility, taxonomy rule, front
+end, workflow permission, production schedule, or publication authorization.
+It does not authorize collection, commit, remote publication, merge, workflow
+dispatch, or event `441441` admission.

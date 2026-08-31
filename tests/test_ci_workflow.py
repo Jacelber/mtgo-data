@@ -17,6 +17,13 @@ def _workflow():
     return yaml.load(WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
 
 
+def _melee_workflow():
+    return yaml.load(
+        PRODUCTION_WORKFLOWS[1].read_text(encoding="utf-8"),
+        Loader=yaml.BaseLoader,
+    )
+
+
 def _strings(value):
     if isinstance(value, dict):
         for key, item in value.items():
@@ -188,6 +195,59 @@ def test_production_pytest_commands_are_explicit_and_external_temped():
     assert all("tests/" in command for command in commands)
     assert all("--basetemp=" in command for command in commands)
     assert not any(command.strip() in {"python -m pytest", "python -B -m pytest"} for command in commands)
+
+
+def test_melee_candidate_checkpoints_retained_evidence_before_derived_work() -> None:
+    workflow = _melee_workflow()
+    job = workflow["jobs"]["candidate"]
+    by_name = {step["name"]: step for step in job["steps"]}
+    names = list(by_name)
+
+    assert names.index("Snapshot Melee candidate baseline") < names.index(
+        "Resume retained event review branch when present"
+    )
+    assert names.index("Retain normalized event") < names.index(
+        "Checkpoint immutable source and normalized event"
+    ) < names.index("Classify submitted decks strictly")
+
+    resume = by_name["Resume retained event review branch when present"]["run"]
+    for required in (
+        'git ls-remote --exit-code --heads origin "refs/heads/${BRANCH}"',
+        "git fetch --no-tags origin",
+        'git diff --name-status "$MERGE_BASE" "$REMOTE_REF"',
+        '"data_raw/melee/${EVENT_ID}/"*',
+        '"data/${FORMAT}/melee/events/${EVENT_ID}.json"',
+        '"stats/${FORMAT}/melee/events/${EVENT_ID}/"*',
+        '"stats/catalog.json"',
+        'git checkout -B "$BRANCH"',
+        'git merge-base --is-ancestor "$GITHUB_SHA" HEAD',
+        'git merge --no-edit "$GITHUB_SHA"',
+    ):
+        assert required in resume
+    assert resume.index("git diff --name-status") < resume.index("git checkout -B")
+    assert "outside the event boundary" in resume
+    for prohibited in ("--force", "git pull", "git rebase"):
+        assert prohibited not in resume
+
+    checkpoint = by_name["Checkpoint immutable source and normalized event"]
+    assert checkpoint["if"] == (
+        "steps.snapshot.outputs.source_mode == 'fetched' || "
+        "steps.review-branch.outputs.resumed == 'true'"
+    )
+    command = checkpoint["run"]
+    for required in (
+        'git add -- "data_raw/melee/${EVENT_ID}/"',
+        '"data/${FORMAT}/melee/events/${EVENT_ID}.json"',
+        "chore: checkpoint Melee event ${EVENT_ID} source",
+        'git push origin "HEAD:refs/heads/${BRANCH}"',
+    ):
+        assert required in command
+    for prohibited in ("classifications", "opportunities", "stats/", "--force"):
+        assert prohibited not in command
+
+    verify = by_name["Verify immutable checkpoint"]
+    assert verify["if"] == "steps.checkpoint.outputs.commit != ''"
+    assert "git ls-remote origin" in verify["run"]
 
 
 def test_production_candidate_is_built_once_and_published_with_immutable_evidence():

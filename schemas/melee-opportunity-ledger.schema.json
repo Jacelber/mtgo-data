@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-opportunity-ledger.schema.json",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "title": "Melee Constructed opportunity ledger",
   "type": "object",
   "additionalProperties": false,
@@ -10,7 +10,7 @@
     "input", "rounds", "scope_summaries", "participants", "opportunities"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
     "format": {"$ref": "#/$defs/id"},
@@ -183,7 +183,7 @@
         "status", "archetype_id", "archetype_name", "subtype_id", "subtype_name"
       ],
       "properties": {
-        "status": {"enum": ["classified", "unknown"]},
+        "status": {"enum": ["classified", "unknown", "unavailable"]},
         "archetype_id": {
           "oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]
         },
@@ -211,6 +211,17 @@
             "properties": {
               "archetype_id": {"$ref": "#/$defs/id"},
               "archetype_name": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"status": {"const": "unavailable"}}},
+          "then": {
+            "properties": {
+              "archetype_id": {"type": "null"},
+              "archetype_name": {"type": "null"},
+              "subtype_id": {"type": "null"},
+              "subtype_name": {"type": "null"}
             }
           }
         }
