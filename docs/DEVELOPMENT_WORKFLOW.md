@@ -328,6 +328,21 @@ verified cache for 90 days. This process grants no repository write permission,
 does not commit image binaries, and fails before Pages upload if any current
 card is unresolved or invalid.
 
+When an active MTGO production run finds that remote `master` no longer equals
+its immutable source commit, it must not publish, rebase, or force-push the old
+candidate. The first stale run may request one replacement `update.yml` run on
+current `master`; the replacement repeats the complete production pipeline and
+cannot request a third run. This internal bounded handoff is part of the
+already-triggered scheduled or explicitly dispatched production operation. It
+does not grant a user or agent standing authority to dispatch production, reuse
+old candidate evidence, or close the failure Issue.
+
+If the production push succeeds before another commit advances `master`, the
+publish job may continue only after proving its generated-data commit remains
+an ancestor of the current tip. The allowlisted Pages workflow still admits and
+compares the exact production evidence; a diverged commit or content mismatch
+fails closed.
+
 When a production data publication changes `master`, its publish job must first
 confirm the remote `master` commit and then explicitly dispatch the allowlisted
 Pages workflow on `master`, as defined by DEC-084. GitHub does not trigger the

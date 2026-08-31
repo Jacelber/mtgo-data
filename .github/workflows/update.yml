@@ -1,7 +1,13 @@
 name: MTGO production data update
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      stale_base_retry_of:
+        description: Internal parent run ID for one bounded stale-base recovery
+        required: false
+        default: ""
+        type: string
   schedule:
     - cron: "0 9 * * *"
 
@@ -500,7 +506,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     outputs:
+      failure-kind: ${{ (steps.publication-base.outputs.stale == 'true' || steps.publish.outputs.stale == 'true') && 'stale-base' || '' }}
+      observed-master: ${{ steps.publish.outputs.observed-master || steps.publication-base.outputs.observed-master }}
       published-commit: ${{ steps.verify.outputs.commit }}
+      recovery-dispatched: ${{ steps.stale-base-recovery.outputs.dispatched || 'false' }}
+      source-commit: ${{ github.sha }}
     permissions:
       actions: write
       contents: write
@@ -512,13 +522,33 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
+      - name: Check publication base is current
+        id: publication-base
+        shell: bash
+        run: |
+          REMOTE_MASTER="$(git ls-remote origin refs/heads/master | awk '{print $1}')"
+          if ! [[ "$REMOTE_MASTER" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Could not resolve the current remote master commit." >&2
+            exit 1
+          fi
+          echo "source-commit=$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+          echo "observed-master=$REMOTE_MASTER" >> "$GITHUB_OUTPUT"
+          if [ "$REMOTE_MASTER" != "$GITHUB_SHA" ]; then
+            echo "stale=true" >> "$GITHUB_OUTPUT"
+            echo "Production source $GITHUB_SHA is stale; current master is $REMOTE_MASTER."
+          else
+            echo "stale=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Download immutable validated output
+        if: steps.publication-base.outputs.stale == 'false'
         uses: actions/download-artifact@v4.3.0
         with:
           name: mtgo-build-candidate
           path: ${{ runner.temp }}/mtgo-build-candidate
 
       - name: Verify and restore validated output
+        if: steps.publication-base.outputs.stale == 'false'
         id: artifact-evidence
         shell: bash
         run: |
@@ -548,6 +578,7 @@ jobs:
           echo "subject-sha256=$SUBJECT_SHA" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push production evidence
+        if: steps.publication-base.outputs.stale == 'false'
         id: publish
         shell: bash
         run: |
@@ -567,11 +598,69 @@ jobs:
           Production-Source: $GITHUB_SHA
           Generation-Subject-SHA256: ${{ steps.artifact-evidence.outputs.subject-sha256 }}
           Validated-Output-SHA256: ${{ steps.artifact-evidence.outputs.output-sha256 }}"
+          set +e
           git push origin HEAD:master
+          PUSH_STATUS=$?
+          set -e
+          if [ "$PUSH_STATUS" -ne 0 ]; then
+            REMOTE_MASTER="$(git ls-remote origin refs/heads/master | awk '{print $1}')"
+            if ! [[ "$REMOTE_MASTER" =~ ^[0-9a-f]{40}$ ]]; then
+              echo "Push failed and the current remote master commit could not be resolved." >&2
+              exit "$PUSH_STATUS"
+            fi
+            echo "observed-master=$REMOTE_MASTER" >> "$GITHUB_OUTPUT"
+            if [ "$REMOTE_MASTER" != "$GITHUB_SHA" ]; then
+              echo "stale=true" >> "$GITHUB_OUTPUT"
+              echo "status=stale" >> "$GITHUB_OUTPUT"
+              echo "Production source $GITHUB_SHA became stale before push; current master is $REMOTE_MASTER."
+              exit 0
+            fi
+            exit "$PUSH_STATUS"
+          fi
           echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
           echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "stale=false" >> "$GITHUB_OUTPUT"
+          echo "status=published" >> "$GITHUB_OUTPUT"
+
+      - name: Request one stale-base recovery
+        id: stale-base-recovery
+        if: >-
+          always() && !cancelled() &&
+          (steps.publication-base.outputs.stale == 'true' || steps.publish.outputs.stale == 'true') &&
+          inputs.stale_base_retry_of == ''
+        uses: actions/github-script@v7.0.1
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: "update.yml",
+              ref: "master",
+              inputs: {
+                stale_base_retry_of: String(context.runId),
+              },
+            });
+            core.setOutput("dispatched", "true");
+
+      - name: Stop stale publication
+        if: >-
+          always() && !cancelled() &&
+          (steps.publication-base.outputs.stale == 'true' || steps.publish.outputs.stale == 'true')
+        shell: bash
+        env:
+          STALE_BASE_RETRY_OF: ${{ inputs.stale_base_retry_of }}
+        run: |
+          if [ -n "$STALE_BASE_RETRY_OF" ]; then
+            echo "The bounded stale-base recovery from run $STALE_BASE_RETRY_OF also became stale; no third run was requested." >&2
+          elif [ '${{ steps.stale-base-recovery.outputs.dispatched }}' = 'true' ]; then
+            echo "The stale publication was stopped after requesting one stale-base-recovery run." >&2
+          else
+            echo "The stale publication was stopped, but its bounded recovery request did not complete." >&2
+          fi
+          exit 1
 
       - name: Verify published master commit and clean workspace
+        if: steps.publish.outputs.status == 'published'
         id: verify
         shell: bash
         run: |
@@ -581,16 +670,20 @@ jobs:
             exit 1
           fi
           LOCAL_SHA="$(git rev-parse HEAD)"
-          REMOTE_SHA="$(git ls-remote origin refs/heads/master | awk '{print $1}')"
-          if [ "$LOCAL_SHA" != "$REMOTE_SHA" ]; then
-            echo "Published master mismatch: local=$LOCAL_SHA remote=$REMOTE_SHA" >&2
+          git fetch --no-tags origin master
+          REMOTE_SHA="$(git rev-parse refs/remotes/origin/master)"
+          if [ "$LOCAL_SHA" = "$REMOTE_SHA" ]; then
+            echo "Published master verified at $LOCAL_SHA."
+          elif git merge-base --is-ancestor "$LOCAL_SHA" "$REMOTE_SHA"; then
+            echo "Published commit $LOCAL_SHA remains an ancestor of current master $REMOTE_SHA."
+          else
+            echo "Published commit is not on current master: local=$LOCAL_SHA remote=$REMOTE_SHA" >&2
             exit 1
           fi
           echo "commit=$LOCAL_SHA" >> "$GITHUB_OUTPUT"
-          echo "Published master verified at $LOCAL_SHA."
 
       - name: Dispatch Pages deployment for published data
-        if: steps.publish.outputs.changed == 'true'
+        if: steps.publish.outputs.status == 'published' && steps.publish.outputs.changed == 'true'
         uses: actions/github-script@v7.0.1
         with:
           script: |
@@ -612,12 +705,18 @@ jobs:
       - name: Write publication summary
         if: always()
         shell: bash
+        env:
+          STALE_BASE_RETRY_OF: ${{ inputs.stale_base_retry_of }}
         run: |
           {
             echo "## MTGO production publication"
             echo
             echo "- Job result: ${{ job.status }}"
             echo "- Trigger: ${{ github.event_name }}"
+            echo "- Stale-base recovery parent: ${STALE_BASE_RETRY_OF:-none}"
+            echo "- Production source commit: ${{ github.sha }}"
+            echo "- Observed master: ${{ steps.publish.outputs.observed-master || steps.publication-base.outputs.observed-master || 'not-reached' }}"
+            echo "- Bounded recovery dispatched: ${{ steps.stale-base-recovery.outputs.dispatched || 'false' }}"
             echo "- Generated changes published: ${{ steps.publish.outputs.changed || 'not-reached' }}"
             echo "- Published commit verified: ${{ steps.verify.outputs.commit || 'not-reached' }}"
             echo "- Candidate transfer: verified immutable \`mtgo-build-candidate\` artifact"
@@ -914,6 +1013,7 @@ jobs:
           FETCH_RESULT: ${{ needs.fetch.result }}
           BUILD_RESULT: ${{ needs.build.result }}
           PUBLISH_RESULT: ${{ needs.publish.result }}
+          PUBLISH_FAILURE_KIND: ${{ needs.publish.outputs.failure-kind }}
         run: |
           if [ "$FETCH_RESULT" = "failure" ]; then
             STAGE="fetch"
@@ -926,14 +1026,21 @@ jobs:
             exit 1
           fi
           echo "stage=$STAGE" >> "$GITHUB_OUTPUT"
+          echo "kind=${PUBLISH_FAILURE_KIND:-stage-failure}" >> "$GITHUB_OUTPUT"
 
       - name: Create or update the stage failure issue
         uses: actions/github-script@v7.0.1
         env:
           FAILED_STAGE: ${{ steps.failed-stage.outputs.stage }}
+          FAILURE_KIND: ${{ steps.failed-stage.outputs.kind }}
+          PUBLISH_SOURCE_COMMIT: ${{ needs.publish.outputs.source-commit }}
+          PUBLISH_OBSERVED_MASTER: ${{ needs.publish.outputs.observed-master }}
+          STALE_BASE_RECOVERY_DISPATCHED: ${{ needs.publish.outputs.recovery-dispatched }}
+          STALE_BASE_RETRY_OF: ${{ inputs.stale_base_retry_of }}
         with:
           script: |
             const stage = process.env.FAILED_STAGE;
+            const failureKind = process.env.FAILURE_KIND || "stage-failure";
             const marker = `<!-- mtgo-production-failure:${stage} -->`;
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const details = [
@@ -941,8 +1048,17 @@ jobs:
               "## MTGO production failure",
               "",
               `- Failed stage: \`${stage}\``,
+              `- Failure kind: \`${failureKind}\``,
               `- Commit: \`${context.sha}\``,
               `- Workflow run: [${context.runId}](${runUrl})`,
+              ...(failureKind === "stale-base"
+                ? [
+                    `- Started from: \`${process.env.PUBLISH_SOURCE_COMMIT || context.sha}\``,
+                    `- Observed master: \`${process.env.PUBLISH_OBSERVED_MASTER || "unavailable"}\``,
+                    `- Bounded recovery dispatched: \`${process.env.STALE_BASE_RECOVERY_DISPATCHED || "false"}\``,
+                    `- Recovery parent run: \`${process.env.STALE_BASE_RETRY_OF || "none"}\``,
+                  ]
+                : []),
               "",
               "This issue is updated for repeated failures of the same stage. Review the linked workflow logs for the diagnostic details.",
             ].join("\n");
