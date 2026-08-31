@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/melee-441441-production-candidate-activation"
+  current_working_branch: "codex/melee-no-show-terminal-opportunity-v1"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_melee_441441_production_candidate_activation"
+  status: "active_melee_no_show_terminal_repair"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: true
@@ -27,82 +27,87 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "MELEE-441441-PRODUCTION-CANDIDATE-ACTIVATION"
-  name: "Activate event 441441 production candidate recovery"
+  id: "MELEE-NO-SHOW-TERMINAL-OPPORTUNITY-V1"
+  name: "Represent Melee no-show as a distinct terminal opportunity state"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-08-31"
-  base_commit: "daa3f0925228a31987dd89e9d847a47cd810fb3e"
-  branch: "codex/melee-441441-production-candidate-activation"
+  base_commit: "ab93d98d88f23978337d61323943bfd089d2d591"
+  branch: "codex/melee-no-show-terminal-opportunity-v1"
   workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-production-candidate-activation-20260831-02"
-  objective: "Persist the Owner's authorization to resume the event 441441 production-candidate stage, repair the same-task authorization regression fixture exposed by the normal next-task transition, then dispatch exactly one candidate run from the activation merge commit and stop at candidate data and classification acceptance."
+  objective: "Preserve source participant status no_show while allowing later missing Constructed Swiss rounds to become explicit zero-point terminal no-show opportunities, without relabeling them as voluntary drops."
   artifact_impact: "none"
   authorization:
-    local_implementation: false
+    local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
+    - "src/mtgmeta/melee/opportunities.py"
+    - "tests/test_melee_missing_decklist_contract.py"
+    - "docs/STATISTICS_SPEC.md"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-    - "tests/test_documentation_history.py"
   planned_additions: []
   protected_scope:
-    product_or_statistical_change: "none"
-    generated_or_source_data_change: "The activation commit changes no data; after it merges, the separately identified candidate operation may perform one complete live collection for event 441441 because no reusable retained snapshot exists."
-    source_scope_change: "none; only the already enabled and verified event 441441 is eligible"
-    workflow_change: "none; use the merged fetch_melee.yml checkpoint and candidate path unchanged"
-    governance_change: "Replace the completed repair state with an exact event 441441 candidate-dispatch contract and make the duplicate-authorization regression explicitly construct equal current and next task IDs."
-    permission_change: "none; preserve the workflow's existing contents: write permission and event-bounded concurrency"
-    issue_change: "none"
-    candidate_dispatch_authorized_after_merge: true
-    candidate_dispatched: false
-    remote_write_performed: "none"
+    whitelist_change: "none"
+    source_or_normalized_data_change: "none; reuse the immutable event 441441 checkpoint only in a separately authorized recovery"
+    classification_or_taxonomy_change: "none"
+    schema_or_output_version_change: "none; existing contracts already represent no_show"
+    workflow_or_permission_change: "none"
+    generated_or_public_artifact_change: "none in this local repair"
+    frontend_or_public_path_change: "none"
+    production_or_remote_write: "none"
   invariants:
-    - "Dispatch exactly one Melee production candidate run from the activation merge commit with event_id 441441."
-    - "No data/melee-441441 branch or canonical normalized event exists before dispatch, so the run performs one new complete collection and checkpoints the immutable raw snapshot plus normalized event before derived work."
-    - "The workflow may push only data/melee-441441; it never pushes master, opens or merges a pull request, deploys Pages, or force-pushes."
-    - "Missing or unavailable decklists remain unavailable rather than Unknown, and the candidate must expose complete participant and denominator reconciliations for review."
+    - "Keep participant_status as no_show; never rewrite it to dropped."
+    - "A synthesized later opportunity uses result_type no_show, zero Constructed points, and remains in the theoretical-round denominator."
+    - "A synthesized no-show opportunity is not a completed round, played match, win-rate record, or matchup record."
+    - "Active and other genuinely non-terminal missing-round states continue to fail closed."
+    - "Source matches that already carry a no_show result retain their existing handling."
   prohibited_changes:
-    - "Do not change code other than the one-line tests/test_documentation_history.py fixture repair, configuration, Schemas, documentation other than docs/STATUS.yaml, data, statistics, classifiers, taxonomy, front ends, schedules, or workflow permissions in the activation commit."
-    - "Do not dispatch before the activation merge, dispatch another event, repeat a successful collection, hand-edit candidate output, or write outside the event 441441 review branch."
-    - "Do not create or merge the candidate PR, publish the candidate to master, deploy Pages, begin P14-02, or begin another task."
+    - "Do not change the Melee whitelist, retained event 441441 source or normalized bytes, participant identities, decklist classification, taxonomy, Schemas, output versions, workflows, permissions, schedules, front ends, or public paths."
+    - "Do not recollect event 441441, mutate data/melee-441441, generate or publish a candidate, dispatch production, deploy Pages, begin P14-02, or begin another task."
+    - "Do not force-push, create a second pull request, or perform remote writes outside the accepted task-completion path."
   planned_verification:
-    - "Run the complete tests/test_documentation_history.py module once on the expanded final tree, then changed-scope repository validation, complete diff review, and git diff --check."
-    - "After merge, inspect the exact workflow run, checkpoint commit, candidate commit, branch scope, and generated candidate reconciliations once; do not repeat successful validation."
-    - "Do not run local source collection, browser, Pages, archetype-rule, full pytest, MTGO production, or deployment workflows."
-  stop_point: "Complete this accepted status-only activation through one Ready PR and merge, dispatch exactly one event 441441 candidate run from that merge commit, inspect the resulting review branch and candidate evidence, and stop for Owner candidate acceptance."
+    - "Run the exact no-show terminal regression while iterating, then the complete tests/test_melee_missing_decklist_contract.py once on the final code tree."
+    - "Run only the live STATUS contract node, changed-scope repository validation, Ruff for the changed Python files, git diff --check, and complete diff review."
+    - "Do not run source collection, candidate generation, full pytest, browser, MTGO, Pages, or deployment checks."
+  stop_point: "Complete the unchanged accepted repair through one Ready pull request, required checks, and merge; stop before candidate recovery or production dispatch."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-08-31"
-    subject: "The exact MELEE-441441-PRODUCTION-CANDIDATE activation plus the one-line same-task authorization regression-fixture repair, followed by one event 441441 workflow dispatch, live collection, retention, and event-bounded review-branch candidate; candidate publication and deployment remain unauthorized."
+    subject: "The exact MELEE-NO-SHOW-TERMINAL-OPPORTUNITY-V1 local code, regression, and authoritative semantic documentation."
 
 current_repository_state:
-  source_master_commit: "daa3f0925228a31987dd89e9d847a47cd810fb3e"
-  previous_task: "MELEE-MISSING-DECKLIST-COVERAGE-V1"
+  source_master_commit: "ab93d98d88f23978337d61323943bfd089d2d591"
+  previous_task: "MELEE-441441-PRODUCTION-CANDIDATE-ACTIVATION"
   previous_task_status: "completed_merged_and_exact_merge_validated"
-  previous_pull_request: 326
-  previous_merge_commit: "daa3f0925228a31987dd89e9d847a47cd810fb3e"
-  previous_merge_validation_run: 33390489485
-  failed_melee_candidate_run: 33331402773
+  previous_pull_request: 327
+  previous_merge_commit: "ab93d98d88f23978337d61323943bfd089d2d591"
+  previous_merge_validation_run: 33393595781
+  failed_melee_candidate_run: 33393692609
+  retained_candidate_branch: "data/melee-441441"
+  retained_checkpoint_commit: "63dd814eeb31aeabc58f20397e8441056df18052"
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
 known_blockers:
-  - id: "MELEE-441441-INITIAL-SNAPSHOT"
-    status: "no_reusable_snapshot_requires_one_new_collection"
-    note: "Run 33331402773 predates checkpoint-first retention and left no data/melee-441441 branch; the authorized replacement run must collect once, checkpoint immediately, and reuse that branch on any later derived-stage recovery."
+  - id: "MELEE-441441-NO-SHOW-TERMINAL"
+    status: "owner_accepted_repair_pending_merge"
+    note: "The retained event has four no-show participants with prior matches and 13 later missing scheduled opportunities; the accepted ledger repair is completing publication but candidate recovery remains separate."
 
 future_task_gates:
-  - id: "MELEE-441441-PRODUCTION-CANDIDATE-ACTIVATION"
+  - id: "MELEE-NO-SHOW-TERMINAL-OPPORTUNITY-V1"
     status: "owner_accepted_completion_authorized"
-    note: "Complete the exact status-only activation through one Ready pull request and merge, then continue to the already authorized candidate dispatch without another prompt."
-  - id: "MELEE-441441-PRODUCTION-CANDIDATE"
-    status: "owner_authorized_after_activation_merge"
-    note: "Dispatch exactly once from the activation merge commit, retain and validate only event 441441 on data/melee-441441, then stop for candidate acceptance."
+    note: "Complete the unchanged accepted repair through one Ready pull request, required checks, and merge."
+  - id: "MELEE-441441-CANDIDATE-RECOVERY"
+    status: "pending_repair_publication_and_separate_authorization"
+    note: "After the repair reaches master, a separately authorized run may reuse checkpoint 63dd814e without recollection and resume derived candidate generation."
   - id: "MELEE-441441-CANDIDATE-ACCEPTANCE"
-    status: "pending_candidate_evidence"
-    note: "Owner review begins only after a successful event-bounded candidate exists."
+    status: "pending_successful_candidate_evidence"
+    note: "Owner data and classification review begins only after a successful recovered candidate exists."
   - id: "MELEE-441441-PUBLICATION"
     status: "not_authorized"
     note: "Candidate PR creation, merge, Pages deployment, and live publication require later Owner acceptance of the exact candidate."
@@ -114,15 +119,15 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "MELEE-441441-PRODUCTION-CANDIDATE"
-  name: "Build event 441441 production candidate"
-  status: "owner_authorized_after_activation_merge"
-  local_execution_authorized: true
-  commit_authorized: true
-  publication_authorized: true
+  id: "MELEE-441441-CANDIDATE-RECOVERY"
+  name: "Resume event 441441 candidate from its immutable checkpoint"
+  status: "pending_repair_publication_and_separate_authorization"
+  local_execution_authorized: false
+  commit_authorized: false
+  publication_authorized: false
   merge_authorized: false
-  note: "After the activation merge, dispatch fetch_melee.yml exactly once for event 441441; workflow commits and pushes only the checkpoint and completed candidate to data/melee-441441, then stop for Owner review."
+  note: "No recovery is authorized by the local repair approval; do not recollect or dispatch before a separate Owner gate."
 
 prohibited_next_actions:
-  - "Do not dispatch event 441441 before the activation merge; after dispatch, do not repeat a successful collection or mutate the event review branch manually."
-  - "Do not create or merge the candidate PR, publish to master, deploy Pages, begin P14-02, Phase 15, another event admission, or unrelated repository work."
+  - "Do not force-push, create a second pull request, dispatch production, or mutate a remote branch outside the accepted repair completion."
+  - "Do not recollect event 441441, change its whitelist or retained checkpoint, generate or publish candidate data, deploy Pages, begin P14-02, Phase 15, another event admission, or unrelated repository work."

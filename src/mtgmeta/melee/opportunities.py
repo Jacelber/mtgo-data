@@ -246,6 +246,10 @@ def _unplayed_opportunity(
         result_type = "drop_unplayed"
         reason = "unplayed_after_drop"
         points_included = True
+    elif participant_status == "no_show":
+        result_type = "no_show"
+        reason = "no_show"
+        points_included = True
     elif participant_status == "disqualified":
         result_type = "administrative_result"
         reason = "unplayed_after_disqualification"

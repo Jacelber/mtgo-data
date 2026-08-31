@@ -7517,3 +7517,59 @@ This decision changes no whitelist, source eligibility, taxonomy rule, front
 end, workflow permission, production schedule, or publication authorization.
 It does not authorize collection, commit, remote publication, merge, workflow
 dispatch, or event `441441` admission.
+
+---
+
+# DEC-153 - Treat Melee no-show as a distinct terminal participant status
+
+Status: `Accepted`
+
+## Context
+
+The retained event `441441` checkpoint contains four participants whose final
+Melee status is `no_show`. Each has consecutive played-round evidence before
+later scheduled Constructed rounds become absent. Candidate run `33393692609`
+therefore stopped in the opportunity ledger because the producer accepted
+`no_show` as a normalized participant status but did not accept it as terminal
+when a later round had no source match.
+
+Melee's published player-status contract at
+`https://help.melee.gg/docs/player-status/` defines `No Show` as failure to
+arrive at a match table on time and says that it is equivalent to a dropped
+player for later pairing. It remains
+factually distinct from `Dropped (Self/Staff)`, which records a player report
+or confirmed self-drop. Rewriting the retained source status would discard that
+distinction, while rejecting every later missing round would contradict the
+source platform's terminal behavior.
+
+## Decision
+
+Preserve the normalized participant status as `no_show`. When such a
+participant has no source match for a later scheduled Constructed Swiss round,
+emit a zero-point theoretical opportunity with result type `no_show`, no match
+or opponent identity, and no win-rate or matchup inclusion. It is not a
+completed or officially exempt round. The synthesized opportunity attributes
+the later absence from the schedule to the terminal participant status; it
+does not assert that the participant independently failed to appear in every
+remaining round.
+
+Do not relabel these opportunities as `drop_unplayed`, and do not change the
+handling of source matches that already carry a `no_show` result. Continue to
+fail closed for missing rounds attached to a genuinely non-terminal status.
+The existing opportunity, statistics, quality, and Schema contracts already
+represent `no_show`, so no output-version or Schema-shape change is required.
+
+## Consequences
+
+A participant may have earlier played matches and later terminate as a
+`no_show` without being treated as invalid source data. Event `441441` can
+resume derived candidate generation from checkpoint
+`63dd814eeb31aeabc58f20397e8441056df18052` without recollection after this
+repair is separately accepted and published. The resulting zero-point
+opportunities affect the scheduled-round denominator and explicit no-show
+count, but never played-match win rate, matchup matrices, or completion count.
+
+This decision changes no whitelist, normalized source bytes, participant
+identity, deck classification, taxonomy, workflow permission, production
+schedule, front end, or public path. It does not authorize commit, remote
+publication, merge, candidate recovery, recollection, or deployment.
