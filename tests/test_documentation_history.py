@@ -245,6 +245,7 @@ def test_live_status_contract_rejects_mismatched_duplicate_completion_authority(
     )
     status["current_task"]["prohibited_changes"] = []
     status["prohibited_next_actions"] = []
+    status["next_approved_task"]["id"] = status["current_task"]["id"]
     status["next_approved_task"].update(
         commit_authorized=True,
         publication_authorized=True,
