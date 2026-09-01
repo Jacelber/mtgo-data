@@ -221,7 +221,7 @@ function tabletopCards(groups, overall, advancementMetric) {
     const parentCard = tabletopMobileCard(group.parent, {
       identityId: group.directIdentity,
       parentId: group.parent.archetype_id,
-      displayName: classifierName(group.parent.archetype_id),
+      displayName: classifierName(tabletopParentIdentity(group.parent)),
       advancementMetric,
       expandable: group.expandable,
       open: group.open,

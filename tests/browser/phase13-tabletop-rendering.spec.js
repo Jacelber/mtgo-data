@@ -21,13 +21,29 @@ function overview(eventId) {
     },
     scopes: {
       all_constructed: {
-        archetypes: [],
+        archetypes: [{
+          group_id: "unknown",
+          classification_status: "unknown",
+          archetype_id: null,
+          archetype_name: "Unknown",
+          expandable: false,
+          deck_count: 1,
+          metagame_share: 1,
+          average_points_per_effective_round: 0,
+          completion_rate: 0,
+          match_record: {
+            all_matches: {
+              literal_record: { wins: 0, losses: 0, draws: 0, matches: 0, win_rate: null },
+            },
+          },
+          subtypes: [],
+        }],
         average_points_per_effective_round: null,
         day2_conversion: null,
         high_score_deck_count: 0,
-        participant_count: 0,
+        participant_count: 1,
         result_counts: {},
-        theoretical_rounds: 0,
+        theoretical_rounds: 1,
       },
     },
   };
@@ -103,10 +119,15 @@ test("Tabletop renders the combined result without merging Event Overview", asyn
   await page.locator('[data-tabletop-view="overview"]').click();
   await expect(page.locator(".multi-event-summary")).toHaveCount(0);
   await expect(page.locator(".event-summary")).toContainText("Synthetic 10");
+  await expect(page.locator(".identity-label").filter({ hasText: "Unknown" })).toBeVisible();
+  await page.locator('[data-tabletop-sort="name"]').click();
+  await expect(page.locator("#view .error-state")).toHaveCount(0);
 
   await page.goto(
     "/melee/index.html?format=modern&product=tabletop-major-events&view=matchup&event=10&events=10,20&scope=all_constructed&lang=zh"
   );
   await expect(page.locator(".multi-event-summary")).toContainText("纳入赛事");
   await expect(page.locator(".matrix-toolbar-note")).toContainText("2 场赛事 · 28 场有效对局");
+  await page.locator('[data-tabletop-view="overview"]').click();
+  await expect(page.locator(".identity-label").filter({ hasText: "Unknown" })).toBeVisible();
 });
