@@ -595,7 +595,11 @@ def validate_phase8_frontend_references(
 
 
 def validate_public_product_facts(
-    root: Path, names: list[str], status: dict[str, Any]
+    root: Path,
+    names: list[str],
+    status: dict[str, Any],
+    *,
+    defer_tabletop_readme: bool = False,
 ) -> tuple[int, list[Failure]]:
     """Require README to match public catalogs, event config, and live entries."""
 
@@ -775,14 +779,17 @@ def validate_public_product_facts(
         rendered_ids = ", ".join(f"`{event_id}`" for event_id in event_ids)
         return f"{label} ({noun} {rendered_ids})"
 
-    expected_rows = (
+    expected_rows = [
         f"| {PUBLIC_PRODUCT_NAMES['mtgo']} | "
         f"{', '.join(format_label(format_id) for format_id in mtgo_catalog_formats)} | "
         f"`{mtgo_entry}` |",
-        f"| {PUBLIC_PRODUCT_NAMES['tabletop']} | "
-        f"{', '.join(format_label(format_id, event_ids_by_format[format_id]) for format_id in tabletop_catalog_formats)} | "
-        f"`{tabletop_entry}` |",
-    )
+    ]
+    if not defer_tabletop_readme:
+        expected_rows.append(
+            f"| {PUBLIC_PRODUCT_NAMES['tabletop']} | "
+            f"{', '.join(format_label(format_id, event_ids_by_format[format_id]) for format_id in tabletop_catalog_formats)} | "
+            f"`{tabletop_entry}` |"
+        )
     checked += len(expected_rows) + 2
     for row in expected_rows:
         if row not in readme:
@@ -978,13 +985,18 @@ def main() -> int:
         action="store_true",
         help="validate the complete repository and all global contracts",
     )
+    mode.add_argument(
+        "--full-candidate",
+        action="store_true",
+        help="validate a staged complete Melee candidate while deferring only its Tabletop README publication row",
+    )
     args = parser.parse_args()
     try:
         root = repository_root()
         tracked = tracked_files(root)
         changed: list[str] = []
-        if args.full:
-            validation_mode = "full"
+        if args.full or args.full_candidate:
+            validation_mode = "full-candidate" if args.full_candidate else "full"
             candidates = sorted(
                 set(tracked) | {"validate_repository.py"} | set(MAINTAINED_JAVASCRIPT)
             )
@@ -1010,7 +1022,10 @@ def main() -> int:
         fact_failures: list[Failure] = []
         if validate_facts:
             fact_count, fact_failures = validate_public_product_facts(
-                root, tracked, parsed.get("docs/STATUS.yaml", {})
+                root,
+                tracked,
+                parsed.get("docs/STATUS.yaml", {}),
+                defer_tabletop_readme=args.full_candidate,
             )
         reference_count += fact_count
         failures.extend(fact_failures)

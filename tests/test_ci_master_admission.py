@@ -117,6 +117,10 @@ def test_known_paths_select_only_their_targeted_categories(paths, expected):
         (["schemas/mtgo-meta.schema.json"], ("schema-contract",)),
         (["validate_schemas.py"], ("repository-modes", "schema-contract")),
         (
+            ["data/modern/melee/classifications/434455.json"],
+            ("melee-data-schema",),
+        ),
+        (
             ["my_archetypes/standard.yaml"],
             ("rules-standard", "top8-restatement"),
         ),
@@ -165,6 +169,42 @@ def test_known_added_path_needs_no_operation_declaration():
         [{"filename": "docs/reviews/Owner-Review.md", "status": "added"}]
     )
     assert decision.validation_class == "targeted:docs"
+
+
+def _melee_publication_files(event_id="441441"):
+    paths = [
+        f"data_raw/melee/{event_id}/snapshot/manifest.json",
+        f"data/modern/melee/events/{event_id}.json",
+        f"data/modern/melee/classifications/{event_id}.json",
+        f"data/modern/melee/opportunities/{event_id}.json",
+        "stats/modern/melee/index.json",
+        "stats/catalog.json",
+        "README.md",
+        "docs/STATUS.yaml",
+    ] + [
+        f"stats/modern/melee/events/{event_id}/{name}.json"
+        for name in ("overview", "decks", "matchup", "quality", "meta")
+    ]
+    return [
+        {
+            "filename": path,
+            "status": "added" if event_id in path else "modified",
+        }
+        for path in paths
+    ]
+
+
+def test_new_melee_event_publication_requires_and_accepts_complete_bundle():
+    complete = _decide_pr(_melee_publication_files())
+    assert complete.mode == "targeted"
+    assert "melee-data-schema" in complete.validation_triggers
+
+    incomplete = _decide_pr(
+        [item for item in _melee_publication_files() if item["filename"] != "README.md"]
+    )
+    assert incomplete.mode == "unclassified"
+    assert "incomplete_melee_event_publication_bundle" in incomplete.reason
+    assert "README.md" in incomplete.reason
 
 
 def test_stage_c_runner_is_a_known_ui_diagnostic_path():

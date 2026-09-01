@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "profile": "internal-melee-data",
+  "output_schema_version_embedded": true,
+  "note": "Validation contract for retained normalized Melee events and their derived classification and opportunity ledgers.",
+  "mappings": [
+    {"pattern": "data/*/melee/events/*.json", "schema": "melee-event.schema.json"},
+    {"pattern": "data/*/melee/classifications/*.json", "schema": "melee-classification.schema.json"},
+    {"pattern": "data/*/melee/opportunities/*.json", "schema": "melee-opportunity-ledger.schema.json"}
+  ]
+}

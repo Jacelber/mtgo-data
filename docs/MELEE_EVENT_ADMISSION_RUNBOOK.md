@@ -150,11 +150,25 @@ reviewable product candidate.
 
 **Operation:** with separate workflow-dispatch, live-collection, retention,
 and candidate-branch authority, run **Melee production candidate** from the
-exact approved `master` commit with the exact event ID. A new event performs
+exact approved `master` commit with the exact event ID and one closed operation
+state. Use `collect-new` only when no review branch exists. Use
+`resume-retained` only with the exact authorized 40-character review-branch
+checkpoint; the workflow must prove that the remote branch still equals that
+checkpoint before source resolution. A recovery may never fall back to a new
+collection. A new event performs
 one complete collection using raw manifest v4, minimized resource v2,
 checkpoint v3, and `source-participant-id-v1`; it then retains, classifies,
 builds the opportunity ledger, generates event statistics and matchup data,
 packages metadata and catalogs, and validates the bounded candidate.
+
+After candidate scope validation, stage only the exact event-bound paths before
+complete candidate validation. This seals the exact Git-index subject so the
+complete validator and later candidate commit consume the same paths without
+publishing them. Run the dynamic
+public-output Schema manifest and the internal Melee event, classification, and
+opportunity manifest. Candidate validation may defer only synchronization of
+the Tabletop row in `README.md`; published-state validation remains strict and
+undefined validation or operation states fail closed.
 
 The workflow may push only `data/melee-<event_id>`. It never writes `master`,
 opens or merges a pull request, or deploys Pages.
@@ -220,7 +234,12 @@ selected event or downgrade the active taxonomy to make it pass.
 one Ready PR from `data/melee-<event_id>`, run the required candidate and
 repository checks, review the complete diff, and merge only after all required
 checks pass. The accepted subject must include every intended raw, normalized,
-derived, catalog, compatibility, and status change and no unrelated path.
+derived, catalog, compatibility, and status change and no unrelated path. For
+a new event, the same publication PR must also update the `README.md` current
+public-product row and `docs/STATUS.yaml`; PR admission rejects an incomplete
+new-event bundle before targeted checks begin. Pages compatibility validation
+must compare every declared protected catalog projection, while allowing only
+the unrelated catalog growth named by its expansion policy.
 
 **Effect:** the reviewed event reaches the exact `master` commit that will
 supply Pages.
@@ -263,7 +282,7 @@ required public resources pass.
 | Edit and merge the whitelist | Focused whitelist task and Owner acceptance |
 | Repair publisher, validator, Schema, or compatibility contracts | Separate implementation task and Owner acceptance |
 | Regenerate an existing protected event | Separate data migration and compatibility authority |
-| Dispatch `fetch_melee.yml` | Exact event workflow-dispatch, live-collection, retention, and candidate-branch authority |
+| Dispatch `fetch_melee.yml` | Exact event, closed operation state, and workflow-dispatch, live-collection or exact-checkpoint recovery, retention, and candidate-branch authority |
 | Create and merge the candidate PR | Owner acceptance of the exact candidate |
 | Deploy or recover Pages | Applicable exact-SHA deployment authority |
 | Begin another event or refresh | A new task; no authority carries over |

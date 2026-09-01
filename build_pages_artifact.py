@@ -181,6 +181,40 @@ def _verify_record(
     return relative
 
 
+def _validate_catalog_projection(
+    document: dict[str, Any], projection: dict[str, Any]
+) -> None:
+    if projection.get("expansion_policy") != (
+        "allow_unselected_entries_and_volatile_root_fields"
+    ):
+        raise PublicationError("unsupported catalog projection expansion policy")
+    requirements = projection.get("root_requirements")
+    selection = projection.get("selection")
+    expected = projection.get("expected")
+    if not isinstance(requirements, dict) or not isinstance(selection, list) or not isinstance(expected, dict):
+        raise PublicationError("catalog projection contract is malformed")
+    for key, value in requirements.items():
+        if document.get(key) != value:
+            raise PublicationError(f"catalog projection root requirement changed: {key}")
+    current: Any = document
+    for step in selection:
+        if not isinstance(step, dict) or set(step) != {"collection", "field", "equals"}:
+            raise PublicationError("catalog projection selection is malformed")
+        collection = current.get(step["collection"]) if isinstance(current, dict) else None
+        if not isinstance(collection, list):
+            raise PublicationError("catalog projection collection is missing")
+        matches = [
+            item
+            for item in collection
+            if isinstance(item, dict) and item.get(step["field"]) == step["equals"]
+        ]
+        if len(matches) != 1:
+            raise PublicationError("catalog projection selection must match exactly once")
+        current = matches[0]
+    if current != expected:
+        raise PublicationError("catalog projection selected value changed")
+
+
 def validate_compatibility(
     root: Path, config: dict[str, Any], selected: set[str]
 ) -> set[str]:
@@ -236,7 +270,8 @@ def validate_compatibility(
             relative = _safe_relative(projection.get("path"), "catalog projection path")
             if relative not in selected:
                 raise PublicationError(f"catalog path is absent from the artifact: {relative}")
-            _read_json(_source_file(root, relative), "catalog projection")
+            document = _read_json(_source_file(root, relative), "catalog projection")
+            _validate_catalog_projection(document, projection)
             protected.add(relative)
     return protected
 

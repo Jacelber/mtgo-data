@@ -117,15 +117,22 @@ jobs:
       - name: Validate changed public JSON contracts
         if: >-
           contains(needs.admission.outputs.validation_triggers, 'schema-contract') ||
-          contains(needs.admission.outputs.validation_triggers, 'schema-documents')
+          contains(needs.admission.outputs.validation_triggers, 'schema-documents') ||
+          contains(needs.admission.outputs.validation_triggers, 'melee-data-schema')
         shell: bash
         env:
           VALIDATION_TRIGGERS: ${{ needs.admission.outputs.validation_triggers }}
         run: |
           if [[ "$VALIDATION_TRIGGERS" == *schema-contract* ]]; then
             python -B validate_schemas.py
+            python -B validate_schemas.py --manifest schemas/melee-data-manifest.json
           else
-            python -B validate_schemas.py --changed-from "${{ github.event.pull_request.base.sha }}"
+            if [[ "$VALIDATION_TRIGGERS" == *schema-documents* ]]; then
+              python -B validate_schemas.py --changed-from "${{ github.event.pull_request.base.sha }}"
+            fi
+            if [[ "$VALIDATION_TRIGGERS" == *melee-data-schema* ]]; then
+              python -B validate_schemas.py --manifest schemas/melee-data-manifest.json --changed-from "${{ github.event.pull_request.base.sha }}"
+            fi
           fi
       - name: Validate Top 8 restatement
         if: contains(needs.admission.outputs.validation_triggers, 'top8-restatement')
