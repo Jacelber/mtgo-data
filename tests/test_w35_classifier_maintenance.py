@@ -16,6 +16,48 @@ from mtgmeta.melee.classification import (
 
 ROOT = Path(__file__).resolve().parents[1]
 
+W35_REVIEWED_441441_PARTICIPANT_IDS = frozenset(
+    {
+        "participant-06645aaf15dfa097fcacb2e63af1b633de0d066b9e98cb482419341abd2de39d",
+        "participant-06f074af0fba643267a2aa2a93e056bfb1a960c81c3f627a5d55726f357eeaea",
+        "participant-10f62d54a05adb22175f85815d2c3128242e03fe8b928caa8f6dd857eff67108",
+        "participant-1c44e49a0c4f574d8d49fd99c642acb4b5495b4d84c773243736ecf41f2cbc85",
+        "participant-27bbf48fa52ae7ea66fa3458ad92a3a2fef93ebcdd5186312fc827a082cb0b60",
+        "participant-2bd23c19e45f3ab13874f419381d5582e037478d84034c228ffb8e64e4f6531a",
+        "participant-2d053efe55e44b6290b1b7655b702da7ed6e7a90a89aafde097e669c8d3a6be1",
+        "participant-36ac49c4c827556ac70601615bc64d34012d1f915837ba9233aabfec1dc85192",
+        "participant-3ba362b9b8f0cc1048b7e65223871f13b3862f3e1c9fc6d772f3c79dbf9960a9",
+        "participant-4235519c0ec9a08d46bfb9639f80fc33640a1d0ec9bcda16136626f0de64f4e6",
+        "participant-50082a2bdbd512118b28a8d2b390a3ac9501fcf5e5350a180b2d2eb6ed0623cb",
+        "participant-53e310852b9d8dd2ed7edb42fdaf7ded35cc3af9ac24c1c09aaf44ea4751bcee",
+        "participant-54933d6426cfa9bc78a4b0474c614d7f1cb5c0606e431fa7a175da0a163b60c5",
+        "participant-5ae15dcfa639f9df2a7fa0f6c5a055635ac993b7491a6d4bdbff2b37c537ed77",
+        "participant-6bb24075c36334a74fc27784ae8f9b474a406b8346f479855a82827e04d9cae1",
+        "participant-6df2f8cbce4d5c8c75a8a1d2f2ae1b0fe2ebfd01ec2b0b9a99b6664091608e7b",
+        "participant-75b20a9848f1fafa476bc2d99ea7b6043821e9e7ddde28b1f327ed90cc2f1427",
+        "participant-968dd11158954fb5d23bf26cf6728a4fe8c7edda457284214690bd6faacedd54",
+        "participant-969ce5a350a6a18c91a00f6935c40cb63bdd65efc31a7c868358f798a0c2b06d",
+        "participant-977686529bb89dae7d262f62c5e0173481f9e393527cf05e342260b275a1b168",
+        "participant-a27ec730c00aa8e42df25e38c65282a9b4afb06ee97dec1000ccea4b173b7876",
+        "participant-a3e640d67fb708905acb22cc49473186d8fa187ccab1218f6a914e366aca1c65",
+        "participant-a404a75274fd94b1df3c76af2e98e797416d653be64a5fbb31dd7ede01663156",
+        "participant-a7d910e266f76e37994778b28d515d32e29a0185a3fbcc28a3e2600dc11cce66",
+        "participant-b295f9e545d761ca793e24d80f4edd9877512bdb1f81ba09d1cf2e3a162ef460",
+        "participant-b2e6db4ef07cfcdd26be0b8420c1150298f31b42b83ccd1a4a2b3a45d10d24af",
+        "participant-b7d59f72ac992f6532a398a583263815b7bb366b21d67a41b92b9b882e2bbfd8",
+        "participant-bb0139c2993fa9f59d788bc3f2994b0e5340aeea8699395d12f5ad11be73b95d",
+        "participant-c01d4424eb75787755dd7c345fd2e23aafab788f4a228944a55e9a3a70f07ba1",
+        "participant-c0683b438bb5ea1d117cb249469161f7c5855d3eeea47e17a9b68f00199b26df",
+        "participant-ce75adf2610707063f373716bf9ef669a68c16a4d8c3633edc6bcc194e537ec5",
+        "participant-dcfa73936e5e4745fd54ec4b52468ec44853022b4e22bc3a33b8d1d58ee28617",
+        "participant-e2ef257bde6507e1976a4a37c5740e294ae62a909f1994cb3ff4295ce94e78ea",
+        "participant-e8ab75cac9c003149e0f1aebf8c7e3b5f2a3d52eac616d40c0f46146f3f15a0e",
+        "participant-ed361fe45751c6d083443b1ecd9d6272267995cd074262da83ce0873d9759807",
+        "participant-f4c3e3e0be7dcb55b7d2e88fb85058bd3762f1d271454a318c06678bd80d829e",
+        "participant-f688ed085f4b7d579ad5573e0a559576f3e4ab97af2c805cbc0cb18785f4faa3",
+    }
+)
+
 
 def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
     return {
@@ -40,7 +82,7 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
             (
                 ("Drake Hatcher", 3),
                 ("Slickshot Show-Off", 3),
-                ("Gandalf, Friend of the Shire", 3),
+                ("Gandalf, Goblins' Bane", 3),
                 ("Steam Vents", 2),
             ),
             "izzet-prowess",
@@ -94,6 +136,37 @@ def test_w35_standard_rules_cover_accepted_representatives(
 
     assert result.status == "classified"
     assert result.archetype_id == expected_parent
+
+
+@pytest.mark.parametrize(
+    "source_file",
+    (
+        "Standard_Challenge_32_12852775.json",
+        "Standard_Challenge_16_12853170.json",
+    ),
+)
+def test_w35_real_gandalf_decks_are_izzet_prowess(source_file: str) -> None:
+    event = json.loads(
+        (ROOT / "data/standard" / source_file).read_text(encoding="utf-8")
+    )
+    reviewed_decks = []
+    for player in event["players"]:
+        main_counts = Counter(
+            {
+                card["name"]: card["qty"]
+                for card in player["main_deck"]
+            }
+        )
+        if main_counts["Gandalf, Goblins' Bane"] >= 3:
+            reviewed_decks.append(player)
+
+    assert len(reviewed_decks) == 1
+    result = classify_deck(
+        load_rule_set(ROOT / "my_archetypes/standard.yaml"),
+        reviewed_decks[0],
+    )
+    assert result.status == "classified"
+    assert result.archetype_id == "izzet-prowess"
 
 
 def test_melee_split_cards_preserve_reviewed_classifier_spellings() -> None:
@@ -424,6 +497,21 @@ def test_w35_artifact_unknown_clusters_have_exact_accepted_identities(
         ),
         (
             (
+                ("Emry, Lurker of the Loch", 4),
+                ("Tamiyo, Inquisitive Student", 4),
+                ("Mox Amber", 4),
+                ("Mox Opal", 4),
+                ("Urza's Saga", 4),
+                ("Mishra's Bauble", 4),
+                ("Quantum Riddler", 4),
+                ("Subtlety", 4),
+                ("Island", 4),
+                ("Kappa Cannoneer", 3),
+            ),
+            ("affinity", None),
+        ),
+        (
+            (
                 ("Basim Ibn Ishaq", 3),
                 ("Bilbo, Thief in the Night", 3),
                 ("Emry, Lurker of the Loch", 4),
@@ -448,6 +536,52 @@ def test_w35_new_artifact_rules_respect_accepted_engine_precedence(
 
     assert result.status == "classified"
     assert (result.archetype_id, result.subtype_id) == expected_identity
+
+
+def test_434455_owner_accepted_mono_blue_artifact_is_narrowly_classified() -> None:
+    event = json.loads(
+        (ROOT / "data/modern/melee/events/434455.json").read_text(encoding="utf-8")
+    )
+    required_cards = {
+        "Emry, Lurker of the Loch",
+        "Tamiyo, Inquisitive Student",
+        "Mox Amber",
+        "Mox Opal",
+        "Urza's Saga",
+        "Mishra's Bauble",
+        "Quantum Riddler",
+        "Subtlety",
+    }
+    reviewed_participants = set()
+    for decklist in event["decklists"]:
+        main_names = {
+            card["name"].split(" // ", maxsplit=1)[0]
+            for card in decklist["cards"]
+            if card["section"] == "main"
+        }
+        if required_cards <= main_names and "Kappa Cannoneer" not in main_names:
+            reviewed_participants.add(decklist["participant_id"])
+
+    refreshed_overlay = build_classification_overlay_from_paths(
+        ROOT / "data/modern/melee/events/434455.json",
+        ROOT / "my_archetypes/modern.yaml",
+        ROOT,
+    )
+    selected = {
+        record["participant_id"]: (
+            record["selected"]["archetype_id"],
+            record["selected"]["subtype_id"],
+        )
+        for record in refreshed_overlay["records"]
+        if record["participant_id"] in reviewed_participants
+    }
+
+    assert len(reviewed_participants) == 1
+    assert selected == {
+        participant_id: ("mono-blue-artifact", None)
+        for participant_id in reviewed_participants
+    }
+    assert refreshed_overlay["summary"]["unknown"] == 0
 
 
 def test_441441_oswald_artifact_decks_use_the_azorius_identity() -> None:
@@ -557,16 +691,7 @@ def test_441441_owner_rejected_off_format_decks_remain_unknown() -> None:
 
 
 def test_441441_reviewed_unknown_cohort_has_exact_accepted_outcomes() -> None:
-    accepted_overlay = json.loads(
-        (ROOT / "data/modern/melee/classifications/441441.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    reviewed_participants = {
-        record["participant_id"]
-        for record in accepted_overlay["records"]
-        if record["classification_status"] == "unknown"
-    }
+    reviewed_participants = W35_REVIEWED_441441_PARTICIPANT_IDS
     refreshed_overlay = build_classification_overlay_from_paths(
         ROOT / "data/modern/melee/events/441441.json",
         ROOT / "my_archetypes/modern.yaml",

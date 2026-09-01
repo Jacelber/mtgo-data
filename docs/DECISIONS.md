@@ -7723,3 +7723,60 @@ remain Unknown. This decision changes no retained event data, generated
 statistics, whitelist, workflow, Schema, front end, or publication state. It
 does not authorize data regeneration, commit, remote publication, pull-request
 creation, merge, production dispatch, or deployment.
+
+---
+
+# DEC-156 - Repair W35 residuals without absorbing the W36 queue
+
+Status: `Accepted`
+
+## Context
+
+The first refreshed classification baseline after DEC-155 exposed three W35
+residuals. Two Standard decks from events `12852775` and `12853170` remained
+Unknown even though the Owner-confirmed construction was Izzet Prowess. Their
+normalized source card is `Gandalf, Goblins' Bane`, but the rule and its
+synthetic test both used the unrelated name `Gandalf, Friend of the Shire`.
+The duplicated mistake let the test pass without exercising either real deck.
+
+DEC-155 also correctly removed the event `434455` Emry, Tamiyo, Mox, Saga,
+Quantum Riddler, and Subtlety construction from Affinity because it contains no
+Kappa Cannoneer. The Owner accepted `Mono-Blue Artifact / 纯蓝神器` for this
+construction. Across the retained 8,256-deck Modern MTGO corpus and retained
+events `434455` and `441441`, the broad Emry/Tamiyo/Mox artifact core occurs in
+128 decks and adding Quantum Riddler still occurs in 32. Requiring both Quantum
+Riddler and Subtlety narrows the observed match to exactly the accepted event
+`434455` deck.
+
+The Standard Dwarves record from event `12853216` and Modern Bant Company
+record from event `12853219` belong to W36. They are valid later review inputs,
+not W35 repair subjects.
+
+## Decision
+
+Correct `izzet-prowess-drake-hatcher` to use the normalized front-face name
+`Gandalf, Goblins' Bane` and bind its regression coverage to both retained W35
+source decks.
+
+Add the format-scoped parent `mono-blue-artifact` with display name
+`Mono-Blue Artifact / 纯蓝神器`. Its first rule requires at least three each of
+Emry, Tamiyo, Mox Amber, Mox Opal, Urza's Saga, Mishra's Bauble, Quantum
+Riddler, and Subtlety plus a reviewed blue mana source. It rejects white,
+black, and red source markers and explicitly excludes Kappa Cannoneer, Sewer-
+veillance Cam, Grinding Station, Jeskai Ascendancy, Oswald Fiddlebender,
+Portable Hole, Erayo, Cori-Steel Cutter, Basim, and Bilbo. These exclusions
+preserve Affinity, Sewer Combo, Azorius Artifact, Jeskai Ascendancy Combo,
+Erayo, Steel-Cutter, and Dimir Legends precedence.
+
+Do not add or relax any Dwarves or Bant Company rule in this repair. Those two
+W36 records remain Unknown for the next weekly review.
+
+## Consequences
+
+The repaired frozen inputs are expected to leave exactly two Standard MTGO
+Unknown records: the sole accepted random card pile and the W36 Dwarves deck.
+Modern MTGO retains exactly one Unknown, the W36 Bant Company deck. Event
+`434455` has no Unknown record, while event `441441` retains its seven accepted
+Unknown records and three excluded unavailable decklists. No source data,
+statistics, Top 8, Landing content, workflow, Schema, front end, public path,
+production state, or remote state changes in this local repair.

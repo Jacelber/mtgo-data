@@ -7,9 +7,9 @@
   "event_count": 258,
   "data_through": "2026-09-01 02:00:00.0",
   "summary": {
-    "record_count": 2847,
+    "record_count": 2881,
     "blocking": false,
-    "selected_record_count": 2765,
+    "selected_record_count": 2798,
     "selected_by_subtype": {
       "badgermole-combo/golgari": 3,
       "badgermole-combo/landfall": 2,
@@ -39,13 +39,14 @@
       "eldrazi-ramp/simic": 5,
       "eldrazi-ramp/sultai": 4,
       "eldrazi-ramp/temur": 6,
-      "eldrazi-tron/colorless": 299,
-      "eldrazi-tron/mono-black": 7,
-      "eldrazi-tron/mono-green": 30,
+      "eldrazi-tron/colorless": 303,
+      "eldrazi-tron/mono-black": 3,
+      "eldrazi-tron/mono-green": 31,
       "hammer-time/azorius": 21,
       "hammer-time/boros": 4,
       "hammer-time/jeskai": 3,
       "hammer-time/mono-white": 1,
+      "hammer-time/orzhov": 2,
       "living-end/bant": 18,
       "living-end/four-color": 1,
       "living-end/rakdos": 3,
@@ -74,16 +75,21 @@
       "rhinos/temur": 12,
       "scapeshift/four-color": 1,
       "scapeshift/naya": 6,
+      "sewer-combo/azorius": 12,
+      "sewer-combo/izzet": 1,
+      "sewer-combo/mono-blue": 5,
+      "sewer-combo/simic": 10,
       "soultrader/dimir": 3,
       "soultrader/golgari": 7,
-      "soultrader/orzhov": 4,
+      "soultrader/orzhov": 5,
       "soultrader/sultai": 5,
-      "steel-cutter/izzet": 63,
+      "steel-cutter/izzet": 60,
       "thopter-sword/bant": 1,
       "tron/mono-green": 3,
-      "tron/selesnya": 1
+      "tron/selesnya": 1,
+      "tron/simic": 4
     },
-    "same_parent_multiple_subtype_matches": 48
+    "same_parent_multiple_subtype_matches": 51
   },
   "records": [
     {
@@ -439,6 +445,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "515aa468d171ae07dec3",
+      "event_id": "12852770",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-08-25 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12852770.json",
+      "selected": {
+        "archetype_id": "hammer-time",
+        "archetype_name": "Hammer Time",
+        "subtype_id": "orzhov",
+        "subtype_name": "Orzhov",
+        "rule_id": "hammer-time-orzhov",
+        "priority": 626040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "hammer-time",
+          "subtype_id": "orzhov"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "7a29d1ac5e38caf3a58f",
       "event_id": "12852770",
       "event_name": "Modern Challenge 16",
@@ -500,6 +528,28 @@
         {
           "archetype_id": "eldrazi-ramp",
           "subtype_id": "gruul"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "cd6c14fc1cacf0538cd4",
+      "event_id": "12852770",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-08-25 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12852770.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -659,6 +709,50 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "6bd11ef3a1e43c845305",
+      "event_id": "12853187",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-08-29 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853187.json",
+      "selected": {
+        "archetype_id": "eldrazi-tron",
+        "archetype_name": "Eldrazi Tron",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "eldrazi-tron-mono-green-sowing",
+        "priority": 647900
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "880d30db2a5526b1d463",
+      "event_id": "12853187",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-08-29 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853187.json",
+      "selected": {
+        "archetype_id": "tron",
+        "archetype_name": "Tron",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "tron-simic-dress-down",
+        "priority": 648080
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "tron",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "89713189f35067168a5b",
       "event_id": "12853187",
       "event_name": "Modern Challenge 16",
@@ -786,6 +880,28 @@
         {
           "archetype_id": "eldrazi-ramp",
           "subtype_id": "golgari"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "e378751d9410f44de422",
+      "event_id": "12853187",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-08-29 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853187.json",
+      "selected": {
+        "archetype_id": "soultrader",
+        "archetype_name": "Soultrader",
+        "subtype_id": "orzhov",
+        "subtype_name": "Orzhov",
+        "rule_id": "soultrader-orzhov-red-splash",
+        "priority": 687090
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "soultrader",
+          "subtype_id": "orzhov"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -3709,12 +3825,12 @@
       "event_start": "2026-04-19 11:00:00.0",
       "source_file": "data/modern/Modern_Challenge_32_12839699.json",
       "selected": {
-        "archetype_id": "steel-cutter",
-        "archetype_name": "Izzet Steel-Cutter",
-        "subtype_id": "izzet",
-        "subtype_name": "Izzet",
-        "rule_id": "steel-cutter-izzet",
-        "priority": 675000
+        "archetype_id": "azorius-artifact",
+        "archetype_name": "Azorius Artifact",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "azorius-artifact-portable-hole",
+        "priority": 689919
       },
       "matched_subtypes": [
         {
@@ -7341,6 +7457,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "cc3ecc5a78acc2617eab",
+      "event_id": "12842485",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-05-16 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12842485.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "sewer-combo-simic",
+        "priority": 689929
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "eb93583a53dec0d526c3",
       "event_id": "12842485",
       "event_name": "Modern Challenge 32",
@@ -9375,10 +9513,14 @@
       "matched_subtypes": [
         {
           "archetype_id": "eldrazi-tron",
+          "subtype_id": "colorless"
+        },
+        {
+          "archetype_id": "eldrazi-tron",
           "subtype_id": "mono-black"
         }
       ],
-      "same_parent_multiple_subtype_matches": false
+      "same_parent_multiple_subtype_matches": true
     },
     {
       "deck_id": "985f4b27d2e53557e59d",
@@ -9947,15 +10089,15 @@
       "selected": {
         "archetype_id": "eldrazi-tron",
         "archetype_name": "Eldrazi Tron",
-        "subtype_id": "mono-black",
-        "subtype_name": "Mono-Black",
-        "rule_id": "eldrazi-tron-mono-black",
-        "priority": 649000
+        "subtype_id": "colorless",
+        "subtype_name": "Colorless",
+        "rule_id": "eldrazi-tron-colorless",
+        "priority": 647000
       },
       "matched_subtypes": [
         {
           "archetype_id": "eldrazi-tron",
-          "subtype_id": "mono-black"
+          "subtype_id": "colorless"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -10233,15 +10375,15 @@
       "selected": {
         "archetype_id": "eldrazi-tron",
         "archetype_name": "Eldrazi Tron",
-        "subtype_id": "mono-black",
-        "subtype_name": "Mono-Black",
-        "rule_id": "eldrazi-tron-mono-black",
-        "priority": 649000
+        "subtype_id": "colorless",
+        "subtype_name": "Colorless",
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_subtypes": [
         {
           "archetype_id": "eldrazi-tron",
-          "subtype_id": "mono-black"
+          "subtype_id": "colorless"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -15255,6 +15397,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "ad83d8315a2d2aeac084",
+      "event_id": "12845682",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-06-28 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12845682.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "sewer-combo-simic",
+        "priority": 689929
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "f196c4338dad72161cad",
       "event_id": "12845682",
       "event_name": "Modern Challenge 32",
@@ -16783,12 +16947,12 @@
       "event_start": "2026-07-15 00:00:00.0",
       "source_file": "data/modern/Modern_Challenge_32_12847171.json",
       "selected": {
-        "archetype_id": "steel-cutter",
-        "archetype_name": "Izzet Steel-Cutter",
-        "subtype_id": "izzet",
-        "subtype_name": "Izzet",
-        "rule_id": "steel-cutter-izzet",
-        "priority": 675000
+        "archetype_id": "jeskai-ascendancy-combo",
+        "archetype_name": "Jeskai Ascendancy Combo",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "jeskai-ascendancy-combo-artifact",
+        "priority": 689915
       },
       "matched_subtypes": [
         {
@@ -19197,6 +19361,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "a751573de6c98e431ad1",
+      "event_id": "12850696",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-08-05 21:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12850696.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "ac3a1b6d6f69c6ffb7e1",
       "event_id": "12850696",
       "event_name": "Modern Challenge 32",
@@ -20094,6 +20280,28 @@
         {
           "archetype_id": "devoted-druid-combo",
           "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "2d30b6ce61c9f9e4f567",
+      "event_id": "12851660",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-08-15 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12851660.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -21309,6 +21517,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "e6086083eada46ac7550",
+      "event_id": "12853160",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-08-26 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853160.json",
+      "selected": {
+        "archetype_id": "tron",
+        "archetype_name": "Tron",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "tron-simic-dress-down",
+        "priority": 648080
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "tron",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "f5aff9d9109aaf8d0b01",
       "event_id": "12853160",
       "event_name": "Modern Challenge 32",
@@ -21485,6 +21715,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "8c785bf5bcb345241c6a",
+      "event_id": "12853219",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-01 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853219.json",
+      "selected": {
+        "archetype_id": "hammer-time",
+        "archetype_name": "Hammer Time",
+        "subtype_id": "orzhov",
+        "subtype_name": "Orzhov",
+        "rule_id": "hammer-time-orzhov",
+        "priority": 626040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "hammer-time",
+          "subtype_id": "orzhov"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "a1f63836c9fa2c50f3b4",
       "event_id": "12853219",
       "event_name": "Modern Challenge 32",
@@ -21546,6 +21798,28 @@
         {
           "archetype_id": "dimir-tempo",
           "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "fb6364d0717a5e8f0e0e",
+      "event_id": "12853219",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-01 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853219.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -23560,6 +23834,28 @@
         {
           "archetype_id": "broodscale-combo",
           "subtype_id": "gruul"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "5dcd00cb6176b9836fec",
+      "event_id": "12839654",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-04-16 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12839654.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "sewer-combo-simic",
+        "priority": 689929
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "simic"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -25689,6 +25985,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "183b678fd810bf76da05",
+      "event_id": "12841399",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-05-05 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12841399.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "sewer-combo-simic",
+        "priority": 689929
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "3d60ec7d99ba08570232",
       "event_id": "12841399",
       "event_name": "Modern Challenge 64",
@@ -26495,6 +26813,28 @@
         }
       ],
       "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "eed1002ba0a0eef8c611",
+      "event_id": "12842129",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-05-12 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12842129.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "mono-blue",
+        "subtype_name": "Mono-Blue",
+        "rule_id": "sewer-combo-mono-blue-rona",
+        "priority": 689926
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "mono-blue"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
     },
     {
       "deck_id": "0087e0635085e51f287e",
@@ -28163,15 +28503,15 @@
       "selected": {
         "archetype_id": "eldrazi-tron",
         "archetype_name": "Eldrazi Tron",
-        "subtype_id": "mono-black",
-        "subtype_name": "Mono-Black",
-        "rule_id": "eldrazi-tron-mono-black",
-        "priority": 649000
+        "subtype_id": "colorless",
+        "subtype_name": "Colorless",
+        "rule_id": "eldrazi-tron-colorless",
+        "priority": 647000
       },
       "matched_subtypes": [
         {
           "archetype_id": "eldrazi-tron",
-          "subtype_id": "mono-black"
+          "subtype_id": "colorless"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -29303,10 +29643,14 @@
       "matched_subtypes": [
         {
           "archetype_id": "eldrazi-tron",
+          "subtype_id": "colorless"
+        },
+        {
+          "archetype_id": "eldrazi-tron",
           "subtype_id": "mono-black"
         }
       ],
-      "same_parent_multiple_subtype_matches": false
+      "same_parent_multiple_subtype_matches": true
     },
     {
       "deck_id": "f63edff865d2a24e9f2d",
@@ -29699,10 +30043,14 @@
       "matched_subtypes": [
         {
           "archetype_id": "eldrazi-tron",
+          "subtype_id": "colorless"
+        },
+        {
+          "archetype_id": "eldrazi-tron",
           "subtype_id": "mono-black"
         }
       ],
-      "same_parent_multiple_subtype_matches": false
+      "same_parent_multiple_subtype_matches": true
     },
     {
       "deck_id": "ed97180014e41f50b05a",
@@ -36315,6 +36663,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "1eceebb884705785784a",
+      "event_id": "12845692",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-06-29 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12845692.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "sewer-combo-simic",
+        "priority": 689929
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "37bae04c8a24f8fc9654",
       "event_id": "12845692",
       "event_name": "Modern Challenge 64",
@@ -38442,6 +38812,28 @@
         {
           "archetype_id": "prowess",
           "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "3bfb3e253c471fb0fd8b",
+      "event_id": "12846528",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-07-07 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12846528.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "sewer-combo-simic",
+        "priority": 689929
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "simic"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -42577,6 +42969,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "86a6b7cc5e20d7b47837",
+      "event_id": "12848190",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-07-24 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12848190.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "sewer-combo-simic",
+        "priority": 689929
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "941f3b6216f444cf7c80",
       "event_id": "12848190",
       "event_name": "Modern Challenge 64",
@@ -42923,6 +43337,28 @@
       "matched_subtypes": [
         {
           "archetype_id": "oculus-ritual",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "8f7ecdaf8e76682ba3e1",
+      "event_id": "12848199",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-07-25 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12848199.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "sewer-combo-simic",
+        "priority": 689929
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
           "subtype_id": "simic"
         }
       ],
@@ -43677,6 +44113,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "24214d505197e59431f2",
+      "event_id": "12848217",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-07-26 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12848217.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "3c5a772fb06e440425d7",
       "event_id": "12848217",
       "event_name": "Modern Challenge 64",
@@ -43738,6 +44196,28 @@
         {
           "archetype_id": "chant-control",
           "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "c4850078a216c58ff5dd",
+      "event_id": "12848217",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-07-26 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12848217.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -44183,6 +44663,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "d58b89197af5a7d4180e",
+      "event_id": "12848246",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-07-28 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12848246.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "sewer-combo-simic",
+        "priority": 689929
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "da4a0a32128feb0ee5a5",
       "event_id": "12848246",
       "event_name": "Modern Challenge 64",
@@ -44398,6 +44900,28 @@
         {
           "archetype_id": "dimir-tempo",
           "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "985e2ec7e9b44d3f718b",
+      "event_id": "12849434",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-07-30 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12849434.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -45205,6 +45729,28 @@
         }
       ],
       "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "60aa04877d51d945b966",
+      "event_id": "12849474",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-08-02 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12849474.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
     },
     {
       "deck_id": "786c793559301dc758d4",
@@ -47429,6 +47975,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "2cdc4382ffc5d901a2e1",
+      "event_id": "12851108",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-08-09 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12851108.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "52b04b9dacf035419b4a",
       "event_id": "12851108",
       "event_name": "Modern Challenge 64",
@@ -49329,15 +49897,15 @@
       "selected": {
         "archetype_id": "eldrazi-tron",
         "archetype_name": "Eldrazi Tron",
-        "subtype_id": "mono-black",
-        "subtype_name": "Mono-Black",
-        "rule_id": "eldrazi-tron-mono-black",
-        "priority": 649000
+        "subtype_id": "colorless",
+        "subtype_name": "Colorless",
+        "rule_id": "eldrazi-tron-colorless",
+        "priority": 647000
       },
       "matched_subtypes": [
         {
           "archetype_id": "eldrazi-tron",
-          "subtype_id": "mono-black"
+          "subtype_id": "colorless"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -50333,6 +50901,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "13e29a4944d36cb13c11",
+      "event_id": "12851676",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-08-16 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12851676.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "5949fb3646e5c0ee8b83",
       "event_id": "12851676",
       "event_name": "Modern Challenge 64",
@@ -50812,6 +51402,28 @@
         {
           "archetype_id": "living-end",
           "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "741d80729eb852e00a21",
+      "event_id": "12851705",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-08-18 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12851705.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "sewer-combo-simic",
+        "priority": 689929
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "simic"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -53905,6 +54517,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "175d31758e3ae411e821",
+      "event_id": "12853181",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-08-28 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853181.json",
+      "selected": {
+        "archetype_id": "tron",
+        "archetype_name": "Tron",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "tron-simic-dress-down",
+        "priority": 648080
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "tron",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "193aaed1ffaa9bcf0368",
       "event_id": "12853181",
       "event_name": "Modern Challenge 64",
@@ -54785,6 +55419,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "1c17699f73737d127d5c",
+      "event_id": "12853197",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-08-30 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853197.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "mono-blue",
+        "subtype_name": "Mono-Blue",
+        "rule_id": "sewer-combo-mono-blue-loki",
+        "priority": 689927
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "mono-blue"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "272f5e4c2294b4f7b7fb",
       "event_id": "12853197",
       "event_name": "Modern Challenge 64",
@@ -55044,6 +55700,28 @@
         {
           "archetype_id": "prowess",
           "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "223550e3114068c4b603",
+      "event_id": "12853202",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-08-30 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853202.json",
+      "selected": {
+        "archetype_id": "tron",
+        "archetype_name": "Tron",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "tron-simic-dress-down",
+        "priority": 648080
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "tron",
+          "subtype_id": "simic"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -55407,14 +56085,18 @@
       "event_start": "2026-08-31 01:00:00.0",
       "source_file": "data/modern/Modern_Challenge_64_12853210.json",
       "selected": {
-        "archetype_id": "steel-cutter",
-        "archetype_name": "Izzet Steel-Cutter",
-        "subtype_id": "izzet",
-        "subtype_name": "Izzet",
-        "rule_id": "steel-cutter-izzet",
-        "priority": 675000
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
       },
       "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
+        },
         {
           "archetype_id": "steel-cutter",
           "subtype_id": "izzet"
@@ -56324,6 +57006,28 @@
         {
           "archetype_id": "chant-control",
           "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4746222632f8b1c55f3d",
+      "event_id": "12846513",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-07-06 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12846513.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "mono-blue",
+        "subtype_name": "Mono-Blue",
+        "rule_id": "sewer-combo-mono-blue-loki",
+        "priority": 689927
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "mono-blue"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -58441,6 +59145,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "111798b0da18c43958d7",
+      "event_id": "12851122",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-08-10 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12851122.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "mono-blue",
+        "subtype_name": "Mono-Blue",
+        "rule_id": "sewer-combo-mono-blue-loki",
+        "priority": 689927
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "mono-blue"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "145e52e8e3411583a848",
       "event_id": "12851122",
       "event_name": "Modern Challenge 96",
@@ -59655,6 +60381,28 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "303d0a1751b5ab9755e0",
+      "event_id": "12852762",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-08-24 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12852762.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "mono-blue",
+        "subtype_name": "Mono-Blue",
+        "rule_id": "sewer-combo-mono-blue-loki",
+        "priority": 689927
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "mono-blue"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "367581a416e8006e2016",
       "event_id": "12852762",
       "event_name": "Modern Challenge 96",
@@ -59793,16 +60541,20 @@
       "event_start": "2026-08-24 14:00:00.0",
       "source_file": "data/modern/Modern_Challenge_96_12852762.json",
       "selected": {
-        "archetype_id": "affinity",
-        "archetype_name": "Affinity",
-        "subtype_id": null,
-        "subtype_name": null,
-        "rule_id": "affinity-primary",
-        "priority": 435000
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
       },
       "matched_subtypes": [
         {
           "archetype_id": "chant-control",
+          "subtype_id": "azorius"
+        },
+        {
+          "archetype_id": "sewer-combo",
           "subtype_id": "azorius"
         }
       ],
@@ -60155,6 +60907,28 @@
       "matched_subtypes": [
         {
           "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "a69abe3a1fa847747fac",
+      "event_id": "12852781",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-08-26 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12852781.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "sewer-combo-izzet",
+        "priority": 689928
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
           "subtype_id": "izzet"
         }
       ],
