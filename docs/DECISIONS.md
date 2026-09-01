@@ -7573,3 +7573,59 @@ This decision changes no whitelist, normalized source bytes, participant
 identity, deck classification, taxonomy, workflow permission, production
 schedule, front end, or public path. It does not authorize commit, remote
 publication, merge, candidate recovery, recollection, or deployment.
+
+---
+
+# DEC-154 - Separate Melee candidate and published validation states
+
+Status: `Accepted`
+
+## Context
+
+Event `441441` repeatedly reached valid derived candidate output but failed in
+the publication section for different reasons. The latest failure used the
+published-repository README contract before the candidate had been accepted or
+published. The candidate catalog correctly contained the new event while the
+README correctly still described the live public product, so two individually
+correct states were treated as a contradiction. The broader audit found that
+the exact candidate index was not sealed until after complete validation,
+public Schema mappings named only event `434455`, retained recovery could
+silently become collection, and declared protected catalog projections were
+parsed but not compared.
+
+## Decision
+
+Define `full-candidate` and `full` as separate closed repository-validation
+states. Candidate validation defers only the Tabletop README row that describes
+the live product; it retains whitelist, catalog, MTGO README, reference,
+hygiene, rule, and Schema checks. Published `full` validation retains strict
+README-to-catalog equality. Unknown modes fail through argument parsing.
+
+After bounded candidate-scope validation, stage the exact allowed candidate
+paths before complete candidate validation and require no unstaged changes, so
+validation and the later candidate commit consume the same Git subject.
+Validate all public Melee event files through format- and event-dynamic Schema
+mappings and validate normalized events, classifications, and opportunity
+ledgers through a separate internal manifest.
+
+Require workflow dispatch to name either `collect-new` or `resume-retained`.
+The latter must name an exact remote review-branch checkpoint and may not fall
+back to collection; the former refuses an existing review branch or normalized
+event. Require a new-event publication PR to contain its raw, normalized,
+classification, opportunity, five public event documents, both catalogs,
+README public-product row, and live STATUS change as one bundle. Enforce every
+compatibility manifest catalog projection by exact root requirements and exact
+selected object while allowing only unrelated expansion declared by the
+existing policy.
+
+## Consequences
+
+Candidate generation can complete without falsely claiming that an unaccepted
+event is already live, while the final published repository remains strict.
+Every newly created event document is validated before persistence; recovery
+cannot recollect by accident; subsequent events receive the same Schema
+coverage as the first; incomplete publication PRs stop at admission; and Pages
+builds reject protected catalog drift. This changes no event data, whitelist,
+statistics, taxonomy, Schema shape or output version, public path, front end,
+workflow permission, or schedule. It does not authorize commit, remote
+publication, merge, candidate recovery, collection, or deployment.

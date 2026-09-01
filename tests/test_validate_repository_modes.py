@@ -1,10 +1,12 @@
 import json
+import subprocess
 from pathlib import Path
 
 from validate_repository import (
     changed_validation_plan,
     validate_files,
     validate_public_product_facts,
+    tracked_files,
 )
 from validate_schemas import validate_manifest
 
@@ -174,6 +176,60 @@ def test_readme_event_ids_follow_public_catalog(tmp_path):
     assert [failure.message for failure in failures] == [
         "missing or inconsistent row '| Tabletop Major Events | Modern (events `434455`, `441441`) | `/melee/index.html` |'"
     ]
+
+
+def test_candidate_mode_defers_only_tabletop_readme_synchronization(tmp_path):
+    names, status = write_public_product_fixture(
+        tmp_path,
+        whitelist_event_ids=("434455", "441441"),
+        public_event_ids=("434455", "441441"),
+    )
+
+    _, failures = validate_public_product_facts(
+        tmp_path, names, status, defer_tabletop_readme=True
+    )
+
+    assert failures == []
+
+
+def test_candidate_mode_keeps_whitelist_and_mtgo_readme_checks(tmp_path):
+    names, status = write_public_product_fixture(
+        tmp_path,
+        whitelist_event_ids=("434455",),
+        public_event_ids=("434455", "441441"),
+    )
+    (tmp_path / "README.md").write_text(
+        "| Tabletop Major Events | Modern (events `434455`, `441441`) | `/melee/index.html` |\n",
+        encoding="utf-8",
+    )
+
+    _, failures = validate_public_product_facts(
+        tmp_path, names, status, defer_tabletop_readme=True
+    )
+
+    assert {failure.message for failure in failures} == {
+        "public event '441441' requires an enabled, verified Tabletop whitelist entry",
+        "missing or inconsistent row '| MTGO Environment Trends | Modern | `/index.html` |'",
+    }
+
+
+def test_candidate_file_discovery_is_stable_before_and_after_bounded_staging(tmp_path):
+    repository = tmp_path / "repository"
+    repository.mkdir()
+    subprocess.run(["git", "init", "--quiet"], cwd=repository, check=True)
+    candidate = repository / "stats" / "modern" / "melee" / "events" / "441441"
+    candidate.mkdir(parents=True)
+    (candidate / "overview.json").write_text("{}\n", encoding="utf-8")
+
+    expected = ["stats/modern/melee/events/441441/overview.json"]
+    assert tracked_files(repository) == expected
+    subprocess.run(
+        ["git", "add", "--", "stats/modern/melee/events/441441/overview.json"],
+        cwd=repository,
+        check=True,
+    )
+
+    assert tracked_files(repository) == expected
 
 
 def test_changed_file_validation_does_not_parse_an_unrelated_area(tmp_path: Path):

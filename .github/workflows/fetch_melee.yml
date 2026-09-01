@@ -6,7 +6,15 @@ on:
       event_id:
         description: "Enabled and verified Melee event ID"
         required: true
-        default: "434455"
+        type: string
+      operation:
+        description: "Closed operation state: collect-new or resume-retained"
+        required: true
+        type: string
+      retained_checkpoint:
+        description: "Exact review-branch SHA required by resume-retained"
+        required: false
+        default: ""
         type: string
 
 permissions:
@@ -25,6 +33,8 @@ jobs:
     env:
       PYTHONPATH: src
       EVENT_ID: ${{ inputs.event_id }}
+      OPERATION: ${{ inputs.operation }}
+      EXPECTED_CHECKPOINT: ${{ inputs.retained_checkpoint }}
     steps:
       - name: Check out full history for candidate publication
         uses: actions/checkout@v7.0.0
@@ -39,6 +49,19 @@ jobs:
 
       - name: Install pinned development dependencies
         run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Validate candidate operation contract
+        shell: bash
+        run: |
+          case "$OPERATION" in
+            collect-new)
+              test -z "$EXPECTED_CHECKPOINT" || { echo "collect-new forbids a retained checkpoint" >&2; exit 1; }
+              ;;
+            resume-retained)
+              [[ "$EXPECTED_CHECKPOINT" =~ ^[0-9a-f]{40}$ ]] || { echo "resume-retained requires an exact lowercase 40-hex checkpoint" >&2; exit 1; }
+              ;;
+            *) echo "Undefined operation; expected collect-new|resume-retained" >&2; exit 1 ;;
+          esac
 
       - name: Smoke the Melee and catalog commands plus privacy boundary
         run: >-
@@ -65,14 +88,18 @@ jobs:
           --event-id "$EVENT_ID" --format "$FORMAT"
           --output "$RUNNER_TEMP/melee-baseline.json"
 
-      - name: Resume retained event review branch when present
+      - name: Resolve exact event review branch
         id: review-branch
         shell: bash
         run: |
           BRANCH="data/melee-${EVENT_ID}"
-          if git ls-remote --exit-code --heads origin "refs/heads/${BRANCH}" >/dev/null 2>&1; then
+          if [ "$OPERATION" = "resume-retained" ]; then
+            REMOTE_SHA="$(git ls-remote origin "refs/heads/${BRANCH}" | awk '{print $1}')"
+            test -n "$REMOTE_SHA" || { echo "Retained review branch is missing" >&2; exit 1; }
+            test "$REMOTE_SHA" = "$EXPECTED_CHECKPOINT" || { echo "Retained review branch does not match the authorized checkpoint" >&2; exit 1; }
             git fetch --no-tags origin "refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}"
             REMOTE_REF="refs/remotes/origin/${BRANCH}"
+            test "$(git rev-parse "$REMOTE_REF")" = "$EXPECTED_CHECKPOINT" || { echo "Fetched retained branch changed after checkpoint resolution" >&2; exit 1; }
             MERGE_BASE="$(git merge-base "$GITHUB_SHA" "$REMOTE_REF")"
             while IFS=$'\t' read -r STATUS CHANGED_PATH REST; do
               if [[ "$STATUS" == D* || "$STATUS" == R* || -n "$REST" ]]; then
@@ -98,24 +125,35 @@ jobs:
             fi
             echo "resumed=true" >> "$GITHUB_OUTPUT"
           else
+            if git ls-remote --exit-code --heads origin "refs/heads/${BRANCH}" >/dev/null 2>&1; then
+              echo "collect-new refuses an existing event review branch" >&2
+              exit 1
+            fi
+            git checkout -B "$BRANCH" "$GITHUB_SHA"
             echo "resumed=false" >> "$GITHUB_OUTPUT"
           fi
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
 
-      - name: Resolve retained snapshot or fetch a new whitelisted event
+      - name: Resolve explicitly selected event source
         id: snapshot
         shell: bash
         run: |
           EVENT_PATH="data/${FORMAT}/melee/events/${EVENT_ID}.json"
-          if [ -f "$EVENT_PATH" ]; then
-            SNAPSHOT="$(python -c 'import json,pathlib,sys; p=json.load(open(sys.argv[1], encoding="utf-8"))["provenance"]["raw_artifacts"][0]["path"]; print(pathlib.Path(p).parent.as_posix())' "$EVENT_PATH")"
-            SOURCE_MODE="retained"
-          else
-            RESULT="$(python -B -m mtgmeta.melee --event-id "$EVENT_ID" --complete --execute)"
-            printf '%s\n' "$RESULT"
-            SNAPSHOT="$(printf '%s' "$RESULT" | python -c 'import json,sys; print(json.load(sys.stdin)["archive_path"])')"
-            SOURCE_MODE="fetched"
-          fi
+          case "$OPERATION" in
+            resume-retained)
+              test -f "$EVENT_PATH" || { echo "Authorized retained event is missing" >&2; exit 1; }
+              SNAPSHOT="$(python -c 'import json,pathlib,sys; p=json.load(open(sys.argv[1], encoding="utf-8"))["provenance"]["raw_artifacts"][0]["path"]; print(pathlib.Path(p).parent.as_posix())' "$EVENT_PATH")"
+              SOURCE_MODE="retained"
+              ;;
+            collect-new)
+              test ! -f "$EVENT_PATH" || { echo "collect-new refuses an existing normalized event" >&2; exit 1; }
+              RESULT="$(python -B -m mtgmeta.melee --event-id "$EVENT_ID" --complete --execute)"
+              printf '%s\n' "$RESULT"
+              SNAPSHOT="$(printf '%s' "$RESULT" | python -c 'import json,sys; print(json.load(sys.stdin)["archive_path"])')"
+              SOURCE_MODE="fetched"
+              ;;
+            *) echo "Undefined operation reached source resolution" >&2; exit 1 ;;
+          esac
           test -n "$SNAPSHOT"
           echo "snapshot=$SNAPSHOT" >> "$GITHUB_OUTPUT"
           echo "source_mode=$SOURCE_MODE" >> "$GITHUB_OUTPUT"
@@ -183,12 +221,19 @@ jobs:
           python -B validate_melee_candidate.py validate
           --baseline "$RUNNER_TEMP/melee-baseline.json"
 
-      - name: Validate repository, rules, and public Schemas
+      - name: Stage validated candidate scope
         shell: bash
         run: |
-          python -B validate_repository.py --full
+          git add -- "data_raw/melee/${EVENT_ID}/" "data/${FORMAT}/melee/" "stats/${FORMAT}/melee/" "stats/catalog.json"
+          git diff --quiet || { echo "Candidate contains unstaged changes outside the exact staged scope" >&2; exit 1; }
+
+      - name: Validate repository, rules, and Schemas
+        shell: bash
+        run: |
+          python -B validate_repository.py --full-candidate
           python -B validate_rules.py "my_archetypes/${FORMAT}.yaml"
           python -B validate_schemas.py
+          python -B validate_schemas.py --manifest schemas/melee-data-manifest.json
 
       - name: Commit and push review branch
         id: publish
@@ -197,7 +242,7 @@ jobs:
           BRANCH="${{ steps.review-branch.outputs.branch }}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -- "data_raw/melee/${EVENT_ID}/" "data/${FORMAT}/melee/" "stats/${FORMAT}/melee/" "stats/catalog.json"
+          git diff --quiet || { echo "Candidate changed after validation" >&2; exit 1; }
           if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
@@ -226,6 +271,8 @@ jobs:
             echo
             echo "- Event ID: ${EVENT_ID}"
             echo "- Format: ${FORMAT}"
+            echo "- Requested operation: ${OPERATION}"
+            echo "- Requested retained checkpoint: ${EXPECTED_CHECKPOINT:-not-applicable}"
             echo "- Source mode: ${{ steps.snapshot.outputs.source_mode || 'not-reached' }}"
             echo "- Immutable checkpoint: ${{ steps.checkpoint.outputs.commit || 'not-required' }}"
             echo "- Result: ${{ job.status }}"

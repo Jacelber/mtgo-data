@@ -122,7 +122,11 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
 
 
 def test_production_repository_validation_is_explicitly_full():
-    for path in PRODUCTION_WORKFLOWS:
+    expected_by_path = {
+        UPDATE_WORKFLOW: "python -B validate_repository.py --full",
+        PRODUCTION_WORKFLOWS[1]: "python -B validate_repository.py --full-candidate",
+    }
+    for path, expected in expected_by_path.items():
         workflow = yaml.load(path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
         commands = [
             line.strip()
@@ -131,7 +135,7 @@ def test_production_repository_validation_is_explicitly_full():
             for line in step.get("run", "").splitlines()
             if "validate_repository.py" in line
         ]
-        assert commands == ["python -B validate_repository.py --full"], path
+        assert commands == [expected], path
 
 
 def test_pr_workflow_contains_no_long_or_repeated_validation():
@@ -205,13 +209,13 @@ def test_melee_candidate_checkpoints_retained_evidence_before_derived_work() -> 
     names = list(by_name)
 
     assert names.index("Snapshot Melee candidate baseline") < names.index(
-        "Resume retained event review branch when present"
+        "Resolve exact event review branch"
     )
     assert names.index("Retain normalized event") < names.index(
         "Checkpoint immutable source and normalized event"
     ) < names.index("Classify submitted decks strictly")
 
-    resume = by_name["Resume retained event review branch when present"]["run"]
+    resume = by_name["Resolve exact event review branch"]["run"]
     assert "read -r STATUS CHANGED_PATH REST" in resume
     assert 'case "$CHANGED_PATH" in' in resume
     assert "${CHANGED_PATH}" in resume
@@ -253,6 +257,46 @@ def test_melee_candidate_checkpoints_retained_evidence_before_derived_work() -> 
     verify = by_name["Verify immutable checkpoint"]
     assert verify["if"] == "steps.checkpoint.outputs.commit != ''"
     assert "git ls-remote origin" in verify["run"]
+
+
+def test_melee_candidate_requires_a_closed_operation_and_exact_recovery_checkpoint():
+    workflow = _melee_workflow()
+    inputs = workflow["on"]["workflow_dispatch"]["inputs"]
+    assert set(inputs) == {"event_id", "operation", "retained_checkpoint"}
+    assert "default" not in inputs["event_id"]
+    assert inputs["operation"]["required"] == "true"
+    assert inputs["retained_checkpoint"]["default"] == ""
+
+    by_name = {step["name"]: step for step in workflow["jobs"]["candidate"]["steps"]}
+    preflight = by_name["Validate candidate operation contract"]["run"]
+    assert "collect-new|resume-retained" in preflight
+    assert "^[0-9a-f]{40}$" in preflight
+    resume = by_name["Resolve exact event review branch"]["run"]
+    assert 'REMOTE_SHA="$EXPECTED_CHECKPOINT"' not in resume
+    assert 'test "$REMOTE_SHA" = "$EXPECTED_CHECKPOINT"' in resume
+    assert 'test "$(git rev-parse "$REMOTE_REF")" = "$EXPECTED_CHECKPOINT"' in resume
+    source = by_name["Resolve explicitly selected event source"]["run"]
+    assert 'case "$OPERATION" in' in source
+    assert "resume-retained)" in source
+    assert "collect-new)" in source
+
+
+def test_melee_candidate_stages_exact_scope_before_complete_validation():
+    workflow = _melee_workflow()
+    steps = workflow["jobs"]["candidate"]["steps"]
+    by_name = {step["name"]: step for step in steps}
+    names = list(by_name)
+    assert names.index("Validate Melee candidate scope") < names.index(
+        "Stage validated candidate scope"
+    ) < names.index("Validate repository, rules, and Schemas")
+    stage = by_name["Stage validated candidate scope"]["run"]
+    assert 'git add -- "data_raw/melee/${EVENT_ID}/"' in stage
+    assert "git diff --quiet" in stage
+    validation = by_name["Validate repository, rules, and Schemas"]["run"]
+    assert "validate_repository.py --full-candidate" in validation
+    assert "schemas/melee-data-manifest.json" in validation
+    publish = by_name["Commit and push review branch"]["run"]
+    assert "git add" not in publish
 
 
 def test_production_candidate_is_built_once_and_published_with_immutable_evidence():

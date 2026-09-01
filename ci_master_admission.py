@@ -425,6 +425,7 @@ def _path_category(path: str) -> str | None:
         (
             "configs/",
             "data/",
+            "data_raw/",
             "my_archetypes/",
             "reports/",
             "rules/",
@@ -480,6 +481,14 @@ def _validation_triggers(paths: set[str]) -> tuple[str, ...]:
         for path in paths
     ):
         triggers.add("schema-documents")
+    if any(
+        re.fullmatch(
+            r"data/[^/]+/melee/(events|classifications|opportunities)/[^/]+\.json",
+            path,
+        )
+        for path in paths
+    ):
+        triggers.add("melee-data-schema")
 
     if paths & {
         "my_archetypes/standard.yaml",
@@ -591,9 +600,12 @@ def _classify_pull_request_evidence(
     used_declarations: set[FileOperation] = set()
     categories: set[str] = set()
     changed_paths: set[str] = set()
+    added_paths: set[str] = set()
     for item in files:
         path, operation = _validated_change(item, declarations)
         changed_paths.add(path)
+        if item.get("status") == "added":
+            added_paths.add(path)
         if operation is not None and operation.previous_path is not None:
             changed_paths.add(operation.previous_path)
         inferred = _path_category(path)
@@ -618,6 +630,43 @@ def _classify_pull_request_evidence(
             raise ValueError(f"undeclared_file_operation:add:{path}")
     if declarations != used_declarations:
         raise ValueError("file_operation_declaration_does_not_match_diff")
+    new_events = {
+        (match.group("format"), match.group("event"))
+        for path in added_paths
+        if (
+            match := re.fullmatch(
+                r"stats/(?P<format>[^/]+)/melee/events/(?P<event>[^/]+)/"
+                r"(overview|decks|matchup|quality|meta)\.json",
+                path,
+            )
+        )
+    }
+    for format_id, event_id in sorted(new_events):
+        required_added = {
+            f"data/{format_id}/melee/events/{event_id}.json",
+            f"data/{format_id}/melee/classifications/{event_id}.json",
+            f"data/{format_id}/melee/opportunities/{event_id}.json",
+        } | {
+            f"stats/{format_id}/melee/events/{event_id}/{name}.json"
+            for name in ("overview", "decks", "matchup", "quality", "meta")
+        }
+        required_changed = {
+            f"stats/{format_id}/melee/index.json",
+            "stats/catalog.json",
+            "README.md",
+            "docs/STATUS.yaml",
+        }
+        missing = sorted(
+            (required_added - added_paths) | (required_changed - changed_paths)
+        )
+        raw_prefix = f"data_raw/melee/{event_id}/"
+        if not any(path.startswith(raw_prefix) for path in changed_paths):
+            missing.append(raw_prefix + "<snapshot>")
+        if missing:
+            raise ValueError(
+                f"incomplete_melee_event_publication_bundle:{format_id}:{event_id}:"
+                + ",".join(missing)
+            )
     expected_ui_digest = owner_ui_subject_digest(files)
     accepted_ui_digest = _owner_ui_acceptance(body)
     if expected_ui_digest is None:
