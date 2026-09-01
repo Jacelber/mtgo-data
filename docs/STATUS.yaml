@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_melee_441441_publication"
+  status: "active_melee_441441_publication_localization_recovery"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: true
@@ -27,14 +27,14 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "MELEE-441441-PUBLICATION"
-  name: "Publish the accepted event 441441 candidate"
+  id: "MELEE-441441-PUBLICATION-LOCALIZATION-400-RECOVERY"
+  name: "Recover the event 441441 publication from a bounded MTGCH batch-query failure"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-09-01"
   base_commit: "0b88c5134d48710949fc0d689a19e76f2a5e65be"
   branch: "codex/melee-441441-publication"
   workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-publication-20260901-01"
-  objective: "Publish the exact accepted event 441441 candidate aa46696d together with the required README and live STATUS synchronization, then verify the exact merge commit on Pages."
+  objective: "Add a bounded 20-to-5-to-1 fallback for multi-name MTGCH HTTP 400 responses, then complete publication of exact accepted candidate aa46696d and verify the exact merge commit on Pages."
   artifact_impact: "statistical_json_structure, public_path"
   authorization:
     local_implementation: true
@@ -51,6 +51,8 @@ current_task:
     - "stats/catalog.json"
     - "README.md"
     - "docs/STATUS.yaml"
+    - "tools/build_simple_card_localization.py"
+    - "tests/test_simple_card_localization.py"
   candidate_source:
     event_id: "441441"
     branch: "data/melee-441441"
@@ -77,18 +79,20 @@ current_task:
     accepted_candidate_bytes: "must equal aa46696d for all 718 candidate paths"
     classification_or_taxonomy_change: "none"
     schema_or_output_version_change: "none"
-    code_test_or_workflow_change: "none"
+    code_and_test_change: "Only the MTGCH multi-name HTTP 400 bounded fallback and its focused tests."
+    workflow_change: "none"
     frontend_or_statistical_semantics_change: "none"
   invariants:
-    - "The 718 candidate paths must retain the exact Git objects from aa46696d; only README.md and docs/STATUS.yaml may differ as publication metadata."
+    - "The 718 candidate paths must retain the exact Git objects from aa46696d; the scoped localization code and test repair must not alter any candidate path."
     - "The new-event publication bundle must contain raw, normalized, classification, opportunity, five public event files, both catalogs, README.md, and docs/STATUS.yaml together."
     - "Published-state repository, rule, public Schema, internal Melee Schema, catalog compatibility, and Pages admission checks must pass."
     - "The 37 Unknown records remain temporary review items; the three decklist_not_available participants remain a separate source-availability state."
   prohibited_changes:
     - "Do not recollect event 441441, regenerate or hand-edit the accepted candidate, or dispatch a workflow."
-    - "Do not change the whitelist, classifier rules, taxonomy, Schemas, code, tests, front ends, permissions, schedules, or statistical meaning."
+    - "Do not change the whitelist, classifier rules, taxonomy, Schemas, other code or tests, front ends, permissions, schedules, or statistical meaning."
     - "Do not begin the supplemental Unknown review, P14-02, Phase 15, another event admission, or unrelated work."
   planned_verification:
+    - "Prove that a multi-name HTTP 400 falls back through the existing bounded batch sizes while singleton HTTP 400 and other HTTP failures remain fatal."
     - "Prove the 718 candidate path and object changes equal aa46696d exactly, with no deletion, rename, or outside path."
     - "Run the live STATUS contract, strict published-state repository validation, required public and internal Schemas, rule validation, candidate compatibility checks, and git diff checks selected by the actual publication bundle."
     - "Create one Ready PR, require all checks, merge the unchanged accepted subject, and verify the exact merge SHA plus event 441441 public resources on Pages."
@@ -96,7 +100,7 @@ current_task:
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-09-01"
-    subject: "Publish exact candidate aa46696d with 37 temporary Unknown accepted for current publication and queued for this week's Modern Tabletop/Melee supplemental review; no classifier change or recollection."
+    subject: "Recover PR 341 with only a bounded 20-to-5-to-1 MTGCH multi-name HTTP 400 fallback and focused tests, then publish exact candidate aa46696d with 37 temporary Unknown queued for this week's Modern Tabletop/Melee supplemental review; no classifier change or recollection."
 
 current_repository_state:
   source_master_commit: "0b88c5134d48710949fc0d689a19e76f2a5e65be"
@@ -124,8 +128,11 @@ future_task_gates:
     status: "accepted"
     note: "Owner accepted aa46696d with 37 temporary Unknown and three decklist_not_available records."
   - id: "MELEE-441441-PUBLICATION"
+    status: "completion_continues_through_authorized_localization_recovery"
+    note: "Publish aa46696d through one complete new-event bundle after the bounded MTGCH batch-query repair, then verify the exact merge SHA on Pages."
+  - id: "MELEE-441441-PUBLICATION-LOCALIZATION-400-RECOVERY"
     status: "owner_accepted_completion_authorized"
-    note: "Publish aa46696d through one complete new-event bundle and verify the exact merge SHA on Pages."
+    note: "Only the bounded multi-name HTTP 400 fallback and focused tests may repair PR 341 before its existing merge and exact-SHA Pages completion."
   - id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
     status: "queued_not_authorized"
     note: "Review 37 temporary Tabletop/Melee Unknown records with this week's Modern maintenance; no classifier work begins under publication authority."
@@ -137,14 +144,14 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "MELEE-441441-PUBLICATION"
-  name: "Publish the exact accepted event 441441 candidate"
+  id: "MELEE-441441-PUBLICATION-LOCALIZATION-400-RECOVERY"
+  name: "Recover and complete publication of the exact accepted event 441441 candidate"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Continuous completion covers the exact candidate publication PR, required checks, merge, and exact-SHA Pages verification."
+  note: "Continuous completion covers only the bounded localization repair in PR 341, required checks, merge, and exact-SHA Pages verification of the unchanged accepted candidate."
 
 prohibited_next_actions:
   - "Do not recollect or regenerate event 441441, dispatch a workflow, change classifier rules or taxonomy, or force-push."
