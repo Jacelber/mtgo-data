@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import urllib.error
 from pathlib import Path
 
 import pytest
@@ -9,6 +10,16 @@ from tools import build_simple_card_localization as localization
 
 
 WEBP = b"RIFF\x04\x00\x00\x00WEBP"
+
+
+def _http_error(code: int) -> urllib.error.HTTPError:
+    return urllib.error.HTTPError(
+        "https://mtgch.com/api/v1/result",
+        code,
+        "test error",
+        None,
+        None,
+    )
 
 
 def _write_json(path: Path, value: object) -> None:
@@ -171,6 +182,64 @@ def test_resolve_lookup_rechecks_only_missing_names_in_smaller_batches(
         ["D"],
     ]
     assert set(lookup) == {"A", "B", "C", "D"}
+
+
+def test_resolve_lookup_splits_multi_name_bad_requests(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    monkeypatch.setattr(localization, "BATCH_SIZE", 4)
+    monkeypatch.setattr(localization, "FALLBACK_BATCH_SIZE", 2)
+    monkeypatch.setattr(localization, "FINAL_BATCH_SIZE", 1)
+    calls: list[list[str]] = []
+
+    def page(names: list[str], _page_number: int) -> dict:
+        calls.append(names)
+        if len(names) > 1:
+            raise _http_error(400)
+        name = names[0]
+        return {
+            "page": 1,
+            "total_pages": 1,
+            "items": [
+                {
+                    "id": name,
+                    "card_detail_url": f"/card/TST/{name}/",
+                    "display_name": name,
+                    "display_name_zh": f"Localized {name}",
+                    "image_url": f"https://images.mtgch.com/zhs/{name}.webp",
+                }
+            ],
+        }
+
+    lookup = localization.resolve_lookup(["A", "B", "C", "D"], page)
+
+    assert calls == [
+        ["A", "B", "C", "D"],
+        ["A", "B"],
+        ["A"],
+        ["B"],
+        ["C", "D"],
+        ["C"],
+        ["D"],
+    ]
+    assert set(lookup) == {"A", "B", "C", "D"}
+
+
+@pytest.mark.parametrize(
+    ("code", "names"),
+    [(400, ["A"]), (429, ["A", "B"])],
+)
+def test_resolve_lookup_keeps_unrecoverable_http_errors_fatal(
+    code: int,
+    names: list[str],
+):
+    def page(_names: list[str], _page_number: int) -> dict:
+        raise _http_error(code)
+
+    with pytest.raises(urllib.error.HTTPError) as exc_info:
+        localization.resolve_lookup(names, page)
+
+    assert exc_info.value.code == code
 
 
 def test_resolved_product_keys_do_not_share_mutable_entries(

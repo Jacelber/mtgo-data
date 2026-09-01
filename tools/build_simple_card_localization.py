@@ -10,6 +10,7 @@ import shutil
 import sys
 import tempfile
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from collections.abc import Callable, Iterable
@@ -240,7 +241,21 @@ def resolve_lookup(
             page = 1
             total_pages: int | None = None
             while total_pages is None or page <= total_pages:
-                response = fetch_page(batch, page)
+                try:
+                    response = fetch_page(batch, page)
+                except urllib.error.HTTPError as exc:
+                    next_batch_size = next(
+                        (
+                            size
+                            for size in (FALLBACK_BATCH_SIZE, FINAL_BATCH_SIZE)
+                            if size < len(batch)
+                        ),
+                        None,
+                    )
+                    if exc.code != 400 or page != 1 or next_batch_size is None:
+                        raise
+                    collect(batch, next_batch_size)
+                    break
                 response_page = response.get("page")
                 response_total = response.get("total_pages")
                 items = response.get("items")
