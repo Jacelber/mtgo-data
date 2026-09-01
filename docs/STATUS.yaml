@@ -42,7 +42,6 @@ current_task:
     commit: true
     remote_publication: true
     merge: true
-    production: false
   allowed_paths:
     - "my_archetypes/standard.yaml"
     - "my_archetypes/modern.yaml"
@@ -76,13 +75,13 @@ current_task:
 weekly_classifier_review:
   id: "W35-CROSS-SOURCE-CLASSIFIER-REVIEW"
   review_week: "2026-W35"
-  status: "owner_accepted_completion_authorized"
+  status: "completed"
   mtgo_readiness:
     carrier: "weekly-maintenance-readiness-2026-W35"
     counts_and_completion_remain_mtgo_only: true
   supplemental_cohorts:
     - id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
-      status: "owner_decisions_accepted"
+      status: "completed"
       source: "tabletop_melee"
       format: "modern"
       event_id: "441441"
