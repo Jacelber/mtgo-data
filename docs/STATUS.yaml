@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/weekly-cross-source-unknown-review-v1"
+  current_working_branch: "codex/melee-441441-unknown-overview-hotfix"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_weekly_cross_source_unknown_review_contract"
+  status: "active_melee_441441_unknown_overview_hotfix"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: true
@@ -27,47 +27,46 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "WEEKLY-CROSS-SOURCE-UNKNOWN-REVIEW-V1"
-  name: "Bind same-format Tabletop Unknown supplements to weekly classifier maintenance"
+  id: "MELEE-441441-UNKNOWN-OVERVIEW-HOTFIX"
+  name: "Render the explicit Unknown bucket in event 441441 Overview"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-09-01"
-  base_commit: "d6dd10fd932dd2b35a0054ff02d5e416cfb33b49"
-  branch: "codex/weekly-cross-source-unknown-review-v1"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-cross-source-unknown-review-v1-20260901-01"
-  objective: "Queue event 441441's 37 temporary Modern Unknown records with W35 maintenance and establish the same-format post-live handoff for future Tabletop events without merging source products or publication paths."
-  artifact_impact: "internal_diagnostics"
+  base_commit: "53aaa10db2c2904e8ad9c0d28a1e0a7bc793d42f"
+  branch: "codex/melee-441441-unknown-overview-hotfix"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-unknown-overview-hotfix-20260901-01"
+  objective: "Map only the canonical Tabletop Unknown Overview row to interface identity unknown in desktop sorting and rendering plus mobile cards, then publish and verify event 441441 before W35 maintenance begins."
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "docs/WEEKLY_MAINTENANCE.md"
-    - "docs/MELEE_EVENT_ADMISSION_RUNBOOK.md"
+    - "assets/js/phase8/app-tabletop.js"
+    - "assets/js/phase8/app-mobile-render.js"
+    - "tests/browser/phase13-tabletop-rendering.spec.js"
     - "docs/STATUS.yaml"
-    - "tests/test_documentation_history.py"
   protected_scope:
     classifier_or_taxonomy_change: "none"
     source_recollection_or_generated_data_change: "none"
     mtgo_readiness_or_completion_contract_change: "none"
-    workflow_schema_frontend_or_statistical_change: "none"
-    remote_write: "none"
+    workflow_schema_or_statistical_change: "none"
+    frontend_change: "canonical Unknown display only"
   invariants:
-    - "The W35 human review may share one Modern classifier decision session, but MTGO and Tabletop counts, readiness, completion, outputs, and publication remain separate."
-    - "The 37 event 441441 Unknown records are queued; three decklist_not_available participants remain excluded."
-    - "A handoff never authorizes rule changes, recollection, regeneration, commit, publication, merge, or deployment."
+    - "The canonical group_id unknown, classification_status unknown, archetype_id null tuple resolves to interface identity unknown without becoming a classifier identity."
+    - "Any other missing or invalid stable identity continues to fail closed."
+    - "The 37 Unknown records and three decklist_not_available participants remain byte-identical and statistically unchanged."
   prohibited_changes:
-    - "Do not change classifier rules, taxonomy, event data, generated outputs, the whitelist, Schemas, workflows, front ends, or statistical meaning."
-    - "Do not begin the queued review, recollect or regenerate event 441441, or dispatch a workflow."
+    - "Do not change classifier rules, taxonomy, event data, generated outputs, the whitelist, Schemas, workflows, public paths, or statistical meaning."
+    - "Do not begin the queued W35 review, recollect or regenerate event 441441, or dispatch a data workflow."
   planned_verification:
-    - "Validate the live STATUS authorization and source-aware supplemental queue contract."
-    - "Verify both runbooks preserve MTGO/Tabletop separation and make future post-live handoff mandatory when Unknown records exist."
-    - "Review the complete four-file diff and run only the focused documentation-governance tests."
-  stop_point: "Complete the unchanged accepted task through commit, one Ready PR, required checks, and merge; then stop before W35 Unknown review."
+    - "Run the one synthetic Tabletop rendering test that switches Matchup to Overview in English and Chinese, renders the canonical Unknown row, and sorts by name."
+    - "Review the exact four-file diff and complete one local browser check against event 441441."
+    - "After merge, bind Pages to the exact merge SHA and verify the live event 441441 Overview plus unchanged Matchup availability."
+  stop_point: "Complete the unchanged accepted hotfix through commit, one Ready PR, required checks, merge, and exact-SHA Pages verification; then stop before W35 Unknown review."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-09-01"
-    subject: "Queue event 441441's exact 37 temporary Modern Unknown records with W35 maintenance and establish the same-format post-live handoff while keeping MTGO and Tabletop counts, outputs, and publication separate."
+    subject: "Repair the live event 441441 Overview before maintenance by mapping only its canonical Unknown row for desktop and mobile display, adding focused regression coverage, and changing no data or statistical meaning."
 
 weekly_classifier_review:
   id: "W35-CROSS-SOURCE-CLASSIFIER-REVIEW"
@@ -92,9 +91,9 @@ weekly_classifier_review:
   separation_rule: "Share the same-format human classifier decision session only; retain separate source provenance, counts, readiness, completion, generation, and publication."
 
 current_repository_state:
-  source_master_commit: "d6dd10fd932dd2b35a0054ff02d5e416cfb33b49"
-  previous_task: "MELEE-441441-PUBLICATION-LOCALIZATION-400-RECOVERY"
-  previous_task_status: "completed_merged_in_pr_341"
+  source_master_commit: "53aaa10db2c2904e8ad9c0d28a1e0a7bc793d42f"
+  previous_task: "WEEKLY-CROSS-SOURCE-UNKNOWN-REVIEW-V1"
+  previous_task_status: "completed_merged_in_pr_342"
   candidate_producer_run: 33494293638
   retained_candidate_branch: "data/melee-441441"
   accepted_candidate_commit: "aa46696d03235e336ec1e4c3a0aa7fcdf48e117f"

@@ -159,9 +159,18 @@ function tabletopRow(record, className = "", advancementMetric = "high_score") {
   </tr>`;
 }
 
+function tabletopParentIdentity(record) {
+  if (
+    record?.group_id === "unknown"
+    && record?.classification_status === "unknown"
+    && record?.archetype_id === null
+  ) return "unknown";
+  return record?.archetype_id;
+}
+
 function tabletopSortValue(record, key) {
   if (key === "name") {
-    return classifierName(record.archetype_id, record.subtype_id).toLowerCase();
+    return classifierName(tabletopParentIdentity(record), record.subtype_id).toLowerCase();
   }
   if (key === "win_rate") return overviewRecord(record.match_record?.all_matches)?.win_rate ?? -1;
   if (key === "matches") return overviewRecord(record.match_record?.all_matches)?.matches ?? -1;
@@ -222,7 +231,7 @@ function tabletopOverview(scope, presentation) {
             data-responsive-key="tabletop-action:${escapeHtml(directIdentity)}"
             aria-expanded="${state.tabletopDetailIdentity === directIdentity}">
             <span class="identity-label">${escapeHtml(classifierName(parent.archetype_id))}</span></button>`
-        : `<span class="identity-label">${escapeHtml(classifierName(parent.archetype_id))}</span>`;
+        : `<span class="identity-label">${escapeHtml(classifierName(tabletopParentIdentity(parent)))}</span>`;
     const output = [tabletopRow({ ...parent, nameHtml }, "", advancementMetric)];
     if (!expandable && directIdentity && state.tabletopDetailIdentity === directIdentity) {
       output.push(tabletopDetailRow(directIdentity));
