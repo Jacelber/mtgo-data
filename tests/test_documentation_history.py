@@ -12,6 +12,8 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 STATUS_PATH = ROOT / "docs" / "STATUS.yaml"
 ROADMAP_PATH = ROOT / "docs" / "ROADMAP.md"
+WEEKLY_MAINTENANCE_PATH = ROOT / "docs" / "WEEKLY_MAINTENANCE.md"
+MELEE_ADMISSION_PATH = ROOT / "docs" / "MELEE_EVENT_ADMISSION_RUNBOOK.md"
 
 FORBIDDEN_STATUS_CACHES = {
     "approved_event_structures",
@@ -25,6 +27,12 @@ FORBIDDEN_STATUS_CACHES = {
 }
 
 OWNER_ACCEPTANCE_STATUSES = {"pending", "accepted"}
+WEEKLY_CLASSIFIER_REVIEW_STATUSES = {
+    "queued_for_owner_start",
+    "in_review",
+    "completed",
+}
+SUPPLEMENTAL_COHORT_STATUSES = {"queued", "in_review", "completed"}
 
 COMPLETION_ACTION_COMMANDS = {
     "commit": {"commit", "commit this task", "commit the current task"},
@@ -122,6 +130,76 @@ def live_status_policy_errors(status_bytes: bytes) -> list[str]:
                     "current_task and next_approved_task completion authorization "
                     f"must agree: {action}"
                 )
+    weekly_review = status.get("weekly_classifier_review")
+    if weekly_review is not None:
+        if weekly_review.get("status") not in WEEKLY_CLASSIFIER_REVIEW_STATUSES:
+            errors.append("weekly_classifier_review status is undefined")
+        review_week = weekly_review.get("review_week")
+        if not isinstance(review_week, str) or not re.fullmatch(
+            r"\d{4}-W\d{2}", review_week
+        ):
+            errors.append("weekly_classifier_review review_week is invalid")
+        mtgo_readiness = weekly_review.get("mtgo_readiness", {})
+        if mtgo_readiness.get("counts_and_completion_remain_mtgo_only") is not True:
+            errors.append("weekly_classifier_review must keep MTGO counts separate")
+        cohorts = weekly_review.get("supplemental_cohorts")
+        if not isinstance(cohorts, list) or not cohorts:
+            errors.append("weekly_classifier_review has no supplemental cohorts")
+        else:
+            cohort_ids = []
+            source_events = []
+            for cohort in cohorts:
+                if not isinstance(cohort, dict):
+                    errors.append(
+                        "weekly_classifier_review contains a non-object cohort"
+                    )
+                    continue
+                cohort_ids.append(cohort.get("id"))
+                source_events.append((cohort.get("source"), cohort.get("event_id")))
+                if cohort.get("status") not in SUPPLEMENTAL_COHORT_STATUSES:
+                    errors.append("weekly_classifier_review cohort status is undefined")
+                if cohort.get("source") != "tabletop_melee":
+                    errors.append("weekly_classifier_review cohort source is invalid")
+                if not re.fullmatch(r"[a-z0-9_-]+", str(cohort.get("format", ""))):
+                    errors.append("weekly_classifier_review cohort format is invalid")
+                if not re.fullmatch(r"\d+", str(cohort.get("event_id", ""))):
+                    errors.append("weekly_classifier_review cohort event_id is invalid")
+                if not re.fullmatch(
+                    r"[0-9a-f]{40}", str(cohort.get("accepted_candidate_commit", ""))
+                ):
+                    errors.append(
+                        "weekly_classifier_review candidate commit is invalid"
+                    )
+                unknown_count = cohort.get("unknown_count")
+                unavailable_count = cohort.get("excluded_unavailable_decklist_count")
+                if not isinstance(unknown_count, int) or unknown_count <= 0:
+                    errors.append("weekly_classifier_review Unknown count is invalid")
+                if not isinstance(unavailable_count, int) or unavailable_count < 0:
+                    errors.append(
+                        "weekly_classifier_review unavailable count is invalid"
+                    )
+                authorization_keys = {
+                    "review_start_authorized",
+                    "rule_change_authorized",
+                    "regeneration_authorized",
+                    "republication_authorized",
+                }
+                if not all(
+                    isinstance(cohort.get(key), bool) for key in authorization_keys
+                ):
+                    errors.append(
+                        "weekly_classifier_review cohort authorization is incomplete"
+                    )
+                if cohort.get("status") == "queued" and any(
+                    cohort.get(key) is True for key in authorization_keys
+                ):
+                    errors.append(
+                        "queued weekly_classifier_review cohort authorizes execution"
+                    )
+            if len(cohort_ids) != len(set(cohort_ids)):
+                errors.append("weekly_classifier_review cohort IDs are not unique")
+            if len(source_events) != len(set(source_events)):
+                errors.append("weekly_classifier_review source events are not unique")
     return errors
 
 
@@ -135,6 +213,21 @@ def test_live_roadmap_history_pointers_exist():
 
     assert pointers
     assert all((ROOT / pointer).is_file() for pointer in pointers)
+
+
+def test_cross_source_unknown_review_runbooks_preserve_product_separation():
+    weekly = " ".join(WEEKLY_MAINTENANCE_PATH.read_text(encoding="utf-8").split())
+    melee = " ".join(MELEE_ADMISSION_PATH.read_text(encoding="utf-8").split())
+
+    assert (
+        "The weekly readiness JSON and completion registry remain MTGO-only" in weekly
+    )
+    assert "source-neutral handoff recorded in `docs/STATUS.yaml`" in weekly
+    assert "Post-live Unknown handoff" in melee
+    assert (
+        "The MTGO weekly readiness JSON and completion registry remain MTGO-only"
+        in melee
+    )
 
 
 @pytest.mark.parametrize(
@@ -171,6 +264,18 @@ def test_live_status_contract_rejects_undefined_owner_acceptance_status(
     errors = live_status_policy_errors(yaml.safe_dump(status).encode("utf-8"))
 
     assert "current_task owner_acceptance.status must be pending or accepted" in errors
+
+
+@pytest.mark.parametrize("undefined_status", [None, "", "pending", "unknown"])
+def test_live_status_contract_rejects_undefined_weekly_review_status(
+    undefined_status,
+):
+    status = yaml.safe_load(STATUS_PATH.read_bytes())
+    status["weekly_classifier_review"]["status"] = undefined_status
+
+    errors = live_status_policy_errors(yaml.safe_dump(status).encode("utf-8"))
+
+    assert "weekly_classifier_review status is undefined" in errors
 
 
 @pytest.mark.parametrize("authorization_key", ["commit", "remote_publication", "merge"])

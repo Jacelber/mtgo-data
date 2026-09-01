@@ -36,8 +36,8 @@ open by every digest change.
 | 2. Build weekly readiness | Automatic GitHub workflow | Bind the current review week to Top 8 event IDs and classifier digests, require each Landing editorial candidate source to carry the same classifier and screening-policy digests, and reuse the authoritative Landing Top 8 subject to report the exact machine-fact digest later used by Landing admission plus the complete-link-catalog binding. Never substitute a Top 8 summary digest for the Landing machine-fact digest. The primary Unknown count and complete decklists are the exact intersection with the review week's source event IDs. Preserve every retained-corpus unresolved and intentional Unknown in a separately labelled queue, including an explicit outside-review-week subset that cannot change the weekly count or readiness status. Separately list classification blockers, editorial candidate counts, stale candidates, unavailable review inputs, and the non-blocking status of optional machine prose. Finally compare a recorded completed week with its exact Top 8 review subject and published Landing content; a global classifier digest change alone is not a material review change. | Private Schema-valid readiness JSON plus one deduplicated weekly Issue whose state reflects `awaiting_owner_start`, `blocked`, `completed`, or `revalidation_required`. |
 | 3. Start the review | Owner | Read the Issue and explicitly ask Codex to begin with the named week and readiness artifact. Closing or ignoring the Issue means no review starts. | Authorization for one exact weekly review baseline. |
 | 4. Freeze and verify the baseline | Codex | Confirm the cloud workflow run, publication SHA, week lifecycle, event IDs, classifier digests, and readiness digest. Stop on drift or missing evidence. | Frozen review manifest and plain-language scope summary. |
-| 5. Review Unknown decks | Codex and Owner alternate; Owner confirms | Review every unresolved Unknown whose event belongs to the frozen review week unless it was already reclassified or explicitly accepted as intentional Unknown. Keep older and future-week unresolved records visible in the separate retained-corpus queue for their own explicitly started review; they do not silently expand the current weekly task. Handle coherent clusters in chat with complete representative decklists; use XLSX only for singleton batch review. Codex supplies a preliminary technical proposal, reads unrestricted Owner feedback, then supplies an exact revised proposal. | One final Owner confirmation per review-week unresolved deck or group. Only an incoherent random card pile may be explicitly accepted as intentional Unknown. |
-| 6. Repair and reproduce classification when needed | Codex implements after separate authorization; Owner accepts | Make only accepted classifier changes. When a parent/subtype identity is added or renamed, include its format-scoped English/Chinese name maintenance in the same review and require Owner confirmation of the Chinese name; always run bilingual-name coverage before accepting the refreshed baseline. Then rerun the affected classification and derived weekly outputs and re-freeze the changed baseline. Skip rule edits when no rule change is accepted, but never skip the coverage check. | Accepted classifier subject, complete bilingual identity coverage, and refreshed weekly evidence, or an explicit no-rule-change record with passing coverage. |
+| 5. Review Unknown decks | Codex and Owner alternate; Owner confirms | Review every unresolved MTGO Unknown whose event belongs to the frozen review week plus every separately authorized same-format Tabletop supplement assigned to that week. Keep each source cohort labelled and counted separately. Older and future-week MTGO records and unstarted Tabletop supplements remain visible in their own queues and do not silently expand the task. Handle coherent clusters in chat with complete representative decklists; use XLSX only for singleton batch review. Codex supplies a preliminary technical proposal, reads unrestricted Owner feedback, then supplies an exact revised proposal. | One final Owner confirmation per unresolved deck or group, with source and event provenance retained. Only an incoherent random card pile may be explicitly accepted as intentional Unknown. |
+| 6. Repair and reproduce classification when needed | Codex implements after separate authorization; Owner accepts | Make only accepted classifier changes. One accepted format rule subject may resolve MTGO and Tabletop cohorts reviewed together, but each source retains its own regeneration and publication gate. When a parent/subtype identity is added or renamed, include its format-scoped English/Chinese name maintenance in the same review and require Owner confirmation of the Chinese name; always run bilingual-name coverage before accepting the refreshed baseline. Rerun only the separately authorized affected classifications and derived outputs from their frozen inputs, then re-freeze each changed baseline. Skip rule edits when no rule change is accepted, but never skip the coverage check. | Accepted shared classifier subject, complete bilingual identity coverage, and separate refreshed evidence per authorized source, or an explicit no-rule-change record with passing coverage. |
 | 7. Audit every Top 8 classification | Codex prepares; Owner checks | Export every current-week Top 8 deck in event-date and rank order with its final classification. This temporary human audit remains required until the Owner explicitly retires it. | Owner-checked weekly classification baseline. |
 | 8. Review visual metadata | Codex proposes; Owner decides | Review representative-card choices and deck-color identities against the accepted deck identities. Missing deterministic diagnostics are reported as unavailable, never guessed. | Owner-approved metadata changes or an explicit no-change/defer record. |
 | 9. Screen Landing features | Automatic Landing editorial producer | Run `landing-review prepare --if-absent`, apply the five reviewed routes to exact Top 8 results, and keep the complete ordered Top 8 pool. Merge reason tags only when they select the same exact deck. There is no machine primary pick. | Private Landing candidates, structured evidence, and complete Top 8 link catalog. |
@@ -58,6 +58,37 @@ four only when the lower value causes a demonstrated identity migration,
 conflict, or identity loss, and the workbook records that evidence. If final
 implementation exposes an impact not disclosed in the reviewed workbook, the
 changed subject returns to Owner confirmation before commit or publication.
+
+### Cross-source same-format supplements
+
+The weekly readiness JSON and completion registry remain MTGO-only. A Tabletop
+supplement joins the same human classifier review through a separate,
+source-neutral handoff recorded in `docs/STATUS.yaml`; it is never inserted into
+MTGO event IDs, Unknown counts, readiness status, Top 8 audit, Landing
+candidates, or completion records.
+
+Every handoff must name the target review week, format, source, event ID,
+immutable accepted candidate or classification subject, unresolved Unknown
+count, separately excluded unavailable-decklist count, review status, and the
+authorization state for rule changes, regeneration, and republication. Missing
+or undefined provenance and authorization states fail closed.
+
+For one review week:
+
+1. freeze the exact MTGO readiness subject and every explicitly started
+   supplemental subject;
+2. keep Standard and Modern decisions independent, while reviewing MTGO and
+   Tabletop cohorts for the same format in one classifier decision session;
+3. record every Owner disposition with its source and event provenance;
+4. if a shared rule change is accepted, validate one classifier subject against
+   the complete retained same-format corpus and every reviewed cohort; and
+5. reproduce MTGO and Tabletop outputs only through their separate authorized
+   paths. A retained Melee snapshot is reused without recollection.
+
+The next open maintenance cycle may accept a newly live Tabletop event before
+its MTGO baseline is frozen. Once the weekly baseline is frozen, adding another
+supplement requires an explicit baseline refresh and Owner confirmation; it
+cannot silently enlarge an in-progress review.
 
 ### Landing feature screening
 
@@ -120,6 +151,12 @@ the Owner may delete, rewrite or replace every conclusion and every copy field.
   classifier-digest changes preserve `completed`.
 - Standard and Modern share the same review week but retain separate source
   event IDs, classifier digests, classifications, and Landing candidates.
+- MTGO and Tabletop may share one same-format human classifier decision session,
+  but their source records, Unknown counts, readiness and completion states,
+  generated outputs, and publication gates remain separate.
+- A Tabletop handoff queues review only. It does not authorize a classifier-rule
+  change, source recollection, derived-data regeneration, commit, publication,
+  merge, or deployment.
 - The review-week Unknown count is restricted to those source event IDs. The
   complete retained-corpus Unknown queue remains available as separate evidence;
   records outside the review week do not block or enlarge the current review.
