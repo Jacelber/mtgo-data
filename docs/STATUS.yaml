@@ -4,13 +4,13 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/melee-441441-unknown-overview-hotfix"
+  current_working_branch: "codex/w35-classifier-implementation-20260901"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
   purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-09-01"
+  last_updated: "2026-09-02"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   history_policy: "Completed detail belongs in docs/history, audits, decisions, pull requests, and Git history; never use it to authorize current work."
@@ -18,82 +18,87 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_melee_441441_unknown_overview_hotfix"
+  status: "active_w35_cross_source_classifier_completion"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
-  production_changes_allowed: true
+  production_changes_allowed: false
   implementation_authorized: true
   next_phase_id: 15
   next_phase_authorized: false
 
 current_task:
-  id: "MELEE-441441-UNKNOWN-OVERVIEW-HOTFIX"
-  name: "Render the explicit Unknown bucket in event 441441 Overview"
+  id: "W35-CROSS-SOURCE-CLASSIFIER-IMPLEMENTATION"
+  name: "Apply the accepted W35 Standard and Modern classifier decisions"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-09-01"
-  base_commit: "53aaa10db2c2904e8ad9c0d28a1e0a7bc793d42f"
-  branch: "codex/melee-441441-unknown-overview-hotfix"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-unknown-overview-hotfix-20260901-01"
-  objective: "Map only the canonical Tabletop Unknown Overview row to interface identity unknown in desktop sorting and rendering plus mobile cards, then publish and verify event 441441 before W35 maintenance begins."
+  base_commit: "c6ca31d3fa5f04d98614bfd39960261f601cfb53"
+  branch: "codex/w35-classifier-implementation-20260901"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/w35-classifier-implementation-20260901-01"
+  objective: "Encode the complete Owner-accepted W35 Standard and Modern Unknown dispositions plus the final DEC-155 Kappa Affinity, Sewer Combo, Jeskai Ascendancy Combo, and reviewed artifact-engine boundaries in the shared same-format classifiers, including the Eldrazi Tron color boundary and Melee split-card compatibility, while keeping MTGO and Tabletop data and publication paths separate."
+  artifact_impact:
+    - "none"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
+    production: false
   allowed_paths:
-    - "assets/js/phase8/app-tabletop.js"
-    - "assets/js/phase8/app-mobile-render.js"
-    - "tests/browser/phase13-tabletop-rendering.spec.js"
+    - "my_archetypes/standard.yaml"
+    - "my_archetypes/modern.yaml"
+    - "configs/mtgo_archetype_names.yaml"
+    - "src/mtgmeta/melee/classification.py"
+    - "tests/test_w35_classifier_maintenance.py"
+    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    classifier_or_taxonomy_change: "none"
+    classifier_or_taxonomy_change: "only the complete Owner-accepted W35 Standard and Modern disposition set plus final DEC-155 Kappa Affinity, Sewer Combo, Jeskai Ascendancy Combo, and reviewed artifact-engine separation"
     source_recollection_or_generated_data_change: "none"
     mtgo_readiness_or_completion_contract_change: "none"
-    workflow_schema_or_statistical_change: "none"
-    frontend_change: "canonical Unknown display only"
+    workflow_schema_statistical_formula_or_frontend_change: "none"
   invariants:
-    - "The canonical group_id unknown, classification_status unknown, archetype_id null tuple resolves to interface identity unknown without becoming a classifier identity."
-    - "Any other missing or invalid stable identity continues to fail closed."
-    - "The 37 Unknown records and three decklist_not_available participants remain byte-identical and statistically unchanged."
+    - "Standard and Modern rule identities remain format-scoped and shared across MTGO and Tabletop; source data, Unknown counts, generated products, readiness, and publication remain separate."
+    - "Only Owner-confirmed coherent Modern identities become classified; seven Owner-reviewed off-format, limited-pool, unsupported, or incoherent Tabletop decks remain Unknown, and the three decklist_not_available participants remain excluded."
+    - "No source event, normalized event, classification overlay, statistical JSON, Landing document, public path, Schema, workflow, or front-end source changes in this task."
   prohibited_changes:
-    - "Do not change classifier rules, taxonomy, event data, generated outputs, the whitelist, Schemas, workflows, public paths, or statistical meaning."
-    - "Do not begin the queued W35 review, recollect or regenerate event 441441, or dispatch a data workflow."
+    - "Do not recollect or regenerate MTGO or event 441441, edit event data or generated outputs, change formulas, Schemas, workflows, public paths, or front-end behavior."
+    - "Do not regenerate either source, dispatch production, or begin Top 8, visual-metadata, or Landing review."
   planned_verification:
-    - "Run the one synthetic Tabletop rendering test that switches Matchup to Overview in English and Chinese, renders the canonical Unknown row, and sorts by name."
-    - "Review the exact four-file diff and complete one local browser check against event 441441."
-    - "After merge, bind Pages to the exact merge SHA and verify the live event 441441 Overview plus unchanged Matchup availability."
-  stop_point: "Complete the unchanged accepted hotfix through commit, one Ready PR, required checks, merge, and exact-SHA Pages verification; then stop before W35 Unknown review."
+    - "Run focused W35 representative and boundary tests, including Melee split cards, Eldrazi Tron, Kappa Affinity versus Azorius artifacts, and intentional Tabletop Unknown exclusions."
+    - "Validate both rule files and bilingual identity coverage, then compare complete retained Standard and Modern classification reports with the frozen local baseline."
+    - "Run changed-scope repository validation and review the complete allowed-path diff."
+  stop_point: "Complete the accepted unchanged classifier task through one Ready pull request and merge, then stop before refreshed-baseline generation or the next maintenance step."
   owner_acceptance:
     status: "accepted"
-    accepted_on: "2026-09-01"
-    subject: "Repair the live event 441441 Overview before maintenance by mapping only its canonical Unknown row for desktop and mobile display, adding focused regression coverage, and changing no data or statistical meaning."
+    accepted_on: "2026-09-02"
+    subject: "The complete Owner-accepted W35 Standard and Modern classifier decision set bound to workbook SHA-256 AF9301AA69FC8D67A9705430914F73B0D405B4EDBCC8992DD9FF912E1DBC7588, plus final DEC-155 Kappa Affinity, Sewer Combo, Jeskai Ascendancy Combo, and reviewed artifact-engine separation."
 
 weekly_classifier_review:
   id: "W35-CROSS-SOURCE-CLASSIFIER-REVIEW"
   review_week: "2026-W35"
-  status: "queued_for_owner_start"
+  status: "owner_accepted_completion_authorized"
   mtgo_readiness:
     carrier: "weekly-maintenance-readiness-2026-W35"
     counts_and_completion_remain_mtgo_only: true
   supplemental_cohorts:
     - id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
-      status: "queued"
+      status: "owner_decisions_accepted"
       source: "tabletop_melee"
       format: "modern"
       event_id: "441441"
       accepted_candidate_commit: "aa46696d03235e336ec1e4c3a0aa7fcdf48e117f"
       unknown_count: 37
       excluded_unavailable_decklist_count: 3
-      review_start_authorized: false
-      rule_change_authorized: false
+      review_start_authorized: true
+      rule_change_authorized: true
       regeneration_authorized: false
       republication_authorized: false
   separation_rule: "Share the same-format human classifier decision session only; retain separate source provenance, counts, readiness, completion, generation, and publication."
 
 current_repository_state:
-  source_master_commit: "53aaa10db2c2904e8ad9c0d28a1e0a7bc793d42f"
-  previous_task: "WEEKLY-CROSS-SOURCE-UNKNOWN-REVIEW-V1"
-  previous_task_status: "completed_merged_in_pr_342"
+  source_master_commit: "c6ca31d3fa5f04d98614bfd39960261f601cfb53"
+  previous_task: "MELEE-441441-UNKNOWN-OVERVIEW-HOTFIX"
+  previous_task_status: "completed_merged_in_pr_343"
   candidate_producer_run: 33494293638
   retained_candidate_branch: "data/melee-441441"
   accepted_candidate_commit: "aa46696d03235e336ec1e4c3a0aa7fcdf48e117f"
@@ -109,9 +114,9 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
-    status: "queued_for_explicit_owner_start"
-    note: "W35 carries the 37 temporary Modern Unknown records separately from MTGO readiness; no review or classifier work has started."
+  - id: "W35-CLASSIFIER-REFRESHED-BASELINES"
+    status: "not_authorized"
+    note: "Regenerating MTGO or Tabletop classification-derived outputs remains a separate post-publication gate."
   - id: "P14-02"
     status: "planned_not_authorized"
     note: "Pauper product input does not begin implicitly after this recovery."
@@ -120,15 +125,16 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
-  name: "Review event 441441 Modern Unknown records with W35 maintenance"
-  status: "queued_pending_explicit_owner_start"
-  local_execution_authorized: false
-  commit_authorized: false
-  publication_authorized: false
-  merge_authorized: false
-  note: "The handoff is queued, but review, classifier work, regeneration, and publication remain unauthorized."
+  id: "W35-CROSS-SOURCE-CLASSIFIER-IMPLEMENTATION-COMPLETION"
+  name: "Publish and merge the accepted W35 classifier implementation"
+  status: "owner_accepted_completion_authorized"
+  local_execution_authorized: true
+  commit_authorized: true
+  publication_authorized: true
+  merge_authorized: true
+  note: "Owner acceptance authorizes one Ready pull request and merge of the unchanged accepted classifier subject; refreshed-baseline generation remains unauthorized."
 
 prohibited_next_actions:
-  - "Do not begin the queued W35 Unknown review, change classifier rules or taxonomy, recollect or regenerate event 441441, or dispatch a workflow."
+  - "Do not regenerate either source, dispatch production or data workflows, or modify generated outputs."
+  - "Do not begin W35 Top 8, visual-metadata, or Landing review before accepted refreshed classifier baselines exist."
   - "Do not start P14-02, Phase 15, another event admission, or unrelated work."

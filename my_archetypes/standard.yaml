@@ -254,6 +254,19 @@ archetypes:
         min_count: 3
       - card: Plains
         min_count: 1
+  - id: selesnya-landfall-temple-garden
+    priority: 70999
+    subtype_id: null
+    conditions:
+      all:
+      - card: Sazh's Chocobo
+        min_count: 4
+      - card: Fabled Passage
+        min_count: 4
+      - card: Earthbender Ascension
+        min_count: 3
+      - card: Temple Garden
+        min_count: 1
 - id: dimir-excruciator
   name: Dimir Excruciator
   priority: 70000
@@ -362,7 +375,7 @@ archetypes:
         exact_count: 0
 - id: dimir-midrange
   name: Dimir Midrange
-  priority: 66000
+  priority: 66010
   rules:
   - id: dimir-midrange-primary
     priority: 66000
@@ -375,6 +388,17 @@ archetypes:
         min_count: 2
       - card: Watery Grave
         min_count: 4
+  - id: dimir-midrange-curiosity
+    priority: 66010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Enduring Curiosity
+        min_count: 3
+      - card: Floodpits Drowner
+        min_count: 3
+      - card: Watery Grave
+        min_count: 2
 - id: temur-spellementals
   name: Temur Spellementals
   priority: 64500
@@ -631,7 +655,7 @@ archetypes:
         min_count: 3
 - id: izzet-prowess
   name: Izzet Prowess
-  priority: 51000
+  priority: 51010
   rules:
   - id: izzet-prowess-primary
     priority: 51000
@@ -648,6 +672,19 @@ archetypes:
         exact_count: 0
       - card: Accumulate Wisdom
         exact_count: 0
+  - id: izzet-prowess-drake-hatcher
+    priority: 51010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Drake Hatcher
+        min_count: 3
+      - card: Slickshot Show-Off
+        min_count: 3
+      - card: Gandalf, Friend of the Shire
+        min_count: 3
+      - card: Steam Vents
+        min_count: 2
 - id: bant-airbending
   name: Bant Airbending
   priority: 50000
@@ -856,6 +893,29 @@ archetypes:
         zone: any
         exact_count: 0
       - card: Swamp
+        zone: any
+        exact_count: 0
+  - id: azorius-control-consult-ugin
+    priority: 38995
+    subtype_id: null
+    conditions:
+      all:
+      - card: Consult the Star Charts
+        zone: main
+        min_count: 3
+      - card: Day of Judgment
+        zone: main
+        min_count: 2
+      - card: No More Lies
+        zone: main
+        min_count: 2
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 2
+      - card: Ugin, Eye of the Storms
+        zone: main
+        min_count: 1
+      - card: Jeskai Revelation
         zone: any
         exact_count: 0
 - id: mono-white-momo
@@ -2555,3 +2615,75 @@ archetypes:
       - card: Mountain
         zone: main
         min_count: 13
+- id: affinity
+  name: Affinity
+  priority: 77100
+  rules:
+  - id: affinity-robots
+    priority: 77100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Pinnacle Emissary
+        zone: main
+        min_count: 3
+      - card: Ravenous Robots
+        zone: main
+        min_count: 3
+      - card: Springleaf Drum
+        zone: main
+        min_count: 3
+      - card: Steam Vents
+        zone: main
+        min_count: 2
+- id: dimir-spellementals
+  name: Dimir Spellementals
+  priority: 77090
+  rules:
+  - id: dimir-spellementals-primary
+    priority: 77090
+    subtype_id: null
+    conditions:
+      all:
+      - card: Eddymurk Crab
+        zone: main
+        min_count: 3
+      - card: Flow State
+        zone: main
+        min_count: 3
+      - card: Opt
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+- id: abzan-offense
+  name: Abzan Offense
+  priority: 77080
+  rules:
+  - id: abzan-offense-primary
+    priority: 77080
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ambitious Augmenter
+        zone: main
+        min_count: 3
+      - card: Ouroboroid
+        zone: main
+        min_count: 3
+      - card: Practiced Offense
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
