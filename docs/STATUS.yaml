@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/melee-441441-publication"
+  current_working_branch: "codex/weekly-cross-source-unknown-review-v1"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_melee_441441_publication_localization_recovery"
+  status: "active_weekly_cross_source_unknown_review_contract"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: true
@@ -27,85 +27,74 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "MELEE-441441-PUBLICATION-LOCALIZATION-400-RECOVERY"
-  name: "Recover the event 441441 publication from a bounded MTGCH batch-query failure"
+  id: "WEEKLY-CROSS-SOURCE-UNKNOWN-REVIEW-V1"
+  name: "Bind same-format Tabletop Unknown supplements to weekly classifier maintenance"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-09-01"
-  base_commit: "0b88c5134d48710949fc0d689a19e76f2a5e65be"
-  branch: "codex/melee-441441-publication"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-publication-20260901-01"
-  objective: "Add a bounded 20-to-5-to-1 fallback for multi-name MTGCH HTTP 400 responses, then complete publication of exact accepted candidate aa46696d and verify the exact merge commit on Pages."
-  artifact_impact: "statistical_json_structure, public_path"
+  base_commit: "d6dd10fd932dd2b35a0054ff02d5e416cfb33b49"
+  branch: "codex/weekly-cross-source-unknown-review-v1"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/weekly-cross-source-unknown-review-v1-20260901-01"
+  objective: "Queue event 441441's 37 temporary Modern Unknown records with W35 maintenance and establish the same-format post-live handoff for future Tabletop events without merging source products or publication paths."
+  artifact_impact: "internal_diagnostics"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "data_raw/melee/441441/20260831T124956Z-01/"
-    - "data/modern/melee/events/441441.json"
-    - "data/modern/melee/classifications/441441.json"
-    - "data/modern/melee/opportunities/441441.json"
-    - "stats/modern/melee/events/441441/"
-    - "stats/modern/melee/index.json"
-    - "stats/catalog.json"
-    - "README.md"
+    - "docs/WEEKLY_MAINTENANCE.md"
+    - "docs/MELEE_EVENT_ADMISSION_RUNBOOK.md"
     - "docs/STATUS.yaml"
-    - "tools/build_simple_card_localization.py"
-    - "tests/test_simple_card_localization.py"
-  candidate_source:
-    event_id: "441441"
-    branch: "data/melee-441441"
-    accepted_commit: "aa46696d03235e336ec1e4c3a0aa7fcdf48e117f"
-    producer_run: 33494293638
-    operation: "resume-retained"
-    source_mode: "retained"
-    snapshot: "data_raw/melee/441441/20260831T124956Z-01"
-    submitted_decklists: 571
-    classified: 534
-    temporary_unknown: 37
-    decklist_not_available: 3
-  weekly_maintenance_supplement:
-    id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
-    status: "queued_not_started"
-    format: "modern"
-    source: "tabletop_melee"
-    event_id: "441441"
-    temporary_unknown: 37
-    rule_change_authorized: false
-    note: "Review the 37 temporary Unknown records with this week's Modern maintenance without counting the three decklist_not_available participants as Unknown."
+    - "tests/test_documentation_history.py"
   protected_scope:
-    recollection: "prohibited"
-    accepted_candidate_bytes: "must equal aa46696d for all 718 candidate paths"
-    classification_or_taxonomy_change: "none"
-    schema_or_output_version_change: "none"
-    code_and_test_change: "Only the MTGCH multi-name HTTP 400 bounded fallback and its focused tests."
-    workflow_change: "none"
-    frontend_or_statistical_semantics_change: "none"
+    classifier_or_taxonomy_change: "none"
+    source_recollection_or_generated_data_change: "none"
+    mtgo_readiness_or_completion_contract_change: "none"
+    workflow_schema_frontend_or_statistical_change: "none"
+    remote_write: "none"
   invariants:
-    - "The 718 candidate paths must retain the exact Git objects from aa46696d; the scoped localization code and test repair must not alter any candidate path."
-    - "The new-event publication bundle must contain raw, normalized, classification, opportunity, five public event files, both catalogs, README.md, and docs/STATUS.yaml together."
-    - "Published-state repository, rule, public Schema, internal Melee Schema, catalog compatibility, and Pages admission checks must pass."
-    - "The 37 Unknown records remain temporary review items; the three decklist_not_available participants remain a separate source-availability state."
+    - "The W35 human review may share one Modern classifier decision session, but MTGO and Tabletop counts, readiness, completion, outputs, and publication remain separate."
+    - "The 37 event 441441 Unknown records are queued; three decklist_not_available participants remain excluded."
+    - "A handoff never authorizes rule changes, recollection, regeneration, commit, publication, merge, or deployment."
   prohibited_changes:
-    - "Do not recollect event 441441, regenerate or hand-edit the accepted candidate, or dispatch a workflow."
-    - "Do not change the whitelist, classifier rules, taxonomy, Schemas, other code or tests, front ends, permissions, schedules, or statistical meaning."
-    - "Do not begin the supplemental Unknown review, P14-02, Phase 15, another event admission, or unrelated work."
+    - "Do not change classifier rules, taxonomy, event data, generated outputs, the whitelist, Schemas, workflows, front ends, or statistical meaning."
+    - "Do not begin the queued review, recollect or regenerate event 441441, or dispatch a workflow."
   planned_verification:
-    - "Prove that a multi-name HTTP 400 falls back through the existing bounded batch sizes while singleton HTTP 400 and other HTTP failures remain fatal."
-    - "Prove the 718 candidate path and object changes equal aa46696d exactly, with no deletion, rename, or outside path."
-    - "Run the live STATUS contract, strict published-state repository validation, required public and internal Schemas, rule validation, candidate compatibility checks, and git diff checks selected by the actual publication bundle."
-    - "Create one Ready PR, require all checks, merge the unchanged accepted subject, and verify the exact merge SHA plus event 441441 public resources on Pages."
-  stop_point: "Stop after the exact accepted candidate is merged and its exact merge SHA and required 441441 public resources pass Pages verification; do not start the queued Unknown review."
+    - "Validate the live STATUS authorization and source-aware supplemental queue contract."
+    - "Verify both runbooks preserve MTGO/Tabletop separation and make future post-live handoff mandatory when Unknown records exist."
+    - "Review the complete four-file diff and run only the focused documentation-governance tests."
+  stop_point: "Complete the unchanged accepted task through commit, one Ready PR, required checks, and merge; then stop before W35 Unknown review."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-09-01"
-    subject: "Recover PR 341 with only a bounded 20-to-5-to-1 MTGCH multi-name HTTP 400 fallback and focused tests, then publish exact candidate aa46696d with 37 temporary Unknown queued for this week's Modern Tabletop/Melee supplemental review; no classifier change or recollection."
+    subject: "Queue event 441441's exact 37 temporary Modern Unknown records with W35 maintenance and establish the same-format post-live handoff while keeping MTGO and Tabletop counts, outputs, and publication separate."
+
+weekly_classifier_review:
+  id: "W35-CROSS-SOURCE-CLASSIFIER-REVIEW"
+  review_week: "2026-W35"
+  status: "queued_for_owner_start"
+  mtgo_readiness:
+    carrier: "weekly-maintenance-readiness-2026-W35"
+    counts_and_completion_remain_mtgo_only: true
+  supplemental_cohorts:
+    - id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
+      status: "queued"
+      source: "tabletop_melee"
+      format: "modern"
+      event_id: "441441"
+      accepted_candidate_commit: "aa46696d03235e336ec1e4c3a0aa7fcdf48e117f"
+      unknown_count: 37
+      excluded_unavailable_decklist_count: 3
+      review_start_authorized: false
+      rule_change_authorized: false
+      regeneration_authorized: false
+      republication_authorized: false
+  separation_rule: "Share the same-format human classifier decision session only; retain separate source provenance, counts, readiness, completion, generation, and publication."
 
 current_repository_state:
-  source_master_commit: "0b88c5134d48710949fc0d689a19e76f2a5e65be"
-  previous_task: "MELEE-441441-CANDIDATE-RECOVERY-RETRY-3"
-  previous_task_status: "completed_candidate_accepted"
+  source_master_commit: "d6dd10fd932dd2b35a0054ff02d5e416cfb33b49"
+  previous_task: "MELEE-441441-PUBLICATION-LOCALIZATION-400-RECOVERY"
+  previous_task_status: "completed_merged_in_pr_341"
   candidate_producer_run: 33494293638
   retained_candidate_branch: "data/melee-441441"
   accepted_candidate_commit: "aa46696d03235e336ec1e4c3a0aa7fcdf48e117f"
@@ -121,21 +110,9 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "MELEE-441441-CANDIDATE-RECOVERY-RETRY-3"
-    status: "completed_candidate_persisted"
-    note: "Run 33494293638 persisted exact retained-source candidate aa46696d."
-  - id: "MELEE-441441-CANDIDATE-ACCEPTANCE"
-    status: "accepted"
-    note: "Owner accepted aa46696d with 37 temporary Unknown and three decklist_not_available records."
-  - id: "MELEE-441441-PUBLICATION"
-    status: "completion_continues_through_authorized_localization_recovery"
-    note: "Publish aa46696d through one complete new-event bundle after the bounded MTGCH batch-query repair, then verify the exact merge SHA on Pages."
-  - id: "MELEE-441441-PUBLICATION-LOCALIZATION-400-RECOVERY"
-    status: "owner_accepted_completion_authorized"
-    note: "Only the bounded multi-name HTTP 400 fallback and focused tests may repair PR 341 before its existing merge and exact-SHA Pages completion."
   - id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
-    status: "queued_not_authorized"
-    note: "Review 37 temporary Tabletop/Melee Unknown records with this week's Modern maintenance; no classifier work begins under publication authority."
+    status: "queued_for_explicit_owner_start"
+    note: "W35 carries the 37 temporary Modern Unknown records separately from MTGO readiness; no review or classifier work has started."
   - id: "P14-02"
     status: "planned_not_authorized"
     note: "Pauper product input does not begin implicitly after this recovery."
@@ -144,15 +121,15 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "MELEE-441441-PUBLICATION-LOCALIZATION-400-RECOVERY"
-  name: "Recover and complete publication of the exact accepted event 441441 candidate"
-  status: "owner_accepted_completion_authorized"
-  local_execution_authorized: true
-  commit_authorized: true
-  publication_authorized: true
-  merge_authorized: true
-  note: "Continuous completion covers only the bounded localization repair in PR 341, required checks, merge, and exact-SHA Pages verification of the unchanged accepted candidate."
+  id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
+  name: "Review event 441441 Modern Unknown records with W35 maintenance"
+  status: "queued_pending_explicit_owner_start"
+  local_execution_authorized: false
+  commit_authorized: false
+  publication_authorized: false
+  merge_authorized: false
+  note: "The handoff is queued, but review, classifier work, regeneration, and publication remain unauthorized."
 
 prohibited_next_actions:
-  - "Do not recollect or regenerate event 441441, dispatch a workflow, change classifier rules or taxonomy, or force-push."
-  - "Do not begin the queued Unknown review, P14-02, Phase 15, another event admission, or unrelated work."
+  - "Do not begin the queued W35 Unknown review, change classifier rules or taxonomy, recollect or regenerate event 441441, or dispatch a workflow."
+  - "Do not start P14-02, Phase 15, another event admission, or unrelated work."

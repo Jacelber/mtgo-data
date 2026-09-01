@@ -194,16 +194,20 @@ warning. Confirm that generated product files use event-scoped derived
 `participant_id`; direct source IDs remain only in the accepted retained Git
 boundary.
 
-If a classifier rule or event semantic must change, stop and open the matching
-separate task. After that task is accepted and merged, reuse the same immutable
-snapshot and regenerate the candidate; do not refetch it.
+If a classifier rule or event semantic must change before publication, stop and
+open the matching separate task. After that task is accepted and merged, reuse
+the same immutable snapshot and regenerate the candidate; do not refetch it.
+The Owner may instead accept an exact non-blocking Unknown cohort as temporary
+for this publication. Record its count and immutable candidate identity, keep
+unavailable decklists separate, and require the post-live handoff in step 10.
 
 **Effect:** the exact candidate has human-readable evidence that its source,
 normalization, classification, statistics, and privacy boundaries agree.
 
 **Stop:** no blocking issue, unresolved unknown round, conflict, invalid deck,
 unexplained count regression, stale taxonomy, or unreviewed exception may enter
-publication.
+publication. An Unknown cohort is non-blocking only when the Owner explicitly
+accepts that exact cohort as temporary and the candidate records its count.
 
 ### 7. Product and multi-event acceptance
 
@@ -273,6 +277,37 @@ reviewed source and deployment evidence.
 **Stop:** do not describe the event as live until the exact-SHA deployment and
 required public resources pass.
 
+### 10. Post-live Unknown handoff
+
+**Problem:** a temporarily accepted Unknown cohort can remain outside routine
+classifier maintenance after the event is live, or be mixed into MTGO weekly
+counts merely because both sources use the same format rules.
+
+**Operation:** after exact-SHA live acceptance, inspect the accepted candidate's
+classification summary. If it has no Unknown records, record that no handoff is
+required. Otherwise, under a focused local handoff task, assign the immutable
+Unknown cohort to the next open weekly maintenance cycle for the same format.
+If the event's matching review week is still open and its baseline has not been
+frozen, that open week may be used. Record the target week, source, format,
+event ID, accepted candidate or classification subject, Unknown count,
+separately excluded unavailable-decklist count, and closed authorization states
+for rule changes, regeneration, and republication in `docs/STATUS.yaml`.
+
+The weekly review may examine the Tabletop cohort alongside MTGO Unknowns for
+the same format and may reach one shared classifier decision. It must keep
+source provenance, counts, completion states, generated outputs, and
+publication gates separate. The MTGO weekly readiness JSON and completion
+registry remain MTGO-only.
+
+**Effect:** every newly admitted event has an explicit, reusable route from a
+temporarily accepted Unknown cohort into the next same-format human review,
+without creating a second classifier-maintenance process.
+
+**Stop:** the handoff queues review only. Do not begin the review, change rules,
+recollect the event, regenerate derived data, commit, publish, merge, or deploy
+without the separately applicable authorization. A frozen in-progress weekly
+baseline cannot be enlarged silently.
+
 ## Authorization matrix
 
 | Action | Required authority |
@@ -285,6 +320,9 @@ required public resources pass.
 | Dispatch `fetch_melee.yml` | Exact event, closed operation state, and workflow-dispatch, live-collection or exact-checkpoint recovery, retention, and candidate-branch authority |
 | Create and merge the candidate PR | Owner acceptance of the exact candidate |
 | Deploy or recover Pages | Applicable exact-SHA deployment authority |
+| Queue a live event's Unknown cohort for weekly review | Focused local post-live handoff authority |
+| Begin the queued weekly Unknown review | Exact review week and frozen source-subject authority |
+| Regenerate or republish an event after a classifier decision | Separate retained-source regeneration and publication authority |
 | Begin another event or refresh | A new task; no authority carries over |
 
 ## Reuse template
@@ -299,6 +337,8 @@ For each new event, create event-specific task IDs and preserve this order:
 6. `MELEE-<event_id>-CANDIDATE-ACCEPTANCE`
 7. `MELEE-<event_id>-PUBLICATION`
 8. `MELEE-<event_id>-LIVE-ACCEPTANCE`
+9. `MELEE-<event_id>-UNKNOWN-HANDOFF` when the accepted candidate contains
+   Unknown classifications
 
 The event-specific task contract may narrow this list only when current
 evidence proves a stage is already satisfied by the same immutable subject. It
