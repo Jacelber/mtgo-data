@@ -9,31 +9,42 @@ an unbounded suite.
 
 ## Retained Python tests
 
-| File or node | Trigger | Purpose | Minimum subject |
-| --- | --- | --- | --- |
-| `tests/test_ci_master_admission.py` | `ci_master_admission.py`, PR admission wiring, production-evidence admission, or this test changes | Prove exact changed paths select named checks, unknown evidence stops, exact merges remain bound, and production evidence fails closed | Exact admission nodes for the changed decision |
-| `tests/test_ci_workflow.py` | A workflow file or this workflow-contract test changes | Prove permissions, dependencies, trigger routing, and publication gates remain bounded | Exact workflow nodes for the changed job chain |
-| `tests/test_cli_smoke.py` | MTGO, Melee, Landing-review, or catalog CLI dispatch/package wiring changes; the Melee smoke also runs immediately before live collection | Prove only the changed command parser and dispatch path can run offline | The named CLI node, never the whole file by default |
-| `tests/test_documentation_history.py` | `docs/STATUS.yaml`, live `docs/ROADMAP.md` history pointers, their currently named targets, or this test changes | Enforce bounded live-status fields and require live history pointers to resolve, without asserting completed-phase prose | The status node or pointer node |
-| `tests/test_generated_consumer_contracts.py` | An MTGO candidate is generated, before packaging, or the cross-file consumer contract changes | Prove the current candidate is internally consumable without fixed historical-week facts | Current candidate documents only |
-| `tests/test_landing_card_image_cache.py` | Rolling featured-card selection, Scryfall Bulk mapping, cache manifest, Pages generated-overlay admission, or their Schema/workflow changes | Prove exact four-week selection, deduplication, complete `normal` image generation without representative-art reuse, double-faced resolution, atomic failure, byte closure, and Pages overlay admission without contacting Scryfall | Synthetic Standard/Modern weeks, Bulk Data, and JPEG bytes only |
-| `tests/test_card_names.py` | Shared maintained-alias, front-face, legacy single-slash lookup behavior, or this test changes | Prove one shared lookup entry supplies alias, double-faced, and legacy split-card candidates without changing `SP//dr`-style names | Four fixed card-name strings only |
-| `tests/test_simple_card_localization.py` | Flat MTGCH lookup generation, current-Landing Chinese image selection, or this test changes | Prove product keys use shared candidates, unresolved batches narrow safely, name-only entries remain usable, result objects remain independent, and only current Landing images become local files | Synthetic product JSON, MTGCH records, and WebP bytes only |
-| `tests/test_github_publication_preflight.py` | `tools/github_publication_preflight.ps1` or its focused mocked contract changes | Prove authentication, permission, scope, PR declaration, and transport failures remain fail closed | Changed preflight states only |
-| `tests/test_melee_privacy_validation.py` | Melee production before live collection, or a minimization boundary change | Prove legacy v1 and direct-source-ID v2 resources are accepted while a prohibited persisted key is rejected independently of Schema permissiveness | One legacy tournament, one direct-ID standing, and one invalid key |
-| `tests/test_melee_source_identity.py` | Melee participant identity, minimized-resource version, raw-manifest version, complete checkpoint identity, or historical v3 compatibility changes | Prove new writes copy the public source ID without HMAC, checkpoints carry no key, and v3/v4 snapshots remain readable under their own contracts | One synthetic decklist per identity generation plus one checkpoint payload |
-| `tests/test_melee_multi_event_matchup.py` | The pure Melee multi-event aggregator, its compatibility failure vocabulary, canonical identity union, raw-count roll-up, the shared `literal_match_record` or `wilson_interval` implementation it consumes, or this test changes | Prove synthetic same-format events aggregate only leaf W-L-D counts and fail closed on incompatible identity, Schema, source, format, scope, or quality inputs | The complete synthetic multi-event contract file |
-| `tests/test_melee_multi_event_contract.py` | The versioned Melee multi-event result, catalog compatibility block or version, catalog producer wiring, catalog admission wrapper, either directly owned Schema, or this test changes | Prove legacy catalogs remain single-event compatible but multi-event ineligible, catalog evidence reconciles fail closed, and admitted results validate against the in-memory Schema | The complete synthetic versioned-contract file |
-| `tests/test_melee_multi_event_parity.py` | The shared multi-event parity fixture, Python contract output consumed by JavaScript, JavaScript multi-event aggregator, or this test changes | Keep one Python-owned synthetic success result and rejection vocabulary as the exact cross-runtime contract without repeating the complete P13-01 or P13-02 suites | The complete shared parity fixture only |
-| `tests/test_mtgo_fetch_recovery.py` | MTGO fetch retry classification, month traversal, transient exit code, or the matching recovery steps in `update.yml` change | Prove only explicitly transient source failures retry and stop subsequent collection safely | Synthetic response and command nodes only |
-| `tests/test_mtgo_landing_editorial.py` | Landing workbook parsing/import, bilingual stages, review binding, or editorial schemas change | Prove blank-cell parsing, bilingual completeness, stale-binding rejection, deterministic import, and hash pinning with a generated minimal workbook | Generated one-scope OOXML carrier |
-| `tests/test_mtgo_landing_screening.py` | Landing screening policy or representative selection changes | Prove exact Top 8 gating, thresholds, continuity, reason merging, build comparison, and later-date ties | Synthetic selection subjects only |
-| `tests/test_mtgo_landing_screening_provenance.py` | Landing candidate provenance, classifier/selection digest binding, or review-preservation behavior changes | Prove stale candidates regenerate and reviewed subjects remain fail closed | Synthetic provenance subjects only |
-| `tests/test_mtgo_landing.py` | Landing facts, reviewed-feature binding, latest-only production admission, or Pages private-file exclusions change | Prove generic no-event output, review binding, exact deck links, and public/private path separation | Synthetic Landing boundaries plus current-candidate cross-file binding |
-| `tests/test_mtgo_metadata.py` | MTGO metadata generation, hierarchy ownership, Landing/Pickup metadata routing, or this test changes | Prove metadata points to Landing and keeps hierarchy counts owned by the generated hierarchy | One synthetic metadata subject |
-| `tests/test_mtgo_top8_restatement.py` | Top 8 generator, classifier digest, lifecycle contract, or Top 8 Schema changes | Prove retained source facts stay fixed while current-classifier identities restate deterministically, including explicit Unknown | Three synthetic source/classifier cases |
-| `tests/test_validate_repository_modes.py` | `validate_repository.py`, changed-scope Schema selection, `validate_schemas.py`, or this test changes | Prove changed-mode parsing and Schema validation exclude unrelated documents while full Schema validation retains the complete manifest | Synthetic changed and unrelated files |
-| `tests/test_weekly_maintenance_readiness.py` | Weekly readiness generator or private readiness Schema changes | Prove exact-week Unknown binding, separately retained full-corpus Unknown evidence and decklists, strict intentional-random separation, Landing-screening availability, deterministic digesting, and fail-closed cross-format lifecycle | Synthetic Standard and Modern handoff only |
+Every row is machine enforced. The independent oracle must exist before the
+implementation runs; current output is never an allowed oracle. Adding,
+deleting, or renaming a Python test requires an exact inventory update in the
+same change.
+
+| File | Trigger | Purpose | Minimum subject | Independent oracle |
+| --- | --- | --- | --- | --- |
+| `tests/test_card_names.py` | Shared card-name candidate behavior or this test changes | Preserve alias, front-face, and legacy split-card lookup | Four fixed strings | `synthetic` |
+| `tests/test_ci_master_admission.py` | Admission logic, PR evidence routing, or this test changes | Keep known paths targeted and unknown evidence fail closed | Exact changed admission nodes | `policy` |
+| `tests/test_ci_workflow.py` | A workflow or this test changes | Preserve permissions, dependencies, minimal routing, and publication gates | Exact changed workflow nodes | `workflow` |
+| `tests/test_cli_smoke.py` | One CLI dispatch/package boundary changes or pre-collection Melee smoke | Prove the named offline entry point dispatches | The named CLI node | `synthetic` |
+| `tests/test_classifier_rule_contracts.py` | Standard/Modern rules, shared classifier, Melee deck adapter, or this test changes | Preserve Owner-defined discriminating rule and adapter boundaries without reading live events | One synthetic representative per distinct boundary | `owner-rule-contract` |
+| `tests/test_documentation_history.py` | Live status/history pointers or this test changes | Keep live governance bounded and pointers resolvable | The changed status or pointer node | `policy` |
+| `tests/test_generated_consumer_contracts.py` | A fresh MTGO candidate or consumer contract changes | Prove current candidate documents are internally consumable without historical totals | Current candidate invariants only | `current-candidate-invariant` |
+| `tests/test_github_publication_preflight.py` | Publication preflight or this test changes | Keep authentication, permission, scope, and transport states fail closed | Changed preflight states | `policy` |
+| `tests/test_landing_card_image_cache.py` | Landing card cache selection/build/admission changes | Prove complete deterministic cache closure without network access | Synthetic weeks, Bulk records, and image bytes | `synthetic` |
+| `tests/test_melee_candidate_validation.py` | Melee candidate boundary or this test changes | Reject cross-event, deletion, and unrelated candidate writes | Synthetic baseline and candidate paths | `synthetic` |
+| `tests/test_melee_missing_decklist_contract.py` | Missing-decklist ledger/statistics behavior or its Schema changes | Keep unavailable decklists distinct from Unknown and conserve coverage | Five synthetic participants and one played-match subject | `synthetic` |
+| `tests/test_melee_multi_event_contract.py` | Versioned multi-event result/catalog contract or this test changes | Preserve compatibility admission and Schema vocabulary | Synthetic same-format catalogs | `synthetic` |
+| `tests/test_melee_multi_event_matchup.py` | Multi-event matchup aggregation or shared math changes | Preserve leaf W-L-D roll-up and incompatibility rejection | Synthetic same-format matrices | `synthetic` |
+| `tests/test_melee_multi_event_parity.py` | Cross-runtime parity fixture or aggregator changes | Preserve one Python/JavaScript contract vocabulary | One shared synthetic fixture | `synthetic` |
+| `tests/test_melee_privacy_validation.py` | Melee collection privacy boundary or this test changes | Accept supported identities and reject a persisted key | One legacy, one direct-ID, and one invalid subject | `policy` |
+| `tests/test_melee_source_identity.py` | Source identity/minimization/checkpoint contract or this test changes | Preserve public source IDs without a new HMAC key | Synthetic source responses and checkpoint | `external-contract` |
+| `tests/test_mtgo_fetch_recovery.py` | Fetch retry/month traversal/transient classification changes | Retry only explicitly transient source failures | Synthetic HTTP responses and commands | `external-contract` |
+| `tests/test_mtgo_landing.py` | Landing facts, review binding, or public/private admission changes | Preserve value-independent document and lifecycle invariants | Synthetic boundaries plus current-candidate mutation checks | `current-candidate-invariant` |
+| `tests/test_mtgo_landing_editorial.py` | Editorial workbook/import/binding changes | Preserve deterministic workbook parsing and stale-binding rejection | Generated one-scope OOXML carrier | `current-candidate-invariant` |
+| `tests/test_mtgo_landing_screening.py` | Screening policy or representative selection changes | Preserve thresholds, continuity, merging, and ties | Synthetic selection subjects | `synthetic` |
+| `tests/test_mtgo_landing_screening_provenance.py` | Screening provenance or classifier binding changes | Reject stale candidates and preserve reviewed subjects | Synthetic provenance subjects | `synthetic` |
+| `tests/test_mtgo_metadata.py` | MTGO metadata ownership/routing changes | Keep hierarchy ownership and Landing routing explicit | One synthetic metadata subject | `synthetic` |
+| `tests/test_mtgo_top8_restatement.py` | Top 8 generator/digest/lifecycle contract changes | Restate identities while retaining synthetic source facts | Three synthetic source/classifier cases | `synthetic` |
+| `tests/test_pages_compatibility.py` | Protected catalog-projection compatibility changes | Permit unrelated growth and reject protected projection drift | One synthetic protected projection | `protected-compatibility` |
+| `tests/test_pauper_rules.py` | Pauper taxonomy/rules/contract fixture changes | Give every rule one Owner-approved representative without fixed inventory totals | One fixture case per rule and boundary | `owner-rule-contract` |
+| `tests/test_simple_card_localization.py` | Flat MTGCH localization generation changes | Preserve key resolution, fallback, and output isolation | Synthetic product records and image bytes | `synthetic` |
+| `tests/test_validate_repository_modes.py` | Repository validator, test inventory, or Schema mode changes | Keep changed/full validation and test admission fail closed | Synthetic repository paths and inventory rows | `policy` |
+| `tests/test_validate_schemas.py` | Schema manifests or Schema validator changes | Require dynamic mappings and validate declared documents | Schema manifests and mapped instances | `schema` |
+| `tests/test_weekly_maintenance_readiness.py` | Weekly readiness generator/private Schema changes | Preserve review-week and retained-queue separation | Synthetic Standard and Modern handoff | `synthetic` |
 
 The public data/output rows remain bounded to their named subjects. The
 documentation and CI rows are control-plane checks. The Landing-screening and weekly-
@@ -46,7 +57,7 @@ production candidate validation.
 | --- | --- | --- | --- |
 | Any targeted PR | `python -B validate_repository.py --changed-from <base-sha>` | Parse changed maintained files and run only directly coupled repository-reference contracts | Once on the final PR head |
 | Maintained Python changes | Ruff and mypy commands in `ci.yml` | Catch syntax/import and maintained type-contract failures | Once on the final PR head |
-| One format's rule file, shared rule validator, or direct rule contract changes | `validate_rules.py` for only the affected format, or both formats for a shared validator change | Reject invalid classifier rules without validating the unrelated format | Once on the final PR head |
+| One format's rule file, shared rule validator, or direct rule contract changes | `validate_rules.py` for only the affected format plus the matching node in `tests/test_classifier_rule_contracts.py`; a direct contract-file change runs that one file | Reject malformed rules and prove only the independently specified semantic boundary | Once on the final PR head |
 | A mapped ordinary public JSON document changes | `python -B validate_schemas.py --changed-from <base-sha>` | Validate only changed documents covered by the current manifest | Once on the final PR head |
 | A Schema, Schema manifest, or Schema validator changes | `python -B validate_schemas.py` | Prove the complete declared public contract migration | Once on the final PR head |
 | Cache-A external-source integration changes | One read-only build of the current rolling subject from Scryfall Oracle Cards Bulk Data and image CDN into an external temporary directory, followed by local verification | Prove every current featured name resolves to a complete `normal` card image and the real immutable bundle closes without writing images to Git or reusing representative art | Once on the final Cache-A tree before Owner review; never from automated tests |
@@ -86,6 +97,9 @@ production candidate validation.
   publication gates own production safety.
 - A governance-only, test-only, or other non-site `master` change does not
   trigger Pages.
+- An unregistered, stale, duplicate, week/event-specific, invalid-oracle, or
+  repository-live data/report oracle test fails repository validation before
+  any catch-all test can run.
 - Authentication preflight does not run during local development or CI unless
   its script or routing rule changed; operational publication runs it once per
   publication context.

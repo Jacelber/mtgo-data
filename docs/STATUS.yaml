@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_w35_classifier_residual_repair_completion"
+  status: "active_combined_w35_governance_completion"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: false
@@ -27,65 +27,61 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "W35-CLASSIFIER-RESIDUAL-REPAIR"
-  name: "Repair W35 classifier residuals without absorbing W36 review"
+  id: "GOV-TEST-ORACLE-INDEPENDENCE-V1"
+  name: "Reject unregistered and output-derived tests"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-09-02"
-  base_commit: "cd46f271d269dab5a3f8ecd464bbc95e65780c18"
+  base_commit: "d6aec78583c06eb400bedf0bd50bc6f02aa098e2"
   branch: "codex/w35-classifier-residual-repair-20260902"
   workspace: "D:/dl/crawlerpj/.codex-workspaces/w35-classifier-residual-repair-20260902-01"
-  objective: "Repair the two W35 Standard Izzet Prowess records missed by an incorrect normalized Gandalf card name and classify the Owner-accepted event 434455 mono-blue artifact construction under one new shared Modern identity, while leaving the W36 Standard Dwarves and Modern Bant Company records unresolved for next week's review."
+  objective: "Remove the W35 historical-output test tax, retain only independently specified classifier contracts, register every Python test, and fail closed when a later change adds an unregistered, week/event-specific, or live-corpus-oracle test."
   artifact_impact:
     - "internal_diagnostics"
+    - "governance"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - "my_archetypes/standard.yaml"
-    - "my_archetypes/modern.yaml"
-    - "configs/mtgo_archetype_names.yaml"
+    - ".github/workflows/ci.yml"
+    - "ci_master_admission.py"
+    - "validate_repository.py"
     - "tests/test_w35_classifier_maintenance.py"
+    - "tests/test_classifier_rule_contracts.py"
+    - "tests/test_validate_repository_modes.py"
+    - "tests/test_ci_master_admission.py"
+    - "tests/test_ci_workflow.py"
+    - "tests/test_melee_missing_decklist_contract.py"
+    - "tests/test_pauper_rules.py"
+    - "docs/TEST_TRIGGER_MATRIX.md"
+    - "docs/GOVERNANCE_REMEDIATION.yaml"
     - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
-    - "reports/standard/mtgo/classification_conflicts.json"
-    - "reports/standard/mtgo/index.json"
-    - "reports/standard/mtgo/multiple_matches.json"
-    - "reports/standard/mtgo/overridden_matches.json"
-    - "reports/standard/mtgo/subtype_diagnostics.json"
-    - "reports/standard/mtgo/unknown_decks.json"
-    - "reports/modern/mtgo/classification_conflicts.json"
-    - "reports/modern/mtgo/index.json"
-    - "reports/modern/mtgo/multiple_matches.json"
-    - "reports/modern/mtgo/overridden_matches.json"
-    - "reports/modern/mtgo/subtype_diagnostics.json"
-    - "reports/modern/mtgo/unknown_decks.json"
-    - "data/modern/melee/classifications/434455.json"
-    - "data/modern/melee/classifications/441441.json"
   protected_scope:
-    classifier_or_taxonomy_change: "only the Owner-confirmed Mono-Blue Artifact identity for event 434455 and the exact normalized-card correction for the two W35 Standard Izzet Prowess records"
-    w36_classification_change: "none; retain event 12853216 Standard Dwarves and event 12853219 Modern Bant Company as Unknown"
-    source_recollection_or_statistical_generation: "none; use only committed MTGO inputs and retained Melee normalized events"
-    workflow_schema_formula_frontend_or_publication_change: "none"
+    retained_pending_subject: "Preserve the previously completed W35 classifier and Melee derived closure byte-for-byte while changing only its test and governance envelope."
+    product_data_or_classifier_change: "none"
+    test_policy: "Every retained Python test must have one registered trigger, purpose, minimum subject, and independent oracle; new week/event-specific or repository-live data/report oracle tests fail closed."
+    workflow_change: "Only add the minimum classifier-contract routing and keep permissions, jobs, timeout, evidence reuse, and every production workflow unchanged."
   invariants:
     - "Standard and Modern identities remain format-scoped and shared across MTGO and Tabletop while source data, reports, statistics, and publication remain separate."
     - "Event 441441 retains exactly seven Owner-reviewed Unknown records and three excluded decklist_not_available participants."
     - "The sole accepted MTGO random_card_pile remains intentional Unknown; the W36 Standard and Modern records remain unresolved."
-    - "No source event, normalized event, statistical JSON, Top 8, Landing document, public path, Schema, workflow, front-end source, production state, or remote state changes."
+    - "The retained raw snapshots and normalized events for 434455 and 441441 remain byte-identical; no source request is made."
+    - "Protected 434455 compatibility remains an explicit authorized-baseline exception and is not treated as intrinsic correctness evidence."
+    - "No generated output, statistical formula, public URL, classifier rule, production workflow, or front-end behavior changes."
   prohibited_changes:
-    - "Do not add or modify a W36 Dwarves or Bant Company rule, fetch or recollect either source, generate statistics, Top 8, Landing, metadata, catalogs, or public artifacts."
-    - "Do not dispatch production, deploy, republish either Melee event, or begin another maintenance stage."
+    - "Do not weaken validation, create a catch-all suite, restore full pytest, or permit a test through a filename or generic-code exemption."
+    - "Do not dispatch a production data workflow, change the accepted subject, or begin another maintenance stage during accepted-task completion."
   planned_verification:
-    - "Capture the exact pre-repair Standard, Modern, 434455, and 441441 classification baselines from committed inputs."
-    - "Run focused real-deck regressions for both Standard Izzet Prowess records and event 434455 Mono-Blue Artifact, plus Affinity and W36 exclusion boundaries."
-    - "Regenerate strict Standard and Modern MTGO diagnostics and both retained Melee overlays; compare every classification migration with the approved three-record repair set."
-    - "Validate both rule files, bilingual identity coverage, changed documents, changed-scope repository rules, and the complete allowed-path diff."
-  stop_point: "Commit the unchanged accepted repair, publish one Ready pull request, merge after required checks pass, then stop without beginning W36 review or production."
+    - "Prove missing, duplicate, stale, invalid-oracle, week/event-specific, and live-corpus test registrations fail closed while the complete retained inventory passes."
+    - "Run only the new classifier contract, reduced missing-decklist/Pauper nodes, focused repository-mode/admission/workflow nodes, and one final changed-scope repository validation."
+    - "Compare every non-governance artifact with the pending accepted closure and require byte identity."
+  stop_point: "Commit and update PR #345 with the unchanged accepted subject, merge after required checks pass, complete applicable exact-SHA Pages acceptance, then stop without beginning another maintenance stage."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-09-02"
-    subject: "The exact local W35 residual repair preserving both W36 Unknown records and every unrelated retained classification."
+    subject: "The unchanged W35/Melee closure plus the local strict test-oracle and inventory governance repair."
 
 weekly_classifier_review:
   id: "W35-CROSS-SOURCE-CLASSIFIER-REVIEW"
@@ -113,9 +109,12 @@ current_repository_state:
   source_master_commit: "cd46f271d269dab5a3f8ecd464bbc95e65780c18"
   previous_task: "W35-CROSS-SOURCE-CLASSIFIER-IMPLEMENTATION"
   previous_task_status: "completed_merged_in_pr_344"
-  candidate_producer_run: 33494293638
-  retained_candidate_branch: "data/melee-441441"
-  accepted_candidate_commit: "aa46696d03235e336ec1e4c3a0aa7fcdf48e117f"
+  open_pull_request: 345
+  open_pull_request_head: "d6aec78583c06eb400bedf0bd50bc6f02aa098e2"
+  open_pull_request_status: "owner_accepted_combined_completion_authorized"
+  local_compatibility_contract_version: "1.8.0"
+  local_active_taxonomy_sha256: "2ab329e4a35655b88b159edfc60d37d4d3f8b5e38d1c37a519b21f29e0001515"
+  local_registered_python_test_count: 29
   retained_source_bytes_changed: false
   public_tabletop_events:
     - "434455"
@@ -139,17 +138,17 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "W35-CLASSIFIER-RESIDUAL-REPAIR-COMPLETION"
-  name: "Publish and merge the accepted W35 classifier residual repair"
+  id: "GOV-TEST-ORACLE-INDEPENDENCE-V1-COMPLETION"
+  name: "Complete the accepted combined W35 and test-governance repair"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Owner acceptance authorizes one Ready pull request and merge of the unchanged accepted repair; production and W36 review remain unauthorized."
+  note: "Owner acceptance authorizes continuous completion of the unchanged combined subject through PR #345, required checks, merge, and applicable exact-SHA Pages acceptance; production data workflows and later maintenance remain unauthorized."
 
 prohibited_next_actions:
   - "Do not classify the W36 Standard Dwarves or Modern Bant Company records in this task."
-  - "Do not fetch either source, dispatch production or data workflows, or generate public outputs."
-  - "Do not deploy, republish either Melee event, or begin W35 Top 8, visual-metadata, or Landing review."
+  - "Do not fetch either source, dispatch production or data workflows, or change any classifier decision."
+  - "Do not dispatch production data workflows or begin W35 Top 8, visual-metadata, or Landing review during accepted-task completion."
   - "Do not start P14-02, Phase 15, another event admission, or unrelated work."

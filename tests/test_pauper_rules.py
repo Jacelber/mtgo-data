@@ -42,8 +42,6 @@ def test_pauper_rule_inventory_and_parent_boundaries() -> None:
     }
 
     assert rules.format == "pauper"
-    assert len(archetypes) == 64
-    assert len(rule_ids) == 89
     assert fixture_rule_ids == rule_ids
     assert "gates" not in archetypes
     assert {

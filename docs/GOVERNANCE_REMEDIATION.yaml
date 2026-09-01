@@ -8,6 +8,9 @@ history_authority: "non_authoritative"
 
 retained_rules:
   - "Do not test unless a named risk requires it; use the smallest check that can answer it."
+  - "Reject every Python test that lacks one registered trigger, purpose, minimum subject, and independent oracle."
+  - "Reject week- or event-specific test files and any test that reads repository-live data or reports as its correctness oracle."
+  - "Treat protected compatibility bytes as an authorized post-acceptance lock, never as intrinsic correctness evidence."
   - "Do not repeat successful evidence for the same immutable subject and environment layer."
   - "Protect generated candidates at the publication output gate; do not make master a surrogate product."
   - "Owner browser acceptance is final UI evidence for the reviewed immutable subject."

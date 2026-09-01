@@ -7780,3 +7780,106 @@ Modern MTGO retains exactly one Unknown, the W36 Bant Company deck. Event
 Unknown records and three excluded unavailable decklists. No source data,
 statistics, Top 8, Landing content, workflow, Schema, front end, public path,
 production state, or remote state changes in this local repair.
+
+---
+
+# DEC-157 - Complete the W35 Melee derived-data closure
+
+Status: `Accepted`
+
+## Context
+
+PR `#345` correctly passed its classifier, focused test, and repository
+validation, but the allowlisted Pages build rejected the changed event
+`434455` classification overlay. Compatibility contract `1.7.0` still froze
+the prior overlay bytes, while the task had not regenerated the dependent
+opportunity ledger, event statistics, metadata, or selected catalog evidence.
+The failure was therefore a valid incomplete-migration signal rather than a
+rejection of the Owner-accepted classification.
+
+Event `441441` had the same downstream-consistency requirement even though it
+is not an exact-file member of the `434455` reference manifest. Publishing its
+new overlay with an old ledger and statistics would expose mutually
+inconsistent taxonomy results.
+
+## Decision
+
+Keep every classifier rule and Owner-reviewed classification decision from
+DEC-155 and DEC-156 unchanged. From the retained normalized events and accepted
+classification overlays, deterministically rebuild the `434455` and `441441`
+opportunity ledgers, overview, decks, quality, matchup, metadata, and merged
+Modern Melee event catalog. Do not fetch either source or change a statistical
+formula, scope, Schema shape, public URL, workflow, or front-end behavior.
+The rebuilt `434455` opportunity ledger adopts the already maintained `1.1.0`
+missing-decklist-aware Schema in place of its stale `1.0.0` output; this is an
+existing producer contract, not a new Schema design.
+
+Advance the `434455` reference-event compatibility boundary and its closed
+Schema version together from `1.7.0` to `1.8.0`. Preserve the retained v2 raw
+snapshot, its 483-response closure, and the normalized event byte-for-byte.
+Record replacement byte counts and SHA-256 values for every derived exact file
+and replace the selected `434455` catalog projection with the newly generated
+active-taxonomy evidence.
+
+## Consequences
+
+Event `434455` retains 362 classified decks with zero Unknown, conflicts, or
+invalid records. Relative to compatibility `1.7.0`, exactly two decks leave
+the old Affinity result: one becomes Mono-Blue Artifact and one becomes
+Azorius Sewer Combo. Event `441441` retains 564 classified submitted decks,
+seven Owner-reviewed Unknown submitted decks, and three unavailable decklists
+among 574 participants. Opportunity totals, source match facts, stage
+populations, and existing statistical formulas remain unchanged. MTGO and
+Tabletop outputs remain separate, and W36 classification review remains out of
+scope.
+
+---
+
+# DEC-158 - Require an independent oracle for every retained test
+
+Status: `Accepted`
+
+## Context
+
+GOV-07 and GOV-08 retired rolling byte baselines and historical inline review
+corpora because a legitimate data or classifier change made them fail in the
+same way as a defect. The later W35 classifier task nevertheless added a
+week-specific Python test file. It read retained event data and asserted
+resulting cohort totals such as 29 Affinity and seven Unknown. Those values
+described one accepted run; they were not an independent classifier contract.
+
+The live test-trigger matrix listed 23 Python files while the repository held
+29. Nothing forced a later test addition to declare its risk, minimum subject,
+or source of truth, so the earlier efficiency policy remained operational but
+could not prevent test-inventory drift.
+
+## Decision
+
+Every retained Python test file under `tests/` must have exactly one machine-checked
+row in `docs/TEST_TRIGGER_MATRIX.md`. The row declares its trigger, purpose,
+minimum subject, and one enumerated independent oracle. Missing, duplicate,
+stale, or invalid declarations fail repository validation. Week- or
+event-specific Python test filenames fail closed. Tests may not read
+repository-live `data/` or `reports/` as a correctness oracle. Access to current
+`stats/` is limited to declared value-independent candidate, Schema, or
+protected-compatibility contracts.
+
+Replace the W35 file with one stable classifier contract containing only
+synthetic discriminating decks whose expected identities come from accepted
+rule decisions. Run only the Standard node, Modern node, or Melee adapter node
+whose contract changed. Reduce the missing-decklist coverage case to five
+synthetic participants and remove redundant Pauper taxonomy totals while
+retaining one representative for every declared rule.
+
+Protected compatibility hashes remain an explicit exception: after independent
+semantic acceptance they lock an authorized version against later drift, but
+passing the hash comparison never proves that the new baseline is correct.
+
+## Consequences
+
+Adding a test is no longer an ordinary code-path addition. It must identify the
+risk and independent source of truth in the same change, and repository
+validation rejects it before any broad fallback suite can run. Weekly human
+review evidence remains in decisions, review carriers, and immutable artifacts
+rather than permanent executable totals. Product data, classifier rules,
+statistics, public paths, and production behavior do not change.

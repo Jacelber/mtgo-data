@@ -1657,7 +1657,7 @@ unchanged.
 
 ### 11.12 Reference-event compatibility manifest
 
-The active-taxonomy compatibility migration updates the version `1.7.0`
+The W35 derived-data closure migration updates the version `1.8.0`
 compatibility boundary for mixed Melee event `434455` in
 `tests/fixtures/melee/434455_compatibility_manifest.json`. Its exact-byte set
 contains the raw snapshot manifest, normalized event, classification overlay,
@@ -1666,14 +1666,25 @@ is a closure root: validation also verifies the unique path, byte count, and
 SHA-256 of every one of its 483 declared responses and rejects any undeclared
 file in the retained snapshot directory.
 
-Version `1.7.0` keeps the raw snapshot manifest and normalized event
+Version `1.8.0` keeps the raw snapshot manifest and normalized event
 byte-identical while rebinding the classification overlay, opportunity ledger,
-and five event documents to the maintained Modern taxonomy. All 362 selected
-parent and subtype classifications remain identical. Six records lose only an
-obsolete fallback candidate match, and the hierarchy adds the maintained
-zero-sample `chant-control/esper` leaf. Opportunity totals, scope populations,
-result totals, and shared matchup cells remain unchanged. No source response is
-fetched or rewritten.
+and five event documents to the Owner-accepted W35 Modern taxonomy. All 362
+submitted decks remain classified with zero Unknown, conflicts, or invalid
+records. Relative to `1.7.0`, exactly two event `434455` decks leave the former
+Affinity result: one becomes `mono-blue-artifact` and one becomes
+`sewer-combo/azorius`. Opportunity totals, scope populations, and result facts
+remain unchanged. The rebuilt `434455` opportunity ledger advances from its
+stale `1.0.0` output to the already maintained `1.1.0` missing-decklist-aware
+Schema without adding a new field or statistical meaning. The maintained
+hierarchy and matchup matrices expand to the new taxonomy. No source response
+is fetched or rewritten.
+
+The same deterministic migration rebuilds event `441441` from its retained
+normalized event. Its 574 participants consist of 564 classified submitted
+decks, seven Owner-reviewed Unknown submitted decks, and three unavailable
+decklists represented only in the opportunity ledger. Both events' metadata
+and matchup compatibility now bind to one active Modern taxonomy; their source
+data and statistics remain separate.
 
 The format event catalog and global consumer catalog are expandable indexes,
 not immutable event payloads. Their complete bytes are excluded from the
@@ -1682,7 +1693,7 @@ compatibility digest set. Validation instead freezes the complete selected
 `tabletop-major-events` product route in `stats/catalog.json`. Unrelated event,
 format, product, default-selection, ordering, and volatile generation metadata
 may change when their own tasks authorize that work, provided the selected
-projection remains unchanged. The `1.7.0` selected projection uses catalog
+projection remains unchanged. The `1.8.0` selected projection uses catalog
 schema `1.2.0`, binds its root to the active taxonomy, and freezes the event's
 matchup compatibility evidence so later multi-event growth fails closed on a
 taxonomy mismatch.

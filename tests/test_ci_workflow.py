@@ -78,6 +78,17 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
     assert "code" in by_name["Check maintained Python package"]["if"]
     assert "rules-standard" in by_name["Validate changed archetype rules"]["if"]
     assert "rules-modern" in by_name["Validate changed archetype rules"]["if"]
+    classifier = by_name["Validate classifier rule contracts"]
+    assert "classifier-contract" in classifier["if"]
+    assert "classifier-adapter" in classifier["if"]
+    assert "rules-standard" in classifier["if"]
+    assert "rules-modern" in classifier["if"]
+    assert "tests/test_classifier_rule_contracts.py" in classifier["run"]
+    assert "pytest-classifier-contract" in classifier["run"]
+    assert "::test_standard_owner_rule_contracts" in classifier["run"]
+    assert "::test_modern_owner_rule_contracts" in classifier["run"]
+    assert "::test_melee_split_card_adapter_contract" in classifier["run"]
+    assert classifier["run"].count("python -B -m pytest") == 1
     assert "schema-contract" in by_name["Validate changed public JSON contracts"]["if"]
     assert "schema-documents" in by_name["Validate changed public JSON contracts"]["if"]
     assert "top8-restatement" in by_name["Validate Top 8 restatement"]["if"]
@@ -104,6 +115,7 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
         "ruff check src",
         "-m mypy",
         "validate_rules.py",
+        "test_classifier_rule_contracts.py",
         "validate_schemas.py",
         "--changed-from",
         "test_mtgo_top8_restatement.py",

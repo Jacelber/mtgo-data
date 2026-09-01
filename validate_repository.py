@@ -6,6 +6,7 @@ import argparse
 import ast
 import io
 import json
+import re
 import subprocess
 import tokenize
 from dataclasses import dataclass
@@ -98,6 +99,23 @@ REQUIRED_GOVERNANCE_DOCUMENTS = (
     "docs/DEVELOPMENT_WORKFLOW.md",
     "docs/history/README.md",
 )
+TEST_TRIGGER_MATRIX_PATH = "docs/TEST_TRIGGER_MATRIX.md"
+ALLOWED_TEST_ORACLES = frozenset(
+    {
+        "current-candidate-invariant",
+        "external-contract",
+        "owner-rule-contract",
+        "policy",
+        "protected-compatibility",
+        "schema",
+        "synthetic",
+        "workflow",
+    }
+)
+TEST_FILE_PATTERN = re.compile(r"tests/(?:[^/]+/)*test_[^/]+\.py")
+HISTORICAL_TEST_NAME_PATTERN = re.compile(
+    r"(?:^|[_-])w\d{1,2}(?:[_-]|$)|\d{5,}", re.IGNORECASE
+)
 PUBLIC_PRODUCT_NAMES = {
     "mtgo": "MTGO Environment Trends",
     "tabletop": "Tabletop Major Events",
@@ -163,6 +181,7 @@ REFERENCE_GROUPS = frozenset(
         "phase8-entries",
         "required-standard-files",
         "pickup-indexes",
+        "test-inventory",
     }
 )
 REQUIREMENT_MANIFESTS = ("requirements.txt", "requirements-dev.txt")
@@ -319,6 +338,12 @@ def reference_groups_for_paths(paths: set[str]) -> frozenset[str]:
         for format_id in ("standard", "modern")
     ):
         groups.add("pickup-indexes")
+    if (
+        TEST_TRIGGER_MATRIX_PATH in paths
+        or "validate_repository.py" in paths
+        or any(TEST_FILE_PATTERN.fullmatch(path) for path in paths)
+    ):
+        groups.add("test-inventory")
     return frozenset(groups)
 
 
@@ -797,6 +822,195 @@ def validate_public_product_facts(
     return checked, failures
 
 
+def _root_path_segment(node: ast.AST) -> str | None:
+    segments: list[str] = []
+    current = node
+    while isinstance(current, ast.BinOp) and isinstance(current.op, ast.Div):
+        if not isinstance(current.right, ast.Constant) or not isinstance(
+            current.right.value, str
+        ):
+            return None
+        segments.append(current.right.value)
+        current = current.left
+    if not isinstance(current, ast.Name) or current.id != "ROOT" or not segments:
+        return None
+    first = segments[-1].replace("\\", "/").split("/", 1)[0]
+    return first or None
+
+
+def _literal_prefix(node: ast.AST) -> str | None:
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return node.value
+    if isinstance(node, ast.JoinedStr) and node.values:
+        first = node.values[0]
+        if isinstance(first, ast.Constant) and isinstance(first.value, str):
+            return first.value
+    return None
+
+
+def _repository_live_roots(source: str) -> set[str]:
+    tree = ast.parse(source)
+    roots = {
+        segment
+        for node in ast.walk(tree)
+        if isinstance(node, ast.BinOp)
+        and (segment := _root_path_segment(node)) is not None
+    }
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call) or not node.args:
+            continue
+        if not isinstance(node.func, ast.Name) or node.func.id != "_json":
+            continue
+        prefix = _literal_prefix(node.args[0])
+        if prefix:
+            roots.add(prefix.replace("\\", "/").split("/", 1)[0])
+    return roots
+
+
+def validate_test_inventory(
+    root: Path, names: list[str]
+) -> tuple[int, list[Failure]]:
+    """Require one independent, trigger-bound contract for every Python test."""
+
+    failures: list[Failure] = []
+    tracked = set(names)
+    actual = sorted(name for name in tracked if TEST_FILE_PATTERN.fullmatch(name))
+    if TEST_TRIGGER_MATRIX_PATH not in tracked:
+        return 1, [
+            Failure(
+                "References",
+                TEST_TRIGGER_MATRIX_PATH,
+                "missing machine-enforced test trigger matrix",
+            )
+        ]
+
+    matrix = read_bytes(root, TEST_TRIGGER_MATRIX_PATH).decode("utf-8")
+    section_start = matrix.find("## Retained Python tests")
+    section_end = matrix.find("\n## ", section_start + 1)
+    if section_start < 0 or section_end < 0:
+        return 1, [
+            Failure(
+                "References",
+                TEST_TRIGGER_MATRIX_PATH,
+                "missing bounded Retained Python tests section",
+            )
+        ]
+
+    registered: dict[str, tuple[str, int]] = {}
+    for line_number, raw in enumerate(matrix[:section_end].splitlines(), 1):
+        if line_number <= matrix[:section_start].count("\n") or not raw.startswith("| `tests/test_"):
+            continue
+        cells = [cell.strip() for cell in raw.strip().strip("|").split("|")]
+        if len(cells) != 5:
+            failures.append(
+                Failure(
+                    "References",
+                    TEST_TRIGGER_MATRIX_PATH,
+                    "each retained Python test row must have five columns",
+                    line_number,
+                )
+            )
+            continue
+        match = re.fullmatch(r"`(tests/(?:[^/]+/)*test_[^/]+\.py)`", cells[0])
+        if match is None:
+            failures.append(
+                Failure(
+                    "References",
+                    TEST_TRIGGER_MATRIX_PATH,
+                    "test inventory rows must name one complete top-level Python test file",
+                    line_number,
+                )
+            )
+            continue
+        path = match.group(1)
+        if any(not cells[index] for index in (1, 2, 3)):
+            failures.append(
+                Failure(
+                    "References",
+                    TEST_TRIGGER_MATRIX_PATH,
+                    f"trigger, purpose, and minimum subject are required for {path}",
+                    line_number,
+                )
+            )
+        oracle_match = re.fullmatch(r"`([^`]+)`", cells[4])
+        oracle = oracle_match.group(1) if oracle_match else ""
+        if path in registered:
+            failures.append(
+                Failure(
+                    "References",
+                    TEST_TRIGGER_MATRIX_PATH,
+                    f"duplicate test registration for {path}",
+                    line_number,
+                )
+            )
+            continue
+        registered[path] = (oracle, line_number)
+        if oracle not in ALLOWED_TEST_ORACLES:
+            failures.append(
+                Failure(
+                    "References",
+                    TEST_TRIGGER_MATRIX_PATH,
+                    f"invalid independent oracle {oracle!r} for {path}",
+                    line_number,
+                )
+            )
+
+    for path in sorted(set(actual) - set(registered)):
+        failures.append(
+            Failure(
+                "References",
+                path,
+                "unregistered Python test; declare its trigger, purpose, minimum subject, and independent oracle",
+            )
+        )
+    for path in sorted(set(registered) - set(actual)):
+        failures.append(
+            Failure(
+                "References",
+                TEST_TRIGGER_MATRIX_PATH,
+                f"stale Python test registration for {path}",
+                registered[path][1],
+            )
+        )
+
+    for path in sorted(set(actual).intersection(registered)):
+        stem = Path(path).stem
+        if HISTORICAL_TEST_NAME_PATTERN.search(stem):
+            failures.append(
+                Failure(
+                    "References",
+                    path,
+                    "week- or event-specific Python test files are prohibited; use a stable synthetic contract or one-time acceptance evidence",
+                )
+            )
+        source = read_bytes(root, path).decode("utf-8")
+        live_roots = _repository_live_roots(source)
+        if live_roots.intersection({"data", "reports"}):
+            failures.append(
+                Failure(
+                    "References",
+                    path,
+                    "tests must not read repository-live data or reports as an oracle",
+                )
+            )
+        if "stats" in live_roots:
+            oracle = registered[path][0]
+            if oracle not in {
+                "current-candidate-invariant",
+                "protected-compatibility",
+                "schema",
+            }:
+                failures.append(
+                    Failure(
+                        "References",
+                        path,
+                        "repository-live statistics require a value-independent candidate, protected-compatibility, or Schema oracle",
+                    )
+                )
+
+    return len(actual) + len(registered), failures
+
+
 def validate_references(
     root: Path,
     names: list[str],
@@ -811,6 +1025,7 @@ def validate_references(
         "Phase 8 production resources": 0,
         "required Standard files": 0,
         "frozen Pickup week entries": 0,
+        "test inventory contracts": 0,
     }
     if "governance" in enabled_groups:
         for value in REQUIRED_GOVERNANCE_DOCUMENTS:
@@ -942,6 +1157,10 @@ def validate_references(
                     f"{pickup}:weeks[{index}]",
                     None if valid else f"invalid frozen Pickup week file {value!r}",
                 )
+    if "test-inventory" in enabled_groups:
+        inventory_checked, inventory_failures = validate_test_inventory(root, names)
+        breakdown["test inventory contracts"] = inventory_checked
+        failures.extend(inventory_failures)
     if "phase8-entries" in enabled_groups:
         phase8_checked, phase8_failures = validate_phase8_frontend_references(
             root, names
