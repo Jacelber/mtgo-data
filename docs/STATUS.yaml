@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/melee-candidate-publication-pipeline-hardening-v1"
+  current_working_branch: "codex/melee-441441-candidate-recovery-retry-3"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_melee_candidate_publication_pipeline_hardening_completion"
+  status: "active_melee_441441_candidate_recovery_retry_3"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: true
@@ -27,14 +27,14 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "MELEE-CANDIDATE-PUBLICATION-PIPELINE-HARDENING-V1"
-  name: "Close the Melee candidate-to-publication validation and recovery gaps"
+  id: "MELEE-441441-CANDIDATE-RECOVERY-RETRY-3"
+  name: "Resume event 441441 candidate from the exact retained checkpoint"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-09-01"
-  base_commit: "05120144d43f3ebbeee87656b43a10486328c922"
-  branch: "codex/melee-candidate-publication-pipeline-hardening-v1"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-candidate-publication-hardening-20260901-01"
-  objective: "Audit and repair the complete Melee candidate-to-publication path so candidate and published states are explicit, every new-event file is validated before persistence, retained recovery is bound to an exact checkpoint, and protected catalog projections remain enforced."
+  base_commit: "2f1e9b35414242dff491f893e308acade8ad961b"
+  branch: "codex/melee-441441-candidate-recovery-retry-3"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-candidate-recovery-retry-3-20260901-01"
+  objective: "Activate and dispatch exactly one resume-retained recovery for event 441441 from checkpoint c63ad902 using the hardened candidate workflow, without recollection, and stop at persisted candidate acceptance."
   artifact_impact: "none"
   authorization:
     local_implementation: true
@@ -42,64 +42,56 @@ current_task:
     remote_publication: true
     merge: true
   allowed_paths:
-    - ".github/workflows/ci.yml"
-    - ".github/workflows/fetch_melee.yml"
-    - "build_pages_artifact.py"
-    - "ci_master_admission.py"
-    - "validate_repository.py"
-    - "schemas/manifest.json"
-    - "schemas/melee-data-manifest.json"
-    - "tests/test_ci_master_admission.py"
-    - "tests/test_ci_workflow.py"
-    - "tests/test_melee_candidate_validation.py"
-    - "tests/test_pages_compatibility.py"
-    - "tests/test_validate_repository_modes.py"
-    - "tests/test_validate_schemas.py"
-    - "docs/DECISIONS.md"
-    - "docs/MELEE_EVENT_ADMISSION_RUNBOOK.md"
     - "docs/STATUS.yaml"
-  planned_additions:
-    - "schemas/melee-data-manifest.json"
-    - "tests/test_pages_compatibility.py"
-    - "tests/test_validate_schemas.py"
+  planned_additions: []
+  candidate_operation:
+    workflow: ".github/workflows/fetch_melee.yml"
+    event_id: "441441"
+    operation: "resume-retained"
+    dispatch_ref: "master after the RETRY-3 activation merge"
+    required_workflow_base: "the exact RETRY-3 activation merge commit"
+    retained_branch: "data/melee-441441"
+    retained_checkpoint: "c63ad902945d36cd242d3c524ef99fbfe6ba879a"
+    required_source_mode: "retained"
+    allowed_remote_write: "data/melee-441441 only"
+    dispatch_count: 1
   protected_scope:
     whitelist_or_source_scope_change: "none"
     recollection: "prohibited"
     raw_or_normalized_bytes_change: "none"
     classification_or_taxonomy_change: "none"
-    schema_or_output_version_change: "none; manifests expand validation coverage only"
-    workflow_or_permission_change: "workflow behavior may change only to require explicit operation state, exact retained checkpoint, bounded staging, and candidate-context validation; permissions and schedules remain unchanged"
-    generated_candidate_change: "none"
-    master_or_publication_change: "none during local implementation"
+    schema_or_output_version_change: "none"
+    workflow_or_permission_change: "none"
+    generated_candidate_change: "event 441441 review branch only"
+    master_or_publication_change: "the activation commit changes only STATUS; the candidate operation never writes master or creates a pull request"
   invariants:
-    - "Candidate and published repository validation are distinct closed states; every undefined state fails."
-    - "A retained recovery must name and match its exact event review-branch checkpoint before source resolution; it cannot fall back to collection."
-    - "Every candidate path is scope-validated and staged before full candidate repository validation, and every internal and public new-event JSON is Schema-validated."
-    - "A new-event publication PR must carry the complete event bundle, README public-product row, and live STATUS change together."
-    - "Pages compatibility validation must compare the protected 434455 catalog projections while allowing unrelated catalog growth."
-    - "No test or implementation may read, regenerate, or modify event 441441 data."
+    - "Dispatch fetch_melee.yml exactly once for event 441441 with operation resume-retained and checkpoint c63ad902 after the activation merge."
+    - "The workflow must prove the remote review branch equals c63ad902 before and after fetch and must never execute collection."
+    - "Preserve every retained raw response and canonical normalized event byte; do not hand-edit generated output."
+    - "Require candidate scope, full-candidate repository, rule, public Schema, and internal Melee Schema validation before pushing a derived candidate commit."
+    - "The workflow may push only data/melee-441441 and must not write master, create or merge a pull request, or begin publication."
   prohibited_changes:
-    - "Do not modify the Melee whitelist, retained or generated data, taxonomy, statistics, public Schema shapes, front ends, public paths, permissions, or schedules."
-    - "Do not dispatch a workflow, access Melee, recollect or regenerate event 441441, deploy Pages, or mutate a remote branch outside the accepted task publication path."
-    - "Do not weaken published-state README consistency, candidate scope, protected-event bytes, or compatibility projection enforcement."
-    - "Do not begin RETRY-3, candidate acceptance, candidate publication, P14-02, Phase 15, another event admission, or unrelated work."
+    - "Do not change code, tests, configuration, Schemas, documentation other than docs/STATUS.yaml, whitelist, taxonomy, statistics, front ends, permissions, schedules, or public paths in the activation commit."
+    - "Do not dispatch before the activation merge, use collect-new, recollect event 441441, run more than once, force-push, or mutate a remote branch outside the bounded workflow."
+    - "Do not create or merge the candidate publication PR, publish event 441441 to master, begin P14-02, Phase 15, another event admission, or unrelated work."
   planned_verification:
-    - "Use synthetic tests for operation-mode/checkpoint rejection, candidate versus published validation, staged new-file coverage, dynamic Melee Schema mappings, complete publication bundles, and catalog projection compatibility."
-    - "Run the focused workflow, repository-mode, Schema, candidate, PR-admission, Pages-compatibility, and documentation-history tests only, then changed-scope repository validation, rule/Schema checks required by changed contracts, Ruff, git diff --check, and complete diff review."
-    - "Do not run collection, candidate generation, full pytest, browser, MTGO, Pages deployment, or unrelated validation."
-  stop_point: "Present the complete local diff and focused evidence for Owner acceptance; no commit or remote action follows automatically."
+    - "For activation, run only the live STATUS contract, changed-scope repository validation, git diff --check, and complete status-only diff review."
+    - "After the single dispatch, inspect the exact workflow run, prove source_mode retained, verify review-branch scope and SHA, and review persisted candidate evidence without recollecting."
+    - "Do not run local collection, candidate generation, full pytest, browser, MTGO, Pages deployment, or unrelated validation."
+  stop_point: "Complete the status activation through one Ready PR and merge, dispatch exactly one retained recovery, inspect the persisted candidate, and stop for Owner candidate acceptance."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-09-01"
-    subject: "The unchanged 15-path local MELEE-CANDIDATE-PUBLICATION-PIPELINE-HARDENING-V1 implementation and its focused, full, Schema, Pages-compatibility, Ruff, and scope-validation evidence."
+    subject: "One MELEE-441441-CANDIDATE-RECOVERY-RETRY-3 activation and one resume-retained workflow dispatch from exact checkpoint c63ad902, stopping at persisted candidate acceptance."
 
 current_repository_state:
-  source_master_commit: "05120144d43f3ebbeee87656b43a10486328c922"
-  previous_task: "MELEE-441441-CANDIDATE-RECOVERY-RETRY-2"
-  previous_task_status: "failed_after_single_authorized_dispatch"
-  previous_pull_request: 333
-  previous_merge_commit: "05120144d43f3ebbeee87656b43a10486328c922"
-  previous_merge_validation_run: 33409145137
+  source_master_commit: "2f1e9b35414242dff491f893e308acade8ad961b"
+  previous_task: "MELEE-CANDIDATE-PUBLICATION-PIPELINE-HARDENING-V1"
+  previous_task_status: "completed_merged_and_exact_sha_deployed"
+  previous_pull_request: 339
+  previous_merge_commit: "2f1e9b35414242dff491f893e308acade8ad961b"
+  previous_merge_validation_run: 33491949757
+  previous_pages_run: 33491949898
   failed_melee_candidate_run: 33409287877
   failed_run_stage: "Validate repository, rules, and public Schemas"
   failed_run_source_mode: "retained"
@@ -118,11 +110,11 @@ known_blockers: []
 
 future_task_gates:
   - id: "MELEE-CANDIDATE-PUBLICATION-PIPELINE-HARDENING-V1"
-    status: "owner_accepted_completion_authorized"
-    note: "Complete the unchanged task through one Ready PR, required CI, merge, and exact merge verification; do not start candidate recovery."
+    status: "completed_merged_and_exact_sha_deployed"
+    note: "PR 339 merged as 2f1e9b3; exact merge CI and automatic Pages deployment succeeded."
   - id: "MELEE-441441-CANDIDATE-RECOVERY-RETRY-3"
-    status: "not_authorized"
-    note: "A later retry requires accepted and merged pipeline hardening plus a new exact retained-checkpoint activation."
+    status: "owner_accepted_completion_authorized"
+    note: "Complete the status-only activation, then dispatch exactly one resume-retained run from c63ad902 and stop at persisted candidate acceptance."
   - id: "MELEE-441441-CANDIDATE-ACCEPTANCE"
     status: "pending_successful_candidate_evidence"
     note: "Owner data, classification, statistics, and quality review begins only after a successful persisted candidate exists."
@@ -137,15 +129,15 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "MELEE-CANDIDATE-PUBLICATION-PIPELINE-HARDENING-V1"
-  name: "Complete the accepted Melee candidate-to-publication pipeline hardening"
+  id: "MELEE-441441-CANDIDATE-RECOVERY-RETRY-3"
+  name: "Complete one exact-checkpoint event 441441 candidate recovery"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Continuous completion covers only the unchanged accepted hardening task through exact merge verification; candidate recovery remains separate."
+  note: "Continuous completion covers the status activation and one exact resume-retained workflow run; candidate publication remains separate."
 
 prohibited_next_actions:
-  - "Do not dispatch any workflow, mutate a remote branch outside the accepted task branch, or deploy Pages during this completion."
-  - "Do not recollect or regenerate event 441441, change its whitelist or retained checkpoint, begin RETRY-3, candidate acceptance or publication, P14-02, Phase 15, another event admission, or unrelated repository work."
+  - "Do not use collect-new, dispatch another event or a second RETRY-3 run, force-push, or mutate a remote branch outside the bounded workflow."
+  - "Do not recollect event 441441, change its whitelist or retained checkpoint, create or merge the candidate publication PR, publish candidate data, begin P14-02, Phase 15, another event admission, or unrelated work."
