@@ -37,6 +37,17 @@ class MeleeClassificationError(ValueError):
     """Raised when a normalized event cannot be classified safely."""
 
 
+def _classifier_card_name(name: str) -> str:
+    """Bridge reviewed split cards to the shared classifier's legacy spelling."""
+
+    stripped = name.strip()
+    reviewed_split_names = {
+        "Dead // Gone": "Dead/Gone",
+        "Fire // Ice": "Fire/Ice",
+    }
+    return reviewed_split_names.get(stripped, front_face_card_name(stripped))
+
+
 def _sha256_bytes(payload: bytes) -> str:
     return sha256(payload).hexdigest()
 
@@ -141,7 +152,7 @@ def _adapt_decklist(decklist: Mapping[str, Any]) -> tuple[dict[str, Any] | None,
         ):
             continue
         target = main if section == "main" else side
-        target.append({"name": front_face_card_name(name), "qty": quantity})
+        target.append({"name": _classifier_card_name(name), "qty": quantity})
 
     if not main:
         errors.append("decklist must contain at least one main-deck card")

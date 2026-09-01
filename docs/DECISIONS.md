@@ -7629,3 +7629,97 @@ builds reject protected catalog drift. This changes no event data, whitelist,
 statistics, taxonomy, Schema shape or output version, public path, front end,
 workflow permission, or schedule. It does not authorize commit, remote
 publication, merge, candidate recovery, collection, or deployment.
+
+---
+
+# DEC-155 - Separate Kappa Affinity from reviewed artifact engines
+
+Status: `Accepted`
+
+## Context
+
+The Modern `affinity-primary` rule required only `Mox Opal`, `Urza's Saga`,
+and `Mishra's Bauble`. Those cards describe a broad artifact shell rather than
+the maintained Affinity archetype. Event `441441` therefore classified four
+Oswald artifact-combo decks as Affinity even though none contained
+`Kappa Cannoneer`. Their white `Oswald Fiddlebender` and `Portable Hole`
+package makes the shell Azorius; `Sewer-veillance Cam` plus
+`Grinding Station` distinguishes the combo build.
+
+The current Modern MTGO corpus contained 614 selected Affinity decks. Of
+those, 578 contained three or four `Kappa Cannoneer` and 36 contained none.
+Fourteen no-Kappa decks had the initially accepted Azorius Oswald/Portable
+structure: 11 included both Sewer-veillance Cam and Grinding Station, while
+three did not. Thirteen of those 14 were selected as Affinity and one was
+selected by a different higher-priority rule. A subsequent Owner review
+clustered and assigned the remaining 23 no-Kappa Affinity selections rather
+than leaving a known false classification as Unknown.
+
+## Decision
+
+Require at least three main-deck `Kappa Cannoneer` in `affinity-primary`, in
+addition to its existing artifact-engine requirements.
+
+Create a `sewer-combo` parent with `azorius`, `simic`, `mono-blue`, and `izzet`
+subtypes. Every subtype requires the artifact engine, both
+`Sewer-veillance Cam` and `Grinding Station`, and no Kappa Cannoneer. The
+Azorius subtype requires the reviewed Oswald, Portable Hole, blue-source, and
+white-source package. Simic requires at least two Malevolent Rumble while
+excluding the already established Kethis Combo and Song of Creation engines.
+Izzet requires at least two Ragavan plus Steam Vents while excluding the
+already established Steel-Cutter engine. Mono-Blue has a reviewed Loki path
+without the Azorius, Simic, Izzet, or Steel-Cutter markers and a separate
+reviewed Rona path requiring Gran-Gran, Rona, and Retraction Helix. Gran-Gran
+may appear in the Loki path without changing the identity. A singleton
+Breeding Pool retained for splash or sideboard access does not by itself
+change the main-deck identity.
+
+Keep `azorius-artifact` as an independent parent. Its original Oswald path
+remains, and a second non-combo path admits blue-white Portable Hole builds
+without Oswald only when Cam, Grinding Station, Kappa, and Jeskai Ascendancy
+are absent.
+
+Create a separate `jeskai-ascendancy-combo` parent for the Owner-confirmed
+Jeskai Ascendancy artifact engine. It requires Jeskai Ascendancy, Emry, Tamiyo,
+Mox Amber, Mox Opal, Urza's Saga, Mishra's Bauble, Portable Hole, and blue,
+white, and red sources. It excludes Cam, Grinding Station, Oswald,
+and Kappa Cannoneer so established Azorius Sewer Combo records retain their
+identity. Three or more Jeskai Ascendancy take precedence over the
+Steel-Cutter fallback even when Cori-Steel Cutter is present.
+
+Assign the remaining reviewed constructions as follows: the Legion Extruder
+and Experimental Synthesizer pair to the existing `mono-red-artifact`; the
+Coretapper, charge-counter, Mystic Forge, Karn, and Eldrazi Temple construction
+to the existing `dice-factory-eldrazi`; the Basim, Bilbo, Emry, Tamiyo, and Mox
+Amber construction without Erayo to a new `dimir-legends` parent; and the Asmo,
+Underworld Cookbook, Ovalchase Daredevil, Academy Manufactor, and Time Sieve
+construction to a new `dimir-asmo` parent.
+
+The accepted display names are Sewer Combo / 下水道组合技, Azorius Sewer
+Combo / 蓝白下水道组合技, Simic Sewer Combo / 蓝绿下水道组合技, Mono-Blue
+Sewer Combo / 纯蓝下水道组合技, Izzet Sewer Combo / 红蓝下水道组合技,
+Azorius Artifact / 蓝白神器, Dimir Legends / 蓝黑传奇, and Dimir Asmo /
+蓝黑阿司魔, plus Jeskai Ascendancy Combo / 霸权组合技. Existing
+accepted names remain unchanged.
+
+## Consequences
+
+The retained 8,192-deck Modern MTGO corpus classifies every deck with zero
+Unknown, conflicts, or invalid records. The 23 reviewed records select exactly
+10 Simic Sewer Combo, five Mono-Blue Sewer Combo, one Izzet Sewer Combo, two
+Azorius Artifact, two Mono-Red Artifact, and one each Dimir Legends, Dimir
+Asmo, and Dice Factory Eldrazi. The full corpus retains 578 true Affinity
+decks; Sewer Combo totals 11 Azorius, 10 Simic, five Mono-Blue, and one Izzet.
+Existing Kethis Combo, Song of Creation, and Dimir Erayo records retain their
+established identities. Exactly one retained MTGO deck migrates from
+Steel-Cutter to Jeskai Ascendancy Combo because it contains three Ascendancy;
+the other artifact Ascendancy record remains Azorius Sewer Combo because its
+Oswald, Cam, and Grinding Station engine takes precedence.
+
+Event `441441` retains 29 Affinity decks, classifies four as Azorius Sewer
+Combo, one as Mono-Blue Sewer Combo, and two as Jeskai Ascendancy Combo. Seven
+Owner-reviewed off-format, limited-pool, unsupported, or incoherent decks
+remain Unknown. This decision changes no retained event data, generated
+statistics, whitelist, workflow, Schema, front end, or publication state. It
+does not authorize data regeneration, commit, remote publication, pull-request
+creation, merge, production dispatch, or deployment.
