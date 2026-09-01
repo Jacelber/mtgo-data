@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/melee-441441-candidate-recovery-retry-3"
+  current_working_branch: "codex/melee-441441-publication"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_melee_441441_candidate_recovery_retry_3"
+  status: "active_melee_441441_publication"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: true
@@ -27,80 +27,88 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "MELEE-441441-CANDIDATE-RECOVERY-RETRY-3"
-  name: "Resume event 441441 candidate from the exact retained checkpoint"
+  id: "MELEE-441441-PUBLICATION"
+  name: "Publish the accepted event 441441 candidate"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-09-01"
-  base_commit: "2f1e9b35414242dff491f893e308acade8ad961b"
-  branch: "codex/melee-441441-candidate-recovery-retry-3"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-candidate-recovery-retry-3-20260901-01"
-  objective: "Activate and dispatch exactly one resume-retained recovery for event 441441 from checkpoint c63ad902 using the hardened candidate workflow, without recollection, and stop at persisted candidate acceptance."
-  artifact_impact: "none"
+  base_commit: "0b88c5134d48710949fc0d689a19e76f2a5e65be"
+  branch: "codex/melee-441441-publication"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-441441-publication-20260901-01"
+  objective: "Publish the exact accepted event 441441 candidate aa46696d together with the required README and live STATUS synchronization, then verify the exact merge commit on Pages."
+  artifact_impact: "statistical_json_structure, public_path"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
+    - "data_raw/melee/441441/20260831T124956Z-01/"
+    - "data/modern/melee/events/441441.json"
+    - "data/modern/melee/classifications/441441.json"
+    - "data/modern/melee/opportunities/441441.json"
+    - "stats/modern/melee/events/441441/"
+    - "stats/modern/melee/index.json"
+    - "stats/catalog.json"
+    - "README.md"
     - "docs/STATUS.yaml"
-  planned_additions: []
-  candidate_operation:
-    workflow: ".github/workflows/fetch_melee.yml"
+  candidate_source:
     event_id: "441441"
+    branch: "data/melee-441441"
+    accepted_commit: "aa46696d03235e336ec1e4c3a0aa7fcdf48e117f"
+    producer_run: 33494293638
     operation: "resume-retained"
-    dispatch_ref: "master after the RETRY-3 activation merge"
-    required_workflow_base: "the exact RETRY-3 activation merge commit"
-    retained_branch: "data/melee-441441"
-    retained_checkpoint: "c63ad902945d36cd242d3c524ef99fbfe6ba879a"
-    required_source_mode: "retained"
-    allowed_remote_write: "data/melee-441441 only"
-    dispatch_count: 1
+    source_mode: "retained"
+    snapshot: "data_raw/melee/441441/20260831T124956Z-01"
+    submitted_decklists: 571
+    classified: 534
+    temporary_unknown: 37
+    decklist_not_available: 3
+  weekly_maintenance_supplement:
+    id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
+    status: "queued_not_started"
+    format: "modern"
+    source: "tabletop_melee"
+    event_id: "441441"
+    temporary_unknown: 37
+    rule_change_authorized: false
+    note: "Review the 37 temporary Unknown records with this week's Modern maintenance without counting the three decklist_not_available participants as Unknown."
   protected_scope:
-    whitelist_or_source_scope_change: "none"
     recollection: "prohibited"
-    raw_or_normalized_bytes_change: "none"
+    accepted_candidate_bytes: "must equal aa46696d for all 718 candidate paths"
     classification_or_taxonomy_change: "none"
     schema_or_output_version_change: "none"
-    workflow_or_permission_change: "none"
-    generated_candidate_change: "event 441441 review branch only"
-    master_or_publication_change: "the activation commit changes only STATUS; the candidate operation never writes master or creates a pull request"
+    code_test_or_workflow_change: "none"
+    frontend_or_statistical_semantics_change: "none"
   invariants:
-    - "Dispatch fetch_melee.yml exactly once for event 441441 with operation resume-retained and checkpoint c63ad902 after the activation merge."
-    - "The workflow must prove the remote review branch equals c63ad902 before and after fetch and must never execute collection."
-    - "Preserve every retained raw response and canonical normalized event byte; do not hand-edit generated output."
-    - "Require candidate scope, full-candidate repository, rule, public Schema, and internal Melee Schema validation before pushing a derived candidate commit."
-    - "The workflow may push only data/melee-441441 and must not write master, create or merge a pull request, or begin publication."
+    - "The 718 candidate paths must retain the exact Git objects from aa46696d; only README.md and docs/STATUS.yaml may differ as publication metadata."
+    - "The new-event publication bundle must contain raw, normalized, classification, opportunity, five public event files, both catalogs, README.md, and docs/STATUS.yaml together."
+    - "Published-state repository, rule, public Schema, internal Melee Schema, catalog compatibility, and Pages admission checks must pass."
+    - "The 37 Unknown records remain temporary review items; the three decklist_not_available participants remain a separate source-availability state."
   prohibited_changes:
-    - "Do not change code, tests, configuration, Schemas, documentation other than docs/STATUS.yaml, whitelist, taxonomy, statistics, front ends, permissions, schedules, or public paths in the activation commit."
-    - "Do not dispatch before the activation merge, use collect-new, recollect event 441441, run more than once, force-push, or mutate a remote branch outside the bounded workflow."
-    - "Do not create or merge the candidate publication PR, publish event 441441 to master, begin P14-02, Phase 15, another event admission, or unrelated work."
+    - "Do not recollect event 441441, regenerate or hand-edit the accepted candidate, or dispatch a workflow."
+    - "Do not change the whitelist, classifier rules, taxonomy, Schemas, code, tests, front ends, permissions, schedules, or statistical meaning."
+    - "Do not begin the supplemental Unknown review, P14-02, Phase 15, another event admission, or unrelated work."
   planned_verification:
-    - "For activation, run only the live STATUS contract, changed-scope repository validation, git diff --check, and complete status-only diff review."
-    - "After the single dispatch, inspect the exact workflow run, prove source_mode retained, verify review-branch scope and SHA, and review persisted candidate evidence without recollecting."
-    - "Do not run local collection, candidate generation, full pytest, browser, MTGO, Pages deployment, or unrelated validation."
-  stop_point: "Complete the status activation through one Ready PR and merge, dispatch exactly one retained recovery, inspect the persisted candidate, and stop for Owner candidate acceptance."
+    - "Prove the 718 candidate path and object changes equal aa46696d exactly, with no deletion, rename, or outside path."
+    - "Run the live STATUS contract, strict published-state repository validation, required public and internal Schemas, rule validation, candidate compatibility checks, and git diff checks selected by the actual publication bundle."
+    - "Create one Ready PR, require all checks, merge the unchanged accepted subject, and verify the exact merge SHA plus event 441441 public resources on Pages."
+  stop_point: "Stop after the exact accepted candidate is merged and its exact merge SHA and required 441441 public resources pass Pages verification; do not start the queued Unknown review."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-09-01"
-    subject: "One MELEE-441441-CANDIDATE-RECOVERY-RETRY-3 activation and one resume-retained workflow dispatch from exact checkpoint c63ad902, stopping at persisted candidate acceptance."
+    subject: "Publish exact candidate aa46696d with 37 temporary Unknown accepted for current publication and queued for this week's Modern Tabletop/Melee supplemental review; no classifier change or recollection."
 
 current_repository_state:
-  source_master_commit: "2f1e9b35414242dff491f893e308acade8ad961b"
-  previous_task: "MELEE-CANDIDATE-PUBLICATION-PIPELINE-HARDENING-V1"
-  previous_task_status: "completed_merged_and_exact_sha_deployed"
-  previous_pull_request: 339
-  previous_merge_commit: "2f1e9b35414242dff491f893e308acade8ad961b"
-  previous_merge_validation_run: 33491949757
-  previous_pages_run: 33491949898
-  failed_melee_candidate_run: 33409287877
-  failed_run_stage: "Validate repository, rules, and public Schemas"
-  failed_run_source_mode: "retained"
-  failed_run_candidate_scope_validation: "passed"
-  failed_run_candidate_commit_created: false
-  failed_run_reason: "Candidate catalog contained 441441 while published README correctly still described only 434455; published-state validation was used in the pre-acceptance candidate context."
+  source_master_commit: "0b88c5134d48710949fc0d689a19e76f2a5e65be"
+  previous_task: "MELEE-441441-CANDIDATE-RECOVERY-RETRY-3"
+  previous_task_status: "completed_candidate_accepted"
+  candidate_producer_run: 33494293638
   retained_candidate_branch: "data/melee-441441"
-  retained_checkpoint_commit: "c63ad902945d36cd242d3c524ef99fbfe6ba879a"
+  accepted_candidate_commit: "aa46696d03235e336ec1e4c3a0aa7fcdf48e117f"
   retained_source_bytes_changed: false
+  public_tabletop_events:
+    - "434455"
+    - "441441"
   public_entries:
     mtgo: "/index.html"
     tabletop: "/melee/index.html"
@@ -109,18 +117,18 @@ current_repository_state:
 known_blockers: []
 
 future_task_gates:
-  - id: "MELEE-CANDIDATE-PUBLICATION-PIPELINE-HARDENING-V1"
-    status: "completed_merged_and_exact_sha_deployed"
-    note: "PR 339 merged as 2f1e9b3; exact merge CI and automatic Pages deployment succeeded."
   - id: "MELEE-441441-CANDIDATE-RECOVERY-RETRY-3"
-    status: "owner_accepted_completion_authorized"
-    note: "Complete the status-only activation, then dispatch exactly one resume-retained run from c63ad902 and stop at persisted candidate acceptance."
+    status: "completed_candidate_persisted"
+    note: "Run 33494293638 persisted exact retained-source candidate aa46696d."
   - id: "MELEE-441441-CANDIDATE-ACCEPTANCE"
-    status: "pending_successful_candidate_evidence"
-    note: "Owner data, classification, statistics, and quality review begins only after a successful persisted candidate exists."
+    status: "accepted"
+    note: "Owner accepted aa46696d with 37 temporary Unknown and three decklist_not_available records."
   - id: "MELEE-441441-PUBLICATION"
-    status: "not_authorized"
-    note: "Candidate PR creation, merge, Pages deployment, and live publication require later Owner acceptance of the exact candidate."
+    status: "owner_accepted_completion_authorized"
+    note: "Publish aa46696d through one complete new-event bundle and verify the exact merge SHA on Pages."
+  - id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
+    status: "queued_not_authorized"
+    note: "Review 37 temporary Tabletop/Melee Unknown records with this week's Modern maintenance; no classifier work begins under publication authority."
   - id: "P14-02"
     status: "planned_not_authorized"
     note: "Pauper product input does not begin implicitly after this recovery."
@@ -129,15 +137,15 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "MELEE-441441-CANDIDATE-RECOVERY-RETRY-3"
-  name: "Complete one exact-checkpoint event 441441 candidate recovery"
+  id: "MELEE-441441-PUBLICATION"
+  name: "Publish the exact accepted event 441441 candidate"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Continuous completion covers the status activation and one exact resume-retained workflow run; candidate publication remains separate."
+  note: "Continuous completion covers the exact candidate publication PR, required checks, merge, and exact-SHA Pages verification."
 
 prohibited_next_actions:
-  - "Do not use collect-new, dispatch another event or a second RETRY-3 run, force-push, or mutate a remote branch outside the bounded workflow."
-  - "Do not recollect event 441441, change its whitelist or retained checkpoint, create or merge the candidate publication PR, publish candidate data, begin P14-02, Phase 15, another event admission, or unrelated work."
+  - "Do not recollect or regenerate event 441441, dispatch a workflow, change classifier rules or taxonomy, or force-push."
+  - "Do not begin the queued Unknown review, P14-02, Phase 15, another event admission, or unrelated work."
