@@ -2,10 +2,13 @@ import json
 import subprocess
 from pathlib import Path
 
+import pytest
+
 from validate_repository import (
     changed_validation_plan,
     validate_files,
     validate_public_product_facts,
+    validate_test_inventory,
     tracked_files,
 )
 from validate_schemas import validate_manifest
@@ -90,6 +93,114 @@ def write_public_product_fixture(
     return names, status
 
 
+def write_test_inventory_fixture(
+    root: Path,
+    *,
+    rows: tuple[tuple[str, str], ...],
+    files: dict[str, str],
+) -> list[str]:
+    matrix = root / "docs" / "TEST_TRIGGER_MATRIX.md"
+    matrix.parent.mkdir(parents=True)
+    body = [
+        "## Retained Python tests",
+        "",
+        "| File | Trigger | Purpose | Minimum subject | Independent oracle |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    body.extend(
+        f"| `{path}` | trigger | purpose | subject | `{oracle}` |"
+        for path, oracle in rows
+    )
+    body.extend(("", "## Next section", ""))
+    matrix.write_text("\n".join(body), encoding="utf-8")
+    for path, source in files.items():
+        target = root / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(source, encoding="utf-8")
+    return sorted(["docs/TEST_TRIGGER_MATRIX.md", *files])
+
+
+def test_registered_synthetic_test_inventory_passes(tmp_path: Path) -> None:
+    names = write_test_inventory_fixture(
+        tmp_path,
+        rows=(("tests/test_alpha.py", "synthetic"),),
+        files={"tests/test_alpha.py": "def test_alpha():\n    assert True\n"},
+    )
+
+    checked, failures = validate_test_inventory(tmp_path, names)
+
+    assert checked == 2
+    assert failures == []
+
+
+@pytest.mark.parametrize(
+    ("rows", "files", "expected"),
+    (
+        (
+            (),
+            {"tests/unit/test_alpha.py": "def test_alpha():\n    assert True\n"},
+            "unregistered Python test",
+        ),
+        (
+            (("tests/test_alpha.py", "result-looked-right"),),
+            {"tests/test_alpha.py": "def test_alpha():\n    assert True\n"},
+            "invalid independent oracle",
+        ),
+        (
+            (("tests/test_alpha.py", "synthetic"),),
+            {},
+            "stale Python test registration",
+        ),
+        (
+            (("tests/test_w35_alpha.py", "synthetic"),),
+            {"tests/test_w35_alpha.py": "def test_alpha():\n    assert True\n"},
+            "week- or event-specific Python test files are prohibited",
+        ),
+        (
+            (("tests/test_alpha.py", "owner-rule-contract"),),
+            {
+                "tests/test_alpha.py": (
+                    "from pathlib import Path\n"
+                    "ROOT = Path(__file__).parents[1]\n"
+                    "VALUE = ROOT / 'data/modern/event.json'\n"
+                )
+            },
+            "tests must not read repository-live data or reports as an oracle",
+        ),
+        (
+            (
+                ("tests/test_alpha.py", "synthetic"),
+                ("tests/test_alpha.py", "synthetic"),
+            ),
+            {"tests/test_alpha.py": "def test_alpha():\n    assert True\n"},
+            "duplicate test registration",
+        ),
+        (
+            (("tests/test_alpha.py", "synthetic"),),
+            {
+                "tests/test_alpha.py": (
+                    "from pathlib import Path\n"
+                    "ROOT = Path(__file__).parents[1]\n"
+                    "VALUE = ROOT / 'stats/example.json'\n"
+                )
+            },
+            "repository-live statistics require",
+        ),
+    ),
+)
+def test_test_inventory_failures_are_closed_and_specific(
+    tmp_path: Path,
+    rows: tuple[tuple[str, str], ...],
+    files: dict[str, str],
+    expected: str,
+) -> None:
+    names = write_test_inventory_fixture(tmp_path, rows=rows, files=files)
+
+    _checked, failures = validate_test_inventory(tmp_path, names)
+
+    assert any(expected in failure.message for failure in failures)
+
+
 def test_changed_plan_includes_directly_changed_maintained_files():
     tracked = [
         "src/mtgmeta/example.py",
@@ -110,7 +221,13 @@ def test_changed_plan_includes_directly_changed_maintained_files():
 
 
 def test_changed_plan_adds_only_the_triggered_coupled_contracts():
-    tracked = ["README.md", "docs/STATUS.yaml", "index.html"]
+    tracked = [
+        "README.md",
+        "docs/STATUS.yaml",
+        "docs/TEST_TRIGGER_MATRIX.md",
+        "index.html",
+        "tests/test_alpha.py",
+    ]
 
     readme_plan = changed_validation_plan(["README.md"], tracked)
     entry_plan = changed_validation_plan(["index.html"], tracked)
@@ -122,6 +239,10 @@ def test_changed_plan_adds_only_the_triggered_coupled_contracts():
     assert entry_plan.reference_groups == frozenset(
         {"frontend-templates", "phase8-entries"}
     )
+    test_plan = changed_validation_plan(["tests/test_alpha.py"], tracked)
+    assert test_plan.reference_groups == frozenset({"test-inventory"})
+    matrix_plan = changed_validation_plan(["docs/TEST_TRIGGER_MATRIX.md"], tracked)
+    assert matrix_plan.reference_groups == frozenset({"test-inventory"})
 
 
 def test_changed_plan_treats_tabletop_event_catalog_as_public_product_facts():

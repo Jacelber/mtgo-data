@@ -128,6 +128,14 @@ def test_known_paths_select_only_their_targeted_categories(paths, expected):
             ["my_archetypes/modern.yaml"],
             ("rules-modern", "top8-restatement"),
         ),
+        (
+            ["tests/test_classifier_rule_contracts.py"],
+            ("classifier-contract",),
+        ),
+        (
+            ["src/mtgmeta/melee/classification.py"],
+            ("classifier-adapter",),
+        ),
         (["src/mtgmeta/mtgo/top8.py"], ("top8-restatement",)),
         (
             ["tools/build_landing_card_image_cache.py"],

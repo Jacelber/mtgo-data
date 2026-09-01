@@ -17,11 +17,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "ae06e549dec4511bb7476eb5dcf10e1b1f2c8678e67899f3a3b8318baa22a4e4",
+    "rule_sha256": "2ab329e4a35655b88b159edfc60d37d4d3f8b5e38d1c37a519b21f29e0001515",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 134,
-    "rule_count": 219,
-    "subtype_count": 73
+    "archetype_count": 155,
+    "rule_count": 265,
+    "subtype_count": 81
   },
   "summary": {
     "total_records": 362,
@@ -29,14 +29,14 @@
     "unknown": 0,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 66,
-    "overridden_matches": 66,
-    "selected_subtypes": 125,
-    "parent_only": 237,
+    "multiple_matches": 73,
+    "overridden_matches": 73,
+    "selected_subtypes": 126,
+    "parent_only": 236,
     "same_parent_multiple_subtype_matches": 2,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
-      "affinity": 48,
+      "affinity": 46,
       "amulet-titan": 25,
       "azorius-control": 2,
       "azorius-energy": 2,
@@ -59,6 +59,7 @@
       "jeskai-control": 2,
       "living-end": 4,
       "mardu-energy": 1,
+      "mono-blue-artifact": 1,
       "mono-blue-belcher": 1,
       "necrodominance": 1,
       "prowess": 26,
@@ -66,6 +67,7 @@
       "ruby-storm": 16,
       "sam-combo": 1,
       "selesnya-energy": 1,
+      "sewer-combo": 1,
       "simic-neoform": 14,
       "song-of-creation": 1
     },
@@ -88,7 +90,8 @@
       "prowess/jeskai": 1,
       "prowess/lessons": 1,
       "prowess/mono-red": 1,
-      "rakdos-hollow-one/rakdos": 2
+      "rakdos-hollow-one/rakdos": 2,
+      "sewer-combo/azorius": 1
     },
     "strict_validation": "pass"
   },
@@ -193,21 +196,21 @@
       "participant_id": "participant-00da91b75a62549c3f68ba45247bcf4bf09e1692a1f55130667ac2eb84ac9c16",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "affinity",
-        "archetype_name": "Affinity",
-        "subtype_id": null,
-        "subtype_name": null,
-        "rule_id": "affinity-primary",
-        "priority": 435000
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
       },
       "matched_rules": [
         {
-          "archetype_id": "affinity",
-          "archetype_name": "Affinity",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "affinity-primary",
-          "priority": 435000,
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius",
+          "rule_id": "sewer-combo-azorius",
+          "priority": 689930,
           "evidence": [
             {
               "card": "Mox Opal",
@@ -232,18 +235,148 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Oswald Fiddlebender",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Portable Hole",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Sewer-veillance Cam",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
+        {
+          "archetype_id": "azorius-artifact",
+          "archetype_name": "Azorius Artifact",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "azorius-artifact-primary",
+          "priority": 689920,
+          "evidence": [
+            {
+              "card": "Mox Opal",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Saga",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Oswald Fiddlebender",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Portable Hole",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
       ],
       "top_priority_matches": [
         {
-          "archetype_id": "affinity",
-          "archetype_name": "Affinity",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "affinity-primary",
-          "priority": 435000,
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius",
+          "rule_id": "sewer-combo-azorius",
+          "priority": 689930,
           "evidence": [
             {
               "card": "Mox Opal",
@@ -268,11 +401,142 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Oswald Fiddlebender",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Portable Hole",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Sewer-veillance Cam",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "azorius-artifact",
+          "archetype_name": "Azorius Artifact",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "azorius-artifact-primary",
+          "priority": 689920,
+          "evidence": [
+            {
+              "card": "Mox Opal",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Saga",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Oswald Fiddlebender",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Portable Hole",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -322,6 +586,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -353,6 +625,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -624,6 +904,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -655,6 +943,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -754,14 +1050,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -823,14 +1111,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -912,14 +1192,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -983,14 +1255,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -1211,14 +1475,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -1280,14 +1536,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -1369,14 +1617,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -1440,14 +1680,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -1636,14 +1868,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -1705,14 +1929,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -1794,14 +2010,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -1865,14 +2073,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -2830,14 +3030,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -2899,14 +3091,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -2988,14 +3172,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -3059,14 +3235,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -4725,6 +4893,80 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-emperor-ephemerate",
+          "priority": 632750,
+          "evidence": [
+            {
+              "card": "Emperor of Bones",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Flickerwisp",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Overlord of the Balemurk",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -4787,7 +5029,82 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-emperor-ephemerate",
+          "priority": 632750,
+          "evidence": [
+            {
+              "card": "Emperor of Bones",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Flickerwisp",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Overlord of the Balemurk",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -4869,14 +5186,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -4940,14 +5249,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -5047,14 +5348,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -5116,14 +5409,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -5205,14 +5490,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -5276,14 +5553,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -5368,6 +5637,80 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-emperor-ephemerate",
+          "priority": 632750,
+          "evidence": [
+            {
+              "card": "Emperor of Bones",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Flickerwisp",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Overlord of the Balemurk",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -5430,7 +5773,82 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-emperor-ephemerate",
+          "priority": 632750,
+          "evidence": [
+            {
+              "card": "Emperor of Bones",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Flickerwisp",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Overlord of the Balemurk",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -6632,14 +7050,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -6701,14 +7111,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -6790,14 +7192,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -6861,14 +7255,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -7314,6 +7700,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -7345,6 +7739,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -7884,14 +8286,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -7953,14 +8347,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -8042,14 +8428,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -8113,14 +8491,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -8635,6 +9005,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -8666,6 +9044,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -8725,6 +9111,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -8756,6 +9150,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -8855,14 +9257,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -8924,14 +9318,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -9013,14 +9399,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -9084,14 +9462,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -9190,14 +9560,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -9259,14 +9621,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -9348,14 +9702,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -9419,14 +9765,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -9525,14 +9863,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -9594,14 +9924,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -9683,14 +10005,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -9759,14 +10073,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -9820,6 +10126,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -9851,6 +10165,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -10175,6 +10497,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -10206,6 +10536,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -10265,6 +10603,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -10296,6 +10642,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -10514,14 +10868,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -10585,14 +10931,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -10774,6 +11112,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -10805,6 +11151,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -11042,14 +11396,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -11111,14 +11457,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -11200,14 +11538,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -11271,14 +11601,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -11692,6 +12014,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -11723,6 +12053,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -12275,6 +12613,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -12306,6 +12652,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -12365,6 +12719,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -12396,6 +12758,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13138,6 +13508,80 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-emperor-ephemerate",
+          "priority": 632750,
+          "evidence": [
+            {
+              "card": "Emperor of Bones",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Flickerwisp",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Overlord of the Balemurk",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -13200,7 +13644,82 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-emperor-ephemerate",
+          "priority": 632750,
+          "evidence": [
+            {
+              "card": "Emperor of Bones",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Flickerwisp",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Overlord of the Balemurk",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -13547,6 +14066,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -13578,6 +14105,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -14024,6 +14559,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -14055,6 +14598,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -14154,14 +14705,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -14223,14 +14766,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -14312,14 +14847,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -14383,14 +14910,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -15435,14 +15954,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -15506,14 +16017,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -16634,6 +17137,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -16665,6 +17176,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -16936,6 +17455,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -16967,6 +17494,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -17312,6 +17847,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -17343,6 +17886,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -17524,6 +18075,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -17555,6 +18114,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -17789,14 +18356,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -17865,14 +18424,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -17927,6 +18478,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -17958,6 +18517,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -19268,6 +19835,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -19299,6 +19874,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -20572,14 +21155,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -20643,14 +21218,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -21696,6 +22263,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -21727,6 +22302,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -22226,6 +22809,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -22257,6 +22848,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -22740,6 +23339,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -22771,6 +23378,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -23375,6 +23990,56 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "grixis-persist",
+          "archetype_name": "Grixis Persist",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "grixis-persist-emperor",
+          "priority": 639895,
+          "evidence": [
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Archon of Cruelty",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Faithless Looting",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Abhorrent Oculus",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emperor of Bones",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -23421,7 +24086,58 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "grixis-persist",
+          "archetype_name": "Grixis Persist",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "grixis-persist-emperor",
+          "priority": 639895,
+          "evidence": [
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Archon of Cruelty",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Faithless Looting",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Abhorrent Oculus",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emperor of Bones",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -23885,6 +24601,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -23916,6 +24640,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -24415,6 +25147,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -24446,6 +25186,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -24595,6 +25343,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -24626,6 +25382,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -24807,14 +25571,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -24878,14 +25634,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -25340,14 +26088,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -25409,14 +26149,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -25498,14 +26230,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -25569,14 +26293,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -25675,14 +26391,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -25744,14 +26452,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -25833,14 +26533,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -25904,14 +26596,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -26394,6 +27078,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -26425,6 +27117,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27337,6 +28037,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -27368,6 +28076,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27427,6 +28143,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -27458,6 +28182,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27517,6 +28249,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -27548,6 +28288,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27729,6 +28477,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -27760,6 +28516,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27957,6 +28721,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -27988,6 +28760,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -28169,14 +28949,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -28240,14 +29012,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -28413,14 +29177,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -28489,14 +29245,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -28551,6 +29299,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -28582,6 +29338,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -29017,6 +29781,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -29048,6 +29820,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -29773,14 +30553,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -29842,14 +30614,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -29931,14 +30695,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -30002,14 +30758,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -30248,6 +30996,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -30279,6 +31035,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -30963,6 +31727,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -30994,6 +31766,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -31265,14 +32045,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -31336,14 +32108,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -32565,6 +33329,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -32596,6 +33368,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -33287,14 +34067,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -33358,14 +34130,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -34352,14 +35116,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -34423,14 +35179,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -34686,6 +35434,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -34717,6 +35473,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -34930,14 +35694,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -35001,14 +35757,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -35320,14 +36068,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -35389,14 +36129,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -35478,14 +36210,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -35549,14 +36273,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -37298,14 +38014,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -37367,14 +38075,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -37456,14 +38156,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -37527,14 +38219,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -37773,6 +38457,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -37804,6 +38496,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -39436,22 +40136,46 @@
       "participant_id": "participant-d6b362c14ea18b9bf1bed6ad766714001aed63bee412a5c1756521499274536b",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "affinity",
-        "archetype_name": "Affinity",
+        "archetype_id": "mono-blue-artifact",
+        "archetype_name": "Mono-Blue Artifact",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "affinity-primary",
-        "priority": 435000
+        "rule_id": "mono-blue-artifact-quantum-subtlety",
+        "priority": 689918
       },
       "matched_rules": [
         {
-          "archetype_id": "affinity",
-          "archetype_name": "Affinity",
+          "archetype_id": "mono-blue-artifact",
+          "archetype_name": "Mono-Blue Artifact",
           "subtype_id": null,
           "subtype_name": null,
-          "rule_id": "affinity-primary",
-          "priority": 435000,
+          "rule_id": "mono-blue-artifact-quantum-subtlety",
+          "priority": 689918,
           "evidence": [
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Tamiyo, Inquisitive Student",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
             {
               "card": "Mox Opal",
               "zone": "main",
@@ -39475,19 +40199,171 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Subtlety",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Sewer-veillance Cam",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Grinding Station",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Jeskai Ascendancy",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Oswald Fiddlebender",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Portable Hole",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Erayo, Soratami Ascendant",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Basim Ibn Ishaq",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Bilbo, Thief in the Night",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
       ],
       "top_priority_matches": [
         {
-          "archetype_id": "affinity",
-          "archetype_name": "Affinity",
+          "archetype_id": "mono-blue-artifact",
+          "archetype_name": "Mono-Blue Artifact",
           "subtype_id": null,
           "subtype_name": null,
-          "rule_id": "affinity-primary",
-          "priority": 435000,
+          "rule_id": "mono-blue-artifact-quantum-subtlety",
+          "priority": 689918,
           "evidence": [
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Tamiyo, Inquisitive Student",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
             {
               "card": "Mox Opal",
               "zone": "main",
@@ -39511,6 +40387,134 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Subtlety",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Sewer-veillance Cam",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Grinding Station",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Jeskai Ascendancy",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Oswald Fiddlebender",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Portable Hole",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Erayo, Soratami Ascendant",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Basim Ibn Ishaq",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Bilbo, Thief in the Night",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -39793,6 +40797,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -39824,6 +40836,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -40983,6 +42003,48 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "selesnya-energy",
+          "archetype_name": "Selesnya Energy",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "selesnya-energy-ocelot-birthing",
+          "priority": 684990,
+          "evidence": [
+            {
+              "card": "Guide of Souls",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ocelot Pride",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Birthing Ritual",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Temple Garden",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -41021,7 +42083,50 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "selesnya-energy",
+          "archetype_name": "Selesnya Energy",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "selesnya-energy-ocelot-birthing",
+          "priority": 684990,
+          "evidence": [
+            {
+              "card": "Guide of Souls",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ocelot Pride",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Birthing Ritual",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Temple Garden",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -41193,6 +42298,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -41224,6 +42337,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -41691,6 +42812,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -41722,6 +42851,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -42450,14 +43587,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -42521,14 +43650,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -42784,6 +43905,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -42815,6 +43944,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -43170,6 +44307,72 @@
           ]
         },
         {
+          "archetype_id": "eldrazi-tron",
+          "archetype_name": "Eldrazi Tron",
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "eldrazi-tron-mono-green-sowing",
+          "priority": 647900,
+          "evidence": [
+            {
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Eldrazi Temple",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Forest",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Sowing Mycospawn",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Talisman of Resilience",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
+        {
           "archetype_id": "eldrazi-ramp",
           "archetype_name": "Eldrazi Ramp",
           "subtype_id": "sultai",
@@ -43313,6 +44516,72 @@
         }
       ],
       "overridden_matches": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "archetype_name": "Eldrazi Tron",
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "eldrazi-tron-mono-green-sowing",
+          "priority": 647900,
+          "evidence": [
+            {
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Eldrazi Temple",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Forest",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Sowing Mycospawn",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Talisman of Resilience",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "eldrazi-ramp",
           "archetype_name": "Eldrazi Ramp",
@@ -43830,14 +45099,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -43901,14 +45162,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -44296,6 +45549,56 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "grixis-persist",
+          "archetype_name": "Grixis Persist",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "grixis-persist-emperor",
+          "priority": 639895,
+          "evidence": [
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Archon of Cruelty",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Faithless Looting",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Abhorrent Oculus",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emperor of Bones",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -44342,7 +45645,58 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "grixis-persist",
+          "archetype_name": "Grixis Persist",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "grixis-persist-emperor",
+          "priority": 639895,
+          "evidence": [
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Archon of Cruelty",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Faithless Looting",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Abhorrent Oculus",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emperor of Bones",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -44609,6 +45963,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -44640,6 +46002,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -44699,6 +46069,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -44732,6 +46110,14 @@
               "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 3,
               "min_count": 3,
               "max_count": null,
               "exact_count": null
@@ -44829,14 +46215,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -44898,14 +46276,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -44987,14 +46357,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -45058,14 +46420,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -45156,14 +46510,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -45227,14 +46573,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -45965,14 +47303,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         },
@@ -46034,14 +47364,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -46123,14 +47445,6 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             }
           ]
         }
@@ -46194,14 +47508,6 @@
             },
             {
               "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            },
-            {
-              "card": "Tezzeret, Cruel Captain",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -46334,6 +47640,14 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -46365,6 +47679,14 @@
             },
             {
               "card": "Mishra's Bauble",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,

@@ -201,8 +201,8 @@ def _documents() -> tuple[dict[str, Any], dict[str, dict[str, Any]], dict[str, A
     return ledger, statistics, build_event_matchup(statistics["overview"], ledger)
 
 
-def test_574_participants_accept_571_submitted_classifications() -> None:
-    participant_ids = [f"participant-{index:064x}" for index in range(574)]
+def test_participant_coverage_accepts_submitted_and_unavailable_decklists() -> None:
+    participant_ids = [f"participant-{index:064x}" for index in range(5)]
     event = {
         "schema_version": "2.2.0",
         "event_structure": "constructed_single_stage",
@@ -219,7 +219,7 @@ def test_574_participants_accept_571_submitted_classifications() -> None:
             {
                 "participant_id": participant_id,
                 "game_format": "modern",
-                "status": "submitted" if index < 571 else "unavailable",
+                "status": "submitted" if index < 2 else "unavailable",
             }
             for index, participant_id in enumerate(participant_ids)
         ],
@@ -253,7 +253,7 @@ def test_574_participants_accept_571_submitted_classifications() -> None:
                     "subtype_name": None,
                 },
             }
-            for participant_id in participant_ids[:571]
+            for participant_id in participant_ids[:2]
         ],
     }
 
@@ -267,8 +267,8 @@ def test_574_participants_accept_571_submitted_classifications() -> None:
     )
 
     statuses = [item["classification"]["status"] for item in ledger["participants"]]
-    assert len(statuses) == 574
-    assert statuses.count("classified") == 571
+    assert len(statuses) == 5
+    assert statuses.count("classified") == 2
     assert statuses.count("unknown") == 0
     assert statuses.count("unavailable") == 3
 

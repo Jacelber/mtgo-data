@@ -114,6 +114,33 @@ jobs:
           if [[ "$VALIDATION_TRIGGERS" == *rules-modern* ]]; then
             python -B validate_rules.py my_archetypes/modern.yaml
           fi
+      - name: Validate classifier rule contracts
+        if: >-
+          contains(needs.admission.outputs.validation_triggers, 'classifier-contract') ||
+          contains(needs.admission.outputs.validation_triggers, 'classifier-adapter') ||
+          contains(needs.admission.outputs.validation_triggers, 'rules-standard') ||
+          contains(needs.admission.outputs.validation_triggers, 'rules-modern')
+        shell: bash
+        env:
+          VALIDATION_TRIGGERS: ${{ needs.admission.outputs.validation_triggers }}
+        run: |
+          if [[ "$VALIDATION_TRIGGERS" == *classifier-contract* ]]; then
+            TESTS=(tests/test_classifier_rule_contracts.py)
+          else
+            TESTS=()
+            if [[ "$VALIDATION_TRIGGERS" == *rules-standard* ]]; then
+              TESTS+=(tests/test_classifier_rule_contracts.py::test_standard_owner_rule_contracts)
+            fi
+            if [[ "$VALIDATION_TRIGGERS" == *rules-modern* ]]; then
+              TESTS+=(tests/test_classifier_rule_contracts.py::test_modern_owner_rule_contracts)
+            fi
+            if [[ "$VALIDATION_TRIGGERS" == *classifier-adapter* ]]; then
+              TESTS+=(tests/test_classifier_rule_contracts.py::test_melee_split_card_adapter_contract)
+            fi
+          fi
+          python -B -m pytest \
+            --basetemp="${RUNNER_TEMP}/pytest-classifier-contract" \
+            "${TESTS[@]}"
       - name: Validate changed public JSON contracts
         if: >-
           contains(needs.admission.outputs.validation_triggers, 'schema-contract') ||

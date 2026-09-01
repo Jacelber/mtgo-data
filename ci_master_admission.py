@@ -473,6 +473,10 @@ def _validation_triggers(paths: set[str]) -> tuple[str, ...]:
         triggers.add("rules-standard")
     if paths & (shared_rule_paths | {"my_archetypes/modern.yaml"}):
         triggers.add("rules-modern")
+    if "tests/test_classifier_rule_contracts.py" in paths:
+        triggers.add("classifier-contract")
+    if "src/mtgmeta/melee/classification.py" in paths:
+        triggers.add("classifier-adapter")
 
     if any(path.startswith("schemas/") for path in paths) or "validate_schemas.py" in paths:
         triggers.add("schema-contract")
