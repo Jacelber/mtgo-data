@@ -120,6 +120,8 @@ PUBLIC_PRODUCT_NAMES = {
     "mtgo": "MTGO Environment Trends",
     "tabletop": "Tabletop Major Events",
 }
+CLASSIFIER_NAME_CATALOG = "configs/mtgo_archetype_names.yaml"
+PUBLIC_CLASSIFIER_NAME_SCHEMA_VERSION = "1.0.0"
 PHASE8_FRONTEND_ENTRIES = {
     "index.html": {
         "stylesheets": (
@@ -353,7 +355,14 @@ def changed_validation_plan(changed: list[str], tracked: list[str]) -> Validatio
     existing = changed_set.intersection(tracked_set)
     public_product_facts = any(
         path in PUBLIC_PRODUCT_FACT_SOURCES
-        or (path.startswith("stats/") and path.endswith("/melee/index.json"))
+        or path == CLASSIFIER_NAME_CATALOG
+        or (
+            path.startswith("stats/")
+            and (
+                path.endswith("/archetype_names.json")
+                or "/melee/" in path
+            )
+        )
         for path in changed_set
     )
     candidates = set(existing)
@@ -619,6 +628,37 @@ def validate_phase8_frontend_references(
     return checked, failures
 
 
+def _public_classifier_name_contract(
+    approved_names: list[Any], format_id: str
+) -> dict[str, Any]:
+    names = []
+    for item in approved_names:
+        if not isinstance(item, dict):
+            raise ValueError("classifier name row is not a mapping")
+        if item.get("format") != format_id:
+            continue
+        if item.get("review_status") != "approved":
+            raise ValueError(f"classifier name is not approved for {format_id}")
+        parent_id = item["parent_id"]
+        subtype_id = item["subtype_id"]
+        names.append(
+            {
+                "identity_id": (
+                    f"{parent_id}/{subtype_id}" if subtype_id is not None else parent_id
+                ),
+                "parent_id": parent_id,
+                "subtype_id": subtype_id,
+                "display": {"en": item["english"], "zh": item["chinese"]},
+            }
+        )
+    names.sort(key=lambda item: item["identity_id"])
+    return {
+        "schema_version": PUBLIC_CLASSIFIER_NAME_SCHEMA_VERSION,
+        "format": format_id,
+        "names": names,
+    }
+
+
 def validate_public_product_facts(
     root: Path,
     names: list[str],
@@ -630,7 +670,12 @@ def validate_public_product_facts(
 
     failures: list[Failure] = []
     tracked = set(names)
-    required = ("README.md", "stats/catalog.json", "configs/melee_events.yaml")
+    required = (
+        "README.md",
+        "stats/catalog.json",
+        "configs/melee_events.yaml",
+        CLASSIFIER_NAME_CATALOG,
+    )
     checked = len(required)
     for name in required:
         if not tracked_regular(root, tracked, name):
@@ -642,11 +687,15 @@ def validate_public_product_facts(
         readme = read_bytes(root, "README.md").decode("utf-8")
         catalog = json.loads(read_bytes(root, "stats/catalog.json").decode("utf-8"))
         event_config = yaml.safe_load(read_bytes(root, "configs/melee_events.yaml"))
+        name_catalog = yaml.safe_load(read_bytes(root, CLASSIFIER_NAME_CATALOG))
     except (json.JSONDecodeError, UnicodeDecodeError, yaml.YAMLError) as exc:
         reference_check(failures, "public product facts", f"invalid source: {exc}")
         return checked, failures
 
     formats = catalog.get("formats") if isinstance(catalog, dict) else None
+    approved_names = (
+        name_catalog.get("names") if isinstance(name_catalog, dict) else None
+    )
     repository_state = (
         status.get("current_repository_state") if isinstance(status, dict) else None
     )
@@ -660,13 +709,14 @@ def validate_public_product_facts(
     )
     if (
         not isinstance(formats, list)
+        or not isinstance(approved_names, list)
         or not isinstance(public_entries, dict)
         or not isinstance(configured_events, list)
     ):
         reference_check(
             failures,
             "public product facts",
-            "missing catalog formats, enabled events, or live public entries",
+            "missing catalog formats, approved classifier names, enabled events, or live public entries",
         )
         return checked, failures
     mtgo_entry = public_entries.get("mtgo")
@@ -722,6 +772,47 @@ def validate_public_product_facts(
         for format_id in labels
         if "tabletop-major-events" in catalog_products[format_id]
     )
+    public_formats = tuple(
+        format_id for format_id in labels if catalog_products[format_id]
+    )
+    for format_id in public_formats:
+        contract_path = f"stats/{format_id}/archetype_names.json"
+        checked += 1
+        if not tracked_regular(root, tracked, contract_path):
+            reference_check(
+                failures,
+                contract_path,
+                "missing public classifier-name contract",
+            )
+            continue
+        try:
+            expected_contract = _public_classifier_name_contract(
+                approved_names, format_id
+            )
+        except (KeyError, TypeError, ValueError) as exc:
+            reference_check(
+                failures,
+                CLASSIFIER_NAME_CATALOG,
+                f"invalid approved classifier names: {exc}",
+            )
+            continue
+        try:
+            public_contract = json.loads(
+                read_bytes(root, contract_path).decode("utf-8")
+            )
+        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+            reference_check(
+                failures,
+                contract_path,
+                f"invalid public classifier-name contract: {exc}",
+            )
+            continue
+        if public_contract != expected_contract:
+            reference_check(
+                failures,
+                contract_path,
+                "does not match the approved bilingual name catalog",
+            )
     event_ids_by_format: dict[str, list[str]] = {
         format_id: [] for format_id in tabletop_catalog_formats
     }
