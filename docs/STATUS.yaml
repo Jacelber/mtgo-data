@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/tabletop-latest-metrics-quality"
-  working_branch_status: "tabletop_hotfix_owner_accepted_completion_authorized"
+  current_working_branch: "codex/pages-card-localization-cache"
+  working_branch_status: "pages_recovery_owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_tabletop_hotfix_owner_accepted_completion"
+  status: "active_pages_recovery_owner_accepted_completion"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: false
@@ -27,14 +27,14 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "TABLETOP-LATEST-METRICS-QUALITY-HOTFIX"
-  name: "Repair latest-event selection, scope metrics, and data-quality presentation"
+  id: "PAGES-SIMPLE-CARD-LOCALIZATION-CACHE-RECOVERY"
+  name: "Cache simple card localization outside the bounded Pages build"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-09-02"
-  base_commit: "d821c153d525bbc70e271e75edd4f65997ca94e2"
-  branch: "codex/tabletop-latest-metrics-quality"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/tabletop-bugfix-20260902-01"
-  objective: "Make Tabletop default to the newest admitted event, show Day 2 conversion in the all-Constructed scope, hide unavailable mixed-event high-score metrics, and render approved bilingual data-quality explanations only when present."
+  base_commit: "de8a60ff80a3717027e2c989df4ccd890e2fbdcd"
+  branch: "codex/pages-card-localization-cache"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/pages-card-localization-cache-20260902-01"
+  objective: "Move the slow MTGCH localization preparation into a separate bounded cache job so the unchanged allowlisted Pages build can verify and publish the already merged Tabletop hotfix within its existing limit."
   authorization:
     local_implementation: true
     commit: true
@@ -43,37 +43,35 @@ current_task:
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-09-02"
-    subject: "Interactive local Tabletop preview for the unchanged hotfix."
+    subject: "Final local Pages workflow, cache builder contract, focused tests, and complete diff."
   local_acceptance:
     status: "accepted"
     accepted_on: "2026-09-02"
-    subject: "Interactive local Tabletop preview for the unchanged hotfix."
+    subject: "Eight-file local recovery diff; all 12 focused test nodes, the final run-attempt handoff recheck, Ruff, and final changed-scope validation passed."
   allowed_paths:
-    - "assets/js/phase8/app-mobile-render.js"
-    - "assets/js/phase8/app-tabletop.js"
-    - "assets/js/phase8/i18n.js"
-    - "assets/js/phase8/tabletop-controller.js"
-    - "src/mtgmeta/melee/publish.py"
-    - "stats/modern/melee/index.json"
-    - "README.md"
-    - "tests/browser/phase13-tabletop-rendering.spec.js"
-    - "tests/js/phase8-tabletop-controller.test.js"
-    - "tests/test_melee_multi_event_contract.py"
+    - ".github/workflows/pages.yml"
+    - "tools/build_simple_card_localization.py"
+    - "tests/test_simple_card_localization.py"
+    - "tests/test_ci_workflow.py"
+    - "docs/DATA_ARCHITECTURE.md"
+    - "docs/DECISIONS.md"
+    - "docs/TEST_TRIGGER_MATRIX.md"
     - "docs/STATUS.yaml"
   read_only_inputs:
-    - "data/modern/melee/"
-    - "stats/modern/melee/events/434455/"
-    - "stats/modern/melee/events/441441/"
+    - "stats/"
+    - "src/mtgmeta/card_names.py"
+    - "src/mtgmeta/data/om1_spm_aliases.json"
   protected_scope:
     source_data: "Do not fetch, refresh, or modify retained MTGO or Melee source data."
-    statistics: "Do not change statistical formulas, schemas, event results, or classification decisions; project the existing Day 2 metric only in the consumer view."
-    publication: "Local implementation only; do not commit, push, open a pull request, merge, or deploy without separate authorization."
+    product: "Do not change the accepted Tabletop UI, statistics, localization output shape, public paths, or browser behavior."
+    workflow: "Do not raise the existing 20-minute Pages build limit, add unbounded retry, or trust cache artifacts from a non-master producer."
+    publication: "Complete only the unchanged accepted recovery through one Ready PR, required checks, normal merge, and exact-SHA Pages verification; do not manually rerun or dispatch Pages."
   invariants:
-    - "The newest admitted event is first in the catalog and is the default when no event is requested."
-    - "Constructed Day 2 conversion remains the existing Day 2 statistic and is not recalculated in the browser."
-    - "Mixed-event high-score data remains visible in day-specific scopes and is hidden only where the metric is unavailable."
-    - "Unknown and unavailable-decklist quality counts remain separate and do not change classification or statistical eligibility."
-  stop_point: "Complete the unchanged accepted subject through one Ready PR, required checks, merge, and exact-SHA Pages verification; stop on failure, conflict, permission blockage, scope change, or changed subject."
+    - "The slow localization producer runs only when no exact trusted cache exists."
+    - "The cache subject changes when product card names, current Landing card names, or the localization builder/name-normalization contract changes."
+    - "Every reused or newly built cache is verified before the allowlisted Pages artifact consumes it."
+    - "The existing 20-minute allowlisted Pages build and 10-minute deploy limits remain unchanged."
+  stop_point: "Complete the unchanged accepted recovery through one Ready PR, required checks, normal merge, and exact-SHA Pages verification; stop on failure, conflict, permission blockage, or changed subject."
 
 weekly_classifier_review:
   id: "W35-CROSS-SOURCE-CLASSIFIER-REVIEW"
@@ -98,9 +96,9 @@ weekly_classifier_review:
   separation_rule: "Share the same-format human classifier decision session only; retain separate source provenance, counts, readiness, completion, generation, and publication."
 
 current_repository_state:
-  source_master_commit: "d821c153d525bbc70e271e75edd4f65997ca94e2"
-  previous_task: "W35-UNIFIED-FINAL-REGENERATION-AND-LANDING-IMPORT"
-  previous_task_status: "completed_merged_in_pr_349_pages_verified"
+  source_master_commit: "de8a60ff80a3717027e2c989df4ccd890e2fbdcd"
+  previous_task: "TABLETOP-LATEST-METRICS-QUALITY-HOTFIX"
+  previous_task_status: "merged_in_pr_350_pages_publication_blocked_by_run_33633293653"
   open_pull_request: null
   open_pull_request_head: null
   open_pull_request_status: "none"
@@ -116,7 +114,10 @@ current_repository_state:
     tabletop: "/melee/index.html"
   public_catalog: "/stats/catalog.json"
 
-known_blockers: []
+known_blockers:
+  - id: "PAGES-33633293653-TIMEOUT"
+    status: "owner_accepted_recovery_authorized"
+    note: "The merge-triggered Pages build reached a passing allowlisted artifact at de8a60ff80a3717027e2c989df4ccd890e2fbdcd, then the 20-minute build job was cancelled before Configure/Upload because simple card localization consumed nearly the full job window."
 
 future_task_gates:
   - id: "W36-CROSS-SOURCE-CLASSIFIER-REVIEW"
@@ -130,16 +131,16 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "TABLETOP-LATEST-METRICS-QUALITY-HOTFIX"
-  name: "Complete the accepted local Tabletop hotfix"
+  id: "PAGES-SIMPLE-CARD-LOCALIZATION-CACHE-RECOVERY"
+  name: "Implement and verify the bounded simple-card-localization cache recovery"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Complete only the unchanged accepted subject through one Ready PR, required checks, merge, and exact-SHA Pages verification."
+  note: "Complete only the unchanged accepted recovery through one Ready PR, required checks, normal merge, and exact-SHA Pages verification."
 
 prohibited_next_actions:
   - "Do not classify the W36 Standard Dwarves or Modern Bant Company records or change another classifier decision."
-  - "Do not fetch either source, regenerate event statistics, or manually dispatch production or Pages."
+  - "Do not fetch either source, regenerate event statistics, or manually dispatch, rerun, or cancel production or Pages."
   - "Do not start P14-02, Phase 15, another event admission, or unrelated work."

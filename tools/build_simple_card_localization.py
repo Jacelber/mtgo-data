@@ -28,6 +28,7 @@ from card_names import card_name_lookup_candidates  # noqa: E402
 
 PUBLIC_PREFIX = "assets/card-localization"
 LOOKUP_FILE = "cards.json"
+CACHE_SUBJECT_VERSION = "1.0.0"
 MTGCH_RESULT_URL = "https://mtgch.com/api/v1/result"
 MTGCH_IMAGE_HOST = "images.mtgch.com"
 MTGCH_CARD_ORIGIN = "https://mtgch.com"
@@ -79,6 +80,14 @@ def _write_json(path: Path, value: Any) -> None:
         json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _card_names(value: Any, parent_key: str | None = None) -> Iterable[str]:
@@ -143,6 +152,29 @@ def current_landing_names(root: Path) -> list[str]:
                 raise LocalizationBuildError(f"featured_cards are missing: {feature_path}")
             names.update(_card_names(cards, "featured_cards"))
     return sorted(names)
+
+
+def cache_subject(root: Path) -> dict[str, Any]:
+    """Bind one reusable bundle to its exact product and builder inputs."""
+
+    subject = {
+        "schema_version": CACHE_SUBJECT_VERSION,
+        "product_card_names": product_card_names(root),
+        "current_landing_names": current_landing_names(root),
+        "builder_sha256": _sha256_file(Path(__file__)),
+        "card_names_sha256": _sha256_file(CARD_NAME_SOURCE / "card_names.py"),
+        "card_name_aliases_sha256": _sha256_file(
+            CARD_NAME_SOURCE / "data" / "om1_spm_aliases.json"
+        ),
+    }
+    canonical = json.dumps(
+        subject,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    )
+    subject["subject_sha256"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return subject
 
 
 def _trusted_mtgch_image(value: Any) -> str:
@@ -459,12 +491,21 @@ def verify_bundle(root: Path, output: Path) -> dict[str, dict[str, str]]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
+    subject_parser = subparsers.add_parser("subject")
+    subject_parser.add_argument("--github-output", type=Path)
     for command in ("build", "verify"):
         subparser = subparsers.add_parser(command)
         subparser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     root = ROOT
     try:
+        if args.command == "subject":
+            subject = cache_subject(root)
+            if args.github_output:
+                with args.github_output.open("a", encoding="utf-8") as handle:
+                    handle.write(f"sha256={subject['subject_sha256']}\n")
+            print(json.dumps(subject, ensure_ascii=False, sort_keys=True))
+            return 0
         if args.command == "build":
             lookup = build_bundle(root, args.output)
         else:

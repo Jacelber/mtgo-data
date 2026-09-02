@@ -41,7 +41,7 @@ same change.
 | `tests/test_mtgo_top8_restatement.py` | Top 8 generator/digest/lifecycle contract changes | Restate identities while retaining synthetic source facts | Three synthetic source/classifier cases | `synthetic` |
 | `tests/test_pages_compatibility.py` | Protected catalog-projection compatibility changes | Permit unrelated growth and reject protected projection drift | One synthetic protected projection | `protected-compatibility` |
 | `tests/test_pauper_rules.py` | Pauper taxonomy/rules/contract fixture changes | Give every rule one Owner-approved representative without fixed inventory totals | One fixture case per rule and boundary | `owner-rule-contract` |
-| `tests/test_simple_card_localization.py` | Flat MTGCH localization generation changes | Preserve key resolution, fallback, and output isolation | Synthetic product records and image bytes | `synthetic` |
+| `tests/test_simple_card_localization.py` | Flat MTGCH localization generation or cache-subject changes | Preserve deterministic cache identity, key resolution, fallback, and output isolation | Synthetic product records and image bytes | `synthetic` |
 | `tests/test_validate_repository_modes.py` | Repository validator, test inventory, or Schema mode changes | Keep changed/full validation and test admission fail closed | Synthetic repository paths and inventory rows | `policy` |
 | `tests/test_validate_schemas.py` | Schema manifests or Schema validator changes | Require dynamic mappings and validate declared documents | Schema manifests and mapped instances | `schema` |
 | `tests/test_weekly_maintenance_readiness.py` | Weekly readiness generator/private Schema changes | Preserve review-week and retained-queue separation | Synthetic Standard and Modern handoff | `synthetic` |

@@ -84,6 +84,30 @@ def test_collects_existing_product_names_and_current_landing_only(tmp_path: Path
     assert localization.current_landing_names(root) == ["Feature Card", "Local Card"]
 
 
+def test_cache_subject_is_stable_and_changes_with_product_inputs(tmp_path: Path):
+    root = _root(tmp_path)
+    first = localization.cache_subject(root)
+
+    assert first == localization.cache_subject(root)
+    assert first["schema_version"] == "1.0.0"
+    assert first["product_card_names"] == [
+        "Feature Card",
+        "Local Card",
+        "Remote Card",
+    ]
+    assert first["current_landing_names"] == ["Feature Card", "Local Card"]
+    assert len(first["subject_sha256"]) == 64
+
+    _write_json(
+        root / "stats/modern/mtgo/decks_1w.json",
+        {"decks": [{"sideboard": [{"name": "New Card", "qty": 1}]}]},
+    )
+
+    second = localization.cache_subject(root)
+    assert second["subject_sha256"] != first["subject_sha256"]
+    assert "New Card" in second["product_card_names"]
+
+
 def test_builds_flat_lookup_and_only_current_landing_images(tmp_path: Path):
     root = _root(tmp_path)
     output = tmp_path / "bundle"

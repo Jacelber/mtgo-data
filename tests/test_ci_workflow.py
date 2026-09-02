@@ -588,6 +588,26 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
     workflow = yaml.load(
         PAGES_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
     )
+    localization_cache = workflow["jobs"]["localization-cache"]
+    assert localization_cache["timeout-minutes"] == "30"
+    assert localization_cache["permissions"] == {
+        "actions": "read",
+        "contents": "read",
+    }
+    localization_steps = {
+        step["name"]: step for step in localization_cache["steps"]
+    }
+    assert "head_branch === \"master\"" in localization_steps[
+        "Find exact trusted simple card localization cache"
+    ]["with"]["script"]
+    assert localization_steps[
+        "Build missing simple card localization cache"
+    ]["if"] == "steps.localization-cache-artifact.outputs.cache-hit != 'true'"
+    localization_commands = "\n".join(
+        step.get("run", "") for step in localization_cache["steps"]
+    )
+    assert "tools/build_simple_card_localization.py subject" in localization_commands
+    assert "tools/build_simple_card_localization.py verify" in localization_commands
     assert workflow["jobs"]["build"]["timeout-minutes"] == "20"
     push_paths = set(workflow["on"]["push"]["paths"])
     assert {"index.html", "melee/**", "stats/**", "data/**"} <= push_paths
@@ -608,6 +628,7 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
         "validated_output_sha256",
     }
     build = workflow["jobs"]["build"]
+    assert build["needs"] == "localization-cache"
     assert build["permissions"] == {"actions": "read", "contents": "read"}
     checkout = next(
         step
@@ -636,12 +657,20 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
         "tools/build_landing_card_image_cache.py subject",
         "tools/build_landing_card_image_cache.py build",
         "tools/build_landing_card_image_cache.py verify",
-        "tools/build_simple_card_localization.py build",
         "tools/build_simple_card_localization.py verify",
         '--overlay "landing_card_images=$RUNNER_TEMP/landing-card-image-cache"',
         '--overlay "card_localization=$RUNNER_TEMP/card-localization"',
     ):
         assert required in commands
+    assert "tools/build_simple_card_localization.py build" not in commands
+    localization_handoff = next(
+        step
+        for step in build["steps"]
+        if step["name"] == "Download verified simple card localization handoff"
+    )
+    assert localization_handoff["with"]["name"] == (
+        "simple-card-localization-handoff-${{ github.run_attempt }}"
+    )
     cache_upload = next(
         step
         for step in build["steps"]

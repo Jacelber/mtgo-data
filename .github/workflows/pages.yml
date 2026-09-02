@@ -77,8 +77,97 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  localization-cache:
+    name: Prepare simple card localization cache
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Check out localization inputs without persisted credentials
+        uses: actions/checkout@v7.0.0
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6.3.0
+        with:
+          python-version: "3.12"
+
+      - name: Compute simple card localization cache subject
+        id: localization-cache-subject
+        shell: bash
+        run: >-
+          python -B tools/build_simple_card_localization.py subject
+          --github-output "$GITHUB_OUTPUT"
+          > "$RUNNER_TEMP/localization-cache-subject.json"
+
+      - name: Find exact trusted simple card localization cache
+        id: localization-cache-artifact
+        uses: actions/github-script@v7.0.1
+        env:
+          ARTIFACT_NAME: simple-card-localization-${{ steps.localization-cache-subject.outputs.sha256 }}
+        with:
+          script: |
+            const response = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: process.env.ARTIFACT_NAME,
+              per_page: 100,
+            });
+            const artifact = response.data.artifacts
+              .filter((item) => !item.expired)
+              .filter((item) => item.workflow_run?.head_branch === "master")
+              .sort((left, right) => right.id - left.id)[0];
+            core.setOutput("cache-hit", artifact ? "true" : "false");
+            core.setOutput("run-id", artifact?.workflow_run?.id ?? "");
+
+      - name: Download exact simple card localization cache
+        if: steps.localization-cache-artifact.outputs.cache-hit == 'true'
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: simple-card-localization-${{ steps.localization-cache-subject.outputs.sha256 }}
+          path: ${{ runner.temp }}/card-localization
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.localization-cache-artifact.outputs.run-id }}
+
+      - name: Build missing simple card localization cache
+        if: steps.localization-cache-artifact.outputs.cache-hit != 'true'
+        run: >-
+          python -B tools/build_simple_card_localization.py build
+          --output "$RUNNER_TEMP/card-localization"
+
+      - name: Verify exact simple card localization cache
+        run: >-
+          python -B tools/build_simple_card_localization.py verify
+          --output "$RUNNER_TEMP/card-localization"
+
+      - name: Retain new simple card localization cache
+        if: >-
+          steps.localization-cache-artifact.outputs.cache-hit != 'true' &&
+          (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+          github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: simple-card-localization-${{ steps.localization-cache-subject.outputs.sha256 }}
+          path: ${{ runner.temp }}/card-localization
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Hand verified localization to the allowlisted build
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: simple-card-localization-handoff-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/card-localization
+          if-no-files-found: error
+          retention-days: 1
+
   build:
     name: Build and verify allowlisted site
+    needs: localization-cache
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -239,12 +328,13 @@ jobs:
           python -B tools/build_landing_card_image_cache.py verify
           --output "$RUNNER_TEMP/landing-card-image-cache"
 
-      - name: Build simple card localization
-        run: >-
-          python -B tools/build_simple_card_localization.py build
-          --output "$RUNNER_TEMP/card-localization"
+      - name: Download verified simple card localization handoff
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: simple-card-localization-handoff-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/card-localization
 
-      - name: Verify simple card localization
+      - name: Verify simple card localization handoff
         run: >-
           python -B tools/build_simple_card_localization.py verify
           --output "$RUNNER_TEMP/card-localization"

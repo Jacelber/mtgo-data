@@ -7989,3 +7989,44 @@ token, and defer the single complete classifier-bound regeneration until every
 remaining W35 maintenance input is final. This decision does not authorize
 collection, import, commit, remote publication, pull-request creation, Pages,
 or production dispatch.
+
+---
+
+# DEC-161 - Prepare simple card localization outside the Pages build window
+
+Status: `Accepted; local implementation authorized`
+
+## Context
+
+The merge-triggered Pages run `33633293653` for commit
+`de8a60ff80a3717027e2c989df4ccd890e2fbdcd` spent nearly the complete
+20-minute build-job limit regenerating the simple MTGCH localization bundle.
+The allowlisted site artifact then passed, but GitHub cancelled the job before
+Pages configuration and upload. Repeating the same run or raising its timeout
+would neither remove the repeated external work nor improve deterministic
+delivery.
+
+## Decision
+
+Prepare simple card localization in a separate 30-minute bounded job. Compute
+one subject digest from the exact public-product card names, current Landing
+card names, localization builder, shared card-name normalizer, and maintained
+alias input. Reuse only a non-expired exact-name Actions artifact produced from
+`master`; build the bundle only on a cache miss. Verify either path before
+retaining it and again after the same-run handoff to the allowlisted Pages
+build.
+
+Keep the existing 20-minute Pages build and 10-minute deployment limits. Do not
+add retries, trust pull-request artifacts, change the flat localization output,
+or add a public manifest or Schema. The first `master` cache miss may perform
+the existing bounded MTGCH generation once; later identical subjects reuse the
+verified cache.
+
+## Consequences
+
+The long external preparation no longer consumes the Pages packaging window,
+while an input or builder-contract change invalidates the cache automatically.
+The accepted Tabletop hotfix, generated statistics, card-localization bytes and
+fields, browser behavior, public paths, and MTGCH request pacing remain
+unchanged. Commit, remote publication, merge, and Pages recovery remain
+separately Owner-gated.

@@ -3582,6 +3582,16 @@ checks selected by the actual changed paths. There is no separate localization
 Schema, source-snapshot proof, per-card provenance class, capacity-proxy
 experiment, or staged optional-overlay admission.
 
+Pages may retain the already verified bundle as a private Actions cache. Its
+artifact name is bound to the exact public-product card-name set, current
+Landing card-name set, localization builder, shared card-name normalizer, and
+maintained alias input. Only a non-expired artifact produced from `master` may
+satisfy that subject. A separate bounded preparation job builds only a missing
+subject, verifies either source before handoff, and passes the verified bundle
+to the unchanged 20-minute allowlisted Pages build. The cache adds no public
+manifest, Schema, path, lookup field, or browser contract; the published
+overlay remains exactly `cards.json` plus its declared current-Landing images.
+
 Existing Pickup history remains frozen migration and rollback input:
 
 ```text
