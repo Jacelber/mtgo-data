@@ -3,16 +3,14 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
-from hashlib import sha256
 import json
 from pathlib import Path
 import re
 from typing import Any
 
-from mtgmeta.classifier import CLASSIFIER_ENGINE_VERSION
+from mtgmeta.classifier import classifier_digest
 from mtgmeta.consumer import identity_display_name
 from mtgmeta.rules import ArchetypeDefinition
-from mtgmeta.rules import RuleSet
 
 from . import load_mtgo_context
 from . import stats
@@ -81,59 +79,6 @@ def _identity(
         "display_name": display_name,
         "detail_id": identity_id,
     }
-
-
-def classifier_digest(rules: RuleSet) -> str:
-    """Hash every rule input plus the explicit classifier engine contract."""
-
-    subject = {
-        "engine_version": CLASSIFIER_ENGINE_VERSION,
-        "rule_schema_version": rules.schema_version,
-        "format": rules.format,
-        "semantic_feature_path": rules.semantic_feature_path,
-        "semantic_feature_sha256": rules.semantic_feature_sha256,
-        "archetypes": [
-            {
-                "id": parent.id,
-                "name": parent.name,
-                "priority": parent.priority,
-                "subtypes": [
-                    {
-                        "id": subtype.id,
-                        "name": subtype.name,
-                        "parent_archetype_id": subtype.parent_archetype_id,
-                    }
-                    for subtype in parent.subtypes
-                ],
-                "rules": [
-                    {
-                        "id": rule.id,
-                        "priority": rule.priority,
-                        "subtype_id": rule.subtype_id,
-                        "conditions": [
-                            {
-                                "card": condition.card,
-                                "zone": condition.zone,
-                                "min_count": condition.min_count,
-                                "max_count": condition.max_count,
-                                "exact_count": condition.exact_count,
-                            }
-                            for condition in rule.conditions
-                        ],
-                    }
-                    for rule in parent.rules
-                ],
-            }
-            for parent in rules.archetypes
-        ],
-    }
-    encoded = json.dumps(
-        subject,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
-    return sha256(encoded).hexdigest()
 
 
 def _versioned(document: dict[str, Any]) -> dict[str, Any]:

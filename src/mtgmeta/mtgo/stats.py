@@ -9,7 +9,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from mtgmeta.classifier import classify_deck
+from mtgmeta.classifier import classifier_digest, classify_deck
 from mtgmeta.legacy_rules import LegacyArchetypeRules
 from mtgmeta.rules import RuleSet
 from mtgmeta.public_contract import versioned
@@ -22,7 +22,9 @@ from .normalize import load_rules_for_format
 
 DEFAULT_RANGES = (1, 4, 12, 36)
 SOURCE_ID = "mtgo"
-MTGO_DECKS_SCHEMA_VERSION = "1.1.0"
+MTGO_RANGE_SCHEMA_VERSION = "1.1.0"
+MTGO_DECKS_SCHEMA_VERSION = "1.2.0"
+MTGO_CATALOG_SCHEMA_VERSION = "1.1.0"
 
 # Preserve the narrower legacy public-output aliases. The broader shared OM1/SPM
 # mapping is intentionally not used for deck construction metrics in P3-04.
@@ -1011,12 +1013,17 @@ def build_range(
         "end": end_sunday.isoformat(),
         "weeks": n_weeks,
     }
-    stats_data = versioned({
-        "format": format_id,
-        "source": SOURCE_ID,
-        "period": period,
-        **agg,
-    })
+    rules_digest = classifier_digest(rules)
+    stats_data = versioned(
+        {
+            "format": format_id,
+            "source": SOURCE_ID,
+            "classifier_digest": rules_digest,
+            "period": period,
+            **agg,
+        },
+        schema_version=MTGO_RANGE_SCHEMA_VERSION,
+    )
     parent_decks = build_decks(
         records,
         base_pack,
@@ -1027,6 +1034,7 @@ def build_range(
         {
             "format": format_id,
             "source": SOURCE_ID,
+            "classifier_digest": rules_digest,
             "period": period,
             "decks": attach_subtype_decks(
                 parent_decks,
@@ -1075,6 +1083,7 @@ def build_all_stats(
         raise MTGOStatisticsError("rolling ranges must be unique")
 
     rules = load_rules_for_format(root, format_id, registry_path=registry_path)
+    rules_digest = classifier_digest(rules)
     events = load_events_from_directory(
         context.paths["events"],
         repository_root=context.repository_root,
@@ -1129,12 +1138,13 @@ def build_all_stats(
     index = versioned({
         "format": format_id,
         "source": SOURCE_ID,
+        "classifier_digest": rules_digest,
         "generated": generated_value,
         "latest_complete_week": end_monday.isoformat(),
         "base_weeks": BASE_WEEKS,
         "global_d99": round(d99, 4),
         "ranges": index_entries,
-    })
+    }, schema_version=MTGO_CATALOG_SCHEMA_VERSION)
     documents["index.json"] = index
 
     out_dir.mkdir(parents=True, exist_ok=True)

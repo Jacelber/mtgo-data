@@ -441,6 +441,8 @@ Responsibilities:
 Responsibilities:
 
 - format-parameterized MTGO statistics;
+- one canonical classifier digest on every rolling-range, representative-deck,
+  and statistics-catalog document generated from classified decks;
 - reject retained players without a non-negative integer Swiss score or
   positive integer final rank;
 - time-range aggregation;
@@ -461,7 +463,8 @@ retained event's numeric `event_id` and official `description` as `event_name`.
 These fields are display provenance, not statistics. Consumers may combine
 them with the existing `player_count` and date-only projection of `starttime`;
 they must not infer an event by matching date, player count, rank, or player.
-The additive deck contract is version `1.1.0`. Existing Top 8 week and
+The event-context deck contract was version `1.1.0`; the additive classifier
+binding advances it to `1.2.0`. Existing Top 8 week and
 comparison-base documents retain their own compatibility versions and do not
 need event-context duplication in the expanded deck detail.
 
@@ -470,6 +473,8 @@ need event-context duplication in the expanded deck detail.
 Responsibilities:
 
 - process the approved MTGO matchup source;
+- bind every matchup range and matchup catalog to the same canonical classifier
+  digest used to classify its event decks;
 - retain source coverage metadata;
 - calculate format-specific matchup outputs;
 - retain stable parent-archetype and selected-subtype identities for both sides
@@ -505,7 +510,12 @@ compatibility and rollback resources and are not modified by this boundary.
 The daily MTGO production workflow may generate one private weekly-maintenance
 readiness artifact after a successful production result. That artifact binds
 the exact publication commit, review week, format-specific event IDs and
-classifier digests. Its classification section contains the complete retained
+classifier digests. Before creating that handoff, it requires the current rule
+digest to match the latest Top 8 week and index, every indexed rolling-range and
+representative-deck document, every indexed matchup document, and the maintained
+hierarchy catalog. A missing or different binding stops the handoff rather than
+allowing visual-metadata or Landing review to continue on a local overlay. Its
+classification section contains the complete retained
 Unknown diagnostic corpus, partitioned into unresolved records and exact
 Owner-accepted intentional Unknown records, and includes each deck's complete
 main deck and sideboard. It also carries classification blockers and Landing
@@ -2028,6 +2038,8 @@ aliases generated from `parent_order`, `parent_overall`, and `parent_matrix`.
 MTGO rolling-range and deck-construction documents use a parallel additive
 hierarchy:
 
+- each range, representative-deck, and statistics-catalog document records the
+  canonical classifier digest that produced its identities;
 - every range document keeps its existing parent rows and nests `subtypes`
   only beneath an observed parent that defines maintained subtypes;
 - every nested range row carries the stable subtype ID, parent ID, display

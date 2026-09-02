@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from mtgmeta.classifier import classifier_digest
 from mtgmeta.public_contract import versioned
 
 from . import load_mtgo_context, matchup, stats
@@ -15,6 +16,7 @@ from .normalize import load_rules_for_format
 
 
 SOURCE_ID = "mtgo"
+MTGO_HIERARCHY_SCHEMA_VERSION = "1.1.0"
 
 
 def rules_last_commit_iso(
@@ -71,6 +73,7 @@ def generate_hierarchy_catalog(
         {
             "format": format_id,
             "source": SOURCE_ID,
+            "classifier_digest": classifier_digest(rules),
             "rules_updated": rules_updated,
             "summary": {
                 "parents": len(parents),
@@ -78,7 +81,8 @@ def generate_hierarchy_catalog(
                 "expandable_parents": sum(item["expandable"] for item in parents),
             },
             **hierarchy,
-        }
+        },
+        schema_version=MTGO_HIERARCHY_SCHEMA_VERSION,
     )
     output = (
         Path(output_directory).resolve()

@@ -59,6 +59,30 @@ def _write_intentional_unknowns(root: Path, *, reason_code: str = "random_card_p
 
 def _write_format(root: Path, format_name: str, *, candidate: bool = True) -> None:
     digest = "a" * 64 if format_name == "standard" else "b" * 64
+    statistics = root / "stats" / format_name / "mtgo"
+    _write_json(
+        statistics / "index.json",
+        {
+            "classifier_digest": digest,
+            "latest_complete_week": "2026-08-10",
+            "ranges": [{"file": "range_1w.json", "decks_file": "decks_1w.json"}],
+        },
+    )
+    _write_json(statistics / "range_1w.json", {"classifier_digest": digest})
+    _write_json(statistics / "decks_1w.json", {"classifier_digest": digest})
+    _write_json(
+        statistics / "matchup_index.json",
+        {
+            "classifier_digest": digest,
+            "latest_complete_week": "2026-08-10",
+            "ranges": [{"file": "matchup_1w.json"}],
+        },
+    )
+    _write_json(statistics / "matchup_1w.json", {"classifier_digest": digest})
+    _write_json(
+        statistics / "archetype_hierarchy.json",
+        {"classifier_digest": digest},
+    )
     top8 = root / "stats" / format_name / "mtgo" / "top8"
     entry = {
         "file": "2026-W33.json",
@@ -225,7 +249,12 @@ def _build(
     generated_at: str = "2026-08-19T09:00:00Z",
     *,
     landing_subject_builder=_landing_subject,
+    classifier_digests: dict[str, str] | None = None,
 ) -> dict:
+    expected_digests = classifier_digests or {
+        "standard": "a" * 64,
+        "modern": "b" * 64,
+    }
     return build_readiness(
         root,
         publication_sha="1" * 40,
@@ -234,6 +263,9 @@ def _build(
         source_sha="2" * 40,
         generated_at=generated_at,
         landing_subject_builder=landing_subject_builder,
+        classifier_digest_builder=lambda _root, format_name: expected_digests[
+            format_name
+        ],
     )
 
 
@@ -310,6 +342,19 @@ def test_readiness_separates_review_week_unknowns_from_retained_queue(tmp_path):
         ] == ["99"]
         assert item["landing_screening"]["total_candidate_count"] == 3
         assert item["visual_metadata"]["deck_colors"]["exception_count"] is None
+        binding = item["public_classifier_binding"]
+        assert binding["status"] == "current"
+        assert binding["classifier_digest"] == item["classifier_digest"]
+        assert {product["family"] for product in binding["products"]} == {
+            "top8_index",
+            "top8_week",
+            "statistics_index",
+            "statistics_range",
+            "representative_decks",
+            "matchup_index",
+            "matchup_range",
+            "archetype_hierarchy",
+        }
     standard = document["formats"][0]
     assert standard["classification"]["accepted_intentional_unknown_count"] == 0
     assert standard["retained_corpus_unknown_queue"]["accepted_intentional_unknown_count"] == 1
@@ -367,6 +412,18 @@ def test_completed_week_survives_non_material_classifier_digest_refresh(tmp_path
 
     refreshed_digests = {"standard": "5" * 64, "modern": "6" * 64}
     for format_name, digest in refreshed_digests.items():
+        statistics_dir = tmp_path / "stats" / format_name / "mtgo"
+        for path in (
+            statistics_dir / "index.json",
+            statistics_dir / "range_1w.json",
+            statistics_dir / "decks_1w.json",
+            statistics_dir / "matchup_index.json",
+            statistics_dir / "matchup_1w.json",
+            statistics_dir / "archetype_hierarchy.json",
+        ):
+            document = json.loads(path.read_text(encoding="utf-8"))
+            document["classifier_digest"] = digest
+            _write_json(path, document)
         top8_dir = tmp_path / "stats" / format_name / "mtgo" / "top8"
         index = json.loads((top8_dir / "index.json").read_text(encoding="utf-8"))
         index["classifier_digest"] = digest
@@ -392,7 +449,11 @@ def test_completed_week_survives_non_material_classifier_digest_refresh(tmp_path
         subject["classifier_digest"] = refreshed_digests[format_name]
         return subject
 
-    document = _build(tmp_path, landing_subject_builder=refreshed_subject)
+    document = _build(
+        tmp_path,
+        landing_subject_builder=refreshed_subject,
+        classifier_digests=refreshed_digests,
+    )
 
     assert document["status"] == "completed"
     assert document["completion"]["state"] == "verified"
@@ -507,6 +568,19 @@ def test_mismatched_format_week_fails_closed(tmp_path):
     candidate_path.write_text(yaml.safe_dump(candidate), encoding="utf-8")
 
     with pytest.raises(ValueError, match="same weekly review window"):
+        _build(tmp_path)
+
+
+def test_stale_public_classifier_binding_fails_closed(tmp_path):
+    for format_name in ("standard", "modern"):
+        _write_format(tmp_path, format_name)
+    _write_intentional_unknowns(tmp_path)
+    _write_json(
+        tmp_path / "stats" / "standard" / "mtgo" / "range_1w.json",
+        {"classifier_digest": "c" * 64},
+    )
+
+    with pytest.raises(ValueError, match="public classifier binding mismatch"):
         _build(tmp_path)
 
 

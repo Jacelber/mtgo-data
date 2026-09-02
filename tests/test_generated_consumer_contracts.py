@@ -49,7 +49,7 @@ def test_current_representative_decks_keep_source_event_context(
 ) -> None:
     document = _json(f"stats/{format_id}/mtgo/decks_{weeks}w.json")
 
-    assert document["schema_version"] == "1.1.0"
+    assert document["schema_version"] == "1.2.0"
     for deck in _deck_records(document):
         assert deck["event_id"].isdigit()
         assert deck["event_name"].strip()

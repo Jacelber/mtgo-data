@@ -15,7 +15,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-from mtgmeta.classifier import classify_deck
+from mtgmeta.classifier import classifier_digest, classify_deck
 from mtgmeta.config import load_rule_set
 from mtgmeta.consumer import (
     identity_display_name,
@@ -35,6 +35,8 @@ DEFAULT_RANGES = (1, 4, 12, 36)
 MIN_MATCHUP_SAMPLE = 20
 WILSON_Z = 1.96
 SOURCE_ID = "mtgo"
+MTGO_MATCHUP_SCHEMA_VERSION = "1.1.0"
+MTGO_MATCHUP_CATALOG_SCHEMA_VERSION = "1.1.0"
 VIDERE_REQUEST_ATTEMPTS = 3
 VIDERE_REQUEST_TIMEOUT_SECONDS = 30
 VIDERE_RETRY_DELAY_SECONDS = 2.0
@@ -1003,6 +1005,7 @@ def build_hierarchical_window(
     document = {
         "format": format_id,
         "source": SOURCE_ID,
+        "classifier_digest": classifier_digest(rule_set),
         "period": {
             "type": f"{n_weeks}w",
             "start": start_monday.isoformat(),
@@ -1047,7 +1050,7 @@ def build_hierarchical_window(
                 },
             }
         )
-    return versioned(document), stats
+    return versioned(document, schema_version=MTGO_MATCHUP_SCHEMA_VERSION), stats
 
 
 def _generated_value(value: datetime | str | None) -> str:
@@ -1076,6 +1079,7 @@ def build_all_matchups(
         registry_path=registry_path,
     )
     rule_set = load_rule_set(context.paths["rules"])
+    rules_digest = classifier_digest(rule_set)
     events = load_hierarchical_events_from_directory(
         context.paths["events"],
         rule_set,
@@ -1116,13 +1120,17 @@ def build_all_matchups(
     index_document = {
         "format": format_id,
         "source": SOURCE_ID,
+        "classifier_digest": rules_digest,
         "generated": _generated_value(generated_at),
         "latest_complete_week": end_monday.isoformat(),
         "min_sample_hint": MIN_MATCHUP_SAMPLE,
         "ranges": index_entries,
     }
     index_document["hierarchical"] = True
-    documents["matchup_index.json"] = versioned(index_document)
+    documents["matchup_index.json"] = versioned(
+        index_document,
+        schema_version=MTGO_MATCHUP_CATALOG_SCHEMA_VERSION,
+    )
     output.mkdir(parents=True, exist_ok=True)
     written: dict[str, Path] = {}
     for filename, document in documents.items():
