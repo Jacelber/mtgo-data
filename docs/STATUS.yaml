@@ -4,7 +4,7 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/w35-classifier-residual-repair-20260902"
+  current_working_branch: "codex/melee-public-name-contract-recovery-20260902"
   working_branch_status: "owner_accepted_completion_authorized"
   status: "active"
 
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_combined_w35_governance_completion"
+  status: "active_emergency_tabletop_recovery"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: false
@@ -27,61 +27,50 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "GOV-TEST-ORACLE-INDEPENDENCE-V1"
-  name: "Reject unregistered and output-derived tests"
+  id: "MELEE-PUBLIC-NAME-CONTRACT-RECOVERY-V1"
+  name: "Restore the shared public classifier-name contract"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-09-02"
-  base_commit: "d6aec78583c06eb400bedf0bd50bc6f02aa098e2"
-  branch: "codex/w35-classifier-residual-repair-20260902"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/w35-classifier-residual-repair-20260902-01"
-  objective: "Remove the W35 historical-output test tax, retain only independently specified classifier contracts, register every Python test, and fail closed when a later change adds an unregistered, week/event-specific, or live-corpus-oracle test."
+  base_commit: "dbb8b4ba67b80a7b554f81cf3e75ee1b0acb60dc"
+  branch: "codex/melee-public-name-contract-recovery-20260902"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/melee-public-name-contract-recovery-20260902-02"
+  objective: "Regenerate the stale Standard and Modern public bilingual classifier-name contracts from the approved private catalog, restore Tabletop rendering, and reject any future private/public name-contract drift before publication."
   artifact_impact:
-    - "internal_diagnostics"
-    - "governance"
+    - "statistical_json_structure"
   authorization:
     local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   allowed_paths:
-    - ".github/workflows/ci.yml"
-    - "ci_master_admission.py"
+    - "stats/standard/archetype_names.json"
+    - "stats/modern/archetype_names.json"
     - "validate_repository.py"
-    - "tests/test_w35_classifier_maintenance.py"
-    - "tests/test_classifier_rule_contracts.py"
     - "tests/test_validate_repository_modes.py"
-    - "tests/test_ci_master_admission.py"
-    - "tests/test_ci_workflow.py"
-    - "tests/test_melee_missing_decklist_contract.py"
-    - "tests/test_pauper_rules.py"
-    - "docs/TEST_TRIGGER_MATRIX.md"
-    - "docs/GOVERNANCE_REMEDIATION.yaml"
-    - "docs/DECISIONS.md"
     - "docs/STATUS.yaml"
   protected_scope:
-    retained_pending_subject: "Preserve the previously completed W35 classifier and Melee derived closure byte-for-byte while changing only its test and governance envelope."
+    source_catalog: "configs/mtgo_archetype_names.yaml is the unchanged Owner-approved source; public JSON is regenerated from it rather than manually edited."
     product_data_or_classifier_change: "none"
-    test_policy: "Every retained Python test must have one registered trigger, purpose, minimum subject, and independent oracle; new week/event-specific or repository-live data/report oracle tests fail closed."
-    workflow_change: "Only add the minimum classifier-contract routing and keep permissions, jobs, timeout, evidence reuse, and every production workflow unchanged."
+    test_policy: "Add no test file and no live-corpus or output-count oracle; use one synthetic stale-contract case in the already registered repository-validator test file."
+    workflow_change: "none"
   invariants:
     - "Standard and Modern identities remain format-scoped and shared across MTGO and Tabletop while source data, reports, statistics, and publication remain separate."
-    - "Event 441441 retains exactly seven Owner-reviewed Unknown records and three excluded decklist_not_available participants."
-    - "The sole accepted MTGO random_card_pile remains intentional Unknown; the W36 Standard and Modern records remain unresolved."
-    - "The retained raw snapshots and normalized events for 434455 and 441441 remain byte-identical; no source request is made."
-    - "Protected 434455 compatibility remains an explicit authorized-baseline exception and is not treated as intrinsic correctness evidence."
-    - "No generated output, statistical formula, public URL, classifier rule, production workflow, or front-end behavior changes."
+    - "All source, normalized, classification, opportunity, report, and event-statistics files remain byte-identical."
+    - "No source request, event recollection, classifier decision, Unknown decision, Schema change, public-path change, or front-end code change occurs."
+    - "The public JSON gains approved name-contract rows only; no statistical value or meaning changes."
+    - "The committed public name contract exactly equals the deterministic projection of the approved private catalog for each public format."
   prohibited_changes:
-    - "Do not weaken validation, create a catch-all suite, restore full pytest, or permit a test through a filename or generic-code exemption."
-    - "Do not dispatch a production data workflow, change the accepted subject, or begin another maintenance stage during accepted-task completion."
+    - "Do not edit configs/mtgo_archetype_names.yaml, my_archetypes, Melee/MTGO event data, reports, statistical outputs, Schemas, front-end files, or workflows."
+    - "Do not dispatch production, fetch either source, or begin another maintenance task during accepted-task completion."
   planned_verification:
-    - "Prove missing, duplicate, stale, invalid-oracle, week/event-specific, and live-corpus test registrations fail closed while the complete retained inventory passes."
-    - "Run only the new classifier contract, reduced missing-decklist/Pauper nodes, focused repository-mode/admission/workflow nodes, and one final changed-scope repository validation."
-    - "Compare every non-governance artifact with the pending accepted closure and require byte identity."
-  stop_point: "Commit and update PR #345 with the unchanged accepted subject, merge after required checks pass, complete applicable exact-SHA Pages acceptance, then stop without beginning another maintenance stage."
+    - "Use a synthetic stale public contract to prove repository validation fails independently of current output values."
+    - "Regenerate only Standard and Modern public name contracts with the maintained producer and require zero private/public identity drift."
+    - "Run only the focused repository-validator node, changed-scope repository validation, and one local Tabletop browser smoke covering events 434455 and 441441."
+  stop_point: "Commit the accepted subject, publish one Ready PR, merge after required checks pass, complete exact-SHA Pages and live Tabletop acceptance, then stop."
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-09-02"
-    subject: "The unchanged W35/Melee closure plus the local strict test-oracle and inventory governance repair."
+    subject: "The five-file local public-name-contract recovery with regenerated Standard/Modern public contracts, fail-closed drift validation, focused synthetic coverage, and corrected live status."
 
 weekly_classifier_review:
   id: "W35-CROSS-SOURCE-CLASSIFIER-REVIEW"
@@ -106,12 +95,12 @@ weekly_classifier_review:
   separation_rule: "Share the same-format human classifier decision session only; retain separate source provenance, counts, readiness, completion, generation, and publication."
 
 current_repository_state:
-  source_master_commit: "cd46f271d269dab5a3f8ecd464bbc95e65780c18"
-  previous_task: "W35-CROSS-SOURCE-CLASSIFIER-IMPLEMENTATION"
-  previous_task_status: "completed_merged_in_pr_344"
-  open_pull_request: 345
-  open_pull_request_head: "d6aec78583c06eb400bedf0bd50bc6f02aa098e2"
-  open_pull_request_status: "owner_accepted_combined_completion_authorized"
+  source_master_commit: "dbb8b4ba67b80a7b554f81cf3e75ee1b0acb60dc"
+  previous_task: "GOV-TEST-ORACLE-INDEPENDENCE-V1"
+  previous_task_status: "completed_merged_in_pr_345"
+  open_pull_request: null
+  open_pull_request_head: null
+  open_pull_request_status: "none"
   local_compatibility_contract_version: "1.8.0"
   local_active_taxonomy_sha256: "2ab329e4a35655b88b159edfc60d37d4d3f8b5e38d1c37a519b21f29e0001515"
   local_registered_python_test_count: 29
@@ -138,17 +127,17 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "GOV-TEST-ORACLE-INDEPENDENCE-V1-COMPLETION"
-  name: "Complete the accepted combined W35 and test-governance repair"
+  id: "MELEE-PUBLIC-NAME-CONTRACT-RECOVERY-V1-COMPLETION"
+  name: "Complete the accepted emergency public-name-contract recovery"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Owner acceptance authorizes continuous completion of the unchanged combined subject through PR #345, required checks, merge, and applicable exact-SHA Pages acceptance; production data workflows and later maintenance remain unauthorized."
+  note: "Owner acceptance authorizes continuous completion of the unchanged subject through one Ready PR, required checks, merge, exact-SHA Pages deployment, and live Tabletop acceptance."
 
 prohibited_next_actions:
   - "Do not classify the W36 Standard Dwarves or Modern Bant Company records in this task."
   - "Do not fetch either source, dispatch production or data workflows, or change any classifier decision."
-  - "Do not dispatch production data workflows or begin W35 Top 8, visual-metadata, or Landing review during accepted-task completion."
+  - "Do not begin W35 Top 8, visual-metadata, Landing review, or another maintenance task during accepted-task completion."
   - "Do not start P14-02, Phase 15, another event admission, or unrelated work."

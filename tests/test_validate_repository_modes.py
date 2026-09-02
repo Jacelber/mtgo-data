@@ -65,6 +65,38 @@ def write_public_product_fixture(
         ),
         encoding="utf-8",
     )
+    (root / "configs" / "mtgo_archetype_names.yaml").write_text(
+        "schema_version: 1.0.0\n"
+        "names:\n"
+        "- format: modern\n"
+        "  parent_id: synthetic-control\n"
+        "  subtype_id: null\n"
+        "  english: Synthetic Control\n"
+        "  chinese: 合成控制\n"
+        "  review_status: approved\n"
+        "  identity_key: modern|synthetic-control|none\n",
+        encoding="utf-8",
+    )
+    (root / "stats" / "modern" / "archetype_names.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0.0",
+                "format": "modern",
+                "names": [
+                    {
+                        "identity_id": "synthetic-control",
+                        "parent_id": "synthetic-control",
+                        "subtype_id": None,
+                        "display": {
+                            "en": "Synthetic Control",
+                            "zh": "合成控制",
+                        },
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
     (root / "stats" / "modern" / "melee" / "index.json").write_text(
         json.dumps(
             {
@@ -79,7 +111,9 @@ def write_public_product_fixture(
     names = [
         "README.md",
         "configs/melee_events.yaml",
+        "configs/mtgo_archetype_names.yaml",
         "stats/catalog.json",
+        "stats/modern/archetype_names.json",
         "stats/modern/melee/index.json",
     ]
     status = {
@@ -245,13 +279,25 @@ def test_changed_plan_adds_only_the_triggered_coupled_contracts():
     assert matrix_plan.reference_groups == frozenset({"test-inventory"})
 
 
-def test_changed_plan_treats_tabletop_event_catalog_as_public_product_facts():
-    catalog_path = "stats/modern/melee/index.json"
-
-    plan = changed_validation_plan([catalog_path], [catalog_path, "docs/STATUS.yaml"])
+@pytest.mark.parametrize(
+    "changed_path",
+    (
+        "configs/mtgo_archetype_names.yaml",
+        "stats/modern/archetype_names.json",
+        "stats/modern/melee/index.json",
+        "stats/modern/melee/events/441441/overview.json",
+    ),
+)
+def test_changed_plan_treats_public_name_and_tabletop_outputs_as_public_product_facts(
+    changed_path: str,
+):
+    plan = changed_validation_plan(
+        [changed_path],
+        [changed_path, "docs/STATUS.yaml"],
+    )
 
     assert plan.public_product_facts is True
-    assert plan.candidates == ("docs/STATUS.yaml", catalog_path)
+    assert set(plan.candidates) == {"docs/STATUS.yaml", changed_path}
 
 
 def test_enabled_unpublished_event_does_not_change_public_product_facts(tmp_path):
@@ -264,6 +310,26 @@ def test_enabled_unpublished_event_does_not_change_public_product_facts(tmp_path
     _, failures = validate_public_product_facts(tmp_path, names, status)
 
     assert failures == []
+
+
+def test_stale_public_classifier_name_contract_fails_closed(tmp_path):
+    names, status = write_public_product_fixture(
+        tmp_path,
+        whitelist_event_ids=("434455",),
+        public_event_ids=("434455",),
+    )
+    public_contract = tmp_path / "stats" / "modern" / "archetype_names.json"
+    document = json.loads(public_contract.read_text(encoding="utf-8"))
+    document["names"][0]["display"]["zh"] = "陈旧名称"
+    public_contract.write_text(json.dumps(document), encoding="utf-8")
+
+    _, failures = validate_public_product_facts(tmp_path, names, status)
+
+    assert any(
+        failure.path == "stats/modern/archetype_names.json"
+        and "does not match the approved bilingual name catalog" in failure.message
+        for failure in failures
+    )
 
 
 def test_public_event_requires_matching_whitelist_entry(tmp_path):
