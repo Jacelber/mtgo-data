@@ -4,8 +4,9 @@
 public product coverage is summarized below.
 
 Development proceeds one owner-authorized task at a time. Read [`AGENTS.md`](AGENTS.md)
-before changing the repository. Current phase, task, authorization, blockers,
-and stop conditions are recorded only in [`docs/STATUS.yaml`](docs/STATUS.yaml).
+before changing the repository. Durable phase, program, blocker, and pause state
+is recorded in [`docs/STATUS.yaml`](docs/STATUS.yaml); current task authority
+comes from the active Owner conversation.
 Completed-task history is indexed under [`docs/history/`](docs/history/README.md).
 
 ## Current public products

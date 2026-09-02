@@ -120,6 +120,10 @@ PUBLIC_PRODUCT_NAMES = {
     "mtgo": "MTGO Environment Trends",
     "tabletop": "Tabletop Major Events",
 }
+PUBLIC_PRODUCT_ENTRIES = {
+    "mtgo": "/index.html",
+    "tabletop": "/melee/index.html",
+}
 CLASSIFIER_NAME_CATALOG = "configs/mtgo_archetype_names.yaml"
 PUBLIC_CLASSIFIER_NAME_SCHEMA_VERSION = "1.0.0"
 PHASE8_FRONTEND_ENTRIES = {
@@ -210,7 +214,6 @@ PUBLIC_PRODUCT_FACT_SOURCES = frozenset(
         "README.md",
         "stats/catalog.json",
         "configs/melee_events.yaml",
-        "docs/STATUS.yaml",
     }
 )
 FRONTEND_REFERENCE_TRIGGERS = frozenset(
@@ -365,11 +368,8 @@ def changed_validation_plan(changed: list[str], tracked: list[str]) -> Validatio
         )
         for path in changed_set
     )
-    candidates = set(existing)
-    if public_product_facts and "docs/STATUS.yaml" in tracked_set:
-        candidates.add("docs/STATUS.yaml")
     return ValidationPlan(
-        candidates=tuple(sorted(candidates)),
+        candidates=tuple(sorted(existing)),
         javascript=tuple(sorted(name for name in existing if name.endswith(".js"))),
         reference_groups=reference_groups_for_paths(changed_set),
         public_product_facts=public_product_facts,
@@ -662,7 +662,6 @@ def _public_classifier_name_contract(
 def validate_public_product_facts(
     root: Path,
     names: list[str],
-    status: dict[str, Any],
     *,
     defer_tabletop_readme: bool = False,
 ) -> tuple[int, list[Failure]]:
@@ -696,38 +695,22 @@ def validate_public_product_facts(
     approved_names = (
         name_catalog.get("names") if isinstance(name_catalog, dict) else None
     )
-    repository_state = (
-        status.get("current_repository_state") if isinstance(status, dict) else None
-    )
-    public_entries = (
-        repository_state.get("public_entries")
-        if isinstance(repository_state, dict)
-        else None
-    )
     configured_events = (
         event_config.get("events") if isinstance(event_config, dict) else None
     )
     if (
         not isinstance(formats, list)
         or not isinstance(approved_names, list)
-        or not isinstance(public_entries, dict)
         or not isinstance(configured_events, list)
     ):
         reference_check(
             failures,
             "public product facts",
-            "missing catalog formats, approved classifier names, enabled events, or live public entries",
+            "missing catalog formats, approved classifier names, or enabled events",
         )
         return checked, failures
-    mtgo_entry = public_entries.get("mtgo")
-    tabletop_entry = public_entries.get("tabletop")
-    if not isinstance(mtgo_entry, str) or not isinstance(tabletop_entry, str):
-        reference_check(
-            failures,
-            "docs/STATUS.yaml:current_repository_state.public_entries",
-            "must contain MTGO and Tabletop public paths",
-        )
-        return checked, failures
+    mtgo_entry = PUBLIC_PRODUCT_ENTRIES["mtgo"]
+    tabletop_entry = PUBLIC_PRODUCT_ENTRIES["tabletop"]
 
     labels: dict[str, str] = {}
     catalog_products: dict[str, set[str]] = {}
@@ -1334,7 +1317,6 @@ def main() -> int:
             fact_count, fact_failures = validate_public_product_facts(
                 root,
                 tracked,
-                parsed.get("docs/STATUS.yaml", {}),
                 defer_tabletop_readme=args.full_candidate,
             )
         reference_count += fact_count

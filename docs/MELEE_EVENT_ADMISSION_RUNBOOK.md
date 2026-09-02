@@ -7,11 +7,13 @@ It turns an Owner-supplied Melee tournament link into separately reviewable
 admission, collection, candidate, publication, and live-acceptance tasks. It
 does not itself authorize any of those tasks.
 
-`docs/STATUS.yaml` remains the only live authorization source. An event link,
-read-only review, successful rehearsal, whitelist entry, completed collection,
-or passing candidate is evidence for the next gate, never authority to cross
-it. Refreshes of an already admitted event use the existing-event operation
-path and do not silently inherit new-event admission authority.
+The active Owner conversation is the only live authorization source for the
+current event-specific task and lane. `docs/STATUS.yaml` supplies durable phase,
+program, blocker, and pause state. An event link, read-only review, successful
+rehearsal, whitelist entry, completed collection, or passing candidate is
+evidence for the next gate, never authority to cross it. Refreshes of an already
+admitted event use the existing-event operation path and do not silently inherit
+new-event admission authority.
 
 ## Fixed sequence
 

@@ -5,7 +5,8 @@
 This runbook routes an operator through controls that already exist. It does
 not authorize a workflow dispatch, source fetch, secret operation, candidate
 publication, merge, deployment, rollback, or data change. Read
-`docs/STATUS.yaml` before acting and obtain the authorization recorded there.
+`docs/STATUS.yaml` for durable live state before acting and obtain explicit
+authorization for the exact operation from the active Owner conversation.
 
 New Melee collections use the public upstream participant ID directly and do
 not require an HMAC key. A first live v4 collection still requires a separate
@@ -23,7 +24,8 @@ For a GitHub Actions failure, inspect these in order:
 
 1. the failed run's job result and `$GITHUB_STEP_SUMMARY`;
 2. the open stage-specific `MTGO production failure` issue, when one exists;
-3. `docs/STATUS.yaml` for the current blocker, authorization, and stop point.
+3. `docs/STATUS.yaml` for durable blockers and pause state, then the active
+   Owner conversation for the exact authorized response and stop point.
 
 The executable boundaries are `.github/workflows/update.yml` for MTGO,
 `.github/workflows/pages.yml` for Pages, and `.github/workflows/fetch_melee.yml`

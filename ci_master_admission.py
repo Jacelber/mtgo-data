@@ -79,6 +79,18 @@ class FileOperation:
     previous_path: str | None = None
 
 
+@dataclass(frozen=True)
+class RefreshDecision:
+    state: str
+    reason: str
+    accepted_base: str = ""
+    accepted_head: str = ""
+    current_base: str = ""
+    refreshed_head: str = ""
+    task_paths: tuple[str, ...] = ()
+    master_paths: tuple[str, ...] = ()
+
+
 FetchJson = Callable[[str], object]
 
 
@@ -1100,6 +1112,187 @@ def _git_in(repository_root: Path, *args: str) -> str:
     return completed.stdout.strip()
 
 
+def _git_is_ancestor(repository_root: Path, ancestor: str, descendant: str) -> bool:
+    completed = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", ancestor, descendant],
+        cwd=repository_root,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    if completed.returncode not in {0, 1}:
+        raise ValueError("git_ancestry_check_failed")
+    return completed.returncode == 0
+
+
+def _local_diff_operations(
+    repository_root: Path, start: str, end: str
+) -> tuple[tuple[str, str | None, str], ...]:
+    operations = []
+    diff = _git_in(
+        repository_root,
+        "diff",
+        "--name-status",
+        "--find-renames",
+        f"{start}..{end}",
+        "--",
+    )
+    for line in diff.splitlines():
+        fields = line.split("\t")
+        code = fields[0]
+        if code.startswith("R") and len(fields) == 3:
+            operations.append((code, fields[1], fields[2]))
+        elif code in {"A", "M", "D"} and len(fields) == 2:
+            operations.append((code, None, fields[1]))
+        else:
+            raise ValueError(f"unsupported_git_change:{line}")
+    return tuple(operations)
+
+
+def _operation_paths(
+    operations: tuple[tuple[str, str | None, str], ...]
+) -> frozenset[str]:
+    return frozenset(
+        path
+        for _, previous, current in operations
+        for path in (previous, current)
+        if path is not None
+    )
+
+
+def _tree_entry(repository_root: Path, commit: str, path: str) -> str:
+    return _git_in(repository_root, "ls-tree", commit, "--", path)
+
+
+def _automatic_merge_tree(
+    repository_root: Path, first_parent: str, second_parent: str
+) -> str:
+    completed = subprocess.run(
+        ["git", "merge-tree", "--write-tree", first_parent, second_parent],
+        cwd=repository_root,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+    )
+    if completed.returncode != 0:
+        raise ValueError("accepted_refresh_merge_conflict")
+    lines = completed.stdout.splitlines()
+    if not lines or not re.fullmatch(r"[0-9a-f]{40,64}", lines[0]):
+        raise ValueError("accepted_refresh_merge_tree_unavailable")
+    return lines[0]
+
+
+def decide_accepted_refresh(
+    *,
+    repository_root: Path,
+    accepted_base: str,
+    accepted_head: str,
+    current_base: str,
+    refreshed_head: str | None = None,
+) -> RefreshDecision:
+    """Prove only the mechanical safety of refreshing one accepted task delta."""
+
+    root = repository_root.resolve()
+    try:
+        accepted_base_sha = _git_in(
+            root, "rev-parse", "--verify", f"{accepted_base}^{{commit}}"
+        )
+        accepted_head_sha = _git_in(
+            root, "rev-parse", "--verify", f"{accepted_head}^{{commit}}"
+        )
+        current_base_sha = _git_in(
+            root, "rev-parse", "--verify", f"{current_base}^{{commit}}"
+        )
+        if not _git_is_ancestor(root, accepted_base_sha, accepted_head_sha):
+            raise ValueError("accepted_base_not_ancestor_of_accepted_head")
+        if not _git_is_ancestor(root, accepted_base_sha, current_base_sha):
+            raise ValueError("accepted_base_not_ancestor_of_current_base")
+
+        task_operations = _local_diff_operations(
+            root, accepted_base_sha, accepted_head_sha
+        )
+        if not task_operations:
+            raise ValueError("accepted_task_delta_missing")
+        task_paths = _operation_paths(task_operations)
+        master_operations = _local_diff_operations(
+            root, accepted_base_sha, current_base_sha
+        )
+        master_paths = _operation_paths(master_operations)
+
+        if current_base_sha == accepted_base_sha:
+            return RefreshDecision(
+                state="NO_REFRESH_REQUIRED",
+                reason="current_base_matches_accepted_base",
+                accepted_base=accepted_base_sha,
+                accepted_head=accepted_head_sha,
+                current_base=current_base_sha,
+                task_paths=tuple(sorted(task_paths)),
+            )
+
+        overlap = sorted(task_paths & master_paths)
+        if overlap:
+            raise ValueError(f"accepted_and_master_paths_overlap:{','.join(overlap)}")
+        automatic_merge_tree = _automatic_merge_tree(
+            root, accepted_head_sha, current_base_sha
+        )
+        if not refreshed_head:
+            return RefreshDecision(
+                state="READY_TO_MERGE",
+                reason="accepted_and_current_bases_mechanically_mergeable",
+                accepted_base=accepted_base_sha,
+                accepted_head=accepted_head_sha,
+                current_base=current_base_sha,
+                task_paths=tuple(sorted(task_paths)),
+                master_paths=tuple(sorted(master_paths)),
+            )
+        refreshed_head_sha = _git_in(
+            root, "rev-parse", "--verify", f"{refreshed_head}^{{commit}}"
+        )
+        parents = _git_in(root, "show", "-s", "--format=%P", refreshed_head_sha).split()
+        if parents != [accepted_head_sha, current_base_sha]:
+            raise ValueError("refreshed_head_parents_do_not_match_accepted_and_current")
+
+        refreshed_operations = _local_diff_operations(
+            root, current_base_sha, refreshed_head_sha
+        )
+        if refreshed_operations != task_operations:
+            raise ValueError("refreshed_delta_operations_changed")
+
+        for code, previous, current in task_operations:
+            if code == "D":
+                paths = (current,)
+            elif code.startswith("R"):
+                paths = (previous, current)
+            else:
+                paths = (current,)
+            for path in paths:
+                if path is None:
+                    continue
+                if _tree_entry(root, accepted_head_sha, path) != _tree_entry(
+                    root, refreshed_head_sha, path
+                ):
+                    raise ValueError(f"accepted_task_content_changed:{path}")
+
+        refreshed_tree = _git_in(
+            root, "rev-parse", "--verify", f"{refreshed_head_sha}^{{tree}}"
+        )
+        if refreshed_tree != automatic_merge_tree:
+            raise ValueError("refreshed_head_not_automatic_merge_result")
+
+        return RefreshDecision(
+            state="READY_FOR_EXACT_VALIDATION",
+            reason="accepted_delta_mechanically_preserved",
+            accepted_base=accepted_base_sha,
+            accepted_head=accepted_head_sha,
+            current_base=current_base_sha,
+            refreshed_head=refreshed_head_sha,
+            task_paths=tuple(sorted(task_paths)),
+            master_paths=tuple(sorted(master_paths)),
+        )
+    except Exception as exc:
+        return RefreshDecision(state="STOP", reason=_fail_safe_reason(exc))
+
+
 def local_pull_request_files(
     repository_root: Path, base: str, head: str
 ) -> tuple[str, str, list[dict]]:
@@ -1223,6 +1416,15 @@ def main() -> int:
     )
     parser.add_argument("--base-commit", metavar="COMMIT")
     parser.add_argument("--head-commit", metavar="COMMIT")
+    parser.add_argument(
+        "--verify-accepted-refresh",
+        action="store_true",
+        help="prove one accepted task delta was mechanically preserved on a new base",
+    )
+    parser.add_argument("--accepted-base", metavar="COMMIT")
+    parser.add_argument("--accepted-head", metavar="COMMIT")
+    parser.add_argument("--current-base", metavar="COMMIT")
+    parser.add_argument("--refreshed-head", metavar="COMMIT")
     parser.add_argument("--repository-root", type=Path, default=Path.cwd())
     parser.add_argument(
         "--verify-production-evidence",
@@ -1234,6 +1436,21 @@ def main() -> int:
     if args.owner_ui_marker_from:
         print(owner_ui_marker_from_git(args.owner_ui_marker_from))
         return 0
+    if args.verify_accepted_refresh:
+        if not args.accepted_base or not args.accepted_head or not args.current_base:
+            parser.error(
+                "--verify-accepted-refresh requires --accepted-base, "
+                "--accepted-head, and --current-base"
+            )
+        decision = decide_accepted_refresh(
+            repository_root=args.repository_root,
+            accepted_base=args.accepted_base,
+            accepted_head=args.accepted_head,
+            current_base=args.current_base,
+            refreshed_head=args.refreshed_head,
+        )
+        print(json.dumps(decision.__dict__, separators=(",", ":")))
+        return 0 if decision.state != "STOP" else 8
     if args.validate_pr_body:
         if not args.base_commit or not args.head_commit:
             parser.error(

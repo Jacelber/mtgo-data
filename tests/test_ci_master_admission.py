@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -10,6 +12,7 @@ from ci_master_admission import (
     AGGREGATE_JOB,
     TARGETED_JOB,
     AdmissionDecision,
+    decide_accepted_refresh,
     decide_from_environment,
     decide_local_pull_request,
     decide_master_push,
@@ -376,6 +379,269 @@ def _commit_test_repository(repository: Path) -> tuple[str, str]:
     return base, head
 
 
+def _run_git(repository: Path, *args: str) -> str:
+    return subprocess.run(
+        ["git", *args],
+        cwd=repository,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+
+def _commit_file(repository: Path, path: str, content: str, message: str) -> str:
+    target = repository / path
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(content, encoding="utf-8")
+    _run_git(repository, "add", path)
+    _run_git(repository, "commit", "-qm", message)
+    return _run_git(repository, "rev-parse", "HEAD")
+
+
+def _accepted_refresh_repository(tmp_path: Path) -> tuple[Path, str, str, str, str]:
+    repository = tmp_path / "accepted-refresh"
+    repository.mkdir()
+    _run_git(repository, "init", "-q", "-b", "master")
+    _run_git(repository, "config", "user.name", "Admission Test")
+    _run_git(repository, "config", "user.email", "admission@example.invalid")
+    accepted_base = _commit_file(repository, "README.md", "base\n", "base")
+
+    _run_git(repository, "switch", "-qc", "task")
+    accepted_head = _commit_file(
+        repository, "docs/policy.md", "accepted task\n", "accepted task"
+    )
+
+    _run_git(repository, "switch", "-q", "master")
+    current_base = _commit_file(
+        repository, "stats/current.json", "{}\n", "automated production"
+    )
+
+    _run_git(repository, "switch", "-q", "task")
+    _run_git(repository, "merge", "--no-ff", "--no-edit", current_base)
+    refreshed_head = _run_git(repository, "rev-parse", "HEAD")
+    return repository, accepted_base, accepted_head, current_base, refreshed_head
+
+
+def test_pr351_topology_refreshes_disjoint_accepted_delta(tmp_path: Path):
+    repository, accepted_base, accepted_head, current_base, refreshed_head = (
+        _accepted_refresh_repository(tmp_path)
+    )
+
+    decision = decide_accepted_refresh(
+        repository_root=repository,
+        accepted_base=accepted_base,
+        accepted_head=accepted_head,
+        current_base=current_base,
+        refreshed_head=refreshed_head,
+    )
+
+    assert decision.state == "READY_FOR_EXACT_VALIDATION"
+    assert decision.reason == "accepted_delta_mechanically_preserved"
+    assert decision.task_paths == ("docs/policy.md",)
+    assert decision.master_paths == ("stats/current.json",)
+    assert _run_git(repository, "show", "-s", "--format=%P", refreshed_head).split() == [
+        accepted_head,
+        current_base,
+    ]
+
+    _run_git(repository, "switch", "-q", "master")
+    _run_git(repository, "merge", "--no-ff", "--no-edit", refreshed_head)
+    merge_subject = _run_git(repository, "rev-parse", "HEAD")
+    assert _run_git(repository, "show", "-s", "--format=%P", merge_subject).split() == [
+        current_base,
+        refreshed_head,
+    ]
+    assert _run_git(repository, "diff", "--name-only", refreshed_head, merge_subject) == ""
+
+    current_evidence = _valid_merge_responses(
+        base_sha=current_base,
+        head_sha=refreshed_head,
+        merge_sha=merge_subject,
+    )
+    assert _decide_merge(current_evidence, merge_sha=merge_subject).mode == (
+        "pr-confirmation"
+    )
+
+    old_evidence = _valid_merge_responses(
+        base_sha=accepted_base,
+        head_sha=accepted_head,
+        merge_sha=merge_subject,
+    )
+    old_evidence[f"{REPOSITORY_API}/commits/{merge_subject}"]["parents"] = [
+        {"sha": current_base},
+        {"sha": refreshed_head},
+    ]
+    old_decision = _decide_merge(old_evidence, merge_sha=merge_subject)
+    assert old_decision.mode == "unclassified"
+    assert "pull_request_base_head_do_not_match_merge_parents" in old_decision.reason
+
+
+def test_accepted_refresh_cli_reports_exact_combined_subject(tmp_path: Path):
+    repository, accepted_base, accepted_head, current_base, refreshed_head = (
+        _accepted_refresh_repository(tmp_path)
+    )
+
+    command = [
+        sys.executable,
+        "-B",
+        str(Path(__file__).resolve().parents[1] / "ci_master_admission.py"),
+        "--verify-accepted-refresh",
+        "--accepted-base",
+        accepted_base,
+        "--accepted-head",
+        accepted_head,
+        "--current-base",
+        current_base,
+        "--repository-root",
+        str(repository),
+    ]
+    precheck = subprocess.run(
+        command,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert json.loads(precheck.stdout)["state"] == "READY_TO_MERGE"
+
+    completed = subprocess.run(
+        [*command, "--refreshed-head", refreshed_head],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    result = json.loads(completed.stdout)
+    assert result["state"] == "READY_FOR_EXACT_VALIDATION"
+    assert result["accepted_base"] == accepted_base
+    assert result["accepted_head"] == accepted_head
+    assert result["current_base"] == current_base
+    assert result["refreshed_head"] == refreshed_head
+
+
+def test_accepted_refresh_is_not_needed_when_base_did_not_move(tmp_path: Path):
+    repository = tmp_path / "unchanged-base"
+    base, head = _commit_test_repository(repository)
+
+    decision = decide_accepted_refresh(
+        repository_root=repository,
+        accepted_base=base,
+        accepted_head=head,
+        current_base=base,
+    )
+
+    assert decision.state == "NO_REFRESH_REQUIRED"
+
+
+@pytest.mark.parametrize("master_operation", ["modify", "delete", "rename"])
+def test_accepted_refresh_rejects_overlapping_operations(
+    tmp_path: Path, master_operation: str
+):
+    repository = tmp_path / master_operation
+    repository.mkdir()
+    _run_git(repository, "init", "-q", "-b", "master")
+    _run_git(repository, "config", "user.name", "Admission Test")
+    _run_git(repository, "config", "user.email", "admission@example.invalid")
+    accepted_base = _commit_file(repository, "shared.txt", "base\n", "base")
+
+    _run_git(repository, "switch", "-qc", "task")
+    accepted_head = _commit_file(repository, "shared.txt", "task\n", "task")
+
+    _run_git(repository, "switch", "-q", "master")
+    if master_operation == "modify":
+        current_base = _commit_file(repository, "shared.txt", "master\n", "modify")
+    elif master_operation == "delete":
+        _run_git(repository, "rm", "-q", "shared.txt")
+        _run_git(repository, "commit", "-qm", "delete")
+        current_base = _run_git(repository, "rev-parse", "HEAD")
+    else:
+        _run_git(repository, "mv", "shared.txt", "renamed.txt")
+        _run_git(repository, "commit", "-qm", "rename")
+        current_base = _run_git(repository, "rev-parse", "HEAD")
+
+    decision = decide_accepted_refresh(
+        repository_root=repository,
+        accepted_base=accepted_base,
+        accepted_head=accepted_head,
+        current_base=current_base,
+    )
+
+    assert decision.state == "STOP"
+    assert "accepted_and_master_paths_overlap" in decision.reason
+
+
+def test_accepted_refresh_rejects_disjoint_paths_that_cannot_merge(tmp_path: Path):
+    repository = tmp_path / "file-directory-conflict"
+    repository.mkdir()
+    _run_git(repository, "init", "-q", "-b", "master")
+    _run_git(repository, "config", "user.name", "Admission Test")
+    _run_git(repository, "config", "user.email", "admission@example.invalid")
+    accepted_base = _commit_file(repository, "README.md", "base\n", "base")
+
+    _run_git(repository, "switch", "-qc", "task")
+    accepted_head = _commit_file(
+        repository, "shared/item.txt", "task\n", "accepted task"
+    )
+
+    _run_git(repository, "switch", "-q", "master")
+    current_base = _commit_file(repository, "shared", "master\n", "current base")
+
+    decision = decide_accepted_refresh(
+        repository_root=repository,
+        accepted_base=accepted_base,
+        accepted_head=accepted_head,
+        current_base=current_base,
+    )
+
+    assert decision.state == "STOP"
+    assert "accepted_refresh_merge_conflict" in decision.reason
+
+
+def test_accepted_refresh_rejects_changed_task_content(tmp_path: Path):
+    repository, accepted_base, accepted_head, current_base, _ = (
+        _accepted_refresh_repository(tmp_path)
+    )
+    (repository / "docs/policy.md").write_text(
+        "changed after acceptance\n", encoding="utf-8"
+    )
+    _run_git(repository, "add", "docs/policy.md")
+    _run_git(repository, "commit", "--amend", "-qm", "change accepted result")
+    refreshed_head = _run_git(repository, "rev-parse", "HEAD")
+
+    decision = decide_accepted_refresh(
+        repository_root=repository,
+        accepted_base=accepted_base,
+        accepted_head=accepted_head,
+        current_base=current_base,
+        refreshed_head=refreshed_head,
+    )
+
+    assert decision.state == "STOP"
+    assert "accepted_task_content_changed" in decision.reason
+
+
+def test_accepted_refresh_rejects_changed_current_base_content(tmp_path: Path):
+    repository, accepted_base, accepted_head, current_base, _ = (
+        _accepted_refresh_repository(tmp_path)
+    )
+    (repository / "stats/current.json").write_text(
+        '{"changed": true}\n', encoding="utf-8"
+    )
+    _run_git(repository, "add", "stats/current.json")
+    _run_git(repository, "commit", "--amend", "-qm", "change current base content")
+    refreshed_head = _run_git(repository, "rev-parse", "HEAD")
+
+    decision = decide_accepted_refresh(
+        repository_root=repository,
+        accepted_base=accepted_base,
+        accepted_head=accepted_head,
+        current_base=current_base,
+        refreshed_head=refreshed_head,
+    )
+
+    assert decision.state == "STOP"
+    assert "refreshed_delta_operations_changed" in decision.reason
+
+
 def test_local_pr_contract_reuses_remote_admission_rules(tmp_path: Path):
     repository = tmp_path / "repository"
     base, head = _commit_test_repository(repository)
@@ -491,14 +757,20 @@ def test_file_pagination_is_complete_before_classification():
     assert _decide_pr(files).validation_class == "targeted:docs"
 
 
-def _valid_merge_responses(validation_class="targeted:governance"):
+def _valid_merge_responses(
+    validation_class="targeted:governance",
+    *,
+    base_sha=BASE_SHA,
+    head_sha=HEAD_SHA,
+    merge_sha=MERGE_SHA,
+):
     pull_request = {
         "number": 119,
         "body": "<!-- artifact-impact: none -->",
         "merged_at": "2026-07-28T07:38:13Z",
-        "merge_commit_sha": MERGE_SHA,
-        "base": {"ref": "master", "sha": BASE_SHA},
-        "head": {"sha": HEAD_SHA},
+        "merge_commit_sha": merge_sha,
+        "base": {"ref": "master", "sha": base_sha},
+        "head": {"sha": head_sha},
     }
     jobs = []
     for name in sorted(expected_successful_jobs(validation_class) or ()):
@@ -506,7 +778,7 @@ def _valid_merge_responses(validation_class="targeted:governance"):
         if name == AGGREGATE_JOB:
             job["steps"] = [
                 {
-                    "name": validation_subject_step(119, BASE_SHA, HEAD_SHA),
+                    "name": validation_subject_step(119, base_sha, head_sha),
                     "conclusion": "success",
                 },
                 {
@@ -516,17 +788,17 @@ def _valid_merge_responses(validation_class="targeted:governance"):
             ]
         jobs.append(job)
     return {
-        f"{REPOSITORY_API}/commits/{MERGE_SHA}": {
-            "parents": [{"sha": BASE_SHA}, {"sha": HEAD_SHA}]
+        f"{REPOSITORY_API}/commits/{merge_sha}": {
+            "parents": [{"sha": base_sha}, {"sha": head_sha}]
         },
-        f"{REPOSITORY_API}/commits/{MERGE_SHA}/pulls?per_page=100": [pull_request],
+        f"{REPOSITORY_API}/commits/{merge_sha}/pulls?per_page=100": [pull_request],
         f"{REPOSITORY_API}/pulls/119": pull_request,
         f"{REPOSITORY_API}/pulls/119/files?per_page=100&page=1": [
             {"filename": ".github/workflows/ci.yml", "status": "modified"}
         ],
         (
             f"{REPOSITORY_API}/actions/workflows/ci.yml/runs?"
-            f"event=pull_request&head_sha={HEAD_SHA}&status=success&per_page=100"
+            f"event=pull_request&head_sha={head_sha}&status=success&per_page=100"
         ): {
             "total_count": 1,
             "workflow_runs": [
@@ -536,7 +808,7 @@ def _valid_merge_responses(validation_class="targeted:governance"):
                     "event": "pull_request",
                     "status": "completed",
                     "conclusion": "success",
-                    "head_sha": HEAD_SHA,
+                    "head_sha": head_sha,
                     "path": ".github/workflows/ci.yml",
                     "updated_at": "2026-07-28T07:37:50Z",
                 }
@@ -549,10 +821,10 @@ def _valid_merge_responses(validation_class="targeted:governance"):
     }
 
 
-def _decide_merge(responses):
+def _decide_merge(responses, *, merge_sha=MERGE_SHA):
     return decide_master_push(
         repository="owner/repo",
-        merge_sha=MERGE_SHA,
+        merge_sha=merge_sha,
         fetch_json=lambda url: responses[url],
         api_url="https://api.github.test",
     )
@@ -567,6 +839,33 @@ def test_exact_merge_reuses_only_the_exact_targeted_evidence():
         workflow_run=42,
         validation_class="targeted:governance",
     )
+
+
+def test_pr351_topology_accepts_exact_current_base_and_task_head_evidence():
+    accepted_base = BASE_SHA
+    accepted_head = HEAD_SHA
+    current_base = PRODUCTION_SOURCE_SHA
+    assert len({accepted_base, accepted_head, current_base, MERGE_SHA}) == 4
+
+    decision = _decide_merge(
+        _valid_merge_responses(base_sha=current_base, head_sha=accepted_head)
+    )
+
+    assert decision.mode == "pr-confirmation"
+    assert decision.reason == "exact_validated_merge:targeted:governance"
+
+
+def test_pr351_topology_rejects_old_base_head_evidence_for_combined_merge():
+    responses = _valid_merge_responses()
+    responses[f"{REPOSITORY_API}/commits/{MERGE_SHA}"]["parents"] = [
+        {"sha": PRODUCTION_SOURCE_SHA},
+        {"sha": HEAD_SHA},
+    ]
+
+    decision = _decide_merge(responses)
+
+    assert decision.mode == "unclassified"
+    assert "pull_request_base_head_do_not_match_merge_parents" in decision.reason
 
 
 def test_incomplete_merge_evidence_stops_without_full_suite():
