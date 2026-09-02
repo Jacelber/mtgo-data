@@ -1,146 +1,40 @@
-schema_version: "1.0"
+schema_version: "1.1"
 
 project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/pages-card-localization-cache"
-  working_branch_status: "pages_recovery_owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
-  purpose: "Small machine-readable record of current state and authorization."
-  last_updated: "2026-09-02"
+  purpose: "Small machine-readable record of durable live project state."
+  last_updated: "2026-09-03"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
-  history_policy: "Completed detail belongs in docs/history, audits, decisions, pull requests, and Git history; never use it to authorize current work."
+  authority_model:
+    owner_authorization: "active_owner_conversation"
+    repository_and_merge_facts: "git_and_github"
+    generated_subject_provenance: "artifacts"
+    durable_project_state: "this_document"
+  history_policy: "Completed task, validation, publication, and merge detail belongs in pull requests and Git/GitHub history; it is not copied here."
 
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_pages_recovery_owner_accepted_completion"
+  status: "paused_for_post_w35_governance_and_reliability_reset"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
-  production_changes_allowed: false
-  implementation_authorized: true
-  next_phase_id: 15
-  next_phase_authorized: false
+  pause_reason: "Complete the Owner-directed Post-W35 Governance & Reliability Reset before resuming separately authorized product work."
 
-current_task:
-  id: "PAGES-SIMPLE-CARD-LOCALIZATION-CACHE-RECOVERY"
-  name: "Cache simple card localization outside the bounded Pages build"
-  status: "owner_accepted_completion_authorized"
-  authorized_on: "2026-09-02"
-  base_commit: "de8a60ff80a3717027e2c989df4ccd890e2fbdcd"
-  branch: "codex/pages-card-localization-cache"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/pages-card-localization-cache-20260902-01"
-  objective: "Move the slow MTGCH localization preparation into a separate bounded cache job so the unchanged allowlisted Pages build can verify and publish the already merged Tabletop hotfix within its existing limit."
-  authorization:
-    local_implementation: true
-    commit: true
-    remote_publication: true
-    merge: true
-  owner_acceptance:
-    status: "accepted"
-    accepted_on: "2026-09-02"
-    subject: "Final local Pages workflow, cache builder contract, focused tests, and complete diff."
-  local_acceptance:
-    status: "accepted"
-    accepted_on: "2026-09-02"
-    subject: "Eight-file local recovery diff; all 12 focused test nodes, the final run-attempt handoff recheck, Ruff, and final changed-scope validation passed."
-  allowed_paths:
-    - ".github/workflows/pages.yml"
-    - "tools/build_simple_card_localization.py"
-    - "tests/test_simple_card_localization.py"
-    - "tests/test_ci_workflow.py"
-    - "docs/DATA_ARCHITECTURE.md"
-    - "docs/DECISIONS.md"
-    - "docs/TEST_TRIGGER_MATRIX.md"
-    - "docs/STATUS.yaml"
-  read_only_inputs:
-    - "stats/"
-    - "src/mtgmeta/card_names.py"
-    - "src/mtgmeta/data/om1_spm_aliases.json"
-  protected_scope:
-    source_data: "Do not fetch, refresh, or modify retained MTGO or Melee source data."
-    product: "Do not change the accepted Tabletop UI, statistics, localization output shape, public paths, or browser behavior."
-    workflow: "Do not raise the existing 20-minute Pages build limit, add unbounded retry, or trust cache artifacts from a non-master producer."
-    publication: "Complete only the unchanged accepted recovery through one Ready PR, required checks, normal merge, and exact-SHA Pages verification; do not manually rerun or dispatch Pages."
-  invariants:
-    - "The slow localization producer runs only when no exact trusted cache exists."
-    - "The cache subject changes when product card names, current Landing card names, or the localization builder/name-normalization contract changes."
-    - "Every reused or newly built cache is verified before the allowlisted Pages artifact consumes it."
-    - "The existing 20-minute allowlisted Pages build and 10-minute deploy limits remain unchanged."
-  stop_point: "Complete the unchanged accepted recovery through one Ready PR, required checks, normal merge, and exact-SHA Pages verification; stop on failure, conflict, permission blockage, or changed subject."
+active_program:
+  id: "POST-W35-GOVERNANCE-RELIABILITY-RESET-20260903"
+  name: "Post-W35 Governance & Reliability Reset"
+  status: "active"
+  governance_model: "single_agent_chat_authority_with_exact_merge_subject_validation"
 
-weekly_classifier_review:
-  id: "W35-CROSS-SOURCE-CLASSIFIER-REVIEW"
-  review_week: "2026-W35"
-  status: "completed"
-  mtgo_readiness:
-    carrier: "weekly-maintenance-readiness-2026-W35"
-    counts_and_completion_remain_mtgo_only: true
-  supplemental_cohorts:
-    - id: "MELEE-441441-MODERN-UNKNOWN-SUPPLEMENTAL-REVIEW"
-      status: "completed"
-      source: "tabletop_melee"
-      format: "modern"
-      event_id: "441441"
-      accepted_candidate_commit: "aa46696d03235e336ec1e4c3a0aa7fcdf48e117f"
-      unknown_count: 37
-      excluded_unavailable_decklist_count: 3
-      review_start_authorized: true
-      rule_change_authorized: true
-      regeneration_authorized: true
-      republication_authorized: false
-  separation_rule: "Share the same-format human classifier decision session only; retain separate source provenance, counts, readiness, completion, generation, and publication."
+known_blockers: []
 
-current_repository_state:
-  source_master_commit: "de8a60ff80a3717027e2c989df4ccd890e2fbdcd"
-  previous_task: "TABLETOP-LATEST-METRICS-QUALITY-HOTFIX"
-  previous_task_status: "merged_in_pr_350_pages_publication_blocked_by_run_33633293653"
-  open_pull_request: null
-  open_pull_request_head: null
-  open_pull_request_status: "none"
-  local_compatibility_contract_version: "1.8.0"
-  local_active_taxonomy_sha256: "2ab329e4a35655b88b159edfc60d37d4d3f8b5e38d1c37a519b21f29e0001515"
-  local_registered_python_test_count: 29
-  retained_source_bytes_changed: false
-  public_tabletop_events:
-    - "434455"
-    - "441441"
-  public_entries:
-    mtgo: "/index.html"
-    tabletop: "/melee/index.html"
-  public_catalog: "/stats/catalog.json"
-
-known_blockers:
-  - id: "PAGES-33633293653-TIMEOUT"
-    status: "owner_accepted_recovery_authorized"
-    note: "The merge-triggered Pages build reached a passing allowlisted artifact at de8a60ff80a3717027e2c989df4ccd890e2fbdcd, then the 20-minute build job was cancelled before Configure/Upload because simple card localization consumed nearly the full job window."
-
-future_task_gates:
-  - id: "W36-CROSS-SOURCE-CLASSIFIER-REVIEW"
-    status: "planned_not_authorized"
-    note: "The event 12853216 Standard Dwarves and event 12853219 Modern Bant Company records remain for next week's maintenance and are excluded from this repair."
+paused_activities:
   - id: "P14-02"
-    status: "planned_not_authorized"
-    note: "Pauper product input does not begin implicitly after this recovery."
-  - id: "PHASE-15"
-    status: "planned_not_authorized"
-    note: "Pioneer does not begin implicitly after Phase 14."
-
-next_approved_task:
-  id: "PAGES-SIMPLE-CARD-LOCALIZATION-CACHE-RECOVERY"
-  name: "Implement and verify the bounded simple-card-localization cache recovery"
-  status: "owner_accepted_completion_authorized"
-  local_execution_authorized: true
-  commit_authorized: true
-  publication_authorized: true
-  merge_authorized: true
-  note: "Complete only the unchanged accepted recovery through one Ready PR, required checks, normal merge, and exact-SHA Pages verification."
-
-prohibited_next_actions:
-  - "Do not classify the W36 Standard Dwarves or Modern Bant Company records or change another classifier decision."
-  - "Do not fetch either source, regenerate event statistics, or manually dispatch, rerun, or cancel production or Pages."
-  - "Do not start P14-02, Phase 15, another event admission, or unrelated work."
+    name: "Produce Pauper MTGO data and statistics privately"
+    reason: "Phase 14 remains paused during the Post-W35 program and requires a separate Owner start instruction before resumption."

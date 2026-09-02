@@ -8,10 +8,9 @@ authoritative document.
 
 ## Start every task
 
-1. Read `docs/STATUS.yaml`; confirm the current phase, current task, local and
-   completion authorization, blockers, branch, protected paths, and prohibited
-   next actions.
-2. Read only the current task and phase material in `docs/ROADMAP.md`.
+1. Read `docs/STATUS.yaml`; confirm the current phase, active program or weekly
+   cycle, durable blockers or unresolved decisions, and paused activities.
+2. Read only the current-phase material in `docs/ROADMAP.md`.
 3. Read the applicable Gate, artifact-impact, authorization, validation, and
    publication sections of `docs/DEVELOPMENT_WORKFLOW.md`.
 4. Expand by impact:
@@ -20,17 +19,18 @@ authoritative document.
      `docs/STATISTICS_SPEC.md`;
    - data, Schemas, public paths, production, privacy, or retention:
      `docs/DATA_ARCHITECTURE.md`;
-   - scope or statistical precedent: only the relevant entries in
-     `docs/DECISIONS.md`;
-   - GOV-06 or later governance efficiency: only the current entry and its
-     dependencies in `docs/GOVERNANCE_REMEDIATION.yaml`.
+   - scope, statistical, or governance precedent: only the relevant entries in
+     `docs/DECISIONS.md`.
 5. Read wider only when an authoritative document changes, impact is unclear,
    or the task requires the highest-strength process.
 
 Authority remains, in order: this file, project scope, statistics
 specification, data architecture, roadmap, decisions, status, then development
-workflow. `docs/STATUS.yaml` alone controls live task authorization. Existing
-code describes implementation, not necessarily the approved target.
+workflow. The active Owner conversation is the authority for the current task
+and its permissions. `docs/STATUS.yaml` records durable live project state;
+Git and GitHub record repository and merge facts; generated artifacts record
+their own provenance. Existing code describes implementation, not necessarily
+the approved target.
 
 Files under `docs/history/`, audits, `PROJECT_NOTES.md`, pull requests, and Git
 are evidence only. They never authorize current work.
@@ -56,11 +56,17 @@ Work one focused task at a time in a disposable isolated workspace unless the
 Owner explicitly approves reuse. Inspect branch and worktree state before
 editing, preserve unexplained changes, and develop off `master`.
 
-Local authorization covers only the approved implementation. Owner acceptance
-authorizes continuous completion of that unchanged task through local commit,
-one Ready PR, required CI, merge, and applicable publication. Stop on failed
-checks, changed subject or scope, conflict, permission blocker, or a new product
-or statistical decision. Never carry authorization into another task or phase.
+An explicit Owner instruction in the active conversation authorizes only the
+exact named task and lane. Do not require or create a STATUS-only change to
+repeat that authority. Owner acceptance binds the approved objective, semantic
+and visible result, protected scope, and task delta; it does not bind the task
+to an obsolete base commit. Acceptance authorizes continuous completion of
+that same task through local commit, one Ready PR, required CI, merge, and
+applicable publication. Follow the bounded accepted-task base-refresh procedure
+in `docs/DEVELOPMENT_WORKFLOW.md` when `master` advances. Stop on failed checks,
+changed subject or scope, unproved semantic dependency, permission blocker, or
+a new product or statistical decision. Never carry authorization into another
+task or phase.
 
 Before an authorized GitHub write, run
 `tools/github_publication_preflight.ps1 -ActualPublicationContext -PrBodyFile
@@ -109,8 +115,8 @@ generated candidate once at the output gate.
 
 At every task completion:
 
-- keep `docs/STATUS.yaml` limited to live state, authorization, blockers, and
-  the next gate;
+- keep `docs/STATUS.yaml` limited to durable phase or program state, active
+  weekly-cycle state, unresolved blockers or decisions, and paused activities;
 - when completed task detail exists in `docs/ROADMAP.md`, move it in the same
   accepted task to the matching phase history file, update
   `docs/history/README.md`, and leave one compact history pointer;

@@ -8030,3 +8030,64 @@ The accepted Tabletop hotfix, generated statistics, card-localization bytes and
 fields, browser behavior, public paths, and MTGCH request pacing remain
 unchanged. Commit, remote publication, merge, and Pages recovery remain
 separately Owner-gated.
+
+---
+
+# DEC-162 - Use chat authority and mechanically refresh accepted task deltas
+
+Status: `Accepted; local implementation authorized`
+
+## Context
+
+Live task authority, temporary branch facts, Owner acceptance, and publication
+identifiers had accumulated in `docs/STATUS.yaml`. That duplicated the active
+Owner conversation, Git, GitHub, and generated-artifact provenance, while a
+base advance could make an unchanged accepted task appear unauthorized or
+unmergeable until another STATUS-only change was published.
+
+PR #351 demonstrated the relevant topology. The Owner accepted task delta
+`A..B`; an independent production change advanced `master` from `A` to `C`;
+and the resulting merge had the accepted task and current production content
+without a conflict. Admission still evaluated obsolete `A,B` evidence against
+the final merge parents and failed closed.
+
+## Decision
+
+Use the active Owner conversation as authority for the exact current task and
+lane. Keep STATUS limited to durable phase or program state, active weekly-
+cycle state, unresolved blockers or decisions, and paused activities. Git and
+GitHub remain authoritative for repository and merge facts, and generated
+artifacts retain their own provenance. Do not require a STATUS-only pull
+request before an explicitly authorized task.
+
+Owner acceptance binds the objective, semantic and visible result, protected
+scope, and accepted task delta. It does not permanently bind the task to an
+obsolete base commit. A base refresh may proceed only through the narrow
+mechanical `A/B/C/D` proof in `docs/DEVELOPMENT_WORKFLOW.md`: disjoint path
+operations, a conflict-free exact-parent merge, exact preservation of the
+accepted task operation stream and tree entries, current-master non-task
+content, and fresh validation of the exact `C..D` subject under the existing
+trigger matrix. Old `A..B` evidence is never reused for `C..D`.
+
+The proof helper is not a general dependency graph or semantic-impact engine.
+Any semantic dependency that cannot be proved safe mechanically, product-
+behavior change, statistical-meaning change, or accepted-result change stops
+and returns to the Owner. A completion run may attempt at most two base
+refreshes; the count is runtime-only and is not durable governance state.
+Exact-merge admission remains fail closed.
+
+Retain `artifact-impact: none` for a task with no product, generated, rendered,
+or public artifact impact. Internal governance or control-plane source changes
+do not create a new product artifact-impact class.
+
+## Consequences
+
+GOV-11 itself completes under the pre-existing governance model. The new
+authority and refresh mechanism becomes effective only after GOV-11 merges.
+Later explicitly authorized tasks can preserve an accepted delta across a safe
+base advance without a preparatory STATUS-only pull request, but cannot infer
+semantic safety or begin another task automatically.
+
+This decision does not change product behavior, statistics, classifiers,
+Schemas, Pages, production, or Issue #325. It does not alter the historical
+record in `docs/GOVERNANCE_REMEDIATION.yaml`.

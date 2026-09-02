@@ -2,10 +2,10 @@
 
 ## Authority
 
-This document governs workspace isolation, execution permissions, task contracts, validation gates, publication gates, and stop conditions. Existing project-scope, statistics, architecture, roadmap, decision, and status documents retain their existing authority. `docs/STATUS.yaml` controls current project state and task authorization.
+This document governs workspace isolation, execution permissions, task contracts, validation gates, publication gates, and stop conditions. Existing project-scope, statistics, architecture, roadmap, decision, and status documents retain their existing authority. The active Owner conversation controls the current task and its permissions. `docs/STATUS.yaml` records durable live project state; Git and GitHub record repository and merge facts; generated artifacts record their own provenance.
 
-For every task, read `AGENTS.md`, `docs/STATUS.yaml`, the relevant current-task
-and current-phase roadmap subsections, and the Gate and authorization sections
+For every task, read `AGENTS.md`, `docs/STATUS.yaml`, the relevant current-phase
+roadmap subsection, and the Gate and authorization sections
 needed for the task. Expand that set from the approved paths and artifact
 impact: product-scope or navigation work requires `docs/PROJECT_SCOPE.md`;
 statistical code, formulas, semantics, or artifacts require
@@ -29,7 +29,7 @@ A fresh disposable independent clone remains the default for every focused task.
 
 Before reuse, rerun Gate 2. Reuse requires a completed prior task; intact independent repository topology; no protected-source filesystem access; a clean worktree and index with no untracked or unknown files; no caches, bytecode, logs, or temporary artifacts; no unreviewed dependency or runtime mutation; no credential or persistent permission state; disabled push and credential helper; a fetch URL that does not point to the protected local repository; an explicitly verified current remote base; a new task branch created from that base; and a unique new task ID with explicit allowed paths.
 
-Require a fresh workspace for product-code, dependency, data, schema, architecture, or production-behavior changes; after untrusted code execution; when workspace integrity or isolation is uncertain; when credentials or persistent permissions may remain; for a different project; or whenever the owner requires it. For an approved focused task, anonymous read-only fetch of the approved public repository is allowed unless the task is explicitly fully offline. Workspace repair may proceed only within delegated local authority; stop if it would discard unknown work, alter a protected environment, access another workspace, use credentials, or compromise isolation. Fetch or repair does not authorize push, PR creation, merge, remote-branch deletion, or another task. Stable project facts belong in `docs/STATUS.yaml`; short-lived Git publication steps should generally remain in Git/GitHub history unless they materially affect current authorization or project state. Never start a follow-up task automatically.
+Require a fresh workspace for product-code, dependency, data, schema, architecture, or production-behavior changes; after untrusted code execution; when workspace integrity or isolation is uncertain; when credentials or persistent permissions may remain; for a different project; or whenever the owner requires it. For an approved focused task, anonymous read-only fetch of the approved public repository is allowed unless the task is explicitly fully offline. Workspace repair may proceed only within delegated local authority; stop if it would discard unknown work, alter a protected environment, access another workspace, use credentials, or compromise isolation. Fetch or repair does not authorize push, PR creation, merge, remote-branch deletion, or another task. Durable project facts belong in `docs/STATUS.yaml`; short-lived task authorization remains in the active Owner conversation, and publication facts remain in Git and GitHub. Never start a follow-up task automatically.
 
 ## Controlled workspace continuation
 
@@ -54,8 +54,9 @@ Never start the next task automatically.
 At Gate 1, every task contract must declare the expected artifact impact before
 implementation. Select every applicable value from this closed list:
 
-- `none` — no committed, generated, rendered, or public artifact is expected
-  to change;
+- `none` — no product, generated, rendered, or public artifact is expected to
+  change; internal governance and control-plane source changes do not by
+  themselves constitute product artifact impact;
 - `internal_diagnostics` — only non-public diagnostics or reports are expected
   to change;
 - `user_visible_ui` — a rendered user-visible page, interaction, copy, or
@@ -196,16 +197,21 @@ Task-contract paths normally identify expected final deliverables, not absolute 
 
 Anonymous read-only clone and fetch of the approved public repository, and necessary public-documentation access, are allowed unless a task is explicitly fully offline. They do not authorize credentials, uploads, remote API writes, transmission to unrelated services, unapproved third-party execution, unrelated services or repositories, or system-level installation.
 
-Before Owner acceptance, separate authorization is required for remote writes.
-Owner acceptance then authorizes local commit, push, one Ready pull request,
+An explicit Owner instruction in the active conversation starts only the exact
+named task and lane; no STATUS-only authorization change is required. Before
+Owner acceptance, separate authorization is required for remote writes. Owner
+acceptance then authorizes local commit, push, one Ready pull request,
 required-check waiting, merge, and the accepted task's applicable publication
-or production completion without repeated prompts. The accepted subject must
-remain byte-identical except for publication metadata that GitHub creates.
-Stop and return to the Owner when a required check fails, the diff or scope
-changes, a merge conflict appears, permissions block the documented path, or a
-new product/statistical decision is required. Acceptance never carries to
-another task or phase, unrelated credentials, force-push, repository settings,
-secrets, or destructive action outside the accepted contract.
+or production completion without repeated prompts. The accepted subject is the
+approved objective, semantic and visible result, protected scope, and task
+delta. It need not retain an obsolete base commit, but may move only through
+the bounded mechanical refresh procedure below. Stop and return to the Owner
+when a required check fails, the accepted subject or scope changes, mechanical
+proof fails, an unproved semantic dependency appears, permissions block the
+documented path, or a new product or statistical decision is required.
+Acceptance never carries to another task or phase, unrelated credentials,
+force-push, repository settings, secrets, or destructive action outside the
+accepted contract.
 
 Prohibited operations are Full access, direct development on `master`, reading
 or copying credentials, protected-source modification, cross-project access,
@@ -469,10 +475,95 @@ reload, and network inspection before a code change. A correct destination link
 combined with a transient hover-image failure is not by itself evidence of an
 application defect.
 
+## Accepted-task base refresh
+
+Owner acceptance binds the accepted task delta and result, not a permanently
+fixed base. When `master` advances after acceptance, define:
+
+- `A` as the base on which the Owner accepted the task;
+- `B` as the accepted task head;
+- `C` as the newly fetched current `master`; and
+- `D` as the candidate produced by merging `C` into the task branch at `B`.
+
+If `C` equals `A`, no refresh is needed. Otherwise, automation may continue
+only when all of the following are mechanically proved:
+
+1. `A` is an ancestor of both `B` and `C`, and `A..B` contains a task delta;
+2. the path operations in `A..B` and `A..C` do not overlap, including the
+   footprints of modifications, deletions, and renames;
+3. merging `C` into the branch at `B` produces no conflict and `D` has exact
+   parents `B,C` in that order;
+4. the `C..D` operation stream exactly equals the accepted `A..B` operation
+   stream, and every task path retains its exact accepted Git tree entry from
+   `B`; therefore non-task content in `D` remains exactly `C`; and
+5. the existing trigger matrix and publication preflight are rerun against the
+   exact combined subject with base `C` and head `D`.
+
+Use the following two-stage operational path. Record the resolved full SHAs as
+`A`, `B`, `C`, and `D`; placeholders below are not persistent state:
+
+```powershell
+git fetch --no-tags origin `
+  refs/heads/master:refs/remotes/origin/master
+git rev-parse --verify <A>^{commit}
+git rev-parse --verify <B>^{commit}
+git rev-parse --verify origin/master^{commit}  # record as C
+git rev-parse --verify HEAD                    # must equal B
+
+python -B ci_master_admission.py --verify-accepted-refresh `
+  --accepted-base <A> --accepted-head <B> `
+  --current-base <C> `
+  --repository-root <workspace>
+
+# Continue only after READY_TO_MERGE.
+git merge --no-ff --no-edit <C>
+git rev-parse --verify HEAD                    # record as D
+
+python -B ci_master_admission.py --verify-accepted-refresh `
+  --accepted-base <A> --accepted-head <B> `
+  --current-base <C> --refreshed-head <D> `
+  --repository-root <workspace>
+```
+
+The first invocation proves ancestry, disjoint path operations, and a conflict-
+free automatic Git merge, then returns `READY_TO_MERGE`. The second additionally
+proves the exact parents, operation stream, accepted tree entries, current-base
+content, and automatic merge tree, then returns
+`READY_FOR_EXACT_VALIDATION`. Neither state proves semantic independence or
+authorizes a remote write. `NO_REFRESH_REQUIRED` applies only when `C` equals
+`A`; every `STOP` returns to the Owner.
+
+After `READY_FOR_EXACT_VALIDATION`, classify the exact local `C..D` diff with
+`ci_master_admission.py --validate-pr-body <body-file> --base-commit <C>
+--head-commit <D> --repository-root <workspace>`, run only the focused commands
+selected by that output and `docs/TEST_TRIGGER_MATRIX.md`, and then run the
+existing publication preflight with `-BaseCommit <C> -HeadCommit <D>`. Publish
+through the documented command-scoped path. Pushing `D` to an existing PR
+branch triggers `synchronize`, which must validate that exact combined subject;
+a not-yet-published task follows the ordinary Ready-PR opening path with the
+same `C,D` subject. Evidence from old `A..B` is invalid for both paths.
+
+Do not build a general dependency graph, semantic-impact engine, or persistent
+dependency registry for this decision. If review exposes a semantic dependency
+that cannot be proved safe mechanically, a product-behavior or statistical-
+meaning change, or any change to the accepted result, stop and return to the
+Owner. Merge conflicts, task-path overlap, parent mismatch, and content drift
+also stop. The PR #351 `A/B/C/M` shape is retained as a synthetic successful
+policy case, while exact-merge admission remains fail closed.
+
+One accepted task may make at most two refresh attempts before returning to the
+Owner. This counter exists only in the active completion run; never persist it
+in STATUS, a registry, or another governance layer. Do not force-push. After a
+successful refresh, run the existing publication preflight against `C,D`, push
+the same branch by the documented command-scoped path, let the `synchronize`
+event validate the exact combined subject, refetch `master` immediately before
+merge, and apply this procedure again only within the remaining retry bound.
+
 ## Publication preflight and records
 
 Owner acceptance supplies Gate 6 completion authority for the exact accepted
-task. Before the first remote write:
+task. Before the first remote write, and again after any accepted-task base
+refresh:
 
 1. confirm the final local commit, clean status, current branch, and intended
    base;
@@ -563,13 +654,12 @@ the owner explicitly requires immediate exact metadata, create at most one
 intentional documentation closure change; never create a second change solely
 to finalize that closure change.
 
-Before merging the implementation PR, update durable project state and the
-next owner-authorization stop in that same PR without inventing not-yet-known
-identifiers. Report the actual PR number, merge SHA, workflow run IDs, and Pages
-result in the final handoff. Leave those exact publication fields absent or
-explicitly deferred in the repository until the next already-authorized
-development or governance PR, then reconcile them as part of that PR's normal
-documentation maintenance. Do not create or switch to a
+Before merging the implementation PR, update durable project state in that
+same PR only when the phase, active program or weekly cycle, unresolved
+blockers or decisions, or paused activities changed. Do not invent not-yet-
+known identifiers. Report the actual PR number, merge SHA, workflow run IDs,
+and Pages result in the final handoff. Leave those exact publication fields to
+Git and GitHub. Do not create or switch to a
 `publication-record`, `status`, `reconciliation`, or `finalization` branch
 solely for those identifiers. An immediate documentation PR is allowed only
 when the owner explicitly requests it or when stale durable state would
@@ -587,11 +677,11 @@ Inspect evidence progressively:
    targeted query answers the question.
 
 Keep completed-task validation and publication evidence in the pull request and
-Git whenever those systems already record it. `docs/STATUS.yaml` stores live
-state, authorization, blockers, and the next planned task; ordinary tasks do
-not require a separate history entry by default. Add durable history only when
-the evidence is not otherwise preserved or a phase-closeout contract requires
-it.
+Git whenever those systems already record it. `docs/STATUS.yaml` stores only
+durable phase or program state, active weekly-cycle state, unresolved blockers
+or decisions, and paused activities; ordinary tasks do not require a separate
+history entry by default. Add durable history only when the evidence is not
+otherwise preserved or a phase-closeout contract requires it.
 
 This rule reduces both diagnostic noise and repeated work. A truncated output
 is a signal to narrow the query, not to repeat the same broad read.
@@ -605,8 +695,8 @@ Keep the always-read layer bounded by responsibility:
 
 - `AGENTS.md` contains only stable every-task steps, hard boundaries, and
   conditional reading pointers;
-- `docs/STATUS.yaml` contains only live phase, task, authorization, blockers,
-  next-gate, and prohibition state;
+- `docs/STATUS.yaml` contains only durable phase or program state, active
+  weekly-cycle state, unresolved blockers or decisions, and paused activities;
 - `docs/ROADMAP.md` contains the active phase, useful future phases, and their
   acceptance criteria; and
 - `docs/history/` preserves completed or superseded detail and never
@@ -624,7 +714,10 @@ Repository and Git/GitHub content must be English. Codex contracts, criteria, st
 
 ## Pause and authorization
 
-A paused project permits read-only analysis and explicitly authorized governance or maintenance tasks. A pause does not authorize product development. P1-05 requires explicit owner authorization. One task's authorization does not authorize another task.
+A paused project permits read-only analysis and governance or maintenance tasks
+explicitly authorized in the active Owner conversation. A pause does not
+authorize product development. One task's authorization does not authorize
+another task.
 
 ## Disposal
 

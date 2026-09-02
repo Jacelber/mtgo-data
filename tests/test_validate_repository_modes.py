@@ -19,7 +19,7 @@ def write_public_product_fixture(
     *,
     whitelist_event_ids: tuple[str, ...],
     public_event_ids: tuple[str, ...],
-) -> tuple[list[str], dict]:
+) -> list[str]:
     (root / "configs").mkdir()
     (root / "stats" / "modern" / "melee").mkdir(parents=True)
     (root / "README.md").write_text(
@@ -116,15 +116,7 @@ def write_public_product_fixture(
         "stats/modern/archetype_names.json",
         "stats/modern/melee/index.json",
     ]
-    status = {
-        "current_repository_state": {
-            "public_entries": {
-                "mtgo": "/index.html",
-                "tabletop": "/melee/index.html",
-            }
-        }
-    }
-    return names, status
+    return names
 
 
 def write_test_inventory_fixture(
@@ -267,7 +259,7 @@ def test_changed_plan_adds_only_the_triggered_coupled_contracts():
     entry_plan = changed_validation_plan(["index.html"], tracked)
 
     assert readme_plan.public_product_facts is True
-    assert readme_plan.candidates == ("README.md", "docs/STATUS.yaml")
+    assert readme_plan.candidates == ("README.md",)
     assert readme_plan.reference_groups == frozenset()
     assert entry_plan.public_product_facts is False
     assert entry_plan.reference_groups == frozenset(
@@ -297,23 +289,33 @@ def test_changed_plan_treats_public_name_and_tabletop_outputs_as_public_product_
     )
 
     assert plan.public_product_facts is True
-    assert set(plan.candidates) == {"docs/STATUS.yaml", changed_path}
+    assert plan.candidates == (changed_path,)
+
+
+def test_status_change_does_not_select_public_product_fact_validation():
+    plan = changed_validation_plan(
+        ["docs/STATUS.yaml"],
+        ["README.md", "docs/STATUS.yaml", "stats/catalog.json"],
+    )
+
+    assert plan.public_product_facts is False
+    assert plan.candidates == ("docs/STATUS.yaml",)
 
 
 def test_enabled_unpublished_event_does_not_change_public_product_facts(tmp_path):
-    names, status = write_public_product_fixture(
+    names = write_public_product_fixture(
         tmp_path,
         whitelist_event_ids=("434455", "441441"),
         public_event_ids=("434455",),
     )
 
-    _, failures = validate_public_product_facts(tmp_path, names, status)
+    _, failures = validate_public_product_facts(tmp_path, names)
 
     assert failures == []
 
 
 def test_stale_public_classifier_name_contract_fails_closed(tmp_path):
-    names, status = write_public_product_fixture(
+    names = write_public_product_fixture(
         tmp_path,
         whitelist_event_ids=("434455",),
         public_event_ids=("434455",),
@@ -323,7 +325,7 @@ def test_stale_public_classifier_name_contract_fails_closed(tmp_path):
     document["names"][0]["display"]["zh"] = "陈旧名称"
     public_contract.write_text(json.dumps(document), encoding="utf-8")
 
-    _, failures = validate_public_product_facts(tmp_path, names, status)
+    _, failures = validate_public_product_facts(tmp_path, names)
 
     assert any(
         failure.path == "stats/modern/archetype_names.json"
@@ -333,7 +335,7 @@ def test_stale_public_classifier_name_contract_fails_closed(tmp_path):
 
 
 def test_public_event_requires_matching_whitelist_entry(tmp_path):
-    names, status = write_public_product_fixture(
+    names = write_public_product_fixture(
         tmp_path,
         whitelist_event_ids=("434455",),
         public_event_ids=("434455", "441441"),
@@ -344,7 +346,7 @@ def test_public_event_requires_matching_whitelist_entry(tmp_path):
         encoding="utf-8",
     )
 
-    _, failures = validate_public_product_facts(tmp_path, names, status)
+    _, failures = validate_public_product_facts(tmp_path, names)
 
     assert [failure.message for failure in failures] == [
         "public event '441441' requires an enabled, verified Tabletop whitelist entry"
@@ -352,13 +354,13 @@ def test_public_event_requires_matching_whitelist_entry(tmp_path):
 
 
 def test_readme_event_ids_follow_public_catalog(tmp_path):
-    names, status = write_public_product_fixture(
+    names = write_public_product_fixture(
         tmp_path,
         whitelist_event_ids=("434455", "441441"),
         public_event_ids=("434455", "441441"),
     )
 
-    _, failures = validate_public_product_facts(tmp_path, names, status)
+    _, failures = validate_public_product_facts(tmp_path, names)
 
     assert [failure.message for failure in failures] == [
         "missing or inconsistent row '| Tabletop Major Events | Modern (events `434455`, `441441`) | `/melee/index.html` |'"
@@ -366,21 +368,21 @@ def test_readme_event_ids_follow_public_catalog(tmp_path):
 
 
 def test_candidate_mode_defers_only_tabletop_readme_synchronization(tmp_path):
-    names, status = write_public_product_fixture(
+    names = write_public_product_fixture(
         tmp_path,
         whitelist_event_ids=("434455", "441441"),
         public_event_ids=("434455", "441441"),
     )
 
     _, failures = validate_public_product_facts(
-        tmp_path, names, status, defer_tabletop_readme=True
+        tmp_path, names, defer_tabletop_readme=True
     )
 
     assert failures == []
 
 
 def test_candidate_mode_keeps_whitelist_and_mtgo_readme_checks(tmp_path):
-    names, status = write_public_product_fixture(
+    names = write_public_product_fixture(
         tmp_path,
         whitelist_event_ids=("434455",),
         public_event_ids=("434455", "441441"),
@@ -391,7 +393,7 @@ def test_candidate_mode_keeps_whitelist_and_mtgo_readme_checks(tmp_path):
     )
 
     _, failures = validate_public_product_facts(
-        tmp_path, names, status, defer_tabletop_readme=True
+        tmp_path, names, defer_tabletop_readme=True
     )
 
     assert {failure.message for failure in failures} == {
