@@ -267,6 +267,27 @@ archetypes:
         min_count: 3
       - card: Temple Garden
         min_count: 1
+- id: sultai-excruciator
+  name: Sultai Excruciator
+  priority: 70010
+  rules:
+  - id: sultai-excruciator-primary
+    priority: 70010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Doomsday Excruciator
+        min_count: 1
+      - card: Superior Spider-Man
+        min_count: 3
+      - card: Deceit
+        min_count: 3
+      - card: Wistfulness
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
 - id: dimir-excruciator
   name: Dimir Excruciator
   priority: 70000

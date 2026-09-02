@@ -1,0 +1,1662 @@
+schema_version: 1.0.0
+format: standard
+source: mtgo
+week:
+  id: 2026-W35
+  start: '2026-08-24'
+  end: '2026-08-30'
+bindings:
+  workbook_sha256: 2704fea39c92a29a04c67fe8dc7ba8f4f5951e7edb26811207f86f6b4165479f
+  source_event_ids:
+  - '12852766'
+  - '12852775'
+  - '12853170'
+  - '12853183'
+  - '12853190'
+  - '12853208'
+  classifier_digest: 4bd98c063a5b621a40a1d81aff7d696e07052859fc2c459f6054076005ebb9f0
+  selection_policy_digest: 3541185e634bcab559bb3118ee3f29ece113552473d1f314bcde2a1e2f697a42
+  machine_fact_digest: 50cce32a8678eaae4aeb8cef989e85b3f319658953e6bfaf9339c9595ce55608
+  link_catalog_digest: 518755fb5aba62d6859067a768cc58fb2a04b7706a0d2c7dc2ccc368d016a197
+  bilingual_catalog_digest: bc6fd5463a82b0825155f686d9bfd4d9aa2ca99ad754fbf89cd55a805949da2e
+candidate_evidence:
+- token: deck:8f7c4d0eeef49d894520
+  source_order: 1
+  reasons: &id001
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 0
+- token: deck:0c06019f86999a574c2a
+  source_order: 2
+  reasons: &id002
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 1
+- token: deck:2e7fadb9eeb308e0ee63
+  source_order: 3
+  reasons:
+  - type: share_increase
+    current_high_score_count: 35
+    current_high_score_denominator: 114
+    current_share: 0.307
+    reference_high_score_count: 90
+    reference_high_score_denominator: 527
+    reference_share: 0.1708
+    delta_pp: 13.62
+- token: deck:c121c96f31fa68891e4c
+  source_order: 4
+  reasons:
+  - type: share_increase
+    current_high_score_count: 15
+    current_high_score_denominator: 114
+    current_share: 0.1316
+    reference_high_score_count: 39
+    reference_high_score_denominator: 527
+    reference_share: 0.074
+    delta_pp: 5.76
+- token: deck:ffdc0b8f7addde986b68
+  source_order: 5
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: 4-color-tablet
+    reference_sample_size: 62
+    score: 35
+    difference:
+      fewer:
+      - name: Blood Crypt
+        deck_qty: 0
+        typical_qty: 2.3
+      - name: Riverpyre Verge
+        deck_qty: 0
+        typical_qty: 1.8
+      - name: Bleachbone Verge
+        deck_qty: 0
+        typical_qty: 1.7
+      - name: Deadly Cover-Up
+        deck_qty: 0
+        typical_qty: 1.2
+      - name: Starting Town
+        deck_qty: 0
+        typical_qty: 1.1
+      - name: Nowhere to Run
+        deck_qty: 0
+        typical_qty: 1.1
+      - name: Undercity Sewers
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Shoot the Sheriff
+        deck_qty: 0
+        typical_qty: 0.9
+      more:
+      - name: Steam Vents
+        deck_qty: 4
+        typical_qty: 2.3
+      - name: Gloomlake Verge
+        deck_qty: 2
+        typical_qty: 0.8
+      - name: No More Lies
+        deck_qty: 2
+        typical_qty: 0.8
+      - name: Day of Judgment
+        deck_qty: 2
+        typical_qty: 0.9
+      - name: Hallowed Fountain
+        deck_qty: 2
+        typical_qty: 0.9
+      - name: Together as One
+        deck_qty: 2
+        typical_qty: 1.0
+      - name: Inevitable Defeat
+        deck_qty: 4
+        typical_qty: 3.2
+      - name: Meticulous Archive
+        deck_qty: 1
+        typical_qty: 0.4
+- token: deck:6a7bd2cb191b0251bbe6
+  source_order: 6
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: selesnya-landfall
+    reference_sample_size: 13
+    score: 29
+    difference:
+      fewer:
+      - name: Plains
+        deck_qty: 0
+        typical_qty: 2.0
+      - name: Badgermole Cub
+        deck_qty: 0
+        typical_qty: 1.8
+      - name: Keen-Eyed Curator
+        deck_qty: 0
+        typical_qty: 1.4
+      - name: Snakeskin Veil
+        deck_qty: 0
+        typical_qty: 1.1
+      - name: Hushwood Verge
+        deck_qty: 1
+        typical_qty: 1.8
+      - name: Bristly Bill, Spine Sower
+        deck_qty: 0
+        typical_qty: 0.8
+      - name: Practiced Offense
+        deck_qty: 0
+        typical_qty: 0.8
+      - name: Demolition Field
+        deck_qty: 0
+        typical_qty: 0.5
+      more:
+      - name: Forest
+        deck_qty: 11
+        typical_qty: 8.5
+      - name: Esper Origins
+        deck_qty: 3
+        typical_qty: 0.5
+      - name: Shared Roots
+        deck_qty: 2
+        typical_qty: 0.4
+      - name: Mossborn Hydra
+        deck_qty: 3
+        typical_qty: 1.5
+      - name: Temple Garden
+        deck_qty: 4
+        typical_qty: 2.6
+      - name: Icetill Explorer
+        deck_qty: 4
+        typical_qty: 3.0
+      - name: Dyadrine, Synthesis Amalgam
+        deck_qty: 2
+        typical_qty: 1.3
+      - name: Mightform Harmonizer
+        deck_qty: 4
+        typical_qty: 3.4
+- token: deck:8deacbfdb5cd51b44019
+  source_order: 7
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: mono-green-landfall
+    reference_sample_size: 138
+    score: 20
+    difference:
+      fewer:
+      - name: Sapling Nursery
+        deck_qty: 0
+        typical_qty: 2.5
+      - name: Esper Origins
+        deck_qty: 1
+        typical_qty: 3.3
+      - name: Badgermole Cub
+        deck_qty: 0
+        typical_qty: 1.7
+      - name: Surrak, Elusive Hunter
+        deck_qty: 0
+        typical_qty: 0.9
+      - name: Escape Tunnel
+        deck_qty: 3
+        typical_qty: 3.9
+      - name: Meltstrider's Resolve
+        deck_qty: 1
+        typical_qty: 1.8
+      - name: Lumbering Worldwagon
+        deck_qty: 0
+        typical_qty: 0.5
+      - name: Royal Treatment
+        deck_qty: 0
+        typical_qty: 0.5
+      more:
+      - name: Mossborn Hydra
+        deck_qty: 4
+        typical_qty: 0.7
+      - name: Bushwhack
+        deck_qty: 3
+        typical_qty: 0.0
+      - name: Shared Roots
+        deck_qty: 3
+        typical_qty: 0.8
+      - name: Bristly Bill, Spine Sower
+        deck_qty: 1
+        typical_qty: 0.2
+      - name: Snakeskin Veil
+        deck_qty: 1
+        typical_qty: 0.2
+      - name: Mightform Harmonizer
+        deck_qty: 4
+        typical_qty: 3.4
+      - name: Forest
+        deck_qty: 14
+        typical_qty: 13.7
+      - name: Demolition Field
+        deck_qty: 1
+        typical_qty: 0.8
+- token: deck:3a942d34c46e347f080e
+  source_order: 8
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: orzhov-lifegain
+    reference_sample_size: 48
+    score: 20
+    difference:
+      fewer:
+      - name: Deep-Cavern Bat
+        deck_qty: 0
+        typical_qty: 2.4
+      - name: Multiversal Passage
+        deck_qty: 0
+        typical_qty: 1.6
+      - name: Bleachbone Verge
+        deck_qty: 1
+        typical_qty: 1.9
+      - name: Lunar Convocation
+        deck_qty: 3
+        typical_qty: 3.8
+      - name: Zora, Spider Fancier
+        deck_qty: 0
+        typical_qty: 0.4
+      - name: Clarion Conqueror
+        deck_qty: 0
+        typical_qty: 0.4
+      - name: Erode
+        deck_qty: 2
+        typical_qty: 2.4
+      - name: Plains
+        deck_qty: 3
+        typical_qty: 3.4
+      more:
+      - name: Leonardo, Cutting Edge
+        deck_qty: 3
+        typical_qty: 0.4
+      - name: Essence Channeler
+        deck_qty: 2
+        typical_qty: 0.4
+      - name: Starting Town
+        deck_qty: 4
+        typical_qty: 2.8
+      - name: Curious Farm Animals
+        deck_qty: 1
+        typical_qty: 0.0
+      - name: Dalkovan Encampment
+        deck_qty: 1
+        typical_qty: 0.2
+      - name: Voice of Victory
+        deck_qty: 3
+        typical_qty: 2.3
+      - name: Aunt May
+        deck_qty: 1
+        typical_qty: 0.5
+      - name: Strategic Betrayal
+        deck_qty: 1
+        typical_qty: 0.6
+- token: deck:e12a618c9b3db9190181
+  source_order: 9
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: boros-dragons
+    reference_sample_size: 8
+    score: 25
+    difference:
+      fewer:
+      - name: Voice of Victory
+        deck_qty: 0
+        typical_qty: 2.9
+      - name: Clarion Conqueror
+        deck_qty: 0
+        typical_qty: 2.4
+      - name: Maelstrom of the Spirit Dragon
+        deck_qty: 2
+        typical_qty: 3.5
+      - name: Lorehold, the Historian
+        deck_qty: 0
+        typical_qty: 1.1
+      - name: Cavern of Souls
+        deck_qty: 2
+        typical_qty: 2.8
+      - name: Erode
+        deck_qty: 0
+        typical_qty: 0.5
+      - name: Get Lost
+        deck_qty: 0
+        typical_qty: 0.5
+      - name: Hired Claw
+        deck_qty: 0
+        typical_qty: 0.4
+      more:
+      - name: Lightning Helix
+        deck_qty: 4
+        typical_qty: 0.9
+      - name: Magda, the Hoardmaster
+        deck_qty: 3
+        typical_qty: 1.0
+      - name: Monica Rambeau
+        deck_qty: 2
+        typical_qty: 0.8
+      - name: Smaug the Magnificent
+        deck_qty: 4
+        typical_qty: 2.9
+      - name: Fountainport
+        deck_qty: 1
+        typical_qty: 0.0
+      - name: Multiversal Passage
+        deck_qty: 4
+        typical_qty: 3.2
+      - name: Burst Lightning
+        deck_qty: 4
+        typical_qty: 3.4
+      - name: Sunbillow Verge
+        deck_qty: 4
+        typical_qty: 3.4
+- token: deck:6857032a6b453789ac89
+  source_order: 10
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: dimir-midrange
+    reference_sample_size: 64
+    score: 20
+    difference:
+      fewer:
+      - name: Dream Beavers
+        deck_qty: 0
+        typical_qty: 3.5
+      - name: Tishana's Tidebinder
+        deck_qty: 0
+        typical_qty: 1.5
+      - name: Spell Pierce
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: The Wondrous Wasp
+        deck_qty: 1
+        typical_qty: 1.9
+      - name: Spell Snare
+        deck_qty: 0
+        typical_qty: 0.9
+      - name: Swamp
+        deck_qty: 3
+        typical_qty: 3.8
+      - name: Nowhere to Run
+        deck_qty: 0
+        typical_qty: 0.5
+      - name: Cecil, Dark Knight
+        deck_qty: 0
+        typical_qty: 0.3
+      more:
+      - name: Infestation Sage
+        deck_qty: 4
+        typical_qty: 0.0
+      - name: The Sackville-Bagginses
+        deck_qty: 4
+        typical_qty: 0.0
+      - name: Wan Shi Tong, Librarian
+        deck_qty: 2
+        typical_qty: 0.7
+      - name: Island
+        deck_qty: 5
+        typical_qty: 4.1
+      - name: Enduring Curiosity
+        deck_qty: 4
+        typical_qty: 3.5
+      - name: Requiting Hex
+        deck_qty: 4
+        typical_qty: 3.7
+      - name: Floodpits Drowner
+        deck_qty: 4
+        typical_qty: 3.9
+      - name: Bitter Triumph
+        deck_qty: 2
+        typical_qty: 1.9
+all_top8:
+- token: deck:2e7fadb9eeb308e0ee63
+  event_id: '12852766'
+  deck_id: 2e7fadb9eeb308e0ee63
+  deck_fingerprint_sha256: d30b21866bb636dd4196940d6f970db474f5e9d84b32f86200a7e6be7161a146
+  date: '2026-08-24'
+  starttime: '2026-08-24 20:00:00.0'
+  final_rank: 1
+  player_count: 55
+  player: MatheusPonciano
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:d0d2852723a09f48a56e
+  event_id: '12852766'
+  deck_id: d0d2852723a09f48a56e
+  deck_fingerprint_sha256: 593e524554d93d017e52c0d9bacd18df07b75fa549ec6b87138e03607612bc7a
+  date: '2026-08-24'
+  starttime: '2026-08-24 20:00:00.0'
+  final_rank: 2
+  player_count: 55
+  player: MdvWin
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:d0461535a5082ce390ee
+  event_id: '12852766'
+  deck_id: d0461535a5082ce390ee
+  deck_fingerprint_sha256: 70853e310c085e6cbcb23e66ba791d6280441383fdd05ee5ce36d785cf900b51
+  date: '2026-08-24'
+  starttime: '2026-08-24 20:00:00.0'
+  final_rank: 3
+  player_count: 55
+  player: Capitano_CL
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:ec57ff967da37ccf91b7
+  event_id: '12852766'
+  deck_id: ec57ff967da37ccf91b7
+  deck_fingerprint_sha256: 7eb6eac51d3e4957dba7dd6e93c502f65051abe32d290618f73b7d17626fa0b5
+  date: '2026-08-24'
+  starttime: '2026-08-24 20:00:00.0'
+  final_rank: 4
+  player_count: 55
+  player: jtl005
+  parent_id: azorius-control
+  subtype_id: null
+  display_name: Azorius Control
+  main_deck:
+  - name: Bender's Waterskin
+    qty: 4
+  - name: Consult the Star Charts
+    qty: 4
+  - name: Day of Judgment
+    qty: 3
+  - name: Emeritus of Ideation
+    qty: 4
+  - name: Erode
+    qty: 4
+  - name: Floodfarm Verge
+    qty: 4
+  - name: Fountainport
+    qty: 2
+  - name: Get Lost
+    qty: 1
+  - name: Hallowed Fountain
+    qty: 4
+  - name: Island
+    qty: 5
+  - name: Meticulous Archive
+    qty: 2
+  - name: No More Lies
+    qty: 4
+  - name: Petrified Hamlet
+    qty: 2
+  - name: Plains
+    qty: 4
+  - name: Restless Anchorage
+    qty: 2
+  - name: Seam Rip
+    qty: 4
+  - name: Spell Pierce
+    qty: 1
+  - name: Three Steps Ahead
+    qty: 4
+  - name: Ugin, Eye of the Storms
+    qty: 2
+  side_deck:
+  - name: Beza, the Bounding Spring
+    qty: 2
+  - name: Day of Judgment
+    qty: 1
+  - name: Disdainful Stroke
+    qty: 1
+  - name: Flashfreeze
+    qty: 1
+  - name: Plunder the Trollshaws
+    qty: 4
+  - name: Pyrrhic Strike
+    qty: 1
+  - name: Requisition Raid
+    qty: 1
+  - name: Rest in Peace
+    qty: 1
+  - name: Sage of the Skies
+    qty: 2
+  - name: Spell Snare
+    qty: 1
+- token: deck:5fc2f8e674a2f0f24ff4
+  event_id: '12852766'
+  deck_id: 5fc2f8e674a2f0f24ff4
+  deck_fingerprint_sha256: d265185c72babbea3cb0622716e538f355186212c07ab03c599f18f9a0422dd8
+  date: '2026-08-24'
+  starttime: '2026-08-24 20:00:00.0'
+  final_rank: 5
+  player_count: 55
+  player: Laplasjan
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:c70782712ec1ebe027db
+  event_id: '12852766'
+  deck_id: c70782712ec1ebe027db
+  deck_fingerprint_sha256: 9fb7fa1593a5e18ec579fe1f18a0ca569a8b68378c2d95af9f82d378e21c6625
+  date: '2026-08-24'
+  starttime: '2026-08-24 20:00:00.0'
+  final_rank: 6
+  player_count: 55
+  player: taldoitalo
+  parent_id: jeskai-artifacts
+  subtype_id: null
+  display_name: Jeskai Artifacts
+  main_deck: []
+  side_deck: []
+- token: deck:ee1db97c0c64cdb0f6de
+  event_id: '12852766'
+  deck_id: ee1db97c0c64cdb0f6de
+  deck_fingerprint_sha256: 8e89ed083428c1ba9bbe0865322197f3dbb5747a3112e975e28c04372ec7ac54
+  date: '2026-08-24'
+  starttime: '2026-08-24 20:00:00.0'
+  final_rank: 7
+  player_count: 55
+  player: mommydom_manifesto
+  parent_id: boros-dragons
+  subtype_id: null
+  display_name: Boros Dragons
+  main_deck: []
+  side_deck: []
+- token: deck:e12a618c9b3db9190181
+  event_id: '12852766'
+  deck_id: e12a618c9b3db9190181
+  deck_fingerprint_sha256: 4105de5e2682f578963c0e6a4d1dbafc4661d3308a773eba869736e4437245c4
+  date: '2026-08-24'
+  starttime: '2026-08-24 20:00:00.0'
+  final_rank: 8
+  player_count: 55
+  player: WadeB
+  parent_id: boros-dragons
+  subtype_id: null
+  display_name: Boros Dragons
+  main_deck: []
+  side_deck: []
+- token: deck:8fdac0a6194558e83efc
+  event_id: '12852775'
+  deck_id: 8fdac0a6194558e83efc
+  deck_fingerprint_sha256: 10e72b40b8959c2fc960c7bb99731651950d59e97a1f218aac39f93a16f9ce7f
+  date: '2026-08-25'
+  starttime: '2026-08-25 17:30:00.0'
+  final_rank: 1
+  player_count: 72
+  player: MacIsaac
+  parent_id: leyline-aggro
+  subtype_id: izzet
+  display_name: Leyline Aggro
+  main_deck:
+  - name: Ancestral Anger
+    qty: 4
+  - name: Bulk Up
+    qty: 1
+  - name: Callous Sell-Sword
+    qty: 3
+  - name: Drake Hatcher
+    qty: 2
+  - name: Elusive Otter
+    qty: 4
+  - name: Leyline of Resonance
+    qty: 4
+  - name: Might of the Meek
+    qty: 2
+  - name: Mountain
+    qty: 1
+  - name: Multiversal Passage
+    qty: 2
+  - name: Octopus Form
+    qty: 2
+  - name: Pym Particles
+    qty: 3
+  - name: Riverpyre Verge
+    qty: 3
+  - name: Secret Identity
+    qty: 1
+  - name: Shore Up
+    qty: 1
+  - name: Slickshot Show-Off
+    qty: 4
+  - name: Spirebluff Canal
+    qty: 4
+  - name: Stadium Headliner
+    qty: 4
+  - name: Starting Town
+    qty: 4
+  - name: Steam Vents
+    qty: 4
+  - name: Turn Inside Out
+    qty: 3
+  - name: Wild Ride
+    qty: 4
+  side_deck:
+  - name: Dreadmaw's Ire
+    qty: 2
+  - name: Full Bore
+    qty: 2
+  - name: Island
+    qty: 1
+  - name: Octopus Form
+    qty: 2
+  - name: Poison Dart Frog
+    qty: 1
+  - name: Pyroclasm
+    qty: 1
+  - name: Secret Identity
+    qty: 1
+  - name: Shore Up
+    qty: 1
+  - name: Soul-Guide Lantern
+    qty: 1
+  - name: Spell Pierce
+    qty: 2
+- token: deck:ffdc0b8f7addde986b68
+  event_id: '12852775'
+  deck_id: ffdc0b8f7addde986b68
+  deck_fingerprint_sha256: 767fd8c711fedfbf24ada3ae1cbdfe9ff2fb8660dff6e2cd1823d0a6610de35a
+  date: '2026-08-25'
+  starttime: '2026-08-25 17:30:00.0'
+  final_rank: 2
+  player_count: 72
+  player: B-Carp
+  parent_id: 4-color-tablet
+  subtype_id: null
+  display_name: 4-Color Tablet
+  main_deck: []
+  side_deck: []
+- token: deck:1e91c43c52bc4a2b33c7
+  event_id: '12852775'
+  deck_id: 1e91c43c52bc4a2b33c7
+  deck_fingerprint_sha256: b21b21be89bafcfabce54e28e3ef1b6cc5c38c7e5ead0f4dd6fceeb23d4f2f6e
+  date: '2026-08-25'
+  starttime: '2026-08-25 17:30:00.0'
+  final_rank: 3
+  player_count: 72
+  player: TrueHero
+  parent_id: azorius-momo
+  subtype_id: null
+  display_name: Azorius Momo
+  main_deck: []
+  side_deck: []
+- token: deck:6a7bd2cb191b0251bbe6
+  event_id: '12852775'
+  deck_id: 6a7bd2cb191b0251bbe6
+  deck_fingerprint_sha256: d4041a4031c106ad47e890fc518080c81a7995c833d3f65182381bb21ab0af0a
+  date: '2026-08-25'
+  starttime: '2026-08-25 17:30:00.0'
+  final_rank: 4
+  player_count: 72
+  player: LucasG1ggs
+  parent_id: selesnya-landfall
+  subtype_id: null
+  display_name: Selesnya Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:8deacbfdb5cd51b44019
+  event_id: '12852775'
+  deck_id: 8deacbfdb5cd51b44019
+  deck_fingerprint_sha256: ba03ca10470f0b3dcbb3e97d1a042fc641ebc309dd653844b3566d47427f8d22
+  date: '2026-08-25'
+  starttime: '2026-08-25 17:30:00.0'
+  final_rank: 5
+  player_count: 72
+  player: Thalai
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:3a942d34c46e347f080e
+  event_id: '12852775'
+  deck_id: 3a942d34c46e347f080e
+  deck_fingerprint_sha256: 319522a4ef3fd4389d14c18518659933c643931beba9cd749d26e6403ac13582
+  date: '2026-08-25'
+  starttime: '2026-08-25 17:30:00.0'
+  final_rank: 6
+  player_count: 72
+  player: Gxs3v3n
+  parent_id: orzhov-lifegain
+  subtype_id: null
+  display_name: Orzhov Lifegain
+  main_deck: []
+  side_deck: []
+- token: deck:f393848d0721e86c1493
+  event_id: '12852775'
+  deck_id: f393848d0721e86c1493
+  deck_fingerprint_sha256: 4976fe451d59fcb30a3fb37e9b56d0944bfd57d57479d37d9196f3d6fdd42da9
+  date: '2026-08-25'
+  starttime: '2026-08-25 17:30:00.0'
+  final_rank: 7
+  player_count: 72
+  player: Bertram
+  parent_id: mono-black-aggro
+  subtype_id: null
+  display_name: Mono-Black Aggro
+  main_deck: []
+  side_deck: []
+- token: deck:baa405205228f6031626
+  event_id: '12852775'
+  deck_id: baa405205228f6031626
+  deck_fingerprint_sha256: d30b21866bb636dd4196940d6f970db474f5e9d84b32f86200a7e6be7161a146
+  date: '2026-08-25'
+  starttime: '2026-08-25 17:30:00.0'
+  final_rank: 8
+  player_count: 72
+  player: _Chamytinho_
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:8f7c4d0eeef49d894520
+  event_id: '12853170'
+  deck_id: 8f7c4d0eeef49d894520
+  deck_fingerprint_sha256: dd8a529d331d6589b7f50202b0e69451a5633881a7dc86a15fe69a6e405409f6
+  date: '2026-08-27'
+  starttime: '2026-08-27 10:00:00.0'
+  final_rank: 1
+  player_count: 32
+  player: Aldreen
+  parent_id: affinity
+  subtype_id: null
+  display_name: Affinity
+  main_deck:
+  - name: Castle Doom
+    qty: 2
+  - name: Dusk Rose Reliquary
+    qty: 4
+  - name: Fomori Vault
+    qty: 2
+  - name: Giant's Boulder
+    qty: 4
+  - name: Improvised Arsenal
+    qty: 1
+  - name: Island
+    qty: 1
+  - name: Krang, Master Mind
+    qty: 2
+  - name: Merata, Neuron Hacker
+    qty: 3
+  - name: Mountain
+    qty: 1
+  - name: Multiversal Passage
+    qty: 1
+  - name: Pinnacle Emissary
+    qty: 4
+  - name: Quantum Riddler
+    qty: 3
+  - name: Ravenous Robots
+    qty: 4
+  - name: Riverpyre Verge
+    qty: 1
+  - name: Rust Harvester
+    qty: 2
+  - name: Skateboard
+    qty: 1
+  - name: Soul-Guide Lantern
+    qty: 1
+  - name: Spirebluff Canal
+    qty: 3
+  - name: Springleaf Drum
+    qty: 4
+  - name: Starting Town
+    qty: 4
+  - name: Steam Vents
+    qty: 4
+  - name: Tezzeret, Cruel Captain
+    qty: 2
+  - name: The Enigma Jewel
+    qty: 2
+  - name: The Ooze
+    qty: 1
+  - name: Uthros, Titanic Godcore
+    qty: 3
+  side_deck:
+  - name: Disdainful Stroke
+    qty: 2
+  - name: Flashfreeze
+    qty: 2
+  - name: Grim Bauble
+    qty: 2
+  - name: Quantum Riddler
+    qty: 1
+  - name: Soul-Guide Lantern
+    qty: 3
+  - name: The Ooze
+    qty: 2
+  - name: Torch the Tower
+    qty: 3
+- token: deck:acd64480393ee151594a
+  event_id: '12853170'
+  deck_id: acd64480393ee151594a
+  deck_fingerprint_sha256: 0c23936187c6e3d8fa8442e4f801c7e19604366b9aca6b7e7c98bc5540748b15
+  date: '2026-08-27'
+  starttime: '2026-08-27 10:00:00.0'
+  final_rank: 2
+  player_count: 32
+  player: AKvsJJ
+  parent_id: selesnya-landfall
+  subtype_id: null
+  display_name: Selesnya Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:c87c41f10542bffb78bf
+  event_id: '12853170'
+  deck_id: c87c41f10542bffb78bf
+  deck_fingerprint_sha256: 9f3b69c2197cf0e408cc927b20e74eee4c4d56c57225c8772cd75f653b4431f9
+  date: '2026-08-27'
+  starttime: '2026-08-27 10:00:00.0'
+  final_rank: 3
+  player_count: 32
+  player: Kritik
+  parent_id: jeskai-tablet
+  subtype_id: null
+  display_name: Jeskai Tablet
+  main_deck: []
+  side_deck: []
+- token: deck:6c5dac7f92e67f57ff33
+  event_id: '12853170'
+  deck_id: 6c5dac7f92e67f57ff33
+  deck_fingerprint_sha256: 254a826f4537f73c7bc75962bda57ee6e9c1caca93b3df0ffbaf1462e4e067ee
+  date: '2026-08-27'
+  starttime: '2026-08-27 10:00:00.0'
+  final_rank: 4
+  player_count: 32
+  player: liuyuchen
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:32b34178c62817b824b5
+  event_id: '12853170'
+  deck_id: 32b34178c62817b824b5
+  deck_fingerprint_sha256: 892bb4235ca373a7a7b5399378ec471338da05f344551c2b91951be88bea303f
+  date: '2026-08-27'
+  starttime: '2026-08-27 10:00:00.0'
+  final_rank: 5
+  player_count: 32
+  player: bubblywubblytubbler
+  parent_id: dimir-midrange
+  subtype_id: null
+  display_name: Dimir Midrange
+  main_deck: []
+  side_deck: []
+- token: deck:7aa04ac5bde2745dec6d
+  event_id: '12853170'
+  deck_id: 7aa04ac5bde2745dec6d
+  deck_fingerprint_sha256: 5a7387261d17c666064fb2f57989798876eff0c36947203538513e5aa79a236c
+  date: '2026-08-27'
+  starttime: '2026-08-27 10:00:00.0'
+  final_rank: 6
+  player_count: 32
+  player: HolaChico
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:6c8d42998ed001bd4589
+  event_id: '12853170'
+  deck_id: 6c8d42998ed001bd4589
+  deck_fingerprint_sha256: 0961a71d01f1ea10bcdba1588736e84b02963df1647629c03b0d62745be97a5d
+  date: '2026-08-27'
+  starttime: '2026-08-27 10:00:00.0'
+  final_rank: 7
+  player_count: 32
+  player: scipios
+  parent_id: dwarves
+  subtype_id: boros
+  display_name: Dwarves
+  main_deck: []
+  side_deck: []
+- token: deck:6857032a6b453789ac89
+  event_id: '12853170'
+  deck_id: 6857032a6b453789ac89
+  deck_fingerprint_sha256: a61e3cdd654fc2a5ac82c1180700dce00e5ac22ff7b61ed11d91c43136e053ce
+  date: '2026-08-27'
+  starttime: '2026-08-27 10:00:00.0'
+  final_rank: 8
+  player_count: 32
+  player: unagieel
+  parent_id: dimir-midrange
+  subtype_id: null
+  display_name: Dimir Midrange
+  main_deck: []
+  side_deck: []
+- token: deck:b65e7c596ec9a1c79648
+  event_id: '12853183'
+  deck_id: b65e7c596ec9a1c79648
+  deck_fingerprint_sha256: d9b8b4aac7b86b556387c3de6caacc9083a7280726606518ff8ee40849256f79
+  date: '2026-08-28'
+  starttime: '2026-08-28 18:00:00.0'
+  final_rank: 1
+  player_count: 57
+  player: aljce
+  parent_id: jeskai-artifacts
+  subtype_id: null
+  display_name: Jeskai Artifacts
+  main_deck:
+  - name: Braided Net
+    qty: 2
+  - name: Candy Trail
+    qty: 3
+  - name: Castle Doom
+    qty: 4
+  - name: Cryogen Relic
+    qty: 4
+  - name: Dusk Rose Reliquary
+    qty: 2
+  - name: Floodfarm Verge
+    qty: 4
+  - name: Hallowed Fountain
+    qty: 4
+  - name: Island
+    qty: 1
+  - name: Meticulous Archive
+    qty: 4
+  - name: Perilous Snare
+    qty: 4
+  - name: Petrified Hamlet
+    qty: 2
+  - name: Pinnacle Starcage
+    qty: 2
+  - name: Plains
+    qty: 3
+  - name: Repurposing Bay
+    qty: 3
+  - name: Sacred Foundry
+    qty: 1
+  - name: Simulacrum Synthesizer
+    qty: 4
+  - name: Spring-Loaded Sawblades
+    qty: 1
+  - name: Starting Town
+    qty: 1
+  - name: The Fire Crystal
+    qty: 1
+  - name: The Mind Stone
+    qty: 4
+  - name: Torpor Orb
+    qty: 1
+  - name: Unidentified Hovership
+    qty: 1
+  - name: United Battlefront
+    qty: 4
+  side_deck:
+  - name: Authority of the Consuls
+    qty: 2
+  - name: Day of Judgment
+    qty: 3
+  - name: Disdainful Stroke
+    qty: 2
+  - name: Erode
+    qty: 2
+  - name: Pinnacle Starcage
+    qty: 1
+  - name: Rest in Peace
+    qty: 1
+  - name: Spring-Loaded Sawblades
+    qty: 2
+  - name: Torpor Orb
+    qty: 2
+- token: deck:c121c96f31fa68891e4c
+  event_id: '12853183'
+  deck_id: c121c96f31fa68891e4c
+  deck_fingerprint_sha256: c7bd3fd0b94afb33c534cd3f8db4f052f0e5e47be8a4b6b9f709133a143651af
+  date: '2026-08-28'
+  starttime: '2026-08-28 18:00:00.0'
+  final_rank: 2
+  player_count: 57
+  player: Kako_Ferrer
+  parent_id: dimir-midrange
+  subtype_id: null
+  display_name: Dimir Midrange
+  main_deck: []
+  side_deck: []
+- token: deck:2b6bc60c16d2d33482ef
+  event_id: '12853183'
+  deck_id: 2b6bc60c16d2d33482ef
+  deck_fingerprint_sha256: 8135a386920d6c460772c3ecd14599da439afd5db3cfe2690ed2b252d7d82c0d
+  date: '2026-08-28'
+  starttime: '2026-08-28 18:00:00.0'
+  final_rank: 3
+  player_count: 57
+  player: HyPPeR
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:609d5dd1b5cf4f3273eb
+  event_id: '12853183'
+  deck_id: 609d5dd1b5cf4f3273eb
+  deck_fingerprint_sha256: 5a07c2bd8f3caff8a1fa1846866ba9252da02ea5e9fc2f69bd9bb2dcbab04b60
+  date: '2026-08-28'
+  starttime: '2026-08-28 18:00:00.0'
+  final_rank: 4
+  player_count: 57
+  player: Bertram
+  parent_id: mono-black-aggro
+  subtype_id: null
+  display_name: Mono-Black Aggro
+  main_deck: []
+  side_deck: []
+- token: deck:ccd8c0e396b0f9bf2338
+  event_id: '12853183'
+  deck_id: ccd8c0e396b0f9bf2338
+  deck_fingerprint_sha256: 5ceaa3792f1a6fe8ce090b3fd8f33067dc59f2847d473b2553e979032c530fd3
+  date: '2026-08-28'
+  starttime: '2026-08-28 18:00:00.0'
+  final_rank: 5
+  player_count: 57
+  player: L1X0
+  parent_id: dwarves
+  subtype_id: boros
+  display_name: Dwarves
+  main_deck:
+  - name: Basilisk Collar
+    qty: 2
+  - name: Bofur, Reliable Guardian
+    qty: 2
+  - name: Cavern of Souls
+    qty: 2
+  - name: Doc Ock's Tentacles
+    qty: 2
+  - name: Dragonfire Blade
+    qty: 4
+  - name: Dwarven Mauler
+    qty: 4
+  - name: Dáin's Company
+    qty: 4
+  - name: Inspiring Vantage
+    qty: 4
+  - name: Kíli the Resourceful
+    qty: 4
+  - name: Lavaspur Boots
+    qty: 4
+  - name: Leyline Axe
+    qty: 4
+  - name: Plains
+    qty: 4
+  - name: Raubahn, Bull of Ala Mhigo
+    qty: 4
+  - name: Sacred Foundry
+    qty: 4
+  - name: Sunbillow Verge
+    qty: 4
+  - name: The Lonely Mountain
+    qty: 4
+  - name: Thorin, Mountain-king
+    qty: 4
+  side_deck:
+  - name: Chainsaw
+    qty: 2
+  - name: Erode
+    qty: 2
+  - name: Fíli the Pathfinder
+    qty: 1
+  - name: Iron Man Armor
+    qty: 1
+  - name: Mjölnir, Hammer of Thor
+    qty: 1
+  - name: Rest in Peace
+    qty: 2
+  - name: Shattered Acolyte
+    qty: 2
+  - name: Sunspine Lynx
+    qty: 2
+  - name: The Queen of Dale
+    qty: 2
+- token: deck:0c06019f86999a574c2a
+  event_id: '12853183'
+  deck_id: 0c06019f86999a574c2a
+  deck_fingerprint_sha256: 99a5948133e909819e3ec16c4fa510a7cad9e517c3aff960bda4f1ef8b04e9c5
+  date: '2026-08-28'
+  starttime: '2026-08-28 18:00:00.0'
+  final_rank: 6
+  player_count: 57
+  player: Scappie
+  parent_id: sultai-excruciator
+  subtype_id: null
+  display_name: Sultai Excruciator
+  main_deck:
+  - name: Bitter Triumph
+    qty: 3
+  - name: Breeding Pool
+    qty: 1
+  - name: Cavern of Souls
+    qty: 1
+  - name: Day of Black Sun
+    qty: 2
+  - name: Deadly Cover-Up
+    qty: 1
+  - name: Deceit
+    qty: 4
+  - name: Doomsday Excruciator
+    qty: 2
+  - name: Emeritus of Ideation
+    qty: 2
+  - name: Gloomlake Verge
+    qty: 4
+  - name: M.O.D.O.K.
+    qty: 1
+  - name: Oildeep Gearhulk
+    qty: 1
+  - name: Overgrown Tomb
+    qty: 4
+  - name: Overlord of the Balemurk
+    qty: 1
+  - name: Professor Dellian Fel
+    qty: 2
+  - name: Requiting Hex
+    qty: 2
+  - name: Restless Cottage
+    qty: 1
+  - name: Restless Reef
+    qty: 4
+  - name: Stock Up
+    qty: 3
+  - name: Strategic Betrayal
+    qty: 1
+  - name: Superior Spider-Man
+    qty: 4
+  - name: Swamp
+    qty: 1
+  - name: Tishana's Tidebinder
+    qty: 1
+  - name: Undercity Sewers
+    qty: 1
+  - name: Underground Mortuary
+    qty: 1
+  - name: Wastewood Verge
+    qty: 4
+  - name: Watery Grave
+    qty: 4
+  - name: We Say Thee Nay!
+    qty: 2
+  - name: Winternight Stories
+    qty: 1
+  - name: Wistfulness
+    qty: 2
+  side_deck:
+  - name: Ancient Vendetta
+    qty: 1
+  - name: Deadly Cover-Up
+    qty: 1
+  - name: Disdainful Stroke
+    qty: 1
+  - name: Duress
+    qty: 3
+  - name: Flashfreeze
+    qty: 1
+  - name: Ghost Vacuum
+    qty: 1
+  - name: Negate
+    qty: 1
+  - name: Preacher of the Schism
+    qty: 3
+  - name: Quantum Riddler
+    qty: 1
+  - name: The End
+    qty: 1
+  - name: Wan Shi Tong, Librarian
+    qty: 1
+- token: deck:81cdd241ec4087f8b797
+  event_id: '12853183'
+  deck_id: 81cdd241ec4087f8b797
+  deck_fingerprint_sha256: 09e45d4e65a2d2bc45c317fd9890bb8302f2623833a8947d0685b776acef2cfb
+  date: '2026-08-28'
+  starttime: '2026-08-28 18:00:00.0'
+  final_rank: 7
+  player_count: 57
+  player: r0cknati0n
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:d6c1c5f3d3caca1708ef
+  event_id: '12853183'
+  deck_id: d6c1c5f3d3caca1708ef
+  deck_fingerprint_sha256: 2c23c690211e33f9a110b8eb8d218f58dc5e61881f3284d1d98ba37be3c9eb12
+  date: '2026-08-28'
+  starttime: '2026-08-28 18:00:00.0'
+  final_rank: 8
+  player_count: 57
+  player: Takayama
+  parent_id: jeskai-tablet
+  subtype_id: null
+  display_name: Jeskai Tablet
+  main_deck: []
+  side_deck: []
+- token: deck:ba6d75f935706c85d587
+  event_id: '12853190'
+  deck_id: ba6d75f935706c85d587
+  deck_fingerprint_sha256: 817a84935dc5728ea49424d143ce26bf4c4cf0cde095a4ca87e5284b511aba90
+  date: '2026-08-29'
+  starttime: '2026-08-29 13:00:00.0'
+  final_rank: 1
+  player_count: 51
+  player: Venom01
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:d50e94af500842e6a96d
+  event_id: '12853190'
+  deck_id: d50e94af500842e6a96d
+  deck_fingerprint_sha256: 980601149f1a5734fa6f99948f75547a2d8c7ee01f9b047bd0e5cbac3a720eda
+  date: '2026-08-29'
+  starttime: '2026-08-29 13:00:00.0'
+  final_rank: 2
+  player_count: 51
+  player: fate_kuro
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:8efdbce98aa39b836b62
+  event_id: '12853190'
+  deck_id: 8efdbce98aa39b836b62
+  deck_fingerprint_sha256: f7b04e634bdff3876f717f5cc9cea4eec3f3029c1698861c27740202ec41b850
+  date: '2026-08-29'
+  starttime: '2026-08-29 13:00:00.0'
+  final_rank: 3
+  player_count: 51
+  player: msskinbolic
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:7caad3fd41bbb7f83312
+  event_id: '12853190'
+  deck_id: 7caad3fd41bbb7f83312
+  deck_fingerprint_sha256: 4724e2eda4abbe1aba494cb0b8bce1838bb0fd694c96786568bbe405261e9db2
+  date: '2026-08-29'
+  starttime: '2026-08-29 13:00:00.0'
+  final_rank: 4
+  player_count: 51
+  player: indianpancake
+  parent_id: dimir-midrange
+  subtype_id: null
+  display_name: Dimir Midrange
+  main_deck: []
+  side_deck: []
+- token: deck:34058038bd6f12187151
+  event_id: '12853190'
+  deck_id: 34058038bd6f12187151
+  deck_fingerprint_sha256: 87c6e5b67288b88db66e3d9b03afeff6ec013109c8a37e381d48db58006289a4
+  date: '2026-08-29'
+  starttime: '2026-08-29 13:00:00.0'
+  final_rank: 5
+  player_count: 51
+  player: VitorCarvalho01
+  parent_id: dimir-excruciator
+  subtype_id: null
+  display_name: Dimir Excruciator
+  main_deck: []
+  side_deck: []
+- token: deck:888d04da590e38444adc
+  event_id: '12853190'
+  deck_id: 888d04da590e38444adc
+  deck_fingerprint_sha256: 69f11ab1c02d207dd9a8590599aefddc50067ba0c3729f5d719c025b22ccc729
+  date: '2026-08-29'
+  starttime: '2026-08-29 13:00:00.0'
+  final_rank: 6
+  player_count: 51
+  player: ryuumei
+  parent_id: azorius-control
+  subtype_id: null
+  display_name: Azorius Control
+  main_deck: []
+  side_deck: []
+- token: deck:3ddf9c2cb250b2263ea7
+  event_id: '12853190'
+  deck_id: 3ddf9c2cb250b2263ea7
+  deck_fingerprint_sha256: d9c2205773854d6cc53742288e0d59ba9d4adc5afc3519db0cd3966205a76252
+  date: '2026-08-29'
+  starttime: '2026-08-29 13:00:00.0'
+  final_rank: 7
+  player_count: 51
+  player: SpockVidaLoka
+  parent_id: temur-harmonizer
+  subtype_id: null
+  display_name: Temur Harmonizer
+  main_deck: []
+  side_deck: []
+- token: deck:a060f94ffc88ba6073be
+  event_id: '12853190'
+  deck_id: a060f94ffc88ba6073be
+  deck_fingerprint_sha256: c7bd3fd0b94afb33c534cd3f8db4f052f0e5e47be8a4b6b9f709133a143651af
+  date: '2026-08-29'
+  starttime: '2026-08-29 13:00:00.0'
+  final_rank: 8
+  player_count: 51
+  player: _Falcon_
+  parent_id: dimir-midrange
+  subtype_id: null
+  display_name: Dimir Midrange
+  main_deck: []
+  side_deck: []
+- token: deck:9c0f1669a41d46933d8a
+  event_id: '12853208'
+  deck_id: 9c0f1669a41d46933d8a
+  deck_fingerprint_sha256: 661e81ad4b854b26ba26f2646ff5b29330027cac976240da5bff9ffa138d060e
+  date: '2026-08-30'
+  starttime: '2026-08-30 22:00:00.0'
+  final_rank: 1
+  player_count: 53
+  player: Cachorrowo
+  parent_id: bant-airbending
+  subtype_id: null
+  display_name: Bant Airbending
+  main_deck:
+  - name: Aang, Swift Savior
+    qty: 4
+  - name: Aang, at the Crossroads
+    qty: 2
+  - name: Appa, Steadfast Guardian
+    qty: 4
+  - name: Bramble Familiar
+    qty: 4
+  - name: Breeding Pool
+    qty: 4
+  - name: Cavern of Souls
+    qty: 2
+  - name: Doc Aurlock, Grizzled Genius
+    qty: 4
+  - name: Floodfarm Verge
+    qty: 1
+  - name: Formidable Speaker
+    qty: 2
+  - name: Great Divide Guide
+    qty: 4
+  - name: Hallowed Fountain
+    qty: 4
+  - name: Hushwood Verge
+    qty: 4
+  - name: Llanowar Elves
+    qty: 4
+  - name: Michelangelo's Technique
+    qty: 4
+  - name: Plains
+    qty: 1
+  - name: Reality Fulcrum
+    qty: 4
+  - name: Starting Town
+    qty: 4
+  - name: Temple Garden
+    qty: 4
+  side_deck:
+  - name: Airbender Ascension
+    qty: 2
+  - name: Bovine Intervention
+    qty: 1
+  - name: Get Lost
+    qty: 2
+  - name: Leatherhead, Swamp Stalker
+    qty: 3
+  - name: Seam Rip
+    qty: 4
+  - name: Surrak, Elusive Hunter
+    qty: 3
+- token: deck:fc6fdafcc05e4df01ae5
+  event_id: '12853208'
+  deck_id: fc6fdafcc05e4df01ae5
+  deck_fingerprint_sha256: 817a84935dc5728ea49424d143ce26bf4c4cf0cde095a4ca87e5284b511aba90
+  date: '2026-08-30'
+  starttime: '2026-08-30 22:00:00.0'
+  final_rank: 2
+  player_count: 53
+  player: Venom01
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:378cbe01cb817a102967
+  event_id: '12853208'
+  deck_id: 378cbe01cb817a102967
+  deck_fingerprint_sha256: f620ea564dee5409c386dca787675d1c43ee9f93bbd830fa71f48560afe17033
+  date: '2026-08-30'
+  starttime: '2026-08-30 22:00:00.0'
+  final_rank: 3
+  player_count: 53
+  player: Mansa_Musa
+  parent_id: selesnya-landfall
+  subtype_id: null
+  display_name: Selesnya Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:efcab00b6b3c4d7fc50e
+  event_id: '12853208'
+  deck_id: efcab00b6b3c4d7fc50e
+  deck_fingerprint_sha256: 980601149f1a5734fa6f99948f75547a2d8c7ee01f9b047bd0e5cbac3a720eda
+  date: '2026-08-30'
+  starttime: '2026-08-30 22:00:00.0'
+  final_rank: 4
+  player_count: 53
+  player: jps_17
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:25e06e1b174bde329b8c
+  event_id: '12853208'
+  deck_id: 25e06e1b174bde329b8c
+  deck_fingerprint_sha256: 87c6e5b67288b88db66e3d9b03afeff6ec013109c8a37e381d48db58006289a4
+  date: '2026-08-30'
+  starttime: '2026-08-30 22:00:00.0'
+  final_rank: 5
+  player_count: 53
+  player: VitorCarvalho01
+  parent_id: dimir-excruciator
+  subtype_id: null
+  display_name: Dimir Excruciator
+  main_deck: []
+  side_deck: []
+- token: deck:b0b84364dfc806593bc1
+  event_id: '12853208'
+  deck_id: b0b84364dfc806593bc1
+  deck_fingerprint_sha256: d45ec56582ac4efbaceea617f42a006a927906623bb23f55a8aa8e853d22c60b
+  date: '2026-08-30'
+  starttime: '2026-08-30 22:00:00.0'
+  final_rank: 6
+  player_count: 53
+  player: wolf2222
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:c90a9068930a9051e6a0
+  event_id: '12853208'
+  deck_id: c90a9068930a9051e6a0
+  deck_fingerprint_sha256: 817a84935dc5728ea49424d143ce26bf4c4cf0cde095a4ca87e5284b511aba90
+  date: '2026-08-30'
+  starttime: '2026-08-30 22:00:00.0'
+  final_rank: 7
+  player_count: 53
+  player: J0hnWick
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:31613dbbe6bee50b4ab1
+  event_id: '12853208'
+  deck_id: 31613dbbe6bee50b4ab1
+  deck_fingerprint_sha256: 817a84935dc5728ea49424d143ce26bf4c4cf0cde095a4ca87e5284b511aba90
+  date: '2026-08-30'
+  starttime: '2026-08-30 22:00:00.0'
+  final_rank: 8
+  player_count: 53
+  player: Arianne
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+review:
+  top_copy:
+    reviewed: true
+    items:
+    - order: 1
+      text:
+        zh: 本周标准地落依旧独占鳌头，两项占比都来到了30%以上，巨幅领先第二名的蓝黑中速。不过之后的第二梯队涌现了很多新面孔，除了地落的数据有些失控之外，整体环境还算开放。除了上周介绍过的新版小黑之外，HOB矮人+武具思路的矮人套牌本周两项占比也都可以超过5%：deck:ccd8c0e396b0f9bf2338
+        en: 'Standard Landfall remained firmly on top this week, with both metagame-share measures above 30% and a huge lead over second-place Dimir Midrange. The second tier, however, featured plenty of new faces. Aside from Landfall’s rather overwhelming numbers, the field remained fairly open. In addition to the updated Mono-Black build covered last week, the HOB Dwarves equipment build also cleared 5% in both measures this week: deck:ccd8c0e396b0f9bf2338'
+    - order: 2
+      text:
+        zh: 禁牌前就曾经出现过，但曾经一度被打没的思路，最近也开始重新涌现：EOE、TMT神器为核心的共鸣deck:8f7c4d0eeef49d894520；经典融合仪洁斯凯神器deck:b65e7c596ec9a1c79648；经典班特截气deck:9c0f1669a41d46933d8a；还有毒镖蛙哥的地脉红蓝deck:8fdac0a6194558e83efc，这些套牌本周都有席卷。
+        en: 'Several strategies that appeared before the ban but were subsequently pushed out have started to return: Affinity built around EOE and TMT artifacts deck:8f7c4d0eeef49d894520; classic Simulacrum Synthesizer–based Jeskai Artifacts deck:b65e7c596ec9a1c79648; classic Bant Airbending deck:9c0f1669a41d46933d8a; and Poison Dart Frog’s post-ban Izzet Leyline build deck:8fdac0a6194558e83efc. Each of these decks won an event this week.'
+    - order: 3
+      text:
+        zh: 还有满编截水师水袋的蓝白控拿下四强deck:ec57ff967da37ccf91b7；类似之前席卷RC的苏勒台拷打魔拿下八强deck:0c06019f86999a574c2a。
+        en: Azorius Control with the full four copies of Bender’s Waterskin reached the semifinals deck:ec57ff967da37ccf91b7; a Sultai Excruciator build similar to the one that previously won an RC also made the Top 8 deck:0c06019f86999a574c2a.
+  features:
+    reviewed: true
+    explicit_empty: false
+    items:
+    - source_order: 1
+      category: new_deck
+      destination_id: deck:8f7c4d0eeef49d894520
+      parent_id: affinity
+      subtype_id: null
+      positioning:
+        zh: 曾经一瞬出现在环境中的共鸣套牌复活，本周席卷一场
+        en: Affinity briefly surfaced in the metagame before disappearing, but returned to win an event this week.
+      featured_cards:
+      - Pinnacle Emissary
+      - Ravenous Robots
+      - Springleaf Drum
+      - Uthros, Titanic Godcore
+      supporting_facts: *id001
+    - source_order: 2
+      category: new_technology
+      destination_id: deck:ccd8c0e396b0f9bf2338
+      parent_id: dwarves
+      subtype_id: boros
+      positioning:
+        zh: HOB矮人+武具思路的矮人套牌本周两项占比也都可以超过5%。奇力、戴恩一行给续航，舞锤矮人和劳班装武具打伤害。最强力的应该是梭林，进场装所有武具，有熔刺靴+地脉斧就是敏捷连击践踏，进场还能解一个阻挡者，经常能直接终结比赛。
+        en: 'The HOB Dwarves equipment build cleared 5% in both share metrics this week. Kíli and Dáin’s Company provide staying power, while Dwarven Mauler and Raubahn turn equipment into damage. Thorin is probably the deck’s strongest card: he equips everything on entry, and Lavaspur Boots plus Leyline Axe immediately gives him haste, double strike, and trample. He can also remove a blocker as he enters, often ending the game on the spot.'
+      featured_cards:
+      - Thorin, Mountain-king
+      - Kíli the Resourceful
+      - Leyline Axe
+      - Lavaspur Boots
+      supporting_facts: []
+    - source_order: 3
+      category: new_technology
+      destination_id: deck:b65e7c596ec9a1c79648
+      parent_id: jeskai-artifacts
+      subtype_id: null
+      positioning:
+        zh: 传统洁斯凯神器，完全没用新牌，也能够席卷
+        en: A traditional Jeskai Artifacts list with no new cards at all still managed to win an event.
+      featured_cards:
+      - Simulacrum Synthesizer
+      - Repurposing Bay
+      - Cryogen Relic
+      - United Battlefront
+      supporting_facts: []
+    - source_order: 4
+      category: new_technology
+      destination_id: deck:9c0f1669a41d46933d8a
+      parent_id: bant-airbending
+      subtype_id: null
+      positioning:
+        zh: 同样是TMT之后的版本，虽然没有獾地鼠了但影响不大。本周可以席卷一场
+        en: This is another post-TMT build. The loss of Badgermole Cub has not hurt it much, and it won an event this week.
+      featured_cards:
+      - Aang, Swift Savior
+      - Appa, Steadfast Guardian
+      - Reality Fulcrum
+      - Michelangelo's Technique
+      supporting_facts: []
+    - source_order: 5
+      category: new_technology
+      destination_id: deck:8fdac0a6194558e83efc
+      parent_id: leyline-aggro
+      subtype_id: izzet
+      positioning:
+        zh: 毒镖蛙哥在才能被禁后的地脉投掷版本，本周席卷一场
+        en: Poison Dart Frog’s post-ban Leyline fling build won an event this week.
+      featured_cards:
+      - Leyline of Resonance
+      - Slickshot Show-Off
+      - Wild Ride
+      - Callous Sell-Sword
+      supporting_facts: []
+    - source_order: 6
+      category: new_technology
+      destination_id: deck:ec57ff967da37ccf91b7
+      parent_id: azorius-control
+      subtype_id: null
+      positioning:
+        zh: 满编截水师水袋拿下一个四强
+        en: An Azorius Control build with a full four copies of Bender’s Waterskin reached the semifinals.
+      featured_cards:
+      - Bender's Waterskin
+      - Emeritus of Ideation
+      - Three Steps Ahead
+      - Ugin, Eye of the Storms
+      supporting_facts: []
+    - source_order: 7
+      category: new_technology
+      destination_id: deck:0c06019f86999a574c2a
+      parent_id: sultai-excruciator
+      subtype_id: null
+      positioning:
+        zh: 之前席卷过一场RC的进绿混惆怅的拷打魔，本周有一个八强成绩
+        en: A green-splash Excruciator build with Wistfulness, similar to one that previously won an RC, posted a Top 8 finish this week.
+      featured_cards:
+      - Doomsday Excruciator
+      - Wistfulness
+      - Superior Spider-Man
+      - Deceit
+      supporting_facts: *id002
+known_archetype_ids:
+- 4-color-tablet
+- abzan-offense
+- affinity
+- azorius-control
+- azorius-momo
+- bant-airbending
+- boros-dragons
+- boros-manufacturing
+- boros-token
+- dimir-deceit
+- dimir-excruciator
+- dimir-midrange
+- dimir-spellementals
+- dwarves
+- five-color-humans
+- gruul-fling
+- izzet-aggro
+- izzet-prowess
+- izzet-spellementals
+- jeskai-artifacts
+- jeskai-tablet
+- kona-omniscience
+- leyline-aggro
+- mardu-discard
+- mono-black-aggro
+- mono-green-landfall
+- orzhov-lifegain
+- selesnya-landfall
+- selesnya-offense
+- sultai-demon
+- sultai-excruciator
+- temur-harmonizer

@@ -35,7 +35,7 @@ WORKBOOK_SHEETS = (
     "Landing Copy",
     "Featured Decks",
     "All Top 8",
-    "Bilingual Names",
+    "Field Guide",
 )
 WORKBOOK_REVIEW_STAGES = {"chinese", "bilingual"}
 _OOXML_MAIN = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
@@ -1467,7 +1467,8 @@ def _validated_workbook_subject(
             raise MTGOLandingEditorialError(
                 "review workbook has no valid scope for the requested format"
             )
-    catalog_document = _catalog_from_workbook(root, sheets["Bilingual Names"])
+    catalog_document = load_name_catalog_document(root / DEFAULT_NAME_CATALOG)
+    _validate_name_catalog_document(root, catalog_document)
     names = _name_lookup_from_document(catalog_document)
     catalog_digest = document_digest(catalog_document)
     subjects = {scope: build_top8_subject(root, *scope) for scope in scopes}

@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/w35-landing-screening-20260902-v2"
-  working_branch_status: "owner_accepted_completion_authorized"
+  current_working_branch: "codex/w35-stats-visual-metadata-recovery"
+  working_branch_status: "w35_unified_owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_w35_landing_representative_card_publication"
+  status: "active_w35_owner_accepted_completion_in_progress"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: false
@@ -27,79 +27,70 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "W35-LANDING-REPRESENTATIVE-CARDS"
-  name: "Record the Owner-approved W35 Landing representative cards"
+  id: "W35-UNIFIED-FINAL-REGENERATION-AND-LANDING-IMPORT"
+  name: "Regenerate the final W35 classifier-bound products and build the local Landing preview"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-09-02"
-  base_commit: "4b62b309abae3577a9ae1049a8d230d5411e5611"
-  branch: "codex/w35-landing-screening-20260902-v2"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/w35-landing-screening-20260902-02"
-  objective: "Complete the recovered W35 Landing screening subject by recording the Owner-approved representative-card pairs for its three Standard identities and one Modern identity, while preserving colors, classifiers, generated Landing data, and later editorial work."
+  base_commit: "172ace5e35329c6feea5771dd18855880960d97f"
+  branch: "codex/w35-stats-visual-metadata-recovery"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/w35-stats-visual-metadata-recovery-20260902-01"
+  objective: "Run one final local classifier-bound W35 regeneration from retained MTGO inputs, materialize all accepted bilingual and Feature inputs into one five-sheet workbook, import it, and build the local Landing preview."
   artifact_impact:
-    - "internal_diagnostics"
+    - "generated_public_data"
+    - "private_review_data"
+    - "user_visible_ui"
   authorization:
-    local_implementation: true
+    local_implementation: false
     commit: true
     remote_publication: true
     merge: true
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-09-02"
-    subject: "The unchanged recovered W35 Landing screening subject plus the four exact Owner-approved representative-card mappings for Standard Dwarves, Mono-Black Aggro, Jeskai Artifacts, and Modern Jeskai Energy."
+    subject:
+      base_commit: "172ace5e35329c6feea5771dd18855880960d97f"
+      final_workbook_sha256: "2704fea39c92a29a04c67fe8dc7ba8f4f5951e7edb26811207f86f6b4165479f"
+      standard_classifier_digest: "4bd98c063a5b621a40a1d81aff7d696e07052859fc2c459f6054076005ebb9f0"
+      modern_classifier_digest: "cae8e46c65d9ff3955d8005155da6cca89e6eba743057ceca1331cb1e47c57b6"
+      standard_landing_summary_count: 3
+      modern_landing_summary_count: 2
+      standard_w35_feature_count: 7
+      modern_w35_feature_count: 0
   allowed_paths:
-    - "stats/standard/mtgo/landing/review/candidates_2026-W35.yaml"
-    - "stats/standard/mtgo/landing/review/base_reference_2026-W35.yaml"
-    - "stats/modern/mtgo/landing/review/candidates_2026-W35.yaml"
-    - "stats/modern/mtgo/landing/review/base_reference_2026-W35.yaml"
+    - "my_archetypes/standard.yaml"
+    - "configs/mtgo_archetype_names.yaml"
     - "configs/mtgo_landing_visuals.yaml"
+    - "assets/js/phase8/archetype-visuals.js"
+    - "assets/images/representative-cards/standard/"
+    - "src/mtgmeta/mtgo/landing_editorial.py"
+    - "tests/test_classifier_rule_contracts.py"
+    - "tests/test_mtgo_landing_editorial.py"
+    - "stats/standard/mtgo/"
+    - "stats/standard/archetype_names.json"
+    - "stats/modern/mtgo/"
+    - "stats/catalog.json"
     - "docs/STATUS.yaml"
+    - "outputs/01a052a5-768e-7630-a121-9a44e1c23c61/W35_Landing_Review_Field_Guide.xlsx"
+    - "outputs/01a052a5-768e-7630-a121-9a44e1c23c61/W35_Landing_Review_Final_Bilingual.xlsx"
+  read_only_inputs:
+    - "data/standard/mtgo/"
+    - "data/modern/mtgo/"
+    - "data/standard/mtgo_matches/"
+    - "data/modern/mtgo_matches/"
   protected_scope:
-    public_landing: "Keep both public landing/current.json documents, feature history, frontend files, and Pages paths byte-identical."
-    editorial_state: "Do not create or import reviewed week YAML, generate an XLSX carrier, select a feature, or write final copy."
-    visual_metadata: "Add only the four Owner-approved parent representative-card pairs; keep all existing cards, every color mapping, subtype metadata, and fallback rule unchanged."
-    retained_inputs: "Do not fetch or modify MTGO or Melee inputs, classifiers, statistics, reports, or Top 8 outputs."
-    test_policy: "Add no test and run no broad or repeated suite; validate only generated candidate contracts, readiness, exact changed paths, and protected-byte invariants."
+    source_data: "Do not fetch, refresh, or modify MTGO or Melee source data; use only retained local inputs."
+    generation_count: "Generate each required Standard and Modern classifier-bound family once; do not repeat a successful family."
+    tabletop: "Do not regenerate, modify, or publish Melee event data or Tabletop products."
+    workbook: "Preserve every accepted Chinese paragraph, exact token, six All Top 8 ADD rows, Owner Note, five English top-copy drafts, seven Feature English positionings, and 28 Feature cards."
+    classifier: "Apply only the accepted Sultai Excruciator change; leave the W36 Standard Dwarves and Modern Bant Company queue untouched."
+    publication: "Complete only this unchanged accepted subject through commit, one Ready PR, required checks, merge, and its merge-triggered Pages verification; do not dispatch production or another workflow."
   invariants:
-    - "The stale W35 candidate files contain no accepted manual review and may be deterministically refreshed with preserve-existing behavior."
-    - "Standard and Modern remain separately generated and reviewed."
-    - "Representative-card review follows the refreshed actual Landing environment subject and is not inferred from a pre-screening identity inventory."
-  planned_verification:
-    - "Reuse the already-passed W35 screening and readiness evidence because their immutable candidate subject is unchanged."
-    - "Load the edited visual metadata through the production parser and require the four exact Owner-approved pairs."
-    - "Require exactly the four private candidate/reference paths, visual configuration, and docs/STATUS.yaml to change; public Landing, retained inputs, colors, existing visual mappings, and W36 queues remain unchanged."
-  stop_point: "Commit the accepted unchanged subject, publish one Ready PR, merge after required checks pass, complete applicable exact-SHA Pages verification, and stop without creating a Landing workbook or rebuilding Landing."
-  local_results:
-    readiness_status: "awaiting_owner_start"
-    public_classifier_binding: "current_for_both_formats"
-    standard_candidate_count: 10
-    modern_candidate_count: 9
-    standard_environment_row_count: 8
-    modern_environment_row_count: 11
-    missing_representative_card_identities:
-      standard:
-        - "dwarves"
-        - "mono-black-aggro"
-        - "jeskai-artifacts"
-      modern:
-        - "jeskai-energy"
-    public_landing_changed: false
-    representative_card_configuration_changed: true
-    representative_card_mappings:
-      standard:
-        dwarves:
-          - "Kíli the Resourceful"
-          - "Thorin, Mountain-king"
-        mono-black-aggro:
-          - "Forsaken Miner"
-          - "Corpses of the Lost"
-        jeskai-artifacts:
-          - "Simulacrum Synthesizer"
-          - "Repurposing Bay"
-      modern:
-        jeskai-energy:
-          - "Guide of Souls"
-          - "Quantum Riddler"
-    w36_queue_changed: false
+    - "All Standard and Modern classification-dependent public families carry the current format classifier digest after one regeneration."
+    - "The accepted W35 classification delta is event 12853183 rank six Scappie from Dimir Excruciator to Sultai Excruciator; source facts stay unchanged."
+    - "The imported Landing review contains five bilingual top-copy items and seven exact Feature decks with four accepted cards each."
+    - "Chinese and English top copy contain the same seven exact deck tokens."
+    - "The output workbook remains a five-sheet Field Guide carrier and contains no artifact-tool numeric 53 blank sentinel."
+  stop_point: "Complete the unchanged accepted subject through one Ready PR, required checks, merge, and exact-SHA Pages verification; stop on failure, conflict, permission blockage, scope change, or changed subject."
 
 weekly_classifier_review:
   id: "W35-CROSS-SOURCE-CLASSIFIER-REVIEW"
@@ -124,9 +115,9 @@ weekly_classifier_review:
   separation_rule: "Share the same-format human classifier decision session only; retain separate source provenance, counts, readiness, completion, generation, and publication."
 
 current_repository_state:
-  source_master_commit: "4b62b309abae3577a9ae1049a8d230d5411e5611"
-  previous_task: "W35-MTGO-PUBLIC-BASELINE-RECOVERY"
-  previous_task_status: "completed_merged_in_pr_347_exact_sha_pages_verified"
+  source_master_commit: "172ace5e35329c6feea5771dd18855880960d97f"
+  previous_task: "W35-LANDING-REPRESENTATIVE-CARDS"
+  previous_task_status: "completed_merged_in_pr_348"
   open_pull_request: null
   open_pull_request_head: null
   open_pull_request_status: "none"
@@ -156,18 +147,18 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "W35-LANDING-REPRESENTATIVE-CARD-COMPLETION"
-  name: "Complete the accepted W35 Landing representative-card task"
+  id: "W35-UNIFIED-FINAL-REGENERATION-AND-LANDING-IMPORT"
+  name: "Complete the accepted final W35 subject"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Owner acceptance authorizes continuous completion of the unchanged task through one Ready PR, required checks, merge, and applicable exact-SHA Pages verification. Landing workbook preparation and regeneration remain unauthorized."
+  note: "Commit and publish only the unchanged accepted subject through one Ready PR, required checks, merge, and exact-SHA Pages verification; do not dispatch production or start another task."
 
 prohibited_next_actions:
-  - "Do not classify the W36 Standard Dwarves or Modern Bant Company records in this task."
-  - "Do not fetch either source, dispatch production or data workflows, or change any classifier decision."
-  - "Do not alter the accepted representative-card pairs, any deck color, existing visual metadata, or subtype fallback rule."
-  - "Do not create or import a Landing workbook, build or regenerate public Landing, or dispatch any data or production workflow."
+  - "Do not classify the W36 Standard Dwarves or Modern Bant Company records or change another classifier decision."
+  - "Do not fetch either source or dispatch production, data, Pages, or another workflow."
+  - "Do not repeat a successfully completed generated family or change another classifier decision."
+  - "Do not dispatch production, manually dispatch Pages, or publish any changed subject beyond the accepted commit."
   - "Do not start P14-02, Phase 15, another event admission, or unrelated work."

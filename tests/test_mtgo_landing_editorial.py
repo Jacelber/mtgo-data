@@ -105,7 +105,7 @@ def _sheets(scope=None, *, all_top8_rows=()):
             ],
             list(all_top8_rows),
         ),
-        "Bilingual Names": (["Review Result"], []),
+        "Field Guide": (["Field", "Meaning"], []),
     }
 
 

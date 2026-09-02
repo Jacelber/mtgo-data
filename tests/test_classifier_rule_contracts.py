@@ -44,6 +44,25 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
         ),
         (
             (
+                ("Doomsday Excruciator", 2),
+                ("Superior Spider-Man", 4),
+                ("Deceit", 4),
+                ("Wistfulness", 2),
+                ("Overgrown Tomb", 4),
+            ),
+            "sultai-excruciator",
+        ),
+        (
+            (
+                ("Doomsday Excruciator", 2),
+                ("Superior Spider-Man", 4),
+                ("Deceit", 4),
+                ("Watery Grave", 4),
+            ),
+            "dimir-excruciator",
+        ),
+        (
+            (
                 ("Drake Hatcher", 3),
                 ("Slickshot Show-Off", 3),
                 ("Gandalf, Goblins' Bane", 3),
