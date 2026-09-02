@@ -147,7 +147,7 @@ def merge_event_catalog(
     existing_catalog: Mapping[str, Any],
     generated_catalog: Mapping[str, Any],
 ) -> dict[str, Any]:
-    """Merge one generated event without changing the existing cohort selection."""
+    """Merge one generated event and select the latest event by date."""
 
     identity_fields = ("document_type", "source", "product", "format")
     for field in identity_fields:
@@ -195,8 +195,23 @@ def merge_event_catalog(
     if not replaced:
         merged_events.append(selected_event)
 
+    def recency_key(event: Mapping[str, Any]) -> tuple[str, str, int, str]:
+        event_id = event["event_id"]
+        date = event.get("date")
+        if not isinstance(date, Mapping):
+            raise MeleePublicationError(f"catalog event {event_id} has no date")
+        start = date.get("start")
+        end = date.get("end")
+        if not isinstance(start, str) or not isinstance(end, str):
+            raise MeleePublicationError(
+                f"catalog event {event_id} has an invalid date"
+            )
+        return end, start, len(event_id), event_id
+
+    merged_events.sort(key=recency_key, reverse=True)
+
     merged = dict(generated_catalog)
-    merged["default_event_id"] = existing_default
+    merged["default_event_id"] = merged_events[0]["event_id"]
     merged["events"] = merged_events
     return merged
 

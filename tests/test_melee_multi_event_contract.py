@@ -468,19 +468,27 @@ def test_event_publisher_wires_catalog_version_and_compatibility(
     }
 
 
-def test_event_publisher_merges_new_event_without_changing_existing_selection() -> None:
+def test_event_publisher_selects_and_orders_the_latest_event() -> None:
     existing = _catalog([_event_input("434455", "a", 5)])
     generated = _catalog([_event_input("441441", "b", 5)])
+    existing["events"][0]["date"] = {
+        "start": "2026-07-17",
+        "end": "2026-07-19",
+    }
+    generated["events"][0]["date"] = {
+        "start": "2026-08-29",
+        "end": "2026-08-30",
+    }
     protected_event = deepcopy(existing["events"][0])
 
     merged = merge_event_catalog(existing, generated)
 
-    assert merged["default_event_id"] == "434455"
+    assert merged["default_event_id"] == "441441"
     assert [event["event_id"] for event in merged["events"]] == [
-        "434455",
         "441441",
+        "434455",
     ]
-    assert merged["events"][0] == protected_event
+    assert merged["events"][1] == protected_event
 
 
 def test_event_publisher_main_writes_the_merged_catalog(
@@ -488,6 +496,14 @@ def test_event_publisher_main_writes_the_merged_catalog(
 ) -> None:
     existing = _catalog([_event_input("434455", "a", 5)])
     generated = _catalog([_event_input("441441", "b", 5)])
+    existing["events"][0]["date"] = {
+        "start": "2026-07-17",
+        "end": "2026-07-19",
+    }
+    generated["events"][0]["date"] = {
+        "start": "2026-08-29",
+        "end": "2026-08-30",
+    }
     catalog_path = tmp_path / "stats" / "modern" / "melee" / "index.json"
     catalog_path.parent.mkdir(parents=True)
     catalog_path.write_bytes(publish.statistics_document_bytes(existing))
@@ -511,10 +527,10 @@ def test_event_publisher_main_writes_the_merged_catalog(
 
     assert result == 0
     merged, _ = publish._read_object(catalog_path)
-    assert merged["default_event_id"] == "434455"
+    assert merged["default_event_id"] == "441441"
     assert [event["event_id"] for event in merged["events"]] == [
-        "434455",
         "441441",
+        "434455",
     ]
 
 

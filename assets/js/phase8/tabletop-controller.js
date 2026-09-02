@@ -21,7 +21,7 @@
     return [...new Set(eventIds)].sort(numericEventOrder);
   }
 
-  function resolveEventSelection(events, selectedEventIds, activeEventId) {
+  function resolveEventSelection(events, selectedEventIds, activeEventId, defaultEventId) {
     if (!Array.isArray(events) || !events.length) {
       throw new Error("实体大赛目录中没有可用赛事。");
     }
@@ -38,10 +38,15 @@
     const requested = Array.isArray(selectedEventIds)
       ? [...new Set(selectedEventIds)].sort(numericEventOrder)
       : [];
+    const fallbackEventId = byId.has(activeEventId)
+      ? activeEventId
+      : byId.has(defaultEventId)
+        ? defaultEventId
+        : events[0].event_id;
     const admitted = requested.length
       && requested.every(eventId => EVENT_ID_PATTERN.test(eventId) && byId.has(eventId))
       ? requested
-      : [byId.has(activeEventId) ? activeEventId : events[0].event_id];
+      : [fallbackEventId];
     const activeId = admitted.includes(activeEventId) ? activeEventId : admitted[0];
     return {
       activeEvent: byId.get(activeId),
@@ -133,7 +138,7 @@
     };
   }
 
-  function structurePresentation(overview) {
+  function structurePresentation(overview, scopeId = overview.default_scope) {
     if (overview.event_structure === "constructed_day2") {
       return {
         advancement_metric: "day2_conversion",
@@ -141,8 +146,39 @@
       };
     }
     return {
-      advancement_metric: "high_score",
+      advancement_metric: overview.event_structure === "mixed"
+        && scopeId === "all_constructed"
+        ? null
+        : "high_score",
       show_mixed_selection_bias: overview.event_structure === "mixed",
+    };
+  }
+
+  function withDay2Conversion(scope, day2Scope) {
+    if (!scope || !day2Scope || !Array.isArray(scope.archetypes)) return scope;
+    const conversionByGroup = new Map();
+    (day2Scope.archetypes || []).forEach(parent => {
+      conversionByGroup.set(parent.group_id, parent.day2_conversion);
+      (parent.subtypes || []).forEach(subtype => {
+        conversionByGroup.set(subtype.group_id, subtype.day2_conversion);
+      });
+    });
+    const conversion = record => (
+      conversionByGroup.has(record.group_id)
+        ? conversionByGroup.get(record.group_id)
+        : 0
+    );
+    return {
+      ...scope,
+      day2_conversion: day2Scope.day2_conversion,
+      archetypes: scope.archetypes.map(parent => ({
+        ...parent,
+        day2_conversion: conversion(parent),
+        subtypes: (parent.subtypes || []).map(subtype => ({
+          ...subtype,
+          day2_conversion: conversion(subtype),
+        })),
+      })),
     };
   }
 
@@ -191,7 +227,8 @@
     const selection = resolveEventSelection(
       index.events,
       selectedEventIds || [selectedEventId].filter(Boolean),
-      selectedEventId
+      selectedEventId,
+      index.default_event_id
     );
     const eventEntry = selection.activeEvent;
 
@@ -349,5 +386,6 @@
     resolveScopeState,
     stageEvent,
     structurePresentation,
+    withDay2Conversion,
   });
 })(globalThis);

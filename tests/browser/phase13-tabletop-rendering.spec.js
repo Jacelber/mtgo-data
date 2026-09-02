@@ -60,9 +60,13 @@ function quality() {
   };
 }
 
-async function routeSyntheticEvents(page) {
+async function routeSyntheticEvents(page, {
+  catalog = fixture.catalog,
+  overviewFor = overview,
+  qualityFor = quality,
+} = {}) {
   const documents = new Map([
-    ["/stats/modern/melee/index.json", fixture.catalog],
+    ["/stats/modern/melee/index.json", catalog],
     ["/stats/modern/archetype_names.json", {
       schema_version: "1.0.0",
       format: "modern",
@@ -79,8 +83,8 @@ async function routeSyntheticEvents(page) {
     const base = `/stats/modern/melee/events/${eventId}`;
     documents.set(`${base}/meta.json`, input.meta);
     documents.set(`${base}/matchup.json`, input.matchup);
-    documents.set(`${base}/overview.json`, overview(eventId));
-    documents.set(`${base}/quality.json`, quality());
+    documents.set(`${base}/overview.json`, overviewFor(eventId));
+    documents.set(`${base}/quality.json`, qualityFor(eventId));
   });
   await page.route("**/stats/modern/{archetype_names.json,melee/**}", async route => {
     const value = documents.get(new URL(route.request().url()).pathname);
@@ -91,6 +95,79 @@ async function routeSyntheticEvents(page) {
     await route.fulfill({ json: value });
   });
 }
+
+test("Tabletop defaults to the latest event and presents only meaningful metrics", async ({ page }) => {
+  const catalog = structuredClone(fixture.catalog);
+  catalog.default_event_id = "20";
+  catalog.events[0].event_structure = "constructed_day2";
+  catalog.events[0].scope_order = ["day1", "day2", "all_constructed"];
+  const overviewFor = eventId => {
+    const document = overview(eventId);
+    if (eventId === "20") {
+      document.event_structure = "constructed_day2";
+      const all = document.scopes.all_constructed;
+      const day2 = structuredClone(all);
+      all.day2_conversion = null;
+      day2.day2_conversion = 0.25;
+      day2.archetypes[0].day2_conversion = 0.25;
+      document.scopes = { day1: structuredClone(all), day2, all_constructed: all };
+    } else {
+      document.event_structure = "mixed";
+    }
+    return document;
+  };
+  const qualityFor = eventId => eventId === "20"
+    ? {
+      format: "modern",
+      issues: [
+        { code: "unknown_classifications", count: 7 },
+        { code: "missing_or_unavailable_decklists", count: 3 },
+      ],
+      counts: { submitted_decklists: 7, missing_or_unavailable_decklists: 3 },
+    }
+    : quality();
+  await routeSyntheticEvents(page, { catalog, overviewFor, qualityFor });
+
+  await page.goto(
+    "/melee/index.html?format=modern&product=tabletop-major-events&view=overview&scope=all_constructed&lang=en"
+  );
+  await expect(page.locator("#tabletop-event")).toHaveValue("20");
+  await expect(page.locator(".event-summary")).toContainText("Synthetic 20");
+  const advancementHeader = page.locator(".desktop-metric-table thead th").last();
+  await expect(advancementHeader).toContainText("Day 2 CVR");
+  await expect(page.locator(".desktop-metric-table .overall-row td").last()).toHaveText("25.0%");
+  await expect(page.locator(".desktop-metric-table tbody tr").nth(1).locator("td").last()).toHaveText("25.0%");
+  await expect(page.locator(".mobile-metric-card.overall-card")).toContainText("Day 2 CVR");
+  await expect(page.locator(".mobile-metric-card.overall-card")).toContainText("25.0%");
+  await expect(page.locator(".quality-notice")).toContainText(
+    "7 valid submitted decklists resemble random card piles or placeholder lists."
+  );
+  await expect(page.locator(".quality-notice")).toContainText(
+    "3 participants have no available decklist."
+  );
+  const labelBox = await advancementHeader.locator(".sort-label").boundingBox();
+  const accessoriesBox = await advancementHeader.locator(".sort-accessories").boundingBox();
+  expect(labelBox.x + labelBox.width).toBeLessThanOrEqual(accessoriesBox.x + 1);
+
+  await page.goto(
+    "/melee/index.html?format=modern&product=tabletop-major-events&view=overview&event=20&scope=all_constructed&lang=zh"
+  );
+  await expect(page.locator(".quality-notice")).toContainText(
+    "7 份有效提交牌表近似于随机卡堆或凑数牌"
+  );
+  await expect(page.locator(".quality-notice")).toContainText(
+    "3 名参赛者没有可用牌表"
+  );
+
+  await page.goto(
+    "/melee/index.html?format=modern&product=tabletop-major-events&view=overview&event=10&scope=all_constructed&sort=high_score&lang=en"
+  );
+  await expect(page.locator(".desktop-metric-table thead th")).toHaveCount(8);
+  await expect(page.locator(".desktop-metric-table")).not.toContainText("High-score decks");
+  await expect(page.locator(".mobile-metric-layout")).not.toContainText("High-score decks");
+  await expect(page.locator(".quality-notice")).toHaveCount(0);
+  await expect.poll(() => new URL(page.url()).searchParams.get("sort")).toBe("deck_count");
+});
 
 test("Tabletop renders the combined result without merging Event Overview", async ({ page }) => {
   await routeSyntheticEvents(page);

@@ -182,12 +182,16 @@ function tabletopMobileCard(record, {
           data-responsive-key="tabletop-action:${escapeHtml(identityId)}" aria-expanded="${detailOpen}"
           aria-controls="tabletop-mobile-detail-${escapeHtml(identityId)}">
           ${detailOpen ? t("mobile.close_deck") : t("mobile.view_deck")}</button>`;
-  const advancementLabel = advancementMetric === "day2_conversion"
-    ? t("tabletop.day2_conversion")
-    : t("tabletop.high_score_decks");
-  const advancementValue = advancementMetric === "day2_conversion"
-    ? pct(record.day2_conversion)
-    : (record.high_score?.count ?? "—");
+  const advancementHtml = advancementMetric
+    ? mobileMetricHtml(
+      advancementMetric === "day2_conversion"
+        ? t("tabletop.day2_conversion")
+        : t("tabletop.high_score_decks"),
+      advancementMetric === "day2_conversion"
+        ? pct(record.day2_conversion)
+        : (record.high_score?.count ?? "—")
+    )
+    : "";
   return `<article class="mobile-metric-card${subtype ? " subtype-card" : ""}${overall ? " overall-card" : ""}${detailOpen ? " detail-open" : ""}"
       role="listitem" aria-labelledby="${escapeHtml(titleId)}">
     <div class="mobile-card-heading">
@@ -204,7 +208,7 @@ function tabletopMobileCard(record, {
     <dl class="mobile-secondary-metrics">
       ${mobileMetricHtml(t("tabletop.record"), match ? `${match.wins}-${match.losses}-${match.draws}` : "—")}
       ${mobileMetricHtml(t("tabletop.completion_rate"), pct(record.completion_rate))}
-      ${mobileMetricHtml(advancementLabel, advancementValue)}
+      ${advancementHtml}
     </dl>
     ${detailOpen ? tabletopMobileDetail(identityId) : ""}
   </article>`;
