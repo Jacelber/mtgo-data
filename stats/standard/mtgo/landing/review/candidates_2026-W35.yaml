@@ -368,25 +368,28 @@ existing_changes:
   archetype_id: selesnya-landfall
   subtype_id: null
   subtype: null
-  event_id: '12853208'
-  deck_id: 378cbe01cb817a102967
-  deck_fingerprint_sha256: f620ea564dee5409c386dca787675d1c43ee9f93bbd830fa71f48560afe17033
+  event_id: '12852775'
+  deck_id: 6a7bd2cb191b0251bbe6
+  deck_fingerprint_sha256: d4041a4031c106ad47e890fc518080c81a7995c833d3f65182381bb21ab0af0a
   archetype: Selesnya Landfall
-  player: Mansa_Musa
-  final_rank: 3
+  player: LucasG1ggs
+  final_rank: 4
   swiss_score: 15
-  player_count: 53
-  starttime: '2026-08-30 22:00:00.0'
-  deviation: 23
+  player_count: 72
+  starttime: '2026-08-25 17:30:00.0'
+  deviation: 29
   source: existing
   candidate_reasons:
   - type: build_shift
     identity_level: parent
     identity_id: selesnya-landfall
     reference_sample_size: 13
-    score: 23
+    score: 29
     difference:
       fewer:
+      - name: Plains
+        deck_qty: 0
+        typical_qty: 2.0
       - name: Badgermole Cub
         deck_qty: 0
         typical_qty: 1.8
@@ -408,15 +411,18 @@ existing_changes:
       - name: Demolition Field
         deck_qty: 0
         typical_qty: 0.5
-      - name: Surrak, Elusive Hunter
-        deck_qty: 0
-        typical_qty: 0.5
       more:
+      - name: Forest
+        deck_qty: 11
+        typical_qty: 8.5
       - name: Esper Origins
-        deck_qty: 4
+        deck_qty: 3
         typical_qty: 0.5
+      - name: Shared Roots
+        deck_qty: 2
+        typical_qty: 0.4
       - name: Mossborn Hydra
-        deck_qty: 4
+        deck_qty: 3
         typical_qty: 1.5
       - name: Temple Garden
         deck_qty: 4
@@ -430,12 +436,6 @@ existing_changes:
       - name: Mightform Harmonizer
         deck_qty: 4
         typical_qty: 3.4
-      - name: Forest
-        deck_qty: 9
-        typical_qty: 8.5
-      - name: Erode
-        deck_qty: 4
-        typical_qty: 3.6
   approved: false
   comment_zh: ''
   comment_en: ''
@@ -459,11 +459,11 @@ existing_changes:
   - name: Escape Tunnel
     qty: 3
   - name: Esper Origins
-    qty: 4
+    qty: 3
   - name: Fabled Passage
     qty: 4
   - name: Forest
-    qty: 9
+    qty: 11
   - name: Hushwood Verge
     qty: 1
   - name: Icetill Explorer
@@ -473,22 +473,26 @@ existing_changes:
   - name: Mightform Harmonizer
     qty: 4
   - name: Mossborn Hydra
-    qty: 4
-  - name: Plains
-    qty: 2
+    qty: 3
   - name: Sazh's Chocobo
     qty: 4
+  - name: Shared Roots
+    qty: 2
   - name: Temple Garden
     qty: 4
   side_deck:
+  - name: Mossborn Hydra
+    qty: 1
+  - name: Rest in Peace
+    qty: 2
   - name: Sapling Nursery
     qty: 4
   - name: Sheltered by Ghosts
     qty: 4
   - name: Surrak, Elusive Hunter
-    qty: 3
+    qty: 2
   - name: Torpor Orb
-    qty: 4
+    qty: 2
 - identity_id: mono-green-landfall
   archetype_id: mono-green-landfall
   subtype_id: null
@@ -1220,7 +1224,104 @@ existing_changes:
     qty: 3
   - name: The Ooze
     qty: 2
-new_archetypes: []
+new_archetypes:
+- identity_id: affinity
+  archetype_id: affinity
+  subtype_id: null
+  subtype: null
+  event_id: '12853170'
+  deck_id: 8f7c4d0eeef49d894520
+  deck_fingerprint_sha256: dd8a529d331d6589b7f50202b0e69451a5633881a7dc86a15fe69a6e405409f6
+  archetype: Affinity
+  player: Aldreen
+  final_rank: 1
+  swiss_score: 15
+  player_count: 32
+  starttime: '2026-08-27 10:00:00.0'
+  deviation: null
+  source: new
+  candidate_reasons:
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 0
+  approved: false
+  comment_zh: ''
+  comment_en: ''
+  landing:
+    category: new_deck
+    order: null
+    headline_zh: ''
+    headline_en: ''
+    positioning_zh: ''
+    positioning_en: ''
+    featured_cards: []
+  main_deck:
+  - name: Castle Doom
+    qty: 2
+  - name: Dusk Rose Reliquary
+    qty: 4
+  - name: Fomori Vault
+    qty: 2
+  - name: Giant's Boulder
+    qty: 4
+  - name: Improvised Arsenal
+    qty: 1
+  - name: Island
+    qty: 1
+  - name: Krang, Master Mind
+    qty: 2
+  - name: Merata, Neuron Hacker
+    qty: 3
+  - name: Mountain
+    qty: 1
+  - name: Multiversal Passage
+    qty: 1
+  - name: Pinnacle Emissary
+    qty: 4
+  - name: Quantum Riddler
+    qty: 3
+  - name: Ravenous Robots
+    qty: 4
+  - name: Riverpyre Verge
+    qty: 1
+  - name: Rust Harvester
+    qty: 2
+  - name: Skateboard
+    qty: 1
+  - name: Soul-Guide Lantern
+    qty: 1
+  - name: Spirebluff Canal
+    qty: 3
+  - name: Springleaf Drum
+    qty: 4
+  - name: Starting Town
+    qty: 4
+  - name: Steam Vents
+    qty: 4
+  - name: Tezzeret, Cruel Captain
+    qty: 2
+  - name: The Enigma Jewel
+    qty: 2
+  - name: The Ooze
+    qty: 1
+  - name: Uthros, Titanic Godcore
+    qty: 3
+  side_deck:
+  - name: Disdainful Stroke
+    qty: 2
+  - name: Flashfreeze
+    qty: 2
+  - name: Grim Bauble
+    qty: 2
+  - name: Quantum Riddler
+    qty: 1
+  - name: Soul-Guide Lantern
+    qty: 3
+  - name: The Ooze
+    qty: 2
+  - name: Torch the Tower
+    qty: 3
 week_status: provisional
 provisional_through: '2026-09-06'
 seal_on: '2026-09-07'
@@ -1231,5 +1332,5 @@ source_event_ids:
 - '12853183'
 - '12853190'
 - '12853208'
-classifier_digest: 24869dd125635fb4549a3f03f3c7b5fb2d0f6195539a26a054dc47d7ab7c730a
+classifier_digest: 3a1f37a21767f25f8bf0e0830ae88f6f838245ea697f633dd7f3f90dc8686fa0
 selection_policy_digest: 3541185e634bcab559bb3118ee3f29ece113552473d1f314bcde2a1e2f697a42
