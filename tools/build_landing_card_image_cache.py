@@ -8,6 +8,7 @@ import hashlib
 import json
 import re
 import shutil
+import sys
 import tempfile
 import unicodedata
 import urllib.request
@@ -17,6 +18,13 @@ from datetime import date, timedelta
 from pathlib import Path, PurePosixPath
 from typing import Any, Callable
 from urllib.parse import urlsplit
+
+
+CARD_NAME_SOURCE = Path(__file__).resolve().parents[1] / "src" / "mtgmeta"
+if str(CARD_NAME_SOURCE) not in sys.path:
+    sys.path.insert(0, str(CARD_NAME_SOURCE))
+
+from card_names import card_name_lookup_candidates  # noqa: E402
 
 
 CACHE_SCHEMA_VERSION = "1.1.0"
@@ -399,11 +407,26 @@ def build_cache_bundle(
                 else _live_bulk_data(temporary)
             )
             bulk_sha256 = _sha256_file(bulk_path)
-            requested_names = {_normalized_name(card["name"]) for card in unresolved}
+            lookup_names = {
+                card["name"]: tuple(
+                    _normalized_name(candidate)
+                    for candidate in card_name_lookup_candidates(card["name"])
+                )
+                for card in unresolved
+            }
+            requested_names = {
+                candidate
+                for candidates in lookup_names.values()
+                for candidate in candidates
+            }
             lookup = _bulk_lookup(_bulk_cards(bulk_path), requested_names)
             if downloaded_bulk:
                 bulk_path.unlink()
-            missing = [card["name"] for card in unresolved if _normalized_name(card["name"]) not in lookup]
+            missing = [
+                name
+                for name, candidates in lookup_names.items()
+                if not any(candidate in lookup for candidate in candidates)
+            ]
             if missing:
                 raise CacheBuildError("unresolved featured cards: " + ", ".join(missing))
 
@@ -414,7 +437,11 @@ def build_cache_bundle(
         entries: list[dict[str, Any]] = []
         for card in subject["cards"]:
             common = {"name": card["name"], "uses": card["uses"]}
-            resolved = lookup[_normalized_name(card["name"])]
+            resolved = next(
+                lookup[candidate]
+                for candidate in lookup_names[card["name"]]
+                if candidate in lookup
+            )
             suffix = "" if resolved["face_index"] is None else f"-face-{resolved['face_index']}"
             file_name = f"{resolved['scryfall_id']}{suffix}.jpg"
             payload = image_fetch(resolved["source_image_uri"])

@@ -257,6 +257,46 @@ def test_missing_recent_card_fails_without_partial_bundle(tmp_path):
     assert not output.exists()
 
 
+def test_build_resolves_maintained_alias_without_changing_feature_name(tmp_path):
+    root = tmp_path / "repository"
+    _write_format(
+        root,
+        "standard",
+        [("2026-W35", "2026-08-24")],
+        {"2026-W35": ["Reality Fulcrum"]},
+    )
+    _write_format(root, "modern", [("2026-W35", "2026-08-24")], {})
+    bulk_path = tmp_path / "oracle-cards.json"
+    _write_json(
+        bulk_path,
+        [
+            {
+                "id": "55555555-5555-4555-8555-555555555555",
+                "oracle_id": "456dbec4-1b0e-48c4-abae-5c8205651872",
+                "name": "Interdimensional Web Watch",
+                "image_uris": {
+                    "normal": "https://cards.scryfall.io/normal/interdimensional-web-watch.jpg"
+                },
+            }
+        ],
+    )
+    output = tmp_path / "cache"
+
+    manifest = build_cache_bundle(
+        root,
+        output,
+        bulk_data_path=bulk_path,
+        fetch_image=lambda _url: JPEG_A,
+    )
+
+    assert manifest["cards"][0]["name"] == "Reality Fulcrum"
+    assert manifest["cards"][0]["oracle_id"] == "456dbec4-1b0e-48c4-abae-5c8205651872"
+    assert manifest["cards"][0]["source_image_uri"].endswith(
+        "/interdimensional-web-watch.jpg"
+    )
+    assert verify_cache_bundle(root, output) == manifest
+
+
 def test_adventure_face_name_uses_the_combined_card_image(tmp_path):
     root = _synthetic_subject_root(tmp_path)
     cards = _bulk_cards()

@@ -7936,3 +7936,56 @@ not calculate statistics; the generators must refresh every affected family,
 and weekly readiness proves that closure before human downstream work begins.
 Completeness remains outside this digest because it measures source coverage,
 and Landing remains separately human-gated.
+
+---
+
+# DEC-160 - Separate Sultai Excruciator from Dimir Excruciator
+
+Status: `Accepted`
+
+## Context
+
+The W35 Standard Top 8 review identified the event `12853183` rank-six deck by
+Scappie as Sultai rather than Dimir Excruciator. It contains the established
+`Doomsday Excruciator`, `Superior Spider-Man`, and `Deceit` core together with
+two main-deck `Wistfulness` and reviewed green mana sources including four
+`Overgrown Tomb`. The existing `dimir-excruciator-primary` rule checked only
+the three-card engine and therefore selected every color variant. The existing
+`sultai-demon` identity instead describes the distinct `Unholy Annex // Ritual
+Chamber` construction and cannot be reused without merging unrelated decks.
+
+Across the retained Standard MTGO weekly Top 8 documents, this is the only deck
+that combines the Excruciator core with main-deck Wistfulness. The other two W35
+Dimir Excruciator Top 8 decks contain neither that green spell nor a green mana
+package.
+
+## Decision
+
+Add the stable parent identity `sultai-excruciator` with the approved display
+`Sultai Excruciator / 苏勒台拷打魔`. Its rule requires the existing Excruciator
+core, at least one main-deck `Wistfulness`, and at least one reviewed main-deck
+green mana source. Give that rule priority `70010`, immediately above the
+unchanged `dimir-excruciator-primary` priority `70000`, so the green build is
+selected while genuine blue-black builds retain their stable identity.
+
+Record blue-black-green visual identity and the Owner-selected `Doomsday
+Excruciator` plus `Wistfulness` representative pair. This identity does not
+enter the current W35 Landing environment threshold, so record the choice
+without downloading a representative image or adding an unresolved static
+image mapping. Do not rename or broaden `sultai-demon` or change the existing
+Dimir rule.
+
+## Consequences
+
+The accepted W35 classification change is exactly one reviewed Top 8 deck:
+event `12853183`, rank six, Scappie. The rule decision is protected by one
+synthetic Sultai positive boundary and one genuine Dimir negative boundary in
+the existing stable classifier contract; no week-specific totals are added.
+
+Do not regenerate W35 Top 8, rolling statistics, matchups, hierarchy, Landing
+candidates, or public Landing during this local task. Preserve the Owner-edited
+five-sheet workbook as the editorial input, correct only its Dwarves exact-deck
+token, and defer the single complete classifier-bound regeneration until every
+remaining W35 maintenance input is final. This decision does not authorize
+collection, import, commit, remote publication, pull-request creation, Pages,
+or production dispatch.
