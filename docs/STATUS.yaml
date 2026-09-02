@@ -4,8 +4,8 @@ project:
   name: "mtgo-data"
   repository: "https://github.com/Jacelber/mtgo-data"
   default_branch: "master"
-  current_working_branch: "codex/w35-stats-visual-metadata-recovery"
-  working_branch_status: "w35_unified_owner_accepted_completion_authorized"
+  current_working_branch: "codex/tabletop-latest-metrics-quality"
+  working_branch_status: "tabletop_hotfix_owner_accepted_completion_authorized"
   status: "active"
 
 status_document:
@@ -18,7 +18,7 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "active_w35_owner_accepted_completion_in_progress"
+  status: "active_tabletop_hotfix_owner_accepted_completion"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
   production_changes_allowed: false
@@ -27,69 +27,52 @@ current_phase:
   next_phase_authorized: false
 
 current_task:
-  id: "W35-UNIFIED-FINAL-REGENERATION-AND-LANDING-IMPORT"
-  name: "Regenerate the final W35 classifier-bound products and build the local Landing preview"
+  id: "TABLETOP-LATEST-METRICS-QUALITY-HOTFIX"
+  name: "Repair latest-event selection, scope metrics, and data-quality presentation"
   status: "owner_accepted_completion_authorized"
   authorized_on: "2026-09-02"
-  base_commit: "172ace5e35329c6feea5771dd18855880960d97f"
-  branch: "codex/w35-stats-visual-metadata-recovery"
-  workspace: "D:/dl/crawlerpj/.codex-workspaces/w35-stats-visual-metadata-recovery-20260902-01"
-  objective: "Run one final local classifier-bound W35 regeneration from retained MTGO inputs, materialize all accepted bilingual and Feature inputs into one five-sheet workbook, import it, and build the local Landing preview."
-  artifact_impact:
-    - "generated_public_data"
-    - "private_review_data"
-    - "user_visible_ui"
+  base_commit: "d821c153d525bbc70e271e75edd4f65997ca94e2"
+  branch: "codex/tabletop-latest-metrics-quality"
+  workspace: "D:/dl/crawlerpj/.codex-workspaces/tabletop-bugfix-20260902-01"
+  objective: "Make Tabletop default to the newest admitted event, show Day 2 conversion in the all-Constructed scope, hide unavailable mixed-event high-score metrics, and render approved bilingual data-quality explanations only when present."
   authorization:
-    local_implementation: false
+    local_implementation: true
     commit: true
     remote_publication: true
     merge: true
   owner_acceptance:
     status: "accepted"
     accepted_on: "2026-09-02"
-    subject:
-      base_commit: "172ace5e35329c6feea5771dd18855880960d97f"
-      final_workbook_sha256: "2704fea39c92a29a04c67fe8dc7ba8f4f5951e7edb26811207f86f6b4165479f"
-      standard_classifier_digest: "4bd98c063a5b621a40a1d81aff7d696e07052859fc2c459f6054076005ebb9f0"
-      modern_classifier_digest: "cae8e46c65d9ff3955d8005155da6cca89e6eba743057ceca1331cb1e47c57b6"
-      standard_landing_summary_count: 3
-      modern_landing_summary_count: 2
-      standard_w35_feature_count: 7
-      modern_w35_feature_count: 0
+    subject: "Interactive local Tabletop preview for the unchanged hotfix."
+  local_acceptance:
+    status: "accepted"
+    accepted_on: "2026-09-02"
+    subject: "Interactive local Tabletop preview for the unchanged hotfix."
   allowed_paths:
-    - "my_archetypes/standard.yaml"
-    - "configs/mtgo_archetype_names.yaml"
-    - "configs/mtgo_landing_visuals.yaml"
-    - "assets/js/phase8/archetype-visuals.js"
-    - "assets/images/representative-cards/standard/"
-    - "src/mtgmeta/mtgo/landing_editorial.py"
-    - "tests/test_classifier_rule_contracts.py"
-    - "tests/test_mtgo_landing_editorial.py"
-    - "stats/standard/mtgo/"
-    - "stats/standard/archetype_names.json"
-    - "stats/modern/mtgo/"
-    - "stats/catalog.json"
+    - "assets/js/phase8/app-mobile-render.js"
+    - "assets/js/phase8/app-tabletop.js"
+    - "assets/js/phase8/i18n.js"
+    - "assets/js/phase8/tabletop-controller.js"
+    - "src/mtgmeta/melee/publish.py"
+    - "stats/modern/melee/index.json"
+    - "README.md"
+    - "tests/browser/phase13-tabletop-rendering.spec.js"
+    - "tests/js/phase8-tabletop-controller.test.js"
+    - "tests/test_melee_multi_event_contract.py"
     - "docs/STATUS.yaml"
-    - "outputs/01a052a5-768e-7630-a121-9a44e1c23c61/W35_Landing_Review_Field_Guide.xlsx"
-    - "outputs/01a052a5-768e-7630-a121-9a44e1c23c61/W35_Landing_Review_Final_Bilingual.xlsx"
   read_only_inputs:
-    - "data/standard/mtgo/"
-    - "data/modern/mtgo/"
-    - "data/standard/mtgo_matches/"
-    - "data/modern/mtgo_matches/"
+    - "data/modern/melee/"
+    - "stats/modern/melee/events/434455/"
+    - "stats/modern/melee/events/441441/"
   protected_scope:
-    source_data: "Do not fetch, refresh, or modify MTGO or Melee source data; use only retained local inputs."
-    generation_count: "Generate each required Standard and Modern classifier-bound family once; do not repeat a successful family."
-    tabletop: "Do not regenerate, modify, or publish Melee event data or Tabletop products."
-    workbook: "Preserve every accepted Chinese paragraph, exact token, six All Top 8 ADD rows, Owner Note, five English top-copy drafts, seven Feature English positionings, and 28 Feature cards."
-    classifier: "Apply only the accepted Sultai Excruciator change; leave the W36 Standard Dwarves and Modern Bant Company queue untouched."
-    publication: "Complete only this unchanged accepted subject through commit, one Ready PR, required checks, merge, and its merge-triggered Pages verification; do not dispatch production or another workflow."
+    source_data: "Do not fetch, refresh, or modify retained MTGO or Melee source data."
+    statistics: "Do not change statistical formulas, schemas, event results, or classification decisions; project the existing Day 2 metric only in the consumer view."
+    publication: "Local implementation only; do not commit, push, open a pull request, merge, or deploy without separate authorization."
   invariants:
-    - "All Standard and Modern classification-dependent public families carry the current format classifier digest after one regeneration."
-    - "The accepted W35 classification delta is event 12853183 rank six Scappie from Dimir Excruciator to Sultai Excruciator; source facts stay unchanged."
-    - "The imported Landing review contains five bilingual top-copy items and seven exact Feature decks with four accepted cards each."
-    - "Chinese and English top copy contain the same seven exact deck tokens."
-    - "The output workbook remains a five-sheet Field Guide carrier and contains no artifact-tool numeric 53 blank sentinel."
+    - "The newest admitted event is first in the catalog and is the default when no event is requested."
+    - "Constructed Day 2 conversion remains the existing Day 2 statistic and is not recalculated in the browser."
+    - "Mixed-event high-score data remains visible in day-specific scopes and is hidden only where the metric is unavailable."
+    - "Unknown and unavailable-decklist quality counts remain separate and do not change classification or statistical eligibility."
   stop_point: "Complete the unchanged accepted subject through one Ready PR, required checks, merge, and exact-SHA Pages verification; stop on failure, conflict, permission blockage, scope change, or changed subject."
 
 weekly_classifier_review:
@@ -115,9 +98,9 @@ weekly_classifier_review:
   separation_rule: "Share the same-format human classifier decision session only; retain separate source provenance, counts, readiness, completion, generation, and publication."
 
 current_repository_state:
-  source_master_commit: "172ace5e35329c6feea5771dd18855880960d97f"
-  previous_task: "W35-LANDING-REPRESENTATIVE-CARDS"
-  previous_task_status: "completed_merged_in_pr_348"
+  source_master_commit: "d821c153d525bbc70e271e75edd4f65997ca94e2"
+  previous_task: "W35-UNIFIED-FINAL-REGENERATION-AND-LANDING-IMPORT"
+  previous_task_status: "completed_merged_in_pr_349_pages_verified"
   open_pull_request: null
   open_pull_request_head: null
   open_pull_request_status: "none"
@@ -147,18 +130,16 @@ future_task_gates:
     note: "Pioneer does not begin implicitly after Phase 14."
 
 next_approved_task:
-  id: "W35-UNIFIED-FINAL-REGENERATION-AND-LANDING-IMPORT"
-  name: "Complete the accepted final W35 subject"
+  id: "TABLETOP-LATEST-METRICS-QUALITY-HOTFIX"
+  name: "Complete the accepted local Tabletop hotfix"
   status: "owner_accepted_completion_authorized"
   local_execution_authorized: true
   commit_authorized: true
   publication_authorized: true
   merge_authorized: true
-  note: "Commit and publish only the unchanged accepted subject through one Ready PR, required checks, merge, and exact-SHA Pages verification; do not dispatch production or start another task."
+  note: "Complete only the unchanged accepted subject through one Ready PR, required checks, merge, and exact-SHA Pages verification."
 
 prohibited_next_actions:
   - "Do not classify the W36 Standard Dwarves or Modern Bant Company records or change another classifier decision."
-  - "Do not fetch either source or dispatch production, data, Pages, or another workflow."
-  - "Do not repeat a successfully completed generated family or change another classifier decision."
-  - "Do not dispatch production, manually dispatch Pages, or publish any changed subject beyond the accepted commit."
+  - "Do not fetch either source, regenerate event statistics, or manually dispatch production or Pages."
   - "Do not start P14-02, Phase 15, another event admission, or unrelated work."

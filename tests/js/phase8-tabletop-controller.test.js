@@ -151,6 +151,54 @@ test("selected matchup events load as one catalog-admitted canonical set", async
   );
 });
 
+test("catalog default is used when no event is requested", async () => {
+  const documents = eventDocuments();
+  const catalog = structuredClone(parityFixture.catalog);
+  catalog.default_event_id = "10";
+  documents.set("./stats/modern/melee/index.json", catalog);
+  const controller = controllerWith(documents);
+  const active = await controller.loadEvent(
+    "stats/modern/melee/index.json",
+    null,
+    "modern",
+    {}
+  );
+
+  assert.equal(active.eventEntry.event_id, "10");
+});
+
+test("scope presentation hides unavailable mixed metrics and projects Day 2 conversion", () => {
+  const controller = controllerWith(eventDocuments());
+  assert.equal(controller.structurePresentation({
+    event_structure: "mixed",
+    default_scope: "all_constructed",
+  }, "all_constructed").advancement_metric, null);
+  assert.equal(controller.structurePresentation({
+    event_structure: "mixed",
+    default_scope: "all_constructed",
+  }, "day1").advancement_metric, "high_score");
+
+  const projected = controller.withDay2Conversion({
+    day2_conversion: null,
+    archetypes: [
+      { group_id: "archetype:alpha", day2_conversion: null, subtypes: [] },
+      { group_id: "archetype:beta", day2_conversion: null, subtypes: [
+        { group_id: "subtype:beta/one", day2_conversion: null },
+      ] },
+    ],
+  }, {
+    day2_conversion: 0.25,
+    archetypes: [
+      { group_id: "archetype:alpha", day2_conversion: 0.4, subtypes: [] },
+    ],
+  });
+
+  assert.equal(projected.day2_conversion, 0.25);
+  assert.equal(projected.archetypes[0].day2_conversion, 0.4);
+  assert.equal(projected.archetypes[1].day2_conversion, 0);
+  assert.equal(projected.archetypes[1].subtypes[0].day2_conversion, 0);
+});
+
 test("a rejected staged member cannot replace the last complete selection", async () => {
   const documents = eventDocuments();
   const controller = controllerWith(documents);
