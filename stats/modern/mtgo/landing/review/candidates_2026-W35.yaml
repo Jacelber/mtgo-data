@@ -628,40 +628,40 @@ existing_changes:
   swiss_score: 24
   player_count: 289
   starttime: '2026-08-29 15:00:00.0'
-  deviation: 55
+  deviation: 56
   source: existing
   candidate_reasons:
   - type: build_shift
     identity_level: parent
     identity_id: affinity
-    reference_sample_size: 70
-    score: 55
+    reference_sample_size: 58
+    score: 56
     difference:
       fewer:
       - name: Engineered Explosives
         deck_qty: 0
-        typical_qty: 3.3
+        typical_qty: 4.0
       - name: Spirebluff Canal
         deck_qty: 0
-        typical_qty: 3.2
+        typical_qty: 3.8
       - name: Weapons Manufacturing
         deck_qty: 0
-        typical_qty: 3.1
+        typical_qty: 3.7
       - name: Fiery Islet
         deck_qty: 0
-        typical_qty: 2.9
-      - name: Metallic Rebuke
-        deck_qty: 0
-        typical_qty: 2.5
+        typical_qty: 3.5
       - name: Claws of Gix
         deck_qty: 0
-        typical_qty: 2.3
+        typical_qty: 2.8
+      - name: Metallic Rebuke
+        deck_qty: 0
+        typical_qty: 2.4
       - name: Island
         deck_qty: 0
         typical_qty: 1.8
       - name: Welding Jar
         deck_qty: 0
-        typical_qty: 1.4
+        typical_qty: 1.7
       more:
       - name: Darkslick Shores
         deck_qty: 4
@@ -678,15 +678,15 @@ existing_changes:
       - name: Springleaf Drum
         deck_qty: 3
         typical_qty: 0.0
+      - name: Tamiyo, Inquisitive Student
+        deck_qty: 3
+        typical_qty: 0.0
       - name: Underground River
         deck_qty: 3
         typical_qty: 0.0
       - name: Memnite
         deck_qty: 3
         typical_qty: 0.2
-      - name: Tamiyo, Inquisitive Student
-        deck_qty: 3
-        typical_qty: 0.7
   approved: false
   comment_zh: ''
   comment_en: ''
@@ -1211,7 +1211,96 @@ existing_changes:
     qty: 1
   - name: Wrath of the Skies
     qty: 3
-new_archetypes: []
+new_archetypes:
+- identity_id: kethis-combo
+  archetype_id: kethis-combo
+  subtype_id: null
+  subtype: null
+  event_id: '12852770'
+  deck_id: 9486019b737c42ce2432
+  deck_fingerprint_sha256: c932acc282933431f591561fe3c95275e53d5a09c37a76ef7e50b0f5ea5aad97
+  archetype: Kethis Combo
+  player: GreyChroma
+  final_rank: 7
+  swiss_score: 12
+  player_count: 34
+  starttime: '2026-08-25 08:00:00.0'
+  deviation: null
+  source: new
+  candidate_reasons:
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 3
+  approved: false
+  comment_zh: ''
+  comment_en: ''
+  landing:
+    category: new_deck
+    order: null
+    headline_zh: ''
+    headline_en: ''
+    positioning_zh: ''
+    positioning_en: ''
+    featured_cards: []
+  main_deck:
+  - name: Agatha's Soul Cauldron
+    qty: 2
+  - name: Boseiju, Who Endures
+    qty: 3
+  - name: Emry, Lurker of the Loch
+    qty: 4
+  - name: Grinding Station
+    qty: 4
+  - name: Hallowed Fountain
+    qty: 1
+  - name: Jace, the Perfected Mind
+    qty: 1
+  - name: Kethis, the Hidden Hand
+    qty: 4
+  - name: Malevolent Rumble
+    qty: 4
+  - name: Minamo, School at Water's Edge
+    qty: 1
+  - name: Mishra's Bauble
+    qty: 4
+  - name: Mox Amber
+    qty: 4
+  - name: Mox Opal
+    qty: 4
+  - name: Otawara, Soaring City
+    qty: 1
+  - name: Plaza of Heroes
+    qty: 4
+  - name: Sewer-veillance Cam
+    qty: 3
+  - name: Spire of Industry
+    qty: 4
+  - name: Starting Town
+    qty: 4
+  - name: Tamiyo, Inquisitive Student
+    qty: 4
+  - name: Teferi, Time Raveler
+    qty: 2
+  - name: Urza's Saga
+    qty: 2
+  side_deck:
+  - name: Ashiok, Dream Render
+    qty: 2
+  - name: Consign to Memory
+    qty: 4
+  - name: Flame of Anor
+    qty: 2
+  - name: Haywire Mite
+    qty: 1
+  - name: Lavinia, Azorius Renegade
+    qty: 2
+  - name: Nihil Spellbomb
+    qty: 2
+  - name: Noxious Revival
+    qty: 1
+  - name: Toxic Deluge
+    qty: 1
 week_status: provisional
 provisional_through: '2026-09-06'
 seal_on: '2026-09-07'
@@ -1231,5 +1320,5 @@ source_event_ids:
 - '12853192'
 - '12853197'
 - '12853202'
-classifier_digest: 12c14d5e94d915c272d2cf0580602b3c0ad8d4f162af87028097e24dac6734c4
+classifier_digest: cae8e46c65d9ff3955d8005155da6cca89e6eba743057ceca1331cb1e47c57b6
 selection_policy_digest: 3541185e634bcab559bb3118ee3f29ece113552473d1f314bcde2a1e2f697a42
