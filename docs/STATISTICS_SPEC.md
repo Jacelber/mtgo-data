@@ -2096,6 +2096,33 @@ an impact report for review, not a zero-difference acceptance gate. The catalog
 exposes `status`, `provisional_through`, and `seal_on`; those fields govern only
 event membership and source-fact retention.
 
+### 16.9 Public classifier binding
+
+Every classification-dependent MTGO public family must identify the exact
+classifier that produced it. The canonical digest covers the classifier engine
+contract, normalized format rules, and semantic-feature manifest. The same
+format digest is required on:
+
+- the rolling-statistics catalog and every indexed range document;
+- every indexed representative-deck document;
+- the matchup catalog and every indexed matchup range;
+- the maintained parent/subtype hierarchy catalog; and
+- the Top 8 index and every indexed week and comparison base.
+
+For one format and publication subject, these bindings must equal the digest of
+the current rules, and the statistics, matchup, and Top 8 catalogs must identify
+the same latest complete week. A classifier change does not update an already
+generated statistic merely because the browser can load the new rule or name
+contract. All affected derived families must be regenerated atomically from the
+retained source inputs. Weekly readiness fails closed on a missing, stale, or
+mixed binding before Top 8, color, representative-card, or Landing review can
+continue.
+
+Completeness documents are excluded because they measure source availability
+rather than classified identities. A previously admitted Landing may remain on
+its older explicitly reviewed week until the next Landing review is complete;
+it must not be silently restated as part of classifier-baseline recovery.
+
 ---
 
 ## 17. Tabletop per-event outputs

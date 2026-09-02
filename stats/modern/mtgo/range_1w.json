@@ -1,7 +1,8 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
+  "classifier_digest": "cae8e46c65d9ff3955d8005155da6cca89e6eba743057ceca1331cb1e47c57b6",
   "period": {
     "type": "1w",
     "start": "2026-08-24",
@@ -11,7 +12,7 @@
   "total_decks": 480,
   "total_high_score": 428,
   "total_top8": 120,
-  "unknown_count": 17,
+  "unknown_count": 0,
   "archetypes": [
     {
       "id": "prowess",
@@ -239,14 +240,14 @@
     {
       "id": "esper-blink",
       "name": "Esper Blink",
-      "count": 36,
-      "high_score_count": 35,
-      "high_score_share": 0.0818,
-      "top8_count": 12,
-      "top8_share": 0.1,
-      "conversion": 0.3429,
-      "avg_points_per_round": 2.08,
-      "avg_deviation": 8
+      "count": 39,
+      "high_score_count": 38,
+      "high_score_share": 0.0888,
+      "top8_count": 14,
+      "top8_share": 0.1167,
+      "conversion": 0.3684,
+      "avg_points_per_round": 2.1,
+      "avg_deviation": 9
     },
     {
       "id": "esper-goryos",
@@ -259,18 +260,6 @@
       "conversion": 0.3235,
       "avg_points_per_round": 2.12,
       "avg_deviation": 11
-    },
-    {
-      "id": "affinity",
-      "name": "Affinity",
-      "count": 28,
-      "high_score_count": 21,
-      "high_score_share": 0.0491,
-      "top8_count": 4,
-      "top8_share": 0.0333,
-      "conversion": 0.1905,
-      "avg_points_per_round": 1.87,
-      "avg_deviation": 41
     },
     {
       "id": "devoted-druid-combo",
@@ -315,6 +304,18 @@
         }
       ],
       "avg_deviation": 13
+    },
+    {
+      "id": "affinity",
+      "name": "Affinity",
+      "count": 20,
+      "high_score_count": 15,
+      "high_score_share": 0.035,
+      "top8_count": 4,
+      "top8_share": 0.0333,
+      "conversion": 0.2667,
+      "avg_points_per_round": 1.99,
+      "avg_deviation": 17
     },
     {
       "id": "living-end",
@@ -418,18 +419,6 @@
       "avg_deviation": 3
     },
     {
-      "id": "unknown",
-      "name": "Unknown",
-      "count": 17,
-      "high_score_count": 12,
-      "high_score_share": 0.028,
-      "top8_count": 4,
-      "top8_share": 0.0333,
-      "conversion": 0.3333,
-      "avg_points_per_round": 1.75,
-      "avg_deviation": null
-    },
-    {
       "id": "boros-energy",
       "name": "Boros Energy",
       "count": 17,
@@ -525,6 +514,65 @@
       "avg_deviation": 21
     },
     {
+      "id": "eldrazi-tron",
+      "name": "Eldrazi Tron",
+      "count": 12,
+      "high_score_count": 9,
+      "high_score_share": 0.021,
+      "top8_count": 2,
+      "top8_share": 0.0167,
+      "conversion": 0.2222,
+      "avg_points_per_round": 1.79,
+      "subtypes": [
+        {
+          "id": "colorless",
+          "name": "Colorless",
+          "parent_id": "eldrazi-tron",
+          "display_name": "Colorless Eldrazi Tron",
+          "count": 8,
+          "high_score_count": 6,
+          "high_score_share": 0.014,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": 0.0,
+          "avg_points_per_round": 1.8,
+          "parent_share": 0.6667,
+          "avg_deviation": 11
+        },
+        {
+          "id": "mono-green",
+          "name": "Mono-Green",
+          "parent_id": "eldrazi-tron",
+          "display_name": "Mono-Green Eldrazi Tron",
+          "count": 4,
+          "high_score_count": 3,
+          "high_score_share": 0.007,
+          "top8_count": 2,
+          "top8_share": 0.0167,
+          "conversion": 0.6667,
+          "avg_points_per_round": 1.78,
+          "parent_share": 0.3333,
+          "avg_deviation": 13
+        },
+        {
+          "id": "mono-black",
+          "name": "Mono-Black",
+          "parent_id": "eldrazi-tron",
+          "display_name": "Mono-Black Eldrazi Tron",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        }
+      ],
+      "avg_deviation": 16
+    },
+    {
       "id": "hollowvine",
       "name": "Hollowvine",
       "count": 12,
@@ -547,65 +595,6 @@
       "conversion": 0.4167,
       "avg_points_per_round": 2.16,
       "avg_deviation": 10
-    },
-    {
-      "id": "eldrazi-tron",
-      "name": "Eldrazi Tron",
-      "count": 11,
-      "high_score_count": 9,
-      "high_score_share": 0.021,
-      "top8_count": 2,
-      "top8_share": 0.0167,
-      "conversion": 0.2222,
-      "avg_points_per_round": 1.89,
-      "subtypes": [
-        {
-          "id": "colorless",
-          "name": "Colorless",
-          "parent_id": "eldrazi-tron",
-          "display_name": "Colorless Eldrazi Tron",
-          "count": 8,
-          "high_score_count": 6,
-          "high_score_share": 0.014,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": 0.0,
-          "avg_points_per_round": 1.8,
-          "parent_share": 0.7273,
-          "avg_deviation": 11
-        },
-        {
-          "id": "mono-green",
-          "name": "Mono-Green",
-          "parent_id": "eldrazi-tron",
-          "display_name": "Mono-Green Eldrazi Tron",
-          "count": 3,
-          "high_score_count": 3,
-          "high_score_share": 0.007,
-          "top8_count": 2,
-          "top8_share": 0.0167,
-          "conversion": 0.6667,
-          "avg_points_per_round": 2.14,
-          "parent_share": 0.2727,
-          "avg_deviation": 10
-        },
-        {
-          "id": "mono-black",
-          "name": "Mono-Black",
-          "parent_id": "eldrazi-tron",
-          "display_name": "Mono-Black Eldrazi Tron",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        }
-      ],
-      "avg_deviation": 15
     },
     {
       "id": "eldrazi-ramp",
@@ -846,6 +835,80 @@
       "avg_deviation": 13
     },
     {
+      "id": "sewer-combo",
+      "name": "Sewer Combo",
+      "count": 5,
+      "high_score_count": 4,
+      "high_score_share": 0.0093,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.76,
+      "subtypes": [
+        {
+          "id": "azorius",
+          "name": "Azorius",
+          "parent_id": "sewer-combo",
+          "display_name": "Azorius Sewer Combo",
+          "count": 2,
+          "high_score_count": 1,
+          "high_score_share": 0.0023,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": 0.0,
+          "avg_points_per_round": 1.62,
+          "parent_share": 0.4,
+          "avg_deviation": null
+        },
+        {
+          "id": "simic",
+          "name": "Simic",
+          "parent_id": "sewer-combo",
+          "display_name": "Simic Sewer Combo",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "mono-blue",
+          "name": "Mono-Blue",
+          "parent_id": "sewer-combo",
+          "display_name": "Mono-Blue Sewer Combo",
+          "count": 2,
+          "high_score_count": 2,
+          "high_score_share": 0.0047,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": 0.0,
+          "avg_points_per_round": 1.93,
+          "parent_share": 0.4,
+          "avg_deviation": null
+        },
+        {
+          "id": "izzet",
+          "name": "Izzet",
+          "parent_id": "sewer-combo",
+          "display_name": "Izzet Sewer Combo",
+          "count": 1,
+          "high_score_count": 1,
+          "high_score_share": 0.0023,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": 0.0,
+          "avg_points_per_round": 1.71,
+          "parent_share": 0.2,
+          "avg_deviation": null
+        }
+      ],
+      "avg_deviation": 33
+    },
+    {
       "id": "grixis-persist",
       "name": "Grixis Persist",
       "count": 4,
@@ -856,6 +919,65 @@
       "conversion": 0.3333,
       "avg_points_per_round": 1.89,
       "avg_deviation": 10
+    },
+    {
+      "id": "tron",
+      "name": "Tron",
+      "count": 4,
+      "high_score_count": 3,
+      "high_score_share": 0.007,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.78,
+      "subtypes": [
+        {
+          "id": "mono-green",
+          "name": "Mono-Green",
+          "parent_id": "tron",
+          "display_name": "Mono-Green Tron",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "selesnya",
+          "name": "Selesnya",
+          "parent_id": "tron",
+          "display_name": "Selesnya Tron",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "simic",
+          "name": "Simic",
+          "parent_id": "tron",
+          "display_name": "Simic Tron",
+          "count": 4,
+          "high_score_count": 3,
+          "high_score_share": 0.007,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": 0.0,
+          "avg_points_per_round": 1.78,
+          "parent_share": 1.0,
+          "avg_deviation": null
+        }
+      ],
+      "avg_deviation": null
     },
     {
       "id": "fling-goyf",
@@ -899,6 +1021,80 @@
       "avg_deviation": 23
     },
     {
+      "id": "soultrader",
+      "name": "Soultrader",
+      "count": 3,
+      "high_score_count": 1,
+      "high_score_share": 0.0023,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.11,
+      "subtypes": [
+        {
+          "id": "golgari",
+          "name": "Golgari",
+          "parent_id": "soultrader",
+          "display_name": "Golgari Soultrader",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "sultai",
+          "name": "Sultai",
+          "parent_id": "soultrader",
+          "display_name": "Sultai Soultrader",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "dimir",
+          "name": "Dimir",
+          "parent_id": "soultrader",
+          "display_name": "Dimir Soultrader",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "orzhov",
+          "name": "Orzhov",
+          "parent_id": "soultrader",
+          "display_name": "Orzhov Soultrader",
+          "count": 3,
+          "high_score_count": 1,
+          "high_score_share": 0.0023,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": 0.0,
+          "avg_points_per_round": 1.11,
+          "parent_share": 1.0,
+          "avg_deviation": null
+        }
+      ],
+      "avg_deviation": null
+    },
+    {
       "id": "mono-blue-tron",
       "name": "Mono-Blue Tron",
       "count": 3,
@@ -921,6 +1117,18 @@
       "conversion": 0.6667,
       "avg_points_per_round": 2.29,
       "avg_deviation": 0
+    },
+    {
+      "id": "selesnya-energy",
+      "name": "Selesnya Energy",
+      "count": 3,
+      "high_score_count": 3,
+      "high_score_share": 0.007,
+      "top8_count": 1,
+      "top8_share": 0.0083,
+      "conversion": 0.3333,
+      "avg_points_per_round": 2.29,
+      "avg_deviation": null
     },
     {
       "id": "erayo",
@@ -1136,20 +1344,8 @@
       "avg_deviation": null
     },
     {
-      "id": "mardu-energy",
-      "name": "Mardu Energy",
-      "count": 2,
-      "high_score_count": 1,
-      "high_score_share": 0.0023,
-      "top8_count": 0,
-      "top8_share": 0.0,
-      "conversion": 0.0,
-      "avg_points_per_round": 1.38,
-      "avg_deviation": null
-    },
-    {
-      "id": "soultrader",
-      "name": "Soultrader",
+      "id": "hammer-time",
+      "name": "Hammer Time",
       "count": 2,
       "high_score_count": 1,
       "high_score_share": 0.0023,
@@ -1159,10 +1355,25 @@
       "avg_points_per_round": 1.15,
       "subtypes": [
         {
-          "id": "golgari",
-          "name": "Golgari",
-          "parent_id": "soultrader",
-          "display_name": "Golgari Soultrader",
+          "id": "azorius",
+          "name": "Azorius",
+          "parent_id": "hammer-time",
+          "display_name": "Azorius Hammer Time",
+          "count": 1,
+          "high_score_count": 1,
+          "high_score_share": 0.0023,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": 0.0,
+          "avg_points_per_round": 2.14,
+          "parent_share": 0.5,
+          "avg_deviation": null
+        },
+        {
+          "id": "boros",
+          "name": "Boros",
+          "parent_id": "hammer-time",
+          "display_name": "Boros Hammer Time",
           "count": 0,
           "high_score_count": 0,
           "high_score_share": 0.0,
@@ -1174,10 +1385,10 @@
           "avg_deviation": null
         },
         {
-          "id": "sultai",
-          "name": "Sultai",
-          "parent_id": "soultrader",
-          "display_name": "Sultai Soultrader",
+          "id": "jeskai",
+          "name": "Jeskai",
+          "parent_id": "hammer-time",
+          "display_name": "Jeskai Hammer Time",
           "count": 0,
           "high_score_count": 0,
           "high_score_share": 0.0,
@@ -1189,10 +1400,10 @@
           "avg_deviation": null
         },
         {
-          "id": "dimir",
-          "name": "Dimir",
-          "parent_id": "soultrader",
-          "display_name": "Dimir Soultrader",
+          "id": "mono-white",
+          "name": "Mono-White",
+          "parent_id": "hammer-time",
+          "display_name": "Mono-White Hammer Time",
           "count": 0,
           "high_score_count": 0,
           "high_score_share": 0.0,
@@ -1206,24 +1417,60 @@
         {
           "id": "orzhov",
           "name": "Orzhov",
-          "parent_id": "soultrader",
-          "display_name": "Orzhov Soultrader",
-          "count": 2,
-          "high_score_count": 1,
-          "high_score_share": 0.0023,
+          "parent_id": "hammer-time",
+          "display_name": "Orzhov Hammer Time",
+          "count": 1,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
           "top8_count": 0,
           "top8_share": 0.0,
-          "conversion": 0.0,
-          "avg_points_per_round": 1.15,
-          "parent_share": 1.0,
+          "conversion": null,
+          "avg_points_per_round": 0.0,
+          "parent_share": 0.5,
           "avg_deviation": null
         }
       ],
       "avg_deviation": null
     },
     {
+      "id": "kethis-combo",
+      "name": "Kethis Combo",
+      "count": 2,
+      "high_score_count": 2,
+      "high_score_share": 0.0047,
+      "top8_count": 1,
+      "top8_share": 0.0083,
+      "conversion": 0.5,
+      "avg_points_per_round": 1.85,
+      "avg_deviation": null
+    },
+    {
+      "id": "mardu-energy",
+      "name": "Mardu Energy",
+      "count": 2,
+      "high_score_count": 1,
+      "high_score_share": 0.0023,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.38,
+      "avg_deviation": null
+    },
+    {
       "id": "rakdos-delirium",
       "name": "Rakdos Delirium",
+      "count": 2,
+      "high_score_count": 2,
+      "high_score_share": 0.0047,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.71,
+      "avg_deviation": null
+    },
+    {
+      "id": "azorius-artifact",
+      "name": "Azorius Artifact",
       "count": 2,
       "high_score_count": 2,
       "high_score_share": 0.0047,
@@ -1267,6 +1514,18 @@
       "top8_share": 0.0,
       "conversion": 0.0,
       "avg_points_per_round": 1.93,
+      "avg_deviation": null
+    },
+    {
+      "id": "dimir-legends",
+      "name": "Dimir Legends",
+      "count": 1,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 0.0,
       "avg_deviation": null
     },
     {
@@ -1326,8 +1585,20 @@
       "avg_deviation": null
     },
     {
-      "id": "hammer-time",
-      "name": "Hammer Time",
+      "id": "five-color-elementals",
+      "name": "Five-Color Elementals",
+      "count": 1,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 0.5,
+      "avg_deviation": null
+    },
+    {
+      "id": "rakdos-phoenix",
+      "name": "Rakdos Phoenix",
       "count": 1,
       "high_score_count": 1,
       "high_score_share": 0.0023,
@@ -1335,68 +1606,6 @@
       "top8_share": 0.0,
       "conversion": 0.0,
       "avg_points_per_round": 2.14,
-      "subtypes": [
-        {
-          "id": "azorius",
-          "name": "Azorius",
-          "parent_id": "hammer-time",
-          "display_name": "Azorius Hammer Time",
-          "count": 1,
-          "high_score_count": 1,
-          "high_score_share": 0.0023,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": 0.0,
-          "avg_points_per_round": 2.14,
-          "parent_share": 1.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "boros",
-          "name": "Boros",
-          "parent_id": "hammer-time",
-          "display_name": "Boros Hammer Time",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "jeskai",
-          "name": "Jeskai",
-          "parent_id": "hammer-time",
-          "display_name": "Jeskai Hammer Time",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "mono-white",
-          "name": "Mono-White",
-          "parent_id": "hammer-time",
-          "display_name": "Mono-White Hammer Time",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        }
-      ],
       "avg_deviation": null
     },
     {

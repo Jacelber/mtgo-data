@@ -7883,3 +7883,56 @@ validation rejects it before any broad fallback suite can run. Weekly human
 review evidence remains in decisions, review carriers, and immutable artifacts
 rather than permanent executable totals. Product data, classifier rules,
 statistics, public paths, and production behavior do not change.
+
+---
+
+# DEC-159 - Bind every reviewed MTGO public family to one classifier
+
+Status: `Accepted`
+
+## Context
+
+The accepted W35 classifier was applied to Tabletop publication, MTGO
+diagnostics, and a local Top 8 audit overlay after the last complete MTGO
+production run. The public MTGO rolling statistics, representative decks,
+matchups, and Top 8 files therefore remained on the older classifier. Pages
+correctly deployed those repository bytes, so the Standard 2026-08-27 C16
+winner remained `Unknown` online while the local audit classified the same
+deck as `Affinity`.
+
+The Top 8 family recorded a classifier digest, but rolling statistics,
+representative decks, matchup documents, and the hierarchy catalog did not.
+Weekly readiness compared Top 8 and Landing bindings without proving that the
+public percentage and matchup products were generated under the same rules.
+The maintenance sequence also asked for representative cards before the exact
+Landing environment subject was fixed.
+
+## Decision
+
+Use one canonical format-scoped classifier digest for every
+classification-dependent MTGO public family. Add it to the rolling-statistics
+catalog and ranges, representative-deck documents, matchup catalog and ranges,
+and hierarchy catalog; retain the existing Top 8 binding. Advance the affected
+public Schemas additively.
+
+Before weekly readiness is emitted, compare the current rules with the latest
+Top 8 index and week, every file referenced by the statistics and matchup
+catalogs, and the hierarchy catalog. Also require the three catalogs to use one
+latest complete week. Any absent, stale, or mixed binding stops the handoff.
+
+Recover W35 by regenerating those Standard and Modern public families from the
+already retained MTGO inputs. Do not fetch either source, change a classifier
+decision, mix MTGO with Tabletop, or restate the already admitted W34 Landing.
+
+Split weekly visual review: review published parent/subtype colors after the
+Top 8 audit, screen the exact Landing subject, and only then review
+representative cards for the environment rows that will actually appear.
+
+## Consequences
+
+A classifier change can no longer appear correct in one frontend source while
+leaving MTGO percentages on an unidentifiable older baseline. Pages still does
+not calculate statistics; the generators must refresh every affected family,
+and weekly readiness proves that closure before human downstream work begins.
+Completeness remains outside this digest because it measures source coverage,
+and Landing remains separately human-gated.

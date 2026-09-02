@@ -2,12 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-matchup-catalog.schema.json",
   "title": "MTGO matchup catalog",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "type": "object",
   "required": [
     "schema_version",
     "format",
     "source",
+    "classifier_digest",
     "generated",
     "latest_complete_week",
     "min_sample_hint",
@@ -15,14 +16,16 @@
     "ranges"
   ],
   "properties": {
-    "schema_version": {
-      "$ref": "common.schema.json#/$defs/schemaVersion"
-    },
+    "schema_version": {"const": "1.1.0"},
     "format": {
       "enum": ["standard", "modern"]
     },
     "source": {
       "const": "mtgo"
+    },
+    "classifier_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     },
     "generated": {
       "type": "string",

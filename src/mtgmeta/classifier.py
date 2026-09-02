@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass
+from hashlib import sha256
+import json
 from typing import Any, Literal
 
 from .classifier_features import SemanticFeatureError, augment_semantic_counts
@@ -17,6 +19,59 @@ ConflictKind = Literal["parent_archetype", "subtype"]
 # Bump this only when classifier evaluation semantics change.  Rule and
 # semantic-feature changes are independently included in each rule digest.
 CLASSIFIER_ENGINE_VERSION = "1.0.0"
+
+
+def classifier_digest(rules: RuleSet) -> str:
+    """Hash every rule input plus the explicit classifier engine contract."""
+
+    subject = {
+        "engine_version": CLASSIFIER_ENGINE_VERSION,
+        "rule_schema_version": rules.schema_version,
+        "format": rules.format,
+        "semantic_feature_path": rules.semantic_feature_path,
+        "semantic_feature_sha256": rules.semantic_feature_sha256,
+        "archetypes": [
+            {
+                "id": parent.id,
+                "name": parent.name,
+                "priority": parent.priority,
+                "subtypes": [
+                    {
+                        "id": subtype.id,
+                        "name": subtype.name,
+                        "parent_archetype_id": subtype.parent_archetype_id,
+                    }
+                    for subtype in parent.subtypes
+                ],
+                "rules": [
+                    {
+                        "id": rule.id,
+                        "priority": rule.priority,
+                        "subtype_id": rule.subtype_id,
+                        "conditions": [
+                            {
+                                "card": condition.card,
+                                "zone": condition.zone,
+                                "min_count": condition.min_count,
+                                "max_count": condition.max_count,
+                                "exact_count": condition.exact_count,
+                            }
+                            for condition in rule.conditions
+                        ],
+                    }
+                    for rule in parent.rules
+                ],
+            }
+            for parent in rules.archetypes
+        ],
+    }
+    encoded = json.dumps(
+        subject,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return sha256(encoded).hexdigest()
 
 
 @dataclass(frozen=True)

@@ -60,6 +60,7 @@ def test_hierarchy_generation_remains_owned_by_metadata(monkeypatch, tmp_path):
     }
     monkeypatch.setattr(metadata, "load_mtgo_context", lambda *args, **kwargs: context)
     monkeypatch.setattr(metadata, "load_rules_for_format", lambda *args, **kwargs: rules)
+    monkeypatch.setattr(metadata, "classifier_digest", lambda value: "a" * 64)
     monkeypatch.setattr(
         metadata.matchup,
         "build_matchup_hierarchy",
@@ -73,6 +74,7 @@ def test_hierarchy_generation_remains_owned_by_metadata(monkeypatch, tmp_path):
     )
     document = json.loads(destination.read_text(encoding="utf-8"))
 
+    assert document["classifier_digest"] == "a" * 64
     assert document["summary"] == {
         "parents": 1,
         "leaves": 1,

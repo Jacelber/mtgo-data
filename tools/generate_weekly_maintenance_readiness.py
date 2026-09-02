@@ -13,9 +13,12 @@ from typing import Any
 import jsonschema
 import yaml
 
+from mtgmeta.classifier import classifier_digest
+from mtgmeta.mtgo.normalize import load_rules_for_format
+
 
 FORMATS = ("standard", "modern")
-SCHEMA_VERSION = "1.5.0"
+SCHEMA_VERSION = "1.6.0"
 INTENTIONAL_UNKNOWN_CONFIG = Path("configs/mtgo_intentional_unknowns.yaml")
 WEEKLY_REVIEW_COMPLETIONS_CONFIG = Path(
     "configs/mtgo_weekly_review_completions.yaml"
@@ -331,11 +334,84 @@ def _latest_week(root: Path, format_name: str) -> tuple[dict[str, Any], dict[str
     return index, week
 
 
+def _current_classifier_digest(root: Path, format_name: str) -> str:
+    return classifier_digest(load_rules_for_format(root, format_name))
+
+
+def _public_classifier_binding(
+    root: Path,
+    format_name: str,
+    *,
+    top8_index: dict[str, Any],
+    top8_week: dict[str, Any],
+    expected_digest: str,
+) -> dict[str, Any]:
+    statistics_root = root / "stats" / format_name / "mtgo"
+    latest_complete_week = top8_index.get("latest_complete_week")
+    week_id = Path(top8_index["weeks"][0]["file"]).stem
+    subjects = [
+        ("top8_index", statistics_root / "top8" / "index.json", top8_index),
+        ("top8_week", statistics_root / "top8" / f"{week_id}.json", top8_week),
+    ]
+
+    statistics_index_path = statistics_root / "index.json"
+    statistics_index = _read_json(statistics_index_path)
+    if statistics_index.get("latest_complete_week") != latest_complete_week:
+        raise ValueError(f"{format_name} statistics use a different complete week")
+    subjects.append(("statistics_index", statistics_index_path, statistics_index))
+    ranges = statistics_index.get("ranges")
+    if not isinstance(ranges, list) or not ranges:
+        raise ValueError(f"{format_name} statistics index has no ranges")
+    for entry in ranges:
+        if not isinstance(entry, dict):
+            raise ValueError(f"{format_name} statistics range entry is invalid")
+        for family, field in (("statistics_range", "file"), ("representative_decks", "decks_file")):
+            filename = entry.get(field)
+            if not isinstance(filename, str):
+                raise ValueError(f"{format_name} statistics range is missing {field}")
+            path = statistics_root / filename
+            subjects.append((family, path, _read_json(path)))
+
+    matchup_index_path = statistics_root / "matchup_index.json"
+    matchup_index = _read_json(matchup_index_path)
+    if matchup_index.get("latest_complete_week") != latest_complete_week:
+        raise ValueError(f"{format_name} matchups use a different complete week")
+    subjects.append(("matchup_index", matchup_index_path, matchup_index))
+    matchup_ranges = matchup_index.get("ranges")
+    if not isinstance(matchup_ranges, list) or not matchup_ranges:
+        raise ValueError(f"{format_name} matchup index has no ranges")
+    for entry in matchup_ranges:
+        if not isinstance(entry, dict) or not isinstance(entry.get("file"), str):
+            raise ValueError(f"{format_name} matchup range entry is invalid")
+        path = statistics_root / entry["file"]
+        subjects.append(("matchup_range", path, _read_json(path)))
+
+    hierarchy_path = statistics_root / "archetype_hierarchy.json"
+    subjects.append(("archetype_hierarchy", hierarchy_path, _read_json(hierarchy_path)))
+
+    products = []
+    for family, path, document in subjects:
+        actual_digest = document.get("classifier_digest")
+        if actual_digest != expected_digest:
+            relative = path.relative_to(root).as_posix()
+            raise ValueError(
+                f"{format_name} public classifier binding mismatch: {relative}"
+            )
+        products.append({"family": family, "path": path.relative_to(root).as_posix()})
+    return {
+        "status": "current",
+        "classifier_digest": expected_digest,
+        "latest_complete_week": latest_complete_week,
+        "products": products,
+    }
+
+
 def _format_readiness(
     root: Path,
     format_name: str,
     intentional_unknowns: dict[tuple[str, str, str], dict[str, str]],
     landing_subject: dict[str, Any],
+    current_classifier_digest: str,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     index, week = _latest_week(root, format_name)
     week_entry = index["weeks"][0]
@@ -349,6 +425,13 @@ def _format_readiness(
     if len(top8_event_ids) != len(events):
         raise ValueError(f"{format_name} Top 8 events have duplicate or missing IDs")
     classifier_digest = str(index.get("classifier_digest", ""))
+    public_classifier_binding = _public_classifier_binding(
+        root,
+        format_name,
+        top8_index=index,
+        top8_week=week,
+        expected_digest=current_classifier_digest,
+    )
     landing_binding = _landing_binding(
         landing_subject,
         format_name=format_name,
@@ -487,6 +570,7 @@ def _format_readiness(
     return {
         "format": format_name,
         "classifier_digest": classifier_digest,
+        "public_classifier_binding": public_classifier_binding,
         "source_event_ids": top8_event_ids,
         "source_event_count": len(top8_event_ids),
         "classification": {
@@ -542,6 +626,7 @@ def build_readiness(
     source_sha: str,
     generated_at: str,
     landing_subject_builder: Callable[[str | Path, str, str], dict[str, Any]] | None = None,
+    classifier_digest_builder: Callable[[Path, str], str] | None = None,
 ) -> dict[str, Any]:
     intentional_unknowns = _intentional_unknowns(root)
     standard_entry = _read_json(root / "stats" / "standard" / "mtgo" / "top8" / "index.json")["weeks"][0]
@@ -551,12 +636,14 @@ def build_readiness(
         raise ValueError("Standard and Modern do not expose the same weekly review window")
     week_id = Path(standard_entry["file"]).stem
     subject_builder = landing_subject_builder or _default_landing_subject_builder
+    digest_builder = classifier_digest_builder or _current_classifier_digest
     results = [
         _format_readiness(
             root,
             format_name,
             intentional_unknowns[format_name],
             subject_builder(root, format_name, week_id),
+            digest_builder(root, format_name),
         )
         for format_name in FORMATS
     ]
