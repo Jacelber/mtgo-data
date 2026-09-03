@@ -311,6 +311,61 @@ def test_melee_candidate_stages_exact_scope_before_complete_validation():
     assert "git add" not in publish
 
 
+def test_melee_candidate_binds_browser_smoke_to_exact_staged_tree():
+    workflow = _melee_workflow()
+    steps = workflow["jobs"]["candidate"]["steps"]
+    by_name = {step["name"]: step for step in steps}
+    names = list(by_name)
+    ordered = (
+        "Checkpoint immutable source and normalized event",
+        "Classify submitted decks strictly",
+        "Stage validated candidate scope",
+        "Validate repository, rules, and Schemas",
+        "Set up Node.js 24 for candidate consumer smoke",
+        "Install pinned browser-test package",
+        "Install Chromium with runner dependencies",
+        "Bind exact staged candidate tree",
+        "Render exact Melee candidate in Chromium",
+        "Confirm browser-validated candidate tree",
+        "Commit and push review branch",
+    )
+    assert [names.index(name) for name in ordered] == sorted(
+        names.index(name) for name in ordered
+    )
+
+    bind = by_name["Bind exact staged candidate tree"]
+    assert bind["id"] == "candidate-tree"
+    assert "git diff --quiet" in bind["run"]
+    assert "git write-tree" in bind["run"]
+    assert 'echo "tree=$CANDIDATE_TREE" >> "$GITHUB_OUTPUT"' in bind["run"]
+
+    smoke = by_name["Render exact Melee candidate in Chromium"]
+    assert smoke["env"] == {
+        "TABLETOP_CANDIDATE_FORMAT": "${{ steps.whitelist.outputs.format }}",
+        "TABLETOP_CANDIDATE_EVENT_ID": "${{ inputs.event_id }}",
+    }
+    assert "tests/browser/production-pages.spec.js" in smoke["run"]
+    assert "--grep" in smoke["run"]
+    assert "Tabletop entry renders candidate-derived data" in smoke["run"]
+
+    confirm = by_name["Confirm browser-validated candidate tree"]["run"]
+    assert "git diff --quiet" in confirm
+    assert "git write-tree" in confirm
+    assert "${{ steps.candidate-tree.outputs.tree }}" in confirm
+
+    publish = by_name["Commit and push review branch"]["run"]
+    assert "git add" not in publish
+    assert "git write-tree" in publish
+    assert "git rev-parse 'HEAD^{tree}'" in publish
+    assert "${{ steps.candidate-tree.outputs.tree }}" in publish
+    assert publish.index("git commit") < publish.rindex("git rev-parse 'HEAD^{tree}'")
+
+    after_smoke = steps[names.index("Render exact Melee candidate in Chromium") + 1 :]
+    commands = "\n".join(step.get("run", "") for step in after_smoke)
+    for prohibited in ("git add", "mtgmeta.", "validate_schemas.py", "ruff", "prettier"):
+        assert prohibited not in commands
+
+
 def test_production_candidate_is_built_once_and_published_with_immutable_evidence():
     workflow = yaml.load(
         UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
