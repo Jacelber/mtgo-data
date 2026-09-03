@@ -635,8 +635,16 @@ def test_weekly_readiness_uses_the_verified_publication_and_private_handoff():
         "readiness.landing.status",
         "optional_draft_status",
         "human final copy may be edited, replaced, omitted",
+        "start one exact weekly Operational Lane",
+        "complete official classifications through rank 32 require Owner review",
+        "display metadata is reviewed only after final classification",
+        "This artifact is evidence, not authorization",
+        "deterministic continuation of the same lane",
     ):
         assert required in script
+    assert "representative cards and deck colors require manual review" not in script
+    assert "Landing remains a separately authorized human-review gate" not in script
+    assert "review only the bounded material delta" not in script
 
 
 def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():

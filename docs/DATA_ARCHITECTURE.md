@@ -526,13 +526,14 @@ not authorize a review or repository mutation. Its current operating contract
 is `docs/WEEKLY_MAINTENANCE.md`.
 
 `configs/mtgo_weekly_review_completions.yaml` is the maintained non-public
-completion ledger. Each accepted week binds a material Top 8 review digest and
-the published Landing content digest for both formats. The Top 8 digest covers
-event identity, placement, selected classification identity, player, and exact
-deck content, but intentionally excludes the global classifier digest and
-comparison-only fields. This lets production diagnostics and unrelated
-classifier rules advance without erasing completed human workflow state. A
-material mismatch produces `revalidation_required`; an unchanged accepted
+completion ledger. Legacy records retain their Top-8-only meaning: each format
+binds the material Top 8 review digest and published Landing content digest.
+Weekly V2 records instead bind the event IDs actually reviewed by the Owner,
+the accepted classifier subject, one machine digest of every official weekly
+classification through rank 32, and the published Landing content digest for
+both formats. The ledger is not a per-rank database, source-mutation detector,
+publication registry, or authorization source. A mismatch with the scope that
+the record declares produces `revalidation_required`; an unchanged accepted
 subject produces `completed`, and the deduplicated weekly Issue remains closed.
 
 `configs/mtgo_intentional_unknowns.yaml` is the maintained non-public registry

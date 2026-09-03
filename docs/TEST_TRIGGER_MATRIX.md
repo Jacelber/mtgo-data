@@ -45,7 +45,8 @@ same change.
 | `tests/test_simple_card_localization.py` | Flat MTGCH localization generation or cache-subject changes | Preserve deterministic cache identity, key resolution, fallback, and output isolation | Synthetic product records and image bytes | `synthetic` |
 | `tests/test_validate_repository_modes.py` | Repository validator, test inventory, or Schema mode changes | Keep changed/full validation and test admission fail closed | Synthetic repository paths and inventory rows | `policy` |
 | `tests/test_validate_schemas.py` | Schema manifests or Schema validator changes | Require dynamic mappings and validate declared documents | Schema manifests and mapped instances | `schema` |
-| `tests/test_weekly_maintenance_readiness.py` | Weekly readiness generator/private Schema changes | Preserve review-week and retained-queue separation | Synthetic Standard and Modern handoff | `synthetic` |
+| `tests/test_weekly_maintenance_readiness.py` | Weekly readiness or completion lifecycle changes | Preserve readiness 1.6 plus legacy and full-review completion meanings | Synthetic Standard/Modern readiness, Landing, and completion subjects | `synthetic` |
+| `tests/test_weekly_classification_review.py` | Weekly V2 complete-review or classifier-impact changes | Preserve rank-through-32 review material, focused deck detail, review-ready Melee separation, and same-input retained-corpus impact proof | Synthetic MTGO events, Melee records, accepted/candidate rules, and completion subjects | `synthetic` |
 
 The public data/output rows remain bounded to their named subjects. The
 documentation and CI rows are control-plane checks. The Landing-screening and weekly-

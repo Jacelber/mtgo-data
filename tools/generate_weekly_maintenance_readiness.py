@@ -126,8 +126,11 @@ def _completion_state(root: Path, week_id: str) -> dict[str, Any]:
             "mismatches": [],
         }
     registry = _read_yaml(path)
-    if registry.get("schema_version") != "1.0.0":
-        raise ValueError("Weekly review completion registry schema_version must be 1.0.0")
+    registry_version = registry.get("schema_version")
+    if registry_version not in {"1.0.0", "1.1.0"}:
+        raise ValueError(
+            "Weekly review completion registry schema_version must be 1.0.0 or 1.1.0"
+        )
     records = registry.get("records")
     if not isinstance(records, list):
         raise ValueError("Weekly review completion registry records must be a list")
@@ -154,16 +157,50 @@ def _completion_state(root: Path, week_id: str) -> dict[str, Any]:
             f"Weekly review completion record for {week_id} must bind Standard and Modern"
         )
     mismatches = []
+    review_scope = record.get("review_scope", "top8_legacy")
+    if review_scope not in {"top8_legacy", "full_official_classification_v2"}:
+        raise ValueError(f"Weekly review completion record for {week_id} has invalid scope")
+    if registry_version == "1.0.0" and review_scope != "top8_legacy":
+        raise ValueError("Weekly review completion registry 1.0.0 supports legacy scope only")
     for format_name in FORMATS:
         expected = subjects.get(format_name)
         if not isinstance(expected, dict):
             raise ValueError(f"{week_id} {format_name} completion subject is invalid")
-        expected_top8 = expected.get("top8_review_digest")
         expected_landing = expected.get("landing_content_digest")
-        if not _is_sha256(expected_top8) or not _is_sha256(expected_landing):
+        if not _is_sha256(expected_landing):
             raise ValueError(f"{week_id} {format_name} completion digests are invalid")
-        if _top8_review_digest(root, format_name, week_id) != expected_top8:
-            mismatches.append(f"{format_name} Top 8 review subject")
+        if review_scope == "top8_legacy":
+            expected_top8 = expected.get("top8_review_digest")
+            if not _is_sha256(expected_top8):
+                raise ValueError(f"{week_id} {format_name} Top 8 digest is invalid")
+            if _top8_review_digest(root, format_name, week_id) != expected_top8:
+                mismatches.append(f"{format_name} Top 8 review subject")
+        else:
+            from mtgmeta.weekly_review import build_mtgo_weekly_review
+
+            expected_events = expected.get("accepted_event_ids")
+            expected_classifier = expected.get("accepted_classifier_subject")
+            expected_review = expected.get("classification_review_digest")
+            if (
+                not isinstance(expected_events, list)
+                or not expected_events
+                or any(
+                    not isinstance(event_id, str) or not event_id.isdigit()
+                    for event_id in expected_events
+                )
+                or not _is_sha256(expected_classifier)
+                or not _is_sha256(expected_review)
+            ):
+                raise ValueError(
+                    f"{week_id} {format_name} full classification completion is invalid"
+                )
+            current_review = build_mtgo_weekly_review(root, format_name, week_id)
+            if current_review["event_ids"] != expected_events:
+                mismatches.append(f"{format_name} accepted event IDs")
+            if current_review["classifier"]["subject_digest"] != expected_classifier:
+                mismatches.append(f"{format_name} accepted classifier subject")
+            if current_review["classification_review_digest"] != expected_review:
+                mismatches.append(f"{format_name} full classification review subject")
         if _landing_content_digest(root, format_name, week_id) != expected_landing:
             mismatches.append(f"{format_name} Landing content")
     return {

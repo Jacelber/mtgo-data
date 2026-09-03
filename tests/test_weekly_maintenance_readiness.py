@@ -6,6 +6,7 @@ import pytest
 import yaml
 
 from tools.generate_weekly_maintenance_readiness import (
+    _completion_state,
     _top8_review_digest,
     build_readiness,
 )
@@ -117,8 +118,16 @@ def _write_format(root: Path, format_name: str, *, candidate: bool = True) -> No
                         {
                             "rank": 1,
                             "deck_status": "available",
-                            "identity": {"parent_id": "deck-a", "subtype_id": None},
-                            "exact_deck": {"player": "Player A", "main_deck": []},
+                            "identity": {
+                                "identity_id": "deck-a",
+                                "parent_id": "deck-a",
+                                "subtype_id": None,
+                            },
+                            "exact_deck": {
+                                "player": "Player A",
+                                "main_deck": [],
+                                "sideboard": [],
+                            },
                             "comparison": {"non_review_fact": 1},
                         }
                     ],
@@ -477,6 +486,76 @@ def test_completed_week_requires_revalidation_after_top8_subject_change(tmp_path
     assert document["completion"]["state"] == "stale"
     assert document["completion"]["mismatches"] == ["modern Top 8 review subject"]
     assert document["workflow"]["next_action"] == "owner_revalidation_required"
+
+
+def test_v2_completion_binds_full_review_events_classifier_and_digest(
+    tmp_path, monkeypatch
+):
+    landing_digests = {"standard": "3" * 64, "modern": "4" * 64}
+    review_digests = {"standard": "5" * 64, "modern": "6" * 64}
+    classifier_digests = {"standard": "a" * 64, "modern": "b" * 64}
+    event_ids = {"standard": ["100"], "modern": ["200", "201"]}
+    for format_name in ("standard", "modern"):
+        _write_json(
+            tmp_path
+            / "stats"
+            / format_name
+            / "mtgo"
+            / "landing"
+            / "features"
+            / "2026-W35.json",
+            {"content_digest": landing_digests[format_name]},
+        )
+    completion_path = tmp_path / "configs/mtgo_weekly_review_completions.yaml"
+    completion_path.parent.mkdir(parents=True, exist_ok=True)
+    completion_path.write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": "1.1.0",
+                "records": [
+                    {
+                        "week": "2026-W35",
+                        "review_scope": "full_official_classification_v2",
+                        "completed_on": "2026-09-03",
+                        "evidence": "https://example.test/review",
+                        "formats": {
+                            format_name: {
+                                "accepted_event_ids": event_ids[format_name],
+                                "accepted_classifier_subject": classifier_digests[
+                                    format_name
+                                ],
+                                "classification_review_digest": review_digests[
+                                    format_name
+                                ],
+                                "landing_content_digest": landing_digests[format_name],
+                            }
+                            for format_name in ("standard", "modern")
+                        },
+                    }
+                ],
+            },
+            sort_keys=False,
+        ),
+        encoding="utf-8",
+    )
+
+    def current_review(_root, format_name, week_id):
+        assert week_id == "2026-W35"
+        return {
+            "event_ids": event_ids[format_name],
+            "classifier": {"subject_digest": classifier_digests[format_name]},
+            "classification_review_digest": review_digests[format_name],
+        }
+
+    monkeypatch.setattr(
+        "mtgmeta.weekly_review.build_mtgo_weekly_review", current_review
+    )
+    assert _completion_state(tmp_path, "2026-W35")["state"] == "verified"
+
+    review_digests["modern"] = "7" * 64
+    result = _completion_state(tmp_path, "2026-W35")
+    assert result["state"] == "stale"
+    assert result["mismatches"] == ["modern full classification review subject"]
 
 
 def test_missing_landing_screening_candidate_is_reported_as_a_blocker(tmp_path):
