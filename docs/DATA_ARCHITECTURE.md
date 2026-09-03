@@ -3700,6 +3700,14 @@ bilingual identity coverage, an intentional Unknown conflict, or a material
 change to an accepted Landing result. Historical Landing and frozen Pickup
 artifacts are outside automatic closure.
 
+For a current public Melee event, closure also discovers any applicable
+protected compatibility manifest through the existing Pages publication
+configuration. A mismatch in classifier-derived exact bytes or its selected
+catalog projection is `BLOCKED_OWNER_REVIEW` until an explicitly approved
+manifest-version migration records the new exact subject. The manifest remains
+Owner-protected and is never materialized by `converge`; immutable snapshot or
+normalized-source drift is invalid rather than regenerable.
+
 Ordinary `validate_repository.py` use performs only the read-only provenance,
 catalog, and exact-SHA inspection. Classification, statistics generation,
 staging, materialization, and fetch remain exclusive to explicit operations.

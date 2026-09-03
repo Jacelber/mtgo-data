@@ -25,6 +25,17 @@ STALE = "STALE_REGENERABLE"
 BLOCKED_OWNER_REVIEW = "BLOCKED_OWNER_REVIEW"
 INVALID = "INVALID"
 FORMAT_STATES = {CURRENT, STALE, BLOCKED_OWNER_REVIEW, INVALID}
+PROTECTED_MELEE_DERIVED_ROLES = frozenset(
+    {
+        "classification_overlay",
+        "opportunity_ledger",
+        "event_overview",
+        "event_decks",
+        "event_matchup",
+        "event_quality",
+        "event_meta",
+    }
+)
 
 
 class ClassifierClosureError(RuntimeError):
@@ -235,6 +246,147 @@ def _enabled_melee_ids(root: Path, format_id: str) -> set[str]:
     }
 
 
+def _protected_record_matches(root: Path, record: Mapping[str, Any]) -> bool:
+    path = _safe_relative(root, record.get("path"), label="protected record")
+    expected_bytes = record.get("bytes")
+    expected_sha = record.get("sha256")
+    return (
+        path.is_file()
+        and isinstance(expected_bytes, int)
+        and expected_bytes >= 0
+        and isinstance(expected_sha, str)
+        and path.stat().st_size == expected_bytes
+        and _sha256(path) == expected_sha
+    )
+
+
+def _protected_projection_matches(root: Path, projection: Mapping[str, Any]) -> bool:
+    if projection.get("expansion_policy") != (
+        "allow_unselected_entries_and_volatile_root_fields"
+    ):
+        raise ClassifierClosureError("protected catalog projection policy is invalid")
+    document = _json_object(
+        _safe_relative(root, projection.get("path"), label="protected projection")
+    )
+    requirements = projection.get("root_requirements")
+    selection = projection.get("selection")
+    expected = projection.get("expected")
+    if (
+        not isinstance(requirements, Mapping)
+        or not isinstance(selection, list)
+        or not isinstance(expected, Mapping)
+    ):
+        raise ClassifierClosureError("protected catalog projection is malformed")
+    if any(document.get(key) != value for key, value in requirements.items()):
+        return False
+    current: Mapping[str, Any] = document
+    for step in selection:
+        if not isinstance(step, Mapping):
+            raise ClassifierClosureError("protected catalog selection is malformed")
+        collection = current.get(step.get("collection"))
+        if not isinstance(collection, list):
+            return False
+        matches = [
+            item
+            for item in collection
+            if isinstance(item, Mapping)
+            and item.get(step.get("field")) == step.get("equals")
+        ]
+        if len(matches) != 1:
+            return False
+        current = matches[0]
+    return current == expected
+
+
+def _inspect_protected_melee_compatibility(
+    root: Path,
+    format_id: str,
+    event_id: str,
+) -> tuple[list[Path], list[str], list[str]]:
+    """Return manifest paths, Owner blockers, and invalid immutable inputs."""
+
+    config_path = root / "configs" / "pages_publication.json"
+    config = _json_object(config_path)
+    manifest_values = config.get("compatibility_manifests")
+    if not isinstance(manifest_values, list):
+        raise ClassifierClosureError(
+            "Pages publication config has no compatibility manifest list"
+        )
+    artifacts: list[Path] = []
+    blockers: list[str] = []
+    invalid: list[str] = []
+    for value in manifest_values:
+        manifest_path = _safe_relative(
+            root, value, label="Pages compatibility manifest"
+        )
+        manifest = _json_object(manifest_path)
+        event = manifest.get("event")
+        if (
+            not isinstance(event, Mapping)
+            or event.get("format") != format_id
+            or str(event.get("event_id") or "") != event_id
+        ):
+            continue
+        artifacts.append(manifest_path)
+        policy = manifest.get("migration_policy")
+        if (
+            not isinstance(policy, Mapping)
+            or policy.get("exact_byte_change")
+            != "separate_owner_approved_version_migration"
+        ):
+            invalid.append(
+                f"Melee event {event_id} compatibility migration policy is invalid"
+            )
+            continue
+        immutable = manifest.get("immutable_snapshot")
+        immutable_record = (
+            immutable.get("manifest") if isinstance(immutable, Mapping) else None
+        )
+        if not isinstance(immutable_record, Mapping) or not _protected_record_matches(
+            root, immutable_record
+        ):
+            invalid.append(
+                f"Melee event {event_id} immutable snapshot authority changed"
+            )
+        exact_files = manifest.get("exact_files")
+        if not isinstance(exact_files, list):
+            invalid.append(f"Melee event {event_id} exact-file authority is invalid")
+        else:
+            for record in exact_files:
+                if not isinstance(record, Mapping):
+                    invalid.append(
+                        f"Melee event {event_id} exact-file authority is malformed"
+                    )
+                    continue
+                if _protected_record_matches(root, record):
+                    continue
+                role = record.get("role")
+                if role in PROTECTED_MELEE_DERIVED_ROLES:
+                    blockers.append(
+                        f"Melee event {event_id} protected {role} requires Owner-approved migration"
+                    )
+                else:
+                    invalid.append(
+                        f"Melee event {event_id} protected immutable {role} changed"
+                    )
+        projections = manifest.get("catalog_projections")
+        if not isinstance(projections, list):
+            invalid.append(
+                f"Melee event {event_id} catalog projection authority is invalid"
+            )
+        else:
+            for projection in projections:
+                if not isinstance(projection, Mapping):
+                    invalid.append(
+                        f"Melee event {event_id} catalog projection is malformed"
+                    )
+                elif not _protected_projection_matches(root, projection):
+                    blockers.append(
+                        f"Melee event {event_id} protected catalog projection requires Owner-approved migration"
+                    )
+    return artifacts, blockers, invalid
+
+
 def _inspect_melee(
     root: Path,
     format_id: str,
@@ -245,6 +397,8 @@ def _inspect_melee(
         return _family("melee", [], root)
     artifacts: list[Path] = [catalog_path]
     issues: list[str] = []
+    owner_blockers: list[str] = []
+    invalid_issues: list[str] = []
     if not catalog_path.is_file():
         return _family("melee", artifacts, root, ["missing Melee format catalog"])
     try:
@@ -347,8 +501,30 @@ def _inspect_melee(
                 or compatibility.get("matchup_sha256") != _sha256(matchup_pair[0])
             ):
                 issues.append(f"Melee event {event_id} catalog matchup evidence is stale")
+            protected, blockers, invalid = _inspect_protected_melee_compatibility(
+                root, format_id, event_id
+            )
+            artifacts.extend(protected)
+            owner_blockers.extend(blockers)
+            invalid_issues.extend(invalid)
     except ClassifierClosureError as exc:
         return _family("melee", artifacts, root, [str(exc)], state=INVALID)
+    if invalid_issues:
+        return _family(
+            "melee",
+            artifacts,
+            root,
+            [*invalid_issues, *owner_blockers, *issues],
+            state=INVALID,
+        )
+    if owner_blockers:
+        return _family(
+            "melee",
+            artifacts,
+            root,
+            [*owner_blockers, *issues],
+            state=BLOCKED_OWNER_REVIEW,
+        )
     return _family("melee", artifacts, root, issues)
 
 
