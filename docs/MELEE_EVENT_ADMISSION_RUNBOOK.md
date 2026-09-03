@@ -172,6 +172,16 @@ opportunity manifest. Candidate validation may defer only synchronization of
 the Tabletop row in `README.md`; published-state validation remains strict and
 undefined validation or operation states fail closed.
 
+After the existing candidate validations pass, the workflow asserts that no
+tracked unstaged drift exists, records the exact staged Git tree, and runs one
+candidate-bound smoke through the current production Tabletop consumer. It
+then rechecks both the unstaged state and staged tree before committing the
+derived candidate without another `git add`, generator, restatement, or
+formatter. Browser setup completes before the tree is bound. This focused
+consumer gate does not replace a generic browser suite and does not move or
+change the earlier immutable raw-snapshot and normalized-event checkpoint.
+Failure blocks only the final derived candidate commit and push.
+
 The workflow may push only `data/melee-<event_id>`. It never writes `master`,
 opens or merges a pull request, or deploys Pages.
 

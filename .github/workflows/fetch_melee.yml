@@ -235,21 +235,73 @@ jobs:
           python -B validate_schemas.py
           python -B validate_schemas.py --manifest schemas/melee-data-manifest.json
 
+      - name: Set up Node.js 24 for candidate consumer smoke
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install pinned browser-test package
+        run: npm ci
+
+      - name: Install Chromium with runner dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: Bind exact staged candidate tree
+        id: candidate-tree
+        shell: bash
+        run: |
+          git diff --quiet || { echo "Candidate has tracked unstaged drift before browser validation" >&2; exit 1; }
+          CANDIDATE_TREE="$(git write-tree)"
+          test -n "$CANDIDATE_TREE"
+          echo "tree=$CANDIDATE_TREE" >> "$GITHUB_OUTPUT"
+
+      - name: Render exact Melee candidate in Chromium
+        env:
+          TABLETOP_CANDIDATE_FORMAT: ${{ steps.whitelist.outputs.format }}
+          TABLETOP_CANDIDATE_EVENT_ID: ${{ inputs.event_id }}
+        run: >-
+          npx playwright test tests/browser/production-pages.spec.js
+          --grep '^Tabletop entry renders candidate-derived data$'
+
+      - name: Confirm browser-validated candidate tree
+        shell: bash
+        run: |
+          git diff --quiet || { echo "Candidate has tracked unstaged drift after browser validation" >&2; exit 1; }
+          ACTUAL_TREE="$(git write-tree)"
+          test "$ACTUAL_TREE" = "${{ steps.candidate-tree.outputs.tree }}" || {
+            echo "Staged candidate tree changed after browser validation" >&2
+            exit 1
+          }
+
       - name: Commit and push review branch
         id: publish
         shell: bash
         run: |
           BRANCH="${{ steps.review-branch.outputs.branch }}"
+          CANDIDATE_TREE="${{ steps.candidate-tree.outputs.tree }}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git diff --quiet || { echo "Candidate changed after validation" >&2; exit 1; }
+          test "$(git write-tree)" = "$CANDIDATE_TREE" || {
+            echo "Staged candidate tree changed before commit" >&2
+            exit 1
+          }
           if git diff --cached --quiet; then
+            test "$(git rev-parse 'HEAD^{tree}')" = "$CANDIDATE_TREE" || {
+              echo "Unchanged candidate HEAD tree does not match browser evidence" >&2
+              exit 1
+            }
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
             echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "chore: build Melee event ${EVENT_ID} candidate"
+          test "$(git rev-parse 'HEAD^{tree}')" = "$CANDIDATE_TREE" || {
+            echo "Committed candidate tree does not match browser evidence" >&2
+            exit 1
+          }
           git push origin "HEAD:refs/heads/${BRANCH}"
           echo "changed=true" >> "$GITHUB_OUTPUT"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
