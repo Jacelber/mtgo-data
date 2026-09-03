@@ -140,9 +140,14 @@ def test_cross_source_unknown_review_runbooks_preserve_product_separation():
     melee = " ".join(MELEE_ADMISSION_PATH.read_text(encoding="utf-8").split())
 
     assert "The weekly readiness JSON and completion registry remain MTGO-only" in weekly
-    assert "source-neutral handoff recorded in `docs/STATUS.yaml`" in weekly
-    assert "Post-live Unknown handoff" in melee
+    assert "never written to `docs/STATUS.yaml`" in weekly
+    assert "contains no authorization, progress, or workflow state" in weekly
+    assert "Review-ready weekly supplement" in melee
     assert "The MTGO weekly readiness JSON and completion registry remain MTGO-only" in melee
+    assert "contains no authorization, progress, or workflow state" in melee
+    assert "The Owner decides in the active conversation" in melee
+    assert "Public or live status is not part of this definition" in melee
+    assert "An unavailable decklist is listed separately" in melee
 
 
 @pytest.mark.parametrize(

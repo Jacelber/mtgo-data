@@ -393,20 +393,12 @@ decision to defer a named compatibility artifact.
 | Step | Who | Work | Output for the next step |
 | --- | --- | --- | --- |
 | 1. Production | Automatic workflow | Fetch allowlisted events, generate and validate statistics, Top 8, Unknown diagnostics, and machine editorial candidates. | Verified cloud baseline and readiness artifact. |
-| 2. Start review | Owner | Explicitly start the named week from the readiness Issue. | Authority for the exact baseline. |
-| 3. Freeze baseline | Codex | Verify the cloud run, publication SHA, event IDs, lifecycle, and classifier digests. | Frozen review manifest. |
-| 4. Review Unknown | Codex and Owner | Handle coherent clustered Unknown groups in chat; use XLSX only for singleton batch review. Preserve prior unresolved Unknown unless already classified or explicitly accepted as a random card pile. | Final classification decisions. |
-| 5. Repair classifier | Codex implements; Owner accepts | Apply only accepted rule changes and regenerate affected outputs. | Accepted classifier subject or explicit no-change result. |
-| 6. Audit all Top 8 classifications | Codex prepares; Owner checks | Export every current-week Top 8 classification ordered by event date and rank. | Owner-checked weekly classification baseline. |
-| 7. Review visual metadata | Codex proposes; Owner decides | Confirm representative cards and deck colors. | Accepted visual metadata or explicit no change. |
-| 8. Screen Landing features | Automatic producer | Apply the five reviewed routes and retain the complete Top 8 pool. Merge reason tags only for the same exact deck. | Private candidates and evidence. |
-| 9. Prepare Landing workbook | Codex | Populate top-copy drafts, ordinary feature candidates, all Top 8 decks, exact deck tokens, and simple review controls. Before delivery, union every exact deck already referenced by top copy into `Featured Decks` as mandatory `KEEP`. | Editable Landing review carrier with no top-copy-only deck. |
-| 10. Complete Chinese review | Owner submits once; Codex validates | Select, add, delete, merge, reorder, or rewrite without a machine-imposed item limit; confirm cards and Chinese final copy. Any exact deck added to kept top copy must receive a matching feature row and cannot be dropped while referenced. One chat submission closes this authored stage; Codex runs the read-only Chinese-stage validator. | Machine-valid Chinese final content whose top-copy token set is contained in the selected feature set. |
-| 11. Draft English | Codex | Translate the Owner-final Chinese content without changing it. | English draft in the same workbook lineage. |
-| 12. Complete final review | Owner accepts once; Codex validates | Correct English or accept the supplied draft once in chat. No duplicate top-copy, feature, or English approval cells are required. An intentional zero-feature result is valid only when final top copy contains no deck token. | Machine-valid bilingual review state. |
-| 13. Build preview | Codex | After separate import authorization, import the exact accepted workbook hash; import repeats complete bilingual validation before writing private review state, then generates current and feature-history documents and renders the accepted Landing UI. | Exact local preview. |
-| 14. Accept and publish | Owner accepts; Codex completes | After hands-on acceptance, complete the unchanged task through commit, Ready PR, required checks, merge, and Pages publication. | Cloud Landing and immutable publication subject. |
-| 15. Verify cloud | Codex | Verify current copy, feature weeks, language, format, deck links, card display, redirects, and no legacy Pickup data request. | Completed weekly maintenance evidence. |
+| 2. Establish and freeze the review-ready scope | Owner names scope; Codex verifies | Start the named week once in Chat and optionally include exact review-ready Melee events. Treat successful MTGO production as fixed input. A production integrity defect pauses Weekly for a separate repair. | Exact MTGO week and optional source-separated Melee review subjects. |
+| 3. Complete classification review | Codex prepares; Owner reviews all rows | Present both machine-priority evidence and the complete Chinese classification tables: every official MTGO record through rank 32 and every available classification in included Melee events. Supply full cards and rule analysis only for flagged or Owner-selected rows. | Accepted identity, subtype, bilingual-name, and intentional-Unknown decisions. |
+| 4. Prove and reproduce accepted changes | Codex | Implement accepted rules, compare accepted and candidate classifiers on the same complete retained format corpus, stop on unexplained impact, regenerate MTGO and Melee separately, run closure/name coverage, and rebuild the complete review tables. | Exact accepted classifier subject and source-separated current outputs. |
+| 5. Screen Landing and decide metadata deltas | Codex screens; Owner decides if needed | Screen the final classified subject. Ask only about actual new, missing, changed, or judgment-dependent display metadata; skip the step when there is no delta. | Accepted bounded metadata result. |
+| 6. Author and accept Landing | Owner authors/reviews; Codex validates/builds | The Owner writes Chinese content. Codex validates it, drafts English, receives one English acceptance or correction, imports only that accepted workbook hash, generates current and feature-history documents, and presents the final content/data/normal-rendering preview. | Exact accepted bilingual preview or a fail-closed blocker. |
+| 7. Publish and verify | Owner accepts; Codex completes | Preserve the final accepted subject through GOV-11 commit, Ready PR, required checks, merge, applicable publication, exact cloud verification, and a Weekly V2 full-classification completion record. | Completed weekly maintenance evidence and immutable publication subject. |
 
 The automatic workflow never approves editorial content and never publishes a
 new Landing review on its own. A later daily production run may refresh only an
@@ -443,8 +435,9 @@ submission and one later bilingual acceptance are sufficient; the same authored
 content is not approved again through workbook status dropdowns. The read-only
 `landing-review validate-xlsx --stage chinese|bilingual --expected-sha256`
 command checks actual content and provenance without writing repository state.
-`import-xlsx` remains separately authorized and accepts only the exact
-bilingual-validated hash.
+Within an Owner-started weekly lane, `import-xlsx` needs no separate technical
+authorization and accepts only the exact Owner-accepted, bilingual-validated
+hash.
 
 The reference block has no `COPY LINK ONLY` state. Every exact token appearing
 in a kept top-copy row must resolve to a `KEEP` row in `Featured Decks`. The

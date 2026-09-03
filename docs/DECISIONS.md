@@ -8091,3 +8091,81 @@ semantic safety or begin another task automatically.
 This decision does not change product behavior, statistics, classifiers,
 Schemas, Pages, production, or Issue #325. It does not alter the historical
 record in `docs/GOVERNANCE_REMEDIATION.yaml`.
+
+---
+
+# DEC-163 - Combine complete weekly human review with retained-corpus impact proof
+
+Status: `Accepted; local implementation authorized`
+
+## Context
+
+The steady weekly procedure divided one review cycle into repeated technical
+authorization stops. An attempted simplification then proposed replacing the
+complete human classification audit with a machine-selected exception packet.
+That proposal is unsafe: the classifier cannot identify every plausible known-
+classification error. MTGO officially publishes at most 32 records per event,
+and the Owner needs a fast complete Chinese scan of all of them in addition to
+machine prioritization.
+
+Recent classifier maintenance also used week-specific tests and manual counts
+to compare old and candidate rules. The shared classifier and retained inputs
+already support deterministic reclassification, but there was no narrow stable
+entry point that proved every requested change and exposed every unexplained
+same-format corpus change.
+
+## Decision
+
+One explicit Owner instruction starts one exact weekly maintenance operational
+lane. Successfully fetched and production-validated MTGO events are fixed
+inputs; Weekly does not build a second source-mutation or production-
+completeness framework. A missing expected event or malformed production result
+pauses Weekly for a separate engineering repair.
+
+Every lane supplies both a machine-priority packet and a complete human review
+table. The packet uses existing Unknown, conflict, multiple-match, override,
+subtype, deviation, and classifier-impact diagnostics and never implies that an
+unlisted classification is correct. The MTGO table covers every official event
+and every published record through rank 32. It carries no bulk decklist content;
+complete cards and rules are returned only for machine-selected or Owner-
+selected rows. An Owner-named Melee event may join when its source and candidate
+are review-ready, even if not yet public. Its available classifications and
+unavailable decklists are reported separately.
+
+After accepted classifier/name decisions, compare the accepted and candidate
+rules over the exact same complete retained same-format MTGO and Melee corpus.
+Continue only when every expected change is realized and no additional status,
+identity, subtype, selected-rule, match, override, conflict, or invalid-deck
+change remains unexplained. Then regenerate each source separately, run
+Classifier Closure and bilingual-name coverage, and rebuild the complete weekly
+tables. No rule change means no pointless regeneration.
+
+Visual metadata review occurs only after regeneration and Landing screening.
+Only an actual new, missing, changed, or judgment-dependent item creates a
+bounded second business decision. Classifier implementation, retained-source
+regeneration, closure, workbook import, generation, validation, commit, Ready
+PR, CI, merge, publication, and cloud verification are technical continuation,
+not repeated authorization stops. Chinese authoring, English acceptance, and
+final weekly content/data/normal-rendering preview remain substantive Owner
+touchpoints.
+
+Weekly completion schema 1.1 preserves legacy Top-8-only records and gives new
+Weekly V2 records a minimal `full_official_classification_v2` scope. Each format
+binds the reviewed event IDs, accepted classifier subject, one digest of the
+complete classification review, and Landing content. It is not a per-rank
+database or source-mutation detector. Melee stays outside MTGO readiness and
+completion, and no weekly state is written to STATUS.
+
+## Consequences
+
+This decision retains the one-lane reduction of technical authorization while
+rejecting the attempted removal of complete classification review. It preserves
+the readiness 1.6 public/private document shape, existing production and
+Landing gates, historical completion meaning, GOV-11 exact-subject gates, and
+separate MTGO/Melee products.
+
+Future work may use accepted event IDs, classifier subjects, completion
+evidence, and the neutral Melee review-ready concept to design an Owner-reviewed
+front-end publication boundary. GOV-12 does not implement that boundary: daily
+public generation, statistics, catalogs, Pages, frontend visibility, Melee
+candidate publication, and Issue #325 remain unchanged. W36 is not run.

@@ -289,36 +289,41 @@ reviewed source and deployment evidence.
 **Stop:** do not describe the event as live until the exact-SHA deployment and
 required public resources pass.
 
-### 10. Post-live Unknown handoff
+### 10. Review-ready weekly supplement
 
-**Problem:** a temporarily accepted Unknown cohort can remain outside routine
-classifier maintenance after the event is live, or be mixed into MTGO weekly
-counts merely because both sources use the same format rules.
+**Problem:** a Melee event selected by the Owner for weekly classifier review
+needs a neutral readiness boundary. Requiring prior public visibility would
+prevent a future reviewed-publication gate, while admitting an incomplete
+candidate would make the human review unreliable.
 
-**Operation:** after exact-SHA live acceptance, inspect the accepted candidate's
-classification summary. If it has no Unknown records, record that no handoff is
-required. Otherwise, under a focused local handoff task, assign the immutable
-Unknown cohort to the next open weekly maintenance cycle for the same format.
-If the event's matching review week is still open and its baseline has not been
-frozen, that open week may be used. Record the target week, source, format,
-event ID, accepted candidate or classification subject, Unknown count,
-separately excluded unavailable-decklist count, and closed authorization states
-for rule changes, regeneration, and republication in `docs/STATUS.yaml`.
+**Operation:** preserve immutable task-local supplement evidence once source is
+completely collected and retained, the event/candidate can be reproduced, its
+current classification exists, every available decklist can be reviewed, and
+no engineering defect blocks human review. Public or live status is not part of
+this definition. The evidence contains the target week, format, source, event
+ID, exact candidate or classification subject and locator, classifier subject
+and digest, available-classification count, unresolved Unknown count, and
+separately excluded unavailable-decklist count. It contains no authorization,
+progress, or workflow state and is never recorded in `docs/STATUS.yaml`. The
+Owner decides in the active conversation whether to include it.
 
-The weekly review may examine the Tabletop cohort alongside MTGO Unknowns for
-the same format and may reach one shared classifier decision. It must keep
+The weekly review examines every available Tabletop classification alongside
+the complete MTGO classification table for the same format and may reach one
+shared classifier decision. An unavailable decklist is listed separately and
+is not Unknown. The lane must keep
 source provenance, counts, completion states, generated outputs, and
 publication gates separate. The MTGO weekly readiness JSON and completion
 registry remain MTGO-only.
 
-**Effect:** every newly admitted event has an explicit, reusable route from a
-temporarily accepted Unknown cohort into the next same-format human review,
-without creating a second classifier-maintenance process.
+**Effect:** an Owner-selected event can participate in one same-format full
+classification review before or after public admission without creating a
+second classifier-maintenance process or publication-state registry.
 
-**Stop:** the handoff queues review only. Do not begin the review, change rules,
-recollect the event, regenerate derived data, commit, publish, merge, or deploy
-without the separately applicable authorization. A frozen in-progress weekly
-baseline cannot be enlarged silently.
+**Stop:** supplement creation does not start weekly review or authorize
+publication. Do not recollect the event. If an Owner-named event is not
+review-ready, Weekly waits. An engineering defect is repaired in a separate
+task, after which the same weekly subject may resume. Adding another event after
+freeze is a visible Owner scope change; it cannot silently enlarge the lane.
 
 ## Authorization matrix
 
@@ -332,9 +337,9 @@ baseline cannot be enlarged silently.
 | Dispatch `fetch_melee.yml` | Exact event, closed operation state, and workflow-dispatch, live-collection or exact-checkpoint recovery, retention, and candidate-branch authority |
 | Create and merge the candidate PR | Owner acceptance of the exact candidate |
 | Deploy or recover Pages | Applicable exact-SHA deployment authority |
-| Queue a live event's Unknown cohort for weekly review | Focused local post-live handoff authority |
-| Begin the queued weekly Unknown review | Exact review week and frozen source-subject authority |
-| Regenerate or republish an event after a classifier decision | Separate retained-source regeneration and publication authority |
+| Preserve review-ready supplement evidence | Exact reproducible candidate/classification subject with complete available review inputs; evidence contains no authorization state |
+| Include the supplement in weekly review | Owner instruction in the active Chat for the exact weekly lane |
+| Regenerate or republish after an accepted weekly classifier decision | The same weekly lane for deterministic retained-source continuation; any new semantic, compatibility, or product decision returns to the Owner |
 | Begin another event or refresh | A new task; no authority carries over |
 
 ## Reuse template
@@ -349,8 +354,8 @@ For each new event, create event-specific task IDs and preserve this order:
 6. `MELEE-<event_id>-CANDIDATE-ACCEPTANCE`
 7. `MELEE-<event_id>-PUBLICATION`
 8. `MELEE-<event_id>-LIVE-ACCEPTANCE`
-9. `MELEE-<event_id>-UNKNOWN-HANDOFF` when the accepted candidate contains
-   Unknown classifications
+9. a review-ready weekly supplement when the Owner names the event for joint
+   same-format classification review
 
 The event-specific task contract may narrow this list only when current
 evidence proves a stage is already satisfied by the same immutable subject. It

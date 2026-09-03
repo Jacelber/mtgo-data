@@ -889,7 +889,7 @@ jobs:
               awaiting_owner_start: {
                 heading: "## Weekly MTGO maintenance is ready",
                 state: "open",
-                instruction: "Open Codex manually and authorize the review of this exact handoff.",
+                instruction: "Open Codex manually and start one exact weekly Operational Lane from this handoff.",
               },
               completed: {
                 heading: "## Weekly MTGO maintenance is completed",
@@ -899,7 +899,7 @@ jobs:
               revalidation_required: {
                 heading: "## Weekly MTGO maintenance requires revalidation",
                 state: "open",
-                instruction: "The accepted Top 8 or published Landing subject changed. Review the listed mismatch before continuing.",
+                instruction: "The recorded classification-review or published Landing subject no longer matches. Inspect the exact mismatch before continuing.",
               },
             };
             const presentation = presentations[readiness.status];
@@ -913,7 +913,7 @@ jobs:
                 `${queue.outside_review_week_unresolved_unknown_count} unresolved Unknown outside the review week in the retained-corpus queue; ` +
                 `${item.classification.accepted_intentional_unknown_count} accepted intentional Unknown in ${week}; ` +
                 `${item.landing_screening.total_candidate_count ?? "unavailable"} Landing screening candidates; ` +
-                `representative cards and deck colors require manual review.`;
+                `complete official classifications through rank 32 require Owner review; display metadata is reviewed only after final classification and Landing screening exposes an actual delta.`;
             });
             const completionLines = readiness.completion.state === "unrecorded"
               ? ["- Completion record: `unrecorded`."]
@@ -939,10 +939,10 @@ jobs:
               ...formatLines,
               `- Landing machine facts: \`${readiness.landing.status}\`; optional machine draft: \`${readiness.landing.optional_draft_status}\`.`,
               "",
-              `${presentation.instruction} The artifact does not authorize classifier edits, Landing review import, Landing generation, or any repository mutation.`,
+              `${presentation.instruction} This artifact is evidence, not authorization; the active Owner conversation starts and governs the exact lane.`,
               "Codex must provide every review-week unresolved deck's complete main deck and sideboard before requesting classification decisions. Unknown records outside the review week remain visible in a separate retained-corpus queue and do not change this week's review count or readiness status. Singleton status is not a reason to remain Unknown; intentional Unknown is limited to Owner-confirmed random card piles.",
               "",
-              "Landing remains a separately authorized human-review gate. Machine facts are provenance-bound, optional machine prose is not required, and the human final copy may be edited, replaced, omitted, or written independently of machine conclusions.",
+              "Landing substantive Chinese, English, and final-preview decisions remain Owner-reviewed. After each acceptance, exact workbook import, generation, validation, and publication are deterministic continuation of the same lane. Machine facts are provenance-bound, optional machine prose is not required, and human final copy may be edited, replaced, omitted, or written independently of machine conclusions.",
             ].join("\n");
             const existing = issues.find(
               (issue) => !issue.pull_request && issue.body?.includes(marker),
@@ -977,9 +977,9 @@ jobs:
               if (!existing.body?.includes(digestMarker)) {
                 const comments = {
                   blocked: `The weekly diagnostics changed and are blocked. Inspect the updated handoff from [run ${context.runId}](${runUrl}).`,
-                  awaiting_owner_start: `The weekly baseline changed before review completion. Review the updated handoff from [run ${context.runId}](${runUrl}) before continuing.`,
+                  awaiting_owner_start: `A new verified weekly handoff is available from [run ${context.runId}](${runUrl}). If a review is already active, stop and inspect why its fixed production subject changed.`,
                   completed: `Machine diagnostics changed, but the accepted weekly review subject is unchanged. Completion remains valid after [run ${context.runId}](${runUrl}).`,
-                  revalidation_required: `The accepted weekly review subject changed materially. Revalidate the updated handoff from [run ${context.runId}](${runUrl}) before continuing.`,
+                  revalidation_required: `The recorded weekly completion subject no longer matches. Inspect the exact mismatch from [run ${context.runId}](${runUrl}) before continuing.`,
                 };
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
