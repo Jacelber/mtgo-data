@@ -7,6 +7,24 @@
 
   const FORMAT_PATTERN = /^[a-z0-9_-]+$/;
   const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+  const SHA256_PATTERN = /^[0-9a-f]{64}$/;
+  const PROVENANCE_FIELDS = [
+    "classifier_identity_digest",
+    "name_catalog_digest",
+    "projection_subject_digest",
+  ];
+
+  function hasSupportedContractVersion(document) {
+    if (document?.schema_version === "1.0.0") return true;
+    if (document?.schema_version !== "1.1.0") return false;
+    const provenance = document.provenance;
+    return (
+      provenance
+      && typeof provenance === "object"
+      && !Array.isArray(provenance)
+      && PROVENANCE_FIELDS.every(field => SHA256_PATTERN.test(provenance[field] || ""))
+    );
+  }
 
   function identityId(parentId, subtypeId = null) {
     if (!ID_PATTERN.test(parentId || "") || (subtypeId !== null && !ID_PATTERN.test(subtypeId))) {
@@ -18,7 +36,7 @@
   function normalize(document, expectedFormat) {
     if (
       !document
-      || document.schema_version !== "1.0.0"
+      || !hasSupportedContractVersion(document)
       || !FORMAT_PATTERN.test(document.format || "")
       || document.format !== expectedFormat
       || !Array.isArray(document.names)
