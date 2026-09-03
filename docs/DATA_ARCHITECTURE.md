@@ -3651,3 +3651,63 @@ After that remediation and before P12-10 begins, the project must:
 P12-04 through P12-09 may proceed when separately authorized because they do
 not produce Landing facts or freeze classifier identities. This gate does not
 authorize the classifier remediation or P12-10.
+
+## 26. Classifier-derived artifact closure
+
+`my_archetypes/<format>.yaml` remains the canonical classifier subject. The
+closure operation discovers current public formats and their admitted products
+from the existing catalogs; it does not add a dependency registry. A derived
+artifact is current when it either binds that canonical subject directly or is
+reachable through verified exact upstream SHA-256 links to an artifact that
+does. Direct classifier digests are therefore limited to boundaries where the
+existing SHA chain is insufficient:
+
+- MTGO statistics, matchup, Top 8, hierarchy, Landing, and classification
+  reports bind the canonical classifier subject directly;
+- `stats/<format>/archetype_names.json` binds both the current classifier
+  identity set and the format rows in `configs/mtgo_archetype_names.yaml`, plus
+  their combined projection subject;
+- each Melee classification overlay binds the canonical classifier subject and
+  retained normalized event bytes directly; opportunity, event output, meta,
+  and catalog documents continue through their existing exact SHA chain.
+
+`stats/<format>/melee/index.json` is the current/public Melee event authority.
+Every event it lists must resolve back to an enabled, verified Tabletop entry in
+the source registry and have one complete overlay-to-catalog chain; missing,
+stale, mixed, disabled, or unregistered public references prevent a healthy
+result. An enabled and verified registry entry that is not in the public catalog
+is only eligible for a later separately authorized operation and does not enter
+classifier closure. Extra approved name rows are governed by the existing name
+authority: they block only when that authority requires exact catalog equality.
+The closure operation never creates, translates, renames, or accepts an
+archetype identity.
+
+`python -m mtgmeta.classifier_closure ... inspect` is read-only. The default
+`converge` operation creates a staging tree from retained repository inputs,
+rebuilds only stale deterministic families, validates protected-input
+fingerprints, allowed paths, exact-SHA closure, and the affected JSON Schemas,
+and reports the plan. It never fetches historical data. `converge --execute`
+requires separate authorization and materializes one fully validated format at
+a time. Candidate files and rollback bytes are prepared beside their targets;
+any replacement or final-inspection failure restores the exact pre-execute
+format tree. A retained staging tree may be used for diagnosis.
+
+The format states are `CURRENT`, `STALE_REGENERABLE`,
+`BLOCKED_OWNER_REVIEW`, and `INVALID`. A format is current only with zero
+stale, missing, mixed-subject, or unexplained artifacts. An Owner blocker is a
+valid fail-closed outcome, not a tool fault. Examples include missing approved
+bilingual identity coverage, an intentional Unknown conflict, or a material
+change to an accepted Landing result. Historical Landing and frozen Pickup
+artifacts are outside automatic closure.
+
+For a current public Melee event, closure also discovers any applicable
+protected compatibility manifest through the existing Pages publication
+configuration. A mismatch in classifier-derived exact bytes or its selected
+catalog projection is `BLOCKED_OWNER_REVIEW` until an explicitly approved
+manifest-version migration records the new exact subject. The manifest remains
+Owner-protected and is never materialized by `converge`; immutable snapshot or
+normalized-source drift is invalid rather than regenerable.
+
+Ordinary `validate_repository.py` use performs only the read-only provenance,
+catalog, and exact-SHA inspection. Classification, statistics generation,
+staging, materialization, and fetch remain exclusive to explicit operations.

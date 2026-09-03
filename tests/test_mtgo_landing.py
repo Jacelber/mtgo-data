@@ -17,6 +17,26 @@ PICKUP_DIGEST = "d" * 64
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_classifier_restatement_requires_identical_accepted_material():
+    material = {
+        field: {"value": field}
+        for field in landing.CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS
+    }
+
+    assert landing._classifier_restatement_preserves_accepted_material(
+        {"classifier_digest", "machine_fact_digest"}, material, dict(material)
+    )
+
+    changed = dict(material)
+    changed["environment"] = {"value": "changed"}
+    assert not landing._classifier_restatement_preserves_accepted_material(
+        {"classifier_digest"}, material, changed
+    )
+    assert not landing._classifier_restatement_preserves_accepted_material(
+        {"bilingual_catalog_digest"}, material, material
+    )
+
+
 def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_path):
     context = SimpleNamespace(paths={"statistics": tmp_path / "stats"})
     rules = SimpleNamespace(archetypes=())

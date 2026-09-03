@@ -2607,3 +2607,20 @@ facts behind reviewed editorial content, the last admitted Landing remains
 public until explicit re-review; refreshed facts must not be combined with
 stale approved copy. External card-image failure is non-blocking and must not
 remove readable names, values, or navigation.
+
+## 25. Classifier closure and statistical meaning
+
+Classifier closure is a provenance and deterministic-restatement mechanism; it
+does not change any formula in this specification. For the initial V1
+migration, there is no new classifier decision, so retained-corpus comparison
+must show unchanged classification identities and statistical payload after
+provenance, Schema-version, and resulting exact-SHA fields are excluded. Any
+other difference is an unexplained migration change and blocks materialization.
+
+That migration check is not a permanent restriction on classifier maintenance.
+After the Owner accepts a new canonical classifier subject, explicit closure may
+materialize the deterministic classification and statistical consequences of
+that accepted subject from retained inputs. It must still stop for a new
+classifier, statistical, product, name, Unknown-treatment, or Landing editorial
+decision. No historical source is refetched and no Owner-reviewed content is
+silently rewritten to match new machine facts.

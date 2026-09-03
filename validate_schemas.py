@@ -118,12 +118,28 @@ def main(argv: list[str] | None = None) -> int:
         metavar="REF",
         help="validate only mapped public JSON changed from REF",
     )
+    parser.add_argument(
+        "--path",
+        dest="paths",
+        action="append",
+        help="validate one mapped repository-relative JSON path (repeatable)",
+    )
     args = parser.parse_args(argv)
     root = args.root.resolve()
     manifest = args.manifest if args.manifest.is_absolute() else (root / args.manifest)
     try:
-        selected = set(changed_files(root, args.changed_from)) if args.changed_from else None
+        if args.changed_from and args.paths:
+            raise ValueError("--changed-from and --path cannot be combined")
+        selected = (
+            set(changed_files(root, args.changed_from))
+            if args.changed_from
+            else set(args.paths) if args.paths else None
+        )
         checked, failures = validate_manifest(root, manifest.resolve(), selected)
+        if args.paths and checked != len(selected):
+            raise SchemaError(
+                "one or more requested --path values are not mapped by the selected manifest"
+            )
     except (
         OSError,
         UnicodeError,

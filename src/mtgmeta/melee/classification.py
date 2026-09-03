@@ -19,14 +19,20 @@ import sys
 import tempfile
 from typing import Any
 
-from ..classifier import ClassificationResult, ConditionEvidence, RuleMatch, classify_deck
+from ..classifier import (
+    ClassificationResult,
+    ConditionEvidence,
+    RuleMatch,
+    classifier_digest,
+    classify_deck,
+)
 from ..card_names import front_face_card_name
 from ..config import load_rule_set
 from ..deck import deck_to_counts
 from ..rules import RuleSet
 
 
-CLASSIFICATION_OVERLAY_SCHEMA_VERSION = "1.0.0"
+CLASSIFICATION_OVERLAY_SCHEMA_VERSION = "1.1.0"
 CLASSIFIER_CONTRACT_VERSION = "1.0.0"
 FORMAT_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
@@ -356,6 +362,7 @@ def build_classification_overlay(
         "classifier": {
             "name": "shared-rule-classifier",
             "contract_version": CLASSIFIER_CONTRACT_VERSION,
+            "digest": classifier_digest(rule_set),
         },
         "input": {
             "event_path": event_path,

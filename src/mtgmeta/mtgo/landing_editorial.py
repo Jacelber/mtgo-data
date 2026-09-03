@@ -25,6 +25,7 @@ from .top8 import classifier_digest
 SOURCE_ID = "mtgo"
 REVIEW_SCHEMA_VERSION = "1.0.0"
 NAME_SCHEMA_VERSION = "1.0.0"
+PUBLIC_NAME_SCHEMA_VERSION = "1.1.0"
 DEFAULT_NAME_CATALOG = Path("configs/mtgo_archetype_names.yaml")
 DEFAULT_REVIEW_SCHEMA = Path("schemas/mtgo-landing-review.schema.json")
 DEFAULT_NAME_SCHEMA = Path("schemas/mtgo-archetype-names.schema.json")
@@ -721,6 +722,34 @@ def build_public_name_contract(
     path = Path(catalog_path) if catalog_path is not None else root / DEFAULT_NAME_CATALOG
     validate_name_catalog(root, path)
     catalog = load_name_catalog_document(path)
+    taxonomy_rows = _taxonomy_rows(root, format_id)
+    identity_subject = [
+        {
+            "parent_id": item["parent_id"],
+            "subtype_id": item["subtype_id"],
+        }
+        for item in taxonomy_rows
+    ]
+    identity_subject.sort(
+        key=lambda item: (item["parent_id"], item["subtype_id"] or "")
+    )
+    authority_subject = [
+        dict(item) for item in catalog["names"] if item["format"] == format_id
+    ]
+    authority_subject.sort(key=lambda item: item["identity_key"])
+    classifier_identity_digest = document_digest(
+        {"format": format_id, "identities": identity_subject}
+    )
+    name_catalog_digest = document_digest(
+        {"format": format_id, "names": authority_subject}
+    )
+    projection_subject_digest = document_digest(
+        {
+            "format": format_id,
+            "classifier_identity_digest": classifier_identity_digest,
+            "name_catalog_digest": name_catalog_digest,
+        }
+    )
     names = []
     for item in catalog["names"]:
         if item["format"] != format_id:
@@ -747,7 +776,18 @@ def build_public_name_contract(
             f"bilingual name catalog has no approved identities for {format_id}"
         )
     names.sort(key=lambda item: item["identity_id"])
-    return versioned({"format": format_id, "names": names})
+    return versioned(
+        {
+            "format": format_id,
+            "provenance": {
+                "classifier_identity_digest": classifier_identity_digest,
+                "name_catalog_digest": name_catalog_digest,
+                "projection_subject_digest": projection_subject_digest,
+            },
+            "names": names,
+        },
+        schema_version=PUBLIC_NAME_SCHEMA_VERSION,
+    )
 
 
 def generate_public_name_contract(

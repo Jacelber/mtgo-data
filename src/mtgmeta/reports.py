@@ -9,12 +9,18 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .classifier import ClassificationResult, ConditionEvidence, RuleMatch, classify_deck
+from .classifier import (
+    ClassificationResult,
+    ConditionEvidence,
+    RuleMatch,
+    classifier_digest,
+    classify_deck,
+)
 from .deck import deck_to_counts
 from .rules import RuleSet
 
 
-REPORT_SCHEMA_VERSION = "1.0.0"
+REPORT_SCHEMA_VERSION = "1.1.0"
 REPORT_FILENAMES = {
     "unknown_decks": "unknown_decks.json",
     "multiple_matches": "multiple_matches.json",
@@ -102,12 +108,14 @@ def _base(
     data_through: str,
     format_id: str,
     source: str,
+    classifier_subject: str,
 ) -> dict[str, Any]:
     return {
         "schema_version": REPORT_SCHEMA_VERSION,
         "report_type": report_type,
         "format": format_id,
         "source": source,
+        "classifier_digest": classifier_subject,
         "scope": "all_available_events",
         "event_count": event_count,
         "data_through": data_through,
@@ -221,6 +229,7 @@ def build_classification_reports(
         "data_through": data_through,
         "format_id": resolved_format,
         "source": source,
+        "classifier_subject": classifier_digest(rule_set),
     }
     reports = {
         "unknown_decks": {
