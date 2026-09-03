@@ -125,7 +125,6 @@ PUBLIC_PRODUCT_ENTRIES = {
     "tabletop": "/melee/index.html",
 }
 CLASSIFIER_NAME_CATALOG = "configs/mtgo_archetype_names.yaml"
-PUBLIC_CLASSIFIER_NAME_SCHEMA_VERSION = "1.0.0"
 PHASE8_FRONTEND_ENTRIES = {
     "index.html": {
         "stylesheets": (
@@ -187,6 +186,7 @@ REFERENCE_GROUPS = frozenset(
         "phase8-entries",
         "required-standard-files",
         "pickup-indexes",
+        "classifier-closure",
         "test-inventory",
     }
 )
@@ -343,6 +343,30 @@ def reference_groups_for_paths(paths: set[str]) -> frozenset[str]:
         for format_id in ("standard", "modern")
     ):
         groups.add("pickup-indexes")
+    if any(
+        path in {
+            "configs/mtgo_archetype_names.yaml",
+            "configs/melee_events.yaml",
+            "stats/catalog.json",
+            "src/mtgmeta/classifier.py",
+            "src/mtgmeta/classifier_closure.py",
+            "src/mtgmeta/reports.py",
+            "src/mtgmeta/melee/classification.py",
+            "src/mtgmeta/mtgo/landing.py",
+            "src/mtgmeta/mtgo/landing_editorial.py",
+        }
+        or path.startswith("my_archetypes/")
+        or path.startswith("stats/standard/")
+        or path.startswith("stats/modern/")
+        or path.startswith("reports/standard/mtgo/")
+        or path.startswith("reports/modern/mtgo/")
+        or path.startswith("data/standard/melee/classifications/")
+        or path.startswith("data/standard/melee/opportunities/")
+        or path.startswith("data/modern/melee/classifications/")
+        or path.startswith("data/modern/melee/opportunities/")
+        for path in paths
+    ):
+        groups.add("classifier-closure")
     if (
         TEST_TRIGGER_MATRIX_PATH in paths
         or "validate_repository.py" in paths
@@ -628,37 +652,6 @@ def validate_phase8_frontend_references(
     return checked, failures
 
 
-def _public_classifier_name_contract(
-    approved_names: list[Any], format_id: str
-) -> dict[str, Any]:
-    names = []
-    for item in approved_names:
-        if not isinstance(item, dict):
-            raise ValueError("classifier name row is not a mapping")
-        if item.get("format") != format_id:
-            continue
-        if item.get("review_status") != "approved":
-            raise ValueError(f"classifier name is not approved for {format_id}")
-        parent_id = item["parent_id"]
-        subtype_id = item["subtype_id"]
-        names.append(
-            {
-                "identity_id": (
-                    f"{parent_id}/{subtype_id}" if subtype_id is not None else parent_id
-                ),
-                "parent_id": parent_id,
-                "subtype_id": subtype_id,
-                "display": {"en": item["english"], "zh": item["chinese"]},
-            }
-        )
-    names.sort(key=lambda item: item["identity_id"])
-    return {
-        "schema_version": PUBLIC_CLASSIFIER_NAME_SCHEMA_VERSION,
-        "format": format_id,
-        "names": names,
-    }
-
-
 def validate_public_product_facts(
     root: Path,
     names: list[str],
@@ -758,6 +751,11 @@ def validate_public_product_facts(
     public_formats = tuple(
         format_id for format_id in labels if catalog_products[format_id]
     )
+    from mtgmeta.mtgo.landing_editorial import (
+        MTGOLandingEditorialError,
+        build_public_name_contract,
+    )
+
     for format_id in public_formats:
         contract_path = f"stats/{format_id}/archetype_names.json"
         checked += 1
@@ -769,10 +767,8 @@ def validate_public_product_facts(
             )
             continue
         try:
-            expected_contract = _public_classifier_name_contract(
-                approved_names, format_id
-            )
-        except (KeyError, TypeError, ValueError) as exc:
+            expected_contract = build_public_name_contract(root, format_id)
+        except (MTGOLandingEditorialError, OSError, ValueError) as exc:
             reference_check(
                 failures,
                 CLASSIFIER_NAME_CATALOG,
@@ -1099,6 +1095,7 @@ def validate_references(
         "Phase 8 production resources": 0,
         "required Standard files": 0,
         "frozen Pickup week entries": 0,
+        "classifier-derived artifact closure": 0,
         "test inventory contracts": 0,
     }
     if "governance" in enabled_groups:
@@ -1231,6 +1228,42 @@ def validate_references(
                     f"{pickup}:weeks[{index}]",
                     None if valid else f"invalid frozen Pickup week file {value!r}",
                 )
+    if "classifier-closure" in enabled_groups:
+        try:
+            from mtgmeta.classifier_closure import inspect_repository
+
+            closure = inspect_repository(root)
+            for format_report in closure["formats"]:
+                for family in format_report["families"].values():
+                    breakdown["classifier-derived artifact closure"] += 1
+                    if family["state"] == "CURRENT":
+                        continue
+                    path = (
+                        family["artifacts"][0]
+                        if family["artifacts"]
+                        else "stats/catalog.json"
+                    )
+                    detail = "; ".join(family["issues"][:3]) or family["state"]
+                    reference_check(
+                        failures,
+                        path,
+                        f"classifier closure {format_report['format']}/{family['name']} is {family['state']}: {detail}",
+                    )
+                if not format_report["families"]:
+                    breakdown["classifier-derived artifact closure"] += 1
+                    reference_check(
+                        failures,
+                        "stats/catalog.json",
+                        f"classifier closure {format_report['format']} is {format_report['state']}: "
+                        + "; ".join(format_report["issues"][:3]),
+                    )
+        except (ImportError, RuntimeError, OSError, ValueError) as exc:
+            breakdown["classifier-derived artifact closure"] += 1
+            reference_check(
+                failures,
+                "stats/catalog.json",
+                f"classifier closure inspection failed: {type(exc).__name__}: {exc}",
+            )
     if "test-inventory" in enabled_groups:
         inventory_checked, inventory_failures = validate_test_inventory(root, names)
         breakdown["test inventory contracts"] = inventory_checked

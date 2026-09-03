@@ -1,16 +1,17 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/classification-report-common.schema.json",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "$defs": {
     "header": {
       "type": "object",
-      "required": ["schema_version", "report_type", "format", "source", "scope", "event_count", "data_through"],
+      "required": ["schema_version", "report_type", "format", "source", "classifier_digest", "scope", "event_count", "data_through"],
       "properties": {
-        "schema_version": {"const": "1.0.0"},
+        "schema_version": {"const": "1.1.0"},
         "report_type": {"type": "string", "minLength": 1},
         "format": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
         "source": {"const": "mtgo"},
+        "classifier_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
         "scope": {"const": "all_available_events"},
         "event_count": {"type": "integer", "minimum": 0},
         "data_through": {"type": "string"}

@@ -32,10 +32,33 @@ FEATURE_ARCHIVE_SCHEMA_VERSION = "1.0.0"
 FEATURE_ARCHIVE_PRODUCT_ID = "mtgo-landing-features"
 DEFAULT_VISUALS_PATH = Path("configs/mtgo_landing_visuals.yaml")
 DECK_LINK_TOKEN_PATTERN = re.compile(r"deck:[0-9a-f]{20}")
+CLASSIFIER_RESTATEMENT_BINDINGS = frozenset(
+    {"classifier_digest", "machine_fact_digest"}
+)
+CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS = (
+    "week",
+    "state",
+    "source_event_ids",
+    "comparison",
+    "thresholds",
+    "populations",
+    "environment",
+)
 
 
 class MTGOLandingError(RuntimeError):
     """Raised when Landing facts or reviewed features cannot be admitted."""
+
+
+def _classifier_restatement_preserves_accepted_material(
+    binding_mismatches: set[str],
+    prior_document: Mapping[str, Any],
+    fact_payload: Mapping[str, Any],
+) -> bool:
+    return binding_mismatches <= CLASSIFIER_RESTATEMENT_BINDINGS and all(
+        prior_document.get(field) == fact_payload.get(field)
+        for field in CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS
+    )
 
 
 def _closed_week_monday(today: date) -> date:
@@ -670,6 +693,7 @@ def build_document(
     review_directory: str | Path | None = None,
     name_catalog_path: str | Path | None = None,
     visuals_path: str | Path | None = None,
+    allow_classifier_restatement: bool = False,
     _admit_review: bool = True,
 ) -> tuple[str, dict[str, Any]]:
     root = Path(repository_root).resolve()
@@ -843,9 +867,41 @@ def build_document(
                 "link_catalog_digest": editorial.document_digest(current_catalog),
                 "bilingual_catalog_digest": editorial.document_digest(name_document),
             }
-            try:
-                editorial.validate_review_binding(review, current_binding)
-            except editorial.MTGOLandingEditorialError:
+            binding_fields = (
+                "workbook_sha256",
+                "source_event_ids",
+                "classifier_digest",
+                "selection_policy_digest",
+                "machine_fact_digest",
+                "link_catalog_digest",
+                "bilingual_catalog_digest",
+            )
+            binding_mismatches = {
+                field
+                for field in binding_fields
+                if review["bindings"].get(field) != current_binding.get(field)
+            }
+            prior_document: dict[str, Any] | None = None
+            if allow_classifier_restatement and binding_mismatches <= (
+                CLASSIFIER_RESTATEMENT_BINDINGS
+            ):
+                current_path = context.paths["statistics"] / "landing" / "current.json"
+                try:
+                    loaded = json.loads(current_path.read_text(encoding="utf-8"))
+                except (OSError, UnicodeError, json.JSONDecodeError):
+                    loaded = None
+                if isinstance(loaded, dict):
+                    prior_document = loaded
+            restatement_safe = (
+                allow_classifier_restatement
+                and prior_document is not None
+                and _classifier_restatement_preserves_accepted_material(
+                    binding_mismatches,
+                    prior_document,
+                    fact_payload,
+                )
+            )
+            if binding_mismatches and not restatement_safe:
                 review_status = "stale_review_required"
             else:
                 materialized = editorial.materialize_review(review, names)
@@ -1057,6 +1113,7 @@ def generate(
     name_catalog_path: str | Path | None = None,
     output_directory: str | Path | None = None,
     visuals_path: str | Path | None = None,
+    allow_classifier_restatement: bool = False,
 ) -> dict[str, Any]:
     root = Path(repository_root).resolve()
     context = load_mtgo_context(
@@ -1073,6 +1130,7 @@ def generate(
         review_directory=review_directory,
         name_catalog_path=name_catalog_path,
         visuals_path=visuals_path,
+        allow_classifier_restatement=allow_classifier_restatement,
     )
     output = (
         Path(output_directory).resolve()

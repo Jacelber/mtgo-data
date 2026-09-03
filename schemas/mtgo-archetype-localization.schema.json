@@ -2,13 +2,27 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-archetype-localization.schema.json",
   "title": "Public format-scoped bilingual classifier names",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "format", "names"],
+  "required": ["schema_version", "format", "provenance", "names"],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"const": "1.1.0"},
     "format": {"enum": ["standard", "modern"]},
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classifier_identity_digest",
+        "name_catalog_digest",
+        "projection_subject_digest"
+      ],
+      "properties": {
+        "classifier_identity_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "name_catalog_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "projection_subject_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
     "names": {
       "type": "array",
       "minItems": 1,

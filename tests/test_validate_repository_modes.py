@@ -4,6 +4,8 @@ from pathlib import Path
 
 import pytest
 
+from mtgmeta.mtgo.landing_editorial import build_public_name_contract
+
 from validate_repository import (
     changed_validation_plan,
     validate_files,
@@ -14,6 +16,9 @@ from validate_repository import (
 from validate_schemas import validate_manifest
 
 
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+
+
 def write_public_product_fixture(
     root: Path,
     *,
@@ -21,6 +26,8 @@ def write_public_product_fixture(
     public_event_ids: tuple[str, ...],
 ) -> list[str]:
     (root / "configs").mkdir()
+    (root / "my_archetypes").mkdir()
+    (root / "schemas").mkdir()
     (root / "stats" / "modern" / "melee").mkdir(parents=True)
     (root / "README.md").write_text(
         "| MTGO Environment Trends | Modern | `/index.html` |\n"
@@ -65,6 +72,48 @@ def write_public_product_fixture(
         ),
         encoding="utf-8",
     )
+    rule_template = (
+        "schema_version: 1.0.0\n"
+        "format: {format_id}\n"
+        "archetypes:\n"
+        "- id: {identity}\n"
+        "  name: {english}\n"
+        "  priority: 1\n"
+        "  rules:\n"
+        "  - id: {identity}-rule\n"
+        "    priority: 1\n"
+        "    subtype_id: null\n"
+        "    conditions:\n"
+        "      all:\n"
+        "      - card: Synthetic Card\n"
+        "        min_count: 1\n"
+    )
+    (root / "my_archetypes" / "modern.yaml").write_text(
+        rule_template.format(
+            format_id="modern",
+            identity="synthetic-control",
+            english="Synthetic Control",
+        ),
+        encoding="utf-8",
+    )
+    (root / "my_archetypes" / "standard.yaml").write_text(
+        rule_template.format(
+            format_id="standard",
+            identity="synthetic-standard",
+            english="Synthetic Standard",
+        ),
+        encoding="utf-8",
+    )
+    (root / "schemas" / "mtgo-archetype-names.schema.json").write_text(
+        (REPOSITORY_ROOT / "schemas" / "mtgo-archetype-names.schema.json").read_text(
+            encoding="utf-8"
+        ),
+        encoding="utf-8",
+    )
+    (root / "configs" / "formats.yaml").write_text(
+        (REPOSITORY_ROOT / "configs" / "formats.yaml").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
     (root / "configs" / "mtgo_archetype_names.yaml").write_text(
         "schema_version: 1.0.0\n"
         "names:\n"
@@ -74,27 +123,18 @@ def write_public_product_fixture(
         "  english: Synthetic Control\n"
         "  chinese: 合成控制\n"
         "  review_status: approved\n"
-        "  identity_key: modern|synthetic-control|none\n",
+        "  identity_key: modern|synthetic-control|none\n"
+        "- format: standard\n"
+        "  parent_id: synthetic-standard\n"
+        "  subtype_id: null\n"
+        "  english: Synthetic Standard\n"
+        "  chinese: 合成标准\n"
+        "  review_status: approved\n"
+        "  identity_key: standard|synthetic-standard|none\n",
         encoding="utf-8",
     )
     (root / "stats" / "modern" / "archetype_names.json").write_text(
-        json.dumps(
-            {
-                "schema_version": "1.0.0",
-                "format": "modern",
-                "names": [
-                    {
-                        "identity_id": "synthetic-control",
-                        "parent_id": "synthetic-control",
-                        "subtype_id": None,
-                        "display": {
-                            "en": "Synthetic Control",
-                            "zh": "合成控制",
-                        },
-                    }
-                ],
-            }
-        ),
+        json.dumps(build_public_name_contract(root, "modern")),
         encoding="utf-8",
     )
     (root / "stats" / "modern" / "melee" / "index.json").write_text(

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-classification.schema.json",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "title": "Melee event classification overlay",
   "type": "object",
   "additionalProperties": false,
@@ -10,17 +10,18 @@
     "taxonomy", "summary", "quality", "records"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"const": "1.1.0"},
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
     "format": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
     "classifier": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "contract_version"],
+      "required": ["name", "contract_version", "digest"],
       "properties": {
         "name": {"const": "shared-rule-classifier"},
-        "contract_version": {"const": "1.0.0"}
+        "contract_version": {"const": "1.0.0"},
+        "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
       }
     },
     "input": {

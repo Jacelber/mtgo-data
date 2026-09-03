@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from validate_schemas import validate_manifest
+from validate_schemas import main, validate_manifest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,3 +36,8 @@ def test_current_melee_documents_pass_both_complete_manifests():
         checked, failures = validate_manifest(ROOT, ROOT / relative)
         assert checked > 0
         assert failures == []
+
+
+def test_explicit_schema_path_fails_when_manifest_does_not_map_it(capsys):
+    assert main(["--root", str(ROOT), "--path", "README.md"]) == 2
+    assert "not mapped by the selected manifest" in capsys.readouterr().out

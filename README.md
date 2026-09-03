@@ -71,6 +71,23 @@ entry points. The complete trigger-specific list is in
 unbounded test suite when a named smaller command answers the current risk.
 These commands do not fetch tournament data or regenerate production statistics.
 
+Classifier-dependent public artifacts have a separate explicit closure operation.
+Inspection is read-only, and `converge` without `--execute` builds and validates a
+format-scoped staging tree without changing the repository:
+
+```powershell
+.\.venv\Scripts\python.exe -B -m mtgmeta.classifier_closure --root . inspect --format standard --format modern
+.\.venv\Scripts\python.exe -B -m mtgmeta.classifier_closure --root . converge --format standard --format modern
+```
+
+After reviewing the staged result and resolving any `BLOCKED_OWNER_REVIEW`
+outcome, an explicitly authorized materialization uses `--execute`. Each format
+is staged and validated completely before its final artifacts are replaced; a
+write or final-validation failure restores that format's pre-execute bytes.
+The operation reads retained repository sources only. It does not fetch event
+data, change classifier rules or approved names, or turn editorial decisions
+into generated content.
+
 The Standard public-contract and frozen classification baselines are documented
 in [`docs/audits/P1-11.md`](docs/audits/P1-11.md) and
 [`docs/audits/P1-12.md`](docs/audits/P1-12.md). Generated public JSON uses the
