@@ -5,9 +5,11 @@ const test = require("node:test");
 
 const names = require("../../assets/js/phase8/archetype-names.js");
 
-function contract() {
-  return {
-    schema_version: "1.0.0",
+const DIGEST = "a".repeat(64);
+
+function contract(schemaVersion = "1.0.0") {
+  const document = {
+    schema_version: schemaVersion,
     format: "modern",
     names: [
       {
@@ -24,7 +26,58 @@ function contract() {
       },
     ],
   };
+  if (schemaVersion === "1.1.0") {
+    document.provenance = {
+      classifier_identity_digest: DIGEST,
+      name_catalog_digest: DIGEST,
+      projection_subject_digest: DIGEST,
+    };
+  }
+  return document;
 }
+
+test("accepts explicit legacy and provenance-bearing name contract versions", () => {
+  assert.equal(names.normalize(contract("1.0.0"), "modern").format, "modern");
+  assert.equal(names.normalize(contract("1.1.0"), "modern").format, "modern");
+});
+
+test("rejects incomplete or malformed 1.1 provenance and unsupported versions", () => {
+  const missingProvenance = contract("1.1.0");
+  delete missingProvenance.provenance;
+  assert.throws(
+    () => names.normalize(missingProvenance, "modern"),
+    /Invalid classifier name contract/
+  );
+
+  for (const field of [
+    "classifier_identity_digest",
+    "name_catalog_digest",
+    "projection_subject_digest",
+  ]) {
+    const missingDigest = contract("1.1.0");
+    delete missingDigest.provenance[field];
+    assert.throws(
+      () => names.normalize(missingDigest, "modern"),
+      /Invalid classifier name contract/
+    );
+
+    const malformedDigest = contract("1.1.0");
+    malformedDigest.provenance[field] = "A".repeat(64);
+    assert.throws(
+      () => names.normalize(malformedDigest, "modern"),
+      /Invalid classifier name contract/
+    );
+  }
+
+  assert.throws(
+    () => names.normalize(contract("1.2.0"), "modern"),
+    /Invalid classifier name contract/
+  );
+  assert.throws(
+    () => names.normalize(contract("2.0.0"), "modern"),
+    /Invalid classifier name contract/
+  );
+});
 
 test("resolves approved names only by stable identity and language", () => {
   const normalized = names.normalize(contract(), "modern");
