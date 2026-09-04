@@ -15,7 +15,8 @@ from tools.generate_weekly_maintenance_readiness import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_independent_private_review_and_public_weeks(tmp_path, monkeypatch):
+@pytest.mark.parametrize("modern_completion", ["verified", "stale", "unrecorded"])
+def test_independent_private_review_and_public_weeks(tmp_path, monkeypatch, modern_completion):
     from datetime import date
     from types import SimpleNamespace
     from mtgmeta.mtgo import publication, classification
@@ -34,7 +35,12 @@ def test_independent_private_review_and_public_weeks(tmp_path, monkeypatch):
         reports={"unknown_decks": {"records": []}, "index": {"summary": {"strict_validation": "pass"}}}))
     for fmt in ("standard", "modern"):
         _write_json(tmp_path / "stats" / fmt / "mtgo/landing/current.json", {"week": {"id": "2025-W01"}})
-    registry = {"data_admissions": {"formats": {
+    monkeypatch.setattr(readiness, "_completion_state", lambda root, week, format_id: {
+        "state": ("verified" if format_id == "standard" else modern_completion)
+        if week == "2025-W01" else "unrecorded",
+        "completed_on": None, "evidence": None, "mismatches": []})
+    registry = {"records": [{"week": "2025-W01", "formats": {"standard": {}, "modern": {}}}],
+                "data_admissions": {"formats": {
         fmt: {"weekly_acceptances": []} for fmt in ("standard", "modern")}}}
     document = readiness._independent_readiness(tmp_path, registry,
         publication_sha="a" * 40, production_run_id="1", production_run_attempt="1",
@@ -42,6 +48,9 @@ def test_independent_private_review_and_public_weeks(tmp_path, monkeypatch):
     assert document["schema_version"] == "1.7.0"
     assert [(row["review_week"], row["public_week"]) for row in document["formats"]] == [
         ("2025-W03", "2025-W02"), ("2025-W04", "2025-W01")]
+    assert document["formats"][0]["completed_reviews"] == ["2025-W01"]
+    assert document["formats"][1]["completed_reviews"] == (
+        ["2025-W01"] if modern_completion == "verified" else [])
     assert all(row["completion"]["state"] == "unrecorded" for row in document["formats"])
     assert all(row["data_admission"] == "not_accepted" for row in document["formats"])
     schema = json.loads((ROOT / "schemas/weekly-maintenance-readiness.schema.json").read_text())

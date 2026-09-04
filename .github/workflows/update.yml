@@ -878,6 +878,26 @@ jobs:
 
             const readiness = JSON.parse(fs.readFileSync(process.env.READINESS_PATH, "utf8"));
             if (readiness.schema_version === "1.7.0") {
+              // A legacy shared notice requires verified completion of both formats.
+              const legacyWeeks = readiness.formats.find(item => item.format === "standard")?.completed_reviews || [];
+              for (const week of legacyWeeks) {
+                if (!["standard", "modern"].every(format => readiness.formats.some(
+                  item => item.format === format && item.completed_reviews.includes(week),
+                ))) continue;
+                const marker = `<!-- weekly-maintenance:${week} -->`;
+                const legacy = issues.find(issue => !issue.pull_request && issue.body?.includes(marker));
+                if (legacy?.state === "open") {
+                  const body = [marker, "## Weekly MTGO maintenance completed", "",
+                    `- Review week: ${week}`,
+                    "- Standard and Modern: explicit completion records verified against their accepted subjects.",
+                    `- Verification: [run ${context.runId}](${runUrl}).`,
+                    "- Completion evidence: configs/mtgo_weekly_review_completions.yaml.",
+                    "This legacy shared notice is closed only after both formats are complete; data publication alone does not close it.",
+                  ].join("\n");
+                  await github.rest.issues.update({ ...context.repo, issue_number: legacy.number,
+                    body, state: "closed", state_reason: "completed" });
+                }
+              }
               for (const item of readiness.formats) {
                 // Only explicit verified completion closes this format/week's notice.
                 for (const week of item.completed_reviews) {

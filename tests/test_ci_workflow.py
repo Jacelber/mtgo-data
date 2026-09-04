@@ -1,4 +1,6 @@
+import json
 from pathlib import Path
+import subprocess
 
 import yaml
 
@@ -11,6 +13,59 @@ PRODUCTION_WORKFLOWS = (
     ROOT / ".github" / "workflows" / "update.yml",
     ROOT / ".github" / "workflows" / "fetch_melee.yml",
 )
+
+
+def test_legacy_weekly_notice_requires_both_verified_formats(tmp_path):
+    workflow = yaml.load(UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+    script = next(step["with"]["script"] for step in
+                  workflow["jobs"]["weekly-readiness-notify"]["steps"]
+                  if step.get("uses", "").startswith("actions/github-script@"))
+    runner = r'''
+const fs = require("fs");
+const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+const input = JSON.parse(fs.readFileSync(0, "utf8"));
+const run = new AsyncFunction("github", "context", "core", "require", input.script);
+const summary = { addRaw(){ return this; }, addEOL(){ return this; }, async write(){} };
+(async () => {
+  const results = [];
+  for (const scenario of input.scenarios) {
+    fs.writeFileSync(input.path, JSON.stringify(scenario.readiness));
+    process.env.READINESS_PATH = input.path;
+    process.env.READINESS_RESULT = "success";
+    const updates = [];
+    const issues = scenario.issues;
+    const api = { listForRepo(){}, async update(value){ updates.push(value); },
+      async create(){ throw Error("Unexpected notice creation"); } };
+    await run({rest: {issues: api}, paginate: async () => issues},
+      {repo: {owner: "synthetic", repo: "test"}, runId: 123},
+      {summary, setFailed(message){ throw Error(message); }}, require);
+    results.push(updates);
+  }
+  process.stdout.write(JSON.stringify(results));
+})().catch(error => { console.error(error); process.exit(1); });
+'''
+    def scenario(standard, modern, state="open"):
+        return {"readiness": {"schema_version": "1.7.0", "formats": [
+            {"format": "standard", "review_week": None, "completed_reviews": standard},
+            {"format": "modern", "review_week": None, "completed_reviews": modern}]},
+            "issues": [{"number": 10, "state": state,
+                        "body": "<!-- weekly-maintenance:2025-W01 -->"},
+                       {"number": 11, "state": "open",
+                        "body": "<!-- weekly-maintenance:2025-W02 -->"}]}
+    scenarios = [scenario([], []), scenario(["2025-W01"], []),
+                 scenario([], ["2025-W01"]), scenario(["2025-W01"], ["2025-W01"]),
+                 scenario(["2025-W01"], ["2025-W01"], "closed")]
+    payload = {"script": script, "path": str(tmp_path / "readiness.json"), "scenarios": scenarios}
+    result = subprocess.run(["node", "-e", runner], input=json.dumps(payload), text=True,
+                            capture_output=True, check=True, encoding="utf-8")
+    updates = json.loads(result.stdout)
+    assert updates[:3] == [[], [], []]
+    assert updates[4] == []
+    assert len(updates[3]) == 1
+    assert updates[3][0]["issue_number"] == 10
+    assert updates[3][0]["state"] == "closed"
+    assert updates[3][0]["state_reason"] == "completed"
+    assert "Standard and Modern" in updates[3][0]["body"]
 
 
 def _workflow():

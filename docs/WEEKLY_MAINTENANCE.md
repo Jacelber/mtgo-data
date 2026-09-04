@@ -411,6 +411,12 @@ Owner-reviewed event IDs, accepted classifier subject, digest of every official
 classification through rank 32, and published Landing content. Melee remains
 outside this MTGO registry. The Issue is closed.
 
+Readiness 1.7 derives verified completion from the completion records even when
+the week predates per-format data admissions. Existing-public-scope migration
+alone is never completion evidence. A legacy shared weekly Issue closes only
+when both Standard and Modern have verified completion for that week; one
+completed format, missing evidence, or a stale record cannot close it.
+
 `revalidation_required` means a recorded completion no longer matches its
 declared legacy Top 8 subject or its Weekly V2 event/classifier/full-review
 subject, or its published Landing content. It is a review-evidence mismatch,
