@@ -35,7 +35,7 @@ jobs:
       validation_triggers: ${{ steps.classify.outputs.validation_triggers }}
     steps:
       - name: Check out admission logic without persisted credentials
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: Set up Python 3.12
@@ -56,7 +56,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Check out repository without persisted credentials
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 0
