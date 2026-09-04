@@ -121,6 +121,7 @@ def _matchup_coverage(
         if event_id is not None:
             archive_ids.add(str(event_id))
     overlap = official_ids & archive_ids
+    archive_ids &= official_ids
     return {
         "official_events": len(official_ids),
         "events_with_archives": len(overlap),
@@ -205,6 +206,9 @@ def generate_metadata(
             ),
         }
     )
+    from .publication import publication_binding
+    document["schema_version"] = "1.1.0"
+    document["publication"] = publication_binding(context.repository_root, format_id)
     output = (
         Path(output_directory).resolve()
         if output_directory is not None

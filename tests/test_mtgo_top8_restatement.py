@@ -75,6 +75,23 @@ def _read(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def test_multiple_newly_admitted_weeks_do_not_skip_intermediate_top8(tmp_path):
+    from datetime import timedelta
+    from copy import deepcopy
+    events = _events()
+    rules = _rules("alpha", "Signal Card")
+    top8.write_latest_week(events, rules, tmp_path, format_id="modern", today=SEALED_TODAY)
+    for offset in (1, 2):
+        day = MONDAY + timedelta(weeks=offset)
+        event = deepcopy(events[0][1])
+        event["event_id"] = str(1001 + offset)
+        event["starttime"] = day.isoformat() + "T12:00:00Z"
+        events.append((day, event))
+    top8.write_latest_week(events, rules, tmp_path, format_id="modern", today=date(2026, 2, 3))
+    assert [row["file"] for row in _read(tmp_path / "index.json")["weeks"]] == [
+        "2026-W04.json", "2026-W03.json", "2026-W02.json"]
+
+
 def test_sealed_history_restates_derived_identity_under_current_classifier(tmp_path):
     output = tmp_path / "top8"
     top8.write_latest_week(

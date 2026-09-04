@@ -175,24 +175,24 @@ def build_mtgo_weekly_review(
     """Return every officially published weekly record, capped at rank 32."""
 
     root = Path(repository_root).resolve()
-    week_path = root / "stats" / format_id / "mtgo" / "top8" / f"{week_id}.json"
-    week = _json_object(week_path)
-    events = week.get("events")
-    if week.get("format") != format_id:
-        raise ValueError(f"{week_path}: format binding mismatch")
-    if not isinstance(events, list) or not events:
-        raise ValueError(f"{week_path}: events must be a non-empty list")
+    from datetime import timedelta
+    from .mtgo.publication import week_monday
+    monday = week_monday(week_id)
 
     rule_path = root / "my_archetypes" / f"{format_id}.yaml"
     rules = load_rule_set(rule_path)
     names = _name_authority(root, format_id)
     retained = _event_map(root, format_id)
+    events = [event for _, event in retained.values()
+              if monday.isoformat() <= str(event["starttime"])[:10]
+              <= (monday + timedelta(days=6)).isoformat()]
+    events.sort(key=lambda event: (str(event["starttime"]), str(event["event_id"])))
+    if not events:
+        raise ValueError(f"{format_id} {week_id}: no retained official events")
     rows: list[dict[str, Any]] = []
     event_summaries: list[dict[str, Any]] = []
 
     for week_event in events:
-        if not isinstance(week_event, dict):
-            raise ValueError(f"{week_path}: event must be an object")
         event_id = str(week_event.get("event_id", ""))
         if event_id not in retained:
             raise ValueError(f"retained MTGO event {event_id} is unavailable")
@@ -525,14 +525,16 @@ def build_v2_completion_record(
     completed_on: str,
     evidence: str,
     landing_content_digests: Mapping[str, str],
+    independent_format: bool = False,
 ) -> dict[str, Any]:
     """Build a minimal full-review completion record without writing a registry."""
 
     by_format = {str(review.get("format")): review for review in reviews}
-    if set(by_format) != {"standard", "modern"}:
+    valid = bool(by_format) and set(by_format) <= {"standard", "modern"}
+    if not valid or (not independent_format and set(by_format) != {"standard", "modern"}):
         raise ValueError("Weekly V2 completion must bind Standard and Modern")
     formats = {}
-    for format_id in ("standard", "modern"):
+    for format_id in (item for item in ("standard", "modern") if item in by_format):
         review = by_format[format_id]
         classifier = review.get("classifier")
         if not isinstance(classifier, Mapping):

@@ -251,9 +251,9 @@ The format argument is mandatory. The installed command works without setting
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard landing-review import-xlsx <accepted-workbook.xlsx> --expected-sha256 <accepted-sha256>
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard build-landing
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard generate-hierarchy
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard classification-reports --strict
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard generate-metadata
 .\.venv\Scripts\mtgo-data-catalog.exe --root .
-.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard classification-reports --strict
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern fetch-matches
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-statistics
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-matchups
@@ -263,6 +263,9 @@ The format argument is mandatory. The installed command works without setting
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern landing-review import-xlsx <accepted-workbook.xlsx> --expected-sha256 <accepted-sha256>
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern build-landing
 .\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern classification-reports --strict
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern generate-hierarchy
+.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format modern generate-metadata
+.\.venv\Scripts\mtgo-data-catalog.exe --root .
 ```
 
 Standard and Modern are complete public MTGO products. The format registry also
@@ -271,6 +274,20 @@ scheduled pipeline builds statistics, matchups, completeness, provisional then
 sealed weekly Top 8 data and bases, private Landing screening candidates,
 latest Landing facts, metadata, the product catalog, hierarchy catalogs, and strict
 classification diagnostics for enabled products.
+
+Public MTGO producers use only the explicit Owner-approved event IDs in the
+`data_admissions` section of `configs/mtgo_weekly_review_completions.yaml`.
+Collection and private full classification review still see pending events.
+Data approval is independent of Landing and Weekly completion; Standard and
+Modern can advance separately. Individual producer commands above are candidate
+building steps, not standalone authorization to publish partially updated data.
+
+For a reviewed-scope advancement, use `publication inspect`, then the explicit
+offline `publication stage` operation (`--execute` materializes after all
+checks; `--include-landing` is only for accepted content). Install pinned runtime
+and Chromium dependencies beforehand. See
+[`docs/WEEKLY_MAINTENANCE.md`](docs/WEEKLY_MAINTENANCE.md#reviewed-data-publication-operations)
+for exact acceptance-record commands, both publication nodes and stop conditions.
 
 The Landing editorial producer owns weekly candidate screening through
 `landing-review prepare`. Candidate generation never approves a row,

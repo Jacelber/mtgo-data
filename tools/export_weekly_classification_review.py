@@ -65,10 +65,21 @@ def main(argv: list[str] | None = None) -> int:
     completion.add_argument("--completed-on", required=True)
     completion.add_argument("--evidence", required=True)
     completion.add_argument("--output", type=Path)
+    independent = subparsers.add_parser("format-completion")
+    independent.add_argument("--week", required=True)
+    independent.add_argument("--format", dest="format_id", required=True)
+    independent.add_argument("--review", required=True, type=Path)
+    independent.add_argument("--landing-digest", required=True)
+    independent.add_argument("--completed-on", required=True)
+    independent.add_argument("--evidence", required=True)
+    independent.add_argument("--output", type=Path)
 
     args = parser.parse_args(argv)
     root = args.repository_root.resolve()
     try:
+        if args.output is not None:
+            from mtgmeta.mtgo.publication import require_private_output
+            require_private_output(root, args.output)
         if args.command == "mtgo":
             value = build_mtgo_weekly_review(root, args.format_id, args.week)
         elif args.command == "melee":
@@ -82,6 +93,30 @@ def main(argv: list[str] | None = None) -> int:
                 args.event_id,
                 args.participant_id,
             )
+        elif args.command == "format-completion":
+            review = json.loads(args.review.read_text(encoding="utf-8"))
+            if review.get("format") != args.format_id or review.get("week") != args.week:
+                raise ValueError("completion review format/week mismatch")
+            from mtgmeta.mtgo.publication import resolve_scope, inspect_publication
+            import yaml
+            registry = yaml.safe_load((root / "configs/mtgo_weekly_review_completions.yaml").read_text(encoding="utf-8"))
+            admissions = registry["data_admissions"]["formats"][args.format_id]["weekly_acceptances"]
+            current_review = build_mtgo_weekly_review(root, args.format_id, args.week)
+            if current_review["classification_review_digest"] != review["classification_review_digest"] or not any(
+                row["week"] == args.week
+                and row["classification_review_digest"] == review["classification_review_digest"]
+                and row["event_ids"] == review["event_ids"] for row in admissions
+            ):
+                raise ValueError("completion requires the exact full-classification data acceptance")
+            scope = resolve_scope(root, args.format_id)
+            if not set(review["event_ids"]) <= scope.event_ids or inspect_publication(root, args.format_id):
+                raise ValueError("data admission/publication is not complete")
+            landing = json.loads((root / "stats" / args.format_id / "mtgo/landing/features" / f"{args.week}.json").read_text(encoding="utf-8"))
+            if landing["content_digest"] != args.landing_digest:
+                raise ValueError("accepted Landing is not published")
+            value = build_v2_completion_record([review], week_id=args.week,
+                completed_on=args.completed_on, evidence=args.evidence,
+                landing_content_digests={args.format_id: args.landing_digest}, independent_format=True)
         else:
             reviews = [
                 json.loads(args.standard_review.read_text(encoding="utf-8")),

@@ -628,6 +628,8 @@ def _feature_archive_documents(
 ) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
     editorial.validate_name_catalog(root, name_catalog_path)
     names = editorial.load_name_catalog(name_catalog_path)
+    from .publication import resolve_scope
+    admitted = resolve_scope(root, format_id).event_ids
     week_documents: dict[str, dict[str, Any]] = {}
     index_entries: list[dict[str, Any]] = []
     for review_path in sorted(review_root.glob("????-W??.yaml")):
@@ -644,6 +646,11 @@ def _feature_archive_documents(
             raise MTGOLandingError(
                 f"{review_path}: Landing review filename does not match week"
             )
+        if not set(review["bindings"]["source_event_ids"]) <= admitted:
+            existing = root / "stats" / format_id / "mtgo/landing/features" / f"{week['id']}.json"
+            if existing.is_file():
+                raise MTGOLandingError("existing public Landing feature source is outside the admitted scope")
+            continue
         materialized = editorial.materialize_review(review, names)
         items = [_public_feature(item) for item in materialized["features"]]
         destinations = [item["destination_id"] for item in items]
@@ -704,9 +711,13 @@ def build_document(
         registry_path=registry_path,
     )
     rules = load_rules_for_format(root, format_id, registry_path=registry_path)
-    events = stats.load_all_events(root, format_id, registry_path=registry_path)
+    events = stats.load_all_events(root, format_id, registry_path=registry_path,
+                                  public=_admit_review)
     reference_today = today or datetime.now().date()
     target_monday = _closed_week_monday(reference_today)
+    if _admit_review:
+        from .publication import resolve_scope
+        target_monday = min(target_monday, resolve_scope(root, format_id).week)
     target_sunday = target_monday + timedelta(days=6)
     previous_monday = target_monday - timedelta(weeks=1)
     reference_start = target_monday - timedelta(weeks=4)

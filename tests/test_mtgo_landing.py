@@ -38,6 +38,9 @@ def test_classifier_restatement_requires_identical_accepted_material():
 
 
 def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_path):
+    from mtgmeta.mtgo import publication
+    monkeypatch.setattr(publication, "resolve_scope", lambda *args: SimpleNamespace(
+        week=date.fromisocalendar(2099, 2, 1)))
     context = SimpleNamespace(paths={"statistics": tmp_path / "stats"})
     rules = SimpleNamespace(archetypes=())
     monkeypatch.setattr(landing, "load_mtgo_context", lambda *args, **kwargs: context)

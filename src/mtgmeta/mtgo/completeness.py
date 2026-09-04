@@ -284,6 +284,7 @@ def build_all_completeness(
         context.paths["events"],
         repository_root=context.repository_root,
         format_id=format_id,
+        public=True,
     )
     end_monday = latest_complete_week(events, today=today)
     if end_monday is None:

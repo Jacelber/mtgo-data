@@ -17,8 +17,8 @@ After a successful production run, the workflow:
 
 1. checks out the exact verified production publication, or the unchanged
    source commit when generation was correctly skipped;
-2. builds one private `weekly-maintenance-readiness-<week>` Actions artifact;
-3. creates or updates one GitHub Issue identified by the review week; and
+2. builds one private `weekly-maintenance-readiness-<review-label>` Actions artifact;
+3. creates or updates a GitHub Issue for each format/review week requiring work; and
 4. stops without changing classifier rules, review metadata, Landing editorial
    approval, Landing content, or repository files.
 
@@ -32,17 +32,17 @@ open by every digest change.
 
 | Step | Who | Work | Output for the next step |
 | --- | --- | --- | --- |
-| 1. Collect and publish production data | Automatic GitHub workflow | Fetch the allowlisted MTGO inputs, validate one candidate, publish the verified generated data when changed, and keep production failures fail-closed. | Exact publication SHA, run evidence, current Standard and Modern outputs. |
-| 2. Build weekly readiness | Automatic GitHub workflow | Bind the current review week to Top 8 event IDs and the current classifier digest. Before emitting a handoff, require that digest and the same latest complete week across the Top 8 index/week, every indexed rolling range and representative-deck document, every indexed matchup range, and the hierarchy catalog. Missing or mixed public bindings fail closed. Require each Landing editorial candidate source to carry the same classifier and screening-policy digests, and reuse the authoritative Landing Top 8 subject to report the exact machine-fact digest later used by Landing admission plus the complete-link-catalog binding. Never substitute a Top 8 summary digest for the Landing machine-fact digest. The primary Unknown count and complete decklists are the exact intersection with the review week's source event IDs. Preserve every retained-corpus unresolved and intentional Unknown in a separately labelled queue, including an explicit outside-review-week subset that cannot change the weekly count or readiness status. Separately list classification blockers, editorial candidate counts, stale candidates, unavailable review inputs, and the non-blocking status of optional machine prose. Finally compare a recorded completed week with its exact Top 8 review subject and published Landing content; a global classifier digest change alone is not a material review change. | Private Schema-valid readiness JSON plus one deduplicated weekly Issue whose state reflects `awaiting_owner_start`, `blocked`, `completed`, or `revalidation_required`. |
+| 1. Collect and refresh approved public data | Automatic GitHub workflow | Fetch allowlisted MTGO inputs. New events remain retained/private-review inputs until explicit data acceptance. Regenerate public products only from the approved event set; validate and publish the entire candidate or nothing. | Successful collection evidence, unchanged or restated approved public products, and pending retained events. |
+| 2. Build weekly readiness | Automatic GitHub workflow | Discover each format's oldest closed pending week independently of its public week. Export full official classifications and machine-priority records privately. Keep retained-corpus Unknown diagnostics separate from the weekly review population. Report data acceptance, exact publication, Landing preparation, and completion as distinct facts. An unexplained review/classification failure is reported for that format; it cannot authorize publication or stop the other format's valid business progress. | Private readiness 1.7 plus deduplicated format/week notices; legacy 1.6 remains readable. |
 | 3. Establish the review-ready scope | Owner specifies; Codex verifies | The Owner names the week and any Melee events to include. A named Melee event must have complete retained source, a reproducible candidate, current classification, every available decklist needed for review, and no engineering blocker. Public visibility is not required. | One MTGO week plus optional, separately identified review-ready Melee events. |
 | 4. Start and freeze one operational lane | Owner starts; Codex verifies | Codex binds the successful MTGO production subject and each named Melee review subject. Successfully collected MTGO events are treated as fixed weekly inputs. Missing expected events, impossible official coverage, or malformed production output is an engineering defect and pauses the lane; Weekly does not build a second production validator or source-mutation tracker. | One exact review subject or a separate engineering-repair interruption. |
 | 5. Prepare both review layers | Codex | Produce a machine-priority packet from existing Unknown, conflict, multiple-match, overridden-match, subtype, deviation, and classifier-impact diagnostics. Also export every official MTGO classification for every weekly event, up to rank 32, and every available classification for each included Melee event. The full tables contain classification and exact locators, not all deck cards. | Machine-priority evidence plus complete MTGO and optional Melee classification tables. |
 | 6. Complete the full classification review | Owner reviews; Codex investigates | The Owner scans every row, uses the priority packet to start with higher-risk records, and identifies any additional suspected error. Codex returns the complete main deck, sideboard, current rules, similar decks, and reasoning only for machine-selected or Owner-selected records. Standard and Modern progress independently; MTGO and Melee remain source-labelled. | Accepted identity, subtype, bilingual-name, and intentional-Unknown decisions for the complete weekly review scope. |
 | 7. Implement and prove classifier impact | Codex | Implement only accepted classifier/name decisions. For each affected format, classify the same complete retained MTGO and Melee corpus once with the accepted rules and once with the candidate rules. Continue only when every requested target changed as accepted and every other change is explained; new Unknown, conflict, identity migration, classification loss, or subtype drift is returned for classifier-design review. | One accepted classifier subject with no unexplained retained-corpus impact, or a fail-closed Owner blocker. |
-| 8. Regenerate and close derived artifacts | Codex | Regenerate affected MTGO and Melee outputs through their separate retained-source paths, run classifier closure and bilingual-name coverage, then rebuild the full weekly tables and confirm the final change list equals the accepted decisions. Skip regeneration when rules did not change. | Source-separated current derived products and a final complete classification review subject. |
+| 8. Accept and publish reviewed data | Owner accepts full classification; Codex continues | Record explicit data admission for that format and week, independently of Landing and completion. Restate all applicable public MTGO products from the same approved set, including accepted historical classifier corrections; Melee reproduction remains separate. Validate the complete candidate, then perform the authorized exact-subject publication and verification. No extra technical authorization is needed inside the accepted lane. Skip unchanged generation, not a newly advanced data scope. | First publication: approved Statistics, Matchup, Representative Decks, Top 8, Completeness, metadata/catalogs and public reports; Weekly completion remains unrecorded. |
 | 9. Screen Landing and decide metadata deltas | Codex screens; Owner decides only if needed | Run Landing screening after classification is final. Only new, missing, changed, or genuinely judgment-dependent representative cards, colors, or other display metadata return to the Owner. If no such delta exists, skip this touchpoint. | Accepted bounded metadata delta or an explicit no-change result. |
 | 10. Author and accept Landing | Owner authors/reviews; Codex validates | The Owner writes Chinese content. Codex validates it, drafts English, receives one English acceptance or correction, imports only the accepted workbook hash, generates the preview, and presents the final weekly content/data/normal-rendering result. Final preview is not a recurring UI redesign review. | Exact bilingual Landing content and final preview subject. |
-| 11. Publish and complete | Owner accepts; Codex completes | After final preview acceptance, preserve the exact subject through GOV-11 commit, one Ready PR, required CI, merge, applicable publication, and cloud verification. Write a Weekly V2 completion record binding the reviewed MTGO event IDs, accepted classifier subjects, full-review digests, and Landing content. Melee remains outside the MTGO completion registry. | Completed weekly-maintenance evidence and immutable publication subject. |
+| 11. Publish Landing and complete | Owner accepts; Codex completes | After final preview acceptance, preserve the exact subject through GOV-11 commit, one Ready PR, required CI, merge, applicable publication, and cloud verification. This is the second, content publication. Only after both publication results and all business steps are verified, record completion for the finished format. The other format and Melee remain independent. | Accepted Landing and actual format-specific Weekly completion, never inferred from the first data publication. |
 
 Classifier recommendations in step 7 follow two additional controls. Codex first
 tests whether an existing rule can be modified across the complete retained
@@ -91,6 +91,60 @@ python -B tools/export_weekly_classification_review.py completion --week <week> 
 
 Codex reviews that exact row before adding it to the existing completion
 registry. The command does not publish, authorize, or write weekly state.
+
+### Reviewed data publication operations
+
+`configs/mtgo_weekly_review_completions.yaml` 1.2 has two separate sections:
+`data_admissions` is public membership authority; `records` is maintenance
+completion evidence. Neither implies the other. Initial explicit event IDs are
+`grandfathered_existing_public_scope`, not historical full human review.
+Standard and Modern advance independently through continuous accepted natural
+weeks. An observed empty intervening week can be crossed; a later arrival with
+an unlisted ID remains pending even when its date is before the public frontier.
+An accepted later nonempty week waits behind an unreviewed nonempty week.
+
+After the Owner accepts the exact full classification table, Codex uses:
+
+```text
+python -B -m mtgmeta.mtgo --format <format> publication inspect
+python -B -m mtgmeta.mtgo --format <format> publication admission-record --week <week> --expected-review-digest <digest> --accepted-on <date> --evidence <acceptance-reference> --output <private-path>/admission.json
+```
+
+The second command prepares a row; it does not grant authority or edit the
+registry. Codex places that exact accepted row under the format's
+`weekly_acceptances`. An additional accepted late-event delta replaces that
+week's row with its explicitly accepted complete set; no date rule admits it.
+Existing intentional-Unknown and classifier-impact policies still apply.
+
+With pinned Python/browser dependencies already installed, run the offline
+format operation (no fetch, dependency installation, commit, or publication):
+
+```text
+python -B -m mtgmeta.mtgo --format <format> publication stage
+python -B -m mtgmeta.mtgo --format <format> publication stage --execute
+```
+
+Default staging generates and checks a separate candidate without changing final
+files. Execute additionally replaces only validated allowed products, using the
+existing classifier-closure rollback implementation on failure/interruption.
+It leaves accepted Landing untouched. After content acceptance, use the same
+operation with `--include-landing`; stale/materially changed accepted content
+returns to the Owner. Do not run both commands on the same unchanged subject
+merely to duplicate evidence: choose plan-only for inspection or execute for an
+authorized local materialization. Normal GOV-11 remote gates follow separately.
+
+After the accepted format's data and Landing are actually published:
+
+```text
+python -B tools/export_weekly_classification_review.py format-completion --format <format> --week <week> --review <private-path>/review.json --landing-digest <digest> --completed-on <date> --evidence <publication-reference> --output <private-path>/completion.json
+```
+
+This verifies explicit classification acceptance and published data/Landing
+before preparing the existing completion record. It never marks the other
+format complete. Private review outputs, including full tables and pending
+Landing preparation, must not enter Pages-admitted report/statistics paths.
+Display metadata decisions occur after deterministic regeneration and screening
+expose a real delta, not prematurely to force one decision batch.
 
 ### Cross-source same-format supplements
 

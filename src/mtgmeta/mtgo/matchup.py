@@ -450,6 +450,7 @@ def load_hierarchical_events_from_directory(
     *,
     repository_root: str | Path,
     format_id: str,
+    public: bool = False,
 ) -> list[tuple[date, str, dict[str, MatchupIdentity], set[str]]]:
     """Load exact-format events and stable parent/subtype mappings."""
 
@@ -459,6 +460,12 @@ def load_hierarchical_events_from_directory(
         repository_root,
         format_id,
     )
+    if public:
+        from .publication import public_events
+        context = load_mtgo_context(repository_root, format_id, "matchup_statistics")
+        if Path(events_directory).resolve() != context.paths["events"].resolve():
+            raise MTGOMatchupError("public matchups require canonical retained inputs")
+        loaded = public_events(repository_root, format_id)
     if excluded:
         details = ", ".join(
             f"{item.source_file} ({item.actual_format})" for item in excluded
@@ -1085,6 +1092,7 @@ def build_all_matchups(
         rule_set,
         repository_root=context.repository_root,
         format_id=format_id,
+        public=True,
     )
     end_monday = latest_complete_week([(event[0], None) for event in events], today=today)
     if end_monday is None:

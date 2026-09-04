@@ -419,6 +419,7 @@ def load_events_from_directory(
     *,
     repository_root: str | Path | None = None,
     format_id: str | None = None,
+    public: bool = False,
 ):
     """Load dated event documents from one authorized, format-isolated directory."""
 
@@ -433,6 +434,12 @@ def load_events_from_directory(
             repository_root,
             format_id,
         )
+        if public:
+            from .publication import public_events
+            context = load_mtgo_context(repository_root, format_id, "event_statistics")
+            if Path(events_directory).resolve() != context.paths["events"].resolve():
+                raise MTGOStatisticsError("public statistics require canonical retained inputs")
+            loaded = public_events(repository_root, format_id)
         if excluded:
             details = ", ".join(
                 f"{item.source_file} ({item.actual_format})" for item in excluded
@@ -459,6 +466,7 @@ def load_all_events(
     format_id: str,
     *,
     registry_path: str | Path | None = None,
+    public: bool = True,
 ):
     """Load event input only after registry and capability authorization."""
 
@@ -472,6 +480,7 @@ def load_all_events(
         context.paths["events"],
         repository_root=context.repository_root,
         format_id=format_id,
+        public=public,
     )
 
 
@@ -1088,6 +1097,7 @@ def build_all_stats(
         context.paths["events"],
         repository_root=context.repository_root,
         format_id=format_id,
+        public=True,
     )
     end_monday = latest_complete_week(events, today=today)
     if end_monday is None:

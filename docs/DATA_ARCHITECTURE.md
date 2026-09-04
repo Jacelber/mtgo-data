@@ -2023,8 +2023,9 @@ the same shared hierarchy function and reconcile exactly.
 
 MTGO format metadata references the statistics, matchup, and hierarchy
 catalogs. It records the approved matchup source and exact event/archive
-coverage counts, including official events without stored archives and stored
-archives outside the admitted official-event set. Pickup publication is always
+coverage counts within the explicitly approved event set, including approved
+official events without stored archives. Orphan/unapproved archives remain
+retained but are excluded from public metadata coverage. Pickup publication is always
 represented as a null compatibility-catalog reference. Feature-history
 availability comes from the Landing feature
 index; an explicitly reviewed empty week is represented in that index rather
@@ -3712,3 +3713,61 @@ normalized-source drift is invalid rather than regenerable.
 Ordinary `validate_repository.py` use performs only the read-only provenance,
 catalog, and exact-SHA inspection. Classification, statistics generation,
 staging, materialization, and fetch remain exclusive to explicit operations.
+
+### MTGO reviewed publication membership
+
+The `data_admissions` section of completion configuration 1.2 is a separate
+authority from its `records` section. Each format has a fixed grandfathered
+initial ID set and explicit Owner-accepted full-classification week sets, with
+exact retained-source bindings. Public generators never infer admission from
+Weekly `completed`, Landing status, directory growth, or an event-date cutoff.
+The initial baseline is an existing-public-scope migration, not a claim that
+the Owner historically reviewed all rows. Existing legacy completion evidence
+is preserved without changing its meaning.
+
+`mtgmeta.mtgo.publication.resolve_scope` resolves each format's continuous
+approved natural-week frontier; `public_events` supplies the common retained
+membership to event-dependent producers. Later accepted weeks cannot pass a
+nonempty unaccepted week. Empty-gap observations permit continuous advancement
+but do not authorize later arrivals. A late unlisted ID remains pending.
+
+| Public product | Membership / provenance boundary |
+| --- | --- |
+| Rolling statistics and representative decks | `stats` public loader |
+| Hierarchical matchup | `matchup` public loader before classification and archive aggregation |
+| Top 8 weeks and comparison bases | `top8` through the shared public statistics loader |
+| Weekly/range completeness | `completeness` through the shared public statistics loader |
+| Public classification reports | `classification_reports_cli` through `public_events`; scope `all_admitted_events` |
+| Source-coverage metadata | Same public event set; excludes orphan/pending archives from public coverage |
+| Landing current machine facts | Shared public loader and approved frontier; content admission remains separate |
+| Landing feature archives | Existing accepted content only; every referenced event must be admitted |
+| Hierarchy and bilingual-name projection | Existing rule/name authorities, not an event-population filter; no new names or taxonomy |
+| Format/global catalogs | Existing generated product references; never discover pending events independently |
+| Frozen Pickup / historical compatibility products | Not regenerated or newly admitted; retained paths remain within the initial approved history |
+
+`meta.json` 1.1 records one approved scope digest and an exact-byte map of the
+format's existing MTGO public JSON tree. This binds the complete candidate
+without adding the same digest to every downstream JSON. Read-only repository
+and classifier-closure inspection checks scope, byte closure, event references,
+and matching active data frontiers; it never classifies or generates data.
+Classification reports use 1.2 to label their narrower public scope explicitly.
+Private audit/report APIs still inspect the entire retained corpus; pending
+results may be written only to task-local or Pages-excluded review carriers.
+
+The explicit format publication operation stages all producers, existing
+repository/rule/Schema/output/consumer checks and focused Chromium smoke before
+materialization. It reuses classifier-closure replacement/rollback, detects
+concurrent protected/input/output drift, and never fetches. Production continues
+to transfer one validated immutable candidate through the existing publication
+gate. No partial producer result is a publication subject. Data publication
+leaves the last accepted Landing intact; the existing frontend rejects
+cross-week companion facts. Later accepted Landing publication and actual
+maintenance completion remain separate evidence.
+
+Private readiness 1.7 is required because 1.6 has one shared review week and
+requires identical format windows. In 1.7, review week, public week, data
+acceptance, Landing preparation and completion are per-format. It retains the
+private artifact carrier, exact production identity, full human classification
+review, retained-corpus diagnostic queue, bounded metadata-delta timing,
+deduplicated notices, and explicit completion checks. Legacy 1.6 and legacy
+Top-8-only completion remain readable. No public readiness endpoint is added.

@@ -836,7 +836,7 @@ def build_top8_subject(
     root = Path(repository_root).resolve()
     context = load_mtgo_context(root, format_id, "landing_generation")
     rules = load_rules_for_format(root, format_id)
-    events = stats.load_all_events(root, format_id)
+    events = stats.load_all_events(root, format_id, public=False)
     monday = _week_monday(week)
     records = [
         record

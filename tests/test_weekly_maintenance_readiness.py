@@ -15,9 +15,87 @@ from tools.generate_weekly_maintenance_readiness import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_independent_private_review_and_public_weeks(tmp_path, monkeypatch):
+    from datetime import date
+    from types import SimpleNamespace
+    from mtgmeta.mtgo import publication, classification
+    from mtgmeta import weekly_review
+    from tools import generate_weekly_maintenance_readiness as readiness
+
+    monkeypatch.setattr(readiness, "_intentional_unknowns", lambda root: {"standard": {}, "modern": {}})
+    monkeypatch.setattr(publication, "resolve_scope", lambda root, fmt: SimpleNamespace(
+        week=date(2025, 1, 6) if fmt == "standard" else date(2024, 12, 30),
+        pending_event_ids=frozenset({"200"}), event_ids=frozenset({"100"})))
+    monkeypatch.setattr(publication, "retained_events", lambda root, fmt: [("synthetic.json", {
+        "event_id": "200", "starttime": "2025-01-13" if fmt == "standard" else "2025-01-20"})])
+    monkeypatch.setattr(weekly_review, "build_mtgo_weekly_review", lambda root, fmt, week: {
+        "event_ids": ["200"], "format": fmt, "week": week, "records": []})
+    monkeypatch.setattr(classification, "audit_mtgo_classification", lambda root, fmt: SimpleNamespace(
+        reports={"unknown_decks": {"records": []}, "index": {"summary": {"strict_validation": "pass"}}}))
+    for fmt in ("standard", "modern"):
+        _write_json(tmp_path / "stats" / fmt / "mtgo/landing/current.json", {"week": {"id": "2025-W01"}})
+    registry = {"data_admissions": {"formats": {
+        fmt: {"weekly_acceptances": []} for fmt in ("standard", "modern")}}}
+    document = readiness._independent_readiness(tmp_path, registry,
+        publication_sha="a" * 40, production_run_id="1", production_run_attempt="1",
+        source_sha="b" * 40, generated_at="2025-02-03T00:00:00Z")
+    assert document["schema_version"] == "1.7.0"
+    assert [(row["review_week"], row["public_week"]) for row in document["formats"]] == [
+        ("2025-W03", "2025-W02"), ("2025-W04", "2025-W01")]
+    assert all(row["completion"]["state"] == "unrecorded" for row in document["formats"])
+    assert all(row["data_admission"] == "not_accepted" for row in document["formats"])
+    schema = json.loads((ROOT / "schemas/weekly-maintenance-readiness.schema.json").read_text())
+    jsonschema.Draft202012Validator(schema).validate(document)
+
+
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value), encoding="utf-8")
+
+
+def test_data_publication_landing_blocker_and_late_delta_are_independent(tmp_path, monkeypatch):
+    from datetime import date
+    from types import SimpleNamespace
+    from mtgmeta.mtgo import publication, classification
+    from mtgmeta import weekly_review
+    from tools import generate_weekly_maintenance_readiness as readiness
+    monkeypatch.setattr(readiness, "_intentional_unknowns", lambda root: {"standard": {}, "modern": {}})
+    monkeypatch.setattr(readiness, "_completion_state", lambda *args, **kwargs: {
+        "state": "unrecorded", "completed_on": None, "evidence": None, "mismatches": []})
+    monkeypatch.setattr(publication, "resolve_scope", lambda root, fmt: SimpleNamespace(
+        week=date(2025, 1, 13) if fmt == "standard" else date(2025, 1, 6),
+        pending_event_ids=set() if fmt == "standard" else {"200"},
+        event_ids={"100", "200"} if fmt == "standard" else {"100"}))
+    monkeypatch.setattr(publication, "retained_events", lambda *args: [("synthetic.json", {
+        "event_id": "200", "starttime": "2025-01-13"})])
+    monkeypatch.setattr(publication, "inspect_publication", lambda *args: [])
+    review = {"event_ids": ["200"], "classification_review_digest": "a" * 64}
+    def build(root, fmt, week):
+        if fmt == "modern":
+            raise ValueError("synthetic missing approved bilingual name")
+        return review
+    monkeypatch.setattr(weekly_review, "build_mtgo_weekly_review", build)
+    monkeypatch.setattr(classification, "audit_mtgo_classification", lambda *args: SimpleNamespace(
+        reports={"unknown_decks": {"records": []}, "index": {"summary": {"strict_validation": "pass"}}}))
+    for fmt in ("standard", "modern"):
+        _write_json(tmp_path / "stats" / fmt / "mtgo/landing/current.json", {"week": {"id": "2025-W02"}})
+    row = {"week": "2025-W03", "event_ids": ["200"], "classification_review_digest": "a" * 64}
+    registry = {"data_admissions": {"formats": {"standard": {"weekly_acceptances": [row]},
+                                                  "modern": {"weekly_acceptances": []}}}}
+    def result():
+        return readiness._independent_readiness(tmp_path, registry, publication_sha="a" * 40,
+            production_run_id="1", production_run_attempt="1", source_sha="b" * 40,
+            generated_at="2025-02-03T00:00:00Z")["formats"]
+    standard, modern = result()
+    assert standard["data_admission"] == "published"
+    assert standard["status"] == "continue_landing_review"
+    assert standard["completion"]["state"] == "unrecorded"
+    assert modern["status"] == "blocked_owner_review"
+    review["event_ids"] = ["200", "201"]
+    standard, modern = result()
+    assert standard["data_admission"] == "review_delta_required"
+    assert standard["status"] == "awaiting_owner_review"
+    assert row["event_ids"] == ["200"]
 
 
 def _unknown_record(format_name: str, label: str, event_id: str) -> dict:

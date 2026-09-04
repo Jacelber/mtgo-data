@@ -2,11 +2,26 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-meta.schema.json",
   "title": "MTGO format metadata",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "type": "object",
   "required": ["schema_version", "format", "source", "rules_updated", "data_updated"],
   "properties": {
-    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
+    "publication": {
+      "type": "object",
+      "required": ["scope_digest", "week", "artifacts"],
+      "properties": {
+        "scope_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "week": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
+        "artifacts": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {"pattern": "^(stats|reports)/(standard|modern)/mtgo/.+\\.json$"},
+          "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
     "format": {"enum": ["standard", "modern"]}, "source": {"const": "mtgo"},
     "rules_updated": {"type": "string", "minLength": 1}, "data_updated": {"type": "string", "minLength": 1},
     "statistics_catalog": {"const": "index.json"},
@@ -63,6 +78,10 @@
     }
   },
   "allOf": [
+    {
+      "if": {"properties": {"schema_version": {"const": "1.1.0"}}},
+      "then": {"required": ["publication"]}
+    },
     {
       "required": [
         "statistics_catalog",

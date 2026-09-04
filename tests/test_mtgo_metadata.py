@@ -1,7 +1,30 @@
 import json
+from pathlib import Path
 from types import SimpleNamespace
 
+from jsonschema import Draft202012Validator
+
 from mtgmeta.mtgo import metadata
+
+
+def test_metadata_scope_binding_schema_preserves_legacy_and_rejects_missing_binding():
+    schema = json.loads((Path(__file__).resolve().parents[1] / "schemas/mtgo-meta.schema.json").read_text())
+    validator = Draft202012Validator(schema)
+    document = {"schema_version": "1.0.0", "format": "standard", "source": "mtgo",
+        "rules_updated": "synthetic", "data_updated": "synthetic", "statistics_catalog": "index.json",
+        "matchup_catalog": "matchup_index.json", "hierarchy_catalog": "archetype_hierarchy.json",
+        "top8_catalog": None, "completeness_catalog": None, "pickup_catalog": None,
+        "landing_document": None, "landing_feature_catalog": None, "matchup_source": "Videre",
+        "matchup_coverage": {key: 0 for key in ("official_events", "events_with_archives",
+            "events_without_archives", "stored_archives", "archives_outside_official_events")}}
+    validator.validate(document)
+    document["schema_version"] = "1.1.0"
+    assert list(validator.iter_errors(document))
+    document["publication"] = {"scope_digest": "a" * 64, "week": "2025-W02",
+        "artifacts": {"stats/standard/mtgo/index.json": "b" * 64}}
+    validator.validate(document)
+    document["schema_version"] = "1.2.0"
+    assert list(validator.iter_errors(document))
 
 
 def _context(tmp_path):
@@ -22,6 +45,9 @@ def _context(tmp_path):
 
 
 def test_metadata_does_not_publish_the_frozen_pickup_catalog(monkeypatch, tmp_path):
+    from mtgmeta.mtgo import publication
+    monkeypatch.setattr(publication, "publication_binding", lambda *args: {
+        "scope_digest": "a" * 64, "week": "2025-W02", "artifacts": {}})
     context = _context(tmp_path)
     frozen = context.paths["statistics"] / "pickup/index.json"
     frozen.parent.mkdir(parents=True)

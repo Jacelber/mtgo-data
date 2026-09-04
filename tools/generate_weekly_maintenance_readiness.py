@@ -116,7 +116,7 @@ def _landing_content_digest(root: Path, format_name: str, week_id: str) -> str |
     return digest if _is_sha256(digest) else None
 
 
-def _completion_state(root: Path, week_id: str) -> dict[str, Any]:
+def _completion_state(root: Path, week_id: str, *, format_id: str | None = None) -> dict[str, Any]:
     path = root / WEEKLY_REVIEW_COMPLETIONS_CONFIG
     if not path.exists():
         return {
@@ -127,16 +127,17 @@ def _completion_state(root: Path, week_id: str) -> dict[str, Any]:
         }
     registry = _read_yaml(path)
     registry_version = registry.get("schema_version")
-    if registry_version not in {"1.0.0", "1.1.0"}:
+    if registry_version not in {"1.0.0", "1.1.0", "1.2.0"}:
         raise ValueError(
-            "Weekly review completion registry schema_version must be 1.0.0 or 1.1.0"
+            "Weekly review completion registry schema_version must be 1.0.0, 1.1.0 or 1.2.0"
         )
     records = registry.get("records")
     if not isinstance(records, list):
         raise ValueError("Weekly review completion registry records must be a list")
     if any(not isinstance(record, dict) for record in records):
         raise ValueError("Weekly review completion registry records must be mappings")
-    matches = [record for record in records if record.get("week") == week_id]
+    matches = [record for record in records if record.get("week") == week_id
+               and (format_id is None or format_id in record.get("formats", {}))]
     if len(matches) > 1:
         raise ValueError(f"Weekly review completion registry duplicates {week_id}")
     if not matches:
@@ -152,7 +153,8 @@ def _completion_state(root: Path, week_id: str) -> dict[str, Any]:
     subjects = record.get("formats")
     if not isinstance(completed_on, str) or not isinstance(evidence, str):
         raise ValueError(f"Weekly review completion record for {week_id} is incomplete")
-    if not isinstance(subjects, dict) or set(subjects) != set(FORMATS):
+    valid_formats = isinstance(subjects, dict) and bool(subjects) and set(subjects) <= set(FORMATS)
+    if not valid_formats or (registry_version != "1.2.0" and set(subjects) != set(FORMATS)):
         raise ValueError(
             f"Weekly review completion record for {week_id} must bind Standard and Modern"
         )
@@ -162,7 +164,7 @@ def _completion_state(root: Path, week_id: str) -> dict[str, Any]:
         raise ValueError(f"Weekly review completion record for {week_id} has invalid scope")
     if registry_version == "1.0.0" and review_scope != "top8_legacy":
         raise ValueError("Weekly review completion registry 1.0.0 supports legacy scope only")
-    for format_name in FORMATS:
+    for format_name in ([format_id] if format_id is not None else subjects):
         expected = subjects.get(format_name)
         if not isinstance(expected, dict):
             raise ValueError(f"{week_id} {format_name} completion subject is invalid")
@@ -312,42 +314,8 @@ def _unknown_record(record: Any, *, format_name: str) -> dict[str, Any]:
 
 
 def _intentional_unknowns(root: Path) -> dict[str, dict[tuple[str, str, str], dict[str, str]]]:
-    config = _read_yaml(root / INTENTIONAL_UNKNOWN_CONFIG)
-    if config.get("schema_version") != "1.0.0":
-        raise ValueError("Intentional Unknown registry has an unsupported schema version")
-    records = config.get("records")
-    if not isinstance(records, list):
-        raise ValueError("Intentional Unknown registry has no records list")
-    result: dict[str, dict[tuple[str, str, str], dict[str, str]]] = {
-        format_name: {} for format_name in FORMATS
-    }
-    for item in records:
-        if not isinstance(item, dict):
-            raise ValueError("Intentional Unknown registry contains a non-object")
-        format_name = item.get("format")
-        event_id = str(item.get("event_id", ""))
-        deck_id = str(item.get("deck_id", ""))
-        source_file = str(item.get("source_file", ""))
-        disposition = item.get("disposition")
-        reason_code = item.get("reason_code")
-        owner_accepted_on = str(item.get("owner_accepted_on", ""))
-        evidence = str(item.get("evidence", ""))
-        if format_name not in FORMATS or not event_id.isdigit() or not deck_id or not source_file:
-            raise ValueError("Intentional Unknown registry contains an invalid identity")
-        if disposition != "intentional_unknown" or reason_code != "random_card_pile":
-            raise ValueError("Only Owner-accepted random card piles may remain intentional Unknown")
-        if not owner_accepted_on or not evidence:
-            raise ValueError("Intentional Unknown registry entry lacks acceptance evidence")
-        key = (event_id, deck_id, source_file)
-        if key in result[format_name]:
-            raise ValueError("Intentional Unknown registry contains a duplicate identity")
-        result[format_name][key] = {
-            "disposition": disposition,
-            "reason_code": reason_code,
-            "owner_accepted_on": owner_accepted_on,
-            "evidence": evidence,
-        }
-    return result
+    from mtgmeta.mtgo.publication import intentional_unknowns
+    return intentional_unknowns(root)
 
 
 def _latest_week(root: Path, format_name: str) -> tuple[dict[str, Any], dict[str, Any]]:
@@ -665,6 +633,11 @@ def build_readiness(
     landing_subject_builder: Callable[[str | Path, str, str], dict[str, Any]] | None = None,
     classifier_digest_builder: Callable[[Path, str], str] | None = None,
 ) -> dict[str, Any]:
+    registry = _read_yaml(root / WEEKLY_REVIEW_COMPLETIONS_CONFIG) if (root / WEEKLY_REVIEW_COMPLETIONS_CONFIG).is_file() else {}
+    if registry.get("schema_version") == "1.2.0":
+        return _independent_readiness(root, registry, publication_sha=publication_sha,
+            production_run_id=production_run_id, production_run_attempt=production_run_attempt,
+            source_sha=source_sha, generated_at=generated_at)
     intentional_unknowns = _intentional_unknowns(root)
     standard_entry = _read_json(root / "stats" / "standard" / "mtgo" / "top8" / "index.json")["weeks"][0]
     modern_entry = _read_json(root / "stats" / "modern" / "mtgo" / "top8" / "index.json")["weeks"][0]
@@ -759,9 +732,116 @@ def build_readiness(
     }
 
 
+def _independent_readiness(root: Path, registry: dict[str, Any], *, publication_sha: str,
+                          production_run_id: str, production_run_attempt: str,
+                          source_sha: str, generated_at: str) -> dict[str, Any]:
+    """Private handoff: public dates never determine the next review subject."""
+    from datetime import date, timedelta
+    from mtgmeta.mtgo.publication import resolve_scope, retained_events, week_monday
+    from mtgmeta.mtgo.classification import audit_mtgo_classification
+    from mtgmeta.weekly_review import build_mtgo_weekly_review
+    today = date.fromisoformat(generated_at[:10])
+    results = []
+    accepted_unknowns = _intentional_unknowns(root)
+    for format_id in FORMATS:
+        scope = resolve_scope(root, format_id)
+        events = retained_events(root, format_id)
+        dates = {str(event["event_id"]): date.fromisoformat(event["starttime"][:10]) for _, event in events}
+        pending_weeks = {day.strftime("%G-W%V") for item, day in dates.items()
+                         if item in scope.pending_event_ids
+                         and week_monday(day.strftime("%G-W%V")) + timedelta(days=6) < today}
+        admissions = registry["data_admissions"]["formats"][format_id]["weekly_acceptances"]
+        completed = {row["week"] for row in admissions
+                     if _completion_state(root, row["week"], format_id=format_id)["state"] == "verified"}
+        unfinished = {row["week"] for row in admissions} - completed
+        weeks = sorted(pending_weeks | unfinished)
+        week = weeks[0] if weeks else None
+        admission = next((row for row in admissions if row["week"] == week), None)
+        completion = _completion_state(root, week, format_id=format_id) if week else {
+            "state": "unrecorded", "completed_on": None, "evidence": None, "mismatches": []}
+        blockers = []
+        try:
+            review = build_mtgo_weekly_review(root, format_id, week) if week else None
+        except (OSError, ValueError) as exc:
+            review = None
+            blockers.append(f"full classification review: {exc}")
+        private_audit = audit_mtgo_classification(root, format_id)
+        unresolved = [record for record in private_audit.reports["unknown_decks"]["records"]
+                      if (str(record["event_id"]), str(record["deck_id"]), str(record["source_file"]))
+                      not in accepted_unknowns[format_id]]
+        review_ids = set(review["event_ids"]) if review else set()
+        queue = {"outside_review_week_unresolved_unknown_records": [record for record in unresolved
+                    if str(record["event_id"]) not in review_ids],
+                 "review_week_unresolved_unknown_records": [record for record in unresolved
+                    if str(record["event_id"]) in review_ids],
+                 "strict_validation": private_audit.reports["index"]["summary"]["strict_validation"]}
+        if queue["strict_validation"] != "pass":
+            blockers.append("retained-corpus classification diagnostics require investigation")
+        landing = _read_json(root / "stats" / format_id / "mtgo/landing/current.json")
+        published_ids = scope.event_ids
+        data_status = "not_accepted"
+        if admission is not None:
+            data_status = "published" if set(admission["event_ids"]) <= published_ids else "waiting_for_contiguous_weeks"
+        # Exact bytes, not mere eligibility, distinguish accepted from published.
+        if data_status == "published":
+            from mtgmeta.mtgo.publication import inspect_publication
+            if inspect_publication(root, format_id):
+                data_status = "accepted_not_published"
+        if admission is not None and review is not None and (
+            set(admission["event_ids"]) != review_ids
+            or admission["classification_review_digest"] != review["classification_review_digest"]
+        ):
+            data_status = "review_delta_required"
+        screening = {"status": "after_data_acceptance", "reason": None, "binding": None}
+        if data_status == "published" and week:
+            try:
+                from mtgmeta.mtgo.landing_editorial import build_top8_subject
+                subject = build_top8_subject(root, format_id, week)
+                candidate_path = root / "stats" / format_id / "mtgo/landing/review" / f"candidates_{week}.yaml"
+                candidate = _read_yaml(candidate_path)
+                keys = ("classifier_digest", "selection_policy_digest", "source_event_ids")
+                stale = [key for key in keys if candidate.get(key) != subject.get(key)]
+                screening = {"status": "stale_review_required" if stale else "candidate_review_required",
+                             "reason": ", ".join(stale) or None,
+                             "binding": subject}
+            except (OSError, ValueError) as exc:
+                screening = {"status": "preparation_required", "reason": str(exc), "binding": None}
+        status = "no_review_ready" if week is None else (
+            "continue_landing_review" if data_status == "published" else "awaiting_owner_review")
+        if blockers:
+            status = "blocked_owner_review"
+        results.append({
+            "format": format_id, "review_week": week,
+            "public_week": scope.week.strftime("%G-W%V"),
+            "public_event_count": len(scope.event_ids),
+            "pending_event_ids": sorted(scope.pending_event_ids, key=int),
+            "data_admission": data_status,
+            "landing_week": landing["week"]["id"],
+            "completion": completion,
+            "classification_review": review,
+            "retained_corpus_unknown_queue": queue,
+            "landing_screening": screening,
+            "metadata_review": "after_regeneration_and_screening_if_delta",
+            "completed_reviews": sorted(completed),
+            "blockers": blockers,
+            "status": status,
+        })
+    digest = _sha256_json(results)
+    label = "_".join(f"{row['format']}-{row['review_week'] or 'none'}" for row in results)
+    return {"schema_version": "1.7.0", "document_type": "weekly_maintenance_readiness",
+            "review_id": f"{label}@{publication_sha[:12]}", "review_label": label,
+            "readiness_digest": digest, "generated_at": generated_at,
+            "status": "review_available" if any(row["review_week"] for row in results) else "no_review_ready",
+            "production": {"publication_sha": publication_sha, "source_sha": source_sha,
+                           "run_id": production_run_id, "run_attempt": production_run_attempt},
+            "formats": results,
+            "workflow": {"codex_automation_required": False, "repository_mutation_authorized": False}}
+
+
 def _write_github_output(path: Path, document: dict[str, Any]) -> None:
     with path.open("a", encoding="utf-8", newline="\n") as handle:
-        handle.write(f"week={document['week']['id']}\n")
+        label = document.get("review_label") or document["week"]["id"]
+        handle.write(f"week={label}\n")
         handle.write(f"review-id={document['review_id']}\n")
         handle.write(f"readiness-digest={document['readiness_digest']}\n")
         handle.write(f"status={document['status']}\n")
@@ -778,6 +858,8 @@ def main() -> int:
     parser.add_argument("--generated-at")
     parser.add_argument("--github-output", type=Path)
     args = parser.parse_args()
+    from mtgmeta.mtgo.publication import require_private_output
+    require_private_output(args.repository_root.resolve(), args.output)
     generated_at = args.generated_at or datetime.now(UTC).isoformat().replace("+00:00", "Z")
     document = build_readiness(
         args.repository_root.resolve(),
