@@ -8169,3 +8169,58 @@ evidence, and the neutral Melee review-ready concept to design an Owner-reviewed
 front-end publication boundary. GOV-12 does not implement that boundary: daily
 public generation, statistics, catalogs, Pages, frontend visibility, Melee
 candidate publication, and Issue #325 remain unchanged. W36 is not run.
+
+# DEC-164 - Separate reviewed MTGO data publication from weekly completion
+
+## Status
+
+Accepted design, 2026-09-04. Implementation is subject to local Owner acceptance.
+
+## Context
+
+Daily collection previously let new, unreviewed MTGO events reach website
+classification-derived products before full human classification review. Weekly
+completion also includes Landing editorial work and therefore cannot act as a
+data-admission proxy. Standard and Modern need independent review/public weeks.
+
+## Decision
+
+Use one MTGO-specific explicit event-membership resolver. The existing
+completion configuration 1.2 separates `data_admissions` from completion
+`records`; no generator consults a completed flag. Initial fixed IDs migrate
+the existing public scope of `da9a6dfda2c83d5a2ba8d7f4fa2db6878c864183` as
+`grandfathered_existing_public_scope`, not historical full manual review.
+Counts are extraction evidence, not runtime constants. Later events remain
+pending regardless of event date or directory growth.
+
+Per-format publication advances only through continuous accepted natural
+weeks. Observed empty gaps may be crossed without admitting future late IDs.
+All event-dependent public statistics, matchup, representative decks, Top 8,
+completeness, reports, metadata and Landing facts consume the same approved
+membership. Maintained hierarchy/name authority and frozen legacy products
+keep their existing responsibilities. Raw source archive policy, formulas,
+classifier rules and intentional-Unknown policy do not change.
+
+Full classification acceptance permits the first, data-only publication under
+the active Weekly lane. Landing screening and any bounded metadata decision
+follow regeneration; Chinese, English and final content acceptance permit the
+second publication. Only actual completion of all steps produces a completion
+record, independently for each format. Current frontend cross-week protection
+retains earlier accepted Landing without mixing newer companion facts.
+
+Private readiness 1.7 replaces the ambiguous shared-week assumption while
+retaining legacy readability and exact evidence. Pending classifications and
+full review materials never enter Pages-admitted reports. Public reports 1.2
+explicitly label approved-only scope. MTGO metadata 1.1 binds the scope and
+exact product bytes once at the existing public boundary.
+
+## Consequences
+
+Collection stays timely; public products wait for explicit classification
+acceptance. Historical classifier corrections may restate approved events but
+cannot admit pending events. Format staging reuses existing validation and
+rollback rather than introducing a generic graph, registry or transaction
+framework. Failed validation publishes nothing. Production, exact-subject,
+permissions and Pages gates are not relaxed. A new classifier/product decision,
+unexplained migration difference or inadequate frontend protection returns to
+the Owner instead of expanding this implementation.

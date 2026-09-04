@@ -515,7 +515,7 @@ def prepare_candidates(
     policy = load_screening_policy(repository_root, policy_file)
     policy_digest = document_digest(policy)
     events = stats.load_all_events(
-        repository_root, format_id, registry_path=registry_path
+        repository_root, format_id, registry_path=registry_path, public=False
     )
     reference_today = today or datetime.now().date()
     end_monday = stats.latest_complete_week(events, today=reference_today)

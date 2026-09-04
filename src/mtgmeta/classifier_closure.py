@@ -582,6 +582,10 @@ def inspect_format(repository_root: str | Path, format_id: str) -> dict[str, Any
         families["classification_reports"] = _inspect_reports(
             root, format_id, desired
         )
+        from .mtgo.publication import inspect_publication
+        families["mtgo_publication"] = _family(
+            "mtgo_publication", [root / "stats" / format_id / "mtgo/meta.json"],
+            root, inspect_publication(root, format_id))
         _format_entry, tabletop_path = _catalog_format(root, format_id)
         families["melee"] = _inspect_melee(
             root, format_id, desired, tabletop_path
@@ -769,20 +773,21 @@ def _build_staged_format(
     initial: Mapping[str, Any],
 ) -> None:
     from .classification_reports_cli import generate_reports
-    from .mtgo import landing, landing_editorial, matchup, metadata, stats, top8
+    from .mtgo import completeness, landing, landing_editorial, matchup, metadata, stats, top8
 
     families = initial["families"]
-    if families["mtgo_statistics"]["state"] != CURRENT:
+    publication_stale = families.get("mtgo_publication", {}).get("state") != CURRENT
+    if publication_stale or families["mtgo_statistics"]["state"] != CURRENT:
         stats.build_all_stats(stage, format_id)
-    if families["mtgo_matchups"]["state"] != CURRENT:
+    if publication_stale or families["mtgo_matchups"]["state"] != CURRENT:
         matchup.build_all_matchups(stage, format_id)
-    if families["mtgo_top8"]["state"] != CURRENT:
+    if publication_stale or families["mtgo_top8"]["state"] != CURRENT:
         top8.build_all_top8(stage, format_id)
     if families["mtgo_hierarchy"]["state"] != CURRENT:
         metadata.generate_hierarchy_catalog(stage, format_id)
     if families["public_archetype_names"]["state"] != CURRENT:
         landing_editorial.generate_public_name_contract(stage, format_id)
-    if families["classification_reports"]["state"] != CURRENT:
+    if publication_stale or families["classification_reports"]["state"] != CURRENT:
         generate_reports(stage, format_id)
     if families["mtgo_landing"]["state"] != CURRENT:
         result = landing.generate(
@@ -796,6 +801,10 @@ def _build_staged_format(
             )
     if families["melee"]["state"] != CURRENT:
         _generate_melee(stage, format_id)
+    if publication_stale:
+        completeness.build_all_completeness(stage, format_id)
+    current_meta = _json_object(stage / "stats" / format_id / "mtgo/meta.json")
+    metadata.generate_metadata(stage, format_id, rules_updated=current_meta["rules_updated"])
 
 
 def _candidate_tree_paths(root: Path, format_id: str) -> set[str]:

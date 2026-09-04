@@ -540,6 +540,9 @@ def test_production_build_orders_landing_screening_before_landing_and_catalog():
     assert screening_index < landing_index < metadata_index < catalog_index
     assert "landing-review prepare --if-absent" in steps[screening_index]["run"]
     assert "build-landing" in steps[landing_index]["run"]
+    reports_index = names.index("Generate and strictly validate product classification diagnostics")
+    assert reports_index < metadata_index < names.index("Validate repository files and references")
+    assert names.index("Render generated production pages in Chromium") < names.index("Package validated output for the publish job")
 
 
 def test_mtgo_fetch_retries_only_explicit_transient_source_failures():
@@ -645,6 +648,9 @@ def test_weekly_readiness_uses_the_verified_publication_and_private_handoff():
     assert "representative cards and deck colors require manual review" not in script
     assert "Landing remains a separately authorized human-review gate" not in script
     assert "review only the bounded material delta" not in script
+    for required in ("weekly-maintenance:${item.format}:${item.review_week}",
+                     "item.completed_reviews", "item.data_admission", "item.landing_screening.status"):
+        assert required in script
 
 
 def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():

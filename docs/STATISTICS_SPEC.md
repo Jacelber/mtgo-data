@@ -1863,13 +1863,21 @@ For a format with hierarchical matchup data, metadata must report:
 - the matchup source name;
 - the number of admitted official events;
 - the number with and without stored matchup archives;
-- the total stored matchup archives;
-- the number of stored archives that do not correspond to an admitted official
-  statistics event.
+- the stored matchup archives within the explicit approved official-event set;
+- zero archives outside that set in public metadata. Retained archives outside
+  the set remain available to private diagnostics, not public coverage counts.
 
 These are coverage diagnostics, not estimates of unobserved match results. A
 format metadata document must use a null Pickup catalog reference. Candidate
 files are private review inputs, not public statistics.
+
+For MTGO reviewed publication, every event-dependent public producer uses the
+same explicit per-format data-admission set. The existing formulas, Unknown
+policy, rankings and classifier rules are unchanged. Collection, private full
+classification review and same-format classifier-impact analysis may read all
+retained official events; their population is not the public statistics
+population. Data acceptance and Weekly completion are separate facts, and
+accepted Landing may remain on its earlier week while reviewed data advances.
 
 Landing known-state and screening remain parent-archetype based. Stable parent IDs determine
 whether an archetype is already known, while subtype ID and display name may be

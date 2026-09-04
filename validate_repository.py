@@ -350,6 +350,14 @@ def reference_groups_for_paths(paths: set[str]) -> frozenset[str]:
             "stats/catalog.json",
             "src/mtgmeta/classifier.py",
             "src/mtgmeta/classifier_closure.py",
+            "src/mtgmeta/mtgo/publication.py",
+            "src/mtgmeta/mtgo/stats.py",
+            "src/mtgmeta/mtgo/matchup.py",
+            "src/mtgmeta/mtgo/completeness.py",
+            "src/mtgmeta/mtgo/top8.py",
+            "src/mtgmeta/mtgo/metadata.py",
+            "src/mtgmeta/classification_reports_cli.py",
+            "configs/mtgo_weekly_review_completions.yaml",
             "src/mtgmeta/reports.py",
             "src/mtgmeta/melee/classification.py",
             "src/mtgmeta/mtgo/landing.py",
@@ -360,6 +368,7 @@ def reference_groups_for_paths(paths: set[str]) -> frozenset[str]:
         or path.startswith("stats/modern/")
         or path.startswith("reports/standard/mtgo/")
         or path.startswith("reports/modern/mtgo/")
+        or (path.startswith(("data/standard/", "data/modern/")) and path.count("/") == 2)
         or path.startswith("data/standard/melee/classifications/")
         or path.startswith("data/standard/melee/opportunities/")
         or path.startswith("data/modern/melee/classifications/")

@@ -632,6 +632,12 @@ def write_latest_week(
         entries_by_start[start] = item
 
     retained_mondays = sorted({monday, *entries_by_start})
+    if entries_by_start:
+        first = min(entries_by_start)
+        retained_mondays = sorted(set(retained_mondays) | {
+            stats.week_monday(day) for day, _event in events
+            if first <= stats.week_monday(day) <= monday
+        })
     documents: dict[str, dict[str, Any]] = {}
     catalog_entries = []
     impacts = []
@@ -760,6 +766,7 @@ def build_all_top8(
         context.paths["events"],
         repository_root=context.repository_root,
         format_id=format_id,
+        public=True,
     )
     rules = load_rules_for_format(root, format_id, registry_path=registry_path)
     output = (

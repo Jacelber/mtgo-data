@@ -2,145 +2,646 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/weekly-maintenance-readiness.schema.json",
   "title": "Private weekly MTGO maintenance readiness handoff",
-  "x-schema-version": "1.6.0",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "document_type",
-    "review_id",
-    "readiness_digest",
-    "generated_at",
-    "status",
-    "production",
-    "week",
-    "formats",
-    "landing",
-    "completion",
-    "workflow"
-  ],
-  "properties": {
-    "schema_version": {"const": "1.6.0"},
-    "document_type": {"const": "weekly_maintenance_readiness"},
-    "review_id": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}@[a-f0-9]{12}$"},
-    "readiness_digest": {"$ref": "#/$defs/sha256"},
-    "generated_at": {"type": "string", "format": "date-time"},
-    "status": {"enum": ["awaiting_owner_start", "blocked", "completed", "revalidation_required"]},
-    "production": {
+  "x-schema-version": "1.7.0",
+  "oneOf": [
+    {
       "type": "object",
       "additionalProperties": false,
-      "required": ["publication_sha", "source_sha", "run_id", "run_attempt"],
-      "properties": {
-        "publication_sha": {"$ref": "#/$defs/gitSha"},
-        "source_sha": {"$ref": "#/$defs/gitSha"},
-        "run_id": {"type": "string", "pattern": "^[0-9]+$"},
-        "run_attempt": {"type": "string", "pattern": "^[0-9]+$"}
-      }
-    },
-    "week": {"$ref": "#/$defs/week"},
-    "formats": {
-      "type": "array",
-      "prefixItems": [
-        {"allOf": [{"$ref": "#/$defs/formatReadiness"}, {"properties": {"format": {"const": "standard"}}}]},
-        {"allOf": [{"$ref": "#/$defs/formatReadiness"}, {"properties": {"format": {"const": "modern"}}}]}
+      "required": [
+        "schema_version",
+        "document_type",
+        "review_id",
+        "readiness_digest",
+        "generated_at",
+        "status",
+        "production",
+        "week",
+        "formats",
+        "landing",
+        "completion",
+        "workflow"
       ],
-      "items": false,
-      "minItems": 2,
-      "maxItems": 2
-    },
-    "landing": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["status", "optional_draft_status", "bindings", "reason"],
       "properties": {
-        "status": {"enum": ["ready_for_human_review", "blocked"]},
-        "optional_draft_status": {"const": "not_requested"},
-        "bindings": {
+        "schema_version": {
+          "const": "1.6.0"
+        },
+        "document_type": {
+          "const": "weekly_maintenance_readiness"
+        },
+        "review_id": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-W[0-9]{2}@[a-f0-9]{12}$"
+        },
+        "readiness_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "enum": [
+            "awaiting_owner_start",
+            "blocked",
+            "completed",
+            "revalidation_required"
+          ]
+        },
+        "production": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "publication_sha",
+            "source_sha",
+            "run_id",
+            "run_attempt"
+          ],
+          "properties": {
+            "publication_sha": {
+              "$ref": "#/$defs/gitSha"
+            },
+            "source_sha": {
+              "$ref": "#/$defs/gitSha"
+            },
+            "run_id": {
+              "type": "string",
+              "pattern": "^[0-9]+$"
+            },
+            "run_attempt": {
+              "type": "string",
+              "pattern": "^[0-9]+$"
+            }
+          }
+        },
+        "week": {
+          "$ref": "#/$defs/week"
+        },
+        "formats": {
           "type": "array",
           "prefixItems": [
-            {"allOf": [{"$ref": "#/$defs/landingBinding"}, {"properties": {"format": {"const": "standard"}}}]},
-            {"allOf": [{"$ref": "#/$defs/landingBinding"}, {"properties": {"format": {"const": "modern"}}}]}
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/formatReadiness"
+                },
+                {
+                  "properties": {
+                    "format": {
+                      "const": "standard"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/formatReadiness"
+                },
+                {
+                  "properties": {
+                    "format": {
+                      "const": "modern"
+                    }
+                  }
+                }
+              ]
+            }
           ],
           "items": false,
           "minItems": 2,
           "maxItems": 2
         },
-        "reason": {"type": ["string", "null"]}
-      },
-      "allOf": [
-        {
-          "if": {"properties": {"status": {"const": "ready_for_human_review"}}},
-          "then": {"properties": {"reason": {"type": "null"}}},
-          "else": {"properties": {"reason": {"type": "string", "minLength": 1}}}
-        }
-      ]
-    },
-    "completion": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["state", "completed_on", "evidence", "mismatches"],
-      "properties": {
-        "state": {"enum": ["unrecorded", "verified", "stale"]},
-        "completed_on": {"type": ["string", "null"], "format": "date"},
-        "evidence": {"type": ["string", "null"], "minLength": 1},
-        "mismatches": {
-          "type": "array",
-          "items": {"type": "string", "minLength": 1},
-          "uniqueItems": true
-        }
-      },
-      "allOf": [
-        {
-          "if": {"properties": {"state": {"const": "unrecorded"}}},
-          "then": {
-            "properties": {
-              "completed_on": {"type": "null"},
-              "evidence": {"type": "null"},
-              "mismatches": {"maxItems": 0}
+        "landing": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "optional_draft_status",
+            "bindings",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "ready_for_human_review",
+                "blocked"
+              ]
+            },
+            "optional_draft_status": {
+              "const": "not_requested"
+            },
+            "bindings": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/landingBinding"
+                    },
+                    {
+                      "properties": {
+                        "format": {
+                          "const": "standard"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/landingBinding"
+                    },
+                    {
+                      "properties": {
+                        "format": {
+                          "const": "modern"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "items": false,
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "reason": {
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
-          "else": {
-            "properties": {
-              "completed_on": {"type": "string", "format": "date"},
-              "evidence": {"type": "string", "minLength": 1}
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "status": {
+                    "const": "ready_for_human_review"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "reason": {
+                    "type": "null"
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "completion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "completed_on",
+            "evidence",
+            "mismatches"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "unrecorded",
+                "verified",
+                "stale"
+              ]
+            },
+            "completed_on": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "mismatches": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "state": {
+                    "const": "unrecorded"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "completed_on": {
+                    "type": "null"
+                  },
+                  "evidence": {
+                    "type": "null"
+                  },
+                  "mismatches": {
+                    "maxItems": 0
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "completed_on": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "state": {
+                    "const": "verified"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "mismatches": {
+                    "maxItems": 0
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "state": {
+                    "const": "stale"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "mismatches": {
+                    "minItems": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "workflow": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "next_action",
+            "codex_automation_required",
+            "repository_mutation_authorized"
+          ],
+          "properties": {
+            "next_action": {
+              "enum": [
+                "owner_start_required",
+                "owner_revalidation_required",
+                "resolve_blocker",
+                "none"
+              ]
+            },
+            "codex_automation_required": {
+              "const": false
+            },
+            "repository_mutation_authorized": {
+              "const": false
             }
           }
-        },
-        {
-          "if": {"properties": {"state": {"const": "verified"}}},
-          "then": {"properties": {"mismatches": {"maxItems": 0}}}
-        },
-        {
-          "if": {"properties": {"state": {"const": "stale"}}},
-          "then": {"properties": {"mismatches": {"minItems": 1}}}
         }
-      ]
+      }
     },
-    "workflow": {
+    {
       "type": "object",
       "additionalProperties": false,
-      "required": ["next_action", "codex_automation_required", "repository_mutation_authorized"],
+      "required": [
+        "schema_version",
+        "document_type",
+        "review_id",
+        "review_label",
+        "readiness_digest",
+        "generated_at",
+        "status",
+        "production",
+        "formats",
+        "workflow"
+      ],
       "properties": {
-        "next_action": {"enum": ["owner_start_required", "owner_revalidation_required", "resolve_blocker", "none"]},
-        "codex_automation_required": {"const": false},
-        "repository_mutation_authorized": {"const": false}
+        "schema_version": {
+          "const": "1.7.0"
+        },
+        "document_type": {
+          "const": "weekly_maintenance_readiness"
+        },
+        "review_id": {
+          "type": "string"
+        },
+        "review_label": {
+          "type": "string"
+        },
+        "readiness_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "enum": [
+            "review_available",
+            "no_review_ready"
+          ]
+        },
+        "production": {
+          "$ref": "#/oneOf/0/properties/production"
+        },
+        "formats": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "format",
+              "review_week",
+              "public_week",
+              "public_event_count",
+              "pending_event_ids",
+              "data_admission",
+              "landing_week",
+              "completion",
+              "classification_review",
+              "retained_corpus_unknown_queue",
+              "landing_screening",
+              "metadata_review",
+              "completed_reviews",
+              "blockers",
+              "status"
+            ],
+            "properties": {
+              "format": {
+                "enum": [
+                  "standard",
+                  "modern"
+                ]
+              },
+              "review_week": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^[0-9]{4}-W[0-9]{2}$"
+              },
+              "public_week": {
+                "type": "string",
+                "pattern": "^[0-9]{4}-W[0-9]{2}$"
+              },
+              "public_event_count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "pending_event_ids": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                }
+              },
+              "data_admission": {
+                "enum": [
+                  "not_accepted",
+                  "published",
+                  "waiting_for_contiguous_weeks",
+                  "review_delta_required",
+                  "accepted_not_published"
+                ]
+              },
+              "landing_week": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^[0-9]{4}-W[0-9]{2}$"
+              },
+              "completion": {
+                "$ref": "#/oneOf/0/properties/completion"
+              },
+              "classification_review": {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "landing_screening": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "status",
+                  "reason",
+                  "binding"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "after_data_acceptance",
+                      "preparation_required",
+                      "stale_review_required",
+                      "candidate_review_required"
+                    ]
+                  },
+                  "reason": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "binding": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "metadata_review": {
+                "const": "after_regeneration_and_screening_if_delta"
+              },
+              "completed_reviews": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[0-9]{4}-W[0-9]{2}$"
+                }
+              },
+              "blockers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "retained_corpus_unknown_queue": {
+                "type": "object",
+                "required": [
+                  "outside_review_week_unresolved_unknown_records",
+                  "review_week_unresolved_unknown_records",
+                  "strict_validation"
+                ],
+                "properties": {
+                  "outside_review_week_unresolved_unknown_records": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "review_week_unresolved_unknown_records": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "strict_validation": {
+                    "enum": [
+                      "pass",
+                      "fail"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              },
+              "status": {
+                "enum": [
+                  "no_review_ready",
+                  "continue_landing_review",
+                  "blocked_owner_review",
+                  "awaiting_owner_review"
+                ]
+              }
+            }
+          },
+          "allOf": [
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "format": {
+                    "const": "standard"
+                  }
+                },
+                "required": [
+                  "format"
+                ]
+              }
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "format": {
+                    "const": "modern"
+                  }
+                },
+                "required": [
+                  "format"
+                ]
+              }
+            }
+          ]
+        },
+        "workflow": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "codex_automation_required",
+            "repository_mutation_authorized"
+          ],
+          "properties": {
+            "codex_automation_required": {
+              "const": false
+            },
+            "repository_mutation_authorized": {
+              "const": false
+            }
+          }
+        }
       }
     }
-  },
+  ],
   "$defs": {
-    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-    "gitSha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "gitSha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
     "week": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "start", "end", "status", "provisional_through", "seal_on"],
+      "required": [
+        "id",
+        "start",
+        "end",
+        "status",
+        "provisional_through",
+        "seal_on"
+      ],
       "properties": {
-        "id": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
-        "start": {"type": "string", "format": "date"},
-        "end": {"type": "string", "format": "date"},
-        "status": {"enum": ["provisional", "sealed"]},
-        "provisional_through": {"type": "string", "format": "date"},
-        "seal_on": {"type": "string", "format": "date"}
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-W[0-9]{2}$"
+        },
+        "start": {
+          "type": "string",
+          "format": "date"
+        },
+        "end": {
+          "type": "string",
+          "format": "date"
+        },
+        "status": {
+          "enum": [
+            "provisional",
+            "sealed"
+          ]
+        },
+        "provisional_through": {
+          "type": "string",
+          "format": "date"
+        },
+        "seal_on": {
+          "type": "string",
+          "format": "date"
+        }
       }
     },
     "unknownRecord": {
@@ -156,22 +657,54 @@
         "sideboard"
       ],
       "properties": {
-        "deck_id": {"type": "string", "minLength": 1},
-        "event_id": {"type": "string", "pattern": "^[0-9]+$"},
-        "event_name": {"type": "string"},
-        "event_start": {"type": "string"},
-        "source_file": {"type": "string", "minLength": 1},
-        "main_deck": {"type": "array", "items": {"$ref": "#/$defs/cardRecord"}},
-        "sideboard": {"type": "array", "items": {"$ref": "#/$defs/cardRecord"}}
+        "deck_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "event_id": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "event_name": {
+          "type": "string"
+        },
+        "event_start": {
+          "type": "string"
+        },
+        "source_file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "main_deck": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cardRecord"
+          }
+        },
+        "sideboard": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cardRecord"
+          }
+        }
       }
     },
     "cardRecord": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "quantity"],
+      "required": [
+        "name",
+        "quantity"
+      ],
       "properties": {
-        "name": {"type": "string", "minLength": 1},
-        "quantity": {"type": "integer", "minimum": 1}
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quantity": {
+          "type": "integer",
+          "minimum": 1
+        }
       }
     },
     "acceptedIntentionalUnknownRecord": {
@@ -191,27 +724,71 @@
         "evidence"
       ],
       "properties": {
-        "deck_id": {"type": "string", "minLength": 1},
-        "event_id": {"type": "string", "pattern": "^[0-9]+$"},
-        "event_name": {"type": "string"},
-        "event_start": {"type": "string"},
-        "source_file": {"type": "string", "minLength": 1},
-        "main_deck": {"type": "array", "items": {"$ref": "#/$defs/cardRecord"}},
-        "sideboard": {"type": "array", "items": {"$ref": "#/$defs/cardRecord"}},
-        "disposition": {"const": "intentional_unknown"},
-        "reason_code": {"const": "random_card_pile"},
-        "owner_accepted_on": {"type": "string", "format": "date"},
-        "evidence": {"type": "string", "minLength": 1}
+        "deck_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "event_id": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "event_name": {
+          "type": "string"
+        },
+        "event_start": {
+          "type": "string"
+        },
+        "source_file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "main_deck": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cardRecord"
+          }
+        },
+        "sideboard": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cardRecord"
+          }
+        },
+        "disposition": {
+          "const": "intentional_unknown"
+        },
+        "reason_code": {
+          "const": "random_card_pile"
+        },
+        "owner_accepted_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "manualReview": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status", "exception_count", "reason"],
+      "required": [
+        "status",
+        "exception_count",
+        "reason"
+      ],
       "properties": {
-        "status": {"const": "manual_review_required"},
-        "exception_count": {"type": "null"},
-        "reason": {"type": "string", "minLength": 1}
+        "status": {
+          "const": "manual_review_required"
+        },
+        "exception_count": {
+          "type": "null"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "landingBinding": {
@@ -228,24 +805,69 @@
         "reason"
       ],
       "properties": {
-        "format": {"enum": ["standard", "modern"]},
-        "status": {"enum": ["available", "stale"]},
+        "format": {
+          "enum": [
+            "standard",
+            "modern"
+          ]
+        },
+        "status": {
+          "enum": [
+            "available",
+            "stale"
+          ]
+        },
         "source_event_ids": {
           "type": "array",
           "uniqueItems": true,
-          "items": {"type": "string", "pattern": "^[0-9]+$"}
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          }
         },
-        "classifier_digest": {"$ref": "#/$defs/sha256"},
-        "selection_policy_digest": {"$ref": "#/$defs/sha256"},
-        "machine_fact_digest": {"$ref": "#/$defs/sha256"},
-        "link_catalog_digest": {"$ref": "#/$defs/sha256"},
-        "reason": {"type": ["string", "null"]}
+        "classifier_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "selection_policy_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "machine_fact_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "link_catalog_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
       },
       "allOf": [
         {
-          "if": {"properties": {"status": {"const": "available"}}},
-          "then": {"properties": {"reason": {"type": "null"}}},
-          "else": {"properties": {"reason": {"type": "string", "minLength": 1}}}
+          "if": {
+            "properties": {
+              "status": {
+                "const": "available"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reason": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
         }
       ]
     },
@@ -264,23 +886,45 @@
         "landing_screening"
       ],
       "properties": {
-        "format": {"enum": ["standard", "modern"]},
-        "classifier_digest": {"$ref": "#/$defs/sha256"},
+        "format": {
+          "enum": [
+            "standard",
+            "modern"
+          ]
+        },
+        "classifier_digest": {
+          "$ref": "#/$defs/sha256"
+        },
         "public_classifier_binding": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["status", "classifier_digest", "latest_complete_week", "products"],
+          "required": [
+            "status",
+            "classifier_digest",
+            "latest_complete_week",
+            "products"
+          ],
           "properties": {
-            "status": {"const": "current"},
-            "classifier_digest": {"$ref": "#/$defs/sha256"},
-            "latest_complete_week": {"type": "string", "format": "date"},
+            "status": {
+              "const": "current"
+            },
+            "classifier_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "latest_complete_week": {
+              "type": "string",
+              "format": "date"
+            },
             "products": {
               "type": "array",
               "minItems": 1,
               "items": {
                 "type": "object",
                 "additionalProperties": false,
-                "required": ["family", "path"],
+                "required": [
+                  "family",
+                  "path"
+                ],
                 "properties": {
                   "family": {
                     "enum": [
@@ -294,7 +938,10 @@
                       "archetype_hierarchy"
                     ]
                   },
-                  "path": {"type": "string", "minLength": 1}
+                  "path": {
+                    "type": "string",
+                    "minLength": 1
+                  }
                 }
               }
             }
@@ -303,9 +950,15 @@
         "source_event_ids": {
           "type": "array",
           "uniqueItems": true,
-          "items": {"type": "string", "pattern": "^[0-9]+$"}
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          }
         },
-        "source_event_count": {"type": "integer", "minimum": 1},
+        "source_event_count": {
+          "type": "integer",
+          "minimum": 1
+        },
         "classification": {
           "type": "object",
           "additionalProperties": false,
@@ -323,20 +976,54 @@
             "strict_validation"
           ],
           "properties": {
-            "status": {"enum": ["review_required", "blocked"]},
-            "scope": {"const": "review_week_source_events"},
-            "validation_scope": {"const": "all_available_events"},
-            "total_unknown_count": {"type": "integer", "minimum": 0},
-            "unresolved_unknown_count": {"type": "integer", "minimum": 0},
-            "unresolved_unknown_records": {"type": "array", "items": {"$ref": "#/$defs/unknownRecord"}},
-            "accepted_intentional_unknown_count": {"type": "integer", "minimum": 0},
+            "status": {
+              "enum": [
+                "review_required",
+                "blocked"
+              ]
+            },
+            "scope": {
+              "const": "review_week_source_events"
+            },
+            "validation_scope": {
+              "const": "all_available_events"
+            },
+            "total_unknown_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unresolved_unknown_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unresolved_unknown_records": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/unknownRecord"
+              }
+            },
+            "accepted_intentional_unknown_count": {
+              "type": "integer",
+              "minimum": 0
+            },
             "accepted_intentional_unknown_records": {
               "type": "array",
-              "items": {"$ref": "#/$defs/acceptedIntentionalUnknownRecord"}
+              "items": {
+                "$ref": "#/$defs/acceptedIntentionalUnknownRecord"
+              }
             },
-            "conflict_count": {"type": "integer", "minimum": 0},
-            "invalid_deck_count": {"type": "integer", "minimum": 0},
-            "strict_validation": {"type": "string", "minLength": 1}
+            "conflict_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "invalid_deck_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "strict_validation": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "retained_corpus_unknown_queue": {
@@ -353,29 +1040,59 @@
             "outside_review_week_unresolved_unknown_records"
           ],
           "properties": {
-            "scope": {"const": "all_available_events"},
-            "total_unknown_count": {"type": "integer", "minimum": 0},
-            "unresolved_unknown_count": {"type": "integer", "minimum": 0},
-            "unresolved_unknown_records": {"type": "array", "items": {"$ref": "#/$defs/unknownRecord"}},
-            "accepted_intentional_unknown_count": {"type": "integer", "minimum": 0},
+            "scope": {
+              "const": "all_available_events"
+            },
+            "total_unknown_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unresolved_unknown_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unresolved_unknown_records": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/unknownRecord"
+              }
+            },
+            "accepted_intentional_unknown_count": {
+              "type": "integer",
+              "minimum": 0
+            },
             "accepted_intentional_unknown_records": {
               "type": "array",
-              "items": {"$ref": "#/$defs/acceptedIntentionalUnknownRecord"}
+              "items": {
+                "$ref": "#/$defs/acceptedIntentionalUnknownRecord"
+              }
             },
-            "outside_review_week_unresolved_unknown_count": {"type": "integer", "minimum": 0},
+            "outside_review_week_unresolved_unknown_count": {
+              "type": "integer",
+              "minimum": 0
+            },
             "outside_review_week_unresolved_unknown_records": {
               "type": "array",
-              "items": {"$ref": "#/$defs/unknownRecord"}
+              "items": {
+                "$ref": "#/$defs/unknownRecord"
+              }
             }
           }
         },
         "visual_metadata": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["representative_cards", "deck_colors"],
+          "required": [
+            "representative_cards",
+            "deck_colors"
+          ],
           "properties": {
-            "representative_cards": {"$ref": "#/$defs/manualReview"},
-            "deck_colors": {"$ref": "#/$defs/manualReview"}
+            "representative_cards": {
+              "$ref": "#/$defs/manualReview"
+            },
+            "deck_colors": {
+              "$ref": "#/$defs/manualReview"
+            }
           }
         },
         "landing_screening": {
@@ -394,26 +1111,71 @@
             "total_candidate_count"
           ],
           "properties": {
-            "status": {"enum": ["candidate_review_required", "stale_review_required", "unavailable"]},
-            "candidate_file": {"type": "string", "pattern": "^stats/(standard|modern)/mtgo/landing/review/candidates_[0-9]{4}-W[0-9]{2}\\.yaml$"},
+            "status": {
+              "enum": [
+                "candidate_review_required",
+                "stale_review_required",
+                "unavailable"
+              ]
+            },
+            "candidate_file": {
+              "type": "string",
+              "pattern": "^stats/(standard|modern)/mtgo/landing/review/candidates_[0-9]{4}-W[0-9]{2}\\.yaml$"
+            },
             "candidate_classifier_digest": {
               "oneOf": [
-                {"$ref": "#/$defs/sha256"},
-                {"type": "null"}
+                {
+                  "$ref": "#/$defs/sha256"
+                },
+                {
+                  "type": "null"
+                }
               ]
             },
-            "expected_classifier_digest": {"$ref": "#/$defs/sha256"},
+            "expected_classifier_digest": {
+              "$ref": "#/$defs/sha256"
+            },
             "candidate_selection_policy_digest": {
               "oneOf": [
-                {"$ref": "#/$defs/sha256"},
-                {"type": "null"}
+                {
+                  "$ref": "#/$defs/sha256"
+                },
+                {
+                  "type": "null"
+                }
               ]
             },
-            "expected_selection_policy_digest": {"$ref": "#/$defs/sha256"},
-            "reason": {"type": ["string", "null"], "minLength": 1},
-            "existing_change_count": {"type": ["integer", "null"], "minimum": 0},
-            "new_archetype_count": {"type": ["integer", "null"], "minimum": 0},
-            "total_candidate_count": {"type": ["integer", "null"], "minimum": 0}
+            "expected_selection_policy_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "existing_change_count": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "new_archetype_count": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "total_candidate_count": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
           }
         }
       }

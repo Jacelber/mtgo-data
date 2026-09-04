@@ -132,6 +132,21 @@ def build_parser() -> argparse.ArgumentParser:
         help="write reports to a disposable or alternate directory",
     )
     report_parser.add_argument("--strict", action="store_true", help="fail on blocking diagnostics")
+    publication_parser = commands.add_parser("publication", help="inspect or prepare the Owner-reviewed MTGO boundary")
+    publication_commands = publication_parser.add_subparsers(dest="publication_command", required=True)
+    publication_commands.add_parser("inspect", help="read public and pending event membership")
+    prepare = publication_commands.add_parser("prepare-review", help="write private full classification material")
+    prepare.add_argument("--week", required=True)
+    prepare.add_argument("--output", type=Path, required=True)
+    accept = publication_commands.add_parser("admission-record", help="prepare a data-admission record after exact Owner acceptance; never marks completion")
+    accept.add_argument("--week", required=True)
+    accept.add_argument("--expected-review-digest", required=True)
+    accept.add_argument("--accepted-on", required=True)
+    accept.add_argument("--evidence", required=True)
+    accept.add_argument("--output", type=Path, required=True)
+    stage = publication_commands.add_parser("stage", help="generate and validate a format in isolation; default is no materialization")
+    stage.add_argument("--include-landing", action="store_true")
+    stage.add_argument("--execute", action="store_true")
     return parser
 
 
@@ -369,7 +384,29 @@ def _run_reports(args: argparse.Namespace, root: Path, registry: Path) -> int:
     return 0
 
 
+def _run_publication(args: argparse.Namespace, root: Path, registry: Path) -> int:
+    import json
+    from . import publication
+    if args.publication_command == "inspect":
+        print(json.dumps(publication.inspect(root, args.format_id), indent=2))
+    elif args.publication_command == "stage":
+        print(json.dumps(publication.stage_publication(root, args.format_id,
+            include_landing=args.include_landing, execute=args.execute), indent=2))
+    elif args.publication_command == "prepare-review":
+        print(publication.prepare_review(root, args.format_id, args.week, args.output))
+    else:
+        publication.require_private_output(root, args.output)
+        record = publication.acceptance_record(root, args.format_id, args.week,
+            expected_review_digest=args.expected_review_digest,
+            accepted_on=args.accepted_on, evidence=args.evidence)
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8", newline="\n")
+        print(args.output)
+    return 0
+
+
 RUNNERS = {
+    "publication": _run_publication,
     "fetch-events": _run_fetch_events,
     "refresh-event": _run_refresh_event,
     "fetch-matches": _run_fetch_matches,
@@ -385,6 +422,7 @@ RUNNERS = {
 }
 
 COMMAND_CAPABILITIES = {
+    "publication": "classification",
     "fetch-matches": "matchup_statistics",
     "build-statistics": "event_statistics",
     "build-top8": "weekly_top8",

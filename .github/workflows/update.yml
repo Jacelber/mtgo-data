@@ -397,17 +397,6 @@ jobs:
             python -B -m mtgmeta.mtgo --format "$FORMAT" generate-hierarchy
           done
 
-      - name: Generate product metadata
-        shell: bash
-        run: |
-          for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            echo "Generating MTGO metadata for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" generate-metadata
-          done
-
-      - name: Generate format-first consumer catalog
-        run: python -B -m mtgmeta.catalog --root .
-
       - name: Generate and strictly validate product classification diagnostics
         shell: bash
         run: |
@@ -415,6 +404,17 @@ jobs:
             echo "Generating classification diagnostics for ${FORMAT}."
             python -B -m mtgmeta.mtgo --format "$FORMAT" classification-reports --strict
           done
+
+      - name: Generate product metadata
+        shell: bash
+        run: |
+          for FORMAT in $MTGO_PRODUCT_FORMATS; do
+            echo "Binding all reviewed MTGO output bytes for ${FORMAT}."
+            python -B -m mtgmeta.mtgo --format "$FORMAT" generate-metadata
+          done
+
+      - name: Generate format-first consumer catalog
+        run: python -B -m mtgmeta.catalog --root .
 
       - name: Validate production candidate scope and data increments
         run: >-
@@ -779,7 +779,7 @@ jobs:
             --production-run-attempt "$GITHUB_RUN_ATTEMPT" \
             --source-sha "$GITHUB_SHA" \
             --github-output "$GITHUB_OUTPUT"
-          WEEK="$(python -c 'import json,os; print(json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "weekly-maintenance-readiness", "readiness.json"), encoding="utf-8"))["week"]["id"])')"
+          WEEK="$(python -c 'import json,os; d=json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "weekly-maintenance-readiness", "readiness.json"), encoding="utf-8")); print(d.get("review_label") or d["week"]["id"])')"
           echo "artifact-name=weekly-maintenance-readiness-${WEEK}" >> "$GITHUB_OUTPUT"
 
       - name: Upload the private weekly handoff
@@ -877,6 +877,41 @@ jobs:
             }
 
             const readiness = JSON.parse(fs.readFileSync(process.env.READINESS_PATH, "utf8"));
+            if (readiness.schema_version === "1.7.0") {
+              for (const item of readiness.formats) {
+                // Only explicit verified completion closes this format/week's notice.
+                for (const week of item.completed_reviews) {
+                  const marker = `<!-- weekly-maintenance:${item.format}:${week} -->`;
+                  const completed = issues.find(issue => !issue.pull_request && issue.body?.includes(marker));
+                  if (completed?.state === "open") {
+                    await github.rest.issues.update({ ...context.repo, issue_number: completed.number, state: "closed" });
+                  }
+                }
+                if (!item.review_week) continue;
+                const marker = `<!-- weekly-maintenance:${item.format}:${item.review_week} -->`;
+                const digest = require("crypto").createHash("sha256").update(JSON.stringify(item)).digest("hex");
+                const digestMarker = `<!-- readiness-digest:${digest} -->`;
+                const body = [marker, digestMarker, "## MTGO 人工审核与公开状态", "",
+                  `- ${item.format}：待审核周 ${item.review_week}；当前公开周 ${item.public_week}；数据准入 ${item.data_admission}；首页 ${item.landing_week}；维护完成 ${item.completion.state}。`,
+                  ...item.blockers.map(reason => `- 停止原因：${reason}`),
+                  `- 首页筛选：${item.landing_screening.status}；展示资料差异在确定性重算和筛选之后确认。`,
+                  "", `完整分类材料和重点记录见本次工作流审核附件：[${context.runId}](${runUrl})。`,
+                  "机器重点不能替代全量人工审核。只有既有政策接受的随机牌堆可以保留为 intentional Unknown。",
+                  "分类接受后先发布该赛制的数据；首页筛选、展示资料差异、中文、英文和最终预览完成后再发布首页。第一次发布不表示维护全部完成。",
+                  "两个赛制独立推进。此通知不是授权；请在当前 Owner 会话中开始或恢复相应维护范围。",
+                ].join("\n");
+                const existing = issues.find(issue => !issue.pull_request && issue.body?.includes(marker));
+                if (!existing) {
+                  await github.rest.issues.create({ ...context.repo,
+                    title: `Weekly MTGO maintenance — ${item.format} ${item.review_week}`, body });
+                } else if (!existing.body?.includes(digestMarker) || existing.state !== "open") {
+                  await github.rest.issues.update({ ...context.repo, issue_number: existing.number, body, state: "open" });
+                }
+              }
+              core.summary.addRaw("Format-specific readiness checked; no completion inferred from collection or data publication.");
+              await core.summary.write({ overwrite: false });
+              return;
+            }
             const week = readiness.week.id;
             const marker = `<!-- weekly-maintenance:${week} -->`;
             const digestMarker = `<!-- readiness-digest:${readiness.readiness_digest} -->`;
