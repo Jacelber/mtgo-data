@@ -751,8 +751,10 @@ def _independent_readiness(root: Path, registry: dict[str, Any], *, publication_
                          if item in scope.pending_event_ids
                          and week_monday(day.strftime("%G-W%V")) + timedelta(days=6) < today}
         admissions = registry["data_admissions"]["formats"][format_id]["weekly_acceptances"]
-        completed = {row["week"] for row in admissions
-                     if _completion_state(root, row["week"], format_id=format_id)["state"] == "verified"}
+        recorded_weeks = {row["week"] for row in registry.get("records", [])
+                          if format_id in row.get("formats", {})}
+        completed = {week for week in recorded_weeks
+                     if _completion_state(root, week, format_id=format_id)["state"] == "verified"}
         unfinished = {row["week"] for row in admissions} - completed
         weeks = sorted(pending_weeks | unfinished)
         week = weeks[0] if weeks else None
