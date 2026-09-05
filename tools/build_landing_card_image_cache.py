@@ -20,11 +20,11 @@ from typing import Any, Callable
 from urllib.parse import urlsplit
 
 
-CARD_NAME_SOURCE = Path(__file__).resolve().parents[1] / "src" / "mtgmeta"
-if str(CARD_NAME_SOURCE) not in sys.path:
-    sys.path.insert(0, str(CARD_NAME_SOURCE))
+SOURCE_ROOT = Path(__file__).resolve().parents[1] / "src"
+if str(SOURCE_ROOT) not in sys.path:
+    sys.path.insert(0, str(SOURCE_ROOT))
 
-from card_names import card_name_lookup_candidates  # noqa: E402
+from mtgmeta.card_names import card_name_lookup_candidates  # noqa: E402
 
 
 CACHE_SCHEMA_VERSION = "1.1.0"
