@@ -15,7 +15,11 @@ from mtgmeta.classifier_closure import (
     ClassifierClosureError,
     _inspect_melee,
     _materialize_with_rollback,
+    converge_format,
+    discover_live_formats,
+    inspect_repository,
 )
+from mtgmeta.catalog import write_catalog
 from mtgmeta.mtgo import landing_editorial
 
 
@@ -349,3 +353,76 @@ def test_format_materialization_rolls_back_after_final_validation_failure(
         )
 
     assert (root / "stats" / "modern" / "a.json").read_bytes() == b"old"
+
+
+def test_public_format_selection_excludes_and_rejects_private_executable(
+    tmp_path: Path,
+) -> None:
+    capabilities = [
+        "classification",
+        "event_statistics",
+        "range_statistics",
+        "matchup_statistics",
+        "weekly_top8",
+        "completeness_reporting",
+        "landing_generation",
+        "metadata_generation",
+        "catalog_generation",
+    ]
+    formats = []
+    for format_id, public in (("standard", True), ("pauper", False)):
+        formats.append(
+            {
+                "id": format_id,
+                "display_name": format_id.title(),
+                "state": "executable",
+                "public": public,
+                "mtgo": {
+                    "enabled": True,
+                    "event_collection_enabled": True,
+                    "capabilities": capabilities,
+                    "paths": {
+                        "events": f"data/{format_id}",
+                        "matches": f"data/{format_id}/mtgo/matches",
+                        "rules": f"my_archetypes/{format_id}.yaml",
+                        "statistics": f"stats/{format_id}/mtgo",
+                        "reports": f"reports/{format_id}/mtgo",
+                    },
+                },
+            }
+        )
+        for suffix in (
+            "meta.json",
+            "matchup_index.json",
+            "top8/index.json",
+            "landing/current.json",
+        ):
+            _write_json(tmp_path / "stats" / format_id / "mtgo" / suffix, {})
+    config = tmp_path / "configs" / "formats.yaml"
+    config.parent.mkdir(parents=True)
+    config.write_text(
+        yaml.safe_dump({"schema_version": "1.3.0", "formats": formats}),
+        encoding="utf-8",
+    )
+    write_catalog(tmp_path, generated_at="2026-09-05T00:00:00+00:00")
+
+    assert discover_live_formats(tmp_path) == ["standard"]
+    stored_catalog = json.loads(
+        (tmp_path / "stats" / "catalog.json").read_text(encoding="utf-8")
+    )
+    stored_catalog["formats"] = []
+    _write_json(tmp_path / "stats" / "catalog.json", stored_catalog)
+    assert discover_live_formats(tmp_path) == ["standard"]
+
+    before = {path.relative_to(tmp_path) for path in tmp_path.rglob("*")}
+    inspection = inspect_repository(tmp_path, ["pauper"])
+    assert inspection["state"] == "NOT_CURRENT"
+    assert inspection["formats"][0]["state"] == "INVALID"
+    assert inspection["formats"][0]["issues"] == [
+        "format 'pauper' is not a complete public MTGO format: "
+        "registry public is false"
+    ]
+    convergence = converge_format(tmp_path, "pauper", execute=True)
+    assert convergence["state"] == "INVALID"
+    assert convergence["changed_paths"] == []
+    assert {path.relative_to(tmp_path) for path in tmp_path.rglob("*")} == before

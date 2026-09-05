@@ -167,6 +167,13 @@ jobs:
           python -B -m pytest
           --basetemp="${RUNNER_TEMP}/pytest-top8-restatement"
           tests/test_mtgo_top8_restatement.py
+      - name: Validate shared public admission contracts
+        if: contains(needs.admission.outputs.validation_triggers, 'public-admission')
+        run: >-
+          python -B -m pytest
+          --basetemp="${RUNNER_TEMP}/pytest-public-admission"
+          tests/test_mtgo_third_format.py
+          tests/test_classifier_closure.py
       - name: Validate Landing card-image cache contract
         if: contains(needs.admission.outputs.validation_triggers, 'landing-card-image-cache')
         run: >-

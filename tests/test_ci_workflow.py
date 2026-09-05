@@ -147,6 +147,11 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
     assert "schema-contract" in by_name["Validate changed public JSON contracts"]["if"]
     assert "schema-documents" in by_name["Validate changed public JSON contracts"]["if"]
     assert "top8-restatement" in by_name["Validate Top 8 restatement"]["if"]
+    public_admission = by_name["Validate shared public admission contracts"]
+    assert "public-admission" in public_admission["if"]
+    assert "tests/test_mtgo_third_format.py" in public_admission["run"]
+    assert "tests/test_classifier_closure.py" in public_admission["run"]
+    assert "pytest-public-admission" in public_admission["run"]
     cache = by_name["Validate Landing card-image cache contract"]
     assert "landing-card-image-cache" in cache["if"]
     assert "tests/test_landing_card_image_cache.py" in cache["run"]
@@ -174,6 +179,8 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
         "validate_schemas.py",
         "--changed-from",
         "test_mtgo_top8_restatement.py",
+        "test_mtgo_third_format.py",
+        "test_classifier_closure.py",
         "test_ci_master_admission.py",
         "test_ci_workflow.py",
         "test_github_publication_preflight.py",
