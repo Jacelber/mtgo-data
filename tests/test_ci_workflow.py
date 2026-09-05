@@ -164,6 +164,9 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
     assert "tests/js/phase8-card-localization.test.js" in browser_localization["run"]
     assert "ci-admission" in by_name["Validate changed governance contracts"]["if"]
     assert "ci-workflow" in by_name["Validate changed governance contracts"]["if"]
+    governance = by_name["Validate changed governance contracts"]["run"]
+    assert "tests/test_pages_candidate_measurement.py" in governance
+    assert "tests/test_trusted_pages_artifact.py" in governance
     package_install = by_name["Install maintained package for code and data checks"]
     assert "code" in package_install["if"]
     assert "data" in package_install["if"]

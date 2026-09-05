@@ -205,7 +205,11 @@ jobs:
             TESTS+=(tests/test_ci_master_admission.py)
           fi
           if [[ "$VALIDATION_TRIGGERS" == *ci-workflow* ]]; then
-            TESTS+=(tests/test_ci_workflow.py)
+            TESTS+=(
+              tests/test_ci_workflow.py
+              tests/test_pages_candidate_measurement.py
+              tests/test_trusted_pages_artifact.py
+            )
           fi
           if [[ "$VALIDATION_TRIGGERS" == *publication-preflight* ]]; then
             TESTS+=(tests/test_github_publication_preflight.py)
