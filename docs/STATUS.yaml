@@ -8,7 +8,7 @@ project:
 
 status_document:
   purpose: "Small machine-readable record of durable live project state."
-  last_updated: "2026-09-03"
+  last_updated: "2026-09-05"
   updated_by: "project-owner-with-ai-assistance"
   live_state_only: true
   authority_model:
@@ -21,20 +21,19 @@ status_document:
 current_phase:
   id: 14
   name: "Pauper MTGO and Paupergeddon"
-  status: "paused_for_post_w35_governance_and_reliability_reset"
+  status: "active"
   started_on: "2026-08-30"
   objective: "Extend the existing shared multi-format product to Pauper without copying Standard or Modern implementations, keep MTGO and Tabletop products separate, and admit no partial public format."
-  pause_reason: "Complete the Owner-directed Post-W35 Governance & Reliability Reset before resuming separately authorized product work."
 
 active_program:
-  id: "POST-W35-GOVERNANCE-RELIABILITY-RESET-20260903"
-  name: "Post-W35 Governance & Reliability Reset"
+  id: "PHASE-14-SHARED-REUSE"
+  name: "Phase 14 shared reuse and complete-product admission"
   status: "active"
   governance_model: "single_agent_chat_authority_with_exact_merge_subject_validation"
 
 known_blockers: []
 
 paused_activities:
-  - id: "P14-02"
+  - id: "P14-02B"
     name: "Produce Pauper MTGO data and statistics privately"
-    reason: "Phase 14 remains paused during the Post-W35 program and requires a separate Owner start instruction before resumption."
+    reason: "Private Pauper generation requires accepted shared repair and a separate Owner start instruction. Real collection, production dispatch, public admission, and later Phase 14 tasks remain unopened."

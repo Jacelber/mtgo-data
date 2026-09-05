@@ -5,11 +5,12 @@ from types import SimpleNamespace
 from jsonschema import Draft202012Validator
 
 from mtgmeta.mtgo import metadata
+from validate_schemas import load_schemas
 
 
 def test_metadata_scope_binding_schema_preserves_legacy_and_rejects_missing_binding():
-    schema = json.loads((Path(__file__).resolve().parents[1] / "schemas/mtgo-meta.schema.json").read_text())
-    validator = Draft202012Validator(schema)
+    schemas, registry = load_schemas(Path(__file__).resolve().parents[1] / "schemas")
+    validator = Draft202012Validator(schemas["mtgo-meta.schema.json"], registry=registry)
     document = {"schema_version": "1.0.0", "format": "standard", "source": "mtgo",
         "rules_updated": "synthetic", "data_updated": "synthetic", "statistics_catalog": "index.json",
         "matchup_catalog": "matchup_index.json", "hierarchy_catalog": "archetype_hierarchy.json",
@@ -35,7 +36,7 @@ def _context(tmp_path):
     rules.write_text("archetypes: []\n", encoding="utf-8")
     return SimpleNamespace(
         repository_root=tmp_path,
-        definition=SimpleNamespace(id="standard"),
+        definition=SimpleNamespace(id="standard", public=True),
         paths={
             "rules": rules,
             "statistics": statistics,

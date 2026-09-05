@@ -11,7 +11,7 @@ from typing import Any, Iterable
 
 from mtgmeta.public_contract import versioned
 
-from . import load_mtgo_context
+from . import require_product_output, load_mtgo_context
 from .stats import (
     DEFAULT_RANGES,
     high_score_threshold,
@@ -284,7 +284,7 @@ def build_all_completeness(
         context.paths["events"],
         repository_root=context.repository_root,
         format_id=format_id,
-        public=True,
+        public=context.definition.public,
     )
     end_monday = latest_complete_week(events, today=today)
     if end_monday is None:
@@ -295,6 +295,7 @@ def build_all_completeness(
         if output_directory is not None
         else context.paths["statistics"] / "completeness"
     )
+    require_product_output(context, output)
     documents: dict[str, dict[str, Any]] = {}
     entries: list[dict[str, Any]] = []
     for weeks in normalized_ranges:

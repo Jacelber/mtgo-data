@@ -12,6 +12,8 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from mtgmeta.catalog import build_catalog
+from mtgmeta.config import load_format_registry
 from tools.build_landing_card_image_cache import verify_cache_bundle
 from tools.build_simple_card_localization import verify_bundle as verify_localization_bundle
 
@@ -125,10 +127,29 @@ def _source_file(root: Path, relative: str) -> Path:
 
 
 def publication_paths(root: Path, config: dict[str, Any]) -> set[str]:
+    # Catalog visibility and direct-file publication are the same admission.
+    try:
+        registry = load_format_registry(root / "configs/formats.yaml")
+        expected = build_catalog(root)
+    except ValueError as exc:
+        raise PublicationError(str(exc)) from exc
+    catalog = _read_json(root / "stats/catalog.json", "consumer catalog")
+    if catalog.get("formats") != expected["formats"]:
+        raise PublicationError("consumer catalog does not match current format admission")
+    public_formats = {item.id for item in registry.formats if item.public}
+
+    def admitted(relative: str) -> bool:
+        parts = Path(relative).parts
+        if parts[0] in {"stats", "reports"} and relative != "stats/catalog.json":
+            if len(parts) < 3 or parts[1] not in public_formats:
+                return False
+        return not any(fnmatchcase(relative, pattern) for pattern in config["excluded_patterns"])
+
     selected: set[str] = set()
     for relative in config["site_files"]:
         _source_file(root, relative)
-        selected.add(relative)
+        if admitted(relative):
+            selected.add(relative)
     for relative in config["site_directories"]:
         directory = root / relative
         if directory.is_symlink() or not directory.is_dir():
@@ -142,10 +163,7 @@ def publication_paths(root: Path, config: dict[str, Any]) -> set[str]:
             if path.is_file():
                 found = True
                 candidate = path.relative_to(root).as_posix()
-                if not any(
-                    fnmatchcase(candidate, pattern)
-                    for pattern in config["excluded_patterns"]
-                ):
+                if admitted(candidate):
                     selected.add(candidate)
         if not found:
             raise PublicationError(f"approved directory is empty: {relative}")

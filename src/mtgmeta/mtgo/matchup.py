@@ -25,7 +25,7 @@ from mtgmeta.consumer import (
 from mtgmeta.rules import RuleSet
 from mtgmeta.public_contract import versioned
 
-from . import load_mtgo_context
+from . import require_product_output, load_mtgo_context
 from .classification import load_mtgo_events_for_format
 from .stats import latest_complete_week, parse_event_date
 
@@ -1092,13 +1092,14 @@ def build_all_matchups(
         rule_set,
         repository_root=context.repository_root,
         format_id=format_id,
-        public=True,
+        public=context.definition.public,
     )
     end_monday = latest_complete_week([(event[0], None) for event in events], today=today)
     if end_monday is None:
         return {}, {}
 
     output = Path(output_directory) if output_directory is not None else context.paths["statistics"]
+    require_product_output(context, output)
     documents: dict[str, dict[str, Any]] = {}
     statistics: dict[int, dict[str, int]] = {}
     index_entries = []

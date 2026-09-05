@@ -18,7 +18,7 @@
   "properties": {
     "schema_version": {"const": "1.1.0"},
     "format": {
-      "enum": ["standard", "modern"]
+      "$ref": "common.schema.json#/$defs/formatId"
     },
     "source": {
       "const": "mtgo"

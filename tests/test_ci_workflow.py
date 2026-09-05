@@ -708,10 +708,33 @@ def test_weekly_readiness_uses_the_verified_publication_and_private_handoff():
         assert required in script
 
 
+def test_production_formats_follow_the_registry_before_fetch_and_build():
+    workflow = yaml.load(UPDATE_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+    for job_id in ("fetch", "build"):
+        job = workflow["jobs"][job_id]
+        assert "MTGO_PRODUCT_FORMATS" not in job["env"]
+        steps = job["steps"]
+        selection = next(i for i, step in enumerate(steps)
+                         if step["name"] == "Select registry-admitted production formats")
+        assert any("pip install" in step.get("run", "") for step in steps[:selection])
+        script = steps[selection]["run"]
+        assert "validate_production_candidate.py formats --kind collection" in script
+        assert "validate_production_candidate.py formats --kind product" in script
+        assert 'echo "MTGO_PRODUCT_FORMATS=$PRODUCT_FORMATS" >> "$GITHUB_ENV"' in script
+        assert 'echo "MTGO_HIERARCHY_FORMATS=$PRODUCT_FORMATS" >> "$GITHUB_ENV"' in script
+        assert all("$MTGO_PRODUCT_FORMATS" not in step.get("run", "") for step in steps[:selection])
+
+
 def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
     workflow = yaml.load(
         PAGES_WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader
     )
+    for event in ("push", "pull_request"):
+        assert {"configs/formats.yaml", "src/mtgmeta/config.py", "src/mtgmeta/catalog.py", "requirements.txt"} <= set(workflow["on"][event]["paths"])
+    build_steps = workflow["jobs"]["build"]["steps"]
+    package_index = next(i for i, step in enumerate(build_steps) if step["name"] == "Build fresh allowlisted Pages artifact")
+    assert build_steps[package_index]["env"]["PYTHONPATH"] == "src"
+    assert any("-r requirements.txt" in step.get("run", "") for step in build_steps[:package_index])
     localization_cache = workflow["jobs"]["localization-cache"]
     assert localization_cache["timeout-minutes"] == "30"
     assert localization_cache["permissions"] == {

@@ -10,7 +10,7 @@ from typing import Any, Sequence
 
 from mtgmeta.public_contract import versioned
 
-from .config import load_format_registry
+from .config import REQUIRED_MTGO_PRODUCT_CAPABILITIES, load_format_registry
 
 
 PRODUCTS = (
@@ -44,6 +44,10 @@ def build_catalog(
         generated = generated_at
     formats = []
     for definition in registry.formats:
+        if definition.public and not definition.mtgo.enabled:
+            raise ValueError(f"public format {definition.id!r} must be executable")
+        if definition.public and not REQUIRED_MTGO_PRODUCT_CAPABILITIES <= definition.mtgo.capabilities:
+            raise ValueError(f"public format {definition.id!r} is missing required MTGO capabilities")
         products = []
         for product_id, source, suffix in PRODUCTS:
             relative = Path("stats") / definition.id / source / Path(suffix)

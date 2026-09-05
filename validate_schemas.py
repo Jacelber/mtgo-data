@@ -11,6 +11,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
 from referencing import Registry, Resource
 
+from mtgmeta.config import load_format_registry
 from validate_repository import InfrastructureError, changed_files
 
 
@@ -80,6 +81,7 @@ def validate_manifest(
     checked = 0
     failures: list[ValidationFailure] = []
     seen: set[Path] = set()
+    formats = None
     for mapping in mappings:
         if not isinstance(mapping, dict) or set(mapping) != {"pattern", "schema"}:
             raise SchemaError("each manifest mapping must contain only pattern and schema")
@@ -105,6 +107,17 @@ def validate_manifest(
                 failures.append(ValidationFailure(relative, "$", f"cannot read JSON: {exc}"))
             else:
                 failures.extend(validate_instance(instance, schemas[schema_name], registry, relative))
+                parts = path.relative_to(repository_root).parts
+                if (len(parts) >= 4 and parts[0] in {"stats", "reports"}
+                        and parts[2] == "mtgo"):
+                    if formats is None:
+                        formats = load_format_registry(repository_root / "configs/formats.yaml")
+                    try:
+                        formats.require_mtgo(parts[1])
+                    except ValueError as exc:
+                        failures.append(ValidationFailure(relative, "$.format", str(exc)))
+                    if not isinstance(instance, dict) or instance.get("format") != parts[1]:
+                        failures.append(ValidationFailure(relative, "$.format", "must match the registered output path"))
             checked += 1
     return checked, failures
 

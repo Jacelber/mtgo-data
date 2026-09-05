@@ -25,7 +25,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 | 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Complete on 2026-08-25 |
 | 13 | Aggregate compatible multi-event matchups from raw counts. | Complete on 2026-08-27 |
 | Pre-14 | Establish provenance-safe Chinese card names and complete card images. | Owner accepted on 2026-08-29; completion authorized |
-| 14 | Add Pauper MTGO and approved Paupergeddon support. | Planned; not authorized |
+| 14 | Add Pauper MTGO and approved Paupergeddon support. | Active; shared repair precedes private generation |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
 | 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
 | 17 | Add qualifying Standard Tabletop events. | Planned; not authorized |
@@ -68,8 +68,8 @@ selection while preserving the English path.
 
 The complete problem statement, implementation sequence, acceptance boundary,
 and retained evidence are preserved in
-`docs/history/ROADMAP-PRE-14-COMPLETED.md`. Phase 14 remains separately
-unauthorized.
+`docs/history/ROADMAP-PRE-14-COMPLETED.md`. Phase 14 resumed on 2026-09-05
+with its shared-repair lane; later tasks remain separate.
 
 ---
 
@@ -130,77 +130,9 @@ model; it does not add an intermediate public capability.
 
 ## Task sequence
 
-### P14-00 — Freeze the Phase 14 contract
-
-- **Problem:** the former ten-line sequence did not identify input evidence,
-  exact artifacts, stop conditions, or the boundary between MTGO and Tabletop.
-- **Operation:** inventory existing Pauper archives, rule files, catalogs,
-  Schemas, consumers, Landing requirements, and event-strategy contracts using
-  read-only evidence. Classify explicit Standard/Modern assumptions as active,
-  intentional compatibility, synthetic/test-only, or historical. Define exact
-  task path envelopes, private/public state transitions, separate shared-repair
-  gates, and risk-triggered checks. Do not fetch a real event or change a
-  whitelist.
-- **Effect:** one Owner-reviewable implementation contract exists without data,
-  code, or public behavior changes.
-- **Paths:** `docs/audits/P14-00.md`, this Phase 14 section, and the live
-  `docs/STATUS.yaml` task contract only.
-- **Validation:** focused live-status and roadmap-pointer checks, one final
-  changed-scope repository validation, and complete diff review. Do not run
-  classifier, data, Schema, browser, candidate, Pages, or production tests.
-- **Stop:** Owner acceptance. P14-01 remains separately unauthorized.
-- **Recommended model:** `gpt-5.6-sol`, high reasoning.
-
-### P14-01 — Establish and accept Pauper classification
-
-- **Problem:** shared Pauper parent/subtype identities and representative rules
-  are not yet an accepted cross-source taxonomy, and the earlier single-step
-  wording did not identify where retained-corpus review and final rule
-  refinement occur.
-- **Operation A — P14-01A taxonomy proposal:** inspect existing behavior and the
-  current retained recent Pauper corpus, propose parent/subtype boundaries and
-  bilingual identities before coding, and obtain Owner acceptance of the
-  classification logic. This proposal is design evidence, not an executable
-  classifier.
-- **Operation B — P14-01B rule implementation:** encode the accepted taxonomy
-  with stable IDs, explicit priorities, bounded representative fixtures,
-  conflicts, Unknown reporting, and proposed bilingual identity coverage.
-  Classify by stable primary-engine signals rather than incidental cards. A
-  subtype-defining parent has no implicit Other or parent-only fallback.
-- **Operation C — P14-01C retained-corpus refinement:** replay the implemented
-  rules once against the current retained recent corpus; cluster every Unknown
-  and every classified-but-reference-inconsistent record by stable primary
-  engine and deck similarity; present every affected record, representative
-  lists, and an evidence-backed recommendation for Owner confirmation; apply
-  only the confirmed reference corrections, intentional Unknown dispositions,
-  and rule refinements; then rerun the affected focused evidence and freeze the
-  final taxonomy for Owner acceptance. Multiple matches, conflicts, and the
-  accepted boundary cohorts remain visible in the same review. Machine replay
-  metrics or a generated review queue do not complete P14-01C without the
-  clustered Owner review and post-decision rerun. P14-01B and P14-01C are one
-  continuous focused implementation task and do not add an intermediate
-  authorization gate.
-- **Validation:** validate the Pauper rule document and focused fixtures, record
-  the retained-corpus impact report, and use only the smallest Standard/Modern
-  regression evidence that answers a named shared-validator risk.
-- **Effect:** one accepted classifier can later classify both MTGO and the
-  approved Tabletop event without copying source-specific archetypes; final
-  refinement is complete before private product generation begins.
-- **Expected paths:** `my_archetypes/pauper.yaml`, focused Pauper rule fixtures
-  and tests, an Owner-review artifact for the proposed bilingual identities,
-  and only directly required rule contract paths. The maintained two-format
-  name catalog is not extended until P14-03A generalizes its shared contract.
-- **Stop:** final taxonomy, retained-corpus report, and proposed bilingual
-  identity acceptance after P14-01C. If P14-02 later exposes a material
-  classifier defect, stop product generation and return to a separately scoped
-  classifier repair; do not mix rule changes into data generation or Landing
-  review. Do not activate Pauper execution, generate product output, or import
-  the names into the maintained catalog during P14-01.
-- **Recommended model:** `gpt-5.6-sol`, high reasoning.
-- **Current evidence:** P14-01A, all 13 Owner-review batches, and the completed
-  consolidated P14-01B/P14-01C subject are Owner-accepted. Same-task completion
-  through one Ready PR, required CI, and merge is authorized. P14-02 remains
-  unauthorized.
+Completed P14-00 and P14-01 detail is preserved in
+`docs/history/ROADMAP-PHASE-14-COMPLETED.md`. The accepted Pauper classifier
+merged through PR #313; no real Pauper product has been enabled.
 
 ### P14-02 — Produce Pauper MTGO data and statistics privately
 
@@ -212,6 +144,11 @@ model; it does not add an intermediate public capability.
   Preserve intentional Standard compatibility aliases and do not edit frozen
   migration tools merely because they contain two-format history. A material
   shared repair is its own Owner-authorized and Owner-accepted subtask.
+- **P14-02A boundary:** the refreshed exact contract and invalidation map are
+  in `docs/audits/P14-02A.md`. Synthetic third-format execution, reviewed input
+  selection, statistical Schemas, dynamic manifests, complete public catalog
+  admission, production format selection, and direct-path Pages exclusion are
+  repaired together. P14-03 human Landing/name carriers remain separate.
 - **Operation B — private generation:** after shared repair acceptance, activate
   Pauper capabilities with `public: false`, then run the generalized
   classification and generators. Collect matches only under separate authority.
@@ -308,10 +245,10 @@ model; it does not add an intermediate public capability.
 
 - **Problem:** enabling one source or one MTGO view early would create a partial
   public format and inconsistent navigation.
-- **Operation A — shared production repair:** before publication, derive active
-  production product and hierarchy formats from the accepted registry contract
-  rather than adding a copied Pauper loop. Generalize only the active workflow,
-  candidate, manifest, admission, and metadata boundaries; preserve least
+- **Operation A — shared production acceptance:** before publication, reuse
+  the P14-02A registry-derived product/hierarchy selection and private Pages
+  exclusion. Review only remaining candidate, admission, and metadata gaps
+  against the eventual complete accepted product; preserve least
   privilege, concurrency, immutable candidate transfer, validation before
   publication, failure reporting, and exact-evidence Pages admission. This is a
   separate Owner-authorized and Owner-accepted task and changes no generated

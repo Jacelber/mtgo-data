@@ -15,22 +15,14 @@ from typing import Any, Iterable
 
 import yaml
 
+from mtgmeta.config import (
+    REQUIRED_MTGO_PRODUCT_CAPABILITIES as PRODUCTION_CAPABILITIES, load_format_registry,
+)
+from mtgmeta.catalog import build_catalog
 
 ROOT = Path(__file__).resolve().parent
 BASELINE_SCHEMA_VERSION = "3.0.0"
-PRODUCTION_CAPABILITIES = frozenset(
-    {
-        "classification",
-        "event_statistics",
-        "range_statistics",
-        "matchup_statistics",
-        "weekly_top8",
-        "completeness_reporting",
-        "landing_generation",
-        "metadata_generation",
-        "catalog_generation",
-    }
-)
+
 
 
 class CandidateValidationError(RuntimeError):
@@ -89,6 +81,8 @@ def collect_changes(root: Path) -> list[Change]:
 
 def _configured_formats(root: Path) -> tuple[tuple[str, ...], tuple[str, ...]]:
     registry_path = root / "configs" / "formats.yaml"
+    # Validate lifecycle and booleans before selecting a production write scope.
+    load_format_registry(registry_path)
     registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
     formats = registry.get("formats") if isinstance(registry, dict) else None
     if not isinstance(formats, list):
@@ -112,7 +106,9 @@ def _configured_formats(root: Path) -> tuple[tuple[str, ...], tuple[str, ...]]:
             raise CandidateValidationError(
                 f"{registry_path}: invalid MTGO capabilities for {item['id']}"
             )
-        if mtgo.get("enabled") is True and PRODUCTION_CAPABILITIES <= set(capabilities):
+        if item.get("public") is True:
+            if mtgo.get("enabled") is not True or not PRODUCTION_CAPABILITIES <= set(capabilities):
+                raise CandidateValidationError(f"incomplete public MTGO capabilities: {item['id']}")
             product_formats.append(item["id"])
     if not collection_formats:
         raise CandidateValidationError(
@@ -122,6 +118,10 @@ def _configured_formats(root: Path) -> tuple[tuple[str, ...], tuple[str, ...]]:
         raise CandidateValidationError(
             f"{registry_path}: no complete MTGO products enabled"
         )
+    try:
+        build_catalog(root)
+    except ValueError as exc:
+        raise CandidateValidationError(str(exc)) from exc
     return tuple(collection_formats), tuple(product_formats)
 
 
@@ -665,6 +665,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
     commands = parser.add_subparsers(dest="command", required=True)
+    formats = commands.add_parser("formats", help="print registry-admitted production formats")
+    formats.add_argument("--kind", choices=("collection", "product"), required=True)
     snapshot = commands.add_parser(
         "snapshot", help="record the clean production baseline"
     )
@@ -676,6 +678,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     root = args.root.resolve()
     try:
+        if args.command == "formats":
+            collection, products = _configured_formats(root)
+            print(" ".join(collection if args.kind == "collection" else products))
+            return 0
         if args.command == "snapshot":
             existing_changes = collect_changes(root)
             if existing_changes:
