@@ -6,7 +6,7 @@ import argparse
 from pathlib import Path
 
 from mtgmeta.config import load_rule_set
-from mtgmeta.mtgo import load_mtgo_context
+from mtgmeta.mtgo import load_mtgo_context, require_product_output
 from mtgmeta.reports import (
     build_classification_reports,
     find_identity_fields,
@@ -46,21 +46,24 @@ def generate_reports(
     data_dir = _resolve_override(root, data_directory, context.paths["events"])
     rules = _resolve_override(root, rules_path, context.paths["rules"])
     output_dir = _resolve_override(root, output_directory, context.paths["reports"])
-    from mtgmeta.mtgo.publication import public_events, require_private_output
+    require_product_output(context, output_dir)
+    from mtgmeta.mtgo.publication import public_events, retained_events, require_private_output
     if data_dir.resolve() != context.paths["events"].resolve() or rules.resolve() != context.paths["rules"].resolve():
         raise ValueError("public reports require canonical retained inputs and maintained rules")
     if output_dir.resolve() != context.paths["reports"].resolve():
         require_private_output(root, output_dir)
-    events = public_events(root, format_id)
+    events = (public_events(root, format_id) if context.definition.public
+              else retained_events(root, format_id))
     reports = build_classification_reports(
         events,
         load_rule_set(rules),
         format_id=format_id,
         source="mtgo",
     )
-    for document in reports.values():
-        document["scope"] = "all_admitted_events"
-        document["schema_version"] = "1.2.0"
+    if context.definition.public:
+        for document in reports.values():
+            document["scope"] = "all_admitted_events"
+            document["schema_version"] = "1.2.0"
     identity_fields = find_identity_fields(reports)
     if identity_fields:
         raise ValueError("forbidden identity fields found: " + ", ".join(identity_fields))

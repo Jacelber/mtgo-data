@@ -33,6 +33,9 @@ must not be used to authorize work. Current authorization is recorded only in
 - `ROADMAP-PRE-14-COMPLETED.md` preserves the localization reset, minimal
   implementation contract, acceptance boundary, and retained source evidence.
 
+- `ROADMAP-PHASE-14-COMPLETED.md` preserves completed P14-00 and P14-01
+  detail and the accepted classifier's Git merge evidence.
+
 At task completion, move detailed completed roadmap material into the matching
 phase history file in the same accepted task. Keep only remaining work,
 acceptance criteria, and a compact history pointer in `docs/ROADMAP.md`.

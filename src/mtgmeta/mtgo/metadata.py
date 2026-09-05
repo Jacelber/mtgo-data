@@ -11,7 +11,7 @@ from typing import Any, Callable
 from mtgmeta.classifier import classifier_digest
 from mtgmeta.public_contract import versioned
 
-from . import load_mtgo_context, matchup, stats
+from . import require_product_output, load_mtgo_context, matchup, stats
 from .normalize import load_rules_for_format
 
 
@@ -89,6 +89,7 @@ def generate_hierarchy_catalog(
         if output_directory is not None
         else context.paths["statistics"]
     )
+    require_product_output(context, output)
     output.mkdir(parents=True, exist_ok=True)
     destination = output / "archetype_hierarchy.json"
     destination.write_text(
@@ -206,14 +207,16 @@ def generate_metadata(
             ),
         }
     )
-    from .publication import publication_binding
-    document["schema_version"] = "1.1.0"
-    document["publication"] = publication_binding(context.repository_root, format_id)
+    if context.definition.public:
+        from .publication import publication_binding
+        document["schema_version"] = "1.1.0"
+        document["publication"] = publication_binding(context.repository_root, format_id)
     output = (
         Path(output_directory).resolve()
         if output_directory is not None
         else context.paths["statistics"]
     )
+    require_product_output(context, output)
     output.mkdir(parents=True, exist_ok=True)
     destination = output / "meta.json"
     destination.write_text(

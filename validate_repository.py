@@ -345,6 +345,7 @@ def reference_groups_for_paths(paths: set[str]) -> frozenset[str]:
         groups.add("pickup-indexes")
     if any(
         path in {
+            "configs/formats.yaml",
             "configs/mtgo_archetype_names.yaml",
             "configs/melee_events.yaml",
             "stats/catalog.json",
@@ -364,15 +365,9 @@ def reference_groups_for_paths(paths: set[str]) -> frozenset[str]:
             "src/mtgmeta/mtgo/landing_editorial.py",
         }
         or path.startswith("my_archetypes/")
-        or path.startswith("stats/standard/")
-        or path.startswith("stats/modern/")
-        or path.startswith("reports/standard/mtgo/")
-        or path.startswith("reports/modern/mtgo/")
-        or (path.startswith(("data/standard/", "data/modern/")) and path.count("/") == 2)
-        or path.startswith("data/standard/melee/classifications/")
-        or path.startswith("data/standard/melee/opportunities/")
-        or path.startswith("data/modern/melee/classifications/")
-        or path.startswith("data/modern/melee/opportunities/")
+        or path.startswith(("stats/", "reports/"))
+        or (path.startswith("data/") and path.count("/") == 2)
+        or re.fullmatch(r"data/[^/]+/melee/(classifications|opportunities)/.+", path)
         for path in paths
     ):
         groups.add("classifier-closure")

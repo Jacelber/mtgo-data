@@ -15,7 +15,7 @@ from mtgmeta.rules import RuleSet
 from mtgmeta.public_contract import versioned
 from mtgmeta.consumer import identity_display_name
 
-from . import load_mtgo_context
+from . import require_product_output, load_mtgo_context
 from .classification import load_mtgo_events_for_format
 from .normalize import load_rules_for_format
 
@@ -480,7 +480,7 @@ def load_all_events(
         context.paths["events"],
         repository_root=context.repository_root,
         format_id=format_id,
-        public=public,
+        public=public and context.definition.public,
     )
 
 
@@ -1097,7 +1097,7 @@ def build_all_stats(
         context.paths["events"],
         repository_root=context.repository_root,
         format_id=format_id,
-        public=True,
+        public=context.definition.public,
     )
     end_monday = latest_complete_week(events, today=today)
     if end_monday is None:
@@ -1111,6 +1111,7 @@ def build_all_stats(
         today=today,
     )
     out_dir = Path(output_directory) if output_directory is not None else context.paths["statistics"]
+    require_product_output(context, out_dir)
 
     index_entries = []
     documents = {}

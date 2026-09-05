@@ -1860,6 +1860,16 @@ unsafe paths and symbolic links, verifies every copied byte, enforces the
 one-gibibyte site ceiling, and validates the complete event `434455`
 compatibility closure before producing a size and digest report.
 
+P14-02A makes `stats/` and `reports/` conditional format trees rather than
+unconditional recursive grants. Their format child must be registered and
+public, with executable MTGO capabilities and every required MTGO product.
+The source `stats/catalog.json` must agree with the registry-derived catalog
+before packaging; it is the sole global exception to the format-tree filter.
+Private and unregistered format outputs are excluded even when an explicit
+site-file entry names them. Existing review exclusions, approved raw archives,
+and the event `434455` compatibility closure remain intact. Format registry,
+catalog admission code, and pinned runtime dependencies are Pages inputs.
+
 Cache-A adds one generated Pages overlay at `assets/card-cache/v1/`. The
 overlay is built outside the repository and is never a Git-tracked input. Its
 Schema-governed manifest binds the exact rolling Landing subject, every
@@ -3715,6 +3725,19 @@ catalog, and exact-SHA inspection. Classification, statistics generation,
 staging, materialization, and fetch remain exclusive to explicit operations.
 
 ### MTGO reviewed publication membership
+
+Private executable formats reuse the same statistical producers with retained
+format-isolated inputs. They do not call the public membership resolver or
+claim a public admission: metadata remains the supported unbound 1.0 shape,
+and classification reports retain `all_available_events` scope. Public
+formats keep metadata 1.1 binding and `all_admitted_events` report scope.
+Private generator destinations must remain outside Pages-admitted trees.
+Production selects only registered complete public MTGO products; event-only
+archival eligibility remains a separate existing registry capability.
+Statistical/report manifest mappings cover registered executable formats
+dynamically and require embedded format identity to match the output path.
+This changes neither formulas nor classifier rules. Human Landing/name
+carriers and first real Pauper publication remain separately gated.
 
 The `data_admissions` section of completion configuration 1.2 is a separate
 authority from its `records` section. Each format has a fixed grandfathered

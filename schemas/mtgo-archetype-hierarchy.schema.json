@@ -16,7 +16,7 @@
   ],
   "properties": {
     "schema_version": {"const": "1.1.0"},
-    "format": {"enum": ["standard", "modern"]},
+    "format": {"$ref": "common.schema.json#/$defs/formatId"},
     "source": {"const": "mtgo"},
     "classifier_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "rules_updated": {"type": "string", "minLength": 1},

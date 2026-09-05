@@ -43,6 +43,11 @@ FORMAT_PATH_KEYS = (
     "statistics",
     "reports",
 )
+REQUIRED_MTGO_PRODUCT_CAPABILITIES = frozenset({
+    "classification", "event_statistics", "range_statistics", "matchup_statistics",
+    "weekly_top8", "completeness_reporting", "landing_generation",
+    "metadata_generation", "catalog_generation",
+})
 
 
 class DuplicateKeyLoader(yaml.SafeLoader):

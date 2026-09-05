@@ -7,7 +7,7 @@
   "required": ["schema_version", "format", "source", "classifier_digest", "period", "total_decks", "total_high_score", "total_top8", "unknown_count", "archetypes"],
   "properties": {
     "schema_version": {"const": "1.1.0"},
-    "format": {"enum": ["standard", "modern"]},
+    "format": {"$ref": "common.schema.json#/$defs/formatId"},
     "source": {"const": "mtgo"},
     "classifier_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "period": {"$ref": "common.schema.json#/$defs/period"},
@@ -68,7 +68,7 @@
   },
   "allOf": [
     {
-      "if": {"properties": {"format": {"const": "modern"}}, "required": ["format"]},
+      "if": {"properties": {"format": {"not": {"const": "standard"}}}, "required": ["format"]},
       "then": {"properties": {"archetypes": {"items": {"required": ["id"]}}}}
     }
   ],

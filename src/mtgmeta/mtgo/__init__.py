@@ -18,6 +18,13 @@ class MTGOFormatContext:
     paths: dict[str, Path]
 
 
+def require_product_output(context: MTGOFormatContext, output: Path) -> None:
+    """A private generator override must not write into a public product tree."""
+    if not context.definition.public:
+        from .publication import require_private_output
+        require_private_output(context.repository_root, output)
+
+
 def load_mtgo_context(
     repository_root: str | Path,
     format_id: str,

@@ -21,7 +21,7 @@
     "schema_version": {"const": "1.1.0"},
     "document_type": {"const": "top8_index"},
     "source": {"const": "mtgo"},
-    "format": {"enum": ["standard", "modern"]},
+    "format": {"$ref": "common.schema.json#/$defs/formatId"},
     "classifier_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "generated": {"type": "string", "minLength": 1},
     "latest_complete_week": {"type": "string", "format": "date"},

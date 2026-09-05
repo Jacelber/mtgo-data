@@ -15,14 +15,14 @@
         "artifacts": {
           "type": "object",
           "minProperties": 1,
-          "propertyNames": {"pattern": "^(stats|reports)/(standard|modern)/mtgo/.+\\.json$"},
+          "propertyNames": {"pattern": "^(stats|reports)/[a-z0-9]+(?:-[a-z0-9]+)*/mtgo/.+\\.json$"},
           "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
         }
       },
       "additionalProperties": false
     },
     "schema_version": {"enum": ["1.0.0", "1.1.0"]},
-    "format": {"enum": ["standard", "modern"]}, "source": {"const": "mtgo"},
+    "format": {"$ref": "common.schema.json#/$defs/formatId"}, "source": {"const": "mtgo"},
     "rules_updated": {"type": "string", "minLength": 1}, "data_updated": {"type": "string", "minLength": 1},
     "statistics_catalog": {"const": "index.json"},
     "matchup_catalog": {"const": "matchup_index.json"},

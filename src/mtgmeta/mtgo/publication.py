@@ -126,6 +126,10 @@ def retained_events(root: Path, format_id: str):
 
 def resolve_scope(repository_root: str | Path, format_id: str) -> PublicScope:
     root = Path(repository_root).resolve()
+    from ..config import load_format_registry
+    definition = load_format_registry(root / "configs/formats.yaml").require_mtgo(format_id)
+    if not definition.public:
+        raise PublicationError("non-public format has no public admission scope")
     try:
         document = yaml.safe_load((root / ADMISSION_PATH).read_text(encoding="utf-8"))
         if document.get("schema_version") != "1.2.0":
@@ -269,6 +273,13 @@ def require_private_output(root: Path, output: Path) -> None:
         relative = target.relative_to(root.resolve()).as_posix()
     except ValueError:
         return
+    from ..config import load_format_registry
+    parts = Path(relative).parts
+    if len(parts) >= 2 and parts[0] in {"stats", "reports"}:
+        registry = load_format_registry(root / "configs/formats.yaml")
+        private_formats = {item.id for item in registry.formats if not item.public}
+        if parts[1] in private_formats:
+            return
     config = json.loads((root / "configs/pages_publication.json").read_text(encoding="utf-8"))
     admitted = relative in config["site_files"] or any(
         relative == directory or relative.startswith(directory + "/")

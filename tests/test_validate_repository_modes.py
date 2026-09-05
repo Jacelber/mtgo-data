@@ -312,7 +312,9 @@ def test_changed_plan_adds_only_the_triggered_coupled_contracts():
 
 
 @pytest.mark.parametrize("path", ["configs/mtgo_weekly_review_completions.yaml",
-    "src/mtgmeta/mtgo/publication.py", "src/mtgmeta/mtgo/stats.py", "data/standard/synthetic.json"])
+    "src/mtgmeta/mtgo/publication.py", "src/mtgmeta/mtgo/stats.py", "data/standard/synthetic.json",
+    "configs/formats.yaml", "data/synthetic-third/100.json", "stats/synthetic-third/mtgo/meta.json",
+    "reports/synthetic-third/mtgo/index.json"])
 def test_reviewed_publication_changes_select_only_read_only_closure(path):
     plan = changed_validation_plan([path], [path])
     assert plan.reference_groups == frozenset({"classifier-closure"})

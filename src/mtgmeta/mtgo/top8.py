@@ -12,7 +12,7 @@ from mtgmeta.classifier import classifier_digest
 from mtgmeta.consumer import identity_display_name
 from mtgmeta.rules import ArchetypeDefinition
 
-from . import load_mtgo_context
+from . import require_product_output, load_mtgo_context
 from . import stats
 from .normalize import load_rules_for_format
 from . import week_lifecycle
@@ -766,7 +766,7 @@ def build_all_top8(
         context.paths["events"],
         repository_root=context.repository_root,
         format_id=format_id,
-        public=True,
+        public=context.definition.public,
     )
     rules = load_rules_for_format(root, format_id, registry_path=registry_path)
     output = (
@@ -774,6 +774,7 @@ def build_all_top8(
         if output_directory is not None
         else context.paths["statistics"] / "top8"
     )
+    require_product_output(context, output)
     return write_latest_week(
         events,
         rules,
