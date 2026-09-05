@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 import build_pages_artifact
+from mtgmeta.catalog import write_catalog
 from tools.build_landing_card_image_cache import (
     CacheBuildError,
     build_cache_bundle,
@@ -342,6 +343,34 @@ def test_verifier_rejects_changed_image_bytes(tmp_path):
 
 def test_pages_builder_admits_only_verified_configured_overlay(tmp_path, monkeypatch):
     root = _synthetic_subject_root(tmp_path)
+    # The overlay fixture must also satisfy the shared Pages admission boundary.
+    formats = []
+    for format_name in ("standard", "modern"):
+        formats.append({
+            "id": format_name, "display_name": format_name.title(),
+            "state": "executable", "public": True,
+            "mtgo": {
+                "enabled": True, "event_collection_enabled": True,
+                "capabilities": [
+                    "classification", "event_statistics", "range_statistics",
+                    "matchup_statistics", "weekly_top8", "completeness_reporting",
+                    "landing_generation", "metadata_generation", "catalog_generation",
+                ],
+                "paths": {
+                    "events": f"data/{format_name}",
+                    "matches": f"data/{format_name}/mtgo/matches",
+                    "rules": f"my_archetypes/{format_name}.yaml",
+                    "statistics": f"stats/{format_name}/mtgo",
+                    "reports": f"reports/{format_name}/mtgo",
+                },
+            },
+        })
+        for suffix in ("meta.json", "matchup_index.json", "top8/index.json", "landing/current.json"):
+            path = root / f"stats/{format_name}/mtgo/{suffix}"
+            if not path.exists():
+                _write_json(path, {})
+    _write_json(root / "configs/formats.yaml", {"schema_version": "1.3.0", "formats": formats})
+    write_catalog(root, generated_at="2026-08-17T00:00:00+00:00")
     (root / "index.html").write_text("ok", encoding="utf-8")
     (root / "assets/base.txt").parent.mkdir(parents=True, exist_ok=True)
     (root / "assets/base.txt").write_text("base", encoding="utf-8")
