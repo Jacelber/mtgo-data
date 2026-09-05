@@ -40,6 +40,7 @@ WORKBOOK_SHEETS = (
     "Field Guide",
 )
 WORKBOOK_REVIEW_STAGES = {"chinese", "bilingual"}
+HISTORICAL_REVIEW_FORMATS = frozenset({"standard", "modern"})
 _OOXML_MAIN = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 _OOXML_REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 _PACKAGE_REL = "http://schemas.openxmlformats.org/package/2006/relationships"
@@ -60,6 +61,31 @@ def document_digest(value: Any) -> str:
         default=str,
     )
     return hashlib.sha256(material.encode("utf-8")).hexdigest()
+
+
+def name_catalog_binding_digest(
+    document: Mapping[str, Any],
+    *,
+    review_schema_version: str,
+    format_id: str,
+) -> str:
+    """Bind legacy reviews to their old scope and new reviews to one format."""
+
+    if review_schema_version == REVIEW_SCHEMA_VERSION:
+        selected = HISTORICAL_REVIEW_FORMATS
+    elif review_schema_version == FORMAT_SCOPED_REVIEW_SCHEMA_VERSION:
+        selected = frozenset({format_id})
+    else:
+        raise MTGOLandingEditorialError(
+            f"unsupported Landing review version: {review_schema_version}"
+        )
+    subject = {
+        "schema_version": document["schema_version"],
+        "names": [
+            dict(item) for item in document["names"] if item["format"] in selected
+        ],
+    }
+    return document_digest(subject)
 
 
 def file_sha256(path: str | Path) -> str:
@@ -984,82 +1010,6 @@ def _event_id(value: Any) -> str:
     return match.group(1) if match else ""
 
 
-def _catalog_from_workbook(
-    repository_root: Path,
-    rows: list[dict[str, Any]],
-    *,
-    formats: set[str] | None = None,
-) -> dict[str, Any]:
-    selected = formats or {"standard", "modern"}
-    taxonomy = {
-        row["identity_key"]: row
-        for format_id in sorted(selected)
-        for row in _taxonomy_rows(repository_root, format_id)
-    }
-    names: list[dict[str, Any]] = []
-    for row in rows:
-        format_id = str(row.get("Format") or "")
-        if format_id not in selected:
-            continue
-        if row.get("Review Result") != "APPROVED":
-            raise MTGOLandingEditorialError("bilingual name row lacks explicit APPROVED review")
-        parent_id = str(row.get("Parent ID") or "")
-        subtype_id = str(row.get("Subtype ID") or "").strip() or None
-        identity_key = _identity_key(format_id, parent_id, subtype_id)
-        if row.get("Identity Key") != identity_key:
-            raise MTGOLandingEditorialError(
-                f"bilingual name identity key changed: {row.get('Identity Key')!r}"
-            )
-        if identity_key not in taxonomy:
-            raise MTGOLandingEditorialError(
-                f"bilingual name identity is absent from the classifier: {identity_key}"
-            )
-        names.append(
-            {
-                "format": format_id,
-                "parent_id": parent_id,
-                "subtype_id": subtype_id,
-                "english": taxonomy[identity_key]["english"],
-                "chinese": str(row.get("Chinese Final") or "").strip(),
-                "review_status": "approved",
-                "identity_key": identity_key,
-            }
-        )
-    workbook_keys = {item["identity_key"] for item in names}
-    if workbook_keys != set(taxonomy):
-        missing = sorted(set(taxonomy) - workbook_keys)
-        extra = sorted(workbook_keys - set(taxonomy))
-        raise MTGOLandingEditorialError(
-            "workbook name scope is incomplete or stale: "
-            f"missing={missing[:5]}; extra={extra[:5]}"
-        )
-    current_path = repository_root / DEFAULT_NAME_CATALOG
-    if current_path.is_file():
-        current_document = load_name_catalog_document(current_path)
-        selected_rows = {item["identity_key"]: item for item in names}
-        merged: list[dict[str, Any]] = []
-        for item in current_document["names"]:
-            if item["format"] in selected:
-                replacement = selected_rows.pop(item["identity_key"], None)
-                if replacement is not None:
-                    merged.append(replacement)
-            else:
-                merged.append(dict(item))
-        merged.extend(
-            selected_rows[key]
-            for key in sorted(selected_rows)
-        )
-        names = merged
-    document = {"schema_version": NAME_SCHEMA_VERSION, "names": names}
-    _validate_schema(
-        document,
-        repository_root / DEFAULT_NAME_SCHEMA,
-        "imported bilingual name catalog",
-    )
-    _validate_name_catalog_document(repository_root, document, formats=selected)
-    return document
-
-
 def _name_lookup_from_document(
     document: Mapping[str, Any],
 ) -> dict[tuple[str, str, str | None], dict[str, str]]:
@@ -1534,11 +1484,9 @@ def _validated_workbook_subject(
                 "review workbook has no valid scope for the requested format"
             )
     selected_formats = {scope[0] for scope in scopes}
-    catalog_document = _catalog_from_workbook(
-        root,
-        sheets["Field Guide"],
-        formats=selected_formats,
-    )
+    catalog_path = root / DEFAULT_NAME_CATALOG
+    validate_name_catalog(root, catalog_path, formats=selected_formats)
+    catalog_document = load_name_catalog_document(catalog_path)
     names = _name_lookup_from_document(catalog_document)
     subjects = {scope: build_top8_subject(root, *scope) for scope in scopes}
     for scope, subject in subjects.items():
@@ -1558,13 +1506,6 @@ def _validated_workbook_subject(
     reviews: dict[tuple[str, str], dict[str, Any]] = {}
     for scope in sorted(scopes):
         format_id, week = scope
-        format_catalog = {
-            "schema_version": catalog_document["schema_version"],
-            "names": [
-                dict(item) for item in catalog_document["names"]
-                if item["format"] == format_id
-            ],
-        }
         subject = subjects[scope]
         features = feature_rows[scope]
         feature_tokens = {item["destination_id"] for item in features}
@@ -1576,12 +1517,13 @@ def _validated_workbook_subject(
             }
             for item in subject["all_top8"]
         ]
+        review_schema_version = (
+            REVIEW_SCHEMA_VERSION
+            if selected_formats <= HISTORICAL_REVIEW_FORMATS
+            else FORMAT_SCOPED_REVIEW_SCHEMA_VERSION
+        )
         document = {
-            "schema_version": (
-                REVIEW_SCHEMA_VERSION
-                if selected_formats <= {"standard", "modern"}
-                else FORMAT_SCOPED_REVIEW_SCHEMA_VERSION
-            ),
+            "schema_version": review_schema_version,
             "format": format_id,
             "source": SOURCE_ID,
             "week": subject["week"],
@@ -1592,10 +1534,10 @@ def _validated_workbook_subject(
                 "selection_policy_digest": subject["selection_policy_digest"],
                 "machine_fact_digest": subject["machine_fact_digest"],
                 "link_catalog_digest": subject["link_catalog_digest"],
-                "bilingual_catalog_digest": document_digest(
-                    format_catalog
-                    if selected_formats - {"standard", "modern"}
-                    else catalog_document
+                "bilingual_catalog_digest": name_catalog_binding_digest(
+                    catalog_document,
+                    review_schema_version=review_schema_version,
+                    format_id=format_id,
                 ),
             },
             "candidate_evidence": subject["candidate_evidence"],
@@ -1677,10 +1619,12 @@ def import_review_workbook(
         formats=formats,
         stage="bilingual",
     )
-    catalog_document = validated["catalog_document"]
     reviews = validated["reviews"]
+    source_catalog_path = root / DEFAULT_NAME_CATALOG
     catalog_path = output / DEFAULT_NAME_CATALOG
-    _write_yaml(catalog_path, catalog_document)
+    if catalog_path != source_catalog_path:
+        catalog_path.parent.mkdir(parents=True, exist_ok=True)
+        catalog_path.write_bytes(source_catalog_path.read_bytes())
     review_paths: list[Path] = []
     for (format_id, week), document in sorted(reviews.items()):
         review_path = output / f"stats/{format_id}/mtgo/landing/review/{week}.yaml"
@@ -1737,6 +1681,7 @@ __all__ = [
     "load_name_catalog",
     "load_name_catalog_document",
     "load_review_document",
+    "name_catalog_binding_digest",
     "materialize_review",
     "read_review_workbook",
     "validate_name_catalog",

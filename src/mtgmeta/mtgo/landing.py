@@ -32,6 +32,7 @@ PRIVATE_LANDING_SCHEMA_VERSION = "1.3.0"
 FEATURE_ARCHIVE_SCHEMA_VERSION = "1.0.0"
 FEATURE_ARCHIVE_PRODUCT_ID = "mtgo-landing-features"
 DEFAULT_VISUALS_PATH = Path("configs/mtgo_landing_visuals.yaml")
+HISTORICAL_LANDING_FORMATS = frozenset({"standard", "modern"})
 DECK_LINK_TOKEN_PATTERN = re.compile(r"deck:[0-9a-f]{20}")
 CLASSIFIER_RESTATEMENT_BINDINGS = frozenset(
     {"classifier_digest", "machine_fact_digest"}
@@ -174,6 +175,30 @@ def load_visual_metadata(
                 f"{source}: {format_id} subtype fallback list is invalid"
             )
     return dict(document)
+
+
+def visual_metadata_binding_digest(
+    document: Mapping[str, Any],
+    *,
+    landing_schema_version: str,
+    format_id: str,
+) -> str:
+    """Bind legacy Landing to its old scope and private Landing to one format."""
+
+    selected = (
+        frozenset({format_id})
+        if landing_schema_version == PRIVATE_LANDING_SCHEMA_VERSION
+        else HISTORICAL_LANDING_FORMATS
+    )
+    subject = {
+        "schema_version": document["schema_version"],
+        "formats": {
+            current_format: dict(value)
+            for current_format, value in document["formats"].items()
+            if current_format in selected
+        },
+    }
+    return screening.document_digest(subject)
 
 
 def _key_cards(
@@ -759,10 +784,13 @@ def build_document(
     rules_digest = classifier_digest(rules)
     selection_policy_digest = screening.document_digest(screening.load_screening_policy(root))
     visual_metadata = load_visual_metadata(root, visuals_path)
-    visual_metadata_digest = screening.document_digest(
-        {"format": format_id, "visuals": visual_metadata["formats"].get(format_id)}
-        if private
-        else visual_metadata
+    landing_schema_version = (
+        PRIVATE_LANDING_SCHEMA_VERSION if private else LANDING_SCHEMA_VERSION
+    )
+    visual_metadata_digest = visual_metadata_binding_digest(
+        visual_metadata,
+        landing_schema_version=landing_schema_version,
+        format_id=format_id,
     )
     display_names = _display_names(rules)
     comparison_available = bool(
@@ -899,16 +927,10 @@ def build_document(
                 "selection_policy_digest": selection_policy_digest,
                 "machine_fact_digest": machine_fact_digest,
                 "link_catalog_digest": editorial.document_digest(current_catalog),
-                "bilingual_catalog_digest": editorial.document_digest(
-                    {
-                        "schema_version": name_document["schema_version"],
-                        "names": [
-                            dict(item) for item in name_document["names"]
-                            if item["format"] == format_id
-                        ],
-                    }
-                    if private
-                    else name_document
+                "bilingual_catalog_digest": editorial.name_catalog_binding_digest(
+                    name_document,
+                    review_schema_version=str(review["schema_version"]),
+                    format_id=format_id,
                 ),
             }
             binding_fields = (
@@ -984,7 +1006,7 @@ def build_document(
                 "summary_fact_digest": summary_fact_digest,
             },
         },
-        schema_version=PRIVATE_LANDING_SCHEMA_VERSION if private else LANDING_SCHEMA_VERSION,
+        schema_version=landing_schema_version,
     )
     validate_document(document)
     return review_status, document
@@ -1266,4 +1288,5 @@ __all__ = [
     "load_visual_metadata",
     "machine_fact_digest_for_week",
     "validate_document",
+    "visual_metadata_binding_digest",
 ]
