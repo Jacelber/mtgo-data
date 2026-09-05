@@ -217,7 +217,7 @@ jobs:
           if [[ "$VALIDATION_TRIGGERS" == *repository-modes* ]]; then
             TESTS+=(tests/test_validate_repository_modes.py)
           fi
-          python -B -m pytest \
+          GITHUB_EVENT_NAME=local_measurement python -B -m pytest \
             --basetemp="${RUNNER_TEMP}/pytest-targeted-governance" \
             "${TESTS[@]}"
   post-merge-confirmation:

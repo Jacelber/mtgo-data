@@ -167,6 +167,7 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
     governance = by_name["Validate changed governance contracts"]["run"]
     assert "tests/test_pages_candidate_measurement.py" in governance
     assert "tests/test_trusted_pages_artifact.py" in governance
+    assert "GITHUB_EVENT_NAME=local_measurement python -B -m pytest" in governance
     package_install = by_name["Install maintained package for code and data checks"]
     assert "code" in package_install["if"]
     assert "data" in package_install["if"]
