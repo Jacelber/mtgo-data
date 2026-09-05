@@ -41,7 +41,7 @@ def _deck_records(document: dict):
                 yield subtype["average_deck"]["medoid"]
 
 
-@pytest.mark.parametrize("format_id", ("standard", "modern"))
+@pytest.mark.parametrize("format_id", ("standard", "modern", "pauper"))
 @pytest.mark.parametrize("weeks", DECK_RANGES)
 def test_current_representative_decks_keep_source_event_context(
     format_id: str,
@@ -55,7 +55,7 @@ def test_current_representative_decks_keep_source_event_context(
         assert deck["event_name"].strip()
 
 
-@pytest.mark.parametrize("format_id", ("standard", "modern"))
+@pytest.mark.parametrize("format_id", ("standard", "modern", "pauper"))
 def test_current_matchup_consumer_follows_generated_parent_order(
     format_id: str,
 ) -> None:
@@ -107,7 +107,7 @@ process.stdout.write(JSON.stringify({
         )
 
 
-@pytest.mark.parametrize("format_id", ("standard", "modern"))
+@pytest.mark.parametrize("format_id", ("standard", "modern", "pauper"))
 @pytest.mark.parametrize("weeks", RANGES)
 def test_current_freshness_inputs_are_internally_consistent(
     format_id: str,
@@ -131,7 +131,7 @@ def test_current_freshness_inputs_are_internally_consistent(
     )
 
 
-@pytest.mark.parametrize("format_id", ("standard", "modern"))
+@pytest.mark.parametrize("format_id", ("standard", "modern", "pauper"))
 def test_current_top8_freshness_inputs_follow_the_latest_generated_week(
     format_id: str,
 ) -> None:

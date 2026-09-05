@@ -30,12 +30,20 @@ formats:
 
   - id: "pauper"
     display_name: "Pauper"
-    state: "planned"
+    state: "executable"
     public: false
     mtgo:
-      enabled: false
+      enabled: true
       event_collection_enabled: true
-      capabilities: []
+      capabilities:
+        - "classification"
+        - "event_statistics"
+        - "range_statistics"
+        - "matchup_statistics"
+        - "weekly_top8"
+        - "completeness_reporting"
+        - "metadata_generation"
+        - "catalog_generation"
       paths:
         events: "data/pauper"
         matches: "data/pauper/mtgo/matches"
