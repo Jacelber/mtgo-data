@@ -61,12 +61,15 @@ exact named task and lane. Do not require or create a STATUS-only change to
 repeat that authority. Owner acceptance binds the approved objective, semantic
 and visible result, protected scope, and task delta; it does not bind the task
 to an obsolete base commit. Acceptance authorizes continuous completion of
-that same task through local commit, one Ready PR, required CI, merge, and
-applicable publication. Follow the bounded accepted-task base-refresh procedure
-in `docs/DEVELOPMENT_WORKFLOW.md` when `master` advances. Stop on failed checks,
-changed subject or scope, unproved semantic dependency, permission blocker, or
-a new product or statistical decision. Never carry authorization into another
-task or phase.
+that same task through local commit, one Ready PR, required CI, eligible bounded
+pre-merge repair, merge, and applicable publication. A failed required check
+closes the merge gate but does not by itself require new authorization. Follow
+the accepted-task repair and base-refresh procedures in
+`docs/DEVELOPMENT_WORKFLOW.md`; stop when a repair is ineligible, unproved, or
+exhausts its limit, or when the subject or scope changes, a semantic dependency
+is unproved, permissions block the documented path, or a new product,
+statistical, editorial, or security decision is required. Never carry
+authorization into another task or phase.
 
 Before an authorized GitHub write, run
 `tools/github_publication_preflight.ps1 -ActualPublicationContext -PrBodyFile

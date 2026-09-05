@@ -43,9 +43,9 @@ A workspace created during the current authorized task may continue after a comp
 | 1: Scope and risk confirmation | Confirm scope, paths, permissions, and risks. | Confirmed boundaries. | Stop on scope or risk conflict. |
 | 2: Disposable workspace bootstrap | Establish an isolated workspace. | Verified topology and runtime. | Stop if isolation or preflight fails. |
 | 3: Autonomous isolated implementation | Perform permitted in-scope work. | Focused local change. | Stop on an unauthorized operation. |
-| 4: Automated technical acceptance | Validate the change. | Passing validation evidence. | Stop on unresolved validation failure. |
-| 5: Owner acceptance and completion authority | Obtain owner review of the completed task. Acceptance authorizes continuous completion of that exact task. | Owner decision and accepted subject. | Stop pending owner confirmation. |
-| 6: Accepted-task completion | Commit, publish a Ready PR, merge after required checks pass, and perform the task's applicable publication or production steps. | Completed accepted task. | Stop on failed checks, changed subject, conflict, permission blocker, or scope expansion. |
+| 4: Automated technical acceptance | Validate the change and map every required check to its actual execution contract. | Passing local evidence, resolved execution mapping, and explicit cloud-only pending items. | Stop on an unresolved local failure, invalid evidence, or unmapped requirement. |
+| 5: Owner acceptance and completion authority | Obtain owner review of the completed task. Acceptance authorizes continuous completion of that exact task. | Owner decision and exact acceptance anchor. | Stop pending owner confirmation. |
+| 6: Accepted-task completion | Commit, publish a Ready PR, satisfy required checks, merge, and perform the task's applicable publication or production steps. | Completed accepted task. | Stop when repair is ineligible or exhausted, the accepted subject changes, exact proof or permissions fail, a conflict appears, or scope expands. |
 
 Never start the next task automatically.
 
@@ -135,6 +135,19 @@ replaced the accumulated ordinary suite with the trigger-specific inventory in
 `docs/TEST_TRIGGER_MATRIX.md`; GOV-09 removed post-acceptance UI automation.
 No workflow may invoke unbounded pytest.
 
+Before Gate 5, map every new or affected required validation to its exact test
+or check, invocation, runtime environment and identity, existing evidence, and
+cloud-only remainder. Confirm that selection logic actually executes the test,
+that local simulation and publication identities are not confused, that
+platform skips have an identified evidence owner, and that the asserted object
+is the object the requirement protects. Read existing commands and configuration
+first, reuse valid evidence, and run only the smallest check needed for a
+specific unproved risk. Local Acceptance normally reports only whether this
+mapping is complete, any unresolved exception, and the evidence that remains
+cloud-only. Keep detail traceable in existing execution records; do not create
+a permanent checklist or substitute an unsupported assertion that review
+occurred.
+
 At Gate 5, present the owner with the original declaration, the actual changed
 artifact list, the relevant source or rendered diff, and verification matched
 to the impact: browser behavior for `user_visible_ui`, field and consumer
@@ -144,6 +157,14 @@ evidence for `public_path`. A Phase 12 UI task, for example, declares
 and shows the owner the final changed state and URL before acceptance. That
 Owner review is the final UI acceptance evidence. Do not rerun automated UI or
 browser tests afterward unless a user-visible file changes.
+
+Acceptance covers the objective and task delta; product, business, statistical,
+editorial, and security meaning; reviewed visible and public-path results;
+artifact impact; Schema, data, retention, and privacy boundaries; protected
+scope; and every decision requiring human judgment. Record the exact base and
+head or staged tree, complete changed paths, and supporting evidence as the
+original acceptance anchor. Later repair evidence supplements that anchor; it
+never replaces or reinterprets it.
 
 After acceptance, commit the unchanged reviewed UI tree and print its subject
 marker with:
@@ -202,13 +223,17 @@ named task and lane; no STATUS-only authorization change is required. Before
 Owner acceptance, separate authorization is required for remote writes. Owner
 acceptance then authorizes local commit, push, one Ready pull request,
 required-check waiting, merge, and the accepted task's applicable publication
-or production completion without repeated prompts. The accepted subject is the
-approved objective, semantic and visible result, protected scope, and task
-delta. It need not retain an obsolete base commit, but may move only through
-the bounded mechanical refresh procedure below. Stop and return to the Owner
-when a required check fails, the accepted subject or scope changes, mechanical
-proof fails, an unproved semantic dependency appears, permissions block the
-documented path, or a new product or statistical decision is required.
+or production completion without repeated prompts, including an eligible
+bounded repair before merge. The accepted subject is the approved objective,
+semantic and visible result, protected scope, and task delta. It need not retain
+an obsolete base commit, but may move only through the bounded repair and
+mechanical refresh procedures below. A failed required check closes the merge
+gate while the failure remains; apply the repair eligibility and limit rules
+below before deciding whether Owner re-entry is required. Stop and return to the
+Owner when those rules require it, the accepted subject or scope changes,
+mechanical proof fails, an unproved semantic dependency appears, permissions
+block the documented path, or a new product, statistical, editorial, or security
+decision is required.
 Acceptance never carries to another task or phase, unrelated credentials,
 force-push, repository settings, secrets, or destructive action outside the
 accepted contract.
@@ -219,7 +244,196 @@ force-push, and automatic next-task startup.
 
 ## Validation-failure handling
 
-A validation failure does not itself require new Owner authorization. Codex may diagnose and repair it locally when the repair remains within the approved task objective, introduces no unapproved product or statistical semantics, accesses no protected resource, requires no remote write, does not weaken the intended validation guarantee, and is fully disclosed. Stop when completion would require an unresolved product or statistical decision, material task or phase expansion, sensitive access, protected-environment modification, acceptance of unexplained production behavior, weakened validation, unauthorized remote write, or an explicitly protected or prohibited path.
+A validation failure does not itself require new Owner authorization. Before
+acceptance, Codex may diagnose and repair it locally when the repair remains
+within the approved task objective, introduces no unapproved semantics,
+accesses no protected resource, requires no remote write, preserves the intended
+validation guarantee, and is fully disclosed. After acceptance and before
+merge, diagnosis, repair, local validation, commit, and same-PR publication may
+continue only under the bounded-repair rules below. Local authority never
+creates remote authority that has not yet been granted. Stop when completion
+would require an unresolved human decision, material task or phase expansion,
+sensitive access, protected-environment modification, acceptance of unexplained
+production behavior, weakened validation, unauthorized remote write, or an
+explicitly protected or prohibited path.
+
+## Accepted-task bounded repair
+
+After Gate 5 and before merge, an unsatisfied required validation closes the
+merge gate but does not automatically require new repair authorization. A
+repair may continue only when every condition below is proved:
+
+1. The accepted objective, semantic and visible result, and product, business,
+   statistical, editorial, and security decisions remain unchanged.
+2. Artifact impact, public paths, Schemas, data, retention, and privacy
+   boundaries remain unchanged.
+3. Protected scope and explicit prohibited paths or resources remain untouched.
+4. The repair adds no dependency, credential, secret, permission, repository
+   setting, or external-service authority.
+5. The intended validation guarantee remains at least as strong and the repair
+   creates no new human policy decision.
+6. The changed implementation, invocation, environment, harness, or fixture
+   directly restores an accepted requirement or its effective validation, with
+   a concrete supporting diff and evidence.
+7. The work remains on the same task, branch, and unmerged pull request, and the
+   repair-round limit remains available.
+
+For each unsatisfied validation, first record the exact stage, command or test,
+commit, environment, and log, then classify the cause as an implementation
+defect, test-definition error, execution-entry omission, environment problem,
+or infrastructure problem. Inspect only the directly connected selection
+condition, invocation, runtime identity, fixture, and output criterion. Every
+rerun must state what the prior failure supports, what evidence or hypothesis
+changed, and what the smallest next check will prove. Without a new input,
+diagnosis, or hypothesis, do not repeat the command. If the same root cause
+recurs after repair, diagnose it again and stop when no evidenced in-scope next
+step exists. If a test expectation materially conflicts with or leaves the
+accepted requirement ambiguous, return to the Owner instead of choosing the
+easier interpretation.
+
+Required failing tests may not be deleted, skipped, xfailed, weakened, narrowed,
+or rewritten to accept noncompliant behavior. Do not bypass a validator, weaken
+fail-closed behavior, suppress a required trigger, or make a real-identity check
+permanently unreachable. A disclosed platform exception remains an exception,
+not passing evidence; its required complementary environment must be named.
+
+The original acceptance anchor remains immutable. A legal repair may change the
+implementation diff, tree, commit, and pull-request head. For every repair,
+record the original anchor; the before and after commits; changed paths and
+diff; the accepted requirement restored; affected validation; and final result.
+Prove preservation from the actual delta, unchanged artifacts, and focused or
+existing evidence. Evidence is invalidated only where the implementation,
+fixture, environment, or input could affect it. Old-head CI never proves a new
+head, and every new head must satisfy its exact required checks. An unsupported
+preservation claim is a stop condition.
+
+An `owner-ui-accepted` marker remains valid only under its existing blob-subject
+rules. A repair that invalidates the marker or changes an Owner-reviewed UI or
+public artifact returns to Gate 5; visual similarity is not reusable evidence.
+Repair and accepted-task base refresh have separate counters and separate proof.
+After a legal repair, its latest verified head is the task head to preserve in
+the refresh procedure while the original acceptance anchor and repair history
+remain recorded. Stop if the existing refresh helper cannot express or prove
+that relationship. A mixed repair and refresh cannot evade either limit.
+
+One repair round begins when an unsatisfied validation is followed by publishing
+one repair group to the same pull request; publishing that head consumes the
+round even if its run is later cancelled. Local diagnosis does not consume a
+round. At most two post-acceptance remote repair rounds are allowed for one task,
+and the count survives renamed failures, branch changes, new conversations, and
+repeat acceptance. After the second round, any unsatisfied required validation
+returns to the Owner unless the Owner explicitly adds a limited allowance while
+preserving the accumulated count.
+
+Before every repair-head remote write, prepare the accurate pull-request body
+and run the existing publication preflight against the exact base and head, with
+workflow scope when applicable. Only `READY` permits the documented
+command-scoped push to the same branch and Ready pull request. Do not force-push,
+rebase published history, or create a replacement pull request. Return to the
+Owner immediately when eligibility cannot be proved, the limit is exhausted,
+the accepted subject or a protected boundary changes, a new human decision or
+privilege is needed, validation would weaken, exact refresh or merge proof
+fails, or permissions block the documented path. The return report identifies
+the root cause and evidence, attempted repairs, accumulated rounds, affected
+boundary, and smallest next option.
+
+These repair rules end at merge. A post-merge publication or production failure
+uses only an already applicable recovery authority; otherwise diagnose and
+report without rollback, settings changes, dispatch, or a new repair pull
+request. The observation-comment permission below permits evidence maintenance,
+not code repair or deployment. DEC-165 makes this section effective only after
+the governance change that introduced it merges; that governance task itself
+completes under the prior failure-stop rule.
+
+## Owner-minimal-operation observation
+
+After DEC-165 takes effect, lock the first three ordinary engineering tasks that
+have completed Gate 5 and first enter a Ready pull request, ordered by the
+GitHub timestamp of Ready creation or first Draft-to-Ready conversion. Exclude
+the DEC-165 governance task, consultation, and independent governance work.
+Lock each sample at first Ready even if it later blocks, fails, is cancelled, or
+does not complete; do not replace it with a later success. Count Owner re-entry
+from that task's first Gate 5 acceptance through complete Remote Completion,
+including pre-PR and post-merge events. Determine the sequence from all
+qualifying pull requests, not only those that already contain an observation
+comment. A task that never enters Ready is not a sample. Uncertain ordering or
+eligibility is reported as insufficient evidence rather than guessed.
+
+Each sampled task uses exactly one top-level comment on its existing pull
+request as its observation and repair ledger. Create it once after first Ready,
+then update the same comment by verified ID. Match the fixed marker, task ID, and
+author identity; never select the last comment. Multiple matches or uncertain
+identity stop evidence maintenance. Gate 5 completion authority includes this
+one comment's creation and updates, including a final post-merge evidence update,
+but grants no other comment, code, deployment, or pull-request authority. Record
+the returned comment ID and URL and cite that URL from the existing task report.
+An `evidence persistence blocker` report must preserve the unsaved content when
+creation or update fails; the sample remains locked and is not replaced.
+
+Use this format:
+
+```text
+<!-- owner-minimal-operation-observation:v1 -->
+Owner Minimal Operation observation
+- task_id / pr_url:
+- first_ready_at / evidence:
+- first_acceptance_at / accepted_subject_reference:
+- status: completed | blocked | cancelled | in_progress
+- first_required_validation_satisfied: yes | no | pending
+- avoidable_validation_omission: yes | no | unknown
+- mechanical_owner_reentry: <N>
+- decision_owner_reentry: <N>
+- owner_reentry_events: <none, or one short entry per request>
+  - request_reference / reason:
+    category: mechanical | decision
+    stage: pre_pr | pre_merge | post_merge
+    repair_authority_available: yes | no | unknown
+    authority_reason: <within_scope | post_merge | limit_exhausted | permission_boundary | other reason>
+- repair_rounds: <N>
+- repeated_root_cause: yes | no | unknown
+- authority_compliant: yes | no | unknown
+- validation_weakened: yes | no | unknown
+- accepted_subject_preserved: yes | no | unknown
+- repair_evidence: <failure, paths, before/after commits, checks, links; or none>
+```
+
+`first_required_validation_satisfied` is `no` for a confirmed missing,
+unexecuted, or invalid required check and `pending` only while normal evidence
+is outstanding. `avoidable_validation_omission` requires evidence that Gate 4
+could have found the omission from existing entries or environment assumptions.
+Mechanical re-entry counts technical requests needed to continue the same task;
+decision re-entry counts a new product, business, editorial, statistical, or
+security decision. A technical request remains mechanical when authority was
+unavailable, the repair limit was exhausted, it occurred post-merge, or the
+Owner was asked to accept the same mechanical repair again. Progress updates,
+completion reports, and later-task discussion do not count. Record each mixed
+request once under its primary reason, with its stage and then-current authority.
+A repeated root cause requires evidence that the same cause recurred
+after repair or an explicit prevention requirement. Authority compliance,
+validation strength, and accepted-subject preservation are independent findings;
+use `unknown` when evidence is insufficient. An unnecessary Owner prompt adds
+operation burden but is not by itself an authority violation; a correct stop
+without repair authority remains compliant. `validation_weakened: yes` is a
+boundary violation. No repair means zero rounds and `repair_evidence: none`.
+
+The pull-request body remains the sole machine task declaration and must still
+carry the exact current head, artifact impact, file operations, accepted subject,
+and publication statements required by admission. The comment never replaces or
+mutates that body. Do not create a file, issue, tracker, database, YAML or STATUS
+field, CI artifact, dashboard, automation, or pilot task for this observation.
+
+When the third sample reaches Remote Completion or its stop report, update that
+sample's comment once with a three-task summary linking all three comment URLs.
+Report three separate conclusions: Owner operation burden from mechanical and
+decision re-entry; validation execution quality from omissions, first required
+validation, repeated causes, and repair rounds; and authority and validation
+boundaries from compliance, validation strength, and subject preservation.
+Give a final observation-window conclusion only when all three tasks are
+complete with sufficient comment evidence; otherwise report current facts and
+unknowns. If no sample used bounded repair, state that the repair branch lacks a
+real sample. Conclusions apply only to the Ready-PR observation window and do
+not prove that all post-acceptance tasks avoid mechanical interruption.
+Observation findings never authorize a new governance task.
 
 ## Codex task contracts
 
@@ -558,6 +772,12 @@ successful refresh, run the existing publication preflight against `C,D`, push
 the same branch by the documented command-scoped path, let the `synchronize`
 event validate the exact combined subject, refetch `master` immediately before
 merge, and apply this procedure again only within the remaining retry bound.
+
+When a bounded repair precedes refresh, substitute its latest legally verified
+head for the task head `B` used by this mechanical procedure, while retaining
+the original Gate 5 anchor and complete repair evidence. This substitution does
+not reset either counter or reuse old-head CI. Stop when the helper cannot prove
+the resulting exact subject.
 
 ## Publication preflight and records
 
