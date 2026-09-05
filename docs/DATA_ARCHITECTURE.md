@@ -3757,6 +3757,17 @@ production identity, and represents public admission fields as not applicable.
 These contracts do not make a format public and do not authorize collection,
 publication, ledger mutation, or Pages inclusion.
 
+An executable, registered, non-public MTGO format with the `classification`
+capability may produce a repository-external first-name review diagnostic.
+`weekly_classification_name_bootstrap` version `1.0.0` retains the ordinary
+weekly classifier subject, events, records, priority records, and no-decklist
+boundary, but adds the complete taxonomy's parent and subtype rows as
+`name_candidates`. Existing approved Chinese names are reference values;
+missing values and every `chinese_suggestion` remain null. Its
+`bootstrap_subject_digest` covers the complete document except that digest
+field itself. It has no `classification_review_digest`, is pending Owner
+review, and is never formal classification or completion evidence.
+
 The `data_admissions` section of completion configuration 1.2 is a separate
 authority from its `records` section. Each format has a fixed grandfathered
 initial ID set and explicit Owner-accepted full-classification week sets, with

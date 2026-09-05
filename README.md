@@ -278,6 +278,18 @@ classification diagnostics for enabled products.
 Public MTGO producers use only the explicit Owner-approved event IDs in the
 `data_admissions` section of `configs/mtgo_weekly_review_completions.yaml`.
 Collection and private full classification review still see pending events.
+
+An executable non-public format can prepare its first bilingual-name review
+without weakening formal review requirements:
+
+```powershell
+.\.venv\Scripts\python.exe -B tools\export_weekly_classification_review.py mtgo --format <format> --week <ended-iso-week> --name-review-bootstrap --output C:\tmp\name-bootstrap.json
+```
+
+The output must be outside the repository. It lists every taxonomy parent and
+subtype, leaves unapproved Chinese names and suggestions null, and is rejected
+by weekly completion commands. The ordinary `mtgo` export continues to require
+approved names and remains the formal evidence path.
 Data approval is independent of Landing and Weekly completion; Standard and
 Modern can advance separately. Individual producer commands above are candidate
 building steps, not standalone authorization to publish partially updated data.

@@ -171,17 +171,53 @@ def build_mtgo_weekly_review(
     repository_root: str | Path,
     format_id: str,
     week_id: str,
+    *,
+    name_review_bootstrap: bool = False,
 ) -> dict[str, Any]:
     """Return every officially published weekly record, capped at rank 32."""
 
     root = Path(repository_root).resolve()
     from datetime import timedelta
     from .mtgo.publication import week_monday
+    if name_review_bootstrap:
+        from .mtgo.review_scope import parse_review_scopes
+
+        parse_review_scopes(
+            root,
+            [f"{format_id}={week_id}"],
+            capability="classification",
+            private=True,
+        )
     monday = week_monday(week_id)
 
     rule_path = root / "my_archetypes" / f"{format_id}.yaml"
     rules = load_rule_set(rule_path)
     names = _name_authority(root, format_id)
+    taxonomy_names: dict[tuple[str, str | None], dict[str, Any]] = {}
+    name_candidates: list[dict[str, Any]] = []
+    if name_review_bootstrap:
+        # Reuse the Landing owner's canonical taxonomy enumeration and English
+        # display-name composition. This private diagnostic must not become a
+        # second taxonomy implementation.
+        from .mtgo.landing_editorial import _taxonomy_rows
+
+        for item in _taxonomy_rows(root, format_id):
+            key = (item["parent_id"], item["subtype_id"])
+            approved = names.get(key)
+            taxonomy_names[key] = {
+                "english": item["english"],
+                "chinese": approved["chinese"] if approved is not None else None,
+            }
+            name_candidates.append(
+                {
+                    **item,
+                    "existing_approved_chinese": (
+                        approved["chinese"] if approved is not None else None
+                    ),
+                    "chinese_suggestion": None,
+                    "review_status": "pending_owner_review",
+                }
+            )
     retained = _event_map(root, format_id)
     events = [event for _, event in retained.values()
               if monday.isoformat() <= str(event["starttime"])[:10]
@@ -223,7 +259,9 @@ def build_mtgo_weekly_review(
                 "high_score_count": None,
                 "rank": rank,
                 "player": str(player.get("player") or player.get("name") or ""),
-                "identity": _localized_identity(result, names),
+                "identity": _localized_identity(
+                    result, taxonomy_names if name_review_bootstrap else names
+                ),
                 "classification": _classification(result),
                 "priority_reasons": _priority_reasons(result),
                 "source_locator": f"{source_file}#players/{index}",
@@ -258,9 +296,13 @@ def build_mtgo_weekly_review(
             for row in rows
         ],
     }
-    return {
+    document = {
         "schema_version": "1.0.0",
-        "document_type": "weekly_full_classification_review",
+        "document_type": (
+            "weekly_classification_name_bootstrap"
+            if name_review_bootstrap
+            else "weekly_full_classification_review"
+        ),
         "week": week_id,
         "format": format_id,
         "source": "mtgo",
@@ -274,9 +316,15 @@ def build_mtgo_weekly_review(
         "machine_priority_records": [
             row for row in rows if row["priority_reasons"]
         ],
-        "classification_review_digest": _sha256_json(subject),
         "decklists_embedded": False,
     }
+    if name_review_bootstrap:
+        document["review_status"] = "pending_owner_review"
+        document["name_candidates"] = name_candidates
+        document["bootstrap_subject_digest"] = _sha256_json(document)
+    else:
+        document["classification_review_digest"] = _sha256_json(subject)
+    return document
 
 
 def mtgo_record_detail(
@@ -540,6 +588,11 @@ def build_v2_completion_record(
     formats = {}
     for format_id in by_format:
         review = by_format[format_id]
+        if (
+            review.get("document_type") == "weekly_classification_name_bootstrap"
+            or review.get("review_status") == "pending_owner_review"
+        ):
+            raise ValueError(f"{format_id} name bootstrap is not completion evidence")
         if review.get("week") != week_id:
             raise ValueError(f"{format_id} review week does not match {week_id}")
         classifier = review.get("classifier")
