@@ -76,6 +76,22 @@ python -B tools/export_weekly_classification_review.py mtgo --week <week> --form
 python -B tools/export_weekly_classification_review.py melee --format <format> --event-id <event> --output <review.json>
 ```
 
+For the first bilingual-name review of an executable non-public format, create
+the private diagnostic outside the repository:
+
+```text
+python -B tools/export_weekly_classification_review.py mtgo --format <format> --week <ended-iso-week> --name-review-bootstrap --output <external-path>/name-bootstrap.json
+```
+
+The flag requires an explicit format, ended week, and external output. It uses
+the shared classifier and complete Landing taxonomy enumeration, including
+parents with subtypes and identities absent from the selected week. Missing
+approved Chinese values and all suggestions remain null for later human
+review. This pending bootstrap document cannot be used by `completion` or
+`format-completion`, even if a formal-looking review digest is added manually.
+Run the ordinary `mtgo` export after names are approved; only that formal
+document can enter completion and publication admission.
+
 Codex renders these source documents as human XLSX carriers. To investigate one
 MTGO row, use `mtgo-detail` with its event and rank. For one Melee row, use
 `melee-detail` with its event and participant ID. Only those focused outputs

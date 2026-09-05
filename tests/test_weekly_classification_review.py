@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
@@ -15,6 +16,7 @@ from mtgmeta.weekly_review import (
     melee_record_detail,
     mtgo_record_detail,
 )
+from tools.export_weekly_classification_review import main as export_review_main
 
 
 def _write_json(path: Path, value: object) -> None:
@@ -27,7 +29,13 @@ def _write_yaml(path: Path, value: object) -> None:
     path.write_text(yaml.safe_dump(value, sort_keys=False), encoding="utf-8")
 
 
-def _registry(root: Path) -> None:
+def _registry(
+    root: Path,
+    *,
+    public: bool = True,
+    state: str = "executable",
+    capabilities: list[str] | None = None,
+) -> None:
     _write_yaml(
         root / "configs/formats.yaml",
         {
@@ -36,12 +44,14 @@ def _registry(root: Path) -> None:
                 {
                     "id": "standard",
                     "display_name": "Standard",
-                    "state": "executable",
-                    "public": True,
+                    "state": state,
+                    "public": public,
                     "mtgo": {
-                        "enabled": True,
+                        "enabled": state == "executable",
                         "event_collection_enabled": True,
-                        "capabilities": ["classification"],
+                        "capabilities": (
+                            ["classification"] if capabilities is None else capabilities
+                        ),
                         "paths": {
                             "events": "data/standard",
                             "matches": "data/standard/mtgo/matches",
@@ -245,6 +255,132 @@ def test_owner_selected_record_returns_exact_deck_and_rules(tmp_path: Path) -> N
     assert detail["source_locator"] == "data/standard/event.json#players/0"
 
 
+def test_name_bootstrap_separates_classification_from_complete_taxonomy_names(
+    tmp_path: Path,
+) -> None:
+    root = _synthetic_root(
+        tmp_path,
+        [_player(2, "Lost Card"), _player(1, "Alpha Card")],
+    )
+    _registry(root, public=False)
+
+    bootstrap = build_mtgo_weekly_review(
+        root, "standard", "2026-W35", name_review_bootstrap=True
+    )
+
+    assert bootstrap["document_type"] == "weekly_classification_name_bootstrap"
+    assert bootstrap["review_status"] == "pending_owner_review"
+    assert "classification_review_digest" not in bootstrap
+    digest = bootstrap.pop("bootstrap_subject_digest")
+    assert digest == sha256(json.dumps(
+        bootstrap, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")).hexdigest()
+    assert [row["rank"] for row in bootstrap["records"]] == [1, 2]
+    assert bootstrap["records"][1]["classification"]["status"] == "classified"
+    assert bootstrap["records"][1]["identity"]["parent_id"] == "lost"
+    assert bootstrap["records"][1]["identity"]["parent_chinese"] is None
+    candidates = {
+        row["identity_key"]: row for row in bootstrap["name_candidates"]
+    }
+    assert set(candidates) == {
+        "standard|alpha|none",
+        "standard|alpha|one",
+        "standard|alpha|two",
+        "standard|lost|none",
+    }
+    assert candidates["standard|alpha|none"]["existing_approved_chinese"] == "甲类"
+    assert candidates["standard|alpha|two"]["existing_approved_chinese"] is None
+    assert all(row["chinese_suggestion"] is None for row in candidates.values())
+    with pytest.raises(ValueError, match="missing approved parent name for lost"):
+        build_mtgo_weekly_review(root, "standard", "2026-W35")
+    names = yaml.safe_load((root / "configs/mtgo_archetype_names.yaml").read_text(encoding="utf-8"))
+    names["names"].append({
+        "format": "standard", "parent_id": "lost", "subtype_id": None,
+        "english": "Lost", "chinese": "失落", "review_status": "approved",
+    })
+    _write_yaml(root / "configs/mtgo_archetype_names.yaml", names)
+    formal = build_mtgo_weekly_review(root, "standard", "2026-W35")
+    for bootstrap_row, formal_row in zip(bootstrap["records"], formal["records"], strict=True):
+        for field in (
+            "source", "format", "event_id", "event_name", "date", "player_count",
+            "high_score_count", "rank", "player", "classification", "priority_reasons",
+            "source_locator",
+        ):
+            assert bootstrap_row[field] == formal_row[field]
+
+
+@pytest.mark.parametrize(
+    ("registry_options", "format_id", "week", "expected"),
+    [
+        ({"public": True}, "standard", "2026-W35", "public: false"),
+        ({"public": False}, "missing", "2026-W35", "unknown format"),
+        ({"public": False, "state": "planned", "capabilities": []}, "standard", "2026-W35", "not enabled"),
+        ({"public": False, "capabilities": ["statistics"]}, "standard", "2026-W35", "classification"),
+        ({"public": False}, "standard", "2099-W01", "has not ended"),
+    ],
+)
+def test_name_bootstrap_rejects_unauthorized_scope_before_writing(
+    tmp_path: Path,
+    registry_options: dict[str, object],
+    format_id: str,
+    week: str,
+    expected: str,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    root = _synthetic_root(tmp_path, [_player(1, "Alpha Card")])
+    _registry(root, **registry_options)  # type: ignore[arg-type]
+    output = tmp_path.parent / f"{tmp_path.name}-external" / "review.json"
+
+    result = export_review_main(
+        [
+            "--repository-root", str(root), "mtgo", "--format", format_id,
+            "--week", week, "--name-review-bootstrap", "--output", str(output),
+        ]
+    )
+
+    assert result == 2
+    assert not output.exists()
+    assert not output.parent.exists()
+    assert expected in capsys.readouterr().out
+
+
+def test_name_bootstrap_requires_external_output_before_writing(tmp_path: Path) -> None:
+    root = _synthetic_root(tmp_path, [_player(1, "Alpha Card")])
+    _registry(root, public=False)
+    internal = root / "diagnostics/review.json"
+    assert export_review_main([
+        "--repository-root", str(root), "mtgo", "--format", "standard",
+        "--week", "2026-W35", "--name-review-bootstrap",
+    ]) == 2
+    assert export_review_main([
+        "--repository-root", str(root), "mtgo", "--format", "standard",
+        "--week", "2026-W35", "--name-review-bootstrap", "--output", str(internal),
+    ]) == 2
+    assert not internal.exists()
+    assert not internal.parent.exists()
+
+
+def test_name_bootstrap_cli_output_supports_existing_mtgo_detail(tmp_path: Path) -> None:
+    root = _synthetic_root(tmp_path, [_player(17, "Alpha Card", name="Selected")])
+    _registry(root, public=False)
+    external = tmp_path.parent / f"{tmp_path.name}-external-chain"
+    review_path = external / "review.json"
+    detail_path = external / "detail.json"
+
+    assert export_review_main([
+        "--repository-root", str(root), "mtgo", "--format", "standard",
+        "--week", "2026-W35", "--name-review-bootstrap", "--output", str(review_path),
+    ]) == 0
+    review = json.loads(review_path.read_text(encoding="utf-8"))
+    row = review["records"][0]
+    assert export_review_main([
+        "--repository-root", str(root), "mtgo-detail", "--format", "standard",
+        "--event-id", row["event_id"], "--rank", str(row["rank"]),
+        "--output", str(detail_path),
+    ]) == 0
+    assert json.loads(detail_path.read_text(encoding="utf-8"))["player"] == "Selected"
+
+
 def test_melee_review_ready_is_independent_of_publication_and_separates_unavailable(
     tmp_path: Path,
 ) -> None:
@@ -418,6 +554,7 @@ def test_v2_completion_record_binds_full_review_subjects() -> None:
     reviews = [
         {
             "format": format_id,
+            "week": "2026-W35",
             "event_ids": ["123456"],
             "classifier": {"subject_digest": digit * 64},
             "classification_review_digest": digit * 64,
@@ -440,3 +577,72 @@ def test_v2_completion_record_binds_full_review_subjects() -> None:
         "classification_review_digest": "a" * 64,
         "landing_content_digest": "c" * 64,
     }
+
+
+@pytest.mark.parametrize("with_formal_digest", [False, True])
+def test_v2_completion_rejects_name_bootstrap_even_with_formal_digest(
+    with_formal_digest: bool,
+) -> None:
+    review = {
+        "document_type": "weekly_classification_name_bootstrap",
+        "review_status": "pending_owner_review",
+        "format": "standard",
+        "week": "2026-W35",
+        "event_ids": ["123456"],
+        "classifier": {"subject_digest": "a" * 64},
+        "bootstrap_subject_digest": "b" * 64,
+    }
+    if with_formal_digest:
+        review["classification_review_digest"] = "c" * 64
+
+    with pytest.raises(ValueError, match="not completion evidence"):
+        build_v2_completion_record(
+            [review],
+            week_id="2026-W35",
+            completed_on="2026-09-05",
+            evidence="owner-review",
+            landing_content_digests={"standard": "d" * 64},
+            independent_format=True,
+        )
+
+
+@pytest.mark.parametrize("command", ["completion", "format-completion"])
+def test_completion_cli_rejects_name_bootstrap(command: str, tmp_path: Path) -> None:
+    root = _synthetic_root(tmp_path, [_player(1, "Alpha Card")])
+    _registry(root, public=False)
+    review = {
+        "document_type": "weekly_classification_name_bootstrap",
+        "review_status": "pending_owner_review",
+        "format": "standard",
+        "week": "2026-W35",
+        "event_ids": ["10"],
+        "classifier": {"subject_digest": "a" * 64},
+        "classification_review_digest": "b" * 64,
+    }
+    review_path = tmp_path / "bootstrap.json"
+    _write_json(review_path, review)
+    output = tmp_path.parent / f"{tmp_path.name}-{command}.json"
+    common = ["--repository-root", str(root), command, "--week", "2026-W35"]
+    if command == "completion":
+        arguments = [
+            *common,
+            "--standard-review", str(review_path),
+            "--modern-review", str(review_path),
+            "--standard-landing-digest", "c" * 64,
+            "--modern-landing-digest", "d" * 64,
+        ]
+    else:
+        arguments = [
+            *common,
+            "--format", "standard",
+            "--review", str(review_path),
+            "--landing-digest", "c" * 64,
+        ]
+    result = export_review_main([
+        *arguments,
+        "--completed-on", "2026-09-05",
+        "--evidence", "owner-review",
+        "--output", str(output),
+    ])
+    assert result == 2
+    assert not output.exists()

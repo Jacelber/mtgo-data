@@ -38,6 +38,7 @@ def main(argv: list[str] | None = None) -> int:
     mtgo.add_argument("--week", required=True)
     mtgo.add_argument("--format", dest="format_id", required=True)
     mtgo.add_argument("--output", type=Path)
+    mtgo.add_argument("--name-review-bootstrap", action="store_true")
 
     melee = subparsers.add_parser("melee")
     melee.add_argument("--format", dest="format_id", required=True)
@@ -78,11 +79,27 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     root = args.repository_root.resolve()
     try:
+        if args.command == "mtgo" and args.name_review_bootstrap:
+            if args.output is None:
+                raise ValueError("name review bootstrap requires --output")
+            try:
+                args.output.resolve().relative_to(root)
+            except ValueError:
+                pass
+            else:
+                raise ValueError(
+                    "name review bootstrap output must be outside the repository"
+                )
         if args.output is not None:
             from mtgmeta.mtgo.publication import require_private_output
             require_private_output(root, args.output)
         if args.command == "mtgo":
-            value = build_mtgo_weekly_review(root, args.format_id, args.week)
+            value = build_mtgo_weekly_review(
+                root,
+                args.format_id,
+                args.week,
+                name_review_bootstrap=args.name_review_bootstrap,
+            )
         elif args.command == "melee":
             value = build_melee_review(root, args.format_id, args.event_id)
         elif args.command == "mtgo-detail":
@@ -96,6 +113,11 @@ def main(argv: list[str] | None = None) -> int:
             )
         elif args.command == "format-completion":
             review = json.loads(args.review.read_text(encoding="utf-8"))
+            if (
+                review.get("document_type") == "weekly_classification_name_bootstrap"
+                or review.get("review_status") == "pending_owner_review"
+            ):
+                raise ValueError("name bootstrap is not completion evidence")
             if review.get("format") != args.format_id or review.get("week") != args.week:
                 raise ValueError("completion review format/week mismatch")
             current_review = build_mtgo_weekly_review(root, args.format_id, args.week)
@@ -137,6 +159,12 @@ def main(argv: list[str] | None = None) -> int:
                 json.loads(args.standard_review.read_text(encoding="utf-8")),
                 json.loads(args.modern_review.read_text(encoding="utf-8")),
             ]
+            if any(
+                review.get("document_type") == "weekly_classification_name_bootstrap"
+                or review.get("review_status") == "pending_owner_review"
+                for review in reviews
+            ):
+                raise ValueError("name bootstrap is not completion evidence")
             value = build_v2_completion_record(
                 reviews,
                 week_id=args.week,
