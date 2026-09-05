@@ -751,17 +751,37 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
     localization_steps = {
         step["name"]: step for step in localization_cache["steps"]
     }
-    assert "head_branch === \"master\"" in localization_steps[
+    localization_step_names = list(localization_steps)
+    assert localization_step_names.index("Install pinned registry dependencies") < (
+        localization_step_names.index("Compute simple card localization cache subject")
+    )
+    assert "-r requirements.txt" in localization_steps[
+        "Install pinned registry dependencies"
+    ]["run"]
+    assert "tools/select_trusted_pages_artifact.py" in localization_steps[
         "Find exact trusted simple card localization cache"
-    ]["with"]["script"]
+    ]["run"]
     assert localization_steps[
         "Build missing simple card localization cache"
-    ]["if"] == "steps.localization-cache-artifact.outputs.cache-hit != 'true'"
+    ]["if"] == "steps.localization-cache-verify.outcome != 'success'"
     localization_commands = "\n".join(
         step.get("run", "") for step in localization_cache["steps"]
     )
     assert "tools/build_simple_card_localization.py subject" in localization_commands
     assert "tools/build_simple_card_localization.py verify" in localization_commands
+    assert "tools/build_simple_card_localization.py verify-seed" in localization_commands
+    assert "tools/build_simple_card_localization.py bootstrap-seed" in localization_commands
+    assert "tools/build_simple_card_localization.py seed" in localization_commands
+    seed_upload = localization_steps["Retain next current-demand localization seed"]
+    assert "refs/heads/master" in seed_upload["if"]
+    assert seed_upload["with"]["retention-days"] == "90"
+    for name in (
+        "Find exact trusted simple card localization cache",
+        "Find trusted current-demand localization seed",
+        "Find compatible trusted exact cache for seed bootstrap",
+        "Bootstrap current-demand seed from compatible trusted exact cache",
+    ):
+        assert localization_steps[name]["continue-on-error"] == "true"
     assert workflow["jobs"]["build"]["timeout-minutes"] == "20"
     push_paths = set(workflow["on"]["push"]["paths"])
     assert {"index.html", "melee/**", "stats/**", "data/**"} <= push_paths
@@ -770,7 +790,9 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
         "src/mtgmeta/card_names.py",
         "src/mtgmeta/data/om1_spm_aliases.json",
         "tools/build_landing_card_image_cache.py",
+        "tools/build_pages_candidate_measurement.py",
         "tools/build_simple_card_localization.py",
+        "tools/select_trusted_pages_artifact.py",
     } <= push_paths
     assert not ({"docs/**", "tests/**", ".github/workflows/ci.yml"} & push_paths)
     assert set(workflow["on"]["workflow_dispatch"]["inputs"]) == {
@@ -816,6 +838,7 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
         '--overlay "card_localization=$RUNNER_TEMP/card-localization"',
     ):
         assert required in commands
+    assert '--json-output "$RUNNER_TEMP/landing-card-cache-subject.json"' in commands
     assert "tools/build_simple_card_localization.py build" not in commands
     localization_handoff = next(
         step
@@ -830,9 +853,26 @@ def test_pages_runs_only_for_site_inputs_and_reuses_exact_production_evidence():
         for step in build["steps"]
         if step["name"] == "Retain new Landing card-image cache"
     )
-    assert cache_upload["uses"] == "actions/upload-artifact@v4.6.2"
+    assert cache_upload["uses"] == (
+        "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02"
+    )
     assert cache_upload["with"]["retention-days"] == "90"
     assert "refs/heads/master" in cache_upload["if"]
+    candidate_upload = next(
+        step for step in build["steps"]
+        if step["name"] == "Upload measurement-only Pages candidate"
+    )
+    assert candidate_upload["if"] == "github.event_name == 'pull_request'"
+    assert candidate_upload["with"]["retention-days"] == "7"
+    candidate_commands = "\n".join(step.get("run", "") for step in build["steps"])
+    assert "build_pages_candidate_measurement.py package" in candidate_commands
+    candidate_verification = workflow["jobs"]["candidate-measurement-verification"]
+    assert candidate_verification["if"] == "github.event_name == 'pull_request'"
+    assert candidate_verification["needs"] == "build"
+    assert "build_pages_candidate_measurement.py verify" in "\n".join(
+        step.get("run", "") for step in candidate_verification["steps"]
+    )
+    assert workflow["jobs"]["deploy"]["needs"] == "build"
     deploy_commands = "\n".join(
         step.get("run", "") for step in workflow["jobs"]["deploy"]["steps"]
     )

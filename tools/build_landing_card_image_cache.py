@@ -623,11 +623,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--bulk-data", type=Path)
     parser.add_argument("--github-output", type=Path)
+    parser.add_argument("--json-output", type=Path)
     args = parser.parse_args(argv)
     try:
         if args.command == "subject":
             subject = cache_subject(args.root)
             print(json.dumps(subject, ensure_ascii=False, sort_keys=True))
+            if args.json_output:
+                args.json_output.write_text(
+                    json.dumps(subject, ensure_ascii=False, indent=2, sort_keys=True)
+                    + "\n",
+                    encoding="utf-8",
+                )
             if args.github_output:
                 with args.github_output.open("a", encoding="utf-8") as handle:
                     handle.write(f"sha256={subject['subject_sha256']}\n")

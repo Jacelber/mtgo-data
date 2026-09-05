@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 import time
@@ -14,21 +16,27 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections.abc import Callable, Iterable
+from fnmatch import fnmatchcase
 from pathlib import Path, PurePosixPath
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CARD_NAME_SOURCE = ROOT / "src" / "mtgmeta"
-if str(CARD_NAME_SOURCE) not in sys.path:
-    sys.path.insert(0, str(CARD_NAME_SOURCE))
+PACKAGE_SOURCE = ROOT / "src"
+CARD_NAME_SOURCE = PACKAGE_SOURCE / "mtgmeta"
+if str(PACKAGE_SOURCE) not in sys.path:
+    sys.path.insert(0, str(PACKAGE_SOURCE))
 
-from card_names import card_name_lookup_candidates  # noqa: E402
+from mtgmeta.card_names import card_name_lookup_candidates  # noqa: E402
+from mtgmeta.catalog import complete_public_formats  # noqa: E402
 
 
 PUBLIC_PREFIX = "assets/card-localization"
 LOOKUP_FILE = "cards.json"
-CACHE_SUBJECT_VERSION = "1.0.0"
+CACHE_SUBJECT_VERSION = "1.1.0"
+SEED_SCHEMA_VERSION = "1.0.0"
+SEED_FILE = "seed.json"
+SEED_BUNDLE_DIRECTORY = "bundle"
 MTGCH_RESULT_URL = "https://mtgch.com/api/v1/result"
 MTGCH_IMAGE_HOST = "images.mtgch.com"
 MTGCH_CARD_ORIGIN = "https://mtgch.com"
@@ -62,6 +70,30 @@ CARD_ARRAY_KEYS = frozenset(
 CARD_VALUE_KEYS = frozenset(
     {"deck_qty", "mean_qty", "qty", "quantity", "rate", "section", "typical_qty"}
 )
+RESOLVER_CONTRACT_FUNCTIONS = frozenset(
+    {
+        "_image_file_name",
+        "_records",
+        "_safe_local_image",
+        "_trusted_mtgch_card",
+        "_trusted_mtgch_image",
+        "_valid_webp",
+        "resolve_lookup",
+    }
+)
+RESOLVER_CONTRACT_CONSTANTS = frozenset(
+    {
+        "BATCH_SIZE",
+        "FALLBACK_BATCH_SIZE",
+        "FINAL_BATCH_SIZE",
+        "MAX_IMAGE_BYTES",
+        "MAX_PAGES",
+        "MTGCH_CARD_ORIGIN",
+        "MTGCH_IMAGE_HOST",
+        "MTGCH_RESULT_URL",
+        "PAGE_SIZE",
+    }
+)
 
 
 class LocalizationBuildError(ValueError):
@@ -90,6 +122,95 @@ def _sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _sha256_bytes(payload: bytes) -> str:
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _git_file(root: Path, commit: str, relative: str) -> bytes:
+    if re.fullmatch(r"[0-9a-f]{40}", commit) is None:
+        raise LocalizationBuildError(f"invalid seed source commit: {commit!r}")
+    ancestor = subprocess.run(
+        ["git", "-C", str(root), "merge-base", "--is-ancestor", commit, "HEAD"],
+        check=False,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    if ancestor.returncode != 0:
+        raise LocalizationBuildError("seed source commit is not an ancestor of HEAD")
+    result = subprocess.run(
+        ["git", "-C", str(root), "show", f"{commit}:{relative}"],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if result.returncode != 0:
+        raise LocalizationBuildError(
+            f"cannot read seed compatibility input {relative} at {commit}"
+        )
+    return result.stdout
+
+
+def _resolver_ast_sha256(builder_source: bytes) -> str:
+    try:
+        tree = ast.parse(builder_source.decode("utf-8"))
+    except (UnicodeDecodeError, SyntaxError) as exc:
+        raise LocalizationBuildError("seed source builder is not valid UTF-8 Python") from exc
+    selected: list[ast.stmt] = []
+    found_functions: set[str] = set()
+    found_constants: set[str] = set()
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if node.name in RESOLVER_CONTRACT_FUNCTIONS:
+                selected.append(node)
+                found_functions.add(node.name)
+            continue
+        if isinstance(node, ast.Assign):
+            names = {
+                target.id for target in node.targets if isinstance(target, ast.Name)
+            }
+            if names & RESOLVER_CONTRACT_CONSTANTS:
+                selected.append(node)
+                found_constants.update(names & RESOLVER_CONTRACT_CONSTANTS)
+    if found_functions != RESOLVER_CONTRACT_FUNCTIONS:
+        missing = sorted(RESOLVER_CONTRACT_FUNCTIONS - found_functions)
+        raise LocalizationBuildError(
+            "seed source builder lacks resolver functions: " + ", ".join(missing)
+        )
+    if found_constants != RESOLVER_CONTRACT_CONSTANTS:
+        missing = sorted(RESOLVER_CONTRACT_CONSTANTS - found_constants)
+        raise LocalizationBuildError(
+            "seed source builder lacks resolver constants: " + ", ".join(missing)
+        )
+    contract = ast.Module(body=selected, type_ignores=[])
+    return _sha256_bytes(
+        ast.dump(contract, annotate_fields=True, include_attributes=False).encode("utf-8")
+    )
+
+
+def seed_compatibility(root: Path, source_commit: str | None = None) -> dict[str, str]:
+    """Bind reusable mappings to only their direct resolver semantics."""
+
+    if source_commit:
+        builder = _git_file(root, source_commit, "tools/build_simple_card_localization.py")
+        card_names = _git_file(root, source_commit, "src/mtgmeta/card_names.py")
+        aliases = _git_file(
+            root, source_commit, "src/mtgmeta/data/om1_spm_aliases.json"
+        )
+    else:
+        builder = Path(__file__).read_bytes()
+        card_names = (CARD_NAME_SOURCE / "card_names.py").read_bytes()
+        aliases = (CARD_NAME_SOURCE / "data" / "om1_spm_aliases.json").read_bytes()
+    contract = {
+        "schema_version": SEED_SCHEMA_VERSION,
+        "resolver_ast_sha256": _resolver_ast_sha256(builder),
+        "card_names_sha256": _sha256_bytes(card_names),
+        "card_name_aliases_sha256": _sha256_bytes(aliases),
+    }
+    canonical = json.dumps(contract, separators=(",", ":"), sort_keys=True)
+    contract["compatibility_sha256"] = _sha256_bytes(canonical.encode("utf-8"))
+    return contract
+
+
 def _card_names(value: Any, parent_key: str | None = None) -> Iterable[str]:
     if isinstance(value, list):
         for item in value:
@@ -109,20 +230,54 @@ def _card_names(value: Any, parent_key: str | None = None) -> Iterable[str]:
         yield from _card_names(child, key)
 
 
+def _pages_statistics_exclusions(root: Path) -> tuple[str, ...] | None:
+    policy = _read_json(root / "configs" / "pages_publication.json", "Pages policy")
+    directories = policy.get("site_directories") if isinstance(policy, dict) else None
+    patterns = policy.get("excluded_patterns") if isinstance(policy, dict) else None
+    if (
+        not isinstance(directories, list)
+        or any(not isinstance(directory, str) for directory in directories)
+        or not isinstance(patterns, list)
+        or any(not isinstance(pattern, str) for pattern in patterns)
+    ):
+        raise LocalizationBuildError("Pages publication policy is incompatible")
+    if "stats" not in directories:
+        return None
+    return tuple(patterns)
+
+
 def product_card_names(root: Path) -> list[str]:
     """Return exact English card names already emitted in public product JSON."""
 
+    patterns = _pages_statistics_exclusions(root)
+    if patterns is None:
+        return []
     names: set[str] = set()
-    for path in sorted((root / "stats").rglob("*.json")):
-        names.update(_card_names(_read_json(path, "public product JSON")))
+    for definition in complete_public_formats(root):
+        statistics_root = root / definition.mtgo.paths.statistics
+        for path in sorted(statistics_root.rglob("*.json")):
+            relative = path.relative_to(root).as_posix()
+            if any(fnmatchcase(relative, pattern) for pattern in patterns):
+                continue
+            names.update(_card_names(_read_json(path, "public product JSON")))
     return sorted(names)
 
 
 def current_landing_names(root: Path) -> list[str]:
     """Return cards visible on each current default MTGO Landing."""
 
+    patterns = _pages_statistics_exclusions(root)
+    if patterns is None:
+        return []
     names: set[str] = set()
-    for current_path in sorted((root / "stats").glob("*/mtgo/landing/current.json")):
+    current_paths = [
+        root / definition.mtgo.paths.statistics / "landing" / "current.json"
+        for definition in complete_public_formats(root)
+    ]
+    for current_path in sorted(current_paths):
+        current_relative = current_path.relative_to(root).as_posix()
+        if any(fnmatchcase(current_relative, pattern) for pattern in patterns):
+            continue
         current = _read_json(current_path, "current Landing")
         if not isinstance(current, dict):
             raise LocalizationBuildError(f"current Landing is not an object: {current_path}")
@@ -141,6 +296,9 @@ def current_landing_names(root: Path) -> list[str]:
         if not isinstance(week_id, str) or not re.fullmatch(r"\d{4}-W\d{2}", week_id):
             raise LocalizationBuildError(f"current Landing week is invalid: {current_path}")
         feature_path = current_path.parent / "features" / f"{week_id}.json"
+        feature_relative = feature_path.relative_to(root).as_posix()
+        if any(fnmatchcase(feature_relative, pattern) for pattern in patterns):
+            continue
         feature = _read_json(feature_path, "current Landing feature week")
         features = feature.get("features") if isinstance(feature, dict) else None
         items = features.get("items") if isinstance(features, dict) else None
@@ -209,7 +367,7 @@ def _trusted_mtgch_card(value: Any) -> str:
 def _download(url: str, headers: dict[str, str], maximum_bytes: int) -> bytes:
     request = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(request, timeout=30) as response:
-        payload = response.read(maximum_bytes + 1)
+        payload: bytes = response.read(maximum_bytes + 1)
     if len(payload) > maximum_bytes:
         raise LocalizationBuildError(f"response exceeds {maximum_bytes} bytes: {url}")
     return payload
@@ -323,7 +481,7 @@ def resolve_lookup(
                         except LocalizationBuildError:
                             card_url = None
                         identifier = str(record.get("id") or "")
-                        candidates.setdefault(english, []).append(
+                        candidates.setdefault(english, []).append(  # type: ignore[arg-type]
                             (
                                 image is None,
                                 card_url is None,
@@ -389,6 +547,8 @@ def build_bundle(
     *,
     fetch_page: Callable[[list[str], int], dict[str, Any]] = _live_page,
     fetch_image: Callable[[str], bytes] | None = None,
+    seed: Path | None = None,
+    statistics: dict[str, int | str] | None = None,
 ) -> dict[str, dict[str, str]]:
     """Build one repository-external flat lookup and current-Landing image set."""
 
@@ -404,22 +564,63 @@ def build_bundle(
         raise LocalizationBuildError(f"localization output already exists: {output}")
 
     product_names = product_card_names(root)
+    product_name_set = set(product_names)
     landing_names = set(current_landing_names(root))
-    lookup = resolve_lookup(product_names, fetch_page)
+    seed_lookup: dict[str, dict[str, str]] = {}
+    seed_bundle: Path | None = None
+    if seed is not None:
+        seed_lookup = verify_seed(root, seed)
+        seed_bundle = seed.resolve() / SEED_BUNDLE_DIRECTORY
+    reusable_names = sorted(product_name_set & seed_lookup.keys())
+    missing_names = sorted(product_name_set - seed_lookup.keys())
+    api_requests = 0
+    image_requests = 0
+
+    def counted_page(names: list[str], page: int) -> dict[str, Any]:
+        nonlocal api_requests
+        api_requests += 1
+        return fetch_page(names, page)
+
+    lookup = {
+        name: {key: value for key, value in seed_lookup[name].items() if key != "local_image"}
+        for name in reusable_names
+    }
+    lookup.update(resolve_lookup(missing_names, counted_page))
     image_fetch = fetch_image or _live_image
     output.parent.mkdir(parents=True, exist_ok=True)
     temporary = Path(tempfile.mkdtemp(prefix="card-localization-", dir=output.parent))
     try:
         image_dir = temporary / "images"
+        reused_images = 0
+        fetched_images = 0
         for english in sorted(landing_names & lookup.keys()):
             entry = lookup[english]
             if "image_url" not in entry:
                 continue
-            payload = image_fetch(entry["image_url"])
-            _valid_webp(payload, english)
             image_dir.mkdir(parents=True, exist_ok=True)
             file_name = _image_file_name(english)
-            (image_dir / file_name).write_bytes(payload)
+            destination = image_dir / file_name
+            seed_entry = seed_lookup.get(english, {})
+            reusable_image = (
+                seed_bundle is not None
+                and seed_entry.get("image_url") == entry["image_url"]
+                and isinstance(seed_entry.get("local_image"), str)
+            )
+            if reusable_image:
+                assert seed_bundle is not None
+                seed_relative = _safe_local_image(seed_entry["local_image"]).relative_to(
+                    PUBLIC_PREFIX
+                )
+                source = seed_bundle / Path(*seed_relative.parts)
+                shutil.copyfile(source, destination)
+                _valid_webp(destination.read_bytes(), english)
+                reused_images += 1
+            else:
+                image_requests += 1
+                payload = image_fetch(entry["image_url"])
+                _valid_webp(payload, english)
+                destination.write_bytes(payload)
+                fetched_images += 1
             entry["local_image"] = f"{PUBLIC_PREFIX}/images/{file_name}"
         _write_json(temporary / LOOKUP_FILE, lookup)
         verify_bundle(root, temporary)
@@ -427,6 +628,24 @@ def build_bundle(
     except Exception:
         shutil.rmtree(temporary, ignore_errors=True)
         raise
+    if statistics is not None:
+        statistics.update(
+            {
+                "desired_card_count": len(product_names),
+                "seed_entry_count": len(seed_lookup),
+                "reused_localization_count": len(reusable_names),
+                "fetched_localization_count": len(lookup) - len(reusable_names),
+                "removed_current_demand_count": len(set(seed_lookup) - product_name_set),
+                "reused_image_count": reused_images,
+                "fetched_image_count": fetched_images,
+                "api_request_count": api_requests,
+                "image_request_count": image_requests,
+                "external_request_count": api_requests + image_requests,
+                "final_card_count": len(lookup),
+                "final_image_count": sum("local_image" in entry for entry in lookup.values()),
+                "seed_used": "true" if seed is not None else "false",
+            }
+        )
     return lookup
 
 
@@ -440,10 +659,9 @@ def _safe_local_image(value: Any) -> PurePosixPath:
     return path
 
 
-def verify_bundle(root: Path, output: Path) -> dict[str, dict[str, str]]:
+def _verify_bundle_structure(output: Path) -> dict[str, dict[str, str]]:
     """Verify the flat map and every local image it declares."""
 
-    del root  # The flat lookup intentionally has no second identity contract.
     output = output.resolve()
     lookup = _read_json(output / LOOKUP_FILE, "card-localization lookup")
     if not isinstance(lookup, dict):
@@ -481,6 +699,9 @@ def verify_bundle(root: Path, output: Path) -> dict[str, dict[str, str]]:
             raise LocalizationBuildError(f"local image exceeds {MAX_IMAGE_BYTES} bytes: {local_path}")
         _valid_webp(payload, local_path.as_posix())
 
+    for path in output.rglob("*"):
+        if path.is_symlink():
+            raise LocalizationBuildError(f"symbolic links are prohibited: {path}")
     actual = {path for path in output.rglob("*") if path.is_file()}
     if actual != expected:
         extras = sorted(path.relative_to(output).as_posix() for path in actual - expected)
@@ -488,14 +709,183 @@ def verify_bundle(root: Path, output: Path) -> dict[str, dict[str, str]]:
     return lookup
 
 
+def verify_bundle(root: Path, output: Path) -> dict[str, dict[str, str]]:
+    """Verify that one exact bundle stays inside the current public demand."""
+
+    lookup = _verify_bundle_structure(output)
+    desired = set(product_card_names(root))
+    landing = set(current_landing_names(root))
+    extras = sorted(set(lookup) - desired)
+    if extras:
+        raise LocalizationBuildError(
+            "localization lookup contains names outside current public demand: "
+            + ", ".join(extras)
+        )
+    outside_hot_set = sorted(
+        name for name, entry in lookup.items() if "local_image" in entry and name not in landing
+    )
+    if outside_hot_set:
+        raise LocalizationBuildError(
+            "local images fall outside the current Landing hot set: "
+            + ", ".join(outside_hot_set)
+        )
+    return lookup
+
+
+def _bundle_manifest(bundle: Path) -> list[dict[str, Any]]:
+    records = []
+    for path in sorted(bundle.rglob("*")):
+        if path.is_symlink():
+            raise LocalizationBuildError(f"symbolic links are prohibited: {path}")
+        if not path.is_file():
+            continue
+        records.append(
+            {
+                "path": path.relative_to(bundle).as_posix(),
+                "bytes": path.stat().st_size,
+                "sha256": _sha256_file(path),
+            }
+        )
+    return records
+
+
+def write_seed(root: Path, bundle: Path, output: Path) -> dict[str, Any]:
+    """Create a current-demand-only seed from a structurally valid exact bundle."""
+
+    root = root.resolve()
+    bundle = bundle.resolve()
+    output = output.resolve()
+    try:
+        output.relative_to(root)
+    except ValueError:
+        pass
+    else:
+        raise LocalizationBuildError("localization seed output must be outside the repository")
+    if output.exists():
+        raise LocalizationBuildError(f"localization seed output already exists: {output}")
+    desired = set(product_card_names(root))
+    landing = set(current_landing_names(root))
+    source_lookup = _verify_bundle_structure(bundle)
+    lookup: dict[str, dict[str, str]] = {}
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = Path(tempfile.mkdtemp(prefix="card-localization-seed-", dir=output.parent))
+    try:
+        seed_bundle = temporary / SEED_BUNDLE_DIRECTORY
+        for english in sorted(desired & source_lookup.keys()):
+            entry = dict(source_lookup[english])
+            local_image = entry.pop("local_image", None)
+            if english in landing and local_image is not None:
+                relative = _safe_local_image(local_image).relative_to(PUBLIC_PREFIX)
+                source = bundle / Path(*relative.parts)
+                destination = seed_bundle / Path(*relative.parts)
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, destination)
+                entry["local_image"] = local_image
+            lookup[english] = entry
+        seed_bundle.mkdir(parents=True, exist_ok=True)
+        _write_json(seed_bundle / LOOKUP_FILE, lookup)
+        _verify_bundle_structure(seed_bundle)
+        manifest = {
+            "schema_version": SEED_SCHEMA_VERSION,
+            "compatibility": seed_compatibility(root),
+            "source_subject_sha256": cache_subject(root)["subject_sha256"],
+            "product_card_names": sorted(desired),
+            "current_landing_names": sorted(landing),
+            "bundle_files": _bundle_manifest(seed_bundle),
+        }
+        _write_json(temporary / SEED_FILE, manifest)
+        temporary.replace(output)
+    except Exception:
+        shutil.rmtree(temporary, ignore_errors=True)
+        raise
+    verify_seed(root, output)
+    return manifest
+
+
+def verify_seed(root: Path, output: Path) -> dict[str, dict[str, str]]:
+    """Verify one seed snapshot and its direct resolver compatibility."""
+
+    output = output.resolve()
+    manifest = _read_json(output / SEED_FILE, "localization seed")
+    expected_keys = {
+        "schema_version",
+        "compatibility",
+        "source_subject_sha256",
+        "product_card_names",
+        "current_landing_names",
+        "bundle_files",
+    }
+    if not isinstance(manifest, dict) or set(manifest) != expected_keys:
+        raise LocalizationBuildError("localization seed manifest is malformed")
+    if manifest["schema_version"] != SEED_SCHEMA_VERSION:
+        raise LocalizationBuildError("localization seed schema is incompatible")
+    if manifest["compatibility"] != seed_compatibility(root):
+        raise LocalizationBuildError("localization seed resolver contract is incompatible")
+    if re.fullmatch(r"[0-9a-f]{64}", str(manifest["source_subject_sha256"])) is None:
+        raise LocalizationBuildError("localization seed source subject is invalid")
+    product_names = manifest["product_card_names"]
+    landing_names = manifest["current_landing_names"]
+    if not isinstance(product_names, list) or not isinstance(landing_names, list):
+        raise LocalizationBuildError("localization seed demand is malformed")
+    if (
+        any(not isinstance(name, str) or not name for name in product_names)
+        or any(not isinstance(name, str) or not name for name in landing_names)
+        or product_names != sorted(product_names)
+        or landing_names != sorted(landing_names)
+        or len(product_names) != len(set(product_names))
+        or len(landing_names) != len(set(landing_names))
+        or not set(landing_names) <= set(product_names)
+    ):
+        raise LocalizationBuildError("localization seed demand is malformed")
+    seed_bundle = output / SEED_BUNDLE_DIRECTORY
+    lookup = _verify_bundle_structure(seed_bundle)
+    if not set(lookup) <= set(product_names):
+        raise LocalizationBuildError("localization seed contains out-of-demand mappings")
+    if any("local_image" in entry and name not in landing_names for name, entry in lookup.items()):
+        raise LocalizationBuildError("localization seed contains an out-of-demand image")
+    if manifest["bundle_files"] != _bundle_manifest(seed_bundle):
+        raise LocalizationBuildError("localization seed bundle digest mismatch")
+    actual = {path.relative_to(output).as_posix() for path in output.rglob("*") if path.is_file()}
+    expected = {SEED_FILE} | {
+        f"{SEED_BUNDLE_DIRECTORY}/{record['path']}" for record in manifest["bundle_files"]
+    }
+    if actual != expected:
+        raise LocalizationBuildError("localization seed contains undeclared files")
+    return lookup
+
+
+def bootstrap_seed(
+    root: Path, bundle: Path, source_commit: str, output: Path
+) -> dict[str, Any]:
+    """Convert a trusted legacy exact bundle only when resolver semantics match."""
+
+    source_contract = seed_compatibility(root, source_commit)
+    if source_contract != seed_compatibility(root):
+        raise LocalizationBuildError("legacy exact bundle resolver contract is incompatible")
+    return write_seed(root, bundle, output)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
     subject_parser = subparsers.add_parser("subject")
     subject_parser.add_argument("--github-output", type=Path)
-    for command in ("build", "verify"):
-        subparser = subparsers.add_parser(command)
-        subparser.add_argument("--output", type=Path, required=True)
+    build_parser = subparsers.add_parser("build")
+    build_parser.add_argument("--output", type=Path, required=True)
+    build_parser.add_argument("--seed", type=Path)
+    build_parser.add_argument("--summary", type=Path)
+    verify_parser = subparsers.add_parser("verify")
+    verify_parser.add_argument("--output", type=Path, required=True)
+    seed_parser = subparsers.add_parser("seed")
+    seed_parser.add_argument("--bundle", type=Path, required=True)
+    seed_parser.add_argument("--output", type=Path, required=True)
+    verify_seed_parser = subparsers.add_parser("verify-seed")
+    verify_seed_parser.add_argument("--output", type=Path, required=True)
+    bootstrap_parser = subparsers.add_parser("bootstrap-seed")
+    bootstrap_parser.add_argument("--bundle", type=Path, required=True)
+    bootstrap_parser.add_argument("--source-commit", required=True)
+    bootstrap_parser.add_argument("--output", type=Path, required=True)
+    bootstrap_parser.add_argument("--github-output", type=Path)
     args = parser.parse_args(argv)
     root = ROOT
     try:
@@ -507,9 +897,45 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(subject, ensure_ascii=False, sort_keys=True))
             return 0
         if args.command == "build":
-            lookup = build_bundle(root, args.output)
-        else:
+            statistics: dict[str, int | str] = {}
+            lookup = build_bundle(
+                root, args.output, seed=args.seed, statistics=statistics
+            )
+            if args.summary:
+                with args.summary.open("a", encoding="utf-8") as handle:
+                    handle.write("## Simple card localization\n\n")
+                    for key, value in statistics.items():
+                        handle.write(f"- {key}: `{value}`\n")
+                    handle.write("\n")
+            print(json.dumps(statistics, ensure_ascii=False, sort_keys=True))
+        elif args.command == "verify":
             lookup = verify_bundle(root, args.output)
+        elif args.command == "seed":
+            manifest = write_seed(root, args.bundle, args.output)
+            lookup = verify_seed(root, args.output)
+            print(json.dumps(manifest, ensure_ascii=False, sort_keys=True))
+        elif args.command == "verify-seed":
+            lookup = verify_seed(root, args.output)
+        else:
+            try:
+                manifest = bootstrap_seed(
+                    root, args.bundle, args.source_commit, args.output
+                )
+            except (LocalizationBuildError, OSError) as exc:
+                if args.output.exists():
+                    shutil.rmtree(args.output, ignore_errors=True)
+                if args.github_output:
+                    with args.github_output.open("a", encoding="utf-8") as handle:
+                        handle.write("usable=false\n")
+                        handle.write(f"reason={str(exc).replace(chr(10), ' ')}\n")
+                print(f"Trusted exact bootstrap rejected: {exc}")
+                return 0
+            if args.github_output:
+                with args.github_output.open("a", encoding="utf-8") as handle:
+                    handle.write("usable=true\n")
+                    handle.write("reason=\n")
+            lookup = verify_seed(root, args.output)
+            print(json.dumps(manifest, ensure_ascii=False, sort_keys=True))
     except (LocalizationBuildError, OSError) as exc:
         parser.error(str(exc))
     local_count = sum("local_image" in entry for entry in lookup.values())
