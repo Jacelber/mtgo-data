@@ -391,7 +391,10 @@ def stage_publication(root: Path, format_id: str, *, include_landing: bool = Fal
             "scope_digest": subject.subject_digest, "changed_paths": changed}
 
 
-def intentional_unknowns(root: Path) -> dict[str, dict[tuple[str, str, str], dict[str, str]]]:
+def intentional_unknowns(
+    root: Path,
+    formats: tuple[str, ...] | None = None,
+) -> dict[str, dict[tuple[str, str, str], dict[str, str]]]:
     """Read the existing random-card-pile policy, without expanding its scope."""
     config = yaml.safe_load((root / "configs/mtgo_intentional_unknowns.yaml").read_text(encoding="utf-8"))
     if config.get("schema_version") != "1.0.0":
@@ -399,8 +402,12 @@ def intentional_unknowns(root: Path) -> dict[str, dict[tuple[str, str, str], dic
     records = config.get("records")
     if not isinstance(records, list):
         raise ValueError("Intentional Unknown registry has no records list")
+    if formats is None:
+        formats = ("standard", "modern")
+    if not formats or len(formats) != len(set(formats)):
+        raise ValueError("Intentional Unknown format scope is empty or duplicated")
     result: dict[str, dict[tuple[str, str, str], dict[str, str]]] = {
-        format_name: {} for format_name in ("standard", "modern")
+        format_name: {} for format_name in formats
     }
     for item in records:
         if not isinstance(item, dict):
@@ -413,7 +420,9 @@ def intentional_unknowns(root: Path) -> dict[str, dict[tuple[str, str, str], dic
         reason_code = item.get("reason_code")
         owner_accepted_on = str(item.get("owner_accepted_on", ""))
         evidence = str(item.get("evidence", ""))
-        if format_name not in result or not event_id.isdigit() or not deck_id or not source_file:
+        if format_name not in result:
+            continue
+        if not event_id.isdigit() or not deck_id or not source_file:
             raise ValueError("Intentional Unknown registry contains an invalid identity")
         if disposition != "intentional_unknown" or reason_code != "random_card_pile":
             raise ValueError("Only Owner-accepted random card piles may remain intentional Unknown")

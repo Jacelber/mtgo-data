@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/weekly-maintenance-readiness.schema.json",
   "title": "Private weekly MTGO maintenance readiness handoff",
-  "x-schema-version": "1.7.0",
+  "x-schema-version": "1.8.0",
   "oneOf": [
     {
       "type": "object",
@@ -593,6 +593,70 @@
           }
         }
       }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "document_type", "review_id", "review_label",
+        "readiness_digest", "generated_at", "status", "input", "formats",
+        "workflow"
+      ],
+      "properties": {
+        "schema_version": {"const": "1.8.0"},
+        "document_type": {"const": "weekly_maintenance_readiness"},
+        "review_id": {"type": "string", "minLength": 1},
+        "review_label": {"type": "string", "minLength": 1},
+        "readiness_digest": {"$ref": "#/$defs/sha256"},
+        "generated_at": {"type": "string", "format": "date-time"},
+        "status": {"enum": ["review_available", "blocked"]},
+        "input": {
+          "type": "object", "additionalProperties": false,
+          "required": ["repository_sha"],
+          "properties": {"repository_sha": {"$ref": "#/$defs/gitSha"}}
+        },
+        "formats": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": [
+              "format", "review_week", "public_week", "public_event_count",
+              "pending_event_ids", "data_admission", "classification_review",
+              "retained_corpus_unknown_queue", "landing", "completion",
+              "blockers", "status"
+            ],
+            "properties": {
+              "format": {"$ref": "#/$defs/stableId"},
+              "review_week": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"},
+              "public_week": {"type": "null"},
+              "public_event_count": {"type": "null"},
+              "pending_event_ids": {"type": "null"},
+              "data_admission": {"const": "private_not_applicable"},
+              "classification_review": {"type": "object"},
+              "retained_corpus_unknown_queue": {"type": "object"},
+              "landing": {
+                "type": "object", "additionalProperties": false,
+                "required": ["status", "content_digest"],
+                "properties": {
+                  "status": {"enum": ["available", "preparation_required"]},
+                  "content_digest": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+                }
+              },
+              "completion": {"type": "object"},
+              "blockers": {"type": "array", "items": {"type": "string"}},
+              "status": {"enum": ["blocked", "completed", "continue_review", "prepare_landing"]}
+            }
+          }
+        },
+        "workflow": {
+          "type": "object", "additionalProperties": false,
+          "required": ["codex_automation_required", "repository_mutation_authorized"],
+          "properties": {
+            "codex_automation_required": {"const": false},
+            "repository_mutation_authorized": {"const": false}
+          }
+        }
+      }
     }
   ],
   "$defs": {
@@ -603,6 +667,10 @@
     "gitSha": {
       "type": "string",
       "pattern": "^[a-f0-9]{40}$"
+    },
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
     },
     "week": {
       "type": "object",

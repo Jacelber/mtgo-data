@@ -31,7 +31,6 @@ CACHE_SCHEMA_VERSION = "1.1.0"
 CACHE_PRODUCT = "mtgo-landing-card-image-cache"
 CACHE_PUBLIC_PREFIX = "assets/card-cache/v1"
 CACHE_WINDOW_WEEKS = 4
-SUPPORTED_FORMATS = ("standard", "modern")
 SCRYFALL_BULK_DEFINITION = "https://api.scryfall.com/bulk-data/oracle-cards"
 HTTP_HEADERS = {
     "Accept": "application/json;q=0.9,*/*;q=0.8",
@@ -45,6 +44,45 @@ MAX_IMAGE_BYTES = 5 * 1024 * 1024
 MAX_BULK_BYTES = 1024 * 1024 * 1024
 class CacheBuildError(ValueError):
     """Indicate that the rolling image cache cannot be built safely."""
+
+
+def selected_formats(
+    root: Path,
+    requested: Iterable[str] | None = None,
+    *,
+    private: bool = False,
+) -> tuple[str, ...]:
+    """Resolve either the complete public default or an explicit private scope."""
+
+    from mtgmeta.config import FormatConfigError, load_format_registry
+
+    registry = load_format_registry(root / "configs/formats.yaml")
+    values = tuple(requested or ())
+    if not values:
+        values = tuple(
+            item.id
+            for item in registry.formats
+            if item.public
+            and item.mtgo.enabled
+            and "landing_generation" in item.mtgo.capabilities
+        )
+        if private:
+            raise CacheBuildError("private cache scope requires explicit --format")
+    if len(values) != len(set(values)):
+        raise CacheBuildError("cache format scope contains duplicates")
+    for format_id in values:
+        try:
+            definition = registry.require_mtgo(format_id)
+        except FormatConfigError as exc:
+            raise CacheBuildError(str(exc)) from exc
+        if "landing_generation" not in definition.mtgo.capabilities:
+            raise CacheBuildError(f"format {format_id!r} lacks landing_generation")
+        if private != (not definition.public):
+            boundary = "private" if private else "public"
+            raise CacheBuildError(f"{boundary} cache scope rejects format {format_id!r}")
+    if not values:
+        raise CacheBuildError("cache format scope must not be empty")
+    return values
 
 
 def _read_json(path: Path, label: str) -> Any:
@@ -129,11 +167,13 @@ def _feature_names(path: Path, format_name: str, week: str) -> list[str]:
 def cache_subject(
     root: Path,
     *,
-    formats: tuple[str, ...] = SUPPORTED_FORMATS,
+    formats: tuple[str, ...] | None = None,
+    private: bool = False,
 ) -> dict[str, Any]:
     """Return the deterministic rolling-window card set and its subject digest."""
 
     root = root.resolve()
+    formats = selected_formats(root, formats, private=private)
     uses: dict[str, dict[str, Any]] = {}
     format_records: list[dict[str, Any]] = []
     for format_name in formats:
@@ -379,6 +419,8 @@ def build_cache_bundle(
     *,
     bulk_data_path: Path | None = None,
     fetch_image: Callable[[str], bytes] | None = None,
+    formats: tuple[str, ...] | None = None,
+    private: bool = False,
 ) -> dict[str, Any]:
     """Build an atomic cache bundle from repository Landing documents."""
 
@@ -395,7 +437,7 @@ def build_cache_bundle(
     output.parent.mkdir(parents=True, exist_ok=True)
     temporary = Path(tempfile.mkdtemp(prefix="landing-card-cache-", dir=output.parent))
     try:
-        subject = cache_subject(root)
+        subject = cache_subject(root, formats=formats, private=private)
         unresolved = subject["cards"]
         bulk_sha256: str | None = None
         lookup: dict[str, dict[str, Any]] = {}
@@ -473,7 +515,7 @@ def build_cache_bundle(
             "window_size_weeks": CACHE_WINDOW_WEEKS,
         }
         _write_json(temporary / "manifest.json", manifest)
-        verify_cache_bundle(root, temporary)
+        verify_cache_bundle(root, temporary, formats=formats, private=private)
         temporary.replace(output)
         return manifest
     except Exception:
@@ -490,7 +532,13 @@ def _safe_local_path(value: Any) -> PurePosixPath:
     return path
 
 
-def verify_cache_bundle(root: Path, cache_root: Path) -> dict[str, Any]:
+def verify_cache_bundle(
+    root: Path,
+    cache_root: Path,
+    *,
+    formats: tuple[str, ...] | None = None,
+    private: bool = False,
+) -> dict[str, Any]:
     """Verify subject identity, path closure, and every declared cache byte."""
 
     root = root.resolve()
@@ -519,7 +567,7 @@ def verify_cache_bundle(root: Path, cache_root: Path) -> dict[str, Any]:
         raise CacheBuildError("card-image cache bulk-data SHA-256 is invalid")
     if manifest.get("window_size_weeks") != CACHE_WINDOW_WEEKS:
         raise CacheBuildError("card-image cache window size is invalid")
-    subject = cache_subject(root)
+    subject = cache_subject(root, formats=formats, private=private)
     if manifest.get("subject_sha256") != subject["subject_sha256"]:
         raise CacheBuildError("card-image cache subject SHA-256 mismatch")
     if manifest.get("formats") != subject["formats"]:
@@ -624,10 +672,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--bulk-data", type=Path)
     parser.add_argument("--github-output", type=Path)
     parser.add_argument("--json-output", type=Path)
+    parser.add_argument("--format", dest="formats", action="append")
+    parser.add_argument("--private", action="store_true")
     args = parser.parse_args(argv)
     try:
         if args.command == "subject":
-            subject = cache_subject(args.root)
+            subject = cache_subject(
+                args.root,
+                formats=tuple(args.formats) if args.formats else None,
+                private=args.private,
+            )
             print(json.dumps(subject, ensure_ascii=False, sort_keys=True))
             if args.json_output:
                 args.json_output.write_text(
@@ -646,6 +700,8 @@ def main(argv: list[str] | None = None) -> int:
                 args.root,
                 args.output,
                 bulk_data_path=args.bulk_data,
+                formats=tuple(args.formats) if args.formats else None,
+                private=args.private,
             )
             print(
                 "Landing card-image cache: "
@@ -654,7 +710,12 @@ def main(argv: list[str] | None = None) -> int:
         else:
             if args.output is None:
                 raise CacheBuildError("verify requires --output")
-            manifest = verify_cache_bundle(args.root, args.output)
+            manifest = verify_cache_bundle(
+                args.root,
+                args.output,
+                formats=tuple(args.formats) if args.formats else None,
+                private=args.private,
+            )
             print(
                 "Landing card-image cache verified: "
                 f"cards={len(manifest['cards'])} subject={manifest['subject_sha256']}"

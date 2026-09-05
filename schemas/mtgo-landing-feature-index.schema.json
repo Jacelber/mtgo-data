@@ -9,7 +9,7 @@
   "properties": {
     "schema_version": {"const": "1.0.0"},
     "product": {"const": "mtgo-landing-features"},
-    "format": {"enum": ["standard", "modern"]},
+    "format": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
     "source": {"const": "mtgo"},
     "weeks": {
       "type": "array",

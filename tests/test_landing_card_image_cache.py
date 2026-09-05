@@ -86,8 +86,33 @@ def _write_format(
         _write_feature_week(root, format_name, week, cards_by_week.get(week, []))
 
 
+def _write_registry(root: Path, entries: list[tuple[str, bool]]) -> None:
+    formats = []
+    for format_name, public in entries:
+        formats.append({
+            "id": format_name,
+            "display_name": format_name.title(),
+            "state": "executable",
+            "public": public,
+            "mtgo": {
+                "enabled": True,
+                "event_collection_enabled": False,
+                "capabilities": ["landing_generation"],
+                "paths": {
+                    "events": f"data/{format_name}",
+                    "matches": f"data/{format_name}/mtgo/matches",
+                    "rules": f"my_archetypes/{format_name}.yaml",
+                    "statistics": f"stats/{format_name}/mtgo",
+                    "reports": f"reports/{format_name}/mtgo",
+                },
+            },
+        })
+    _write_json(root / "configs/formats.yaml", {"schema_version": "1.3.0", "formats": formats})
+
+
 def _synthetic_subject_root(tmp_path: Path) -> Path:
     root = tmp_path / "repository"
+    _write_registry(root, [("standard", True), ("modern", True)])
     _write_format(
         root,
         "standard",
@@ -109,6 +134,27 @@ def _synthetic_subject_root(tmp_path: Path) -> Path:
         {"2026-W34": ["New Card"], "2026-W33": ["Modern Card"]},
     )
     return root
+
+
+def test_explicit_private_format_isolated_from_public_default(tmp_path):
+    root = _synthetic_subject_root(tmp_path)
+    _write_registry(root, [("standard", True), ("modern", True), ("pauper", False)])
+    _write_format(
+        root,
+        "pauper",
+        [("2026-W32", "2026-08-03")],
+        {"2026-W32": ["Private Card"]},
+    )
+
+    public_subject = cache_subject(root)
+    private_subject = cache_subject(root, formats=("pauper",), private=True)
+
+    assert [item["format"] for item in public_subject["formats"]] == ["standard", "modern"]
+    assert [item["format"] for item in private_subject["formats"]] == ["pauper"]
+    with pytest.raises(CacheBuildError, match="public cache scope rejects"):
+        cache_subject(root, formats=("pauper",))
+    with pytest.raises(CacheBuildError, match="requires explicit"):
+        cache_subject(root, private=True)
 
 
 def _bulk_cards() -> list[dict[str, object]]:
@@ -272,6 +318,7 @@ def test_missing_recent_card_fails_without_partial_bundle(tmp_path):
 
 def test_build_resolves_maintained_alias_without_changing_feature_name(tmp_path):
     root = tmp_path / "repository"
+    _write_registry(root, [("standard", True), ("modern", True)])
     _write_format(
         root,
         "standard",

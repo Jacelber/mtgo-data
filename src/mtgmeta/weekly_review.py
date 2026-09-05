@@ -530,12 +530,18 @@ def build_v2_completion_record(
     """Build a minimal full-review completion record without writing a registry."""
 
     by_format = {str(review.get("format")): review for review in reviews}
-    valid = bool(by_format) and set(by_format) <= {"standard", "modern"}
+    if len(by_format) != len(reviews):
+        raise ValueError("Weekly V2 completion contains a duplicate format")
+    valid = bool(by_format) and (
+        independent_format or set(by_format) <= {"standard", "modern"}
+    )
     if not valid or (not independent_format and set(by_format) != {"standard", "modern"}):
         raise ValueError("Weekly V2 completion must bind Standard and Modern")
     formats = {}
-    for format_id in (item for item in ("standard", "modern") if item in by_format):
+    for format_id in by_format:
         review = by_format[format_id]
+        if review.get("week") != week_id:
+            raise ValueError(f"{format_id} review week does not match {week_id}")
         classifier = review.get("classifier")
         if not isinstance(classifier, Mapping):
             raise ValueError(f"{format_id} review classifier is missing")

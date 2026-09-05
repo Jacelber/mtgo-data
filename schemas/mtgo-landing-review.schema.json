@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/mtgo-landing-review.schema.json",
   "title": "Private reviewed MTGO Landing week",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -10,8 +10,8 @@
     "candidate_evidence", "all_top8", "review", "known_archetype_ids"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
-    "format": {"enum": ["standard", "modern"]},
+    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
+    "format": {"$ref": "#/$defs/stableId"},
     "source": {"const": "mtgo"},
     "week": {"$ref": "#/$defs/week"},
     "bindings": {"$ref": "#/$defs/bindings"},
@@ -30,6 +30,12 @@
       "items": {"$ref": "#/$defs/stableId"}
     }
   },
+  "allOf": [
+    {
+      "if": {"properties": {"schema_version": {"const": "1.0.0"}}},
+      "then": {"properties": {"format": {"enum": ["standard", "modern"]}}}
+    }
+  ],
   "$defs": {
     "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "stableId": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},

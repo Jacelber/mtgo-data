@@ -94,6 +94,27 @@ registry. The command does not publish, authorize, or write weekly state.
 
 ### Reviewed data publication operations
 
+#### Explicit private review scopes
+
+An executable non-public format may use the private review path without becoming
+a public product. Pass one repeatable `--review-scope <format>=<week>` per
+format to readiness together with `--repository-sha`; each week is validated as
+a real, already-ended ISO week and is never replaced by the latest week. The
+result is readiness `1.8.0`, records the repository input SHA instead of a
+production run identity, and reports public admission fields as not applicable.
+
+Prepare screening for an exact week with `landing-review prepare --week <week>`.
+Build a reviewed private Landing with `build-landing --week <week>
+--private-output <external-directory>`. The output must remain outside the
+repository. A private format-completion carrier uses `format-completion` with
+`--private-landing <external-feature-week.json>`; it prepares one format/week
+record and does not edit the real completion ledger or grant public admission.
+
+Card-image cache `subject`, `build`, and `verify` accept the same repeatable
+`--format` selection plus `--private`. Private selection is mandatory and its
+bundle stays outside the repository. Omitting both options continues to resolve
+the complete public Landing format set only.
+
 `configs/mtgo_weekly_review_completions.yaml` 1.2 has two separate sections:
 `data_admissions` is public membership authority; `records` is maintenance
 completion evidence. Neither implies the other. Initial explicit event IDs are

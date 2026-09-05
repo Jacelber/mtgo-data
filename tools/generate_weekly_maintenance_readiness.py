@@ -313,9 +313,12 @@ def _unknown_record(record: Any, *, format_name: str) -> dict[str, Any]:
     return normalized
 
 
-def _intentional_unknowns(root: Path) -> dict[str, dict[tuple[str, str, str], dict[str, str]]]:
+def _intentional_unknowns(
+    root: Path,
+    formats: tuple[str, ...] | None = None,
+) -> dict[str, dict[tuple[str, str, str], dict[str, str]]]:
     from mtgmeta.mtgo.publication import intentional_unknowns
-    return intentional_unknowns(root)
+    return intentional_unknowns(root, formats=formats)
 
 
 def _latest_week(root: Path, format_name: str) -> tuple[dict[str, Any], dict[str, Any]]:
@@ -840,6 +843,98 @@ def _independent_readiness(root: Path, registry: dict[str, Any], *, publication_
             "workflow": {"codex_automation_required": False, "repository_mutation_authorized": False}}
 
 
+def build_private_readiness(
+    root: Path,
+    review_scopes: list[str],
+    *,
+    repository_sha: str,
+    generated_at: str,
+) -> dict[str, Any]:
+    """Build explicit non-public 1.8 readiness without publication identity."""
+
+    from datetime import date
+    from mtgmeta.mtgo.classification import audit_mtgo_classification
+    from mtgmeta.mtgo.review_scope import parse_review_scopes
+    from mtgmeta.weekly_review import build_mtgo_weekly_review
+
+    scopes = parse_review_scopes(
+        root,
+        review_scopes,
+        capability="landing_generation",
+        private=True,
+        today=date.fromisoformat(generated_at[:10]),
+    )
+    accepted = _intentional_unknowns(root, formats=tuple(scope.format_id for scope in scopes))
+    results = []
+    for scope in scopes:
+        format_id, week = scope.format_id, scope.week
+        review = build_mtgo_weekly_review(root, format_id, week)
+        audit = audit_mtgo_classification(root, format_id)
+        accepted_for_format = accepted.get(format_id, {})
+        unresolved = [
+            record for record in audit.reports["unknown_decks"]["records"]
+            if (
+                str(record["event_id"]),
+                str(record["deck_id"]),
+                str(record["source_file"]),
+            ) not in accepted_for_format
+        ]
+        review_ids = set(review["event_ids"])
+        week_unknowns = [row for row in unresolved if str(row["event_id"]) in review_ids]
+        blockers = []
+        if week_unknowns:
+            blockers.append("review-week Unknown classifications")
+        if audit.reports["index"]["summary"]["strict_validation"] != "pass":
+            blockers.append("retained-corpus classification diagnostics")
+        landing_path = root / "stats" / format_id / "mtgo/landing/features" / f"{week}.json"
+        landing = _read_json(landing_path) if landing_path.is_file() else None
+        landing_status = "available" if landing is not None else "preparation_required"
+        completion = _completion_state(root, week, format_id=format_id)
+        results.append({
+            "format": format_id,
+            "review_week": week,
+            "public_week": None,
+            "public_event_count": None,
+            "pending_event_ids": None,
+            "data_admission": "private_not_applicable",
+            "classification_review": review,
+            "retained_corpus_unknown_queue": {
+                "review_week_unresolved_unknown_records": week_unknowns,
+                "outside_review_week_unresolved_unknown_records": [
+                    row for row in unresolved if str(row["event_id"]) not in review_ids
+                ],
+                "strict_validation": audit.reports["index"]["summary"]["strict_validation"],
+            },
+            "landing": {
+                "status": landing_status,
+                "content_digest": landing.get("content_digest") if landing else None,
+            },
+            "completion": completion,
+            "blockers": blockers,
+            "status": "blocked" if blockers else (
+                "completed" if completion["state"] == "verified" else (
+                    "continue_review" if landing else "prepare_landing"
+                )
+            ),
+        })
+    label = "_".join(f"{row['format']}-{row['review_week']}" for row in results)
+    return {
+        "schema_version": "1.8.0",
+        "document_type": "weekly_maintenance_readiness",
+        "review_id": f"{label}@{repository_sha[:12]}",
+        "review_label": label,
+        "readiness_digest": _sha256_json(results),
+        "generated_at": generated_at,
+        "status": "blocked" if any(row["blockers"] for row in results) else "review_available",
+        "input": {"repository_sha": repository_sha},
+        "formats": results,
+        "workflow": {
+            "codex_automation_required": False,
+            "repository_mutation_authorized": False,
+        },
+    }
+
+
 def _write_github_output(path: Path, document: dict[str, Any]) -> None:
     with path.open("a", encoding="utf-8", newline="\n") as handle:
         label = document.get("review_label") or document["week"]["id"]
@@ -853,24 +948,45 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repository-root", type=Path, default=Path("."))
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--publication-sha", required=True)
-    parser.add_argument("--production-run-id", required=True)
-    parser.add_argument("--production-run-attempt", required=True)
-    parser.add_argument("--source-sha", required=True)
+    parser.add_argument("--publication-sha")
+    parser.add_argument("--production-run-id")
+    parser.add_argument("--production-run-attempt")
+    parser.add_argument("--source-sha")
+    parser.add_argument("--review-scope", action="append", default=[])
+    parser.add_argument("--repository-sha")
     parser.add_argument("--generated-at")
     parser.add_argument("--github-output", type=Path)
     args = parser.parse_args()
     from mtgmeta.mtgo.publication import require_private_output
     require_private_output(args.repository_root.resolve(), args.output)
     generated_at = args.generated_at or datetime.now(UTC).isoformat().replace("+00:00", "Z")
-    document = build_readiness(
-        args.repository_root.resolve(),
-        publication_sha=args.publication_sha,
-        production_run_id=args.production_run_id,
-        production_run_attempt=args.production_run_attempt,
-        source_sha=args.source_sha,
-        generated_at=generated_at,
-    )
+    if args.review_scope:
+        if not args.repository_sha:
+            parser.error("--review-scope requires --repository-sha")
+        document = build_private_readiness(
+            args.repository_root.resolve(),
+            args.review_scope,
+            repository_sha=args.repository_sha,
+            generated_at=generated_at,
+        )
+    else:
+        required = {
+            "--publication-sha": args.publication_sha,
+            "--production-run-id": args.production_run_id,
+            "--production-run-attempt": args.production_run_attempt,
+            "--source-sha": args.source_sha,
+        }
+        missing = [name for name, value in required.items() if not value]
+        if missing:
+            parser.error("default readiness requires " + ", ".join(missing))
+        document = build_readiness(
+            args.repository_root.resolve(),
+            publication_sha=args.publication_sha,
+            production_run_id=args.production_run_id,
+            production_run_attempt=args.production_run_attempt,
+            source_sha=args.source_sha,
+            generated_at=generated_at,
+        )
     schema = _read_json(
         args.repository_root.resolve()
         / "schemas"

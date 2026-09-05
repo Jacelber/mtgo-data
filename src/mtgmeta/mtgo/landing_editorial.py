@@ -24,6 +24,7 @@ from .top8 import classifier_digest
 
 SOURCE_ID = "mtgo"
 REVIEW_SCHEMA_VERSION = "1.0.0"
+FORMAT_SCOPED_REVIEW_SCHEMA_VERSION = "1.1.0"
 NAME_SCHEMA_VERSION = "1.0.0"
 PUBLIC_NAME_SCHEMA_VERSION = "1.1.0"
 DEFAULT_NAME_CATALOG = Path("configs/mtgo_archetype_names.yaml")
@@ -650,26 +651,30 @@ def load_name_catalog(path: str | Path) -> dict[tuple[str, str, str | None], dic
 def validate_name_catalog(
     repository_root: str | Path,
     catalog_path: str | Path | None = None,
+    formats: set[str] | None = None,
 ) -> dict[str, int]:
-    """Fail closed unless the catalog exactly covers current Standard/Modern taxonomy."""
+    """Fail closed unless the catalog covers the selected current taxonomies."""
 
     root = Path(repository_root).resolve()
     path = Path(catalog_path) if catalog_path is not None else root / DEFAULT_NAME_CATALOG
     document = load_name_catalog_document(path)
-    return _validate_name_catalog_document(root, document)
+    return _validate_name_catalog_document(root, document, formats=formats)
 
 
 def _validate_name_catalog_document(
     repository_root: Path,
     document: Mapping[str, Any],
+    *,
+    formats: set[str] | None = None,
 ) -> dict[str, int]:
     """Validate one in-memory bilingual catalog against the current taxonomy."""
 
     root = repository_root.resolve()
     _validate_schema(document, root / DEFAULT_NAME_SCHEMA, "bilingual name catalog")
+    selected = formats or {"standard", "modern"}
     expected = {
         row["identity_key"]: row
-        for format_id in ("standard", "modern")
+        for format_id in sorted(selected)
         for row in _taxonomy_rows(root, format_id)
     }
     actual: dict[str, Mapping[str, Any]] = {}
@@ -679,7 +684,8 @@ def _validate_name_catalog_document(
             raise MTGOLandingEditorialError(
                 f"bilingual name catalog identity is duplicated: {identity_key}"
             )
-        actual[identity_key] = item
+        if item.get("format") in selected:
+            actual[identity_key] = item
     missing = sorted(expected.keys() - actual.keys())
     extra = sorted(actual.keys() - expected.keys())
     mismatched = sorted(
@@ -720,7 +726,7 @@ def build_public_name_contract(
 
     root = Path(repository_root).resolve()
     path = Path(catalog_path) if catalog_path is not None else root / DEFAULT_NAME_CATALOG
-    validate_name_catalog(root, path)
+    validate_name_catalog(root, path, formats={format_id})
     catalog = load_name_catalog_document(path)
     taxonomy_rows = _taxonomy_rows(root, format_id)
     identity_subject = [
@@ -981,17 +987,22 @@ def _event_id(value: Any) -> str:
 def _catalog_from_workbook(
     repository_root: Path,
     rows: list[dict[str, Any]],
+    *,
+    formats: set[str] | None = None,
 ) -> dict[str, Any]:
+    selected = formats or {"standard", "modern"}
     taxonomy = {
         row["identity_key"]: row
-        for format_id in ("standard", "modern")
+        for format_id in sorted(selected)
         for row in _taxonomy_rows(repository_root, format_id)
     }
     names: list[dict[str, Any]] = []
     for row in rows:
+        format_id = str(row.get("Format") or "")
+        if format_id not in selected:
+            continue
         if row.get("Review Result") != "APPROVED":
             raise MTGOLandingEditorialError("bilingual name row lacks explicit APPROVED review")
-        format_id = str(row.get("Format") or "")
         parent_id = str(row.get("Parent ID") or "")
         subtype_id = str(row.get("Subtype ID") or "").strip() or None
         identity_key = _identity_key(format_id, parent_id, subtype_id)
@@ -1016,21 +1027,36 @@ def _catalog_from_workbook(
         )
     workbook_keys = {item["identity_key"] for item in names}
     if workbook_keys != set(taxonomy):
-        current_path = repository_root / DEFAULT_NAME_CATALOG
-        current_document = load_name_catalog_document(current_path)
-        _validate_name_catalog_document(repository_root, current_document)
-        names.extend(
-            dict(item)
-            for item in current_document["names"]
-            if item["identity_key"] not in workbook_keys
+        missing = sorted(set(taxonomy) - workbook_keys)
+        extra = sorted(workbook_keys - set(taxonomy))
+        raise MTGOLandingEditorialError(
+            "workbook name scope is incomplete or stale: "
+            f"missing={missing[:5]}; extra={extra[:5]}"
         )
+    current_path = repository_root / DEFAULT_NAME_CATALOG
+    if current_path.is_file():
+        current_document = load_name_catalog_document(current_path)
+        selected_rows = {item["identity_key"]: item for item in names}
+        merged: list[dict[str, Any]] = []
+        for item in current_document["names"]:
+            if item["format"] in selected:
+                replacement = selected_rows.pop(item["identity_key"], None)
+                if replacement is not None:
+                    merged.append(replacement)
+            else:
+                merged.append(dict(item))
+        merged.extend(
+            selected_rows[key]
+            for key in sorted(selected_rows)
+        )
+        names = merged
     document = {"schema_version": NAME_SCHEMA_VERSION, "names": names}
     _validate_schema(
         document,
         repository_root / DEFAULT_NAME_SCHEMA,
         "imported bilingual name catalog",
     )
-    _validate_name_catalog_document(repository_root, document)
+    _validate_name_catalog_document(repository_root, document, formats=selected)
     return document
 
 
@@ -1049,7 +1075,7 @@ def _control_scopes(rows: list[dict[str, Any]]) -> dict[tuple[str, str], dict[st
     for row in rows:
         format_id = str(row.get("Format") or "").strip()
         week = str(row.get("Week") or "").strip()
-        if format_id not in {"standard", "modern"} or not re.fullmatch(
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", format_id) or not re.fullmatch(
             r"[0-9]{4}-W[0-9]{2}", week
         ):
             continue
@@ -1093,7 +1119,7 @@ def _copy_rows_by_scope(
             continue
         format_id = str(row.get("Format") or "")
         if format_id not in copy_scope_by_format:
-            if format_id in {"standard", "modern"}:
+            if format_id not in {scope[0] for scope in scopes}:
                 continue
             raise MTGOLandingEditorialError(f"kept top copy has no valid scope: {format_id}")
         key = copy_scope_by_format[format_id]
@@ -1175,7 +1201,7 @@ def _feature_rows_by_scope(
             continue
         key = (str(row.get("Format") or ""), str(row.get("Feature Week") or ""))
         if key not in scopes:
-            if key[0] in {"standard", "modern"} and key[0] not in {
+            if key[0] not in {
                 scope[0] for scope in scopes
             }:
                 continue
@@ -1507,10 +1533,13 @@ def _validated_workbook_subject(
             raise MTGOLandingEditorialError(
                 "review workbook has no valid scope for the requested format"
             )
-    catalog_document = load_name_catalog_document(root / DEFAULT_NAME_CATALOG)
-    _validate_name_catalog_document(root, catalog_document)
+    selected_formats = {scope[0] for scope in scopes}
+    catalog_document = _catalog_from_workbook(
+        root,
+        sheets["Field Guide"],
+        formats=selected_formats,
+    )
     names = _name_lookup_from_document(catalog_document)
-    catalog_digest = document_digest(catalog_document)
     subjects = {scope: build_top8_subject(root, *scope) for scope in scopes}
     for scope, subject in subjects.items():
         _verify_workbook_top8(scope, subject, sheets["All Top 8"])
@@ -1529,6 +1558,13 @@ def _validated_workbook_subject(
     reviews: dict[tuple[str, str], dict[str, Any]] = {}
     for scope in sorted(scopes):
         format_id, week = scope
+        format_catalog = {
+            "schema_version": catalog_document["schema_version"],
+            "names": [
+                dict(item) for item in catalog_document["names"]
+                if item["format"] == format_id
+            ],
+        }
         subject = subjects[scope]
         features = feature_rows[scope]
         feature_tokens = {item["destination_id"] for item in features}
@@ -1541,7 +1577,11 @@ def _validated_workbook_subject(
             for item in subject["all_top8"]
         ]
         document = {
-            "schema_version": REVIEW_SCHEMA_VERSION,
+            "schema_version": (
+                REVIEW_SCHEMA_VERSION
+                if selected_formats <= {"standard", "modern"}
+                else FORMAT_SCOPED_REVIEW_SCHEMA_VERSION
+            ),
             "format": format_id,
             "source": SOURCE_ID,
             "week": subject["week"],
@@ -1552,7 +1592,11 @@ def _validated_workbook_subject(
                 "selection_policy_digest": subject["selection_policy_digest"],
                 "machine_fact_digest": subject["machine_fact_digest"],
                 "link_catalog_digest": subject["link_catalog_digest"],
-                "bilingual_catalog_digest": catalog_digest,
+                "bilingual_catalog_digest": document_digest(
+                    format_catalog
+                    if selected_formats - {"standard", "modern"}
+                    else catalog_document
+                ),
             },
             "candidate_evidence": subject["candidate_evidence"],
             "all_top8": stored_top8,
