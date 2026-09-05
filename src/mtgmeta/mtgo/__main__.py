@@ -72,10 +72,19 @@ def build_parser() -> argparse.ArgumentParser:
         "build-completeness",
         help="build range-specific MTGO source-completeness data",
     )
-    commands.add_parser(
+    landing_parser = commands.add_parser(
         "build-landing",
         help="build the latest-only MTGO Landing document",
     )
+    landing_parser.add_argument("--week", help="explicit closed review week")
+    landing_parser.add_argument(
+        "--private-output",
+        type=Path,
+        help="build a private format into an external directory",
+    )
+    landing_parser.add_argument("--review-directory", type=Path)
+    landing_parser.add_argument("--name-catalog", type=Path)
+    landing_parser.add_argument("--visuals", type=Path)
     review_parser = commands.add_parser(
         "landing-review",
         help="manage the private Landing editorial review source",
@@ -91,6 +100,7 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="preserve an existing candidate for the latest complete week",
     )
+    prepare_parser.add_argument("--week", help="explicit closed review week")
     validate_parser = review_commands.add_parser(
         "validate-xlsx",
         help="validate a Landing workbook stage without importing it",
@@ -263,7 +273,17 @@ def _run_completeness(
 
 
 def _run_landing(args: argparse.Namespace, root: Path, registry: Path) -> int:
-    result = landing.generate(root, args.format_id, registry_path=registry)
+    result = landing.generate(
+        root,
+        args.format_id,
+        registry_path=registry,
+        review_directory=args.review_directory,
+        name_catalog_path=args.name_catalog,
+        output_directory=args.private_output,
+        visuals_path=args.visuals,
+        private=args.private_output is not None,
+        review_week=args.week,
+    )
     if result["status"] in {"stale_review_required", "summary_review_required"}:
         reason = (
             "explicit summary review"
@@ -291,6 +311,7 @@ def _run_landing_review(args: argparse.Namespace, root: Path, registry: Path) ->
             args.format_id,
             registry_path=registry,
             preserve_existing=args.if_absent,
+            week=args.week,
         )
         if result is None:
             print(f"No complete MTGO event week is available for {args.format_id}.")

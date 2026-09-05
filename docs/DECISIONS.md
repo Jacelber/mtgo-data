@@ -8284,3 +8284,26 @@ publication, or deployment repair still requires an independently applicable
 recovery authority; permission to maintain the one observation comment is
 evidence authority only. Product behavior, statistics, Schemas, data, public
 paths, workflows, CI routing, and production behavior remain unchanged.
+
+# DEC-165 - Isolate explicit private MTGO review scope from public defaults
+
+Status: `Accepted; local implementation authorized`
+
+P14-03A keeps Definition, Implementation, and Completion as stages of one task.
+Shared review tools must prove a third executable format without admitting real
+Pauper Landing content or changing Standard/Modern defaults. Use an ordered,
+explicit `<format>=<week>` scope for private work, validate it against the
+format registry and required capability, require a completed ISO week, and keep
+all private generated artifacts outside the repository.
+
+Names and visuals bind per format for new private review/Landing versions so a
+third format cannot invalidate historical public objects. Public admission
+continues through the existing resolver; private Landing and cache paths may
+not call or infer that authority. Readiness `1.8.0` describes repository input
+and private review state without production identity. A single-format
+completion carrier remains evidence only and never writes the real ledger.
+
+This decision changes no statistics, thresholds, taxonomy identity, event
+admission, real Pauper review content, public path, front end, workflow, or
+production behavior. Completion publication remains gated by Owner acceptance
+of the local Implementation artifact.

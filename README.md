@@ -289,6 +289,13 @@ and Chromium dependencies beforehand. See
 [`docs/WEEKLY_MAINTENANCE.md`](docs/WEEKLY_MAINTENANCE.md#reviewed-data-publication-operations)
 for exact acceptance-record commands, both publication nodes and stop conditions.
 
+Private executable formats remain opt-in. Use `landing-review prepare --week
+<YYYY-Www>` and `build-landing --week <YYYY-Www> --private-output
+<external-directory>` for an explicitly reviewed week. Weekly readiness accepts
+repeatable `--review-scope <format>=<week>` with `--repository-sha`; Landing
+card-cache commands accept repeatable `--format` with `--private`. None of these
+private operations changes public admission or writes a completion record.
+
 The Landing editorial producer owns weekly candidate screening through
 `landing-review prepare`. Candidate generation never approves a row,
 publishes a week, or changes accepted Landing state. Candidates are available

@@ -12,7 +12,7 @@
   "properties": {
     "schema_version": {"const": "1.0.0"},
     "product": {"const": "mtgo-landing-features"},
-    "format": {"enum": ["standard", "modern"]},
+    "format": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
     "source": {"const": "mtgo"},
     "week": {"$ref": "mtgo-landing.schema.json#/$defs/week"},
     "source_event_ids": {"$ref": "mtgo-landing.schema.json#/$defs/eventIds"},

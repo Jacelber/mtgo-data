@@ -8,7 +8,7 @@
   "required": ["schema_version", "format", "provenance", "names"],
   "properties": {
     "schema_version": {"const": "1.1.0"},
-    "format": {"enum": ["standard", "modern"]},
+    "format": {"$ref": "#/$defs/stableId"},
     "provenance": {
       "type": "object",
       "additionalProperties": false,

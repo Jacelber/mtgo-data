@@ -3739,6 +3739,24 @@ dynamically and require embedded format identity to match the output path.
 This changes neither formulas nor classifier rules. Human Landing/name
 carriers and first real Pauper publication remain separately gated.
 
+#### Explicit private review execution
+
+P14-03A adds a small ordered format/week scope boundary for executable MTGO
+formats. It validates registry membership, the operation capability, format
+path identity, duplicate formats, and completed ISO weeks. Default operations
+still resolve only the complete public format set; a non-public format requires
+an explicit private scope and repository-external output.
+
+Private Landing review `1.1.0` binds the selected format's approved name rows.
+Private Landing current `1.3.0` binds only that format's visual configuration.
+Historical review and Landing versions retain their whole-catalog and
+whole-visual digest rules. Feature archives, name projections, and card-cache
+documents keep their existing versions while accepting a registry-validated
+format identifier. Readiness `1.8.0` records `input.repository_sha`, carries no
+production identity, and represents public admission fields as not applicable.
+These contracts do not make a format public and do not authorize collection,
+publication, ledger mutation, or Pages inclusion.
+
 The `data_admissions` section of completion configuration 1.2 is a separate
 authority from its `records` section. Each format has a fixed grandfathered
 initial ID set and explicit Owner-accepted full-classification week sets, with

@@ -23,7 +23,7 @@
         "review_status", "identity_key"
       ],
       "properties": {
-        "format": {"enum": ["standard", "modern"]},
+        "format": {"$ref": "#/$defs/stableId"},
         "parent_id": {"$ref": "#/$defs/stableId"},
         "subtype_id": {
           "oneOf": [
@@ -36,7 +36,7 @@
         "review_status": {"const": "approved"},
         "identity_key": {
           "type": "string",
-          "pattern": "^(standard|modern)\\|[a-z0-9]+(?:-[a-z0-9]+)*\\|(?:none|[a-z0-9]+(?:-[a-z0-9]+)*)$"
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\|[a-z0-9]+(?:-[a-z0-9]+)*\\|(?:none|[a-z0-9]+(?:-[a-z0-9]+)*)$"
         }
       }
     }

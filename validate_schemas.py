@@ -108,8 +108,16 @@ def validate_manifest(
             else:
                 failures.extend(validate_instance(instance, schemas[schema_name], registry, relative))
                 parts = path.relative_to(repository_root).parts
-                if (len(parts) >= 4 and parts[0] in {"stats", "reports"}
-                        and parts[2] == "mtgo"):
+                format_scoped_output = (
+                    len(parts) >= 4
+                    and parts[0] in {"stats", "reports"}
+                    and parts[2] == "mtgo"
+                ) or (
+                    len(parts) == 3
+                    and parts[0] == "stats"
+                    and parts[2] == "archetype_names.json"
+                )
+                if format_scoped_output:
                     if formats is None:
                         formats = load_format_registry(repository_root / "configs/formats.yaml")
                     try:

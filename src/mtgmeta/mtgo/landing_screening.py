@@ -500,6 +500,7 @@ def prepare_candidates(
     known_file: str | Path | None = None,
     policy_file: str | Path | None = None,
     preserve_existing: bool = False,
+    week: str | None = None,
 ) -> dict[str, Any] | None:
     """Prepare private Landing screening candidates for one MTGO format."""
 
@@ -518,7 +519,17 @@ def prepare_candidates(
         repository_root, format_id, registry_path=registry_path, public=False
     )
     reference_today = today or datetime.now().date()
-    end_monday = stats.latest_complete_week(events, today=reference_today)
+    if week is None:
+        end_monday = stats.latest_complete_week(events, today=reference_today)
+    else:
+        from .review_scope import parse_iso_week
+
+        end_monday = parse_iso_week(week)
+        latest = stats.latest_complete_week(events, today=reference_today)
+        if latest is None or end_monday > latest:
+            raise MTGOLandingScreeningError(
+                f"requested review week is unavailable or incomplete: {week}"
+            )
     if end_monday is None:
         return None
 

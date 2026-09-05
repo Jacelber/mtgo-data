@@ -28,6 +28,7 @@ SHARE_MOVE_THRESHOLD = 0.05
 EXIT_THRESHOLD = 0.05
 BUILD_SHIFT_THRESHOLD = 20
 LANDING_SCHEMA_VERSION = "1.2.0"
+PRIVATE_LANDING_SCHEMA_VERSION = "1.3.0"
 FEATURE_ARCHIVE_SCHEMA_VERSION = "1.0.0"
 FEATURE_ARCHIVE_PRODUCT_ID = "mtgo-landing-features"
 DEFAULT_VISUALS_PATH = Path("configs/mtgo_landing_visuals.yaml")
@@ -625,11 +626,16 @@ def _feature_archive_documents(
     format_id: str,
     review_root: Path,
     name_catalog_path: Path,
+    *,
+    private: bool = False,
 ) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
-    editorial.validate_name_catalog(root, name_catalog_path)
+    editorial.validate_name_catalog(root, name_catalog_path, formats={format_id})
     names = editorial.load_name_catalog(name_catalog_path)
-    from .publication import resolve_scope
-    admitted = resolve_scope(root, format_id).event_ids
+    admitted: frozenset[str] | None = None
+    if not private:
+        from .publication import resolve_scope
+
+        admitted = resolve_scope(root, format_id).event_ids
     week_documents: dict[str, dict[str, Any]] = {}
     index_entries: list[dict[str, Any]] = []
     for review_path in sorted(review_root.glob("????-W??.yaml")):
@@ -646,7 +652,7 @@ def _feature_archive_documents(
             raise MTGOLandingError(
                 f"{review_path}: Landing review filename does not match week"
             )
-        if not set(review["bindings"]["source_event_ids"]) <= admitted:
+        if admitted is not None and not set(review["bindings"]["source_event_ids"]) <= admitted:
             existing = root / "stats" / format_id / "mtgo/landing/features" / f"{week['id']}.json"
             if existing.is_file():
                 raise MTGOLandingError("existing public Landing feature source is outside the admitted scope")
@@ -702,6 +708,8 @@ def build_document(
     visuals_path: str | Path | None = None,
     allow_classifier_restatement: bool = False,
     _admit_review: bool = True,
+    private: bool = False,
+    review_week: str | None = None,
 ) -> tuple[str, dict[str, Any]]:
     root = Path(repository_root).resolve()
     context = load_mtgo_context(
@@ -711,11 +719,22 @@ def build_document(
         registry_path=registry_path,
     )
     rules = load_rules_for_format(root, format_id, registry_path=registry_path)
-    events = stats.load_all_events(root, format_id, registry_path=registry_path,
-                                  public=_admit_review)
+    definition = context.definition
+    if private and definition.public:
+        raise MTGOLandingError("private Landing mode requires a public: false format")
+    events = stats.load_all_events(
+        root, format_id, registry_path=registry_path, public=_admit_review and not private
+    )
     reference_today = today or datetime.now().date()
-    target_monday = _closed_week_monday(reference_today)
-    if _admit_review:
+    if review_week is not None:
+        from .review_scope import parse_iso_week
+
+        target_monday = parse_iso_week(review_week)
+        if target_monday >= stats.week_monday(reference_today):
+            raise MTGOLandingError(f"review week has not ended: {review_week}")
+    else:
+        target_monday = _closed_week_monday(reference_today)
+    if _admit_review and not private:
         from .publication import resolve_scope
         target_monday = min(target_monday, resolve_scope(root, format_id).week)
     target_sunday = target_monday + timedelta(days=6)
@@ -740,7 +759,11 @@ def build_document(
     rules_digest = classifier_digest(rules)
     selection_policy_digest = screening.document_digest(screening.load_screening_policy(root))
     visual_metadata = load_visual_metadata(root, visuals_path)
-    visual_metadata_digest = screening.document_digest(visual_metadata)
+    visual_metadata_digest = screening.document_digest(
+        {"format": format_id, "visuals": visual_metadata["formats"].get(format_id)}
+        if private
+        else visual_metadata
+    )
     display_names = _display_names(rules)
     comparison_available = bool(
         current["event_ids"] and previous["event_ids"] and reference["event_ids"]
@@ -861,7 +884,7 @@ def build_document(
                 if name_catalog_path is not None
                 else root / editorial.DEFAULT_NAME_CATALOG
             )
-            editorial.validate_name_catalog(root, catalog_path)
+            editorial.validate_name_catalog(root, catalog_path, formats={format_id})
             name_document = editorial.load_name_catalog_document(catalog_path)
             names = editorial.load_name_catalog(catalog_path)
             review = editorial.load_review_document(
@@ -876,7 +899,17 @@ def build_document(
                 "selection_policy_digest": selection_policy_digest,
                 "machine_fact_digest": machine_fact_digest,
                 "link_catalog_digest": editorial.document_digest(current_catalog),
-                "bilingual_catalog_digest": editorial.document_digest(name_document),
+                "bilingual_catalog_digest": editorial.document_digest(
+                    {
+                        "schema_version": name_document["schema_version"],
+                        "names": [
+                            dict(item) for item in name_document["names"]
+                            if item["format"] == format_id
+                        ],
+                    }
+                    if private
+                    else name_document
+                ),
             }
             binding_fields = (
                 "workbook_sha256",
@@ -951,7 +984,7 @@ def build_document(
                 "summary_fact_digest": summary_fact_digest,
             },
         },
-        schema_version=LANDING_SCHEMA_VERSION,
+        schema_version=PRIVATE_LANDING_SCHEMA_VERSION if private else LANDING_SCHEMA_VERSION,
     )
     validate_document(document)
     return review_status, document
@@ -1058,7 +1091,7 @@ def validate_document(document: Mapping[str, Any]) -> None:
                 for link in links
             ):
                 raise MTGOLandingError("Landing weekly summary deck-link label is invalid")
-        if document["schema_version"] == LANDING_SCHEMA_VERSION:
+        if document["schema_version"] in {LANDING_SCHEMA_VERSION, PRIVATE_LANDING_SCHEMA_VERSION}:
             feature_destinations = {
                 item.get("destination_id") for item in document["features"]["items"]
             }
@@ -1125,6 +1158,8 @@ def generate(
     output_directory: str | Path | None = None,
     visuals_path: str | Path | None = None,
     allow_classifier_restatement: bool = False,
+    private: bool = False,
+    review_week: str | None = None,
 ) -> dict[str, Any]:
     root = Path(repository_root).resolve()
     context = load_mtgo_context(
@@ -1142,12 +1177,23 @@ def generate(
         name_catalog_path=name_catalog_path,
         visuals_path=visuals_path,
         allow_classifier_restatement=allow_classifier_restatement,
+        private=private,
+        review_week=review_week,
     )
     output = (
         Path(output_directory).resolve()
         if output_directory is not None
         else context.paths["statistics"] / "landing"
     )
+    if private:
+        if output_directory is None:
+            raise MTGOLandingError("private Landing mode requires an explicit output directory")
+        try:
+            output.relative_to(root)
+        except ValueError:
+            pass
+        else:
+            raise MTGOLandingError("private Landing output must be outside the repository")
     destination = output / "current.json"
     if review_status in {"stale_review_required", "summary_review_required"}:
         if not destination.is_file():
@@ -1176,6 +1222,7 @@ def generate(
         format_id,
         review_root,
         catalog_path,
+        private=private,
     )
     current_feature = feature_weeks.get(document["week"]["id"])
     if current_feature is None or current_feature["features"]["items"] != document["features"]["items"]:
