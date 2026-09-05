@@ -13,6 +13,7 @@ from tools.build_landing_card_image_cache import (
     CacheBuildError,
     build_cache_bundle,
     cache_subject,
+    main as landing_cache_main,
     verify_cache_bundle,
 )
 from validate_schemas import load_schemas, validate_instance
@@ -184,6 +185,17 @@ def test_subject_uses_latest_published_week_and_three_iso_predecessors(tmp_path)
     assert subject["cache_schema_version"] == "1.1.0"
     assert len(subject["subject_sha256"]) == 64
     assert subject == cache_subject(root)
+
+
+def test_subject_can_write_one_machine_readable_json_document(tmp_path):
+    root = _synthetic_subject_root(tmp_path)
+    output = tmp_path / "subject.json"
+
+    assert landing_cache_main(
+        ["subject", "--root", str(root), "--json-output", str(output)]
+    ) == 0
+
+    assert json.loads(output.read_text(encoding="utf-8")) == cache_subject(root)
 
 
 def test_build_ignores_repository_art_and_resolves_every_full_card_image(tmp_path):
@@ -368,7 +380,12 @@ def test_pages_builder_admits_only_verified_configured_overlay(tmp_path, monkeyp
         for suffix in ("meta.json", "matchup_index.json", "top8/index.json", "landing/current.json"):
             path = root / f"stats/{format_name}/mtgo/{suffix}"
             if not path.exists():
-                _write_json(path, {})
+                value = (
+                    {"week": {"id": "2026-W34"}, "environment": {"rows": []}}
+                    if suffix == "landing/current.json"
+                    else {}
+                )
+                _write_json(path, value)
     _write_json(root / "configs/formats.yaml", {"schema_version": "1.3.0", "formats": formats})
     write_catalog(root, generated_at="2026-08-17T00:00:00+00:00")
     (root / "index.html").write_text("ok", encoding="utf-8")
