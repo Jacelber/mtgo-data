@@ -8224,3 +8224,63 @@ framework. Failed validation publishes nothing. Production, exact-subject,
 permissions and Pages gates are not relaxed. A new classifier/product decision,
 unexplained migration difference or inadequate frontend protection returns to
 the Owner instead of expanding this implementation.
+
+# DEC-165 - Permit bounded pre-merge repair after Owner acceptance
+
+## Status
+
+Accepted design, 2026-09-05. Implementation is subject to local Owner
+acceptance.
+
+## Context
+
+DEC-094 correctly made Owner acceptance the single authorization for completing
+one unchanged task, but required every failed required check to return to the
+Owner. Local validation-failure handling separately allowed in-scope repair
+before acceptance. Together those rules left no uniform authority for a purely
+technical, evidenced repair discovered after acceptance and before merge, even
+when the accepted subject and every protected boundary remained unchanged.
+
+Gate 4 also named risk and minimized checks without requiring the implementation
+to confirm that each required test was selected by its real entry point, ran
+under the correct identity and platform, and proved the intended object.
+
+## Decision
+
+Partially supersede DEC-094 only in these respects:
+
+1. A failed required check closes the merge gate but does not automatically
+   require new Owner authorization. After acceptance and before merge, Codex may
+   autonomously diagnose, repair, validate, commit, and update the same Ready
+   pull request when every bounded-repair condition remains satisfied and the
+   two-round remote-repair allowance is not exhausted.
+2. A legal bounded repair may change the implementation diff, tree, commit, and
+   pull-request head. The original Owner-accepted subject and anchor remain
+   authoritative, and each changed head requires the exact diff, preservation,
+   validation, and publication evidence defined in
+   `docs/DEVELOPMENT_WORKFLOW.md`.
+
+Retain DEC-094's continuous same-task completion model and all of its other
+limits. Acceptance still grants no authority for another task or phase,
+force-push, repository settings, secrets, unrelated credentials, destructive
+action, scope expansion, or a new product, statistical, editorial, or security
+decision. The complete eligibility, diagnosis, evidence invalidation, UI,
+base-refresh, preflight, round-counting, stop, post-merge, and three-task
+observation rules live in `docs/DEVELOPMENT_WORKFLOW.md` and are not duplicated
+here.
+
+## Consequences
+
+Gate 4 must verify the execution contract of every new or affected required
+validation before Owner acceptance. A later technical failure can be repaired
+without a mechanical authorization prompt only while the accepted subject,
+validation strength, exact evidence, permissions, and repair allowance all
+remain intact. Boundary uncertainty or exhaustion still returns to the Owner.
+
+This decision becomes effective only when the governance change containing it
+merges. That governance task completes under the prior required-check stop rule
+and cannot use this decision to authorize its own repair. Post-merge code,
+publication, or deployment repair still requires an independently applicable
+recovery authority; permission to maintain the one observation comment is
+evidence authority only. Product behavior, statistics, Schemas, data, public
+paths, workflows, CI routing, and production behavior remain unchanged.
