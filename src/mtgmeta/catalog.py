@@ -10,7 +10,11 @@ from typing import Any, Sequence
 
 from mtgmeta.public_contract import versioned
 
-from .config import REQUIRED_MTGO_PRODUCT_CAPABILITIES, load_format_registry
+from .config import (
+    REQUIRED_MTGO_PRODUCT_CAPABILITIES,
+    FormatDefinition,
+    load_format_registry,
+)
 
 
 PRODUCTS = (
@@ -24,6 +28,71 @@ DEFAULT_MTGO_PRODUCT_ID = "mtgo-landing"
 REQUIRED_MTGO_PRODUCT_IDS = frozenset(
     product_id for product_id, source, _suffix in PRODUCTS if source == "mtgo"
 )
+
+
+def _product_path(format_id: str, source: str, suffix: str) -> Path:
+    return Path("stats") / format_id / source / Path(suffix)
+
+
+def require_complete_public_format(
+    repository_root: str | Path,
+    definition: FormatDefinition,
+) -> FormatDefinition:
+    """Resolve complete-public eligibility from registry state and product files."""
+
+    root = Path(repository_root).resolve()
+    if not definition.public:
+        raise ValueError(
+            f"format {definition.id!r} is not a complete public MTGO format: "
+            "registry public is false"
+        )
+    if definition.state != "executable" or not definition.mtgo.enabled:
+        raise ValueError(f"public format {definition.id!r} must be executable")
+    if not REQUIRED_MTGO_PRODUCT_CAPABILITIES <= definition.mtgo.capabilities:
+        raise ValueError(
+            f"public format {definition.id!r} is missing required MTGO capabilities"
+        )
+    missing = sorted(
+        product_id
+        for product_id, source, suffix in PRODUCTS
+        if product_id in REQUIRED_MTGO_PRODUCT_IDS
+        and not (root / _product_path(definition.id, source, suffix)).is_file()
+    )
+    if missing:
+        raise ValueError(
+            f"public format {definition.id!r} is missing required MTGO products: "
+            + ", ".join(missing)
+        )
+    return definition
+
+
+def resolve_complete_public_format(
+    repository_root: str | Path,
+    format_id: str,
+    *,
+    registry_path: str | Path | None = None,
+) -> FormatDefinition:
+    root = Path(repository_root).resolve()
+    registry = load_format_registry(
+        registry_path or root / "configs" / "formats.yaml"
+    )
+    return require_complete_public_format(root, registry.get(format_id))
+
+
+def complete_public_formats(
+    repository_root: str | Path,
+    *,
+    registry_path: str | Path | None = None,
+) -> tuple[FormatDefinition, ...]:
+    root = Path(repository_root).resolve()
+    registry = load_format_registry(
+        registry_path or root / "configs" / "formats.yaml"
+    )
+    return tuple(
+        require_complete_public_format(root, definition)
+        for definition in registry.formats
+        if definition.public
+    )
 
 
 def build_catalog(
@@ -44,13 +113,11 @@ def build_catalog(
         generated = generated_at
     formats = []
     for definition in registry.formats:
-        if definition.public and not definition.mtgo.enabled:
-            raise ValueError(f"public format {definition.id!r} must be executable")
-        if definition.public and not REQUIRED_MTGO_PRODUCT_CAPABILITIES <= definition.mtgo.capabilities:
-            raise ValueError(f"public format {definition.id!r} is missing required MTGO capabilities")
+        if definition.public:
+            require_complete_public_format(root, definition)
         products = []
         for product_id, source, suffix in PRODUCTS:
-            relative = Path("stats") / definition.id / source / Path(suffix)
+            relative = _product_path(definition.id, source, suffix)
             available = definition.public and (root / relative).is_file()
             products.append(
                 {
@@ -60,17 +127,6 @@ def build_catalog(
                 }
             )
         available_ids = [item["id"] for item in products if item["available"]]
-        available_mtgo_ids = {
-            item["id"]
-            for item in products
-            if item["available"] and item["id"] in REQUIRED_MTGO_PRODUCT_IDS
-        }
-        if definition.public and available_mtgo_ids != REQUIRED_MTGO_PRODUCT_IDS:
-            missing = sorted(REQUIRED_MTGO_PRODUCT_IDS - available_mtgo_ids)
-            raise ValueError(
-                f"public format {definition.id!r} is missing required MTGO products: "
-                + ", ".join(missing)
-            )
         default_product_id = (
             DEFAULT_MTGO_PRODUCT_ID
             if DEFAULT_MTGO_PRODUCT_ID in available_ids

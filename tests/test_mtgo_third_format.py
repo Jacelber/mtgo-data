@@ -9,7 +9,12 @@ import shutil
 import pytest
 
 from build_pages_artifact import PublicationError as PagesError, publication_paths
-from mtgmeta.catalog import build_catalog, write_catalog
+from mtgmeta.catalog import (
+    build_catalog,
+    complete_public_formats,
+    resolve_complete_public_format,
+    write_catalog,
+)
 from mtgmeta.classification_reports_cli import generate_reports
 from mtgmeta.config import DisabledFormatError
 from mtgmeta.mtgo import load_mtgo_context
@@ -99,6 +104,8 @@ def repository(root, state):
 def test_four_states_share_execution_catalog_and_direct_path_boundary(tmp_path, state):
     repository(tmp_path, state)
     if state == "incomplete_public":
+        with pytest.raises(ValueError, match="missing required MTGO products"):
+            resolve_complete_public_format(tmp_path, THIRD)
         with pytest.raises(CandidateValidationError, match="missing required MTGO products"):
             _configured_formats(tmp_path)
         with pytest.raises(ValueError, match="missing required MTGO products"):
@@ -119,6 +126,11 @@ def test_four_states_share_execution_catalog_and_direct_path_boundary(tmp_path, 
     paths = publication_paths(tmp_path, POLICY)
     third = build_catalog(tmp_path)["formats"][2]
     available = state == "complete_public"
+    if available:
+        assert resolve_complete_public_format(tmp_path, THIRD).id == THIRD
+    else:
+        with pytest.raises(ValueError, match="not a complete public MTGO format"):
+            resolve_complete_public_format(tmp_path, THIRD)
     assert bool(third["default_product_id"]) == available
     assert all(item["available"] == available for item in third["products"] if item["id"].startswith("mtgo-"))
     assert (f"stats/{THIRD}/mtgo/meta.json" in paths) == available
@@ -172,9 +184,17 @@ def test_shared_producers_and_dynamic_manifest_use_the_correct_population(tmp_pa
 def test_stale_catalog_and_incomplete_public_capabilities_fail_closed(tmp_path):
     entries = repository(tmp_path, "private_executable")
     write_catalog(tmp_path, generated_at=NOW)
+    assert [item.id for item in complete_public_formats(tmp_path)] == [
+        "standard",
+        "modern",
+    ]
     catalog = json.loads((tmp_path / "stats/catalog.json").read_text())
     catalog["formats"][2]["products"][0].update(available=True, path=f"stats/{THIRD}/mtgo/meta.json")
     write(tmp_path, "stats/catalog.json", catalog)
+    assert [item.id for item in complete_public_formats(tmp_path)] == [
+        "standard",
+        "modern",
+    ]
     with pytest.raises(PagesError, match="current format admission"):
         publication_paths(tmp_path, POLICY)
     entries[2]["public"] = True

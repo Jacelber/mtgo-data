@@ -16,6 +16,7 @@ from typing import Any
 
 import yaml
 
+from .catalog import complete_public_formats, resolve_complete_public_format
 from .classifier import classifier_digest
 from .mtgo.normalize import load_rules_for_format
 
@@ -569,6 +570,7 @@ def inspect_format(repository_root: str | Path, format_id: str) -> dict[str, Any
 
     root = Path(repository_root).resolve()
     try:
+        resolve_complete_public_format(root, format_id)
         _catalog_format(root, format_id)
         desired = classifier_digest(load_rules_for_format(root, format_id))
         discovered = _discover_mtgo_paths(root, format_id)
@@ -618,15 +620,7 @@ def inspect_format(repository_root: str | Path, format_id: str) -> dict[str, Any
 
 def discover_live_formats(repository_root: str | Path) -> list[str]:
     root = Path(repository_root).resolve()
-    catalog = _json_object(root / "stats" / "catalog.json")
-    formats = catalog.get("formats")
-    if not isinstance(formats, list):
-        raise ClassifierClosureError("stats/catalog.json has no format list")
-    return sorted(
-        str(item["id"])
-        for item in formats
-        if isinstance(item, Mapping) and item.get("state") == "executable"
-    )
+    return sorted(definition.id for definition in complete_public_formats(root))
 
 
 def inspect_repository(

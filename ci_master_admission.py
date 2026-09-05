@@ -519,6 +519,15 @@ def _validation_triggers(paths: set[str]) -> tuple[str, ...]:
         triggers.add("top8-restatement")
 
     if paths & {
+        "configs/formats.yaml",
+        "src/mtgmeta/catalog.py",
+        "src/mtgmeta/classifier_closure.py",
+        "tests/test_classifier_closure.py",
+        "tests/test_mtgo_third_format.py",
+    }:
+        triggers.add("public-admission")
+
+    if paths & {
         ".github/workflows/ci.yml",
         ".github/workflows/pages.yml",
         ".github/workflows/update.yml",

@@ -216,6 +216,13 @@ PUBLIC_PRODUCT_FACT_SOURCES = frozenset(
         "configs/melee_events.yaml",
     }
 )
+CATALOG_CONSISTENCY_SOURCES = frozenset(
+    {
+        "configs/formats.yaml",
+        "stats/catalog.json",
+        "src/mtgmeta/catalog.py",
+    }
+)
 FRONTEND_REFERENCE_TRIGGERS = frozenset(
     set(PHASE8_PRODUCTION_RESOURCES)
     | set(PHASE8_FRONTEND_ENTRIES)
@@ -229,6 +236,7 @@ class ValidationPlan:
     javascript: tuple[str, ...]
     reference_groups: frozenset[str]
     public_product_facts: bool
+    catalog_consistency: bool
     hygiene: tuple[str, ...]
 
 
@@ -401,6 +409,7 @@ def changed_validation_plan(changed: list[str], tracked: list[str]) -> Validatio
         javascript=tuple(sorted(name for name in existing if name.endswith(".js"))),
         reference_groups=reference_groups_for_paths(changed_set),
         public_product_facts=public_product_facts,
+        catalog_consistency=bool(changed_set.intersection(CATALOG_CONSISTENCY_SOURCES)),
         hygiene=tuple(sorted(existing)),
     )
 
@@ -896,6 +905,59 @@ def validate_public_product_facts(
     return checked, failures
 
 
+def validate_catalog_consistency(
+    root: Path,
+    names: list[str],
+) -> tuple[int, list[Failure]]:
+    """Treat the stored catalog as a derivative of registry state and files."""
+
+    failures: list[Failure] = []
+    tracked = set(names)
+    required = ("configs/formats.yaml", "stats/catalog.json")
+    for name in required:
+        if not tracked_regular(root, tracked, name):
+            reference_check(failures, name, "missing catalog consistency source")
+    if failures:
+        return len(required), failures
+
+    try:
+        catalog = json.loads(read_bytes(root, "stats/catalog.json").decode("utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        reference_check(
+            failures,
+            "stats/catalog.json",
+            f"invalid catalog consistency source: {exc}",
+        )
+        return len(required) + 1, failures
+    generated = catalog.get("generated") if isinstance(catalog, dict) else None
+    if not isinstance(generated, str) or not generated:
+        reference_check(
+            failures,
+            "stats/catalog.json",
+            "catalog requires a generated timestamp for deterministic consistency checking",
+        )
+        return len(required) + 1, failures
+
+    try:
+        from mtgmeta.catalog import build_catalog
+
+        expected = build_catalog(root, generated_at=generated)
+    except (ImportError, OSError, ValueError) as exc:
+        reference_check(
+            failures,
+            "configs/formats.yaml",
+            f"cannot resolve complete public format qualification: {exc}",
+        )
+        return len(required) + 1, failures
+    if catalog != expected:
+        reference_check(
+            failures,
+            "stats/catalog.json",
+            "does not match the registry-derived complete public format qualification and product files",
+        )
+    return len(required) + 1, failures
+
+
 def _root_path_segment(node: ast.AST) -> str | None:
     segments: list[str] = []
     current = node
@@ -1333,6 +1395,7 @@ def main() -> int:
             javascript = MAINTAINED_JAVASCRIPT
             reference_groups = REFERENCE_GROUPS
             validate_facts = True
+            validate_catalog = True
             hygiene_names = tracked
         else:
             validation_mode = f"changed-from {args.changed_from}"
@@ -1342,6 +1405,7 @@ def main() -> int:
             javascript = plan.javascript
             reference_groups = plan.reference_groups
             validate_facts = plan.public_product_facts
+            validate_catalog = plan.catalog_consistency
             hygiene_names = list(plan.hygiene)
         counts, failures, parsed = validate_files(root, candidates, javascript)
         reference_count, reference_failures, breakdown = validate_references(
@@ -1356,9 +1420,19 @@ def main() -> int:
                 tracked,
                 defer_tabletop_readme=args.full_candidate,
             )
-        reference_count += fact_count
+        catalog_count = 0
+        catalog_failures: list[Failure] = []
+        if validate_catalog:
+            catalog_count, catalog_failures = validate_catalog_consistency(
+                root,
+                tracked,
+            )
+        reference_count += fact_count + catalog_count
         failures.extend(fact_failures)
-        all_reference_failures = reference_failures + fact_failures
+        failures.extend(catalog_failures)
+        all_reference_failures = (
+            reference_failures + fact_failures + catalog_failures
+        )
         hygiene_count, hygiene_failures = validate_hygiene(hygiene_names)
         failures.extend(hygiene_failures)
         failures.sort(key=lambda f: (CATEGORY_ORDER[f.category], f.path, f.line or 0, f.column or 0, f.message))

@@ -4,10 +4,12 @@ from pathlib import Path
 
 import pytest
 
+from mtgmeta.catalog import write_catalog
 from mtgmeta.mtgo.landing_editorial import build_public_name_contract
 
 from validate_repository import (
     changed_validation_plan,
+    validate_catalog_consistency,
     validate_files,
     validate_public_product_facts,
     validate_test_inventory,
@@ -17,6 +19,58 @@ from validate_schemas import validate_manifest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+
+
+def write_catalog_consistency_fixture(root: Path, *, public: bool) -> list[str]:
+    format_id = "synthetic"
+    capabilities = [
+        "classification",
+        "event_statistics",
+        "range_statistics",
+        "matchup_statistics",
+        "weekly_top8",
+        "completeness_reporting",
+        "landing_generation",
+        "metadata_generation",
+        "catalog_generation",
+    ]
+    registry = {
+        "schema_version": "1.3.0",
+        "formats": [
+            {
+                "id": format_id,
+                "display_name": "Synthetic",
+                "state": "executable",
+                "public": public,
+                "mtgo": {
+                    "enabled": True,
+                    "event_collection_enabled": True,
+                    "capabilities": capabilities,
+                    "paths": {
+                        "events": f"data/{format_id}",
+                        "matches": f"data/{format_id}/mtgo/matches",
+                        "rules": f"my_archetypes/{format_id}.yaml",
+                        "statistics": f"stats/{format_id}/mtgo",
+                        "reports": f"reports/{format_id}/mtgo",
+                    },
+                },
+            }
+        ],
+    }
+    formats_path = root / "configs" / "formats.yaml"
+    formats_path.parent.mkdir(parents=True)
+    formats_path.write_text(json.dumps(registry), encoding="utf-8")
+    for suffix in (
+        "meta.json",
+        "matchup_index.json",
+        "top8/index.json",
+        "landing/current.json",
+    ):
+        path = root / "stats" / format_id / "mtgo" / suffix
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{}", encoding="utf-8")
+    write_catalog(root, generated_at="2026-09-05T00:00:00+00:00")
+    return ["configs/formats.yaml", "stats/catalog.json"]
 
 
 def write_public_product_fixture(
@@ -309,6 +363,55 @@ def test_changed_plan_adds_only_the_triggered_coupled_contracts():
     assert test_plan.reference_groups == frozenset({"test-inventory"})
     matrix_plan = changed_validation_plan(["docs/TEST_TRIGGER_MATRIX.md"], tracked)
     assert matrix_plan.reference_groups == frozenset({"test-inventory"})
+
+
+def test_registry_and_catalog_changes_select_catalog_consistency():
+    tracked = ["configs/formats.yaml", "stats/catalog.json", "docs/STATUS.yaml"]
+
+    assert changed_validation_plan(
+        ["configs/formats.yaml"], tracked
+    ).catalog_consistency is True
+    assert changed_validation_plan(
+        ["stats/catalog.json"], tracked
+    ).catalog_consistency is True
+    assert changed_validation_plan(
+        ["docs/STATUS.yaml"], tracked
+    ).catalog_consistency is False
+
+
+@pytest.mark.parametrize(
+    ("public", "product_available"),
+    [(False, True), (True, False)],
+)
+def test_catalog_consistency_rejects_registry_catalog_drift(
+    tmp_path: Path,
+    public: bool,
+    product_available: bool,
+):
+    names = write_catalog_consistency_fixture(tmp_path, public=public)
+    path = tmp_path / "stats" / "catalog.json"
+    catalog = json.loads(path.read_text(encoding="utf-8"))
+    product = catalog["formats"][0]["products"][0]
+    product["available"] = product_available
+    product["path"] = (
+        "stats/synthetic/mtgo/meta.json" if product_available else None
+    )
+    path.write_text(json.dumps(catalog), encoding="utf-8")
+
+    _, failures = validate_catalog_consistency(tmp_path, names)
+
+    assert [failure.path for failure in failures] == ["stats/catalog.json"]
+    assert "registry-derived complete public format qualification" in failures[0].message
+
+
+def test_catalog_consistency_rejects_incomplete_public_format(tmp_path: Path):
+    names = write_catalog_consistency_fixture(tmp_path, public=True)
+    (tmp_path / "stats" / "synthetic" / "mtgo" / "landing" / "current.json").unlink()
+
+    _, failures = validate_catalog_consistency(tmp_path, names)
+
+    assert [failure.path for failure in failures] == ["configs/formats.yaml"]
+    assert "missing required MTGO products" in failures[0].message
 
 
 @pytest.mark.parametrize("path", ["configs/mtgo_weekly_review_completions.yaml",
