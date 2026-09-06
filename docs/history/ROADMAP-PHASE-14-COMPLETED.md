@@ -80,6 +80,42 @@ permission wording describes that historical stage, not current authority.
   through one Ready PR, required CI, and merge is authorized. P14-02 remains
   unauthorized.
 
+### P14-02 — Produce Pauper MTGO data and statistics privately
+
+- **Problem:** archived Pauper collection does not constitute a complete MTGO
+  product, and active product Schemas, manifests, validation, and orchestration
+  still contain confirmed Standard/Modern boundaries.
+- **Operation A — shared repair:** inspect the invalidation map and repair active
+  third-format gaps with synthetic input before using Pauper product data.
+  Preserve intentional Standard compatibility aliases and do not edit frozen
+  migration tools merely because they contain two-format history. A material
+  shared repair is its own Owner-authorized and Owner-accepted subtask.
+- **P14-02A boundary:** the refreshed exact contract and invalidation map are
+  in `docs/audits/P14-02A.md`. Synthetic third-format execution, reviewed input
+  selection, statistical Schemas, dynamic manifests, complete public catalog
+  admission, production format selection, and direct-path Pages exclusion are
+  repaired together. P14-03 human Landing/name carriers remain separate.
+- **Operation B — private generation:** after shared repair acceptance, activate
+  Pauper capabilities with `public: false`, then run the generalized
+  classification and generators. Collect matches only under separate authority.
+  Produce versioned statistics, ranges, matchups, Top 8, completeness,
+  hierarchy, metadata, and quality reports with visible Unknown, conflicts,
+  invalid decks, and source completeness.
+- **Effect:** a versioned, Schema-valid private Pauper MTGO candidate exists
+  with visible Unknown and source-completeness evidence.
+- **Expected paths:** active shared owners and tests for Operation A; then the
+  Pauper registry entry, `data/pauper/mtgo/matches/` when authorized,
+  `stats/pauper/mtgo/`, `reports/pauper/mtgo/`, and directly required manifest
+  patterns for Operation B. The consumer catalog remains unavailable.
+- **Validation:** one synthetic private-executable/public-false format for each
+  changed shared contract, then Pauper-only generated contracts and named
+  shared regressions. Schema/manifest changes retain complete Schema validation.
+- **Stop:** private candidate acceptance. Do not start Landing review.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+- **Completion evidence:** the shared third-format repair and private Pauper
+  candidate merged through PR #361 and PR #362. The candidate remained
+  `public: false`, with no consumer-catalog or Pages admission.
+
 ### P14-03 — Complete the Pauper Landing review path
 
 - **Problem:** a future MTGO format cannot launch without a reviewed Landing
@@ -108,3 +144,25 @@ permission wording describes that historical stage, not current authority.
   SHA-256 `b2d565484d3d112eb056fe6b536196f23b6eb00ccb14374858321f221c97c2e2`,
   six source events, two retained copy paragraphs, and two exact feature decks.
   Pauper remains `public: false`; P14-04 is a separate task.
+
+### P14-04 — Accept the complete private Pauper MTGO product
+
+- **Problem:** individually valid outputs can still disagree at the catalog,
+  freshness, localization, or product-completeness boundary.
+- **Operation:** assemble a local non-public complete-product candidate, verify
+  Landing, official statistics, matchup coverage, Top 8 decklists, card
+  localization, routes, and mobile behavior, then stop for Owner acceptance.
+- **Effect:** the exact MTGO Pauper subject is ready for later coordinated
+  admission but remains absent from the public catalog.
+- **Validation:** complete-product consistency and only named shared regressions,
+  followed by one final local visible-subject review at desktop, 390px, and
+  412px. Do not publish or repeat passed immutable checks.
+- **Stop:** Owner accepts the unchanged complete private MTGO subject.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+- **Completion evidence:** the Owner accepted the complete private product on
+  2026-09-07 after separate Landing/statistics and matchup review. The retained
+  official-event match set contains 99 usable archives; eight Videre event IDs
+  remain visibly missing, while the reviewed 2026-W35 four-week preview covers
+  all 19 expected events. Card names, images, and outbound links follow the
+  accepted Chinese/MTGCH and English/Scryfall locale contracts. Pauper remains
+  excluded from public catalogs and Pages assets.
