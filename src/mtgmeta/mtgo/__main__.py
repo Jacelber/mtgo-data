@@ -101,6 +101,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="preserve an existing candidate for the latest complete week",
     )
     prepare_parser.add_argument("--week", help="explicit closed review week")
+    initialize_parser = review_commands.add_parser(
+        "initialize-known",
+        help="bootstrap Landing known-archetype state before the first review",
+    )
+    initialize_parser.add_argument("--week", help="explicit closed review week")
     validate_parser = review_commands.add_parser(
         "validate-xlsx",
         help="validate a Landing workbook stage without importing it",
@@ -305,6 +310,18 @@ def _run_landing(args: argparse.Namespace, root: Path, registry: Path) -> int:
 
 
 def _run_landing_review(args: argparse.Namespace, root: Path, registry: Path) -> int:
+    if args.landing_review_command == "initialize-known":
+        destination = landing_screening.initialize_known_state(
+            root,
+            args.format_id,
+            registry_path=registry,
+            week=args.week,
+        )
+        if destination is None:
+            print(f"No complete MTGO event week is available for {args.format_id}.")
+        else:
+            print(f"Landing known state initialized: {destination}")
+        return 0
     if args.landing_review_command == "prepare":
         result = landing_screening.prepare_candidates(
             root,

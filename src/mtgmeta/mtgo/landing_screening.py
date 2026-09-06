@@ -186,6 +186,70 @@ def load_known(path: str | Path, *, stable_ids: bool = False) -> set[str] | None
     return set(known)
 
 
+def initialize_known_state(
+    repository_root: str | Path,
+    format_id: str,
+    *,
+    today: date | None = None,
+    registry_path: str | Path | None = None,
+    week: str | None = None,
+) -> Path | None:
+    """Explicitly bootstrap Landing continuity before the first review."""
+
+    configured, _output = _screening_directories(
+        repository_root,
+        format_id,
+        registry_path=registry_path,
+        output_directory=None,
+    )
+    destination = configured / "known_archetypes.json"
+    if destination.exists():
+        raise MTGOLandingScreeningError(
+            f"{destination}: Landing known state already exists"
+        )
+    rules = load_rules_for_format(
+        repository_root, format_id, registry_path=registry_path
+    )
+    events = stats.load_all_events(
+        repository_root, format_id, registry_path=registry_path, public=False
+    )
+    reference_today = today or datetime.now().date()
+    if week is None:
+        end_monday = stats.latest_complete_week(events, today=reference_today)
+    else:
+        from .review_scope import parse_iso_week
+
+        end_monday = parse_iso_week(week)
+        latest = stats.latest_complete_week(events, today=reference_today)
+        if latest is None or end_monday > latest:
+            raise MTGOLandingScreeningError(
+                f"requested review week is unavailable or incomplete: {week}"
+            )
+    if end_monday is None:
+        return None
+
+    known = archetypes_in_window(
+        events,
+        rules,
+        end_monday,
+        INITIAL_KNOWN_WEEKS,
+        stable_ids=True,
+    )
+    document = {
+        "schema_version": "1.0.0",
+        "format": format_id,
+        "accepted_through_week": iso_week_label(end_monday),
+        "known_ids": sorted(known),
+    }
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(
+        json.dumps(document, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+        newline="\n",
+    )
+    return destination
+
+
 def deck_deviation(record, base, _d99=None):
     if not base:
         return None
@@ -731,6 +795,7 @@ __all__ = [
     "deck_fingerprint",
     "document_digest",
     "iso_week_label",
+    "initialize_known_state",
     "load_known",
     "load_screening_policy",
     "prepare_candidates",
