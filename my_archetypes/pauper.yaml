@@ -41,7 +41,7 @@ archetypes:
         zone: main
         min_count: 3
 - id: ephemerate-tron
-  name: "Ephemerate Tron"
+  name: "Flicker Tron"
   priority: 9980
   rules:
   - id: ephemerate-tron-a
@@ -72,6 +72,29 @@ archetypes:
       - card: "Prohibit"
         zone: main
         min_count: 1
+  - id: flicker-tron-pactdoll
+    priority: 9970
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Urza's Tower"
+        zone: main
+        min_count: 3
+      - card: "Urza's Mine"
+        zone: main
+        min_count: 3
+      - card: "Urza's Power Plant"
+        zone: main
+        min_count: 3
+      - card: "Ghostly Flicker"
+        zone: main
+        min_count: 3
+      - card: "Pactdoll Terror"
+        zone: main
+        min_count: 3
+      - card: "Black Mage's Rod"
+        zone: main
+        min_count: 3
 - id: green-tron
   name: "Monster Tron"
   priority: 9900
@@ -120,7 +143,7 @@ archetypes:
         min_count: 4
       - card: "Expedition Map"
         zone: main
-        min_count: 4
+        min_count: 3
       - card: "Bramble Wurm"
         zone: main
         min_count: 4
@@ -194,7 +217,7 @@ archetypes:
         min_count: 3
       - card: "Prologue to Phyresis"
         zone: main
-        min_count: 2
+        min_count: 1
 - id: ruby-storm
   name: "Ruby Storm"
   priority: 9670
@@ -211,6 +234,30 @@ archetypes:
         zone: main
         min_count: 3
       - card: "Goblin Anarchomancer"
+        zone: main
+        min_count: 3
+- id: mono-green-freed-combo
+  name: "Freed Combo"
+  priority: 9665
+  rules:
+  - id: mono-green-freed-combo
+    priority: 9665
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Freed from the Real"
+        zone: main
+        min_count: 3
+      - card: "Arbor Elf"
+        zone: main
+        min_count: 3
+      - card: "Beastrider Vanguard"
+        zone: main
+        min_count: 3
+      - card: "Fertile Ground"
+        zone: main
+        min_count: 3
+      - card: "Sculptor of Winter"
         zone: main
         min_count: 3
 - id: walls-combo
@@ -246,13 +293,10 @@ archetypes:
       - card: "Overgrown Battlement"
         zone: main
         min_count: 3
-      - card: "Annoyed Altisaur"
-        zone: main
-        min_count: 3
-      - card: "Boarding Party"
-        zone: main
-        min_count: 3
       - card: "Freed from the Real"
+        zone: main
+        exact_count: 0
+      - card: "Balustrade Spy"
         zone: main
         exact_count: 0
 - id: spy-combo
@@ -339,9 +383,6 @@ archetypes:
       - card: "Gray Merchant of Asphodel"
         zone: main
         min_count: 3
-      - card: "Chittering Rats"
-        zone: main
-        min_count: 3
       - card: "Cuombajj Witches"
         zone: main
         min_count: 3
@@ -358,9 +399,6 @@ archetypes:
     conditions:
       all:
       - card: "Stinkweed Imp"
-        zone: main
-        min_count: 3
-      - card: "Satyr Wayfinder"
         zone: main
         min_count: 3
       - card: "Dread Return"
@@ -382,6 +420,27 @@ archetypes:
         zone: main
         min_count: 3
       - card: "Blight Mamba"
+        zone: main
+        min_count: 3
+- id: mono-red-fiend
+  name: "Mono-Red Fiend"
+  priority: 9595
+  rules:
+  - id: mono-red-fiend
+    priority: 9595
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Kiln Fiend"
+        zone: main
+        min_count: 3
+      - card: "Festival Crasher"
+        zone: main
+        min_count: 3
+      - card: "Lava Dart"
+        zone: main
+        min_count: 3
+      - card: "Manamorphose"
         zone: main
         min_count: 3
 - id: goblins
@@ -462,6 +521,26 @@ archetypes:
       - card: "Snuff Out"
         zone: main
         exact_count: 0
+  - id: izzet-terror-delver
+    priority: 9388
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Thought Scour"
+        zone: main
+        min_count: 3
+      - card: "Delver of Secrets"
+        zone: main
+        min_count: 3
+      - card: "Guttersnipe"
+        zone: main
+        min_count: 3
+      - card: "Molten Tributary"
+        zone: main
+        min_count: 3
 - id: dimir-terror
   name: "Dimir Terror"
   priority: 9380
@@ -509,9 +588,6 @@ archetypes:
     conditions:
       all:
       - card: "Tolarian Terror"
-        zone: main
-        min_count: 3
-      - card: "Thought Scour"
         zone: main
         min_count: 3
       - card: "Snuff Out"
@@ -595,13 +671,28 @@ archetypes:
       - card: "Thought Scour"
         zone: main
         min_count: 3
-      - card: "Cryptic Serpent"
-        zone: main
-        min_count: 2
       - card: "Sneaky Snacker"
         zone: main
         exact_count: 0
       - card: "Snuff Out"
+        zone: main
+        exact_count: 0
+- id: dimir-control
+  name: "Dimir Control"
+  priority: 9290
+  rules:
+  - id: dimir-control
+    priority: 9290
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Contaminated Aquifer"
+        zone: main
+        min_count: 3
+      - card: "Murmuring Mystic"
+        zone: main
+        min_count: 3
+      - card: "Tolarian Terror"
         zone: main
         exact_count: 0
 - id: azorius-faeries
@@ -712,6 +803,57 @@ archetypes:
       - card: "Snuff Out"
         zone: main
         min_count: 3
+- id: izzet-control
+  name: "Izzet Control"
+  priority: 9170
+  rules:
+  - id: izzet-control
+    priority: 9170
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Skred"
+        zone: main
+        min_count: 3
+      - card: "Murmuring Mystic"
+        zone: main
+        min_count: 3
+      - card: "Counterspell"
+        zone: main
+        min_count: 3
+      - card: "Tolarian Terror"
+        zone: main
+        exact_count: 0
+      - card: "Ephemerate"
+        zone: main
+        exact_count: 0
+- id: grixis-control
+  name: "Grixis Control"
+  priority: 9160
+  rules:
+  - id: grixis-control
+    priority: 9160
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Augur of Bolas"
+        zone: main
+        min_count: 3
+      - card: "Counterspell"
+        zone: main
+        min_count: 3
+      - card: "Lightning Bolt"
+        zone: main
+        min_count: 3
+      - card: "Snuff Out"
+        zone: main
+        min_count: 2
+      - card: "Seething Landscape"
+        zone: main
+        min_count: 3
+      - card: "Tolarian Terror"
+        zone: main
+        exact_count: 0
 - id: mono-blue-faeries
   name: "Mono-Blue Faeries"
   priority: 9100
@@ -810,9 +952,9 @@ archetypes:
       - card: "Seeker of Skybreak"
         zone: main
         min_count: 3
-      - card: "Tamiyo's Safekeeping"
+      - card: "Basilisk Gate"
         zone: main
-        min_count: 3
+        exact_count: 0
 - id: synthesizer-gates
   name: "Synthesizer Gates"
   priority: 8940
@@ -897,6 +1039,33 @@ archetypes:
       - card: "Pursue the Past"
         zone: main
         min_count: 3
+- id: boros-snacker
+  name: "Boros Snacker"
+  priority: 8900
+  rules:
+  - id: boros-snacker
+    priority: 8900
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Sneaky Snacker"
+        zone: main
+        min_count: 3
+      - card: "Pursue the Past"
+        zone: main
+        min_count: 3
+      - card: "Kor Skyfisher"
+        zone: main
+        min_count: 3
+      - card: "Melded Moxite"
+        zone: main
+        min_count: 3
+      - card: "Glint Hawk"
+        zone: main
+        max_count: 2
+      - card: "Basilisk Gate"
+        zone: main
+        exact_count: 0
 - id: naya-gates
   name: "Naya Gates"
   priority: 8800
@@ -1019,6 +1188,42 @@ archetypes:
       - card: "Mistvault Bridge"
         zone: main
         min_count: 1
+- id: rakdos-affinity
+  name: "Rakdos Affinity"
+  priority: 8670
+  rules:
+  - id: rakdos-affinity
+    priority: 8670
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Myr Enforcer"
+        zone: main
+        min_count: 3
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+      - card: "Drossforge Bridge"
+        zone: main
+        min_count: 3
+      - card: "Great Furnace"
+        zone: main
+        min_count: 3
+      - card: "Vault of Whispers"
+        zone: main
+        min_count: 3
+      - card: "Mistvault Bridge"
+        zone: main
+        exact_count: 0
+      - card: "Silverbluff Bridge"
+        zone: main
+        exact_count: 0
+      - card: "Thoughtcast"
+        zone: main
+        exact_count: 0
+      - card: "Utrom Monitor"
+        zone: main
+        exact_count: 0
 - id: grixis-affinity
   name: "Grixis Affinity"
   priority: 8600
@@ -1049,9 +1254,6 @@ archetypes:
         zone: main
         min_count: 3
       - card: "Cleansing Wildfire"
-        zone: main
-        min_count: 3
-      - card: "Cryogen Relic"
         zone: main
         min_count: 3
       - card: "Silverbluff Bridge"
@@ -1121,9 +1323,6 @@ archetypes:
       - card: "Cryogen Relic"
         zone: main
         min_count: 3
-      - card: "Cast Down"
-        zone: main
-        min_count: 3
       - card: "Myr Enforcer"
         zone: main
         exact_count: 0
@@ -1163,9 +1362,6 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Vampire's Kiss"
-        zone: main
-        min_count: 3
       - card: "Kitchen Imp"
         zone: main
         min_count: 3
@@ -1190,6 +1386,33 @@ archetypes:
       - card: "Spirit Mascot"
         zone: main
         min_count: 1
+- id: gruul-madness
+  name: "Gruul Madness"
+  priority: 8450
+  rules:
+  - id: gruul-madness
+    priority: 8450
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Basking Rootwalla"
+        zone: main
+        min_count: 3
+      - card: "Gruul Turf"
+        zone: main
+        min_count: 3
+      - card: "Sneaky Snacker"
+        zone: main
+        min_count: 3
+      - card: "Fiery Temper"
+        zone: main
+        min_count: 3
+      - card: "Grab the Prize"
+        zone: main
+        min_count: 3
+      - card: "Scrapwork Mutt"
+        zone: main
+        min_count: 3
 - id: mono-red-madness
   name: "Mono-Red Madness"
   priority: 8400
@@ -1202,9 +1425,6 @@ archetypes:
       - card: "Guttersnipe"
         zone: main
         min_count: 2
-      - card: "Grab the Prize"
-        zone: main
-        min_count: 3
       - card: "Fiery Temper"
         zone: main
         min_count: 3
@@ -1245,7 +1465,7 @@ archetypes:
         zone: main
         exact_count: 0
 - id: ephemerate
-  name: "Ephemerate"
+  name: "Jeskai Ephemerate"
   priority: 8300
   subtypes:
   - id: four-color
@@ -1301,6 +1521,27 @@ archetypes:
       - card: "Glacial Floodplain"
         zone: main
         min_count: 1
+- id: domain-ephemerate
+  name: "Domain Ephemerate"
+  priority: 8290
+  rules:
+  - id: domain-ephemerate
+    priority: 8290
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Ephemerate"
+        zone: main
+        min_count: 2
+      - card: "Farseek"
+        zone: main
+        min_count: 3
+      - card: "Tribal Flames"
+        zone: main
+        min_count: 3
+      - card: "Meria's Outrider"
+        zone: main
+        min_count: 3
 - id: battle-screech
   name: "Battle Screech"
   priority: 8100
@@ -1340,6 +1581,23 @@ archetypes:
       - card: "Boros Garrison"
         zone: main
         min_count: 2
+  - id: boros-battle-screech-gates
+    priority: 8085
+    subtype_id: boros
+    conditions:
+      all:
+      - card: "Battle Screech"
+        zone: main
+        min_count: 3
+      - card: "Rally the Peasants"
+        zone: main
+        min_count: 1
+      - card: "Faithless Looting"
+        zone: main
+        min_count: 3
+      - card: "Cliffgate"
+        zone: main
+        min_count: 3
   - id: mono-white-battle-screech
     priority: 8000
     subtype_id: mono-white
@@ -1368,6 +1626,8 @@ archetypes:
     name: "Mono-White Packbeast Swarm"
   - id: esper
     name: "Esper Packbeast Swarm"
+  - id: selesnya
+    name: "Selesnya Packbeast Swarm"
   rules:
   - id: boros-packbeast-swarm
     priority: 8050
@@ -1461,7 +1721,7 @@ archetypes:
       - card: "Ardent Recruit"
         zone: main
         min_count: 3
-      - card: "Elite Interceptor"
+      - card: "Novice Inspector"
         zone: main
         min_count: 3
       - card: "Galvanic Blast"
@@ -1474,6 +1734,9 @@ archetypes:
         zone: main
         exact_count: 0
       - card: "Lightning Bolt"
+        zone: main
+        exact_count: 0
+      - card: "Winding Way"
         zone: main
         exact_count: 0
   - id: esper-packbeast-swarm
@@ -1496,6 +1759,26 @@ archetypes:
       - card: "Thraben Inspector"
         zone: main
         min_count: 3
+  - id: selesnya-packbeast-swarm
+    priority: 8005
+    subtype_id: selesnya
+    conditions:
+      all:
+      - card: "Salt Road Packbeast"
+        zone: main
+        min_count: 3
+      - card: "Leonardo, Big Brother"
+        zone: main
+        min_count: 3
+      - card: "Winding Way"
+        zone: main
+        min_count: 3
+      - card: "Khalni Garden"
+        zone: main
+        min_count: 3
+      - card: "Ardent Recruit"
+        zone: main
+        exact_count: 0
 - id: food-gardens
   name: "Food Gardens"
   priority: 7900
@@ -1580,6 +1863,27 @@ archetypes:
       - card: "Slagwoods Bridge"
         zone: main
         min_count: 3
+- id: izzet-wildfire-control
+  name: "Izzet Wildfire Control"
+  priority: 7690
+  rules:
+  - id: izzet-wildfire-control
+    priority: 7690
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Cleansing Wildfire"
+        zone: main
+        min_count: 3
+      - card: "Stone Rain"
+        zone: main
+        min_count: 3
+      - card: "Kenku Artificer"
+        zone: main
+        min_count: 3
+      - card: "Silverbluff Bridge"
+        zone: main
+        min_count: 3
 - id: naya-ponza
   name: "Naya Ponza"
   priority: 7610
@@ -1631,9 +1935,9 @@ archetypes:
       - card: "Arbor Elf"
         zone: main
         min_count: 3
-      - card: "Jewel Thief"
+      - card: "Quirion Ranger"
         zone: main
-        min_count: 3
+        exact_count: 0
 - id: elves
   name: "Elves"
   priority: 7400
@@ -1724,9 +2028,9 @@ archetypes:
       - card: "Kor Skyfisher"
         zone: main
         min_count: 3
-      - card: "Melded Moxite"
+      - card: "Refurbished Familiar"
         zone: main
-        min_count: 3
+        exact_count: 0
 - id: temur-control
   name: "Temur Control"
   priority: 7000
