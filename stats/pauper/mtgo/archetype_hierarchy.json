@@ -2,11 +2,11 @@
   "schema_version": "1.1.0",
   "format": "pauper",
   "source": "mtgo",
-  "classifier_digest": "d7f76feea5b5e7c882ede8a184fa7f335b115c6d5e0f9f27b2d365cab5876f61",
-  "rules_updated": "2026-08-30T23:10:29+09:00",
+  "classifier_digest": "2cc625f1b0b3f7715cb694435f0ce96477227e3a63445e5769d0064e5a10f530",
+  "rules_updated": "2026-09-06T19:20:40+09:00",
   "summary": {
-    "parents": 64,
-    "leaves": 71,
+    "parents": 74,
+    "leaves": 82,
     "expandable_parents": 3
   },
   "parents": [
@@ -51,6 +51,12 @@
       "subtype_ids": []
     },
     {
+      "id": "boros-snacker",
+      "name": "Boros Snacker",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "boros-synthesizer",
       "name": "Boros Synthesizer",
       "expandable": false,
@@ -65,6 +71,12 @@
     {
       "id": "dimir-affinity",
       "name": "Dimir Affinity",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "dimir-control",
+      "name": "Dimir Control",
       "expandable": false,
       "subtype_ids": []
     },
@@ -93,6 +105,12 @@
       "subtype_ids": []
     },
     {
+      "id": "domain-ephemerate",
+      "name": "Domain Ephemerate",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "dredge",
       "name": "Dredge",
       "expandable": false,
@@ -112,7 +130,7 @@
     },
     {
       "id": "ephemerate",
-      "name": "Ephemerate",
+      "name": "Jeskai Ephemerate",
       "expandable": true,
       "subtype_ids": [
         "ephemerate/four-color",
@@ -121,7 +139,7 @@
     },
     {
       "id": "ephemerate-tron",
-      "name": "Ephemerate Tron",
+      "name": "Flicker Tron",
       "expandable": false,
       "subtype_ids": []
     },
@@ -174,6 +192,12 @@
       "subtype_ids": []
     },
     {
+      "id": "grixis-control",
+      "name": "Grixis Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "grixis-terror",
       "name": "Grixis Terror",
       "expandable": false,
@@ -182,6 +206,12 @@
     {
       "id": "gruul-hawkeye",
       "name": "Gruul Hawkeye",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "gruul-madness",
+      "name": "Gruul Madness",
       "expandable": false,
       "subtype_ids": []
     },
@@ -210,6 +240,12 @@
       "subtype_ids": []
     },
     {
+      "id": "izzet-control",
+      "name": "Izzet Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "izzet-faeries",
       "name": "Izzet Faeries",
       "expandable": false,
@@ -218,6 +254,12 @@
     {
       "id": "izzet-terror",
       "name": "Izzet Terror",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "izzet-wildfire-control",
+      "name": "Izzet Wildfire Control",
       "expandable": false,
       "subtype_ids": []
     },
@@ -270,6 +312,12 @@
       "subtype_ids": []
     },
     {
+      "id": "mono-green-freed-combo",
+      "name": "Freed Combo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "mono-red-axe",
       "name": "Mono-Red Axe",
       "expandable": false,
@@ -278,6 +326,12 @@
     {
       "id": "mono-red-burn",
       "name": "Mono-Red Burn",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-red-fiend",
+      "name": "Mono-Red Fiend",
       "expandable": false,
       "subtype_ids": []
     },
@@ -332,12 +386,19 @@
         "packbeast-swarm/esper",
         "packbeast-swarm/mardu",
         "packbeast-swarm/mono-white",
-        "packbeast-swarm/mono-white-learn"
+        "packbeast-swarm/mono-white-learn",
+        "packbeast-swarm/selesnya"
       ]
     },
     {
       "id": "proliferate-storm",
-      "name": "Proliferate Storm",
+      "name": "Poison Storm",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "rakdos-affinity",
+      "name": "Rakdos Affinity",
       "expandable": false,
       "subtype_ids": []
     },
@@ -474,6 +535,14 @@
       "subtype_id": null
     },
     {
+      "id": "boros-snacker",
+      "kind": "archetype",
+      "name": "Boros Snacker",
+      "display_name": "Boros Snacker",
+      "parent_id": "boros-snacker",
+      "subtype_id": null
+    },
+    {
       "id": "boros-synthesizer",
       "kind": "archetype",
       "name": "Boros Synthesizer",
@@ -495,6 +564,14 @@
       "name": "Dimir Affinity",
       "display_name": "Dimir Affinity",
       "parent_id": "dimir-affinity",
+      "subtype_id": null
+    },
+    {
+      "id": "dimir-control",
+      "kind": "archetype",
+      "name": "Dimir Control",
+      "display_name": "Dimir Control",
+      "parent_id": "dimir-control",
       "subtype_id": null
     },
     {
@@ -527,6 +604,14 @@
       "name": "Dimir Terror",
       "display_name": "Dimir Terror",
       "parent_id": "dimir-terror",
+      "subtype_id": null
+    },
+    {
+      "id": "domain-ephemerate",
+      "kind": "archetype",
+      "name": "Domain Ephemerate",
+      "display_name": "Domain Ephemerate",
+      "parent_id": "domain-ephemerate",
       "subtype_id": null
     },
     {
@@ -572,8 +657,8 @@
     {
       "id": "ephemerate-tron",
       "kind": "archetype",
-      "name": "Ephemerate Tron",
-      "display_name": "Ephemerate Tron",
+      "name": "Flicker Tron",
+      "display_name": "Flicker Tron",
       "parent_id": "ephemerate-tron",
       "subtype_id": null
     },
@@ -642,6 +727,14 @@
       "subtype_id": null
     },
     {
+      "id": "grixis-control",
+      "kind": "archetype",
+      "name": "Grixis Control",
+      "display_name": "Grixis Control",
+      "parent_id": "grixis-control",
+      "subtype_id": null
+    },
+    {
       "id": "grixis-terror",
       "kind": "archetype",
       "name": "Grixis Terror",
@@ -655,6 +748,14 @@
       "name": "Gruul Hawkeye",
       "display_name": "Gruul Hawkeye",
       "parent_id": "gruul-hawkeye",
+      "subtype_id": null
+    },
+    {
+      "id": "gruul-madness",
+      "kind": "archetype",
+      "name": "Gruul Madness",
+      "display_name": "Gruul Madness",
+      "parent_id": "gruul-madness",
       "subtype_id": null
     },
     {
@@ -690,6 +791,14 @@
       "subtype_id": null
     },
     {
+      "id": "izzet-control",
+      "kind": "archetype",
+      "name": "Izzet Control",
+      "display_name": "Izzet Control",
+      "parent_id": "izzet-control",
+      "subtype_id": null
+    },
+    {
       "id": "izzet-faeries",
       "kind": "archetype",
       "name": "Izzet Faeries",
@@ -703,6 +812,14 @@
       "name": "Izzet Terror",
       "display_name": "Izzet Terror",
       "parent_id": "izzet-terror",
+      "subtype_id": null
+    },
+    {
+      "id": "izzet-wildfire-control",
+      "kind": "archetype",
+      "name": "Izzet Wildfire Control",
+      "display_name": "Izzet Wildfire Control",
+      "parent_id": "izzet-wildfire-control",
       "subtype_id": null
     },
     {
@@ -770,6 +887,14 @@
       "subtype_id": null
     },
     {
+      "id": "mono-green-freed-combo",
+      "kind": "archetype",
+      "name": "Freed Combo",
+      "display_name": "Freed Combo",
+      "parent_id": "mono-green-freed-combo",
+      "subtype_id": null
+    },
+    {
       "id": "mono-red-axe",
       "kind": "archetype",
       "name": "Mono-Red Axe",
@@ -783,6 +908,14 @@
       "name": "Mono-Red Burn",
       "display_name": "Mono-Red Burn",
       "parent_id": "mono-red-burn",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-red-fiend",
+      "kind": "archetype",
+      "name": "Mono-Red Fiend",
+      "display_name": "Mono-Red Fiend",
+      "parent_id": "mono-red-fiend",
       "subtype_id": null
     },
     {
@@ -882,11 +1015,27 @@
       "subtype_id": "mono-white-learn"
     },
     {
+      "id": "packbeast-swarm/selesnya",
+      "kind": "subtype",
+      "name": "Selesnya Packbeast Swarm",
+      "display_name": "Selesnya Packbeast Swarm",
+      "parent_id": "packbeast-swarm",
+      "subtype_id": "selesnya"
+    },
+    {
       "id": "proliferate-storm",
       "kind": "archetype",
-      "name": "Proliferate Storm",
-      "display_name": "Proliferate Storm",
+      "name": "Poison Storm",
+      "display_name": "Poison Storm",
       "parent_id": "proliferate-storm",
+      "subtype_id": null
+    },
+    {
+      "id": "rakdos-affinity",
+      "kind": "archetype",
+      "name": "Rakdos Affinity",
+      "display_name": "Rakdos Affinity",
+      "parent_id": "rakdos-affinity",
       "subtype_id": null
     },
     {

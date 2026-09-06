@@ -130,58 +130,10 @@ model; it does not add an intermediate public capability.
 
 ## Task sequence
 
-Completed P14-00, P14-01, and P14-03 detail is preserved in
-`docs/history/ROADMAP-PHASE-14-COMPLETED.md`. The accepted Pauper classifier
-merged through PR #313, and the accepted P14-03 Landing remains private. No
-real Pauper product has been enabled.
-
-### P14-02 — Produce Pauper MTGO data and statistics privately
-
-- **Problem:** archived Pauper collection does not constitute a complete MTGO
-  product, and active product Schemas, manifests, validation, and orchestration
-  still contain confirmed Standard/Modern boundaries.
-- **Operation A — shared repair:** inspect the invalidation map and repair active
-  third-format gaps with synthetic input before using Pauper product data.
-  Preserve intentional Standard compatibility aliases and do not edit frozen
-  migration tools merely because they contain two-format history. A material
-  shared repair is its own Owner-authorized and Owner-accepted subtask.
-- **P14-02A boundary:** the refreshed exact contract and invalidation map are
-  in `docs/audits/P14-02A.md`. Synthetic third-format execution, reviewed input
-  selection, statistical Schemas, dynamic manifests, complete public catalog
-  admission, production format selection, and direct-path Pages exclusion are
-  repaired together. P14-03 human Landing/name carriers remain separate.
-- **Operation B — private generation:** after shared repair acceptance, activate
-  Pauper capabilities with `public: false`, then run the generalized
-  classification and generators. Collect matches only under separate authority.
-  Produce versioned statistics, ranges, matchups, Top 8, completeness,
-  hierarchy, metadata, and quality reports with visible Unknown, conflicts,
-  invalid decks, and source completeness.
-- **Effect:** a versioned, Schema-valid private Pauper MTGO candidate exists
-  with visible Unknown and source-completeness evidence.
-- **Expected paths:** active shared owners and tests for Operation A; then the
-  Pauper registry entry, `data/pauper/mtgo/matches/` when authorized,
-  `stats/pauper/mtgo/`, `reports/pauper/mtgo/`, and directly required manifest
-  patterns for Operation B. The consumer catalog remains unavailable.
-- **Validation:** one synthetic private-executable/public-false format for each
-  changed shared contract, then Pauper-only generated contracts and named
-  shared regressions. Schema/manifest changes retain complete Schema validation.
-- **Stop:** private candidate acceptance. Do not start Landing review.
-- **Recommended model:** `gpt-5.6-sol`, high reasoning.
-
-### P14-04 — Accept the complete private Pauper MTGO product
-
-- **Problem:** individually valid outputs can still disagree at the catalog,
-  freshness, localization, or product-completeness boundary.
-- **Operation:** assemble a local non-public complete-product candidate, verify
-  Landing, official statistics, matchup coverage, Top 8 decklists, card
-  localization, routes, and mobile behavior, then stop for Owner acceptance.
-- **Effect:** the exact MTGO Pauper subject is ready for later coordinated
-  admission but remains absent from the public catalog.
-- **Validation:** complete-product consistency and only named shared regressions,
-  followed by one final local visible-subject review at desktop, 390px, and
-  412px. Do not publish or repeat passed immutable checks.
-- **Stop:** Owner accepts the unchanged complete private MTGO subject.
-- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+Completed P14-00 through P14-04 detail is preserved in
+`docs/history/ROADMAP-PHASE-14-COMPLETED.md`. The accepted classifier, private
+data/statistics candidate, and reviewed Landing now form one accepted complete
+Pauper MTGO subject. Pauper remains private and absent from the public catalog.
 
 ### P14-05 — Trial the Owner-supplied Paupergeddon event
 
