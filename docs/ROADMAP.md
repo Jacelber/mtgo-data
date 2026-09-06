@@ -130,9 +130,10 @@ model; it does not add an intermediate public capability.
 
 ## Task sequence
 
-Completed P14-00 and P14-01 detail is preserved in
+Completed P14-00, P14-01, and P14-03 detail is preserved in
 `docs/history/ROADMAP-PHASE-14-COMPLETED.md`. The accepted Pauper classifier
-merged through PR #313; no real Pauper product has been enabled.
+merged through PR #313, and the accepted P14-03 Landing remains private. No
+real Pauper product has been enabled.
 
 ### P14-02 — Produce Pauper MTGO data and statistics privately
 
@@ -166,30 +167,6 @@ merged through PR #313; no real Pauper product has been enabled.
   shared regressions. Schema/manifest changes retain complete Schema validation.
 - **Stop:** private candidate acceptance. Do not start Landing review.
 - **Recommended model:** `gpt-5.6-sol`, high reasoning.
-
-### P14-03 — Complete the Pauper Landing review path
-
-- **Problem:** a future MTGO format cannot launch without a reviewed Landing
-  and complete weekly-maintenance inputs.
-- **Operation A — shared repair:** generalize active bilingual-name, Landing
-  review, weekly readiness, and card-cache selection contracts with synthetic
-  third-format subjects. Pauper must not be forced to share a review week with
-  Standard/Modern. Frozen Pickup history remains unchanged. A material repair
-  is separately authorized and accepted.
-- **Operation B — Pauper review:** run the established Unknown,
-  representative-card, deck-color, screening, machine-fact, Chinese authoring,
-  English final review, and feature-card sequence. The Owner remains
-  authoritative for final content and card choices.
-- **Effect:** the private Pauper candidate has an admitted-quality Landing and
-  feature subject instead of a statistics-only partial product.
-- **Expected paths:** active Landing/editorial/readiness/name/cache owners,
-  Schemas, synthetic fixtures, and tests for Operation A; then Pauper private
-  review sources, visuals, names, reviewed candidate, and bounded review
-  artifacts for Operation B. Public catalog availability remains false.
-- **Stop:** Owner acceptance of the exact private Landing subject.
-- **Recommended model:** `gpt-5.6-terra`, medium reasoning for bounded carrier
-  preparation; use `gpt-5.6-sol`, high reasoning for stale-binding or contract
-  failures.
 
 ### P14-04 — Accept the complete private Pauper MTGO product
 
