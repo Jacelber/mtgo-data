@@ -308,6 +308,12 @@ repeatable `--review-scope <format>=<week>` with `--repository-sha`; Landing
 card-cache commands accept repeatable `--format` with `--private`. None of these
 private operations changes public admission or writes a completion record.
 
+Before a format's first Landing candidate review, initialize its continuity
+state once from the accepted classified baseline with `landing-review
+initialize-known --week <YYYY-Www>`. The command fails if continuity state
+already exists; routine `prepare` does not initialize or replace state, and an
+accepted workbook import remains the only weekly advancement path.
+
 The Landing editorial producer owns weekly candidate screening through
 `landing-review prepare`. Candidate generation never approves a row,
 publishes a week, or changes accepted Landing state. Candidates are available

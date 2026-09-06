@@ -59,6 +59,39 @@ def test_landing_screening_uses_the_landing_review_command():
     assert mtgo_cli.COMMAND_CAPABILITIES[args.command] == "landing_generation"
 
 
+def test_landing_known_state_initialization_requires_an_explicit_command(
+    monkeypatch, tmp_path, capsys
+):
+    args = mtgo_cli.build_parser().parse_args(
+        [
+            "--format",
+            "pauper",
+            "landing-review",
+            "initialize-known",
+            "--week",
+            "2026-W35",
+        ]
+    )
+
+    assert args.landing_review_command == "initialize-known"
+    assert args.week == "2026-W35"
+
+    calls = []
+    destination = tmp_path / "known_archetypes.json"
+
+    def initialize(root, format_id, *, registry_path, week):
+        calls.append((root, format_id, registry_path, week))
+        return destination
+
+    monkeypatch.setattr(mtgo_cli.landing_screening, "initialize_known_state", initialize)
+    registry = tmp_path / "formats.yaml"
+    assert mtgo_cli._run_landing_review(args, tmp_path, registry) == 0
+    assert calls == [(tmp_path, "pauper", registry, "2026-W35")]
+    assert capsys.readouterr().out.strip() == (
+        f"Landing known state initialized: {destination}"
+    )
+
+
 def test_landing_workbook_validation_stage_is_explicit_and_read_only():
     args = mtgo_cli.build_parser().parse_args(
         [

@@ -10,7 +10,11 @@ from xml.sax.saxutils import escape
 import pytest
 import yaml
 
-from mtgmeta.mtgo import landing, landing_editorial as editorial
+from mtgmeta.mtgo import (
+    landing,
+    landing_editorial as editorial,
+    landing_screening as screening,
+)
 from mtgmeta.weekly_review import build_v2_completion_record
 from mtgmeta.mtgo.review_scope import MTGOReviewScopeError, parse_review_scopes
 from validate_schemas import validate_manifest
@@ -168,6 +172,14 @@ def _synthetic_landing_repository(root: Path) -> tuple[Path, Path, str]:
     event_path = root / "data/pauper/100.json"
     event_path.parent.mkdir(parents=True)
     event_path.write_text(json.dumps(event), encoding="utf-8")
+    previous_event = {
+        **event,
+        "event_id": "99",
+        "starttime": "2025-01-06T12:00:00Z",
+    }
+    (event_path.parent / "99.json").write_text(
+        json.dumps(previous_event), encoding="utf-8"
+    )
     _write_yaml(
         root / "configs/mtgo_pickup_policy.yaml",
         {
@@ -479,6 +491,31 @@ def test_five_sheet_workbook_imports_without_names_and_generates_private_landing
 ):
     repository = tmp_path / "repository"
     registry, visuals_path, week = _synthetic_landing_repository(repository)
+    known_path = screening.initialize_known_state(
+        repository,
+        "pauper",
+        today=date(2025, 1, 27),
+        registry_path=registry,
+        week=week,
+    )
+    assert known_path is not None
+    assert json.loads(known_path.read_text(encoding="utf-8")) == {
+        "schema_version": "1.0.0",
+        "format": "pauper",
+        "accepted_through_week": week,
+        "known_ids": ["alpha"],
+    }
+    with pytest.raises(
+        screening.MTGOLandingScreeningError,
+        match="known state already exists",
+    ):
+        screening.initialize_known_state(
+            repository,
+            "pauper",
+            today=date(2025, 1, 27),
+            registry_path=registry,
+            week=week,
+        )
     subject = editorial.build_top8_subject(repository, "pauper", week)
     assert subject["source_event_ids"] == ["100"]
     assert len(subject["all_top8"]) == 8
