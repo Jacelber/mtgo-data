@@ -69,6 +69,7 @@ def test_pauper_rule_inventory_and_parent_boundaries() -> None:
             "mardu",
             "mono-white",
             "mono-white-learn",
+            "selesnya",
         },
     }
     for archetype in rules.archetypes:
