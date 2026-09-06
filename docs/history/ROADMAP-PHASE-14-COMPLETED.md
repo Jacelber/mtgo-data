@@ -79,3 +79,32 @@ permission wording describes that historical stage, not current authority.
   consolidated P14-01B/P14-01C subject are Owner-accepted. Same-task completion
   through one Ready PR, required CI, and merge is authorized. P14-02 remains
   unauthorized.
+
+### P14-03 — Complete the Pauper Landing review path
+
+- **Problem:** a future MTGO format cannot launch without a reviewed Landing
+  and complete weekly-maintenance inputs.
+- **Operation A — shared repair:** generalize active bilingual-name, Landing
+  review, weekly readiness, and card-cache selection contracts with synthetic
+  third-format subjects. Pauper must not be forced to share a review week with
+  Standard/Modern. Frozen Pickup history remains unchanged. A material repair
+  is separately authorized and accepted.
+- **Operation B — Pauper review:** run the established Unknown,
+  representative-card, deck-color, screening, machine-fact, Chinese authoring,
+  English final review, and feature-card sequence. The Owner remains
+  authoritative for final content and card choices.
+- **Effect:** the private Pauper candidate has an admitted-quality Landing and
+  feature subject instead of a statistics-only partial product.
+- **Expected paths:** active Landing/editorial/readiness/name/cache owners,
+  Schemas, synthetic fixtures, and tests for Operation A; then Pauper private
+  review sources, visuals, names, reviewed candidate, and bounded review
+  artifacts for Operation B. Public catalog availability remains false.
+- **Stop:** Owner acceptance of the exact private Landing subject.
+- **Recommended model:** `gpt-5.6-terra`, medium reasoning for bounded carrier
+  preparation; use `gpt-5.6-sol`, high reasoning for stale-binding or contract
+  failures.
+- **Completion evidence:** the Owner accepted the Pauper 2026-W35 bilingual
+  Landing subject on 2026-09-06. The imported private review binds workbook
+  SHA-256 `b2d565484d3d112eb056fe6b536196f23b6eb00ccb14374858321f221c97c2e2`,
+  six source events, two retained copy paragraphs, and two exact feature decks.
+  Pauper remains `public: false`; P14-04 is a separate task.

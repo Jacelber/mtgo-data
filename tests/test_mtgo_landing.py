@@ -41,7 +41,10 @@ def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_
     from mtgmeta.mtgo import publication
     monkeypatch.setattr(publication, "resolve_scope", lambda *args: SimpleNamespace(
         week=date.fromisocalendar(2099, 2, 1)))
-    context = SimpleNamespace(paths={"statistics": tmp_path / "stats"})
+    context = SimpleNamespace(
+        definition=SimpleNamespace(public=True),
+        paths={"statistics": tmp_path / "stats"},
+    )
     rules = SimpleNamespace(archetypes=())
     monkeypatch.setattr(landing, "load_mtgo_context", lambda *args, **kwargs: context)
     monkeypatch.setattr(landing, "load_rules_for_format", lambda *args, **kwargs: rules)
@@ -178,8 +181,23 @@ def test_deck_link_catalog_keeps_every_top8_deck_independent_of_review_inputs():
     assert catalog[0]["link_id"] == "deck:deck-1"
 
 
-def test_pages_selection_excludes_all_private_landing_review_files(tmp_path):
-    from build_pages_artifact import publication_paths
+def test_pages_selection_excludes_all_private_landing_review_files(
+    monkeypatch, tmp_path
+):
+    import build_pages_artifact
+
+    monkeypatch.setattr(
+        build_pages_artifact,
+        "load_format_registry",
+        lambda *args, **kwargs: SimpleNamespace(
+            formats=(SimpleNamespace(id="standard", public=True),)
+        ),
+    )
+    monkeypatch.setattr(
+        build_pages_artifact,
+        "build_catalog",
+        lambda *args, **kwargs: {"formats": []},
+    )
 
     for relative in (
         "stats/standard/mtgo/landing/current.json",
@@ -197,6 +215,9 @@ def test_pages_selection_excludes_all_private_landing_review_files(tmp_path):
         path = tmp_path / relative
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("{}", encoding="utf-8")
+    (tmp_path / "stats" / "catalog.json").write_text(
+        json.dumps({"formats": []}), encoding="utf-8"
+    )
     (tmp_path / "index.html").write_text("ok", encoding="utf-8")
     config = {
         "site_files": ["index.html"],
@@ -209,7 +230,7 @@ def test_pages_selection_excludes_all_private_landing_review_files(tmp_path):
             ],
     }
 
-    selected = publication_paths(tmp_path, config)
+    selected = build_pages_artifact.publication_paths(tmp_path, config)
 
     assert "stats/standard/mtgo/landing/current.json" in selected
     assert "stats/standard/mtgo/landing/features/index.json" in selected
@@ -339,7 +360,16 @@ def test_landing_cli_reports_pending_summary_review_without_count_lookup(
     )
 
     result = mtgo_cli._run_landing(
-        SimpleNamespace(format_id="standard"), tmp_path, tmp_path / "formats.yaml"
+        SimpleNamespace(
+            format_id="standard",
+            review_directory=None,
+            name_catalog=None,
+            private_output=None,
+            visuals=None,
+            week=None,
+        ),
+        tmp_path,
+        tmp_path / "formats.yaml",
     )
 
     assert result == 0

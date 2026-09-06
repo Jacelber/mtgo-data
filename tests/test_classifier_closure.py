@@ -60,7 +60,11 @@ def test_public_name_projection_binds_classifier_identity_and_owner_catalog(
             "identity_key": "modern|alpha|none",
         }
     ]
-    monkeypatch.setattr(landing_editorial, "validate_name_catalog", lambda *_args: {})
+    monkeypatch.setattr(
+        landing_editorial,
+        "validate_name_catalog",
+        lambda *_args, **_kwargs: {},
+    )
     monkeypatch.setattr(landing_editorial, "_taxonomy_rows", lambda *_args: taxonomy)
 
     original = landing_editorial.build_public_name_contract(
