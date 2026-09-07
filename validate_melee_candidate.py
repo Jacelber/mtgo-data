@@ -105,7 +105,10 @@ def snapshot_state(root: Path, event_id: str, format_id: str) -> dict[str, Any]:
 
 
 def _allowed_path(path: str, event_id: str, format_id: str) -> bool:
-    if path == "stats/catalog.json":
+    if path in {
+        "stats/catalog.json",
+        f"stats/{format_id}/archetype_names.json",
+    }:
         return True
     event_file = f"{event_id}.json"
     if path.startswith(f"data_raw/melee/{event_id}/"):
@@ -137,6 +140,12 @@ def _validate_json_identity(
     failures: list[str] = []
     if change.path == "stats/catalog.json":
         return []
+    if change.path == f"stats/{format_id}/archetype_names.json":
+        if value.get("format") != format_id:
+            failures.append(
+                f"{change.path}: format does not match {format_id}"
+            )
+        return failures
     if change.path != f"stats/{format_id}/melee/index.json":
         if value.get("event_id") != event_id:
             failures.append(f"{change.path}: event_id does not match {event_id}")

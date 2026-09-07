@@ -512,6 +512,15 @@ def test_event_publisher_main_writes_the_merged_catalog(
         "build_event_publication_from_paths",
         lambda *args: {"meta": {"schema_version": "1.0.0"}, "catalog": generated},
     )
+    monkeypatch.setattr(
+        publish,
+        "build_public_name_contract",
+        lambda *args: {
+            "schema_version": "1.1.0",
+            "format": "modern",
+            "names": [],
+        },
+    )
 
     result = publish.main(
         [
@@ -532,6 +541,10 @@ def test_event_publisher_main_writes_the_merged_catalog(
         "441441",
         "434455",
     ]
+    names, _ = publish._read_object(
+        tmp_path / "stats" / "modern" / "archetype_names.json"
+    )
+    assert names["format"] == "modern"
 
 
 def test_event_publisher_rejects_multi_event_growth_from_legacy_catalog() -> None:

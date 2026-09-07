@@ -10,6 +10,10 @@ import re
 import sys
 from typing import Any, Mapping, Sequence
 
+from ..mtgo.landing_editorial import (
+    MTGOLandingEditorialError,
+    build_public_name_contract,
+)
 from .config import MeleeConfigError, load_melee_event_registry
 from .matchup import MeleeMatchupError, build_event_matchup_from_paths
 from .stats import (
@@ -409,6 +413,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             root / "configs" / "melee_events.yaml",
             root,
         )
+        name_contract = build_public_name_contract(root, args.format_id)
         event_directory = (
             root
             / "stats"
@@ -420,6 +425,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         destinations = {
             "meta": event_directory / "meta.json",
             "catalog": root / "stats" / args.format_id / "melee" / "index.json",
+            "names": root / "stats" / args.format_id / "archetype_names.json",
         }
         if destinations["catalog"].is_file():
             existing_catalog, _ = _read_object(destinations["catalog"])
@@ -432,9 +438,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             reused = {
                 name: write_statistics_document(
                     destinations[name],
-                    statistics_document_bytes(publication[name]),
+                    statistics_document_bytes(
+                        name_contract if name == "names" else publication[name]
+                    ),
                 )
-                for name in ("meta", "catalog")
+                for name in ("meta", "catalog", "names")
             }
         print(
             json.dumps(
@@ -445,7 +453,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                     "outputs": (
                         {
                             name: destinations[name].relative_to(root).as_posix()
-                            for name in ("meta", "catalog")
+                            for name in ("meta", "catalog", "names")
                         }
                         if args.execute
                         else {}
@@ -460,6 +468,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         MeleeMatchupError,
         MeleePublicationError,
         MeleeStatisticsError,
+        MTGOLandingEditorialError,
         OSError,
     ) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)

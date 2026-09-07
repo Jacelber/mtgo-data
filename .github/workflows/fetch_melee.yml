@@ -113,6 +113,7 @@ jobs:
                 "data/${FORMAT}/melee/opportunities/${EVENT_ID}.json" | \
                 "stats/${FORMAT}/melee/index.json" | \
                 "stats/${FORMAT}/melee/events/${EVENT_ID}/"* | \
+                "stats/${FORMAT}/archetype_names.json" | \
                 "stats/catalog.json") ;;
                 *) echo "Resumed review branch path is outside the event boundary: ${CHANGED_PATH}" >&2; exit 1 ;;
               esac
@@ -224,7 +225,7 @@ jobs:
       - name: Stage validated candidate scope
         shell: bash
         run: |
-          git add -- "data_raw/melee/${EVENT_ID}/" "data/${FORMAT}/melee/" "stats/${FORMAT}/melee/" "stats/catalog.json"
+          git add -- "data_raw/melee/${EVENT_ID}/" "data/${FORMAT}/melee/" "stats/${FORMAT}/melee/" "stats/${FORMAT}/archetype_names.json" "stats/catalog.json"
           git diff --quiet || { echo "Candidate contains unstaged changes outside the exact staged scope" >&2; exit 1; }
 
       - name: Validate repository, rules, and Schemas

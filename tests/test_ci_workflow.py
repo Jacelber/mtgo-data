@@ -305,6 +305,7 @@ def test_melee_candidate_checkpoints_retained_evidence_before_derived_work() -> 
         '"data_raw/melee/${EVENT_ID}/"*',
         '"data/${FORMAT}/melee/events/${EVENT_ID}.json"',
         '"stats/${FORMAT}/melee/events/${EVENT_ID}/"*',
+        '"stats/${FORMAT}/archetype_names.json"',
         '"stats/catalog.json"',
         'git checkout -B "$BRANCH"',
         'git merge-base --is-ancestor "$GITHUB_SHA" HEAD',
@@ -369,6 +370,7 @@ def test_melee_candidate_stages_exact_scope_before_complete_validation():
     ) < names.index("Validate repository, rules, and Schemas")
     stage = by_name["Stage validated candidate scope"]["run"]
     assert 'git add -- "data_raw/melee/${EVENT_ID}/"' in stage
+    assert '"stats/${FORMAT}/archetype_names.json"' in stage
     assert "git diff --quiet" in stage
     validation = by_name["Validate repository, rules, and Schemas"]["run"]
     assert "validate_repository.py --full-candidate" in validation
