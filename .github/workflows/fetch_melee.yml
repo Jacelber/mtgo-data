@@ -262,7 +262,7 @@ jobs:
           TABLETOP_CANDIDATE_EVENT_ID: ${{ inputs.event_id }}
         run: >-
           npx playwright test tests/browser/production-pages.spec.js
-          --grep '^Tabletop entry renders candidate-derived data$'
+          --grep 'Tabletop entry renders candidate-derived data'
 
       - name: Confirm browser-validated candidate tree
         shell: bash

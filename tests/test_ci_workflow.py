@@ -410,9 +410,10 @@ def test_melee_candidate_binds_browser_smoke_to_exact_staged_tree():
         "TABLETOP_CANDIDATE_FORMAT": "${{ steps.whitelist.outputs.format }}",
         "TABLETOP_CANDIDATE_EVENT_ID": "${{ inputs.event_id }}",
     }
-    assert "tests/browser/production-pages.spec.js" in smoke["run"]
-    assert "--grep" in smoke["run"]
-    assert "Tabletop entry renders candidate-derived data" in smoke["run"]
+    assert smoke["run"] == (
+        "npx playwright test tests/browser/production-pages.spec.js "
+        "--grep 'Tabletop entry renders candidate-derived data'"
+    )
 
     confirm = by_name["Confirm browser-validated candidate tree"]["run"]
     assert "git diff --quiet" in confirm
