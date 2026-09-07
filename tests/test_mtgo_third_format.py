@@ -75,6 +75,8 @@ def repository(root, state):
                 continue
             write(root, f"stats/{fmt}/mtgo/{suffix}", {})
         write(root, f"reports/{fmt}/mtgo/index.json", {})
+    if state == "complete_public":
+        write(root, f"stats/{THIRD}/melee/index.json", {})
     for event_id, day in (("100", "2025-01-06"), ("200", "2025-01-13")):
         write(root, f"data/{THIRD}/{event_id}.json", {
             "event_id": event_id, "format": "CSYNTHETIC-THIRD", "description": "Synthetic Challenge",
@@ -92,8 +94,11 @@ def repository(root, state):
         write(root, "configs/mtgo_weekly_review_completions.yaml", {
             "schema_version": "1.2.0", "records": [],
             "data_admissions": {"schema_version": "1.0.0", "formats": {THIRD: {
-                "initial": {"kind": "grandfathered_existing_public_scope", "week": "2025-W02",
-                            "event_ids": ["100"], "evidence": "Synthetic pre-existing public scope only",
+                "initial": {"kind": "owner_accepted_initial_public_scope", "week": "2025-W02",
+                            "event_ids": ["100"], "evidence": "Synthetic accepted private product",
+                            "accepted_classifier_subject": "a" * 64,
+                            "classification_review_digest": "b" * 64,
+                            "accepted_on": "2025-01-13",
                             "source_manifest_digest": _digest([{"event_id": "100", "source_file": source,
                                 "sha256": sha256((root / source).read_bytes()).hexdigest()}])},
                 "weekly_acceptances": []}}}})
@@ -101,17 +106,23 @@ def repository(root, state):
 
 
 @pytest.mark.parametrize("state", ["planned", "private_executable", "incomplete_public", "complete_public"])
-def test_four_states_share_execution_catalog_and_direct_path_boundary(tmp_path, state):
+def test_four_states_share_execution_catalog_and_direct_path_boundary(
+    tmp_path, state, monkeypatch
+):
+    monkeypatch.setattr(
+        "mtgmeta.catalog._registered_tabletop_formats",
+        lambda _root: frozenset({THIRD}),
+    )
     repository(tmp_path, state)
     if state == "incomplete_public":
-        with pytest.raises(ValueError, match="missing required MTGO products"):
+        with pytest.raises(ValueError, match="missing required coordinated products"):
             resolve_complete_public_format(tmp_path, THIRD)
-        with pytest.raises(CandidateValidationError, match="missing required MTGO products"):
+        with pytest.raises(CandidateValidationError, match="missing required coordinated products"):
             _configured_formats(tmp_path)
-        with pytest.raises(ValueError, match="missing required MTGO products"):
+        with pytest.raises(ValueError, match="missing required coordinated products"):
             build_catalog(tmp_path)
         write(tmp_path, "stats/catalog.json", {"formats": []})
-        with pytest.raises(PagesError, match="missing required MTGO products"):
+        with pytest.raises(PagesError, match="missing required coordinated products"):
             publication_paths(tmp_path, POLICY)
         return
     collection, products = _configured_formats(tmp_path)
@@ -133,6 +144,9 @@ def test_four_states_share_execution_catalog_and_direct_path_boundary(tmp_path, 
             resolve_complete_public_format(tmp_path, THIRD)
     assert bool(third["default_product_id"]) == available
     assert all(item["available"] == available for item in third["products"] if item["id"].startswith("mtgo-"))
+    assert next(
+        item for item in third["products"] if item["id"] == "tabletop-major-events"
+    )["available"] == available
     assert (f"stats/{THIRD}/mtgo/meta.json" in paths) == available
     assert (f"reports/{THIRD}/mtgo/index.json" in paths) == available
     assert f"data/{THIRD}/100.json" in paths  # Existing public archive policy is unchanged.
@@ -141,6 +155,22 @@ def test_four_states_share_execution_catalog_and_direct_path_boundary(tmp_path, 
         require_private_output(tmp_path, tmp_path / f"reports/{THIRD}/mtgo/private.json")
         with pytest.raises(PublicationError, match="Pages"):
             require_private_output(tmp_path, tmp_path / "reports/standard/mtgo/private.json")
+
+
+def test_registered_tabletop_product_is_required_for_complete_public_state(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setattr(
+        "mtgmeta.catalog._registered_tabletop_formats",
+        lambda _root: frozenset({THIRD}),
+    )
+    repository(tmp_path, "complete_public")
+    (tmp_path / f"stats/{THIRD}/melee/index.json").unlink()
+    with pytest.raises(
+        ValueError,
+        match="missing required coordinated products: tabletop-major-events",
+    ):
+        resolve_complete_public_format(tmp_path, THIRD)
 
 
 @pytest.mark.parametrize("state,expected_events,expected_week", [

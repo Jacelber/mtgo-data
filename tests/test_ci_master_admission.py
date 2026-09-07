@@ -155,8 +155,10 @@ def test_known_paths_select_only_their_targeted_categories(paths, expected):
         (["configs/formats.yaml"], ("public-admission",)),
         (["src/mtgmeta/catalog.py"], ("public-admission",)),
         (["src/mtgmeta/classifier_closure.py"], ("public-admission",)),
+        (["src/mtgmeta/mtgo/publication.py"], ("public-admission",)),
         (["tests/test_mtgo_third_format.py"], ("public-admission",)),
         (["tests/test_classifier_closure.py"], ("public-admission",)),
+        (["tests/test_mtgo_reviewed_publication.py"], ("public-admission",)),
         (
             ["tests/test_card_names.py"],
             ("card-localization",),

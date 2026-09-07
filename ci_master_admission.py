@@ -522,7 +522,9 @@ def _validation_triggers(paths: set[str]) -> tuple[str, ...]:
         "configs/formats.yaml",
         "src/mtgmeta/catalog.py",
         "src/mtgmeta/classifier_closure.py",
+        "src/mtgmeta/mtgo/publication.py",
         "tests/test_classifier_closure.py",
+        "tests/test_mtgo_reviewed_publication.py",
         "tests/test_mtgo_third_format.py",
     }:
         triggers.add("public-admission")

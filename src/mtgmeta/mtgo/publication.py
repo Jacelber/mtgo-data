@@ -102,6 +102,21 @@ def _digest(value: Any) -> str:
                                      ensure_ascii=False).encode("utf-8")).hexdigest()
 
 
+def _validate_owner_classification_acceptance(record: Mapping[str, Any]) -> None:
+    for key in ("accepted_classifier_subject", "classification_review_digest"):
+        value = record.get(key)
+        if (
+            not isinstance(value, str)
+            or len(value) != 64
+            or any(character not in "0123456789abcdef" for character in value)
+        ):
+            raise PublicationError(f"invalid data admission {key}")
+    if date.fromisoformat(record["accepted_on"]) <= (
+        week_monday(record["week"]) + timedelta(days=6)
+    ):
+        raise PublicationError("data acceptance precedes the complete natural week")
+
+
 @dataclass(frozen=True)
 class PublicScope:
     format_id: str
@@ -139,20 +154,18 @@ def resolve_scope(repository_root: str | Path, format_id: str) -> PublicScope:
             raise PublicationError("unsupported data-admission version")
         config = admissions["formats"][format_id]
         initial = config["initial"]
-        if initial["kind"] != "grandfathered_existing_public_scope":
-            raise PublicationError("initial scope is not a historical review completion")
+        initial_kind = initial.get("kind")
+        if initial_kind == "owner_accepted_initial_public_scope":
+            _validate_owner_classification_acceptance(initial)
+        elif initial_kind != "grandfathered_existing_public_scope":
+            raise PublicationError("unsupported initial public scope admission")
         reviews = config["weekly_acceptances"]
         if not isinstance(reviews, list):
             raise PublicationError("weekly acceptances must be a list")
         for review in reviews:
             if review.get("kind") != "owner_accepted_full_classification":
                 raise PublicationError("a completion is not a classification admission")
-            for key in ("accepted_classifier_subject", "classification_review_digest"):
-                value = review.get(key)
-                if not isinstance(value, str) or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
-                    raise PublicationError(f"invalid data admission {key}")
-            if date.fromisoformat(review["accepted_on"]) <= week_monday(review["week"]) + timedelta(days=6):
-                raise PublicationError("data acceptance precedes the complete natural week")
+            _validate_owner_classification_acceptance(review)
         records = [initial, *reviews]
         sources = retained_events(root, format_id)
         event_dates = {str(event["event_id"]): date.fromisoformat(event["starttime"][:10])

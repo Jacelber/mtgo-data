@@ -186,6 +186,51 @@ def test_changed_accepted_source_and_public_review_destination_fail_closed(tmp_p
         resolve_scope(tmp_path, "standard")
 
 
+def test_first_public_format_uses_reviewed_initial_scope_without_false_history(tmp_path):
+    from mtgmeta.mtgo.publication import resolve_scope
+
+    registry = _repository(tmp_path)
+    initial = registry["data_admissions"]["formats"]["standard"]["initial"]
+    initial.update(
+        kind="owner_accepted_initial_public_scope",
+        accepted_classifier_subject="a" * 64,
+        classification_review_digest="b" * 64,
+        accepted_on="2025-01-13",
+        evidence="synthetic Owner acceptance of the complete private product",
+    )
+    _write(tmp_path / "configs/mtgo_weekly_review_completions.yaml", registry)
+    scope = resolve_scope(tmp_path, "standard")
+    assert scope.event_ids == frozenset({"100"})
+    assert scope.week == date(2025, 1, 6)
+
+
+@pytest.mark.parametrize(
+    "field,value,message",
+    [
+        ("accepted_classifier_subject", "not-a-digest", "accepted_classifier_subject"),
+        ("classification_review_digest", None, "classification_review_digest"),
+        ("accepted_on", "2025-01-12", "precedes the complete natural week"),
+    ],
+)
+def test_reviewed_initial_scope_fails_closed_on_invalid_acceptance(
+    tmp_path, field, value, message
+):
+    from mtgmeta.mtgo.publication import resolve_scope
+
+    registry = _repository(tmp_path)
+    initial = registry["data_admissions"]["formats"]["standard"]["initial"]
+    initial.update(
+        kind="owner_accepted_initial_public_scope",
+        accepted_classifier_subject="a" * 64,
+        classification_review_digest="b" * 64,
+        accepted_on="2025-01-13",
+    )
+    initial[field] = value
+    _write(tmp_path / "configs/mtgo_weekly_review_completions.yaml", registry)
+    with pytest.raises(PublicationError, match=message):
+        resolve_scope(tmp_path, "standard")
+
+
 def test_staging_failure_never_materializes_partial_format(tmp_path, monkeypatch):
     from mtgmeta.mtgo import publication, stats
     from mtgmeta import classifier_closure
