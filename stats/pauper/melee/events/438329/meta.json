@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "document_type": "meta",
+  "source": "melee",
+  "product": "tabletop-major-events",
+  "event_id": "438329",
+  "format": "pauper",
+  "event_structure": "constructed_day2",
+  "event": {
+    "name": "Paupergeddon Summer 2026 Main Event",
+    "series": "paupergeddon",
+    "date": {
+      "end": "2026-07-12",
+      "start": "2026-07-11"
+    },
+    "source_url": "https://melee.gg/Tournament/View/438329"
+  },
+  "input": {
+    "event_path": "data/pauper/melee/events/438329.json",
+    "event_sha256": "9c4c5f344144773cd60595590bb5e70b3b3dd9b7655beaa0bca90b26d4ac2343",
+    "event_schema_version": "2.2.0",
+    "classification_path": "data/pauper/melee/classifications/438329.json",
+    "classification_sha256": "0b8ba38967e252d5bf9fd696d65b94850889e0ae3a01741b079d7fe7272c6a8c",
+    "classification_schema_version": "1.1.0",
+    "opportunity_path": "data/pauper/melee/opportunities/438329.json",
+    "opportunity_sha256": "6324824dc048e1570b82554efc36dd9d058214c4074483992de353f00836a551",
+    "opportunity_schema_version": "1.1.0",
+    "taxonomy_path": "my_archetypes/pauper.yaml",
+    "taxonomy_sha256": "308e4eb39e1d282d93cb3b8386b4c82cf81a1bb96c5a923e793ba29a475c8af7",
+    "taxonomy_schema_version": "1.1.0"
+  },
+  "scope_order": [
+    "day1",
+    "day2",
+    "all_constructed"
+  ],
+  "default_scope": "all_constructed",
+  "quality": {
+    "status": "warning",
+    "blocking": false,
+    "issue_codes": [
+      "unknown_classifications",
+      "missing_or_unavailable_decklists"
+    ]
+  },
+  "outputs": {
+    "overview": {
+      "path": "overview.json",
+      "schema_version": "1.1.0",
+      "bytes": 596849,
+      "sha256": "e6fec878675029a25b01d099e668f57340c5b4111c9210f673cd83fbcf0edc9f"
+    },
+    "decks": {
+      "path": "decks.json",
+      "schema_version": "1.1.0",
+      "bytes": 6629628,
+      "sha256": "c65061c1b34f98c1eef075150303ef66af15f01aab443d26f049dc8d6c3bc7f7"
+    },
+    "matchup": {
+      "path": "matchup.json",
+      "schema_version": "1.0.0",
+      "bytes": 17153175,
+      "sha256": "1c4174ad28d08b71f993196e1c8765398052c1539e5974c0ecd63407eec40832"
+    },
+    "quality": {
+      "path": "quality.json",
+      "schema_version": "1.1.0",
+      "bytes": 2866,
+      "sha256": "975eac0309d0d7655ec10e850d75c586a91bd9f1b20d8ecfa73b0de89dca5313"
+    }
+  }
+}
