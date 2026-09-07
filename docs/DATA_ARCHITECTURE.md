@@ -1302,6 +1302,14 @@ at least one HTTPS source. Duplicate override IDs, duplicate match targets,
 identity mismatches, malformed played-result pairs, and unsupported Top 8 lock
 awards fail closed.
 
+Whitelist Schema 3.1.0 remains read-compatible with 3.0.0 and adds the optional
+event-scoped `advancement.qualified_result_type`. It is the only automatic
+interpretation of Melee's overloaded `Qualified` match status beyond the legacy
+reviewed Top 8 lock case, and its closed values are `bye` and
+`awarded_win_top8_lock`. The latter still requires
+`top8_lock_supported: true`. A 3.0.0 registry cannot carry the new field, so
+existing admitted events retain their prior result meaning.
+
 The normalizer resolves phase, stage, actual game format, participant status,
 result type, points, and eligibility. Only internally consistent played results
 in a reviewed Constructed Swiss phase of the event's configured format are
@@ -1756,6 +1764,14 @@ decklist, URL, and positive-decimal source-participant formats, and apply both
 before canonical serialization and after a persisted resource is read.
 Generation, resume, parsing, assembly, and retention therefore continue sharing
 the same fail-closed resource boundary.
+
+A minimized decklist response contains zero or one decklist. Zero is valid only
+when the live parser has verified that Melee returned both an empty `Records`
+array and an empty `Components` array for the requested decklist identity. The
+empty resource is persisted as `decklists: []`; normalization then retains the
+standing and reference while assigning the participant's decklist status
+`unavailable` under DEC-152. A nonempty response with no recognized cards is
+still rejected as a source-compatibility error.
 
 An exact-key recursive scan supplements the Schema for source identity,
 account, profile, preference, and unused deck metadata keys identified by the

@@ -651,9 +651,10 @@ def _real_decklist(payload: Mapping[str, Any], artifact: SourceArtifact) -> Pars
     payload_id = str(payload.get("Guid") or "")
     if payload_id.casefold() != artifact.source_decklist_id.casefold():
         raise MeleeSourceParseError(f"{artifact.path}: decklist identity does not match manifest")
+    records = _list(payload.get("Records"), f"{artifact.path}.Records")
     cards = []
     section_names = {0: "Main Deck", 2: "Commander", 3: "Commander", 99: "Sideboard"}
-    for index, value in enumerate(_list(payload.get("Records"), f"{artifact.path}.Records")):
+    for index, value in enumerate(records):
         path = f"{artifact.path}.Records[{index}]"
         record = _mapping(value, path)
         section = record.get("c")
@@ -667,6 +668,13 @@ def _real_decklist(payload: Mapping[str, Any], artifact: SourceArtifact) -> Pars
             section_text=section_names[section],
         ))
     if not cards:
+        components = (
+            _list(payload.get("Components"), f"{artifact.path}.Components")
+            if "Components" in payload
+            else None
+        )
+        if not records and components == []:
+            return ParsedSourcePage(artifact=artifact)
         raise MeleeSourceParseError(f"{artifact.path}: decklist contains no recognized cards")
     return ParsedSourcePage(artifact=artifact, decklists=(SourceDecklist(
         source_decklist_id=artifact.source_decklist_id,
@@ -874,14 +882,14 @@ def parse_minimized_response(
                 )
             )
         )
-        if len(decklists) != 1:
+        if len(decklists) > 1:
             raise MeleeSourceParseError(
-                f"{artifact.path}.decklists: expected exactly one decklist"
+                f"{artifact.path}.decklists: expected at most one decklist"
             )
         manifest_participant = (
             artifact.participant_ref if legacy_hmac else artifact.source_participant_id
         )
-        if manifest_participant != decklists[0].source_participant_id:
+        if decklists and manifest_participant != decklists[0].source_participant_id:
             raise MeleeSourceParseError(
                 f"{artifact.path}: decklist participant identity does not match manifest"
             )

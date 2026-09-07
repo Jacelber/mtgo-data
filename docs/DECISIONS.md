@@ -8307,3 +8307,52 @@ This decision changes no statistics, thresholds, taxonomy identity, event
 admission, real Pauper review content, public path, front end, workflow, or
 production behavior. Completion publication remains gated by Owner acceptance
 of the local Implementation artifact.
+
+# DEC-166 - Distinguish empty Melee decklists and event-specific Qualified results
+
+Status: `Accepted; P14-05R1 local implementation authorized`
+
+## Context
+
+The disposable P14-05 trial for event `438329` reached a source-valid decklist
+response whose requested identity and format were present but whose `Records`
+and `Components` arrays were both empty. The pre-persistence parser rejected
+that response before DEC-152 could represent the decklist as unavailable. The
+same retained checkpoint also showed one-participant, three-point `Qualified`
+records in the first Swiss round. Melee uses that source label for more than one
+administrative procedure, while the existing normalizer recognized it only as
+a reviewed Top 8 lock award.
+
+## Decision
+
+Accept an explicitly empty Melee decklist response only when both `Records` and
+`Components` are present and empty. Persist the minimized resource as
+`decklists: []`, read it back without fabricating a deck, and let the existing
+assembly and DEC-152 contracts mark the referenced participant decklist
+`unavailable`. Continue to reject a nonempty response that contains no
+recognized cards.
+
+Advance the event-registry contract to Schema 3.1.0 while retaining read
+compatibility for 3.0.0. The new optional event-scoped
+`advancement.qualified_result_type` has only two values: `bye` and
+`awarded_win_top8_lock`. The second value continues to require explicit Top 8
+lock support. A 3.0.0 registry retains the old behavior: `Qualified` maps to a
+Top 8 lock award only where the existing event advancement already supports
+that procedure, and otherwise remains unknown.
+
+For the private `438329` P14-05 trial only, the reviewed first-round evidence
+maps `Qualified` to `bye`. The private registry and checkpoint remain outside
+the repository. The formal whitelist is not changed.
+
+## Consequences
+
+The same P14-05 checkpoint can resume after Owner acceptance without requesting
+already verified resources again. A source-asserted empty decklist no longer
+blocks collection and does not become an Unknown classification. Event `434455`
+retains its existing Top 8 lock interpretation, event `441441` retains its
+existing meaning, and their configuration bytes do not change.
+
+This decision authorizes no new real request during P14-05R1 and no formal event
+admission, classifier change, P14-06/P14-07 work, Pages change, production
+change, commit, remote publication, or merge. Resuming the same disposable
+P14-05 plan remains a post-repair Owner acceptance action.

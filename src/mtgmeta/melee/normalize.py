@@ -96,16 +96,23 @@ def _source_result(
     if status == "qualified" or any(
         _normalized_text(item.outcome_text) == "qualified" for item in competitors
     ):
+        qualified_result_type = None
+        if event.advancement is not None:
+            qualified_result_type = event.advancement.qualified_result_type
+            if (
+                qualified_result_type is None
+                and event.advancement.top8_lock_supported is True
+            ):
+                qualified_result_type = "awarded_win_top8_lock"
         if (
             len(competitors) != 1
             or competitors[0].match_points not in {None, 3}
-            or event.advancement is None
-            or event.advancement.top8_lock_supported is not True
+            or qualified_result_type is None
         ):
             return None
         return False, [{
             "source_participant_id": competitors[0].source_participant_id,
-            "result_type": "awarded_win_top8_lock",
+            "result_type": qualified_result_type,
             "match_points": competitors[0].match_points if competitors[0].match_points is not None else 3,
         }]
 

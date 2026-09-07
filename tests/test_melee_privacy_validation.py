@@ -41,6 +41,16 @@ def test_v2_minimized_resource_preserves_public_source_participant_id():
     )
 
 
+def test_v2_minimized_resource_accepts_explicitly_empty_decklist_response():
+    validate_minimized_resource(
+        {
+            "schema_version": "2.0.0",
+            "resource_type": "decklist",
+            "decklists": [],
+        }
+    )
+
+
 def test_prohibited_key_remains_blocking_with_a_permissive_schema(tmp_path):
     schema_path = tmp_path / "permissive.schema.json"
     schema_path.write_text(

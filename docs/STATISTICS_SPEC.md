@@ -311,6 +311,15 @@ played result is valid only when two identified competitors have a consistent
 win/loss or draw/draw pair and compatible match points. Ambiguous records remain
 `unknown` and are excluded.
 
+Melee source status `Qualified` is not itself a statistical result type. Event
+registry Schema 3.1.0 may map a one-participant, three-point `Qualified` record
+to either `bye` or `awarded_win_top8_lock` through the reviewed
+`advancement.qualified_result_type` field. Without that explicit mapping, the
+legacy Schema 3.0.0 behavior recognizes `Qualified` only for an event whose
+reviewed advancement configuration enables Top 8 lock handling; otherwise the
+result remains unknown. A mapping to `bye` follows the ordinary bye rules in
+section 6.5 and must not remove an effective theoretical round.
+
 Event-specific corrections must be stored as reviewed configuration with the
 source match ID, complete competitor identities and results, a reason, and
 reviewable source URLs. In particular, `awarded_win_top8_lock` must not be

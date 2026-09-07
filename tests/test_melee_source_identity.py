@@ -4,14 +4,25 @@ from __future__ import annotations
 
 from hashlib import sha256
 import json
+from pathlib import Path
 
 import pytest
 
 from mtgmeta.melee.client import RawResponseRecord, _checkpoint_payload
-from mtgmeta.melee.parser import MeleeSourceParseError, SourceArtifact, parse_raw_snapshot
+from mtgmeta.melee.config import MeleeConfigError, parse_melee_event_text
+from mtgmeta.melee.normalize import _source_result
+from mtgmeta.melee.parser import (
+    MeleeSourceParseError,
+    SourceArtifact,
+    SourceCompetitor,
+    SourceMatch,
+    parse_minimized_response,
+    parse_raw_snapshot,
+)
 from mtgmeta.melee.privacy import minimize_source_response
 
 
+ROOT = Path(__file__).resolve().parents[1]
 DECKLIST_ID = "12345678-1234-1234-1234-123456789abc"
 LEGACY_REF = "melee-v3-" + "a" * 64
 
@@ -132,6 +143,114 @@ def test_minimizer_copies_public_source_participant_id_without_hmac():
     assert persisted["schema_version"] == "2.0.0"
     assert persisted["decklists"][0]["source_participant_id"] == "123456"
     assert "participant_ref" not in result.body.decode()
+
+
+def test_explicitly_empty_real_decklist_round_trips_without_a_fabricated_deck():
+    source = json.dumps(
+        {
+            "Guid": DECKLIST_ID,
+            "FormatName": "Pauper",
+            "Records": [],
+            "Components": [],
+        }
+    ).encode()
+    artifact = _artifact(body=source, source_participant_id="123456")
+
+    result = minimize_source_response(source, artifact, event_id="438329")
+    persisted = json.loads(result.body)
+    restored = parse_minimized_response(
+        result.body,
+        _artifact(body=result.body, source_participant_id="123456"),
+        expected_schema_version="2.0.0",
+    )
+
+    assert persisted == {
+        "schema_version": "2.0.0",
+        "resource_type": "decklist",
+        "decklists": [],
+    }
+    assert result.page.decklists == ()
+    assert restored.decklists == ()
+
+
+def test_nonempty_unrecognized_real_decklist_still_fails_closed():
+    source = json.dumps(
+        {
+            "Guid": DECKLIST_ID,
+            "FormatName": "Pauper",
+            "Records": [{"n": "Fixture Card", "q": 4, "c": 7}],
+            "Components": [],
+        }
+    ).encode()
+
+    with pytest.raises(MeleeSourceParseError, match="no recognized cards"):
+        minimize_source_response(
+            source,
+            _artifact(body=source, source_participant_id="123456"),
+            event_id="438329",
+        )
+
+
+def _qualified_source_match() -> SourceMatch:
+    competitor = SourceCompetitor("123456", "Qualified", 3)
+    return SourceMatch(
+        source_match_id="match-1",
+        source_round_id="round-1",
+        competitor_source_ids=(competitor.source_participant_id,),
+        competitor_results=(competitor,),
+        result_text=None,
+        status_text="Qualified",
+        table_number=None,
+    )
+
+
+def test_registry_31_can_distinguish_qualified_bye_from_legacy_top8_lock():
+    registry_text = (ROOT / "configs" / "melee_events.yaml").read_text(
+        encoding="utf-8"
+    )
+    legacy_event = parse_melee_event_text(registry_text).get("434455")
+    schema_31_text = registry_text.replace(
+        'schema_version: "3.0.0"', 'schema_version: "3.1.0"', 1
+    ).replace(
+        "      top8_lock_supported: true",
+        "      top8_lock_supported: true\n      qualified_result_type: bye",
+        1,
+    )
+    bye_event = parse_melee_event_text(schema_31_text).get("434455")
+
+    assert _source_result(_qualified_source_match(), legacy_event) == (
+        False,
+        [
+            {
+                "source_participant_id": "123456",
+                "result_type": "awarded_win_top8_lock",
+                "match_points": 3,
+            }
+        ],
+    )
+    assert _source_result(_qualified_source_match(), bye_event) == (
+        False,
+        [
+            {
+                "source_participant_id": "123456",
+                "result_type": "bye",
+                "match_points": 3,
+            }
+        ],
+    )
+
+
+def test_registry_30_rejects_new_qualified_result_interpretation():
+    registry_text = (ROOT / "configs" / "melee_events.yaml").read_text(
+        encoding="utf-8"
+    ).replace(
+        "      top8_lock_supported: true",
+        "      top8_lock_supported: true\n      qualified_result_type: bye",
+        1,
+    )
+
+    with pytest.raises(MeleeConfigError, match="unsupported"):
+        parse_melee_event_text(registry_text)
 
 
 def test_checkpoint_v3_declares_direct_identity_without_a_key():
