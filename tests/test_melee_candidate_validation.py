@@ -77,7 +77,22 @@ def test_candidate_catalog_allows_only_selected_event_addition(
     assert not _validate(tmp_path, baseline)
 
 
-@pytest.mark.parametrize("mutation", ["delete", "default", "rewrite", "unrelated"])
+def test_candidate_catalog_allows_selected_new_event_as_proposed_default(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    existing = _catalog(["434455"])
+    baseline = _baseline(tmp_path, monkeypatch, existing)
+    candidate_catalog = deepcopy(existing)
+    events = candidate_catalog["events"]
+    assert isinstance(events, list)
+    events.insert(0, _event(SELECTED_EVENT_ID))
+    candidate_catalog["default_event_id"] = SELECTED_EVENT_ID
+    _write_catalog(tmp_path, candidate_catalog)
+
+    assert not _validate(tmp_path, baseline)
+
+
+@pytest.mark.parametrize("mutation", ["delete", "rewrite", "unrelated"])
 def test_candidate_catalog_rejects_existing_cohort_changes(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -90,9 +105,6 @@ def test_candidate_catalog_rejects_existing_cohort_changes(
     assert isinstance(events, list)
     if mutation == "delete":
         events.clear()
-    elif mutation == "default":
-        candidate_catalog["default_event_id"] = SELECTED_EVENT_ID
-        events.append(_event(SELECTED_EVENT_ID))
     elif mutation == "rewrite":
         events[0]["name"] = "Silently rewritten"  # type: ignore[index]
         events.append(_event(SELECTED_EVENT_ID))
@@ -101,3 +113,54 @@ def test_candidate_catalog_rejects_existing_cohort_changes(
     _write_catalog(tmp_path, candidate_catalog)
 
     assert _validate(tmp_path, baseline)
+
+
+def test_candidate_catalog_rejects_default_change_to_another_existing_event(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    existing = _catalog(["434455", "400000"])
+    baseline = _baseline(tmp_path, monkeypatch, existing)
+    candidate_catalog = deepcopy(existing)
+    events = candidate_catalog["events"]
+    assert isinstance(events, list)
+    events.append(_event(SELECTED_EVENT_ID))
+    candidate_catalog["default_event_id"] = "400000"
+    _write_catalog(tmp_path, candidate_catalog)
+
+    failures = _validate(tmp_path, baseline)
+
+    assert (
+        "event catalog changed the default to an event other than the candidate"
+        in failures
+    )
+
+
+def test_candidate_catalog_rejects_existing_candidate_as_new_default(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    existing = _catalog(["434455", SELECTED_EVENT_ID])
+    baseline = _baseline(tmp_path, monkeypatch, existing)
+    candidate_catalog = deepcopy(existing)
+    candidate_catalog["default_event_id"] = SELECTED_EVENT_ID
+    _write_catalog(tmp_path, candidate_catalog)
+
+    failures = _validate(tmp_path, baseline)
+
+    assert "existing candidate event cannot become the proposed default" in failures
+
+
+def test_candidate_catalog_rejects_nonleading_candidate_as_proposed_default(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    existing = _catalog(["434455"])
+    baseline = _baseline(tmp_path, monkeypatch, existing)
+    candidate_catalog = deepcopy(existing)
+    events = candidate_catalog["events"]
+    assert isinstance(events, list)
+    events.append(_event(SELECTED_EVENT_ID))
+    candidate_catalog["default_event_id"] = SELECTED_EVENT_ID
+    _write_catalog(tmp_path, candidate_catalog)
+
+    failures = _validate(tmp_path, baseline)
+
+    assert "proposed default event must be the first catalog event" in failures
