@@ -123,7 +123,10 @@ manifests. Prove that the candidate path:
 
 - adds the selected event without deleting or silently rewriting another
   event;
-- makes any default-event change explicit and Owner-reviewed;
+- keeps the published default unchanged outside the review branch; a candidate
+  catalog may identify the selected newer event only as a proposed default,
+  which becomes public only after exact-candidate Owner acceptance, merge, and
+  deployment;
 - emits the current catalog Schema and active-taxonomy identity;
 - admits multi-event selection only for same-format, non-blocking events whose
   matchup and taxonomy identities reconcile;
@@ -183,7 +186,9 @@ change the earlier immutable raw-snapshot and normalized-event checkpoint.
 Failure blocks only the final derived candidate commit and push.
 
 The workflow may push only `data/melee-<event_id>`. It never writes `master`,
-opens or merges a pull request, or deploys Pages.
+opens or merges a pull request, or deploys Pages. A `default_event_id` change
+inside that review branch is candidate state only; whitelist admission and
+candidate collection do not change the default visible from `master` or Pages.
 
 **Effect:** one immutable, event-bound candidate is available for review.
 

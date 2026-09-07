@@ -185,10 +185,17 @@ def _validate_catalog_cohort(
         )
     if event_id not in after:
         failures.append(f"event catalog does not contain candidate event {event_id}")
-    if current_catalog.get("default_event_id") != baseline_catalog.get(
-        "default_event_id"
-    ):
-        failures.append("event catalog changed the existing default event")
+    baseline_default = baseline_catalog.get("default_event_id")
+    candidate_default = current_catalog.get("default_event_id")
+    if candidate_default != baseline_default:
+        if candidate_default != event_id:
+            failures.append(
+                "event catalog changed the default to an event other than the candidate"
+            )
+        elif event_id in before:
+            failures.append("existing candidate event cannot become the proposed default")
+        elif current_catalog["events"][0].get("event_id") != event_id:
+            failures.append("proposed default event must be the first catalog event")
     for protected_id in sorted(set(before) - {event_id}):
         if protected_id in after and after[protected_id] != before[protected_id]:
             failures.append(
