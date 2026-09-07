@@ -77,6 +77,29 @@ def test_candidate_catalog_allows_only_selected_event_addition(
     assert not _validate(tmp_path, baseline)
 
 
+def test_candidate_catalog_allows_first_event_for_format(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(candidate, "_git", lambda *args: "base-head\n")
+    baseline = candidate.snapshot_state(tmp_path, SELECTED_EVENT_ID, FORMAT_ID)
+    assert baseline["catalog"] is None
+    _write_catalog(tmp_path, _catalog([SELECTED_EVENT_ID]))
+
+    assert not _validate(tmp_path, baseline)
+
+
+def test_candidate_catalog_rejects_unrelated_event_in_first_catalog(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(candidate, "_git", lambda *args: "base-head\n")
+    baseline = candidate.snapshot_state(tmp_path, SELECTED_EVENT_ID, FORMAT_ID)
+    _write_catalog(tmp_path, _catalog([SELECTED_EVENT_ID, "999999"]))
+
+    failures = _validate(tmp_path, baseline)
+
+    assert "event catalog added events outside the candidate: 999999" in failures
+
+
 def test_candidate_catalog_allows_selected_new_event_as_proposed_default(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
