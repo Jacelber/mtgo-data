@@ -8356,3 +8356,61 @@ This decision authorizes no new real request during P14-05R1 and no formal event
 admission, classifier change, P14-06/P14-07 work, Pages change, production
 change, commit, remote publication, or merge. Resuming the same disposable
 P14-05 plan remains a post-repair Owner acceptance action.
+
+---
+
+# DEC-167 - Apply the reviewed P14-05R2 Pauper classifier dispositions
+
+Status: `Accepted`
+
+## Context
+
+The resumed disposable P14-05 trial classified the complete retained event
+`438329` with the accepted Pauper rules and produced 39 distinct Unknown
+decklist fingerprints. The Owner reviewed every workbook decision through the
+value-complete XLSX intake gate, accepted 33 recommendations, and supplied six
+complete corrections. One reviewed construction remains intentionally Unknown;
+the other reviewed fingerprints require classifier maintenance.
+
+The Owner also required existing rules to be simplified before adding
+alternatives. An alternative is permitted only where broadening the existing
+rule would change a retained known classification or its classifier
+diagnostics.
+
+## Decision
+
+Add nine stable Pauper parent identities: `life-combo`, `midnight-gond`,
+`persistent-petitioners`, `mardu-reanimator`, `slivers`, `affinity-combo`,
+`mono-black-burn`, `gruul-initiative`, and `jund-affinity`. Register their
+Owner-approved English and Chinese display names. Keep the existing
+`jund-wildfire` identity and change only its Chinese display name from
+`勇德共鸣` to `勇德野火`; the new `jund-affinity` identity owns `勇德共鸣`.
+
+Simplify the existing `mono-black-devotion`, `mono-red-fiend`,
+`dimir-faeries-aquifer`, `temur-hawkeye`, `dimir-flicker-control`,
+`mono-red-burn`, and `temur-control` rules where the complete retained corpus
+proves that the broader condition is stable. Add narrowly bounded alternatives
+under the existing Freed Combo, Dimir Terror, Mono-Blue Terror, Esper Affinity,
+Rakdos Affinity, Mono-Red Madness, Mono-Red Burn, Jeskai Ephemerate,
+Battle Screech, Golgari Gardens, Gruul Ramp, and Orzhov Midrange parents where
+editing the existing branch produced retained diagnostic or identity drift.
+The two materially different Affinity Combo engines receive two rules under one
+parent because the rule schema expresses conjunction but not alternatives.
+
+Keep review item `U31` intentionally Unknown. Preserve every existing stable
+parent and subtype ID, and add one bounded synthetic representative for every
+new rule. Do not retain the private event, its decklists, account names, or the
+review workbook in the repository.
+
+## Consequences
+
+The accepted and candidate rules were compared on the exact same complete
+Pauper input of 4,521 decklists: 3,451 retained MTGO decklists and 1,070 private
+Melee decklists from event `438329`. Exactly the 39 Owner-approved records move
+from Unknown to their reviewed identities. There are zero unexpected record
+changes, new Unknowns, new conflicts, lost classifications, or subtype drift.
+
+The classifier and bilingual-name authority change, but the formal Melee event
+registry, public assets, generated statistics, Pages, and production do not.
+Event `438329` remains disposable and non-public. This decision does not
+authorize P14-06 or P14-07.
