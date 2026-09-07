@@ -14,7 +14,8 @@ import yaml
 from ..config import DuplicateKeyLoader
 
 
-MELEE_EVENT_SCHEMA_VERSION = "3.0.0"
+MELEE_EVENT_SCHEMA_VERSION = "3.1.0"
+SUPPORTED_MELEE_EVENT_SCHEMA_VERSIONS = frozenset({"3.0.0", MELEE_EVENT_SCHEMA_VERSION})
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
 PHASE_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*$")
 MELEE_EVENT_URL_PATTERN = re.compile(r"^https://melee\.gg/Tournament/View/([1-9][0-9]*)$")
@@ -41,6 +42,7 @@ RESULT_TYPES = frozenset(
     }
 )
 PLAYED_RESULT_TYPES = frozenset({"played_win", "played_loss", "played_draw"})
+QUALIFIED_RESULT_TYPES = frozenset({"bye", "awarded_win_top8_lock"})
 
 
 class MeleeConfigError(ValueError):
@@ -84,6 +86,7 @@ class MeleeAdvancement:
     day2_after_round: int | None
     day2_minimum_match_points: int | None
     top8_lock_supported: bool | None
+    qualified_result_type: str | None
 
 
 @dataclass(frozen=True)
@@ -319,8 +322,19 @@ def _parse_raw_requests(value: Any, path: str, event_id: str) -> tuple[MeleeRawR
     return tuple(requests)
 
 
-def _parse_advancement(value: Any, path: str) -> MeleeAdvancement:
-    data = _require_mapping(value, path, set(), {"day2_after_round", "day2_minimum_match_points", "top8_lock_supported"})
+def _parse_advancement(
+    value: Any,
+    path: str,
+    registry_schema_version: str,
+) -> MeleeAdvancement:
+    optional = {
+        "day2_after_round",
+        "day2_minimum_match_points",
+        "top8_lock_supported",
+    }
+    if registry_schema_version == "3.1.0":
+        optional.add("qualified_result_type")
+    data = _require_mapping(value, path, set(), optional)
     after_round = data.get("day2_after_round")
     if after_round is not None:
         after_round = _require_non_negative_int(after_round, f"{path}.day2_after_round")
@@ -332,7 +346,30 @@ def _parse_advancement(value: Any, path: str) -> MeleeAdvancement:
     top8_lock_supported = data.get("top8_lock_supported")
     if top8_lock_supported is not None:
         top8_lock_supported = _require_bool(top8_lock_supported, f"{path}.top8_lock_supported")
-    return MeleeAdvancement(after_round, match_points, top8_lock_supported)
+    qualified_result_type = data.get("qualified_result_type")
+    if qualified_result_type is not None:
+        qualified_result_type = _require_string(
+            qualified_result_type, f"{path}.qualified_result_type"
+        )
+        if qualified_result_type not in QUALIFIED_RESULT_TYPES:
+            raise _error(
+                f"{path}.qualified_result_type",
+                "must be bye or awarded_win_top8_lock",
+            )
+        if (
+            qualified_result_type == "awarded_win_top8_lock"
+            and top8_lock_supported is not True
+        ):
+            raise _error(
+                f"{path}.qualified_result_type",
+                "Top 8 lock interpretation requires top8_lock_supported: true",
+            )
+    return MeleeAdvancement(
+        after_round,
+        match_points,
+        top8_lock_supported,
+        qualified_result_type,
+    )
 
 
 def _parse_reviewed_overrides(value: Any, path: str) -> tuple[MeleeMatchOverride, ...]:
@@ -414,7 +451,11 @@ def _parse_reviewed_overrides(value: Any, path: str) -> tuple[MeleeMatchOverride
     return tuple(overrides)
 
 
-def _parse_event(value: Any, path: str) -> MeleeEventDefinition:
+def _parse_event(
+    value: Any,
+    path: str,
+    registry_schema_version: str,
+) -> MeleeEventDefinition:
     required = {
         "id", "url", "name", "date", "format", "series", "structure", "enabled", "review_status",
         "tabletop", "team_event", "mixed_format", "raw_requests", "include", "phases", "statistics", "source_evidence",
@@ -498,7 +539,15 @@ def _parse_event(value: Any, path: str) -> MeleeEventDefinition:
         _require_https_url(source_url, f"{path}.source_evidence[{index}]")
     special_handling = _parse_string_list(data["special_handling"], f"{path}.special_handling", required=False)
     notes = _require_string(data["notes"], f"{path}.notes")
-    advancement = _parse_advancement(data["advancement"], f"{path}.advancement") if "advancement" in data else None
+    advancement = (
+        _parse_advancement(
+            data["advancement"],
+            f"{path}.advancement",
+            registry_schema_version,
+        )
+        if "advancement" in data
+        else None
+    )
     reviewed_overrides = _parse_reviewed_overrides(
         data.get("reviewed_overrides", []), f"{path}.reviewed_overrides"
     )
@@ -521,16 +570,27 @@ def parse_melee_event_text(text: str) -> MeleeEventRegistry:
     data = _load_yaml_mapping(text, "melee_events")
     if set(data) != {"schema_version", "events"}:
         raise _error("melee_events", "must contain only schema_version and events")
-    if data["schema_version"] != MELEE_EVENT_SCHEMA_VERSION:
-        raise _error("schema_version", f"must equal {MELEE_EVENT_SCHEMA_VERSION!r}")
+    registry_schema_version = data["schema_version"]
+    if registry_schema_version not in SUPPORTED_MELEE_EVENT_SCHEMA_VERSIONS:
+        raise _error(
+            "schema_version",
+            f"must be one of {sorted(SUPPORTED_MELEE_EVENT_SCHEMA_VERSIONS)!r}",
+        )
     entries = data["events"]
     if not isinstance(entries, list) or not entries:
         raise _error("events", "must be a non-empty list")
-    events = tuple(_parse_event(entry, f"events[{index}]") for index, entry in enumerate(entries))
+    events = tuple(
+        _parse_event(
+            entry,
+            f"events[{index}]",
+            registry_schema_version,
+        )
+        for index, entry in enumerate(entries)
+    )
     event_ids = [event.id for event in events]
     if len(event_ids) != len(set(event_ids)):
         raise _error("events", "must not contain duplicate event IDs")
-    return MeleeEventRegistry(MELEE_EVENT_SCHEMA_VERSION, events)
+    return MeleeEventRegistry(registry_schema_version, events)
 
 
 def load_melee_event_registry(path: str | Path) -> MeleeEventRegistry:

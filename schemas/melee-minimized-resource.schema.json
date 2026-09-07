@@ -133,7 +133,7 @@
     "decklistResourceBase": {
       "type": "object", "additionalProperties": false,
       "required": ["schema_version", "resource_type", "decklists"],
-      "properties": {"schema_version": {}, "resource_type": {"const": "decklist"}, "decklists": {"type": "array", "minItems": 1, "maxItems": 1}}
+      "properties": {"schema_version": {}, "resource_type": {"const": "decklist"}, "decklists": {"type": "array", "maxItems": 1}}
     },
     "decklistResourceV1": {"$ref": "#/$defs/decklistResourceBase", "properties": {"schema_version": {"const": "1.0.0"}, "decklists": {"items": {"$ref": "#/$defs/decklistV1"}}}},
     "decklistResourceV2": {"$ref": "#/$defs/decklistResourceBase", "properties": {"schema_version": {"const": "2.0.0"}, "decklists": {"items": {"$ref": "#/$defs/decklistV2"}}}}
