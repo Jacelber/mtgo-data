@@ -9,7 +9,11 @@ from pathlib import Path
 import pytest
 
 from mtgmeta.melee.client import RawResponseRecord, _checkpoint_payload
-from mtgmeta.melee.config import MeleeConfigError, parse_melee_event_text
+from mtgmeta.melee.config import (
+    MeleeConfigError,
+    load_melee_event_registry,
+    parse_melee_event_text,
+)
 from mtgmeta.melee.normalize import _source_result
 from mtgmeta.melee.parser import (
     MeleeSourceParseError,
@@ -205,18 +209,9 @@ def _qualified_source_match() -> SourceMatch:
 
 
 def test_registry_31_can_distinguish_qualified_bye_from_legacy_top8_lock():
-    registry_text = (ROOT / "configs" / "melee_events.yaml").read_text(
-        encoding="utf-8"
-    )
-    legacy_event = parse_melee_event_text(registry_text).get("434455")
-    schema_31_text = registry_text.replace(
-        'schema_version: "3.0.0"', 'schema_version: "3.1.0"', 1
-    ).replace(
-        "      top8_lock_supported: true",
-        "      top8_lock_supported: true\n      qualified_result_type: bye",
-        1,
-    )
-    bye_event = parse_melee_event_text(schema_31_text).get("434455")
+    registry = load_melee_event_registry(ROOT / "configs" / "melee_events.yaml")
+    legacy_event = registry.get("434455")
+    bye_event = registry.get("438329")
 
     assert _source_result(_qualified_source_match(), legacy_event) == (
         False,
@@ -244,6 +239,8 @@ def test_registry_30_rejects_new_qualified_result_interpretation():
     registry_text = (ROOT / "configs" / "melee_events.yaml").read_text(
         encoding="utf-8"
     ).replace(
+        'schema_version: "3.1.0"', 'schema_version: "3.0.0"', 1
+    ).replace(
         "      top8_lock_supported: true",
         "      top8_lock_supported: true\n      qualified_result_type: bye",
         1,
@@ -251,6 +248,55 @@ def test_registry_30_rejects_new_qualified_result_interpretation():
 
     with pytest.raises(MeleeConfigError, match="unsupported"):
         parse_melee_event_text(registry_text)
+
+
+def test_paupergeddon_registry_admission_is_exact_and_fetchable():
+    registry = load_melee_event_registry(ROOT / "configs" / "melee_events.yaml")
+    event = registry.require_fetchable("438329")
+
+    assert registry.schema_version == "3.1.0"
+    assert (
+        event.url,
+        event.name,
+        event.start_date.isoformat(),
+        event.end_date.isoformat(),
+        event.format,
+        event.series,
+        event.structure,
+        event.mixed_format,
+        event.include_playoffs,
+        event.constructed_game_format,
+    ) == (
+        "https://melee.gg/Tournament/View/438329",
+        "Paupergeddon Summer 2026 Main Event",
+        "2026-07-11",
+        "2026-07-12",
+        "pauper",
+        "paupergeddon",
+        "constructed_day2",
+        False,
+        True,
+        "pauper",
+    )
+    assert [
+        (phase.id, phase.stage, phase.swiss, phase.rounds, phase.source_labels)
+        for phase in event.phases
+    ] == [
+        ("day1_pauper", "day1", True, tuple(range(1, 9)), ()),
+        ("day2_pauper", "day2", True, tuple(range(9, 15)), ()),
+        ("top8_pauper", "playoff", False, (), ("Quarterfinals", "Semifinals", "Finals")),
+    ]
+    assert event.advancement is not None
+    assert (
+        event.advancement.day2_after_round,
+        event.advancement.day2_minimum_match_points,
+        event.advancement.top8_lock_supported,
+        event.advancement.qualified_result_type,
+    ) == (8, 18, None, "bye")
+    assert event.source_evidence == (
+        "https://melee.gg/Tournament/View/438329",
+        "https://paupergeddon.com/",
+    )
 
 
 def test_checkpoint_v3_declares_direct_identity_without_a_key():

@@ -1,4 +1,4 @@
-schema_version: "3.0.0"
+schema_version: "3.1.0"
 
 events:
   - id: "434455"
@@ -191,3 +191,63 @@ events:
       - "Players with at least 18 match points after round 9 advance to Day 2."
       - "Quarterfinals, Semifinals, and Finals remain contextual only and are excluded from primary Modern Swiss statistics."
     notes: "Owner-accepted qualification evidence supports this Dallas main-event entry; collection, retention, generation, workflow dispatch, candidate publication, and Pages deployment remain separately authorized operations."
+
+  - id: "438329"
+    url: "https://melee.gg/Tournament/View/438329"
+    name: "Paupergeddon Summer 2026 Main Event"
+    date:
+      start: "2026-07-11"
+      end: "2026-07-12"
+    format: "pauper"
+    series: "paupergeddon"
+    structure: "constructed_day2"
+    enabled: true
+    review_status: "verified"
+    tabletop: true
+    team_event: false
+    mixed_format: false
+    raw_requests:
+      - id: "tournament"
+        resource_type: "tournament"
+        url: "https://melee.gg/Tournament/View/438329"
+        content_type: "html"
+    include:
+      swiss: true
+      playoffs: true
+    phases:
+      - id: "day1_pauper"
+        stage: "day1"
+        round_phase: "constructed"
+        game_format: "pauper"
+        swiss: true
+        rounds: [1, 2, 3, 4, 5, 6, 7, 8]
+      - id: "day2_pauper"
+        stage: "day2"
+        round_phase: "constructed"
+        game_format: "pauper"
+        swiss: true
+        rounds: [9, 10, 11, 12, 13, 14]
+      - id: "top8_pauper"
+        stage: "playoff"
+        round_phase: "playoff"
+        game_format: "pauper"
+        swiss: false
+        source_labels: ["Quarterfinals", "Semifinals", "Finals"]
+    advancement:
+      day2_after_round: 8
+      day2_minimum_match_points: 18
+      qualified_result_type: "bye"
+    reviewed_overrides: []
+    statistics:
+      default_match_scope: "all_constructed_swiss"
+      constructed_game_format: "pauper"
+      include_playoffs: false
+    source_evidence:
+      - "https://melee.gg/Tournament/View/438329"
+      - "https://paupergeddon.com/"
+    special_handling:
+      - "Rounds 1 through 8 are Day 1 Pauper Swiss; players with at least 18 match points advance to Day 2."
+      - "Rounds 9 through 14 are Day 2 Pauper Swiss."
+      - "Reviewed source Qualified results represent Main Event byes and must not be treated as played wins."
+      - "Quarterfinals, Semifinals, and Finals remain contextual only and are excluded from primary Pauper Swiss statistics."
+    notes: "Owner-accepted P14-05 qualification and disposable-trial evidence supports this entry; collection, retention, generation, workflow dispatch, candidate publication, and Pages deployment remain separately authorized operations."
