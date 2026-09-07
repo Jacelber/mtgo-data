@@ -3476,12 +3476,18 @@ English once; duplicate approval cells are not machine facts. Read-only
 validate actual content. Import is a separate mutation gate and repeats the
 complete bilingual contract before writing any private review file.
 
-The importer reads XLSX cells from raw OOXML, including explicit shared-string,
-inline-string, cached-formula, numeric, boolean, and true-blank semantics. It
-binds the accepted workbook SHA-256 before writing any private review file.
-Repeated import of the same immutable workbook and repository subject is
-deterministic; a workbook byte change, incomplete stage content, or source
-identity change fails before admission.
+The shared review-workbook intake reads XLSX cells from raw OOXML, including
+explicit shared-string, inline-string, cached-formula, numeric, boolean, and
+true-blank semantics. A referenced empty shared string normalizes to a true
+blank; the numeric index is never content. Every Owner-returned workbook passes
+through `tools/review_workbook_intake.py` before semantic interpretation. When
+the issued workbook is retained, its normalized cell values are compared with
+the returned workbook and only the resulting semantic differences may carry
+Owner intent. Product importers reuse this reader and bind the accepted
+workbook SHA-256 before writing any private review file. Repeated import of the
+same immutable workbook and repository subject is deterministic; a workbook
+byte change, incomplete stage content, source identity change, or intake error
+fails before admission.
 
 Top copy may embed zero or more exact `deck:<20-hex deck ID>` tokens at any
 desired positions. Non-empty localized versions use the same token set, but

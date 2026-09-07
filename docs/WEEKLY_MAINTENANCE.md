@@ -367,13 +367,25 @@ workbook is a review carrier, not an authoritative database. Codex validates and
 writes accepted decisions into the private Landing review source before any
 preview or publication.
 
-The importer never reads workbook cells as untyped positional values. It
-resolves raw OOXML shared strings, inline strings, cached formulas, numbers,
-booleans, and true blanks before mapping named headers. This prevents an empty
-Owner cell from inheriting an unrelated shared-string index or number. The
-accepted workbook SHA-256, complete Top 8 catalog, classifier/policy/fact
-digests, and bilingual catalog digest are stored together in the private week
-document; any later mismatch requires explicit re-review.
+No Owner-returned review workbook is interpreted directly through a generic
+spreadsheet library. First run the repository-owned raw-OOXML intake gate:
+
+```powershell
+python -B tools/review_workbook_intake.py diff `
+  --baseline <issued-review.xlsx> `
+  --workbook <returned-review.xlsx> `
+  --output <external-path>/review-semantic-diff.json
+```
+
+Use `snapshot` only for a legacy carrier whose issued baseline was not retained.
+The shared reader resolves shared strings, inline strings, cached formulas,
+numbers, booleans, and true blanks before comparison. A referenced empty shared
+string becomes a true blank regardless of its table index. Only the successful
+gate output may be interpreted as Owner content; a generic-library value or its
+render is not independent confirmation. The product importer then maps named
+headers and stores the accepted workbook SHA-256 with the complete Top 8
+catalog, classifier/policy/fact digests, and bilingual catalog digest; any later
+mismatch requires explicit re-review.
 
 Owner intent is recorded once per authored stage. Saving and submitting the
 Chinese workbook in chat is the Chinese-stage decision; editing or accepting

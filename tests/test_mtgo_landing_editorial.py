@@ -239,7 +239,12 @@ def test_bilingual_catalog_coverage_fails_closed(imported, tmp_path):
     catalog = yaml.safe_load(
         (output_root / "configs/mtgo_archetype_names.yaml").read_text(encoding="utf-8")
     )
-    catalog["names"].pop()
+    selected_index = next(
+        index
+        for index, item in enumerate(catalog["names"])
+        if item["format"] in {"standard", "modern"}
+    )
+    catalog["names"].pop(selected_index)
     path = tmp_path / "incomplete.yaml"
     path.write_text(yaml.safe_dump(catalog, allow_unicode=True), encoding="utf-8")
 
