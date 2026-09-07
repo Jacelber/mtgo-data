@@ -56,6 +56,14 @@ Work one focused task at a time in a disposable isolated workspace unless the
 Owner explicitly approves reuse. Inspect branch and worktree state before
 editing, preserve unexplained changes, and develop off `master`.
 
+Before interpreting any Owner-returned review XLSX, run the maintained
+`tools/review_workbook_intake.py` raw-OOXML gate. Use `diff` against the retained
+issued workbook whenever that baseline exists; `snapshot` is permitted only
+when a legacy carrier has no retained baseline. The gate output, not a generic
+spreadsheet library or a render produced from that library, is the cell-value
+authority. Stop on any gate error or unexplained semantic difference; never ask
+the Owner to confirm an unresolved shared-string index as authored content.
+
 An explicit Owner instruction in the active conversation authorizes only the
 exact named task and lane. Do not require or create a STATUS-only change to
 repeat that authority. Owner acceptance binds the approved objective, semantic

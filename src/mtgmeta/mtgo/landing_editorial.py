@@ -5,17 +5,16 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-import zipfile
 from collections.abc import Mapping
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
-from xml.etree import ElementTree
 
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
 from mtgmeta.public_contract import versioned
+from mtgmeta.review_workbook import ReviewWorkbookError, read_workbook_rows
 
 from . import landing_screening as screening, load_mtgo_context, stats
 from .normalize import load_rules_for_format
@@ -41,9 +40,6 @@ WORKBOOK_SHEETS = (
 )
 WORKBOOK_REVIEW_STAGES = {"chinese", "bilingual"}
 HISTORICAL_REVIEW_FORMATS = frozenset({"standard", "modern"})
-_OOXML_MAIN = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
-_OOXML_REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-_PACKAGE_REL = "http://schemas.openxmlformats.org/package/2006/relationships"
 
 
 class MTGOLandingEditorialError(RuntimeError):
@@ -420,142 +416,45 @@ def build_candidate_documents(
     return candidates, base_reference, len(all_top8_records), len(entries)
 
 
-def _column_index(reference: str) -> int:
-    letters = "".join(character for character in reference if character.isalpha())
-    result = 0
-    for character in letters:
-        result = result * 26 + ord(character.upper()) - ord("A") + 1
-    return result - 1
-
-
-def _shared_strings(archive: zipfile.ZipFile) -> list[str]:
-    try:
-        root = ElementTree.fromstring(archive.read("xl/sharedStrings.xml"))
-    except KeyError:
-        return []
-    namespace = {"x": _OOXML_MAIN}
-    return [
-        "".join(node.text or "" for node in item.findall(".//x:t", namespace))
-        for item in root.findall("x:si", namespace)
-    ]
-
-
-def _sheet_targets(archive: zipfile.ZipFile) -> dict[str, str]:
-    workbook = ElementTree.fromstring(archive.read("xl/workbook.xml"))
-    relationships = ElementTree.fromstring(
-        archive.read("xl/_rels/workbook.xml.rels")
-    )
-    relation_targets = {
-        relation.attrib["Id"]: relation.attrib["Target"]
-        for relation in relationships.findall(f"{{{_PACKAGE_REL}}}Relationship")
-    }
-    targets: dict[str, str] = {}
-    for sheet in workbook.findall(f".//{{{_OOXML_MAIN}}}sheet"):
-        name = sheet.attrib["name"]
-        relation_id = sheet.attrib[f"{{{_OOXML_REL}}}id"]
-        target = relation_targets[relation_id].replace("\\", "/").lstrip("/")
-        while target.startswith("../"):
-            target = target[3:]
-        if not target.startswith("xl/"):
-            target = f"xl/{target}"
-        targets[name] = target
-    return targets
-
-
-def _cell_value(cell: ElementTree.Element, shared: list[str]) -> Any:
-    cell_type = cell.attrib.get("t")
-    if cell_type == "inlineStr":
-        text = "".join(
-            node.text or "" for node in cell.findall(f".//{{{_OOXML_MAIN}}}t")
-        )
-        return text or None
-    value_node = cell.find(f"{{{_OOXML_MAIN}}}v")
-    if value_node is None or value_node.text is None or value_node.text == "":
-        return None
-    raw = value_node.text
-    if cell_type == "s":
-        try:
-            return shared[int(raw)]
-        except (ValueError, IndexError) as exc:
-            raise MTGOLandingEditorialError(
-                f"invalid shared-string index {raw!r}"
-            ) from exc
-    if cell_type in {"str", "e"}:
-        return raw
-    if cell_type == "b":
-        return raw == "1"
-    try:
-        number = float(raw)
-    except ValueError:
-        return raw
-    return int(number) if number.is_integer() else number
-
-
-def _sheet_rows(
-    archive: zipfile.ZipFile,
-    target: str,
-    shared: list[str],
-) -> list[list[Any]]:
-    root = ElementTree.fromstring(archive.read(target))
-    rows: list[list[Any]] = []
-    for row in root.findall(f".//{{{_OOXML_MAIN}}}row"):
-        row_index = int(row.attrib.get("r", len(rows) + 1)) - 1
-        while len(rows) < row_index:
-            rows.append([])
-        values: list[Any] = []
-        for cell in row.findall(f"{{{_OOXML_MAIN}}}c"):
-            index = _column_index(cell.attrib.get("r", "A1"))
-            if index >= len(values):
-                values.extend([None] * (index - len(values) + 1))
-            values[index] = _cell_value(cell, shared)
-        if len(rows) == row_index:
-            rows.append(values)
-        else:
-            rows[row_index] = values
-    return rows
-
-
 def read_review_workbook(path: str | Path) -> dict[str, list[dict[str, Any]]]:
     """Read the Landing carrier with raw OOXML blank/shared-string semantics."""
 
     workbook_path = Path(path)
     try:
-        with zipfile.ZipFile(workbook_path) as archive:
-            shared = _shared_strings(archive)
-            targets = _sheet_targets(archive)
-            missing = sorted(set(WORKBOOK_SHEETS) - targets.keys())
-            if missing:
-                raise MTGOLandingEditorialError(
-                    "review workbook is missing sheets: " + ", ".join(missing)
-                )
-            result: dict[str, list[dict[str, Any]]] = {}
-            for name in WORKBOOK_SHEETS:
-                rows = _sheet_rows(archive, targets[name], shared)
-                if len(rows) < 4:
-                    raise MTGOLandingEditorialError(
-                        f"review workbook sheet {name!r} has no header row"
-                    )
-                headers = [str(value).strip() if value is not None else "" for value in rows[3]]
-                if not headers or not headers[0]:
-                    raise MTGOLandingEditorialError(
-                        f"review workbook sheet {name!r} has an invalid header"
-                    )
-                entries: list[dict[str, Any]] = []
-                for values in rows[4:]:
-                    padded = values + [None] * max(0, len(headers) - len(values))
-                    row = {
-                        header: padded[index]
-                        for index, header in enumerate(headers)
-                        if header
-                    }
-                    if any(value is not None and value != "" for value in row.values()):
-                        entries.append(row)
-                result[name] = entries
-            return result
-    except (OSError, zipfile.BadZipFile, ElementTree.ParseError) as exc:
+        sheets = read_workbook_rows(workbook_path)
+    except ReviewWorkbookError as exc:
         raise MTGOLandingEditorialError(
             f"{workbook_path}: review workbook could not be read"
         ) from exc
+    missing = sorted(set(WORKBOOK_SHEETS) - sheets.keys())
+    if missing:
+        raise MTGOLandingEditorialError(
+            "review workbook is missing sheets: " + ", ".join(missing)
+        )
+    result: dict[str, list[dict[str, Any]]] = {}
+    for name in WORKBOOK_SHEETS:
+        rows = sheets[name]
+        if len(rows) < 4:
+            raise MTGOLandingEditorialError(
+                f"review workbook sheet {name!r} has no header row"
+            )
+        headers = [str(value).strip() if value is not None else "" for value in rows[3]]
+        if not headers or not headers[0]:
+            raise MTGOLandingEditorialError(
+                f"review workbook sheet {name!r} has an invalid header"
+            )
+        entries: list[dict[str, Any]] = []
+        for values in rows[4:]:
+            padded = values + [None] * max(0, len(headers) - len(values))
+            row = {
+                header: padded[index]
+                for index, header in enumerate(headers)
+                if header
+            }
+            if any(value is not None and value != "" for value in row.values()):
+                entries.append(row)
+        result[name] = entries
+    return result
 
 
 def _identity_key(format_id: str, parent_id: str, subtype_id: str | None) -> str:

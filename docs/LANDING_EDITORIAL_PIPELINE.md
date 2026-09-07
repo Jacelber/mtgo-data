@@ -448,13 +448,15 @@ Owner-reviewed even when membership is mandatory.
 
 An Excel save may serialize a visually empty editable cell as a shared-string
 reference whose resolved text is empty. Before every workbook read or rewrite,
-the importer must independently resolve `xl/sharedStrings.xml` against the
-worksheet cell references. A resolved empty string is normalized to blank even
-if a higher-level library exposes the numeric shared-string index such as `15`
-or `46`. A repeated numeric value across unrelated optional text fields is an
-anomaly that requires this preflight; a render produced by the same importer is
-not independent confirmation. After any rewrite, re-open the exported XLSX and
-verify both the raw OOXML blank semantics and the user-visible render.
+run `tools/review_workbook_intake.py`; use `diff` against the retained issued
+workbook whenever available. The shared reader independently resolves
+`xl/sharedStrings.xml` against worksheet cell references. A resolved empty
+string is normalized to blank for every valid table index; the index itself is
+never Owner content. A disagreement with a higher-level library, an invalid
+index, or an unexplained semantic difference fails closed. A render produced by
+the same higher-level importer is not independent confirmation. After any
+rewrite, re-open the exported XLSX through the gate and verify the user-visible
+render separately.
 
 ## Migration and deletion controls
 
