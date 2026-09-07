@@ -3756,6 +3756,11 @@ formats keep metadata 1.1 binding and `all_admitted_events` report scope.
 Private generator destinations must remain outside Pages-admitted trees.
 Production selects only registered complete public MTGO products; event-only
 archival eligibility remains a separate existing registry capability.
+When an enabled, verified event in `configs/melee_events.yaml` belongs to a
+format, that format's complete-public product set also requires
+`stats/<format>/melee/index.json`. The registry-derived requirement prevents a
+format from exposing only its four MTGO products while omitting its admitted
+Tabletop product.
 Statistical/report manifest mappings cover registered executable formats
 dynamically and require embedded format identity to match the output path.
 This changes neither formulas nor classifier rules. Human Landing/name
@@ -3798,6 +3803,14 @@ Weekly `completed`, Landing status, directory growth, or an event-date cutoff.
 The initial baseline is an existing-public-scope migration, not a claim that
 the Owner historically reviewed all rows. Existing legacy completion evidence
 is preserved without changing its meaning.
+
+A format reaching its first public release uses
+`owner_accepted_initial_public_scope`, not the grandfathered migration type.
+That initial record binds explicit event IDs and retained source bytes, the
+accepted classifier subject, the exact classification-review digest, the date
+after the complete natural week, and Owner acceptance evidence. The two initial
+types remain distinct so a newly reviewed product never creates false
+historical-review evidence.
 
 `mtgmeta.mtgo.publication.resolve_scope` resolves each format's continuous
 approved natural-week frontier; `public_events` supplies the common retained

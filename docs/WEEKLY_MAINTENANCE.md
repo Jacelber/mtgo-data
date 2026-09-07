@@ -140,6 +140,19 @@ weeks. An observed empty intervening week can be crossed; a later arrival with
 an unlisted ID remains pending even when its date is before the public frontier.
 An accepted later nonempty week waits behind an unreviewed nonempty week.
 
+The grandfathered kind is only for migration of a product that was already
+public. A format's first public release instead uses
+`owner_accepted_initial_public_scope`, with the same exact source manifest plus
+the accepted classifier subject, classification-review digest, acceptance date,
+and evidence. This initial record is prepared only from the separately accepted
+complete private product; ordinary weekly `admission-record` remains for later
+increments and does not bootstrap a new public format.
+
+Complete-public selection also reads the Melee registry. If the format has an
+enabled, verified registered Tabletop event, its Melee index is required along
+with all four MTGO products. A missing fifth product blocks catalogs, candidate
+validation, and Pages selection instead of allowing a partial launch.
+
 After the Owner accepts the exact full classification table, Codex uses:
 
 ```text

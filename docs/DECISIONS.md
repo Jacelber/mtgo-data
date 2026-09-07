@@ -8414,3 +8414,45 @@ The classifier and bilingual-name authority change, but the formal Melee event
 registry, public assets, generated statistics, Pages, and production do not.
 Event `438329` remains disposable and non-public. This decision does not
 authorize P14-06 or P14-07.
+
+---
+
+# DEC-168 - Require honest first-public admission and coordinated source products
+
+Status: `Accepted`
+
+## Context
+
+The reviewed-publication resolver recognized only a grandfathered initial MTGO
+scope. Reusing that type for Pauper would falsely describe a newly accepted
+private product as a migration of historical public data. Separately, the
+complete-public catalog required the four MTGO products but did not derive a
+Tabletop requirement from an enabled, verified Melee event. A format could
+therefore pass the public gate while one of its five accepted products was
+missing.
+
+## Decision
+
+Retain `grandfathered_existing_public_scope` unchanged for existing public
+migrations. Add `owner_accepted_initial_public_scope` for a format's first
+public release. It requires explicit event membership and exact source binding,
+the accepted classifier subject, classification-review digest, an acceptance
+date after the complete natural week, and Owner evidence. Later advancement
+continues to use `owner_accepted_full_classification` and the same continuous
+week rules.
+
+Derive the coordinated public product set from the existing format and Melee
+registries. Every public executable MTGO format still requires all four MTGO
+products. If that format also has an enabled, verified Melee event, it must have
+`stats/<format>/melee/index.json` before complete-public catalog, candidate, or
+Pages selection succeeds.
+
+## Consequences
+
+Pauper can be admitted without rewriting history, but it cannot appear with
+only one source or a partial navigation surface. Standard keeps its four-product
+requirement; formats with admitted Tabletop events fail closed on a missing
+fifth product. This changes no classifier rule, statistical formula, generated
+Pauper byte, source request, public flag, workflow, Pages artifact, or production
+state. P14-07B remains separately authorized and must stop if restaging changes
+the Owner-accepted product subject.

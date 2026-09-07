@@ -151,6 +151,7 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
     assert "public-admission" in public_admission["if"]
     assert "tests/test_mtgo_third_format.py" in public_admission["run"]
     assert "tests/test_classifier_closure.py" in public_admission["run"]
+    assert "tests/test_mtgo_reviewed_publication.py" in public_admission["run"]
     assert "pytest-public-admission" in public_admission["run"]
     cache = by_name["Validate Landing card-image cache contract"]
     assert "landing-card-image-cache" in cache["if"]

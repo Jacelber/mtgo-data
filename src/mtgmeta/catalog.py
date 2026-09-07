@@ -28,10 +28,44 @@ DEFAULT_MTGO_PRODUCT_ID = "mtgo-landing"
 REQUIRED_MTGO_PRODUCT_IDS = frozenset(
     product_id for product_id, source, _suffix in PRODUCTS if source == "mtgo"
 )
+TABLETOP_PRODUCT_ID = "tabletop-major-events"
 
 
 def _product_path(format_id: str, source: str, suffix: str) -> Path:
     return Path("stats") / format_id / source / Path(suffix)
+
+
+def _registered_tabletop_formats(repository_root: Path) -> frozenset[str]:
+    """Return formats with an enabled, verified event in the Melee registry.
+
+    A repository without a Melee registry has no Tabletop product obligation.
+    An existing but invalid registry still fails closed through its parser.
+    """
+
+    registry_path = repository_root / "configs" / "melee_events.yaml"
+    if not registry_path.is_file():
+        return frozenset()
+    from .melee.config import load_melee_event_registry
+
+    registry = load_melee_event_registry(registry_path)
+    return frozenset(
+        event.format
+        for event in registry.events
+        if event.enabled and event.review_status == "verified"
+    )
+
+
+def required_public_product_ids(
+    repository_root: str | Path,
+    definition: FormatDefinition,
+) -> frozenset[str]:
+    """Derive the atomic public product set from both source registries."""
+
+    root = Path(repository_root).resolve()
+    required = set(REQUIRED_MTGO_PRODUCT_IDS)
+    if definition.id in _registered_tabletop_formats(root):
+        required.add(TABLETOP_PRODUCT_ID)
+    return frozenset(required)
 
 
 def require_complete_public_format(
@@ -52,15 +86,21 @@ def require_complete_public_format(
         raise ValueError(
             f"public format {definition.id!r} is missing required MTGO capabilities"
         )
+    required_product_ids = required_public_product_ids(root, definition)
     missing = sorted(
         product_id
         for product_id, source, suffix in PRODUCTS
-        if product_id in REQUIRED_MTGO_PRODUCT_IDS
+        if product_id in required_product_ids
         and not (root / _product_path(definition.id, source, suffix)).is_file()
     )
     if missing:
+        requirement = (
+            "required MTGO products"
+            if set(missing) <= REQUIRED_MTGO_PRODUCT_IDS
+            else "required coordinated products"
+        )
         raise ValueError(
-            f"public format {definition.id!r} is missing required MTGO products: "
+            f"public format {definition.id!r} is missing {requirement}: "
             + ", ".join(missing)
         )
     return definition
