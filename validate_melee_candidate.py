@@ -47,10 +47,16 @@ def collect_changes(root: Path) -> list[Change]:
     return changes
 
 
-def _catalog_snapshot(root: Path, format_id: str) -> dict[str, Any]:
+def _catalog_snapshot(
+    root: Path, format_id: str, *, allow_missing: bool = False
+) -> dict[str, Any] | None:
     path = root / "stats" / format_id / "melee" / "index.json"
     try:
         catalog = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        if allow_missing:
+            return None
+        raise MeleeCandidateError(f"{path}: cannot read event catalog") from None
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise MeleeCandidateError(f"{path}: cannot read event catalog") from exc
     if not isinstance(catalog, dict):
@@ -94,7 +100,7 @@ def snapshot_state(root: Path, event_id: str, format_id: str) -> dict[str, Any]:
         "event_id": event_id,
         "format": format_id,
         "head": _git(root, "rev-parse", "HEAD").strip(),
-        "catalog": _catalog_snapshot(root, format_id),
+        "catalog": _catalog_snapshot(root, format_id, allow_missing=True),
     }
 
 
@@ -165,11 +171,16 @@ def _validate_catalog_cohort(
     format_id: str,
 ) -> list[str]:
     baseline_catalog = baseline.get("catalog")
-    if not isinstance(baseline_catalog, dict):
-        return ["baseline has no catalog snapshot"]
+    if baseline_catalog is not None and not isinstance(baseline_catalog, dict):
+        return ["baseline has an invalid catalog snapshot"]
     try:
         current_catalog = _catalog_snapshot(root, format_id)
-        before = _event_map(baseline_catalog, label="baseline")
+        before = (
+            _event_map(baseline_catalog, label="baseline")
+            if baseline_catalog is not None
+            else {}
+        )
+        assert current_catalog is not None
         after = _event_map(current_catalog, label="candidate")
     except MeleeCandidateError as exc:
         return [str(exc)]
@@ -185,7 +196,11 @@ def _validate_catalog_cohort(
         )
     if event_id not in after:
         failures.append(f"event catalog does not contain candidate event {event_id}")
-    baseline_default = baseline_catalog.get("default_event_id")
+    baseline_default = (
+        baseline_catalog.get("default_event_id")
+        if baseline_catalog is not None
+        else None
+    )
     candidate_default = current_catalog.get("default_event_id")
     if candidate_default != baseline_default:
         if candidate_default != event_id:
@@ -201,7 +216,7 @@ def _validate_catalog_cohort(
             failures.append(
                 f"event catalog rewrote existing event {protected_id}"
             )
-    if set(before) - {event_id}:
+    if baseline_catalog is not None and set(before) - {event_id}:
         if current_catalog.get("schema_version") != baseline_catalog.get(
             "schema_version"
         ):
