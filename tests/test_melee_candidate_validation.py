@@ -88,6 +88,61 @@ def test_candidate_catalog_allows_first_event_for_format(
     assert not _validate(tmp_path, baseline)
 
 
+def test_candidate_allows_format_scoped_name_contract(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    existing = _catalog(["434455"])
+    baseline = _baseline(tmp_path, monkeypatch, existing)
+    candidate_catalog = deepcopy(existing)
+    candidate_catalog["events"].append(_event(SELECTED_EVENT_ID))  # type: ignore[union-attr]
+    _write_catalog(tmp_path, candidate_catalog)
+    names_path = tmp_path / "stats" / FORMAT_ID / "archetype_names.json"
+    names_path.write_text(
+        json.dumps({"schema_version": "1.1.0", "format": FORMAT_ID, "names": []}),
+        encoding="utf-8",
+    )
+
+    _, failures = validate_candidate(
+        tmp_path,
+        baseline,
+        [
+            Change(" M", CATALOG_PATH),
+            Change("??", names_path.relative_to(tmp_path).as_posix()),
+        ],
+    )
+
+    assert not failures
+
+
+def test_candidate_rejects_name_contract_for_another_format(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    existing = _catalog(["434455"])
+    baseline = _baseline(tmp_path, monkeypatch, existing)
+    candidate_catalog = deepcopy(existing)
+    candidate_catalog["events"].append(_event(SELECTED_EVENT_ID))  # type: ignore[union-attr]
+    _write_catalog(tmp_path, candidate_catalog)
+    names_path = tmp_path / "stats" / FORMAT_ID / "archetype_names.json"
+    names_path.write_text(
+        json.dumps({"schema_version": "1.1.0", "format": "pauper", "names": []}),
+        encoding="utf-8",
+    )
+
+    _, failures = validate_candidate(
+        tmp_path,
+        baseline,
+        [
+            Change(" M", CATALOG_PATH),
+            Change("??", names_path.relative_to(tmp_path).as_posix()),
+        ],
+    )
+
+    assert (
+        "stats/modern/archetype_names.json: format does not match modern"
+        in failures
+    )
+
+
 def test_candidate_catalog_rejects_unrelated_event_in_first_catalog(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

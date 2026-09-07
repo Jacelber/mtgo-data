@@ -25,11 +25,30 @@ function resolveTabletopSubject() {
   const consumerCatalog = readJson("stats/catalog.json");
   const formatEntry = consumerCatalog.formats?.find(item => item.id === formatId);
   const product = formatEntry?.products?.find(item => item.id === "tabletop-major-events");
-  if (!product?.available || typeof product.path !== "string") {
-    throw new Error(`Tabletop product is unavailable for ${formatId}`);
+  if (!product) {
+    throw new Error(`Tabletop product is absent for ${formatId}`);
   }
 
-  const indexPath = product.path;
+  const privateCandidate = Boolean(requestedEventId) && !product.available;
+  if (!privateCandidate && (!product.available || typeof product.path !== "string")) {
+    throw new Error(`Tabletop product is unavailable for ${formatId}`);
+  }
+  if (privateCandidate && product.path !== null) {
+    throw new Error(`Private Tabletop product has an unexpected public path for ${formatId}`);
+  }
+
+  const indexPath = privateCandidate ? `stats/${formatId}/melee/index.json` : product.path;
+  let catalogOverride = null;
+  if (privateCandidate) {
+    catalogOverride = JSON.parse(JSON.stringify(consumerCatalog));
+    const runtimeFormat = catalogOverride.formats.find(item => item.id === formatId);
+    const runtimeProduct = runtimeFormat.products.find(
+      item => item.id === "tabletop-major-events"
+    );
+    runtimeFormat.default_product_id = "tabletop-major-events";
+    runtimeProduct.available = true;
+    runtimeProduct.path = indexPath;
+  }
   const index = readJson(indexPath);
   if (index.format !== formatId || !Array.isArray(index.events)) {
     throw new Error(`Tabletop event catalog is invalid for ${formatId}`);
@@ -55,6 +74,7 @@ function resolveTabletopSubject() {
   }
 
   return {
+    catalogOverride,
     candidateEntry,
     candidateEventId,
     defaultEntry,
@@ -119,6 +139,12 @@ test("legacy Weekly Pickup path renders the admitted Landing feature", async ({ 
 
 test("Tabletop entry renders candidate-derived data", async ({ page }) => {
   const subject = resolveTabletopSubject();
+  if (subject.catalogOverride) {
+    await page.route("**/stats/catalog.json", route => route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify(subject.catalogOverride),
+    }));
+  }
   const runtimeErrors = [];
   page.on("pageerror", error => runtimeErrors.push(`pageerror: ${error.message}`));
   page.on("console", message => {
