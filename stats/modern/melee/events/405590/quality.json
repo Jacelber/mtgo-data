@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.1.0",
+  "document_type": "quality",
+  "source": "melee",
+  "event_id": "405590",
+  "format": "modern",
+  "event_structure": "constructed_day2",
+  "input": {
+    "event_path": "data/modern/melee/events/405590.json",
+    "event_sha256": "c3b97a89ecbf1ffded51efa48c106eee1efddf4f3ce67c858418ea83cc9f6c92",
+    "event_schema_version": "2.2.0",
+    "classification_path": "data/modern/melee/classifications/405590.json",
+    "classification_sha256": "a5389e7c1c4db15f2c66e62729cd355cd458f470ed669c0a3659ffc8126e82c3",
+    "classification_schema_version": "1.1.0",
+    "opportunity_path": "data/modern/melee/opportunities/405590.json",
+    "opportunity_sha256": "4489dcb6a15c626687c6a96043363c31b158d6517f26de1ed4dc9ba85ae925f1",
+    "opportunity_schema_version": "1.1.0",
+    "taxonomy_path": "my_archetypes/modern.yaml",
+    "taxonomy_sha256": "2ab329e4a35655b88b159edfc60d37d4d3f8b5e38d1c37a519b21f29e0001515",
+    "taxonomy_schema_version": "1.1.0"
+  },
+  "status": "warning",
+  "blocking": false,
+  "counts": {
+    "participants": 932,
+    "standings": 932,
+    "submitted_decklists": 928,
+    "missing_or_unavailable_decklists": 4,
+    "classified_decks": 881,
+    "unknown_decks": 47,
+    "classification_conflicts": 0,
+    "invalid_decks": 0,
+    "rounds": 18,
+    "unknown_rounds": 0,
+    "source_matches": 3967,
+    "source_constructed_matches": 3960,
+    "eligible_constructed_matches": 3910,
+    "unknown_result_opportunities": 0,
+    "bye_count": 6,
+    "intentional_draw_match_count": 26,
+    "intentional_draw_opportunities": 52,
+    "drop_player_count": 548,
+    "drop_unplayed_rounds": 1701,
+    "disqualified_participant_count": 2,
+    "disqualified_matches_excluded": 18,
+    "top8_lock_player_count": 0,
+    "top8_lock_exemptions": 0,
+    "day2_participants": 208,
+    "playoff_participants": 8,
+    "no_show_opportunities": 15
+  },
+  "checks": [
+    {
+      "id": "participant_coverage",
+      "passed": true
+    },
+    {
+      "id": "classification_coverage",
+      "passed": true
+    },
+    {
+      "id": "scope_participant_conservation",
+      "passed": true
+    },
+    {
+      "id": "scope_points_conservation",
+      "passed": true
+    },
+    {
+      "id": "scope_opportunity_conservation",
+      "passed": true
+    },
+    {
+      "id": "eligible_match_conservation",
+      "passed": true
+    },
+    {
+      "id": "draft_and_playoff_excluded",
+      "passed": true
+    }
+  ],
+  "issues": [
+    {
+      "code": "unknown_classifications",
+      "severity": "warning",
+      "count": 47,
+      "message": "Valid submitted decks remain explicitly Unknown."
+    },
+    {
+      "code": "missing_or_unavailable_decklists",
+      "severity": "warning",
+      "count": 4,
+      "message": "Participants and event results are retained, but unavailable decklists are excluded from deck-share and matchup identities."
+    },
+    {
+      "code": "disqualified_participant_matches_excluded",
+      "severity": "warning",
+      "count": 18,
+      "message": "Disqualified participant records are retained while every affected match is excluded symmetrically from played-match statistics."
+    }
+  ]
+}
