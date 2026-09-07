@@ -236,6 +236,39 @@ archetypes:
       - card: "Goblin Anarchomancer"
         zone: main
         min_count: 3
+- id: life-combo
+  name: "Life Combo"
+  priority: 9668
+  rules:
+  - id: life-combo
+    priority: 9668
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Daru Spiritualist"
+        zone: main
+        min_count: 3
+      - card: "Nomads en-Kor"
+        zone: main
+        min_count: 3
+      - card: "Task Force"
+        zone: main
+        min_count: 3
+- id: midnight-gond
+  name: "Midnight Gond"
+  priority: 9667
+  rules:
+  - id: midnight-gond
+    priority: 9667
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Midnight Guard"
+        zone: main
+        min_count: 3
+      - card: "Presence of Gond"
+        zone: main
+        min_count: 3
 - id: mono-green-freed-combo
   name: "Freed Combo"
   priority: 9665
@@ -260,6 +293,40 @@ archetypes:
       - card: "Sculptor of Winter"
         zone: main
         min_count: 3
+  - id: freed-combo-helix
+    priority: 9664
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Devoted Druid"
+        zone: main
+        min_count: 3
+      - card: "Retraction Helix"
+        zone: main
+        min_count: 2
+      - card: "First Day of Class"
+        zone: main
+        min_count: 1
+  - id: freed-combo-snap
+    priority: 9663
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Arbor Elf"
+        zone: main
+        min_count: 3
+      - card: "Utopia Sprawl"
+        zone: main
+        min_count: 3
+      - card: "Dawn's Reflection"
+        zone: main
+        min_count: 2
+      - card: "Snap"
+        zone: main
+        min_count: 3
+      - card: "Archaeomancer"
+        zone: main
+        min_count: 2
 - id: walls-combo
   name: "Walls Combo"
   priority: 9660
@@ -335,6 +402,18 @@ archetypes:
       - card: "Tangle"
         zone: main
         min_count: 2
+- id: persistent-petitioners
+  name: "Petitioners Mill"
+  priority: 9635
+  rules:
+  - id: persistent-petitioners
+    priority: 9635
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Persistent Petitioners"
+        zone: main
+        min_count: 8
 - id: bogles
   name: "Bogles"
   priority: 9630
@@ -385,7 +464,7 @@ archetypes:
         min_count: 3
       - card: "Cuombajj Witches"
         zone: main
-        min_count: 3
+        min_count: 2
       - card: "Defile"
         zone: main
         min_count: 3
@@ -402,6 +481,27 @@ archetypes:
         zone: main
         min_count: 3
       - card: "Dread Return"
+        zone: main
+        min_count: 3
+- id: mardu-reanimator
+  name: "Mardu Reanimator"
+  priority: 9605
+  rules:
+  - id: mardu-reanimator
+    priority: 9605
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Dread Return"
+        zone: main
+        min_count: 2
+      - card: "Faithless Looting"
+        zone: main
+        min_count: 3
+      - card: "Ponyback Brigade"
+        zone: main
+        min_count: 3
+      - card: "Mardu Devotee"
         zone: main
         min_count: 3
 - id: infect
@@ -437,10 +537,22 @@ archetypes:
       - card: "Festival Crasher"
         zone: main
         min_count: 3
-      - card: "Lava Dart"
+- id: slivers
+  name: "Slivers"
+  priority: 9570
+  rules:
+  - id: slivers
+    priority: 9570
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Gemhide Sliver"
         zone: main
         min_count: 3
-      - card: "Manamorphose"
+      - card: "Muscle Sliver"
+        zone: main
+        min_count: 3
+      - card: "Predatory Sliver"
         zone: main
         min_count: 3
 - id: goblins
@@ -582,6 +694,26 @@ archetypes:
       - card: "Contaminated Aquifer"
         zone: main
         min_count: 2
+  - id: dimir-terror-reanimator
+    priority: 9373
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Exhume"
+        zone: main
+        min_count: 3
+      - card: "Striped Riverwinder"
+        zone: main
+        min_count: 3
+      - card: "Cast Down"
+        zone: main
+        min_count: 3
+      - card: "Contaminated Aquifer"
+        zone: main
+        min_count: 3
   - id: dimir-terror-aquifer-control
     priority: 9372
     subtype_id: null
@@ -631,6 +763,27 @@ archetypes:
       - card: "Sneaky Snacker"
         zone: main
         exact_count: 0
+      - card: "Snuff Out"
+        zone: main
+        exact_count: 0
+  - id: mono-blue-terror-low-snacker
+    priority: 9295
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Tolarian Terror"
+        zone: main
+        min_count: 3
+      - card: "Cryptic Serpent"
+        zone: main
+        min_count: 3
+      - card: "Thought Scour"
+        zone: main
+        min_count: 3
+      - card: "Sneaky Snacker"
+        zone: main
+        min_count: 1
+        max_count: 2
       - card: "Snuff Out"
         zone: main
         exact_count: 0
@@ -762,7 +915,7 @@ archetypes:
         min_count: 1
       - card: "Snuff Out"
         zone: main
-        min_count: 3
+        min_count: 2
       - card: "Contaminated Aquifer"
         zone: main
         min_count: 1
@@ -931,12 +1084,12 @@ archetypes:
       - card: "Hawkeye's Bow"
         zone: main
         min_count: 3
-      - card: "Seeker of Skybreak"
-        zone: main
-        min_count: 3
       - card: "Perilous Research"
         zone: main
         min_count: 2
+      - card: "Writhing Chrysalis"
+        zone: main
+        min_count: 3
 - id: gruul-hawkeye
   name: "Gruul Hawkeye"
   priority: 8990
@@ -1123,6 +1276,70 @@ archetypes:
       - card: "Myr Enforcer"
         zone: main
         min_count: 3
+  - id: esper-affinity-no-enforcer
+    priority: 8698
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Razortide Bridge"
+        zone: main
+        min_count: 3
+      - card: "Ancient Den"
+        zone: main
+        min_count: 3
+      - card: "Thoughtcast"
+        zone: main
+        min_count: 3
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+      - card: "Kor Skyfisher"
+        zone: main
+        min_count: 3
+      - card: "Luxknight Breacher"
+        zone: main
+        min_count: 3
+      - card: "Myr Enforcer"
+        zone: main
+        exact_count: 0
+- id: affinity-combo
+  name: "Affinity Combo"
+  priority: 8710
+  rules:
+  - id: affinity-combo-hydra
+    priority: 8710
+    subtype_id: null
+    conditions:
+      all:
+      - card: "HYDRA Assault Robot"
+        zone: main
+        min_count: 3
+      - card: "Utrom Monitor"
+        zone: main
+        min_count: 3
+      - card: "Thoughtcast"
+        zone: main
+        min_count: 3
+      - card: "Seat of the Synod"
+        zone: main
+        min_count: 3
+      - card: "Refurbished Familiar"
+        zone: main
+        exact_count: 0
+  - id: affinity-combo-whale
+    priority: 8705
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Steelfin Whale"
+        zone: main
+        min_count: 3
+      - card: "Utrom Monitor"
+        zone: main
+        min_count: 3
+      - card: "Banishing Knack"
+        zone: main
+        min_count: 2
 - id: dimir-affinity
   name: "Dimir Affinity"
   priority: 8690
@@ -1222,6 +1439,29 @@ archetypes:
         zone: main
         exact_count: 0
       - card: "Utrom Monitor"
+        zone: main
+        exact_count: 0
+  - id: rakdos-affinity-sacrifice
+    priority: 8665
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+      - card: "Drossforge Bridge"
+        zone: main
+        min_count: 3
+      - card: "Galvanic Blast"
+        zone: main
+        min_count: 3
+      - card: "Fanatical Offering"
+        zone: main
+        min_count: 3
+      - card: "Myr Enforcer"
+        zone: main
+        exact_count: 0
+      - card: "Cleansing Wildfire"
         zone: main
         exact_count: 0
 - id: grixis-affinity
@@ -1437,6 +1677,59 @@ archetypes:
       - card: "Goblin Bushwhacker"
         zone: main
         exact_count: 0
+  - id: mono-red-madness-moxite
+    priority: 8395
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Fiery Temper"
+        zone: main
+        min_count: 3
+      - card: "Sneaky Snacker"
+        zone: main
+        min_count: 3
+      - card: "Highway Robbery"
+        zone: main
+        min_count: 3
+      - card: "Voldaren Epicure"
+        zone: main
+        min_count: 3
+      - card: "Melded Moxite"
+        zone: main
+        min_count: 3
+      - card: "Guttersnipe"
+        zone: main
+        exact_count: 0
+      - card: "Lava Dart"
+        zone: main
+        exact_count: 0
+      - card: "Alms of the Vein"
+        zone: main
+        exact_count: 0
+      - card: "Goblin Bushwhacker"
+        zone: main
+        exact_count: 0
+- id: mono-black-burn
+  name: "Mono-Black Burn"
+  priority: 8390
+  rules:
+  - id: mono-black-burn
+    priority: 8390
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Bump in the Night"
+        zone: main
+        min_count: 3
+      - card: "Hopeless Nightmare"
+        zone: main
+        min_count: 3
+      - card: "Okiba Reckoner Raid"
+        zone: main
+        min_count: 3
+      - card: "Vampire's Kiss"
+        zone: main
+        min_count: 3
 - id: mono-red-burn
   name: "Mono-Red Burn"
   priority: 8350
@@ -1448,7 +1741,7 @@ archetypes:
       all:
       - card: "Experimental Synthesizer"
         zone: main
-        min_count: 3
+        min_count: 2
       - card: "Kessig Flamebreather"
         zone: main
         min_count: 3
@@ -1464,6 +1757,26 @@ archetypes:
       - card: "Inventor's Axe"
         zone: main
         exact_count: 0
+  - id: mono-red-burn-spells
+    priority: 8345
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Chain Lightning"
+        zone: main
+        min_count: 3
+      - card: "Lava Spike"
+        zone: main
+        min_count: 3
+      - card: "Rift Bolt"
+        zone: main
+        min_count: 3
+      - card: "Skewer the Critics"
+        zone: main
+        min_count: 3
+      - card: "Fireblast"
+        zone: main
+        min_count: 2
 - id: ephemerate
   name: "Jeskai Ephemerate"
   priority: 8300
@@ -1504,6 +1817,26 @@ archetypes:
       - card: "Pulse of Murasa"
         zone: main
         min_count: 1
+  - id: four-color-ephemerate-snacker
+    priority: 8285
+    subtype_id: four-color
+    conditions:
+      all:
+      - card: "Ephemerate"
+        zone: main
+        min_count: 3
+      - card: "Archaeomancer"
+        zone: main
+        min_count: 2
+      - card: "Sneaky Snacker"
+        zone: main
+        min_count: 3
+      - card: "Ghastly Demise"
+        zone: main
+        min_count: 2
+      - card: "Fire/Ice"
+        zone: main
+        min_count: 1
   - id: jeskai-ephemerate
     priority: 8200
     subtype_id: jeskai
@@ -1521,6 +1854,35 @@ archetypes:
       - card: "Glacial Floodplain"
         zone: main
         min_count: 1
+  - id: jeskai-ephemerate-wildfire
+    priority: 8195
+    subtype_id: jeskai
+    conditions:
+      all:
+      - card: "Ephemerate"
+        zone: main
+        min_count: 2
+      - card: "Archaeomancer"
+        zone: main
+        min_count: 1
+      - card: "Cleansing Wildfire"
+        zone: main
+        min_count: 3
+      - card: "Rustvale Bridge"
+        zone: main
+        min_count: 3
+      - card: "Silverbluff Bridge"
+        zone: main
+        min_count: 3
+      - card: "Galvanic Discharge"
+        zone: main
+        min_count: 3
+      - card: "Visionary's Dance"
+        zone: main
+        min_count: 2
+      - card: "Bender's Waterskin"
+        zone: main
+        exact_count: 0
 - id: domain-ephemerate
   name: "Domain Ephemerate"
   priority: 8290
@@ -1612,6 +1974,23 @@ archetypes:
       - card: "Thraben Inspector"
         zone: main
         min_count: 3
+  - id: mono-white-battle-screech-novice
+    priority: 7995
+    subtype_id: mono-white
+    conditions:
+      all:
+      - card: "Battle Screech"
+        zone: main
+        min_count: 3
+      - card: "Raffine's Informant"
+        zone: main
+        min_count: 3
+      - card: "Novice Inspector"
+        zone: main
+        min_count: 3
+      - card: "Thraben Inspector"
+        zone: main
+        exact_count: 0
 - id: packbeast-swarm
   name: "Packbeast Swarm"
   priority: 8050
@@ -1845,6 +2224,50 @@ archetypes:
       - card: "Crypt Rats"
         zone: main
         min_count: 1
+  - id: golgari-gardens-artifact
+    priority: 7795
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Khalni Garden"
+        zone: main
+        min_count: 3
+      - card: "Fanatical Offering"
+        zone: main
+        min_count: 3
+      - card: "Tithing Blade"
+        zone: main
+        min_count: 3
+      - card: "Ichor Wellspring"
+        zone: main
+        min_count: 3
+      - card: "Cast Down"
+        zone: main
+        min_count: 3
+      - card: "Crypt Rats"
+        zone: main
+        exact_count: 0
+- id: gruul-initiative
+  name: "Gruul Initiative"
+  priority: 7705
+  rules:
+  - id: gruul-initiative
+    priority: 7705
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Avenging Hunter"
+        zone: main
+        min_count: 3
+      - card: "Crimson Fleet Commodore"
+        zone: main
+        min_count: 3
+      - card: "Simian Spirit Guide"
+        zone: main
+        min_count: 3
+      - card: "Rite of Flame"
+        zone: main
+        min_count: 3
 - id: jund-wildfire
   name: "Jund Wildfire"
   priority: 7700
@@ -1863,6 +2286,30 @@ archetypes:
       - card: "Slagwoods Bridge"
         zone: main
         min_count: 3
+- id: jund-affinity
+  name: "Jund Affinity"
+  priority: 7695
+  rules:
+  - id: jund-affinity
+    priority: 7695
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Drossforge Bridge"
+        zone: main
+        min_count: 3
+      - card: "Slagwoods Bridge"
+        zone: main
+        min_count: 3
+      - card: "Myr Enforcer"
+        zone: main
+        min_count: 3
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+      - card: "Cleansing Wildfire"
+        zone: main
+        exact_count: 0
 - id: izzet-wildfire-control
   name: "Izzet Wildfire Control"
   priority: 7690
@@ -1938,6 +2385,26 @@ archetypes:
       - card: "Quirion Ranger"
         zone: main
         exact_count: 0
+  - id: gruul-ramp-cascade
+    priority: 7495
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Writhing Chrysalis"
+        zone: main
+        min_count: 3
+      - card: "Boarding Party"
+        zone: main
+        min_count: 3
+      - card: "Annoyed Altisaur"
+        zone: main
+        min_count: 3
+      - card: "Arboreal Grazer"
+        zone: main
+        min_count: 3
+      - card: "Arbor Elf"
+        zone: main
+        exact_count: 0
 - id: elves
   name: "Elves"
   priority: 7400
@@ -1989,12 +2456,9 @@ archetypes:
       - card: "Archaeomancer"
         zone: main
         min_count: 2
-      - card: "Cryogen Relic"
+      - card: "Cast Down"
         zone: main
-        min_count: 3
-      - card: "Tithing Blade"
-        zone: main
-        min_count: 2
+        min_count: 1
 - id: orzhov-midrange
   name: "Orzhov Midrange"
   priority: 7200
@@ -2013,6 +2477,29 @@ archetypes:
       - card: "Oroku Saki, Shredder Rising"
         zone: main
         min_count: 1
+  - id: orzhov-midrange-nightmare
+    priority: 7195
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Glint Hawk"
+        zone: main
+        min_count: 3
+      - card: "Kor Skyfisher"
+        zone: main
+        min_count: 3
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+      - card: "Hopeless Nightmare"
+        zone: main
+        min_count: 3
+      - card: "Tithing Blade"
+        zone: main
+        min_count: 2
+      - card: "Oroku Saki, Shredder Rising"
+        zone: main
+        exact_count: 0
 - id: boros-synthesizer
   name: "Boros Synthesizer"
   priority: 7100
@@ -2046,9 +2533,15 @@ archetypes:
       - card: "Azure Fleet Admiral"
         zone: main
         min_count: 1
-      - card: "Breath Weapon"
+      - card: "Counterspell"
         zone: main
-        min_count: 1
+        min_count: 3
+      - card: "Skred"
+        zone: main
+        min_count: 3
+      - card: "Writhing Chrysalis"
+        zone: main
+        min_count: 3
 - id: mono-red-rally
   name: "Mono-Red Rally"
   priority: 6910

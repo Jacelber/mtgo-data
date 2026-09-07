@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "format": "pauper",
-  "source": "Bounded synthetic representatives derived from the Owner-accepted P14-01A rule boundaries; not tournament data.",
+  "source": "Bounded synthetic representatives derived from the Owner-accepted P14-01A and P14-05R2 rule boundaries; not tournament data.",
   "cases": [
     {
       "id": "altar-tron",
@@ -431,7 +431,8 @@
       "main": {
         "Hawkeye's Bow": 3,
         "Seeker of Skybreak": 3,
-        "Perilous Research": 2
+        "Perilous Research": 2,
+        "Writhing Chrysalis": 3
       },
       "expected": {
         "status": "classified",
@@ -879,7 +880,9 @@
       "main": {
         "Bountiful Landscape": 2,
         "Azure Fleet Admiral": 1,
-        "Breath Weapon": 1
+        "Counterspell": 3,
+        "Skred": 3,
+        "Writhing Chrysalis": 3
       },
       "expected": {
         "status": "classified",
@@ -1264,7 +1267,8 @@
         "Ghostly Flicker": 2,
         "Archaeomancer": 2,
         "Cryogen Relic": 3,
-        "Tithing Blade": 2
+        "Tithing Blade": 2,
+        "Cast Down": 1
       },
       "expected": {
         "status": "classified",
@@ -1534,6 +1538,383 @@
         "subtype_id": null,
         "selected_rule_id": "izzet-wildfire-control"
       }
+    },
+    {
+      "id": "life-combo",
+      "main": {
+        "Daru Spiritualist": 3,
+        "Nomads en-Kor": 3,
+        "Task Force": 3
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "life-combo",
+        "subtype_id": null,
+        "selected_rule_id": "life-combo"
+      }
+    },
+    {
+      "id": "midnight-gond",
+      "main": {
+        "Midnight Guard": 3,
+        "Presence of Gond": 3
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "midnight-gond",
+        "subtype_id": null,
+        "selected_rule_id": "midnight-gond"
+      }
+    },
+    {
+      "id": "freed-combo-helix",
+      "main": {
+        "Devoted Druid": 3,
+        "Retraction Helix": 2,
+        "First Day of Class": 1
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "mono-green-freed-combo",
+        "subtype_id": null,
+        "selected_rule_id": "freed-combo-helix"
+      }
+    },
+    {
+      "id": "freed-combo-snap",
+      "main": {
+        "Arbor Elf": 3,
+        "Utopia Sprawl": 3,
+        "Dawn's Reflection": 2,
+        "Snap": 3,
+        "Archaeomancer": 2
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "mono-green-freed-combo",
+        "subtype_id": null,
+        "selected_rule_id": "freed-combo-snap"
+      }
+    },
+    {
+      "id": "persistent-petitioners",
+      "main": {
+        "Persistent Petitioners": 8
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "persistent-petitioners",
+        "subtype_id": null,
+        "selected_rule_id": "persistent-petitioners"
+      }
+    },
+    {
+      "id": "mardu-reanimator",
+      "main": {
+        "Dread Return": 2,
+        "Faithless Looting": 3,
+        "Ponyback Brigade": 3,
+        "Mardu Devotee": 3
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "mardu-reanimator",
+        "subtype_id": null,
+        "selected_rule_id": "mardu-reanimator"
+      }
+    },
+    {
+      "id": "slivers",
+      "main": {
+        "Gemhide Sliver": 3,
+        "Muscle Sliver": 3,
+        "Predatory Sliver": 3
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "slivers",
+        "subtype_id": null,
+        "selected_rule_id": "slivers"
+      }
+    },
+    {
+      "id": "dimir-terror-reanimator",
+      "main": {
+        "Tolarian Terror": 3,
+        "Exhume": 3,
+        "Striped Riverwinder": 3,
+        "Cast Down": 3,
+        "Contaminated Aquifer": 3
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "dimir-terror",
+        "subtype_id": null,
+        "selected_rule_id": "dimir-terror-reanimator"
+      }
+    },
+    {
+      "id": "mono-blue-terror-low-snacker",
+      "main": {
+        "Tolarian Terror": 3,
+        "Cryptic Serpent": 3,
+        "Thought Scour": 3,
+        "Sneaky Snacker": 2,
+        "Snuff Out": 0
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "mono-blue-terror",
+        "subtype_id": null,
+        "selected_rule_id": "mono-blue-terror-low-snacker"
+      }
+    },
+    {
+      "id": "esper-affinity-no-enforcer",
+      "main": {
+        "Razortide Bridge": 3,
+        "Ancient Den": 3,
+        "Thoughtcast": 3,
+        "Refurbished Familiar": 3,
+        "Kor Skyfisher": 3,
+        "Luxknight Breacher": 3,
+        "Myr Enforcer": 0
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "esper-affinity",
+        "subtype_id": null,
+        "selected_rule_id": "esper-affinity-no-enforcer"
+      }
+    },
+    {
+      "id": "affinity-combo-hydra",
+      "main": {
+        "HYDRA Assault Robot": 3,
+        "Utrom Monitor": 3,
+        "Thoughtcast": 3,
+        "Seat of the Synod": 3,
+        "Refurbished Familiar": 0
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "affinity-combo",
+        "subtype_id": null,
+        "selected_rule_id": "affinity-combo-hydra"
+      }
+    },
+    {
+      "id": "affinity-combo-whale",
+      "main": {
+        "Steelfin Whale": 3,
+        "Utrom Monitor": 3,
+        "Banishing Knack": 2
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "affinity-combo",
+        "subtype_id": null,
+        "selected_rule_id": "affinity-combo-whale"
+      }
+    },
+    {
+      "id": "rakdos-affinity-sacrifice",
+      "main": {
+        "Refurbished Familiar": 3,
+        "Drossforge Bridge": 3,
+        "Galvanic Blast": 3,
+        "Fanatical Offering": 3,
+        "Myr Enforcer": 0,
+        "Cleansing Wildfire": 0
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "rakdos-affinity",
+        "subtype_id": null,
+        "selected_rule_id": "rakdos-affinity-sacrifice"
+      }
+    },
+    {
+      "id": "mono-red-madness-moxite",
+      "main": {
+        "Fiery Temper": 3,
+        "Sneaky Snacker": 3,
+        "Highway Robbery": 3,
+        "Voldaren Epicure": 3,
+        "Melded Moxite": 3,
+        "Guttersnipe": 0,
+        "Lava Dart": 0,
+        "Alms of the Vein": 0,
+        "Goblin Bushwhacker": 0
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "mono-red-madness",
+        "subtype_id": null,
+        "selected_rule_id": "mono-red-madness-moxite"
+      }
+    },
+    {
+      "id": "mono-black-burn",
+      "main": {
+        "Bump in the Night": 3,
+        "Hopeless Nightmare": 3,
+        "Okiba Reckoner Raid": 3,
+        "Vampire's Kiss": 3
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "mono-black-burn",
+        "subtype_id": null,
+        "selected_rule_id": "mono-black-burn"
+      }
+    },
+    {
+      "id": "mono-red-burn-spells",
+      "main": {
+        "Chain Lightning": 3,
+        "Lava Spike": 3,
+        "Rift Bolt": 3,
+        "Skewer the Critics": 3,
+        "Fireblast": 2
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "mono-red-burn",
+        "subtype_id": null,
+        "selected_rule_id": "mono-red-burn-spells"
+      }
+    },
+    {
+      "id": "four-color-ephemerate-snacker",
+      "main": {
+        "Ephemerate": 3,
+        "Archaeomancer": 2,
+        "Sneaky Snacker": 3,
+        "Ghastly Demise": 2,
+        "Fire/Ice": 1
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "ephemerate",
+        "subtype_id": "four-color",
+        "selected_rule_id": "four-color-ephemerate-snacker"
+      }
+    },
+    {
+      "id": "jeskai-ephemerate-wildfire",
+      "main": {
+        "Ephemerate": 2,
+        "Archaeomancer": 1,
+        "Cleansing Wildfire": 3,
+        "Rustvale Bridge": 3,
+        "Silverbluff Bridge": 3,
+        "Galvanic Discharge": 3,
+        "Visionary's Dance": 2,
+        "Bender's Waterskin": 0
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "ephemerate",
+        "subtype_id": "jeskai",
+        "selected_rule_id": "jeskai-ephemerate-wildfire"
+      }
+    },
+    {
+      "id": "mono-white-battle-screech-novice",
+      "main": {
+        "Battle Screech": 3,
+        "Raffine's Informant": 3,
+        "Novice Inspector": 3,
+        "Thraben Inspector": 0
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "battle-screech",
+        "subtype_id": "mono-white",
+        "selected_rule_id": "mono-white-battle-screech-novice"
+      }
+    },
+    {
+      "id": "golgari-gardens-artifact",
+      "main": {
+        "Khalni Garden": 3,
+        "Fanatical Offering": 3,
+        "Tithing Blade": 3,
+        "Ichor Wellspring": 3,
+        "Cast Down": 3,
+        "Crypt Rats": 0
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "golgari-gardens",
+        "subtype_id": null,
+        "selected_rule_id": "golgari-gardens-artifact"
+      }
+    },
+    {
+      "id": "gruul-initiative",
+      "main": {
+        "Avenging Hunter": 3,
+        "Crimson Fleet Commodore": 3,
+        "Simian Spirit Guide": 3,
+        "Rite of Flame": 3
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "gruul-initiative",
+        "subtype_id": null,
+        "selected_rule_id": "gruul-initiative"
+      }
+    },
+    {
+      "id": "jund-affinity",
+      "main": {
+        "Drossforge Bridge": 3,
+        "Slagwoods Bridge": 3,
+        "Myr Enforcer": 3,
+        "Refurbished Familiar": 3,
+        "Cleansing Wildfire": 0
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "jund-affinity",
+        "subtype_id": null,
+        "selected_rule_id": "jund-affinity"
+      }
+    },
+    {
+      "id": "gruul-ramp-cascade",
+      "main": {
+        "Writhing Chrysalis": 3,
+        "Boarding Party": 3,
+        "Annoyed Altisaur": 3,
+        "Arboreal Grazer": 3,
+        "Arbor Elf": 0
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "gruul-ramp",
+        "subtype_id": null,
+        "selected_rule_id": "gruul-ramp-cascade"
+      }
+    },
+    {
+      "id": "orzhov-midrange-nightmare",
+      "main": {
+        "Glint Hawk": 3,
+        "Kor Skyfisher": 3,
+        "Refurbished Familiar": 3,
+        "Hopeless Nightmare": 3,
+        "Tithing Blade": 2,
+        "Oroku Saki, Shredder Rising": 0
+      },
+      "expected": {
+        "status": "classified",
+        "archetype_id": "orzhov-midrange",
+        "subtype_id": null,
+        "selected_rule_id": "orzhov-midrange-nightmare"
+      }
     }
   ],
   "boundary_cases": [
@@ -1561,7 +1942,8 @@
         "Hawkeye's Bow": 3,
         "Seeker of Skybreak": 3,
         "Perilous Research": 2,
-        "Tamiyo's Safekeeping": 3
+        "Tamiyo's Safekeeping": 3,
+        "Writhing Chrysalis": 3
       },
       "expected": {
         "status": "classified",
