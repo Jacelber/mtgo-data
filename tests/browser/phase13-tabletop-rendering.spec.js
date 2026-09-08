@@ -71,10 +71,10 @@ async function routeSyntheticEvents(page, {
       schema_version: "1.0.0",
       format: "modern",
       names: [
-        { identity_id: "alpha", parent_id: "alpha", subtype_id: null, display: { en: "Alpha", zh: "阿尔法" } },
         { identity_id: "beta", parent_id: "beta", subtype_id: null, display: { en: "Beta", zh: "贝塔" } },
         { identity_id: "beta/one", parent_id: "beta", subtype_id: "one", display: { en: "One Beta", zh: "贝塔一" } },
         { identity_id: "beta/two", parent_id: "beta", subtype_id: "two", display: { en: "Two Beta", zh: "贝塔二" } },
+        { identity_id: "alpha", parent_id: "alpha", subtype_id: null, display: { en: "Alpha", zh: "阿尔法" } },
       ],
     }],
   ]);
@@ -184,6 +184,11 @@ test("Tabletop renders the combined result without merging Event Overview", asyn
   await expect(page.locator(".scope-lock-note")).toContainText("only All Constructed Swiss");
   await expect(page.locator("[data-matchup-mainstream]")).toHaveCount(0);
   await expect(page.locator(".matchup-table")).toBeVisible();
+  expect(await page.locator(".matchup-table tbody tr").evaluateAll(rows => (
+    rows.map(row => row.dataset.matchupRowIdentity)
+  ))).toEqual(
+    ["alpha", "beta", "unknown"]
+  );
 
   const alphaCells = page.locator('[data-matchup-row-identity="alpha"] .matrix-cell');
   await expect(alphaCells.nth(1)).toHaveClass(/low-sample/);

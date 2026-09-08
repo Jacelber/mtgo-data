@@ -1042,6 +1042,25 @@
     };
   }
 
+  function orderParentIdsByMatches(document) {
+    const indexes = buildIndexes(document);
+    const stableOrder = new Map(
+      (document.parent_order || []).map((parentId, position) => [parentId, position])
+    );
+    const matches = new Map([...stableOrder.keys()].map(parentId => {
+      const parent = indexes.parentById.get(parentId);
+      if (!parent) throw new Error(`排序中存在未知类型：${parentId}`);
+      return [
+        parentId,
+        aggregateOverall(document, parentNode(parent, parentId), indexes).matches,
+      ];
+    }));
+    return [...stableOrder.keys()].sort((left, right) => (
+      matches.get(right) - matches.get(left)
+      || stableOrder.get(left) - stableOrder.get(right)
+    ));
+  }
+
   function buildIndexes(document) {
     if (!document || document.hierarchical !== true) {
       throw new Error("需要 hierarchical=true 的对阵数据。");
@@ -1275,6 +1294,7 @@
     MULTI_EVENT_ERROR_CODES,
     MultiEventMatchupError,
     normalizeSearch,
+    orderParentIdsByMatches,
     publicPath,
     resolveFilterIdentity,
   };

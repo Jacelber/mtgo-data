@@ -319,12 +319,16 @@ function tabletopOverview(scope, presentation) {
 
 function tabletopMatchup(matchupDocument, scopeId, eventFormat, overviewScope) {
   const scope = matchupDocument.scopes[scopeId];
-  const viewDocument = localizedMatchupDocument(ReviewData.activeMatchupDocument({
+  const activeDocument = ReviewData.activeMatchupDocument({
     hierarchical: true,
     hierarchy: matchupDocument.hierarchy,
     parent_order: scope.parent_order,
     leaf_matrix: scope.leaf_matrix,
-  }, LOW_SAMPLE_THRESHOLD));
+  }, LOW_SAMPLE_THRESHOLD);
+  const viewDocument = localizedMatchupDocument({
+    ...activeDocument,
+    parent_order: ReviewData.orderParentIdsByMatches(activeDocument),
+  });
   const mainstreamParentIds = state.matchupMainstreamOnly
     ? ReviewData.mainstreamParentIds(
       overviewScope?.archetypes,
@@ -348,12 +352,16 @@ function tabletopMatchup(matchupDocument, scopeId, eventFormat, overviewScope) {
 }
 
 function tabletopMultiEventMatchup(matchupDocument, eventFormat) {
-  const viewDocument = localizedMatchupDocument(ReviewData.activeMatchupDocument({
+  const activeDocument = ReviewData.activeMatchupDocument({
     hierarchical: true,
     hierarchy: matchupDocument.hierarchy,
     parent_order: matchupDocument.parent_order,
     leaf_matrix: matchupDocument.leaf_matrix,
-  }, matchupDocument.rate_method.low_sample_threshold));
+  }, matchupDocument.rate_method.low_sample_threshold);
+  const viewDocument = localizedMatchupDocument({
+    ...activeDocument,
+    parent_order: ReviewData.orderParentIdsByMatches(activeDocument),
+  });
   currentContext.matchupDisplayDocument = viewDocument;
   currentContext.matchupMainstreamParentIds = null;
   currentContext.matchupMainstreamUnavailable = true;
