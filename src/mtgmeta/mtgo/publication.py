@@ -319,11 +319,15 @@ def stage_publication(root: Path, format_id: str, *, include_landing: bool = Fal
     Neither this operation nor ordinary producer calls create an Owner approval.
     """
     import os
-    import shutil
     import subprocess
     import sys
-    import tempfile
-    from ..classifier_closure import _materialize_with_rollback, _protected_input_fingerprints, inspect_format
+    from time import perf_counter
+    from ..classifier_closure import (
+        _copy_repository_to_stage,
+        _materialize_with_rollback,
+        _protected_input_fingerprints,
+        inspect_format,
+    )
     from ..classification_reports_cli import generate_reports
     from ..catalog import write_catalog
     from . import completeness, landing, landing_editorial, matchup, metadata, stats, top8
@@ -331,9 +335,12 @@ def stage_publication(root: Path, format_id: str, *, include_landing: bool = Fal
     root = root.resolve()
     subject = resolve_scope(root, format_id)
     protected = _protected_input_fingerprints(root, format_id)
-    stage = Path(tempfile.mkdtemp(prefix=f"mtgo-publication-{format_id}-", dir=root.parent))
-    shutil.copytree(root, stage, dirs_exist_ok=True,
-                    ignore=shutil.ignore_patterns(".git", ".venv", "node_modules", "__pycache__", ".pytest_cache", "test-results", "playwright-report"))
+    stage_started = perf_counter()
+    stage = _copy_repository_to_stage(root, f"mtgo-publication-{format_id}-")
+    print(json.dumps({"format": format_id, "operation": "mtgo-publication-progress",
+                      "phase": "copy-stage",
+                      "seconds": round(perf_counter() - stage_started, 3)},
+                     sort_keys=True), file=sys.stderr, flush=True)
     # A separate local index gives the existing read-only repository validator
     # its tracked inventory without creating any commit or remote publication.
     subprocess.run(["git", "init", "--quiet", str(stage)], check=True)

@@ -13,6 +13,8 @@ from mtgmeta.classifier_closure import (
     CURRENT,
     STALE,
     ClassifierClosureError,
+    _allowed_refreshed_artifacts,
+    _create_stage,
     _inspect_melee,
     _materialize_with_rollback,
     converge_format,
@@ -30,6 +32,84 @@ def _write_json(path: Path, document: object) -> None:
 
 def _digest(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
+
+
+def test_allowed_refresh_includes_dependent_publication_metadata() -> None:
+    initial = {
+        "families": {
+            "mtgo_statistics": {"state": STALE},
+            "mtgo_publication": {"state": CURRENT},
+            "melee": {"state": CURRENT},
+        }
+    }
+    staged = {
+        "families": {
+            "mtgo_statistics": {"artifacts": ["stats/modern/mtgo/stats.json"]},
+            "mtgo_publication": {"artifacts": ["stats/modern/mtgo/meta.json"]},
+            "melee": {"artifacts": ["stats/modern/melee/index.json"]},
+        }
+    }
+
+    assert _allowed_refreshed_artifacts(initial, staged) == {
+        "stats/modern/mtgo/stats.json",
+        "stats/modern/mtgo/meta.json",
+    }
+
+
+def test_stage_creation_falls_back_after_preferred_parent_permission_error(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import tempfile
+
+    root = tmp_path / "managed-parent" / "repository"
+    root.mkdir(parents=True)
+    (root / "kept.txt").write_text("kept\n", encoding="utf-8")
+    (root / "node_modules").mkdir()
+    (root / "node_modules" / "ignored.txt").write_text("ignored\n", encoding="utf-8")
+    fallback = tmp_path / "system-temp"
+    fallback.mkdir()
+    original_mkdir = Path.mkdir
+
+    def guarded_mkdir(path: Path, *args: object, **kwargs: object) -> None:
+        if path.parent == root.parent and path.name.startswith(
+            "classifier-closure-modern-"
+        ):
+            raise PermissionError("synthetic managed-parent denial")
+        original_mkdir(path, *args, **kwargs)
+
+    monkeypatch.setattr(tempfile, "gettempdir", lambda: str(fallback))
+    monkeypatch.setattr(Path, "mkdir", guarded_mkdir)
+
+    stage = _create_stage(root, "modern")
+
+    assert stage.parent == fallback
+    assert (stage / "kept.txt").read_text(encoding="utf-8") == "kept\n"
+    assert not (stage / "node_modules").exists()
+
+
+def test_stage_creation_permission_failures_are_bounded(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import tempfile
+    from mtgmeta import classifier_closure
+
+    root = tmp_path / "repository"
+    root.mkdir()
+    fallback = tmp_path / "system-temp"
+    fallback.mkdir()
+    attempts = 0
+
+    def denied_mkdir(path: Path, *args: object, **kwargs: object) -> None:
+        nonlocal attempts
+        attempts += 1
+        raise PermissionError("synthetic denial")
+
+    monkeypatch.setattr(tempfile, "gettempdir", lambda: str(fallback))
+    monkeypatch.setattr(Path, "mkdir", denied_mkdir)
+
+    with pytest.raises(ClassifierClosureError, match="cannot create"):
+        classifier_closure._create_stage_directory(root, "bounded-")
+    assert attempts == 2
 
 
 def test_public_name_projection_binds_classifier_identity_and_owner_catalog(

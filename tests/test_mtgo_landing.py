@@ -23,17 +23,42 @@ def test_classifier_restatement_requires_identical_accepted_material():
         for field in landing.CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS
     }
 
+    summary = [{"order": 1, "text": {"en": "same", "zh": "相同"}}]
+    features = [
+        {
+            "archetype_id": "alpha",
+            "headline": {"en": "Alpha", "zh": "阿尔法"},
+            "positioning": {"en": "same", "zh": "相同"},
+        }
+    ]
+    prior = {
+        **material,
+        "weekly_summary": {"items": summary},
+        "features": {"items": features},
+    }
+
     assert landing._classifier_restatement_preserves_accepted_material(
-        {"classifier_digest", "machine_fact_digest"}, material, dict(material)
+        {"classifier_digest", "machine_fact_digest", "bilingual_catalog_digest"},
+        prior,
+        dict(material),
+        summary,
+        features,
     )
 
     changed = dict(material)
     changed["environment"] = {"value": "changed"}
     assert not landing._classifier_restatement_preserves_accepted_material(
-        {"classifier_digest"}, material, changed
+        {"classifier_digest"}, prior, changed, summary, features
     )
+
+    renamed = [dict(features[0], headline={"en": "Renamed", "zh": "已改名"})]
     assert not landing._classifier_restatement_preserves_accepted_material(
-        {"bilingual_catalog_digest"}, material, material
+        {"bilingual_catalog_digest"}, prior, material, summary, renamed
+    )
+
+    reclassified = [dict(features[0], archetype_id="beta")]
+    assert not landing._classifier_restatement_preserves_accepted_material(
+        {"classifier_digest"}, prior, material, summary, reclassified
     )
 
 
