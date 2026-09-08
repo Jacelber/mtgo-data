@@ -5,21 +5,21 @@
   "source": "mtgo",
   "period": {
     "type": "36w",
-    "start": "2025-12-22",
-    "end": "2026-08-30",
+    "start": "2025-12-29",
+    "end": "2026-09-06",
     "weeks": 36
   },
   "matchup_coverage": {
     "formula_version": "videre-range-coverage-v1",
     "status": "available",
     "period": {
-      "start": "2025-12-22",
-      "end": "2026-08-30"
+      "start": "2025-12-29",
+      "end": "2026-09-06"
     },
-    "expected_event_count": 169,
-    "available_event_count": 158,
+    "expected_event_count": 176,
+    "available_event_count": 164,
     "deferred_event_count": 0,
-    "missing_event_count": 11,
+    "missing_event_count": 12,
     "excluded_event_count": 0,
     "available_event_ids": [
       "12838092",
@@ -179,7 +179,13 @@
       "12853170",
       "12853183",
       "12853190",
-      "12853208"
+      "12853208",
+      "12853216",
+      "12853225",
+      "12853229",
+      "12853666",
+      "12853674",
+      "12853686"
     ],
     "deferred_event_ids": [],
     "missing_event_ids": [
@@ -193,20 +199,21 @@
       "12844317",
       "12844322",
       "12844341",
-      "12844351"
+      "12844351",
+      "12853679"
     ],
     "excluded_events": [],
-    "completeness_rate": 0.934911,
+    "completeness_rate": 0.931818,
     "unavailable_reason": null
   },
   "high_score_decklist_completeness": {
     "formula_version": "mtgo-high-score-binomial-v1",
     "status": "available",
     "period": {
-      "start": "2025-12-22",
-      "end": "2026-08-30"
+      "start": "2025-12-29",
+      "end": "2026-09-06"
     },
-    "eligible_event_count": 169,
+    "eligible_event_count": 176,
     "unsupported_event_count": 0,
     "events": [
       {
@@ -1729,13 +1736,76 @@
         "minimum_decisive_wins": 4,
         "observed_decklist_count": 17,
         "expected_decklist_count": 18.21875
+      },
+      {
+        "event_id": "12853216",
+        "player_count": 54,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 18,
+        "expected_decklist_count": 18.5625
+      },
+      {
+        "event_id": "12853225",
+        "player_count": 60,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 21,
+        "expected_decklist_count": 20.625
+      },
+      {
+        "event_id": "12853229",
+        "player_count": 27,
+        "round_count": 5,
+        "high_score_threshold": 9,
+        "minimum_decisive_wins": 3,
+        "observed_decklist_count": 13,
+        "expected_decklist_count": 13.5
+      },
+      {
+        "event_id": "12853666",
+        "player_count": 32,
+        "round_count": 5,
+        "high_score_threshold": 9,
+        "minimum_decisive_wins": 3,
+        "observed_decklist_count": 15,
+        "expected_decklist_count": 16.0
+      },
+      {
+        "event_id": "12853674",
+        "player_count": 44,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 14,
+        "expected_decklist_count": 15.125
+      },
+      {
+        "event_id": "12853679",
+        "player_count": 53,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 18,
+        "expected_decklist_count": 18.21875
+      },
+      {
+        "event_id": "12853686",
+        "player_count": 62,
+        "round_count": 6,
+        "high_score_threshold": 12,
+        "minimum_decisive_wins": 4,
+        "observed_decklist_count": 20,
+        "expected_decklist_count": 21.3125
       }
     ],
     "unsupported_events": [],
-    "observed_decklist_count": 2921,
-    "expected_decklist_count": 3439.734375,
-    "expected_decklist_count_display": 3440,
-    "completeness_rate": 0.849193,
+    "observed_decklist_count": 3040,
+    "expected_decklist_count": 3563.078125,
+    "expected_decklist_count_display": 3563,
+    "completeness_rate": 0.853195,
     "exceeds_model": false,
     "unavailable_reason": null
   }
