@@ -4,6 +4,66 @@ semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
   manifest_sha256: 87120f979a4bd00e4a2aa601e3001862ce2575d12de355c3a42548b535b40b36
 archetypes:
+- id: 4-color-demons
+  name: 4-Color Demons
+  priority: 77130
+  rules:
+  - id: 4-color-demons-primary
+    priority: 77130
+    subtype_id: null
+    conditions:
+      all:
+      - card: Unholy Annex // Ritual Chamber
+        zone: main
+        min_count: 3
+      - card: Jeskai Revelation
+        zone: main
+        min_count: 2
+      - card: Tablet of Discovery
+        zone: main
+        min_count: 2
+      - card: Inevitable Defeat
+        zone: main
+        min_count: 2
+- id: jund-artifact-sacrifice
+  name: Jund Artifact Sacrifice
+  priority: 77120
+  rules:
+  - id: jund-artifact-sacrifice-primary
+    priority: 77120
+    subtype_id: null
+    conditions:
+      all:
+      - card: Gene Pollinator
+        zone: main
+        min_count: 3
+      - card: Biotech Specialist
+        zone: main
+        min_count: 3
+      - card: The Sackville-Bagginses
+        zone: main
+        min_count: 3
+      - card: Obsessive Pursuit
+        zone: main
+        min_count: 3
+- id: dimir-faeries
+  name: Dimir Faeries
+  priority: 77110
+  rules:
+  - id: dimir-faeries-primary
+    priority: 77110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Bitterbloom Bearer
+        zone: main
+        min_count: 3
+      - card: Sleep-Cursed Faerie
+        zone: main
+        min_count: 3
+      - card: Spell Stutter
+        zone: main
+        min_count: 3
 - id: izzet-monument
   name: Izzet Monument
   priority: 76750
@@ -117,6 +177,8 @@ archetypes:
     name: Izzet
   - id: boros
     name: Boros
+  - id: mono-red
+    name: Mono-Red
   rules:
   - id: dwarves-izzet
     priority: 76700
@@ -146,6 +208,20 @@ archetypes:
       - card: Sacred Foundry
         zone: main
         min_count: 1
+  - id: dwarves-mono-red
+    priority: 76680
+    subtype_id: mono-red
+    conditions:
+      all:
+      - card: Dwarven Mauler
+        zone: main
+        min_count: 3
+      - card: Thorin, Mountain-king
+        zone: main
+        min_count: 3
+      - card: Mountain
+        zone: main
+        min_count: 12
 - id: monument-lessons
   name: Monument Lessons
   priority: 76000
@@ -631,7 +707,7 @@ archetypes:
       all:
       - card: Voice of Victory
         zone: main
-        min_count: 3
+        min_count: 2
       - card: Warleader's Call
         zone: main
         min_count: 3
@@ -706,6 +782,23 @@ archetypes:
         min_count: 3
       - card: Steam Vents
         min_count: 2
+  - id: izzet-prowess-colorstorm
+    priority: 50990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Slickshot Show-Off
+        zone: main
+        min_count: 3
+      - card: Colorstorm Stallion
+        zone: main
+        min_count: 3
+      - card: Burst Lightning
+        zone: main
+        min_count: 3
+      - card: Stormchaser's Talent
+        zone: main
+        exact_count: 0
 - id: bant-airbending
   name: Bant Airbending
   priority: 50000
@@ -939,6 +1032,23 @@ archetypes:
       - card: Jeskai Revelation
         zone: any
         exact_count: 0
+  - id: azorius-control-trollshaws
+    priority: 38998
+    subtype_id: null
+    conditions:
+      all:
+      - card: Plunder the Trollshaws
+        zone: main
+        min_count: 3
+      - card: Consult the Star Charts
+        zone: main
+        min_count: 3
+      - card: No More Lies
+        zone: main
+        min_count: 3
+      - card: Day of Judgment
+        zone: main
+        min_count: 3
 - id: mono-white-momo
   name: Mono-White Momo
   priority: 38000
@@ -1990,9 +2100,6 @@ archetypes:
       - card: Hinterland Sanctifier
         zone: main
         min_count: 3
-      - card: Lunar Convocation
-        zone: main
-        min_count: 2
       - card: Godless Shrine
         zone: main
         min_count: 2

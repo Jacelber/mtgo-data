@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "cae8e46c65d9ff3955d8005155da6cca89e6eba743057ceca1331cb1e47c57b6"
+    "digest": "c06c700e7b9b2ba4da1eab4aca18830cba7e2e1e138f9749b02ce8ba7f79587e"
   },
   "input": {
     "event_path": "data/modern/melee/events/441441.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "2ab329e4a35655b88b159edfc60d37d4d3f8b5e38d1c37a519b21f29e0001515",
+    "rule_sha256": "36893b50f6185ff2a10629fa4b888dcc4013b9a15676fb0297b817202df16b62",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 155,
-    "rule_count": 265,
-    "subtype_count": 81
+    "archetype_count": 177,
+    "rule_count": 307,
+    "subtype_count": 83
   },
   "summary": {
     "total_records": 571,
@@ -30,8 +30,8 @@
     "unknown": 7,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 98,
-    "overridden_matches": 98,
+    "multiple_matches": 100,
+    "overridden_matches": 100,
     "selected_subtypes": 257,
     "parent_only": 307,
     "same_parent_multiple_subtype_matches": 3,
@@ -966,6 +966,14 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         },
@@ -1127,6 +1135,14 @@
             },
             {
               "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Cori-Steel Cutter",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -4427,6 +4443,14 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         },
@@ -4588,6 +4612,14 @@
             },
             {
               "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Cori-Steel Cutter",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -24140,6 +24172,14 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         },
@@ -24301,6 +24341,14 @@
             },
             {
               "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Cori-Steel Cutter",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -24491,6 +24539,14 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         },
@@ -24652,6 +24708,14 @@
             },
             {
               "card": "Kappa Cannoneer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Cori-Steel Cutter",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
@@ -45123,10 +45187,76 @@
         "archetype_name": "Hammer Time",
         "subtype_id": "azorius",
         "subtype_name": "Azorius",
-        "rule_id": "hammer-time-azorius",
-        "priority": 626000
+        "rule_id": "hammer-time-azorius-puresteel-two",
+        "priority": 690930
       },
       "matched_rules": [
+        {
+          "archetype_id": "hammer-time",
+          "archetype_name": "Hammer Time",
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius",
+          "rule_id": "hammer-time-azorius-puresteel-two",
+          "priority": 690930,
+          "evidence": [
+            {
+              "card": "Colossus Hammer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Puresteel Paladin",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stoneforge Mystic",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Opal",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hallowed Fountain",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
         {
           "archetype_id": "hammer-time",
           "archetype_name": "Hammer Time",
@@ -45224,6 +45354,74 @@
           "archetype_name": "Hammer Time",
           "subtype_id": "azorius",
           "subtype_name": "Azorius",
+          "rule_id": "hammer-time-azorius-puresteel-two",
+          "priority": 690930,
+          "evidence": [
+            {
+              "card": "Colossus Hammer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Puresteel Paladin",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Stoneforge Mystic",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Opal",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hallowed Fountain",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
+          "archetype_id": "hammer-time",
+          "archetype_name": "Hammer Time",
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius",
           "rule_id": "hammer-time-azorius",
           "priority": 626000,
           "evidence": [
@@ -45310,7 +45508,6 @@
           ]
         }
       ],
-      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -50556,10 +50753,52 @@
         "archetype_name": "Mono-Blue Merfolk",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "mono-blue-merfolk-primary",
-        "priority": 102000
+        "rule_id": "mono-blue-merfolk-flare-harbinger",
+        "priority": 690899
       },
       "matched_rules": [
+        {
+          "archetype_id": "mono-blue-merfolk",
+          "archetype_name": "Mono-Blue Merfolk",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "mono-blue-merfolk-flare-harbinger",
+          "priority": 690899,
+          "evidence": [
+            {
+              "card": "Master of the Pearl Trident",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Flare of Denial",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Harbinger of the Seas",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Tide Shaper",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "mono-blue-merfolk",
           "archetype_name": "Mono-Blue Merfolk",
@@ -50585,6 +50824,50 @@
           "archetype_name": "Mono-Blue Merfolk",
           "subtype_id": null,
           "subtype_name": null,
+          "rule_id": "mono-blue-merfolk-flare-harbinger",
+          "priority": 690899,
+          "evidence": [
+            {
+              "card": "Master of the Pearl Trident",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Flare of Denial",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Harbinger of the Seas",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Tide Shaper",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 4,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
+          "archetype_id": "mono-blue-merfolk",
+          "archetype_name": "Mono-Blue Merfolk",
+          "subtype_id": null,
+          "subtype_name": null,
           "rule_id": "mono-blue-merfolk-primary",
           "priority": 102000,
           "evidence": [
@@ -50599,7 +50882,6 @@
           ]
         }
       ],
-      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
