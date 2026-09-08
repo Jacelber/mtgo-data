@@ -153,6 +153,30 @@ test("active matchup documents omit leaves with no played matches", () => {
   assert.equal(matchup.resolveFilterIdentity(active, "bravo").id, "bravo");
 });
 
+test("matchup parent order uses valid match count with stable ties", () => {
+  const original = ["alpha", "bravo", "charlie", "unknown"];
+  const document = {
+    hierarchical: true,
+    hierarchy: {
+      parents: original.map(id => ({ id, name: id, subtype_ids: [`${id}/one`] })),
+      leaves: original.map(id => ({ id: `${id}/one`, parent_id: id })),
+    },
+    parent_order: original,
+    leaf_matrix: {
+      "alpha/one": { "bravo/one": { wins: 12, losses: 0, draws: 0 } },
+      "bravo/one": { "alpha/one": { wins: 20, losses: 0, draws: 0 } },
+      "charlie/one": { "alpha/one": { wins: 12, losses: 0, draws: 0 } },
+      "unknown/one": {},
+    },
+  };
+
+  assert.deepEqual(
+    matchup.orderParentIdsByMatches(document),
+    ["bravo", "alpha", "charlie", "unknown"]
+  );
+  assert.deepEqual(original, ["alpha", "bravo", "charlie", "unknown"]);
+});
+
 test("exact matchup row filters preserve stable order and column expansion", () => {
   const document = documentFor(3);
   const expandedRows = new Set();
