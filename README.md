@@ -296,10 +296,12 @@ building steps, not standalone authorization to publish partially updated data.
 
 For a reviewed-scope advancement, use `publication inspect`, then the explicit
 offline `publication stage` operation (`--execute` materializes after all
-checks; `--include-landing` is only for accepted content). Install pinned runtime
-and Chromium dependencies beforehand. See
+deterministic checks; `--include-landing` is only for accepted content). See
 [`docs/WEEKLY_MAINTENANCE.md`](docs/WEEKLY_MAINTENANCE.md#reviewed-data-publication-operations)
 for exact acceptance-record commands, both publication nodes and stop conditions.
+When multiple accepted public formats are simultaneously stale, add one
+repeatable `--co-stage-format <format>` so they share the same fully validated
+staging tree and rollback transaction.
 
 Private executable formats remain opt-in. Use `landing-review prepare --week
 <YYYY-Www>` and `build-landing --week <YYYY-Www> --private-output

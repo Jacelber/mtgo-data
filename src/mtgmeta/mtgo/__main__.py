@@ -160,6 +160,12 @@ def build_parser() -> argparse.ArgumentParser:
     accept.add_argument("--evidence", required=True)
     accept.add_argument("--output", type=Path, required=True)
     stage = publication_commands.add_parser("stage", help="generate and validate a format in isolation; default is no materialization")
+    stage.add_argument(
+        "--co-stage-format",
+        action="append",
+        default=[],
+        help="additional accepted public format to stage and materialize atomically",
+    )
     stage.add_argument("--include-landing", action="store_true")
     stage.add_argument("--execute", action="store_true")
     return parser
@@ -428,8 +434,23 @@ def _run_publication(args: argparse.Namespace, root: Path, registry: Path) -> in
     if args.publication_command == "inspect":
         print(json.dumps(publication.inspect(root, args.format_id), indent=2))
     elif args.publication_command == "stage":
-        print(json.dumps(publication.stage_publication(root, args.format_id,
-            include_landing=args.include_landing, execute=args.execute), indent=2))
+        formats = (args.format_id, *args.co_stage_format)
+        result = (
+            publication.stage_publication(
+                root,
+                args.format_id,
+                include_landing=args.include_landing,
+                execute=args.execute,
+            )
+            if len(formats) == 1
+            else publication.stage_publications(
+                root,
+                formats,
+                include_landing=args.include_landing,
+                execute=args.execute,
+            )
+        )
+        print(json.dumps(result, indent=2))
     elif args.publication_command == "prepare-review":
         print(publication.prepare_review(root, args.format_id, args.week, args.output))
     else:
@@ -485,12 +506,18 @@ def main(argv: list[str] | None = None) -> int:
         if args.command in {"fetch-events", "refresh-event"}:
             format_registry.require_mtgo_event_collection(args.format_id)
         else:
-            definition = format_registry.require_mtgo(args.format_id)
             capability = COMMAND_CAPABILITIES[args.command]
-            if capability not in definition.mtgo.capabilities:
-                raise DisabledFormatError(
-                    f"MTGO format {args.format_id!r} does not support {capability!r}"
-                )
+            format_ids = [args.format_id]
+            if args.command == "publication" and args.publication_command == "stage":
+                format_ids.extend(args.co_stage_format)
+            if len(format_ids) != len(set(format_ids)):
+                raise FormatConfigError("publication staging formats must be unique")
+            for format_id in format_ids:
+                definition = format_registry.require_mtgo(format_id)
+                if capability not in definition.mtgo.capabilities:
+                    raise DisabledFormatError(
+                        f"MTGO format {format_id!r} does not support {capability!r}"
+                    )
         return RUNNERS[args.command](args, root, registry)
     except (
         FormatConfigError,

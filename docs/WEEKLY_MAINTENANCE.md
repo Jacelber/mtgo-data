@@ -166,8 +166,8 @@ registry. Codex places that exact accepted row under the format's
 week's row with its explicitly accepted complete set; no date rule admits it.
 Existing intentional-Unknown and classifier-impact policies still apply.
 
-With pinned Python/browser dependencies already installed, run the offline
-format operation (no fetch, dependency installation, commit, or publication):
+With the pinned Python dependencies already installed, run the offline format
+operation (no fetch, dependency installation, commit, or publication):
 
 ```text
 python -B -m mtgmeta.mtgo --format <format> publication stage
@@ -182,6 +182,21 @@ operation with `--include-landing`; stale/materially changed accepted content
 returns to the Owner. Do not run both commands on the same unchanged subject
 merely to duplicate evidence: choose plan-only for inspection or execute for an
 authorized local materialization. Normal GOV-11 remote gates follow separately.
+
+When two or more accepted public formats are simultaneously stale, stage them
+in one explicit atomic set so the full-repository validation observes the same
+candidate that will be materialized:
+
+```text
+python -B -m mtgmeta.mtgo --format standard publication stage --co-stage-format modern --include-landing --execute
+```
+
+Every named format is generated in the same external staging tree, the existing
+full repository, rule, Schema, output-invariant, and production-consumer checks
+run before materialization, and one rollback transaction covers the complete
+changed-path set. A duplicate, unsupported, non-public, unaccepted, stale-
+review, or failed format blocks the complete set. Joint staging does not couple
+their admission timelines or permit an unaccepted format to advance.
 
 After the accepted format's data and Landing are actually published:
 
