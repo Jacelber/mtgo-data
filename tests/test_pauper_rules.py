@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
+import yaml
 
 from mtgmeta.classifier import classify_counts
 from mtgmeta.config import load_rule_set
@@ -12,6 +13,7 @@ from mtgmeta.config import load_rule_set
 ROOT = Path(__file__).resolve().parents[1]
 RULES_PATH = ROOT / "my_archetypes" / "pauper.yaml"
 FIXTURE_PATH = ROOT / "tests" / "fixtures" / "pauper" / "rule_contract.json"
+NAMES_PATH = ROOT / "configs" / "mtgo_archetype_names.yaml"
 
 
 def _fixture() -> dict[str, object]:
@@ -75,6 +77,27 @@ def test_pauper_rule_inventory_and_parent_boundaries() -> None:
     for archetype in rules.archetypes:
         if archetype.subtypes:
             assert all(rule.subtype_id is not None for rule in archetype.rules)
+
+
+def test_owner_accepted_jund_names() -> None:
+    text = NAMES_PATH.read_text(encoding="utf-8")
+    rows = yaml.safe_load(text)["names"]
+    pauper_names = {
+        row["parent_id"]: row["chinese"]
+        for row in rows
+        if row.get("format") == "pauper" and row.get("subtype_id") is None
+    }
+
+    assert "勇德" not in text
+    assert {
+        parent_id: pauper_names[parent_id]
+        for parent_id in ("jund-gardens", "jund-wildfire", "jund-affinity", "jund-ramp")
+    } == {
+        "jund-gardens": "勇得控制",
+        "jund-wildfire": "勇得野火",
+        "jund-affinity": "勇得共鸣",
+        "jund-ramp": "勇得Ramp",
+    }
 
 
 @pytest.mark.parametrize("case", _fixture()["cases"], ids=lambda case: case["id"])

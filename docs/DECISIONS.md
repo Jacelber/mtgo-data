@@ -8456,3 +8456,48 @@ fifth product. This changes no classifier rule, statistical formula, generated
 Pauper byte, source request, public flag, workflow, Pages artifact, or production
 state. P14-07B remains separately authorized and must stop if restaging changes
 the Owner-accepted product subject.
+
+---
+
+# DEC-169 - Correct reviewed W36 Pauper color branches and Jund transliteration
+
+Status: `Accepted; P14-07B-R3 local implementation authorized`
+
+## Context
+
+The Owner's complete W36 Pauper review found two false two-color results in
+MTGO event `12853701`. Rank 8 was classified as Izzet Control despite four
+main-deck copies of `Terminate`; rank 18 was classified as Gruul Ramp despite
+three main-deck copies of `Cast Down`. The review also confirmed that every
+Chinese Jund display name must use `勇得`, not `勇德`.
+
+Broadening the existing Grixis Control rule to cover the new construction
+caused four retained Dimir Faeries records to acquire an additional matching
+rule. Although their selected identity did not change, that diagnostic drift
+violated the no-unexplained-impact requirement.
+
+## Decision
+
+Keep the original Grixis Control branch and add one bounded
+`grixis-control-terminate` branch for the distinct Skred, Murmuring Mystic,
+Counterspell, and Terminate construction. Make the existing Izzet Control
+branch explicitly exclude main-deck `Terminate`.
+
+Add the stable `jund-ramp` parent and one rule requiring the existing
+Chrysalis and Arbor Elf ramp core plus main-deck `Cast Down`. Make the existing
+Gruul Ramp branch explicitly exclude main-deck `Cast Down`. Register `Jund
+Ramp` / `勇得Ramp`, and change the maintained Pauper names to `勇得控制`,
+`勇得野火`, and `勇得共鸣` for Jund Gardens, Jund Wildfire, and Jund Affinity.
+
+Compare the accepted and candidate rules on the same retained corpus, including
+the already retained private Melee `438329` event. The accepted change set is
+exactly MTGO event `12853701` rank 8 from Izzet Control to Grixis Control and
+rank 18 from Gruul Ramp to Jund Ramp. No other identity, subtype, selected-rule,
+match, override, conflict, invalid-deck, or Unknown change is accepted.
+
+## Consequences
+
+The P14-07B product subject must be restaged after this repair is accepted.
+Generated statistics and name projections are rebuilt from their authorities;
+they are not manually patched. This decision authorizes no source request,
+remote publication, merge, Pages deployment, or production change.

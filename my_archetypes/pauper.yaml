@@ -974,6 +974,9 @@ archetypes:
       - card: "Counterspell"
         zone: main
         min_count: 3
+      - card: "Terminate"
+        zone: main
+        exact_count: 0
       - card: "Tolarian Terror"
         zone: main
         exact_count: 0
@@ -1005,6 +1008,29 @@ archetypes:
         zone: main
         min_count: 3
       - card: "Tolarian Terror"
+        zone: main
+        exact_count: 0
+  - id: grixis-control-terminate
+    priority: 9155
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Skred"
+        zone: main
+        min_count: 3
+      - card: "Murmuring Mystic"
+        zone: main
+        min_count: 3
+      - card: "Counterspell"
+        zone: main
+        min_count: 3
+      - card: "Terminate"
+        zone: main
+        min_count: 1
+      - card: "Tolarian Terror"
+        zone: main
+        exact_count: 0
+      - card: "Ephemerate"
         zone: main
         exact_count: 0
 - id: mono-blue-faeries
@@ -2367,6 +2393,27 @@ archetypes:
       - card: "Utopia Sprawl"
         zone: main
         min_count: 2
+- id: jund-ramp
+  name: "Jund Ramp"
+  priority: 7510
+  rules:
+  - id: jund-ramp
+    priority: 7510
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Writhing Chrysalis"
+        zone: main
+        min_count: 3
+      - card: "Arbor Elf"
+        zone: main
+        min_count: 3
+      - card: "Cast Down"
+        zone: main
+        min_count: 1
+      - card: "Quirion Ranger"
+        zone: main
+        exact_count: 0
 - id: gruul-ramp
   name: "Gruul Ramp"
   priority: 7500
@@ -2383,6 +2430,9 @@ archetypes:
         zone: main
         min_count: 3
       - card: "Quirion Ranger"
+        zone: main
+        exact_count: 0
+      - card: "Cast Down"
         zone: main
         exact_count: 0
   - id: gruul-ramp-cascade
