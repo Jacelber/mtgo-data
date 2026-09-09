@@ -103,7 +103,8 @@ jobs:
       - name: Validate changed archetype rules
         if: >-
           contains(needs.admission.outputs.validation_triggers, 'rules-standard') ||
-          contains(needs.admission.outputs.validation_triggers, 'rules-modern')
+          contains(needs.admission.outputs.validation_triggers, 'rules-modern') ||
+          contains(needs.admission.outputs.validation_triggers, 'rules-pauper')
         shell: bash
         env:
           VALIDATION_TRIGGERS: ${{ needs.admission.outputs.validation_triggers }}
@@ -114,12 +115,16 @@ jobs:
           if [[ "$VALIDATION_TRIGGERS" == *rules-modern* ]]; then
             python -B validate_rules.py my_archetypes/modern.yaml
           fi
+          if [[ "$VALIDATION_TRIGGERS" == *rules-pauper* ]]; then
+            python -B validate_rules.py my_archetypes/pauper.yaml
+          fi
       - name: Validate classifier rule contracts
         if: >-
           contains(needs.admission.outputs.validation_triggers, 'classifier-contract') ||
           contains(needs.admission.outputs.validation_triggers, 'classifier-adapter') ||
           contains(needs.admission.outputs.validation_triggers, 'rules-standard') ||
-          contains(needs.admission.outputs.validation_triggers, 'rules-modern')
+          contains(needs.admission.outputs.validation_triggers, 'rules-modern') ||
+          contains(needs.admission.outputs.validation_triggers, 'rules-pauper')
         shell: bash
         env:
           VALIDATION_TRIGGERS: ${{ needs.admission.outputs.validation_triggers }}
@@ -134,6 +139,9 @@ jobs:
             if [[ "$VALIDATION_TRIGGERS" == *rules-modern* ]]; then
               TESTS+=(tests/test_classifier_rule_contracts.py::test_modern_owner_rule_contracts)
             fi
+            if [[ "$VALIDATION_TRIGGERS" == *rules-pauper* ]]; then
+              TESTS+=(tests/test_pauper_rules.py)
+            fi
             if [[ "$VALIDATION_TRIGGERS" == *classifier-adapter* ]]; then
               TESTS+=(tests/test_classifier_rule_contracts.py::test_melee_split_card_adapter_contract)
             fi
@@ -141,6 +149,9 @@ jobs:
           python -B -m pytest \
             --basetemp="${RUNNER_TEMP}/pytest-classifier-contract" \
             "${TESTS[@]}"
+      - name: Validate archetype name resolution
+        if: contains(needs.admission.outputs.validation_triggers, 'archetype-names')
+        run: node --test tests/js/phase8-archetype-names.test.js
       - name: Validate changed public JSON contracts
         if: >-
           contains(needs.admission.outputs.validation_triggers, 'schema-contract') ||
