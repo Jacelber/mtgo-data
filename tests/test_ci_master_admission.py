@@ -132,6 +132,30 @@ def test_known_paths_select_only_their_targeted_categories(paths, expected):
             ("rules-modern", "top8-restatement"),
         ),
         (
+            ["my_archetypes/pauper.yaml"],
+            ("rules-pauper",),
+        ),
+        (
+            ["tests/fixtures/pauper/rule_contract.json"],
+            ("rules-pauper",),
+        ),
+        (
+            ["tests/test_pauper_rules.py"],
+            ("rules-pauper",),
+        ),
+        (
+            ["src/mtgmeta/rules.py"],
+            ("rules-modern", "rules-pauper", "rules-standard", "top8-restatement"),
+        ),
+        (
+            ["configs/mtgo_archetype_names.yaml"],
+            ("archetype-names",),
+        ),
+        (
+            ["tests/js/phase8-archetype-names.test.js"],
+            ("archetype-names",),
+        ),
+        (
             ["tests/test_classifier_rule_contracts.py"],
             ("classifier-contract",),
         ),

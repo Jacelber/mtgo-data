@@ -485,6 +485,15 @@ def _validation_triggers(paths: set[str]) -> tuple[str, ...]:
         triggers.add("rules-standard")
     if paths & (shared_rule_paths | {"my_archetypes/modern.yaml"}):
         triggers.add("rules-modern")
+    if paths & (
+        shared_rule_paths
+        | {
+            "my_archetypes/pauper.yaml",
+            "tests/fixtures/pauper/rule_contract.json",
+            "tests/test_pauper_rules.py",
+        }
+    ):
+        triggers.add("rules-pauper")
     if "tests/test_classifier_rule_contracts.py" in paths:
         triggers.add("classifier-contract")
     if "src/mtgmeta/melee/classification.py" in paths:
@@ -537,6 +546,12 @@ def _validation_triggers(paths: set[str]) -> tuple[str, ...]:
         "tests/test_ci_master_admission.py",
     }:
         triggers.add("ci-admission")
+    if paths & {
+        "assets/js/phase8/archetype-names.js",
+        "configs/mtgo_archetype_names.yaml",
+        "tests/js/phase8-archetype-names.test.js",
+    }:
+        triggers.add("archetype-names")
     if paths & {
         ".github/workflows/pages.yml",
         "build_pages_artifact.py",

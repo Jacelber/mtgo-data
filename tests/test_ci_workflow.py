@@ -133,17 +133,23 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
     assert "code" in by_name["Check maintained Python package"]["if"]
     assert "rules-standard" in by_name["Validate changed archetype rules"]["if"]
     assert "rules-modern" in by_name["Validate changed archetype rules"]["if"]
+    assert "rules-pauper" in by_name["Validate changed archetype rules"]["if"]
     classifier = by_name["Validate classifier rule contracts"]
     assert "classifier-contract" in classifier["if"]
     assert "classifier-adapter" in classifier["if"]
     assert "rules-standard" in classifier["if"]
     assert "rules-modern" in classifier["if"]
+    assert "rules-pauper" in classifier["if"]
     assert "tests/test_classifier_rule_contracts.py" in classifier["run"]
+    assert "tests/test_pauper_rules.py" in classifier["run"]
     assert "pytest-classifier-contract" in classifier["run"]
     assert "::test_standard_owner_rule_contracts" in classifier["run"]
     assert "::test_modern_owner_rule_contracts" in classifier["run"]
     assert "::test_melee_split_card_adapter_contract" in classifier["run"]
     assert classifier["run"].count("python -B -m pytest") == 1
+    archetype_names = by_name["Validate archetype name resolution"]
+    assert "archetype-names" in archetype_names["if"]
+    assert "tests/js/phase8-archetype-names.test.js" in archetype_names["run"]
     assert "schema-contract" in by_name["Validate changed public JSON contracts"]["if"]
     assert "schema-documents" in by_name["Validate changed public JSON contracts"]["if"]
     assert "top8-restatement" in by_name["Validate Top 8 restatement"]["if"]
@@ -192,7 +198,7 @@ def test_targeted_commands_map_directly_to_named_changed_contracts():
         "test_validate_repository_modes.py",
     ):
         assert required in commands
-    assert commands.count("node --test") == 1
+    assert commands.count("node --test") == 2
     checkout = by_name["Check out repository without persisted credentials"]
     assert checkout["with"]["fetch-depth"] == "0"
     repository_validation = by_name["Validate repository files and references"]["run"]
