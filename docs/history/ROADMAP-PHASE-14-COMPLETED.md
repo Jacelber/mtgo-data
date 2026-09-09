@@ -166,3 +166,79 @@ permission wording describes that historical stage, not current authority.
   all 19 expected events. Card names, images, and outbound links follow the
   accepted Chinese/MTGCH and English/Scryfall locale contracts. Pauper remains
   excluded from public catalogs and Pages assets.
+
+### P14-05 — Trial the Owner-supplied Paupergeddon event
+
+- **Problem:** the event's real round labels, decklists, and result completeness
+  could not be established from assumptions.
+- **Operation:** after the Owner supplied Melee event `438329`, collect it once
+  into a disposable private location, classify it with the accepted Pauper
+  taxonomy, and validate the proposed `constructed_day2` strategy without
+  changing the formal registry or public catalog.
+- **Effect:** the source, round strategy, and classifier compatibility were
+  reviewed before any retained event admission.
+- **Validation:** the retained checkpoint was reused through the bounded source
+  compatibility repair and full classification review; no repeated real-data
+  request was used as a substitute for diagnosis.
+- **Stop:** Owner acceptance of the admit conclusion; P14-06 remained separately
+  authorized.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+- **Completion evidence:** the Owner accepted the repaired source-compatibility
+  result and every classified or intentional-Unknown event record. The private
+  checkpoint then became the exact retained input authorized for P14-06.
+
+### P14-06 — Implement the separately approved Paupergeddon product
+
+- **Problem:** a successful disposable trial was evidence, not authority to
+  retain or publish the event.
+- **Operation:** register only event `438329`, normalize its retained checkpoint,
+  generate event-specific overview and matchup statistics, and prove the
+  active-taxonomy and private-public boundaries before Owner review.
+- **Effect:** a private Tabletop Pauper candidate reused the shared classifier
+  while its source data and statistics remained separate from MTGO.
+- **Expected paths:** the exact event registry entry, approved source and
+  normalized event data, `stats/pauper/melee/`, applicable manifest entries,
+  and focused producer and consumer tests.
+- **Stop:** Owner acceptance of the exact private Tabletop subject; catalog and
+  Pages admission remained unopened.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+- **Completion evidence:** the Owner accepted the private event `438329`
+  overview and matchup product. The normalized event digest retained for final
+  publication is recorded in `docs/audits/P14-07B.md`.
+
+### P14-07 — Coordinate admission, publication, and closeout
+
+- **Problem:** enabling only one source or MTGO view would create a partial
+  public format and inconsistent navigation.
+- **Operation A — shared production acceptance:** generalize the complete-public
+  production and admission boundary with synthetic third-format subjects while
+  preserving least privilege, concurrency, validation before publication,
+  failure reporting, and exact-evidence Pages admission.
+- **Operation B — coordinated admission:** after separate acceptance of the
+  unchanged MTGO and Tabletop subjects, admit every required Pauper product
+  together through generated catalogs, verify retained product behavior, and
+  use the normal commit, Ready PR, merge, exact-SHA Pages, and documentation
+  closeout gates.
+- **Effect:** Pauper appears once as a complete catalog-driven format with
+  separate MTGO and Tabletop products and the accepted bilingual card behavior.
+- **Validation:** the final immutable candidate received one complete repository,
+  rule, Schema, invariant, and production-consumer validation path.
+- **Stop:** Phase 14 complete. Phase 15 remains separately unauthorized.
+- **Recommended model:** `gpt-5.6-sol`, high reasoning.
+- **Completion evidence:** P14-07A's shared boundary, the Elves compatibility
+  repair, and the W36 Grixis Control/Jund Ramp classifier repair were separately
+  accepted before final restaging. Classifier repair PR #392 merged as
+  `6dfbbe26002730b795219b1822179c831959bdc9`. On 2026-09-10 the Owner authorized
+  the exact 109-event Pauper initial public scope through `12853701`, explicitly
+  excluding `12853710`, and authorized the coordinated PR, merge, and Pages
+  publication chain. Exact candidate evidence is in `docs/audits/P14-07B.md`.
+
+## Final acceptance criteria
+
+Phase 14 completed with the card-localization rights gates still enforced, one
+shared Pauper taxonomy across both sources, and no parallel Pauper statistics
+engine, renderer, page, catalog, workflow, or source-specific taxonomy. MTGO
+and Melee source data and statistics remain separate. The complete five-product
+catalog admission is atomic, classifier and generated-contract checks pass,
+and event `12853710` remains outside the accepted public scope. Phase 15 is not
+authorized by this closeout.

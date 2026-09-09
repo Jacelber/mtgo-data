@@ -1,22 +1,22 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "report_type": "subtype_diagnostics",
   "format": "pauper",
   "source": "mtgo",
-  "classifier_digest": "2cc625f1b0b3f7715cb694435f0ce96477227e3a63445e5769d0064e5a10f530",
-  "scope": "all_available_events",
-  "event_count": 107,
-  "data_through": "2026-09-04 13:00:00.0",
+  "classifier_digest": "77d6f81ecd566dd316c36826a7339bdb96bf524398c96dcc7a28e7d4ffd715c3",
+  "scope": "all_admitted_events",
+  "event_count": 109,
+  "data_through": "2026-09-06 17:00:00.0",
   "summary": {
-    "record_count": 245,
+    "record_count": 249,
     "blocking": false,
-    "selected_record_count": 245,
+    "selected_record_count": 249,
     "selected_by_subtype": {
-      "battle-screech/boros": 31,
+      "battle-screech/boros": 32,
       "battle-screech/mono-white": 77,
-      "battle-screech/orzhov": 3,
+      "battle-screech/orzhov": 4,
       "ephemerate/four-color": 12,
-      "ephemerate/jeskai": 110,
+      "ephemerate/jeskai": 112,
       "packbeast-swarm/boros": 2,
       "packbeast-swarm/esper": 1,
       "packbeast-swarm/mardu": 3,
@@ -24,7 +24,7 @@
       "packbeast-swarm/mono-white-learn": 1,
       "packbeast-swarm/selesnya": 1
     },
-    "same_parent_multiple_subtype_matches": 40
+    "same_parent_multiple_subtype_matches": 42
   },
   "records": [
     {
@@ -5241,6 +5241,102 @@
       "event_name": "Pauper Challenge 32",
       "event_start": "2026-09-04 13:00:00.0",
       "source_file": "data/pauper/Pauper_Challenge_32_12853676.json",
+      "selected": {
+        "archetype_id": "ephemerate",
+        "archetype_name": "Jeskai Ephemerate",
+        "subtype_id": "jeskai",
+        "subtype_name": "Jeskai",
+        "rule_id": "jeskai-ephemerate",
+        "priority": 8200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "ephemerate",
+          "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4fa507684d693fde06a8",
+      "event_id": "12853684",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-05 09:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12853684.json",
+      "selected": {
+        "archetype_id": "battle-screech",
+        "archetype_name": "Battle Screech",
+        "subtype_id": "orzhov",
+        "subtype_name": "Orzhov",
+        "rule_id": "orzhov-battle-screech",
+        "priority": 8100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "battle-screech",
+          "subtype_id": "mono-white"
+        },
+        {
+          "archetype_id": "battle-screech",
+          "subtype_id": "orzhov"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "9c8a3ecd9a223df01b3f",
+      "event_id": "12853684",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-05 09:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12853684.json",
+      "selected": {
+        "archetype_id": "battle-screech",
+        "archetype_name": "Battle Screech",
+        "subtype_id": "boros",
+        "subtype_name": "Boros",
+        "rule_id": "boros-battle-screech",
+        "priority": 8090
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "battle-screech",
+          "subtype_id": "boros"
+        },
+        {
+          "archetype_id": "battle-screech",
+          "subtype_id": "mono-white"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "c487e9b826aa531867d6",
+      "event_id": "12853684",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-05 09:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12853684.json",
+      "selected": {
+        "archetype_id": "ephemerate",
+        "archetype_name": "Jeskai Ephemerate",
+        "subtype_id": "jeskai",
+        "subtype_name": "Jeskai",
+        "rule_id": "jeskai-ephemerate",
+        "priority": 8200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "ephemerate",
+          "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "2dbc4d97f9b98a543dbf",
+      "event_id": "12853701",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-06 17:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12853701.json",
       "selected": {
         "archetype_id": "ephemerate",
         "archetype_name": "Jeskai Ephemerate",

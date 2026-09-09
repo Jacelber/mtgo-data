@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "pauper",
   "source": "mtgo",
-  "classifier_digest": "2cc625f1b0b3f7715cb694435f0ce96477227e3a63445e5769d0064e5a10f530",
+  "classifier_digest": "77d6f81ecd566dd316c36826a7339bdb96bf524398c96dcc7a28e7d4ffd715c3",
   "period": {
     "type": "12w",
     "start": "2026-06-15",
@@ -14,6 +14,12 @@
   "canonical_level": "leaf",
   "hierarchy": {
     "parents": [
+      {
+        "id": "affinity-combo",
+        "name": "Affinity Combo",
+        "expandable": false,
+        "subtype_ids": []
+      },
       {
         "id": "altar-tron",
         "name": "Altar Tron",
@@ -214,6 +220,12 @@
         "subtype_ids": []
       },
       {
+        "id": "gruul-initiative",
+        "name": "Gruul Initiative",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "gruul-madness",
         "name": "Gruul Madness",
         "expandable": false,
@@ -274,8 +286,20 @@
         "subtype_ids": []
       },
       {
+        "id": "jund-affinity",
+        "name": "Jund Affinity",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "jund-gardens",
         "name": "Jund Gardens",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "jund-ramp",
+        "name": "Jund Ramp",
         "expandable": false,
         "subtype_ids": []
       },
@@ -286,8 +310,32 @@
         "subtype_ids": []
       },
       {
+        "id": "life-combo",
+        "name": "Life Combo",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "mardu-reanimator",
+        "name": "Mardu Reanimator",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "mardu-synthesizer",
         "name": "Mardu Synthesizer",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "midnight-gond",
+        "name": "Midnight Gond",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "mono-black-burn",
+        "name": "Mono-Black Burn",
         "expandable": false,
         "subtype_ids": []
       },
@@ -395,6 +443,12 @@
         ]
       },
       {
+        "id": "persistent-petitioners",
+        "name": "Petitioners Mill",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "proliferate-storm",
         "name": "Poison Storm",
         "expandable": false,
@@ -421,6 +475,12 @@
       {
         "id": "selesnya-gates",
         "name": "Selesnya Gates",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "slivers",
+        "name": "Slivers",
         "expandable": false,
         "subtype_ids": []
       },
@@ -474,6 +534,14 @@
       }
     ],
     "leaves": [
+      {
+        "id": "affinity-combo",
+        "kind": "archetype",
+        "name": "Affinity Combo",
+        "display_name": "Affinity Combo",
+        "parent_id": "affinity-combo",
+        "subtype_id": null
+      },
       {
         "id": "altar-tron",
         "kind": "archetype",
@@ -755,6 +823,14 @@
         "subtype_id": null
       },
       {
+        "id": "gruul-initiative",
+        "kind": "archetype",
+        "name": "Gruul Initiative",
+        "display_name": "Gruul Initiative",
+        "parent_id": "gruul-initiative",
+        "subtype_id": null
+      },
+      {
         "id": "gruul-madness",
         "kind": "archetype",
         "name": "Gruul Madness",
@@ -835,11 +911,27 @@
         "subtype_id": null
       },
       {
+        "id": "jund-affinity",
+        "kind": "archetype",
+        "name": "Jund Affinity",
+        "display_name": "Jund Affinity",
+        "parent_id": "jund-affinity",
+        "subtype_id": null
+      },
+      {
         "id": "jund-gardens",
         "kind": "archetype",
         "name": "Jund Gardens",
         "display_name": "Jund Gardens",
         "parent_id": "jund-gardens",
+        "subtype_id": null
+      },
+      {
+        "id": "jund-ramp",
+        "kind": "archetype",
+        "name": "Jund Ramp",
+        "display_name": "Jund Ramp",
+        "parent_id": "jund-ramp",
         "subtype_id": null
       },
       {
@@ -851,11 +943,43 @@
         "subtype_id": null
       },
       {
+        "id": "life-combo",
+        "kind": "archetype",
+        "name": "Life Combo",
+        "display_name": "Life Combo",
+        "parent_id": "life-combo",
+        "subtype_id": null
+      },
+      {
+        "id": "mardu-reanimator",
+        "kind": "archetype",
+        "name": "Mardu Reanimator",
+        "display_name": "Mardu Reanimator",
+        "parent_id": "mardu-reanimator",
+        "subtype_id": null
+      },
+      {
         "id": "mardu-synthesizer",
         "kind": "archetype",
         "name": "Mardu Synthesizer",
         "display_name": "Mardu Synthesizer",
         "parent_id": "mardu-synthesizer",
+        "subtype_id": null
+      },
+      {
+        "id": "midnight-gond",
+        "kind": "archetype",
+        "name": "Midnight Gond",
+        "display_name": "Midnight Gond",
+        "parent_id": "midnight-gond",
+        "subtype_id": null
+      },
+      {
+        "id": "mono-black-burn",
+        "kind": "archetype",
+        "name": "Mono-Black Burn",
+        "display_name": "Mono-Black Burn",
+        "parent_id": "mono-black-burn",
         "subtype_id": null
       },
       {
@@ -1027,6 +1151,14 @@
         "subtype_id": "selesnya"
       },
       {
+        "id": "persistent-petitioners",
+        "kind": "archetype",
+        "name": "Petitioners Mill",
+        "display_name": "Petitioners Mill",
+        "parent_id": "persistent-petitioners",
+        "subtype_id": null
+      },
+      {
         "id": "proliferate-storm",
         "kind": "archetype",
         "name": "Poison Storm",
@@ -1064,6 +1196,14 @@
         "name": "Selesnya Gates",
         "display_name": "Selesnya Gates",
         "parent_id": "selesnya-gates",
+        "subtype_id": null
+      },
+      {
+        "id": "slivers",
+        "kind": "archetype",
+        "name": "Slivers",
+        "display_name": "Slivers",
+        "parent_id": "slivers",
         "subtype_id": null
       },
       {
