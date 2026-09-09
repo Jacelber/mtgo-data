@@ -117,6 +117,26 @@ def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_
     )
     Draft202012Validator.check_schema(schema)
     assert list(Draft202012Validator(schema).iter_errors(document)) == []
+
+
+def test_public_landing_schema_admits_pauper_without_opening_format_enum():
+    schema = json.loads(
+        (ROOT / "schemas" / "mtgo-landing.schema.json").read_text(encoding="utf-8")
+    )
+    public_format_rule = schema["allOf"][0]
+
+    assert public_format_rule["if"]["properties"]["schema_version"]["enum"] == [
+        "1.0.0",
+        "1.1.0",
+        "1.2.0",
+    ]
+    assert public_format_rule["then"]["properties"]["format"]["enum"] == [
+        "standard",
+        "modern",
+        "pauper",
+    ]
+
+
 def test_cross_field_population_mismatch_fails_closed():
     document = json.loads(
         (ROOT / "stats" / "standard" / "mtgo" / "landing" / "current.json").read_text(

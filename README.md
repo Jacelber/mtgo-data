@@ -13,8 +13,8 @@ Completed-task history is indexed under [`docs/history/`](docs/history/README.md
 
 | Product | Public formats | Entry |
 | --- | --- | --- |
-| MTGO Environment Trends | Standard, Modern | `/index.html` |
-| Tabletop Major Events | Modern (events `405590`, `441441`, `434455`) | `/melee/index.html` |
+| MTGO Environment Trends | Standard, Pauper, Modern | `/index.html` |
+| Tabletop Major Events | Pauper (event `438329`), Modern (events `405590`, `441441`, `434455`) | `/melee/index.html` |
 
 ## Product boundaries
 

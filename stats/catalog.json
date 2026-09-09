@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "document_type": "consumer_catalog",
-  "generated": "2026-09-09T13:15:09+00:00",
+  "generated": "2026-09-09T15:34:40+00:00",
   "formats": [
     {
       "id": "standard",
@@ -40,32 +40,32 @@
       "id": "pauper",
       "display_name": "Pauper",
       "state": "executable",
-      "default_product_id": null,
+      "default_product_id": "mtgo-landing",
       "products": [
         {
           "id": "mtgo-statistics",
-          "available": false,
-          "path": null
+          "available": true,
+          "path": "stats/pauper/mtgo/meta.json"
         },
         {
           "id": "mtgo-matchups",
-          "available": false,
-          "path": null
+          "available": true,
+          "path": "stats/pauper/mtgo/matchup_index.json"
         },
         {
           "id": "mtgo-top8",
-          "available": false,
-          "path": null
+          "available": true,
+          "path": "stats/pauper/mtgo/top8/index.json"
         },
         {
           "id": "mtgo-landing",
-          "available": false,
-          "path": null
+          "available": true,
+          "path": "stats/pauper/mtgo/landing/current.json"
         },
         {
           "id": "tabletop-major-events",
-          "available": false,
-          "path": null
+          "available": true,
+          "path": "stats/pauper/melee/index.json"
         }
       ]
     },

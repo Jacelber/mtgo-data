@@ -16,7 +16,9 @@ Completed and superseded roadmap detail is non-authoritative history:
 - the complete Phase 13 design, task sequence, acceptance criteria, and closeout
   record: `docs/history/ROADMAP-PHASE-13-COMPLETED.md`;
 - the completed Pre-Phase-14 localization reset and minimal implementation:
-  `docs/history/ROADMAP-PRE-14-COMPLETED.md`.
+  `docs/history/ROADMAP-PRE-14-COMPLETED.md`;
+- the complete Phase 14 task sequence, acceptance criteria, and closeout record:
+  `docs/history/ROADMAP-PHASE-14-COMPLETED.md`.
 
 ## Phase index
 
@@ -25,7 +27,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 | 12 | Productize loading, state, accessibility, sharing, and the MTGO Landing under one visual system. | Complete on 2026-08-25 |
 | 13 | Aggregate compatible multi-event matchups from raw counts. | Complete on 2026-08-27 |
 | Pre-14 | Establish provenance-safe Chinese card names and complete card images. | Owner accepted on 2026-08-29; completion authorized |
-| 14 | Add Pauper MTGO and approved Paupergeddon support. | Active; shared repair precedes private generation |
+| 14 | Add Pauper MTGO and approved Paupergeddon support. | Complete on 2026-09-10 |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
 | 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
 | 17 | Add qualifying Standard Tabletop events. | Planned; not authorized |
@@ -75,150 +77,17 @@ with its shared-repair lane; later tasks remain separate.
 
 # Phase 14 — Pauper MTGO and Paupergeddon
 
-## Objective
+Phase 14 completed on 2026-09-10 after the Owner accepted one coordinated
+public admission of the complete Pauper MTGO product and Paupergeddon event
+`438329`. Pauper now reuses the shared classifier, generators, catalogs, and
+front ends while MTGO and Tabletop source data and statistics remain separate.
+The admission includes 109 explicitly reviewed MTGO events through 2026-W36;
+event `12853710` remains excluded.
 
-Add Pauper to both product tracks after the Modern reference path, reusable
-event strategies, and the separately accepted card-localization foundation are
-stable.
-
-## Required work
-
-Use the shared classifier and stable Pauper archetype identities for both
-sources while keeping MTGO and Tabletop inputs, outputs, statistics, catalogs,
-and product behavior separate. Depend on the engineering and front-end
-baselines established by Phases 10 through 13.
-
-Phase 14 is a third-format reuse proof, not a Pauper-specific product copy.
-Every task must inspect the existing shared producer, contract, validator, and
-consumer before adding a path. Pauper-specific rules, data, and reviewed
-content are permitted; a parallel statistics engine, Landing renderer, page,
-catalog, workflow, or source-specific taxonomy is not. A small closed-enum or
-parameter extension may stay in the directly affected task. A material shared
-framework gap must be repaired and separately accepted before Pauper input
-enters that layer.
-
-Pauper must publish an admitted Landing under the Phase 12 contract in the same
-public launch as its other required MTGO products. Until that complete set is
-ready, the format remains unavailable in the public catalog. The Owner supplies
-the Paupergeddon event link only when `P14-05` is authorized. Its trial data
-remains disposable and non-public until a later explicit event-admission task.
-
-The complete read-only base inventory, invalidation map, task path envelopes,
-risk-triggered validation, and state transitions are frozen in
-`docs/audits/P14-00.md`. Its observed archive counts describe only the P14-00
-base and are not fixed acceptance facts.
-
-## Reuse and admission sequence
-
-1. freeze the Phase 14 contract without changing product behavior;
-2. accept one Pauper taxonomy shared by MTGO and Tabletop;
-3. repair any material third-format MTGO contract gap with synthetic input
-   before generating Pauper output;
-4. generate and accept a complete private Pauper MTGO product while
-   `public: false` keeps every catalog capability unavailable;
-5. generalize the Landing/maintenance carrier with synthetic third-format
-   subjects before importing Pauper human review;
-6. trial the Owner-supplied real event once in a disposable non-public location;
-7. after separate event admission, build a private Tabletop Pauper product; and
-8. generalize the production/admission boundary before one coordinated complete
-   Pauper launch.
-
-The existing format registry permits an executable but non-public format. The
-generated catalog exposes products only for a public format and rejects a
-public format missing any required MTGO product. Phase 14 reuses that state
-model; it does not add an intermediate public capability.
-
-## Task sequence
-
-Completed P14-00 through P14-04 detail is preserved in
-`docs/history/ROADMAP-PHASE-14-COMPLETED.md`. The accepted classifier, private
-data/statistics candidate, and reviewed Landing now form one accepted complete
-Pauper MTGO subject. Pauper remains private and absent from the public catalog.
-
-### P14-05 — Trial the Owner-supplied Paupergeddon event
-
-- **Problem:** the event's real round labels, decklists, and result completeness
-  cannot be established from assumptions.
-- **Operation:** only after the Owner supplies and authorizes the exact event
-  link, collect it into a disposable test location, classify it with the
-  accepted Pauper taxonomy, and validate the proposed `constructed_day2`
-  strategy. Do not add it to `configs/melee_events.yaml`, the public catalog,
-  Pages, production retention, or a front end.
-- **Effect:** the Owner receives a quality and compatibility report based on the
-  real event while the test event remains non-public and disposable.
-- **Validation:** collect once, reuse the snapshot during diagnosis, and delete
-  all temporary registration, source, derived output, and HMAC material after
-  the exact quality harness completes.
-- **Stop:** present admit, repair, defer, or reject options. Trial success does
-  not authorize P14-06.
-- **Recommended model:** `gpt-5.6-sol`, high reasoning.
-
-### P14-06 — Implement the separately approved Paupergeddon product
-
-- **Problem:** a successful disposable trial is evidence, not authorization to
-  retain or publish the event.
-- **Operation:** after separate Owner approval, register only the exact approved
-  main event, normalize and validate it under the accepted event strategy,
-  generate event-specific overview and matchup statistics, and prove the
-  active-taxonomy and privacy/publication boundaries.
-- **Effect:** a private Tabletop Pauper candidate reuses the same classifier but
-  keeps its source data and statistics separate from MTGO.
-- **Expected paths:** the exact approved `configs/melee_events.yaml` entry,
-  approved source/normalized event paths, `stats/pauper/melee/`, quality/privacy
-  evidence, applicable manifest entries, and focused producer/consumer tests.
-- **Stop:** Owner acceptance of the exact private Tabletop subject. No catalog
-  or Pages admission follows automatically.
-- **Recommended model:** `gpt-5.6-sol`, high reasoning.
-
-### P14-07 — Coordinate admission, publication, and closeout
-
-- **Problem:** enabling one source or one MTGO view early would create a partial
-  public format and inconsistent navigation.
-- **Operation A — shared production acceptance:** before publication, reuse
-  the P14-02A registry-derived product/hierarchy selection and private Pages
-  exclusion. Review only remaining candidate, admission, and metadata gaps
-  against the eventual complete accepted product; preserve least
-  privilege, concurrency, immutable candidate transfer, validation before
-  publication, failure reporting, and exact-evidence Pages admission. This is a
-  separate Owner-authorized and Owner-accepted task and changes no generated
-  Pauper product bytes.
-- **Operation B — coordinated admission:** after separate acceptance of the
-  unchanged MTGO and Tabletop subjects, admit every required Pauper product
-  together through generated catalogs, verify both front ends and retained
-  Standard/Modern behavior, then use the normal commit, Ready PR, merge,
-  exact-SHA Pages, and documentation closeout gates. Stop on any changed subject,
-  failed check, conflict, permission blocker, or new decision.
-- **Effect:** Pauper appears once as a complete catalog-driven format with
-  separate MTGO and Tabletop products, verified Chinese card fallback, and
-  recoverable publication evidence.
-- **Validation:** synthetic registry routing proves collection-only, private,
-  incomplete-public, and complete-public states before the final immutable
-  candidate receives its one applicable publication path.
-- **Stop:** Phase 14 complete. Phase 15 remains separately unauthorized.
-- **Recommended model:** `gpt-5.6-sol`, high reasoning.
-
-## Acceptance criteria
-
-Phase 14 is complete when:
-
-- the card-localization foundation is accepted and its unresolved rights gates
-  remain enforced;
-- shared Pauper archetype IDs are used by both sources;
-- every Pauper layer reuses the maintained shared owner or records and
-  separately accepts a material shared-framework repair before Pauper input;
-- no parallel Pauper statistics engine, Landing renderer, page, catalog,
-  workflow, or source-specific taxonomy was introduced;
-- MTGO and Melee data remain separate;
-- MTGO and Melee statistics remain separate;
-- Pauper rules pass their focused validation;
-- Standard and Modern named regressions pass without repeating unrelated tests;
-- the Owner-supplied real-event trial remained non-public until separate event
-  admission;
-- front-end format selection is catalog-driven;
-- Pauper is not public until Landing and every required MTGO product are
-  admitted together;
-- quality, localization-fallback, and publication evidence are available; and
-- Phase 15 remains unauthorized until separately opened.
+The complete contract, task sequence, acceptance criteria, and closeout
+evidence are preserved in
+`docs/history/ROADMAP-PHASE-14-COMPLETED.md` and `docs/audits/P14-07B.md`.
+Phase 15 remains separately unauthorized.
 
 ---
 
