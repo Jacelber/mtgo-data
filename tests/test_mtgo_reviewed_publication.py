@@ -265,7 +265,7 @@ def test_unknown_policy_is_not_expanded_by_data_acceptance(tmp_path):
             accepted_on="2025-02-03", evidence="synthetic acceptance cannot override Unknown policy")
 
 
-def test_execute_materializes_only_after_existing_validation_and_browser_gate(tmp_path, monkeypatch):
+def test_execute_materializes_only_after_existing_deterministic_validation(tmp_path, monkeypatch):
     from types import SimpleNamespace
     import subprocess
     from mtgmeta import classifier_closure, catalog
@@ -288,9 +288,11 @@ def test_execute_materializes_only_after_existing_validation_and_browser_gate(tm
         executed = "\n".join(" ".join(command) for command in calls)
         for name in ("validate_repository.py", "validate_rules.py", "validate_schemas.py",
                      "validate_output_invariants.py", "test_generated_consumer_contracts.py",
-                     "production-pages.spec.js", "diff --exit-code"):
+                     "diff --exit-code"):
             assert name in executed
-        assert executed.index("validate_schemas.py") < executed.index("production-pages.spec.js") < executed.index("diff --exit-code")
+        assert executed.index("validate_schemas.py") < executed.index("test_generated_consumer_contracts.py") < executed.index("diff --exit-code")
+        assert "playwright" not in executed
+        assert "production-pages.spec.js" not in executed
         assert all(path.startswith(("stats/standard/", "reports/standard/")) or path == "stats/catalog.json" for path in paths)
         materialize(root, stage, paths, **kwargs)
     monkeypatch.setattr(classifier_closure, "_materialize_with_rollback", replace)
@@ -301,3 +303,124 @@ def test_execute_materializes_only_after_existing_validation_and_browser_gate(tm
     for path, content in before.items():
         if str(path).replace("\\", "/").startswith(("data/", "configs/", "stats/modern/")):
             assert (tmp_path / path).read_bytes() == content
+
+
+def test_joint_staging_converges_two_stale_public_formats(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    import subprocess
+    from mtgmeta import classifier_closure, catalog
+    from mtgmeta.mtgo import publication, metadata, landing_editorial
+
+    _repository(tmp_path)
+    for fmt in ("standard", "modern"):
+        _generate(tmp_path, fmt)
+        landing = tmp_path / f"stats/{fmt}/mtgo/landing/current.json"
+        document = json.loads(landing.read_text())
+        document["accepted_revision"] = "joint-staging"
+        _write(landing, document)
+        assert publication.inspect_publication(tmp_path, fmt)
+
+    calls = []
+
+    def run(command, **kwargs):
+        calls.append([str(part) for part in command])
+        return SimpleNamespace(stdout="", returncode=0)
+
+    monkeypatch.setattr(subprocess, "run", run)
+    monkeypatch.setattr(
+        classifier_closure, "_protected_input_fingerprints", lambda *args: {}
+    )
+    monkeypatch.setattr(
+        metadata, "rules_last_commit_iso", lambda *args: "2025-02-03T00:00:00Z"
+    )
+    monkeypatch.setattr(catalog, "write_catalog", lambda *args: None)
+    monkeypatch.setattr(
+        landing_editorial, "generate_public_name_contract", lambda *args: None
+    )
+    monkeypatch.setattr(
+        classifier_closure, "inspect_format", lambda *args: {"state": "CURRENT"}
+    )
+
+    result = publication.stage_publications(
+        tmp_path, ("standard", "modern"), execute=True
+    )
+
+    assert result["formats"] == ["standard", "modern"]
+    assert any(path.startswith("stats/standard/") for path in result["changed_paths"])
+    assert any(path.startswith("stats/modern/") for path in result["changed_paths"])
+    assert publication.inspect_publication(tmp_path, "standard") == []
+    assert publication.inspect_publication(tmp_path, "modern") == []
+    commands = [" ".join(command) for command in calls]
+    assert sum("validate_repository.py" in command for command in commands) == 1
+    assert sum("validate_rules.py" in command for command in commands) == 2
+
+
+def test_joint_staging_rolls_back_both_formats_on_materialization_failure(
+    tmp_path, monkeypatch
+):
+    from types import SimpleNamespace
+    import subprocess
+    from mtgmeta import classifier_closure, catalog
+    from mtgmeta.mtgo import publication, metadata, landing_editorial
+
+    _repository(tmp_path)
+    for fmt in ("standard", "modern"):
+        _generate(tmp_path, fmt)
+        landing = tmp_path / f"stats/{fmt}/mtgo/landing/current.json"
+        document = json.loads(landing.read_text())
+        document["accepted_revision"] = "joint-staging"
+        _write(landing, document)
+    before = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    }
+
+    monkeypatch.setattr(
+        subprocess,
+        "run",
+        lambda *args, **kwargs: SimpleNamespace(stdout="", returncode=0),
+    )
+    monkeypatch.setattr(
+        classifier_closure, "_protected_input_fingerprints", lambda *args: {}
+    )
+    monkeypatch.setattr(
+        metadata, "rules_last_commit_iso", lambda *args: "2025-02-03T00:00:00Z"
+    )
+    monkeypatch.setattr(catalog, "write_catalog", lambda *args: None)
+    monkeypatch.setattr(
+        landing_editorial, "generate_public_name_contract", lambda *args: None
+    )
+    monkeypatch.setattr(
+        classifier_closure, "inspect_format", lambda *args: {"state": "CURRENT"}
+    )
+    materialize = classifier_closure._materialize_with_rollback
+
+    def fail_during_materialization(root, stage, paths, **kwargs):
+        replacements = 0
+
+        def replace(source, target):
+            nonlocal replacements
+            replacements += 1
+            if replacements == 2:
+                raise OSError("synthetic joint replacement failure")
+            source.replace(target)
+
+        materialize(root, stage, paths, replace_file=replace, **kwargs)
+
+    monkeypatch.setattr(
+        classifier_closure, "_materialize_with_rollback", fail_during_materialization
+    )
+
+    with pytest.raises(
+        classifier_closure.ClassifierClosureError, match="was rolled back"
+    ):
+        publication.stage_publications(
+            tmp_path, ("standard", "modern"), execute=True
+        )
+
+    assert {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    } == before

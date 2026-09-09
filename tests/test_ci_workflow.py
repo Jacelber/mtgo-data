@@ -390,12 +390,8 @@ def test_melee_candidate_binds_browser_smoke_to_exact_staged_tree():
         "Classify submitted decks strictly",
         "Stage validated candidate scope",
         "Validate repository, rules, and Schemas",
-        "Set up Node.js 24 for candidate consumer smoke",
-        "Install pinned browser-test package",
-        "Install Chromium with runner dependencies",
         "Bind exact staged candidate tree",
-        "Render exact Melee candidate in Chromium",
-        "Confirm browser-validated candidate tree",
+        "Confirm validated candidate tree",
         "Commit and push review branch",
     )
     assert [names.index(name) for name in ordered] == sorted(
@@ -408,17 +404,7 @@ def test_melee_candidate_binds_browser_smoke_to_exact_staged_tree():
     assert "git write-tree" in bind["run"]
     assert 'echo "tree=$CANDIDATE_TREE" >> "$GITHUB_OUTPUT"' in bind["run"]
 
-    smoke = by_name["Render exact Melee candidate in Chromium"]
-    assert smoke["env"] == {
-        "TABLETOP_CANDIDATE_FORMAT": "${{ steps.whitelist.outputs.format }}",
-        "TABLETOP_CANDIDATE_EVENT_ID": "${{ inputs.event_id }}",
-    }
-    assert smoke["run"] == (
-        "npx playwright test tests/browser/production-pages.spec.js "
-        "--grep 'Tabletop entry renders candidate-derived data'"
-    )
-
-    confirm = by_name["Confirm browser-validated candidate tree"]["run"]
+    confirm = by_name["Confirm validated candidate tree"]["run"]
     assert "git diff --quiet" in confirm
     assert "git write-tree" in confirm
     assert "${{ steps.candidate-tree.outputs.tree }}" in confirm
@@ -430,8 +416,8 @@ def test_melee_candidate_binds_browser_smoke_to_exact_staged_tree():
     assert "${{ steps.candidate-tree.outputs.tree }}" in publish
     assert publish.index("git commit") < publish.rindex("git rev-parse 'HEAD^{tree}'")
 
-    after_smoke = steps[names.index("Render exact Melee candidate in Chromium") + 1 :]
-    commands = "\n".join(step.get("run", "") for step in after_smoke)
+    after_validation = steps[names.index("Confirm validated candidate tree") + 1 :]
+    commands = "\n".join(step.get("run", "") for step in after_validation)
     for prohibited in ("git add", "mtgmeta.", "validate_schemas.py", "ruff", "prettier"):
         assert prohibited not in commands
 
@@ -612,7 +598,10 @@ def test_production_build_orders_landing_screening_before_landing_and_catalog():
     assert "build-landing" in steps[landing_index]["run"]
     reports_index = names.index("Generate and strictly validate product classification diagnostics")
     assert reports_index < metadata_index < names.index("Validate repository files and references")
-    assert names.index("Render generated production pages in Chromium") < names.index("Package validated output for the publish job")
+    assert "Render generated production pages in Chromium" not in names
+    assert "Install pinned browser-test package" not in names
+    assert "Install Chromium with runner dependencies" not in names
+    assert names.index("Validate generated consumer contracts") < names.index("Package validated output for the publish job")
 
 
 def test_mtgo_fetch_retries_only_explicit_transient_source_failures():

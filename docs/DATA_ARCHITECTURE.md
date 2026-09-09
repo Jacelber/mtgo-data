@@ -2722,8 +2722,7 @@ The retained data/output set consists of:
 - one offline smoke for each installed command entry point;
 - the minimum Melee pre-persistence privacy boundary;
 - direct public Schema and value-independent output validators;
-- the generated consumer contract; and
-- one generated-page browser smoke at the MTGO candidate output gate.
+- the generated consumer contract.
 
 The targeted control plane separately retains only the live-status contract,
 CI admission/workflow contract, maintained-code lint/type checks, rule/Schema
@@ -2735,8 +2734,8 @@ paths change; they are not part of a production baseline.
 Before live collection, each workflow runs only the offline command and privacy
 checks for the commands it is about to use. After generation, validation binds
 to the new candidate: candidate-path allowlists, repository/rule/Schema checks,
-output invariants, consumer contracts, and the one generated-page smoke. The
-candidate is validated once before packaging.
+output invariants, and consumer contracts. The candidate is validated once
+before packaging. Browser rendering is not a publication gate.
 
 ### 16.3 Frozen fixtures
 
@@ -3721,10 +3720,14 @@ archetype identity.
 rebuilds only stale deterministic families, validates protected-input
 fingerprints, allowed paths, exact-SHA closure, and the affected JSON Schemas,
 and reports the plan. It never fetches historical data. `converge --execute`
-requires separate authorization and materializes one fully validated format at
-a time. Candidate files and rollback bytes are prepared beside their targets;
-any replacement or final-inspection failure restores the exact pre-execute
-format tree. A retained staging tree may be used for diagnosis.
+requires separate authorization. Ordinary convergence materializes one fully
+validated format at a time. Reviewed MTGO publication may explicitly co-stage
+multiple already accepted public formats when their derived families are stale
+at the same time: one external tree is generated and fully validated before one
+rollback transaction materializes the complete named set. Candidate files and
+rollback bytes are prepared beside their targets; any replacement or final-
+inspection failure restores the exact pre-execute tree. A retained staging tree
+may be used for diagnosis.
 
 The format states are `CURRENT`, `STALE_REGENERABLE`,
 `BLOCKED_OWNER_REVIEW`, and `INVALID`. A format is current only with zero
