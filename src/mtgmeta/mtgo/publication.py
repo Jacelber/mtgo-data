@@ -311,97 +311,190 @@ def prepare_review(root: Path, format_id: str, week: str, output: Path) -> Path:
     return output
 
 
-def stage_publication(root: Path, format_id: str, *, include_landing: bool = False,
-                      execute: bool = False) -> dict[str, Any]:
-    """Explicit offline operation; stage and validate before touching final files.
-
-    Reuse the existing classifier-closure file replacement/rollback implementation.
-    Neither this operation nor ordinary producer calls create an Owner approval.
-    """
+def stage_publications(
+    root: Path,
+    format_ids: Sequence[str],
+    *,
+    include_landing: bool = False,
+    execute: bool = False,
+) -> dict[str, Any]:
+    """Stage one or more accepted formats and materialize them atomically."""
     import os
-    import shutil
     import subprocess
     import sys
-    import tempfile
-    from ..classifier_closure import _materialize_with_rollback, _protected_input_fingerprints, inspect_format
+    from time import perf_counter
+    from ..classifier_closure import (
+        _copy_repository_to_stage,
+        _materialize_with_rollback,
+        _protected_input_fingerprints,
+        inspect_format,
+    )
     from ..classification_reports_cli import generate_reports
     from ..catalog import write_catalog
     from . import completeness, landing, landing_editorial, matchup, metadata, stats, top8
 
+    formats = tuple(format_ids)
+    if not formats or len(formats) != len(set(formats)):
+        raise PublicationError("publication staging requires unique formats")
     root = root.resolve()
-    subject = resolve_scope(root, format_id)
-    protected = _protected_input_fingerprints(root, format_id)
-    stage = Path(tempfile.mkdtemp(prefix=f"mtgo-publication-{format_id}-", dir=root.parent))
-    shutil.copytree(root, stage, dirs_exist_ok=True,
-                    ignore=shutil.ignore_patterns(".git", ".venv", "node_modules", "__pycache__", ".pytest_cache", "test-results", "playwright-report"))
+    subjects = {format_id: resolve_scope(root, format_id) for format_id in formats}
+    protected = {
+        format_id: _protected_input_fingerprints(root, format_id)
+        for format_id in formats
+    }
+    stage_started = perf_counter()
+    stage = _copy_repository_to_stage(
+        root, f"mtgo-publication-{'-'.join(formats)}-"
+    )
+    print(
+        json.dumps(
+            {
+                "formats": list(formats),
+                "operation": "mtgo-publication-progress",
+                "phase": "copy-stage",
+                "seconds": round(perf_counter() - stage_started, 3),
+            },
+            sort_keys=True,
+        ),
+        file=sys.stderr,
+        flush=True,
+    )
     # A separate local index gives the existing read-only repository validator
     # its tracked inventory without creating any commit or remote publication.
     subprocess.run(["git", "init", "--quiet", str(stage)], check=True)
     subprocess.run(["git", "-C", str(stage), "config", "core.autocrlf", "false"], check=True)
-    before_paths = artifact_paths(root, format_id)
-    before = {path: hashlib.sha256((root / path).read_bytes()).hexdigest() for path in before_paths}
-    meta_path = f"stats/{format_id}/mtgo/meta.json"
-    before[meta_path] = hashlib.sha256((root / meta_path).read_bytes()).hexdigest()
-    for path in (f"stats/{format_id}/archetype_names.json", "stats/catalog.json"):
+    before_paths = {
+        format_id: artifact_paths(root, format_id) for format_id in formats
+    }
+    before: dict[str, str] = {}
+    for format_id in formats:
+        for path in (
+            *before_paths[format_id],
+            f"stats/{format_id}/mtgo/meta.json",
+            f"stats/{format_id}/archetype_names.json",
+        ):
+            before[path] = hashlib.sha256((root / path).read_bytes()).hexdigest()
+    for path in ("stats/catalog.json",):
         before[path] = hashlib.sha256((root / path).read_bytes()).hexdigest()
-    stats.build_all_stats(stage, format_id)
-    matchup.build_all_matchups(stage, format_id)
-    completeness.build_all_completeness(stage, format_id)
-    top8.build_all_top8(stage, format_id)
-    metadata.generate_hierarchy_catalog(stage, format_id,
-        rules_updated=metadata.rules_last_commit_iso(root, root / "my_archetypes" / f"{format_id}.yaml"))
-    landing_editorial.generate_public_name_contract(stage, format_id)
-    generate_reports(stage, format_id)
-    if include_landing:
-        result = landing.generate(stage, format_id)
-        if result["status"] in {"stale_review_required", "summary_review_required"}:
-            raise PublicationError(f"BLOCKED_OWNER_REVIEW: {result['status']}; stage retained at {stage}")
-    metadata.generate_metadata(stage, format_id,
-        rules_updated=metadata.rules_last_commit_iso(root, root / "my_archetypes" / f"{format_id}.yaml"))
+    for format_id in formats:
+        stats.build_all_stats(stage, format_id)
+        matchup.build_all_matchups(stage, format_id)
+        completeness.build_all_completeness(stage, format_id)
+        top8.build_all_top8(stage, format_id)
+        rules_updated = metadata.rules_last_commit_iso(
+            root, root / "my_archetypes" / f"{format_id}.yaml"
+        )
+        metadata.generate_hierarchy_catalog(
+            stage, format_id, rules_updated=rules_updated
+        )
+        landing_editorial.generate_public_name_contract(stage, format_id)
+        generate_reports(stage, format_id)
+        if include_landing:
+            result = landing.generate(stage, format_id)
+            if result["status"] in {
+                "stale_review_required",
+                "summary_review_required",
+            }:
+                raise PublicationError(
+                    f"BLOCKED_OWNER_REVIEW: {format_id}: {result['status']}; "
+                    f"stage retained at {stage}"
+                )
+        metadata.generate_metadata(stage, format_id, rules_updated=rules_updated)
     write_catalog(stage)
-    issues = inspect_publication(stage, format_id)
-    if issues:
-        raise PublicationError(f"invalid staged publication: {issues}; {stage}")
-    closure = inspect_format(stage, format_id)
-    if closure["state"] != "CURRENT":
-        raise PublicationError(f"BLOCKED_OWNER_REVIEW: staged classifier closure {closure}; {stage}")
-    if _protected_input_fingerprints(stage, format_id) != protected:
-        raise PublicationError(f"staging changed a protected input; {stage}")
+    for format_id in formats:
+        issues = inspect_publication(stage, format_id)
+        if issues:
+            raise PublicationError(
+                f"invalid staged publication for {format_id}: {issues}; {stage}"
+            )
+        closure = inspect_format(stage, format_id)
+        if closure["state"] != "CURRENT":
+            raise PublicationError(
+                f"BLOCKED_OWNER_REVIEW: staged classifier closure {closure}; {stage}"
+            )
+        if _protected_input_fingerprints(stage, format_id) != protected[format_id]:
+            raise PublicationError(
+                f"staging changed a protected input for {format_id}; {stage}"
+            )
     subprocess.run(["git", "-C", str(stage), "add", "--all"], check=True)
     environment = dict(os.environ, PYTHONPATH=str(stage / "src"))
-    for script, arguments in (("validate_repository.py", ["--full"]),
-                              ("validate_rules.py", [f"my_archetypes/{format_id}.yaml"]),
-                              ("validate_schemas.py", []), ("validate_output_invariants.py", [])):
+    commands = [("validate_repository.py", ["--full"])]
+    commands.extend(
+        ("validate_rules.py", [f"my_archetypes/{format_id}.yaml"])
+        for format_id in formats
+    )
+    commands.extend((("validate_schemas.py", []), ("validate_output_invariants.py", [])))
+    for script, arguments in commands:
         subprocess.run([sys.executable, "-B", str(stage / script), *arguments],
                        cwd=stage, env=environment, check=True)
     subprocess.run([sys.executable, "-B", "-m", "pytest", "-q",
                     "tests/test_generated_consumer_contracts.py"],
                    cwd=stage, env=environment, check=True)
-    # Use the existing focused production consumer gate. Dependencies must have
-    # been installed explicitly before this offline operation; never install/fetch here.
-    browser_cli = root / "node_modules/@playwright/test/cli.js"
-    environment["NODE_PATH"] = str(root / "node_modules")
-    subprocess.run(["node", str(browser_cli), "test", "tests/browser/production-pages.spec.js"],
-                   cwd=stage, env=environment, check=True)
     subprocess.run(["git", "-C", str(stage), "diff", "--exit-code"], check=True)
     # No final target has been changed if any preceding operation fails.
-    if artifact_paths(root, format_id) != before_paths or resolve_scope(root, format_id) != subject or _protected_input_fingerprints(root, format_id) != protected or any(
-        hashlib.sha256((root / path).read_bytes()).hexdigest() != sha for path, sha in before.items()
+    final_subject_changed = any(
+        artifact_paths(root, format_id) != before_paths[format_id]
+        or resolve_scope(root, format_id) != subjects[format_id]
+        or _protected_input_fingerprints(root, format_id) != protected[format_id]
+        for format_id in formats
+    )
+    if final_subject_changed or any(
+        hashlib.sha256((root / path).read_bytes()).hexdigest() != sha
+        for path, sha in before.items()
     ):
         raise PublicationError(f"final subject changed during staging; {stage}")
-    paths = [*artifact_paths(stage, format_id), meta_path,
-             f"stats/{format_id}/archetype_names.json", "stats/catalog.json"]
+    paths = sorted(
+        {
+            "stats/catalog.json",
+            *(
+                path
+                for format_id in formats
+                for path in (
+                    *artifact_paths(stage, format_id),
+                    f"stats/{format_id}/mtgo/meta.json",
+                    f"stats/{format_id}/archetype_names.json",
+                )
+            ),
+        }
+    )
     changed = [path for path in paths if not (root / path).is_file()
                or (root / path).read_bytes() != (stage / path).read_bytes()]
     if execute:
         def validate_final():
-            failures = inspect_publication(root, format_id)
+            failures = {
+                format_id: issues
+                for format_id in formats
+                if (issues := inspect_publication(root, format_id))
+            }
             if failures:
                 raise PublicationError(str(failures))
         _materialize_with_rollback(root, stage, changed, validate_final=validate_final)
-    return {"format": format_id, "stage": str(stage), "executed": execute,
+    return {"formats": list(formats), "stage": str(stage), "executed": execute,
             "publication_node": "landing_content" if include_landing else "reviewed_data",
-            "scope_digest": subject.subject_digest, "changed_paths": changed}
+            "scope_digests": {
+                format_id: subjects[format_id].subject_digest
+                for format_id in formats
+            },
+            "changed_paths": changed}
+
+
+def stage_publication(root: Path, format_id: str, *, include_landing: bool = False,
+                      execute: bool = False) -> dict[str, Any]:
+    """Backward-compatible single-format publication staging."""
+    result = stage_publications(
+        root,
+        (format_id,),
+        include_landing=include_landing,
+        execute=execute,
+    )
+    return {
+        "format": format_id,
+        "stage": result["stage"],
+        "executed": result["executed"],
+        "publication_node": result["publication_node"],
+        "scope_digest": result["scope_digests"][format_id],
+        "changed_paths": result["changed_paths"],
+    }
 
 
 def intentional_unknowns(

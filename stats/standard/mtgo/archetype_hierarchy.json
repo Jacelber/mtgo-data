@@ -2,17 +2,23 @@
   "schema_version": "1.1.0",
   "format": "standard",
   "source": "mtgo",
-  "classifier_digest": "4bd98c063a5b621a40a1d81aff7d696e07052859fc2c459f6054076005ebb9f0",
-  "rules_updated": "2026-09-02T19:32:26+09:00",
+  "classifier_digest": "6b71c6949027068126aec45bae2de78c4bdad267379f3e10ebf5de11e493eb27",
+  "rules_updated": "2026-09-08T18:38:27+09:00",
   "summary": {
-    "parents": 116,
-    "leaves": 125,
+    "parents": 119,
+    "leaves": 129,
     "expandable_parents": 4
   },
   "parents": [
     {
       "id": "4-color-allies",
       "name": "Allies Kindred",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "4-color-demons",
+      "name": "4-Color Demons",
       "expandable": false,
       "subtype_ids": []
     },
@@ -177,6 +183,12 @@
       "subtype_ids": []
     },
     {
+      "id": "dimir-faeries",
+      "name": "Dimir Faeries",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "dimir-flash",
       "name": "Dimir Flash",
       "expandable": false,
@@ -206,7 +218,8 @@
       "expandable": true,
       "subtype_ids": [
         "dwarves/boros",
-        "dwarves/izzet"
+        "dwarves/izzet",
+        "dwarves/mono-red"
       ]
     },
     {
@@ -416,6 +429,12 @@
     {
       "id": "jeskai-tablet",
       "name": "Jeskai Tablet",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "jund-artifact-sacrifice",
+      "name": "Jund Artifact Sacrifice",
       "expandable": false,
       "subtype_ids": []
     },
@@ -734,6 +753,14 @@
       "subtype_id": null
     },
     {
+      "id": "4-color-demons",
+      "kind": "archetype",
+      "name": "4-Color Demons",
+      "display_name": "4-Color Demons",
+      "parent_id": "4-color-demons",
+      "subtype_id": null
+    },
+    {
       "id": "4-color-tablet",
       "kind": "archetype",
       "name": "4-Color Tablet",
@@ -958,6 +985,14 @@
       "subtype_id": null
     },
     {
+      "id": "dimir-faeries",
+      "kind": "archetype",
+      "name": "Dimir Faeries",
+      "display_name": "Dimir Faeries",
+      "parent_id": "dimir-faeries",
+      "subtype_id": null
+    },
+    {
       "id": "dimir-flash",
       "kind": "archetype",
       "name": "Dimir Flash",
@@ -1004,6 +1039,14 @@
       "display_name": "Izzet Dwarves",
       "parent_id": "dwarves",
       "subtype_id": "izzet"
+    },
+    {
+      "id": "dwarves/mono-red",
+      "kind": "subtype",
+      "name": "Mono-Red",
+      "display_name": "Mono-Red Dwarves",
+      "parent_id": "dwarves",
+      "subtype_id": "mono-red"
     },
     {
       "id": "esper-control",
@@ -1283,6 +1326,14 @@
       "name": "Jeskai Tablet",
       "display_name": "Jeskai Tablet",
       "parent_id": "jeskai-tablet",
+      "subtype_id": null
+    },
+    {
+      "id": "jund-artifact-sacrifice",
+      "kind": "archetype",
+      "name": "Jund Artifact Sacrifice",
+      "display_name": "Jund Artifact Sacrifice",
+      "parent_id": "jund-artifact-sacrifice",
       "subtype_id": null
     },
     {

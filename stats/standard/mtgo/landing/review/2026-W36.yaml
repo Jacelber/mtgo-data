@@ -1,0 +1,1332 @@
+schema_version: 1.0.0
+format: standard
+source: mtgo
+week:
+  id: 2026-W36
+  start: '2026-08-31'
+  end: '2026-09-06'
+bindings:
+  workbook_sha256: dd56fee8101a45cfad0ac1292ea20252026ade57cdd1c690f41703142ff38545
+  source_event_ids:
+  - '12853216'
+  - '12853225'
+  - '12853229'
+  - '12853666'
+  - '12853674'
+  - '12853679'
+  - '12853686'
+  classifier_digest: 6b71c6949027068126aec45bae2de78c4bdad267379f3e10ebf5de11e493eb27
+  selection_policy_digest: 3541185e634bcab559bb3118ee3f29ece113552473d1f314bcde2a1e2f697a42
+  machine_fact_digest: 33b480578a6755f460682eea840016107bc08da2378d9531075784d562adbe9a
+  link_catalog_digest: 8ea4ae55fe4c4b16fde22882bf6ad56988a4af2dbcef6539b8f5a420280eb31d
+  bilingual_catalog_digest: 9dd0044425daeb2dec05ea5beec668b7e06c382cad6590d60110203cd7eaec68
+candidate_evidence:
+- token: deck:3a2766382a9a6dff793f
+  source_order: 1
+  reasons: &id001
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 0
+- token: deck:2b828363fb5b9881ee8a
+  source_order: 2
+  reasons: &id002
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 0
+- token: deck:b44b58e7c61472d15642
+  source_order: 3
+  reasons:
+  - type: share_increase
+    current_high_score_count: 24
+    current_high_score_denominator: 119
+    current_share: 0.2017
+    reference_high_score_count: 39
+    reference_high_score_denominator: 505
+    reference_share: 0.0772
+    delta_pp: 12.45
+- token: deck:08262362cdfe0187f1ef
+  source_order: 4
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: 4-color-tablet
+    reference_sample_size: 50
+    score: 37
+    difference:
+      fewer:
+      - name: Steam Vents
+        deck_qty: 1
+        typical_qty: 2.5
+      - name: Shattered Sanctum
+        deck_qty: 1
+        typical_qty: 2.0
+      - name: Day of Judgment
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Island
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Gloomlake Verge
+        deck_qty: 0
+        typical_qty: 0.9
+      - name: No More Lies
+        deck_qty: 0
+        typical_qty: 0.9
+      - name: Sear
+        deck_qty: 1
+        typical_qty: 1.9
+      - name: Nowhere to Run
+        deck_qty: 0
+        typical_qty: 0.9
+      more:
+      - name: Shoot the Sheriff
+        deck_qty: 3
+        typical_qty: 1.0
+      - name: Blood Crypt
+        deck_qty: 4
+        typical_qty: 2.0
+      - name: Deadly Cover-Up
+        deck_qty: 3
+        typical_qty: 1.0
+      - name: Bleachbone Verge
+        deck_qty: 3
+        typical_qty: 1.5
+      - name: Riverpyre Verge
+        deck_qty: 3
+        typical_qty: 1.6
+      - name: Undercity Sewers
+        deck_qty: 2
+        typical_qty: 0.9
+      - name: Watery Grave
+        deck_qty: 1
+        typical_qty: 0.2
+      - name: Strategic Betrayal
+        deck_qty: 1
+        typical_qty: 0.2
+- token: deck:99616464c918b62c5f3a
+  source_order: 5
+  reasons:
+  - type: build_shift
+    identity_level: subtype
+    identity_id: dwarves/boros
+    reference_sample_size: 11
+    score: 25
+    difference:
+      fewer:
+      - name: Cavern of Souls
+        deck_qty: 1
+        typical_qty: 2.7
+      - name: Bofur, Reliable Guardian
+        deck_qty: 0
+        typical_qty: 1.4
+      - name: Chainsaw
+        deck_qty: 0
+        typical_qty: 1.1
+      - name: Iron Hills Blacksmith
+        deck_qty: 0
+        typical_qty: 0.9
+      - name: Basilisk Collar
+        deck_qty: 0
+        typical_qty: 0.7
+      - name: Dáin Ironfoot
+        deck_qty: 0
+        typical_qty: 0.6
+      - name: Mountain
+        deck_qty: 0
+        typical_qty: 0.5
+      - name: Skateboard
+        deck_qty: 1
+        typical_qty: 1.5
+      more:
+      - name: Doc Ock's Tentacles
+        deck_qty: 3
+        typical_qty: 0.8
+      - name: Lavaspur Boots
+        deck_qty: 4
+        typical_qty: 2.5
+      - name: Dragonfire Blade
+        deck_qty: 4
+        typical_qty: 2.7
+      - name: Raubahn, Bull of Ala Mhigo
+        deck_qty: 3
+        typical_qty: 1.8
+      - name: Thorin, Mountain-king
+        deck_qty: 4
+        typical_qty: 2.8
+      - name: Plains
+        deck_qty: 4
+        typical_qty: 2.9
+      - name: Sunbillow Verge
+        deck_qty: 4
+        typical_qty: 3.0
+      - name: Multiversal Passage
+        deck_qty: 2
+        typical_qty: 1.4
+- token: deck:3449ef055b7fde3feb1c
+  source_order: 6
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: mono-black-aggro
+    reference_sample_size: 13
+    score: 56
+    difference:
+      fewer:
+      - name: Corpses of the Lost
+        deck_qty: 0
+        typical_qty: 3.4
+      - name: Iridescent Vinelasher
+        deck_qty: 0
+        typical_qty: 2.8
+      - name: Desolation Prowler
+        deck_qty: 0
+        typical_qty: 2.5
+      - name: Dissection Practice
+        deck_qty: 0
+        typical_qty: 2.5
+      - name: Nighthowl Pursuer
+        deck_qty: 0
+        typical_qty: 2.5
+      - name: Soulstone Sanctuary
+        deck_qty: 0
+        typical_qty: 2.5
+      - name: Sunset Saboteur
+        deck_qty: 0
+        typical_qty: 2.5
+      - name: Swamp
+        deck_qty: 16
+        typical_qty: 18.2
+      more:
+      - name: Gatekeeper of Malakir
+        deck_qty: 4
+        typical_qty: 0.2
+      - name: Faerie Dreamthief
+        deck_qty: 4
+        typical_qty: 0.6
+      - name: Hylderblade
+        deck_qty: 4
+        typical_qty: 0.6
+      - name: Strategic Betrayal
+        deck_qty: 4
+        typical_qty: 0.6
+      - name: Thought-Stalker Warlock
+        deck_qty: 4
+        typical_qty: 0.6
+      - name: Deep-Cavern Bat
+        deck_qty: 4
+        typical_qty: 1.2
+      - name: Mudflat Village
+        deck_qty: 4
+        typical_qty: 1.2
+      - name: Timeline Culler
+        deck_qty: 4
+        typical_qty: 1.5
+all_top8:
+- token: deck:79c590f0205dbbdbf928
+  event_id: '12853216'
+  deck_id: 79c590f0205dbbdbf928
+  deck_fingerprint_sha256: f49a0a5949846c089ba13d841972fb38769aff20c1a1c0dd3d846a909de4daaf
+  date: '2026-08-31'
+  starttime: '2026-08-31 20:00:00.0'
+  final_rank: 1
+  player_count: 54
+  player: McWinSauce
+  parent_id: sultai-demon
+  subtype_id: null
+  display_name: Sultai Demon
+  main_deck:
+  - name: Ba Sing Se
+    qty: 1
+  - name: Bitter Triumph
+    qty: 1
+  - name: Blazemire Verge
+    qty: 3
+  - name: Bleachbone Verge
+    qty: 3
+  - name: Deadly Cover-Up
+    qty: 4
+  - name: Deceit
+    qty: 4
+  - name: Duress
+    qty: 3
+  - name: Firdoch Core
+    qty: 4
+  - name: Great Hall of the Biblioplex
+    qty: 3
+  - name: Inside Information
+    qty: 1
+  - name: Maelstrom Pulse
+    qty: 1
+  - name: Mazemind Tome
+    qty: 1
+  - name: Multiversal Passage
+    qty: 1
+  - name: Nowhere to Run
+    qty: 1
+  - name: Overgrown Tomb
+    qty: 2
+  - name: Professor Dellian Fel
+    qty: 1
+  - name: Requiting Hex
+    qty: 3
+  - name: Restless Cottage
+    qty: 2
+  - name: Restless Reef
+    qty: 2
+  - name: Shoot the Sheriff
+    qty: 2
+  - name: Swamp
+    qty: 5
+  - name: The Terminus of Return
+    qty: 1
+  - name: Together as One
+    qty: 4
+  - name: Unholy Annex // Ritual Chamber
+    qty: 4
+  - name: Wastewood Verge
+    qty: 1
+  - name: Watery Grave
+    qty: 2
+  side_deck:
+  - name: Ancient Vendetta
+    qty: 1
+  - name: Day of Black Sun
+    qty: 2
+  - name: Duress
+    qty: 1
+  - name: Ghost Vacuum
+    qty: 1
+  - name: Inside Information
+    qty: 1
+  - name: Intimidation Tactics
+    qty: 2
+  - name: Nowhere to Run
+    qty: 1
+  - name: Outrageous Robbery
+    qty: 1
+  - name: Qarsi Revenant
+    qty: 2
+  - name: Strategic Betrayal
+    qty: 1
+  - name: The End
+    qty: 1
+  - name: Vicious Rivalry
+    qty: 1
+- token: deck:082786b9b49296b3fde8
+  event_id: '12853216'
+  deck_id: 082786b9b49296b3fde8
+  deck_fingerprint_sha256: 980601149f1a5734fa6f99948f75547a2d8c7ee01f9b047bd0e5cbac3a720eda
+  date: '2026-08-31'
+  starttime: '2026-08-31 20:00:00.0'
+  final_rank: 2
+  player_count: 54
+  player: Ale_Mtg
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:59a300a079b845a1a17d
+  event_id: '12853216'
+  deck_id: 59a300a079b845a1a17d
+  deck_fingerprint_sha256: b55a22557c7f243626a3dcc24b7f4e59ff23594d493f49143bc495dc68ce0659
+  date: '2026-08-31'
+  starttime: '2026-08-31 20:00:00.0'
+  final_rank: 3
+  player_count: 54
+  player: thirstythievin
+  parent_id: dwarves
+  subtype_id: boros
+  display_name: Dwarves
+  main_deck: []
+  side_deck: []
+- token: deck:c313f198851013f59ac8
+  event_id: '12853216'
+  deck_id: c313f198851013f59ac8
+  deck_fingerprint_sha256: b41d40fc4da7cf0b8ff45eae9f9a8edc88e26b37485e60bcc5d501f67a4b70e7
+  date: '2026-08-31'
+  starttime: '2026-08-31 20:00:00.0'
+  final_rank: 4
+  player_count: 54
+  player: MercurialChemister
+  parent_id: boros-token
+  subtype_id: null
+  display_name: Boros Token
+  main_deck: []
+  side_deck: []
+- token: deck:6d4b5cb4adbea346cb12
+  event_id: '12853216'
+  deck_id: 6d4b5cb4adbea346cb12
+  deck_fingerprint_sha256: 87c6e5b67288b88db66e3d9b03afeff6ec013109c8a37e381d48db58006289a4
+  date: '2026-08-31'
+  starttime: '2026-08-31 20:00:00.0'
+  final_rank: 5
+  player_count: 54
+  player: VitorCarvalho01
+  parent_id: dimir-excruciator
+  subtype_id: null
+  display_name: Dimir Excruciator
+  main_deck: []
+  side_deck: []
+- token: deck:2eded188f01c57be38ff
+  event_id: '12853216'
+  deck_id: 2eded188f01c57be38ff
+  deck_fingerprint_sha256: 5c76a5d570fffaa79a1a67bd59ba0a45b17c173b147eb510e8cb322a19fccba6
+  date: '2026-08-31'
+  starttime: '2026-08-31 20:00:00.0'
+  final_rank: 6
+  player_count: 54
+  player: mcwright_
+  parent_id: boros-dragons
+  subtype_id: null
+  display_name: Boros Dragons
+  main_deck: []
+  side_deck: []
+- token: deck:4e203ffb56bcbd27d702
+  event_id: '12853216'
+  deck_id: 4e203ffb56bcbd27d702
+  deck_fingerprint_sha256: 239759df278e15ed79abee42008f20154e738ec3784840e9010cc828bbae9092
+  date: '2026-08-31'
+  starttime: '2026-08-31 20:00:00.0'
+  final_rank: 7
+  player_count: 54
+  player: FacadeJK
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:9f0f8e77e8b8f40d2b20
+  event_id: '12853216'
+  deck_id: 9f0f8e77e8b8f40d2b20
+  deck_fingerprint_sha256: c5e291ab773472f2c7e83b78bc3d80ec11052311b97a2343e152d453991fe661
+  date: '2026-08-31'
+  starttime: '2026-08-31 20:00:00.0'
+  final_rank: 8
+  player_count: 54
+  player: Boin
+  parent_id: mono-black-aggro
+  subtype_id: null
+  display_name: Mono-Black Aggro
+  main_deck: []
+  side_deck: []
+- token: deck:7195afcccd41ee7cb209
+  event_id: '12853225'
+  deck_id: 7195afcccd41ee7cb209
+  deck_fingerprint_sha256: 8cf0e19d57515183f62519cfea65ca6bbe4c4e10515323216b7fa60ddfd416ce
+  date: '2026-09-01'
+  starttime: '2026-09-01 17:30:00.0'
+  final_rank: 1
+  player_count: 60
+  player: kthanakit26
+  parent_id: dimir-midrange
+  subtype_id: null
+  display_name: Dimir Midrange
+  main_deck: []
+  side_deck: []
+- token: deck:b43545f30da50baba507
+  event_id: '12853225'
+  deck_id: b43545f30da50baba507
+  deck_fingerprint_sha256: 980601149f1a5734fa6f99948f75547a2d8c7ee01f9b047bd0e5cbac3a720eda
+  date: '2026-09-01'
+  starttime: '2026-09-01 17:30:00.0'
+  final_rank: 2
+  player_count: 60
+  player: Ale_Mtg
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:568e384cee9aa498e236
+  event_id: '12853225'
+  deck_id: 568e384cee9aa498e236
+  deck_fingerprint_sha256: 980601149f1a5734fa6f99948f75547a2d8c7ee01f9b047bd0e5cbac3a720eda
+  date: '2026-09-01'
+  starttime: '2026-09-01 17:30:00.0'
+  final_rank: 3
+  player_count: 60
+  player: Arianne
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:a1f80c2d8e76e2a2773f
+  event_id: '12853225'
+  deck_id: a1f80c2d8e76e2a2773f
+  deck_fingerprint_sha256: 831d4f2cc0e90f550c5dca7d4788b39c0170eed894cca1bf47597a7cfc68990c
+  date: '2026-09-01'
+  starttime: '2026-09-01 17:30:00.0'
+  final_rank: 4
+  player_count: 60
+  player: Davidowiz
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:c355b98d227ac3557fb7
+  event_id: '12853225'
+  deck_id: c355b98d227ac3557fb7
+  deck_fingerprint_sha256: 4b6d3634ef08e0440fd0776adbb2d11aef679f2133dff83a900b35c3a0ec4bbe
+  date: '2026-09-01'
+  starttime: '2026-09-01 17:30:00.0'
+  final_rank: 5
+  player_count: 60
+  player: _Falcon_
+  parent_id: dimir-midrange
+  subtype_id: null
+  display_name: Dimir Midrange
+  main_deck: []
+  side_deck: []
+- token: deck:be18268cc41e02ac9283
+  event_id: '12853225'
+  deck_id: be18268cc41e02ac9283
+  deck_fingerprint_sha256: 206901a495d0896ca7050bfdf1d377c2e20a29bc1a56e7ccfaa903f92d31deb1
+  date: '2026-09-01'
+  starttime: '2026-09-01 17:30:00.0'
+  final_rank: 6
+  player_count: 60
+  player: mosh_joscoe
+  parent_id: mardu-discard
+  subtype_id: null
+  display_name: Mardu Discard
+  main_deck: []
+  side_deck: []
+- token: deck:99616464c918b62c5f3a
+  event_id: '12853225'
+  deck_id: 99616464c918b62c5f3a
+  deck_fingerprint_sha256: 8ffd6bfbed60c55fba6a8fb6d2d007f9cac887fcdeb5ea8c1ceb03e1b1c5fbde
+  date: '2026-09-01'
+  starttime: '2026-09-01 17:30:00.0'
+  final_rank: 7
+  player_count: 60
+  player: L1X0
+  parent_id: dwarves
+  subtype_id: boros
+  display_name: Dwarves
+  main_deck: []
+  side_deck: []
+- token: deck:5ff4ac406793e1dff86a
+  event_id: '12853225'
+  deck_id: 5ff4ac406793e1dff86a
+  deck_fingerprint_sha256: 76119a4e675690764c2795ed390f9edca3465f9a802f159fe7bfa15e954b96ac
+  date: '2026-09-01'
+  starttime: '2026-09-01 17:30:00.0'
+  final_rank: 8
+  player_count: 60
+  player: makaaaa
+  parent_id: dimir-midrange
+  subtype_id: null
+  display_name: Dimir Midrange
+  main_deck: []
+  side_deck: []
+- token: deck:b5e5f6794ac1ed0ad8ee
+  event_id: '12853229'
+  deck_id: b5e5f6794ac1ed0ad8ee
+  deck_fingerprint_sha256: 0418bfbf9a5ad16ce057f5d15a95939d95df559cd113bfa4a8f27a48304f0107
+  date: '2026-09-02'
+  starttime: '2026-09-02 07:00:00.0'
+  final_rank: 1
+  player_count: 27
+  player: duanceyao
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:3208fd0b69577c98a7f2
+  event_id: '12853229'
+  deck_id: 3208fd0b69577c98a7f2
+  deck_fingerprint_sha256: 797e2c1d0a982e8c34f6992bf2f917ec49153ac23125ce02de45894fcfb5061a
+  date: '2026-09-02'
+  starttime: '2026-09-02 07:00:00.0'
+  final_rank: 2
+  player_count: 27
+  player: OTP_Luke
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:47739504fae6b38a90b3
+  event_id: '12853229'
+  deck_id: 47739504fae6b38a90b3
+  deck_fingerprint_sha256: d7ac95abd334f760f0f0ba6ca6fa089cbe72f098617501ba784124a6d58fad84
+  date: '2026-09-02'
+  starttime: '2026-09-02 07:00:00.0'
+  final_rank: 3
+  player_count: 27
+  player: Reiam
+  parent_id: kona-omniscience
+  subtype_id: temur
+  display_name: Kona Omniscience
+  main_deck: []
+  side_deck: []
+- token: deck:c7697c04a5e5bc1c5a0b
+  event_id: '12853229'
+  deck_id: c7697c04a5e5bc1c5a0b
+  deck_fingerprint_sha256: 8cf0e19d57515183f62519cfea65ca6bbe4c4e10515323216b7fa60ddfd416ce
+  date: '2026-09-02'
+  starttime: '2026-09-02 07:00:00.0'
+  final_rank: 4
+  player_count: 27
+  player: albertosd87
+  parent_id: dimir-midrange
+  subtype_id: null
+  display_name: Dimir Midrange
+  main_deck: []
+  side_deck: []
+- token: deck:3d68e0bd7d584abc42d5
+  event_id: '12853229'
+  deck_id: 3d68e0bd7d584abc42d5
+  deck_fingerprint_sha256: b21b21be89bafcfabce54e28e3ef1b6cc5c38c7e5ead0f4dd6fceeb23d4f2f6e
+  date: '2026-09-02'
+  starttime: '2026-09-02 07:00:00.0'
+  final_rank: 5
+  player_count: 27
+  player: DuduDeNunu
+  parent_id: azorius-momo
+  subtype_id: null
+  display_name: Azorius Momo
+  main_deck: []
+  side_deck: []
+- token: deck:aacc868ff6f300f39f88
+  event_id: '12853229'
+  deck_id: aacc868ff6f300f39f88
+  deck_fingerprint_sha256: 5f7f8584e598cd7e9aba83d5753d85e7f5450f06d7f01d2586908d84bdd66ad2
+  date: '2026-09-02'
+  starttime: '2026-09-02 07:00:00.0'
+  final_rank: 6
+  player_count: 27
+  player: fireflymylove
+  parent_id: boros-token
+  subtype_id: null
+  display_name: Boros Token
+  main_deck: []
+  side_deck: []
+- token: deck:75e28899f96097d88dc6
+  event_id: '12853229'
+  deck_id: 75e28899f96097d88dc6
+  deck_fingerprint_sha256: 179dbb7e665f7e3b5cd05b04f506a4c229300740be084e9599b5e7163501c4d0
+  date: '2026-09-02'
+  starttime: '2026-09-02 07:00:00.0'
+  final_rank: 7
+  player_count: 27
+  player: unagieel
+  parent_id: 4-color-demons
+  subtype_id: null
+  display_name: 4-Color Demons
+  main_deck: []
+  side_deck: []
+- token: deck:8263f85fdb94af4efea5
+  event_id: '12853229'
+  deck_id: 8263f85fdb94af4efea5
+  deck_fingerprint_sha256: bd90d1be7c54a9e430b0ae9cd755e330db3da855f207f56d8dd79ecb2aa07c8f
+  date: '2026-09-02'
+  starttime: '2026-09-02 07:00:00.0'
+  final_rank: 8
+  player_count: 27
+  player: Tetsubou
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:b44b58e7c61472d15642
+  event_id: '12853666'
+  deck_id: b44b58e7c61472d15642
+  deck_fingerprint_sha256: 0418bfbf9a5ad16ce057f5d15a95939d95df559cd113bfa4a8f27a48304f0107
+  date: '2026-09-03'
+  starttime: '2026-09-03 10:00:00.0'
+  final_rank: 1
+  player_count: 32
+  player: duanceyao
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:6a1151285223a4869186
+  event_id: '12853666'
+  deck_id: 6a1151285223a4869186
+  deck_fingerprint_sha256: 7a6640fb309da16e4d356e89e5dc04519251d426ee86f151669c780bda7e5ed4
+  date: '2026-09-03'
+  starttime: '2026-09-03 10:00:00.0'
+  final_rank: 2
+  player_count: 32
+  player: _Stream
+  parent_id: izzet-opus
+  subtype_id: null
+  display_name: Izzet Opus
+  main_deck: []
+  side_deck: []
+- token: deck:dd969da55cc555883e79
+  event_id: '12853666'
+  deck_id: dd969da55cc555883e79
+  deck_fingerprint_sha256: 741b7a690d8fafd2b7ff1a4412e731ea7c637502a2de07cd58e066247f3b9f18
+  date: '2026-09-03'
+  starttime: '2026-09-03 10:00:00.0'
+  final_rank: 3
+  player_count: 32
+  player: yolad
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:18334981cba5cbf58085
+  event_id: '12853666'
+  deck_id: 18334981cba5cbf58085
+  deck_fingerprint_sha256: e48ae1e8b292b1305f2ad0eb04dce6dd5657f2bc94197a784204abfbf27161ed
+  date: '2026-09-03'
+  starttime: '2026-09-03 10:00:00.0'
+  final_rank: 4
+  player_count: 32
+  player: ryuumei
+  parent_id: 4-color-demons
+  subtype_id: null
+  display_name: 4-Color Demons
+  main_deck: []
+  side_deck: []
+- token: deck:661b99ee9c71029cbb74
+  event_id: '12853666'
+  deck_id: 661b99ee9c71029cbb74
+  deck_fingerprint_sha256: 1457a5037b0b6bdfbba0a00294a62c092629ce9221a554e27b5e94114cc442ad
+  date: '2026-09-03'
+  starttime: '2026-09-03 10:00:00.0'
+  final_rank: 5
+  player_count: 32
+  player: kanister
+  parent_id: 4-color-tablet
+  subtype_id: null
+  display_name: 4-Color Tablet
+  main_deck: []
+  side_deck: []
+- token: deck:9506c5f56959fa5badbc
+  event_id: '12853666'
+  deck_id: 9506c5f56959fa5badbc
+  deck_fingerprint_sha256: de17d71aea8ec0367b63bf86ccfc8857e3c1b9afcf748e21082f842ef8dd3628
+  date: '2026-09-03'
+  starttime: '2026-09-03 10:00:00.0'
+  final_rank: 6
+  player_count: 32
+  player: pizzangry
+  parent_id: boros-token
+  subtype_id: null
+  display_name: Boros Token
+  main_deck: []
+  side_deck: []
+- token: deck:ac432fe58305f515cf4d
+  event_id: '12853666'
+  deck_id: ac432fe58305f515cf4d
+  deck_fingerprint_sha256: 789d3a114ac765f57f53cf8c80d2df793a00cd3f6b7883378cd52e66986d0b0f
+  date: '2026-09-03'
+  starttime: '2026-09-03 10:00:00.0'
+  final_rank: 7
+  player_count: 32
+  player: McWinSauce
+  parent_id: sultai-demon
+  subtype_id: null
+  display_name: Sultai Demon
+  main_deck: []
+  side_deck: []
+- token: deck:7b7751147296e86587aa
+  event_id: '12853666'
+  deck_id: 7b7751147296e86587aa
+  deck_fingerprint_sha256: e512810531a73c609fb4ccc008ef29704e10488babcc909f5181b6122fbf6604
+  date: '2026-09-03'
+  starttime: '2026-09-03 10:00:00.0'
+  final_rank: 8
+  player_count: 32
+  player: kthanakit26
+  parent_id: dimir-midrange
+  subtype_id: null
+  display_name: Dimir Midrange
+  main_deck: []
+  side_deck: []
+- token: deck:2028268797605dc71423
+  event_id: '12853674'
+  deck_id: 2028268797605dc71423
+  deck_fingerprint_sha256: 656b73bcd0067aca50534b5afe2d58a4c881df2874e161534d6461ffc8ec21e8
+  date: '2026-09-04'
+  starttime: '2026-09-04 00:00:00.0'
+  final_rank: 1
+  player_count: 44
+  player: L1X0
+  parent_id: dwarves
+  subtype_id: boros
+  display_name: Dwarves
+  main_deck: []
+  side_deck: []
+- token: deck:aa65facde3b45bf0f707
+  event_id: '12853674'
+  deck_id: aa65facde3b45bf0f707
+  deck_fingerprint_sha256: 5709d79b1bad863e3867d28c1188fbe7140aa48cdb0bfc7cfe7d1c82b01a5628
+  date: '2026-09-04'
+  starttime: '2026-09-04 00:00:00.0'
+  final_rank: 2
+  player_count: 44
+  player: Denisevich
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:2584303eba3df8cb4f2f
+  event_id: '12853674'
+  deck_id: 2584303eba3df8cb4f2f
+  deck_fingerprint_sha256: 1d3b842ca777397bcb30123c10458a636c872063b28eb2378f7731016bac2083
+  date: '2026-09-04'
+  starttime: '2026-09-04 00:00:00.0'
+  final_rank: 3
+  player_count: 44
+  player: Mikebrav
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:08262362cdfe0187f1ef
+  event_id: '12853674'
+  deck_id: 08262362cdfe0187f1ef
+  deck_fingerprint_sha256: 0507f32ee03b704c9fac7e3ba8dbc0acc359700edf57a257d0f47f9ccebe6142
+  date: '2026-09-04'
+  starttime: '2026-09-04 00:00:00.0'
+  final_rank: 4
+  player_count: 44
+  player: LuRu
+  parent_id: 4-color-tablet
+  subtype_id: null
+  display_name: 4-Color Tablet
+  main_deck: []
+  side_deck: []
+- token: deck:fa77ac9d2341102e22b0
+  event_id: '12853674'
+  deck_id: fa77ac9d2341102e22b0
+  deck_fingerprint_sha256: 3abbe59884be8a049c4ddeb6d2a6bd18d359a43b776540ccc628dde9b64225c6
+  date: '2026-09-04'
+  starttime: '2026-09-04 00:00:00.0'
+  final_rank: 5
+  player_count: 44
+  player: CuteChandra19
+  parent_id: boros-manufacturing
+  subtype_id: jeskai
+  display_name: Boros Manufacturing
+  main_deck: []
+  side_deck: []
+- token: deck:43cd1ee96da9b5201411
+  event_id: '12853674'
+  deck_id: 43cd1ee96da9b5201411
+  deck_fingerprint_sha256: 14179f7f6060b34ab34012611a65231b7365c754f9d453b03a8242e81775cde2
+  date: '2026-09-04'
+  starttime: '2026-09-04 00:00:00.0'
+  final_rank: 6
+  player_count: 44
+  player: bugzbugs
+  parent_id: gruul-fling
+  subtype_id: null
+  display_name: Gruul Fling
+  main_deck: []
+  side_deck: []
+- token: deck:3449ef055b7fde3feb1c
+  event_id: '12853674'
+  deck_id: 3449ef055b7fde3feb1c
+  deck_fingerprint_sha256: 2270a784309aadddd84c5148f465cf6a2a599731b4d901d513442f3a8838fe9e
+  date: '2026-09-04'
+  starttime: '2026-09-04 00:00:00.0'
+  final_rank: 7
+  player_count: 44
+  player: Matsukasa10
+  parent_id: mono-black-aggro
+  subtype_id: null
+  display_name: Mono-Black Aggro
+  main_deck: []
+  side_deck: []
+- token: deck:428587825bd8b7a2a4d4
+  event_id: '12853674'
+  deck_id: 428587825bd8b7a2a4d4
+  deck_fingerprint_sha256: c9d85402810d3cfd45d7a247b6059120db7ff59ab6b03877e732976b35f6e3d5
+  date: '2026-09-04'
+  starttime: '2026-09-04 00:00:00.0'
+  final_rank: 8
+  player_count: 44
+  player: deleon91
+  parent_id: izzet-aggro
+  subtype_id: null
+  display_name: Izzet Aggro
+  main_deck: []
+  side_deck: []
+- token: deck:3a2766382a9a6dff793f
+  event_id: '12853679'
+  deck_id: 3a2766382a9a6dff793f
+  deck_fingerprint_sha256: 8e90347fdbbb996f10c5556f672b3da6798abfa89a2ea4396b446610e638eba7
+  date: '2026-09-04'
+  starttime: '2026-09-04 18:00:00.0'
+  final_rank: 1
+  player_count: 53
+  player: filpin
+  parent_id: jund-artifact-sacrifice
+  subtype_id: null
+  display_name: Jund Artifact Sacrifice
+  main_deck:
+  - name: Biotech Specialist
+    qty: 4
+  - name: Blood Crypt
+    qty: 1
+  - name: Blooming Marsh
+    qty: 4
+  - name: Deadly Precision
+    qty: 2
+  - name: Forest
+    qty: 1
+  - name: Gene Pollinator
+    qty: 4
+  - name: Greedy Freebooter
+    qty: 3
+  - name: Lively Dirge
+    qty: 3
+  - name: Llanowar Elves
+    qty: 4
+  - name: Magda, the Hoardmaster
+    qty: 2
+  - name: Mutagen Man, Living Ooze
+    qty: 1
+  - name: Nature's Rhythm
+    qty: 1
+  - name: Obsessive Pursuit
+    qty: 4
+  - name: Ouroboroid
+    qty: 1
+  - name: Overgrown Tomb
+    qty: 4
+  - name: Phoenix Fleet Airship
+    qty: 1
+  - name: Starting Town
+    qty: 4
+  - name: Stomping Ground
+    qty: 4
+  - name: Swamp
+    qty: 1
+  - name: The Sackville-Bagginses
+    qty: 4
+  - name: Umbral Collar Zealot
+    qty: 4
+  - name: Wastewood Verge
+    qty: 2
+  - name: Witherbloom Charm
+    qty: 1
+  side_deck:
+  - name: Chandra, Spark Hunter
+    qty: 1
+  - name: Duress
+    qty: 3
+  - name: Fountainport
+    qty: 1
+  - name: Professor Dellian Fel
+    qty: 2
+  - name: Ral Zarek, Guest Lecturer
+    qty: 1
+  - name: Raven Eagle
+    qty: 1
+  - name: Shoot the Sheriff
+    qty: 1
+  - name: Strategic Betrayal
+    qty: 3
+  - name: The Ooze
+    qty: 1
+  - name: The Swarmweaver
+    qty: 1
+- token: deck:753e73797f91e75703cc
+  event_id: '12853679'
+  deck_id: 753e73797f91e75703cc
+  deck_fingerprint_sha256: f7b04e634bdff3876f717f5cc9cea4eec3f3029c1698861c27740202ec41b850
+  date: '2026-09-04'
+  starttime: '2026-09-04 18:00:00.0'
+  final_rank: 2
+  player_count: 53
+  player: burp93
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:dae6c259a200561a307b
+  event_id: '12853679'
+  deck_id: dae6c259a200561a307b
+  deck_fingerprint_sha256: 1457a5037b0b6bdfbba0a00294a62c092629ce9221a554e27b5e94114cc442ad
+  date: '2026-09-04'
+  starttime: '2026-09-04 18:00:00.0'
+  final_rank: 3
+  player_count: 53
+  player: BERNASTORRES
+  parent_id: 4-color-tablet
+  subtype_id: null
+  display_name: 4-Color Tablet
+  main_deck: []
+  side_deck: []
+- token: deck:2b828363fb5b9881ee8a
+  event_id: '12853679'
+  deck_id: 2b828363fb5b9881ee8a
+  deck_fingerprint_sha256: e48ae1e8b292b1305f2ad0eb04dce6dd5657f2bc94197a784204abfbf27161ed
+  date: '2026-09-04'
+  starttime: '2026-09-04 18:00:00.0'
+  final_rank: 4
+  player_count: 53
+  player: McWinSauce
+  parent_id: 4-color-demons
+  subtype_id: null
+  display_name: 4-Color Demons
+  main_deck:
+  - name: Blazemire Verge
+    qty: 2
+  - name: Bleachbone Verge
+    qty: 3
+  - name: Blood Crypt
+    qty: 1
+  - name: Deadly Cover-Up
+    qty: 2
+  - name: Dispelling Exhale
+    qty: 3
+  - name: Firdoch Core
+    qty: 4
+  - name: Flashback
+    qty: 1
+  - name: Great Hall of the Biblioplex
+    qty: 4
+  - name: Inevitable Defeat
+    qty: 3
+  - name: Island
+    qty: 1
+  - name: Jeskai Revelation
+    qty: 2
+  - name: Mountain
+    qty: 1
+  - name: Nowhere to Run
+    qty: 2
+  - name: Plains
+    qty: 1
+  - name: Requiting Hex
+    qty: 3
+  - name: Riverpyre Verge
+    qty: 1
+  - name: Sacred Foundry
+    qty: 1
+  - name: Shattered Sanctum
+    qty: 1
+  - name: Shoot the Sheriff
+    qty: 3
+  - name: Starting Town
+    qty: 1
+  - name: Steam Vents
+    qty: 1
+  - name: Stock Up
+    qty: 4
+  - name: Sundown Pass
+    qty: 1
+  - name: Swamp
+    qty: 1
+  - name: Tablet of Discovery
+    qty: 2
+  - name: Together as One
+    qty: 2
+  - name: Undercity Sewers
+    qty: 2
+  - name: Unholy Annex // Ritual Chamber
+    qty: 4
+  - name: Watery Grave
+    qty: 3
+  side_deck:
+  - name: Annul
+    qty: 2
+  - name: Day of Black Sun
+    qty: 2
+  - name: Disdainful Stroke
+    qty: 1
+  - name: Duress
+    qty: 3
+  - name: Flashfreeze
+    qty: 1
+  - name: Ghost Vacuum
+    qty: 1
+  - name: Intimidation Tactics
+    qty: 2
+  - name: Nowhere to Run
+    qty: 1
+  - name: Requiting Hex
+    qty: 1
+  - name: Strategic Betrayal
+    qty: 1
+- token: deck:d2aafd405f2a22ce10b2
+  event_id: '12853679'
+  deck_id: d2aafd405f2a22ce10b2
+  deck_fingerprint_sha256: 87c6e5b67288b88db66e3d9b03afeff6ec013109c8a37e381d48db58006289a4
+  date: '2026-09-04'
+  starttime: '2026-09-04 18:00:00.0'
+  final_rank: 5
+  player_count: 53
+  player: VitorCarvalho01
+  parent_id: dimir-excruciator
+  subtype_id: null
+  display_name: Dimir Excruciator
+  main_deck: []
+  side_deck: []
+- token: deck:840cd7964addd4ec7a6e
+  event_id: '12853679'
+  deck_id: 840cd7964addd4ec7a6e
+  deck_fingerprint_sha256: 789d3a114ac765f57f53cf8c80d2df793a00cd3f6b7883378cd52e66986d0b0f
+  date: '2026-09-04'
+  starttime: '2026-09-04 18:00:00.0'
+  final_rank: 6
+  player_count: 53
+  player: Traft
+  parent_id: sultai-demon
+  subtype_id: null
+  display_name: Sultai Demon
+  main_deck: []
+  side_deck: []
+- token: deck:0188d4b8c3063c90a1f9
+  event_id: '12853679'
+  deck_id: 0188d4b8c3063c90a1f9
+  deck_fingerprint_sha256: f620ea564dee5409c386dca787675d1c43ee9f93bbd830fa71f48560afe17033
+  date: '2026-09-04'
+  starttime: '2026-09-04 18:00:00.0'
+  final_rank: 7
+  player_count: 53
+  player: DayBreakMe
+  parent_id: selesnya-landfall
+  subtype_id: null
+  display_name: Selesnya Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:6ecde2b4682156a5b1f9
+  event_id: '12853679'
+  deck_id: 6ecde2b4682156a5b1f9
+  deck_fingerprint_sha256: 235229382b22593feb3320ef5fbb82790ef08110134d17b9af3889c41a8e80d1
+  date: '2026-09-04'
+  starttime: '2026-09-04 18:00:00.0'
+  final_rank: 8
+  player_count: 53
+  player: Mogged
+  parent_id: dimir-bounce
+  subtype_id: null
+  display_name: Dimir Bounce
+  main_deck: []
+  side_deck: []
+- token: deck:66154157224a4a1623de
+  event_id: '12853686'
+  deck_id: 66154157224a4a1623de
+  deck_fingerprint_sha256: f64704bf99650e9c09098df9f4e1991a5469e9f0661a7b51d3c0bb3c90a7981d
+  date: '2026-09-05'
+  starttime: '2026-09-05 13:00:00.0'
+  final_rank: 1
+  player_count: 62
+  player: Special_Boy
+  parent_id: mardu-discard
+  subtype_id: null
+  display_name: Mardu Discard
+  main_deck: []
+  side_deck: []
+- token: deck:a3ce038d66d1ce31b199
+  event_id: '12853686'
+  deck_id: a3ce038d66d1ce31b199
+  deck_fingerprint_sha256: 5cb167598ede442cde5e3c5715b1b6c810cf6e814ae591eaded4c3929c72c7d2
+  date: '2026-09-05'
+  starttime: '2026-09-05 13:00:00.0'
+  final_rank: 2
+  player_count: 62
+  player: KeeganReynolds
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:963c8e96912c5e2b519d
+  event_id: '12853686'
+  deck_id: 963c8e96912c5e2b519d
+  deck_fingerprint_sha256: 019b6fb5b711b1f2df7822248a276dbb0c61bf7c28dc9b353440aa95ba982886
+  date: '2026-09-05'
+  starttime: '2026-09-05 13:00:00.0'
+  final_rank: 3
+  player_count: 62
+  player: JAJC
+  parent_id: dimir-midrange
+  subtype_id: null
+  display_name: Dimir Midrange
+  main_deck: []
+  side_deck: []
+- token: deck:c82a143eb7dbaefbfd68
+  event_id: '12853686'
+  deck_id: c82a143eb7dbaefbfd68
+  deck_fingerprint_sha256: 980601149f1a5734fa6f99948f75547a2d8c7ee01f9b047bd0e5cbac3a720eda
+  date: '2026-09-05'
+  starttime: '2026-09-05 13:00:00.0'
+  final_rank: 4
+  player_count: 62
+  player: Ale_Mtg
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:61558f7a3d5943797f73
+  event_id: '12853686'
+  deck_id: 61558f7a3d5943797f73
+  deck_fingerprint_sha256: d83f56e40ba7aec946593fd883ad3b3f9d49e5ea68b8bdc5d6b3033b1bd3eae7
+  date: '2026-09-05'
+  starttime: '2026-09-05 13:00:00.0'
+  final_rank: 5
+  player_count: 62
+  player: RCMerriam
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+- token: deck:9851811f15ea72912d6e
+  event_id: '12853686'
+  deck_id: 9851811f15ea72912d6e
+  deck_fingerprint_sha256: b5b088f8ae711042d0123597f601e48e752e4cfdd4d5c08e60de6e0c5c6f6314
+  date: '2026-09-05'
+  starttime: '2026-09-05 13:00:00.0'
+  final_rank: 6
+  player_count: 62
+  player: solaec0501
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:ca50cbe0153deb2a7fda
+  event_id: '12853686'
+  deck_id: ca50cbe0153deb2a7fda
+  deck_fingerprint_sha256: 89d76e4783cb21874b570ea53f98ce9041aef3cc28c7bc164ca0187ee0067675
+  date: '2026-09-05'
+  starttime: '2026-09-05 13:00:00.0'
+  final_rank: 7
+  player_count: 62
+  player: Dai66s
+  parent_id: izzet-spellementals
+  subtype_id: null
+  display_name: Izzet Spellementals
+  main_deck: []
+  side_deck: []
+- token: deck:788eb6fdd8e93b830aa9
+  event_id: '12853686'
+  deck_id: 788eb6fdd8e93b830aa9
+  deck_fingerprint_sha256: cf7ac8b5dcd17bada7036971e611389f20ee1b59145d26f421001fea08266131
+  date: '2026-09-05'
+  starttime: '2026-09-05 13:00:00.0'
+  final_rank: 8
+  player_count: 62
+  player: kasa
+  parent_id: mono-green-landfall
+  subtype_id: null
+  display_name: Mono-Green Landfall
+  main_deck: []
+  side_deck: []
+review:
+  top_copy:
+    reviewed: true
+    items:
+    - order: 1
+      text:
+        zh: 在地落连续霸榜三周之后，本周环境开始有一些变化。顶端还是地落、元素、蓝黑三套，但元素两项占比本周都实现了反超，登上头名。上周开始成为环境组成部分的红白矮人套牌，本周依旧能保持5%的占比。
+        en: After Landfall topped the metagame for three consecutive weeks, the field began to shift. Landfall, Spellementals, and Dimir remain the leading decks, but Spellementals overtook the field in both tracked shares to claim first place. Boros Dwarves, which joined the metagame last week, still held roughly a 5% share.
+    - order: 2
+      text:
+        zh: 同时还有新势力进入环境。两套恶魔隔间控都取得不错的成绩。首先是McWinsauce的：deck:79c590f0205dbbdbf928。本质是个携力如一套牌，带了很多黑边陲产其他色。用杉石人核心ramp+调色出携力如一，并可以作为恶魔触发隔间，长盘价值爆炸。
+        en: 'New contenders also entered the metagame. Two Unholy Annex control decks posted strong results. The first was McWinSauce''s list: deck:79c590f0205dbbdbf928. It is fundamentally a Together as One deck, using several black verge lands to supply the other colors. Firdoch Core both ramps and fixes for Together as One, while also serving as a Demon to trigger Unholy Annex, creating tremendous long-game value.'
+    - order: 3
+      text:
+        zh: 本周杀出的另一套隔间控制牌是：deck:2b828363fb5b9881ee8a。最开始出现是上周日本100+人RCQ上拿到资格，之后在MO上有人抄取也有出色表现。先是日本牌手ryuumei操控拿下四强，然后构筑上面苏勒台版本的McWinsauce也用同样的牌表取得四强，之外还有不少高分成绩。
+        en: The other Unholy Annex control deck to break out this week was deck:2b828363fb5b9881ee8a. It first appeared in last week's over-100-player RCQ in Japan and earned a qualification slot. MTGO players then picked it up and produced strong results. Japanese player ryuumei reached the Top 4 first, and McWinSauce later made another Top 4 with the same list, alongside several other high finishes.
+    - order: 4
+      text:
+        zh: 还有一套勇德神器牺牲套牌本周可以席卷一场：deck:3a2766382a9a6dff793f。以前天梯上偶尔能见到类似思路的套牌，以EOE的生质科技专家和TLA偏执追击为核心，不过MO比赛中高分区从来没出现过。但个人认为这两张牌，尤其是偏执追击的强度还是非常高的，只是暂时没有合适的结构。HOB的萨克维尔巴金斯家族可能一定程度上补足了这个结构，作为单次牺牲源+珍宝加速+牺牲打血引擎，整体和现有结构都非常搭。
+        en: 'Jund Artifact Sacrifice also topped one event this week: deck:3a2766382a9a6dff793f. Similar lists occasionally appeared on the ladder, built around Biotech Specialist from EOE and Obsessive Pursuit from TLA, but they had never reached the high-finishing ranks of an MTGO event. Both cards—especially Obsessive Pursuit—look very powerful, but the archetype previously lacked the right shell. The Sackville-Bagginses from HOB may be the missing piece: a sacrifice outlet, Treasure acceleration, and a sacrifice-based damage engine that fits the rest of the deck extremely well.'
+  features:
+    reviewed: true
+    explicit_empty: false
+    items:
+    - source_order: 1
+      category: new_deck
+      destination_id: deck:3a2766382a9a6dff793f
+      parent_id: jund-artifact-sacrifice
+      subtype_id: null
+      positioning:
+        zh: 这个思路以前基本属于娱乐级，而HOB的萨克维尔巴金斯家族可能一定程度上是这个思路的最后一块拼图。作为单次牺牲源+珍宝加速+牺牲打血引擎，整体和现有结构都非常搭。
+        en: This strategy had previously been little more than a casual concept, but The Sackville-Bagginses from HOB may be its final missing piece. As a sacrifice outlet, Treasure accelerator, and sacrifice-based damage engine, it fits the rest of the deck exceptionally well.
+      featured_cards:
+      - The Sackville-Bagginses
+      - Biotech Specialist
+      - Umbral Collar Zealot
+      - Lively Dirge
+      supporting_facts: *id001
+    - source_order: 2
+      category: new_deck
+      destination_id: deck:2b828363fb5b9881ee8a
+      parent_id: 4-color-demons
+      subtype_id: null
+      positioning:
+        zh: 整体还是以前石板控的思路，但不再满编石板和启示，而是加入杉石人核心和恶魔隔间的配合，相比5费回合打启示的爆发，这一套的资源要更坚实，回血撮血能力也强。个人认为很可能是现在环境中最好的套牌之一。
+        en: The deck still follows the old Tablet control plan, but no longer maxes out on Tablet of Discovery and Jeskai Revelation. Instead, it adds the Firdoch Core and Unholy Annex interaction. Compared with the burst of resolving Revelation on turn five, this version has a steadier resource engine and stronger life-gain and life-drain. It may be one of the best decks in the current metagame.
+      featured_cards:
+      - Unholy Annex // Ritual Chamber
+      - Firdoch Core
+      - Together as One
+      - Jeskai Revelation
+      supporting_facts: *id002
+    - source_order: 13
+      category: new_technology
+      destination_id: deck:79c590f0205dbbdbf928
+      parent_id: sultai-demon
+      subtype_id: null
+      positioning:
+        zh: 套牌基本是纯黑，沾蓝施放欺瞒，微混绿带了涡心鼓动、黑绿教授、4费扫场各1。但本质是个携力如一套牌，带了很多黑边陲产其他色。用杉石人核心ramp+调色出携力如一，并可以作为恶魔触发隔间，长盘价值爆炸。
+        en: The deck is essentially mono-black, splashing blue for Deceit and lightly splashing green for single copies of Maelstrom Pulse, Professor Dellian Fel, and the four-mana sweeper. Fundamentally, however, it is a Together as One deck, using several Black Verge lands to provide the other colors. Firdoch Core ramps and fixes for Together as One while also serving as a Demon to trigger Unholy Annex, giving the deck explosive long-game value.
+      featured_cards:
+      - Unholy Annex // Ritual Chamber
+      - Firdoch Core
+      - Together as One
+      - Deceit
+      supporting_facts: []
+known_archetype_ids:
+- 4-color-demons
+- 4-color-tablet
+- affinity
+- azorius-control
+- azorius-momo
+- bant-airbending
+- boros-dragons
+- boros-manufacturing
+- boros-token
+- dimir-bounce
+- dimir-excruciator
+- dimir-faeries
+- dimir-midrange
+- dimir-oculus
+- dwarves
+- five-color-humans
+- gruul-fling
+- izzet-aggro
+- izzet-opus
+- izzet-prowess
+- izzet-spellementals
+- jeskai-artifacts
+- jeskai-lessons
+- jeskai-tablet
+- jund-artifact-sacrifice
+- kona-omniscience
+- leyline-aggro
+- mardu-discard
+- mono-black-aggro
+- mono-green-landfall
+- mono-red-aggro
+- orzhov-lifegain
+- selesnya-landfall
+- sultai-control
+- sultai-demon

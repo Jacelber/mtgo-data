@@ -8,10 +8,12 @@ from hashlib import sha256
 import json
 import os
 from pathlib import Path
+import secrets
 import shutil
 import subprocess
 import sys
 import tempfile
+from time import perf_counter
 from typing import Any
 
 import yaml
@@ -26,6 +28,16 @@ STALE = "STALE_REGENERABLE"
 BLOCKED_OWNER_REVIEW = "BLOCKED_OWNER_REVIEW"
 INVALID = "INVALID"
 FORMAT_STATES = {CURRENT, STALE, BLOCKED_OWNER_REVIEW, INVALID}
+STAGE_DIRECTORY_ATTEMPTS = 8
+STAGE_COPY_IGNORES = (
+    ".git",
+    ".venv",
+    "node_modules",
+    "__pycache__",
+    ".pytest_cache",
+    "test-results",
+    "playwright-report",
+)
 PROTECTED_MELEE_DERIVED_ROLES = frozenset(
     {
         "classification_overlay",
@@ -661,20 +673,79 @@ def _protected_input_fingerprints(root: Path, format_id: str) -> dict[str, str]:
     }
 
 
-def _create_stage(root: Path, format_id: str) -> Path:
-    stage = Path(
-        tempfile.mkdtemp(
-            prefix=f"classifier-closure-{format_id}-",
-            dir=root.parent,
+def _create_stage_directory(root: Path, prefix: str) -> Path:
+    """Create an external stage without tempfile's unbounded permission retry."""
+
+    resolved_root = root.resolve()
+    candidates = (resolved_root.parent, Path(tempfile.gettempdir()).resolve())
+    failures: list[str] = []
+    seen: set[Path] = set()
+    for parent in candidates:
+        if parent in seen:
+            continue
+        seen.add(parent)
+        if not parent.is_dir():
+            failures.append(f"{parent}: not a directory")
+            continue
+        try:
+            parent.relative_to(resolved_root)
+        except ValueError:
+            pass
+        else:
+            failures.append(f"{parent}: stage parent is inside the repository")
+            continue
+        for _attempt in range(STAGE_DIRECTORY_ATTEMPTS):
+            stage = parent / f"{prefix}{secrets.token_hex(8)}"
+            try:
+                stage.mkdir(mode=0o700)
+            except FileExistsError:
+                continue
+            except OSError as exc:
+                failures.append(f"{parent}: {exc}")
+                break
+            return stage
+        else:
+            failures.append(
+                f"{parent}: exhausted {STAGE_DIRECTORY_ATTEMPTS} name attempts"
+            )
+    raise ClassifierClosureError(
+        "cannot create an external staging directory: " + "; ".join(failures)
+    )
+
+
+def _copy_repository_to_stage(root: Path, prefix: str) -> Path:
+    stage = _create_stage_directory(root, prefix)
+    try:
+        shutil.copytree(
+            root,
+            stage,
+            dirs_exist_ok=True,
+            ignore=shutil.ignore_patterns(*STAGE_COPY_IGNORES),
         )
-    )
-    shutil.copytree(
-        root,
-        stage,
-        dirs_exist_ok=True,
-        ignore=shutil.ignore_patterns(".git", ".venv", "__pycache__", ".pytest_cache"),
-    )
+    except BaseException:
+        shutil.rmtree(stage, ignore_errors=True)
+        raise
     return stage
+
+
+def _create_stage(root: Path, format_id: str) -> Path:
+    return _copy_repository_to_stage(root, f"classifier-closure-{format_id}-")
+
+
+def _report_phase(format_id: str, phase: str, started: float) -> None:
+    print(
+        json.dumps(
+            {
+                "format": format_id,
+                "operation": "classifier-closure-progress",
+                "phase": phase,
+                "seconds": round(perf_counter() - started, 3),
+            },
+            sort_keys=True,
+        ),
+        file=sys.stderr,
+        flush=True,
+    )
 
 
 def _generate_melee(stage: Path, format_id: str) -> None:
@@ -770,6 +841,7 @@ def _build_staged_format(
     from .mtgo import completeness, landing, landing_editorial, matchup, metadata, stats, top8
 
     families = initial["families"]
+    current_meta = _json_object(stage / "stats" / format_id / "mtgo/meta.json")
     publication_stale = families.get("mtgo_publication", {}).get("state") != CURRENT
     if publication_stale or families["mtgo_statistics"]["state"] != CURRENT:
         stats.build_all_stats(stage, format_id)
@@ -778,7 +850,11 @@ def _build_staged_format(
     if publication_stale or families["mtgo_top8"]["state"] != CURRENT:
         top8.build_all_top8(stage, format_id)
     if families["mtgo_hierarchy"]["state"] != CURRENT:
-        metadata.generate_hierarchy_catalog(stage, format_id)
+        metadata.generate_hierarchy_catalog(
+            stage,
+            format_id,
+            rules_updated=current_meta["rules_updated"],
+        )
     if families["public_archetype_names"]["state"] != CURRENT:
         landing_editorial.generate_public_name_contract(stage, format_id)
     if publication_stale or families["classification_reports"]["state"] != CURRENT:
@@ -791,13 +867,13 @@ def _build_staged_format(
         )
         if result["status"] in {"stale_review_required", "summary_review_required"}:
             raise ClassifierClosureError(
-                "BLOCKED_OWNER_REVIEW: Landing material or accepted result changed"
+                "BLOCKED_OWNER_REVIEW: Landing material or accepted result changed: "
+                f"{result['status']}"
             )
     if families["melee"]["state"] != CURRENT:
         _generate_melee(stage, format_id)
     if publication_stale:
         completeness.build_all_completeness(stage, format_id)
-    current_meta = _json_object(stage / "stats" / format_id / "mtgo/meta.json")
     metadata.generate_metadata(stage, format_id, rules_updated=current_meta["rules_updated"])
 
 
@@ -830,6 +906,25 @@ def _changed_tree_paths(root: Path, stage: Path, format_id: str) -> list[str]:
         elif original.is_file() and original.read_bytes() != candidate.read_bytes():
             changed.append(relative)
     return changed
+
+
+def _allowed_refreshed_artifacts(
+    initial: Mapping[str, Any], staged: Mapping[str, Any]
+) -> set[str]:
+    initial_families = initial["families"]
+    staged_families = staged["families"]
+    refreshed_families = {
+        name
+        for name, family in initial_families.items()
+        if family["state"] != CURRENT
+    }
+    if refreshed_families:
+        refreshed_families.add("mtgo_publication")
+    return {
+        path
+        for name in refreshed_families
+        for path in staged_families[name]["artifacts"]
+    }
 
 
 def _validate_staged_schemas(stage: Path, relative_paths: Sequence[str]) -> None:
@@ -979,7 +1074,9 @@ def converge_format(
     """Stage one format completely, then optionally materialize it atomically."""
 
     root = Path(repository_root).resolve()
+    phase_started = perf_counter()
     initial = inspect_format(root, format_id)
+    _report_phase(format_id, "inspect", phase_started)
     if initial["state"] == CURRENT:
         return {
             "format": format_id,
@@ -997,11 +1094,28 @@ def converge_format(
             "stage": None,
             "inspection": initial,
         }
+    phase_started = perf_counter()
     before_inputs = _protected_input_fingerprints(root, format_id)
-    stage = _create_stage(root, format_id)
+    _report_phase(format_id, "fingerprint-inputs", phase_started)
+    phase_started = perf_counter()
     try:
+        stage = _create_stage(root, format_id)
+    except (ClassifierClosureError, OSError) as exc:
+        return {
+            "format": format_id,
+            "state": INVALID,
+            "mode": "execute" if execute else "plan",
+            "changed_paths": [],
+            "stage": None,
+            "issues": [str(exc)],
+        }
+    _report_phase(format_id, "copy-stage", phase_started)
+    try:
+        phase_started = perf_counter()
         _build_staged_format(stage, format_id, initial)
+        _report_phase(format_id, "generate-stage", phase_started)
     except ClassifierClosureError as exc:
+        _report_phase(format_id, "generate-stage-blocked", phase_started)
         state = BLOCKED_OWNER_REVIEW if str(exc).startswith("BLOCKED_OWNER_REVIEW:") else INVALID
         return {
             "format": format_id,
@@ -1011,7 +1125,9 @@ def converge_format(
             "stage": str(stage),
             "issues": [str(exc)],
         }
+    phase_started = perf_counter()
     after_inputs = _protected_input_fingerprints(stage, format_id)
+    _report_phase(format_id, "verify-staged-inputs", phase_started)
     if before_inputs != after_inputs:
         return {
             "format": format_id,
@@ -1021,7 +1137,9 @@ def converge_format(
             "stage": str(stage),
             "issues": ["retained or Owner-reviewed input changed during staging"],
         }
+    phase_started = perf_counter()
     staged = inspect_format(stage, format_id)
+    _report_phase(format_id, "inspect-stage", phase_started)
     if staged["state"] != CURRENT:
         return {
             "format": format_id,
@@ -1032,16 +1150,7 @@ def converge_format(
             "inspection": staged,
         }
     changed = _changed_tree_paths(root, stage, format_id)
-    refreshed_families = {
-        name
-        for name, family in initial["families"].items()
-        if family["state"] != CURRENT
-    }
-    allowed = {
-        path
-        for name in refreshed_families
-        for path in staged["families"][name]["artifacts"]
-    }
+    allowed = _allowed_refreshed_artifacts(initial, staged)
     unexpected = sorted(set(changed) - allowed)
     if unexpected:
         return {
@@ -1053,7 +1162,9 @@ def converge_format(
             "issues": ["unexpected staged paths: " + ", ".join(unexpected)],
         }
     try:
+        phase_started = perf_counter()
         _validate_staged_schemas(stage, changed)
+        _report_phase(format_id, "validate-staged-schemas", phase_started)
     except ClassifierClosureError as exc:
         return {
             "format": format_id,

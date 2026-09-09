@@ -3,6 +3,7 @@
 const manaIdentities = Object.freeze({
   standard: Object.freeze({
     "4-color-allies": Object.freeze(["w", "u", "r", "g"]),
+    "4-color-demons": Object.freeze(["w", "u", "b", "r"]),
     "4-color-tablet": Object.freeze(["w", "u", "b", "r"]),
     "azorius-auras": Object.freeze(["w", "u"]),
     "azorius-cage": Object.freeze(["w", "u"]),
@@ -25,6 +26,7 @@ const manaIdentities = Object.freeze({
     "dimir-control": Object.freeze(["u", "b"]),
     "dimir-deceit": Object.freeze(["u", "b"]),
     "dimir-excruciator": Object.freeze(["u", "b"]),
+    "dimir-faeries": Object.freeze(["u", "b"]),
     "dimir-flash": Object.freeze(["u", "b"]),
     "dimir-midrange": Object.freeze(["u", "b"]),
     "dimir-oculus": Object.freeze(["u", "b"]),
@@ -61,6 +63,7 @@ const manaIdentities = Object.freeze({
     "jeskai-lessons": Object.freeze(["w", "u", "r"]),
     "jeskai-momo": Object.freeze(["w", "u", "r"]),
     "jeskai-tablet": Object.freeze(["w", "u", "r"]),
+    "jund-artifact-sacrifice": Object.freeze(["b", "r", "g"]),
     "kona-omniscience/temur": Object.freeze(["u", "r", "g"]),
     "leyline-aggro/izzet": Object.freeze(["u", "r"]),
     "mardu-discard": Object.freeze(["w", "b", "r"]),
@@ -335,6 +338,7 @@ const manaIdentities = Object.freeze({
     "hammer-time/orzhov": Object.freeze(["w", "b"]),
     "infect": Object.freeze(["u", "g"]),
     "infect/simic": Object.freeze(["u", "g"]),
+    "izzet-artifact": Object.freeze(["u", "r"]),
     "izzet-twin": Object.freeze(["u", "r"]),
     "jeskai-ascendancy-combo": Object.freeze(["w", "u", "r"]),
     "jund-goblins": Object.freeze(["b", "r", "g"]),
@@ -374,6 +378,10 @@ const manaIdentities = Object.freeze({
 
 const representativeCards = Object.freeze({
   standard: Object.freeze({
+    "4-color-demons": Object.freeze([
+      Object.freeze({ name: "Unholy Annex // Ritual Chamber", image: "../images/representative-cards/standard/unholy-annex-ritual-chamber.jpg" }),
+      Object.freeze({ name: "Jeskai Revelation", image: "../images/representative-cards/standard/jeskai-revelation.jpg" }),
+    ]),
     "4-color-tablet": Object.freeze([
       Object.freeze({ name: "Inevitable Defeat", image: "../images/representative-cards/standard/inevitable-defeat.jpg" }),
       Object.freeze({ name: "Tablet of Discovery", image: "../images/representative-cards/standard/tablet-of-discovery.jpg" }),
@@ -389,6 +397,10 @@ const representativeCards = Object.freeze({
     "boros-dragons": Object.freeze([
       Object.freeze({ name: "Sarkhan, Dragon Ascendant", image: "../images/representative-cards/standard/sarkhan-dragon-ascendant.jpg" }),
       Object.freeze({ name: "Nova Hellkite", image: "../images/representative-cards/standard/nova-hellkite.jpg" }),
+    ]),
+    "boros-token": Object.freeze([
+      Object.freeze({ name: "Warleader's Call", image: "../images/representative-cards/standard/warleaders-call.jpg" }),
+      Object.freeze({ name: "Political Triumph", image: "../images/representative-cards/standard/political-triumph.jpg" }),
     ]),
     "dimir-excruciator": Object.freeze([
       Object.freeze({ name: "Doomsday Excruciator", image: "../images/representative-cards/standard/doomsday-excruciator.jpg" }),
@@ -453,6 +465,10 @@ const representativeCards = Object.freeze({
     "selesnya-offense": Object.freeze([
       Object.freeze({ name: "Practiced Offense", image: "../images/representative-cards/standard/practiced-offense.jpg" }),
       Object.freeze({ name: "Leatherhead, Swamp Stalker", image: "../images/representative-cards/standard/leatherhead-swamp-stalker.jpg" }),
+    ]),
+    "sultai-demon": Object.freeze([
+      Object.freeze({ name: "Unholy Annex // Ritual Chamber", image: "../images/representative-cards/standard/unholy-annex-ritual-chamber.jpg" }),
+      Object.freeze({ name: "Deceit", image: "../images/representative-cards/standard/deceit.jpg" }),
     ]),
     "sultai-reanimator": Object.freeze([
       Object.freeze({ name: "Bringer of the Last Gift", image: "../images/representative-cards/standard/bringer-of-the-last-gift.jpg" }),

@@ -35,7 +35,7 @@ DEFAULT_VISUALS_PATH = Path("configs/mtgo_landing_visuals.yaml")
 HISTORICAL_LANDING_FORMATS = frozenset({"standard", "modern"})
 DECK_LINK_TOKEN_PATTERN = re.compile(r"deck:[0-9a-f]{20}")
 CLASSIFIER_RESTATEMENT_BINDINGS = frozenset(
-    {"classifier_digest", "machine_fact_digest"}
+    {"classifier_digest", "machine_fact_digest", "bilingual_catalog_digest"}
 )
 CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS = (
     "week",
@@ -56,10 +56,21 @@ def _classifier_restatement_preserves_accepted_material(
     binding_mismatches: set[str],
     prior_document: Mapping[str, Any],
     fact_payload: Mapping[str, Any],
+    current_summary_items: list[dict[str, Any]],
+    current_features: list[dict[str, Any]],
 ) -> bool:
-    return binding_mismatches <= CLASSIFIER_RESTATEMENT_BINDINGS and all(
-        prior_document.get(field) == fact_payload.get(field)
-        for field in CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS
+    prior_summary = prior_document.get("weekly_summary")
+    prior_features = prior_document.get("features")
+    return (
+        binding_mismatches <= CLASSIFIER_RESTATEMENT_BINDINGS
+        and all(
+            prior_document.get(field) == fact_payload.get(field)
+            for field in CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS
+        )
+        and isinstance(prior_summary, Mapping)
+        and prior_summary.get("items") == current_summary_items
+        and isinstance(prior_features, Mapping)
+        and prior_features.get("items") == current_features
     )
 
 
@@ -947,6 +958,11 @@ def build_document(
                 for field in binding_fields
                 if review["bindings"].get(field) != current_binding.get(field)
             }
+            materialized = editorial.materialize_review(review, names)
+            current_summary_items = materialized["weekly_summary"]
+            current_features = [
+                _public_feature(item) for item in materialized["features"]
+            ]
             prior_document: dict[str, Any] | None = None
             if allow_classifier_restatement and binding_mismatches <= (
                 CLASSIFIER_RESTATEMENT_BINDINGS
@@ -965,14 +981,15 @@ def build_document(
                     binding_mismatches,
                     prior_document,
                     fact_payload,
+                    current_summary_items,
+                    current_features,
                 )
             )
             if binding_mismatches and not restatement_safe:
                 review_status = "stale_review_required"
             else:
-                materialized = editorial.materialize_review(review, names)
-                summary_items = materialized["weekly_summary"]
-                features = [_public_feature(item) for item in materialized["features"]]
+                summary_items = current_summary_items
+                features = current_features
                 pickup_document_digest = editorial.document_digest(review)
                 summary_fact_digest = editorial.document_digest(
                     {

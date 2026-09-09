@@ -8459,7 +8459,86 @@ the Owner-accepted product subject.
 
 ---
 
-# DEC-169 - Correct reviewed W36 Pauper color branches and Jund transliteration
+# DEC-169 - Atomically co-stage simultaneously stale reviewed MTGO formats
+
+Status: `Accepted`
+
+## Context
+
+The accepted W36 Standard and Modern Landing documents changed public artifact
+bytes for both formats at the same time. The existing publication operation
+rebuilt one format but then ran full-repository validation in its staging tree.
+Standard staging therefore failed on the still-stale Modern closure, while
+Modern-first staging would symmetrically fail on Standard. Neither operation
+could materialize its candidate, even though both reviewed subjects were ready.
+
+## Decision
+
+Keep single-format staging as the default. Add an explicit repeatable
+`--co-stage-format` option for the case where multiple already accepted public
+formats are simultaneously stale. Generate every named format in one external
+staging tree, run the existing full repository validation once, validate each
+format's rules and closure, and materialize the union of changed paths through
+one existing rollback transaction. Reject empty or duplicate sets and validate
+every named format through the existing registry and capability boundary.
+
+Do not weaken, skip, or format-scope the full repository, Schema, output-
+invariant, classifier-closure, protected-input, or production-consumer checks.
+Joint staging does not change independent data admission, authorize content,
+or make a private or incomplete format public.
+
+## Consequences
+
+Two accepted formats can now converge from one exact candidate without either
+format temporarily blessing or ignoring the other's stale closure. Any
+generation, validation, replacement, or final-inspection failure leaves or
+restores both final format trees. The change introduces no classifier rule,
+statistical formula, Schema, public path, permission, dependency, or source
+request and does not alter the Owner-accepted Landing content.
+
+---
+
+# DEC-170 - Retire the generated-page browser publication gate
+
+Status: `Accepted`
+
+## Context
+
+The remaining `production-pages.spec.js` smoke was mandatory in local reviewed
+MTGO staging, the MTGO production workflow, and the Melee candidate workflow.
+Repeated W36 publication attempts completed the deterministic repository,
+rules, Schema, output-invariant, and generated-consumer checks, then failed on
+browser-environment prerequisites such as package availability, temporary-file
+permissions, process launch permissions, and a fixed local port. These failures
+did not identify a candidate-data or accepted-page defect and forced the costly
+candidate generation to restart.
+
+## Decision
+
+Delete `tests/browser/production-pages.spec.js` and every mandatory local and
+workflow invocation of it. Remove the dedicated Node, package-install, and
+Chromium-install steps that existed only for this publication smoke. Retain the
+candidate boundary, full repository, rule, Schema, output-invariant,
+generated-consumer, exact staged-tree, classifier-closure, protected-input,
+atomic replacement, and rollback gates.
+
+Do not replace the deleted browser smoke with another mandatory rendering test.
+Focused browser review remains available when a user-visible implementation
+change independently triggers it, but candidate generation alone no longer
+does so.
+
+## Consequences
+
+Local and cloud candidate publication no longer depends on a browser process,
+Node package installation, a writable browser cache, or a fixed HTTP port.
+Deterministic data and publication-contract failures continue to block before
+packaging or materialization. This changes no classifier rule, statistical
+formula, Schema, generated data, accepted Landing content, public path, source
+request, or visibility boundary.
+
+---
+
+# DEC-171 - Correct reviewed W36 Pauper color branches and Jund transliteration
 
 Status: `Accepted; P14-07B-R3 local implementation authorized`
 
