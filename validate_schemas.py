@@ -6,13 +6,14 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
 from referencing import Registry, Resource
 
 from mtgmeta.config import load_format_registry
-from validate_repository import InfrastructureError, changed_files
+from tools.delivery.gitfacts import InfrastructureError, changed_files
 
 
 ROOT = Path(__file__).resolve().parent
@@ -37,20 +38,33 @@ def _location(parts: list[Any]) -> str:
     return result
 
 
-def load_schemas(schema_dir: Path) -> tuple[dict[str, dict[str, Any]], Registry]:
+def load_schemas(schema_dir: Path, names: set[str] | None = None) -> tuple[dict[str, dict[str, Any]], Registry]:
     schemas: dict[str, dict[str, Any]] = {}
     resources: list[tuple[str, Resource[Any]]] = []
-    for path in sorted(schema_dir.glob("*.schema.json")):
+    def read(name: str) -> dict:
+        if Path(name).name != name or not name.endswith(".schema.json"):
+            raise SchemaError(f"invalid local schema name: {name}")
+        path = schema_dir / name
         schema = _read_json(path)
         Draft202012Validator.check_schema(schema)
         schema_id = schema.get("$id")
         if not isinstance(schema_id, str) or not schema_id:
             raise SchemaError(f"{path.name} has no non-empty $id")
-        schemas[path.name] = schema
-        resources.append((schema_id, Resource.from_contents(schema)))
-    if not schemas:
+        return schema
+    def retrieve(uri: str) -> Resource:
+        # Resolve only referenced local schemas. Never fetch remote schemas or
+        # parse unrelated products merely because they share this directory.
+        schema = read(urlsplit(uri).path.rsplit("/", 1)[-1])
+        if schema["$id"] != uri:
+            raise SchemaError(f"schema identity mismatch: {uri}")
+        return Resource.from_contents(schema)
+    for name in sorted(names if names is not None else {p.name for p in schema_dir.glob("*.schema.json")}):
+        schema = read(name)
+        schemas[name] = schema
+        resources.append((schema["$id"], Resource.from_contents(schema)))
+    if not schemas and names is None:
         raise SchemaError(f"no schemas found in {schema_dir}")
-    return schemas, Registry().with_resources(resources)
+    return schemas, Registry(retrieve=retrieve).with_resources(resources)
 
 
 def validate_instance(
@@ -77,22 +91,25 @@ def validate_manifest(
     mappings = manifest.get("mappings")
     if not isinstance(mappings, list) or not mappings:
         raise SchemaError("manifest mappings must be a non-empty list")
-    schemas, registry = load_schemas(manifest_path.parent)
-    checked = 0
-    failures: list[ValidationFailure] = []
-    seen: set[Path] = set()
-    formats = None
+    selected_mappings = []
     for mapping in mappings:
         if not isinstance(mapping, dict) or set(mapping) != {"pattern", "schema"}:
             raise SchemaError("each manifest mapping must contain only pattern and schema")
         pattern, schema_name = mapping["pattern"], mapping["schema"]
         if not isinstance(pattern, str) or not isinstance(schema_name, str):
             raise SchemaError("manifest pattern and schema must be strings")
-        if schema_name not in schemas:
-            raise SchemaError(f"manifest references missing schema {schema_name}")
-        matches = sorted(repository_root.glob(pattern))
+        matches = [path for path in sorted(repository_root.glob(pattern))
+                   if selected_paths is None or path.relative_to(repository_root).as_posix() in selected_paths]
         if not matches and selected_paths is None:
             raise SchemaError(f"manifest pattern matched no files: {pattern}")
+        if matches:
+            selected_mappings.append((schema_name, matches))
+    schemas, registry = load_schemas(manifest_path.parent, {name for name, _ in selected_mappings})
+    checked = 0
+    failures: list[ValidationFailure] = []
+    seen: set[Path] = set()
+    formats = None
+    for schema_name, matches in selected_mappings:
         for path in matches:
             relative = path.relative_to(repository_root).as_posix()
             if selected_paths is not None and relative not in selected_paths:

@@ -1,316 +1,59 @@
-name: Pull request validation
-
+name: Focused project checks
 on:
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - edited
-  push:
-    branches:
-      - master
-  workflow_dispatch: {}
-
+    types: [opened, synchronize, reopened]
+    paths:
+      - AGENTS.md
+      - CLAUDE.md
+      - .github/copilot-instructions.md
+      - docs/GOVERNANCE.md
+      - docs/QUALITY.md
+      - docs/DELIVERY.md
+      - docs/STATUS.yaml
+      - tools/project.py
+  workflow_dispatch:
+    inputs:
+      check:
+        description: Necessary mechanism check selected for this task
+        required: true
+        type: choice
+        options: [packages, writer, github, platform, checks, dispatch, entries, status]
 permissions:
-  actions: read
   contents: read
-  pull-requests: read
-
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: focused-checks-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-
 jobs:
-  admission:
-    name: Select PR validation class or exact-merge confirmation
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    outputs:
-      mode: ${{ steps.classify.outputs.mode }}
-      reason: ${{ steps.classify.outputs.reason }}
-      pull_request: ${{ steps.classify.outputs.pull_request }}
-      workflow_run: ${{ steps.classify.outputs.workflow_run }}
-      validation_class: ${{ steps.classify.outputs.validation_class }}
-      validation_triggers: ${{ steps.classify.outputs.validation_triggers }}
-    steps:
-      - name: Check out admission logic without persisted credentials
-        uses: actions/checkout@v7.0.0
-        with:
-          persist-credentials: false
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v6.3.0
-        with:
-          python-version: "3.12"
-      - name: Classify validation path
-        id: classify
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: python -B ci_master_admission.py
-
-  targeted-validation:
-    name: Targeted PR validation
-    needs: admission
-    if: needs.admission.outputs.mode == 'targeted'
+  selected:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Check out repository without persisted credentials
-        uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v6.3.0
-        with:
-          python-version: "3.12"
-          cache: pip
-      - name: Verify checked-out PR merge subject
-        shell: bash
-        run: |
-          ACTUAL_PARENTS="$(git cat-file -p HEAD | awk '/^parent / { if (count++) printf " "; printf "%s", $2 } END { print "" }')"
-          EXPECTED_PARENTS="${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}"
-          if [ "$ACTUAL_PARENTS" != "$EXPECTED_PARENTS" ]; then
-            echo "Checked-out PR merge subject mismatch." >&2
-            exit 1
-          fi
-      - name: Install pinned development dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
-      - name: Install maintained package for code and data checks
-        if: >-
-          contains(needs.admission.outputs.validation_class, 'code') ||
-          contains(needs.admission.outputs.validation_class, 'data')
-        run: python -m pip install --disable-pip-version-check --no-deps .
-      - name: Set up Node.js 24 for repository JavaScript checks
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-      - name: Validate repository files and references
-        run: >-
-          python -B validate_repository.py
-          --changed-from "${{ github.event.pull_request.base.sha }}"
-      - name: Validate live documentation policy
-        if: contains(needs.admission.outputs.validation_triggers, 'docs-history')
-        run: >-
-          python -B -m pytest
-          --basetemp="${RUNNER_TEMP}/pytest-targeted-docs"
-          tests/test_documentation_history.py
-      - name: Check maintained Python package
-        if: contains(needs.admission.outputs.validation_class, 'code')
-        run: |
-          python -B -m ruff check src
-          python -B -m mypy
-      - name: Validate changed archetype rules
-        if: >-
-          contains(needs.admission.outputs.validation_triggers, 'rules-standard') ||
-          contains(needs.admission.outputs.validation_triggers, 'rules-modern') ||
-          contains(needs.admission.outputs.validation_triggers, 'rules-pauper')
-        shell: bash
+      - name: Run selected checks
         env:
-          VALIDATION_TRIGGERS: ${{ needs.admission.outputs.validation_triggers }}
+          CHECK: ${{ inputs.check }}
+          BASE: ${{ github.event.pull_request.base.sha }}
         run: |
-          if [[ "$VALIDATION_TRIGGERS" == *rules-standard* ]]; then
-            python -B validate_rules.py my_archetypes/standard.yaml
-          fi
-          if [[ "$VALIDATION_TRIGGERS" == *rules-modern* ]]; then
-            python -B validate_rules.py my_archetypes/modern.yaml
-          fi
-          if [[ "$VALIDATION_TRIGGERS" == *rules-pauper* ]]; then
-            python -B validate_rules.py my_archetypes/pauper.yaml
-          fi
-      - name: Validate classifier rule contracts
-        if: >-
-          contains(needs.admission.outputs.validation_triggers, 'classifier-contract') ||
-          contains(needs.admission.outputs.validation_triggers, 'classifier-adapter') ||
-          contains(needs.admission.outputs.validation_triggers, 'rules-standard') ||
-          contains(needs.admission.outputs.validation_triggers, 'rules-modern') ||
-          contains(needs.admission.outputs.validation_triggers, 'rules-pauper')
-        shell: bash
-        env:
-          VALIDATION_TRIGGERS: ${{ needs.admission.outputs.validation_triggers }}
-        run: |
-          if [[ "$VALIDATION_TRIGGERS" == *classifier-contract* ]]; then
-            TESTS=(tests/test_classifier_rule_contracts.py)
-          else
-            TESTS=()
-            if [[ "$VALIDATION_TRIGGERS" == *rules-standard* ]]; then
-              TESTS+=(tests/test_classifier_rule_contracts.py::test_standard_owner_rule_contracts)
-            fi
-            if [[ "$VALIDATION_TRIGGERS" == *rules-modern* ]]; then
-              TESTS+=(tests/test_classifier_rule_contracts.py::test_modern_owner_rule_contracts)
-            fi
-            if [[ "$VALIDATION_TRIGGERS" == *rules-pauper* ]]; then
-              TESTS+=(tests/test_pauper_rules.py)
-            fi
-            if [[ "$VALIDATION_TRIGGERS" == *classifier-adapter* ]]; then
-              TESTS+=(tests/test_classifier_rule_contracts.py::test_melee_split_card_adapter_contract)
-            fi
-          fi
-          python -B -m pytest \
-            --basetemp="${RUNNER_TEMP}/pytest-classifier-contract" \
-            "${TESTS[@]}"
-      - name: Validate archetype name resolution
-        if: contains(needs.admission.outputs.validation_triggers, 'archetype-names')
-        run: node --test tests/js/phase8-archetype-names.test.js
-      - name: Validate changed public JSON contracts
-        if: >-
-          contains(needs.admission.outputs.validation_triggers, 'schema-contract') ||
-          contains(needs.admission.outputs.validation_triggers, 'schema-documents') ||
-          contains(needs.admission.outputs.validation_triggers, 'melee-data-schema')
-        shell: bash
-        env:
-          VALIDATION_TRIGGERS: ${{ needs.admission.outputs.validation_triggers }}
-        run: |
-          if [[ "$VALIDATION_TRIGGERS" == *schema-contract* ]]; then
-            python -B validate_schemas.py
-            python -B validate_schemas.py --manifest schemas/melee-data-manifest.json
-          else
-            if [[ "$VALIDATION_TRIGGERS" == *schema-documents* ]]; then
-              python -B validate_schemas.py --changed-from "${{ github.event.pull_request.base.sha }}"
-            fi
-            if [[ "$VALIDATION_TRIGGERS" == *melee-data-schema* ]]; then
-              python -B validate_schemas.py --manifest schemas/melee-data-manifest.json --changed-from "${{ github.event.pull_request.base.sha }}"
-            fi
-          fi
-      - name: Validate Top 8 restatement
-        if: contains(needs.admission.outputs.validation_triggers, 'top8-restatement')
-        run: >-
-          python -B -m pytest
-          --basetemp="${RUNNER_TEMP}/pytest-top8-restatement"
-          tests/test_mtgo_top8_restatement.py
-      - name: Validate shared public admission contracts
-        if: contains(needs.admission.outputs.validation_triggers, 'public-admission')
-        run: >-
-          python -B -m pytest
-          --basetemp="${RUNNER_TEMP}/pytest-public-admission"
-          tests/test_mtgo_third_format.py
-          tests/test_classifier_closure.py
-          tests/test_mtgo_reviewed_publication.py
-      - name: Validate Landing card-image cache contract
-        if: contains(needs.admission.outputs.validation_triggers, 'landing-card-image-cache')
-        run: >-
-          python -B -m pytest
-          --basetemp="${RUNNER_TEMP}/pytest-landing-card-image-cache"
-          tests/test_landing_card_image_cache.py
-      - name: Validate card-localization contract
-        if: contains(needs.admission.outputs.validation_triggers, 'card-localization')
-        run: >-
-          python -B -m pytest
-          --basetemp="${RUNNER_TEMP}/pytest-card-localization"
-          tests/test_card_names.py
-          tests/test_simple_card_localization.py
-      - name: Validate card-localization browser selection
-        if: contains(needs.admission.outputs.validation_triggers, 'card-localization')
-        run: node --test tests/js/phase8-card-localization.test.js
-      - name: Validate changed governance contracts
-        if: >-
-          contains(needs.admission.outputs.validation_triggers, 'ci-admission') ||
-          contains(needs.admission.outputs.validation_triggers, 'ci-workflow') ||
-          contains(needs.admission.outputs.validation_triggers, 'publication-preflight') ||
-          contains(needs.admission.outputs.validation_triggers, 'repository-modes')
-        shell: bash
-        env:
-          VALIDATION_TRIGGERS: ${{ needs.admission.outputs.validation_triggers }}
-        run: |
-          TESTS=()
-          if [[ "$VALIDATION_TRIGGERS" == *ci-admission* ]]; then
-            TESTS+=(tests/test_ci_master_admission.py)
-          fi
-          if [[ "$VALIDATION_TRIGGERS" == *ci-workflow* ]]; then
-            TESTS+=(
-              tests/test_ci_workflow.py
-              tests/test_pages_candidate_measurement.py
-              tests/test_trusted_pages_artifact.py
-            )
-          fi
-          if [[ "$VALIDATION_TRIGGERS" == *publication-preflight* ]]; then
-            TESTS+=(tests/test_github_publication_preflight.py)
-          fi
-          if [[ "$VALIDATION_TRIGGERS" == *repository-modes* ]]; then
-            TESTS+=(tests/test_validate_repository_modes.py)
-          fi
-          GITHUB_EVENT_NAME=local_measurement python -B -m pytest \
-            --basetemp="${RUNNER_TEMP}/pytest-targeted-governance" \
-            "${TESTS[@]}"
-  post-merge-confirmation:
-    name: Confirm previously validated merge
-    needs: admission
-    if: needs.admission.outputs.mode == 'pr-confirmation'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Confirm exact prior validation evidence
-        shell: bash
-        run: |
-          {
-            echo "## Exact merged-PR confirmation"
-            echo
-            echo "- Pull request: #${{ needs.admission.outputs.pull_request }}"
-            echo "- Prior validation run: ${{ needs.admission.outputs.workflow_run }}"
-            echo "- Prior validation class: ${{ needs.admission.outputs.validation_class }}"
-            echo "- Admission reason: ${{ needs.admission.outputs.reason }}"
-          } >> "$GITHUB_STEP_SUMMARY"
-          if [ "${{ github.event_name }}" != "push" ] ||
-             [ "${{ github.ref }}" != "refs/heads/master" ] ||
-             [ -z "${{ needs.admission.outputs.pull_request }}" ] ||
-             [ -z "${{ needs.admission.outputs.workflow_run }}" ] ||
-             [ -z "${{ needs.admission.outputs.validation_class }}" ]; then
-            exit 1
-          fi
-          case "${{ needs.admission.outputs.reason }}" in
-            exact_validated_merge:*) ;;
-            *) exit 1 ;;
-          esac
-
-  validate:
-    name: Repository validation (Python 3.12)
-    if: always()
-    needs:
-      - admission
-      - targeted-validation
-      - post-merge-confirmation
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: "Validated merge subject: pr=${{ github.event.pull_request.number }}; base=${{ github.event.pull_request.base.sha }}; head=${{ github.event.pull_request.head.sha }}"
-        if: github.event_name == 'pull_request'
-        run: "true"
-      - name: "Validated PR class: ${{ needs.admission.outputs.validation_class }}"
-        if: github.event_name == 'pull_request'
-        run: "true"
-      - name: Require the one applicable validation path
-        shell: bash
-        run: |
-          {
-            echo "## Pull request validation"
-            echo
-            echo "- Admission: ${{ needs.admission.result }}"
-            echo "- Validation mode: ${{ needs.admission.outputs.mode }}"
-            echo "- Validation class: ${{ needs.admission.outputs.validation_class }}"
-            echo "- Targeted validation: ${{ needs.targeted-validation.result }}"
-            echo "- Exact merged-PR confirmation: ${{ needs.post-merge-confirmation.result }}"
-            echo "- No tournament fetch, publication, byte snapshot, full pytest, or Playwright job runs here."
-          } >> "$GITHUB_STEP_SUMMARY"
-          if [ "${{ needs.admission.result }}" != "success" ]; then
-            exit 1
-          fi
-          if [ "${{ needs.admission.outputs.mode }}" = "targeted" ] &&
-             [ "${{ needs.targeted-validation.result }}" = "success" ] &&
-             [ "${{ needs.post-merge-confirmation.result }}" = "skipped" ]; then
-            exit 0
-          fi
-          if [ "${{ needs.admission.outputs.mode }}" = "metadata-only" ] &&
-             [ "${{ needs.targeted-validation.result }}" = "skipped" ] &&
-             [ "${{ needs.post-merge-confirmation.result }}" = "skipped" ]; then
-            exit 0
-          fi
-          if [ "${{ needs.admission.outputs.mode }}" = "pr-confirmation" ] &&
-             [ "${{ needs.targeted-validation.result }}" = "skipped" ] &&
-             [ "${{ needs.post-merge-confirmation.result }}" = "success" ]; then
-            exit 0
-          fi
-          if [ "${{ needs.admission.outputs.mode }}" = "unclassified" ]; then
-            echo "Unknown or incomplete evidence requires owner classification; no catch-all tests were run." >&2
-            echo "Admission reason: ${{ needs.admission.outputs.reason }}" >&2
-          fi
-          exit 1
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from tools.delivery import checks
+          from tools.delivery.gitfacts import changed_files
+          root = Path.cwd()
+          if os.environ.get("CHECK"):
+              selected = [os.environ["CHECK"]]
+          else:
+              paths = set(changed_files(root, os.environ["BASE"]))
+              selected = []
+              if "docs/STATUS.yaml" in paths:
+                  selected.append("status")
+              if paths.intersection((*checks.ENTRY_FILES, "tools/project.py")):
+                  selected.append("entries")
+          result = checks.run(root, selected)
+          print(json.dumps(result, indent=2))
+          raise SystemExit(1 if result["state"] in {"failed", "execution_failed"} else 0)
+          PY

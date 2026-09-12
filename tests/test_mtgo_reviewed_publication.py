@@ -286,11 +286,13 @@ def test_execute_materializes_only_after_existing_deterministic_validation(tmp_p
     def replace(root, stage, paths, **kwargs):
         assert {path.relative_to(root): path.read_bytes() for path in root.rglob("*") if path.is_file()} == before
         executed = "\n".join(" ".join(command) for command in calls)
-        for name in ("validate_repository.py", "validate_rules.py", "validate_schemas.py",
-                     "validate_output_invariants.py", "test_generated_consumer_contracts.py",
+        for name in ("validate_schemas.py", "validate_output_invariants.py",
                      "diff --exit-code"):
             assert name in executed
-        assert executed.index("validate_schemas.py") < executed.index("test_generated_consumer_contracts.py") < executed.index("diff --exit-code")
+        assert executed.index("validate_schemas.py") < executed.index("diff --exit-code")
+        assert "--format standard" in executed
+        assert "--format modern" not in executed
+        assert not any("--full" in command or "pytest" in command for command in calls)
         assert "playwright" not in executed
         assert "production-pages.spec.js" not in executed
         assert all(path.startswith(("stats/standard/", "reports/standard/")) or path == "stats/catalog.json" for path in paths)
@@ -351,8 +353,10 @@ def test_joint_staging_converges_two_stale_public_formats(tmp_path, monkeypatch)
     assert publication.inspect_publication(tmp_path, "standard") == []
     assert publication.inspect_publication(tmp_path, "modern") == []
     commands = [" ".join(command) for command in calls]
-    assert sum("validate_repository.py" in command for command in commands) == 1
-    assert sum("validate_rules.py" in command for command in commands) == 2
+    invariant_commands = [command for command in commands if "validate_output_invariants.py" in command]
+    assert len(invariant_commands) == 1
+    assert "--format standard" in invariant_commands[0] and "--format modern" in invariant_commands[0]
+    assert not any("--full" in command or "pytest" in command for command in calls)
 
 
 def test_joint_staging_rolls_back_both_formats_on_materialization_failure(

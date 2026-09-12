@@ -2,8 +2,8 @@
 
 The scheduled workflow stores this small manifest alongside a temporary
 artifact containing only fetched inputs.  A checkpoint is valid only for the
-same repository commit and the same configured collection plan; it is never a
-publication input.
+same relevant inputs, implementation and collection plan; a new commit alone
+does not invalidate it. It is never a publication input.
 """
 
 from __future__ import annotations
@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +23,23 @@ MATCH_PREFIX = "matches/"
 
 class CheckpointError(ValueError):
     """Raised when a checkpoint is malformed or incompatible."""
+
+
+def compatible_source(root: Path, source: str, current: str) -> bool:
+    for commit in (source, current):
+        if len(commit) != 40 or any(c not in "0123456789abcdef" for c in commit):
+            raise CheckpointError("Checkpoint applicability needs exact source commits")
+    commands = (["merge-base", "--is-ancestor", source, current],
+                ["diff", "--quiet", source, current, "--", "src", "data", "configs", "rules",
+                 "my_archetypes", "fetched.txt", "requirements.txt", "pyproject.toml",
+                 "mtgo_fetch_checkpoint.py", "validate_production_candidate.py", ".github/workflows/update.yml"])
+    for arguments in commands:
+        result = subprocess.run(["git", *arguments], cwd=root, capture_output=True)
+        if result.returncode == 1:
+            return False
+        if result.returncode:
+            raise CheckpointError("Cannot establish checkpoint input compatibility: " + result.stderr.decode("utf-8", errors="replace"))
+    return True
 
 
 def _formats(value: str) -> list[str]:
@@ -101,6 +119,12 @@ def _expected_from_args(args: argparse.Namespace) -> tuple[str, str, list[str], 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    compatible = commands.add_parser("compatible", help="Compare actual checkpoint inputs across commits")
+    compatible.add_argument("--source", required=True)
+    compatible.add_argument("--current", required=True)
+    rebind = commands.add_parser("rebind", help="Carry completed operations to an unchanged execution subject")
+    _arguments(rebind)
+    rebind.add_argument("--source", required=True)
     initialize = commands.add_parser("initialize", help="write a fresh pending checkpoint")
     _arguments(initialize)
     validate = commands.add_parser("validate", help="reject incompatible or malformed checkpoints")
@@ -113,12 +137,21 @@ def main(argv: list[str] | None = None) -> int:
     status.add_argument("--operation", required=True)
     args = parser.parse_args(argv)
     try:
+        if args.command == "compatible":
+            return 0 if compatible_source(Path.cwd(), args.source, args.current) else 1
         repository, commit, event_formats, match_formats = _expected_from_args(args)
         if args.command == "initialize":
             _write(args.checkpoint, new_checkpoint(repository, commit, event_formats, match_formats))
             print(f"Initialized MTGO fetch checkpoint: {args.checkpoint}")
             return 0
         checkpoint = _load(args.checkpoint)
+        if args.command == "rebind":
+            validate_checkpoint(checkpoint, repository, args.source, event_formats, match_formats)
+            if not compatible_source(Path.cwd(), args.source, commit):
+                raise CheckpointError("Changed inputs require focused reuse review, not an automatic rebind")
+            checkpoint["commit"] = commit
+            _write(args.checkpoint, checkpoint)
+            return 0
         validate_checkpoint(checkpoint, repository, commit, event_formats, match_formats)
         if args.command == "validate":
             print(f"MTGO fetch checkpoint PASS: {args.checkpoint}")

@@ -18,7 +18,9 @@ It distinguishes:
 
 This is a target architecture.
 
-The repository may not yet contain every path described here. Migration must proceed through the phases defined in `ROADMAP.md` without breaking the current Standard MTGO page.
+The repository may not yet contain every optional path described here. Changes
+follow the current authorized plan and preserve supported product behavior;
+ROADMAP supplies product direction, not a mandatory sequence of technical approvals.
 
 Statistical behavior is defined in `STATISTICS_SPEC.md`.
 
@@ -148,7 +150,8 @@ During migration:
 - existing Standard commands may remain available;
 - root-level legacy scripts may remain as wrappers;
 - existing public JSON paths may remain as compatibility outputs;
-- new modules should receive tests before legacy code is removed;
+- needed legacy callers must have a working replacement before removal;
+  verify the affected behavior, without requiring tests merely for a new module;
 - large file moves must not be combined with statistical formula changes unless unavoidable.
 
 ---
@@ -192,7 +195,7 @@ mtgo-data/
 │   ├── STATISTICS_SPEC.md
 │   ├── DATA_ARCHITECTURE.md
 │   ├── ROADMAP.md
-│   ├── DECISIONS.md
+│   ├── GOVERNANCE.md
 │   └── STATUS.yaml
 ├── melee/
 │   └── index.html
@@ -749,7 +752,11 @@ archetypes:
 
 This example defines structure only. It is not an approved real archetype rule.
 
-During the Standard compatibility migration, only distinct legacy rule entries that already return the same legacy archetype may receive different subtype IDs. The initial known duplicate display-name groups are `4-Color Control` and `Izzet Aggro`. All other existing Standard archetypes must initially return no subtype. Choosing names and rules for additional archetypes or subtypes is a later, separately approved rule-development task.
+The initial Standard migration exposed subtypes only for distinct legacy rules
+within the same parent (`4-Color Control` and `Izzet Aggro`). That historical
+mapping does not limit the current approved taxonomy. Implementation-only
+changes preserve parent results and stable IDs; new names or rule meanings are
+business choices within the current task plan, not a repeat migration stage.
 
 ### 7.2 Identifier rules
 
@@ -819,20 +826,30 @@ The format registry should identify:
 - implementation status;
 - relevant output paths.
 
-The registry should eventually allow the front end and command-line tools to discover supported formats without hard-coding only Standard.
+The registry supplies format discovery to the front end and command-line tools;
+consumers must not assume that Standard is the only executable format.
 
 MTGO raw-event collection and product execution are separate states. `event_collection_enabled` authorizes only official event download, normalized archival storage, and fetched-ledger maintenance for that format. It does not authorize Videre fetching, classification, statistics, Landing screening or generation, catalogs, public output, or front-end exposure. Those operations continue to require the executable MTGO state and their declared capabilities.
 
-During Phase 3, Standard, Pauper, Modern, Pioneer, Legacy, and Vintage retain their pre-migration official-event archive, while Standard remains the only executable MTGO product format. Non-Standard Videre collection is not implied by event archival.
+Executable state is capability-scoped rather than equivalent to public
+availability. Commands honor the capability for their network or output effect;
+event archival does not imply Videre collection or public catalog exposure.
 
-Beginning with P6-04, executable state is capability-scoped rather than equivalent to a complete public product. Every command must check its own declared capability before performing network or output side effects. By P6-07, Modern has the full MTGO producer capability set while remaining non-public; executable completeness therefore does not imply public catalog or front-end exposure.
-
-Beginning with P6-08, the single production workflow distinguishes two registry-derived sets:
+Production processing distinguishes two registry-derived sets:
 
 - **event-collection formats** have `event_collection_enabled: true` and receive only official MTGO event archives plus fetched-ledger maintenance unless they also qualify as a complete product;
 - **complete product formats** have MTGO execution enabled and declare every production capability: classification, event and range statistics, matchup statistics, weekly Top 8 generation, Landing generation, metadata generation, and catalog generation.
 
-Standard and Modern are the complete products during P6-08. Standard, Legacy, Pioneer, Pauper, Vintage, and Modern remain event-collection formats. The production workflow may express these sets as explicit environment lists for readable command dispatch, but workflow tests must prove that those lists match the registry. The dynamic production-candidate validator independently derives the same sets from the registry, records per-format event and match counts, and restricts statistics and reports to complete products. A planned or raw-archive-only format cannot gain generated product output merely by being added to the event loop.
+The registry and public catalog checked on 2026-09-12 identify Standard, Modern
+and Pauper as complete public MTGO products. All six listed formats retain
+event collection; Pioneer and Legacy remain planned and Vintage awaits its
+scope decision. Processing selection must agree with the registry and restrict
+statistics/reports to eligible products. A change to selection needs focused
+proof of included and excluded formats, not a workflow test on every delivery.
+A planned or raw-archive-only format cannot gain generated product output
+merely by being added to the event loop. Tabletop availability is independently
+listed in its event catalogs: Modern `405590`, `441441`, `434455` and Pauper
+`438329`; MTGO eligibility does not admit a Tabletop event.
 
 Videre match collection has a narrower availability boundary than official MTGO
 event collection. After bounded retries, retryable HTTP, timeout, and transport
@@ -851,7 +868,7 @@ late event changes those IDs, an unreviewed candidate is refreshed; an approved
 or commented candidate is retained and reported for human re-review. Candidate
 generation may continue on error so that review preparation cannot suppress
 unrelated generated data, but every product format must still be attempted.
-Approval and admitted Landing publication remain human-gated. Known state is
+Landing business acceptance follows the agreed task under GOVERNANCE. Known state is
 maintained through the private Landing review boundary.
 
 P6-08 initially regenerated the maintained hierarchy catalog only for Modern.
@@ -958,16 +975,16 @@ events:
 
 This configuration does not by itself prove the exact round assignments. They must be verified during collection and normalization.
 
-For the Phase 7 reference event, `enabled: true` authorizes the bounded client
-to resolve this one verified whitelist entry for an explicitly invoked manual
-collection. It does not authorize broad event discovery, recurring workflow
-execution, or any write to MTGO paths. The complete live request plan still
-requires the caller to supply both `--execute` and `--complete`.
+`enabled: true` makes a verified whitelist entry eligible for the bounded
+collector; the actual task must authorize the collection. It does not permit
+broad event discovery, recurring execution or MTGO writes. The complete live
+request command requires `--execute` and `--complete` as technical effect flags,
+not separate Owner approvals.
 
-P7-01 activation alone writes no source or generated data. P7-02 owns the first
-retained immutable snapshot and canonical normalized event. Later Phase 7
-tasks own classification, mixed-event opportunity accounting, overview and
-matchup generation, public packaging, and workflow integration in that order.
+Configuration alone writes no source or generated data. Collection produces the
+retained snapshot and normalized input; classification, opportunity accounting
+and event statistics consume that input. These are data dependencies within the
+authorized delivery, not the completed P7-01/P7-02 stage-authorization sequence.
 
 ### 8.3 Event-specific overrides
 
@@ -1019,7 +1036,7 @@ data/pioneer/
 data/legacy/
 ```
 
-Existing Standard paths must not be moved until regression tests and front-end compatibility are in place.
+A Standard path change preserves required consumer compatibility; QUALITY defines affected proof.
 
 ### 9.1 MTGO event files
 
@@ -1169,7 +1186,7 @@ Do not store:
 
 Only collect data required for approved public tournament analysis.
 The reviewed public Melee participant ID is an approved join and provenance
-field under DEC-147; this does not authorize any other account or profile field.
+field; this does not authorize any other account or profile field.
 
 ### 10.3 Raw-data retention
 
@@ -1199,7 +1216,7 @@ decklists required for the approved product. These third-party records remain
 subject to `NOTICE.md` and are not relicensed as project code. Any later refresh
 must create a separate snapshot, pass the same boundary, and receive an
 explicit repository-size and production-input review before it can replace or
-supplement the reference input. After the separately gated writer implementation,
+supplement the reference input. The maintained writer
 a future approved event must use manifest `4.0.0`; it must not create a new
 source-preserving v2 production snapshot or a new HMAC v3 snapshot.
 
@@ -1592,8 +1609,10 @@ integration remain separate publication responsibilities.
 
 ### 11.11 Deterministic event publication packaging
 
-P7-07 rebuilds and byte-compares the four event statistics before publishing
-their metadata. It writes only:
+The event metadata producer currently reconstructs the selected event statistics
+and compares their bytes so that descriptors bind the intended derived documents.
+This is the producer's selected-event consistency operation, not a standing
+regression suite or a request to rerun completed work for each task stage. It writes only:
 
 ```text
 stats/<format>/melee/events/<event_id>/meta.json
@@ -1619,10 +1638,9 @@ P13-02 advances future format catalogs to Schema `1.1.0`. Every `1.1.0`
 event entry contains a versioned `matchup_compatibility` block binding the
 Melee/Tabletop identity, Constructed format, `all_constructed` scope, matchup
 Schema and SHA-256, taxonomy Schema and SHA-256, and non-blocking quality.
-Catalog Schema `1.0.0` remains valid for existing single-event discovery, so
-the current production catalog need not be regenerated in this task. It is
-deliberately ineligible for multi-event admission because it lacks the new
-evidence. A later authorized event publication writes `1.1.0` through the
+Catalog Schema `1.0.0` remains valid for historical single-event discovery but
+is ineligible for multi-event admission because it lacks that compatibility
+information. Current catalogs use `1.2.0` as described below; changes use the
 maintained producer rather than manually editing generated JSON.
 
 P13-07 advances future multi-event-eligible catalogs to Schema `1.2.0` and
@@ -1661,8 +1679,9 @@ opportunity, statistics, and catalog work begins after that checkpoint, so a
 later-stage failure cannot discard the source evidence or require recollection.
 The workflow pushes changed data only to `data/melee-<event_id>` for later
 review. It cannot push
-`master`, create a pull request, merge, or run on a schedule. P7-08 owns the
-first authorized real workflow execution.
+`master`, create a pull request, merge, or run on a schedule. These are boundaries
+of the collection workflow; Codex completes the same authorized delivery's PR,
+merge and publication through the delivery path without another stage approval.
 
 P10-12 resolves the Constructed format before any candidate baseline, retained
 snapshot lookup, or live request. It loads the authoritative whitelist through
@@ -1671,8 +1690,7 @@ and verified. The resulting format becomes the workflow's sole `FORMAT` value
 for all data paths, classification rules, statistics, publication, and staged
 candidate paths. A missing, disabled, unverified, malformed, or unsupported
 entry fails before source access and has no fallback format. Manual dispatch,
-review-branch publication, and owner-controlled pull-request review remain
-unchanged.
+review-branch publication and source boundaries are preserved.
 
 ### 11.12 Reference-event compatibility manifest
 
@@ -1726,8 +1744,8 @@ reference snapshot.
 
 ### 11.13 Future-event participant and field minimization
 
-DEC-147 selects minimized resource document `2.0.0`, complete snapshot manifest
-`4.0.0`, and checkpoint `3.0.0` for the next implemented collection contract.
+The current collection contract uses minimized resource document `2.0.0`, complete snapshot manifest
+`4.0.0`, and checkpoint `3.0.0` in the implemented collection contract.
 Each admitted participant context copies the public Melee `Player.ID` exactly as
 positive-decimal-string `source_participant_id`. The value is an opaque source
 identifier: it may be shared across Melee events, but the project does not
@@ -1735,7 +1753,7 @@ guarantee global or permanent upstream stability.
 
 The source ID remains available in approved raw and normalized Git records for
 joins and provenance. Generated products continue using the existing
-event-scoped derived `participant_id`; DEC-147 adds no raw source-ID field to a
+event-scoped derived `participant_id`; this contract adds no raw source-ID field to a
 Pages artifact or front-end response. Because public Git is the durable archive,
 the source ID remains publicly accessible and potentially cross-event linkable
 even when the Pages artifact omits it.
@@ -1750,9 +1768,9 @@ Legacy v1/v2 and completed HMAC v3 snapshots remain read-compatible and need no
 secret for downstream parsing or generation. The protected `434455` v2 bytes
 and derived compatibility result are not migrated. The successor writer has no
 HMAC creation, key storage, key ID, rotation, injection, or recovery lifecycle.
-Until that writer and its validation are separately accepted and merged, no new
-live complete collection may use either the old HMAC writer or the unimplemented
-v4 contract.
+The implemented v4 writer is the current collection path; do not reintroduce
+HMAC creation for new collections. Existing supported snapshots remain readable
+under their own versions without replaying a writer-acceptance stage.
 
 ### 11.14 Minimized-resource validation and privacy requests
 
@@ -1770,7 +1788,7 @@ when the live parser has verified that Melee returned both an empty `Records`
 array and an empty `Components` array for the requested decklist identity. The
 empty resource is persisted as `decklists: []`; normalization then retains the
 standing and reference while assigning the participant's decklist status
-`unavailable` under DEC-152. A nonempty response with no recognized cards is
+`unavailable`. A nonempty response with no recognized cards is
 still rejected as a source-compatibility error.
 
 An exact-key recursive scan supplements the Schema for source identity,
@@ -1784,82 +1802,31 @@ change accidentally admitting a previously rejected source key.
 `NOTICE.md` publishes `djacerror@gmail.com` as the project contact and defines
 the information needed for correction or removal review. Current content
 correction, upstream-source requests, and Git-history rewriting are distinct
-operations. P10-04 changes no retained or generated data and does not
-authorize the separately owner-gated P10-05 history operation.
+operations with different scope. A product correction does not silently expand
+into Git-history rewriting or removal of source records.
 
-### 11.15 Legacy reachability and history-rewrite sequencing
+### 11.15 Public history and removal scope
 
-P10-05 identifies commit `d8880c2126814407a873d9ba3285300cc1c87c4f`
-as the only commit that introduces `data_raw/`. The current master tree still
-contains and GitHub Pages still serves the complete 484-file event `434455`
-snapshot. Twenty-one ordinary remote branches, three phase tags, and 49
-GitHub-managed pull-request heads are reachable from the introducing commit.
+Public Git history, current Pages content, other clones, forks and third-party
+caches are distinct copies. A branch force-push cannot update GitHub-managed
+pull-request refs or external copies. History-only rewriting does not remove
+current exposure while the same paths remain served. Removing approved raw
+paths changes the retained-data and compatibility boundary and requires the
+corresponding explicit business/privacy decision. Product rollback cannot undo
+past disclosure. Historical restoration observations are evidence for their
+original objects, not a standing instruction to perform another history rewrite.
 
-A branch and tag force-push cannot update GitHub's read-only pull-request refs,
-other users' clones, forks, or third-party caches. A history-only rewrite also
-does not reduce current exposure while the same raw paths remain at master.
-Removing those current paths would change the P10-02 exact-byte compatibility
-closure and requires both an approved compatibility successor and a selected
-storage destination.
+### 11.16 Source retention and deployable-package storage
 
-P10-05 therefore proves an owner-designated private independent bundle and
-restoration, then stops for an owner decision. Actual history rewriting is not
-an implicit implementation step. The preferred sequence defers any execution
-until P10-06/P10-07 resolve the active archive and public-path boundary, unless
-the owner separately accepts the full compatibility, Git-ref, collaborator,
-Pages, and GitHub Support consequences.
-
-The P10-05 base was preserved in a private bundle of 18,003,023 bytes with
-SHA-256
-`53ea51b53cd03f7cd55bdbfff61e7e0235e2c74f5556e3966f44f40e2c83a35d`.
-A no-hardlink mirror restoration reproduced all 216 named refs exactly, and a
-second master worktree passed object integrity, the seven-event compatibility
-checks, and repository validators. This proves the procedure only for base
-`48a4863a28d6ec6d9b854c7a9d72058c68a0f4aa`; any later execution requires a
-fresh bundle after refs stop moving.
-
-### 11.16 Selected public-Git archive and Pages-artifact separation
-
-P10-06 audits the current branch-root publication model. The scheduled MTGO
-workflow fetches, builds, validates, stages `data/`, `stats/`, `reports/`, and
-`fetched.txt`, then pushes a generated commit directly to master. GitHub's
-managed Pages build publishes from the repository tree. Representative
-`data/`, `stats/`, `reports/`, and `data_raw/` paths all return HTTP 200, even
-though the active front end fetches only the `stats/` consumer contract.
-
-After comparing the current repository, `j6e/mtg-meta-analyzer`, and Videre's
-database-backed service, the owner selected the A+ architecture on 2026-08-01.
-The selected target separates storage from publication without adding a cloud
-storage provider:
-
-1. the current public Git repository continues to own code, tests, Schemas,
-   reviewed configuration, governance documents, retained source evidence,
-   normalized inputs, and generated data;
-2. accepted field minimization and Schema gates control which future Melee v3
-   source fields may enter that public Git history;
-3. bounded workflow artifacts transfer exact inputs and candidates between
-   fetch, build, validation, and deploy jobs but are not the durable archive;
-4. a fresh allowlisted static artifact contains only approved public paths and
-   is deployed to GitHub Pages independently of the repository-root tree.
-
-No storage account, provider, region, fee, object-store credential, or data
-migration is part of A+. Public source retention is intentional. The current
-repository pack and comparable public-Git projects provide no evidence of an
-immediate capacity problem, so the selected design records repository,
-data-tree, and Pages-artifact size over time and requires a later owner review
-only if measured growth affects clone, workflow, or Pages operation.
-
-This remains a selected proposal, not an active implementation. A separately
-authorized P10-07 may replace managed branch-root Pages publication with the
-allowlisted artifact while preserving the current Git data location, daily
-commit behavior, approved public closure, and every event `434455`
-compatibility byte. P10-09 remains the separate task for splitting fetch,
-build, and publish jobs. Any later cloud-storage migration, raw-path removal,
-compatibility revision, or history rewrite requires new evidence and separate
-owner authorization.
-
-The complete inventory, option matrix, permission boundary, recovery proof,
-and owner selection are recorded in `docs/audits/P10-06.md`.
+The public product repository retains the already approved source evidence,
+normalized inputs, generated data, reviewed configuration and code. Field
+minimization controls which new source fields enter public Git; a private
+recovery repository does not retroactively make those retained records private.
+GitHub Pages serves an explicitly selected static package, independently of the
+repository root. Temporary workflow artifacts can transfer inputs or candidates
+but are not the sole durable recovery store. Complete deployment packages and
+private candidates use the GitHub-only archive described in DELIVERY.
+No new source retention, raw-path removal or history rewrite is implied.
 
 ### 11.17 Allowlisted Pages artifact implementation
 
@@ -1899,65 +1866,16 @@ duplicated into the overlay.
 The policy is a publication boundary, not a confidentiality claim. Python
 source, tests, internal governance documents, and development configuration
 remain available through public Git but are not site payloads. New approved
-product data continues to enter the selected product trees through the existing
-candidate and Schema gates; a new repository path outside those trees cannot
+product data enters selected product trees only within approved scope and
+with applicable result verification; a new repository path outside those trees cannot
 become a Pages path merely because it was committed.
 
-`.github/workflows/pages.yml` builds the candidate for relevant pull requests,
-site-input `master` pushes, and an explicit `master` dispatch from the
-production publisher. Governance, tests, and paths excluded from the site do
-not trigger Pages. Pull requests cannot upload or deploy the Pages artifact. A
-relevant master push or accepted dispatch may upload the verified artifact, and
-a separate job with only `pages: write` and `id-token: write` may deploy it
-through the protected `github-pages` environment. The Pages workflow does not
-fetch tournament data or modify the repository. It may read Scryfall's Oracle
-Cards Bulk Data and `cards.scryfall.io` image CDN only when an exact
-rolling-subject cache artifact is absent. A verified artifact is named by the
-subject SHA-256, retained for 90 days only from a trusted `master` Pages run,
-and reusable across later runs with the same subject. A cache miss, unresolved
-card, invalid image, digest mismatch, or incomplete bundle blocks the new
-Pages candidate and leaves the prior deployment unchanged.
-
-After fetch, `.github/workflows/update.yml` hashes the generation inputs. The
-latest generated commit records that digest, the validated output digest, the
-producer run and attempt, and the source commit in unique commit trailers. If a
-later fetch produces the same generation-subject digest, the existing bytes are
-reused and no baseline smoke, build, validation, artifact, generated commit, or
-Pages dispatch is created. A changed subject is generated and validated once,
-then transferred as the immutable `mtgo-build-candidate` artifact.
-
-The production publish job explicitly dispatches Pages only after the generated
-commit is pushed and remote `master` is verified; a push made with
-`GITHUB_TOKEN` does not recursively trigger the push workflow. That dispatch
-names the exact publication commit, producer run and attempt, source commit,
-generation-subject SHA-256, and validated-output SHA-256. Pages accepts the
-production path only when all six values are present, the producer jobs prove
-the candidate succeeded, the publication commit is an ancestor of the
-immutable master dispatch subject, and the commit trailers and validated
-artifact digests match. Pages compares the extracted artifact paths and file
-contents with that dispatch subject, ignoring ordinary permissions that Git
-does not preserve, then packages the normal allowlist without rerunning
-candidate tests. A dispatch with no production fields remains the separately
-authorized ordinary manual path; an exact-evidence recovery supplies all six
-fields, and partial production evidence fails closed. After
-deployment, availability is checked only for `index.html`, `melee/index.html`,
-and `stats/catalog.json`.
-
-The initial legacy baseline is Pages run `30699810612`, built from merge commit
-`82a28d954546cb6112ad0655223fd609035b0b40`. Its retained artifact contains
-1,996 files and 226,062,320 unpacked bytes. The first local P10-07 candidate
-contains 1,584 files and 213,481,951 bytes. Apart from generated `.nojekyll`,
-all 1,583 candidate files exist in that legacy artifact with identical bytes.
-The 413 omitted legacy outputs are repository code, tests, internal documents,
-configuration, rules, Schemas, Markdown-rendering outputs, and one generated
-Jekyll theme stylesheet; neither product entry point references them.
-
-The repository Pages setting remains the legacy `master` `/` source during
-local work and pull-request review. A separately authorized cutover changes it
-to GitHub Actions immediately before the accepted PR merge. Rollback restores
-the recorded legacy source and confirms a managed build. The legacy setting
-record and artifact remain recovery evidence until a scheduled MTGO update is
-followed by a successful custom deployment and front-end acceptance.
+Content-affecting resource preparation occurs before the candidate is finalized.
+The deployment and recovery paths consume that package without source access,
+classification or regeneration. Current supported operations and runtime
+credentials are defined in DELIVERY, not in historical workflow descriptions.
+The original Pages baseline is historical evidence only; neither legacy Pages
+source settings nor old governance are a recovery mechanism.
 
 ---
 
@@ -2147,10 +2065,9 @@ must not infer either denominator from presentation rows.
 
 ### 12.1.1 Phase 8 consumer-contract freeze
 
-P8-03 freezes the semantic consumer requirements before P8-04 chooses a
-versioned Schema or public-field spelling. The published legacy outputs remain
-compatible until that migration is implemented; no front end may reinterpret a
-legacy percentage as a new statistic.
+These are the semantic consumer requirements established in Phase 8. Retained
+legacy fields preserve their declared meaning until a versioned migration;
+no front end may reinterpret a legacy percentage as a new statistic.
 
 The target public contract requires:
 
@@ -2171,19 +2088,19 @@ The target public contract requires:
 - direct Tabletop event/per-scope overall summaries, event structure, supported
   scopes, quality context, and compatible multi-event matchup counts.
 
-P8-04 owns exact field names, Schema versions, compatibility aliases, producer
-paths, rounding, fixtures, and migration tests. P8-05 and P8-06 implement
-only the approved producers. P8-07 proves generated consumer readiness with
-real retained data before P8-08 through P8-10 implement production pages.
+Field names, Schema versions, compatibility aliases, producer paths and rounding
+must agree between a changed producer and its consumers. Verify affected
+relationships when changing that contract, retaining meaningful compatibility
+examples. The completed P8 task sequence imposes no prerequisite audit, producer
+stage approval or repeat consumer regression on current work.
 
 ### 12.1.2 P8-04 versioned target contract
 
 `schemas/phase8-public-contract.schema.json` is the executable `1.0.0` target
 contract for the P8-03 consumers. Its representative document is
-`tests/fixtures/phase8_public_contract.json`. GOV-08 retained that document as
-frozen migration evidence but retired its routine Python regression module.
-Current public files are protected by the production Schema manifest, candidate
-boundary, value-independent output invariants, and generated consumer contract.
+`tests/fixtures/phase8_public_contract.json`, retained as business migration
+evidence. Current public results must satisfy the applicable data relationships;
+QUALITY defines when and how to check them, without reviving historical test schedules.
 
 The contract covers:
 
@@ -2238,10 +2155,9 @@ hierarchy, metadata, the global consumer catalog, and diagnostics. Candidate
 validation admits only the reviewed completeness documents, Top 8 week/base
 names, latest-only Landing document, and `stats/catalog.json`; arbitrary
 generated paths remain blocked.
-Before packaging, dedicated consumer-contract tests verify relationships among
-the current generated documents, and a focused Chromium baseline renders those
-documents through the production pages. Both derive rolling identities, counts,
-percentages, and dates from the candidate rather than from an earlier snapshot.
+Affected consumers must read the candidate's actual identities, counts,
+percentages and dates. Use the result and mechanism checks selected under
+QUALITY; packaging alone does not trigger consumer suites or a Chromium baseline.
 
 ### 12.2 Melee output
 
@@ -2599,19 +2515,20 @@ added.
 
 ### 15.7 No statistical formulas only in UI
 
-Primary statistical values must be generated or calculated through tested statistical code.
+Primary statistical values come from the defined statistical producers; the UI does not invent parallel formulas.
 
 The front end may format values and combine explicitly supplied counts for approved interactive views, but a statistical rule must not exist only as undocumented JavaScript.
 
-The shared statistical tests must prove every hierarchical matchup rollup before
-the front end relies on it. JavaScript may select and sum the approved canonical
+When rollup logic changes, use independently calculable counts to verify the
+affected parent/subtype projection and its consumer. Unchanged rollup evidence
+remains reusable. JavaScript may select and sum the approved canonical
 count cells for an interaction, but it must not infer classification, invent a
 subtype, average percentages, or define a different eligibility rule.
 
-For the Phase 8 target, a visible `Win Rate` / `胜率` is calculated from the
+Under the literal-rate contract, a visible `Win Rate` / `胜率` is calculated from the
 supplied all-match W-L-D record as `W / (W + L + D)`. The browser may format it
-or roll up supplied canonical counts, but the versioned producer and its
-compatibility behavior remain P8-04 responsibilities.
+or roll up supplied canonical counts; the versioned producer defines the meaning
+and retains the existing compatibility fields until their approved migration.
 
 ### 15.8 Hierarchical statistics and deck-detail presentation
 
@@ -2623,8 +2540,8 @@ global control may expand or collapse all eligible parents.
 A subtype must have a stable self-contained public display label, such as
 `Grixis Prowess`, in addition to its stable subtype ID and parent membership.
 Presentation code must not rename classifier identities or guess a label from
-color words. The exact catalog field and compatibility behavior are frozen
-before generator implementation.
+color words. The generated label's field and compatibility meaning must agree
+between producer and consumer.
 
 The shared producer composes this label from maintained taxonomy names rather
 than a color-name dictionary. If a parent name begins with the exact name of
@@ -2647,32 +2564,23 @@ Deck-construction details use the most specific maintained identity:
 - a weekly Top 8 selection displays the exact event deck while reusing the same
   detail component and subtype comparison base.
 
-### 15.9 Design-to-data sequence
+### 15.9 Design and data compatibility
 
-Phase 8 follows this order:
+The shared shell uses catalog-driven availability and separate MTGO and Tabletop
+controllers. Retain both public entry paths and the approved data meanings when
+changing UI or producers. A changed payload must reach its actual consumer with
+the needed fields, labels, missing states and compatible identities intact.
+Inspect that affected result; do not repeat the completed Phase 8 audit,
+prototype, backend, page-switch and all-product acceptance sequence.
 
-1. current UI and public-data audit;
-2. local information-architecture and interaction prototypes;
-3. owner-approved UI specification;
-4. statistical and public payload contract;
-5. backend generation and Schema validation;
-6. productionize the owner-accepted P8-07 real-data prototype as a parallel,
-   modular static candidate;
-7. connect the MTGO and Tabletop production entry points in separate tasks;
-8. cross-product browser and regression acceptance.
-
-Phase 4 already split the legacy MTGO page. P8-08 therefore does not decompose
-that page a second time. The legacy entry remains unchanged as a regression
-oracle and rollback path while the candidate establishes the shared shell,
-catalog-driven availability, and structurally separate MTGO and Tabletop
-controllers. P8-09 alone may switch `/index.html`; P8-10 separately owns
-`/melee/index.html`.
+Historical prototypes and legacy assets explain compatibility needs. They are
+not a permanent byte-equality oracle or a frozen rollback target. Current
+recovery restores the applicable complete archived product under DELIVERY.
 
 Local HTML/CSS/JavaScript prototypes are the default design method. An external
 generative design service is not part of the required architecture and may be
-used only after separate owner authorization that identifies the design gap,
-expected deliverables, current cost or quota limits, transmitted context, data
-minimization, and the local alternative. Its output is advisory and does not
+used within the task's authorization under GOVERNANCE, with the actual design
+need, cost, transmitted context and data minimization considered. Its output is advisory and does not
 replace repository specifications, tests, or owner acceptance.
 
 ### 15.10 Shareable URL state
@@ -2703,47 +2611,12 @@ serialized.
 
 ---
 
-## 16. Test architecture
+## 16. Verification responsibility
 
-Executable tests belong under `tests/`. Historical fixtures may remain under
-`tests/fixtures/` as review or compatibility evidence, but their presence does
-not create a test trigger. `docs/TEST_TRIGGER_MATRIX.md` is the complete live
-inventory of retained triggers, purposes, minimum subjects, and commands.
-
-### 16.1 Default and retained checks
-
-The default is no test. A check runs only for its named risk and smallest
-subject, and successful evidence is not repeated for an unchanged tree or
-generated candidate. Do not invoke unbounded pytest from a production or pull-
-request workflow.
-
-The retained data/output set consists of:
-
-- one offline smoke for each installed command entry point;
-- the minimum Melee pre-persistence privacy boundary;
-- direct public Schema and value-independent output validators;
-- the generated consumer contract.
-
-The targeted control plane separately retains only the live-status contract,
-CI admission/workflow contract, maintained-code lint/type checks, rule/Schema
-validators, and one UI model smoke. These checks run only when their associated
-paths change; they are not part of a production baseline.
-
-### 16.2 Production boundary
-
-Before live collection, each workflow runs only the offline command and privacy
-checks for the commands it is about to use. After generation, validation binds
-to the new candidate: candidate-path allowlists, repository/rule/Schema checks,
-output invariants, and consumer contracts. The candidate is validated once
-before packaging. Browser rendering is not a publication gate.
-
-### 16.3 Frozen fixtures
-
-Frozen corpora and compatibility manifests remain available for audit, manual
-review, and explicit future migrations. They are not discovered or executed in
-routine CI, and they must not be expanded into rolling byte snapshots.
-
----
+[QUALITY](QUALITY.md) defines necessary results, finite core mechanisms and
+valid result reuse. Historical fixtures do not trigger checks merely by existing.
+Data schemas define shape; they do not independently prove counts, business
+meaning, actual resource rendering or authorization.
 
 ## 17. Command-line entry points
 
@@ -2762,7 +2635,7 @@ python -m mtgmeta.melee.stats --event-id 434455
 
 These command shapes are architectural examples, not confirmation that the modules already provide executable command-line interfaces.
 
-Final commands must be documented in `README.md` and tested before legacy commands are removed.
+Supported commands are documented in README or entry help; necessary callers must reach their replacement before an old command is removed.
 
 ### 17.1 Retired compatibility wrappers
 
@@ -2770,8 +2643,8 @@ P11-12 removed the temporary root compatibility wrappers after the installed
 package commands, package APIs, workflows, tests, and current README commands
 were verified. Supported MTGO operations now use `mtgo-data-mtgo --root .
 --format <id> <command>` or the equivalent `python -m mtgmeta.mtgo` form.
-Shared helpers are imported from `mtgmeta`, and the frozen aggregate Standard
-quality validator lives at `tools/validate_standard_quality.py`.
+Shared helpers are imported from `mtgmeta`. Frozen Standard classification
+corpora describe their historical subject; they are not a current aggregate quality gate.
 
 Historical audits and the Phase 3 inventory continue to name the former files
 as evidence of the migration. Their presence in those records does not make
@@ -2818,100 +2691,16 @@ Do not rely on undeclared packages installed only on one developer’s machine.
 
 ---
 
-## 19. GitHub Actions architecture
+## 19. Source operations and delivery separation
 
-Target workflows belong under:
+MTGO's existing daily schedule remains 09:00 UTC. Melee operations remain
+explicitly event-scoped. Fetch, generation and product publication are different
+side effects; completed input is reused. Source-specific inputs and derived
+products remain separate. There is only one supported Pages writer.
+Operational commands, credentials, candidate handoff and recovery live in
+[DELIVERY](DELIVERY.md); workflow runtime state does not authorize new work.
 
-```text
-.github/workflows/
-```
-
-### 19.1 `ci.yml`
-
-Purpose:
-
-- run on pull requests and relevant pushes;
-- install declared development dependencies;
-- validate classification rules;
-- run pytest;
-- validate representative JSON files;
-- prevent unsafe merges.
-
-Permissions should default to:
-
-```yaml
-permissions:
-  contents: read
-```
-
-CI should not receive write permission without a specific reason.
-
-### 19.2 `update.yml`
-
-Purpose:
-
-- scheduled and manual MTGO updates;
-- fetch approved MTGO data;
-- generate format statistics;
-- run validation;
-- run tests;
-- commit only generated changes after checks pass.
-
-It should use:
-
-- workflow-default `contents: read`, with `contents: write` only on the final
-  publication job;
-- a dedicated concurrency group;
-- `cancel-in-progress: false` unless a later decision changes it;
-- a workflow summary;
-- no-op handling when no files change.
-
-The production workflow uses three validation layers:
-
-1. a dedicated clean-checkout job that runs only the offline CLI and privacy
-   checks needed by the production path before any live fetch starts;
-2. a dynamic, registry-aware candidate snapshot comparison after fetch and generation but before staging;
-3. confirmation that the locally created generated-data commit was published and
-   remains the current remote `master` commit or its ancestor.
-
-The fetch, build, and publish jobs transfer their inputs and validated output as
-short-lived immutable workflow artifacts. The build job verifies the fetched
-artifact digest before extraction; the publish job verifies the validated-output
-digest and rejects archive paths outside `data/`, `stats/`, `reports/`, and
-`fetched.txt` before extraction. The normal candidate artifacts are one-day
-intra-run handoffs, not durable storage. The candidate baseline is part of the
-fetched-candidate artifact. Its
-schema version is breaking when the tracked format dimensions change; P6-08
-used version `2.0.0` to replace the former Standard-only match count with
-per-product match counts. The discovery-ledger addition uses version `3.0.0`.
-Each `data/<format>/mtgo/discovery.json` records observed event links and their
-processed, retained, excluded, or deferred state. New arbitrary generated JSON
-paths remain blocked even for complete products; only expected event archives,
-match archives, discovery ledgers, and machine-produced
-`landing/review/candidates_<week>.yaml` and
-`landing/review/base_reference_<week>.yaml` may be newly
-created automatically.
-
-Publication remains bound to the workflow's immutable source commit. Before
-restoring the validated output, the publish job compares that source with the
-current remote `master`; it repeats the comparison after a rejected push to
-distinguish a branch race from an authentication or transport failure. A stale
-candidate is never rebased, force-pushed, or restored onto newer code.
-
-The first stale run may dispatch one replacement `update.yml` run on current
-`master`, carrying only the parent run ID. The replacement does not reuse the
-old fetched candidate, baseline, generated output, or validation evidence; it
-passes the complete normal pipeline under its own source commit. A stale
-replacement fails closed without another dispatch. The original run remains a
-failed publish stage, so Pages and weekly readiness stay blocked and the
-deduplicated publish Issue records controlled stale-base evidence without raw
-source or log content.
-
-If the generated-data push succeeds and another commit reaches `master` before
-confirmation, publication remains valid only when the generated-data commit is
-an ancestor of the observed tip. Pages still performs its exact production
-evidence and content comparison against that immutable publication commit;
-diverged history fails closed.
+### MTGO source-response meaning
 
 Each requested monthly listing is observed three times and the observations
 are unioned with recorded links. A link does not become invalid merely because
@@ -2931,94 +2720,15 @@ build and publication. This recovery retains no response body or cookie,
 expands no URL scope, and changes no request count, timeout, recovery delay, or
 checkpoint contract.
 
-When an MTGO input collection fails after the clean baseline and checkpoint
-manifest are prepared, the read-only fetch job may retain a separate
-`mtgo-fetch-checkpoint` artifact for seven days. It contains only `data/`,
-`fetched.txt`, the clean baseline, SHA-256 sums, and a versioned manifest of the
-exact repository, full trigger SHA, configured event formats, configured match
-formats, and each operation's `pending` or `complete` state. The next fetch job
-may discover it with `actions: read` only when the artifact metadata and its
-manifest both match the exact master SHA and current plan. It verifies checksums
-and rejects archive paths outside `data/` and `fetched.txt` before restoration.
-It skips only recorded-complete collection operations and reruns every pending
-one. An incompatible, corrupt, expired, or absent checkpoint is never reused;
-the job starts from its clean checkout instead.
+An incomplete input checkpoint is recovery material, not a complete generated
+candidate. It cannot be represented as successfully collected input. Recovery
+reuses completed operations whose inputs and collection plan still apply;
+unrelated commit changes alone do not invalidate collection. Discovery ledgers
+retain observed links and processed, retained, excluded or deferred states.
 
-An incomplete checkpoint is not the normal fetched-candidate artifact and is
-never made available to build or publish. It therefore cannot generate
-statistics, validate a candidate, stage a commit, or alter public output. It is
-bounded recovery state, not a durable data archive. P10-11 separately reports
-an actual failed pipeline stage through its dedicated issue-only notification
-job.
-
-The clean regression and live fetch use separate bounded jobs so a complete
-regression run cannot consume the fetch job's timeout budget. After one
-official MTGO event-format collection fails, the fetch job stops the remaining
-official event-format operations because they depend on the same upstream
-monthly-listing service. It still attempts the independent pending Videre match
-operations, then fails and uploads the verified resumable checkpoint. This
-prevents a known shared-source outage from being retried once per event format
-and preserves useful independently collectable progress.
-
-### 19.3 `fetch_melee.yml`
-
-Purpose:
-
-- manually fetch or refresh a whitelisted Melee event;
-- verify whitelist membership;
-- preserve raw source records;
-- normalize data;
-- classify decks;
-- generate event statistics;
-- run schema and quality validation;
-- publish changes through a reviewable branch or pull request.
-
-It should not perform unrestricted site-wide crawling.
-
-Permissions must be limited to the steps actually used.
-
-### 19.4 Existing workflows
-
-Existing workflows such as `scrape.yml` and `update.yml` must be reviewed before replacement.
-
-Do not leave two scheduled workflows running the same MTGO update command.
-
-The migration must:
-
-1. identify the currently active production workflow;
-2. add the replacement;
-3. test it manually;
-4. disable or remove the duplicate schedule;
-5. verify the next scheduled run;
-6. document the change.
-
-### 19.5 Failure reporting
-
-Production failure reporting uses:
-
-- failed Action status;
-- GitHub’s normal workflow notifications;
-- `$GITHUB_STEP_SUMMARY`;
-- uploaded diagnostic artifacts when useful.
-- one deduplicated open GitHub issue for each failed MTGO production stage.
-
-The notification job depends on baseline, fetch, build, and publish but has no
-checkout, repository-content permission, source data, or generated candidate.
-It runs only when one of those jobs has result `failure`, records the first
-failed stage in pipeline order, and has only `issues: write`. Fetch owns the
-dynamic baseline snapshot and input collection. The separate clean-checkout
-`baseline` CLI smoke runs afterward only when the post-fetch generation subject
-requires a candidate build. Each stage exposes a controlled failure identity.
-The stable HTML comment marker identifies one open
-non-pull-request issue for `baseline`, `fetch`, `build`, or `publish`.
-It creates that issue when absent and adds a later run link when it already
-exists. The body contains only the controlled stage name, commit SHA, and
-workflow URL; it must not copy source responses, request details, or raw error
-messages. Skipped downstream jobs and successful or cancelled workflow runs do
-not create an issue. Closing an issue deliberately permits a later failure to
-open a new record.
-
----
+Source data, generated candidates and private review materials retain their
+separate visibility policies. Ordinary summaries and failure notices contain
+controlled stage/context and run links, not raw responses, cookies or secrets.
 
 ## 20. File naming and identifier conventions
 
@@ -3141,53 +2851,16 @@ Do not manually patch only the generated JSON and leave the generator incorrect.
 
 ---
 
-## 22. Compatibility and migration rules
+## 22. Compatibility meaning
 
-### 22.1 Standard protection
-
-Before changing the Standard pipeline:
-
-- capture representative current outputs;
-- add regression fixtures;
-- define expected current behavior;
-- test the existing public page;
-- preserve recovery through Git history or a baseline tag.
-
-### 22.2 Public path protection
-
-Before changing a JSON URL used by `index.html`:
-
-- locate all consumers;
-- provide a compatibility file or coordinated front-end change;
-- test through a local HTTP server;
-- test GitHub Pages path behavior;
-- document the migration.
-
-### 22.3 No simultaneous uncontrolled rewrite
-
-Do not combine all of the following in one uncontrolled change:
-
-- classification rewrite;
-- data-path migration;
-- statistical formula changes;
-- front-end redesign;
-- workflow replacement.
-
-Each should have a separate verification point.
-
-### 22.4 Legacy cleanup
-
-Legacy code and paths may be removed only when:
-
-- the replacement exists;
-- tests pass;
-- generated outputs are validated;
-- front-end consumers have migrated;
-- workflows use the replacement;
-- documentation has been updated;
-- rollback is possible through Git history.
-
----
+Preserve required Standard and other existing product behavior unless an explicit
+business change is approved. Public URLs have real consumers: a path change needs
+a compatible replacement or coordinated consumer migration. Legacy paths may
+exit after their required callers have moved; their existence alone does not
+freeze old code, snapshots or governance. QUALITY determines affected proof.
+DELIVERY restores complete deployable products without reverting governance.
+Scope, verification and Owner decisions follow GOVERNANCE rather than separate
+phase-specific controls.
 
 ## 23. Data flow
 
@@ -3248,33 +2921,14 @@ mismatch fails closed before the result is exposed to a consumer.
 
 ---
 
-## 24. Architecture-change procedure
+## 24. Contract changes
 
-A change is an architecture change when it affects:
-
-- public data paths;
-- source separation;
-- normalized event structure;
-- stable IDs;
-- schema versions;
-- package boundaries;
-- workflow responsibilities;
-- front-end entry points;
-- generated-output contracts.
-
-An architecture change must:
-
-1. be recorded in `DECISIONS.md`;
-2. update this document;
-3. update affected JSON Schemas;
-4. update tests;
-5. update `ROADMAP.md` or `STATUS.yaml` when phase scope changes;
-6. include a migration or compatibility plan;
-7. preserve existing Standard behavior unless a statistical change is separately approved.
-
-Do not implement a new architecture only through undocumented directory creation.
-
----
+Changes to public paths, source separation, normalized shape, identifiers,
+schemas, package boundaries or consumer contracts must keep their actual
+producers and consumers compatible. Record changed meaning in this specification
+and obtain any necessary Owner decision under GOVERNANCE. Implement and verify
+only affected behavior under QUALITY. A file move does not itself create an
+additional approval or full regression requirement.
 
 ## 25. MTGO Landing contract
 
@@ -3296,14 +2950,15 @@ new-technology section, not a public historical Landing contract. Selecting a
 prior feature week does not replace or reinterpret the current Landing brief,
 environment, composition, or construction-change facts.
 
-The explicit pre-closeout URL is:
+The explicit Landing URL remains:
 
 ```text
 /index.html?format=<format>&product=mtgo-landing&lang=<zh|en>
 ```
 
-Landing remains non-default through P12-11 and P12-12. The bare MTGO entry may
-switch only at P12-16 after complete owner acceptance.
+Landing is the current default for public MTGO formats in the catalog. The bare
+entry follows that catalog default; explicit product URLs remain usable. A new
+default experience is an Owner choice in the task plan, not a replay of P12-16.
 
 ### 25.2 Responsibility separation
 
@@ -3359,8 +3014,8 @@ state.
 
 Environment-list key cards are manually maintained product metadata keyed by
 stable parent or subtype identity and kept outside classifier rule files and
-generated statistics. P12-10 may introduce a format-scoped source under
-`configs/` only after the classifier gate in section 25.7 is satisfied.
+generated statistics. The format-scoped source is maintained under `configs/`
+for the approved classifier identities described in section 25.7.
 
 An explicit subtype pair takes priority. Parent cards may be used only when the
 configuration explicitly permits parent fallback. If neither is available,
@@ -3369,8 +3024,8 @@ configured card absent from every current related deck creates a review
 diagnostic rather than an automatic replacement. An image request failure
 uses a dimensionally stable placeholder while retaining the card name.
 
-The complete representative-card map is an owner-reviewed P12-10 input, not a
-P12-03B repository artifact.
+Representative-card selections are Owner-reviewed product metadata, not values
+to infer from the classification rules or arbitrary current program output.
 
 ### 25.5 Landing editorial screening and feature history
 
@@ -3381,11 +3036,10 @@ Landing.
 
 The screening producer examines only exact ranks one through eight and
 preserves the complete Top 8 population before route-specific representative
-selection. During the staged migration, `configs/mtgo_pickup_policy.yaml`
-remains the maintained compatibility path for screening thresholds,
+selection. `configs/mtgo_pickup_policy.yaml` remains the maintained path for screening thresholds,
 strategic-identity continuity aliases, official release dates, and frozen
-new-to-Magic manifests. P12-15D may rename that path only with a complete caller
-and rollback migration. Pending future manifests fail closed for the new-card
+new-to-Magic manifests. Renaming that path must update its actual callers and
+preserve the policy meaning, without reopening P12-15D. Pending future manifests fail closed for the new-card
 route rather than being inferred from a set code.
 
 Candidate evidence records every route that selected one exact event-deck. It
@@ -3415,11 +3069,9 @@ display is derived from the current parent/subtype taxonomy and its Chinese
 display is the Owner-approved value imported from the review carrier. The
 catalog and every `landing/review/` path are excluded from the Pages artifact.
 
-P12-15E may serialize catalog-derived localized titles inside Landing feature
-documents, but that does not localize the other retained views. After the
-P12-15E preview is accepted, P12-15E-I18N introduces a separately versioned,
-format-scoped public bilingual name contract generated from this private
-catalog. Retained MTGO and applicable Tabletop consumers resolve parent and
+Landing feature documents may serialize catalog-derived localized titles. The
+format-scoped public bilingual name contract is generated from the private
+catalog for other retained views. Retained MTGO and applicable Tabletop consumers resolve parent and
 subtype labels from stable IDs through that contract. They do not use display
 text as identity, and the public contract does not change classifier rules or
 statistical meaning.
@@ -3472,8 +3124,15 @@ classifier IDs, generated link labels, or arbitrary URLs.
 Owner submits authored Chinese content once in chat and later edits or accepts
 English once; duplicate approval cells are not machine facts. Read-only
 `chinese` and `bilingual` validation stages bind the submitted workbook hash and
-validate actual content. Import is a separate mutation gate and repeats the
-complete bilingual contract before writing any private review file.
+validate actual content. Import writes that accepted content within the current
+authorized task; reuse the valid content check when its workbook and source
+remain applicable, without a separate authorization stage.
+
+The Landing workbook supplies read-only review context, ordered Landing copy and bilingual editing, selected
+features with category/positioning/four cards, all exact Top 8 decks, and field
+guidance. Links derive from selected deck IDs; there is no independent link-only
+selection or editable feature-order authority. It carries business content,
+not a second task-authorization record.
 
 The shared review-workbook intake reads XLSX cells from raw OOXML, including
 explicit shared-string, inline-string, cached-formula, numeric, boolean, and
@@ -3569,7 +3228,7 @@ link and attribution remain unchanged.
 
 #### Simple card localization boundary
 
-DEC-146 removes the versioned `assets/card-localization/v1/` sidecar, immutable
+The current localization architecture has removed the versioned `assets/card-localization/v1/` sidecar, immutable
 printing-identity manifest, Scryfall Bulk candidate, English-byte proxy,
 content-addressed overlay, and separate B1/B2/C admission route from the
 current architecture. The deleted localization builder, Schema, and synthetic
@@ -3607,15 +3266,31 @@ rule is intentionally small:
   falls back only the image.
 
 The Owner-recorded MTGCH permission and required attribution still apply.
+The existing full-card image reuse conditions are preserved here as part of
+the migration of approved business constraints; no new permission is granted:
+
+An admitted official image remains byte-for-byte original. Do not convert,
+recompress, crop, filter, recolor, distort, watermark, overlay, or remove its
+artist, copyright, or legal notices. Keep the admitted subject bounded to cards
+used by the product; do not create a Scryfall or MTGCH mirror or proxy.
+
+An admitted MTGCH community-rendered image remains byte-for-byte as supplied by
+MTGCH. Do not relabel it as official or convert, recompress, crop, filter,
+recolor, distort, watermark, overlay, or remove embedded legal or artist
+notices. Identity-ambiguous, non-MTGCH third-party, or separately unpermitted
+material fails closed unless a separate permission decision covers that exact
+class. The absence of an MTGCH per-record source field is not evidence that an
+MTGCH-supplied image is unknown third-party material. The existing English
+complete-card image remains the fallback.
+
 Historical source and browser trials already establish the selected source and
 direct-image feasibility and must not be repeated as implementation gates.
-Feature verification is limited to the generated map, declared local
-Landing files, the four source-selection outcomes, and mandatory repository
-checks selected by the actual changed paths. There is no separate localization
+Feature verification covers the affected generated map, declared local
+Landing files and source-selection outcomes under QUALITY. There is no separate localization
 Schema, source-snapshot proof, per-card provenance class, capacity-proxy
 experiment, or staged optional-overlay admission.
 
-Pages may retain the already verified bundle as a private Actions cache. Its
+Candidate preparation may reuse the already verified public-resource bundle as an Actions cache. Its
 artifact name is bound to the exact public-product card-name set, current
 Landing card-name set, localization builder, shared card-name normalizer, and
 maintained alias input. Only a non-expired artifact produced from `master` may
@@ -3633,8 +3308,8 @@ stats/<format>/mtgo/pickup/<week>.json
 ```
 
 No new Pickup week is published after P12-15F. The legacy files are not deleted,
-renamed, relocated, or modified by P12-15G-2; they remain separately gated
-frozen compatibility and rollback evidence. A legacy URL using
+renamed, relocated, or modified without an approved compatibility change;
+they retain frozen business history, not workflow authority or a governance rollback path. A legacy URL using
 `product=weekly-pickup&week=<week>` continues to
 resolve to `product=mtgo-landing&section=features&week=<week>`. The `week`
 parameter affects only the feature section.
@@ -3664,26 +3339,12 @@ replace images with placeholders. It must retain the archetype name, current,
 previous-week and previous-four-week values, movement direction, feature
 category, and stable detail navigation.
 
-### 25.7 Classifier gate before P12-10
+### 25.7 Classifier-backed Landing identities
 
-The current Standard and Modern classifier rules remain a provisional Phase 12
-planning baseline and are not approved as the production Landing identity
-contract. P12-10 is blocked until a separately authorized classifier
-remediation is implemented and accepted.
-
-After that remediation and before P12-10 begins, the project must:
-
-1. freeze the corrected stable parent and subtype identities;
-2. validate or explicitly migrate Landing known-archetype state;
-3. rerun the eight-to-twelve-week Standard and Modern Landing shadow;
-4. recheck the 3% environment and return, five-percentage-point movement, and
-   20-point subtype-or-parent construction thresholds;
-5. obtain owner confirmation of the refreshed results; and
-6. only then populate the manual representative-card configuration.
-
-P12-04 through P12-09 may proceed when separately authorized because they do
-not produce Landing facts or freeze classifier identities. This gate does not
-authorize the classifier remediation or P12-10.
+Landing uses approved stable parent/subtype identities and reviewed representative
+cards. Historical Phase 12 planning stops are retired. Current business screening
+thresholds remain in the Landing sections and STATISTICS_SPEC; this migration
+does not change their values or require repeating historical shadow runs.
 
 ## 26. Classifier-derived artifact closure
 
@@ -3709,7 +3370,7 @@ Every event it lists must resolve back to an enabled, verified Tabletop entry in
 the source registry and have one complete overlay-to-catalog chain; missing,
 stale, mixed, disabled, or unregistered public references prevent a healthy
 result. An enabled and verified registry entry that is not in the public catalog
-is only eligible for a later separately authorized operation and does not enter
+is eligible input, not public admission, and does not enter
 classifier closure. Extra approved name rows are governed by the existing name
 authority: they block only when that authority requires exact catalog equality.
 The closure operation never creates, translates, renames, or accepts an
@@ -3719,8 +3380,8 @@ archetype identity.
 `converge` operation creates a staging tree from retained repository inputs,
 rebuilds only stale deterministic families, validates protected-input
 fingerprints, allowed paths, exact-SHA closure, and the affected JSON Schemas,
-and reports the plan. It never fetches historical data. `converge --execute`
-requires separate authorization. Ordinary convergence materializes one fully
+and reports the plan. It never fetches historical data. `converge --execute` materializes the prepared result only when included in
+the current authorized task; it is not a new technical approval stage. Ordinary convergence materializes one fully
 validated format at a time. Reviewed MTGO publication may explicitly co-stage
 multiple already accepted public formats when their derived families are stale
 at the same time: one external tree is generated and fully validated before one
@@ -3745,9 +3406,8 @@ manifest-version migration records the new exact subject. The manifest remains
 Owner-protected and is never materialized by `converge`; immutable snapshot or
 normalized-source drift is invalid rather than regenerable.
 
-Ordinary `validate_repository.py` use performs only the read-only provenance,
-catalog, and exact-SHA inspection. Classification, statistics generation,
-staging, materialization, and fetch remain exclusive to explicit operations.
+Inspection does not classify, generate, materialize or fetch. Those operations
+remain explicit and their results are reusable under QUALITY and DELIVERY.
 
 ### MTGO reviewed publication membership
 
@@ -3766,8 +3426,8 @@ format from exposing only its four MTGO products while omitting its admitted
 Tabletop product.
 Statistical/report manifest mappings cover registered executable formats
 dynamically and require embedded format identity to match the output path.
-This changes neither formulas nor classifier rules. Human Landing/name
-carriers and first real Pauper publication remain separately gated.
+This changes neither formulas nor classifier rules. Human Landing/name decisions remain business judgments in the current task.
+Pauper first publication is complete; historical phase gates have no authority.
 
 #### Explicit private review execution
 
@@ -3844,12 +3504,9 @@ Classification reports use 1.2 to label their narrower public scope explicitly.
 Private audit/report APIs still inspect the entire retained corpus; pending
 results may be written only to task-local or Pages-excluded review carriers.
 
-The explicit format publication operation stages all producers, existing
-repository/rule/Schema/output/consumer checks and focused Chromium smoke before
-materialization. It reuses classifier-closure replacement/rollback, detects
-concurrent protected/input/output drift, and never fetches. Production continues
-to transfer one validated immutable candidate through the existing publication
-gate. No partial producer result is a publication subject. Data publication
+The explicit format publication operation forms a complete selected candidate
+before materialization and obtains only the affected necessary proof under QUALITY. It reuses classifier-closure replacement/rollback, detects
+concurrent protected/input/output drift, and never fetches. Production transfers the selected verified candidate through DELIVERY. No partial producer result is a publication subject. Data publication
 leaves the last accepted Landing intact; the existing frontend rejects
 cross-week companion facts. Later accepted Landing publication and actual
 maintenance completion remain separate evidence.

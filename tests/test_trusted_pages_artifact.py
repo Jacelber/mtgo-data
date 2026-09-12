@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from tools.select_trusted_pages_artifact import select_trusted_artifact
+from tools.select_trusted_pages_artifact import ArtifactSelectionError, select_trusted_artifact
 
 
 NOW = datetime(2026, 9, 5, tzinfo=timezone.utc)
@@ -66,6 +66,20 @@ def test_selects_only_a_completed_successful_exact_master_run():
     assert selected.run_id == 200
     assert selected.run_attempt == 1
     assert selected.head_sha == SHA
+
+
+def test_replacement_producer_keeps_exact_workflow_and_master_provenance():
+    path = ".github/workflows/prepare-pages.yml"
+    def select(run, workflow=path):
+        return select_trusted_artifact([_artifact()], repository=REPOSITORY,
+            workflow_id=88, workflow_path=workflow, get_run=lambda _: run,
+            name_matches=lambda _: True, now=NOW)
+    assert select(_run(path=path, workflow_id=88)) is not None
+    for change in ({"workflow_id": 99}, {"path": ".github/workflows/pages.yml"},
+                   {"event": "pull_request"}, {"head_branch": "feature"}, {"conclusion": "failure"}):
+        assert select(_run(**({"path": path, "workflow_id": 88} | change))) is None
+    with pytest.raises(ArtifactSelectionError):
+        select(_run(path=".github/workflows/arbitrary.yml", workflow_id=88), ".github/workflows/arbitrary.yml")
 
 
 @pytest.mark.parametrize(

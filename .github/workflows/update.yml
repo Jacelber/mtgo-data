@@ -2,12 +2,6 @@ name: MTGO production data update
 
 on:
   workflow_dispatch:
-    inputs:
-      stale_base_retry_of:
-        description: Internal parent run ID for one bounded stale-base recovery
-        required: false
-        default: ""
-        type: string
   schedule:
     - cron: "0 9 * * *"
 
@@ -80,16 +74,25 @@ jobs:
                 per_page: 100,
               },
             );
-            const checkpoint = artifacts
+            const candidates = artifacts
               .filter(
                 (artifact) =>
                   !artifact.expired &&
-                  artifact.workflow_run?.head_branch === "master" &&
-                  artifact.workflow_run?.head_sha === context.sha,
+                  artifact.workflow_run?.head_branch === "master",
               )
-              .sort((left, right) => Date.parse(right.created_at) - Date.parse(left.created_at))[0];
+              .sort((left, right) => Date.parse(right.created_at) - Date.parse(left.created_at));
+            let checkpoint;
+            const {spawnSync} = require('child_process');
+            for (const candidate of candidates) {
+              const run = (await github.rest.actions.getWorkflowRun({...context.repo, run_id: candidate.workflow_run.id})).data;
+              if (run.path !== '.github/workflows/update.yml' || run.head_branch !== 'master' || !['schedule', 'workflow_dispatch'].includes(run.event) || run.head_repository?.full_name !== `${context.repo.owner}/${context.repo.repo}`) continue;
+              const result = spawnSync('python', ['-B', 'mtgo_fetch_checkpoint.py', 'compatible', '--source', run.head_sha, '--current', context.sha], {encoding: 'utf8'});
+              if (result.status === 0) { checkpoint = {...candidate, source: run.head_sha}; break; }
+              if (result.status !== 1) throw new Error(result.stderr || result.stdout || 'Checkpoint applicability query failed');
+            }
             core.setOutput("found", checkpoint ? "true" : "false");
             core.setOutput("run-id", checkpoint ? String(checkpoint.workflow_run.id) : "");
+            core.setOutput("source", checkpoint ? checkpoint.source : "");
 
       - name: Download compatible incomplete fetch checkpoint
         if: steps.previous-checkpoint.outputs.found == 'true'
@@ -110,8 +113,9 @@ jobs:
             cd "$ARTIFACT_DIR"
             sha256sum --check SHA256SUMS
           )
-          python -B mtgo_fetch_checkpoint.py validate \
+          python -B mtgo_fetch_checkpoint.py rebind \
             --checkpoint "$ARTIFACT_DIR/checkpoint.json" \
+            --source '${{ steps.previous-checkpoint.outputs.source }}' \
             --repository "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
             --event-formats "$MTGO_EVENT_FORMATS" --match-formats "$MTGO_PRODUCT_FORMATS"
           cmp "$ARTIFACT_DIR/production-baseline.json" "$RUNNER_TEMP/production-baseline.json"
@@ -212,7 +216,7 @@ jobs:
         shell: bash
         run: |
           SUBJECT_TAR="$RUNNER_TEMP/mtgo-generation-subject.tar"
-          INPUTS=(src data configs my_archetypes schemas fetched.txt pyproject.toml requirements.txt requirements-dev.txt)
+          INPUTS=(src data configs my_archetypes schemas fetched.txt pyproject.toml requirements.txt)
           if [ -d rules ]; then
             INPUTS+=(rules)
           fi
@@ -288,7 +292,7 @@ jobs:
             echo "- Candidate transfer: immutable \`mtgo-fetch-candidate\` artifact"
             echo "- Generation subject: \`${{ steps.generation-subject.outputs.sha256 || 'not-reached' }}\`"
             echo "- Build required: \`${{ steps.generation-subject.outputs.needed || 'not-reached' }}\`"
-            echo "- Restart transfer: a same-commit, seven-day \`mtgo-fetch-checkpoint\` artifact only after incomplete collection"
+            echo "- Restart transfer: a seven-day \`mtgo-fetch-checkpoint\` reused when relevant inputs and the operation plan remain unchanged"
             echo "- Transient MTGO event recovery: three rounds with 120-second and 300-second cooldowns"
             echo "- Event formats: ${MTGO_EVENT_FORMATS}"
             echo "- Match formats: ${MTGO_PRODUCT_FORMATS}"
@@ -324,8 +328,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install pinned runtime and validation dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+      - name: Install pinned runtime dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
 
       - name: Select registry-admitted production formats
         shell: bash
@@ -435,27 +439,8 @@ jobs:
           python -B validate_production_candidate.py validate
           --baseline "$RUNNER_TEMP/mtgo-fetch-candidate/production-baseline.json"
 
-      - name: Validate repository files and references
-        run: python -B validate_repository.py --full
-
-      - name: Validate product archetype rules
-        shell: bash
-        run: |
-          for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            python -B validate_rules.py "my_archetypes/${FORMAT}.yaml"
-          done
-
-      - name: Validate generated JSON schemas
-        run: python -B validate_schemas.py
-
-      - name: Validate value-independent output invariants
-        run: python -B validate_output_invariants.py
-
-      - name: Validate generated consumer contracts
-        run: >-
-          python -B -m pytest
-          --basetemp="${RUNNER_TEMP}/pytest-generated-consumers"
-          tests/test_generated_consumer_contracts.py
+      - name: Check changed product outputs
+        run: python -B tools/check_outputs.py --changed-from HEAD
 
       - name: Package validated output for the publish job
         id: output-evidence
@@ -463,23 +448,36 @@ jobs:
         run: |
           ARTIFACT_DIR="$RUNNER_TEMP/mtgo-build-candidate"
           mkdir -p "$ARTIFACT_DIR"
-          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 \
-            --numeric-owner -cf "$ARTIFACT_DIR/validated-output.tar" \
-            data stats reports fetched.txt
+          python -B tools/integrate_mtgo_candidate.py export --artifact "$ARTIFACT_DIR"
           printf '%s\n' '${{ needs.fetch.outputs.generation-subject-sha256 }}' \
             > "$ARTIFACT_DIR/generation-subject.txt"
           (
             cd "$ARTIFACT_DIR"
-            sha256sum validated-output.tar generation-subject.txt > SHA256SUMS
+            sha256sum output.patch source.txt generation-subject.txt > SHA256SUMS
           )
-          OUTPUT_SHA="$(sha256sum "$ARTIFACT_DIR/validated-output.tar" | awk '{print $1}')"
+          OUTPUT_SHA="$(sha256sum "$ARTIFACT_DIR/output.patch" | awk '{print $1}')"
           echo "sha256=$OUTPUT_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Encrypt unpublished output without archive credentials
+        env:
+          CERTIFICATE: ${{ vars.ARCHIVE_HANDOFF_CERT }}
+        run: |
+          printf '%s' "$CERTIFICATE" > "$RUNNER_TEMP/mtgo-public.pem"
+          openssl cms -encrypt -binary -stream -outform DER -aes-256-gcm \
+            -in "$RUNNER_TEMP/mtgo-build-candidate/output.patch" \
+            -out "$RUNNER_TEMP/mtgo-build-candidate/output.patch.cms" \
+            -recip "$RUNNER_TEMP/mtgo-public.pem" \
+            -keyopt rsa_padding_mode:oaep -keyopt rsa_oaep_md:sha256
 
       - name: Upload immutable validated output
         uses: actions/upload-artifact@v4.6.2
         with:
           name: mtgo-build-candidate
-          path: ${{ runner.temp }}/mtgo-build-candidate
+          path: |
+            ${{ runner.temp }}/mtgo-build-candidate/output.patch.cms
+            ${{ runner.temp }}/mtgo-build-candidate/source.txt
+            ${{ runner.temp }}/mtgo-build-candidate/generation-subject.txt
+            ${{ runner.temp }}/mtgo-build-candidate/SHA256SUMS
           if-no-files-found: error
           retention-days: 1
 
@@ -494,7 +492,7 @@ jobs:
             echo "- Candidate transfer: verified \`mtgo-fetch-candidate\` input and immutable \`mtgo-build-candidate\` output"
             echo "- Product formats: ${MTGO_PRODUCT_FORMATS}"
             echo "- Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}"
-            echo "- Validation layers: production candidate acceptance, repository, rule, Schema, generated consumer contracts, and focused Chromium rendering."
+            echo "- Validation: selected production scope and increments, changed output schemas and relevant format arithmetic. No mechanism suite or browser test is implied by this run."
             echo "- No repository write permission is available to this job."
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -503,12 +501,10 @@ jobs:
     if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
+    environment: product-archive
     timeout-minutes: 15
     outputs:
-      failure-kind: ${{ (steps.publication-base.outputs.stale == 'true' || steps.publish.outputs.stale == 'true') && 'stale-base' || '' }}
-      observed-master: ${{ steps.publish.outputs.observed-master || steps.publication-base.outputs.observed-master }}
-      published-commit: ${{ steps.verify.outputs.commit }}
-      recovery-dispatched: ${{ steps.stale-base-recovery.outputs.dispatched || 'false' }}
+      published-commit: ${{ steps.publish.outputs.commit }}
       source-commit: ${{ github.sha }}
     permissions:
       actions: write
@@ -521,167 +517,65 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Check publication base is current
-        id: publication-base
-        shell: bash
-        run: |
-          REMOTE_MASTER="$(git ls-remote origin refs/heads/master | awk '{print $1}')"
-          if ! [[ "$REMOTE_MASTER" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "Could not resolve the current remote master commit." >&2
-            exit 1
-          fi
-          echo "source-commit=$GITHUB_SHA" >> "$GITHUB_OUTPUT"
-          echo "observed-master=$REMOTE_MASTER" >> "$GITHUB_OUTPUT"
-          if [ "$REMOTE_MASTER" != "$GITHUB_SHA" ]; then
-            echo "stale=true" >> "$GITHUB_OUTPUT"
-            echo "Production source $GITHUB_SHA is stale; current master is $REMOTE_MASTER."
-          else
-            echo "stale=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Download immutable validated output
-        if: steps.publication-base.outputs.stale == 'false'
+      - name: Download existing validated output
         uses: actions/download-artifact@v4.3.0
         with:
           name: mtgo-build-candidate
           path: ${{ runner.temp }}/mtgo-build-candidate
 
-      - name: Verify and restore validated output
-        if: steps.publication-base.outputs.stale == 'false'
-        id: artifact-evidence
+      - name: Decrypt the existing output in the trusted integration job
+        env:
+          HANDOFF_KEY: ${{ secrets.ARCHIVE_HANDOFF_KEY }}
+        run: |
+          umask 077
+          KEY="$RUNNER_TEMP/mtgo-output-key.pem"
+          trap 'rm -f "$KEY"' EXIT
+          printf '%s' "$HANDOFF_KEY" > "$KEY"
+          openssl cms -decrypt -binary -inform DER \
+            -in "$RUNNER_TEMP/mtgo-build-candidate/output.patch.cms" \
+            -inkey "$KEY" -out "$RUNNER_TEMP/mtgo-build-candidate/output.patch"
+
+      - name: Verify candidate transfer
         shell: bash
         run: |
           ARTIFACT_DIR="$RUNNER_TEMP/mtgo-build-candidate"
-          (
-            cd "$ARTIFACT_DIR"
-            sha256sum --check SHA256SUMS
-          )
-          OUTPUT_SHA="$(sha256sum "$ARTIFACT_DIR/validated-output.tar" | awk '{print $1}')"
-          SUBJECT_SHA="$(tr -d '\r\n' < "$ARTIFACT_DIR/generation-subject.txt")"
-          if [ "$OUTPUT_SHA" != '${{ needs.build.outputs.validated-output-sha256 }}' ] ||
-             [ "$SUBJECT_SHA" != '${{ needs.build.outputs.generation-subject-sha256 }}' ]; then
-            echo "Validated production evidence changed between build and publish." >&2
-            exit 1
-          fi
-          if tar -tf "$ARTIFACT_DIR/validated-output.tar" | grep -Ev '^(data/|stats/|reports/|fetched\.txt$)'; then
-            echo "Validated output contains a path outside the publication boundary." >&2
-            exit 1
-          fi
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "Publication checkout is not clean before restoring validated output." >&2
-            git status --short >&2
-            exit 1
-          fi
-          tar -xf "$ARTIFACT_DIR/validated-output.tar" -C "$GITHUB_WORKSPACE"
-          echo "output-sha256=$OUTPUT_SHA" >> "$GITHUB_OUTPUT"
-          echo "subject-sha256=$SUBJECT_SHA" >> "$GITHUB_OUTPUT"
+          (cd "$ARTIFACT_DIR" && sha256sum --check SHA256SUMS)
+          test "$(sha256sum "$ARTIFACT_DIR/output.patch" | awk '{print $1}')" = '${{ needs.build.outputs.validated-output-sha256 }}'
+          test "$(tr -d '\r\n' < "$ARTIFACT_DIR/generation-subject.txt")" = '${{ needs.build.outputs.generation-subject-sha256 }}'
+          test "$(tr -d '\r\n' < "$ARTIFACT_DIR/source.txt")" = "$GITHUB_SHA"
 
-      - name: Commit and push production evidence
-        if: steps.publication-base.outputs.stale == 'false'
-        id: publish
+      - name: Integrate the existing result with current master
+        id: integrate
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -- data/ stats/ reports/ fetched.txt
-          if git diff --cached --quiet; then
-            CHANGED=false
-            MESSAGE="chore: record MTGO production evidence $(date -u +'%Y-%m-%d %H:%M UTC')"
-          else
-            CHANGED=true
-            MESSAGE="chore: update MTGO production data $(date -u +'%Y-%m-%d %H:%M UTC')"
-          fi
-          git commit --allow-empty -m "$MESSAGE" \
-            -m "Production-Run: $GITHUB_RUN_ID
-          Production-Attempt: $GITHUB_RUN_ATTEMPT
-          Production-Source: $GITHUB_SHA
-          Generation-Subject-SHA256: ${{ steps.artifact-evidence.outputs.subject-sha256 }}
-          Validated-Output-SHA256: ${{ steps.artifact-evidence.outputs.output-sha256 }}"
-          set +e
-          git push origin HEAD:master
-          PUSH_STATUS=$?
-          set -e
-          if [ "$PUSH_STATUS" -ne 0 ]; then
-            REMOTE_MASTER="$(git ls-remote origin refs/heads/master | awk '{print $1}')"
-            if ! [[ "$REMOTE_MASTER" =~ ^[0-9a-f]{40}$ ]]; then
-              echo "Push failed and the current remote master commit could not be resolved." >&2
-              exit "$PUSH_STATUS"
-            fi
-            echo "observed-master=$REMOTE_MASTER" >> "$GITHUB_OUTPUT"
-            if [ "$REMOTE_MASTER" != "$GITHUB_SHA" ]; then
-              echo "stale=true" >> "$GITHUB_OUTPUT"
-              echo "status=stale" >> "$GITHUB_OUTPUT"
-              echo "Production source $GITHUB_SHA became stale before push; current master is $REMOTE_MASTER."
-              exit 0
-            fi
-            exit "$PUSH_STATUS"
-          fi
-          echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
-          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-          echo "stale=false" >> "$GITHUB_OUTPUT"
-          echo "status=published" >> "$GITHUB_OUTPUT"
+          git fetch --no-tags origin master
+          python -B tools/integrate_mtgo_candidate.py integrate \
+            --artifact "$RUNNER_TEMP/mtgo-build-candidate" --run "$GITHUB_RUN_ID"
 
-      - name: Request one stale-base recovery
-        id: stale-base-recovery
-        if: >-
-          always() && !cancelled() &&
-          (steps.publication-base.outputs.stale == 'true' || steps.publish.outputs.stale == 'true') &&
-          inputs.stale_base_retry_of == ''
-        uses: actions/github-script@v7.0.1
-        with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: "update.yml",
-              ref: "master",
-              inputs: {
-                stale_base_retry_of: String(context.runId),
-              },
-            });
-            core.setOutput("dispatched", "true");
-
-      - name: Stop stale publication
-        if: >-
-          always() && !cancelled() &&
-          (steps.publication-base.outputs.stale == 'true' || steps.publish.outputs.stale == 'true')
+      - name: Push only the prepared data change and query actual result
+        id: publish
         shell: bash
         env:
-          STALE_BASE_RETRY_OF: ${{ inputs.stale_base_retry_of }}
+          CANDIDATE_COMMIT: ${{ steps.integrate.outputs.commit }}
+          INTEGRATION_STATUS: ${{ steps.integrate.outputs.status }}
+          CHANGED: ${{ steps.integrate.outputs.changed }}
         run: |
-          if [ -n "$STALE_BASE_RETRY_OF" ]; then
-            echo "The bounded stale-base recovery from run $STALE_BASE_RETRY_OF also became stale; no third run was requested." >&2
-          elif [ '${{ steps.stale-base-recovery.outputs.dispatched }}' = 'true' ]; then
-            echo "The stale publication was stopped after requesting one stale-base-recovery run." >&2
-          else
-            echo "The stale publication was stopped, but its bounded recovery request did not complete." >&2
+          if [ "$INTEGRATION_STATUS" = prepared ]; then
+            # On timeout, query below before deciding another write is needed.
+            git push origin HEAD:master || true
           fi
-          exit 1
-
-      - name: Verify published master commit and clean workspace
-        if: steps.publish.outputs.status == 'published'
-        id: verify
-        shell: bash
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "Production workspace is not clean after publication." >&2
-            git status --short >&2
-            exit 1
-          fi
-          LOCAL_SHA="$(git rev-parse HEAD)"
           git fetch --no-tags origin master
-          REMOTE_SHA="$(git rev-parse refs/remotes/origin/master)"
-          if [ "$LOCAL_SHA" = "$REMOTE_SHA" ]; then
-            echo "Published master verified at $LOCAL_SHA."
-          elif git merge-base --is-ancestor "$LOCAL_SHA" "$REMOTE_SHA"; then
-            echo "Published commit $LOCAL_SHA remains an ancestor of current master $REMOTE_SHA."
-          else
-            echo "Published commit is not on current master: local=$LOCAL_SHA remote=$REMOTE_SHA" >&2
+          if ! git merge-base --is-ancestor "$CANDIDATE_COMMIT" origin/master; then
+            echo "Candidate retained in mtgo-build-candidate. Resume the failed publish job and integrate only; do not restart collection or generation." >&2
             exit 1
           fi
-          echo "commit=$LOCAL_SHA" >> "$GITHUB_OUTPUT"
+          echo "commit=$CANDIDATE_COMMIT" >> "$GITHUB_OUTPUT"
+          echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+          echo "status=published" >> "$GITHUB_OUTPUT"
 
-      - name: Dispatch Pages deployment for published data
+      - name: Prepare published data for automatic Pages delivery
         if: steps.publish.outputs.status == 'published' && steps.publish.outputs.changed == 'true'
         uses: actions/github-script@v7.0.1
         with:
@@ -689,39 +583,27 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: "pages.yml",
+              workflow_id: "prepare-pages.yml",
               ref: "master",
               inputs: {
-                publication_commit: "${{ steps.verify.outputs.commit }}",
-                producer_run_id: "${{ github.run_id }}",
-                producer_run_attempt: "${{ github.run_attempt }}",
-                source_commit: "${{ github.sha }}",
-                generation_subject_sha256: "${{ steps.artifact-evidence.outputs.subject-sha256 }}",
-                validated_output_sha256: "${{ steps.artifact-evidence.outputs.output-sha256 }}",
+                source: "${{ steps.publish.outputs.commit }}",
+                operation: "mtgo-${{ github.run_id }}",
+                publish_automatically: "true",
               },
             });
 
       - name: Write publication summary
         if: always()
         shell: bash
-        env:
-          STALE_BASE_RETRY_OF: ${{ inputs.stale_base_retry_of }}
         run: |
           {
-            echo "## MTGO production publication"
-            echo
-            echo "- Job result: ${{ job.status }}"
-            echo "- Trigger: ${{ github.event_name }}"
-            echo "- Stale-base recovery parent: ${STALE_BASE_RETRY_OF:-none}"
-            echo "- Production source commit: ${{ github.sha }}"
-            echo "- Observed master: ${{ steps.publish.outputs.observed-master || steps.publication-base.outputs.observed-master || 'not-reached' }}"
-            echo "- Bounded recovery dispatched: ${{ steps.stale-base-recovery.outputs.dispatched || 'false' }}"
-            echo "- Generated changes published: ${{ steps.publish.outputs.changed || 'not-reached' }}"
-            echo "- Published commit verified: ${{ steps.verify.outputs.commit || 'not-reached' }}"
-            echo "- Candidate transfer: verified immutable \`mtgo-build-candidate\` artifact"
-            echo "- Generation subject: \`${{ steps.artifact-evidence.outputs.subject-sha256 || 'not-reached' }}\`"
-            echo "- Validated output: \`${{ steps.artifact-evidence.outputs.output-sha256 || 'not-reached' }}\`"
-            echo "- Publication boundary: data/, stats/, reports/, and fetched.txt only."
+            echo "## MTGO data integration"
+            echo "- Result: ${{ job.status }}"
+            echo "- Existing candidate: mtgo-build-candidate from this run"
+            echo "- Integrated commit: ${{ steps.publish.outputs.commit || 'not-published' }}"
+            echo "- Changed outputs: ${{ steps.publish.outputs.changed || 'not-published' }}"
+            echo "- Disjoint changes are preserved. Changed inputs or overlapping outputs need focused integration, not automatic workflow restart or Owner reauthorization."
+            echo "- If publication fails, resume the failed job with the retained candidate; successful fetch and build results remain reusable."
           } >> "$GITHUB_STEP_SUMMARY"
 
   weekly-readiness:
@@ -781,11 +663,22 @@ jobs:
           WEEK="$(python -c 'import json,os; d=json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "weekly-maintenance-readiness", "readiness.json"), encoding="utf-8")); print(d.get("review_label") or d["week"]["id"])')"
           echo "artifact-name=weekly-maintenance-readiness-${WEEK}" >> "$GITHUB_OUTPUT"
 
-      - name: Upload the private weekly handoff
+      - name: Encrypt the private weekly handoff without write credentials
+        env:
+          CERTIFICATE: ${{ vars.ARCHIVE_HANDOFF_CERT }}
+        run: |
+          printf '%s' "$CERTIFICATE" > "$RUNNER_TEMP/weekly-handoff-public.pem"
+          openssl cms -encrypt -binary -stream -outform DER -aes-256-gcm \
+            -in "$RUNNER_TEMP/weekly-maintenance-readiness/readiness.json" \
+            -out "$RUNNER_TEMP/weekly-maintenance-readiness/readiness.cms" \
+            -recip "$RUNNER_TEMP/weekly-handoff-public.pem" \
+            -keyopt rsa_padding_mode:oaep -keyopt rsa_oaep_md:sha256
+
+      - name: Transfer encrypted weekly handoff
         uses: actions/upload-artifact@v4.6.2
         with:
           name: ${{ steps.generate.outputs.artifact-name }}
-          path: ${{ runner.temp }}/weekly-maintenance-readiness/readiness.json
+          path: ${{ runner.temp }}/weekly-maintenance-readiness/readiness.cms
           if-no-files-found: error
           retention-days: 21
 
@@ -801,7 +694,7 @@ jobs:
             echo "- Readiness status: ${{ steps.generate.outputs.status || 'not-reached' }}"
             echo "- Readiness digest: \`${{ steps.generate.outputs.readiness-digest || 'not-reached' }}\`"
             echo "- Handoff artifact: \`${{ steps.generate.outputs.artifact-name || 'not-reached' }}\`"
-            echo "- The artifact is private workflow output and is not part of Pages."
+            echo "- The public workflow attachment contains ciphertext only; the readable report is retained in the private archive, outside Pages packages."
             echo "- No Codex scheduled task or repository mutation is authorized by this handoff."
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -812,6 +705,7 @@ jobs:
       needs.weekly-readiness.result != 'skipped'
     needs: weekly-readiness
     runs-on: ubuntu-latest
+    environment: product-archive
     timeout-minutes: 5
     permissions:
       actions: read
@@ -823,6 +717,34 @@ jobs:
         with:
           name: ${{ needs.weekly-readiness.outputs.artifact-name }}
           path: ${{ runner.temp }}/weekly-maintenance-readiness
+
+      - name: Decrypt and retain the business handoff in the private archive
+        if: needs.weekly-readiness.result == 'success'
+        env:
+          HANDOFF_KEY: ${{ secrets.ARCHIVE_HANDOFF_KEY }}
+          GH_TOKEN: ${{ secrets.ARCHIVE_TOKEN }}
+        run: |
+          umask 077
+          KEY="$RUNNER_TEMP/weekly-handoff-key.pem"
+          trap 'rm -f "$KEY"' EXIT
+          printf '%s' "$HANDOFF_KEY" > "$KEY"
+          REPORT="$RUNNER_TEMP/weekly-maintenance-readiness/readiness.json"
+          openssl cms -decrypt -binary -inform DER \
+            -in "$RUNNER_TEMP/weekly-maintenance-readiness/readiness.cms" \
+            -inkey "$KEY" -out "$REPORT"
+          python -c 'import json,sys; d=json.load(open(sys.argv[1], encoding="utf-8")); assert d["document_type"] == "weekly_maintenance_readiness"' "$REPORT"
+          ARCHIVE=Jacelber/mtgo-data-releases
+          test "$(gh api "repos/$ARCHIVE" --jq .private)" = true
+          DIGEST="$(sha256sum "$REPORT" | awk '{print $1}')"
+          TAG="weekly-readiness-${GITHUB_RUN_ID}-${DIGEST:0:16}"
+          # A lost create response is resolved by reading the same immutable object.
+          if ! gh release view "$TAG" --repo "$ARCHIVE" >/dev/null 2>&1; then
+            gh release create "$TAG" "$REPORT" --repo "$ARCHIVE" --draft \
+              --title "Private weekly review handoff $GITHUB_RUN_ID" --notes "Business review material; not a deployable or recovery package." || true
+          fi
+          gh release download "$TAG" --repo "$ARCHIVE" --pattern readiness.json --output "$RUNNER_TEMP/weekly-handoff-returned.json"
+          cmp "$REPORT" "$RUNNER_TEMP/weekly-handoff-returned.json"
+          echo "Private handoff: https://github.com/$ARCHIVE/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Create or update the deduplicated readiness issue
         uses: actions/github-script@v7.0.1
@@ -914,7 +836,7 @@ jobs:
                   `- ${item.format}：待审核周 ${item.review_week}；当前公开周 ${item.public_week}；数据准入 ${item.data_admission}；首页 ${item.landing_week}；维护完成 ${item.completion.state}。`,
                   ...item.blockers.map(reason => `- 停止原因：${reason}`),
                   `- 首页筛选：${item.landing_screening.status}；展示资料差异在确定性重算和筛选之后确认。`,
-                  "", `完整分类材料和重点记录见本次工作流审核附件：[${context.runId}](${runUrl})。`,
+                  "", `完整分类材料保存在私有归档，取用位置见本次工作流摘要：[${context.runId}](${runUrl})。`,
                   "机器重点不能替代全量人工审核。只有既有政策接受的随机牌堆可以保留为 intentional Unknown。",
                   "分类接受后先发布该赛制的数据；首页筛选、展示资料差异、中文、英文和最终预览完成后再发布首页。第一次发布不表示维护全部完成。",
                   "两个赛制独立推进。此通知不是授权；请在当前 Owner 会话中开始或恢复相应维护范围。",
@@ -1067,7 +989,6 @@ jobs:
           FETCH_RESULT: ${{ needs.fetch.result }}
           BUILD_RESULT: ${{ needs.build.result }}
           PUBLISH_RESULT: ${{ needs.publish.result }}
-          PUBLISH_FAILURE_KIND: ${{ needs.publish.outputs.failure-kind }}
         run: |
           if [ "$FETCH_RESULT" = "failure" ]; then
             STAGE="fetch"
@@ -1080,17 +1001,13 @@ jobs:
             exit 1
           fi
           echo "stage=$STAGE" >> "$GITHUB_OUTPUT"
-          echo "kind=${PUBLISH_FAILURE_KIND:-stage-failure}" >> "$GITHUB_OUTPUT"
+          echo "kind=stage-failure" >> "$GITHUB_OUTPUT"
 
       - name: Create or update the stage failure issue
         uses: actions/github-script@v7.0.1
         env:
           FAILED_STAGE: ${{ steps.failed-stage.outputs.stage }}
           FAILURE_KIND: ${{ steps.failed-stage.outputs.kind }}
-          PUBLISH_SOURCE_COMMIT: ${{ needs.publish.outputs.source-commit }}
-          PUBLISH_OBSERVED_MASTER: ${{ needs.publish.outputs.observed-master }}
-          STALE_BASE_RECOVERY_DISPATCHED: ${{ needs.publish.outputs.recovery-dispatched }}
-          STALE_BASE_RETRY_OF: ${{ inputs.stale_base_retry_of }}
         with:
           script: |
             const stage = process.env.FAILED_STAGE;
@@ -1105,14 +1022,6 @@ jobs:
               `- Failure kind: \`${failureKind}\``,
               `- Commit: \`${context.sha}\``,
               `- Workflow run: [${context.runId}](${runUrl})`,
-              ...(failureKind === "stale-base"
-                ? [
-                    `- Started from: \`${process.env.PUBLISH_SOURCE_COMMIT || context.sha}\``,
-                    `- Observed master: \`${process.env.PUBLISH_OBSERVED_MASTER || "unavailable"}\``,
-                    `- Bounded recovery dispatched: \`${process.env.STALE_BASE_RECOVERY_DISPATCHED || "false"}\``,
-                    `- Recovery parent run: \`${process.env.STALE_BASE_RETRY_OF || "none"}\``,
-                  ]
-                : []),
               "",
               "This issue is updated for repeated failures of the same stage. Review the linked workflow logs for the diagnostic details.",
             ].join("\n");

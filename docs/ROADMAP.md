@@ -3,8 +3,8 @@
 ## Live-document contract
 
 This document contains only the active phase, useful future phases, and their
-acceptance criteria. It never authorizes work: read `docs/STATUS.yaml` for the
-current task, blockers, and stop conditions. Product, statistical, and data
+acceptance criteria. Current instructions and the confirmed plan authorize work
+under GOVERNANCE; STATUS records durable facts and actual blockers. Product, statistical, and data
 contracts remain in their dedicated specifications.
 
 Completed and superseded roadmap detail is non-authoritative history:
@@ -87,7 +87,10 @@ event `12853710` remains excluded.
 The complete contract, task sequence, acceptance criteria, and closeout
 evidence are preserved in
 `docs/history/ROADMAP-PHASE-14-COMPLETED.md` and `docs/audits/P14-07B.md`.
-Phase 15 remains separately unauthorized.
+The public catalogs checked on 2026-09-12 list Standard, Modern and Pauper MTGO;
+Tabletop lists Modern `405590`, `441441`, `434455` (default `405590`) and Pauper
+`438329`. Public admission does not mean known image or color defects are fixed.
+Phase 15 is not part of the current governance-rebuild delivery.
 
 ---
 
@@ -128,10 +131,12 @@ Phase 15 is complete when:
 - Pioneer uses the shared classifier;
 - MTGO and Melee remain separate;
 - no copied Standard-only pipeline is introduced;
-- rules, tests, schemas, and catalogs are updated;
+- applicable rules, schemas and catalogs describe the new product, with proof
+  for affected results and any changed core mechanism;
 - Pioneer is not public without an admitted Landing and complete required
   product set;
-- prior-format regression tests pass.
+- existing products retain their required behavior, with affected-result proof
+  selected under QUALITY rather than an automatic prior-format regression suite.
 
 ---
 
@@ -186,7 +191,8 @@ Phase 16 is complete when:
 - MTGO and Melee remain separate;
 - Legacy is not public without an admitted Landing and complete required
   product set;
-- prior-format regressions pass;
+- existing formats retain supported behavior; validate only affected results
+  and changed mechanisms, reusing applicable evidence;
 - front-end catalogs are updated.
 
 ---
@@ -219,8 +225,11 @@ Qualifying mixed-format Standard events must use the mixed-event strategy.
 3. Reuse the shared Standard classifier without merging MTGO and Tabletop data.
 4. Generate event-specific Tabletop statistics and quality evidence.
 5. Validate mixed, Constructed Day 2, or single-stage behavior as applicable.
-6. Enable each event through the catalog only after separate owner approval.
-7. Run Standard MTGO regression and cross-product browser acceptance.
+6. Enable the complete event product through the catalog within its authorized
+   plan and agreed business acceptance, without a second publication approval.
+7. Check affected Tabletop results and any changed shared behavior. Source
+   separation and Standard compatibility remain required; adding an event does
+   not automatically trigger Standard MTGO regression or all-product browsing.
 
 ## Acceptance criteria
 
@@ -276,7 +285,7 @@ The project owner may:
 
 Phase 18 is complete when:
 
-- the decision is recorded in `docs/DECISIONS.md`;
+- the resulting scope decision is recorded in the applicable business specification;
 - `docs/PROJECT_SCOPE.md` is updated;
 - `docs/STATUS.yaml` is updated;
 - the roadmap is updated if implementation phases change;
@@ -295,15 +304,17 @@ history or unverified compatibility entry points.
 ## Required work
 
 - complete only the compatibility cleanup that remains after Phase 11 owner
-  review, beginning with the DEC-078 draw-adjusted metric retirement;
+  review, beginning with the draw-adjusted compatibility metric retirement;
 - publish current operator documentation for MTGO, Tabletop, Landing and Weekly
   Pickup editorial review, late-event re-review, storage, Pages, workflows,
   schemas, rules, quality review, rollback, and recovery;
-- exercise the selected public-data and archive-storage design end to end;
-- run regression across every approved format and both product areas;
+- retain applicable evidence that the selected public-data and archive-storage
+  path works; fill only gaps introduced by the release changes;
+- establish that affected release results and retained compatibility behavior
+  meet their contracts, using valid prior evidence and focused new checks;
 - define long-term ownership, maintenance cadence, incident handling, and
   release evidence;
-- retain rollback paths until the release is accepted.
+- retain applicable complete deployment versions under DELIVERY's recovery policy.
 
 ## Task sequence
 
@@ -318,12 +329,14 @@ history or unverified compatibility entry points.
    including weekly Landing and Pickup candidate review, publication, valid
    empty states, additive late-event re-review, stale-content diagnosis, and
    Landing fallback recovery.
-4. Perform backup restoration, workflow recovery, publication rollback, and
-   Pages recovery drills.
-5. Exercise the production pipeline from approved source collection through
-   data publication without bypassing validation or review gates.
-6. Run full cross-format, cross-product, Schema, rule, repository, and
-   real-browser regression.
+4. Reuse applicable archive, workflow and Pages recovery evidence. Verify only
+   changed recovery mechanisms or a necessary capability not yet demonstrated;
+   release closeout alone does not trigger repeated drills or a production rollback.
+5. Confirm the affected collection-to-publication path using applicable results
+   and agreed business review. Do not collect data or publish a product solely
+   to repeat already-valid release evidence.
+6. Resolve gaps in proof for the actual changes and their combinations. Check
+   affected numbers, contracts and usable pages; no full-suite closeout prerequisite.
 7. Resolve or explicitly defer every release-blocking Unknown, conflict,
    quality, privacy, compatibility, and operational issue.
 8. Obtain owner acceptance, publish the approved release tag, and record the
@@ -340,11 +353,12 @@ Phase 19 is complete when:
 - written operations cover routine refresh, event addition, Landing and Pickup
   editorial review, late-event re-review, quality review, schema migration,
   deployment, rollback, and recovery;
-- Pages, selected data storage, and production workflows pass an end-to-end
-  recovery exercise;
-- all approved formats and both product areas pass their regression contracts;
+- Pages, selected storage and production workflows have applicable evidence
+  that the required recovery path works; unchanged evidence remains reusable;
+- affected results in the approved formats and both product areas satisfy
+  their applicable business and compatibility contracts;
 - production pages and public paths remain compatible;
-- a release tag is published only after separate owner authorization;
+- the agreed release tag is published within the accepted release plan;
 - long-term ownership and maintenance cadence are recorded in
   `docs/STATUS.yaml`.
 
@@ -393,16 +407,12 @@ latest-only document or Git history as an approved historical product source.
 
 # Completion and change control
 
-At task completion, keep docs/STATUS.yaml live-only. When completed task detail
-exists in this roadmap, move it in the same accepted task to the corresponding
-phase file under docs/history/, update the history index, and leave only the
-remaining plan plus a compact history pointer here. Git and the pull request
-retain ordinary validation and publication evidence.
-
-Use `docs/DEVELOPMENT_WORKFLOW.md` for task gates, artifact impact, validation,
-Owner acceptance, publication, and stop conditions. Record scope or statistical
-decisions in `docs/DECISIONS.md`. Historical files never authorize work.
+Keep this roadmap focused on useful product direction and remaining work.
+Ordinary delivery facts remain in Git/GitHub. GOVERNANCE defines task completion;
+only changes to actual roadmap or durable project facts require updating them.
 
 # Current approved action
 
-The current approved task is defined only in `docs/STATUS.yaml`.
+The active Owner instruction and confirmed plan define the current task.
+Governance rebuild is authorized through U6 acceptance, then U7 cutover;
+implementation facts are in `plans/governance-rebuild/RESULTS.md`.

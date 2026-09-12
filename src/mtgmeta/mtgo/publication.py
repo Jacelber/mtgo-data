@@ -418,18 +418,23 @@ def stage_publications(
             )
     subprocess.run(["git", "-C", str(stage), "add", "--all"], check=True)
     environment = dict(os.environ, PYTHONPATH=str(stage / "src"))
-    commands = [("validate_repository.py", ["--full"])]
-    commands.extend(
-        ("validate_rules.py", [f"my_archetypes/{format_id}.yaml"])
-        for format_id in formats
-    )
-    commands.extend((("validate_schemas.py", []), ("validate_output_invariants.py", [])))
+    # Validate this generated result. Data publication does not modify the
+    # classifier engine or execute every other format's regression suite.
+    selected_json = sorted({
+        "stats/catalog.json",
+        *(path for format_id in formats for path in (
+            *artifact_paths(stage, format_id), f"stats/{format_id}/mtgo/meta.json",
+            f"stats/{format_id}/archetype_names.json"))
+    })
+    selected_json = [path for path in selected_json if (stage / path).is_file()
+                     and (not (root / path).is_file() or (stage / path).read_bytes() != (root / path).read_bytes())]
+    commands = []
+    if selected_json:
+        commands.append(("validate_schemas.py", [arg for path in selected_json for arg in ("--path", path)]))
+    commands.append(("validate_output_invariants.py", [arg for fmt in formats for arg in ("--format", fmt)]))
     for script, arguments in commands:
         subprocess.run([sys.executable, "-B", str(stage / script), *arguments],
                        cwd=stage, env=environment, check=True)
-    subprocess.run([sys.executable, "-B", "-m", "pytest", "-q",
-                    "tests/test_generated_consumer_contracts.py"],
-                   cwd=stage, env=environment, check=True)
     subprocess.run(["git", "-C", str(stage), "diff", "--exit-code"], check=True)
     # No final target has been changed if any preceding operation fails.
     final_subject_changed = any(

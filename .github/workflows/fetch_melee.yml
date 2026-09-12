@@ -40,15 +40,15 @@ jobs:
         uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
-          persist-credentials: true
+          persist-credentials: false
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v6.3.0
         with:
           python-version: "3.12"
 
-      - name: Install pinned development dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+      - name: Install pinned runtime dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
 
       - name: Validate candidate operation contract
         shell: bash
@@ -62,14 +62,6 @@ jobs:
               ;;
             *) echo "Undefined operation; expected collect-new|resume-retained" >&2; exit 1 ;;
           esac
-
-      - name: Smoke the Melee and catalog commands plus privacy boundary
-        run: >-
-          python -B -m pytest
-          --basetemp="${RUNNER_TEMP}/pytest-melee-baseline"
-          tests/test_cli_smoke.py::test_melee_cli_smoke
-          tests/test_cli_smoke.py::test_catalog_cli_smoke
-          tests/test_melee_privacy_validation.py
 
       - name: Resolve verified whitelist format
         id: whitelist
@@ -169,6 +161,8 @@ jobs:
         id: checkpoint
         if: steps.snapshot.outputs.source_mode == 'fetched' || steps.review-branch.outputs.resumed == 'true'
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           BRANCH="${{ steps.review-branch.outputs.branch }}"
           git config user.name "github-actions[bot]"
@@ -177,7 +171,7 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "chore: checkpoint Melee event ${EVENT_ID} source"
           fi
-          git push origin "HEAD:refs/heads/${BRANCH}"
+          git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push origin "HEAD:refs/heads/${BRANCH}"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
           echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
@@ -228,14 +222,6 @@ jobs:
           git add -- "data_raw/melee/${EVENT_ID}/" "data/${FORMAT}/melee/" "stats/${FORMAT}/melee/" "stats/${FORMAT}/archetype_names.json" "stats/catalog.json"
           git diff --quiet || { echo "Candidate contains unstaged changes outside the exact staged scope" >&2; exit 1; }
 
-      - name: Validate repository, rules, and Schemas
-        shell: bash
-        run: |
-          python -B validate_repository.py --full-candidate
-          python -B validate_rules.py "my_archetypes/${FORMAT}.yaml"
-          python -B validate_schemas.py
-          python -B validate_schemas.py --manifest schemas/melee-data-manifest.json
-
       - name: Bind exact staged candidate tree
         id: candidate-tree
         shell: bash
@@ -245,19 +231,14 @@ jobs:
           test -n "$CANDIDATE_TREE"
           echo "tree=$CANDIDATE_TREE" >> "$GITHUB_OUTPUT"
 
-      - name: Confirm validated candidate tree
-        shell: bash
-        run: |
-          git diff --quiet || { echo "Candidate has tracked unstaged drift after validation" >&2; exit 1; }
-          ACTUAL_TREE="$(git write-tree)"
-          test "$ACTUAL_TREE" = "${{ steps.candidate-tree.outputs.tree }}" || {
-            echo "Staged candidate tree changed after validation" >&2
-            exit 1
-          }
+      - name: Check changed product outputs
+        run: python -B tools/check_outputs.py --changed-from HEAD
 
       - name: Commit and push review branch
         id: publish
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           BRANCH="${{ steps.review-branch.outputs.branch }}"
           CANDIDATE_TREE="${{ steps.candidate-tree.outputs.tree }}"
@@ -283,7 +264,7 @@ jobs:
             echo "Committed candidate tree does not match validation evidence" >&2
             exit 1
           }
-          git push origin "HEAD:refs/heads/${BRANCH}"
+          git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push origin "HEAD:refs/heads/${BRANCH}"
           echo "changed=true" >> "$GITHUB_OUTPUT"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
           echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"

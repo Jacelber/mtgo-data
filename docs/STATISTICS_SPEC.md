@@ -15,13 +15,10 @@ It applies to:
 
 Do not change a statistical formula only in implementation code.
 
-Any intentional formula change must also update:
-
-- this document;
-- affected tests;
-- affected JSON Schemas;
-- `DECISIONS.md`;
-- generated-data version information when compatibility is affected.
+Intentional formula changes require the Owner's business decision under
+GOVERNANCE. Keep the affected specification, producers, consumers, data contract
+and compatibility version aligned. Select proof under QUALITY; this document
+defines statistical meaning, not a separate authorization or test schedule.
 
 ---
 
@@ -138,7 +135,12 @@ Statistics must aggregate by archetype ID rather than only by display name.
 
 A classification result may also contain an optional subtype ID and subtype display name. A subtype is a rule-level variant within one parent archetype. Primary metagame, performance, and conversion statistics continue to aggregate by the parent archetype ID. Hierarchical matchup statistics are separately defined in section 11.8, and supplementary hierarchical MTGO range statistics are defined in section 16.3. Subtypes must not split or double-count the parent archetype population.
 
-The Phase 2 compatibility migration may expose subtypes only for distinct legacy rule entries that already resolve to the same legacy archetype. It must not change any deck's parent archetype result. New subtype taxonomy and subtype-level statistical presentation require separate approval after the compatibility classifier is complete.
+Introducing subtype detail without a taxonomy change must preserve each deck's
+parent archetype and must not split or double-count its population. The initial
+legacy migration exposed distinct rule entries within one parent; that completed
+migration does not freeze today's approved subtype taxonomy. New taxonomy or
+presentation meaning is a business choice in the current task plan, not a
+requirement to reopen the compatibility-classifier phase.
 
 The reviewed Standard `leyline-aggro/izzet` identity requires the maintained
 four-copy Leyline of Resonance and Slickshot Show-Off core. There is no
@@ -634,7 +636,8 @@ MTGO\ APPR_a =
 }
 \]
 
-Existing Standard behavior must be regression-tested before generalization.
+Generalization preserves the applicable Standard business behavior; QUALITY
+defines the smallest proof needed for the actual change.
 
 ### 7.5 Pure Constructed Day 1 average
 
@@ -991,7 +994,7 @@ If a raw Day 2 qualification rate is displayed for context, it must be labeled c
 ### 10.0 Implementation status and compatibility boundary
 
 The formulas in this section are the approved target statistical meaning for
-the public label `win rate` / `胜率`, frozen by DEC-053. P8-04 defines the
+the public label `win rate` / `胜率`. P8-04 defines the
 versioned target contract, fixture, and migration boundary. Existing generated
 outputs and the deployed front end retain the pre-P8 draw-adjusted
 compatibility fields. P8-06 adds parallel literal records to every MTGO matrix
@@ -1004,7 +1007,7 @@ remains governed by its existing Schema and producer behavior.
 
 ### 10.0.1 Planned retirement of draw-adjusted compatibility data
 
-DEC-078 records the owner's decision that the draw-adjusted calculation is not
+The Owner has decided that the draw-adjusted calculation is not
 part of the final product contract. P11-09 is skipped so that the project does
 not build a new shared API around logic selected for removal. Current generated
 documents, Schemas, and protected event `434455` bytes remain unchanged through
@@ -1015,8 +1018,8 @@ calculation and obsolete compatibility fields through an explicit Schema
 version and generated-data migration. It must not silently reinterpret an
 existing field whose published meaning was draw-adjusted. The migration must
 update both source products, retained legacy JavaScript, fixtures, validation,
-the protected `434455` manifest, and rollback evidence. Until that separately
-authorized migration is complete, existing compatibility fields retain their
+the protected `434455` manifest, and applicable recovery compatibility. Until that
+planned migration is complete, existing compatibility fields retain their
 current historical meaning and no new consumer may depend on them.
 
 ### 10.1 General formula
@@ -1209,7 +1212,7 @@ the maintained taxonomy defines at least two subtypes.
 The played records expose raw W-L-D counts, match count, win rate, and a 95%
 Wilson interval. Both all-match and non-mirror records are retained; the
 non-mirror record excludes opponents assigned to the same displayed identity.
-The Phase 8 consumer applies the DEC-060 shared low-sample presentation warning
+The Phase 8 consumer applies the shared low-sample presentation warning
 when the valid-match count is fewer than 20. Consumers must still use the
 retained sample size and interval rather than treating the warning as a
 reliability gate or treating an unavailable rate as zero.
@@ -1449,11 +1452,11 @@ subtype.
 Unknown archetypes remain governed by section 11.3. A subtype is never treated
 as an unrelated parent archetype.
 
-Before the hierarchical matchup front end is accepted, Standard must be run
-through the same shared hierarchical calculation used for Modern. Its fully
-collapsed parent matrix must reproduce the existing Standard parent-level
-matchup output. This migration is required even if the legacy Standard public
-files remain available temporarily as compatibility outputs.
+Standard and Modern use the same shared hierarchical calculation. For the same
+admitted input and taxonomy, collapsing subtype cells must reproduce the
+parent-level W-L-D counts and derived matchup values. A change to this grouping
+or projection needs proof of that relationship; unrelated delivery does not
+rerun the completed front-end migration or a fixed Standard baseline.
 
 ### 11.9 P7-06 mixed-event matchup contract
 
@@ -1485,7 +1488,7 @@ overview records exactly.
 Each cell and overall record contains raw wins, losses, draws, valid-match
 count, win rate, and a 95% Wilson interval. A zero-sample rate and interval are
 `null`. Existing Tabletop output may retain `low_sample_threshold: null` as a
-compatibility field; the Phase 8 consumer applies the DEC-060 shared
+compatibility field; the Phase 8 consumer applies the shared
 presentation value of 20 to both source products. A future generated-contract
 migration may publish that value directly, but must preserve the same warning
 meaning and source separation.
@@ -1559,8 +1562,8 @@ n = wins + losses + draws
 \]
 
 The resulting compatibility interval is an approximation for the half-win
-treatment of draws. DEC-078 prohibits new consumers and schedules this
-calculation and its fields for versioned removal in Phase 19.
+treatment of draws. New consumers must not use this compatibility method;
+the calculation and its fields are scheduled for versioned removal in Phase 19.
 
 ### 12.3 Low-sample warnings
 
@@ -1791,7 +1794,7 @@ The exact available ranges must be listed in generated index data rather than as
 
 The existing Standard implementation identifies a latest complete calendar week.
 
-This behavior must be preserved by regression tests before the pipeline becomes format-parameterized.
+Format-parameterized consumers preserve this meaning; affected proof follows QUALITY.
 
 ### 16.3 Hierarchical range statistics
 
@@ -1819,10 +1822,10 @@ records in the selected range remains present with zero counts and null
 sample-dependent rates. This makes taxonomy membership and expandability
 independent of short-lived event volume.
 
-The parent row remains authoritative and must reproduce the Phase 6 parent-only
-result byte-for-byte when supplementary subtype fields and newly exposed stable
-parent IDs are projected away. Adding the subtype layer must not change totals,
-Unknown handling, thresholds, range dates, or parent ranking.
+The parent row remains authoritative. For the same input and approved taxonomy,
+adding subtype detail must preserve parent totals, Unknown handling, thresholds,
+range dates and ranking. Compare those meanings when their calculation changes;
+new data or approved taxonomy changes need not reproduce Phase 6 output bytes.
 
 ### 16.4 Average deck and deviation
 
@@ -1830,7 +1833,10 @@ Average decklists, representative decklists, Core/Flex classification, construct
 
 These calculations are not automatically required for tabletop event pages.
 
-Their detailed existing behavior should be documented and regression-tested during the Standard baseline phase before intentional formula changes.
+An intentional formula change must specify the old and new meaning and preserve
+the applicable compatibility contract. Validate the changed calculation against
+independently calculable inputs and affected results; completion of a historical
+Standard baseline phase is not a prerequisite.
 
 For a parent with maintained subtypes, each subtype's representative deck,
 average deck, Core/Flex list, deviation, and recent construction change are
@@ -1899,7 +1905,7 @@ candidate records the source event IDs used to generate it. During the
 following seven-day provisional window, an additive late-event arrival
 regenerates an unreviewed candidate. A candidate containing an approval or a
 non-empty reviewer comment is not overwritten; it is retained and reported for
-human re-review. Landing admission and known-archetype changes remain human-gated.
+human re-review. Landing content and known-archetype changes retain the relevant Owner business judgment under GOVERNANCE.
 
 ### 16.7 Phase 8 MTGO source-completeness contracts
 
@@ -1998,9 +2004,10 @@ contents while restoring the missing Swiss evidence.
 Statistical consumption is now fail closed. Every retained player consumed by
 the MTGO statistics generator must have a non-negative integer Swiss score and
 a positive integer final rank. Missing or invalid evidence is an error and must
-not be coerced to zero or a fallback placement. A full retained-archive audit
-must report zero semantic exceptions before affected statistics are generated
-or published.
+not be coerced to zero or a fallback placement. This condition applies to the
+records consumed by the affected generation. An invalid consumed record prevents
+that result from being presented as valid; an unrelated retained archive does
+not require a full-corpus audit before generation or publication.
 
 The output must retain:
 
@@ -2061,7 +2068,7 @@ each identity record contains `all_matches`, `non_mirror`, and the physical
 `mirror_match_count`. The existing `parent_overall`, `leaf_overall`, Standard
 name aliases, and their draw-adjusted compatibility fields were retained while
 the production front end migrated in P8-09. The front end now consumes literal
-records; DEC-078 retains the old fields only until their versioned Phase 19
+records; the old fields remain only until their versioned Phase 19
 removal.
 
 ### 16.8 Weekly MTGO Top 8 decklist presentation data
@@ -2180,7 +2187,7 @@ Includes:
 P8-07 preserves the existing draw-adjusted overview records as compatibility
 data and adds `literal_record` to each all-match and non-mirror record. The
 literal method is wins divided by wins, losses, and normal played draws. The
-production front end now uses that literal method; DEC-078 schedules the
+production front end now uses that literal method; the approved plan schedules the
 draw-adjusted compatibility records for versioned Phase 19 removal.
 
 ### 17.3 Deck data
@@ -2264,7 +2271,7 @@ Round only the final stored or displayed calculated value according to the outpu
 
 ---
 
-## 19. Data-quality gates
+## 19. Event data-quality conditions
 
 An event must not be silently published as complete when primary statistics cannot be trusted.
 
@@ -2312,45 +2319,18 @@ A missing or unavailable decklist is a non-blocking warning at this ingestion
 boundary. It does not make a match result untrustworthy by itself. This rule
 does not establish a decklist-coverage threshold for later classification or
 public statistics; that coverage threshold remains unresolved. The matchup
-sample presentation warning is separately resolved by DEC-060: the Phase 8
+sample presentation warning is: the Phase 8
 consumer warns below 20 valid matches without treating the threshold as a
 reliability or publication gate.
 
 ---
 
-## 20. Required statistical tests
+## 20. Proving statistical meaning
 
-Automated tests must cover at least:
-
-- high-score threshold examples;
-- average points using theoretical rounds;
-- early `0-2` drop behavior;
-- early `0-9` or equivalent drop behavior;
-- played win and loss handling;
-- normal played draw handling;
-- `0-0-3` intentional-draw exclusion from win rate;
-- bye exclusion from win rate;
-- no-show exclusion;
-- awarded-win exclusion;
-- disqualified-participant match exclusion with both match sides retained;
-- Top 8 lock theoretical-round exemption;
-- Draft exclusion;
-- playoff exclusion;
-- Day 1 scope;
-- Day 2 scope;
-- Combined Constructed scope;
-- non-qualifiers not receiving Day 2 theoretical rounds;
-- W-L-D aggregation;
-- mirror exclusion;
-- matchup inverse-cell reconciliation;
-- multi-event raw-count aggregation;
-- missing data returning `null`;
-- low-sample warnings;
-- source separation between MTGO and tabletop data.
-
-Regression tests must also preserve the existing Standard outputs before major refactoring.
-
----
+The formulas and independently calculable examples above define correct results.
+QUALITY selects affected result checks and mechanism tests. Ordinary data updates
+do not rerun all statistical mechanisms, and legitimate new data does not need
+to reproduce historical Standard output bytes.
 
 ## 21. Interpretation requirements
 
@@ -2443,7 +2423,7 @@ The following may be finalized during implementation without changing the approv
 - event-specific detection method for Top 8 lock results;
 - event-specific handling of unusual administrative penalties.
 
-Any resolution must be recorded in configuration, tests, or `DECISIONS.md` as appropriate.
+Record a resolved meaning in this specification and its applicable configuration; QUALITY defines affected proof.
 
 Implementation details must not contradict the formulas and exclusions in this document.
 
