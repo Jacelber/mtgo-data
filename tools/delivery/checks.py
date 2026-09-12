@@ -14,7 +14,7 @@ MECHANISMS = {
     "packages": ("test_packages.py", ("packages.py",)),
     "writer": ("test_state.py", ("state.py",)),
     "github": ("test_github.py", ("github.py", "state.py", "packages.py")),
-    "platform": ("test_platform.py", ("platform.py", "github.py", "state.py", "packages.py")),
+    "platform": ("test_platform.py", ("platform.py", "github.py", "state.py", "packages.py", "commands.py")),
     "checks": ("test_checks.py", ("checks.py",)),
     "dispatch": ("test_commands.py", ("commands.py", "platform.py", "github.py", "state.py")),
 }
@@ -61,7 +61,7 @@ def subjects(root: Path, name: str) -> list[Path]:
         sources = [root / "tools/delivery" / module for module in modules]
         if name in {"platform", "dispatch"}:
             sources.append(root / "tools/pages_writer.py")
-        if name == "checks":
+        if name in {"checks", "platform"}:
             sources.append(root / "tools/project.py")
         return [*sources, root / "tests/delivery" / test]
     raise ValueError(f"Unknown check {name!r}; investigate actual impact, never fall back to full tests")

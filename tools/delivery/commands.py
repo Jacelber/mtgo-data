@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 from tools.delivery import state as transitions
-from tools.pages_writer import context
+from tools.pages_writer import context, resume_completed
 
 
 def dispatch(target: str, operation: str, package: str, base: str | None, mode: str, reason: str = "",
@@ -14,7 +14,10 @@ def dispatch(target: str, operation: str, package: str, base: str | None, mode: 
     archive.private()
     state, sha = archive.load_state()
     if transitions.current_id(state) == operation and not state["pending"]:
-        return {"state": "already_recorded", "current": state["current"]}
+        if mode == "resume":
+            return resume_completed(archive, pages, state, sha, target=target, operation=operation)
+        health = state["current"].get("health", "unknown")
+        return {"state": "already_recorded" if health == "passed" else health, "current": state["current"]}
     if mode == "resume":
         pending = state["pending"]
         if not pending or pending["operation"] != operation:

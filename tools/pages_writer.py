@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 import json
 import os
 from pathlib import Path
 import re
 import sys
+import tempfile
 import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -21,6 +23,48 @@ def context(target: str):
     path = "state/pages.json" if target == "Jacelber/mtgo-data" else "state/verification-pages.json"
     credential = "ARCHIVE_TOKEN" if os.environ.get("GITHUB_ACTIONS") == "true" or os.environ.get("ARCHIVE_TOKEN") else None
     return GitHub("Jacelber/mtgo-data-releases", token_env=credential, state_path=path), Pages(target)
+
+
+def resume_completed(archive, pages, state: dict, sha: str, *, target: str,
+                     operation: str, candidate: Path | None = None) -> dict:
+    """Confirm an ended write; never claim, dispatch or send another deployment."""
+    if state["pending"] or transitions.current_id(state) != operation:
+        raise transitions.Conflict("Resolve the changed or pending operation before confirming this product")
+    current = state["current"]
+    if current.get("health") == "passed":
+        return {"state": "already_confirmed", "current": current}
+    info = state["packages"][current["package"]]
+    if current.get("health") == "failed" or info.get("failed"):
+        # Matching bytes cannot disprove an independently established product defect.
+        return {"state": "failed", "current": current}
+    remote = current["remote"]
+    remote_status = pages.query(remote["pages_id"])
+    pages.current(expected=remote["deployment_id"])
+    if remote_status.get("status") != "succeed":
+        return {"state": "unknown", "current": current, "remote_status": remote_status}
+    if not info.get("complete") or info.get("target") != target:
+        raise transitions.Conflict("The recorded product is not completely archived for this target")
+    with tempfile.TemporaryDirectory(prefix="resume-product-") as temporary:
+        if candidate is None:
+            manifest = archive.retrieve(current["package"], Path(temporary) / "candidate", target=target)
+        else:
+            manifest = json.loads((candidate / "manifest.json").read_text(encoding="utf-8"))
+            packages.verify(candidate / "product.tar.gz", manifest, target=target)
+        if manifest["id"] != current["package"]:
+            raise transitions.Conflict("Confirmation refers to another product")
+        observation = observe_content(pages.site_url(), manifest, operation)
+    if observation["state"] != "matching":
+        return {"state": "unconfirmed", "current": current, "service": observation}
+    # A subsequent supported writer changes the control SHA. External writes
+    # are checked again after observation; neither may be silently overwritten.
+    pages.current(expected=remote["deployment_id"])
+    updated = deepcopy(state)
+    updated["current"].update(health="passed", platform_status="succeed", service_observation=observation)
+    updated["packages"][current["package"]].update(eligible=True, failed=False, active=False)
+    if updated["recovery"] and updated["recovery"]["id"] == operation:
+        updated["recovery"] = None
+    archive.save_state(updated, sha)
+    return {"state": "confirmed", "operation": operation, "package": current["package"]}
 
 
 def main() -> int:
@@ -210,7 +254,8 @@ def main() -> int:
                 if args.command == "status":
                     result = state
                 elif args.command == "resume" and transitions.current_id(state) == args.operation:
-                    result = {"state": "already_confirmed", "current": state["current"]}
+                    result = resume_completed(archive, pages, state, sha, target=args.target,
+                                              operation=args.operation, candidate=args.candidate)
                 else:
                     raise transitions.Conflict("No matching pending operation")
             elif not pending["remote"]:
@@ -261,7 +306,7 @@ def main() -> int:
                         break
                     time.sleep(5)
         print(json.dumps(result, ensure_ascii=False, indent=2))
-        return 3 if result.get("state") in {"unknown", "unconfirmed", "cancel_requested"} else 0
+        return {"unknown": 3, "unconfirmed": 3, "cancel_requested": 3, "failed": 1}.get(result.get("state"), 0)
     except (APIError, OSError, ValueError, KeyError) as error:
         print(json.dumps({"state": "execution_failed", "error": str(error)}, ensure_ascii=False))
         return 2
