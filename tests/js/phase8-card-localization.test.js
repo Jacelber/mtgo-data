@@ -120,3 +120,15 @@ test("a Chinese name without a Chinese image keeps the name and uses the English
     }
   );
 });
+
+
+test("full double-face names reuse the front-face localization", () => {
+  const api = localization();
+  const lookup = api.parseLookup({
+    "Sink into Stupor": { zh_name: "渐入迷眠", image_url: mtgchImage, mtgch_url: mtgchCard },
+  });
+  assert.deepEqual(api.resolve("Sink into Stupor // Soporific Springs", "zh", lookup),
+    api.resolve("Sink into Stupor", "zh", lookup));
+  assert.equal(api.resolve("Sink into Stupor // Soporific Springs", "en", lookup).displayName,
+    "Sink into Stupor // Soporific Springs");
+});

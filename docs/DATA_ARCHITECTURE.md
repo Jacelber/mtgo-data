@@ -3545,3 +3545,22 @@ private artifact carrier, exact production identity, full human classification
 review, retained-corpus diagnostic queue, bounded metadata-delta timing,
 deduplicated notices, and explicit completion checks. Legacy 1.6 and legacy
 Top-8-only completion remain readable. No public readiness endpoint is added.
+
+
+### Official final standings repairs
+
+Melee final ranks use the official standings after the completed Finals round;
+Swiss standings are not a substitute for the final top-eight order. The collector
+selects that round when available. Existing retained events can receive a narrow
+`data/<format>/melee/final_standings/<event>.json` supplement through
+`tools/refresh_melee_final_standings.py --event-id <event>` without recollecting
+matches or decklists. This stores only existing participant identities and exact
+official ranks, together with the source round and retained-event digest.
+`--materialize` uses the saved source without network requests and updates only
+deck ranks and their metadata descriptor. The ordinary statistics generator uses
+the same transformation. A mismatched event or participant set is rejected.
+Legacy raw snapshots, classification and match statistics remain unchanged.
+
+The shared card-localization demand includes public MTGO and Tabletop products.
+Full double-face names can reuse the front-face localization; both product views
+use the same resolver for Chinese name, link and preview image.

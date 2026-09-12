@@ -1144,7 +1144,8 @@ def fetch_complete_event(
         numeric_rounds = [(round_id, int(match.group(1))) for round_id, label in rounds if (match := re.fullmatch(r"Round\s+(\d+)", label, re.IGNORECASE))]
         if not numeric_rounds:
             raise MeleeFetchError("tournament page did not expose a completed Swiss round")
-        standings_round_id = max(numeric_rounds, key=lambda item: item[1])[0]
+        final_rounds = [round_id for round_id, label in rounds if label.casefold() == "finals"]
+        standings_round_id = final_rounds[0] if len(final_rounds) == 1 else max(numeric_rounds, key=lambda item: item[1])[0]
 
         decklists: dict[str, str] = {}
         standings_requests: list[_CompleteRequest] = []

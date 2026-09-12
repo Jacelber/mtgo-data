@@ -562,3 +562,17 @@ def test_verify_rejects_a_declared_missing_landing_image(tmp_path: Path):
 
     with pytest.raises(localization.LocalizationBuildError, match="is missing"):
         localization.verify_bundle(root, output)
+
+
+def test_public_tabletop_names_enter_shared_localization(tmp_path):
+    root = _root(tmp_path)
+    registry_path = root / "configs/formats.yaml"
+    registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
+    for definition in registry["formats"]:
+        if definition["id"] == "pauper":
+            definition["public"] = False
+    registry_path.write_text(yaml.safe_dump(registry), encoding="utf-8")
+    _write_json(root / "stats/modern/melee/events/123/decks.json", {
+        "decks": [{"decklist": {"cards": [{"name": "Sink into Stupor // Soporific Springs", "quantity": 4}]}}]
+    })
+    assert "Sink into Stupor // Soporific Springs" in localization.product_card_names(root)

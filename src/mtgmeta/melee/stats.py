@@ -1360,7 +1360,7 @@ def build_event_statistics_from_paths(
         taxonomy = load_rule_set(taxonomy_path)
     except (OSError, RuleConfigError) as exc:
         raise MeleeStatisticsError(f"{taxonomy_path}: cannot load taxonomy") from exc
-    return build_event_statistics(
+    documents = build_event_statistics(
         event,
         classification,
         ledger,
@@ -1374,6 +1374,31 @@ def build_event_statistics_from_paths(
         taxonomy_path=_repository_relative(taxonomy_path, root),
         taxonomy_sha256=_sha256_bytes(taxonomy_bytes),
     )
+    apply_final_standings(documents["decks"], event_path, root)
+    return documents
+
+
+def apply_final_standings(document, event_path, root):
+    """Update ranks from a bound official source, preserving all other event facts."""
+    final_path = event_path.parent.parent / "final_standings" / event_path.name
+    if not final_path.exists():
+        return
+    final, final_bytes = _read_json_object(final_path)
+    ranks = final.get("ranks", {})
+    decks = document["decks"]
+    if (final.get("event_sha256") != _sha256_bytes(event_path.read_bytes())
+            or final.get("event_id") != document["event_id"]
+            or set(ranks) != {deck["participant_id"] for deck in decks}
+            or any(type(rank) is not int or rank < 1 for rank in ranks.values())
+            or len(set(ranks.values())) != len(ranks)):
+        raise MeleeStatisticsError("Official final standings do not match retained event participants")
+    for deck in decks:
+        deck["final_rank"] = ranks[deck["participant_id"]]
+    document["final_rank_source"] = {
+        "path": _repository_relative(final_path, root),
+        "sha256": _sha256_bytes(final_bytes),
+    }
+
 
 
 def write_statistics_document(path: Path, payload: bytes) -> bool:

@@ -195,7 +195,7 @@ function tabletopMobileCard(record, {
   return `<article class="mobile-metric-card${subtype ? " subtype-card" : ""}${overall ? " overall-card" : ""}${detailOpen ? " detail-open" : ""}"
       role="listitem" aria-labelledby="${escapeHtml(titleId)}">
     <div class="mobile-card-heading">
-      <div class="mobile-card-title"><div>
+      <div class="mobile-card-title">${overall ? "" : manaIdentityHtml(identityId || parentId)}<div>
         ${subtype ? `<span class="mobile-subtype-label">${t("mobile.subtype")}</span>` : ""}
         <h3 id="${escapeHtml(titleId)}">${escapeHtml(displayName)}</h3></div></div>
       ${action}

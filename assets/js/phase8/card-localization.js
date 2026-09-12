@@ -87,7 +87,8 @@
         linkProvider: "scryfall",
       });
     }
-    const entry = lookup?.[englishName];
+    const frontName = englishName.split(/\s*\/\/\s*/)[0];
+    const entry = lookup?.[englishName] || lookup?.[frontName];
     if (!entry) {
       return Object.freeze({
         displayName: englishName,

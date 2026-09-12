@@ -349,12 +349,20 @@ async function renderViewWithFocus(
   root.querySelectorAll(".inline-error-state, .load-error-row").forEach(node => node.remove());
   root.setAttribute("aria-busy", "true");
   root.inert = true;
+  document.querySelector(".view-loading-overlay")?.remove();
+  const loadingOverlay = document.createElement("div");
+  loadingOverlay.className = "view-loading-overlay";
+  loadingOverlay.setAttribute("role", "status");
+  loadingOverlay.textContent = t("loading.data");
+  document.body.append(loadingOverlay);
   if (preserveExistingContent) {
     root.style.minHeight = `${Math.ceil(root.getBoundingClientRect().height)}px`;
   } else {
     root.innerHTML = loadingSkeleton();
   }
   try {
+    await new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 0)));
+    if (token !== state.renderToken) return;
     await ensureClassifierNames(state.format);
     let html;
     if (state.product === "mtgo-landing") html = await landingView();
@@ -410,6 +418,8 @@ async function renderViewWithFocus(
     root.style.removeProperty("min-height");
     document.querySelector("#payload-status").textContent = t("loading.failed");
     console.error(error);
+  } finally {
+    loadingOverlay.remove();
   }
   flushUrlWrite();
 }
@@ -678,11 +688,11 @@ document.addEventListener("click", async event => {
   } else if (button.dataset.matchupRow) {
     const parentId = button.dataset.matchupRow;
     toggleSet(state.matchupRows, parentId);
-    await renderView();
+    await renderMatchupExpansion();
   } else if (button.dataset.matchupColumn) {
     const parentId = button.dataset.matchupColumn;
     toggleSet(state.matchupColumns, parentId);
-    await renderView();
+    await renderMatchupExpansion();
   } else if (button.id === "matchup-expand-all") {
     const document = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
     const parents = document
@@ -697,7 +707,7 @@ document.addEventListener("click", async event => {
         state.matchupColumns.add(id);
       });
     }
-    await renderView();
+    await renderMatchupExpansion();
   } else if (button.dataset.top8Detail) {
     state.top8Detail = state.top8Detail === button.dataset.top8Detail
       ? null

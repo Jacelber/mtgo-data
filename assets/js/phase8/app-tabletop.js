@@ -232,12 +232,12 @@ function tabletopOverview(scope, presentation) {
     const nameHtml = expandable
       ? `<button class="name-button hierarchy-toggle" type="button" data-tabletop-toggle="${escapeHtml(parent.archetype_id)}"
           data-responsive-key="tabletop-action:${escapeHtml(parent.archetype_id)}" aria-expanded="${open}">
-          <span class="round-toggle">${open ? "−" : "+"}</span><span class="identity-label">${escapeHtml(classifierName(parent.archetype_id))}</span></button>`
+          <span class="round-toggle">${open ? "−" : "+"}</span>${manaIdentityHtml(directIdentity || parent.archetype_id)}<span class="identity-label">${escapeHtml(classifierName(parent.archetype_id))}</span></button>`
       : directIdentity
         ? `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(directIdentity)}"
             data-responsive-key="tabletop-action:${escapeHtml(directIdentity)}"
             aria-expanded="${state.tabletopDetailIdentity === directIdentity}">
-            <span class="identity-label">${escapeHtml(classifierName(parent.archetype_id))}</span></button>`
+            ${manaIdentityHtml(directIdentity || parent.archetype_id)}<span class="identity-label">${escapeHtml(classifierName(parent.archetype_id))}</span></button>`
         : `<span class="identity-label">${escapeHtml(classifierName(tabletopParentIdentity(parent)))}</span>`;
     const output = [tabletopRow({ ...parent, nameHtml }, "", advancementMetric)];
     if (!expandable && directIdentity && state.tabletopDetailIdentity === directIdentity) {
@@ -252,7 +252,7 @@ function tabletopOverview(scope, presentation) {
           nameHtml: `<button class="name-button" type="button" data-tabletop-detail="${escapeHtml(identityId)}"
             data-responsive-key="tabletop-action:${escapeHtml(identityId)}"
             aria-expanded="${state.tabletopDetailIdentity === identityId}">
-            <span class="identity-label">${escapeHtml(classifierName(
+            ${manaIdentityHtml(identityId)}<span class="identity-label">${escapeHtml(classifierName(
               parent.archetype_id,
               subtype.subtype_id
             ))}</span></button>`,

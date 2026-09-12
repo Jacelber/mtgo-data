@@ -1906,3 +1906,23 @@
   }
 
 }
+
+/* Keep feedback visible while the existing view is waiting for its replacement. */
+.view-loading-overlay {
+  position: fixed;
+  z-index: 2000;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  background: rgb(255 255 255 / 55%);
+  color: var(--brand2, #9a542c);
+  font-weight: 700;
+  pointer-events: none;
+}
+.row-axis-name .mana-identity {
+  display: flex;
+  margin-top: 3px;
+  gap: 2px;
+}
+.row-axis-name .mana-identity img { width: 12px; height: 12px; }
+.row-axis-name:has(.mana-identity) { max-height: none; }

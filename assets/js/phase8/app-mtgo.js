@@ -6,8 +6,9 @@ function manaIdentityHtml(identityId) {
   const colors = MANA_IDENTITIES[state.format]?.[identityId];
   if (!colors?.length) return "";
   const names = colors.map(color => t(`mana.${color}`)).join(t("mana.separator"));
+  const base = Runtime.publicPath("stats/catalog.json").replace(/stats\/catalog\.json$/, "");
   return `<span class="mana-identity" aria-label="${escapeHtml(t("mana.identity", { colors: names }))}">
-    ${colors.map(color => `<img src="assets/images/mana/${color}.svg" alt="">`).join("")}
+    ${colors.map(color => `<img src="${base}assets/images/mana/${color}.svg" alt="">`).join("")}
   </span>`;
 }
 
@@ -860,11 +861,11 @@ function matrixHtml(document) {
           ? `<button type="button" class="axis-disclosure-button row-axis-controls" data-matchup-row="${escapeHtml(row.parentId)}"
               aria-label="${escapeHtml(`${open ? t("matchup.collapse") : t("matchup.expand")}${row.name}`)}">
               <span class="row-axis-toggle" aria-hidden="true">${open ? "−" : "+"}</span>
-              <span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</span></button>`
+              <span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}${state.product === "tabletop-major-events" ? manaIdentityHtml(row.id) : ""}</span></button>`
           : `<div class="row-axis-controls"><a class="row-axis-detail-link"
               href="${escapeHtml(matchupDetailUrl(matchupDetailIdentity(document, row)))}" target="_blank" rel="noopener"
               aria-label="${escapeHtml(t("matchup.open_detail", { name: row.name }))}">
-              <span class="row-axis-detail-content"><span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}</span>
+              <span class="row-axis-detail-content"><span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}${state.product === "tabletop-major-events" ? manaIdentityHtml(row.id) : ""}</span>
               <svg class="axis-detail-external" viewBox="0 0 16 16" aria-hidden="true"><path d="M9 2h5v5M14 2 8 8M12 9v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h4" /></svg></span></a></div>`;
         return `<tr data-matchup-row-identity="${escapeHtml(row.id)}">
           <th class="row-head ${row.kind === "subtype" ? "subtype-head" : ""}">
@@ -878,6 +879,21 @@ function matrixHtml(document) {
 
 function matchupProjection(document) {
   return `<div id="matchup-projection">${matrixHtml(document)}</div>`;
+}
+
+async function renderMatchupExpansion() {
+  const root = document.querySelector("#matchup-projection");
+  const documentValue = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
+  if (!root || !documentValue) return renderView();
+  const focus = renderFocusSelector(document.activeElement, root);
+  const position = captureRenderPosition(root, focus);
+  root.innerHTML = matrixHtml(documentValue);
+  restoreRenderPosition(root, focus, position);
+  restoreRenderFocus(root, focus);
+  updateMatrixPresentation();
+  const expand = document.querySelector("#matchup-expand-all");
+  if (expand) expand.textContent = t(state.matchupRows.size || state.matchupColumns.size
+    ? "matchup.collapse_all" : "matchup.expand_all");
 }
 
 async function mtgoMainstreamProjection() {
