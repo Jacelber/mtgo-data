@@ -38,7 +38,7 @@ class GitHub:
 
     def command(self, arguments: list[str], *, body: dict | None = None) -> str:
         execution = subprocess.run(["gh", *arguments], input=json.dumps(body) if body is not None else None,
-                                   capture_output=True, text=True, env=self.environment)
+                                   capture_output=True, text=True, encoding="utf-8", env=self.environment)
         if execution.returncode:
             match = re.search(r"HTTP (\d{3})", execution.stderr)
             # gh does not echo token environment variables; do not log command environment.

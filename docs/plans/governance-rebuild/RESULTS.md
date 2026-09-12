@@ -1,14 +1,23 @@
 # 治理重建实施结果
 
-更新：2026-09-12。修订后的 [U6 已验收](U6_REVIEW.md)，U7 统一切换进行中。
+更新：2026-09-12。修订后的 [U6 已验收](U6_REVIEW.md)，U7 已取得下列实际切换结果。
+本次收尾提交包含切换时发现的 Windows 环境修复；其最终合并事实以 Git/GitHub 为准。
 
-## U7 当前切换事实
+## U7 实际交付结果
 
 - Owner 明确要求在原授权内连续完成 U7，保留有效验证及最新恢复策略，不夹带产品修复。
 - 已分别暂时停用原 Pages `325084643`、MTGO update `312241633`、Melee candidate `320126493`；查询 in_progress／queued／waiting／requested／pending 均为零。网站仍服务现有包。
-- 主分支仍为原基线，历史 ruleset 仅含 deletion／non_fast_forward，未改变。基线准备器实际确认部署 `6394719184` 后，将已归档包 `pages-fd42fbd24cc55d82f65e6905645b1e9c5bfae909c050aa57dab1ee33adbb8608` 登记为正式 `state/pages.json` 当前引用；没有重新生成产品。
+- 切换前主分支核对为原基线，历史 ruleset 仅含 deletion／non_fast_forward，未改变。基线准备器实际确认部署 `6394719184` 后，将已归档包 `pages-fd42fbd24cc55d82f65e6905645b1e9c5bfae909c050aa57dab1ee33adbb8608` 登记为正式 `state/pages.json` 当前引用；没有重新生成产品。
 - 自动审批最初拒绝将三项暂停与基线写入组合执行；命令未执行。补充已验收 §八的精确映射并逐项执行后均获允许，未重新要求 Owner 审批。
-- 新版本提交合并、正式入口调用／服务确认、项目入口同步及临时资源清理继续执行；当前不宣称 U7 完成。
+- [PR #394](https://github.com/Jacelber/mtgo-data/pull/394) 已合并，提交 `7adff02f8f92a2a3d7fb9a113e24494ec919909b`。新 selected 检查运行 `34679389367` 通过，仅核对入口和 STATUS；没有全量产品验证或旧合并证据门禁。
+- 正式 [部署运行 34679526144](https://github.com/Jacelber/mtgo-data/actions/runs/34679526144) 已成功：product-archive 登记请求、github-pages 取回私有包、上传、发送及实际服务确认均完成。部署记录 `6406995564`，操作 `governance-u7-20260912-current`；复用原包全部字节，未抓取、分类、重新生成或修复 P14。
+- 正式状态的 current 为上述新操作，previous 为 `baseline-6394719184`，两者指向同一已完整归档包，两个产品入口与公开目录的服务摘要匹配。pending／recovery／automatic_publication_pause 均为空。此同包切换保留可恢复引用，不虚构另一个不同内容的历史版本，也不将确认 passed 解释为 P14 缺陷已清零。
+- Windows 首次调用在 GitHub 运行列表查询时用系统 GBK 解码 UTF-8，未到 POST 即失败；`GitHub.command` 已显式使用 UTF-8。同一只读查询实际解析 100 条记录通过，之后同一操作号成功提交。不用失败命令重启产品验证，也不将尚未发出的请求冒称未知写入。
+- 原项目 `D:/dl/crawlerpj` 已从旧 master 快进至新规则，跟踪文件无额外修改，未跟踪预览／导出／工作区保留。实际重新读取 AGENTS／CLAUDE／Copilot，入口指向新职责规范；旧工作流文档、DECISIONS、全量验证、预检、合并证明入口不存在，统一入口的 entries 核对通过。收尾修复随最终提交继续快进同步。
+- 外部项目记忆更新请求已核对存在。当前会话既有旧摘要文字不会被工具抹去，摘要后台重新生成尚无可核实结果；现行实际入口已明确取消其规则地位，本次续作未让旧阶段授权／全量要求控制执行。已打开任务的历史文字不作为另一套规则；不冒称记忆物理擦除，也不要求每项任务再声明例外。后续若发现旧提示实质重新控制任务，按当前任务范围纠正，不能将其当作新制度的要求。
+- 临时验证 Pages 已删除，验证仓库 Actions 已停用，两个测试环境及归档／解密凭据、公钥变量已清理。四个 341–441 字节的合成产品 Release、合成周审草稿及 `state/verification-pages.json` 已删除；私有仓库只剩正式产品 Release `387423167`。保留验证仓库源码与历史运行记录供查阅，不保留运行站点或后台工作。
+- 正式 Pages、MTGO update 和 Melee 手工入口已重新启用；保留原 09:00 UTC 定时安排，未手工发起采集。两个正式环境仍仅允许 master 且无人工 reviewer，历史防删除／非快进保护保持。平台有写权限者的历史重跑能力仍存在，受支持入口不使用旧写入运行续作；没有声称改 YAML 能消除平台外部能力。
+- 本轮新增验证限于实际切换环境、归档／服务对象、Windows 受影响查询及重新加载的入口；此前机制和产品结论继续复用。Step 8 从 2026-09-12 起利用自然任务已有信息，首五项任务结束或 2026-09-26 先到者截止；不设置提醒、后台任务或新的填报。
 
 ## 本次 U6 文档纠正
 
@@ -27,7 +36,9 @@ Owner 暂不验收后的本轮只修改文档，保留此前实现和仍适用�
 改动章节标题未留下旧锚点引用，文档 diff 无空白格式错误；配置、分类规则、数据和
 前端产品路径无准备差异。没有修改实现、重跑产品验证或触发云端工作流。
 
-## 已完成的准备事实
+## U1—U6 已完成的准备事实（阶段记录）
+
+以下保留准备时的分次结果及当时未启用生产的边界；对应生产启用和环境确认已由上节实际结果关闭，不能再将阶段文字当成当前待办。
 
 - U6 最终组合：整站来源选择实际覆盖请求提交和已交付来源；新增合成 Git 案例通过，未并入 master 的已交付来源会明确要求集成，不暗中覆盖。采集 checkpoint 改为按相关输入/执行实现判断；无关提交保留已完成操作，实际相关变化拒绝自动重绑定，聚焦案例通过。没有建立通用依赖分析平台。
 - 检查入口的真实组合案例通过：选中 Standard 小样触发 Schema 和手算数值关系，合法结果通过、错误分母失败、无关 Modern 损坏不阻断；文档任务返回不需要输出检查。运行器明确区分未执行/零执行和检查失败，必要条件均不放行，对应案例通过。
@@ -104,19 +115,19 @@ Owner 暂不验收后的本轮只修改文档，保留此前实现和仍适用�
 
 | 待替换对象 | 有效内容的去处 | 状态 |
 | --- | --- | --- |
-| AGENTS / CLAUDE / Copilot / DEVELOPMENT_WORKFLOW | GOVERNANCE、QUALITY、DELIVERY；真实命令进入运行入口 | 准备分支新入口已替换，旧工作流文档已删除；外部实际加载入口待统一切换 |
+| AGENTS / CLAUDE / Copilot / DEVELOPMENT_WORKFLOW | GOVERNANCE、QUALITY、DELIVERY；真实命令进入运行入口 | 已合并替换；原项目检出同步并实际重新读取新入口，旧工作流文档已删除 |
 | DECISIONS 中产品、统计、分类决定 | 上表所列主题及原业务配置；按标题和原基线定位，不只按重复 DEC 编号 | 业务主题去处已核对，旧混合文档已按 Owner 明确授权删除 |
 | MELEE_EVENT_ADMISSION_RUNBOOK | operations/MELEE_ADMISSION 的赛事资格和业务输入 | 新业务入口存在，旧分阶段授权文档已删除 |
 | ROADMAP、STATISTICS_SPEC、PROJECT_SCOPE、FRONTEND_DESIGN_SYSTEM、DATA_ARCHITECTURE 的流程段落 | 上表定位的实际业务条款，以及 GOVERNANCE／QUALITY／DELIVERY | 初轮清理不完整；本次逐段补清固定回归、全档案审计前置和旧阶段授权，按实际输入／对象保留结果及兼容约束，不靠一句优先级声明覆盖旧正文 |
 | TEST_TRIGGER_MATRIX / GOVERNANCE_REMEDIATION / 纯治理历史 | 合格风险进入 QUALITY 和相应执行实现；旧文本删除 | 对应纯治理文件已删除；当前引用/执行入口无这些旧要求，独立业务历史不作为现行操作依据 |
 | ci_master_admission / validate_repository / publication_preflight 及调用 | 有限检查与交付入口 | 三个旧入口及配套 CI/modes/预检测试已删除；实际工作流已不调用 |
-| ci / pages / update / fetch_melee | 同一版本的有限检查和候选交付机制 | 准备稿已接上有限检查、输出续作、加密归档、统一部署；新增 prepare-pages 只准备固定候选。隔离实际验证与受改组合检查完成；正式生效在 U7 |
-| 项目外默认指令及专用 skills / 记忆 | 有限定位项目来源；确需用户操作的最小更改单独说明 | 项目目录和专用 skill 有限核查完成，记忆更新请求已提交；重新加载及摘要状态的真实核对列为 U7，不将请求提交冒称旧摘要已被删除 |
+| ci / pages / update / fetch_melee | 同一版本的有限检查和候选交付机制 | 已随 PR #394 正式生效，有限检查和正式归档原包部署取得实际结果；prepare-pages 负责固定候选。复用隔离验证，不为切换再次生成产品 |
+| 项目外默认指令及专用 skills / 记忆 | 有限定位项目来源；确需用户操作的最小更改单独说明 | 项目来源核查、新入口实际读取及记忆更新请求核对已完成；旧会话摘要与宿主重新生成的边界见 U7 结果，不冒称旧摘要已被物理删除 |
 
 ## 最新设计、准备差异与已有验证的定位
 
 - **最新已批准恢复设计**：[Owner 恢复决定](RECOVERY_AUTOMATION_DECISION.md)「已确认的决定」；[Step 6 v1.2](GOVERNANCE_REBUILD_STEP_6.md) §§5–6；[Step 7 v1.3](GOVERNANCE_REBUILD_STEP_7.md)。日常执行入口为 [DELIVERY](../../DELIVERY.md)「Owner 决定回滚，工具执行恢复」「回滚附带暂停自动发布」「恢复执行与未确认状态」。Step 文档的早期“当前授权”是设计阶段记录，实际整体实施授权及本次 U6 等待状态见当前指令和本文件；不恢复机器判断回滚或修好即自动解除的旧提议。
-- **当前准备差异**：工作区 `D:/dl/crawlerpj/.codex-workspaces/governance-rebuild-20260912`，分支 `codex/governance-rebuild-20260912`，HEAD 为上述原基线。尚无准备提交／PR。`git diff HEAD --` 查看已跟踪文件修改／删除；`git ls-files --others --exclude-standard` 定位新增文件，不能只看 diff 就漏掉新规范、工具、测试和 prepare-pages。当前工作区为准备实现，外部 `*-prepared.yml` 仅是早期快照。
+- **实施差异**：[PR #394](https://github.com/Jacelber/mtgo-data/pull/394) 包含已验收的规则、实现和删除；`git diff 2e299cab25403e580c2677b4ac4c2a509104c080..7adff02f8f92a2a3d7fb9a113e24494ec919909b --` 可查看完整首次切换差异，新增文件亦已入 Git。本轮 Windows 修复与真实收尾记录在后续同范围提交中；原项目 `D:/dl/crawlerpj` 同步最终云端，外部 `*-prepared.yml` 仅是早期快照。
 - **恢复实现及聚焦案例**：[state.py](../../../tools/delivery/state.py)、[platform.py](../../../tools/delivery/platform.py)、[commands.py](../../../tools/delivery/commands.py)、[pages_writer.py](../../../tools/pages_writer.py)、[pages.yml](../../../.github/workflows/pages.yml)；[test_state.py](../../../tests/delivery/test_state.py)、[test_platform.py](../../../tests/delivery/test_platform.py)、[test_commands.py](../../../tests/delivery/test_commands.py)。源文件说明案例，是否执行过以本文件已记录结果及相应运行事实为准。
 - **归档／恢复已执行结果**：[归档上传取回 34667947270](https://github.com/Jacelber/mtgo-data-governance-verification/actions/runs/34667947270)、[加密候选交接 34670854494](https://github.com/Jacelber/mtgo-data-governance-verification/actions/runs/34670854494)、[Owner 指令恢复 34673213234](https://github.com/Jacelber/mtgo-data-governance-verification/actions/runs/34673213234)、[暂停自动写入 34673256390](https://github.com/Jacelber/mtgo-data-governance-verification/actions/runs/34673256390)、[明确解除 34673374190](https://github.com/Jacelber/mtgo-data-governance-verification/actions/runs/34673374190)、[解除后自动写入 34673433902](https://github.com/Jacelber/mtgo-data-governance-verification/actions/runs/34673433902)。这些是独立目标的分支验证，不冒称产品生产已切换。
 - **后续组合及补充分支**：上述准备事实中的 MTGO delta、整站来源、终止写入／服务未知、checkpoint、检查运行状态对应 [tests/delivery](../../../tests/delivery)，周审交接对应 [34675532942](https://github.com/Jacelber/mtgo-data-governance-verification/actions/runs/34675532942)。策略云端案例位于验证仓库提交 `0b4fe437bd496d50abedcffdb1ee83b50a1bf108`；后续周审上传代码为 `21d467c10d7e7996080cc28acdea5242302d1f58`。不能将任一旧运行概括为当前全部准备代码的一次全量验证。
@@ -124,14 +135,13 @@ Owner 暂不验收后的本轮只修改文档，保留此前实现和仍适用�
 
 ## 资源范围
 
-- 主产品仓库 `Jacelber/mtgo-data`：本次 U7 前不激活新规则或生产写入。
+- 主产品仓库 `Jacelber/mtgo-data`：新规则已统一合并，正式原包发布及入口确认完成。
 - 私有 `Jacelber/mtgo-data-releases`：候选、完整恢复包、`state/pages.json` 及独立的必要周审业务材料；周审材料不进入 Pages／恢复包，不用于保存全部任务证据。
-- 已创建 `Jacelber/mtgo-data-governance-verification`：只使用合成公开样例验证 Pages 传递、状态和恢复。Owner 另明确确认了新工具 `pages_writer.py`、`platform.py`、`packages.py` 及合成工作流的公开验证用途；这是平台审批要求，并非项目新增 Gate。验证结束清除测试目标及对应合成归档；不含真实私有数据。
+- `Jacelber/mtgo-data-governance-verification`：只留已批准公开源码及历史运行记录；临时 Pages、Actions 运行能力、凭据环境、合成 Release 和控制状态已清理，不含真实私有数据。
 - 不使用额外服务，不配置新的周期任务，不新增付费方案。
 
-## 验收后的剩余工作
+## 后续安排
 
-等待本次 U6 验收，然后按原授权执行 U7：处理在途旧写入、复核当时真实基线、提交合并一致切换版本、
-应用实际环境/入口、确认正式服务并同步原检出、清理临时验证资源。U7 的真实生产调用不能提前冒称通过。
-项目记忆的新摘要是否生成、重新加载是否仍有旧规则实质影响，按 U6_REVIEW 所述如实核对；其它项目不改。
-Step 8 效果观察尚未开始；实施可用不等于真实日常效率改善已被证明。
+U7 实际运行与外部入口情况见首节，不再等待 U6 或第二次发布审批。收尾修复在同一交付中合并、同步后结束实施。
+之后获准的真实任务按 Step 8 利用现成资料完成一次初始效果总结；不为补样本制造任务，不承诺精确提速。
+新产品目标（包括 P14 图片／颜色修复）需要其自身明确范围；本次实施不取得永久改造或自动回滚权。
