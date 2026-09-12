@@ -92,7 +92,7 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 result = packages.verify(package, manifest, target=args.target)
         print(json.dumps(result, ensure_ascii=False, indent=2))
-        return 2 if result.get("state") == "execution_failed" else 1 if result.get("state") == "failed" else 0
+        return {"execution_failed": 2, "failed": 1, "unknown": 3, "unconfirmed": 3}.get(result.get("state"), 0)
     except (OSError, ValueError, RuntimeError) as error:
         print(json.dumps({"state": "execution_failed", "error": str(error)}, ensure_ascii=False))
         return 2

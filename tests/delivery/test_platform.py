@@ -9,6 +9,8 @@ import unittest
 from unittest.mock import Mock, patch
 
 from tools import pages_writer
+from tools import project
+from tools.delivery import commands
 from tools.delivery import packages, state
 from tools.delivery.platform import Pages, observe_content
 
@@ -218,6 +220,142 @@ class PlatformTests(unittest.TestCase):
             job = {"name": "Deploy selected product", "status": job_status, "steps": [{"name": "Send selected package once", "conclusion": conclusion}]}
             with patch.object(pages.client, "api", return_value={"jobs": [job]}):
                 self.assertEqual(pages.attempt_never_sent("1", "1"), expected)
+
+
+class CompletedResumeTests(unittest.TestCase):
+    """Exercise the ended-write state through both real command entry points."""
+
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        root = Path(self.temporary.name)
+        self.candidate = root / "candidate"
+        site = root / "site"
+        for relative in packages.PROBES:
+            path = site / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("selected product", encoding="utf-8")
+        self.target = "Jacelber/mtgo-data"
+        self.manifest = packages.prepare(site, self.candidate, target=self.target, source="synthetic")
+        self.package = self.manifest["id"]
+        self.saved = state.initial()
+        self.saved["current"] = {"operation": "A", "package": "A", "health": "passed"}
+        self.saved["packages"] = {"A": {"complete": True, "eligible": True},
+            self.package: {"complete": True, "target": self.target}}
+        self.saved = state.sending(state.claim(self.saved, operation="B", package=self.package, base="A"), "B")
+        self.saved = state.bind_remote(self.saved, "B", {"pages_id": "original-request"})
+        self.saved["pending"].update(run="7", attempt="1")
+        self.archive, self.pages = Mock(), Mock()
+        self.archive.load_state.side_effect = lambda: (self.saved, "sha")
+        self.archive.save_state.side_effect = self.save
+        self.archive.retrieve.return_value = self.manifest
+        self.pages.query.return_value = {"status": "succeed"}
+        self.pages.operation_record.return_value = "2"
+        self.observation = {"state": "unconfirmed", "mismatches": ["index.html"]}
+        self.addCleanup(patch.stopall)
+        patch.object(pages_writer, "context", return_value=(self.archive, self.pages)).start()
+        patch.object(commands, "context", return_value=(self.archive, self.pages)).start()
+        patch.object(pages_writer, "observe_content", side_effect=lambda *args: self.observation).start()
+
+    def save(self, updated, sha):
+        self.assertEqual(sha, "sha")
+        self.saved = updated
+        return "sha"
+
+    def invoke(self, entry, command="resume"):
+        with patch("sys.stdout", new_callable=io.StringIO) as report:
+            if entry == "writer":
+                with patch("sys.argv", ["writer", "--operation", "B", command, "--candidate", str(self.candidate)]):
+                    code = pages_writer.main()
+            else:
+                code = project.main(["resume", "--operation", "B"])
+        return code, json.loads(report.getvalue())
+
+    def settle(self):
+        self.assertEqual(self.invoke("writer", "settle-completed")[0], 0)
+        self.assertIsNone(self.saved["pending"])
+        self.assertEqual(self.saved["current"]["health"], "unknown")
+        self.archive.save_state.reset_mock()
+        self.pages.query.reset_mock()
+
+    def test_settle_then_both_resumes_preserve_unknown_confirm_and_reuse(self):
+        self.settle()
+        for entry in ("writer", "project"):
+            code, result = self.invoke(entry)
+            self.assertEqual((code, result["state"]), (3, "unconfirmed"))
+            self.assertEqual(self.saved["current"]["health"], "unknown")
+        self.assertEqual(self.pages.query.call_count, 2)
+        self.pages.query.assert_called_with("original-request")
+        self.archive.save_state.assert_not_called()
+        self.archive.retrieve.assert_called_once_with(self.package, unittest.mock.ANY, target=self.target)
+        self.observation = {"state": "matching", "mismatches": []}
+        self.assertEqual(self.invoke("project")[1]["state"], "confirmed")
+        self.assertEqual(self.saved["current"]["health"], "passed")
+        self.assertEqual(self.saved["previous"]["package"], "A")
+        self.assertTrue(self.saved["packages"][self.package]["eligible"])
+        self.assertIsNone(self.saved["pending"])
+        self.assertIsNone(self.saved["recovery"])
+        self.pages.query.reset_mock()
+        self.archive.save_state.reset_mock()
+        self.archive.retrieve.reset_mock()
+        for entry in ("writer", "project"):
+            self.assertEqual(self.invoke(entry), (0, {"state": "already_confirmed", "current": self.saved["current"]}))
+        self.pages.query.assert_not_called()
+        self.archive.retrieve.assert_not_called()
+        self.archive.save_state.assert_not_called()
+        self.pages.create.assert_not_called()
+        self.pages.cancel.assert_not_called()
+        self.pages.client.api.assert_not_called()  # No workflow dispatch, including after unknown.
+
+    def test_known_defect_never_becomes_success_from_matching_bytes(self):
+        self.settle()
+        self.saved["current"].update(health="failed", defect="known content error")
+        self.saved["packages"][self.package]["failed"] = True
+        self.observation = {"state": "matching", "mismatches": []}
+        for entry in ("writer", "project"):
+            code, result = self.invoke(entry)
+            self.assertEqual((code, result["state"]), (1, "failed"))
+        self.pages.query.assert_not_called()
+        self.archive.save_state.assert_not_called()
+        self.archive.retrieve.assert_not_called()
+
+    def test_terminal_platform_failure_stays_unknown(self):
+        self.pages.query.return_value = {"status": "deployment_failed"}
+        self.settle()
+        self.observation = {"state": "matching", "mismatches": []}
+        for entry in ("writer", "project"):
+            code, result = self.invoke(entry)
+            self.assertEqual((code, result["state"]), (3, "unknown"))
+        self.archive.save_state.assert_not_called()
+        self.archive.retrieve.assert_not_called()
+
+    def test_new_write_cannot_be_overwritten_by_old_confirmation(self):
+        self.settle()
+        self.observation = {"state": "matching", "mismatches": []}
+        self.archive.save_state.side_effect = state.Conflict("Writer state changed")
+        self.assertEqual(self.invoke("project")[0], 2)
+        self.assertEqual(self.saved["current"]["health"], "unknown")
+        self.pages.create.assert_not_called()
+
+    def test_other_pending_or_external_deployment_prevents_confirmation(self):
+        self.settle()
+        self.saved["pending"] = {"operation": "new"}
+        self.assertEqual(self.invoke("writer")[0], 2)
+        self.pages.query.assert_not_called()
+        self.saved["pending"] = None
+        self.pages.current.side_effect = state.Conflict("Another deployment changed the production base")
+        self.assertEqual(self.invoke("project")[0], 2)
+        self.archive.save_state.assert_not_called()
+
+    def test_confirmation_ends_only_its_recovery_and_keeps_automatic_pause(self):
+        self.settle()
+        self.saved["recovery"] = {"id": "B", "package": self.package}
+        pause = {"recovery": "B", "reason": "Owner restore"}
+        self.saved["automatic_publication_pause"] = pause
+        self.observation = {"state": "matching", "mismatches": []}
+        self.assertEqual(self.invoke("writer")[1]["state"], "confirmed")
+        self.assertIsNone(self.saved["recovery"])
+        self.assertEqual(self.saved["automatic_publication_pause"], pause)
 
 
 if __name__ == "__main__":
