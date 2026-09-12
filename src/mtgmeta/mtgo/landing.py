@@ -932,7 +932,7 @@ def build_document(
             )
             current_catalog = editorial.build_top8_catalog(current_top8)
             current_binding = {
-                "workbook_sha256": review["bindings"]["workbook_sha256"],
+                **{key: review["bindings"][key] for key in ("workbook_sha256", "content_sha256") if key in review["bindings"]},
                 "source_event_ids": current["event_ids"],
                 "classifier_digest": rules_digest,
                 "selection_policy_digest": selection_policy_digest,
@@ -946,6 +946,7 @@ def build_document(
             }
             binding_fields = (
                 "workbook_sha256",
+                "content_sha256",
                 "source_event_ids",
                 "classifier_digest",
                 "selection_policy_digest",

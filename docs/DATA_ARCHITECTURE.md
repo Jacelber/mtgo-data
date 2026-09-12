@@ -3128,6 +3128,11 @@ The default conversation/Web workflow is defined in [WEEKLY_MAINTENANCE](WEEKLY_
 Accepted conversation content is stored in the same private week document and
 validated against the exact review subject before generation. XLSX is an optional
 alternative input, not a mandatory intermediate or duplicate Owner review.
+Conversation review version `1.2.0` uses `content_sha256`, the canonical digest of
+`format`, `week`, and `review`, instead of claiming an XLSX `workbook_sha256`.
+`tools/import_landing_conversation.py` requires accepted content and its original
+machine bindings, checks those against the current subject, and validates before
+writing. Legacy `1.0.0`/`1.1.0` workbook binding semantics remain unchanged.
 The optional Landing-only XLSX review carrier contains `Review Control`, `Landing Copy`,
 `Featured Decks`, `All Top 8`, and `Field Guide`. It is not a database. Accepted
 content is validated and imported into the private week document before preview
