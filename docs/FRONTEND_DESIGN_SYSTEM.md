@@ -3,8 +3,8 @@
 ## 1. Authority and scope
 
 This document is the durable visual and interaction authority for the MTGO and
-Tabletop static products. It freezes the owner-accepted P12-04 direction before
-production implementation. `docs/design/p12-04a-selected-desktop.html` is the
+Tabletop static products. It records the owner-accepted visual direction now used
+by the shared products. `docs/design/p12-04a-selected-desktop.html` is the
 reference composition; its sample values are illustrative, not product data.
 
 The system is named **Editorial Analysis Console (A3)**: an editorial reading
@@ -13,9 +13,9 @@ analysis console. It applies to the shared shell, Landing, statistics, matchup,
 weekly Top 8, Tabletop, and reusable deck-detail surfaces. It does not merge
 their data or force every view to use Landing's density.
 
-Production implementation begins only in separately authorized P12-05 and later
-tasks. This contract changes no front-end source, public path, generated data,
-Schema, workflow, or statistical meaning.
+Visual requirements do not define task authorization or a phase sequence.
+Preserve public paths, source separation and statistical meaning when applying
+this design to an authorized change.
 
 ## 2. Product identity
 
@@ -28,7 +28,7 @@ header watermark. It is not data, a control, or a replacement for text.
 The header palette is inspired by the warm brown, burnt orange, muted blue, and
 turquoise relationships of a Magic card back without copying card-back artwork.
 Do not use the Magic or Wizards logo as the site brand. Repository-owned brand
-assets must record their source and transformation; production assets must be
+assets must record their source and transformation; production brand assets must be
 local and must not depend on a third-party runtime request.
 
 P12-15 adds only durable shell additions around the accepted A3 composition: a
@@ -234,7 +234,9 @@ Pointer devices retain the established hover preview and direct card-name link.
 ## 9. Responsive behavior
 
 Use one semantic markup contract with a primary breakpoint at 780 CSS pixels.
-Design and test desktop plus 390- and 412-pixel widths. The accepted cat
+Support desktop plus 390- and 412-pixel widths without losing content or controls.
+For a layout or interaction change, inspect affected responsive behavior; these
+widths do not prescribe a recurring test run for unrelated work. The accepted cat
 watermark frame is 230 by 114 pixels on desktop and a compact 84 by 64 pixels on
 mobile; both use the same asset and are `aria-hidden`.
 
@@ -291,12 +293,14 @@ view intact. Offline-to-online changes announce availability but do not retry
 automatically. Loading, retry, stale, and pending-update state is transient and
 does not enter shareable URLs.
 
-## 12. Implementation and acceptance
+## 12. Maintaining the shared design
 
-P12-05 turns these values into shared static tokens and shell components.
-P12-09 establishes the shared loading, retry, refresh, and card-preview rules
-above. P12-06 through P12-15 migrate and extend individual views. P12-16 verifies all
-retained products, formats, languages, desktop and 390-pixel behavior, URLs,
-compatibility, loading, console state, and reversible Landing cutover. Any
-intentional deviation from this authority must be documented and owner-approved
-rather than introduced as a page-local exception.
+Use shared static tokens, shell components and loading/card-preview behavior
+across applicable views. Preserve supported languages, responsive layouts, URLs
+and usable loading/error states when changing their consumers. Check the actual
+affected page and resource behavior; completed Phase 12 acceptance is not a
+standing all-view regression requirement.
+
+Changing an accepted experience choice requires the affected Owner decision
+under GOVERNANCE. Implementing or repairing the same choice within the authorized
+delivery does not require a separate visual-specification or phase approval.

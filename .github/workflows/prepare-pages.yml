@@ -1,0 +1,443 @@
+name: Prepare and archive selected Pages candidate
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: Requested merged commit; prepare current master containing this and already delivered work
+        type: string
+        default: ''
+      operation:
+        description: Stable preparation identifier
+        required: true
+        type: string
+      publish_automatically:
+        description: Continue automatic delivery after preparation; respects the recovery pause
+        type: boolean
+        default: false
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: candidate-${{ inputs.operation }}
+  cancel-in-progress: false
+jobs:
+  base:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    environment: product-archive
+    outputs:
+      operation: ${{ steps.base.outputs.operation }}
+      source: ${{ steps.base.outputs.source }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Read preparation base without holding the writer
+        id: base
+        env:
+          ARCHIVE_TOKEN: ${{ secrets.ARCHIVE_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_SOURCE: ${{ inputs.source || github.sha }}
+        run: |
+          git fetch --no-tags origin master
+          python - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+          from tools.pages_writer import context
+          from tools.delivery.gitfacts import preparation_source
+          archive, _ = context('Jacelber/mtgo-data')
+          archive.private()
+          state, _ = archive.load_state()
+          deployed = None
+          if state['current']:
+              package = state['current']['package']
+              manifest = json.loads(archive.command(['release', 'download', package, '--repo', archive.repository,
+                                                    '--pattern', 'manifest.json', '--output', '-']))
+              if manifest['id'] != package or manifest['target'] != 'Jacelber/mtgo-data':
+                  raise ValueError('Current source reference does not match the archived product')
+              deployed = manifest['source']
+              legacy = re.fullmatch(r'https://github.com/Jacelber/mtgo-data/actions/runs/(\d+)', deployed)
+              if legacy:
+                  from tools.delivery.github import GitHub
+                  deployed = GitHub('Jacelber/mtgo-data').api('repos/Jacelber/mtgo-data/actions/runs/' + legacy[1])['head_sha']
+          source = preparation_source(Path.cwd(), os.environ['REQUESTED_SOURCE'], deployed)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('operation=' + (state['current']['operation'] if state['current'] else '') + '\n')
+              output.write('source=' + source + '\n')
+          PY
+  localization-cache:
+    needs: base
+    name: Prepare simple card localization cache
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Check out localization inputs without persisted credentials
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ needs.base.outputs.source }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Confirm merged source before executing its tools
+        run: git merge-base --is-ancestor HEAD origin/master
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned registry dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Compute simple card localization cache subject
+        id: localization-cache-subject
+        shell: bash
+        run: >-
+          python -B tools/build_simple_card_localization.py subject
+          --github-output "$GITHUB_OUTPUT"
+          > "$RUNNER_TEMP/localization-cache-subject.json"
+
+      - name: Find exact trusted simple card localization cache
+        id: localization-cache-artifact
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          ARTIFACT_NAME: simple-card-localization-${{ steps.localization-cache-subject.outputs.sha256 }}
+        run: >-
+          python -B tools/select_trusted_pages_artifact.py
+          --repository "${{ github.repository }}"
+          --artifact-name "$ARTIFACT_NAME"
+          --github-output "$GITHUB_OUTPUT"
+
+      - name: Download exact simple card localization cache
+        id: localization-cache-download
+        if: steps.localization-cache-artifact.outputs.found == 'true'
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ${{ steps.localization-cache-artifact.outputs.artifact-name }}
+          path: ${{ runner.temp }}/card-localization-exact
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.localization-cache-artifact.outputs.run-id }}
+
+      - name: Verify exact simple card localization cache
+        id: localization-cache-verify
+        if: steps.localization-cache-download.outcome == 'success'
+        continue-on-error: true
+        run: >-
+          python -B tools/build_simple_card_localization.py verify
+          --output "$RUNNER_TEMP/card-localization-exact"
+
+      - name: Find trusted current-demand localization seed
+        id: localization-seed-artifact
+        if: steps.localization-cache-verify.outcome != 'success'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          python -B tools/select_trusted_pages_artifact.py
+          --repository "${{ github.repository }}"
+          --artifact-name "simple-card-localization-seed-v1"
+          --github-output "$GITHUB_OUTPUT"
+
+      - name: Download trusted current-demand localization seed
+        id: localization-seed-download
+        if: steps.localization-seed-artifact.outputs.found == 'true'
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ${{ steps.localization-seed-artifact.outputs.artifact-name }}
+          path: ${{ runner.temp }}/card-localization-seed
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.localization-seed-artifact.outputs.run-id }}
+
+      - name: Verify trusted current-demand localization seed
+        id: localization-seed-verify
+        if: steps.localization-seed-download.outcome == 'success'
+        continue-on-error: true
+        run: >-
+          python -B tools/build_simple_card_localization.py verify-seed
+          --output "$RUNNER_TEMP/card-localization-seed"
+
+      - name: Find compatible trusted exact cache for seed bootstrap
+        id: localization-bootstrap-artifact
+        if: >-
+          steps.localization-cache-verify.outcome != 'success' &&
+          steps.localization-seed-verify.outcome != 'success'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          python -B tools/select_trusted_pages_artifact.py
+          --repository "${{ github.repository }}"
+          --artifact-name-regex '^simple-card-localization-[0-9a-f]{64}$'
+          --github-output "$GITHUB_OUTPUT"
+
+      - name: Download compatible trusted exact cache for seed bootstrap
+        id: localization-bootstrap-download
+        if: steps.localization-bootstrap-artifact.outputs.found == 'true'
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ${{ steps.localization-bootstrap-artifact.outputs.artifact-name }}
+          path: ${{ runner.temp }}/card-localization-bootstrap-bundle
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.localization-bootstrap-artifact.outputs.run-id }}
+
+      - name: Bootstrap current-demand seed from compatible trusted exact cache
+        id: localization-bootstrap
+        if: steps.localization-bootstrap-download.outcome == 'success'
+        continue-on-error: true
+        run: >-
+          python -B tools/build_simple_card_localization.py bootstrap-seed
+          --bundle "$RUNNER_TEMP/card-localization-bootstrap-bundle"
+          --source-commit "${{ steps.localization-bootstrap-artifact.outputs.head-sha }}"
+          --output "$RUNNER_TEMP/card-localization-bootstrap-seed"
+          --github-output "$GITHUB_OUTPUT"
+
+      - name: Build missing simple card localization cache
+        if: steps.localization-cache-verify.outcome != 'success'
+        shell: bash
+        run: |
+          SEED_ARGS=()
+          if [ "${{ steps.localization-seed-verify.outcome }}" = "success" ]; then
+            SEED_ARGS=(--seed "$RUNNER_TEMP/card-localization-seed")
+          elif [ "${{ steps.localization-bootstrap.outputs.usable }}" = "true" ]; then
+            SEED_ARGS=(--seed "$RUNNER_TEMP/card-localization-bootstrap-seed")
+          fi
+          python -B tools/build_simple_card_localization.py build \
+            --output "$RUNNER_TEMP/card-localization" \
+            --summary "$GITHUB_STEP_SUMMARY" \
+            "${SEED_ARGS[@]}"
+
+      - name: Materialize verified exact simple card localization cache
+        if: steps.localization-cache-verify.outcome == 'success'
+        run: >-
+          mv "$RUNNER_TEMP/card-localization-exact"
+          "$RUNNER_TEMP/card-localization"
+
+      - name: Verify final simple card localization cache
+        if: steps.localization-cache-verify.outcome != 'success'
+        run: >-
+          python -B tools/build_simple_card_localization.py verify
+          --output "$RUNNER_TEMP/card-localization"
+
+      - name: Retain new simple card localization cache
+        if: >-
+          steps.localization-cache-verify.outcome != 'success' &&
+          (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+          github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: simple-card-localization-${{ steps.localization-cache-subject.outputs.sha256 }}
+          path: ${{ runner.temp }}/card-localization
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Create next current-demand localization seed
+        if: >-
+          steps.localization-cache-verify.outcome != 'success' &&
+          (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+          github.ref == 'refs/heads/master'
+        run: >-
+          python -B tools/build_simple_card_localization.py seed
+          --bundle "$RUNNER_TEMP/card-localization"
+          --output "$RUNNER_TEMP/card-localization-next-seed"
+
+      - name: Retain next current-demand localization seed
+        if: >-
+          steps.localization-cache-verify.outcome != 'success' &&
+          (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+          github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: simple-card-localization-seed-v1
+          path: ${{ runner.temp }}/card-localization-next-seed
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Hand verified localization to the allowlisted build
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: simple-card-localization-handoff-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/card-localization
+          if-no-files-found: error
+          retention-days: 1
+
+  build:
+    name: Prepare one fixed candidate without archive credentials
+    needs: [base, localization-cache]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: product
+    steps:
+      - name: Check out the current packaging tools
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          persist-credentials: false
+      - name: Check out the selected merged product source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: ${{ needs.base.outputs.source }}
+          path: product
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Confirm the source belongs to the merged product history
+        run: git merge-base --is-ancestor HEAD origin/master
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - name: Install pinned runtime dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
+      - name: Compute Landing card-image cache subject
+        id: landing-card-cache-subject
+        shell: bash
+        run: >-
+          python -B tools/build_landing_card_image_cache.py subject
+          --github-output "$GITHUB_OUTPUT"
+          --json-output "$RUNNER_TEMP/landing-card-cache-subject.json"
+
+      - name: Find exact trusted Landing card-image cache
+        id: landing-card-cache-artifact
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          ARTIFACT_NAME: landing-card-image-cache-${{ steps.landing-card-cache-subject.outputs.sha256 }}
+        with:
+          script: |
+            const response = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: process.env.ARTIFACT_NAME,
+              per_page: 100,
+            });
+            const artifact = response.data.artifacts
+              .filter((item) => !item.expired)
+              .filter((item) => item.workflow_run?.head_branch === "master")
+              .sort((left, right) => right.id - left.id)[0];
+            core.setOutput("cache-hit", artifact ? "true" : "false");
+            core.setOutput("run-id", artifact?.workflow_run?.id ?? "");
+
+      - name: Download exact Landing card-image cache
+        if: steps.landing-card-cache-artifact.outputs.cache-hit == 'true'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: landing-card-image-cache-${{ steps.landing-card-cache-subject.outputs.sha256 }}
+          path: ${{ runner.temp }}/landing-card-image-cache
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.landing-card-cache-artifact.outputs.run-id }}
+
+      - name: Build missing Landing card-image cache
+        if: steps.landing-card-cache-artifact.outputs.cache-hit != 'true'
+        run: >-
+          python -B tools/build_landing_card_image_cache.py build
+          --output "$RUNNER_TEMP/landing-card-image-cache"
+
+      - name: Download verified simple card localization handoff
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: simple-card-localization-handoff-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/card-localization
+
+      - name: Retain new Landing card-image cache
+        if: >-
+          steps.landing-card-cache-artifact.outputs.cache-hit != 'true' &&
+          (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+          github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: landing-card-image-cache-${{ steps.landing-card-cache-subject.outputs.sha256 }}
+          path: ${{ runner.temp }}/landing-card-image-cache
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Build fresh allowlisted Pages artifact
+        env:
+          PYTHONPATH: src
+        run: >-
+          python -B build_pages_artifact.py
+          --output "$RUNNER_TEMP/pages-site"
+          --report "$RUNNER_TEMP/pages-report.json"
+          --summary "$GITHUB_STEP_SUMMARY"
+          --overlay "landing_card_images=$RUNNER_TEMP/landing-card-image-cache"
+          --overlay "card_localization=$RUNNER_TEMP/card-localization"
+
+      - name: Package and encrypt the fixed candidate
+        env:
+          CERTIFICATE: ${{ vars.ARCHIVE_HANDOFF_CERT }}
+          SOURCE: ${{ needs.base.outputs.source }}
+        run: |
+          printf '%s' "$CERTIFICATE" > "$RUNNER_TEMP/public.pem"
+          python "$GITHUB_WORKSPACE/tools/project.py" prepare --site "$RUNNER_TEMP/pages-site" --output "$RUNNER_TEMP/candidate" --source "$SOURCE"
+          python "$GITHUB_WORKSPACE/tools/project.py" seal --candidate "$RUNNER_TEMP/candidate" --output "$RUNNER_TEMP/candidate.cms" --certificate "$RUNNER_TEMP/public.pem"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: encrypted-candidate
+          path: ${{ runner.temp }}/candidate.cms
+          if-no-files-found: error
+          retention-days: 7
+  archive:
+    needs: [base, build]
+    runs-on: ubuntu-latest
+    environment: product-archive
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Check out trusted upload tools, not candidate code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: encrypted-candidate
+          path: incoming
+      - name: Archive the selected candidate
+        env:
+          ARCHIVE_TOKEN: ${{ secrets.ARCHIVE_TOKEN }}
+          ARCHIVE_HANDOFF_KEY: ${{ secrets.ARCHIVE_HANDOFF_KEY }}
+          BASE: ${{ needs.base.outputs.operation }}
+        run: |
+          python tools/archive_product.py --token-env ARCHIVE_TOKEN upload incoming/candidate.cms --encrypted > "$RUNNER_TEMP/archive-result.json"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          result = json.loads((Path(os.environ['RUNNER_TEMP']) / 'archive-result.json').read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+              output.write('Candidate privately archived. Select this exact package for delivery.\n')
+              output.write('Package: `' + result['id'] + '`; preparation base: `' + os.environ['BASE'] + '`.\n')
+          PY
+      - name: Continue automatic publication when enabled
+        if: inputs.publish_automatically
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARCHIVE_TOKEN: ${{ secrets.ARCHIVE_TOKEN }}
+          BASE: ${{ needs.base.outputs.operation }}
+          OPERATION: ${{ inputs.operation }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from tools.delivery.commands import dispatch
+          candidate = json.loads((Path(os.environ['RUNNER_TEMP']) / 'archive-result.json').read_text())
+          result = dispatch('Jacelber/mtgo-data', os.environ['OPERATION'], candidate['id'],
+                            os.environ['BASE'] or None, 'publish', automatic=True)
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+              output.write('\nAutomatic publication: `' + result['state'] + '`.\n')
+              if result['state'] == 'publication_paused':
+                  output.write('Candidate retained; the Owner-directed recovery pause remains in force.\n')
+          print(json.dumps(result))
+          PY

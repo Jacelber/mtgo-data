@@ -17,6 +17,9 @@ import urllib.request
 
 
 PAGES_WORKFLOW_PATH = ".github/workflows/pages.yml"
+# The same resource producer moved to this fixed preparation workflow during
+# governance cutover. No caller may add an arbitrary workflow to this list.
+TRUSTED_WORKFLOW_PATHS = (PAGES_WORKFLOW_PATH, ".github/workflows/prepare-pages.yml")
 ALLOWED_EVENTS = frozenset({"push", "workflow_dispatch"})
 MAX_ARTIFACT_PAGES = 10
 MAX_TRUSTED_AGE_DAYS = 90
@@ -52,6 +55,7 @@ def select_trusted_artifact(
     *,
     repository: str,
     workflow_id: int,
+    workflow_path: str = PAGES_WORKFLOW_PATH,
     get_run: Callable[[int], dict[str, Any]],
     name_matches: Callable[[str], bool],
     now: datetime | None = None,
@@ -59,6 +63,8 @@ def select_trusted_artifact(
     """Return the newest artifact whose complete run provenance is trusted."""
 
     current_time = now or datetime.now(timezone.utc)
+    if workflow_path not in TRUSTED_WORKFLOW_PATHS:
+        raise ArtifactSelectionError("Only the existing Pages or replacement preparation producer is supported")
 
     def artifact_id_key(item: dict[str, Any]) -> int:
         value = item.get("id")
@@ -99,7 +105,7 @@ def select_trusted_artifact(
         if (
             run.get("id") != run_id
             or run.get("workflow_id") != workflow_id
-            or run.get("path") != PAGES_WORKFLOW_PATH
+            or run.get("path") != workflow_path
             or run.get("event") not in ALLOWED_EVENTS
             or run.get("head_branch") != "master"
             or run.get("status") != "completed"
@@ -188,7 +194,8 @@ def _write_outputs(path: Path, artifact: TrustedArtifact | None) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repository", required=True)
-    parser.add_argument("--workflow", default=PAGES_WORKFLOW_PATH)
+    parser.add_argument("--workflow", choices=TRUSTED_WORKFLOW_PATHS,
+                        help="Optional single fixed producer; default reuses old or replacement producer")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--artifact-name")
     group.add_argument("--artifact-name-regex")
@@ -200,14 +207,7 @@ def main(argv: list[str] | None = None) -> int:
     if not token:
         parser.error("GITHUB_TOKEN is required")
     client = GitHubClient(api_url, token)
-    workflow_path = urllib.parse.quote(args.workflow, safe="")
     try:
-        workflow = client.get(
-            f"/repos/{args.repository}/actions/workflows/{workflow_path}"
-        )
-        workflow_id = workflow.get("id")
-        if not isinstance(workflow_id, int):
-            raise ArtifactSelectionError("Pages workflow identity is unavailable")
         exact_name: str | None = args.artifact_name
         regex: str | None = args.artifact_name_regex
         if exact_name is not None:
@@ -217,15 +217,28 @@ def main(argv: list[str] | None = None) -> int:
                 raise ArtifactSelectionError("artifact name matcher is unavailable")
             pattern = re.compile(regex)
             name_matches = lambda name: pattern.fullmatch(name) is not None
-        artifact = select_trusted_artifact(
-            _artifacts(client, args.repository, exact_name),
-            repository=args.repository,
-            workflow_id=workflow_id,
-            get_run=lambda run_id: client.get(
-                f"/repos/{args.repository}/actions/runs/{run_id}"
-            ),
-            name_matches=name_matches,
-        )
+        candidates = _artifacts(client, args.repository, exact_name)
+        runs = {}
+        def get_run(run_id):
+            if run_id not in runs:
+                runs[run_id] = client.get(f"/repos/{args.repository}/actions/runs/{run_id}")
+            return runs[run_id]
+        artifact = None
+        for workflow_path in ((args.workflow,) if args.workflow else TRUSTED_WORKFLOW_PATHS):
+            encoded_path = urllib.parse.quote(workflow_path, safe="")
+            try:
+                workflow = client.get(f"/repos/{args.repository}/actions/workflows/{encoded_path}")
+            except ArtifactSelectionError as error:
+                if isinstance(error.__cause__, urllib.error.HTTPError) and error.__cause__.code == 404:
+                    continue  # The replacement need not exist before cutover.
+                raise
+            workflow_id = workflow.get("id")
+            if not isinstance(workflow_id, int):
+                raise ArtifactSelectionError("Resource producer workflow identity is unavailable")
+            artifact = select_trusted_artifact(candidates, repository=args.repository,
+                workflow_id=workflow_id, workflow_path=workflow_path, get_run=get_run, name_matches=name_matches)
+            if artifact:
+                break  # A still-applicable existing cache is sufficient.
         _write_outputs(args.github_output, artifact)
     except (ArtifactSelectionError, re.error) as exc:
         parser.error(str(exc))

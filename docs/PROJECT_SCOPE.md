@@ -58,11 +58,12 @@ It is intended to show:
 
 ### 3.2 Supported formats
 
-The current public MTGO implementation supports Standard and Modern as
-complete products. Official event collection also retains archives for
-Pauper, Pioneer, Legacy, and Vintage, but archive collection alone does not
-make those formats complete or public MTGO products. Vintage remains behind
-its separate decision gate.
+As checked against the public catalog on 2026-09-12, Standard, Modern and Pauper
+are public MTGO products, each with Landing, statistics, matchups and weekly
+Top 8 entries. Official event collection also retains archives for Pioneer,
+Legacy and Vintage; archive collection alone does not make them public products.
+Pioneer and Legacy remain planned; Vintage requires a product-scope decision.
+Catalog availability is not a claim that every current UI behavior is defect-free.
 
 The scoped formats are:
 
@@ -118,18 +119,15 @@ Landing product together with official statistics, matchup win rates, weekly
 Top 8 decklists, and every other format-applicable required product. Its
 Landing includes the approved new-deck and new-technology feature section fed
 by the internal Landing editorial capability; a separate Pickup product is not
-required. A future format
-must not become public through a partial launch that omits Landing. Standard
-and Modern are the explicit migration exceptions because their existing
-products predate Landing; they must satisfy the same complete-product rule at
-Phase 12 closeout without taking their current products offline during the
-migration.
+required. A future format must not become public through a partial launch that
+omits Landing. Standard and Modern completed their transition from pre-Landing
+products; that historical migration exception does not permit a new partial launch.
 
 The weekly maintenance process may use deterministic facts or machine-written
 copy as a draft, but the human final Landing content is authoritative. The
 Owner may rewrite, replace, omit, or independently author that content; machine
-evidence does not define the permitted editorial conclusion. Publication and
-all repository mutations remain separately gated.
+evidence does not define the permitted editorial conclusion. Publication and necessary repository work follow the current authorized plan
+and agreed business acceptance under GOVERNANCE.
 
 ---
 
@@ -147,9 +145,12 @@ Each event should be independently inspectable.
 
 ### 4.2 Supported formats
 
-The current public Tabletop implementation supports Modern through the
-explicitly whitelisted reference event `434455`. The other scoped tabletop
-formats remain planned and require separately approved events.
+As checked against the public event catalogs on 2026-09-12, Tabletop supports
+Modern events `405590`, `441441` and the protected reference event `434455`
+(default `405590`), plus Paupergeddon `438329` for Pauper. Other scoped tabletop
+formats have no public event entry. New events must satisfy the approved event
+policy and belong to the current authorized delivery; registration is not proof
+of public availability.
 
 The scoped tabletop formats are:
 
@@ -404,7 +405,9 @@ This event is used to implement and validate:
 
 The reference event has three Draft Swiss rounds followed by five Modern Swiss rounds on each of Day 1 and Day 2, then a Draft Top 8 playoff. The normalized model must therefore represent event stage, round phase, and game format independently. The implementation must still verify source records during collection rather than assuming that all Pro Tours follow this structure.
 
-Pauper and the approved Paupergeddon event remain in scope after the Modern reference path is proven. They are no longer the first post-Standard implementation target.
+Pauper MTGO and Paupergeddon `438329` were publicly admitted in Phase 14. The
+Modern reference event remains a compatibility subject, not the only public
+Tabletop event or a prerequisite phase to repeat for later work.
 
 ---
 
@@ -451,8 +454,8 @@ the Landing, every retained MTGO view, and applicable Tabletop views. English
 variants continue to use the classifier taxonomy's English names. Consumers
 must resolve these labels from stable format, parent, and subtype identities;
 they must not infer identity by matching display text. This cross-view consumer
-change is implemented and accepted separately from the internal catalog and
-from classifier maintenance.
+behavior is distinct from the private catalog and classifier maintenance;
+changing display consumers does not by itself change classification rules.
 
 Card names and complete card images remain separate from
 classifier-backed archetype labels. The English source card name remains the
@@ -461,7 +464,7 @@ applies the maintained card-name aliases and card-face normalization used by
 the English image path; card localization must consume those results and must
 not create another conversion layer.
 
-Under DEC-146, a future separately authorized implementation uses one flat
+The implemented localization uses one flat
 English-name lookup for the MTGCH Chinese display name and exact MTGCH image
 URL. Current default-Landing images are the only localization images stored in
 Pages. Other Chinese views load the mapped MTGCH image on demand; English views
@@ -495,7 +498,7 @@ The existing root page remains the MTGO entry point:
 
 `/index.html`
 
-The current Standard behavior must be protected while the page is split and generalized.
+Retain supported Standard behavior and public URLs when changing the shared page.
 
 The MTGO page must default hierarchical statistics and matchup axes to parent
 archetypes. Eligible parents may expand into maintained subtypes individually
@@ -551,11 +554,10 @@ Do not introduce a mandatory front-end build system or framework unless a later 
 
 ### 9.5 Existing page split
 
-Phase 4 already split the deployed legacy MTGO page into static HTML, CSS, and
-focused JavaScript assets. Phase 8 must not repeat that decomposition as
-throwaway work. After the owner accepted the real-data P8-07 prototype, that
-prototype became the implementation reference for the format-first front end;
-the deployed legacy page remains the regression oracle and rollback baseline.
+The completed page split uses static HTML, CSS and focused JavaScript assets.
+The format-first shared shell keeps independent MTGO and Tabletop controllers.
+Historical prototypes explain the design; they are not a permanent correctness
+oracle or the current recovery version.
 
 The production target structure remains:
 
@@ -566,23 +568,16 @@ The production target structure remains:
 - `/assets/js/mtgo.js`;
 - additional focused JavaScript modules when justified.
 
-P8-08 productionizes the accepted P8-07 behavior into a modular, parallel
-candidate with a shared shell and separate MTGO and Tabletop controllers. It
-must not replace `/index.html` or create the final `/melee/index.html`. P8-09
-connects the accepted MTGO candidate to `/index.html` after one-to-one
-regression, and P8-10 separately connects the Tabletop product to
-`/melee/index.html`.
+Changes must preserve approved behavior, supported languages, public data paths,
+source separation and GitHub Pages compatibility. Retire a compatibility asset
+only when its needed callers have a working replacement or its retirement is an
+approved scope change; this does not require repeating P8-08/P8-09/P8-10.
 
-The transition must preserve approved behavior, language behavior, public data
-paths, source separation, and GitHub Pages deployment. Legacy compatibility
-assets may be retired only after the corresponding production entry point is
-accepted and verified.
-
-The Phase 8 redesign must be approved through local information-architecture
-and interaction prototypes before backend production additions or final
-front-end implementation. External generative design services are optional and
-require separate owner authorization after a documented cost, privacy, scope,
-and local-alternative review.
+Use a stable local preview when the task needs an Owner experience decision.
+External design services are optional and must fit the actual authorized cost,
+privacy and scope. Neither prototypes nor an extra service review are mandatory
+stages for an ordinary repair. Current product recovery uses the applicable
+complete archived deployment described in DELIVERY, not a frozen legacy page.
 
 ---
 
@@ -592,12 +587,11 @@ Each archetype definition must have a stable machine-readable archetype ID.
 
 An archetype may optionally contain stable machine-readable subtype identities. A subtype describes an existing rule-level variant within one archetype; it is not a separate archetype and must not change archetype-level compatibility or aggregation.
 
-During the initial shared-classifier migration:
-
-- the selected archetype must remain identical to the approved legacy Standard result;
-- only legacy rules that already produce the same archetype through distinct rule entries may become distinct subtypes;
-- archetypes without an existing duplicate rule path must return no subtype;
-- no new archetype or additional subtype taxonomy may be introduced until the compatibility classifier is complete and separately approved.
+When changing implementation without an approved taxonomy change, preserve
+parent classification and stable identities. Subtype detail must not split or
+double-count parent populations. The completed initial Standard migration is
+historical evidence, not a continuing prohibition on approved new subtypes.
+New archetypes or subtype meanings are business decisions in the task plan.
 
 Classification rules must support:
 
@@ -608,7 +602,7 @@ Classification rules must support:
 - conflict reporting;
 - Unknown reporting;
 - format-specific rule files;
-- regression testing.
+- inspectable same-input classification changes against approved outcomes.
 
 The intended rule files are:
 
@@ -623,7 +617,8 @@ Adding a new source for an existing format should reuse the same archetype ident
 
 Source-specific parsing differences must not require duplicate archetype identities.
 
-Future front-end work should consider how to expose subtype information without replacing, splitting, or double-counting the parent archetype. Phase 2 does not require a subtype visual redesign.
+Subtype presentation must retain the parent relationship without replacing,
+splitting or double-counting the parent archetype.
 
 ---
 
@@ -634,14 +629,14 @@ regression baseline, shared classification and MTGO infrastructure, split
 static front end, Modern MTGO product, approved mixed-event Modern reference
 product, and reusable pure Constructed event strategies.
 
-After the separately controlled post-Phase-9 governance tasks, development
-must proceed in this broad order:
+Phases 10 through 14 have completed. The following sequence records delivered
+foundations and future product direction, not recurring technical approval stages:
 
 1. Phase 10 — data governance, compliance, and production operations.
 2. Phase 11 — engineering baseline, test structure, and documentation reduction.
 3. Phase 12 — front-end productization and sharing readiness.
 4. Phase 13 — compatible multi-event raw-count matchup aggregation.
-5. Complete the separately gated card-name and card-image localization
+5. Complete the shared card-name and card-image localization
    foundation required before Phase 14.
 6. Phase 14 — Pauper MTGO and the approved Paupergeddon event.
 7. Phase 15 — Pioneer.
@@ -650,39 +645,20 @@ must proceed in this broad order:
 10. Phase 18 — the Vintage decision gate.
 11. Phase 19 — release and long-term maintenance closeout.
 
-Listing a phase does not authorize it. `STATUS.yaml` controls the next allowed
-task and all stop conditions.
+ROADMAP records development order. Current Owner instructions and the confirmed
+plan determine task scope under GOVERNANCE; STATUS records durable facts.
 
 Detailed phases and acceptance criteria belong in `ROADMAP.md`.
 
 ---
 
-## 12. Engineering-quality scope
+## 12. Delivery quality
 
-The project must add or improve:
-
-- a concise root README;
-- an explicit code license;
-- data-source and data-rights notices;
-- production dependency definitions;
-- development dependency definitions;
-- automated tests;
-- classification-rule validation;
-- classification conflict reports;
-- Unknown classification reports;
-- versioned JSON Schemas;
-- generated-data validation;
-- GitHub Actions with least-privilege permissions;
-- workflow concurrency controls;
-- workflow summaries;
-- failure reporting;
-- reproducible commands;
-- regression checks for existing Standard output;
-- documentation for non-programmer maintenance.
-
-These requirements are part of the development plan, not optional final cleanup.
-
----
+The product retains explicit licensing and source notices, versioned data
+contracts, conflict/Unknown reporting, usable public interfaces and reproducible
+operations. Validation policy belongs to [QUALITY](QUALITY.md), collaboration
+to [GOVERNANCE](GOVERNANCE.md), and publication/recovery to [DELIVERY](DELIVERY.md).
+This product specification does not prescribe a standing test suite or workflow gates.
 
 ## 13. Out of scope
 
@@ -697,7 +673,7 @@ The following are outside the current approved scope:
 - publishing unsupported events without review;
 - replacing the static site with a server application;
 - requiring a front-end framework or build pipeline;
-- deleting legacy Standard code before regression protection exists;
+- removing a required Standard consumer behavior without a compatible replacement;
 - manually editing generated statistics instead of fixing their generators;
 - implementing Vintage before a separate approval decision.
 
@@ -716,14 +692,8 @@ A change affects project scope when it modifies:
 - development order;
 - explicitly excluded functionality.
 
-Scope changes must:
-
-1. be confirmed explicitly;
-2. be recorded in `DECISIONS.md`;
-3. update this document when necessary;
-4. update `STATISTICS_SPEC.md` if metrics are affected;
-5. update `DATA_ARCHITECTURE.md` if paths or structures are affected;
-6. update `ROADMAP.md` and `STATUS.yaml`;
-7. add or update tests before implementation is considered complete.
+Owner decides intentional scope changes under GOVERNANCE. Record the resulting
+meaning here and in affected statistics/data contracts. Update roadmap or status
+only when their actual facts change; obtain proportionate proof under QUALITY.
 
 Do not make undocumented scope changes only in code.

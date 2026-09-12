@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import re
 from typing import Any
 
 from mtgmeta.mtgo.landing import MTGOLandingError, validate_document as validate_landing
@@ -113,15 +114,25 @@ def validate_matchup_document(document: dict[str, Any], label: str) -> list[str]
     return failures
 
 
-def validate_repository_output(root: Path) -> list[str]:
+def validate_repository_output(root: Path, formats: list[str] | None = None) -> list[str]:
     failures: list[str] = []
-    for path in sorted(root.glob("stats/*/mtgo/range_*w.json")):
+    if formats is not None and (not formats or any(not re.fullmatch(r"[a-z][a-z0-9-]*", value) for value in formats)):
+        raise ValueError("Select actual format identifiers")
+    selected = set(formats) if formats is not None else {path.name for path in (root / "stats").iterdir() if path.is_dir()}
+    def paths(pattern):
+        return sorted(path for fmt in selected for path in (root / "stats" / fmt / "mtgo").glob(pattern))
+    for fmt in selected:
+        if not (root / "stats" / fmt / "mtgo").is_dir():
+            failures.append(f"{fmt}: selected MTGO product is missing")
+        elif not any((root / "stats" / fmt / "mtgo").glob("range_*w.json")):
+            failures.append(f"{fmt}: selected MTGO product has no range result to check")
+    for path in paths("range_*w.json"):
         document = json.loads(path.read_text(encoding="utf-8"))
         failures.extend(validate_range_document(document, path.as_posix()))
-    for path in sorted(root.glob("stats/*/mtgo/matchup_*w.json")):
+    for path in paths("matchup_*w.json"):
         document = json.loads(path.read_text(encoding="utf-8"))
         failures.extend(validate_matchup_document(document, path.as_posix()))
-    for path in sorted(root.glob("stats/*/mtgo/landing/current.json")):
+    for path in paths("landing/current.json"):
         document = json.loads(path.read_text(encoding="utf-8"))
         try:
             validate_landing(document)
@@ -133,8 +144,10 @@ def validate_repository_output(root: Path) -> list[str]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parent)
+    parser.add_argument("--format", dest="formats", action="append", required=True,
+                        help="Check only the affected MTGO format (repeatable)")
     args = parser.parse_args(argv)
-    failures = validate_repository_output(args.root)
+    failures = validate_repository_output(args.root, args.formats)
     if failures:
         for failure in failures:
             print(f"ERROR: {failure}")

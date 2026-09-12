@@ -34,42 +34,32 @@ path contracts.
 
 ## Local setup
 
-Python 3.12 is the supported runtime for local validation and GitHub Actions.
-Create a virtual environment, install pinned development dependencies, and
-install this repository into that environment:
+Python 3.12 is the project runtime. Inspect the current environment first:
+
+```powershell
+python tools/project.py env
+```
+
+For product tools, use a task-local environment with the declared production
+dependencies. Install only the additional test/browser dependencies actually
+needed for a selected check. Documentation work needs neither a browser nor the
+complete development environment.
 
 ```powershell
 py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
-.\.venv\Scripts\python.exe -m pip install .
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pip install --no-deps .
 ```
 
-The installation adds `mtgo-data-mtgo`, `mtgo-data-melee`, and
-`mtgo-data-catalog`. It does not add credentials, network access, scheduled
-jobs, or production-data changes.
+## Selected verification and delivery
 
-## Read-only validation
+Use [QUALITY](docs/QUALITY.md) to identify the actual risk and reuse valid results.
+`python tools/project.py check --help` lists finite operational checks. No default
+full suite or fixed PR declarations apply. Product-specific commands remain
+available for the relevant source, format and result; command existence does
+not make it mandatory for every task.
 
-Run the applicable checks from the repository root:
-
-```powershell
-.\.venv\Scripts\python.exe validate_repository.py --full
-.\.venv\Scripts\python.exe -m ruff check src
-.\.venv\Scripts\python.exe -m mypy
-.\.venv\Scripts\python.exe validate_rules.py
-.\.venv\Scripts\python.exe validate_rules.py path\to\versioned-rules.yaml
-.\.venv\Scripts\mtgo-data-mtgo.exe --root . --format standard classification-reports --strict
-.\.venv\Scripts\python.exe tools\validate_standard_quality.py
-.\.venv\Scripts\python.exe validate_schemas.py
-.\.venv\Scripts\python.exe -m pytest tests\test_cli_smoke.py
-```
-
-These commands validate repository content, maintained code, archetype rules,
-classification diagnostics, public JSON Schemas, and the three offline command
-entry points. The complete trigger-specific list is in
-[`docs/TEST_TRIGGER_MATRIX.md`](docs/TEST_TRIGGER_MATRIX.md). Do not run an
-unbounded test suite when a named smaller command answers the current risk.
-These commands do not fetch tournament data or regenerate production statistics.
+Use [DELIVERY](docs/DELIVERY.md) for candidates, archive, publication and recovery.
 
 Classifier-dependent public artifacts have a separate explicit closure operation.
 Inspection is read-only, and `converge` without `--execute` builds and validates a
@@ -147,7 +137,8 @@ valid retained input; a complete snapshot is promoted atomically under
 Privacy contact information and correction or removal handling are documented
 in [`NOTICE.md`](NOTICE.md). Source-identity recovery boundaries and the
 existing MTGO, Pages, and Melee failure paths are summarized in
-[`docs/OPERATIONS_RUNBOOK.md`](docs/OPERATIONS_RUNBOOK.md).
+[`docs/DELIVERY.md`](docs/DELIVERY.md) and
+[`docs/operations/MELEE_ADMISSION.md`](docs/operations/MELEE_ADMISSION.md).
 
 ### Build and validate an event candidate
 
@@ -219,21 +210,15 @@ relationships are documented in `docs/DATA_ARCHITECTURE.md`.
 
 ### Operate an approved event
 
-For a new event, follow the complete staged admission process in
-[`docs/MELEE_EVENT_ADMISSION_RUNBOOK.md`](docs/MELEE_EVENT_ADMISSION_RUNBOOK.md)
-before using the commands below. The runbook requires separate qualification,
-whitelist, existing-cohort, collection, candidate, publication, and live
-acceptance gates; completing one gate does not authorize the next.
+For a new event, use [Melee admission](docs/operations/MELEE_ADMISSION.md)
+to establish event identity, eligibility, structure and the necessary business
+judgments. An authorized complete plan continues through its technical steps;
+the operations are not separate permission requests.
 
-Adding a whitelist entry is not the same as publishing an event. After an
-owner-approved pull request adds and verifies the complete entry, an authorized
-operator selects **Melee production candidate** in GitHub Actions and enters
-the exact event ID. The workflow derives the format from the whitelist; there
-is no manual format field or Modern fallback.
-
-Review the Actions summary and any `data/melee-<event_id>` candidate branch.
-The workflow never opens a pull request, merges, or writes to `master`; those
-remain separate owner-reviewed actions.
+The existing event-scoped workflow prepares a review branch and derives the
+format from the approved registry. A candidate branch is not a public release.
+Codex completes the agreed PR, merge and applicable delivery after the planned
+acceptance, using the same candidate and valid results.
 
 ## Format-aware MTGO commands
 
@@ -355,14 +340,14 @@ roles. Do not manually edit generated output as a permanent fix.
 ## Production operations
 
 `.github/workflows/update.yml` runs the scheduled MTGO production pipeline
-daily at `20:00 UTC` and may be manually dispatched on `master`. Read-only fetch
+daily at `09:00 UTC` and may be manually dispatched on `master`. Read-only fetch
 and build jobs exchange short-lived verified artifacts; only the final publish
 job receives `contents: write`, stages the approved generated scopes, and
 confirms the published commit.
 
 An interrupted input collection may produce a seven-day checkpoint artifact.
-It is reusable only for the same master commit and exact operation plan after
-checksum and archive-boundary validation. It cannot reach generation or
+Reuse depends on the relevant inputs and operation plan after checksum and
+archive-boundary validation, not merely on the master commit identifier. It cannot reach generation or
 publication while incomplete and is not durable storage.
 
 On failure, a separate least-privilege notification job creates or updates one
@@ -371,7 +356,7 @@ commit, and workflow link; it cannot write repository contents. A successful
 run creates no issue.
 
 Before operating or changing production, review
-[`docs/DEVELOPMENT_WORKFLOW.md`](docs/DEVELOPMENT_WORKFLOW.md),
+[`docs/DELIVERY.md`](docs/DELIVERY.md),
 [`docs/STATISTICS_SPEC.md`](docs/STATISTICS_SPEC.md), and the live
 [`docs/STATUS.yaml`](docs/STATUS.yaml). Do not run an unapproved fetch or
 production dispatch.
