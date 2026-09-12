@@ -15,6 +15,12 @@ from tools import build_simple_card_localization as localization
 WEBP = b"RIFF\x04\x00\x00\x00WEBP"
 
 
+def test_explicit_copy_cards_enter_localization_demand():
+    copy = {"text": {"zh": "[[card:Dispatch|迅速了结]]", "en": "Plain Consider; [[card:Dispatch]]"}}
+    assert set(localization._card_names(copy)) == {"Dispatch"}
+    assert list(localization._card_names({"text": "普通正文 Consider"})) == []
+
+
 def _http_error(code: int) -> urllib.error.HTTPError:
     return urllib.error.HTTPError(
         "https://mtgch.com/api/v1/result",

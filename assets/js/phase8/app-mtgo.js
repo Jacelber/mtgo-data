@@ -89,17 +89,31 @@ function landingDeckUrl(link, weekId) {
   });
 }
 
+function landingCardText(text) {
+  // Explicit authoring tokens avoid turning ordinary words into card links.
+  const pattern = /\[\[card:([^\[\]|\r\n]+)(?:\|([^\[\]|\r\n]+))?\]\]/g;
+  let output = "", offset = 0;
+  for (const match of text.matchAll(pattern)) {
+    const display = cardDisplay(match[1]);
+    const label = match[2] || display.displayName;
+    output += escapeHtml(text.slice(offset, match.index));
+    output += `<a class="card-link" href="${escapeHtml(display.linkUrl)}" target="_blank" rel="noopener" data-card-image="${escapeHtml(display.image)}" data-card-name="${escapeHtml(display.displayName)}" data-card-url="${escapeHtml(display.linkUrl)}" data-card-provider="${escapeHtml(display.linkProvider)}">${escapeHtml(label)}</a>`;
+    offset = match.index + match[0].length;
+  }
+  return output + escapeHtml(text.slice(offset));
+}
+
 function landingSummaryText(item, weekId) {
   const text = localizedValue(item.text);
   const links = new Map((item.deck_links || []).map(link => [link.token, link]));
   const tokens = [...links.keys()].sort((left, right) => right.length - left.length);
-  if (!tokens.length) return escapeHtml(text);
+  if (!tokens.length) return landingCardText(text);
   const pattern = new RegExp(`(${tokens.map(token => (
     token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
   )).join("|")})`, "g");
   return text.split(pattern).map(part => {
     const link = links.get(part);
-    if (!link) return escapeHtml(part);
+    if (!link) return landingCardText(part);
     const featureAttributes = isLandingFeatureDestination(link.token)
       ? ` data-landing-feature-destination="${escapeHtml(link.token)}" data-landing-feature-week="${escapeHtml(`${weekId}.json`)}"`
       : "";
