@@ -18,6 +18,15 @@
     "warnings"
   ],
   "properties": {
+    "final_rank_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^data/[a-z0-9_-]+/melee/final_standings/[1-9][0-9]*\\.json$"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
     "schema_version": {"enum": ["1.0.0", "1.1.0"]},
     "document_type": {"const": "decks"},
     "source": {"const": "melee"},

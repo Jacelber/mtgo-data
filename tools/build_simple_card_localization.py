@@ -257,8 +257,9 @@ def product_card_names(root: Path) -> list[str]:
         return []
     names: set[str] = set()
     for definition in complete_public_formats(root):
-        statistics_root = root / definition.mtgo.paths.statistics
-        for path in sorted(statistics_root.rglob("*.json")):
+        statistics_roots = (root / definition.mtgo.paths.statistics,
+                            root / "stats" / definition.id / "melee")
+        for path in sorted(path for directory in statistics_roots for path in directory.rglob("*.json")):
             relative = path.relative_to(root).as_posix()
             if any(fnmatchcase(relative, pattern) for pattern in patterns):
                 continue
