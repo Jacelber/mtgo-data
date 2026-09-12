@@ -49,23 +49,43 @@
     return client.fetchJson(`${rootPath(format)}/range_${weeks}w.json`);
   }
 
+  function landingDataPaths(format, landing) {
+    const base = rootPath(format);
+    const defaults = {
+      range: `${base}/range_1w.json`, completeness: `${base}/completeness/1w.json`,
+      environment_decks: `${base}/decks_1w.json`, feature_decks: `${base}/decks_4w.json`,
+    };
+    if (!landing.data_files) return defaults;
+    if (!/^\d{4}-W\d{2}$/.test(landing.week?.id || "")) {
+      throw new Runtime.ResourceError("invalid", `${base}/landing/current.json`);
+    }
+    return Object.fromEntries(Object.keys(defaults).map(key => {
+      const expected = `weeks/${landing.week.id}/${key}.json`;
+      if (landing.data_files[key] !== expected) {
+        throw new Runtime.ResourceError("invalid", `${base}/landing/current.json`);
+      }
+      return [key, `${base}/landing/${expected}`];
+    }));
+  }
+
   function landingPaths(format, landingPath, selectedFeatureFile, {
     includeEnvironmentDecks = false,
     includeFeatureDecks = false,
-  } = {}) {
+  } = {}, landing = {}) {
     const base = rootPath(format);
+    const data = landingDataPaths(format, landing);
     const paths = [
       landingPath,
       `${base}/meta.json`,
-      `${base}/range_1w.json`,
-      `${base}/completeness/1w.json`,
+      data.range,
+      data.completeness,
       `${base}/landing/features/index.json`,
     ];
     if (selectedFeatureFile) {
       paths.push(`${base}/landing/features/${selectedFeatureFile}`);
     }
-    if (includeEnvironmentDecks) paths.push(`${base}/decks_1w.json`);
-    if (includeFeatureDecks) paths.push(`${base}/decks_4w.json`);
+    if (includeEnvironmentDecks) paths.push(data.environment_decks);
+    if (includeFeatureDecks) paths.push(data.feature_decks);
     return paths;
   }
 
@@ -80,12 +100,26 @@
     const formatsMatch = [landing, range, completeness, featureIndex, featureDocument]
       .filter(Boolean)
       .every(document => !document.format || document.format === format);
+    if (landing.data_files) {
+      const digest = landing.classifier?.digest;
+      const boundDecks = [documents.environmentDecks, documents.featureDecks].filter(Boolean);
+      if (range.format !== format || completeness.format !== format
+        || range.classifier_digest !== digest || boundDecks.some(deck => (
+        deck.format !== format || deck.classifier_digest !== digest
+        || deck.period?.end !== landing.week.end
+      ))) {
+        throw new Runtime.ResourceError("invalid", `${rootPath(format)}/landing/current.json`);
+      }
+    }
     const selectedWeekMatches = !featureDocument
       || featureDocument.week?.id === documents.featureFile?.replace(/\.json$/, "");
     if (!formatsMatch || !selectedWeekMatches) {
       throw new Runtime.ResourceError("invalid", `${rootPath(format)}/landing/current.json`);
     }
     if (periodMatches) return documents;
+    if (landing.data_files) {
+      throw new Runtime.ResourceError("invalid", `${rootPath(format)}/landing/current.json`);
+    }
     return {
       ...documents,
       range: null,
@@ -155,6 +189,7 @@
   async function loadLanding(format, landingPath, selectedFeatureFile, options = {}) {
     const base = rootPath(format);
     const landing = await client.fetchJson(landingPath);
+    const data = landingDataPaths(format, landing);
     const featureIndex = await client.fetchJson(`${base}/landing/features/index.json`);
     const selectableWeeks = featureIndex.weeks.filter(item => item.feature_count > 0);
     const selectableFeatureIndex = { ...featureIndex, weeks: selectableWeeks };
@@ -174,11 +209,11 @@
       featureImageCache,
     ] = await Promise.all([
       client.fetchJson(`${base}/meta.json`),
-      client.fetchJson(`${base}/range_1w.json`),
-      client.fetchJson(`${base}/completeness/1w.json`),
+      client.fetchJson(data.range),
+      client.fetchJson(data.completeness),
       featureFile ? client.fetchJson(`${base}/landing/features/${featureFile}`) : null,
-      options.includeEnvironmentDecks ? client.fetchJson(`${base}/decks_1w.json`) : null,
-      options.includeFeatureDecks ? client.fetchJson(`${base}/decks_4w.json`) : null,
+      options.includeEnvironmentDecks ? client.fetchJson(data.environment_decks) : null,
+      options.includeFeatureDecks ? client.fetchJson(data.feature_decks) : null,
       loadFeatureImageCache(format, selectedEntry?.week),
     ]);
     return validateLandingGroup(format, {
@@ -246,8 +281,19 @@
   }
 
   async function stageLanding(format, landingPath, selectedFeatureFile, options = {}) {
-    const paths = landingPaths(format, landingPath, selectedFeatureFile, options);
-    return requireFormat(await client.stage(paths), paths, format);
+    const head = requireFormat(await client.stage([landingPath]), [landingPath], format);
+    const landing = head.get(landingPath);
+    const paths = landingPaths(format, landingPath, selectedFeatureFile, options, landing);
+    const data = requireFormat(await client.stage(paths.filter(path => path !== landingPath)),
+      paths.filter(path => path !== landingPath), format);
+    const pinned = landingDataPaths(format, landing);
+    validateLandingGroup(format, {
+      landing, range: data.get(pinned.range), completeness: data.get(pinned.completeness),
+      environmentDecks: data.get(pinned.environment_decks), featureDecks: data.get(pinned.feature_decks),
+    });
+    return { changed: head.changed || data.changed,
+      get: path => path === landingPath ? head.get(path) : data.get(path),
+      commit() { head.commit(); data.commit(); } };
   }
 
   async function stageComparisonDecks(format) {

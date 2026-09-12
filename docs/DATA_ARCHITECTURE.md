@@ -2943,6 +2943,16 @@ stats/<format>/mtgo/landing/features/index.json
 stats/<format>/mtgo/landing/features/<week>.json
 ```
 
+Landing may also carry `data_files`, binding its range, high-score completeness,
+environment decks and four-week comparison decks to
+`landing/weeks/<week>/{range,completeness,environment_decks,feature_decks}.json`.
+These files are generated from the admitted events and the same classifier as
+that Landing week. Rolling updates must not replace these dependencies with
+the latest rolling range. The consumer rejects a wrong week, format or
+classifier; legacy Landing documents without the binding retain their existing
+period-match fallback. The optional binding is an additive schema revision.
+Week snapshots contain public derived data only, never editorial review files.
+
 The documents are versioned and discovered through `stats/catalog.json`.
 `current.json` remains the only complete latest Landing document. The feature
 index and week documents are a bounded archive of the bottom new-deck and

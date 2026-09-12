@@ -16,7 +16,7 @@ from mtgmeta.public_contract import versioned
 
 from . import load_mtgo_context
 from . import landing_editorial as editorial
-from . import landing_screening as screening, stats
+from . import completeness, landing_screening as screening, stats
 from .normalize import load_rules_for_format
 from .top8 import classifier_digest
 
@@ -1057,6 +1057,13 @@ def machine_fact_digest_for_week(
 def validate_document(document: Mapping[str, Any]) -> None:
     """Reject cross-field inconsistencies that JSON Schema cannot express."""
 
+    if "data_files" in document:
+        expected = {
+            key: f"weeks/{document['week']['id']}/{key}.json"
+            for key in ("range", "completeness", "environment_decks", "feature_decks")
+        }
+        if document["data_files"] != expected:
+            raise MTGOLandingError("Landing data files must belong to its own week")
     source_event_ids = document["source_event_ids"]
     if source_event_ids != sorted(set(source_event_ids)):
         raise MTGOLandingError("Landing source_event_ids must be sorted and unique")
@@ -1186,6 +1193,58 @@ def validate_document(document: Mapping[str, Any]) -> None:
         raise MTGOLandingError("Landing ready document has no source events")
 
 
+def generate_week_data(
+    repository_root: str | Path,
+    format_id: str,
+    document: Mapping[str, Any],
+    output: Path,
+    *,
+    registry_path: str | Path | None = None,
+) -> dict[str, str]:
+    """Pin Landing dependencies to its admitted week, not the rolling latest week."""
+    root = Path(repository_root).resolve()
+    monday = date.fromisoformat(document["week"]["start"])
+    sunday = date.fromisoformat(document["week"]["end"])
+    events = stats.load_all_events(root, format_id, public=True, registry_path=registry_path)
+    event_ids = sorted(
+        str(event["event_id"]) for day, event in events if monday <= day <= sunday
+    )
+    if event_ids != document["source_event_ids"]:
+        raise MTGOLandingError("Landing week data does not match the admitted source events")
+    rules = load_rules_for_format(root, format_id, registry_path=registry_path)
+    if classifier_digest(rules) != document["classifier"]["digest"]:
+        raise MTGOLandingError("Landing week data classifier does not match Landing")
+    # Reuse classification within this generation; the base builders otherwise
+    # classify the same events again for each parent and subtype.
+    processed = {id(event): stats.process_event(event, rules) for _, event in events}
+    bases, d99 = stats.build_base_pack(events, rules, monday, processed_events=processed)
+    subtypes, _ = stats.build_subtype_base_pack(events, rules, monday, processed_events=processed)
+    data, decks = stats.build_range(events, rules, monday, 1, bases, d99,
+                                   format_id=format_id, subtype_base_pack=subtypes)
+    _, reference = stats.build_range(events, rules, monday, 4, bases, d99,
+                                    format_id=format_id, subtype_base_pack=subtypes)
+    context = load_mtgo_context(root, format_id, "completeness_reporting", registry_path=registry_path)
+    coverage = versioned({
+        "document_type": "mtgo_completeness_range",
+        "format": format_id, "source": SOURCE_ID, "period": data["period"],
+        "matchup_coverage": completeness.build_videre_coverage(
+            events, context.paths["matches"], period_start=monday, period_end=sunday),
+        "high_score_decklist_completeness": completeness.build_high_score_completeness(
+            events, period_start=monday, period_end=sunday),
+    })
+    documents = {"range": data, "completeness": coverage,
+                 "environment_decks": decks, "feature_decks": reference}
+    files = {}
+    for key, value in documents.items():
+        relative = f"weeks/{document['week']['id']}/{key}.json"
+        destination = output / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n",
+                               encoding="utf-8", newline="\n")
+        files[key] = relative
+    return files
+
+
 def generate(
     repository_root: str | Path,
     format_id: str,
@@ -1271,6 +1330,11 @@ def generate(
     output.mkdir(parents=True, exist_ok=True)
     feature_output = output / "features"
     feature_output.mkdir(parents=True, exist_ok=True)
+    if not private:
+        document["data_files"] = generate_week_data(
+            root, format_id, document, output, registry_path=registry_path
+        )
+        validate_document(document)
     destination.write_text(
         json.dumps(document, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
