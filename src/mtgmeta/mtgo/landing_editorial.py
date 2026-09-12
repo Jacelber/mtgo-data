@@ -69,7 +69,7 @@ def name_catalog_binding_digest(
 
     if review_schema_version == REVIEW_SCHEMA_VERSION:
         selected = HISTORICAL_REVIEW_FORMATS
-    elif review_schema_version == FORMAT_SCOPED_REVIEW_SCHEMA_VERSION:
+    elif review_schema_version in (FORMAT_SCOPED_REVIEW_SCHEMA_VERSION, "1.2.0"):
         selected = frozenset({format_id})
     else:
         raise MTGOLandingEditorialError(
@@ -1150,6 +1150,10 @@ def copy_deck_tokens(items: list[Mapping[str, Any]]) -> list[str]:
 
 def validate_review_document(document: Mapping[str, Any], schema_path: str | Path) -> None:
     _validate_schema(document, Path(schema_path), "Landing review document")
+    if document['schema_version'] == '1.2.0':
+        content = {key: document[key] for key in ('format', 'week', 'review')}
+        if document_digest(content) != document['bindings']['content_sha256']:
+            raise MTGOLandingEditorialError('Conversation content digest changed')
     top8_tokens = [item["token"] for item in document["all_top8"]]
     if top8_tokens != sorted(
         top8_tokens,
@@ -1228,6 +1232,7 @@ def validate_review_binding(
 
     for field in (
         "workbook_sha256",
+        "content_sha256",
         "source_event_ids",
         "classifier_digest",
         "selection_policy_digest",
