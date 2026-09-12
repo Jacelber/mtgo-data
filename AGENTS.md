@@ -19,6 +19,7 @@ problem, concrete action and expected result in plain language.
 | Question | Source |
 | --- | --- |
 | What product should exist? | [PROJECT_SCOPE](docs/PROJECT_SCOPE.md) |
+| Weekly review, Feature/Landing content, or a bug fix touching that workflow? | [WEEKLY_MAINTENANCE](docs/WEEKLY_MAINTENANCE.md) |
 | What do numbers and missing states mean? | [STATISTICS_SPEC](docs/STATISTICS_SPEC.md) |
 | What data, identities and visibility apply? | [DATA_ARCHITECTURE](docs/DATA_ARCHITECTURE.md) |
 | Which result needs which proof? | [QUALITY](docs/QUALITY.md) |

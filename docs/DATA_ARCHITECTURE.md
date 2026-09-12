@@ -3114,7 +3114,11 @@ revalidation instead compares the material Top 8 review subject and admitted
 Landing content; a global classifier digest change with no reviewed-content
 change does not reset the week to an unstarted state.
 
-The Landing-only XLSX review carrier contains `Review Control`, `Landing Copy`,
+The default conversation/Web workflow is defined in [WEEKLY_MAINTENANCE](WEEKLY_MAINTENANCE.md).
+Accepted conversation content is stored in the same private week document and
+validated against the exact review subject before generation. XLSX is an optional
+alternative input, not a mandatory intermediate or duplicate Owner review.
+The optional Landing-only XLSX review carrier contains `Review Control`, `Landing Copy`,
 `Featured Decks`, `All Top 8`, and `Field Guide`. It is not a database. Accepted
 content is validated and imported into the private week document before preview
 or publication. The Owner is not asked to provide internal input IDs, stable
@@ -3146,6 +3150,14 @@ workbook SHA-256 before writing any private review file. Repeated import of the
 same immutable workbook and repository subject is deterministic; a workbook
 byte change, incomplete stage content, source identity change, or intake error
 fails before admission.
+
+Explicit `[[card:English Name]]` or `[[card:English Name|display label]]` tokens
+in localized Top copy use the existing card localization and preview interaction.
+`tools/prepare_landing_copy.py` recognizes exact names from the shared bilingual
+catalog and inserts these tokens without changing the displayed prose. It preserves
+existing tokens, reports ambiguous mentions, and does not infer Owner acceptance.
+These references also enter current Landing localization demand. The
+Owner does not need to type internal syntax.
 
 Top copy may embed zero or more exact `deck:<20-hex deck ID>` tokens at any
 desired positions. Non-empty localized versions use the same token set, but

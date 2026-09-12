@@ -212,6 +212,9 @@ def seed_compatibility(root: Path, source_commit: str | None = None) -> dict[str
 
 
 def _card_names(value: Any, parent_key: str | None = None) -> Iterable[str]:
+    if isinstance(value, str):
+        yield from re.findall(r"\[\[card:([^\[\]|\r\n]+)(?:\|[^\[\]|\r\n]+)?\]\]", value)
+        return
     if isinstance(value, list):
         for item in value:
             yield from _card_names(item, parent_key)
@@ -281,6 +284,7 @@ def current_landing_names(root: Path) -> list[str]:
         current = _read_json(current_path, "current Landing")
         if not isinstance(current, dict):
             raise LocalizationBuildError(f"current Landing is not an object: {current_path}")
+        names.update(_card_names(current.get("weekly_summary", {})))
         environment = current.get("environment")
         rows = environment.get("rows") if isinstance(environment, dict) else None
         if not isinstance(rows, list):

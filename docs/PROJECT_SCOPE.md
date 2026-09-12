@@ -123,8 +123,10 @@ required. A future format must not become public through a partial launch that
 omits Landing. Standard and Modern completed their transition from pre-Landing
 products; that historical migration exception does not permit a new partial launch.
 
-The weekly maintenance process may use deterministic facts or machine-written
-copy as a draft, but the human final Landing content is authoritative. The
+The weekly maintenance process follows [WEEKLY_MAINTENANCE](WEEKLY_MAINTENANCE.md).
+Machines supply screening facts and reasons; the Owner selects features and
+authors Chinese copy. Machine-written editorial suggestions require an explicit
+Owner request. Human final Landing content is authoritative. The
 Owner may rewrite, replace, omit, or independently author that content; machine
 evidence does not define the permitted editorial conclusion. Publication and necessary repository work follow the current authorized plan
 and agreed business acceptance under GOVERNANCE.

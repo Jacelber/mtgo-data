@@ -120,6 +120,16 @@ test("a legacy noncanonical token retains the exact Top 8 fallback", () => {
   assert.doesNotMatch(html, /data-landing-feature-destination/);
 });
 
+test("explicit summary cards reuse preview attributes and escape surrounding prose", () => {
+  const { landingSummaryText } = landingFunctions("zh");
+  const html = landingSummaryText({ text: { zh: '<b>正文</b> [[card:Dispatch|迅速了结]]；普通 Dispatch', en: '' } }, "2026-W36");
+  assert.match(html, /&lt;b&gt;正文&lt;\/b&gt;/);
+  assert.match(html, /data-card-image=/);
+  assert.match(html, /data-card-url=/);
+  assert.match(html, />迅速了结<\/a>；普通 Dispatch$/);
+  assert.equal((html.match(/class="card-link"/g) || []).length, 1);
+});
+
 test("environment direction uses the accepted five-point movement boundary", () => {
   const { landingDirection } = landingFunctions();
 
