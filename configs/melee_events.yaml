@@ -1,6 +1,55 @@
 schema_version: "3.1.0"
 
 events:
+  - id: "451148"
+    url: "https://melee.gg/Tournament/View/451148"
+    name: "龙盾杯 MTG China Open S13 Regional Championship"
+    date:
+      start: "2026-09-12"
+      end: "2026-09-13"
+    format: "modern"
+    series: "regional_championship"
+    structure: "constructed_single_stage"
+    enabled: true
+    review_status: "verified"
+    tabletop: true
+    team_event: false
+    mixed_format: false
+    raw_requests:
+      - id: "tournament"
+        resource_type: "tournament"
+        url: "https://melee.gg/Tournament/View/451148"
+        content_type: "html"
+    include:
+      swiss: true
+      playoffs: true
+    phases:
+      - id: "day1_modern"
+        stage: "day1"
+        round_phase: "constructed"
+        game_format: "modern"
+        swiss: true
+        rounds: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      - id: "top8_modern"
+        stage: "playoff"
+        round_phase: "playoff"
+        game_format: "modern"
+        swiss: false
+        source_labels: ["Quarterfinals", "Semifinals", "Finals"]
+    reviewed_overrides: []
+    statistics:
+      default_match_scope: "all_constructed_swiss"
+      constructed_game_format: "modern"
+      include_playoffs: false
+    source_evidence:
+      - "https://melee.gg/Tournament/View/451148"
+    special_handling:
+      - "The organizer schedule places all nine Modern Swiss rounds on September 12 and the Top 8 playoff on September 13."
+      - "A second calendar day containing only playoffs is not a Day 2 Constructed Swiss stage; no Day 2 conversion applies."
+      - "Quarterfinals, Semifinals, and Finals remain contextual only and are excluded from primary Modern Swiss statistics."
+      - "The completed source page displays 403 registered players but 404 standings rows; use retained participant and deck coverage rather than the headline count."
+    notes: "Kadou Event's completed individual Regional Championship in Hangzhou. Owner requested separate single-event delivery after Unknown review, independent of weekly maintenance."
+
   - id: "434455"
     url: "https://melee.gg/Tournament/View/434455"
     name: "Pro Tour Magic: The Gathering | Marvel Super Heroes"
